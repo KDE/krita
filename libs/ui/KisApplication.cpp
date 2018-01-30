@@ -256,6 +256,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("templates", "data", "/templates");
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
     KoResourcePaths::addResourceType("symbols", "data", "/symbols");
+    KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -281,6 +282,9 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/input/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/pykrita/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/symbols/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
 
     // Indicate that it is now safe for users of KoResourcePaths to load resources
     KoResourcePaths::setReady();
@@ -500,7 +504,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             }
             else {
                 if (exportAs) {
-                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName);
+                    QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName, false);
                     if (outputMimetype == "application/octetstream") {
                         dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
                         return 1;
@@ -553,8 +557,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // fixes BUG:369308  - Krita crashing on splash screen when loading.
     // trying to open a file before Krita has loaded can cause it to hang and crash
     if (d->splashScreen) {
-        d->splashScreen->displayLinks();
-        d->splashScreen->displayRecentFiles();
+        d->splashScreen->displayLinks(true);
+        d->splashScreen->displayRecentFiles(true);
     }
 
 
@@ -575,7 +579,8 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 void KisApplication::setSplashScreenLoadingText(QString textToLoad)
 {
     if (d->splashScreen) {
-        d->splashScreen->loadingLabel->setText(textToLoad);
+       //d->splashScreen->loadingLabel->setText(textToLoad);
+        d->splashScreen->setLoadingText(textToLoad);
         d->splashScreen->repaint();
     }
 }

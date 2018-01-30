@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +28,9 @@
 #include <ktoggleaction.h>
 #include "kis_debug.h"
 #include "KisDocument.h"
+#include "kis_canvas2.h"
+#include "kis_icon_utils.h"
+#include "KisViewManager.h"
 
 #include <QPainter>
 
@@ -44,7 +48,25 @@ struct KisPaintingAssistantsDecoration::Private {
     bool snapOnlyOneAssistant;
     KisPaintingAssistantSP firstAssistant;
     bool aFirstStroke;
+    QColor m_assistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
+    bool m_isEditingAssistants = false;
+    bool m_outlineVisible = false;
+    int m_handleSize = 14; // size of editor handles on assistants
+
+    // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
+    // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
+
+    AssistantEditorData toolData;
+
+    QPixmap m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(toolData.deleteIconSize, toolData.deleteIconSize);
+    QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
+    QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
+    QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(toolData.moveIconSize, toolData.moveIconSize);
+
+    KisCanvas2 * m_canvas = 0;
 };
+
+
 
 KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisView> parent) :
     KisCanvasDecoration("paintingAssistantsDecoration", parent),
@@ -52,7 +74,7 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
-    d->snapOnlyOneAssistant=true;//turn on by default.
+    d->snapOnlyOneAssistant = true; //turn on by default.
 }
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
@@ -96,12 +118,14 @@ void KisPaintingAssistantsDecoration::removeAll()
 
 QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
-    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
 
-    if (assistants.empty()) return point;
-    if (assistants.count() == 1) {
-        if(assistants.first()->snapping()==true){
-            QPointF newpoint = assistants.first()->adjustPosition(point, strokeBegin);
+    if (assistants().empty()) {
+        return point;
+    }
+
+    if (assistants().count() == 1) {
+        if(assistants().first()->isSnappingActive() == true){
+            QPointF newpoint = assistants().first()->adjustPosition(point, strokeBegin);
             // check for NaN
             if (newpoint.x() != newpoint.x()) return point;
             return newpoint;
@@ -111,8 +135,8 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     double distance = DBL_MAX;
     //the following tries to find the closest point to stroke-begin. It checks all assistants for the closest point//
     if(!d->snapOnlyOneAssistant){
-        Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-            if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+            if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
@@ -123,8 +147,8 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
             }
         }
     } else if (d->aFirstStroke==false) {
-        Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-            if(assistant->snapping()==true){//this checks if the assistant in question has it's snapping boolean turned on//
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+            if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin);
                 if (pt.x() != pt.x()) continue;
                 double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
@@ -152,34 +176,100 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 
 void KisPaintingAssistantsDecoration::endStroke()
 {
-    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
+    d->aFirstStroke = false;
 
-    d->aFirstStroke=false;
-    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->endStroke();
     }
 }
 
 void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas)
-{
+{    
+    if(assistants().length() == 0) {
+        return; // no assistants to worry about, ok to exit
+    }
+
     if (!canvas) {
         dbgFile<<"canvas does not exist in painting assistant decoration, you may have passed arguments incorrectly:"<<canvas;
+    } else {
+        d->m_canvas = canvas;
     }
 
-    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
-
-    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
-        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), outlineVisibility());
+    // the preview functionality for assistants. do not show while editing
+    if (d->m_isEditingAssistants) {
+        d->m_outlineVisible = false;
     }
+    else {
+        d->m_outlineVisible = outlineVisibility();
+    }
+
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+
+        assistant->setAssistantColor(assistantsColor());
+        assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
+
+        if (isEditingAssistants()) {
+            drawHandles(assistant, gc, converter);
+        }
+    }
+
+    // draw editor controls on top of all assistant lines (why this code is last)
+    if (isEditingAssistants()) {
+        Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+            drawEditorWidget(assistant, gc, converter);
+        }
+     }
 }
-//drawPreview//
+
+void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
+{
+        QTransform initialTransform = converter->documentToWidgetTransform();
+
+        Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+
+            QPointF transformedHandle = initialTransform.map(*handle);
+            QRectF ellipse(transformedHandle -  QPointF(handleSize() * 0.5, handleSize() * 0.5), QSizeF(handleSize(), handleSize()));
+
+            QPainterPath path;
+            path.addEllipse(ellipse);
+
+            gc.save();
+            gc.setPen(Qt::NoPen);
+            gc.setBrush(assistantsColor());
+            gc.drawPath(path);
+            gc.restore();
+        }
+
+         // some assistants have side handles like the vanishing point assistant
+         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->sideHandles()) {
+             QPointF transformedHandle = initialTransform.map(*handle);
+             QRectF ellipse(transformedHandle -  QPointF(handleSize() * 0.5, handleSize() * 0.5), QSizeF(handleSize(), handleSize()));
+
+             QPainterPath path;
+             path.addEllipse(ellipse);
+
+             gc.save();
+             gc.setPen(Qt::NoPen);
+             gc.setBrush(assistantsColor());
+             gc.drawPath(path);
+             gc.restore();
+         }
+}
+
+int KisPaintingAssistantsDecoration::handleSize()
+{
+    return  d->m_handleSize;
+}
+
+void KisPaintingAssistantsDecoration::setHandleSize(int handleSize)
+{
+    d->m_handleSize = handleSize;
+}
 
 QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsDecoration::handles()
 {
-    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
-
     QList<KisPaintingAssistantHandleSP> hs;
-    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
             if (!hs.contains(handle)) {
                 hs.push_back(handle);
@@ -225,9 +315,7 @@ bool KisPaintingAssistantsDecoration::outlineVisibility()
 }
 void KisPaintingAssistantsDecoration::uncache()
 {
-    QList<KisPaintingAssistantSP> assistants = view()->document()->assistants();
-
-    Q_FOREACH (KisPaintingAssistantSP assistant, assistants) {
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->uncache();
     }
 }
@@ -236,7 +324,119 @@ void KisPaintingAssistantsDecoration::toggleAssistantVisible()
     setAssistantVisible(!assistantVisibility());
     uncache();
 }
+
 void KisPaintingAssistantsDecoration::toggleOutlineVisible()
 {
     setOutlineVisible(!outlineVisibility());
+}
+
+QColor KisPaintingAssistantsDecoration::assistantsColor() {
+    return d->m_assistantsColor;
+}
+
+void KisPaintingAssistantsDecoration::setAssistantsColor(QColor color)
+{
+    d->m_assistantsColor = color;
+    uncache();
+}
+
+void KisPaintingAssistantsDecoration::activateAssistantsEditor()
+{
+    setVisible(true); // this turns on the decorations in general. we leave it on at this point
+    d->m_isEditingAssistants = true;
+    uncache(); // updates visuals when editing
+}
+
+void KisPaintingAssistantsDecoration::deactivateAssistantsEditor()
+{
+    if (!d->m_canvas) {
+        return;
+    }
+
+    d->m_isEditingAssistants = false; // some elements are hidden when we aren't editing
+    uncache(); // updates visuals when not editing
+}
+
+bool KisPaintingAssistantsDecoration::isEditingAssistants()
+{
+    return d->m_isEditingAssistants;
+}
+
+QPointF KisPaintingAssistantsDecoration::snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers)
+{
+    if (!d->m_canvas || !d->m_canvas->currentImage()) {
+        return e->point;
+    }
+
+
+    KoSnapGuide *snapGuide = d->m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(e->point, offset, useModifiers ? e->modifiers() : Qt::NoModifier);
+
+    return pos;
+}
+
+QPointF KisPaintingAssistantsDecoration::snapToGuide(const QPointF& pt, const QPointF &offset)
+{
+    if (!d->m_canvas) {
+         return pt;
+    }
+
+
+    KoSnapGuide *snapGuide = d->m_canvas->snapGuide();
+    QPointF pos = snapGuide->snap(pt, offset, Qt::NoModifier);
+
+    return pos;
+}
+
+/*
+ * functions only used internally in this class
+ * we potentially could make some of these inline to speed up performance
+*/
+
+void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter)
+{
+    if (!assistant->isAssistantComplete()) {
+        return;
+    }
+
+    QTransform initialTransform = converter->documentToWidgetTransform();
+
+    // We are going to put all of the assistant actions below the bounds of the assistant
+    // so they are out of the way
+    // assistant->buttonPosition() gets the center X/Y position point
+    QPointF actionsPosition = initialTransform.map(assistant->buttonPosition());
+
+    AssistantEditorData toolData; // shared const data for positioning and sizing
+
+    QPointF iconMovePosition(actionsPosition + toolData.moveIconPosition);
+    QPointF iconSnapPosition(actionsPosition + toolData.snapIconPosition);
+    QPointF iconDeletePosition(actionsPosition + toolData.deleteIconPosition);
+
+    // Background container for helpers
+    QBrush backgroundColor = d->m_canvas->viewManager()->mainWindow()->palette().window();
+    QPointF actionsBGRectangle(actionsPosition + QPointF(10, 10));
+
+    gc.setRenderHint(QPainter::Antialiasing);
+
+    QPainterPath bgPath;
+    bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 110, 40), 6, 6);
+    QPen stroke(QColor(60, 60, 60, 80), 2);
+    gc.setPen(stroke);
+    gc.fillPath(bgPath, backgroundColor);
+    gc.drawPath(bgPath);
+
+
+    // Move Assistant Tool helper
+    gc.drawPixmap(iconMovePosition, d->m_iconMove);
+
+    // active toggle
+    if (assistant->isSnappingActive() == true) {
+        gc.drawPixmap(iconSnapPosition, d->m_iconSnapOn);
+    }
+    else {
+        gc.drawPixmap(iconSnapPosition, d->m_iconSnapOff);
+    }
+
+    gc.drawPixmap(iconDeletePosition, d->m_iconDelete);
+
 }

@@ -442,6 +442,8 @@ void KisLayer::updateClones(const QRect &rect)
 
 void KisLayer::notifyChildMaskChanged(KisNodeSP changedChildMask)
 {
+    Q_UNUSED(changedChildMask);
+
     updateSelectionMask();
     updateEffectMasks();
 }

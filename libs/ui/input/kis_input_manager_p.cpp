@@ -157,6 +157,11 @@ KisInputManager::Private::Private(KisInputManager *qq)
     if (cfg.trackTabletEventLatency()) {
         tabletLatencyTracker = new TabletLatencyTracker();
     }
+
+    matcher.setInputActionGroupsMaskCallback(
+        [this] () {
+            return this->canvas ? this->canvas->inputActionGroupsMask() : AllActionGroup;
+        });
 }
 
 static const int InputWidgetsThreshold = 2000;

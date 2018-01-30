@@ -61,7 +61,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
 
     # We give this target a long logical target name.
     # (This is to avoid having the library name clash with any already
-    # install library names. If that happens then cmake dependancy
+    # install library names. If that happens then cmake dependency
     # tracking get confused.)
     STRING(REPLACE "." "_" _logical_name ${MODULE_NAME})
     SET(_logical_name "python_module_${_logical_name}")
@@ -92,29 +92,19 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         ENDIF( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS} )
     ENDFOREACH(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS} )
 
-    IF(NOT WIN32)
-        SET(TOUCH_COMMAND touch)
-    ELSE(NOT WIN32)
-        SET(TOUCH_COMMAND echo)
-        # instead of a touch command, give out the name and append to the files
-        # this is basically what the touch command does.
-        FOREACH(filename ${_sip_output_files})
-            FILE(APPEND filename "")
-        ENDFOREACH(filename ${_sip_output_files})
-    ENDIF(NOT WIN32)
     ADD_CUSTOM_COMMAND(
         OUTPUT ${_sip_output_files} 
         COMMAND ${CMAKE_COMMAND} -E echo ${message}
-        COMMAND ${TOUCH_COMMAND} ${_sip_output_files} 
+        COMMAND ${CMAKE_COMMAND} -E touch ${_sip_output_files}
         COMMAND ${SIP_EXECUTABLE} ${_sip_tags} ${_sip_x} ${SIP_EXTRA_OPTIONS} -j ${SIP_CONCAT_PARTS} -c ${CMAKE_CURRENT_SIP_OUTPUT_DIR} ${_sip_includes} ${_abs_module_sip}
         DEPENDS ${_abs_module_sip} ${SIP_EXTRA_FILES_DEPEND}
     )
     # not sure if type MODULE could be uses anywhere, limit to cygwin for now
-    IF (CYGWIN)
+    IF (WIN32 OR CYGWIN)
         ADD_LIBRARY(${_logical_name} MODULE ${_sip_output_files} )
-    ELSE (CYGWIN)
+    ELSE (WIN32 OR CYGWIN)
         ADD_LIBRARY(${_logical_name} SHARED ${_sip_output_files} )
-    ENDIF (CYGWIN)
+    ENDIF (WIN32 OR CYGWIN)
     TARGET_LINK_LIBRARIES(${_logical_name} ${PYTHON_LIBRARY})
     TARGET_LINK_LIBRARIES(${_logical_name} ${EXTRA_LINK_LIBRARIES})
     SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PREFIX "" OUTPUT_NAME ${_child_module_name})

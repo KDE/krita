@@ -143,7 +143,7 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
         inner line (for example, a line that goes from corner to corner), thus
         triggering an error. The idea is of the algorithm is that only 2 intersections
         at most are considered at a time. Graphically this is indistinguishable, it's
-        just there to avoid making unnecesary control structures (like additional "ifs").
+        just there to avoid making unnecessary control structures (like additional "ifs").
         */
 
         if ((scanIntercept >= 0) && (scanIntercept <= height_)) {
@@ -203,7 +203,7 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
         }
         else {
             continue;
-            /*Drawing points at the vertices causes incosistent results due to
+            /*Drawing points at the vertices causes inconsistent results due to
             floating point calculations not being quite in sync with algebra,
             therefore if I have only 1 intersection (= corner = this case),
             don't draw*/

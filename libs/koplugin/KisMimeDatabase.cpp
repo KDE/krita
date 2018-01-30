@@ -28,7 +28,7 @@
 QList<KisMimeDatabase::KisMimeType> KisMimeDatabase::s_mimeDatabase;
 
 
-QString KisMimeDatabase::mimeTypeForFile(const QString &file)
+QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExistingFiles)
 {
     fillMimeData();
 
@@ -42,20 +42,20 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file)
     }
 
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
-    if (mime.name() != "application/octet-stream" && mime.name() != "application/zip") {
-        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
-        return mime.name();
-    }
-
-    if (mime.name() == "application/octet-stream" || mime.name() == "application/zip") {
-        mime = db.mimeTypeForFile(file);
-        if (mime.name() != "application/octet-stream") {
+    QMimeType mime;
+    if (checkExistingFiles && fi.size() > 0) {
+        mime = db.mimeTypeForFile(file, QMimeDatabase::MatchContent);
+        if (mime.name() != "application/octet-stream" && mime.name() != "application/zip") {
             debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
             return mime.name();
         }
     }
 
+    mime = db.mimeTypeForFile(file);
+    if (mime.name() != "application/octet-stream") {
+        debugPlugin << "mimeTypeForFile(). QMimeDatabase returned" << mime.name() << "for" << file;
+        return mime.name();
+    }
     return "";
 }
 
@@ -77,12 +77,7 @@ QString KisMimeDatabase::mimeTypeForSuffix(const QString &suffix)
     // make the file look like a file so Qt would recognize it
     s = "file." + s;
 
-    QMimeType mime = db.mimeTypeForName(s);
-    if (mime.name() != "application/octet-stream") {
-        debugPlugin << "mimeTypeForSuffix(). QMimeDatabase returned" << mime.name() << "for" << s;
-        return mime.name();
-    }
-    return "";
+    return mimeTypeForFile(s);
 }
 
 QString KisMimeDatabase::mimeTypeForData(const QByteArray ba)

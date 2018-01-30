@@ -120,20 +120,59 @@
      <item>
       <layout class="QVBoxLayout" name="rightPane">
        <item>
-        <widget class="KoColorSetWidget" name="paletteBox">
+        <widget class="KisPaletteView" name="paletteBox">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>225</width>
-           <height>50</height>
+           <width>90</width>
+           <height>0</height>
           </size>
          </property>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="KisPopupButton" name="paletteList">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>50</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="SqueezedComboBox" name="cmbNameList">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="KisScreenColorPicker" name="screenColorPicker" native="true">
@@ -169,6 +208,21 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisPopupButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_popup_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisPaletteView</class>
+   <extends>QTableView</extends>
+   <header location="global">kis_palette_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">squeezedcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisSpinboxColorSelector</class>
    <extends>QWidget</extends>
    <header>kis_spinbox_color_selector.h</header>
@@ -190,12 +244,6 @@
    <class>KoColorPatch</class>
    <extends>QWidget</extends>
    <header>KoColorPatch.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KoColorSetWidget</class>
-   <extends>QFrame</extends>
-   <header>KoColorSetWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

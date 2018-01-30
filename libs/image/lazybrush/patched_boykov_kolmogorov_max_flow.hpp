@@ -186,7 +186,7 @@ class bk_max_flow {
               set_edge_to_parent(current_node, from_source);
               put(m_dist_map, current_node, 1);
               put(m_time_map, current_node, 1);
-              // add stuff to flow and update residuals. we dont need to
+              // add stuff to flow and update residuals. we don't need to
               // update reverse_edges, as incoming/outgoing edges to/from
               // source/sink don't count for max-flow
               put(m_res_cap_map, from_source, get(m_res_cap_map, from_source) - cap_to_sink);
@@ -198,7 +198,7 @@ class bk_max_flow {
               set_edge_to_parent(current_node, to_sink);
               put(m_dist_map, current_node, 1);
               put(m_time_map, current_node, 1);
-              // add stuff to flow and update residuals. we dont need to update
+              // add stuff to flow and update residuals. we don't need to update
               // reverse_edges, as incoming/outgoing edges to/from source/sink
               // don't count for max-flow
               put(m_res_cap_map, to_sink, get(m_res_cap_map, to_sink) - cap_from_source);
@@ -256,7 +256,7 @@ class bk_max_flow {
               if(get(m_res_cap_map, out_edge) > 0){ //check if we have capacity left on this edge
                 vertex_descriptor other_node = target(out_edge, m_g);
                 if(get_tree(other_node) == tColorTraits::gray()){ //it's a free node
-                  set_tree(other_node, tColorTraits::black()); //aquire other node to our search tree
+                  set_tree(other_node, tColorTraits::black()); //acquire other node to our search tree
                   set_edge_to_parent(other_node, out_edge);   //set us as parent
                   put(m_dist_map, other_node, get(m_dist_map, current_node) + 1);  //and update the distance-heuristic
                   put(m_time_map, other_node, get(m_time_map, current_node));
@@ -290,7 +290,7 @@ class bk_max_flow {
               if(get(m_res_cap_map, in_edge) > 0){ //check if there is capacity left
                 vertex_descriptor other_node = source(in_edge, m_g);
                 if(get_tree(other_node) == tColorTraits::gray()){ //it's a free node
-                  set_tree(other_node, tColorTraits::white());      //aquire that node to our search tree
+                  set_tree(other_node, tColorTraits::white());      //acquire that node to our search tree
                   set_edge_to_parent(other_node, in_edge);          //set us as parent
                   add_active_node(other_node);                      //activate that node
                   put(m_dist_map, other_node, get(m_dist_map, current_node) + 1); //set its distance

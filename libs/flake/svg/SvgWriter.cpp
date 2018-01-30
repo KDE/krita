@@ -91,8 +91,9 @@ bool SvgWriter::save(const QString &filename, const QSizeF &pageSize, bool write
 
 bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
 {
-    if (m_toplevelShapes.isEmpty())
+    if (m_toplevelShapes.isEmpty()) {
         return false;
+    }
 
     QTextStream svgStream(&outputDevice);
     svgStream.setCodec("UTF-8");
@@ -138,6 +139,16 @@ bool SvgWriter::saveDetached(QIODevice &outputDevice)
     return true;
 }
 
+bool SvgWriter::saveDetached(SvgSavingContext &savingContext)
+{
+    if (m_toplevelShapes.isEmpty())
+        return false;
+
+    saveShapes(m_toplevelShapes, savingContext);
+
+    return true;
+}
+
 void SvgWriter::saveShapes(const QList<KoShape *> shapes, SvgSavingContext &savingContext)
 {
     // top level shapes
@@ -178,7 +189,8 @@ void SvgWriter::saveGroup(KoShapeGroup * group, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("g");
     context.shapeWriter().addAttribute("id", context.getID(group));
-    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(group->transformation()));
+
+    SvgUtil::writeTransformAttributeLazy("transform", group->transformation(), context.shapeWriter());
 
     SvgStyleWriter::saveSvgStyle(group, context);
 
@@ -215,7 +227,8 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 {
     context.shapeWriter().startElement("path");
     context.shapeWriter().addAttribute("id", context.getID(path));
-    context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(path->transformation()));
+
+    SvgUtil::writeTransformAttributeLazy("transform", path->transformation(), context.shapeWriter());
 
     SvgStyleWriter::saveSvgStyle(path, context);
 

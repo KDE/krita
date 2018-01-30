@@ -135,20 +135,27 @@ private:
 class DifferencePolicySlow
 {
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold) {
         m_colorSpace = device->colorSpace();
         m_srcPixel = srcPixel;
         m_srcPixelPtr = m_srcPixel.data();
+        m_threshold = threshold;
     }
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
-        return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+        if (m_threshold == 1) {
+            return memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize());
+        }
+        else {
+            return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+        }
     }
 
 private:
     const KoColorSpace *m_colorSpace;
     KoColor m_srcPixel;
     const quint8 *m_srcPixelPtr;
+    int m_threshold;
 };
 
 template <typename SrcPixelType>
@@ -158,10 +165,11 @@ class DifferencePolicyOptimized
     typedef QHash<HashKeyType, quint8> HashType;
 
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold) {
         m_colorSpace = device->colorSpace();
         m_srcPixel = srcPixel;
         m_srcPixelPtr = m_srcPixel.data();
+        m_threshold = threshold;
     }
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
@@ -174,7 +182,12 @@ public:
         if (it != m_differences.end()) {
             result = *it;
         } else {
-            result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            if (m_threshold == 1) {
+                result = memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize());
+            }
+            else {
+                result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            }
             m_differences.insert(key, result);
         }
 
@@ -187,6 +200,7 @@ private:
     const KoColorSpace *m_colorSpace;
     KoColor m_srcPixel;
     const quint8 *m_srcPixelPtr;
+    int m_threshold;
 };
 
 template <bool useSmoothSelection,
@@ -201,7 +215,7 @@ public:
     SelectionPolicy(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold)
         : m_threshold(threshold)
     {
-        this->initDifferencies(device, srcPixel);
+        this->initDifferences(device, srcPixel, threshold);
         m_srcIt = this->createSourceDeviceAccessor(device);
     }
 
@@ -231,7 +245,7 @@ private:
 class IsNonNullPolicySlow
 {
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int /*threshold*/) {
         Q_UNUSED(srcPixel);
 
         m_pixelSize = device->pixelSize();
@@ -251,7 +265,7 @@ template <typename SrcPixelType>
 class IsNonNullPolicyOptimized
 {
 public:
-    ALWAYS_INLINE void initDifferencies(KisPaintDeviceSP device, const KoColor &srcPixel) {
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int /*threshold*/) {
         Q_UNUSED(device);
         Q_UNUSED(srcPixel);
     }
@@ -261,6 +275,64 @@ public:
         return *pixel == 0;
     }
 };
+
+class GroupSplitPolicy
+{
+public:
+    typedef KisRandomAccessorSP SourceAccessorType;
+    SourceAccessorType m_srcIt;
+
+public:
+    GroupSplitPolicy(KisPaintDeviceSP scribbleDevice,
+                     KisPaintDeviceSP groupMapDevice,
+                     qint32 groupIndex,
+                     quint8 referenceValue, int threshold)
+        : m_threshold(threshold),
+          m_groupIndex(groupIndex),
+          m_referenceValue(referenceValue)
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_groupIndex > 0);
+
+        m_srcIt = scribbleDevice->createRandomAccessorNG(0,0);
+        m_groupMapIt = groupMapDevice->createRandomAccessorNG(0,0);
+    }
+
+    ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr) {
+        // TODO: either threshold should always be null, or there should be a special
+        //       case for *pixelPtr == 0, which is different from all the other groups,
+        //       whatever the threshold is
+
+        int diff = qAbs(int(*pixelPtr) - m_referenceValue);
+        return diff <= m_threshold ? MAX_SELECTED : MIN_SELECTED;
+    }
+
+    ALWAYS_INLINE void fillPixel(quint8 *dstPtr, quint8 opacity, int x, int y) {
+        Q_UNUSED(opacity);
+
+        // erase the scribble
+        *dstPtr = 0;
+
+        // write group index into the map
+        m_groupMapIt->moveTo(x, y);
+        qint32 *groupMapPtr = reinterpret_cast<qint32*>(m_groupMapIt->rawData());
+
+        if (*groupMapPtr != 0) {
+            qDebug() << ppVar(*groupMapPtr) << ppVar(m_groupIndex);
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(*groupMapPtr == 0);
+
+        *groupMapPtr = m_groupIndex;
+    }
+
+private:
+    int m_threshold;
+    qint32 m_groupIndex;
+    quint8 m_referenceValue;
+    KisRandomAccessorSP m_groupMapIt;
+};
+
+
 
 struct Q_DECL_HIDDEN KisScanlineFill::Private
 {
@@ -343,7 +415,7 @@ void KisScanlineFill::extendedPass(KisFillInterval *currentInterval, int srcRow,
         x += columnIncrement;
 
         pixelPolicy.m_srcIt->moveTo(x, srcRow);
-        quint8 *pixelPtr = const_cast<quint8*>(pixelPolicy.m_srcIt->rawDataConst());
+        quint8 *pixelPtr = const_cast<quint8*>(pixelPolicy.m_srcIt->rawDataConst()); // TODO: avoid doing const_cast
         quint8 opacity = pixelPolicy.calculateOpacity(pixelPtr);
 
         if (opacity) {
@@ -607,6 +679,18 @@ void KisScanlineFill::clearNonZeroComponent()
         policy.setFillColor(srcColor);
         runImpl(policy);
     }
+}
+
+void KisScanlineFill::fillContiguousGroup(KisPaintDeviceSP groupMapDevice, qint32 groupIndex)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->device->pixelSize() == 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(groupMapDevice->pixelSize() == 4);
+
+    KisRandomConstAccessorSP it = m_d->device->createRandomConstAccessorNG(m_d->startPoint.x(), m_d->startPoint.y());
+    const quint8 referenceValue = *it->rawDataConst();
+
+    GroupSplitPolicy policy(m_d->device, groupMapDevice, groupIndex, referenceValue, m_d->threshold);
+    runImpl(policy);
 }
 
 void KisScanlineFill::testingProcessLine(const KisFillInterval &processInterval)

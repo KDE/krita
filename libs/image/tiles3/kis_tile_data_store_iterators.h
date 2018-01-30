@@ -24,7 +24,7 @@
  * KisTileDataStoreClockIterator
  * - are general iterators for the contents of KisTileDataStore.
  * The store starts holding a lock when returns one of such
- * iterators, so noone will be able to change the list while
+ * iterators, so no one will be able to change the list while
  * you are iterating.
  *
  * But be careful! You can't change the list while iterating either,

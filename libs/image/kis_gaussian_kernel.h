@@ -50,11 +50,12 @@ public:
                               const QBitArray &channelFlags,
                               KoUpdater *updater);
 
-    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius);
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createLoGMatrix(qreal radius, qreal coeff = 1.0);
 
     static void applyLoG(KisPaintDeviceSP device,
                          const QRect& rect,
                          qreal radius,
+                         qreal coeff,
                          const QBitArray &channelFlags,
                          KoUpdater *progressUpdater);
 };

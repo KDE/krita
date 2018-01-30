@@ -22,6 +22,8 @@
 
 #include <QList>
 #include "kis_single_action_shortcut.h"
+#include "KisInputActionGroup.h"
+#include <functional>
 
 class QEvent;
 class QWheelEvent;
@@ -33,6 +35,7 @@ class QPointF;
 class KisStrokeShortcut;
 class KisTouchShortcut;
 class KisNativeGestureShortcut;
+
 
 /**
  * The class that manages connections between shortcuts and actions.
@@ -218,6 +221,8 @@ public:
      * Remove all shortcuts that have been registered.
      */
     void clearShortcuts();
+
+    void setInputActionGroupsMaskCallback(std::function<KisInputActionGroupsMask()> func);
 
 private:
     friend class KisInputManagerTest;

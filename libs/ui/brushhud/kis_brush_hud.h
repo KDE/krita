@@ -34,6 +34,8 @@ public:
     void updateProperties();
     QSize sizeHint() const override;
 
+    void updateIcons();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     bool event(QEvent *event) override;

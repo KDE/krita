@@ -37,7 +37,7 @@
 #include <kis_iterator_ng.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-        : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
+    : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
 {
     setSupportsPainting(false);
 }
@@ -114,10 +114,10 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
 
     for (int j = 0; j < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); j++) {
         do {
-                quint8 diff = cs->difference(dstIt->oldRawData(), intermIt->oldRawData());
-                if (diff > threshold) {
-                    memcpy(dstIt->rawData(), intermIt->oldRawData(), cs->pixelSize());
-                }
+            quint8 diff = cs->difference(dstIt->oldRawData(), intermIt->oldRawData());
+            if (diff > threshold) {
+                memcpy(dstIt->rawData(), intermIt->oldRawData(), cs->pixelSize());
+            }
             if (progressUpdater) progressUpdater->setValue(++count);
             intermIt->nextPixel();
         } while (dstIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));

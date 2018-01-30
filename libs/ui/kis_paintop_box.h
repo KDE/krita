@@ -52,6 +52,7 @@ class KoCanvasController;
 class KisViewManager;
 class KisCanvasResourceProvider;
 class KisPopupButton;
+class KisIconWidget;
 class KisToolOptionsPopup;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
@@ -76,7 +77,7 @@ class KisPresetSaveWidget;
     void slotDirtyPresetToggled(bool);
     Everytime a value is changed in a preset, the preset is made dirty through the onChange() function.
     For Locked Settings however, a changed Locked Setting will not cause a preset to become dirty. That is
-    becuase it borrows its values from the KisLockedPropertiesServer.
+    because it borrows its values from the KisLockedPropertiesServer.
     Hence the dirty state of the Preset is kept consistent before and after a writeConfiguration operation in  most cases.
  * XXX: When we have a lot of paintops, replace the listbox
  * with a table, and for every category a combobox.
@@ -121,6 +122,11 @@ public Q_SLOTS:
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResource* resource);
+
+    /// This should take care of creating a new brush preset from scratch
+    /// It will either load the default brush preset for the engine,
+    /// or create a new empty preset if a default preset does not exist
+    void slotCreatePresetFromScratch(QString paintop);
 
 private:
 
@@ -181,12 +187,11 @@ private:
     KisPopupButton*                     m_toolOptionsPopupButton;
 
     KisPresetSaveWidget*                m_savePresetWidget;
-    KisPopupButton*                     m_brushEditorPopupButton;
+    KisIconWidget*                     m_brushEditorPopupButton;
     KisPopupButton*                     m_presetSelectorPopupButton;
     KisCompositeOpComboBox*             m_cmbCompositeOp;
     QToolButton*                        m_eraseModeButton;
     QToolButton*                        m_alphaLockButton;
-    QToolButton*                        m_disablePressureButton;
     QToolButton*                        m_hMirrorButton;
     QToolButton*                        m_vMirrorButton;
     KisToolOptionsPopup*                m_toolOptionsPopup;

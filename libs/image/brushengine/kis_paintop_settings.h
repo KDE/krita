@@ -81,7 +81,7 @@ public:
     /**
      *
      */
-    virtual void setOptionsWidget(KisPaintOpConfigWidget* widget);
+    void setOptionsWidget(KisPaintOpConfigWidget* widget);
 
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
@@ -96,6 +96,12 @@ public:
      * store everything as properties.
      */
     virtual KisPaintOpSettingsSP clone() const;
+
+    /**
+     * Removes all the settings from the object while keeping the paintop id,
+     * which is loaded to the object by the factory
+     */
+    void resetSettings();
 
     /**
      * @return the node the paintop is working on.
@@ -290,6 +296,11 @@ public:
     static bool isLodUserAllowed(const KisPropertiesConfigurationSP config);
     static void setLodUserAllowed(KisPropertiesConfigurationSP config, bool value);
 
+    virtual bool lodSizeThresholdSupported() const;
+
+    qreal lodSizeThreshold() const;
+    void setLodSizeThreshold(qreal value);
+
     /**
     * @return the option widget of the paintop (can be 0 is no option widgets is set)
     */
@@ -302,6 +313,26 @@ public:
      *
      */
     virtual void setRandomOffset(const KisPaintInformation &paintInformation);
+
+    /**
+     * @return true if this preset demands a secondary masked brush running
+     *         alongside it
+     */
+    bool hasMaskingSettings() const;
+
+    /**
+     * @return a newly created settings object representing a preset of the masking
+     *         brush that should be run alongside the current brush
+     */
+    KisPaintOpSettingsSP createMaskingSettings() const;
+
+    /**
+     * @return a composite op id of the masked brush rendering algorithm.
+     *
+     * Please take into account that the brush itself always paints in alpha-
+     * darken mode, but the final result is combined with this composite op.
+     */
+    QString maskingBrushCompositeOp() const;
 
 protected:
 

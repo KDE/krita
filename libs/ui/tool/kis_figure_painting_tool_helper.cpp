@@ -24,6 +24,7 @@
 #include <kis_distance_information.h>
 #include "kis_image.h"
 #include "kis_painter.h"
+#include <strokes/KisFreehandStrokeInfo.h>
 
 
 KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString &name,
@@ -43,12 +44,10 @@ KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString
     m_resources->setStrokeStyle(strokeStyle);
     m_resources->setFillStyle(fillStyle);
 
-    PainterInfo *painterInfo = new PainterInfo();
+    KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(m_resources->needsIndirectPainting(),
-                                   m_resources->indirectPaintingCompositeOp(),
-                                   m_resources, painterInfo, name);
+        new FreehandStrokeStrategy(m_resources, strokeInfo, name);
 
     m_strokeId = m_strokesFacade->startStroke(stroke);
 }

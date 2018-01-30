@@ -73,6 +73,7 @@ KisNodeDelegate::KisNodeDelegate(KisNodeView *view, QObject *parent)
     , d(new Private)
 {
     d->view = view;
+
     QApplication::instance()->installEventFilter(this);
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
@@ -534,8 +535,18 @@ void KisNodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionVi
     const int y = option.rect.top() + (scm.rowHeight() - scm.border() - scm.visibilitySize()) / 2;
 
     QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
-    p->setOpacity(1.0);
+
+    // if we are not showing the layer, make the icon slightly transparent like other inactive icons
+    const qreal oldOpacity = p->opacity();
+    if (prop->state.toBool() == true) {
+         p->setOpacity(1.0);
+    }
+    else {
+        p->setOpacity(0.35);
+    }
+
     p->drawPixmap(x, y, icon.pixmap(scm.visibilitySize(),  QIcon::Normal));
+    p->setOpacity(oldOpacity);
 
     //// For debugging purposes only
     // p->save();
@@ -637,6 +648,7 @@ void KisNodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, 
         model->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
     }
 }
+
 
 bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
@@ -855,16 +867,20 @@ QStyleOptionViewItem KisNodeDelegate::getOptions(const QStyleOptionViewItem &o, 
    return option;
 }
 
-QRect KisNodeDelegate::progressBarRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-    return iconsRect(option, index);
-}
-
 void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QVariant value = index.data(KisNodeModel::ProgressRole);
     if (!value.isNull() && (value.toInt() >= 0 && value.toInt() <= 100)) {
-        const QRect r = progressBarRect(option, index);
+
+        /// The progress bar will display under the layer name area. The bars have accurate data, so we
+        /// probably don't need to also show the actual number for % complete
+
+        KisNodeViewColorScheme scm;
+        const int width = textRect(option, index).width() + scm.iconSize()*2;
+        const int height = 5;
+        const QPoint base = option.rect.bottomLeft() - QPoint(0, height );
+        const QRect r = QRect(base.x(), base.y(), width, height);
+
         p->save();
         {
             p->setClipRect(r);
@@ -874,7 +890,7 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
             opt.minimum = 0;
             opt.maximum = 100;
             opt.progress = value.toInt();
-            opt.textVisible = true;
+            opt.textVisible = false;
             opt.textAlignment = Qt::AlignHCenter;
             opt.text = i18n("%1 %", opt.progress);
             opt.rect = r;
@@ -892,4 +908,9 @@ void KisNodeDelegate::slotConfigChanged()
 
     d->checkersColor1 = cfg.checkersColor1();
     d->checkersColor2 = cfg.checkersColor2();
+}
+
+void KisNodeDelegate::slotUpdateIcon()
+{
+   KisLayerPropertiesIcons::instance()->updateIcons();
 }

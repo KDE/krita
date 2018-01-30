@@ -14,6 +14,7 @@ public:
     bool guidesLocked() const;
 public Q_SLOTS:
 
+    Document *clone() const /Factory/;
     Node * activeNode() const  /Factory/;
     void setActiveNode(Node*  value);
     QList<Node*> topLevelNodes() const  /Factory/;
@@ -60,6 +61,13 @@ public Q_SLOTS:
     bool save();
     bool saveAs(const QString & filename);
     Node *createNode(const QString & name, const QString & nodeType)  /Factory/;
+    GroupLayer *createGroupLayer(const QString &name) /Factory/;
+    CloneLayer *createCloneLayer(const QString &name, const Node *source) /Factory/;
+    FilterLayer *createFilterLayer(const QString &name, Filter &filter, Selection &selection) /Factory/;
+    FillLayer *createFillLayer(const QString &name, const QString filterName, InfoObject &configuration, Selection &selection) /Factory/;
+    VectorLayer *createVectorLayer(const QString &name) /Factory/;
+    FilterMask *createFilterMask(const QString &name, Filter &filter) /Factory/;
+    SelectionMask *createSelectionMask(const QString &name) /Factory/;
     QImage projection(int x = 0, int y = 0, int w = 0, int h = 0) const;
     QImage thumbnail(int w, int h) const;
     void lock();

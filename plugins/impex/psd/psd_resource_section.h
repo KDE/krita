@@ -117,10 +117,10 @@ public:
         COUNT_INFO        = 1080,         /* 0x0438 - (Photoshop CS4) Count Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the count in the document. See the Count Tool. */
         CS5_PRINT_INFO    = 1082,         /* 0x043A - (Photoshop CS5) Print Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print settings in the document. The color management options. */
         CS5_PRINT_STYLE   = 1083,         /* 0x043B - (Photoshop CS5) Print Style. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current print style in the document. The printing marks, labels, ornaments, etc. */
-        CS5_NSPrintInfo   = 1084,         /* 0x043C - (Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommened that you do not interpret or use this data. */
-        CS5_WIN_DEVMODE   = 1085,         /* 0x043D - (Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommened that you do not interpret or use this data. */
-        CS6_AUTOSAVE_FILE_PATH = 1086,    /* 0x043E - (Photoshop CS6) Auto Save File Path. Unicode string. It is recommened that you do not interpret or use this data. */
-        CS6_AUTOSAVE_FORMAT = 1087,       /* 0x043F - (Photoshop CS6) Auto Save Format. Unicode string. It is recommened that you do not interpret or use this data. */
+        CS5_NSPrintInfo   = 1084,         /* 0x043C - (Photoshop CS5) Macintosh NSPrintInfo. Variable OS specific info for Macintosh. NSPrintInfo. It is recommended that you do not interpret or use this data. */
+        CS5_WIN_DEVMODE   = 1085,         /* 0x043D - (Photoshop CS5) Windows DEVMODE. Variable OS specific info for Windows. DEVMODE. It is recommended that you do not interpret or use this data. */
+        CS6_AUTOSAVE_FILE_PATH = 1086,    /* 0x043E - (Photoshop CS6) Auto Save File Path. Unicode string. It is recommended that you do not interpret or use this data. */
+        CS6_AUTOSAVE_FORMAT = 1087,       /* 0x043F - (Photoshop CS6) Auto Save Format. Unicode string. It is recommended that you do not interpret or use this data. */
         CC_PATH_SELECTION_SATE = 1088,    /* 0x0440 - (Photoshop CC) Path Selection State. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) Information about the current path selection state. */
 
         PATH_INFO_FIRST   = 2000,         /* 0x07d0 - First path info block */

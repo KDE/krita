@@ -61,7 +61,7 @@
 #include <KoResourcePaths.h>
 #include "kis_action_registry.h"
 
-#include "widgets/squeezedcombobox.h"
+#include <squeezedcombobox.h>
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorSpace.h"
@@ -108,6 +108,10 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbOutlineShape->addItem(i18n("Preview Outline"));
     m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
 
+    m_cmbKineticScrollingGesture->addItem(i18n("Disabled"));
+    m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
+    m_cmbKineticScrollingGesture->addItem(i18n("On Click Drag"));
+
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
 
@@ -144,6 +148,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
 
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
+    m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
+    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
+    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
@@ -189,6 +196,9 @@ void GeneralTab::setDefault()
 
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
+    m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
+    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity(true));
+    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
@@ -263,6 +273,21 @@ bool GeneralTab::compressKra()
 bool GeneralTab::toolOptionsInDocker()
 {
     return m_radioToolOptionsInDocker->isChecked();
+}
+
+int GeneralTab::kineticScrollingGesture()
+{
+    return m_cmbKineticScrollingGesture->currentIndex();
+}
+
+int GeneralTab::kineticScrollingSensitivity()
+{
+    return m_kineticScrollingSensitivity->value();
+}
+
+bool GeneralTab::kineticScrollingScrollbar()
+{
+    return m_chkKineticScrollingScrollbar->isChecked();
 }
 
 bool GeneralTab::switchSelectionCtrlAlt()
@@ -869,6 +894,24 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
             cmbFilterMode->removeItem(3);
         }
     }
+
+    const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
+    if (openglWarnings.isEmpty()) {
+        lblOpenGLWarnings->setVisible(false);
+    } else {
+        QString text("<span style=\"color: yellow;\">&#x26A0;</span> ");
+        text.append(i18n("Warning(s):"));
+        text.append("<ul>");
+        Q_FOREACH (const QString &warning, openglWarnings) {
+            text.append("<li>");
+            text.append(warning.toHtmlEscaped());
+            text.append("</li>");
+        }
+        text.append("</ul>");
+        lblOpenGLWarnings->setText(text);
+        lblOpenGLWarnings->setVisible(true);
+    }
+
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
        grpOpenGL->setVisible(false);
        grpOpenGL->setMaximumHeight(0);
@@ -1176,6 +1219,9 @@ bool KisDlgPreferences::editPreferences()
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
 
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
+        cfg.setKineticScrollingGesture(dialog->m_general->kineticScrollingGesture());
+        cfg.setKineticScrollingSensitivity(dialog->m_general->kineticScrollingSensitivity());
+        cfg.setKineticScrollingScrollbar(dialog->m_general->kineticScrollingScrollbar());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());

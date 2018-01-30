@@ -203,7 +203,7 @@ public:
 
     /**
      * User visible name which contains the name of the color model and of the color depth.
-     * For intance "RGBA (8-bits)" or "CMYKA (16-bits)".
+     * For instance "RGBA (8-bits)" or "CMYKA (16-bits)".
      */
     QString name() const;
 
@@ -251,7 +251,7 @@ public:
      * Retrieve a single composite op from the ones this colorspace offers.
      * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
      */
-    virtual const KoCompositeOp * compositeOp(const QString & id) const;
+    const KoCompositeOp * compositeOp(const QString & id) const;
 
     /**
      * add a composite op to this colorspace.
@@ -493,7 +493,7 @@ public:
 
     /**
      * Get the difference between 2 colors, normalized in the range (0,255). Only completely
-     * opaque and completely transparent are taken into account when computing the different;
+     * opaque and completely transparent are taken into account when computing the difference;
      * other transparency levels are not regarded when finding the difference.
      */
     virtual quint8 difference(const quint8* src1, const quint8* src2) const = 0;

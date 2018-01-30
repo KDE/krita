@@ -114,6 +114,7 @@ private:
     KisCoordinatesConverter* m_coordinatesConverter;
 
     KisActionManager* m_actionManager;
+    KisViewManager* m_viewManager;
     KisFavoriteResourceManager* m_resourceManager;
     KisColorSelectorInterface* m_triangleColorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
@@ -156,6 +157,9 @@ Q_SIGNALS:
     // is not visible
     void sigEnableChangeFGColor(bool);
     void sigTriggerTimer();
+
+public Q_SLOTS:
+    void slotUpdateIcons();
 
 private Q_SLOTS:
     void slotExternalFgColorChanged(const KoColor &color);

@@ -5,10 +5,12 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../plugin
 )
 
 set(kritarunner_SRCS main.cpp
-    ../plugin/engine.cpp
     ../plugin/plugin.cpp
     ../plugin/pyqtpluginsettings.cpp
     ../plugin/utilities.cpp
+    ../plugin/PykritaModule.cpp
+    ../plugin/PythonPluginManager.cpp
+    ../plugin/PythonPluginsModel.cpp
 )
 
 add_executable(kritarunner ${kritarunner_SRCS})

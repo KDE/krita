@@ -20,7 +20,7 @@ void KisAutoBrushFactoryTest::testXMLClone()
     QDomDocument d;
     QDomElement e = d.createElement("Brush");
     brush->toXML(d, e);
-    KisBrushSP clone = KisAutoBrushFactory().getOrCreateBrush(e, false);
+    KisBrushSP clone = KisAutoBrushFactory().createBrush(e);
 
     // Test that the clone has the same settings as the original brush.
     QCOMPARE(brush->width(), clone->width());

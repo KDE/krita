@@ -345,7 +345,7 @@ void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
     QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
-    Q_ASSERT(stroke);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
 
     KisStrokeSP buddy = stroke->lodBuddy();
     if (buddy) {
@@ -364,7 +364,7 @@ void KisStrokesQueue::addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobD
     QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
-    Q_ASSERT(stroke);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
 
     stroke->addMutatedJobs(list);
 }
@@ -374,7 +374,7 @@ void KisStrokesQueue::endStroke(KisStrokeId id)
     QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
-    Q_ASSERT(stroke);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
     stroke->endStroke();
     m_d->openedStrokesCounter--;
 

@@ -658,7 +658,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
 
 bool KisNodeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const {
     if (parent.isValid()) {
-        // drop occured on an item. always return true as returning false will mess up
+        // drop occurred on an item. always return true as returning false will mess up
         // QT5's drag handling (see KisNodeModel::setDropEnabled).
         return true;
     } else {

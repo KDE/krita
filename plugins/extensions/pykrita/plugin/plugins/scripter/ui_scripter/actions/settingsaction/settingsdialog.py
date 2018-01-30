@@ -10,7 +10,7 @@ class SettingsDialog(QDialog):
         self.scripter = scripter
         self.setWindowTitle('Settings')
         self.mainLayout = QFormLayout(self)
-        self.mainLayout.addRow('Syntax Highlither', syntaxstylescombobox.SyntaxStylesComboBox(self.scripter.uicontroller.highlight))
+        self.mainLayout.addRow('Syntax Highlither', syntaxstylescombobox.SyntaxStylesComboBox(self.scripter.uicontroller.highlight, self.scripter.uicontroller.editor))
         self.mainLayout.addRow('Fonts', fontscombobox.FontsComboBox(self.scripter.uicontroller.editor))
 
     def readSettings(self, settings):

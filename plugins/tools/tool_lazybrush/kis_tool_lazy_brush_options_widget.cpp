@@ -68,6 +68,40 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->ui->colorView->setAllowModification(false); //people proly shouldn't be able to edit the colorentries themselves.
     m_d->ui->colorView->setCrossedKeyword("transparent");
 
+    connect(m_d->ui->chkUseEdgeDetection, SIGNAL(toggled(bool)), SLOT(slotUseEdgeDetectionChanged(bool)));
+    connect(m_d->ui->intEdgeDetectionSize, SIGNAL(valueChanged(int)), SLOT(slotEdgeDetectionSizeChanged(int)));
+    connect(m_d->ui->intRadius, SIGNAL(valueChanged(int)), SLOT(slotRadiusChanged(int)));
+    connect(m_d->ui->intCleanUp, SIGNAL(valueChanged(int)), SLOT(slotCleanUpChanged(int)));
+    connect(m_d->ui->chkLimitToDevice, SIGNAL(toggled(bool)), SLOT(slotLimitToDeviceChanged(bool)));
+
+    m_d->ui->intEdgeDetectionSize->setRange(0, 100);
+    m_d->ui->intEdgeDetectionSize->setExponentRatio(2.0);
+    m_d->ui->intEdgeDetectionSize->setSuffix(i18n(" px"));
+    m_d->ui->intEdgeDetectionSize->setPrefix("Edge detection: ");
+    m_d->ui->intEdgeDetectionSize->setToolTip(
+        i18nc("@info:tooltip",
+              "Activate for images with vast solid areas. "
+              "Set the value to the width of the thinnest "
+              "lines on the image"));
+
+    m_d->ui->intRadius->setRange(0, 1000);
+    m_d->ui->intRadius->setExponentRatio(3.0);
+    m_d->ui->intRadius->setSuffix(i18n(" px"));
+    m_d->ui->intRadius->setPrefix("Gap close hint: ");
+    m_d->ui->intRadius->setToolTip(
+        i18nc("@info:tooltip",
+              "The mask will try to close non-closed contours "
+              "if the gap is smaller than \"Gap close hint\" value"));
+
+    m_d->ui->intCleanUp->setRange(0, 100);
+    m_d->ui->intCleanUp->setSuffix(i18n(" %"));
+    m_d->ui->intCleanUp->setPrefix("Clean up: ");
+    m_d->ui->intCleanUp->setToolTip(
+        i18nc("@info:tooltip",
+              "The mask will try to remove parts of the key strokes "
+              "that are placed outside the closed contours. 0% - no effect, 100% - max effect"));
+
+
     connect(m_d->ui->colorView, SIGNAL(indexEntrySelected(QModelIndex)), this, SLOT(entrySelected(QModelIndex)));
     connect(m_d->ui->btnTransparent, SIGNAL(toggled(bool)), this, SLOT(slotMakeTransparent(bool)));
     connect(m_d->ui->btnRemove, SIGNAL(clicked()), this, SLOT(slotRemove()));
@@ -122,12 +156,9 @@ void KisToolLazyBrushOptionsWidget::hideEvent(QHideEvent *event)
 
 void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
 {
-    qDebug()<<"triggered";
     if (!index.isValid()) return;
 
-    qDebug()<<index;
     const int i = m_d->colorModel->idFromIndex(index);
-    qDebug()<<i;
 
     if (i >= 0 && i < (int)m_d->colorSet.nColors()) {
         KoColorSetEntry entry = m_d->colorModel->colorSetEntryFromIndex(index);
@@ -159,7 +190,9 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
         m_d->ui->btnTransparent->setChecked(false);
     }
 
-    QModelIndex newIndex = m_d->colorModel->indexFromId(selectedIndex);
+    QModelIndex newIndex =
+        selectedIndex >= 0 ?
+        m_d->colorModel->indexFromId(selectedIndex) : QModelIndex();
 
     if (newIndex != m_d->ui->colorView->currentIndex()) {
         m_d->ui->colorView->setCurrentIndex(newIndex);
@@ -187,20 +220,25 @@ void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
 
 void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
 {
-    KisSignalsBlocker b(m_d->ui->chkAutoUpdates,
-                        m_d->ui->btnUpdate,
-                        m_d->ui->chkShowKeyStrokes,
-                        m_d->ui->chkShowOutput);
+    KisSignalsBlocker b1(m_d->ui->chkAutoUpdates,
+                         m_d->ui->btnUpdate,
+                         m_d->ui->chkShowKeyStrokes,
+                         m_d->ui->chkShowOutput);
+    KisSignalsBlocker b2(m_d->ui->chkUseEdgeDetection,
+                         m_d->ui->intEdgeDetectionSize,
+                         m_d->ui->intRadius,
+                         m_d->ui->intCleanUp,
+                         m_d->ui->chkLimitToDevice);
 
     // not implemented yet!
     //m_d->ui->chkAutoUpdates->setEnabled(m_d->activeMask);
     m_d->ui->chkAutoUpdates->setEnabled(false);
+    m_d->ui->chkAutoUpdates->setVisible(false);
 
     bool value = false;
 
-    value = m_d->activeMask && !KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, true).toBool();
-    m_d->ui->btnUpdate->setEnabled(m_d->activeMask && !m_d->ui->chkAutoUpdates->isChecked());
-    m_d->ui->btnUpdate->setChecked(value);
+    value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeNeedsUpdate, true).toBool();
+    m_d->ui->btnUpdate->setEnabled(m_d->activeMask && !m_d->ui->chkAutoUpdates->isChecked() && value);
 
     value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool();
     m_d->ui->chkShowKeyStrokes->setEnabled(m_d->activeMask);
@@ -209,6 +247,19 @@ void KisToolLazyBrushOptionsWidget::slotUpdateNodeProperties()
     value = m_d->activeMask && KisLayerPropertiesIcons::nodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool();
     m_d->ui->chkShowOutput->setEnabled(m_d->activeMask);
     m_d->ui->chkShowOutput->setChecked(value);
+
+    m_d->ui->chkUseEdgeDetection->setEnabled(m_d->activeMask);
+    m_d->ui->chkUseEdgeDetection->setChecked(m_d->activeMask && m_d->activeMask->useEdgeDetection());
+
+    m_d->ui->intEdgeDetectionSize->setEnabled(m_d->activeMask && m_d->ui->chkUseEdgeDetection->isChecked());
+    m_d->ui->intEdgeDetectionSize->setValue(m_d->activeMask ? m_d->activeMask->edgeDetectionSize() : 4.0);
+    m_d->ui->intRadius->setEnabled(m_d->activeMask);
+    m_d->ui->intRadius->setValue(2 * (m_d->activeMask ? m_d->activeMask->fuzzyRadius() : 15));
+    m_d->ui->intCleanUp->setEnabled(m_d->activeMask);
+    m_d->ui->intCleanUp->setValue(100 * (m_d->activeMask ? m_d->activeMask->cleanUpAmount() : 0.7));
+
+    m_d->ui->chkLimitToDevice->setEnabled(m_d->activeMask);
+    m_d->ui->chkLimitToDevice->setChecked(m_d->activeMask && m_d->activeMask->limitToDeviceBounds());
 }
 
 void KisToolLazyBrushOptionsWidget::slotCurrentNodeChanged(KisNodeSP node)
@@ -277,6 +328,7 @@ void KisToolLazyBrushOptionsWidget::slotUpdate()
 
 void KisToolLazyBrushOptionsWidget::slotSetAutoUpdates(bool value)
 {
+    // not implemented yet!
     ENTER_FUNCTION() << ppVar(value);
 }
 
@@ -290,5 +342,36 @@ void KisToolLazyBrushOptionsWidget::slotSetShowOutput(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
     KisLayerPropertiesIcons::setNodeProperty(m_d->activeMask, KisLayerPropertiesIcons::colorizeShowColoring, value, m_d->provider->currentImage());
+}
+
+void KisToolLazyBrushOptionsWidget::slotUseEdgeDetectionChanged(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
+    m_d->activeMask->setUseEdgeDetection(value);
+    m_d->ui->intEdgeDetectionSize->setEnabled(value);
+}
+
+void KisToolLazyBrushOptionsWidget::slotEdgeDetectionSizeChanged(int value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
+    m_d->activeMask->setEdgeDetectionSize(value);
+}
+
+void KisToolLazyBrushOptionsWidget::slotRadiusChanged(int value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
+    m_d->activeMask->setFuzzyRadius(0.5 * value);
+}
+
+void KisToolLazyBrushOptionsWidget::slotCleanUpChanged(int value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
+    m_d->activeMask->setCleanUpAmount(qreal(value) / 100.0);
+}
+
+void KisToolLazyBrushOptionsWidget::slotLimitToDeviceChanged(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->activeMask);
+    m_d->activeMask->setLimitToDeviceBounds(value);
 }
 

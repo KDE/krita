@@ -38,6 +38,7 @@
 #include <SvgStyleParser.h>
 #include <SvgWriter.h>
 #include <SvgStyleWriter.h>
+#include <KisQPainterStateSaver.h>
 
 #include <klocalizedstring.h>
 
@@ -66,8 +67,30 @@ ArtisticTextShape::~ArtisticTextShape()
     }
 }
 
+KoShape *ArtisticTextShape::cloneShape() const
+{
+    ArtisticTextShape *clone = new ArtisticTextShape();
+    clone->m_ranges = m_ranges;
+    if (m_path) {
+        clone->m_path = static_cast<KoPathShape*>(m_path->cloneShape());
+    }
+    clone->m_charOutlines = m_charOutlines;
+    clone->m_startOffset = m_startOffset;
+    clone->m_outlineOrigin = m_outlineOrigin;
+    clone->m_outline = m_outline;
+    clone->m_baseline = m_baseline;
+    clone->m_textAnchor = m_textAnchor;
+    clone->m_charOffsets = m_charOffsets;
+    clone->m_charPositions = m_charPositions;
+    clone->m_textUpdateCounter = m_textUpdateCounter;
+    clone->m_defaultFont = m_defaultFont;
+    return clone;
+}
+
 void ArtisticTextShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
+    KisQPainterStateSaver saver(&painter);
+
     applyConversion(painter, converter);
     if (background()) {
         background()->paint(painter, converter, paintContext, outline());
@@ -1052,7 +1075,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
     if (layout() == ArtisticTextShape::Straight) {
         context.shapeWriter().addAttributePt("x", anchorOffset);
         context.shapeWriter().addAttributePt("y", baselineOffset());
-        context.shapeWriter().addAttribute("transform", SvgUtil::transformToString(transformation()));
+        SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
         Q_FOREACH (const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
         }
@@ -1354,8 +1377,11 @@ ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, Artist
     }
 
     range.setRotations(context.rotations(textLength));
+
+#if 0
     range.setLetterSpacing(gc->letterSpacing);
     range.setWordSpacing(gc->wordSpacing);
+
     if (gc->baselineShift == "sub") {
         range.setBaselineShift(ArtisticTextRange::Sub);
     } else if (gc->baselineShift == "super") {
@@ -1368,6 +1394,7 @@ ArtisticTextRange ArtisticTextShape::createTextRange(const QString &text, Artist
             range.setBaselineShift(ArtisticTextRange::Length, value);
         }
     }
+#endif
 
     //range.printDebug();
 

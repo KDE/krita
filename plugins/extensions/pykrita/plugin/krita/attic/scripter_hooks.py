@@ -92,7 +92,7 @@ class MenuHooks(object):
 
     def appendMenu(self, menu):
         """
-          Probably not that usefull
+          Probably not that useful
           because it will add a menu after the help menu
         """
         action = self.menubar.addMenu(menu)

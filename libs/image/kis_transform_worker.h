@@ -77,7 +77,7 @@ public:
     static void mirrorY(KisPaintDeviceSP dev);
 
     /**
-     * Offset the specified device with wraping around edges of rect specified as QRect(0,0,wrapSize.width, wrapSize.height)*
+     * Offset the specified device with wrapping around edges of rect specified as QRect(0,0,wrapSize.width, wrapSize.height)*
      * @param device device to be offset
      * @param offsetPosition position where the new origin will be
      * @param wrapSize width and height of the wrap edge, usual scenario is to use canvas width&height

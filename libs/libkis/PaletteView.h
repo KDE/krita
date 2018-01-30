@@ -53,20 +53,20 @@ public Q_SLOTS:
      * This gives a simple dialog for adding colors, with options like
      * adding name, id, and to which group the color should be added.
      * @param color the default color to add
-     * @return whether it was succesful.
+     * @return whether it was successful.
      */
     bool addEntryWithDialog(ManagedColor *color);
     /**
      * @brief addGroupWithDialog
      * gives a little dialog to ask for the desired groupname.
-     * @return whether this was succesful.
+     * @return whether this was successful.
      */
     bool addGroupWithDialog();
     /**
      * @brief removeSelectedEntryWithDialog
      * removes the selected entry. If it is a group, it pop up a dialog
      * asking whether the colors should also be removed.
-     * @return whether this was succesful
+     * @return whether this was successful
      */
     bool removeSelectedEntryWithDialog();
     /**

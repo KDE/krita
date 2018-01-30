@@ -30,7 +30,7 @@
 #include <QGridLayout>
 
 #include <klocalizedstring.h>
-#include <kcombobox.h>
+#include <squeezedcombobox.h>
 
 #include <KoIcon.h>
 
@@ -41,18 +41,17 @@
 class Q_DECL_HIDDEN KoTagChooserWidget::Private
 {
 public:
-    KComboBox* comboBox;
+    SqueezedComboBox* comboBox;
     KoTagToolButton* tagToolButton;
     QList<QString> readOnlyTags;
     QList<QString> tags;
 };
 
 KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
-, d(new Private())
+  , d(new Private())
 {
-    d->comboBox = new KComboBox(this);
+    d->comboBox = new SqueezedComboBox(this);
     d->comboBox->setToolTip(i18n("Tag"));
-    d->comboBox->setInsertPolicy(KComboBox::InsertAlphabetically);
     d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed );
 
 
@@ -120,7 +119,7 @@ void KoTagChooserWidget::setCurrentIndex(int index)
 
 int KoTagChooserWidget::findIndexOf(QString tagName)
 {
-    return d->comboBox->findText(tagName);
+    return d->comboBox->findOriginalText(tagName);
 }
 
 void KoTagChooserWidget::addReadOnlyItem(QString tagName)
@@ -138,21 +137,15 @@ void KoTagChooserWidget::insertItem(QString tagName)
     }
 
     int index = tags.indexOf(tagName);
-    if (d->comboBox->findText(tagName) == -1) {
-        insertItemAt(index, tagName);
+    if (d->comboBox->findOriginalText(tagName) == -1) {
+        d->comboBox->insertSqueezedItem(tagName, index);
         d->tags.append(tagName);
     }
-
-}
-
-void KoTagChooserWidget::insertItemAt(int index, QString tag)
-{
-    d->comboBox->insertItem(index,tag);
 }
 
 QString KoTagChooserWidget::currentlySelectedTag()
 {
-    return d->comboBox->currentText();
+    return d->comboBox->itemHighlighted();
 }
 
 QStringList KoTagChooserWidget::allTags()
@@ -162,7 +155,7 @@ QStringList KoTagChooserWidget::allTags()
 
 bool KoTagChooserWidget::selectedTagIsReadOnly()
 {
-    return d->readOnlyTags.contains(d->comboBox->currentText()) ;
+    return d->readOnlyTags.contains(d->comboBox->itemHighlighted()) ;
 }
 
 void KoTagChooserWidget::addItems(QStringList tagNames)
@@ -177,19 +170,19 @@ void KoTagChooserWidget::addItems(QStringList tagNames)
     items.append(tagNames);
     d->tags.append(tagNames);
 
-    d->comboBox->addItems(items);
+    d->comboBox->resetOriginalTexts(items);
 }
 
 void KoTagChooserWidget::clear()
 {
-    d->comboBox->clear();
+    d->comboBox->resetOriginalTexts(QStringList());
 }
 
 void KoTagChooserWidget::removeItem(QString item)
 {
-    int pos = d->comboBox->findText(item);
+    int pos = findIndexOf(item);
     if (pos >= 0) {
-        d->comboBox->removeItem(pos);
+        d->comboBox->removeSqueezedItem(pos);
         d->tags.removeOne(item);
     }
 }

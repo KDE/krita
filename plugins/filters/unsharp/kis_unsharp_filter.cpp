@@ -66,7 +66,7 @@ KisFilterConfigurationSP KisUnsharpFilter::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration(id().id(), 1);
     config->setProperty("halfSize", 1);
-    config->setProperty("amount", 50);
+    config->setProperty("amount", 0.5);
     config->setProperty("threshold", 0);
     config->setProperty("lightnessOnly", true);
     return config;
@@ -98,7 +98,7 @@ void KisUnsharpFilter::processImpl(KisPaintDeviceSP device,
     KisLodTransformScalar t(device);
 
     const qreal halfSize = t.scale(config->getProperty("halfSize", value) ? value.toDouble() : 1.0);
-    const qreal amount = (config->getProperty("amount", value)) ? value.toDouble() : 25;
+    const qreal amount = (config->getProperty("amount", value)) ? value.toDouble() : 0.5;
     const uint threshold = (config->getProperty("threshold", value)) ? value.toUInt() : 0;
     const uint lightnessOnly = (config->getProperty("lightnessOnly", value)) ? value.toBool() : true;
 
@@ -147,8 +147,18 @@ void KisUnsharpFilter::processRaw(KisPaintDeviceSP device,
 
     for (int j = 0; j < rect.height(); j++) {
         do {
-            quint8 diff = cs->difference(dstIt->oldRawData(), dstIt->rawDataConst());
-            if (diff > threshold) {
+            quint8 diff = 0;
+            if (threshold == 1) {
+                if (memcmp(dstIt->oldRawData(), dstIt->rawDataConst(), cs->pixelSize()) == 0) {
+                    diff = 1;
+                }
+            }
+            else {
+                diff = cs->difference(dstIt->oldRawData(), dstIt->rawDataConst());
+            }
+
+
+            if (diff >= threshold) {
                 memcpy(colors[0], dstIt->oldRawData(), pixelSize);
                 memcpy(colors[1], dstIt->rawDataConst(), pixelSize);
                 convolutionOp->convolveColors(colors, weights, dstIt->rawData(), factor, 0, 2, channelFlags);
@@ -185,7 +195,7 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
     for (int j = 0; j < rect.height(); j++) {
         do {
             quint8 diff = cs->differenceA(dstIt->oldRawData(), dstIt->rawDataConst());
-            if (diff > threshold) {
+            if (diff >= threshold) {
                 cs->toLabA16(dstIt->oldRawData(), (quint8*)labColorSrc, 1);
                 cs->toLabA16(dstIt->rawDataConst(), (quint8*)labColorDst, 1);
 

@@ -380,7 +380,7 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
 {
     if (!d->allowLocalUnitManagement) {
-        return; //the unit management is completly transfered to the unitManagers.
+        return; //the unit management is completely transferred to the unitManagers.
     }
 
     blockChildSignals(true);

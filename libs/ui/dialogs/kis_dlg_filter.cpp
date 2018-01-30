@@ -36,13 +36,16 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_filter_manager.h"
 #include "ui_wdgfilterdialog.h"
+#include "kis_canvas2.h"
 
 
 struct KisDlgFilter::Private {
-    Private()
+    Private(KisFilterManager *_filterManager, KisViewManager *_view)
             : currentFilter(0)
             , resizeCount(0)
-            , view(0)
+            , view(_view)
+            , filterManager(_filterManager)
+            , blockModifyingActionsGuard(new KisInputActionGroupsMaskGuard(view->canvasBase(), ViewTransformActionGroup))
     {
     }
 
@@ -52,18 +55,20 @@ struct KisDlgFilter::Private {
     int resizeCount;
     KisViewManager *view;
     KisFilterManager *filterManager;
+
+    // a special guard object that blocks all the painting input actions while the
+    // dialog is open
+    QScopedPointer<KisInputActionGroupsMaskGuard> blockModifyingActionsGuard;
 };
 
 KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManager *filterManager, QWidget *parent) :
         QDialog(parent),
-        d(new Private)
+        d(new Private(filterManager, view))
 {
     setModal(false);
 
     d->uiFilterDialog.setupUi(this);
     d->node = node;
-    d->view = view;
-    d->filterManager = filterManager;
 
     d->uiFilterDialog.filterSelection->setView(view);
     d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig().showFilterGallery());
@@ -226,7 +231,7 @@ void KisDlgFilter::resizeEvent(QResizeEvent* event)
 {
     QDialog::resizeEvent(event);
 
-//    // Workaround, after the initalisation don't center the dialog anymore
+//    // Workaround, after the initialisation don't center the dialog anymore
 //    if(d->resizeCount < 2) {
 //        QWidget* canvas = d->view->canvas();
 //        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());

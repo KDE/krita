@@ -976,7 +976,7 @@ void writeColors(KisLazyFillGraph &graph, const std::vector<int> &groups, KisPai
     KoColor gray(Qt::gray, dst->colorSpace());
     const int pixelSize = dst->colorSpace()->pixelSize();
 
-    do {
+    while (dstIt.nextPixel()) {
         KisLazyFillGraph::vertex_descriptor v(dstIt.x(), dstIt.y());
         long vertex_idx = get(boost::vertex_index, graph, v);
         int label = groups[vertex_idx];
@@ -989,7 +989,7 @@ void writeColors(KisLazyFillGraph &graph, const std::vector<int> &groups, KisPai
 
         quint8 *dstPtr = dstIt.rawData();
         memcpy(dstPtr, color.data(), pixelSize);
-    } while (dstIt.nextPixel());
+    }
 }
 
 void writeStat(KisLazyFillGraph &graph,
@@ -1229,6 +1229,7 @@ void KisLazyBrushTest::testCutOnGraphDeviceMulti()
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 filterRect,
                                 2,
+                                1.0,
                                 QBitArray(), 0);
 
     KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, filterRect);
@@ -1272,6 +1273,7 @@ void KisLazyBrushTest::testLoG()
     KisGaussianKernel::applyLoG(filteredMainDev,
                                 rect,
                                 4.0,
+                                1.0,
                                 QBitArray(), 0);
 
     KisLazyFillTools::normalizeAndInvertAlpha8Device(filteredMainDev, rect);

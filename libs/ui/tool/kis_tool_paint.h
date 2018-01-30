@@ -138,7 +138,8 @@ protected:
     enum NodePaintAbility {
         NONE,
         PAINT,
-        VECTOR
+        VECTOR,
+        CLONE
     };
 
     /// Checks if and how the tool can paint on the current node

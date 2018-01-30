@@ -52,6 +52,8 @@ public:
     void cursorMoved(const QPointF &lastPos, const QPointF &pos) override;
     void inputEvent(QEvent* event) override;
 
+    KisInputActionGroup inputActionGroup(int shortcut) const override;
+
 private:
     class Private;
     Private * const d;

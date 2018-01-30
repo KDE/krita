@@ -25,7 +25,7 @@
 
 #include <QRect>
 #include <QImage>
-#include <QVector>
+#include "KisOptimizedByteArray.h"
 
 class KoColor;
 
@@ -41,7 +41,8 @@ class KRITAIMAGE_EXPORT KisFixedPaintDevice : public KisShared
 
 public:
 
-    KisFixedPaintDevice(const KoColorSpace* colorSpace);
+    KisFixedPaintDevice(const KoColorSpace* colorSpace,
+                        KisOptimizedByteArray::MemoryAllocatorSP allocator = KisOptimizedByteArray::MemoryAllocatorSP());
     virtual ~KisFixedPaintDevice();
 
     /**
@@ -93,13 +94,13 @@ public:
     bool initialize(quint8 defaultValue = 0);
 
     /**
-     * Changed the size of the internal buffer to accomodate the exact number of bytes
+     * Changed the size of the internal buffer to accommodate the exact number of bytes
      * needed to store area bounds(). The allocated data is *not* initialized!
      */
     void reallocateBufferWithoutInitialization();
 
     /**
-     * If the size of the internal buffer is smller than the one needed to accomodate
+     * If the size of the internal buffer is smaller than the one needed to accommodate
      * bounds(), resize the buffer. Otherwise, do nothing. The allocated data is neither
      * copying or initialized!
      */
@@ -195,8 +196,7 @@ private:
 
     const KoColorSpace* m_colorSpace;
     QRect m_bounds;
-    QByteArray m_data;
-
+    KisOptimizedByteArray m_data;
 };
 
 #endif

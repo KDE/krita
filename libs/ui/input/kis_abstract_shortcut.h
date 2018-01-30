@@ -23,6 +23,8 @@
 #include <Qt>
 #include <QSet>
 #include <kritaui_export.h>
+#include "KisInputActionGroup.h"
+
 class KisAbstractInputAction;
 
 
@@ -58,7 +60,7 @@ public:
     /**
      * Returns true if the shortcut is enabled at the moment
      */
-    bool isAvailable() const;
+    bool isAvailable(KisInputActionGroupsMask mask) const;
 
 protected:
     bool compareKeys(const QSet<Qt::Key> &keys1,

@@ -8,3 +8,7 @@ class OutPutTextEdit(QPlainTextEdit):
 
         self.setObjectName('OutPutTextEdit')
         self.setReadOnly(True)
+        doc = self.document()
+        font = doc.defaultFont()
+        font.setFamily('Monospace')
+        doc.setDefaultFont(font)

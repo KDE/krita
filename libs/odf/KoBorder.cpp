@@ -175,11 +175,11 @@ KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle, bool 
         return BorderOutset;
     if (borderstyle == "dash-largegap")
         return KoBorder::BorderDashedLong;
-    if (borderstyle == "slash") // not officially odf, but we suppport it anyway
+    if (borderstyle == "slash") // not officially odf, but we support it anyway
         return KoBorder::BorderSlash;
-    if (borderstyle == "wave") // not officially odf, but we suppport it anyway
+    if (borderstyle == "wave") // not officially odf, but we support it anyway
         return KoBorder::BorderWave;
-    if (borderstyle == "double-wave") // not officially odf, but we suppport it anyway
+    if (borderstyle == "double-wave") // not officially odf, but we support it anyway
         return KoBorder::BorderDoubleWave;
 
     if (converted)
@@ -226,11 +226,11 @@ QString KoBorder::msoBorderStyleString(BorderStyle borderstyle)
     case KoBorder::BorderDashedLong:
         return QString("dash-largegap");
     case KoBorder::BorderSlash:
-        return QString("slash"); // not officially odf, but we suppport it anyway
+        return QString("slash"); // not officially odf, but we support it anyway
     case KoBorder::BorderWave:
-        return QString("wave"); // not officially odf, but we suppport it anyway
+        return QString("wave"); // not officially odf, but we support it anyway
     case KoBorder::BorderDoubleWave:
-        return QString("double-wave"); // not officially odf, but we suppport it anyway
+        return QString("double-wave"); // not officially odf, but we support it anyway
 
     default:
         // Handle remaining styles as odf type style.

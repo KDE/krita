@@ -432,7 +432,7 @@ void KisPrescaledProjectionTest::testQtScaling()
     // See: https://bugreports.qt.nokia.com/browse/QTBUG-22827
 
     /**
-     * Curently we rely on this behavior, so let's test for it.
+     * Currently we rely on this behavior, so let's test for it.
      */
 
     // Create a canvas image

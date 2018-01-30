@@ -10,7 +10,6 @@ macro_add_unittest_definitions()
 
 ecm_add_tests(
     kis_image_view_converter_test.cpp
-    squeezedcombobox_test.cpp
     kis_shape_selection_test.cpp
     kis_recorded_action_editor_test.cpp
     kis_doc2_test.cpp

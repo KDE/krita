@@ -27,7 +27,7 @@
 #include <metadata/kis_meta_data_value.h>
 #include <kis_debug.h>
 
-// ---- Generic convertion functions ---- //
+// ---- Generic conversion functions ---- //
 
 // Convert an exiv value to a KisMetaData value
 KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool forceSeq, KisMetaData::Value::ValueType arrayType)

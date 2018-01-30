@@ -136,11 +136,11 @@ QRect Channel::bounds() const
     KisSequentialConstIterator srcIt(d->node->projection(), rect);
     KisSequentialIterator dstIt(dev, rect);
 
-    do {
+    while(srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         memcpy(dstIt.rawData(), srcPtr + d->channel->pos(), d->channel->size());
 
-    } while(srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     if (dev) {
         return dev->exactBounds();
@@ -159,27 +159,27 @@ QByteArray Channel::pixelData(const QRect &rect) const
     KisSequentialConstIterator srcIt(d->node->projection(), rect);
 
     if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
-        do {
+        while(srcIt.nextPixel()) {
             stream << (quint8) *srcIt.rawDataConst();
-        } while(srcIt.nextPixel());
+        }
     }
     else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
-        do {
+        while(srcIt.nextPixel()) {
             stream << (quint16) *srcIt.rawDataConst();
-        } while(srcIt.nextPixel());
+        }
     }
 #ifdef HAVE_OPENEXR
     else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
-        do {
+        while(srcIt.nextPixel()) {
             half h = (half)*srcIt.rawDataConst();
             stream << (float)h;
-        } while(srcIt.nextPixel());
+        }
     }
 #endif
     else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
-        do {
+        while(srcIt.nextPixel()) {
             stream << (float) *srcIt.rawDataConst();
-        } while(srcIt.nextPixel());
+        }
 
     }
 
@@ -194,36 +194,36 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
     KisSequentialIterator dstIt(d->node->paintDevice(), rect);
 
     if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
-        do {
+        while (dstIt.nextPixel()) {
             quint8 v;
             stream >> v;
             *dstIt.rawData() = v ;
-        } while(dstIt.nextPixel());
+        }
     }
     else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
-        do {
+        while (dstIt.nextPixel()) {
             quint16 v;
             stream >> v;
             *dstIt.rawData() = v ;
-        } while(dstIt.nextPixel());
+        }
     }
 #ifdef HAVE_OPENEXR
     else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
-        do {
+        while (dstIt.nextPixel()) {
             float f;
             stream >> f;
             half v = f;
             *dstIt.rawData() = v ;
-        } while(dstIt.nextPixel());
+        }
 
     }
 #endif
     else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
-        do {
+        while (dstIt.nextPixel()) {
             float v;
             stream >> v;
             *dstIt.rawData() = v ;
-        } while(dstIt.nextPixel());
+        }
     }
 }
 

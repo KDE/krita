@@ -100,12 +100,12 @@ void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
 
             //read
             KisSequentialConstIterator srcIt(device, QRect(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h));
-            do {
+            while (srcIt.nextPixel()) {
                 for (qint32 i = 0; i < pixelSize; i++) {
                     average[i] += srcIt.oldRawData()[i];
                 }
                 count++;
-            } while (srcIt.nextPixel());
+            }
 
             //average
             if (count > 0) {
@@ -114,11 +114,11 @@ void KisPixelizeFilter::processImpl(KisPaintDeviceSP device,
             }
             //write
             KisSequentialIterator dstIt(device, QRect(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h));
-            do {
+            while (srcIt.nextPixel()) {
                 for (int i = 0; i < pixelSize; i++) {
                     dstIt.rawData()[i] = average[i];
                 }
-            } while (dstIt.nextPixel());
+            }
             if (progressUpdater) progressUpdater->setValue(++numberOfPixelsProcessed);
         }
     }

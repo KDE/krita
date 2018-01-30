@@ -27,8 +27,10 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
+#include <QScroller>
 
 #include "kritawidgets_export.h"
+#include <QPushButton>
 
 class QModelIndex;
 class QAbstractProxyModel;
@@ -110,6 +112,9 @@ public:
 
     bool eventFilter(QObject *object, QEvent *event) override;
 
+    /// sets up this chooser for kinetic (drag triggered) scrolling
+    void configureKineticScrolling(int gesture, int sensitivity, bool scrollbar);
+
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource *resource);
@@ -125,11 +130,9 @@ private Q_SLOTS:
     void clicked(const QModelIndex &index);
     void contextMenuRequested(const QPoint &pos);
     void baseLengthChanged(int length);
-
+    void updateView();
     void slotBeforeResourcesLayoutReset(KoResource *activateAfterReset);
     void slotAfterResourcesLayoutReset();
-
-    void updateView();
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -148,6 +151,10 @@ private:
 
     class Private;
     Private *const d;
+
+   QPushButton *importButton;
+   QPushButton *deleteButton;
+
 };
 
 #endif // KO_RESOURCE_ITEM_CHOOSER

@@ -34,6 +34,7 @@
 #include "KoCompositeOpErase.h"
 #include "KoCompositeOpCopy2.h"
 #include "KoCompositeOpAlphaDarken.h"
+#include "KoCompositeOpBase.h"
 #include <colorprofiles/KoDummyColorProfile.h>
 
 namespace {
@@ -46,6 +47,39 @@ template <> inline KoChannelInfo::enumChannelValueType channelInfoIdFromChannelT
 template <> inline KoChannelInfo::enumChannelValueType channelInfoIdFromChannelType<float>() { return KoChannelInfo::FLOAT32; }
 }
 
+template<class Traits>
+class AlphaColorSpaceMultiplyOp : public KoCompositeOpBase< Traits, AlphaColorSpaceMultiplyOp<Traits>>
+{
+    typedef KoCompositeOpBase<Traits, AlphaColorSpaceMultiplyOp<Traits>> base_class;
+    typedef typename Traits::channels_type channels_type;
+
+public:
+    AlphaColorSpaceMultiplyOp(const KoColorSpace* cs)
+        : base_class(cs, COMPOSITE_MULT, i18n("Multiply"), KoCompositeOp::categoryArithmetic()) { }
+
+public:
+    template<bool alphaLocked, bool allChannelFlags>
+    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
+                                                     channels_type*       dst, channels_type dstAlpha, channels_type maskAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
+        using namespace Arithmetic;
+
+        Q_UNUSED(allChannelFlags);
+        Q_UNUSED(src);
+        Q_UNUSED(dst);
+        Q_UNUSED(channelFlags);
+
+        if (!alphaLocked) {
+            // use internal parallelism for multiplication!
+            srcAlpha = mul(srcAlpha, maskAlpha);
+            dstAlpha = mul(dstAlpha, opacity);
+            dstAlpha = mul(srcAlpha, dstAlpha);
+        }
+
+        return dstAlpha;
+    }
+};
+
 
 template <class _CSTrait>
 KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
@@ -57,7 +91,8 @@ KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
     m_compositeOps << new KoCompositeOpOver<_CSTrait>(this)
                    << new KoCompositeOpErase<_CSTrait>(this)
                    << new KoCompositeOpCopy2<_CSTrait>(this)
-                   << new KoCompositeOpAlphaDarken<_CSTrait>(this);
+                   << new KoCompositeOpAlphaDarken<_CSTrait>(this)
+                   << new AlphaColorSpaceMultiplyOp<_CSTrait>(this);
 
     Q_FOREACH (KoCompositeOp *op, m_compositeOps) {
         this->addCompositeOp(op);

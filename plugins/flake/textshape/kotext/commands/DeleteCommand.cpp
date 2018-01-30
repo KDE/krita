@@ -448,7 +448,7 @@ void DeleteCommand::doDelete()
                     shapeDeleteCommand->redo();
                 }
                 // via m_shapeController->removeShape a DeleteAnchorsCommand should be created that
-                // also calls rangeManager->remove(range), so we shouldn't do that here aswell
+                // also calls rangeManager->remove(range), so we shouldn't do that here as well
             }
         } else if (annotation) {
             KoShape *shape = annotation->annotationShape();
@@ -457,7 +457,7 @@ void DeleteCommand::doDelete()
                 shapeDeleteCommand->redo();
             }
             // via m_shapeController->removeShape a DeleteAnnotationsCommand should be created that
-            // also calls rangeManager->remove(range), so we shouldn't do that here aswell
+            // also calls rangeManager->remove(range), so we shouldn't do that here as well
         } else {
             rangeManager->remove(range);
         }

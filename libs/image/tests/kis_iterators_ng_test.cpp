@@ -149,14 +149,14 @@ void KisIteratorTest::sequentialIter(const KoColorSpace * colorSpace)
         KisSequentialIterator it(dev, QRect(0, 0, 128, 128));
         int i = -1;
 
-        do {
+        while (it.nextPixel()) {
             i++;
             KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
             memcpy(it.rawData(), c.data(), colorSpace->pixelSize());
 
             QCOMPARE(it.x(), i % 128);
             QCOMPARE(it.y(), i / 128);
-        } while (it.nextPixel());
+        }
 
         QCOMPARE(dev->extent(), QRect(0, 0, 128, 128));
         QCOMPARE(dev->exactBounds(), QRect(0, 0, 128, 128));
@@ -166,14 +166,59 @@ void KisIteratorTest::sequentialIter(const KoColorSpace * colorSpace)
         KisSequentialConstIterator it(dev, QRect(0, 0, 128, 128));
         int i = -1;
 
-        do {
+        while (it.nextPixel()) {
             i++;
             KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
             QVERIFY(memcmp(it.rawDataConst(), c.data(), colorSpace->pixelSize()) == 0);
-        } while (it.nextPixel());
+        }
 
         QCOMPARE(dev->extent(), QRect(0, 0, 128, 128));
         QCOMPARE(dev->exactBounds(), QRect(0, 0, 128, 128));
+    }
+
+    { // check const iterator with **empty** area! It should neither crash nor enter the loop
+        KisSequentialConstIterator it(dev, QRect());
+
+        QVERIFY(!it.rawDataConst());
+        QVERIFY(!it.oldRawData());
+
+        while (it.nextPixel()) {
+            QVERIFY(0 && "we should never enter the loop");
+        }
+    }
+
+    { // check const iterator with strides
+        KisSequentialConstIterator it(dev, QRect(0, 0, 128, 128));
+        int i = -1;
+
+        int numConseqPixels = it.nConseqPixels();
+        while (it.nextPixels(numConseqPixels)) {
+
+            numConseqPixels = it.nConseqPixels();
+
+            for (int j = 0; j < numConseqPixels; j++) {
+                i++;
+                KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
+                QVERIFY(memcmp(it.rawDataConst() + j * colorSpace->pixelSize(),
+                               c.data(),
+                               colorSpace->pixelSize()) == 0);
+            }
+        }
+
+        QCOMPARE(dev->extent(), QRect(0, 0, 128, 128));
+        QCOMPARE(dev->exactBounds(), QRect(0, 0, 128, 128));
+    }
+
+    { // check const iterator with strides and **empty** area
+        KisSequentialConstIterator it(dev, QRect());
+
+        QVERIFY(!it.rawDataConst());
+        QVERIFY(!it.oldRawData());
+
+        int numConseqPixels = it.nConseqPixels();
+        while (it.nextPixels(numConseqPixels)) {
+            QVERIFY(0 && "we should never enter the loop");
+        }
     }
 
     dev->clear();
@@ -182,12 +227,12 @@ void KisIteratorTest::sequentialIter(const KoColorSpace * colorSpace)
         KisSequentialIterator it(dev, QRect(10, 10, 128, 128));
         int i = -1;
 
-        do {
+        while (it.nextPixel()) {
             i++;
             KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
 
             memcpy(it.rawData(), c.data(), colorSpace->pixelSize());
-        } while (it.nextPixel());
+        }
 
         QCOMPARE(dev->extent(), QRect(0, 0, 3 * 64, 3 * 64));
         QCOMPARE(dev->exactBounds(), QRect(10, 10, 128, 128));
@@ -201,12 +246,12 @@ void KisIteratorTest::sequentialIter(const KoColorSpace * colorSpace)
         KisSequentialIterator it(dev, QRect(10, 10, 128, 128));
         int i = -1;
 
-        do {
+        while (it.nextPixel()) {
             i++;
             KoColor c(QColor(i % 255, i / 255, 0), colorSpace);
 
             memcpy(it.rawData(), c.data(), colorSpace->pixelSize());
-        } while (it.nextPixel());
+        }
         QCOMPARE(dev->extent(), QRect(10, -15, 128, 192));
         QCOMPARE(dev->exactBounds(), QRect(10, 10, 128, 128));
     }

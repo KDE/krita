@@ -91,7 +91,7 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
     KisSequentialIterator it(device, applyRect);
     int p = 0;
     const int pixelSize = device->colorSpace()->pixelSize();
-    do {
+    while (it.nextPixel()) {
         if (device->colorSpace()->intensity8(it.oldRawData()) > threshold) {
             memcpy(it.rawData(), white.data(), pixelSize);
         }
@@ -101,7 +101,7 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 
         if (progressUpdater) progressUpdater->setValue(p++);
 
-    } while (it.nextPixel());
+    }
 
 }
 

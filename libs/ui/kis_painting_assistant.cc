@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2008,2011 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
+ *  Copyright (c) 2017 Scott Petrovic <scottpetrovic@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
 #include <kis_canvas2.h>
+#include "kis_tool.h"
 
 #include <KoStore.h>
 
@@ -44,6 +46,7 @@ struct KisPaintingAssistantHandle::Private {
 KisPaintingAssistantHandle::KisPaintingAssistantHandle(double x, double y) : QPointF(x, y), d(new Private)
 {
 }
+
 KisPaintingAssistantHandle::KisPaintingAssistantHandle(QPointF p) : QPointF(p), d(new Private)
 {
 }
@@ -72,7 +75,6 @@ char KisPaintingAssistantHandle::handleType()
     return d->handle_type;
 }
 
-
 KisPaintingAssistantHandle::~KisPaintingAssistantHandle()
 {
     Q_ASSERT(d->assistants.empty());
@@ -98,8 +100,11 @@ bool KisPaintingAssistantHandle::containsAssistant(KisPaintingAssistant* assista
 
 void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
 {
-    if(this->handleType()=='S' || handle.data()->handleType()== 'S')
+    if(this->handleType()== HandleType::NORMAL || handle.data()->handleType()== HandleType::SIDE) {
         return;
+    }
+
+
     Q_FOREACH (KisPaintingAssistant* assistant, handle->d->assistants) {
         if (!assistant->handles().contains(this)) {
             assistant->replaceHandle(handle, this);
@@ -118,12 +123,15 @@ void KisPaintingAssistantHandle::uncache()
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
-    bool snapping;
+    bool isSnappingActive;
     bool outlineVisible;
     QList<KisPaintingAssistantHandleSP> handles,sideHandles;
     QPixmapCache::Key cached;
     QRect cachedRect; // relative to boundingRect().topLeft()
     KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
+    KisCanvas2* m_canvas = 0;
+
+
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
         TranslationInvariantTransform() { }
@@ -132,50 +140,44 @@ struct KisPaintingAssistant::Private {
             return m11 == b.m11 && m12 == b.m12 && m21 == b.m21 && m22 == b.m22;
         }
     } cachedTransform;
+
+    QColor assistantColor;
 };
+
+void KisPaintingAssistant::setAssistantColor(QColor color)
+{
+    d->assistantColor = color;
+}
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
 {
     d->id = id;
     d->name = name;
-    d->snapping=true;
-    d->outlineVisible=true;
+    d->isSnappingActive = true;
+    d->outlineVisible = true;
 }
 
-bool KisPaintingAssistant::snapping() const
+bool KisPaintingAssistant::isSnappingActive() const
 {
-    return d->snapping;
+    return d->isSnappingActive;
 }
 
-void KisPaintingAssistant::setSnapping(bool set)
+void KisPaintingAssistant::setSnappingActive(bool set)
 {
-    d->snapping=set;
+    d->isSnappingActive = set;
 }
 
-bool KisPaintingAssistant::outline() const
+void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
-    return d->outlineVisible;
-}
-
-void KisPaintingAssistant::setOutline(bool set)
-{
-    d->outlineVisible=set;
-}
-
-void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool drawActive)
-{
-    int alpha=100;
-    if (!drawActive) {
-        alpha=20;
+    int alpha = d->assistantColor.alpha();
+    if (!isSnappingOn) {
+        alpha = d->assistantColor.alpha() *0.2;
     }
+
     painter.save();
-    QPen pen_a(QColor(0, 0, 0, alpha), 2);
+    QPen pen_a(QColor(d->assistantColor.red(), d->assistantColor.green(), d->assistantColor.blue(), alpha), 2);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
-    painter.drawPath(path);
-    QPen pen_b(QColor(255, 255, 255, alpha), 0.9);
-    pen_b.setCosmetic(true);
-    painter.setPen(pen_b);
     painter.drawPath(path);
     painter.restore();
 }
@@ -183,15 +185,10 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
 void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
 {
     painter.save();
-    QPen pen_a(QColor(0, 0, 0, 50), 1);
+    QPen pen_a(d->assistantColor, 1);
     pen_a.setStyle(Qt::SolidLine);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
-    painter.drawPath(path);
-    QPen pen_b(QColor(255, 255, 255, 50), 1);
-    pen_b.setStyle(Qt::DotLine);
-    pen_b.setCosmetic(true);
-    painter.setPen(pen_b);
     painter.drawPath(path);
     painter.restore();
 }
@@ -237,36 +234,39 @@ void KisPaintingAssistant::replaceHandle(KisPaintingAssistantHandleSP _handle, K
     _with->registerAssistant(this);
 }
 
-void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
+void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle, HandleType type)
 {
     Q_ASSERT(!d->handles.contains(handle));
-    d->handles.append(handle);
+    if (HandleType::SIDE == type) {
+        d->sideHandles.append(handle);
+    } else {
+        d->handles.append(handle);
+    }
+
     handle->registerAssistant(this);
-    handle.data()->setType('H');
+    handle.data()->setType(type);
 }
 
-void KisPaintingAssistant::addSideHandle(KisPaintingAssistantHandleSP handle)
-{
-    Q_ASSERT(!d->sideHandles.contains(handle));
-    d->sideHandles.append(handle);
-    handle->registerAssistant(this);
-    handle.data()->setType('S');
-}
 
 void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache,KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     Q_UNUSED(updateRect);
-    Q_UNUSED(canvas);
     Q_UNUSED(previewVisible);
-    findHandleLocation();
+
+    findPerspectiveAssistantHandleLocation();
+
     if (!useCache) {
         gc.save();
         drawCache(gc, converter, assistantVisible);
         gc.restore();
         return;
     }
+
     const QRect bound = boundingRect();
-    if (bound.isEmpty()) return;
+    if (bound.isEmpty()) {
+        return;
+    }
+
     const QTransform transform = converter->documentToWidgetTransform();
     const QRect widgetBound = transform.mapRect(bound);
 
@@ -276,14 +276,15 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     QPixmap cached;
     bool found = QPixmapCache::find(d->cached, &cached);
 
-    if (!(found &&
-          d->cachedTransform == transform &&
-          d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
+    if (!(found && d->cachedTransform == transform && d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
+
         const QRect cacheRect = gc.viewport().adjusted(-100, -100, 100, 100).intersected(widgetBound);
         Q_ASSERT(!cacheRect.isEmpty());
+
         if (cached.isNull() || cached.size() != cacheRect.size()) {
             cached = QPixmap(cacheRect.size());
         }
+
         cached.fill(Qt::transparent);
         QPainter painter(&cached);
         painter.setRenderHint(QPainter::Antialiasing);
@@ -294,7 +295,13 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         d->cachedRect = cacheRect.translated(-widgetBound.topLeft());
         d->cached = QPixmapCache::insert(cached);
     }
+
     gc.drawPixmap(paintRect, cached, paintRect.translated(-widgetBound.topLeft() - d->cachedRect.topLeft()));
+
+
+    if (canvas) {
+        d->m_canvas = canvas;
+    }
 }
 
 void KisPaintingAssistant::uncache()
@@ -311,30 +318,36 @@ QRect KisPaintingAssistant::boundingRect() const
     return r.adjusted(-2, -2, 2, 2).toAlignedRect();
 }
 
+bool KisPaintingAssistant::isAssistantComplete() const
+{
+    return true;
+}
+
 QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
 {
-        QByteArray data;
-        QXmlStreamWriter xml(&data);
-            xml.writeStartDocument();
-            xml.writeStartElement("assistant");
-            xml.writeAttribute("type",d->id);
-            xml.writeStartElement("handles");
-            Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
-                int id = handleMap.size();
-                if (!handleMap.contains(handle)){
-                    handleMap.insert(handle, id);
-                }
-                id = handleMap.value(handle);
-                xml.writeStartElement("handle");
-                xml.writeAttribute("id", QString::number(id));
-                xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
-                xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
-                xml.writeEndElement();
-            }
-            xml.writeEndElement();
-            xml.writeEndElement();
-            xml.writeEndDocument();
-            return data;
+    QByteArray data;
+    QXmlStreamWriter xml(&data);
+    xml.writeStartDocument();
+    xml.writeStartElement("assistant");
+    xml.writeAttribute("type",d->id);
+    xml.writeAttribute("active", QString::number(d->isSnappingActive));
+    xml.writeStartElement("handles");
+    Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
+        int id = handleMap.size();
+        if (!handleMap.contains(handle)){
+            handleMap.insert(handle, id);
+        }
+        id = handleMap.value(handle);
+        xml.writeStartElement("handle");
+        xml.writeAttribute("id", QString::number(id));
+        xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+        xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+        xml.writeEndElement();
+    }
+    xml.writeEndElement();
+    xml.writeEndElement();
+    xml.writeEndDocument();
+    return data;
 }
 
 void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
@@ -347,10 +360,15 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
     while (!xml.atEnd()) {
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
+            if (xml.name() == "assistant") {
+                QStringRef active = xml.attributes().value("active");
+                d->isSnappingActive = (active != "0");
+            }
+
             if (xml.name() == "handle") {
                 QString strId = xml.attributes().value("id").toString(),
-                strX = xml.attributes().value("x").toString(),
-                strY = xml.attributes().value("y").toString();
+                        strX = xml.attributes().value("x").toString(),
+                        strY = xml.attributes().value("y").toString();
                 if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
                     id = strId.toInt();
                     x = strX.toDouble();
@@ -359,7 +377,7 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                         handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
                     }
                 }
-                addHandle(handleMap.value(id));
+                addHandle(handleMap.value(id), HandleType::NORMAL);
             }
             break;
         default:
@@ -427,7 +445,7 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
     }
 }
 
-void KisPaintingAssistant::findHandleLocation() {
+void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
     QList<KisPaintingAssistantHandleSP> hHandlesList;
     QList<KisPaintingAssistantHandleSP> vHandlesList;
     uint vHole = 0,hHole = 0;
@@ -481,9 +499,9 @@ void KisPaintingAssistant::findHandleLocation() {
          find if the handles that should be opposite are actually oppositely positioned
          */
         if (( (d->topLeft == d->handles.at(0).data() && d->bottomRight == oppHandle) ||
-            (d->topLeft == oppHandle && d->bottomRight == d->handles.at(0).data()) ||
-            (d->topRight == d->handles.at(0).data() && d->bottomLeft == oppHandle) ||
-            (d->topRight == oppHandle && d->bottomLeft == d->handles.at(0).data()) ) )
+              (d->topLeft == oppHandle && d->bottomRight == d->handles.at(0).data()) ||
+              (d->topRight == d->handles.at(0).data() && d->bottomLeft == oppHandle) ||
+              (d->topRight == oppHandle && d->bottomLeft == d->handles.at(0).data()) ) )
         {}
         else {
             if(hHandlesList.at(0).data()->y() > hHandlesList.at(1).data()->y()) {
@@ -511,26 +529,26 @@ void KisPaintingAssistant::findHandleLocation() {
             d->bottomMiddle = new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
                                                              (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
             d->topMiddle = new KisPaintingAssistantHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
-                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5);
+                                                          (d->topLeft.data()->y() + d->topRight.data()->y())*0.5);
             d->rightMiddle= new KisPaintingAssistantHandle((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
+                                                           (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
             d->leftMiddle= new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
-            addSideHandle(d->rightMiddle.data());
-            addSideHandle(d->leftMiddle.data());
-            addSideHandle(d->bottomMiddle.data());
-            addSideHandle(d->topMiddle.data());
+                                                          (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
+            addHandle(d->rightMiddle.data(), HandleType::SIDE);
+            addHandle(d->leftMiddle.data(), HandleType::SIDE);
+            addHandle(d->bottomMiddle.data(), HandleType::SIDE);
+            addHandle(d->topMiddle.data(), HandleType::SIDE);
         }
         else
         {
             d->bottomMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5));
+                                                       (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5));
             d->topMiddle.data()->operator =(QPointF((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
-                                                             (d->topLeft.data()->y() + d->topRight.data()->y())*0.5));
+                                                    (d->topLeft.data()->y() + d->topRight.data()->y())*0.5));
             d->rightMiddle.data()->operator =(QPointF((d->topRight.data()->x() + d->bottomRight.data()->x())*0.5,
-                                                             (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
+                                                      (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5));
             d->leftMiddle.data()->operator =(QPointF((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
-                                                             (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
+                                                     (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5));
         }
 
     }
@@ -654,6 +672,53 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistant::sideHandles()
 {
     return d->sideHandles;
 }
+
+
+
+bool KisPaintingAssistant::areTwoPointsClose(const QPointF& pointOne, const QPointF& pointTwo)
+{
+    int m_handleSize = 16;
+
+    QRectF handlerect(pointTwo - QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize));
+    return handlerect.contains(pointOne);
+}
+
+KisPaintingAssistantHandleSP KisPaintingAssistant::closestCornerHandleFromPoint(QPointF point)
+{
+    if (!d->m_canvas) {
+        return 0;
+    }
+
+
+    if (areTwoPointsClose(point, pixelToView(topLeft()->toPoint()))) {
+        return topLeft();
+    } else if (areTwoPointsClose(point, pixelToView(topRight()->toPoint()))) {
+        return topRight();
+    } else if (areTwoPointsClose(point, pixelToView(bottomLeft()->toPoint()))) {
+        return bottomLeft();
+    } else if (areTwoPointsClose(point, pixelToView(bottomRight()->toPoint()))) {
+        return bottomRight();
+    }
+    return 0;
+}
+
+
+QPointF KisPaintingAssistant::pixelToView(const QPoint pixelCoords) const
+{
+    QPointF documentCoord = d->m_canvas->image()->pixelToDocument(pixelCoords);
+    return d->m_canvas->viewConverter()->documentToView(documentCoord);
+}
+
+double KisPaintingAssistant::norm2(const QPointF& p)
+{
+    return p.x() * p.x() + p.y() * p.y();
+}
+
+
+
+/*
+ * KisPaintingAssistantFactory classes
+*/
 
 KisPaintingAssistantFactory::KisPaintingAssistantFactory()
 {

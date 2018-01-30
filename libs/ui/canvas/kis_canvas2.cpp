@@ -135,6 +135,7 @@ public:
     bool lodAllowedInCanvas;
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
+    KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
 
     bool effectiveLodAllowedInCanvas() {
         return lodAllowedInCanvas && !bootstrapLodBlocked;
@@ -404,6 +405,16 @@ KisInputManager* KisCanvas2::globalInputManager() const
     return m_d->view->globalInputManager();
 }
 
+KisInputActionGroupsMask KisCanvas2::inputActionGroupsMask() const
+{
+    return m_d->inputActionGroupsMask;
+}
+
+void KisCanvas2::setInputActionGroupsMask(KisInputActionGroupsMask mask)
+{
+    m_d->inputActionGroupsMask = mask;
+}
+
 QWidget* KisCanvas2::canvasWidget()
 {
     return m_d->canvasWidget->widget();
@@ -611,6 +622,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
 #if QT_VERSION >= 0x050700
+
     if (this->image()->colorSpace()->colorDepthId().id().contains("U")) {
         conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, softProof);
         if (softProof) {
@@ -921,6 +933,7 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
                                             m_d->view->resourceProvider(), m_d->canvasWidget->widget());
     connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotZoomChanged(int)));
     connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
+    connect(m_d->view->mainWindow(), SIGNAL(themeChanged()), m_d->popupPalette, SLOT(slotUpdateIcons()));
 
     m_d->popupPalette->showPopupPalette(false);
 }

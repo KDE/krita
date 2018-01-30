@@ -51,6 +51,15 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
 
+    void activateAlternateAction(AlternateAction action) override;
+    void deactivateAlternateAction(AlternateAction action) override;
+
+    void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+    void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
+
+    void explicitUserStrokeEndRequest() override;
+
 protected Q_SLOTS:
     void resetCursorStyle() override;
 
@@ -58,11 +67,18 @@ public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
 
+private Q_SLOTS:
+    void slotCurrentNodeChanged(KisNodeSP node);
+
 Q_SIGNALS:
 
 private:
     bool colorizeMaskActive() const;
     bool canCreateColorizeMask() const;
+    bool shouldActivateKeyStrokes() const;
+    void tryCreateColorizeMask();
+
+    void tryDisableKeyStrokesOnMask();
 
 private:
     struct Private;

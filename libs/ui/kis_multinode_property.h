@@ -176,7 +176,7 @@ struct LayerPropertyAdapter : public BaseAdapter {
     }
 
     static KisBaseNode::PropertyList adaptersList(KisNodeList nodes) {
-        QHash<KisBaseNode::Property, int> adapters;
+        QHash<QString, std::pair<KisBaseNode::Property, int>> adapters;
 
         Q_FOREACH (KisNodeSP node, nodes) {
             int sortingIndex = 0;
@@ -184,10 +184,10 @@ struct LayerPropertyAdapter : public BaseAdapter {
             Q_FOREACH (const KisBaseNode::Property &prop, props) {
                 if (prop.state.type() != QVariant::Bool) continue;
 
-                if (!adapters.contains(prop)) {
-                    adapters.insert(prop, sortingIndex);
+                if (!adapters.contains(prop.id)) {
+                    adapters.insert(prop.id, std::make_pair(prop, sortingIndex));
                 } else {
-                    adapters[prop] = qMin(adapters[prop], sortingIndex);
+                    adapters[prop.id].second = qMin(adapters[prop.id].second, sortingIndex);
                 }
                 sortingIndex++;
             }
@@ -197,7 +197,11 @@ struct LayerPropertyAdapter : public BaseAdapter {
         auto it = adapters.constBegin();
         auto end = adapters.constEnd();
         for (; it != end; ++it) {
-            sortedAdapters.insert(it.value(), it.key());
+            KisBaseNode::Property prop;
+            int sortingIndex = 0;
+            std::tie(prop, sortingIndex) = it.value();
+
+            sortedAdapters.insert(sortingIndex, prop);
         }
 
         return sortedAdapters.values();

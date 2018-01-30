@@ -46,6 +46,7 @@
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_qimage_pyramid.h>
+#include <KisSharedQImagePyramid.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 
 
@@ -126,7 +127,7 @@ struct KisBrush::Private {
     double spacing;
     QPointF hotSpot;
 
-    mutable QSharedPointer<const KisQImagePyramid> brushPyramid;
+    mutable QSharedPointer<KisSharedQImagePyramid> brushPyramid;
 
     QImage brushTipImage;
 
@@ -179,7 +180,6 @@ KisBrush::KisBrush(const KisBrush& rhs)
 
 KisBrush::~KisBrush()
 {
-    clearBrushPyramid();
     delete d;
 }
 
@@ -306,7 +306,6 @@ bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 
 void KisBrush::setBrushTipImage(const QImage& image)
 {
-    //Q_ASSERT(!image.isNull());
     d->brushTipImage = image;
 
     if (!image.isNull()) {
@@ -349,9 +348,9 @@ void KisBrush::toXML(QDomDocument& /*document*/ , QDomElement& element) const
     element.setAttribute("BrushVersion", "2");
 }
 
-KisBrushSP KisBrush::fromXML(const QDomElement& element, bool forceCopy)
+KisBrushSP KisBrush::fromXML(const QDomElement& element)
 {
-    KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element, forceCopy);
+    KisBrushSP brush = KisBrushRegistry::instance()->createBrush(element);
     if (brush && element.attribute("BrushVersion", "1") == "1") {
         brush->setScale(brush->scale() * 2.0);
     }
@@ -455,16 +454,9 @@ bool KisBrush::threadingAllowed() const
     return d->threadingAllowed;
 }
 
-void KisBrush::prepareBrushPyramid() const
-{
-    if (!d->brushPyramid) {
-        d->brushPyramid = toQShared(new KisQImagePyramid(brushTipImage()));
-    }
-}
-
 void KisBrush::clearBrushPyramid()
 {
-    d->brushPyramid.clear();
+    d->brushPyramid.reset(new KisSharedQImagePyramid());
 }
 
 void KisBrush::mask(KisFixedPaintDeviceSP dst, const KoColor& color, KisDabShape const& shape, const KisPaintInformation& info, double subPixelX, double subPixelY, qreal softnessFactor) const
@@ -486,12 +478,11 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         const KisPaintInformation& info_,
         double subPixelX, double subPixelY, qreal softnessFactor) const
 {
-    Q_ASSERT(valid());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(valid());
     Q_UNUSED(info_);
     Q_UNUSED(softnessFactor);
 
-    prepareBrushPyramid();
-    QImage outputImage = d->brushPyramid->createImage(KisDabShape(
+    QImage outputImage = d->brushPyramid->pyramid(this)->createImage(KisDabShape(
             shape.scale() * d->scale, shape.ratio(),
             -normalizeAngle(shape.rotation() + d->angle)),
         subPixelX, subPixelY);
@@ -577,8 +568,7 @@ KisFixedPaintDeviceSP KisBrush::paintDevice(const KoColorSpace * colorSpace,
     double angle = normalizeAngle(shape.rotation() + d->angle);
     double scale = shape.scale() * d->scale;
 
-    prepareBrushPyramid();
-    QImage outputImage = d->brushPyramid->createImage(
+    QImage outputImage = d->brushPyramid->pyramid(this)->createImage(
         KisDabShape(scale, shape.ratio(), -angle), subPixelX, subPixelY);
 
     KisFixedPaintDeviceSP dab = new KisFixedPaintDevice(colorSpace);

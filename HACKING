@@ -17,12 +17,13 @@ Qt vs STD vs Boost:
 
 C++11 and C++14
 
-    Yes, but. Avoid lambdas. Avoid the new sig/slot connection syntax _unless_
-    you are porting all of Krita to the new syntax. Sure, it has some advantages,
-    but having two different ways of doing the same thing is begging for trouble
-    and comprehension problems. For now, keep using Q_FOREACH, we're using it all
-    over the place. auto is fine, when using in for loops. Don't go overboard
-    using it in other places. 
+    Yes, but. Avoid lambdas (except when replacing the use of
+    QSignalMapper. Sigh.).  Avoid the new sig/slot connection syntax
+    _unless_ you are porting all of Krita to the new syntax. Sure, it
+    has some advantages, but having two different ways of doing the same
+    thing is begging for trouble and comprehension problems. For now,
+    keep using Q_FOREACH, we're using it all over the place. auto is fine,
+    when using in for loops. Don't go use it in other places.
 
     Before using other new features, discuss on #krita so we can expand this list.
 
@@ -42,13 +43,19 @@ Includes
 Initializers
 
 	Avoid as much as possible initializers in the body of the constructor. Use
-	initializer lists instead. Write the initializers as followed:
+	initializer lists instead. Write the initializers as follows
 
     Class(A a, B b)
         : Subclass(a)
         , m_b(b)
     {
     }
+
+    Note the location of the colon and comma.
+
+    It is also okay to use initializers like, and maybe even preferred where it works.
+
+    int m_something {0};
 
 Scope prefixes
 
@@ -57,7 +64,8 @@ Scope prefixes
 
 Shared pointers
 
-	Use shared pointers wherever possible.
+	Use shared pointers wherever possible. Prefer Qt's shared pointer classes
+    to our home-grown shared ppointer classes.
 
 Getter/setter
 
@@ -79,7 +87,7 @@ Function naming
 	If you encounter functions in c_style_like_this, feel free to rename. Also:
 	verbNoun -- i.e., rotateLayer, not layer_rotate. The latter is a true c-ism,
 	introduced by a language that needs to prefix the 'class' name to every function
-	in order to have something that not quite OO.
+	in order to have something that's not quite OO.
 
 Variable/Parameter names
 

@@ -226,6 +226,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->volumeSlider->setSingleStep(1);
     m_d->volumeSlider->setPageStep(10);
     m_d->volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+
     connect(m_d->volumeSlider, SIGNAL(valueChanged(int)), SLOT(slotAudioVolumeChanged(int)));
 
     QWidgetAction *volumeAction = new QWidgetAction(m_d->audioOptionsMenu);
@@ -423,6 +424,13 @@ void TimelineFramesView::slotAudioChannelMute(bool value)
     if (value != m_d->model->isAudioMuted()) {
         m_d->model->setAudioMuted(value);
     }
+}
+
+void TimelineFramesView::slotUpdateIcons()
+{
+    m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("addlayer"));
+    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
+    m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
 }
 
 void TimelineFramesView::slotAudioChannelRemove()

@@ -35,6 +35,9 @@ private Q_SLOTS:
     void testDefaultValues();
     void testNotSavedValues();
     void testCopy();
+    void testGetColor();
+    void testLists();
+
 private:
     KisPropertiesConfigurationSP createConfig();
     void testConfig(KisPropertiesConfigurationSP config);

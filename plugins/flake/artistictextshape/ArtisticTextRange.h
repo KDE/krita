@@ -73,10 +73,10 @@ public:
     /// Checks if specified text range has the same style as this text range
     bool hasEqualStyle(const ArtisticTextRange &other) const;
 
-    /// Sets indivdual character x-offsets
+    /// Sets individual character x-offsets
     void setXOffsets(const QList<qreal> &offsets, OffsetType type);
 
-    /// Sets indivdual character y-offsets
+    /// Sets individual character y-offsets
     void setYOffsets(const QList<qreal> &offsets, OffsetType type);
 
     /// Returns the character x-offset for the specified character

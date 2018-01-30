@@ -109,8 +109,8 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
     brush->setSpacing(exportOptions.spacing);
     brush->setUseColorAsMask(exportOptions.mask);
 
-    int w = document->savingImage()->width();
-    int h = document->savingImage()->height();
+
+
 
     KisImagePipeBrush *pipeBrush = dynamic_cast<KisImagePipeBrush*>(brush);
     if (pipeBrush) {
@@ -144,22 +144,27 @@ KisImportExportFilter::ConversionStatus KisBrushExport::convert(KisDocument *doc
         parasite.ncells = devices.at(0).count();
         parasite.rank[0] = parasite.ncells; // ### This can mask some bugs, be careful here in the future
         parasite.selection[0] = modes.at(0);
-        // XXX needsmovement!
+        // XXX needs movement!
         parasite.setBrushesCount();
         pipeBrush->setParasite(parasite);
-        pipeBrush->setDevices(devices, w, h);
+        pipeBrush->setDevices(devices, rc.width(), rc.height());
     }
     else {
         QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        image.save("~/bla.png");
         brush->setImage(image);
+        brush->setBrushTipImage(image);
     }
 
-    brush->setWidth(w);
-    brush->setHeight(h);
+    brush->setWidth(rc.width());
+    brush->setHeight(rc.height());
 
-    brush->saveToDevice(io);
-
-    return KisImportExportFilter::OK;
+    if (brush->saveToDevice(io)) {
+        return KisImportExportFilter::OK;
+    }
+    else {
+        return KisImportExportFilter::CreationError;
+    }
 }
 
 KisPropertiesConfigurationSP KisBrushExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
@@ -202,7 +207,6 @@ void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg
 {
     spacingWidget->setSpacing(false, cfg->getBool("spacing"));
     nameLineEdit->setText(cfg->getString("name"));
-    brushNameLbl->setText(cfg->getString("name"));
     colorAsMask->setChecked(cfg->getBool("mask"));
     brushStyle->setCurrentIndex(cfg->getInt("selectionMode"));
     cmbSelectionMode->setCurrentIndex(cfg->getInt("brushStyle"));
@@ -212,7 +216,7 @@ KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->setProperty("spacing", spacingWidget->spacing());
-    cfg->setProperty("name", brushNameLbl->text());
+    cfg->setProperty("name", nameLineEdit->text());
     cfg->setProperty("mask", colorAsMask->isChecked());
     cfg->setProperty("selectionMode", brushStyle->currentIndex());
     cfg->setProperty("brushStyle", cmbSelectionMode->currentIndex());

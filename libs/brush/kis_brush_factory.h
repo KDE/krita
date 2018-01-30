@@ -43,11 +43,11 @@ public:
     }
 
     /**
-     * Create a a new brush from the given data or return an existing KisBrush
+     * Create a new brush from the given data or return an existing KisBrush
      * object. If this call leads to the creation of a resource, it should be
      * added to the resource provider, too.
      */
-    virtual KisBrushSP getOrCreateBrush(const QDomElement& element, bool forceCopy) = 0;
+    virtual KisBrushSP createBrush(const QDomElement& element) = 0;
 
 };
 

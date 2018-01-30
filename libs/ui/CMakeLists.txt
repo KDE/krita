@@ -6,7 +6,6 @@ include_directories(
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
     ${OCIO_INCLUDE_DIR}
-    ${Boost_INCLUDE_DIRS}
 )
 
 add_subdirectory( tests )
@@ -201,6 +200,10 @@ set(kritaui_LIB_SRCS
     tool/strokes/kis_painter_based_stroke_strategy.cpp
     tool/strokes/kis_filter_stroke_strategy.cpp
     tool/strokes/kis_color_picker_stroke_strategy.cpp
+    tool/strokes/KisFreehandStrokeInfo.cpp
+    tool/strokes/KisMaskedFreehandStrokePainter.cpp
+    tool/strokes/KisMaskingBrushRenderer.cpp
+    tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
@@ -230,6 +233,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_paintop_presets_save.cpp
+    widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
     widgets/kis_popup_button.cc
@@ -244,7 +248,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_size_group_p.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
-    widgets/squeezedcombobox.cpp
     widgets/kis_categorized_list_view.cpp
     widgets/kis_widget_chooser.cpp
     widgets/kis_tool_button.cpp
@@ -292,6 +295,7 @@ set(kritaui_LIB_SRCS
     input/kis_shortcut_matcher.cpp
     input/kis_select_layer_action.cpp
     input/KisQtWidgetsTweaker.cpp
+    input/KisInputActionGroup.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
@@ -395,6 +399,7 @@ if(WIN32)
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
         input/wintab/kis_tablet_support_win8.cpp
+        opengl/kis_opengl_win.cpp
         )
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
@@ -478,6 +483,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgsavebrushpreset.ui
+    forms/wdgpreseticonlibrary.ui
     forms/wdgdlgblacklistcleanup.ui
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui

@@ -27,7 +27,7 @@
 #include <kpagedialog.h>
 
 #include "kis_global.h"
-#include "widgets/squeezedcombobox.h"
+#include <squeezedcombobox.h>
 
 #include "ui_wdggeneralsettings.h"
 #include "ui_wdgdisplaysettings.h"
@@ -80,6 +80,9 @@ public:
     bool showCanvasMessages();
     bool compressKra();
     bool toolOptionsInDocker();
+    int kineticScrollingGesture();
+    int kineticScrollingSensitivity();
+    bool kineticScrollingScrollbar();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
 

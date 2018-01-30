@@ -389,6 +389,26 @@ QList<KisUniformPaintOpPropertySP> KisPaintOpPreset::uniformProperties()
     return m_d->settings->uniformProperties(m_d->settings);
 }
 
+bool KisPaintOpPreset::hasMaskingPreset() const
+{
+    return m_d->settings && m_d->settings->hasMaskingSettings();
+}
+
+KisPaintOpPresetSP KisPaintOpPreset::createMaskingPreset() const
+{
+    KisPaintOpPresetSP result;
+
+    if (m_d->settings && m_d->settings->hasMaskingSettings()) {
+        result = new KisPaintOpPreset();
+        result->setSettings(m_d->settings->createMaskingSettings());
+        if (!result->valid()) {
+            result.clear();
+        }
+    }
+
+    return result;
+}
+
 KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPreset *preset)
     : m_updateProxy(preset->updateProxyNoCreate())
 {

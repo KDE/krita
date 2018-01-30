@@ -4,7 +4,6 @@ include_directories(
 )
 
 include_directories(SYSTEM
-    ${Boost_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIR}
 )
 

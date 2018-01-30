@@ -165,15 +165,15 @@ public:
 
 Q_SIGNALS:
     /**
-     *  This signal gets emitted when the user selects an URL.
+     *  This signal gets emitted when the user selects a URL.
      *
-     *  @param url The URL thats the user selected.
+     *  @param url The URL that the user selected.
      */
     void urlSelected(const QUrl &url);
 
     /**
      *  This signal gets emitted when the user clear list.
-     *  So when user store url in specific config file it can saveEntry.
+     *  So when user stores url in specific config file it can saveEntry.
      *  @since 4.3
      */
     void recentListCleared();

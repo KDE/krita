@@ -11,6 +11,7 @@ include(KritaAddBrokenUnitTest)
 ecm_add_tests(
     zoomhandler_test.cpp
     zoomcontroller_test.cpp
+    squeezedcombobox_test.cpp 
     NAME_PREFIX "libs-widgets-"
     LINK_LIBRARIES kritawidgets Qt5::Test)
 

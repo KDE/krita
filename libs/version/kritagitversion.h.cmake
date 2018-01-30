@@ -35,4 +35,11 @@
  */
 #cmakedefine KRITA_GIT_BRANCH_STRING "@KRITA_GIT_BRANCH_STRING@"
 
+/**
+ * @def KRITA_GIT_DESCRIBE_STRING
+ * @ingroup KritaMacros
+ * @brief Indicates the git describe string
+ */
+#cmakedefine KRITA_GIT_DESCRIBE_STRING "@KRITA_GIT_DESCRIBE_STRING@"
+
 #endif /* __KRITA_GIT_VERSION_H */

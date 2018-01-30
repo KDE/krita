@@ -96,7 +96,7 @@ public:
     /**
      * @return true if the map contains a property with the specified name
      */
-    bool hasProperty(const QString& name) const;
+    virtual bool hasProperty(const QString& name) const;
 
     /**
      * Set the property with name to value.
@@ -132,6 +132,23 @@ public:
 
     KisCubicCurve getCubicCurve(const QString & name, const KisCubicCurve & curve = KisCubicCurve()) const;
 
+    /**
+     * @brief getColor fetch the given property as a KoColor.
+     *
+     * The color can be stored as
+     * <ul>
+     * <li>A KoColor
+     * <li>A QColor
+     * <li>A string that can be parsed as an XML color definition
+     * <li>A string that QColor can convert to a color (see http://doc.qt.io/qt-5/qcolor.html#setNamedColor)
+     * <li>An integer that QColor can convert to a color
+     * </ul>
+     *
+     * @param name the name of the property
+     * @param color the default value to be returned if the @param name does not exist.
+     * @return returns the named property as a KoColor if the value can be converted to a color,
+     * otherwise a empty KoColor is returned.
+     */
     KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
 
     QMap<QString, QVariant> getProperties() const;
@@ -143,6 +160,40 @@ public:
     void setPropertyNotSaved(const QString & name);
 
     void removeProperty(const QString & name);
+
+    /**
+     * Get the keys of all the properties in the object
+     */
+    virtual QList<QString> getPropertiesKeys() const;
+
+    /**
+     * Get a set of properties, which keys are prefixed with \p prefix. The settings object
+     * \p config will have all these properties with the prefix stripped from them.
+     */
+    void getPrefixedProperties(const QString &prefix, KisPropertiesConfiguration *config) const;
+
+    /**
+     * A convenience override
+     */
+    void getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const;
+
+    /**
+     * Takes all the properties from \p config, adds \p prefix to all their keys and puths them
+     * into this properties object
+     */
+    void setPrefixedProperties(const QString &prefix, const KisPropertiesConfiguration *config);
+
+    /**
+     * A convenience override
+     */
+    void setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config);
+
+    static QString escapeString(const QString &string);
+    static QString unescapeString(const QString &string);
+
+    void setProperty(const QString &name, const QStringList &value);
+    QStringList getStringList(const QString &name, const QStringList &defaultValue = QStringList()) const;
+    QStringList getPropertyLazy(const QString &name, const QStringList &defaultValue) const;
 
 public:
 

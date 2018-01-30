@@ -40,7 +40,7 @@ EnhancedPathShapeFactory::EnhancedPathShapeFactory()
     : KoShapeFactoryBase(EnhancedPathShapeId, i18n("An enhanced path shape"))
 {
     setToolTip(i18n("An enhanced path"));
-    setIconName(koIconNameCStr("enhancedpath"));
+    setIconName(koIconNameCStr("krita_draw_path"));
     setXmlElementNames(KoXmlNS::draw, QStringList("custom-shape"));
     setLoadingPriority(1);
 

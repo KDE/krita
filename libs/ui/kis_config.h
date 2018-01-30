@@ -496,6 +496,15 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
+    int kineticScrollingGesture(bool defaultValue = false) const;
+    void setKineticScrollingGesture(int kineticScroll);
+
+    int kineticScrollingSensitivity(bool defaultValue = false) const;
+    void setKineticScrollingSensitivity(int sensitivity);
+
+    bool kineticScrollingScrollbar(bool defaultValue = false) const;
+    void setKineticScrollingScrollbar(bool scrollbar);
+
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 
@@ -562,7 +571,7 @@ public:
     }
 
 
-    /// get the profile the color managment system has stored for the given screen
+    /// get the profile the color management system has stored for the given screen
     static const KoColorProfile* getScreenProfile(int screen);
 
 private:

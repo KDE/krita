@@ -45,7 +45,7 @@ void KisExrTest::testRoundTrip()
     KisDocument *doc1 = KisPart::instance()->createDocument();
 
     KisImportExportManager manager(doc1);
-    manager.setBatchMode(true);
+    doc1->setFileBatchMode(true);
 
     KisImportExportFilter::ConversionStatus status = manager.importDocument(inputFileName, QString());
 
@@ -59,7 +59,7 @@ void KisExrTest::testRoundTrip()
 
     QString savedFileName(savedFile.fileName());
 
-    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileName);
+    QString typeName = KisMimeDatabase::mimeTypeForFile(savedFileName, false);
 
     QByteArray mimeType(typeName.toLatin1());
     status = manager.exportDocument(savedFileName, savedFileName, mimeType);
@@ -69,7 +69,7 @@ void KisExrTest::testRoundTrip()
         KisDocument *doc2 = KisPart::instance()->createDocument();
 
         KisImportExportManager manager(doc2);
-        manager.setBatchMode(true);
+        doc2->setFileBatchMode(true);
 
         status = manager.importDocument(savedFileName, QString());
 

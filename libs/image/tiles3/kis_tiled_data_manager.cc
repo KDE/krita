@@ -90,7 +90,7 @@ KisTiledDataManager::~KisTiledDataManager()
      * dynamically allocated We need to  destroy them in that very order. The
      * reason is that when hash table destroying all her child tiles they all
      * cry about it  to The Memento Manager using a  pointer.  So The Memento
-     * Manager sould  be alive during  that destruction. We could  use shared
+     * Manager should be alive during  that destruction. We could  use shared
      * pointers instead, but they create too much overhead.
      */
     delete m_hashTable;

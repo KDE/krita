@@ -49,7 +49,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
             filenamePrefix = baseFilename;
         }
 
-        outputMimeType = KisMimeDatabase::mimeTypeForFile(baseFilename).toLatin1();
+        outputMimeType = KisMimeDatabase::mimeTypeForFile(baseFilename, false).toLatin1();
     }
 
     KisImageSP originalImage;
@@ -161,6 +161,7 @@ KisAsyncAnimationRendererBase *KisAsyncAnimationFramesSaveDialog::createRenderer
                                                      m_d->sequenceNumberingOffset,
                                                      m_d->exportConfiguration);
 }
+
 
 QString KisAsyncAnimationFramesSaveDialog::savedFilesMask() const
 {

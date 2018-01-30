@@ -48,6 +48,7 @@
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
 #include "kis_keyframe_channel.h"
+#include "kis_dom_utils.h"
 
 using namespace KRA;
 
@@ -414,6 +415,17 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
         el.setAttribute(COMPOSITE_OP, mask->compositeOpId());
         el.setAttribute(COLORIZE_EDIT_KEYSTROKES, KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, true).toBool());
         el.setAttribute(COLORIZE_SHOW_COLORING, KisLayerPropertiesIcons::nodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, true).toBool());
+
+        const KisColorizeMask *colorizeMask = dynamic_cast<const KisColorizeMask*>(mask.data());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(colorizeMask);
+
+        if (colorizeMask) {
+            el.setAttribute(COLORIZE_USE_EDGE_DETECTION, colorizeMask->useEdgeDetection());
+            el.setAttribute(COLORIZE_EDGE_DETECTION_SIZE, KisDomUtils::toString(colorizeMask->edgeDetectionSize()));
+            el.setAttribute(COLORIZE_FUZZY_RADIUS, KisDomUtils::toString(colorizeMask->fuzzyRadius()));
+            el.setAttribute(COLORIZE_CLEANUP, int(100 * colorizeMask->cleanUpAmount()));
+            el.setAttribute(COLORIZE_LIMIT_TO_DEVICE, colorizeMask->limitToDeviceBounds());
+        }
     }
 
     saveNodeKeyframes(mask, filename, el);

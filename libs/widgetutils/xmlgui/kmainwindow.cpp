@@ -504,7 +504,7 @@ void KMainWindow::saveMainWindowSettings(KConfigGroup &cg)
     }
 
     // One day will need to save the version number, but for now, assume 0
-    // Utilise the QMainWindow::saveState() functionality.
+    // Utilize the QMainWindow::saveState() functionality.
     const QByteArray state = saveState();
     cg.writeEntry("State", state.toBase64());
 

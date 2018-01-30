@@ -510,6 +510,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);
+
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){
                 m_d->assistants.append(toQShared(assistant));
@@ -850,11 +851,25 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
     QString attr;
     KisAdjustmentLayer* layer;
     QString filtername;
+    QString legacy = filtername;
 
     if ((filtername = element.attribute(FILTER_NAME)).isNull()) {
         // XXX: Invalid adjustmentlayer! We should warn about it!
         warnFile << "No filter in adjustment layer";
         return 0;
+    }
+
+    //get deprecated filters.
+    if (filtername=="brightnesscontrast") {
+        legacy = filtername;
+        filtername = "perchannel";
+    }
+    if (filtername=="left edge detections"
+            || filtername=="right edge detections"
+            || filtername=="top edge detections"
+            || filtername=="bottom edge detections") {
+        legacy = filtername;
+        filtername = "edge detection";
     }
 
     KisFilterSP f = KisFilterRegistry::instance()->value(filtername);
@@ -864,6 +879,10 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const KoXmlElement& element, KisImag
     }
 
     KisFilterConfigurationSP  kfc = f->defaultConfiguration();
+    kfc->setProperty("legacy", legacy);
+    if (legacy=="brightnesscontrast") {
+        kfc->setProperty("colorModel", cs->colorModelId().id());
+    }
 
     // We'll load the configuration and the selection later.
     layer = new KisAdjustmentLayer(image, name, kfc, 0);
@@ -1030,11 +1049,24 @@ KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& e
 {
     Q_UNUSED(parent);
     KisColorizeMaskSP mask = new KisColorizeMask();
-    bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
-    bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
+    const bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
+    const bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
 
     KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeEditKeyStrokes, editKeystrokes, image);
     KisLayerPropertiesIcons::setNodeProperty(mask, KisLayerPropertiesIcons::colorizeShowColoring, showColoring, image);
+
+    const bool useEdgeDetection = KisDomUtils::toInt(element.attribute(COLORIZE_USE_EDGE_DETECTION, "0"));
+    const qreal edgeDetectionSize = KisDomUtils::toDouble(element.attribute(COLORIZE_EDGE_DETECTION_SIZE, "4"));
+    const qreal radius = KisDomUtils::toDouble(element.attribute(COLORIZE_FUZZY_RADIUS, "0"));
+    const int cleanUp = KisDomUtils::toInt(element.attribute(COLORIZE_CLEANUP, "0"));
+    const bool limitToDevice = KisDomUtils::toInt(element.attribute(COLORIZE_LIMIT_TO_DEVICE, "0"));
+
+    mask->setUseEdgeDetection(useEdgeDetection);
+    mask->setEdgeDetectionSize(edgeDetectionSize);
+    mask->setFuzzyRadius(radius);
+    mask->setCleanUpAmount(qreal(cleanUp) / 100.0);
+    mask->setLimitToDeviceBounds(limitToDevice);
+
     delete mask->setColorSpace(colorSpace);
     mask->setImage(image);
 

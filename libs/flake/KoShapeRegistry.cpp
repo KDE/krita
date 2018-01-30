@@ -24,6 +24,7 @@
 // Own
 #include "KoShapeRegistry.h"
 
+#include "KoSvgTextShape.h"
 #include "KoPathShapeFactory.h"
 #include "KoConnectionShapeFactory.h"
 #include "KoShapeLoadingContext.h"
@@ -89,6 +90,7 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
                                      config);
 
     // Also add our hard-coded basic shapes
+    q->add(new KoSvgTextShapeFactory());
     q->add(new KoPathShapeFactory(QStringList()));
     q->add(new KoConnectionShapeFactory());
     // As long as there is no shape dealing with embedded svg images
@@ -96,7 +98,7 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
     q->add(new SvgShapeFactory);
 
     // Now all shape factories are registered with us, determine their
-    // assocated odf tagname & priority and prepare ourselves for
+    // associated odf tagname & priority and prepare ourselves for
     // loading ODF.
 
     QList<KoShapeFactoryBase*> factories = q->values();
@@ -314,7 +316,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             KoShape *shape = factory->createShapeFromOdf(fullElement, context);
             if (shape) {
                 debugFlake << "Shape found for factory " << factory->id() << factory->name();
-                // we return the top-level most shape as thats the one that we'll have to
+                // we return the top-level most shape as that's the one that we'll have to
                 // add to the KoShapeManager for painting later (and also to avoid memory leaks)
                 // but don't go past a KoShapeLayer as KoShape adds those from the context
                 // during loading and those are already added.

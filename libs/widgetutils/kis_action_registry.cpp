@@ -211,10 +211,11 @@ void KisActionRegistry::settingsPageSaved()
 void KisActionRegistry::applyShortcutScheme(const KConfigBase *config)
 {
     // First, update the things in KisActionRegistry
+    d->actionInfoList.clear();
+    d->loadActionFiles();
+
     if (config == 0) {
         // Use default shortcut scheme. Simplest just to reload everything.
-        d->actionInfoList.clear();
-        d->loadActionFiles();
         loadCustomShortcuts();
     } else {
         const auto schemeEntries = config->group(QStringLiteral("Shortcuts")).entryMap();
@@ -250,7 +251,7 @@ QList<QString> KisActionRegistry::registeredShortcutIds() const
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {
-        qDebug() << "No XML data found for action" << name;
+        warnAction << "No XML data found for action" << name;
         return false;
     }
 

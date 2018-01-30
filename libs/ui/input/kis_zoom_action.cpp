@@ -75,7 +75,7 @@ QPointF KisZoomAction::Private::centerPoint(QTouchEvent* event)
 
     Q_FOREACH (QTouchEvent::TouchPoint point, event->touchPoints()) {
         if (point.state() != Qt::TouchPointReleased) {
-            result += point.screenPos();
+            result += point.pos();
             count++;
         }
     }
@@ -209,7 +209,7 @@ void KisZoomAction::inputEvent( QEvent* event )
                 if (point.state() != Qt::TouchPointReleased) {
                     count++;
 
-                    dist += (point.screenPos() - center).manhattanLength();
+                    dist += (point.pos() - center).manhattanLength();
                 }
             }
 
@@ -300,5 +300,11 @@ void KisZoomAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 bool KisZoomAction::isShortcutRequired(int shortcut) const
 {
     return shortcut == ZoomModeShortcut;
+}
+
+KisInputActionGroup KisZoomAction::inputActionGroup(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return ViewTransformActionGroup;
 }
 

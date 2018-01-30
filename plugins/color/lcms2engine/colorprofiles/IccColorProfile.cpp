@@ -372,7 +372,7 @@ void IccColorProfile::calculateFloatUIMinMax(void)
             ret[i].minVal = out_min_pixel[i];
             ret[i].maxVal = out_max_pixel[i];
         } else {
-            // aparently we can't even guarentee that converted_to_double(0x0000) < converted_to_double(0xFFFF)
+            // apparently we can't even guarantee that converted_to_double(0x0000) < converted_to_double(0xFFFF)
             // assume [0..1] in such cases
             // we need to find a really solid way of determining the bounds of a profile, if possible
             ret[i].minVal = 0;

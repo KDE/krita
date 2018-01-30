@@ -70,8 +70,7 @@ namespace utils {
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
         virtual void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode);
 
-        virtual KisStrokeStrategy* createStroke(bool indirectPainting,
-                                                KisResourcesSnapshotSP resources,
+        virtual KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,
                                                 KisImageWSP image) = 0;
 
         virtual void addPaintingJobs(KisImageWSP image,
@@ -86,7 +85,7 @@ namespace utils {
         void testOneStroke(bool cancelled, bool indirectPainting,
                            bool externalLayer, bool testUpdates = false);
 
-        QImage doStroke(bool cancelled, bool indirectPainting,
+        QImage doStroke(bool cancelled,
                         bool externalLayer, bool testUpdates = false,
                         bool needQImage = true);
 

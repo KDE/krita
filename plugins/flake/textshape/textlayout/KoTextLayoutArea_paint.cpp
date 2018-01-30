@@ -251,7 +251,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             }
             // this is a workaround to fix text getting cut of when format ranges are used. There
             // is a bug in Qt that can hit when text lines overlap each other. In case a format range
-            // is used for formating it can clip the lines above/below as Qt creates a clip rect for
+            // is used for formatting it can clip the lines above/below as Qt creates a clip rect for
             // the places it already painted for the format range which results in clippling. So use
             // the format range always to paint the text.
             QVector<QTextLayout::FormatRange> workaroundFormatRanges;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
+    <width>326</width>
     <height>219</height>
    </rect>
   </property>
@@ -38,54 +38,6 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="5">
-      <widget class="QToolButton" name="bnAddDialog">
-       <property name="toolTip">
-        <string>Add color</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="lblColorName">
-       <property name="minimumSize">
-        <size>
-         <width>60</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="4">
       <widget class="QToolButton" name="bnAdd">
        <property name="toolTip">
@@ -138,6 +90,45 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="SqueezedComboBox" name="cmbNameList">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="5">
+      <widget class="QToolButton" name="bnAddDialog">
+       <property name="toolTip">
+        <string>Add color</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -152,6 +143,11 @@
    <class>KisPaletteView</class>
    <extends>QTableView</extends>
    <header location="global">kis_palette_view.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SqueezedComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">squeezedcombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

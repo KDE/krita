@@ -162,12 +162,12 @@ void KisPixelSelection::copyAlphaFrom(KisPaintDeviceSP src, const QRect &process
     KisSequentialConstIterator srcIt(src, processRect);
     KisSequentialIterator dstIt(this, processRect);
 
-    do {
+    while (srcIt.nextPixel() && dstIt.nextPixel()) {
         const quint8 *srcPtr = srcIt.rawDataConst();
         quint8 *alpha8Ptr = dstIt.rawData();
 
         *alpha8Ptr = srcCS->opacityU8(srcPtr);
-    } while (srcIt.nextPixel() && dstIt.nextPixel());
+    }
 
     m_d->outlineCacheValid = false;
     m_d->outlineCache = QPainterPath();
@@ -296,9 +296,9 @@ void KisPixelSelection::invert()
 
     if (!rc.isEmpty()) {
         KisSequentialIterator it(this, rc);
-        do {
+        while(it.nextPixel()) {
             *(it.rawData()) = MAX_SELECTED - *(it.rawData());
-        } while (it.nextPixel());
+        }
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel().data();
     setDefaultPixel(KoColor(&defPixel, colorSpace()));
@@ -473,7 +473,7 @@ QImage deviceToQImage(KisPaintDeviceSP device,
     const qreal alphaScale = maskColor.alphaF();
 
     KisSequentialIterator it(device, rc);
-    do {
+    while(it.nextPixel()) {
         quint8 value = (MAX_SELECTED - *(it.rawData())) * alphaScale;
         color.setAlpha(value);
 
@@ -481,7 +481,7 @@ QImage deviceToQImage(KisPaintDeviceSP device,
         pt -= rc.topLeft();
 
         image.setPixel(pt.x(), pt.y(), color.rgba());
-    } while (it.nextPixel());
+    }
 
     return image;
 }

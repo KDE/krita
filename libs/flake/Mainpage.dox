@@ -38,7 +38,7 @@
  * It is common to combine a shape-plugin with one or more tools which are made
  * specifically to work on that shape type. So, a text shape comes with a tool that
  * knows how to address the shape not only by the abstract KoShape class, but also
- * by the KoTextShape API and is therefor able to alter the data that that shape
+ * by the KoTextShape API and is therefore able to alter the data that shape
  * displays. In this case text.
 
  * Flake natively only has a vector shape. All other types of shapes (including the

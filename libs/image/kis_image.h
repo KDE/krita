@@ -269,7 +269,7 @@ public:
      * undo stack using the adapter. This adapter is used for a backward
      * compatibility for old commands created before strokes. It blocks
      * all the porcessing at the scheduler, waits until it's finished
-     * adn executes commands exclusively.
+     * and executes commands exclusively.
      */
     KisUndoAdapter* undoAdapter() const;
 
@@ -334,11 +334,11 @@ public:
     QPointF documentToPixel(const QPointF &documentCoord) const;
 
     /**
-     * Convert a document coordinate to an integer pixel coordinate.
+     * Convert a document coordinate to an integer pixel coordinate rounded down.
      *
      * @param documentCoord PostScript Pt coordinate to convert.
      */
-    QPoint documentToIntPixel(const QPointF &documentCoord) const;
+    QPoint documentToImagePixelFloored(const QPointF &documentCoord) const;
 
     /**
      * Convert a document rectangle to a pixel rectangle.
@@ -346,13 +346,6 @@ public:
      * @param documentRect PostScript Pt rectangle to convert.
      */
     QRectF documentToPixel(const QRectF &documentRect) const;
-
-    /**
-     * Convert a document rectangle to an integer pixel rectangle.
-     *
-     * @param documentRect PostScript Pt rectangle to convert.
-     */
-    QRect documentToIntPixel(const QRectF &documentRect) const;
 
     /**
      * Convert a pixel coordinate to a document coordinate.

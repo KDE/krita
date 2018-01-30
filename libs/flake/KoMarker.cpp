@@ -43,7 +43,6 @@
 #include "kis_global.h"
 #include "kis_algebra_2d.h"
 
-
 class Q_DECL_HIDDEN KoMarker::Private
 {
 public:
@@ -55,6 +54,9 @@ public:
     {}
 
     ~Private() {
+        // shape manager that is stored in the painter should be destroyed
+        // before the shapes themselves
+        shapePainter.reset();
         qDeleteAll(shapes);
     }
 

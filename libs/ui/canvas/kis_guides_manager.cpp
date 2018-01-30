@@ -166,6 +166,11 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
         m_d->updateSnappingStatus(value);
     }
 
+    if (m_d->view) {
+        m_d->view->document()->setUnit(KoUnit(m_d->guidesConfig.unitType()));
+        m_d->view->viewManager()->actionManager()->actionByName("ruler_pixel_multiple2")->setChecked(value.rulersMultiple2());
+    }
+
     emit sigRequestUpdateGuidesConfig(m_d->guidesConfig);
 }
 
@@ -267,6 +272,28 @@ void KisGuidesManager::setSnapToGuides(bool value)
 {
     m_d->guidesConfig.setSnapToGuides(value);
     setGuidesConfigImpl(m_d->guidesConfig);
+}
+
+bool KisGuidesManager::rulersMultiple2() const
+{
+    return m_d->guidesConfig.rulersMultiple2();
+}
+
+void KisGuidesManager::setRulersMultiple2(bool value)
+{
+    m_d->guidesConfig.setRulersMultiple2(value);
+    setGuidesConfigImpl(m_d->guidesConfig);
+}
+
+KoUnit::Type KisGuidesManager::unitType() const
+{
+    return m_d->guidesConfig.unitType();
+}
+
+void KisGuidesManager::setUnitType(const KoUnit::Type type)
+{
+    m_d->guidesConfig.setUnitType(type);
+    setGuidesConfigImpl(m_d->guidesConfig, false);
 }
 
 void KisGuidesManager::setup(KisActionManager *actionManager)

@@ -163,13 +163,15 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);
 #endif
-    setAttribute(Qt::WA_InputMethodEnabled, true);
+    setAttribute(Qt::WA_InputMethodEnabled, false);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotPixelGridModeChanged()));
     slotConfigChanged();
+    slotPixelGridModeChanged();
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
@@ -784,12 +786,20 @@ void KisOpenGLCanvas2::slotConfigChanged()
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
-    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
-    d->pixelGridEnabled = cfg.pixelGridEnabled();
-    d->gridColor = cfg.getPixelGridColor();
     d->cursorColor = cfg.getCursorMainColor();
 
     notifyConfigChanged();
+}
+
+void KisOpenGLCanvas2::slotPixelGridModeChanged()
+{
+    KisConfig cfg;
+
+    d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
+    d->pixelGridEnabled = cfg.pixelGridEnabled();
+    d->gridColor = cfg.getPixelGridColor();
+
+    update();
 }
 
 QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const

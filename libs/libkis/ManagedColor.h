@@ -77,7 +77,7 @@ public:
     /**
      * @brief colorForCanvas
      * @param canvas the canvas whose color management you'd like to use. In Krita, different views have
-     * seperate canvasses, and these can have different OCIO configurations active.
+     * separate canvasses, and these can have different OCIO configurations active.
      * @return the QColor as it would be displaying on the canvas. This result can be used to draw widgets with
      * the correct configuration applied.
      */

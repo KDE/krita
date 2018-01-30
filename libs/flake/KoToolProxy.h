@@ -53,7 +53,7 @@ class QMenu;
  * the user to do anything.  Since the flake system is responsible for handling
  * tools and also to change the active tool when needed we provide one class
  * that can be used by an application canvas to route all the native events too
- * which will transparantly be routed to the active tool.  Without the application
+ * which will transparently be routed to the active tool.  Without the application
  * having to bother about which tool is active.
  */
 class KRITAFLAKE_EXPORT KoToolProxy : public QObject

@@ -70,6 +70,7 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
         type == QEvent::Enter ? "Enter" :
         type == QEvent::Leave ? "Leave" :
         type == QEvent::FocusIn ? "FocusIn" :
+        type == QEvent::FocusOut ? "FocusOut" :
         type == QEvent::Wheel ? "Wheel" :
         type == QEvent::KeyPress ? "KeyPress" :
         type == QEvent::KeyRelease ? "KeyRelease" :

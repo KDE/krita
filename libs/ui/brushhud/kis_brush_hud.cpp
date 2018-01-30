@@ -82,7 +82,9 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
 
     m_d->btnConfigure = new QToolButton(this);
     m_d->btnConfigure->setAutoRaise(true);
-    m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
+
+
+
     connect(m_d->btnConfigure, SIGNAL(clicked()), SLOT(slotConfigBrushHud()));
 
     labelLayout->addWidget(m_d->lblPresetIcon);
@@ -109,12 +111,16 @@ KisBrushHud::KisBrushHud(KisCanvasResourceProvider *provider, QWidget *parent)
     m_d->wdgPropertiesArea->setWidget(m_d->wdgProperties);
     layout->addWidget(m_d->wdgPropertiesArea);
 
+    updateIcons();
+
     setLayout(layout);
     setCursor(Qt::ArrowCursor);
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
 }
+
+
 
 KisBrushHud::~KisBrushHud()
 {
@@ -124,6 +130,11 @@ QSize KisBrushHud::sizeHint() const
 {
     QSize size = QWidget::sizeHint();
     return QSize(size.width(), parentWidget()->height());
+}
+
+void KisBrushHud::updateIcons()
+{
+    m_d->btnConfigure->setIcon(KisIconUtils::loadIcon("applications-system"));
 }
 
 void KisBrushHud::slotReloadProperties()

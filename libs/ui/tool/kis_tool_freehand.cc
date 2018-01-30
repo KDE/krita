@@ -212,8 +212,9 @@ void KisToolFreehand::beginPrimaryAction(KoPointerEvent *event)
     requestUpdateOutline(event->point, event);
 
     NodePaintAbility paintability = nodePaintAbility();
+    // XXX: move this to KisTool and make it work properly for clone layers: for clone layers, the shape paint tools don't work either
     if (!nodeEditable() || paintability != PAINT) {
-        if(paintability == KisToolPaint::VECTOR){
+        if (paintability == KisToolPaint::VECTOR || paintability == KisToolPaint::CLONE){
             KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
             QString message = i18n("The brush tool cannot paint on this layer.  Please select a paint layer or mask.");
             kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));

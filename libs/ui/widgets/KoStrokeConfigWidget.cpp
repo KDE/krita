@@ -302,7 +302,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyJoinCapChanges()));
 
-    { // Map the marker signals correclty
+    { // Map the marker signals correctly
         QSignalMapper *mapper = new QSignalMapper(this);
         connect(mapper, SIGNAL(mapped(int)), SLOT(applyMarkerChanges(int)));
 
@@ -417,7 +417,7 @@ void KoStrokeConfigWidget::updateStyleControlsAvailability(bool enabled)
 void KoStrokeConfigWidget::setUnit(const KoUnit &unit, KoShape *representativeShape)
 {
     if (!d->allowLocalUnitManagement) {
-        return; //the unit management is completly transfered to the unitManagers.
+        return; //the unit management is completely transferred to the unitManagers.
     }
 
     blockChildSignals(true);

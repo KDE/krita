@@ -384,7 +384,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     int8 alphapos = -1; // <- no alpha
     // Check which extra is alpha if any
     dbgFile << "There are" << nbchannels << " channels and" << extrasamplescount << " extra channels";
-    if (sampleinfo) { // index images don't have any sampleinfo, and therefor sampleinfo == 0
+    if (sampleinfo) { // index images don't have any sampleinfo, and therefore sampleinfo == 0
         for (int i = 0; i < extrasamplescount; i ++) {
             dbgFile << i << "" << extrasamplescount << ""  << (cs->colorChannelCount()) <<  nbchannels << "" << sampleinfo[i];
             if (sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA) {

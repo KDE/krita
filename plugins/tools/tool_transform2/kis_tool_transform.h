@@ -125,6 +125,18 @@ public:
     KisToolTransform(KoCanvasBase * canvas);
     ~KisToolTransform() override;
 
+    /**
+     * @brief wantsAutoScroll
+     * reimplemented from KoToolBase
+     * there's an issue where autoscrolling with this tool never makes the
+     * stroke end, so we return false here so that users don't get stuck with
+     * the tool. See bug 362659
+     * @return false
+     */
+    bool wantsAutoScroll() const {
+        return false;
+    }
+
     QWidget* createOptionWidget() override;
 
     void mousePressEvent(KoPointerEvent *e) override;

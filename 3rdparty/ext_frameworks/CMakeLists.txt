@@ -130,7 +130,7 @@ ExternalProject_Add(
     DEPENDS ext_kcoreaddons
 )
 
-
+if(APPLE)
 ExternalProject_Add(
     ext_ki18n
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -145,10 +145,26 @@ ExternalProject_Add(
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
-    DEPENDS ext_kguiaddons
+    DEPENDS ext_kguiaddons ext_gettext
 )
-
-
+else()
+ExternalProject_Add(
+    ext_ki18n
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL http://download.kde.org/Attic/frameworks/5.17/ki18n-5.17.0.zip
+    URL_MD5 7d60380d09f98defbf878ea9daba0fbb
+    INSTALL_DIR ${EXTPREFIX_frameworks}
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n.diff
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ki18n-appdatalocation.diff
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
+            -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 
+                ${GLOBAL_PROFILE}
+                -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX} 
+                -DBUILD_TESTING=false
+    UPDATE_COMMAND ""
+    DEPENDS ext_kguiaddons 
+)
+endif()
 ExternalProject_Add(
     ext_kitemmodels
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

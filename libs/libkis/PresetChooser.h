@@ -57,12 +57,12 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     /**
-     * Emited whenever a user selects the given preset.
+     * Emitted whenever a user selects the given preset.
      */
     void presetSelected(Resource *resource);
     
     /**
-     * Emited whenever a user clicks on the given preset.
+     * Emitted whenever a user clicks on the given preset.
      */
     void presetClicked(Resource *resource);
 

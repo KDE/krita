@@ -46,6 +46,7 @@
 #include <KoGenStyle.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
+#include "KisQPainterStateSaver.h"
 
 #include <FlakeDebug.h>
 #include <QPainter>
@@ -400,6 +401,9 @@ void KoPathShape::clear()
 void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     Q_D(KoPathShape);
+
+    KisQPainterStateSaver saver(&painter);
+
     applyConversion(painter, converter);
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);
@@ -721,7 +725,7 @@ int KoPathShape::arcToCurve(qreal rx, qreal ry, qreal startAngle, qreal sweepAng
         //TODO
     }
 
-    // split angles bigger than 90° so that it gives a good aproximation to the circle
+    // split angles bigger than 90° so that it gives a good approximation to the circle
     qreal parts = ceil(qAbs(sweepAngle / 90.0));
 
     qreal sa_rad = startAngle * M_PI / 180.0;
@@ -1289,7 +1293,9 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
         if (! shape) continue;
 
         shape->setStroke(stroke());
+        shape->setBackground(background());
         shape->setShapeId(shapeId());
+        shape->setZIndex(zIndex());
 
         KoSubpath *newSubpath = new KoSubpath();
 
@@ -1543,6 +1549,8 @@ KoPathShape * KoPathShape::createShapeFromPainterPath(const QPainterPath &path)
             continue;
         }
     }
+
+    shape->setShapeId(KoPathShapeId);
 
     //shape->normalize();
     return shape;

@@ -234,7 +234,7 @@ void KoColumns::loadOdf(const KoXmlElement &style)
         }
 
         if (! columnData.isEmpty() && count != columnData.count()) {
-            warnOdf << "Found not as many <style:column> elements as attribut fo:column-count has set:"<< count;
+            warnOdf << "Found not as many <style:column> elements as attribute fo:column-count has set:"<< count;
             columnData.clear();
         }
     } else {

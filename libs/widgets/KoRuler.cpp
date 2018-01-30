@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QFontDatabase>
+#include <QtMath>
 
 #include <KoViewConverter.h>
 
@@ -258,126 +259,95 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
 
 void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
 {
-    qreal numberStep = d->numberStepForUnit(); // number step in unit
-//    QRectF activeRangeRectangle;
-    int numberStepPixel = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberStep)));
-//    const bool adjustMillimeters = (d->unit.type() == KoUnit::Millimeter);
-
     const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
-    painter.setFont(font);
-
-    if (numberStepPixel == 0 || numberStep == 0)
-        return;
-
-    // Calc the longest text length
-    int textLength = 0;
-    for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
-        int number = qRound((i / numberStepPixel) * numberStep);
-
-        textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
-    }
-    textLength += 4;  // Add some padding
-
-    // Change number step so all digits fits
-    while(textLength > numberStepPixel) {
-        numberStepPixel += numberStepPixel;
-        numberStep += numberStep;
-    }
-
-    int start=0;
-    // Calc the first number step
-    if(d->offset < 0)
-        start = qAbs(d->offset);
-
-    // make a little hack so rulers shows correctly inversed number aligned
-    const qreal lengthInUnit = d->unit.toUserValue(d->rulerLength);
-    const qreal hackyLength = lengthInUnit - fmod(lengthInUnit, numberStep);
-    if(d->rightToLeft) {
-        start -= int(d->viewConverter->documentToViewX(fmod(d->rulerLength,
-                    d->unit.fromUserValue(numberStep))));
-    }
-
-    int stepCount = (start / numberStepPixel) + 1;
-    int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
-    int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
-
-    int pos = 0;
     const QPen numberPen(d->ruler->palette().color(QPalette::Text), 0);
     const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text), 0);
     painter.setPen(markerPen);
+    painter.setFont(font);
 
-    if(d->offset > 0)
-        painter.translate(d->offset, 0);
+    // length of the ruler in pixels
+    const int rulerLengthPixel = d->viewConverter->documentToViewX(d->rulerLength);
+    // length of the ruler in the chosen unit
+    const qreal rulerLengthUnit = d->unit.toUserValue(d->rulerLength);
+    // length of a unit in pixels
+    const qreal unitLength = d->viewConverter->documentToViewX(d->unit.fromUserValue(1.0));
+    // length of the text for longest number with some padding
+    const int textLength = fontMetrics.width(QString::number(qCeil(rulerLengthUnit))) + 20;
+    // the minimal separation of numbers that won't make the text a mess
+    const qreal minimalNumberSeparation = qCeil(textLength / unitLength);
+    // the chosen separation of numbers so that we have "whole" numbers
+    qreal numberSeparation = minimalNumberSeparation;
+    if (minimalNumberSeparation <= 5) {
+    } else if (minimalNumberSeparation <= 10) {
+        numberSeparation = 10;
+    } else if (minimalNumberSeparation <= 20) {
+        numberSeparation = 20;
+    } else if (minimalNumberSeparation <= 50) {
+        numberSeparation = 50;
+    } else if (minimalNumberSeparation <= 100) {
+        numberSeparation = 100;
+    } else if (minimalNumberSeparation <= 200) {
+        numberSeparation = 200;
+    } else if (minimalNumberSeparation <= 500) {
+        numberSeparation = 500;
+    } else {
+        numberSeparation = qRound(qreal(numberSeparation / 100)) * 100;
+    }
+    // the chosen separation converted to pixel
+    const int pixelSeparation = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(numberSeparation)));
+    // the value used to calculate displacement of secondary marks
+    const int secondarydisplacement = d->rightToLeft ? -pixelSeparation : pixelSeparation;
 
-    const int len = qRound(rectangle.width()) + start;
-    int nextStep = qRound(d->viewConverter->documentToViewX(
-        d->unit.fromUserValue(numberStep * stepCount)));
-    int nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-        numberStep * 0.5 * halfStepCount)));
-    int nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-        numberStep * 0.25 * quarterStepCount)));
-
-    for(int i = start; i < len; ++i) {
-        pos = i - start;
-
-        if(i == nextStep) {
-            if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1),
-                                 QPointF(pos, rectangle.bottom() - fullStepMarkerLength));
-
-            int number = qRound(stepCount * numberStep);
-
-            QString numberText = QString::number(number);
-            int x = pos;
-            if (d->rightToLeft) { // this is done in a hacky way with the fine tuning done above
-                numberText = QString::number(hackyLength - stepCount * numberStep);
-            }
-            painter.setPen(numberPen);
-            painter.drawText(QPointF(x-fontMetrics.width(numberText)/2.0,
-                                     rectangle.bottom() -fullStepMarkerLength -measurementTextAboveBelowMargin),
-                             numberText);
-            painter.setPen(markerPen);
-
-            ++stepCount;
-            nextStep = qRound(d->viewConverter->documentToViewX(
-                d->unit.fromUserValue(numberStep * stepCount)));
-            ++halfStepCount;
-            nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-                numberStep * 0.5 * halfStepCount)));
-            ++quarterStepCount;
-            nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-                numberStep * 0.25 * quarterStepCount)));
+    // Draw the marks
+    const int rulerEnd = d->rightToLeft ? d->offset : d->offset + rulerLengthPixel;
+    for(qreal n = 0; n < rulerLengthUnit; n += numberSeparation) {
+        int posOnRuler = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(n)));
+        int x = d->offset + posOnRuler;
+        if (d->rightToLeft) {
+            x = d->offset + rulerLengthPixel - posOnRuler;
         }
-        else if(i == nextHalfStep) {
-            if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1),
-                                 QPointF(pos, rectangle.bottom() - halfStepMarkerLength));
 
-            ++halfStepCount;
-            nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-                numberStep * 0.5 * halfStepCount)));
-            ++quarterStepCount;
-            nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-                numberStep * 0.25 * quarterStepCount)));
-        }
-        else if(i == nextQuarterStep) {
-            if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1),
-                                 QPointF(pos, rectangle.bottom() - quarterStepMarkerLength));
+        // to draw the primary mark
+        painter.drawLine(QPointF(x, rectangle.bottom()-1),
+                QPointF(x, rectangle.bottom() - fullStepMarkerLength));
+        QString numberText = QString::number(n);
+        painter.setPen(numberPen);
+        painter.drawText(QPointF(x - fontMetrics.width(numberText)/2.0,
+                    rectangle.bottom() - fullStepMarkerLength - measurementTextAboveBelowMargin),
+                numberText);
 
-            ++quarterStepCount;
-            nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
-                numberStep * 0.25 * quarterStepCount)));
-        }
+        // start to draw secondary marks following the primary mark
+        painter.setPen(markerPen);
+
+        int xQuarterMark1 = qRound(qreal(x) + qreal(secondarydisplacement) / 4.0);
+        if (d->rightToLeft ? xQuarterMark1 < rulerEnd : xQuarterMark1 > rulerEnd)
+            break;
+        painter.drawLine(QPointF(xQuarterMark1, rectangle.bottom() - 1),
+                QPointF(xQuarterMark1, rectangle.bottom() - quarterStepMarkerLength));
+
+        int xHalfMark = qRound(qreal(x) + qreal(secondarydisplacement) / 2.0);
+        if (d->rightToLeft ? xHalfMark < rulerEnd : xHalfMark > rulerEnd)
+            break;
+        painter.drawLine(QPointF(xHalfMark, rectangle.bottom() - 1),
+                QPointF(xHalfMark, rectangle.bottom() - halfStepMarkerLength));
+
+        int xQuarterMark2 = qRound(qreal(x) + 3.0 * qreal(secondarydisplacement) / 4.0);
+        if (d->rightToLeft ? xQuarterMark2 < rulerEnd : xQuarterMark2 > rulerEnd)
+            break;
+        painter.drawLine(QPointF(xQuarterMark2, rectangle.bottom() - 1),
+                QPointF(xQuarterMark2, rectangle.bottom() - quarterStepMarkerLength));
     }
 
     // Draw the mouse indicator
-    const int mouseCoord = d->mouseCoordinate - start;
+    const int mouseCoord = d->mouseCoordinate + d->offset;
     if (d->selected == KoRulerPrivate::None || d->selected == KoRulerPrivate::HotSpot) {
         const qreal top = rectangle.y() + 1;
         const qreal bottom = rectangle.bottom() -1;
-        if (d->selected == KoRulerPrivate::None && d->showMousePosition && mouseCoord > 0 && mouseCoord < rectangle.width() )
+        if (d->selected == KoRulerPrivate::None
+                && d->showMousePosition
+                && d->mouseCoordinate > 0
+                && d->mouseCoordinate < rulerLengthPixel)
             painter.drawLine(QPointF(mouseCoord, top), QPointF(mouseCoord, bottom));
         foreach (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
             const qreal x = d->viewConverter->documentToViewX(hp.position) + d->offset;
@@ -488,109 +458,93 @@ QRectF VerticalPaintingStrategy::drawBackground(const KoRulerPrivate *d, QPainte
 
 void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainter &painter, const QRectF &rectangle)
 {
-    qreal numberStep = d->numberStepForUnit(); // number step in unit
-    int numberStepPixel = qRound(d->viewConverter->documentToViewY( d->unit.fromUserValue(numberStep)));
-    if (numberStepPixel <= 0)
-        return;
-
     const QFont font = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
     const QFontMetrics fontMetrics(font);
-    painter.setFont(font);
-
-    // Calc the longest text length
-    int textLength = 0;
-
-    for(int i = 0; i < lengthInPixel; i += numberStepPixel) {
-        int number = qRound((i / numberStepPixel) * numberStep);
-        textLength = qMax(textLength, fontMetrics.width(QString::number(number)));
-    }
-    textLength += 4;  // Add some padding
-
-    if (numberStepPixel == 0 || numberStep == 0)
-        return;
-    // Change number step so all digits will fit
-    while(textLength > numberStepPixel) {
-        numberStepPixel += numberStepPixel;
-        numberStep += numberStep;
-    }
-
-    // Calc the first number step
-    const int start = d->offset < 0 ? qAbs(d->offset) : 0;
-
-    // make a little hack so rulers shows correctly inversed number aligned
-    int stepCount = (start / numberStepPixel) + 1;
-    int halfStepCount = (start / qRound(numberStepPixel * 0.5)) + 1;
-    int quarterStepCount = (start / qRound(numberStepPixel * 0.25)) + 1;
-
     const QPen numberPen(d->ruler->palette().color(QPalette::Text), 0);
     const QPen markerPen(d->ruler->palette().color(QPalette::Inactive, QPalette::Text), 0);
     painter.setPen(markerPen);
+    painter.setFont(font);
 
-    if(d->offset > 0)
-        painter.translate(0, d->offset);
+    // length of the ruler in pixels
+    const int rulerLengthPixel = d->viewConverter->documentToViewY(d->rulerLength);
+    // length of the ruler in the chosen unit
+    const qreal rulerLengthUnit = d->unit.toUserValue(d->rulerLength);
+    // length of a unit in pixels
+    const qreal unitLength = d->viewConverter->documentToViewY(d->unit.fromUserValue(1.0));
+    // length of the text for longest number with some padding
+    const int textLength = fontMetrics.width(QString::number(qCeil(rulerLengthUnit))) + 20;
+    // the minimal separation of numbers that won't make the text a mess
+    const qreal minimalNumberSeparation = qCeil(textLength / unitLength);
+    // the chosen separation of numbers so that we have "whole" numbers
+    qreal numberSeparation = minimalNumberSeparation;
+    if (minimalNumberSeparation <= 5) {
+    } else if (minimalNumberSeparation <= 10) {
+        numberSeparation = 10;
+    } else if (minimalNumberSeparation <= 20) {
+        numberSeparation = 20;
+    } else if (minimalNumberSeparation <= 50) {
+        numberSeparation = 50;
+    } else if (minimalNumberSeparation <= 100) {
+        numberSeparation = 100;
+    } else if (minimalNumberSeparation <= 200) {
+        numberSeparation = 200;
+    } else if (minimalNumberSeparation <= 500) {
+        numberSeparation = 500;
+    } else {
+        numberSeparation = qRound(qreal(numberSeparation / 100.0)) * 100;
+    }
+    // the chosen separation converted to pixel
+    const int pixelSeparation = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(numberSeparation)));
 
-    const int len = qRound(rectangle.height()) + start;
-    int nextStep = qRound(d->viewConverter->documentToViewY(
-        d->unit.fromUserValue(numberStep * stepCount)));
-    int nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-        numberStep * 0.5 * halfStepCount)));
-    int nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-        numberStep * 0.25 * quarterStepCount)));
+    // Draw the marks
+    const int rulerEnd = rulerLengthPixel + d->offset;
+    for(qreal n = 0; n < rulerLengthUnit; n += numberSeparation) {
+        int posOnRuler = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(n)));
+        int y = d->offset + posOnRuler;
 
-    int pos = 0;
-    for(int i = start; i < len; ++i) {
-        pos = i - start;
+        // to draw the primary mark
+        QString numberText = QString::number(n);
+        painter.save();
+        painter.translate(rectangle.right() - fullStepMarkerLength, y);
+        painter.drawLine(QPointF(0, 0),
+                QPointF(rectangle.right() - fullStepMarkerLength, 0));
+        painter.setPen(numberPen);
+        painter.rotate(-90);
+        painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, 0),
+                numberText);
+        painter.restore();
 
-        if(i == nextStep) {
-            painter.save();
-            painter.translate(rectangle.right()-fullStepMarkerLength, pos);
-            if(pos != 0)
-                painter.drawLine(QPointF(0, 0), QPointF(fullStepMarkerLength-1, 0));
+        // start to draw secondary marks following the primary mark
+        painter.setPen(markerPen);
 
-            painter.rotate(-90);
-            int number = qRound(stepCount * numberStep);
-            QString numberText = QString::number(number);
-            painter.setPen(numberPen);
-            painter.drawText(QPointF(-fontMetrics.width(numberText) / 2.0, -measurementTextAboveBelowMargin), numberText);
-            painter.restore();
+        int yQuarterMark1 = qRound(qreal(y + pixelSeparation / 4.0));
+        if (yQuarterMark1 > rulerEnd)
+            break;
+        painter.drawLine(QPointF(rectangle.right() - 1, yQuarterMark1),
+                QPointF(rectangle.right() - quarterStepMarkerLength, yQuarterMark1));
 
-            ++stepCount;
-            nextStep = qRound(d->viewConverter->documentToViewY(
-                d->unit.fromUserValue(numberStep * stepCount)));
-            ++halfStepCount;
-            nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-                numberStep * 0.5 * halfStepCount)));
-            ++quarterStepCount;
-            nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-                numberStep * 0.25 * quarterStepCount)));
-        } else if(i == nextHalfStep) {
-            if(pos != 0)
-                painter.drawLine(QPointF(rectangle.right() - halfStepMarkerLength, pos),
-                                 QPointF(rectangle.right() - 1, pos));
+        int yHalfMark = qRound(qreal(y + pixelSeparation / 2.0));
+        if (yHalfMark > rulerEnd)
+            break;
+        painter.drawLine(QPointF(rectangle.right() - 1, yHalfMark),
+                QPointF(rectangle.right() - halfStepMarkerLength, yHalfMark));
 
-            ++halfStepCount;
-            nextHalfStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-                numberStep * 0.5 * halfStepCount)));
-            ++quarterStepCount;
-            nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-                numberStep * 0.25 * quarterStepCount)));
-        } else if(i == nextQuarterStep) {
-            if(pos != 0)
-                painter.drawLine(QPointF(rectangle.right() - quarterStepMarkerLength, pos),
-                                 QPointF(rectangle.right() - 1, pos));
-
-            ++quarterStepCount;
-            nextQuarterStep = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(
-                numberStep * 0.25 * quarterStepCount)));
-        }
+        int yQuarterMark2 = qRound(qreal(y + 3.0 * pixelSeparation / 4.0));
+        if (yQuarterMark2 > rulerEnd)
+            break;
+        painter.drawLine(QPointF(rectangle.right() - 1, yQuarterMark2),
+                QPointF(rectangle.right() - quarterStepMarkerLength, yQuarterMark2));
     }
 
     // Draw the mouse indicator
-    const int mouseCoord = d->mouseCoordinate - start;
+    const int mouseCoord = d->mouseCoordinate + d->offset;
     if (d->selected == KoRulerPrivate::None || d->selected == KoRulerPrivate::HotSpot) {
         const qreal left = rectangle.left() + 1;
         const qreal right = rectangle.right() -1;
-        if (d->selected == KoRulerPrivate::None && d->showMousePosition && mouseCoord > 0 && mouseCoord < rectangle.height() )
+        if (d->selected == KoRulerPrivate::None
+                && d->showMousePosition
+                && d->mouseCoordinate > 0
+                && d->mouseCoordinate < rulerLengthPixel)
             painter.drawLine(QPointF(left, mouseCoord), QPointF(right, mouseCoord));
         foreach (const KoRulerPrivate::HotSpotData & hp, d->hotspots) {
             const qreal y = d->viewConverter->documentToViewY(hp.position) + d->offset;
@@ -709,7 +663,8 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     distancesPaintingStrategy((PaintingStrategy*)new HorizontalDistancesPaintingStrategy()),
     paintingStrategy(normalPaintingStrategy),
     ruler(parent),
-    guideCreationStarted(false)
+    guideCreationStarted(false),
+    pixelStep(100.0)
 {
 }
 
@@ -732,7 +687,7 @@ qreal KoRulerPrivate::numberStepForUnit() const
             return 10.0;
         case KoUnit::Point:
         default:
-            return 100.0;
+            return pixelStep;
     }
 }
 
@@ -1367,4 +1322,14 @@ void KoRuler::createGuideToolConnection(KoCanvasBase *canvas)
     if (!tool) return; // It's perfectly fine to have no guides tool, we don't have to warn the user about it
     connect(this, SIGNAL(guideLineCreated(Qt::Orientation,qreal)),
         tool, SLOT(createGuideLine(Qt::Orientation,qreal)));
+}
+
+void KoRuler::setUnitPixelMultiple2(bool enabled)
+{
+    if (enabled) {
+        d->pixelStep = 64.0;
+    }
+    else {
+        d->pixelStep = 100.0;
+    }
 }

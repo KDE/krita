@@ -2,6 +2,7 @@
    Copyright (c) 2000 Simon Hausmann <hausmann@kde.org>
                  2006 Martin Pfeiffer <hubipete@gmx.net>
                  2012 C. Boemann <cbo@boemann.dk>
+                 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 
 #include <KoGlobal.h>
 #include <KoIcon.h>
+#include <QDebug>
 
 #include <klocalizedstring.h>
 #include <kuser.h>
@@ -33,6 +35,7 @@
 #include <ksharedconfig.h>
 
 #include <QLineEdit>
+#include <QCompleter>
 #include <QStackedWidget>
 #include <QList>
 #include <QComboBox>
@@ -41,6 +44,14 @@
 #include <QStringList>
 #include <QToolButton>
 #include <QInputDialog>
+#include <QTableView>
+#include <QStandardItem>
+#include <QLabel>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QFile>
+#include <QDir>
+#include <QByteArray>
 
 class Q_DECL_HIDDEN KoConfigAuthorPage::Private
 {
@@ -49,6 +60,10 @@ public:
     QStackedWidget *stack;
     QComboBox *combo;
     QToolButton *deleteUser;
+    QStringList positions;
+    QStringList contactModes;
+    QStringList contactKeys;
+    QString defaultAuthor;
 };
 
 
@@ -57,65 +72,203 @@ KoConfigAuthorPage::KoConfigAuthorPage()
 {
     QGridLayout *layout = new QGridLayout;
 
-    d->combo = new QComboBox;
+    d->combo = new QComboBox();
     layout->addWidget(d->combo, 0, 0);
-    QToolButton *newUser = new QToolButton;
+    QToolButton *newUser = new QToolButton();
     newUser->setIcon(koIcon("list-add"));
     newUser->setToolTip(i18n("Add new author profile (starts out as a copy of current)"));
     layout->addWidget(newUser, 0, 1);
-    d->deleteUser = new QToolButton;
+    d->deleteUser = new QToolButton();
     d->deleteUser->setIcon(koIcon("trash-empty"));
     d->deleteUser->setToolTip(i18n("Delete the author profile"));
     layout->addWidget(d->deleteUser, 0, 2);
-    QFrame *f = new QFrame;
+    QFrame *f = new QFrame();
     f->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     layout->addWidget(f, 1, 0);
     d->stack = new QStackedWidget();
     layout->addWidget(d->stack, 2, 0, 1, 3);
     setLayout(layout);
 
-    // Add a default profile
+    //list of positions that we can use to provide useful autocompletion.
+    d->positions << QString(i18nc("This is a list of suggestions for positions an artist can take, comma-separated","Adapter,Animator,Artist,Art Director,Author,Assistant,"
+                                 "Editor,Background,Cartoonist,Colorist,Concept Artist,"
+                                 "Corrector,Cover Artist,Creator,Designer,Inker,"
+                                 "Letterer,Matte Painter,Painter,Penciller,Proofreader,"
+                                 "Pixel Artist,Redliner,Sprite Artist,Typographer,Texture Artist,"
+                                 "Translator,Writer,Other")).split(",");
+
+    //Keep these two in sync!
+    d->contactModes << i18n("Homepage") << i18n("Email") << i18n("Post Address") << i18n("Telephone") << i18n("Fax");
+    d->contactKeys << "homepage" << "email" << "address" << "telephone" << "fax";
+    QStringList headerlabels;
+    headerlabels<< i18n("Type") << i18n("Entry");
+
     Ui::KoConfigAuthorPage *aUi = new Ui::KoConfigAuthorPage();
     QWidget *w = new QWidget;
-    w->setEnabled(false);
-    aUi->setupUi(w);
-    d->combo->addItem(i18n("Default Author Profile"));
-    d->stack->addWidget(w);
-    KUser user(KUser::UseRealUserID);
-    aUi->leFullName->setText(user.property(KUser::FullName).toString());
-    aUi->lePhoneWork->setText(user.property(KUser::WorkPhone).toString());
-    aUi->lePhoneHome->setText(user.property(KUser::HomePhone).toString());
-    KEMailSettings eMailSettings;
-    aUi->leEmail->setText(eMailSettings.getSetting(KEMailSettings::EmailAddress));
-    d->profileUiList.append(aUi);
+    d->defaultAuthor = i18n("Anonymous");
 
-    // Add all the user defined profiles
+    QStringList profilesNew;
+    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QDir dir(authorInfo);
+    QStringList filters = QStringList() << "*.authorinfo";
+    Q_FOREACH(const QString &entry, dir.entryList(filters)) {
+        QFile file(dir.absoluteFilePath(entry));
+        if (file.exists()) {
+            file.open(QFile::ReadOnly);
+            QByteArray ba = file.readAll();
+            file.close();
+            QDomDocument doc = QDomDocument();
+            doc.setContent(ba);
+            QDomElement root = doc.firstChildElement();
+            aUi = new Ui::KoConfigAuthorPage();
+            w = new QWidget;
+            aUi->setupUi(w);
+            QString profile = root.attribute("name");
+
+            QDomElement el = root.firstChildElement("nickname");
+            if (!el.isNull()) {
+                aUi->leNickName->setText(el.text());
+            }
+            el = root.firstChildElement("givenname");
+            if (!el.isNull()) {
+                aUi->leFirstName->setText(el.text());
+            }
+            el = root.firstChildElement("middlename");
+            if (!el.isNull()) {
+                aUi->leInitials->setText(el.text());
+            }
+            el = root.firstChildElement("familyname");
+            if (!el.isNull()) {
+                aUi->leLastName->setText(el.text());
+            }
+            el = root.firstChildElement("title");
+            if (!el.isNull()) {
+                aUi->leTitle->setText(el.text());
+            }
+            el = root.firstChildElement("position");
+            if (!el.isNull()) {
+                aUi->lePosition->setText(el.text());
+            }
+            el = root.firstChildElement("company");
+            if (!el.isNull()) {
+                aUi->leCompany->setText(el.text());
+            }
+
+            aUi->tblContactInfo->setItemDelegate(new KoContactInfoDelegate(this, d->contactModes));
+            QStandardItemModel *modes = new QStandardItemModel();
+            aUi->tblContactInfo->setModel(modes);
+            el = root.firstChildElement("contact");
+            while (!el.isNull()) {
+                QList<QStandardItem *> list;
+                QString type = d->contactModes.at(d->contactKeys.indexOf(el.attribute("type")));
+                list.append(new QStandardItem(type));
+                list.append(new QStandardItem(el.text()));
+                modes->appendRow(list);
+                el = el.nextSiblingElement("contact");
+            }
+            modes->setHorizontalHeaderLabels(headerlabels);
+            QCompleter *positionSuggestions = new QCompleter(d->positions);
+            positionSuggestions->setCaseSensitivity(Qt::CaseInsensitive);
+            aUi->lePosition->setCompleter(positionSuggestions);
+
+            connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
+            connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));
+
+            d->combo->addItem(profile);
+            profilesNew.append(profile);
+            d->profileUiList.append(aUi);
+            d->stack->addWidget(w);
+        }
+    }
+
+    // Add all the user defined profiles (old type)
     KConfig *config = KoGlobal::calligraConfig();
     KConfigGroup authorGroup(config, "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
-    foreach (const QString &profile , profiles) {
-        KConfigGroup cgs(&authorGroup, "Author-" + profile);
-        aUi = new Ui::KoConfigAuthorPage();
-        w = new QWidget;
-        aUi->setupUi(w);
-        aUi->leFullName->setText(cgs.readEntry("creator"));
-        aUi->leInitials->setText(cgs.readEntry("initial"));
-        aUi->leTitle->setText(cgs.readEntry("author-title"));
-        aUi->leCompany->setText(cgs.readEntry("company"));
-        aUi->leEmail->setText(cgs.readEntry("email"));
-        aUi->lePhoneWork->setText(cgs.readEntry("telephone-work"));
-        aUi->lePhoneHome->setText(cgs.readEntry("telephone"));
-        aUi->leFax->setText(cgs.readEntry("fax"));
-        aUi->leCountry->setText(cgs.readEntry("country"));
-        aUi->lePostal->setText(cgs.readEntry("postal-code"));
-        aUi->leCity->setText(cgs.readEntry("city"));
-        aUi->leStreet->setText(cgs.readEntry("street"));
-        aUi->lePosition->setText(cgs.readEntry("position"));
 
-        d->combo->addItem(profile);
-        d->profileUiList.append(aUi);
+    // Add a default profile
+    aUi = new Ui::KoConfigAuthorPage();
+    w = new QWidget;
+    if (profiles.contains(d->defaultAuthor)==false || profilesNew.contains(d->defaultAuthor)) {
+        //w->setEnabled(false);
+        aUi->setupUi(w);
+        w->setEnabled(false);
+        d->combo->addItem(d->defaultAuthor);
         d->stack->addWidget(w);
+        //KUser user(KUser::UseRealUserID);
+        //aUi->leFullName->setText(user.property(KUser::FullName).toString());
+        //aUi->lePhoneWork->setText(user.property(KUser::WorkPhone).toString());
+        //aUi->lePhoneHome->setText(user.property(KUser::HomePhone).toString());
+        //KEMailSettings eMailSettings;
+        //aUi->leEmail->setText(eMailSettings.getSetting(KEMailSettings::EmailAddress));
+        d->profileUiList.append(aUi);
+    }
+
+    foreach (const QString &profile , profiles) {
+        if (profilesNew.contains(profile)==false) {
+            KConfigGroup cgs(&authorGroup, "Author-" + profile);
+            aUi = new Ui::KoConfigAuthorPage();
+            w = new QWidget;
+            aUi->setupUi(w);
+            aUi->leNickName->setText(cgs.readEntry("creator"));
+            aUi->leFirstName->setText(cgs.readEntry("creator-first-name"));
+            aUi->leLastName->setText(cgs.readEntry("creator-last-name"));
+            aUi->leInitials->setText(cgs.readEntry("initial"));
+            aUi->leTitle->setText(cgs.readEntry("author-title"));
+            aUi->lePosition->setText(cgs.readEntry("position"));
+            QCompleter *positionSuggestions = new QCompleter(d->positions);
+            positionSuggestions->setCaseSensitivity(Qt::CaseInsensitive);
+            aUi->lePosition->setCompleter(positionSuggestions);
+            aUi->leCompany->setText(cgs.readEntry("company"));
+
+            aUi->tblContactInfo->setItemDelegate(new KoContactInfoDelegate(this, d->contactModes));
+            QStandardItemModel *modes = new QStandardItemModel();
+            aUi->tblContactInfo->setModel(modes);
+            if (cgs.hasKey("email")) {
+                QList<QStandardItem *> list;
+                QString email = d->contactModes.at(d->contactKeys.indexOf("email"));
+                list.append(new QStandardItem(email));
+                list.append(new QStandardItem(cgs.readEntry("email")));
+                modes->appendRow(list);
+            }
+            if (cgs.hasKey("telephone-work")) {
+                QList<QStandardItem *> list;
+                QString tel = d->contactModes.at(d->contactKeys.indexOf("telephone"));
+                list.append(new QStandardItem(tel));
+                list.append(new QStandardItem(cgs.readEntry("telephone-work")));
+                modes->appendRow(list);
+            }
+            if (cgs.hasKey("fax")) {
+                QList<QStandardItem *> list;
+                QString fax = d->contactModes.at(d->contactKeys.indexOf("fax"));
+                list.append(new QStandardItem(fax));
+                list.append(new QStandardItem(cgs.readEntry("fax")));
+                modes->appendRow(list);
+            }
+            QStringList postal;
+            postal << cgs.readEntry("street") << cgs.readEntry("postal-code") << cgs.readEntry("city") << cgs.readEntry("country");
+            QString address;
+            Q_FOREACH(QString part, postal) {
+                if (!part.isEmpty()) {
+                    address+= part + "\n";
+                }
+            }
+            if (!address.isEmpty()) {
+                QList<QStandardItem *> list;
+                QString add = d->contactModes.at(d->contactKeys.indexOf("address"));
+                list.append(new QStandardItem(add));
+                list.append(new QStandardItem(address));
+                modes->appendRow(list);
+            }
+            modes->setHorizontalHeaderLabels(headerlabels);
+            connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
+            connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));
+
+            d->combo->addItem(profile);
+            d->profileUiList.append(aUi);
+            d->stack->addWidget(w);
+        }
     }
 
     // Connect slots
@@ -150,19 +303,22 @@ void KoConfigAuthorPage::addUser()
     QWidget *w = new QWidget;
     aUi->setupUi(w);
 
-    aUi->leFullName->setText(curUi->leFullName->text());
+    aUi->leNickName->setText(curUi->leNickName->text());
     aUi->leInitials->setText(curUi->leInitials->text());
     aUi->leTitle->setText(curUi->leTitle->text());
     aUi->leCompany->setText(curUi->leCompany->text());
-    aUi->leEmail->setText(curUi->leEmail->text());
-    aUi->lePhoneWork->setText(curUi->lePhoneWork->text());
-    aUi->lePhoneHome->setText(curUi->lePhoneHome->text());
-    aUi->leFax->setText(curUi->leFax->text());
-    aUi->leCountry->setText(curUi->leCountry->text());
-    aUi->lePostal->setText(curUi->lePostal->text());
-    aUi->leCity->setText(curUi->leCity->text());
-    aUi->leStreet->setText(curUi->leStreet->text());
+    aUi->leFirstName->setText(curUi->leFirstName->text());
+    aUi->leLastName->setText(curUi->leLastName->text());
     aUi->lePosition->setText(curUi->lePosition->text());
+    QCompleter *positionSuggestions = new QCompleter(d->positions);
+    positionSuggestions->setCaseSensitivity(Qt::CaseInsensitive);
+    aUi->lePosition->setCompleter(positionSuggestions);
+    aUi->tblContactInfo->setItemDelegate(new KoContactInfoDelegate(this, d->contactModes));
+    QStandardItemModel *modes = new QStandardItemModel();
+    aUi->tblContactInfo->setModel(modes);
+
+    connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
+    connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));
 
     int index = d->combo->currentIndex() + 1;
     d->combo->insertItem(index, profileName);
@@ -182,32 +338,106 @@ void KoConfigAuthorPage::deleteUser()
     delete w;
 }
 
+void KoConfigAuthorPage::addContactEntry()
+{
+    int i = d->combo->currentIndex();
+    Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
+    QStandardItemModel *contact = static_cast<QStandardItemModel*>(aUi->tblContactInfo->model());
+    QList<QStandardItem*>list;
+    list.append(new QStandardItem(d->contactModes.at(0)));
+    list.append(new QStandardItem(i18n("New Contact Info")));
+    contact->appendRow(list);
+    aUi->tblContactInfo->setModel(contact);
+}
+
+void KoConfigAuthorPage::removeContactEntry()
+{
+    int i = d->combo->currentIndex();
+    Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
+    QModelIndex index = aUi->tblContactInfo->selectionModel()->currentIndex();
+    aUi->tblContactInfo->model()->removeRow(index.row());
+}
+
 void KoConfigAuthorPage::apply()
 {
-    KConfig *config = KoGlobal::calligraConfig();
-    KConfigGroup authorGroup(config, "Author");
-    QStringList profiles;
-
-    for (int i = 1; i < d->profileUiList.size(); i++) {
-        KConfigGroup cgs(&authorGroup, "Author-" + d->combo->itemText(i));
-        profiles.append(d->combo->itemText(i));
-        Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
-        cgs.writeEntry("creator", aUi->leFullName->text());
-        cgs.writeEntry("initial", aUi->leInitials->text());
-        cgs.writeEntry("author-title", aUi->leTitle->text());
-        cgs.writeEntry("company", aUi->leCompany->text());
-        cgs.writeEntry("email", aUi->leEmail->text());
-        cgs.writeEntry("telephone-work", aUi->lePhoneWork->text());
-        cgs.writeEntry("telephone", aUi->lePhoneHome->text());
-        cgs.writeEntry("fax", aUi->leFax->text());
-        cgs.writeEntry("country", aUi->leCountry->text());
-        cgs.writeEntry("postal-code", aUi->lePostal->text());
-        cgs.writeEntry("city", aUi->leCity->text());
-        cgs.writeEntry("street", aUi->leStreet->text());
-        cgs.writeEntry("position", aUi->lePosition->text());
-
-        cgs.sync();
+    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QDir dir(authorInfo);
+    if (!dir.mkpath(authorInfo)) {
+        qWarning()<<"We can't make an author info directory, and therefore not save!";
+        return;
     }
-    authorGroup.writeEntry("profile-names", profiles);
-    authorGroup.sync();
+    for (int i = 0; i < d->profileUiList.size(); i++) {
+        if (d->combo->itemText(i)!= d->defaultAuthor) {
+            QByteArray ba;
+            QDomDocument doc = QDomDocument();
+            Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
+
+            QDomElement root = doc.createElement("author");
+            root.setAttribute("name", d->combo->itemText(i));
+
+            QDomElement nickname = doc.createElement("nickname");
+            nickname.appendChild(doc.createTextNode(aUi->leNickName->text()));
+            root.appendChild(nickname);
+            QDomElement givenname = doc.createElement("givenname");
+            givenname.appendChild(doc.createTextNode(aUi->leFirstName->text()));
+            root.appendChild(givenname);
+            QDomElement familyname = doc.createElement("familyname");
+            familyname.appendChild(doc.createTextNode(aUi->leLastName->text()));
+            root.appendChild(familyname);
+            QDomElement middlename = doc.createElement("middlename");
+            middlename.appendChild(doc.createTextNode(aUi->leInitials->text()));
+            root.appendChild(middlename);
+            QDomElement title = doc.createElement("title");
+            title.appendChild(doc.createTextNode(aUi->leTitle->text()));
+            root.appendChild(title);
+            QDomElement company = doc.createElement("company");
+            company.appendChild(doc.createTextNode(aUi->leCompany->text()));
+            root.appendChild(company);
+            QDomElement position = doc.createElement("position");
+            position.appendChild(doc.createTextNode(aUi->lePosition->text()));
+            root.appendChild(position);
+            if (aUi->tblContactInfo) {
+                if (aUi->tblContactInfo->model()) {
+                    for (int i=0; i<aUi->tblContactInfo->model()->rowCount(); i++) {
+                        QModelIndex index = aUi->tblContactInfo->model()->index(i, 1);
+                        QModelIndex typeIndex = aUi->tblContactInfo->model()->index(i, 0);
+                        QDomElement contactEl = doc.createElement("contact");
+                        QString content = QVariant(aUi->tblContactInfo->model()->data(index)).toString();
+                        contactEl.appendChild(doc.createTextNode(content));
+                        QString type = QVariant(aUi->tblContactInfo->model()->data(typeIndex)).toString();
+                        contactEl.setAttribute("type", d->contactKeys.at(d->contactModes.indexOf(type)));
+                        root.appendChild(contactEl);
+                    }
+                }
+            }
+            doc.appendChild(root);
+            ba = doc.toByteArray();
+
+            QFile f(authorInfo + d->combo->itemText(i) +".authorinfo");
+            f.open(QFile::WriteOnly);
+            f.write(ba);
+            f.close();
+        }
+    }
+}
+
+KoContactInfoDelegate::KoContactInfoDelegate(QWidget *parent, QStringList contactModes): QStyledItemDelegate(parent), m_contactModes(contactModes)
+{
+}
+
+KoContactInfoDelegate::~KoContactInfoDelegate()
+{
+
+}
+
+QWidget* KoContactInfoDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+
+    if (index.column() > 0) {
+        return new QLineEdit(parent);
+    } else {
+        QComboBox *box = new QComboBox(parent);
+        box->addItems(m_contactModes);
+        return box;
+    }
 }

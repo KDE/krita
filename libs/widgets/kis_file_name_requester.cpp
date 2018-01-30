@@ -28,6 +28,7 @@ KisFileNameRequester::KisFileNameRequester(QWidget *parent)
     : QWidget(parent)
     , m_ui(new Ui::WdgFileNameRequester)
     , m_mode(KoFileDialog::OpenFile)
+    , m_name("OpenDocument")
 {
     m_ui->setupUi(this);
 
@@ -44,6 +45,11 @@ KisFileNameRequester::~KisFileNameRequester()
 void KisFileNameRequester::setStartDir(const QString &path)
 {
     m_basePath = path;
+}
+
+void KisFileNameRequester::setConfiguratioName(const QString &name)
+{
+    m_name = name;
 }
 
 void KisFileNameRequester::setFileName(const QString &path)
@@ -77,7 +83,7 @@ void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList,
 
 void KisFileNameRequester::slotSelectFile()
 {
-    KoFileDialog dialog(this, m_mode, "OpenDocument");
+    KoFileDialog dialog(this, m_mode, m_name);
     if (m_mode == KoFileDialog::OpenFile)
     {
         dialog.setCaption(i18n("Select a file to load..."));

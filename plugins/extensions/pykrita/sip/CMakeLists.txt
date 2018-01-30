@@ -10,7 +10,7 @@ message( ${SIP_DEFAULT_SIP_DIR} " - default SIP dir" )
 
 set(SIP_INCLUDES 
     ${SIP_DEFAULT_SIP_DIR}
-    ${SIP_DEFAULT_SIP_DIR}/PyQt5
+    ${PYQT5_SIP_DIR}
     ${PYQT_SIP_DIR_OVERRIDE}
      ./krita)
 
@@ -18,7 +18,7 @@ set(SIP_CONCAT_PARTS 1)
 set(SIP_TAGS ALL WS_X11 ${PYQT5_VERSION_TAG})
 set(SIP_EXTRA_OPTIONS -g -x PyKDE_QVector)
 
-set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${DATA_INSTALL_DIR}/krita/pykrita/)
+set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${LIB_INSTALL_DIR}/krita-python-libs)
 file(GLOB PYKRITA_KRITA_sip_files ./krita/*.sip)
 set(SIP_EXTRA_FILES_DEPEND ${PYKRITA_KRITA_sip_files})
 add_sip_python_module(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)

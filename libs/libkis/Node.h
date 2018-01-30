@@ -40,7 +40,14 @@ public:
     ~Node() override;
     bool operator==(const Node &other) const;
     bool operator!=(const Node &other) const;
+
 public Q_SLOTS:
+
+    /**
+     * @brief clone clone the current node. The node is not associated with any image.
+     */
+    Node *clone() const;
+
     /**
      * @brief alphaLocked checks whether the node is a paint layer and returns whether it is alpha locked
      * @return whether the paint layer is alpha locked, or false if the node is not a paint layer
@@ -48,7 +55,7 @@ public Q_SLOTS:
     bool alphaLocked() const;
 
     /**
-     * @brief setAlphaLocked set the layer to value if the the node is paint layer.
+     * @brief setAlphaLocked set the layer to value if the node is paint layer.
      */
     void setAlphaLocked(bool value);
 
@@ -215,7 +222,7 @@ public Q_SLOTS:
     void setInheritAlpha(bool value);
 
     /**
-     * @brief locked checkes whether the Node is locked. A locked node cannot be changed.
+     * @brief locked checks whether the Node is locked. A locked node cannot be changed.
      * @return true if the Node is locked, false if it hasn't been locked.
      */
     bool locked() const;
@@ -273,7 +280,13 @@ public Q_SLOTS:
      * If the Node object isn't wrapping a valid Krita layer or mask object, and
      * empty string is returned.
      */
-    QString type() const;
+    virtual QString type() const;
+
+    /**
+     * @brief icon
+     * @return the icon associated with the layer.
+     */
+    QIcon icon() const;
 
     /**
      * Check whether the current Node is visible in the layer stack
@@ -437,7 +450,7 @@ public Q_SLOTS:
     Node* duplicate();
 
     /**
-     * @brief save exports the given node with this filename. The extension of the filename determins the filetype.
+     * @brief save exports the given node with this filename. The extension of the filename determines the filetype.
      * @param filename the filename including extension
      * @param xRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
      * @param yRes the horizontal resolution in pixels per pt (there are 72 pts in an inch)
@@ -506,6 +519,13 @@ private:
     friend class Filter;
     friend class Document;
     friend class Selection;
+    friend class GroupLayer;
+    friend class FileLayer;
+    friend class FilterLayer;
+    friend class FillLayer;
+    friend class VectorLayer;
+    friend class FilterMask;
+    friend class SelectionMask;
     /**
      * @brief paintDevice gives access to the internal paint device of this Node
      * @return the paintdevice or 0 if the node does not have an editable paint device.

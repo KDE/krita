@@ -97,9 +97,9 @@ int parseIntegerMathExpr(QString const& expr, bool* noProblem)
 //intermediate functions
 
 /*!
- * \brief extractSubExprLevel1 extract from an expression the part of an expression that need to be treated recursivly before computing level 1 operations (+, -).
+ * \brief extractSubExprLevel1 extract from an expression the part of an expression that need to be treated recursively before computing level 1 operations (+, -).
  * \param expr The expression to treat, the part returned will be removed.
- * \param nextOp This reference, in case of sucess, will hold the first level operation identified as separator ('+' or '-')
+ * \param nextOp This reference, in case of success, will hold the first level operation identified as separator ('+' or '-')
  * \param noProblem A reference to a bool, set to true if there was no problem, false otherwise.
  * \return The first part of the expression that doesn't contain first level operations not nested within parenthesis.
  */
@@ -168,9 +168,9 @@ inline QString extractSubExprLevel1(QString & expr, char & nextOp, bool & noProb
 
 
 /*!
- * \brief extractSubExprLevel2 extract from an expression the part of an expression that need to be treated recursivly before computing level 2 operations (*, /).
+ * \brief extractSubExprLevel2 extract from an expression the part of an expression that need to be treated recursively before computing level 2 operations (*, /).
  * \param expr The expression to treat, the part returned will be removed.
- * \param nextOp This reference, in case of sucess, will hold the first level operation identified as separator ('*' or '/')
+ * \param nextOp This reference, in case of success, will hold the first level operation identified as separator ('*' or '/')
  * \param noProblem A reference to a bool, set to true if there was no problem, false otherwise.
  * \return The first part of the expression that doesn't contain second level operations not nested within parenthesis.
  */

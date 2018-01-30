@@ -170,6 +170,9 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
     if (!m_colorSet) {
         return 0;
     }
+    if (m_colorSet->nColors()==0) {
+        return 0;
+    }
     if (columnCount() > 0) {
         int countedrows = m_colorSet->nColorsGroup("")/columnCount();
         if (m_colorSet->nColorsGroup()%columnCount() > 0) {
@@ -319,7 +322,7 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
     QStringList entryList = qvariant_cast<QStringList>(data(index, RetrieveEntryRole));
     if (entryList.isEmpty()) {
         return -1;
-        qWarning()<<"invalid index, there's no data to retreive here";
+        qWarning()<<"invalid index, there's no data to retrieve here";
     }
     if (entryList.at(0)==QString()) {
         return entryList.at(1).toUInt();

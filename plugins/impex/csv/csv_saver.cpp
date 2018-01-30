@@ -366,7 +366,7 @@ QString CSVSaver::convertToBlending(const QString &opid)
     if (opid == COMPOSITE_MULT) return "Multiply";
     if (opid == COMPOSITE_SCREEN) return "Screen";
     // "Replace"
-    // "Subtitute"
+    // "Substitute"
     if (opid == COMPOSITE_DIFF) return "Difference";
     if (opid == COMPOSITE_DIVIDE) return "Divide";
     if (opid == COMPOSITE_OVERLAY) return "Overlay";
@@ -415,12 +415,12 @@ KisImageBuilder_Result CSVSaver::getLayer(CSVLayerRecord* layer, KisDocument* ex
     const KoColorSpace* cs = device->colorSpace();
 
     bool isThereAlpha = false;
-    do {
+    while (it.nextPixel()) {
         if (cs->opacityU8(it.oldRawData()) != OPACITY_OPAQUE_U8) {
             isThereAlpha = true;
             break;
         }
-    } while (it.nextPixel());
+    }
 
     if (!KisPNGConverter::isColorSpaceSupported(cs)) {
         device = new KisPaintDevice(*device.data());

@@ -170,13 +170,13 @@ public:
     virtual ~KoShape();
 
     /**
-     * @brief creates a deep copy of thie shape or shapes subtree
+     * @brief creates a deep copy of the shape or shape's subtree 
      * @return a cloned shape
      */
     virtual KoShape* cloneShape() const;
 
     /**
-     * @brief Paint the shape
+     * @brief Paint the shape fill
      * The class extending this one is responsible for painting itself.  Since we do not
      * assume the shape is square the paint must also clear its background if it will draw
      * something transparent on top.
@@ -192,6 +192,15 @@ public:
      * @param paintcontext the painting context.
      */
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
+
+    /**
+     * @brief paintStroke paints the shape's stroked outline
+     * @param painter used for painting the shape
+     * @param converter to convert between internal and view coordinates.
+     * @see applyConversion()
+     * @param paintcontext the painting context.
+     */
+    virtual void paintStroke(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /**
      * @brief Paint the shape's border
@@ -515,6 +524,10 @@ public:
      * or have a complex fill.
      * Setting such a background will allow the shape to be filled and will be able to tell
      * if it is transparent or not.
+     *
+     * If the shape inherited the background from its parent, its stops inheriting it, that
+     * is inheritBackground property resets to false.
+     *
      * @param background the new shape background.
      */
     void setBackground(QSharedPointer<KoShapeBackground> background);
@@ -527,6 +540,19 @@ public:
      * @return the background-brush
      */
     QSharedPointer<KoShapeBackground> background() const;
+
+    /**
+     * @brief setInheritBackground marks a shape as inhiriting the background
+     * from the parent shape. NOTE: The currently selected background is destroyed.
+     * @param value true if the shape should inherit the filling background
+     */
+    void setInheritBackground(bool value);
+
+    /**
+     * @brief inheritBackground shows if the shape inherits background from its parent
+     * @return true if the shape inherits the fill
+     */
+    bool inheritBackground() const;
 
     /**
      * Returns true if there is some transparency, false if the shape is fully opaque.
@@ -555,7 +581,7 @@ public:
      * @return the z-index of this shape.
      * @see setZIndex()
      */
-    int zIndex() const;
+    qint16 zIndex() const;
 
     /**
      * Set the z-coordinate of this shape.
@@ -568,7 +594,17 @@ public:
      * and probably depends on the order in which they are added to the shape manager.
      * @param zIndex the new z-index;
      */
-    void setZIndex(int zIndex);
+    void setZIndex(qint16 zIndex);
+
+    /**
+     * Maximum value of z-index
+     */
+    static const qint16 maxZIndex;
+
+    /**
+     * Minimum value of z-index
+     */
+    static const qint16 minZIndex;
 
     /**
      * Retrieve the run through property of this shape.
@@ -774,10 +810,23 @@ public:
     KoShapeStrokeModelSP stroke() const;
 
     /**
-     * Set a new stroke, removing the old one.
+     * Set a new stroke, removing the old one. The stroke inheritance becomes disabled.
      * @param stroke the new stroke, or 0 if there should be no stroke.
      */
     void setStroke(KoShapeStrokeModelSP stroke);
+
+    /**
+     * @brief setInheritStroke marks a shape as inhiriting the stroke
+     * from the parent shape. NOTE: The currently selected stroke is destroyed.
+     * @param value true if the shape should inherit the stroke style
+     */
+    void setInheritStroke(bool value);
+
+    /**
+     * @brief inheritStroke shows if the shape inherits the stroke from its parent
+     * @return true if the shape inherits the stroke style
+     */
+    bool inheritStroke() const;
 
     /**
      * Return the insets of the stroke.
@@ -811,7 +860,7 @@ public:
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
-     * keep the width/hight ratio intact so as not to distort shapes that rely on that
+     * keep the width/height ratio intact so as not to distort shapes that rely on that
      * ratio.
      * @param keepAspect the new value
      */
@@ -819,7 +868,7 @@ public:
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
-     * keep the width/hight ratio intact so as not to distort shapes that rely on that
+     * keep the width/height ratio intact so as not to distort shapes that rely on that
      * ratio.
      * @return whether to keep aspect ratio of this shape
      */
@@ -1132,7 +1181,7 @@ public:
 
 public:
 
-    struct ShapeChangeListener {
+    struct KRITAFLAKE_EXPORT ShapeChangeListener {
         virtual ~ShapeChangeListener();
         virtual void notifyShapeChanged(ChangeType type, KoShape *shape) = 0;
 

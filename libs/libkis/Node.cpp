@@ -56,6 +56,17 @@
 #include "Filter.h"
 #include "Selection.h"
 
+#include "GroupLayer.h"
+#include "CloneLayer.h"
+#include "FilterLayer.h"
+#include "FillLayer.h"
+#include "FileLayer.h"
+#include "VectorLayer.h"
+#include "FilterMask.h"
+#include "SelectionMask.h"
+
+
+
 
 struct Node::Private {
     Private() {}
@@ -85,6 +96,13 @@ bool Node::operator==(const Node &other) const
 bool Node::operator!=(const Node &other) const
 {
     return !(operator==(other));
+}
+
+Node *Node::clone() const
+{
+    KisNodeSP clone = d->node->clone();
+    Node *node = new Node(0, clone);
+    return node;
 }
 
 
@@ -143,7 +161,33 @@ QList<Node*> Node::childNodes() const
     if (d->node) {
         int childCount = d->node->childCount();
         for (int i = 0; i < childCount; ++i) {
-            nodes << new Node(d->image, d->node->at(i));
+            if (qobject_cast<const KisGroupLayer*>(d->node->at(i))) {
+                nodes << new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisCloneLayer*>(d->node->at(i))) {
+                nodes << new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisFileLayer*>(d->node->at(i))) {
+                nodes << new FileLayer(KisFileLayerSP(dynamic_cast<KisFileLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisAdjustmentLayer*>(d->node->at(i))) {
+                nodes << new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisGeneratorLayer*>(d->node->at(i))) {
+                nodes << new FillLayer(KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisShapeLayer*>(d->node->at(i))) {
+                nodes << new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisFilterMask*>(d->node->at(i))) {
+                nodes << new FilterMask(d->image, KisFilterMaskSP(dynamic_cast<KisFilterMask*>(d->node->at(i).data())));
+
+            } else  if (qobject_cast<const KisSelectionMask*>(d->node->at(i))) {
+                nodes << new SelectionMask(d->image, KisSelectionMaskSP(dynamic_cast<KisSelectionMask*>(d->node->at(i).data())));
+
+            } else {
+                nodes << new Node(d->image, d->node->at(i));
+            }
         }
     }
     return nodes;
@@ -340,7 +384,7 @@ QString Node::type() const
         return "clonelayer";
     }
     if (qobject_cast<const KisShapeLayer*>(d->node)) {
-        return "shapelayer";
+        return "vectorlayer";
     }
     if (qobject_cast<const KisTransparencyMask*>(d->node)) {
         return "transparencymask";
@@ -358,6 +402,15 @@ QString Node::type() const
         return "colorizemask";
     }
     return QString();
+}
+
+QIcon Node::icon() const
+{
+    QIcon icon;
+    if (d->node) {
+        icon = d->node->icon();
+    }
+    return icon;
 }
 
 bool Node::visible() const
@@ -469,7 +522,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     KisPaintDeviceSP projection = d->node->projection();
     QRect bounds = d->node->exactBounds();
 
-    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename);
+    QString mimeType = KisMimeDatabase::mimeTypeForFile(filename, false);
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     KisImageSP dst = new KisImage(doc->createUndoStore(),

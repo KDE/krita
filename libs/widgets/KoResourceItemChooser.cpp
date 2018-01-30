@@ -27,7 +27,6 @@
 
 #include <QGridLayout>
 #include <QButtonGroup>
-#include <QPushButton>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
 #include <QLabel>
@@ -147,19 +146,18 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
     d->buttonLayout = new QGridLayout();
 
-    QPushButton *button = new QPushButton(this);
-    button->setIcon(koIcon("document-open"));
-    button->setToolTip(i18nc("@info:tooltip", "Import resource"));
-    button->setEnabled(true);
-    d->buttonGroup->addButton(button, Button_Import);
-    d->buttonLayout->addWidget(button, 0, 0);
+    importButton = new QPushButton(this);
 
-    button = new QPushButton(this);
-    button->setIcon(koIcon("trash-empty"));
-    button->setToolTip(i18nc("@info:tooltip", "Delete resource"));
-    button->setEnabled(false);
-    d->buttonGroup->addButton(button, Button_Remove);
-    d->buttonLayout->addWidget(button, 0, 1);
+    importButton->setToolTip(i18nc("@info:tooltip", "Import resource"));
+    importButton->setEnabled(true);
+    d->buttonGroup->addButton(importButton, Button_Import);
+    d->buttonLayout->addWidget(importButton, 0, 0);
+
+    deleteButton = new QPushButton(this);
+    deleteButton->setToolTip(i18nc("@info:tooltip", "Delete resource"));
+    deleteButton->setEnabled(false);
+    d->buttonGroup->addButton(deleteButton, Button_Remove);
+    d->buttonLayout->addWidget(deleteButton, 0, 1);
 
     connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
@@ -170,7 +168,6 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->buttonLayout->setMargin(0);
 
     d->viewModeButton = new QToolButton(this);
-    d->viewModeButton->setIcon(koIcon("view-choose"));
     d->viewModeButton->setPopupMode(QToolButton::InstantPopup);
     d->viewModeButton->setVisible(false);
 
@@ -184,6 +181,9 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     layout->addLayout(d->buttonLayout, 3, 0, 1, 2);
     layout->setMargin(0);
     layout->setSpacing(0);
+
+    updateView();
+
     updateButtonState();
     showTaggingBar(false);
     activated(d->model->index(0, 0));
@@ -502,9 +502,9 @@ void KoResourceItemChooser::baseLengthChanged(int length)
     if (d->synced) {
         int resourceCount = d->model->resourcesCount();
         int width = d->view->width();
-        int maxColums = width / length;
+        int maxColumns = width / length;
         int cols = width / (2 * length) + 1;
-        while (cols <= maxColums) {
+        while (cols <= maxColumns) {
             int size = width / cols;
             int rows = ceil(resourceCount / (double)cols);
             if (rows * size < (d->view->height() - 5)) {
@@ -533,6 +533,61 @@ bool KoResourceItemChooser::eventFilter(QObject *object, QEvent *event)
     return QObject::eventFilter(object, event);
 }
 
+void KoResourceItemChooser::configureKineticScrolling(int gesture, int sensitivity, bool scrollbar)
+{
+    QScroller::ScrollerGestureType gestureType;
+
+    switch (gesture) {
+    case 1: {
+        gestureType = QScroller::TouchGesture;
+        break;
+    }
+    case 2: {
+        gestureType = QScroller::LeftMouseButtonGesture;
+        break;
+    }
+    default:
+        return;
+    }
+
+    KoResourceItemView *view = itemView();
+
+    view->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    if (!scrollbar) {
+        view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+
+    QScroller *scroller = QScroller::scroller(view);
+    scroller->grabGesture(view, gestureType);
+
+    QScrollerProperties sp;
+
+    // DragStartDistance seems to be based on meter per second; though it's
+    // not explicitly documented, other QScroller values are in that metric.
+
+    // To start kinetic scrolling, with minimal sensitity, we expect a drag
+    // of 10 mm, with minimum sensitity any > 0 mm.
+
+    const float mm = 0.001f; // 1 millimeter
+    const float resistance = 1.0f - (sensitivity / 100.0f);
+
+    sp.setScrollMetric(QScrollerProperties::DragStartDistance, resistance * 10.0f * mm);
+    sp.setScrollMetric(QScrollerProperties::DragVelocitySmoothingFactor, 1.0f);
+    sp.setScrollMetric(QScrollerProperties::MinimumVelocity, 0.0f);
+    sp.setScrollMetric(QScrollerProperties::AxisLockThreshold, 1.0f);
+    sp.setScrollMetric(QScrollerProperties::MaximumClickThroughVelocity, 0.0f);
+    sp.setScrollMetric(QScrollerProperties::MousePressEventDelay, 1.0f - 0.75f * resistance);
+    sp.setScrollMetric(QScrollerProperties::AcceleratingFlickSpeedupFactor, 1.5f);
+
+    sp.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOn);
+    sp.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 0.1);
+    sp.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0.3);
+    sp.setScrollMetric(QScrollerProperties::OvershootScrollDistanceFactor, 0.1);
+    sp.setScrollMetric(QScrollerProperties::OvershootScrollTime, 0.4);
+
+    scroller->setScrollerProperties(sp);
+}
+
 void KoResourceItemChooser::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
@@ -551,4 +606,9 @@ void KoResourceItemChooser::updateView()
         KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
         baseLengthChanged(chooserSync->baseLength());
     }
+
+    /// helps to set icons here in case the theme is changed
+    d->viewModeButton->setIcon(koIcon("view-choose"));
+    importButton->setIcon(koIcon("document-open"));
+    deleteButton->setIcon(koIcon("trash-empty"));
 }

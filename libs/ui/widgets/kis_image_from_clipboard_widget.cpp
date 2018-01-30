@@ -52,7 +52,7 @@
 #include "kis_clipboard.h"
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
-#include "widgets/squeezedcombobox.h"
+#include <squeezedcombobox.h>
 
 
 KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)

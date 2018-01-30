@@ -131,11 +131,25 @@ public:
     void setDirty(const QRegion &region);
 
     /**
+     * Convenience override of multirect version of setDirtyDontResetAnimationCache()
+     *
+     * @see setDirtyDontResetAnimationCache(const QVector<QRect> &rects)
+     */
+    void setDirtyDontResetAnimationCache();
+
+    /**
+     * Convenience override of multirect version of setDirtyDontResetAnimationCache()
+     *
+     * @see setDirtyDontResetAnimationCache(const QVector<QRect> &rects)
+     */
+    void setDirtyDontResetAnimationCache(const QRect &rect);
+
+    /**
      * @brief setDirtyDontResetAnimationCache does almost the same thing as usual
      * setDirty() call, but doesn't reset the animation cache (since onlion skins are
      * not used when rendering animation.
      */
-    void setDirtyDontResetAnimationCache();
+    void setDirtyDontResetAnimationCache(const QVector<QRect> &rects);
 
     /**
      * Informs that the frames in the given range are no longer valid

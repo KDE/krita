@@ -25,7 +25,7 @@
 /**
  * KisAsyncAnimationRendererBase is a special class represinting a
  * single worker thread inside KisAsyncAnimationRenderDialogBase. It connects
- * the the specified image using correct Qt::DirectConnection connections and
+ * the specified image using correct Qt::DirectConnection connections and
  * reacts on them. On sigFrameReady() signal it calls frameCompletedCallback(),
  * so the derived class can fetch a frame from the image and process it. On
  * sigFrameCancelled() it calls frameCancelledCallback(). The derived class
@@ -100,7 +100,7 @@ protected:
      *        the frame was cancelled.
      *
      * The rendering of the frame can be either cancelled by the image itself or
-     * by recieving a timeout signal (10 seconds).
+     * by receiving a timeout signal (10 seconds).
      *
      * NOTE: the slot is called in the GUI thread. Don't forget to call
      *       notifyFrameCancelled() in he end of your call.

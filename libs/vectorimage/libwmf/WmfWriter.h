@@ -96,7 +96,7 @@ public:
     void  setWindow(int left, int top , int width, int height);
 
     // Clipping
-    // the 'CoordinateMode' parameter is ommitted : always CoordPainter in wmf
+    // the 'CoordinateMode' parameter is omitted : always CoordPainter in wmf
     // not yet implemented
     void  setClipRegion(const QRegion& r);
     void  clipping(bool enable);
@@ -129,7 +129,7 @@ private:
     /** Convert QPointArray into qint16 position (result in mSt) */
     void pointArray(const QPolygon& pa);
 
-    /** Convertion between windows color and QColor */
+    /** Conversion between windows color and QColor */
     quint32 winColor(const QColor &color);
 
     /** Convert angle a and alen in coordinate (xStart,yStart) and (xEnd, yEnd) */

@@ -92,7 +92,6 @@ static QObject *provideKritaRssModelObject(QQmlEngine *engine, QJSEngine *script
 
 void KritaSketchPlugin::registerTypes(const char* uri)
 {
-    qDebug() << "registerTypes();" << uri;
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
     qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
@@ -126,8 +125,6 @@ void KritaSketchPlugin::registerTypes(const char* uri)
 
 void KritaSketchPlugin::initializeEngine(QQmlEngine* engine, const char* uri)
 {
-    qDebug() << "initializeEngine();" << uri;
-
     Q_UNUSED(uri)
     Q_ASSERT(uri == QLatin1String("org.krita.sketch"));
 

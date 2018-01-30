@@ -29,6 +29,7 @@
 #include <KoXmlWriter.h>
 #include <QDomDocument>
 #include <KoXmlReader.h>
+#include <QDir>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -44,13 +45,10 @@ KoDocumentInfo::KoDocumentInfo(QObject *parent) : QObject(parent)
 {
     m_aboutTags << "title" << "description" << "subject" << "abstract"
     << "keyword" << "initial-creator" << "editing-cycles" << "editing-time"
-    << "date" << "creation-date" << "language";
+    << "date" << "creation-date" << "language" << "license";
 
-    m_authorTags << "creator" << "initial" << "author-title"
-    << "email" << "telephone" << "telephone-work"
-    << "fax" << "country" << "postal-code" << "city"
-    << "street" << "position" << "company";
-
+    m_authorTags << "creator" << "creator-first-name" << "creator-last-name" << "initial" << "author-title" << "position" << "company";
+    m_contactTags << "email" << "telephone" << "telephone-work" << "fax" << "country" << "postal-code" << "city" << "street";
     setAboutInfo("editing-cycles", "0");
     setAboutInfo("time-elapsed", "0");
     setAboutInfo("initial-creator", i18n("Unknown"));
@@ -62,10 +60,12 @@ KoDocumentInfo::KoDocumentInfo(const KoDocumentInfo &rhs, QObject *parent)
     : QObject(parent),
       m_aboutTags(rhs.m_aboutTags),
       m_authorTags(rhs.m_authorTags),
+      m_contact(rhs.m_contact),
       m_authorInfo(rhs.m_authorInfo),
       m_authorInfoOverride(rhs.m_authorInfoOverride),
       m_aboutInfo(rhs.m_aboutInfo),
       m_generator(rhs.m_generator)
+
 {
 }
 
@@ -108,7 +108,8 @@ QDomDocument KoDocumentInfo::save(QDomDocument &doc)
 
 void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
 {
-    if (!m_authorTags.contains(info)) {
+    if (!m_authorTags.contains(info) && !m_contactTags.contains(info) && !info.contains("contact-mode-")) {
+        qDebug()<<info<<"dun exist";
         return;
     }
 
@@ -117,12 +118,12 @@ void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
 
 void KoDocumentInfo::setActiveAuthorInfo(const QString &info, const QString &data)
 {
-    if (!m_authorTags.contains(info)) {
+    if (!m_authorTags.contains(info) && !m_contactTags.contains(info) && !info.contains("contact-mode-")) {
+        qDebug()<<info<<"doesn't exist";
         return;
     }
-
-    if (data.isEmpty()) {
-        m_authorInfo.remove(info);
+    if (m_contactTags.contains(info)) {
+        m_contact.insert(data, info);
     } else {
         m_authorInfo.insert(info, data);
     }
@@ -131,10 +132,15 @@ void KoDocumentInfo::setActiveAuthorInfo(const QString &info, const QString &dat
 
 QString KoDocumentInfo::authorInfo(const QString &info) const
 {
-    if (!m_authorTags.contains(info))
+    if (!m_authorTags.contains(info)  && !m_contactTags.contains(info) && !info.contains("contact-mode-"))
         return QString();
 
     return m_authorInfo[ info ];
+}
+
+QStringList KoDocumentInfo::authorContactInfo() const
+{
+    return m_contact.keys();
 }
 
 void KoDocumentInfo::setAboutInfo(const QString &info, const QString &data)
@@ -198,16 +204,20 @@ bool KoDocumentInfo::loadOasisAuthorInfo(const KoXmlNode &metaDoc)
 
 bool KoDocumentInfo::loadAuthorInfo(const KoXmlElement &e)
 {
+    m_contact.clear();
     KoXmlNode n = e.namedItem("author").firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         KoXmlElement e = n.toElement();
         if (e.isNull())
             continue;
 
-        if (e.tagName() == "full-name")
+        if (e.tagName() == "full-name") {
             setActiveAuthorInfo("creator", e.text().trimmed());
-        else
+        } else if (e.tagName() == "contact") {
+            m_contact.insert(e.text(), e.attribute("type"));
+        } else {
             setActiveAuthorInfo(e.tagName(), e.text().trimmed());
+        }
     }
 
     return true;
@@ -226,6 +236,13 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument &doc)
 
         e.appendChild(t);
         t.appendChild(doc.createTextNode(authorInfo(tag)));
+    }
+    for (int i=0; i<m_contact.keys().size(); i++) {
+        t = doc.createElement("contact");
+        e.appendChild(t);
+        QString key = m_contact.keys().at(i);
+        t.setAttribute("type", m_contact[key]);
+        t.appendChild(doc.createTextNode(key));
     }
 
     return e;
@@ -364,54 +381,68 @@ void KoDocumentInfo::updateParameters()
 
     KConfig config("kritarc");
     config.reparseConfiguration();
-    KConfigGroup authorGroup(&config, "Author");
-    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-
-    config.reparseConfiguration();
     KConfigGroup appAuthorGroup(&config, "Author");
     QString profile = appAuthorGroup.readEntry("active-profile", "");
 
-    if (profiles.contains(profile)) {
-        KConfigGroup cgs(&authorGroup, "Author-" + profile);
-        setActiveAuthorInfo("creator", cgs.readEntry("creator"));
-        setActiveAuthorInfo("initial", cgs.readEntry("initial"));
-        setActiveAuthorInfo("author-title", cgs.readEntry("author-title"));
-        setActiveAuthorInfo("email", cgs.readEntry("email"));
-        setActiveAuthorInfo("telephone", cgs.readEntry("telephone"));
-        setActiveAuthorInfo("telephone-work", cgs.readEntry("telephone-work"));
-        setActiveAuthorInfo("fax", cgs.readEntry("fax"));
-        setActiveAuthorInfo("country",cgs.readEntry("country"));
-        setActiveAuthorInfo("postal-code",cgs.readEntry("postal-code"));
-        setActiveAuthorInfo("city", cgs.readEntry("city"));
-        setActiveAuthorInfo("street", cgs.readEntry("street"));
-        setActiveAuthorInfo("position", cgs.readEntry("position"));
-        setActiveAuthorInfo("company", cgs.readEntry("company"));
-    } else {
-        if (profile == "anonymous") {
-            setActiveAuthorInfo("creator", QString());
-            setActiveAuthorInfo("telephone", QString());
-            setActiveAuthorInfo("telephone-work", QString());
-            setActiveAuthorInfo("email", QString());
-        } else {
-            KUser user(KUser::UseRealUserID);
-            setActiveAuthorInfo("creator", user.property(KUser::FullName).toString());
-            setActiveAuthorInfo("telephone-work", user.property(KUser::WorkPhone).toString());
-            setActiveAuthorInfo("telephone", user.property(KUser::HomePhone).toString());
-            KEMailSettings eMailSettings;
-            setActiveAuthorInfo("email", eMailSettings.getSetting(KEMailSettings::EmailAddress));
+    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QDir dir(authorInfo);
+    QStringList filters = QStringList() << "*.authorinfo";
+
+    //Anon case
+    setActiveAuthorInfo("creator", QString());
+    setActiveAuthorInfo("initial", "");
+    setActiveAuthorInfo("author-title", "");
+    setActiveAuthorInfo("position", "");
+    setActiveAuthorInfo("company", "");
+    if (dir.entryList(filters).contains(profile+".authorinfo")) {
+        QFile file(dir.absoluteFilePath(profile+".authorinfo"));
+        if (file.exists()) {
+            file.open(QFile::ReadOnly);
+            QByteArray ba = file.readAll();
+            file.close();
+            QDomDocument doc = QDomDocument();
+            doc.setContent(ba);
+            QDomElement root = doc.firstChildElement();
+
+            QDomElement el = root.firstChildElement("nickname");
+            if (!el.isNull()) {
+                setActiveAuthorInfo("creator", el.text());
+            }
+            el = root.firstChildElement("givenname");
+            if (!el.isNull()) {
+                setActiveAuthorInfo("creator-first-name", el.text());
+            }
+            el = root.firstChildElement("middlename");
+            if (!el.isNull()) {
+                setActiveAuthorInfo("initial", el.text());
+            }
+            el = root.firstChildElement("familyname");
+            if (!el.isNull()) {
+               setActiveAuthorInfo("creator-last-name", el.text());
+            }
+            el = root.firstChildElement("title");
+            if (!el.isNull()) {
+                setActiveAuthorInfo("author-title", el.text());
+            }
+            el = root.firstChildElement("position");
+            if (!el.isNull()) {
+                setActiveAuthorInfo("position", el.text());
+            }
+            el = root.firstChildElement("company");
+            if (!el.isNull()) {
+                setActiveAuthorInfo("company", el.text());
+            }
+
+            m_contact.clear();
+            el = root.firstChildElement("contact");
+            while (!el.isNull()) {
+                m_contact.insert(el.text(), el.attribute("type"));
+                el = el.nextSiblingElement("contact");
+            }
         }
-        setActiveAuthorInfo("initial", "");
-        setActiveAuthorInfo("author-title", "");
-        setActiveAuthorInfo("fax", "");
-        setActiveAuthorInfo("country", "");
-        setActiveAuthorInfo("postal-code", "");
-        setActiveAuthorInfo("city", "");
-        setActiveAuthorInfo("street", "");
-        setActiveAuthorInfo("position", "");
-        setActiveAuthorInfo("company", "");
     }
 
-    //alllow author info set programatically to override info from author profile
+    //allow author info set programmatically to override info from author profile
     Q_FOREACH (const QString &tag, m_authorTags) {
         if (m_authorInfoOverride.contains(tag)) {
             setActiveAuthorInfo(tag, m_authorInfoOverride.value(tag));

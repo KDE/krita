@@ -30,6 +30,7 @@
 #include <QDate>
 #include <QLocale>
 #include <QSettings>
+#include <QMessageBox>
 
 #include <time.h>
 
@@ -155,6 +156,11 @@ extern "C" int main(int argc, char **argv)
     KisApplication app(key, argc, argv);
 
 #ifdef Q_OS_LINUX
+    // We must have the XDG environment to run.
+    if (qgetenv("XDG_DATA_DIRS").isEmpty()) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("XDG_DATA_DIRS is not set. Krita cannot run."));
+        return 1;
+    }
     qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share"));
@@ -164,7 +170,7 @@ extern "C" int main(int argc, char **argv)
     qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
     qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
 
-    // Now that the paths are set, set the language. First check the override from the langage
+    // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
     {
         QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
@@ -185,9 +191,10 @@ extern "C" int main(int argc, char **argv)
             // And if there isn't one, check the one set by the system.
             // XXX: This doesn't work, for some !@#$% reason.
             QLocale locale = QLocale::system();
-            if (locale.bcp47Name() != QStringLiteral("en")) {
-                qputenv("LANG", locale.bcp47Name().toLatin1());
-                KLocalizedString::setLanguages(QStringList() << locale.bcp47Name());
+            if (locale.name() != QStringLiteral("en")) {
+                qDebug() << "Setting Krita's language to:" << locale;
+                qputenv("LANG", locale.name().toLatin1());
+                KLocalizedString::setLanguages(QStringList() << locale.name());
             }
         }
 

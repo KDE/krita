@@ -157,7 +157,7 @@ private:
         loop.connect(&watcher, SIGNAL(sigProgressChanged(int)), &progress, SLOT(setValue(int)));
         loop.exec();
 
-        // wait for some errorneous case
+        // wait for some erroneous case
         ffmpegProcess.waitForFinished(5000);
 
         KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
@@ -219,17 +219,28 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
 
     KisImageBuilder_Result result = KisImageBuilder_RESULT_OK;
 
-    KisImageAnimationInterface *animation = m_image->animationInterface();
-    const KisTimeRange fullRange = animation->fullClipRange();
-    const int frameRate = animation->framerate();
-
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("first_frame"));
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("last_frame"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("height"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("width"));
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("include_audio"));
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("directory"));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("framerate"));
+
+    KisImageAnimationInterface *animation = m_image->animationInterface();
+    const KisTimeRange fullRange = animation->fullClipRange();
+    const int frameRate = configuration->getInt("framerate", animation->framerate());
 
     const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
     const bool includeAudio = configuration->getBool("include_audio", true);
+
+    const int exportHeight = configuration->getInt("height", int(m_image->height()));
+    const int exportWidth = configuration->getInt("width", int(m_image->width()));
+
+     // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
+    const QString exportDimensions = QString("scale=w=").append(QString::number(exportWidth)).append(":h=")
+            .append(QString::number(exportHeight)).append(":force_original_aspect_ratio=decrease");
+
 
     const QDir framesDir(configuration->getString("directory"));
 
@@ -278,6 +289,12 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
                  << additionalOptionsList
                  << "-y" << resultFile;
 
+            // if we are exporting out at a different image size, we apply scaling filter
+            if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
+                args << "-vf" << exportDimensions;
+            }
+
+
             dbgFile << "savedFilesMask" << savedFilesMask << "start" << QString::number(clipRange.start()) << "duration" << clipRange.duration();
 
             KisImageBuilder_Result result =
@@ -294,6 +311,11 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
         args << "-r" << QString::number(frameRate)
              << "-start_number" << QString::number(clipRange.start())
              << "-i" << savedFilesMask;
+
+        // if we are exporting out at a different image size, we apply scaling filter
+        if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
+            args << "-vf" << exportDimensions;
+        }
 
 
         QFileInfo audioFileInfo = animation->audioChannelFileName();

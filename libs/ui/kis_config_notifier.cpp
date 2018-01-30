@@ -56,3 +56,8 @@ void KisConfigNotifier::notifyDropFramesModeChanged()
 {
     m_d->dropFramesModeCompressor.start();
 }
+
+void KisConfigNotifier::notifyPixelGridModeChanged()
+{
+    emit pixelGridModeChanged();
+}

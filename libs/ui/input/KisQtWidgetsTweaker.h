@@ -27,7 +27,7 @@ class QEvent;
 /**
  * KisQtWidgetsTweaker is used to make minor adjustments to
  * "native" qt widgets' behavior application-wise
- * by filtering events adressed to them
+ * by filtering events addressed to them
  * It expected to be installed on the application
  */
 class KRITAUI_EXPORT KisQtWidgetsTweaker : public QObject

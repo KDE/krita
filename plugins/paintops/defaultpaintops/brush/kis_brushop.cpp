@@ -53,13 +53,18 @@
 #include <QSharedPointer>
 #include <QThread>
 #include "kis_image_config.h"
+#include "kis_wrapped_rect.h"
+
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_opacityOption(node)
     , m_avgSpacing(50)
     , m_avgNumDabs(50)
+    , m_avgUpdateTimePerDab(50)
     , m_idealNumRects(KisImageConfig().maxNumberOfThreads())
+    , m_minUpdatePeriod(10)
+    , m_maxUpdatePeriod(100)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -216,25 +221,86 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
     state->allDirtyRects.append(rects);
 }
 
-int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
+std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 {
-    if (!m_updateSharedState && m_dabExecutor->hasPreparedDabs()) {
+    bool someDabsAreStillInQueue = false;
+    const bool hasPreparedDabsAtStart = m_dabExecutor->hasPreparedDabs();
+
+    if (!m_updateSharedState && hasPreparedDabsAtStart) {
 
         m_updateSharedState = toQShared(new UpdateSharedState());
         UpdateSharedStateSP state = m_updateSharedState;
 
         state->painter = painter();
 
-        state->dabsQueue = m_dabExecutor->takeReadyDabs(painter()->hasMirroring());
+        {
+            const qreal dabRenderingTime = m_dabExecutor->averageDabRenderingTime();
+            const qreal totalRenderingTimePerDab = dabRenderingTime + m_avgUpdateTimePerDab.rollingMeanSafe();
+
+            // we limit the number of fetched dabs to fit the maximum update period and not
+            // make visual hiccups
+            const int dabsLimit =
+                totalRenderingTimePerDab > 0 ?
+                    qMax(10, int(m_maxUpdatePeriod  / totalRenderingTimePerDab * m_idealNumRects)) :
+                    -1;
+
+            state->dabsQueue = m_dabExecutor->takeReadyDabs(painter()->hasMirroring(), dabsLimit, &someDabsAreStillInQueue);
+        }
+
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!state->dabsQueue.isEmpty(),
-                                             m_currentUpdatePeriod);
+                                             std::make_pair(m_currentUpdatePeriod, false));
 
         const int diameter = m_dabExecutor->averageDabSize();
         const qreal spacing = m_avgSpacing.rollingMean();
 
         const int idealNumRects = m_idealNumRects;
-        QVector<QRect> rects =
-                KisPaintOpUtils::splitDabsIntoRects(state->dabsQueue,
+
+        QVector<QRect> rects;
+
+        // wrap the dabs if needed
+        if (painter()->device()->defaultBounds()->wrapAroundMode()) {
+            /**
+             * In WA mode we do two things:
+             *
+             * 1) We ensure that the parallel threads do not access the same are on
+             *    the image. For normal updates that is ensured by the code in KisImage
+             *    and the scheduler. Here we should do that manually by adjusting 'rects'
+             *    so that they would not intersect in the wrapped space.
+             *
+             * 2) We duplicate dabs, to ensure that all the pieces of dabs are painted
+             *    inside the wrapped rect. No pieces are dabs are painted twice, because
+             *    we paint only the parts intersecting the wrap rect.
+             */
+
+            const QRect wrapRect = painter()->device()->defaultBounds()->bounds();
+
+            QList<KisRenderedDab> wrappedDabs;
+
+            Q_FOREACH (const KisRenderedDab &dab, state->dabsQueue) {
+                const QVector<QPoint> normalizationOrigins =
+                    KisWrappedRect::normalizationOriginsForRect(dab.realBounds(), wrapRect);
+
+                Q_FOREACH(const QPoint &pt, normalizationOrigins) {
+                    KisRenderedDab newDab = dab;
+
+                    newDab.offset = pt;
+
+                    rects.append(newDab.realBounds() & wrapRect);
+                    wrappedDabs.append(newDab);
+                }
+            }
+
+            state->dabsQueue = wrappedDabs;
+
+        } else {
+            // just get all rects
+            Q_FOREACH (const KisRenderedDab &dab, state->dabsQueue) {
+                rects.append(dab.realBounds());
+            }
+        }
+
+        // split/merge rects into non-overlapping areas
+        rects = KisPaintOpUtils::splitDabsIntoRects(rects,
                                                     idealNumRects, diameter, spacing);
 
         state->allDirtyRects = rects;
@@ -256,7 +322,7 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 
         /**
          * After the dab has been rendered once, we should mirror it either one
-         * (h __or__ v) or three (h __and__ v) times. This sequence of 'if's achives
+         * (h __or__ v) or three (h __and__ v) times. This sequence of 'if's achieves
          * the goal without any extra copying. Please note that it has __no__ 'else'
          * branches, which is done intentionally!
          */
@@ -274,7 +340,7 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 
         jobs.append(
             new KisRunnableStrokeJobData(
-                [state, this] () {
+                [state, this, someDabsAreStillInQueue] () {
                     Q_FOREACH(const QRect &rc, state->allDirtyRects) {
                         state->painter->addDirtyRect(rc);
                     }
@@ -282,37 +348,44 @@ int KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
                     state->painter->setAverageOpacity(state->dabsQueue.last().averageOpacity);
 
                     const int updateRenderingTime = state->dabRenderingTimer.elapsed();
-                    const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime() / 1000;
+                    const qreal dabRenderingTime = m_dabExecutor->averageDabRenderingTime();
+
                     m_avgNumDabs(state->dabsQueue.size());
 
-                    QVector<KisFixedPaintDeviceSP> recycledDevices;
-                    for (auto it = state->dabsQueue.begin(); it != state->dabsQueue.end(); ++it) {
-                        // we don't need to check for uniqueness, it is done by the queue
-                        recycledDevices << it->device;
-                        it->device.clear();
-                    }
-                    m_dabExecutor->recyclePaintDevicesForCache(recycledDevices);
+                    const qreal currentUpdateTimePerDab = qreal(updateRenderingTime) / state->dabsQueue.size();
+                    m_avgUpdateTimePerDab(currentUpdateTimePerDab);
 
+                    /**
+                     * NOTE: using currentUpdateTimePerDab in the calculation for the next update time instead
+                     *       of the average one makes rendering speed about 40% faster. It happens because the
+                     *       adaptation period is shorter than if it used
+                     */
+                    const qreal totalRenderingTimePerDab = dabRenderingTime + currentUpdateTimePerDab;
 
+                    const int approxDabRenderingTime =
+                        qreal(totalRenderingTimePerDab) * m_avgNumDabs.rollingMean() / m_idealNumRects;
 
-                    const int approxDabRenderingTime = qreal(dabRenderingTime) / m_idealNumRects * m_avgNumDabs.rollingMean();
-
-                    m_currentUpdatePeriod = qBound(20, int(1.5 * (approxDabRenderingTime + updateRenderingTime)), 100);
+                    m_currentUpdatePeriod =
+                        someDabsAreStillInQueue ? m_minUpdatePeriod :
+                        qBound(m_minUpdatePeriod, int(1.5 * approxDabRenderingTime), m_maxUpdatePeriod);
 
 
                     { // debug chunk
-//                        const int updateRenderingTime = state->dabRenderingTimer.nsecsElapsed() / 1000;
-//                        const int dabRenderingTime = m_dabExecutor->averageDabRenderingTime();
 //                        ENTER_FUNCTION() << ppVar(state->allDirtyRects.size()) << ppVar(state->dabsQueue.size()) << ppVar(dabRenderingTime) << ppVar(updateRenderingTime);
-//                        ENTER_FUNCTION() << ppVar(m_currentUpdatePeriod);
+//                        ENTER_FUNCTION() << ppVar(m_currentUpdatePeriod) << ppVar(someDabsAreStillInQueue);
                     }
+
+                    // release all the dab devices
+                    state->dabsQueue.clear();
 
                     m_updateSharedState.clear();
                 },
                 KisStrokeJobData::SEQUENTIAL));
+    } else if (m_updateSharedState && hasPreparedDabsAtStart) {
+        someDabsAreStillInQueue = true;
     }
 
-    return m_currentUpdatePeriod;
+    return std::make_pair(m_currentUpdatePeriod, someDabsAreStillInQueue);
 }
 
 KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &info) const

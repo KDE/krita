@@ -158,8 +158,8 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
         // However since the distance can be express in 4 directions and QPainterPathStroker only
         // handles a penWidth we do some tricks to get it working.
         //
-        // Explaination in one dimension only: we sum the distances top and below and use that as the
-        // penWidth. afterwards we translate the result so it is destributed correctly by top and bottom
+        // Explanation in one dimension only: we sum the distances top and below and use that as the
+        // penWidth. Afterwards we translate the result so it is distributed correctly by top and bottom.
         // Now by doing that we would also implicitly set the left+right size of the pen which is no good,
         // so in order to set that to a minimal value (we choose 1, as 0 would give division by 0) we do
         // the following:. We scale the original path by sumX, stroke the path with penwidth=sumY, then

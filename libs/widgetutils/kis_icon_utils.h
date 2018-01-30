@@ -74,6 +74,9 @@ namespace KisIconUtils
      */
     KRITAWIDGETUTILS_EXPORT void updateIcon(QAbstractButton *button);
 
+
+    KRITAWIDGETUTILS_EXPORT void clearIconCache();
+
     /**
      * Update an icon of \p comboBox according to the current theme
      */

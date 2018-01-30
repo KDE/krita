@@ -39,7 +39,6 @@ public:
     void setCurrentIndex(int index);
     int findIndexOf(QString tagName);
     void insertItem(QString tagName);
-    void insertItemAt(int index, QString tag);
     QString currentlySelectedTag();
     QStringList allTags();
     bool selectedTagIsReadOnly();

@@ -155,7 +155,7 @@ void DlgBundleManager::accept()
             }
             else {
             bundleServer->removeFromBlacklist(bundle);
-            //let's asume that bundles who exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
+            //let's assume that bundles that exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
             }
         }
         else{

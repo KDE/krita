@@ -236,7 +236,7 @@ QString KisImageConfig::swapDir(bool requestDefault)
     // tell us otherwise.
 
     // the other option here would be to use a "garbled name" temp file (i.e. no name
-    // KRITA_SWAP_FILE_XXXXXX) in an obsure /var/folders place, which is not
+    // KRITA_SWAP_FILE_XXXXXX) in an obscure /var/folders place, which is not
     // nice to the user. having a clearly named swap file in the home folder is
     // much nicer to Krita's users.
 
@@ -247,10 +247,12 @@ QString KisImageConfig::swapDir(bool requestDefault)
 #else
     QString swap = QDir::tempPath();
 #endif
-    QString configuredSwap = !requestDefault ?
-            m_config.readEntry("swaplocation", swap) : swap;
-    if (configuredSwap.isEmpty()) {
-        configuredSwap = swap;
+    if (requestDefault) {
+       return swap;
+    }
+    QString configuredSwap = m_config.readEntry("swaplocation", swap);
+    if (!configuredSwap.isEmpty()) {
+        swap = configuredSwap;
     }
     return swap;
 }

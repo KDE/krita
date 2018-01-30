@@ -1,6 +1,6 @@
 The text layout framework
 -------------------------
-The data of the document is stored in a QTextDocument (with some resouces set by the KoTextDocument helper class) The styles are stored in a KoStyleManager, and we have some other managers and helpers as needed.
+The data of the document is stored in a QTextDocument (with some resources set by the KoTextDocument helper class) The styles are stored in a KoStyleManager, and we have some other managers and helpers as needed.
 
 The layout of that document is handled by the KoTextDocumentLayout class. It builds a series of KoTextLayoutRootArea which roughly corresponds to a page, but since this is completely abstract such a root area could also be the cell in a spreadsheet. For both the spreadsheet case and a normal textshape only a single root area is created, but for Words we can create many root areas.
 

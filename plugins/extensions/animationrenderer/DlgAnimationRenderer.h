@@ -76,6 +76,9 @@ private Q_SLOTS:
     void sequenceMimeTypeSelected();
     void ffmpegLocationChanged(const QString&);
 
+    void slotLockAspectRatioDimensionsWidth(int width);
+    void slotLockAspectRatioDimensionsHeight(int height);
+
     void slotExportTypeChanged();
 
 

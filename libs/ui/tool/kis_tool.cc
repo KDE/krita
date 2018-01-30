@@ -153,10 +153,6 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     connect(action("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
     connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 
-    connect(image(), SIGNAL(sigUndoDuringStrokeRequested()), SLOT(requestUndoDuringStroke()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigStrokeCancellationRequested()), SLOT(requestStrokeCancellation()), Qt::UniqueConnection);
-    connect(image(), SIGNAL(sigStrokeEndRequested()), SLOT(requestStrokeEnd()), Qt::UniqueConnection);
-
     d->m_isActive = true;
     emit isActiveChanged();
 }
@@ -165,9 +161,6 @@ void KisTool::deactivate()
 {
     bool result = true;
 
-    result &= disconnect(image().data(), SIGNAL(sigUndoDuringStrokeRequested()), this, 0);
-    result &= disconnect(image().data(), SIGNAL(sigStrokeCancellationRequested()), this, 0);
-    result &= disconnect(image().data(), SIGNAL(sigStrokeEndRequested()), this, 0);
     result &= disconnect(action("toggle_fg_bg"), 0, this, 0);
     result &= disconnect(action("reset_fg_bg"), 0, this, 0);
 
@@ -184,6 +177,11 @@ void KisTool::deactivate()
 
 void KisTool::canvasResourceChanged(int key, const QVariant & v)
 {
+    QString formattedBrushName;
+    if (key == KisCanvasResourceProvider::CurrentPaintOpPreset) {
+         formattedBrushName = v.value<KisPaintOpPresetSP>()->name().replace("_", " ");
+    }
+
     switch (key) {
     case(KoCanvasResourceManager::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
@@ -204,7 +202,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
         break;
     case(KisCanvasResourceProvider::CurrentPaintOpPreset):
-        emit statusTextChanged(v.value<KisPaintOpPresetSP>()->name());
+        emit statusTextChanged(formattedBrushName);
         break;
     case(KisCanvasResourceProvider::CurrentKritaNode):
         resetCursorStyle();
@@ -273,12 +271,12 @@ QPointF KisTool::convertToPixelCoordAndSnap(const QPointF& pt, const QPointF &of
     return image()->documentToPixel(pos);
 }
 
-QPoint KisTool::convertToIntPixelCoord(KoPointerEvent *e)
+QPoint KisTool::convertToImagePixelCoordFloored(KoPointerEvent *e)
 {
     if (!image())
         return e->point.toPoint();
 
-    return image()->documentToIntPixel(e->point);
+    return image()->documentToImagePixelFloored(e->point);
 }
 
 QPointF KisTool::viewToPixel(const QPointF &viewCoord) const
@@ -654,7 +652,20 @@ bool KisTool::nodeEditable()
         return false;
     }
 
-    bool nodeEditable = node->isEditable();
+    bool blockedNoIndirectPainting = false;
+
+    const bool presetUsesIndirectPainting =
+        !currentPaintOpPreset()->settings()->paintIncremental();
+
+    if (!presetUsesIndirectPainting) {
+        const KisIndirectPaintingSupport *indirectPaintingLayer =
+                dynamic_cast<const KisIndirectPaintingSupport*>(node.data());
+        if (indirectPaintingLayer) {
+            blockedNoIndirectPainting = !indirectPaintingLayer->supportsNonIndirectPainting();
+        }
+    }
+
+    bool nodeEditable = node->isEditable() && !blockedNoIndirectPainting;
 
     if (!nodeEditable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
@@ -665,6 +676,8 @@ bool KisTool::nodeEditable()
             message = i18n("Layer is locked.");
         } else if(!node->visible()) {
             message = i18n("Layer is invisible.");
+        } else if (blockedNoIndirectPainting) {
+            message = i18n("Layer can be painted in Wash Mode only.");
         } else {
             message = i18n("Group not editable.");
         }

@@ -28,6 +28,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPointer>
+#include <QStringList>
 
 #include <WidgetsDebug.h>
 
@@ -233,8 +234,8 @@ void KoResourceTaggingManager::syncTagBoxEntryRemoval(const QString& tag)
 void KoResourceTaggingManager::syncTagBoxEntries()
 {
     QStringList tags = d->model->tagNamesList();
-
-    foreach (const QString &tag, tags) {
+    tags.sort();
+    Q_FOREACH (const QString &tag, tags) {
         d->tagChooser->insertItem(tag);
     }
 }

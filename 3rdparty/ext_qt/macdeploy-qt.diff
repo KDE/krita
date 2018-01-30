@@ -1,16 +1,22 @@
+commit 26d6c76d5a51504ebabec5f4ea2643069743f962
+Author: Boudewijn Rempt <boud@valdyas.org>
+Date:   Sat Nov 4 14:15:25 2017 +0100
+
+    Fix macdeployqt
+
 diff --git a/qttools/src/macdeployqt/macdeployqt/main.cpp b/qttools/src/macdeployqt/macdeployqt/main.cpp
-index 2e6ad0c..8a90c1a 100644
+index 5488a5f..1e90c72 100644
 --- a/qttools/src/macdeployqt/macdeployqt/main.cpp
 +++ b/qttools/src/macdeployqt/macdeployqt/main.cpp
-@@ -52,6 +52,7 @@ int main(int argc, char **argv)
-         qDebug() << "   -always-overwrite  : Copy files even if the target file exists";
+@@ -53,6 +53,7 @@ int main(int argc, char **argv)
          qDebug() << "   -codesign=<ident>  : Run codesign with the given identity on all executables";
          qDebug() << "   -appstore-compliant: Skip deployment of components that use private API";
+         qDebug() << "   -libpath=<path>    : Add the given path to the library search path";
 +        qDebug() << "   -extra-plugins=<d> : Deploy plugins from given extra directory";
          qDebug() << "";
          qDebug() << "macdeployqt takes an application bundle as input and makes it";
          qDebug() << "self-contained by copying in the Qt frameworks and plugins that";
-@@ -92,6 +93,7 @@ int main(int argc, char **argv)
+@@ -94,6 +95,7 @@ int main(int argc, char **argv)
      extern QString codesignIdentiy;
      extern bool appstoreCompliant;
      extern bool deployFramework;
@@ -18,7 +24,7 @@ index 2e6ad0c..8a90c1a 100644
  
      for (int i = 2; i < argc; ++i) {
          QByteArray argument = QByteArray(argv[i]);
-@@ -153,6 +155,14 @@ int main(int argc, char **argv)
+@@ -162,6 +164,14 @@ int main(int argc, char **argv)
              LogDebug() << "Argument found:" << argument;
              deployFramework = true;
  
@@ -33,7 +39,7 @@ index 2e6ad0c..8a90c1a 100644
          } else if (argument.startsWith("-")) {
              LogError() << "Unknown argument" << argument << "\n";
              return 1;
-@@ -183,10 +193,13 @@ int main(int argc, char **argv)
+@@ -192,10 +202,13 @@ int main(int argc, char **argv)
          deploymentInfo.deployedFrameworks = deploymentInfo.deployedFrameworks.toSet().toList();
      }
  
@@ -50,10 +56,10 @@ index 2e6ad0c..8a90c1a 100644
      }
  
 diff --git a/qttools/src/macdeployqt/shared/shared.cpp b/qttools/src/macdeployqt/shared/shared.cpp
-index 5577265..a590039 100644
+index 9575090..477f7a0 100644
 --- a/qttools/src/macdeployqt/shared/shared.cpp
 +++ b/qttools/src/macdeployqt/shared/shared.cpp
-@@ -1070,6 +1070,43 @@ void deployPlugins(const ApplicationBundleInfo &appBundleInfo, const QString &pl
+@@ -1120,6 +1120,43 @@ void deployPlugins(const ApplicationBundleInfo &appBundleInfo, const QString &pl
      }
  }
  
@@ -97,7 +103,7 @@ index 5577265..a590039 100644
  void createQtConf(const QString &appBundlePath)
  {
      // Set Plugins and imports paths. These are relative to App.app/Contents.
-@@ -1111,6 +1148,16 @@ void deployPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo,
+@@ -1161,6 +1198,16 @@ void deployPlugins(const QString &appBundlePath, DeploymentInfo deploymentInfo,
      deployPlugins(applicationBundle, deploymentInfo.pluginPath, pluginDestinationPath, deploymentInfo, useDebugLibs);
  }
  

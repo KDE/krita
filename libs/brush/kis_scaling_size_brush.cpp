@@ -28,6 +28,13 @@ KisScalingSizeBrush::KisScalingSizeBrush(const QString &filename)
 {
 }
 
+KisScalingSizeBrush::KisScalingSizeBrush(const KisScalingSizeBrush &rhs)
+    : KisBrush(rhs)
+{
+    setName(rhs.name());
+    setValid(rhs.valid());
+}
+
 qreal KisScalingSizeBrush::userEffectiveSize() const
 {
     return this->width() * this->scale();

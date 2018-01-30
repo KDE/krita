@@ -34,8 +34,8 @@ KisSvgBrush::KisSvgBrush(const QString& filename)
 }
 
 KisSvgBrush::KisSvgBrush(const KisSvgBrush& rhs)
-    : KisScalingSizeBrush(rhs),
-      m_svg(rhs.m_svg)
+    : KisScalingSizeBrush(rhs)
+    , m_svg(rhs.m_svg)
 {
 }
 
@@ -95,7 +95,11 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev)
     }
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
-    return !brushTipImage().isNull();
+
+    QFileInfo fi(filename());
+    setName(fi.baseName());
+
+    return !brushTipImage().isNull() && valid();
 }
 
 bool KisSvgBrush::save()

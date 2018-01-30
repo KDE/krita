@@ -138,9 +138,7 @@ KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
     : KisScalingSizeBrush(rhs)
     , d(new Private(*rhs.d))
 {
-    setName(rhs.name());
     d->data = QByteArray();
-    setValid(rhs.valid());
 }
 
 KisGbrBrush::~KisGbrBrush()

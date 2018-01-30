@@ -46,7 +46,6 @@ KisPngBrush::KisPngBrush(const KisPngBrush &rhs)
         setBrushType(IMAGE);
         setHasColor(true);
     }
-    setValid(rhs.valid());
 }
 
 KisBrush* KisPngBrush::clone() const

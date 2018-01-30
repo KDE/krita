@@ -2,16 +2,16 @@ from PyQt5.QtGui import QTextCursor, QPalette, QFontInfo
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
                              QSplitter, QSizePolicy)
-from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot
+from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot,  QRect
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
 from scripter import scripterdialog
 import os
 import importlib
 
-
-INITIAL_WIDTH = 660
-INITIAL_HEIGHT = 500
+KEY_GEOMETRY = "geometry"
+DEFAULT_GEOMETRY = QRect(600, 200, 400, 500) 
+# essentially randomly placed
 
 class Elided_Text_Label(QLabel):
     mainText = str()
@@ -65,7 +65,7 @@ class UIController(object):
         self.loadMenus()
         self.loadWidgets()
         self.loadActions()
-        self._readSettings()
+        self._readSettings() #sets window size
 
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
@@ -75,7 +75,6 @@ class UIController(object):
         vbox.addWidget(self.splitter)
         vbox.addWidget(self.statusBar)
 
-        self.mainWidget.resize(INITIAL_WIDTH, INITIAL_HEIGHT)
         self.mainWidget.setWindowTitle("Scripter")
         self.mainWidget.setSizeGripEnabled(True)
         self.mainWidget.show()
@@ -208,6 +207,10 @@ class UIController(object):
             if callable(writeSettings):
                 writeSettings()
 
+        #  Window Geometry
+        rect = self.mainWidget.geometry()
+        self.scripter.settings.setValue(KEY_GEOMETRY, rect)
+        
         self.scripter.settings.endGroup()
 
     def _readSettings(self):
@@ -230,6 +233,10 @@ class UIController(object):
                 
         pointSize = self.scripter.settings.value('editorFontSize', str(self.editor.fontInfo().pointSize()))
         self.editor.setFontSize(int(pointSize))
+        
+        #Window Geometry
+        rect = self.scripter.settings.value(KEY_GEOMETRY, DEFAULT_GEOMETRY)
+        self.mainWidget.setGeometry(rect)
 
         self.scripter.settings.endGroup()
 

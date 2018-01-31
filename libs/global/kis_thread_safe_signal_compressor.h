@@ -20,7 +20,7 @@
 #define __KIS_THREAD_SAFE_SIGNAL_COMPRESSOR_H
 
 #include <QObject>
-#include "kritaimage_export.h"
+#include "kritaglobal_export.h"
 
 #include "kis_signal_compressor.h"
 
@@ -36,7 +36,7 @@
  *          deleteLater() instead. Moving into another thread is
  *          another reason why it cannot have parent QObject.
  */
-class KRITAIMAGE_EXPORT KisThreadSafeSignalCompressor : public QObject
+class KRITAGLOBAL_EXPORT KisThreadSafeSignalCompressor : public QObject
 {
     Q_OBJECT
 public:

@@ -846,6 +846,10 @@ namespace KisLayerUtils {
             applicator.applyCommand(new FillSelectionMasks(info));
             applicator.applyCommand(new CreateMergedLayer(info), KisStrokeJobData::BARRIER);
 
+            // NOTE: shape layer may have emitted spontaneous jobs during layer creation,
+            //       wait for them to complete!
+            applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
+
             // in two-layer mode we disable pass trhough only when the destination layer
             // is not a group layer
             applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true));

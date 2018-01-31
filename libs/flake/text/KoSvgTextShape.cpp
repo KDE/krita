@@ -43,6 +43,7 @@
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 
+#include <QThread>
 #include <vector>
 #include <memory>
 #include <QPainter>
@@ -63,8 +64,10 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
     {
     }
 
-    std::vector<std::unique_ptr<QTextLayout>> layouts;
-    std::vector<QPointF> layoutOffsets;
+    std::vector<std::unique_ptr<QTextLayout>> cachedLayouts;
+    std::vector<QPointF> cachedLayoutsOffsets;
+    Qt::HANDLE cachedLayoutsWorkingThread = 0;
+
 
     void clearAssociatedOutlines(KoShape *rootShape);
 
@@ -112,9 +115,20 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
 
     Q_UNUSED(paintContext);
 
+    /**
+     * HACK ALERT:
+     * QTextLayout should only be accessed from the tread it has been created in.
+     * If the cached layout has been created in a different thread, we should just
+     * recreate the layouts in the current thread to be able to render them.
+     */
+
+    if (QThread::currentThreadId() != d->cachedLayoutsWorkingThread) {
+        relayout();
+    }
+
     applyConversion(painter, converter);
-    for (int i = 0; i < (int)d->layouts.size(); i++) {
-        d->layouts[i]->draw(&painter, d->layoutOffsets[i]);
+    for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
+        d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
     }
 }
 
@@ -207,8 +221,9 @@ void KoSvgTextShape::relayout()
 {
     Q_D(KoSvgTextShape);
 
-    d->layouts.clear();
-    d->layoutOffsets.clear();
+    d->cachedLayouts.clear();
+    d->cachedLayoutsOffsets.clear();
+    d->cachedLayoutsWorkingThread = QThread::currentThreadId();
 
     QPointF currentTextPos;
 
@@ -294,16 +309,16 @@ void KoSvgTextShape::relayout()
             diff.ry() = 0;
         }
 
-        d->layouts.push_back(std::move(layout));
-        d->layoutOffsets.push_back(-diff);
+        d->cachedLayouts.push_back(std::move(layout));
+        d->cachedLayoutsOffsets.push_back(-diff);
 
     }
 
     d->clearAssociatedOutlines(this);
 
-    for (int i = 0; i < int(d->layouts.size()); i++) {
-        const QTextLayout &layout = *d->layouts[i];
-        const QPointF layoutOffset = d->layoutOffsets[i];
+    for (int i = 0; i < int(d->cachedLayouts.size()); i++) {
+        const QTextLayout &layout = *d->cachedLayouts[i];
+        const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
 
         using namespace KoSvgText;
 

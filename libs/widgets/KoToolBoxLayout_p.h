@@ -298,9 +298,7 @@ public:
 
     QLayoutItem* itemAt(int i) const override
     {
-        if (m_sections.count() >= i)
-            return 0;
-        return m_sections.at(i);
+        return m_sections.value(i);
     }
 
     QLayoutItem* takeAt(int i) override { return m_sections.takeAt(i); }

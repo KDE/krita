@@ -386,6 +386,8 @@ set(kritaui_LIB_SRCS
     kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
+    KisWindowLayoutResource.cpp
+    KisWindowLayoutResource.h
 )
 
 if(WIN32)

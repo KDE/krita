@@ -39,6 +39,8 @@
 #include <resources/KoPattern.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
+#include <KisWindowLayoutResource.h>
+
 #include <kis_psd_layer_style_resource.h>
 
 #include <kis_brush_server.h>
@@ -81,6 +83,14 @@ KisResourceServerProvider::KisResourceServerProvider()
 //        m_workspaceThread->barrier();
 //    }
 
+    m_windowLayoutServer= new KoResourceServerSimpleConstruction<KisWindowLayoutResource>("kis_windowlayouts", "*.kwl");
+    if (!QFileInfo(m_windowLayoutServer->saveLocation()).exists()) {
+        QDir().mkpath(m_windowLayoutServer->saveLocation());
+    }
+    m_windowLayoutThread = new KoResourceLoaderThread(m_windowLayoutServer);
+    m_windowLayoutThread->loadSynchronously();
+
+
     m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
     if (!QFileInfo(m_layerStyleCollectionServer->saveLocation()).exists()) {
         QDir().mkpath(m_layerStyleCollectionServer->saveLocation());
@@ -101,10 +111,12 @@ KisResourceServerProvider::~KisResourceServerProvider()
 {
     delete m_paintOpPresetThread;
     delete m_workspaceThread;
+    delete m_windowLayoutThread;
     delete m_layerStyleCollectionThread;
 
     delete m_paintOpPresetServer;
     delete m_workspaceServer;
+    delete m_windowLayoutServer;
     delete m_layerStyleCollectionServer;
 }
 
@@ -140,9 +152,14 @@ KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer(b
 
 KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer(bool block)
 {
-
     if (block) m_workspaceThread->barrier();
     return m_workspaceServer;
+}
+
+KoResourceServer< KisWindowLayoutResource >* KisResourceServerProvider::windowLayoutServer(bool block)
+{
+    if (block) m_windowLayoutThread->barrier();
+    return m_windowLayoutServer;
 }
 
 KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer(bool block)

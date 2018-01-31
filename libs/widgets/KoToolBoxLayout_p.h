@@ -247,7 +247,8 @@ class KoToolBoxLayout : public QLayout
 {
 public:
     explicit KoToolBoxLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
+        : QLayout(parent)
+        , m_orientation(Qt::Vertical)
     {
         setSpacing(6);
     }
@@ -260,21 +261,15 @@ public:
 
     QSize sizeHint() const override
     {
-        if (m_sections.isEmpty())
-            return QSize();
-        QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
-        return oneIcon;
+        return minimumSize();
     }
 
     QSize minimumSize() const override
     {
-        QSize s = sizeHint();
-        if (m_orientation == Qt::Vertical) {
-            s.setHeight(m_currentHeight);
-        } else {
-            s.setWidth(m_currentHeight);
-        }
-        return s;
+        if (m_sections.isEmpty())
+            return QSize();
+        QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
+        return oneIcon;
     }
 
     void addSection(Section *section)
@@ -307,7 +302,8 @@ public:
 
     void setGeometry (const QRect &rect) override
     {
-        m_currentHeight = doLayout(rect);
+        QLayout::setGeometry(rect);
+        doLayout(rect);
     }
 
     void setOrientation (Qt::Orientation orientation)
@@ -400,7 +396,6 @@ private:
 
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
-    mutable int m_currentHeight;
 };
 
 #endif

@@ -95,18 +95,11 @@ private Q_SLOTS:
     /// add a tool post-initialization. The tool will also be activated.
     void toolAdded(KoToolAction *toolAction, KoCanvasController *canvas);
 
-    /// resize the toolbox to show the icons without any gap at the edge
-    void adjustToFit();
-
-    /// unlocks the with after adjustToFit
-    void resizeUnlock();
-
     /// set the icon size for all the buttons
     void slotContextIconSize();
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void resizeEvent(QResizeEvent* event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:

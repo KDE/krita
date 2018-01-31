@@ -589,9 +589,6 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
     if (wasEmpty && !d->aggregate4update.isEmpty()) {
         d->updateTreeCompressor.start();
     }
-
-    // TODO: remove, it is not used anymore!
-    emit shapeChanged(shape);
 }
 
 QList<KoShape*> KoShapeManager::shapes() const

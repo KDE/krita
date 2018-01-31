@@ -200,8 +200,6 @@ Q_SIGNALS:
     void selectionContentChanged();
     /// emitted when any object changed (moved/rotated etc)
     void contentChanged();
-    /// emitted when any shape changed.
-    void shapeChanged(KoShape *);
 
 private:
     KoCanvasBase *canvas();

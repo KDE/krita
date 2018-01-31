@@ -338,12 +338,6 @@ private:
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
-            // Since sections can overlap (if a section occupies two rows, and there
-            // is space on the second row for all of the next section, the next section
-            // will be placed overlapping with the previous section), it's important that
-            // later sections will be higher in the widget z-order than previous
-            // sections, so raise it.
-            section->raise();
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
                 // move out of view, not perfect TODO: better solution
@@ -353,25 +347,16 @@ private:
 
             // rows needed for the buttons (calculation gets the ceiling value of the plain div)
             const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
-            const int availableButtonCount = (maxWidth - x + 1) / iconWidth;
 
             if (firstSection) {
                 firstSection = false;
-            } else if (buttonCount > availableButtonCount) {
+            } else {
                 // start on a new row, set separator
                 x = 0;
                 y += iconHeight + spacing();
                 const Section::Separators separator =
                     isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
                 section->setSeparator( separator );
-            } else {
-                // append to last row, set separators (on first row only to the left side)
-                const bool isFirstRow = (y == 0);
-                const Section::Separators separators =
-                    isFirstRow ?
-                        (isVertical ? Section::SeparatorLeft : Section::SeparatorTop) :
-                        (Section::SeparatorTop | Section::SeparatorLeft);
-                section->setSeparator( separators );
             }
 
             const int usedColumns = qMin(buttonCount, maxColumns);

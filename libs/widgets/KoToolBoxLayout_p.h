@@ -303,7 +303,7 @@ public:
     void setGeometry (const QRect &rect) override
     {
         QLayout::setGeometry(rect);
-        doLayout(rect);
+        doLayout(rect, true);
     }
 
     void setOrientation (Qt::Orientation orientation)
@@ -313,7 +313,7 @@ public:
     }
 
 private:
-    int doLayout(const QRect &rect) const
+    int doLayout(const QRect &rect, bool notDryRun) const
     {
         // nothing to do?
         if (m_sections.isEmpty()) {
@@ -341,7 +341,9 @@ private:
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
                 // move out of view, not perfect TODO: better solution
-                section->setGeometry(1000, 1000, 0, 0);
+                if (notDryRun) {
+                    section->setGeometry(1000, 1000, 0, 0);
+                }
                 continue;
             }
 
@@ -354,18 +356,22 @@ private:
                 // start on a new row, set separator
                 x = 0;
                 y += iconHeight + spacing();
-                const Section::Separators separator =
-                    isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
-                section->setSeparator( separator );
+                if (notDryRun){
+                    const Section::Separators separator =
+                        isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
+                    section->setSeparator( separator );
+                }
             }
 
-            const int usedColumns = qMin(buttonCount, maxColumns);
-            if (isVertical) {
-                section->setGeometry(x, y,
-                                     usedColumns * iconWidth, neededRowCount * iconHeight);
-            } else {
-                section->setGeometry(y, x,
-                                     neededRowCount * iconHeight, usedColumns * iconWidth);
+            if (notDryRun) {
+                const int usedColumns = qMin(buttonCount, maxColumns);
+                if (isVertical) {
+                    section->setGeometry(x, y,
+                                         usedColumns * iconWidth, neededRowCount * iconHeight);
+                } else {
+                    section->setGeometry(y, x,
+                                         neededRowCount * iconHeight, usedColumns * iconWidth);
+                }
             }
 
             // advance by the icons in the last row

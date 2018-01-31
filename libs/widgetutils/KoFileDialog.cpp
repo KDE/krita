@@ -155,6 +155,9 @@ void KoFileDialog::createFileDialog()
         dontUseNative = false;
     }
 #endif
+#ifdef Q_OS_WIN
+    dontUseNative = false;
+#endif
 
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, group.readEntry("DontUseNativeFileDialog", dontUseNative));
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);

@@ -299,6 +299,10 @@ bool KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
                     }
                     return false;
                 }
+
+                // HACK ALERT!
+                m_doc->hackPreliminarySetImage(m_image);
+
                 return true;
             }
             else {

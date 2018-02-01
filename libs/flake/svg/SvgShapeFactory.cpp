@@ -117,32 +117,50 @@ KoShape *SvgShapeFactory::createShapeFromOdf(const KoXmlElement &element, KoShap
             return 0;
         }
 
-        SvgParser parser(context.documentResourceManager());
-
-        QList<KoShape*> shapes = parser.parseSvg(xmlDoc.documentElement());
-        if (shapes.isEmpty())
-            return 0;
-
-        int zIndex = 0;
-        if (element.hasAttributeNS(KoXmlNS::draw, "z-index")) {
-            zIndex = element.attributeNS(KoXmlNS::draw, "z-index").toInt();
-        } else {
-            zIndex = context.zIndex();
-        }
-
-        if (shapes.count() == 1) {
-            KoShape *shape = shapes.first();
-            shape->setZIndex(zIndex);
-            return shape;
-        }
-
-        KoShapeGroup *svgGroup = new KoShapeGroup;
-        KoShapeGroupCommand cmd(svgGroup, shapes);
-        cmd.redo();
-        svgGroup->setZIndex(zIndex);
-
-        return svgGroup;
+        const int zIndex = calculateZIndex(element, context);
+        return createShapeFromSvgDirect(xmlDoc.documentElement(), QRect(0,0,30,30), 72.0, zIndex, context);
     }
 
     return 0;
+}
+
+int SvgShapeFactory::calculateZIndex(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    int zIndex = 0;
+
+    if (element.hasAttributeNS(KoXmlNS::draw, "z-index")) {
+        zIndex = element.attributeNS(KoXmlNS::draw, "z-index").toInt();
+    } else {
+        zIndex = context.zIndex();
+    }
+
+    return zIndex;
+}
+
+KoShape *SvgShapeFactory::createShapeFromSvgDirect(const KoXmlElement &root,
+                                                   const QRectF &boundsInPixels,
+                                                   const qreal pixelsPerInch,
+                                                   int zIndex,
+                                                   KoShapeLoadingContext &context,
+                                                   QSizeF *fragmentSize)
+{
+    SvgParser parser(context.documentResourceManager());
+    parser.setResolution(boundsInPixels, pixelsPerInch);
+
+    QList<KoShape*> shapes = parser.parseSvg(root, fragmentSize);
+    if (shapes.isEmpty())
+        return 0;
+
+    if (shapes.count() == 1) {
+        KoShape *shape = shapes.first();
+        shape->setZIndex(zIndex);
+        return shape;
+    }
+
+    KoShapeGroup *svgGroup = new KoShapeGroup;
+    KoShapeGroupCommand cmd(svgGroup, shapes);
+    cmd.redo();
+    svgGroup->setZIndex(zIndex);
+
+    return svgGroup;
 }

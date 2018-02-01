@@ -125,6 +125,8 @@ private Q_SLOTS:
     void setModified(bool modified);
     void dialogButtonClicked(QAbstractButton *button);
 
+    void setLetterSpacing(double value);
+
 Q_SIGNALS:
 
     void textUpdated(const QString &svg, const QString &defs);

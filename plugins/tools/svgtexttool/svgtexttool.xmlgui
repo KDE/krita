@@ -74,15 +74,19 @@
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
   </ToolBar>
-  <ToolBar name="formatting" position="top">
+  <ToolBar name="font" position="top">
     <Text>Formatting</Text>
     <Action name="svg_font"/>
     <Action name="svg_font_size"/>
-    <Action name="svg_line_height"/>
-    <Action name="svg_font_color"/>
-    <Action name="svg_format_textcolor"/>
     <Action name="svg_weight_bold"/>
     <Action name="svg_format_italic"/>
     <Action name="svg_format_underline"/>
+  </ToolBar>
+  <ToolBar name="formatting" position="top">
+    <Text>Formatting</Text>
+    <Action name="svg_line_height"/>
+    <Action name="svg_letter_spacing"/>
+    <Action name="svg_font_color"/>
+    <Action name="svg_format_textcolor"/>
   </ToolBar>
 </kpartgui>

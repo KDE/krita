@@ -618,6 +618,13 @@ void SvgTextEditor::setLineHeight(double lineHeightPercentage)
      m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
 }
 
+void SvgTextEditor::setLetterSpacing(double value)
+{
+    QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
+    format.setFontLetterSpacingType(QFont::AbsoluteSpacing);
+    format.setFontLetterSpacing(value);
+    m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
+}
 
 void SvgTextEditor::alignLeft()
 {
@@ -1064,6 +1071,16 @@ void SvgTextEditor::createActions()
     actionCollection()->addAction("svg_line_height", lineHeight);
     m_richTextActions << lineHeight;
     actionRegistry->propertizeAction("svg_line_height", lineHeight);
+
+    QWidgetAction *letterSpacing = new QWidgetAction(this);
+    QDoubleSpinBox *spnLetterSpacing = new QDoubleSpinBox();
+    spnLetterSpacing->setRange(-100.0,100.0);
+    spnLetterSpacing->setSingleStep(2.0);
+    connect(spnLetterSpacing,SIGNAL(valueChanged(double)),SLOT(setLetterSpacing(double)));
+    letterSpacing->setDefaultWidget(spnLetterSpacing);
+    actionCollection()->addAction("svg_letter_spacing", letterSpacing);
+    m_richTextActions << letterSpacing;
+    actionRegistry->propertizeAction("svg_letter_spacing",letterSpacing);
 }
 
 void SvgTextEditor::enableRichTextActions(bool enable)

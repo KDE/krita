@@ -222,6 +222,16 @@
       <isCheckable>false</isCheckable>
       <text>Line Height</text>
     </Action>
+    <Action name="svg_letter_spacing">
+      <iconText>Letter Spacing</iconText>
+      <shortcut>Ctrl+Shift+S</shortcut>
+      <toolTip>Letter Spacing in pts</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      <text>Letter Spacing</text>
+    </Action>
     <Action name="svg_settings">
       <iconText>Settings</iconText>
       <shortcut></shortcut>

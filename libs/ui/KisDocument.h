@@ -31,6 +31,7 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <kis_image.h>
 #include <KisImportExportFilter.h>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>

@@ -118,7 +118,7 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
 
     if (shape) {
         auto *reference = dynamic_cast<KisReferenceImage*>(shape);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, QColor());
 
         return reference->getPixel(docPoint);
     }

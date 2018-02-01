@@ -28,6 +28,7 @@
 
 class KoCanvasBase;
 class KoToolBox;
+class KoToolBoxScrollArea;
 
 class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -47,6 +48,7 @@ protected Q_SLOTS:
 
 private:
     KoToolBox *m_toolBox;
+    KoToolBoxScrollArea *m_scrollArea;
 };
 
 #endif // _KO_TOOLBOX_DOCKER_H_

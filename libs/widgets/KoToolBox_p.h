@@ -31,6 +31,7 @@
 
 class KoCanvasController;
 class KoShapeLayer;
+class KoToolBoxLayout;
 
 /**
  * KoToolBox is a dock widget that can order tools according to type and
@@ -77,6 +78,8 @@ public Q_SLOTS:
     void setOrientation(Qt::Orientation orientation);
 
     void setFloating(bool v);
+
+    KoToolBoxLayout *toolBoxLayout() const;
 
 private:
     /**

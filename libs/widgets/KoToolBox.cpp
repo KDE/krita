@@ -334,3 +334,9 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 
     d->contextSize->exec(event->globalPos());
 }
+KoToolBoxLayout *KoToolBox::toolBoxLayout() const
+{
+    return d->layout;
+}
+
+#include "moc_KoToolBoxScrollArea_p.cpp"

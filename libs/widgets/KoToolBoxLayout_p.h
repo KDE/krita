@@ -306,6 +306,48 @@ public:
         doLayout(rect, true);
     }
 
+    bool hasHeightForWidth() const override
+    {
+        // return true;
+        return m_orientation == Qt::Vertical;
+    }
+
+    int heightForWidth(int width) const override
+    {
+        if (m_orientation == Qt::Vertical) {
+            const int height = doLayout(QRect(0, 0, width, 0), false);
+            return height;
+        } else {
+    #if 0
+            const int iconHeight = static_cast<Section*> (m_sections[0]->widget())->iconSize().height();
+            for (int i = 1; i <= 10; i++) {
+                const int testWidth = doLayout(QRect(0, 0, 0, iconHeight * i), false);
+                if (testWidth <= width) {
+                    return iconHeight * i;
+                }
+            }
+            // Return a huge height
+            return 65535;
+    #endif
+            return -1;
+        }
+    }
+
+    /**
+     * For calculating the width from height by KoToolBoxScrollArea.
+     * QWidget doesn't actually support trading width for height, so it needs to
+     * be handled specificly.
+     */
+    int widthForHeight(int height) const
+    {
+        if (m_orientation == Qt::Horizontal) {
+            const int width = doLayout(QRect(0, 0, 0, height), false);
+            return width;
+        } else {
+            return -1;
+        }
+    }
+
     void setOrientation (Qt::Orientation orientation)
     {
         m_orientation = orientation;

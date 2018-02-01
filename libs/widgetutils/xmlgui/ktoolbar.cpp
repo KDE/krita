@@ -924,6 +924,7 @@ void KToolBar::loadState(const QDomElement &element)
         if (newLine && mw) {
             mw->insertToolBarBreak(this);
         }
+
     }
 
     int newIconSize = -1;

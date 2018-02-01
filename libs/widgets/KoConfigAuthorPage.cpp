@@ -58,8 +58,8 @@ class Q_DECL_HIDDEN KoConfigAuthorPage::Private
 public:
     QList<Ui::KoConfigAuthorPage *> profileUiList;
     QStackedWidget *stack;
-    QComboBox *combo;
-    QToolButton *deleteUser;
+    QComboBox *cmbAuthorProfiles;
+    QToolButton *bnDeleteUser;
     QStringList positions;
     QStringList contactModes;
     QStringList contactKeys;
@@ -72,16 +72,16 @@ KoConfigAuthorPage::KoConfigAuthorPage()
 {
     QGridLayout *layout = new QGridLayout;
 
-    d->combo = new QComboBox();
-    layout->addWidget(d->combo, 0, 0);
+    d->cmbAuthorProfiles = new QComboBox();
+    layout->addWidget(d->cmbAuthorProfiles, 0, 0);
     QToolButton *newUser = new QToolButton();
     newUser->setIcon(koIcon("list-add"));
     newUser->setToolTip(i18n("Add new author profile (starts out as a copy of current)"));
     layout->addWidget(newUser, 0, 1);
-    d->deleteUser = new QToolButton();
-    d->deleteUser->setIcon(koIcon("trash-empty"));
-    d->deleteUser->setToolTip(i18n("Delete the author profile"));
-    layout->addWidget(d->deleteUser, 0, 2);
+    d->bnDeleteUser = new QToolButton();
+    d->bnDeleteUser->setIcon(koIcon("trash-empty"));
+    d->bnDeleteUser->setToolTip(i18n("Delete the author profile"));
+    layout->addWidget(d->bnDeleteUser, 0, 2);
     QFrame *f = new QFrame();
     f->setFrameStyle(QFrame::HLine | QFrame::Sunken);
     layout->addWidget(f, 1, 0);
@@ -108,8 +108,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     d->defaultAuthor = i18n("Anonymous");
 
     QStringList profilesNew;
-    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
-    QDir dir(authorInfo);
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/");
     QStringList filters = QStringList() << "*.authorinfo";
     Q_FOREACH(const QString &entry, dir.entryList(filters)) {
         QFile file(dir.absoluteFilePath(entry));
@@ -174,7 +173,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
             connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
             connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));
 
-            d->combo->addItem(profile);
+            d->cmbAuthorProfiles->addItem(profile);
             profilesNew.append(profile);
             d->profileUiList.append(aUi);
             d->stack->addWidget(w);
@@ -187,26 +186,8 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
 
-    // Add a default profile
-    aUi = new Ui::KoConfigAuthorPage();
-    w = new QWidget;
-    if (profiles.contains(d->defaultAuthor)==false || profilesNew.contains(d->defaultAuthor)) {
-        //w->setEnabled(false);
-        aUi->setupUi(w);
-        w->setEnabled(false);
-        d->combo->addItem(d->defaultAuthor);
-        d->stack->addWidget(w);
-        //KUser user(KUser::UseRealUserID);
-        //aUi->leFullName->setText(user.property(KUser::FullName).toString());
-        //aUi->lePhoneWork->setText(user.property(KUser::WorkPhone).toString());
-        //aUi->lePhoneHome->setText(user.property(KUser::HomePhone).toString());
-        //KEMailSettings eMailSettings;
-        //aUi->leEmail->setText(eMailSettings.getSetting(KEMailSettings::EmailAddress));
-        d->profileUiList.append(aUi);
-    }
-
     foreach (const QString &profile , profiles) {
-        if (profilesNew.contains(profile)==false) {
+        if (!profilesNew.contains(profile)) {
             KConfigGroup cgs(&authorGroup, "Author-" + profile);
             aUi = new Ui::KoConfigAuthorPage();
             w = new QWidget;
@@ -265,16 +246,32 @@ KoConfigAuthorPage::KoConfigAuthorPage()
             connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
             connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));
 
-            d->combo->addItem(profile);
+            d->cmbAuthorProfiles->addItem(profile);
             d->profileUiList.append(aUi);
             d->stack->addWidget(w);
         }
     }
 
+
+    // Add a default profile
+    aUi = new Ui::KoConfigAuthorPage();
+    w = new QWidget;
+    if (!profiles.contains(d->defaultAuthor) || profilesNew.contains(d->defaultAuthor)) {
+        //w->setEnabled(false);
+        aUi->setupUi(w);
+        w->setEnabled(false);
+        d->cmbAuthorProfiles->insertItem(0, d->defaultAuthor);
+        d->stack->insertWidget(0, w);
+        d->profileUiList.append(aUi);
+    }
+
+
     // Connect slots
-    connect(d->combo, SIGNAL(currentIndexChanged(int)), this, SLOT(profileChanged(int)));
+    connect(d->cmbAuthorProfiles, SIGNAL(currentIndexChanged(int)), this, SLOT(profileChanged(int)));
     connect(newUser, SIGNAL(clicked(bool)), this, SLOT(addUser()));
-    connect(d->deleteUser, SIGNAL(clicked(bool)), this, SLOT(deleteUser()));
+    connect(d->bnDeleteUser, SIGNAL(clicked(bool)), this, SLOT(deleteUser()));
+
+    d->cmbAuthorProfiles->setCurrentIndex(0);
     profileChanged(0);
 }
 
@@ -286,19 +283,20 @@ KoConfigAuthorPage::~KoConfigAuthorPage()
 void KoConfigAuthorPage::profileChanged(int i)
 {
     d->stack->setCurrentIndex(i);
-    d->deleteUser->setEnabled(i != 0);
+    // Profile 0 should never be deleted: it's the anonymous profile.
+    d->bnDeleteUser->setEnabled(i > 0);
 }
 
 void KoConfigAuthorPage::addUser()
 {
     bool ok;
-    QString profileName = QInputDialog::getText(this, i18n("Name of Profile"), i18n("Name (not duplicate or blank name):"),QLineEdit::Normal, "", &ok);
+    QString profileName = QInputDialog::getText(this, i18n("Name of Profile"), i18n("Name (not duplicate or blank name):"), QLineEdit::Normal, "", &ok);
 
     if (!ok) {
         return;
     }
 
-    Ui::KoConfigAuthorPage *curUi = d->profileUiList[d->combo->currentIndex()];
+    Ui::KoConfigAuthorPage *curUi = d->profileUiList[d->cmbAuthorProfiles->currentIndex()];
     Ui::KoConfigAuthorPage *aUi = new Ui::KoConfigAuthorPage();
     QWidget *w = new QWidget;
     aUi->setupUi(w);
@@ -320,27 +318,27 @@ void KoConfigAuthorPage::addUser()
     connect(aUi->btnAdd, SIGNAL(clicked()), this, SLOT(addContactEntry()));
     connect(aUi->btnRemove, SIGNAL(clicked()), this, SLOT(removeContactEntry()));
 
-    int index = d->combo->currentIndex() + 1;
-    d->combo->insertItem(index, profileName);
+    int index = d->cmbAuthorProfiles->currentIndex() + 1;
+    d->cmbAuthorProfiles->insertItem(index, profileName);
     d->profileUiList.insert(index, aUi);
     d->stack->insertWidget(index, w);
-    d->combo->setCurrentIndex(index);
+    d->cmbAuthorProfiles->setCurrentIndex(index);
 }
 
 void KoConfigAuthorPage::deleteUser()
 {
-    int index = d->combo->currentIndex();
+    int index = d->cmbAuthorProfiles->currentIndex();
     QWidget *w = d->stack->currentWidget();
 
     d->stack->removeWidget(w);
     d->profileUiList.removeAt(index);
-    d->combo->removeItem(index);
+    d->cmbAuthorProfiles->removeItem(index);
     delete w;
 }
 
 void KoConfigAuthorPage::addContactEntry()
 {
-    int i = d->combo->currentIndex();
+    int i = d->cmbAuthorProfiles->currentIndex();
     Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
     QStandardItemModel *contact = static_cast<QStandardItemModel*>(aUi->tblContactInfo->model());
     QList<QStandardItem*>list;
@@ -352,7 +350,7 @@ void KoConfigAuthorPage::addContactEntry()
 
 void KoConfigAuthorPage::removeContactEntry()
 {
-    int i = d->combo->currentIndex();
+    int i = d->cmbAuthorProfiles->currentIndex();
     Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
     QModelIndex index = aUi->tblContactInfo->selectionModel()->currentIndex();
     aUi->tblContactInfo->model()->removeRow(index.row());
@@ -367,13 +365,13 @@ void KoConfigAuthorPage::apply()
         return;
     }
     for (int i = 0; i < d->profileUiList.size(); i++) {
-        if (d->combo->itemText(i)!= d->defaultAuthor) {
+        if (d->cmbAuthorProfiles->itemText(i)!= d->defaultAuthor) {
             QByteArray ba;
             QDomDocument doc = QDomDocument();
             Ui::KoConfigAuthorPage *aUi = d->profileUiList[i];
 
             QDomElement root = doc.createElement("author");
-            root.setAttribute("name", d->combo->itemText(i));
+            root.setAttribute("name", d->cmbAuthorProfiles->itemText(i));
 
             QDomElement nickname = doc.createElement("nickname");
             nickname.appendChild(doc.createTextNode(aUi->leNickName->text()));
@@ -413,7 +411,7 @@ void KoConfigAuthorPage::apply()
             doc.appendChild(root);
             ba = doc.toByteArray();
 
-            QFile f(authorInfo + d->combo->itemText(i) +".authorinfo");
+            QFile f(authorInfo + d->cmbAuthorProfiles->itemText(i) +".authorinfo");
             f.open(QFile::WriteOnly);
             f.write(ba);
             f.close();

@@ -74,7 +74,7 @@
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
   </ToolBar>
-  <ToolBar name="font" position="top">
+  <ToolBar name="font" position="top" newline="true">
     <Text>Formatting</Text>
     <Action name="svg_font"/>
     <Action name="svg_font_size"/>
@@ -82,7 +82,7 @@
     <Action name="svg_format_italic"/>
     <Action name="svg_format_underline"/>
   </ToolBar>
-  <ToolBar name="formatting" position="top">
+  <ToolBar name="formatting" position="top" newline="true">
     <Text>Formatting</Text>
     <Action name="svg_line_height"/>
     <Action name="svg_letter_spacing"/>

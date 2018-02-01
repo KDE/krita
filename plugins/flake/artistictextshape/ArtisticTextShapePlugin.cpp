@@ -33,7 +33,7 @@ ArtisticTextShapePlugin::ArtisticTextShapePlugin(QObject *parent, const QVariant
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new ArtisticTextShapeFactory());
-    KoToolRegistry::instance()->add(new ArtisticTextToolFactory());
+    //KoToolRegistry::instance()->add(new ArtisticTextToolFactory());
 }
 
 ArtisticTextShapePlugin::~ArtisticTextShapePlugin()

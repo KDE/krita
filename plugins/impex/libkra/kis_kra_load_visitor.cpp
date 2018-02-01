@@ -20,6 +20,8 @@
 #include "kis_kra_load_visitor.h"
 #include "kis_kra_tags.h"
 #include "flake/kis_shape_layer.h"
+#include "flake/KisReferenceImagesLayer.h"
+#include "KisReferenceImage.h"
 
 #include <QRect>
 #include <QBuffer>
@@ -128,7 +130,13 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
 
-    if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+    if (auto *referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
+        Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+            auto *reference = dynamic_cast<KisReferenceImage*>(shape);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
+            reference->loadImage(m_store);
+        }
+    } else if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
 
         if (!loadMetaData(layer)) {
             return false;

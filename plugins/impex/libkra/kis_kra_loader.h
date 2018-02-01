@@ -99,6 +99,8 @@ private:
 
     KisNodeSP loadFileLayer(const KoXmlElement& elem, KisImageSP image, const QString& name, quint32 opacity);
 
+    KisNodeSP loadReferenceImagesLayer(const KoXmlElement& elem, KisImageSP image);
+
     void loadNodeKeyframes(KoStore *store, const QString &location, KisNodeSP node);
 
     void loadCompositions(const KoXmlElement& elem, KisImageSP image);

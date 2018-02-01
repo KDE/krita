@@ -61,6 +61,8 @@
 #include <kis_canvas2.h>
 #include <kis_cubic_curve.h>
 #include "kis_display_color_converter.h"
+#include <KisDocument.h>
+#include <KisReferenceImagesLayer.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -379,6 +381,19 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
     const QPoint imagePoint = image()->documentToImagePixelFloored(pickingJob.documentPixel);
     const bool fromCurrentNode = pickingJob.action == PickFgNode || pickingJob.action == PickBgNode;
     m_pickingResource = colorPreviewResourceId(pickingJob.action);
+
+    if (!fromCurrentNode) {
+        auto *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+        auto *referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
+        if (referencesLayer) {
+            QColor color = referencesLayer->getPixel(imagePoint);
+            if (color.isValid() && !color.alpha() == 0) {
+                slotColorPickingFinished(KoColor(color, image()->colorSpace()));
+                return;
+            }
+        }
+    }
 
     KisPaintDeviceSP device = fromCurrentNode ?
         currentNode()->projection() : image()->projection();

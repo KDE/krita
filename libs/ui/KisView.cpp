@@ -84,6 +84,8 @@
 #include "kis_zoom_manager.h"
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
+#include "KisReferenceImagesDecoration.h"
+#include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
 #include "kis_file_layer.h"
@@ -114,6 +116,7 @@ public:
         , canvas(&viewConverter, resourceManager, _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
+        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -142,6 +145,7 @@ public:
     KisViewManager *viewManager = 0;
     KisNodeSP currentNode;
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration;
+    KisReferenceImagesDecorationSP referenceImagesDecoration;
     bool isCurrent = false;
     bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
@@ -255,6 +259,9 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
 
+    d->canvas.addDecoration(d->referenceImagesDecoration);
+    d->referenceImagesDecoration->setVisible(true);
+
     d->showFloatingMessage = cfg.showCanvasMessages();
 }
 
@@ -316,7 +323,7 @@ void KisView::showFloatingMessageImpl(const QString &message, const QIcon& icon,
 
 bool KisView::canvasIsMirrored() const
 {
-   return d->canvas.xAxisMirrored() || d->canvas.yAxisMirrored();
+    return d->canvas.xAxisMirrored() || d->canvas.yAxisMirrored();
 }
 
 void KisView::setViewManager(KisViewManager *view)
@@ -384,7 +391,7 @@ void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
      */
 
     if (!d->isCurrent &&
-        (!d->currentNode || !d->currentNode->parent())) {
+            (!d->currentNode || !d->currentNode->parent())) {
 
         d->currentNode = newActiveNode;
     }
@@ -533,23 +540,30 @@ void KisView::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
             QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
 
+            QAction *insertAsReferenceImage = new QAction(i18n("Insert as Reference Image"), &popup);
+            QAction *insertAsReferenceImages = new QAction(i18n("Insert as Reference Images"), &popup);
+
             QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
             popup.addAction(insertAsNewFileLayer);
             popup.addAction(openInNewDocument);
+            popup.addAction(insertAsReferenceImage);
 
             popup.addAction(insertManyLayers);
             popup.addAction(insertManyFileLayers);
             popup.addAction(openManyDocuments);
+            popup.addAction(insertAsReferenceImages);
 
             insertAsNewLayer->setEnabled(image() && urls.count() == 1);
             insertAsNewFileLayer->setEnabled(image() && urls.count() == 1);
             openInNewDocument->setEnabled(urls.count() == 1);
+            insertAsReferenceImage->setEnabled(image() && urls.count() == 1);
 
             insertManyLayers->setEnabled(image() && urls.count() > 1);
             insertManyFileLayers->setEnabled(image() && urls.count() > 1);
             openManyDocuments->setEnabled(urls.count() > 1);
+            insertAsReferenceImages->setEnabled(image() && urls.count() > 1);
 
             popup.addSeparator();
             popup.addAction(cancel);
@@ -581,12 +595,19 @@ void KisView::dropEvent(QDropEvent *event)
                                                                        KisFileLayer::None, image()->nextLayerName(), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
-                        else {
-                            Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
+                        else if (action == openInNewDocument || action == openManyDocuments) {
                             if (mainWindow()) {
                                 mainWindow()->openDocument(url, KisMainWindow::None);
                             }
                         }
+                        else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
+                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile());
+                            reference->setPosition(cursorPos);
+                            d->referenceImagesDecoration->addReferenceImage(reference);
+
+                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                        }
+
                     }
                     delete tmp;
                     tmp = 0;

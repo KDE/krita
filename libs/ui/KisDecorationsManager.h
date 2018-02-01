@@ -25,18 +25,19 @@
 
 #include "KisView.h"
 #include "kis_painting_assistants_decoration.h"
+#include "KisReferenceImagesDecoration.h"
 
 class KisViewManager;
 class KisAction;
 class KisActionManager;
 
-class KisPaintingAssistantsManager : public QObject
+class KisDecorationsManager : public QObject
 {
     Q_OBJECT
 
 public:
-    KisPaintingAssistantsManager(KisViewManager* view);
-    ~KisPaintingAssistantsManager() override;
+    KisDecorationsManager(KisViewManager* view);
+    ~KisDecorationsManager() override;
 
     void setup(KisActionManager* actionManager);
 
@@ -46,11 +47,15 @@ private Q_SLOTS:
     void updateAction();
 
 private:
-    KisPaintingAssistantsDecorationSP decoration();
+    KisPaintingAssistantsDecorationSP assistantsDecoration() const;
+    KisReferenceImagesDecorationSP referenceImagesDecoration() const;
 
     QPointer<KisView> m_imageView;
-    KisAction* m_toggleAssistant;
-    KisAction* m_togglePreview;
+
+    KisAction *m_toggleAssistant;
+    KisAction *m_togglePreview;
+
+    KisAction *m_toggleReferenceImages;
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

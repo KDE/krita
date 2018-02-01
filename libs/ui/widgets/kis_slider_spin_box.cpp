@@ -810,6 +810,12 @@ bool KisAbstractSliderSpinBox::isDragging() const
     return d->isDragging;
 }
 
+void KisAbstractSliderSpinBox::setPrivateValue(int value)
+{
+    Q_D(KisAbstractSliderSpinBox);
+    d->value = qBound(d->minimum, value, d->maximum);
+}
+
 class KisSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
 };
 

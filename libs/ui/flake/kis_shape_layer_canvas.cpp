@@ -46,15 +46,12 @@
 
 //#define DEBUG_REPAINT
 
-KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
+KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
     : KoCanvasBase(0)
     , m_isDestroying(false)
     , m_viewConverter(new KisImageViewConverter(image))
     , m_shapeManager(new KoShapeManager(this))
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
-    , m_projection(0)
-    , m_parentLayer(parent)
-    , m_image(image)
 {
     m_shapeManager->selection()->setActiveLayer(parent);
 }
@@ -125,6 +122,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
+        , m_image(image)
 {
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
 }

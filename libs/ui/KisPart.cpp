@@ -57,6 +57,7 @@
 #include <QDomElement>
 #include <QGlobalStatic>
 #include <KisMimeDatabase.h>
+#include <dialogs/KisSessionManagerDialog.h>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -78,6 +79,7 @@
 
 #include "kis_action.h"
 #include "kis_action_registry.h"
+#include "KisSessionResource.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -107,6 +109,20 @@ public:
 
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
+
+    KisSessionResource *currentSession = nullptr;
+    bool closingSession{false};
+    QScopedPointer<KisSessionManagerDialog> sessionManager;
+
+    bool queryCloseDocument(KisDocument *document) {
+        Q_FOREACH(auto view, views) {
+            if (view && view->isVisible() && view->document() == document) {
+                return view->queryClose();
+            }
+        }
+
+        return false;
+    }
 };
 
 
@@ -205,9 +221,9 @@ void KisPart::removeDocument(KisDocument *document)
     document->deleteLater();
 }
 
-KisMainWindow *KisPart::createMainWindow()
+KisMainWindow *KisPart::createMainWindow(QUuid id)
 {
-    KisMainWindow *mw = new KisMainWindow();
+    KisMainWindow *mw = new KisMainWindow(id);
     Q_FOREACH(KisAction *action, d->scriptActions) {
         mw->viewManager()->scriptManager()->addAction(action);
     }
@@ -309,6 +325,38 @@ int KisPart::viewCount(KisDocument *doc) const
         }
         return count;
     }
+}
+
+bool KisPart::closingSession() const
+{
+    return d->closingSession;
+}
+
+bool KisPart::closeSession()
+{
+    d->closingSession = true;
+
+    Q_FOREACH(auto document, d->documents) {
+        if (!d->queryCloseDocument(document.data())) {
+            d->closingSession = false;
+            return false;
+        }
+    }
+
+    if (d->currentSession) {
+        d->currentSession->storeCurrentWindows();
+        d->currentSession->save();
+
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
+        cfg.writeEntry("previousSession", d->currentSession->name());
+    }
+
+    Q_FOREACH (auto window, d->mainWindows) {
+        window->close();
+    }
+
+    d->closingSession = false;
+    return true;
 }
 
 void KisPart::slotDocumentSaved()
@@ -477,3 +525,39 @@ KisInputManager* KisPart::currentInputManager()
     return manager ? manager->inputManager() : 0;
 }
 
+void KisPart::showSessionManager()
+{
+    if (d->sessionManager.isNull()) {
+        d->sessionManager.reset(new KisSessionManagerDialog());
+    }
+
+    d->sessionManager->show();
+}
+
+void KisPart::startBlankSession()
+{
+    KisMainWindow *window = createMainWindow();
+    window->initializeGeometry();
+    window->show();
+
+}
+
+bool KisPart::restorePreviousSession()
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
+    const QString &sessionName = cfg.readEntry("previousSession");
+    if (sessionName.isNull()) return false;
+
+    KoResourceServer<KisSessionResource> * rserver = KisResourceServerProvider::instance()->sessionServer();
+    auto *session = rserver->resourceByName(sessionName);
+    if (!session || !session->valid()) return false;
+
+    session->restore();
+
+    return true;
+}
+
+void KisPart::setCurrentSession(KisSessionResource *session)
+{
+    d->currentSession = session;
+}

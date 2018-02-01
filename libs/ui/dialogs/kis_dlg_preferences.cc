@@ -115,6 +115,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
 
+    cmbStartupSession->addItem(i18n("Open default window"));
+    cmbStartupSession->addItem(i18n("Load previous session"));
+    // TODO: before enabling this, fix the bootstrap problem of opening
+    // the first main window if no sessions exist yet
+    //cmbStartupSession->addItem(i18n("Show session manager"));
+    cmbStartupSession->setCurrentIndex(cfg.sessionOnStartup());
+
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     int autosaveInterval = cfg.autoSaveInterval();
@@ -186,6 +193,7 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
+
     m_chkNativeFileDialog->setChecked(false);
     intMaxBrushSize->setValue(1000);
 
@@ -224,6 +232,11 @@ CursorStyle GeneralTab::cursorStyle()
 OutlineStyle GeneralTab::outlineStyle()
 {
     return (OutlineStyle)m_cmbOutlineShape->currentIndex();
+}
+
+KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
+{
+    return (KisConfig::SessionOnStartup)cmbStartupSession->currentIndex();
 }
 
 bool GeneralTab::showRootLayer()
@@ -1199,6 +1212,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
+        cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
         cfg.setCalculateAnimationCacheInBackground(dialog->m_general->calculateAnimationCacheInBackground());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");

@@ -62,6 +62,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_import_image_sequence.cpp
     dialogs/kis_delayed_save_dialog.cpp
     dialogs/kis_dlg_internal_color_selector.cpp
+    dialogs/KisSessionManagerDialog.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -386,6 +387,8 @@ set(kritaui_LIB_SRCS
     kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
+    KisWindowLayoutResource.cpp
+    KisSessionResource.cpp
 )
 
 if(WIN32)
@@ -491,6 +494,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
     forms/wdgstopgradienteditor.ui
+    forms/wdgsessionmanager.ui
     brushhud/kis_dlg_brush_hud_config.ui
     forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui

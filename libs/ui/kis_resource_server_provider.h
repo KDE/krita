@@ -30,9 +30,11 @@
 
 #include "KisResourceBundle.h"
 #include "kritaui_export.h"
+#include "KisWindowLayoutResource.h"
 
 class KoResourceLoaderThread;
 class KisWorkspaceResource;
+class KisSessionResource;
 class KisPSDLayerStyleCollectionResource;
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
@@ -51,6 +53,8 @@ public:
     KoResourceServer<KisResourceBundle> *resourceBundleServer();
     KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
     KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
+    KoResourceServer<KisWindowLayoutResource>* windowLayoutServer(bool block = true);
+    KoResourceServer<KisSessionResource>* sessionServer(bool block = true);
     KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer(bool block = true);
 
     void brushBlacklistCleanup();
@@ -65,6 +69,8 @@ private:
 
     KisPaintOpPresetResourceServer *m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
+    KoResourceServer<KisWindowLayoutResource> *m_windowLayoutServer;
+    KoResourceServer<KisSessionResource> *m_sessionServer;
     KoResourceServer<KisPSDLayerStyleCollectionResource> *m_layerStyleCollectionServer;
     KoResourceServer<KisResourceBundle> *m_resourceBundleServer;
 
@@ -72,6 +78,8 @@ private:
 
     KoResourceLoaderThread *m_paintOpPresetThread;
     KoResourceLoaderThread *m_workspaceThread;
+    KoResourceLoaderThread *m_windowLayoutThread;
+    KoResourceLoaderThread *m_sessionThread;
     KoResourceLoaderThread *m_layerStyleCollectionThread;
 
 };

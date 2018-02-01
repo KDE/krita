@@ -25,9 +25,10 @@
 
 #include <QPointer>
 #include <QPrinter>
+#include <QUuid>
+#include <QUrl>
 
 #include <xmlgui/kxmlguiwindow.h>
-#include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 #include "KisView.h"
@@ -75,17 +76,14 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow();
+    explicit KisMainWindow(QUuid id = QUuid());
 
     /**
      *  Destructor.
      */
     ~KisMainWindow() override;
 
-
-    // If noCleanup is set, KisMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
+    QUuid id() const;
 
     /**
      * @brief showView shows the given view. Override this if you want to show
@@ -141,6 +139,10 @@ public:
     KoCanvasResourceManager *resourceManager() const;
 
     int viewCount() const;
+
+    void saveWindowState(bool restoreNormalState =false);
+
+    const KConfigGroup &windowStateConfig() const;
 
     /**
      * A wrapper around restoreState
@@ -231,6 +233,9 @@ public Q_SLOTS:
      *  Saves the current document with the current name.
      */
     void slotFileSave();
+
+
+    void slotShowSessionManager();
 
     // XXX: disabled
     KisPrintJob* exportToPdf(QString pdfFileName = QString());
@@ -396,6 +401,7 @@ public Q_SLOTS:
 private:
 
     friend class KisApplication;
+    friend class KisPart;
 
 
     /**

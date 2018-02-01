@@ -172,8 +172,9 @@ public:
 class Q_DECL_HIDDEN KisMainWindow::Private
 {
 public:
-    Private(KisMainWindow *parent)
+    Private(KisMainWindow *parent, QUuid id)
         : q(parent)
+        , id(id)
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
@@ -182,6 +183,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
+        if (id.isNull()) this->id = QUuid::createUuid();
         mdiArea->setTabsMovable(true);
     }
 
@@ -190,6 +192,8 @@ public:
     }
 
     KisMainWindow *q {0};
+    QUuid id;
+
     KisViewManager *viewManager {0};
 
     QPointer<KisView> activeView;
@@ -199,7 +203,6 @@ public:
     bool firstTime {true};
     bool windowSizeDirty {false};
     bool readOnly {false};
-    bool noCleanup {false};
 
     KisAction *showDocumentInfo {0};
     KisAction *saveAction {0};
@@ -223,6 +226,7 @@ public:
     KisAction *toggleDockers {0};
     KisAction *toggleDockerTitleBars {0};
     KisAction *fullScreenMode {0};
+    KisAction *showSessionManager {0};
 
     KisAction *expandingSpacers[2];
 
@@ -239,7 +243,6 @@ public:
     QString lastExportLocation;
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
-    QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     QByteArray dockerStateBeforeHiding;
     KoToolDocker *toolOptionsDocker {0};
 
@@ -255,6 +258,8 @@ public:
     QByteArray lastExportedFormat;
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
     QMutex savingEntryMutex;
+
+    KConfigGroup windowStateConfig;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -272,9 +277,9 @@ public:
     }
 };
 
-KisMainWindow::KisMainWindow()
+KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
-    , d(new Private(this))
+    , d(new Private(this, uuid))
 {
     auto rserver = KisResourceServerProvider::instance()->workspaceServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
@@ -286,6 +291,8 @@ KisMainWindow::KisMainWindow()
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager = new Digikam::ThemeManager(group.readEntry("Theme", "Krita dark"), this);
+
+    d->windowStateConfig = KSharedConfig::openConfig()->group("MainWindow");
 
     setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
@@ -363,8 +370,7 @@ KisMainWindow::KisMainWindow()
 
     createActions();
 
-    setAutoSaveSettings("krita", false);
-
+    setAutoSaveSettings(d->windowStateConfig, false);
 
     subWindowActivated();
     updateWindowMenu();
@@ -486,11 +492,6 @@ KisMainWindow::KisMainWindow()
     }
 }
 
-void KisMainWindow::setNoCleanup(bool noCleanup)
-{
-    d->noCleanup = noCleanup;
-}
-
 KisMainWindow::~KisMainWindow()
 {
 //    Q_FOREACH (QAction *ac, actionCollection()->actions()) {
@@ -518,12 +519,13 @@ KisMainWindow::~KisMainWindow()
     // The doc and view might still exist (this is the case when closing the window)
     KisPart::instance()->removeMainWindow(this);
 
-    if (d->noCleanup)
-        return;
-
     delete d->viewManager;
     delete d;
 
+}
+
+QUuid KisMainWindow::id() const {
+    return d->id;
 }
 
 void KisMainWindow::addView(KisView *view)
@@ -566,6 +568,7 @@ void KisMainWindow::showView(KisView *imageView)
         imageView->slotLoadingFinished();
 
         QMdiSubWindow *subwin = d->mdiArea->addSubWindow(imageView);
+        imageView->setSubWindow(subwin);
         subwin->setAttribute(Qt::WA_DeleteOnClose, true);
         connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
 
@@ -1186,42 +1189,30 @@ void KisMainWindow::redo()
 
 void KisMainWindow::closeEvent(QCloseEvent *e)
 {
+    if (!KisPart::instance()->closingSession()) {
+        QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
+        if ((action) && (action->isChecked())) {
+            action->setChecked(false);
+        }
+
+        // Save session when last window is closed
+        if (KisPart::instance()->mainwindowCount() == 1) {
+            bool closeAllowed = KisPart::instance()->closeSession();
+
+            if (!closeAllowed) {
+                e->setAccepted(false);
+            }
+            return;
+        }
+    }
+
     d->mdiArea->closeAllSubWindows();
-
-    QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
-
-    if ((action) && (action->isChecked())) {
-        action->setChecked(false);
-    }
-    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
-    cfg.writeEntry("ko_geometry", saveGeometry().toBase64());
-    cfg.writeEntry("State", saveState().toBase64());
-
-    {
-        KConfigGroup group( KSharedConfig::openConfig(), "theme");
-        group.writeEntry("Theme", d->themeManager->currentThemeName());
-    }
 
     QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
 
     if (childrenList.isEmpty()) {
         d->deferredClosingEvent = e;
-
-        if (!d->dockerStateBeforeHiding.isEmpty()) {
-            restoreState(d->dockerStateBeforeHiding);
-        }
-        statusBar()->setVisible(true);
-        menuBar()->setVisible(true);
-
-        saveWindowSettings();
-
-        if (d->noCleanup)
-            return;
-
-        if (!d->dockWidgetVisibilityMap.isEmpty()) { // re-enable dockers for persistency
-            Q_FOREACH (QDockWidget* dockWidget, d->dockWidgetsMap)
-                dockWidget->setVisible(d->dockWidgetVisibilityMap.value(dockWidget));
-        }
+        saveWindowState(true);
     } else {
         e->setAccepted(false);
     }
@@ -1233,7 +1224,7 @@ void KisMainWindow::saveWindowSettings()
 
     if (d->windowSizeDirty ) {
         dbgUI << "KisMainWindow::saveWindowSettings";
-        KConfigGroup group = config->group("MainWindow");
+        KConfigGroup group = d->windowStateConfig;
         KWindowConfig::saveWindowSize(windowHandle(), group);
         config->sync();
         d->windowSizeDirty = false;
@@ -1242,7 +1233,7 @@ void KisMainWindow::saveWindowSettings()
     if (!d->activeView || d->activeView->document()) {
 
         // Save toolbar position into the config file of the app, under the doc's component name
-        KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
+        KConfigGroup group = d->windowStateConfig;
         saveMainWindowSettings(group);
 
         // Save collapsible state of dock widgets
@@ -1471,6 +1462,10 @@ void KisMainWindow::slotExportFile()
     }
 }
 
+void KisMainWindow::slotShowSessionManager() {
+    KisPart::instance()->showSessionManager();
+}
+
 KoCanvasResourceManager *KisMainWindow::resourceManager() const
 {
     return d->viewManager->resourceProvider()->resourceManager();
@@ -1479,6 +1474,38 @@ KoCanvasResourceManager *KisMainWindow::resourceManager() const
 int KisMainWindow::viewCount() const
 {
     return d->mdiArea->subWindowList().size();
+}
+
+const KConfigGroup &KisMainWindow::windowStateConfig() const
+{
+    return d->windowStateConfig;
+}
+
+void KisMainWindow::saveWindowState(bool restoreNormalState)
+{
+    if (restoreNormalState) {
+        QAction *showCanvasOnly = d->viewManager->actionCollection()->action("view_show_canvas_only");
+
+        if (showCanvasOnly && showCanvasOnly->isChecked()) {
+            showCanvasOnly->setChecked(false);
+        }
+
+        d->windowStateConfig.writeEntry("ko_geometry", saveGeometry().toBase64());
+        d->windowStateConfig.writeEntry("State", saveState().toBase64());
+
+        if (!d->dockerStateBeforeHiding.isEmpty()) {
+            restoreState(d->dockerStateBeforeHiding);
+        }
+
+        statusBar()->setVisible(true);
+        menuBar()->setVisible(true);
+
+        saveWindowSettings();
+
+    } else {
+        saveMainWindowSettings(d->windowStateConfig);
+    }
+
 }
 
 bool KisMainWindow::restoreWorkspace(const QByteArray &state)
@@ -1559,19 +1586,7 @@ bool KisMainWindow::slotFileCloseAll()
 
 void KisMainWindow::slotFileQuit()
 {
-    if(!slotFileCloseAll())
-        return;
-
-    close();
-
-    Q_FOREACH (QPointer<KisMainWindow> mainWin, KisPart::instance()->mainWindows()) {
-        if (mainWin != this) {
-            if(!mainWin->slotFileCloseAll())
-                return;
-
-            mainWin->close();
-        }
-    }
+    KisPart::instance()->closeSession();
 }
 
 void KisMainWindow::slotFilePrint()
@@ -1739,8 +1754,7 @@ void KisMainWindow::importAnimation()
 
 void KisMainWindow::slotConfigureToolbars()
 {
-    KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
-    saveMainWindowSettings(group);
+    saveWindowState();
     KEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
@@ -1749,7 +1763,7 @@ void KisMainWindow::slotConfigureToolbars()
 
 void KisMainWindow::slotNewToolbarConfig()
 {
-    applyMainWindowSettings(KSharedConfig::openConfig()->group("krita"));
+    applyMainWindowSettings(d->windowStateConfig);
 
     KXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
@@ -1776,8 +1790,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
         }
 
         if (d->activeView && d->activeView->document()) {
-            KConfigGroup group =  KSharedConfig::openConfig()->group("krita");
-            saveMainWindowSettings(group);
+            saveWindowState();
         }
     } else
         warnUI << "slotToolbarToggled : Toolbar " << sender()->objectName() << " not found!";
@@ -1878,7 +1891,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             visible = false;
         }
 
-        KConfigGroup group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
+        KConfigGroup group = d->windowStateConfig.group("DockWidget " + factory->id());
         side = static_cast<Qt::DockWidgetArea>(group.readEntry("DockArea", static_cast<int>(side)));
         if (side == Qt::NoDockWidgetArea) side = Qt::RightDockWidgetArea;
 
@@ -1889,7 +1902,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool collapsed = factory->defaultCollapsed();
 
         bool locked = false;
-        group =  KSharedConfig::openConfig()->group("krita").group("DockWidget " + factory->id());
+        group = d->windowStateConfig.group("DockWidget " + factory->id());
         collapsed = group.readEntry("Collapsed", collapsed);
         locked = group.readEntry("Locked", locked);
 
@@ -2400,6 +2413,9 @@ void KisMainWindow::createActions()
     d->close = actionManager->createAction("file_close");
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
 
+    d->showSessionManager = actionManager->createAction("file_sessions");
+    connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));
+
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 
     for (int i = 0; i < 2; i++) {
@@ -2434,7 +2450,7 @@ void KisMainWindow::initializeGeometry()
 {
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
-    KConfigGroup cfg( KSharedConfig::openConfig(), "MainWindow");
+    KConfigGroup cfg = d->windowStateConfig;
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
         const int scnum = QApplication::desktop()->screenNumber(parentWidget());

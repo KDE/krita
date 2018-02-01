@@ -76,6 +76,19 @@
       <statusTip></statusTip>
     </Action>
 -->
+    <Action name="file_sessions">
+      <icon></icon>
+      <text>Sessions...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Open session manager</toolTip>
+      <iconText>Sessions</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="file_import_file">
       <icon>document-import</icon>
       <text>Open ex&amp;isting Document as Untitled Document...</text>

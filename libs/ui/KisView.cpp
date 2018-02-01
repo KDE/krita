@@ -806,29 +806,29 @@ void KisView::syncLastActiveNodeToDocument()
     }
 }
 
-void KisView::saveViewState(KConfigGroup config) const
+void KisView::saveViewState(KisPropertiesConfiguration &config) const
 {
-    config.writeEntry("file", d->document->url());
-    config.writeEntry("window", mainWindow()->windowStateConfig().name());
+    config.setProperty("file", d->document->url());
+    config.setProperty("window", mainWindow()->windowStateConfig().name());
 
     if (d->subWindow) {
-        config.writeEntry("geometry", d->subWindow->saveGeometry().toBase64());
+        config.setProperty("geometry", d->subWindow->saveGeometry().toBase64());
     }
 
-    config.writeEntry("zoomMode", (int)zoomController()->zoomMode());
-    config.writeEntry("zoom", d->zoomManager.zoom());
+    config.setProperty("zoomMode", (int)zoomController()->zoomMode());
+    config.setProperty("zoom", d->zoomManager.zoom());
     d->canvasController.saveCanvasState(config);
 }
 
-void KisView::restoreViewState(const KConfigGroup &config)
+void KisView::restoreViewState(const KisPropertiesConfiguration &config)
 {
     if (d->subWindow) {
-        QByteArray geometry = config.readEntry("geometry", QByteArray());
+        QByteArray geometry = QByteArray::fromBase64(config.getString("geometry", "").toLatin1());
         d->subWindow->restoreGeometry(QByteArray::fromBase64(geometry));
     }
 
-    qreal zoom = config.readEntry("zoom", 1.0f);
-    int zoomMode = config.readEntry("zoomMode", (int)KoZoomMode::ZOOM_PAGE);
+    qreal zoom = config.getFloat("zoom", 1.0f);
+    int zoomMode = config.getInt("zoomMode", (int)KoZoomMode::ZOOM_PAGE);
     d->zoomManager.zoomController()->setZoom((KoZoomMode::Mode)zoomMode, zoom);
     d->canvasController.restoreCanvasState(config);
 }

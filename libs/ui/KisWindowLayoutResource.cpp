@@ -29,6 +29,7 @@ static const int WINDOW_LAYOUT_VERSION = 1;
 struct KisWindowLayoutResource::Private
 {
     struct Window {
+        QUuid windowId;
         QByteArray geometry;
         QByteArray windowState;
     };
@@ -44,34 +45,69 @@ struct KisWindowLayoutResource::Private
     void openNecessaryWindows(QList<QPointer<KisMainWindow>> &currentWindows) {
         auto *kisPart = KisPart::instance();
 
-        while (currentWindows.length() < windows.length()) {
-            KisMainWindow *window = kisPart->createMainWindow();
-            currentWindows.append(window);
-            window->show();
+        Q_FOREACH(const Window &window, windows) {
+            bool isOpen = false;
+            Q_FOREACH(QPointer<KisMainWindow> mainWindow, currentWindows) {
+                if (mainWindow->id() == window.windowId) {
+                    isOpen = true;
+                    break;
+                }
+            }
+
+            if (!isOpen) {
+                KisMainWindow *mainWindow = kisPart->createMainWindow(window.windowId);
+                currentWindows.append(mainWindow);
+                mainWindow->show();
+            }
         }
     }
 
     void closeUnneededWindows(QList<QPointer<KisMainWindow>> &currentWindows) {
-        if (currentWindows.length() <= windows.length()) return;
+        QVector<QPointer<KisMainWindow>> windowsToClose;
 
-        migrateViewsFromClosingWindows(currentWindows);
+        Q_FOREACH(KisMainWindow *mainWindow, currentWindows) {
+            bool keep = false;
+            Q_FOREACH(const Window &window, windows) {
+                if (window.windowId == mainWindow->id()) {
+                    keep = true;
+                    break;
+                }
+            }
 
-        while (currentWindows.length() > windows.length()) {
-            KisMainWindow *window = currentWindows.takeLast();
-            window->close();
+            if (!keep) {
+                windowsToClose.append(mainWindow);
+            }
+        }
+
+        migrateViewsFromClosingWindows(windowsToClose);
+
+        Q_FOREACH(QPointer<KisMainWindow> mainWindow, windowsToClose) {
+            mainWindow->close();
         }
     }
 
-    void migrateViewsFromClosingWindows(QList<QPointer<KisMainWindow>> &currentWindows) const
+    void migrateViewsFromClosingWindows(QVector<QPointer<KisMainWindow>> &closingWindows) const
     {
         auto *kisPart = KisPart::instance();
+        KisMainWindow *migrationTarget = nullptr;
+
+        Q_FOREACH(KisMainWindow *mainWindow, kisPart->mainWindows()) {
+            if (!closingWindows.contains(mainWindow)) {
+                migrationTarget = mainWindow;
+                break;
+            }
+        }
+
+        if (!migrationTarget) {
+            qWarning() << "Problem: window layout with no windows would leave user with zero main windows.";
+            migrationTarget = closingWindows.takeLast();
+            migrationTarget->show();
+        }
 
         QVector<KisDocument*> visibleDocuments;
         Q_FOREACH(KisView *view, kisPart->views()) {
             KisMainWindow *window = view->mainWindow();
-            int index = currentWindows.indexOf(window);
-
-            if (index >= 0 && index < windows.length()) {
+            if (!closingWindows.contains(window)) {
                 visibleDocuments.append(view->document());
             }
         }
@@ -79,7 +115,7 @@ struct KisWindowLayoutResource::Private
         Q_FOREACH(KisDocument *document, kisPart->documents()) {
             if (!visibleDocuments.contains(document)) {
                 visibleDocuments.append(document);
-                currentWindows.first()->newView(document);
+                migrationTarget->newView(document);
             }
         }
     }
@@ -90,35 +126,20 @@ KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename)
     , d(new Private)
 {}
 
-KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename, KisWindowLayoutResource::Private *d)
-    : KoResource(filename)
-    , d(d)
-{}
-
 KisWindowLayoutResource::~KisWindowLayoutResource()
 {}
 
 KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows)
 {
-    QVector<Private::Window> windows;
-
-    Q_FOREACH(auto window, mainWindows) {
-        Private::Window state;
-        state.geometry = window->saveGeometry();
-        state.windowState = window->saveState();
-
-        windows.append(state);
-    }
-
-    return new KisWindowLayoutResource(filename, new Private(windows));
+    auto resource = new KisWindowLayoutResource(filename);
+    resource->setWindows(mainWindows);
+    return resource;
 }
 
 void KisWindowLayoutResource::applyLayout()
 {
     KisPart *kisPart = KisPart::instance();
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
-
-    // TODO? map the open windows to ones saved... somehow
 
     d->openNecessaryWindows(currentWindows);
 
@@ -168,18 +189,7 @@ bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
     root.setAttribute("name", name());
     root.setAttribute("version", WINDOW_LAYOUT_VERSION);
 
-    Q_FOREACH(const auto &window, d->windows) {
-        QDomElement elem = doc.createElement("window");
-
-        QDomElement geometry = doc.createElement("geometry");
-        geometry.appendChild(doc.createCDATASection(window.geometry.toBase64()));
-        elem.appendChild(geometry);
-
-        QDomElement state = doc.createElement("windowState");
-        state.appendChild(doc.createCDATASection(window.windowState.toBase64()));
-        elem.appendChild(state);
-        root.appendChild(elem);
-    }
+    saveXml(doc, root);
 
     doc.appendChild(root);
 
@@ -204,11 +214,41 @@ bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
 
     d->windows.clear();
 
+    loadXml(element);
+
+    setValid(true);
+    return true;
+}
+
+void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) const
+{
+    Q_FOREACH(const auto &window, d->windows) {
+        QDomElement elem = doc.createElement("window");
+        elem.setAttribute("id", window.windowId.toString());
+
+        QDomElement geometry = doc.createElement("geometry");
+        geometry.appendChild(doc.createCDATASection(window.geometry.toBase64()));
+        elem.appendChild(geometry);
+
+        QDomElement state = doc.createElement("windowState");
+        state.appendChild(doc.createCDATASection(window.windowState.toBase64()));
+        elem.appendChild(state);
+        root.appendChild(elem);
+    }
+}
+
+void KisWindowLayoutResource::loadXml(const QDomElement &element) const
+{
     for (auto windowElement = element.firstChildElement("window");
          !windowElement.isNull();
-         windowElement = windowElement.nextSiblingElement()) {
+         windowElement = windowElement.nextSiblingElement("window")) {
 
         Private::Window window;
+
+        window.windowId = QUuid(windowElement.attribute("id", QUuid().toString()));
+        if (window.windowId.isNull()) {
+            window.windowId = QUuid::createUuid();
+        }
 
         QDomElement geometry = windowElement.firstChildElement("geometry");
         QDomElement state = windowElement.firstChildElement("windowState");
@@ -218,14 +258,25 @@ bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
 
         d->windows.append(window);
     }
-
-    setValid(true);
-    return true;
 }
 
 QString KisWindowLayoutResource::defaultFileExtension() const
 {
     return QString(".kwl");
+}
+
+void KisWindowLayoutResource::setWindows(const QList<QPointer<KisMainWindow>> &mainWindows)
+{
+    d->windows.clear();
+
+    Q_FOREACH(auto window, mainWindows) {
+        Private::Window state;
+        state.windowId = window->id();
+        state.geometry = window->saveGeometry();
+        state.windowState = window->saveState();
+
+        d->windows.append(state);
+    }
 }
 
 

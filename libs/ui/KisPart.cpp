@@ -57,6 +57,7 @@
 #include <QDomElement>
 #include <QGlobalStatic>
 #include <KisMimeDatabase.h>
+#include <dialogs/KisSessionManagerDialog.h>
 
 #include "KisView.h"
 #include "KisDocument.h"
@@ -78,6 +79,7 @@
 
 #include "kis_action.h"
 #include "kis_action_registry.h"
+#include "KisSessionResource.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -108,7 +110,9 @@ public:
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
 
+    KisSessionResource *currentSession = nullptr;
     bool closingSession{false};
+    QScopedPointer<KisSessionManagerDialog> sessionManager;
 
     bool queryCloseDocument(KisDocument *document) {
         Q_FOREACH(auto view, views) {
@@ -118,60 +122,6 @@ public:
         }
 
         return false;
-    }
-
-    QMap<QString, KisMainWindow*> restoreWindows(const KConfigGroup &session) {
-        QStringList openWindows = session.readEntry("openWindows", QStringList());
-
-        QMap<QString, KisMainWindow*> windows;
-
-        if (!openWindows.isEmpty()) {
-            Q_FOREACH(auto windowConfigGroup, openWindows) {
-                 KisMainWindow *window = part->createMainWindow(session.group(windowConfigGroup));
-                 window->initializeGeometry();
-                 window->show();
-
-                 windows.insert(windowConfigGroup, window);
-            }
-
-            QString activeWindowId = session.readEntry("activeWindow", QString());
-            auto activeWindow = windows.value(activeWindowId);
-            if (activeWindow) {
-                activeWindow->activateWindow();
-            }
-        }
-
-        return windows;
-    }
-
-    void restoreViews(const KConfigGroup &session, const QMap<QString, KisMainWindow*> windows) {
-        QMap<QUrl, KisDocument*> documents;
-
-        Q_FOREACH(auto viewCfgGroup, session.readEntry("openViews", QStringList())) {
-            KConfigGroup viewConfig = session.group(viewCfgGroup);
-            QUrl url = viewConfig.readEntry("file", QUrl());
-            QString windowId = viewConfig.readEntry("window", QString());
-
-            KisMainWindow *window = windows.value(windowId);
-
-            if (!window) {
-                qDebug() << "Warning: configuration file contains inconsistent session data.";
-            } else {
-                auto document = documents.value(url);
-
-                if (!document) {
-                    document = part->createDocument();
-                    part->addDocument(document);
-                    documents.insert(url, document);
-
-                    bool ok = document->openUrl(url);
-                    // TODO: warn if failing to re-open document
-                }
-
-                KisView *view = window->addViewAndNotifyLoadingCompleted(document);
-                view->restoreViewState(viewConfig);
-            }
-        }
     }
 };
 
@@ -271,26 +221,9 @@ void KisPart::removeDocument(KisDocument *document)
     document->deleteLater();
 }
 
-KisMainWindow *KisPart::createMainWindow(KConfigGroup stateConfig)
+KisMainWindow *KisPart::createMainWindow(QUuid id)
 {
-    if (!stateConfig.isValid()) {
-        // Fall back to default or legacy configuration
-
-        KSharedConfig::Ptr cfg = KSharedConfig::openConfig();
-
-        QString id = QUuid::createUuid().toString();
-        stateConfig = cfg->group("session").group(QString("window ") + id);
-
-        if (cfg->hasGroup("MainWindow")) {
-            cfg->group("MainWindow").copyTo(&stateConfig);
-        }
-
-        if (cfg->hasGroup("krita")) {
-            cfg->group("krita").copyTo(&stateConfig);
-        }
-    }
-
-    KisMainWindow *mw = new KisMainWindow(stateConfig);
+    KisMainWindow *mw = new KisMainWindow(id);
     Q_FOREACH(KisAction *action, d->scriptActions) {
         mw->viewManager()->scriptManager()->addAction(action);
     }
@@ -394,59 +327,6 @@ int KisPart::viewCount(KisDocument *doc) const
     }
 }
 
-void KisPart::saveSession()
-{
-    KConfigGroup session = KSharedConfig::openConfig()->group("session");
-
-    // Clean up any previous session data
-    session.deleteGroup();
-
-    QStringList openWindows;
-    QStringList openViews;
-    QString activeWindow;
-
-    if (!d->mainWindows.isEmpty()) {
-        Q_FOREACH(auto window, d->mainWindows) {
-            window->saveWindowState(true);
-            openWindows.append(window->windowStateConfig().name());
-        }
-
-        activeWindow = currentMainwindow()->windowStateConfig().name();
-
-        int nextViewId = 1;
-        Q_FOREACH(auto view, d->views) {
-            QString viewId = QString("view ") + QString::number(nextViewId++);
-            view->saveViewState(session.group(viewId));
-            openViews.append(viewId);
-        }
-    }
-
-    session.writeEntry("openWindows", openWindows);
-    session.writeEntry("openViews", openViews);
-    session.writeEntry("activeWindow", activeWindow);
-}
-
-void KisPart::restoreSession()
-{
-    auto cfg = KSharedConfig::openConfig();
-    if (cfg->hasGroup("session")) {
-        KConfigGroup session = cfg->group("session");
-
-        QMap<QString, KisMainWindow*> windows = d->restoreWindows(session);
-
-        KisConfig cfg;
-        if (cfg.restoreDocumentsOnStartup()) {
-            d->restoreViews(session, windows);
-        }
-    }
-
-    if (d->mainWindows.isEmpty()) {
-        KisMainWindow *window = createMainWindow();
-        window->initializeGeometry();
-        window->show();
-    }
-}
-
 bool KisPart::closingSession() const
 {
     return d->closingSession;
@@ -458,16 +338,24 @@ bool KisPart::closeSession()
 
     Q_FOREACH(auto document, d->documents) {
         if (!d->queryCloseDocument(document.data())) {
+            d->closingSession = false;
             return false;
         }
     }
 
-    saveSession();
+    if (d->currentSession) {
+        d->currentSession->storeCurrentWindows();
+        d->currentSession->save();
+
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
+        cfg.writeEntry("previousSession", d->currentSession->name());
+    }
 
     Q_FOREACH (auto window, d->mainWindows) {
         window->close();
     }
 
+    d->closingSession = false;
     return true;
 }
 
@@ -637,3 +525,39 @@ KisInputManager* KisPart::currentInputManager()
     return manager ? manager->inputManager() : 0;
 }
 
+void KisPart::showSessionManager()
+{
+    if (d->sessionManager.isNull()) {
+        d->sessionManager.reset(new KisSessionManagerDialog());
+    }
+
+    d->sessionManager->show();
+}
+
+void KisPart::startBlankSession()
+{
+    KisMainWindow *window = createMainWindow();
+    window->initializeGeometry();
+    window->show();
+
+}
+
+bool KisPart::restorePreviousSession()
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
+    const QString &sessionName = cfg.readEntry("previousSession");
+    if (sessionName.isNull()) return false;
+
+    KoResourceServer<KisSessionResource> * rserver = KisResourceServerProvider::instance()->sessionServer();
+    auto *session = rserver->resourceByName(sessionName);
+    if (!session || !session->valid()) return false;
+
+    session->restore();
+
+    return true;
+}
+
+void KisPart::setCurrentSession(KisSessionResource *session)
+{
+    d->currentSession = session;
+}

@@ -40,6 +40,7 @@
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
 #include <KisWindowLayoutResource.h>
+#include <KisSessionResource.h>
 
 #include <kis_psd_layer_style_resource.h>
 
@@ -83,13 +84,19 @@ KisResourceServerProvider::KisResourceServerProvider()
 //        m_workspaceThread->barrier();
 //    }
 
-    m_windowLayoutServer= new KoResourceServerSimpleConstruction<KisWindowLayoutResource>("kis_windowlayouts", "*.kwl");
+    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>("kis_windowlayouts", "*.kwl");
     if (!QFileInfo(m_windowLayoutServer->saveLocation()).exists()) {
         QDir().mkpath(m_windowLayoutServer->saveLocation());
     }
     m_windowLayoutThread = new KoResourceLoaderThread(m_windowLayoutServer);
     m_windowLayoutThread->loadSynchronously();
 
+    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>("kis_sessions", "*.ksn");
+    if (!QFileInfo(m_sessionServer->saveLocation()).exists()) {
+        QDir().mkpath(m_sessionServer->saveLocation());
+    }
+    m_sessionThread = new KoResourceLoaderThread(m_sessionServer);
+    m_sessionThread->loadSynchronously();
 
     m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
     if (!QFileInfo(m_layerStyleCollectionServer->saveLocation()).exists()) {
@@ -112,10 +119,12 @@ KisResourceServerProvider::~KisResourceServerProvider()
     delete m_paintOpPresetThread;
     delete m_workspaceThread;
     delete m_windowLayoutThread;
+    delete m_sessionThread;
     delete m_layerStyleCollectionThread;
 
     delete m_paintOpPresetServer;
     delete m_workspaceServer;
+    delete m_sessionServer;
     delete m_windowLayoutServer;
     delete m_layerStyleCollectionServer;
 }
@@ -160,6 +169,12 @@ KoResourceServer< KisWindowLayoutResource >* KisResourceServerProvider::windowLa
 {
     if (block) m_windowLayoutThread->barrier();
     return m_windowLayoutServer;
+}
+
+KoResourceServer< KisSessionResource >* KisResourceServerProvider::sessionServer(bool block)
+{
+    if (block) m_sessionThread->barrier();
+    return m_sessionServer;
 }
 
 KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer(bool block)

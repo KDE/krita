@@ -50,8 +50,8 @@ public:
     bool wrapAroundMode() const;
     bool levelOfDetailMode() const;
 
-    void saveCanvasState(KConfigGroup config) const;
-    void restoreCanvasState(const KConfigGroup &config);
+    void saveCanvasState(KisPropertiesConfiguration &config) const;
+    void restoreCanvasState(const KisPropertiesConfiguration &config);
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);

@@ -172,8 +172,9 @@ public:
 class Q_DECL_HIDDEN KisMainWindow::Private
 {
 public:
-    Private(KisMainWindow *parent)
+    Private(KisMainWindow *parent, QUuid id)
         : q(parent)
+        , id(id)
         , dockWidgetMenu(new KActionMenu(i18nc("@action:inmenu", "&Dockers"), parent))
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
@@ -182,6 +183,7 @@ public:
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
+        if (id.isNull()) this->id = QUuid::createUuid();
         mdiArea->setTabsMovable(true);
     }
 
@@ -190,6 +192,8 @@ public:
     }
 
     KisMainWindow *q {0};
+    QUuid id;
+
     KisViewManager *viewManager {0};
 
     QPointer<KisView> activeView;
@@ -222,6 +226,7 @@ public:
     KisAction *toggleDockers {0};
     KisAction *toggleDockerTitleBars {0};
     KisAction *fullScreenMode {0};
+    KisAction *showSessionManager {0};
 
     KisAction *expandingSpacers[2];
 
@@ -272,9 +277,9 @@ public:
     }
 };
 
-KisMainWindow::KisMainWindow(KConfigGroup windowStateConfig)
+KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
-    , d(new Private(this))
+    , d(new Private(this, uuid))
 {
     auto rserver = KisResourceServerProvider::instance()->workspaceServer(false);
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
@@ -287,7 +292,7 @@ KisMainWindow::KisMainWindow(KConfigGroup windowStateConfig)
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
     d->themeManager = new Digikam::ThemeManager(group.readEntry("Theme", "Krita dark"), this);
 
-    d->windowStateConfig = windowStateConfig;
+    d->windowStateConfig = KSharedConfig::openConfig()->group("MainWindow");
 
     setAcceptDrops(true);
     setStandardToolBarMenuEnabled(true);
@@ -517,6 +522,10 @@ KisMainWindow::~KisMainWindow()
     delete d->viewManager;
     delete d;
 
+}
+
+QUuid KisMainWindow::id() const {
+    return d->id;
 }
 
 void KisMainWindow::addView(KisView *view)
@@ -1451,6 +1460,10 @@ void KisMainWindow::slotExportFile()
     if (saveDocument(d->activeView->document(), true, true)) {
         emit documentSaved();
     }
+}
+
+void KisMainWindow::slotShowSessionManager() {
+    KisPart::instance()->showSessionManager();
 }
 
 KoCanvasResourceManager *KisMainWindow::resourceManager() const
@@ -2399,6 +2412,9 @@ void KisMainWindow::createActions()
 
     d->close = actionManager->createAction("file_close");
     connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+
+    d->showSessionManager = actionManager->createAction("file_sessions");
+    connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));
 
     actionManager->createStandardAction(KStandardAction::Preferences, this, SLOT(slotPreferences()));
 

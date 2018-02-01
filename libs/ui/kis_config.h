@@ -251,8 +251,13 @@ public:
     bool hideSplashScreen(bool defaultValue = false) const;
     void setHideSplashScreen(bool hideSplashScreen) const;
 
-    bool restoreDocumentsOnStartup(bool defaultValue = false) const;
-    void setRestoreDocumentsOnStartup(bool restoreDocuments) const;
+    enum SessionOnStartup {
+        SOS_BlankSession,
+        SOS_PreviousSession,
+        SOS_ShowSessionManager
+    };
+    SessionOnStartup sessionOnStartup(bool defaultValue = false) const;
+    void setSessionOnStartup(SessionOnStartup value);
 
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;

@@ -58,7 +58,7 @@ public:
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
 
-        mainWindow = new KisMainWindow(KSharedConfig::openConfig()->group("krita"));
+        mainWindow = new KisMainWindow();
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
         view = new KisViewManager(mainWindow, mainWindow->actionCollection());
 

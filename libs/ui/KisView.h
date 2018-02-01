@@ -217,8 +217,8 @@ public:
 
     void syncLastActiveNodeToDocument();
 
-    void saveViewState(KConfigGroup config) const;
-    void restoreViewState(const KConfigGroup &config);
+    void saveViewState(KisPropertiesConfiguration &config) const;
+    void restoreViewState(const KisPropertiesConfiguration &config);
 
 public Q_SLOTS:
 

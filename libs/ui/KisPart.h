@@ -27,6 +27,7 @@
 #include <QList>
 #include <QPointer>
 #include <QUrl>
+#include <QUuid>
 
 #include "kritaui_export.h"
 #include <KConfigCore/kconfiggroup.h>
@@ -42,6 +43,7 @@ class KisView;
 class KisDocument;
 class KisIdleWatcher;
 class KisAnimationCachePopulator;
+class KisSessionResource;
 
 /**
  * KisPart is the Great Deku Tree of Krita.
@@ -110,7 +112,7 @@ public:
     /**
      * Create a new main window.
      */
-    KisMainWindow *createMainWindow(KConfigGroup stateConfig = KConfigGroup());
+    KisMainWindow *createMainWindow(QUuid id = QUuid());
 
     /**
      * Removes a main window from the list of managed windows.
@@ -245,15 +247,16 @@ public:
 
     //------------------ Session management ------------------
 
-    /**
-     * Serializes the current session into configuration.
-     */
-    void saveSession();
+    void showSessionManager();
+
+    void startBlankSession();
 
     /**
      * Restores previous session saved in configuration.
      */
-    void restoreSession();
+    bool restorePreviousSession();
+
+    void setCurrentSession(KisSessionResource *session);
 
     /**
      * Attempts to save the session and close all windows.

@@ -329,26 +329,31 @@ bool KisCanvasController::levelOfDetailMode() const
     return kritaCanvas->lodAllowedInCanvas();
 }
 
-void KisCanvasController::saveCanvasState(KConfigGroup config) const
+void KisCanvasController::saveCanvasState(KisPropertiesConfiguration &config) const
 {
-    config.writeEntry("pan", preferredCenter());
-    config.writeEntry("rotation", rotation());
-    config.writeEntry("mirror", m_d->coordinatesConverter->xAxisMirrored());
-    config.writeEntry("wrapAround", wrapAroundMode());
-    config.writeEntry("enableInstantPreview", levelOfDetailMode());
+    const QPointF &center = preferredCenter();
+    config.setProperty("panX", center.x());
+    config.setProperty("panY", center.y());
+
+    config.setProperty("rotation", rotation());
+    config.setProperty("mirror", m_d->coordinatesConverter->xAxisMirrored());
+    config.setProperty("wrapAround", wrapAroundMode());
+    config.setProperty("enableInstantPreview", levelOfDetailMode());
 }
 
-void KisCanvasController::restoreCanvasState(const KConfigGroup &config)
+void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &config)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kritaCanvas);
 
-    mirrorCanvas(config.readEntry("mirror", false));
-    rotateCanvas(config.readEntry("rotation", 0.0f));
+    mirrorCanvas(config.getBool("mirror", false));
+    rotateCanvas(config.getFloat("rotation", 0.0f));
 
-    QPointF pan = config.readEntry("pan", preferredCenter());
-    setPreferredCenter(pan);
+    const QPointF &center = preferredCenter();
+    float panX = config.getFloat("panX", center.x());
+    float panY = config.getFloat("panY", center.y());
+    setPreferredCenter(QPointF(panX, panY));
 
-    slotToggleWrapAroundMode(config.readEntry("wrapAround", false));
-    kritaCanvas->setLodAllowedInCanvas(config.readEntry("enableInstantPreview", false));
+    slotToggleWrapAroundMode(config.getBool("wrapAround", false));
+    kritaCanvas->setLodAllowedInCanvas(config.getBool("enableInstantPreview", false));
 }

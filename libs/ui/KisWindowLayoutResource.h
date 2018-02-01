@@ -40,11 +40,17 @@ public:
 
     QString defaultFileExtension() const override;
 
+protected:
+    void setWindows(const QList<QPointer<KisMainWindow>> &mainWindows);
+
+    virtual void saveXml(QDomDocument &doc, QDomElement &root) const;
+
+    virtual void loadXml(const QDomElement &root) const;
+
 private:
     struct Private;
-    QScopedPointer<Private> d;
 
-    KisWindowLayoutResource(const QString &filename, Private *d);
+    QScopedPointer<Private> d;
 };
 
 #endif

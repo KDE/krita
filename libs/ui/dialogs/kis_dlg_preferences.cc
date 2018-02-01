@@ -60,7 +60,7 @@
 #include <kundo2stack.h>
 #include <KoResourcePaths.h>
 #include "kis_action_registry.h"
-
+#include <kis_image.h>
 #include <squeezedcombobox.h>
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"

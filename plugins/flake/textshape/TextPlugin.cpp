@@ -18,13 +18,10 @@
  */
 #include "TextPlugin.h"
 #include "TextToolFactory.h"
-#include "ReferencesToolFactory.h"
-#include "ReviewToolFactory.h"
 #ifdef CREATE_TEXTDOCUMENT_INSPECTOR
 #include "TextDocumentInspectionPlugin.h"
 #endif
 #include "TextShapeFactory.h"
-#include "AnnotationTextShapeFactory.h"
 
 #include <KoShapeRegistry.h>
 #include <KoDockRegistry.h>
@@ -42,10 +39,7 @@ TextPlugin::TextPlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     //KoToolRegistry::instance()->add(new TextToolFactory());
-    //KoToolRegistry::instance()->add(new ReviewToolFactory());
-    //KoToolRegistry::instance()->add(new ReferencesToolFactory());
     KoShapeRegistry::instance()->add(new TextShapeFactory());
-    //KoShapeRegistry::instance()->add(new AnnotationTextShapeFactory());
 }
 
 #include <TextPlugin.moc>

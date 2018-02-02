@@ -104,8 +104,6 @@
 #include <QDropEvent>
 #include <QMimeData>
 
-#include "AnnotationTextShape.h"
-#define AnnotationShape_SHAPEID "AnnotationTextShapeID"
 #include "KoShapeBasedDocumentBase.h"
 #include <KoAnnotation.h>
 #include <KoShapeRegistry.h>
@@ -1847,7 +1845,7 @@ void TextTool::keyReleaseEvent(QKeyEvent *event)
 
 void TextTool::updateActions()
 {
-    bool notInAnnotation = !dynamic_cast<AnnotationTextShape *>(m_textShape);
+    bool notInAnnotation = true; // no annotation shape anymore!
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0) {
         return;
@@ -3135,30 +3133,5 @@ void TextTool::setListLevel(int level)
 
 void TextTool::insertAnnotation()
 {
-    AnnotationTextShape *shape = (AnnotationTextShape *)KoShapeRegistry::instance()->value(AnnotationShape_SHAPEID)->createDefaultShape(canvas()->shapeController()->resourceManager());
-    textEditor()->addAnnotation(shape);
-
-    // Set annotation creator.
-    KConfig cfg("kritarc");
-    cfg.reparseConfiguration();
-    KConfigGroup authorGroup(&cfg, "Author");
-    QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    KSharedConfig::openConfig()->reparseConfiguration();
-    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
-    QString profile = appAuthorGroup.readEntry("active-profile", "");
-    KConfigGroup cgs(&authorGroup, "Author-" + profile);
-
-    if (profiles.contains(profile)) {
-        KConfigGroup cgs(&authorGroup, "Author-" + profile);
-        shape->setCreator(cgs.readEntry("creator"));
-    } else {
-        if (profile == "anonymous") {
-            shape->setCreator("Anonymous");
-        } else {
-            KUser user(KUser::UseRealUserID);
-            shape->setCreator(user.property(KUser::FullName).toString());
-        }
-    }
-    // Set Annotation creation date.
-    shape->setDate(QDate::currentDate().toString(Qt::ISODate));
+    // no annotations anymore, sorry :(
 }

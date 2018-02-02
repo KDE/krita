@@ -29,22 +29,10 @@ set ( textshape_SRCS
     TextToolFactory.cpp
     ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
-    AnnotationTextShape.cpp
-    AnnotationTextShapeFactory.cpp
 
-    ChangeTracker.cpp
-    ReviewTool.cpp
-    ReviewToolFactory.cpp
-    TextChanges.cpp
-    TextChange.cpp
     FontSizeAction.cpp
     FontFamilyAction.cpp
 
-    ReferencesTool.cpp
-    ReferencesToolFactory.cpp
-
-#    dialogs/StylesWidget.cpp
-#    dialogs/SpecialButton.cpp
     dialogs/StylesCombo.cpp
     dialogs/StylesComboPreview.cpp
     dialogs/DockerStylesComboModel.cpp
@@ -52,16 +40,6 @@ set ( textshape_SRCS
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/SimpleInsertWidget.cpp
-    dialogs/LinkInsertionDialog.cpp
-    dialogs/SimpleTableOfContentsWidget.cpp
-    dialogs/SimpleCitationBibliographyWidget.cpp
-    dialogs/SimpleLinksWidget.cpp
-    dialogs/SimpleSpellCheckingWidget.cpp
-    dialogs/CitationInsertionDialog.cpp
-    dialogs/InsertBibliographyDialog.cpp
-    dialogs/SimpleFootEndNotesWidget.cpp
-    dialogs/NotesConfigurationDialog.cpp
-    dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
     dialogs/ParagraphDecorations.cpp
@@ -106,8 +84,6 @@ set ( textshape_SRCS
     dialogs/BibliographyTemplate.cpp
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
-    dialogs/SimpleAnnotationWidget.cpp
-    dialogs/ManageBookmarkDialog.cpp
     dialogs/SectionFormatDialog.cpp
     dialogs/SectionsSplitDialog.cpp
 
@@ -123,15 +99,6 @@ ki18n_wrap_ui(textshape_SRCS
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
     dialogs/SimpleInsertWidget.ui
-    dialogs/SimpleTableOfContentsWidget.ui
-    dialogs/SimpleCitationBibliographyWidget.ui
-    dialogs/SimpleSpellCheckingWidget.ui
-    dialogs/CitationInsertionDialog.ui
-    dialogs/InsertBibliographyDialog.ui
-    dialogs/SimpleFootEndNotesWidget.ui
-    dialogs/NotesConfigurationDialog.ui
-    dialogs/SimpleCaptionsWidget.ui
-    dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui
     dialogs/ParagraphDecorations.ui
@@ -144,9 +111,7 @@ ki18n_wrap_ui(textshape_SRCS
     dialogs/TableDialog.ui
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
-    dialogs/SimpleLinksWidget.ui
     dialogs/TableOfContentsStyleConfigure.ui
-    dialogs/SimpleAnnotationWidget.ui
 
 
     dialogs/FontDecorations.ui
@@ -154,8 +119,6 @@ ki18n_wrap_ui(textshape_SRCS
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
-    dialogs/LinkInsertionDialog.ui
-    dialogs/ManageBookmark.ui
     dialogs/SectionFormatDialog.ui
     dialogs/SectionsSplitDialog.ui
 

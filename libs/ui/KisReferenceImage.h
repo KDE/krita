@@ -41,7 +41,7 @@ class KisCanvas2;
 class KRITAUI_EXPORT KisReferenceImage : public KoTosContainer
 {
 public:
-    struct SetSaturationCommand : public KUndo2Command {
+    struct KRITAUI_EXPORT SetSaturationCommand : public KUndo2Command {
         QVector<KisReferenceImage*> images;
         QVector<qreal> oldSaturations;
         qreal newSaturation;

@@ -126,6 +126,10 @@ private:
     QList<T> m_selection;
 };
 
-using KisShapePropertySlider = KisSelectionPropertySlider<KoShape*>;
+class KRITAUI_EXPORT KisShapePropertySlider : public KisSelectionPropertySlider<KoShape*>
+{
+public:
+    KisShapePropertySlider(QWidget* parent=0);
+};
 
 #endif

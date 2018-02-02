@@ -83,3 +83,7 @@ void KisSelectionPropertySliderBase::setSelectionValue(qreal commonValue, bool m
         setPrefix(m_d->normalPrefix);
     }
 }
+
+KisShapePropertySlider::KisShapePropertySlider(QWidget *parent)
+    : KisSelectionPropertySlider<KoShape*>::KisSelectionPropertySlider(parent)
+{}

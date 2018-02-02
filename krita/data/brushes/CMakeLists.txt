@@ -18,10 +18,7 @@ A_sparkle3.gbr
 A_splat2.gih
 A_starfield2.gbr
 A_wall-texture.gih
-cazu-chalk.gbr
-cazu-reptile.gbr
-cazu-smear-paint.gbr
-cazu-spines.gbr
+chalk.gbr
 double_special6.gih
 dub1.gbr
 dub6.gbr
@@ -42,9 +39,12 @@ Rect_textured3.gih
 round_textured1.gbr
 R_Rake2.gbr
 R_Rake4.gbr
+reptile.gbr
 rock2.gbr
 S_splats_02.gih
 scribbles.gbr
+spines.gbr
+smear_paint.gbr
 texture51.gbr
 w_hearts.gih
 watercolor-animated.gih

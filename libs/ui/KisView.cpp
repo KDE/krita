@@ -1024,3 +1024,8 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGUI();
 }
+
+void KisView::closeView()
+{
+    d->subWindow->close();
+}

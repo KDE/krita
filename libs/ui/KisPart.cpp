@@ -332,7 +332,7 @@ bool KisPart::closingSession() const
     return d->closingSession;
 }
 
-bool KisPart::closeSession()
+bool KisPart::closeSession(bool keepWindows)
 {
     d->closingSession = true;
 
@@ -349,10 +349,19 @@ bool KisPart::closeSession()
 
         KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
         cfg.writeEntry("previousSession", d->currentSession->name());
+
+        d->currentSession = nullptr;
     }
 
-    Q_FOREACH (auto window, d->mainWindows) {
-        window->close();
+
+    if (!keepWindows) {
+        Q_FOREACH (auto window, d->mainWindows) {
+            window->close();
+        }
+
+        if (d->sessionManager) {
+            d->sessionManager->close();
+        }
     }
 
     d->closingSession = false;
@@ -532,6 +541,7 @@ void KisPart::showSessionManager()
     }
 
     d->sessionManager->show();
+    d->sessionManager->activateWindow();
 }
 
 void KisPart::startBlankSession()

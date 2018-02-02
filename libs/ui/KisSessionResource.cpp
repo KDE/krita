@@ -59,6 +59,14 @@ void KisSessionResource::restore()
 
     QMap<QUrl, KisDocument *> documents;
 
+    // Find documents which are already open so we don't need to reload them
+    QList<QPointer<KisView>> oldViews = kisPart->views();
+    Q_FOREACH(const QPointer<KisView> view, oldViews) {
+        KisDocument *document = view->document();
+        const QUrl url = document->url();
+        documents.insert(url, document);
+    }
+
     Q_FOREACH(auto &viewData, d->views) {
         QUrl url = viewData.file;
 
@@ -81,6 +89,10 @@ void KisSessionResource::restore()
             KisView *view = window->newView(document);
             view->restoreViewState(viewData.viewConfig);
         }
+    }
+
+    Q_FOREACH(QPointer<KisView> view, oldViews) {
+        view->closeView();
     }
 
     kisPart->setCurrentSession(this);

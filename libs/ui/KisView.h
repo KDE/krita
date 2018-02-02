@@ -150,6 +150,8 @@ public:
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
 
+    void closeView();
+
 public:
 
     /**

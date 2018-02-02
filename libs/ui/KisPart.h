@@ -263,7 +263,7 @@ public:
      * This may involve asking the user to save open files.
      * @return false, if closing was cancelled by the user
      */
-    bool closeSession();
+    bool closeSession(bool keepWindows = false);
 
     /**
      * Are we in the process of closing the application through closeSession().

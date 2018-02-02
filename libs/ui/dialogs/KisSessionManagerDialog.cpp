@@ -101,8 +101,10 @@ void KisSessionManagerDialog::slotSwitchSession()
     KisSessionResource *session = getSelectedSession();
 
     if (session) {
-        KisPart::instance()->closeSession();
-        session->restore();
+        bool closed = KisPart::instance()->closeSession(true);
+        if (closed) {
+            session->restore();
+        }
     }
 }
 

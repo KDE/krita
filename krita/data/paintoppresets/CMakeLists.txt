@@ -36,10 +36,12 @@ Fill_Shape.kpp
 FX_Glow_Add.kpp
 FX_Image_Blur.kpp
 FX_Image_Sharpen.kpp
+FX_Pixelize.kpp
 FX_Smoke_Particles.kpp
 FX_Starfield.kpp
 FX_Value_Burn.kpp
 FX_Value_Dodge.kpp
+Ink_Bristle.kpp
 Ink_Brush.kpp
 Ink_Brush_Rough.kpp
 Ink_Fineliner.kpp
@@ -71,6 +73,7 @@ Waterpaint_Soft_Edges.kpp
 Waterpaint_Soft.kpp
 Wet_Bristles.kpp
 Wet_Bristles_Rough.kpp
+Wet_Bristles_Square.kpp
 Wet_Circle.kpp
 Wet_Soft_Tilted.kpp
 Wet_Smear.kpp

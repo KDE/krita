@@ -63,8 +63,8 @@
 
 #include <QDebug>
 
+#include <KoShapeContainer_p.h>
 #include "kis_painting_tweaks.h"
-
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager)
     : KoShapeContainer(new KoTextShapeContainerModel())
@@ -89,8 +89,38 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
     QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
 }
 
+TextShape::TextShape(const TextShape &rhs)
+    : KoShapeContainer(new KoShapeContainerPrivate(*reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr), this)),
+      KoFrameShape(rhs),
+      m_textShapeData(dynamic_cast<KoTextShapeData*>(rhs.m_textShapeData->clone())),
+      m_pageProvider(0),
+      m_imageCollection(0),
+      m_clip(rhs.m_clip)
+{
+    reinterpret_cast<KoShapeContainerPrivate*>(rhs.d_ptr)->model = new KoTextShapeContainerModel();
+
+    setShapeId(TextShape_SHAPEID);
+    setUserData(m_textShapeData);
+
+    SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(m_textShapeData, this);
+    m_layout = new KoTextDocumentLayout(m_textShapeData->document(), provider);
+    m_textShapeData->document()->setDocumentLayout(m_layout);
+
+    setCollisionDetection(true);
+    QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
+
+    updateDocumentData();
+    m_layout->scheduleLayout();
+}
+
+
 TextShape::~TextShape()
 {
+}
+
+KoShape *TextShape::cloneShape() const
+{
+    return new TextShape(*this);
 }
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter,

@@ -29,12 +29,21 @@ public:
             : ns(ns)
             , tag(tag) {}
 
+    Private(const Private &rhs)
+            : ns(rhs.ns)
+            , tag(rhs.tag) {}
+
     const QString ns;
     const QString tag;
 };
 
 KoFrameShape::KoFrameShape(const QString &ns, const QString &tag)
-        : d(new Private(ns, tag))
+    : d(new Private(ns, tag))
+{
+}
+
+KoFrameShape::KoFrameShape(const KoFrameShape &rhs)
+    : d(new Private(*rhs.d))
 {
 }
 

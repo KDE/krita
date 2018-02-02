@@ -53,6 +53,8 @@ public:
     TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
     ~TextShape() override;
 
+    KoShape* cloneShape() const override;
+
     /// reimplemented
     void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     /// reimplemented
@@ -128,6 +130,8 @@ protected:
 
     /// reimplemented
     QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
+
+    TextShape(const TextShape &rhs);
 
 private:
     void shapeChanged(ChangeType type, KoShape *shape = 0) override;

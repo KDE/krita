@@ -20,8 +20,9 @@ A_starfield2.gbr
 A_wall-texture.gih
 chalk.gbr
 double_special6.gih
-dub1.gbr
-dub6.gbr
+chalk_sparse.gbr
+abominable_snowman.gbr
+chisel_smear.gbr
 Flat_textured1.gih
 freckles.gbr
 knife3.gbr
@@ -45,8 +46,7 @@ S_splats_02.gih
 scribbles.gbr
 spines.gbr
 smear_paint.gbr
-texture51.gbr
 w_hearts.gih
-watercolor-animated.gih
+watercolor.gih
 z_study_pencil_2H.gih
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

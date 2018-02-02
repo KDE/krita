@@ -103,6 +103,7 @@ GenericName[zh_CN]=数字绘画
 GenericName[zh_TW]=數位繪畫
 MimeType=application/x-krita;image/openraster;application/x-krita-paintoppreset;
 Comment=Pixel-based image manipulation program for the Calligra Suite
+Comment[ar]=برنامج لتعديل الصّور البكسليّة لطقم «كاليغرا»
 Comment[ca]=Programa de manipulació d'imatges basades en píxels per a la Suite Calligra
 Comment[ca@valencia]=Programa de manipulació d'imatges basades en píxels per a la Suite Calligra
 Comment[de]=Pixelbasiertes Bildbearbeitungsprogramm für die Calligra-Suite

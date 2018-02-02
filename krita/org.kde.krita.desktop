@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Krita
 Name[af]=Krita
+Name[ar]=كريتا
 Name[bg]=Krita
 Name[br]=Krita
 Name[bs]=Krita
@@ -63,6 +64,7 @@ Name[zh_CN]=Krita
 Name[zh_TW]=Krita
 Exec=krita %U
 GenericName=Digital Painting
+GenericName[ar]=رسم رقميّ
 GenericName[bs]=Digitalno Bojenje
 GenericName[ca]=Dibuix digital
 GenericName[ca@valencia]=Dibuix digital
@@ -102,6 +104,7 @@ GenericName[zh_CN]=数字绘画
 GenericName[zh_TW]=數位繪畫
 MimeType=application/x-krita;image/openraster;application/x-krita-paintoppreset;
 Comment=Digital Painting
+Comment[ar]=رسم رقميّ
 Comment[bs]=Digitalno Bojenje
 Comment[ca]=Dibuix digital
 Comment[ca@valencia]=Dibuix digital

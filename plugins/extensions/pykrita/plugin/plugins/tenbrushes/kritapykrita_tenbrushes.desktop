@@ -4,6 +4,7 @@ ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=tenbrushes
 X-Python-2-Compatible=false
 Name=Ten Brushes
+Name[ar]=عشرُ فُرش
 Name[ca]=Deu pinzells
 Name[ca@valencia]=Deu pinzells
 Name[cs]=Deset štětců

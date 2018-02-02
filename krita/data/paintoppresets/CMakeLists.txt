@@ -6,9 +6,12 @@ Basic_tip_default.kpp
 Blender_Basic.kpp
 Blender_Blur.kpp
 Blender_Mover.kpp
+Blender_Mover_Tendrils.kpp
 Blender_Rake.kpp
 Blender_Textured.kpp
+Blender_Textured_Marble.kpp
 Blender_Water.kpp
+Blender_Water_Sponge.kpp
 Clone_Tool.kpp
 Clone_Tool_Textured.kpp
 Distort_Grow.kpp

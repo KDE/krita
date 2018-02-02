@@ -19,15 +19,14 @@ A_splat2.gih
 A_starfield2.gbr
 A_wall-texture.gih
 cazu-chalk.gbr
-cazu-freckles.gbr
 cazu-reptile.gbr
 cazu-smear-paint.gbr
 cazu-spines.gbr
-cazu_watercolor2.gih
 double_special6.gih
 dub1.gbr
 dub6.gbr
 Flat_textured1.gih
+freckles.gbr
 knife3.gbr
 LJF_Water_Brush_02.gih
 leaves-scattered.svg
@@ -48,5 +47,6 @@ S_splats_02.gih
 scribbles.gbr
 texture51.gbr
 w_hearts.gih
+watercolor-animated.gih
 z_study_pencil_2H.gih
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

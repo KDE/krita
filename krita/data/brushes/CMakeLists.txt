@@ -28,7 +28,6 @@ freckles.gbr
 knife3.gbr
 LJF_Water_Brush_02.gih
 leaves-scattered.svg
-M_Pipe_1.gbr
 MZ_leaves.gbr
 N_Grass_2.gih
 oil_bristle.gbr

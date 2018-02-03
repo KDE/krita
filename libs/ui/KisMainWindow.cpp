@@ -1339,7 +1339,7 @@ void KisMainWindow::mouseReleaseEvent(QMouseEvent *event)
      * dialog on click.
      */
     if (centralWidget()->geometry().contains(event->pos())
-            && KisPart::instance()->documents().size()==0) {
+            && KisPart::instance()->documents().size()==0 && event->button() == Qt::LeftButton) {
         this->slotFileNew();
         event->accept();
     } else {

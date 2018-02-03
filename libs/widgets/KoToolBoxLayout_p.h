@@ -261,7 +261,14 @@ public:
 
     QSize sizeHint() const override
     {
-        return minimumSize();
+        // Prefer showing two rows/columns by default
+        QSize twoIcons = static_cast<Section*> (m_sections[0]->widget())->iconSize() * 2;
+        const int length = doLayout(QRect(QPoint(), twoIcons), false);
+        if (m_orientation == Qt::Vertical) {
+            return QSize(twoIcons.width(), length);
+        } else {
+            return QSize(length, twoIcons.height());
+        }
     }
 
     QSize minimumSize() const override

@@ -25,6 +25,7 @@
 
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QScroller>
 #include <QStyleOption>
 #include <QToolButton>
 
@@ -56,6 +57,18 @@ public:
         m_scrollNext->setFocusPolicy(Qt::NoFocus);
         m_scrollNext->hide();
         connect(m_scrollNext, &QToolButton::clicked, this, &KoToolBoxScrollArea::doScrollNext);
+
+        QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
+        QScroller *scroller = QScroller::scroller(viewport());
+        QScrollerProperties sp = scroller->scrollerProperties();
+
+        sp.setScrollMetric(QScrollerProperties::MaximumVelocity, 0.0);
+        sp.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 0.1);
+        sp.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0.1);
+        sp.setScrollMetric(QScrollerProperties::OvershootScrollDistanceFactor, 0.0);
+        sp.setScrollMetric(QScrollerProperties::OvershootScrollTime, 0.4);
+
+        scroller->setScrollerProperties(sp);
     }
 
     void setOrientation(Qt::Orientation orientation)

@@ -50,12 +50,10 @@ public:
         m_scrollPrev->setAutoRepeat(true);
         m_scrollPrev->setAutoFillBackground(true);
         m_scrollPrev->setFocusPolicy(Qt::NoFocus);
-        m_scrollPrev->hide();
         connect(m_scrollPrev, &QToolButton::clicked, this, &KoToolBoxScrollArea::doScrollPrev);
         m_scrollNext->setAutoRepeat(true);
         m_scrollNext->setAutoFillBackground(true);
         m_scrollNext->setFocusPolicy(Qt::NoFocus);
-        m_scrollNext->hide();
         connect(m_scrollNext, &QToolButton::clicked, this, &KoToolBoxScrollArea::doScrollNext);
 
         QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
@@ -168,32 +166,49 @@ private:
         }
         m_toolBox->resize(newSize);
 
-        const int scrollButtonWidth = this->scrollButtonWidth();
-        if (m_orientation == Qt::Vertical) {
-            m_scrollPrev->setArrowType(Qt::UpArrow);
-            m_scrollPrev->setGeometry(0, 0, width(), scrollButtonWidth);
-            m_scrollNext->setArrowType(Qt::DownArrow);
-            m_scrollNext->setGeometry(0, height() - scrollButtonWidth, width(), scrollButtonWidth);
-        } else {
-            m_scrollPrev->setArrowType(Qt::LeftArrow);
-            m_scrollPrev->setGeometry(0, 0, scrollButtonWidth, height());
-            m_scrollNext->setArrowType(Qt::RightArrow);
-            m_scrollNext->setGeometry(width() - scrollButtonWidth, 0, scrollButtonWidth, height());
-        }
         updateScrollButtons();
     }
 
     void updateScrollButtons()
     {
+        // We move the scroll buttons outside the widget rect instead of setting
+        // the visibility, because setting the visibility triggers a relayout
+        // of QAbstractScrollArea, which occasionally causes an offset bug when
+        // QScroller performs the overshoot animation. (Overshoot is done by
+        // moving the viewport widget, but the viewport position is reset during
+        // a relayout.)
+        const int scrollButtonWidth = this->scrollButtonWidth();
         if (m_orientation == Qt::Vertical) {
+            m_scrollPrev->setArrowType(Qt::UpArrow);
             m_scrollPrev->setEnabled(verticalScrollBar()->value() != verticalScrollBar()->minimum());
+            if (m_scrollPrev->isEnabled()) {
+                m_scrollPrev->setGeometry(0, 0, width(), scrollButtonWidth);
+            } else {
+                m_scrollPrev->setGeometry(-width(), 0, width(), scrollButtonWidth);
+            }
+            m_scrollNext->setArrowType(Qt::DownArrow);
             m_scrollNext->setEnabled(verticalScrollBar()->value() != verticalScrollBar()->maximum());
+            if (m_scrollNext->isEnabled()) {
+                m_scrollNext->setGeometry(0, height() - scrollButtonWidth, width(), scrollButtonWidth);
+            } else {
+                m_scrollNext->setGeometry(-width(), height() - scrollButtonWidth, width(), scrollButtonWidth);
+            }
         } else {
+            m_scrollPrev->setArrowType(Qt::LeftArrow);
             m_scrollPrev->setEnabled(horizontalScrollBar()->value() != horizontalScrollBar()->minimum());
+            if (m_scrollPrev->isEnabled()) {
+                m_scrollPrev->setGeometry(0, 0, scrollButtonWidth, height());
+            } else {
+                m_scrollPrev->setGeometry(0, -height(), scrollButtonWidth, height());
+            }
+            m_scrollNext->setArrowType(Qt::RightArrow);
             m_scrollNext->setEnabled(horizontalScrollBar()->value() != horizontalScrollBar()->maximum());
+            if (m_scrollNext->isEnabled()) {
+                m_scrollNext->setGeometry(width() - scrollButtonWidth, 0, scrollButtonWidth, height());
+            } else {
+                m_scrollNext->setGeometry(width() - scrollButtonWidth, -height(), scrollButtonWidth, height());
+            }
         }
-        m_scrollPrev->setVisible(m_scrollPrev->isEnabled());
-        m_scrollNext->setVisible(m_scrollNext->isEnabled());
     }
 
     KoToolBox *m_toolBox;

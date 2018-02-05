@@ -30,7 +30,7 @@
 
 void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 {
-    TestUtil::ExternalImageChecker chk("flayer_tmask_offimage", "file_layer");
+    TestUtil::ReferenceImageChecker chk("flayer_tmask_offimage", "file_layer");
 
     QRect refRect(0,0,640,441);
     QRect fillRect(400,400,100,100);
@@ -95,7 +95,7 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 
 void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
 {
-    TestUtil::ExternalImageChecker chk("flayer_tmask_huge_offset", "file_layer");
+    TestUtil::ReferenceImageChecker chk("flayer_tmask_huge_offset", "file_layer");
 
     QRect refRect(0,0,2000,1500);
     QRect fillRect(400,400,100,100);

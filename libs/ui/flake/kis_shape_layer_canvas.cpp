@@ -43,6 +43,7 @@
 
 #include <kis_spontaneous_job.h>
 #include "kis_image.h"
+#include "kis_global.h"
 
 //#define DEBUG_REPAINT
 
@@ -56,12 +57,19 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         , m_parentLayer(parent)
         , m_image(image)
 {
+    /**
+     * The layour should also add itself to its own shape manager, so that the canvas
+     * would track its changes/transformations
+     */
+    m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
     m_shapeManager->selection()->setActiveLayer(parent);
+
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
+    m_shapeManager->remove(m_parentLayer);
 }
 
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
@@ -140,8 +148,8 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
         return;
     }
 
-    QRect r = m_viewConverter->documentToView(rc).toRect();
-    r.adjust(-2, -2, 2, 2); // for antialias
+    // grow for antialiasing
+    const QRect r = kisGrowRect(m_viewConverter->documentToView(rc).toAlignedRect(), 2);
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);

@@ -33,6 +33,16 @@ class KoShapeReorderCommandPrivate;
 class KRITAFLAKE_EXPORT KoShapeReorderCommand : public KUndo2Command
 {
 public:
+    struct IndexedShape {
+        IndexedShape();
+        IndexedShape(KoShape *_shape);
+
+        int zIndex = 0;
+        KoShape *shape = 0;
+    };
+
+
+public:
     /**
      * Constructor.
      * @param shapes the set of objects that are moved.
@@ -41,6 +51,7 @@ public:
      * @param parent the parent command used for macro commands
      */
     KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, KUndo2Command *parent = 0);
+    KoShapeReorderCommand(const QList<IndexedShape> &shapes, KUndo2Command *parent = 0);
     ~KoShapeReorderCommand() override;
 
     /// An enum for defining what kind of reordering to use.
@@ -76,6 +87,12 @@ public:
      */
     static KoShapeReorderCommand *mergeInShape(QList<KoShape*> shapes, KoShape *newShape,
                                                KUndo2Command *parent = 0);
+
+    /**
+     * Put all the shapes in \p shapesAbove above the shapes in \p shapesBelow, adjusting their
+     * z-index values.
+     */
+    static QList<IndexedShape> mergeDownShapes(QList<KoShape*> shapesBelow, QList<KoShape*> shapesAbove);
 
     /// redo the command
     void redo() override;

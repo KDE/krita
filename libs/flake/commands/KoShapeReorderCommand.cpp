@@ -27,10 +27,20 @@
 #include <FlakeDebug.h>
 #include <limits.h>
 
+KoShapeReorderCommand::IndexedShape::IndexedShape()
+{
+}
+
+KoShapeReorderCommand::IndexedShape::IndexedShape(KoShape *_shape)
+    : zIndex(_shape->zIndex()), shape(_shape)
+{
+}
+
 
 class KoShapeReorderCommandPrivate
 {
 public:
+    KoShapeReorderCommandPrivate() {}
     KoShapeReorderCommandPrivate(const QList<KoShape*> &s, QList<int> &ni)
         : shapes(s), newIndexes(ni)
     {
@@ -43,11 +53,24 @@ public:
 
 KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, KUndo2Command *parent)
     : KUndo2Command(parent),
-    d(new KoShapeReorderCommandPrivate(shapes, newIndexes))
+      d(new KoShapeReorderCommandPrivate(shapes, newIndexes))
 {
     Q_ASSERT(shapes.count() == newIndexes.count());
     foreach (KoShape *shape, shapes)
         d->previousIndexes.append(shape->zIndex());
+
+    setText(kundo2_i18n("Reorder shapes"));
+}
+
+KoShapeReorderCommand::KoShapeReorderCommand(const QList<IndexedShape> &shapes, KUndo2Command *parent)
+    : KUndo2Command(parent),
+      d(new KoShapeReorderCommandPrivate())
+{
+    Q_FOREACH (const IndexedShape &index, shapes) {
+        d->shapes.append(index.shape);
+        d->newIndexes.append(index.zIndex);
+        d->previousIndexes.append(index.shape->zIndex());
+    }
 
     setText(kundo2_i18n("Reorder shapes"));
 }
@@ -61,7 +84,8 @@ void KoShapeReorderCommand::redo()
 {
     KUndo2Command::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
-        d->shapes.at(i)->update();
+        // z-index cannot chage the bounding rect of the shape, so
+        // no united updates needed
         d->shapes.at(i)->setZIndex(d->newIndexes.at(i));
         d->shapes.at(i)->update();
     }
@@ -71,7 +95,8 @@ void KoShapeReorderCommand::undo()
 {
     KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
-        d->shapes.at(i)->update();
+        // z-index cannot chage the bounding rect of the shape, so
+        // no united updates needed
         d->shapes.at(i)->setZIndex(d->previousIndexes.at(i));
         d->shapes.at(i)->update();
     }
@@ -222,4 +247,77 @@ KoShapeReorderCommand *KoShapeReorderCommand::mergeInShape(QList<KoShape *> shap
     }
 
     return !reindexedShapes.isEmpty() ? new KoShapeReorderCommand(reindexedShapes, reindexedIndexes, parent) : 0;
+}
+
+namespace {
+
+QList<KoShapeReorderCommand::IndexedShape>
+homogenizeZIndexes(QList<KoShapeReorderCommand::IndexedShape> shapes)
+{
+    if (shapes.isEmpty()) return shapes;
+
+    // the shapes are expected to be sorted, we just need to adjust the indexes
+
+    int lastIndex = shapes.begin()->zIndex;
+
+    auto it = shapes.begin() + 1;
+    while (it != shapes.end()) {
+        if (it->zIndex <= lastIndex) {
+            it->zIndex = lastIndex + 1;
+        }
+        lastIndex = it->zIndex;
+        ++it;
+    }
+
+    const int overflowSize = shapes.last().zIndex - int(std::numeric_limits<qint16>::max());
+
+    if (overflowSize > 0) {
+        if (shapes.first().zIndex - overflowSize > int(std::numeric_limits<qint16>::min())) {
+            for (auto it = shapes.begin(); it != shapes.end(); ++it) {
+                it->zIndex -= overflowSize;
+            }
+        } else {
+            int index = shapes.size() < int(std::numeric_limits<qint16>::max()) ?
+                        0 :
+                        int(std::numeric_limits<qint16>::max()) - shapes.size();
+
+            for (auto it = shapes.begin(); it != shapes.end(); ++it) {
+                it->zIndex = index;
+                index++;
+            }
+        }
+    }
+
+    return shapes;
+}
+
+}
+
+QList<KoShapeReorderCommand::IndexedShape>
+KoShapeReorderCommand::mergeDownShapes(QList<KoShape *> shapesBelow, QList<KoShape *> shapesAbove)
+{
+    std::sort(shapesBelow.begin(), shapesBelow.end(), KoShape::compareShapeZIndex);
+    std::sort(shapesAbove.begin(), shapesAbove.end(), KoShape::compareShapeZIndex);
+
+    QList<IndexedShape> shapes;
+    Q_FOREACH (KoShape *shape, shapesBelow) {
+        shapes.append(IndexedShape(shape));
+    }
+
+    Q_FOREACH (KoShape *shape, shapesAbove) {
+        shapes.append(IndexedShape(shape));
+    }
+
+    shapes = homogenizeZIndexes(shapes);
+
+    // remove shapes that didn't change
+    for (auto it = shapes.begin(); it != shapes.end();) {
+        if (it->zIndex == it->shape->zIndex()) {
+            it = shapes.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    return shapes;
 }

@@ -36,7 +36,7 @@
 
 void KisShapeCommandsTest::testGrouping()
 {
-    TestUtil::ExternalImageChecker chk("grouping", "shape_commands_test");
+    TestUtil::ReferenceImageChecker chk("grouping", "shape_commands_test");
 
     QRect refRect(0,0,64,64);
 
@@ -122,7 +122,7 @@ void KisShapeCommandsTest::testGrouping()
 
 void KisShapeCommandsTest::testResizeShape(bool normalizeGroup)
 {
-    TestUtil::ExternalImageChecker chk("resize_shape", "shape_commands_test");
+    TestUtil::ReferenceImageChecker chk("resize_shape", "shape_commands_test");
 
     QRect refRect(0,0,64,64);
 

@@ -1,4 +1,5 @@
 install( FILES
+A_sparke1.gbr
 abominable_snowman.png
 bamboo_leaves_random.gih
 brick.gih

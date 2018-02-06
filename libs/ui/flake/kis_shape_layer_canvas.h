@@ -87,7 +87,7 @@ private:
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
 
-    KisImageSP m_image;
+    KisImageWSP m_image;
 };
 
 #endif

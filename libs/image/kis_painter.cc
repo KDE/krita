@@ -885,7 +885,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
 
     /* Trying to read outside a KisFixedPaintDevice is inherently wrong and shouldn't be done,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
-    Q_ASSERT(srcBounds.contains(srcRect));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
 
     /* Create an intermediate byte array to hold information before it is written

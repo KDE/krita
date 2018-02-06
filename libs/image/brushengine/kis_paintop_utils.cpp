@@ -92,7 +92,7 @@ QVector<QRect> splitDabsIntoRects(const QVector<QRect> &dabRects, int idealNumRe
     constexpr int minPatchSize = 128;
     constexpr int maxPatchSize = 512;
     constexpr int patchStep = 64;
-    constexpr int halfPatchStep= patchStep >> 1;
+    constexpr int halfPatchStep = patchStep >> 1;
 
 
     int idealPatchSize = qBound(minPatchSize,

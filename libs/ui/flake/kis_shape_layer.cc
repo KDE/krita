@@ -172,9 +172,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
     // copy the projection to avoid extra round of updates!
     initShapeLayer(controller, _rhs.m_d->paintDevice);
 
+    /**
+     * The transformaitons of the added shapes are automatically merged into the transformation
+     * of the layer, so we should apply this extra transform separately
+     */
+    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
         addShape(clonedShape);
     }
 }

@@ -240,4 +240,74 @@ void KisShapeLayerTest::testMergingShapeZIndexes()
                                  0, 1, 1024);
 }
 
+void KisShapeLayerTest::testCloneScaledLayer()
+{
+    using namespace TestUtil;
+
+    ReferenceImageChecker chk("scale_and_clone", "shape_layer_test", ReferenceImageChecker::InternalStorage);
+    chk.setMaxFailingPixels(10);
+
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+    const QRect refRect(0,0,64,64);
+    MaskParent p(refRect);
+
+    const qreal resolution = 72.0 / 72.0;
+    p.image->setResolution(resolution, resolution);
+
+    doc->setCurrentImage(p.image);
+
+
+    KisShapeLayerSP shapeLayer1 = new KisShapeLayer(doc->shapeController(), p.image, "shapeLayer1", 150);
+
+    {
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+        path->moveTo(QPointF(5, 5));
+        path->lineTo(QPointF(5, 55));
+        path->lineTo(QPointF(20, 55));
+        path->lineTo(QPointF(20,  5));
+        path->close();
+        path->normalize();
+        path->setBackground(toQShared(new KoColorBackground(Qt::red)));
+
+        path->setName("shape1");
+        path->setZIndex(1);
+        shapeLayer1->addShape(path);
+    }
+
+    p.image->addNode(shapeLayer1);
+    shapeLayer1->setDirty();
+
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    QCOMPARE(int(p.image->root()->childCount()), 2);
+
+    chk.checkImage(p.image, "00_initial_layer_update");
+
+    {
+
+        KisFilterStrategy *strategy = new KisBilinearFilterStrategy();
+        p.image->scaleImage(QSize(32, 32), p.image->xRes(), p.image->yRes(), strategy);
+
+        qApp->processEvents();
+        p.image->waitForDone();
+
+        chk.checkImage(p.image, "01_after_scale_down");
+    }
+
+    KisNodeSP clonedLayer = shapeLayer1->clone();
+
+    p.image->removeNode(shapeLayer1);
+    p.image->addNode(clonedLayer);
+    clonedLayer->setDirty();
+
+    qApp->processEvents();
+    p.image->waitForDone();
+
+    QCOMPARE(int(p.image->root()->childCount()), 2);
+    chk.checkImage(p.image, "01_after_scale_down");
+}
+
 QTEST_MAIN(KisShapeLayerTest)

@@ -28,9 +28,9 @@ private Q_SLOTS:
 
     void testMergeDown();
     void testScaleAndMergeDown();
-
     void testMergingShapeZIndexes();
 
+    void testCloneScaledLayer();
 };
 
 #endif // KISSHAPELAYERTEST_H

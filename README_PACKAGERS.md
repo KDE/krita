@@ -23,9 +23,7 @@ There are four forks of 3rd party libraries that are relevant and cannot be repl
 
 * plugins/impex/xcf/3rdparty contains the xcftools code. This has never been released as a library
 
-* plugins/extensions/gmic/3rdparty contains G'Mic. This has never been released as a shared library.
-
-* libs/image/3rdparty contains einspline. This code is directly linke d into the kritaimage library and has never been released as a separate library.
+* libs/image/3rdparty contains einspline. This code is directly linked into the kritaimage library and has never been released as a separate library.
 
 == Build flags ==
 

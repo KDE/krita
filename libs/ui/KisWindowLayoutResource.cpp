@@ -42,20 +42,25 @@ struct KisWindowLayoutResource::Private
         : windows(std::move(windows))
     {}
 
+    QPointer<KisMainWindow> findWindow(QUuid id) {
+        const QList<QPointer<KisMainWindow>> &currentWindows = KisPart::instance()->mainWindows();
+        Q_FOREACH(QPointer<KisMainWindow> mainWindow, currentWindows) {
+            if (mainWindow->id() == id) {
+                return mainWindow;
+            }
+        }
+
+        return QPointer<KisMainWindow>();
+    }
+
     void openNecessaryWindows(QList<QPointer<KisMainWindow>> &currentWindows) {
         auto *kisPart = KisPart::instance();
 
         Q_FOREACH(const Window &window, windows) {
-            bool isOpen = false;
-            Q_FOREACH(QPointer<KisMainWindow> mainWindow, currentWindows) {
-                if (mainWindow->id() == window.windowId) {
-                    isOpen = true;
-                    break;
-                }
-            }
+            QPointer<KisMainWindow> mainWindow = findWindow(window.windowId);
 
-            if (!isOpen) {
-                KisMainWindow *mainWindow = kisPart->createMainWindow(window.windowId);
+            if (mainWindow.isNull()) {
+                mainWindow = kisPart->createMainWindow(window.windowId);
                 currentWindows.append(mainWindow);
                 mainWindow->show();
             }
@@ -143,11 +148,12 @@ void KisWindowLayoutResource::applyLayout()
 
     d->openNecessaryWindows(currentWindows);
 
-    int index = 0;
     Q_FOREACH(const auto &window, d->windows) {
-        currentWindows.at(index)->restoreGeometry(window.geometry);
-        currentWindows.at(index)->restoreWorkspace(window.windowState);
-        index++;
+        QPointer<KisMainWindow> mainWindow = d->findWindow(window.windowId);
+        KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
+
+        mainWindow->restoreGeometry(window.geometry);
+        mainWindow->restoreWorkspace(window.windowState);
     }
 
     d->closeUnneededWindows(currentWindows);

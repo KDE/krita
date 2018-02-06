@@ -243,7 +243,7 @@ QString KisImageConfig::swapDir(bool requestDefault)
     // furthermore, this is just a default and swapDir can always be configured
     // to another location.
 
-    QString swap = QDir::homePath();
+    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/swap";
 #else
     QString swap = QDir::tempPath();
 #endif

@@ -1,0 +1,10 @@
+{
+    "Id": "SVG Collection Docker",
+    "Type": "Service",
+    "X-Flake-MinVersion": "28",
+    "X-Flake-PluginVersion": "28",
+    "X-KDE-Library": "kritasvgcollectiondocker",
+    "X-KDE-ServiceTypes": [
+        "Calligra/Dock"
+    ]
+}

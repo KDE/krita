@@ -1,0 +1,25 @@
+commit 65f72e760c0e900a24073f72aadc9027a852007f
+Author: Boudewijn Rempt <boud@valdyas.org>
+Date:   Wed Feb 7 11:41:40 2018 +0100
+
+    Add desktop file and icon
+
+diff --git a/gmic_krita_qt.desktop b/gmic_krita_qt.desktop
+new file mode 100644
+index 0000000..579d427
+--- /dev/null
++++ b/gmic_krita_qt.desktop
+@@ -0,0 +1,9 @@
++[Desktop Entry]
++Name=gmic_krita_qt
++Exec=gmic_krita_qt
++GenericName=G'Mic plugin for Krita
++Comment=G'Mic plugin for Krita
++Type=Application
++Icon=gmic_krita_qt
++Categories=Qt;KDE;Graphics;
++StartupNotify=false
+diff --git a/gmic_krita_qt.png b/gmic_krita_qt.png
+new file mode 100644
+index 0000000..cda8d5c
+Binary files /dev/null and b/gmic_krita_qt.png differ

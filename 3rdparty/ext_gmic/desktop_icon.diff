@@ -1,9 +1,41 @@
-commit 65f72e760c0e900a24073f72aadc9027a852007f
+commit 43fcba96d44ed2bdbe69f6070e0535095a7aeb80
 Author: Boudewijn Rempt <boud@valdyas.org>
 Date:   Wed Feb 7 11:41:40 2018 +0100
 
     Add desktop file and icon
 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c8106e2..5838b60 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -70,10 +70,6 @@ if (NOT(${GMIC_VERSION} EQUAL ${CIMG_VERSION}))
+   message(FATAL_ERROR "\nVersion numbers of files 'gmic.h' (" ${GMIC_VERSION} ") and 'CImg.h' ("${CIMG_VERSION} ") mismatch")
+ endif()
+ 
+-
+-
+-
+-
+ option(PRERELEASE "Set to ON makes this a prelease build")
+ if (${PRERELEASE})
+     string(TIMESTAMP PRERELEASE_DATE %y%m%d)
+@@ -86,8 +82,6 @@ if (${DRMINGW})
+     add_definitions(-DDRMINGW)
+ endif()
+ 
+-
+-
+ # Required packages
+ 
+ #
+@@ -432,3 +426,7 @@ else()
+ endif()
+ 
+ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
++
++install(TARGETS qmic_qt RUNTIME DESTINATION  ${INSTALL_TARGETS_DEFAULT_ARGS})
++install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
++
 diff --git a/gmic_krita_qt.desktop b/gmic_krita_qt.desktop
 new file mode 100644
 index 0000000..579d427

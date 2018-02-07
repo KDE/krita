@@ -23,6 +23,7 @@
 #include <KoCanvasBase.h>
 
 #include <kis_types.h>
+#include "kis_thread_safe_signal_compressor.h"
 
 class KoShapeManager;
 class KoToolProxy;
@@ -69,10 +70,15 @@ public:
     void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 
+    void updateCanvas(const QVector<QRectF> &region);
+
     void forceRepaint();
 
 private Q_SLOTS:
+    friend class KisRepaintShapeLayerLayerJob;
     void repaint();
+    void slotStartAsyncRepaint();
+    void slotImageSizeChanged();
 Q_SIGNALS:
     void forwardRepaint();
 private:
@@ -84,8 +90,13 @@ private:
     KisPaintDeviceSP m_projection;
     KisShapeLayer *m_parentLayer;
 
+    KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
+    volatile bool m_hasUpdateInCompressor = false;
+
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;
+
+    QRect m_cachedImageRect;
 
     KisImageWSP m_image;
 };

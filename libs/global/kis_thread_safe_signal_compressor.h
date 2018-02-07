@@ -44,10 +44,12 @@ public:
 
 public Q_SLOTS:
     void start();
+    void stop();
 
 Q_SIGNALS:
     void timeout();
     void internalRequestSignal();
+    void internalStopSignal();
 
 private:
     KisSignalCompressor *m_compressor;

@@ -30,7 +30,7 @@
 class KRITAIMAGE_EXPORT KisImageResizeCommand : public KUndo2Command
 {
 public:
-    KisImageResizeCommand(KisImageWSP image, const QSize& newRect);
+    KisImageResizeCommand(KisImageWSP image, const QSize& newRect, KUndo2Command *parent = 0);
 
     void redo() override;
     void undo() override;

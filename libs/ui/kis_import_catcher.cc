@@ -85,13 +85,12 @@ KisImportCatcher::KisImportCatcher(const QUrl &url, KisViewManager *view, const 
     : m_d(new Private)
 {
     m_d->doc = KisPart::instance()->createDocument();
-
     m_d->view = view;
     m_d->url = url;
     m_d->layerType = layerType;
 
     connect(m_d->doc, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    bool result = m_d->doc->openUrl(url);
+    bool result = m_d->doc->openUrl(url, KisDocument::DontAddToRecent);
 
     if (!result) {
         deleteMyself();

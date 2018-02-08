@@ -112,6 +112,8 @@ void KisSessionResource::storeCurrentWindows()
 
     d->views.clear();
     Q_FOREACH(const KisView *view, kisPart->views()) {
+        if (view->document()->url().isEmpty()) continue;
+
         auto viewData = Private::View();
         viewData.windowId = view->mainWindow()->id();
         viewData.file = view->document()->url();

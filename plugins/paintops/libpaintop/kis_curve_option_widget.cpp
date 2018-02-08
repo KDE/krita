@@ -107,7 +107,7 @@ void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
 
 void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    setting->dump();
+    //setting->dump();
 
     m_curveOption->readOptionSetting(setting);
 

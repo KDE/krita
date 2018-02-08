@@ -125,7 +125,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
 {
     if (!setting) return;
     //dbgKrita << "readNamedOptionSetting" << prefix;
-    setting->dump();
+    // setting->dump();
 
     if (m_checkable) {
         setChecked(setting->getBool("Pressure" + prefix, false));

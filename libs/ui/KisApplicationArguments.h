@@ -50,6 +50,8 @@ public:
     bool exportAsPdf() const;
     QString exportFileName() const;
     QString workspace() const;
+    QString windowLayout() const;
+    QString session() const;
     bool canvasOnly() const;
     bool noSplash() const;
     bool fullScreen() const;

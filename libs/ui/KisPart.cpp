@@ -552,10 +552,8 @@ void KisPart::startBlankSession()
 
 }
 
-bool KisPart::restorePreviousSession()
+bool KisPart::restoreSession(const QString &sessionName)
 {
-    KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
-    const QString &sessionName = cfg.readEntry("previousSession");
     if (sessionName.isNull()) return false;
 
     KoResourceServer<KisSessionResource> * rserver = KisResourceServerProvider::instance()->sessionServer();

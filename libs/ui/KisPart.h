@@ -252,9 +252,9 @@ public:
     void startBlankSession();
 
     /**
-     * Restores previous session saved in configuration.
+     * Restores a saved session by name
      */
-    bool restorePreviousSession();
+    bool restoreSession(const QString &sessionName);
 
     void setCurrentSession(KisSessionResource *session);
 

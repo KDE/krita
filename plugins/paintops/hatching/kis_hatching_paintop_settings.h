@@ -36,6 +36,7 @@ public:
     ~KisHatchingPaintOpSettings() override;
 
     //Dialogs enabled
+    bool enabledcurveangle;
     bool enabledcurvecrosshatching;
     bool enabledcurveopacity;
     bool enabledcurveseparation;
@@ -63,7 +64,8 @@ public:
     bool subpixelprecision;
     bool opaquebackground;
 
-    //Crosshatching, Separation and Thickness curves
+    //Angle, Crosshatching, Separation and Thickness curves
+    double anglesensorvalue;
     double crosshatchingsensorvalue;
     double separationsensorvalue;
     double thicknesssensorvalue;

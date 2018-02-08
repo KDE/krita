@@ -56,6 +56,7 @@ void KisHatchingPaintOpSettings::initializeTwin(KisPaintOpSettingsSP settings) c
 
     KisHatchingPaintOpSettings *convenienttwin = static_cast<KisHatchingPaintOpSettings*>(settings.data());
 
+    convenienttwin->enabledcurveangle = getBool("PressureAngle");
     convenienttwin->enabledcurvecrosshatching = getBool("PressureCrosshatching");
     convenienttwin->enabledcurveopacity = getBool("PressureOpacity");
     convenienttwin->enabledcurveseparation = getBool("PressureSeparation");

@@ -5,6 +5,7 @@ set(kritahatchingpaintop_SOURCES
     kis_hatching_preferences.cpp
     kis_hatching_paintop_settings.cpp
     kis_hatching_paintop_settings_widget.cpp
+    kis_hatching_pressure_angle_option.cpp
     kis_hatching_pressure_crosshatching_option.cpp
     kis_hatching_pressure_separation_option.cpp
     kis_hatching_pressure_thickness_option.cpp

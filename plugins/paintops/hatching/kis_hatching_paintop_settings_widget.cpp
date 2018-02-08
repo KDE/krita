@@ -23,6 +23,7 @@
 #include "kis_hatching_preferences.h"
 #include "kis_hatching_paintop_settings.h"
 
+#include "kis_hatching_pressure_angle_option.h"
 #include "kis_hatching_pressure_crosshatching_option.h"
 #include "kis_hatching_pressure_separation_option.h"
 #include "kis_hatching_pressure_thickness_option.h"
@@ -54,6 +55,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption(), i18n("0.0"), i18n("1.0")), i18n("Separation"));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption(), i18n("0.0"), i18n("1.0")), i18n("Thickness"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureAngleOption(), i18n("0.0"), i18n("1.0")), i18n("Angle"));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption(), i18n("0.0"), i18n("1.0")), i18n("Crosshatching"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));

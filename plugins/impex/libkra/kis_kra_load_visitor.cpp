@@ -227,7 +227,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     return result;
 }
 
-bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
+bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
 {
     if (!loadMetaData(layer)) {
         return false;
@@ -235,12 +235,9 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     bool result = true;
 
     loadNodeKeyframes(layer);
-
     result = loadSelection(getLocation(layer), layer->internalSelection());
-
     result = loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
     layer->update();
-
     result = visitAll(layer);
     return result;
 }
@@ -544,7 +541,6 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
 
 bool KisKraLoadVisitor::loadMetaData(KisNode* node)
 {
-    dbgFile << "Load metadata for " << node->name();
     KisLayer* layer = qobject_cast<KisLayer*>(node);
     if (!layer) return true;
 
@@ -554,7 +550,7 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
         if (backend)
             dbgFile << "Backend " << backend->id() << " does not support loading.";
         else
-            dbgFile << "Could not load the XMP backenda t all";
+            dbgFile << "Could not load the XMP backend at all";
         return true;
     }
 

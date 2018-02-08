@@ -95,20 +95,22 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
                     QString type = e.attribute("type");
                     QString name = e.attribute("name");
                     QString value = e.text();
-                    if(type == "bytearray")
-                    {
+
+                    if (type == "bytearray") {
                         d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
                     }
-                    else
+                    else {
                         d->properties[name] = value;
+                    }
                 }
-                else
+                else {
                     d->properties[e.attribute("name")] = QVariant(e.text());
+                }
             }
         }
         n = n.nextSibling();
     }
-    //dump();
+    dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -258,16 +260,18 @@ KisCubicCurve KisPropertiesConfiguration::getCubicCurve(const QString & name, co
 KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor& color) const
 {
     QVariant v = getProperty(name);
+
     if (v.isValid()) {
-        if (v.canConvert<QColor>()) {
-            QColor c = v.value<QColor>();
-            KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
-            return kc;
+        switch(v.type()) {
+        case QVariant::UserType:
+        {
+            if (v.userType() == qMetaTypeId<KoColor>()) {
+                return v.value<KoColor>();
+            }
+            break;
         }
-        else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
-            return v.value<KoColor>();
-        }
-        else if (v.canConvert<QString>()) {
+        case QVariant::String:
+        {
             QDomDocument doc;
             if (doc.setContent(v.toString())) {
                 QDomElement e = doc.documentElement().firstChild().toElement();
@@ -284,13 +288,25 @@ KoColor KisPropertiesConfiguration::getColor(const QString& name, const KoColor&
                     return kc;
                 }
             }
+            break;
         }
-        else if (v.canConvert<int>()) {
+        case QVariant::Color:
+        {
+            QColor c = v.value<QColor>();
+            KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
+            return kc;
+        }
+        case QVariant::Int:
+        {
             QColor c(v.toInt());
             if (c.isValid()) {
                 KoColor kc(c, KoColorSpaceRegistry::instance()->rgb8());
                 return kc;
             }
+            break;
+        }
+        default:
+            ;
         }
     }
     return color;
@@ -300,7 +316,7 @@ void KisPropertiesConfiguration::dump() const
 {
     QMap<QString, QVariant>::Iterator it;
     for (it = d->properties.begin(); it != d->properties.end(); ++it) {
-        dbgKrita << it.key() << " = " << it.value();
+        qDebug() << it.key() << " = " << it.value() << it.value().typeName();
     }
 
 }

@@ -49,6 +49,7 @@ public:
 
     /// Create a null KoColor. It will be valid, but all channels will be set to 0
     explicit KoColor(const KoColorSpace * colorSpace);
+
     /// Create a KoColor from a QColor. The QColor is immediately converted to native. The QColor
     /// is assumed to have the current monitor profile.
     KoColor(const QColor & color, const KoColorSpace * colorSpace);

@@ -110,7 +110,7 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
         }
         n = n.nextSibling();
     }
-    dump();
+    //dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const

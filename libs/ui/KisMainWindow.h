@@ -116,6 +116,11 @@ public:
     bool openDocument(const QUrl &url, OpenFlags flags);
 
     /**
+     * Activate a view containing the document in this window, creating one if needed.
+     */
+    void showDocument(KisDocument *document);
+
+    /**
      * Saves the document, asking for a filename if necessary.
      *
      * @param saveas if set to TRUE the user is always prompted for a filename

@@ -856,6 +856,22 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
     return true;
 }
 
+void KisMainWindow::showDocument(KisDocument *document) {
+    Q_FOREACH(QMdiSubWindow *subwindow, d->mdiArea->subWindowList()) {
+        KisView *view = qobject_cast<KisView*>(subwindow->widget());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(view);
+
+        if (view) {
+            if (view->document() == document) {
+                setActiveSubWindow(subwindow);
+                return;
+            }
+        }
+    }
+
+    addViewAndNotifyLoadingCompleted(document);
+}
+
 KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
     KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
@@ -1272,6 +1288,14 @@ void KisMainWindow::setActiveView(KisView* view)
     actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
     actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
     d->viewManager->setCurrentView(view);
+
+    auto *kisPart = KisPart::instance();
+    if (kisPart->isShowImageInAllWindowsEnabled()) {
+        Q_FOREACH(QPointer<KisMainWindow> window, kisPart->mainWindows()) {
+            if (window == this) continue;
+            window->showDocument(view->document());
+        }
+    }
 }
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)

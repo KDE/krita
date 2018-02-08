@@ -245,6 +245,12 @@ public:
      */
     int viewCount(KisDocument *doc) const;
 
+    /**
+     * When enabled, main windows will synchronize to keep the same document active
+     */
+    void setShowImageInAllWindowsEnabled(bool showInAll);
+    bool isShowImageInAllWindowsEnabled() const;
+
     //------------------ Session management ------------------
 
     void showSessionManager();

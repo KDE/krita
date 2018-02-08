@@ -41,6 +41,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
 #include <KisPart.h>
+#include <dialogs/KisNewWindowLayoutDialog.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -203,10 +204,19 @@ void KisWorkspaceChooser::workspaceSelected(KoResource *resource)
 
 void KisWorkspaceChooser::slotSaveWindowLayout()
 {
-    QString name = m_windowLayoutWidgets.nameEdit->text();
-    auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows());
+    KisNewWindowLayoutDialog dlg;
+    dlg.setName(m_windowLayoutWidgets.nameEdit->text());
+    dlg.exec();
 
+    if (dlg.result() != QDialog::Accepted) return;
+
+    QString name = dlg.name();
+    bool showImageInAllWindows = dlg.showImageInAllWindows();
+
+    auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows);
     layout->setValid(true);
+
+    KisPart::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
 
     KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
     QString saveLocation = rserver->saveLocation();

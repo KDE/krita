@@ -114,6 +114,8 @@ public:
     bool closingSession{false};
     QScopedPointer<KisSessionManagerDialog> sessionManager;
 
+    bool showImageInAllWindows{false};
+
     bool queryCloseDocument(KisDocument *document) {
         Q_FOREACH(auto view, views) {
             if (view && view->isVisible() && view->document() == document) {
@@ -532,6 +534,17 @@ KisInputManager* KisPart::currentInputManager()
     KisMainWindow *mw = currentMainwindow();
     KisViewManager *manager = mw ? mw->viewManager() : 0;
     return manager ? manager->inputManager() : 0;
+}
+
+
+void KisPart::setShowImageInAllWindowsEnabled(bool showInAll)
+{
+    d->showImageInAllWindows = showInAll;
+}
+
+bool KisPart::isShowImageInAllWindowsEnabled() const
+{
+    return d->showImageInAllWindows;
 }
 
 void KisPart::showSessionManager()

@@ -23,6 +23,7 @@
 
 #include <KisPart.h>
 #include <KisDocument.h>
+#include <kis_dom_utils.h>
 
 static const int WINDOW_LAYOUT_VERSION = 1;
 
@@ -35,6 +36,7 @@ struct KisWindowLayoutResource::Private
     };
 
     QVector<Window> windows;
+    bool showImageInAllWindows;
 
     Private() = default;
 
@@ -134,10 +136,13 @@ KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename)
 KisWindowLayoutResource::~KisWindowLayoutResource()
 {}
 
-KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows)
+KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(
+    const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows, bool showImageInAllWindows
+)
 {
     auto resource = new KisWindowLayoutResource(filename);
     resource->setWindows(mainWindows);
+    resource->setShowImageInAllWindows(showImageInAllWindows);
     return resource;
 }
 
@@ -157,6 +162,8 @@ void KisWindowLayoutResource::applyLayout()
     }
 
     d->closeUnneededWindows(currentWindows);
+
+    kisPart->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
 }
 
 bool KisWindowLayoutResource::save()
@@ -228,6 +235,8 @@ bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
 
 void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) const
 {
+    root.setAttribute("showImageInAllWindows", (int)d->showImageInAllWindows);
+
     Q_FOREACH(const auto &window, d->windows) {
         QDomElement elem = doc.createElement("window");
         elem.setAttribute("id", window.windowId.toString());
@@ -245,6 +254,8 @@ void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) cons
 
 void KisWindowLayoutResource::loadXml(const QDomElement &element) const
 {
+    d->showImageInAllWindows = KisDomUtils::toInt(element.attribute("showImageInAllWindows", "0"));
+
     for (auto windowElement = element.firstChildElement("window");
          !windowElement.isNull();
          windowElement = windowElement.nextSiblingElement("window")) {
@@ -285,4 +296,8 @@ void KisWindowLayoutResource::setWindows(const QList<QPointer<KisMainWindow>> &m
     }
 }
 
+void KisWindowLayoutResource::setShowImageInAllWindows(bool showInAll)
+{
+    d->showImageInAllWindows = showInAll;
+}
 

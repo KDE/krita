@@ -1,11 +1,11 @@
-commit 1de1e51701fecc40935129fdf2fbbb06d5b90d9f
+commit f65b19713653c35707cf4c33c405802710fbce83
 Author: Boudewijn Rempt <boud@valdyas.org>
-Date:   Wed Feb 7 15:34:19 2018 +0100
+Date:   Thu Feb 8 13:30:47 2018 +0100
 
-    Try to make gmic install
+    Install gmic and desktop file
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c8106e2..8229f8f 100644
+index c8106e2..ab071e9 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -70,10 +70,6 @@ if (NOT(${GMIC_VERSION} EQUAL ${CIMG_VERSION}))
@@ -32,8 +32,8 @@ index c8106e2..8229f8f 100644
          ${gmic_qt_LIBRARIES}
      )
  
-+    install(TARGETS qmic_krita_qt RUNTIME DESTINATION  ${INSTALL_TARGETS_DEFAULT_ARGS})
-+    install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
++    install(TARGETS gmic_krita_qt RUNTIME DESTINATION  ${CMAKE_INSTALL_PREFIX}/bin)
++    install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 +
  elseif (${GMIC_QT_HOST} STREQUAL "none")
  

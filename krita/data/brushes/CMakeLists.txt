@@ -19,6 +19,7 @@ chisel_dense_smear.png
 chisel_knife.svg
 circle_hard_eroded.gih
 freckles.png
+gradient.png
 graphite_grain.gih
 grass.gih
 grass_patch.gih

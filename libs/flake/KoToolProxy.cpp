@@ -118,7 +118,7 @@ bool KoToolProxyPrivate::isActiveLayerEditable()
 
     KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
     KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
-    if (activeLayer && !activeLayer->isEditable())
+    if (activeLayer && !activeLayer->isShapeEditable())
         return false;
     return true;
 }

@@ -168,7 +168,7 @@ void KarbonPatternTool::initialize()
     // remove all pattern strategies no longer applicable
     Q_FOREACH (KarbonPatternEditStrategyBase *strategy, m_strategies) {
         // is this gradient shape still selected ?
-        if (!selectedShapes.contains(strategy->shape()) || ! strategy->shape()->isEditable()) {
+        if (!selectedShapes.contains(strategy->shape()) || ! strategy->shape()->isShapeEditable()) {
             m_strategies.remove(strategy->shape());
             if (m_currentStrategy == strategy) {
                 m_currentStrategy = 0;
@@ -197,7 +197,7 @@ void KarbonPatternTool::initialize()
 
     // now create new strategies if needed
     Q_FOREACH (KoShape *shape, selectedShapes) {
-        if (!shape->isEditable()) {
+        if (!shape->isShapeEditable()) {
             continue;
         }
 

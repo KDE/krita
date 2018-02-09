@@ -636,7 +636,7 @@ public:
      * @return current visibility state of this shape.
      * @see isGeometryProtected(), isContentProtected(), isSelectable()
      */
-    bool isVisible(bool recursive = false) const;
+    bool isVisible(bool recursive = true) const;
 
     /**
      * Changes the shape to be printable or not. The default is true.
@@ -1054,7 +1054,7 @@ public:
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
 
     /// checks recursively if the shape or one of its parents is not visible or locked
-    bool isEditable() const;
+    virtual bool isShapeEditable(bool recursive = true) const;
 
     /**
      * Adds a shape which depends on this shape.

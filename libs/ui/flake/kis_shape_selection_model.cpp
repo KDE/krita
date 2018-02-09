@@ -182,11 +182,6 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     requestUpdate(changedRect.toAlignedRect());
 }
 
-bool KisShapeSelectionModel::isChildLocked(const KoShape *child) const
-{
-    return child->isGeometryProtected() || child->parent()->isGeometryProtected();
-}
-
 void KisShapeSelectionModel::setShapeSelection(KisShapeSelection* selection)
 {
     m_shapeSelection = selection;

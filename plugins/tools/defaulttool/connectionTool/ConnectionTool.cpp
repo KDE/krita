@@ -237,7 +237,7 @@ void ConnectionTool::repaintDecorations()
         repaintRect = m_currentShape->boundingRect();
         canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
         KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape *>(m_currentShape);
-        if (!m_resetPaint && m_currentShape->isVisible(true) && !connectionShape) {
+        if (!m_resetPaint && m_currentShape->isVisible() && !connectionShape) {
             // only paint connection points of textShapes not inside a tos container and other shapes
             if (!(m_currentShape->shapeId() == TextShape_SHAPEID &&
                   dynamic_cast<KoTosContainer *>(m_currentShape->parent()))) {

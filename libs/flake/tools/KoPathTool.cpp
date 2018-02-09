@@ -940,7 +940,7 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
     Q_FOREACH (KoShape *shape, shapes) {
         KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
 
-        if (pathShape && pathShape->isEditable()) {
+        if (pathShape && pathShape->isShapeEditable()) {
             selectedShapes.append(pathShape);
         }
     }

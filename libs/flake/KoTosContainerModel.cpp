@@ -77,14 +77,6 @@ bool KoTosContainerModel::inheritsTransform(const KoShape *shape) const
     return true;
 }
 
-bool KoTosContainerModel::isChildLocked(const KoShape *child) const
-{
-    Q_ASSERT(child == m_textShape);
-    Q_ASSERT(child->parent());
-    // TODO do we need to guard this?
-    return child->isGeometryProtected() || child->parent()->isGeometryProtected();
-}
-
 int KoTosContainerModel::count() const
 {
     return m_textShape != 0 ? 1 : 0;

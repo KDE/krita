@@ -430,8 +430,23 @@ bool KisShapeLayer::visible(bool recursive) const
 
 void KisShapeLayer::setVisible(bool visible, bool isLoading)
 {
+    KoShapeLayer::setVisible(visible);
     KisExternalLayer::setVisible(visible, isLoading);
 }
+
+void KisShapeLayer::setUserLocked(bool value)
+{
+    KoShapeLayer::setGeometryProtected(value);
+    KisExternalLayer::setUserLocked(value);
+}
+
+bool KisShapeLayer::isShapeEditable(bool recursive) const
+{
+    return KoShapeLayer::isShapeEditable(recursive) && isEditable(true);
+}
+
+// we do not override KoShape::setGeometryProtected() as we consider
+// the user not being able to access the layer shape from Krita UI!
 
 void KisShapeLayer::forceUpdateTimedNode()
 {

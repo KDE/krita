@@ -110,30 +110,6 @@ enum BooleanOp {
 
 }
 
-QPolygonF selectionPolygon(KoSelection *selection)
-{
-    QPolygonF result;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
-
-    if (!selectedShapes.size()) {
-        return result;
-    }
-
-    if (selectedShapes.size() > 1) {
-        QTransform matrix = selection->absoluteTransformation(0);
-        result = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection->size())));
-    } else {
-        KoShape *selectedShape = selectedShapes.first();
-        QTransform matrix = selectedShape->absoluteTransformation(0);
-        result = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selectedShape->size())));
-    }
-
-    return result;
-}
-
-
-
 class NopInteractionStrategy : public KoInteractionStrategy
 {
 public:

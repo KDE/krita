@@ -924,7 +924,7 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
 {
     emit q->currentLayerChanged(canvasData->canvas, layer);
-    layerExplicitlyDisabled = layer && !layer->isEditable();
+    layerExplicitlyDisabled = layer && !layer->isShapeEditable();
     updateToolForProxy();
 
     debugFlake << "Layer changed to" << layer << "explicitly disabled:" << layerExplicitlyDisabled;

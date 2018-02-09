@@ -111,7 +111,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
     // only allow dropping when active layer is editable
     KoSelection *selection = m_parent->canvas()->shapeManager()->selection();
     KoShapeLayer *activeLayer = selection->activeLayer();
-    if (activeLayer && (!activeLayer->isEditable() || activeLayer->isGeometryProtected())) {
+    if (activeLayer && (!activeLayer->isShapeEditable() || activeLayer->isGeometryProtected())) {
         event->ignore();
         return;
     }

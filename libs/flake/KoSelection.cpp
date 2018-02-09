@@ -68,7 +68,7 @@ QRectF KoSelection::outlineRect() const
     Q_D(const KoSelection);
 
     QPolygonF globalPolygon;
-    Q_FOREACH (KoShape *shape, d->selectedShapes) {
+    Q_FOREACH (KoShape *shape, selectedVisibleShapes()) {
         globalPolygon = globalPolygon.united(
             shape->absoluteTransformation(0).map(QPolygonF(shape->outlineRect())));
     }
@@ -80,7 +80,7 @@ QRectF KoSelection::outlineRect() const
 QRectF KoSelection::boundingRect() const
 {
     Q_D(const KoSelection);
-    return KoShape::boundingRect(d->selectedShapes);
+    return KoShape::boundingRect(selectedVisibleShapes());
 }
 
 void KoSelection::select(KoShape *shape)
@@ -89,7 +89,7 @@ void KoSelection::select(KoShape *shape)
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape != this);
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
-    if (!shape->isSelectable() || !shape->isVisible(true)) {
+    if (!shape->isSelectable() || !shape->isVisible()) {
         return;
     }
 
@@ -160,6 +160,7 @@ bool KoSelection::hitTest(const QPointF &position) const
     Q_D(const KoSelection);
 
     Q_FOREACH (KoShape *shape, d->selectedShapes) {
+        if (shape->isVisible()) continue;
         if (shape->hitTest(position)) return true;
     }
 
@@ -172,6 +173,19 @@ const QList<KoShape*> KoSelection::selectedShapes() const
     return d->selectedShapes;
 }
 
+const QList<KoShape *> KoSelection::selectedVisibleShapes() const
+{
+    Q_D(const KoSelection);
+
+    QList<KoShape*> shapes = selectedShapes();
+
+    KritaUtils::filterContainer (shapes, [](KoShape *shape) {
+        return shape->isVisible();
+    });
+
+    return shapes;
+}
+
 const QList<KoShape *> KoSelection::selectedEditableShapes() const
 {
     Q_D(const KoSelection);
@@ -179,7 +193,7 @@ const QList<KoShape *> KoSelection::selectedEditableShapes() const
     QList<KoShape*> shapes = selectedShapes();
 
     KritaUtils::filterContainer (shapes, [](KoShape *shape) {
-        return shape->isEditable();
+        return shape->isShapeEditable();
     });
 
     return shapes;
@@ -208,7 +222,7 @@ bool KoSelection::isSelected(const KoShape *shape) const
         return true;
 
     const KoShape *tmpShape = shape;
-    while (tmpShape && std::find(d->selectedShapes.begin(), d->selectedShapes.end(), tmpShape) == d->selectedShapes.end()/*d->selectedShapes.contains(tmpShape)*/) {
+    while (tmpShape && std::find(d->selectedShapes.begin(), d->selectedShapes.end(), tmpShape) == d->selectedShapes.end()) {
         tmpShape = tmpShape->parent();
     }
 

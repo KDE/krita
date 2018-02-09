@@ -76,7 +76,7 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
 {
     QList<QPointF> snapPoints;
     // no snapping to hidden shapes
-    if (! shape->isVisible(true))
+    if (! shape->isVisible())
         return snapPoints;
 
     // return the special snap points of the shape
@@ -157,7 +157,7 @@ QList<KoShape*> KoSnapProxy::shapes(bool omitEditedShape)
 
     // filter all hidden and ignored shapes
     Q_FOREACH (KoShape * shape, allShapes) {
-        if (shape->isVisible(true) &&
+        if (shape->isVisible() &&
             !ignoredShapes.contains(shape)) {
 
             filteredShapes.append(shape);

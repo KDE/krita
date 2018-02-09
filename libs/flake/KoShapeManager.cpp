@@ -105,7 +105,7 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
     Q_FOREACH (KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
-        if (!child->isVisible())
+        if (!child->isVisible(false))
             continue;
         KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
         if (childGroup) {
@@ -267,7 +267,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
     // also filter shapes with a parent which has filter effects applied
     QList<KoShape*> sortedShapes;
     foreach (KoShape *shape, unsortedShapes) {
-        if (!shape->isVisible(true))
+        if (!shape->isVisible())
             continue;
         bool addShapeToList = true;
         // check if one of the shapes ancestors have filter effects
@@ -488,7 +488,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
     KoShape *firstUnselectedShape = 0;
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
-        if (omitHiddenShapes && ! shape->isVisible(true))
+        if (omitHiddenShapes && ! shape->isVisible())
             continue;
         if (! shape->hitTest(position))
             continue;
@@ -538,7 +538,7 @@ QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenSha
      
         KoShape *shape = shapes.at(count);
        
-        if (omitHiddenShapes && !shape->isVisible(true)) {
+        if (omitHiddenShapes && !shape->isVisible()) {
             shapes.removeAt(count);
         } else {
             const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());

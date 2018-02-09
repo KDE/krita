@@ -53,7 +53,6 @@ public:
 
     void containerChanged(KoShapeContainer *, KoShape::ChangeType) override;
     void childChanged(KoShape * child, KoShape::ChangeType type) override;
-    bool isChildLocked(const KoShape *child) const override;
     void setShapeSelection(KisShapeSelection* selection);
 
 private Q_SLOTS:

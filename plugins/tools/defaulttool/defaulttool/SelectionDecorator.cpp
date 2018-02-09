@@ -71,14 +71,16 @@ void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    const bool haveOnlyOneEditableShape = m_selection->selectedEditableShapes().size() == 1;
+    QList<KoShape*> selectedShapes = m_selection->selectedVisibleShapes();
+    if (selectedShapes.isEmpty()) return;
+
+    const bool haveOnlyOneEditableShape =
+        m_selection->selectedEditableShapes().size() == 1 &&
+        selectedShapes.size() == 1;
 
     bool editable = false;
 
-    QList<KoShape*> selectedShapes = m_selection->selectedShapes();
-    if (selectedShapes.isEmpty()) return;
-
-    foreach (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
+    Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
             KisHandlePainterHelper helper =
                 KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
@@ -87,7 +89,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
             helper.drawRubberLine(shape->outlineRect());
         }
 
-        if (!shape->isGeometryProtected()) {
+        if (shape->isShapeEditable()) {
             editable = true;
         }
     }

@@ -57,8 +57,6 @@ public:
     /// reimplemented from KoShapeContainerModel
     void childChanged(KoShape *child, KoShape::ChangeType type) override;
     /// reimplemented from KoShapeContainerModel
-    bool isChildLocked(const KoShape *child) const override;
-    /// reimplemented from KoShapeContainerModel
     void setInheritsTransform(const KoShape *shape, bool inherit) override;
     /// reimplemented from KoShapeContainerModel
     bool inheritsTransform(const KoShape *shape) const override;

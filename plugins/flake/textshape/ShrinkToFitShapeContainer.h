@@ -100,8 +100,6 @@ public:
     // reimplemented
     bool inheritsTransform(const KoShape *child) const override;
     // reimplemented
-    bool isChildLocked(const KoShape *child) const override;
-    // reimplemented
     bool isClipped(const KoShape *child) const override;
 
 private Q_SLOTS:

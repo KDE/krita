@@ -2055,7 +2055,7 @@ void TestSvgParser::testKoClipPathRendering()
     {
         QList<KoShape*> shapes({shape1.take(), shape2.take()});
 
-        KoShapeGroupCommand cmd(group.data(), shapes, false, true, false);
+        KoShapeGroupCommand cmd(group.data(), shapes, false);
         cmd.redo();
     }
 
@@ -2099,7 +2099,7 @@ void TestSvgParser::testKoClipPathRelativeRendering()
     {
         QList<KoShape*> shapes({shape1.take(), shape2.take()});
 
-        KoShapeGroupCommand cmd(group.data(), shapes, false, true, false);
+        KoShapeGroupCommand cmd(group.data(), shapes, false);
         cmd.redo();
     }
 

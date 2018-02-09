@@ -697,6 +697,25 @@ bool KoShape::inheritsTransformFromAny(const QList<KoShape *> ancestorsInQuestio
     return result;
 }
 
+bool KoShape::hasCommonParent(const KoShape *shape) const
+{
+    const KoShape *thisShape = this;
+    while (thisShape) {
+
+        const KoShape *otherShape = shape;
+        while (otherShape) {
+            if (thisShape == otherShape) {
+                return true;
+            }
+            otherShape = otherShape->parent();
+        }
+
+        thisShape = thisShape->parent();
+    }
+
+    return false;
+}
+
 qint16 KoShape::zIndex() const
 {
     Q_D(const KoShape);

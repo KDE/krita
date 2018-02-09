@@ -1033,13 +1033,17 @@ void DefaultTool::selectionGroup()
 
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
     std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    if (selectedShapes.isEmpty()) return;
+
+    const int groupZIndex = selectedShapes.last()->zIndex();
 
     KoShapeGroup *group = new KoShapeGroup();
+    group->setZIndex(groupZIndex);
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
     new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
     canvas()->shapeController()->addShapeDirect(group, 0, cmd);
-    new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
+    new KoShapeGroupCommand(group, selectedShapes, true, cmd);
     new KoKeepShapesSelectedCommand({}, {group}, selection, true, cmd);
     canvas()->addCommand(cmd);
 

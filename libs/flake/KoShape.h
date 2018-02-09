@@ -728,6 +728,11 @@ public:
     bool inheritsTransformFromAny(const QList<KoShape*> ancestorsInQuestion) const;
 
     /**
+     * @return true if this shape has a common parent with \p shape
+     */
+    bool hasCommonParent(const KoShape *shape) const;
+
+    /**
      * Request a repaint to be queued.
      * The repaint will be of the entire Shape, including its selection handles should this
      * shape be selected.

@@ -1245,8 +1245,8 @@ void SvgParser::addToGroup(QList<KoShape*> shapes, KoShapeContainer *group)
     if (!group || shapes.isEmpty())
         return;
 
-    // not clipped, but inherit transform
-    KoShapeGroupCommand cmd(group, shapes, false, true, false);
+    // not normalized
+    KoShapeGroupCommand cmd(group, shapes, false);
     cmd.redo();
 }
 

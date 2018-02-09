@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QAction, QFileDialog
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
 
@@ -23,23 +23,17 @@ class SaveAction(QAction):
     def save(self):
         text = self.editor.toPlainText()
         fileName = ''
-        fileExtension = ''
 
         if not self.scripter.documentcontroller.activeDocument:
-            try:
-                fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
-                                                       'Save Python File', '',
-                                                       'Python File (*.py)')[0]
-                if not fileName:
-                    return
-
-                fileExtension = fileName.rsplit('.', maxsplit=1)[1]
-            except:
-                if not fileExtension == 'py':
-                    QMessageBox.information(self.scripter.uicontroller.mainWidget,
-                                            'Invalid File',
-                                            'Save files with .py extension')
+            fileName = QFileDialog.getSaveFileName(self.scripter.uicontroller.mainWidget,
+                                                   'Save Python File', '',
+                                                   'Python File (*.py)')[0]
+            if not fileName:
                 return
+
+            # don't validate file name - trust user to specify the extension they want
+            # getSaveFileName will add ".py" if there is no extension. 
+            # It will strip a trailing period and, in each case,  test for file collisions 
 
         document = self.scripter.documentcontroller.saveDocument(text, fileName)
         if document:

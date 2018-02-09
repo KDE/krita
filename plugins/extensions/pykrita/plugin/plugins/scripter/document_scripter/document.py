@@ -1,5 +1,3 @@
-from PyQt5.QtCore import QFile, QIODevice, QTextStream
-
 
 class Document(object):
 
@@ -16,7 +14,7 @@ class Document(object):
 
     def save(self):
         with open(self._filePath, 'w') as pythonFile:
-            print(self._document, file=pythonFile)
+            pythonFile.write(self._document)
 
     def compare(self, new_doc):
         if len(self._document) != len(new_doc):

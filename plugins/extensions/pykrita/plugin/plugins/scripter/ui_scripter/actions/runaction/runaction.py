@@ -10,7 +10,7 @@ import traceback
 
 PYTHON33 = sys.version_info.major==3 and sys.version_info.minor==3
 PYTHON34 = sys.version_info.major==3 and sys.version_info.minor==4
-EXEC_NAMESPACE = "users_script" # namespace that user scripts will run in 
+EXEC_NAMESPACE = "__main__" # namespace that user scripts will run in 
 
 class RunAction(QAction):
 
@@ -79,7 +79,8 @@ class RunAction(QAction):
                 
             else:
                 code = compile(script, '<string>', 'exec')
-                exec(code, {})
+                globals_dict = {"__name__":EXEC_NAMESPACE}
+                exec(code, globals_dict)
                 
         except Exception as e:
             """Provide context (line number and text) for an error that is caught. 

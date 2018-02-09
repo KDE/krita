@@ -106,9 +106,14 @@ void KoShapeShadowCommand::redo()
     int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape *shape = d->shapes[i];
-        shape->update();
-        shape->setShadow(d->newShadows[i]);
-        shape->update();
+
+        // TODO: implement comparison operator for KoShapeShadow
+        //       (or just deprecate it entirely)
+        if (shape->shadow() || d->newShadows[i]) {
+            const QRectF oldBoundingRect = shape->boundingRect();
+            shape->setShadow(d->newShadows[i]);
+            shape->updateAbsolute(oldBoundingRect | shape->boundingRect());
+        }
     }
 }
 
@@ -118,8 +123,13 @@ void KoShapeShadowCommand::undo()
     int shapeCount = d->shapes.count();
     for (int i = 0; i < shapeCount; ++i) {
         KoShape *shape = d->shapes[i];
-        shape->update();
-        shape->setShadow(d->oldShadows[i]);
-        shape->update();
+
+        // TODO: implement comparison operator for KoShapeShadow
+        //       (or just deprecate it entirely)
+        if (shape->shadow() || d->oldShadows[i]) {
+            const QRectF oldBoundingRect = shape->boundingRect();
+            shape->setShadow(d->oldShadows[i]);
+            shape->updateAbsolute(oldBoundingRect | shape->boundingRect());
+        }
     }
 }

@@ -524,6 +524,17 @@ public:
      */
     void setCurrentImage(KisImageSP image);
 
+    /**
+     * Set the image of the document preliminary, before the document
+     * has completed loading. Some of the document items (shapes) may want
+     * to access image properties (bounds and resolution), so we should provide
+     * it to them even before the entire image is loaded.
+     *
+     * Right now, the only use by KoShapeRegistry::createShapeFromOdf(), remove
+     * after it is deprecated.
+     */
+    void hackPreliminarySetImage(KisImageSP image);
+
     KisUndoStore* createUndoStore();
 
     /**

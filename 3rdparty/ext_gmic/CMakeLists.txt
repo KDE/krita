@@ -22,6 +22,7 @@ ExternalProject_Add( ext_gmic_qt
     URL https://files.kde.org/krita/build/dependencies/gmic-qt-3868d25.tar.gz
     DOWNLOAD_NAME gmic-qt-3868d25.tar.gz
     URL_HASH SHA1=98ae2db9c45ee1c830011b4ed2574eb0839c7abe
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/desktop_icon.diff
 
     SOURCE_DIR gmic-qt
     INSTALL_DIR ${PREFIX_ext_gmic}
@@ -29,7 +30,6 @@ ExternalProject_Add( ext_gmic_qt
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_gmic} -DGMIC_QT_HOST=krita -DCMAKE_BUILD_TYPE=Release ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <BINARY_DIR>/gmic_krita_qt${CMAKE_EXECUTABLE_SUFFIX} <INSTALL_DIR>/bin/gmic_krita_qt${CMAKE_EXECUTABLE_SUFFIX}
 
     DEPENDS ext_gmic_base
 )

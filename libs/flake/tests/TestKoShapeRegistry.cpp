@@ -37,6 +37,8 @@
 #include <KoXmlReader.h>
 
 #include <FlakeDebug.h>
+#include "kis_debug.h"
+
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {
@@ -137,6 +139,75 @@ void TestKoShapeRegistry::testCreateFramedShapes()
     shape = registry->createShapeFromOdf(pathElement, shapeContext);
     QVERIFY(shape != 0);
     QVERIFY(shape->shapeId() == KoPathShapeId);
+}
+
+#include <KoStore.h>
+#include <KoDocumentResourceManager.h>
+#include <KoShapeController.h>
+#include <MockShapes.h>
+#include "../../sdk/tests/qimage_test_util.h"
+
+void TestKoShapeRegistry::testFramedSvgShapes()
+{
+    QBuffer xmldevice;
+    xmldevice.open(QIODevice::WriteOnly);
+    QTextStream xmlstream(&xmldevice);
+    xmlstream.setCodec("UTF-8");
+
+    xmlstream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+    xmlstream << "<office:document-content xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:meta=\"urn:oasis:names:tc:opendocument:xmlns:meta:1.0\" xmlns:config=\"urn:oasis:names:tc:opendocument:xmlns:config:1.0\" xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\" xmlns:table=\"urn:oasis:names:tc:opendocument:xmlns:table:1.0\" xmlns:draw=\"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0\" xmlns:presentation=\"urn:oasis:names:tc:opendocument:xmlns:presentation:1.0\" xmlns:dr3d=\"urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0\" xmlns:chart=\"urn:oasis:names:tc:opendocument:xmlns:chart:1.0\" xmlns:form=\"urn:oasis:names:tc:opendocument:xmlns:form:1.0\" xmlns:script=\"urn:oasis:names:tc:opendocument:xmlns:script:1.0\" xmlns:style=\"urn:oasis:names:tc:opendocument:xmlns:style:1.0\" xmlns:number=\"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0\" xmlns:math=\"http://www.w3.org/1998/Math/MathML\" xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\" xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" xmlns:calligra=\"http://www.calligra.org/2005/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";
+    xmlstream << "<office:body>";
+    xmlstream << "<office:text>";
+    xmlstream << "<draw:frame xml:id=\"shape-1\" draw:z-index=\"2\" draw:id=\"shape-1\" draw:layer=\"\" svg:width=\"226pt\" svg:height=\"141pt\" svg:x=\"83pt\" svg:y=\"41pt\">";
+    xmlstream << "  <draw:image xlink:type=\"simple\" draw:z-index=\"3\" xlink:show=\"embed\" xlink:actuate=\"onLoad\" xlink:href=\"VectorImages/Image1\"/>";
+    xmlstream << "</draw:frame>";
+    xmlstream << "</office:text>";
+    xmlstream << "</office:body>";
+    xmlstream << "</office:document-content>";
+    xmldevice.close();
+
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine = 0;
+    int errorColumn = 0;
+
+    QCOMPARE(doc.setContent(&xmldevice, true, &errorMsg, &errorLine, &errorColumn), true);
+    QCOMPARE(errorMsg.isEmpty(), true);
+    QCOMPARE(errorLine, 0);
+    QCOMPARE(errorColumn, 0);
+
+    KoXmlElement contentElement = doc.documentElement();
+    KoXmlElement bodyElement = contentElement.firstChild().toElement();
+
+    KoShapeRegistry * registry = KoShapeRegistry::instance();
+
+    // XXX: When loading is implemented, these no doubt have to be
+    // sensibly filled.
+    KoOdfStylesReader stylesReader;
+
+    const QString resourcesBlob = TestUtil::fetchDataFileLazy("odf_frame_resource_store.zip");
+    QScopedPointer<KoStore> store(KoStore::createStore(resourcesBlob, KoStore::Read, "krita", KoStore::Zip));
+    QScopedPointer<KoDocumentResourceManager> resourceManager(new KoDocumentResourceManager());
+
+
+    QScopedPointer<MockShapeController> document(new MockShapeController());
+    QScopedPointer<MockCanvas> canvas(new MockCanvas(document.data()));
+
+    QScopedPointer<KoShapeController> shapeController(new KoShapeController(canvas.data(), document.data()));
+    resourceManager->setShapeController(shapeController.data());
+
+
+    KoOdfLoadingContext odfContext(stylesReader, store.data());
+    KoShapeLoadingContext shapeContext(odfContext, resourceManager.data());
+
+    KoXmlElement frameElement = bodyElement.firstChild().firstChild().toElement();
+
+    QCOMPARE(frameElement.tagName(), QString("frame"));
+
+    KoShape *shape = registry->createShapeFromOdf(frameElement, shapeContext);
+
+    QVERIFY(shape);
+    QCOMPARE(shape->absoluteOutlineRect(0), QRectF(83, 41, 226,141));
 }
 
 QTEST_MAIN(TestKoShapeRegistry)

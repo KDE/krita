@@ -21,6 +21,7 @@ deform.png
 eraser-large.png
 experimental.png
 gel-pen.png
+grid.png
 ink-brush.png
 ink-G-pen.png
 inking_brush_a.png

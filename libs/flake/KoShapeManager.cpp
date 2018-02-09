@@ -586,12 +586,9 @@ void KoShapeManager::notifyShapeChanged(KoShape *shape)
             notifyShapeChanged(child);
     }
 
-    // TODO: change to a KisThreadSafeSignalCompressor!
-    if (wasEmpty && !d->aggregate4update.isEmpty())
-        QTimer::singleShot(100, this, SLOT(updateTree()));
-
-    // TODO: remove, it is not used anymore!
-    emit shapeChanged(shape);
+    if (wasEmpty && !d->aggregate4update.isEmpty()) {
+        d->updateTreeCompressor.start();
+    }
 }
 
 QList<KoShape*> KoShapeManager::shapes() const

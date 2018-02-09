@@ -52,13 +52,16 @@ namespace KritaUtils
 
     QVector<QRect> splitRectIntoPatches(const QRect &rc, const QSize &patchSize)
     {
+        using namespace KisAlgebra2D;
+
+
         QVector<QRect> patches;
 
-        qint32 firstCol = rc.x() / patchSize.width();
-        qint32 firstRow = rc.y() / patchSize.height();
+        qint32 firstCol = divideFloor(rc.x(), patchSize.width());
+        qint32 firstRow = divideFloor(rc.y(), patchSize.height());
 
-        qint32 lastCol = (rc.x() + rc.width()) / patchSize.width();
-        qint32 lastRow = (rc.y() + rc.height()) / patchSize.height();
+        qint32 lastCol = divideFloor(rc.x() + rc.width(), patchSize.width());
+        qint32 lastRow = divideFloor(rc.y() + rc.height(), patchSize.height());
 
         for(qint32 i = firstRow; i <= lastRow; i++) {
             for(qint32 j = firstCol; j <= lastCol; j++) {

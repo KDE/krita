@@ -106,6 +106,25 @@ template <typename T>
     return y >= T(0) ? strippedX : -strippedX;
 }
 
+template<class T>
+typename std::enable_if<std::is_integral<T>::value, T>::type
+divideFloor(T a, T b)
+{
+    const bool a_neg = a < T(0);
+    const bool b_neg = b < T(0);
+
+    if (a == T(0)) {
+        return 0;
+    } else if (a_neg == b_neg) {
+        return a / b;
+    } else {
+        const T a_abs = qAbs(a);
+        const T b_abs = qAbs(b);
+
+        return - 1 - (a_abs - T(1)) / b_abs;
+    }
+}
+
 template <class T>
 T leftUnitNormal(const T &a)
 {

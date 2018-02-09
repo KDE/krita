@@ -141,7 +141,7 @@ void KisKraSaverTest::testSaveEmpty()
 
 void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationSP config)
 {
-    TestUtil::ExternalImageChecker chk(testName, "fill_layer");
+    TestUtil::ReferenceImageChecker chk(testName, "fill_layer");
     chk.setFuzzy(2);
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
@@ -212,7 +212,7 @@ void KisKraSaverTest::testRoundTripFillLayerPattern()
 
 void KisKraSaverTest::testRoundTripLayerStyles()
 {
-    TestUtil::ExternalImageChecker chk("kra_saver_test", "layer_styles");
+    TestUtil::ReferenceImageChecker chk("kra_saver_test", "layer_styles");
 
     QRect imageRect(0,0,512,512);
 
@@ -431,7 +431,7 @@ void KisKraSaverTest::testRoundTripColorizeMask()
 
 void KisKraSaverTest::testRoundTripShapeLayer()
 {
-    TestUtil::ExternalImageChecker chk("kra_saver_test", "shape_layer");
+    TestUtil::ReferenceImageChecker chk("kra_saver_test", "shape_layer");
 
     QRect refRect(0,0,512,512);
 
@@ -482,7 +482,7 @@ void KisKraSaverTest::testRoundTripShapeLayer()
 
 void KisKraSaverTest::testRoundTripShapeSelection()
 {
-    TestUtil::ExternalImageChecker chk("kra_saver_test", "shape_selection");
+    TestUtil::ReferenceImageChecker chk("kra_saver_test", "shape_selection");
 
     QRect refRect(0,0,512,512);
 

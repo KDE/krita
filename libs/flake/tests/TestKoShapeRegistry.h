@@ -30,7 +30,7 @@ private Q_SLOTS:
     void testGetKoShapeRegistryInstance();
     void testCreateShapes();
     void testCreateFramedShapes();
-
+    void testFramedSvgShapes();
 };
 
 #endif

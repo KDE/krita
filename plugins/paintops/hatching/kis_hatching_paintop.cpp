@@ -56,11 +56,13 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisP
 
     m_hatchingBrush = new HatchingBrush(m_settings);
 
+    m_angleOption.readOptionSetting(settings);
     m_crosshatchingOption.readOptionSetting(settings);
     m_separationOption.readOptionSetting(settings);
     m_thicknessOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
+    m_angleOption.resetAllSensors();
     m_crosshatchingOption.resetAllSensors();
     m_separationOption.resetAllSensors();
     m_thicknessOption.resetAllSensors();
@@ -95,6 +97,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     if (!brush->canPaintFor(info)) return KisSpacingInformation(1.0);
 
     //SENSOR-depending settings
+    m_settings->anglesensorvalue = m_angleOption.apply(info);
     m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
     m_settings->separationsensorvalue = m_separationOption.apply(info);
     m_settings->thicknesssensorvalue = m_thicknessOption.apply(info);
@@ -130,9 +133,6 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
         m_hatchedDab->fill(0, 0, (sw - 1), (sh - 1), aersh.data()); //this plus yellow background = french fry brush
     }
 
-    // Trick for moire pattern to look better
-    bool donotbasehatch = false;
-
     /* If block describing how to stack hatching passes to generate
     crosshatching according to user specifications */
     if (m_settings->enabledcurvecrosshatching) {
@@ -153,8 +153,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
         }
         else if (m_settings->moirepattern) {
-            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 180), painter()->paintColor(), additionalScale);
-            donotbasehatch = true;
+            m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 360), painter()->paintColor(), additionalScale);
         }
     } else {
         if (m_settings->perpendicular) {
@@ -173,8 +172,13 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
         }
     }
 
-    if (!donotbasehatch)
+    if (m_settings->enabledcurveangle)
+      m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->anglesensorvalue)*360+m_settings->angle), painter()->paintColor(), additionalScale);
+
+    // The base hatch... unless moiré or angle
+    if (!m_settings->moirepattern && !m_settings->enabledcurveangle)
         m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor(), additionalScale);
+
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);

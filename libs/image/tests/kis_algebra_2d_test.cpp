@@ -187,4 +187,27 @@ void KisAlgebra2DTest::testMatrixDecomposition2()
     QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
 }
 
+
+
+void KisAlgebra2DTest::testDivisionWithFloor()
+{
+    QBENCHMARK {
+
+    for (int a = -1000; a < 1000; a++) {
+        for (int b = -1000; b < 1000; b++) {
+            if (b == 0) continue;
+
+            int refValue = qFloor(qreal(a) / b);
+            int value = KisAlgebra2D::divideFloor(a, b);
+
+            if (refValue != value) {
+                qDebug() << ppVar(a) << ppVar(b);
+
+                QCOMPARE(value, refValue);
+            }
+        }
+    }
+    }
+}
+
 QTEST_MAIN(KisAlgebra2DTest)

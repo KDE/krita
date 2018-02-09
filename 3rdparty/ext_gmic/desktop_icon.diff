@@ -1,0 +1,64 @@
+commit f65b19713653c35707cf4c33c405802710fbce83
+Author: Boudewijn Rempt <boud@valdyas.org>
+Date:   Thu Feb 8 13:30:47 2018 +0100
+
+    Install gmic and desktop file
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c8106e2..ab071e9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -70,10 +70,6 @@ if (NOT(${GMIC_VERSION} EQUAL ${CIMG_VERSION}))
+   message(FATAL_ERROR "\nVersion numbers of files 'gmic.h' (" ${GMIC_VERSION} ") and 'CImg.h' ("${CIMG_VERSION} ") mismatch")
+ endif()
+ 
+-
+-
+-
+-
+ option(PRERELEASE "Set to ON makes this a prelease build")
+ if (${PRERELEASE})
+     string(TIMESTAMP PRERELEASE_DATE %y%m%d)
+@@ -86,8 +82,6 @@ if (${DRMINGW})
+     add_definitions(-DDRMINGW)
+ endif()
+ 
+-
+-
+ # Required packages
+ 
+ #
+@@ -416,6 +410,9 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+         ${gmic_qt_LIBRARIES}
+     )
+ 
++    install(TARGETS gmic_krita_qt RUNTIME DESTINATION  ${CMAKE_INSTALL_PREFIX}/bin)
++    install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
++
+ elseif (${GMIC_QT_HOST} STREQUAL "none")
+ 
+     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/host_none.cpp include/standalone/ImageDialog.h src/standalone/ImageDialog.cpp)
+@@ -432,3 +429,4 @@ else()
+ endif()
+ 
+ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
++
+diff --git a/gmic_krita_qt.desktop b/gmic_krita_qt.desktop
+new file mode 100644
+index 0000000..579d427
+--- /dev/null
++++ b/gmic_krita_qt.desktop
+@@ -0,0 +1,9 @@
++[Desktop Entry]
++Name=gmic_krita_qt
++Exec=gmic_krita_qt
++GenericName=G'Mic plugin for Krita
++Comment=G'Mic plugin for Krita
++Type=Application
++Icon=gmic_krita_qt
++Categories=Qt;KDE;Graphics;
++StartupNotify=false
+diff --git a/gmic_krita_qt.png b/gmic_krita_qt.png
+new file mode 100644
+index 0000000..cda8d5c
+Binary files /dev/null and b/gmic_krita_qt.png differ

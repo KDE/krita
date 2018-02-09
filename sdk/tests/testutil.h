@@ -196,10 +196,16 @@ inline bool comparePaintDevicesClever(const KisPaintDeviceSP dev1, const KisPain
 
 #ifdef FILES_OUTPUT_DIR
 
-struct ExternalImageChecker
+struct ReferenceImageChecker
 {
-    ExternalImageChecker(const QString &prefix, const QString &testName)
-        : m_prefix(prefix),
+    enum StorageType {
+        InternalStorage = 0,
+        ExternalStorage
+    };
+
+    ReferenceImageChecker(const QString &prefix, const QString &testName, StorageType storageType = ExternalStorage)
+        : m_storageType(storageType),
+          m_prefix(prefix),
           m_testName(testName),
           m_success(true),
           m_maxFailingPixels(100),
@@ -221,11 +227,20 @@ struct ExternalImageChecker
     }
 
     inline bool checkDevice(KisPaintDeviceSP device, KisImageSP image, const QString &caseName) {
-        bool result =
-            checkQImageExternal(device->convertToQImage(0, image->bounds()),
-                                m_testName,
-                                m_prefix,
-                                caseName, m_fuzzy, m_fuzzy, m_maxFailingPixels);
+        bool result = false;
+
+
+        if (m_storageType == ExternalStorage) {
+            result = checkQImageExternal(device->convertToQImage(0, image->bounds()),
+                                         m_testName,
+                                         m_prefix,
+                                         caseName, m_fuzzy, m_fuzzy, m_maxFailingPixels);
+        } else {
+            result = checkQImage(device->convertToQImage(0, image->bounds()),
+                                 m_testName,
+                                 m_prefix,
+                                 caseName, m_fuzzy, m_fuzzy, m_maxFailingPixels);
+        }
 
         m_success &= result;
         return result;
@@ -239,6 +254,8 @@ struct ExternalImageChecker
     }
 
 private:
+    bool m_storageType;
+
     QString m_prefix;
     QString m_testName;
 

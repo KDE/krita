@@ -31,7 +31,6 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
-#include "KoUnavailShape.h"
 #include "SvgShapeFactory.h"
 
 #include <KoPluginLoader.h>
@@ -147,6 +146,180 @@ void KoShapeRegistry::Private::insertFactory(KoShapeFactoryBase *factory)
     }
 }
 
+#include <KoXmlWriter.h>
+#include <QBuffer>
+#include <KoStore.h>
+#include <boost/optional.hpp>
+
+namespace {
+
+struct ObjectEntry {
+    ObjectEntry()
+    {
+    }
+
+    ObjectEntry(const ObjectEntry &rhs)
+        : objectXmlContents(rhs.objectXmlContents),
+          objectName(rhs.objectName),
+          isDir(rhs.isDir)
+    {
+    }
+
+    ~ObjectEntry()
+    {
+    }
+
+    QByteArray objectXmlContents; // the XML tree in the object
+    QString objectName;       // object name in the frame without "./"
+    // This is extracted from objectXmlContents.
+    bool isDir = false;
+};
+
+// A FileEntry is used to store information about embedded files
+// inside (i.e. referred to by) an object.
+struct FileEntry {
+    FileEntry() {}
+    FileEntry(const FileEntry &rhs)
+        : path(rhs.path),
+          mimeType(rhs.mimeType),
+          isDir(rhs.isDir),
+          contents(rhs.contents)
+    {
+    }
+
+    QString path;           // Normalized filename, i.e. without "./".
+    QString mimeType;
+    bool  isDir;
+    QByteArray contents;
+};
+
+QByteArray loadFile(const QString &fileName, KoShapeLoadingContext &context)
+{
+    // Can't load a file which is a directory, return an invalid QByteArray
+    if (fileName.endsWith('/'))
+        return QByteArray();
+
+    KoStore *store = context.odfLoadingContext().store();
+    QByteArray fileContent;
+
+    if (!store->open(fileName)) {
+        store->close();
+        return QByteArray();
+    }
+
+    int fileSize = store->size();
+    fileContent = store->read(fileSize);
+    store->close();
+
+    //debugFlake << "File content: " << fileContent;
+    return fileContent;
+}
+
+
+boost::optional<FileEntry> storeFile(const QString &fileName, KoShapeLoadingContext &context)
+{
+    debugFlake << "Saving file: " << fileName;
+
+    boost::optional<FileEntry> result;
+
+    QByteArray fileContent = loadFile(fileName, context);
+    if (!fileContent.isNull()) {
+
+        // Actually store the file in the list.
+        FileEntry entry;
+        entry.path = fileName;
+        if (entry.path.startsWith(QLatin1String("./"))) {
+            entry.path.remove(0, 2);
+        }
+        entry.mimeType = context.odfLoadingContext().mimeTypeForPath(entry.path);
+        entry.isDir = false;
+        entry.contents = fileContent;
+
+        result = entry;
+    }
+
+    return result;
+}
+
+void storeXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer,
+                       ObjectEntry *object, QHash<QString, QString> &unknownNamespaces)
+{
+    // Start the element;
+    // keep the name in a QByteArray so that it stays valid until end element is called.
+    const QByteArray name(el.nodeName().toLatin1());
+    writer.startElement(name.constData());
+
+    // Child elements
+    // Loop through all the child elements of the draw:frame.
+    KoXmlNode n = el.firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            storeXmlRecursive(n.toElement(), writer, object, unknownNamespaces);
+        }
+        else if (n.isText()) {
+            writer.addTextNode(n.toText().data()/*.toUtf8()*/);
+        }
+    }
+
+    // End the element
+    writer.endElement();
+}
+
+
+QVector<ObjectEntry> storeObjects(const KoXmlElement &element)
+{
+    QVector<ObjectEntry> result;
+
+    // Loop through all the child elements of the draw:frame and save them.
+    KoXmlNode n = element.firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        debugFlake << "In draw:frame, node =" << n.nodeName();
+
+        // This disregards #text, but that's not in the spec anyway so
+        // it doesn't need to be saved.
+        if (!n.isElement())
+            continue;
+        KoXmlElement el = n.toElement();
+
+        ObjectEntry object;
+
+        QByteArray contentsTmp;
+        QBuffer buffer(&contentsTmp); // the member
+        KoXmlWriter writer(&buffer);
+
+        // 1. Find out the objectName
+        // Save the normalized filename, i.e. without a starting "./".
+        // An empty string is saved if no name is found.
+        QString  name = el.attributeNS(KoXmlNS::xlink, "href", QString());
+        if (name.startsWith(QLatin1String("./")))
+            name.remove(0, 2);
+        object.objectName = name;
+
+        // 2. Copy the XML code.
+        QHash<QString, QString> unknownNamespaces;
+        storeXmlRecursive(el, writer, &object, unknownNamespaces);
+        object.objectXmlContents = contentsTmp;
+
+        // 3, 4: the isDir and manifestEntry members are not set here,
+        // but initialize them anyway. .
+        object.isDir = false;  // Has to be initialized to something.
+
+        result.append(object);
+    }
+
+    return result;
+}
+}
+
+#include <svg/SvgShapeFactory.h>
+#include "kis_debug.h"
+#include <QMimeDatabase>
+#include <KoUnit.h>
+#include <KoDocumentResourceManager.h>
+#include <KoShapeController.h>
+#include <KoShapeGroupCommand.h>
+
+
 KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoadingContext & context) const
 {
     debugFlake << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
@@ -161,14 +334,6 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
         //
         // FIXME: we might want to have some code to determine which is
         //        the "best" of the creatable shapes.
-
-        // The logic is thus:
-        // First attempt to check whether we can in fact load the first child,
-        // and only use a Shape if the first child is accepted. If this is not the case, then
-        // use the UnavailShape which ensures data integrity and that the fallback views are not
-        // edited and subsequently saved back (as they would then no longer be a true
-        // representation of the data they are supposed to be views of).
-        // The reason is that all subsequent children will be fallbacks, in order of preference.
 
         if (e.hasChildNodes()) {
             // if we don't ignore white spaces it can be that the first child is not a element so look for the first element
@@ -208,46 +373,99 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
             }
             else {
                 // If none of the registered shapes could handle the frame
-                // contents, create an UnavailShape.  This should never fail.
-                debugFlake << "No shape found; Creating an unavail shape";
+                // contents, try to fetch SVG it from an embedded link
 
-                KoUnavailShape *uShape = new KoUnavailShape();
-                uShape->setShapeId(KoUnavailShape_SHAPEID);
-                //FIXME: Add creating/setting the collection here(?)
-                uShape->loadOdf(e, context);
+                const KoXmlElement &frameElement = e;
+                const int frameZIndex = SvgShapeFactory::calculateZIndex(frameElement, context);
 
-                // Check whether we can load a shape to fit the current object.
-                KoXmlElement child;
-                KoShape *childShape = 0;
-                bool first = true;
-                forEachElement(child, e) {
-                    // no need to try to load the first element again as it was already tried before and we could not load it
-                    if (first) {
-                        first = false;
-                        continue;
-                    }
-                    debugFlake << "--------------------------------------------------------";
-                    debugFlake << "Attempting to check if we can fall back ability to the item"
-                                  << child.nodeName();
-                    childShape = d->createShapeInternal(e, context, child);
-                    if (childShape) {
-                        debugFlake << "Shape was found! Adding as child of unavail shape and stopping search";
-                        uShape->addShape(childShape);
-                        childShape->setPosition(QPointF(qreal(0.0), qreal(0.0)));
+                QList<KoShape*> resultShapes;
 
-                        // The embedded shape is just there to show the preview image.
-                        // We don't want the user to be able to manipulate the picture
-                        // in any way, so we disable the tools of the shape. This can
-                        // be done in a hacky way (courtesy of Jaham) by setting its
-                        // shapeID to "".
-                        childShape->setShapeId(QString());
-                        break;
+                QVector<ObjectEntry> objects = storeObjects(frameElement);
+                Q_FOREACH (const ObjectEntry &object, objects) {
+                    if (object.objectName.isEmpty()) continue;
+
+                    boost::optional<FileEntry> file = storeFile(object.objectName, context);
+                    if (file && !file->contents.isEmpty()) {
+                        QMimeDatabase db;
+                        QMimeType mime = db.mimeTypeForData(file->contents);
+
+                        const int zIndex = SvgShapeFactory::calculateZIndex(element, context);
+
+                        if (mime.inherits("image/svg+xml")) {
+
+
+                            KoXmlDocument xmlDoc;
+
+                            int line, col;
+                            QString errormessage;
+                            const bool parsed = xmlDoc.setContent(file->contents, &errormessage, &line, &col);
+                            if (!parsed) continue;
+
+                            const QRectF bounds = context.documentResourceManager()->shapeController()->documentRectInPixels();
+
+                            // WARNING: Krita 3.x expects all the embedded objects to
+                            //          be loaded in default resolution of 72.0 ppi.
+                            //          Don't change it to the correct data in the image,
+                            //          it will change back compatibility (and this code will
+                            //          be deprecated some time soon
+                            const qreal pixelsPerInch = 72.0;
+
+                            QPointF pos;
+                            pos.setX(KoUnit::parseValue(frameElement.attributeNS(KoXmlNS::svg, "x", QString::number(bounds.x()))));
+                            pos.setY(KoUnit::parseValue(frameElement.attributeNS(KoXmlNS::svg, "y", QString::number(bounds.y()))));
+
+                            QSizeF size;
+                            size.setWidth(KoUnit::parseValue(frameElement.attributeNS(KoXmlNS::svg, "width", QString::number(bounds.width()))));
+                            size.setHeight(KoUnit::parseValue(frameElement.attributeNS(KoXmlNS::svg, "height", QString::number(bounds.height()))));
+
+                            KoShape *shape = SvgShapeFactory::createShapeFromSvgDirect(xmlDoc.documentElement(),
+                                                                                       QRectF(pos, size),
+                                                                                       pixelsPerInch,
+                                                                                       zIndex,
+                                                                                       context);
+
+                            if (shape) {
+                                // NOTE: here we are expected to stretch the internal to the bounds of
+                                //       the frame! Sounds weird, but it is what Krita 3.x did.
+
+                                const QRectF shapeRect = shape->absoluteOutlineRect(0);
+                                const QPointF offset = shapeRect.topLeft();
+                                const QSizeF fragmentSize = shapeRect.size();
+
+                                if (fragmentSize.isValid()) {
+                                    /**
+                                     * Yes, you see what you see. The previous versions of Krita used
+                                     * QSvgRenderer to render the object, which allegedly truncated the
+                                     * object on sides. Even though we don't use pre-rendering now,
+                                     * we should still reproduce the old way...
+                                     */
+                                    const QSizeF newSize = QSizeF(int(size.width()), int(size.height()));
+
+                                    shape->applyAbsoluteTransformation(
+                                                QTransform::fromTranslate(-offset.x(), -offset.y()) *
+                                                QTransform::fromScale(
+                                                    newSize.width() / fragmentSize.width(),
+                                                    newSize.height() / fragmentSize.height()) *
+                                                QTransform::fromTranslate(pos.x(), pos.y()));
+                                    resultShapes.append(shape);
+                                }
+                            }
+
+                        } else {
+                            // TODO: implement raster images?
+                        }
                     }
                 }
-                if (!childShape)
-                    debugFlake << "Failed to find fallback for the unavail shape named "
-                                  << e.tagName();
-                shape = uShape;
+
+                if (resultShapes.size() == 1) {
+                    shape = resultShapes.takeLast();
+                } else if (resultShapes.size() > 1) {
+                    KoShapeGroup *groupShape = new KoShapeGroup;
+                    KoShapeGroupCommand cmd(groupShape, resultShapes);
+                    cmd.redo();
+                    groupShape->setZIndex(frameZIndex);
+                    shape = groupShape;
+                }
             }
         }
     }

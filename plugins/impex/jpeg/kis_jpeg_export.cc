@@ -159,9 +159,11 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     if (options.storeAuthor) {
         QString author = document->documentInfo()->authorInfo("creator");
         if (!author.isEmpty()) {
-            QString contact = document->documentInfo()->authorContactInfo().at(0);
-            if (!contact.isEmpty()) {
-                author = author+"("+contact+")";
+            if (!document->documentInfo()->authorContactInfo().isEmpty()) {
+                QString contact = document->documentInfo()->authorContactInfo().at(0);
+                if (!contact.isEmpty()) {
+                    author = author+"("+contact+")";
+                }
             }
             if (eI->containsEntry("creator")) {
                 eI->removeEntry("creator");

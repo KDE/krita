@@ -200,7 +200,7 @@ void KisTransformMaskTest::testSafeTransformSingleVanishingPoint()
 bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLayer,
                     KisLayerSP visibilityToggleLayer, KisTransformMaskSP mask)
 {
-    TestUtil::ExternalImageChecker chk(prefix, "transform_mask_updates");
+    TestUtil::ReferenceImageChecker chk(prefix, "transform_mask_updates");
 
     bool result = true;
 
@@ -419,7 +419,7 @@ void KisTransformMaskTest::testMaskOnCloneLayer()
 
 void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
 {
-    TestUtil::ExternalImageChecker chk("clone_offset_simple", "transform_mask_updates");
+    TestUtil::ReferenceImageChecker chk("clone_offset_simple", "transform_mask_updates");
 
     QRect refRect(0,0,512,512);
     QRect fillRect(400,400,100,100);
@@ -474,7 +474,7 @@ void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
 
 void KisTransformMaskTest::testMultipleMasks()
 {
-    TestUtil::ExternalImageChecker chk("multiple_masks", "transform_mask_updates");
+    TestUtil::ReferenceImageChecker chk("multiple_masks", "transform_mask_updates");
 
     QRect refRect(0,0,512,512);
     QRect fillRect(400,400,100,100);
@@ -760,7 +760,7 @@ void KisTransformMaskTest::testMultipleMasks()
 
 void KisTransformMaskTest::testMaskWithOffset()
 {
-    TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
+    TestUtil::ReferenceImageChecker chk("mask_with_offset", "transform_mask_updates");
 
     QRect refRect(0,0,512,512);
     QRect fillRect(400,400,100,100);

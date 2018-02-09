@@ -65,6 +65,11 @@ public:
     KoFrameShape(const QString &ns, const QString &tag);
 
     /**
+     * Copy contrustor
+     */
+    KoFrameShape(const KoFrameShape &rhs);
+
+    /**
     * Destructor.
     */
     virtual ~KoFrameShape();

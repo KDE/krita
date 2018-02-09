@@ -28,6 +28,7 @@
 #include "hatching_brush.h"
 #include "kis_hatching_paintop_settings.h"
 
+#include <kis_hatching_pressure_angle_option.h>
 #include <kis_hatching_pressure_crosshatching_option.h>
 #include <kis_hatching_pressure_separation_option.h>
 #include <kis_hatching_pressure_thickness_option.h>
@@ -72,6 +73,12 @@ private:
      *  hatching by HatchingBrush::hatch
      */
     KisPaintDeviceSP m_hatchedDab;
+
+    /**
+     *  Curve to control the hatching angle
+     *  according to user preferences set in the GUI
+     */
+    KisHatchingPressureAngleOption m_angleOption;
 
     /**
      *  Curve to control the intensity of crosshatching

@@ -81,6 +81,7 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_effect_mask.h"
+#include "commands/KoShapeReorderCommand.h"
 
 #include <SimpleShapeContainerModel.h>
 class ShapeLayerContainerModel : public SimpleShapeContainerModel
@@ -171,9 +172,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase
     // copy the projection to avoid extra round of updates!
     initShapeLayer(controller, _rhs.m_d->paintDevice);
 
+    /**
+     * The transformaitons of the added shapes are automatically merged into the transformation
+     * of the layer, so we should apply this extra transform separately
+     */
+    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
+        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
         addShape(clonedShape);
     }
 }
@@ -188,18 +196,39 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 
     initShapeLayer(_rhs.m_d->controller);
 
+    /**
+     * With current implementation this matrix will always be an identity, because
+     * we do not copy the transformation from any of the source layers. But we should
+     * handle this anyway, to not be caught by this in the future.
+     */
+    const QTransform thisInvertedTransform = this->absoluteTransformation(0).inverted();
+
+    QList<KoShape *> shapesAbove;
+    QList<KoShape *> shapesBelow;
+
     // copy in _rhs's shapes
     Q_FOREACH (KoShape *shape, _rhs.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        addShape(clonedShape);
+        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        shapesBelow.append(clonedShape);
     }
 
     // copy in _addShapes's shapes
     Q_FOREACH (KoShape *shape, _addShapes.shapes()) {
         KoShape *clonedShape = shape->cloneShape();
         KIS_SAFE_ASSERT_RECOVER(clonedShape) { continue; }
-        addShape(clonedShape);
+        clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+        shapesAbove.append(clonedShape);
+    }
+
+    QList<KoShapeReorderCommand::IndexedShape> shapes =
+        KoShapeReorderCommand::mergeDownShapes(shapesBelow, shapesAbove);
+    KoShapeReorderCommand cmd(shapes);
+    cmd.redo();
+
+    Q_FOREACH (KoShape *shape, shapesBelow + shapesAbove) {
+        addShape(shape);
     }
 }
 

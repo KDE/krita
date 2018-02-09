@@ -1113,9 +1113,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
 
         QString author = info->authorInfo("creator");
         if (!author.isEmpty() && options.storeAuthor) {
-            QString contact = info->authorContactInfo().at(0);
-            if (!contact.isEmpty()) {
-                author = author+"("+contact+")";
+            if (!info->authorContactInfo().isEmpty()) {
+                QString contact = info->authorContactInfo().at(0);
+                if (!contact.isEmpty()) {
+                    author = author+"("+contact+")";
+                }
             }
             fillText(texts + nbtexts, "Author", author);
             nbtexts++;

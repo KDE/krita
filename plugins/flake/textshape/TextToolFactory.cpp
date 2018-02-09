@@ -20,7 +20,6 @@
 #include "TextToolFactory.h"
 #include "TextTool.h"
 #include "TextShape.h"
-#include "AnnotationTextShape.h"
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
@@ -32,7 +31,7 @@ TextToolFactory::TextToolFactory()
     setSection(dynamicToolType() + ",calligrawords,calligraauthor");
     setIconName(koIconNameCStr("tool-text"));
     setPriority(2);
-    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
+    setActivationShapeId(TextShape_SHAPEID);
 }
 
 TextToolFactory::~TextToolFactory()

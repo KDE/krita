@@ -230,7 +230,7 @@ int KisOptimizedByteArray::size() const
 
 bool KisOptimizedByteArray::isEmpty() const
 {
-    return m_d->dataSize;
+    return !m_d->dataSize;
 }
 
 KisOptimizedByteArray::MemoryAllocatorSP KisOptimizedByteArray::customMemoryAllocator() const

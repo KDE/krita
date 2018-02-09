@@ -247,7 +247,8 @@ class KoToolBoxLayout : public QLayout
 {
 public:
     explicit KoToolBoxLayout(QWidget *parent)
-        : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0)
+        : QLayout(parent)
+        , m_orientation(Qt::Vertical)
     {
         setSpacing(6);
     }
@@ -260,21 +261,22 @@ public:
 
     QSize sizeHint() const override
     {
-        if (m_sections.isEmpty())
-            return QSize();
-        QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
-        return oneIcon;
+        // Prefer showing two rows/columns by default
+        QSize twoIcons = static_cast<Section*> (m_sections[0]->widget())->iconSize() * 2;
+        const int length = doLayout(QRect(QPoint(), twoIcons), false);
+        if (m_orientation == Qt::Vertical) {
+            return QSize(twoIcons.width(), length);
+        } else {
+            return QSize(length, twoIcons.height());
+        }
     }
 
     QSize minimumSize() const override
     {
-        QSize s = sizeHint();
-        if (m_orientation == Qt::Vertical) {
-            s.setHeight(m_currentHeight);
-        } else {
-            s.setWidth(m_currentHeight);
-        }
-        return s;
+        if (m_sections.isEmpty())
+            return QSize();
+        QSize oneIcon = static_cast<Section*> (m_sections[0]->widget())->iconSize();
+        return oneIcon;
     }
 
     void addSection(Section *section)
@@ -298,9 +300,7 @@ public:
 
     QLayoutItem* itemAt(int i) const override
     {
-        if (m_sections.count() >= i)
-            return 0;
-        return m_sections.at(i);
+        return m_sections.value(i);
     }
 
     QLayoutItem* takeAt(int i) override { return m_sections.takeAt(i); }
@@ -309,22 +309,76 @@ public:
 
     void setGeometry (const QRect &rect) override
     {
+        QLayout::setGeometry(rect);
+        doLayout(rect, true);
+    }
+
+    bool hasHeightForWidth() const override
+    {
+        // return true;
+        return m_orientation == Qt::Vertical;
+    }
+
+    int heightForWidth(int width) const override
+    {
+        if (m_orientation == Qt::Vertical) {
+            const int height = doLayout(QRect(0, 0, width, 0), false);
+            return height;
+        } else {
+    #if 0
+            const int iconHeight = static_cast<Section*> (m_sections[0]->widget())->iconSize().height();
+            for (int i = 1; i <= 10; i++) {
+                const int testWidth = doLayout(QRect(0, 0, 0, iconHeight * i), false);
+                if (testWidth <= width) {
+                    return iconHeight * i;
+                }
+            }
+            // Return a huge height
+            return 65535;
+    #endif
+            return -1;
+        }
+    }
+
+    /**
+     * For calculating the width from height by KoToolBoxScrollArea.
+     * QWidget doesn't actually support trading width for height, so it needs to
+     * be handled specificly.
+     */
+    int widthForHeight(int height) const
+    {
+        if (m_orientation == Qt::Horizontal) {
+            const int width = doLayout(QRect(0, 0, 0, height), false);
+            return width;
+        } else {
+            return -1;
+        }
+    }
+
+    void setOrientation (Qt::Orientation orientation)
+    {
+        m_orientation = orientation;
+        invalidate();
+    }
+
+private:
+    int doLayout(const QRect &rect, bool notDryRun) const
+    {
         // nothing to do?
-        if (m_sections.isEmpty())
-        {
-            m_currentHeight = 0;
-            return;
+        if (m_sections.isEmpty()) {
+            return 0;
         }
 
         // the names of the variables assume a vertical orientation,
         // but all calculations are done based on the real orientation
+        const bool isVertical = m_orientation == Qt::Vertical;
 
         const QSize iconSize = static_cast<Section*> (m_sections.first()->widget())->iconSize();
 
-        const int maxWidth = (m_orientation == Qt::Vertical) ? rect.width() : rect.height();
+        const int maxWidth = isVertical ? rect.width() : rect.height();
         // using min 1 as width to e.g. protect against div by 0 below
-        const int iconWidth = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.width() : iconSize.height());
-        const int iconHeight = qMax(1, (m_orientation == Qt::Vertical) ? iconSize.height() : iconSize.width());
+        const int iconWidth = qMax(1, isVertical ? iconSize.width() : iconSize.height());
+        const int iconHeight = qMax(1, isVertical ? iconSize.height() : iconSize.width());
 
         const int maxColumns = qMax(1, (maxWidth / iconWidth));
 
@@ -333,49 +387,40 @@ public:
         bool firstSection = true;
         foreach (QWidgetItem *wi, m_sections) {
             Section *section = static_cast<Section*> (wi->widget());
-            // Since sections can overlap (if a section occupies two rows, and there
-            // is space on the second row for all of the next section, the next section
-            // will be placed overlapping with the previous section), it's important that
-            // later sections will be higher in the widget z-order than previous
-            // sections, so raise it.
-            section->raise();
             const int buttonCount = section->visibleButtonCount();
             if (buttonCount == 0) {
                 // move out of view, not perfect TODO: better solution
-                section->setGeometry(1000, 1000, 0, 0);
+                if (notDryRun) {
+                    section->setGeometry(1000, 1000, 0, 0);
+                }
                 continue;
             }
 
             // rows needed for the buttons (calculation gets the ceiling value of the plain div)
             const int neededRowCount = ((buttonCount-1) / maxColumns) + 1;
-            const int availableButtonCount = (maxWidth - x + 1) / iconWidth;
 
             if (firstSection) {
                 firstSection = false;
-            } else if (buttonCount > availableButtonCount) {
+            } else {
                 // start on a new row, set separator
                 x = 0;
                 y += iconHeight + spacing();
-                const Section::Separators separator =
-                    (m_orientation == Qt::Vertical) ? Section::SeparatorTop : Section::SeparatorLeft;
-                section->setSeparator( separator );
-            } else {
-                // append to last row, set separators (on first row only to the left side)
-                const bool isFirstRow = (y == 0);
-                const Section::Separators separators =
-                    isFirstRow ?
-                        ((m_orientation == Qt::Vertical) ? Section::SeparatorLeft : Section::SeparatorTop) :
-                        (Section::SeparatorTop | Section::SeparatorLeft);
-                section->setSeparator( separators );
+                if (notDryRun){
+                    const Section::Separators separator =
+                        isVertical ? Section::SeparatorTop : Section::SeparatorLeft;
+                    section->setSeparator( separator );
+                }
             }
 
-            const int usedColumns = qMin(buttonCount, maxColumns);
-            if (m_orientation == Qt::Vertical) {
-                section->setGeometry(x, y,
-                                     usedColumns * iconWidth, neededRowCount * iconHeight);
-            } else {
-                section->setGeometry(y, x,
-                                     neededRowCount * iconHeight, usedColumns * iconWidth);
+            if (notDryRun) {
+                const int usedColumns = qMin(buttonCount, maxColumns);
+                if (isVertical) {
+                    section->setGeometry(x, y,
+                                         usedColumns * iconWidth, neededRowCount * iconHeight);
+                } else {
+                    section->setGeometry(y, x,
+                                         neededRowCount * iconHeight, usedColumns * iconWidth);
+                }
             }
 
             // advance by the icons in the last row
@@ -386,19 +431,11 @@ public:
         }
 
         // cache total height (or width), adding the iconHeight for the current row
-        m_currentHeight = y + iconHeight;
+        return y + iconHeight;
     }
 
-    void setOrientation (Qt::Orientation orientation)
-    {
-        m_orientation = orientation;
-        invalidate();
-    }
-
-private:
     QList <QWidgetItem*> m_sections;
     Qt::Orientation m_orientation;
-    mutable int m_currentHeight;
 };
 
 #endif

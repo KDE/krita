@@ -42,6 +42,7 @@ struct Q_DECL_HIDDEN KisSelectionBasedLayer::Private
 {
 public:
     Private() : useSelectionInProjection(true) {}
+    Private(const Private &rhs) : useSelectionInProjection(rhs.useSelectionInProjection) {}
 
     KisSelectionSP selection;
     KisPaintDeviceSP paintDevice;
@@ -74,7 +75,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs
         : KisLayer(rhs)
         , KisIndirectPaintingSupport()
         , KisNodeFilterInterface(rhs)
-        , m_d(new Private())
+        , m_d(new Private(*rhs.m_d))
 {
     setInternalSelection(rhs.m_d->selection);
 
@@ -173,9 +174,14 @@ void KisSelectionBasedLayer::copyOriginalToProjection(const KisPaintDeviceSP ori
 
     if (m_d->useSelectionInProjection) {
         tempSelection = fetchComposedInternalSelection(rect);
+
+        /**
+         * When we paint with a selection, the deselected areas will *not* be
+         * overwritten by copyAreaOptimized(), so we need to clear them beforehand
+         */
+        projection->clear(rect);
     }
 
-    projection->clear(rect);
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, rect, tempSelection);
 }
 

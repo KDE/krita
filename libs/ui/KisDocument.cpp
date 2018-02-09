@@ -1677,6 +1677,14 @@ void KisDocument::setCurrentImage(KisImageSP image)
     d->image->initialRefreshGraph();
 }
 
+void KisDocument::hackPreliminarySetImage(KisImageSP image)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!d->image);
+
+    d->setImageAndInitIdleWatcher(image);
+    d->shapeController->setImage(image);
+}
+
 void KisDocument::setImageModified()
 {
     setModified(true);

@@ -35,6 +35,9 @@ public:
     // reimplemented from KoShapeFactoryBase
     KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
+    static int calculateZIndex(const KoXmlElement &element, KoShapeLoadingContext &context);
+    static KoShape *createShapeFromSvgDirect(const KoXmlElement &root, const QRectF &boundsInPixels, const qreal pixelsPerInch, int zIndex, KoShapeLoadingContext &context, QSizeF *fragmentSize = 0);
+
     /// Adds an instance of this factory to the shape registry, if not already registered
     static void addToRegistry();
 };

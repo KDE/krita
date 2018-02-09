@@ -43,6 +43,7 @@
 
 #include <kis_spontaneous_job.h>
 #include "kis_image.h"
+#include "kis_global.h"
 
 //#define DEBUG_REPAINT
 
@@ -122,13 +123,26 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
+        , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , m_image(image)
 {
+    /**
+     * The layour should also add itself to its own shape manager, so that the canvas
+     * would track its changes/transformations
+     */
+    m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
+    m_shapeManager->selection()->setActiveLayer(parent);
+
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
+    connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+
+    connect(m_image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), SLOT(slotImageSizeChanged()));
+    m_cachedImageRect = m_image->bounds();
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
 {
+    m_shapeManager->remove(m_parentLayer);
 }
 
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
@@ -145,17 +159,21 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
 class KisRepaintShapeLayerLayerJob : public KisSpontaneousJob
 {
 public:
-    KisRepaintShapeLayerLayerJob(KisShapeLayerSP layer) : m_layer(layer) {}
+    KisRepaintShapeLayerLayerJob(KisShapeLayerSP layer, KisShapeLayerCanvas *canvas)
+        : m_layer(layer),
+          m_canvas(canvas)
+    {
+    }
 
     bool overrides(const KisSpontaneousJob *_otherJob) override {
         const KisRepaintShapeLayerLayerJob *otherJob =
             dynamic_cast<const KisRepaintShapeLayerLayerJob*>(_otherJob);
 
-        return otherJob && otherJob->m_layer == m_layer;
+        return otherJob && otherJob->m_canvas == m_canvas;
     }
 
     void run() override {
-        m_layer->forceUpdateTimedNode();
+        m_canvas->repaint();
     }
 
     int levelOfDetail() const override {
@@ -163,26 +181,28 @@ public:
     }
 
 private:
+
+    // we store a pointer to the layer just
+    // to keep the lifetime of the canvas!
     KisShapeLayerSP m_layer;
+
+    KisShapeLayerCanvas *m_canvas;
 };
 
 
-void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
+void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
 {
-    dbgUI << "KisShapeLayerCanvas::updateCanvas()" << rc;
-    //image is 0, if parentLayer is being deleted so don't update
     if (!m_parentLayer->image() || m_isDestroying) {
         return;
     }
 
-    QRect r = m_viewConverter->documentToView(rc).toRect();
-    r.adjust(-2, -2, 2, 2); // for antialias
-
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        m_dirtyRegion += r;
-        qreal x, y;
-        m_viewConverter->zoom(&x, &y);
+        Q_FOREACH (const QRectF &rc, region) {
+            // grow for antialiasing
+            const QRect imageRect = kisGrowRect(m_viewConverter->documentToView(rc).toAlignedRect(), 2);
+            m_dirtyRegion += imageRect;
+        }
     }
 
     /**
@@ -206,8 +226,37 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
     if (qApp->thread() == QThread::currentThread()) {
         emit forwardRepaint();
     } else {
-        m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer));
+        m_asyncUpdateSignalCompressor.start();
+        m_hasUpdateInCompressor = true;
     }
+}
+
+
+void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
+{
+    updateCanvas(QVector<QRectF>({rc}));
+}
+
+void KisShapeLayerCanvas::slotStartAsyncRepaint()
+{
+    m_hasUpdateInCompressor = false;
+    m_image->addSpontaneousJob(new KisRepaintShapeLayerLayerJob(m_parentLayer, this));
+}
+
+void KisShapeLayerCanvas::slotImageSizeChanged()
+{
+    QRegion dirtyCacheRegion;
+    dirtyCacheRegion += m_image->bounds();
+    dirtyCacheRegion += m_cachedImageRect;
+    dirtyCacheRegion -= m_image->bounds() & m_cachedImageRect;
+
+    QVector<QRectF> dirtyRects;
+    Q_FOREACH (const QRect &rc, dirtyCacheRegion.rects()) {
+        dirtyRects.append(m_viewConverter->viewToDocument(rc));
+    }
+    updateCanvas(dirtyRects);
+
+    m_cachedImageRect = m_image->bounds();
 }
 
 void KisShapeLayerCanvas::repaint()
@@ -223,7 +272,10 @@ void KisShapeLayerCanvas::repaint()
 
     if (r.isEmpty()) return;
 
+    // Crop the update rect by the image bounds. We keep the cache consistent
+    // by tracking the size of the image in slotImageSizeChanged()
     r = r.intersected(m_parentLayer->image()->bounds());
+
     QImage image(r.width(), r.height(), QImage::Format_ARGB32);
     image.fill(0);
     QPainter p(&image);
@@ -259,6 +311,9 @@ void KisShapeLayerCanvas::forceRepaint()
      * The only real solution to this is to port vector tools to strokes framework.
      */
 
-    repaint();
+    if (m_hasUpdateInCompressor) {
+        m_asyncUpdateSignalCompressor.stop();
+        slotStartAsyncRepaint();
+    }
 }
 

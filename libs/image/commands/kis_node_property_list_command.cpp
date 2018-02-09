@@ -34,11 +34,11 @@ KisNodePropertyListCommand::KisNodePropertyListCommand(KisNodeSP node, KisBaseNo
     : KisNodeCommand(kundo2_i18n("Property Changes"), node),
       m_newPropertyList(newPropertyList),
       m_oldPropertyList(node->sectionModelProperties())
-/**
- * TODO instead of "Property Changes" check which property
- * has been changed and display either lock/unlock, visible/hidden
- * or "Property Changes" (this require new strings)
- */
+    /**
+     * TODO instead of "Property Changes" check which property
+     * has been changed and display either lock/unlock, visible/hidden
+     * or "Property Changes" (this require new strings)
+     */
 {
 }
 
@@ -142,34 +142,56 @@ void KisNodePropertyListCommand::doUpdate(const KisBaseNode::PropertyList &oldPr
 
 void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImageSP image, PropertyList proplist)
 {
-    bool undo = true;
+    QVector<bool> undo;
+
     Q_FOREACH (const KisBaseNode::Property &prop, proplist) {
-        if (prop.isInStasis) undo = false;
-        if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) undo = false;
-        if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) undo = false;
-        if (prop.name == i18n("Active")) {
+
+        if (prop.isInStasis) undo << false;
+
+        if (prop.name == i18n("Visible") && node->visible() != prop.state.toBool()) {
+            undo << false;
+            continue;
+        }
+        else if (prop.name == i18n("Locked") && node->userLocked() != prop.state.toBool()) {
+            undo << false;
+            continue;
+        }
+        else if (prop.name == i18n("Active")) {
             if (KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data())) {
                 if (m->active() != prop.state.toBool()) {
-                    undo = false;
+                    undo << false;
+                    continue;
                 }
             }
         }
-        if (prop.name == i18n("Alpha Locked")) {
+        else if (prop.name == i18n("Alpha Locked")) {
             if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(node.data())) {
                 if (l->alphaLocked() != prop.state.toBool()) {
-                    undo = false;
+                    undo << false;
+                    continue;
                 }
             }
         }
+
+        // This property is known, but it hasn't got the same value, and it isn't one of
+        // the previous properties, so we need to add the command to the undo list.
+        Q_FOREACH(const KisBaseNode::Property &p2, node->sectionModelProperties()) {
+            if (p2.name == prop.name && p2.state != prop.state) {
+                undo << true;
+                break;
+            }
+        }
+
+
     }
 
     QScopedPointer<KUndo2Command> cmd(new KisNodePropertyListCommand(node, proplist));
 
-    if (undo) {
+    if (undo.contains(true)) {
         image->undoAdapter()->addCommand(cmd.take());
+        image->setModified();
     }
     else {
-        image->setModified();
         cmd->redo();
 
         /**
@@ -185,4 +207,5 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
         KisStrokeId strokeId = image->startStroke(new KisSimpleStrokeStrategy());
         image->endStroke(strokeId);
     }
+
 }

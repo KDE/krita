@@ -129,6 +129,7 @@ void KisPropertiesConfigurationTest::testGetColor()
     pc.setProperty("colorAsKoColor", c);
     pc.setProperty("colorAsQColor", QColor(Qt::red));
     pc.setProperty("colorAsString", "#FF0000");
+    pc.setProperty("colorAsXML", "<!DOCTYPE color><color><RGB space=\"sRGB-elle-V2-g10.icc\" g=\"0\" b=\"0\" r=\"1\"/></color>");
 
     kc = pc.getColor("colorAsKoColor");
     QVERIFY(kc.toQColor() == QColor(Qt::red));
@@ -136,7 +137,8 @@ void KisPropertiesConfigurationTest::testGetColor()
     QVERIFY(kc.toQColor() == QColor(Qt::red));
     kc = pc.getColor("colorAsString");
     QVERIFY(kc.toQColor() == QColor(Qt::red));
-
+    kc = pc.getColor("colorAsXML");
+    QVERIFY(kc.toQColor() == QColor(Qt::red));
 }
 
 void roundTripStringList(const QStringList &refList)

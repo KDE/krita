@@ -158,7 +158,7 @@ QSize KoDockWidgetTitleBar::sizeHint() const
         }
         else {
             if (q->widget()) {
-                return QSize(qMin(q->widget()->sizeHint().width(), buttonWidth), height);
+                return QSize(qMin(q->widget()->minimumSizeHint().width(), buttonWidth), height);
             }
             else {
                 return QSize(buttonWidth, height);

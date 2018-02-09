@@ -283,14 +283,7 @@ namespace KisLayerUtils {
 
         void redo() override {
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                recursiveApplyNodes(node,
-                    [] (KisNodeSP node) {
-                        KisDelayedUpdateNodeInterface *delayedUpdate =
-                            dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
-                        if (delayedUpdate) {
-                            delayedUpdate->forceUpdateTimedNode();
-                        }
-                    });
+                forceAllDelayedNodesUpdate(node);
             }
         }
 
@@ -1362,7 +1355,19 @@ namespace KisLayerUtils {
         return recursiveFindNode(root,
             [uuid] (KisNodeSP node) {
                 return node->uuid() == uuid;
-            });
+        });
+    }
+
+    void forceAllDelayedNodesUpdate(KisNodeSP root)
+    {
+        KisLayerUtils::recursiveApplyNodes(root,
+        [] (KisNodeSP node) {
+            KisDelayedUpdateNodeInterface *delayedUpdate =
+                    dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
+            if (delayedUpdate) {
+                delayedUpdate->forceUpdateTimedNode();
+            }
+        });
     }
 
 }

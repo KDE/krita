@@ -29,7 +29,7 @@ if(NOT DEFINED NO_DOWNLOAD_NSIS)
     if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
         file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
     endif()
-    file(DOWNLOAD "https://sourceforge.net/projects/nsis/files/NSIS%203/${DOWNLOAD_NSIS_VERSION}/nsis-${DOWNLOAD_NSIS_VERSION}.zip/download"
+    file(DOWNLOAD "https://files.kde.org/krita/build/dependencies/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
         "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
         EXPECTED_HASH SHA1=06c791f9cf668d945564316c9c947ebb4cc469e9
     )

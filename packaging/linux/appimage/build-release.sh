@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RELEASE=3.3.2.1
+RELEASE=4.0.0.51
 
 # Enter a CentOS 6 chroot (you could use other methods)
 # git clone https://github.com/probonopd/AppImageKit.git
@@ -29,8 +29,6 @@ grep -r "CentOS release 6" /etc/redhat-release || exit 1
 rm -rf /out/*
 rm -rf /krita.appdir
 rm -rf /krita_build
-rm -rf /gmic-qt-build
-mkdir gmic-qt-build
 mkdir /krita_build
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
@@ -71,32 +69,10 @@ git_pull_rebase_helper()
         git pull
 
 }
-# fetch and build gmic
-if [ ! -d /gmic ] ; then
-	git clone  --depth 1 https://github.com/dtschump/gmic.git
-fi
-
-cd /gmic/
-git_pull_rebase_helper
-cd /
-make -C gmic/src CImg.h gmic_stdlib.h
-
-# fetch and build gmic-qt
-if [ ! -d /gmic-qt ] ; then
-	git clone  --depth 1 https://github.com/c-koi/gmic-qt.git
-fi
-
-cd /gmic-qt/
-git_pull_rebase_helper
-
-cd /gmic-qt-build
-cmake3 ../gmic-qt -DGMIC_QT_HOST=krita -DCMAKE_BUILD_TYPE=Release
-make -j4
-cp gmic_krita_qt /krita.appdir/usr/bin
 
 # fetch and build krita
 cd /
-tar -xf krita-$RELEASE.tar.xz
+tar -xf krita-$RELEASE.tar.gz
 cd /krita_build
 cmake3 ../krita-$RELEASE \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
@@ -107,6 +83,8 @@ cmake3 ../krita-$RELEASE \
     -DKDE4_BUILD_TESTS=FALSE \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE
 make -j4 install
+
+cp /gmic-qt/b/gmic_krita_qt /krita.appdir/usr/bin
 
 cd /krita.appdir
 

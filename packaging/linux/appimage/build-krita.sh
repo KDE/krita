@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Enter a CentOS 6 chroot (you could use other methods)
 # git clone https://github.com/probonopd/AppImageKit.git
 # ./AppImageKit/build.sh 
 # sudo ./AppImageKit/AppImageAssistant.AppDir/testappimage /isodevice/boot/iso/CentOS-6.5-x86_64-LiveCD.iso bash
@@ -11,8 +10,13 @@ set -e
 # Be verbose
 set -x
 
-# Now we are inside CentOS 6
-grep -r "CentOS release 6" /etc/redhat-release || exit 1
+export BUILD_PREFIX=/media/krita/_devel
+export INSTALLDIR=$BUILD_PREFIX/krita.appdir/usr
+export QTDIR=$BUILD_PREFIX/deps/usr
+export LD_LIBRARY_PATH=$QTDIR/lib/x86_64-linux-gnu:$QTDIR/lib:$BUILD_PREFIX/i/lib:$LD_LIBRARY_PATH
+export PATH=$QTDIR/bin:$BUILD_PREFIX/i/bin:$PATH
+export PKG_CONFIG_PATH=$QTDIR/share/pkgconfig:$QTDIR/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=$QTDIR/lib/x86_64-linux-gnu:$BUILD_PREFIX:$QTDIR:$CMAKE_PREFIX_PATH
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
@@ -27,25 +31,11 @@ else
   exit 1
 fi
 
-# if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
-export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/krita.appdir/usr/lib
-
 git_pull_rebase_helper()
 {
 	git reset --hard HEAD
-        git pull
+	git pull --rebase
 }
-
-# Use the new compiler
-. /opt/rh/devtoolset-3/enable
-
-
-# Workaround for: On CentOS 6, .pc files in /usr/lib/pkgconfig are not recognized
-# However, this is where .pc files get installed when building libraries... (FIXME)
-# I found this by comparing the output of librevenge's "make install" command
-# between Ubuntu and CentOS 6
-ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
-
 
 # A krita build layout looks like this:
 # krita/ -- the source directory
@@ -54,16 +44,18 @@ ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 # b -- build directory for the dependencies
 # krita_build -- build directory for krita itself
 # krita.appdir -- install directory for krita and the dependencies
-
+#
+# Krita should have been checked out in the build deps phase
+#
 # Get Krita
-if [ ! -d /krita ] ; then
-	git clone  --depth 1 https://github.com/KDE/krita.git /krita
+if [ ! -d $BUILD_PREFIX/krita ] ; then
+  git clone  --depth 1 git://anongit.kde.org/krita $BUILD_PREFIX/krita
 fi
 
-cd /krita/
+
+cd $BUILD_PREFIX/krita/
 git_pull_rebase_helper
 
-cd /
 
 # If the environment variable DO_NOT_BUILD_KRITA is set to something,
 # then stop here. This is for docker hub which has a timeout that
@@ -71,18 +63,21 @@ cd /
 # if [ ! -z "$DO_NOT_BUILD_KRITA" ] ; then
 #  exit 0
 # fi
-
-mkdir -p /krita_build
-cd /krita_build
-cmake3 ../krita \
+rm -rf $BUILD_PREFIX/krita_build || true
+mkdir -p $BUILD_PREFIX/krita_build
+cd $BUILD_PREFIX/krita_build
+cmake $BUILD_PREFIX/krita \
     -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Release \
     -DPACKAGERS_BUILD=1 \
+    -DFOUNDATION_BUILD=1 \
+    -DHIDE_SAVE_ASSERTS=ON \
     -DBUILD_TESTING=FALSE \
     -DKDE4_BUILD_TESTS=FALSE \
+    -DPYQT_SIP_DIR_OVERRIDE=$QTDIR/share/sip/\
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE
     
 # build
-make -j4 
+make -j10 install
 

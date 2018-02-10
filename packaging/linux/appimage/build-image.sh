@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Enter a CentOS 6 chroot (you could use other methods)
 # git clone https://github.com/probonopd/AppImageKit.git
 # ./AppImageKit/build.sh 
 # sudo ./AppImageKit/AppImageAssistant.AppDir/testappimage /isodevice/boot/iso/CentOS-6.5-x86_64-LiveCD.iso bash
@@ -11,21 +10,15 @@ set -e
 # Be verbose
 set -x
 
-# Now we are inside CentOS 6
-grep -r "CentOS release 6" /etc/redhat-release || exit 1
+export BUILD_PREFIX=/media/krita/_devel
+export QTDIR=$BUILD_PREFIX/deps
+export INSTALLDIR=$BUILD_PREFIX/i
+export APPDIR=$BUILD_PREFIX/krita.appdir
 
-# If we are running inside Travis CI, then we want to build Krita
-# and we remove the $DO_NOT_BUILD_KRITA environment variable
-# that was used in the process of generating the Docker image.
-# Also we do not want to download and build the dependencies every
-# time we build Krita on travis in the docker image. In order to
-# use newer dependencies, we re-build the docker image instead.
-#unset DO_NOT_BUILD_KRITA
-#NO_DOWNLOAD=1
-
-# clean up
-rm -rf /out/*
-rm -rf /krita.appdir
+export LD_LIBRARY_PATH=$QTDIR/lib:$INSTALLDIR/lib:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=$QTDIR/share/pkgconfig:$QTDIR/lib/pkgconfig:$INSTALLDIR/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=$QTDIR:$INSTALLDIR:$CMAKE_PREFIX_PATH
+export PATH=$QTDIR/bin:$INSTALLDIR/bin:$PATH
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
@@ -40,29 +33,27 @@ else
   exit 1
 fi
 
-# if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
-export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/krita.appdir/usr/lib
 
-cd /
+# clean up
+rm -rf $BUILD_PREFIX/out || true
+rm -rf $APPDIR || true
 
-# Prepare the install location
-rm -rf /krita.appdir/ || true
-mkdir -p /krita.appdir/usr/bin
+mkdir -p $APPDIR/usr/bin
 
 # make sure lib and lib64 are the same thing
-mkdir -p /krita.appdir/usr/lib
-cd  /krita.appdir/usr
+mkdir -p $APPDIR/usr/lib
+cd  $APPDIR/usr
 ln -s lib lib64
 
-cd /krita_build
-make -j4 install
-
-cd /krita.appdir
+cd $APPDIR
 
 # FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
-cp -r /usr/plugins ./usr/bin/
+cp -r $/usr/plugins ./usr/bin/
 # copy the Qt translation
 cp -r /usr/translations ./usr
+# copy the Python 3 installation
+cp -r /usr/lib/python3.5 ./usr/lib
+cp -r /usr/sip/ ./usr/lib/python3.5
 
 cp $(ldconfig -p | grep libsasl2.so.2 | cut -d ">" -f 2 | xargs) ./usr/lib/
 cp $(ldconfig -p | grep libGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # otherwise segfaults!?
@@ -79,9 +70,6 @@ cp $(ldconfig -p | grep libEGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # Othe
 cp $(ldconfig -p | grep libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/ # For Fedora 20
 
 ldd usr/bin/krita | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
-#ldd usr/lib64/krita/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
-#ldd usr/lib64/plugins/imageformats/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
-
 ldd usr/bin/plugins/platforms/libqxcb.so | grep "=>" | awk '{print $3}'  |  xargs -I '{}' cp -v '{}' ./usr/lib || true
 
 # Copy in the indirect dependencies

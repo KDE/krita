@@ -183,6 +183,7 @@ public:
         , documentMapper(new QSignalMapper(parent))
     {
         mdiArea->setTabsMovable(true);
+        mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
 
     ~Private() {

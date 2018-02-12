@@ -91,6 +91,9 @@ void TestShapeContainer::testSetParent()
     QCOMPARE(model2->shapes().count(), 1);
     QCOMPARE(container2.shapes().count(), 1);
     QCOMPARE(shape.parent(), &container2);
+
+    // on destruction shape should have no parent
+    shape.setParent(0);
 }
 
 void TestShapeContainer::testSetParent2()
@@ -177,11 +180,14 @@ void TestShapeContainer::testScaling2()
     groupedShapes.append(shape1);
     groupedShapes.append(shape2);
 
-    KoShapeGroup *group = new KoShapeGroup();
-    KoShapeGroupCommand* groupCommand = KoShapeGroupCommand::createCommand(group, groupedShapes);
+    QScopedPointer<KoShapeGroup> group(new KoShapeGroup());
+    QScopedPointer<KoShapeGroupCommand> groupCommand(
+        KoShapeGroupCommand::createCommand(group.data(), groupedShapes));
     groupCommand->redo();
 
-    KoSelection* selection = new KoSelection();
+    QScopedPointer<KoSelection> selection(new KoSelection());
+
+    // the topmost shape is selected, not shape1!
     selection->select(shape1);
 
     QList<KoShape*> transformShapes;
@@ -203,22 +209,17 @@ void TestShapeContainer::testScaling2()
         oldPositions.append(transformShapes.at(i)->absolutePosition(KoFlake::TopLeft));
     }
 
-    KoShapeTransformCommand* transformCommand;
-    transformCommand = new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations);
+    QScopedPointer<KoShapeTransformCommand> transformCommand(
+        new KoShapeTransformCommand(transformShapes, oldTransformations, newTransformations));
     transformCommand->redo();
 
-    QRectF r1(shape1->absolutePosition(KoFlake::TopLeft), shape1->absolutePosition(KoFlake::BottomRight));
-    QRectF r2(shape2->absolutePosition(KoFlake::TopLeft), shape2->absolutePosition(KoFlake::BottomRight));
-    QSizeF shapeSize=r1.united(r2).size();
+    QCOMPARE(selection->boundingRect(), group->boundingRect());
 
-    selection = new KoSelection();
+    selection->deselectAll();
+
+    // the topmost shape is selected, not shape1!
     selection->select(shape1);
-    QSizeF selecSize = selection->size();
-
-    bool works=false;
-    if(qFuzzyCompare(selecSize.width(), shapeSize.width()) && qFuzzyCompare(selecSize.height(), shapeSize.height()))
-        works=true;
-    QCOMPARE(works, true);
+    QCOMPARE(selection->boundingRect(), group->boundingRect());
 }
 
 QTEST_MAIN(TestShapeContainer)

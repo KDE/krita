@@ -83,7 +83,10 @@ void KisSessionResource::restore()
                 documents.insert(url, document);
 
                 bool ok = document->openUrl(url);
-                // TODO: warn if failing to re-open document
+                if (!ok) {
+                    // TODO: warn user that we failed to re-open a document
+                    continue;
+                }
             }
 
             KisView *view = window->newView(document);

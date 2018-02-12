@@ -47,7 +47,6 @@ class QPainter;
 class KRITAFLAKE_EXPORT KoShapeStrokeModel
 {
 public:
-    KoShapeStrokeModel();
     virtual ~KoShapeStrokeModel();
 
     /**
@@ -89,23 +88,6 @@ public:
     virtual bool compareFillTo(const KoShapeStrokeModel *other) = 0;
     virtual bool compareStyleTo(const KoShapeStrokeModel *other) = 0;
     virtual bool isVisible() const = 0;
-
-    /**
-     * Increments the use-value.
-     * Returns true if the new value is non-zero, false otherwise.
-     */
-    bool ref();
-    /**
-     * Decrements the use-value.
-     * Returns true if the new value is non-zero, false otherwise.
-     */
-    bool deref();
-    /// Return the usage count
-    int useCount() const;
-
-private:
-    class Private;
-    Private * const d;
 };
 
 #endif

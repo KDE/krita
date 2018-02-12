@@ -35,7 +35,6 @@ void TestShapeStrokeCommand::refCounting()
 
     shape1->setStroke(whiteStroke);
     QVERIFY(shape1->stroke() == whiteStroke);
-    QCOMPARE(whiteStroke->useCount(), 1);
 
     // old stroke is white, new stroke is black
     KUndo2Command *cmd1 = new KoShapeStrokeCommand(shape1, blackStroke);

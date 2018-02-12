@@ -27,7 +27,7 @@
 #include <QDomDocument>
 #include <KoResourcePaths.h>
 #include <KoResourceServer.h>
-
+#include <kis_dom_utils.h>
 
 #define BLACKLISTED "blacklisted"
 
@@ -215,6 +215,7 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
     doc = docTemp;
     doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
     root = doc.createElement("tags");
+    root.setAttribute("version", "4");
     doc.appendChild(root);
 
     QSet<KoResource*> taggedResources;
@@ -308,6 +309,15 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
     QDomElement root = doc.documentElement();
     if (root.tagName() != "tags") {
         warnWidgets << "The file doesn't seem to be of interest.";
+        return;
+    }
+
+    if (root.attribute("version").isNull()) {
+        return;
+    }
+
+    int version = KisDomUtils::toInt(root.attribute("version"));
+    if (version < 4) {
         return;
     }
 

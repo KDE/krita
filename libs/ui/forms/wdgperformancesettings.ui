@@ -20,7 +20,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Note: Krita will need to be restarted for changes to take affect</string>
+      <string>Note: Krita will need to be restarted for changes to take effect</string>
      </property>
     </widget>
    </item>

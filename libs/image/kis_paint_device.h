@@ -190,7 +190,7 @@ public:
      */
     QRect extent() const;
 
-    /// Convience method for the above
+    /// Convenience method for the above
     void extent(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
     /**
@@ -259,7 +259,7 @@ public:
      */
     void crop(qint32 x, qint32 y, qint32 w, qint32 h);
 
-    /// Convience method for the above
+    /// Convenience method for the above
     void crop(const QRect & r);
 
     /**
@@ -598,7 +598,7 @@ public:
      */
     bool setPixel(qint32 x, qint32 y, const QColor& c);
 
-    /// Convience method for the above
+    /// Convenience method for the above
     bool setPixel(qint32 x, qint32 y, const KoColor& kc);
 
     /**

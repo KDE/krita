@@ -89,7 +89,7 @@ void KisBrushHudPropertiesConfig::Private::readConfig()
         if (!KisDomUtils::loadValue(root, "version", &version) ||
             version != 1) {
 
-            warnKrita << "Unknows Brush HUD XML document type or version!";
+            warnKrita << "Unknown Brush HUD XML document type or version!";
             doc = QDomDocument();
         }
     }

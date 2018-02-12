@@ -14,8 +14,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __MODIFY_TRANFORM_MASK_COMMAND_H
-#define __MODIFY_TRANFORM_MASK_COMMAND_H
+#ifndef __MODIFY_TRANSFORM_MASK_COMMAND_H
+#define __MODIFY_TRANSFORM_MASK_COMMAND_H
 
 #include "kundo2command.h"
 #include "kis_types.h"

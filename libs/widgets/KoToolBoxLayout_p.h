@@ -343,7 +343,7 @@ public:
     /**
      * For calculating the width from height by KoToolBoxScrollArea.
      * QWidget doesn't actually support trading width for height, so it needs to
-     * be handled specificly.
+     * be handled specifically.
      */
     int widthForHeight(int height) const
     {

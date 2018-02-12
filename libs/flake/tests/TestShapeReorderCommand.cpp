@@ -435,7 +435,7 @@ void TestShapeReorderCommand::testSendToBackChildren()
     shape3->setSize(QSizeF(100, 100));
     shape3->setZIndex(3);
 
-    MockContainer *container = new MockContainer();
+    QScopedPointer<MockContainer> container(new MockContainer());
     container->addShape(shape1);
     container->addShape(shape2);
     container->addShape(shape3);
@@ -444,13 +444,13 @@ void TestShapeReorderCommand::testSendToBackChildren()
     shapes.append(shape1);
     shapes.append(shape2);
     shapes.append(shape3);
-    shapes.append(container);
+    shapes.append(container.data());
 
     MockCanvas canvas;
     KoShapeManager manager(&canvas, shapes);
 
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    QCOMPARE(shapes.indexOf(container), 0); // atm the parent is always lower than its children
+    QCOMPARE(shapes.indexOf(container.data()), 0); // atm the parent is always lower than its children
     QCOMPARE(shapes.indexOf(shape1), 1);
     QCOMPARE(shapes.indexOf(shape2), 2);
     QCOMPARE(shapes.indexOf(shape3), 3);
@@ -463,7 +463,7 @@ void TestShapeReorderCommand::testSendToBackChildren()
     delete cmd;
 
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    QCOMPARE(shapes.indexOf(container), 0); // atm the parent is always lower than its children
+    QCOMPARE(shapes.indexOf(container.data()), 0); // atm the parent is always lower than its children
     QCOMPARE(shapes.indexOf(shape3), 1);
     QVERIFY(shape3->zIndex() < shape1->zIndex());
     QCOMPARE(shapes.indexOf(shape1), 2);
@@ -478,7 +478,7 @@ void TestShapeReorderCommand::testSendToBackChildren()
     delete cmd;
 
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    QCOMPARE(shapes.indexOf(container), 0); // atm the parent is always lower than its children
+    QCOMPARE(shapes.indexOf(container.data()), 0); // atm the parent is always lower than its children
     QCOMPARE(shapes.indexOf(shape2), 1);
     QVERIFY(shape2->zIndex() < shape3->zIndex());
     QCOMPARE(shapes.indexOf(shape3), 2);
@@ -493,14 +493,12 @@ void TestShapeReorderCommand::testSendToBackChildren()
     delete cmd;
 
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-    QCOMPARE(shapes.indexOf(container), 0); // atm the parent is always lower than its children
+    QCOMPARE(shapes.indexOf(container.data()), 0); // atm the parent is always lower than its children
     QCOMPARE(shapes.indexOf(shape1), 1);
     QVERIFY(shape1->zIndex() < shape2->zIndex());
     QCOMPARE(shapes.indexOf(shape2), 2);
     QVERIFY(shape2->zIndex() < shape3->zIndex());
     QCOMPARE(shapes.indexOf(shape3), 3);
-
-    delete container;
 }
 
 void TestShapeReorderCommand::testNoCommand()

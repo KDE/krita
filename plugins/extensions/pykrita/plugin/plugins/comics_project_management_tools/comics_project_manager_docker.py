@@ -695,6 +695,7 @@ class comics_project_manager_docker(DockWidget):
                     passedString = str(int(timePassed / 60000)) + ":" + format(int(timePassed / 1000), "02d") + ":" + format(timePassed % 1000, "03d")
                     estimatedString = str(int(timeEstimated / 60000)) + ":" + format(int(timeEstimated / 1000), "02d") + ":" + format(int(timeEstimated % 1000), "03d")
                     progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(self.setupDictionary["pages"]), passedString=passedString, estimated=estimatedString))
+                    qApp.processEvents()
                 if os.path.exists(absoluteUrl):
                     doc = Application.openDocument(absoluteUrl)
                     listScales = exporterSizes.get_scale_from_resize_config(config["Scale"], [doc.width(), doc.height(), doc.resolution(), doc.resolution()])

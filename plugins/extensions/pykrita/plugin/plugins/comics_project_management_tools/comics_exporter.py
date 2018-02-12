@@ -10,7 +10,7 @@ import json
 import zipfile
 import xml.etree.ElementTree as ET
 import shutil
-from PyQt5.QtWidgets import QLabel, QProgressDialog  # For the progress dialog.
+from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
 from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt
 from krita import *
 
@@ -463,6 +463,7 @@ class comicsExporter():
             progress.setCancelButton(None)
             timer = QElapsedTimer()
             timer.start()
+            qApp.processEvents()
 
             for p in range(0, len(pagesList)):
 
@@ -474,7 +475,7 @@ class comicsExporter():
                     passedString = str(int(timePassed / 60000)) + ":" + format(int(timePassed / 1000), "02d") + ":" + format(timePassed % 1000, "03d")
                     estimatedString = str(int(timeEstimated / 60000)) + ":" + format(int(timeEstimated / 1000), "02d") + ":" + format(int(timeEstimated % 1000), "03d")
                     progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(pagesList), passedString=passedString, estimated=estimatedString))
-
+                qApp.processEvents()
                 # Get the appropriate url and open the page.
                 url = os.path.join(self.projectURL, pagesList[p])
                 page = Application.openDocument(url)

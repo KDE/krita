@@ -312,7 +312,7 @@ QStringList Krita::recentDocuments() const
     return recentDocuments;
 }
 
-Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)
+Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution)
 {
     KisDocument *document = KisPart::instance()->createDocument();
     KisPart::instance()->addDocument(document);
@@ -323,7 +323,7 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     qc.setAlpha(0);
     KoColor bgColor(qc, cs);
 
-    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", 100.0)) {
+    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", double(resolution / 72) )) {
         qDebug() << "Could not create a new image";
         return 0;
     }

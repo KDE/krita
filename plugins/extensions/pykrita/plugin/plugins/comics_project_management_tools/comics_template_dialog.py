@@ -239,8 +239,7 @@ class comics_template_create(QDialog):
         mT = self.marginTopUnit.pixelsForUnit(self.marginTop.value(), self.DPI.value())
         mB = self.marginBottomUnit.pixelsForUnit(self.marginBottom.value(), self.DPI.value())
 
-        template = Application.createDocument((wBase + bL + bR), (hBase + bT + bB), self.templateName.text(), "RGBA", "U8", "sRGB built-in")
-        template.setResolution(self.DPI.value())
+        template = Application.createDocument((wBase + bL + bR), (hBase + bT + bB), self.templateName.text(), "RGBA", "U8", "sRGB built-in", self.DPI.value())
 
         backgroundNode = template.activeNode()
         backgroundNode.setName(i18n("Background"))

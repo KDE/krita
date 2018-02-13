@@ -240,9 +240,10 @@ public Q_SLOTS:
      * </ul>
      * @param profile The name of an icc profile that is known to Krita. If an empty string is passed, the default is
      * taken.
+     * @param resolution the resolution in points per inch.
      * @return the created document.
      */
-    Document *createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile);
+    Document *createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution);
 
     /**
      * @brief openDocument creates a new Document, registers it with the Krita application and loads the given file.

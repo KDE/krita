@@ -1,22 +1,21 @@
 #!/bin/bash
 
-# git clone https://github.com/probonopd/AppImageKit.git
-# ./AppImageKit/build.sh 
-# sudo ./AppImageKit/AppImageAssistant.AppDir/testappimage /isodevice/boot/iso/CentOS-6.5-x86_64-LiveCD.iso bash
-
 # Halt on errors
 set -e
 
 # Be verbose
 set -x
 
-export BUILD_PREFIX=/media/krita/_devel
+export BUILD_PREFIX=/home/krita/devel
 export INSTALLDIR=$BUILD_PREFIX/krita.appdir/usr
 export QTDIR=$BUILD_PREFIX/deps/usr
-export LD_LIBRARY_PATH=$QTDIR/lib/x86_64-linux-gnu:$QTDIR/lib:$BUILD_PREFIX/i/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$QTDIR/sip:$QTDIR/lib/x86_64-linux-gnu:$QTDIR/lib:$BUILD_PREFIX/i/lib:$LD_LIBRARY_PATH
 export PATH=$QTDIR/bin:$BUILD_PREFIX/i/bin:$PATH
 export PKG_CONFIG_PATH=$QTDIR/share/pkgconfig:$QTDIR/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$QTDIR/lib/x86_64-linux-gnu:$BUILD_PREFIX:$QTDIR:$CMAKE_PREFIX_PATH
+
+export PYTHONPATH=$QTDIR/sip:$QTDIR/lib/python3.5/site-packages:$QTDIR/lib/python3.5
+export PYTHONHOME=$QTDIR
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
@@ -57,25 +56,26 @@ cd $BUILD_PREFIX/krita/
 git_pull_rebase_helper
 
 
+
 # If the environment variable DO_NOT_BUILD_KRITA is set to something,
 # then stop here. This is for docker hub which has a timeout that
 # prevents us from building in one go.
 # if [ ! -z "$DO_NOT_BUILD_KRITA" ] ; then
 #  exit 0
 # fi
+
+
 rm -rf $BUILD_PREFIX/krita_build || true
 mkdir -p $BUILD_PREFIX/krita_build
 cd $BUILD_PREFIX/krita_build
 cmake $BUILD_PREFIX/krita \
-    -DCMAKE_INSTALL_PREFIX:PATH=/krita.appdir/usr \
+    -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
     -DCMAKE_BUILD_TYPE=Release \
-    -DPACKAGERS_BUILD=1 \
     -DFOUNDATION_BUILD=1 \
-    -DHIDE_SAVE_ASSERTS=ON \
+    -DHIDE_SAFE_ASSERTS=ON \
     -DBUILD_TESTING=FALSE \
-    -DKDE4_BUILD_TESTS=FALSE \
-    -DPYQT_SIP_DIR_OVERRIDE=$QTDIR/share/sip/\
+    -DPYQT_SIP_DIR_OVERRIDE=$QTDIR/share/sip/ \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE
     
 # build

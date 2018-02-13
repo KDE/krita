@@ -622,7 +622,7 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 
         // add an "All" option at the front to show all presets
         QPixmap emptyPixmap = QPixmap(22,22);
-        emptyPixmap.fill(palette().color(QPalette::Background));
+        emptyPixmap.fill(Qt::transparent);
 
         // if we create a new brush from scratch, we need a full list of paintops to choose from
         // we don't want "All", so populate the list before that is added

@@ -182,6 +182,10 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // will fire off signals that make this run in an infinite loop
     qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
+    //Except for the sketchbrush where it determine sthe history.
+    if (m_currentPreset->paintOp().id() == "sketchbrush") {
+        previewSize = qMax(3.0, m_currentPreset->settings()->paintOpSize());
+    }
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
     proxy_preset->settings()->setPaintOpSize(previewSize);
 
@@ -206,27 +210,44 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
 
     // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
-    if (m_currentPreset->paintOp().id() == "sketchbrush") {
-
+    if (m_currentPreset->paintOp().id() == "sketchbrush"
+         || m_currentPreset->paintOp().id() == "curvebrush"
+         || m_currentPreset->paintOp().id() == "particlebrush") {
+        qreal startX = m_canvasCenterPoint.x() - (this->width()*0.4);
+        qreal endX   = m_canvasCenterPoint.x() + (this->width()*0.4);
+        qreal middle = m_canvasCenterPoint.y();
         KisPaintInformation pointOne;
         pointOne.setPressure(0.0);
-        pointOne.setPos(QPointF(m_canvasCenterPoint.x() - (this->width() * 0.4),
-                                m_canvasCenterPoint.y() - (this->height()*0.2) ));
-
+        pointOne.setPos(QPointF(startX, middle));
         KisPaintInformation pointTwo;
-        pointTwo.setPressure(1.0);
-        pointTwo.setPos(QPointF(m_canvasCenterPoint.x() + (this->width() * 0.4),
-                                m_canvasCenterPoint.y() + (this->height()*0.2) ));
+        pointTwo.setPressure(0.0);
+        pointTwo.setPos(QPointF(startX, middle));
+        int repeats = 8;
 
+        for (int i = 0; i < repeats; i++) {
+            pointOne.setPos(pointTwo.pos());
+            pointOne.setPressure(pointTwo.pressure());
 
-        m_image->addJob(strokeId,
-            new FreehandStrokeStrategy::Data(0,
-                                             pointOne,
-                                             QPointF(m_canvasCenterPoint.x() + this->width(),
-                                                     m_canvasCenterPoint.y() - (this->height()*0.2) ),
-                                             QPointF(m_canvasCenterPoint.x() - this->width(),
-                                                     m_canvasCenterPoint.y() + (this->height()*0.2) ),
-                                             pointTwo));
+            pointTwo.setPressure((1.0/repeats)*(i+1));
+            qreal xPos = ((1.0/repeats) * (i+1) * (endX-startX) )+startX;
+            pointTwo.setPos(QPointF(xPos, middle));
+
+            qreal offset = (this->height()/(repeats*1.5))*(i+1);
+            qreal handleY = middle + offset;
+            if (i%2 == 0) {
+                handleY = middle - offset;
+            }
+
+            m_image->addJob(strokeId,
+                            new FreehandStrokeStrategy::Data(0,
+                                        pointOne,
+                                QPointF(pointOne.pos().x(),
+                                        handleY),
+                                QPointF(pointTwo.pos().x(),
+                                        handleY),
+                                        pointTwo));
+            m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+        }
 
     } else {
 
@@ -249,9 +270,8 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                              QPointF(m_canvasCenterPoint.x(),
                                                      m_canvasCenterPoint.y()+this->height()),
                                              m_curvePointPI2));
+        m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
     }
-
-    m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
     m_image->endStroke(strokeId);
     m_image->waitForDone();
 

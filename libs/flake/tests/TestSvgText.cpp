@@ -981,7 +981,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"Verdana\" font-size=\"15\"><tspan>S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"Verdana\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 }
 
 void TestSvgText::testConvertFromIncorrectStrippedSvg()

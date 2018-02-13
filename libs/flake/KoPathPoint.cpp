@@ -279,11 +279,11 @@ void KoPathPoint::paint(KisHandlePainterHelper &handlesHelper, PointTypes types,
     // the point is lowest
     if (types & Node) {
         if (properties() & IsSmooth) {
-            handlesHelper.drawHandleRect(point());
-        } else if (properties() & IsSymmetric) {
-            handlesHelper.drawGradientHandle(point());
-        } else {
             handlesHelper.drawHandleCircle(point());
+        } else if (properties() & IsSymmetric) {
+            handlesHelper.drawHandleRect(point());
+        } else {
+            handlesHelper.drawGradientHandle(point());
         }
     }
 

@@ -1371,6 +1371,7 @@ void TestSvgParser::testRenderFillRadialGradientUserCoord()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(1);
     t.test_standard_30px_72ppi("fill_gradient_radial_in_user");
 }
 

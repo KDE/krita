@@ -506,6 +506,24 @@ inline QPointF absoluteToRelative(const QPointF &pt, const QRectF &rc) {
 }
 
 /**
+ * Scales relative isotropic value from relative to absolute coordinate system
+ * using SVG 1.1 rules (see chapter 7.10)
+ */
+inline qreal relativeToAbsolute(qreal value, const QRectF &rc) {
+    const qreal coeff = std::sqrt(pow2(rc.width()) + pow2(rc.height())) / std::sqrt(2.0);
+    return value * coeff;
+}
+
+/**
+ * Scales absolute isotropic value from absolute to relative coordinate system
+ * using SVG 1.1 rules (see chapter 7.10)
+ */
+inline qreal absoluteToRelative(const qreal value, const QRectF &rc) {
+    const qreal coeff = std::sqrt(pow2(rc.width()) + pow2(rc.height())) / std::sqrt(2.0);
+    return coeff != 0 ? value / coeff : 0;
+}
+
+/**
  * Compare the matrices with tolerance \p delta
  */
 bool KRITAGLOBAL_EXPORT fuzzyMatrixCompare(const QTransform &t1, const QTransform &t2, qreal delta);

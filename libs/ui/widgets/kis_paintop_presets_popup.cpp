@@ -779,10 +779,7 @@ void KisPaintOpPresetsPopup::slotSaveNewBrushPreset() {
 
 void KisPaintOpPresetsPopup::slotCreateNewBrushPresetEngine()
 {
-    KisAction *actionThatWasSent = static_cast<KisAction*>(sender());// sender() gets what menu item was called
-    emit createPresetFromScratch(actionThatWasSent->objectName());
-
-    actionThatWasSent->deleteLater();
+    emit createPresetFromScratch(sender()->objectName());
 }
 
 void KisPaintOpPresetsPopup::updateViewSettings()

@@ -508,5 +508,10 @@ void KisScratchPad::fillBackground()
 
 void KisScratchPad::fillLayer()
 {
-    // TODO
+    if(!m_paintLayer) return;
+    KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+    KisPainter painter(paintDevice);
+    QRect sourceRect(0, 0, paintDevice->exactBounds().width(), paintDevice->exactBounds().height());
+    painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentImage()->projection(), sourceRect);
+    update();
 }

@@ -118,7 +118,6 @@ KoToolBox::KoToolBox()
             SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
             this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
 
-    QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }
 
 KoToolBox::~KoToolBox()

@@ -389,28 +389,28 @@ double Document::xRes() const
 {
     if (!d->document) return 0.0;
     if (!d->document->image()) return 0.0;
-    return d->document->image()->xRes();
+    return d->document->image()->xRes()*72.0;
 }
 
 void Document::setXRes(double xRes) const
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->setResolution(xRes, d->document->image()->yRes());
+    d->document->image()->setResolution(xRes/72.0, d->document->image()->yRes());
 }
 
 double Document::yRes() const
 {
     if (!d->document) return 0.0;
     if (!d->document->image()) return 0.0;
-    return d->document->image()->yRes();
+    return d->document->image()->yRes()*72.0;
 }
 
 void Document::setYRes(double yRes) const
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->setResolution(d->document->image()->xRes(), yRes);
+    d->document->image()->setResolution(d->document->image()->xRes(), yRes/72.0);
 }
 
 
@@ -495,7 +495,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    image->scaleImage(rc.size(), xres, yres, actualStrategy);
+    image->scaleImage(rc.size(), xres/72, yres/72, actualStrategy);
 }
 
 void Document::rotateImage(double radians)

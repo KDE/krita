@@ -20,6 +20,8 @@
 #include <QVector>
 #include <QFile>
 #include <QDomDocument>
+#include <QApplication>
+#include <QtCore/QEventLoop>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -152,6 +154,11 @@ void KisWindowLayoutResource::applyLayout()
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
 
     d->openNecessaryWindows(currentWindows);
+    d->closeUnneededWindows(currentWindows);
+
+    // Wait for the windows to finish opening / closing before applying saved geometry.
+    // If we don't, the geometry may get reset after we apply it.
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
     Q_FOREACH(const auto &window, d->windows) {
         QPointer<KisMainWindow> mainWindow = d->findWindow(window.windowId);
@@ -160,8 +167,6 @@ void KisWindowLayoutResource::applyLayout()
         mainWindow->restoreGeometry(window.geometry);
         mainWindow->restoreWorkspace(window.windowState);
     }
-
-    d->closeUnneededWindows(currentWindows);
 
     kisPart->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
 }

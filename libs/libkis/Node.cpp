@@ -526,8 +526,8 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     KisImageSP dst = new KisImage(doc->createUndoStore(),
-                                  bounds.width(),
-                                  bounds.height(),
+                                  bounds.right(),
+                                  bounds.bottom(),
                                   projection->compositionSourceColorSpace(),
                                   d->node->name());
     dst->setResolution(xRes, yRes);
@@ -536,6 +536,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", d->node->opacity());
     paintLayer->paintDevice()->makeCloneFrom(projection, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+    dst->cropImage(bounds);
     dst->initialRefreshGraph();
 
     bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());

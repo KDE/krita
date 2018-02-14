@@ -16,7 +16,7 @@ export PYTHONPATH=$QTDIR/sip:$QTDIR/lib/python3.5/site-packages:$QTDIR/lib/pytho
 export PYTHONHOME=$QTDIR
 
 export APPDIR=$BUILD_PREFIX/krita.appdir
-export PLUGINS=$APPDIR/usr/lib/x86_64-linux-gnu/kritaplugins/
+export PLUGINS=$APPDIR/usr/lib/kritaplugins/
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
@@ -31,23 +31,72 @@ else
   exit 1
 fi
 
-#
-# Get the latest linuxdeployqt
-#
-cd
-wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
-chmod a+x linuxdeployqt
+rm -rf $APPDIR
+cd $BUILD_PREFIX/krita_build
+make -j10 install
+cd  -
 
 cp -r $QTDIR/share/kf5 $APPDIR/usr/share
 cp -r $QTDIR/share/locale $APPDIR/usr/share
 cp -r $QTDIR/share/mime $APPDIR/usr/share
 cp -r $QTDIR/lib/python3.5 $APPDIR/usr/lib
+cp -r $QTDIR/sip $APPDIR/usr/lib/
+
+mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
+rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
+
+for lib in $PLUGINS/*.so*; do
+  patchelf --set-rpath '$ORIGIN/..' $lib; 
+done
+
+for lib in $APPDIR/usr/lib/python3.5/site-packages/PyQt5/*.so*; do
+  patchelf --set-rpath '$ORIGIN/../..' $lib; 
+done
+
+for lib in $APPDIR/usr/lib/python3.5/lib-dynload/*.so*; do
+  patchelf --set-rpath '$ORIGIN/../..' $lib; 
+done
+
+patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
+patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/sip/sip.so
+
+#
+# Get the latest linuxdeployqt
+#
+
+wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
+chmod a+x linuxdeployqt
 
 ./linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
   -qmldir=$QTDIR/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
-  -appimage \
-  -extra-plugins=$PLUGINS/kritaanimationdocker.so,$PLUGINS/kritaanimationrenderer.so,$PLUGINS/kritaarrangedocker.so,$PLUGINS/kritaartisticcolorselector.so,$PLUGINS/kritaasccdl.so,$PLUGINS/kritaassistanttool.so,$PLUGINS/kritabigbrother.so,$PLUGINS/kritablurfilter.so,$PLUGINS/kritabmpexport.so,$PLUGINS/kritabmpimport.so,$PLUGINS/kritabrushexport.so,$PLUGINS/kritabrushimport.so,$PLUGINS/kritabuginfo.so,$PLUGINS/kritachanneldocker.so,$PLUGINS/kritaclonesarray.so,$PLUGINS/kritacolorgenerator.so,$PLUGINS/kritacolorrange.so,$PLUGINS/kritacolorselectorng.so,$PLUGINS/kritacolorsfilters.so,$PLUGINS/kritacolorslider.so,$PLUGINS/kritacolorsmudgepaintop.so,$PLUGINS/kritacolorspaceconversion.so,$PLUGINS/krita_colorspaces_extensions.so,$PLUGINS/kritacompositiondocker.so,$PLUGINS/kritaconvertheighttonormalmap.so,$PLUGINS/kritaconvolutionfilters.so,$PLUGINS/kritacsvexport.so,$PLUGINS/kritacsvimport.so,$PLUGINS/kritacurvepaintop.so,$PLUGINS/kritadefaultdockers.so,$PLUGINS/kritadefaultpaintops.so,$PLUGINS/kritadefaulttools.so,$PLUGINS/kritadeformpaintop.so,$PLUGINS/kritadigitalmixer.so,$PLUGINS/kritadodgeburn.so,$PLUGINS/kritadynapaintop.so,$PLUGINS/kritaedgedetection.so,$PLUGINS/kritaembossfilter.so,$PLUGINS/kritaexample.so,$PLUGINS/kritaexperimentpaintop.so,$PLUGINS/kritaexrexport.so,$PLUGINS/kritaexrimport.so,$PLUGINS/kritaextensioncolorsfilters.so,$PLUGINS/kritafastcolortransferfilter.so,$PLUGINS/krita_filtereffects.so,$PLUGINS/kritafilterop.so,$PLUGINS/krita_flaketools.so,$PLUGINS/kritagradientmap.so,$PLUGINS/kritagriddocker.so,$PLUGINS/kritagridpaintop.so,$PLUGINS/kritahairypaintop.so,$PLUGINS/kritahalftone.so,$PLUGINS/kritahatchingpaintop.so,$PLUGINS/kritaheightmapexport.so,$PLUGINS/kritaheightmapimport.so,$PLUGINS/kritahistogramdocker.so,$PLUGINS/kritahistogram.so,$PLUGINS/kritahistorydocker.so,$PLUGINS/kritaimagedocker.so,$PLUGINS/kritaimageenhancement.so,$PLUGINS/kritaimagesize.so,$PLUGINS/kritaimagesplit.so,$PLUGINS/kritaindexcolors.so,$PLUGINS/kritajpegexport.so,$PLUGINS/kritajpegimport.so,$PLUGINS/krita_karbontools.so,$PLUGINS/kritakraexport.so,$PLUGINS/kritakraimport.so,$PLUGINS/kritalayergroupswitcher.so,$PLUGINS/kritalayersplit.so,$PLUGINS/kritalcmsengine.so,$PLUGINS/kritalevelfilter.so,$PLUGINS/kritalutdocker.so,$PLUGINS/kritametadataeditor.so,$PLUGINS/kritamodifyselection.so,$PLUGINS/kritanoisefilter.so,$PLUGINS/kritanormalize.so,$PLUGINS/kritaoffsetimage.so,$PLUGINS/kritaoilpaintfilter.so,$PLUGINS/kritaoraexport.so,$PLUGINS/kritaoraimport.so,$PLUGINS/kritaoverviewdocker.so,$PLUGINS/kritapalettedocker.so,$PLUGINS/kritaparticlepaintop.so,$PLUGINS/kritapatterndocker.so,$PLUGINS/kritapatterngenerator.so,$PLUGINS/kritapdfimport.so,$PLUGINS/kritaphongbumpmap.so,$PLUGINS/kritapixelizefilter.so,$PLUGINS/kritapngexport.so,$PLUGINS/kritapngimport.so,$PLUGINS/kritaposterize.so,$PLUGINS/kritappmexport.so,$PLUGINS/kritappmimport.so,$PLUGINS/kritapresetdocker.so,$PLUGINS/kritapresethistory.so,$PLUGINS/kritapsdexport.so,$PLUGINS/kritapsdimport.so,$PLUGINS/kritapykrita.so,$PLUGINS/kritaqmic.so,$PLUGINS/kritaqmlexport.so,$PLUGINS/kritaraindropsfilter.so,$PLUGINS/kritarandompickfilter.so,$PLUGINS/krita_raw_import.so,$PLUGINS/kritaresourcemanager.so,$PLUGINS/kritarotateimage.so,$PLUGINS/kritaroundcornersfilter.so,$PLUGINS/kritaroundmarkerpaintop.so,$PLUGINS/kritaselectiontools.so,$PLUGINS/kritaseparatechannels.so,$PLUGINS/krita_shape_artistictext.so,$PLUGINS/krita_shape_image.so,$PLUGINS/krita_shape_paths.so,$PLUGINS/krita_shape_text.so,$PLUGINS/kritashearimage.so,$PLUGINS/kritasketchpaintop.so,$PLUGINS/kritasmallcolorselector.so,$PLUGINS/kritasmalltilesfilter.so,$PLUGINS/kritaspecificcolorselector.so,$PLUGINS/kritaspraypaintop.so,$PLUGINS/kritaspriterexport.so,$PLUGINS/kritasvgcollectiondocker.so,$PLUGINS/kritasvgimport.so,$PLUGINS/kritatangentnormalpaintop.so,$PLUGINS/kritatasksetdocker.so,$PLUGINS/kritatgaexport.so,$PLUGINS/kritatgaimport.so,$PLUGINS/kritathreshold.so,$PLUGINS/kritatiffexport.so,$PLUGINS/kritatiffimport.so,$PLUGINS/krita_tool_basicflakes.so,$PLUGINS/kritatoolcrop.so,$PLUGINS/kritatooldyna.so,$PLUGINS/kritatoollazybrush.so,$PLUGINS/kritatoolpolygon.so,$PLUGINS/kritatoolpolyline.so,$PLUGINS/kritatoolSmartPatch.so,$PLUGINS/krita_tool_svgtext.so,$PLUGINS/kritatooltransform.so,$PLUGINS/kritatouchdocker.so,$PLUGINS/kritaunsharpfilter.so,$PLUGINS/kritavideoexport.so,$PLUGINS/kritawavefilter.so,$PLUGINS/kritawaveletdecompose.so,$PLUGINS/kritaxcfimport.so,$APPDIR/usr/lib/x86_64-linux-gnu/qml/org/krita/sketch/libkritasketchplugin.so,$QTDIR/share/locale,$APPDIR/usr/lib/x86_64-linux-gnu/qml/org/krita/draganddrop/libdraganddrop.so
+  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
+  -appimage 
+
+  
+cd $BUILD_PREFIX/krita_build
+VER=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
+cd -
+cd $BUILD_PREFIX/krita
+REVISION=$(git rev-parse --short HEAD)
+cd -
+
+VERSION=$VER-$REVISION
+VERSION="$(sed s/\ /-/g <<<$VERSION)"
+echo $VERSION
+
+if [[ "$ARCH" = "x86_64" ]] ; then
+        APPIMAGE=$APP"-"$VERSION"-x86_64.appimage"
+fi
+if [[ "$ARCH" = "i686" ]] ; then
+        APPIMAGE=$APP"-"$VERSION"-i386.appimage"
+fi
+echo $APPIMAGE
+
+mv Krita-x86_64.AppImage $APPIMAGE
+
 

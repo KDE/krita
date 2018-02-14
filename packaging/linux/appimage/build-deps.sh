@@ -27,59 +27,67 @@ install_deps()
   apt update
   apt upgrade
   apt-get install build-essential \
+  bison \
   cmake3 \
+  gettext \
   git \
+  gperf \
+  libasound2-dev \
+  libasound2-dev \
+  libatkmm-1.6-dev \
+  libbz2-dev \
   libcairo-perl \
+  libcap-dev \
+  libcups2-dev \
+  libcups2-dev \
+  libdbus-1-dev \
+  libdrm-dev \
+  libegl1-mesa-dev \
+  libfontconfig1-dev \
+  libfontconfig1-dev \
+  libfreetype6-dev \
+  libgcrypt11-dev \
   libgl1-mesa-dev \
   libglib-perl \
+  libgsl0-dev \
+  libgstreamer-plugins-base0.10-dev \
+  libgstreamer0.10-dev \
   libgtk2-perl \
+  libjpeg-dev \
+  libnss3-dev \
+  libpci-dev \
+  libpng12-dev \
+  libpulse-dev \
+  libssl-dev \
+  libtiff5-dev \
+  libudev-dev \
+  libwebp-dev  \
   libx11-dev \
-  libxcb1-dev \
   libxcb-glx0-dev \
   libxcb-keysyms1-dev \
+  libxcb-util0-dev \
+  libxcb1-dev \
+  libxcomposite-dev \
+  libxcursor-dev \
+  libxdamage-dev \
   libxext-dev \
   libxfixes-dev \
   libxi-dev \
-  libxrender-dev \
-  mesa-common-dev \
-  libxcb-util0-dev \
-  libgsl0-dev \
-  libpng12-dev \
-  libtiff5-dev \
-  libjpeg-dev \
-  libfontconfig1-dev \
-  libfreetype6-dev \
-  libcups2-dev \
-  libbz2-dev \
-  libgcrypt11-dev \
-  libdrm-dev \
-  libcups2-dev \
-  libatkmm-1.6-dev \
-  libssl-dev \
-  libxcursor-dev \
-  libxcomposite-dev \
-  libxdamage-dev \
   libxrandr-dev \
-  libdbus-1-dev \
-  libfontconfig1-dev \
-  libcap-dev \
-  libxtst-dev \
-  libpulse-dev \
-  libudev-dev \
-  libpci-dev \
-  libnss3-dev \
-  libasound2-dev \
+  libxrender-dev \
   libxss-dev \
-  libegl1-mesa-dev \
-  gperf \
-  bison \
-  libasound2-dev \
-  libgstreamer0.10-dev \
-  libgstreamer-plugins-base0.10-dev \
-  libwebp-dev  
+  libxtst-dev \
+  mesa-common-dev 
 }
 
 install_deps || true
+
+# We also need patchelf
+wget  -c -nv https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2
+tar -xf patchelf-0.9.tar.bz2
+cd patchelf-0.9
+./configure -prefix=$QTDIR
+make -j4 install
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7

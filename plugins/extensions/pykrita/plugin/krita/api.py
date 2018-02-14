@@ -26,20 +26,7 @@ import os
 import sys
 
 from PyKrita.krita import *
-
 import pykrita
-
-
-def objectIsAlive(obj):
-    ''' Test whether an object is alive; that is, whether the pointer
-    to the object still exists. '''
-    import sip
-    try:
-        sip.unwrapinstance(obj)
-    except RuntimeError:
-        return False
-    return True
-
 
 def qDebug(text):
     '''Use KDE way to show debug info

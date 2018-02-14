@@ -90,10 +90,10 @@ VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
 
 if [[ "$ARCH" = "x86_64" ]] ; then
-        APPIMAGE=$APP"-"$VERSION"-x86_64.appimage"
+        APPIMAGE=krita-"$VERSION"-x86_64.appimage"
 fi
 if [[ "$ARCH" = "i686" ]] ; then
-        APPIMAGE=$APP"-"$VERSION"-i386.appimage"
+        APPIMAGE=krita-"$VERSION"-i386.appimage"
 fi
 echo $APPIMAGE
 

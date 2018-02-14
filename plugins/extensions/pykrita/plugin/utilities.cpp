@@ -273,18 +273,16 @@ bool Python::libraryLoad()
         else {
             QString libraryName = fi.fileName();
             QString applicationRoot = KoResourcePaths::getApplicationRoot();
-            qDebug() << "applicationRoot" << applicationRoot << "library" << libraryName;
-            QStringList locations = QStringList() << applicationRoot + "/lib"
-                                                  << applicationRoot + "/lib64"
-                                                  << applicationRoot + "/lib/X64_86-linux-gnu";
-            qDebug() << locations;
+            QStringList locations;
+            locations << applicationRoot + "/lib"
+                      << applicationRoot + "/lib64"
+                      << applicationRoot + "/lib/X64_86-linux-gnu";
             Q_FOREACH(const QString &location, locations) {
                 QDir d(location);
                 QStringList entries = d.entryList(QStringList() << libraryName + "*");
                 qDebug() << entries;
                 Q_FOREACH(const QString &entry, entries) {
                      QFileInfo fi2(location + "/" + entry);
-                     qDebug() << fi2 << fi2.exists();
                      if (fi2.exists()) {
                         s_pythonLibrary = new QLibrary(fi2.canonicalFilePath());
                         break;
@@ -381,7 +379,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     }
 #else
     // If using a system Python install, respect the current PYTHONPATH
-    if (KoResourcePaths::getApplicationRoot().contains(".mount_Krita")) {
+    if (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita")) {
         // We're running from an appimage, so we need our local python
         QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
         QString p2 = p.remove("lib").remove("m.so");

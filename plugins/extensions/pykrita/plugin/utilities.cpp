@@ -124,11 +124,6 @@ namespace PyKrita
     void finalize() {
         dbgScript << "Going to destroy the Python engine";
 
-        // Notify Python that engine going to die
-        {
-            PyKrita::Python py = PyKrita::Python();
-            py.functionCall("_pykritaUnloading");
-        }
         pluginManagerInstance->unloadAllModules();
 
         PyKrita::Python::maybeFinalize();
@@ -353,7 +348,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     }
     qDebug() << "Found krita-python-libs at" << pythonLibsPath;
     paths.append(pythonLibsPath);
-    
+
     // Append the Krita libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
     if (pythonLibsPath.isEmpty()) {

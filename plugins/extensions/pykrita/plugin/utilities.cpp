@@ -123,14 +123,15 @@ namespace PyKrita
 
     void finalize() {
         dbgScript << "Going to destroy the Python engine";
+        if (pluginManagerInstance) {
+            pluginManagerInstance->unloadAllModules();
 
-        pluginManagerInstance->unloadAllModules();
+            PyKrita::Python::maybeFinalize();
+            PyKrita::Python::libraryUnload();
 
-        PyKrita::Python::maybeFinalize();
-        PyKrita::Python::libraryUnload();
-
-        pluginManagerInstance.reset();
-        initStatus = INIT_UNINITIALIZED;
+            pluginManagerInstance.reset();
+            initStatus = INIT_UNINITIALIZED;
+        }
     }
 
     namespace

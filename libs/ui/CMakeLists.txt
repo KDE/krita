@@ -275,6 +275,8 @@ set(kritaui_LIB_SRCS
     widgets/KoFillConfigWidget.cpp
     widgets/KoShapeFillWrapper.cpp
 
+    widgets/KisLayoutSelector.cpp
+
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 

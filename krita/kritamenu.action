@@ -1806,6 +1806,15 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="select_layout">
+      <icon></icon>
+      <text>Layouts</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select layout</toolTip>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="workspaces">
       <icon></icon>
       <text>Workspaces</text>

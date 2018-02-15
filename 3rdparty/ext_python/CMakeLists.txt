@@ -26,6 +26,7 @@ elseif(MINGW)
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/ ${PREFIX_ext_python}/python
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python36.dll ${PREFIX_ext_python}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
             UPDATE_COMMAND ""
         )
     else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
@@ -40,6 +41,7 @@ elseif(MINGW)
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/ ${PREFIX_ext_python}/python
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python3.dll ${PREFIX_ext_python}/bin
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/python36.dll ${PREFIX_ext_python}/bin
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/vcruntime140.dll ${PREFIX_ext_python}/bin
             UPDATE_COMMAND ""
         )
     endif("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")

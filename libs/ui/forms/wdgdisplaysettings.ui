@@ -434,7 +434,7 @@
         <string>Determines whether the checks will stay put or whether they will scroll together with the canvas</string>
        </property>
        <property name="text">
-        <string>&amp;Move checkers  when scrolling</string>
+        <string>&amp;Move checkers when scrolling</string>
        </property>
        <property name="checked">
         <bool>true</bool>

@@ -261,6 +261,8 @@ public:
 
     KConfigGroup windowStateConfig;
 
+    QUuid workspaceBorrowedBy;
+
     KisActionManager * actionManager() {
         return viewManager->actionManager();
     }
@@ -1566,6 +1568,41 @@ bool KisMainWindow::restoreWorkspace(const QByteArray &state)
     return success;
 }
 
+QByteArray KisMainWindow::borrowWorkspace(KisMainWindow *other)
+{
+    QByteArray currentWorkspace = saveState();
+
+    if (!d->workspaceBorrowedBy.isNull()) {
+        if (other->id() == d->workspaceBorrowedBy) {
+            // We're swapping our original workspace back
+            d->workspaceBorrowedBy = QUuid();
+            return currentWorkspace;
+        } else {
+            // Get our original workspace back before swapping with a third window
+            KisMainWindow *borrower = KisPart::instance()->windowById(d->workspaceBorrowedBy);
+            if (borrower) {
+                QByteArray originalLayout = borrower->borrowWorkspace(this);
+                borrower->restoreWorkspace(currentWorkspace);
+
+                d->workspaceBorrowedBy = other->id();
+                return originalLayout;
+            }
+        }
+    }
+
+    d->workspaceBorrowedBy = other->id();
+    return currentWorkspace;
+}
+
+void KisMainWindow::swapWorkspaces(KisMainWindow *a, KisMainWindow *b)
+{
+    QByteArray workspaceA = a->borrowWorkspace(b);
+    QByteArray workspaceB = b->borrowWorkspace(a);
+
+    a->restoreWorkspace(workspaceB);
+    b->restoreWorkspace(workspaceA);
+}
+
 KisViewManager *KisMainWindow::viewManager() const
 {
     return d->viewManager;
@@ -2037,6 +2074,29 @@ void KisMainWindow::subWindowActivated()
 
     updateCaption();
     d->actionManager()->updateGUI();
+}
+
+void KisMainWindow::windowFocused()
+{
+    auto *kisPart = KisPart::instance();
+    if (!kisPart->primaryWorkspaceFollowsFocus()) return;
+
+    QUuid primary = kisPart->primaryWindowId();
+    if (primary.isNull()) return;
+
+    if (d->id == primary) {
+        if (!d->workspaceBorrowedBy.isNull()) {
+            KisMainWindow *borrower = kisPart->windowById(d->workspaceBorrowedBy);
+            if (!borrower) return;
+            swapWorkspaces(this, borrower);
+        }
+    } else {
+        if (d->workspaceBorrowedBy == primary) return;
+
+        KisMainWindow *primaryWindow = kisPart->windowById(primary);
+        if (!primaryWindow) return;
+        swapWorkspaces(this, primaryWindow);
+    }
 }
 
 void KisMainWindow::updateWindowMenu()

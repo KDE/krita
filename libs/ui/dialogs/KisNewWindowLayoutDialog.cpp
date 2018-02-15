@@ -23,9 +23,6 @@ KisNewWindowLayoutDialog::KisNewWindowLayoutDialog(QWidget *parent)
 {
     setupUi(this);
 
-    // The feature is not implemented yet
-    chkFollowFocus->hide();
-
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -43,4 +40,9 @@ QString KisNewWindowLayoutDialog::name() const
 bool KisNewWindowLayoutDialog::showImageInAllWindows() const
 {
     return chkActiveInAllWindows->isChecked();
+}
+
+bool KisNewWindowLayoutDialog::primaryWorkspaceFollowsFocus() const
+{
+    return chkFollowFocus->isChecked();
 }

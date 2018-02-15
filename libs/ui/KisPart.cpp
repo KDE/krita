@@ -35,6 +35,7 @@
 #include <kis_icon.h>
 
 #include "KisApplication.h"
+#include "KisMainWindow.h"
 #include "KisDocument.h"
 #include "KisView.h"
 #include "KisViewManager.h"
@@ -115,6 +116,8 @@ public:
     QScopedPointer<KisSessionManagerDialog> sessionManager;
 
     bool showImageInAllWindows{false};
+    bool primaryWorkspaceFollowsFocus{false};
+    QUuid primaryWindow;
 
     bool queryCloseDocument(KisDocument *document) {
         Q_FOREACH(auto view, views) {
@@ -152,6 +155,9 @@ KisPart::KisPart()
             this, SLOT(updateShortcuts()));
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
+
+    connect(qobject_cast<KisApplication*>(KisApplication::instance()), SIGNAL(focusChanged(QWidget*, QWidget*)),
+            this, SLOT(focusChanged(QWidget*, QWidget*)));
 
     d->animationCachePopulator.slotRequestRegeneration();
 }
@@ -411,6 +417,17 @@ KisMainWindow *KisPart::currentMainwindow() const
 
 }
 
+KisMainWindow * KisPart::windowById(QUuid id) const
+{
+    Q_FOREACH(QPointer<KisMainWindow> mainWindow, d->mainWindows) {
+        if (mainWindow->id() == id) {
+            return mainWindow;
+        }
+    }
+
+    return nullptr;
+}
+
 void KisPart::addScriptAction(KisAction *action)
 {
     d->scriptActions << action;
@@ -545,6 +562,33 @@ void KisPart::setShowImageInAllWindowsEnabled(bool showInAll)
 bool KisPart::isShowImageInAllWindowsEnabled() const
 {
     return d->showImageInAllWindows;
+}
+
+bool KisPart::primaryWorkspaceFollowsFocus() const
+{
+    return d->primaryWorkspaceFollowsFocus;
+}
+
+void KisPart::setPrimaryWorkspaceFollowsFocus(bool enabled, QUuid primaryWindow)
+{
+    d->primaryWorkspaceFollowsFocus = enabled;
+    d->primaryWindow = primaryWindow;
+}
+
+QUuid KisPart::primaryWindowId() const
+{
+    return d->primaryWindow;
+}
+
+void KisPart::focusChanged(QWidget *old, QWidget *now)
+{
+    Q_UNUSED(old);
+
+    if (!now) return;
+    KisMainWindow *newMainWindow = qobject_cast<KisMainWindow*>(now->window());
+    if (!newMainWindow) return;
+
+    newMainWindow->windowFocused();
 }
 
 void KisPart::showSessionManager()

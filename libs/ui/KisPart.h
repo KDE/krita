@@ -138,6 +138,8 @@ public:
      */
     KisMainWindow *currentMainwindow() const;
 
+    KisMainWindow *windowById(QUuid id) const;
+
     /**
      * Add a given action to the list of dynamically defined actions. On creating
      * a mainwindow, all these actions will be added to the script manager.
@@ -158,6 +160,15 @@ public:
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
+
+
+    /**
+     * When enabled, a workspace dedicated as primary is used for any main window which receives focus.
+     * Meanwhile, the workspace of that window is used for the window which originally had the primary workspace.
+     */
+    bool primaryWorkspaceFollowsFocus() const;
+    void setPrimaryWorkspaceFollowsFocus(bool enabled, QUuid primaryWindow);
+    QUuid primaryWindowId() const;
 
 
 public Q_SLOTS:
@@ -186,6 +197,8 @@ private Q_SLOTS:
     void updateIdleWatcherConnections();
 
     void updateShortcuts();
+
+    void focusChanged(QWidget *old, QWidget *now);
 
 Q_SIGNALS:
     /**

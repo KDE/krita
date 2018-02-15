@@ -204,6 +204,9 @@ void KisWorkspaceChooser::workspaceSelected(KoResource *resource)
 
 void KisWorkspaceChooser::slotSaveWindowLayout()
 {
+    KisMainWindow *thisWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
+    if (!thisWindow) return;
+
     KisNewWindowLayoutDialog dlg;
     dlg.setName(m_windowLayoutWidgets.nameEdit->text());
     dlg.exec();
@@ -212,8 +215,9 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
     QString name = dlg.name();
     bool showImageInAllWindows = dlg.showImageInAllWindows();
+    bool primaryWorkspaceFollowsFocus = dlg.primaryWorkspaceFollowsFocus();
 
-    auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows);
+    auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows, primaryWorkspaceFollowsFocus, thisWindow);
     layout->setValid(true);
 
     KisPart::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);

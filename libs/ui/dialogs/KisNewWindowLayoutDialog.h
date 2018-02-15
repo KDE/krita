@@ -30,6 +30,7 @@ public:
     void setName(const QString &name);
     QString name() const;
     bool showImageInAllWindows() const;
+    bool primaryWorkspaceFollowsFocus() const;
 };
 
 #endif

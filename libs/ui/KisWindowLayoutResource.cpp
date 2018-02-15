@@ -39,6 +39,8 @@ struct KisWindowLayoutResource::Private
 
     QVector<Window> windows;
     bool showImageInAllWindows;
+    bool primaryWorkspaceFollowsFocus;
+    QUuid primaryWindow;
 
     Private() = default;
 
@@ -46,22 +48,11 @@ struct KisWindowLayoutResource::Private
         : windows(std::move(windows))
     {}
 
-    QPointer<KisMainWindow> findWindow(QUuid id) {
-        const QList<QPointer<KisMainWindow>> &currentWindows = KisPart::instance()->mainWindows();
-        Q_FOREACH(QPointer<KisMainWindow> mainWindow, currentWindows) {
-            if (mainWindow->id() == id) {
-                return mainWindow;
-            }
-        }
-
-        return QPointer<KisMainWindow>();
-    }
-
     void openNecessaryWindows(QList<QPointer<KisMainWindow>> &currentWindows) {
         auto *kisPart = KisPart::instance();
 
         Q_FOREACH(const Window &window, windows) {
-            QPointer<KisMainWindow> mainWindow = findWindow(window.windowId);
+            QPointer<KisMainWindow> mainWindow = kisPart->windowById(window.windowId);
 
             if (mainWindow.isNull()) {
                 mainWindow = kisPart->createMainWindow(window.windowId);
@@ -139,12 +130,15 @@ KisWindowLayoutResource::~KisWindowLayoutResource()
 {}
 
 KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(
-    const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows, bool showImageInAllWindows
+    const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows, bool showImageInAllWindows,
+    bool primaryWorkspaceFollowsFocus, KisMainWindow *primaryWindow
 )
 {
     auto resource = new KisWindowLayoutResource(filename);
     resource->setWindows(mainWindows);
-    resource->setShowImageInAllWindows(showImageInAllWindows);
+    resource->d->showImageInAllWindows = showImageInAllWindows;
+    resource->d->primaryWorkspaceFollowsFocus = primaryWorkspaceFollowsFocus;
+    resource->d->primaryWindow = primaryWindow->id();
     return resource;
 }
 
@@ -161,7 +155,7 @@ void KisWindowLayoutResource::applyLayout()
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
     Q_FOREACH(const auto &window, d->windows) {
-        QPointer<KisMainWindow> mainWindow = d->findWindow(window.windowId);
+        QPointer<KisMainWindow> mainWindow = kisPart->windowById(window.windowId);
         KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
 
         mainWindow->restoreGeometry(window.geometry);
@@ -169,6 +163,7 @@ void KisWindowLayoutResource::applyLayout()
     }
 
     kisPart->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
+    kisPart->setPrimaryWorkspaceFollowsFocus(d->primaryWorkspaceFollowsFocus, d->primaryWindow);
 }
 
 bool KisWindowLayoutResource::save()
@@ -241,6 +236,8 @@ bool KisWindowLayoutResource::loadFromDevice(QIODevice *dev)
 void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) const
 {
     root.setAttribute("showImageInAllWindows", (int)d->showImageInAllWindows);
+    root.setAttribute("primaryWorkspaceFollowsFocus", (int)d->primaryWorkspaceFollowsFocus);
+    root.setAttribute("primaryWindow", d->primaryWindow.toString());
 
     Q_FOREACH(const auto &window, d->windows) {
         QDomElement elem = doc.createElement("window");
@@ -260,6 +257,8 @@ void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) cons
 void KisWindowLayoutResource::loadXml(const QDomElement &element) const
 {
     d->showImageInAllWindows = KisDomUtils::toInt(element.attribute("showImageInAllWindows", "0"));
+    d->primaryWorkspaceFollowsFocus = KisDomUtils::toInt(element.attribute("primaryWorkspaceFollowsFocus", "0"));
+    d->primaryWindow = element.attribute("primaryWindow");
 
     for (auto windowElement = element.firstChildElement("window");
          !windowElement.isNull();
@@ -300,9 +299,3 @@ void KisWindowLayoutResource::setWindows(const QList<QPointer<KisMainWindow>> &m
         d->windows.append(state);
     }
 }
-
-void KisWindowLayoutResource::setShowImageInAllWindows(bool showInAll)
-{
-    d->showImageInAllWindows = showInAll;
-}
-

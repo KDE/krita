@@ -156,6 +156,8 @@ public:
      */
     bool restoreWorkspace(const QByteArray &state);
 
+    static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);
+
     KisViewManager *viewManager() const;
 
     KisView *addViewAndNotifyLoadingCompleted(KisDocument *document);
@@ -402,6 +404,7 @@ public Q_SLOTS:
 
     void subWindowActivated();
 
+    void windowFocused();
 
 private:
 
@@ -439,6 +442,8 @@ private:
     void createActions();
 
     void applyToolBarLayout();
+
+    QByteArray borrowWorkspace(KisMainWindow *borrower);
 
 protected:
 

@@ -30,7 +30,9 @@ public:
 
     static KisWindowLayoutResource * fromCurrentWindows(
         const QString &filename, const QList<QPointer<KisMainWindow>> &mainWindows,
-        bool showImageInAllWindows
+        bool showImageInAllWindows,
+        bool primaryWorkspaceFollowsFocus,
+        KisMainWindow *primaryWindow
     );
 
     void applyLayout();
@@ -45,7 +47,6 @@ public:
 
 protected:
     void setWindows(const QList<QPointer<KisMainWindow>> &mainWindows);
-    void setShowImageInAllWindows(bool showInAll);
 
     virtual void saveXml(QDomDocument &doc, QDomElement &root) const;
 

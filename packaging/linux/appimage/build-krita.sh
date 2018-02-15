@@ -22,14 +22,6 @@ export PYTHONHOME=$QTDIR
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-# Determine which architecture should be built
-if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
-  ARCH=$(arch)
-else
-  echo "Architecture could not be determined"
-  exit 1
-fi
-
 git_pull_rebase_helper()
 {
 	git reset --hard HEAD
@@ -51,23 +43,14 @@ if [ ! -d $BUILD_PREFIX/krita ] ; then
   git clone  --depth 1 git://anongit.kde.org/krita $BUILD_PREFIX/krita
 fi
 
-
 cd $BUILD_PREFIX/krita/
 git_pull_rebase_helper
-
-
-
-# If the environment variable DO_NOT_BUILD_KRITA is set to something,
-# then stop here. This is for docker hub which has a timeout that
-# prevents us from building in one go.
-# if [ ! -z "$DO_NOT_BUILD_KRITA" ] ; then
-#  exit 0
-# fi
-
+cd -
 
 rm -rf $BUILD_PREFIX/krita_build || true
 mkdir -p $BUILD_PREFIX/krita_build
 cd $BUILD_PREFIX/krita_build
+
 cmake $BUILD_PREFIX/krita \
     -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \

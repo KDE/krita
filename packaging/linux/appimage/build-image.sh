@@ -23,14 +23,6 @@ export PLUGINS=$APPDIR/usr/lib/kritaplugins/
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-# Determine which architecture should be built
-if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
-  ARCH=$(arch)
-else
-  echo "Architecture could not be determined"
-  exit 1
-fi
-
 rm -rf $APPDIR
 cd $BUILD_PREFIX/krita_build
 make -j10 install
@@ -65,7 +57,6 @@ patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/sip/sip.so
 #
 # Get the latest linuxdeployqt
 #
-
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
 chmod a+x linuxdeployqt
 
@@ -88,6 +79,15 @@ cd -
 VERSION=$VER-$REVISION
 VERSION="$(sed s/\ /-/g <<<$VERSION)"
 echo $VERSION
+
+
+# Determine which architecture should be built
+if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
+  ARCH=$(arch)
+else
+  echo "Architecture could not be determined"
+  exit 1
+fi
 
 if [[ "$ARCH" = "x86_64" ]] ; then
         APPIMAGE=krita-"$VERSION"-x86_64.appimage"

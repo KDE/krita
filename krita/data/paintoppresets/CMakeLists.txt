@@ -41,6 +41,8 @@ FX_Smoke_Particles.kpp
 FX_Starfield.kpp
 FX_Value_Burn.kpp
 FX_Value_Dodge.kpp
+FX_Chrome.kpp
+FX_Hatch_Noisy.kpp
 Ink_Bristle.kpp
 Ink_Brush.kpp
 Ink_Brush_Rough.kpp
@@ -50,9 +52,6 @@ Ink_Precision.kpp
 Ink_Tough.kpp
 Normal_Map.kpp
 Pencil_2B.kpp
-Pencil_6B.kpp
-Pencil_Chrome.kpp
-Pencil_Hatch_Noisy.kpp
 Pencil_Pattern_Shading.kpp
 Pencil_Pattern_Tilt.kpp
 Pixel_Art.kpp

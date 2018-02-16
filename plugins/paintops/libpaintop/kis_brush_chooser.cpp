@@ -48,6 +48,7 @@
 
 #include "kis_custom_brush_widget.h"
 #include "kis_clipboard_brush_widget.h"
+#include <kis_config.h>
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
@@ -144,6 +145,11 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setMinimumWidth(100);
     m_itemChooser->setMinimumHeight(150);
     m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
+
+    KisConfig cfg;
+    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));

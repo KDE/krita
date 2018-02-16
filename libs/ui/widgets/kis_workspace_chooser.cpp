@@ -40,6 +40,7 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
+#include <kis_config.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -89,6 +90,11 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
     m_itemChooser->showTaggingBar(false);
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
+
+    KisConfig cfg;
+    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
 
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));

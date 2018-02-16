@@ -98,7 +98,7 @@ public:
 
 void appendPlatformOpenGLDebugText(QDebug &debugOut);
 #ifndef Q_OS_WIN
-void appendPlatformOpenGLDebugText(QDebug &debugOut) {}
+void appendPlatformOpenGLDebugText(QDebug &/*debugOut*/) {}
 #endif
 
 void appendOpenGLWarningString(KLocalizedString warning);

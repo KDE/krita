@@ -112,7 +112,7 @@ QString Settings::themeID() const
     return QString();
 }
 
-void Settings::setThemeID(const QString& id)
+void Settings::setThemeID(const QString& /*id*/)
 {
 //    if(!d->theme || id != d->theme->id()) {
 //        if(d->theme) {

@@ -107,14 +107,14 @@ private:
     void adjustLayout(const QPoint &p);
 private:
 
-    int m_hoveredPreset;
-    int m_hoveredColor;
-    int m_selectedColor;
+    int m_hoveredPreset {0};
+    int m_hoveredColor {0};
+    int m_selectedColor {0};
 
     KisCoordinatesConverter* m_coordinatesConverter;
 
-    KisActionManager* m_actionManager;
     KisViewManager* m_viewManager;
+    KisActionManager* m_actionManager;
     KisFavoriteResourceManager* m_resourceManager;
     KisColorSelectorInterface* m_triangleColorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
@@ -123,25 +123,25 @@ private:
 
     QTimer m_timer;
 
-    KisBrushHud *m_brushHud;
-    float m_popupPaletteSize;
-    float m_colorHistoryInnerRadius;
-    float m_colorHistoryOuterRadius;
+    KisBrushHud *m_brushHud {0};
+    float m_popupPaletteSize {385.0};
+    float m_colorHistoryInnerRadius {72.0};
+    float m_colorHistoryOuterRadius {92.0};
 
-    KisRoundHudButton *m_settingsButton;
-    KisRoundHudButton *m_brushHudButton;
+    KisRoundHudButton *m_settingsButton {0};
+    KisRoundHudButton *m_brushHudButton {0};
     QPoint m_lastCenterPoint;
     QRect m_canvasRotationIndicatorRect;
     QRect m_resetCanvasRotationIndicatorRect;
-    bool m_isOverCanvasRotationIndicator;
-    bool m_isRotatingCanvasIndicator;
+    bool m_isOverCanvasRotationIndicator {false};
+    bool m_isRotatingCanvasIndicator {false};
 
-    KisHighlightedToolButton* mirrorMode;
-    KisHighlightedToolButton* canvasOnlyButton;
-    QPushButton* zoomToOneHundredPercentButton;
-    QSlider* zoomCanvasSlider;
-    int zoomSliderMinValue;
-    int zoomSliderMaxValue;
+    KisHighlightedToolButton *mirrorMode {0};
+    KisHighlightedToolButton *canvasOnlyButton {0};
+    QPushButton *zoomToOneHundredPercentButton {0};
+    QSlider *zoomCanvasSlider {0};
+    int zoomSliderMinValue {10};
+    int zoomSliderMaxValue {200};
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

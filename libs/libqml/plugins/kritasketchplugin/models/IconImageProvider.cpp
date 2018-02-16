@@ -27,7 +27,7 @@ IconImageProvider::IconImageProvider()
 }
 
 
-QImage IconImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
+QImage IconImageProvider::requestImage(const QString &id, QSize */*size*/, const QSize &requestedSize)
 {
     QIcon icon = KisIconUtils::loadIcon(id);
     Q_ASSERT(!icon.isNull());

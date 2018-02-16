@@ -73,7 +73,7 @@ KisHSVSlider::~KisHSVSlider()
 void KisHSVSlider::setColors(const KoColor& currentc, const int type, qreal hue_backup, qreal l_R, qreal l_G, qreal l_B, qreal gamma)
 {
     d->currentColorF = currentc;
-    KoColor c = currentc;
+//    KoColor c = currentc;
     d->HSVtype = type;
     d->hue_b = hue_backup/360.0f;
     R=l_R;
@@ -112,10 +112,10 @@ void KisHSVSlider::drawContents( QPainter *painter )
 
                 qreal t = static_cast<qreal>(x) / (contentsRect_.width() - 1);
                 t = 1.0-t;
-                
+
                 //function find current color from hsv thingymabobs.
                 c = HSXcolor(type, t);
-                
+
                 color = d->displayRenderer->toQColor(c);
 
                 for (int y = 0; y < contentsRect_.height(); y++)
@@ -126,14 +126,14 @@ void KisHSVSlider::drawContents( QPainter *painter )
             for (int y = 0; y < contentsRect_.height(); y++) {
 
                 qreal t = static_cast<qreal>(y) / (contentsRect_.height() - 1);
-                
+
                 c = HSXcolor(type, t);
-                
+
                 color = d->displayRenderer->toQColor(c);
 
                 for (int x = 0; x < contentsRect_.width(); x++)
                 image.setPixel(x, y, color.rgba());
-            }   
+            }
         }
         d->pixmap = QPixmap::fromImage(image);
         d->upToDate = true;

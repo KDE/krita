@@ -154,7 +154,7 @@ void ColorSelectorItem::Private::repaint()
 
 void ColorSelectorItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    QRectF bounds = boundingRect();
+//    QRectF bounds = boundingRect();
 //    if (d->selector->configuration().subType==KisColorSelector::Ring)
 //    {
 //        d->ring->setGeometry(bounds.x(),bounds.y(),bounds.width(), bounds.height());

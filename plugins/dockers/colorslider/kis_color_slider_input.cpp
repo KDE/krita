@@ -77,7 +77,7 @@ void KisColorSliderInput::init()
     case 10: m_name=i18n("Saturation"); break;
     case 11: m_name=i18n("Luma"); break;
     }
-    
+
     QLabel* m_label = new QLabel(i18n("%1:", m_name), this);
     m_layout->addWidget(m_label);
 
@@ -288,52 +288,49 @@ void KisHSXColorSliderInput::setValue(double v)
 //update
 void KisHSXColorSliderInput::update()
 {
-    
-    KoColor min = *m_color;
-    KoColor max = *m_color;
-    
-    qreal hue, sat, val, hue_backup, sat_backup, val_backup;
+
+//    KoColor min = *m_color;
+//    KoColor max = *m_color;
+
+    qreal hue = 0.0;
+    qreal sat = 0.0;
+    qreal val = 0.0;
+    qreal hue_backup, sat_backup, val_backup;
     //gets the hsv for the appropriate type//
     hue_backup = m_hue;
     sat_backup = m_sat;
     val_backup = m_val;
-    
+
     switch (m_type) {
     case 0:
         this->converter()->getHsvF(*m_color, &hue, &sat, &val);
-        if (m_sliderisupdating==true)
-        {
-            if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
-                sat = (sat_backup*0.01);
+        if (m_sliderisupdating) {
+            if ((sat * 100.0) < m_sat + 2 && (sat * 100.0) > m_sat - 2) {
+                sat = (sat_backup * 0.01);
             }
-            if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
+            if ((val * 100.0) < m_val + 2 && (val * 100.0) > m_val - 2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
         }
-        else{
-            if((hue*360.0)<m_hue+2 && (hue*360.0)>m_hue-2) {
+        else {
+            if((hue * 360.0) < m_hue + 2 && (hue * 360.0) > m_hue - 2) {
                 hue = (hue_backup/360.0);
             }
         }
         break;
     case 1:
         this->converter()->getHsvF(*m_color, &hue, &sat, &val);
-        if (m_sliderisupdating==true)
-        {
-            if( (hue*360.0)<m_hue+2 && (hue*360.0)>m_hue-2 ) {
+        if (m_sliderisupdating) {
+            if ((hue * 360.0) < m_hue + 2 && (hue * 360.0) > m_hue - 2 ) {
                 hue = (hue_backup/360.0);
             }
-            if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
+            if ((val * 100.0) < m_val + 2 && (val * 100.0) > m_val - 2) {
                 val = (val_backup*0.01);
             }
-            
-            
         }
-        else{
-            
-            if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
+        else {
+            if ((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
                 sat = (sat_backup*0.01);
             }
         }
@@ -365,8 +362,8 @@ void KisHSXColorSliderInput::update()
             if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
+
         }
         else{
             if((hue*360.0)<m_hue+2 && (hue*360.0)>m_hue-2) {
@@ -384,11 +381,11 @@ void KisHSXColorSliderInput::update()
             if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
+
         }
         else{
-            
+
             if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
                 sat = (sat_backup*0.01);
             }
@@ -421,8 +418,8 @@ void KisHSXColorSliderInput::update()
             if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
+
         }
         else{
             if((hue*360.0)<m_hue+2 && (hue*360.0)>m_hue-2) {
@@ -440,11 +437,11 @@ void KisHSXColorSliderInput::update()
             if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
+
         }
         else{
-            
+
             if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
                 sat = (sat_backup*0.01);
             }
@@ -477,8 +474,8 @@ void KisHSXColorSliderInput::update()
             if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
+
         }
         else{
             if((hue*360.0)<m_hue+2 && (hue*360.0)>m_hue-2) {
@@ -496,11 +493,11 @@ void KisHSXColorSliderInput::update()
             if((val*100.0)<m_val+2 && (val*100.0)>m_val-2) {
                 val = (val_backup*0.01);
             }
-            
-            
+
+
         }
         else{
-            
+
             if((sat*100.0)<m_sat+2 && (sat*100.0)>m_sat-2) {
                 sat = (sat_backup*0.01);
             }
@@ -525,27 +522,27 @@ void KisHSXColorSliderInput::update()
         break;
     }
     //this prevents the hue going to 0 when used with grey//
-    
+
     if (sat<=0.0) {
         m_hue = hue_backup;
     }
     else{
         m_hue=(hue*360.0);
     }
-    
+
     if (val==0 || val>0.999) {
         m_sat = sat_backup;
     }
     else{
         m_sat=(sat*100.0);
     }
-    
+
     m_val=(val*100.0);
-    
+
     if (m_hueupdating==true){m_val=val_backup; m_sat = sat_backup; m_hueupdating=false;}
     else if (m_satupdating==true){m_val=val_backup; m_hue = hue_backup; m_satupdating=false;}
     else if (m_toneupdating==true){m_sat=sat_backup; m_hue = hue_backup;m_toneupdating=false;}
-    
+
     //sets slider and num-input according to type//
     switch (m_type) {
     case 0:
@@ -690,7 +687,7 @@ void KisHSXColorSliderInput::toneUpdate(int l, int type)
     if (m_type==type-1 || m_type==type-2)
     {
         if (l<25 || l>75){
-        
+
             if (l<=m_val-10 || l>=m_val+10) {
                 m_val=l;
                 m_toneupdating=true;
@@ -704,8 +701,8 @@ void KisHSXColorSliderInput::toneUpdate(int l, int type)
                 update();
             }
         }
-            
-        
+
+
     }
 }
 

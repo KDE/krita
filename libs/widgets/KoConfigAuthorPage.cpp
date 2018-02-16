@@ -430,7 +430,7 @@ KoContactInfoDelegate::~KoContactInfoDelegate()
 
 }
 
-QWidget* KoContactInfoDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget* KoContactInfoDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
 
     if (index.column() > 0) {

@@ -249,7 +249,7 @@ QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
-void KisNode::childNodeChanged(KisNodeSP changedChildNode)
+void KisNode::childNodeChanged(KisNodeSP /*changedChildNode*/)
 {
 }
 

@@ -45,17 +45,17 @@ struct KisColorizeStrokeStrategy::Private
 {
     Private() : filteredSourceValid(false) {}
     Private(const Private &rhs, int _levelOfDetail)
-        : progressNode(rhs.progressNode),
-          src(rhs.src),
-          dst(rhs.dst),
-          filteredSource(rhs.filteredSource),
-          internalFilteredSource(rhs.internalFilteredSource),
-          filteredSourceValid(rhs.filteredSourceValid),
-          boundingRect(rhs.boundingRect),
-          prefilterOnly(rhs.prefilterOnly),
-          keyStrokes(rhs.keyStrokes),
-          filteringOptions(rhs.filteringOptions),
-          levelOfDetail(_levelOfDetail)
+        : progressNode(rhs.progressNode)
+        , src(rhs.src)
+        , dst(rhs.dst)
+        , filteredSource(rhs.filteredSource)
+        , internalFilteredSource(rhs.internalFilteredSource)
+        , filteredSourceValid(rhs.filteredSourceValid)
+        , boundingRect(rhs.boundingRect)
+        , prefilterOnly(rhs.prefilterOnly)
+        , levelOfDetail(_levelOfDetail)
+        , keyStrokes(rhs.keyStrokes)
+        , filteringOptions(rhs.filteringOptions)
     {}
 
     KisNodeSP progressNode;

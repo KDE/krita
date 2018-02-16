@@ -93,12 +93,10 @@ private:
     int m_progress; // always in percent
     int m_weight;
     bool m_interrupted;
-    QString m_subTaskName;
     QString m_autoNestedName;
+    QString m_subTaskName;
     bool m_hasValidRange;
     bool m_isPersistent;
-
-
     KoProgressUpdater *m_parent;
     QPointer<KoUpdater> m_connectedUpdater;
 };

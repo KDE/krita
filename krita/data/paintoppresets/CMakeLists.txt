@@ -51,9 +51,10 @@ Ink_Leaky.kpp
 Ink_Precision.kpp
 Ink_Tough.kpp
 Normal_Map.kpp
-Pencil_2B.kpp
+Pencil_Draw.kpp
 Pencil_Pattern_Shading.kpp
-Pencil_Pattern_Tilt.kpp
+Pencil_Pattern_Draw.kpp
+Pencil_DrShade.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
 Spray_Smoke.kpp

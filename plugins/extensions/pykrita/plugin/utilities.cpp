@@ -83,7 +83,7 @@ namespace PyKrita
 
         Python::ensureInitialized();
         Python py = Python();
-/*
+
         PyRun_SimpleString(
                 "import sip\n"
                         "sip.setapi('QDate', 2)\n"
@@ -94,7 +94,7 @@ namespace PyKrita
                         "sip.setapi('QString', 2)\n"
                         "sip.setapi('QVariant', 2)\n"
         );
-*/
+
         // Initialize 'plugins' dict of module 'pykrita'
         PyObject* plugins = PyDict_New();
         py.itemStringSet("plugins", plugins);
@@ -353,12 +353,10 @@ bool Python::setPath(const QStringList& scriptPaths)
 #ifdef Q_OS_LINUX
     // Append the Krita libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
-    if (pythonLibsPath.isEmpty()) {
-        qDebug() << "Cannot find sip";
-        return false;
+    if (!pythonLibsPath.isEmpty()) {
+        qDebug() << "Found sip at" << pythonLibsPath;
+        paths.append(pythonLibsPath);
     }
-    qDebug() << "Found sip at" << pythonLibsPath;
-    paths.append(pythonLibsPath);
 #endif
 
 #ifdef Q_OS_WIN

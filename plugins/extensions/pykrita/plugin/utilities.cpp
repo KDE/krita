@@ -350,6 +350,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     qDebug() << "Found krita-python-libs at" << pythonLibsPath;
     paths.append(pythonLibsPath);
 
+#ifdef Q_OS_LINUX
     // Append the Krita libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
     if (pythonLibsPath.isEmpty()) {
@@ -358,6 +359,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     }
     qDebug() << "Found sip at" << pythonLibsPath;
     paths.append(pythonLibsPath);
+#endif
 
 #ifdef Q_OS_WIN
     // Find embeddable Python at <root>/python

@@ -33,7 +33,7 @@ index c8106e2..ab071e9 100644
      )
  
 +    install(TARGETS gmic_krita_qt RUNTIME DESTINATION  ${CMAKE_INSTALL_PREFIX}/bin)
-+    install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
++    install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${CMAKE_INSTALL_PREFIX}/bin OPTIONAL)
 +
  elseif (${GMIC_QT_HOST} STREQUAL "none")
  

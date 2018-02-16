@@ -51,6 +51,7 @@ Ink_Leaky.kpp
 Ink_Precision.kpp
 Ink_Tough.kpp
 Normal_Map.kpp
+Pencil_2B.kpp
 Pencil_Draw.kpp
 Pencil_Pattern_Shading.kpp
 Pencil_Pattern_Draw.kpp

@@ -38,7 +38,7 @@ KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, 
     ui->cmbGreen->addItems(swizzle);
     ui->cmbBlue->addItems(swizzle);
 
-    for (int c = 0; c < m_cs->channelCount(); c++) {
+    for (int c = 0; c < (int)m_cs->channelCount(); c++) {
         ui->cmbChannel->addItem(m_cs->channels().at(c)->name());
     }
 

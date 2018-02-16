@@ -107,7 +107,7 @@ void KoUpdater::setAutoNestedName(const QString &name)
 
 void KoUpdater::setInterrupted(bool value)
 {
-    m_interrupted = true;
+    m_interrupted = value;
 }
 
 KoDummyUpdater::KoDummyUpdater()

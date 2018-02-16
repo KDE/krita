@@ -96,23 +96,13 @@ private:
 KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConverter* coordinatesConverter ,KisFavoriteResourceManager* manager,
                                  const KoColorDisplayRendererInterface *displayRenderer, KisCanvasResourceProvider *provider, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint)
-    , m_hoveredPreset(0)
-    , m_hoveredColor(0)
-    , m_selectedColor(0)
     , m_coordinatesConverter(coordinatesConverter)
     , m_viewManager(viewManager)
     , m_actionManager(viewManager->actionManager())
     , m_resourceManager(manager)
-    , m_triangleColorSelector(0)
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
     , m_actionCollection(viewManager->actionCollection())
-    , m_brushHud(0)
-    , m_popupPaletteSize(385.0)
-    , m_colorHistoryInnerRadius(72.0)
-    , m_colorHistoryOuterRadius(92.0)
-    , m_isOverCanvasRotationIndicator(false)
-    , m_isRotatingCanvasIndicator(false)
 {
     // some UI controls are defined and created based off these variables
 
@@ -388,7 +378,7 @@ void KisPopupPalette::showPopupPalette(bool show)
         // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
         // the bounds and cause the canvas to jump between the slider's min and max
         if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
-            m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue  ){
+                m_coordinatesConverter->zoomInPercent() < zoomSliderMaxValue  ){
 
             KisSignalsBlocker b(zoomCanvasSlider);
             zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent()); // sync the zoom slider
@@ -466,7 +456,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     QPainterPath rotationTrackPath;
     shrinkCircleAmount = 18;
     QRectF circleRect2(shrinkCircleAmount, shrinkCircleAmount,
-                      m_popupPaletteSize - shrinkCircleAmount*2,m_popupPaletteSize - shrinkCircleAmount*2);
+                       m_popupPaletteSize - shrinkCircleAmount*2,m_popupPaletteSize - shrinkCircleAmount*2);
 
     rotationTrackPath.addEllipse( circleRect2 );
     pen.setWidth(1);
@@ -507,7 +497,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
 
     // hover indicator for the canvas rotation
     if (m_isOverCanvasRotationIndicator == true) {
-         painter.save();
+        painter.save();
 
         QPen pen(palette().color(QPalette::Highlight));
         pen.setWidth(2);
@@ -571,8 +561,8 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     painter.setPen(Qt::NoPen);
     float rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
 
-   // there might be no recent colors at the start, so paint a placeholder
-   if (m_resourceManager->recentColorsTotal() == 0) {
+    // there might be no recent colors at the start, so paint a placeholder
+    if (m_resourceManager->recentColorsTotal() == 0) {
         painter.setBrush(Qt::transparent);
 
         QPainterPath emptyRecentColorsPath(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
@@ -580,16 +570,16 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.drawPath(emptyRecentColorsPath);
     } else {
 
-       for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
-           QPainterPath recentColorsPath(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
+        for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
+            QPainterPath recentColorsPath(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
 
-           //accessing recent color of index pos
-           painter.fillPath(recentColorsPath, m_displayRenderer->toQColor( m_resourceManager->recentColorAt(pos) ));
-           painter.drawPath(recentColorsPath);
-           painter.rotate(rotationAngle);
-       }
+            //accessing recent color of index pos
+            painter.fillPath(recentColorsPath, m_displayRenderer->toQColor( m_resourceManager->recentColorAt(pos) ));
+            painter.drawPath(recentColorsPath);
+            painter.rotate(rotationAngle);
+        }
 
-   }
+    }
 
     //painting hovered color
     if (hoveredColor() > -1) {
@@ -650,26 +640,26 @@ QPainterPath KisPopupPalette::drawRotationIndicator(qreal rotationAngle, bool ca
     // used for canvas rotation. This function gets called twice. Once by the canvas rotation indicator,
     // and another time by the reset canvas position
 
-     float canvasRotationRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
-     float rotationDialXPosition = qCos(canvasRotationRadians) * (m_popupPaletteSize/2 - 10); // m_popupPaletteSize/2  = radius
-     float rotationDialYPosition = qSin(canvasRotationRadians) * (m_popupPaletteSize/2 - 10);
+    float canvasRotationRadians = qDegreesToRadians(rotationAngle - 90);  // -90 will make 0 degrees be at the top
+    float rotationDialXPosition = qCos(canvasRotationRadians) * (m_popupPaletteSize/2 - 10); // m_popupPaletteSize/2  = radius
+    float rotationDialYPosition = qSin(canvasRotationRadians) * (m_popupPaletteSize/2 - 10);
 
-     QPainterPath canvasRotationIndicator;
-     int canvasIndicatorSize = 15;
-     float canvasIndicatorMiddle = canvasIndicatorSize/2;
-     QRect indicatorRectangle = QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
-                                       canvasIndicatorSize, canvasIndicatorSize );
+    QPainterPath canvasRotationIndicator;
+    int canvasIndicatorSize = 15;
+    float canvasIndicatorMiddle = canvasIndicatorSize/2;
+    QRect indicatorRectangle = QRect( rotationDialXPosition - canvasIndicatorMiddle, rotationDialYPosition - canvasIndicatorMiddle,
+                                      canvasIndicatorSize, canvasIndicatorSize );
 
-     if (canDrag) {
-         m_canvasRotationIndicatorRect = indicatorRectangle;
-     } else {
-         m_resetCanvasRotationIndicatorRect = indicatorRectangle;
-     }
+    if (canDrag) {
+        m_canvasRotationIndicatorRect = indicatorRectangle;
+    } else {
+        m_resetCanvasRotationIndicatorRect = indicatorRectangle;
+    }
 
-     canvasRotationIndicator.addEllipse(indicatorRectangle.x(), indicatorRectangle.y(),
-                                        indicatorRectangle.width(), indicatorRectangle.height() );
+    canvasRotationIndicator.addEllipse(indicatorRectangle.x(), indicatorRectangle.y(),
+                                       indicatorRectangle.width(), indicatorRectangle.height() );
 
-     return canvasRotationIndicator;
+    return canvasRotationIndicator;
 
 }
 
@@ -691,7 +681,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
     float rotationCorrectedXPos = m_canvasRotationIndicatorRect.x() + (m_popupPaletteSize / 2);
     float rotationCorrectedYPos = m_canvasRotationIndicatorRect.y() + (m_popupPaletteSize / 2);
     QRect correctedCanvasRotationIndicator = QRect(rotationCorrectedXPos, rotationCorrectedYPos,
-                                               m_canvasRotationIndicatorRect.width(), m_canvasRotationIndicatorRect.height());
+                                                   m_canvasRotationIndicatorRect.width(), m_canvasRotationIndicatorRect.height());
 
     if (correctedCanvasRotationIndicator.contains(point.x(), point.y())) {
         m_isOverCanvasRotationIndicator = true;
@@ -806,7 +796,7 @@ void KisPopupPalette::slotmirroModeClicked() {
     QAction* action = m_actionCollection->action("mirror_canvas");
 
     if (action) {
-          action->trigger();
+        action->trigger();
     }
 }
 
@@ -814,7 +804,7 @@ void KisPopupPalette::slotCanvasonlyModeClicked() {
     QAction* action = m_actionCollection->action("view_show_canvas_only");
 
     if (action) {
-          action->trigger();
+        action->trigger();
     }
 }
 
@@ -823,7 +813,7 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
     QAction* action = m_actionCollection->action("zoom_to_100pct");
 
     if (action) {
-          action->trigger();
+        action->trigger();
     }
 
     // also move the zoom slider to 100% position so they are in sync

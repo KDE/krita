@@ -31,7 +31,7 @@ struct KisRenderedDab
     {
     }
 
-    KisRenderedDab(const KisRenderedDab &rhs)  = default;
+    KisRenderedDab(const KisRenderedDab &/*rhs*/) = default;
 
     KisFixedPaintDeviceSP device;
     QPoint offset;

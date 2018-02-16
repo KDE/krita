@@ -37,7 +37,7 @@ struct KisAsyncAnimationRendererBase::Private
 
     static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
 
-    void clearFrameRegenerationState(bool cancelled);
+    void clearFrameRegenerationState(bool);
 };
 
 KisAsyncAnimationRendererBase::KisAsyncAnimationRendererBase(QObject *parent)
@@ -90,7 +90,7 @@ void KisAsyncAnimationRendererBase::cancelCurrentFrameRendering()
     frameCancelledCallback(m_d->requestedFrame);
 }
 
-void KisAsyncAnimationRendererBase::Private::clearFrameRegenerationState(bool cancelled)
+void KisAsyncAnimationRendererBase::Private::clearFrameRegenerationState(bool /*canceled*/)
 {
     imageRequestConnections.clear();
     requestedImage = 0;

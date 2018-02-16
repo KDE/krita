@@ -278,7 +278,7 @@ void ArtisticTextTool::mouseMoveEvent(KoPointerEvent *event)
     if (textOnPath) {
         QPainterPath handle = offsetHandleShape();
         QPointF handleCenter = handle.boundingRect().center();
-        if (handleGrabRect(event->point).contains(handleCenter)) {
+        if (handleGrabDocRect(event->point).contains(handleCenter)) {
             // mouse is on offset handle
             if (!m_hoverHandle) {
                 canvas()->updateCanvas(handle.boundingRect());
@@ -293,7 +293,7 @@ void ArtisticTextTool::mouseMoveEvent(KoPointerEvent *event)
     }
     if (!m_hoverHandle) {
         // find text or path shape at cursor position
-        QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(event->point));
+        QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabDocRect(event->point));
         if (shapes.contains(m_currentShape)) {
             m_hoverText = m_currentShape;
         } else {

@@ -613,7 +613,7 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
     }
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        QRectF roi = handleGrabRect(shape->documentToShape(event->point));
+        QRectF roi = handleGrabDocRect(shape->documentToShape(event->point));
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape()) {
             int handleId = parameterShape->handleIdAt(roi);

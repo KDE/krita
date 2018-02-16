@@ -26,10 +26,14 @@
 #include <KoFlakeTypes.h>
 #include <KoToolBase.h>
 
+// TODO: make private
+#include <KoPathPoint.h>
+
 #include <QList>
 
 class KoPathShape;
 class KoShapeStroke;
+class KoShapeHandlesCollection;
 
 class KoCreatePathToolPrivate;
 
@@ -69,7 +73,7 @@ public:
     /**
     * Returns true if path has been started
     */
-    bool pathStarted();
+    bool pathStarted() const;
 
 public Q_SLOTS:
     /// reimplemented
@@ -87,6 +91,14 @@ protected:
      */
     virtual void addPathShape(KoPathShape* pathShape);
 
+protected:
+    QRectF shapeAndSnapGuidesRect(KoShape *shape) const;
+    QRectF pathPointBoundingRect(KoPathPoint *pt, KoPathPoint::PointTypes types, bool activeOnly = true) const;
+    QRectF activePointBoundingRect() const;
+    void setMouseOverFirstPoint(bool value);
+    bool isOverFirstPoint(const QPointF &pos) const;
+
+    KoShapeHandlesCollection handlesCollection() const;
 protected:
     /**
       * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.

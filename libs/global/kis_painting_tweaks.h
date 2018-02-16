@@ -91,6 +91,83 @@ namespace KisPaintingTweaks {
         QPen m_pen;
         QBrush m_brush;
     };
+
+    /**
+     * A special class to save painter->transform() using RAII principle.
+     */
+    class KRITAGLOBAL_EXPORT TransformSaver
+    {
+    public:
+        struct allow_noop_t { explicit allow_noop_t() = default; };
+        static constexpr allow_noop_t	allow_noop { };
+
+        /**
+         * Saves transformation state of the provided painter object. \p painter cannot be null.
+         */
+        TransformSaver(QPainter *painter);
+
+        /**
+         * Overrides transformation of \p painter with the provided value. \p painter cannot be null.
+         */
+        TransformSaver(QPainter *painter, const QTransform &newTransform);
+
+        /**
+         * A special constructor of TransformSaver that allows \p painter to be null. Passing null
+         * pointer will basically mean that the whole saver existence will be a noop.
+         */
+        TransformSaver(QPainter *painter, const QTransform &newTransform, allow_noop_t);
+
+        /**
+         * Restores the state of the painter that has been saved during the construction of the saver
+         */
+        ~TransformSaver();
+
+        /**
+         * Move c-tor that makes the other saver invalid
+         */
+        TransformSaver(TransformSaver &&rhs);
+        TransformSaver& operator=(TransformSaver &&rhs);
+
+    private:
+        TransformSaver(const TransformSaver &rhs) = delete;
+        QPainter *m_painter;
+        QTransform m_savedTransform;
+    };
+
+    /**
+     * A special class to save painter->transform() using RAII principle.
+     */
+    class KRITAGLOBAL_EXPORT StateSaver
+    {
+    public:
+        struct allow_noop_t { explicit allow_noop_t() = default; };
+        static constexpr allow_noop_t	allow_noop { };
+
+        /**
+         * Saves transformation state of the provided painter object. \p painter cannot be null.
+         */
+        StateSaver(QPainter *painter);
+
+        /**
+         * Overrides transformation of \p painter with the provided value. \p painter cannot be null.
+         */
+        StateSaver(QPainter *painter, allow_noop_t);
+
+        /**
+         * Restores the state of the painter that has been saved during the construction of the saver
+         */
+        ~StateSaver();
+
+        /**
+         * Move c-tor that makes the other saver invalid
+         */
+        StateSaver(StateSaver &&rhs);
+        StateSaver& operator=(StateSaver &&rhs);
+
+    private:
+        StateSaver(const StateSaver &rhs) = delete;
+        QPainter *m_painter;
+    };
 }
 
 #endif /* __KIS_PAINTING_TWEAKS_H */

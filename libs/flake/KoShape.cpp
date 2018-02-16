@@ -2308,13 +2308,21 @@ void KoShape::applyConversion(QPainter &painter, const KoViewConverter &converte
 
 KisHandlePainterHelper KoShape::createHandlePainterHelper(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius)
 {
-    const QTransform originalPainterTransform = painter->transform();
+    qreal zoomX = 0.0, zoomY = 0.0;
+    converter.zoom(&zoomX, &zoomY);
 
-    painter->setTransform(shape->absoluteTransformation(&converter) * painter->transform());
-    KoShape::applyConversion(*painter, converter);
+    const QTransform localToDocTransform = shape->absoluteTransformation(&converter);
+
+    QTransform localToViewTransform =
+        QTransform::fromScale(zoomX, zoomY) *
+        localToDocTransform;
+
+    if (painter) {
+        localToViewTransform *= painter->transform();
+    }
 
     // move c-tor
-    return KisHandlePainterHelper(painter, originalPainterTransform, handleRadius);
+    return KisHandlePainterHelper(painter, localToViewTransform, localToDocTransform, handleRadius);
 }
 
 QPointF KoShape::shapeToDocument(const QPointF &point) const

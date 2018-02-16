@@ -31,6 +31,8 @@
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
 #include <KoViewConverter.h>
+#include <KoShapeHandlesCollection.h>
+
 
 #include "math.h"
 
@@ -171,7 +173,6 @@ private:
     bool m_active;
 };
 
-
 class KoCreatePathToolPrivate : public KoToolBasePrivate
 {
     KoCreatePathTool * const q;
@@ -205,50 +206,21 @@ public:
     PathConnectionPoint existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
     bool listeningToModifiers; //  Fine tune when to begin processing modifiers at the beginning of a stroke.
+    QPointF dragStartPoint;
 
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;
 
-    void repaintActivePoint() const {
-        const bool isFirstPoint = (activePoint == firstPoint);
-
-        if (!isFirstPoint && !pointIsDragged)
-            return;
-
-        QRectF rect = activePoint->boundingRect(false);
-
-        // make sure that we have the second control point inside our
-        // update rect, as KoPathPoint::boundingRect will not include
-        // the second control point of the last path point if the path
-        // is not closed
-        const QPointF &point = activePoint->point();
-        const QPointF &controlPoint = activePoint->controlPoint2();
-        rect = rect.united(QRectF(point, controlPoint).normalized());
-
-        // when painting the first point we want the
-        // first control point to be painted as well
-        if (isFirstPoint) {
-            const QPointF &controlPoint = activePoint->controlPoint1();
-            rect = rect.united(QRectF(point, controlPoint).normalized());
-        }
-
-        QPointF border = q->canvas()->viewConverter()
-                         ->viewToDocument(QPointF(handleRadius, handleRadius));
-
-        rect.adjust(-border.x(), -border.y(), border.x(), border.y());
-        q->canvas()->updateCanvas(rect);
-    }
-
     /// returns the nearest existing path point
     KoPathPoint* endPointAtPosition(const QPointF &position) const {
-        QRectF roi = q->handleGrabRect(position);
-        QList<KoShape *> shapes = q->canvas()->shapeManager()->shapesAt(roi);
+        const int viewGrabSensitivity = q->grabSensitivity();
+
+        const QRectF roi = q->handleGrabDocRect(position);
+        const QList<KoShape *> shapes = q->canvas()->shapeManager()->shapesAt(roi);
 
         KoPathPoint * nearestPoint = 0;
-        qreal minDistance = HUGE_VAL;
-        uint grabSensitivity = q->grabSensitivity();
-        qreal maxDistance = q->canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
+        qreal minDistance = std::numeric_limits<qreal>::max();
 
         Q_FOREACH(KoShape * s, shapes) {
             KoPathShape * path = dynamic_cast<KoPathShape*>(s);
@@ -258,25 +230,25 @@ public:
             if (paramShape && paramShape->isParametricShape())
                 continue;
 
-            KoPathPoint * p = 0;
-            uint subpathCount = path->subpathCount();
+            const uint subpathCount = path->subpathCount();
             for (uint i = 0; i < subpathCount; ++i) {
-                if (path->isClosedSubpath(i))
-                    continue;
-                p = path->pointByIndex(KoPathPointIndex(i, 0));
+                if (path->isClosedSubpath(i)) continue;
+
+                auto addIfSmaller = [&] (const KoPathPointIndex &index) {
+                    KoPathPoint *pt = path->pointByIndex(index);
+                    const qreal distance = q->viewDistanceFromDocPoints(position, path->shapeToDocument(pt->point()));
+
+                    if (distance < minDistance && distance < viewGrabSensitivity) {
+                        nearestPoint = pt;
+                        minDistance = distance;
+                    }
+                };
+
                 // check start of subpath
-                qreal d = squareDistance(position, path->shapeToDocument(p->point()));
-                if (d < minDistance && d < maxDistance) {
-                    nearestPoint = p;
-                    minDistance = d;
-                }
+                addIfSmaller(KoPathPointIndex(i, 0));
+
                 // check end of subpath
-                p = path->pointByIndex(KoPathPointIndex(i, path->subpathPointCount(i) - 1));
-                d = squareDistance(position, path->shapeToDocument(p->point()));
-                if (d < minDistance && d < maxDistance) {
-                    nearestPoint = p;
-                    minDistance = d;
-                }
+                addIfSmaller(KoPathPointIndex(i, path->subpathPointCount(i) - 1));
             }
         }
 
@@ -378,9 +350,11 @@ public:
         if (!shape) return;
 
         if (shape->pointCount() < 2) {
-            cleanUp();
+            cleanUp(QRectF());
             return;
         }
+
+        const QRectF shapeBoundingRect = shape->boundingRect();
 
         // this is done so that nothing happens when the mouseReleaseEvent for the this event is received
         KoPathShape *pathShape = shape;
@@ -388,15 +362,23 @@ public:
 
         q->addPathShape(pathShape);
 
-        cleanUp();
+        cleanUp(shapeBoundingRect);
 
         return;
     }
 
-    void cleanUp() {
+    void cleanUp(const QRectF &shapeBoundingRect) {
+        QRectF dirtyRect = shapeBoundingRect;
+
         // reset snap guide
-        q->canvas()->updateCanvas(q->canvas()->snapGuide()->boundingRect());
+        dirtyRect |= q->canvas()->snapGuide()->boundingRect();
         q->canvas()->snapGuide()->reset();
+        dirtyRect |= q->canvas()->snapGuide()->boundingRect();
+
+        dirtyRect |= q->pathPointBoundingRect(hoveredPoint, KoPathPoint::Node);
+        dirtyRect |= q->pathPointBoundingRect(firstPoint, KoPathPoint::Node);
+        dirtyRect |= q->activePointBoundingRect();
+
         angleSnapStrategy = 0;
 
         delete shape;
@@ -404,7 +386,11 @@ public:
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
+        activePoint = 0;
+        firstPoint = 0;
         listeningToModifiers = false;
+
+        q->canvas()->updateCanvas(dirtyRect);
     }
 
     void angleDeltaChanged(int value) {

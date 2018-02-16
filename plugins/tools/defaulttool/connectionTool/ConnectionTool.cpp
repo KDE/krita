@@ -245,7 +245,7 @@ void ConnectionTool::repaintDecorations()
                 KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
                 KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
                 for (; cp != lastCp; ++cp) {
-                    repaintRect = handleGrabRect(m_currentShape->shapeToDocument(cp.value().position));
+                    repaintRect = handleGrabDocRect(m_currentShape->shapeToDocument(cp.value().position));
                     canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
                 }
             }
@@ -273,7 +273,7 @@ void ConnectionTool::repaintDecorations()
                 KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
                 KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
                 for (; cp != lastCp; ++cp) {
-                    repaintRect = handleGrabRect(shape->shapeToDocument(cp.value().position));
+                    repaintRect = handleGrabDocRect(shape->shapeToDocument(cp.value().position));
                     canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
                 }
             }
@@ -546,7 +546,7 @@ qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2) const
 
 KoShape *ConnectionTool::findShapeAtPosition(const QPointF &position) const
 {
-    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
+    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabDocRect(position));
     if (!shapes.isEmpty()) {
         std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
         // we want to priorize connection shape handles, even if the connection shape
@@ -570,7 +570,7 @@ KoShape *ConnectionTool::findShapeAtPosition(const QPointF &position) const
 
 KoShape *ConnectionTool::findNonConnectionShapeAtPosition(const QPointF &position) const
 {
-    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
+    QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(handleGrabDocRect(position));
     if (!shapes.isEmpty()) {
         std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
         for (QList<KoShape *>::const_iterator end = shapes.constEnd() - 1; end >= shapes.constBegin(); --end) {
@@ -595,7 +595,7 @@ int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint) con
     KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape *>(shape);
     if (connectionShape) {
         // check connection shape handles
-        return connectionShape->handleIdAt(handleGrabRect(shapePoint));
+        return connectionShape->handleIdAt(handleGrabDocRect(shapePoint));
     } else {
         // check connection points
         int grabDistance = grabSensitivity();
@@ -632,7 +632,7 @@ KoConnectionShape *ConnectionTool::nearestConnectionShape(const QList<KoShape *>
         // convert document point to shape coordinates
         QPointF p = connectionShape->documentToShape(mousePos);
         // our region of interest, i.e. a region around our mouse position
-        QRectF roi = handleGrabRect(p);
+        QRectF roi = handleGrabDocRect(p);
 
         // check all segments of this shape which intersect the region of interest
         QList<KoPathSegment> segments = connectionShape->segmentsAt(roi);

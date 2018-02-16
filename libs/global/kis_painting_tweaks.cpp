@@ -107,5 +107,99 @@ PenBrushSaver::~PenBrushSaver()
     }
 }
 
+TransformSaver::TransformSaver(QPainter *painter)
+    : m_painter(painter)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
+    m_savedTransform = m_painter->transform();
+}
+
+TransformSaver::TransformSaver(QPainter *painter, const QTransform &newTransform)
+    : TransformSaver(painter, newTransform, allow_noop)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(painter);
+}
+
+TransformSaver::TransformSaver(QPainter *painter, const QTransform &newTransform, TransformSaver::allow_noop_t)
+    : m_painter(painter)
+{
+    if (m_painter) {
+        m_savedTransform = m_painter->transform();
+        m_painter->setTransform(newTransform);
+    }
+}
+
+TransformSaver::~TransformSaver()
+{
+    if (m_painter) {
+        m_painter->setTransform(m_savedTransform);
+    }
+}
+
+TransformSaver::TransformSaver(TransformSaver &&rhs)
+    : m_painter(rhs.m_painter),
+      m_savedTransform(rhs.m_savedTransform)
+{
+    // reset the other saver!
+    rhs.m_painter = 0;
+}
+
+TransformSaver& TransformSaver::operator=(TransformSaver &&rhs)
+{
+    if (m_painter) {
+        m_painter->setTransform(m_savedTransform);
+    }
+
+    m_painter = rhs.m_painter;
+    m_savedTransform = rhs.m_savedTransform;
+
+    // reset the other saver!
+    rhs.m_painter = 0;
+
+    return *this;
+}
+
+StateSaver::StateSaver(QPainter *painter)
+    : m_painter(painter)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
+    m_painter->save();
+}
+
+StateSaver::StateSaver(QPainter *painter, StateSaver::allow_noop_t)
+    : m_painter(painter)
+{
+    if (m_painter) {
+        m_painter->save();
+    }
+}
+
+StateSaver::~StateSaver()
+{
+    if (m_painter) {
+        m_painter->restore();
+    }
+}
+
+StateSaver::StateSaver(StateSaver &&rhs)
+    : m_painter(rhs.m_painter)
+{
+    // reset the other saver!
+    rhs.m_painter = 0;
+}
+
+StateSaver& StateSaver::operator=(StateSaver &&rhs)
+{
+    if (m_painter) {
+        m_painter->restore();
+    }
+
+    m_painter = rhs.m_painter;
+
+    // reset the other saver!
+    rhs.m_painter = 0;
+
+    return *this;
+}
 
 }

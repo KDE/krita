@@ -40,6 +40,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include "kis_global.h"
+
 KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
 {
@@ -327,11 +329,11 @@ uint KoToolBase::grabSensitivity() const
     }
 }
 
-QRectF KoToolBase::handleGrabRect(const QPointF &position) const
+QRectF KoToolBase::handleGrabDocRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*grabSensitivity();
+    const int handleSize = 2 * grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -345,6 +347,14 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
+}
+
+qreal KoToolBase::viewDistanceFromDocPoints(const QPointF &docPoint1, const QPointF &docPoint2) const
+{
+    Q_D(const KoToolBase);
+    const KoViewConverter *converter = d->canvas->viewConverter();
+    return kisDistance(converter->documentToView(docPoint1),
+                       converter->documentToView(docPoint2));
 }
 
 void KoToolBase::setTextMode(bool value)

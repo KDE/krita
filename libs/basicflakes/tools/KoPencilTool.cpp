@@ -450,7 +450,7 @@ KoShapeStrokeSP KoPencilTool::createStroke()
 
 KoPathPoint* KoPencilTool::endPointAtPosition(const QPointF &position)
 {
-    QRectF roi = handleGrabRect(position);
+    QRectF roi = handleGrabDocRect(position);
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
 
     KoPathPoint * nearestPoint = 0;

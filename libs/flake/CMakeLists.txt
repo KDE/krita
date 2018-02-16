@@ -95,6 +95,7 @@ set(kritaflake_SRCS
     KoShapeShadow.cpp
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
+    KoShapeHandlesCollection.cpp
     KoViewConverter.cpp
     KoInputDeviceHandler.cpp
     KoInputDeviceHandlerEvent.cpp

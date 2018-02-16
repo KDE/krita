@@ -24,6 +24,10 @@
 
 #include <QPainter>
 #include <KisHandleStyle.h>
+#include "kis_painting_tweaks.h"
+
+#include <boost/variant.hpp>
+
 class QPainter;
 class KoShape;
 class KoViewConverter;
@@ -46,25 +50,60 @@ class KoViewConverter;
 class KRITAGLOBAL_EXPORT KisHandlePainterHelper
 {
 public:
+    enum Type {
+        Invalid = 0,
+        Rect,
+        Diamond,
+        GradientDiamond,
+        Circle,
+        SmallCircle,
+        GradientCross
+    };
+
+    enum LineType {
+        ConnectionLine
+    };
+
+    struct Handle {
+
+        struct PointHandle {
+            Type type;
+            QPointF pos;
+        };
+        struct LineHandle {
+            LineType type;
+            QPointF p1;
+            QPointF p2;
+        };
+
+        boost::variant<PointHandle, LineHandle> value;
+
+        Handle() : value (PointHandle({Invalid, QPointF()})) {}
+
+        Handle(Type type, const QPointF &pos) : value(PointHandle({type, pos})) {}
+        Handle(LineType lineType, const QPointF &p1, const QPointF &p2) : value(LineHandle({lineType, p1, p2})) {}
+    };
+
+public:
+    KisHandlePainterHelper();
 
     /**
      * Creates the helper, initializes all the internal transformations and
      * *resets* the transformation of the painter.
      */
-    KisHandlePainterHelper(QPainter *_painter, qreal handleRadius = 0.0);
-
-    /**
-     * Creates the helper, initializes all the internal transformations and
-     * *resets* the transformation of the painter. This override also adjusts the
-     * transformation of the painter into the coordinate system of the shape
-     */
-    KisHandlePainterHelper(QPainter *_painter, const QTransform &originalPainterTransform, qreal handleRadius);
+    KisHandlePainterHelper(QPainter *_painter,
+                           const QTransform &localToViewTransform,
+                           const QTransform &localToDocTransform,
+                           qreal handleRadius);
 
     /**
      * Move c-tor. Used to create and return the helper from functions by-value.
      */
     KisHandlePainterHelper(KisHandlePainterHelper &&rhs);
     KisHandlePainterHelper(KisHandlePainterHelper &rhs) = delete;
+
+    KisHandlePainterHelper& operator=(KisHandlePainterHelper &&rhs);
+    KisHandlePainterHelper& operator=(KisHandlePainterHelper &rhs) = delete;
 
     /**
      * Restores the transformation of the painter
@@ -76,6 +115,41 @@ public:
      * KisHandleStyle to select predefined styles.
      */
     void setHandleStyle(const KisHandleStyle &style);
+
+    /**
+     * Draw an abstract point-type handle of type \p type at position
+     * \p pos (in local CS)
+     */
+    void drawHandle(Type type, const QPointF &pos);
+
+    /**
+     * Calculate the bounding rect (document CS) of the point-type handle
+     * \p type, which should be painted at position \p pos (in local CS)
+     */
+    QRectF handleBoundingRectDoc(Type type, const QPointF &pos) const;
+
+    /**
+     * Draw an abstract line-type handle of type \p type at positions
+     * \p p1 and \p p2 (in local CS)
+     */
+    void drawHandle(LineType type, const QPointF &p1, const QPointF &p2);
+
+    /**
+     * Calculate the bounding rect (document CS) of the line-type handle
+     * \p type, which should be painted at positions \p p1 and \p p2 (in local CS)
+     */
+    QRectF handleBoundingRectDoc(LineType type, QPointF &p1, const QPointF &p2) const;
+
+    /**
+     * Draw an abstract handle \p handle, which might encapsulate either point or line
+     */
+    void drawHandle(const Handle &handle);
+
+    /**
+     * Calculate bounding box of an abstract handle \p handle, which can
+     * encapsulate either point or line.
+     */
+    QRectF handleBoundingRectDoc(const Handle &handle) const;
 
     /**
      * Draws a handle rect with a custom \p radius at position \p center
@@ -147,6 +221,11 @@ public:
 
 private:
 
+    QPainterPath calculatePointHandlePath(Type type) const;
+
+    void drawPathImpl(const QPainterPath &path);
+    QRectF pathBoundingRectDocImpl(const QPainterPath &poly) const;
+
     /**
      * Draw a single arrow with the tip at position \p pos, directed from \p from,
      * of size \p radius.
@@ -156,10 +235,12 @@ private:
     void init();
 
 private:
-    QPainter *m_painter;
-    QTransform m_originalPainterTransform;
+    KisPaintingTweaks::TransformSaver m_transformSaver;
+
+    QPainter *m_painter = 0;
     QTransform m_painterTransform;
-    qreal m_handleRadius;
+    QTransform m_localToDocTransform;
+    qreal m_handleRadius = 0.0;
     KisAlgebra2D::DecomposedMatix m_decomposedMatrix;
     QTransform m_handleTransform;
     QPolygonF m_handlePolygon;

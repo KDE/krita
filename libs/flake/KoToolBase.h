@@ -487,7 +487,7 @@ protected:
     *
     * @return the handle rectangle in document coordinates
     */
-    QRectF handleGrabRect(const QPointF &position) const;
+    QRectF handleGrabDocRect(const QPointF &position) const;
 
     /**
     * Returns a handle paint rect at the given position.
@@ -498,6 +498,12 @@ protected:
     * @return the handle rectangle in document coordinates
     */
     QRectF handlePaintRect(const QPointF &position) const;
+
+    /**
+     * @return distance in view coordinate system, defined by two points in document
+     *         coordinate system
+     */
+    qreal viewDistanceFromDocPoints(const QPointF &docPoint1, const QPointF &docPoint2) const;
 
     /**
       * You should set the text mode to true in subclasses, if this tool is in text input mode, eg if the users

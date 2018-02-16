@@ -25,6 +25,7 @@
 #include "kritaflake_export.h"
 
 #include <QFlags>
+#include "KisHandlePainterHelper.h"
 
 class KoPathShape;
 class QPointF;
@@ -215,6 +216,8 @@ public:
      *               If false all given points are used.
      */
     void paint(KisHandlePainterHelper &handlesHelper, PointTypes types, bool active = true);
+
+    QVector<KisHandlePainterHelper::Handle> handles(PointTypes types, bool active = true);
 
     /**
      * @brief Sets the parent path shape.

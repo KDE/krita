@@ -297,7 +297,11 @@ void TimelineFramesModel::slotCurrentNodeChanged(KisNodeSP node)
     }
 
     KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(node);
-    KIS_ASSERT_RECOVER_RETURN(dummy);
+    if (!dummy) {
+        // It's perfectly normal that dummyForNode returns 0; that happens
+        // when views get activated while Krita is closing down.
+        return;
+    }
 
     m_d->converter->updateActiveDummy(dummy);
 

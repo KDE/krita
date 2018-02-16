@@ -50,8 +50,8 @@ public:
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
-    virtual void classBegin();
-    virtual void componentComplete();
+    virtual void classBegin() override;
+    virtual void componentComplete() override;
 
     virtual QString path();
     virtual void setPath(const QString& path);

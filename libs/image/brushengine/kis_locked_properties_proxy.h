@@ -48,7 +48,7 @@ public:
 
     bool hasProperty(const QString& name) const override;
 
-    QList<QString> getPropertiesKeys() const;
+    QList<QString> getPropertiesKeys() const override;
 
 private:
     Q_DISABLE_COPY(KisLockedPropertiesProxy)

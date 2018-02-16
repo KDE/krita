@@ -1,21 +1,19 @@
-From 7d97df5b2eb704e78e63b761c9bf14354fa56f05 Mon Sep 17 00:00:00 2001
+From f05b7865bb29479281f9d6613841d4613f2d62ff Mon Sep 17 00:00:00 2001
 From: Boudewijn Rempt <boud@valdyas.org>
-Date: Fri, 16 Feb 2018 11:51:43 +0100
-Subject: [PATCH] Add png and desktop file
+Date: Fri, 16 Feb 2018 13:22:29 +0100
+Subject: [PATCH] ...
 
 ---
- CMakeLists.txt        |  10 ++++------
- gmic_krita_qt.desktop |   9 +++++++++
- gmic_krita_qt.png     | Bin 0 -> 4178 bytes
- 3 files changed, 13 insertions(+), 6 deletions(-)
+ CMakeLists.txt        | 11 ++++-------
+ gmic_krita_qt.desktop |  9 +++++++++
+ 2 files changed, 13 insertions(+), 7 deletions(-)
  create mode 100644 gmic_krita_qt.desktop
- create mode 100644 gmic_krita_qt.png
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c8106e2..ab071e9 100644
+index c63b434..59a906c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -70,10 +70,6 @@ if (NOT(${GMIC_VERSION} EQUAL ${CIMG_VERSION}))
+@@ -75,10 +75,6 @@ if (NOT(${GMIC_VERSION} EQUAL ${CIMG_VERSION}))
    message(FATAL_ERROR "\nVersion numbers of files 'gmic.h' (" ${GMIC_VERSION} ") and 'CImg.h' ("${CIMG_VERSION} ") mismatch")
  endif()
  
@@ -26,7 +24,7 @@ index c8106e2..ab071e9 100644
  option(PRERELEASE "Set to ON makes this a prelease build")
  if (${PRERELEASE})
      string(TIMESTAMP PRERELEASE_DATE %y%m%d)
-@@ -86,8 +82,6 @@ if (${DRMINGW})
+@@ -91,8 +87,6 @@ if (${DRMINGW})
      add_definitions(-DDRMINGW)
  endif()
  
@@ -35,17 +33,25 @@ index c8106e2..ab071e9 100644
  # Required packages
  
  #
-@@ -416,6 +410,9 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
+@@ -427,7 +421,6 @@ qt5_add_translation(gmic_qt_QM
+     translations/zh.ts
+   )
+ 
+-install(FILES ${gmic_qt_QM} DESTINATION ${CMAKE_SOURCE_DIR}/translations)
+ 
+ set(gmic_qt_QRC
+     gmic_qt.qrc
+@@ -461,6 +454,9 @@ elseif (${GMIC_QT_HOST} STREQUAL "krita")
          ${gmic_qt_LIBRARIES}
-     )
+ 	)
  
 +    install(TARGETS gmic_krita_qt RUNTIME DESTINATION  ${CMAKE_INSTALL_PREFIX}/bin)
-+    install(FILES gmic_krita_qt.desktop gmic_krita_qt.png DESTINATION ${CMAKE_INSTALL_PREFIX}/bin OPTIONAL)
++    install(FILES gmic_krita_qt.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/bin OPTIONAL)
 +
  elseif (${GMIC_QT_HOST} STREQUAL "none")
  
-     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/host_none.cpp include/standalone/ImageDialog.h src/standalone/ImageDialog.cpp)
-@@ -432,3 +429,4 @@ else()
+     set (gmic_qt_SRCS ${gmic_qt_SRCS} src/Host/None/host_none.cpp src/Host/None/ImageDialog.h src/Host/None/ImageDialog.cpp)
+@@ -473,3 +469,4 @@ else()
  endif()
  
  feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
@@ -65,96 +71,6 @@ index 0000000..579d427
 +Icon=gmic_krita_qt
 +Categories=Qt;KDE;Graphics;
 +StartupNotify=false
-diff --git a/gmic_krita_qt.png b/gmic_krita_qt.png
-new file mode 100644
-index 0000000000000000000000000000000000000000..cda8d5c646a3f4d1ce8ae7da6ac9acdfcc9b3441
-GIT binary patch
-literal 4178
-zcmV-Y5UuZtP)<h;3K|Lk000e1NJLTq002M$002M;0ssI2B@5<>00001b5ch_0Itp)
-z=>Px#32;bRa{vGf6951U69E94oEQKA00(qQO+^RY0vQe`4D3ifU;qFQ<Vi$9RA}C{
-zT5EJ%)ph>%Irq+;hh)i;ZP}J3KV`5DeqbAdp*$8OJVGhZv?Q!TyBfMknwFH7Hf^DW
-zwy=QG<^kmuR)|?m2#_=oNEeXuDmXT^v17~FmeI?y-p`RVnwdNI-g9<;oSD%`@<YO-
-z`)fusy0iD$dw=`e-@e4mD8|LiL{#`%GZPe;KrkOMi`-X=c3DNb4+90(g8&dTk%Y0F
-z0f5LHRxzCrMY<0Wp}%L~y*EE0A{ay2*h+xNy~tV5dAG;k6ug*vIwyTAig*}ZZDW7-
-z<=5`K?S=SY0$`9R%qSva)_`JGOq!t!T+$eSdxFye7*LZ!Jqr$Wq<k;<<%_LXZ~Fd!
-z|FnK=G@U=P<XC2)Z?wH7@#d?aWL!-U1Th{6rqh-pGchZk5+$pM4s>@6k`Rt##RoE9
-z`~9C^`Nico-MU^WZuxYixuLJ==wM^RfD_e61~=pmlE%#gDEmidCIH!TXD|#rP%a4B
-z|7I|Oidn=R9Rpws#8Ox#G4bnndOqISr&+n_j3Ap}A+WBwzOEoEs30i<uw#m!hym?+
-zN(w2YAR>k$l7P$t0x`hE5>(U_>Tb`7T<J2AwAl9p?aPoAky1*DK&gwbSYD9X02l-?
-z30MVq#ejU|o;RQQ_jicQ!H?$~ftZ0T)Sa;dx!ffH-R%jG0t3)wN|yylftW}$G;?s_
-zrK<~JgqZ*)%9o~T81%*~^*?+5@Dq>hP9<DG5(vg_FcSnA(8Z|%BGOt5!M}KMUq|Z*
-zNCMiN%Y>fAq!pH}EMKrNT8JY=<_HvE_4f|<btn3|Q^$|Rw?Do+J*q+U?SFau-haIg
-z0JA2dY_}wltra>02MjneLkO|`@edxo?*o;Q5P5i^NjRt!&cA3WpBOBOncsTt;CJua
-z0obmql*iH%0A7CXU~ALRAKbC^@~hVHc;7I!!VD$O$a*jlKXUJD|8Unk+7CexK~IHh
-zW`MMmv}adq;AQbXo9xU)g2)mAmtMKHYDq;h;b~t$fC&J58SH$k`}XT!zI5XQ8P_)n
-zHf{rx_{^EZ%!56Nzx?Buo_^$$l1KzlbYd(gfEgquwKk?7d-zv{#HoNjp>{>(ZC~GD
-zhXja;nb_1fl=7FZD1YjQw}!)^!gj$-d`3mgy6I?l{l~pQkW!ujHG^;jp1>A}7%V_K
-z7ImKgUj5<yZIok06aB<BH=GlRW%~gWm<2PRwPD_WymaH*O*OfsWfMOkh)AA+10=R=
-zTlMn~zWVHc-MsRg=vZ=8D=AnDCZ22_k+F)j(s<xoZv&c6#ALfVhE>2|0t?cTpjq>!
-zUs$nreQloXnkpt@b4Gc5Wrp#LCv|nLbr7h)SH7pbOyFe#&kF)yv1ZGbrDf5pZ(8@p
-z-f#Z!^;_!BEfY57keo~xrQA)y=49pJz46yyK2V6l1`Gf+9U1n0k`5xJwi6S~EG(4F
-z3FYn1MRnXni%m6CHt<9OKyO#Pt9>Lsn2ZnlgMEp_NYcx&>vG2RwN|#YA~9K35vr=5
-zyJ731)oZFq&=uFMz2dsH5B=>gpL%p(EE-}K3?|Yl(6()rlv&ZJ6D<*uQYR9!I@*R^
-z*L56+$h71vvrsy7?eDGHuzAVmZA<#Q6F+)(|K1Nf?2s&IIHr{W(0~M(STmD?CKAHS
-zWM28n{vB_(b+nB3c8|q}lIf%(GXKF4&_2?fDT{{IZKztcwqnKVc~@L}cHO!v5Sd;R
-z9~k|u)sOiZA`%2rfu6rO{7>Jzwz4V`jX9C16^VwTQQHaI(xQCZ%JU!3^BpIY4}ReL
-z`*t3Sl{xD+))qKml8G5apm7@b+~XfU@$imxinOouRYkcRW@axFY`tXR*Y3XPywBA-
-z;gA%NmN3&+HolBN`w!mz*7nEi!x3h-qNU=y+i$q!s+ESuOc{W93ags{zQ#_?nuur|
-zFgeG)1prHH9UmC}tJ{C};TwatgM6PWs4qd9m#vEZ^Ap#efAOlRFrWP~fC-kgufO@+
-zpKd=Gc(5b#&U-Jq<f_$qi-RB->`U}^CR>`id{5an&9ADMzpyMCvqFvxIkw}-kRzpK
-z<r=vHNkO8(Xw!^k{+^ca`49fh|9tqyfbB3yf>FRszyvVQsjwdY{_kwOV5!zx2y-?x
-z5oJus7@$>a7Hqw!=6~O6zVrTVfAo!Qh0NzapZ@ie4}H|$HG08?i))rvGPCP8q>`Q;
-zlF?Ww9I-7a=2ph4YbzJm#unF>S1l@?zp$(zL~IB};c#a)9`1SNg(HsRu&IfO2TUM_
-z9!muKceii6V5txS<HP&Zj!Q%+EsI|Kh3d<$UjCKa&o{h?Su;ZjUA1`b=YRX`rK`%m
-z^oQq_&y6rcDfT^;$popS?<O;DI%q!@Z)_OY_588MBZJWrQCb$RSyocFwrW}3obxYQ
-zSyoXxIr2Yv?1THi`Ccp*%7P!AhzNj`PTg?JIsf=?*Oit#niWA(HnJ14*$j_L>3k;U
-zTMrSk?Uj(#D4@Y0f@Tnl?)Kq5A2sjY)w_RJTXVyZ*0up;Gh`D;h+x&4xwqW0^`=|S
-zBZ~z|BBtk`+;#7t{wh{tpF%8P76i_CK`7$ieA}k$zr21?ZF$+;XspDUGHBB&d$-PH
-zd^fGqDbGy@V<T?ECw+(ZcOE*>dFViYJnq`$*tU>T3bH_|ARU+?30f<pUB7&u_2++o
-z@eQ}EpI=o%^&cO*X3GysVi9EhoD_lF^p=B!jH`tetXN%n*17X*mseCTEnBcCQdVA4
-zQff;}7&s*ofghw(uAAa?+Dj(f;kZ9Mlp2Y<@qw{{-gIBjSbtBVzi$jomb8Vmq?E!m
-z*K7lXR!~Z5b8$Ap0zyiFgi`)FTNZxn!OLlEB>B~wUjF#QPTRJa6tS3;LExNB0^+<s
-zY!aJ8jtqw_J0vZO^5{h%%~}Pl6f31wpgm9fzG7`K*Z2s^MU1nJiIgJc`GF2JWBJO`
-zwHvEzSClPZSy@#*#|p`G((UgZYik;4Z5pZH*WKP8Ur;f}ij+9F-?i~@eW#z)fCW;M
-zseEBS$o(i0K@b3~kV*zf1}93M2}+42rD+DtAYx*nnIHlJ3lbzOVXHM~mu|bPZp*gX
-z%@@?nsfgv}7E@X|0>Nf%>S!DK;LTRjS`pD>54`{MqdS#v38{hXJeWh4Q)G5wzA>gm
-z4&&%*7z}I8teJq)@=$rDT|U2LNp1OtE%P^>zhuMaB{DRzs5qxfWa%4^D;HVl7Dj9W
-zfFC`z^Wl5mO^?Y?h_bWRxHxsfK`L*T28nS)^Pic_&^ieGz=uMxpekIqX3^?(m33?9
-z)vl<lURqYOtUMeE=kM6xGu+ueQeI&%Te;ATX?eQAJg!U{PqONZp^8L-R&;oO_uqZv
-zwS#+xBN5Z61)xoqPO0p?NXQ_;S`cZNAhXaqP|EkUVyK#>rCTptv1QwmO`ls*wP=p*
-zSdo}?oRA>`iTK!_oz44pcmHO0S6j=l_K_M39(v~U*W9=%cizGr#w3W#hk#f!NHYK^
-zf))6|PoCTJ^rO2HBP#G%>i|5Jt59Li2ogeSl9rILEkx(gx{dQUY_3_qx#rx>i%QE%
-za<p9eUJwK-IpXi$d3?vaO&`72+}fD1EL#X6gpdRVxvu+u!`GLtng=G%%@L=XN(@z}
-zY|8|gNeBSD-f!IZ(eai~M~C{7Bg1Jot$kmCi3BVQj$=Dv5iOCWW#Ott<qMZYtE%T#
-z*Tk09RhG}4Qy8nk{zQMzSYKD7rE%ck-kyVdJ3l=%7-$YzA<MF)l_MsmK-tQu{ucL<
-zg8q0KDcjV*slMc<(!+5#lL>rZ69f@Ui=41@94l7hgdAtm_XE%S^iWUZ(V^yszLv&;
-z-cGl_JJH{hOpYmO2`NbkL0SFFsD_-c8Ld%KC3m&{HRrN^I{N`S8N8TI9*#N-qmeu;
-zD&<R=rR+M;J)Hx+-J>l>N1BiJHXR*oIyxHfODIJufDSwrSXr5fC=xZ=AQxoe1dIkq
-zD_vb%nnkYZ?Lw@RE84n%avE_D%q(T-;d@?v<;RVK{mE1+kVHfz$(BM&0U<SnH1jW5
-zk_a>`f+j}J`jcb@1EiUCS$T9uOAzbi057J{8zcK*WRQpZlqExDu`tH5-ULldn6X$2
-z(gj1{Ni8D+gP18&>J(+gbc$UA!Vz0Y!Z;O}(4-552u#Y5)088?VB4CRSU4kDg>$4p
-z<c8AXN!zAv5(1@W&jHh0k;w$i8YEA?)tb5e1SSH=bJeNVWoNqNV*p6IF3;#krtbyO
-za6B=iMW&dM?dG;_+5;EedH@iDh6XdITv2{@2MAygYo$|(yrfsOA|NnW3&DNu!#TEd
-z>ec0E+)`39nNFwt;vYU|S=I1x+TbmbDBLU+ZP7iJaFb&}agRR>y98zkgpVHT%84jk
-z^ax;NC^Z_-V0JDd7D608&|XNGiwUCu4Gm;QhSRfSKLZd_96m5qC|MUb0zA;0934&<
-zIe!XpLI^rk-vxkK6*&S7s32%;=vNv<vzA0e$6H5K5YY72U(<EKa5K;M4)5=^gv6{}
-zL~zIS(L<du+p1zYKt!6Am*!9Q_6jLx&jDr*Jbk3TZ#rFUW+@~{v^Ea4cMOssp2ZL#
-z<EkSE`!Vs+qBC}Y0ni(-);l6fnAM9kb8|yHF*-UO5-w(d5WuT191b}mFImk_06@U;
-z#*x0Rv0@c*c5iuLcUx~~LXc$AgxO0X2Fc@XgWVm;BBBrj`0=y5LUxn|6AQ*{27%b~
-z^uGV=)LNhRpu{vxCnAaujqH54TSy}Klh)L;(au7az4P4`74T`Z^|THc;fO!paXgvO
-z1TdRT;H;$(GeA<(!M*KDoxa+pkwV0Puq=^#0zzY!F9vJH(UNJQg_vHQ=nF4jUQ_3I
-zz9!PSManEyFlk>!ORf9AbDa|weC7@iG&91H@G~!cW%=1oDy4*x5I8IOXP+#bK~m)>
-zYBo2>-V4l3ZpvG-yyV$ezI4@%>yY0Kom$*IEeSHzO|w#-zVEJIy#C^+$`cyeJYm2_
-z*JQ%9^gzS&831cZ1VX?N3b3V!l=2;SU+^b?aoHpkITHuQFRc}kB*MXc$G1PZyJ3I-
-zv8Iu9%9m0|3XxE`O#)86(aGvbj6i9nwd06IH6=^y%C7w4S-*Shrf|ezHV;`&Yv`M<
-z1I!@OImwX#bhPy!sqa6yw`<Ri_Cvqv85~MkWJ^m*A%p-GJg1(0j7PK9P)aMM6#RLW
-z(X|^Ftlv_7?&igHYv!$5vp`B4<GDrCWb8DP$M1O@=yKYj3Y41;GH%e;+_!J{@uT&_
-z&5b>M-N}Le6bBk0h89B3nHyQKFuJH_&Wcs@R-QfgoQ>5B7ng^^mJ_xtTOz**%RUV{
-cgMs`10kQy-@w;`EkpKVy07*qoM6N<$g1Y<a?f?J)
-
-literal 0
-HcmV?d00001
-
 -- 
 2.12.3
 

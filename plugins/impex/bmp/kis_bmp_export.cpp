@@ -47,13 +47,17 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *docum
 {
     QRect rc = document->savingImage()->bounds();
     QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
-    image.save(io, QFileInfo(filename()).suffix().toLatin1());
-    return KisImportExportFilter::OK;
+    bool r = image.save(io, QFileInfo(filename()).suffix().toLatin1());
+    if (r) {
+        return KisImportExportFilter::OK;
+    }
+    else {
+        return KisImportExportFilter::InvalidFormat;
+    }
 }
 
 void KisBMPExport::initializeCapabilities()
 {
-
     QList<QPair<KoID, KoID> > supportedColorModels;
     supportedColorModels << QPair<KoID, KoID>()
             << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID);

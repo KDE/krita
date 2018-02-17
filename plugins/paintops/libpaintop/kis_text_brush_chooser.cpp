@@ -51,7 +51,7 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
 void KisTextBrushChooser::getFont()
 {
     bool ok = false;
-    QFont f = QFontDialog::getFont(&ok);
+    QFont f = QFontDialog::getFont(&ok, m_font);
     if (ok) {
         m_font = f;
         rebuildTextBrush();

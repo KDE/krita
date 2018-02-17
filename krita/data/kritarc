@@ -464,3 +464,6 @@ LastReturnType=Custom Document
 [theme]
 Theme=Krita dark
 
+[python]
+enable_scripter=true
+

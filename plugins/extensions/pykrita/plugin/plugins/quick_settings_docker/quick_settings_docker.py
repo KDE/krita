@@ -9,7 +9,7 @@ By Wolthera
 # Importing the relevant dependencies:
 import sys
 from PyQt5.QtCore import pyqtSlot, Qt, QPointF
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QPainter, QPalette, QPixmap, QImage, QBrush, QIcon
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QPainter, QPalette, QPixmap, QImage, QBrush, QPen, QIcon
 from PyQt5.QtWidgets import QWidget, QTabWidget, QListView, QVBoxLayout
 from krita import *
 
@@ -93,8 +93,8 @@ class QuickSettingsDocker(DockWidget):
             brush = QBrush(Qt.SolidPattern)
             brush.setColor(self.brushSizeTableView.palette().color(QPalette.Text))
             circlePainter.setBrush(brush)
-            circlePainter.pen().setWidth(0)
-            brushSize = max(min((self.sizesList[s] / 500) * 100, 64), 1)
+            circlePainter.setPen(QPen(QBrush(Qt.transparent), 0))
+            brushSize = max(min(self.sizesList[s], 64), 1)
             brushSize = brushSize * 0.5
             circlePainter.drawEllipse(QPointF(32, 32), brushSize, brushSize)
             circlePainter.end()
@@ -122,7 +122,7 @@ class QuickSettingsDocker(DockWidget):
             brush = QBrush(Qt.SolidPattern)
             brush.setColor(self.brushSizeTableView.palette().color(QPalette.Text))
             circlePainter.setBrush(brush)
-            circlePainter.pen().setWidth(0)
+            circlePainter.setPen(QPen(QBrush(Qt.transparent), 0))
             circlePainter.setOpacity(self.opacityList[s] / 100)
             circlePainter.drawEllipse(QPointF(32, 32), 32, 32)
             circlePainter.end()

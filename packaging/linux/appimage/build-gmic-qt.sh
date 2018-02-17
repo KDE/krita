@@ -29,9 +29,6 @@ mkdir -p $BUILD_PREFIX/gmic_qt_krita.appdir/usr/share
 cd
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
 chmod a+x linuxdeployqt
-./linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -verbose=2 -bundle-non-qt-libs
-cp $BUILD_PREFIX/b/ext_gmic//ext_gmic_qt-prefix/src/ext_gmic_qt-build/*qm $BUILD_PREFIX/gmic_qt_krita.appdir/usr/translations
 ./linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -verbose=2 -bundle-non-qt-libs -appimage
 
-#mv *AppImage /krita.appdir/usr/bin/gmic_qt_krita
  

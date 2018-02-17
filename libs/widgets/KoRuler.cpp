@@ -36,6 +36,7 @@
 #include <QMouseEvent>
 #include <QFontDatabase>
 #include <QtMath>
+#include <cmath>
 
 #include <KoViewConverter.h>
 
@@ -300,10 +301,42 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
     const int secondarydisplacement = d->rightToLeft ? -pixelSeparation : pixelSeparation;
 
     // Draw the marks
-    const int rulerEnd = d->rightToLeft ? d->offset : d->offset + rulerLengthPixel;
-    for(qreal n = 0; n < rulerLengthUnit; n += numberSeparation) {
+    int rulerEnd;
+    qreal numberStart, numberEnd;
+    if (d->rightToLeft) {
+        rulerEnd = d->offset;
+        numberStart = d->unit.toUserValue(d->viewConverter->viewToDocumentX(
+                    rulerLengthPixel + d->offset - rectangle.right()));
+        // draw the partly hidden mark when the left part of the ruler is
+        // invisible
+        int pixelEnd = rulerLengthPixel + d->offset - rectangle.left();
+        if (rulerEnd + textLength < rectangle.left()) {
+            pixelEnd -= textLength;
+        }
+        numberEnd = d->unit.toUserValue(d->viewConverter->viewToDocumentX(
+                    pixelEnd));
+        if (rulerLengthPixel + d->offset > rectangle.right()) {
+            numberStart -= fmod(numberStart, numberSeparation);
+        }
+    } else {
+        rulerEnd = d->offset + rulerLengthPixel;
+        numberStart = d->unit.toUserValue(d->viewConverter->viewToDocumentX(
+                    rectangle.left() - d->offset));
+        // draw the partly hidden mark when the right part of the ruler is
+        // invisible
+        int pixelEnd = rectangle.right() - d->offset;
+        if (rulerEnd - textLength > rectangle.right()) {
+            pixelEnd += textLength;
+        }
+        numberEnd = d->unit.toUserValue(d->viewConverter->viewToDocumentX(
+                    pixelEnd));
+        if (d->offset < 0) {
+            numberStart -= fmod(numberStart, numberSeparation);
+        }
+    }
+    for(qreal n = numberStart; n < numberEnd; n += numberSeparation) {
         int posOnRuler = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(n)));
-        int x = d->offset + posOnRuler;
+        int x = posOnRuler + d->offset;
         if (d->rightToLeft) {
             x = d->offset + rulerLengthPixel - posOnRuler;
         }
@@ -498,7 +531,20 @@ void VerticalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPainte
 
     // Draw the marks
     const int rulerEnd = rulerLengthPixel + d->offset;
-    for(qreal n = 0; n < rulerLengthUnit; n += numberSeparation) {
+    qreal numberStart = d->unit.toUserValue(d->viewConverter->viewToDocumentY(
+                rectangle.top() - d->offset));
+    // draw the partly hidden mark when the bottom part of the ruler is
+    // invisible
+    int pixelEnd = rectangle.bottom() - d->offset;
+    if (rulerEnd - textLength > rectangle.bottom()) {
+        pixelEnd += textLength;
+    }
+    qreal numberEnd = d->unit.toUserValue(d->viewConverter->viewToDocumentX(
+                pixelEnd));
+    if (d->offset < 0) {
+        numberStart -= fmod(numberStart, numberSeparation);
+    }
+    for(qreal n = numberStart; n < numberEnd; n += numberSeparation) {
         int posOnRuler = qRound(d->viewConverter->documentToViewY(d->unit.fromUserValue(n)));
         int y = d->offset + posOnRuler;
 

@@ -10,8 +10,9 @@ import json
 import zipfile
 import xml.etree.ElementTree as ET
 import shutil
+import html
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
-from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt
+from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt, QRectF, QPointF
 from krita import *
 
 """
@@ -68,6 +69,8 @@ The majority of the functions are meta-data encoding functions.
 
 class comicsExporter():
     acbfLocation = str()
+    acbfPageData = []
+    acbfPageTransform = []
     cometLocation = str()
     comicRackInfo = str()
     comic_book_info_json_dump = str()
@@ -89,6 +92,8 @@ class comicsExporter():
         self.projectURL = projectURL
         self.pagesLocationList = {}
         self.acbfLocation = str()
+        self.acbfPageData = []
+        self.acbfPageTransform = []
         self.cometLocation = str()
         self.comicRackInfo = str()
         self.comic_book_info_json_dump = str()
@@ -483,6 +488,12 @@ class comicsExporter():
                 # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
                 root = page.rootNode()
+                
+                #We'll need the offset and scale for aligning the panels and text correctly. We're getting this from the CBZ
+                
+                panelsAndText = []
+                self.getPanelsAndText(root, panelsAndText)
+                self.acbfPageData.append(panelsAndText)
                 self.removeLayers(labelList, node=root)
                 page.refreshProjection()
                 page.flatten()
@@ -495,6 +506,7 @@ class comicsExporter():
                     for key in sizesList.keys():
                         w = sizesList[key]
                         # copy over data
+                        
                         projection = page.clone()
                         projection.setBatchmode(True)
                         # Crop. Cropping per guide only happens if said guides have been found.
@@ -522,12 +534,14 @@ class comicsExporter():
                             else:
                                 cropy = self.configDictionary["cropTop"]
                                 croph = page.height() - self.configDictionary["cropBottom"] - cropy
+                            
                             projection.crop(cropx, cropy, cropw, croph)
                             projection.waitForDone()
 
                         # resize appropriately
                         res = page.resolution()
                         listScales = [projection.width(), projection.height(), res, res]
+                        projectionOldSize = [projection.width(), projection.height()]
                         sizesCalc = sizesCalculator()
                         listScales = sizesCalc.get_scale_from_resize_config(config=w, listSizes=listScales)
                         projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
@@ -558,6 +572,14 @@ class comicsExporter():
                         if projection.isIdle():
                             projection.exportImage(fn, InfoObject())
                             projection.waitForDone()
+                            if key == "CBZ":
+                                transform = {}
+                                transform["offsetX"] = cropx*(projection.width()/projectionOldSize[0])
+                                transform["offsetY"] = cropy*(projection.height()/projectionOldSize[1])
+                                resDiff = page.resolution()/72
+                                transform["scaleWidth"] = resDiff/(projectionOldSize[0]/projection.width())
+                                transform["scaleHeight"] = resDiff/(projectionOldSize[1]/projection.height())
+                                self.acbfPageTransform.append(transform)
                         self.pagesLocationList[key].append(fn)
 
                         # close
@@ -571,6 +593,94 @@ class comicsExporter():
             return True
         print("CPMT: Export not happening because there aren't any pages.")
         return False
+    
+    """
+    Function to get the panel and text data.
+    """
+    def getPanelsAndText(self, node, list):
+        vectorLayersToSearch = ["panels", "text"]
+        if node.type() == "vectorlayer" and node.name():
+            for name in vectorLayersToSearch:
+                if name in node.name():
+                    for shape in node.shapes():
+                        if (shape.type()=="groupshape"):
+                            self.getPanelsAndTextVector(shape, list)
+                        else:
+                            self.handleShapeDescription(shape, list)
+        else:
+            if len(node.childNodes()) > 0:
+                for child in node.childNodes():
+                    self.getPanelsAndText(node = child, list = list)
+    """
+    Function to get the panel and text data from a group shape
+    """                
+    def getPanelsAndTextVector(self, group, list):
+        for shape in group.shapes():
+            if (shape.type()=="groupshape"):
+                self.getPanelsAndTextVector(shape, list)
+            else:
+                self.handleShapeDescription(shape, list)
+    """
+    Function to get text in a format that acbf will accept
+    """
+    def handleShapeDescription(self, shape, list):
+        shapeDesc = {}
+        shapeDesc["name"] = shape.name()
+        rect = shape.boundingBox()
+        listOfPoints = [rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()]
+        shapeDesc["boundingBox"] = listOfPoints
+        if (shape.type() == "KoSvgTextShapeID"):
+            textRoot = ET.fromstring(shape.toSvg())
+            paragraph = ET.Element("p")
+            if (len(textRoot)>0):
+                self.parseTextChildren(textRoot, paragraph)
+            shapeDesc["text"] = ET.tostring(paragraph, "unicode")
+        list.append(shapeDesc)
+    
+    def parseTextChildren(self, elRead, elWrite):
+        
+        if elRead.text is not None:
+            if len(elWrite)>0:
+                if (elWrite[-1].tail is None):
+                    elWrite[-1].tail = str()
+                elWrite[-1].tail = " ".join([elWrite[-1].tail, elRead.text])
+            else:
+                if elWrite.text is None:
+                    elWrite.text = elRead.text
+                else:
+                    elWrite.text = " ".join([elWrite.text, elRead.text])
+
+        for childNode in elRead:
+            fontWeight = childNode.get("font-weight")
+            fontItalic = childNode.get("font-style")
+            newElementMade = False
+            if fontItalic is not None:
+                if (fontItalic == "italic"):
+                    newElement = ET.Element("Emphasis")
+                    newElementMade = True
+            elif fontWeight is not None:
+                if (fontWeight=="bold" or int(fontWeight)>400):
+                    newElement = ET.Element("Strong")
+                    newElementMade = True
+
+            if newElementMade is True:
+                if (len(childNode)>0):
+                    self.parseTextChildren(childNode, newElement)
+                else:
+                    newElement.text = childNode.text
+                elWrite.append(newElement)
+            else:
+                if (len(childNode)>0):
+                    self.parseTextChildren(childNode, elWrite)
+                else:
+                    if len(elWrite)>0:
+                        if (elWrite[-1].tail is None):
+                            elWrite[-1].tail = str()
+                        elWrite[-1].tail = " ".join([elWrite[-1].tail,childNode.text])
+                    else:
+                        if elWrite.text is None:
+                            elWrite.text = str()
+                        elWrite.text = " ".join([elWrite.text,childNode.text])
 
     """
     Function to remove layers when they have the given labels.
@@ -712,7 +822,11 @@ class comicsExporter():
             textlayer = ET.Element("text-layer")
             textlayer.set("lang", self.configDictionary["language"])
             textlayer.set("show", "False")
+            textlayerNative = ET.Element("text-layer")
+            textlayerNative.set("lang", self.configDictionary["language"])
+            textlayerNative.set("show", "True")
             language.append(textlayer)
+            language.append(textlayerNative)
             bookInfo.append(language)
         #database = ET.Element("databaseref")
         # bookInfo.append(database)
@@ -807,12 +921,42 @@ class comicsExporter():
 
         body = ET.Element("body")
 
-        for page in self.pagesLocationList["CBZ"]:
+        for p in range(0, len(self.pagesLocationList["CBZ"])):
+            page = self.pagesLocationList["CBZ"][p]
             if page is not coverpageurl:
                 pg = ET.Element("page")
                 image = ET.Element("image")
                 image.set("href", os.path.basename(page))
                 pg.append(image)
+                
+                language = "en"
+                if "language" in self.configDictionary.keys():
+                    language = self.configDictionary["language"]
+                textLayer = ET.Element("text-layer")
+                textLayer.set("lang", language)
+                pageData = self.acbfPageData[p]
+                transform = self.acbfPageTransform[p]
+                for v in pageData:
+                    boundingBoxText = []
+                    for point in v["boundingBox"]:
+                        offset = QPointF(transform["offsetX"], transform["offsetY"])
+                        newPoint = point-offset
+                        x = int(newPoint.x() * transform["scaleWidth"])
+                        y = int(newPoint.y() * transform["scaleHeight"])
+                        pointText = str(x)+","+str(y)
+                        boundingBoxText.append(pointText)
+                    
+                    if "text" in v.keys():
+                        textArea = ET.Element("text-area")
+                        textArea.set("points", " ".join(boundingBoxText))
+                        paragraph = ET.fromstring(v["text"])
+                        textArea.append(paragraph)
+                        textLayer.append(textArea)
+                    else:
+                        frame = ET.Element("frame")
+                        frame.set("points", " ".join(boundingBoxText))
+                        pg.append(frame)
+                pg.append(textLayer)
                 body.append(pg)
 
         root.append(body)

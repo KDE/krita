@@ -143,16 +143,20 @@ Once you've done that, press export. Krita will pop up a progress bar for you wi
 
 CPMT will store the resized files and meta data in separate folders in the export folder. This is so that you can perform optimization methods afterwards and update everything quickly.
 
+### ACBF ###
+
+ACBF is the advanced comic book format. It is a metadata file that can hold extra data like panels and text, and can even store translations for the text.
+
+Krita has some support for frames and text. If you name a vector layer "text" or "panels" it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren't text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last.
+
+When you generate a CBZ file, the ACBF file will be generated alongside of it. There's in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there's currently fewer viewers who can read it.
+
 TODO:
 ======
 Things I still want to do:
 
 * Krita:
-	- Allow selecting the text layer for acbf. (Requires text api, preferably with html option :) )
-	- Allow selecting the panel layer for acbf. (Requires vector api)
 	- Generate text from the author list. (Requires text api)
-	- batch export broken. (bug)
-	- save as doesn't work on a new file. (bug)
 * clean up path relativeness. (Not sure how much better this can be done)
 * Make label removal just a list? (unsure)
 
@@ -165,7 +169,7 @@ ACBF list:
 	- acbf:horz
 	- acbf:vert
 	- acbf:title (Will use this page's title as a table of contents entry.)
-* support getting text info from the vector layers.
+* support getting text info from the vector layers. [Partially done]
 	- users can specify a name for text layers.
 	- last two/five characters are used to determine language.
 	- maybe text-class can be used to determine type?

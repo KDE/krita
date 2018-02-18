@@ -111,6 +111,10 @@ extern "C" int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
+#if QT_VERSION >= 0x050900
+    QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
+#endif
+
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
     bool singleApplication = true;

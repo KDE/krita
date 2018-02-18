@@ -71,11 +71,13 @@ The majority of the functions are meta-data encoding functions.
 class comicsExporter():
     acbfLocation = str()
     acbfPageData = []
-    acbfPageTransform = []
     cometLocation = str()
     comicRackInfo = str()
     comic_book_info_json_dump = str()
     pagesLocationList = {}
+    
+    #set of keys used to define specific export behaviour for this page.
+    pageKeys = ["acbf_title", "acbf_none", "acbf_fade", "acbf_blend", "acbf_horizontal", "acbf_vertical"]
 
     def __init__(self):
         pass
@@ -94,7 +96,6 @@ class comicsExporter():
         self.pagesLocationList = {}
         self.acbfLocation = str()
         self.acbfPageData = []
-        self.acbfPageTransform = []
         self.cometLocation = str()
         self.comicRackInfo = str()
         self.comic_book_info_json_dump = str()
@@ -494,7 +495,20 @@ class comicsExporter():
                 
                 panelsAndText = []
                 self.getPanelsAndText(root, panelsAndText)
-                self.acbfPageData.append(panelsAndText)
+                pageData = {}
+                pageData["vector"] = panelsAndText
+                tree = ET.fromstring(page.documentInfo())
+                pageData["title"] = page.name()
+                calligra = "{http://www.calligra.org/DTD/document-info}"
+                about = tree.find(calligra+"about")
+                keywords = about.find(calligra+"keyword")
+                keys = str(keywords.text).split(",")
+                pKeys = []
+                for key in keys:
+                    print("key "+str(key))
+                    if key in self.pageKeys:
+                        pKeys.append(key)
+                pageData["keys"] = pKeys
                 self.removeLayers(labelList, node=root)
                 page.refreshProjection()
                 page.flatten()
@@ -580,12 +594,14 @@ class comicsExporter():
                                 transform["resDiff"] = page.resolution()/72
                                 transform["scaleWidth"] = projection.width()/projectionOldSize[0]
                                 transform["scaleHeight"] = projection.height()/projectionOldSize[1]
-                                self.acbfPageTransform.append(transform)
+                                pageData["transform"] = transform
                         self.pagesLocationList[key].append(fn)
 
                         # close
                         
                         projection.close()
+                    
+                    self.acbfPageData.append(pageData)
                     page.close()
             progress.setValue(len(pagesList))
             Application.setBatchmode(batchsave)
@@ -941,6 +957,7 @@ class comicsExporter():
             page = self.pagesLocationList["CBZ"][p]
             if page is not coverpageurl:
                 pg = ET.Element("page")
+                pageData = self.acbfPageData[p]
                 image = ET.Element("image")
                 image.set("href", os.path.basename(page))
                 pg.append(image)
@@ -948,11 +965,26 @@ class comicsExporter():
                 language = "en"
                 if "language" in self.configDictionary.keys():
                     language = self.configDictionary["language"]
+                print(str(p) + str(pageData["keys"]))
+                if "acbf_title" in pageData["keys"]:
+                    title = ET.Element("title")
+                    title.set("lang", language)
+                    title.text = pageData["title"]
+                    pg.append(title)
+                if "acbf_none" in pageData["keys"]:
+                    pg.set("transition", "none")
+                if "acbf_blend" in pageData["keys"]:
+                    pg.set("transition", "blend")
+                if "acbf_fade" in pageData["keys"]:
+                    pg.set("transition", "fade")
+                if "acbf_horizontal" in pageData["keys"]:
+                    pg.set("transition", "scroll_right")
+                if "acbf_vertical" in pageData["keys"]:
+                    pg.set("transition", "scroll_down")
                 textLayer = ET.Element("text-layer")
                 textLayer.set("lang", language)
-                pageData = self.acbfPageData[p]
-                transform = self.acbfPageTransform[p]
-                for v in pageData:
+                transform = pageData["transform"]
+                for v in pageData["vector"]:
                     boundingBoxText = []
                     for point in v["boundingBox"]:
                         offset = QPointF(transform["offsetX"], transform["offsetY"])

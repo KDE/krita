@@ -151,6 +151,15 @@ Krita has some support for frames and text. If you name a vector layer "text" or
 
 When you generate a CBZ file, the ACBF file will be generated alongside of it. There's in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there's currently fewer viewers who can read it.
 
+To fine tune the export to ACBF, you can go to file->document Information and add the following keywords:
+
+ - acbf_title     : this will flag this page to be used as a table of contents bookmark inside ACBF. The content mark will use the "title" value in the document information to create a bookmark in the project language.
+ - acbf_none      : Sets the page transition value to "none" explicitly.
+ - acbf_fade      : Sets the page transitio to fade. Viewers that support it will fade to black into this page.
+ - acbf_blend     : Sets the page transition to blend. Viewers that support it will fade the previous page to this one.
+ - acbf_horizontal: Sets the page transition to scroll_right. Viewers that support it will scroll right to a new page.
+ - acbf_vertical  : Sets the page transition to scroll_down. Viewers that support it will scroll down to a new page.
+
 TODO:
 ======
 Things I still want to do:
@@ -162,17 +171,11 @@ Things I still want to do:
 
 ACBF list:
 
-* Support fading mechanisms by using the keywords field in the metadata.
-	- acbf:none
-	- acbf:fade
-	- acbf:blend
-	- acbf:horz
-	- acbf:vert
-	- acbf:title (Will use this page's title as a table of contents entry.)
 * support getting text info from the vector layers. [Partially done]
-	- users can specify a name for text layers.
-	- last two/five characters are used to determine language.
-	- maybe text-class can be used to determine type?
+	- users can specify a name for text layers. (Waiting for stringfreeze to end)
+	- Don't forget text-rotation(Needs API)
+	- last two/five characters are used to determine language. (Maybe not a good idea...>_>)
+	- maybe text-class can be used to determine type? (We'll proly need to use style sheets and comparing the text format to those)
 		+ Speech (speech, dialogue)
 		+ Commentary (caption in american comics)
 		+ Formal (For justified aligned text, like big chunks of text.)
@@ -185,3 +188,7 @@ ACBF list:
 		+ Inverted (Whether or not this should be treated as inverted text)
 		+ transparent(For a transparent wordballoon.)
 		+ Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.)
+* 1.2 support:
+    - Role: designer
+    - Book-info: reading direction
+    - text type: Sound.

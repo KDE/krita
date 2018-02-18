@@ -54,6 +54,7 @@
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
 #include <kis_config.h>
+#include <QLibrary>
 
 #elif defined HAVE_X11
 #include <kis_tablet_support_x11.h>
@@ -86,6 +87,33 @@ void tryInitDrMingw()
     // Set the log file path to %LocalAppData%\kritacrash.log
     QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
     myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+}
+
+typedef enum ORIENTATION_PREFERENCE {
+    ORIENTATION_PREFERENCE_NONE = 0x0,
+    ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
+    ORIENTATION_PREFERENCE_PORTRAIT = 0x2,
+    ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
+    ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
+} ORIENTATION_PREFERENCE;
+typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
+    ORIENTATION_PREFERENCE orientation
+);
+void resetRotation()
+{
+    QLibrary user32Lib("user32");
+    if (!user32Lib.load()) {
+        qWarning() << "Failed to load user32.dll! This really should not happen.";
+        return;
+    }
+    pSetDisplayAutoRotationPreferences_t pSetDisplayAutoRotationPreferences
+            = reinterpret_cast<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
+    if (!pSetDisplayAutoRotationPreferences) {
+        qDebug() << "Failed to load function SetDisplayAutoRotationPreferences";
+        return;
+    }
+    bool result = pSetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE);
+    qDebug() << "SetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE) returned" << result;
 }
 } // namespace
 #endif
@@ -151,6 +179,9 @@ extern "C" int main(int argc, char **argv)
 
         // Probe QPA auto OpenGL detection
         KisOpenGL::probeWindowsQpaOpenGL(argc, argv, preferredOpenGLRenderer);
+
+        // HACK: https://bugs.kde.org/show_bug.cgi?id=390651
+        resetRotation();
 #endif
     }
 

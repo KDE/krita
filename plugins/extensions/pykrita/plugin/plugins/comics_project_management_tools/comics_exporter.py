@@ -599,9 +599,11 @@ class comicsExporter():
     """
     def getPanelsAndText(self, node, list):
         vectorLayersToSearch = ["panels", "text"]
-        if node.type() == "vectorlayer" and node.name():
+        if "vectorLayerNames" in self.configDictionary.keys():
+            vectorLayersToSearch = self.configDictionary["vectorLayerNames"]
+        if node.type() == "vectorlayer":
             for name in vectorLayersToSearch:
-                if name in node.name():
+                if str(name).lower() in str(node.name()).lower():
                     for shape in node.shapes():
                         if (shape.type()=="groupshape"):
                             self.getPanelsAndTextVector(shape, list)

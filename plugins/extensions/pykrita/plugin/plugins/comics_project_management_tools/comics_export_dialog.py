@@ -394,4 +394,7 @@ class comic_export_setting_dialog(QDialog):
             index = self.ACBFhistoryModel.index(r, 0)
             versionList.append(self.ACBFhistoryModel.data(index, Qt.DisplayRole))
         config["acbfHistory"] = versionList
+        
+        #Turn this into something that retreives from a line-edit when string freeze is over.
+        config["vectorLayerNames"] = ["panels", "text"]
         return config

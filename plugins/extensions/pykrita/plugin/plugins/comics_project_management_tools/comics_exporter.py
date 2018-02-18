@@ -574,11 +574,11 @@ class comicsExporter():
                             projection.waitForDone()
                             if key == "CBZ":
                                 transform = {}
-                                transform["offsetX"] = cropx*(projection.width()/projectionOldSize[0])
-                                transform["offsetY"] = cropy*(projection.height()/projectionOldSize[1])
-                                resDiff = page.resolution()/72
-                                transform["scaleWidth"] = resDiff/(projectionOldSize[0]/projection.width())
-                                transform["scaleHeight"] = resDiff/(projectionOldSize[1]/projection.height())
+                                transform["offsetX"] = cropx
+                                transform["offsetY"] = cropy
+                                transform["resDiff"] = page.resolution()/72
+                                transform["scaleWidth"] = projection.width()/projectionOldSize[0]
+                                transform["scaleHeight"] = projection.height()/projectionOldSize[1]
                                 self.acbfPageTransform.append(transform)
                         self.pagesLocationList[key].append(fn)
 
@@ -955,7 +955,8 @@ class comicsExporter():
                     boundingBoxText = []
                     for point in v["boundingBox"]:
                         offset = QPointF(transform["offsetX"], transform["offsetY"])
-                        newPoint = point-offset
+                        pixelPoint = QPointF(point.x()*transform["resDiff"], point.y()*transform["resDiff"])
+                        newPoint = pixelPoint-offset
                         x = int(newPoint.x() * transform["scaleWidth"])
                         y = int(newPoint.y() * transform["scaleHeight"])
                         pointText = str(x)+","+str(y)

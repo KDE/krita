@@ -12,7 +12,8 @@ import xml.etree.ElementTree as ET
 import shutil
 import html
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
-from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt, QRectF, QPointF
+from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt, QRectF, QPointF, QByteArray, QBuffer
+from PyQt5.QtGui import QImage
 from krita import *
 
 """
@@ -979,6 +980,52 @@ class comicsExporter():
 
         document.write(location, encoding="UTF-8", xml_declaration=True)
         self.acbfLocation = location
+        success = True
+        success = self.createStandAloneACBF(document)
+        return success
+    
+    def createStandAloneACBF(self, document):
+        title = self.configDictionary["projectName"]
+        if "title" in self.configDictionary.keys():
+            title = self.configDictionary["title"]
+        location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], title + ".acbf"))
+        
+        meta = document._root.find("meta-data")
+        bookInfo = meta.find("book-info")
+        cover = bookInfo.find("coverpage")
+        
+        body = document._root.find("body")
+        pages = body.findall("page")
+        if (cover):
+            pages.append(cover)
+        
+        data = ET.Element("data")
+        
+        
+        #Covert pages to base64 strings.
+        for i in range(0, len(pages)):
+            image = pages[i].find("image")
+            href = image.get("href")
+            for p in self.pagesLocationList["CBZ"]:
+                if href in p:
+                    binary = ET.Element("binary")
+                    binary.set("id", href)
+                    imageFile = QImage()
+                    imageFile.load(p)
+                    imageData = QByteArray()
+                    buffer = QBuffer(imageData)
+                    imageFile.save(buffer, "PNG")
+                    #For now always embed as png.
+                    contentType = "image/png"
+                    binary.set("content-type", contentType)
+                    binary.text = bytearray(imageData.toBase64()).decode("ascii")
+                    
+                    image.set("href", "#"+ href)
+                    data.append(binary)
+        
+        document._root.append(data)
+        
+        document.write(location, encoding="UTF-8", xml_declaration=True)
         return True
 
     """

@@ -168,6 +168,7 @@ Things I still want to do:
 	- Generate text from the author list. (Requires text api)
 * clean up path relativeness. (Not sure how much better this can be done)
 * Make label removal just a list? (unsure)
+* PNG and JPEG export settings.
 
 ACBF list:
 
@@ -187,7 +188,8 @@ ACBF list:
 		+ Sign (For signs on buildings and the like.)
 		+ Inverted (Whether or not this should be treated as inverted text)
 		+ transparent(For a transparent wordballoon.)
-		+ Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.)
+		+ Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.) (See 1.2 support)
+    - Get page background color from the page if possible. (This might only work with canvas color, though)
 * 1.2 support:
     - Role: designer
     - Book-info: reading direction

@@ -505,7 +505,6 @@ class comicsExporter():
                 keys = str(keywords.text).split(",")
                 pKeys = []
                 for key in keys:
-                    print("key "+str(key))
                     if key in self.pageKeys:
                         pKeys.append(key)
                 pageData["keys"] = pKeys
@@ -965,7 +964,6 @@ class comicsExporter():
                 language = "en"
                 if "language" in self.configDictionary.keys():
                     language = self.configDictionary["language"]
-                print(str(p) + str(pageData["keys"]))
                 if "acbf_title" in pageData["keys"]:
                     title = ET.Element("title")
                     title.set("lang", language)

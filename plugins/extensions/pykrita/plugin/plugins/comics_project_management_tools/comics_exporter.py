@@ -653,6 +653,8 @@ class comicsExporter():
         for childNode in elRead:
             fontWeight = childNode.get("font-weight")
             fontItalic = childNode.get("font-style")
+            fontStrikeThrough = childNode.get("text-decoration")
+            fontBaseLine = childNode.get("baseline-shift")
             newElementMade = False
             if fontItalic is not None:
                 if (fontItalic == "italic"):
@@ -661,6 +663,17 @@ class comicsExporter():
             elif fontWeight is not None:
                 if (fontWeight=="bold" or int(fontWeight)>400):
                     newElement = ET.Element("Strong")
+                    newElementMade = True
+            elif fontStrikeThrough is not None:
+                if (fontStrikeThrough=="line-through"):
+                    newElement = ET.Element("Strikethrough")
+                    newElementMade = True
+            elif fontBaseLine is not None:
+                if (fontBaseLine=="super"):
+                    newElement = ET.Element("Sup")
+                    newElementMade = True
+                elif (fontBaseLine=="sub"):
+                    newElement = ET.Element("Sub")
                     newElementMade = True
 
             if newElementMade is True:

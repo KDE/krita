@@ -16,11 +16,14 @@ if (WIN32)
         -opensource -confirm-license
         #
         -release -platform win32-g++ -prefix ${EXTPREFIX_qt}
-        QMAKE_CXXFLAGS+=-Wa,-mbig-obj
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}
         QMAKE_LFLAGS_SHLIB+=${SECURITY_SHARED_LINKER_FLAGS}
         QMAKE_LFLAGS_SONAME+=${SECURITY_SHARED_LINKER_FLAGS}
         QMAKE_LFLAGS_PLUGIN+=${SECURITY_SHARED_LINKER_FLAGS}
+        # The following additional CXXFLAG is to workaround an issue in the Qt
+        # build system. Please check when updating to the next Qt version.
+        # See: https://bugreports.qt.io/browse/QTBUG-66123
+        QMAKE_CXXFLAGS+=-fno-keep-inline-dllexport
     )
     if (QT_ENABLE_DEBUG_INFO)
         # Set the option to build Qt with debugging info enabled

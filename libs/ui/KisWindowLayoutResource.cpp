@@ -145,6 +145,9 @@ KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(
 void KisWindowLayoutResource::applyLayout()
 {
     KisPart *kisPart = KisPart::instance();
+
+    kisPart->setLastLayoutName(name());
+
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
 
     d->openNecessaryWindows(currentWindows);

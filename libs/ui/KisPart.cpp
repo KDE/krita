@@ -119,6 +119,8 @@ public:
     bool primaryWorkspaceFollowsFocus{false};
     QUuid primaryWindow;
 
+    QString lastLayoutName;
+
     bool queryCloseDocument(KisDocument *document) {
         Q_FOREACH(auto view, views) {
             if (view && view->isVisible() && view->document() == document) {
@@ -625,4 +627,15 @@ bool KisPart::restoreSession(const QString &sessionName)
 void KisPart::setCurrentSession(KisSessionResource *session)
 {
     d->currentSession = session;
+}
+
+
+QString KisPart::lastLayoutName()
+{
+    return d->lastLayoutName;
+}
+
+void KisPart::setLastLayoutName(const QString &name)
+{
+    d->lastLayoutName = name;
 }

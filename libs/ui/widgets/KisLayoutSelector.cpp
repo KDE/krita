@@ -18,6 +18,7 @@
 
 #include <KisWindowLayoutResource.h>
 #include <kis_resource_server_provider.h>
+#include <KisPart.h>
 #include "KisLayoutSelector.h"
 #include "KisSessionResource.h"
 
@@ -32,8 +33,6 @@ struct KisLayoutSelector::Private {
 
     bool blockChange = false;
 };
-
-QString lastSelectedItemName;
 
 KisLayoutSelector::KisLayoutSelector(QWidget *parent)
     : QComboBox(parent)
@@ -62,8 +61,9 @@ void KisLayoutSelector::updateItems() {
         addItem(session->name(), Private::Session);
     }
 
-    if (!lastSelectedItemName.isEmpty()) {
-        int index = findText(lastSelectedItemName);
+    const QString &lastLayout = KisPart::instance()->lastLayoutName();
+    if (!lastLayout.isEmpty()) {
+        int index = findText(lastLayout);
         if (index >=0) setCurrentIndex(index);
     }
 
@@ -76,7 +76,6 @@ void KisLayoutSelector::slotItemChanged(int index)
     if (d->blockChange) return;
 
     const QString name = itemText(index);
-    lastSelectedItemName = name;
 
     switch (currentData(Qt::UserRole).toInt()) {
         case Private::WindowLayout: {

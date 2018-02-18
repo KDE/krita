@@ -289,6 +289,13 @@ public:
      */
     bool closingSession() const;
 
+    /**
+     * The name of the last activated window layout or session.
+     * Used by the layout selector.
+     */
+    QString lastLayoutName();
+    void setLastLayoutName(const QString &name);
+
 private Q_SLOTS:
 
     void slotDocumentSaved();

@@ -489,12 +489,15 @@ class comicsExporter():
 
                 # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
-                root = page.rootNode()
+                panelsAndText = []
                 
+                # These three lines are what is causing the page not to close.
+                root = page.rootNode()
+                self.removeLayers(labelList, root)
+                self.getPanelsAndText(root, panelsAndText)
                 #We'll need the offset and scale for aligning the panels and text correctly. We're getting this from the CBZ
                 
-                panelsAndText = []
-                self.getPanelsAndText(root, panelsAndText)
+                
                 pageData = {}
                 pageData["vector"] = panelsAndText
                 tree = ET.fromstring(page.documentInfo())
@@ -508,104 +511,94 @@ class comicsExporter():
                     if key in self.pageKeys:
                         pKeys.append(key)
                 pageData["keys"] = pKeys
-                self.removeLayers(labelList, node=root)
-                page.refreshProjection()
+                
+                page.lock()
                 page.flatten()
-                while page.isIdle() is False:
-                    page.waitForDone()
+                page.unlock()
                 batchsave = Application.batchmode()
                 Application.setBatchmode(True)
                 # Start making the format specific copy.
-                if page.isIdle():
-                    for key in sizesList.keys():
-                        w = sizesList[key]
-                        # copy over data
-                        
-                        projection = page.clone()
-                        projection.setBatchmode(True)
-                        # Crop. Cropping per guide only happens if said guides have been found.
-                        if w["Crop"] is True:
-                            listHGuides = []
-                            listHGuides = page.horizontalGuides()
-                            listHGuides.sort()
-                            for i in range(len(listHGuides)-1, 0, -1):
-                                if listHGuides[i] < 0 or listHGuides[i] > page.height():
-                                    listHGuides.pop(i)
-                            listVGuides = page.verticalGuides()
-                            listVGuides.sort()
-                            for i in range(len(listVGuides)-1, 0, -1):
-                                if listVGuides[i] < 0 or listVGuides[i] > page.width():
-                                    listVGuides.pop(i)
-                            if self.configDictionary["cropToGuides"] and len(listVGuides) > 1:
-                                cropx = listVGuides[0]
-                                cropw = listVGuides[-1] - cropx
-                            else:
-                                cropx = self.configDictionary["cropLeft"]
-                                cropw = page.width() - self.configDictionary["cropRight"] - cropx
-                            if self.configDictionary["cropToGuides"] and len(listHGuides) > 1:
-                                cropy = listHGuides[0]
-                                croph = listHGuides[-1] - cropy
-                            else:
-                                cropy = self.configDictionary["cropTop"]
-                                croph = page.height() - self.configDictionary["cropBottom"] - cropy
-                            
-                            projection.crop(cropx, cropy, cropw, croph)
-                            projection.waitForDone()
-
-                        # resize appropriately
-                        res = page.resolution()
-                        listScales = [projection.width(), projection.height(), res, res]
-                        projectionOldSize = [projection.width(), projection.height()]
-                        sizesCalc = sizesCalculator()
-                        listScales = sizesCalc.get_scale_from_resize_config(config=w, listSizes=listScales)
-                        projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
-                        projection.waitForDone()
-
-                        # png, gif and other webformats should probably be in 8bit srgb at maximum.
-                        if key is not "TIFF":
-                            if projection.colorModel() is not "RGBA" or projection.colorModel() is not "GRAYA" or projection.colorDepth() is not "U8":
-                                projection.setColorSpace("RGBA", "U8", "sRGB built-in")
-                                projection.refreshProjection()
+                for key in sizesList.keys():
+                    w = sizesList[key]
+                    # copy over data
+                    projection = page.clone()
+                    projection.setBatchmode(True)
+                    # Crop. Cropping per guide only happens if said guides have been found.
+                    if w["Crop"] is True:
+                        listHGuides = []
+                        listHGuides = page.horizontalGuides()
+                        listHGuides.sort()
+                        for i in range(len(listHGuides)-1, 0, -1):
+                            if listHGuides[i] < 0 or listHGuides[i] > page.height():
+                                listHGuides.pop(i)
+                        listVGuides = page.verticalGuides()
+                        listVGuides.sort()
+                        for i in range(len(listVGuides)-1, 0, -1):
+                            if listVGuides[i] < 0 or listVGuides[i] > page.width():
+                               listVGuides.pop(i)
+                        if self.configDictionary["cropToGuides"] and len(listVGuides) > 1:
+                            cropx = listVGuides[0]
+                            cropw = listVGuides[-1] - cropx
                         else:
-                            # Tiff on the other hand can handle all the colormodels, but can only handle integer bit depths.
-                            # Tiff is intended for print output, and 16 bit integer will be sufficient.
-                            if projection.colorDepth() is not "U8" or projection.colorDepth() is not "U16":
-                                projection.setColorSpace(page.colorModel(), "U16", page.colorProfile())
-                                projection.refreshProjection()
-
-                        # save
-                        # Make sure the folder name for this export exists. It'll allow us to keep the
-                        # export folders nice and clean.
-                        folderName = str(key + "-" + w["FileType"])
-                        if Path(exportPath / folderName).exists() is False:
-                            Path.mkdir(exportPath / folderName)
-                        # Get a nice and descriptive fle name.
-                        fn = os.path.join(str(Path(exportPath / folderName)), "page_" + format(p, "03d") + "_" + str(listScales[0]) + "x" + str(listScales[1]) + "." + w["FileType"])
-                        # Finally save and add the page to a list of pages. This will make it easy for the packaging function to
-                        # find the pages and store them.
-                        if projection.isIdle():
-                            projection.exportImage(fn, InfoObject())
-                            projection.waitForDone()
-                            if key == "CBZ":
-                                transform = {}
-                                transform["offsetX"] = cropx
-                                transform["offsetY"] = cropy
-                                transform["resDiff"] = page.resolution()/72
-                                transform["scaleWidth"] = projection.width()/projectionOldSize[0]
-                                transform["scaleHeight"] = projection.height()/projectionOldSize[1]
-                                pageData["transform"] = transform
-                        self.pagesLocationList[key].append(fn)
-
-                        # close
-                        
-                        projection.close()
-                    
-                    self.acbfPageData.append(pageData)
-                    page.close()
+                            cropx = self.configDictionary["cropLeft"]
+                            cropw = page.width() - self.configDictionary["cropRight"] - cropx
+                        if self.configDictionary["cropToGuides"] and len(listHGuides) > 1:
+                            cropy = listHGuides[0]
+                            croph = listHGuides[-1] - cropy
+                        else:
+                            cropy = self.configDictionary["cropTop"]
+                            croph = page.height() - self.configDictionary["cropBottom"] - cropy
+                        projection.crop(cropx, cropy, cropw, croph)
+                        projection.waitForDone()
+                        qApp.processEvents()
+                        # resize appropriately
+                    res = page.resolution()
+                    listScales = [projection.width(), projection.height(), res, res]
+                    projectionOldSize = [projection.width(), projection.height()]
+                    sizesCalc = sizesCalculator()
+                    listScales = sizesCalc.get_scale_from_resize_config(config=w, listSizes=listScales)
+                    projection.unlock()
+                    projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
+                    projection.waitForDone()
+                    qApp.processEvents()
+                    # png, gif and other webformats should probably be in 8bit srgb at maximum.
+                    if key != "TIFF":
+                        if (projection.colorModel() != "RGBA" and projection.colorModel() != "GRAYA") or projection.colorDepth() != "U8":
+                            projection.setColorSpace("RGBA", "U8", "sRGB built-in")
+                    else:
+                        # Tiff on the other hand can handle all the colormodels, but can only handle integer bit depths.
+                        # Tiff is intended for print output, and 16 bit integer will be sufficient.
+                        if projection.colorDepth() != "U8" or projection.colorDepth() != "U16":
+                            projection.setColorSpace(page.colorModel(), "U16", page.colorProfile())
+                    # save
+                    # Make sure the folder name for this export exists. It'll allow us to keep the
+                    # export folders nice and clean.
+                    folderName = str(key + "-" + w["FileType"])
+                    if Path(exportPath / folderName).exists() is False:
+                        Path.mkdir(exportPath / folderName)
+                    # Get a nice and descriptive fle name.
+                    fn = os.path.join(str(Path(exportPath / folderName)), "page_" + format(p, "03d") + "_" + str(listScales[0]) + "x" + str(listScales[1]) + "." + w["FileType"])
+                    # Finally save and add the page to a list of pages. This will make it easy for the packaging function to
+                    # find the pages and store them.
+                    projection.exportImage(fn, InfoObject())
+                    projection.waitForDone()
+                    qApp.processEvents()
+                    if key == "CBZ":
+                        transform = {}
+                        transform["offsetX"] = cropx
+                        transform["offsetY"] = cropy
+                        transform["resDiff"] = page.resolution()/72
+                        transform["scaleWidth"] = projection.width()/projectionOldSize[0]
+                        transform["scaleHeight"] = projection.height()/projectionOldSize[1]
+                        pageData["transform"] = transform
+                    self.pagesLocationList[key].append(fn)
+                    projection.close()
+                self.acbfPageData.append(pageData)
+                page.close()
             progress.setValue(len(pagesList))
             Application.setBatchmode(batchsave)
             # TODO: Check what or whether memory leaks are still caused and otherwise remove the entry below.
-            print("CPMT: Export has finished. There are memory leaks, but the source is not obvious due wild times on git master. Last attempt to fix was august 2017")
+            print("CPMT: Export has finished. There are memory leaks, caused by layers")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
         return False
@@ -626,7 +619,7 @@ class comicsExporter():
                         else:
                             self.handleShapeDescription(shape, list)
         else:
-            if len(node.childNodes()) > 0:
+            if node.childNodes():
                 for child in node.childNodes():
                     self.getPanelsAndText(node = child, list = list)
     """
@@ -723,7 +716,7 @@ class comicsExporter():
         if node.colorLabel() in labels:
             node.remove()
         else:
-            if len(node.childNodes()) > 0:
+            if node.childNodes():
                 for child in node.childNodes():
                     self.removeLayers(labels, node=child)
 
@@ -840,7 +833,7 @@ class comicsExporter():
             if "cover" in self.configDictionary.keys():
                 pageList = []
                 pageList = self.configDictionary["pages"]
-                coverNumber = pageList.index(self.configDictionary["cover"])
+                coverNumber = max([pageList.index(self.configDictionary["cover"]), 0])
                 image = ET.Element("image")
                 if len(self.pagesLocationList["CBZ"]) >= coverNumber:
                     coverpageurl = self.pagesLocationList["CBZ"][coverNumber]

@@ -25,6 +25,7 @@
 #include "../KoPathPointData.h"
 #include <MockShapes.h>
 #include <QTest>
+#include <KoCanvasUpdatesCollector.h>
 
 void TestPathTool::koPathPointSelection_selectedSegmentsData()
 {
@@ -52,22 +53,25 @@ void TestPathTool::koPathPointSelection_selectedSegmentsData()
     path3.close();
 
     MockCanvas canvas;
+    KoCanvasUpdatesCollector pendingUpdates(&canvas);
+
+
     KoPathTool tool(&canvas);
     QVERIFY(1 == 1);
     KoPathToolSelection pps(&tool);
-    pps.add(point11, false);
-    pps.add(point12, false);
-    pps.add(point13, false);
-    pps.add(point14, false);
-    pps.add(point16, false);
-    pps.add(point18, false);
-    pps.add(point19, false);
-    pps.add(point21, false);
-    pps.add(point22, false);
-    pps.add(point23, false);
-    pps.add(point31, false);
-    pps.add(point32, false);
-    pps.add(point33, false);
+    pps.add(point11, false, pendingUpdates);
+    pps.add(point12, false, pendingUpdates);
+    pps.add(point13, false, pendingUpdates);
+    pps.add(point14, false, pendingUpdates);
+    pps.add(point16, false, pendingUpdates);
+    pps.add(point18, false, pendingUpdates);
+    pps.add(point19, false, pendingUpdates);
+    pps.add(point21, false, pendingUpdates);
+    pps.add(point22, false, pendingUpdates);
+    pps.add(point23, false, pendingUpdates);
+    pps.add(point31, false, pendingUpdates);
+    pps.add(point32, false, pendingUpdates);
+    pps.add(point33, false, pendingUpdates);
 
     QList<KoPathPointData> pd2;
     pd2.append(KoPathPointData(&path1, path1.pathPointIndex(point11)));

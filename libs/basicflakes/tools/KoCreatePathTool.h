@@ -29,11 +29,14 @@
 // TODO: make private
 #include <KoPathPoint.h>
 
+#include <KoHandleUtilityTypes.h>
+
 #include <QList>
 
 class KoPathShape;
 class KoShapeStroke;
 class KoShapeHandlesCollection;
+class KoCanvasUpdatesCollector;
 
 class KoCreatePathToolPrivate;
 
@@ -92,21 +95,21 @@ protected:
     virtual void addPathShape(KoPathShape* pathShape);
 
 protected:
-    QRectF shapeAndSnapGuidesRect(KoShape *shape) const;
-    QRectF pathPointBoundingRect(KoPathPoint *pt, KoPathPoint::PointTypes types, bool activeOnly = true) const;
-    QRectF activePointBoundingRect() const;
-    void setMouseOverFirstPoint(bool value);
+    QVector<QRectF> shapeAndSnapGuidesRect(KoShape *shape) const;
+    QVector<QRectF> pathPointUpdateRects(KoPathPoint *pt, KoPathPoint::PointTypes types, bool activeOnly = true) const;
+    QVector<QRectF> activePointUpdateRects() const;
+    void setMouseOverFirstPoint(bool value, KoCanvasUpdatesCollector &pendingUpdates);
     bool isOverFirstPoint(const QPointF &pos) const;
 
-    KoShapeHandlesCollection handlesCollection() const;
+    QVector<KoFlake::HandlesRecord> handlesCollection() const;
 protected:
     /**
       * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.
       */
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
-    void endPath();
-    void endPathWithoutLastPoint();
+    void endPath(KoCanvasUpdatesCollector &pendingUpdates);
+    void endPathWithoutLastPoint(KoCanvasUpdatesCollector &pendingUpdates);
     void cancelPath();
     void removeLastPoint();
 

@@ -29,6 +29,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include <KisView.h>
+#include <KoCanvasUpdatesCollector.h>
 
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
@@ -41,7 +42,8 @@ KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
 
 void KisToolSelectPath::requestStrokeEnd()
 {
-    localTool()->endPathWithoutLastPoint();
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+    localTool()->endPathWithoutLastPoint(pendingUpdates);
 }
 
 void KisToolSelectPath::requestStrokeCancellation()

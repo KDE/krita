@@ -14,6 +14,8 @@ add_subdirectory(tests)
 set(kritaflake_SRCS
     KoGradientHelper.cpp
     KoFlake.cpp
+    KoFlakeUtils.cpp
+    KoHandleUtilityTypes.cpp
     KoCanvasBase.cpp
     KoResourceManager_p.cpp
     KoDerivedResourceConverter.cpp
@@ -96,6 +98,7 @@ set(kritaflake_SRCS
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoShapeHandlesCollection.cpp
+    KoCanvasUpdatesCollector.cpp
     KoViewConverter.cpp
     KoInputDeviceHandler.cpp
     KoInputDeviceHandlerEvent.cpp

@@ -89,18 +89,16 @@ QPointF KoParameterShape::handlePosition(int handleId) const
     return d->handles.value(handleId);
 }
 
-void KoParameterShape::paintHandles(KisHandlePainterHelper &handlesHelper)
+KritaUtils::Handle KoParameterShape::handleObject(int handleId) const
 {
-    Q_D(KoParameterShape);
-
-    QList<QPointF>::const_iterator it(d->handles.constBegin());
-    for (; it != d->handles.constEnd(); ++it) {
-        handlesHelper.drawGradientHandle(*it);
-    }
+    Q_D(const KoParameterShape);
+    return KritaUtils::Handle(KritaUtils::Diamond, d->handles.value(handleId));
 }
 
 void KoParameterShape::paintHandle(KisHandlePainterHelper &handlesHelper, int handleId)
 {
+    // TODO: remove!
+
     Q_D(KoParameterShape);
     handlesHelper.drawGradientHandle(d->handles[handleId]);
 }

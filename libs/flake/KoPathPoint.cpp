@@ -25,7 +25,6 @@
 #include <FlakeDebug.h>
 #include <QPainter>
 #include <QPointF>
-#include <KisHandlePainterHelper.h>
 
 #include <math.h>
 
@@ -262,55 +261,48 @@ void KoPathPoint::map(const QTransform &matrix)
         d->shape->notifyChanged();
 }
 
-void KoPathPoint::paint(KisHandlePainterHelper &handlesHelper, PointTypes types, bool active)
+QVector<KoFlake::Handle> KoPathPoint::handles(PointTypes types, bool active)
 {
-    Q_FOREACH (const KisHandlePainterHelper::Handle &handle, handles(types, active)) {
-        handlesHelper.drawHandle(handle);
-    }
-}
-
-QVector<KisHandlePainterHelper::Handle> KoPathPoint::handles(PointTypes types, bool active)
-{
-    QVector<KisHandlePainterHelper::Handle> result;
+    QVector<KoFlake::Handle> result;
 
     const bool drawControlPoint1 = types & ControlPoint1 && (!active || activeControlPoint1());
     const bool drawControlPoint2 = types & ControlPoint2 && (!active || activeControlPoint2());
 
-    using Handle = KisHandlePainterHelper::Handle;
-    using Type = KisHandlePainterHelper::Type;
-    using LineType = KisHandlePainterHelper::LineType;
+    using Handle = KoFlake::Handle;
+    using HandlePointType = KoFlake::HandlePointType;
+    using HandleLineType = KoFlake::HandleLineType;
 
     // draw lines at the bottom
     if (drawControlPoint2) {
-        result << Handle(LineType::ConnectionLine, point(), controlPoint2());
+        result << Handle(HandleLineType::ConnectionLine, point(), controlPoint2());
     }
 
     if (drawControlPoint1) {
-        result << Handle(LineType::ConnectionLine, point(), controlPoint1());
+        result << Handle(HandleLineType::ConnectionLine, point(), controlPoint1());
     }
 
     // the point is lowest
     if (types & Node) {
-        Type type = Type::Rect;
+        HandlePointType type = HandlePointType::Rect;
 
         if (properties() & IsSmooth) {
-            type = Type::Circle;
+            type = HandlePointType::Circle;
         } else if (properties() & IsSymmetric) {
-            type = Type::Rect;
+            type = HandlePointType::Rect;
         } else {
-            type = Type::Diamond;
+            type = HandlePointType::Diamond;
         }
         result << Handle(type, point());
     }
 
     // then comes control point 2
     if (drawControlPoint2) {
-        result << Handle(Type::SmallCircle, controlPoint2());
+        result << Handle(HandlePointType::SmallCircle, controlPoint2());
     }
 
     // then comes control point 1
     if (drawControlPoint1) {
-        result << Handle(Type::SmallCircle, controlPoint1());
+        result << Handle(HandlePointType::SmallCircle, controlPoint1());
     }
 
     return result;
@@ -321,27 +313,6 @@ void KoPathPoint::setParent(KoPathShape* parent)
     // don't set to zero
     //Q_ASSERT(parent);
     d->shape = parent;
-}
-
-QRectF KoPathPoint::boundingRect(bool active) const
-{
-    // TODO: deprecate!!!
-
-    QRectF rect(d->point, QSize(1, 1));
-    if (!active && activeControlPoint1()) {
-        QRectF r1(d->point, QSize(1, 1));
-        r1.setBottomRight(d->controlPoint1);
-        rect = rect.united(r1);
-    }
-    if (!active && activeControlPoint2()) {
-        QRectF r2(d->point, QSize(1, 1));
-        r2.setBottomRight(d->controlPoint2);
-        rect = rect.united(r2);
-    }
-    if (d->shape)
-        return d->shape->shapeToDocument(rect);
-    else
-        return rect;
 }
 
 void KoPathPoint::reverse()

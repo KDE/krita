@@ -21,19 +21,31 @@
 
 #include "kritaflake_export.h"
 
-#include "KisHandlePainterHelper.h"
+#include <KoHandleUtilityTypes.h>
+
+class KoViewConverter;
+
 
 class KRITAFLAKE_EXPORT KoShapeHandlesCollection
 {
 public:
-    typedef QVector<KisHandlePainterHelper::Handle> HandlesVector;
-    typedef std::tuple<KoShape*, KisHandleStyle, HandlesVector> HandlesRecord;
+    using HandlesVector = KoFlake::HandlesVector;
+    using HandlesRecord = KoFlake::HandlesRecord;
 
     void addHandles(KoShape *shape, const KisHandleStyle &style, const HandlesVector &handles);
+    void addHandles(KoShape *shape, const KisHandleStyle &style, const KoFlake::Handle &handle);
+
+    void addHandles(const HandlesRecord &record);
+    void addHandles(const QVector<HandlesRecord> &records);
 
     void drawHandles(QPainter *painter, const KoViewConverter &converter, qreal handleRadius);
 
     QRectF boundingRectDoc(const KoViewConverter &converter, qreal handleRadius);
+    QVector<QRectF> updateDocRects(const KoViewConverter &converter, qreal handleRadius);
+    QVector<QRectF> updateDocRects(qreal handleRadius);
+
+    static QVector<QRectF> updateDocRects(const HandlesRecord &record, qreal handleRadius);
+    static QVector<QRectF> updateDocRects(const QVector<HandlesRecord> &records, qreal handleRadius);
 
 private:
     template <class Functor>

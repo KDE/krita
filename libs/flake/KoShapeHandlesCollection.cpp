@@ -20,13 +20,30 @@
 
 #include <tuple>
 #include <KoShape.h>
+#include <KoViewConverter.h>
+#include "KisHandlePainterHelper.h"
 
 
 void KoShapeHandlesCollection::addHandles(KoShape *shape,
                                           const KisHandleStyle &style,
-                                          const KoShapeHandlesCollection::HandlesVector &handles)
+                                          const KoFlake::HandlesVector &handles)
 {
-    m_handles << std::make_tuple(shape, style, handles);
+    m_handles << HandlesRecord(shape, style, handles);
+}
+
+void KoShapeHandlesCollection::addHandles(KoShape *shape, const KisHandleStyle &style, const KoFlake::Handle &handle)
+{
+    addHandles(shape, style, HandlesVector({handle}));
+}
+
+void KoShapeHandlesCollection::addHandles(const KoFlake::HandlesRecord &record)
+{
+    m_handles << record;
+}
+
+void KoShapeHandlesCollection::addHandles(const QVector<KoFlake::HandlesRecord> &records)
+{
+    m_handles << records;
 }
 
 template <class Functor>
@@ -39,19 +56,16 @@ void KoShapeHandlesCollection::applyToAllHandles(QPainter *painter,
     KoShape *lastPaintedShape = 0;
 
     for (auto it = m_handles.begin(); it != m_handles.end(); ++it) {
-        KoShape *shape = std::get<0>(*it);
+        KoShape *shape = it->shape;
 
         if (shape != lastPaintedShape) {
             lastPaintedShape = shape;
             helper = std::move(KoShape::createHandlePainterHelper(painter, shape, converter, handleRadius));
         }
 
-        const KisHandleStyle &style = std::get<1>(*it);
-        const HandlesVector &handles = std::get<2>(*it);
+        helper.setHandleStyle(it->style);
 
-        helper.setHandleStyle(style);
-
-        Q_FOREACH (const KisHandlePainterHelper::Handle &handle, handles) {
+        Q_FOREACH (const KritaUtils::Handle &handle, it->handles) {
             func(helper, handle);
         }
     }
@@ -60,7 +74,7 @@ void KoShapeHandlesCollection::applyToAllHandles(QPainter *painter,
 void KoShapeHandlesCollection::drawHandles(QPainter *painter, const KoViewConverter &converter, qreal handleRadius)
 {
     auto drawHandleFunc =
-            [] (KisHandlePainterHelper &helper, const KisHandlePainterHelper::Handle &handle) {
+            [] (KisHandlePainterHelper &helper, const KritaUtils::Handle &handle) {
         helper.drawHandle(handle);
     };
 
@@ -72,11 +86,43 @@ QRectF KoShapeHandlesCollection::boundingRectDoc(const KoViewConverter &converte
     QRectF boundingRect;
 
     auto drawHandleFunc =
-            [&boundingRect] (KisHandlePainterHelper &helper, const KisHandlePainterHelper::Handle &handle) {
+            [&boundingRect] (KisHandlePainterHelper &helper, const KritaUtils::Handle &handle) {
         boundingRect |= helper.handleBoundingRectDoc(handle);
     };
 
     applyToAllHandles(0, converter, handleRadius, drawHandleFunc);
 
     return boundingRect;
+}
+
+QVector<QRectF> KoShapeHandlesCollection::updateDocRects(const KoViewConverter &converter, qreal handleRadius)
+{
+    QVector<QRectF> result;
+
+    auto drawHandleFunc =
+        [&result] (KisHandlePainterHelper &helper, const KritaUtils::Handle &handle) {
+            result << helper.handleBoundingRectDoc(handle);
+        };
+
+    applyToAllHandles(0, converter, handleRadius, drawHandleFunc);
+
+    return result;
+}
+
+QVector<QRectF> KoShapeHandlesCollection::updateDocRects(qreal handleRadius)
+{
+    KoViewConverter fakeConverter;
+    return updateDocRects(fakeConverter, handleRadius);
+}
+
+QVector<QRectF> KoShapeHandlesCollection::updateDocRects(const KoFlake::HandlesRecord &record, qreal handleRadius)
+{
+    return updateDocRects(QVector<HandlesRecord>({record}), handleRadius);
+}
+
+QVector<QRectF> KoShapeHandlesCollection::updateDocRects(const QVector<KoFlake::HandlesRecord> &records, qreal handleRadius)
+{
+    KoShapeHandlesCollection collection;
+    collection.addHandles(records);
+    return collection.updateDocRects(handleRadius);
 }

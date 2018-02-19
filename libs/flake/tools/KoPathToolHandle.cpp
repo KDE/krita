@@ -36,7 +36,8 @@
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
 #include <QPainter>
-#include <KisHandlePainterHelper.h>
+#include <KoShapeHandlesCollection.h>
+#include <KoCanvasUpdatesCollector.h>
 
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
@@ -60,7 +61,7 @@ PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint
 {
 }
 
-void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void PointHandle::collectHandles(KoShapeHandlesCollection &handles, const KisHandleStyle &style) const
 {
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
@@ -69,24 +70,13 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
         type = KoPathPoint::All;
     }
 
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_activePoint->parent(), converter, handleRadius);
-    helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-    m_activePoint->paint(helper, type);
-}
-
-void PointHandle::repaint() const
-{
-    m_tool->repaint(m_oldRepaintedRect);
-    bool active = false;
-    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-    if (selection && selection->contains(m_activePoint))
-        active = true;
-    m_oldRepaintedRect = m_activePoint->boundingRect(!active);
-    m_tool->repaint(m_oldRepaintedRect);
+    handles.addHandles(m_activePoint->parent(), style, m_activePoint->handles(type));
 }
 
 KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
 {
+    KoCanvasUpdatesCollector pendingUpdates(m_tool->canvas());
+
     if ((event->button() & Qt::LeftButton) == 0)
         return 0;
     if ((event->modifiers() & Qt::ControlModifier) == 0) { // no shift pressed.
@@ -95,16 +85,14 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
         // control select adds/removes points to/from the selection
         if (event->modifiers() & Qt::ShiftModifier) {
             if (selection->contains(m_activePoint)) {
-                selection->remove(m_activePoint);
+                selection->remove(m_activePoint, pendingUpdates);
             } else {
-                selection->add(m_activePoint, false);
+                selection->add(m_activePoint, false, pendingUpdates);
             }
-            m_tool->repaint(m_activePoint->boundingRect(false));
         } else {
             // no control modifier, so clear selection and select active point
             if (!selection->contains(m_activePoint)) {
-                selection->add(m_activePoint, true);
-                m_tool->repaint(m_activePoint->boundingRect(false));
+                selection->add(m_activePoint, true, pendingUpdates);
             }
         }
         // TODO remove canvas from call ?
@@ -158,9 +146,17 @@ void PointHandle::trySelectHandle()
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
     if (!selection->contains(m_activePoint) && m_activePointType == KoPathPoint::Node) {
-        selection->clear();
-        selection->add(m_activePoint, false);
+        KoCanvasUpdatesCollector pendingUpdates(m_tool->canvas());
+
+        selection->clear(pendingUpdates);
+        selection->add(m_activePoint, false, pendingUpdates);
     }
+}
+
+bool PointHandle::compareTo(const KoPathToolHandle *_other) const
+{
+    const PointHandle *other = dynamic_cast<const PointHandle*>(_other);
+    return other && other->m_activePoint == m_activePoint && other->m_activePointType == m_activePointType;
 }
 
 ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId)
@@ -170,24 +166,19 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 {
 }
 
-void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void ParameterHandle::collectHandles(KoShapeHandlesCollection &handles, const KisHandleStyle &style) const
 {
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_parameterShape, converter, handleRadius);
-    helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-    m_parameterShape->paintHandle(helper, m_handleId);
-}
-
-void ParameterHandle::repaint() const
-{
-    m_tool->repaint(m_parameterShape->shapeToDocument(QRectF(m_parameterShape->handlePosition(m_handleId), QSize(1, 1))));
+    handles.addHandles(m_parameterShape, style, m_parameterShape->handleObject(m_handleId));
 }
 
 KoInteractionStrategy * ParameterHandle::handleMousePress(KoPointerEvent *event)
 {
     if (event->button() & Qt::LeftButton) {
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-        if (selection)
-            selection->clear();
+        if (selection) {
+            KoCanvasUpdatesCollector pendingUpdates(m_tool->canvas());
+            selection->clear(pendingUpdates);
+        }
         return new KoParameterChangeStrategy(m_tool, m_parameterShape, m_handleId);
     }
     return 0;
@@ -198,6 +189,11 @@ bool ParameterHandle::check(const QList<KoPathShape*> &selectedShapes)
     return selectedShapes.contains(m_parameterShape);
 }
 
+bool ParameterHandle::compareTo(const KoPathToolHandle *_other) const
+{
+    const ParameterHandle *other = dynamic_cast<const ParameterHandle*>(_other);
+    return other && other->m_parameterShape == m_parameterShape && other->m_handleId == m_handleId;
+}
 
 ConnectionHandle::ConnectionHandle(KoPathTool *tool, KoParameterShape *parameterShape, int handleId)
         : ParameterHandle(tool, parameterShape, handleId)
@@ -208,8 +204,10 @@ KoInteractionStrategy * ConnectionHandle::handleMousePress(KoPointerEvent *event
 {
     if (event->button() & Qt::LeftButton) {
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
-        if (selection)
-            selection->clear();
+        if (selection) {
+            KoCanvasUpdatesCollector pendingUpdates(m_tool->canvas());
+            selection->clear(pendingUpdates);
+        }
         KoConnectionShape * shape = dynamic_cast<KoConnectionShape*>(m_parameterShape);
         if (! shape)
             return 0;

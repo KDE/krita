@@ -27,6 +27,8 @@
 class KoParameterShapePrivate;
 class KisHandlePainterHelper;
 
+#include <KoHandleUtilityTypes.h>
+
 /**
  * KoParameterShape is the base class for all parametric shapes
  * in flake.
@@ -77,14 +79,7 @@ public:
      */
     QPointF handlePosition(int handleId) const;
 
-    /**
-     * @brief Paint the handles
-     *
-     * @param painter the painter to paint the handles on
-     * @param converter the view converter for applying the actual zoom
-     * @param handleRadius the radius of the handles used for painting
-     */
-    void paintHandles(KisHandlePainterHelper &handlesHelper);
+    KritaUtils::Handle handleObject(int handleId) const;
 
     /**
      * @brief Paint the given handles

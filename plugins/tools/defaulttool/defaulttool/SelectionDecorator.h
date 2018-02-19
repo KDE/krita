@@ -28,6 +28,8 @@
 #include <QPainter>
 #include <QPointer>
 
+#include <KoHandleUtilityTypes.h>
+
 class KoSelection;
 class KoCanvasResourceManager;
 
@@ -46,12 +48,17 @@ public:
     SelectionDecorator(KoCanvasResourceManager *resourceManager);
     ~SelectionDecorator() {}
 
+    SelectionDecorator(const SelectionDecorator &rhs) = default;
+    SelectionDecorator& operator=(const SelectionDecorator &rhs) = default;
+
     /**
      * paint the decortations.
      * @param painter the painter to paint to.
      * @param converter to convert between internal and view coordinates.
      */
     void paint(QPainter &painter, const KoViewConverter &converter);
+
+    QVector<QRectF> updateDocRects(const KoViewConverter &converter) const;
 
     /**
      * set the selection that is to be painted.
@@ -78,7 +85,8 @@ public:
     void setShowStrokeFillGradientHandles(bool value);
 
 private:
-    void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
+    QVector<KoFlake::HandlesRecord> calculateGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant) const;
+    QVector<KoFlake::HandlesRecord> calculateCurrentHandles() const;
 
 private:
     KoFlake::AnchorPosition m_hotPosition;

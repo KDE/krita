@@ -99,7 +99,7 @@ void KisHandlePainterHelper::setHandleStyle(const KisHandleStyle &style)
     m_handleStyle = style;
 }
 
-QPainterPath KisHandlePainterHelper::calculatePointHandlePath(KisHandlePainterHelper::Type type) const
+QPainterPath KisHandlePainterHelper::calculatePointHandlePath(KritaUtils::HandlePointType type) const
 {
     auto rectPath = [] (qreal radius) {
         QRectF rect(-radius, -radius, 2 * radius, 2 * radius);
@@ -132,30 +132,103 @@ QPainterPath KisHandlePainterHelper::calculatePointHandlePath(KisHandlePainterHe
     QPainterPath path;
 
     switch (type) {
-    case Invalid:
+    case KritaUtils::Invalid:
         KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "invalid handle type");
         break;
-    case Rect:
+    case KritaUtils::Rect:
         path = m_handleTransform.map(rectPath(m_handleRadius));
         break;
-    case Circle:
+    case KritaUtils::Circle:
         path = circlePath(m_handleRadius);
         break;
-    case SmallCircle:
+    case KritaUtils::SmallCircle:
         path = circlePath(0.7 * m_handleRadius);
         break;
-    case Diamond:
+    case KritaUtils::Diamond:
         path = m_handleTransform.map(diamondPolygon(1.41 * m_handleRadius));
         break;
-    case GradientDiamond:
-        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "not implemented");
+    case KritaUtils::GradientDiamond:
+        path = m_handleTransform.map(diamondPolygon(1.2 * m_handleRadius));
         break;
-    case GradientCross:
-        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "not implemented");
+    case KritaUtils::GradientCross: {
+        const qreal radius = 1.2 * m_handleRadius;
+
+        { // Draw a cross
+            path.moveTo(-radius, -radius);
+            path.lineTo(radius, radius);
+            path.moveTo(radius, -radius);
+            path.lineTo(-radius, radius);
+        }
+
+        { // Draw a square
+            const qreal halfRadius = 0.5 * radius;
+
+            path.moveTo(QPointF(-halfRadius, 0));
+            path.lineTo(QPointF(0, halfRadius));
+            path.lineTo(QPointF(halfRadius, 0));
+            path.lineTo(QPointF(0, -halfRadius));
+            path.lineTo(QPointF(-halfRadius, 0));
+        }
+
+        path = m_handleTransform.map(path);
         break;
+    }
     }
 
     return path;
+}
+
+QPainterPath KisHandlePainterHelper::calculateLineHandlePath(const Handle::LineHandle &handle) const
+{
+    QPainterPath path;
+
+    switch (handle.type) {
+    case KritaUtils::ConnectionLine:
+        path.moveTo(handle.p1);
+        path.lineTo(handle.p2);
+        path = m_painterTransform.map(path);
+        break;
+    case KritaUtils::GradientArrow: {
+        path.moveTo(handle.p1);
+        path.lineTo(handle.p2);
+        path = m_painterTransform.map(path);
+
+        const qreal radius = 1.5 * m_handleRadius;
+        const qreal length = kisDistance(handle.p1, handle.p2);
+        const QPointF diff = handle.p2 - handle.p1;
+
+        if (length > 5 * radius) {
+            //path = calculateArrow(handle.p1 + 0.33 * diff, handle.p1, radius);
+            path = calculateArrow(handle.p1 + 0.66 * diff, handle.p1, radius);
+        } else if (length > 3 * radius) {
+            path = calculateArrow(handle.p1 + 0.5 * diff, handle.p1, radius);
+        }
+
+        break;
+    }
+    }
+
+    return path;
+}
+
+QPainterPath KisHandlePainterHelper::calculateArrow(const QPointF &pos, const QPointF &from, qreal radius) const
+{
+    QPainterPath p;
+
+    QLineF line(pos, from);
+    line.setLength(radius);
+
+    QPointF norm = KisAlgebra2D::leftUnitNormal(pos - from);
+    norm *= 0.34 * radius;
+
+    p.moveTo(line.p2() + norm);
+    p.lineTo(line.p1());
+    p.lineTo(line.p2() - norm);
+
+    p.translate(-pos);
+
+    p = m_handleTransform.map(p).translated(m_painterTransform.map(pos));
+    return p;
 }
 
 void KisHandlePainterHelper::drawPathImpl(const QPainterPath &path)
@@ -166,76 +239,42 @@ void KisHandlePainterHelper::drawPathImpl(const QPainterPath &path)
     }
 }
 
+void KisHandlePainterHelper::strokePathImpl(const QPainterPath &path)
+{
+    Q_FOREACH (KisHandleStyle::IterationStyle it, m_handleStyle.handleIterations) {
+        PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
+        m_painter->strokePath(path, m_painter->pen());
+    }
+}
 QRectF KisHandlePainterHelper::pathBoundingRectDocImpl(const QPainterPath &path) const
 {
-    QPainterPath handlePath(path);
-
     // todo: cache transform!
     const QTransform viewToDoc = m_painterTransform.inverted() * m_localToDocTransform;
-    handlePath = viewToDoc.map(handlePath);
 
-    return kisGrowRect(handlePath.boundingRect(), 4.0);
+    // TODO: this growing of the rect doesn't work for some reason!
+
+    const QRectF docRect = viewToDoc.mapRect(kisGrowRect(path.boundingRect(), 5.0)).toAlignedRect();
+    return docRect;
 }
 
-
-void KisHandlePainterHelper::drawHandle(KisHandlePainterHelper::Type type, const QPointF &pos)
-{
-    QPainterPath handlePath = calculatePointHandlePath(type);
-    handlePath.translate(m_painterTransform.map(pos));
-
-    drawPathImpl(handlePath);
-}
-
-QRectF KisHandlePainterHelper::handleBoundingRectDoc(KisHandlePainterHelper::Type type, const QPointF &pos) const
-{
-    QPainterPath handlePath = calculatePointHandlePath(type);
-    handlePath.translate(m_painterTransform.map(pos));
-
-    return pathBoundingRectDocImpl(handlePath);
-}
-
-void KisHandlePainterHelper::drawHandle(KisHandlePainterHelper::LineType type, const QPointF &p1, const QPointF &p2)
-{
-    QPainterPath path;
-
-    switch (type) {
-    case ConnectionLine:
-        path.moveTo(p1);
-        path.lineTo(p2);
-        break;
-    }
-
-    path = m_painterTransform.map(path);
-
-    drawPathImpl(path);
-}
-
-QRectF KisHandlePainterHelper::handleBoundingRectDoc(KisHandlePainterHelper::LineType type, QPointF &p1, const QPointF &p2) const
-{
-    QPainterPath path;
-
-    switch (type) {
-    case ConnectionLine:
-        path.moveTo(p1);
-        path.lineTo(p2);
-        break;
-    }
-
-    path = m_painterTransform.map(path);
-    return pathBoundingRectDocImpl(path);
-}
-
-void KisHandlePainterHelper::drawHandle(const KisHandlePainterHelper::Handle &handle)
+void KisHandlePainterHelper::drawHandle(const KritaUtils::Handle &handle)
 {
     struct Visitor : public boost::static_visitor<>
     {
         Visitor(KisHandlePainterHelper *_q) : q(_q) {}
 
         void operator()(Handle::PointHandle handle) const {
-            q->drawHandle(handle.type, handle.pos);
+            QPainterPath handlePath = q->calculatePointHandlePath(handle.type);
+            handlePath.translate(q->m_painterTransform.map(handle.pos));
+
+            q->drawPathImpl(handlePath);
         }
         void operator()(Handle::LineHandle handle) const {
-            q->drawHandle(handle.type, handle.p1, handle.p2);
+            q->strokePathImpl(q->calculateLineHandlePath(handle));
+        }
+        void operator()(Handle::PathHandle handle) const {
+            const QPainterPath path = q->m_painterTransform.map(handle.path);
+            q->strokePathImpl(path);
         }
 
         KisHandlePainterHelper *q;
@@ -244,17 +283,25 @@ void KisHandlePainterHelper::drawHandle(const KisHandlePainterHelper::Handle &ha
     boost::apply_visitor(Visitor(this), handle.value);
 }
 
-QRectF KisHandlePainterHelper::handleBoundingRectDoc(const KisHandlePainterHelper::Handle &handle) const
+QRectF KisHandlePainterHelper::handleBoundingRectDoc(const KritaUtils::Handle &handle) const
 {
     struct Visitor : public boost::static_visitor<QRectF>
     {
         Visitor(const KisHandlePainterHelper *_q) : q(_q) {}
 
         QRectF operator()(Handle::PointHandle handle) const {
-            return q->handleBoundingRectDoc(handle.type, handle.pos);
+            QPainterPath handlePath = q->calculatePointHandlePath(handle.type);
+            handlePath.translate(q->m_painterTransform.map(handle.pos));
+
+            return q->pathBoundingRectDocImpl(handlePath);
         }
         QRectF operator()(Handle::LineHandle handle) const {
-            return q->handleBoundingRectDoc(handle.type, handle.p1, handle.p2);
+            return q->pathBoundingRectDocImpl(q->calculateLineHandlePath(handle));
+        }
+
+        QRectF operator()(Handle::PathHandle handle) const {
+            const QPainterPath path = q->m_painterTransform.map(handle.path);
+            return q->pathBoundingRectDocImpl(path);
         }
 
         const KisHandlePainterHelper *q;

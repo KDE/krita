@@ -28,6 +28,7 @@
 
 #include "kis_debug.h"
 #include <KisHandlePainterHelper.h>
+#include <KoShapeHandlesCollection.h>
 #include <KoCanvasResourceManager.h>
 #include <KisQPainterStateSaver.h>
 #include "KoShapeGradientHandles.h"
@@ -71,8 +72,65 @@ void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    KoShapeHandlesCollection collection;
+    collection.addHandles(calculateCurrentHandles());
+    collection.drawHandles(&painter, converter, m_handleRadius);
+}
+
+QVector<QRectF> SelectionDecorator::updateDocRects(const KoViewConverter &converter) const
+{
+    KoShapeHandlesCollection collection;
+    collection.addHandles(calculateCurrentHandles());
+    return collection.updateDocRects(converter, m_handleRadius);
+}
+
+QVector<KoFlake::HandlesRecord> SelectionDecorator::calculateGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant) const
+{
+    using KoFlake::Handle;
+    using KoFlake::HandlesRecord;
+    using KoFlake::HandlePointType;
+    using KoFlake::HandleLineType;
+
+    QVector<HandlesRecord> result;
+
+    KoShapeGradientHandles gradientHandles(fillVariant, shape);
+    QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
+
+    const QTransform t = shape->absoluteTransformation(0).inverted();
+
+    if (gradientHandles.type() == QGradient::LinearGradient) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);
+        if (handles.size() == 2) {
+
+            result << HandlesRecord(shape, KisHandleStyle::gradientArrows(),
+                                    Handle(HandleLineType::GradientArrow, t.map(handles[0].pos), t.map(handles[1].pos)));
+        }
+    }
+
+    Q_FOREACH (const KoShapeGradientHandles::Handle &h, handles) {
+        if (h.type == KoShapeGradientHandles::Handle::RadialCenter) {
+            result << HandlesRecord(shape, KisHandleStyle::gradientHandles(),
+                                    Handle(HandlePointType::GradientCross, t.map(h.pos)));
+        } else {
+            result << HandlesRecord(shape, KisHandleStyle::gradientHandles(),
+                                    Handle(HandlePointType::GradientDiamond, t.map(h.pos)));
+        }
+    }
+
+    return result;
+}
+
+QVector<KoFlake::HandlesRecord> SelectionDecorator::calculateCurrentHandles() const
+{
+    using KoFlake::Handle;
+    using KoFlake::HandlesRecord;
+    using KoFlake::HandlePointType;
+    using KoFlake::HandlePathType;
+
+    QVector<HandlesRecord> result;
+
     QList<KoShape*> selectedShapes = m_selection->selectedVisibleShapes();
-    if (selectedShapes.isEmpty()) return;
+    if (selectedShapes.isEmpty()) return result;
 
     const bool haveOnlyOneEditableShape =
         m_selection->selectedEditableShapes().size() == 1 &&
@@ -82,11 +140,9 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
-            KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
-
-            helper.setHandleStyle(KisHandleStyle::secondarySelection());
-            helper.drawRubberLine(shape->outlineRect());
+            result << HandlesRecord(shape,
+                                    KisHandleStyle::secondarySelection(),
+                                    Handle(HandlePathType::OutlinePath, shape->outlineRect()));
         }
 
         if (shape->isShapeEditable()) {
@@ -98,35 +154,37 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     // draw extra rubber line around all the shapes
     if (selectedShapes.size() > 1) {
-        KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
-
-        helper.setHandleStyle(KisHandleStyle::primarySelection());
-        helper.drawRubberLine(handleArea);
+        result << HandlesRecord(m_selection,
+                                KisHandleStyle::primarySelection(),
+                                Handle(HandlePathType::OutlinePath, handleArea));
     }
 
     // if we have no editable shape selected there
     // is no need drawing the selection handles
     if (editable) {
-        KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
-        helper.setHandleStyle(KisHandleStyle::primarySelection());
-
-        QPolygonF outline = handleArea;
 
         {
-            helper.drawHandleRect(outline.value(0));
-            helper.drawHandleRect(outline.value(1));
-            helper.drawHandleRect(outline.value(2));
-            helper.drawHandleRect(outline.value(3));
-            helper.drawHandleRect(0.5 * (outline.value(0) + outline.value(1)));
-            helper.drawHandleRect(0.5 * (outline.value(1) + outline.value(2)));
-            helper.drawHandleRect(0.5 * (outline.value(2) + outline.value(3)));
-            helper.drawHandleRect(0.5 * (outline.value(3) + outline.value(0)));
+            QPolygonF outline = handleArea;
+            QVector<Handle> handles;
 
+            handles << Handle(HandlePointType::Rect, outline.value(0));
+            handles << Handle(HandlePointType::Rect, outline.value(1));
+            handles << Handle(HandlePointType::Rect, outline.value(2));
+            handles << Handle(HandlePointType::Rect, outline.value(3));
+
+            handles << Handle(HandlePointType::Rect, 0.5 * (outline.value(0) + outline.value(1)));
+            handles << Handle(HandlePointType::Rect, 0.5 * (outline.value(1) + outline.value(2)));
+            handles << Handle(HandlePointType::Rect, 0.5 * (outline.value(2) + outline.value(3)));
+            handles << Handle(HandlePointType::Rect, 0.5 * (outline.value(3) + outline.value(0)));
+
+            result << HandlesRecord(m_selection, KisHandleStyle::primarySelection(), handles);
+        }
+
+        {
             QPointF hotPos = KoFlake::anchorToPoint(m_hotPosition, handleArea);
-            helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-            helper.drawHandleRect(hotPos);
+            result << HandlesRecord(m_selection,
+                                    KisHandleStyle::highlightedPrimaryHandles(),
+                                    Handle(HandlePointType::Rect, hotPos));
         }
     }
 
@@ -134,39 +192,11 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         KoShape *shape = selectedShapes.first();
 
         if (m_showFillGradientHandles) {
-            paintGradientHandles(shape, KoFlake::Fill, painter, converter);
+            result << calculateGradientHandles(shape, KoFlake::Fill);
         } else if (m_showStrokeFillGradientHandles) {
-            paintGradientHandles(shape, KoFlake::StrokeFill, painter, converter);
-        }
-    }
-}
-
-void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter)
-{
-    KoShapeGradientHandles gradientHandles(fillVariant, shape);
-    QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
-
-    KisHandlePainterHelper helper =
-        KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
-
-    const QTransform t = shape->absoluteTransformation(0).inverted();
-
-    if (gradientHandles.type() == QGradient::LinearGradient) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(handles.size() == 2);
-
-        if (handles.size() == 2) {
-            helper.setHandleStyle(KisHandleStyle::gradientArrows());
-            helper.drawGradientArrow(t.map(handles[0].pos), t.map(handles[1].pos), 1.5 * m_handleRadius);
+            result << calculateGradientHandles(shape, KoFlake::StrokeFill);
         }
     }
 
-    helper.setHandleStyle(KisHandleStyle::gradientHandles());
-
-    Q_FOREACH (const KoShapeGradientHandles::Handle &h, handles) {
-        if (h.type == KoShapeGradientHandles::Handle::RadialCenter) {
-            helper.drawGradientCrossHandle(t.map(h.pos), 1.2 * m_handleRadius);
-        } else {
-            helper.drawGradientHandle(t.map(h.pos), 1.2 * m_handleRadius);
-        }
-    }
+    return result;
 }

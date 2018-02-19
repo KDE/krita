@@ -36,6 +36,7 @@ class KoShapeMoveCommand;
 class KoSelection;
 class DefaultToolTabbedWidget;
 class KisViewManager;
+class SelectionDecorator;
 
 /**
  * The default tool (associated with the arrow icon) implements the default
@@ -146,12 +147,11 @@ private:
 
     void selectionReorder(KoShapeReorderCommand::MoveShapeType order);
     bool moveSelection(int direction, Qt::KeyboardModifiers modifiers);
-
-    /// Returns selection rectangle adjusted by handle proximity threshold
-    QRectF handlesSize();
+    SelectionDecorator createSelectionDecorator() const;
+    QVector<QRectF> handlesUpdateRects() const;
 
     // convenience method;
-    KoSelection *koSelection();
+    KoSelection *koSelection() const;
 
     void canvasResourceChanged(int key, const QVariant &res) override;
 

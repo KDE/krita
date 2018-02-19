@@ -62,6 +62,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include <KoInteractionStrategyFactory.h>
+#include <KoCanvasUpdatesCollector.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
 
@@ -688,11 +689,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 
 
-    SelectionDecorator decorator(canvas()->resourceManager());
-    decorator.setSelection(koSelection());
-    decorator.setHandleRadius(handleRadius());
-    decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-    decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+    SelectionDecorator decorator = createSelectionDecorator();
     decorator.paint(painter, converter);
 
     KoInteractionTool::paint(painter, converter);
@@ -711,51 +708,35 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
 
 void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+
+    if (currentStrategy()) {
+        pendingUpdates.addUpdate(handlesUpdateRects());
+        pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
+    }
+
+    // let the internal strategy change the handles...
     KoInteractionTool::mouseMoveEvent(event);
+
+    if (currentStrategy()) {
+        pendingUpdates.addUpdate(handlesUpdateRects());
+        pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
+    }
+
     if (currentStrategy() == 0 && koSelection() && koSelection()->count() > 0) {
-        QRectF bound = handlesSize();
+        bool inside;
+        KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
 
-        if (bound.contains(event->point)) {
-            bool inside;
-            KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
-
-            if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
-                m_lastHandle = newDirection;
-                m_mouseWasInsideHandles = inside;
-                //repaintDecorations();
-            }
-        } else {
-            /*if (m_lastHandle != KoFlake::NoHandle)
-                repaintDecorations(); */
-            m_lastHandle = KoFlake::NoHandle;
-            m_mouseWasInsideHandles = false;
-
-            // there used to be guides... :'''(
+        if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
+            m_lastHandle = newDirection;
+            m_mouseWasInsideHandles = inside;
+            //repaintDecorations();
         }
     } else {
         // there used to be guides... :'''(
     }
 
     updateCursor();
-}
-
-QRectF DefaultTool::handlesSize()
-{
-    KoSelection *selection = koSelection();
-    if (!selection->count()) return QRectF();
-
-    recalcSelectionBox(selection);
-
-    QRectF bound = m_selectionOutline.boundingRect();
-
-    // expansion Border
-    if (!canvas() || !canvas()->viewConverter()) {
-        return bound;
-    }
-
-    QPointF border = canvas()->viewConverter()->viewToDocument(QPointF(HANDLE_DISTANCE, HANDLE_DISTANCE));
-    bound.adjust(-border.x(), -border.y(), border.x(), border.y());
-    return bound;
 }
 
 void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -817,6 +798,23 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
     return result;
 }
 
+SelectionDecorator DefaultTool::createSelectionDecorator() const
+{
+    SelectionDecorator decorator(canvas()->resourceManager());
+    decorator.setSelection(koSelection());
+    decorator.setHandleRadius(handleRadius());
+    decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
+    decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+
+    return decorator;
+}
+
+QVector<QRectF> DefaultTool::handlesUpdateRects() const
+{
+    SelectionDecorator decorator = createSelectionDecorator();
+    return decorator.updateDocRects(*canvas()->viewConverter());
+}
+
 void DefaultTool::keyPressEvent(QKeyEvent *event)
 {
     KoInteractionTool::keyPressEvent(event);
@@ -846,9 +844,10 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
 
 void DefaultTool::repaintDecorations()
 {
-    if (koSelection() && koSelection()->count() > 0) {
-        canvas()->updateCanvas(handlesSize());
-    }
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+
+    pendingUpdates.addUpdate(handlesUpdateRects());
+    pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
 }
 
 void DefaultTool::copy() const
@@ -883,7 +882,7 @@ bool DefaultTool::paste()
     return false;
 }
 
-KoSelection *DefaultTool::koSelection()
+KoSelection *DefaultTool::koSelection() const
 {
     Q_ASSERT(canvas());
     Q_ASSERT(canvas()->selectedShapesProxy());
@@ -1369,8 +1368,10 @@ QList<QPointer<QWidget> > DefaultTool::createOptionWidgets()
 void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
 {
     if (key == HotPosition) {
+        KoCanvasUpdatesCollector pendingUpdates(canvas());
+        pendingUpdates.addUpdate(handlesUpdateRects());
         m_hotPosition = KoFlake::AnchorPosition(res.toInt());
-        repaintDecorations();
+        pendingUpdates.addUpdate(handlesUpdateRects());
     }
 }
 
@@ -1467,11 +1468,12 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
     }
 
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
     KoShape *shape = shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
 
     if (avoidSelection || (!shape && handle == KoFlake::NoHandle)) {
         if (!selectMultiple) {
-            repaintDecorations();
+            pendingUpdates.addUpdate(handlesUpdateRects());
             selection->deselectAll();
         }
         return new SelectionInteractionStrategy(this, event->point, false);
@@ -1479,16 +1481,17 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     if (selection->isSelected(shape)) {
         if (selectMultiple) {
-            repaintDecorations();
+            pendingUpdates.addUpdate(handlesUpdateRects());
             selection->deselect(shape);
+            pendingUpdates.addUpdate(handlesUpdateRects());
         }
     } else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
-        repaintDecorations();
+        pendingUpdates.addUpdate(handlesUpdateRects());
         if (!selectMultiple) {
             shapeManager->selection()->deselectAll();
         }
         selection->select(shape);
-        repaintDecorations();
+        pendingUpdates.addUpdate(handlesUpdateRects());
         // tablet selection isn't precise and may lead to a move, preventing that
         if (event->isTabletEvent()) {
             return new NopInteractionStrategy(this);

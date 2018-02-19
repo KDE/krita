@@ -48,6 +48,7 @@ public:
     KoShapeManager *shapeManager() const override;
     KoSelectedShapesProxy *selectedShapesProxy() const override;
     void updateCanvas(const QRectF& rc) override;
+    using KoCanvasBase::updateCanvas;
     KoToolProxy * toolProxy() const override;
     KoViewConverter *viewConverter() const override;
     QWidget* canvasWidget() override;

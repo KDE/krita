@@ -24,6 +24,7 @@
 #include "KoCanvasBase.h"
 #include "KoPathTool.h"
 #include "KoPathToolSelection.h"
+#include <KoCanvasUpdatesCollector.h>
 
 KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy(KoPathTool *tool, const QPointF &clicked)
         : KoShapeRubberSelectStrategy(tool, clicked)
@@ -33,9 +34,12 @@ KoPathPointRubberSelectStrategy::KoPathPointRubberSelectStrategy(KoPathTool *too
 
 void KoPathPointRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::KeyboardModifiers modifiers)
 {
-    KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+    Q_D(KoShapeRubberSelectStrategy);
+
+    KoPathToolSelection *selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
     if (selection && !(modifiers & Qt::ShiftModifier)) {
-        selection->clear();
+        KoCanvasUpdatesCollector pendingUpdates(m_tool->canvas());
+        selection->clear(pendingUpdates);
     }
 
     KoShapeRubberSelectStrategy::handleMouseMove(p, modifiers);
@@ -49,7 +53,8 @@ void KoPathPointRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers mo
         return;
     }
 
-    selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ShiftModifier));
-    m_tool->canvas()->updateCanvas(d->selectedRect().normalized());
-    selection->repaint();
+    KoCanvasUpdatesCollector pendingUpdates(m_tool->canvas());
+    pendingUpdates.addUpdate(d->selectedRect().toAlignedRect()); // the rect can be too small, so make it aligned
+
+    selection->selectPoints(d->selectedRect(), !(modifiers & Qt::ShiftModifier), pendingUpdates);
 }

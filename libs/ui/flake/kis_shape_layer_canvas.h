@@ -70,7 +70,7 @@ public:
     void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 
-    void updateCanvas(const QVector<QRectF> &region);
+    void updateCanvas(const QVector<QRectF> &region) override;
 
     void forceRepaint();
 

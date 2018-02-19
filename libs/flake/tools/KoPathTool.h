@@ -36,6 +36,7 @@ class KoInteractionStrategy;
 class KoPathToolHandle;
 class KoParameterShape;
 class KUndo2Command;
+class KoCanvasUpdatesCollector;
 
 class QAction;
 class QMenu;
@@ -67,9 +68,6 @@ public:
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
 
-    /// repaints the specified rect
-    void repaint(const QRectF &repaintRect);
-
     QMenu* popupActionsMenu() override;
 
 public Q_SLOTS:
@@ -87,7 +85,7 @@ private:
     struct PathSegment;
 
     void updateOptionsWidget();
-    PathSegment* segmentAtPoint(const QPointF &point);
+    PathSegment* segmentAtPoint(const QPointF &point, PathSegment *excludeSegment);
 
 private Q_SLOTS:
     void pointTypeChanged(QAction *type);
@@ -107,11 +105,19 @@ private Q_SLOTS:
     void slotSelectionChanged();
 
 private:
-    void clearActivePointSelectionReferences();
+    void clearActivePointSelectionReferences(KoCanvasUpdatesCollector &pendingUpdates);
     void initializeWithShapes(const QList<KoShape*> shapes);
     KUndo2Command* createPointToCurveCommand(const QList<KoPathPointData> &points);
-    void repaintSegment(PathSegment *pathSegment);
     void mergePointsImpl(bool doJoin);
+
+    void addSegmentHandle(KoShapeHandlesCollection &handles, PathSegment *pathSegment);
+
+    QVector<QRectF> pointSelectionUpdateRects();
+    QVector<QRectF> activeHandleUpdateRects();
+    QRectF activeSegmentUpdateRects();
+
+    void setActiveSegment(PathSegment *segment, KoCanvasUpdatesCollector &pendingUpdates);
+    void setActiveHandle(KoPathToolHandle *handle, KoCanvasUpdatesCollector &pendingUpdates);
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection
@@ -126,6 +132,7 @@ private:
 
     // make a frind so that it can test private member/methods
     friend class TestPathTool;
+    friend class KoPathToolSelection;
 
     KoInteractionStrategy *m_currentStrategy; ///< the rubber selection strategy
 

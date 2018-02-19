@@ -21,6 +21,7 @@
 #include <KoPathShape.h>
 #include <KoCanvasBase.h>
 #include <kis_cursor.h>
+#include <KoCanvasUpdatesCollector.h>
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
     : DelegatedPathTool(canvas, Qt::ArrowCursor,
@@ -36,7 +37,8 @@ void KisToolPath::resetCursorStyle()
 
 void KisToolPath::requestStrokeEnd()
 {
-    localTool()->endPathWithoutLastPoint();
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+    localTool()->endPathWithoutLastPoint(pendingUpdates);
 }
 
 void KisToolPath::requestStrokeCancellation()

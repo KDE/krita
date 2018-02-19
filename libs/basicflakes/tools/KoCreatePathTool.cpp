@@ -33,8 +33,9 @@
 #include "kis_int_parse_spin_box.h"
 #include <KoColor.h>
 #include "kis_canvas_resource_provider.h"
-#include <KisHandlePainterHelper.h>
 #include <KoShapeHandlesCollection.h>
+#include <KoFlakeUtils.h>
+#include "kis_painting_tweaks.h"
 
 #include <klocalizedstring.h>
 
@@ -54,11 +55,11 @@ KoCreatePathTool::~KoCreatePathTool()
 {
 }
 
-KoShapeHandlesCollection KoCreatePathTool::handlesCollection() const
+QVector<KoFlake::HandlesRecord> KoCreatePathTool::handlesCollection() const
 {
     Q_D(const KoCreatePathTool);
 
-    KoShapeHandlesCollection collection;
+    QVector<KoFlake::HandlesRecord> result;
 
     if (pathStarted()) {
         const bool firstPointActive = d->firstPoint == d->activePoint;
@@ -71,27 +72,27 @@ KoShapeHandlesCollection KoCreatePathTool::handlesCollection() const
                 paintFlags |= KoPathPoint::ControlPoint1;
             }
 
-            collection.addHandles(d->activePoint->parent(),
-                                  KisHandleStyle::highlightedPrimaryHandles(),
-                                  d->activePoint->handles(paintFlags, onlyPaintActivePoints));
+            result << KoFlake::HandlesRecord(d->activePoint->parent(),
+                                             KisHandleStyle::highlightedPrimaryHandles(),
+                                             d->activePoint->handles(paintFlags, onlyPaintActivePoints));
         }
 
         if (!(d->pointIsDragged && firstPointActive)) {
-            collection.addHandles(d->firstPoint->parent(),
-                                  d->mouseOverFirstPoint ?
-                                      KisHandleStyle::highlightedPrimaryHandles() :
-                                      KisHandleStyle::primarySelection(),
-                                  d->firstPoint->handles(KoPathPoint::Node));
+            result << KoFlake::HandlesRecord(d->firstPoint->parent(),
+                                             d->mouseOverFirstPoint ?
+                                                 KisHandleStyle::highlightedPrimaryHandles() :
+                                                 KisHandleStyle::primarySelection(),
+                                             d->firstPoint->handles(KoPathPoint::Node));
         }
     }
 
-    if (d->hoveredPoint && d->hoveredPoint != d->firstPoint) {
-        collection.addHandles(d->hoveredPoint->parent(),
-                              KisHandleStyle::highlightedPrimaryHandles(),
-                              d->hoveredPoint->handles(KoPathPoint::Node));
+    if (d->hoveredPoint) {
+        result << KoFlake::HandlesRecord(d->hoveredPoint->parent(),
+                                         KisHandleStyle::highlightedPrimaryHandles(),
+                                         d->hoveredPoint->handles(KoPathPoint::Node));
     }
 
-    return collection;
+    return result;
 }
 
 void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -103,7 +104,8 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         paintPath(*(d->shape), painter, converter);
     }
 
-    KoShapeHandlesCollection collection = handlesCollection();
+    KoShapeHandlesCollection collection;
+    collection.addHandles(handlesCollection());
     collection.drawHandles(&painter, converter, d->handleRadius);
 
     {
@@ -143,22 +145,23 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         return;
     }
 
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+    setMouseOverFirstPoint(d->shape && isOverFirstPoint(event->point), pendingUpdates);
 
-    setMouseOverFirstPoint(d->shape && isOverFirstPoint(event->point));
     const bool haveCloseModifier = listeningToModifiers() && (event->modifiers() & Qt::ShiftModifier);
 
     if ((event->button() == Qt::LeftButton) && haveCloseModifier && !d->mouseOverFirstPoint) {
-        endPathWithoutLastPoint();
+        endPathWithoutLastPoint(pendingUpdates);
         return;
     }
 
     d->finishAfterThisPoint = false;
     bool shouldEndPath = false;
-    QRectF dirtyRect = shapeAndSnapGuidesRect(d->shape);
-    dirtyRect |= activePointBoundingRect();
+
+    pendingUpdates.addUpdate(shapeAndSnapGuidesRect(d->shape));
+    pendingUpdates.addUpdate(activePointUpdateRects());
 
     const QPointF snappedPoint = canvas()->snapGuide()->snap(event->point, event->modifiers());
-
 
     if (pathStarted()) {
         if (d->mouseOverFirstPoint) {
@@ -178,7 +181,11 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
             QPointF newPoint = snappedPoint;
 
             // check whether we hit an start/end node of an existing path
-            d->existingEndPoint = d->endPointAtPosition(newPoint);
+            d->existingEndPoint =
+                KoFlake::findNearestPathEndPoint(newPoint,
+                                              canvas()->shapeManager(),
+                                              grabSensitivity(),
+                                              *canvas()->viewConverter());
 
             if (d->existingEndPoint.isValid() && d->existingEndPoint != d->existingStartPoint) {
                 newPoint = d->existingEndPoint.path->shapeToDocument(d->existingEndPoint.point->point());
@@ -203,7 +210,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         QPointF newPoint = snappedPoint;
 
         // check whether we hit an start/end node of an existing path
-        d->existingStartPoint = d->endPointAtPosition(newPoint);
+        d->existingStartPoint = KoFlake::findNearestPathEndPoint(newPoint,
+                                                              canvas()->shapeManager(),
+                                                              grabSensitivity(),
+                                                              *canvas()->viewConverter());
 
         if (d->existingStartPoint.isValid()) {
             newPoint = d->existingStartPoint.path->shapeToDocument(d->existingStartPoint.point->point());
@@ -211,7 +221,7 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
         d->activePoint = pathShape->moveTo(newPoint);
         d->firstPoint = d->activePoint;
-        setMouseOverFirstPoint(true);
+        setMouseOverFirstPoint(true, pendingUpdates);
 
         canvas()->snapGuide()->setAdditionalEditedShape(pathShape);
 
@@ -219,12 +229,11 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);
     }
 
-    dirtyRect |= shapeAndSnapGuidesRect(d->shape);
-    dirtyRect |= activePointBoundingRect();
+    pendingUpdates.addUpdate(shapeAndSnapGuidesRect(d->shape));
+    pendingUpdates.addUpdate(activePointUpdateRects());
 
-    canvas()->updateCanvas(dirtyRect);
     if (shouldEndPath) {
-        endPath();
+        endPath(pendingUpdates);
     } else {
         d->dragStartPoint = snappedPoint;
     }
@@ -248,63 +257,67 @@ bool KoCreatePathTool::pathStarted() const
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    endPathWithoutLastPoint();
+    Q_UNUSED(event);
+
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+    endPathWithoutLastPoint(pendingUpdates);
 }
 
 void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_D(KoCreatePathTool);
 
-    KoPathPoint *endPoint = d->endPointAtPosition(event->point);
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+
+    KoPathPoint *endPoint =
+        KoFlake::findNearestPathEndPoint(event->point,
+                                      canvas()->shapeManager(),
+                                      grabSensitivity(),
+                                      *canvas()->viewConverter());
 
     if (d->hoveredPoint != endPoint) {
-        QRectF dirtyRect;
-
-        dirtyRect |= pathPointBoundingRect(d->hoveredPoint, KoPathPoint::Node);
+        pendingUpdates.addUpdate(pathPointUpdateRects(d->hoveredPoint, KoPathPoint::Node));
         d->hoveredPoint = endPoint;
-        dirtyRect |= pathPointBoundingRect(d->hoveredPoint, KoPathPoint::Node);
-
-        canvas()->updateCanvas(dirtyRect);
+        pendingUpdates.addUpdate(pathPointUpdateRects(d->hoveredPoint, KoPathPoint::Node));
     }
 
     if (!pathStarted()) {
-        QRectF dirtyRect = canvas()->snapGuide()->boundingRect();
+        pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
         canvas()->snapGuide()->snap(event->point, event->modifiers());
-        dirtyRect |= canvas()->snapGuide()->boundingRect();
+        pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
 
-        canvas()->updateCanvas(dirtyRect);
-        setMouseOverFirstPoint(false);
+        setMouseOverFirstPoint(false, pendingUpdates);
         return;
     }
 
-    setMouseOverFirstPoint(isOverFirstPoint(event->point));
+    setMouseOverFirstPoint(isOverFirstPoint(event->point), pendingUpdates);
 
-    {
-        QRectF dirtyRect = shapeAndSnapGuidesRect(d->shape);
-        const QPointF snappedPosition = canvas()->snapGuide()->snap(event->point, event->modifiers());
+    // --- here we are guaranteed to have a shape created ---
 
-        dirtyRect |= activePointBoundingRect();
+    pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
+    const QPointF snappedPosition = canvas()->snapGuide()->snap(event->point, event->modifiers());
+    pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
 
-        if (event->buttons() & Qt::LeftButton) {
-            if (d->pointIsDragged ||
-                viewDistanceFromDocPoints(snappedPosition, d->dragStartPoint) > grabSensitivity()) {
+    pendingUpdates.addUpdate(activePointUpdateRects());
 
-                d->pointIsDragged = true;
-                QPointF offset = snappedPosition - d->activePoint->point();
-                d->activePoint->setControlPoint2(d->activePoint->point() + offset);
+    if (event->buttons() & Qt::LeftButton) {
+        if (d->pointIsDragged ||
+            viewDistanceFromDocPoints(snappedPosition, d->dragStartPoint) > grabSensitivity()) {
 
-                // pressing <alt> stops controls points moving symmetrically
-                if ((event->modifiers() & Qt::AltModifier) == 0) {
-                    d->activePoint->setControlPoint1(d->activePoint->point() - offset);
-                }
+            d->pointIsDragged = true;
+            QPointF offset = snappedPosition - d->activePoint->point();
+            d->activePoint->setControlPoint2(d->activePoint->point() + offset);
+
+            // pressing <alt> stops controls points moving symmetrically
+            if ((event->modifiers() & Qt::AltModifier) == 0) {
+                d->activePoint->setControlPoint1(d->activePoint->point() - offset);
             }
-        } else if (d->shape->pointCount() > 1) {
-            d->activePoint->setPoint(snappedPosition);
         }
-
-        dirtyRect |= activePointBoundingRect();
-        canvas()->updateCanvas(shapeAndSnapGuidesRect(d->shape) | dirtyRect);
+    } else if (d->shape->pointCount() > 1) {
+        d->activePoint->setPoint(snappedPosition);
     }
+
+    pendingUpdates.addUpdate(activePointUpdateRects());
 }
 
 void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -315,8 +328,10 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     d->listeningToModifiers = true; // After the first press-and-release
 
-    QRectF dirtyRect = shapeAndSnapGuidesRect(d->shape);
-    dirtyRect |= activePointBoundingRect();
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+
+    pendingUpdates.addUpdate(shapeAndSnapGuidesRect(d->shape));
+    pendingUpdates.addUpdate(activePointUpdateRects());
 
     d->pointIsDragged = false;
 
@@ -345,17 +360,15 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
         // we are closing the path, so reset the existing start path point
         d->existingStartPoint = 0;
         // finish path
-        endPath();
+        endPath(pendingUpdates);
     }
 
     if (d->angleSnapStrategy && lastActivePoint->activeControlPoint2()) {
         d->angleSnapStrategy->deactivate();
     }
 
-    dirtyRect |= shapeAndSnapGuidesRect(d->shape);
-    dirtyRect |= activePointBoundingRect();
-
-    canvas()->updateCanvas(dirtyRect);
+    pendingUpdates.addUpdate(shapeAndSnapGuidesRect(d->shape));
+    pendingUpdates.addUpdate(activePointUpdateRects());
 }
 
 void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
@@ -367,30 +380,31 @@ void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KoCreatePathTool::endPath()
+void KoCreatePathTool::endPath(KoCanvasUpdatesCollector &pendingUpdates)
 {
     Q_D(KoCreatePathTool);
-
-    d->addPathShape();
+    d->addPathShape(pendingUpdates);
 }
 
-void KoCreatePathTool::endPathWithoutLastPoint()
+void KoCreatePathTool::endPathWithoutLastPoint(KoCanvasUpdatesCollector &pendingUpdates)
 {
     Q_D(KoCreatePathTool);
 
     if (d->shape) {
-        QRectF dirtyRect = d->shape->boundingRect();
-        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-        canvas()->updateCanvas(dirtyRect);
+        pendingUpdates.addUpdate(d->shape->boundingRect());
 
-        d->addPathShape();
+        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
+
+        d->addPathShape(pendingUpdates);
     }
 }
 
 void KoCreatePathTool::cancelPath()
 {
     Q_D(KoCreatePathTool);
-    d->cleanUp(d->shape ? d->shape->boundingRect() : QRectF());
+
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+    d->cleanUp(d->shape ? d->shape->boundingRect() : QRectF(), pendingUpdates);
 }
 
 void KoCreatePathTool::removeLastPoint()
@@ -405,20 +419,20 @@ void KoCreatePathTool::removeLastPoint()
 
             KoPathPoint *pointToDelete = d->shape->pointByIndex(lastPointIndex);
 
-            KoViewConverter fakeViewConverter;
+            KoCanvasUpdatesCollector pendingUpdates(canvas());
+
             KoShapeHandlesCollection collection;
             collection.addHandles(d->shape,
                                   KisHandleStyle::highlightedPrimaryHandles(),
                                   pointToDelete->handles(KoPathPoint::All));
 
-            const QRectF oldDirtyRect =
-                collection.boundingRectDoc(fakeViewConverter, d->handleRadius) |
-                d->shape->boundingRect();
+            pendingUpdates.addUpdate(collection.updateDocRects(d->handleRadius));
+            pendingUpdates.addUpdate(d->shape->boundingRect());
 
             delete d->shape->removePoint(lastPointIndex);
             d->hoveredPoint = 0;
 
-            canvas()->updateCanvas(d->shape->boundingRect() | oldDirtyRect);
+            pendingUpdates.addUpdate(d->shape->boundingRect());
         }
     }
 }
@@ -434,9 +448,11 @@ void KoCreatePathTool::activate(ToolActivation activation, const QSet<KoShape*> 
     d->handleRadius = handleRadius();
 
     // reset snap guide
-    const QRectF oldDirtyRect = canvas()->snapGuide()->boundingRect();
+    KoCanvasUpdatesCollector pendingUpdates(canvas());
+
+    pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
     canvas()->snapGuide()->reset();
-    canvas()->updateCanvas(canvas()->snapGuide()->boundingRect() | oldDirtyRect);
+    pendingUpdates.addUpdate(canvas()->snapGuide()->boundingRect());
 }
 
 void KoCreatePathTool::deactivate()
@@ -498,37 +514,37 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     }
 }
 
-QRectF KoCreatePathTool::shapeAndSnapGuidesRect(KoShape *shape) const
+QVector<QRectF> KoCreatePathTool::shapeAndSnapGuidesRect(KoShape *shape) const
 {
-    QRectF result = canvas()->snapGuide()->boundingRect();
+    QVector<QRectF> result;
+
+    result << canvas()->snapGuide()->boundingRect();
     if (shape) {
-        result |= shape->boundingRect();
+        result << shape->boundingRect();
     }
     return result;
 }
 
-QRectF KoCreatePathTool::pathPointBoundingRect(KoPathPoint *pt, KoPathPoint::PointTypes types, bool activeOnly) const
+QVector<QRectF> KoCreatePathTool::pathPointUpdateRects(KoPathPoint *pt, KoPathPoint::PointTypes types, bool activeOnly) const
 {
     Q_D(const KoCreatePathTool);
 
-    QRectF result;
+    QVector<QRectF> result;
 
     if (pt) {
-        KoViewConverter fakeViewConverter;
-
         KoShapeHandlesCollection collection;
         collection.addHandles(pt->parent(), KisHandleStyle::inheritStyle(), pt->handles(types, activeOnly));
-        result = collection.boundingRectDoc(fakeViewConverter, d->handleRadius);
+        result = collection.updateDocRects(d->handleRadius);
     }
 
     return result;
 }
 
-QRectF KoCreatePathTool::activePointBoundingRect() const
+QVector<QRectF> KoCreatePathTool::activePointUpdateRects() const
 {
     Q_D(const KoCreatePathTool);
 
-    QRectF result;
+    QVector<QRectF> result;
 
     if (d->activePoint && d->pointIsDragged) {
         const bool onlyPaintActivePoints = false;
@@ -538,19 +554,19 @@ QRectF KoCreatePathTool::activePointBoundingRect() const
             paintFlags |= KoPathPoint::ControlPoint1;
         }
 
-        result = pathPointBoundingRect(d->activePoint, paintFlags, onlyPaintActivePoints);
+        result = pathPointUpdateRects(d->activePoint, paintFlags, onlyPaintActivePoints);
     }
 
     return result;
 }
 
-void KoCreatePathTool::setMouseOverFirstPoint(bool value)
+void KoCreatePathTool::setMouseOverFirstPoint(bool value, KoCanvasUpdatesCollector &pendingUpdates)
 {
     Q_D(KoCreatePathTool);
 
     if (d->mouseOverFirstPoint != value) {
         d->mouseOverFirstPoint = value;
-        canvas()->updateCanvas(pathPointBoundingRect(d->firstPoint, KoPathPoint::Node));
+        pendingUpdates.addUpdate(pathPointUpdateRects(d->firstPoint, KoPathPoint::Node));
     }
 }
 

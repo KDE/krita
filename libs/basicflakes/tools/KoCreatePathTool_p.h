@@ -31,7 +31,7 @@
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
 #include <KoViewConverter.h>
-#include <KoShapeHandlesCollection.h>
+#include <KoCanvasUpdatesCollector.h>
 
 
 #include "math.h"
@@ -212,48 +212,6 @@ public:
     int angleSnappingDelta;
     bool angleSnapStatus;
 
-    /// returns the nearest existing path point
-    KoPathPoint* endPointAtPosition(const QPointF &position) const {
-        const int viewGrabSensitivity = q->grabSensitivity();
-
-        const QRectF roi = q->handleGrabDocRect(position);
-        const QList<KoShape *> shapes = q->canvas()->shapeManager()->shapesAt(roi);
-
-        KoPathPoint * nearestPoint = 0;
-        qreal minDistance = std::numeric_limits<qreal>::max();
-
-        Q_FOREACH(KoShape * s, shapes) {
-            KoPathShape * path = dynamic_cast<KoPathShape*>(s);
-            if (!path)
-                continue;
-            KoParameterShape *paramShape = dynamic_cast<KoParameterShape*>(s);
-            if (paramShape && paramShape->isParametricShape())
-                continue;
-
-            const uint subpathCount = path->subpathCount();
-            for (uint i = 0; i < subpathCount; ++i) {
-                if (path->isClosedSubpath(i)) continue;
-
-                auto addIfSmaller = [&] (const KoPathPointIndex &index) {
-                    KoPathPoint *pt = path->pointByIndex(index);
-                    const qreal distance = q->viewDistanceFromDocPoints(position, path->shapeToDocument(pt->point()));
-
-                    if (distance < minDistance && distance < viewGrabSensitivity) {
-                        nearestPoint = pt;
-                        minDistance = distance;
-                    }
-                };
-
-                // check start of subpath
-                addIfSmaller(KoPathPointIndex(i, 0));
-
-                // check end of subpath
-                addIfSmaller(KoPathPointIndex(i, path->subpathPointCount(i) - 1));
-            }
-        }
-
-        return nearestPoint;
-    }
 
     /// Connects given path with the ones we hit when starting/finishing
     bool connectPaths(KoPathShape *pathShape, const PathConnectionPoint &pointAtStart, const PathConnectionPoint &pointAtEnd) const {
@@ -346,11 +304,11 @@ public:
         return true;
     }
 
-    void addPathShape() {
+    void addPathShape(KoCanvasUpdatesCollector &pendingUpdates) {
         if (!shape) return;
 
         if (shape->pointCount() < 2) {
-            cleanUp(QRectF());
+            cleanUp(QRectF(), pendingUpdates);
             return;
         }
 
@@ -362,22 +320,23 @@ public:
 
         q->addPathShape(pathShape);
 
-        cleanUp(shapeBoundingRect);
-
-        return;
+        cleanUp(shapeBoundingRect, pendingUpdates);
     }
 
-    void cleanUp(const QRectF &shapeBoundingRect) {
-        QRectF dirtyRect = shapeBoundingRect;
+    void cleanUp(const QRectF &shapeBoundingRect, KoCanvasUpdatesCollector &pendingUpdates) {
+
+        // reset shape area
+        pendingUpdates.addUpdate(shapeBoundingRect);
 
         // reset snap guide
-        dirtyRect |= q->canvas()->snapGuide()->boundingRect();
+        pendingUpdates.addUpdate(q->canvas()->snapGuide()->boundingRect());
         q->canvas()->snapGuide()->reset();
-        dirtyRect |= q->canvas()->snapGuide()->boundingRect();
+        pendingUpdates.addUpdate(q->canvas()->snapGuide()->boundingRect());
 
-        dirtyRect |= q->pathPointBoundingRect(hoveredPoint, KoPathPoint::Node);
-        dirtyRect |= q->pathPointBoundingRect(firstPoint, KoPathPoint::Node);
-        dirtyRect |= q->activePointBoundingRect();
+        // reset handles
+        pendingUpdates.addUpdate(q->pathPointUpdateRects(hoveredPoint, KoPathPoint::Node));
+        pendingUpdates.addUpdate(q->pathPointUpdateRects(firstPoint, KoPathPoint::Node));
+        pendingUpdates.addUpdate(q->activePointUpdateRects());
 
         angleSnapStrategy = 0;
 
@@ -389,8 +348,6 @@ public:
         activePoint = 0;
         firstPoint = 0;
         listeningToModifiers = false;
-
-        q->canvas()->updateCanvas(dirtyRect);
     }
 
     void angleDeltaChanged(int value) {

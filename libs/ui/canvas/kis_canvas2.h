@@ -206,6 +206,8 @@ public: // KisCanvas2 methods
     KisAnimationPlayer *animationPlayer() const;
     void refetchDataFromImage();
 
+    using KoCanvasBase::updateCanvas;
+
 Q_SIGNALS:
     void imageChanged(KisImageWSP image);
 

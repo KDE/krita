@@ -464,17 +464,22 @@ void KoPathShapePrivate::debugPath() const
 }
 #endif
 
-void KoPathShape::paintPoints(KisHandlePainterHelper &handlesHelper)
+QVector<KoPathPoint*> KoPathShape::allPathPoints() const
 {
-    Q_D(KoPathShape);
+    Q_D(const KoPathShape);
+
+    QVector<KoPathPoint*> result;
 
     KoSubpathList::const_iterator pathIt(d->subpaths.constBegin());
 
     for (; pathIt != d->subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
-        for (; it != (*pathIt)->constEnd(); ++it)
-            (*it)->paint(handlesHelper, KoPathPoint::Node);
+        for (; it != (*pathIt)->constEnd(); ++it) {
+            result << *it;
+        }
     }
+
+    return result;
 }
 
 QRectF KoPathShape::outlineRect() const

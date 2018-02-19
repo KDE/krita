@@ -155,6 +155,7 @@ public:
         return m_selectedShapesProxy.data();
     }
     void updateCanvas(const QRectF&) override  {}
+    using KoCanvasBase::updateCanvas;
     KoToolProxy * toolProxy() const override {
         return 0;
     }

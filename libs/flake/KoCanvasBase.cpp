@@ -76,6 +76,13 @@ KoCanvasBase::~KoCanvasBase()
     delete d;
 }
 
+void KoCanvasBase::updateCanvas(const QVector<QRectF> &rects)
+{
+    Q_FOREACH (const QRectF &rc, rects) {
+        updateCanvas(rc);
+    }
+}
+
 QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const
 {
     return viewConverter()->viewToDocument(viewPoint - documentOrigin());

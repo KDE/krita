@@ -26,6 +26,8 @@
 #include <KisHandleStyle.h>
 #include "kis_painting_tweaks.h"
 
+#include <KisHandleUtililtyTypes.h>
+
 #include <boost/variant.hpp>
 
 class QPainter;
@@ -50,39 +52,7 @@ class KoViewConverter;
 class KRITAGLOBAL_EXPORT KisHandlePainterHelper
 {
 public:
-    enum Type {
-        Invalid = 0,
-        Rect,
-        Diamond,
-        GradientDiamond,
-        Circle,
-        SmallCircle,
-        GradientCross
-    };
-
-    enum LineType {
-        ConnectionLine
-    };
-
-    struct Handle {
-
-        struct PointHandle {
-            Type type;
-            QPointF pos;
-        };
-        struct LineHandle {
-            LineType type;
-            QPointF p1;
-            QPointF p2;
-        };
-
-        boost::variant<PointHandle, LineHandle> value;
-
-        Handle() : value (PointHandle({Invalid, QPointF()})) {}
-
-        Handle(Type type, const QPointF &pos) : value(PointHandle({type, pos})) {}
-        Handle(LineType lineType, const QPointF &p1, const QPointF &p2) : value(LineHandle({lineType, p1, p2})) {}
-    };
+    using Handle = KritaUtils::Handle;
 
 public:
     KisHandlePainterHelper();
@@ -115,30 +85,6 @@ public:
      * KisHandleStyle to select predefined styles.
      */
     void setHandleStyle(const KisHandleStyle &style);
-
-    /**
-     * Draw an abstract point-type handle of type \p type at position
-     * \p pos (in local CS)
-     */
-    void drawHandle(Type type, const QPointF &pos);
-
-    /**
-     * Calculate the bounding rect (document CS) of the point-type handle
-     * \p type, which should be painted at position \p pos (in local CS)
-     */
-    QRectF handleBoundingRectDoc(Type type, const QPointF &pos) const;
-
-    /**
-     * Draw an abstract line-type handle of type \p type at positions
-     * \p p1 and \p p2 (in local CS)
-     */
-    void drawHandle(LineType type, const QPointF &p1, const QPointF &p2);
-
-    /**
-     * Calculate the bounding rect (document CS) of the line-type handle
-     * \p type, which should be painted at positions \p p1 and \p p2 (in local CS)
-     */
-    QRectF handleBoundingRectDoc(LineType type, QPointF &p1, const QPointF &p2) const;
 
     /**
      * Draw an abstract handle \p handle, which might encapsulate either point or line
@@ -221,9 +167,12 @@ public:
 
 private:
 
-    QPainterPath calculatePointHandlePath(Type type) const;
+    QPainterPath calculatePointHandlePath(KritaUtils::HandlePointType type) const;
+    QPainterPath calculateLineHandlePath(const Handle::LineHandle &handle) const;
+    QPainterPath calculateArrow(const QPointF &pos, const QPointF &from, qreal radius) const;
 
     void drawPathImpl(const QPainterPath &path);
+    void strokePathImpl(const QPainterPath &path);
     QRectF pathBoundingRectDocImpl(const QPainterPath &poly) const;
 
     /**

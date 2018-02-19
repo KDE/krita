@@ -186,9 +186,9 @@ void KoInteractionTool::removeInteractionFactory(const QString &id)
     }
 }
 
-bool KoInteractionTool::hasInteractioFactory(const QString &id)
+bool KoInteractionTool::hasInteractioFactory(const QString &id) const
 {
-    Q_D(KoInteractionTool);
+    Q_D(const KoInteractionTool);
 
     Q_FOREACH (auto f, d->interactionFactories) {
         if (f->id() == id) {

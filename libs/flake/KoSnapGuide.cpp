@@ -25,6 +25,7 @@
 #include <KoPathPoint.h>
 #include <KoViewConverter.h>
 #include <KoCanvasBase.h>
+#include "kis_global.h"
 
 #include <QPainter>
 

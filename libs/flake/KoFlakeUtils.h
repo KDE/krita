@@ -26,6 +26,12 @@
 #include "kis_global.h"
 #include "KoShapeStrokeCommand.h"
 
+#include "kritaflake_export.h"
+
+class KoShapeManager;
+class KoPathPoint;
+class KoViewConverter;
+
 
 namespace KoFlake {
 
@@ -84,6 +90,9 @@ bool compareShapePropertiesEqual(const QList<KoShape*> shapes)
 {
     return compareShapePropertiesEqual<Policy>(shapes, Policy());
 }
+
+KRITAFLAKE_EXPORT
+KoPathPoint* findNearestPathEndPoint(const QPointF &position, KoShapeManager *shapeManager, qreal viewGrabThreshold, const KoViewConverter &viewConverter);
 
 }
 

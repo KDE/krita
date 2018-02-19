@@ -135,6 +135,14 @@ public:
     virtual void updateCanvas(const QRectF &rc) = 0;
 
     /**
+     * Tell the canvas to repaint the specified rectangles. The coordinates
+     * are document coordinates, not view coordinates.
+     *
+     * The canvas might optimize the mass-update. Or might not optimize :)
+     */
+    virtual void updateCanvas(const QVector<QRectF> &rects);
+
+    /**
      * Return the proxy to the active tool (determining which tool
      * is really, really active is hard when tablets are involved,
      * so leave that to others.

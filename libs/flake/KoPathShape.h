@@ -36,7 +36,6 @@ class KoPathSegment;
 class KoPathPoint;
 class KoPathShapePrivate;
 class KoMarker;
-class KisHandlePainterHelper;
 
 typedef QPair<int, int> KoPathPointIndex;
 
@@ -89,7 +88,7 @@ public:
 
     /// reimplemented
     void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
-    virtual void paintPoints(KisHandlePainterHelper &handlesHelper);
+    QVector<KoPathPoint*> allPathPoints() const;
 
     /// reimplemented
     QRectF outlineRect() const override;

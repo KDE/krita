@@ -30,7 +30,9 @@
 #include <KoDocumentResourceManager.h>
 #include <KoShapeController.h>
 #include <QPainter>
-#include <KisHandlePainterHelper.h>
+#include <KoShapeHandlesCollection.h>
+#include <KoCanvasUpdatesCollector.h>
+
 
 KoPathToolSelection::KoPathToolSelection(KoPathTool * tool)
         : m_tool(tool)
@@ -41,23 +43,9 @@ KoPathToolSelection::~KoPathToolSelection()
 {
 }
 
-void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void KoPathToolSelection::add(KoPathPoint *point, bool clear, KoCanvasUpdatesCollector &pendingUpdates)
 {
-    PathShapePointMap::iterator it(m_shapePointMap.begin());
-    for (; it != m_shapePointMap.end(); ++it) {
-        KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelper(&painter, it.key(), converter, handleRadius);
-        helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
-
-        Q_FOREACH (KoPathPoint *p, it.value()) {
-            p->paint(helper, KoPathPoint::All);
-        }
-    }
-}
-
-void KoPathToolSelection::add(KoPathPoint * point, bool clear)
-{
-    if(! point)
+    if(!point)
         return;
 
     bool allreadyIn = false;
@@ -65,7 +53,7 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
         if (size() == 1 && m_selectedPoints.contains(point)) {
             allreadyIn = true;
         } else {
-            this->clear();
+            this->clear(pendingUpdates);
         }
     } else {
         allreadyIn = m_selectedPoints.contains(point);
@@ -79,13 +67,26 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
             it = m_shapePointMap.insert(pathShape, QSet<KoPathPoint *>());
         }
         it.value().insert(point);
-        m_tool->repaint(point->boundingRect());
+
+        pendingUpdates.addUpdate(
+            KoShapeHandlesCollection::updateDocRects(
+                KoFlake::HandlesRecord(point->parent(),
+                                                        KisHandleStyle::selectedPrimaryHandles(),
+                                                        point->handles(KoPathPoint::All)),
+                m_tool->handleRadius()));
         emit selectionChanged();
     }
 }
 
-void KoPathToolSelection::remove(KoPathPoint * point)
+void KoPathToolSelection::remove(KoPathPoint * point, KoCanvasUpdatesCollector &pendingUpdates)
 {
+    pendingUpdates.addUpdate(
+        KoShapeHandlesCollection::updateDocRects(
+            KoFlake::HandlesRecord(point->parent(),
+                                                    KisHandleStyle::selectedPrimaryHandles(),
+                                                    point->handles(KoPathPoint::All)),
+            m_tool->handleRadius()));
+
     if (m_selectedPoints.remove(point)) {
         KoPathShape * pathShape = point->parent();
         m_shapePointMap[pathShape].remove(point);
@@ -94,21 +95,24 @@ void KoPathToolSelection::remove(KoPathPoint * point)
         }
         emit selectionChanged();
     }
-    m_tool->repaint(point->boundingRect());
 }
 
-void KoPathToolSelection::clear()
+void KoPathToolSelection::clear(KoCanvasUpdatesCollector &pendingUpdates)
 {
-    repaint();
+    pendingUpdates.addUpdate(
+        KoShapeHandlesCollection::updateDocRects(
+            collectSelectedHandles(KisHandleStyle::selectedPrimaryHandles()),
+                                 m_tool->handleRadius()));
+
     m_selectedPoints.clear();
     m_shapePointMap.clear();
     emit selectionChanged();
 }
 
-void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
+void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection, KoCanvasUpdatesCollector &pendingUpdates)
 {
     if (clearSelection) {
-        clear();
+        clear(pendingUpdates);
     }
 
     blockSignals(true);
@@ -117,7 +121,7 @@ void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
         if (parameterShape && parameterShape->isParametricShape())
             continue;
         Q_FOREACH (KoPathPoint* point, shape->pointsAt(shape->documentToShape(rect)))
-            add(point, false);
+            add(point, false, pendingUpdates);
     }
     blockSignals(false);
     emit selectionChanged();
@@ -196,12 +200,54 @@ void KoPathToolSelection::setSelectedShapes(const QList<KoPathShape*> shapes)
     m_selectedShapes = shapes;
 }
 
-void KoPathToolSelection::repaint()
+QVector<KoFlake::HandlesRecord>
+KoPathToolSelection::collectSelectedHandles(const KisHandleStyle &style)
 {
-    update();
-    Q_FOREACH (KoPathPoint *p, m_selectedPoints) {
-        m_tool->repaint(p->boundingRect(false));
+    QVector<KoFlake::HandlesRecord> records;
+
+    PathShapePointMap::iterator it(m_shapePointMap.begin());
+    for (; it != m_shapePointMap.end(); ++it) {
+        Q_FOREACH (KoPathPoint *p, it.value()) {
+            records.append(KoFlake::HandlesRecord(p->parent(), style, p->handles(KoPathPoint::All)));
+        }
     }
+
+    return records;
+}
+
+#include <KoShapeStrokeModel.h>
+
+QVector<KoFlake::HandlesRecord> KoPathToolSelection::collectShapeHandles()
+{
+    QVector<KoFlake::HandlesRecord> records;
+
+    Q_FOREACH (KoPathShape *shape, selectedShapes()) {
+        if (!shape->stroke() || !shape->stroke()->isVisible()) {
+            records.append(KoFlake::HandlesRecord(
+                shape,
+                KisHandleStyle::secondarySelection(),
+                {KritaUtils::Handle(KritaUtils::OutlinePath, shape->outline())}));
+        }
+
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
+        if (parameterShape && parameterShape->isParametricShape()) {
+            for (int i = 0; i < parameterShape->handleCount(); i++) {
+                records.append(KoFlake::HandlesRecord(
+                    shape,
+                    KisHandleStyle::primarySelection(),
+                    {parameterShape->handleObject(i)}));
+            }
+        } else {
+            QVector<KoPathPoint*> allPoints = shape->allPathPoints();
+            Q_FOREACH (KoPathPoint *pt, allPoints) {
+                records.append(KoFlake::HandlesRecord(
+                   shape, KisHandleStyle::primarySelection(),
+                   pt->handles(KoPathPoint::Node)));
+            }
+        }
+    }
+
+    return records;
 }
 
 void KoPathToolSelection::update()

@@ -25,14 +25,13 @@
 #include "kritaflake_export.h"
 
 #include <QFlags>
-#include "KisHandlePainterHelper.h"
+#include <KoHandleUtilityTypes.h>
 
 class KoPathShape;
 class QPointF;
 class QTransform;
 class QRectF;
 class QPainter;
-class KisHandlePainterHelper;
 
 /**
  * @brief A KoPathPoint represents a point in a path.
@@ -208,16 +207,12 @@ public:
     void map(const QTransform &matrix);
 
     /**
-     * Paints the path point with the actual brush and pen
-     * @param painter used for painting the shape point
-     * @param handleRadius size of point handles in pixel
+     * Return the handles associated with the current point
      * @param types the points which should be painted
-     * @param active If true only the given active points are painted
-     *               If false all given points are used.
+     * @param active If true only active points will be returned
+     *               If false all requested points are used.
      */
-    void paint(KisHandlePainterHelper &handlesHelper, PointTypes types, bool active = true);
-
-    QVector<KisHandlePainterHelper::Handle> handles(PointTypes types, bool active = true);
+    QVector<KoFlake::Handle> handles(PointTypes types, bool active = true);
 
     /**
      * @brief Sets the parent path shape.
@@ -230,18 +225,6 @@ public:
      * @return the path shape the point belongs to
      */
     KoPathShape *parent() const;
-
-    /**
-     * @brief Get the bounding rect of the point.
-     *
-     * This takes into account if there are controlpoints
-     *
-     * @param active If true only the active points are used in calculation
-     *               of the bounding rectangle. If false all points are used.
-     *
-     * @return bounding rect in document coordinates
-     */
-    QRectF boundingRect(bool active = true) const;
 
     /**
      * @brief Reverses the path point.

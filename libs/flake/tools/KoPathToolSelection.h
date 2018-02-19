@@ -25,12 +25,16 @@
 
 #include <KoToolSelection.h>
 #include <KoPathShape.h>
+#include <KoHandleUtilityTypes.h>
 
 class KoPathTool;
 class KoPathPoint;
 class KoPathPointData;
 class KoViewConverter;
 class QPainter;
+class KoShapeHandlesCollection;
+class KoCanvasUpdatesCollector;
+class KisHandleStyle;
 
 /**
 * @brief Handle the selection of points
@@ -47,28 +51,25 @@ public:
 
     ~KoPathToolSelection() override;
 
-    /// @brief Draw the selected points
-    void paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius);
-
     /**
     * @brief Add a point to the selection
     *
     * @param point to add to the selection
     * @param clear if true the selection will be cleared before adding the point
     */
-    void add(KoPathPoint *point, bool clear);
+    void add(KoPathPoint *point, bool clear, KoCanvasUpdatesCollector &pendingUpdates);
 
     /**
     * @brief Remove a point form the selection
     *
     * @param point to remove from the selection
     */
-    void remove(KoPathPoint *point);
+    void remove(KoPathPoint *point, KoCanvasUpdatesCollector &pendingUpdates);
 
     /**
     * @brief Clear the selection
     */
-    void clear();
+    void clear(KoCanvasUpdatesCollector &pendingUpdates);
 
     /**
      * @brief Select points in rect
@@ -76,7 +77,7 @@ public:
      * @param rect the selection rectangle in document coordinates
      * @param clearSelection if set clear the current selection before the selection
      */
-    void selectPoints(const QRectF &rect, bool clearSelection);
+    void selectPoints(const QRectF &rect, bool clearSelection, KoCanvasUpdatesCollector &pendingUpdates);
 
     /**
     * @brief Get the number of path objects in the selection
@@ -126,10 +127,8 @@ public:
     /// Sets list of selected shapes
     void setSelectedShapes(const QList<KoPathShape*> shapes);
 
-    /**
-    * @brief trigger a repaint
-    */
-    void repaint();
+    QVector<KoFlake::HandlesRecord> collectSelectedHandles(const KisHandleStyle &style);
+    QVector<KoFlake::HandlesRecord> collectShapeHandles();
 
     /**
     * @brief Update the selection to contain only valid points

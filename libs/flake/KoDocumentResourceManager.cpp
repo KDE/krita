@@ -132,6 +132,8 @@ void KoDocumentResourceManager::setHandleRadius(int handleRadius)
 
 int KoDocumentResourceManager::handleRadius() const
 {
+    return 20;
+
     if (hasResource(HandleRadius))
         return intResource(HandleRadius);
     return 5; // default value (and is used just about everywhere)
@@ -146,6 +148,9 @@ void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 
 int KoDocumentResourceManager::grabSensitivity() const
 {
+    return 40;
+
+
     if (hasResource(GrabSensitivity))
         return intResource(GrabSensitivity);
     return 5; // default value (and is used just about everywhere)

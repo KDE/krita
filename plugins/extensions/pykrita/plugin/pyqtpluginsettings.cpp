@@ -49,7 +49,7 @@ PyQtPluginSettings::PyQtPluginSettings(PythonPluginManager *pluginManager, QWidg
     m_page->pluginsList->setEnabled(is_enabled);
     m_page->textBrowser->setEnabled(is_enabled);
 
-    connect(m_page->pluginsList, SIGNAL(activated(QModelIndex)), SLOT(updateManual(QModelIndex)));
+    connect(m_page->pluginsList, SIGNAL(clicked(QModelIndex)), SLOT(updateManual(QModelIndex)));
 }
 
 PyQtPluginSettings::~PyQtPluginSettings()

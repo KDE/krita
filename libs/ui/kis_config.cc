@@ -982,6 +982,15 @@ void KisConfig::setSessionOnStartup(SessionOnStartup value)
     m_cfg.writeEntry("sessionOnStartup", (int)value);
 }
 
+bool KisConfig::saveSessionOnQuit(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("saveSessionOnQuit", false);
+}
+void KisConfig::setSaveSessionOnQuit(bool value)
+{
+    m_cfg.writeEntry("saveSessionOnQuit", value);
+}
+
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
 {
     return (defaultValue ? 1.0 : m_cfg.readEntry("OutlineSizeMinimum", 1.0));

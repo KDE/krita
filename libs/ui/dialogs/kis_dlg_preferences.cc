@@ -122,6 +122,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //cmbStartupSession->addItem(i18n("Show session manager"));
     cmbStartupSession->setCurrentIndex(cfg.sessionOnStartup());
 
+    chkSaveSessionOnQuit->setChecked(cfg.saveSessionOnQuit(false));
+
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
     int autosaveInterval = cfg.autoSaveInterval();
@@ -237,6 +239,11 @@ OutlineStyle GeneralTab::outlineStyle()
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
 {
     return (KisConfig::SessionOnStartup)cmbStartupSession->currentIndex();
+}
+
+bool GeneralTab::saveSessionOnQuit() const
+{
+    return chkSaveSessionOnQuit->isChecked();
 }
 
 bool GeneralTab::showRootLayer()
@@ -1213,6 +1220,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
         cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
+        cfg.setSaveSessionOnQuit(dialog->m_general->saveSessionOnQuit());
         cfg.setCalculateAnimationCacheInBackground(dialog->m_general->calculateAnimationCacheInBackground());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");

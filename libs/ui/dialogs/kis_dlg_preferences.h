@@ -70,6 +70,7 @@ public:
     OutlineStyle outlineStyle();
 
     KisConfig::SessionOnStartup sessionOnStartup() const;
+    bool saveSessionOnQuit() const;
 
     bool showRootLayer();
     int autoSaveInterval();

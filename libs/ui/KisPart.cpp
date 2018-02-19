@@ -354,15 +354,18 @@ bool KisPart::closeSession(bool keepWindows)
     }
 
     if (d->currentSession) {
-        d->currentSession->storeCurrentWindows();
-        d->currentSession->save();
+        KisConfig kisCfg;
+        if (kisCfg.saveSessionOnQuit(false)) {
 
-        KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
-        cfg.writeEntry("previousSession", d->currentSession->name());
+            d->currentSession->storeCurrentWindows();
+            d->currentSession->save();
+
+            KConfigGroup cfg = KSharedConfig::openConfig()->group("session");
+            cfg.writeEntry("previousSession", d->currentSession->name());
+        }
 
         d->currentSession = nullptr;
     }
-
 
     if (!keepWindows) {
         Q_FOREACH (auto window, d->mainWindows) {

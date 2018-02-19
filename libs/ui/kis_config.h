@@ -259,6 +259,9 @@ public:
     SessionOnStartup sessionOnStartup(bool defaultValue = false) const;
     void setSessionOnStartup(SessionOnStartup value);
 
+    bool saveSessionOnQuit(bool defaultValue) const;
+    void setSaveSessionOnQuit(bool value);
+
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
 

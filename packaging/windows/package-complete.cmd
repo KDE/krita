@@ -741,7 +741,7 @@ if /i %getfilesize_retval% LEQ 2048 (
 )
 if not exist %~dp1.debug mkdir %~dp1.debug
 move %~1.debug %~dp1.debug\ > NUL
-strip %~1
+strip --strip-debug %~1
 :: Add debuglink
 :: FIXME: There is a problem with gdb that cause it to output this warning
 :: FIXME: "warning: section .gnu_debuglink not found in xxx.debug"

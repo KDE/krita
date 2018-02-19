@@ -100,6 +100,10 @@ install( FILES
     hello/hello.xmlgui
 DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/)
 
+install( FILES
+    comics_project_management_tools/README.html
+DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita/comics_project_management_tools)
+
 
 install( FILES
     hello/hello.action

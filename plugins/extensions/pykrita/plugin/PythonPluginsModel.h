@@ -27,13 +27,15 @@
 #include <QtCore/QAbstractTableModel>
 
 class PythonPluginManager;
+class PythonPlugin;
 
 class PythonPluginsModel : public QAbstractTableModel
 {
 public:
     PythonPluginsModel(QObject *parent, PythonPluginManager *pluginManager);
+    PythonPlugin *plugin(const QModelIndex &) const;
 
-private:
+protected:
     enum Column {COl_NAME, COL_COMMENT, COLUMN_COUNT};
 
     int columnCount(const QModelIndex&) const override;
@@ -43,6 +45,7 @@ private:
     QVariant data(const QModelIndex&, int) const override;
     Qt::ItemFlags flags(const QModelIndex&) const override;
     bool setData(const QModelIndex&, const QVariant&, int) override;
+
 
 private:
     PythonPluginManager *m_pluginManager;

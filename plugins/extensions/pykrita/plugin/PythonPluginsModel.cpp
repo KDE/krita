@@ -147,3 +147,12 @@ bool PythonPluginsModel::setData(const QModelIndex& index, const QVariant& value
     }
     return true;
 }
+
+PythonPlugin *PythonPluginsModel::plugin(const QModelIndex &index) const
+{
+    if (index.isValid()) {
+        PythonPlugin * plugin = static_cast<PythonPlugin*>(index.internalPointer());
+        return plugin;
+    }
+    return 0;
+}

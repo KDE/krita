@@ -2,21 +2,16 @@
 <ui version="4.0">
  <class>ManagerPage</class>
  <widget class="QWidget" name="ManagerPage">
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="errorLabel">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Error: The Python engine could not be initialized</string>
-     </property>
-    </widget>
-   </item>
-   <item>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>361</width>
+    <height>228</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
     <widget class="QTreeView" name="pluginsList">
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
@@ -40,6 +35,22 @@
       <bool>false</bool>
      </attribute>
     </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="errorLabel">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Error: The Python engine could not be initialized</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTextBrowser" name="textBrowser"/>
    </item>
   </layout>
  </widget>

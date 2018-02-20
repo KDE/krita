@@ -224,6 +224,11 @@ bool KoCreatePathTool::pathStarted()
     return ((bool) d->shape);
 }
 
+bool KoCreatePathTool::tryMergeInPathShape(KoPathShape *pathShape)
+{
+    return addPathShapeImpl(pathShape, true);
+}
+
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     //remove handle
@@ -429,7 +434,7 @@ void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
     }
 }
 
-void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
+bool KoCreatePathTool::addPathShapeImpl(KoPathShape *pathShape, bool tryMergeOnly)
 {
     Q_D(KoCreatePathTool);
 
@@ -450,22 +455,45 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
         }
     }
 
+    if (tryMergeOnly && !startShape && !endShape) {
+        return false;
+    }
+
     KUndo2Command *cmd = canvas()->shapeController()->addShape(pathShape, 0);
-    if (cmd) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(pathShape);
-        if (startShape) {
-            canvas()->shapeController()->removeShape(startShape, cmd);
-        }
-        if (endShape && startShape != endShape) {
-            canvas()->shapeController()->removeShape(endShape, cmd);
-        }
-        canvas()->addCommand(cmd);
-    } else {
+    KIS_SAFE_ASSERT_RECOVER(cmd) {
         canvas()->updateCanvas(pathShape->boundingRect());
         delete pathShape;
+        return true;
     }
+
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    selection->deselectAll();
+    selection->select(pathShape);
+
+    if (startShape) {
+        pathShape->setBackground(startShape->background());
+        pathShape->setStroke(startShape->stroke());
+    } else if (endShape) {
+        pathShape->setBackground(endShape->background());
+        pathShape->setStroke(endShape->stroke());
+    }
+
+
+    if (startShape) {
+        canvas()->shapeController()->removeShape(startShape, cmd);
+    }
+    if (endShape && startShape != endShape) {
+        canvas()->shapeController()->removeShape(endShape, cmd);
+    }
+    canvas()->addCommand(cmd);
+
+    return true;
+}
+
+
+void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
+{
+    addPathShapeImpl(pathShape, false);
 }
 
 QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()

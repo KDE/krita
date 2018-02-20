@@ -76,6 +76,7 @@ Waterpaint_Hard_Edges.kpp
 Waterpaint_Soft_Edges.kpp
 Waterpaint_Soft.kpp
 Wet_Bristles.kpp
+Wet_Bristles_Chisel.kpp
 Wet_Bristles_Rough.kpp
 Wet_Bristles_Square.kpp
 Wet_Circle.kpp

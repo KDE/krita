@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_bmp_export.h"
+#include "kis_qimageio_export.h"
 
 #include <QCheckBox>
 #include <QSlider>
@@ -33,17 +33,17 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(KisBMPExportFactory, "krita_bmp_export.json", registerPlugin<KisBMPExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisQImageIOExportFactory, "krita_qimageio_export.json", registerPlugin<KisQImageIOExport>();)
 
-KisBMPExport::KisBMPExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+KisQImageIOExport::KisQImageIOExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
-KisBMPExport::~KisBMPExport()
+KisQImageIOExport::~KisQImageIOExport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportFilter::ConversionStatus KisQImageIOExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
     QRect rc = document->savingImage()->bounds();
     QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
@@ -56,7 +56,7 @@ KisImportExportFilter::ConversionStatus KisBMPExport::convert(KisDocument *docum
     }
 }
 
-void KisBMPExport::initializeCapabilities()
+void KisQImageIOExport::initializeCapabilities()
 {
     QList<QPair<KoID, KoID> > supportedColorModels;
     supportedColorModels << QPair<KoID, KoID>()
@@ -65,5 +65,5 @@ void KisBMPExport::initializeCapabilities()
     addCapability(KisExportCheckRegistry::instance()->get("ColorModelPerLayerCheck/" + RGBAColorModelID.id() + "/" + Integer8BitsColorDepthID.id())->create(KisExportCheckBase::SUPPORTED));
 }
 
-#include "kis_bmp_export.moc"
+#include "kis_qimageio_export.moc"
 

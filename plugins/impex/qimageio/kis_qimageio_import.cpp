@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_bmp_import.h"
+#include "kis_qimageio_import.h"
 
 #include <QCheckBox>
 #include <QSlider>
@@ -39,17 +39,17 @@
 #include <kis_group_layer.h>
 
 
-K_PLUGIN_FACTORY_WITH_JSON(KisBMPImportFactory, "krita_bmp_import.json", registerPlugin<KisBMPImport>();)
+K_PLUGIN_FACTORY_WITH_JSON(KisQImageIOImportFactory, "krita_qimageio_import.json", registerPlugin<KisQImageIOImport>();)
 
-KisBMPImport::KisBMPImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+KisQImageIOImport::KisQImageIOImport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
-KisBMPImport::~KisBMPImport()
+KisQImageIOImport::~KisQImageIOImport()
 {
 }
 
-KisImportExportFilter::ConversionStatus KisBMPImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportFilter::ConversionStatus KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QFileInfo fi(filename());
     if (!QImageReader::supportedImageFormats().contains(fi.suffix().toLatin1())) {
@@ -73,5 +73,5 @@ KisImportExportFilter::ConversionStatus KisBMPImport::convert(KisDocument *docum
 
 }
 
-#include "kis_bmp_import.moc"
+#include "kis_qimageio_import.moc"
 

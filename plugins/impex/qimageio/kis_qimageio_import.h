@@ -17,22 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_BMP_EXPORT_H_
-#define _KIS_BMP_EXPORT_H_
+#ifndef _KIS_BMP_IMPORT_H_
+#define _KIS_BMP_IMPORT_H_
 
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
 
-class KisBMPExport : public KisImportExportFilter
+class KisQImageIOImport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
-    KisBMPExport(QObject *parent, const QVariantList &);
-    ~KisBMPExport() override;
+    KisQImageIOImport(QObject *parent, const QVariantList &);
+    ~KisQImageIOImport() override;
 public:
     KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
-    void initializeCapabilities() override;
 };
 
 #endif

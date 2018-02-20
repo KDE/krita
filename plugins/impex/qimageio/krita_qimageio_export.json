@@ -1,9 +1,9 @@
 {
-    "Id": "Krita BMP Export Filter",
+    "Id": "Krita QImageIO Export Filter",
     "NoDisplay": "true",
     "Type": "Service",
     "X-KDE-Export": "image/bmp,image/x-xpixmap,image/x-xbitmap,image/vnd.microsoft.icon,image/webp",
-    "X-KDE-Library": "kritabmpexport",
+    "X-KDE-Library": "kritaqimageioexport",
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],

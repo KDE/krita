@@ -33,7 +33,7 @@ endif()
 
 add_subdirectory(svg)
 
-add_subdirectory(bmp)
+add_subdirectory(qimageio)
 add_subdirectory(ora)
 add_subdirectory(ppm)
 add_subdirectory(xcf)

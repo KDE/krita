@@ -47,8 +47,6 @@ KisGIFExport::~KisGIFExport()
 
 KisImportExportFilter::ConversionStatus KisGIFExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
-    qDebug() << "GIF export";
-
     Q_UNUSED(configuration);
     QRect rc = document->savingImage()->bounds();
     QImage image = document->savingImage()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
@@ -56,8 +54,6 @@ KisImportExportFilter::ConversionStatus KisGIFExport::convert(KisDocument *docum
     QGIFLibHandler handler;
     handler.setDevice(io);
     bool result = handler.write(image);
-    qDebug() << ">>>>>>>>>>>>>" << result;
-
     return (result ? KisImportExportFilter::OK : KisImportExportFilter::InternalError);
 }
 

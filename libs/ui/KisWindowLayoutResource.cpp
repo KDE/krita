@@ -18,10 +18,13 @@
 #include "KisWindowLayoutResource.h"
 
 #include <QVector>
+#include <QList>
 #include <QFile>
 #include <QDomDocument>
 #include <QApplication>
 #include <QtCore/QEventLoop>
+#include <QWindow>
+#include <QScreen>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -35,6 +38,8 @@ struct KisWindowLayoutResource::Private
         QUuid windowId;
         QByteArray geometry;
         QByteArray windowState;
+        int screen = -1;
+        Qt::WindowStates stateFlags = Qt::WindowNoState;
     };
 
     QVector<Window> windows;
@@ -119,6 +124,21 @@ struct KisWindowLayoutResource::Private
             }
         }
     }
+
+
+    QList<QScreen*> getScreensInConsistentOrder() {
+        QList<QScreen*> screens = QGuiApplication::screens();
+
+        std::sort(screens.begin(), screens.end(), [](const QScreen *a, const QScreen *b) {
+            QRect aRect = a->geometry();
+            QRect bRect = b->geometry();
+
+            if (aRect.y() == bRect.y()) return aRect.x() < bRect.x();
+            return (aRect.y() < aRect.y());
+        });
+
+        return screens;
+    }
 };
 
 KisWindowLayoutResource::KisWindowLayoutResource(const QString &filename)
@@ -163,6 +183,27 @@ void KisWindowLayoutResource::applyLayout()
 
         mainWindow->restoreGeometry(window.geometry);
         mainWindow->restoreWorkspace(window.windowState);
+    }
+
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+    QList<QScreen*> screens = d->getScreensInConsistentOrder();
+    Q_FOREACH(const auto &window, d->windows) {
+        if (window.screen >= 0 && window.screen < screens.size()) {
+            QPointer<KisMainWindow> mainWindow = kisPart->windowById(window.windowId);
+            KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
+
+            QWindow *windowHandle = mainWindow->windowHandle();
+            if (screens.indexOf(windowHandle->screen()) != window.screen) {
+                QScreen *screen = screens[window.screen];
+                windowHandle->setScreen(screen);
+                windowHandle->setPosition(screen->availableGeometry().topLeft());
+            }
+
+            if (window.stateFlags) {
+                mainWindow->setWindowState(window.stateFlags);
+            }
+        }
     }
 
     kisPart->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
@@ -246,6 +287,14 @@ void KisWindowLayoutResource::saveXml(QDomDocument &doc, QDomElement &root) cons
         QDomElement elem = doc.createElement("window");
         elem.setAttribute("id", window.windowId.toString());
 
+        if (window.screen >= 0) {
+            elem.setAttribute("screen", window.screen);
+        }
+
+        if (window.stateFlags & Qt::WindowMaximized) {
+            elem.setAttribute("maximized", "1");
+        }
+
         QDomElement geometry = doc.createElement("geometry");
         geometry.appendChild(doc.createCDATASection(window.geometry.toBase64()));
         elem.appendChild(geometry);
@@ -274,6 +323,12 @@ void KisWindowLayoutResource::loadXml(const QDomElement &element) const
             window.windowId = QUuid::createUuid();
         }
 
+        window.screen = windowElement.attribute("screen", "-1").toInt();
+
+        if (windowElement.attribute("maximized", "0") != "0") {
+            window.stateFlags |= Qt::WindowMaximized;
+        }
+
         QDomElement geometry = windowElement.firstChildElement("geometry");
         QDomElement state = windowElement.firstChildElement("windowState");
 
@@ -293,11 +348,22 @@ void KisWindowLayoutResource::setWindows(const QList<QPointer<KisMainWindow>> &m
 {
     d->windows.clear();
 
+    QList<QScreen*> screens = d->getScreensInConsistentOrder();
+
     Q_FOREACH(auto window, mainWindows) {
         Private::Window state;
         state.windowId = window->id();
         state.geometry = window->saveGeometry();
         state.windowState = window->saveState();
+        state.stateFlags = window->windowState();
+
+        QWindow *windowHandle = window->windowHandle();
+        if (windowHandle) {
+            int index = screens.indexOf(windowHandle->screen());
+            if (index >= 0) {
+                state.screen = index;
+            }
+        }
 
         d->windows.append(state);
     }

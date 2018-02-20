@@ -62,7 +62,7 @@ class TenScriptsExtension(krita.Extension):
             except Exception as e:
                 self.showMessage(str(e))
         else:
-            self.showMessage("You don't assign a script to that action")
+            self.showMessage("You didn't assign a script to that action")
 
     def showMessage(self, message):
         self.msgBox  = QMessageBox(Application.activeWindow().qwindow())

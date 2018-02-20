@@ -29,9 +29,10 @@ class UITenBrushes(object):
         self.loadButtons()
 
         self.vbox.addLayout(self.hbox)
+        self.vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
         self.vbox.addWidget(self.presetChooser)
         self.vbox.addWidget(self.buttonBox)
-        self.vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
+        
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()
@@ -42,7 +43,7 @@ class UITenBrushes(object):
 
         allPresets = Application.resources("preset")
 
-        for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
+        for index in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
             buttonLayout = QVBoxLayout()
             button = dropbutton.DropButton(self.mainDialog)
             button.setObjectName(item)
@@ -55,7 +56,8 @@ class UITenBrushes(object):
                 button.setIcon(QIcon(QPixmap.fromImage(p.image())))
 
             buttonLayout.addWidget(button)
-            label = QLabel("Ctrl+Alt+" + item)
+            
+            label = QLabel(self.tentbrushes.actions[index].shortcut())
             label.setAlignment(Qt.AlignHCenter)
             buttonLayout.addWidget(label)
 

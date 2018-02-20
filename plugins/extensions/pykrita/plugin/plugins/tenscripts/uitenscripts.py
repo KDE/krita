@@ -50,7 +50,7 @@ class UITenScripts(object):
         directoryDialogButton = QPushButton("...")
 
         directoryTextField.setReadOnly(True)
-        label.setText("Ctrl+Shift+{0}".format(key))
+        label.setText(self.tenscripts.actions[key].shortcut())
         directoryTextField.setToolTip("Selected Path")
         directoryDialogButton.setToolTip("Select the script")
         directoryDialogButton.clicked.connect(self._selectScript)
@@ -82,7 +82,7 @@ class UITenScripts(object):
             textField.setText(selectedFile)
 
     def _loadGridLayout(self):
-        for item in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+        for item in range(0, 10):
             self.addNewRow(item)
 
     def _fillScripts(self):

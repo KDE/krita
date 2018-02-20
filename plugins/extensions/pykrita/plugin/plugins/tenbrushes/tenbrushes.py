@@ -41,6 +41,8 @@ class TenBrushesExtension(krita.Extension):
             action = Application.createAction("activate_preset_" + item, "Activate Brush Preset " + item)
             action.setMenu("None")
             action.triggered.connect(self.activatePreset)
+            
+            
 
             if index < len(self.selectedPresets) and self.selectedPresets[index] in allPresets:
                 action.preset = self.selectedPresets[index]

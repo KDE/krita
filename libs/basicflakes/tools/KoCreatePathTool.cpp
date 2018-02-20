@@ -206,6 +206,8 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);
     }
 
+    d->dragStartPoint = event->point;
+
     if (d->angleSnapStrategy)
         d->angleSnapStrategy->setStartPoint(d->activePoint->point());
 }
@@ -269,15 +271,18 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
     d->repaintActivePoint();
 
     if (event->buttons() & Qt::LeftButton) {
+        if (d->pointIsDragged ||
+            !handleGrabRect(d->dragStartPoint).contains(event->point)) {
 
-        d->pointIsDragged = true;
-        QPointF offset = snappedPosition - d->activePoint->point();
-        d->activePoint->setControlPoint2(d->activePoint->point() + offset);
-        // pressing <alt> stops controls points moving symmetrically
-        if ((event->modifiers() & Qt::AltModifier) == 0) {
-            d->activePoint->setControlPoint1(d->activePoint->point() - offset);
+            d->pointIsDragged = true;
+            QPointF offset = snappedPosition - d->activePoint->point();
+            d->activePoint->setControlPoint2(d->activePoint->point() + offset);
+            // pressing <alt> stops controls points moving symmetrically
+            if ((event->modifiers() & Qt::AltModifier) == 0) {
+                d->activePoint->setControlPoint1(d->activePoint->point() - offset);
+            }
+            d->repaintActivePoint();
         }
-        d->repaintActivePoint();
     } else {
         d->activePoint->setPoint(snappedPosition);
     }

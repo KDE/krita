@@ -3,6 +3,47 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><title>Comics Project Management Tools Plugin Manual</title>
+<style>
+
+body
+{
+    margin:0 auto;
+    max-width: 800px;
+    min-width: 300px;
+    padding: 1em;
+}
+
+h1
+{
+    text-align:center;
+}
+
+h2
+{
+    text-align:center;
+    text-decoration:underline;
+    padding-bottom:1em;
+}
+
+h3
+{
+    text-align:center;
+    font-style:italic;
+    padding-bottom:1em;
+}
+
+dt
+{
+    font-weight:700;
+}
+
+img
+{
+    margin:0 auto;
+    display:block;
+}
+
+</style>
 </head>
 <body>
 <h1 id="comics-project-management-tools">Comics Project Management Tools</h1>
@@ -34,7 +75,7 @@
 
 <h2 id="toc">Table of Contents:</h2>
 
-<ol>
+<ol class="toc">
 <li><a href="#usage---quick-start-guide">Usage - quick-start guide</a></li>
 <li>
     <a href="#usage---meta-data">Usage - Meta Data</a>
@@ -84,16 +125,16 @@
 <dd>The name for the directory to store the template. This is where the page templates get stored.
 </dd>
 </dl>
-<p>It will also allow you to edit meta data if you’d want already, but this is not mandatory.</p>
+<p>It will also allow you to edit meta data if you'd want already, but this is not mandatory.</p>
 <p>Then after you finish, select <em>Open Project</em>, go to the location where you have stored your comics project. There should be a “comicsConfig.json” file there, next to the new folders for the pages, templates and export. Open that.</p>
 <p>Now, click <em>Add Page</em> to add your first page. You will get a dialog asking for the template. Here you can generate one, or import one. CPMT will remember this as the default one.</p>
 <p>Double click the new page to open in Krita.</p>
-<p>The second column in the docker allows you to see the “subject” line in the document info if it’s filled in.</p>
+<p>The second column in the docker allows you to see the “subject” line in the document info if it's filled in.</p>
 <p>You can press the arrow next to <em>Add Page</em> to get more features, like <em>Add Existing Page</em>, <em>Remove Page</em>, or <em>Batch Resize</em>.</p>
 <h2 id="usage---meta-data">Usage - Meta Data</h2>
 <p>You can edit the meta data by clicking the dropdown next to <em>Project Settings</em> and selecting <em>Meta Data</em>.</p>
-<p>There’s quite a few fields here, because there’s quite a few different types of meta data. Hover over the fields to get an idea of what needs to be typed.</p>
-<p>The meta data is intended to be filled out over the course of the project, so don’t worry too much if you cannot instantly think of what a certain entry should be.</p>
+<p>There's quite a few fields here, because there's quite a few different types of meta data. Hover over the fields to get an idea of what needs to be typed.</p>
+<p>The meta data is intended to be filled out over the course of the project, so don't worry too much if you cannot instantly think of what a certain entry should be.</p>
 <p>The meta data fields have auto completion wherever sensible. You can add your own meta data fields as noted in the following section:</p>
 <h3 id="adding-extra-auto-completion-keys.">Adding extra auto-completion keys.</h3>
 <p>First, you need to go to project settings, and there point the extra keys to a folder where extra keys can be found.</p>
@@ -106,7 +147,7 @@
 <li>key_author_roles</li>
 <li>key_other</li>
 </ul>
-<p>You can add extra auto-completion keys by adding a text file with each new key on a separate line to one of the “key” folders. The name of the text file doesn’t matter. This way you can add characters by universe, or archive specific keywords by archive name.</p>
+<p>You can add extra auto-completion keys by adding a text file with each new key on a separate line to one of the “key” folders. The name of the text file doesn't matter. This way you can add characters by universe, or archive specific keywords by archive name.</p>
 <p>So for example, the following file has three superhero names on different lines, nothing more, nothing less.</p>
 <pre><code> Spider-Man
  Hawkeye
@@ -117,7 +158,7 @@
 <p>The author list is a table containing all the authors of the project. It allows a distinction between given, family, middle and nickname, as well as role, email and homepage.</p>
 <p>You can rearrange the author list by drag and dropping the number at the left, as well as adding and removing authors.</p>
 <p>Adding an author will always add “John Doe”. You can double click the names and cells to change their contents. For the role, there are auto completion keys, so to encourage using standardized ways to describe their roles.</p>
-<p>In the main docker, there’s an option under the pages actions called <em>Scrape Authors</em>, this will make the comics project docker search the pages in the pages list for author info and append that to the author list. It will not attempt to check for duplicates, so be sure to the list afterwards.</p>
+<p>In the main docker, there's an option under the pages actions called <em>Scrape Authors</em>, this will make the comics project docker search the pages in the pages list for author info and append that to the author list. It will not attempt to check for duplicates, so be sure to the list afterwards.</p>
 <h2 id="usage---project-settings">Usage - Project Settings</h2>
 <p>The project settings allows you to change all the technical details of the project:</p>
 <ul>
@@ -128,10 +169,10 @@
 <li>the location of the extra auto-completion keys(see metadata)</li>
 </ul>
 <h2 id="usage---pages">Usage - Pages</h2>
-<p>There’s several other things you can do with pages. You can either access these feature by clicking the drop-down next to <em>Add Page</em> or right-clicking the pages list.</p>
+<p>There's several other things you can do with pages. You can either access these feature by clicking the drop-down next to <em>Add Page</em> or right-clicking the pages list.</p>
 <dl>
 <dt>Adding pages</dt>
-<dd>You can add pages by pressing the <em>Add Page</em> button. The first time you press this, it’ll ask for a template. After you create or select a template it will use this as the default. You can set the default in the project settings.
+<dd>You can add pages by pressing the <em>Add Page</em> button. The first time you press this, it'll ask for a template. After you create or select a template it will use this as the default. You can set the default in the project settings.
 </dd>
 <dt>Adding pages from template:</dt>
 <dd>Adding pages from a template will always give the template dialog. This will allow you to have several different templates in the templates directory(it will show all the kra files in the templates directory), so that you can have spread, coverpages and other pages at your finger tips. The create template dialog will allow you to make a simple two layer image with a white background, and rulers for the bleeds and guides. Import template will copy selected templates to the template directory, keeping all the necessary files inside the comics project.
@@ -146,7 +187,7 @@
 <dd>This will show a window with resize options. After selecting the right options, all the pages will be resized as such. A progress dialog will pop up showing you which pages have been done and how long it will take based on the passed time.
 </dd>
 <dt>View Page in Window</dt>
-<dd>This will pop up a dialog with the selected page’s mergedimage.png. The dialog will update when doing this for the image of another page. This is so that you can have a quick reference for a single page in the event your other referencing tools cannot open kra files.
+<dd>This will pop up a dialog with the selected page's mergedimage.png. The dialog will update when doing this for the image of another page. This is so that you can have a quick reference for a single page in the event your other referencing tools cannot open kra files.
 </dd>
 <dt>Scrape Authors</dt>
 <dd>This searches all the files from the pages list for author information and adds that to the author list. It will not check for copies, so you will need to clean up the author list yourself.
@@ -160,18 +201,18 @@
 <h2 id="usage---export">Usage - Export</h2>
 <p>CPMT will not allow export without any export methods set.</p>
 <p>You can configure the export settings by going to the drop-down next to <em>Project Settings</em> and selecting <em>Export Settings</em>.</p>
-<p>Here you can define…</p>
+<p>Here you can define...</p>
 <ul>
 <li>how much a page needs to be cropped</li>
 <li>which layers to remove by layer color-label</li>
 <li>to which formats to export, in what file-format and how to resize.</li>
 </ul>
-<p>Once you’ve done that, press export. Krita will pop up a progress bar for you with the estimated time and progress, so you can estimate how long you will have to wait.</p>
+<p>Once you've done that, press export. Krita will pop up a progress bar for you with the estimated time and progress, so you can estimate how long you will have to wait.</p>
 <p>CPMT will store the resized files and meta data in separate folders in the export folder. This is so that you can perform optimization methods afterwards and update everything quickly.</p>
 <h3 id="acbf">ACBF</h3>
 <p>ACBF is the advanced comic book format. It is a metadata file that can hold extra data like panels and text, and can even store translations for the text.</p>
-<p>Krita has some support for frames and text. If you name a vector layer “text” or “panels” it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren’t text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last.</p>
-<p>When you generate a CBZ file, the ACBF file will be generated alongside of it. There’s in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there’s currently fewer viewers who can read it.</p>
+<p>Krita has some support for frames and text. If you name a vector layer “text” or “panels” it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren't text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last.</p>
+<p>When you generate a CBZ file, the ACBF file will be generated alongside of it. There's in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there's currently fewer viewers who can read it.</p>
 <p>To fine tune the export to ACBF, you can go to file→document Information and add the following keywords:</p>
 <dl>
 <dt>acbf_title</dt>
@@ -209,9 +250,9 @@
 <li>support getting text info from the vector layers. [Partially done]
 <ul>
 <li>users can specify a name for text layers. (Waiting for stringfreeze to end)</li>
-<li>Don’t forget text-rotation(Needs API)</li>
-<li>last two/five characters are used to determine language. (Maybe not a good idea…)</li>
-<li>maybe text-class can be used to determine type? (We’ll proly need to use style sheets and comparing the text format to those)
+<li>Don't forget text-rotation(Needs API)</li>
+<li>last two/five characters are used to determine language. (Maybe not a good idea...)</li>
+<li>maybe text-class can be used to determine type? (We'll proly need to use style sheets and comparing the text format to those)
 <ul>
 <li>Speech (speech, dialogue)</li>
 <li>Commentary (caption in american comics)</li>
@@ -224,7 +265,7 @@
 <li>Sign (For signs on buildings and the like.)</li>
 <li>Inverted (Whether or not this should be treated as inverted text)</li>
 <li>transparent(For a transparent wordballoon.)</li>
-<li>Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I’d prefer if we could allow putting sound effects and such as a base64 reffed bit.) (See 1.2 support)</li>
+<li>Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.) (See 1.2 support)</li>
 </ul></li>
 <li>Get page background color from the page if possible. (This might only work with canvas color, though)</li>
 </ul></li>

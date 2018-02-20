@@ -1,0 +1,706 @@
+diff -Nru -x '*~' giflib-5.0.5.orig/cmake/modules/FindWcecompat.cmake giflib-5.0.5/cmake/modules/FindWcecompat.cmake
+--- giflib-5.0.5.orig/cmake/modules/FindWcecompat.cmake	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/cmake/modules/FindWcecompat.cmake	2013-09-16 23:17:55.666749200 +0200
+@@ -0,0 +1,33 @@
++# Try to find Wcecompat functionality
++# Once done this will define
++#
++#  WCECOMPAT_FOUND - system has Wcecompat
++#  WCECOMPAT_INCLUDE_DIR - Wcecompat include directory
++#  WCECOMPAT_LIBRARIES - Libraries needed to use Wcecompat
++#
++# Copyright (c) 2010, Andreas Holzammer, <andy@kdab.com>
++#
++# Redistribution and use is allowed according to the terms of the BSD license.
++
++if(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
++  set(Wcecompat_FIND_QUIETLY TRUE)
++endif(WCECOMPAT_INCLUDE_DIR AND WCECOMPAT_LIB_FOUND)
++
++find_path(WCECOMPAT_INCLUDE_DIR errno.h PATH_SUFFIXES wcecompat)
++
++set(WCECOMPAT_LIB_FOUND FALSE)
++
++if(WCECOMPAT_INCLUDE_DIR)
++    find_library(WCECOMPAT_LIBRARIES NAMES wcecompat wcecompatex )
++    if(WCECOMPAT_LIBRARIES)
++      set(WCECOMPAT_LIB_FOUND TRUE)
++    endif(WCECOMPAT_LIBRARIES)
++endif(WCECOMPAT_INCLUDE_DIR)
++
++# I have no idea what this is about, but it seems to be used quite often, so I add this here
++set(WCECOMPAT_CONST const)
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(Wcecompat  DEFAULT_MSG  WCECOMPAT_LIBRARIES  WCECOMPAT_LIB_FOUND)
++
++mark_as_advanced(WCECOMPAT_INCLUDE_DIR  WCECOMPAT_LIBRARIES  WCECOMPAT_CONST  WCECOMPAT_LIB_FOUND)
+diff -Nru -x '*~' giflib-5.0.5.orig/CMakeLists.txt giflib-5.0.5/CMakeLists.txt
+--- giflib-5.0.5.orig/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/CMakeLists.txt	2013-09-16 23:17:55.676749800 +0200
+@@ -0,0 +1,115 @@
++# This file is copyrighted under the BSD-license for buildsystem files of KDE
++# copyright 2010,2013, Patrick Spendrin <ps_ml@gmx.de>
++
++set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
++
++project (libgif)
++
++cmake_minimum_required(VERSION 2.8)
++
++if(WINCE)
++    find_package(Wcecompat REQUIRED)
++    include_directories(${WCECOMPAT_INCLUDE_DIR})
++    set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${WCECOMPAT_INCLUDE_DIR})
++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${WCECOMPAT_LIBRARIES})
++endif(WINCE)
++
++option(BUILD_utils "build also some small helper executables to transform gif files into other formats" ON)
++option(BUILD_TESTS "build some unittest files" OFF)
++
++include(CheckIncludeFile)
++
++check_include_file("fcntl.h" HAVE_FCNTL_H)
++check_include_file("io.h" HAVE_IO_H)
++check_include_file("stdarg.h" HAVE_STDARG_H)
++check_include_file("inttypes.h" HAVE_INTTYPES_H)
++check_include_file("limits.h" HAVE_MEMORY_H)
++check_include_file("memory.h" HAVE_MEMORY_H)
++check_include_file("stdint.h" HAVE_STDINT_H)
++check_include_file("stdlib.h" HAVE_STDLIB_H)
++check_include_file("strings.h" HAVE_STRINGS_H)
++check_include_file("string.h" HAVE_STRING_H)
++check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
++check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
++check_include_file("unistd.h" HAVE_UNISTD_H)
++
++set(PACKAGE "giflib")
++set(PACKAGE_BUGREPORT "kde-windows@kde.org")
++set(PACKAGE_NAME "giflib")
++set(PACKAGE_STRING "giflib-5.0.4")
++set(PACKAGE_TARNAME "")
++set(PACKAGE_VERSION "5.0.4")
++#cmakedefine VERSION
++
++configure_file(config.h.cmake config.h)
++include_directories(lib ${CMAKE_BINARY_DIR}) 
++
++add_definitions(-DHAVE_CONFIG_H)
++if(MSVC)
++    add_definitions(-D_CRT_SECURE_NO_WARNINGS -wd4996)
++endif(MSVC)
++
++set(libgif_SRCS 
++    lib/dgif_lib.c
++    lib/egif_lib.c
++    lib/gif_err.c
++    lib/gif_font.c
++    lib/gif_hash.c
++    lib/gifalloc.c
++    lib/quantize.c
++)
++
++add_library(gif SHARED ${libgif_SRCS})
++
++if(WINCE)
++    target_link_libraries(gif ${WCECOMPAT_LIBRARIES})
++endif(WINCE)
++
++install(TARGETS gif RUNTIME DESTINATION bin
++                    LIBRARY DESTINATION lib
++                    ARCHIVE DESTINATION lib)
++set_target_properties(gif PROPERTIES OUTPUT_NAME giflib4)
++
++install(FILES lib/gif_lib.h DESTINATION include)
++
++if(BUILD_utils)
++# add a convenience library so that these file is not recompiled for each target
++add_library(getarg STATIC util/getarg.c util/qprintf.c util/mkstemp.c)
++
++macro(compileUtils)
++foreach(srcfile ${ARGN})
++    add_executable(${srcfile} util/${srcfile}.c)
++    target_link_libraries(${srcfile} gif getarg)
++    install(TARGETS ${srcfile} RUNTIME DESTINATION bin
++                               LIBRARY DESTINATION lib
++                               ARCHIVE DESTINATION lib)
++endforeach(srcfile ${ARGN})
++endmacro(compileUtils)
++
++compileUtils(
++    gif2raw
++    gif2rgb
++    gifbuild
++    gifecho
++    giffix
++    gifinto
++    giftext
++    giftool
++    gifclrmp
++)
++
++if(BUILD_TESTS)
++    foreach(srcfile gifbg gifcolor giffilter gifhisto gifsponge gifwedge)
++        add_executable(${srcfile} util/${srcfile}.c)
++        target_link_libraries(${srcfile} gif getarg)
++    endforeach(srcfile gifbg gifcolor giffilter gifhisto gifsponge gifwedge)
++endif(BUILD_TESTS)
++
++if(NOT WIN32)
++    target_link_libraries(gifclrmp m)
++endif(NOT WIN32)
++endif(BUILD_utils)
++
++
++# documentation
++add_subdirectory(doc)
+\ Kein Zeilenumbruch am Dateiende.
+diff -Nru -x '*~' giflib-5.0.5.orig/config.h.cmake giflib-5.0.5/config.h.cmake
+--- giflib-5.0.5.orig/config.h.cmake	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/config.h.cmake	2013-09-16 23:17:55.681750100 +0200
+@@ -0,0 +1,74 @@
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#cmakedefine HAVE_DLFCN_H
++
++/* Define to 1 if you have the <fcntl.h> header file. */
++#cmakedefine HAVE_FCNTL_H
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#cmakedefine HAVE_INTTYPES_H
++
++/* Define to 1 if you have the <limits.h> header file. */
++#cmakedefine HAVE_LIMITS_H
++
++/* Define to 1 if you have the <memory.h> header file. */
++#cmakedefine HAVE_MEMORY_H
++
++/* Define to 1 if you have the <stdarg.h> header file. */
++#cmakedefine HAVE_STDARG_H
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#cmakedefine HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#cmakedefine HAVE_STDLIB_H
++
++/* Define to 1 if you have the <strings.h> header file. */
++#cmakedefine HAVE_STRINGS_H
++
++/* Define to 1 if you have the <string.h> header file. */
++#cmakedefine HAVE_STRING_H
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#cmakedefine HAVE_SYS_STAT_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#cmakedefine HAVE_SYS_TYPES_H
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#cmakedefine HAVE_UNISTD_H
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#cmakedefine LT_OBJDIR
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++#cmakedefine NO_MINUS_C_MINUS_O
++
++/* Name of package */
++#cmakedefine PACKAGE
++
++/* Define to the address where bug reports for this package should be sent. */
++#cmakedefine PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#cmakedefine PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#cmakedefine PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#cmakedefine PACKAGE_TARNAME
++
++/* Define to the home page for this package. */
++#cmakedefine PACKAGE_URL
++
++/* Define to the version of this package. */
++#cmakedefine PACKAGE_VERSION
++
++/* Define to 1 if you have the ANSI C header files. */
++#cmakedefine STDC_HEADERS
++
++/* Version number of package */
++#cmakedefine VERSION
+diff -Nru -x '*~' giflib-5.0.5.orig/doc/CMakeLists.txt giflib-5.0.5/doc/CMakeLists.txt
+--- giflib-5.0.5.orig/doc/CMakeLists.txt	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/doc/CMakeLists.txt	2013-09-16 23:17:55.690750600 +0200
+@@ -0,0 +1,18 @@
++set(gif_MANS
++    gif2raw.1
++    gif2rgb.1
++    gifbg.1
++    gifbuild.1
++    gifclrmp.1
++    gifcolor.1
++    gifecho.1
++    giffix.1
++    gifhisto.1
++    gifinto.1
++    giflib.1
++    giftext.1
++    giftool.1
++    gifwedge.1
++)
++
++install(FILES ${gif_MANS} DESTINATION share/man/man1)
+\ Kein Zeilenumbruch am Dateiende.
+diff -Nru -x '*~' giflib-5.0.5.orig/lib/dgif_lib.c giflib-5.0.5/lib/dgif_lib.c
+--- giflib-5.0.5.orig/lib/dgif_lib.c	2013-08-29 21:56:39.000000000 +0200
++++ giflib-5.0.5/lib/dgif_lib.c	2013-09-16 23:17:55.696750900 +0200
+@@ -17,6 +17,7 @@
+ #include <string.h>
+ 
+ #ifdef _WIN32
++#include <stdbool.h>
+ #include <io.h>
+ #endif /* _WIN32 */
+ 
+@@ -362,7 +363,7 @@
+     }
+     /* Does this image have local color map? */
+     if (Buf[0] & 0x80) {
+-	unsigned int i;
++	int i;
+ 
+         GifFile->Image.ColorMap = GifMakeMapObject(1 << BitsPerPixel, NULL);
+         if (GifFile->Image.ColorMap == NULL) {
+diff -Nru -x '*~' giflib-5.0.5.orig/lib/egif_lib.c giflib-5.0.5/lib/egif_lib.c
+--- giflib-5.0.5.orig/lib/egif_lib.c	2013-08-29 21:56:39.000000000 +0200
++++ giflib-5.0.5/lib/egif_lib.c	2013-09-16 23:17:55.707751600 +0200
+@@ -16,6 +16,7 @@
+ #include <fcntl.h>
+ 
+ #ifdef _WIN32
++#include <stdbool.h>
+ #include <io.h>
+ #else
+ #include <sys/types.h>
+@@ -35,8 +36,8 @@
+ static int EGifPutWord(int Word, GifFileType * GifFile);
+ static int EGifSetupCompress(GifFileType * GifFile);
+ static int EGifCompressLine(GifFileType * GifFile, GifPixelType * Line,
+-                            int LineLen);
+-static int EGifCompressOutput(GifFileType * GifFile, int Code);
++                            const int LineLen);
++static int EGifCompressOutput(GifFileType * GifFile, const int Code);
+ static int EGifBufferedOutput(GifFileType * GifFile, GifByteType * Buf,
+                               int c);
+ 
+diff -Nru -x '*~' giflib-5.0.5.orig/lib/gif_lib.h giflib-5.0.5/lib/gif_lib.h
+--- giflib-5.0.5.orig/lib/gif_lib.h	2013-08-29 22:02:42.000000000 +0200
++++ giflib-5.0.5/lib/gif_lib.h	2013-09-16 23:27:13.817673600 +0200
+@@ -9,6 +9,10 @@
+ 
+ #ifdef __cplusplus
+ extern "C" {
++#elif !defined(_STDBOOL_H)
++#include <stdbool.h>
++#else
++typedef int bool;
+ #endif /* __cplusplus */
+ 
+ #define GIFLIB_MAJOR 5
+@@ -19,7 +21,6 @@
+ #define GIF_OK      1
+ 
+ #include <stddef.h>
+-#include <stdbool.h>
+ 
+ #define GIF_STAMP "GIFVER"          /* First chars in file - GIF stamp.  */
+ #define GIF_STAMP_LEN sizeof(GIF_STAMP) - 1
+@@ -119,17 +120,31 @@
+ } GraphicsControlBlock;
+ 
+ /******************************************************************************
++ Windows exports
++******************************************************************************/
++#if !defined(gif_STATIC) && defined(_WIN32) || defined(_WIN64)
++# ifdef gif_EXPORTS
++#  define GIF_EXPORT __declspec(dllexport)
++# else
++#  define GIF_EXPORT __declspec(dllimport)
++# endif
++#else
++# define GIF_EXPORT
++#endif
++
++
++/******************************************************************************
+  GIF encoding routines
+ ******************************************************************************/
+ 
+ /* Main entry points */
+-GifFileType *EGifOpenFileName(const char *GifFileName,
++GIF_EXPORT GifFileType *EGifOpenFileName(const char *GifFileName,
+                               const bool GifTestExistence, int *Error);
+-GifFileType *EGifOpenFileHandle(const int GifFileHandle, int *Error);
+-GifFileType *EGifOpen(void *userPtr, OutputFunc writeFunc, int *Error);
+-int EGifSpew(GifFileType * GifFile);
+-char *EGifGetGifVersion(GifFileType *GifFile); /* new in 5.x */
+-int EGifCloseFile(GifFileType * GifFile);
++GIF_EXPORT GifFileType *EGifOpenFileHandle(const int GifFileHandle, int *Error);
++GIF_EXPORT GifFileType *EGifOpen(void *userPtr, OutputFunc writeFunc, int *Error);
++GIF_EXPORT int EGifSpew(GifFileType * GifFile);
++GIF_EXPORT char *EGifGetGifVersion(GifFileType *GifFile); /* new in 5.x */
++GIF_EXPORT int EGifCloseFile(GifFileType * GifFile);
+ 
+ #define E_GIF_ERR_OPEN_FAILED    1    /* And EGif possible errors. */
+ #define E_GIF_ERR_WRITE_FAILED   2
+@@ -143,31 +158,31 @@
+ #define E_GIF_ERR_NOT_WRITEABLE  10
+ 
+ /* These are legacy.  You probably do not want to call them directly */
+-int EGifPutScreenDesc(GifFileType *GifFile,
++GIF_EXPORT int EGifPutScreenDesc(GifFileType *GifFile,
+                       const int GifWidth, const int GifHeight, 
+ 		      const int GifColorRes,
+                       const int GifBackGround,
+                       const ColorMapObject *GifColorMap);
+-int EGifPutImageDesc(GifFileType *GifFile, 
++GIF_EXPORT int EGifPutImageDesc(GifFileType *GifFile, 
+ 		     const int GifLeft, const int GifTop,
+                      const int GifWidth, const int GifHeight, 
+ 		     const bool GifInterlace,
+                      const ColorMapObject *GifColorMap);
+-void EGifSetGifVersion(GifFileType *GifFile, const bool gif89);
+-int EGifPutLine(GifFileType *GifFile, GifPixelType *GifLine,
++GIF_EXPORT void EGifSetGifVersion(GifFileType *GifFile, const bool gif89);
++GIF_EXPORT int EGifPutLine(GifFileType *GifFile, GifPixelType *GifLine,
+                 int GifLineLen);
+-int EGifPutPixel(GifFileType *GifFile, const GifPixelType GifPixel);
+-int EGifPutComment(GifFileType *GifFile, const char *GifComment);
+-int EGifPutExtensionLeader(GifFileType *GifFile, const int GifExtCode);
+-int EGifPutExtensionBlock(GifFileType *GifFile,
++GIF_EXPORT int EGifPutPixel(GifFileType *GifFile, GifPixelType GifPixel);
++GIF_EXPORT int EGifPutComment(GifFileType *GifFile, const char *GifComment);
++GIF_EXPORT int EGifPutExtensionLeader(GifFileType *GifFile, const int GifExtCode);
++GIF_EXPORT int EGifPutExtensionBlock(GifFileType *GifFile,
+                          const int GifExtLen, const void *GifExtension);
+-int EGifPutExtensionTrailer(GifFileType *GifFile);
+-int EGifPutExtension(GifFileType *GifFile, const int GifExtCode, 
++GIF_EXPORT int EGifPutExtensionTrailer(GifFileType *GifFile);
++GIF_EXPORT int EGifPutExtension(GifFileType *GifFile, const int GifExtCode, 
+ 		     const int GifExtLen,
+                      const void *GifExtension);
+-int EGifPutCode(GifFileType *GifFile, int GifCodeSize,
++GIF_EXPORT int EGifPutCode(GifFileType *GifFile, int GifCodeSize,
+                 const GifByteType *GifCodeBlock);
+-int EGifPutCodeNext(GifFileType *GifFile,
++GIF_EXPORT int EGifPutCodeNext(GifFileType *GifFile,
+                     const GifByteType *GifCodeBlock);
+ 
+ /******************************************************************************
+@@ -175,11 +190,11 @@
+ ******************************************************************************/
+ 
+ /* Main entry points */
+-GifFileType *DGifOpenFileName(const char *GifFileName, int *Error);
+-GifFileType *DGifOpenFileHandle(int GifFileHandle, int *Error);
+-int DGifSlurp(GifFileType * GifFile);
+-GifFileType *DGifOpen(void *userPtr, InputFunc readFunc, int *Error);    /* new one (TVT) */
+-int DGifCloseFile(GifFileType * GifFile);
++GIF_EXPORT GifFileType *DGifOpenFileName(const char *GifFileName, int *Error);
++GIF_EXPORT GifFileType *DGifOpenFileHandle(int GifFileHandle, int *Error);
++GIF_EXPORT int DGifSlurp(GifFileType * GifFile);
++GIF_EXPORT GifFileType *DGifOpen(void *userPtr, InputFunc readFunc, int *Error);    /* new one (TVT) */
++GIF_EXPORT int DGifCloseFile(GifFileType * GifFile);
+ 
+ #define D_GIF_ERR_OPEN_FAILED    101    /* And DGif possible errors. */
+ #define D_GIF_ERR_READ_FAILED    102
+@@ -196,25 +211,25 @@
+ #define D_GIF_ERR_EOF_TOO_SOON   113
+ 
+ /* These are legacy.  You probably do not want to call them directly */
+-int DGifGetScreenDesc(GifFileType *GifFile);
+-int DGifGetRecordType(GifFileType *GifFile, GifRecordType *GifType);
+-int DGifGetImageDesc(GifFileType *GifFile);
+-int DGifGetLine(GifFileType *GifFile, GifPixelType *GifLine, int GifLineLen);
+-int DGifGetPixel(GifFileType *GifFile, GifPixelType GifPixel);
+-int DGifGetComment(GifFileType *GifFile, char *GifComment);
+-int DGifGetExtension(GifFileType *GifFile, int *GifExtCode,
+-                     GifByteType **GifExtension);
+-int DGifGetExtensionNext(GifFileType *GifFile, GifByteType **GifExtension);
+-int DGifGetCode(GifFileType *GifFile, int *GifCodeSize,
+-                GifByteType **GifCodeBlock);
+-int DGifGetCodeNext(GifFileType *GifFile, GifByteType **GifCodeBlock);
+-int DGifGetLZCodes(GifFileType *GifFile, int *GifCode);
++GIF_EXPORT int DGifGetScreenDesc(GifFileType *GifFile);
++GIF_EXPORT int DGifGetRecordType(GifFileType *GifFile, GifRecordType *GifType);
++GIF_EXPORT int DGifGetImageDesc(GifFileType *GifFile);
++GIF_EXPORT int DGifGetLine(GifFileType *GifFile, GifPixelType *GifLine, int GifLineLen);
++GIF_EXPORT int DGifGetPixel(GifFileType *GifFile, GifPixelType GifPixel);
++GIF_EXPORT int DGifGetComment(GifFileType *GifFile, char *GifComment);
++GIF_EXPORT int DGifGetExtension(GifFileType *GifFile, int *GifExtCode,
++                                GifByteType **GifExtension);
++GIF_EXPORT int DGifGetExtensionNext(GifFileType *GifFile, GifByteType **GifExtension);
++GIF_EXPORT int DGifGetCode(GifFileType *GifFile, int *GifCodeSize,
++                           GifByteType **GifCodeBlock);
++GIF_EXPORT int DGifGetCodeNext(GifFileType *GifFile, GifByteType **GifCodeBlock);
++GIF_EXPORT int DGifGetLZCodes(GifFileType *GifFile, int *GifCode);
+ 
+ 
+ /******************************************************************************
+  Color table quantization (deprecated)
+ ******************************************************************************/
+-int GifQuantizeBuffer(unsigned int Width, unsigned int Height,
++GIF_EXPORT int GifQuantizeBuffer(unsigned int Width, unsigned int Height,
+                    int *ColorMapSize, GifByteType * RedInput,
+                    GifByteType * GreenInput, GifByteType * BlueInput,
+                    GifByteType * OutputBuffer,
+@@ -223,7 +238,7 @@
+ /******************************************************************************
+  Error handling and reporting.
+ ******************************************************************************/
+-extern char *GifErrorString(int ErrorCode);     /* new in 2012 - ESR */
++GIF_EXPORT extern char *GifErrorString(int ErrorCode);     /* new in 2012 - ESR */
+ 
+ /*****************************************************************************
+  Everything below this point is new after version 1.2, supporting `slurp
+@@ -234,43 +249,43 @@
+  Color map handling from gif_alloc.c
+ ******************************************************************************/
+ 
+-extern ColorMapObject *GifMakeMapObject(int ColorCount,
++GIF_EXPORT extern ColorMapObject *GifMakeMapObject(int ColorCount,
+                                      const GifColorType *ColorMap);
+-extern void GifFreeMapObject(ColorMapObject *Object);
+-extern ColorMapObject *GifUnionColorMap(const ColorMapObject *ColorIn1,
++GIF_EXPORT extern void GifFreeMapObject(ColorMapObject *Object);
++GIF_EXPORT extern ColorMapObject *GifUnionColorMap(const ColorMapObject *ColorIn1,
+                                      const ColorMapObject *ColorIn2,
+                                      GifPixelType ColorTransIn2[]);
+-extern int GifBitSize(int n);
++GIF_EXPORT extern int GifBitSize(int n);
+ 
+ /******************************************************************************
+  Support for the in-core structures allocation (slurp mode).              
+ ******************************************************************************/
+ 
+-extern void GifApplyTranslation(SavedImage *Image, GifPixelType Translation[]);
+-extern int GifAddExtensionBlock(int *ExtensionBlock_Count,
++GIF_EXPORT extern void GifApplyTranslation(SavedImage *Image, GifPixelType Translation[]);
++GIF_EXPORT extern int GifAddExtensionBlock(int *ExtensionBlock_Count,
+ 				ExtensionBlock **ExtensionBlocks, 
+ 				int Function, 
+ 				unsigned int Len, unsigned char ExtData[]);
+-extern void GifFreeExtensions(int *ExtensionBlock_Count,
++GIF_EXPORT extern void GifFreeExtensions(int *ExtensionBlock_Count,
+ 			      ExtensionBlock **ExtensionBlocks);
+-extern SavedImage *GifMakeSavedImage(GifFileType *GifFile,
++GIF_EXPORT extern SavedImage *GifMakeSavedImage(GifFileType *GifFile,
+                                   const SavedImage *CopyFrom);
+-extern void GifFreeSavedImages(GifFileType *GifFile);
++GIF_EXPORT extern void GifFreeSavedImages(GifFileType *GifFile);
+ 
+ /******************************************************************************
+  5.x functions for GIF89 graphics control blocks
+ ******************************************************************************/
+ 
+-int DGifExtensionToGCB(const size_t GifExtensionLength,
++GIF_EXPORT int DGifExtensionToGCB(const size_t GifExtensionLength,
+ 		       const GifByteType *GifExtension,
+ 		       GraphicsControlBlock *GCB);
+-size_t EGifGCBToExtension(const GraphicsControlBlock *GCB,
++GIF_EXPORT size_t EGifGCBToExtension(const GraphicsControlBlock *GCB,
+ 		       GifByteType *GifExtension);
+ 
+-int DGifSavedExtensionToGCB(GifFileType *GifFile, 
++GIF_EXPORT int DGifSavedExtensionToGCB(GifFileType *GifFile, 
+ 			    int ImageIndex, 
+ 			    GraphicsControlBlock *GCB);
+-int EGifGCBToSavedExtension(const GraphicsControlBlock *GCB, 
++GIF_EXPORT int EGifGCBToSavedExtension(const GraphicsControlBlock *GCB, 
+ 			    GifFileType *GifFile, 
+ 			    int ImageIndex);
+ 
+@@ -280,21 +295,21 @@
+ 
+ #define GIF_FONT_WIDTH  8
+ #define GIF_FONT_HEIGHT 8
+-extern const unsigned char GifAsciiTable8x8[][GIF_FONT_WIDTH];
++GIF_EXPORT extern const unsigned char GifAsciiTable8x8[][GIF_FONT_WIDTH];
+ 
+-extern void GifDrawText8x8(SavedImage *Image,
++GIF_EXPORT extern void GifDrawText8x8(SavedImage *Image,
+                      const int x, const int y,
+                      const char *legend, const int color);
+ 
+-extern void GifDrawBox(SavedImage *Image,
++GIF_EXPORT extern void GifDrawBox(SavedImage *Image,
+                     const int x, const int y,
+                     const int w, const int d, const int color);
+ 
+-extern void GifDrawRectangle(SavedImage *Image,
++GIF_EXPORT extern void GifDrawRectangle(SavedImage *Image,
+                    const int x, const int y,
+                    const int w, const int d, const int color);
+ 
+-extern void GifDrawBoxedText8x8(SavedImage *Image,
++GIF_EXPORT extern void GifDrawBoxedText8x8(SavedImage *Image,
+                           const int x, const int y,
+                           const char *legend,
+                           const int border, const int bg, const int fg);
+diff -Nru -x '*~' giflib-5.0.5.orig/lib/stdbool.h giflib-5.0.5/lib/stdbool.h
+--- giflib-5.0.5.orig/lib/stdbool.h	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/lib/stdbool.h	2013-09-16 23:17:55.737753300 +0200
+@@ -0,0 +1,20 @@
++#ifndef stdbool_h
++#define stdbool_h
++
++#ifndef __cplusplus
++typedef int bool;
++#define false 0
++#define true 1
++#endif /* !__cplusplus */
++
++#define snprintf sprintf_s
++
++int mkstemp(char* tmpl);
++
++extern char *optarg;    // global argument pointer
++extern int   optind;   // global argv index
++extern int   opterr;
++
++int getopt(int argc, char **argv, const char *optstring);
++
++#endif /* stdbool_h */
+diff -Nru -x '*~' giflib-5.0.5.orig/lib/unistd.h giflib-5.0.5/lib/unistd.h
+--- giflib-5.0.5.orig/lib/unistd.h	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/lib/unistd.h	2013-09-16 23:17:55.744753700 +0200
+@@ -0,0 +1 @@
++// dummy 
+diff -Nru -x '*~' giflib-5.0.5.orig/util/gifinto.c giflib-5.0.5/util/gifinto.c
+--- giflib-5.0.5.orig/util/gifinto.c	2013-08-29 21:56:39.000000000 +0200
++++ giflib-5.0.5/util/gifinto.c	2013-09-16 23:17:55.747753900 +0200
+@@ -52,6 +52,7 @@
+     bool Error, MinSizeFlag = false, HelpFlag = false;
+     char **FileName = NULL, FoutTmpName[STRLEN], FullPath[STRLEN], *p;
+     FILE *Fin, *Fout;
++    int FD;
+ 
+     if ((Error = GAGetArgs(argc, argv, CtrlStr, &GifNoisyPrint,
+ 		&MinSizeFlag, &MinFileSize, &HelpFlag,
+@@ -104,7 +105,6 @@
+     /* then add a name for the tempfile */
+     if ( (strlen(FoutTmpName) + strlen(DEFAULT_TMP_NAME))  > STRLEN-1 ) GIF_EXIT("Filename too long.");
+     strcat(FoutTmpName, DEFAULT_TMP_NAME);
+-    int FD;
+     FD = mkstemp(FoutTmpName); /* returns filedescriptor */
+     if (FD == -1 )
+     {
+diff -Nru -x '*~' giflib-5.0.5.orig/util/giftool.c giflib-5.0.5/util/giftool.c
+--- giflib-5.0.5.orig/util/giftool.c	2013-08-29 21:56:39.000000000 +0200
++++ giflib-5.0.5/util/giftool.c	2013-09-16 23:17:55.757754400 +0200
+@@ -10,7 +10,7 @@
+ #include <fcntl.h>
+ #include <stdbool.h>
+ 
+-#include "getopt.h"
++//#include "getopt.h"
+ #include "getarg.h"
+ #include "gif_lib.h"
+ 
+diff -Nru -x '*~' giflib-5.0.5.orig/util/mkstemp.c giflib-5.0.5/util/mkstemp.c
+--- giflib-5.0.5.orig/util/mkstemp.c	1970-01-01 01:00:00.000000000 +0100
++++ giflib-5.0.5/util/mkstemp.c	2013-09-16 23:17:55.767755000 +0200
+@@ -0,0 +1,88 @@
++#include <stdio.h>
++#include <string.h>
++#include <fcntl.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <io.h>
++
++int mkstemp(const char *tmpl)
++{
++    int fd = -1;
++    char* fn = _strdup(tmpl);
++    int len = strlen(tmpl) + 1;
++    int err = 0;
++
++    err = _mktemp_s(fn, len);
++    fd = _open(fn, O_RDWR|O_CREAT|O_EXCL, 0600);
++    free(fn);
++    return fd;
++}
++
++char *optarg = NULL;    // global argument pointer
++int   optind = 0;   // global argv index
++int   opterr = 0;
++
++int getopt(int argc, char **argv, const char *optstring)
++{
++    static char *next = NULL;
++    char c = '?';
++    char *cp = NULL;
++    if (optind == 0)
++        next = NULL;
++
++    optarg = NULL;
++
++    if (next == NULL || *next == '\0')
++    {
++        if (optind == 0)
++            optind++;
++
++        if (optind >= argc || argv[optind][0] != '-' || argv[optind][1] == '\0')
++        {
++            optarg = NULL;
++            if (optind < argc)
++                optarg = argv[optind];
++            return -1;
++        }
++
++        if (strcmp(argv[optind], "--") == 0)
++        {
++            optind++;
++            optarg = NULL;
++            if (optind < argc)
++                optarg = argv[optind];
++            return -1;
++        }
++
++        next = argv[optind];
++        next++;     // skip past -
++        optind++;
++    }
++
++    c = *next++;
++    cp = strchr(optstring, c);
++
++    if (cp == NULL || c == ':')
++        return '?';
++
++    cp++;
++    if (*cp == ':')
++    {
++        if (*next != '\0')
++        {
++            optarg = next;
++            next = NULL;
++        }
++        else if (optind < argc)
++        {
++            optarg = argv[optind];
++            optind++;
++        }
++        else
++        {
++            return '?';
++        }
++    }
++
++    return c;
++}

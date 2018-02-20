@@ -515,6 +515,13 @@ set_package_properties(JPEG PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
 
+find_package(GIF)
+set_package_properties(GIF PROPERTIES
+    DESCRIPTION "Library for loading and saving gif files."
+    URL "http://giflib.sourceforge.net/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita GIF filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES

@@ -32,7 +32,6 @@ if(LIBRAW_FOUND)
 endif()
 
 add_subdirectory(svg)
-
 add_subdirectory(qimageio)
 add_subdirectory(ora)
 add_subdirectory(ppm)
@@ -45,3 +44,7 @@ add_subdirectory(brush)
 add_subdirectory(spriter)
 add_subdirectory(video)
 add_subdirectory(kra)
+
+if (GIF_FOUND)
+    add_subdirectory(gif)
+endif()

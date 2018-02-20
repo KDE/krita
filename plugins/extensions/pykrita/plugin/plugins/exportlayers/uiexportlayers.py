@@ -25,7 +25,6 @@ class UIExportLayers(object):
         self.widgetDocuments = QListWidget()
         self.directoryTextField = QLineEdit()
         self.directoryDialogButton = QPushButton("...")
-        self.verifyLayerFormatCheckBox = QCheckBox("Verify layers that contains [jpeg|png]")
         self.exportFilterLayersCheckBox = QCheckBox("Export filter layers")
         self.batchmodeCheckBox = QCheckBox("Export in batchmode")
         self.ignoreInvisibleLayersCheckBox = QCheckBox("Ignore invisible layers")
@@ -64,7 +63,6 @@ class UIExportLayers(object):
         self.directorySelectorLayout.addWidget(self.directoryTextField)
         self.directorySelectorLayout.addWidget(self.directoryDialogButton)
 
-        self.optionsLayout.addWidget(self.verifyLayerFormatCheckBox)
         self.optionsLayout.addWidget(self.exportFilterLayersCheckBox)
         self.optionsLayout.addWidget(self.batchmodeCheckBox)
         self.optionsLayout.addWidget(self.ignoreInvisibleLayersCheckBox)

@@ -55,6 +55,7 @@ function(install_pykrita_plugin name)
                 PATTERN "*.ui"
                 PATTERN "*.txt"
                 PATTERN "*.csv"
+                PATTERN "*.html"
                 PATTERN "__pycache__*" EXCLUDE
            )
         # TODO Is there any way to form a long PATTERN options string
@@ -87,7 +88,7 @@ install_pykrita_plugin(tenscripts)
 install_pykrita_plugin(palette_docker)
 install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
-install_pykrita_plugin(scriptdocker)
+# install_pykrita_plugin(scriptdocker)
 install_pykrita_plugin(comics_project_management_tools)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
@@ -100,9 +101,6 @@ install( FILES
     hello/hello.xmlgui
 DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/)
 
-install( FILES
-    comics_project_management_tools/README.html
-DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita/comics_project_management_tools)
 
 
 install( FILES

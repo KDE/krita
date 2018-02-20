@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=tenscripts
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Ten Scripts
 Name[ar]=عشرُ سكربتات
 Name[ca]=Deu scripts

@@ -2,6 +2,7 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=hello
+X-Krita-Manual=Manual.html
 X-Python-2-Compatible=false
 Name=Hello World
 Name[ar]=مرحبًا يا عالم

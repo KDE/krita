@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=assignprofiledialog
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Assign Profile to Image
 Name[ar]=إسناد اللاحات إلى الصّور
 Name[ca]=Assigna un perfil a una imatge

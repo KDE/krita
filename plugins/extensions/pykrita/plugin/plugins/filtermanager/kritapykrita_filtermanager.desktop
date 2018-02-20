@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=filtermanager
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Filter Manager
 Name[ar]=مدير المرشّحات
 Name[ca]=Gestor de filtres

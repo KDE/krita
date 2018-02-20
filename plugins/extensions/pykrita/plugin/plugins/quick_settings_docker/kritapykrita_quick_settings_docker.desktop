@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=quick_settings_docker
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Quick Settings Docker
 Name[ar]=رصيف بإعدادات سريعة
 Name[ca]=Acoblador d'arranjament ràpid

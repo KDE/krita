@@ -84,7 +84,7 @@ class Palette_Docker(DockWidget):
         self.actionMenu.addAction(self.editPaletteData)
         self.actionMenu.addAction(self.exportToGimp)
         self.actionMenu.addAction(self.exportToInkscape)
-        self.actionMenu.addAction(self.sortColors)
+        # self.actionMenu.addAction(self.sortColors)
 
         self.extra.setMenu(self.actionMenu)
 

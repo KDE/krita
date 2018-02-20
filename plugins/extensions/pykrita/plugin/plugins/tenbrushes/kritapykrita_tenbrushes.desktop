@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=tenbrushes
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Ten Brushes
 Name[ar]=عشرُ فُرش
 Name[ca]=Deu pinzells

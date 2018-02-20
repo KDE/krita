@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=scripter
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Scripter
 Name[ca]=Scripter
 Name[ca@valencia]=Scripter

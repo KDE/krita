@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=palette_docker
 X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
 Name=Palette docker
 Name[ar]=رصيف اللوحات
 Name[ca]=Acoblador de paletes

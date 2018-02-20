@@ -75,8 +75,17 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
 
     if (allPaintedTypes != m_activePointType) {
         KoPathPoint::PointTypes nonHighlightedType = allPaintedTypes & ~m_activePointType;
-        helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
-        m_activePoint->paint(helper, nonHighlightedType);
+        KoPathPoint::PointTypes nonNodeType = nonHighlightedType & ~KoPathPoint::Node;
+
+        if (nonNodeType != KoPathPoint::None) {
+            helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
+            m_activePoint->paint(helper, nonHighlightedType);
+        }
+
+        if (nonHighlightedType & KoPathPoint::Node) {
+            helper.setHandleStyle(KisHandleStyle::partiallyHighlightedPrimaryHandles());
+            m_activePoint->paint(helper, KoPathPoint::Node);
+        }
     }
 
     helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());

@@ -1,22 +1,22 @@
-From 230c7679a3a1a8d849adcfe941030ec423228f3f Mon Sep 17 00:00:00 2001
+From 5322f8d7bbba2cb8a94236aafad08189f88a1759 Mon Sep 17 00:00:00 2001
 From: Boudewijn Rempt <boud@valdyas.org>
 Date: Tue, 20 Feb 2018 12:41:23 +0100
 Subject: [PATCH] Add a cmake build system
 
 ---
- CMakeLists.txt                    | 115 +++++++++++++++++++++++++++++++++
+ CMakeLists.txt                    | 117 ++++++++++++++++++++++++++++++++++
  cmake/modules/FindWcecompat.cmake |  33 ++++++++++
- config.h.cmake                    |  74 ++++++++++++++++++++++
+ config.h.cmake                    |  74 +++++++++++++++++++++
  config.h.in                       |   3 +
  doc/CMakeLists.txt                |  18 ++++++
  lib/dgif_lib.c                    |   3 +-
  lib/egif_lib.c                    |   5 +-
- lib/gif_lib.h                     | 130 ++++++++++++++++++++++----------------
+ lib/gif_lib.h                     | 131 +++++++++++++++++++++-----------------
  lib/stdbool.h                     |  20 ++++++
  lib/unistd.h                      |   1 +
  util/giftool.c                    |   2 +-
- util/mkstemp.c                    |  88 ++++++++++++++++++++++++++
- 12 files changed, 432 insertions(+), 60 deletions(-)
+ util/mkstemp.c                    |  88 +++++++++++++++++++++++++
+ 12 files changed, 434 insertions(+), 61 deletions(-)
  create mode 100644 CMakeLists.txt
  create mode 100644 cmake/modules/FindWcecompat.cmake
  create mode 100644 config.h.cmake
@@ -27,10 +27,10 @@ Subject: [PATCH] Add a cmake build system
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
 new file mode 100644
-index 0000000..af1ad6e
+index 0000000..711c7eb
 --- /dev/null
 +++ b/CMakeLists.txt
-@@ -0,0 +1,115 @@
+@@ -0,0 +1,117 @@
 +# This file is copyrighted under the BSD-license for buildsystem files of KDE
 +# copyright 2010,2013, Patrick Spendrin <ps_ml@gmx.de>
 +
@@ -90,6 +90,8 @@ index 0000000..af1ad6e
 +    lib/gif_hash.c
 +    lib/gifalloc.c
 +    lib/quantize.c
++    lib/gifalloc.c
++    lib/openbsd-reallocarray.c
 +)
 +
 +add_library(gif SHARED ${libgif_SRCS})
@@ -145,8 +147,7 @@ index 0000000..af1ad6e
 +
 +
 +# documentation
-+add_subdirectory(doc)
-\ No newline at end of file
++#add_subdirectory(doc)
 diff --git a/cmake/modules/FindWcecompat.cmake b/cmake/modules/FindWcecompat.cmake
 new file mode 100644
 index 0000000..4276975
@@ -350,7 +351,7 @@ index 18f954f..02f6fec 100644
                                int c);
  
 diff --git a/lib/gif_lib.h b/lib/gif_lib.h
-index 078930c..b9b79c8 100644
+index 078930c..47ce60d 100644
 --- a/lib/gif_lib.h
 +++ b/lib/gif_lib.h
 @@ -9,6 +9,10 @@ gif_lib.h - service library for decoding and encoding GIF images
@@ -519,7 +520,7 @@ index 078930c..b9b79c8 100644
  
  /*****************************************************************************
   Everything below this point is new after version 1.2, supporting `slurp
-@@ -236,46 +254,46 @@ extern const char *GifErrorString(int ErrorCode);     /* new in 2012 - ESR */
+@@ -236,46 +254,45 @@ extern const char *GifErrorString(int ErrorCode);     /* new in 2012 - ESR */
   Color map handling from gif_alloc.c
  ******************************************************************************/
  
@@ -536,8 +537,8 @@ index 078930c..b9b79c8 100644
 +GIF_EXPORT extern int GifBitSize(int n);
  
 -extern void *
-+GIF_EXPORT extern void *
- reallocarray(void *optr, size_t nmemb, size_t size);
+-reallocarray(void *optr, size_t nmemb, size_t size);
++GIF_EXPORT extern void * reallocarray(void *optr, size_t nmemb, size_t size);
  
  /******************************************************************************
   Support for the in-core structures allocation (slurp mode).              
@@ -580,7 +581,7 @@ index 078930c..b9b79c8 100644
  			    GifFileType *GifFile, 
  			    int ImageIndex);
  
-@@ -285,21 +303,21 @@ int EGifGCBToSavedExtension(const GraphicsControlBlock *GCB,
+@@ -285,21 +302,21 @@ int EGifGCBToSavedExtension(const GraphicsControlBlock *GCB,
  
  #define GIF_FONT_WIDTH  8
  #define GIF_FONT_HEIGHT 8

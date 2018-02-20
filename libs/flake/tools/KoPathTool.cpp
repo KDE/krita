@@ -829,14 +829,16 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     // check if we are doing something else at the moment
     if (m_currentStrategy) return;
 
-    QScopedPointer<PathSegment> s(segmentAtPoint(event->point));
-
-    if (s && s->isValid()) {
+    if (!m_activeHandle && m_activeSegment && m_activeSegment->isValid()) {
         QList<KoPathPointData> segments;
-        segments.append(KoPathPointData(s->path, s->path->pathPointIndex(s->segmentStart)));
-        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, s->positionOnSegment);
+        segments.append(
+            KoPathPointData(m_activeSegment->path,
+                            m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart)));
+
+        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, m_activeSegment->positionOnSegment);
         d->canvas->addCommand(cmd);
 
+        m_pointSelection.clear();
         foreach (KoPathPoint * p, cmd->insertedPoints()) {
             m_pointSelection.add(p, false);
         }
@@ -844,6 +846,13 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->accept();
     } else if (!m_activeHandle && !m_activeSegment && m_activatedTemporarily) {
         emit done();
+        event->accept();
+    } else if (!m_activeHandle && !m_activeSegment) {
+        KoShapeManager *shapeManager = canvas()->shapeManager();
+        KoSelection *selection = shapeManager->selection();
+
+        selection->deselectAll();
+        event->accept();
     }
 }
 
@@ -934,6 +943,8 @@ void KoPathTool::clearActivePointSelectionReferences()
     m_pointSelection.clear();
 }
 
+#include "kis_pointer_utils.h"
+
 void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
 {
     QList<KoPathShape*> selectedShapes;
@@ -944,6 +955,9 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
             selectedShapes.append(pathShape);
         }
     }
+
+    const QRectF oldBoundingRect =
+        KoShape::boundingRect(implicitCastList<KoShape*>(m_pointSelection.selectedShapes()));
 
     if (selectedShapes != m_pointSelection.selectedShapes()) {
         clearActivePointSelectionReferences();
@@ -957,6 +971,7 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
         // current canvas
         repaint(shape->boundingRect());
     }
+    repaint(oldBoundingRect);
 
     updateOptionsWidget();
     updateActions();

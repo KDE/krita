@@ -90,8 +90,7 @@ bool QGIFLibHandler::read ( QImage * image )
             leftCol = gifFile->Image.Left;
             width = gifFile->Image.Width;
             height = gifFile->Image.Height;
-//            qDebug("Image %d at (%d, %d) [%dx%d]",
-                   ++imageNum, leftCol, topRow, width, height);
+            qDebug("Image %d at (%d, %d) [%dx%d]", ++imageNum, leftCol, topRow, width, height);
             if (gifFile->Image.Left + width > gifFile->SWidth ||
                     gifFile->Image.Top + height > gifFile->SHeight)
             {
@@ -154,8 +153,7 @@ bool QGIFLibHandler::read ( QImage * image )
                 switch (extCode)
                 {
                 case GRAPHICS_EXT_FUNC_CODE:	// Graphics control extension
-//                    qDebug("graphics control: %x %x %x %x %x",
-                           extData[0], extData[1], extData[2], extData[3], extData[4]);
+//                    qDebug("graphics control: %x %x %x %x %x", extData[0], extData[1], extData[2], extData[3], extData[4]);
                     // Should be block size, packed fields, delay time,
                     // transparent color, block terminator
                     // see doc/gif89.txt in libgif source package

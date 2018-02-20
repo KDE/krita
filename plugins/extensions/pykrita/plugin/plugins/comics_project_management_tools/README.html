@@ -33,21 +33,24 @@
 </dl>
 
 <h2 id="toc">Table of Contents:</h2>
+
 <ol>
 <li><a href="#usage---quick-start-guide">Usage - quick-start guide</a></li>
-<li><a href="#usage---meta-data">Usage - Meta Data</a>
+<li>
+    <a href="#usage---meta-data">Usage - Meta Data</a>
         <ol>
             <li><a href="#adding-extra-auto-completion-keys.">Adding extra auto-completion keys.</a></li>
             <li><a href="#the-author-list">The Author list</a></li>
         </ol>
-    </li>
+</li>
 <li><a href="#usage---pages">Usage - Pages</a></li>
-<a href="#usage---pages">
-</a><li><a href="#usage---pages"></a><a href="#usage---copy-location">Usage - Copy Location</a></li>
-<li><a href="#usage---export">Usage - Export</a><ol>
+<li><a href="#usage---copy-location">Usage - Copy Location</a></li>
+<li>
+    <a href="#usage---export">Usage - Export</a>
+        <ol>
             <li><a href="#acbf">ACBF</a></li>
         </ol>
-    </li>
+</li>
 <li><a href="#todo">TODO:</a></li>
 </ol>
 
@@ -169,7 +172,7 @@
 <p>ACBF is the advanced comic book format. It is a metadata file that can hold extra data like panels and text, and can even store translations for the text.</p>
 <p>Krita has some support for frames and text. If you name a vector layer “text” or “panels” it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren’t text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last.</p>
 <p>When you generate a CBZ file, the ACBF file will be generated alongside of it. There’s in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there’s currently fewer viewers who can read it.</p>
-<p>To fine tune the export to ACBF, you can go to file-&gt;document Information and add the following keywords:</p>
+<p>To fine tune the export to ACBF, you can go to file→document Information and add the following keywords:</p>
 <dl>
 <dt>acbf_title</dt>
 <dd>this will flag this page to be used as a table of contents bookmark inside ACBF. The content mark will use the “title” value in the document information to create a bookmark in the project language.
@@ -207,7 +210,7 @@
 <ul>
 <li>users can specify a name for text layers. (Waiting for stringfreeze to end)</li>
 <li>Don’t forget text-rotation(Needs API)</li>
-<li>last two/five characters are used to determine language. (Maybe not a good idea…&gt;_&gt;)</li>
+<li>last two/five characters are used to determine language. (Maybe not a good idea…)</li>
 <li>maybe text-class can be used to determine type? (We’ll proly need to use style sheets and comparing the text format to those)
 <ul>
 <li>Speech (speech, dialogue)</li>

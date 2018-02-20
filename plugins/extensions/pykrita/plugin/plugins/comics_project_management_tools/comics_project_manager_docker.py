@@ -435,16 +435,17 @@ class comics_project_manager_docker(DockWidget):
 
     """
     This is the actual function that adds the template using the template url.
-    It will attempt to name the new page projectName+number, and tries to get the first possible
-    number that is not in the pages list. If such a file already exists it will only append the file.
+    It will attempt to name the new page projectName+number.
     """
-
     def add_new_page(self, templateUrl):
 
         # check for page list and or location.
         pagesList = []
         if "pages" in self.setupDictionary.keys():
             pagesList = self.setupDictionary["pages"]
+        if not "pageNumber" in self.setupDictionary.keys():
+            self.setupDictionary['pageNumber'] = 0
+
         if (str(self.setupDictionary["pagesLocation"]).isspace()):
             self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
 
@@ -452,14 +453,9 @@ class comics_project_manager_docker(DockWidget):
         extraUnderscore = str()
         if str(self.setupDictionary["projectName"])[-1].isdigit():
             extraUnderscore = "_"
-        pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(len(pagesList), "03d"))
+        self.setupDictionary['pageNumber'] += 1
+        pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(self.setupDictionary['pageNumber'], "03d"))
         url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
-        pageNumber = 0
-        if (url in pagesList):
-            while (url in pagesList):
-                pageNumber += 1
-                pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(pageNumber, "03d"))
-                url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
 
         # open the page by opening the template and resaving it, or just opening it.
         absoluteUrl = os.path.join(self.projecturl, url)

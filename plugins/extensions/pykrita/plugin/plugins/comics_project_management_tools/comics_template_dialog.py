@@ -7,7 +7,8 @@ import os
 import shutil
 #from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget
-from PyQt5.QtCore import QLocale, Qt, QByteArray
+from PyQt5.QtCore import QLocale, Qt, QByteArray, QRectF
+from PyQt5.QtGui import QImage, QPainter, QPixmap
 from krita import *
 """
 Quick and dirty QComboBox subclassing that handles unitconversion for us.
@@ -128,17 +129,21 @@ class comics_template_create(QDialog):
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         mainWidget = QWidget()
+        explanation = QLabel(i18n("This allows you to make a template document with guides.\nThe width and height are the size of the live-area, the safe area is the live area minus the margins, and the full image is the live area plus the bleeds."))
+        explanation.setWordWrap(True)
+        self.layout().addWidget(explanation)
         self.layout().addWidget(mainWidget)
         self.layout().addWidget(buttons)
         mainWidget.setLayout(QHBoxLayout())
-        explanation = QLabel(i18n("This allows you to make a template document with guides.\nThe width and height are the size of the live-area, the safe area is the live area minus the margins, and the full image is the live area plus the bleeds."))
-        explanation.setWordWrap(True)
         elements = QWidget()
         elements.setLayout(QVBoxLayout())
         mainWidget.layout().addWidget(elements)
-        elements.layout().addWidget(explanation)
+        self.imagePreview = QLabel()
+        self.imagePreview.setMinimumSize(256, 256)
+        mainWidget.layout().addWidget(self.imagePreview)
 
         self.templateName = QLineEdit()
+        self.templateName.setPlaceholderText("...")
         elements.layout().addWidget(self.templateName)
 
         self.DPI = QSpinBox()
@@ -224,16 +229,45 @@ class comics_template_create(QDialog):
         bleedsForm.addWidget(QLabel(i18n("Bottom:")), 3, 0, Qt.AlignRight)
         bleedsForm.addWidget(self.bleedBottom, 3, 1)
         bleedsForm.addWidget(self.bleedBottomUnit, 3, 2)
+        
         marginAndBleed.addTab(bleeds, i18n("Bleeds"))
+        
+        if QLocale().system().measurementSystem() is QLocale.MetricSystem:
+            self.setDefaults("European")
+        else:
+            self.setDefaults("American")
+        
+        self.spn_width.valueChanged.connect(self.updateImagePreview)
+        self.widthUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.spn_height.valueChanged.connect(self.updateImagePreview)
+        self.heightUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.marginLeft.valueChanged.connect(self.updateImagePreview)
+        self.marginLeftUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.marginRight.valueChanged.connect(self.updateImagePreview)
+        self.marginRightUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.marginTop.valueChanged.connect(self.updateImagePreview)
+        self.marginTopUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.marginBottom.valueChanged.connect(self.updateImagePreview)
+        self.marginBottomUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.bleedLeft.valueChanged.connect(self.updateImagePreview)
+        self.bleedLeftUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.bleedRight.valueChanged.connect(self.updateImagePreview)
+        self.bleedRightUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.bleedTop.valueChanged.connect(self.updateImagePreview)
+        self.bleedTopUnit.currentIndexChanged.connect(self.updateImagePreview)
+        self.bleedBottom.valueChanged.connect(self.updateImagePreview)
+        self.bleedBottomUnit.currentIndexChanged.connect(self.updateImagePreview)
+        
+        self.updateImagePreview()
 
     def prepare_krita_file(self):
-        wBase = self.widthUnit.pixelsForUnit(self.spn_width.value(), self.DPI.value())
+        wBase = max(self.widthUnit.pixelsForUnit(self.spn_width.value(), self.DPI.value()), 1)
         bL = self.bleedLeftUnit.pixelsForUnit(self.bleedLeft.value(), self.DPI.value())
         bR = self.bleedRightUnit.pixelsForUnit(self.bleedRight.value(), self.DPI.value())
         mL = self.marginLeftUnit.pixelsForUnit(self.marginLeft.value(), self.DPI.value())
         mR = self.marginRightUnit.pixelsForUnit(self.marginRight.value(), self.DPI.value())
 
-        hBase = self.heightUnit.pixelsForUnit(self.spn_height.value(), self.DPI.value())
+        hBase = max(self.heightUnit.pixelsForUnit(self.spn_height.value(), self.DPI.value()), 1)
         bT = self.bleedTopUnit.pixelsForUnit(self.bleedTop.value(), self.DPI.value())
         bB = self.bleedBottomUnit.pixelsForUnit(self.bleedBottom.value(), self.DPI.value())
         mT = self.marginTopUnit.pixelsForUnit(self.marginTop.value(), self.DPI.value())
@@ -277,6 +311,112 @@ class comics_template_create(QDialog):
         template.close()
 
         return success
+    
+    def updateImagePreview(self):
+        maxSize = 256
+        
+        wBase = max(self.widthUnit.pixelsForUnit(self.spn_width.value(), self.DPI.value()), 1)
+        bL = self.bleedLeftUnit.pixelsForUnit(self.bleedLeft.value(), self.DPI.value())
+        bR = self.bleedRightUnit.pixelsForUnit(self.bleedRight.value(), self.DPI.value())
+        mL = self.marginLeftUnit.pixelsForUnit(self.marginLeft.value(), self.DPI.value())
+        mR = self.marginRightUnit.pixelsForUnit(self.marginRight.value(), self.DPI.value())
+
+        hBase = max(self.heightUnit.pixelsForUnit(self.spn_height.value(), self.DPI.value()), 1)
+        bT = self.bleedTopUnit.pixelsForUnit(self.bleedTop.value(), self.DPI.value())
+        bB = self.bleedBottomUnit.pixelsForUnit(self.bleedBottom.value(), self.DPI.value())
+        mT = self.marginTopUnit.pixelsForUnit(self.marginTop.value(), self.DPI.value())
+        mB = self.marginBottomUnit.pixelsForUnit(self.marginBottom.value(), self.DPI.value())
+        
+        scaleRatio = maxSize/(hBase+bT+bB)
+        if wBase>hBase:
+            scaleRatio = maxSize/(wBase+bR+bL)
+        
+        width = (wBase + bL + bR)*scaleRatio
+        height = (hBase + bT + bB)*scaleRatio
+        topLeft = [max((maxSize-width)/2, 0), max((maxSize-height)/2, 0)]
+        
+        image = QImage(maxSize, maxSize, QImage.Format_ARGB32)
+        image.fill(Qt.transparent)
+        
+        p = QPainter(image)
+        
+        p.setBrush(Qt.white)
+        
+        CanvasSize = QRectF(topLeft[0], topLeft[1], width, height)
+        p.drawRect(CanvasSize.toRect())
+        
+        
+        # Draw bleeds.
+        PageSize = CanvasSize
+        PageSize.setWidth(width-(bR*scaleRatio))
+        PageSize.setHeight(height-(bB*scaleRatio))
+        PageSize.setX(PageSize.x()+(bL*scaleRatio))
+        PageSize.setY(PageSize.y()+(bT*scaleRatio))
+        
+        p.setPen(Qt.blue)
+        p.setBrush(Qt.transparent)
+        p.drawRect(PageSize.toRect())
+        
+        #Draw liveArea
+        LiveArea = PageSize
+        LiveArea.setWidth(LiveArea.width()-(mR*scaleRatio))
+        LiveArea.setHeight(LiveArea.height()-(mB*scaleRatio))
+        LiveArea.setX(LiveArea.x()+(mL*scaleRatio))
+        LiveArea.setY(LiveArea.y()+(mT*scaleRatio))
+        
+        p.setPen(Qt.blue)
+        p.drawRect(LiveArea.toRect())
+        
+        p.end()
+        
+        self.imagePreview.setPixmap(QPixmap.fromImage(image))
+        
+    def setDefaults(self, type):
+        
+        if type == "American":
+            # American 11x17 inch
+            self.spn_width.setValue(11)
+            self.widthUnit.setCurrentIndex(1)
+            self.spn_height.setValue(17)
+            self.heightUnit.setCurrentIndex(1)
+            self.bleedBottom.setValue(1)
+            self.bleedBottomUnit.setCurrentIndex(1)
+            self.bleedTop.setValue(1)
+            self.bleedTopUnit.setCurrentIndex(1)
+            self.bleedLeft.setValue(0.5)
+            self.bleedLeftUnit.setCurrentIndex(1)
+            self.bleedRight.setValue(0.5)
+            self.bleedRightUnit.setCurrentIndex(1)
+            self.marginBottom.setValue(0.745)
+            self.marginBottomUnit.setCurrentIndex(1)
+            self.marginTop.setValue(0.745)
+            self.marginTopUnit.setCurrentIndex(1)
+            self.marginRight.setValue(0.5)
+            self.marginRightUnit.setCurrentIndex(1)
+            self.marginLeft.setValue(0.5)
+            self.marginLeftUnit.setCurrentIndex(1)
+        if type == "European":
+            #European A4
+            self.spn_width.setValue(21)
+            self.widthUnit.setCurrentIndex(2)
+            self.spn_height.setValue(29.7)
+            self.heightUnit.setCurrentIndex(2)
+            self.bleedBottom.setValue(5)
+            self.bleedBottomUnit.setCurrentIndex(3)
+            self.bleedTop.setValue(5)
+            self.bleedTopUnit.setCurrentIndex(3)
+            self.bleedLeft.setValue(5)
+            self.bleedLeftUnit.setCurrentIndex(3)
+            self.bleedRight.setValue(5)
+            self.bleedRightUnit.setCurrentIndex(3)
+            self.marginBottom.setValue(1.5)
+            self.marginBottomUnit.setCurrentIndex(2)
+            self.marginTop.setValue(1.5)
+            self.marginTopUnit.setCurrentIndex(2)
+            self.marginRight.setValue(1)
+            self.marginRightUnit.setCurrentIndex(2)
+            self.marginLeft.setValue(1)
+            self.marginLeftUnit.setCurrentIndex(2)
 
     def url(self):
         return self.urlSavedTemplate

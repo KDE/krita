@@ -64,14 +64,23 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
 {
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
-    KoPathPoint::PointType type = KoPathPoint::Node;
+    KoPathPoint::PointTypes allPaintedTypes = KoPathPoint::Node;
     if (selection && selection->contains(m_activePoint)) {
-        type = KoPathPoint::All;
+        allPaintedTypes = KoPathPoint::All;
     }
 
+
     KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_activePoint->parent(), converter, handleRadius);
+
+
+    if (allPaintedTypes != m_activePointType) {
+        KoPathPoint::PointTypes nonHighlightedType = allPaintedTypes & ~m_activePointType;
+        helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
+        m_activePoint->paint(helper, nonHighlightedType);
+    }
+
     helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
-    m_activePoint->paint(helper, type);
+    m_activePoint->paint(helper, m_activePointType);
 }
 
 void PointHandle::repaint() const

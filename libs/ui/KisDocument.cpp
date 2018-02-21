@@ -483,13 +483,13 @@ KisDocument::~KisDocument()
 
         KisImageWSP sanityCheckPointer = d->image;
         Q_UNUSED(sanityCheckPointer);
+
         // The following line trigger the deletion of the image
         d->image.clear();
 
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-
 
     delete d;
 }
@@ -1593,8 +1593,10 @@ bool KisDocument::isSaving() const
 
 void KisDocument::waitForSavingToComplete()
 {
-    KisAsyncActionFeedback f(i18nc("progress dialog message when the user closes the document that is being saved", "Waiting for saving to complete..."), 0);
-    f.waitForMutex(&d->savingMutex);
+    if (isSaving()) {
+        KisAsyncActionFeedback f(i18nc("progress dialog message when the user closes the document that is being saved", "Waiting for saving to complete..."), 0);
+        f.waitForMutex(&d->savingMutex);
+    }
 }
 
 KoShapeBasedDocumentBase *KisDocument::shapeController() const

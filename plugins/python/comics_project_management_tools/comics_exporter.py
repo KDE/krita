@@ -10,6 +10,7 @@ import json
 import zipfile
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import types
 import shutil
 import html
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
@@ -853,6 +854,10 @@ class comicsExporter():
             language.appendChild(textlayer)
             language.appendChild(textlayerNative)
             bookInfo.appendChild(language)
+            
+            bookTitle.setAttribute("lang", self.configDictionary["language"])
+            annotation.setAttribute("lang", self.configDictionary["language"])
+            keywords.setAttribute("lang", self.configDictionary["language"])
         #database = document.createElement("databaseref")
         # bookInfo.appendChild(database)
 
@@ -905,12 +910,53 @@ class comicsExporter():
         meta.appendChild(publisherInfo)
 
         documentInfo = document.createElement("document-info")
-        acbfAuthor = document.createElement("author")
+        #TODO: ACBF apparantly uses first/middle/last/nick/email/homepage for the document auhtor too...
+        #      The following code compensates for me not understanding this initially. This still needs
+        #      adjustments in the gui.
         if "acbfAuthor" in self.configDictionary.keys():
-            acbfAuthor.appendChild(document.createTextNode(str(self.configDictionary["acbfAuthor"])))
+            if isinstance(self.configDictionary["acbfAuthor"], list):
+                for e in self.configDictionary["acbfAuthor"]:
+                    acbfAuthor = document.createElement("author")
+                    authorDict = self.configDictionary["acbfAuthor"][e]
+                    if "first-name" in authorDict.keys():
+                        authorN = document.createElement("first-name")
+                        authorN.appendChild(document.createTextNode(str(authorDict["first-name"])))
+                        acbfAuthor.appendChild(authorN)
+                    if "last-name" in authorDict.keys():
+                        authorN = document.createElement("last-name")
+                        authorN.appendChild(document.createTextNode(str(authorDict["last-name"])))
+                        acbfAuthor.appendChild(authorN)
+                    if "initials" in authorDict.keys():
+                        authorN = document.createElement("middle-name")
+                        authorN.appendChild(document.createTextNode(str(authorDict["initials"])))
+                        acbfAuthor.appendChild(authorN)
+                    if "nickname" in authorDict.keys():
+                        authorN = document.createElement("nickname")
+                        authorN.appendChild(document.createTextNode(str(authorDict["nickname"])))
+                        acbfAuthor.appendChild(authorN)
+                    if "homepage" in authorDict.keys():
+                        authorN = document.createElement("homepage")
+                        authorN.appendChild(document.createTextNode(str(authorDict["homepage"])))
+                        acbfAuthor.appendChild(authorN)
+                    if "email" in authorDict.keys():
+                        authorN = document.createElement("email")
+                        authorN.appendChild(document.createTextNode(str(authorDict["email"])))
+                        acbfAuthor.appendChild(authorN)
+                    if "language" in authorDict.keys():
+                        acbfAuthor.setAttribute("lang", str(authorDict["language"]))
+                    documentInfo.appendChild(acbfAuthor)
+            else:
+                acbfAuthor = document.createElement("author")
+                acbfAuthorNick = document.createElement("nickname")
+                acbfAuthorNick.appendChild(document.createTextNode(str(self.configDictionary["acbfAuthor"])))
+                acbfAuthor.appendChild(acbfAuthorNick)
+                documentInfo.appendChild(acbfAuthor)
         else:
-            acbfAuthor.appendChild(document.createTextNode(str("Anon")))
-        documentInfo.appendChild(acbfAuthor)
+            acbfAuthor = document.createElement("author")
+            acbfAuthorNick = document.createElement("nickname")
+            acbfAuthorNick.appendChild(document.createTextNode(str("Anon")))
+            acbfAuthor.appendChild(acbfAuthorNick)
+            documentInfo.appendChild(acbfAuthor)
 
         acbfDate = document.createElement("creation-date")
         now = QDate.currentDate()
@@ -1090,7 +1136,7 @@ class comicsExporter():
             root.appendChild(series)
             if "seriesNumber" in self.configDictionary.keys():
                 issue = document.createElement("issue")
-                issue.appendChild(document.createTextNode(str(self.configDictionary["seriesName"])))
+                issue.appendChild(document.createTextNode(str(self.configDictionary["seriesNumber"])))
                 root.appendChild(issue)
             if "seriesVolume" in self.configDictionary.keys():
                 volume = document.createElement("volume")

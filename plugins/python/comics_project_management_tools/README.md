@@ -243,8 +243,8 @@ ACBF list:
     - text url anchors: don't have a sensible interface for this.
     - Font embedding: spec is super vague about this.
     - Style sheets: needs a very complex gui.
-    - database reference: I need to have better examples of this.
-    - acbf doc info should use author with first/nick/last/etc seperate as well
+    - database reference: I am not sure if this is at all relevant for Krita? Because it implies an already published comic.
+    - acbf doc info should use author with first/nick/last/etc seperate as well[partially done]
     - text-layer background color(maybe sample topleft of projection???)
 * 1.2 support:
     - Role: designer

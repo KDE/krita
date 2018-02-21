@@ -5,7 +5,6 @@ class ScripterDialog(QDialog):
 
     def __init__(self, uicontroller, parent=None):
         super(ScripterDialog, self).__init__(parent)
-        self.setWindowFlags(QtCore.Qt.Tool | QtCore.Qt.WindowStaysOnTopHint)
         self.uicontroller = uicontroller
 
     def closeEvent(self, event):

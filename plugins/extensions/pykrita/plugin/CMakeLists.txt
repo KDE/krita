@@ -40,5 +40,4 @@ install(
 )
 
 add_subdirectory(plugins)
-#add_subdirectory(test)
 

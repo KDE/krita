@@ -19,7 +19,7 @@
 #ifndef KOSHAPEFILLWRAPPER_H
 #define KOSHAPEFILLWRAPPER_H
 
-#include "kritaui_export.h"
+#include "kritaflake_export.h"
 #include <QScopedPointer>
 #include <QList>
 #include <KoFlake.h>
@@ -30,7 +30,7 @@ class QColor;
 class QTransform;
 class QGradient;
 
-class KRITAUI_EXPORT KoShapeFillWrapper
+class KRITAFLAKE_EXPORT KoShapeFillWrapper
 {
 public:
     KoShapeFillWrapper(KoShape *shape, KoFlake::FillVariant fillVariant);

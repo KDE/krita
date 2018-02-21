@@ -270,7 +270,6 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-    widgets/KoShapeFillWrapper.cpp
 
 
     utils/kis_document_aware_spin_box_unit_manager.cpp

@@ -178,7 +178,8 @@ extern "C" int main(int argc, char **argv)
         qputenv("QT_ANGLE_PLATFORM", "d3d11");
 
         // Probe QPA auto OpenGL detection
-        KisOpenGL::probeWindowsQpaOpenGL(argc, argv, preferredOpenGLRenderer);
+        char *fakeArgv[2] = { argv[0], nullptr }; // Prevents QCoreApplication from modifying the real argc/argv
+        KisOpenGL::probeWindowsQpaOpenGL(1, fakeArgv, preferredOpenGLRenderer);
 
         // HACK: https://bugs.kde.org/show_bug.cgi?id=390651
         resetRotation();

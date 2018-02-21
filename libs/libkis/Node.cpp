@@ -67,12 +67,9 @@
 
 #include "LibKisUtils.h"
 
-
-
-
 struct Node::Private {
     Private() {}
-    KisImageSP image;
+    KisImageWSP image;
     KisNodeSP node;
 };
 

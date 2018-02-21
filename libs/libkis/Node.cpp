@@ -174,7 +174,12 @@ QList<Node*> Node::childNodes() const
 bool Node::addChildNode(Node *child, Node *above)
 {
     if (!d->node) return false;
-    return d->image->addNode(child->node(), d->node, above->node());
+    if (above) {
+        return d->image->addNode(child->node(), d->node, above->node());
+    }
+    else {
+        return d->image->addNode(child->node(), d->node, 0);
+    }
 }
 
 bool Node::removeChildNode(Node *child)

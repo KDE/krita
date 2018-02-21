@@ -214,7 +214,12 @@ public Q_SLOTS:
 
 
     /**
-     * @brief createDocument creates a new document and image and registers the document with the Krita application.
+     * @brief createDocument creates a new document and image and registers
+     * the document with the Krita application.
+     *
+     * Unless you explicitly call Document::close() the document wil remain
+     * known to the Krita document registry. The document and its image will
+     * only be deleted when Krita exits.
      *
      * The document will have one transparent layer.
      *

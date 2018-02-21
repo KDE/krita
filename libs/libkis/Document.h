@@ -393,6 +393,9 @@ public Q_SLOTS:
      * @brief close Close the document: remove it from Krita's internal list of documents and
      * close all views. If the document is modified, you should save it first. There will be
      * no prompt for saving.
+     *
+     * After closing the document it becomes invalid.
+     *
      * @return true if the document is closed.
      */
     bool close();

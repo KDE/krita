@@ -1155,7 +1155,7 @@ class comicsExporter():
                     stringName.append(authorDict["last-name"])
                 if "first-name" in authorDict.keys():
                     stringName.append(authorDict["first-name"])
-                if "last-name" in authorDict.keys():
+                if "nickname" in authorDict.keys():
                     stringName.append("(" + authorDict["nickname"] + ")")
                 author.text = ",".join(stringName)
                 root.append(author)
@@ -1244,7 +1244,7 @@ class comicsExporter():
                     stringName.append(authorDict["last-name"])
                 if "first-name" in authorDict.keys():
                     stringName.append(authorDict["first-name"])
-                if "last-name" in authorDict.keys():
+                if "nickname" in authorDict.keys():
                     stringName.append("(" + authorDict["nickname"] + ")")
                 author.text = ",".join(stringName)
                 root.append(author)

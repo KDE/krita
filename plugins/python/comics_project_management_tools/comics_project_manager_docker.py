@@ -466,13 +466,15 @@ class comics_project_manager_docker(DockWidget):
             if booltemplateExists is False:
                 templateUrl = os.path.relpath(QFileDialog.getOpenFileName(caption=i18n("Which image should be the basis the new page?"), directory=self.projecturl, filter=str(i18n("Krita files") + "(*.kra)"))[0], self.projecturl)
             newPage = Application.openDocument(os.path.join(self.projecturl, templateUrl))
+            newPage.waitForDone()
             newPage.setFileName(absoluteUrl)
             newPage.setName(pageName)
-            newPage.exportImage(absoluteUrl, InfoObject())
+            newPage.save()
+            newPage.waitForDone()
 
         # Get out the extra data for the standard item.
         newPageItem = QStandardItem()
-        newPageItem.setIcon(QIcon(QPixmap.fromImage(newPage.thumbnail(100, 100))))
+        newPageItem.setIcon(QIcon(QPixmap.fromImage(newPage.thumbnail(256, 256))))
         newPageItem.setDragEnabled(True)
         newPageItem.setDropEnabled(False)
         newPageItem.setEditable(False)
@@ -480,9 +482,10 @@ class comics_project_manager_docker(DockWidget):
         newPageItem.setToolTip(url)
 
         # close page document.
-        newPage.waitForDone()
-        if newPage.isIdle():
-            newPage.close()
+        while os.path.exists(absoluteUrl) is False:
+            qApp.processEvents()
+        
+        newPage.close()
 
         # add item to page.
         description = QStandardItem()

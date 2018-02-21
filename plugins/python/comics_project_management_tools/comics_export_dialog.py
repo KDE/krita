@@ -396,5 +396,6 @@ class comic_export_setting_dialog(QDialog):
         config["acbfHistory"] = versionList
         
         #Turn this into something that retreives from a line-edit when string freeze is over.
-        config["vectorLayerNames"] = ["panels", "text"]
+        config["textLayerNames"] = ["text"]
+        config["panelLayerNames"] = ["panels"]
         return config

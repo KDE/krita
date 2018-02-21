@@ -488,6 +488,7 @@ class comicsExporter():
                 # Get the appropriate url and open the page.
                 url = os.path.join(self.projectURL, pagesList[p])
                 page = Application.openDocument(url)
+                page.waitForDone()
 
                 # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
@@ -513,10 +514,8 @@ class comicsExporter():
                     if key in self.pageKeys:
                         pKeys.append(key)
                 pageData["keys"] = pKeys
-                
-                page.lock()
                 page.flatten()
-                page.unlock()
+                page.waitForDone()
                 batchsave = Application.batchmode()
                 Application.setBatchmode(True)
                 # Start making the format specific copy.
@@ -609,17 +608,27 @@ class comicsExporter():
     Function to get the panel and text data.
     """
     def getPanelsAndText(self, node, list):
-        vectorLayersToSearch = ["panels", "text"]
-        if "vectorLayerNames" in self.configDictionary.keys():
-            vectorLayersToSearch = self.configDictionary["vectorLayerNames"]
+        textLayersToSearch = ["text"]
+        panelLayersToSearch = ["panels"]
+        if "textLayerNames" in self.configDictionary.keys():
+            textLayersToSearch = self.configDictionary["textLayerNames"]
+        if "panelLayerNames" in self.configDictionary.keys():
+            panelLayersToSearch = self.configDictionary["panelLayerNames"]
         if node.type() == "vectorlayer":
-            for name in vectorLayersToSearch:
+            for name in panelLayersToSearch:
                 if str(name).lower() in str(node.name()).lower():
                     for shape in node.shapes():
                         if (shape.type()=="groupshape"):
                             self.getPanelsAndTextVector(shape, list)
                         else:
                             self.handleShapeDescription(shape, list)
+            for name in textLayersToSearch:
+                if str(name).lower() in str(node.name()).lower():
+                    for shape in node.shapes():
+                        if (shape.type()=="groupshape"):
+                            self.getPanelsAndTextVector(shape, list, True)
+                        else:
+                            self.handleShapeDescription(shape, list, True)
         else:
             if node.childNodes():
                 for child in node.childNodes():
@@ -627,22 +636,24 @@ class comicsExporter():
     """
     Function to get the panel and text data from a group shape
     """                
-    def getPanelsAndTextVector(self, group, list):
+    def getPanelsAndTextVector(self, group, list, textOnly = False):
         for shape in group.shapes():
             if (shape.type()=="groupshape"):
-                self.getPanelsAndTextVector(shape, list)
+                self.getPanelsAndTextVector(shape, list, textOnly)
             else:
-                self.handleShapeDescription(shape, list)
+                self.handleShapeDescription(shape, list, textOnly)
     """
     Function to get text in a format that acbf will accept
     """
-    def handleShapeDescription(self, shape, list):
+    def handleShapeDescription(self, shape, list, textOnly = False):
+        if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
+            return
         shapeDesc = {}
         shapeDesc["name"] = shape.name()
         rect = shape.boundingBox()
         listOfPoints = [rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()]
         shapeDesc["boundingBox"] = listOfPoints
-        if (shape.type() == "KoSvgTextShapeID"):
+        if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
             textRoot = ET.fromstring(shape.toSvg())
             paragraph = ET.Element("p")
             if (len(textRoot)>0):

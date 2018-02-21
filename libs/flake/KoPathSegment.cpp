@@ -24,6 +24,8 @@
 #include <QTransform>
 #include <math.h>
 
+#include "kis_global.h"
+
 /// Maximal recursion depth for finding root params
 const int MaxRecursionDepth = 64;
 /// Flatness tolerance for finding root params
@@ -1404,28 +1406,26 @@ qreal KoPathSegment::nearestPoint(const QPointF &point) const
     // Now compare the distances of the candidate points.
 
     // First candidate is the previous knot.
-    QPointF dist = d->first->point() - point;
-    qreal distanceSquared = dist.x() * dist.x() + dist.y() * dist.y();
-    qreal oldDistanceSquared;
+    qreal distanceSquared = kisSquareDistance(point, d->first->point());
+    qreal minDistanceSquared = distanceSquared;
     qreal resultParam = 0.0;
 
     // Iterate over the found candidate params.
     foreach (qreal root, rootParams) {
-        dist = point - pointAt(root);
-        oldDistanceSquared = distanceSquared;
-        distanceSquared = dist.x() * dist.x() + dist.y() * dist.y();
+        distanceSquared = kisSquareDistance(point, pointAt(root));
 
-        if (distanceSquared < oldDistanceSquared)
+        if (distanceSquared < minDistanceSquared) {
+            minDistanceSquared = distanceSquared;
             resultParam = root;
+        }
     }
 
     // Last candidate is the knot.
-    dist = d->second->point() - point;
-    oldDistanceSquared = distanceSquared;
-    distanceSquared = dist.x() * dist.x() + dist.y() * dist.y();
-
-    if (distanceSquared < oldDistanceSquared)
+    distanceSquared = kisSquareDistance(point, d->second->point());
+    if (distanceSquared < minDistanceSquared) {
+        minDistanceSquared = distanceSquared;
         resultParam = 1.0;
+    }
 
     return resultParam;
 }

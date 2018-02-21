@@ -58,6 +58,9 @@ Pencil_Pattern_Draw.kpp
 Pencil_DrShade.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
+Shapes_Mecha.kpp
+Shapes_Rounded.kpp
+Shapes_Spikes.kpp
 Spray_Impressionism.kpp
 Spray_Smoke.kpp
 Spray_Watercolor.kpp

@@ -598,7 +598,7 @@ class comicsExporter():
             progress.setValue(len(pagesList))
             Application.setBatchmode(batchsave)
             # TODO: Check what or whether memory leaks are still caused and otherwise remove the entry below.
-            print("CPMT: Export has finished. There are memory leaks, caused by layers")
+            print("CPMT: Export has finished. If there are memory leaks, they are caused by file layers.")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
         return False

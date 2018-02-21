@@ -210,6 +210,8 @@ Things I still want to do:
 * clean up path relativeness. (Not sure how much better this can be done)
 * Make label removal just a list? (unsure)
 * PNG and JPEG export settings.
+* improve author scrape fucntion
+* maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question.
 
 ACBF list:
 
@@ -230,7 +232,20 @@ ACBF list:
 		+ Inverted (Whether or not this should be treated as inverted text)
 		+ transparent(For a transparent wordballoon.)
 		+ Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.) (See 1.2 support)
+		+ Probably also support acbf_order[n], where n is used to be the definitive value of the order.
+		+ Text class battle plan:
+            1. Support title and desc in vector shapes(c++)
+            2. Support editing them from a right-click "properties" window.
+            3. Support getting those values from python.
+            4. have acbf_textclass read from the desc.
     - Get page background color from the page if possible. (This might only work with canvas color, though)
+    - Jump: proly not gonna support this.
+    - text url anchors: don't have a sensible interface for this.
+    - Font embedding: spec is super vague about this.
+    - Style sheets: needs a very complex gui.
+    - database reference: I need to have better examples of this.
+    - acbf doc info should use author with first/nick/last/etc seperate as well
+    - text-layer background color(maybe sample topleft of projection???)
 * 1.2 support:
     - Role: designer
     - Book-info: reading direction

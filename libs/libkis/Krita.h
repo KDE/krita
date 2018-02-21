@@ -223,6 +223,17 @@ public Q_SLOTS:
      *
      * The document will have one transparent layer.
      *
+     * To create a new document and show it, do something like:
+@code
+from Krita import *
+
+def add_document_to_window():
+    d = Application.createDocument(100, 100, "Test", "RGBA", "U8", "", 120.0)
+    Application.activeWindow().addView(d)
+
+add_document_to_window()
+@endcode
+     *
      * @param width the width in pixels
      * @param height the height in pixels
      * @param name the name of the image (not the filename of the document)

@@ -9,6 +9,7 @@ from pathlib import Path
 import json
 import zipfile
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import shutil
 import html
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
@@ -734,87 +735,87 @@ class comicsExporter():
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
         location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata", title + ".acbf"))
-        document = ET.ElementTree()
-        root = ET.Element("ACBF")
-        root.set("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
-        document._setroot(root)
+        document = minidom.Document()
+        root = document.createElement("ACBF")
+        root.setAttribute("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
+        document.appendChild(root)
 
-        meta = ET.Element("meta-data")
+        meta = document.createElement("meta-data")
 
-        bookInfo = ET.Element("book-info")
+        bookInfo = document.createElement("book-info")
         if "authorList" in self.configDictionary.keys():
             for authorE in range(len(self.configDictionary["authorList"])):
-                author = ET.Element("author")
+                author = document.createElement("author")
                 authorDict = self.configDictionary["authorList"][authorE]
                 if "first-name" in authorDict.keys():
-                    authorN = ET.Element("first-name")
-                    authorN.text = str(authorDict["first-name"])
-                    author.append(authorN)
+                    authorN = document.createElement("first-name")
+                    authorN.appendChild(document.createTextNode(str(authorDict["first-name"])))
+                    author.appendChild(authorN)
                 if "last-name" in authorDict.keys():
-                    authorN = ET.Element("last-name")
-                    authorN.text = str(authorDict["last-name"])
-                    author.append(authorN)
+                    authorN = document.createElement("last-name")
+                    authorN.appendChild(document.createTextNode(str(authorDict["last-name"])))
+                    author.appendChild(authorN)
                 if "initials" in authorDict.keys():
-                    authorN = ET.Element("middle-name")
-                    authorN.text = str(authorDict["initials"])
-                    author.append(authorN)
+                    authorN = document.createElement("middle-name")
+                    authorN.appendChild(document.createTextNode(str(authorDict["initials"])))
+                    author.appendChild(authorN)
                 if "nickname" in authorDict.keys():
-                    authorN = ET.Element("nickname")
-                    authorN.text = str(authorDict["nickname"])
-                    author.append(authorN)
+                    authorN = document.createElement("nickname")
+                    authorN.appendChild(document.createTextNode(str(authorDict["nickname"])))
+                    author.appendChild(authorN)
                 if "homepage" in authorDict.keys():
-                    authorN = ET.Element("homepage")
-                    authorN.text = str(authorDict["homepage"])
-                    author.append(authorN)
+                    authorN = document.createElement("homepage")
+                    authorN.appendChild(document.createTextNode(str(authorDict["homepage"])))
+                    author.appendChild(authorN)
                 if "email" in authorDict.keys():
-                    authorN = ET.Element("email")
-                    authorN.text = str(authorDict["email"])
-                    author.append(authorN)
+                    authorN = document.createElement("email")
+                    authorN.appendChild(document.createTextNode(str(authorDict["email"])))
+                    author.appendChild(authorN)
                 if "role" in authorDict.keys():
                     if str(authorDict["role"]).title() in acbfAuthorRolesList:
-                        author.set("activity", str(authorDict["role"]))
+                        author.setAttribute("activity", str(authorDict["role"]))
                 if "language" in authorDict.keys():
-                    author.set("lang", str(authorDict["language"]))
-                bookInfo.append(author)
-        bookTitle = ET.Element("book-title")
+                    author.setAttribute("lang", str(authorDict["language"]))
+                bookInfo.appendChild(author)
+        bookTitle = document.createElement("book-title")
         if "title" in self.configDictionary.keys():
-            bookTitle.text = str(self.configDictionary["title"])
+            bookTitle.appendChild(document.createTextNode(str(self.configDictionary["title"])))
         else:
-            bookTitle.text = "Comic with no Name"
-        bookInfo.append(bookTitle)
+            bookTitle.appendChild(document.createTextNode(str("Comic with no Name")))
+        bookInfo.appendChild(bookTitle)
         extraGenres = []
         if "genre" in self.configDictionary.keys():
             for genre in self.configDictionary["genre"]:
                 genreModified = str(genre).lower()
                 genreModified.replace(" ", "_")
                 if genreModified in acbfGenreList:
-                    bookGenre = ET.Element("genre")
-                    bookGenre.text = genreModified
-                    bookInfo.append(bookGenre)
+                    bookGenre = document.createElement("genre")
+                    bookGenre.appendChild(document.createTextNode(str(genreModified)))
+                    bookInfo.appendChild(bookGenre)
                 else:
-                    extraGenres.append(genre)
-        annotation = ET.Element("annotation")
+                    extraGenres.appendChild(genre)
+        annotation = document.createElement("annotation")
         if "summary" in self.configDictionary.keys():
             paragraphList = str(self.configDictionary["summary"]).split("\n")
             for para in paragraphList:
-                p = ET.Element("p")
-                p.text = para
-                annotation.append(p)
+                p = document.createElement("p")
+                p.appendChild(document.createTextNode(str(para)))
+                annotation.appendChild(p)
         else:
-            p = ET.Element("p")
-            p.text = "There was no summary upon generation of this file."
-            annotation.append(p)
-        bookInfo.append(annotation)
+            p = document.createElement("p")
+            p.appendChild(document.createTextNode(str("There was no summary upon generation of this file.")))
+            annotation.appendChild(p)
+        bookInfo.appendChild(annotation)
 
         if "characters" in self.configDictionary.keys():
-            character = ET.Element("characters")
+            character = document.createElement("characters")
             for name in self.configDictionary["characters"]:
-                char = ET.Element("name")
-                char.text = name
-                character.append(char)
-            bookInfo.append(character)
+                char = document.createElement("name")
+                char.appendChild(document.createTextNode(str(name)))
+                character.appendChild(char)
+            bookInfo.appendChild(character)
 
-        keywords = ET.Element("keywords")
+        keywords = document.createElement("keywords")
         stringKeywordsList = []
         for key in extraGenres:
             stringKeywordsList.append(str(key))
@@ -824,156 +825,156 @@ class comicsExporter():
         if "format" in self.configDictionary.keys():
             for key in self.configDictionary["format"]:
                 stringKeywordsList.append(str(key))
-        keywords.text = ", ".join(stringKeywordsList)
-        bookInfo.append(keywords)
+        keywords.appendChild(document.createTextNode(", ".join(stringKeywordsList)))
+        bookInfo.appendChild(keywords)
 
         coverpageurl = ""
-        coverpage = ET.Element("coverpage")
+        coverpage = document.createElement("coverpage")
         if "pages" in self.configDictionary.keys():
             if "cover" in self.configDictionary.keys():
                 pageList = []
                 pageList = self.configDictionary["pages"]
                 coverNumber = max([pageList.index(self.configDictionary["cover"]), 0])
-                image = ET.Element("image")
+                image = document.createElement("image")
                 if len(self.pagesLocationList["CBZ"]) >= coverNumber:
                     coverpageurl = self.pagesLocationList["CBZ"][coverNumber]
-                    image.set("href", os.path.basename(coverpageurl))
-                coverpage.append(image)
-        bookInfo.append(coverpage)
+                    image.setAttribute("href", os.path.basename(coverpageurl))
+                coverpage.appendChild(image)
+        bookInfo.appendChild(coverpage)
 
         if "language" in self.configDictionary.keys():
-            language = ET.Element("languages")
-            textlayer = ET.Element("text-layer")
-            textlayer.set("lang", self.configDictionary["language"])
-            textlayer.set("show", "False")
-            textlayerNative = ET.Element("text-layer")
-            textlayerNative.set("lang", self.configDictionary["language"])
-            textlayerNative.set("show", "True")
-            language.append(textlayer)
-            language.append(textlayerNative)
-            bookInfo.append(language)
-        #database = ET.Element("databaseref")
-        # bookInfo.append(database)
+            language = document.createElement("languages")
+            textlayer = document.createElement("text-layer")
+            textlayer.setAttribute("lang", self.configDictionary["language"])
+            textlayer.setAttribute("show", "False")
+            textlayerNative = document.createElement("text-layer")
+            textlayerNative.setAttribute("lang", self.configDictionary["language"])
+            textlayerNative.setAttribute("show", "True")
+            language.appendChild(textlayer)
+            language.appendChild(textlayerNative)
+            bookInfo.appendChild(language)
+        #database = document.createElement("databaseref")
+        # bookInfo.appendChild(database)
 
         if "seriesName" in self.configDictionary.keys():
-            sequence = ET.Element("sequence")
-            sequence.set("title", self.configDictionary["seriesName"])
+            sequence = document.createElement("sequence")
+            sequence.setAttribute("title", self.configDictionary["seriesName"])
             if "seriesVolume" in self.configDictionary.keys():
-                sequence.set("volume", str(self.configDictionary["seriesVolume"]))
+                sequence.setAttribute("volume", str(self.configDictionary["seriesVolume"]))
             if "seriesNumber" in self.configDictionary.keys():
-                sequence.text = str(self.configDictionary["seriesNumber"])
+                sequence.appendChild(document.createTextNode(str(self.configDictionary["seriesNumber"])))
             else:
-                sequence.text = 0
-            bookInfo.append(sequence)
-        contentrating = ET.Element("content-rating")
+                sequence.appendChild(document.createTextNode(str(0)))
+            bookInfo.appendChild(sequence)
+        contentrating = document.createElement("content-rating")
 
         if "rating" in self.configDictionary.keys():
-            contentrating.text = self.configDictionary["rating"]
+            contentrating.appendChild(document.createTextNode(str(self.configDictionary["rating"])))
         else:
-            contentrating.text = "Unrated."
+            contentrating.appendChild(document.createTextNode(str("Unrated.")))
         if "ratingSystem" in self.configDictionary.keys():
-            contentrating.set("type", self.configDictionary["ratingSystem"])
-        bookInfo.append(contentrating)
-        meta.append(bookInfo)
+            contentrating.setAttribute("type", self.configDictionary["ratingSystem"])
+        bookInfo.appendChild(contentrating)
+        meta.appendChild(bookInfo)
 
-        publisherInfo = ET.Element("publish-info")
+        publisherInfo = document.createElement("publish-info")
         if "publisherName" in self.configDictionary.keys():
-            publisherName = ET.Element("publisher")
-            publisherName.text = self.configDictionary["publisherName"]
-            publisherInfo.append(publisherName)
+            publisherName = document.createElement("publisher")
+            publisherName.appendChild(document.createTextNode(str(self.configDictionary["publisherName"])))
+            publisherInfo.appendChild(publisherName)
         if "publishingDate" in self.configDictionary.keys():
-            publishingDate = ET.Element("publish-date")
-            publishingDate.set("value", self.configDictionary["publishingDate"])
-            publishingDate.text = QDate.fromString(self.configDictionary["publishingDate"], Qt.ISODate).toString(Qt.SystemLocaleLongDate)
-            publisherInfo.append(publishingDate)
+            publishingDate = document.createElement("publish-date")
+            publishingDate.setAttribute("value", self.configDictionary["publishingDate"])
+            publishingDate.appendChild(document.createTextNode(QDate.fromString(self.configDictionary["publishingDate"], Qt.ISODate).toString(Qt.SystemLocaleLongDate)))
+            publisherInfo.appendChild(publishingDate)
         if "publisherCity" in self.configDictionary.keys():
-            publishCity = ET.Element("city")
-            publishCity.text = self.configDictionary["publisherCity"]
-            publisherInfo.append(publishCity)
+            publishCity = document.createElement("city")
+            publishCity.appendChild(document.createTextNode(str(self.configDictionary["publisherCity"])))
+            publisherInfo.appendChild(publishCity)
         if "isbn-number" in self.configDictionary.keys():
-            publishISBN = ET.Element("isbn")
-            publishISBN.text = self.configDictionary["isbn-number"]
-            publisherInfo.append(publishISBN)
+            publishISBN = document.createElement("isbn")
+            publishISBN.appendChild(document.createTextNode(str(self.configDictionary["isbn-number"])))
+            publisherInfo.appendChild(publishISBN)
         if "license" in self.configDictionary.keys():
             license = self.configDictionary["license"]
             if license.isspace() is False and len(license) > 0:
-                publishLicense = ET.Element("license")
-                publishLicense.text = self.configDictionary["license"]
-                publisherInfo.append(publishLicense)
+                publishLicense = document.createElement("license")
+                publishLicense.appendChild(document.createTextNode(str(self.configDictionary["license"])))
+                publisherInfo.appendChild(publishLicense)
 
-        meta.append(publisherInfo)
+        meta.appendChild(publisherInfo)
 
-        documentInfo = ET.Element("document-info")
-        acbfAuthor = ET.Element("author")
+        documentInfo = document.createElement("document-info")
+        acbfAuthor = document.createElement("author")
         if "acbfAuthor" in self.configDictionary.keys():
-            acbfAuthor.text = self.configDictionary["acbfAuthor"]
+            acbfAuthor.appendChild(document.createTextNode(str(self.configDictionary["acbfAuthor"])))
         else:
-            acbfAuthor.text = "Anon"
-        documentInfo.append(acbfAuthor)
+            acbfAuthor.appendChild(document.createTextNode(str("Anon")))
+        documentInfo.appendChild(acbfAuthor)
 
-        acbfDate = ET.Element("creation-date")
+        acbfDate = document.createElement("creation-date")
         now = QDate.currentDate()
-        acbfDate.set("value", now.toString(Qt.ISODate))
-        acbfDate.text = now.toString(Qt.SystemLocaleLongDate)
-        documentInfo.append(acbfDate)
+        acbfDate.setAttribute("value", now.toString(Qt.ISODate))
+        acbfDate.appendChild(document.createTextNode(str(now.toString(Qt.SystemLocaleLongDate))))
+        documentInfo.appendChild(acbfDate)
 
-        acbfSource = ET.Element("source")
+        acbfSource = document.createElement("source")
         if "acbfSource" in self.configDictionary.keys():
-            acbfSource.text = self.configDictionary["acbfSource"]
-        documentInfo.append(acbfSource)
+            acbfSource.appendChild(document.createTextNode(str(self.configDictionary["acbfSource"])))
+        documentInfo.appendChild(acbfSource)
 
-        acbfID = ET.Element("id")
+        acbfID = document.createElement("id")
         if "acbfID" in self.configDictionary.keys():
-            acbfID.text = self.configDictionary["acbfID"]
-        documentInfo.append(acbfID)
+            acbfID.appendChild(document.createTextNode(str(self.configDictionary["acbfID"])))
+        documentInfo.appendChild(acbfID)
 
-        acbfVersion = ET.Element("version")
+        acbfVersion = document.createElement("version")
         if "acbfVersion" in self.configDictionary.keys():
-            acbfVersion.text = str(self.configDictionary["acbfVersion"])
-        documentInfo.append(acbfVersion)
+            acbfVersion.appendChild(document.createTextNode(str(self.configDictionary["acbfVersion"])))
+        documentInfo.appendChild(acbfVersion)
 
-        acbfHistory = ET.Element("history")
+        acbfHistory = document.createElement("history")
         if "acbfHistory" in self.configDictionary.keys():
             for h in self.configDictionary["acbfHistory"]:
-                p = ET.Element("p")
-                p.text = h
-                acbfHistory.append(p)
-        documentInfo.append(acbfHistory)
-        meta.append(documentInfo)
+                p = document.createElement("p")
+                p.appendChild(document.createTextNode(str(h)))
+                acbfHistory.appendChild(p)
+        documentInfo.appendChild(acbfHistory)
+        meta.appendChild(documentInfo)
 
-        root.append(meta)
+        root.appendChild(meta)
 
-        body = ET.Element("body")
+        body = document.createElement("body")
 
         for p in range(0, len(self.pagesLocationList["CBZ"])):
             page = self.pagesLocationList["CBZ"][p]
             if page is not coverpageurl:
-                pg = ET.Element("page")
+                pg = document.createElement("page")
                 pageData = self.acbfPageData[p]
-                image = ET.Element("image")
-                image.set("href", os.path.basename(page))
-                pg.append(image)
+                image = document.createElement("image")
+                image.setAttribute("href", os.path.basename(page))
+                pg.appendChild(image)
                 
                 language = "en"
                 if "language" in self.configDictionary.keys():
                     language = self.configDictionary["language"]
                 if "acbf_title" in pageData["keys"]:
-                    title = ET.Element("title")
-                    title.set("lang", language)
-                    title.text = pageData["title"]
-                    pg.append(title)
+                    title = document.createElement("title")
+                    title.setAttribute("lang", language)
+                    title.appendChild(document.createTextNode(str(pageData["title"])))
+                    pg.appendChild(title)
                 if "acbf_none" in pageData["keys"]:
-                    pg.set("transition", "none")
+                    pg.setAttribute("transition", "none")
                 if "acbf_blend" in pageData["keys"]:
-                    pg.set("transition", "blend")
+                    pg.setAttribute("transition", "blend")
                 if "acbf_fade" in pageData["keys"]:
-                    pg.set("transition", "fade")
+                    pg.setAttribute("transition", "fade")
                 if "acbf_horizontal" in pageData["keys"]:
-                    pg.set("transition", "scroll_right")
+                    pg.setAttribute("transition", "scroll_right")
                 if "acbf_vertical" in pageData["keys"]:
-                    pg.set("transition", "scroll_down")
-                textLayer = ET.Element("text-layer")
-                textLayer.set("lang", language)
+                    pg.setAttribute("transition", "scroll_down")
+                textLayer = document.createElement("text-layer")
+                textLayer.setAttribute("lang", language)
                 transform = pageData["transform"]
                 for v in pageData["vector"]:
                     boundingBoxText = []
@@ -987,21 +988,23 @@ class comicsExporter():
                         boundingBoxText.append(pointText)
                     
                     if "text" in v.keys():
-                        textArea = ET.Element("text-area")
-                        textArea.set("points", " ".join(boundingBoxText))
-                        paragraph = ET.fromstring(v["text"])
-                        textArea.append(paragraph)
-                        textLayer.append(textArea)
+                        textArea = document.createElement("text-area")
+                        textArea.setAttribute("points", " ".join(boundingBoxText))
+                        paragraph = minidom.parseString(v["text"])
+                        textArea.appendChild(paragraph.documentElement)
+                        textLayer.appendChild(textArea)
                     else:
-                        frame = ET.Element("frame")
-                        frame.set("points", " ".join(boundingBoxText))
-                        pg.append(frame)
-                pg.append(textLayer)
-                body.append(pg)
+                        frame = document.createElement("frame")
+                        frame.setAttribute("points", " ".join(boundingBoxText))
+                        pg.appendChild(frame)
+                pg.appendChild(textLayer)
+                body.appendChild(pg)
 
-        root.append(body)
+        root.appendChild(body)
 
-        document.write(location, encoding="UTF-8", xml_declaration=True)
+        f = open(location, 'w', newline="", encoding="utf-8")
+        f.write(document.toprettyxml(indent="  "))
+        f.close()
         self.acbfLocation = location
         success = True
         success = self.createStandAloneACBF(document)
@@ -1012,27 +1015,27 @@ class comicsExporter():
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
         location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], title + ".acbf"))
+        root = document.getElementsByTagName("ACBF")[0]
+        meta = root.getElementsByTagName("meta-data")[0]
+        bookInfo = meta.getElementsByTagName("book-info")[0]
+        cover = bookInfo.getElementsByTagName("coverpage")[0]
         
-        meta = document._root.find("meta-data")
-        bookInfo = meta.find("book-info")
-        cover = bookInfo.find("coverpage")
-        
-        body = document._root.find("body")
-        pages = body.findall("page")
+        body = root.getElementsByTagName("body")[0]
+        pages = body.getElementsByTagName("page")
         if (cover):
             pages.append(cover)
         
-        data = ET.Element("data")
+        data = document.createElement("data")
         
         
         #Covert pages to base64 strings.
         for i in range(0, len(pages)):
-            image = pages[i].find("image")
-            href = image.get("href")
+            image = pages[i].getElementsByTagName("image")[0]
+            href = image.getAttribute("href")
             for p in self.pagesLocationList["CBZ"]:
                 if href in p:
-                    binary = ET.Element("binary")
-                    binary.set("id", href)
+                    binary = document.createElement("binary")
+                    binary.setAttribute("id", href)
                     imageFile = QImage()
                     imageFile.load(p)
                     imageData = QByteArray()
@@ -1040,15 +1043,17 @@ class comicsExporter():
                     imageFile.save(buffer, "PNG")
                     #For now always embed as png.
                     contentType = "image/png"
-                    binary.set("content-type", contentType)
-                    binary.text = bytearray(imageData.toBase64()).decode("ascii")
+                    binary.setAttribute("content-type", contentType)
+                    binary.appendChild(document.createTextNode(str(bytearray(imageData.toBase64()).decode("ascii"))))
                     
-                    image.set("href", "#"+ href)
-                    data.append(binary)
+                    image.setAttribute("href", "#"+ href)
+                    data.appendChild(binary)
         
-        document._root.append(data)
+        root.appendChild(data)
         
-        document.write(location, encoding="UTF-8", xml_declaration=True)
+        f = open(location, 'w', newline="", encoding="utf-8")
+        f.write(document.toprettyxml(indent="  "))
+        f.close()
         return True
 
     """
@@ -1060,96 +1065,96 @@ class comicsExporter():
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
         location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata", title + " CoMet.xml"))
-        document = ET.ElementTree()
-        root = ET.Element("comet")
-        root.set("xmlns:comet", "http://www.denvog.com/comet/")
-        root.set("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        root.set("xsi:schemaLocation", "http://www.denvog.com http://www.denvog.com/comet/comet.xsd")
-        document._setroot(root)
+        document = minidom.Document()
+        root = document.createElement("comet")
+        root.setAttribute("xmlns:comet", "http://www.denvog.com/comet/")
+        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
+        root.setAttribute("xsi:schemaLocation", "http://www.denvog.com http://www.denvog.com/comet/comet.xsd")
+        document.appendChild(root)
 
-        title = ET.Element("title")
+        title = document.createElement("title")
         if "title" in self.configDictionary.keys():
-            title.text = self.configDictionary["title"]
+            title.appendChild(document.createTextNode(str(self.configDictionary["title"])))
         else:
-            title.text = "Untitled Comic"
-        root.append(title)
-        description = ET.Element("description")
+            title.appendChild(document.createTextNode(str("Untitled Comic")))
+        root.appendChild(title)
+        description = document.createElement("description")
         if "summary" in self.configDictionary.keys():
-            description.text = self.configDictionary["summary"]
+            description.appendChild(document.createTextNode(str(self.configDictionary["summary"])))
         else:
-            description.text = "There was no summary upon generation of this file."
-        root.append(description)
+            description.appendChild(document.createTextNode(str("There was no summary upon generation of this file.")))
+        root.appendChild(description)
         if "seriesName" in self.configDictionary.keys():
-            series = ET.Element("series")
-            series.text = self.configDictionary["seriesName"]
-            root.append(series)
+            series = document.createElement("series")
+            series.appendChild(document.createTextNode(str(self.configDictionary["seriesName"])))
+            root.appendChild(series)
             if "seriesNumber" in self.configDictionary.keys():
-                issue = ET.Element("issue")
-                issue.text = str(self.configDictionary["seriesName"])
-                root.append(issue)
+                issue = document.createElement("issue")
+                issue.appendChild(document.createTextNode(str(self.configDictionary["seriesName"])))
+                root.appendChild(issue)
             if "seriesVolume" in self.configDictionary.keys():
-                volume = ET.Element("volume")
-                volume.text = str(self.configDictionary["seriesVolume"])
-                root.append(volume)
+                volume = document.createElement("volume")
+                volume.appendChild(document.createTextNode(str(self.configDictionary["seriesVolume"])))
+                root.appendChild(volume)
 
         if "publisherName" in self.configDictionary.keys():
-            publisher = ET.Element("publisher")
-            publisher.text = self.configDictionary["publisherName"]
-            root.append(publisher)
+            publisher = document.createElement("publisher")
+            publisher.appendChild(document.createTextNode(str(self.configDictionary["publisherName"])))
+            root.appendChild(publisher)
 
         if "publishingDate" in self.configDictionary.keys():
-            date = ET.Element("date")
-            date.text = self.configDictionary["publishingDate"]
-            root.append(date)
+            date = document.createElement("date")
+            date.appendChild(document.createTextNode(str(self.configDictionary["publishingDate"])))
+            root.appendChild(date)
 
         if "genre" in self.configDictionary.keys():
             for genreE in self.configDictionary["genre"]:
-                genre = ET.Element("genre")
-                genre.text = genreE
-                root.append(genre)
+                genre = document.createElement("genre")
+                genre.appendChild(document.createTextNode(str(genreE)))
+                root.appendChild(genre)
 
         if "characters" in self.configDictionary.keys():
             for char in self.configDictionary["characters"]:
-                character = ET.Element("character")
-                character.text = char
-                root.append(character)
+                character = document.createElement("character")
+                character.appendChild(document.createTextNode(str(char)))
+                root.appendChild(character)
 
         if "format" in self.configDictionary.keys():
-            format = ET.Element("format")
-            format.text = ",".join(self.configDictionary["format"])
-            root.append(format)
+            format = document.createElement("format")
+            format.appendChild(document.createTextNode(str(",".join(self.configDictionary["format"]))))
+            root.appendChild(format)
 
         if "language" in self.configDictionary.keys():
-            language = ET.Element("language")
-            language.text = self.configDictionary["language"]
-            root.append(language)
+            language = document.createElement("language")
+            language.appendChild(document.createTextNode(str(self.configDictionary["language"])))
+            root.appendChild(language)
         if "rating" in self.configDictionary.keys():
-            rating = ET.Element("rating")
-            rating.text = self.configDictionary["rating"]
-            root.append(rating)
-        #rights = ET.Element("rights")
+            rating = document.createElement("rating")
+            rating.appendChild(document.createTextNode(str(self.configDictionary["rating"])))
+            root.appendChild(rating)
+        #rights = document.createElement("rights")
         if "pages" in self.configDictionary.keys():
-            pages = ET.Element("pages")
-            pages.text = str(len(self.configDictionary["pages"]))
-            root.append(pages)
+            pages = document.createElement("pages")
+            pages.appendChild(document.createTextNode(str(len(self.configDictionary["pages"]))))
+            root.appendChild(pages)
 
         if "isbn-number" in self.configDictionary.keys():
-            identifier = ET.Element("identifier")
-            identifier.text = self.configDictionary["isbn-number"]
-            root.append(identifier)
+            identifier = document.createElement("identifier")
+            identifier.appendChild(document.createTextNode(str(self.configDictionary["isbn-number"])))
+            root.appendChild(identifier)
 
         if "authorList" in self.configDictionary.keys():
             for authorE in range(len(self.configDictionary["authorList"])):
-                author = ET.Element("creator")
+                author = document.createElement("creator")
                 authorDict = self.configDictionary["authorList"][authorE]
                 if "role" in authorDict.keys():
                     if str(authorDict["role"]).lower() in ["writer", "penciller", "editor", "assistant editor", "cover artist", "letterer", "inker", "colorist"]:
                         if str(authorDict["role"]).lower() is "cover artist":
-                            author = ET.Element("coverDesigner")
+                            author = document.createElement("coverDesigner")
                         elif str(authorDict["role"]).lower() is "assistant editor":
-                            author = ET.Element("editor")
+                            author = document.createElement("editor")
                         else:
-                            author = ET.Element(str(authorDict["role"]).lower())
+                            author = document.createElement(str(authorDict["role"]).lower())
                 stringName = []
                 if "last-name" in authorDict.keys():
                     stringName.append(authorDict["last-name"])
@@ -1157,8 +1162,8 @@ class comicsExporter():
                     stringName.append(authorDict["first-name"])
                 if "nickname" in authorDict.keys():
                     stringName.append("(" + authorDict["nickname"] + ")")
-                author.text = ",".join(stringName)
-                root.append(author)
+                author.appendChild(document.createTextNode(str(",".join(stringName))))
+                root.appendChild(author)
 
         if "pages" in self.configDictionary.keys():
             if "cover" in self.configDictionary.keys():
@@ -1166,17 +1171,19 @@ class comicsExporter():
                 pageList = self.configDictionary["pages"]
                 coverNumber = pageList.index(self.configDictionary["cover"])
                 if len(self.pagesLocationList["CBZ"]) >= coverNumber:
-                    coverImage = ET.Element("coverImage")
-                    coverImage.text = os.path.basename(self.pagesLocationList["CBZ"][coverNumber])
-                    root.append(coverImage)
-        readingDirection = ET.Element("readingDirection")
-        readingDirection.text = "ltr"
+                    coverImage = document.createElement("coverImage")
+                    coverImage.appendChild(document.createTextNode(str(os.path.basename(self.pagesLocationList["CBZ"][coverNumber]))))
+                    root.appendChild(coverImage)
+        readingDirection = document.createElement("readingDirection")
+        readingDirection.appendChild(document.createTextNode(str("ltr")))
         if "readingDirection" in self.configDictionary.keys():
             if self.configDictionary["readingDirection"] is "rightToLeft":
-                readingDirection.text = "rtl"
-        root.append(readingDirection)
+                readingDirection.appendChild(document.createTextNode(str("rtl")))
+        root.appendChild(readingDirection)
 
-        document.write(location, encoding="UTF-8", xml_declaration=True)
+        f = open(location, 'w', newline="", encoding="utf-8")
+        f.write(document.toprettyxml(indent="  "))
+        f.close()
         self.cometLocation = location
         return True
     """
@@ -1186,59 +1193,59 @@ class comicsExporter():
 
     def write_comic_rack_info(self):
         location = str(os.path.join(self.projectURL, self.configDictionary["exportLocation"], "metadata", "ComicInfo.xml"))
-        document = ET.ElementTree()
-        root = ET.Element("ComicInfo")
-        root.set("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        root.set("xmlns:xsd", "http://www.w3.org/2001/XMLSchema")
+        document = minidom.Document()
+        root = document.createElement("ComicInfo")
+        root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
+        root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema")
 
-        title = ET.Element("Title")
+        title = document.createElement("Title")
         if "title" in self.configDictionary.keys():
-            title.text = self.configDictionary["title"]
+            title.appendChild(document.createTextNode(str(self.configDictionary["title"])))
         else:
-            title.text = "Untitled Comic"
-        root.append(title)
-        description = ET.Element("Summary")
+            title.appendChild(document.createTextNode(str("Untitled Comic")))
+        root.appendChild(title)
+        description = document.createElement("Summary")
         if "summary" in self.configDictionary.keys():
-            description.text = self.configDictionary["summary"]
+            description.appendChild(document.createTextNode(str(self.configDictionary["summary"])))
         else:
-            description.text = "There was no summary upon generation of this file."
-        root.append(description)
+            description.appendChild(document.createTextNode(str("There was no summary upon generation of this file.")))
+        root.appendChild(description)
         if "seriesNumber" in self.configDictionary.keys():
-            number = ET.Element("Number")
-            number.text = str(self.configDictionary["seriesNumber"])
-            root.append(number)
+            number = document.createElement("Number")
+            number.appendChild(document.createTextNode(str(self.configDictionary["seriesNumber"])))
+            root.appendChild(number)
 
         if "publishingDate" in self.configDictionary.keys():
             date = QDate.fromString(self.configDictionary["publishingDate"], Qt.ISODate)
-            publishYear = ET.Element("Year")
-            publishYear.text = str(date.year())
-            publishMonth = ET.Element("Month")
-            publishMonth.text = str(date.month())
-            root.append(publishYear)
-            root.append(publishMonth)
+            publishYear = document.createElement("Year")
+            publishYear.appendChild(document.createTextNode(str(date.year())))
+            publishMonth = document.createElement("Month")
+            publishMonth.appendChild(document.createTextNode(str(date.month())))
+            root.appendChild(publishYear)
+            root.appendChild(publishMonth)
 
         if "format" in self.configDictionary.keys():
             for form in self.configDictionary["format"]:
-                formattag = ET.Element("Format")
-                formattag.text = str(form)
-                root.append(formattag)
+                formattag = document.createElement("Format")
+                formattag.appendChild(document.createTextNode(str(form)))
+                root.appendChild(formattag)
         if "otherKeywords" in self.configDictionary.keys():
-            tags = ET.Element("Tags")
-            tags.text = ", ".join(self.configDictionary["otherKeywords"])
-            root.append(tags)
+            tags = document.createElement("Tags")
+            tags.appendChild(document.createTextNode(str(", ".join(self.configDictionary["otherKeywords"]))))
+            root.appendChild(tags)
 
         if "authorList" in self.configDictionary.keys():
             for authorE in range(len(self.configDictionary["authorList"])):
-                author = ET.Element("Writer")
+                author = document.createElement("Writer")
                 authorDict = self.configDictionary["authorList"][authorE]
                 if "role" in authorDict.keys():
                     if str(authorDict["role"]).lower() in ["writer", "penciller", "editor", "assistant editor", "cover artist", "letterer", "inker", "colorist"]:
                         if str(authorDict["role"]).lower() is "cover artist":
-                            author = ET.Element("CoverArtist")
+                            author = document.createElement("CoverArtist")
                         elif str(authorDict["role"]).lower() is "assistant editor":
-                            author = ET.Element("Editor")
+                            author = document.createElement("Editor")
                         else:
-                            author = ET.Element(str(authorDict["role"]).title())
+                            author = document.createElement(str(authorDict["role"]).title())
                 stringName = []
                 if "last-name" in authorDict.keys():
                     stringName.append(authorDict["last-name"])
@@ -1246,50 +1253,52 @@ class comicsExporter():
                     stringName.append(authorDict["first-name"])
                 if "nickname" in authorDict.keys():
                     stringName.append("(" + authorDict["nickname"] + ")")
-                author.text = ",".join(stringName)
-                root.append(author)
+                author.appendChild(document.createTextNode(str(",".join(stringName))))
+                root.appendChild(author)
         if "publisherName" in self.configDictionary.keys():
-            publisher = ET.Element("Publisher")
-            publisher.text = self.configDictionary["publisherName"]
-            root.append(publisher)
+            publisher = document.createElement("Publisher")
+            publisher.appendChild(document.createTextNode(str(self.configDictionary["publisherName"])))
+            root.appendChild(publisher)
 
         if "genre" in self.configDictionary.keys():
             for genreE in self.configDictionary["genre"]:
-                genre = ET.Element("Genre")
-                genre.text = genreE
-                root.append(genre)
-        blackAndWhite = ET.Element("BlackAndWhite")
-        blackAndWhite.text = "No"
-        root.append(blackAndWhite)
-        readingDirection = ET.Element("Manga")
-        readingDirection.text = "No"
+                genre = document.createElement("Genre")
+                genre.appendChild(document.createTextNode(str(genreE)))
+                root.appendChild(genre)
+        blackAndWhite = document.createElement("BlackAndWhite")
+        blackAndWhite.appendChild(document.createTextNode(str("No")))
+        root.appendChild(blackAndWhite)
+        readingDirection = document.createElement("Manga")
+        readingDirection.appendChild(document.createTextNode(str("No")))
         if "readingDirection" in self.configDictionary.keys():
             if self.configDictionary["readingDirection"] is "rightToLeft":
-                readingDirection.text = "Yes"
-        root.append(readingDirection)
+                readingDirection.appendChild(document.createTextNode(str("Yes")))
+        root.appendChild(readingDirection)
 
         if "characters" in self.configDictionary.keys():
             for char in self.configDictionary["characters"]:
-                character = ET.Element("Character")
-                character.text = char
-                root.append(character)
+                character = document.createElement("Character")
+                character.appendChild(document.createTextNode(str(char)))
+                root.appendChild(character)
         if "pages" in self.configDictionary.keys():
-            pagecount = ET.Element("PageCount")
-            pagecount.text = str(len(self.configDictionary["pages"]))
-            root.append(pagecount)
-        pages = ET.Element("Pages")
+            pagecount = document.createElement("PageCount")
+            pagecount.appendChild(document.createTextNode(str(len(self.configDictionary["pages"]))))
+            root.appendChild(pagecount)
+        pages = document.createElement("Pages")
         covernumber = 0
         if "pages" in self.configDictionary.keys() and "cover" in self.configDictionary.keys():
             covernumber = self.configDictionary["pages"].index(self.configDictionary["cover"])
         for i in range(len(self.pagesLocationList["CBZ"])):
-            page = ET.Element("Page")
-            page.set("Image", str(i))
+            page = document.createElement("Page")
+            page.setAttribute("Image", str(i))
             if i is covernumber:
-                page.set("Type", "FrontCover")
-            pages.append(page)
-        root.append(pages)
-        document._setroot(root)
-        document.write(location, encoding="UTF-8", xml_declaration=True)
+                page.setAttribute("Type", "FrontCover")
+            pages.appendChild(page)
+        root.appendChild(pages)
+        document.appendChild(root)
+        f = open(location, 'w', newline="", encoding="utf-8")
+        f.write(document.toprettyxml(indent="  "))
+        f.close()
         self.comicRackInfo = location
         return True
     """

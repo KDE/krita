@@ -546,37 +546,37 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
 
     Node *node = 0;
 
-    if (nodeType == "paintlayer") {
+    if (nodeType.toLower()== "paintlayer") {
         node = new Node(image, new KisPaintLayer(image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "grouplayer") {
+    else if (nodeType.toLower()  == "grouplayer") {
         node = new Node(image, new KisGroupLayer(image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "filelayer") {
+    else if (nodeType.toLower()  == "filelayer") {
         node = new Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "filterlayer") {
+    else if (nodeType.toLower()  == "filterlayer") {
         node = new Node(image, new KisAdjustmentLayer(image, name, 0, 0));
     }
-    else if (nodeType == "filllayer") {
+    else if (nodeType.toLower()  == "filllayer") {
         node = new Node(image, new KisGeneratorLayer(image, name, 0, 0));
     }
-    else if (nodeType == "clonelayer") {
+    else if (nodeType.toLower()  == "clonelayer") {
         node = new Node(image, new KisCloneLayer(0, image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "vectorlayer") {
+    else if (nodeType.toLower()  == "vectorlayer") {
         node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "transparencymask") {
+    else if (nodeType.toLower()  == "transparencymask") {
         node = new Node(image, new KisTransparencyMask());
     }
-    else if (nodeType == "filtermask") {
+    else if (nodeType.toLower()  == "filtermask") {
         node = new Node(image, new KisFilterMask());
     }
-    else if (nodeType == "transformmask") {
+    else if (nodeType.toLower()  == "transformmask") {
         node = new Node(image, new KisTransformMask());
     }
-    else if (nodeType == "selectionmask") {
+    else if (nodeType.toLower()  == "selectionmask") {
         node = new Node(image, new KisSelectionMask(image));
     }
     return node;

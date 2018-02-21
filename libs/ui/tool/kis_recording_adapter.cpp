@@ -64,12 +64,14 @@ void KisRecordingAdapter::endStroke()
 
 void KisRecordingAdapter::addPoint(const KisPaintInformation &pi)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_pathPaintAction);
     m_pathPaintAction->addPoint(pi);
 }
 
 void KisRecordingAdapter::addLine(const KisPaintInformation &pi1,
                                   const KisPaintInformation &pi2)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_pathPaintAction);
     m_pathPaintAction->addLine(pi1, pi2);
 }
 
@@ -79,6 +81,7 @@ void KisRecordingAdapter::addCurve(const KisPaintInformation &pi1,
                                    const QPointF &control2,
                                    const KisPaintInformation &pi2)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_pathPaintAction);
     m_pathPaintAction->addCurve(pi1, control1, control2, pi2);
 }
 

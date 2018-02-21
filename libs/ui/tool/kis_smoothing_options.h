@@ -68,6 +68,9 @@ public:
     void setStabilizeSensors(bool value);
     bool stabilizeSensors() const;
 
+Q_SIGNALS:
+    void sigSmoothingTypeChanged();
+
 private Q_SLOTS:
     void slotWriteConfig();
 

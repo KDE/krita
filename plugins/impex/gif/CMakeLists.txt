@@ -20,7 +20,7 @@ ki18n_wrap_ui(kritagifimport_SOURCES )
 
 add_library(kritagifimport MODULE ${kritagifimport_SOURCES})
 
-target_link_libraries(kritagifimport kritaui gif)
+target_link_libraries(kritagifimport kritaui ${GIF_LIBRARY})
 
 install(TARGETS kritagifimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_gif.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

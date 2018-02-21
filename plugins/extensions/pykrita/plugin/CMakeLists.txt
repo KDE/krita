@@ -39,5 +39,3 @@ install(
     FILES_MATCHING PATTERN "*.py"
 )
 
-add_subdirectory(plugins)
-

@@ -1334,7 +1334,7 @@ qreal KoPathSegment::nearestPoint(const QPointF &point) const
     * z_{ij} = -----------------------------------------------
     *                   BinomialCoeff(2n - 1, i + j)
     *
-    * This Bernstein-Bezier polynom representation can now be solved for it's roots.
+    * This Bernstein-Bezier polynom representation can now be solved for its roots.
     */
 
     QList<QPointF> ctlPoints = controlPoints();

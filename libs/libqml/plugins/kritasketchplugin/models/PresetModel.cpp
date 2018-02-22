@@ -69,8 +69,6 @@ public:
 #if 0
         preset->settings()->setNode(view->resourceProvider()->currentNode());
 #endif
-        KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
-        QString            pixFilename = KoResourcePaths::findResource("kis_images", paintOp->pixmap());
 
         view->resourceProvider()->setPaintOpPreset(preset);
     }

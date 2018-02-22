@@ -32,7 +32,7 @@ class KisPaintOpFactory;
 struct KRITAUI_EXPORT KisPaintOpInfo
 {
     KisPaintOpInfo() { }
-    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QPixmap& _icon, qint32 _priority):
+    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QIcon& _icon, qint32 _priority):
         id(_id),  name(_name), category(_category), icon(_icon), priority(_priority) { }
 
     KisPaintOpInfo(const QString& _id):
@@ -45,7 +45,7 @@ struct KRITAUI_EXPORT KisPaintOpInfo
     QString id;
     QString name;
     QString category;
-    QPixmap icon;
+    QIcon icon;
     qint32  priority;
 };
 

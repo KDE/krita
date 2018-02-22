@@ -60,21 +60,9 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
 
     QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
     Q_FOREACH (const KoID& paintopId, keys) {
-        QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintopId);
+        QIcon pm = KisPaintOpRegistry::instance()->icon(paintopId);
 
-        QPixmap pm;
-        if (!pixmapName.isEmpty()) {
-            QString fname = KoResourcePaths::findResource("kis_images", pixmapName);
-            pm = QPixmap(fname);
-        }
-
-
-        if (pm.isNull()) {
-            pm = QPixmap(16, 16);
-            pm.fill();
-        }
-
-        m_actionEditor->paintOps->addItem(QIcon(pm), paintopId.name());
+        m_actionEditor->paintOps->addItem(pm, paintopId.name());
         m_paintops.append(paintopId.id());
     }
     connect(m_actionEditor->paintOps, SIGNAL(activated(int)), SLOT(paintOpChanged(int)));

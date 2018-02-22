@@ -600,19 +600,10 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
        sortedBrushEnginesList.clear(); // just in case this function is called again, don't keep adding to the list
 
         for(int i=0; i < list.length(); i++) {
-
-            QString fileName = KoResourcePaths::findResource("kis_images", list.at(i)->pixmap());
-            QPixmap pixmap(fileName);
-
-            if(pixmap.isNull()){
-                pixmap = QPixmap(22,22);
-                pixmap.fill();
-            }
-
             KisPaintOpInfo paintOpInfo;
             paintOpInfo.id = list.at(i)->id();
             paintOpInfo.name = list.at(i)->name();
-            paintOpInfo.icon = pixmap;
+            paintOpInfo.icon = list.at(i)->icon();
             paintOpInfo.priority = list.at(i)->priority();
 
             sortedBrushEnginesList.append(paintOpInfo);
@@ -640,7 +631,7 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
 
 
         // fill the list into the brush combo box
-        sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), emptyPixmap, 0 ));
+        sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), QIcon(emptyPixmap), 0 ));
         for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
             m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
         }

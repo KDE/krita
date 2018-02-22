@@ -82,6 +82,11 @@ public:
         return m_comment;
     }
 
+    QString manual() const
+    {
+        return m_manual;
+    }
+
 private:
     friend class PythonPluginManager;
 
@@ -99,6 +104,8 @@ private:
     QString m_name;
     QString m_moduleName;
     QString m_comment;
+    QString m_manual;
+
     QMap<QString, QVariant> m_properties;
 };
 

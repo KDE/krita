@@ -11,7 +11,6 @@ include_directories(SYSTEM
     ${Vc_INCLUDE_DIR}
 )
 
-
 add_subdirectory( assistants )
 add_subdirectory( color )
 add_subdirectory( dockers )
@@ -22,3 +21,7 @@ add_subdirectory( generators )
 add_subdirectory( impex )
 add_subdirectory( paintops )
 add_subdirectory( tools )
+
+if (HAVE_PYQT5 AND HAVE_SIP AND HAVE_PYTHONLIBS)
+    add_subdirectory( python )
+endif()

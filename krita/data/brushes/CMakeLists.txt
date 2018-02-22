@@ -38,6 +38,9 @@ rock_scraped.gih
 scales.png
 scratches_rough.gih
 scribbles.png
+shapes_mech_random.gih
+shapes_round_random.gih
+shapes_spiked_random.gih
 smear_paint.png
 smoke.png
 snow.gih

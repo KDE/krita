@@ -902,13 +902,16 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
     // there needs to be at least one shape for a tool without an activationShapeId
     // to work
     // if not change the current tool to the default tool
+
+    const QStringList activationShapeIds = canvasData->activationShapeId.split(',');
+
     if (!(canvasData->activationShapeId.isNull() && shapes.size() > 0)
-                && canvasData->activationShapeId != "flake/always"
-                && canvasData->activationShapeId != "flake/edit") {
+        && !activationShapeIds.contains("flake/always")
+        && !activationShapeIds.contains("flake/edit")) {
 
         bool currentToolWorks = false;
         foreach (const QString &type, types) {
-            if (canvasData->activationShapeId.split(',').contains(type)) {
+            if (activationShapeIds.contains(type)) {
                 currentToolWorks = true;
                 break;
             }

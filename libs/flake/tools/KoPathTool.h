@@ -29,6 +29,7 @@
 #include "kis_signal_auto_connection.h"
 #include <QList>
 #include <QCursor>
+#include <KoShapeFillResourceConnector.h>
 
 class QButtonGroup;
 class KoCanvasBase;
@@ -149,6 +150,7 @@ private:
     bool m_activatedTemporarily;
     QScopedPointer<QMenu> m_contextMenu;
     KisSignalAutoConnectionsStore m_canvasConnections;
+    KoShapeFillResourceConnector m_shapeFillResourceConnector;
 
     Q_DECLARE_PRIVATE(KoToolBase)
 };

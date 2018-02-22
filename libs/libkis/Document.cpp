@@ -63,6 +63,7 @@
 #include <InfoObject.h>
 #include <Node.h>
 #include <Selection.h>
+#include <LibKisUtils.h>
 
 struct Document::Private {
     Private() {}
@@ -112,28 +113,10 @@ Node *Document::activeNode() const
         }
     }
     if (activeNodes.size() > 0) {
-        KisNodeSP activeNode = activeNodes.first();
-        if (qobject_cast<const KisGroupLayer*>(activeNode.data())) {
-            return new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(activeNode.data())));
-        } else if (qobject_cast<const KisFileLayer*>(activeNode.data())) {
-            return new FileLayer(KisFileLayerSP(dynamic_cast<KisFileLayer*>(activeNode.data())));
-        } else if (qobject_cast<const KisAdjustmentLayer*>(activeNode.data())) {
-            return new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(activeNode.data())));
-        } else  if (qobject_cast<const KisGeneratorLayer*>(activeNode.data())) {
-            return new FillLayer(KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(activeNode.data())));
-        } else if (qobject_cast<const KisCloneLayer*>(activeNode.data())) {
-            return new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(activeNode.data())));
-        } else  if (qobject_cast<const KisShapeLayer*>(activeNode.data())) {
-            return new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(activeNode.data())));
-        } else  if (qobject_cast<const KisFilterMask*>(activeNode.data())) {
-            return new FilterMask(d->document->image(), KisFilterMaskSP(dynamic_cast<KisFilterMask*>(activeNode.data())));
-        } else  if (qobject_cast<const KisSelectionMask*>(activeNode.data())) {
-            return new SelectionMask(d->document->image(), KisSelectionMaskSP(dynamic_cast<KisSelectionMask*>(activeNode.data())));
-        } else{
-            return new Node(d->document->image(), activeNode);
-        }
+        QList<Node*> nodes = LibKisUtils::createNodeList(activeNodes, d->document->image());
+        return nodes.first();
     }
-    return new Node(d->document->image(), d->document->image()->root()->firstChild());
+    return 0;
 }
 
 void Document::setActiveNode(Node* value)
@@ -546,37 +529,37 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
 
     Node *node = 0;
 
-    if (nodeType == "paintlayer") {
+    if (nodeType.toLower()== "paintlayer") {
         node = new Node(image, new KisPaintLayer(image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "grouplayer") {
+    else if (nodeType.toLower()  == "grouplayer") {
         node = new Node(image, new KisGroupLayer(image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "filelayer") {
+    else if (nodeType.toLower()  == "filelayer") {
         node = new Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "filterlayer") {
+    else if (nodeType.toLower()  == "filterlayer") {
         node = new Node(image, new KisAdjustmentLayer(image, name, 0, 0));
     }
-    else if (nodeType == "filllayer") {
+    else if (nodeType.toLower()  == "filllayer") {
         node = new Node(image, new KisGeneratorLayer(image, name, 0, 0));
     }
-    else if (nodeType == "clonelayer") {
+    else if (nodeType.toLower()  == "clonelayer") {
         node = new Node(image, new KisCloneLayer(0, image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "vectorlayer") {
+    else if (nodeType.toLower()  == "vectorlayer") {
         node = new Node(image, new KisShapeLayer(d->document->shapeController(), image, name, OPACITY_OPAQUE_U8));
     }
-    else if (nodeType == "transparencymask") {
+    else if (nodeType.toLower()  == "transparencymask") {
         node = new Node(image, new KisTransparencyMask());
     }
-    else if (nodeType == "filtermask") {
+    else if (nodeType.toLower()  == "filtermask") {
         node = new Node(image, new KisFilterMask());
     }
-    else if (nodeType == "transformmask") {
+    else if (nodeType.toLower()  == "transformmask") {
         node = new Node(image, new KisTransformMask());
     }
-    else if (nodeType == "selectionmask") {
+    else if (nodeType.toLower()  == "selectionmask") {
         node = new Node(image, new KisSelectionMask(image));
     }
     return node;

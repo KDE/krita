@@ -41,7 +41,8 @@ static const QColor primaryColor(0, 0, 90, 180);
 static const QColor secondaryColor(0, 0, 255, 127);
 static const QColor gradientFillColor(255, 197, 39);
 static const QColor highlightColor(255, 100, 100);
-static const QColor selectionColor(66, 255, 0);
+static const QColor highlightOutlineColor(155, 0, 0);
+static const QColor selectionColor(164, 227, 243);
 
 }
 
@@ -107,7 +108,19 @@ KisHandleStyle &KisHandleStyle::highlightedPrimaryHandles()
 
     if (!style) {
         style.reset(new KisHandleStyle());
-        initDashedStyle(primaryColor, highlightColor, style.data());
+        initDashedStyle(highlightOutlineColor, highlightColor, style.data());
+    }
+
+    return *style;
+}
+
+KisHandleStyle &KisHandleStyle::partiallyHighlightedPrimaryHandles()
+{
+    static QScopedPointer<KisHandleStyle> style;
+
+    if (!style) {
+        style.reset(new KisHandleStyle());
+        initDashedStyle(highlightOutlineColor, selectionColor, style.data());
     }
 
     return *style;

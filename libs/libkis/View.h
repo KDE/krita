@@ -25,7 +25,7 @@
 
 class ManagedColor;
 class Resource;
-
+class Node;
 class KisView;
 
 /**
@@ -123,6 +123,23 @@ Application.activeWindow().activeView().setForeGroundColor(color)
 
     qreal paintingFlow() const;
     void setPaintingFlow(qreal flow);
+
+    /**
+     * @brief selectedNodes returns a list of Nodes that are selected in this view.
+     *
+     *
+@code
+from krita import *
+w = Krita.instance().activeWindow()
+v = w.activeView()
+selected_nodes = v.selectedNodes()
+print(selected_nodes)
+@endcode
+     *
+     *
+     * @return a list of Node objects which may be empty.
+     */
+    QList<Node *> selectedNodes() const;
 
 private:
 

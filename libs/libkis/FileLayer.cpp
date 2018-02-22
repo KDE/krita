@@ -55,9 +55,9 @@ void FileLayer::setProperties(QString FileName, QString ScalingMethod)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
     KisFileLayer::ScalingMethod sm = KisFileLayer::None;
-    if (ScalingMethod=="ToImageSize") {
+    if (ScalingMethod.toLower() == "toimagesize") {
         sm= KisFileLayer::ToImageSize;
-    } else if (ScalingMethod=="ToImagePPI") {
+    } else if (ScalingMethod.toLower() == "toimageppi") {
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);

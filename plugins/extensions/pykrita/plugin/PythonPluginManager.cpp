@@ -23,7 +23,9 @@
 
 #include "PythonPluginManager.h"
 
-#include <QtCore/QSettings>
+#include <QFile>
+#include <QFileInfo>
+#include <QSettings>
 #include <KoResourcePaths.h>
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
@@ -262,7 +264,6 @@ void PythonPluginManager::scanPlugins()
     KConfigGroup pluginSettings(KSharedConfig::openConfig(), "python");
 
     QStringList desktopFiles = KoResourcePaths::findAllResources("data", "pykrita/*desktop");
-    qDebug() << desktopFiles;
 
     Q_FOREACH(const QString &desktopFile, desktopFiles) {
 
@@ -275,6 +276,16 @@ void PythonPluginManager::scanPlugins()
             plugin.m_moduleName = s.value("X-KDE-Library").toString();
             plugin.m_properties["X-Python-2-Compatible"] = s.value("X-Python-2-Compatible", false).toBool();
 
+            QString manual = s.value("X-Krita-Manual").toString();
+            if (!manual.isEmpty()) {
+                QFile f(QFileInfo(desktopFile).path() + "/" + plugin.m_moduleName + "/" + manual);
+                if (f.exists()) {
+                    f.open(QFile::ReadOnly);
+                    QByteArray ba = f.readAll();
+                    f.close();
+                    plugin.m_manual = QString::fromUtf8(ba);
+                }
+            }
             if (!plugin.isValid()) {
                 dbgScript << plugin.name() << "is not usable";
                 continue;

@@ -693,9 +693,7 @@ bool KisView::queryClose()
     if (!document())
         return true;
 
-    if (document()->isSaving()) {
-        document()->waitForSavingToComplete();
-    }
+    document()->waitForSavingToComplete();
 
     if (document()->isModified()) {
         QString name;

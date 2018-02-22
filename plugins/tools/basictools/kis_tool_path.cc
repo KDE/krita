@@ -115,5 +115,7 @@ void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
 
 void __KisToolPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
-    m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Bezier Curve"));
+    if (!KoCreatePathTool::tryMergeInPathShape(pathShape)) {
+        m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Bezier Curve"));
+    }
 }

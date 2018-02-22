@@ -48,5 +48,7 @@ public Q_SLOTS:
 
     qreal paintingFlow() const;
     void setPaintingFlow(qreal flow);
+
+    QList<Node *> selectedNodes() const /Factory/;
 private:
 };

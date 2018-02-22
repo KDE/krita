@@ -225,12 +225,12 @@ qint32 DlgCanvasSize::height()
 
 qint32 DlgCanvasSize::xOffset()
 {
-    return (qint32) m_page->xOffsetDouble->value();
+    return (qint32) m_xOffset;
 }
 
 qint32 DlgCanvasSize::yOffset()
 {
-    return (qint32) m_page->yOffsetDouble->value();
+    return (qint32) m_yOffset;
 }
 
 void DlgCanvasSize::slotAspectChanged(bool keep)

@@ -829,14 +829,16 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     // check if we are doing something else at the moment
     if (m_currentStrategy) return;
 
-    QScopedPointer<PathSegment> s(segmentAtPoint(event->point));
-
-    if (s && s->isValid()) {
+    if (!m_activeHandle && m_activeSegment && m_activeSegment->isValid()) {
         QList<KoPathPointData> segments;
-        segments.append(KoPathPointData(s->path, s->path->pathPointIndex(s->segmentStart)));
-        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, s->positionOnSegment);
+        segments.append(
+            KoPathPointData(m_activeSegment->path,
+                            m_activeSegment->path->pathPointIndex(m_activeSegment->segmentStart)));
+
+        KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, m_activeSegment->positionOnSegment);
         d->canvas->addCommand(cmd);
 
+        m_pointSelection.clear();
         foreach (KoPathPoint * p, cmd->insertedPoints()) {
             m_pointSelection.add(p, false);
         }
@@ -844,18 +846,23 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         event->accept();
     } else if (!m_activeHandle && !m_activeSegment && m_activatedTemporarily) {
         emit done();
+        event->accept();
+    } else if (!m_activeHandle && !m_activeSegment) {
+        KoShapeManager *shapeManager = canvas()->shapeManager();
+        KoSelection *selection = shapeManager->selection();
+
+        selection->deselectAll();
+        event->accept();
     }
 }
 
 KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
     Q_D(KoToolBase);
-    const int clickProximity = 5;
 
-    // convert click proximity to point using the current zoom level
-    QPointF clickOffset = d->canvas->viewConverter()->viewToDocument(QPointF(clickProximity, clickProximity));
     // the max allowed distance from a segment
-    const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
+    const QRectF grabRoi = handleGrabRect(point);
+    const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);
 
     QScopedPointer<PathSegment> segment(new PathSegment);
 
@@ -865,23 +872,25 @@ KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
             continue;
 
         // convert document point to shape coordinates
-        QPointF p = shape->documentToShape(point);
+        const QPointF p = shape->documentToShape(point);
         // our region of interest, i.e. a region around our mouse position
-        QRectF roi(p - clickOffset, p + clickOffset);
+        const QRectF roi = shape->documentToShape(grabRoi);
 
-        qreal minSqaredDistance = HUGE_VAL;
+        qreal minDistance = std::numeric_limits<qreal>::max();
+
         // check all segments of this shape which intersect the region of interest
-        QList<KoPathSegment> segments = shape->segmentsAt(roi);
+        const QList<KoPathSegment> segments = shape->segmentsAt(roi);
+
         foreach (const KoPathSegment &s, segments) {
-            qreal nearestPointParam = s.nearestPoint(p);
-            QPointF nearestPoint = s.pointAt(nearestPointParam);
-            QPointF diff = p - nearestPoint;
-            qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
+            const qreal nearestPointParam = s.nearestPoint(p);
+            const QPointF nearestPoint = s.pointAt(nearestPointParam);
+            const qreal distance = kisDistance(p, nearestPoint);
+
             // are we within the allowed distance ?
-            if (squaredDistance > maxSquaredDistance)
+            if (distance > distanceThreshold)
                 continue;
             // are we closer to the last closest point ?
-            if (squaredDistance < minSqaredDistance) {
+            if (distance < minDistance) {
                 segment->path = shape;
                 segment->segmentStart = s.first();
                 segment->positionOnSegment = nearestPointParam;
@@ -911,6 +920,7 @@ void KoPathTool::activate(ToolActivation activation, const QSet<KoShape*> &shape
     useCursor(m_selectCursor);
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(updateActions()));
+    m_shapeFillResourceConnector.connectToCanvas(d->canvas);
 
     initializeWithShapes(shapes.toList());
 }
@@ -934,6 +944,8 @@ void KoPathTool::clearActivePointSelectionReferences()
     m_pointSelection.clear();
 }
 
+#include "kis_pointer_utils.h"
+
 void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
 {
     QList<KoPathShape*> selectedShapes;
@@ -944,6 +956,9 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
             selectedShapes.append(pathShape);
         }
     }
+
+    const QRectF oldBoundingRect =
+        KoShape::boundingRect(implicitCastList<KoShape*>(m_pointSelection.selectedShapes()));
 
     if (selectedShapes != m_pointSelection.selectedShapes()) {
         clearActivePointSelectionReferences();
@@ -957,6 +972,7 @@ void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
         // current canvas
         repaint(shape->boundingRect());
     }
+    repaint(oldBoundingRect);
 
     updateOptionsWidget();
     updateActions();
@@ -1070,6 +1086,7 @@ void KoPathTool::deactivate()
 {
     Q_D(KoToolBase);
 
+    m_shapeFillResourceConnector.disconnect();
     m_canvasConnections.clear();
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());

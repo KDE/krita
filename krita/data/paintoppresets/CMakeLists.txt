@@ -58,6 +58,10 @@ Pencil_Pattern_Draw.kpp
 Pencil_DrShade.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
+Shapes_Mecha.kpp
+Shapes_Rounded.kpp
+Shapes_Spikes.kpp
+Spray_Impressionism.kpp
 Spray_Smoke.kpp
 Spray_Watercolor.kpp
 Stamp_Clouds.kpp
@@ -76,6 +80,7 @@ Waterpaint_Hard_Edges.kpp
 Waterpaint_Soft_Edges.kpp
 Waterpaint_Soft.kpp
 Wet_Bristles.kpp
+Wet_Bristles_Chisel.kpp
 Wet_Bristles_Rough.kpp
 Wet_Bristles_Square.kpp
 Wet_Circle.kpp

@@ -80,6 +80,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.verticalHeader().setDragEnabled(True)
         self.comicPageList.verticalHeader().setDragDropMode(QAbstractItemView.InternalMove)
         self.comicPageList.setAcceptDrops(True)
+        self.comicPageList.horizontalHeader().setStretchLastSection(True)
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
         self.comicPageList.setIconSize(QSize(128, 128))
@@ -241,7 +242,7 @@ class comics_project_manager_docker(DockWidget):
                 dataList = self.get_description_and_title(page.read("documentinfo.xml"))
                 if (dataList[0].isspace() or len(dataList[0]) < 1):
                     dataList[0] = os.path.basename(url)
-                pageItem.setText(dataList[0])
+                pageItem.setText(dataList[0].replace("_", " "))
                 pageItem.setDragEnabled(True)
                 pageItem.setDropEnabled(False)
                 pageItem.setEditable(False)
@@ -256,7 +257,7 @@ class comics_project_manager_docker(DockWidget):
                 listItem.append(description)
                 self.pagesModel.appendRow(listItem)
                 self.comicPageList.resizeRowsToContents()
-                self.comicPageList.resizeColumnToContents(0)
+                self.comicPageList.setColumnWidth(0, 200)
                 self.comicPageList.setColumnWidth(1, 256)
                 progress.setValue(progress.value() + 1)
         progress.setValue(len(pagesList))
@@ -387,7 +388,7 @@ class comics_project_manager_docker(DockWidget):
                 newPageItem.setDragEnabled(True)
                 newPageItem.setDropEnabled(False)
                 newPageItem.setEditable(False)
-                newPageItem.setText(dataList[0])
+                newPageItem.setText(dataList[0].replace("_", " "))
                 newPageItem.setToolTip(relative)
                 page.close()
                 description = QStandardItem()
@@ -398,7 +399,6 @@ class comics_project_manager_docker(DockWidget):
                 listItem.append(description)
                 self.pagesModel.appendRow(listItem)
                 self.comicPageList.resizeRowsToContents()
-                self.comicPageList.resizeColumnToContents(0)
 
     """
     Remove the selected page from the list of pages. This does not remove it from disk(far too dangerous).
@@ -473,7 +473,7 @@ class comics_project_manager_docker(DockWidget):
         if str(self.setupDictionary["projectName"])[-1].isdigit():
             extraUnderscore = "_"
         self.setupDictionary['pageNumber'] += 1
-        pageName = str(self.setupDictionary["projectName"]) + extraUnderscore + str(format(self.setupDictionary['pageNumber'], "03d"))
+        pageName = str(self.setupDictionary["projectName"]).replace(" ", "_") + extraUnderscore + str(format(self.setupDictionary['pageNumber'], "03d"))
         url = os.path.join(str(self.setupDictionary["pagesLocation"]), pageName + ".kra")
 
         # open the page by opening the template and resaving it, or just opening it.
@@ -487,7 +487,7 @@ class comics_project_manager_docker(DockWidget):
             newPage = Application.openDocument(os.path.join(self.projecturl, templateUrl))
             newPage.waitForDone()
             newPage.setFileName(absoluteUrl)
-            newPage.setName(pageName)
+            newPage.setName(pageName.replace("_", " "))
             newPage.save()
             newPage.waitForDone()
 
@@ -497,7 +497,7 @@ class comics_project_manager_docker(DockWidget):
         newPageItem.setDragEnabled(True)
         newPageItem.setDropEnabled(False)
         newPageItem.setEditable(False)
-        newPageItem.setText(pageName)
+        newPageItem.setText(pageName.replace("_", " "))
         newPageItem.setToolTip(url)
 
         # close page document.
@@ -570,7 +570,7 @@ class comics_project_manager_docker(DockWidget):
 
                 # Set the title to the filename if it was empty. It looks a bit neater.
                 if page.name().isspace or len(page.name()) < 1:
-                    page.setName(str(self.pagesModel.data(index, role=Qt.DisplayRole)))
+                    page.setName(str(self.pagesModel.data(index, role=Qt.DisplayRole)).replace("_", " "))
 
                 # Add views for the document so the user can use it.
                 Application.activeWindow().addView(page)

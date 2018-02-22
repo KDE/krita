@@ -84,13 +84,13 @@ bool checkIsSupportedDesktopGL(const OpenGLCheckResult &checkResult) {
 }
 
 bool checkIsSupportedAngleD3D11(const OpenGLCheckResult &checkResult) {
-    if (!checkResult.isUsingAngle()) {
-        qWarning() << "Desktop OpenGL was being used when ANGLE was wanted, assuming no ANGLE support";
-        return false;
-    }
     if (!checkResult.isOpenGLES()) {
         qWarning() << "Got desktop OpenGL instead of OpenGL ES, this shouldn't happen!";
         return false;
+    }
+    if (!checkResult.isUsingAngle()) {
+        // This can happen if someone tries to swap in SwiftShader, don't mind it.
+        qWarning() << "OpenGL ES context is not ANGLE. Continuing anyway...";
     }
     // HACK: Block ANGLE with Direct3D9
     //       Direct3D9 does not give OpenGL ES 3.0
@@ -206,10 +206,10 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv, QString userRendere
     }
     qDebug() << "Done probing Qt OpenGL detection";
 
-    windowsOpenGLStatus.isQtPreferAngle = qpaDetectionResult->isUsingAngle();
+    windowsOpenGLStatus.isQtPreferAngle = qpaDetectionResult->isOpenGLES();
 
     boost::optional<OpenGLCheckResult> checkResultAngle, checkResultDesktopGL;
-    if (qpaDetectionResult->isUsingAngle()) {
+    if (qpaDetectionResult->isOpenGLES()) {
         checkResultAngle = qpaDetectionResult;
         // We already checked ANGLE, now check desktop OpenGL
         qputenv("QT_OPENGL", "desktop");

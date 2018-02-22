@@ -46,7 +46,7 @@ class path_select(QWidget):
         else:
             self.projectUrl = projectUrl
         self.question = question
-        self.action_change_folder = QAction(i18n("Change Folder"))
+        self.action_change_folder = QAction(i18n("Change Folder"), self)
         self.action_change_folder.setIconText("...")
         self.action_change_folder.triggered.connect(self.slot_change_location)
         self.button.setDefaultAction(self.action_change_folder)

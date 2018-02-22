@@ -316,8 +316,27 @@ class comics_project_manager_docker(DockWidget):
                 author = {}
                 if ET.iselement(authorelem.find(calligra + 'full-name')):
                     author["nickname"] = str(authorelem.find(calligra + 'full-name').text)
+                
+                if ET.iselement(authorelem.find(calligra + 'creator-first-name')):
+                    author["first-name"] = str(authorelem.find(calligra + 'creator-first-name').text)
+                
+                if ET.iselement(authorelem.find(calligra + 'initial')):
+                    author["initials"] = str(authorelem.find(calligra + 'initial').text)
+                
+                if ET.iselement(authorelem.find(calligra + 'creator-last-name')):
+                    author["last-name"] = str(authorelem.find(calligra + 'creator-last-name').text)
+                
                 if ET.iselement(authorelem.find(calligra + 'email')):
                     author["email"] = str(authorelem.find(calligra + 'email').text)
+                
+                if ET.iselement(authorelem.find(calligra + 'contact')):
+                    contact = authorelem.find(calligra + 'contact')
+                    contactMode = contact.get("type")
+                    if contactMode=="email":
+                        author["email"] = str(contact.text)
+                    if contactMode=="homepage":
+                        author["homepage"] = str(contact.text)
+                
                 if ET.iselement(authorelem.find(calligra + 'position')):
                     author["role"] = str(authorelem.find(calligra + 'position').text)
                 listOfAuthors.append(author)

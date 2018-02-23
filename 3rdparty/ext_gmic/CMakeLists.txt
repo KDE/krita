@@ -3,7 +3,7 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 # Download the gmic sources
 ExternalProject_Add( ext_gmic_base
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL http://gmic.eu/files/source/gmic_source.tar.gz
+    URL https://gmic.eu/files/source/gmic_2.2.0.tar.gz
     URL_HASH SHA1=caf72b80da8bd3e31111cff8407b005e7115d2c2
 
     SOURCE_DIR gmic

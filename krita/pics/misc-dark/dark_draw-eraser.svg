@@ -13,7 +13,7 @@
    height="22"
    id="svg3760"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="dark_draw-eraser.svg">
   <defs
      id="defs3762" />
@@ -25,7 +25,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="24.925146"
-     inkscape:cx="5.9368585"
+     inkscape:cx="-0.80332268"
      inkscape:cy="12.562494"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -34,61 +34,73 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1880"
-     inkscape:window-height="1060"
-     inkscape:window-x="-3"
-     inkscape:window-y="-3"
+     inkscape:window-width="1884"
+     inkscape:window-height="1051"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      showguides="false">
     <sodipodi:guide
        position="-0.99999557,22.999999"
        orientation="24,0"
-       id="guide4115" />
+       id="guide4115"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="-0.99999557,-1.0000018"
        orientation="0,24"
-       id="guide4117" />
+       id="guide4117"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="23.000004,-1.0000018"
        orientation="-24,0"
-       id="guide4119" />
+       id="guide4119"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="23.000004,22.999999"
        orientation="0,-24"
-       id="guide4121" />
+       id="guide4121"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="2.0000044,19.999999"
        orientation="18,0"
-       id="guide4123" />
+       id="guide4123"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="2.0000044,1.9999981"
        orientation="0,18"
-       id="guide4125" />
+       id="guide4125"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="20.000004,1.9999981"
        orientation="-18,0"
-       id="guide4127" />
+       id="guide4127"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="20.000004,19.999999"
        orientation="0,-18"
-       id="guide4129" />
+       id="guide4129"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="3.0000044,18.999999"
        orientation="16,0"
-       id="guide4131" />
+       id="guide4131"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="3.0000044,2.9999981"
        orientation="0,16"
-       id="guide4133" />
+       id="guide4133"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="19.000004,2.9999981"
        orientation="-16,0"
-       id="guide4135" />
+       id="guide4135"
+       inkscape:locked="false" />
     <sodipodi:guide
        position="19.000004,18.999999"
        orientation="0,-16"
-       id="guide4137" />
+       id="guide4137"
+       inkscape:locked="false" />
     <inkscape:grid
        type="xygrid"
        id="grid4139"
@@ -105,7 +117,30 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <dc:date>2015</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g

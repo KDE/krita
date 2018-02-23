@@ -1,9 +1,10 @@
 [Desktop Entry]
+Name[fr_FR]=Modèles design
 Name=Design Templates
 Name[ar]=قوالب التّصميم
 Name[bs]=Predlošci dizajna
-Name[ca]=Plantilles de disseny
 Name[ca@valencia]=Plantilles de disseny
+Name[ca]=Plantilles de disseny
 Name[cs]=Návrhové šablony
 Name[da]=Designskabeloner
 Name[de]=Design-Vorlagen
@@ -13,7 +14,6 @@ Name[es]=Plantillas de diseño
 Name[et]=Disainmallid
 Name[eu]=Diseinu-txantiloiak
 Name[fi]=Suunnittelupohjat
-Name[fr]=Modèles design
 Name[gl]=Modelos de deseño
 Name[hu]=Tervező sablonok
 Name[ia]=Patronos de dessigno
@@ -38,3 +38,8 @@ Name[x-test]=xxDesign Templatesxx
 Name[zh_CN]=设计模板
 Name[zh_TW]=設計範本
 X-KDE-DefaultTab=true
+
+[Dolphin]
+PreviewsShown=true
+Timestamp=2018,2,22,19,38,12
+Version=3

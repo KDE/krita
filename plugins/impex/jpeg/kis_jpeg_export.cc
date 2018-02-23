@@ -169,7 +169,6 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
                 eI->removeEntry("creator");
             }
             eI->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(QVariant(author))));
-            qDebug()<<author;
         }
     }
 

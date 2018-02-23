@@ -398,8 +398,6 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 if (entry.name() == "description") {
                     exivKey = "Exif.Image.ImageDescription";
                 } else if (entry.name() == "creator") {
-                    qDebug()<<"saving creator";
-                    qDebug()<<"Exif.Image.Artist";
                     exivKey = "Exif.Image.Artist";
                 } else if (entry.name() == "rights") {
                     exivKey = "Exif.Image.Copyright";
@@ -415,7 +413,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                     exivKey = "Exif.Photo.MakerNote";
                 }
             }
-            qDebug() << "Saving " << entry.name() << " to " << exivKey;
+            dbgFile << "Saving " << entry.name() << " to " << exivKey;
             if (exivKey.isEmpty()) {
                 dbgFile << entry.qualifiedName() << " is unsavable to EXIF";
             } else {
@@ -432,18 +430,16 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 } else if (exivKey == "Exif.Photo.ComponentsConfiguration") {
                     v = kmdIntOrderedArrayToExifArray(entry.value());
                 } else if (exivKey == "Exif.Image.Artist") { // load as dc:creator
+                    KisMetaData::Value creator = entry.value();
                     if (entry.value().asArray().size() > 0) {
-                        KisMetaData::Value creator = entry.value().asArray()[0];
+                        creator = entry.value().asArray()[0];
+                    }
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
-                        v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+                    v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
 #else
-                        v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
-                    }
+                    v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
+
 #endif
-                    else if(!entry.value().isArray() && entry.value().toString().size()>0) {
-                        KisMetaData::Value creator = entry.value();
-                        v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
-                    }
                 } else if (exivKey == "Exif.Photo.OECF") {
                     v = kmdOECFStructureToExifOECF(entry.value());
                 } else if (exivKey == "Exif.Photo.DeviceSettingDescription") {

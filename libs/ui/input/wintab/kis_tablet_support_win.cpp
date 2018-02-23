@@ -32,10 +32,11 @@
 #include <QGuiApplication>
 #include <QDesktopWidget>
 
-#include <qpa/qwindowsysteminterface.h>
-#include <qpa/qplatformscreen.h>
-#include <private/qguiapplication_p.h>
+// #include <qpa/qwindowsysteminterface.h>
+// #include <qpa/qplatformscreen.h>
+// #include <private/qguiapplication_p.h>
 
+#include <QPointer>
 #include <QScreen>
 #include <QWidget>
 #include <QLibrary>

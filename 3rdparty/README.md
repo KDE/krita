@@ -210,7 +210,7 @@ Or this to use jom (faster compiling, uses all cores, ships with QtCreator/pre-b
 
 On Linux
 
-   cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfobg
+   cmake ../krita -DCMAKE_INSTALL_PREFIX=BUILDROOT/i -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo
 
    # Troubleshooting: if you built your own SIP and CMake fails to find it, please set
    #                  the following environment variable to the SIP installation directory:
@@ -231,16 +231,9 @@ On Linux and OSX
     make
     make install
 
-On Windows
+On Windows (replace 4 with the number of jobs to run in parallel)
 
-    Either use MSBuild to build (-- /m tells msbuild to use all your cores):
-
-    cmake --build . --config RelWithDebInfo --target INSTALL -- /m
-
-    Or use jom which should be in a path similar to C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe.
-    So, from the same folder, instead of running cmake run:
-
-    "C:\Qt\Qt5.6.0\Tools\QtCreator\bin\jom.exe" install
+    cmake --build . --target install -- -j4
 
 6. Run krita:
 

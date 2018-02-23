@@ -23,6 +23,7 @@
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
+#include <kis_brush.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
 {
@@ -156,7 +157,6 @@ void KisPresetLivePreviewView::paintBackground()
             this->scene()->removeItem(m_sceneImageItem);
             m_sceneImageItem = 0;
         }
-
         QFont font;
         font.setPixelSize(14);
         font.setBold(false);
@@ -183,11 +183,58 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
     //Except for the sketchbrush where it determine sthe history.
-    if (m_currentPreset->paintOp().id() == "sketchbrush") {
+    if (m_currentPreset->paintOp().id() == "sketchbrush" ||
+            m_currentPreset->paintOp().id() == "spraybrush") {
         previewSize = qMax(3.0, m_currentPreset->settings()->paintOpSize());
     }
+
+
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
+    KisPaintOpSettingsSP settings = proxy_preset->settings();
     proxy_preset->settings()->setPaintOpSize(previewSize);
+    int maxTextureSize = 200;
+    int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
+    int textureOffsetY = settings->getInt("Texture/Pattern/MaximumOffsetY")*2;
+    double textureScale = settings->getDouble("Texture/Pattern/Scale");
+    if ( textureOffsetX*textureScale> maxTextureSize || textureOffsetY*textureScale > maxTextureSize) {
+        int maxSize = qMax(textureOffsetX, textureOffsetY);
+        double result = maxTextureSize/maxSize;
+        settings->setProperty("Texture/Pattern/Scale", result);
+    }
+    if (m_currentPreset->paintOp().id() == "spraybrush") {
+
+        QDomElement element;
+        QDomDocument d;
+        QString brushDefinition = settings->getString("brush_definition");
+        if (!brushDefinition.isEmpty()) {
+            d.setContent(brushDefinition, false);
+            element = d.firstChildElement("Brush");
+        }
+        KisBrushSP brush = KisBrush::fromXML(element);
+        qreal width = brush->image().width();
+        qreal scale = brush->scale();
+        qreal diameterToBrushRatio = 1.0;
+        qreal diameter = settings->getInt("Spray/diameter");
+        //hack, 1000 being the maximum possible brushsize.
+        if (brush->filename().endsWith(".svg")) {
+            diameterToBrushRatio = diameter/(1000.0*scale);
+            scale = 25.0/1000.0;
+        } else {
+            if (width*scale>25.0) {
+                diameterToBrushRatio = diameter/(width*scale);
+                scale = 25.0/width;
+            }
+        }
+        settings->setProperty("Spray/diameter", int(25.0*diameterToBrushRatio));
+
+        brush->setScale(scale);
+        d.clear();
+        element = d.createElement("Brush");
+        brush->toXML(d, element);
+        d.appendChild(element);
+        settings->setProperty("brush_definition", d.toString());
+    }
+    proxy_preset->setSettings(settings);
 
 
     KisResourcesSnapshotSP resources =

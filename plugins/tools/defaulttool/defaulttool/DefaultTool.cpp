@@ -1373,7 +1373,7 @@ void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
         repaintDecorations();
     }
 }
-
+#include "kis_debug.h"
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 {
     KoShapeManager *shapeManager = canvas()->shapeManager();
@@ -1443,7 +1443,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (handle != KoFlake::NoHandle) {
             // resizing or shearing only with left mouse button
             if (insideSelection) {
-                return new ShapeResizeStrategy(this, event->point, handle);
+                return new ShapeResizeStrategy(this, event->point, handle, m_tabbedOptionWidget->useUniformScaling());
             }
 
             if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||

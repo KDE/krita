@@ -40,6 +40,8 @@ public:
     /// Sets the unit used by the unit aware child widgets
     void setUnit(const KoUnit &unit);
 
+    bool useUniformScaling() const;
+
 protected:
     void showEvent(QShowEvent *event) override;
 

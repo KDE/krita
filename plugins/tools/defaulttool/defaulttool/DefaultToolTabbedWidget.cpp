@@ -33,9 +33,9 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 {    
     setObjectName("default-tool-tabbed-widget");
 
-    DefaultToolGeometryWidget *geometryWidget = new DefaultToolGeometryWidget(tool, this);
-    geometryWidget->setWindowTitle(i18n("Geometry"));
-    addTab(geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
+    m_geometryWidget = new DefaultToolGeometryWidget(tool, this);
+    m_geometryWidget->setWindowTitle(i18n("Geometry"));
+    addTab(m_geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
 
     m_strokeWidget = new KoStrokeConfigWidget(tool->canvas(), this);
     m_strokeWidget->setWindowTitle(i18n("Stroke"));
@@ -71,6 +71,11 @@ void DefaultToolTabbedWidget::deactivate()
 {
     m_fillWidget->deactivate();
     m_strokeWidget->deactivate();
+}
+
+bool DefaultToolTabbedWidget::useUniformScaling() const
+{
+    return m_geometryWidget->useUniformScaling();
 }
 
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)

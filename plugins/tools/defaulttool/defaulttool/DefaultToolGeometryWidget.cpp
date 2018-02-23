@@ -462,6 +462,11 @@ void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
     slotUpdateSizeBoxes();
 }
 
+bool DefaultToolGeometryWidget::useUniformScaling() const
+{
+    return chkUniformScaling->isChecked();
+}
+
 void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);

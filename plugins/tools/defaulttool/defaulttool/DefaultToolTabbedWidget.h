@@ -24,6 +24,7 @@
 class KoInteractionTool;
 class KoFillConfigWidget;
 class KoStrokeConfigWidget;
+class DefaultToolGeometryWidget;
 
 class DefaultToolTabbedWidget : public KoTitledTabWidget
 {
@@ -42,6 +43,8 @@ public:
     void activate();
     void deactivate();
 
+    bool useUniformScaling() const;
+
 Q_SIGNALS:
     void sigSwitchModeEditFillGradient(bool value);
     void sigSwitchModeEditStrokeGradient(bool value);
@@ -52,8 +55,10 @@ private Q_SLOTS:
 private:
     int m_oldTabIndex;
 
+    DefaultToolGeometryWidget *m_geometryWidget;
     KoFillConfigWidget *m_fillWidget;
     KoStrokeConfigWidget *m_strokeWidget;
 };
+
 
 #endif // DEFAULTTOOLTABBEDWIDGET_H

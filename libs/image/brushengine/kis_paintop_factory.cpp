@@ -40,7 +40,9 @@ void KisPaintOpFactory::preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP 
 
 QIcon KisPaintOpFactory::icon()
 {
-    return QIcon();
+    QPixmap p = QPixmap(22, 22);
+    p.fill(Qt::transparent);
+    return QIcon(p);
 }
 
 QString KisPaintOpFactory::categoryStable()

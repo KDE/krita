@@ -155,7 +155,9 @@ QIcon KisPaintOpRegistry::icon(const KoID &id) const
 
     if (!f) {
         dbgRegistry << "No paintop" << id.id() << "";
-        return QIcon();
+        QPixmap p = QPixmap(22, 22);
+        p.fill(Qt::transparent);
+        return QIcon(p);
     }
 
     return f->icon();

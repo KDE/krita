@@ -6,6 +6,7 @@ set -x
 
 # Read in our parameters
 export BUILD_PREFIX=$1
+export KRITA_SOURCES=$2
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
 # That's not always the case, so make sure it is
@@ -27,6 +28,9 @@ export PYTHONHOME=$DEPS_INSTALL_PREFIX
 # Save some frequently referenced locations in variables for ease of use / updating
 export APPDIR=$BUILD_PREFIX/krita.appdir
 export PLUGINS=$APPDIR/usr/lib/kritaplugins/
+
+# Switch over to our build prefix
+cd $BUILD_PREFIX
 
 #
 # Now we can get the process started!
@@ -75,11 +79,14 @@ cd $BUILD_PREFIX/krita_build
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
 
 # Also find out the revision of Git we built
-cd $BUILD_PREFIX/krita
+cd $KRITA_SOURCES
 GIT_REVISION=$(git rev-parse --short HEAD)
 
 # Now use that to generate a combined name we'll distribute
 VERSION=$KRITA_VERSION-$GIT_REVISION
+
+# Return to our build root
+cd $BUILD_PREFIX
 
 # Generate a new name for the Appimage file and rename it accordingly
 APPIMAGE=krita-"$VERSION"-x86_64.appimage

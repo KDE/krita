@@ -6,6 +6,7 @@ set -x
 
 # Read in our parameters
 export BUILD_PREFIX=$1
+export KRITA_SOURCES=$2
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
 # That's not always the case, so make sure it is
@@ -36,7 +37,7 @@ cd $BUILD_PREFIX/krita-build/
 CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
 # Configure Krita
-cmake $BUILD_PREFIX/krita \
+cmake $KRITA_SOURCES \
     -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/krita.appdir/usr \
     -DDEFINE_NO_DEPRECATED=1 \
     -DCMAKE_BUILD_TYPE=Release \

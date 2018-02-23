@@ -22,6 +22,9 @@ export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 
+# Switch to the build prefix
+cd $BUILD_PREFIX
+
 # G'Mic is built in build-deps.sh
 # Therefore we just need to copy over the installation artifacts from that process
 # First, make sure we have a clean slate to work from and setup the directory structure
@@ -32,7 +35,7 @@ mkdir -p $BUILD_PREFIX/gmic_qt_krita.appdir/usr/share
 
 # Copy over the artifacts...
 cp $DEPS_INSTALL_PREFIX/bin/gmic_krita_qt* $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin
-cp deps-build/ext_gmic/gmic-qt/resources/gmic_hat.png $BUILD_PREFIX/gmic_qt_krita.appdir/gmic_krita_qt.png
+cp $BUILD_PREFIX/deps-build/ext_gmic/gmic-qt/resources/gmic_hat.png $BUILD_PREFIX/gmic_qt_krita.appdir/gmic_krita_qt.png
 
 # Now generate the Appimage for it
 linuxdeployqt $BUILD_PREFIX/gmic_qt_krita.appdir/usr/bin/gmic_krita_qt.desktop -verbose=2 -bundle-non-qt-libs -appimage

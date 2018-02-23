@@ -11,6 +11,7 @@ set -x
 
 # Read in our parameters
 export BUILD_PREFIX=$1
+export KRITA_SOURCES=$2
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
 # That's not always the case, so make sure it is
@@ -54,7 +55,7 @@ fi
 cd $BUILD_PREFIX/deps-build/
 
 # Configure the dependencies for building
-cmake $BUILD_PREFIX/krita/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
+cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
 #cmake --build . --config RelWithDebInfo --target ext_png

@@ -34,7 +34,7 @@ class KoShapeReorderCommandPrivate;
 class KRITAFLAKE_EXPORT KoShapeReorderCommand : public KUndo2Command
 {
 public:
-    struct IndexedShape : boost::less_than_comparable<IndexedShape> {
+    struct KRITAFLAKE_EXPORT IndexedShape : boost::less_than_comparable<IndexedShape> {
         IndexedShape();
         IndexedShape(KoShape *_shape);
 

@@ -31,6 +31,7 @@
 #include <KoShapeController.h>
 #include <KoColorBackground.h>
 #include <KoPatternBackground.h>
+#include <KoShapeStroke.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPathShape.h>
 
@@ -179,6 +180,20 @@ void KisToolShape::addShape(KoShape* shape)
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
     }
+
+    switch (strokeStyle()) {
+    case KisPainter::StrokeStyleNone:
+        shape->setStroke(KoShapeStrokeModelSP());
+        break;
+    case KisPainter::StrokeStyleBrush: {
+        KoShapeStrokeSP stroke(new KoShapeStroke());
+        stroke->setLineWidth(currentStrokeWidth());
+        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        shape->setStroke(stroke);
+        break;
+    }
+    }
+
     KUndo2Command * cmd = canvas()->shapeController()->addShape(shape, 0);
     canvas()->addCommand(cmd);
 }

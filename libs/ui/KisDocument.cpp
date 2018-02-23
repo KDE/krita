@@ -33,7 +33,6 @@
 #include <KoDocumentInfo.h>
 #include <KoDpi.h>
 #include <KoUnit.h>
-#include <KoFileDialog.h>
 #include <KoID.h>
 #include <KoOdfReadStore.h>
 #include <KoProgressProxy.h>
@@ -1422,6 +1421,7 @@ bool KisDocument::isReadWrite() const
 
 QUrl KisDocument::url() const
 {
+    qDebug() << "url()" << d->m_url;
     return d->m_url;
 }
 
@@ -1537,9 +1537,6 @@ bool KisDocument::newImage(const QString& name,
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
-    if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + '/' + name + ".kra"));
-    }
     documentInfo()->setAboutInfo("abstract", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);

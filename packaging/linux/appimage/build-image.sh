@@ -1,42 +1,49 @@
-# Halt on errors
-set -e
+#!/bin/bash
 
-# Be verbose
+# Halt on errors and be verbose about what we are doing
+set -e
 set -x
 
-export BUILD_PREFIX=/home/krita/devel
-export INSTALLDIR=$BUILD_PREFIX/krita.appdir/usr
-export QTDIR=$BUILD_PREFIX/deps/usr
-export LD_LIBRARY_PATH=$QTDIR/sip:$QTDIR/lib/x86_64-linux-gnu:$QTDIR/lib:$BUILD_PREFIX/i/lib:$LD_LIBRARY_PATH
-export PATH=$QTDIR/bin:$BUILD_PREFIX/i/bin:$PATH
-export PKG_CONFIG_PATH=$QTDIR/share/pkgconfig:$QTDIR/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
-export CMAKE_PREFIX_PATH=$QTDIR/lib/x86_64-linux-gnu:$BUILD_PREFIX:$QTDIR:$CMAKE_PREFIX_PATH
+# Read in our parameters
+export BUILD_PREFIX=$1
 
-export PYTHONPATH=$QTDIR/sip:$QTDIR/lib/python3.5/site-packages:$QTDIR/lib/python3.5
-export PYTHONHOME=$QTDIR
-
-export APPDIR=$BUILD_PREFIX/krita.appdir
-export PLUGINS=$APPDIR/usr/lib/kritaplugins/
-
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
-# not always set correctly in CentOS 6.7
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-rm -rf $APPDIR
-cd $BUILD_PREFIX/krita_build
-make -j10 install
-cd  -
+# We want to use $prefix/deps/usr/ for all our dependencies
+export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
+export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
-cp -r $QTDIR/share/kf5 $APPDIR/usr/share
-cp -r $QTDIR/share/locale $APPDIR/usr/share
-cp -r $QTDIR/share/mime $APPDIR/usr/share
-cp -r $QTDIR/lib/python3.5 $APPDIR/usr/lib
-cp -r $QTDIR/sip $APPDIR/usr/lib/
+# Setup variables needed to help everything find what we built
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
+export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
+export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
+export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip:$DEPS_INSTALL_PREFIX/lib/python3.5/site-packages:$DEPS_INSTALL_PREFIX/lib/python3.5
+export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+# Save some frequently referenced locations in variables for ease of use / updating
+export APPDIR=$BUILD_PREFIX/krita.appdir
+export PLUGINS=$APPDIR/usr/lib/kritaplugins/
+
+#
+# Now we can get the process started!
+#
+
+# Step 1: Copy over all the resources provided by dependencies that we need 
+cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/lib/python3.5 $APPDIR/usr/lib
+cp -r $DEPS_INSTALL_PREFIX/sip $APPDIR/usr/lib/
+
+# Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
 mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
 rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
 
+# Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib; 
 done
@@ -54,49 +61,26 @@ patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/sip/sip.so
 
-#
-# Get the latest linuxdeployqt
-#
-wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" -O linuxdeployqt
-chmod a+x linuxdeployqt
-
-./linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
+# Step 4: Build the image!!!
+linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
-  -qmldir=$QTDIR/qml \
+  -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
   -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
   -appimage 
 
-  
+# Step 5: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita_build
-VER=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
-cd -
+KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
+
+# Also find out the revision of Git we built
 cd $BUILD_PREFIX/krita
-REVISION=$(git rev-parse --short HEAD)
-cd -
+GIT_REVISION=$(git rev-parse --short HEAD)
 
-VERSION=$VER-$REVISION
-VERSION="$(sed s/\ /-/g <<<$VERSION)"
-echo $VERSION
+# Now use that to generate a combined name we'll distribute
+VERSION=$KRITA_VERSION-$GIT_REVISION
 
-
-# Determine which architecture should be built
-if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
-  ARCH=$(arch)
-else
-  echo "Architecture could not be determined"
-  exit 1
-fi
-
-if [[ "$ARCH" = "x86_64" ]] ; then
-        APPIMAGE=krita-"$VERSION"-x86_64.appimage"
-fi
-if [[ "$ARCH" = "i686" ]] ; then
-        APPIMAGE=krita-"$VERSION"-i386.appimage"
-fi
-echo $APPIMAGE
-
+# Generate a new name for the Appimage file and rename it accordingly
+APPIMAGE=krita-"$VERSION"-x86_64.appimage
 mv Krita-x86_64.AppImage $APPIMAGE
-
-

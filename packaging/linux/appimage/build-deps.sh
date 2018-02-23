@@ -1,156 +1,62 @@
-  #!/bin/bash
+#!/bin/bash
 #
 # Build all Krita's dependencies on Ubuntu 14.04.
 #
 # Prerequisites: cmake git build-essential libxcb-keysyms1-dev plus all deps for Qt5
 #
 
-
-# Halt on errors
+# Halt on errors and be verbose about what we are doing
 set -e
-
-# Be verbose
 set -x
 
-export BUILD_PREFIX=/home/krita/devel
-export QTDIR=$BUILD_PREFIX/deps/usr
-export LD_LIBRARY_PATH=$QTDIR/lib:$BUILD_PREFIX/i/lib:$LD_LIBRARY_PATH
-export PATH=$QTDIR/bin:$BUILD_PREFIX/i/bin:$PATH
-export PKG_CONFIG_PATH=$QTDIR/share/pkgconfig:$QTDIR/lib/pkgconfig:$BUILD_PREFIX/i/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
-export CMAKE_PREFIX_PATH=$BUILD_PREFIX:$QTDIR:$CMAKE_PREFIX_PATH
+# Read in our parameters
+export BUILD_PREFIX=$1
 
-#
-# Add the deps we can install from Ubuntu 14.04
-#
-install_deps()
-{
-  apt update
-  apt upgrade
-  apt-get install build-essential \
-  bison \
-  cmake3 \
-  gettext \
-  git \
-  gperf \
-  libasound2-dev \
-  libasound2-dev \
-  libatkmm-1.6-dev \
-  libbz2-dev \
-  libcairo-perl \
-  libcap-dev \
-  libcups2-dev \
-  libcups2-dev \
-  libdbus-1-dev \
-  libdrm-dev \
-  libegl1-mesa-dev \
-  libfontconfig1-dev \
-  libfontconfig1-dev \
-  libfreetype6-dev \
-  libgcrypt11-dev \
-  libgl1-mesa-dev \
-  libglib-perl \
-  libgsl0-dev \
-  libgstreamer-plugins-base0.10-dev \
-  libgstreamer0.10-dev \
-  libgtk2-perl \
-  libjpeg-dev \
-  libnss3-dev \
-  libpci-dev \
-  libpng12-dev \
-  libpulse-dev \
-  libssl-dev \
-  libtiff5-dev \
-  libudev-dev \
-  libwebp-dev  \
-  libx11-dev \
-  libxcb-glx0-dev \
-  libxcb-keysyms1-dev \
-  libxcb-util0-dev \
-  libxcb1-dev \
-  libxcomposite-dev \
-  libxcursor-dev \
-  libxdamage-dev \
-  libxext-dev \
-  libxfixes-dev \
-  libxi-dev \
-  libxrandr-dev \
-  libxrender-dev \
-  libxss-dev \
-  libxtst-dev \
-  mesa-common-dev 
-}
-
-install_deps || true
-
-# We also need patchelf
-wget  -c -nv https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2
-tar -xf patchelf-0.9.tar.bz2
-cd patchelf-0.9
-./configure -prefix=$QTDIR
-make -j4 install
-
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
-# not always set correctly in CentOS 6.7
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-# Determine which architecture should be built
-if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
-  ARCH=$(arch)
-else
-  echo "Architecture could not be determined"
-  exit 1
-fi
+# We want to use $prefix/deps/usr/ for all our dependencies
+export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
+export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
-git_pull_rebase_helper()
-{
-  git reset --hard HEAD
-  git pull
-}
+# Setup variables needed to help everything find what we build
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
+export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
+export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 
 # A krita build layout looks like this:
 # krita/ -- the source directory
-# krita/3rdparty -- the cmake definitions for the dependencies
-# d -- downloads of the dependencies from files.kde.org
-# b -- build directory for the dependencies
-# deps -- the location for the built dependencies
-# build -- build directory for krita itself
-# krita.appdir -- install directory for krita and the dependencies
+# downloads/ -- downloads of the dependencies from files.kde.org
+# deps-build/ -- build directory for the dependencies
+# deps/ -- the location for the built dependencies
+# build/ -- build directory for krita itself
+# krita.appdir/ -- install directory for krita and the dependencies
 
-# Get Krita
-if [ ! -d $BUILD_PREFIX/krita ] ; then
-  git clone  --depth 1 git://anongit.kde.org/krita $BUILD_PREFIX/krita
+# Make sure our downloads directory exists
+if [ ! -d $DOWNLOADS_DIR ] ; then
+    mkdir -p $DOWNLOADS_DIR
 fi
 
-cd $BUILD_PREFIX/krita
-git_pull_rebase_helper
-cd -
-
-# Create the build dir for the 3rdparty deps
-if [ ! -d $BUILD_PREFIX/b ] ; then
-    mkdir $BUILD_PREFIX/b
-fi    
-
-if [ ! -d $BUILD_PREFIX/d ] ; then
-    mkdir $BUILD_PREFIX/d
+# Make sure our build directory exists
+if [ ! -d $BUILD_PREFIX/deps-build/ ] ; then
+    mkdir -p $BUILD_PREFIX/deps-build/
 fi
 
-if [ ! -d $BUILD_PREFIX/i ] ; then
-    mkdir $BUILD_PREFIX/i
+# The 3rdparty dependency handling in Krita also requires the install directory to be pre-created
+if [ ! -d $DEPS_INSTALL_PREFIX ] ; then
+    mkdir -p $DEPS_INSTALL_PREFIX
 fi
 
-if [ ! -d $QTDIR ] ; then
-    mkdir -p $QTDIR
-fi
+# Switch to our build directory as we're basically ready to start building...
+cd $BUILD_PREFIX/deps-build/
 
-cd $BUILD_PREFIX/b
-#rm -rf * || true
+# Configure the dependencies for building
+cmake $BUILD_PREFIX/krita/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-cmake $BUILD_PREFIX/krita/3rdparty \
-    -DCMAKE_INSTALL_PREFIX:PATH=$QTDIR \
-    -DINSTALL_ROOT=$QTDIR \
-    -DEXTERNALS_DOWNLOAD_DIR=$BUILD_PREFIX/d
-    
+# Now start building everything we need, in the appropriate order
 #cmake --build . --config RelWithDebInfo --target ext_png
 #cmake --build . --config RelWithDebInfo --target ext_tiff
 #cmake --build . --config RelWithDebInfo --target ext_jpeg
@@ -173,5 +79,3 @@ cmake --build . --config RelWithDebInfo --target ext_kcrash
 cmake --build . --config RelWithDebInfo --target ext_gmic
 cmake --build . --config RelWithDebInfo --target ext_sip
 cmake --build . --config RelWithDebInfo --target ext_pyqt
-
-

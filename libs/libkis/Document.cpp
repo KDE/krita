@@ -580,7 +580,7 @@ FileLayer *Document::createFileLayer(const QString &name, const QString fileName
     if (!d->document->image()) return 0;
     KisImageSP image = d->document->image();
 
-    return new FileLayer(image, name, fileName(), fileName, scalingMethod);
+    return new FileLayer(image, name, this->fileName(), fileName, scalingMethod);
 }
 
 FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)

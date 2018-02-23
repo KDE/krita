@@ -135,9 +135,9 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
             description = document->documentInfo()->aboutInfo("abstract");
         }
         if (!description.isEmpty()) {
-            QString keywords = document->documentInfo()->aboutInfo("keywords");
+            QString keywords = document->documentInfo()->aboutInfo("keyword");
             if (!keywords.isEmpty()) {
-                description = description + "keywords: " + keywords;
+                description = description + " keywords: " + keywords;
             }
             if (eI->containsEntry("description")) {
                 eI->removeEntry("description");

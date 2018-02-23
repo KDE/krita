@@ -62,11 +62,11 @@ public Q_SLOTS:
     /**
      * @brief setProperties
      * Change the properties of the file layer.
-     * @param FileName - A String containing the absolute file name.
-     * @param ScalingMethod - a string with the scaling method, defaults to "None",
+     * @param fileName - A String containing the absolute file name.
+     * @param scalingMethod - a string with the scaling method, defaults to "None",
      *  other options are "ToImageSize" and "ToImagePPI"
      */
-    void setProperties(QString FileName, QString ScalingMethod = QString("None"));
+    void setProperties(QString fileName, QString scalingMethod = QString("None"));
 
     /**
      * @brief path

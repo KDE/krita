@@ -574,13 +574,13 @@ GroupLayer *Document::createGroupLayer(const QString &name)
     return new GroupLayer(image, name);
 }
 
-FileLayer *Document::createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod)
+FileLayer *Document::createFileLayer(const QString &name, const QString fileName, const QString scalingMethod)
 {
     if (!d->document) return 0;
     if (!d->document->image()) return 0;
     KisImageSP image = d->document->image();
 
-    return new FileLayer(image, name, fileName(), FileName, ScalingMethod);
+    return new FileLayer(image, name, fileName(), fileName, scalingMethod);
 }
 
 FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)

@@ -555,12 +555,12 @@ public Q_SLOTS:
     /**
      * @brief createFileLayer returns a layer that shows an external image.
      * @param name name of the file layer.
-     * @param FileName the absolute filename of the file referenced. Symlinks will be resolved.
-     * @param ScalingMethod how the dimensions of the file are interpreted
+     * @param fileName the absolute filename of the file referenced. Symlinks will be resolved.
+     * @param scalingMethod how the dimensions of the file are interpreted
      *        can be either "None", "ImageToSize" or "ImageToPPI"
      * @return a FileLayer
      */
-    FileLayer* createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod);
+    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod);
 
     /**
      * @brief createFilterLayer creates a filter layer, which is a layer that represents a filter

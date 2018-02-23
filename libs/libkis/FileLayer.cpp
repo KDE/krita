@@ -51,17 +51,17 @@ QString FileLayer::type() const
     return "filelayer";
 }
 
-void FileLayer::setProperties(QString FileName, QString ScalingMethod)
+void FileLayer::setProperties(QString fileName, QString scalingMethod)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
     KisFileLayer::ScalingMethod sm = KisFileLayer::None;
-    if (ScalingMethod.toLower() == "toimagesize") {
+    if (scalingMethod.toLower() == "toimagesize") {
         sm= KisFileLayer::ToImageSize;
-    } else if (ScalingMethod.toLower() == "toimageppi") {
+    } else if (scalingMethod.toLower() == "toimageppi") {
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
-    file->setFileName(QFileInfo(file->path()).baseName(), getFileNameFromAbsolute(QFileInfo(file->path()).baseName(), FileName));
+    file->setFileName(QFileInfo(file->path()).baseName(), getFileNameFromAbsolute(QFileInfo(file->path()).baseName(), fileName));
 }
 
 QString FileLayer::path() const

@@ -1,9 +1,8 @@
 [Desktop Entry]
-Name[fr_FR]=Modèles de textures
 Name=Texture Templates
 Name[bs]=Predlošci teksture
-Name[ca@valencia]=Plantilles de textura
 Name[ca]=Plantilles de textura
+Name[ca@valencia]=Plantilles de textura
 Name[cs]=Šablony textury
 Name[da]=Teksturskabeloner
 Name[de]=Textur-Vorlagen
@@ -13,6 +12,7 @@ Name[es]=Plantillas de textura
 Name[et]=Tekstuurimallid
 Name[eu]=Testura-txantiloiak
 Name[fi]=Tekstuuripohjat
+Name[fr]=Modèles de textures
 Name[gl]=Modelos de texturas
 Name[hu]=Textúrasablonok
 Name[ia]=Patronos deTexture
@@ -37,8 +37,3 @@ Name[x-test]=xxTexture Templatesxx
 Name[zh_CN]=纹理模板
 Name[zh_TW]=紋理範本
 X-KDE-DefaultTab=true
-
-[Dolphin]
-PreviewsShown=true
-Timestamp=2018,2,22,19,37,40
-Version=3

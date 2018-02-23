@@ -144,6 +144,7 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_gsl
     cmake --build . --config RelWithDebInfo --target ext_vc
     cmake --build . --config RelWithDebInfo --target ext_libraw
+    cmake --build . --config RelWithDebInfo --target ext_giflib
 
 On Linux, if you want to build your own SIP and PyQt instead of the system one:
 

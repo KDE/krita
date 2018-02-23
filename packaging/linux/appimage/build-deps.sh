@@ -69,6 +69,7 @@ cmake --build . --config RelWithDebInfo --target ext_ocio
 cmake --build . --config RelWithDebInfo --target ext_openexr
 cmake --build . --config RelWithDebInfo --target ext_vc
 cmake --build . --config RelWithDebInfo --target ext_libraw
+cmake --build . --config RelWithDebInfo --target ext_giflib
 #cmake --build . --config RelWithDebInfo --target ext_gsl
 cmake --build . --config RelWithDebInfo --target ext_python
 #cmake --build . --config RelWithDebInfo --target ext_freetype

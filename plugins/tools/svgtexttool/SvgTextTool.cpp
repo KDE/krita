@@ -273,13 +273,33 @@ void SvgTextTool::mouseMoveEvent(KoPointerEvent *event)
 void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
+        QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
+        if (rectangle.width()<4 || rectangle.height()<4) {
+            event->ignore();
+            return;
+        }
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
         KoProperties *params = new KoProperties();//Fill these with "svgText", "defs" and "shapeRect"
         params->setProperty("defs", QVariant(generateDefs()));
         if (m_dragging) {
             m_dragEnd = event->point;
             m_dragging = false;
-            params->setProperty("shapeRect", QVariant(QRectF(m_dragStart, m_dragEnd).normalized()));
+
+            //The following show only happen when we're creating preformatted text. If we're making
+            //Word-wrapped text, it should take the rectangle unmodified.
+            int size = QFontDatabase::standardSizes().at(m_defPointSize->currentIndex());
+            QFont font = m_defFont->currentFont();
+            font.setPointSize(size);
+            rectangle.setTop(rectangle.top()+QFontMetrics(font).lineSpacing());
+            if (m_defAlignment->button(1)->isChecked()) {
+                rectangle.setLeft(rectangle.center().x());
+            } else if (m_defAlignment->button(2)->isChecked()) {
+                qreal right = rectangle.right();
+                rectangle.setRight(right+10);
+                rectangle.setLeft(right);
+            }
+
+            params->setProperty("shapeRect", QVariant(rectangle));
         }
         KoShape *textShape = factory->createShape( params, canvas()->shapeController()->resourceManager());
 

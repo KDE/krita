@@ -236,6 +236,10 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
         }
     }
 
+    if (image()->globalSelection()) {
+        totalBounds &= image()->globalSelection()->selectedRect();
+    }
+
     m_startPosition = totalBounds.topLeft();
 
     if (m_optionsWidget)
@@ -264,10 +268,14 @@ void KisToolMove::initHandles(const KisNodeList &nodes)
 {
     m_handlesRect = QRect();
     for (KisNodeSP node : nodes) {
+        node->exactBounds();
         m_handlesRect |= node->exactBounds();
     }
     if (image()->globalSelection()) {
         m_handlesRect &= image()->globalSelection()->selectedRect();
+    }
+    if (m_handlesRect.topLeft() != m_startPosition) {
+        m_handlesRect.moveTopLeft(m_startPosition);
     }
 }
 
@@ -551,6 +559,10 @@ void KisToolMove::slotNodeChanged(KisNodeList nodes)
         if (node && node->projection()) {
             totalBounds |= node->projection()->nonDefaultPixelArea();
         }
+    }
+
+    if (image()->globalSelection()) {
+        totalBounds &= image()->globalSelection()->selectedRect();
     }
 
     m_startPosition = totalBounds.topLeft();

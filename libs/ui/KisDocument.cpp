@@ -1421,7 +1421,6 @@ bool KisDocument::isReadWrite() const
 
 QUrl KisDocument::url() const
 {
-    qDebug() << "url()" << d->m_url;
     return d->m_url;
 }
 

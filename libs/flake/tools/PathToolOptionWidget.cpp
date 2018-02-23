@@ -72,29 +72,39 @@ void PathToolOptionWidget::setSelectionType(int type)
         widget.stackedWidget->setCurrentIndex(1);
 }
 
+QString shapeIdFromShape(KoPathShape *pathShape)
+{
+    if (!pathShape) return QString();
+
+    QString shapeId = pathShape->pathShapeId();
+
+    KoParameterShape *paramShape = dynamic_cast<KoParameterShape *>(pathShape);
+    if (paramShape && !paramShape->isParametricShape()) {
+        shapeId = paramShape->shapeId();
+    }
+
+    return shapeId;
+}
+
 void PathToolOptionWidget::setCurrentShape(KoPathShape *pathShape)
 {
-    if (pathShape == m_currentShape) return;
+    const QString newShapeId = shapeIdFromShape(pathShape);
+    if (pathShape == m_currentShape && m_currentShapeId == newShapeId) return;
 
     if (m_currentShape) {
         m_currentShape = 0;
         if (m_currentPanel) {
             m_currentPanel->deleteLater();
             m_currentPanel = 0;
+            m_currentShapeId.clear();
         }
     }
 
     if (pathShape) {
         m_currentShape = pathShape;
-        QString shapeId = m_currentShape->pathShapeId();
+        m_currentShapeId = newShapeId;
 
-        // check if we have an edited parametric shape, then we use the path shape id
-        KoParameterShape *paramShape = dynamic_cast<KoParameterShape *>(m_currentShape);
-        if (paramShape && !paramShape->isParametricShape()) {
-            shapeId = paramShape->shapeId();
-        }
-
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(shapeId);
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value(m_currentShapeId);
         KIS_SAFE_ASSERT_RECOVER_RETURN(factory);
 
         QList<KoShapeConfigWidgetBase*> panels = factory->createShapeOptionPanels();

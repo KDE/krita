@@ -60,6 +60,7 @@ private:
     Ui::PathToolOptionWidgetBase widget;
 
     KoPathShape *m_currentShape;
+    QString m_currentShapeId;
     KoShapeConfigWidgetBase *m_currentPanel;
     KoCanvasBase *m_canvas;
 };

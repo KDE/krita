@@ -363,11 +363,13 @@ void KoPathTool::convertToPath()
     QList<KoParameterShape*> shapesToConvert;
     Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
-        if (parameterShape && parameterShape->isParametricShape())
+        if (parameterShape && parameterShape->isParametricShape()) {
             shapesToConvert.append(parameterShape);
+        }
     }
-    if (shapesToConvert.count())
+    if (!shapesToConvert.isEmpty()) {
         d->canvas->addCommand(new KoParameterToPathCommand(shapesToConvert));
+    }
     updateOptionsWidget();
 }
 

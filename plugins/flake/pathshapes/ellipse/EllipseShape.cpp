@@ -427,6 +427,9 @@ QString EllipseShape::pathShapeId() const
 
 bool EllipseShape::saveSvg(SvgSavingContext &context)
 {
+    // let basic path saiving code handle our saving
+    if (!isParametricShape()) return false;
+
     if (type() == EllipseShape::Arc && startAngle() == endAngle()) {
         const QSizeF size = this->size();
         const bool isCircle = size.width() == size.height();

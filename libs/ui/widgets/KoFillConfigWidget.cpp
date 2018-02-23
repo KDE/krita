@@ -208,19 +208,21 @@ public:
     std::vector<KisAcyclicSignalConnector::Blocker> deactivationLocks;
 };
 
-KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, QWidget *parent)
+KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, bool trackShapeSelection, QWidget *parent)
     :  QWidget(parent)
     , d(new Private(fillVariant))
 {
     d->canvas = canvas;
 
-    d->shapeChangedAcyclicConnector.connectBackwardVoid(
-                d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
-                this, SLOT(shapeChanged()));
+    if (trackShapeSelection) {
+        d->shapeChangedAcyclicConnector.connectBackwardVoid(
+                    d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
+                    this, SLOT(shapeChanged()));
 
-    d->shapeChangedAcyclicConnector.connectBackwardVoid(
-                d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
-                this, SLOT(shapeChanged()));
+        d->shapeChangedAcyclicConnector.connectBackwardVoid(
+                    d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
+                    this, SLOT(shapeChanged()));
+    }
 
     d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
             d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
@@ -338,6 +340,11 @@ void KoFillConfigWidget::deactivate()
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->deactivationLocks.empty());
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
+}
+
+void KoFillConfigWidget::forceUpdateOnSelectionChanged()
+{
+    shapeChanged();
 }
 
 void KoFillConfigWidget::setNoSelectionTrackingMode(bool value)

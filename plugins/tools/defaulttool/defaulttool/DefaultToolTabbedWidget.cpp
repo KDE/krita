@@ -49,7 +49,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     addTab(m_strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
 
 
-    m_fillWidget = new KoFillConfigWidget(tool->canvas(), KoFlake::Fill, this);
+    m_fillWidget = new KoFillConfigWidget(tool->canvas(), KoFlake::Fill, true, this);
     m_fillWidget->setWindowTitle(i18n("Fill"));
     addTab(m_fillWidget, KisIconUtils::loadIcon("krita_tool_color_fill"), QString());
 

@@ -1373,7 +1373,7 @@ void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
         repaintDecorations();
     }
 }
-#include "kis_debug.h"
+
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 {
     KoShapeManager *shapeManager = canvas()->shapeManager();

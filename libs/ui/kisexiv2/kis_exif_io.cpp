@@ -398,6 +398,8 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 if (entry.name() == "description") {
                     exivKey = "Exif.Image.ImageDescription";
                 } else if (entry.name() == "creator") {
+                    qDebug()<<"saving creator";
+                    qDebug()<<"Exif.Image.Artist";
                     exivKey = "Exif.Image.Artist";
                 } else if (entry.name() == "rights") {
                     exivKey = "Exif.Image.Copyright";
@@ -413,7 +415,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                     exivKey = "Exif.Photo.MakerNote";
                 }
             }
-            dbgFile << "Saving " << entry.name() << " to " << exivKey;
+            qDebug() << "Saving " << entry.name() << " to " << exivKey;
             if (exivKey.isEmpty()) {
                 dbgFile << entry.qualifiedName() << " is unsavable to EXIF";
             } else {
@@ -438,6 +440,10 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                         v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
                     }
 #endif
+                    else if(!entry.value().isArray() && entry.value().toString().size()>0) {
+                        KisMetaData::Value creator = entry.value();
+                        v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
+                    }
                 } else if (exivKey == "Exif.Photo.OECF") {
                     v = kmdOECFStructureToExifOECF(entry.value());
                 } else if (exivKey == "Exif.Photo.DeviceSettingDescription") {

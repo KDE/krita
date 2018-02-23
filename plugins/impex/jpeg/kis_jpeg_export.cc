@@ -145,7 +145,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
             eI->addEntry(KisMetaData::Entry(dcSchema, "description", KisMetaData::Value(QVariant(description))));
         }
         QString license = document->documentInfo()->aboutInfo("license");
-        if (!title.isEmpty()) {
+        if (!license.isEmpty()) {
             if (eI->containsEntry("rights")) {
                 eI->removeEntry("rights");
             }
@@ -169,6 +169,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
                 eI->removeEntry("creator");
             }
             eI->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(QVariant(author))));
+            qDebug()<<author;
         }
     }
 

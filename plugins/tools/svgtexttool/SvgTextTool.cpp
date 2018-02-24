@@ -173,6 +173,7 @@ void SvgTextTool::showEditor()
     }
     m_editor->setShape(m_shape);
     m_editor->show();
+    m_editor->activateWindow();
 }
 
 void SvgTextTool::textUpdated(const QString &svg, const QString &defs)

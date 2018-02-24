@@ -523,6 +523,13 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
     }
 
     if (hasColor) {
+        /**
+         * Don't let opacity leak to our resource manager system
+         *
+         * NOTE: theoretically, we could guarantee it on a level of the
+         * resource manager itself,
+         */
+        color.setOpacity(OPACITY_OPAQUE_U8);
         d->canvas->resourceManager()->setResource(colorSlot, QVariant::fromValue(color));
     }
 }

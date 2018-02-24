@@ -49,6 +49,11 @@
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
 
+#include <KoSelectedShapesProxy.h>
+#include <KoSelection.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
+
+
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
         : KisToolPaint(canvas, cursor)
 {
@@ -194,8 +199,19 @@ void KisToolShape::addShape(KoShape* shape)
     }
     }
 
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape, 0);
-    canvas()->addCommand(cmd);
+    KUndo2Command *parentCommand = new KUndo2Command();
+
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
+    const QList<KoShape*> oldSelectedShapes = selection->selectedShapes();
+
+    // reset selection on the newly added shape :)
+    // TODO: think about moving this into controller->addShape?
+    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, selection, false, parentCommand);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(shape, 0, parentCommand);
+    parentCommand->setText(cmd->text());
+    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, selection, true, parentCommand);
+
+    canvas()->addCommand(parentCommand);
 }
 
 void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)

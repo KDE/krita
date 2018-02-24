@@ -32,8 +32,8 @@ class SaveAction(QAction):
                 return
 
             # don't validate file name - trust user to specify the extension they want
-            # getSaveFileName will add ".py" if there is no extension. 
-            # It will strip a trailing period and, in each case,  test for file collisions 
+            # getSaveFileName will add ".py" if there is no extension.
+            # It will strip a trailing period and, in each case,  test for file collisions
 
         document = self.scripter.documentcontroller.saveDocument(text, fileName)
         if document:

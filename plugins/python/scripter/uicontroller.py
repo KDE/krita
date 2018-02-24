@@ -2,16 +2,16 @@ from PyQt5.QtGui import QTextCursor, QPalette, QFontInfo
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
                              QSplitter, QSizePolicy)
-from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot,  QRect
+from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot, QRect
 from scripter.ui_scripter.syntax import syntax, syntaxstyles
 from scripter.ui_scripter.editor import pythoneditor
 from scripter import scripterdialog
-import os
 import importlib
 
 KEY_GEOMETRY = "geometry"
-DEFAULT_GEOMETRY = QRect(600, 200, 400, 500) 
+DEFAULT_GEOMETRY = QRect(600, 200, 400, 500)
 # essentially randomly placed
+
 
 class Elided_Text_Label(QLabel):
     mainText = str()
@@ -30,6 +30,7 @@ class Elided_Text_Label(QLabel):
 
     def resizeEvent(self, event):
         self.elideText()
+
 
 class UIController(object):
     documentModifiedText = ""
@@ -56,8 +57,8 @@ class UIController(object):
         self.splitter.setOrientation(Qt.Vertical)
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
         p = self.editor.palette()
-        p.setColor(QPalette.Base, syntaxstyles.DefaultSyntaxStyle()['background'].foreground().color());
-        p.setColor(QPalette.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color());
+        p.setColor(QPalette.Base, syntaxstyles.DefaultSyntaxStyle()['background'].foreground().color())
+        p.setColor(QPalette.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color())
         self.editor.setPalette(p)
 
         self.scripter = scripter
@@ -65,7 +66,7 @@ class UIController(object):
         self.loadMenus()
         self.loadWidgets()
         self.loadActions()
-        self._readSettings() #sets window size
+        self._readSettings()  # sets window size
 
         vbox = QVBoxLayout(self.mainWidget)
         vbox.addWidget(self.menu_bar)
@@ -79,7 +80,7 @@ class UIController(object):
         self.mainWidget.setSizeGripEnabled(True)
         self.mainWidget.show()
         self.mainWidget.activateWindow()
-        
+
         self.editor.undoAvailable.connect(self.setStatusModified)
 
     def loadMenus(self):
@@ -160,14 +161,14 @@ class UIController(object):
         self.editor.moveCursor(QTextCursor.End)
 
     def setStatusBar(self, value='untitled'):
-        self.documentStatusBarText = value;
-        self.statusBar.setMainText(self.documentStatusBarText+self.documentModifiedText)
+        self.documentStatusBarText = value
+        self.statusBar.setMainText(self.documentStatusBarText + self.documentModifiedText)
 
     def setStatusModified(self):
         self.documentModifiedText = ""
         if (self.editor._documentModified is True):
             self.documentModifiedText = " [Modified]"
-        self.statusBar.setMainText(self.documentStatusBarText+self.documentModifiedText)
+        self.statusBar.setMainText(self.documentStatusBarText + self.documentModifiedText)
 
     def setActiveWidget(self, widgetName):
         widget = self.findTabWidget(widgetName)
@@ -199,7 +200,7 @@ class UIController(object):
             self.scripter.settings.setValue('activeDocumentPath', document.filePath)
         else:
             self.scripter.settings.setValue('activeDocumentPath', '')
-            
+
         self.scripter.settings.setValue('editorFontSize', self.editor.fontInfo().pointSize())
 
         for action in self.actions:
@@ -210,7 +211,7 @@ class UIController(object):
         #  Window Geometry
         rect = self.mainWidget.geometry()
         self.scripter.settings.setValue(KEY_GEOMETRY, rect)
-        
+
         self.scripter.settings.endGroup()
 
     def _readSettings(self):
@@ -225,16 +226,16 @@ class UIController(object):
                 document = self.scripter.documentcontroller.openDocument(activeDocumentPath)
                 self.setStatusBar(document.filePath)
                 self.setDocumentEditor(document)
-        
+
         for action in self.actions:
             readSettings = getattr(action['action'], "readSettings", None)
             if callable(readSettings):
                 readSettings()
-                
+
         pointSize = self.scripter.settings.value('editorFontSize', str(self.editor.fontInfo().pointSize()))
         self.editor.setFontSize(int(pointSize))
-        
-        #Window Geometry
+
+        # Window Geometry
         rect = self.scripter.settings.value(KEY_GEOMETRY, DEFAULT_GEOMETRY)
         self.mainWidget.setGeometry(rect)
 

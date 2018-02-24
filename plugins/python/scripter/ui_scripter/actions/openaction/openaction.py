@@ -33,7 +33,7 @@ class OpenAction(QAction):
                     self.scripter.uicontroller.setDocumentEditor(document)
                     self.scripter.uicontroller.setStatusBar(document.filePath)
                     print("open is run")
-            except:
+            except Exception:
                 QMessageBox.information(self.scripter.uicontroller.mainWidget,
                                         'Invalid File',
                                         'Open files with .py extension')

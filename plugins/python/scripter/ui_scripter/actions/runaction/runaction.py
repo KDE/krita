@@ -8,9 +8,10 @@ from importlib.machinery import SourceFileLoader
 import traceback
 
 
-PYTHON33 = sys.version_info.major==3 and sys.version_info.minor==3
-PYTHON34 = sys.version_info.major==3 and sys.version_info.minor==4
-EXEC_NAMESPACE = "__main__" # namespace that user scripts will run in 
+PYTHON33 = sys.version_info.major == 3 and sys.version_info.minor == 3
+PYTHON34 = sys.version_info.major == 3 and sys.version_info.minor == 4
+EXEC_NAMESPACE = "__main__"  # namespace that user scripts will run in
+
 
 class RunAction(QAction):
 
@@ -51,60 +52,59 @@ class RunAction(QAction):
             output.write("======================================\n")
         sys.stdout = output
         sys.stderr = output
-        
+
         script = self.editor.document().toPlainText()
         document = self.scripter.documentcontroller.activeDocument
 
         try:
             if document and self.editor._documentModified is False:
                 spec = importlib.util.spec_from_file_location(EXEC_NAMESPACE, document.filePath)
-                try: 
+                try:
                     users_module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(users_module)
 
-                    
-                except AttributeError as e: # no module from spec
-                    if PYTHON34 or PYTHON33: 
-                        loader = SourceFileLoader(EXEC_NAMESPACE,   document.filePath)
+                except AttributeError as e:  # no module from spec
+                    if PYTHON34 or PYTHON33:
+                        loader = SourceFileLoader(EXEC_NAMESPACE, document.filePath)
                         users_module = loader.load_module()
                     else:
                         raise e
-                
-                try: 
+
+                try:
                     # maybe script is to be execed, maybe main needs to be invoked
                     # if there is a main() then execute it, otherwise don't worry...
                     users_module.main()
                 except AttributeError:
                     pass
-                
+
             else:
                 code = compile(script, '<string>', 'exec')
-                globals_dict = {"__name__":EXEC_NAMESPACE}
+                globals_dict = {"__name__": EXEC_NAMESPACE}
                 exec(code, globals_dict)
-                
+
         except Exception as e:
-            """Provide context (line number and text) for an error that is caught. 
-            Ordinarily, syntax and Indent errors are caught during initial 
-            compilation in exec(), and the traceback traces back to this file. 
-            So these need to be treated separately. 
-            Other errors trace back to the file/script being run. 
+            """Provide context (line number and text) for an error that is caught.
+            Ordinarily, syntax and Indent errors are caught during initial
+            compilation in exec(), and the traceback traces back to this file.
+            So these need to be treated separately.
+            Other errors trace back to the file/script being run.
             """
             type_, value_, traceback_ = sys.exc_info()
             if type_ == SyntaxError:
-                errorMessage = "%s\n%s"%(value_.text.rstrip(), " "*(value_.offset-1)+"^")
+                errorMessage = "%s\n%s" % (value_.text.rstrip(), " " * (value_.offset - 1) + "^")
                 # rstrip to remove trailing \n, output needs to be fixed width font for the ^ to align correctly
-                errorText = "Syntax Error on line %s"%value_.lineno
+                errorText = "Syntax Error on line %s" % value_.lineno
             elif type_ == IndentationError:
                 # (no offset is provided for an IndentationError
                 errorMessage = value_.text.rstrip()
-                errorText = "Unexpected Indent on line %s"%value_.lineno
-            else: 
+                errorText = "Unexpected Indent on line %s" % value_.lineno
+            else:
                 errorText = traceback.format_exception_only(type_, value_)[0]
                 format_string = "In file: {0}\nIn function: {2} at line: {1}. Line with error:\n{3}"
                 tbList = traceback.extract_tb(traceback_)
                 tb = tbList[-1]
                 errorMessage = format_string.format(*tb)
-            m = "\n**********************\n%s\n%s\n**********************\n"%(errorText, errorMessage)
+            m = "\n**********************\n%s\n%s\n**********************\n" % (errorText, errorMessage)
             output.write(m)
 
         sys.stdout = stdout

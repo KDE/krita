@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
 
+
 class SaveAsAction(QAction):
 
     def __init__(self, scripter, parent=None):
@@ -13,7 +14,7 @@ class SaveAsAction(QAction):
 
         self.setText('Save As')
         self.setObjectName('saveas')
-        self.setShortcut(QKeySequence(Qt.CTRL +Qt.SHIFT+ Qt.Key_S))
+        self.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
 
     @property
     def parent(self):
@@ -29,8 +30,8 @@ class SaveAsAction(QAction):
             return
 
         # don't validate file name - trust user to specify the extension they want
-        # getSaveFileName will add ".py" if there is no extension. 
-        # It will strip a trailing period and, in each case,  test for file collisions 
+        # getSaveFileName will add ".py" if there is no extension.
+        # It will strip a trailing period and, in each case,  test for file collisions
 
         document = self.scripter.documentcontroller.saveDocument(text, fileName, save_as=True)
         if document:

@@ -16,7 +16,7 @@ class SyntaxStylesComboBox(QComboBox):
             className = styleClass.__name__
             self.addItem(className)
 
-            if className == type(self.highlight.getSyntaxStyle()).__name__:
+            if isinstance(self.highlight.getSyntaxStyle(), styleClass):
                 self.setCurrentIndex(self.findText(className))
 
         self.currentIndexChanged.connect(self._currentIndexChanged)
@@ -26,8 +26,8 @@ class SyntaxStylesComboBox(QComboBox):
         self.highlight.setSyntaxStyle(syntaxStyle)
         self.highlight.rehighlight()
         p = self.editor.palette()
-        p.setColor(QPalette.Base, syntaxStyle['background'].foreground().color());
-        p.setColor(QPalette.Text, syntaxStyle['foreground'].foreground().color());
+        p.setColor(QPalette.Base, syntaxStyle['background'].foreground().color())
+        p.setColor(QPalette.Text, syntaxStyle['foreground'].foreground().color())
         self.editor.setPalette(p)
         self.editor.highlightCurrentLine()
 

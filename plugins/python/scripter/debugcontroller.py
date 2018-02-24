@@ -38,7 +38,7 @@ class DebugController (object):
             if self._debugger:
                 return self._debugger.debugprocess.is_alive()
             return False
-        except:
+        except Exception:
             return False
 
     @property
@@ -46,7 +46,7 @@ class DebugController (object):
         try:
             if self._debugger:
                 return int(self.debuggerData['code']['lineNumber'])
-        except:
+        except Exception:
             return 0
 
     def updateUIDebugger(self):
@@ -66,17 +66,17 @@ class DebugController (object):
         try:
             if self._debugger:
                 return self._debugger.application_data
-        except:
+        except Exception:
             return
 
     def _quitDebugger(self):
         try:
             return self.debuggerData['quit']
-        except:
+        except Exception:
             return False
 
     def _debuggerException(self):
         try:
             return self.debuggerData['exception']
-        except:
+        except Exception:
             return False

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QDialog
 from PyQt5 import QtCore
 
+
 class ScripterDialog(QDialog):
 
     def __init__(self, uicontroller, parent=None):

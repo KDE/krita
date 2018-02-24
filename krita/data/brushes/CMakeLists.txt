@@ -16,7 +16,9 @@ chalk_round_hard.png
 chalk_sparse.png
 chisel_bent_rough.gih
 chisel_dense_smear.png
+chisel_eroded.png
 chisel_knife.svg
+chisel_streaks.png
 circle_hard_eroded.gih
 freckles.png
 gradient.png
@@ -32,6 +34,7 @@ oil_knife.png
 paint_splats.gih
 rake_dense.png
 rake_sparse.png
+rock.png
 rock_light.gih
 rock_pitted.gih
 rock_scraped.gih
@@ -44,11 +47,14 @@ shapes_spiked_random.gih
 smear_paint.png
 smoke.png
 snow.gih
+spike_blob.png
+spike_eroded.png
 spines.png
 square_rough.png
+square_eroded.png
 starfield.png
+triangle.svg
 watercolor.gih
 water_still.gih
-spike_eroded.png
-rock.png
+
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

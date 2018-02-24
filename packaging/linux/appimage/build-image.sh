@@ -8,6 +8,10 @@ set -x
 export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
 
+# Save some frequently referenced locations in variables for ease of use / updating
+export APPDIR=$BUILD_PREFIX/krita.appdir
+export PLUGINS=$APPDIR/usr/lib/kritaplugins/
+
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
 # That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
@@ -18,16 +22,12 @@ export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
 # Setup variables needed to help everything find what we built
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
-export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
-export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
+export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
+export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip:$DEPS_INSTALL_PREFIX/lib/python3.5/site-packages:$DEPS_INSTALL_PREFIX/lib/python3.5
+export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.5/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.5/
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
-
-# Save some frequently referenced locations in variables for ease of use / updating
-export APPDIR=$BUILD_PREFIX/krita.appdir
-export PLUGINS=$APPDIR/usr/lib/kritaplugins/
 
 # Switch over to our build prefix
 cd $BUILD_PREFIX

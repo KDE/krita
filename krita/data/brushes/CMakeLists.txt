@@ -49,6 +49,6 @@ square_rough.png
 starfield.png
 watercolor.gih
 water_still.gih
-flat1.png
+spike_eroded.png
 rock.png
 DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)

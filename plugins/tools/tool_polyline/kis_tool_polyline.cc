@@ -55,8 +55,7 @@ void KisToolPolyline::resetCursorStyle()
 
 QWidget* KisToolPolyline::createOptionWidget()
 {
-    // there are no options there
-    return KisTool::createOptionWidget();
+    return KisToolPolylineBase::createOptionWidget();
 }
 
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)

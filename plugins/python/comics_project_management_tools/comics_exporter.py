@@ -15,7 +15,7 @@ import shutil
 import html
 import re
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
-from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt, QRectF, QPointF, QByteArray, QBuffer
+from PyQt5.QtCore import QElapsedTimer, QDate, QLocale, Qt, QRectF, QPointF, QByteArray, QBuffer
 from PyQt5.QtGui import QImage, QTransform, QPainterPath
 from krita import *
 
@@ -830,8 +830,8 @@ class comicsExporter():
     """
 
     def write_acbf_meta_data(self):
-        acbfGenreList = ["science_fiction", "fantasy", "adventure", "horror", "mystery", "crime", "military", "real_life", "superhero", "humor", "western", "manga", "politics", "caricature", "sports", "history", "biography", "education", "computer", "religion", "romance", "children", "non-fiction", "adult", "alternative", "other"]
-        acbfAuthorRolesList = ["Writer", "Adapter", "Artist", "Penciller", "Inker", "Colorist", "Letterer", "Cover Artist", "Photographer", "Editor", "Assistant Editor", "Translator", "Other"]
+        acbfGenreList = ["science_fiction", "fantasy", "adventure", "horror", "mystery", "crime", "military", "real_life", "superhero", "humor", "western", "manga", "politics", "caricature", "sports", "history", "biography", "education", "computer", "religion", "romance", "children", "non-fiction", "adult", "alternative", "other", "artbook"]
+        acbfAuthorRolesList = ["Writer", "Adapter", "Artist", "Penciller", "Inker", "Colorist", "Letterer", "Cover Artist", "Photographer", "Editor", "Assistant Editor", "Translator", "Other", "Designer"]
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
@@ -865,7 +865,7 @@ class comicsExporter():
                     authorN.appendChild(document.createTextNode(str(authorDict["nickname"])))
                     author.appendChild(authorN)
                 if "homepage" in authorDict.keys():
-                    authorN = document.createElement("homepage")
+                    authorN = document.createElement("home-page")
                     authorN.appendChild(document.createTextNode(str(authorDict["homepage"])))
                     author.appendChild(authorN)
                 if "email" in authorDict.keys():
@@ -885,6 +885,7 @@ class comicsExporter():
             bookTitle.appendChild(document.createTextNode(str("Comic with no Name")))
         bookInfo.appendChild(bookTitle)
         extraGenres = []
+
         if "genre" in self.configDictionary.keys():
             for genre in self.configDictionary["genre"]:
                 genreModified = str(genre).lower()
@@ -980,6 +981,14 @@ class comicsExporter():
         if "ratingSystem" in self.configDictionary.keys():
             contentrating.setAttribute("type", self.configDictionary["ratingSystem"])
         bookInfo.appendChild(contentrating)
+
+        if "readingDirection" in self.configDictionary.keys():
+            readingDirection = document.createElement("reading-direction")
+            if self.configDictionary["readingDirection"] is "rightToLeft":
+                readingDirection.appendChild(document.createTextNode(str("RTL")))
+            else:
+                readingDirection.appendChild(document.createTextNode(str("LTR")))
+            bookInfo.appendChild(readingDirection)
         meta.appendChild(bookInfo)
 
         publisherInfo = document.createElement("publish-info")
@@ -1036,7 +1045,7 @@ class comicsExporter():
                         acbfAuthor.appendChild(authorN)
                     if "homepage" in authorDict.keys():
                         authorN = document.createElement("homepage")
-                        authorN.appendChild(document.createTextNode(str(authorDict["homepage"])))
+                        authorN.appendChild(document.createTextNode(str(authorDict["home-page"])))
                         acbfAuthor.appendChild(authorN)
                     if "email" in authorDict.keys():
                         authorN = document.createElement("email")
@@ -1064,28 +1073,30 @@ class comicsExporter():
         acbfDate.appendChild(document.createTextNode(str(now.toString(Qt.SystemLocaleLongDate))))
         documentInfo.appendChild(acbfDate)
 
-        acbfSource = document.createElement("source")
         if "acbfSource" in self.configDictionary.keys():
-            acbfSource.appendChild(document.createTextNode(str(self.configDictionary["acbfSource"])))
-        documentInfo.appendChild(acbfSource)
+            acbfSource = document.createElement("source")
+            acbfSourceP = document.createElement("p")
+            acbfSourceP.appendChild(document.createTextNode(str(self.configDictionary["acbfSource"])))
+            acbfSource.appendChild(acbfSourceP)
+            documentInfo.appendChild(acbfSource)
 
-        acbfID = document.createElement("id")
         if "acbfID" in self.configDictionary.keys():
+            acbfID = document.createElement("id")
             acbfID.appendChild(document.createTextNode(str(self.configDictionary["acbfID"])))
-        documentInfo.appendChild(acbfID)
+            documentInfo.appendChild(acbfID)
 
-        acbfVersion = document.createElement("version")
         if "acbfVersion" in self.configDictionary.keys():
+            acbfVersion = document.createElement("version")
             acbfVersion.appendChild(document.createTextNode(str(self.configDictionary["acbfVersion"])))
-        documentInfo.appendChild(acbfVersion)
+            documentInfo.appendChild(acbfVersion)
 
-        acbfHistory = document.createElement("history")
         if "acbfHistory" in self.configDictionary.keys():
+            acbfHistory = document.createElement("history")
             for h in self.configDictionary["acbfHistory"]:
                 p = document.createElement("p")
                 p.appendChild(document.createTextNode(str(h)))
                 acbfHistory.appendChild(p)
-        documentInfo.appendChild(acbfHistory)
+            documentInfo.appendChild(acbfHistory)
         meta.appendChild(documentInfo)
 
         root.appendChild(meta)
@@ -1094,16 +1105,41 @@ class comicsExporter():
 
         for p in range(0, len(self.pagesLocationList["CBZ"])):
             page = self.pagesLocationList["CBZ"][p]
+            language = "en"
+            if "language" in self.configDictionary.keys():
+                language = self.configDictionary["language"]
+            textLayer = document.createElement("text-layer")
+            textLayer.setAttribute("lang", language)
+            pageData = self.acbfPageData[p]
+            transform = pageData["transform"]
+            frameList = []
+            for v in pageData["vector"]:
+                boundingBoxText = []
+                for point in v["boundingBox"]:
+                    offset = QPointF(transform["offsetX"], transform["offsetY"])
+                    pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
+                    newPoint = pixelPoint - offset
+                    x = int(newPoint.x() * transform["scaleWidth"])
+                    y = int(newPoint.y() * transform["scaleHeight"])
+                    pointText = str(x) + "," + str(y)
+                    boundingBoxText.append(pointText)
+
+                if "text" in v.keys():
+                    textArea = document.createElement("text-area")
+                    textArea.setAttribute("points", " ".join(boundingBoxText))
+                    # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
+                    paragraph = minidom.parseString(v["text"])
+                    textArea.appendChild(paragraph.documentElement)
+                    textLayer.appendChild(textArea)
+                else:
+                    f = {}
+                    f["points"] = " ".join(boundingBoxText)
+                    frameList.append(f)
             if page is not coverpageurl:
                 pg = document.createElement("page")
-                pageData = self.acbfPageData[p]
                 image = document.createElement("image")
                 image.setAttribute("href", os.path.basename(page))
                 pg.appendChild(image)
-
-                language = "en"
-                if "language" in self.configDictionary.keys():
-                    language = self.configDictionary["language"]
                 if "acbf_title" in pageData["keys"]:
                     title = document.createElement("title")
                     title.setAttribute("lang", language)
@@ -1119,34 +1155,18 @@ class comicsExporter():
                     pg.setAttribute("transition", "scroll_right")
                 if "acbf_vertical" in pageData["keys"]:
                     pg.setAttribute("transition", "scroll_down")
-                textLayer = document.createElement("text-layer")
-                textLayer.setAttribute("lang", language)
-                transform = pageData["transform"]
-                for v in pageData["vector"]:
-                    boundingBoxText = []
-                    for point in v["boundingBox"]:
-                        offset = QPointF(transform["offsetX"], transform["offsetY"])
-                        pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
-                        newPoint = pixelPoint - offset
-                        x = int(newPoint.x() * transform["scaleWidth"])
-                        y = int(newPoint.y() * transform["scaleHeight"])
-                        pointText = str(x) + "," + str(y)
-                        boundingBoxText.append(pointText)
-
-                    if "text" in v.keys():
-                        textArea = document.createElement("text-area")
-                        textArea.setAttribute("points", " ".join(boundingBoxText))
-                        # TODO: Rotate will require proper global transform api as transform info is not written into text.
-                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
-                        paragraph = minidom.parseString(v["text"])
-                        textArea.appendChild(paragraph.documentElement)
-                        textLayer.appendChild(textArea)
-                    else:
-                        frame = document.createElement("frame")
-                        frame.setAttribute("points", " ".join(boundingBoxText))
-                        pg.appendChild(frame)
+                for f in frameList:
+                    frame = document.createElement("frame")
+                    frame.setAttribute("points", f["points"])
+                    pg.appendChild(frame)
                 pg.appendChild(textLayer)
                 body.appendChild(pg)
+            else:
+                for f in frameList:
+                    frame = document.createElement("frame")
+                    frame.setAttribute("points", f["points"])
+                    coverpage.appendChild(frame)
+                coverpage.appendChild(textLayer)
 
         root.appendChild(body)
 

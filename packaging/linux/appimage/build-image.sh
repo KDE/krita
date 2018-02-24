@@ -75,7 +75,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -appimage 
 
 # Step 5: Find out what version of Krita we built and give the Appimage a proper name
-cd $BUILD_PREFIX/krita_build
+cd $BUILD_PREFIX/krita-build
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
 
 # Also find out the revision of Git we built

@@ -13,9 +13,10 @@ from xml.dom import minidom
 import types
 import shutil
 import html
+import re
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
 from PyQt5.QtCore import QElapsedTimer, QDateTime, QLocale, Qt, QRectF, QPointF, QByteArray, QBuffer
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QTransform, QPainterPath
 from krita import *
 
 """
@@ -643,7 +644,8 @@ class comicsExporter():
             else:
                 self.handleShapeDescription(shape, list, textOnly)
     """
-    Function to get text in a format that acbf will accept
+    Function to get text and panels in a format that acbf will accept
+    TODO: move this to a new file.
     """
     def handleShapeDescription(self, shape, list, textOnly = False):
         if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
@@ -652,6 +654,86 @@ class comicsExporter():
         shapeDesc["name"] = shape.name()
         rect = shape.boundingBox()
         listOfPoints = [rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()]
+        shapeDoc = minidom.parseString(shape.toSvg())
+        docElem = shapeDoc.documentElement
+        svgRegExp = re.compile('[MLCSQHVATmlzcqshva]\d+\.?\d* \d+\.?\d*')
+        transform = docElem.getAttribute("transform")
+        coord = []
+        adjust = QTransform()
+        # TODO: If we get global transform api, use that instead of parsing manually.
+        if "translate" in transform:
+            transform=transform.replace('translate(', '')
+            for c in transform[:-1].split(" "):
+                coord.append(float(c))
+            if len(coord)<2:
+                coord.append(coord[0])
+            adjust = QTransform(1, 0, 0, 1, coord[0], coord[1])
+        if "matrix" in transform:
+            transform=transform.replace('matrix(', '')
+            for c in transform[:-1].split(" "):
+                coord.append(float(c))
+            adjust = QTransform(coord[0], coord[1], coord[2], coord[3], coord[4], coord[5])
+        path = QPainterPath()
+        if docElem.localName == "path":
+            dVal = docElem.getAttribute("d")
+            listOfSvgStrings = [" "]
+            listOfSvgStrings = svgRegExp.findall(dVal)
+            if listOfSvgStrings:
+                listOfPoints = []
+                for l in listOfSvgStrings:
+                    line = l[1:]
+                    coordinates = line.split(" ")
+                    if len(coordinates)<2:
+                        coordinates.append(coordinates[0])
+                    x = float(coordinates[-2])
+                    y = float(coordinates[-1])
+                    offset = QPointF()
+                    if l.islower():
+                        offset = listOfPoints[0]
+                    if l.lower().startswith("m"):
+                        path.moveTo(QPointF(x, y)+offset)
+                    elif l.lower().startswith("h"):
+                        y = listOfPoints[-1].y()
+                        path.lineTo(QPointF(x, y)+offset)
+                    elif l.lower().startswith("v"):
+                        x = listOfPoints[-1].x()
+                        path.lineTo(QPointF(x, y)+offset)
+                    else:
+                        path.lineTo(QPointF(x, y)+offset)
+                path.setFillRule(Qt.WindingFill)
+                for polygon in path.simplified().toSubpathPolygons(adjust):
+                    for point in polygon:
+                        listOfPoints.append(point)
+        elif docElem.localName == "rect":
+            listOfPoints = []
+            if (docElem.hasAttribute("x")):
+                x = float(docElem.getAttribute("x"))
+            else:
+                x = 0
+            if (docElem.hasAttribute("y")):
+                y = float(docElem.getAttribute("y"))
+            else:
+                y = 0
+            w = float(docElem.getAttribute("width"))
+            h = float(docElem.getAttribute("height"))
+            path.addRect(QRectF(x, y, w, h))
+            for point in path.toFillPolygon(adjust):
+                        listOfPoints.append(point)
+        elif docElem.localName == "ellipse":
+            listOfPoints = []
+            if (docElem.hasAttribute("cx")):
+                x = float(docElem.getAttribute("cx"))
+            else:
+                x = 0
+            if (docElem.hasAttribute("cy")):
+                y = float(docElem.getAttribute("cy"))
+            else:
+                y = 0
+            ry = float(docElem.getAttribute("ry"))
+            rx = float(docElem.getAttribute("rx"))
+            path.addEllipse(QPointF(x, y), rx, ry)
+            for point in path.toFillPolygon(adjust):
+                        listOfPoints.append(point)
         shapeDesc["boundingBox"] = listOfPoints
         if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
             textRoot = ET.fromstring(shape.toSvg())
@@ -661,6 +743,10 @@ class comicsExporter():
             shapeDesc["text"] = ET.tostring(paragraph, "unicode")
         list.append(shapeDesc)
     
+    """
+    Function to parse svg text to acbf ready text
+    TODO: Move to a new file.
+    """
     def parseTextChildren(self, elRead, elWrite):
         
         if elRead.text is not None:
@@ -1047,6 +1133,8 @@ class comicsExporter():
                     if "text" in v.keys():
                         textArea = document.createElement("text-area")
                         textArea.setAttribute("points", " ".join(boundingBoxText))
+                        # TODO: Rotate will require proper global transform api as transform info is not written into text.
+                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
                         paragraph = minidom.parseString(v["text"])
                         textArea.appendChild(paragraph.documentElement)
                         textLayer.appendChild(textArea)

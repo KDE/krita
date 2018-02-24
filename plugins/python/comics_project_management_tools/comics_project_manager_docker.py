@@ -22,6 +22,7 @@ widget size to be bigger.
 This is used by the project name.
 """
 
+
 class Elided_Text_Label(QLabel):
     mainText = str()
 
@@ -317,27 +318,27 @@ class comics_project_manager_docker(DockWidget):
                 author = {}
                 if ET.iselement(authorelem.find(calligra + 'full-name')):
                     author["nickname"] = str(authorelem.find(calligra + 'full-name').text)
-                
+
                 if ET.iselement(authorelem.find(calligra + 'creator-first-name')):
                     author["first-name"] = str(authorelem.find(calligra + 'creator-first-name').text)
-                
+
                 if ET.iselement(authorelem.find(calligra + 'initial')):
                     author["initials"] = str(authorelem.find(calligra + 'initial').text)
-                
+
                 if ET.iselement(authorelem.find(calligra + 'creator-last-name')):
                     author["last-name"] = str(authorelem.find(calligra + 'creator-last-name').text)
-                
+
                 if ET.iselement(authorelem.find(calligra + 'email')):
                     author["email"] = str(authorelem.find(calligra + 'email').text)
-                
+
                 if ET.iselement(authorelem.find(calligra + 'contact')):
                     contact = authorelem.find(calligra + 'contact')
                     contactMode = contact.get("type")
-                    if contactMode=="email":
+                    if contactMode == "email":
                         author["email"] = str(contact.text)
-                    if contactMode=="homepage":
+                    if contactMode == "homepage":
                         author["homepage"] = str(contact.text)
-                
+
                 if ET.iselement(authorelem.find(calligra + 'position')):
                     author["role"] = str(authorelem.find(calligra + 'position').text)
                 listOfAuthors.append(author)
@@ -456,6 +457,7 @@ class comics_project_manager_docker(DockWidget):
     This is the actual function that adds the template using the template url.
     It will attempt to name the new page projectName+number.
     """
+
     def add_new_page(self, templateUrl):
 
         # check for page list and or location.
@@ -503,7 +505,7 @@ class comics_project_manager_docker(DockWidget):
         # close page document.
         while os.path.exists(absoluteUrl) is False:
             qApp.processEvents()
-        
+
         newPage.close()
 
         # add item to page.

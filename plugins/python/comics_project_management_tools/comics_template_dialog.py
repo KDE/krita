@@ -229,14 +229,14 @@ class comics_template_create(QDialog):
         bleedsForm.addWidget(QLabel(i18n("Bottom:")), 3, 0, Qt.AlignRight)
         bleedsForm.addWidget(self.bleedBottom, 3, 1)
         bleedsForm.addWidget(self.bleedBottomUnit, 3, 2)
-        
+
         marginAndBleed.addTab(bleeds, i18n("Bleeds"))
-        
+
         if QLocale().system().measurementSystem() is QLocale.MetricSystem:
             self.setDefaults("European")
         else:
             self.setDefaults("American")
-        
+
         self.spn_width.valueChanged.connect(self.updateImagePreview)
         self.widthUnit.currentIndexChanged.connect(self.updateImagePreview)
         self.spn_height.valueChanged.connect(self.updateImagePreview)
@@ -257,7 +257,7 @@ class comics_template_create(QDialog):
         self.bleedTopUnit.currentIndexChanged.connect(self.updateImagePreview)
         self.bleedBottom.valueChanged.connect(self.updateImagePreview)
         self.bleedBottomUnit.currentIndexChanged.connect(self.updateImagePreview)
-        
+
         self.updateImagePreview()
 
     def prepare_krita_file(self):
@@ -311,10 +311,10 @@ class comics_template_create(QDialog):
         template.close()
 
         return success
-    
+
     def updateImagePreview(self):
         maxSize = 256
-        
+
         wBase = max(self.widthUnit.pixelsForUnit(self.spn_width.value(), self.DPI.value()), 1)
         bL = self.bleedLeftUnit.pixelsForUnit(self.bleedLeft.value(), self.DPI.value())
         bR = self.bleedRightUnit.pixelsForUnit(self.bleedRight.value(), self.DPI.value())
@@ -326,53 +326,52 @@ class comics_template_create(QDialog):
         bB = self.bleedBottomUnit.pixelsForUnit(self.bleedBottom.value(), self.DPI.value())
         mT = self.marginTopUnit.pixelsForUnit(self.marginTop.value(), self.DPI.value())
         mB = self.marginBottomUnit.pixelsForUnit(self.marginBottom.value(), self.DPI.value())
-        
-        scaleRatio = maxSize/(hBase+bT+bB)
-        if wBase>hBase:
-            scaleRatio = maxSize/(wBase+bR+bL)
-        
-        width = (wBase + bL + bR)*scaleRatio
-        height = (hBase + bT + bB)*scaleRatio
-        topLeft = [max((maxSize-width)/2, 0), max((maxSize-height)/2, 0)]
-        
+
+        scaleRatio = maxSize / (hBase + bT + bB)
+        if wBase > hBase:
+            scaleRatio = maxSize / (wBase + bR + bL)
+
+        width = (wBase + bL + bR) * scaleRatio
+        height = (hBase + bT + bB) * scaleRatio
+        topLeft = [max((maxSize - width) / 2, 0), max((maxSize - height) / 2, 0)]
+
         image = QImage(maxSize, maxSize, QImage.Format_ARGB32)
         image.fill(Qt.transparent)
-        
+
         p = QPainter(image)
-        
+
         p.setBrush(Qt.white)
-        
+
         CanvasSize = QRectF(topLeft[0], topLeft[1], width, height)
         p.drawRect(CanvasSize.toRect())
-        
-        
+
         # Draw bleeds.
         PageSize = CanvasSize
-        PageSize.setWidth(width-(bR*scaleRatio))
-        PageSize.setHeight(height-(bB*scaleRatio))
-        PageSize.setX(PageSize.x()+(bL*scaleRatio))
-        PageSize.setY(PageSize.y()+(bT*scaleRatio))
-        
+        PageSize.setWidth(width - (bR * scaleRatio))
+        PageSize.setHeight(height - (bB * scaleRatio))
+        PageSize.setX(PageSize.x() + (bL * scaleRatio))
+        PageSize.setY(PageSize.y() + (bT * scaleRatio))
+
         p.setPen(Qt.blue)
         p.setBrush(Qt.transparent)
         p.drawRect(PageSize.toRect())
-        
-        #Draw liveArea
+
+        # Draw liveArea
         LiveArea = PageSize
-        LiveArea.setWidth(LiveArea.width()-(mR*scaleRatio))
-        LiveArea.setHeight(LiveArea.height()-(mB*scaleRatio))
-        LiveArea.setX(LiveArea.x()+(mL*scaleRatio))
-        LiveArea.setY(LiveArea.y()+(mT*scaleRatio))
-        
+        LiveArea.setWidth(LiveArea.width() - (mR * scaleRatio))
+        LiveArea.setHeight(LiveArea.height() - (mB * scaleRatio))
+        LiveArea.setX(LiveArea.x() + (mL * scaleRatio))
+        LiveArea.setY(LiveArea.y() + (mT * scaleRatio))
+
         p.setPen(Qt.blue)
         p.drawRect(LiveArea.toRect())
-        
+
         p.end()
-        
+
         self.imagePreview.setPixmap(QPixmap.fromImage(image))
-        
+
     def setDefaults(self, type):
-        
+
         if type == "American":
             # American 11x17 inch
             self.spn_width.setValue(11)
@@ -396,7 +395,7 @@ class comics_template_create(QDialog):
             self.marginLeft.setValue(0.5)
             self.marginLeftUnit.setCurrentIndex(1)
         if type == "European":
-            #European A4
+            # European A4
             self.spn_width.setValue(21)
             self.widthUnit.setCurrentIndex(2)
             self.spn_height.setValue(29.7)

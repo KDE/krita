@@ -112,7 +112,7 @@ class author_delegate(QStyledItemDelegate):
     def setCompleterData(self, completerStrings=[str()], completerColumn=0):
         self.completerStrings = completerStrings
         self.completerColumn = completerColumn
-        
+
     def setLanguageData(self, languageColumn=0):
         self.languageColumn = languageColumn
 
@@ -128,11 +128,11 @@ class author_delegate(QStyledItemDelegate):
                     if languagecode != "C":
                         editor.addItem(languagecode)
             editor.model().sort(0)
-                    
+
         if index.column() == self.completerColumn:
             editor.setCompleter(QCompleter(self.completerStrings))
             editor.completer().setCaseSensitivity(False)
-        
+
         return editor
 
 
@@ -145,10 +145,10 @@ To help our user, the dialog loads up lists of keywords to populate several auto
 
 class comic_meta_data_editor(QDialog):
     configGroup = "ComicsProjectManagementTools"
-    
+
     # Translatable genre dictionary that has it's translated entries added to the genrelist and from which the untranslated items are taken.
-    acbfGenreList = {"science_fiction":str(i18n("Science Fiction")), "fantasy":str(i18n("Fantasy")), "adventure":str(i18n("Adventure")), "horror":str(i18n("Horror")), "mystery":str(i18n("Mystery")), "crime":str(i18n("Crime")), "military":str(i18n("Military")), "real_life":str(i18n("Real Life")), "superhero":str(i18n("Superhero")), "humor":str(i18n("Humor")), "western":str(i18n("Western")), "manga":str(i18n("Manga")), "politics":str(i18n("Politics")), "caricature":str(i18n("Caricature")), "sports":str(i18n("Sports")), "history":str(i18n("History")), "biography":str(i18n("Biography")), "education":str(i18n("Education")), "computer":str(i18n("Computer")), "religion":str(i18n("Religion")), "romance":str(i18n("Romance")), "children":str(i18n("Children")), "non-fiction":str(i18n("Non Fiction")), "adult":str(i18n("Adult")), "alternative":str(i18n("Alternative")), "other":str(i18n("Other"))}
-    acbfAuthorRolesList = {"Writer":str(i18n("Writer")), "Adapter":str(i18n("Adapter")), "Artist":str(i18n("Artist")), "Penciller":str(i18n("Penciller")), "Inker":str(i18n("Inker")), "Colorist":str(i18n("Colorist")), "Letterer":str(i18n("Letterer")), "Cover Artist":str(i18n("Cover Artist")), "Photographer":str(i18n("Photographer")), "Editor":str(i18n("Editor")), "Assistant Editor":str(i18n("Assistant Editor")), "Translator":str(i18n("Translator")), "Other":str(i18n("Other"))}
+    acbfGenreList = {"science_fiction": str(i18n("Science Fiction")), "fantasy": str(i18n("Fantasy")), "adventure": str(i18n("Adventure")), "horror": str(i18n("Horror")), "mystery": str(i18n("Mystery")), "crime": str(i18n("Crime")), "military": str(i18n("Military")), "real_life": str(i18n("Real Life")), "superhero": str(i18n("Superhero")), "humor": str(i18n("Humor")), "western": str(i18n("Western")), "manga": str(i18n("Manga")), "politics": str(i18n("Politics")), "caricature": str(i18n("Caricature")), "sports": str(i18n("Sports")), "history": str(i18n("History")), "biography": str(i18n("Biography")), "education": str(i18n("Education")), "computer": str(i18n("Computer")), "religion": str(i18n("Religion")), "romance": str(i18n("Romance")), "children": str(i18n("Children")), "non-fiction": str(i18n("Non Fiction")), "adult": str(i18n("Adult")), "alternative": str(i18n("Alternative")), "other": str(i18n("Other"))}
+    acbfAuthorRolesList = {"Writer": str(i18n("Writer")), "Adapter": str(i18n("Adapter")), "Artist": str(i18n("Artist")), "Penciller": str(i18n("Penciller")), "Inker": str(i18n("Inker")), "Colorist": str(i18n("Colorist")), "Letterer": str(i18n("Letterer")), "Cover Artist": str(i18n("Cover Artist")), "Photographer": str(i18n("Photographer")), "Editor": str(i18n("Editor")), "Assistant Editor": str(i18n("Assistant Editor")), "Translator": str(i18n("Translator")), "Other": str(i18n("Other"))}
 
     def __init__(self):
         super().__init__()
@@ -277,7 +277,7 @@ class comic_meta_data_editor(QDialog):
         self.authorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
         delegate = author_delegate()
         delegate.setCompleterData(self.authorRoleList, 4)
-        delegate.setLanguageData(len(labels)-1)
+        delegate.setLanguageData(len(labels) - 1)
         self.authorTable.setItemDelegate(delegate)
         author_button_layout = QWidget()
         author_button_layout.setLayout(QHBoxLayout())

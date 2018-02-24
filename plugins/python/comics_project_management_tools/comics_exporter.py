@@ -78,8 +78,8 @@ class comicsExporter():
     comicRackInfo = str()
     comic_book_info_json_dump = str()
     pagesLocationList = {}
-    
-    #set of keys used to define specific export behaviour for this page.
+
+    # set of keys used to define specific export behaviour for this page.
     pageKeys = ["acbf_title", "acbf_none", "acbf_fade", "acbf_blend", "acbf_horizontal", "acbf_vertical"]
 
     def __init__(self):
@@ -494,21 +494,20 @@ class comicsExporter():
                 # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
                 panelsAndText = []
-                
+
                 # These three lines are what is causing the page not to close.
                 root = page.rootNode()
                 self.removeLayers(labelList, root)
                 self.getPanelsAndText(root, panelsAndText)
-                #We'll need the offset and scale for aligning the panels and text correctly. We're getting this from the CBZ
-                
-                
+                # We'll need the offset and scale for aligning the panels and text correctly. We're getting this from the CBZ
+
                 pageData = {}
                 pageData["vector"] = panelsAndText
                 tree = ET.fromstring(page.documentInfo())
                 pageData["title"] = page.name()
                 calligra = "{http://www.calligra.org/DTD/document-info}"
-                about = tree.find(calligra+"about")
-                keywords = about.find(calligra+"keyword")
+                about = tree.find(calligra + "about")
+                keywords = about.find(calligra + "keyword")
                 keys = str(keywords.text).split(",")
                 pKeys = []
                 for key in keys:
@@ -530,14 +529,14 @@ class comicsExporter():
                         listHGuides = []
                         listHGuides = page.horizontalGuides()
                         listHGuides.sort()
-                        for i in range(len(listHGuides)-1, 0, -1):
+                        for i in range(len(listHGuides) - 1, 0, -1):
                             if listHGuides[i] < 0 or listHGuides[i] > page.height():
                                 listHGuides.pop(i)
                         listVGuides = page.verticalGuides()
                         listVGuides.sort()
-                        for i in range(len(listVGuides)-1, 0, -1):
+                        for i in range(len(listVGuides) - 1, 0, -1):
                             if listVGuides[i] < 0 or listVGuides[i] > page.width():
-                               listVGuides.pop(i)
+                                listVGuides.pop(i)
                         if self.configDictionary["cropToGuides"] and len(listVGuides) > 1:
                             cropx = listVGuides[0]
                             cropw = listVGuides[-1] - cropx
@@ -589,9 +588,9 @@ class comicsExporter():
                         transform = {}
                         transform["offsetX"] = cropx
                         transform["offsetY"] = cropy
-                        transform["resDiff"] = page.resolution()/72
-                        transform["scaleWidth"] = projection.width()/projectionOldSize[0]
-                        transform["scaleHeight"] = projection.height()/projectionOldSize[1]
+                        transform["resDiff"] = page.resolution() / 72
+                        transform["scaleWidth"] = projection.width() / projectionOldSize[0]
+                        transform["scaleHeight"] = projection.height() / projectionOldSize[1]
                         pageData["transform"] = transform
                     self.pagesLocationList[key].append(fn)
                     projection.close()
@@ -604,10 +603,11 @@ class comicsExporter():
             return True
         print("CPMT: Export not happening because there aren't any pages.")
         return False
-    
+
     """
     Function to get the panel and text data.
     """
+
     def getPanelsAndText(self, node, list):
         textLayersToSearch = ["text"]
         panelLayersToSearch = ["panels"]
@@ -619,27 +619,28 @@ class comicsExporter():
             for name in panelLayersToSearch:
                 if str(name).lower() in str(node.name()).lower():
                     for shape in node.shapes():
-                        if (shape.type()=="groupshape"):
+                        if (shape.type() == "groupshape"):
                             self.getPanelsAndTextVector(shape, list)
                         else:
                             self.handleShapeDescription(shape, list)
             for name in textLayersToSearch:
                 if str(name).lower() in str(node.name()).lower():
                     for shape in node.shapes():
-                        if (shape.type()=="groupshape"):
+                        if (shape.type() == "groupshape"):
                             self.getPanelsAndTextVector(shape, list, True)
                         else:
                             self.handleShapeDescription(shape, list, True)
         else:
             if node.childNodes():
                 for child in node.childNodes():
-                    self.getPanelsAndText(node = child, list = list)
+                    self.getPanelsAndText(node=child, list=list)
     """
     Function to get the panel and text data from a group shape
-    """                
-    def getPanelsAndTextVector(self, group, list, textOnly = False):
+    """
+
+    def getPanelsAndTextVector(self, group, list, textOnly=False):
         for shape in group.shapes():
-            if (shape.type()=="groupshape"):
+            if (shape.type() == "groupshape"):
                 self.getPanelsAndTextVector(shape, list, textOnly)
             else:
                 self.handleShapeDescription(shape, list, textOnly)
@@ -647,7 +648,8 @@ class comicsExporter():
     Function to get text and panels in a format that acbf will accept
     TODO: move this to a new file.
     """
-    def handleShapeDescription(self, shape, list, textOnly = False):
+
+    def handleShapeDescription(self, shape, list, textOnly=False):
         if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
             return
         shapeDesc = {}
@@ -662,14 +664,14 @@ class comicsExporter():
         adjust = QTransform()
         # TODO: If we get global transform api, use that instead of parsing manually.
         if "translate" in transform:
-            transform=transform.replace('translate(', '')
+            transform = transform.replace('translate(', '')
             for c in transform[:-1].split(" "):
                 coord.append(float(c))
-            if len(coord)<2:
+            if len(coord) < 2:
                 coord.append(coord[0])
             adjust = QTransform(1, 0, 0, 1, coord[0], coord[1])
         if "matrix" in transform:
-            transform=transform.replace('matrix(', '')
+            transform = transform.replace('matrix(', '')
             for c in transform[:-1].split(" "):
                 coord.append(float(c))
             adjust = QTransform(coord[0], coord[1], coord[2], coord[3], coord[4], coord[5])
@@ -683,7 +685,7 @@ class comicsExporter():
                 for l in listOfSvgStrings:
                     line = l[1:]
                     coordinates = line.split(" ")
-                    if len(coordinates)<2:
+                    if len(coordinates) < 2:
                         coordinates.append(coordinates[0])
                     x = float(coordinates[-2])
                     y = float(coordinates[-1])
@@ -691,15 +693,15 @@ class comicsExporter():
                     if l.islower():
                         offset = listOfPoints[0]
                     if l.lower().startswith("m"):
-                        path.moveTo(QPointF(x, y)+offset)
+                        path.moveTo(QPointF(x, y) + offset)
                     elif l.lower().startswith("h"):
                         y = listOfPoints[-1].y()
-                        path.lineTo(QPointF(x, y)+offset)
+                        path.lineTo(QPointF(x, y) + offset)
                     elif l.lower().startswith("v"):
                         x = listOfPoints[-1].x()
-                        path.lineTo(QPointF(x, y)+offset)
+                        path.lineTo(QPointF(x, y) + offset)
                     else:
-                        path.lineTo(QPointF(x, y)+offset)
+                        path.lineTo(QPointF(x, y) + offset)
                 path.setFillRule(Qt.WindingFill)
                 for polygon in path.simplified().toSubpathPolygons(adjust):
                     for point in polygon:
@@ -718,7 +720,7 @@ class comicsExporter():
             h = float(docElem.getAttribute("height"))
             path.addRect(QRectF(x, y, w, h))
             for point in path.toFillPolygon(adjust):
-                        listOfPoints.append(point)
+                listOfPoints.append(point)
         elif docElem.localName == "ellipse":
             listOfPoints = []
             if (docElem.hasAttribute("cx")):
@@ -733,24 +735,25 @@ class comicsExporter():
             rx = float(docElem.getAttribute("rx"))
             path.addEllipse(QPointF(x, y), rx, ry)
             for point in path.toFillPolygon(adjust):
-                        listOfPoints.append(point)
+                listOfPoints.append(point)
         shapeDesc["boundingBox"] = listOfPoints
         if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
             textRoot = ET.fromstring(shape.toSvg())
             paragraph = ET.Element("p")
-            if (len(textRoot)>0):
+            if (len(textRoot) > 0):
                 self.parseTextChildren(textRoot, paragraph)
             shapeDesc["text"] = ET.tostring(paragraph, "unicode")
         list.append(shapeDesc)
-    
+
     """
     Function to parse svg text to acbf ready text
     TODO: Move to a new file.
     """
+
     def parseTextChildren(self, elRead, elWrite):
-        
+
         if elRead.text is not None:
-            if len(elWrite)>0:
+            if len(elWrite) > 0:
                 if (elWrite[-1].tail is None):
                     elWrite[-1].tail = str()
                 elWrite[-1].tail = " ".join([elWrite[-1].tail, elRead.text])
@@ -771,39 +774,39 @@ class comicsExporter():
                     newElement = ET.Element("Emphasis")
                     newElementMade = True
             elif fontWeight is not None:
-                if (fontWeight=="bold" or int(fontWeight)>400):
+                if (fontWeight == "bold" or int(fontWeight) > 400):
                     newElement = ET.Element("Strong")
                     newElementMade = True
             elif fontStrikeThrough is not None:
-                if (fontStrikeThrough=="line-through"):
+                if (fontStrikeThrough == "line-through"):
                     newElement = ET.Element("Strikethrough")
                     newElementMade = True
             elif fontBaseLine is not None:
-                if (fontBaseLine=="super"):
+                if (fontBaseLine == "super"):
                     newElement = ET.Element("Sup")
                     newElementMade = True
-                elif (fontBaseLine=="sub"):
+                elif (fontBaseLine == "sub"):
                     newElement = ET.Element("Sub")
                     newElementMade = True
 
             if newElementMade is True:
-                if (len(childNode)>0):
+                if (len(childNode) > 0):
                     self.parseTextChildren(childNode, newElement)
                 else:
                     newElement.text = childNode.text
                 elWrite.append(newElement)
             else:
-                if (len(childNode)>0):
+                if (len(childNode) > 0):
                     self.parseTextChildren(childNode, elWrite)
                 else:
-                    if len(elWrite)>0:
+                    if len(elWrite) > 0:
                         if (elWrite[-1].tail is None):
                             elWrite[-1].tail = str()
-                        elWrite[-1].tail = " ".join([elWrite[-1].tail,childNode.text])
+                        elWrite[-1].tail = " ".join([elWrite[-1].tail, childNode.text])
                     else:
                         if elWrite.text is None:
                             elWrite.text = str()
-                        elWrite.text = " ".join([elWrite.text,childNode.text])
+                        elWrite.text = " ".join([elWrite.text, childNode.text])
 
     """
     Function to remove layers when they have the given labels.
@@ -951,7 +954,7 @@ class comicsExporter():
             language.appendChild(textlayer)
             language.appendChild(textlayerNative)
             bookInfo.appendChild(language)
-            
+
             bookTitle.setAttribute("lang", self.configDictionary["language"])
             annotation.setAttribute("lang", self.configDictionary["language"])
             keywords.setAttribute("lang", self.configDictionary["language"])
@@ -1007,7 +1010,7 @@ class comicsExporter():
         meta.appendChild(publisherInfo)
 
         documentInfo = document.createElement("document-info")
-        #TODO: ACBF apparantly uses first/middle/last/nick/email/homepage for the document auhtor too...
+        # TODO: ACBF apparantly uses first/middle/last/nick/email/homepage for the document auhtor too...
         #      The following code compensates for me not understanding this initially. This still needs
         #      adjustments in the gui.
         if "acbfAuthor" in self.configDictionary.keys():
@@ -1097,7 +1100,7 @@ class comicsExporter():
                 image = document.createElement("image")
                 image.setAttribute("href", os.path.basename(page))
                 pg.appendChild(image)
-                
+
                 language = "en"
                 if "language" in self.configDictionary.keys():
                     language = self.configDictionary["language"]
@@ -1123,13 +1126,13 @@ class comicsExporter():
                     boundingBoxText = []
                     for point in v["boundingBox"]:
                         offset = QPointF(transform["offsetX"], transform["offsetY"])
-                        pixelPoint = QPointF(point.x()*transform["resDiff"], point.y()*transform["resDiff"])
-                        newPoint = pixelPoint-offset
+                        pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
+                        newPoint = pixelPoint - offset
                         x = int(newPoint.x() * transform["scaleWidth"])
                         y = int(newPoint.y() * transform["scaleHeight"])
-                        pointText = str(x)+","+str(y)
+                        pointText = str(x) + "," + str(y)
                         boundingBoxText.append(pointText)
-                    
+
                     if "text" in v.keys():
                         textArea = document.createElement("text-area")
                         textArea.setAttribute("points", " ".join(boundingBoxText))
@@ -1154,7 +1157,7 @@ class comicsExporter():
         success = True
         success = self.createStandAloneACBF(document)
         return success
-    
+
     def createStandAloneACBF(self, document):
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
@@ -1164,16 +1167,15 @@ class comicsExporter():
         meta = root.getElementsByTagName("meta-data")[0]
         bookInfo = meta.getElementsByTagName("book-info")[0]
         cover = bookInfo.getElementsByTagName("coverpage")[0]
-        
+
         body = root.getElementsByTagName("body")[0]
         pages = body.getElementsByTagName("page")
         if (cover):
             pages.append(cover)
-        
+
         data = document.createElement("data")
-        
-        
-        #Covert pages to base64 strings.
+
+        # Covert pages to base64 strings.
         for i in range(0, len(pages)):
             image = pages[i].getElementsByTagName("image")[0]
             href = image.getAttribute("href")
@@ -1186,16 +1188,16 @@ class comicsExporter():
                     imageData = QByteArray()
                     buffer = QBuffer(imageData)
                     imageFile.save(buffer, "PNG")
-                    #For now always embed as png.
+                    # For now always embed as png.
                     contentType = "image/png"
                     binary.setAttribute("content-type", contentType)
                     binary.appendChild(document.createTextNode(str(bytearray(imageData.toBase64()).decode("ascii"))))
-                    
-                    image.setAttribute("href", "#"+ href)
+
+                    image.setAttribute("href", "#" + href)
                     data.appendChild(binary)
-        
+
         root.appendChild(data)
-        
+
         f = open(location, 'w', newline="", encoding="utf-8")
         f.write(document.toprettyxml(indent="  "))
         f.close()

@@ -243,7 +243,7 @@ void SvgTextTool::mousePressEvent(KoPointerEvent *event)
             canvas()->shapeManager()->selection()->select(shape);
             m_shape = shape;
         } else {
-            m_dragStart = event->point;
+            m_dragStart = m_dragEnd = event->point;
             m_dragging = true;
         }
 
@@ -274,8 +274,9 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (m_dragging) {
         QRectF rectangle = QRectF(m_dragStart, m_dragEnd).normalized();
-        if (rectangle.width()<4 || rectangle.height()<4) {
-            event->ignore();
+        if (rectangle.width() < 4 && rectangle.height() < 4) {
+            m_dragging = false;
+            event->accept();
             return;
         }
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");

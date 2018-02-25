@@ -541,6 +541,17 @@ public Q_SLOTS:
      * The settings and selections for relevant layer and mask types can also be set
      * after the Node has been created.
      *
+@code
+d = Application.createDocument(1000, 1000, "Test", "RGBA", "U8", "", 120.0)
+root = d.rootNode();
+print(root.childNodes())
+l2 = d.createNode("layer2", "paintLayer")
+print(l2)
+root.addChildNode(l2, None)
+print(root.childNodes())
+@endcode
+     *
+     *
      * @return the new Node.
      */
     Node* createNode(const QString &name, const QString &nodeType);

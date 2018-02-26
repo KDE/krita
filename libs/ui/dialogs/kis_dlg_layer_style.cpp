@@ -301,10 +301,16 @@ void KisDlgLayerStyle::changePage(QListWidgetItem *current, QListWidgetItem *pre
 
 void KisDlgLayerStyle::setStyle(KisPSDLayerStyleSP style)
 {
-    *m_layerStyle = *style;
+    // we may self-assign style is some cases
+    if (style != m_layerStyle) {
+        *m_layerStyle = *style;
+    }
     m_sanityLayerStyleDirty = false;
 
-    m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
+    {
+        KisSignalsBlocker b(m_stylesSelector);
+        m_stylesSelector->notifyExternalStyleChanged(m_layerStyle->name(), m_layerStyle->uuid());
+    }
 
     QListWidgetItem *item;
     item = wdgLayerStyles.lstStyleSelector->item(2);
@@ -1034,7 +1040,7 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
         ui.cmbGradient->setGradient(gradient);
     }
 
-    ui.chkReverse->setChecked(config->antiAliased());
+    ui.chkReverse->setChecked(config->reverse());
     ui.cmbStyle->setCurrentIndex((int)config->style());
     ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
     ui.dialAngle->setValue(config->angle());

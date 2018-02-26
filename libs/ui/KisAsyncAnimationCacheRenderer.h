@@ -33,6 +33,8 @@ public:
 protected:
     void frameCompletedCallback(int frame) override;
     void frameCancelledCallback(int frame) override;
+    void clearFrameRegenerationState(bool isCancelled) override;
+
 
 Q_SIGNALS:
     void sigCompleteRegenerationInternal(int frame);

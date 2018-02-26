@@ -40,7 +40,7 @@
 #include "kis_transform_mask_params_interface.h"
 #include "kis_transform_mask_params_factory_registry.h"
 #include "kis_recalculate_transform_mask_job.h"
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 #include "kis_algebra_2d.h"
 #include "kis_safe_transform.h"
 #include "kis_keyframe_channel.h"
@@ -55,21 +55,22 @@
 
 struct Q_DECL_HIDDEN KisTransformMask::Private
 {
-    Private(KisTransformMask *q)
+    Private()
         : worker(0, QTransform(), 0),
           staticCacheValid(false),
           recalculatingStaticImage(false),
-          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE, q),
+          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(0.5)
     {
     }
 
-    Private(const Private &rhs, KisTransformMask *q)
+    Private(const Private &rhs)
         : worker(rhs.worker),
           params(rhs.params),
           staticCacheValid(false),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
-          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE, q)
+          updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
+          offBoundsReadArea(rhs.offBoundsReadArea)
     {
     }
 
@@ -92,21 +93,19 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     bool recalculatingStaticImage;
     KisPaintDeviceSP staticCacheDevice;
 
-    KisSignalCompressor updateSignalCompressor;
+    KisThreadSafeSignalCompressor updateSignalCompressor;
     qreal offBoundsReadArea;
 };
 
 
 KisTransformMask::KisTransformMask()
     : KisEffectMask(),
-      m_d(new Private(this))
+      m_d(new Private())
 {
     setTransformParams(
         KisTransformMaskParamsInterfaceSP(
             new KisDumbTransformMaskParams()));
 
-    connect(this, SIGNAL(initiateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(start()));
-    connect(this, SIGNAL(forceTerminateDelayedStaticUpdate()), &m_d->updateSignalCompressor, SLOT(stop()));
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
 
     KisImageConfig cfg;
@@ -119,7 +118,7 @@ KisTransformMask::~KisTransformMask()
 
 KisTransformMask::KisTransformMask(const KisTransformMask& rhs)
     : KisEffectMask(rhs),
-      m_d(new Private(*rhs.m_d, this))
+      m_d(new Private(*rhs.m_d))
 {
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
 }
@@ -144,7 +143,7 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
     m_d->params = params;
     m_d->reloadParameters();
 
-    emit forceTerminateDelayedStaticUpdate();
+    m_d->updateSignalCompressor.stop();
 }
 
 KisTransformMaskParamsInterfaceSP KisTransformMask::transformParams() const
@@ -245,7 +244,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY)) {
 
         m_d->staticCacheValid = false;
-        emit initiateDelayedStaticUpdate();
+        m_d->updateSignalCompressor.start();
     }
 
     if (m_d->recalculatingStaticImage) {
@@ -430,7 +429,7 @@ void KisTransformMask::forceUpdateTimedNode()
     if (m_d->updateSignalCompressor.isActive()) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->staticCacheValid);
 
-        emit forceTerminateDelayedStaticUpdate();
+        m_d->updateSignalCompressor.stop();
         slotDelayedStaticUpdate();
     }
 }

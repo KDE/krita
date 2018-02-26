@@ -649,7 +649,7 @@ void SvgTextEditor::alignJustified()
 
 void SvgTextEditor::setSettings()
 {
-    KoDialog settingsDialog;
+    KoDialog settingsDialog(this);
     Ui_WdgSvgTextSettings textSettings;
     QWidget *settingsPage = new QWidget(&settingsDialog, 0);
     settingsDialog.setMainWidget(settingsPage);

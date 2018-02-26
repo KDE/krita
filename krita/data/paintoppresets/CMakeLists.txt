@@ -75,10 +75,10 @@ Stamp_Scales.kpp
 Stamp_Shoujo_Bubbles.kpp
 Stamp_Spines.kpp
 Stamp_Watercolor.kpp
-Stamp_Water.kpp
+Watercolor_Fringe.kpp
+Watercolor_Texture.kpp
 Waterpaint_Hard_Edges.kpp
 Waterpaint_Soft_Edges.kpp
-Waterpaint_Soft.kpp
 Wet_Bristles.kpp
 Wet_Bristles_Chisel.kpp
 Wet_Bristles_Rough.kpp

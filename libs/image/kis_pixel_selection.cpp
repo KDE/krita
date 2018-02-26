@@ -472,9 +472,9 @@ QImage deviceToQImage(KisPaintDeviceSP device,
     QColor color = maskColor;
     const qreal alphaScale = maskColor.alphaF();
 
-    KisSequentialIterator it(device, rc);
+    KisSequentialConstIterator it(device, rc);
     while(it.nextPixel()) {
-        quint8 value = (MAX_SELECTED - *(it.rawData())) * alphaScale;
+        quint8 value = (MAX_SELECTED - *(it.rawDataConst())) * alphaScale;
         color.setAlpha(value);
 
         QPoint pt(it.x(), it.y());

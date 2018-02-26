@@ -74,7 +74,6 @@ Stamp_Mountains_Distant.kpp
 Stamp_Scales.kpp
 Stamp_Shoujo_Bubbles.kpp
 Stamp_Spines.kpp
-Stamp_Watercolor.kpp
 Watercolor_Fringe.kpp
 Watercolor_Texture.kpp
 Waterpaint_Hard_Edges.kpp

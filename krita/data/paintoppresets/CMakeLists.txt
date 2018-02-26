@@ -58,6 +58,7 @@ Pencil_Pattern_Draw.kpp
 Pencil_DrShade.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
+Pixel_Art_Fill.kpp
 Shapes_Mecha.kpp
 Shapes_Rounded.kpp
 Shapes_Spikes.kpp
@@ -74,6 +75,7 @@ Stamp_Mountains_Distant.kpp
 Stamp_Scales.kpp
 Stamp_Shoujo_Bubbles.kpp
 Stamp_Spines.kpp
+Stamp_Water.kpp
 Watercolor_Fringe.kpp
 Watercolor_Texture.kpp
 Waterpaint_Hard_Edges.kpp

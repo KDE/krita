@@ -107,6 +107,15 @@ protected:
      */
     virtual void frameCancelledCallback(int frame) = 0;
 
+
+    /**
+     * Called by KisAsyncAnimationRendererBase when the processing has been completed
+     * and the internal state of the populator should be cleared
+     *
+     * @param isCancelled tells if frame regeneration has failed to be regenerated
+     */
+    virtual void clearFrameRegenerationState(bool isCancelled);
+
 protected:
     /**
      * @return the image that for which the rendering was requested using

@@ -73,4 +73,12 @@ void KisAsyncAnimationCacheRenderer::frameCancelledCallback(int frame)
     notifyFrameCancelled(frame);
 }
 
+void KisAsyncAnimationCacheRenderer::clearFrameRegenerationState(bool isCancelled)
+{
+    m_d->requestInfo.clear();
+    m_d->requestedCache.clear();
+
+    KisAsyncAnimationRendererBase::clearFrameRegenerationState(isCancelled);
+}
+
 

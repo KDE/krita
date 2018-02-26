@@ -13,7 +13,6 @@ Blender_Textured_Marble.kpp
 Blender_Water.kpp
 Blender_Water_Sponge.kpp
 Clone_Tool.kpp
-Clone_Tool_Textured.kpp
 Distort_Grow.kpp
 Distort_Move.kpp
 Distort_Shrink.kpp

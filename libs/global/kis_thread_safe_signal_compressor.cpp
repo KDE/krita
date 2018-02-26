@@ -33,6 +33,11 @@ KisThreadSafeSignalCompressor::KisThreadSafeSignalCompressor(int delay, KisSigna
     this->moveToThread(QApplication::instance()->thread());
 }
 
+bool KisThreadSafeSignalCompressor::isActive() const
+{
+    return m_compressor->isActive();
+}
+
 void KisThreadSafeSignalCompressor::start()
 {
     emit internalRequestSignal();

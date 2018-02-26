@@ -25,8 +25,7 @@ Dry_Textured_Rough.kpp
 Dry_Textured_Scribbles.kpp
 Dry_Textured_Soft.kpp
 Eraser_Circle.kpp
-Eraser_Hard.kpp
-Eraser_Screentone.kpp
+Eraser_Small.kpp
 Eraser_Soft.kpp
 Fill_Large_Quick.kpp
 Fill_Screentones.kpp
@@ -57,6 +56,7 @@ Pencil_DrShade.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
 Pixel_Art_Fill.kpp
+Screentone_Eraser.kpp
 Shapes_Mecha.kpp
 Shapes_Rounded.kpp
 Shapes_Spikes.kpp

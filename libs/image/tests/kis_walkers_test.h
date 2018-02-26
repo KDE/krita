@@ -242,6 +242,7 @@ private Q_SLOTS:
     void testUsualVisiting();
     void testVisitingWithTopmostMask();
     void testMergeVisiting();
+    void testComplexGroupVisiting();
     void testComplexAccessVisiting();
     void testCloneNotificationsVisiting();
     void testRefreshSubtreeVisiting();

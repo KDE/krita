@@ -27,6 +27,7 @@
 #include "kis_ls_overlay_filter.h"
 #include "kis_ls_stroke_filter.h"
 #include "kis_ls_bevel_emboss_filter.h"
+#include "kis_projection_leaf.h"
 
 
 struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
@@ -37,6 +38,8 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
     QVector<KisAbstractProjectionPlaneSP> stylesAfter;
 
     KisPSDLayerStyleSP style;
+    bool canHaveChildNodes = false;
+    bool dependsOnLowerNodes = false;
 };
 
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
@@ -63,6 +66,8 @@ void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleS
     Q_ASSERT(sourceLayer);
     m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
     m_d->style = style;
+    m_d->canHaveChildNodes = sourceLayer->projectionLeaf()->canHaveChildLayers();
+    m_d->dependsOnLowerNodes = sourceLayer->projectionLeaf()->dependsOnLowerNodes();
 
     {
         KisLayerStyleFilterProjectionPlane *dropShadow =
@@ -206,8 +211,35 @@ KisPaintDeviceList KisLayerStyleProjectionPlane::getLodCapableDevices() const
 
 QRect KisLayerStyleProjectionPlane::needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const
 {
+    /**
+     * Need rect should also be adjust for the layers that generate their 'original'
+     * based on the contents of the underlying/child layers like
+     * KisGroupLayer/KisAdjustmentLayer.
+     *
+     * \see bug 390299
+     */
+
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
-    return sourcePlane->needRect(rect, pos);
+    const QRect layerNeedRect = sourcePlane->needRect(rect, pos);
+    QRect needRect = layerNeedRect;
+
+    const bool dirtyGroupWithChildren = m_d->canHaveChildNodes && (pos & KisLayer::N_FILTHY);
+    const bool adjustmentAboveDirty =
+        m_d->canHaveChildNodes &&
+        (pos & KisLayer::N_FILTHY || pos & KisLayer::N_ABOVE_FILTHY);
+
+    if (m_d->style->isEnabled() && (dirtyGroupWithChildren || adjustmentAboveDirty)) {
+
+        Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesBefore) {
+            needRect |= plane->needRect(layerNeedRect, KisLayer::N_ABOVE_FILTHY);
+        }
+
+        Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->stylesAfter) {
+            needRect |= plane->needRect(layerNeedRect, KisLayer::N_ABOVE_FILTHY);
+        }
+    }
+
+    return needRect;
 }
 
 QRect KisLayerStyleProjectionPlane::changeRect(const QRect &rect, KisLayer::PositionToFilthy pos) const

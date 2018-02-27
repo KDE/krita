@@ -356,6 +356,10 @@ void QXcbConnection::addWindowFromXi2Id(xcb_window_t id)
         if (widget) {
             QWindow *windowHandle = widget->windowHandle();
             m_windowMapper.insert(id, windowHandle);
+
+            // we should also cold-init the window events mask
+            // (Qt's own initialization got broken in Qt 5.10)
+            xi2Select(id);
         }
     }
 }

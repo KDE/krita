@@ -514,9 +514,11 @@ bool Document::saveAs(const QString &filename)
 
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
-
+    QUrl oldUrl = d->document->url();
+    d->document->setUrl(QUrl::fromLocalFile(filename));
     bool retval = d->document->saveAs(QUrl::fromLocalFile(filename), outputFormat, true);
     d->document->waitForSavingToComplete();
+    d->document->setUrl(oldUrl);
 
     return retval;
 }

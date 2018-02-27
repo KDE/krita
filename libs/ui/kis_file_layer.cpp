@@ -218,7 +218,6 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection, int xRes, in
 
 KisNodeSP KisFileLayer::clone() const
 {
-    qDebug() << "Cloning KisFileLayer" << m_filename;
     return KisNodeSP(new KisFileLayer(*this));
 }
 

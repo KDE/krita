@@ -44,6 +44,7 @@ Ink_Bristle.kpp
 Ink_Brush.kpp
 Ink_Brush_Rough.kpp
 Ink_Fineliner.kpp
+Ink_Gpen.kpp
 Ink_Leaky.kpp
 Ink_Pen_Soft.kpp
 Ink_Precision.kpp

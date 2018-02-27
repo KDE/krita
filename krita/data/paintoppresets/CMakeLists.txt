@@ -13,7 +13,6 @@ Blender_Textured_Marble.kpp
 Blender_Water.kpp
 Blender_Water_Sponge.kpp
 Clone_Tool.kpp
-Clone_Tool_Textured.kpp
 Distort_Grow.kpp
 Distort_Move.kpp
 Distort_Shrink.kpp
@@ -25,10 +24,8 @@ Dry_Textured_Creases.kpp
 Dry_Textured_Rough.kpp
 Dry_Textured_Scribbles.kpp
 Dry_Textured_Soft.kpp
-Eraser_Airbrush.kpp
 Eraser_Circle.kpp
-Eraser_Hard.kpp
-Eraser_Screentone.kpp
+Eraser_Small.kpp
 Eraser_Soft.kpp
 Fill_Large_Quick.kpp
 Fill_Screentones.kpp
@@ -47,7 +44,9 @@ Ink_Bristle.kpp
 Ink_Brush.kpp
 Ink_Brush_Rough.kpp
 Ink_Fineliner.kpp
+Ink_Gpen.kpp
 Ink_Leaky.kpp
+Ink_Pen_Soft.kpp
 Ink_Precision.kpp
 Ink_Tough.kpp
 Normal_Map.kpp
@@ -59,6 +58,7 @@ Pencil_DrShade.kpp
 Pixel_Art.kpp
 Pixel_Art_Dithering.kpp
 Pixel_Art_Fill.kpp
+Screentone_Eraser.kpp
 Shapes_Mecha.kpp
 Shapes_Rounded.kpp
 Shapes_Spikes.kpp

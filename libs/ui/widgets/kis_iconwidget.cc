@@ -43,7 +43,8 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
 {
     QPushButton::paintEvent(event);
 
-    QPainter p(this);
+    QPainter p;
+    p.begin(this);
 
     const qint32 cw = width();
     const qint32 ch = height();
@@ -65,9 +66,22 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.drawRect(QRect(0,0,cw,ch));
 
     if (m_resource) {
-        p.drawImage(QRect(border, border, iconWidth, iconHeight), m_resource->image());
+        QImage img = QImage(iconWidth, iconHeight, QImage::Format_ARGB32);
+        img.fill(Qt::transparent);
+        if (m_resource->image().width()<iconWidth ||
+                m_resource->image().height()<iconHeight) {
+            QPainter paint2;
+            paint2.begin(&img);
+            for (int x=0; x< iconWidth; x+=m_resource->image().width()) {
+                for (int y=0; y< iconHeight; y+=m_resource->image().height()) {
+                    paint2.drawImage(x, y, m_resource->image());
+                }
+            }
+        } else {
+            img = m_resource->image().scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
     }
-
     p.setClipping(false);
 }
 

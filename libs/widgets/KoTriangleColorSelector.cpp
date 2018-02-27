@@ -264,11 +264,6 @@ void KoTriangleColorSelector::slotSetColor(const KoColor & color)
     }
 }
 
-QColor KoTriangleColorSelector::color() const
-{
-    return getCurrentColor().toQColor();
-}
-
 void KoTriangleColorSelector::resizeEvent( QResizeEvent * event )
 {
     QWidget::resizeEvent( event );

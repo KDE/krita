@@ -46,10 +46,6 @@ class KRITAWIDGETS_EXPORT KoTriangleColorSelector : public KisColorSelectorInter
         int value() const;
         int saturation() const;
         KoColor getCurrentColor() const override;
-
-        // please use realColor() instead!
-        Q_DECL_DEPRECATED QColor color() const;
-
     public Q_SLOTS:
         void setHue(int h);
         void setValue(int v);

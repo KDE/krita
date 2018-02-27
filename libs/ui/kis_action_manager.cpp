@@ -206,12 +206,13 @@ void KisActionManager::updateGUI()
     KisImageWSP image;
     KisNodeSP node;
     KisLayerSP layer;
-    KisPaintDeviceSP device;
-    KisDocument* document = 0;
-    KisSelectionManager* selectionManager = 0;
+    KisSelectionManager *selectionManager = 0;
+
     KisAction::ActivationConditions conditions = KisAction::NO_CONDITION;
 
     if (d->viewManager) {
+        node = d->viewManager->activeNode();
+        selectionManager = d->viewManager->selectionManager();
 
         // if there are no views, that means no document is open.
         // we cannot have nodes (selections), devices, or documents without a view
@@ -224,28 +225,27 @@ void KisActionManager::updateGUI()
                 flags |= KisAction::IMAGE_HAS_ANIMATION;
             }
 
-            node = d->viewManager->activeNode();
-            device = d->viewManager->activeDevice();
-            document = d->viewManager->document();
-            selectionManager = d->viewManager->selectionManager();
-
             if (d->viewManager->viewCount() > 1) {
                 flags |= KisAction::MULTIPLE_IMAGES;
             }
 
-            if (document && document->isModified()) {
+            if (d->viewManager->document() && d->viewManager->document()->isModified()) {
                 flags |= KisAction::CURRENT_IMAGE_MODIFIED;
             }
 
-            if (device) {
+            if (d->viewManager->activeDevice()) {
                 flags |= KisAction::ACTIVE_DEVICE;
             }
+        }
+
+        if (d->viewManager->selectionEditable()) {
+            conditions |= KisAction::SELECTION_EDITABLE;
         }
 
     }
 
     // is there a selection/mask?
-    // you have to have at least one view(document) open for this to be true
+    // you have to have at least one view (document) open for this to be true
     if (node) {
 
         // if a node exists, we know there is an active layer as well
@@ -269,8 +269,8 @@ void KisActionManager::updateGUI()
             flags |= KisAction::LAYERS_IN_CLIPBOARD;
         }
 
-        if (selectionManager)
-        {
+        if (selectionManager) {
+
             if (selectionManager->havePixelsSelected()) {
                 flags |= KisAction::PIXELS_SELECTED;
             }
@@ -299,12 +299,7 @@ void KisActionManager::updateGUI()
         if (node->hasEditablePaintDevice()) {
             conditions |= KisAction::ACTIVE_NODE_EDITABLE_PAINT_DEVICE;
         }
-
-        if (d->viewManager->selectionEditable()) {
-            conditions |= KisAction::SELECTION_EDITABLE;
-        }
     }
-
 
 
     // loop through all actions in action manager and determine what should be enabled

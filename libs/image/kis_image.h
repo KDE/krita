@@ -632,7 +632,7 @@ public:
     bool wrapAroundModeActive() const;
 
     /**
-     * \return curent level of detail which is used when processing the image.
+     * \return current level of detail which is used when processing the image.
      * Current working zoom = 2 ^ (- currentLevelOfDetail()). Default value is
      * null, which means we work on the original image.
      */

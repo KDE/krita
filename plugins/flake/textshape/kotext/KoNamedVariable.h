@@ -23,7 +23,7 @@
 #include "kritatext_export.h"
 
 /**
- * This inlineObject shows the curent value of a variable as registered in the KoVariableManager.
+ * This inlineObject shows the current value of a variable as registered in the KoVariableManager.
  * The proper way to create a new class is to use KoVariableManager::createVariable()
  */
 class KoNamedVariable : public KoVariable

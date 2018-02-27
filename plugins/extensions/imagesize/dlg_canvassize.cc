@@ -38,7 +38,7 @@ static const QString percentStr(i18n("Percent (%)"));
 
 const QString DlgCanvasSize::PARAM_PREFIX = "canvasizedlg";
 const QString DlgCanvasSize::PARAM_WIDTH_UNIT = DlgCanvasSize::PARAM_PREFIX + "_widthunit";
-const QString DlgCanvasSize::PARAM_HEIGTH_UNIT = DlgCanvasSize::PARAM_PREFIX + "_heightunit";
+const QString DlgCanvasSize::PARAM_HEIGHT_UNIT = DlgCanvasSize::PARAM_PREFIX + "_heightunit";
 const QString DlgCanvasSize::PARAM_XOFFSET_UNIT = DlgCanvasSize::PARAM_PREFIX + "_xoffsetunit";
 const QString DlgCanvasSize::PARAM_YOFFSET_UNIT = DlgCanvasSize::PARAM_PREFIX + "_yoffsetunit";
 
@@ -86,7 +86,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     m_page->heightUnit->setModel(_heightUnitManager);
 
     QString unitw = cfg.readEntry<QString>(PARAM_WIDTH_UNIT, "px");
-    QString unith = cfg.readEntry<QString>(PARAM_HEIGTH_UNIT, "px");
+    QString unith = cfg.readEntry<QString>(PARAM_HEIGHT_UNIT, "px");
 
     _widthUnitManager->setApparentUnitFromSymbol(unitw);
     _heightUnitManager->setApparentUnitFromSymbol(unith);
@@ -205,7 +205,7 @@ DlgCanvasSize::~DlgCanvasSize()
     cfg.writeEntry<bool>("CanvasSize/ConstrainProportions", m_page->constrainProportionsCkb->isChecked());
 
     cfg.writeEntry<QString>(PARAM_WIDTH_UNIT, _widthUnitManager->getApparentUnitSymbol());
-    cfg.writeEntry<QString>(PARAM_HEIGTH_UNIT, _heightUnitManager->getApparentUnitSymbol());
+    cfg.writeEntry<QString>(PARAM_HEIGHT_UNIT, _heightUnitManager->getApparentUnitSymbol());
 
     cfg.writeEntry<QString>(PARAM_XOFFSET_UNIT, _xOffsetUnitManager->getApparentUnitSymbol());
     cfg.writeEntry<QString>(PARAM_YOFFSET_UNIT, _yOffsetUnitManager->getApparentUnitSymbol());

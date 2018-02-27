@@ -759,7 +759,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
             //if (preset)
                 //qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
             //else
-                //qDebug() << "no preset fcound for" << inputDevice.uniqueTabletId();
+                //qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
             preset = rserver->resourceByName("Basic_tip_default");

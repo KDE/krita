@@ -35,7 +35,7 @@
 const QString DlgLayerSize::PARAM_PREFIX = "layersizedlg";
 
 const QString DlgLayerSize::PARAM_WIDTH_UNIT = DlgLayerSize::PARAM_PREFIX + "_widthunit";
-const QString DlgLayerSize::PARAM_HEIGTH_UNIT = DlgLayerSize::PARAM_PREFIX + "_heightunit";
+const QString DlgLayerSize::PARAM_HEIGHT_UNIT = DlgLayerSize::PARAM_PREFIX + "_heightunit";
 
 const QString DlgLayerSize::PARAM_KEEP_AR = DlgLayerSize::PARAM_PREFIX + "_keepar";
 const QString DlgLayerSize::PARAM_KEEP_PROP = DlgLayerSize::PARAM_PREFIX + "_keepprop";
@@ -91,7 +91,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->newHeightUnit->setModel(_heightUnitManager);
 
     QString unitw = cfg.readEntry<QString>(PARAM_WIDTH_UNIT, "px");
-    QString unith = cfg.readEntry<QString>(PARAM_HEIGTH_UNIT, "px");
+    QString unith = cfg.readEntry<QString>(PARAM_HEIGHT_UNIT, "px");
 
     _widthUnitManager->setApparentUnitFromSymbol(unitw);
     _heightUnitManager->setApparentUnitFromSymbol(unith);
@@ -130,7 +130,7 @@ DlgLayerSize::~DlgLayerSize()
     cfg.writeEntry<bool>(PARAM_KEEP_PROP, m_page->constrainProportionsCkb->isChecked());
 
     cfg.writeEntry<QString>(PARAM_WIDTH_UNIT, _widthUnitManager->getApparentUnitSymbol());
-    cfg.writeEntry<QString>(PARAM_HEIGTH_UNIT, _heightUnitManager->getApparentUnitSymbol());
+    cfg.writeEntry<QString>(PARAM_HEIGHT_UNIT, _heightUnitManager->getApparentUnitSymbol());
 
     delete m_page;
 }

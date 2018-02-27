@@ -490,7 +490,7 @@ void KoResourceItemChooser::setSynced(bool sync)
     d->synced = sync;
     KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
     if (sync) {
-        connect(chooserSync, SIGNAL(baseLenghtChanged(int)), SLOT(baseLengthChanged(int)));
+        connect(chooserSync, SIGNAL(baseLengthChanged(int)), SLOT(baseLengthChanged(int)));
         baseLengthChanged(chooserSync->baseLength());
     } else {
         chooserSync->disconnect(this);

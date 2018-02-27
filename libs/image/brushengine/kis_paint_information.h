@@ -203,7 +203,7 @@ public:
     /// Number of dabs painted since the beginning of the stroke
     int currentDabSeqNo() const;
 
-    /// The length of the stroke **before** painting the curent dab
+    /// The length of the stroke **before** painting the current dab
     qreal totalStrokeLength() const;
 
     // random source for generating in-stroke effects

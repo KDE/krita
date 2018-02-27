@@ -455,7 +455,7 @@ public:
      */
     void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2,
-                   KisDistanceInformation *curentDistance);
+                   KisDistanceInformation *currentDistance);
 
     /**
      * Draw a Bezier curve between pos1 and pos2 using control points 1 and 2.

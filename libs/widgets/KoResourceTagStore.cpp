@@ -85,7 +85,7 @@ void KoResourceTagStore::removeResource(const KoResource *resource)
 QStringList KoResourceTagStore::tagNamesList() const
 {
     QStringList tagList = d->tagList.uniqueKeys();
-    //qDebug() << "Taglist" << tagList << "blacklist" << d->blacklistedTags;
+    qDebug() << "tagNameslist" << tagList << "blacklist" << d->blacklistedTags;
     Q_FOREACH(const QString &tag, d->blacklistedTags) {
         tagList.removeAll(tag);
     }

@@ -424,7 +424,6 @@ if(UNIX)
     if(NOT APPLE)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
-            input/wintab/kis_tablet_support_x11.cpp
             input/wintab/qxcbconnection_xi2.cpp
             input/wintab/qxcbconnection.cpp
             input/wintab/kis_xi2_event_filter.cpp

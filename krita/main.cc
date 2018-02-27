@@ -57,7 +57,6 @@
 #include <QLibrary>
 
 #elif defined HAVE_X11
-#include <kis_tablet_support_x11.h>
 #include <kis_xi2_event_filter.h>
 #endif
 

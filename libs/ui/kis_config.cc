@@ -1397,7 +1397,7 @@ void KisConfig::setOcioLockColorVisualRepresentation(bool value)
 
 QString KisConfig::defaultPalette(bool defaultValue) const
 {
-    return (defaultValue ? QString() : m_cfg.readEntry("defaultPalette", QString()));
+    return (defaultValue ? QString() : m_cfg.readEntry("defaultPalette", "Default"));
 }
 
 void KisConfig::setDefaultPalette(const QString& name) const

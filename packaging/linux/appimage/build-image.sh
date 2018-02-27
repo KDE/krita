@@ -1,244 +1,93 @@
 #!/bin/bash
 
-# Enter a CentOS 6 chroot (you could use other methods)
-# git clone https://github.com/probonopd/AppImageKit.git
-# ./AppImageKit/build.sh 
-# sudo ./AppImageKit/AppImageAssistant.AppDir/testappimage /isodevice/boot/iso/CentOS-6.5-x86_64-LiveCD.iso bash
-
-# Halt on errors
+# Halt on errors and be verbose about what we are doing
 set -e
-
-# Be verbose
 set -x
 
-# Now we are inside CentOS 6
-grep -r "CentOS release 6" /etc/redhat-release || exit 1
+# Read in our parameters
+export BUILD_PREFIX=$1
+export KRITA_SOURCES=$2
 
-# If we are running inside Travis CI, then we want to build Krita
-# and we remove the $DO_NOT_BUILD_KRITA environment variable
-# that was used in the process of generating the Docker image.
-# Also we do not want to download and build the dependencies every
-# time we build Krita on travis in the docker image. In order to
-# use newer dependencies, we re-build the docker image instead.
-#unset DO_NOT_BUILD_KRITA
-#NO_DOWNLOAD=1
+# Save some frequently referenced locations in variables for ease of use / updating
+export APPDIR=$BUILD_PREFIX/krita.appdir
+export PLUGINS=$APPDIR/usr/lib/kritaplugins/
 
-# clean up
-rm -rf /out/*
-rm -rf /krita.appdir
-
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
-# not always set correctly in CentOS 6.7
+# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. 
+# That's not always the case, so make sure it is
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-# Determine which architecture should be built
-if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
-  ARCH=$(arch)
-else
-  echo "Architecture could not be determined"
-  exit 1
-fi
+# We want to use $prefix/deps/usr/ for all our dependencies
+export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
+export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
 
-# if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
-export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/krita.appdir/usr/lib
+# Setup variables needed to help everything find what we built
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
+export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
+export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
+export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
+export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip/:$DEPS_INSTALL_PREFIX/lib/python3.5/site-packages/:$DEPS_INSTALL_PREFIX/lib/python3.5/
+export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
-cd /
+# Switch over to our build prefix
+cd $BUILD_PREFIX
 
-# Prepare the install location
-rm -rf /krita.appdir/ || true
-mkdir -p /krita.appdir/usr/bin
+#
+# Now we can get the process started!
+#
 
-# make sure lib and lib64 are the same thing
-mkdir -p /krita.appdir/usr/lib
-cd  /krita.appdir/usr
-ln -s lib lib64
+# Step 1: Copy over all the resources provided by dependencies that we need 
+cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/lib/python3.5 $APPDIR/usr/lib
+cp -r $DEPS_INSTALL_PREFIX/sip $APPDIR/usr/lib/
 
-cd /krita_build
-make -j4 install
+# Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
+mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
+rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
 
-cd /krita.appdir
-
-# FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
-cp -r /usr/plugins ./usr/bin/
-# copy the Qt translation
-cp -r /usr/translations ./usr
-
-cp $(ldconfig -p | grep libsasl2.so.2 | cut -d ">" -f 2 | xargs) ./usr/lib/
-cp $(ldconfig -p | grep libGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # otherwise segfaults!?
-cp $(ldconfig -p | grep libGLU.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # otherwise segfaults!?
-# Fedora 23 seemed to be missing SOMETHING from the Centos 6.7. The only message was:
-# This application failed to start because it could not find or load the Qt platform plugin "xcb".
-# Setting export QT_DEBUG_PLUGINS=1 revealed the cause.
-# QLibraryPrivate::loadPlugin failed on "/usr/lib64/qt5/plugins/platforms/libqxcb.so" : 
-# "Cannot load library /usr/lib64/qt5/plugins/platforms/libqxcb.so: (/lib64/libEGL.so.1: undefined symbol: drmGetNodeTypeFromFd)"
-# Which means that we have to copy libEGL.so.1 in too
-cp $(ldconfig -p | grep libEGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # Otherwise F23 cannot load the Qt platform plugin "xcb"
-# let's not copy xcb itself, that breaks on dri3 systems https://bugs.kde.org/show_bug.cgi?id=360552
-#cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ 
-cp $(ldconfig -p | grep libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/ # For Fedora 20
-
-ldd usr/bin/krita | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
-#ldd usr/lib64/krita/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
-#ldd usr/lib64/plugins/imageformats/*.so  | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
-
-ldd usr/bin/plugins/platforms/libqxcb.so | grep "=>" | awk '{print $3}'  |  xargs -I '{}' cp -v '{}' ./usr/lib || true
-
-# Copy in the indirect dependencies
-FILES=$(find . -type f -executable)
-
-for FILE in $FILES ; do
-	ldd "${FILE}" | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' usr/lib || true
+# Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
+for lib in $PLUGINS/*.so*; do
+  patchelf --set-rpath '$ORIGIN/..' $lib; 
 done
 
-#DEPS=""
-#for FILE in $FILES ; do
-#  ldd "${FILE}" | grep "=>" | awk '{print $3}' | xargs -I '{}' echo '{}' > DEPSFILE
-#done
-#DEPS=$(cat DEPSFILE  |sort | uniq)
-#for FILE in $DEPS ; do
-#  if [ -f $FILE ] ; then
-#    echo $FILE
-#    cp --parents -rfL $FILE ./
-#  fi
-#done
-#rm -f DEPSFILE
+for lib in $APPDIR/usr/lib/python3.5/site-packages/PyQt5/*.so*; do
+  patchelf --set-rpath '$ORIGIN/../..' $lib; 
+done
 
+for lib in $APPDIR/usr/lib/python3.5/lib-dynload/*.so*; do
+  patchelf --set-rpath '$ORIGIN/../..' $lib; 
+done
 
-# The following are assumed to be part of the base system
-rm -f usr/lib/libcom_err.so.2 || true
-rm -f usr/lib/libcrypt.so.1 || true
-rm -f usr/lib/libdl.so.2 || true
-rm -f usr/lib/libexpat.so.1 || true
-#rm -f usr/lib/libfontconfig.so.1 || true
-rm -f usr/lib/libgcc_s.so.1 || true
-rm -f usr/lib/libglib-2.0.so.0 || true
-rm -f usr/lib/libgpg-error.so.0 || true
-rm -f usr/lib/libgssapi_krb5.so.2 || true
-rm -f usr/lib/libgssapi.so.3 || true
-rm -f usr/lib/libhcrypto.so.4 || true
-rm -f usr/lib/libheimbase.so.1 || true
-rm -f usr/lib/libheimntlm.so.0 || true
-rm -f usr/lib/libhx509.so.5 || true
-rm -f usr/lib/libICE.so.6 || true
-rm -f usr/lib/libidn.so.11 || true
-rm -f usr/lib/libk5crypto.so.3 || true
-rm -f usr/lib/libkeyutils.so.1 || true
-rm -f usr/lib/libkrb5.so.26 || true
-rm -f usr/lib/libkrb5.so.3 || true
-rm -f usr/lib/libkrb5support.so.0 || true
-# rm -f usr/lib/liblber-2.4.so.2 || true # needed for debian wheezy
-# rm -f usr/lib/libldap_r-2.4.so.2 || true # needed for debian wheezy
-rm -f usr/lib/libm.so.6 || true
-rm -f usr/lib/libp11-kit.so.0 || true
-rm -f usr/lib/libpcre.so.3 || true
-rm -f usr/lib/libpthread.so.0 || true
-rm -f usr/lib/libresolv.so.2 || true
-rm -f usr/lib/libroken.so.18 || true
-rm -f usr/lib/librt.so.1 || true
-rm -f usr/lib/libsasl2.so.2 || true
-rm -f usr/lib/libSM.so.6 || true
-rm -f usr/lib/libusb-1.0.so.0 || true
-rm -f usr/lib/libuuid.so.1 || true
-rm -f usr/lib/libwind.so.0 || true
-rm -f usr/lib/libfontconfig.so.* || true
+patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so
+patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/lib/qml/org/krita/sketch/libkritasketchplugin.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so
+patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/sip/sip.so
 
-# Remove these libraries, we need to use the system versions; this means 11.04 is not supported (12.04 is our baseline)
-rm -f usr/lib/libGL.so.* || true
-rm -f usr/lib/libdrm.so.* || true
-rm -f usr/lib/libX11.so.* || true
-#rm -f usr/lib/libz.so.1 || true
+# Step 4: Build the image!!!
+linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
+  -executable=$APPDIR/usr/bin/krita \
+  -qmldir=$DEPS_INSTALL_PREFIX/qml \
+  -verbose=2 \
+  -bundle-non-qt-libs \
+  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/lib//qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/lib/qml/org/krita/draganddrop/libdraganddropplugin.so  \
+  -appimage 
 
-# These seem to be available on most systems but not Ubuntu 11.04
-# rm -f usr/lib/libffi.so.6 usr/lib/libGL.so.1 usr/lib/libglapi.so.0 usr/lib/libxcb.so.1 usr/lib/libxcb-glx.so.0 || true
+# Step 5: Find out what version of Krita we built and give the Appimage a proper name
+cd $BUILD_PREFIX/krita-build
+KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
 
-# Delete potentially dangerous libraries
-rm -f usr/lib/libstdc* usr/lib/libgobject* usr/lib/libc.so.* || true
-rm -f usr/lib/libxcb.so.1
+# Also find out the revision of Git we built
+cd $KRITA_SOURCES
+GIT_REVISION=$(git rev-parse --short HEAD)
 
-# Do NOT delete libX* because otherwise on Ubuntu 11.04:
-# loaded library "Xcursor" malloc.c:3096: sYSMALLOc: Assertion (...) Aborted
+# Now use that to generate a combined name we'll distribute
+VERSION=$KRITA_VERSION-$GIT_REVISION
 
-# We don't bundle the developer stuff
-rm -rf usr/include || true
-rm -rf usr/lib/cmake3 || true
-rm -rf usr/lib/pkgconfig || true
-rm -rf usr/share/ECM/ || true
-rm -rf usr/share/gettext || true
-rm -rf usr/share/pkgconfig || true
+# Return to our build root
+cd $BUILD_PREFIX
 
-strip usr/lib/kritaplugins/* usr/bin/* usr/lib/* || true
-
-# Since we set /krita.appdir as the prefix, we need to patch it away too (FIXME)
-# Probably it would be better to use /app as a prefix because it has the same length for all apps
-cd usr/ ; find . -type f -exec sed -i -e 's|/krita.appdir/usr/|./././././././././|g' {} \; ; cd  ..
-
-# On openSUSE Qt is picking up the wrong libqxcb.so
-# (the one from the system when in fact it should use the bundled one) - is this a Qt bug?
-# Also, Krita has a hardcoded /usr which we patch away
-cd usr/ ; find . -type f -exec sed -i -e 's|/usr|././|g' {} \; ; cd ..
-
-# We do not bundle this, so let's not search that inside the AppImage. 
-# Fixes "Qt: Failed to create XKB context!" and lets us enter text
-sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/bin/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so
-sed -i -e 's|././/share/X11/|/usr/share/X11/|g' ./usr/lib/libQt5XcbQpa.so.5
-
-# Workaround for:
-# D-Bus library appears to be incorrectly set up;
-# failed to read machine uuid: Failed to open
-# The file is more commonly in /etc/machine-id
-# sed -i -e 's|/var/lib/dbus/machine-id|//././././etc/machine-id|g' ./usr/lib/libdbus-1.so.3
-# or
-rm -f ./usr/lib/libdbus-1.so.3 || true
-
-cp ../AppImageKit/AppRun .
-cp ./usr/share/applications/org.kde.krita.desktop krita.desktop
-cp /krita/krita/pics/app/64-apps-calligrakrita.png calligrakrita.png
-
-# replace krita with the lib-checking startup script.
-#cd /krita.appdir/usr/bin
-#mv krita krita.real
-#wget https://raw.githubusercontent.com/boudewijnrempt/AppImages/master/recipes/krita/krita
-#chmod a+rx krita
-cd / 
-
-APP=krita
-
-# Source functions
-wget -q https://github.com/probonopd/AppImages/raw/master/functions.sh -O ./functions.sh
-. ./functions.sh
-
-# Install desktopintegration in usr/bin/krita.wrapper -- feel free to edit it
-cd /krita.appdir
-get_desktopintegration krita
-
-cd /
-
-VER=$(grep "#define KRITA_VERSION_STRING" krita_build/libs/version/kritaversion.h | cut -d '"' -f 2)
-cd /krita
-REVISION=$(git rev-parse --short HEAD)
-cd ..
-VERSION=$VER-$REVISION
-VERSION="$(sed s/\ /-/g <<<$VERSION)"
-echo $VERSION
-
-if [[ "$ARCH" = "x86_64" ]] ; then
-	APPIMAGE=$APP"-"$VERSION"-x86_64.appimage"
-fi
-if [[ "$ARCH" = "i686" ]] ; then
-	APPIMAGE=$APP"-"$VERSION"-i386.appimage"
-fi
-echo $APPIMAGE
-
-mkdir -p /out
-
-rm -f /out/*.AppImage || true
-AppImageKit/AppImageAssistant.AppDir/package /krita.appdir/ /out/$APPIMAGE
-
-chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
-
-cd /krita.appdir
-mv AppRun krita
-cd /
-mv krita.appdir "$APP"-"$VERSION"-x86_64
-tar -czf "$APP"-"$VERSION"-x86_64.tgz "$APP"-"$VERSION"-x86_64
+# Generate a new name for the Appimage file and rename it accordingly
+APPIMAGE=krita-"$VERSION"-x86_64.appimage
+mv Krita-x86_64.AppImage $APPIMAGE

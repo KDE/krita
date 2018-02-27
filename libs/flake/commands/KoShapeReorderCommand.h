@@ -22,6 +22,7 @@
 
 #include "kritaflake_export.h"
 
+#include <boost/operators.hpp>
 #include <kundo2command.h>
 #include <QList>
 
@@ -33,9 +34,11 @@ class KoShapeReorderCommandPrivate;
 class KRITAFLAKE_EXPORT KoShapeReorderCommand : public KUndo2Command
 {
 public:
-    struct IndexedShape {
+    struct KRITAFLAKE_EXPORT IndexedShape : boost::less_than_comparable<IndexedShape> {
         IndexedShape();
         IndexedShape(KoShape *_shape);
+
+        bool operator<(const IndexedShape &rhs) const;
 
         int zIndex = 0;
         KoShape *shape = 0;
@@ -89,6 +92,25 @@ public:
                                                KUndo2Command *parent = 0);
 
     /**
+     * Recalculates the attached z-indexes of \p shapes so that all indexes go
+     * strictly in ascending order and no shapes have repetitive indexes. The
+     * physical order of the shapes in the array is not changed, on the indexes
+     * in IndexedShape are corrected.
+     */
+    static
+    QList<KoShapeReorderCommand::IndexedShape>
+    homogenizeZIndexes(QList<IndexedShape> shapes);
+
+    /**
+     * Convenience version of homogenizeZIndexes() that removes all the IndexedShape
+     * objects, which z-index didn't change during homogenization. In a result
+     * you get a list that can be passed to KoShapeReorderCommand directly.
+     */
+    static
+    QList<KoShapeReorderCommand::IndexedShape>
+    homogenizeZIndexesLazy(QList<IndexedShape> shapes);
+
+    /**
      * Put all the shapes in \p shapesAbove above the shapes in \p shapesBelow, adjusting their
      * z-index values.
      */
@@ -102,5 +124,7 @@ public:
 private:
     KoShapeReorderCommandPrivate * const d;
 };
+
+KRITAFLAKE_EXPORT QDebug operator<<(QDebug dbg, const KoShapeReorderCommand::IndexedShape &indexedShape);
 
 #endif

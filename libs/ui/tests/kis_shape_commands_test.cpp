@@ -98,7 +98,7 @@ void KisShapeCommandsTest::testGrouping()
     shapeLayer->addShape(group);
 
     QScopedPointer<KoShapeGroupCommand> cmd(
-        new KoShapeGroupCommand(group, shapes, false, true, true));
+        new KoShapeGroupCommand(group, shapes, true));
 
     cmd->redo();
 
@@ -183,7 +183,7 @@ void KisShapeCommandsTest::testResizeShape(bool normalizeGroup)
     shapeLayer->addShape(group);
 
     QScopedPointer<KoShapeGroupCommand> cmd(
-        new KoShapeGroupCommand(group, shapes, false, true, normalizeGroup));
+        new KoShapeGroupCommand(group, shapes, normalizeGroup));
 
     cmd->redo();
 

@@ -217,7 +217,7 @@ void KoShapeSavingContext::saveLayerSet(KoXmlWriter &xmlWriter) const
         xmlWriter.addAttribute("draw:name", layer->name());
         if (layer->isGeometryProtected())
             xmlWriter.addAttribute("draw:protected", "true");
-        if (! layer->isVisible())
+        if (! layer->isVisible(false))
             xmlWriter.addAttribute("draw:display", "none");
         xmlWriter.endElement();  // draw:layer
     }

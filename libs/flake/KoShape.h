@@ -636,7 +636,7 @@ public:
      * @return current visibility state of this shape.
      * @see isGeometryProtected(), isContentProtected(), isSelectable()
      */
-    bool isVisible(bool recursive = false) const;
+    bool isVisible(bool recursive = true) const;
 
     /**
      * Changes the shape to be printable or not. The default is true.
@@ -726,6 +726,11 @@ public:
      * @return true if there is a (transitive) transformation-wise parent found in \p ancestorsInQuestion
      */
     bool inheritsTransformFromAny(const QList<KoShape*> ancestorsInQuestion) const;
+
+    /**
+     * @return true if this shape has a common parent with \p shape
+     */
+    bool hasCommonParent(const KoShape *shape) const;
 
     /**
      * Request a repaint to be queued.
@@ -1049,7 +1054,7 @@ public:
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
 
     /// checks recursively if the shape or one of its parents is not visible or locked
-    bool isEditable() const;
+    virtual bool isShapeEditable(bool recursive = true) const;
 
     /**
      * Adds a shape which depends on this shape.

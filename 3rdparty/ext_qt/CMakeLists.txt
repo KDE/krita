@@ -19,6 +19,11 @@ if (WIN32)
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}
         QMAKE_LFLAGS_SHLIB+=${SECURITY_SHARED_LINKER_FLAGS}
         QMAKE_LFLAGS_SONAME+=${SECURITY_SHARED_LINKER_FLAGS}
+        QMAKE_LFLAGS_PLUGIN+=${SECURITY_SHARED_LINKER_FLAGS}
+        # The following additional CXXFLAG is to workaround an issue in the Qt
+        # build system. Please check when updating to the next Qt version.
+        # See: https://bugreports.qt.io/browse/QTBUG-66123
+        QMAKE_CXXFLAGS+=-fno-keep-inline-dllexport
     )
     if (QT_ENABLE_DEBUG_INFO)
         # Set the option to build Qt with debugging info enabled
@@ -33,8 +38,8 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/archive/qt/5.9/5.9.3/single/qt-everywhere-opensource-src-5.9.3.zip
-      URL_HASH SHA1=2d3c53cd9dc76a479873548921a20d3d9b6fb9ac
+      URL https://download.qt.io/archive/qt/5.9/5.9.4/single/qt-everywhere-opensource-src-5.9.4.zip
+      URL_HASH SHA1=45ea93658da077728b75756ad7e91a7a218c469e
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-wintab.diff
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtgui-private-headers.diff
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Don-t-request-the-MIME-image-every-time-Windows-asks.patch
@@ -42,7 +47,6 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Hack-for-fullscreen-workaround.patch
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qopengldebug-gles.patch
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-189539-ANGLE-mingw-fix.patch
-            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-212811_qtbase-angle-d3d11-warp-crash-fix.patch
 
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}
@@ -63,9 +67,8 @@ elseif (NOT APPLE)
       URL_MD5 c5e275ab0ed7ee61d0f4b82cd471770d
       #PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qt-no-motion-compression.diff
 
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard
       INSTALL_DIR ${EXTPREFIX_qt}
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -nomake examples -no-sql-sqlite -no-mtdev --no-openssl -no-journald  -no-syslog -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg  -qt-harfbuzz -qt-freetype -qt-xcb -qt-xkbcommon-x11 -optimized-qmake -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus
-        -skip qtspeech -skip qtvirtualkeyboard
 
       BUILD_COMMAND $(MAKE)
       INSTALL_COMMAND $(MAKE) install

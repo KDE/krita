@@ -101,10 +101,14 @@ public:
     /**
      * Return the list of selected shapes
      * @return the list of selected shapes
-     * @param strip if StrippedSelection, the returned list will not include any children
-     *    of a container shape if the container-parent is itself also in the set.
      */
     const QList<KoShape*> selectedShapes() const;
+
+    /**
+     * Same as selectedShapes() but only for shapes in visible state. Used by
+     * the algorithms that draw shapes on the image
+     */
+    const QList<KoShape*> selectedVisibleShapes() const;
 
     /**
      * Same as selectedShapes() but only for editable shapes. Used by

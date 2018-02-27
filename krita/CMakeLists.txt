@@ -49,6 +49,7 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/krita/pics/layers/layers-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/misc-light/misc-light-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/misc-dark/misc-dark-icons.qrc
+    ${CMAKE_SOURCE_DIR}/krita/pics/paintops/paintops-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/tools/SVG/16/tools-svg-16-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/tool_transform/tool-transform-icons.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/svg/svg-icons.qrc

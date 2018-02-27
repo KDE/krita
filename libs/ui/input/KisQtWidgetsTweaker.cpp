@@ -204,6 +204,7 @@ TabShortcutOverrider overrider2;
 constexpr ShortcutOverriderBase *allShortcutOverriders[] = {
     &overrider0, &overrider1, &overrider2
 };
+
 constexpr int numOfShortcutOverriders =
                     sizeof(allShortcutOverriders)/
                     sizeof(allShortcutOverriders[0]);
@@ -217,21 +218,15 @@ struct KisQtWidgetsTweaker::Private
 public:
     Private(KisQtWidgetsTweaker *parent)
         : q(parent)
-        , interestedHandlers(numOfShortcutOverriders)
-        , lastKeyPressProcessingComplete(true)
-        , decision(ShortcutOverriderBase::DecisionOnShortcutOverride::askNext)
     {
     }
 
     const KisQtWidgetsTweaker *q;
 
     QBitArray interestedHandlers = QBitArray(numOfShortcutOverriders);
-
-    ShortcutOverriderBase::DecisionOnShortcutOverride decision =
-            ShortcutOverriderBase::DecisionOnShortcutOverride::askNext;
-    //unsigned long lastEventTimestamp=0;
-
+    ShortcutOverriderBase::DecisionOnShortcutOverride decision = ShortcutOverriderBase::DecisionOnShortcutOverride::askNext;
     bool lastKeyPressProcessingComplete = true;
+
     void newPhysicalKeyPressed(QKeyEvent *event)
     {
         for (int i=0; i < numOfShortcutOverriders; ++i) {

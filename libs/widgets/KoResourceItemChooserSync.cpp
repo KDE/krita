@@ -53,7 +53,7 @@ int KoResourceItemChooserSync::baseLength()
 void KoResourceItemChooserSync::setBaseLength(int length)
 {
     d->baseLength = qBound(25, length, 100);
-    emit baseLenghtChanged(d->baseLength);
+    emit baseLengthChanged(d->baseLength);
 }
 
 

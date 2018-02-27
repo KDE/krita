@@ -90,13 +90,7 @@ void KisToolPath::endAlternateAction(KoPointerEvent *event, AlternateAction acti
 QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
 {
     QList<QPointer<QWidget> > widgets = DelegatedPathTool::createOptionWidgets();
-    QList<QPointer<QWidget> > filteredWidgets;
-    Q_FOREACH (QWidget* widget, widgets) {
-        if (widget->objectName() != "Stroke widget") {
-            filteredWidgets.push_back(widget);
-        }
-    }
-    return filteredWidgets;
+    return widgets;
 }
 
 
@@ -115,5 +109,7 @@ void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter
 
 void __KisToolPathLocalTool::addPathShape(KoPathShape* pathShape)
 {
-    m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Bezier Curve"));
+    if (!KoCreatePathTool::tryMergeInPathShape(pathShape)) {
+        m_parentTool->addPathShape(pathShape, kundo2_i18n("Draw Bezier Curve"));
+    }
 }

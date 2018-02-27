@@ -38,6 +38,7 @@
 #include <KoSelectedShapesProxy.h>
 #include "kis_algebra_2d.h"
 #include <KoShapeMoveCommand.h>
+#include <KoShapeReorderCommand.h>
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -81,6 +82,30 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
         if (!shapes.isEmpty()) {
             KoShapeManager *shapeManager = canvas->shapeManager();
             shapeManager->selection()->deselectAll();
+
+            // adjust z-index of the shapes so that they would be
+            // pasted on the top of the stack
+            QList<KoShape*> topLevelShapes = shapeManager->topLevelShapes();
+            auto it = std::max_element(topLevelShapes.constBegin(), topLevelShapes.constEnd(), KoShape::compareShapeZIndex);
+            if (it != topLevelShapes.constEnd()) {
+                const int zIndexOffset = (*it)->zIndex();
+
+                std::stable_sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
+                QList<KoShapeReorderCommand::IndexedShape> indexedShapes;
+                std::transform(shapes.constBegin(), shapes.constEnd(),
+                               std::back_inserter(indexedShapes),
+                    [zIndexOffset] (KoShape *shape) {
+                        KoShapeReorderCommand::IndexedShape indexedShape(shape);
+                        indexedShape.zIndex += zIndexOffset;
+                        return indexedShape;
+                    });
+
+                indexedShapes = KoShapeReorderCommand::homogenizeZIndexesLazy(indexedShapes);
+
+                KoShapeReorderCommand cmd(indexedShapes);
+                cmd.redo();
+            }
 
             KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Paste shapes"));
             canvas->shapeController()->addShapesDirect(shapes, 0, parentCommand);

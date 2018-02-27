@@ -8,5 +8,4 @@ ExternalProject_Add( ext_tiff
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_tiff} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 	
     UPDATE_COMMAND ""
-	DEPENDS ext_zlib ext_jpeg
 )

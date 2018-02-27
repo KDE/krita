@@ -118,7 +118,7 @@ bool KoToolProxyPrivate::isActiveLayerEditable()
 
     KoShapeManager * shapeManager = activeTool->canvas()->shapeManager();
     KoShapeLayer * activeLayer = shapeManager->selection()->activeLayer();
-    if (activeLayer && !activeLayer->isEditable())
+    if (activeLayer && !activeLayer->isShapeEditable())
         return false;
     return true;
 }
@@ -389,61 +389,11 @@ void KoToolProxy::copy() const
 bool KoToolProxy::paste()
 {
     bool success = false;
-    KoCanvasBase *canvas = d->controller->canvas();
 
     if (d->activeTool && d->isActiveLayerEditable()) {
         success = d->activeTool->paste();
     }
 
-    if (!success) {
-        const QMimeData *data = QApplication::clipboard()->mimeData();
-
-        QList<QImage> imageList;
-
-        QImage image = QApplication::clipboard()->image();
-
-        if (!image.isNull()) {
-            imageList << image;
-        }
-        else if (data->hasUrls()) {
-            QList<QUrl> urls = QApplication::clipboard()->mimeData()->urls();
-            foreach (const QUrl &url, urls) {
-                QImage image;
-                image.load(url.toLocalFile());
-                if (!image.isNull()) {
-                    imageList << image;
-                }
-            }
-        }
-
-        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
-        QWidget *canvasWidget = canvas->canvasWidget();
-        const KoViewConverter *converter = canvas->viewConverter();
-        if (imageList.length() > 0 && factory && canvasWidget) {
-            KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Paste Image"));
-            QList<KoShape*> pastedShapes;
-
-            Q_FOREACH (const QImage &image, imageList) {
-                if (!image.isNull()) {
-                    QPointF p = converter->viewToDocument(canvasWidget->mapFromGlobal(QCursor::pos()) + canvas->canvasController()->documentOffset()- canvasWidget->pos());
-                    KoProperties params;
-                    params.setProperty("qimage", image);
-
-                    KoShape *shape = factory->createShape(&params, canvas->shapeController()->resourceManager());
-                    shape->setPosition(p);
-                    pastedShapes << shape;
-
-                    success = true;
-                }
-            }
-
-            if (!pastedShapes.isEmpty()) {
-                // add shape to the document
-                canvas->shapeController()->addShapesDirect(pastedShapes, 0, cmd);
-                canvas->addCommand(cmd);
-            }
-        }
-    }
     return success;
 }
 

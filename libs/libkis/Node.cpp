@@ -66,12 +66,11 @@
 #include "FilterMask.h"
 #include "SelectionMask.h"
 
-
-
+#include "LibKisUtils.h"
 
 struct Node::Private {
     Private() {}
-    KisImageSP image;
+    KisImageWSP image;
     KisNodeSP node;
 };
 
@@ -160,36 +159,12 @@ QList<Node*> Node::childNodes() const
 {
     QList<Node*> nodes;
     if (d->node) {
+        KisNodeList nodeList;
         int childCount = d->node->childCount();
         for (int i = 0; i < childCount; ++i) {
-            if (qobject_cast<const KisGroupLayer*>(d->node->at(i))) {
-                nodes << new GroupLayer(KisGroupLayerSP(dynamic_cast<KisGroupLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisCloneLayer*>(d->node->at(i))) {
-                nodes << new CloneLayer(KisCloneLayerSP(dynamic_cast<KisCloneLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisFileLayer*>(d->node->at(i))) {
-                nodes << new FileLayer(KisFileLayerSP(dynamic_cast<KisFileLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisAdjustmentLayer*>(d->node->at(i))) {
-                nodes << new FilterLayer(KisAdjustmentLayerSP(dynamic_cast<KisAdjustmentLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisGeneratorLayer*>(d->node->at(i))) {
-                nodes << new FillLayer(KisGeneratorLayerSP(dynamic_cast<KisGeneratorLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisShapeLayer*>(d->node->at(i))) {
-                nodes << new VectorLayer(KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisFilterMask*>(d->node->at(i))) {
-                nodes << new FilterMask(d->image, KisFilterMaskSP(dynamic_cast<KisFilterMask*>(d->node->at(i).data())));
-
-            } else  if (qobject_cast<const KisSelectionMask*>(d->node->at(i))) {
-                nodes << new SelectionMask(d->image, KisSelectionMaskSP(dynamic_cast<KisSelectionMask*>(d->node->at(i).data())));
-
-            } else {
-                nodes << new Node(d->image, d->node->at(i));
-            }
+            nodeList << d->node->at(i);
         }
+        nodes = LibKisUtils::createNodeList(nodeList, d->image);
     }
     return nodes;
 }
@@ -197,7 +172,12 @@ QList<Node*> Node::childNodes() const
 bool Node::addChildNode(Node *child, Node *above)
 {
     if (!d->node) return false;
-    return d->image->addNode(child->node(), d->node, above->node());
+    if (above) {
+        return d->image->addNode(child->node(), d->node, above->node());
+    }
+    else {
+        return d->image->addNode(child->node(), d->node, 0);
+    }
 }
 
 bool Node::removeChildNode(Node *child)
@@ -530,8 +510,8 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     KisImageSP dst = new KisImage(doc->createUndoStore(),
-                                  bounds.width(),
-                                  bounds.height(),
+                                  bounds.right(),
+                                  bounds.bottom(),
                                   projection->compositionSourceColorSpace(),
                                   d->node->name());
     dst->setResolution(xRes, yRes);
@@ -540,6 +520,7 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "paint device", d->node->opacity());
     paintLayer->paintDevice()->makeCloneFrom(projection, bounds);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
+    dst->cropImage(bounds);
     dst->initialRefreshGraph();
 
     bool r = doc->exportDocumentSync(QUrl::fromLocalFile(filename), mimeType.toLatin1());

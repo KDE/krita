@@ -71,6 +71,8 @@ public:
     */
     bool pathStarted();
 
+    bool tryMergeInPathShape(KoPathShape *pathShape);
+
 public Q_SLOTS:
     /// reimplemented
     void activate(ToolActivation activation, const QSet<KoShape*> &shapes) override;
@@ -97,6 +99,8 @@ protected:
     void endPathWithoutLastPoint();
     void cancelPath();
     void removeLastPoint();
+
+    bool addPathShapeImpl(KoPathShape* pathShape, bool tryMergeOnly);
 
     /// reimplemented
     QList<QPointer<QWidget> > createOptionWidgets() override;

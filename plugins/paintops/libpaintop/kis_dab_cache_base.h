@@ -69,7 +69,7 @@ public:
     void disableSubpixelPrecision();
 
     /**
-     * Return true if the dab needs postprocesing by special options
+     * Return true if the dab needs postprocessing by special options
      * like 'texture' or 'sharpness'
      */
     bool needSeparateOriginal(KisTextureProperties *textureOption,

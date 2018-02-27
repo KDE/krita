@@ -24,6 +24,7 @@
 #include "kritaflake_export.h"
 
 #include <QList>
+#include <QScopedPointer>
 #include <kundo2command.h>
 
 class KoShape;
@@ -45,22 +46,9 @@ public:
      * @param parent the parent command if the resulting command is a compound undo command.
      * @param shapes a list of all the shapes that should be grouped.
      */
-    static KoShapeGroupCommand *createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent = 0);
+    static KoShapeGroupCommand *createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, bool shouldNormalize = false);
 
-    /**
-     * Command to group a set of shapes into a predefined container.
-     * @param container the container to group the shapes under.
-     * @param shapes a list of all the shapes that should be grouped.
-     * @param clipped a list of the same length as the shapes list with one bool for each shape.
-     *      See KoShapeContainer::isClipped()
-     * @param inheritTransform a list of the same length as the shapes list with one bool for each shape.
-     *      See KoShapeContainer::inheritsTransform()
-     * @param parent the parent command used for macro commands
-     */
-    KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-            const QList<bool> &clipped, const QList<bool> &inheritTransform, KUndo2Command *parent = 0);
-
-    /**
+        /**
      * Command to group a set of shapes into a predefined container.
      * @param container the container to group the shapes under.
      * @param shapes a list of all the shapes that should be grouped.
@@ -70,8 +58,7 @@ public:
      *      See KoShapeContainer::inheritsTransform()
      * @param parent the parent command used for macro commands
      */
-    KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-            bool clipped, bool inheritTransform, bool shouldNormalize, KUndo2Command *parent = 0);
+    KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, bool shouldNormalize, KUndo2Command *parent = 0);
 
     /**
      * Command to group a set of shapes into a predefined container.
@@ -90,8 +77,7 @@ public:
     void undo() override;
 
 protected:
-    KoShapeGroupCommandPrivate *d;
-    KoShapeGroupCommand(KoShapeGroupCommandPrivate &, KUndo2Command *parent);
+    const QScopedPointer<KoShapeGroupCommandPrivate> d;
 };
 
 #endif

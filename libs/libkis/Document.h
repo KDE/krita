@@ -393,6 +393,9 @@ public Q_SLOTS:
      * @brief close Close the document: remove it from Krita's internal list of documents and
      * close all views. If the document is modified, you should save it first. There will be
      * no prompt for saving.
+     *
+     * After closing the document it becomes invalid.
+     *
      * @return true if the document is closed.
      */
     bool close();
@@ -538,6 +541,17 @@ public Q_SLOTS:
      * The settings and selections for relevant layer and mask types can also be set
      * after the Node has been created.
      *
+@code
+d = Application.createDocument(1000, 1000, "Test", "RGBA", "U8", "", 120.0)
+root = d.rootNode();
+print(root.childNodes())
+l2 = d.createNode("layer2", "paintLayer")
+print(l2)
+root.addChildNode(l2, None)
+print(root.childNodes())
+@endcode
+     *
+     *
      * @return the new Node.
      */
     Node* createNode(const QString &name, const QString &nodeType);
@@ -552,12 +566,12 @@ public Q_SLOTS:
     /**
      * @brief createFileLayer returns a layer that shows an external image.
      * @param name name of the file layer.
-     * @param FileName the absolute filename of the file referenced. Symlinks will be resolved.
-     * @param ScalingMethod how the dimensions of the file are interpreted
+     * @param fileName the absolute filename of the file referenced. Symlinks will be resolved.
+     * @param scalingMethod how the dimensions of the file are interpreted
      *        can be either "None", "ImageToSize" or "ImageToPPI"
      * @return a FileLayer
      */
-    FileLayer* createFileLayer(const QString &name, const QString FileName, const QString ScalingMethod);
+    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod);
 
     /**
      * @brief createFilterLayer creates a filter layer, which is a layer that represents a filter

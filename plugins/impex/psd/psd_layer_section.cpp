@@ -555,7 +555,7 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
                 layerRecord->visible = nodeVisible;
                 layerRecord->irrelevant = nodeIrrelevant;
 
-                layerRecord->layerName = nodeName;
+                layerRecord->layerName = nodeName.isEmpty() ? i18n("Unnamed Layer") : nodeName;
 
                 layerRecord->write(io,
                                    layerContentDevice,

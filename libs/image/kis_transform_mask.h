@@ -82,10 +82,6 @@ protected:
 private Q_SLOTS:
     void slotDelayedStaticUpdate();
 
-Q_SIGNALS:
-    void initiateDelayedStaticUpdate() const;
-    void forceTerminateDelayedStaticUpdate() const;
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

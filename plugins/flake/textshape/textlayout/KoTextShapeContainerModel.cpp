@@ -227,11 +227,6 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
     move.setY(0);
 }
 
-bool KoTextShapeContainerModel::isChildLocked(const KoShape *child) const
-{
-    return child->isGeometryProtected();
-}
-
 void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
 {
     if (child == 0) {

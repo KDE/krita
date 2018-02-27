@@ -23,18 +23,21 @@
 #include <kis_paintop_preset.h>
 #include <KisView.h>
 #include <KisViewManager.h>
+#include <kis_node_manager.h>
 #include <kis_selection_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_paintop_box.h>
-#include <KisViewManager.h>
 #include <KisMainWindow.h>
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
+
 #include "Document.h"
 #include "Canvas.h"
 #include "Window.h"
 #include "Resource.h"
 #include "ManagedColor.h"
+
+#include "LibKisUtils.h"
 
 struct View::Private {
     Private() {}
@@ -256,5 +259,15 @@ void View::setPaintingFlow(qreal flow)
 {
     if (!d->view) return;
     d->view->resourceProvider()->setFlow(flow);
+}
+
+QList<Node *> View::selectedNodes() const
+{
+    if (!d->view) return QList<Node *>();
+    if (!d->view->viewManager()) return QList<Node *>();
+    if (!d->view->viewManager()->nodeManager()) return QList<Node *>();
+
+    KisNodeList selectedNodes = d->view->viewManager()->nodeManager()->selectedNodes();
+    return LibKisUtils::createNodeList(selectedNodes, d->view->image());
 }
 

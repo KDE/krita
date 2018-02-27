@@ -66,6 +66,8 @@ public:
     QStringList searchTag(const QString& query) const;
 
     void loadTags();
+    void clearOldSystemTags();
+
     void serializeTags();
 
 private:

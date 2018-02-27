@@ -1,7 +1,5 @@
 include(SIPMacros)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkis)
-
 message( ${SIP_VERSION} " - The version of SIP found expressed as a 6 digit hex number suitable for comparison as a string.")
 message( ${SIP_VERSION_STR} " - The version of SIP found as a human readable string.")
 message( ${SIP_EXECUTABLE} " - Path and filename of the SIP command line executable.")

@@ -21,7 +21,7 @@
 
 #include <brushengine/kis_paintop_factory.h>
 #include <brushengine/kis_paintop_settings.h>
-
+#include <kis_icon.h>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
@@ -114,8 +114,8 @@ public:
         return m_name;
     }
 
-    QString pixmap() override {
-        return m_pixmap;
+    QIcon icon() override {
+        return KisIconUtils::loadIcon(id());
     }
 
     QString category() const override {

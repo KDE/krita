@@ -259,7 +259,7 @@
 
     <Action name="object_unite">
       <text>Unite</text>
-      <toolTip>Create boolean onion of multiple objects</toolTip>
+      <toolTip>Create boolean union of multiple objects</toolTip>
       <shortcut></shortcut>
       <icon></icon>
       <whatsThis></whatsThis>

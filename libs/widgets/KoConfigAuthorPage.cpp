@@ -262,7 +262,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
         w->setEnabled(false);
         d->cmbAuthorProfiles->insertItem(0, d->defaultAuthor);
         d->stack->insertWidget(0, w);
-        d->profileUiList.append(aUi);
+        d->profileUiList.insert(0, aUi);
     }
 
 
@@ -413,7 +413,9 @@ void KoConfigAuthorPage::apply()
 
             QFile f(authorInfo + d->cmbAuthorProfiles->itemText(i) +".authorinfo");
             f.open(QFile::WriteOnly);
-            f.write(ba);
+            if (f.write(ba) < 0) {
+                qWarning()<<"Writing author info went wrong:"<<f.errorString();
+            }
             f.close();
         }
     }
@@ -428,7 +430,7 @@ KoContactInfoDelegate::~KoContactInfoDelegate()
 
 }
 
-QWidget* KoContactInfoDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget* KoContactInfoDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/*option*/, const QModelIndex &index) const
 {
 
     if (index.column() > 0) {

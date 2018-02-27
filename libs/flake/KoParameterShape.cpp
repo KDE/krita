@@ -34,7 +34,8 @@ KoParameterShapePrivate::KoParameterShapePrivate(KoParameterShape *shape)
 
 KoParameterShapePrivate::KoParameterShapePrivate(const KoParameterShapePrivate &rhs, KoParameterShape *q)
     : KoPathShapePrivate(rhs, q),
-      handles(rhs.handles)
+      handles(rhs.handles),
+      parametric(rhs.parametric)
 {
 }
 

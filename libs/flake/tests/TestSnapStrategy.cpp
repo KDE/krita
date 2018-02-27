@@ -87,6 +87,9 @@ void TestSnapStrategy::testOrthogonalSnap()
     qreal paramSnapDistanceTwo = 4;
     bool didSnapTwo = toTestTwo.snap(paramMousePositionTwo, &paramProxyTwo, paramSnapDistanceTwo);
     QVERIFY(didSnapTwo);
+
+    // don't forget to remove the shape from the shape manager before exiting!
+    fakeShapeManager->remove(&fakeShapeOne);
 }
 void TestSnapStrategy::testNodeSnap()
 {
@@ -126,6 +129,9 @@ void TestSnapStrategy::testNodeSnap()
 
     bool didSnapTwo = toTestTwo.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
     QVERIFY(didSnapTwo);
+
+    // don't forget to remove the shape from the shape manager before exiting!
+    fakeShapeManager->remove(&fakeShapeOne);
 }
 void TestSnapStrategy::testExtensionSnap()
 {
@@ -176,6 +182,9 @@ void TestSnapStrategy::testExtensionSnap()
 
     bool didSnapTwo = toTest.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
     QVERIFY(didSnapTwo);
+
+    // don't forget to remove the shape from the shape manager before exiting!
+    fakeShapeManager->remove(&fakeShapeOne);
 }
 void TestSnapStrategy::testIntersectionSnap()
 {
@@ -241,6 +250,11 @@ void TestSnapStrategy::testIntersectionSnap()
     KoSnapProxy paramProxyTwo(&aKoSnapGuideTwo);
     bool didSnapTwo = toTestTwo.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
     QVERIFY(didSnapTwo);
+
+    // don't forget to remove the shape from the shape manager before exiting!
+    ShapeManager->remove(&pathShapeOne);
+    ShapeManager->remove(&pathShapeTwo);
+    ShapeManager->remove(&pathShapeThree);
 }
 void TestSnapStrategy::testGridSnap()
 {
@@ -326,6 +340,11 @@ void TestSnapStrategy::testBoundingBoxSnap()
     KoSnapProxy paramProxyTwo(&aKoSnapGuideTwo);
     bool didSnapTwo = toTestTwo.snap(paramMousePosTwo, &paramProxyTwo, paramSnapDistanceTwo);
     QVERIFY(didSnapTwo);
+
+    // don't forget to remove the shape from the shape manager before exiting!
+    ShapeManager->remove(&pathShapeOne);
+    ShapeManager->remove(&pathShapeTwo);
+    ShapeManager->remove(&pathShapeThree);
 }
 void TestSnapStrategy::testLineGuideSnap()
 {
@@ -406,6 +425,9 @@ void TestSnapStrategy::testOrhogonalDecoration()
 
     QVERIFY( resultingDecoration.isEmpty() );
 
+    // don't forget to remove the shape from the shape manager before exiting!
+    fakeShapeManager->remove(&fakeShapeOne);
+
 }
 void TestSnapStrategy::testNodeDecoration()
 {
@@ -461,6 +483,9 @@ void TestSnapStrategy::testExtensionDecoration()
     QPointF resultDecorationLastPoint = resultingDecoration.currentPosition();
 
     QVERIFY( resultDecorationLastPoint == QPointF(0,2) );
+
+    // don't forget to remove the shape from the shape manager before exiting!
+    fakeShapeManager->remove(&fakeShapeOne);
 }
 void TestSnapStrategy::testIntersectionDecoration()
 {

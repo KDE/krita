@@ -102,14 +102,6 @@ int  KoShapeContainer::shapeCount() const
     return d->model->count();
 }
 
-bool KoShapeContainer::isChildLocked(const KoShape *child) const
-{
-    Q_D(const KoShapeContainer);
-    if (d->model == 0)
-        return false;
-    return d->model->isChildLocked(child);
-}
-
 void KoShapeContainer::setClipped(const KoShape *child, bool clipping)
 {
     Q_D(KoShapeContainer);

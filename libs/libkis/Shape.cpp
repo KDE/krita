@@ -17,6 +17,11 @@
  */
 #include "Shape.h"
 #include <kis_icon_utils.h>
+#include <SvgWriter.h>
+#include <SvgParser.h>
+#include <SvgSavingContext.h>
+#include <QBuffer>
+#include <KoDocumentResourceManager.h>
 struct Shape::Private {
     Private() {}
     KoShape *shape;
@@ -72,6 +77,27 @@ QPointF Shape::position() const
 void Shape::setPosition(QPointF point)
 {
     d->shape->setPosition(point);
+}
+
+QString Shape::toSvg()
+{
+    QBuffer shapesBuffer;
+    QBuffer stylesBuffer;
+
+    shapesBuffer.open(QIODevice::WriteOnly);
+    stylesBuffer.open(QIODevice::WriteOnly);
+
+    {
+        SvgSavingContext savingContext(shapesBuffer, stylesBuffer);
+        savingContext.setStrippedTextMode(true);
+        SvgWriter writer({d->shape});
+        writer.saveDetached(savingContext);
+    }
+
+    shapesBuffer.close();
+    stylesBuffer.close();
+
+    return QString::fromUtf8(shapesBuffer.data());
 }
 
 KoShape *Shape::shape()

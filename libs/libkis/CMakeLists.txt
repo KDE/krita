@@ -30,6 +30,8 @@ set(kritalibkis_LIB_SRCS
 
     Shape.cpp
     GroupShape.cpp
+
+    LibKisUtils.cpp
 )
 
 add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )

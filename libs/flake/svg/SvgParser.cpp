@@ -71,6 +71,7 @@
 
 #include "kis_dom_utils.h"
 
+#include "kis_algebra_2d.h"
 #include "kis_debug.h"
 #include "kis_global.h"
 #include <algorithm>
@@ -889,8 +890,47 @@ QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
             // For radial and conical gradients such conversion is not possible
 
             resultGradient = KoFlake::cloneGradient(gradient->gradient());
-            resultGradient->setCoordinateMode(QGradient::ObjectBoundingMode);
             *transform = gradient->transform() * gc->matrix * shape->transformation().inverted();
+
+            const QRectF outlineRect = shape->outlineRect();
+            if (outlineRect.isEmpty()) return resultGradient;
+
+            /**
+             * If shape outline rect is valid, convert the gradient into OBB mode by
+             * doing some magic conversions: we compensate non-uniform size of the shape
+             * by applying an additional pre-transform
+             */
+
+            QRadialGradient *rgradient = static_cast<QRadialGradient*>(resultGradient);
+
+            const qreal maxDimension = KisAlgebra2D::maxDimension(outlineRect);
+            const QRectF uniformSize(outlineRect.topLeft(), QSizeF(maxDimension, maxDimension));
+
+            const QTransform uniformizeTransform =
+                    QTransform::fromTranslate(-outlineRect.x(), -outlineRect.y()) *
+                    QTransform::fromScale(maxDimension / shape->outlineRect().width(),
+                                          maxDimension / shape->outlineRect().height()) *
+                    QTransform::fromTranslate(outlineRect.x(), outlineRect.y());
+
+            const QPointF centerLocal = transform->map(rgradient->center());
+            const QPointF focalLocal = transform->map(rgradient->focalPoint());
+
+            const QPointF centerOBB = KisAlgebra2D::absoluteToRelative(centerLocal, uniformSize);
+            const QPointF focalOBB = KisAlgebra2D::absoluteToRelative(focalLocal, uniformSize);
+
+            rgradient->setCenter(centerOBB);
+            rgradient->setFocalPoint(focalOBB);
+
+            const qreal centerRadiusOBB = KisAlgebra2D::absoluteToRelative(rgradient->centerRadius(), uniformSize);
+            const qreal focalRadiusOBB = KisAlgebra2D::absoluteToRelative(rgradient->focalRadius(), uniformSize);
+
+            rgradient->setCenterRadius(centerRadiusOBB);
+            rgradient->setFocalRadius(focalRadiusOBB);
+
+            rgradient->setCoordinateMode(QGradient::ObjectBoundingMode);
+
+            // Warning: should it really be pre-multiplication?
+            *transform = uniformizeTransform * gradient->transform();
         }
     }
 
@@ -1245,8 +1285,8 @@ void SvgParser::addToGroup(QList<KoShape*> shapes, KoShapeContainer *group)
     if (!group || shapes.isEmpty())
         return;
 
-    // not clipped, but inherit transform
-    KoShapeGroupCommand cmd(group, shapes, false, true, false);
+    // not normalized
+    KoShapeGroupCommand cmd(group, shapes, false);
     cmd.redo();
 }
 

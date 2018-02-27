@@ -1097,9 +1097,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
             abstract = info->aboutInfo("abstract");
         }
         if (!abstract.isEmpty() && options.storeMetaData) {
-            QString keywords = info->aboutInfo("keywords");
+            QString keywords = info->aboutInfo("keyword");
             if (!keywords.isEmpty()) {
-                abstract = abstract + "keywords: " + keywords;
+                abstract = abstract + " keywords: " + keywords;
             }
             fillText(texts + nbtexts, "Description", abstract);
             nbtexts++;

@@ -147,11 +147,11 @@ private:
     int computeAirbrushTimerInterval() const;
 
 private Q_SLOTS:
-
     void finishStroke();
     void doAirbrushing();
     void doAsynchronousUpdate(bool forceUpdate = false);
     void stabilizerPollAndPaint();
+    void slotSmoothingTypeChanged();
 
 private:
     struct Private;

@@ -649,7 +649,7 @@ void SvgTextEditor::alignJustified()
 
 void SvgTextEditor::setSettings()
 {
-    KoDialog settingsDialog;
+    KoDialog settingsDialog(this);
     Ui_WdgSvgTextSettings textSettings;
     QWidget *settingsPage = new QWidget(&settingsDialog, 0);
     settingsDialog.setMainWidget(settingsPage);
@@ -877,7 +877,7 @@ void SvgTextEditor::applySettings()
 {
     KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
 
-    EditorMode mode = (EditorMode)cfg.readEntry("EditorMode", (int)RichText);
+    EditorMode mode = (EditorMode)cfg.readEntry("EditorMode", (int)Both);
 
     QWidget *richTab = m_textEditorWidget.richTab;
     QWidget *svgTab = m_textEditorWidget.svgTab;

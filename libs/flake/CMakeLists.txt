@@ -78,6 +78,8 @@ set(kritaflake_SRCS
     KoHatchBackground.cpp
     KoPatternBackground.cpp
     KoVectorPatternBackground.cpp
+    KoShapeFillWrapper.cpp
+    KoShapeFillResourceConnector.cpp
     KoShapeConfigWidgetBase.cpp
     KoDrag.cpp
     KoSvgPaste.cpp

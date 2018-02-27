@@ -44,7 +44,14 @@ class KRITAUI_EXPORT KoFillConfigWidget : public QWidget
     };
 
 public:
-    explicit KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, QWidget *parent);
+
+    /**
+     * @param trackShapeSelection controls if the widget connects to the canvas's selectionChanged signal.
+     *                            If you decide to pass 'false', then don't forget to call
+     *                            forceUpdateOnSelectionChanged() manually of every selectionChanged() and
+     *                            selectionContentChanged() signals.
+     */
+    explicit KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVariant fillVariant, bool trackShapeSelection, QWidget *parent);
     ~KoFillConfigWidget() override;
 
     void setNoSelectionTrackingMode(bool value);
@@ -60,6 +67,8 @@ public:
 
     void activate();
     void deactivate();
+
+    void forceUpdateOnSelectionChanged();
 
 private Q_SLOTS:
     void styleButtonPressed(int buttonId);

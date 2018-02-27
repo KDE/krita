@@ -206,6 +206,8 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         canvas()->snapGuide()->addCustomSnapStrategy(d->angleSnapStrategy);
     }
 
+    d->dragStartPoint = event->point;
+
     if (d->angleSnapStrategy)
         d->angleSnapStrategy->setStartPoint(d->activePoint->point());
 }
@@ -220,6 +222,11 @@ bool KoCreatePathTool::pathStarted()
 {
     Q_D(KoCreatePathTool);
     return ((bool) d->shape);
+}
+
+bool KoCreatePathTool::tryMergeInPathShape(KoPathShape *pathShape)
+{
+    return addPathShapeImpl(pathShape, true);
 }
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -269,15 +276,18 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
     d->repaintActivePoint();
 
     if (event->buttons() & Qt::LeftButton) {
+        if (d->pointIsDragged ||
+            !handleGrabRect(d->dragStartPoint).contains(event->point)) {
 
-        d->pointIsDragged = true;
-        QPointF offset = snappedPosition - d->activePoint->point();
-        d->activePoint->setControlPoint2(d->activePoint->point() + offset);
-        // pressing <alt> stops controls points moving symmetrically
-        if ((event->modifiers() & Qt::AltModifier) == 0) {
-            d->activePoint->setControlPoint1(d->activePoint->point() - offset);
+            d->pointIsDragged = true;
+            QPointF offset = snappedPosition - d->activePoint->point();
+            d->activePoint->setControlPoint2(d->activePoint->point() + offset);
+            // pressing <alt> stops controls points moving symmetrically
+            if ((event->modifiers() & Qt::AltModifier) == 0) {
+                d->activePoint->setControlPoint1(d->activePoint->point() - offset);
+            }
+            d->repaintActivePoint();
         }
-        d->repaintActivePoint();
     } else {
         d->activePoint->setPoint(snappedPosition);
     }
@@ -424,7 +434,7 @@ void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
     }
 }
 
-void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
+bool KoCreatePathTool::addPathShapeImpl(KoPathShape *pathShape, bool tryMergeOnly)
 {
     Q_D(KoCreatePathTool);
 
@@ -445,22 +455,45 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
         }
     }
 
+    if (tryMergeOnly && !startShape && !endShape) {
+        return false;
+    }
+
     KUndo2Command *cmd = canvas()->shapeController()->addShape(pathShape, 0);
-    if (cmd) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(pathShape);
-        if (startShape) {
-            canvas()->shapeController()->removeShape(startShape, cmd);
-        }
-        if (endShape && startShape != endShape) {
-            canvas()->shapeController()->removeShape(endShape, cmd);
-        }
-        canvas()->addCommand(cmd);
-    } else {
+    KIS_SAFE_ASSERT_RECOVER(cmd) {
         canvas()->updateCanvas(pathShape->boundingRect());
         delete pathShape;
+        return true;
     }
+
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    selection->deselectAll();
+    selection->select(pathShape);
+
+    if (startShape) {
+        pathShape->setBackground(startShape->background());
+        pathShape->setStroke(startShape->stroke());
+    } else if (endShape) {
+        pathShape->setBackground(endShape->background());
+        pathShape->setStroke(endShape->stroke());
+    }
+
+
+    if (startShape) {
+        canvas()->shapeController()->removeShape(startShape, cmd);
+    }
+    if (endShape && startShape != endShape) {
+        canvas()->shapeController()->removeShape(endShape, cmd);
+    }
+    canvas()->addCommand(cmd);
+
+    return true;
+}
+
+
+void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
+{
+    addPathShapeImpl(pathShape, false);
 }
 
 QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()

@@ -13,7 +13,7 @@
    height="22"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.0 r15299"
+   inkscape:version="0.92.1 r15371"
    viewBox="0 0 22 22"
    sodipodi:docname="dark_gmic.svg">
   <defs
@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="16.3125"
-     inkscape:cx="12.821463"
+     inkscape:cx="2.4613097"
      inkscape:cy="10.578301"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -102,7 +102,30 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <dc:date>2017</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -150,7 +173,7 @@
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="M 19.171509,1042.3301 18,1041.3622 l -1.421587,0.537 0.558515,-1.4133 -0.950006,-1.1861 1.51669,0.094 0.834451,-1.27 0.378851,1.4716 1.465725,0.4012 -1.282547,0.815 z"
+       d="M 19.171509,1042.3301 18,1041.3622 l -1.421587,0.537 0.558515,-1.4133 -0.950007,-1.1861 1.516691,0.094 0.83445,-1.27 0.378852,1.4716 1.465725,0.4012 -1.282548,0.815 z"
        inkscape:transform-center-x="-0.11327126"
        inkscape:transform-center-y="-0.10290962" />
     <path

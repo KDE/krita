@@ -84,15 +84,15 @@ void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _
     QMutexLocker l(&m);
     for (typename QHash<const _T_*, WhatInfo >::iterator it = map.begin();
             it != map.end(); ++it) {
-        errKrita << "Object " << it.key() << "(" << it.value().name << ") is still referenced by " << it.value().infos.size() << " objects:";
+        qWarning() << "Object " << it.key() << "(" << it.value().name << ") is still referenced by " << it.value().infos.size() << " objects:";
         for (QHash<const void*, BacktraceInfo*>::iterator it2 = it.value().infos.begin();
                 it2 != it.value().infos.end(); ++it2) {
-            errKrita << "Referenced by " << it2.key() << " at:";
+            qWarning() << "Referenced by " << it2.key() << " at:";
 #ifdef HAVE_BACKTRACE_SUPPORT
             BacktraceInfo* info = it2.value();
             char** strings = backtrace_symbols(info->trace, info->size);
             for (int i = 0; i < info->size; ++i) {
-                errKrita << strings[i];
+                qWarning() << strings[i];
             }
             if (_delete) {
                 delete info;
@@ -100,10 +100,10 @@ void KisMemoryLeakTracker::Private::dumpReferencedObjectsAndDelete(QHash<const _
             }
 #else
             Q_UNUSED(_delete);
-            errKrita << "Enable backtrace support by running 'cmake -DHAVE_BACKTRACE_SUPPORT=ON'";
+            qWarning() << "Enable backtrace support by running 'cmake -DHAVE_BACKTRACE_SUPPORT=ON'";
 #endif
         }
-        errKrita << "=====";
+        qWarning() << "=====";
     }
 }
 
@@ -114,12 +114,12 @@ KisMemoryLeakTracker::KisMemoryLeakTracker() : d(new Private)
 KisMemoryLeakTracker::~KisMemoryLeakTracker()
 {
     if (d->whatWhoWhen.isEmpty()) {
-        dbgKrita << "No leak detected.";
+        qDebug() << "No leak detected.";
     } else {
-        errKrita << "****************************************";
-        errKrita << (d->whatWhoWhen.size()) << " leaks have been detected";
+        qWarning() << "****************************************";
+        qWarning() << (d->whatWhoWhen.size()) << " leaks have been detected";
         d->dumpReferencedObjectsAndDelete(d->whatWhoWhen, true);
-        errKrita << "****************************************";
+        qWarning() << "****************************************";
 #ifndef NDEBUG
         qFatal("Leaks have been detected... fix krita.");
 #endif
@@ -164,36 +164,36 @@ void KisMemoryLeakTracker::dereference(const void* what, const void* bywho)
 
 void KisMemoryLeakTracker::dumpReferences()
 {
-    errKrita << "****************************************";
-    errKrita << (d->whatWhoWhen.size()) << " objects are currently referenced";
+    qWarning() << "****************************************";
+    qWarning() << (d->whatWhoWhen.size()) << " objects are currently referenced";
     d->dumpReferencedObjectsAndDelete(d->whatWhoWhen, false);
-    errKrita << "****************************************";
+    qWarning() << "****************************************";
 }
 
 void KisMemoryLeakTracker::dumpReferences(const void* what)
 {
     QMutexLocker l(&d->m);
     if (!d->whatWhoWhen.contains(what)) {
-        errKrita << "Object " << what << " is not tracked";
+        qWarning() << "Object " << what << " is not tracked";
         return;
     }
 
     WhatInfo& info = d->whatWhoWhen[what];
-    dbgKrita << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
+    qDebug() << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
     for (QHash<const void*, BacktraceInfo*>::iterator it2 = info.infos.begin();
             it2 != info.infos.end(); ++it2) {
-        dbgKrita << "Referenced by " << it2.key() << " at:";
+        qDebug() << "Referenced by " << it2.key() << " at:";
 #ifdef HAVE_BACKTRACE_SUPPORT
         BacktraceInfo* info = it2.value();
         char** strings = backtrace_symbols(info->trace, info->size);
         for (int i = 0; i < info->size; ++i) {
-            dbgKrita << strings[i];
+            qDebug() << strings[i];
         }
 #else
-            dbgKrita << "Enable backtrace support in kis_memory_leak_tracker.cpp";
+            qDebug() << "Enable backtrace support in kis_memory_leak_tracker.cpp";
 #endif
     }
-    dbgKrita << "=====";
+    qDebug() << "=====";
 }
 
 #else

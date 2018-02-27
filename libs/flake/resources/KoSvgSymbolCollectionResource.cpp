@@ -48,7 +48,7 @@ void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &c
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
     Q_FOREACH (KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
-        if (!child->isVisible())
+        if (!child->isVisible(false))
             continue;
         KoShapeGroup *childGroup = dynamic_cast<KoShapeGroup*>(child);
         if (childGroup) {

@@ -149,16 +149,18 @@ KisPaintOpPresetSP KisPaintOpRegistry::defaultPreset(const KoID& id) const
     return preset;
 }
 
-QString KisPaintOpRegistry::pixmap(const KoID & id) const
+QIcon KisPaintOpRegistry::icon(const KoID &id) const
 {
     KisPaintOpFactory* f = value(id.id());
 
     if (!f) {
         dbgRegistry << "No paintop" << id.id() << "";
-        return "";
+        QPixmap p = QPixmap(22, 22);
+        p.fill(Qt::transparent);
+        return QIcon(p);
     }
 
-    return f->pixmap();
+    return f->icon();
 }
 
 QList<KoID> KisPaintOpRegistry::listKeys() const

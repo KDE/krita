@@ -42,6 +42,8 @@ class KRITAGLOBAL_EXPORT KisThreadSafeSignalCompressor : public QObject
 public:
     KisThreadSafeSignalCompressor(int delay, KisSignalCompressor::Mode mode);
 
+    bool isActive() const;
+
 public Q_SLOTS:
     void start();
     void stop();

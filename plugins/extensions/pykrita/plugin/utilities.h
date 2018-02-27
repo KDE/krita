@@ -213,22 +213,6 @@ public:
     PyObject* moduleImport(const char* moduleName);
 
     /**
-     * A void * for an arbitrary Qt/KDE object that has been wrapped by SIP. Nifty.
-     *
-     * @param o         The object to be unwrapped. The reference is borrowed.
-     */
-    void* objectUnwrap(PyObject* o);
-
-    /**
-     * A PyObject * for an arbitrary Qt/KDE object using SIP wrapping. Nifty.
-     *
-     * @param o         The object to be wrapped.
-     * @param className The full class name of o, e.g. "PyQt5.QtWidgets.QWidget".
-     * @return @c 0 or a new reference to the object.
-     */
-    PyObject* objectWrap(void* o, const QString& className);
-
-    /**
      * Add a given path to to the front of \c PYTHONPATH
      *
      * @param path      A string (path) to be added

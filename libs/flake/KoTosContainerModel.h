@@ -33,7 +33,6 @@ public:
     bool isClipped(const KoShape *shape) const override;
     void setInheritsTransform(const KoShape *shape, bool inherit) override;
     bool inheritsTransform(const KoShape *shape) const override;
-    bool isChildLocked(const KoShape *child) const override;
     int count() const override;
     QList<KoShape*> shapes() const override;
     void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;

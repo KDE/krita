@@ -23,6 +23,7 @@
 #include "kritaimage_export.h"
 #include <QObject>
 #include <QString>
+#include <QIcon>
 #include <QStringList>
 #include <kis_threaded_text_rendering_workaround.h>
 
@@ -75,11 +76,11 @@ public:
      */
     QStringList whiteListedCompositeOps() const;
 
-
     /**
-     * The filename of the pixmap we can use to represent this paintop in the ui.
+     * @brief icon
+     * @return the icon to represent this paintop.
      */
-    virtual QString pixmap();
+    virtual QIcon icon();
 
     /**
      * Create and return an settings object for this paintop.

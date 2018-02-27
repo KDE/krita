@@ -49,7 +49,7 @@ public:
 
     static const QString PARAM_PREFIX;
     static const QString PARAM_WIDTH_UNIT;
-    static const QString PARAM_HEIGTH_UNIT;
+    static const QString PARAM_HEIGHT_UNIT;
     static const QString PARAM_KEEP_AR;
     static const QString PARAM_KEEP_PROP;
 

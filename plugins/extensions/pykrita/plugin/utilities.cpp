@@ -37,6 +37,7 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
+#include <QFileInfo>
 
 #include <kconfigbase.h>
 #include <kconfiggroup.h>
@@ -122,19 +123,15 @@ namespace PyKrita
 
     void finalize() {
         dbgScript << "Going to destroy the Python engine";
+        if (pluginManagerInstance) {
+            pluginManagerInstance->unloadAllModules();
 
-        // Notify Python that engine going to die
-        {
-            PyKrita::Python py = PyKrita::Python();
-            py.functionCall("_pykritaUnloading");
+            PyKrita::Python::maybeFinalize();
+            PyKrita::Python::libraryUnload();
+
+            pluginManagerInstance.reset();
+            initStatus = INIT_UNINITIALIZED;
         }
-        pluginManagerInstance->unloadAllModules();
-
-        PyKrita::Python::maybeFinalize();
-        PyKrita::Python::libraryUnload();
-
-        pluginManagerInstance.reset();
-        initStatus = INIT_UNINITIALIZED;
     }
 
     namespace
@@ -262,16 +259,41 @@ bool Python::libraryLoad()
     // no-op on Windows
 #ifndef Q_OS_WIN
     if (!s_pythonLibrary) {
-        dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
-        s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
+
+        QFileInfo fi(PYKRITA_PYTHON_LIBRARY);
+        qDebug() << fi.canonicalFilePath() << fi.exists();
+        if (fi.exists()) {
+            qDebug() << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
+            s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
+        }
+        else {
+            QString libraryName = fi.fileName();
+            QString applicationRoot = KoResourcePaths::getApplicationRoot();
+            QStringList locations;
+            locations << applicationRoot + "/lib"
+                      << applicationRoot + "/lib64"
+                      << applicationRoot + "/lib/X64_86-linux-gnu";
+            Q_FOREACH(const QString &location, locations) {
+                QDir d(location);
+                QStringList entries = d.entryList(QStringList() << libraryName + "*");
+                qDebug() << entries;
+                Q_FOREACH(const QString &entry, entries) {
+                     QFileInfo fi2(location + "/" + entry);
+                     if (fi2.exists()) {
+                        s_pythonLibrary = new QLibrary(fi2.canonicalFilePath());
+                        break;
+                     }
+                }
+            }
+        }
         if (!s_pythonLibrary) {
-            errScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
+            qDebug() << "Could not create" << PYKRITA_PYTHON_LIBRARY;
             return false;
         }
 
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load()) {
-            errScript << QString("Could not load %1 -- Reason: %2").arg(PYKRITA_PYTHON_LIBRARY).arg(s_pythonLibrary->errorString());
+            qDebug() << QString("Could not load %1 -- Reason: %2").arg(s_pythonLibrary->fileName()).arg(s_pythonLibrary->errorString());
             return false;
         }
     }
@@ -282,20 +304,20 @@ bool Python::libraryLoad()
 namespace
 {
 
-QString findKritaPythonLibsPath()
+QString findKritaPythonLibsPath(const QString &libdir)
 {
     QDir rootDir(KoResourcePaths::getApplicationRoot());
     //Q_FOREACH (const QFileInfo &entry, rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs)) {
     Q_FOREACH (const QFileInfo &entry, rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot)) {
         QDir libDir(entry.absoluteFilePath());
-        if (libDir.cd("krita-python-libs")) {
+        if (libDir.cd(libdir)) {
             return libDir.absolutePath();
         } else {
             // Handle cases like Linux where libs are placed in a sub-dir
             // with the ABI name
             Q_FOREACH (const QFileInfo &subEntry, libDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
                 QDir subDir(subEntry.absoluteFilePath());
-                if (subDir.cd("krita-python-libs")) {
+                if (subDir.cd(libdir)) {
                     return subDir.absolutePath();
                 }
             }
@@ -315,18 +337,27 @@ bool Python::setPath(const QStringList& scriptPaths)
 #else
     constexpr char pathSeparator = ':';
 #endif
-    QString originalPaths;
+    QString originalPath;
     // Start with the script paths
     QStringList paths(scriptPaths);
 
     // Append the Krita libraries path
-    QString pythonLibsPath = findKritaPythonLibsPath();
+    QString pythonLibsPath = findKritaPythonLibsPath("krita-python-libs");
     if (pythonLibsPath.isEmpty()) {
-        errScript << "Cannot find krita-python-libs";
+        qDebug() << "Cannot find krita-python-libs";
         return false;
     }
-    dbgScript << "Found krita-python-libs at" << pythonLibsPath;
+    qDebug() << "Found krita-python-libs at" << pythonLibsPath;
     paths.append(pythonLibsPath);
+
+#ifdef Q_OS_LINUX
+    // Append the Krita libraries path
+    pythonLibsPath = findKritaPythonLibsPath("sip");
+    if (!pythonLibsPath.isEmpty()) {
+        qDebug() << "Found sip at" << pythonLibsPath;
+        paths.append(pythonLibsPath);
+    }
+#endif
 
 #ifdef Q_OS_WIN
     // Find embeddable Python at <root>/python
@@ -343,22 +374,41 @@ bool Python::setPath(const QStringList& scriptPaths)
         return false;
     }
 #else
-    // TODO: Handle embedded Python or virtualenv
     // If using a system Python install, respect the current PYTHONPATH
-    originalPaths = QString::fromLocal8Bit(qgetenv("PYTHONPATH"));
+    if (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita")) {
+        // We're running from an appimage, so we need our local python
+        QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
+        QString p2 = p.remove("lib").remove("m.so");
+        qDebug() << "\t" << p << p2;
+        originalPath = findKritaPythonLibsPath(p);
+        paths.append(originalPath + "/lib-dynload");
+        paths.append(originalPath + "/site-packages");
+        paths.append(originalPath + "/site-packages/PyQt5");
+    }
+    else {
+        // Use the system path
+        originalPath = QString::fromLocal8Bit(qgetenv("PYTHONPATH"));
+    }
 #endif
 
     QString joinedPaths = paths.join(pathSeparator);
-    if (!originalPaths.isEmpty()) {
-        joinedPaths = joinedPaths + pathSeparator + originalPaths;
+    if (!originalPath.isEmpty()) {
+        joinedPaths = joinedPaths + pathSeparator + originalPath;
     }
-    infoScript << "Setting python paths:" << joinedPaths;
+    qDebug() << "Setting python paths:" << joinedPaths;
 #ifdef Q_OS_WIN
     QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
     joinedPaths.toWCharArray(joinedPathsWChars.data());
     Py_SetPath(joinedPathsWChars.data());
 #else
-    qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
+    if (KoResourcePaths::getApplicationRoot().contains(".mount_Krita")) {
+        QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
+        joinedPaths.toWCharArray(joinedPathsWChars.data());
+        Py_SetPath(joinedPathsWChars.data());
+    }
+    else {
+        qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
+    }
 #endif
     isPythonPathSet = true;
     return true;
@@ -449,32 +499,6 @@ PyObject* Python::moduleImport(const char* const moduleName)
 
     traceback(QString("Could not import %1").arg(moduleName));
     return 0;
-}
-
-void* Python::objectUnwrap(PyObject* o)
-{
-    PyObject* const arguments = Py_BuildValue("(O)", o);
-    PyObject* const result = functionCall("unwrapinstance", "sip", arguments);
-    if (!result)
-        return 0;
-
-    void* const r = reinterpret_cast<void*>(ptrdiff_t(PyLong_AsLongLong(result)));
-    Py_DECREF(result);
-    return r;
-}
-
-PyObject* Python::objectWrap(void* const o, const QString& fullClassName)
-{
-    const QString classModuleName = fullClassName.section('.', 0, -2);
-    const QString className = fullClassName.section('.', -1);
-    PyObject* const classObject = itemString(PQ(className), PQ(classModuleName));
-    if (!classObject)
-        return 0;
-
-    PyObject* const arguments = Py_BuildValue("NO", PyLong_FromVoidPtr(o), classObject);
-    PyObject* const result = functionCall("wrapinstance", "sip", arguments);
-
-    return result;
 }
 
 // Inspired by http://www.gossamer-threads.com/lists/python/python/150924.

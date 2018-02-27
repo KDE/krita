@@ -61,7 +61,7 @@ public:
 
 private Q_SLOTS:
 
-    void setEnabled(bool);
+    void setHSVEnabled(bool);
 
 private:
 

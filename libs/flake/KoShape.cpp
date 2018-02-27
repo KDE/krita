@@ -697,6 +697,25 @@ bool KoShape::inheritsTransformFromAny(const QList<KoShape *> ancestorsInQuestio
     return result;
 }
 
+bool KoShape::hasCommonParent(const KoShape *shape) const
+{
+    const KoShape *thisShape = this;
+    while (thisShape) {
+
+        const KoShape *otherShape = shape;
+        while (otherShape) {
+            if (thisShape == otherShape) {
+                return true;
+            }
+            otherShape = otherShape->parent();
+        }
+
+        thisShape = thisShape->parent();
+    }
+
+    return false;
+}
+
 qint16 KoShape::zIndex() const
 {
     Q_D(const KoShape);
@@ -790,7 +809,7 @@ void KoShape::copySettings(const KoShape *shape)
     Q_FOREACH (const KoConnectionPoint &point, shape->connectionPoints())
         addConnectionPoint(point);
     d->zIndex = shape->zIndex();
-    d->visible = shape->isVisible();
+    d->visible = shape->isVisible(false);
 
     // Ensure printable is true by default
     if (!d->visible)
@@ -1168,11 +1187,11 @@ bool KoShape::isVisible(bool recursive) const
         return false;
 
     KoShapeContainer * parentShape = parent();
-    while (parentShape) {
-        if (! parentShape->isVisible())
-            return false;
-        parentShape = parentShape->parent();
+
+    if (parentShape) {
+        return parentShape->isVisible(true);
     }
+
     return true;
 }
 
@@ -1400,14 +1419,15 @@ void KoShape::waitUntilReady(const KoViewConverter &converter, bool asynchronous
     Q_UNUSED(asynchronous);
 }
 
-bool KoShape::isEditable() const
+bool KoShape::isShapeEditable(bool recursive) const
 {
     Q_D(const KoShape);
     if (!d->visible || d->geometryProtected)
         return false;
 
-    if (d->parent && d->parent->isChildLocked(this))
-        return false;
+    if (recursive && d->parent) {
+        return d->parent->isShapeEditable(true);
+    }
 
     return true;
 }

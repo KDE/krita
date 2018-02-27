@@ -190,7 +190,7 @@ MTF_MIRROR_HORZ    0x00000001
 MTF_MIRROR_VERT    0x00000002
 
 FIXME: Check the details here.
-MTF_MIRROR_NONE    The picture is not mirrored in any direction. 
+MTF_MIRROR_NONE    The picture is not mirrored in any direction.
 
 MTF_MIRROR_HORZ    The picture should be drawn mirrored horizontally,
                    i.e. mirrored in the center line of the picture
@@ -207,7 +207,7 @@ same.
 2.2 SVM Objects
 ---------------
 
-This section specifies the objects used in SVM files. 
+This section specifies the objects used in SVM files.
 
 
 2.2.1 Primitive Data Types
@@ -381,7 +381,7 @@ uint16          emphasis
 uint16          overline
 
 version         Version and size of the font record, excluding the
-                VersionCompat object. 
+                VersionCompat object.
 
 FIXME: Describe the following parts in detail
 family
@@ -514,10 +514,10 @@ uint32          colorData
 bool            isSet
 
 colorData       The color of the brush, in RGB format
-                (... QColor::fromRgb format) 
+                (... QColor::fromRgb format)
 
-isSet           Specifies whether the color should be be applied
-                (true), or if the brush should be hidden (false) 
+isSet           Specifies whether the color should be applied
+                (true), or if the brush should be hidden (false)
 
 
 2.3.2.3 META_MAPMODE_ACTION (137)
@@ -553,7 +553,7 @@ This action sets the current text language in the graphics context.
 
 uint16          languageType
 
-languageType    It is a decimal code that specifies the language. 
+languageType    It is a decimal code that specifies the language.
                 It is described in i18npool/inc/i18npool/lang.h
                 FIXME: Add these language codes to the enums in 2.1.1
 
@@ -674,7 +674,7 @@ dxArray         An array of character offsets for the characters in
 2.3.4 Unsorted Action Types
 - - - - - - - - - - - - - -
 
-These action types have so far not being sorted into any other type. 
+These action types have so far not being sorted into any other type.
 
  META_PIXEL_ACTION
  META_POINT_ACTION
@@ -732,7 +732,7 @@ tools/inc/tools/fontenum.hxx    Enums for fonts
                                 FontWeight, FontWidth, FontItalic,
                                 FontUnderLine, FontStrikeout,
                                 FontEmphasisMark (#defines instead of enum),
-                                FontType, FontEmbeddedBitmap, FontAntiAlias 
+                                FontType, FontEmbeddedBitmap, FontAntiAlias
 
 vcl/inc/vcl/gdimtf.hxx		The main GDI file object
 vcl/source/gdi/gdimtf.cxx

@@ -2608,7 +2608,7 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
         return;
     }
 
-    printf("Procesing content.xml....\n");
+    printf("Processing content.xml....\n");
 
     QString errorMsg;
     int errorLine = 0;

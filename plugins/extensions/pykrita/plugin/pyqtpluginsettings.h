@@ -48,8 +48,14 @@ public Q_SLOTS:
 Q_SIGNALS:
     void settingsChanged() const;
 
+private Q_SLOTS:
+
+    void updateManual(const QModelIndex &index);
+
 private:
-    Ui::ManagerPage *m_manager;
+    PythonPluginManager *m_pluginManager;
+    Ui::ManagerPage *m_page;
+
 };
 
 

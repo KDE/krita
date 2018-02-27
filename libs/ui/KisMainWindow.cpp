@@ -185,6 +185,7 @@ public:
     {
         if (id.isNull()) this->id = QUuid::createUuid();
         mdiArea->setTabsMovable(true);
+        mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
 
     ~Private() {

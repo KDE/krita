@@ -380,7 +380,7 @@ public:
      * Set the locked status of this node. Locked nodes cannot be
      * edited.
      */
-    void setUserLocked(bool l);
+    virtual void setUserLocked(bool l);
 
     /**
      * @return true if the node can be edited:

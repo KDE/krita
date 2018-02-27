@@ -24,6 +24,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <brushengine/kis_paintop_factory.h>
 #include <KoResourcePaths.h>
+#include <QIcon>
 
 
 
@@ -57,19 +58,12 @@ QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
 void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
 {
     Q_FOREACH (KisPaintOpFactory *factory, list) {
-        QString fileName = KoResourcePaths::findResource("kis_images", factory->pixmap());
-        QPixmap pixmap(fileName);
-
-        if(pixmap.isNull()){
-            pixmap = QPixmap(22,22);
-            pixmap.fill();
-        }
 
         categoriesMapper()->addEntry(factory->category(),
                                      KisPaintOpInfo(factory->id(),
                                                     factory->name(),
                                                     factory->category(),
-                                                    pixmap,
+                                                    factory->icon(),
                                                     factory->priority()));
     }
     categoriesMapper()->expandAllCategories();

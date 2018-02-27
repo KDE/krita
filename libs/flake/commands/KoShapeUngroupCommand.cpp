@@ -19,66 +19,104 @@
  */
 
 #include "KoShapeUngroupCommand.h"
-#include "KoShapeGroupCommand_p.h"
 #include "KoShapeContainer.h"
+#include "KoShapeReorderCommand.h"
 
 #include <klocalizedstring.h>
+#include "kis_assert.h"
+
+
+struct KoShapeUngroupCommand::Private
+{
+    Private(KoShapeContainer *_container,
+            const QList<KoShape *> &_shapes,
+            const QList<KoShape*> &_topLevelShapes)
+        : container(_container),
+          shapes(_shapes),
+          topLevelShapes(_topLevelShapes)
+    {
+        std::stable_sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        std::sort(topLevelShapes.begin(), topLevelShapes.end(), KoShape::compareShapeZIndex);
+    }
+
+
+    KoShapeContainer *container;
+    QList<KoShape*> shapes;
+    QList<KoShape*> topLevelShapes;
+    QScopedPointer<KUndo2Command> shapesReorderCommand;
+
+};
 
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-        const QList<KoShape*> &topLevelShapes, KUndo2Command *parent)
-    : KoShapeGroupCommand(*(new KoShapeGroupCommandPrivate(container,
-                                                           shapes,
-                                                           QList<bool>(),
-                                                           QList<bool>(),
-                                                           false)), parent)
+                                             const QList<KoShape*> &topLevelShapes, KUndo2Command *parent)
+    : KUndo2Command(parent),
+      m_d(new Private(container, shapes, topLevelShapes))
 {
-    QList<KoShape*> orderdShapes(shapes);
-    std::sort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
-    d->shapes = orderdShapes;
-
-    QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->shapes(): topLevelShapes;
-    if (ancestors.count()) {
-        std::sort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
-        QList<KoShape*>::const_iterator it(std::find(ancestors.constBegin(), ancestors.constEnd(), d->container));
-
-        Q_ASSERT(it != ancestors.constEnd());
-        for (; it != ancestors.constEnd(); ++it) {
-            d->oldAncestorsZIndex.append(QPair<KoShape*, int>(*it, (*it)->zIndex()));
-        }
-    }
-
-    int zIndex = d->container->zIndex();
-    Q_FOREACH (KoShape *shape, d->shapes) {
-        d->clipped.append(d->container->isClipped(shape));
-        d->oldParents.append(d->container->parent());
-        d->oldClipped.append(d->container->isClipped(shape));
-        d->oldInheritTransform.append(shape->parent() && shape->parent()->inheritsTransform(shape));
-        d->inheritTransform.append(d->container->inheritsTransform(shape));
-        // TODO this might also need to change the children of the parent but that is very problematic if the parent is 0
-        d->oldZIndex.append(zIndex++);
-    }
-    d->shouldNormalize = false;
-
     setText(kundo2_i18n("Ungroup shapes"));
+}
+
+KoShapeUngroupCommand::~KoShapeUngroupCommand()
+{
 }
 
 void KoShapeUngroupCommand::redo()
 {
-    KoShapeGroupCommand::undo();
-    if (d->oldAncestorsZIndex.count()) {
-        int zIndex = d->container->zIndex() + d->oldZIndex.count() - 1;
-        for (QList<QPair<KoShape*, int> >::const_iterator it(d->oldAncestorsZIndex.constBegin()); it != d->oldAncestorsZIndex.constEnd(); ++it) {
-            it->first->setZIndex(zIndex++);
-        }
+    using IndexedShape = KoShapeReorderCommand::IndexedShape;
+
+    KoShapeContainer *newParent = m_d->container->parent();
+
+    QList<IndexedShape> indexedSiblings;
+    QList<KoShape*> perspectiveSiblings;
+
+    if (newParent) {
+        perspectiveSiblings = newParent->shapes();
+        std::sort(perspectiveSiblings.begin(), perspectiveSiblings.end(), KoShape::compareShapeZIndex);
+    } else {
+        perspectiveSiblings = m_d->topLevelShapes;
+    }
+
+    Q_FOREACH (KoShape *shape, perspectiveSiblings) {
+        indexedSiblings.append(shape);
+    }
+
+    // find the place where the ungrouped shapes should be inserted
+    // (right on the top of their current container)
+    auto insertIt = std::upper_bound(indexedSiblings.begin(),
+                                     indexedSiblings.end(),
+                                     IndexedShape(m_d->container));
+
+    std::copy(m_d->shapes.begin(), m_d->shapes.end(),
+              std::inserter(indexedSiblings, insertIt));
+
+    indexedSiblings = KoShapeReorderCommand::homogenizeZIndexesLazy(indexedSiblings);
+
+    const QTransform ungroupTransform = m_d->container->absoluteTransformation(0);
+    for (auto it = m_d->shapes.begin(); it != m_d->shapes.end(); ++it) {
+        KoShape *shape = *it;
+        KIS_SAFE_ASSERT_RECOVER(shape->parent() == m_d->container) { continue; }
+
+        shape->setParent(newParent);
+        shape->applyAbsoluteTransformation(ungroupTransform);
+    }
+
+    if (!indexedSiblings.isEmpty()) {
+        m_d->shapesReorderCommand.reset(new KoShapeReorderCommand(indexedSiblings));
+        m_d->shapesReorderCommand->redo();
     }
 }
 
 void KoShapeUngroupCommand::undo()
 {
-    KoShapeGroupCommand::redo();
-    if (d->oldAncestorsZIndex.count()) {
-        for (QList<QPair<KoShape*, int> >::const_iterator it(d->oldAncestorsZIndex.constBegin()); it != d->oldAncestorsZIndex.constEnd(); ++it) {
-            it->first->setZIndex(it->second);
-        }
+    const QTransform groupTransform = m_d->container->absoluteTransformation(0).inverted();
+    for (auto it = m_d->shapes.begin(); it != m_d->shapes.end(); ++it) {
+        KoShape *shape = *it;
+
+        shape->setParent(m_d->container);
+        shape->applyAbsoluteTransformation(groupTransform);
+    }
+
+    if (m_d->shapesReorderCommand) {
+        m_d->shapesReorderCommand->undo();
+        m_d->shapesReorderCommand.reset();
     }
 }

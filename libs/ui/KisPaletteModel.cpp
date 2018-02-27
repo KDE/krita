@@ -275,7 +275,7 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
     if (colorSet()->nColors()==0) {
         return index;
     }
-    if (i > colorSet()->nColors()) {
+    if (i > (int)colorSet()->nColors()) {
         qWarning()<<"index is too big"<<i<<"/"<<colorSet()->nColors();
         index = this->index(0,0);
     }
@@ -292,19 +292,19 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
         }
         int totalIndexes = colorSet()->nColorsGroup();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
-            if (i+1<=totalIndexes+colorSet()->nColorsGroup(groupName) && i+1>totalIndexes) {
-                int col = (i-totalIndexes)%columnCount();
-                int row = rowstotal+1+((i-totalIndexes)/columnCount());
+            if (i + 1 <= (int)(totalIndexes + colorSet()->nColorsGroup(groupName)) && i + 1 > (int)totalIndexes) {
+                int col = (i - totalIndexes) % columnCount();
+                int row = rowstotal + 1 + ((i - totalIndexes) / columnCount());
                 index = this->index(row, col);
                 return index;
             } else {
-                rowstotal += 1+m_colorSet->nColorsGroup(groupName)/columnCount();
+                rowstotal += 1 + m_colorSet->nColorsGroup(groupName) / columnCount();
                 totalIndexes += colorSet()->nColorsGroup(groupName);
                 if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
-                    rowstotal+=1;
+                    rowstotal += 1;
                 }
                 if (m_colorSet->nColorsGroup(groupName)==0) {
-                    rowstotal+=1; //always add one for the group when considering groups.
+                    rowstotal += 1; //always add one for the group when considering groups.
                 }
             }
         }
@@ -359,17 +359,17 @@ bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
 {
     int col = m_colorSet->nColorsGroup(groupName)%columnCount();
     QModelIndex i = getLastEntryIndex();
-    if (col+1>columnCount()) {
+    if (col+1 > columnCount()) {
         beginInsertRows(QModelIndex(), i.row(), i.row()+1);
     }
-    if (m_colorSet->nColors()<columnCount()) {
+    if ((int)m_colorSet->nColors() < columnCount()) {
         beginInsertColumns(QModelIndex(), m_colorSet->nColors(), m_colorSet->nColors()+1);
     }
     m_colorSet->add(entry, groupName);
-    if (col+1>columnCount()) {
+    if (col + 1 > columnCount()) {
         endInsertRows();
     }
-    if (m_colorSet->nColors()<columnCount()) {
+    if (m_colorSet->nColors() < (quint32)columnCount()) {
         endInsertColumns();
     }
     return true;

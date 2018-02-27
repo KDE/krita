@@ -13,7 +13,7 @@
    width="22"
    height="22"
    id="svg6190"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="dark_animation_stop.svg"
    inkscape:export-filename="../light_animation_play.png"
    inkscape:export-xdpi="90"
@@ -27,12 +27,12 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1878"
-     inkscape:window-height="1048"
+     inkscape:window-width="1884"
+     inkscape:window-height="1051"
      id="namedview4440"
      showgrid="true"
      inkscape:zoom="21.454545"
-     inkscape:cx="6.1391482"
+     inkscape:cx="-9.521869"
      inkscape:cy="16.661163"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -53,7 +53,30 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <dc:date>2015</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Timothée Giet</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <defs

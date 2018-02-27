@@ -1,0 +1,37 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="dark_hairybrush.svg">dark_bristlebrush.svg</file>
+        <file alias="dark_duplicate.svg">dark_clonebrush.svg</file>
+        <file>dark_colorsmudge.svg</file>
+        <file>dark_curvebrush.svg</file>
+        <file>dark_deformbrush.svg</file>
+        <file>dark_dynabrush.svg</file>
+        <file alias="dark_filter.svg">dark_filterbrush.svg</file>
+        <file>dark_gridbrush.svg</file>
+        <file>dark_hatchingbrush.svg</file>
+        <file>dark_particlebrush.svg</file>
+        <file alias="dark_paintbrush.svg">dark_pixelbrush.svg</file>
+        <file alias="dark_roundmarker.svg">dark_quickbrush.svg</file>
+        <file alias="dark_experimentbrush.svg">dark_shapebrush.svg</file>
+        <file>dark_sketchbrush.svg</file>
+        <file>dark_spraybrush.svg</file>
+        <file>dark_tangentnormal.svg</file>
+        <file alias="light_hairybrush.svg">light_bristlebrush.svg</file>
+        <file alias="light_duplicate.svg">light_clonebrush.svg</file>
+        <file>light_colorsmudge.svg</file>
+        <file>light_curvebrush.svg</file>
+        <file>light_deformbrush.svg</file>
+        <file>light_dynabrush.svg</file>
+        <file alias="light_filter.svg">light_filterbrush.svg</file>
+        <file>light_gridbrush.svg</file>
+        <file>light_hatchingbrush.svg</file>
+        <file>light_particlebrush.svg</file>
+        <file alias="light_paintbrush.svg">light_pixelbrush.svg</file>
+        <file alias="light_roundmarker.svg">light_quickbrush.svg</file>
+        <file alias="light_experimentbrush.svg">light_shapebrush.svg</file>
+        <file>light_sketchbrush.svg</file>
+        <file>light_spraybrush.svg</file>
+        <file>light_tangentnormal.svg</file>
+    </qresource>
+</RCC>

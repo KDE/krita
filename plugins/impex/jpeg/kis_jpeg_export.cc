@@ -135,9 +135,9 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
             description = document->documentInfo()->aboutInfo("abstract");
         }
         if (!description.isEmpty()) {
-            QString keywords = document->documentInfo()->aboutInfo("keywords");
+            QString keywords = document->documentInfo()->aboutInfo("keyword");
             if (!keywords.isEmpty()) {
-                description = description + "keywords: " + keywords;
+                description = description + " keywords: " + keywords;
             }
             if (eI->containsEntry("description")) {
                 eI->removeEntry("description");
@@ -145,7 +145,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
             eI->addEntry(KisMetaData::Entry(dcSchema, "description", KisMetaData::Value(QVariant(description))));
         }
         QString license = document->documentInfo()->aboutInfo("license");
-        if (!title.isEmpty()) {
+        if (!license.isEmpty()) {
             if (eI->containsEntry("rights")) {
                 eI->removeEntry("rights");
             }

@@ -35,6 +35,8 @@
 
 #include "kis_filter_strategy.h"
 
+#include "kis_layer_utils.h"
+
 
 void testMergeDownImpl(bool useImageTransformations)
 {
@@ -97,8 +99,7 @@ void testMergeDownImpl(bool useImageTransformations)
     shapeLayer1->setDirty();
     shapeLayer2->setDirty();
 
-    qApp->processEvents();
-    p.image->waitForDone();
+    p.waitForImageAndShapeLayers();
 
     QCOMPARE(int(p.image->root()->childCount()), 3);
 
@@ -108,18 +109,13 @@ void testMergeDownImpl(bool useImageTransformations)
 
         KisFilterStrategy *strategy = new KisBilinearFilterStrategy();
         p.image->scaleImage(QSize(32, 32), p.image->xRes(), p.image->yRes(), strategy);
-
-        qApp->processEvents();
-        p.image->waitForDone();
-        qApp->processEvents();
+        p.waitForImageAndShapeLayers();
 
         chk.checkImage(p.image, "01_after_scale_down");
     }
 
     p.image->mergeDown(shapeLayer2, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-    qApp->processEvents();
-    p.image->waitForDone();
-    qApp->processEvents();
+    p.waitForImageAndShapeLayers();
 
     QCOMPARE(int(p.image->root()->childCount()), 2);
 
@@ -130,6 +126,8 @@ void testMergeDownImpl(bool useImageTransformations)
     QVERIFY(newShapeLayer != shapeLayer2.data());
 
     chk.checkImage(p.image, "02_after_merge_down");
+
+    QVERIFY(chk.testPassed());
 }
 
 void KisShapeLayerTest::testMergeDown()
@@ -279,8 +277,7 @@ void KisShapeLayerTest::testCloneScaledLayer()
     p.image->addNode(shapeLayer1);
     shapeLayer1->setDirty();
 
-    qApp->processEvents();
-    p.image->waitForDone();
+    p.waitForImageAndShapeLayers();
 
     QCOMPARE(int(p.image->root()->childCount()), 2);
 
@@ -290,9 +287,7 @@ void KisShapeLayerTest::testCloneScaledLayer()
 
         KisFilterStrategy *strategy = new KisBilinearFilterStrategy();
         p.image->scaleImage(QSize(32, 32), p.image->xRes(), p.image->yRes(), strategy);
-
-        qApp->processEvents();
-        p.image->waitForDone();
+        p.waitForImageAndShapeLayers();
 
         chk.checkImage(p.image, "01_after_scale_down");
     }
@@ -303,11 +298,12 @@ void KisShapeLayerTest::testCloneScaledLayer()
     p.image->addNode(clonedLayer);
     clonedLayer->setDirty();
 
-    qApp->processEvents();
-    p.image->waitForDone();
+    p.waitForImageAndShapeLayers();
 
     QCOMPARE(int(p.image->root()->childCount()), 2);
     chk.checkImage(p.image, "01_after_scale_down");
+
+    QVERIFY(chk.testPassed());
 }
 
 QTEST_MAIN(KisShapeLayerTest)

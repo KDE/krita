@@ -33,7 +33,6 @@
 #include <KoDocumentInfo.h>
 #include <KoDpi.h>
 #include <KoUnit.h>
-#include <KoFileDialog.h>
 #include <KoID.h>
 #include <KoOdfReadStore.h>
 #include <KoProgressProxy.h>
@@ -487,13 +486,13 @@ KisDocument::~KisDocument()
 
         KisImageWSP sanityCheckPointer = d->image;
         Q_UNUSED(sanityCheckPointer);
+
         // The following line trigger the deletion of the image
         d->image.clear();
 
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-
 
     delete d;
 }
@@ -1541,9 +1540,6 @@ bool KisDocument::newImage(const QString& name,
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
-    if (name != i18n("Unnamed") && !name.isEmpty()) {
-        setUrl(QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation) + '/' + name + ".kra"));
-    }
     documentInfo()->setAboutInfo("abstract", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
@@ -1597,8 +1593,10 @@ bool KisDocument::isSaving() const
 
 void KisDocument::waitForSavingToComplete()
 {
-    KisAsyncActionFeedback f(i18nc("progress dialog message when the user closes the document that is being saved", "Waiting for saving to complete..."), 0);
-    f.waitForMutex(&d->savingMutex);
+    if (isSaving()) {
+        KisAsyncActionFeedback f(i18nc("progress dialog message when the user closes the document that is being saved", "Waiting for saving to complete..."), 0);
+        f.waitForMutex(&d->savingMutex);
+    }
 }
 
 KoShapeBasedDocumentBase *KisDocument::shapeController() const

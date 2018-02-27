@@ -36,6 +36,10 @@ KoShapeReorderCommand::IndexedShape::IndexedShape(KoShape *_shape)
 {
 }
 
+bool KoShapeReorderCommand::IndexedShape::operator<(const KoShapeReorderCommand::IndexedShape &rhs) const
+{
+    return zIndex < rhs.zIndex;
+}
 
 class KoShapeReorderCommandPrivate
 {
@@ -249,10 +253,8 @@ KoShapeReorderCommand *KoShapeReorderCommand::mergeInShape(QList<KoShape *> shap
     return !reindexedShapes.isEmpty() ? new KoShapeReorderCommand(reindexedShapes, reindexedIndexes, parent) : 0;
 }
 
-namespace {
-
 QList<KoShapeReorderCommand::IndexedShape>
-homogenizeZIndexes(QList<KoShapeReorderCommand::IndexedShape> shapes)
+KoShapeReorderCommand::homogenizeZIndexes(QList<KoShapeReorderCommand::IndexedShape> shapes)
 {
     if (shapes.isEmpty()) return shapes;
 
@@ -291,6 +293,20 @@ homogenizeZIndexes(QList<KoShapeReorderCommand::IndexedShape> shapes)
     return shapes;
 }
 
+QList<KoShapeReorderCommand::IndexedShape>
+KoShapeReorderCommand::homogenizeZIndexesLazy(QList<KoShapeReorderCommand::IndexedShape> shapes)
+{
+    shapes = homogenizeZIndexes(shapes);
+    // remove shapes that didn't change
+    for (auto it = shapes.begin(); it != shapes.end();) {
+        if (it->zIndex == it->shape->zIndex()) {
+            it = shapes.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    return shapes;
 }
 
 QList<KoShapeReorderCommand::IndexedShape>
@@ -308,16 +324,11 @@ KoShapeReorderCommand::mergeDownShapes(QList<KoShape *> shapesBelow, QList<KoSha
         shapes.append(IndexedShape(shape));
     }
 
-    shapes = homogenizeZIndexes(shapes);
+    return homogenizeZIndexesLazy(shapes);
+}
 
-    // remove shapes that didn't change
-    for (auto it = shapes.begin(); it != shapes.end();) {
-        if (it->zIndex == it->shape->zIndex()) {
-            it = shapes.erase(it);
-        } else {
-            ++it;
-        }
-    }
-
-    return shapes;
+QDebug operator<<(QDebug dbg, const KoShapeReorderCommand::IndexedShape &indexedShape)
+{
+    dbg.nospace() << "IndexedShape (" << indexedShape.shape << ", " << indexedShape.zIndex << ")";
+    return dbg.space();
 }

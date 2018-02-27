@@ -55,7 +55,7 @@ void KisGridManager::setGridConfig(const KisGridConfig &config)
     setGridConfigImpl(config, true);
 }
 
-void KisGridManager::setGridConfigImpl(const KisGridConfig &config, bool emitModified)
+void KisGridManager::setGridConfigImpl(const KisGridConfig &config, bool /*emitModified*/)
 {
     if (!m_imageView) return;
 

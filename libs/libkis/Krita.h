@@ -214,9 +214,25 @@ public Q_SLOTS:
 
 
     /**
-     * @brief createDocument creates a new document and image and registers the document with the Krita application.
+     * @brief createDocument creates a new document and image and registers
+     * the document with the Krita application.
+     *
+     * Unless you explicitly call Document::close() the document wil remain
+     * known to the Krita document registry. The document and its image will
+     * only be deleted when Krita exits.
      *
      * The document will have one transparent layer.
+     *
+     * To create a new document and show it, do something like:
+@code
+from Krita import *
+
+def add_document_to_window():
+    d = Application.createDocument(100, 100, "Test", "RGBA", "U8", "", 120.0)
+    Application.activeWindow().addView(d)
+
+add_document_to_window()
+@endcode
      *
      * @param width the width in pixels
      * @param height the height in pixels
@@ -240,9 +256,10 @@ public Q_SLOTS:
      * </ul>
      * @param profile The name of an icc profile that is known to Krita. If an empty string is passed, the default is
      * taken.
+     * @param resolution the resolution in points per inch.
      * @return the created document.
      */
-    Document *createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile);
+    Document *createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution);
 
     /**
      * @brief openDocument creates a new Document, registers it with the Krita application and loads the given file.

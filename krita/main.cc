@@ -30,7 +30,7 @@
 #include <QDate>
 #include <QLocale>
 #include <QSettings>
-#include <QMessageBox>
+#include <QByteArray>
 
 #include <time.h>
 
@@ -54,6 +54,7 @@
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
 #include <kis_config.h>
+#include <QLibrary>
 
 #elif defined HAVE_X11
 #include <kis_tablet_support_x11.h>
@@ -87,6 +88,33 @@ void tryInitDrMingw()
     QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
     myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
 }
+
+typedef enum ORIENTATION_PREFERENCE {
+    ORIENTATION_PREFERENCE_NONE = 0x0,
+    ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
+    ORIENTATION_PREFERENCE_PORTRAIT = 0x2,
+    ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
+    ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
+} ORIENTATION_PREFERENCE;
+typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
+    ORIENTATION_PREFERENCE orientation
+);
+void resetRotation()
+{
+    QLibrary user32Lib("user32");
+    if (!user32Lib.load()) {
+        qWarning() << "Failed to load user32.dll! This really should not happen.";
+        return;
+    }
+    pSetDisplayAutoRotationPreferences_t pSetDisplayAutoRotationPreferences
+            = reinterpret_cast<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
+    if (!pSetDisplayAutoRotationPreferences) {
+        qDebug() << "Failed to load function SetDisplayAutoRotationPreferences";
+        return;
+    }
+    bool result = pSetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE);
+    qDebug() << "SetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE) returned" << result;
+}
 } // namespace
 #endif
 extern "C" int main(int argc, char **argv)
@@ -110,6 +138,10 @@ extern "C" int main(int argc, char **argv)
 
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
+
+#if QT_VERSION >= 0x050900
+    QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
+#endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
@@ -146,7 +178,11 @@ extern "C" int main(int argc, char **argv)
         qputenv("QT_ANGLE_PLATFORM", "d3d11");
 
         // Probe QPA auto OpenGL detection
-        KisOpenGL::probeWindowsQpaOpenGL(argc, argv, preferredOpenGLRenderer);
+        char *fakeArgv[2] = { argv[0], nullptr }; // Prevents QCoreApplication from modifying the real argc/argv
+        KisOpenGL::probeWindowsQpaOpenGL(1, fakeArgv, preferredOpenGLRenderer);
+
+        // HACK: https://bugs.kde.org/show_bug.cgi?id=390651
+        resetRotation();
 #endif
     }
 
@@ -156,12 +192,14 @@ extern "C" int main(int argc, char **argv)
     KisApplication app(key, argc, argv);
 
 #ifdef Q_OS_LINUX
-    // We must have the XDG environment to run.
-    if (qgetenv("XDG_DATA_DIRS").isEmpty()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("XDG_DATA_DIRS is not set. Krita cannot run."));
-        return 1;
+    {
+        QByteArray originalXdgDataDirs = qgetenv("XDG_DATA_DIRS");
+        if (originalXdgDataDirs.isEmpty()) {
+            // We don't want to completely override the default
+            originalXdgDataDirs = "/usr/local/share/:/usr/share/";
+        }
+        qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + originalXdgDataDirs);
     }
-    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share"));
 #endif

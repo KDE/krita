@@ -202,10 +202,6 @@ public:
         return false;
     }// ignored
     /// reimplemented
-    bool isChildLocked(const KoShape *child) const override {
-        return child->isGeometryProtected();
-    }
-    /// reimplemented
     int count() const override {
         return m_children.count();
     }

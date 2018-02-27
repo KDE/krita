@@ -50,6 +50,7 @@ namespace KisLayerUtils
      *       to any layer in \p nodes of their children.
      */
     KRITAIMAGE_EXPORT bool checkIsCloneOf(KisNodeSP node, const KisNodeList &nodes);
+    KRITAIMAGE_EXPORT void forceAllDelayedNodesUpdate(KisNodeSP root);
 
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 

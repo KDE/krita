@@ -186,12 +186,6 @@ bool ShrinkToFitShapeContainerModel::inheritsTransform(const KoShape *child) con
     return true;
 }
 
-bool ShrinkToFitShapeContainerModel::isChildLocked(const KoShape *child) const
-{
-    Q_ASSERT(child == d->childShape); Q_UNUSED(child);
-    return true;
-}
-
 bool ShrinkToFitShapeContainerModel::isClipped(const KoShape *child) const
 {
     Q_ASSERT(child == d->childShape); Q_UNUSED(child);

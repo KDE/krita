@@ -19,95 +19,72 @@
  */
 
 #include "KoShapeGroupCommand.h"
-#include "KoShapeGroupCommand_p.h"
 #include "KoShape.h"
 #include "KoShapeGroup.h"
 #include "KoShapeContainer.h"
 
+#include <commands/KoShapeReorderCommand.h>
+
 #include <klocalizedstring.h>
 
 // static
-KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
+KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, bool shouldNormalize)
 {
     QList<KoShape*> orderedShapes(shapes);
-    std::sort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
     if (!orderedShapes.isEmpty()) {
         KoShape * top = orderedShapes.last();
         container->setParent(top->parent());
         container->setZIndex(top->zIndex());
     }
 
-    return new KoShapeGroupCommand(container, orderedShapes, parent);
+    return new KoShapeGroupCommand(container, orderedShapes, shouldNormalize, 0);
 }
 
-KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, const QList<bool> &clip, const QList<bool> &it, bool _shouldNormalize)
+class KoShapeGroupCommandPrivate
+{
+public:
+    KoShapeGroupCommandPrivate(KoShapeContainer *container, const QList<KoShape *> &shapes, bool _shouldNormalize);
+    QRectF containerBoundingRect();
+
+    QList<KoShape*> shapes; ///<list of shapes to be grouped
+    bool shouldNormalize; ///< Adjust the coordinate system of the group to its origin into the topleft of the group
+    KoShapeContainer *container; ///< the container where the grouping should be for.
+    QList<KoShapeContainer*> oldParents; ///< the old parents of the shapes
+
+    QScopedPointer<KUndo2Command> shapesReorderCommand;
+};
+
+KoShapeGroupCommandPrivate::KoShapeGroupCommandPrivate(KoShapeContainer *c, const QList<KoShape *> &s, bool _shouldNormalize)
     : shapes(s),
-    clipped(clip),
-    inheritTransform(it),
-    shouldNormalize(_shouldNormalize),
-    container(c)
-
+      shouldNormalize(_shouldNormalize),
+      container(c)
 {
-}
-
-
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, const QList<bool> &clipped, const QList<bool> &inheritTransform, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes, clipped, inheritTransform, true))
-{
-    Q_ASSERT(d->clipped.count() == d->shapes.count());
-    Q_ASSERT(d->inheritTransform.count() == d->shapes.count());
-    d->init(this);
+    std::stable_sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 }
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), true))
+    : KoShapeGroupCommand(container, shapes, false, parent)
 {
-    for (int i = 0; i < shapes.count(); ++i) {
-        d->clipped.append(false);
-        d->inheritTransform.append(false);
-    }
-    d->init(this);
 }
 
 KoShapeGroupCommand::KoShapeGroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
-                                         bool clipped, bool inheritTransform, bool shouldNormalize, KUndo2Command *parent)
+                                         bool shouldNormalize, KUndo2Command *parent)
     : KUndo2Command(parent),
-      d(new KoShapeGroupCommandPrivate(container,shapes, QList<bool>(), QList<bool>(), shouldNormalize))
+      d(new KoShapeGroupCommandPrivate(container, shapes, shouldNormalize))
 {
-    for (int i = 0; i < shapes.count(); ++i) {
-        d->clipped.append(clipped);
-        d->inheritTransform.append(inheritTransform);
+    Q_FOREACH (KoShape* shape, d->shapes) {
+        d->oldParents.append(shape->parent());
     }
-    d->init(this);
+
+    if (d->container->shapes().isEmpty()) {
+        setText(kundo2_i18n("Group shapes"));
+    } else {
+        setText(kundo2_i18n("Add shapes to group"));
+    }
 }
 
 KoShapeGroupCommand::~KoShapeGroupCommand()
 {
-    delete d;
-}
-
-KoShapeGroupCommand::KoShapeGroupCommand(KoShapeGroupCommandPrivate &dd, KUndo2Command *parent)
-    : KUndo2Command(parent),
-    d(&dd)
-{
-}
-
-void KoShapeGroupCommandPrivate::init(KUndo2Command *q)
-{
-    Q_FOREACH (KoShape* shape, shapes) {
-        oldParents.append(shape->parent());
-        oldClipped.append(shape->parent() && shape->parent()->isClipped(shape));
-        oldInheritTransform.append(shape->parent() && shape->parent()->inheritsTransform(shape));
-        oldZIndex.append(shape->zIndex());
-    }
-
-    if (container->shapes().isEmpty()) {
-        q->setText(kundo2_i18n("Group shapes"));
-    } else {
-        q->setText(kundo2_i18n("Add shapes to group"));
-    }
 }
 
 void KoShapeGroupCommand::redo()
@@ -131,34 +108,45 @@ void KoShapeGroupCommand::redo()
 
     QTransform groupTransform = d->container->absoluteTransformation(0).inverted();
 
-    int zIndex=0;
-    QList<KoShape*> shapes(d->container->shapes());
-    if (!shapes.isEmpty()) {
-        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-        zIndex = shapes.last()->zIndex();
+    QList<KoShape*> containerShapes(d->container->shapes());
+    std::stable_sort(containerShapes.begin(), containerShapes.end(), KoShape::compareShapeZIndex);
+
+    QList<KoShapeReorderCommand::IndexedShape> indexedShapes;
+    Q_FOREACH (KoShape *shape, containerShapes) {
+        indexedShapes.append(KoShapeReorderCommand::IndexedShape(shape));
+    }
+
+    QList<KoShapeReorderCommand::IndexedShape> prependIndexedShapes;
+
+    Q_FOREACH (KoShape *shape, d->shapes) {
+        // test if they inherit the same parent
+
+        if (!shape->hasCommonParent(d->container) ||
+            !KoShape::compareShapeZIndex(shape, d->container)) {
+
+            indexedShapes.append(KoShapeReorderCommand::IndexedShape(shape));
+        } else {
+            prependIndexedShapes.append(KoShapeReorderCommand::IndexedShape(shape));
+        }
+    }
+
+    indexedShapes = prependIndexedShapes + indexedShapes;
+    indexedShapes = KoShapeReorderCommand::homogenizeZIndexesLazy(indexedShapes);
+
+    if (!indexedShapes.isEmpty()) {
+        d->shapesReorderCommand.reset(new KoShapeReorderCommand(indexedShapes));
+        d->shapesReorderCommand->redo();
     }
 
     uint shapeCount = d->shapes.count();
     for (uint i = 0; i < shapeCount; ++i) {
         KoShape * shape = d->shapes[i];
-        shape->setZIndex(zIndex++);
 
-        if(d->inheritTransform[i]) {
-            shape->applyAbsoluteTransformation(groupTransform);
-        }
-        else {
-            QSizeF containerSize = d->container->size();
-            QPointF containerPos = d->container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
-
-            QTransform matrix;
-            matrix.translate(containerPos.x(), containerPos.y());
-            shape->applyAbsoluteTransformation(matrix.inverted());
-        }
-
+        shape->applyAbsoluteTransformation(groupTransform);
         d->container->addShape(shape);
-        d->container->setClipped(shape, d->clipped[i]);
-        d->container->setInheritsTransform(shape, d->inheritTransform[i]);
     }
+
+
 }
 
 void KoShapeGroupCommand::undo()
@@ -168,25 +156,16 @@ void KoShapeGroupCommand::undo()
     QTransform ungroupTransform = d->container->absoluteTransformation(0);
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape * shape = d->shapes[i];
-        const bool inheritedTransform = d->container->inheritsTransform(shape);
         d->container->removeShape(shape);
         if (d->oldParents.at(i)) {
             d->oldParents.at(i)->addShape(shape);
-            d->oldParents.at(i)->setClipped(shape, d->oldClipped.at(i));
-            d->oldParents.at(i)->setInheritsTransform(shape, d->oldInheritTransform.at(i));
         }
-        if(inheritedTransform) {
-            shape->applyAbsoluteTransformation(ungroupTransform);
-        }
-        else {
-            QSizeF containerSize = d->container->size();
-            QPointF containerPos = d->container->absolutePosition() - QPointF(0.5 * containerSize.width(), 0.5 * containerSize.height());
+        shape->applyAbsoluteTransformation(ungroupTransform);
+    }
 
-            QTransform matrix;
-            matrix.translate(containerPos.x(), containerPos.y());
-            shape->applyAbsoluteTransformation(matrix);
-        }
-        shape->setZIndex(d->oldZIndex[i]);
+    if (d->shapesReorderCommand) {
+        d->shapesReorderCommand->undo();
+        d->shapesReorderCommand.reset();
     }
 
     if (d->shouldNormalize && dynamic_cast<KoShapeGroup*>(d->container)) {

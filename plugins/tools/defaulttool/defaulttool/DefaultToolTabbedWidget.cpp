@@ -33,9 +33,9 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
 {    
     setObjectName("default-tool-tabbed-widget");
 
-    DefaultToolGeometryWidget *geometryWidget = new DefaultToolGeometryWidget(tool, this);
-    geometryWidget->setWindowTitle(i18n("Geometry"));
-    addTab(geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
+    m_geometryWidget = new DefaultToolGeometryWidget(tool, this);
+    m_geometryWidget->setWindowTitle(i18n("Geometry"));
+    addTab(m_geometryWidget, KisIconUtils::loadIcon("geometry"), QString());
 
     m_strokeWidget = new KoStrokeConfigWidget(tool->canvas(), this);
     m_strokeWidget->setWindowTitle(i18n("Stroke"));
@@ -49,7 +49,7 @@ DefaultToolTabbedWidget::DefaultToolTabbedWidget(KoInteractionTool *tool, QWidge
     addTab(m_strokeWidget, KisIconUtils::loadIcon("krita_tool_line"), QString());
 
 
-    m_fillWidget = new KoFillConfigWidget(tool->canvas(), KoFlake::Fill, this);
+    m_fillWidget = new KoFillConfigWidget(tool->canvas(), KoFlake::Fill, true, this);
     m_fillWidget->setWindowTitle(i18n("Fill"));
     addTab(m_fillWidget, KisIconUtils::loadIcon("krita_tool_color_fill"), QString());
 
@@ -71,6 +71,11 @@ void DefaultToolTabbedWidget::deactivate()
 {
     m_fillWidget->deactivate();
     m_strokeWidget->deactivate();
+}
+
+bool DefaultToolTabbedWidget::useUniformScaling() const
+{
+    return m_geometryWidget->useUniformScaling();
 }
 
 void DefaultToolTabbedWidget::slotCurrentIndexChanged(int current)

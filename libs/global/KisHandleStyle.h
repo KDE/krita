@@ -69,6 +69,12 @@ public:
     static KisHandleStyle& highlightedPrimaryHandles();
 
     /**
+     * Used for nodes, which control points are highlighted (the node itself
+     * is not highlighted)
+     */
+    static KisHandleStyle& partiallyHighlightedPrimaryHandles();
+
+    /**
      * Same as primary style, but the handles are filled with green color to show
      * that they are selected.
      */

@@ -197,8 +197,7 @@ public:
                 Q_FOREACH (PointerType resource, resources) {
                     Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid() && !resource->md5().isEmpty()) {
-                        QByteArray md5 = resource->md5();
-                        m_resourcesByMd5[md5] = resource;
+                        addResourceToMd5Registry(resource);
 
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
@@ -225,7 +224,7 @@ public:
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
-
+        m_tagStore->clearOldSystemTags();
         debugWidgets << "done loading  resources for type " << type();
     }
 
@@ -270,7 +269,7 @@ public:
         }
 
         m_resourcesByFilename[resource->shortFilename()] = resource;
-        m_resourcesByMd5[resource->md5()] = resource;
+        addResourceToMd5Registry(resource);
         m_resourcesByName[resource->name()] = resource;
         if (infront) {
             m_resources.insert(0, resource);
@@ -284,7 +283,8 @@ public:
         return true;
     }
 
-    /*Removes a given resource from the blacklist.
+    /**
+     * Removes a given resource from the blacklist.
      */
     bool removeFromBlacklist(PointerType resource) {
         if (m_blackListFileNames.contains(resource->filename())) {
@@ -305,7 +305,7 @@ public:
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
-        m_resourcesByMd5.remove(resource->md5());
+        removeResourceFromMd5Registry(resource);
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
@@ -323,7 +323,7 @@ public:
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
-        m_resourcesByMd5.remove(resource->md5());
+        removeResourceFromMd5Registry(resource);
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
@@ -679,6 +679,21 @@ protected:
     KoResource* byFileName(const QString &fileName) const override
     {
         return Policy::toResourcePointer(resourceByFilename(fileName));
+    }
+
+private:
+    void addResourceToMd5Registry(PointerType resource) {
+        const QByteArray md5 = resource->md5();
+        if (!md5.isEmpty()) {
+            m_resourcesByMd5.insert(md5, resource);
+        }
+    }
+
+    void removeResourceFromMd5Registry(PointerType resource) {
+        const QByteArray md5 = resource->md5();
+        if (!md5.isEmpty()) {
+            m_resourcesByMd5.remove(md5);
+        }
     }
 
 private:

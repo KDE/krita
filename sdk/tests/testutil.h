@@ -363,9 +363,11 @@ public:
 
 }
 
+#include <QApplication>
 #include <kis_paint_layer.h>
 #include <kis_image.h>
 #include "kis_undo_stores.h"
+#include "kis_layer_utils.h"
 
 namespace TestUtil {
 
@@ -378,6 +380,14 @@ struct MaskParent
         image = new KisImage(undoStore, imageRect.width(), imageRect.height(), cs, "test image");
         layer = KisPaintLayerSP(new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8));
         image->addNode(KisNodeSP(layer.data()));
+    }
+
+    void waitForImageAndShapeLayers() {
+        qApp->processEvents();
+        image->waitForDone();
+        KisLayerUtils::forceAllDelayedNodesUpdate(image->root());
+        qApp->processEvents();
+        image->waitForDone();
     }
 
     KisSurrogateUndoStore *undoStore;

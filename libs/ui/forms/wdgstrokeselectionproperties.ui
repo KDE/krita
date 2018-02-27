@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>869</width>
-    <height>601</height>
+    <width>304</width>
+    <height>208</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -85,7 +85,7 @@
             <string>Width:</string>
            </property>
            <property name="buddy">
-            <cstring>intSize</cstring>
+            <cstring>lineSize</cstring>
            </property>
           </widget>
          </item>

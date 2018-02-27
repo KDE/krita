@@ -31,6 +31,7 @@
 #include <KoShapeController.h>
 #include <KoColorBackground.h>
 #include <KoPatternBackground.h>
+#include <KoShapeStroke.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPathShape.h>
 
@@ -47,6 +48,11 @@
 #include "kis_figure_painting_tool_helper.h"
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
+
+#include <KoSelectedShapesProxy.h>
+#include <KoSelection.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
+
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
         : KisToolPaint(canvas, cursor)
@@ -179,8 +185,33 @@ void KisToolShape::addShape(KoShape* shape)
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
     }
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(shape, 0);
-    canvas()->addCommand(cmd);
+
+    switch (strokeStyle()) {
+    case KisPainter::StrokeStyleNone:
+        shape->setStroke(KoShapeStrokeModelSP());
+        break;
+    case KisPainter::StrokeStyleBrush: {
+        KoShapeStrokeSP stroke(new KoShapeStroke());
+        stroke->setLineWidth(currentStrokeWidth());
+        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        shape->setStroke(stroke);
+        break;
+    }
+    }
+
+    KUndo2Command *parentCommand = new KUndo2Command();
+
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
+    const QList<KoShape*> oldSelectedShapes = selection->selectedShapes();
+
+    // reset selection on the newly added shape :)
+    // TODO: think about moving this into controller->addShape?
+    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, selection, false, parentCommand);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(shape, 0, parentCommand);
+    parentCommand->setText(cmd->text());
+    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, selection, true, parentCommand);
+
+    canvas()->addCommand(parentCommand);
 }
 
 void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name)

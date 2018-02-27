@@ -28,6 +28,23 @@
 /**
  * @brief The Shape class
  * The shape class is a wrapper around Krita's vector objects.
+ *
+ * Some example code to parse through interesting information in a given vector layer with shapes.
+ * @code
+import sys
+from krita import *
+
+doc = Application.activeDocument()
+
+root = doc.rootNode()
+
+for layer in root.childNodes():
+    print (str(layer.type())+" "+str(layer.name()))
+    if (str(layer.type())=="vectorlayer"):
+        for shape in layer.shapes():
+            print(shape.name())
+            print(shape.toSvg())
+ * @endcode
  */
 class KRITALIBKIS_EXPORT Shape : public QObject
 {
@@ -86,6 +103,13 @@ public Q_SLOTS:
      * @param point the new position in points
      */
     void setPosition(QPointF point);
+
+    /**
+     * @brief toSvg
+     * convert the shape to svg, will not include style definitions.
+     * @return the svg in a string.
+     */
+    QString toSvg();
 
 private:
     friend class GroupShape;

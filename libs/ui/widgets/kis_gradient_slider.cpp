@@ -79,7 +79,8 @@ void KisGradientSlider::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
-    int x, y;
+    int x = 0;
+    int y = 0;
     int wWidth = width() - (2 * MARGIN);
     int wHeight = height();
 

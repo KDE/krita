@@ -208,3 +208,5 @@ endif (MSVC OR MINGW)
 if (NOT APPLE)
 	add_subdirectory( ext_gmic )
 endif (NOT APPLE)
+
+add_subdirectory(ext_giflib)

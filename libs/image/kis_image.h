@@ -141,22 +141,43 @@ public:
 
 
     /**
-     * XXX: docs!
+     * Render a thumbnail of the projection onto a QImage.
      */
     QImage convertToQImage(const QSize& scaledImageSize, const KoColorProfile *profile);
 
     /**
-     * Calls KisUpdateScheduler::lock (XXX: APIDOX -- what does that mean?)
+     * [low-level] Lock the image without waiting for all the internal job queues are processed
+     *
+     * WARNING: Don't use it unless you really know what you are doing! Use barrierLock() instead!
+     *
+     * Waits for all the **currently running** internal jobs to complete and locks the image
+     * for writing. Please note that this function does **not** wait for all the internal
+     * queues to process, so there might be some non-finished actions pending. It means that
+     * you just postpone these actions until you unlock() the image back. Until then, then image
+     * might easily be frozen in some inconsistent state.
+     *
+     * The only sane usage for this function is to lock the image for **emergency**
+     * processing, when some internal action or scheduler got hung up, and you just want
+     * to fetch some data from the image without races.
+     *
+     * In all other cases, please use barrierLock() instead!
      */
     void lock();
 
     /**
-     * Calls KisUpdateScheduler::unlock (XXX: APIDOX -- what does that mean?)
+     * Unlocks the image and starts/resumes all the pending internal jobs. If the image
+     * has been locked for a non-readOnly access, then all the internal caches of the image
+     * (e.g. lod-planes) are reset and regeneration jobs are scheduled.
      */
     void unlock();
 
     /**
-     * Returns true if lock() has been called more often than unlock().
+     * @return return true if the image is in a locked state, i.e. all the internal
+     *         jobs are blocked from execution by calling wither lock() or barrierLock().
+     *
+     *         When the image is locked, the user can do some modifications to the image
+     *         contents safely without a perspective having race conditions with internal
+     *         image jobs.
      */
     bool locked() const;
 
@@ -177,56 +198,129 @@ public:
     void rollBackLayerName();
 
     /**
-     * Resize the image to the specified rect. The resize
-     * method handles the creating on an undo step itself.
+     * @brief start asynchronous operation on resizing the image
      *
-     * @param newRect the rect describing the new width, height and offset
-     *        of the image
+     * The method will resize the image to fit the new size without
+     * dropping any pixel data. The GUI will get correct
+     * notification with old and new sizes, so it adjust canvas origin
+     * accordingly and avoid jumping of the canvas on screen
+     *
+     * @param newRect the rectangle of the image which will be visible
+     *        after operation is completed
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the image having new size
+     * right after ths call.
      */
     void resizeImage(const QRect& newRect);
 
     /**
-     * Crop the image to the specified rect. The crop
-     * method handles the creating on an undo step itself.
+     * @brief start asynchronous operation on cropping the image
      *
-     * @param newRect the rect describing the new width, height and offset
-     *        of the image
+     * The method will **drop** all the image data outside \p newRect
+     * and resize the image to fit the new size. The GUI will get correct
+     * notification with old and new sizes, so it adjust canvas origin
+     * accordingly and avoid jumping of the canvas on screen
+     *
+     * @param newRect the rectangle of the image which will be cut-out
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the image having new size
+     * right after ths call.
      */
     void cropImage(const QRect& newRect);
 
 
     /**
-     * Crop a node to @newRect. The node will *not* be moved anywhere,
-     * it just drops some content
+     * @brief start asynchronous operation on cropping a subtree of nodes starting at \p node
+     *
+     * The method will **drop** all the layer data outside \p newRect. Neither
+     * image nor a layer will be moved anywhere
+     *
+     * @param newRect the rectangle of the layer which will be cut-out
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the image having new size
+     * right after ths call.
      */
     void cropNode(KisNodeSP node, const QRect& newRect);
 
-    /// XXX: ApiDox
+    /**
+     * @brief start asynchronous operation on scaling the image
+     * @param size new image size in pixels
+     * @param xres new image x-resolution pixels-per-pt
+     * @param yres new image y-resolution pixels-per-pt
+     * @param filterStrategy filtering strategy
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the image having new size
+     * right after ths call.
+     */
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
 
-    /// XXX: ApiDox
+    /**
+     * @brief start asynchronous operation on scaling a subtree of nodes starting at \p node
+     * @param node node to scale
+     * @param scaleX, @param scaleY scale coefficient to be applied to the node
+     * @param filterStrategy filtering strategy
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the image having new size
+     * right after ths call.
+     */
     void scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy);
 
     /**
-     * Execute a rotate transform on all layers in this image.
-     * Image is resized to fit rotated image.
+     * @brief start asynchronous operation on rotating the image
+     *
+     * The image is resized to fit the rotated rectangle
+     *
+     * @param radians rotation angle in radians
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the operation being completed
+     * right after the call
      */
     void rotateImage(double radians);
 
     /**
-     * Execute a rotate transform on on a subtree of this image.
-     * Image is not resized.
+     * @brief start asynchronous operation on rotating a subtree of nodes starting at \p node
+     *
+     * The image is not resized!
+     *
+     * @param node the root of the subtree to rotate
+     * @param radians rotation angle in radians
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the operation being completed
+     * right after the call
      */
     void rotateNode(KisNodeSP node, double radians);
 
     /**
-     * Execute a shear transform on all layers in this image.
+     * @brief start asynchronous operation on shearing the image
+     *
+     * The image is resized to fit the sheared polygon
+     *
+     * @param angleX, @param angleY are given in degrees.
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the operation being completed
+     * right after the call
      */
     void shear(double angleX, double angleY);
 
     /**
-     * Shear a node and all its children.
+     * @brief start asynchronous operation on shearing a subtree of nodes starting at \p node
+     *
+     * The image is not resized!
+     *
+     * @param node the root of the subtree to rotate
      * @param angleX, @param angleY are given in degrees.
+     *
+     * Please note that the actual operation starts asynchronously in
+     * a background, so you cannot expect the operation being completed
+     * right after the call
      */
     void shearNode(KisNodeSP node, double angleX, double angleY);
 
@@ -538,7 +632,7 @@ public:
     bool wrapAroundModeActive() const;
 
     /**
-     * \return curent level of detail which is used when processing the image.
+     * \return current level of detail which is used when processing the image.
      * Current working zoom = 2 ^ (- currentLevelOfDetail()). Default value is
      * null, which means we work on the original image.
      */
@@ -763,20 +857,39 @@ public Q_SLOTS:
     bool isIdle(bool allowLocked = false);
 
     /**
-     * @brief barrierLock APIDOX
-     * @param readOnly
+     * @brief Wait until all the queued background jobs are completed and lock the image.
+     *
+     * KisImage object has a local scheduler that executes long-running image
+     * rendering/modifying jobs (we call them "strokes") in a background. Basically,
+     * one should either access the image from the scope of such jobs (strokes) or
+     * just lock the image before using.
+     *
+     * Calling barrierLock() will wait until all the queued operations are finished
+     * and lock the image, so you can start accessing it in a safe way.
+     *
+     * @p readOnly tells the image if the caller is going to modify the image during
+     *             holding the lock. Locking with non-readOnly  access will reset all
+     *             the internal caches of the image (lod-planes) when the lock status
+     *             will be lifted.
      */
     void barrierLock(bool readOnly = false);
 
     /**
-     * @brief barrierLock APIDOX
-     * @param readOnly
+     * @brief Tries to lock the image without waiting for the jobs to finish
+     *
+     * Same as barrierLock(), but doesn't block execution of the calling thread
+     * until all the background jobs are finished. Instead, in case of presence of
+     * unfinished jobs in the queue, it just returns false
+     *
+     * @return whether the lock has been acquired
+     * @see barrierLock
      */
     bool tryBarrierLock(bool readOnly = false);
 
     /**
-     * @brief barrierLock APIDOX
-     * @param readOnly
+     * Wait for all the internal image jobs to complete and return without locking
+     * the image. This function is handly for tests or other synchronous actions,
+     * when one needs to wait for the result of his actions.
      */
     void waitForDone();
 

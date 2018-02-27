@@ -14,7 +14,7 @@
    viewBox="0 0 16 16"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="light_krita_tool_lazybrush.svg"
    inkscape:export-filename="C:\dribbble\krita icons\Collaborate\1_flat\tools\light_krita_tool_freehand.png"
    inkscape:export-xdpi="45"
@@ -94,7 +94,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="27.4375"
-     inkscape:cx="11.178164"
+     inkscape:cx="5.0187107"
      inkscape:cy="4.5477022"
      inkscape:document-units="px"
      inkscape:current-layer="g4152"
@@ -102,7 +102,7 @@
      units="px"
      inkscape:showpageshadow="false"
      showborder="true"
-     inkscape:window-width="1882"
+     inkscape:window-width="1884"
      inkscape:window-height="1051"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -141,10 +141,28 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andrei Rudenko</dc:title>
+            <dc:title>Timothée Giet</dc:title>
           </cc:Agent>
         </dc:creator>
+        <dc:date>2016</dc:date>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g

@@ -324,6 +324,9 @@ QString RectangleShape::pathShapeId() const
 
 bool RectangleShape::saveSvg(SvgSavingContext &context)
 {
+    // let basic path saiving code handle our saving
+    if (!isParametricShape()) return false;
+
     context.shapeWriter().startElement("rect");
     context.shapeWriter().addAttribute("id", context.getID(this));
     SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());

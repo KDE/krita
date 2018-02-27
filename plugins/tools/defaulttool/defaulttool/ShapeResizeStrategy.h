@@ -44,7 +44,7 @@ public:
     /**
      * Constructor
      */
-    ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction);
+    ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode);
     ~ShapeResizeStrategy() override;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
@@ -65,6 +65,8 @@ private:
     QPointF m_globalStillPoint;
     QPointF m_globalCenterPoint;
     QScopedPointer<KoShapeResizeCommand> m_executedCommand;
+
+    bool m_forceUniformScalingMode = false;
 };
 
 #endif

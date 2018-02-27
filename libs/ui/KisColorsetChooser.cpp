@@ -41,6 +41,7 @@
 #include <QSpinBox>
 #include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
+#include <kis_config.h>
 
 #include "kis_int_parse_spin_box.h"
 
@@ -96,6 +97,11 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     m_itemChooser->setColumnCount(1);
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
+
+    KisConfig cfg;
+    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
     
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));

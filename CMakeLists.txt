@@ -197,10 +197,10 @@ add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken te
 
 include(MacroJPEG)
 
-###########################################################
-## Look for Python3. It is also searched by KF5,         ##
-## so we should request the correct  version in advance  ##
-###########################################################
+ #########################################################
+## Look for Python3 It is also searched by KF5,         ##
+## so we should request the correct version in advance  ##
+#########################################################
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
     include(CheckCXXSourceCompiles)
@@ -294,11 +294,12 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Concurrent
 )
 
-
 include (MacroAddFileDependencies)
 include (MacroBoolTo01)
 include (MacroEnsureOutOfSourceBuild)
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
+
+
 
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
@@ -457,7 +458,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost 1.55 REQUIRED COMPONENTS system) # for pigment and stage
+find_package(Boost 1.55 REQUIRED COMPONENTS system) 
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
@@ -476,9 +477,7 @@ configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
 ############################
 ###########################
 
-##
-## Check for OpenEXR
-##
+
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Compression library"
@@ -515,6 +514,13 @@ set_package_properties(JPEG PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
 
+find_package(GIF)
+set_package_properties(GIF PROPERTIES
+    DESCRIPTION "Library for loading and saving gif files."
+    URL "http://giflib.sourceforge.net/"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita GIF filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES
@@ -538,6 +544,30 @@ set_package_properties(OCIO PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita LUT docker")
 macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
+
+set_package_properties(PythonLibrary PROPERTIES
+    DESCRIPTION "Python Library"
+    URL "http://www.python.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PyQt plugin")
+macro_bool_to_01(PYTHONLIBS_FOUND HAVE_PYTHONLIBS)
+
+find_package(SIP "4.18.0")
+set_package_properties(SIP PROPERTIES
+    DESCRIPTION "Support for generating SIP Python bindings"
+    URL "https://www.riverbankcomputing.com/software/sip/download"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PyQt plugin")
+macro_bool_to_01(SIP_FOUND HAVE_SIP)
+
+find_package(PyQt5 "5.6.0")
+set_package_properties(PyQt5 PROPERTIES
+    DESCRIPTION "Python bindings for Qt5."
+    URL "https://www.riverbankcomputing.com/software/pyqt/download5"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita PyQt plugin")
+macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
+
 
 ##
 ## Look for OpenGL

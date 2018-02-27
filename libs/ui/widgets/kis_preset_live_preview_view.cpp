@@ -23,6 +23,7 @@
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
+#include <kis_brush.h>
 
 KisPresetLivePreviewView::KisPresetLivePreviewView(QWidget *parent): QGraphicsView(parent)
 {
@@ -156,7 +157,6 @@ void KisPresetLivePreviewView::paintBackground()
             this->scene()->removeItem(m_sceneImageItem);
             m_sceneImageItem = 0;
         }
-
         QFont font;
         font.setPixelSize(14);
         font.setBold(false);
@@ -182,8 +182,59 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // will fire off signals that make this run in an infinite loop
     qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
+    //Except for the sketchbrush where it determine sthe history.
+    if (m_currentPreset->paintOp().id() == "sketchbrush" ||
+            m_currentPreset->paintOp().id() == "spraybrush") {
+        previewSize = qMax(3.0, m_currentPreset->settings()->paintOpSize());
+    }
+
+
     KisPaintOpPresetSP proxy_preset = m_currentPreset->clone();
+    KisPaintOpSettingsSP settings = proxy_preset->settings();
     proxy_preset->settings()->setPaintOpSize(previewSize);
+    int maxTextureSize = 200;
+    int textureOffsetX = settings->getInt("Texture/Pattern/MaximumOffsetX")*2;
+    int textureOffsetY = settings->getInt("Texture/Pattern/MaximumOffsetY")*2;
+    double textureScale = settings->getDouble("Texture/Pattern/Scale");
+    if ( textureOffsetX*textureScale> maxTextureSize || textureOffsetY*textureScale > maxTextureSize) {
+        int maxSize = qMax(textureOffsetX, textureOffsetY);
+        double result = maxTextureSize/maxSize;
+        settings->setProperty("Texture/Pattern/Scale", result);
+    }
+    if (m_currentPreset->paintOp().id() == "spraybrush") {
+
+        QDomElement element;
+        QDomDocument d;
+        QString brushDefinition = settings->getString("brush_definition");
+        if (!brushDefinition.isEmpty()) {
+            d.setContent(brushDefinition, false);
+            element = d.firstChildElement("Brush");
+        }
+        KisBrushSP brush = KisBrush::fromXML(element);
+        qreal width = brush->image().width();
+        qreal scale = brush->scale();
+        qreal diameterToBrushRatio = 1.0;
+        qreal diameter = settings->getInt("Spray/diameter");
+        //hack, 1000 being the maximum possible brushsize.
+        if (brush->filename().endsWith(".svg")) {
+            diameterToBrushRatio = diameter/(1000.0*scale);
+            scale = 25.0/1000.0;
+        } else {
+            if (width*scale>25.0) {
+                diameterToBrushRatio = diameter/(width*scale);
+                scale = 25.0/width;
+            }
+        }
+        settings->setProperty("Spray/diameter", int(25.0*diameterToBrushRatio));
+
+        brush->setScale(scale);
+        d.clear();
+        element = d.createElement("Brush");
+        brush->toXML(d, element);
+        d.appendChild(element);
+        settings->setProperty("brush_definition", d.toString());
+    }
+    proxy_preset->setSettings(settings);
 
 
     KisResourcesSnapshotSP resources =
@@ -206,27 +257,44 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
 
     // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
-    if (m_currentPreset->paintOp().id() == "sketchbrush") {
-
+    if (m_currentPreset->paintOp().id() == "sketchbrush"
+         || m_currentPreset->paintOp().id() == "curvebrush"
+         || m_currentPreset->paintOp().id() == "particlebrush") {
+        qreal startX = m_canvasCenterPoint.x() - (this->width()*0.4);
+        qreal endX   = m_canvasCenterPoint.x() + (this->width()*0.4);
+        qreal middle = m_canvasCenterPoint.y();
         KisPaintInformation pointOne;
         pointOne.setPressure(0.0);
-        pointOne.setPos(QPointF(m_canvasCenterPoint.x() - (this->width() * 0.4),
-                                m_canvasCenterPoint.y() - (this->height()*0.2) ));
-
+        pointOne.setPos(QPointF(startX, middle));
         KisPaintInformation pointTwo;
-        pointTwo.setPressure(1.0);
-        pointTwo.setPos(QPointF(m_canvasCenterPoint.x() + (this->width() * 0.4),
-                                m_canvasCenterPoint.y() + (this->height()*0.2) ));
+        pointTwo.setPressure(0.0);
+        pointTwo.setPos(QPointF(startX, middle));
+        int repeats = 8;
 
+        for (int i = 0; i < repeats; i++) {
+            pointOne.setPos(pointTwo.pos());
+            pointOne.setPressure(pointTwo.pressure());
 
-        m_image->addJob(strokeId,
-            new FreehandStrokeStrategy::Data(0,
-                                             pointOne,
-                                             QPointF(m_canvasCenterPoint.x() + this->width(),
-                                                     m_canvasCenterPoint.y() - (this->height()*0.2) ),
-                                             QPointF(m_canvasCenterPoint.x() - this->width(),
-                                                     m_canvasCenterPoint.y() + (this->height()*0.2) ),
-                                             pointTwo));
+            pointTwo.setPressure((1.0/repeats)*(i+1));
+            qreal xPos = ((1.0/repeats) * (i+1) * (endX-startX) )+startX;
+            pointTwo.setPos(QPointF(xPos, middle));
+
+            qreal offset = (this->height()/(repeats*1.5))*(i+1);
+            qreal handleY = middle + offset;
+            if (i%2 == 0) {
+                handleY = middle - offset;
+            }
+
+            m_image->addJob(strokeId,
+                            new FreehandStrokeStrategy::Data(0,
+                                        pointOne,
+                                QPointF(pointOne.pos().x(),
+                                        handleY),
+                                QPointF(pointTwo.pos().x(),
+                                        handleY),
+                                        pointTwo));
+            m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
+        }
 
     } else {
 
@@ -249,9 +317,8 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                              QPointF(m_canvasCenterPoint.x(),
                                                      m_canvasCenterPoint.y()+this->height()),
                                              m_curvePointPI2));
+        m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
     }
-
-    m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
     m_image->endStroke(strokeId);
     m_image->waitForDone();
 

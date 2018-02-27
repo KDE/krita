@@ -230,7 +230,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
 
     {
 
-       d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, this);
+       d->fillConfigWidget = new KoFillConfigWidget(canvas, KoFlake::StrokeFill, false, this);
        d->fillConfigWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
        d->ui->fillConfigWidgetLayout->addWidget(d->fillConfigWidget);
        connect(d->fillConfigWidget, SIGNAL(sigFillChanged()), SIGNAL(sigStrokeChanged()));
@@ -662,9 +662,12 @@ struct CheckShapeMarkerPolicy
 
 void KoStrokeConfigWidget::selectionChanged()
 {
-
     KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) return;
+
+    // we need to linearize update orider, so force the child widget to update
+    // before we start doing it
+    d->fillConfigWidget->forceUpdateOnSelectionChanged();
 
 
     QList<KoShape*> shapes = selection->selectedEditableShapes();
@@ -734,7 +737,7 @@ void KoStrokeConfigWidget::selectionChanged()
         }
     }
 
-    const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() == 0 ? false : true;
+    const bool lineOptionsVisible =  d->fillConfigWidget->selectedFillIndex() != 0;
 
     // This switch statement is to help the tab widget "pages" to be closer to the correct size
     // if we don't do this the internal widgets get rendered, then the tab page has to get resized to

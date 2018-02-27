@@ -71,8 +71,8 @@ public:
      */
     KisPaintOpPresetSP defaultPreset(const KoID& id) const;
 
-    // Get the name of the icon to show in the toolchest
-    QString pixmap(const KoID & id) const;
+    // Get the icon to show in the user interface
+    QIcon icon(const KoID & id) const;
 
     /**
      * This function return a list of all the keys in KoID format by using the name() method

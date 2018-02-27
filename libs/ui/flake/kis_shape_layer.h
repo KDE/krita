@@ -129,6 +129,10 @@ public:
     bool visible(bool recursive = false) const override;
     void setVisible(bool visible, bool isLoading = false) override;
 
+    void setUserLocked(bool value) override;
+
+    bool isShapeEditable(bool recursive) const override;
+
     /**
      * Forces a repaint of a shape layer without waiting for an event loop
      * calling a delayed timer update. If you want to see the result of the shape

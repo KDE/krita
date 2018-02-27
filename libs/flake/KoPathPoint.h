@@ -58,6 +58,7 @@ public:
 
     /// the type for identifying part of a KoPathPoint
     enum PointType {
+        None = 0,
         Node = 1,          ///< the node point
         ControlPoint1 = 2, ///< the first control point
         ControlPoint2 = 4,  ///< the second control point

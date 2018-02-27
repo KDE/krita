@@ -38,9 +38,11 @@ void KisPaintOpFactory::preinitializePaintOpIfNeeded(const KisPaintOpSettingsSP 
 }
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-QString KisPaintOpFactory::pixmap()
+QIcon KisPaintOpFactory::icon()
 {
-    return "";
+    QPixmap p = QPixmap(22, 22);
+    p.fill(Qt::transparent);
+    return QIcon(p);
 }
 
 QString KisPaintOpFactory::categoryStable()

@@ -42,6 +42,7 @@
 #include <KisMainWindow.h>
 #include <KisPart.h>
 #include <dialogs/KisNewWindowLayoutDialog.h>
+#include <kis_config.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
 {
@@ -118,6 +119,11 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(QS
     widgets.itemChooser->setColumnCount(1);
     widgets.itemChooser->showTaggingBar(false);
     widgets.saveButton = new QPushButton(i18n("Save"));
+
+    KisConfig cfg;
+    widgets.itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
 
     widgets.nameEdit = new QLineEdit(this);
     widgets.nameEdit->setPlaceholderText(i18n("Insert name"));

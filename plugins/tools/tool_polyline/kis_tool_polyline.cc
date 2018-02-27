@@ -55,8 +55,7 @@ void KisToolPolyline::resetCursorStyle()
 
 QWidget* KisToolPolyline::createOptionWidget()
 {
-    // there are no options there
-    return KisTool::createOptionWidget();
+    return KisToolPolylineBase::createOptionWidget();
 }
 
 void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
@@ -89,9 +88,6 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
         for (int i = 1; i < points.count(); i++)
             path->lineTo(resolutionMatrix.map(points[i]));
         path->normalize();
-
-        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
-        path->setStroke(border);
 
         addShape(path);
     }

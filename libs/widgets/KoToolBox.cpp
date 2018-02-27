@@ -118,7 +118,6 @@ KoToolBox::KoToolBox()
             SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
             this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
 
-    QTimer::singleShot(0, this, SLOT(adjustToFit()));
 }
 
 KoToolBox::~KoToolBox()
@@ -207,7 +206,7 @@ void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
 {
     Q_UNUSED(canvas);
-    const bool enabled = layer == 0 || (layer->isEditable() && layer->isVisible());
+    const bool enabled = layer == 0 || (layer->isShapeEditable() && layer->isVisible());
     foreach (QToolButton *button, d->visibilityCodes.keys()) {
         if (d->visibilityCodes[button].endsWith( QLatin1String( "/always") ) ) {
             continue;

@@ -261,37 +261,37 @@ QMap<QString, Resource *> Krita::resources(const QString &type) const
 {
     QMap<QString, Resource *> resources = QMap<QString, Resource *> ();
 
-    if (type == "pattern") {
+    if (type.toLower() == "pattern") {
         KoResourceServer<KoPattern>* server = KoResourceServerProvider::instance()->patternServer();
         Q_FOREACH (KoResource *res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }
-    else if (type == "gradient") {
+    else if (type.toLower() == "gradient") {
         KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
         Q_FOREACH (KoResource *res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }
-    else if (type == "brush") {
+    else if (type.toLower() == "brush") {
         KisBrushResourceServer* server = KisBrushServer::instance()->brushServer();
         Q_FOREACH (KisBrushSP res, server->resources()) {
             resources[res->name()] = new Resource(res.data());
         }
     }
-    else if (type == "preset") {
+    else if (type.toLower() == "preset") {
         KisPaintOpPresetResourceServer* server = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (KisPaintOpPresetSP res, server->resources()) {
             resources[res->name()] = new Resource(res.data());
         }
     }
-    else if (type == "palette") {
+    else if (type.toLower() == "palette") {
         KoResourceServer<KoColorSet>* server = KoResourceServerProvider::instance()->paletteServer();
         Q_FOREACH (KoResource *res, server->resources()) {
             resources[res->name()] = new Resource(res);
         }
     }
-    else if (type == "workspace") {
+    else if (type.toLower() == "workspace") {
         KoResourceServer< KisWorkspaceResource >* server = KisResourceServerProvider::instance()->workspaceServer();
         Q_FOREACH (KoResource *res, server->resources()) {
             resources[res->name()] = new Resource(res);
@@ -312,7 +312,7 @@ QStringList Krita::recentDocuments() const
     return recentDocuments;
 }
 
-Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile)
+Document* Krita::createDocument(int width, int height, const QString &name, const QString &colorModel, const QString &colorDepth, const QString &profile, double resolution)
 {
     KisDocument *document = KisPart::instance()->createDocument();
     KisPart::instance()->addDocument(document);
@@ -323,7 +323,7 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     qc.setAlpha(0);
     KoColor bgColor(qc, cs);
 
-    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", 100.0)) {
+    if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", double(resolution / 72) )) {
         qDebug() << "Could not create a new image";
         return 0;
     }

@@ -3,8 +3,8 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 # Download the gmic sources
 ExternalProject_Add( ext_gmic_base
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://gmic.eu/files/source/gmic_2.1.8.tar.gz
-    URL_HASH SHA1=9c5bc202c6e792620bdedd6f13d78cea21ef0552
+    URL https://gmic.eu/files/source/gmic_2.2.0.tar.gz
+    URL_HASH SHA1=caf72b80da8bd3e31111cff8407b005e7115d2c2
 
     SOURCE_DIR gmic
 
@@ -19,9 +19,8 @@ ExternalProject_Add( ext_gmic_base
 # FIXME: Forcing CMAKE_BUILD_TYPE to Release
 ExternalProject_Add( ext_gmic_qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://files.kde.org/krita/build/dependencies/gmic-qt-3868d25.tar.gz
-    DOWNLOAD_NAME gmic-qt-3868d25.tar.gz
-    URL_HASH SHA1=98ae2db9c45ee1c830011b4ed2574eb0839c7abe
+    URL https://github.com/c-koi/gmic-qt/archive/v.220.tar.gz
+    URL_HASH SHA1=2b3731e7c90c79d298758b7702a68c1468035429
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/desktop_icon.diff
 
     SOURCE_DIR gmic-qt

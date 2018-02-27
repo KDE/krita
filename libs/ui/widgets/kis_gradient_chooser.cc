@@ -36,6 +36,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoStopGradient.h>
 #include <kis_icon.h>
+#include <kis_config.h>
 
 #include "KisViewManager.h"
 #include "kis_global.h"
@@ -118,6 +119,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
     mainLayout->addWidget(buttonWidget);
+
+    KisConfig cfg;
+    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+                                         cfg.kineticScrollingSensitivity(),
+                                         cfg.kineticScrollingScrollbar());
 
     slotUpdateIcons();
     setLayout(mainLayout);

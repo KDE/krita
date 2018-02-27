@@ -49,7 +49,7 @@ KisColorOption::KisColorOption()
     setObjectName("KisColorOption");
 
     // ui
-    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SLOT(setEnabled(bool)));
+    connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SLOT(setHSVEnabled(bool)));
     // settings
     connect(m_options->randomOpacityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->randomHSVCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
@@ -86,23 +86,23 @@ void KisColorOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
 
 void KisColorOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    m_options->hueSlider->setValue(setting->getInt(COLOROP_HUE));
-    m_options->saturationSlider->setValue(setting->getInt(COLOROP_SATURATION));
-    m_options->valueSlider->setValue(setting->getInt(COLOROP_VALUE));
+    m_options->hueSlider->setValue(setting->getInt(COLOROP_HUE, 0));
+    m_options->saturationSlider->setValue(setting->getInt(COLOROP_SATURATION, 0));
+    m_options->valueSlider->setValue(setting->getInt(COLOROP_VALUE, 0));
     m_options->randomOpacityCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_OPACITY));
-    m_options->randomHSVCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_HSV));
-    setEnabled(setting->getBool(COLOROP_USE_RANDOM_HSV));
-    m_options->sampleInputCHBox->setChecked(setting->getBool(COLOROP_SAMPLE_COLOR));
-    m_options->fillBackgroundCHBox->setChecked(setting->getBool(COLOROP_FILL_BG));
-    m_options->colorPerParticleCHBox->setChecked(setting->getBool(COLOROP_COLOR_PER_PARTICLE));
-    m_options->mixBgColorCHBox->setChecked(setting->getBool(COLOROP_MIX_BG_COLOR));
+    m_options->randomHSVCHBox->setChecked(setting->getBool(COLOROP_USE_RANDOM_HSV, false));
+    setHSVEnabled(m_options->randomHSVCHBox->isChecked());
+    m_options->sampleInputCHBox->setChecked(setting->getBool(COLOROP_SAMPLE_COLOR, false));
+    m_options->fillBackgroundCHBox->setChecked(setting->getBool(COLOROP_FILL_BG, false));
+    m_options->colorPerParticleCHBox->setChecked(setting->getBool(COLOROP_COLOR_PER_PARTICLE, false));
+    m_options->mixBgColorCHBox->setChecked(setting->getBool(COLOROP_MIX_BG_COLOR, false));
 }
 
-void KisColorOption::setEnabled(bool enabled)
+void KisColorOption::setHSVEnabled(bool enabled)
 {
-    m_options->hueSlider->setEnabled(!enabled);
-    m_options->saturationSlider->setEnabled(!enabled);
-    m_options->valueSlider->setEnabled(!enabled);
+    m_options->hueSlider->setEnabled(enabled);
+    m_options->saturationSlider->setEnabled(enabled);
+    m_options->valueSlider->setEnabled(enabled);
 }
 
 bool KisColorOption::useRandomOpacity() const
@@ -159,13 +159,13 @@ bool KisColorOption::mixBgColor() const
 
 void KisColorProperties::fillProperties(const KisPropertiesConfigurationSP setting)
 {
-    hue = setting->getInt(COLOROP_HUE);
-    saturation = setting->getInt(COLOROP_SATURATION);
-    value = setting->getInt(COLOROP_VALUE);
-    useRandomOpacity = setting->getBool(COLOROP_USE_RANDOM_OPACITY);
-    useRandomHSV = setting->getBool(COLOROP_USE_RANDOM_HSV);
-    sampleInputColor = setting->getBool(COLOROP_SAMPLE_COLOR);
-    fillBackground = setting->getBool(COLOROP_FILL_BG);
-    colorPerParticle = setting->getBool(COLOROP_COLOR_PER_PARTICLE);
-    mixBgColor = setting->getBool(COLOROP_MIX_BG_COLOR);
+    hue = setting->getInt(COLOROP_HUE, 0);
+    saturation = setting->getInt(COLOROP_SATURATION, 0);
+    value = setting->getInt(COLOROP_VALUE, 0);
+    useRandomOpacity = setting->getBool(COLOROP_USE_RANDOM_OPACITY, false);
+    useRandomHSV = setting->getBool(COLOROP_USE_RANDOM_HSV, false);
+    sampleInputColor = setting->getBool(COLOROP_SAMPLE_COLOR, false);
+    fillBackground = setting->getBool(COLOROP_FILL_BG, false);
+    colorPerParticle = setting->getBool(COLOROP_COLOR_PER_PARTICLE, false);
+    mixBgColor = setting->getBool(COLOROP_MIX_BG_COLOR, false);
 }

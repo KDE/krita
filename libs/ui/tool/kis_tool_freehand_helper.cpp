@@ -105,6 +105,7 @@ struct KisToolFreehandHelper::Private
     KisPaintOpUtils::PositionHistory lastCursorPos;
 
     // Stabilizer data
+    bool usingStabilizer;
     QQueue<KisPaintInformation> stabilizerDeque;
     QTimer stabilizerPollTimer;
     KisStabilizedEventsSampler stabilizedSampler;
@@ -140,6 +141,7 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
     connect(&m_d->asynchronousUpdatesThresholdTimer, SIGNAL(timeout()), SLOT(doAsynchronousUpdate()));
     connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
+    connect(m_d->smoothingOptions.data(), SIGNAL(sigSmoothingTypeChanged()), SLOT(slotSmoothingTypeChanged()));
 
     m_d->stabilizerDelayedPaintHelper.setPaintLineCallback(
                 [this](const KisPaintInformation &pi1, const KisPaintInformation &pi2) {
@@ -698,6 +700,7 @@ int KisToolFreehandHelper::elapsedStrokeTime() const
 
 void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
 {
+    m_d->usingStabilizer = true;
     // FIXME: Ugly hack, this is no a "distance" in any way
     int sampleSize = qRound(m_d->effectiveSmoothnessDistance());
     sampleSize = qMax(3, sampleSize);
@@ -847,6 +850,23 @@ void KisToolFreehandHelper::stabilizerEnd()
 
     if (m_d->stabilizerDelayedPaintHelper.running()) {
         m_d->stabilizerDelayedPaintHelper.end();
+    }
+    m_d->usingStabilizer = false;
+}
+
+void KisToolFreehandHelper::slotSmoothingTypeChanged()
+{
+    if (!isRunning()) {
+        return;
+    }
+    KisSmoothingOptions::SmoothingType currentSmoothingType =
+            m_d->smoothingOptions->smoothingType();
+    if (m_d->usingStabilizer
+            && (currentSmoothingType != KisSmoothingOptions::STABILIZER)) {
+        stabilizerEnd();
+    } else if (!m_d->usingStabilizer
+            && (currentSmoothingType == KisSmoothingOptions::STABILIZER)) {
+        stabilizerStart(m_d->previousPaintInformation);
     }
 }
 

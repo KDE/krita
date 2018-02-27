@@ -206,6 +206,8 @@ public:
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
     bool listeningToModifiers; //  Fine tune when to begin processing modifiers at the beginning of a stroke.
 
+    QPointF dragStartPoint;
+
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;

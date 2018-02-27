@@ -37,8 +37,9 @@
 
 #include <kis_debug.h>
 
-ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction)
-    : KoInteractionStrategy(tool)
+ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode)
+    : KoInteractionStrategy(tool),
+      m_forceUniformScalingMode(forceUniformScalingMode)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(selection && selection->count() > 0);
 
@@ -210,7 +211,7 @@ void ShapeResizeStrategy::resizeBy(const QPointF &stillPoint, qreal zoomX, qreal
         m_executedCommand.reset();
     }
 
-    const bool usePostScaling = m_selectedShapes.size() > 1;
+    const bool usePostScaling = m_selectedShapes.size() > 1 || m_forceUniformScalingMode;
 
     m_executedCommand.reset(
          new KoShapeResizeCommand(

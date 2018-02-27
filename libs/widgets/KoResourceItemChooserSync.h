@@ -50,7 +50,7 @@ public:
 Q_SIGNALS:
     /// Signal is emitted when the base length is changed and will trigger and update in
     /// the resource item choosers
-    void baseLenghtChanged(int length);
+    void baseLengthChanged(int length);
     
 private:
 

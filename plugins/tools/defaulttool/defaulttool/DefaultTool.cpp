@@ -110,30 +110,6 @@ enum BooleanOp {
 
 }
 
-QPolygonF selectionPolygon(KoSelection *selection)
-{
-    QPolygonF result;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
-
-    if (!selectedShapes.size()) {
-        return result;
-    }
-
-    if (selectedShapes.size() > 1) {
-        QTransform matrix = selection->absoluteTransformation(0);
-        result = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selection->size())));
-    } else {
-        KoShape *selectedShape = selectedShapes.first();
-        QTransform matrix = selectedShape->absoluteTransformation(0);
-        result = matrix.map(QPolygonF(QRectF(QPointF(0, 0), selectedShape->size())));
-    }
-
-    return result;
-}
-
-
-
 class NopInteractionStrategy : public KoInteractionStrategy
 {
 public:
@@ -1066,13 +1042,17 @@ void DefaultTool::selectionGroup()
 
     QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
     std::sort(selectedShapes.begin(), selectedShapes.end(), KoShape::compareShapeZIndex);
+    if (selectedShapes.isEmpty()) return;
+
+    const int groupZIndex = selectedShapes.last()->zIndex();
 
     KoShapeGroup *group = new KoShapeGroup();
+    group->setZIndex(groupZIndex);
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
     new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
     canvas()->shapeController()->addShapeDirect(group, 0, cmd);
-    new KoShapeGroupCommand(group, selectedShapes, false, true, true, cmd);
+    new KoShapeGroupCommand(group, selectedShapes, true, cmd);
     new KoKeepShapesSelectedCommand({}, {group}, selection, true, cmd);
     canvas()->addCommand(cmd);
 
@@ -1496,7 +1476,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (handle != KoFlake::NoHandle) {
             // resizing or shearing only with left mouse button
             if (insideSelection) {
-                return new ShapeResizeStrategy(this, selection, event->point, handle);
+                return new ShapeResizeStrategy(this, selection,event->point, handle, m_tabbedOptionWidget->useUniformScaling());
             }
 
             if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||

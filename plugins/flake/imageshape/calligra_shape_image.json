@@ -3,8 +3,8 @@
     "Type": "Service",
     "X-Flake-MinVersion": "28",
     "X-Flake-PluginVersion": "28",
-    "X-KDE-Library": "krita_shape_vector",
-    "X-KDE-PluginInfo-Name": "vectorshape",
+    "X-KDE-Library": "krita_shape_image",
+    "X-KDE-PluginInfo-Name": "imageshape",
     "X-KDE-ServiceTypes": [
         "Calligra/Flake"
     ]

@@ -36,8 +36,6 @@ struct KisAsyncAnimationRendererBase::Private
     bool isCancelled = false;
 
     static const int WAITING_FOR_FRAME_TIMEOUT = 10000;
-
-    void clearFrameRegenerationState(bool cancelled);
 };
 
 KisAsyncAnimationRendererBase::KisAsyncAnimationRendererBase(QObject *parent)
@@ -90,15 +88,6 @@ void KisAsyncAnimationRendererBase::cancelCurrentFrameRendering()
     frameCancelledCallback(m_d->requestedFrame);
 }
 
-void KisAsyncAnimationRendererBase::Private::clearFrameRegenerationState(bool cancelled)
-{
-    imageRequestConnections.clear();
-    requestedImage = 0;
-    requestedFrame = -1;
-    regenerationTimeout.stop();
-    isCancelled = true;
-}
-
 void KisAsyncAnimationRendererBase::slotFrameRegenerationCancelled()
 {
     // the timeout can arrive in async way
@@ -131,7 +120,7 @@ void KisAsyncAnimationRendererBase::notifyFrameCompleted(int frame)
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
 
-    m_d->clearFrameRegenerationState(false);
+    clearFrameRegenerationState(false);
     emit sigFrameCompleted(frame);
 }
 
@@ -146,8 +135,21 @@ void KisAsyncAnimationRendererBase::notifyFrameCancelled(int frame)
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
 
-    m_d->clearFrameRegenerationState(true);
+    clearFrameRegenerationState(true);
     emit sigFrameCancelled(frame);
+}
+
+void KisAsyncAnimationRendererBase::clearFrameRegenerationState(bool isCancelled)
+{
+    // TODO: for some reason we mark the process as cancelled in any case, and it
+    //       seem to be a correct behavior
+    Q_UNUSED(isCancelled);
+
+    m_d->imageRequestConnections.clear();
+    m_d->requestedImage = 0;
+    m_d->requestedFrame = -1;
+    m_d->regenerationTimeout.stop();
+    m_d->isCancelled = true;
 }
 
 KisImageSP KisAsyncAnimationRendererBase::requestedImage() const

@@ -234,8 +234,9 @@ void KisPresetSaveWidget::savePreset()
             rServer->addResource(curPreset, false, false);
             rServer->removeFromBlacklist(curPreset.data());
         }
-
-        curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
+        if (curPreset->image().isNull()) {
+            curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
+        }
         curPreset->save();
         curPreset->load();
     }

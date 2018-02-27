@@ -175,7 +175,7 @@ bool Node::addChildNode(Node *child, Node *above)
         return d->image->addNode(child->node(), d->node, above->node());
     }
     else {
-        return d->image->addNode(child->node(), d->node, 0);
+        return d->image->addNode(child->node(), d->node, d->node->childCount());
     }
 }
 

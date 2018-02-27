@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1197</width>
+    <width>1200</width>
     <height>431</height>
    </rect>
   </property>
@@ -23,7 +23,7 @@
       <number>1</number>
      </property>
      <item>
-      <widget class="QGraphicsView" name="presetThumbnailicon">
+      <widget class="QLabel" name="presetThumbnailicon">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -36,40 +36,11 @@
          <height>55</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>55</width>
-         <height>55</height>
-        </size>
+       <property name="text">
+        <string/>
        </property>
-       <property name="font">
-        <font>
-         <kerning>false</kerning>
-        </font>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
-       <property name="verticalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="horizontalScrollBarPolicy">
-        <enum>Qt::ScrollBarAlwaysOff</enum>
-       </property>
-       <property name="interactive">
-        <bool>false</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignHCenter|Qt::AlignTop</set>
-       </property>
-       <property name="renderHints">
-        <set>QPainter::Antialiasing</set>
-       </property>
-       <property name="transformationAnchor">
-        <enum>QGraphicsView::AnchorViewCenter</enum>
+       <property name="scaledContents">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

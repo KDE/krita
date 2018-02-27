@@ -577,10 +577,7 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
-    QGraphicsScene * thumbScene = new QGraphicsScene(this);
-    thumbScene->addPixmap(QPixmap::fromImage(resource->image().scaled(55, 55)));
-    thumbScene->setSceneRect(0, 0, 55, 55); // 55 x 55 image for thumb. this is also set in the UI
-    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setScene(thumbScene);
+    m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(QPixmap::fromImage(resource->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 
     toggleBrushRenameUIActive(false); // reset the UI state of renaming a brush if we are changing brush presets
     slotUpdatePresetSettings(); // check to see if the dirty preset icon needs to be shown

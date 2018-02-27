@@ -82,7 +82,7 @@ private:
         gc.restore();
 
         gc.setClipRect(imageRect);
-        layer->paint(gc);
+        layer->paintReferences(gc);
     }
 };
 

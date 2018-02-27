@@ -62,7 +62,6 @@ public:
     void setImage(QImage image);
     void setSource(const QString &location);
 
-    void setPosition(QPointF pos);
     void setSaturation(qreal saturation);
     qreal saturation() const;
 

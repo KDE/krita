@@ -86,7 +86,7 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *re
     return new AddReferenceImageCommand(this, referenceImage);
 }
 
-void KisReferenceImagesLayer::paint(QPainter &painter) {
+void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
     shapeManager()->paint(painter, *converter(), false);
 }
 

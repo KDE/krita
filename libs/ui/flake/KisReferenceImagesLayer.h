@@ -36,7 +36,7 @@ public:
 
     QColor getPixel(QPointF position) const;
 
-    void paint(QPainter &painter);
+    void paintReferences(QPainter &painter);
 
     bool allowAsChild(KisNodeSP) const override;
 

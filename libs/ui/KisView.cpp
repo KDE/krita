@@ -602,7 +602,7 @@ void KisView::dropEvent(QDropEvent *event)
                         }
                         else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
                             auto *reference = KisReferenceImage::fromFile(url.toLocalFile());
-                            reference->setPosition(cursorPos);
+                            reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
                             d->referenceImagesDecoration->addReferenceImage(reference);
 
                             KoToolManager::instance()->switchToolRequested("ToolReferenceImages");

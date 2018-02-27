@@ -35,7 +35,6 @@
 struct KisReferenceImage::Private {
     QString src;
     QImage image;
-    QPointF pos;
     qreal saturation{1.0};
     int id{-1};
 };
@@ -111,11 +110,6 @@ void KisReferenceImage::setImage(QImage image)
 void KisReferenceImage::setSource(const QString &location)
 {
     d->src = location;
-}
-
-void KisReferenceImage::setPosition(QPointF pos)
-{
-    d->pos = pos;
 }
 
 void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)

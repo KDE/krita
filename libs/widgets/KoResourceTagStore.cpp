@@ -28,8 +28,9 @@
 #include <KoResourcePaths.h>
 #include <KoResourceServer.h>
 
+#define BLACKLISTED "blacklisted" ///< xml tag for blacklisted tags
 
-#define BLACKLISTED "blacklisted"
+static const QStringList krita3PresetSystemTags = {"ink", "Ink", "paint", "sketch", "demo", "Block", "Wet", "FX", "Erasers", "Circle", "Smudge", "Mix", "PixelArt"};
 
 class Q_DECL_HIDDEN KoResourceTagStore::Private
 {
@@ -85,7 +86,6 @@ void KoResourceTagStore::removeResource(const KoResource *resource)
 QStringList KoResourceTagStore::tagNamesList() const
 {
     QStringList tagList = d->tagList.uniqueKeys();
-    qDebug() << "tagNameslist" << tagList << "blacklist" << d->blacklistedTags;
     Q_FOREACH(const QString &tag, d->blacklistedTags) {
         tagList.removeAll(tag);
     }
@@ -95,7 +95,6 @@ QStringList KoResourceTagStore::tagNamesList() const
 void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 {
     if (d->blacklistedTags.contains(tag)) {
-        //qDebug() << "Adding blacklisted tag" << tag;
         d->blacklistedTags.removeAll(tag);
     }
     if (!resource) {
@@ -141,7 +140,6 @@ void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
 
 void KoResourceTagStore::delTag(const QString& tag)
 {
-    //qDebug() << "delTag" << tag;
     Q_FOREACH (const QByteArray &res, d->md5ToTag.keys(tag)) {
         d->md5ToTag.remove(res, tag);
     }
@@ -191,18 +189,24 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
 void KoResourceTagStore::loadTags()
 {
     QStringList tagFiles = KoResourcePaths::findDirs("tags");
-
-    //qDebug() << "Going to load tags" << tagFiles;
-
     Q_FOREACH (const QString &tagFile, tagFiles) {
         readXMLFile(tagFile + d->resourceServer->type() + "_tags.xml");
     }
 }
 
+void KoResourceTagStore::clearOldSystemTags()
+{
+    if (d->resourceServer->type() == "kis_paintoppresets") {
+        Q_FOREACH(const QString &systemTag, krita3PresetSystemTags) {
+            if (d->tagList[systemTag] == 0) {
+                d->tagList.remove(systemTag);
+            }
+        }
+    }
+}
+
 void KoResourceTagStore::writeXMLFile(const QString &tagstore)
 {
-    //qDebug() << "writing tags to" << tagstore << "blacklisted" << d->blacklistedTags;
-
     QFile f(tagstore);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         warnWidgets << "Cannot write meta information to '" << tagstore << "'.";
@@ -284,13 +288,10 @@ void KoResourceTagStore::writeXMLFile(const QString &tagstore)
 
 void KoResourceTagStore::readXMLFile(const QString &tagstore)
 {
-    //qDebug() << "Reading tags from" << tagstore;
-
     QString inputFile;
     if (QFile::exists(tagstore)) {
         inputFile = tagstore;
     } else {
-        //qDebug() << "\tdoesn't exist";
         return;
     }
 
@@ -343,7 +344,6 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 
                     QDomElement tagEl = tagNodesList.at(j).toElement();
                     bool blacklisted = (tagEl.attribute(BLACKLISTED, "false") == "true");
-                    //qDebug() << "1 reading tag" << tagEl.text() << "blacklist" << blacklisted << d->blacklistedTags.contains(tagEl.text());
                     if (blacklisted || d->blacklistedTags.contains(tagEl.text())) {
                         if (!d->blacklistedTags.contains(tagEl.text())) {
                             d->blacklistedTags << tagEl.text();
@@ -382,7 +382,6 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                 for (int j = 0; j < tagNodesList.count() ; j++) {
                     QDomElement tagEl = tagNodesList.at(j).toElement();
                     bool blacklisted = (tagEl.attribute(BLACKLISTED, "false") == "true");
-                    //qDebug() << "2 reading tag" << tagEl.text() << "blacklist" << blacklisted << d->blacklistedTags.contains(tagEl.text());
                     if (blacklisted || d->blacklistedTags.contains(tagEl.text())) {
                         if (!d->blacklistedTags.contains(tagEl.text())) {
                             d->blacklistedTags << tagEl.text();
@@ -399,7 +398,6 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
             }
         }
     }
-    //qDebug() << "blacklist" << d->blacklistedTags;
 }
 
 bool KoResourceTagStore::isServerResource(const QString &resourceName) const

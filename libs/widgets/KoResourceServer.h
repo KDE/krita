@@ -224,7 +224,7 @@ public:
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
-
+        m_tagStore->clearOldSystemTags();
         debugWidgets << "done loading  resources for type " << type();
     }
 
@@ -283,7 +283,8 @@ public:
         return true;
     }
 
-    /*Removes a given resource from the blacklist.
+    /**
+     * Removes a given resource from the blacklist.
      */
     bool removeFromBlacklist(PointerType resource) {
         if (m_blackListFileNames.contains(resource->filename())) {

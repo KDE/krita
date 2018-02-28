@@ -490,6 +490,7 @@ class comicsExporter():
             progress.setCancelButton(None)
             timer = QElapsedTimer()
             timer.start()
+            progress.show()
             qApp.processEvents()
 
             for p in range(0, len(pagesList)):
@@ -514,8 +515,9 @@ class comicsExporter():
 
                 # These three lines are what is causing the page not to close.
                 root = page.rootNode()
-                self.removeLayers(labelList, root)
                 self.getPanelsAndText(root, panelsAndText)
+                self.removeLayers(labelList, root)
+                page.refreshProjection()
                 # We'll need the offset and scale for aligning the panels and text correctly. We're getting this from the CBZ
 
                 pageData = {}

@@ -330,6 +330,12 @@ void KisLayer::setImage(KisImageWSP image)
 {
     m_d->image = image;
 
+    // we own the projection device, so we should take care about it
+    KisPaintDeviceSP projection = this->projection();
+    if (projection && projection != original()) {
+        projection->setDefaultBounds(new KisDefaultBounds(image));
+    }
+
     KisNodeSP node = firstChild();
     while (node) {
         KisLayerUtils::recursiveApplyNodes(node,

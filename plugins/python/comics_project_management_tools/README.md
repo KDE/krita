@@ -211,13 +211,13 @@ Things I still want to do:
 * Make label removal just a list? (unsure)
 * PNG and JPEG export settings.
 * maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question. [partialy done, epub still needs this]
+* Implement basic POT translation thingy(POC done, needs proper scrapping and then matching systems)
 
 ACBF list:
 
 * support getting text info from the vector layers. [Partially done]
 	- users can specify a name for text layers. (Waiting for stringfreeze to end)
 	- Don't forget text-rotation(Needs API)
-	- last two/five characters are used to determine language. (Maybe not a good idea...>_>)
 	- maybe text-class can be used to determine type? (We'll proly need to use style sheets and comparing the text format to those)
 		+ Speech (speech, dialogue)
 		+ Commentary (caption in american comics)
@@ -239,13 +239,12 @@ ACBF list:
             4. have acbf_textclass read from the desc.
     - Get page background color from the page if possible. (This might only work with canvas color, though)
     - Jump: proly not gonna support this.
-    - text url anchors: don't have a sensible interface for this.
+    - text url anchors: don't have a sensible interface for this. (Might use it for references only)
     - Font embedding: spec is super vague about this.
     - Style sheets: needs a very complex gui.
     - database reference: I am not sure if this is at all relevant for Krita? Because it implies an already published comic.
     - acbf doc info should use author with first/nick/last/etc seperate as well[partially done]
     - text-layer background color(maybe sample topleft of projection???)
 * 1.2 support:
-    - Role: designer
-    - Book-info: reading direction
-    - text type: Sound.
+    - Role: designer [needs gui still]
+    - text type: Sound.[needs gui still]

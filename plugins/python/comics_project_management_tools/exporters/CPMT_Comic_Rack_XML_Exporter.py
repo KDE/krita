@@ -1,0 +1,135 @@
+"""
+Copyright (c) 2018 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
+
+This file is part of the Comics Project Management Tools(CPMT).
+
+CPMT is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CPMT is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+"""
+The comicrack information is sorta... incomplete, so no idea if the following is right...
+I can't check in any case: It is a windows application.
+"""
+
+from xml.dom import minidom
+from PyQt5.QtCore import QDate, Qt
+
+def write_xml(configDictionary = {}, pagesLocationList = [],  location = str()):
+    document = minidom.Document()
+    root = document.createElement("ComicInfo")
+    root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
+    root.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema")
+
+    title = document.createElement("Title")
+    if "title" in configDictionary.keys():
+        title.appendChild(document.createTextNode(str(configDictionary["title"])))
+    else:
+        title.appendChild(document.createTextNode(str("Untitled Comic")))
+    root.appendChild(title)
+    description = document.createElement("Summary")
+    if "summary" in configDictionary.keys():
+        description.appendChild(document.createTextNode(str(configDictionary["summary"])))
+    else:
+        description.appendChild(document.createTextNode(str("There was no summary upon generation of this file.")))
+    root.appendChild(description)
+    if "seriesNumber" in configDictionary.keys():
+        number = document.createElement("Number")
+        number.appendChild(document.createTextNode(str(configDictionary["seriesNumber"])))
+        root.appendChild(number)
+
+    if "publishingDate" in configDictionary.keys():
+        date = QDate.fromString(configDictionary["publishingDate"], Qt.ISODate)
+        publishYear = document.createElement("Year")
+        publishYear.appendChild(document.createTextNode(str(date.year())))
+        publishMonth = document.createElement("Month")
+        publishMonth.appendChild(document.createTextNode(str(date.month())))
+        root.appendChild(publishYear)
+        root.appendChild(publishMonth)
+
+    if "format" in configDictionary.keys():
+        for form in configDictionary["format"]:
+            formattag = document.createElement("Format")
+            formattag.appendChild(document.createTextNode(str(form)))
+            root.appendChild(formattag)
+    if "otherKeywords" in configDictionary.keys():
+        tags = document.createElement("Tags")
+        tags.appendChild(document.createTextNode(str(", ".join(configDictionary["otherKeywords"]))))
+        root.appendChild(tags)
+
+    if "authorList" in configDictionary.keys():
+        for authorE in range(len(configDictionary["authorList"])):
+            author = document.createElement("Writer")
+            authorDict = configDictionary["authorList"][authorE]
+            if "role" in authorDict.keys():
+                if str(authorDict["role"]).lower() in ["writer", "penciller", "editor", "assistant editor", "cover artist", "letterer", "inker", "colorist"]:
+                    if str(authorDict["role"]).lower() is "cover artist":
+                        author = document.createElement("CoverArtist")
+                    elif str(authorDict["role"]).lower() is "assistant editor":
+                        author = document.createElement("Editor")
+                    else:
+                        author = document.createElement(str(authorDict["role"]).title())
+            stringName = []
+            if "last-name" in authorDict.keys():
+                stringName.append(authorDict["last-name"])
+            if "first-name" in authorDict.keys():
+                stringName.append(authorDict["first-name"])
+            if "nickname" in authorDict.keys():
+                stringName.append("(" + authorDict["nickname"] + ")")
+            author.appendChild(document.createTextNode(str(",".join(stringName))))
+            root.appendChild(author)
+    if "publisherName" in configDictionary.keys():
+        publisher = document.createElement("Publisher")
+        publisher.appendChild(document.createTextNode(str(configDictionary["publisherName"])))
+        root.appendChild(publisher)
+
+    if "genre" in configDictionary.keys():
+        for genreE in configDictionary["genre"]:
+            genre = document.createElement("Genre")
+            genre.appendChild(document.createTextNode(str(genreE)))
+            root.appendChild(genre)
+    blackAndWhite = document.createElement("BlackAndWhite")
+    blackAndWhite.appendChild(document.createTextNode(str("No")))
+    root.appendChild(blackAndWhite)
+    readingDirection = document.createElement("Manga")
+    readingDirection.appendChild(document.createTextNode(str("No")))
+    if "readingDirection" in configDictionary.keys():
+        if configDictionary["readingDirection"] is "rightToLeft":
+            readingDirection.appendChild(document.createTextNode(str("Yes")))
+    root.appendChild(readingDirection)
+
+    if "characters" in configDictionary.keys():
+        for char in configDictionary["characters"]:
+            character = document.createElement("Character")
+            character.appendChild(document.createTextNode(str(char)))
+            root.appendChild(character)
+    if "pages" in configDictionary.keys():
+        pagecount = document.createElement("PageCount")
+        pagecount.appendChild(document.createTextNode(str(len(configDictionary["pages"]))))
+        root.appendChild(pagecount)
+    pages = document.createElement("Pages")
+    covernumber = 0
+    if "pages" in configDictionary.keys() and "cover" in configDictionary.keys():
+        covernumber = configDictionary["pages"].index(configDictionary["cover"])
+    for i in range(len(pagesLocationList)):
+        page = document.createElement("Page")
+        page.setAttribute("Image", str(i))
+        if i is covernumber:
+            page.setAttribute("Type", "FrontCover")
+        pages.appendChild(page)
+    root.appendChild(pages)
+    document.appendChild(root)
+    f = open(location, 'w', newline="", encoding="utf-8")
+    f.write(document.toprettyxml(indent="  "))
+    f.close()
+    return True

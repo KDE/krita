@@ -324,7 +324,10 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 textArea = document.createElement("text-area")
                 textArea.setAttribute("points", " ".join(boundingBoxText))
                 # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
-                paragraph = minidom.parseString(v["text"])
+                svg = minidom.parseString(v["text"])
+                paragraph = minidom.Document()
+                paragraph.appendChild(paragraph.createElement("p"))
+                parseTextChildren(paragraph, svg.documentElement, paragraph.documentElement) 
                 textArea.appendChild(paragraph.documentElement)
                 textLayer.appendChild(textArea)
             else:
@@ -416,3 +419,53 @@ def createStandAloneACBF(configDictionary, document, location, pagesLocationList
     f.write(document.toprettyxml(indent="  "))
     f.close()
     return True
+
+"""
+Function to parse svg text to acbf ready text
+"""
+
+def parseTextChildren(document, elRead, elWrite):
+    for childNode in elRead.childNodes:
+        if childNode.nodeType == minidom.Node.TEXT_NODE:
+            if len(childNode.data) > 0:
+                if len(elWrite.childNodes)>0 and str(childNode.data).startswith(" ") is False:
+                    elWrite.appendChild(document.createTextNode(" "))
+                elWrite.appendChild(document.createTextNode(str(childNode.data)))
+        elif len(childNode.childNodes)>0:
+            fontWeight = str(childNode.getAttribute("font-weight"))
+            fontItalic = str(childNode.getAttribute("font-style"))
+            fontStrikeThrough = str(childNode.getAttribute("text-decoration"))
+            fontBaseLine = str(childNode.getAttribute("baseline-shift"))
+            newElementMade = False
+            if fontItalic.isalnum():
+                if (fontItalic == "italic"):
+                    newElement = document.createElement("Emphasis")
+                    newElementMade = True
+            elif fontWeight.isalnum():
+                if (fontWeight == "bold" or int(fontWeight) > 400):
+                    newElement = document.createElement("Strong")
+                    newElementMade = True
+            elif fontStrikeThrough.isalnum():
+                if (fontStrikeThrough == "line-through"):
+                    newElement = document.createElement("Strikethrough")
+                    newElementMade = True
+            elif fontBaseLine.isalnum():
+                if (fontBaseLine == "super"):
+                    newElement = document.createElement("Sup")
+                    newElementMade = True
+                elif (fontBaseLine == "sub"):
+                    newElement = document.createElement("Sub")
+                    newElementMade = True
+
+            if newElementMade is True:
+                parseTextChildren(document, childNode, newElement)
+                elWrite.appendChild(newElement)
+            else:
+                parseTextChildren(document, childNode, elWrite)
+
+        # If it is not a text node, nor does it have children(which could be textnodes),
+        # we should assume it's empty and ignore it.
+    elWrite.normalize()
+    for e in elWrite.childNodes:
+        if e.nodeType == minidom.Node.TEXT_NODE:
+            e.data = str(e.data).replace("  ", " ")

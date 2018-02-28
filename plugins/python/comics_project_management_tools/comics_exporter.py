@@ -23,8 +23,8 @@ An exporter that take the comicsConfig and uses it to generate several files.
 import sys
 from pathlib import Path
 import zipfile
-import xml.etree.ElementTree as ET
 from xml.dom import minidom
+from xml.etree import ElementTree as ET
 import types
 import re
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
@@ -479,75 +479,8 @@ class comicsExporter():
                 listOfPoints.append(point)
         shapeDesc["boundingBox"] = listOfPoints
         if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
-            textRoot = ET.fromstring(shape.toSvg())
-            paragraph = ET.Element("p")
-            if (len(textRoot) > 0):
-                self.parseTextChildren(textRoot, paragraph)
-            shapeDesc["text"] = ET.tostring(paragraph, "unicode")
+            shapeDesc["text"] = shape.toSvg()
         list.append(shapeDesc)
-
-    """
-    Function to parse svg text to acbf ready text
-    TODO: Move to a new file.
-    """
-
-    def parseTextChildren(self, elRead, elWrite):
-
-        if elRead.text is not None:
-            if len(elWrite) > 0:
-                if (elWrite[-1].tail is None):
-                    elWrite[-1].tail = str()
-                elWrite[-1].tail = " ".join([elWrite[-1].tail, elRead.text])
-            else:
-                if elWrite.text is None:
-                    elWrite.text = elRead.text
-                else:
-                    elWrite.text = " ".join([elWrite.text, elRead.text])
-
-        for childNode in elRead:
-            fontWeight = childNode.get("font-weight")
-            fontItalic = childNode.get("font-style")
-            fontStrikeThrough = childNode.get("text-decoration")
-            fontBaseLine = childNode.get("baseline-shift")
-            newElementMade = False
-            if fontItalic is not None:
-                if (fontItalic == "italic"):
-                    newElement = ET.Element("Emphasis")
-                    newElementMade = True
-            elif fontWeight is not None:
-                if (fontWeight == "bold" or int(fontWeight) > 400):
-                    newElement = ET.Element("Strong")
-                    newElementMade = True
-            elif fontStrikeThrough is not None:
-                if (fontStrikeThrough == "line-through"):
-                    newElement = ET.Element("Strikethrough")
-                    newElementMade = True
-            elif fontBaseLine is not None:
-                if (fontBaseLine == "super"):
-                    newElement = ET.Element("Sup")
-                    newElementMade = True
-                elif (fontBaseLine == "sub"):
-                    newElement = ET.Element("Sub")
-                    newElementMade = True
-
-            if newElementMade is True:
-                if (len(childNode) > 0):
-                    self.parseTextChildren(childNode, newElement)
-                else:
-                    newElement.text = childNode.text
-                elWrite.append(newElement)
-            else:
-                if (len(childNode) > 0):
-                    self.parseTextChildren(childNode, elWrite)
-                else:
-                    if len(elWrite) > 0:
-                        if (elWrite[-1].tail is None):
-                            elWrite[-1].tail = str()
-                        elWrite[-1].tail = " ".join([elWrite[-1].tail, childNode.text])
-                    else:
-                        if elWrite.text is None:
-                            elWrite.text = str()
-                        elWrite.text = " ".join([elWrite.text, childNode.text])
 
     """
     Function to remove layers when they have the given labels.
@@ -575,7 +508,7 @@ class comicsExporter():
             title = self.configDictionary["title"]
 
         # Get the appropriate path.
-        url = str(exportPath / "metadata"/ str(title + ".cbz"))
+        url = str(exportPath / str(title + ".cbz"))
 
         # Create a zip file.
         cbzArchive = zipfile.ZipFile(url, mode="w", compression=zipfile.ZIP_STORED)

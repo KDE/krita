@@ -359,9 +359,9 @@ void QMic::slotStartApplicator(QStringList gmicImages)
             gimg->assign(width, height, 1, spectrum);
             gimg->name = layerName;
 
-            gimg->_data = new float[width * height * spectrum * sizeof(float)];
-            qDebug() << "width" << width << "height" << height << "size" << width * height * spectrum * sizeof(float) << "shared memory size" << m.size();
-            memcpy(gimg->_data, m.constData(), width * height * spectrum * sizeof(float));
+            gimg->_data = new float[width * height * spectrum];
+            qDebug() << "width" << width << "height" << height << "size" << width * height * spectrum << "shared memory size" << m.size();
+            memcpy(gimg->_data, m.constData(), width * height * spectrum);
 
             qDebug() << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
 

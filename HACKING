@@ -132,3 +132,34 @@ Boolean operators
 
 
 Boudewijn Rempt
+
+
+With Krita now supporting Python scripting, we need guidelines for these as well.
+These guidelines are preliminary and may be further refined in the future.
+
+To keep it simple, we have chosen to follow the style guide suggested by Python: PEP8.
+
+All rules should be followed, except the max limit of 79 characters per line. As this
+can reduce readability in some cases, this rule is optional.
+
+The full PEP8 specification is available here: https://www.python.org/dev/peps/pep-0008/
+
+To check compliance you can run pep8.py against the code.
+You can also use autopep8.py to automatically fix detected compliance issues.
+
+pep8.py can be downloaded via Python's package manager (pip) [https://pypi.python.org/pypi/pep8],
+or your distribution's package manager.
+autopep8.py can also be downloaded via Python's package manager [https://pypi.python.org/pypi/autopep8],
+or your distribution's package manager.
+
+Both of these scripts come bundled with the PyDev plugin, which is available for Eclipse and other IDEs.
+The PyDev integration can be configured to visually highlight portions of the code which is not in compliance,
+as well as run autopep8 via shortcuts.
+
+pep8.py and autopep8.py can suppress select rules via the "--ignore" command line argument.
+To ignore the 79 charachers per line rule, pep8.py can be called like this:
+
+pep8.py --ignore=E501
+
+You can read more about the error codes and what they mean here:
+http://pep8.readthedocs.io/en/release-1.7.x/intro.html#error-codes

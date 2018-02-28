@@ -118,7 +118,13 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
 QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage)
 {
     QScopedPointer<KisDocument> doc(createDocument(nodes, srcImage));
-    return doc->serializeToNativeByteArray();
+    QByteArray result = doc->serializeToNativeByteArray();
+
+    // avoid a sanity check failure caused by the fact that the image outlives
+    // the document (and it does)
+    doc->setCurrentImage(0);
+
+    return result;
 }
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
@@ -197,11 +203,9 @@ void KisMimeData::initializeExternalNode(KisNodeSP *node,
                                          KisImageWSP image,
                                          KisShapeController *shapeController)
 {
-    // layers store a link to the image, so update it
-    KisLayer *layer = qobject_cast<KisLayer*>(node->data());
-    if (layer) {
-        layer->setImage(image);
-    }
+    // adjust the link to a correct image object
+    (*node)->setImage(image);
+
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node->data());
     if (shapeLayer) {
         // attach the layer to a new shape controller

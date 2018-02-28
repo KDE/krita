@@ -37,6 +37,7 @@ public:
 
     void putDevice(KisPaintDeviceSP device) {
         device->clear();
+        device->setDefaultBounds(new KisDefaultBounds());
         m_stack.push(device);
     }
 
@@ -59,6 +60,7 @@ public:
 
     void putSelection(KisSelectionSP selection) {
         selection->clear();
+        selection->setDefaultBounds(new KisDefaultBounds());
         m_stack.push(selection);
     }
 

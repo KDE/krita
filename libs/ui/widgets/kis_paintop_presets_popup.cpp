@@ -561,9 +561,12 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 
     // find the display name of the brush engine and append it to the selected preset display
     QString currentBrushEngineName;
+    QPixmap currentBrushEngineIcon = QPixmap(26, 26);
+    currentBrushEngineIcon.fill(Qt::transparent);
     for(int i=0; i < sortedBrushEnginesList.length(); i++) {
         if (sortedBrushEnginesList.at(i).id == currentPaintOpId() ) {
              currentBrushEngineName = sortedBrushEnginesList.at(i).name;
+             currentBrushEngineIcon = sortedBrushEnginesList.at(i).icon.pixmap(26, 26);
         }
     }
 
@@ -573,6 +576,7 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(currentBrushEngineName.append(" ").append("Engine"));
+    m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
 
 

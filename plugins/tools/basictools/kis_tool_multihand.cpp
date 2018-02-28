@@ -264,6 +264,7 @@ QWidget* KisToolMultihand::createOptionWidget()
     connect(customUI->showAxesCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetAxesVisible(bool)));
     customUI->showAxesCheckbox->setChecked((bool)m_configGroup.readEntry("showAxes", false));
 
+    connect(image(), SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), this, SLOT(resetAxes(const QPointF &, const QPointF &)));
 
     customUI->moveOriginButton->setCheckable(true);
     connect(customUI->moveOriginButton, SIGNAL(clicked(bool)),this, SLOT(activateAxesPointModeSetup()));

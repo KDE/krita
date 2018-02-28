@@ -118,7 +118,13 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
 QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage)
 {
     QScopedPointer<KisDocument> doc(createDocument(nodes, srcImage));
-    return doc->serializeToNativeByteArray();
+    QByteArray result = doc->serializeToNativeByteArray();
+
+    // avoid a sanity check failure caused by the fact that the image outlives
+    // the document (and it does)
+    doc->setCurrentImage(0);
+
+    return result;
 }
 
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const

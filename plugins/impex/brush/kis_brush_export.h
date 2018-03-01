@@ -36,10 +36,19 @@ public:
         : KisConfigWidget(parent)
     {
         setupUi(this);
+        connect(this->brushStyle, SIGNAL(currentIndexChanged(int)), SLOT(enableSelectionMedthod(int)));
     }
 
     void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
     KisPropertiesConfigurationSP configuration() const override;
+public Q_SLOTS:
+    void enableSelectionMedthod(int value) {
+        if (value == 0) {
+            cmbSelectionMode->setEnabled(false);
+        } else {
+            cmbSelectionMode->setEnabled(true);
+        }
+    }
 };
 
 

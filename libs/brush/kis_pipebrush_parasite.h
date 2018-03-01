@@ -106,6 +106,7 @@ public:
     qint32 rank[MaxDim];
 
     KisParasite::SelectionMode selection[MaxDim];
+    QString selectionMode; // for UI
 
     /// The total count of brushes in each dimension (helper)
     qint32 brushesCount[MaxDim];

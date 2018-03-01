@@ -123,16 +123,16 @@ public:
     }
 
     static QRect upscaledRect(const QRect &srcRect, int lod) {
-        qint32 x1, y1, x2, y2;
-        srcRect.getCoords(&x1, &y1, &x2, &y2);
+        qint32 x, y, w, h;
+        srcRect.getRect(&x, &y, &w, &h);
 
-        x1 <<= lod;
-        y1 <<= lod;
-        x2 <<= lod;
-        y2 <<= lod;
+        x <<= lod;
+        y <<= lod;
+        w <<= lod;
+        h <<= lod;
 
         QRect rect;
-        rect.setCoords(x1, y1, x2, y2);
+        rect.setRect(x, y, w, h);
 
         return rect;
     }

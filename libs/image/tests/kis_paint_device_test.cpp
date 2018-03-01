@@ -1427,6 +1427,7 @@ void fillGradientDevice(KisPaintDeviceSP dev, const QRect &rect, bool flat = fal
         }
     }
 }
+
 #include "kis_lod_transform.h"
 void KisPaintDeviceTest::testLodTransform()
 {
@@ -1440,6 +1441,16 @@ void KisPaintDeviceTest::testLodTransform()
     QCOMPARE(t.alignedRect(rc1, lod), rc1);
     QCOMPARE(t.alignedRect(rc2, lod), rc1);
     QCOMPARE(t.alignedRect(rc3, lod), rc1);
+
+    QRect rc4(16, 14, 8, 6);
+
+    // round-trip with positive rect
+    QCOMPARE(KisLodTransform::scaledRect(KisLodTransform::upscaledRect(rc4, lod), lod), rc4);
+    QCOMPARE(KisLodTransform::upscaledRect(KisLodTransform::scaledRect(rc4, lod), lod), KisLodTransform::alignedRect(rc4, lod));
+
+    // round-trip with negative rect
+    QCOMPARE(KisLodTransform::scaledRect(KisLodTransform::upscaledRect(rc1, lod), lod), rc1);
+    QCOMPARE(KisLodTransform::upscaledRect(KisLodTransform::scaledRect(rc1, lod), lod), KisLodTransform::alignedRect(rc1, lod));
 }
 
 #include "krita_utils.h"

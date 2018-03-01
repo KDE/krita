@@ -36,7 +36,7 @@ private:
     void doStrokeCallback(KisStrokeJobData *data) override;
     void cancelStrokeCallback() override;
 
-    void resumeAndIssueUpdates(bool dropUpdates);
+    bool resumeAndIssueUpdates(bool dropUpdates);
 
 private:
     struct Private;

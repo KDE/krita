@@ -33,7 +33,8 @@ inline uint qHash(const QRect &rc) {
 struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 {
     KisImageWSP image;
-    bool suspend;
+    bool suspend = true;
+    bool hadAnyRealUpdates = false;
 
     class SuspendLod0Updates : public KisProjectionUpdatesFilter
     {
@@ -228,11 +229,13 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
             KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
     } else if (resumeData) {
         image->disableUIUpdates();
-        resumeAndIssueUpdates(false);
+        m_d->hadAnyRealUpdates = resumeAndIssueUpdates(false);
     } else if (barrierData) {
         image->enableUIUpdates();
     } else if (canvasUpdates) {
-        image->notifyProjectionUpdated(canvasUpdates->updateRect);
+        if (m_d->hadAnyRealUpdates) {
+            image->notifyProjectionUpdated(canvasUpdates->updateRect);
+        }
     }
 }
 
@@ -262,17 +265,19 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
     return jobsData;
 }
 
-void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropUpdates)
+bool KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropUpdates)
 {
     KisImageSP image = m_d->image.toStrongRef();
     if (!image) {
-        return;
+        return false;
     }
 
     KisProjectionUpdatesFilterSP filter =
         image->projectionUpdatesFilter();
 
-    if (!filter) return;
+    if (!filter) return false;
+
+    bool hadRealUpdates = false;
 
     Private::SuspendLod0Updates *localFilter =
         dynamic_cast<Private::SuspendLod0Updates*>(filter.data());
@@ -282,8 +287,11 @@ void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropU
 
         if (!dropUpdates) {
             localFilter->notifyUpdates(image.data());
+            hadRealUpdates = true;
         }
     }
+
+    return hadRealUpdates;
 }
 
 void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()

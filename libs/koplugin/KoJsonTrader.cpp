@@ -57,34 +57,38 @@ KoJsonTrader::KoJsonTrader()
         searchDirs << QDir(CMAKE_INSTALL_PREFIX);
 #endif
         Q_FOREACH (const QDir& dir, searchDirs) {
-            Q_FOREACH (QString entry, dir.entryList()) {
-                QFileInfo info(dir, entry);
+            const QStringList nameFilters = {
 #ifdef Q_OS_OSX
-                if (info.isDir() && info.fileName().contains("PlugIns")) {
+                "*PlugIns*",
+#endif
+                "lib*",
+            };
+            Q_FOREACH (const QFileInfo &info, dir.entryInfoList(nameFilters, QDir::Dirs | QDir::NoDotAndDotDot)) {
+#ifdef Q_OS_OSX
+                if (info.fileName().contains("PlugIns")) {
                     m_pluginPath = info.absoluteFilePath();
                     break;
                 }
-                else if (info.isDir() && (info.fileName().contains("lib"))) {
+                else if (info.fileName().contains("lib")) {
 #else
-                if (info.isDir() && info.fileName().contains("lib")) {
+                if (info.fileName().contains("lib")) {
 #endif
                     QDir libDir(info.absoluteFilePath());
 
                     // on many systems this will be the actual lib dir (and krita subdir contains plugins)
-                    if (libDir.entryList(QStringList() << "kritaplugins").size() > 0) {
-                        m_pluginPath = info.absoluteFilePath() + "/kritaplugins";
+                    if (libDir.cd("kritaplugins")) {
+                        m_pluginPath = libDir.absolutePath();
                         break;
                     }
 
                     // on debian at least the actual libdir is a subdir named like "lib/x86_64-linux-gnu"
                     // so search there for the Krita subdir which will contain our plugins
-                    Q_FOREACH (QString subEntry, libDir.entryList()) {
-                        QFileInfo subInfo(libDir, subEntry);
-                        if (subInfo.isDir()) {
-                            if (QDir(subInfo.absoluteFilePath()).entryList(QStringList() << "kritaplugins").size() > 0) {
-                                m_pluginPath = subInfo.absoluteFilePath() + "/kritaplugins";
-                                break; // will only break inner loop so we need the extra check below
-                            }
+                    // FIXME: what are the chances of there being more than one Krita install with different arch and compiler ABI?
+                    Q_FOREACH (const QFileInfo &subInfo, libDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+                        QDir subDir(subInfo.absoluteFilePath());
+                        if (subDir.cd("kritaplugins")) {
+                            m_pluginPath = subDir.absolutePath();
+                            break; // will only break inner loop so we need the extra check below
                         }
                     }
 

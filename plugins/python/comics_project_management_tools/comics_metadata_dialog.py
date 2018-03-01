@@ -620,7 +620,7 @@ class comic_meta_data_editor(QDialog):
         listkeys = self.lnOtherKeywords.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
             config["otherKeywords"] = self.lnOtherKeywords.text().split(", ")
-        elif "characters" in config.keys():
+        elif "otherKeywords" in config.keys():
             config.pop("otherKeywords")
         text = self.teSummary.toPlainText()
         if len(text) > 0 and text.isspace() is False:

@@ -87,9 +87,11 @@ class comics_template_dialog(QDialog):
         self.setWindowTitle(i18n("Add new template"))
         self.setLayout(QVBoxLayout())
 
+        self.templates = QComboBox()
         self.templates.setEnabled(False)
         self.fill_templates()
 
+        self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
         self.buttons.button(QDialogButtonBox.Ok).setEnabled(False)

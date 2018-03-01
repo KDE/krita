@@ -211,6 +211,8 @@ KisImagePipeBrush::KisImagePipeBrush(const QString& name, int w, int h,
     parasite.ncells = devices.at(0).count();
     parasite.rank[0] = parasite.ncells; // ### This can masquerade some bugs, be careful here in the future
     parasite.selection[0] = modes.at(0);
+
+
     // XXX needsmovement!
 
     parasite.setBrushesCount();
@@ -278,12 +280,14 @@ bool KisImagePipeBrush::initFromData(const QByteArray &data)
     QString paramline = QString::fromUtf8(line2, line2.size());
     qint32 numOfBrushes = paramline.left(paramline.indexOf(' ')).toUInt();
     QString parasiteString = paramline.mid(paramline.indexOf(' ') + 1);
+
     KisPipeBrushParasite parasite = KisPipeBrushParasite(parasiteString);
     parasite.sanitize();
 
+    parasiteSelectionString = parasite.selectionMode; // selection mode to return to UI
+
     m_d->brushesPipe.setParasite(parasite);
     i++; // Skip past the second newline
-
 
     for (int brushIndex = 0;
             brushIndex < numOfBrushes && i < data.size(); brushIndex++) {
@@ -391,6 +395,11 @@ KisFixedPaintDeviceSP KisImagePipeBrush::paintDevice(
 enumBrushType KisImagePipeBrush::brushType() const
 {
     return !hasColor() || useColorAsMask() ? PIPE_MASK : PIPE_IMAGE;
+}
+
+QString KisImagePipeBrush::parasiteSelection()
+{
+    return parasiteSelectionString;
 }
 
 bool KisImagePipeBrush::hasColor() const

@@ -80,6 +80,8 @@ public:
 
     enumBrushType brushType() const override;
 
+    QString parasiteSelection(); // returns random, constant, etc
+
     const KisBoundary* boundary() const override;
 
     bool canPaintFor(const KisPaintInformation& info) override;
@@ -109,7 +111,6 @@ public:
 
     QVector<KisGbrBrush*> brushes() const;
 
-
     const KisPipeBrushParasite &parasite() const;
 
     void setParasite(const KisPipeBrushParasite& parasite);
@@ -120,8 +121,6 @@ protected:
     void setHasColor(bool hasColor) override;
     /// Will call KisBrush's saveToDevice as well
 
-
-
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
 private:
@@ -131,6 +130,8 @@ private:
     void testingSelectNextBrush(const KisPaintInformation& info) const;
 
     bool initFromData(const QByteArray &data);
+
+    QString parasiteSelectionString; // incremental, random, etc.
 
 private:
     struct Private;

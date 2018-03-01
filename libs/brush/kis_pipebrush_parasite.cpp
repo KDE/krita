@@ -39,10 +39,12 @@ KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
             }
         } else if (index.startsWith(QString("sel"))) {
             int selIndex = index.mid(strlen("sel")).toInt();
+
             if (selIndex >= 0 && selIndex < dim) {
-                QString selectionMode = split.at(1);
+                selectionMode = split.at(1);
+
                 if (selectionMode == "incremental") {
-                    selection[selIndex] = KisParasite::Incremental;
+                    selection[selIndex] = KisParasite::Incremental;                    
                 }
                 else if (selectionMode == "angular") {
                     selection[selIndex] = KisParasite::Angular;

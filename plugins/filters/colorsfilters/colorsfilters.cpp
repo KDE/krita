@@ -53,7 +53,7 @@
 #include <KoUpdater.h>
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
 
 
 #include "kis_hsv_adjustment_filter.h"
@@ -156,20 +156,14 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     // apply
     KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
 
-    KisSequentialIterator it(device, applyRect);
-
-    qint32 totalCost = (applyRect.width() * applyRect.height()) / 100;
-    if (totalCost == 0) totalCost = 1;
-    qint32 pixelsProcessed = 0;
+    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
 
     quint32 npix = it.nConseqPixels();
-    while(it.nextPixels(npix)  && !(progressUpdater && progressUpdater->interrupted())) {
+    while(it.nextPixels(npix)) {
 
         // adjust
         npix = it.nConseqPixels();
         adj->transform(it.oldRawData(), it.rawData(), npix);
-        pixelsProcessed += npix;
-        if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
 
     delete[] transfer;

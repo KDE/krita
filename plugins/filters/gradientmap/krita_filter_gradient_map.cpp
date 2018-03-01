@@ -33,7 +33,7 @@
 #include <KoColorSet.h>
 #include "gradientmap.h"
 
-#include <kis_sequential_iterator.h>
+#include <KisSequentialIteratorProgress.h>
 
 
 KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map..."))
@@ -53,10 +53,6 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 {
     Q_ASSERT(!device.isNull());
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.height() * applyRect.width());
-    }
-
     QDomDocument doc;
     if (config->version()==1) {
         QDomElement elt = doc.createElement("gradient");
@@ -75,8 +71,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 
 
     KoColor outColor(Qt::white, device->colorSpace());
-    KisSequentialIterator it(device, applyRect);
-    int p = 0;
+    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
     quint8 grey;
     const int pixelSize = device->colorSpace()->pixelSize();
     while (it.nextPixel()) {
@@ -85,8 +80,6 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
         outColor.setOpacity(qMin(KoColor(it.oldRawData(), device->colorSpace()).opacityF(), outColor.opacityF()));
         outColor.convertTo(device->colorSpace());
         memcpy(it.rawData(), outColor.data(), pixelSize);
-        if (progressUpdater) progressUpdater->setValue(p++);
-
     }
 
 }

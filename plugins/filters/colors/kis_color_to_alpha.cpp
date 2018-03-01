@@ -34,6 +34,7 @@
 #include "ui_wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"
 #include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
 
 KisFilterColorToAlpha::KisFilterColorToAlpha()
     : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
@@ -72,9 +73,8 @@ inline void inverseOver(const int numChannels, const int *channelIndex,
 
 template<typename channel_type, typename composite_type>
 void applyToIterator(const int numChannels, const int *channelIndex,
-                     KisSequentialIterator &it, KoColor baseColor,
-                     int threshold, const KoColorSpace *cs,
-                     KisProgressUpdateHelper &progressHelper)
+                     KisSequentialIteratorProgress &it, KoColor baseColor,
+                     int threshold, const KoColorSpace *cs)
 {
     qreal thresholdF = threshold;
     quint8 *baseColorData_uint8 = baseColor.data();
@@ -95,8 +95,6 @@ void applyToIterator(const int numChannels, const int *channelIndex,
         inverseOver<channel_type, composite_type>(numChannels, channelIndex,
                                                   dst, baseColorData,
                                                   newOpacity);
-
-        progressHelper.step();
     }
 }
 
@@ -116,8 +114,7 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
 
     const KoColorSpace * cs = device->colorSpace();
 
-    KisProgressUpdateHelper progressHelper(progressUpdater, 100, rect.width() * rect.height());
-    KisSequentialIterator it(device, rect);
+    KisSequentialIteratorProgress it(device, rect, progressUpdater);
     KoColor baseColor(cTA, cs);
 
     QVector<int> channelIndex;
@@ -149,28 +146,28 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
     case KoChannelInfo::UINT8:
         applyToIterator<quint8, qint16>(channelIndex.size(), channelIndex.data(),
                                         it, baseColor,
-                                        threshold, cs, progressHelper);
+                                        threshold, cs);
         break;
     case KoChannelInfo::UINT16:
         applyToIterator<quint16, qint32>(channelIndex.size(), channelIndex.data(),
                                          it, baseColor,
-                                         threshold, cs, progressHelper);
+                                         threshold, cs);
         break;
     case KoChannelInfo::UINT32:
         applyToIterator<quint32, qint64>(channelIndex.size(), channelIndex.data(),
                                          it, baseColor,
-                                         threshold, cs, progressHelper);
+                                         threshold, cs);
         break;
 
     case KoChannelInfo::FLOAT32:
         applyToIterator<float, float>(channelIndex.size(), channelIndex.data(),
                                       it, baseColor,
-                                      threshold, cs, progressHelper);
+                                      threshold, cs);
         break;
     case KoChannelInfo::FLOAT64:
         applyToIterator<double, double>(channelIndex.size(), channelIndex.data(),
                                         it, baseColor,
-                                        threshold, cs, progressHelper);
+                                        threshold, cs);
         break;
     case KoChannelInfo::FLOAT16:
 #include <KoConfig.h>
@@ -178,7 +175,7 @@ void KisFilterColorToAlpha::processImpl(KisPaintDeviceSP device,
 #include <half.h>
         applyToIterator<half, half>(channelIndex.size(), channelIndex.data(),
                                     it, baseColor,
-                                    threshold, cs, progressHelper);
+                                    threshold, cs);
         break;
 
 #endif

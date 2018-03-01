@@ -25,7 +25,8 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
+
 
 typedef void (*funcMaxMin)(const quint8* , quint8* , uint);
 
@@ -82,9 +83,6 @@ void KisFilterMax::processImpl(KisPaintDeviceSP device,
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
 
-    int pixelsProcessed = 0;
-    int totalCost = rect.width() * rect.height() / 100;
-
     const KoColorSpace * cs = device->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
@@ -100,11 +98,9 @@ void KisFilterMax::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-    KisSequentialIterator it(device, rect);
-
+    KisSequentialIteratorProgress it(device, rect, progressUpdater);
     while (it.nextPixel()) {
         F(it.oldRawData(), it.rawData(), nC);
-        if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
     }
 }
 
@@ -124,10 +120,6 @@ void KisFilterMin::processImpl(KisPaintDeviceSP device,
     Q_UNUSED(config);
     Q_ASSERT(device != 0);
 
-    int pixelsProcessed = 0;
-    int totalCost = rect.width() * rect.height() / 100;
-    if (totalCost == 0) totalCost = 1;
-
     const KoColorSpace * cs = device->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
@@ -143,10 +135,9 @@ void KisFilterMin::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-    KisSequentialIterator it(device, rect);
+    KisSequentialIteratorProgress it(device, rect, progressUpdater);
     while (it.nextPixel()) {
         F(it.oldRawData(), it.rawData(), nC);
-        if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
     }
 }
 

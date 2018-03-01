@@ -94,11 +94,6 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     quint32 fishEyes = config->getInt("fishEyes", 30);
     qsrand(config->getInt("seed"));
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
-    }
-    int count = 0;
-
     if (fishEyes <= 0) fishEyes = 1;
 
     if (fishEyes > 100) fishEyes = 100;
@@ -130,15 +125,16 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
     // Init boolean Matrix.
 
-    for (i = 0 ; (i < Width) && !(progressUpdater && progressUpdater->interrupted()) ; ++i) {
-        for (j = 0 ; (j < Height) && !(progressUpdater && progressUpdater->interrupted()); ++j) {
+    for (i = 0 ; i < Width; ++i) {
+        for (j = 0 ; j < Height; ++j) {
             BoolMatrix[i][j] = false;
         }
     }
 
+    progressUpdater->setRange(0, number);
     KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
     
-    for (uint NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs) {
+    for (uint NumBlurs = 0; NumBlurs <= number; ++NumBlurs) {
         NewSize = (int)(qrand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;
         Radius = halfSize;
@@ -154,22 +150,22 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
             if (BoolMatrix[y][x])
                 FindAnother = true;
             else
-                for (i = x - halfSize ; (i <= x + halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++)
-                    for (j = y - halfSize ; (j <= y + halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++)
+                for (i = x - halfSize ; i <= x + halfSize; i++)
+                    for (j = y - halfSize ; j <= y + halfSize; j++)
                         if ((i >= 0) && (i < Height) && (j >= 0) && (j < Width))
                             if (BoolMatrix[j][i])
                                 FindAnother = true;
 
             Counter++;
-        } while ((FindAnother && (Counter < 10000) && !(progressUpdater && progressUpdater->interrupted())));
+        } while (FindAnother && Counter < 10000);
 
         if (Counter >= 10000) {
             NumBlurs = number;
             break;
         }
 
-        for (i = -1 * halfSize ; (i < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++) {
-            for (j = -1 * halfSize ; (j < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++) {
+        for (i = -1 * halfSize ; i < NewSize - halfSize; i++) {
+            for (j = -1 * halfSize ; j < NewSize - halfSize; j++) {
                 r = sqrt((double)i * i + j * j);
                 a = atan2(static_cast<double>(i), static_cast<double>(j));
 
@@ -267,10 +263,8 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
         BlurRadius = NewSize / 25 + 1;
 
-        for (i = -1 * halfSize - BlurRadius ; (i < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()) ; i++) {
-            for (j = -1 * halfSize - BlurRadius;
-                    ((j < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()));
-                    ++j) {
+        for (i = -1 * halfSize - BlurRadius ; i < NewSize - halfSize + BlurRadius; i++) {
+            for (j = -1 * halfSize - BlurRadius; j < NewSize - halfSize + BlurRadius; ++j) {
                 r = sqrt((double)i * i + j * j);
 
                 if (r <= Radius * 1.1) {
@@ -308,7 +302,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
             }
         }
 
-        if (progressUpdater) progressUpdater->setValue(++count);
+        progressUpdater->setValue(NumBlurs);
     }
 
     FreeBoolArray(BoolMatrix, Width);

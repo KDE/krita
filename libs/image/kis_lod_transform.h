@@ -41,17 +41,8 @@ public:
         m_levelOfDetail = levelOfDetail;
     }
 
-#ifdef Q_CC_MSVC
-    static double log2( double n )
-    {
-        // log(n)/log(2) is log2.
-        return log( n ) / log( 2 );
-    }
-#endif
-
-
     static int scaleToLod(qreal scale, int maxLod) {
-        return qMin(maxLod, qMax(0, qFloor(log2(1.0 / scale))));
+        return qMin(maxLod, qMax(0, qFloor(std::log2(1.0 / scale))));
     }
 
     static qreal lodToScale(int levelOfDetail) {

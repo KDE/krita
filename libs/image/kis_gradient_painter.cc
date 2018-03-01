@@ -29,10 +29,9 @@
 #include <resources/KoPattern.h>
 #include "kis_selection.h"
 
-#include "kis_iterator_ng.h"
+#include <KisSequentialIteratorProgress.h>
 #include "kis_image.h"
 #include "kis_random_accessor_ng.h"
-#include "kis_progress_update_helper.h"
 #include "kis_gradient_shape_strategy.h"
 #include "kis_polygonal_gradient_shape_strategy.h"
 #include "kis_cached_gradient_shape_strategy.h"
@@ -712,9 +711,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
 
         CachedGradient cachedGradient(gradient(), qMax(processRect.width(), processRect.height()), colorSpace);
 
-        KisSequentialIterator it(dev, processRect);
-        const int rightCol = processRect.right();
-        KisProgressUpdateHelper progressHelper(progressUpdater(), 100, processRect.height());
+        KisSequentialIteratorProgress it(dev, processRect, progressUpdater());
 
         while (it.nextPixel()) {
             double t = shapeStrategy->valueAt(it.x(), it.y());
@@ -725,10 +722,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
             }
 
             memcpy(it.rawData(), cachedGradient.cachedAt(t), pixelSize);
-
-            if (it.x() == rightCol) {
-                progressHelper.step();
-            }
         }
 
         bitBlt(processRect.topLeft(), dev, processRect);

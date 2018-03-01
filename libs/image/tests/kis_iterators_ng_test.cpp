@@ -32,6 +32,7 @@
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
 #include "kis_global.h"
+#include "testutil.h"
 
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
@@ -442,6 +443,46 @@ void KisIteratorTest::fill()
 void KisIteratorTest::sequentialIter()
 {
     allCsApplicator(&KisIteratorTest::sequentialIter);
+}
+
+#include <KisSequentialIteratorProgress.h>
+
+void KisIteratorTest::sequentialIteratorWithProgress()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    const QRect rc(10,10,200,200);
+    TestUtil::TestProgressBar proxy;
+
+    KisSequentialConstIteratorProgress it (dev, rc, &proxy);
+
+    while (it.nextPixel()) {
+        QCOMPARE(proxy.min(), rc.top());
+        QCOMPARE(proxy.max(), rc.top() + rc.height());
+        QCOMPARE(proxy.value(), it.y());
+    }
+
+    QCOMPARE(proxy.max(), rc.top() + rc.height());
+    QCOMPARE(proxy.value(), proxy.max());
+}
+
+void KisIteratorTest::sequentialIteratorWithProgressIncomplete()
+{
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+
+    const QRect rc(10,10,100,100);
+    TestUtil::TestProgressBar proxy;
+
+    {
+        KisSequentialConstIteratorProgress it (dev, rc, &proxy);
+
+        QCOMPARE(proxy.max(), rc.top() + rc.height());
+        QCOMPARE(proxy.value(), rc.top());
+    }
+
+    // on desruction, iterator automatically completes progress reporting
+    QCOMPARE(proxy.max(), rc.top() + rc.height());
+    QCOMPARE(proxy.value(), proxy.max());
 }
 
 void KisIteratorTest::hLineIter()

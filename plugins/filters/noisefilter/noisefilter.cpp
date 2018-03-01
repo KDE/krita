@@ -45,7 +45,7 @@
 
 #include "kis_wdg_noise.h"
 #include "ui_wdgnoiseoptions.h"
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
 
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaNoiseFilterFactory, "kritanoisefilter.json", registerPlugin<KritaNoiseFilter>();)
@@ -93,21 +93,14 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
 {
     Q_ASSERT(!device.isNull());
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
-    }
-    int count = 0;
-
     const KoColorSpace * cs = device->colorSpace();
 
     QVariant value;
-    int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
-    int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
-
-    KisSequentialIterator it(device, applyRect);
+    const int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
+    const int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
 
     quint8* interm = new quint8[cs->pixelSize()];
-    double threshold = (100.0 - level) * 0.01;
+    const double threshold = (100.0 - level) * 0.01;
 
     qint16 weights[2];
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
@@ -134,7 +127,9 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    while (it.nextPixel() && !(progressUpdater && progressUpdater->interrupted())) {
+    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
+
+    while (it.nextPixel()) {
         if (randt.doubleRandomAt(it.x(), it.y()) > threshold) {
             // XXX: Added static_cast to get rid of warnings
             QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(it.x(), it.y()) * 255),
@@ -144,7 +139,6 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
             pixels[1] = it.oldRawData();
             mixOp->mixColors(pixels, weights, 2, it.rawData());
         }
-        if (progressUpdater) progressUpdater->setValue(++count);
     }
 
     delete [] interm;

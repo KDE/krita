@@ -40,7 +40,7 @@
 
 #include <KisDocument.h>
 #include <kis_image.h>
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -64,17 +64,13 @@ void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
                                     KoUpdater* progressUpdater
                                     ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
 
-    qint32 width = applyRect.width();
-    qint32 height = applyRect.height();
-
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 brushSize = config ? config->getInt("brushSize", 1) : 1;
-    quint32 smooth = config ? config->getInt("smooth", 30) : 30;
+    const quint32 brushSize = config ? config->getInt("brushSize", 1) : 1;
+    const quint32 smooth = config ? config->getInt("smooth", 30) : 30;
 
-    OilPaint(device, device, srcTopLeft, applyRect.topLeft(), width, height, brushSize, smooth, progressUpdater);
+    OilPaint(device, device, applyRect, brushSize, smooth, progressUpdater);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.
@@ -91,27 +87,14 @@ void KisOilPaintFilter::processImpl(KisPaintDeviceSP device,
  *                     a matrix and simply write at the original position.
  */
 
-void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QPoint& srcTopLeft, const QPoint& dstTopLeft, int w, int h,
+void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP dst, const QRect &applyRect,
                                  int BrushSize, int Smoothness, KoUpdater* progressUpdater) const
 {
-    if (progressUpdater) {
-        progressUpdater->setRange(0, w * h);
-    }
+    KisSequentialConstIteratorProgress it(src, applyRect, progressUpdater);
+    KisSequentialIterator dstIt(dst, applyRect);
 
-    QRect bounds(srcTopLeft.x(), srcTopLeft.y(), w, h);
-
-    KisHLineConstIteratorSP it = src->createHLineConstIteratorNG(srcTopLeft.x(), srcTopLeft.y(), w);
-    KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(dstTopLeft.x(), dstTopLeft.y(), w);
-
-    int progress = 0;
-    for (qint32 yOffset = 0; yOffset < h; yOffset++) {
-        do {  //&& !cancelRequested()) {
-                MostFrequentColor(src, dstIt->rawData(), bounds, it->x(), it->y(), BrushSize, Smoothness);
-        }  while (it->nextPixel() && dstIt->nextPixel());
-        it->nextRow();
-        dstIt->nextRow();
-
-        if (progressUpdater) progressUpdater->setValue(progress += w);
+    while (it.nextPixel() && dstIt.nextPixel()) {
+        MostFrequentColor(src, dstIt.rawData(), applyRect, it.x(), it.y(), BrushSize, Smoothness);
     }
 }
 

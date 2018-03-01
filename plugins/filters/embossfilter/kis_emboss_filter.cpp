@@ -48,7 +48,8 @@
 #include <kis_processing_information.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
+
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
 {
@@ -99,11 +100,7 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
     int Width = applyRect.width();
     int Height = applyRect.height();
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, Height);
-    }
-
-    KisSequentialIterator it(device, applyRect);
+    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
     QColor color1;
     QColor color2;
     KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
@@ -122,7 +119,6 @@ void KisEmbossFilter::processImpl(KisPaintDeviceSP device,
         Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
         device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it.rawData());
-        if (progressUpdater) { progressUpdater->setValue(it.y()); if(progressUpdater->interrupted()) return; }
     }
 }
 

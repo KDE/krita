@@ -29,7 +29,7 @@
 #ifndef NDEBUG
 #include <QTime>
 #endif
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
 #include "kis_color_transformation_configuration.h"
 
 KisColorTransformationFilter::KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry) : KisFilter(id, category, entry)
@@ -49,10 +49,6 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
 {
     Q_ASSERT(!device.isNull());
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.height() * applyRect.width());
-    }
-
     const KoColorSpace * cs = device->colorSpace();
     KoColorTransformation * colorTransformation = 0;
     // Ew, casting
@@ -65,15 +61,12 @@ void KisColorTransformationFilter::processImpl(KisPaintDeviceSP device,
     }
     if (!colorTransformation) return;
 
-    KisSequentialIterator it(device, applyRect);
-    int p = 0;
+    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
+
     int conseq = it.nConseqPixels();
     while (it.nextPixels(conseq)) {
-
         conseq = it.nConseqPixels();
         colorTransformation->transform(it.oldRawData(), it.rawData(), conseq);
-
-        if (progressUpdater) progressUpdater->setValue(p += conseq);
     }
 
     if (!colorTransformationConfiguration) {

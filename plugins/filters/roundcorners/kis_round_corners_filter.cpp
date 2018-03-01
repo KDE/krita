@@ -45,13 +45,36 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_types.h>
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
+#include <kis_algebra_2d.h>
+#include <KoProgressUpdater.h>
+
 
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Round Corners..."))
 {
     setSupportsPainting(false);
 
 }
+
+void fadeOneCorner(KisPaintDeviceSP device,
+                   const QPoint &basePoint,
+                   const QRect &processRect,
+                   const qreal thresholdSq,
+                   KoUpdater* progressUpdater)
+{
+    const KoColorSpace *cs = device->colorSpace();
+    KisSequentialIteratorProgress dstIt(device, processRect, progressUpdater);
+
+    while (dstIt.nextPixel()) {
+        const QPointF point(dstIt.x(), dstIt.y());
+
+        const qreal distanceSq = kisSquareDistance(point, basePoint);
+        if (distanceSq >= thresholdSq) {
+            cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
+        }
+    }
+}
+
 
 void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
                                         const QRect& applyRect,
@@ -68,57 +91,50 @@ void KisRoundCornersFilter::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-    //read the filter configuration values from the KisFilterConfiguration object
-    qint32 radius = qMax(1, config->getInt("radius" , 30));
+    const QRect bounds = device->defaultBounds()->bounds();
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.height());
+    const qint32 radius = qMin(KisAlgebra2D::minDimension(bounds) / 2, qMax(1, config->getInt("radius" , 30)));
+    const qreal radiusSq = pow2(radius);
+
+    struct CornerJob {
+        QRect rc;
+        QPoint pt;
+        KoUpdater *progressUpdater;
+    };
+
+    QVector<CornerJob> jobs;
+
+    KoProgressUpdater compositeUpdater(progressUpdater, KoProgressUpdater::Unthreaded);
+
+    {
+        QRect rc(bounds.x(), bounds.y(), radius, radius);
+        QPoint pt(rc.bottomRight());
+        jobs << CornerJob({rc, pt, compositeUpdater.startSubtask()});
     }
 
-    qint32 width = applyRect.width();
+    {
+        QRect rc(bounds.x() + bounds.width() - radius, bounds.y(), radius, radius);
+        QPoint pt(rc.bottomLeft());
+        jobs << CornerJob({rc, pt, compositeUpdater.startSubtask()});
+    }
 
-    KisHLineIteratorSP dstIt = device->createHLineIteratorNG(applyRect.x(), applyRect.y(), width);
+    {
+        QRect rc(bounds.x(), bounds.y() + bounds.height() - radius, radius, radius);
+        QPoint pt(rc.topRight());
+        jobs << CornerJob({rc, pt, compositeUpdater.startSubtask()});
+    }
 
-    const KoColorSpace* cs = device->colorSpace();
+    {
+        QRect rc(bounds.x() + bounds.width() - radius, bounds.y() + bounds.height() - radius, radius, radius);
+        QPoint pt(rc.topLeft());
+        jobs << CornerJob({rc, pt, compositeUpdater.startSubtask()});
+    }
 
-    QRect bounds = device->defaultBounds()->bounds();
-    for (qint32 y = applyRect.y(); y < applyRect.y() + applyRect.height(); y++) {
-        qint32 x = applyRect.x();
-        do {
-            if (x <= radius && y <= radius) {
-                double dx = radius - x;
-                double dy = radius - y;
-                double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
-                }
-            } else if (x >= bounds.width() - radius && y <= radius) {
-                double dx = x + radius - bounds.width();
-                double dy = radius - y;
-                double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
-                }
-            } else if (x <= radius && y >= bounds.height() - radius) {
-                double dx = radius - x;
-                double dy = y + radius - bounds.height();
-                double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
-                }
-            } else if (x >= bounds.width()  - radius && y >= bounds.height() - radius) {
-
-                double dx = x + radius - bounds.width() ;
-                double dy = y + radius - bounds.height();
-                double dradius = static_cast<double>(radius);
-                if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
-                }
-            }
-            ++x;
-        } while(dstIt->nextPixel());
-        dstIt->nextRow();
-        if (progressUpdater) progressUpdater->setValue(y);
+    Q_FOREACH (const CornerJob &job, jobs) {
+        const QRect processRect = job.rc & applyRect;
+        if (!processRect.isEmpty()) {
+            fadeOneCorner(device, job.pt, processRect, radiusSq, job.progressUpdater);
+        }
     }
 }
 

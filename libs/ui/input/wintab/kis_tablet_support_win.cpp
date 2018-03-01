@@ -646,19 +646,21 @@ QWindowsTabletDeviceData QWindowsTabletSupport::tabletInit(const quint64 uniqueI
     result.minTanPressure = int(axis.axMin);
     result.maxTanPressure = int(axis.axMax);
 
-    LOGCONTEXT defaultLc;
+    result.minX = int(lc.lcOutOrgX);
+    result.maxX = int(lc.lcOutExtX) + int(lc.lcOutOrgX);
+    result.minY = int(lc.lcOutOrgY);
+    result.maxY = -int(lc.lcOutExtY) + int(lc.lcOutOrgY);
+    // These are set to 0 when we opened the tablet context in QWindowsTabletSupport::create
+    KIS_SAFE_ASSERT_RECOVER_NOOP(lc.lcOutOrgX == 0);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(lc.lcOutOrgY == 0);
 
-    /* get default region */
-    QWindowsTabletSupport::m_winTab32DLL.wTInfo(WTI_DEFCONTEXT, 0, &defaultLc);
-    result.maxX = int(defaultLc.lcInExtX) - int(defaultLc.lcInOrgX);
-    result.maxY = int(defaultLc.lcInExtY) - int(defaultLc.lcInOrgY);
-    result.maxZ = int(defaultLc.lcInExtZ) - int(defaultLc.lcInOrgZ);
+    result.maxZ = int(lc.lcOutExtZ) - int(lc.lcOutOrgZ);
     result.currentDevice = deviceType(cursorType);
 
     // Define a rectangle representing the whole screen as seen by Wintab.
     QRect qtDesktopRect = QApplication::desktop()->geometry();
-    QRect wintabDesktopRect(defaultLc.lcSysOrgX, defaultLc.lcSysOrgY,
-                            defaultLc.lcSysExtX, defaultLc.lcSysExtY);
+    QRect wintabDesktopRect(lc.lcSysOrgX, lc.lcSysOrgY,
+                            lc.lcSysExtX, lc.lcSysExtY);
     qDebug() << ppVar(qtDesktopRect);
     qDebug() << ppVar(wintabDesktopRect);
 

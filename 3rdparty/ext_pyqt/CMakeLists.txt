@@ -7,7 +7,7 @@ if (UNIX)
     endif()
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.9.2/PyQt5_gpl-5.9.2.zip
+        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.9.2.zip
         URL_MD5 67eacf2f486f77136c9758e03fe6889e
         
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py --confirm-license --qmake ${PREFIX_ext_pyqt}/bin/qmake --sip ${PREFIX_ext_pyqt}/bin/sip --sip-incdir ${PREFIX_ext_pyqt}/include --sipdir ${PREFIX_ext_pyqt}/share/sip
@@ -36,7 +36,7 @@ elseif(MINGW)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-5.9.2/PyQt5_gpl-5.9.2.zip
+        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.9.2.zip
         URL_MD5 67eacf2f486f77136c9758e03fe6889e
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch
 

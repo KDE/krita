@@ -28,7 +28,7 @@ class KRITAUI_EXPORT KisCategorizedListView: public QListView
 {
     Q_OBJECT
 public:
-    KisCategorizedListView(bool useCheckBoxHack=false, QWidget* parent=0);
+    KisCategorizedListView(QWidget* parent=0);
     ~KisCategorizedListView() override;
     void setModel(QAbstractItemModel* model) override;
 
@@ -40,7 +40,7 @@ Q_SIGNALS:
     void sigEntryChecked(const QModelIndex& index);
     void rightClickedMenuDropSettingsTriggered();
     void rightClickedMenuSaveSettingsTriggered();
-
+    void lockAreaTriggered(const QModelIndex& index);
 
 protected Q_SLOTS:
     void slotIndexChanged(const QModelIndex& index);
@@ -54,10 +54,6 @@ protected Q_SLOTS:
 
 private:
     void updateRows(int begin, int end);
-
-private:
-    bool m_useCheckBoxHack;
-
 };
 
 #endif // KIS_CATEGORIZED_LIST_VIEW_H_

@@ -28,7 +28,7 @@
 #include <brushengine/kis_locked_properties_server.h>
 
 KisPaintOpListWidget::KisPaintOpListWidget(QWidget* parent, const char* name):
-    KisCategorizedListView(false, parent),
+    KisCategorizedListView(parent),
     m_model(new KisSortedPaintOpListModel(this))
 {
     setObjectName(name);

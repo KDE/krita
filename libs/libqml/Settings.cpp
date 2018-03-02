@@ -23,6 +23,8 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <kis_paintop_preset.h>
+#include "kis_resource_server_provider.h"
 
 #include "Theme.h"
 #include "PropertyContainer.h"
@@ -143,6 +145,20 @@ QObject* Settings::customImageSettings() const
 QString Settings::lastPreset() const
 {
     KisConfig cfg;
-    return cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QString defaultPresetName = "basic_tip_default";
+    bool foundTip = false;
+    for (int i=0; i<rserver->resourceCount(); i++) {
+        KisPaintOpPresetSP resource = rserver->resources().at(i);
+        if (resource->name().toLower().contains("basic_tip_default")) {
+            defaultPresetName = resource->name();
+            foundTip = true;
+        } else if (foundTip == false && (resource->name().toLower().contains("default") ||
+                                         resource->filename().toLower().contains("default"))) {
+            defaultPresetName = resource->name();
+            foundTip = true;
+        }
+    }
+    return cfg.readEntry("LastPreset", defaultPresetName);
 }
 

@@ -414,10 +414,23 @@ void KisViewManager::setCurrentView(KisView *view)
         if (first) {
             KisConfig cfg;
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-            QString lastPreset = cfg.readEntry("LastPreset", QString("Basic_tip_default"));
+            QString defaultPresetName = "basic_tip_default";
+            bool foundTip = false;
+            for (int i=0; i<rserver->resourceCount(); i++) {
+                KisPaintOpPresetSP resource = rserver->resources().at(i);
+                if (resource->name().toLower().contains("basic_tip_default")) {
+                    defaultPresetName = resource->name();
+                    foundTip = true;
+                } else if (foundTip == false && (resource->name().toLower().contains("default") ||
+                                                 resource->filename().toLower().contains("default"))) {
+                    defaultPresetName = resource->name();
+                    foundTip = true;
+                }
+            }
+            QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
             if (!preset) {
-                preset = rserver->resourceByName("Basic_tip_default");
+                preset = rserver->resourceByName(defaultPresetName);
             }
 
             if (!preset) {

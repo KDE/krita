@@ -677,12 +677,12 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     // this tool only works on a vector layer right now, so give a warning if another layer type is trying to use it
     KisNodeSP currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
 
-    if (currentNode.isNull() || !currentNode->inherits("KisShapeLayer")) {
+    if (currentNode.isNull() || (!currentNode->inherits("KisShapeLayer") && !currentNode->inherits("KisSelectionMask"))) {
 
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         kiscanvas->viewManager()->showFloatingMessage(
             i18n("This tool only works on vector layers. You probably want the move tool."),
-            QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+            QIcon(), 500, KisFloatingMessage::Medium, Qt::AlignCenter);
 
         return;
     }

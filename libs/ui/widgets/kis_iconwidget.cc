@@ -62,7 +62,7 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
     p.setClipRegion(clipRegion);
     p.setClipping(true);
 
-    p.setBrush(Qt::white);
+    p.setBrush(this->palette().background());
     p.drawRect(QRect(0,0,cw,ch));
 
     if (m_resource) {
@@ -81,6 +81,9 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
             img = m_resource->image().scaled(iconWidth, iconHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         p.drawImage(QRect(border, border, iconWidth, iconHeight), img);
+    } else if (!icon().isNull()) {
+        int border2 = qRound((cw-16)*0.5);
+        p.drawImage(QRect(border2, border2, 16, 16), icon().pixmap(16, 16).toImage());
     }
     p.setClipping(false);
 }

@@ -83,12 +83,19 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     extraGenres = []
 
     if "genre" in configDictionary.keys():
-        for genre in configDictionary["genre"]:
+        genreListConf = configDictionary["genre"]
+        if isinstance(configDictionary["genre"], dict):
+            genreListConf = configDictionary["genre"].keys()
+        for genre in genreListConf:
             genreModified = str(genre).lower()
             genreModified.replace(" ", "_")
             if genreModified in acbfGenreList:
                 bookGenre = document.createElement("genre")
                 bookGenre.appendChild(document.createTextNode(str(genreModified)))
+                if isinstance(configDictionary["genre"], dict):
+                    genreMatch = configDictionary["genre"][genreModified]
+                    if genreMatch>0:
+                        bookGenre.setAttribute("match", str(genreMatch))
                 bookInfo.appendChild(bookGenre)
             else:
                 extraGenres.appendChild(genre)

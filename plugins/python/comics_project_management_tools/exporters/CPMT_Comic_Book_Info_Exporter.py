@@ -77,7 +77,13 @@ def writeJson(configDictionary = {}):
     if "seriesVolume" in configDictionary.keys():
         metadata["volume"] = configDictionary["seriesVolume"]
     if "genre" in configDictionary.keys():
-        metadata["genre"] = configDictionary["genre"]
+        if isinstance(configDictionary["genre"], dict):
+            listKeys = []
+            for key in configDictionary["genre"].keys():
+                listKeys.append(key)
+            metadata["genre"] = listKeys
+        else:
+            metadata["genre"] = configDictionary["genre"]
     if "language" in configDictionary.keys():
         metadata["language"] = QLocale.languageToString(QLocale(configDictionary["language"]).language())
 

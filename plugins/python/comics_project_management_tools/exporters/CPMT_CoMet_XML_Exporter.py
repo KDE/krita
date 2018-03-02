@@ -68,7 +68,10 @@ def write_xml(configDictionary = {}, pagesLocationList = [], location = str()):
         root.appendChild(date)
 
     if "genre" in configDictionary.keys():
-        for genreE in configDictionary["genre"]:
+        genreListConf = configDictionary["genre"]
+        if isinstance(configDictionary["genre"], dict):
+            genreListConf = configDictionary["genre"].keys()
+        for genreE in genreListConf:
             genre = document.createElement("genre")
             genre.appendChild(document.createTextNode(str(genreE)))
             root.appendChild(genre)

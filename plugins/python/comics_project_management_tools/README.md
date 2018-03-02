@@ -216,7 +216,6 @@ Things I still want to do:
 ACBF list:
 
 * support getting text info from the vector layers. [Partially done]
-	- users can specify a name for text layers. (Waiting for stringfreeze to end)
 	- Don't forget text-rotation(Needs API)
 	- maybe text-class can be used to determine type? (We'll proly need to use style sheets and comparing the text format to those)
 		+ Speech (speech, dialogue)
@@ -246,5 +245,4 @@ ACBF list:
     - acbf doc info should use author with first/nick/last/etc seperate as well[partially done]
     - text-layer background color(maybe sample topleft of projection???)
 * 1.2 support:
-    - Role: designer [needs gui still]
     - text type: Sound.[needs gui still]

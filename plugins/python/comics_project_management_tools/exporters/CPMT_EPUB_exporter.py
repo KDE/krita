@@ -182,7 +182,10 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
         opfMeta.append(rights)
 
     if "genre" in configDictionary.keys():
-        for g in configDictionary["genre"]:
+        genreListConf = configDictionary["genre"]
+        if isinstance(configDictionary["genre"], dict):
+            genreListConf = configDictionary["genre"].keys()
+        for g in genreListConf:
             subject = ET.Element("dc:subject")
             subject.text = g
             opfMeta.append(subject)

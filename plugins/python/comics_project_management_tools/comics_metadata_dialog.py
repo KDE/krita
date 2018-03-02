@@ -23,6 +23,8 @@ This is a metadata editor that helps out setting the proper metadata
 import sys
 import os  # For finding the script location.
 import csv
+import re
+import types
 from pathlib import Path  # For reading all the files in a directory.
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
@@ -483,11 +485,20 @@ class comic_meta_data_editor(QDialog):
             self.teSummary.appendPlainText(config["summary"])
         if "genre" in config.keys():
             genreList = []
-            for genre in config["genre"]:
-                if genre in self.acbfGenreList.keys():
-                    genreList.append(self.acbfGenreList[genre])
-                else:
-                    genreList.append(genre)
+            genreListConf = config["genre"]
+            totalMatch = 100
+            if isinstance(config["genre"], dict):
+                genreListConf = config["genre"].keys()
+                totalMatch = 0
+            for genre in genreListConf:
+                genreKey = genre
+                if genre in self.acbfGenreList:
+                    genreKey = self.acbfGenreList[genre]
+                if isinstance(config["genre"], dict):
+                    genreValue = config["genre"][genre]
+                    if genreValue > 0:
+                        genreKey = str(genreKey+"("+str(genreValue)+")")
+                genreList.append(genreKey)
             self.lnGenre.setText(", ".join(genreList))
         if "characters" in config.keys():
             self.lnCharacters.setText(", ".join(config["characters"]))
@@ -595,13 +606,28 @@ class comic_meta_data_editor(QDialog):
         config["cover"] = self.cmbCoverPage.currentText()
         listkeys = self.lnGenre.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
-            genreList = []
-            for genre in self.lnGenre.text().split(", "):
+            preSplit = self.lnGenre.text().split(", ")
+            genreMatcher = re.compile(r'\((\d+)\)')
+            genreList = {}
+            totalValue = 0
+            for key in preSplit:
+                m = genreMatcher.search(key)
+                if m:
+                    genre = genreMatcher.sub("", key)
+                    match = int(m.group()[:-1][1:])
+                else:
+                    genre = key
+                    match = 0
                 if genre in self.acbfGenreList.values():
                     i = list(self.acbfGenreList.values()).index(genre)
-                    genreList.append(list(self.acbfGenreList.keys())[i])
+                    genreList[list(self.acbfGenreList.keys())[i]] = match
                 else:
-                    genreList.append(genre)
+                    genreList[genre] = match
+                totalValue += match
+            #Normalize the values:
+            for key in genreList.keys():
+                if genreList[key]>0:
+                    genreList[key]= round(genreList[key]/totalValue*100)
             config["genre"] = genreList
         elif "genre" in config.keys():
             config.pop("genre")

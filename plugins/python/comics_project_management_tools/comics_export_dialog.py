@@ -242,6 +242,13 @@ class comic_export_setting_dialog(QDialog):
         groupExportLayers.setLayout(formLayers)
         self.cmbLabelsRemove = labelSelector()
         formLayers.addRow(i18n("Label for removal:"), self.cmbLabelsRemove)
+        self.ln_text_layer_name = QLineEdit()
+        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
+        self.ln_panel_layer_name = QLineEdit()
+        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
+        formLayers.addRow(i18n("Text Layer Key:"), self.ln_text_layer_name)
+        formLayers.addRow(i18n("Panel Layer Key:"), self.ln_panel_layer_name)
+        
 
         mainExportSettings.layout().addWidget(groupExportCrop)
         mainExportSettings.layout().addWidget(groupExportLayers)
@@ -356,6 +363,14 @@ class comic_export_setting_dialog(QDialog):
             self.spn_marginBottom.setValue(config["cropBottom"])
         if "labelsToRemove" in config.keys():
             self.cmbLabelsRemove.setLabels(config["labelsToRemove"])
+        if "textLayerNames" in config.keys():
+            self.ln_text_layer_name.setText(", ".join(config["textLayerNames"]))
+        else:
+            self.ln_text_layer_name.setText("text")
+        if "panelLayerNames" in config.keys():
+            self.ln_panel_layer_name.setText(", ".join(config["panelLayerNames"]))
+        else:
+            self.ln_panel_layer_name.setText("panels")
         self.CBZgroupResize.set_config(config)
         if "CBZactive" in config.keys():
             self.CBZactive.setChecked(config["CBZactive"])
@@ -413,6 +428,6 @@ class comic_export_setting_dialog(QDialog):
         config["acbfHistory"] = versionList
 
         # Turn this into something that retreives from a line-edit when string freeze is over.
-        config["textLayerNames"] = ["text"]
-        config["panelLayerNames"] = ["panels"]
+        config["textLayerNames"] = self.ln_text_layer_name.text().split(",")
+        config["panelLayerNames"] = self.ln_panel_layer_name.text().split(",")
         return config

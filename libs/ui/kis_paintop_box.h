@@ -263,6 +263,9 @@ private:
     bool             m_eraserBrushOpacityEnabled;
 
     KisSignalAutoConnectionsStore m_presetConnections;
+
+    QString m_eraserName;
+    QString m_defaultPresetName;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

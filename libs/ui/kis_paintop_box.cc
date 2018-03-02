@@ -482,6 +482,31 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
+
+    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    m_eraserName = "eraser_circle";
+    m_defaultPresetName = "basic_tip_default";
+    bool foundEraser = false;
+    bool foundTip = false;
+    for (int i=0; i<rserver->resourceCount(); i++) {
+        KisPaintOpPresetSP resource = rserver->resources().at(i);
+        if (resource->name().toLower().contains(m_eraserName)) {
+            m_eraserName = resource->name();
+            foundEraser = true;
+        } else if (foundEraser == false && (resource->name().toLower().contains("eraser") ||
+                                            resource->filename().toLower().contains("eraser"))) {
+            m_eraserName = resource->name();
+            foundEraser = true;
+        }
+        if (resource->name().toLower().contains(m_defaultPresetName)) {
+            m_defaultPresetName = resource->name();
+            foundTip = true;
+        } else if (foundTip == false && (resource->name().toLower().contains("default") ||
+                                         resource->filename().toLower().contains("default"))) {
+            m_defaultPresetName = resource->name();
+            foundTip = true;
+        }
+    }
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -752,17 +777,17 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_Circle"));
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));
         }
         else {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), m_defaultPresetName));
             //if (preset)
                 //qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
             //else
                 //qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
-            preset = rserver->resourceByName("Basic_tip_default");
+            preset = rserver->resourceByName(m_defaultPresetName);
         }
         if (preset) {
             //qDebug() << "inputdevicechanged 1" << preset;

@@ -60,7 +60,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     // positioning of the text over the image (version)
     // also see setLoadingText() for positiong (loading progress text)
-    int leftEdge = 525-metrics.width(version);
+    int leftEdge = 475-metrics.width(version);
     int topEdge = 58+metrics.ascent();
 
     //draw shadow
@@ -204,7 +204,7 @@ void KisSplashScreen::setLoadingText(QString text)
     p.setRenderHint(QPainter::Antialiasing);
 
     // position text for loading text
-    int leftEdge = 525-metrics.width(text);
+    int leftEdge = 475-metrics.width(text);
     int topEdge = m_textTop;
 
     //draw shadow

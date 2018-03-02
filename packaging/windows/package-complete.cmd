@@ -643,6 +643,7 @@ if errorlevel 1 (
 
 :: Copy embedded Python
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\python %pkg_root%\python
+del /q %pkg_root%\python\python.exe %pkg_root%\python\pythonw.exe
 
 :: For chopping relative path
 :: 512 should be enough

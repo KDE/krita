@@ -77,11 +77,14 @@ public:
     KisCategorizedListModel(QObject *parent = 0)
         : __CategorizedListModelBase(parent)
     {
-        connect(&m_mapper, SIGNAL(rowChanged(int)), SLOT(slotRowChanged(int)));
+        connect(&m_mapper, SIGNAL(rowChanged(int)), SLOT(slotRowChanged(int))); // helps with category expand menu
         connect(&m_mapper, SIGNAL(beginInsertRow(int)), SLOT(slotBeginInsertRow(int)));
         connect(&m_mapper, SIGNAL(endInsertRow()), SLOT(slotEndInsertRow()));
         connect(&m_mapper, SIGNAL(beginRemoveRow(int)), SLOT(slotBeginRemoveRow(int)));
         connect(&m_mapper, SIGNAL(endRemoveRow()), SLOT(slotEndRemoveRow()));
+
+
+
     }
 
     int rowCount(const QModelIndex& parent) const override {
@@ -134,10 +137,15 @@ public:
             break;
         case Qt::CheckStateRole:
             Q_ASSERT(item->isCheckable());
-            item->setChecked(value.toInt() == Qt::Checked);
-            break;
+            item->setChecked(value.toInt() == Qt::Checked);            
+            break;        
         }
 
+        // dataChanged() needs a QVector even though we are just passing one
+        QVector<int> roles;
+        roles.append(role);
+
+        emit dataChanged(idx, idx, roles);
         return true;
     }
 

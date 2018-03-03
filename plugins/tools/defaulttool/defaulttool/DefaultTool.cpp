@@ -1476,7 +1476,8 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (handle != KoFlake::NoHandle) {
             // resizing or shearing only with left mouse button
             if (insideSelection) {
-                return new ShapeResizeStrategy(this, selection,event->point, handle, m_tabbedOptionWidget->useUniformScaling());
+                bool forceUniformScaling = m_tabbedOptionWidget && m_tabbedOptionWidget->useUniformScaling();
+                return new ShapeResizeStrategy(this, selection, event->point, handle, forceUniformScaling);
             }
 
             if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||

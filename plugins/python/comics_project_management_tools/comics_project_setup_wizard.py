@@ -102,6 +102,10 @@ class ComicsProjectSetupWizard():
         self.lnTemplateLocation = QLineEdit()
         self.lnTemplateLocation.setText(i18n("templates"))
         self.lnTemplateLocation.setToolTip(i18n("The name for the folder where the page templates are sought in."))
+        
+        self.lnTranslationLocation = QLineEdit()
+        self.lnTranslationLocation.setText(i18n("translations"))
+        self.lnTranslationLocation.setToolTip("This is the location that POT files will be stored to and PO files will be read from.")
         formLayout.addRow(i18n("Comic Concept:"), lnConcept)
         formLayout.addRow(i18n("Project Name:"), projectLayout)
         formLayout.addRow(i18n("Main Language:"), self.cmbLanguage)
@@ -120,6 +124,7 @@ class ComicsProjectSetupWizard():
         folderFormLayout.addRow(i18n("Pages Directory"), self.lnPagesDirectory)
         folderFormLayout.addRow(i18n("Export Directory"), self.lnExportDirectory)
         folderFormLayout.addRow(i18n("Template Directory"), self.lnTemplateLocation)
+        folderFormLayout.addRow(i18n("Translation Directory"), self.lnTranslationLocation)
         folderFormLayout.addRow("", buttonMetaData)
         wizard.addPage(foldersPage)
 
@@ -130,6 +135,7 @@ class ComicsProjectSetupWizard():
             self.pagesDirectory = self.lnPagesDirectory.text()
             self.exportDirectory = self.lnExportDirectory.text()
             self.templateLocation = self.lnTemplateLocation.text()
+            self.translationLocation = self.lnTranslationLocation.text()
             projectPath = Path(self.projectDirectory)
             # Only make a project directory if the checkbox for that has been checked.
             if self.chkMakeProjectDirectory.isChecked():
@@ -143,6 +149,8 @@ class ComicsProjectSetupWizard():
                 Path(projectPath / self.exportDirectory).mkdir()
             if Path(projectPath / self.templateLocation).exists() is False:
                 Path(projectPath / self.templateLocation).mkdir()
+            if Path(projectPath / self.translationLocation).exists() is False:
+                Path(projectPath / self.translationLocation).mkdir()
 
             # Then store the information into the setup diactionary.
             self.setupDictionary["projectName"] = self.lnProjectName.text()
@@ -151,6 +159,7 @@ class ComicsProjectSetupWizard():
             self.setupDictionary["pagesLocation"] = self.pagesDirectory
             self.setupDictionary["exportLocation"] = self.exportDirectory
             self.setupDictionary["templateLocation"] = self.templateLocation
+            self.setupDictionary["translationLocation"] = self.translationLocation
 
             # Finally, write the dictionary into the json file.
             self.writeConfig()

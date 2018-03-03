@@ -31,7 +31,7 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixma
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel
 import math
 from krita import *
-from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
+from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
 
 """
 A very simple class so we can have a label that is single line, but doesn't force the
@@ -176,6 +176,8 @@ class comics_project_manager_docker(DockWidget):
         self.action_scrape_authors = QAction(i18n("Scrape Author Info"), self)
         self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This doesn't check for duplicates."))
         self.action_scrape_authors.triggered.connect(self.slot_scrape_author_list)
+        self.action_scrape_translations = QAction(i18n("Scrape Text for Translation"), self)
+        self.action_scrape_translations.triggered.connect(self.slot_scrape_translations)
         actionList = []
         menu_page = QMenu()
         actionList.append(self.action_add_page)
@@ -185,6 +187,7 @@ class comics_project_manager_docker(DockWidget):
         actionList.append(self.action_resize_all_pages)
         actionList.append(self.action_show_page_viewer)
         actionList.append(self.action_scrape_authors)
+        actionList.append(self.action_scrape_translations)
         menu_page.addActions(actionList)
         self.btn_add_page.setMenu(menu_page)
         buttonLayout.addWidget(self.btn_add_page)
@@ -766,6 +769,26 @@ class comics_project_manager_docker(DockWidget):
         if self.projecturl is not None:
             clipboard = qApp.clipboard()
             clipboard.setText(str(self.projecturl))
+            
+    def slot_scrape_translations(self):
+        # Call up dialog with options.
+        translationFolder = "translations"
+        if "translationLocation" in self.setupDictionary.keys():
+            translationFolder = self.setupDictionary["translationLocation"]
+        else:
+            self.setupDictionary["translationLocation"] = translationFolder
+        fullTranslationPath = os.path.join(self.projecturl, translationFolder)
+        os.makedirs(fullTranslationPath, exist_ok=True)
+        textLayersToSearch = ["text"]
+        pot = True
+        if "textLayerNames" in self.setupDictionary.keys():
+            textLayersToSearch = self.setupDictionary["textLayerNames"]
+        scraper = comics_project_translation_scraper.translation_scraper(self.projecturl, translationFolder, textLayersToSearch, self.setupDictionary["projectName"], pot)
+        # Run text scraper.
+        language = "en"
+        if "language" in self.setupDictionary.keys():
+            language = self.setupDictionary["language"]
+        scraper.start(self.setupDictionary["pages"], language)
     """
     This is required by the dockwidget class, otherwise unused.
     """

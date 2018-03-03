@@ -96,11 +96,11 @@ endif (DEFINED EP_PREFIX)
 
 if (MSVC)
         set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_EXE_LINKER_FLAGS=/PROFILE -DCMAKE_SHARED_LINKER_FLAGS=/PROFILE)
-	set(PATCH_COMMAND myptch)
+	set(PATCH_COMMAND myptch --binary)
 endif()
 
 if (MINGW)
-   set(PATCH_COMMAND myptch)
+   set(PATCH_COMMAND myptch --binary)
 endif()
 
 if (MSYS)

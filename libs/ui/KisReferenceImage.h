@@ -59,11 +59,12 @@ public:
 
     static KisReferenceImage * fromFile(const QString &filename);
 
-    void setImage(QImage image);
-    void setSource(const QString &location);
-
     void setSaturation(qreal saturation);
     qreal saturation() const;
+
+    void setEmbed(bool embed);
+    bool embed();
+    bool hasLocalFile();
 
     void paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 

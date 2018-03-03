@@ -33,10 +33,22 @@
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
 
 struct KisReferenceImage::Private {
+    KisReferenceImage *q;
     QString src;
     QImage image;
     qreal saturation{1.0};
     int id{-1};
+    bool embed{true};
+
+    explicit Private(KisReferenceImage *q)
+        : q(q)
+    {}
+
+    void loadFromFile() {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(src.startsWith("file://"));
+        QString filename = src.mid(7);
+        image.load(filename);
+    }
 };
 
 
@@ -76,7 +88,7 @@ void KisReferenceImage::SetSaturationCommand::redo()
 }
 
 KisReferenceImage::KisReferenceImage()
-    : d(new Private)
+    : d(new Private(this))
 {
     setKeepAspectRatio(true);
 }
@@ -91,25 +103,11 @@ KisReferenceImage::~KisReferenceImage()
 
 KisReferenceImage * KisReferenceImage::fromFile(const QString &filename)
 {
-    QImage img;
-    img.load(filename);
-
     KisReferenceImage *reference = new KisReferenceImage();
-    reference->setImage(img);
-    reference->setSize(img.size());
-
+    reference->d->src = QString("file://") + filename;
+    reference->d->loadFromFile();
+    reference->setSize(reference->d->image.size());
     return reference;
-}
-
-
-void KisReferenceImage::setImage(QImage image)
-{
-    d->image = image;
-}
-
-void KisReferenceImage::setSource(const QString &location)
-{
-    d->src = location;
 }
 
 void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
@@ -139,6 +137,22 @@ qreal KisReferenceImage::saturation() const
     return d->saturation;
 }
 
+void KisReferenceImage::setEmbed(bool embed)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(embed || d->src.startsWith("file://"));
+    d->embed = embed;
+}
+
+bool KisReferenceImage::embed()
+{
+    return d->embed;
+}
+
+bool KisReferenceImage::hasLocalFile()
+{
+    return d->src.startsWith("file://");
+}
+
 QColor KisReferenceImage::getPixel(QPointF position)
 {
     const QSizeF shapeSize = size();
@@ -156,7 +170,9 @@ void KisReferenceImage::saveXml(QDomDocument &document, QDomElement &parentEleme
 
     QDomElement element = document.createElement("referenceimage");
 
-    d->src = QString("reference_images/%1.png").arg(id);
+    if (d->embed) {
+        d->src = QString("reference_images/%1.png").arg(id);
+    }
     element.setAttribute("src", d->src);
 
     const QSizeF &shapeSize = size();
@@ -175,7 +191,9 @@ KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
 {
     auto *reference = new KisReferenceImage();
 
-    reference->setSource(elem.attribute("src"));
+    const QString &src = elem.attribute("src");
+    reference->d->src = src;
+    reference->d->embed = !src.startsWith("file://");
 
     qreal width = KisDomUtils::toDouble(elem.attribute("width", "100"));
     qreal height = KisDomUtils::toDouble(elem.attribute("height", "100"));
@@ -196,6 +214,8 @@ KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
 
 bool KisReferenceImage::saveImage(KoStore *store) const
 {
+    if (!d->embed) return true;
+
     if (!store->open(d->src)) {
         return false;
     }
@@ -214,6 +234,11 @@ bool KisReferenceImage::saveImage(KoStore *store) const
 
 bool KisReferenceImage::loadImage(KoStore *store)
 {
+    if (d->src.startsWith("file://")) {
+        d->loadFromFile();
+        return true;
+    }
+
     if (!store->open(d->src)) {
         return false;
     }

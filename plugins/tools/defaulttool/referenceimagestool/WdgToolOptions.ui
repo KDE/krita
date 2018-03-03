@@ -59,6 +59,20 @@
    <item>
     <widget class="KisShapePropertySlider" name="saturationSlider" native="true"/>
    </item>
+   <item>
+    <widget class="QRadioButton" name="radioEmbed">
+     <property name="text">
+      <string>Embed to .kra</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioLinkExternal">
+     <property name="text">
+      <string>Link to external file</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

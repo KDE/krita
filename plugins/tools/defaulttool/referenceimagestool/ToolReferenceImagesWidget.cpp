@@ -24,6 +24,7 @@
 #include <KoShapeTransparencyCommand.h>
 #include <KoShapeKeepAspectRatioCommand.h>
 #include <kis_config.h>
+#include <kis_signals_blocker.h>
 #include <KisReferenceImage.h>
 
 #include "ToolReferenceImages.h"
@@ -71,6 +72,9 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->chkKeepAspectRatio, SIGNAL(stateChanged(int)), this, SLOT(slotKeepAspectChanged()));
     connect(d->ui->opacitySlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacitySliderChanged(qreal)));
     connect(d->ui->saturationSlider, SIGNAL(valueChanged(qreal)), this, SLOT(slotSaturationSliderChanged(qreal)));
+
+    connect(d->ui->radioEmbed, SIGNAL(toggled(bool)), this, SLOT(slotEmbeddingChanged()));
+    connect(d->ui->radioLinkExternal, SIGNAL(toggled(bool)), this, SLOT(slotEmbeddingChanged()));
 }
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
@@ -86,14 +90,39 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
 
     bool anyKeepingAspectRatio = false;
     bool anyNotKeepingAspectRatio = false;
+    bool anyEmbedded = false;
+    bool anyLinked = false;
+    bool anyNonLinkable = false;
+    bool anySelected = selection->count() > 0;
+
     Q_FOREACH(KoShape *shape, shapes) {
+        KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+
         anyKeepingAspectRatio |= shape->keepAspectRatio();
         anyNotKeepingAspectRatio |= !shape->keepAspectRatio();
+
+        if (reference) {
+            anyEmbedded |= reference->embed();
+            anyLinked |= !reference->embed();
+            anyNonLinkable |= !reference->hasLocalFile();
+        }
     }
+
+    KisSignalsBlocker blocker(
+        d->ui->chkKeepAspectRatio,
+        d->ui->radioEmbed,
+        d->ui->radioLinkExternal
+    );
 
     d->ui->chkKeepAspectRatio->setCheckState(
         (anyKeepingAspectRatio && anyNotKeepingAspectRatio) ? Qt::PartiallyChecked :
          anyKeepingAspectRatio ? Qt::Checked : Qt::Unchecked);
+
+    d->ui->radioEmbed->setChecked(anyEmbedded && !anyLinked);
+    d->ui->radioLinkExternal->setChecked(anyLinked && !anyEmbedded);
+    d->ui->radioEmbed->setEnabled(!anyNonLinkable && anySelected);
+    d->ui->radioLinkExternal->setEnabled(!anyNonLinkable && anySelected);
+    d->ui->chkKeepAspectRatio->setEnabled(anySelected);
 }
 
 void ToolReferenceImagesWidget::slotKeepAspectChanged()
@@ -127,4 +156,21 @@ void ToolReferenceImagesWidget::slotSaturationSliderChanged(qreal newSaturation)
             new KisReferenceImage::SetSaturationCommand(shapes, newSaturation / 100.0);
 
     d->tool->canvas()->addCommand(cmd);
+}
+
+void ToolReferenceImagesWidget::slotEmbeddingChanged()
+{
+    KoSelection *selection = d->tool->koSelection();
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    Q_FOREACH(KoShape *shape, shapes) {
+        KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(reference);
+
+        if (d->ui->radioEmbed->isChecked()) {
+            reference->setEmbed(true);
+        } else if (d->ui->radioLinkExternal->isChecked()) {
+            reference->setEmbed(false);
+        }
+    }
 }

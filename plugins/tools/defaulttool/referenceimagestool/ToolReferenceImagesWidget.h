@@ -43,6 +43,7 @@ private Q_SLOTS:
     void slotOpacitySliderChanged(qreal);
     void slotSaturationSliderChanged(qreal);
     void slotKeepAspectChanged();
+    void slotEmbeddingChanged();
 
 private:
     struct Private;

@@ -4,3 +4,7 @@
 
 # Make sure Windows .lnk shortcuts are binary
 *.lnk binary
+
+# Patch files must be checked out in CRLF on Windows for patch to work
+*.patch text=auto
+*.diff text=auto

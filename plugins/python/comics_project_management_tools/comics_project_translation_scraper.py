@@ -24,7 +24,7 @@ This class does several things:
 1) It can parse through kra files' document.xml, and then through the svgs that file is pointing at.
 2) It can parse a preexisting POT file to ensure it isn't making duplicates.
 3) It can write a POT file.
-4) Writing to a csv file was considered until the realisaton hit that comic dialog itself contains commas.
+4) Writing to a csv file was considered until the realisation hit that comic dialog itself contains commas.
 """
 
 import sys
@@ -33,6 +33,7 @@ import csv
 import zipfile
 import types
 from xml.dom import minidom 
+from PyQt5.QtCore import QDateTime, Qt
 
 class translation_scraper():
     projectURL = str()
@@ -52,7 +53,7 @@ class translation_scraper():
         # Check for a preexisting translation file and parse that.
         for entry in os.scandir(os.path.join(self.projectURL, self.translation_folder)):
             if entry.name.endswith(projectName+'.pot') and entry.is_file():
-                self.parse_pot(entry.name)
+                self.parse_pot(os.path.join(self.projectURL, self.translation_folder, entry.name))
                 break
 
     def start(self, pagesList, language):
@@ -65,23 +66,37 @@ class translation_scraper():
     def parse_pot(self, location):
         if (os.path.exists(location)):
             file = open(location, "r", newline="", encoding="utf8")
-            potEntry = False
-            key = ""
+            multiLine = ""
+            key = None
             entry = {}
             for line in file:
                 if line.isspace():
-                    if entry.keys()>0:
-                        if key.isspace():
-                            key = entry["text"]
-                        self.translationDict[key] = entry
+                    if len(entry.keys())>0:
+                        if key is None:
+                            key = entry.get("text", None)
+                            entry.pop("text")
+                        if key is not None:
+                            if len(key)>0:
+                                self.translationDict[key] = entry
                     entry = {}
+                    key = None
+                    multiLine = ""
                 if line.startswith("msgid "):
-                    string = line.rstrip("msgid \"")
-                    string = string[:-1]
+                    string = line.strip("msgid \"")
+                    string = string[:-len('"\n')]
                     string = string.replace("\\\"", "\"")
                     string = string.replace("\\\'", "\'")
                     string = string.replace("\\#", "#")
                     entry["text"] = string
+                    multiLine = "text"
+                if line.startswith("msgstr "):
+                    string = line.strip("msgstr \"")
+                    string = string[:-len('"\n')]
+                    string = string.replace("\\\"", "\"")
+                    string = string.replace("\\\'", "\'")
+                    string = string.replace("\\#", "#")
+                    entry["trans"] = string
+                    multiLine = "trans"
                 if line.startswith("# "):
                     #Translator comment
                     entry["translator"] = line
@@ -89,6 +104,20 @@ class translation_scraper():
                     entry["extract"] = line
                 if line.startswith("msgctxt "):
                     key = line.strip("msgctxt ")
+                if line.startswith("\"") and len(multiLine)>0:
+                    string = line[1:]
+                    string = string[:-len('"\n')]
+                    string = string.replace("\\\"", "\"")
+                    string = string.replace("\\\'", "\'")
+                    string = string.replace("\\#", "#")
+                    entry[multiLine] += string
+            if len(entry.keys())>0:
+                if key is None:
+                    key = entry.get("text", None)
+                    entry.pop("text")
+                if key is not None:
+                    if len(key)>0:
+                        self.translationDict[key] = entry
             file.close()
 
     def get_svg_layers(self, location):
@@ -146,6 +175,15 @@ class translation_scraper():
         newLine = "\n"
         location = os.path.join(self.projectURL, self.translation_folder, self.projectName+".pot")
         file = open(location, "w", newline="", encoding="utf8")
+        
+        file.write("msgid "+quote+quote+newLine)
+        file.write("msgstr "+quote+quote+newLine)
+        date = QDateTime.currentDateTimeUtc().toString(Qt.UTC)
+        file.write(quote+"POT-Creation-Date:"+date+"\\n\""+quote+newLine)
+        file.write(quote+"Content-Type: text/plain; charset=UTF-8\\n\""+quote+newLine)
+        file.write(quote+"Content-Transfer-Encoding: 8bit\\n\""+quote+newLine)
+        file.write(quote+"X-Generator: Krita Comit Manager Tools Plugin\\n\""+quote+newLine)
+        
         for key in self.translationDict.keys():
             if key != self.languageKey:
                 file.write(newLine)

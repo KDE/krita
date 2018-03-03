@@ -28,8 +28,9 @@ import os
 from xml.dom import minidom
 from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
 from PyQt5.QtGui import QImage
+from . import CPMT_po_parser as po_parser
 
-def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], locationBasic = str(), locationStandAlone = str()):
+def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], locationBasic = str(), locationStandAlone = str(), projectUrl = str()):
     acbfGenreList = ["science_fiction", "fantasy", "adventure", "horror", "mystery", "crime", "military", "real_life", "superhero", "humor", "western", "manga", "politics", "caricature", "sports", "history", "biography", "education", "computer", "religion", "romance", "children", "non-fiction", "adult", "alternative", "other", "artbook"]
     acbfAuthorRolesList = ["Writer", "Adapter", "Artist", "Penciller", "Inker", "Colorist", "Letterer", "Cover Artist", "Photographer", "Editor", "Assistant Editor", "Translator", "Other", "Designer"]
     document = minidom.Document()
@@ -146,6 +147,10 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 image.setAttribute("href", os.path.basename(coverpageurl))
             coverpage.appendChild(image)
     bookInfo.appendChild(coverpage)
+    
+    translationFolder = configDictionary.get("translationLocation", "translations")
+    fullTranslationPath = os.path.join(projectUrl, translationFolder)
+    poParser = po_parser.po_file_parser(fullTranslationPath)
 
     if "language" in configDictionary.keys():
         language = document.createElement("languages")
@@ -157,6 +162,11 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         textlayerNative.setAttribute("show", "True")
         language.appendChild(textlayer)
         language.appendChild(textlayerNative)
+        for lang in poParser.get_translation_list():
+            textlayer = document.createElement("text-layer")
+            textlayer.setAttribute("lang", lang)
+            textlayer.setAttribute("show", "True")
+            language.appendChild(textlayer)
         bookInfo.appendChild(language)
 
         bookTitle.setAttribute("lang", configDictionary["language"])
@@ -305,6 +315,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     root.appendChild(meta)
 
     body = document.createElement("body")
+    
+    references = document.createElement("references")
 
     for p in range(0, len(pagesLocationList)):
         page = pagesLocationList[p]
@@ -341,6 +353,55 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 f = {}
                 f["points"] = " ".join(boundingBoxText)
                 frameList.append(f)
+        textLayerList = document.createElement("trlist")
+        for lang in poParser.get_translation_list():
+            textLayerTr = document.createElement("text-layer")
+            textLayerTr.setAttribute("lang", lang)
+            translationComments = 0
+            for v in data["vector"]:
+                boundingBoxText = []
+                for point in v["boundingBox"]:
+                    offset = QPointF(transform["offsetX"], transform["offsetY"])
+                    pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
+                    newPoint = pixelPoint - offset
+                    x = int(newPoint.x() * transform["scaleWidth"])
+                    y = int(newPoint.y() * transform["scaleHeight"])
+                    pointText = str(x) + "," + str(y)
+                    boundingBoxText.append(pointText)
+
+                if "text" in v.keys():
+                    textArea = document.createElement("text-area")
+                    textArea.setAttribute("points", " ".join(boundingBoxText))
+                    # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
+                    string = str(v["text"])
+                    s = minidom.parseString(string)
+                    string = ""
+                    for c in s.documentElement.childNodes:
+                        string += c.toxml()
+                    translationEntry = poParser.get_entry_for_key(string, lang)
+                    string = translationEntry.get("trans", string)
+                    svg = minidom.parseString("<text>"+string+"</text>")
+                    paragraph = minidom.Document()
+                    paragraph.appendChild(paragraph.createElement("p"))
+                    parseTextChildren(paragraph, svg.documentElement, paragraph.documentElement)
+                    if "translComment" in translationEntry.keys():
+                        ref = document.createElement("reference")
+                        translationComments += 1
+                        ref.setAttribute("lang", lang)
+                        refID = "-".join(["tn", str(p), str(translationComments)])
+                        ref.setAttribute("id", refID)
+                        refPara = document.createElement("p")
+                        refPara.appendChild(document.createTextNode(translationEntry["translComment"]))
+                        ref.appendChild(refPara)
+                        references.appendChild(ref)
+                        anchor = document.createElement("a")
+                        anchor.setAttribute("href", "#"+refID)
+                        anchor.appendChild(document.createTextNode("*"))
+                        paragraph.documentElement.appendChild(anchor)
+                    textArea.appendChild(paragraph.documentElement)
+                    textLayerTr.appendChild(textArea)
+                    textLayerList.appendChild(textLayerTr)
+            
         if page is not coverpageurl:
             pg = document.createElement("page")
             image = document.createElement("image")
@@ -366,6 +427,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 pg.appendChild(frame)
             pg.appendChild(textLayer)
+            for node in textLayerList.childNodes:
+                pg.appendChild(node)
             body.appendChild(pg)
         else:
             for f in frameList:
@@ -373,8 +436,12 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 coverpage.appendChild(frame)
             coverpage.appendChild(textLayer)
+            for node in textLayerList.childNodes:
+                coverpage.appendChild(node)
 
     root.appendChild(body)
+    if references.childNodes:
+        root.appendChild(references)
 
     f = open(locationBasic, 'w', newline="", encoding="utf-8")
     f.write(document.toprettyxml(indent="  "))

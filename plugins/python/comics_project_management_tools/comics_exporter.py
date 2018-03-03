@@ -154,7 +154,7 @@ class comicsExporter():
                 
                 locationStandAlone = str(exportPath / str(title + ".acbf"))
                 
-                export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone)
+                export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone, self.projectURL)
 
             # Export and package CBZ and Epub.
             if export_success:

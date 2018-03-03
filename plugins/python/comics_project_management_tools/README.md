@@ -211,7 +211,6 @@ Things I still want to do:
 * Make label removal just a list? (unsure)
 * PNG and JPEG export settings.
 * maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question. [partialy done, epub still needs this]
-* Implement basic POT translation thingy(POC done, needs proper scrapping and then matching systems)
 
 ACBF list:
 

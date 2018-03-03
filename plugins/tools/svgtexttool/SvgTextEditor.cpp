@@ -70,6 +70,7 @@
 #include <kis_action_registry.h>
 
 #include "kis_font_family_combo_box.h"
+#include "kis_signals_blocker.h"
 
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags)
@@ -216,6 +217,8 @@ void SvgTextEditor::switchTextEditorTab()
 
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
+
+
         if (m_shape) {
 
             // Convert the svg text to html XXX: Fix resolution! Also, the rect should be the image rect, not the shape rect.
@@ -273,7 +276,6 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
     actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
 
-    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->setCurrentFont(format.font());
     QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font_size"))->defaultWidget());
     fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(format.font().pointSize()));
 
@@ -282,6 +284,13 @@ void SvgTextEditor::checkFormat()
 
     KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
     qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"))->setCurrentColor(bg);
+
+
+
+    KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+
+    KisSignalsBlocker b(fontComboBox); // this prevents setting the entire selection to one font
+    fontComboBox->setCurrentFont(format.font());
 
     QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
     if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {

@@ -24,13 +24,14 @@ This class does several things:
 1) It can parse through kra files' document.xml, and then through the svgs that file is pointing at.
 2) It can parse a preexisting POT file to ensure it isn't making duplicates.
 3) It can write a POT file.
-4) It can write a csv file.
+4) Writing to a csv file was considered until the realisaton hit that comic dialog itself contains commas.
 """
 
 import sys
 import os
 import csv
 import zipfile
+import types
 from xml.dom import minidom 
 
 class translation_scraper():
@@ -39,38 +40,27 @@ class translation_scraper():
     textLayerNameList = []
     translationDict = {}
     projectName = str()
-    pot = True
     languageKey = "AA_language"
 
-    def __init__(self, projectURL = str(), translation_folder = str(), textLayerNameList = [], projectName = str(), pot = True):
+    def __init__(self, projectURL = str(), translation_folder = str(), textLayerNameList = [], projectName = str()):
         self.projectURL = projectURL
         self.projectName = projectName
         self.translation_folder = translation_folder
         self.textLayerNameList = textLayerNameList
-        self.pot = pot
         self.translationDict = {}
         
         # Check for a preexisting translation file and parse that.
-        if self.pot:
-            for entry in os.scandir(os.path.join(self.projectURL, self.translation_folder)):
-                if entry.name.endswith(projectName+'.pot') and entry.is_file():
-                    self.parse_pot(entry.name)
-                    break
-        else:
-            for entry in os.scandir(os.path.join(self.projectURL, self.translation_folder)):
-                if entry.name.endswith(projectName+'.csv') and entry.is_file():
-                    self.parse_csv(entry.name)
-                    break
+        for entry in os.scandir(os.path.join(self.projectURL, self.translation_folder)):
+            if entry.name.endswith(projectName+'.pot') and entry.is_file():
+                self.parse_pot(entry.name)
+                break
 
     def start(self, pagesList, language):
         if self.languageKey not in self.translationDict.keys():
             self.translationDict[self.languageKey] = language
         for p in pagesList:
             self.get_svg_layers(os.path.join(self.projectURL, p))
-        if self.pot:
-            self.write_pot()
-        else:
-            self.write_csv()
+        self.write_pot()
 
     def parse_pot(self, location):
         if (os.path.exists(location)):
@@ -99,15 +89,6 @@ class translation_scraper():
                     entry["extract"] = line
                 if line.startswith("msgctxt "):
                     key = line.strip("msgctxt ")
-            file.close()
-
-    def parse_csv(self, location):
-        if (os.path.exists(location)):
-            file = open(location, "r", newline="", encoding="utf8")
-            csvReader = csv.reader(file)
-            row = []
-            for row in csvReader:
-                self.translationDict[row[0]]["text"] = row.pop(0)
             file.close()
 
     def get_svg_layers(self, location):
@@ -183,15 +164,4 @@ class translation_scraper():
                     file.write("msgctxt "+quote+key+quote+newLine)
                 file.write("msgid "+quote+string+quote+newLine)
                 file.write("msgstr "+quote+quote+newLine)
-        file.close()
-        
-    def write_csv(self):
-        location = os.path.join(self.projectURL, self.translation_folder, self.projectName+".csv")
-        file = open(location, "r", newline="", encoding="utf8")
-        csvReader = csv.DictWriter()
-        for key in self.translationDict.keys():
-            row = []
-            row = self.translationDict[key]["text"]
-            row.insert(0, key)
-            csvReader.writerow(row)
         file.close()

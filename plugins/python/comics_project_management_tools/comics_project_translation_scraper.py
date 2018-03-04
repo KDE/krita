@@ -58,12 +58,12 @@ class translation_scraper():
                 self.parse_pot(os.path.join(self.projectURL, self.translation_folder, entry.name))
                 break
 
-    def start(self, pagesList, language):
+    def start(self, pagesList, language, metaData={}):
         if self.languageKey not in self.translationDict.keys():
             self.translationDict[self.languageKey] = language
         for p in pagesList:
             self.get_svg_layers(os.path.join(self.projectURL, p))
-        self.write_pot()
+        self.write_pot(metaData)
 
     def parse_pot(self, location):
         if (os.path.exists(location)):
@@ -172,7 +172,7 @@ class translation_scraper():
 
         parseThroughChildNodes(svg.documentElement)
 
-    def write_pot(self):
+    def write_pot(self, metaData):
         quote = "\""
         newLine = "\n"
         location = os.path.join(self.projectURL, self.translation_folder, self.projectName + ".pot")
@@ -185,6 +185,24 @@ class translation_scraper():
         file.write(quote + "Content-Type: text/plain; charset=UTF-8\\n" + quote + newLine)
         file.write(quote + "Content-Transfer-Encoding: 8bit\\n" + quote + newLine)
         file.write(quote + "X-Generator: Krita Comics Project Manager Tools Plugin\\n" + quote + newLine)
+
+        file.write("#. Title of the work")
+        file.write("msgctxt \"@meta-title\"" + newLine)
+        file.write("msgid " + quote + metaData.get("title", "") + quote + newLine)
+        file.write("msgstr " + quote + quote + newLine)
+        file.write(newLine)
+
+        file.write("#. The summary")
+        file.write("msgctxt \"@meta-summary\"" + newLine)
+        file.write("msgid " + quote + metaData.get("summary", "") + quote + newLine)
+        file.write("msgstr " + quote + quote + newLine)
+        file.write(newLine)
+
+        file.write("#. The keywords, these need to be comma seperated.")
+        file.write("msgctxt \"@meta-keywords\"" + newLine)
+        file.write("msgid " + quote + metaData.get("keywords", "") + quote + newLine)
+        file.write("msgstr " + quote + quote + newLine)
+        file.write(newLine)
 
         for key in self.translationKeys:
             if key != self.languageKey:

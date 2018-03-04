@@ -170,6 +170,24 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             textlayer.setAttribute("show", "True")
             language.appendChild(textlayer)
             translationComments[lang] = []
+            translation = poParser.get_entry_for_key("@meta-title", lang).get("trans", None)
+            if translation is not None:
+                bookTitleTr = document.createElement("book-title")
+                bookTitleTr.setAttribute("lang", lang)
+                bookTitleTr.appendChild(document.createTextNode(translation))
+                bookInfo.appendChild(bookTitleTr)
+            translation = poParser.get_entry_for_key("@meta-summary", lang).get("trans", None)
+            if translation is not None:
+                annotationTr = document.createElement("annotation")
+                annotationTr.setAttribute("lang", lang)
+                annotationTr.appendChild(document.createTextNode(translation))
+                bookInfo.appendChild(annotationTr)
+            translation = poParser.get_entry_for_key("@meta-keywords", lang).get("trans", None)
+            if translation is not None:
+                keywordsTr = document.createElement("keywords")
+                keywordsTr.setAttribute("lang", lang)
+                keywordsTr.appendChild(document.createTextNode(translation))
+                bookInfo.appendChild(keywordsTr)
         bookInfo.appendChild(language)
 
         bookTitle.setAttribute("lang", configDictionary["language"])

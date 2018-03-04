@@ -38,26 +38,27 @@ class po_file_parser():
 
     def parse_pot(self, location):
         if (os.path.exists(location)):
-            file = open(location, "r", newline="", encoding="utf8")
+            file = open(location, "r", encoding="utf8")
             lang = "en"
             for line in file:
                 if line.startswith("\"Language: "):
                     lang = line[len("\"Language: "):]
-                    lang = lang.replace('\\n"\n', "")
+                    lang = lang.replace('\\n\"\n', "")
             file.close()
-            file = open(location, "r", newline="", encoding="utf8")
+            file = open(location, "r", encoding="utf8")
             multiLine = ""
             key = None
             entry = {}
             
             def addEntryToTranslationDict(key, entry, lang):
                 if len(entry.keys())>0:
-                    if self.key_xml:
-                        text = entry.get("text", "")
-                        entry["text"] = re.sub("\<\/*?.*?\>", "", text)
                     if key is None:
-                        key = entry.get("text", None)
-                        entry.pop("text")
+                        if self.key_xml:
+                            text = entry.get("text", "")
+                            text = re.sub("\<.*?\>", " ", text)
+                            key = str(re.sub("\s+", " ", text)).strip()
+                        else:
+                            key = entry.get("text", None)
                     if key is not None:
                         if len(key)>0:
                             dummyDict = {}
@@ -72,16 +73,16 @@ class po_file_parser():
                     key = None
                     multiLine = ""
                 if line.startswith("msgid "):
-                    string = line.strip("msgid \"")
-                    string = string[:-len('"\n')]
+                    string = line[len("msgid \""):]
+                    string = string[:-len("\"\n")]
                     string = string.replace("\\\"", "\"")
                     string = string.replace("\\\'", "\'")
                     string = string.replace("\\#", "#")
                     entry["text"] = string
                     multiLine = "text"
                 if line.startswith("msgstr "):
-                    string = line.strip("msgstr \"")
-                    string = string[:-len('"\n')]
+                    string = line[len("msgstr \""):]
+                    string = string[:-len("\"\n")]
                     string = string.replace("\\\"", "\"")
                     string = string.replace("\\\'", "\'")
                     string = string.replace("\\#", "#")
@@ -96,10 +97,11 @@ class po_file_parser():
                 if line.startswith("#. "):
                     entry["extract"] = line.replace("#. ", "")
                 if line.startswith("msgctxt "):
-                    key = line.strip("msgctxt ")
+                    key = line[len("msgctxt \""):]
+                    key = key[:-len("\"\n")]
                 if line.startswith("\"") and len(multiLine)>0:
-                    string = line[1:]
-                    string = string[:-len('"\n')]
+                    string = line[len("\""):]
+                    string = string[:-len("\"\n")]
                     string = string.replace("\\\"", "\"")
                     string = string.replace("\\\'", "\'")
                     string = string.replace("\\#", "#")
@@ -117,7 +119,9 @@ class po_file_parser():
         entry = {}
         entry["trans"] = " "
         if self.key_xml:
-            key = re.sub("\<\/*?.*?\>", "", key)
+            key = re.sub("\<.*?\>", " ", key)
+            key = re.sub("\s+", " ", key)
+            key = key.strip()
         if key in self.translationDict.keys():
             translations = {}
             translations = self.translationDict[key]

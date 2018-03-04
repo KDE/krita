@@ -46,9 +46,9 @@ class po_file_parser():
             multiLine = ""
             key = None
             entry = {}
-            for line in file:
-                if line.isspace():
-                    if len(entry.keys())>0:
+            
+            def addEntryToTranslationDict(key, entry, lang):
+                if len(entry.keys())>0:
                         if key is None:
                             key = entry.get("text", None)
                             entry.pop("text")
@@ -58,6 +58,10 @@ class po_file_parser():
                                 dummyDict = self.translationDict.get(key, dummyDict)
                                 dummyDict[lang] = entry
                                 self.translationDict[key] = dummyDict
+            
+            for line in file:
+                if line.isspace() or len(line)<1:
+                    addEntryToTranslationDict(key, entry, lang)
                     entry = {}
                     key = None
                     multiLine = ""
@@ -80,11 +84,11 @@ class po_file_parser():
                 if line.startswith("# "):
                     #Translator comment
                     if "translComment" in entry.keys():
-                        entry["translComment"] += line
+                        entry["translComment"] += line.replace("# ", "")
                     else:
-                        entry["translComment"] = line
+                        entry["translComment"] = line.replace("# ", "")
                 if line.startswith("#. "):
-                    entry["extract"] = line
+                    entry["extract"] = line.replace("#. ", "")
                 if line.startswith("msgctxt "):
                     key = line.strip("msgctxt ")
                 if line.startswith("\"") and len(multiLine)>0:
@@ -94,17 +98,10 @@ class po_file_parser():
                     string = string.replace("\\\'", "\'")
                     string = string.replace("\\#", "#")
                     entry[multiLine] += string
-            if len(entry.keys())>0:
-                if key is None:
-                    key = entry.get("text", None)
-                    entry.pop("text")
-                if key is not None:
-                    if len(key)>0:
-                        dummyDict = {}
-                        dummyDict = self.translationDict.get(key, dummyDict)
-                        dummyDict[lang] = entry
-                        self.translationDict[key] = dummyDict
-            self.translationList.append(lang)
+            # ensure that the final entry gets added.
+            addEntryToTranslationDict(key, entry, lang)
+            if lang not in self.translationList:
+                self.translationList.append(lang)
             file.close()
 
     def get_translation_list(self):

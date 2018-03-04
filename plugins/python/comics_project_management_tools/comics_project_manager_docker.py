@@ -769,17 +769,18 @@ class comics_project_manager_docker(DockWidget):
         if self.projecturl is not None:
             clipboard = qApp.clipboard()
             clipboard.setText(str(self.projecturl))
-    
+
     """
     Scrape text files with the textlayer keys for text, and put those in a POT
     file. This makes it possible to handle translations.
     """
+
     def slot_scrape_translations(self):
         translationFolder = self.setupDictionary.get("translationLocation", "translations")
         fullTranslationPath = os.path.join(self.projecturl, translationFolder)
         os.makedirs(fullTranslationPath, exist_ok=True)
         textLayersToSearch = self.setupDictionary.get("textLayerNames", ["text"])
-        
+
         scraper = comics_project_translation_scraper.translation_scraper(self.projecturl, translationFolder, textLayersToSearch, self.setupDictionary["projectName"])
         # Run text scraper.
         language = self.setupDictionary.get("language", "en")

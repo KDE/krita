@@ -248,7 +248,6 @@ class comic_export_setting_dialog(QDialog):
         self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
         formLayers.addRow(i18n("Text Layer Key:"), self.ln_text_layer_name)
         formLayers.addRow(i18n("Panel Layer Key:"), self.ln_panel_layer_name)
-        
 
         mainExportSettings.layout().addWidget(groupExportCrop)
         mainExportSettings.layout().addWidget(groupExportLayers)

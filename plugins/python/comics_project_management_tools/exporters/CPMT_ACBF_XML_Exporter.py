@@ -162,11 +162,13 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         textlayerNative.setAttribute("show", "True")
         language.appendChild(textlayer)
         language.appendChild(textlayerNative)
+        translationComments = {}
         for lang in poParser.get_translation_list():
             textlayer = document.createElement("text-layer")
             textlayer.setAttribute("lang", lang)
             textlayer.setAttribute("show", "True")
             language.appendChild(textlayer)
+            translationComments[lang] = []
         bookInfo.appendChild(language)
 
         bookTitle.setAttribute("lang", configDictionary["language"])
@@ -357,7 +359,6 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         for lang in poParser.get_translation_list():
             textLayerTr = document.createElement("text-layer")
             textLayerTr.setAttribute("lang", lang)
-            translationComments = 0
             for v in data["vector"]:
                 boundingBoxText = []
                 for point in v["boundingBox"]:
@@ -385,15 +386,16 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     paragraph.appendChild(paragraph.createElement("p"))
                     parseTextChildren(paragraph, svg.documentElement, paragraph.documentElement)
                     if "translComment" in translationEntry.keys():
-                        ref = document.createElement("reference")
-                        translationComments += 1
-                        ref.setAttribute("lang", lang)
-                        refID = "-".join(["tn", str(p), str(translationComments)])
-                        ref.setAttribute("id", refID)
-                        refPara = document.createElement("p")
-                        refPara.appendChild(document.createTextNode(translationEntry["translComment"]))
-                        ref.appendChild(refPara)
-                        references.appendChild(ref)
+                        key = translationEntry["translComment"]
+                        listOfComments = []
+                        listOfComments = translationComments[lang]
+                        if key in listOfComments:
+                            index = listOfComments.index(key)+1
+                            refID = "-".join(["tn", lang, str(index)])
+                        else:
+                            listOfComments.append(key)
+                            translationComments[lang] = listOfComments
+                            refID = "-".join(["tn", lang, str(len(listOfComments))])
                         anchor = document.createElement("a")
                         anchor.setAttribute("href", "#"+refID)
                         anchor.appendChild(document.createTextNode("*"))
@@ -401,6 +403,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     textArea.appendChild(paragraph.documentElement)
                     textLayerTr.appendChild(textArea)
                     textLayerList.appendChild(textLayerTr)
+        
+
             
         if page is not coverpageurl:
             pg = document.createElement("page")
@@ -438,6 +442,18 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             coverpage.appendChild(textLayer)
             for node in textLayerList.childNodes:
                 coverpage.appendChild(node)
+
+    for lang in translationComments.keys():
+        for key in translationComments[lang]:
+            index = translationComments[lang].index(key)+1
+            refID = "-".join(["tn", lang, str(index)])
+            ref = document.createElement("reference")
+            ref.setAttribute("lang", lang)
+            ref.setAttribute("id", refID)
+            refPara = document.createElement("p")
+            refPara.appendChild(document.createTextNode(key))
+            ref.appendChild(refPara)
+            references.appendChild(ref)
 
     root.appendChild(body)
     if references.childNodes:

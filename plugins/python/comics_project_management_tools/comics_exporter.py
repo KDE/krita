@@ -149,11 +149,11 @@ class comicsExporter():
                 title = self.configDictionary["projectName"]
                 if "title" in self.configDictionary.keys():
                     title = self.configDictionary["title"]
-                
-                self.acbfLocation = str(exportPath / "metadata"/ str(title + ".acbf"))
-                
+
+                self.acbfLocation = str(exportPath / "metadata" / str(title + ".acbf"))
+
                 locationStandAlone = str(exportPath / str(title + ".acbf"))
-                
+
                 export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone, self.projectURL)
 
             # Export and package CBZ and Epub.
@@ -177,9 +177,9 @@ class comicsExporter():
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
-        self.cometLocation = str(exportPath / "metadata"/ str(title + " CoMet.xml"))
+        self.cometLocation = str(exportPath / "metadata" / str(title + " CoMet.xml"))
         export_success = exporters.CoMet.write_xml(self.configDictionary, self.pagesLocationList["CBZ"], self.cometLocation)
-        self.comicRackInfo = str(exportPath / "metadata"/ "ComicInfo.xml")
+        self.comicRackInfo = str(exportPath / "metadata" / "ComicInfo.xml")
         export_success = exporters.comic_rack_xml.write_xml(self.configDictionary, self.pagesLocationList["CBZ"], self.comicRackInfo)
         self.package_cbz(exportPath)
         return export_success
@@ -227,7 +227,7 @@ class comicsExporter():
                     progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(pagesList), passedString=passedString, estimated=estimatedString))
                 qApp.processEvents()
                 # Get the appropriate url and open the page.
-                url = str(Path(self.projectURL)/ pagesList[p])
+                url = str(Path(self.projectURL) / pagesList[p])
                 page = Application.openDocument(url)
                 page.waitForDone()
 

@@ -102,7 +102,7 @@ class ComicsProjectSetupWizard():
         self.lnTemplateLocation = QLineEdit()
         self.lnTemplateLocation.setText(i18n("templates"))
         self.lnTemplateLocation.setToolTip(i18n("The name for the folder where the page templates are sought in."))
-        
+
         self.lnTranslationLocation = QLineEdit()
         self.lnTranslationLocation.setText(i18n("translations"))
         self.lnTranslationLocation.setToolTip("This is the location that POT files will be stored to and PO files will be read from.")

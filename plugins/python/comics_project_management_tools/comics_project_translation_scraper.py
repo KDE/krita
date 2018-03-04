@@ -32,27 +32,29 @@ import os
 import csv
 import zipfile
 import types
-from xml.dom import minidom 
+from xml.dom import minidom
 from PyQt5.QtCore import QDateTime, Qt
+
 
 class translation_scraper():
     projectURL = str()
     translation_folder = str()
     textLayerNameList = []
     translationDict = {}
+    translationKeys = []  # seperate so that the keys will be somewhat according to the order of appearance.
     projectName = str()
     languageKey = "AA_language"
 
-    def __init__(self, projectURL = str(), translation_folder = str(), textLayerNameList = [], projectName = str()):
+    def __init__(self, projectURL=str(), translation_folder=str(), textLayerNameList=[], projectName=str()):
         self.projectURL = projectURL
         self.projectName = projectName
         self.translation_folder = translation_folder
         self.textLayerNameList = textLayerNameList
         self.translationDict = {}
-        
+
         # Check for a preexisting translation file and parse that.
         for entry in os.scandir(os.path.join(self.projectURL, self.translation_folder)):
-            if entry.name.endswith(projectName+'.pot') and entry.is_file():
+            if entry.name.endswith(projectName + '.pot') and entry.is_file():
                 self.parse_pot(os.path.join(self.projectURL, self.translation_folder, entry.name))
                 break
 
@@ -69,15 +71,18 @@ class translation_scraper():
             multiLine = ""
             key = None
             entry = {}
-            for line in file:
+
+            def addEntryToTranslationDict(key, entry):
+                if len(entry.keys()) > 0:
+                    if key is None:
+                        key = entry.get("text", None)
+                    if key is not None:
+                        if len(key) > 0:
+                            self.translationDict[key] = entry
+
+            for line in file or len(line) < 1:
                 if line.isspace():
-                    if len(entry.keys())>0:
-                        if key is None:
-                            key = entry.get("text", None)
-                            entry.pop("text")
-                        if key is not None:
-                            if len(key)>0:
-                                self.translationDict[key] = entry
+                    addEntryToTranslationDict(key, entry)
                     entry = {}
                     key = None
                     multiLine = ""
@@ -98,44 +103,38 @@ class translation_scraper():
                     entry["trans"] = string
                     multiLine = "trans"
                 if line.startswith("# "):
-                    #Translator comment
+                    # Translator comment
                     entry["translator"] = line
                 if line.startswith("#. "):
                     entry["extract"] = line
                 if line.startswith("msgctxt "):
                     key = line.strip("msgctxt ")
-                if line.startswith("\"") and len(multiLine)>0:
+                if line.startswith("\"") and len(multiLine) > 0:
                     string = line[1:]
                     string = string[:-len('"\n')]
                     string = string.replace("\\\"", "\"")
                     string = string.replace("\\\'", "\'")
                     string = string.replace("\\#", "#")
                     entry[multiLine] += string
-            if len(entry.keys())>0:
-                if key is None:
-                    key = entry.get("text", None)
-                    entry.pop("text")
-                if key is not None:
-                    if len(key)>0:
-                        self.translationDict[key] = entry
+            addEntryToTranslationDict(key, entry)
             file.close()
 
     def get_svg_layers(self, location):
         page = zipfile.ZipFile(location, "a")
         xmlroot = minidom.parseString(page.read("maindoc.xml"))
         doc = xmlroot.documentElement
-        
+
         candidates = []
 
         for member in page.namelist():
             info = page.getinfo(member)
             if info.filename.endswith('svg'):
                 candidates.append(info.filename)
-        
+
         def parseThroughChildNodes(node):
             for childNode in node.childNodes:
                 if childNode.nodeType != minidom.Node.TEXT_NODE:
-                    if childNode.tagName == "layer" and childNode.getAttribute("nodetype")=="shapelayer":
+                    if childNode.tagName == "layer" and childNode.getAttribute("nodetype") == "shapelayer":
                         isTextLayer = False
                         for t in self.textLayerNameList:
                             if t in childNode.getAttribute("name"):
@@ -143,17 +142,18 @@ class translation_scraper():
                         if isTextLayer:
                             filename = childNode.getAttribute("filename")
                             for c in candidates:
-                                if str(filename+".shapelayer/content.svg") in c:
+                                if str(filename + ".shapelayer/content.svg") in c:
                                     self.get_txt(page.read(c))
                     if childNode.childNodes:
                         parseThroughChildNodes(childNode)
-                    
+
         parseThroughChildNodes(doc)
         page.close()
 
     def get_txt(self, string):
         svg = minidom.parseString(string)
         # parse through string as if svg.
+
         def parseThroughChildNodes(node):
             for childNode in node.childNodes:
                 if childNode.nodeType != minidom.Node.TEXT_NODE:
@@ -165,32 +165,34 @@ class translation_scraper():
                             entry = {}
                             entry["text"] = text
                             self.translationDict[text] = entry
+                        if text not in self.translationKeys:
+                            self.translationKeys.append(text)
                     elif childNode.childNodes:
                         parseThroughChildNodes(childNode)
-                    
+
         parseThroughChildNodes(svg.documentElement)
 
     def write_pot(self):
         quote = "\""
         newLine = "\n"
-        location = os.path.join(self.projectURL, self.translation_folder, self.projectName+".pot")
+        location = os.path.join(self.projectURL, self.translation_folder, self.projectName + ".pot")
         file = open(location, "w", newline="", encoding="utf8")
-        
-        file.write("msgid "+quote+quote+newLine)
-        file.write("msgstr "+quote+quote+newLine)
-        date = QDateTime.currentDateTimeUtc().toString(Qt.UTC)
-        file.write(quote+"POT-Creation-Date:"+date+"\\n\""+quote+newLine)
-        file.write(quote+"Content-Type: text/plain; charset=UTF-8\\n\""+quote+newLine)
-        file.write(quote+"Content-Transfer-Encoding: 8bit\\n\""+quote+newLine)
-        file.write(quote+"X-Generator: Krita Comit Manager Tools Plugin\\n\""+quote+newLine)
-        
-        for key in self.translationDict.keys():
+
+        file.write("msgid " + quote + quote + newLine)
+        file.write("msgstr " + quote + quote + newLine)
+        date = QDateTime.currentDateTime().toString()
+        file.write(quote + "POT-Creation-Date:" + date + "\\n" + quote + newLine)
+        file.write(quote + "Content-Type: text/plain; charset=UTF-8\\n" + quote + newLine)
+        file.write(quote + "Content-Transfer-Encoding: 8bit\\n" + quote + newLine)
+        file.write(quote + "X-Generator: Krita Comics Project Manager Tools Plugin\\n" + quote + newLine)
+
+        for key in self.translationKeys:
             if key != self.languageKey:
                 file.write(newLine)
-                if "translator" in self.translationDict[key].keys():
-                    file.write("# "+self.translationDict[key]["translator"]+newLine)
+                if "translComment" in self.translationDict[key].keys():
+                    file.write("# " + self.translationDict[key]["translator"] + newLine)
                 if "extract" in self.translationDict[key].keys():
-                    file.write("#. "+self.translationDict[key]["extract"]+newLine)
+                    file.write("#. " + self.translationDict[key]["extract"] + newLine)
                 string = self.translationDict[key]["text"]
                 uniqueContext = False
                 if string != key:
@@ -199,7 +201,7 @@ class translation_scraper():
                 string = string.replace("\'", "\\\'")
                 string = string.replace("#", "\\#")
                 if uniqueContext:
-                    file.write("msgctxt "+quote+key+quote+newLine)
-                file.write("msgid "+quote+string+quote+newLine)
-                file.write("msgstr "+quote+quote+newLine)
+                    file.write("msgctxt " + quote + key + quote + newLine)
+                file.write("msgid " + quote + string + quote + newLine)
+                file.write("msgstr " + quote + quote + newLine)
         file.close()

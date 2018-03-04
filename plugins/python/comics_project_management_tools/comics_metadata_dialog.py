@@ -497,7 +497,7 @@ class comic_meta_data_editor(QDialog):
                 if isinstance(config["genre"], dict):
                     genreValue = config["genre"][genre]
                     if genreValue > 0:
-                        genreKey = str(genreKey+"("+str(genreValue)+")")
+                        genreKey = str(genreKey + "(" + str(genreValue) + ")")
                 genreList.append(genreKey)
             self.lnGenre.setText(", ".join(genreList))
         if "characters" in config.keys():
@@ -624,10 +624,10 @@ class comic_meta_data_editor(QDialog):
                 else:
                     genreList[genre] = match
                 totalValue += match
-            #Normalize the values:
+            # Normalize the values:
             for key in genreList.keys():
-                if genreList[key]>0:
-                    genreList[key]= round(genreList[key]/totalValue*100)
+                if genreList[key] > 0:
+                    genreList[key] = round(genreList[key] / totalValue * 100)
             config["genre"] = genreList
         elif "genre" in config.keys():
             config.pop("genre")

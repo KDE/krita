@@ -788,6 +788,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["title"] = self.setupDictionary.get("title", "")
         metadata["summary"] = self.setupDictionary.get("summary", "")
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
+        metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
     """
     This is required by the dockwidget class, otherwise unused.

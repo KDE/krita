@@ -286,6 +286,8 @@ class comic_export_setting_dialog(QDialog):
         acbfHistoryList.setModel(self.ACBFhistoryModel)
         btn_add_history = QPushButton(i18n("Add history entry"))
         btn_add_history.clicked.connect(self.slot_add_history_item)
+        self.chkIncludeTranslatorComments = QCheckBox()
+        self.lnTranslatorHeader = QLineEdit()
 
         ACBFform.addRow(i18n("Author-name:"), self.lnACBFAuthor)
         ACBFform.addRow(i18n("Source:"), self.lnACBFSource)
@@ -293,6 +295,8 @@ class comic_export_setting_dialog(QDialog):
         ACBFform.addRow(i18n("Version:"), self.spnACBFVersion)
         ACBFform.addRow(i18n("Version History:"), acbfHistoryList)
         ACBFform.addRow("", btn_add_history)
+        ACBFform.addRow("", self.chkIncludeTranslatorComments)
+        ACBFform.addRow(i18n("Translator Header:"), self.lnTranslatorHeader)
 
         ACBFExportSettings.layout().addWidget(ACBFdocInfo)
         mainWidget.addTab(ACBFExportSettings, "ACBF")
@@ -395,6 +399,8 @@ class comic_export_setting_dialog(QDialog):
                 item.setText(h)
                 self.ACBFhistoryModel.appendRow(item)
         self.CBZgroupResize.setEnabled(self.CBZactive.isChecked())
+        self.lnTranslatorHeader.setText(config.get("translatorHeader", "Translator's Notes"))
+        self.chkIncludeTranslatorComments.setChecked(config.get("includeTranslComment", False))
 
     """
     Store the GUI values into the config dictionary given.
@@ -425,6 +431,8 @@ class comic_export_setting_dialog(QDialog):
             index = self.ACBFhistoryModel.index(r, 0)
             versionList.append(self.ACBFhistoryModel.data(index, Qt.DisplayRole))
         config["acbfHistory"] = versionList
+        config["translatorHeader"] = self.lnTranslatorHeader.text()
+        config["includeTranslComment"] = self.chkIncludeTranslatorComments.isChecked()
 
         # Turn this into something that retreives from a line-edit when string freeze is over.
         config["textLayerNames"] = self.ln_text_layer_name.text().split(",")

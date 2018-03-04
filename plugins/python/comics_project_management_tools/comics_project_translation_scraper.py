@@ -203,6 +203,12 @@ class translation_scraper():
         file.write("msgid " + quote + metaData.get("keywords", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
         file.write(newLine)
+        
+        file.write("#. The header that will prepend translator's notes")
+        file.write("msgctxt \"@meta-translator\"" + newLine)
+        file.write("msgid " + quote + metaData.get("transnotes", "") + quote + newLine)
+        file.write("msgstr " + quote + quote + newLine)
+        file.write(newLine)
 
         for key in self.translationKeys:
             if key != self.languageKey:

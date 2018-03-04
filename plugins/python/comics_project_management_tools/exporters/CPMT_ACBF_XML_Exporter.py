@@ -405,16 +405,19 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                         key = translationEntry["translComment"]
                         listOfComments = []
                         listOfComments = translationComments[lang]
+                        index = 0
                         if key in listOfComments:
                             index = listOfComments.index(key)+1
-                            refID = "-".join(["tn", lang, str(index)])
                         else:
                             listOfComments.append(key)
+                            index = len(listOfComments)
                             translationComments[lang] = listOfComments
-                            refID = "-".join(["tn", lang, str(len(listOfComments))])
-                        anchor = document.createElement("a")
+                        refID = "-".join(["tn", lang, str(index)])
+                        anchor = document.createElement("A")
                         anchor.setAttribute("href", "#"+refID)
-                        anchor.appendChild(document.createTextNode("*"))
+                        sup = document.createElement("Sup")
+                        anchor.appendChild(sup)
+                        sup.appendChild(document.createTextNode(str(index)))
                         paragraph.documentElement().appendChild(anchor)
                     textArea.appendChild(paragraph.documentElement())
                     textLayerTr.appendChild(textArea)
@@ -461,17 +464,23 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 node = textLayerList.childNodes().at(n)
                 coverpage.appendChild(node)
 
-    for lang in translationComments.keys():
-        for key in translationComments[lang]:
-            index = translationComments[lang].index(key)+1
-            refID = "-".join(["tn", lang, str(index)])
-            ref = document.createElement("reference")
-            ref.setAttribute("lang", lang)
-            ref.setAttribute("id", refID)
-            refPara = document.createElement("p")
-            refPara.appendChild(document.createTextNode(key))
-            ref.appendChild(refPara)
-            references.appendChild(ref)
+    if configDictionary.get("includeTranslComment", False):
+        for lang in translationComments.keys():
+            for key in translationComments[lang]:
+                index = translationComments[lang].index(key)+1
+                refID = "-".join(["tn", lang, str(index)])
+                ref = document.createElement("reference")
+                ref.setAttribute("lang", lang)
+                ref.setAttribute("id", refID)
+                transHeaderStr = configDictionary.get("translatorHeader", "Translator's Notes")
+                transHeaderStr = poParser.get_entry_for_key("@meta-translator").get("trans", transHeaderStr)
+                translatorHeader = document.createElement("p")
+                translatorHeader.appendChild(document.createTextNode(transHeaderStr+":"))
+                ref.appendChild(translatorHeader)
+                refPara = document.createElement("p")
+                refPara.appendChild(document.createTextNode(key))
+                ref.appendChild(refPara)
+                references.appendChild(ref)
 
     root.appendChild(body)
     if references.childNodes().size():
@@ -496,7 +505,7 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
     body = root.firstChildElement("body")
     pages = []
     for p in range(0, len(body.elementsByTagName("page"))):
-        pages.append(body.elementsByTagName("page").item(p))
+        pages.append(body.elementsByTagName("page").item(p).toElement())
     if (cover):
         pages.append(cover)
 

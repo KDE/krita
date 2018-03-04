@@ -25,20 +25,25 @@ http://acbf.wikia.com/wiki/ACBF_Specifications
 """
 
 import os
-from xml.dom import minidom
+import re
 from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
 from PyQt5.QtGui import QImage
+from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from . import CPMT_po_parser as po_parser
 
 def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], locationBasic = str(), locationStandAlone = str(), projectUrl = str()):
     acbfGenreList = ["science_fiction", "fantasy", "adventure", "horror", "mystery", "crime", "military", "real_life", "superhero", "humor", "western", "manga", "politics", "caricature", "sports", "history", "biography", "education", "computer", "religion", "romance", "children", "non-fiction", "adult", "alternative", "other", "artbook"]
     acbfAuthorRolesList = ["Writer", "Adapter", "Artist", "Penciller", "Inker", "Colorist", "Letterer", "Cover Artist", "Photographer", "Editor", "Assistant Editor", "Translator", "Other", "Designer"]
-    document = minidom.Document()
+    document = QDomDocument()
     root = document.createElement("ACBF")
     root.setAttribute("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
     document.appendChild(root)
 
     meta = document.createElement("meta-data")
+    
+    translationFolder = configDictionary.get("translationLocation", "translations")
+    fullTranslationPath = os.path.join(projectUrl, translationFolder)
+    poParser = po_parser.po_file_parser(fullTranslationPath, True)
 
     bookInfo = document.createElement("book-info")
     if "authorList" in configDictionary.keys():
@@ -147,10 +152,6 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 image.setAttribute("href", os.path.basename(coverpageurl))
             coverpage.appendChild(image)
     bookInfo.appendChild(coverpage)
-    
-    translationFolder = configDictionary.get("translationLocation", "translations")
-    fullTranslationPath = os.path.join(projectUrl, translationFolder)
-    poParser = po_parser.po_file_parser(fullTranslationPath)
 
     if "language" in configDictionary.keys():
         language = document.createElement("languages")
@@ -224,12 +225,11 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         publishISBN = document.createElement("isbn")
         publishISBN.appendChild(document.createTextNode(str(configDictionary["isbn-number"])))
         publisherInfo.appendChild(publishISBN)
-    if "license" in configDictionary.keys():
-        license = configDictionary["license"]
-        if license.isspace() is False and len(license) > 0:
-            publishLicense = document.createElement("license")
-            publishLicense.appendChild(document.createTextNode(str(configDictionary["license"])))
-            publisherInfo.appendChild(publishLicense)
+    license = str(configDictionary.get("license", ""))
+    if license.isspace() is False and len(license) > 0:
+        publishLicense = document.createElement("license")
+        publishLicense.appendChild(license)
+        publisherInfo.appendChild(publishLicense)
 
     meta.appendChild(publisherInfo)
 
@@ -345,11 +345,12 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 textArea = document.createElement("text-area")
                 textArea.setAttribute("points", " ".join(boundingBoxText))
                 # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
-                svg = minidom.parseString(v["text"])
-                paragraph = minidom.Document()
+                svg = QDomDocument()
+                svg.setContent(v["text"])
+                paragraph = QDomDocument()
                 paragraph.appendChild(paragraph.createElement("p"))
-                parseTextChildren(paragraph, svg.documentElement, paragraph.documentElement) 
-                textArea.appendChild(paragraph.documentElement)
+                parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement()) 
+                textArea.appendChild(paragraph.documentElement())
                 textLayer.appendChild(textArea)
             else:
                 f = {}
@@ -374,17 +375,14 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     textArea = document.createElement("text-area")
                     textArea.setAttribute("points", " ".join(boundingBoxText))
                     # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
-                    string = str(v["text"])
-                    s = minidom.parseString(string)
-                    string = ""
-                    for c in s.documentElement.childNodes:
-                        string += c.toxml()
+                    string = re.sub("\<\/*?text.*?\>",'', str(v["text"]))
+                    string = re.sub("\s+?", " ", string)
                     translationEntry = poParser.get_entry_for_key(string, lang)
                     string = translationEntry.get("trans", string)
-                    svg = minidom.parseString("<text>"+string+"</text>")
-                    paragraph = minidom.Document()
+                    svg.setContent("<text>"+string+"</text>")
+                    paragraph = QDomDocument()
                     paragraph.appendChild(paragraph.createElement("p"))
-                    parseTextChildren(paragraph, svg.documentElement, paragraph.documentElement)
+                    parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement())
                     if "translComment" in translationEntry.keys():
                         key = translationEntry["translComment"]
                         listOfComments = []
@@ -399,8 +397,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                         anchor = document.createElement("a")
                         anchor.setAttribute("href", "#"+refID)
                         anchor.appendChild(document.createTextNode("*"))
-                        paragraph.documentElement.appendChild(anchor)
-                    textArea.appendChild(paragraph.documentElement)
+                        paragraph.documentElement().appendChild(anchor)
+                    textArea.appendChild(paragraph.documentElement())
                     textLayerTr.appendChild(textArea)
                     textLayerList.appendChild(textLayerTr)
         
@@ -431,7 +429,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 pg.appendChild(frame)
             pg.appendChild(textLayer)
-            for node in textLayerList.childNodes:
+            for n in range(0, textLayerList.childNodes().size()):
+                node = textLayerList.childNodes().at(n)
                 pg.appendChild(node)
             body.appendChild(pg)
         else:
@@ -440,7 +439,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 coverpage.appendChild(frame)
             coverpage.appendChild(textLayer)
-            for node in textLayerList.childNodes:
+            for n in range(0, textLayerList.childNodes().size()):
+                node = textLayerList.childNodes().at(n)
                 coverpage.appendChild(node)
 
     for lang in translationComments.keys():
@@ -456,27 +456,29 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             references.appendChild(ref)
 
     root.appendChild(body)
-    if references.childNodes:
+    if references.childNodes().size():
         root.appendChild(references)
 
     f = open(locationBasic, 'w', newline="", encoding="utf-8")
-    f.write(document.toprettyxml(indent="  "))
+    f.write(document.toString(indent=2))
     f.close()
     success = True
     success = createStandAloneACBF(configDictionary, document, locationStandAlone, pagesLocationList)
     return success
 
-def createStandAloneACBF(configDictionary, document, location, pagesLocationList = []):
+def createStandAloneACBF(configDictionary, document = QDomDocument(), location = str(), pagesLocationList = []):
     title = configDictionary["projectName"]
     if "title" in configDictionary.keys():
         title = configDictionary["title"]
-    root = document.getElementsByTagName("ACBF")[0]
-    meta = root.getElementsByTagName("meta-data")[0]
-    bookInfo = meta.getElementsByTagName("book-info")[0]
-    cover = bookInfo.getElementsByTagName("coverpage")[0]
+    root = document.documentElement().firstChildElement("ACBF")
+    meta = root.firstChildElement("meta-data")
+    bookInfo = meta.firstChildElement("book-info")
+    cover = bookInfo.firstChildElement("coverpage")
 
-    body = root.getElementsByTagName("body")[0]
-    pages = body.getElementsByTagName("page")
+    body = root.firstChildElement("body")
+    pages = []
+    for p in range(0, len(body.elementsByTagName("page"))):
+        pages.append(body.elementsByTagName("page").item(p))
     if (cover):
         pages.append(cover)
 
@@ -484,8 +486,8 @@ def createStandAloneACBF(configDictionary, document, location, pagesLocationList
 
     # Covert pages to base64 strings.
     for i in range(0, len(pages)):
-        image = pages[i].getElementsByTagName("image")[0]
-        href = image.getAttribute("href")
+        image = pages[i].firstChildElement("image")
+        href = image.attribute("href")
         for p in pagesLocationList:
             if href in p:
                 binary = document.createElement("binary")
@@ -506,7 +508,7 @@ def createStandAloneACBF(configDictionary, document, location, pagesLocationList
     root.appendChild(data)
 
     f = open(location, 'w', newline="", encoding="utf-8")
-    f.write(document.toprettyxml(indent="  "))
+    f.write(document.toString(indent=2))
     f.close()
     return True
 
@@ -514,18 +516,19 @@ def createStandAloneACBF(configDictionary, document, location, pagesLocationList
 Function to parse svg text to acbf ready text
 """
 
-def parseTextChildren(document, elRead, elWrite):
-    for childNode in elRead.childNodes:
-        if childNode.nodeType == minidom.Node.TEXT_NODE:
-            if len(childNode.data) > 0:
-                if len(elWrite.childNodes)>0 and str(childNode.data).startswith(" ") is False:
-                    elWrite.appendChild(document.createTextNode(" "))
-                elWrite.appendChild(document.createTextNode(str(childNode.data)))
-        elif len(childNode.childNodes)>0:
-            fontWeight = str(childNode.getAttribute("font-weight"))
-            fontItalic = str(childNode.getAttribute("font-style"))
-            fontStrikeThrough = str(childNode.getAttribute("text-decoration"))
-            fontBaseLine = str(childNode.getAttribute("baseline-shift"))
+def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite = QDomElement()):
+    for n in range(0, elRead.childNodes().size()):
+        childNode = elRead.childNodes().item(n)
+        if childNode.isText():
+            if elWrite.hasChildNodes() and str(childNode.nodeValue()).startswith(" ") is False:
+                elWrite.appendChild(document.createTextNode(" "))
+            elWrite.appendChild(document.createTextNode(str(childNode.nodeValue())))
+        elif childNode.hasChildNodes():
+            childNode = childNode.toElement()
+            fontWeight = str(childNode.attribute("font-weight"))
+            fontItalic = str(childNode.attribute("font-style"))
+            fontStrikeThrough = str(childNode.attribute("text-decoration"))
+            fontBaseLine = str(childNode.attribute("baseline-shift"))
             newElementMade = False
             if fontItalic.isalnum():
                 if (fontItalic == "italic"):
@@ -556,6 +559,8 @@ def parseTextChildren(document, elRead, elWrite):
         # If it is not a text node, nor does it have children(which could be textnodes),
         # we should assume it's empty and ignore it.
     elWrite.normalize()
-    for e in elWrite.childNodes:
-        if e.nodeType == minidom.Node.TEXT_NODE:
-            e.data = str(e.data).replace("  ", " ")
+    for e in range(0, elWrite.childNodes().size()):
+        el = elWrite.childNodes().item(e)
+        if el.isText():
+            eb = el.nodeValue()
+            el.setNodeValue(eb.replace("  ", " "))

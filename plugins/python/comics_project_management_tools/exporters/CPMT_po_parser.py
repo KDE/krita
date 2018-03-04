@@ -23,13 +23,16 @@ A thing that parses through POT files.
 
 import sys
 import os
+import re
 
 class po_file_parser():
     translationDict = {}
     translationList = []
+    key_xml = False
 
-    def __init__(self, translationLocation):
+    def __init__(self, translationLocation, key_xml = False):
         for entry in os.scandir(translationLocation):
+            self.key_xml = key_xml
             if entry.name.endswith('.po') and entry.is_file():
                 self.parse_pot(os.path.join(translationLocation, entry.name))
 
@@ -49,15 +52,18 @@ class po_file_parser():
             
             def addEntryToTranslationDict(key, entry, lang):
                 if len(entry.keys())>0:
-                        if key is None:
-                            key = entry.get("text", None)
-                            entry.pop("text")
-                        if key is not None:
-                            if len(key)>0:
-                                dummyDict = {}
-                                dummyDict = self.translationDict.get(key, dummyDict)
-                                dummyDict[lang] = entry
-                                self.translationDict[key] = dummyDict
+                    if self.key_xml:
+                        text = entry.get("text", "")
+                        entry["text"] = re.sub("\<\/*?.*?\>", "", text)
+                    if key is None:
+                        key = entry.get("text", None)
+                        entry.pop("text")
+                    if key is not None:
+                        if len(key)>0:
+                            dummyDict = {}
+                            dummyDict = self.translationDict.get(key, dummyDict)
+                            dummyDict[lang] = entry
+                            self.translationDict[key] = dummyDict
             
             for line in file:
                 if line.isspace() or len(line)<1:
@@ -110,6 +116,8 @@ class po_file_parser():
     def get_entry_for_key(self, key, lang):
         entry = {}
         entry["trans"] = " "
+        if self.key_xml:
+            key = re.sub("\<\/*?.*?\>", "", key)
         if key in self.translationDict.keys():
             translations = {}
             translations = self.translationDict[key]
@@ -118,5 +126,6 @@ class po_file_parser():
                 return entry
             return translations[lang]
         else:
+            print(str(key).encode("utf8"))
             print("translation missing from the translated strings")
             return entry

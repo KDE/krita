@@ -1,4 +1,11 @@
 [Desktop Entry]
 Name=Animation Templates
+Name[ca]=Plantilles d'animació
+Name[en_GB]=Animation Templates
+Name[nl]=Animatiesjablonen
+Name[pt]=Modelos de Animação
+Name[sv]=Animeringsmallar
+Name[uk]=Шаблони анімацій
+Name[x-test]=xxAnimation Templatesxx
 Name[zh_TW]=動畫範本
 X-KDE-DefaultTab=true

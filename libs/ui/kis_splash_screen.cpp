@@ -50,7 +50,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     QImage img = pixmap.toImage();
     QFont font = this->font();
-    font.setPointSize(9);
+    font.setPointSize(11);
     font.setBold(true);
     QFontMetrics metrics(font);
 
@@ -194,7 +194,7 @@ void KisSplashScreen::displayRecentFiles(bool show) {
 void KisSplashScreen::setLoadingText(QString text)
 {
     QFont font = this->font();
-    font.setPointSize(8);
+    font.setPointSize(10);
     font.setItalic(true);
 
     QImage img = m_splashImage;

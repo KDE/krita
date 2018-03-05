@@ -38,6 +38,37 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     root = document.createElement("ACBF")
     root.setAttribute("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
     document.appendChild(root)
+    
+    if "acbfStyles" in configDictionary.keys():
+        stylesDictionary = configDictionary.get("acbfStyles", {})
+        styleString = "\n"
+        for key in stylesDictionary:
+            style = stylesDictionary.get(key, {})
+            if key == "emphasis" or key == "strong":
+                styleClass = key+"{\n"
+            elif key == "default":
+                styleClass = "text-area {\n"
+            else:
+                styleClass = "text-area[type=\""+key+"\"] {\n"
+            styleString += styleClass
+            if "font" in style.keys():
+                styleString += "    font-family:"+style["font"]+";\n"
+            if "bold" in style.keys():
+                if style["bold"]:
+                    styleString += "    font-weight: 700;\n"
+                else:
+                    styleString += "    font-weight: 400;\n"
+            if "italic" in style.keys():
+                if style["italic"]:
+                    styleString += "    font-style: italic;\n"
+                else:
+                    styleString += "    font-style: normal;\n"
+            styleString += "}\n"
+        style = document.createElement("style")
+        style.setAttribute("type", "text/css")
+        style.appendChild(document.createTextNode(styleString))
+        root.appendChild(style)
+        
 
     meta = document.createElement("meta-data")
     
@@ -259,7 +290,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         if isinstance(configDictionary["acbfAuthor"], list):
             for e in configDictionary["acbfAuthor"]:
                 acbfAuthor = document.createElement("author")
-                authorDict = configDictionary["acbfAuthor"][e]
+                authorDict = e
                 if "first-name" in authorDict.keys():
                     authorN = document.createElement("first-name")
                     authorN.appendChild(document.createTextNode(str(authorDict["first-name"])))

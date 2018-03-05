@@ -7,7 +7,7 @@ b\)_Basic-1.kpp
 b\)_Basic-2_Opacity.kpp
 b\)_Basic-3_Flow.kpp
 b\)_Basic-4_Flow_Opacity.kpp
-b\)_Basic-5_Size_default.kpp
+b\)_Basic-5_Size.kpp
 b\)_Basic-5_Size_Opacity.kpp
 b\)_Basic-6_Details.kpp
 c\)_Pencil-1_Hard.kpp

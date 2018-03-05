@@ -490,7 +490,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     bool foundTip = false;
     for (int i=0; i<rserver->resourceCount(); i++) {
         KisPaintOpPresetSP resource = rserver->resources().at(i);
-        if (resource->name().toLower().contains("eraser_circle")) {
+        if (resource->name().toLower().contains(m_eraserName)) {
             m_eraserName = resource->name();
             foundEraser = true;
         } else if (foundEraser == false && (resource->name().toLower().contains("eraser") ||
@@ -498,7 +498,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
             m_eraserName = resource->name();
             foundEraser = true;
         }
-        if (resource->name().toLower().contains("basic_tip_default")) {
+        if (resource->name().toLower().contains(m_defaultPresetName)) {
             m_defaultPresetName = resource->name();
             foundTip = true;
         } else if (foundTip == false && (resource->name().toLower().contains("default") ||

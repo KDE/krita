@@ -33,6 +33,7 @@ grass.gih
 grass_patch.gih
 hair.png
 hearts.gih
+impressionism_brush.gih
 leaves.png
 leaves-scattered.svg
 mountains_distant.gih

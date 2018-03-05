@@ -70,6 +70,7 @@ t\)_Shapes_Fill.kpp
 t\)_Shapes_Mecha.kpp
 t\)_Shapes_Rounded.kpp
 t\)_Shapes_Spikes.kpp
+t\)_Shapes_Square.kpp
 u\)_Pixel_Art_Dithering.kpp
 u\)_Pixel_Art_Fill.kpp
 u\)_Pixel_Art.kpp
@@ -81,12 +82,14 @@ v\)_Experimental_Webs.kpp
 v\)_Sketching-1_Chrome_Thin.kpp
 v\)_Sketching-2_Chrome_Large.kpp
 v\)_Sketching-3_Leaky.kpp
+v\)_Texture_Impressionism.kpp
 v\)_Texture_Pointillism.kpp
 w\)_Texture_Normal_Map.kpp
 x\)_Filter_Blur.kpp
 x\)_Filter_Sharpen.kpp
 y\)_Screentone_Moire.kpp
 y\)_Screentone_Pressure.kpp
+y\)_Screentones_Regular.kpp
 y\)_Texture_Big.kpp
 y\)_Texture_Crackles.kpp
 y\)_Texture_Hair.kpp

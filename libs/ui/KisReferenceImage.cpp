@@ -27,6 +27,7 @@
 #include <KoStoreDevice.h>
 #include <KoTosContainer_p.h>
 
+#include <krita_utils.h>
 #include <kis_coordinates_converter.h>
 #include <kis_dom_utils.h>
 #include <SvgUtil.h>
@@ -35,7 +36,10 @@
 struct KisReferenceImage::Private {
     KisReferenceImage *q;
     QString src;
+
     QImage image;
+    QImage cachedImage;
+
     qreal saturation{1.0};
     int id{-1};
     bool embed{true};
@@ -119,10 +123,23 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
     QSizeF shapeSize = size();
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
+    if (d->cachedImage.isNull()) {
+        if (d->saturation < 1.0) {
+            d->cachedImage = KritaUtils::convertQImageToGrayA(d->image);
+
+            if (d->saturation > 0.0) {
+                QPainter gc2(&d->cachedImage);
+                gc2.setOpacity(d->saturation);
+                gc2.drawImage(QPoint(), d->image);
+            }
+        } else {
+            d->cachedImage = d->image;
+        }
+    }
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
     gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
     gc.setTransform(transform, true);
-    gc.drawImage(QPoint(), d->image);
+    gc.drawImage(QPoint(), d->cachedImage);
 
     gc.restore();
 }
@@ -130,6 +147,7 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
 void KisReferenceImage::setSaturation(qreal saturation)
 {
     d->saturation = saturation;
+    d->cachedImage = QImage();
 }
 
 qreal KisReferenceImage::saturation() const

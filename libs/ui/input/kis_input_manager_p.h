@@ -145,7 +145,7 @@ public:
     };
     EventEater eventEater;
 
-    bool containsPointer = true;
+    bool containsPointer = false;
 
     int accumulatedScrollDelta = 0;
 

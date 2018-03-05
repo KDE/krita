@@ -14,6 +14,7 @@ set(kritawidgetutils_LIB_SRCS
     KisActionsSnapshot.cpp
     KoGroupButton.cpp
     KoProgressProxy.cpp
+    KoFakeProgressProxy.cpp
     KoProgressBar.cpp
     KoProgressUpdater.cpp
     KoUpdater.cpp

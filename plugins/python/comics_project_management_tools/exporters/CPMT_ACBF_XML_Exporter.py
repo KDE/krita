@@ -413,11 +413,9 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                             index = len(listOfComments)
                             translationComments[lang] = listOfComments
                         refID = "-".join(["tn", lang, str(index)])
-                        anchor = document.createElement("A")
+                        anchor = document.createElement("a")
                         anchor.setAttribute("href", "#"+refID)
-                        sup = document.createElement("Sup")
-                        anchor.appendChild(sup)
-                        sup.appendChild(document.createTextNode(str(index)))
+                        anchor.appendChild(document.createTextNode("*"))
                         paragraph.documentElement().appendChild(anchor)
                     textArea.appendChild(paragraph.documentElement())
                     textLayerTr.appendChild(textArea)
@@ -473,7 +471,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 ref.setAttribute("lang", lang)
                 ref.setAttribute("id", refID)
                 transHeaderStr = configDictionary.get("translatorHeader", "Translator's Notes")
-                transHeaderStr = poParser.get_entry_for_key("@meta-translator").get("trans", transHeaderStr)
+                transHeaderStr = poParser.get_entry_for_key("@meta-translator", lang).get("trans", transHeaderStr)
                 translatorHeader = document.createElement("p")
                 translatorHeader.appendChild(document.createTextNode(transHeaderStr+":"))
                 ref.appendChild(translatorHeader)
@@ -497,7 +495,7 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
     title = configDictionary["projectName"]
     if "title" in configDictionary.keys():
         title = configDictionary["title"]
-    root = document.documentElement().firstChildElement("ACBF")
+    root = document.firstChildElement("ACBF")
     meta = root.firstChildElement("meta-data")
     bookInfo = meta.firstChildElement("book-info")
     cover = bookInfo.firstChildElement("coverpage")
@@ -559,22 +557,22 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
             newElementMade = False
             if fontItalic.isalnum():
                 if (fontItalic == "italic"):
-                    newElement = document.createElement("Emphasis")
+                    newElement = document.createElement("emphasis")
                     newElementMade = True
             elif fontWeight.isalnum():
                 if (fontWeight == "bold" or int(fontWeight) > 400):
-                    newElement = document.createElement("Strong")
+                    newElement = document.createElement("strong")
                     newElementMade = True
             elif fontStrikeThrough.isalnum():
                 if (fontStrikeThrough == "line-through"):
-                    newElement = document.createElement("Strikethrough")
+                    newElement = document.createElement("strikethrough")
                     newElementMade = True
             elif fontBaseLine.isalnum():
                 if (fontBaseLine == "super"):
-                    newElement = document.createElement("Sup")
+                    newElement = document.createElement("sup")
                     newElementMade = True
                 elif (fontBaseLine == "sub"):
-                    newElement = document.createElement("Sub")
+                    newElement = document.createElement("sub")
                     newElementMade = True
 
             if newElementMade is True:

@@ -287,6 +287,8 @@ class comic_export_setting_dialog(QDialog):
         btn_add_history = QPushButton(i18n("Add history entry"))
         btn_add_history.clicked.connect(self.slot_add_history_item)
         self.chkIncludeTranslatorComments = QCheckBox()
+        self.chkIncludeTranslatorComments.setText(i18n("Include Translator's Comments"))
+        self.chkIncludeTranslatorComments.setToolTip(i18n("A PO file can contain translator's comments. If this is checked, the translations comments will be added as references into the ACBF file."))
         self.lnTranslatorHeader = QLineEdit()
 
         ACBFform.addRow(i18n("Author-name:"), self.lnACBFAuthor)

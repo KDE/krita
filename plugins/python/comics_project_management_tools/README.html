@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head><title>Comics Project Management Tools Plugin Manual</title>
@@ -123,6 +122,8 @@ img
 <dt>Templates</dt>
 <dd>The name for the directory to store the template. This is where the page templates get stored.
 </dd>
+<dt>Translations</dt>
+<dd>The translations directory is where the POT file will be stored and where the exporter searches for translation(PO) files.</dd>
 </dl>
 <p>It will also allow you to edit meta data if you'd want already, but this is not mandatory.</p>
 <p>Then after you finish, select <em>Open Project</em>, go to the location where you have stored your comics project. There should be a “comicsConfig.json” file there, next to the new folders for the pages, templates and export. Open that.</p>
@@ -189,8 +190,9 @@ img
 <dd>This will pop up a dialog with the selected page's mergedimage.png. The dialog will update when doing this for the image of another page. This is so that you can have a quick reference for a single page in the event your other referencing tools cannot open kra files.
 </dd>
 <dt>Scrape Authors</dt>
-<dd>This searches all the files from the pages list for author information and adds that to the author list. It will not check for copies, so you will need to clean up the author list yourself.
-</dd>
+<dd>This searches all the files from the pages list for author information and adds that to the author list. It will not check for copies, so you will need to clean up the author list yourself.</dd>
+<dt>Scrape Text for Translations</dt>
+<dd>This triggers a script that will go over each page and take out certain text information it can find. It will use the 'text layer keys' in the export dialog to determine whether a vector layer's text ought to be considered. Then, when done, it will put the text it found into a POT file, together with translatable meta-data, like the comic title, and will save it in the translations folder. The POT file can then be used by translators(using something like PO edit) to create a PO file. The CPMT can in turn use the PO files in the creation of ACBF files which'll embed the translations.</dd>
 <dt>Rearranging pages</dt>
 <dd>You can rearrange pages by moving the number on the left of the page up or down.
 </dd>
@@ -211,7 +213,8 @@ img
 <h3 id="acbf">ACBF</h3>
 <p>ACBF is the advanced comic book format. It is a metadata file that can hold extra data like panels and text, and can even store translations for the text.</p>
 <p>ACBF has a set amount of genres it can cover. This is the default list of genre auto completion keys. Genres outside that will be put into the extra keywords list for ACBF. On top of that, it does allow defining a match to this genre. To set a match to a genre, write a number in brackets indicating how much it matches this genre. So for example "Horror(60), Science Fiction(40)" will have Horror set to 60% and Science Fiction set to 40%. These values are normalized. So if you put in "Romance(550), Fantasy(650)" it will ensure that the two values will become percentages, leading to Romance being set to 46% and Fantasy set to 54%.</p>
-<p>Krita has some support for frames and text. If you name a vector layer “text” or “panels” it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren't text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last. You can customize these keys in the export settings dialog.</p>
+<p>The CPMT has some support for frames and text export. If you name a vector layer “text” or “panels” it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren't text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last. You can customize these layer selection keys in the export settings dialog.</p>
+<p>The CPMT also support translations. ACBF will use the PO files stored in the translations folder. In the export dialog, you can configure whether you want translation comments to be embeded. Then, if there's translation comments in the PO file, ACBF will put those in the reference section and add a link to the line with the translation comment. Translations will have translator note headers. You can configure these in the export, and they will also be put into the POT file when it is generated so they may be translated.</p>
 <p>When you generate a CBZ file, the ACBF file will be generated alongside of it. There's in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there's currently fewer viewers who can read it.</p>
 <p>To fine tune the export to ACBF, you can go to file→document Information and add the following keywords:</p>
 <dl>

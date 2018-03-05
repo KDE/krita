@@ -186,29 +186,29 @@ class translation_scraper():
         file.write(quote + "Content-Transfer-Encoding: 8bit\\n" + quote + newLine)
         file.write(quote + "X-Generator: Krita Comics Project Manager Tools Plugin\\n" + quote + newLine)
 
-        file.write("#. Title of the work")
+        file.write(newLine)
+        file.write("#. Title of the work" + newLine)
         file.write("msgctxt \"@meta-title\"" + newLine)
         file.write("msgid " + quote + metaData.get("title", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
         file.write(newLine)
 
-        file.write("#. The summary")
+        file.write("#. The summary" + newLine)
         file.write("msgctxt \"@meta-summary\"" + newLine)
         file.write("msgid " + quote + metaData.get("summary", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
         file.write(newLine)
 
-        file.write("#. The keywords, these need to be comma seperated.")
+        file.write("#. The keywords, these need to be comma seperated." + newLine)
         file.write("msgctxt \"@meta-keywords\"" + newLine)
         file.write("msgid " + quote + metaData.get("keywords", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
         file.write(newLine)
-        
-        file.write("#. The header that will prepend translator's notes")
+
+        file.write("#. The header that will prepend translator's notes" + newLine)
         file.write("msgctxt \"@meta-translator\"" + newLine)
         file.write("msgid " + quote + metaData.get("transnotes", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
-        file.write(newLine)
 
         for key in self.translationKeys:
             if key != self.languageKey:

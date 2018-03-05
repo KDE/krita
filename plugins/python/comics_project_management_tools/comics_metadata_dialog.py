@@ -606,17 +606,17 @@ class comic_meta_data_editor(QDialog):
         config["cover"] = self.cmbCoverPage.currentText()
         listkeys = self.lnGenre.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
-            preSplit = self.lnGenre.text().split(", ")
+            preSplit = self.lnGenre.text().split(",")
             genreMatcher = re.compile(r'\((\d+)\)')
             genreList = {}
             totalValue = 0
             for key in preSplit:
                 m = genreMatcher.search(key)
                 if m:
-                    genre = genreMatcher.sub("", key)
+                    genre = str(genreMatcher.sub("", key)).strip()
                     match = int(m.group()[:-1][1:])
                 else:
-                    genre = key
+                    genre = key.strip()
                     match = 0
                 if genre in self.acbfGenreList.values():
                     i = list(self.acbfGenreList.values()).index(genre)

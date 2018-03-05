@@ -21,11 +21,12 @@
 
 #include "kis_sequential_iterator.h"
 #include <KoProgressProxy.h>
+#include <KoFakeProgressProxy.h>
 
 struct ProxyBasedProgressPolicy
 {
     ProxyBasedProgressPolicy(KoProgressProxy *proxy)
-        : m_proxy(proxy)
+        : m_proxy(proxy ? proxy : KoFakeProgressProxy::instance())
     {
     }
 

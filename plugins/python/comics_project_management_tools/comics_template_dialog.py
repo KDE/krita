@@ -294,8 +294,8 @@ class comics_template_create(QDialog):
 
         template = Application.createDocument((wBase + bL + bR), (hBase + bT + bB), self.templateName.text(), "RGBA", "U8", "sRGB built-in", self.DPI.value())
 
-        backgroundNode = template.activeNode()
-        backgroundNode.setName(i18n("Background"))
+        backgroundNode = template.createNode(i18n("Background"), "paintlayer")
+        template.rootNode().addChildNode(backgroundNode, None)
         pixelByteArray = QByteArray()
         pixelByteArray = backgroundNode.pixelData(0, 0, (wBase + bL + bR), (hBase + bT + bB))
         white = int(255)
@@ -304,7 +304,7 @@ class comics_template_create(QDialog):
         backgroundNode.setLocked(True)
 
         sketchNode = template.createNode(i18n("Sketch"), "paintlayer")
-        template.rootNode().setChildNodes([backgroundNode, sketchNode])
+        template.rootNode().addChildNode(sketchNode, backgroundNode)
 
         verticalGuides = []
         verticalGuides.append(bL)

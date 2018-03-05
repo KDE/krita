@@ -22,7 +22,7 @@ A dialog for editing the exporter settings.
 """
 
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView
 from PyQt5.QtCore import Qt, QUuid
 from krita import *
 
@@ -274,8 +274,6 @@ class comic_export_setting_dialog(QDialog):
         ACBFdocInfo = QGroupBox()
         ACBFdocInfo.setTitle(i18n("ACBF Document Info"))
         ACBFdocInfo.setLayout(ACBFform)
-        self.lnACBFAuthor = QLineEdit()
-        self.lnACBFAuthor.setToolTip(i18n("The person responsible for the generation of the CBZ."))
         self.lnACBFSource = QLineEdit()
         self.lnACBFSource.setToolTip(i18n("Whether the acbf file is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
         self.lnACBFID = QLabel()
@@ -291,7 +289,6 @@ class comic_export_setting_dialog(QDialog):
         self.chkIncludeTranslatorComments.setToolTip(i18n("A PO file can contain translator's comments. If this is checked, the translations comments will be added as references into the ACBF file."))
         self.lnTranslatorHeader = QLineEdit()
 
-        ACBFform.addRow(i18n("Author-name:"), self.lnACBFAuthor)
         ACBFform.addRow(i18n("Source:"), self.lnACBFSource)
         ACBFform.addRow(i18n("ACBF UID:"), self.lnACBFID)
         ACBFform.addRow(i18n("Version:"), self.spnACBFVersion)
@@ -300,8 +297,36 @@ class comic_export_setting_dialog(QDialog):
         ACBFform.addRow("", self.chkIncludeTranslatorComments)
         ACBFform.addRow(i18n("Translator Header:"), self.lnTranslatorHeader)
 
-        ACBFExportSettings.layout().addWidget(ACBFdocInfo)
-        mainWidget.addTab(ACBFExportSettings, "ACBF")
+        ACBFAuthorInfo = QGroupBox()
+        ACBFAuthorInfo.setLayout(QVBoxLayout())
+        infoLabel = QLabel(i18n("The people responsible for the generation of the CBZ/ACBF files."))
+        infoLabel.setWordWrap(True)
+        ACBFAuthorInfo.layout().addChildWidget(infoLabel)
+        self.ACBFauthorModel = QStandardItemModel(0, 6)
+        labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Email"), i18n("Homepage")]
+        self.ACBFauthorModel.setHorizontalHeaderLabels(labels)
+        self.ACBFauthorTable = QTableView()
+        ACBFAuthorInfo.layout().addChildWidget(self.ACBFauthorTable)
+        self.ACBFauthorTable.setModel(self.ACBFauthorModel)
+        self.ACBFauthorTable.verticalHeader().setDragEnabled(True)
+        self.ACBFauthorTable.verticalHeader().setDropIndicatorShown(True)
+        self.ACBFauthorTable.verticalHeader().setSectionsMovable(True)
+        self.ACBFauthorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
+
+        AuthorButtons = QHBoxLayout()
+        btn_add_author = QPushButton(i18n("Add author"))
+        btn_add_author.clicked.connect(self.slot_add_author)
+        AuthorButtons.addChildWidget(btn_add_author)
+        btn_remove_author = QPushButton(i18n("Remove author"))
+        btn_remove_author.clicked.connect(self.slot_remove_author)
+        AuthorButtons.addChildWidget(btn_remove_author)
+        ACBFAuthorInfo.layout().addChildLayout(AuthorButtons)
+
+        ACBFTabwidget = QTabWidget()
+        ACBFTabwidget.addTab(ACBFdocInfo, i18n("Document Info"))
+        ACBFTabwidget.addTab(ACBFAuthorInfo, i18n("Author Info"))
+        ACBFExportSettings.layout().addWidget(ACBFTabwidget)
+        mainWidget.addTab(ACBFExportSettings, i18n("ACBF"))
 
         # Epub export, crop, resize, other questions.
         EPUBexportSettings = QWidget()
@@ -352,6 +377,40 @@ class comic_export_setting_dialog(QDialog):
                 self.spn_marginBottom.setValue(doc.height() - (doc.selection().y() + doc.selection().height()))
 
     """
+    Add an author with default values initialised.
+    """
+
+    def slot_add_author(self):
+        listItems = []
+        listItems.append(QStandardItem(i18n("Anon")))  # Nick name
+        listItems.append(QStandardItem(i18n("John")))  # First name
+        listItems.append(QStandardItem())  # Middle name
+        listItems.append(QStandardItem(i18n("Doe")))  # Last name
+        listItems.append(QStandardItem())  # email
+        listItems.append(QStandardItem())  # homepage
+        self.ACBFauthorModel.appendRow(listItems)
+
+    """
+    Remove the selected author from the author list.
+    """
+
+    def slot_remove_author(self):
+        self.ACBFauthorModel.removeRow(self.ACBFauthorTable.currentIndex().row())
+
+    """
+    Ensure that the drag and drop of authors doesn't mess up the labels.
+    """
+
+    def slot_reset_author_row_visual(self):
+        headerLabelList = []
+        for i in range(self.ACBFauthorTable.verticalHeader().count()):
+            headerLabelList.append(str(i))
+        for i in range(self.ACBFauthorTable.verticalHeader().count()):
+            logicalI = self.ACBFauthorTable.verticalHeader().logicalIndex(i)
+            headerLabelList[logicalI] = str(i + 1)
+        self.ACBFauthorModel.setVerticalHeaderLabels(headerLabelList)
+
+    """
     Load the UI values from the config dictionary given.
     """
 
@@ -385,8 +444,26 @@ class comic_export_setting_dialog(QDialog):
         self.TIFFgroupResize.set_config(config)
         if "TIFFactive" in config.keys():
             self.TIFFactive.setChecked(config["TIFFactive"])
+
         if "acbfAuthor" in config.keys():
-            self.lnACBFAuthor.setText(config["acbfAuthor"])
+            if isinstance(config["acbfAuthor"], list):
+                for author in config["acbfAuthor"]:
+                    listItems = []
+                    listItems.append(QStandardItem(author.get("nickname", "")))
+                    listItems.append(QStandardItem(author.get("first-name", "")))
+                    listItems.append(QStandardItem(author.get("initials", "")))
+                    listItems.append(QStandardItem(author.get("last-name", "")))
+                    listItems.append(QStandardItem(author.get("email", "")))
+                    listItems.append(QStandardItem(author.get("homepage", "")))
+                    self.ACBFauthorModel.appendRow(listItems)
+                pass
+            else:
+                listItems = []
+                listItems.append(QStandardItem(config["acbfAuthor"]))  # Nick name
+                for i in range(0, 5):
+                    listItems.append(QStandardItem())  # First name
+                self.ACBFauthorModel.appendRow(listItems)
+
         if "acbfSource" in config.keys():
             self.lnACBFSource.setText(config["acbfSource"])
         if "acbfID" in config.keys():
@@ -424,7 +501,21 @@ class comic_export_setting_dialog(QDialog):
         config = self.EPUBgroupResize.get_config(config)
         config["TIFFactive"] = self.TIFFactive.isChecked()
         config = self.TIFFgroupResize.get_config(config)
-        config["acbfAuthor"] = self.lnACBFAuthor.text()
+        authorList = []
+        for row in range(self.ACBFauthorTable.verticalHeader().count()):
+            logicalIndex = self.ACBFauthorTable.verticalHeader().logicalIndex(row)
+            listEntries = ["nickname", "first-name", "initials", "last-name", "email", "homepage"]
+            author = {}
+            for i in range(len(listEntries)):
+                entry = self.ACBFauthorModel.data(self.ACBFauthorModel.index(logicalIndex, i))
+                if entry is None:
+                    entry = " "
+                if entry.isspace() is False and len(entry) > 0:
+                    author[listEntries[i]] = entry
+                elif listEntries[i] in author.keys():
+                    author.pop(listEntries[i])
+            authorList.append(author)
+        config["acbfAuthor"] = authorList
         config["acbfSource"] = self.lnACBFSource.text()
         config["acbfID"] = self.lnACBFID.text()
         config["acbfVersion"] = self.spnACBFVersion.value()

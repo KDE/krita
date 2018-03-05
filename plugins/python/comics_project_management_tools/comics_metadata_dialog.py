@@ -285,7 +285,7 @@ class comic_meta_data_editor(QDialog):
         authorPage.setLayout(QVBoxLayout())
         explanation = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
         explanation.setWordWrap(True)
-        self.authorModel = QStandardItemModel(0, 7)
+        self.authorModel = QStandardItemModel(0, 8)
         labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage"), i18n("Language")]
         self.authorModel.setHorizontalHeaderLabels(labels)
         self.authorTable = QTableView()
@@ -550,42 +550,18 @@ class comic_meta_data_editor(QDialog):
                 author = authorList[i]
                 if len(author.keys()) > 0:
                     listItems = []
-                    authorNickName = QStandardItem()
-                    if "nickname" in author.keys():
-                        authorNickName.setText(author["nickname"])
-                    listItems.append(authorNickName)
-                    authorFirstName = QStandardItem()
-                    if "first-name" in author.keys():
-                        authorFirstName.setText(author["first-name"])
-                    listItems.append(authorFirstName)
-                    authorMiddleName = QStandardItem()
-                    if "initials" in author.keys():
-                        authorMiddleName.setText(author["initials"])
-                    listItems.append(authorMiddleName)
-                    authorLastName = QStandardItem()
-                    if "last-name" in author.keys():
-                        authorLastName.setText(author["last-name"])
-                    listItems.append(authorLastName)
-                    authorRole = QStandardItem()
-                    if "role" in author.keys():
-                        role = author["role"]
-                        if author["role"] in self.acbfAuthorRolesList.keys():
-                            role = self.acbfAuthorRolesList[author["role"]]
-                        authorRole.setText(role)
-                    listItems.append(authorRole)
-                    authorEMail = QStandardItem()
-                    if "email" in author.keys():
-                        authorEMail.setText(author["email"])
-                    listItems.append(authorEMail)
-                    authorHomePage = QStandardItem()
-                    if "homepage" in author.keys():
-                        authorHomePage.setText(author["homepage"])
-                    listItems.append(authorHomePage)
-                    authorLanguage = QStandardItem()
-                    if "language" in author.keys():
-                        authorLanguage.setText(author["language"])
-                        pass
-                    listItems.append(authorLanguage)
+                    listItems = []
+                    listItems.append(QStandardItem(author.get("nickname", "")))
+                    listItems.append(QStandardItem(author.get("first-name", "")))
+                    listItems.append(QStandardItem(author.get("initials", "")))
+                    listItems.append(QStandardItem(author.get("last-name", "")))
+                    role = author.get("role", "")
+                    if role in self.acbfAuthorRolesList.keys():
+                        role = self.acbfAuthorRolesList[role]
+                    listItems.append(QStandardItem(role))
+                    listItems.append(QStandardItem(author.get("email", "")))
+                    listItems.append(QStandardItem(author.get("homepage", "")))
+                    listItems.append(QStandardItem(author.get("language", "")))
                     self.authorModel.appendRow(listItems)
         else:
             self.slot_add_author()

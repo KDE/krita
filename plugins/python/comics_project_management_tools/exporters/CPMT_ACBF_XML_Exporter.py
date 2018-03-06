@@ -135,7 +135,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                         bookGenre.setAttribute("match", str(genreMatch))
                 bookInfo.appendChild(bookGenre)
             else:
-                extraGenres.appendChild(genre)
+                extraGenres.append(genre)
     annotation = document.createElement("annotation")
     if "summary" in configDictionary.keys():
         paragraphList = str(configDictionary["summary"]).split("\n")
@@ -277,7 +277,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     license = str(configDictionary.get("license", ""))
     if license.isspace() is False and len(license) > 0:
         publishLicense = document.createElement("license")
-        publishLicense.appendChild(license)
+        publishLicense.appendChild(document.createTextNode(license))
         publisherInfo.appendChild(publishLicense)
 
     meta.appendChild(publisherInfo)

@@ -146,15 +146,17 @@ class comicsExporter():
 
             # Export acbf metadata.
             if export_success:
-                title = self.configDictionary["projectName"]
-                if "title" in self.configDictionary.keys():
-                    title = self.configDictionary["title"]
+                if "CBZ" in sizesList.keys():
+                    title = self.configDictionary["projectName"]
+                    if "title" in self.configDictionary.keys():
+                        title = self.configDictionary["title"]
 
-                self.acbfLocation = str(exportPath / "metadata" / str(title + ".acbf"))
+                    self.acbfLocation = str(exportPath / "metadata" / str(title + ".acbf"))
 
-                locationStandAlone = str(exportPath / str(title + ".acbf"))
+                    locationStandAlone = str(exportPath / str(title + ".acbf"))
 
-                export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone, self.projectURL)
+                    export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone, self.projectURL)
+                    print("CPMT: Exported to ACBF", export_success)
 
             # Export and package CBZ and Epub.
             if export_success:
@@ -294,6 +296,9 @@ class comicsExporter():
                         projection.waitForDone()
                         qApp.processEvents()
                         # resize appropriately
+                    else:
+                        cropx = 0
+                        cropy = 0
                     res = page.resolution()
                     listScales = [projection.width(), projection.height(), res, res]
                     projectionOldSize = [projection.width(), projection.height()]

@@ -62,7 +62,10 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     # copyimages to images
     pagesList = []
     if len(pagesLocationList)>0:
-        coverNumber = configDictionary["pages"].index(configDictionary["cover"])
+        if "cover" in configDictionary.keys():
+            coverNumber = configDictionary["pages"].index(configDictionary["cover"])
+        else:
+            coverNumber = 0
         for p in pagesLocationList:
             if os.path.exists(p):
                 shutil.copy2(p, str(imagePath))

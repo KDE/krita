@@ -386,7 +386,9 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         else:
             type = "commentary"
         return type
-
+    
+    countedPageTitles = 0
+    
     for p in range(0, len(pagesLocationList)):
         page = pagesLocationList[p]
         language = "en"
@@ -479,7 +481,6 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     textLayerList.appendChild(textLayerTr)
         
 
-            
         if page is not coverpageurl:
             pg = document.createElement("page")
             image = document.createElement("image")
@@ -490,6 +491,17 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 title.setAttribute("lang", language)
                 title.appendChild(document.createTextNode(str(data["title"])))
                 pg.appendChild(title)
+                for lang in poParser.get_translation_list():
+                    titleTrans = " "
+                    titlekey = "@page-title-"+str(countedPageTitles)
+                    translationEntry = poParser.get_entry_for_key(titlekey, lang)
+                    titleTrans = translationEntry.get("trans", titleTrans)
+                    if titleTrans.isspace() is False:
+                        titleT = document.createElement("title")
+                        titleT.setAttribute("lang", lang)
+                        title.appendChild(document.createTextNode(titleTrans))
+                        pg.append(titleT)
+                countedPageTitles += 1
             if "acbf_none" in data["keys"]:
                 pg.setAttribute("transition", "none")
             if "acbf_blend" in data["keys"]:

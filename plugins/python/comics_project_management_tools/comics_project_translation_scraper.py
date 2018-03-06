@@ -42,6 +42,7 @@ class translation_scraper():
     textLayerNameList = []
     translationDict = {}
     translationKeys = []  # seperate so that the keys will be somewhat according to the order of appearance.
+    pageTitleKeys= []
     projectName = str()
     languageKey = "AA_language"
 
@@ -51,6 +52,7 @@ class translation_scraper():
         self.translation_folder = translation_folder
         self.textLayerNameList = textLayerNameList
         self.translationDict = {}
+        self.pageTitleKeys = []
 
         # Check for a preexisting translation file and parse that.
         for entry in os.scandir(os.path.join(self.projectURL, self.translation_folder)):
@@ -108,7 +110,12 @@ class translation_scraper():
                 if line.startswith("#. "):
                     entry["extract"] = line
                 if line.startswith("msgctxt "):
-                    key = line.strip("msgctxt ")
+                    string = line.strip("msgctxt \"")
+                    string = string[:-len('"\n')]
+                    string = string.replace("\\\"", "\"")
+                    string = string.replace("\\\'", "\'")
+                    string = string.replace("\\#", "#")
+                    key = string
                 if line.startswith("\"") and len(multiLine) > 0:
                     string = line[1:]
                     string = string[:-len('"\n')]
@@ -148,6 +155,31 @@ class translation_scraper():
                         parseThroughChildNodes(childNode)
 
         parseThroughChildNodes(doc)
+        
+        # Get page title if the keywords contain acbf_title
+        xmlroot = minidom.parseString(page.read("documentinfo.xml"))
+        title = ""
+        keywords = []
+        def parseThroughDocumentInfo(node):
+            for childNode in node.childNodes:
+                if childNode.nodeType != minidom.Node.TEXT_NODE:
+                    if childNode.tagName == "title":
+                        for text in childNode.childNodes:
+                            title += childNode.text()
+                    elif childNode.tagName == "keyword":
+                        k = ""
+                        for text in childNode.childNodes:
+                            key += childNode.text()
+                        keywords = k.split(",")
+                        for i in range(len(keywords)):
+                            keywords[i] = str(keywords[i]).strip()
+                    else:
+                        parseThroughDocumentInfo(childNode)
+                        
+        parseThroughDocumentInfo(xmlroot.documentElement)
+        if "acbf_title" in keywords:
+            self.pageTitleKeys.append(title)
+                    
         page.close()
 
     def get_txt(self, string):
@@ -209,6 +241,13 @@ class translation_scraper():
         file.write("msgctxt \"@meta-translator\"" + newLine)
         file.write("msgid " + quote + metaData.get("transnotes", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
+        
+        for i in range(len(self.pageTitleKeys)):
+            title = self.pageTitleKeys[i]
+            file.write(newLine)
+            file.write("msgctxt " + quote + "@page-title-" + str(i) + quote + newLine)
+            file.write("msgid " + quote + title + quote + newLine)
+            file.write("msgstr " + quote + quote + newLine)
 
         for key in self.translationKeys:
             if key != self.languageKey:

@@ -808,10 +808,18 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
 void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
 {
-    slotSetPaintop(paintop);  // change the paintop settings area and update the UI
-    m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
-
-    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    //First try to select an available default preset for that engine. If it doesn't exist, then
+    //manually set the engine to use a new preset.
+    KoID id(paintop, KisPaintOpRegistry::instance()->get(paintop)->name());
+    KisPaintOpPresetSP preset = defaultPreset(id);
+    if (!preset) {
+        slotSetPaintop(paintop);  // change the paintop settings area and update the UI
+        m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
+        preset = m_resourceProvider->currentPreset();
+    } else {
+        m_resourceProvider->setPaintOpPreset(preset);
+        preset->setOptionsWidget(m_optionWidget);
+    }
     m_presetsPopup->resourceSelected(preset.data());  // this helps update the UI on the brush editor
 }
 

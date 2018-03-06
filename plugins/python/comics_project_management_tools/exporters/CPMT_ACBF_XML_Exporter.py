@@ -46,7 +46,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             style = stylesDictionary.get(key, {})
             if key == "emphasis" or key == "strong":
                 styleClass = key+"{\n"
-            elif key == "default":
+            elif key == "speech":
                 styleClass = "text-area {\n"
             else:
                 styleClass = "text-area[type=\""+key+"\"] {\n"
@@ -55,9 +55,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 styleString += "    font-family:"+style["font"]+";\n"
             if "bold" in style.keys():
                 if style["bold"]:
-                    styleString += "    font-weight: 700;\n"
-                else:
-                    styleString += "    font-weight: 400;\n"
+                    styleString += "    font-weight: bold;\n"
             if "italic" in style.keys():
                 if style["italic"]:
                     styleString += "    font-style: italic;\n"
@@ -368,6 +366,26 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     body = document.createElement("body")
     
     references = document.createElement("references")
+    
+    def figure_out_type(svg = QDomElement()):
+        type = None
+        skipList = ["speech", "emphasis", "strong", "inverted"]
+        if svg.attribute("text-anchor") == "middle" or svg.attribute("text-align") == "center":
+            if "acbfStyles" in configDictionary.keys():
+                stylesDictionary = configDictionary.get("acbfStyles", {})
+                for key in stylesDictionary.keys():
+                    if key not in skipList:
+                        style = stylesDictionary.get(key, {})
+                        font = style.get("font", "")
+                        if svg.attribute("family") == font:
+                            type = key
+            else:
+                type = None
+        elif svg.attribute("text-align") == "justified":
+            type = "formal"
+        else:
+            type = "commentary"
+        return type
 
     for p in range(0, len(pagesLocationList)):
         page = pagesLocationList[p]
@@ -396,10 +414,13 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
                 svg = QDomDocument()
                 svg.setContent(v["text"])
+                type = figure_out_type(svg.documentElement())
                 paragraph = QDomDocument()
                 paragraph.appendChild(paragraph.createElement("p"))
                 parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement()) 
                 textArea.appendChild(paragraph.documentElement())
+                if type is not None:
+                    textArea.setAttribute("type", type)
                 textLayer.appendChild(textArea)
             else:
                 f = {}
@@ -424,6 +445,9 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     textArea = document.createElement("text-area")
                     textArea.setAttribute("points", " ".join(boundingBoxText))
                     # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
+                    svg = QDomDocument()
+                    svg.setContent(v["text"])
+                    type = figure_out_type(svg.documentElement())
                     string = re.sub("\<\/*?text.*?\>",'', str(v["text"]))
                     string = re.sub("\s+?", " ", string)
                     translationEntry = poParser.get_entry_for_key(string, lang)
@@ -450,6 +474,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                         paragraph.documentElement().appendChild(anchor)
                     textArea.appendChild(paragraph.documentElement())
                     textLayerTr.appendChild(textArea)
+                    if type is not None:
+                        textArea.setAttribute("type", type)
                     textLayerList.appendChild(textLayerTr)
         
 

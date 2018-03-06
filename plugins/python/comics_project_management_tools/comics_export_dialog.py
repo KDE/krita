@@ -193,7 +193,7 @@ And for ACBF, it gives the ability to edit acbf document info.
 
 
 class comic_export_setting_dialog(QDialog):
-    acbfStylesList = ["default text", "speech", "commentary", "formal", "letter", "code", "heading", "audio", "thought", "sign", "sound", "emphasis", "strong"]
+    acbfStylesList = ["speech", "commentary", "formal", "letter", "code", "heading", "audio", "thought", "sign", "sound", "emphasis", "strong"]
 
     def __init__(self):
         super().__init__()

@@ -216,32 +216,15 @@ ACBF list:
 
 * support getting text info from the vector layers. [Partially done]
 	- Don't forget text-rotation(Needs API)
-	- maybe text-class can be used to determine type? (We'll proly need to use style sheets and comparing the text format to those)
-		+ Speech (speech, dialogue)
-		+ Commentary (caption in american comics)
-		+ Formal (For justified aligned text, like big chunks of text.)
-		+ Letter (Like a letter in a comic)
-		+ Code (Monospaced font)
-		+ Heading (Chapter title)
-		+ Audio (Only meant for audio devices)
-		+ Thought (Thought bubbles and the like)
-		+ Sign (For signs on buildings and the like.)
-		+ Inverted (Whether or not this should be treated as inverted text)
-		+ transparent(For a transparent wordballoon.)
-		+ Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.) (See 1.2 support)
-		+ Probably also support acbf_order[n], where n is used to be the definitive value of the order.
-		+ Text class battle plan:
+	- Probably also support acbf_order[n], where n is used to be the definitive value of the order.
+	- Text class battle plan:
             1. Support title and desc in vector shapes(c++)
             2. Support editing them from a right-click "properties" window.
             3. Support getting those values from python.
             4. have acbf_textclass read from the desc.
     - Get page background color from the page if possible. (This might only work with canvas color, though)
     - Jump: proly not gonna support this.
-    - text url anchors: don't have a sensible interface for this. (Might use it for references only)
+    - text url anchors: only used for references.
     - Font embedding: spec is super vague about this.
-    - Style sheets: needs a very complex gui.
     - database reference: I am not sure if this is at all relevant for Krita? Because it implies an already published comic.
-    - acbf doc info should use author with first/nick/last/etc seperate as well[partially done]
     - text-layer background color(maybe sample topleft of projection???)
-* 1.2 support:
-    - text type: Sound.[needs gui still]

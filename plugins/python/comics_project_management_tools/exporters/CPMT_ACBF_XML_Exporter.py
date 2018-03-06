@@ -500,7 +500,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                         titleT = document.createElement("title")
                         titleT.setAttribute("lang", lang)
                         title.appendChild(document.createTextNode(titleTrans))
-                        pg.append(titleT)
+                        pg.appendChild(titleT)
                 countedPageTitles += 1
             if "acbf_none" in data["keys"]:
                 pg.setAttribute("transition", "none")

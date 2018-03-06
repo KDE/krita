@@ -178,7 +178,7 @@ void KisPresetSaveWidget::savePreset()
     // make a back up of the existing preset if we are saving over it
     if (isSavingOverExistingPreset) {
         QString currentDate = QDate::currentDate().toString(Qt::ISODate);
-        QString currentTime = QTime::currentTime().toString(Qt::ISODate);
+        QString currentTime = QTime::currentTime().toString(Qt::ISODate).remove(QChar(':'));
         QString presetFilename = saveLocation + presetName + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
         oldPreset->setFilename(presetFilename);
         oldPreset->setName(presetName);

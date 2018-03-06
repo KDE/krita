@@ -299,9 +299,8 @@ void KisPresetChooser::setCurrentResource(KoResource *resource)
      *             invalidated!
      *
      *             Ideally, we should call some method of KoResourceServer instead,
-     *             but ut seems like a bit too much effort for such a small fix.
+     *             but it seems like a bit too much effort for such a small fix.
      */
-
     if (resource == currentResource()) {
         KisPresetProxyAdapter *adapter = static_cast<KisPresetProxyAdapter*>(m_adapter.data());
         KisPaintOpPreset *preset = dynamic_cast<KisPaintOpPreset*>(resource);

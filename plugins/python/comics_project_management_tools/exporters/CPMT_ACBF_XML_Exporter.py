@@ -306,8 +306,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     authorN.appendChild(document.createTextNode(str(authorDict["nickname"])))
                     acbfAuthor.appendChild(authorN)
                 if "homepage" in authorDict.keys():
-                    authorN = document.createElement("homepage")
-                    authorN.appendChild(document.createTextNode(str(authorDict["home-page"])))
+                    authorN = document.createElement("home-page")
+                    authorN.appendChild(document.createTextNode(str(authorDict["homepage"])))
                     acbfAuthor.appendChild(authorN)
                 if "email" in authorDict.keys():
                     authorN = document.createElement("email")

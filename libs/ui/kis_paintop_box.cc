@@ -1320,8 +1320,6 @@ void KisPaintopBox::slotHideDecorationMirrorY(bool toggled) {
     m_resourceProvider->setMirrorVerticalHideDecorations(toggled);
 }
 
-
-
 void KisPaintopBox::slotMoveToCenterMirrorX() {
   m_resourceProvider->mirrorHorizontalMoveCanvasToCenter();
 }

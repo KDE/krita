@@ -491,14 +491,12 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
             KisPaintOpPresetSP preset = m_d->resourceProvider->currentPreset();
             m_d->widgetConnections.addConnection(preset->updateProxy(), SIGNAL(sigSettingsChanged()),
                                                  this, SLOT(slotUpdatePresetSettings()));
-
         }
 
         m_d->layout->update();
         widget->show();
 
     }
-
     slotUpdateLodAvailability();
 }
 
@@ -550,7 +548,6 @@ void KisPaintOpPresetsPopup::setCreatingBrushFromScratch(bool enabled)
     m_d->isCreatingBrushFromScratch = enabled;
 }
 
-
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
     // this gets called every time the brush editor window is opened
@@ -578,7 +575,6 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(currentBrushEngineName.append(" ").append("Engine"));
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
-
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(QPixmap::fromImage(resource->image().scaled(55, 55, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
@@ -629,7 +625,6 @@ void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& l
         connect(newEngineAction, SIGNAL(triggered()), this, SLOT(slotCreateNewBrushPresetEngine()));
     }
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setMenu(newPresetBrushEnginesMenu);
-
 
     // fill the list into the brush combo box
     sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), QIcon(emptyPixmap), 0 ));
@@ -721,7 +716,6 @@ void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setVisible(visible);
 
-
     // we only want a spacer to work when the toggle icon is present. Otherwise the list of presets will shrink
     // which is something we don't want
     if (visible) {
@@ -737,7 +731,6 @@ void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
 void KisPaintOpPresetsPopup::slotUpdatePaintOpFilter() {
     QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
     QString filterPaintOpId = userData.toString();
-
 
     if (filterPaintOpId == "all_options") {
         filterPaintOpId = "";

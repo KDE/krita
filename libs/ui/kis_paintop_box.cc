@@ -1187,7 +1187,7 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
 
     {
         /**
-         * Here we postpone all the settings updates events until thye entire writing
+         * Here we postpone all the settings updates events until the entire writing
          * operation will be finished. As soon as it is finished, the updates will be
          * emitted happily (if there were any).
          */

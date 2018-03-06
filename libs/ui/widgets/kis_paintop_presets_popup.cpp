@@ -179,7 +179,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     // loading preset from scratch option
-   m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setPopupMode(QToolButton::InstantPopup);
+    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setPopupMode(QToolButton::InstantPopup);
 
 
     // show/hide buttons
@@ -202,15 +202,15 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // Connections
     connect(m_d->uiWdgPaintOpPresetSettings.paintPresetIcon, SIGNAL(clicked()),
-               m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
+            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(paintPresetImage()));
 
     connect(saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
 
     connect (m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton, SIGNAL(clicked(bool)),
-            this, SLOT(slotRenameBrushActivated()));
+             this, SLOT(slotRenameBrushActivated()));
 
     connect (m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton, SIGNAL(clicked(bool)),
-            this, SLOT(slotRenameBrushDeactivated()));
+             this, SLOT(slotRenameBrushDeactivated()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.updateBrushNameButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSaveRenameCurrentBrush()));
@@ -302,11 +302,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     slotResourceChanged(KisCanvasResourceProvider::LodAvailability,
                         resourceProvider->resourceManager()->
-                            resource(KisCanvasResourceProvider::LodAvailability));
+                        resource(KisCanvasResourceProvider::LodAvailability));
 
     slotResourceChanged(KisCanvasResourceProvider::LodSizeThreshold,
                         resourceProvider->resourceManager()->
-                            resource(KisCanvasResourceProvider::LodSizeThreshold));
+                        resource(KisCanvasResourceProvider::LodSizeThreshold));
 
     connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
 
@@ -326,19 +326,19 @@ void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
 
     if (rServer->resourceByName(curPreset->name())) {
-         rServer->removeResourceAndBlacklist(curPreset);
+        rServer->removeResourceAndBlacklist(curPreset);
     }
 }
 
 
 void KisPaintOpPresetsPopup::slotRenameBrushActivated()
 {
-   toggleBrushRenameUIActive(true);
+    toggleBrushRenameUIActive(true);
 }
 
 void KisPaintOpPresetsPopup::slotRenameBrushDeactivated()
 {
-   toggleBrushRenameUIActive(false);
+    toggleBrushRenameUIActive(false);
 }
 
 void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
@@ -362,8 +362,8 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
     // what happens if you try to change presets. maybe we should auto-hide (or disable)
     // the presets area in this case
     if (m_d->uiWdgPaintOpPresetSettings.presetWidget->isVisible()) {
-            m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setVisible(!isRenaming);
-            m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setVisible(!isRenaming);
+        m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setVisible(!isRenaming);
+        m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setVisible(!isRenaming);
     }
 
 }
@@ -376,7 +376,7 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
     emit reloadPresetClicked();
 
 
-     m_d->favoriteResManager->setBlockUpdates(true);
+    m_d->favoriteResManager->setBlockUpdates(true);
 
     // get a reference to the existing (and new) file name and path that we are working with
     KisPaintOpPresetSP curPreset = m_d->resourceProvider->currentPreset();
@@ -407,8 +407,8 @@ void KisPaintOpPresetsPopup::slotSaveRenameCurrentBrush()
 
     // Now blacklist the original file
     if (rServer->resourceByName(originalPresetName)) {
-         rServer->removeResourceAndBlacklist(curPreset);
-     }
+        rServer->removeResourceAndBlacklist(curPreset);
+    }
 
     m_d->favoriteResManager->setBlockUpdates(false);
 
@@ -490,7 +490,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
             KisPaintOpPresetSP preset = m_d->resourceProvider->currentPreset();
             m_d->widgetConnections.addConnection(preset->updateProxy(), SIGNAL(sigSettingsChanged()),
-                                      this, SLOT(slotUpdatePresetSettings()));
+                                                 this, SLOT(slotUpdatePresetSettings()));
 
         }
 
@@ -565,8 +565,8 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     currentBrushEngineIcon.fill(Qt::transparent);
     for(int i=0; i < sortedBrushEnginesList.length(); i++) {
         if (sortedBrushEnginesList.at(i).id == currentPaintOpId() ) {
-             currentBrushEngineName = sortedBrushEnginesList.at(i).name;
-             currentBrushEngineIcon = sortedBrushEnginesList.at(i).icon.pixmap(26, 26);
+            currentBrushEngineName = sortedBrushEnginesList.at(i).name;
+            currentBrushEngineIcon = sortedBrushEnginesList.at(i).icon.pixmap(26, 26);
         }
     }
 
@@ -594,50 +594,48 @@ bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
 {
-       m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
+    m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
 
 
-       // create a new list so we can sort it and populate the brush engine combo box
-       sortedBrushEnginesList.clear(); // just in case this function is called again, don't keep adding to the list
+    // create a new list so we can sort it and populate the brush engine combo box
+    sortedBrushEnginesList.clear(); // just in case this function is called again, don't keep adding to the list
 
-        for(int i=0; i < list.length(); i++) {
-            KisPaintOpInfo paintOpInfo;
-            paintOpInfo.id = list.at(i)->id();
-            paintOpInfo.name = list.at(i)->name();
-            paintOpInfo.icon = list.at(i)->icon();
-            paintOpInfo.priority = list.at(i)->priority();
+    for(int i=0; i < list.length(); i++) {
+        KisPaintOpInfo paintOpInfo;
+        paintOpInfo.id = list.at(i)->id();
+        paintOpInfo.name = list.at(i)->name();
+        paintOpInfo.icon = list.at(i)->icon();
+        paintOpInfo.priority = list.at(i)->priority();
 
-            sortedBrushEnginesList.append(paintOpInfo);
-        }
+        sortedBrushEnginesList.append(paintOpInfo);
+    }
 
-        std::stable_sort(sortedBrushEnginesList.begin(), sortedBrushEnginesList.end(), variantLessThan );
+    std::stable_sort(sortedBrushEnginesList.begin(), sortedBrushEnginesList.end(), variantLessThan );
 
-        // add an "All" option at the front to show all presets
-        QPixmap emptyPixmap = QPixmap(22,22);
-        emptyPixmap.fill(Qt::transparent);
+    // add an "All" option at the front to show all presets
+    QPixmap emptyPixmap = QPixmap(22,22);
+    emptyPixmap.fill(Qt::transparent);
 
-        // if we create a new brush from scratch, we need a full list of paintops to choose from
-        // we don't want "All", so populate the list before that is added
-        newPresetBrushEnginesMenu->actions().clear(); // clean out list in case we run this again
-        newBrushEngineOptions.clear();
+    // if we create a new brush from scratch, we need a full list of paintops to choose from
+    // we don't want "All", so populate the list before that is added
+    newPresetBrushEnginesMenu->actions().clear(); // clean out list in case we run this again
+    newBrushEngineOptions.clear();
 
-        for (int j = 0; j < sortedBrushEnginesList.length(); j++) {
-            KisAction * newEngineAction = static_cast<KisAction*>( newPresetBrushEnginesMenu->addAction(sortedBrushEnginesList[j].name));
-            newEngineAction->setObjectName(sortedBrushEnginesList[j].id); // we need the ID for changing the paintop when action triggered
-            newEngineAction->setIcon(sortedBrushEnginesList[j].icon);
-            newBrushEngineOptions.append(newEngineAction);
-            connect(newEngineAction, SIGNAL(triggered()), this, SLOT(slotCreateNewBrushPresetEngine()));
-        }
-        m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setMenu(newPresetBrushEnginesMenu);
-
-
-        // fill the list into the brush combo box
-        sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), QIcon(emptyPixmap), 0 ));
-        for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
-            m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
-        }
+    for (int j = 0; j < sortedBrushEnginesList.length(); j++) {
+        KisAction * newEngineAction = static_cast<KisAction*>( newPresetBrushEnginesMenu->addAction(sortedBrushEnginesList[j].name));
+        newEngineAction->setObjectName(sortedBrushEnginesList[j].id); // we need the ID for changing the paintop when action triggered
+        newEngineAction->setIcon(sortedBrushEnginesList[j].icon);
+        newBrushEngineOptions.append(newEngineAction);
+        connect(newEngineAction, SIGNAL(triggered()), this, SLOT(slotCreateNewBrushPresetEngine()));
+    }
+    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setMenu(newPresetBrushEnginesMenu);
 
 
+    // fill the list into the brush combo box
+    sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), QIcon(emptyPixmap), 0 ));
+    for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
+        m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
+    }
 }
 
 
@@ -705,15 +703,12 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     }
 
-
-
-
     KisConfig cfg;
     cfg.setScratchpadVisible(visible);
 }
 
 void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
-   m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
 }
 
 void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {
@@ -780,7 +775,7 @@ void KisPaintOpPresetsPopup::updateViewSettings()
 }
 
 void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
-{     
+{
     if (preset) {
         m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset.data());
         setCurrentPaintOpId(preset->paintOp().id());
@@ -788,7 +783,7 @@ void KisPaintOpPresetsPopup::currentPresetChanged(KisPaintOpPresetSP preset)
 }
 
 void KisPaintOpPresetsPopup::updateThemedIcons()
- {
+{
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setIcon(KisIconUtils::loadIcon("krita_tool_freehand"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->setIcon(KisIconUtils::loadIcon("document-new"));
     m_d->uiWdgPaintOpPresetSettings.fillLayer->hide();
@@ -805,8 +800,6 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("configure"));
-
-
 
     // if we cannot see the "Preset label", we know it is not visible
     // maybe this can also be stored in the config like the scratchpad?
@@ -825,12 +818,6 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     } else {
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     }
-
-
-
-
-
-
 }
 
 void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
@@ -838,6 +825,7 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
     if (!m_d->resourceProvider) {
         return;
     }
+
     if (!m_d->resourceProvider->currentPreset()) {
         return;
     }

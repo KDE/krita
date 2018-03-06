@@ -554,16 +554,18 @@ class comics_project_manager_docker(DockWidget):
             pagesList = []
             listOfHeaderLabels = []
             for i in range(self.pagesModel.rowCount()):
-                listOfHeaderLabels.append(str(i))
-            for i in range(self.comicPageList.verticalHeader().count()):
+                listOfHeaderLabels.append(str(i+1))
+            for i in range(self.pagesModel.rowCount()):
                 iLogical = max(0, self.comicPageList.verticalHeader().logicalIndex(i))
+                if i >= self.comicPageList.verticalHeader().count():
+                    iLogical = i
                 index = self.pagesModel.index(iLogical, 0)
                 if index.isValid() is False:
                     index = self.pagesModel.index(i, 0)
                 url = str(self.pagesModel.data(index, role=Qt.ToolTipRole))
                 if url not in pagesList:
                     pagesList.append(url)
-                listOfHeaderLabels[iLogical] = str(i + 1)
+                listOfHeaderLabels[iLogical] = str(i+1)
             self.pagesModel.setVerticalHeaderLabels(listOfHeaderLabels)
             self.comicPageList.verticalHeader().update()
             self.setupDictionary["pages"] = pagesList

@@ -555,8 +555,8 @@ class comics_project_manager_docker(DockWidget):
             listOfHeaderLabels = []
             for i in range(self.pagesModel.rowCount()):
                 listOfHeaderLabels.append(str(i))
-            for i in range(self.pagesModel.rowCount()):
-                iLogical = self.comicPageList.verticalHeader().logicalIndex(i)
+            for i in range(self.comicPageList.verticalHeader().count()):
+                iLogical = max(0, self.comicPageList.verticalHeader().logicalIndex(i))
                 index = self.pagesModel.index(iLogical, 0)
                 if index.isValid() is False:
                     index = self.pagesModel.index(i, 0)

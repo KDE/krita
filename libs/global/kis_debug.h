@@ -23,6 +23,13 @@
 
 #include "kritaglobal_export.h"
 
+/**
+ * To show debug output, start krita like:
+ *
+ * QT_LOGGING_RULES="*.*=false;krita.metadata.*=true;krita.file.*=true"
+ *
+ */
+
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_30009();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41000();
 extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41001();

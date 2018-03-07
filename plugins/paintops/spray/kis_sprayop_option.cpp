@@ -53,7 +53,7 @@ KisSprayOpOption::KisSprayOpOption()
     m_options->scaleSpin->setValue(1.0);
 
     m_options->spacingSpin->setRange(0.0, 5.0, 2);
-    m_options->spacingSpin->setValue(0.02);
+    m_options->spacingSpin->setValue(0.5);
 
     m_options->coverageSpin->setRange(0.001, 0.02, 3);
     m_options->coverageSpin->setValue(0.003);

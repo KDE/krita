@@ -21,8 +21,8 @@ along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
 A dialog for editing the exporter settings.
 """
 
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog
 from PyQt5.QtCore import Qt, QUuid
 from krita import *
 
@@ -332,6 +332,8 @@ class comic_export_setting_dialog(QDialog):
         ACBFStyleEdit = QWidget()
         ACBFStyleEditVB = QVBoxLayout(ACBFStyleEdit)
         self.ACBFfontCombo = QFontComboBox()
+        self.ACBFdefaultFont = QComboBox()
+        self.ACBFdefaultFont.addItems(["sans-serif", "serif", "monospace", "cursive", "fantasy"])
         self.ACBFBold = QCheckBox(i18n("Bold"))
         self.ACBFItal = QCheckBox(i18n("Italic"))
         self.ACBFStyleClass.clicked.connect(self.slot_set_style)
@@ -341,7 +343,20 @@ class comic_export_setting_dialog(QDialog):
         self.ACBFfontCombo.setEditable(False)
         self.ACBFBold.toggled.connect(self.slot_font_current_style)
         self.ACBFItal.toggled.connect(self.slot_font_current_style)
+        colorWidget = QGroupBox(self)
+        colorWidget.setTitle(i18n("Text Colors"))
+        colorWidget.setLayout(QHBoxLayout())
+        self.regularColor = QColorDialog()
+        self.invertedColor = QColorDialog()
+        self.btn_acbfRegColor = QPushButton(i18n("Regular Text"), self)
+        self.btn_acbfRegColor.clicked.connect(self.slot_change_regular_color)
+        self.btn_acbfInvColor = QPushButton(i18n("Inverted Text"), self)
+        self.btn_acbfInvColor.clicked.connect(self.slot_change_inverted_color)
+        colorWidget.layout().addWidget(self.btn_acbfRegColor)
+        colorWidget.layout().addWidget(self.btn_acbfInvColor)
+        ACBFStyleEditVB.addWidget(colorWidget)
         ACBFStyleEditVB.addWidget(self.ACBFfontCombo)
+        ACBFStyleEditVB.addWidget(self.ACBFdefaultFont)
         ACBFStyleEditVB.addWidget(self.ACBFBold)
         ACBFStyleEditVB.addWidget(self.ACBFItal)
         ACBFStyleEditVB.addStretch()
@@ -443,10 +458,11 @@ class comic_export_setting_dialog(QDialog):
             font = QFont()
             font.setFamily(str(item.data(role=Qt.UserRole+1)))
             self.ACBFfontCombo.setCurrentFont(font)
-            bold = item.data(role=Qt.UserRole+2)
+            self.ACBFdefaultFont.setCurrentText(str(item.data(role=Qt.UserRole+2)))
+            bold = item.data(role=Qt.UserRole+3)
             if bold is not None:
                 self.ACBFBold.setChecked(bold)
-            italic = item.data(role=Qt.UserRole+3)
+            italic = item.data(role=Qt.UserRole+4)
             if italic is not None:
                 self.ACBFItal.setChecked(italic)
         
@@ -456,9 +472,22 @@ class comic_export_setting_dialog(QDialog):
             item = self.ACBFStylesModel.item(index.row())
             font = QFont(self.ACBFfontCombo.currentFont())
             item.setData(font.family(), role=Qt.UserRole+1)
-            item.setData(self.ACBFBold.isChecked(), role=Qt.UserRole+2)
-            item.setData(self.ACBFItal.isChecked(), role=Qt.UserRole+3)
+            item.setData(self.ACBFdefaultFont.currentText(), role=Qt.UserRole+2)
+            item.setData(self.ACBFBold.isChecked(), role=Qt.UserRole+3)
+            item.setData(self.ACBFItal.isChecked(), role=Qt.UserRole+4)
             self.ACBFStylesModel.setItem(index.row(), item)
+    
+    def slot_change_regular_color(self):
+        if (self.regularColor.exec_() == QDialog.Accepted):
+            square = QPixmap(32, 32)
+            square.fill(self.regularColor.currentColor())
+            self.btn_acbfRegColor.setIcon(QIcon(square))
+    
+    def slot_change_inverted_color(self):
+        if (self.invertedColor.exec_() == QDialog.Accepted):
+            square = QPixmap(32, 32)
+            square.fill(self.invertedColor.currentColor())
+            self.btn_acbfInvColor.setIcon(QIcon(square))
 
     """
     Load the UI values from the config dictionary given.
@@ -538,17 +567,28 @@ class comic_export_setting_dialog(QDialog):
                 else:
                     style.setCheckState(Qt.Unchecked)
                 style.setData(keyDict.get("font", QFont().family()), role=Qt.UserRole+1)
-                style.setData(keyDict.get("bold", False), role=Qt.UserRole+2)
-                style.setData(keyDict.get("ital", False), role=Qt.UserRole+3)
+                style.setData(keyDict.get("genericfont", "sans-serif"), role=Qt.UserRole+2)
+                style.setData(keyDict.get("bold", False), role=Qt.UserRole+3)
+                style.setData(keyDict.get("ital", False), role=Qt.UserRole+4)
                 self.ACBFStylesModel.appendRow(style)
+            keyDict = styleDict.get("general", {})
+            self.regularColor.setCurrentColor(QColor(keyDict.get("color", "#000000")))
+            square = QPixmap(32, 32)
+            square.fill(self.regularColor.currentColor())
+            self.btn_acbfRegColor.setIcon(QIcon(square))
+            keyDict = styleDict.get("inverted", {})
+            self.invertedColor.setCurrentColor(QColor(keyDict.get("color", "#FFFFFF")))
+            square.fill(self.invertedColor.currentColor())
+            self.btn_acbfInvColor.setIcon(QIcon(square))
         else:
             for key in self.acbfStylesList:
                 style = QStandardItem(key.title())
                 style.setCheckable(True)
                 style.setCheckState(Qt.Unchecked)
                 style.setData(QFont().family(), role=Qt.UserRole+1)
-                style.setData(False, role=Qt.UserRole+2) #Bold
-                style.setData(False, role=Qt.UserRole+3) #Italic
+                style.setData("sans-serif", role=Qt.UserRole+2)
+                style.setData(False, role=Qt.UserRole+3) #Bold
+                style.setData(False, role=Qt.UserRole+4) #Italic
                 self.ACBFStylesModel.appendRow(style)
         self.CBZgroupResize.setEnabled(self.CBZactive.isChecked())
         self.lnTranslatorHeader.setText(config.get("translatorHeader", "Translator's Notes"))
@@ -607,13 +647,18 @@ class comic_export_setting_dialog(QDialog):
                 font = entry.data(role=Qt.UserRole+1)
                 if font is not None:
                     style["font"] = font
-                bold = entry.data(role=Qt.UserRole+2)
+                genericfont = entry.data(role=Qt.UserRole+2)
+                if font is not None:
+                    style["genericfont"] = genericfont
+                bold = entry.data(role=Qt.UserRole+3)
                 if bold is not None:
                     style["bold"] = bold
-                italic = entry.data(role=Qt.UserRole+3)
+                italic = entry.data(role=Qt.UserRole+4)
                 if italic is not None:
                     style["ital"] = italic
                 acbfStylesDict[key] = style
+        acbfStylesDict["general"] = {"color": self.regularColor.currentColor().name()}
+        acbfStylesDict["inverted"] = {"color": self.invertedColor.currentColor().name()}
         config["acbfStyles"] = acbfStylesDict
         config["translatorHeader"] = self.lnTranslatorHeader.text()
         config["includeTranslComment"] = self.chkIncludeTranslatorComments.isChecked()

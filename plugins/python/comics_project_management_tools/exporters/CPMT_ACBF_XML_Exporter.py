@@ -27,7 +27,7 @@ http://acbf.wikia.com/wiki/ACBF_Specifications
 import os
 import re
 from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QColor
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from . import CPMT_po_parser as po_parser
 
@@ -48,11 +48,18 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 styleClass = key+"{\n"
             elif key == "speech":
                 styleClass = "text-area {\n"
+            elif key == "general":
+                styleClass = "* {\n"
+            elif key == "inverted":
+                styleClass = "text-area[inverted=\"True\"] {\n"
             else:
                 styleClass = "text-area[type=\""+key+"\"] {\n"
             styleString += styleClass
+            if "color" in style.keys():
+                styleString += "    color:"+style["color"]+";\n"
             if "font" in style.keys():
-                styleString += "    font-family:"+style["font"]+";\n"
+                genericfont = style.get("genericfont", "sans-serif")
+                styleString += "    font-family:\""+style["font"]+"\", "+genericfont+";\n"
             if "bold" in style.keys():
                 if style["bold"]:
                     styleString += "    font-weight: bold;\n"
@@ -369,7 +376,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     
     def figure_out_type(svg = QDomElement()):
         type = None
-        skipList = ["speech", "emphasis", "strong", "inverted"]
+        skipList = ["speech", "emphasis", "strong", "inverted", "regular"]
         if svg.attribute("text-anchor") == "middle" or svg.attribute("text-align") == "center":
             if "acbfStyles" in configDictionary.keys():
                 stylesDictionary = configDictionary.get("acbfStyles", {})
@@ -385,12 +392,38 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             type = "formal"
         else:
             type = "commentary"
-        return type
+        inverted = None
+        #Figure out whether this is inverted colored text.
+        if svg.hasAttribute("fill"):
+            stylesDictionary = configDictionary.get("acbfStyles", {})
+            key = stylesDictionary.get("general", {})
+            regular = QColor(key.get("color", "#000000"))
+            key = stylesDictionary.get("inverted", {})
+            invertedColor = QColor(key.get("color", "#FFFFFF"))
+            textColor = QColor(svg.attribute("fill"))
+            # Proceed to get luma for the three colors.
+            lightnessR = (0.21 * regular.redF()) + (0.72 * regular.greenF()) + (0.07 * regular.blueF())
+            lightnessI = (0.21 * invertedColor.redF()) + (0.72 * invertedColor.greenF()) + (0.07 * invertedColor.blueF())
+            lightnessT = (0.21 * textColor.redF()) + (0.72 * textColor.greenF()) + (0.07 * textColor.blueF())
+            if lightnessI > lightnessR:
+                if lightnessT > (lightnessI+lightnessR)*0.5:
+                    inverted = "True"
+            else:
+                if lightnessT < (lightnessI+lightnessR)*0.5:
+                    inverted = "True"
+        return [type, inverted]
     
     countedPageTitles = 0
     
+    listOfPageColors = []
+    
     for p in range(0, len(pagesLocationList)):
         page = pagesLocationList[p]
+        imageFile = QImage()
+        imageFile.load(page)
+        imageRect = imageFile.rect().adjusted(0, 0, -1, -1)
+        pageColor = findDominantColor([imageFile.pixelColor(imageRect.topLeft()), imageFile.pixelColor(imageRect.topRight()), imageFile.pixelColor(imageRect.bottomRight()), imageFile.pixelColor(imageRect.bottomLeft())])
+        listOfPageColors.append(pageColor)
         language = "en"
         if "language" in configDictionary.keys():
             language = configDictionary["language"]
@@ -399,16 +432,20 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         data = pageData[p]
         transform = data["transform"]
         frameList = []
+        listOfTextColors = []
         for v in data["vector"]:
             boundingBoxText = []
+            listOfBoundaryColors = []
             for point in v["boundingBox"]:
                 offset = QPointF(transform["offsetX"], transform["offsetY"])
                 pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
                 newPoint = pixelPoint - offset
-                x = int(newPoint.x() * transform["scaleWidth"])
-                y = int(newPoint.y() * transform["scaleHeight"])
+                x = max(0, min(imageRect.width(), int(newPoint.x() * transform["scaleWidth"])))
+                y = max(0, min(imageRect.height(), int(newPoint.y() * transform["scaleHeight"])))
+                listOfBoundaryColors.append(imageFile.pixelColor(x, y))
                 pointText = str(x) + "," + str(y)
                 boundingBoxText.append(pointText)
+            mainColor = findDominantColor(listOfBoundaryColors)
 
             if "text" in v.keys():
                 textArea = document.createElement("text-area")
@@ -416,23 +453,32 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
                 svg = QDomDocument()
                 svg.setContent(v["text"])
-                type = figure_out_type(svg.documentElement())
+                figureOut = figure_out_type(svg.documentElement())
+                type = figureOut[0]
+                inverted = figureOut[1]
                 paragraph = QDomDocument()
                 paragraph.appendChild(paragraph.createElement("p"))
                 parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement()) 
                 textArea.appendChild(paragraph.documentElement())
+                textArea.setAttribute("bgcolor", mainColor.name())
                 if type is not None:
                     textArea.setAttribute("type", type)
+                if inverted is not None:
+                    textArea.setAttribute("inverted", inverted)
                 textLayer.appendChild(textArea)
             else:
                 f = {}
                 f["points"] = " ".join(boundingBoxText)
                 frameList.append(f)
+            listOfTextColors.append(mainColor)
+        textLayer.setAttribute("bgcolor", findDominantColor(listOfTextColors).name())
         textLayerList = document.createElement("trlist")
         for lang in poParser.get_translation_list():
             textLayerTr = document.createElement("text-layer")
             textLayerTr.setAttribute("lang", lang)
-            for v in data["vector"]:
+            for i in range(len(data["vector"])):
+                d = data["vector"]
+                v = d[i]
                 boundingBoxText = []
                 for point in v["boundingBox"]:
                     offset = QPointF(transform["offsetX"], transform["offsetY"])
@@ -449,7 +495,9 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     # TODO: Rotate will require proper global transform api as transform info is not written intotext.                        #textArea.setAttribute("text-rotation", str(v["rotate"]))
                     svg = QDomDocument()
                     svg.setContent(v["text"])
-                    type = figure_out_type(svg.documentElement())
+                    figureOut = figure_out_type(svg.documentElement())
+                    type = figureOut[0]
+                    inverted = figureOut[1]
                     string = re.sub("\<\/*?text.*?\>",'', str(v["text"]))
                     string = re.sub("\s+?", " ", string)
                     translationEntry = poParser.get_entry_for_key(string, lang)
@@ -478,7 +526,12 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     textLayerTr.appendChild(textArea)
                     if type is not None:
                         textArea.setAttribute("type", type)
-                    textLayerList.appendChild(textLayerTr)
+                    if inverted is not None:
+                        textArea.setAttribute("inverted", inverted)
+                    textArea.setAttribute("bgcolor", listOfTextColors[i].name())
+                textLayerTr.setAttribute("bgcolor", findDominantColor(listOfTextColors).name())
+                textLayerList.appendChild(textLayerTr)
+                    
         
 
         if page is not coverpageurl:
@@ -517,6 +570,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 pg.appendChild(frame)
             pg.appendChild(textLayer)
+            pg.setAttribute("bgcolor", pageColor.name())
             for n in range(0, textLayerList.childNodes().size()):
                 node = textLayerList.childNodes().at(n)
                 pg.appendChild(node)
@@ -527,9 +581,12 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 coverpage.appendChild(frame)
             coverpage.appendChild(textLayer)
+            coverpage.setAttribute("bgcolor", pageColor.name())
             for n in range(0, textLayerList.childNodes().size()):
                 node = textLayerList.childNodes().at(n)
                 coverpage.appendChild(node)
+    bodyColor = findDominantColor(listOfPageColors)
+    body.setAttribute("bgcolor", bodyColor.name())
 
     if configDictionary.get("includeTranslComment", False):
         for lang in translationComments.keys():
@@ -619,21 +676,18 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
             elWrite.appendChild(document.createTextNode(str(childNode.nodeValue())))
         elif childNode.hasChildNodes():
             childNode = childNode.toElement()
-            fontWeight = str(childNode.attribute("font-weight"))
-            fontItalic = str(childNode.attribute("font-style"))
-            fontStrikeThrough = str(childNode.attribute("text-decoration"))
-            fontBaseLine = str(childNode.attribute("baseline-shift"))
+            fontWeight = str(childNode.attribute("font-weight", "400"))
+            fontItalic = str(childNode.attribute("font-style", "normal"))
+            fontStrikeThrough = str(childNode.attribute("text-decoration", "underline"))
+            fontBaseLine = str(childNode.attribute("baseline-shift", "baseline"))
             newElementMade = False
-            if fontItalic.isalnum():
-                if (fontItalic == "italic"):
+            if fontItalic == "italic":
                     newElement = document.createElement("emphasis")
                     newElementMade = True
-            elif fontWeight.isalnum():
-                if (fontWeight == "bold" or int(fontWeight) > 400):
+            elif fontWeight == "bold" or int(fontWeight) > 400:
                     newElement = document.createElement("strong")
                     newElementMade = True
-            elif fontStrikeThrough.isalnum():
-                if (fontStrikeThrough == "line-through"):
+            elif fontStrikeThrough == "line-through":
                     newElement = document.createElement("strikethrough")
                     newElementMade = True
             elif fontBaseLine.isalnum():
@@ -658,3 +712,28 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
         if el.isText():
             eb = el.nodeValue()
             el.setNodeValue(eb.replace("  ", " "))
+            
+"""
+This function tries to determine if there's a dominant color,
+and if not, it'll mix all of them.
+"""
+
+def findDominantColor(listOfColors = [QColor()]):
+    dominantColor = QColor()
+    listOfColorNames = {}
+    
+    for color in listOfColors:
+        count = listOfColorNames.get(color.name(), 0)
+        listOfColorNames[color.name()] = count+1
+    
+    # Check if there's a sense of dominant color:
+    if len(listOfColorNames.keys()) < (len(listOfColors)*0.5):
+        namesSorted = sorted(listOfColorNames, key=listOfColorNames.get, reverse=True)
+        dominantColor = QColor(namesSorted[0])
+    else:
+        for color in listOfColors:
+            dominantColor.setRedF(0.5*(dominantColor.redF()+color.redF()))
+            dominantColor.setGreenF(0.5*(dominantColor.greenF()+color.greenF()))
+            dominantColor.setBlueF(0.5*(dominantColor.blueF()+color.blueF()))
+    
+    return dominantColor

@@ -527,9 +527,9 @@ class comic_meta_data_editor(QDialog):
             self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
             if config["readingDirection"] is "leftToRight":
-                self.cmbReadingMode.setCurrentIndex(0)
+                self.cmbReadingMode.setCurrentIndex(int(Qt.LeftToRight))
             else:
-                self.cmbReadingMode.setCurrentIndex(1)
+                self.cmbReadingMode.setCurrentIndex(int(Qt.RightToLeft))
         else:
             self.cmbReadingMode.setCurrentIndex(QLocale(self.cmbLanguage.codeForCurrentEntry()).textDirection())
         if "publisherName" in config.keys():
@@ -635,7 +635,7 @@ class comic_meta_data_editor(QDialog):
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
         config["language"] = str(self.cmbLanguage.codeForCurrentEntry())
-        if self.cmbReadingMode is Qt.LeftToRight:
+        if self.cmbReadingMode.currentIndex() is Qt.LeftToRight:
             config["readingDirection"] = "leftToRight"
         else:
             config["readingDirection"] = "rightToLeft"

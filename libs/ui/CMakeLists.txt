@@ -391,6 +391,7 @@ set(kritaui_LIB_SRCS
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
     KisWindowLayoutResource.cpp
+    KisWindowLayoutManager.cpp
     KisSessionResource.cpp
 
     KisReferenceImagesDecoration.cpp

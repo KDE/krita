@@ -118,8 +118,6 @@
 #include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
-#include "KisDocument.h"
-#include "KisDocument.h"
 #include "kis_group_layer.h"
 #include "kis_icon_utils.h"
 #include "kis_image_from_clipboard_widget.h"
@@ -142,6 +140,7 @@
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include <KisUpdateSchedulerConfigNotifier.h>
+#include "KisWindowLayoutManager.h"
 
 #include <mutex>
 
@@ -1293,7 +1292,7 @@ void KisMainWindow::setActiveView(KisView* view)
     d->viewManager->setCurrentView(view);
 
     auto *kisPart = KisPart::instance();
-    if (kisPart->isShowImageInAllWindowsEnabled()) {
+    if (KisWindowLayoutManager::instance()->isShowImageInAllWindowsEnabled()) {
         Q_FOREACH(QPointer<KisMainWindow> window, kisPart->mainWindows()) {
             if (window == this) continue;
             window->showDocument(view->document());
@@ -2080,9 +2079,10 @@ void KisMainWindow::subWindowActivated()
 void KisMainWindow::windowFocused()
 {
     auto *kisPart = KisPart::instance();
-    if (!kisPart->primaryWorkspaceFollowsFocus()) return;
+    auto *layoutManager = KisWindowLayoutManager::instance();
+    if (!layoutManager->primaryWorkspaceFollowsFocus()) return;
 
-    QUuid primary = kisPart->primaryWindowId();
+    QUuid primary = layoutManager->primaryWindowId();
     if (primary.isNull()) return;
 
     if (d->id == primary) {

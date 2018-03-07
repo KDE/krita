@@ -18,7 +18,7 @@
 
 #include <KisWindowLayoutResource.h>
 #include <kis_resource_server_provider.h>
-#include <KisPart.h>
+#include <KisWindowLayoutManager.h>
 #include "KisLayoutSelector.h"
 #include "KisSessionResource.h"
 
@@ -61,7 +61,7 @@ void KisLayoutSelector::updateItems() {
         addItem(session->name(), Private::Session);
     }
 
-    const QString &lastLayout = KisPart::instance()->lastLayoutName();
+    const QString &lastLayout = KisWindowLayoutManager::instance()->lastLayoutName();
     if (!lastLayout.isEmpty()) {
         int index = findText(lastLayout);
         if (index >=0) setCurrentIndex(index);

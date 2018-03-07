@@ -41,6 +41,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
 #include <KisPart.h>
+#include <KisWindowLayoutManager.h>
 #include <dialogs/KisNewWindowLayoutDialog.h>
 #include <kis_config.h>
 
@@ -226,7 +227,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows, primaryWorkspaceFollowsFocus, thisWindow);
     layout->setValid(true);
 
-    KisPart::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
+    KisWindowLayoutManager::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
 
     KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
     QString saveLocation = rserver->saveLocation();

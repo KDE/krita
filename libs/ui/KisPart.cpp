@@ -115,12 +115,6 @@ public:
     bool closingSession{false};
     QScopedPointer<KisSessionManagerDialog> sessionManager;
 
-    bool showImageInAllWindows{false};
-    bool primaryWorkspaceFollowsFocus{false};
-    QUuid primaryWindow;
-
-    QString lastLayoutName;
-
     bool queryCloseDocument(KisDocument *document) {
         Q_FOREACH(auto view, views) {
             if (view && view->isVisible() && view->document() == document) {
@@ -158,8 +152,6 @@ KisPart::KisPart()
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             &d->animationCachePopulator, SLOT(slotRequestRegeneration()));
 
-    connect(qobject_cast<KisApplication*>(KisApplication::instance()), SIGNAL(focusChanged(QWidget*, QWidget*)),
-            this, SLOT(focusChanged(QWidget*, QWidget*)));
 
     d->animationCachePopulator.slotRequestRegeneration();
 }
@@ -558,44 +550,6 @@ KisInputManager* KisPart::currentInputManager()
     return manager ? manager->inputManager() : 0;
 }
 
-
-void KisPart::setShowImageInAllWindowsEnabled(bool showInAll)
-{
-    d->showImageInAllWindows = showInAll;
-}
-
-bool KisPart::isShowImageInAllWindowsEnabled() const
-{
-    return d->showImageInAllWindows;
-}
-
-bool KisPart::primaryWorkspaceFollowsFocus() const
-{
-    return d->primaryWorkspaceFollowsFocus;
-}
-
-void KisPart::setPrimaryWorkspaceFollowsFocus(bool enabled, QUuid primaryWindow)
-{
-    d->primaryWorkspaceFollowsFocus = enabled;
-    d->primaryWindow = primaryWindow;
-}
-
-QUuid KisPart::primaryWindowId() const
-{
-    return d->primaryWindow;
-}
-
-void KisPart::focusChanged(QWidget *old, QWidget *now)
-{
-    Q_UNUSED(old);
-
-    if (!now) return;
-    KisMainWindow *newMainWindow = qobject_cast<KisMainWindow*>(now->window());
-    if (!newMainWindow) return;
-
-    newMainWindow->windowFocused();
-}
-
 void KisPart::showSessionManager()
 {
     if (d->sessionManager.isNull()) {
@@ -630,15 +584,4 @@ bool KisPart::restoreSession(const QString &sessionName)
 void KisPart::setCurrentSession(KisSessionResource *session)
 {
     d->currentSession = session;
-}
-
-
-QString KisPart::lastLayoutName()
-{
-    return d->lastLayoutName;
-}
-
-void KisPart::setLastLayoutName(const QString &name)
-{
-    d->lastLayoutName = name;
 }

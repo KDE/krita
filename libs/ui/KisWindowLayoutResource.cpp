@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "KisWindowLayoutResource.h"
+#include "KisWindowLayoutManager.h"
 
 #include <QVector>
 #include <QList>
@@ -164,9 +165,10 @@ KisWindowLayoutResource * KisWindowLayoutResource::fromCurrentWindows(
 
 void KisWindowLayoutResource::applyLayout()
 {
-    KisPart *kisPart = KisPart::instance();
+    auto *kisPart = KisPart::instance();
+    auto *layoutManager= KisWindowLayoutManager::instance();
 
-    kisPart->setLastLayoutName(name());
+    layoutManager->setLastLayoutName(name());
 
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
 
@@ -206,8 +208,8 @@ void KisWindowLayoutResource::applyLayout()
         }
     }
 
-    kisPart->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
-    kisPart->setPrimaryWorkspaceFollowsFocus(d->primaryWorkspaceFollowsFocus, d->primaryWindow);
+    layoutManager->setShowImageInAllWindowsEnabled(d->showImageInAllWindows);
+    layoutManager->setPrimaryWorkspaceFollowsFocus(d->primaryWorkspaceFollowsFocus, d->primaryWindow);
 }
 
 bool KisWindowLayoutResource::save()

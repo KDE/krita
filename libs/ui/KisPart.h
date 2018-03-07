@@ -161,16 +161,6 @@ public:
      */
     KisAnimationCachePopulator *cachePopulator() const;
 
-
-    /**
-     * When enabled, a workspace dedicated as primary is used for any main window which receives focus.
-     * Meanwhile, the workspace of that window is used for the window which originally had the primary workspace.
-     */
-    bool primaryWorkspaceFollowsFocus() const;
-    void setPrimaryWorkspaceFollowsFocus(bool enabled, QUuid primaryWindow);
-    QUuid primaryWindowId() const;
-
-
 public Q_SLOTS:
 
     /**
@@ -197,8 +187,6 @@ private Q_SLOTS:
     void updateIdleWatcherConnections();
 
     void updateShortcuts();
-
-    void focusChanged(QWidget *old, QWidget *now);
 
 Q_SIGNALS:
     /**
@@ -258,12 +246,6 @@ public:
      */
     int viewCount(KisDocument *doc) const;
 
-    /**
-     * When enabled, main windows will synchronize to keep the same document active
-     */
-    void setShowImageInAllWindowsEnabled(bool showInAll);
-    bool isShowImageInAllWindowsEnabled() const;
-
     //------------------ Session management ------------------
 
     void showSessionManager();
@@ -289,13 +271,6 @@ public:
      */
     bool closingSession() const;
 
-    /**
-     * The name of the last activated window layout or session.
-     * Used by the layout selector.
-     */
-    QString lastLayoutName();
-    void setLastLayoutName(const QString &name);
-
 private Q_SLOTS:
 
     void slotDocumentSaved();
@@ -306,7 +281,6 @@ private:
 
     class Private;
     Private *const d;
-
 
 };
 

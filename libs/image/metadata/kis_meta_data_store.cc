@@ -73,7 +73,7 @@ bool Store::addEntry(const Entry& entry)
 {
     Q_ASSERT(!entry.name().isEmpty());
     if (d->entries.contains(entry.qualifiedName()) && d->entries[entry.qualifiedName()].isValid()) {
-        dbgImage << "Entry" << entry.qualifiedName() << " already exists in the store, cannot be included twice";
+        dbgMetaData << "Entry" << entry.qualifiedName() << " already exists in the store, cannot be included twice";
         return false;
     }
     d->entries.insert(entry.qualifiedName(), entry);
@@ -183,20 +183,20 @@ QHash<QString, Entry>::const_iterator Store::end() const
 
 void Store::debugDump() const
 {
-    dbgImage << "=== Dumping MetaData Store ===";
-    dbgImage << " - Metadata (there are" << d->entries.size() << " entries)";
+    dbgMetaData << "=== Dumping MetaData Store ===";
+    dbgMetaData << " - Metadata (there are" << d->entries.size() << " entries)";
     Q_FOREACH (const Entry& e, d->entries) {
         if (e.isValid()) {
-            dbgImage << e;
+            dbgMetaData << e;
         } else {
-            dbgImage << "Invalid entry";
+            dbgMetaData << "Invalid entry";
         }
     }
 }
 
 void Store::applyFilters(const QList<const Filter*> & filters)
 {
-    dbgImage << "Apply " << filters.size() << " filters";
+    dbgMetaData << "Apply " << filters.size() << " filters";
     Q_FOREACH (const Filter* filter, filters) {
         filter->filter(this);
     }

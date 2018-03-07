@@ -101,6 +101,7 @@ Q_LOGGING_CATEGORY(_41012, "krita.input", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41013, "krita.action", QtInfoMsg)
 Q_LOGGING_CATEGORY(_41014, "krita.tabletlog", QtDebugMsg)
 Q_LOGGING_CATEGORY(_41015, "krita.opengl", QtInfoMsg)
+Q_LOGGING_CATEGORY(_41016, "krita.metadata", QtInfoMsg)
 
 
 QString __methodName(const char *_prettyFunction)

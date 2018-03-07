@@ -57,9 +57,9 @@ SchemaRegistry::SchemaRegistry()
         Schema* schema = new Schema();
         schema->d->load(fileName);
         if (schemaFromUri(schema->uri())) {
-            errImage << "Schema already exist uri: " << schema->uri();
+            errMetaData << "Schema already exist uri: " << schema->uri();
         } else if (schemaFromPrefix(schema->prefix())) {
-            errImage << "Schema already exist prefix: " << schema->prefix();
+            errMetaData << "Schema already exist prefix: " << schema->prefix();
         } else {
             d->uri2Schema[schema->uri()] = schema;
             d->prefix2Schema[schema->prefix()] = schema;

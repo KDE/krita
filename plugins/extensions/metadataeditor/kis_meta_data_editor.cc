@@ -66,11 +66,11 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
 
         QDomDocument document;
         if (!document.setContent(&xmlFile, false, &errMsg, &errLine, &errCol)) {
-            dbgPlugins << "Error reading XML at line" << errLine << " column" << errCol << " :" << errMsg;
+            dbgMetaData << "Error reading XML at line" << errLine << " column" << errCol << " :" << errMsg;
         }
         QDomElement rootElement = document.documentElement();
         if (rootElement.tagName() != "MetaDataEditor") {
-            dbgPlugins << "Invalid XML file";
+            dbgMetaData << "Invalid XML file";
         }
 
         const QString uiFileName = rootElement.attribute("uiFile");
@@ -94,14 +94,14 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             bool ok;
             int arrayIndex = elem.attribute("arrayIndex", "-1").toInt(&ok);
             if (!ok) arrayIndex = -1;
-            dbgPlugins << ppVar(editorName) << ppVar(arrayIndex);
+            dbgMetaData << ppVar(editorName) << ppVar(arrayIndex);
 
             QWidget* obj = widget->findChild<QWidget*>(editorName);
             if (obj) {
                 const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(schemaUri);
                 if (schema) {
                     if (!d->store->containsEntry(schema, entryName)) {
-                        dbgPlugins << " Store does not have yet entry :" << entryName << " in" << schemaUri  << " ==" << schema->generateQualifiedName(entryName);
+                        dbgMetaData << " Store does not have yet entry :" << entryName << " in" << schemaUri  << " ==" << schema->generateQualifiedName(entryName);
                     }
                     QString key = schema->generateQualifiedName(entryName);
                     KisEntryEditor* ee = new KisEntryEditor(obj, d->store, key, propertyName, structureField, arrayIndex);
@@ -113,10 +113,10 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
                     }
                     d->entryEditors.insert(key, ee);
                 } else {
-                    dbgPlugins << "Unknown schema :" << schemaUri;
+                    dbgMetaData << "Unknown schema :" << schemaUri;
                 }
             } else {
-                dbgPlugins << "Unknown object :" << editorName;
+                dbgMetaData << "Unknown object :" << editorName;
             }
         }
         xmlFile.close();

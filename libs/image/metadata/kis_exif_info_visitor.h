@@ -75,7 +75,7 @@ public:
     }
 
     bool visit(KisGroupLayer* layer) override {
-        dbgFile << "Visiting on grouplayer" << layer->name() << "";
+        dbgMetaData << "Visiting on grouplayer" << layer->name() << "";
         return visitAll(layer, true);
     }
 

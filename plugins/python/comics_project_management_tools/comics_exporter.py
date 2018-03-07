@@ -29,7 +29,7 @@ import types
 import re
 from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
 from PyQt5.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
-from PyQt5.QtGui import QImage, QTransform, QPainterPath
+from PyQt5.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
 from krita import *
 from . import exporters
 
@@ -482,6 +482,79 @@ class comicsExporter():
             path.addEllipse(QPointF(x, y), rx, ry)
             for point in path.toFillPolygon(adjust):
                 listOfPoints.append(point)
+        elif docElem.localName == "text":
+            # NOTE: This only works for horizontal preformated text. Vertical text needs a different
+            # ordering of the rects, and wraparound should try to take the shape it is wraped in.
+            family = docElem.getAttribute("font-family")
+            size = docElem.getAttribute("font-size")
+            multilineText = True
+            for el in docElem.childNodes:
+                if el.nodeType == minidom.Node.TEXT_NODE:
+                    multilineText = False
+            if multilineText:
+                listOfPoints = []
+                listOfRects = []
+
+                # First we collect all the possible line-rects.
+                for el in docElem.childNodes:
+                    if docElem.hasAttribute("font-family"):
+                        family = docElem.getAttribute("font-family")
+                    if docElem.hasAttribute("font-size"):
+                        size = docElem.getAttribute("font-size")
+                    if family.isspace() or len(family)==0:
+                        family = "sans-serif"
+                    if size.isspace() or len(size)==0:
+                        fontsize = 11
+                    else:
+                        fontsize = int(size)
+                    font = QFont(family, fontsize)
+                    string = el.toxml()
+                    string = re.sub("\<.*?\>", " ", string)
+                    width = QFontMetrics(font).width(string)
+                    height = QFontMetrics(font).height()
+                    anchor = "start"
+                    if docElem.hasAttribute("text-anchor"):
+                        anchor = docElem.getAttribute("text-anchor")
+                    top = rect.top()
+                    if len(listOfRects)>0:
+                        top = listOfRects[-1].bottom()
+                    if anchor == "start":
+                        spanRect = QRectF(rect.left(), top, width, height)
+                        listOfRects.append(spanRect)
+                    elif anchor == "end":
+                        spanRect = QRectF(rect.right()-width, top, width, height)
+                        listOfRects.append(spanRect)
+                    else:
+                        # Middle
+                        spanRect = QRectF(rect.center().x()-(width*0.5), top, width, height)
+                        listOfRects.append(spanRect)
+                # Now we have all the rects, we can check each and draw a
+                # polygon around them.
+                heightAdjust = (rect.height()-(listOfRects[-1].bottom()-rect.top()))/len(listOfRects)
+                for i in range(len(listOfRects)):
+                    span = listOfRects[i]
+                    addtionalHeight = i*heightAdjust
+                    if i == 0:
+                        listOfPoints.append(span.topLeft())
+                        listOfPoints.append(span.topRight())
+                    else:
+                        if listOfRects[i-1].width()< span.width():
+                            listOfPoints.append(QPointF(span.right(), span.top()+addtionalHeight))
+                            listOfPoints.insert(0, QPointF(span.left(), span.top()+addtionalHeight))
+                        else:
+                            bottom = listOfRects[i-1].bottom()+addtionalHeight-heightAdjust
+                            listOfPoints.append(QPointF(listOfRects[i-1].right(), bottom))
+                            listOfPoints.insert(0, QPointF(listOfRects[i-1].left(), bottom))
+                listOfPoints.append(QPointF(span.right(), rect.bottom()))
+                listOfPoints.insert(0, QPointF(span.left(), rect.bottom()))
+                path = QPainterPath()
+                path.moveTo(listOfPoints[0])
+                for p in range(1, len(listOfPoints)):
+                    path.lineTo(listOfPoints[p])
+                path.closeSubpath()
+                listOfPoints = []
+                for point in path.toFillPolygon(adjust):
+                    listOfPoints.append(point)
         shapeDesc["boundingBox"] = listOfPoints
         if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
             shapeDesc["text"] = shape.toSvg()

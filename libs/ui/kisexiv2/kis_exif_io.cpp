@@ -48,13 +48,13 @@ struct KisExifIO::Private {
 KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
 {
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    if (dvalue) {
         Q_ASSERT(dvalue);
         QByteArray array(dvalue->count(), 0);
         dvalue->copy((Exiv2::byte*)array.data());
         return KisMetaData::Value(QString(array));
-    } else {
+    }
+    else {
         Q_ASSERT(value->typeId() == Exiv2::asciiString);
         return KisMetaData::Value(QString::fromLatin1(value->toString().c_str()));
     }
@@ -74,8 +74,7 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
 {
     QList<KisMetaData::Value> v;
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    if(dvalue)
-    {
+    if (dvalue) {
         QByteArray array(dvalue->count(), 0);
         dvalue->copy((Exiv2::byte*)array.data());
         for (int i = 0; i < array.size(); i++) {

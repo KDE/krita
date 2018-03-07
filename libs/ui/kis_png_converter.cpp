@@ -654,7 +654,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             } else if (key == "author") {
                 info->setAuthorInfo("creator", text_ptr[i].text);
             } else if (key.contains("raw profile type exif")) {
-                qDebug() << "hit!";
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
             } else if (key.contains("raw profile type iptc")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "iptc", 14);

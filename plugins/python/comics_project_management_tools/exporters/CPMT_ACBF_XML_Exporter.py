@@ -234,8 +234,15 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         bookTitle.setAttribute("lang", configDictionary["language"])
         annotation.setAttribute("lang", configDictionary["language"])
         keywords.setAttribute("lang", configDictionary["language"])
-    #database = document.createElement("databaseref")
-    # bookInfo.appendChild(database)
+        
+    if "databaseReference" in configDictionary.keys():
+        database = document.createElement("databaseref")
+        dbRef = configDictionary["databaseReference"]
+        database.setAttribute("dbname", dbRef.get("name", ""))
+        if "type" in dbRef.keys():
+            database.setAttribute("type", dbRef["type"])
+        database.appendChild(document.createTextNode(dbRef.get("entry", "")))
+        bookInfo.appendChild(database)
 
     if "seriesName" in configDictionary.keys():
         sequence = document.createElement("sequence")

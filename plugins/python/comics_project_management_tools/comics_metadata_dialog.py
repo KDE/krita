@@ -331,11 +331,22 @@ class comic_meta_data_editor(QDialog):
         self.license = license_combo_box()  # Maybe ought to make this a QLineEdit...
         self.license.setEditable(True)
         self.license.completer().setCompletionMode(QCompleter.PopupCompletion)
+        dataBaseReference = QVBoxLayout()
+        self.ln_database_name = QLineEdit()
+        self.ln_database_name.setToolTip(i18n("If there's an entry in a comics data base, that should be added here. It is unlikely to be a factor for comics from scratch, but useful when doing a conversion."))
+        self.cmb_entry_type = QComboBox()
+        self.cmb_entry_type.addItems(["IssueID", "SeriesID", "URL"])
+        self.cmb_entry_type.setEditable(True)
+        self.ln_database_entry = QLineEdit()
+        dataBaseReference.addWidget(self.ln_database_name)
+        dataBaseReference.addWidget(self.cmb_entry_type)
+        dataBaseReference.addWidget(self.ln_database_entry)
         publisherLayout.addRow(i18n("Name:"), self.publisherName)
         publisherLayout.addRow(i18n("City:"), self.publishCity)
         publisherLayout.addRow(i18n("Date:"), publishDateLayout)
         publisherLayout.addRow(i18n("ISBN:"), self.isbn)
         publisherLayout.addRow(i18n("License:"), self.license)
+        publisherLayout.addRow(i18n("Database:"), dataBaseReference)
 
         mainWidget.addTab(publisherPage, i18n("Publisher"))
     """
@@ -565,6 +576,10 @@ class comic_meta_data_editor(QDialog):
                     self.authorModel.appendRow(listItems)
         else:
             self.slot_add_author()
+        dbRef = config.get("databaseReference", {})
+        self.ln_database_name.setText(dbRef.get("name", ""))
+        self.ln_database_entry.setText(dbRef.get("entry", ""))
+        self.cmb_entry_type.setCurrentText(dbRef.get("type", ""))
 
     """
     Store the GUI values into the config dictionary given.
@@ -663,5 +678,11 @@ class comic_meta_data_editor(QDialog):
         config["publishingDate"] = self.publishDate.date().toString(Qt.ISODate)
         config["isbn-number"] = self.isbn.text()
         config["license"] = self.license.currentText()
+        if self.ln_database_name.text().isalnum() and self.ln_database_entry.text().isalnum():
+            dbRef = {}
+            dbRef["name"] = self.ln_database_name.text()
+            dbRef["entry"] = self.ln_database_entry.text()
+            dbRef["type"] = self.cmb_entry_type.currentText()
+            config["databaseReference"] = dbRef
 
         return config

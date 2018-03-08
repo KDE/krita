@@ -533,6 +533,14 @@ bool KisResourceBundle::install()
 
                 //find the resource on the server
                 KisBrushSP res2 = brushServer->resourceByName(res->name());
+                if (res2) {
+                    res->setName(res->name()+"("+res->shortFilename()+")");
+                }
+                // file name is more important than the regular name because the
+                // it is the way how it is called up from the brushpreset settings.
+                // Therefore just adjust the resource name and only refuse to load
+                // when the filename is different.
+                res2 = brushServer->resourceByFilename(res->shortFilename());
                 if (!res2)  {//if it doesn't exist...
                     brushServer->addResource(res, false);//add it!
 

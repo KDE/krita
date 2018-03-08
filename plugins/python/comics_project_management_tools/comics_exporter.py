@@ -446,6 +446,8 @@ class comicsExporter():
                     elif l.lower().startswith("v"):
                         x = listOfPoints[-1].x()
                         path.lineTo(QPointF(x, y) + offset)
+                    elif l.lower().startswith("c"):
+                        path.cubicTo(coordinates[0], coordinates[1], coordinates[2], coordinates[3], x, y)
                     else:
                         path.lineTo(QPointF(x, y) + offset)
                 path.setFillRule(Qt.WindingFill)
@@ -485,8 +487,12 @@ class comicsExporter():
         elif docElem.localName == "text":
             # NOTE: This only works for horizontal preformated text. Vertical text needs a different
             # ordering of the rects, and wraparound should try to take the shape it is wraped in.
-            family = docElem.getAttribute("font-family")
-            size = docElem.getAttribute("font-size")
+            family = "sans-serif"
+            if docElem.hasAttribute("font-family"):
+                family = docElem.getAttribute("font-family")
+            size = "11"
+            if docElem.hasAttribute("font-size"):
+                size = docElem.getAttribute("font-size")
             multilineText = True
             for el in docElem.childNodes:
                 if el.nodeType == minidom.Node.TEXT_NODE:
@@ -501,16 +507,12 @@ class comicsExporter():
                         family = docElem.getAttribute("font-family")
                     if docElem.hasAttribute("font-size"):
                         size = docElem.getAttribute("font-size")
-                    if family.isspace() or len(family)==0:
-                        family = "sans-serif"
-                    if size.isspace() or len(size)==0:
-                        fontsize = 11
-                    else:
-                        fontsize = int(size)
+                    fontsize = int(size)
                     font = QFont(family, fontsize)
                     string = el.toxml()
                     string = re.sub("\<.*?\>", " ", string)
-                    width = min(QFontMetrics(font).width(string), rect.width())
+                    string = string.replace("  ", " ")
+                    width = min(QFontMetrics(font).width(string.strip()), rect.width())
                     height = QFontMetrics(font).height()
                     anchor = "start"
                     if docElem.hasAttribute("text-anchor"):

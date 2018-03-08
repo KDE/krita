@@ -313,7 +313,6 @@ class comic_export_setting_dialog(QDialog):
         self.ACBFauthorTable.verticalHeader().setDropIndicatorShown(True)
         self.ACBFauthorTable.verticalHeader().setSectionsMovable(True)
         self.ACBFauthorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
-
         AuthorButtons = QHBoxLayout()
         btn_add_author = QPushButton(i18n("Add author"))
         btn_add_author.clicked.connect(self.slot_add_author)
@@ -365,7 +364,7 @@ class comic_export_setting_dialog(QDialog):
         ACBFTabwidget = QTabWidget()
         ACBFTabwidget.addTab(ACBFdocInfo, i18n("Document Info"))
         ACBFTabwidget.addTab(ACBFAuthorInfo, i18n("Author Info"))
-        ACBFTabwidget.addTab(ACBFStyle, i18n("Style sheet"))
+        ACBFTabwidget.addTab(ACBFStyle, i18n("Style Sheet"))
         ACBFExportSettings.layout().addWidget(ACBFTabwidget)
         mainWidget.addTab(ACBFExportSettings, i18n("ACBF"))
 

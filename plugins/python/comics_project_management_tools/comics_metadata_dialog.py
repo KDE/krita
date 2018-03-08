@@ -338,8 +338,10 @@ class comic_meta_data_editor(QDialog):
         self.cmb_entry_type.addItems(["IssueID", "SeriesID", "URL"])
         self.cmb_entry_type.setEditable(True)
         self.ln_database_entry = QLineEdit()
-        dataBaseReference.addWidget(self.ln_database_name)
-        dataBaseReference.addWidget(self.cmb_entry_type)
+        dbHorizontal = QHBoxLayout()
+        dbHorizontal.addWidget(self.ln_database_name)
+        dbHorizontal.addWidget(self.cmb_entry_type)
+        dataBaseReference.addLayout(dbHorizontal)
         dataBaseReference.addWidget(self.ln_database_entry)
         publisherLayout.addRow(i18n("Name:"), self.publisherName)
         publisherLayout.addRow(i18n("City:"), self.publishCity)
@@ -579,7 +581,8 @@ class comic_meta_data_editor(QDialog):
         dbRef = config.get("databaseReference", {})
         self.ln_database_name.setText(dbRef.get("name", ""))
         self.ln_database_entry.setText(dbRef.get("entry", ""))
-        self.cmb_entry_type.setCurrentText(dbRef.get("type", ""))
+        stringCmbEntryType = self.cmb_entry_type.itemText(0)
+        self.cmb_entry_type.setCurrentText(dbRef.get("type", stringCmbEntryType))
 
     """
     Store the GUI values into the config dictionary given.

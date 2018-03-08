@@ -388,7 +388,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     
     def figure_out_type(svg = QDomElement()):
         type = None
-        skipList = ["speech", "emphasis", "strong", "inverted", "regular"]
+        skipList = ["speech", "emphasis", "strong", "inverted", "general"]
         if svg.attribute("text-anchor") == "middle" or svg.attribute("text-align") == "center":
             if "acbfStyles" in configDictionary.keys():
                 stylesDictionary = configDictionary.get("acbfStyles", {})
@@ -770,7 +770,16 @@ def findDominantColor(listOfColors = [QColor()]):
         listOfColorNames[color.name()] = count+1
     
     # Check if there's a sense of dominant color:
-    if len(listOfColorNames.keys()) < (len(listOfColors)*0.5):
+    clear_dominant = False
+    
+    if len(listOfColorNames) == 2 and len(listOfColors) == 1:
+        clear_dominant = True
+    elif len(listOfColorNames) == 3 and len(listOfColors) == 2:
+        clear_dominant = True
+    elif len(listOfColorNames.keys()) < (len(listOfColors)*0.5):
+        clear_dominant = True
+    
+    if clear_dominant:
         namesSorted = sorted(listOfColorNames, key=listOfColorNames.get, reverse=True)
         dominantColor = QColor(namesSorted[0])
     else:

@@ -86,10 +86,10 @@ private Q_SLOTS:
 
     void zoomOut();
     void zoomIn();
-
+#ifndef Q_OS_WIN
     void showInsertSpecialCharacterDialog();
     void insertCharacter(const QChar &c);
-
+#endif
     void setTextBold(QFont::Weight weight = QFont::Bold);
     void setTextWeightLight();
     void setTextWeightNormal();
@@ -149,7 +149,9 @@ private:
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;
     KoSvgTextShape *m_shape {0};
+#ifndef Q_OS_WIN
     KoDialog *m_charSelectDialog {0};
+#endif
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;

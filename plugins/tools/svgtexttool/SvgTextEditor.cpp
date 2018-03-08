@@ -81,13 +81,13 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     setCentralWidget(m_page);
 
     m_textEditorWidget.chkVertical->setVisible(false);
-
+#ifndef Q_OS_WIN
     KCharSelect *charSelector = new KCharSelect(m_charSelectDialog, 0, KCharSelect::AllGuiElements);
     m_charSelectDialog->setMainWidget(charSelector);
     connect(charSelector, SIGNAL(currentCharChanged(QChar)), SLOT(insertCharacter(QChar)));
     m_charSelectDialog->hide();
     m_charSelectDialog->setButtons(KoDialog::Close);
-
+#endif
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
     connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(close()));
     connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
@@ -418,6 +418,7 @@ void SvgTextEditor::zoomIn()
     m_currentEditor->zoomIn();
 }
 
+#ifndef Q_OS_WIN
 void SvgTextEditor::showInsertSpecialCharacterDialog()
 {
     m_charSelectDialog->setVisible(!m_charSelectDialog->isVisible());
@@ -427,7 +428,7 @@ void SvgTextEditor::insertCharacter(const QChar &c)
 {
     m_currentEditor->textCursor().insertText(QString(c));
 }
-
+#endif
 
 void SvgTextEditor::setTextBold(QFont::Weight weight)
 {
@@ -963,13 +964,13 @@ void SvgTextEditor::createActions()
     // View
     KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
     KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
-
+#ifndef Q_OS_WIN
     // Insert:
     QAction * insertAction = createAction("svg_insert_special_character",
                                           SLOT(showInsertSpecialCharacterDialog()));
     insertAction->setCheckable(true);
     insertAction->setChecked(false);
-
+#endif
     // Format:
     m_richTextActions << createAction("svg_weight_bold",
                                       SLOT(setTextBold()));

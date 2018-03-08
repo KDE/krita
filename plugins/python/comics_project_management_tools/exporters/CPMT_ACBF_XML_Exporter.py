@@ -39,13 +39,18 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     root.setAttribute("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
     document.appendChild(root)
     
+    emphasisStyle = {}
+    strongStyle = {}
     if "acbfStyles" in configDictionary.keys():
         stylesDictionary = configDictionary.get("acbfStyles", {})
+        emphasisStyle = stylesDictionary.get("emphasis", {})
+        strongStyle = stylesDictionary.get("strong", {})
         styleString = "\n"
-        for key in stylesDictionary:
+        tabs = "    "
+        for key in sorted(stylesDictionary.keys()):
             style = stylesDictionary.get(key, {})
             if key == "emphasis" or key == "strong":
-                styleClass = key+"{\n"
+                styleClass = key+" {\n"
             elif key == "speech":
                 styleClass = "text-area {\n"
             elif key == "general":
@@ -54,21 +59,21 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 styleClass = "text-area[inverted=\"True\"] {\n"
             else:
                 styleClass = "text-area[type=\""+key+"\"] {\n"
-            styleString += styleClass
+            styleString += tabs+styleClass
             if "color" in style.keys():
-                styleString += "    color:"+style["color"]+";\n"
+                styleString += tabs+tabs+"color:"+style["color"]+";\n"
             if "font" in style.keys():
                 genericfont = style.get("genericfont", "sans-serif")
-                styleString += "    font-family:\""+style["font"]+"\", "+genericfont+";\n"
+                styleString += tabs+tabs+"font-family:\""+style["font"]+"\", "+genericfont+";\n"
             if "bold" in style.keys():
                 if style["bold"]:
-                    styleString += "    font-weight: bold;\n"
-            if "italic" in style.keys():
-                if style["italic"]:
-                    styleString += "    font-style: italic;\n"
+                    styleString += tabs+tabs+"font-weight: bold;\n"
+            if "ital" in style.keys():
+                if style["ital"]:
+                    styleString += tabs+tabs+"font-style: italic;\n"
                 else:
-                    styleString += "    font-style: normal;\n"
-            styleString += "}\n"
+                    styleString += tabs+tabs+"font-style: normal;\n"
+            styleString += tabs+"}\n"
         style = document.createElement("style")
         style.setAttribute("type", "text/css")
         style.appendChild(document.createTextNode(styleString))
@@ -458,7 +463,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 inverted = figureOut[1]
                 paragraph = QDomDocument()
                 paragraph.appendChild(paragraph.createElement("p"))
-                parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement()) 
+                parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement(), emphasisStyle, strongStyle) 
                 textArea.appendChild(paragraph.documentElement())
                 textArea.setAttribute("bgcolor", mainColor.name())
                 if type is not None:
@@ -505,7 +510,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     svg.setContent("<text>"+string+"</text>")
                     paragraph = QDomDocument()
                     paragraph.appendChild(paragraph.createElement("p"))
-                    parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement())
+                    parseTextChildren(paragraph, svg.documentElement(), paragraph.documentElement(), emphasisStyle, strongStyle)
                     if "translComment" in translationEntry.keys():
                         key = translationEntry["translComment"]
                         listOfComments = []
@@ -667,7 +672,7 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
 Function to parse svg text to acbf ready text
 """
 
-def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite = QDomElement()):
+def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite = QDomElement(), emphasisStyle = {}, strongStyle = {}):
     for n in range(0, elRead.childNodes().size()):
         childNode = elRead.childNodes().item(n)
         if childNode.isText():
@@ -676,16 +681,31 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
             elWrite.appendChild(document.createTextNode(str(childNode.nodeValue())))
         elif childNode.hasChildNodes():
             childNode = childNode.toElement()
+            fontFamily = str(childNode.attribute("font-family"))
             fontWeight = str(childNode.attribute("font-weight", "400"))
-            fontItalic = str(childNode.attribute("font-style", "normal"))
-            fontStrikeThrough = str(childNode.attribute("text-decoration", "underline"))
-            fontBaseLine = str(childNode.attribute("baseline-shift", "baseline"))
+            fontItalic = str(childNode.attribute("font-style"))
+            fontStrikeThrough = str(childNode.attribute("text-decoration"))
+            fontBaseLine = str(childNode.attribute("baseline-shift"))
             newElementMade = False
-            if fontItalic == "italic":
-                    newElement = document.createElement("emphasis")
-                    newElementMade = True
-            elif fontWeight == "bold" or int(fontWeight) > 400:
+
+            emphasis = False
+            strong = False
+            if len(emphasisStyle.keys()) > 0:
+                emphasis = compare_styles(emphasisStyle, fontFamily, fontWeight, fontItalic)
+            else:
+                if fontItalic == "italic":
+                    emphasis = True
+            if len(strongStyle.keys()) > 0:
+                strong = compare_styles(strongStyle, fontFamily, fontWeight, fontItalic)
+            else:
+                if fontWeight == "bold" or int(fontWeight) > 400:
+                    strong = True
+
+            if strong:
                     newElement = document.createElement("strong")
+                    newElementMade = True
+            elif emphasis:
+                    newElement = document.createElement("emphasis")
                     newElementMade = True
             elif fontStrikeThrough == "line-through":
                     newElement = document.createElement("strikethrough")
@@ -699,10 +719,10 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
                     newElementMade = True
 
             if newElementMade is True:
-                parseTextChildren(document, childNode, newElement)
+                parseTextChildren(document, childNode, newElement, emphasisStyle, strongStyle)
                 elWrite.appendChild(newElement)
             else:
-                parseTextChildren(document, childNode, elWrite)
+                parseTextChildren(document, childNode, elWrite, emphasisStyle, strongStyle)
 
         # If it is not a text node, nor does it have children(which could be textnodes),
         # we should assume it's empty and ignore it.
@@ -713,6 +733,22 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
             eb = el.nodeValue()
             el.setNodeValue(eb.replace("  ", " "))
             
+def compare_styles(style = {}, fontFamily = str(), fontWeight = str(), fontStyle = str()):
+    compare = []
+    if "font" in style.keys():
+        compare.append((fontFamily == style.get("font")))
+    if "bold" in style.keys():
+        compare.append(fontWeight == "bold" or int(fontWeight) > 400)
+    if "ital" in style.keys():
+        compare.append(fontStyle == "italic")
+    countTrue = 0
+    for i in compare:
+        if i is True:
+            countTrue +=1
+    if countTrue > 1:
+        return True
+    else:
+        return False
 """
 This function tries to determine if there's a dominant color,
 and if not, it'll mix all of them.

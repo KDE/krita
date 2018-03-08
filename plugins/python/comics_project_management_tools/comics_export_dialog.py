@@ -345,7 +345,7 @@ class comic_export_setting_dialog(QDialog):
         self.ACBFItal.toggled.connect(self.slot_font_current_style)
         colorWidget = QGroupBox(self)
         colorWidget.setTitle(i18n("Text Colors"))
-        colorWidget.setLayout(QHBoxLayout())
+        colorWidget.setLayout(QVBoxLayout())
         self.regularColor = QColorDialog()
         self.invertedColor = QColorDialog()
         self.btn_acbfRegColor = QPushButton(i18n("Regular Text"), self)
@@ -462,9 +462,13 @@ class comic_export_setting_dialog(QDialog):
             bold = item.data(role=Qt.UserRole+3)
             if bold is not None:
                 self.ACBFBold.setChecked(bold)
+            else:
+                self.ACBFBold.setChecked(False)
             italic = item.data(role=Qt.UserRole+4)
             if italic is not None:
                 self.ACBFItal.setChecked(italic)
+            else:
+                self.ACBFItal.setChecked(False)
         
     def slot_font_current_style(self):
         index = self.ACBFStyleClass.currentIndex()

@@ -75,7 +75,9 @@
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags)
     , m_page(new QWidget(this))
+#ifndef Q_OS_WIN
     , m_charSelectDialog(new KoDialog(this))
+#endif
 {
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);

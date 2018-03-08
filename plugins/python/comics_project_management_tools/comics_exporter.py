@@ -510,7 +510,7 @@ class comicsExporter():
                     font = QFont(family, fontsize)
                     string = el.toxml()
                     string = re.sub("\<.*?\>", " ", string)
-                    width = QFontMetrics(font).width(string)
+                    width = min(QFontMetrics(font).width(string), rect.width())
                     height = QFontMetrics(font).height()
                     anchor = "start"
                     if docElem.hasAttribute("text-anchor"):

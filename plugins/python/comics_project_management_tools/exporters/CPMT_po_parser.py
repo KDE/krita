@@ -31,10 +31,11 @@ class po_file_parser():
     key_xml = False
 
     def __init__(self, translationLocation, key_xml = False):
-        for entry in os.scandir(translationLocation):
-            self.key_xml = key_xml
-            if entry.name.endswith('.po') and entry.is_file():
-                self.parse_pot(os.path.join(translationLocation, entry.name))
+        self.key_xml = key_xml
+        if os.path.exists(translationLocation):
+            for entry in os.scandir(translationLocation):
+                if entry.name.endswith('.po') and entry.is_file():
+                    self.parse_pot(os.path.join(translationLocation, entry.name))
 
     def parse_pot(self, location):
         if (os.path.exists(location)):

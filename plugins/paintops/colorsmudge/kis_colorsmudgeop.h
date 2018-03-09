@@ -29,7 +29,9 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_gradient_option.h>
+#include <kis_pressure_hsv_option.h>
 
+#include "KoColorTransformation.h"
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 #include "kis_smudge_option.h"
@@ -69,7 +71,7 @@ private:
     QScopedPointer<KisPainter> m_smudgePainter;
     QScopedPointer<KisPainter> m_colorRatePainter;
     QScopedPointer<KisPainter> m_finalPainter;
-    const KoAbstractGradient* m_gradient;
+    const KoAbstractGradient* m_gradient {0};
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
     KisPressureSpacingOption  m_spacingOption;
@@ -80,11 +82,13 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
     KisPressureGradientOption m_gradientOption;
+    QList<KisPressureHSVOption*> m_hsvOptions;
     QRect                     m_dstDabRect;
     KisFixedPaintDeviceSP     m_maskDab;
     QPointF                   m_lastPaintPos;
 
-    const KoCompositeOp *m_preciseColorRateCompositeOp = 0;
+    KoColorTransformation *m_hsvTransform {0};
+    const KoCompositeOp *m_preciseColorRateCompositeOp {0};
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

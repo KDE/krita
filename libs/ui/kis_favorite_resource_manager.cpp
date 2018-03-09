@@ -345,7 +345,8 @@ void KisFavoriteResourceManager::init()
     if (!m_initialized) {
         m_initialized = true;
         KisResourceServerProvider::instance()->paintOpPresetServer(true);
-        m_currentTag = KisConfig().readEntry<QString>("favoritePresetsTag", "demo");
+        m_currentTag = KisConfig().readEntry<QString>("favoritePresetsTag", "★ My Favorites");
+
         updateFavoritePresets();
     }
 }

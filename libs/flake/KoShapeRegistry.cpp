@@ -408,6 +408,9 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                             //          Don't change it to the correct data in the image,
                             //          it will change back compatibility (and this code will
                             //          be deprecated some time soon
+                            // UPDATE (DK): There is actually no difference in what resolution we
+                            //              load these shapes, because they will be scaled into
+                            //              the bounds of the parent odf-frame
                             const qreal pixelsPerInch = 72.0;
                             const qreal forcedFontSizeResolution = 72.0;
 

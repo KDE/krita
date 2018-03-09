@@ -322,34 +322,50 @@ void KoSvgTextShape::relayout()
 
         using namespace KoSvgText;
 
-        QVector<AssociatedShapeWrapper> shapeMap;
-        shapeMap.resize(layout.text().size());
-
         Q_FOREACH (const QTextLayout::FormatRange &range, layout.formats()) {
-            for (int k = range.start; k < range.start + range.length; k++) {
-                KIS_SAFE_ASSERT_RECOVER_BREAK(k >= 0 && k < shapeMap.size());
+            const KoSvgCharChunkFormat &format =
+                static_cast<const KoSvgCharChunkFormat&>(range.format);
+            AssociatedShapeWrapper wrapper = format.associatedShapeWrapper();
 
-                const KoSvgCharChunkFormat &format =
-                    static_cast<const KoSvgCharChunkFormat&>(range.format);
+            const int rangeStart = range.start;
+            const int safeRangeLength = range.length > 0 ? range.length : layout.text().size() - rangeStart;
 
-                shapeMap[k] = format.associatedShapeWrapper();
-            }
-        }
+            if (safeRangeLength <= 0) continue;
 
-        for (int j = 0; j < layout.lineCount(); j++) {
-            const QTextLine line = layout.lineAt(j);
+            const int rangeEnd = range.start + safeRangeLength - 1;
 
-            for (int k = line.textStart(); k < line.textStart() + line.textLength(); k++) {
-                KIS_SAFE_ASSERT_RECOVER_BREAK(k >= 0 && k < shapeMap.size());
+            const int firstLineIndex = layout.lineForTextPosition(rangeStart).lineNumber();
+            const int lastLineIndex = layout.lineForTextPosition(rangeEnd).lineNumber();
 
-                AssociatedShapeWrapper wrapper = shapeMap[k];
-                if (!wrapper.isValid()) continue;
+            for (int i = firstLineIndex; i <= lastLineIndex; i++) {
+                const QTextLine line = layout.lineAt(i);
 
-                const qreal x1 = line.cursorToX(k, QTextLine::Leading);
-                const qreal x2 = line.cursorToX(k, QTextLine::Trailing);
+                const int posStart = qMax(line.textStart(), rangeStart);
+                const int posEnd = qMin(line.textStart() + line.textLength() - 1, rangeEnd);
 
-                QRectF rect(qMin(x1, x2), line.y(), qAbs(x1 - x2), line.height());
-                wrapper.addCharacterRect(rect.translated(layoutOffset));
+                const QList<QGlyphRun> glyphRuns = line.glyphRuns(posStart, posEnd - posStart + 1);
+                Q_FOREACH (const QGlyphRun &run, glyphRuns) {
+                    const QPointF lastPosition = run.positions().last();
+                    const quint32 lastGlyphIndex = run.glyphIndexes().last();
+                    const QRawFont rawFont = run.rawFont();
+                    const QRectF lastGlyphRect = rawFont.boundingRect(lastGlyphIndex).translated(lastPosition);
+
+                    QRectF rect = run.boundingRect();
+
+                    /**
+                     * HACK ALERT: there is a bug in a way how Qt calculates boundingRect()
+                     *             of the glyph run. It doesn't care about right bearings of
+                     *             the last char in the run, therefore it becomes cropped.
+                     *
+                     *             Here we just add a half-char width margin to the right
+                     *             of the glyph run to make sure the glyph is fully painted.
+                     *
+                     * BUG: 389528
+                     */
+                    rect.setRight(qMax(rect.right(), lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
+
+                    wrapper.addCharacterRect(rect.translated(layoutOffset));
+                }
             }
         }
     }

@@ -409,6 +409,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                             //          it will change back compatibility (and this code will
                             //          be deprecated some time soon
                             const qreal pixelsPerInch = 72.0;
+                            const qreal forcedFontSizeResolution = 72.0;
 
                             QPointF pos;
                             pos.setX(KoUnit::parseValue(frameElement.attributeNS(KoXmlNS::svg, "x", QString::number(bounds.x()))));
@@ -421,6 +422,7 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                             KoShape *shape = SvgShapeFactory::createShapeFromSvgDirect(xmlDoc.documentElement(),
                                                                                        QRectF(pos, size),
                                                                                        pixelsPerInch,
+                                                                                       forcedFontSizeResolution,
                                                                                        zIndex,
                                                                                        context);
 

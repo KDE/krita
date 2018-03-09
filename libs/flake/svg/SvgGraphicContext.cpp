@@ -50,6 +50,7 @@ SvgGraphicsContext::SvgGraphicsContext()
     preserveWhitespace = false;
 
     pixelsPerInch = 72.0;
+    forcedFontSizeCoeff = 1.0; // no workaround by default
 
     autoFillMarkers = false;
     textProperties = KoSvgTextProperties::defaultProperties();

@@ -132,8 +132,8 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
         d->paramId = transfo->parameterId(d->parameterName);
     }
 
-    qreal v = computeSizeLikeValue(info, 0, false);
-    if (d->parameterName = "h") {
+    qreal v = computeSizeLikeValue(info);
+    if (d->parameterName == "h") {
         v = computeRotationLikeValue(info, 0, false);
         v = (v) * (this->value());//multiply by strength slider.
     }

@@ -96,11 +96,24 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_preciseColorRateCompositeOp =
         m_preciseWrapper.preciseColorSpace()->compositeOp(m_colorRatePainter->compositeOp()->id());
 
+    m_hsvOptions.append(KisPressureHSVOption::createHueOption());
+    m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
+    m_hsvOptions.append(KisPressureHSVOption::createValueOption());
+
+    Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
+        option->readOptionSetting(settings);
+        option->resetAllSensors();
+        if (option->isChecked() && !m_hsvTransform) {
+            m_hsvTransform = m_paintColor.colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+        }
+    }
     m_rotationOption.applyFanCornersInfo(this);
 }
 
 KisColorSmudgeOp::~KisColorSmudgeOp()
 {
+    qDeleteAll(m_hsvOptions);
+    delete m_hsvTransform;
 }
 
 void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation, const QPointF &cursorPoint)
@@ -266,6 +279,12 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // composite mode
         KoColor color = m_paintColor;
         m_gradientOption.apply(color, m_gradient, info);
+        if (m_hsvTransform) {
+            Q_FOREACH (KisPressureHSVOption * option, m_hsvOptions) {
+                option->apply(m_hsvTransform, info);
+            }
+            m_hsvTransform->transform(color.data(), color.data(), 1);
+        }
 
         if (!useDullingMode) {
             KIS_SAFE_ASSERT_RECOVER(*m_colorRatePainter->device()->colorSpace() == *color.colorSpace()) {

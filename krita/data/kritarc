@@ -36,6 +36,7 @@ colorDepthDef=U8
 colorModelDef=RGBA
 colorProfileDef=sRGB-elle-V2-srgbtrc.icc
 favoritePresetsTag=★ My Favorites
+internal_selector_active_color_set=Default
 globalSnapBoundingBox=false
 globalSnapExtension=false
 globalSnapImageBounds=true

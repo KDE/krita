@@ -40,6 +40,10 @@
 #include "KoResourceTagStore.h"
 #include "KoResourcePaths.h"
 
+
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
 #include "kritawidgets_export.h"
 #include "WidgetsDebug.h"
 
@@ -633,6 +637,15 @@ protected:
             }
             file = file.nextSiblingElement("file");
         }
+
+        if (type() == "kis_resourcebundles") {
+            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+            if (group.readEntry("HideKrita3Bundle", true)) {
+                QFileInfo fi(KoResourcePaths::getApplicationRoot() + "/share/krita/(bundles/Krita_3_Default_Resources.bundle");
+                filenameList << fi.absoluteFilePath();
+            }
+        }
+
         return filenameList;
     }
 

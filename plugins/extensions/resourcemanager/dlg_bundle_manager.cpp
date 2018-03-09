@@ -32,6 +32,8 @@
 #include <kis_icon.h>
 #include "kis_action.h"
 #include <kis_resource_server_provider.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #define ICON_SIZE 48
 
@@ -136,6 +138,10 @@ void DlgBundleManager::accept()
                 }
             }
         }
+        if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
+            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+            group.writeEntry("HideKrita3Bundle", false);
+        }
 
         if (bundle) {
             if(!bundle->isInstalled()){
@@ -171,7 +177,10 @@ void DlgBundleManager::accept()
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
-
+        if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
+            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+            group.writeEntry("HideKrita3Bundle", true);
+        }
         if (bundle && bundle->isInstalled()) {
             bundle->uninstall();
             bundleServer->removeResourceAndBlacklist(bundle);
@@ -184,7 +193,6 @@ void DlgBundleManager::accept()
 
 void DlgBundleManager::addSelected()
 {
-
     Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
         m_ui->listInactive->addItem(m_ui->listActive->takeItem(m_ui->listActive->row(item)));
     }

@@ -57,7 +57,7 @@ public:
 
     KoShape *cloneShape() const override;
 
-    static KisReferenceImage * fromFile(const QString &filename);
+    static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter);
 
     void setSaturation(qreal saturation);
     qreal saturation() const;

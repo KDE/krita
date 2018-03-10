@@ -74,7 +74,7 @@ void ToolReferenceImages::addReferenceImage()
     if (filename.isEmpty()) return;
     if (!QFileInfo(filename).exists()) return;
 
-    auto *reference = KisReferenceImage::fromFile(filename);
+    auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter());
     KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
     kisCanvas->imageView()->document()->addCommand(layer->addReferenceImage(reference));
 }

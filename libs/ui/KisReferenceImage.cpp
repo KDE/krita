@@ -105,12 +105,16 @@ KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
 KisReferenceImage::~KisReferenceImage()
 {}
 
-KisReferenceImage * KisReferenceImage::fromFile(const QString &filename)
+KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const KisCoordinatesConverter &converter)
 {
     KisReferenceImage *reference = new KisReferenceImage();
     reference->d->src = QString("file://") + filename;
     reference->d->loadFromFile();
-    reference->setSize(reference->d->image.size());
+
+    QRect r = QRect(QPoint(), reference->d->image.size());
+    QSizeF shapeSize = converter.imageToDocument(r).size();
+    reference->setSize(shapeSize);
+
     return reference;
 }
 

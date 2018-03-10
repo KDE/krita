@@ -318,7 +318,6 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
         return;
     }
     m_d->paletteModel->setColorSet(set);
-    m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     m_ui->cmbNameList->clear();
     for (quint32 i = 0; i< set->nColors(); i++) {
         KoColorSetEntry entry = set->getColorGlobal(i);

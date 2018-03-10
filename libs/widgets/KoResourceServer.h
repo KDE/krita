@@ -641,7 +641,7 @@ protected:
         if (type() == "kis_resourcebundles") {
             KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
             if (group.readEntry("HideKrita3Bundle", true)) {
-                QFileInfo fi(KoResourcePaths::getApplicationRoot() + "/share/krita/(bundles/Krita_3_Default_Resources.bundle");
+                QFileInfo fi(KoResourcePaths::getApplicationRoot() + "/share/krita/bundles/Krita_3_Default_Resources.bundle");
                 filenameList << fi.absoluteFilePath();
             }
         }

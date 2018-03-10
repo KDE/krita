@@ -160,23 +160,23 @@ class translation_scraper():
         xmlroot = minidom.parseString(page.read("documentinfo.xml"))
         title = ""
         keywords = []
-        def parseThroughDocumentInfo(node):
+        def parseThroughDocumentInfo(node, title):
             for childNode in node.childNodes:
-                if childNode.nodeType != minidom.Node.TEXT_NODE:
+                if childNode.nodeType != minidom.Node.TEXT_NODE and childNode.nodeType != minidom.Node.CDATA_SECTION_NODE:
                     if childNode.tagName == "title":
                         for text in childNode.childNodes:
-                            title += childNode.text()
+                            title += text.data
                     elif childNode.tagName == "keyword":
                         k = ""
                         for text in childNode.childNodes:
-                            key += childNode.text()
+                            key += text.data
                         keywords = k.split(",")
                         for i in range(len(keywords)):
                             keywords[i] = str(keywords[i]).strip()
                     else:
-                        parseThroughDocumentInfo(childNode)
+                        parseThroughDocumentInfo(childNode, title)
                         
-        parseThroughDocumentInfo(xmlroot.documentElement)
+        parseThroughDocumentInfo(xmlroot.documentElement, title)
         if "acbf_title" in keywords:
             self.pageTitleKeys.append(title)
                     

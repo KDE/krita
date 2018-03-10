@@ -222,9 +222,6 @@ ACBF list:
             2. Support editing them from a right-click "properties" window.
             3. Support getting those values from python.
             4. have acbf_textclass read from the desc.
-    - Get page background color from the page if possible. (This might only work with canvas color, though)
     - Jump: proly not gonna support this.
     - text url anchors: only used for references.
     - Font embedding: spec is super vague about this.
-    - database reference: I am not sure if this is at all relevant for Krita? Because it implies an already published comic.
-    - text-layer background color(maybe sample topleft of projection???)

@@ -653,7 +653,7 @@ class comic_meta_data_editor(QDialog):
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
         config["language"] = str(self.cmbLanguage.codeForCurrentEntry())
-        if self.cmbReadingMode.currentIndex() is Qt.LeftToRight:
+        if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:
             config["readingDirection"] = "rightToLeft"

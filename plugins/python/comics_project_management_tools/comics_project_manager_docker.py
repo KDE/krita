@@ -748,19 +748,11 @@ class comics_project_manager_docker(DockWidget):
                     doc.close()
 
     def slot_show_page_viewer(self):
-        index = self.comicPageList.currentIndex()
-        if index.column() is not 0:
-            index = self.pagesModel.index(index.row(), 0)
-        # Get the absolute url from the relative one in the pages model.
-        absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(index, role=Qt.ToolTipRole)))
+        index = int(self.comicPageList.currentIndex().row())
+        self.page_viewer_dialog.load_comic(self.path_to_config)
+        self.page_viewer_dialog.go_to_page_index(index)
+        self.page_viewer_dialog.show()
 
-        # Make sure the page exists.
-        if os.path.exists(absoluteUrl):
-            page = zipfile.ZipFile(absoluteUrl, "r")
-            image = QImage.fromData(page.read("mergedimage.png"))
-            self.page_viewer_dialog.update_image(image)
-            self.page_viewer_dialog.show()
-            page.close()
     """
     Function to copy the current project location into the clipboard.
     This is useful for users because they'll be able to use that url to quickly

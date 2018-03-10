@@ -26,9 +26,9 @@ import csv
 import re
 import types
 from pathlib import Path  # For reading all the files in a directory.
-from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
 from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate
+from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -57,7 +57,7 @@ class multi_entry_completer(QCompleter):
         if split.endswith(" "):
             split = split[:-1]
         return [split]
-
+    
 
 """
 Language combobox that can take locale codes and get the right language for it and visa-versa.
@@ -70,16 +70,30 @@ class language_combo_box(QComboBox):
 
     def __init__(self, parent=None):
         super(QComboBox, self).__init__(parent)
-        mainP = os.path.dirname(__file__)
-        languageP = os.path.join(mainP, "isoLanguagesList.csv")
-        if (os.path.exists(languageP)):
-            file = open(languageP, "r", newline="", encoding="utf8")
-            languageReader = csv.reader(file)
-            for row in languageReader:
-                self.languageList.append(row[0])
-                self.codesList.append(row[1])
-                self.addItem(row[0])
-            file.close()
+        for i in range(1, 357):
+            locale = QLocale(i)
+            if locale and QLocale.languageToString(locale.language()) != "C":
+                codeName = locale.name().split("_")[0]
+                if codeName not in self.codesList:
+                    self.codesList.append(codeName)
+            self.codesList.sort()
+            
+        for lang in self.codesList:
+            locale = QLocale(lang)
+            if locale:
+                languageName = QLocale.languageToString(locale.language())
+                self.languageList.append(languageName.title())
+                self.setIconSize(QSize(32, 22))
+                codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+                painter = QPainter(codeIcon)
+                painter.setBrush(Qt.transparent)
+                codeIcon.fill(Qt.transparent)
+                font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+                painter.setFont(font)
+                painter.setPen(self.palette().color(QPalette.Text))
+                painter.drawText(codeIcon.rect(), Qt.AlignCenter,lang)
+                painter.end()
+                self.addItem(QIcon(QPixmap.fromImage(codeIcon)), languageName.title())
 
     def codeForCurrentEntry(self):
         if self.currentText() in self.languageList:
@@ -91,6 +105,49 @@ class language_combo_box(QComboBox):
         if code in self.codesList:
             self.setCurrentIndex(self.codesList.index(code))
 
+class country_combo_box(QComboBox):
+    countryList = []
+    codesList = []
+
+    def __init__(self, parent=None):
+        super(QComboBox, self).__init__(parent)
+        
+    def set_country_for_locale(self, languageCode):
+        self.clear()
+        self.codesList = []
+        self.countryList = []
+        for locale in QLocale.matchingLocales(QLocale(languageCode).language(), QLocale.AnyScript, QLocale.AnyCountry):
+            codeName = locale.name().split("_")[-1]
+            if codeName not in self.codesList:
+                self.codesList.append(codeName)
+            self.codesList.sort()
+            
+        for country in self.codesList:
+            locale = QLocale(languageCode+"_"+country)
+            if locale:
+                countryName = locale.nativeCountryName()
+                self.countryList.append(countryName.title())
+                self.setIconSize(QSize(32, 22))
+                codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+                painter = QPainter(codeIcon)
+                painter.setBrush(Qt.transparent)
+                codeIcon.fill(Qt.transparent)
+                font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+                painter.setFont(font)
+                painter.setPen(self.palette().color(QPalette.Text))
+                painter.drawText(codeIcon.rect(), Qt.AlignCenter,country)
+                painter.end()
+                self.addItem(QIcon(QPixmap.fromImage(codeIcon)), countryName.title())
+                
+    def codeForCurrentEntry(self):
+        if self.currentText() in self.countryList:
+            return self.codesList[self.countryList.index(self.currentText())]
+
+    def setEntryToCode(self, code):
+        if code == "C":
+            self.setCurrentIndex(0)
+        elif code in self.codesList:
+            self.setCurrentIndex(self.codesList.index(code))
 
 """
 A combobox that fills up with licenses from a CSV, and also sets tooltips from that
@@ -259,6 +316,8 @@ class comic_meta_data_editor(QDialog):
         self.lnOtherKeywords.setToolTip(i18n("Other keywords that don't fit in the previously mentioned sets. As always, comma-separated"))
 
         self.cmbLanguage = language_combo_box()
+        self.cmbCountry = country_combo_box()
+        self.cmbLanguage.currentIndexChanged.connect(self.slot_update_countries)
         self.cmbReadingMode = QComboBox()
         self.cmbReadingMode.addItem(i18n("Left to Right"))
         self.cmbReadingMode.addItem(i18n("Right to Left"))
@@ -270,6 +329,7 @@ class comic_meta_data_editor(QDialog):
         mformLayout.addRow(i18n("Cover Page:"), self.cmbCoverPage)
         mformLayout.addRow(i18n("Summary:"), self.teSummary)
         mformLayout.addRow(i18n("Language:"), self.cmbLanguage)
+        mformLayout.addRow("", self.cmbCountry)
         mformLayout.addRow(i18n("Reading Direction:"), self.cmbReadingMode)
         mformLayout.addRow(i18n("Genre:"), self.lnGenre)
         mformLayout.addRow(i18n("Characters:"), self.lnCharacters)
@@ -369,6 +429,10 @@ class comic_meta_data_editor(QDialog):
 
     def slot_set_date(self):
         self.publishDate.setDate(QDate().currentDate())
+        
+    def slot_update_countries(self):
+        code = self.cmbLanguage.codeForCurrentEntry()
+        self.cmbCountry.set_country_for_locale(code)
 
     """
     Append keys to autocompletion lists from the directory mainP.
@@ -536,8 +600,10 @@ class comic_meta_data_editor(QDialog):
         if "language" in config.keys():
             code = config["language"]
             if "_" in code:
-                code = code.split("_")[0]
-            self.cmbLanguage.setEntryToCode(code)
+                self.cmbLanguage.setEntryToCode(code.split("_")[0])
+                self.cmbCountry.setEntryToCode(code.split("_")[-1])
+            else:
+                self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
             if config["readingDirection"] is "leftToRight":
                 self.cmbReadingMode.setCurrentIndex(int(Qt.LeftToRight))
@@ -652,7 +718,7 @@ class comic_meta_data_editor(QDialog):
             config["seriesNumber"] = self.spnSeriesNumber.value()
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
-        config["language"] = str(self.cmbLanguage.codeForCurrentEntry())
+        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"_"+self.cmbCountry.codeForCurrentEntry())
         if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:

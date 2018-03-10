@@ -21,12 +21,34 @@
 
 #include <QObject>
 #include <QUuid>
+#include <QVector>
+#include <QSize>
+
+class QScreen;
+class KisWindowLayoutResource;
 
 class KisWindowLayoutManager : public QObject
 {
     Q_OBJECT
 
 public:
+    struct Display
+    {
+        QSize resolution;
+
+        bool matches(QScreen* screen) const;
+    };
+
+    struct DisplayLayout
+    {
+        QString name;
+
+        QVector<Display> displays;
+        QString preferredWindowLayout;
+
+        bool matches(QList<QScreen*> screens) const;
+    };
+
     explicit KisWindowLayoutManager();
     ~KisWindowLayoutManager();
 
@@ -51,10 +73,11 @@ public:
      * Used by the layout selector.
      */
     QString lastLayoutName();
-    void setLastLayoutName(const QString &name);
+    void setLastUsedLayout(const KisWindowLayoutResource *layout);
 
 private Q_SLOTS:
-    void focusChanged(QWidget*, QWidget*);
+    void slotFocusChanged(QWidget*, QWidget*);
+    void slotScreensChanged();
 
 private:
     struct Private;

@@ -19,9 +19,17 @@
 #include "KisWindowLayoutManager.h"
 
 #include <QWidget>
+#include <QDesktopWidget>
+#include <QScreen>
+
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <KisApplication.h>
 #include <KisMainWindow.h>
+#include <kis_dom_utils.h>
+#include "kis_resource_server_provider.h"
+#include <KisSessionResource.h>
 
 Q_GLOBAL_STATIC(KisWindowLayoutManager, s_instance)
 
@@ -31,7 +39,85 @@ struct KisWindowLayoutManager::Private {
     QUuid primaryWindow;
 
     QString lastLayoutName;
+
+    QVector<DisplayLayout*> displayLayouts;
+
+    void loadDisplayLayouts() {
+        KConfigGroup layoutsCfg(KSharedConfig::openConfig(), "DisplayLayouts");
+        QStringList groups = layoutsCfg.groupList();
+
+        Q_FOREACH(QString name, groups) {
+            loadDisplayLayout(name, layoutsCfg.group(name));
+        }
+    }
+
+    void loadDisplayLayout(const QString &name, KConfigGroup layoutCfg) {
+        DisplayLayout *layout = new DisplayLayout();
+        layout->name = name;
+
+        int displayNumber = 1;
+
+        while (true) {
+            const QString displayDefinition = layoutCfg.readEntry(QString("Display%1").arg(displayNumber++), QString());
+            if (displayDefinition.isEmpty()) break;
+
+            // Just the resolution for now. Later we might want to split by a separator and include things like serial number, etc.
+            const QString &resolutionStr = displayDefinition;
+
+            QStringList dimensions = resolutionStr.split('x');
+            if (dimensions.size() != 2) {
+                qWarning() << "Invalid display definition: " << displayDefinition;
+                break;
+            }
+
+            QSize resolution = QSize(
+                KisDomUtils::toInt(dimensions[0]),
+                KisDomUtils::toInt(dimensions[1])
+            );
+
+            layout->displays.append(Display{resolution});
+        }
+
+        layout->preferredWindowLayout = layoutCfg.readEntry("PreferredLayout", "");
+
+        displayLayouts.append(layout);
+    }
+
+    void saveDisplayLayout(const DisplayLayout &layout) {
+        KConfigGroup layoutsCfg(KSharedConfig::openConfig(), "DisplayLayouts");
+        KConfigGroup layoutCfg = layoutsCfg.group(layout.name);
+        layoutCfg.writeEntry("PreferredLayout", layout.preferredWindowLayout);
+    }
 };
+
+bool KisWindowLayoutManager::Display::matches(QScreen* screen) const
+{
+    return resolution == screen->geometry().size();
+}
+
+bool KisWindowLayoutManager::DisplayLayout::matches(QList<QScreen*> screens) const
+{
+    if (screens.size() != displays.size()) return false;
+
+    QVector<bool> matchedScreens(screens.size());
+    Q_FOREACH(auto &expectedDisplay, displays) {
+        int i;
+        for (i = 0; i < screens.size(); i++) {
+            if (matchedScreens[i]) continue;
+
+            if (expectedDisplay.matches(screens[i])) {
+                matchedScreens[i] = true;
+                break;
+            }
+        }
+
+        if (i == screens.size()) {
+            return false;
+        }
+    }
+
+    return true;
+}
 
 KisWindowLayoutManager * KisWindowLayoutManager::instance()
 {
@@ -39,12 +125,22 @@ KisWindowLayoutManager * KisWindowLayoutManager::instance()
 }
 
 KisWindowLayoutManager::KisWindowLayoutManager()
+    : d(new Private)
 {
-    connect(qobject_cast<KisApplication*>(KisApplication::instance()), SIGNAL(focusChanged(QWidget*, QWidget*)),
+    d->loadDisplayLayouts();
+
+    connect(qobject_cast<KisApplication*>(KisApplication::instance()), SIGNAL(slotFocusChanged(QWidget*, QWidget*)),
             this, SLOT(focusChanged(QWidget*, QWidget*)));
+
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(slotScreensChanged()));
+    connect(QApplication::desktop(), SIGNAL(screenCountChanged(int)), this, SLOT(slotScreensChanged()));
 }
 
-KisWindowLayoutManager::~KisWindowLayoutManager() {}
+KisWindowLayoutManager::~KisWindowLayoutManager() {
+    Q_FOREACH(DisplayLayout *layout, d->displayLayouts) {
+        delete layout;
+    }
+}
 
 void KisWindowLayoutManager::setShowImageInAllWindowsEnabled(bool showInAll)
 {
@@ -71,7 +167,8 @@ QUuid KisWindowLayoutManager::primaryWindowId() const
 {
     return d->primaryWindow;
 }
-void KisWindowLayoutManager::focusChanged(QWidget *old, QWidget *now)
+
+void KisWindowLayoutManager::slotFocusChanged(QWidget *old, QWidget *now)
 {
     Q_UNUSED(old);
 
@@ -87,7 +184,39 @@ QString KisWindowLayoutManager::lastLayoutName()
     return d->lastLayoutName;
 }
 
-void KisWindowLayoutManager::setLastLayoutName(const QString &name)
+void KisWindowLayoutManager::setLastUsedLayout(const KisWindowLayoutResource *layout)
 {
-    d->lastLayoutName = name;
+    // For layout selector, accept both window layouts and sessions
+    d->lastLayoutName = layout->name();
+
+    // For automatic switching, only allow a window layout proper
+    auto *session = dynamic_cast<const KisSessionResource*>(layout);
+    if (session) return;
+
+    QList<QScreen*> screens = QGuiApplication::screens();
+    Q_FOREACH(DisplayLayout *displayLayout, d->displayLayouts) {
+        if (displayLayout->matches(screens)) {
+            displayLayout->preferredWindowLayout = layout->name();
+            d->saveDisplayLayout(*displayLayout);
+            break;
+        }
+    }
+}
+
+void KisWindowLayoutManager::slotScreensChanged()
+{
+    QList<QScreen*> screens = QGuiApplication::screens();
+
+    Q_FOREACH(const DisplayLayout *displayLayout, d->displayLayouts) {
+        if (displayLayout->matches(screens)) {
+            KoResourceServer<KisWindowLayoutResource> *windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer(false);
+            KisWindowLayoutResource *layout = windowLayoutServer->resourceByName(displayLayout->preferredWindowLayout);
+
+            if (layout) {
+                setLastUsedLayout(layout);
+                layout->applyLayout();
+                return;
+            }
+        }
+    }
 }

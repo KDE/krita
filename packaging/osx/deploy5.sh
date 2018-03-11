@@ -1,23 +1,26 @@
 set -e # stop on errors
 set -x # be verbose 
-/Users/boud/master/fixrpath.sh
-rm -rf ~/master/krita.app/
-rm -rf ~/master/krita.dmg
-cp -r ~/master/i/bin/krita.app ~/master
-cp -r ~/master/i/share/* ~/master/krita.app/Contents/Resources
-cd  ~/master/krita.app/Contents
+/Users/boud/dev/fixrpath.sh
+rm -rf ~/dev/krita.app/
+rm -rf ~/dev/krita.dmg
+cp -r ~/dev/i/bin/krita.app ~/dev
+cp -r ~/dev/i/share/* ~/dev/krita.app/Contents/Resources
+cd  ~/dev/krita.app/Contents
 ln -s Resources share
-mkdir -p  ~/master/krita.app/Contents/Library/QuickLook
-cp -r  ~/master/i/lib/plugins/kritaquicklook.qlgenerator ~/master/krita.app/Contents/Library/QuickLook
+mkdir -p  ~/dev/krita.app/Contents/Library/QuickLook
+cp -r  ~/dev/i/lib/plugins/kritaquicklook.qlgenerator ~/dev/krita.app/Contents/Library/QuickLook
 
-~/master/deps/bin/macdeployqt ~/master/krita.app \
+~/dev/deps/bin/macdeployqt ~/dev/krita.app \
     -verbose=0 \
-    -executable=/Users/boud/master/krita.app/Contents/MacOS/krita \
-    -extra-plugins=/Users/boud/master/i/lib/kritaplugins/ \
-    -extra-plugins=/Users/boud/master/i/lib/plugins/ \
-    -extra-plugins=/Users/boud/master/i/plugins/ \
-    -extra-plugins=/Users/boud/master/deps/plugins
+    -executable=/Users/boud/dev/krita.app/Contents/MacOS/krita \
+    -qmldir=/Users/boud/dev/deps/qml \
+    -extra-plugins=/Users/boud/dev/i/lib/kritaplugins/ \
+    -extra-plugins=/Users/boud/dev/i/lib/plugins/ \
+    -extra-plugins=/Users/boud/dev/i/plugins/ \
+    -extra-plugins=/Users/boud/dev/deps/plugins
 
+cp -r /Users/boud/dev/i/lib/qml Resources
 
-#install_name_tool -delete_rpath  @loader_path/../../../../lib ~/master/krita.app/Contents/MacOS/krita
+    
+#install_name_tool -delete_rpath  @loader_path/../../../../lib ~/dev/krita.app/Contents/MacOS/krita
 

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head><title>Comics Project Management Tools Plugin Manual</title>
 <style>
 
@@ -47,6 +46,7 @@ img
 </head>
 <body>
 <h1 id="comics-project-management-tools">Comics Project Management Tools</h1>
+<h3>Version 2</h3>
 <p>This is the Comics Project Management Tools python plugin for Krita.</p>
 <p>CPMT aims to simplify comics creation by:</p>
 <ul>
@@ -85,6 +85,7 @@ img
         </ol>
 </li>
 <li><a href="#usage---pages">Usage - Pages</a></li>
+<ol><li><a href="#comicviewer">The Comic Viewer</a></li></ol>
 <li><a href="#usage---copy-location">Usage - Copy Location</a></li>
 <li>
     <a href="#usage---export">Usage - Export</a>
@@ -92,12 +93,11 @@ img
             <li><a href="#acbf">ACBF</a></li>
         </ol>
 </li>
-<li><a href="#todo">TODO:</a></li>
 </ol>
 
 
 <h2 id="usage---quick-start-guide">Usage - quick-start guide:</h2>
-<p>First, get the comic manager docker(settings → dockers → comic Management Docker). There, select <em>New Project</em>.</p>
+<p>First, get the comic manager docker(settings &rarr; dockers &rarr; comic Management Docker). There, select <em>New Project</em>.</p>
 <p>It will show a dialog asking for:</p>
 <dl>
 <dt>The project directory.</dt>
@@ -124,12 +124,14 @@ img
 <dt>Templates</dt>
 <dd>The name for the directory to store the template. This is where the page templates get stored.
 </dd>
+<dt>Translations</dt>
+<dd>The translations directory is where the POT file will be stored and where the exporter searches for translation(PO) files.</dd>
 </dl>
 <p>It will also allow you to edit meta data if you'd want already, but this is not mandatory.</p>
-<p>Then after you finish, select <em>Open Project</em>, go to the location where you have stored your comics project. There should be a “comicsConfig.json” file there, next to the new folders for the pages, templates and export. Open that.</p>
+<p>Then after you finish, select <em>Open Project</em>, go to the location where you have stored your comics project. There should be a &ldquo;comicsConfig.json&rdquo; file there, next to the new folders for the pages, templates and export. Open that.</p>
 <p>Now, click <em>Add Page</em> to add your first page. You will get a dialog asking for the template. Here you can generate one, or import one. CPMT will remember this as the default one.</p>
 <p>Double click the new page to open in Krita.</p>
-<p>The second column in the docker allows you to see the “subject” line in the document info if it's filled in.</p>
+<p>The second column in the docker allows you to see the &ldquo;subject&rdquo; line in the document info if it's filled in.</p>
 <p>You can press the arrow next to <em>Add Page</em> to get more features, like <em>Add Existing Page</em>, <em>Remove Page</em>, or <em>Batch Resize</em>.</p>
 <h2 id="usage---meta-data">Usage - Meta Data</h2>
 <p>You can edit the meta data by clicking the dropdown next to <em>Project Settings</em> and selecting <em>Meta Data</em>.</p>
@@ -147,17 +149,17 @@ img
 <li>key_author_roles</li>
 <li>key_other</li>
 </ul>
-<p>You can add extra auto-completion keys by adding a text file with each new key on a separate line to one of the “key” folders. The name of the text file doesn't matter. This way you can add characters by universe, or archive specific keywords by archive name.</p>
+<p>You can add extra auto-completion keys by adding a text file with each new key on a separate line to one of the &ldquo;key&rdquo; folders. The name of the text file doesn't matter. This way you can add characters by universe, or archive specific keywords by archive name.</p>
 <p>So for example, the following file has three superhero names on different lines, nothing more, nothing less.</p>
 <pre><code> Spider-Man
  Hawkeye
  Jean Grey</code></pre>
-<p>When you then store it as marvel.txt put into the directory “key_characters”, Krita will use the names from the list as suggestion for the character field in the meta-data.</p>
+<p>When you then store it as marvel.txt put into the directory &ldquo;key_characters&rdquo;, Krita will use the names from the list as suggestion for the character field in the meta-data.</p>
 <p>The exception is the key_ratings, which uses CSV files, using the top row to determine the title, and then has the rating in the first column, and the description on the second. This allows the description to show up as tool-tips.</p>
 <h3 id="the-author-list">The Author list</h3>
 <p>The author list is a table containing all the authors of the project. It allows a distinction between given, family, middle and nickname, as well as role, email and homepage.</p>
 <p>You can rearrange the author list by drag and dropping the number at the left, as well as adding and removing authors.</p>
-<p>Adding an author will always add “John Doe”. You can double click the names and cells to change their contents. For the role, there are auto completion keys, so to encourage using standardized ways to describe their roles.</p>
+<p>Adding an author will always add &ldquo;John Doe&rdquo;. You can double click the names and cells to change their contents. For the role, there are auto completion keys, so to encourage using standardized ways to describe their roles.</p>
 <p>In the main docker, there's an option under the pages actions called <em>Scrape Authors</em>, this will make the comics project docker search the pages in the pages list for author info and append that to the author list. It will not attempt to check for duplicates, so be sure to the list afterwards.</p>
 <h2 id="usage---project-settings">Usage - Project Settings</h2>
 <p>The project settings allows you to change all the technical details of the project:</p>
@@ -170,7 +172,6 @@ img
 </ul>
 <h2 id="usage---pages">Usage - Pages</h2>
 <p>There's several other things you can do with pages. You can either access these feature by clicking the drop-down next to <em>Add Page</em> or right-clicking the pages list.</p>
-<dl>
 <dt>Adding pages</dt>
 <dd>You can add pages by pressing the <em>Add Page</em> button. The first time you press this, it'll ask for a template. After you create or select a template it will use this as the default. You can set the default in the project settings.
 </dd>
@@ -187,15 +188,26 @@ img
 <dd>This will show a window with resize options. After selecting the right options, all the pages will be resized as such. A progress dialog will pop up showing you which pages have been done and how long it will take based on the passed time.
 </dd>
 <dt>View Page in Window</dt>
-<dd>This will pop up a dialog with the selected page's mergedimage.png. The dialog will update when doing this for the image of another page. This is so that you can have a quick reference for a single page in the event your other referencing tools cannot open kra files.
-</dd>
+<dd>This will call up the comic viewer.</dd>
 <dt>Scrape Authors</dt>
-<dd>This searches all the files from the pages list for author information and adds that to the author list. It will not check for copies, so you will need to clean up the author list yourself.
-</dd>
+<dd>This searches all the files from the pages list for author information and adds that to the author list. It will not check for copies, so you will need to clean up the author list yourself.</dd>
+<dt>Scrape Text for Translations</dt>
+<dd>This triggers a script that will go over each page and take out certain text information it can find. It will use the 'text layer keys' in the export dialog to determine whether a vector layer's text ought to be considered. Then, when done, it will put the text it found into a POT file, together with translatable meta-data, like the comic title, and will save it in the translations folder. The POT file can then be used by translators(using something like PO edit) to create a PO file. The CPMT can in turn use the PO files in the creation of ACBF files which'll embed the translations.</dd>
 <dt>Rearranging pages</dt>
 <dd>You can rearrange pages by moving the number on the left of the page up or down.
 </dd>
+<h3 id="comicviewer">The Comic Viewer</h3>
+<p>When you rightclick the pages, or press the down button next to <span style="font-style: italic;">Add Page</span>, There's the option <span style="font-style: italic;">View page in window.</span>This will pop up a comic viewer, which is each page's mergedimage.png file(that is a preview of all visible layers merged), and you can flip through them. This is so that you can have a quick reference for a single page in the event your other referencing tools cannot open kra files.</p>
+<dl>
+<dt>First, Last</dt>
+<dd>These will set the viewer to the last or first page in the comic. The hotkeys for these are <kbd>Home</kbd> and <kbd>End</kbd> respectively. These buttons will switch position based on the reading direction configured for the comic.</dd>
+<dt>Previous, Next</dt>
+<dd>These buttons allow you to switch spaces. The hotkeys for these are <kbd>&larr;</kbd> and <kbd>&rarr;</kbd> respectively. You can also use <kbd>Space</kbd> to switch to the next page. These buttons will switch position based on the reading direction configured for the comic.</dd>
+<dt>Spread, single</dt>
+<dd>This button will allow you to switch to single or spread mode.</dd>
 </dl>
+<p>You can also run the comic viewer standalone:</p>
+<pre><code>python3 comics_project_page_viewer.py /path/to/your/comicConfig.json</code></pre>
 <h2 id="usage---copy-location">Usage - Copy Location</h2>
 <p>Copy location, the button underneath the export button, allows you to copy the current project location to clipboard. Just press it, and paste somewhere else. This is useful when using multiple programs and reference tools and you just want to quickly navigate to the project directory.</p>
 <h2 id="usage---export">Usage - Export</h2>
@@ -211,15 +223,23 @@ img
 <p>CPMT will store the resized files and meta data in separate folders in the export folder. This is so that you can perform optimization methods afterwards and update everything quickly.</p>
 <h3 id="acbf">ACBF</h3>
 <p>ACBF is the advanced comic book format. It is a metadata file that can hold extra data like panels and text, and can even store translations for the text.</p>
-<p>Krita has some support for frames and text. If you name a vector layer “text” or “panels” it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren't text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last.</p>
 <p>When you generate a CBZ file, the ACBF file will be generated alongside of it. There's in fact two ACBF files being generated: The one in the metadata folder is the ACBF file as it is inside the CBZ. The other ACBF file, next to the CBZ is the standalonefile. This file has the pages embedded, but there's currently fewer viewers who can read it.</p>
-<p>To fine tune the export to ACBF, you can go to file→document Information and add the following keywords:</p>
+<p>ACBF has a set amount of genres it can cover. This is the default list of genre auto completion keys. Genres outside that will be put into the extra keywords list for ACBF. On top of that, it does allow defining a match to this genre. To set a match to a genre, write a number in brackets indicating how much it matches this genre. So for example &ldquo;Horror(60), Science Fiction(40)&rdquo;will have Horror set to 60% and Science Fiction set to 40%. These values are normalized. So if you put in &ldquo;Romance(550), Fantasy(650)&rdquo;it will ensure that the two values will become percentages, leading to Romance being set to 46% and Fantasy set to 54%.</p>
+<p>The CPMT has some support for frames and text export. If you name a vector layer &ldquo;text&rdquo; or &ldquo;panels&rdquo; it will search those for shapes. The shapes that are text nodes will be added to the ACBF file as a text in the main language of the comic, using the bounding box of the text-shape. The shapes that aren't text will have their bounding boxes used as frames. The order of frames and text is determined by the shape z-order in Krita, with the bottom shape being the first and the top shape being the last. You can customize these layer selection keys in the export settings dialog.</p>
+<p>The CPMT also support translations. ACBF will use the PO files stored in the translations folder. In the export dialog, you can configure whether you want translation comments to be embeded. Then, if there's translation comments in the PO file, ACBF will put those in the reference section and add a link to the line with the translation comment. Translations will have translator note headers. You can configure these in the export, and they will also be put into the POT file when it is generated so they may be translated.</p>
+<p>Finally, there's the styles and the text type. You can configure the styles in the export settings dialog tab for acbf. The exporter will use the configuration and alignment to automatically figure out the text-type in the export.</p>
+<ul>
+<li>Text that is justified will use the &ldquo;formal&rdquo;type. There's no method to currently make justified text, so this won't trigger until then</li>
+<li>Text that is centered will have it's font family compared to the existing styles and their font-families. If it finds a match that will be the type</li>
+<li>Text that is neither will be marked with &ldquo;commentary&rdquo;, that is, it is considered a narrative caption.</li>
+</ul>
+<p>To fine tune the export to ACBF, you can go to file&rarr;document Information and add the following keywords:</p>
 <dl>
 <dt>acbf_title</dt>
-<dd>this will flag this page to be used as a table of contents bookmark inside ACBF. The content mark will use the “title” value in the document information to create a bookmark in the project language.
+<dd>this will flag this page to be used as a table of contents bookmark inside ACBF. The content mark will use the &ldquo;title&rdquo; value in the document information to create a bookmark in the project language.
 </dd>
 <dt>acbf_none</dt>
-<dd>Sets the page transition value to “none” explicitly.
+<dd>Sets the page transition value to &ldquo;none&rdquo; explicitly.
 </dd>
 <dt>acbf_fade</dt>
 <dd>Sets the page transitio to fade. Viewers that support it will fade to black into this page.
@@ -234,47 +254,13 @@ img
 <dd>Sets the page transition to scroll_down. Viewers that support it will scroll down to a new page.
 </dd>
 </dl>
-<h1 id="todo">TODO:</h1>
-<p>Things I still want to do:</p>
-<ul>
-<li>Krita:
-<ul>
-<li>Generate text from the author list. (Requires text api)</li>
-</ul></li>
-<li>clean up path relativeness. (Not sure how much better this can be done)</li>
-<li>Make label removal just a list? (unsure)</li>
-<li>PNG and JPEG export settings.</li>
-</ul>
-<p>ACBF list:</p>
-<ul>
-<li>support getting text info from the vector layers. [Partially done]
-<ul>
-<li>users can specify a name for text layers. (Waiting for stringfreeze to end)</li>
-<li>Don't forget text-rotation(Needs API)</li>
-<li>last two/five characters are used to determine language. (Maybe not a good idea...)</li>
-<li>maybe text-class can be used to determine type? (We'll proly need to use style sheets and comparing the text format to those)
-<ul>
-<li>Speech (speech, dialogue)</li>
-<li>Commentary (caption in american comics)</li>
-<li>Formal (For justified aligned text, like big chunks of text.)</li>
-<li>Letter (Like a letter in a comic)</li>
-<li>Code (Monospaced font)</li>
-<li>Heading (Chapter title)</li>
-<li>Audio (Only meant for audio devices)</li>
-<li>Thought (Thought bubbles and the like)</li>
-<li>Sign (For signs on buildings and the like.)</li>
-<li>Inverted (Whether or not this should be treated as inverted text)</li>
-<li>transparent(For a transparent wordballoon.)</li>
-<li>Question: Where is general sound effects? Like, if we make a distinction between speech and thought, why are general sound effects missing? (Admittedly, I'd prefer if we could allow putting sound effects and such as a base64 reffed bit.) (See 1.2 support)</li>
-</ul></li>
-<li>Get page background color from the page if possible. (This might only work with canvas color, though)</li>
-</ul></li>
-<li>1.2 support:
-<ul>
-<li>Role: designer</li>
-<li>Book-info: reading direction</li>
-<li>text type: Sound.</li>
-</ul></li>
-</ul>
+<h2>Version History</h2>
+<p>Because the comic project management tools are bundled with Krita you could argue that you can identify them that way, but here is a history anyway, so you can check what has changed.</p>
+<dl>
+<dt>Version 2</dt>
+<dd>90% ACBF support, with improved handling of text, translation support, new keys for genres and author roles, style sheets, text-type recognition, database ref, and background color support. The Comic Page viewer has been fully rewritten to handle flipping through the pages as well as made possible to be run standalone.</dd>
+<dt>Version 1 (Krita 4.0)</dt>
+<dd>The initial tools, with project management, page management, meta data management complete with autocompletion keys, copy-location, export to epub, tiff, cbz, and export to zipfile info, ComicInfo.xml and CoMet.xml, and for ACBF support for panels, text and basic metadata. Other features include batch resize, page templates, and author data scraping.</dd>
+</dl>
 </body>
 </html>

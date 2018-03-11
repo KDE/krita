@@ -296,7 +296,7 @@ Value& Value::operator+=(const Value & v)
             Q_ASSERT(v2.canConvert(v1.type()));
             switch (v1.type()) {
             default:
-                warnImage << "KisMetaData: Merging metadata of type" << v1.type() << "is unsupported!";
+                warnMetaData << "KisMetaData: Merging metadata of type" << v1.type() << "is unsupported!";
                 break;
             case QVariant::Date:
                 *d->value.variant = qMax(v1.toDate(), v2.toDate());

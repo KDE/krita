@@ -64,7 +64,7 @@ class path_select(QWidget):
             self.projectUrl = projectUrl
         self.question = question
         self.action_change_folder = QAction(i18n("Change Folder"), self)
-        self.action_change_folder.setIconText("...")
+        self.action_change_folder.setIcon(Application.icon("folder"))
         self.action_change_folder.triggered.connect(self.slot_change_location)
         self.button.setDefaultAction(self.action_change_folder)
 
@@ -124,6 +124,7 @@ class comics_project_details_editor(QDialog):
         self.pagesLocation = path_select(question=i18n("Where should the pages go?"), projectUrl=self.projectUrl)
         self.exportLocation = path_select(question=i18n("Where should the export go?"), projectUrl=self.projectUrl)
         self.templateLocation = path_select(question=i18n("Where are the templates?"), projectUrl=self.projectUrl)
+        self.translationLocation = path_select(question=i18n("Where are the translations?"), projectUrl=self.projectUrl)
         self.keyLocation = path_select(question=i18n("Where are the extra auto-completion keys located?"))
         self.keyLocation.setToolTip(i18n("The location for extra autocompletion keys in the meta-data editor. Point this at a folder containing key_characters/key_format/key_genre/key_rating/key_author_roles/key_other with inside txt files(csv for tating) containing the extra auto-completion keys, each on a new line. This path is stored in the krita configuration, and not the project configuration."))
         self.templateLocation.locationChanged.connect(self.refill_templates)
@@ -133,6 +134,7 @@ class comics_project_details_editor(QDialog):
         layout.addRow(i18n("Pages Folder:"), self.pagesLocation)
         layout.addRow(i18n("Export Folder:"), self.exportLocation)
         layout.addRow(i18n("Template Folder:"), self.templateLocation)
+        layout.addRow(i18n("Translation Folder:"), self.translationLocation)
         layout.addRow(i18n("Default Template:"), self.cmb_defaultTemplate)
         layout.addRow(i18n("Extra Keys Folder:"), self.keyLocation)
 
@@ -163,11 +165,10 @@ class comics_project_details_editor(QDialog):
         if "concept"in config.keys():
             self.lnProjectConcept.setText(config["concept"])
         if "pagesLocation" in config.keys():
-            self.pagesLocation.setLocation(config["pagesLocation"])
-        if "exportLocation" in config.keys():
-            self.exportLocation.setLocation(config["exportLocation"])
-        if "templateLocation" in config.keys():
-            self.templateLocation.setLocation(config["templateLocation"])
+            self.pagesLocation.setLocation(config.get("pagesLocation", "pages"))
+            self.exportLocation.setLocation(config.get("exportLocation", "export"))
+            self.templateLocation.setLocation(config.get("templateLocation", "templates"))
+            self.translationLocation.setLocation(config.get("translationLocation", "translations"))
             self.refill_templates()
         self.keyLocation.setLocation(Application.readSetting(self.configGroup, "extraKeysLocation", str()))
 
@@ -183,6 +184,7 @@ class comics_project_details_editor(QDialog):
         config["pagesLocation"] = self.pagesLocation.getLocation()
         config["exportLocation"] = self.exportLocation.getLocation()
         config["templateLocation"] = self.templateLocation.getLocation()
+        config["translationLocation"] = self.translationLocation.getLocation()
         config["singlePageTemplate"] = os.path.join(self.templateLocation.getLocation(), self.cmb_defaultTemplate.currentText())
         Application.writeSetting(self.configGroup, "extraKeysLocation", self.keyLocation.getLocation())
         return config

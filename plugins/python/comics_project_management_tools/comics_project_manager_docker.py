@@ -31,7 +31,7 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixma
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel
 import math
 from krita import *
-from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer
+from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
 
 """
 A very simple class so we can have a label that is single line, but doesn't force the
@@ -176,6 +176,8 @@ class comics_project_manager_docker(DockWidget):
         self.action_scrape_authors = QAction(i18n("Scrape Author Info"), self)
         self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This doesn't check for duplicates."))
         self.action_scrape_authors.triggered.connect(self.slot_scrape_author_list)
+        self.action_scrape_translations = QAction(i18n("Scrape Text for Translation"), self)
+        self.action_scrape_translations.triggered.connect(self.slot_scrape_translations)
         actionList = []
         menu_page = QMenu()
         actionList.append(self.action_add_page)
@@ -185,6 +187,7 @@ class comics_project_manager_docker(DockWidget):
         actionList.append(self.action_resize_all_pages)
         actionList.append(self.action_show_page_viewer)
         actionList.append(self.action_scrape_authors)
+        actionList.append(self.action_scrape_translations)
         menu_page.addActions(actionList)
         self.btn_add_page.setMenu(menu_page)
         buttonLayout.addWidget(self.btn_add_page)
@@ -554,16 +557,18 @@ class comics_project_manager_docker(DockWidget):
             pagesList = []
             listOfHeaderLabels = []
             for i in range(self.pagesModel.rowCount()):
-                listOfHeaderLabels.append(str(i))
+                listOfHeaderLabels.append(str(i+1))
             for i in range(self.pagesModel.rowCount()):
-                iLogical = self.comicPageList.verticalHeader().logicalIndex(i)
+                iLogical = max(0, self.comicPageList.verticalHeader().logicalIndex(i))
+                if i >= self.comicPageList.verticalHeader().count():
+                    iLogical = i
                 index = self.pagesModel.index(iLogical, 0)
                 if index.isValid() is False:
                     index = self.pagesModel.index(i, 0)
                 url = str(self.pagesModel.data(index, role=Qt.ToolTipRole))
                 if url not in pagesList:
                     pagesList.append(url)
-                listOfHeaderLabels[iLogical] = str(i + 1)
+                listOfHeaderLabels[iLogical] = str(i+1)
             self.pagesModel.setVerticalHeaderLabels(listOfHeaderLabels)
             self.comicPageList.verticalHeader().update()
             self.setupDictionary["pages"] = pagesList
@@ -743,19 +748,11 @@ class comics_project_manager_docker(DockWidget):
                     doc.close()
 
     def slot_show_page_viewer(self):
-        index = self.comicPageList.currentIndex()
-        if index.column() is not 0:
-            index = self.pagesModel.index(index.row(), 0)
-        # Get the absolute url from the relative one in the pages model.
-        absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(index, role=Qt.ToolTipRole)))
+        index = int(self.comicPageList.currentIndex().row())
+        self.page_viewer_dialog.load_comic(self.path_to_config)
+        self.page_viewer_dialog.go_to_page_index(index)
+        self.page_viewer_dialog.show()
 
-        # Make sure the page exists.
-        if os.path.exists(absoluteUrl):
-            page = zipfile.ZipFile(absoluteUrl, "r")
-            image = QImage.fromData(page.read("mergedimage.png"))
-            self.page_viewer_dialog.update_image(image)
-            self.page_viewer_dialog.show()
-            page.close()
     """
     Function to copy the current project location into the clipboard.
     This is useful for users because they'll be able to use that url to quickly
@@ -766,6 +763,27 @@ class comics_project_manager_docker(DockWidget):
         if self.projecturl is not None:
             clipboard = qApp.clipboard()
             clipboard.setText(str(self.projecturl))
+
+    """
+    Scrape text files with the textlayer keys for text, and put those in a POT
+    file. This makes it possible to handle translations.
+    """
+
+    def slot_scrape_translations(self):
+        translationFolder = self.setupDictionary.get("translationLocation", "translations")
+        fullTranslationPath = os.path.join(self.projecturl, translationFolder)
+        os.makedirs(fullTranslationPath, exist_ok=True)
+        textLayersToSearch = self.setupDictionary.get("textLayerNames", ["text"])
+
+        scraper = comics_project_translation_scraper.translation_scraper(self.projecturl, translationFolder, textLayersToSearch, self.setupDictionary["projectName"])
+        # Run text scraper.
+        language = self.setupDictionary.get("language", "en")
+        metadata = {}
+        metadata["title"] = self.setupDictionary.get("title", "")
+        metadata["summary"] = self.setupDictionary.get("summary", "")
+        metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
+        metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
+        scraper.start(self.setupDictionary["pages"], language, metadata)
     """
     This is required by the dockwidget class, otherwise unused.
     """

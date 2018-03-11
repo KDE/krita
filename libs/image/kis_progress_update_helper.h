@@ -29,7 +29,8 @@ public:
           m_baseProgress(0),
           m_portion(portion),
           m_currentStep(0),
-          m_numSteps(numSteps)
+          m_numSteps(numSteps),
+          m_lastReportedLocalProgress(-1)
      {
          if (m_progressUpdater) {
              m_baseProgress = m_progressUpdater->progress();
@@ -46,7 +47,8 @@ public:
         int localProgress = m_numSteps ?
             m_portion * (++m_currentStep) / m_numSteps : m_portion;
 
-        if (m_progressUpdater) {
+        if (m_progressUpdater && m_lastReportedLocalProgress != localProgress) {
+            m_lastReportedLocalProgress = localProgress;
             m_progressUpdater->setProgress(m_baseProgress + localProgress);
         }
         // TODO: handle interrupted processing (connect to other layers, i.e. undo)
@@ -58,6 +60,7 @@ private:
     int m_portion;
     int m_currentStep;
     int m_numSteps;
+    int m_lastReportedLocalProgress;
 };
 
 #endif /* __KIS_PROGRESS_UPDATE_HELPER_H */

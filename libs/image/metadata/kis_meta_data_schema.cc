@@ -42,7 +42,7 @@ const QString Schema::PhotoshopSchemaUri = "http://ns.adobe.com/photoshop/1.0/";
 
 bool Schema::Private::load(const QString& _fileName)
 {
-    dbgImage << "Loading from " << _fileName;
+    dbgMetaData << "Loading from " << _fileName;
     QDomDocument document;
     QString error;
     int ligne, column;
@@ -50,20 +50,20 @@ bool Schema::Private::load(const QString& _fileName)
     if (document.setContent(&file, &error, &ligne, &column)) {
         QDomElement docElem = document.documentElement();
         if (docElem.tagName() != "schema") {
-            dbgImage << _fileName << ": invalid root name";
+            dbgMetaData << _fileName << ": invalid root name";
             return false;
         }
         if (!docElem.hasAttribute("prefix")) {
-            dbgImage << _fileName << ": missing prefix.";
+            dbgMetaData << _fileName << ": missing prefix.";
             return false;
         }
         if (!docElem.hasAttribute("uri")) {
-            dbgImage << _fileName << ": missing uri.";
+            dbgMetaData << _fileName << ": missing uri.";
             return false;
         }
         prefix = docElem.attribute("prefix");
         uri = docElem.attribute("uri");
-        dbgImage << ppVar(prefix) << ppVar(uri);
+        dbgMetaData << ppVar(prefix) << ppVar(uri);
         QDomNode n = docElem.firstChild();
         while (!n.isNull()) {
             QDomElement e = n.toElement();
@@ -78,7 +78,7 @@ bool Schema::Private::load(const QString& _fileName)
         }
         return true;
     } else {
-        dbgImage << error << " at " << ligne << ", " << column << " in " << _fileName;
+        dbgMetaData << error << " at " << ligne << ", " << column << " in " << _fileName;
         return false;
     }
 }
@@ -86,7 +86,7 @@ bool Schema::Private::load(const QString& _fileName)
 void Schema::Private::parseStructures(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "structures");
-    dbgImage << "Parse structures";
+    dbgMetaData << "Parse structures";
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
@@ -94,7 +94,7 @@ void Schema::Private::parseStructures(QDomElement& elt)
             if (e.tagName() == "structure") {
                 parseStructure(e);
             } else {
-                errImage << "Invalid tag: " << e.tagName() << " in structures section";
+                errMetaData << "Invalid tag: " << e.tagName() << " in structures section";
             }
         }
         n = n.nextSibling();
@@ -105,26 +105,26 @@ void Schema::Private::parseStructure(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "structure");
     if (!elt.hasAttribute("name")) {
-        errImage << "Name is required for a structure";
+        errMetaData << "Name is required for a structure";
         return;
     }
     QString structureName = elt.attribute("name");
     if (structures.contains(structureName)) {
-        errImage << structureName << " is defined twice";
+        errMetaData << structureName << " is defined twice";
         return;
     }
-    dbgImage << "Parsing structure " << structureName;
+    dbgMetaData << "Parsing structure " << structureName;
     if (!elt.hasAttribute("prefix")) {
-        errImage << "prefix is required for structure " << structureName;
+        errMetaData << "prefix is required for structure " << structureName;
         return;
     }
     if (!elt.hasAttribute("uri")) {
-        errImage << "uri is required for structure " << structureName;
+        errMetaData << "uri is required for structure " << structureName;
         return;
     }
     QString structurePrefix = elt.attribute("prefix");
     QString structureUri = elt.attribute("uri");
-    dbgImage << ppVar(structurePrefix) << ppVar(structureUri);
+    dbgMetaData << ppVar(structurePrefix) << ppVar(structureUri);
     Schema* schema = new Schema(structureUri, structurePrefix);
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
@@ -134,7 +134,7 @@ void Schema::Private::parseStructure(QDomElement& elt)
             QString name;
             if (parseEltType(e, info, name, false, false)) {
                 if (schema->d->types.contains(name)) {
-                    errImage << structureName << " already contains a field " << name;
+                    errMetaData << structureName << " already contains a field " << name;
                 } else {
                     schema->d->types[ name ] = info;
                 }
@@ -148,7 +148,7 @@ void Schema::Private::parseStructure(QDomElement& elt)
 void Schema::Private::parseProperties(QDomElement& elt)
 {
     Q_ASSERT(elt.tagName() == "properties");
-    dbgImage << "Parse properties";
+    dbgMetaData << "Parse properties";
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
@@ -157,7 +157,7 @@ void Schema::Private::parseProperties(QDomElement& elt)
             QString name;
             if (parseEltType(e, info, name, false, false)) {
                 if (types.contains(name)) {
-                    errImage << name << " already defined.";
+                    errMetaData << name << " already defined.";
                 } else {
                     types[ name ] = info;
                 }
@@ -169,9 +169,10 @@ void Schema::Private::parseProperties(QDomElement& elt)
 
 bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QString& name, bool ignoreStructure, bool ignoreName)
 {
+    dbgMetaData << elt.tagName() << elt.attributes().count() << name << ignoreStructure << ignoreName;
     QString tagName = elt.tagName();
     if (!ignoreName && !elt.hasAttribute("name")) {
-        errImage << "Missing name attribute for tag " << tagName;
+        errMetaData << "Missing name attribute for tag " << tagName;
         return false;
     }
     name = elt.attribute("name");
@@ -194,7 +195,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
             ei = parseEmbType(elt, ignoreStructure);
         }
         if (!ei) {
-            errImage << "No type defined for " << name;
+            errMetaData << "No type defined for " << name;
             return false;
         }
         entryInfo.propertyType = TypeInfo::Private::orderedArray(ei);
@@ -205,7 +206,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
             ei = parseEmbType(elt, ignoreStructure);
         }
         if (!ei) {
-            errImage << "No type defined for " << name;
+            errMetaData << "No type defined for " << name;
             return false;
         }
         entryInfo.propertyType = TypeInfo::Private::unorderedArray(ei);
@@ -216,7 +217,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
             ei = parseEmbType(elt, ignoreStructure);
         }
         if (!ei) {
-            errImage << "No type defined for " << name;
+            errMetaData << "No type defined for " << name;
             return false;
         }
         entryInfo.propertyType = TypeInfo::Private::alternativeArray(ei);
@@ -237,7 +238,7 @@ bool Schema::Private::parseEltType(QDomElement& elt, EntryInfo& entryInfo, QStri
         entryInfo.propertyType = structures.value(tagName);
         return true;
     }
-    errImage << tagName << " isn't a type.";
+    errMetaData << tagName << " isn't a type.";
     return false;
 }
 
@@ -260,13 +261,13 @@ const TypeInfo* Schema::Private::parseAttType(QDomElement& elt, bool ignoreStruc
     } else if (!ignoreStructure && structures.contains(type)) {
         return structures[type];
     }
-    errImage << "Unsupported type: " << type << " in an attribute";
+    errMetaData << "Unsupported type: " << type << " in an attribute";
     return 0;
 }
 
 const TypeInfo* Schema::Private::parseEmbType(QDomElement& elt, bool ignoreStructure)
 {
-    dbgImage << "Parse embbedded type for " << elt.tagName();
+    dbgMetaData << "Parse embbedded type for " << elt.tagName();
     QDomNode n = elt.firstChild();
     while (!n.isNull()) {
         QDomElement e = n.toElement();
@@ -320,7 +321,7 @@ const TypeInfo* Schema::Private::parseChoice(QDomElement& elt)
                     }
                     choices.push_back(TypeInfo::Choice(Value(var), name));
                 } else {
-                    errImage << "All members of a choice need to be of the same type";
+                    errMetaData << "All members of a choice need to be of the same type";
                 }
             }
         }
@@ -343,8 +344,8 @@ Schema::Schema(const QString & _uri, const QString & _ns)
 
 Schema::~Schema()
 {
-    dbgImage << "Deleting schema " << d->uri << " " << d->prefix;
-    dbgImage << kisBacktrace();
+    dbgMetaData << "Deleting schema " << d->uri << " " << d->prefix;
+    dbgMetaData << kisBacktrace();
     delete d;
 }
 
@@ -374,7 +375,7 @@ QString Schema::prefix() const
 
 QString Schema::generateQualifiedName(const QString & name) const
 {
-    dbgImage << "generateQualifiedName for " << name;
+    dbgMetaData << "generateQualifiedName for " << name;
     Q_ASSERT(!name.isEmpty() && !name.isNull());
     return prefix() + ':' + name;
 }

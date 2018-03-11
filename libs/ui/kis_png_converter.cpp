@@ -644,18 +644,20 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         dbgFile << "There are " << num_comments << " comments in the text";
         for (int i = 0; i < num_comments; i++) {
             QString key = QString(text_ptr[i].key).toLower();
-            dbgFile << "key is |" << text_ptr[i].key << "| containing " << text_ptr[i].text << " " << (key ==  "Raw profile type exif ");
+            dbgFile << "key: " << text_ptr[i].key
+                    << ", containing: " << text_ptr[i].text
+                    << ": " << (key == "raw profile type exif " ? "isExif" : "something else");
             if (key == "title") {
                 info->setAboutInfo("title", text_ptr[i].text);
             } else if (key == "description") {
                 info->setAboutInfo("comment", text_ptr[i].text);
             } else if (key == "author") {
                 info->setAuthorInfo("creator", text_ptr[i].text);
-            } else if (key.contains("Raw profile type exif")) {
+            } else if (key.contains("raw profile type exif")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "exif", 6);
-            } else if (key.contains("Raw profile type iptc")) {
+            } else if (key.contains("raw profile type iptc")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "iptc", 14);
-            } else if (key.contains("Raw profile type xmp")) {
+            } else if (key.contains("raw profile type xmp")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "xmp", 0);
             } else if (key == "version") {
                 m_image->addAnnotation(new KisAnnotation("kpp_version", "version", QByteArray(text_ptr[i].text)));
@@ -1082,7 +1084,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     }
 
     // save comments from the document information
-    // warning: according to the official png spec, the keys need to be capitalised!
+    // warning: according to the official png spec, the keys need to be capitalized!
     if (m_doc) {
         png_text texts[4];
         int nbtexts = 0;

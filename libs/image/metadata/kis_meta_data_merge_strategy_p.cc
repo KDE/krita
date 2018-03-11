@@ -60,7 +60,7 @@ void DropMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double
     Q_UNUSED(dst);
     Q_UNUSED(srcs);
     Q_UNUSED(score);
-    dbgImage << "Drop meta data";
+    dbgMetaData << "Drop meta data";
 }
 
 //---------------------------------------//
@@ -92,7 +92,7 @@ QString PriorityToFirstMergeStrategy::description() const
 void PriorityToFirstMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> score) const
 {
     Q_UNUSED(score);
-    dbgImage << "Priority to first meta data";
+    dbgMetaData << "Priority to first meta data";
 
     Q_FOREACH (const Store* store, srcs) {
         QList<QString> keys = store->keys();
@@ -132,8 +132,8 @@ QString OnlyIdenticalMergeStrategy::description() const
 void OnlyIdenticalMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> score) const
 {
     Q_UNUSED(score);
-    dbgImage << "OnlyIdenticalMergeStrategy";
-    dbgImage << "Priority to first meta data";
+    dbgMetaData << "OnlyIdenticalMergeStrategy";
+    dbgMetaData << "Priority to first meta data";
 
     Q_ASSERT(srcs.size() > 0);
     QList<QString> keys = srcs[0]->keys();
@@ -212,7 +212,7 @@ Value SmartMergeStrategy::election(QList<const Store*> srcs, QList<double> score
         }
     }
     if (scoreValues.size() < 1) {
-        warnKrita << "SmartMergeStrategy::election returned less than 1 score value";
+        warnMetaData << "SmartMergeStrategy::election returned less than 1 score value";
         return Value();
     }
     const ScoreValue* bestSv = 0;
@@ -248,7 +248,7 @@ void SmartMergeStrategy::mergeEntry(Store* dst, QList<const Store*> srcs, const 
 
 void SmartMergeStrategy::merge(Store* dst, QList<const Store*> srcs, QList<double> scores) const
 {
-    dbgImage << "Smart merging of meta data";
+    dbgMetaData << "Smart merging of meta data";
     Q_ASSERT(srcs.size() == scores.size());
     Q_ASSERT(srcs.size() > 0);
     if (srcs.size() == 1) {

@@ -107,6 +107,21 @@ private:
     const quint8 *m_oldRawData;
 };
 
+struct NoProgressPolicy
+{
+    ALWAYS_INLINE void setRange(int /* minimum */, int /* maximum */)
+    {
+    }
+
+    ALWAYS_INLINE void setValue(int /* value */)
+    {
+    }
+
+    ALWAYS_INLINE void setFinished()
+    {
+    }
+};
+
 /**
  * Sequential iterator is supposed to be used when you need to
  * read/write a rect of the image and you don't want to think about
@@ -170,12 +185,13 @@ private:
  * const.
  */
 
-template <class IteratorPolicy, class SourcePolicy = DevicePolicy>
+template <class IteratorPolicy, class SourcePolicy = DevicePolicy, class ProgressPolicy = NoProgressPolicy>
 class KisSequentialIteratorBase
 {
 public:
-    KisSequentialIteratorBase(SourcePolicy source, const QRect &rect)
+    KisSequentialIteratorBase(SourcePolicy source, const QRect &rect, ProgressPolicy progressPolicy = ProgressPolicy())
         : m_policy(source, rect),
+          m_progressPolicy(progressPolicy),
           m_pixelSize(source.pixelSize()),
           m_rowsLeft(rect.height() - 1),
           m_columnOffset(0),
@@ -189,6 +205,13 @@ public:
         m_policy.updatePointersCache();
         m_iteratorX = m_policy.m_iter ? m_policy.m_iter->x() : 0;
         m_iteratorY = m_policy.m_iter ? m_policy.m_iter->y() : 0;
+
+        m_progressPolicy.setRange(rect.top(), rect.top() + rect.height());
+        m_progressPolicy.setValue(rect.top());
+    }
+
+    ~KisSequentialIteratorBase() {
+        m_progressPolicy.setFinished();
     }
 
     inline int nConseqPixels() const {
@@ -228,7 +251,12 @@ public:
                 m_columnOffset = 0;
                 m_columnsLeft = m_numConseqPixels = m_policy.m_iter->nConseqPixels();
                 m_policy.updatePointersCache();
+                m_progressPolicy.setValue(m_policy.m_iter->y());
+            } else if (m_rowsLeft == 0) {
+                // report that we have completed iteration
+                m_progressPolicy.setValue(m_policy.m_iter->y() + 1);
             }
+
             m_iteratorX = m_policy.m_iter->x();
             m_iteratorY = m_policy.m_iter->y();
         }
@@ -261,6 +289,7 @@ public:
 private:
     Q_DISABLE_COPY(KisSequentialIteratorBase)
     IteratorPolicy m_policy;
+    ProgressPolicy m_progressPolicy;
     const int m_pixelSize;
     int m_rowsLeft;
 

@@ -172,14 +172,14 @@ void KisPresetSaveWidget::savePreset()
 
     // if we are saving a new brush, use what we type in for the input
     QString presetName = m_useNewBrushDialog ? newBrushNameTexField->text() : curPreset->name();
-    QString currentPresetFileName = saveLocation + presetName + curPreset->defaultFileExtension();
+    QString currentPresetFileName = saveLocation + presetName.replace(" ", "_") + curPreset->defaultFileExtension();
     bool isSavingOverExistingPreset = rServer->resourceByName(presetName);
 
     // make a back up of the existing preset if we are saving over it
     if (isSavingOverExistingPreset) {
         QString currentDate = QDate::currentDate().toString(Qt::ISODate);
-        QString currentTime = QTime::currentTime().toString(Qt::ISODate);
-        QString presetFilename = saveLocation + presetName + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
+        QString currentTime = QTime::currentTime().toString(Qt::ISODate).remove(QChar(':'));
+        QString presetFilename = saveLocation + presetName.replace(" ", "_") + "_backup_" + currentDate + "-" + currentTime + oldPreset->defaultFileExtension();
         oldPreset->setFilename(presetFilename);
         oldPreset->setName(presetName);
         oldPreset->setPresetDirty(false);

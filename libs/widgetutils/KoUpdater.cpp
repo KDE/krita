@@ -51,9 +51,12 @@ void KoUpdater::cancel()
 
 void KoUpdater::setProgress(int percent)
 {
-    m_progressPercent = percent;
+    const bool percentChanged = m_progressPercent != percent;
 
-    emit sigProgress( percent );
+    if (percentChanged || percent == 0 || percent == 100) {
+        m_progressPercent = percent;
+        emit sigProgress( percent );
+    }
 }
 
 int KoUpdater::progress() const
@@ -69,7 +72,7 @@ bool KoUpdater::interrupted() const
 
 int KoUpdater::maximum() const
 {
-    return 100;
+    return max;
 }
 
 void KoUpdater::setValue( int value )
@@ -83,7 +86,7 @@ void KoUpdater::setValue( int value )
         m_progressPercent = max;
         emit sigProgress(max);
     } else {
-        setProgress((100 * (value - min)) / (max - min));
+        setProgress((100 * (value - min)) / range);
     }
 }
 

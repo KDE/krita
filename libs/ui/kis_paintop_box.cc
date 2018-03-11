@@ -488,6 +488,31 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
+
+    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    m_eraserName = "eraser_circle";
+    m_defaultPresetName = "basic_tip_default";
+    bool foundEraser = false;
+    bool foundTip = false;
+    for (int i=0; i<rserver->resourceCount(); i++) {
+        KisPaintOpPresetSP resource = rserver->resources().at(i);
+        if (resource->name().toLower().contains("eraser_circle")) {
+            m_eraserName = resource->name();
+            foundEraser = true;
+        } else if (foundEraser == false && (resource->name().toLower().contains("eraser") ||
+                                            resource->filename().toLower().contains("eraser"))) {
+            m_eraserName = resource->name();
+            foundEraser = true;
+        }
+        if (resource->name().toLower().contains("basic_tip_default")) {
+            m_defaultPresetName = resource->name();
+            foundTip = true;
+        } else if (foundTip == false && (resource->name().toLower().contains("default") ||
+                                         resource->filename().toLower().contains("default"))) {
+            m_defaultPresetName = resource->name();
+            foundTip = true;
+        }
+    }
 }
 
 KisPaintopBox::~KisPaintopBox()
@@ -758,17 +783,17 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), "Eraser_Circle"));
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));
         }
         else {
-            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), "Basic_tip_default"));
+            preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastPreset_%1").arg(inputDevice.uniqueTabletId()), m_defaultPresetName));
             //if (preset)
                 //qDebug() << "found stored preset " << preset->name() << "for" << inputDevice.uniqueTabletId();
             //else
                 //qDebug() << "no preset found for" << inputDevice.uniqueTabletId();
         }
         if (!preset) {
-            preset = rserver->resourceByName("Basic_tip_default");
+            preset = rserver->resourceByName(m_defaultPresetName);
         }
         if (preset) {
             //qDebug() << "inputdevicechanged 1" << preset;
@@ -789,10 +814,18 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
 void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
 {
-    slotSetPaintop(paintop);  // change the paintop settings area and update the UI
-    m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
-
-    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    //First try to select an available default preset for that engine. If it doesn't exist, then
+    //manually set the engine to use a new preset.
+    KoID id(paintop, KisPaintOpRegistry::instance()->get(paintop)->name());
+    KisPaintOpPresetSP preset = defaultPreset(id);
+    if (!preset) {
+        slotSetPaintop(paintop);  // change the paintop settings area and update the UI
+        m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
+        preset = m_resourceProvider->currentPreset();
+    } else {
+        m_resourceProvider->setPaintOpPreset(preset);
+        preset->setOptionsWidget(m_optionWidget);
+    }
     m_presetsPopup->resourceSelected(preset.data());  // this helps update the UI on the brush editor
 }
 
@@ -1168,7 +1201,7 @@ void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is chan
 
     {
         /**
-         * Here we postpone all the settings updates events until thye entire writing
+         * Here we postpone all the settings updates events until the entire writing
          * operation will be finished. As soon as it is finished, the updates will be
          * emitted happily (if there were any).
          */
@@ -1292,8 +1325,6 @@ void KisPaintopBox::slotHideDecorationMirrorX(bool toggled) {
 void KisPaintopBox::slotHideDecorationMirrorY(bool toggled) {
     m_resourceProvider->setMirrorVerticalHideDecorations(toggled);
 }
-
-
 
 void KisPaintopBox::slotMoveToCenterMirrorX() {
   m_resourceProvider->mirrorHorizontalMoveCanvasToCenter();

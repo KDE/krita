@@ -389,12 +389,14 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::Enter:
         d->debugEvent<QEvent, false>(event);
-        d->containsPointer = true;
         //Make sure the input actions know we are active.
         KisAbstractInputAction::setInputManager(this);
+        if (!d->containsPointer) {
+            d->containsPointer = true;
 
-        d->allowMouseEvents();
-        d->touchHasBlockedPressEvents = false;
+            d->allowMouseEvents();
+            d->touchHasBlockedPressEvents = false;
+        }
 
         d->matcher.enterEvent();
         break;
@@ -451,6 +453,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             //Make sure the input actions know we are active.
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.buttonPressed(tabletEvent->button(), tabletEvent);
+            if (!d->containsPointer) {
+                d->containsPointer = true;
+                d->touchHasBlockedPressEvents = false;
+            }
         }
         event->setAccepted(true);
         retval = true;

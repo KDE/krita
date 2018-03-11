@@ -34,7 +34,8 @@
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
+
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
     : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
@@ -78,17 +79,10 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
 
-    int threshold, windowsize;
-
     KisFilterConfigurationSP config = _config ? _config : defaultConfiguration();
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
-    }
-    int count = 0;
-
-    threshold = config->getInt("threshold", 15);
-    windowsize = config->getInt("windowsize", 1);
+    const int threshold = config->getInt("threshold", 15);
+    const int windowsize = config->getInt("windowsize", 1);
 
     const KoColorSpace* cs = device->colorSpace();
 
@@ -104,26 +98,15 @@ void KisSimpleNoiseReducer::processImpl(KisPaintDeviceSP device,
     painter.applyMatrix(kernel, interm, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);
     painter.deleteTransaction();
 
-    if (progressUpdater && progressUpdater->interrupted()) {
-        return;
+
+    KisSequentialConstIteratorProgress intermIt(interm, applyRect, progressUpdater);
+    KisSequentialIterator dstIt(device, applyRect);
+
+    while (dstIt.nextPixel() && intermIt.nextPixel()) {
+        const quint8 diff = cs->difference(dstIt.oldRawData(), intermIt.oldRawData());
+        if (diff > threshold) {
+            memcpy(dstIt.rawData(), intermIt.oldRawData(), cs->pixelSize());
+        }
     }
-
-
-    KisHLineIteratorSP dstIt = device->createHLineIteratorNG(srcTopLeft.x(), srcTopLeft.y(), applyRect.width());
-    KisHLineConstIteratorSP intermIt = interm->createHLineConstIteratorNG(srcTopLeft.x(), srcTopLeft.y(), applyRect.width());
-
-    for (int j = 0; j < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); j++) {
-        do {
-            quint8 diff = cs->difference(dstIt->oldRawData(), intermIt->oldRawData());
-            if (diff > threshold) {
-                memcpy(dstIt->rawData(), intermIt->oldRawData(), cs->pixelSize());
-            }
-            if (progressUpdater) progressUpdater->setValue(++count);
-            intermIt->nextPixel();
-        } while (dstIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
-        dstIt->nextRow();
-        intermIt->nextRow();
-    }
-
 }
 

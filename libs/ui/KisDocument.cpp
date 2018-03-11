@@ -726,9 +726,13 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
                                                            exportConfiguration);
 
     if (!started) {
-        d->backgroundSaveDocument.take()->deleteLater();
-        d->savingMutex.unlock();
-        d->backgroundSaveJob = KritaUtils::ExportFileJob();
+        // the state should have been deinitialized in slotChildCompletedSavingInBackground()
+
+        KIS_SAFE_ASSERT_RECOVER (!d->backgroundSaveDocument && !d->backgroundSaveJob.isValid()) {
+            d->backgroundSaveDocument.take()->deleteLater();
+            d->savingMutex.unlock();
+            d->backgroundSaveJob = KritaUtils::ExportFileJob();
+        }
     }
 
     return started;

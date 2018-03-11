@@ -21,8 +21,8 @@ along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
 A dialog for editing the exporter settings.
 """
 
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog
 from PyQt5.QtCore import Qt, QUuid
 from krita import *
 
@@ -193,6 +193,7 @@ And for ACBF, it gives the ability to edit acbf document info.
 
 
 class comic_export_setting_dialog(QDialog):
+    acbfStylesList = ["speech", "commentary", "formal", "letter", "code", "heading", "audio", "thought", "sign", "sound", "emphasis", "strong"]
 
     def __init__(self):
         super().__init__()
@@ -242,6 +243,12 @@ class comic_export_setting_dialog(QDialog):
         groupExportLayers.setLayout(formLayers)
         self.cmbLabelsRemove = labelSelector()
         formLayers.addRow(i18n("Label for removal:"), self.cmbLabelsRemove)
+        self.ln_text_layer_name = QLineEdit()
+        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
+        self.ln_panel_layer_name = QLineEdit()
+        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
+        formLayers.addRow(i18n("Text Layer Key:"), self.ln_text_layer_name)
+        formLayers.addRow(i18n("Panel Layer Key:"), self.ln_panel_layer_name)
 
         mainExportSettings.layout().addWidget(groupExportCrop)
         mainExportSettings.layout().addWidget(groupExportLayers)
@@ -268,8 +275,6 @@ class comic_export_setting_dialog(QDialog):
         ACBFdocInfo = QGroupBox()
         ACBFdocInfo.setTitle(i18n("ACBF Document Info"))
         ACBFdocInfo.setLayout(ACBFform)
-        self.lnACBFAuthor = QLineEdit()
-        self.lnACBFAuthor.setToolTip(i18n("The person responsible for the generation of the CBZ."))
         self.lnACBFSource = QLineEdit()
         self.lnACBFSource.setToolTip(i18n("Whether the acbf file is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
         self.lnACBFID = QLabel()
@@ -280,16 +285,88 @@ class comic_export_setting_dialog(QDialog):
         acbfHistoryList.setModel(self.ACBFhistoryModel)
         btn_add_history = QPushButton(i18n("Add history entry"))
         btn_add_history.clicked.connect(self.slot_add_history_item)
+        self.chkIncludeTranslatorComments = QCheckBox()
+        self.chkIncludeTranslatorComments.setText(i18n("Include Translator's Comments"))
+        self.chkIncludeTranslatorComments.setToolTip(i18n("A PO file can contain translator's comments. If this is checked, the translations comments will be added as references into the ACBF file."))
+        self.lnTranslatorHeader = QLineEdit()
 
-        ACBFform.addRow(i18n("Author-name:"), self.lnACBFAuthor)
         ACBFform.addRow(i18n("Source:"), self.lnACBFSource)
         ACBFform.addRow(i18n("ACBF UID:"), self.lnACBFID)
         ACBFform.addRow(i18n("Version:"), self.spnACBFVersion)
         ACBFform.addRow(i18n("Version History:"), acbfHistoryList)
         ACBFform.addRow("", btn_add_history)
+        ACBFform.addRow("", self.chkIncludeTranslatorComments)
+        ACBFform.addRow(i18n("Translator Header:"), self.lnTranslatorHeader)
 
-        ACBFExportSettings.layout().addWidget(ACBFdocInfo)
-        mainWidget.addTab(ACBFExportSettings, "ACBF")
+        ACBFAuthorInfo = QWidget()
+        acbfAVbox = QVBoxLayout(ACBFAuthorInfo)
+        infoLabel = QLabel(i18n("The people responsible for the generation of the CBZ/ACBF files."))
+        infoLabel.setWordWrap(True)
+        ACBFAuthorInfo.layout().addWidget(infoLabel)
+        self.ACBFauthorModel = QStandardItemModel(0, 6)
+        labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Email"), i18n("Homepage")]
+        self.ACBFauthorModel.setHorizontalHeaderLabels(labels)
+        self.ACBFauthorTable = QTableView()
+        acbfAVbox.addWidget(self.ACBFauthorTable)
+        self.ACBFauthorTable.setModel(self.ACBFauthorModel)
+        self.ACBFauthorTable.verticalHeader().setDragEnabled(True)
+        self.ACBFauthorTable.verticalHeader().setDropIndicatorShown(True)
+        self.ACBFauthorTable.verticalHeader().setSectionsMovable(True)
+        self.ACBFauthorTable.verticalHeader().sectionMoved.connect(self.slot_reset_author_row_visual)
+        AuthorButtons = QHBoxLayout()
+        btn_add_author = QPushButton(i18n("Add author"))
+        btn_add_author.clicked.connect(self.slot_add_author)
+        AuthorButtons.addWidget(btn_add_author)
+        btn_remove_author = QPushButton(i18n("Remove author"))
+        btn_remove_author.clicked.connect(self.slot_remove_author)
+        AuthorButtons.addWidget(btn_remove_author)
+        acbfAVbox.addLayout(AuthorButtons)
+        
+        ACBFStyle = QWidget()
+        ACBFStyle.setLayout(QHBoxLayout())
+        self.ACBFStylesModel = QStandardItemModel()
+        self.ACBFStyleClass = QListView()
+        self.ACBFStyleClass.setModel(self.ACBFStylesModel)
+        ACBFStyle.layout().addWidget(self.ACBFStyleClass)
+        ACBFStyleEdit = QWidget()
+        ACBFStyleEditVB = QVBoxLayout(ACBFStyleEdit)
+        self.ACBFfontCombo = QFontComboBox()
+        self.ACBFdefaultFont = QComboBox()
+        self.ACBFdefaultFont.addItems(["sans-serif", "serif", "monospace", "cursive", "fantasy"])
+        self.ACBFBold = QCheckBox(i18n("Bold"))
+        self.ACBFItal = QCheckBox(i18n("Italic"))
+        self.ACBFStyleClass.clicked.connect(self.slot_set_style)
+        self.ACBFStyleClass.selectionModel().selectionChanged.connect(self.slot_set_style)
+        self.ACBFStylesModel.itemChanged.connect(self.slot_set_style)
+        self.ACBFfontCombo.currentFontChanged.connect(self.slot_font_current_style)
+        self.ACBFfontCombo.setEditable(False)
+        self.ACBFBold.toggled.connect(self.slot_font_current_style)
+        self.ACBFItal.toggled.connect(self.slot_font_current_style)
+        colorWidget = QGroupBox(self)
+        colorWidget.setTitle(i18n("Text Colors"))
+        colorWidget.setLayout(QVBoxLayout())
+        self.regularColor = QColorDialog()
+        self.invertedColor = QColorDialog()
+        self.btn_acbfRegColor = QPushButton(i18n("Regular Text"), self)
+        self.btn_acbfRegColor.clicked.connect(self.slot_change_regular_color)
+        self.btn_acbfInvColor = QPushButton(i18n("Inverted Text"), self)
+        self.btn_acbfInvColor.clicked.connect(self.slot_change_inverted_color)
+        colorWidget.layout().addWidget(self.btn_acbfRegColor)
+        colorWidget.layout().addWidget(self.btn_acbfInvColor)
+        ACBFStyleEditVB.addWidget(colorWidget)
+        ACBFStyleEditVB.addWidget(self.ACBFfontCombo)
+        ACBFStyleEditVB.addWidget(self.ACBFdefaultFont)
+        ACBFStyleEditVB.addWidget(self.ACBFBold)
+        ACBFStyleEditVB.addWidget(self.ACBFItal)
+        ACBFStyleEditVB.addStretch()
+        ACBFStyle.layout().addWidget(ACBFStyleEdit)
+
+        ACBFTabwidget = QTabWidget()
+        ACBFTabwidget.addTab(ACBFdocInfo, i18n("Document Info"))
+        ACBFTabwidget.addTab(ACBFAuthorInfo, i18n("Author Info"))
+        ACBFTabwidget.addTab(ACBFStyle, i18n("Style Sheet"))
+        ACBFExportSettings.layout().addWidget(ACBFTabwidget)
+        mainWidget.addTab(ACBFExportSettings, i18n("ACBF"))
 
         # Epub export, crop, resize, other questions.
         EPUBexportSettings = QWidget()
@@ -340,6 +417,82 @@ class comic_export_setting_dialog(QDialog):
                 self.spn_marginBottom.setValue(doc.height() - (doc.selection().y() + doc.selection().height()))
 
     """
+    Add an author with default values initialised.
+    """
+
+    def slot_add_author(self):
+        listItems = []
+        listItems.append(QStandardItem(i18n("Anon")))  # Nick name
+        listItems.append(QStandardItem(i18n("John")))  # First name
+        listItems.append(QStandardItem())  # Middle name
+        listItems.append(QStandardItem(i18n("Doe")))  # Last name
+        listItems.append(QStandardItem())  # email
+        listItems.append(QStandardItem())  # homepage
+        self.ACBFauthorModel.appendRow(listItems)
+
+    """
+    Remove the selected author from the author list.
+    """
+
+    def slot_remove_author(self):
+        self.ACBFauthorModel.removeRow(self.ACBFauthorTable.currentIndex().row())
+
+    """
+    Ensure that the drag and drop of authors doesn't mess up the labels.
+    """
+
+    def slot_reset_author_row_visual(self):
+        headerLabelList = []
+        for i in range(self.ACBFauthorTable.verticalHeader().count()):
+            headerLabelList.append(str(i))
+        for i in range(self.ACBFauthorTable.verticalHeader().count()):
+            logicalI = self.ACBFauthorTable.verticalHeader().logicalIndex(i)
+            headerLabelList[logicalI] = str(i + 1)
+        self.ACBFauthorModel.setVerticalHeaderLabels(headerLabelList)
+        
+    def slot_set_style(self):
+        index = self.ACBFStyleClass.currentIndex()
+        if index.isValid():
+            item = self.ACBFStylesModel.item(index.row())
+            font = QFont()
+            font.setFamily(str(item.data(role=Qt.UserRole+1)))
+            self.ACBFfontCombo.setCurrentFont(font)
+            self.ACBFdefaultFont.setCurrentText(str(item.data(role=Qt.UserRole+2)))
+            bold = item.data(role=Qt.UserRole+3)
+            if bold is not None:
+                self.ACBFBold.setChecked(bold)
+            else:
+                self.ACBFBold.setChecked(False)
+            italic = item.data(role=Qt.UserRole+4)
+            if italic is not None:
+                self.ACBFItal.setChecked(italic)
+            else:
+                self.ACBFItal.setChecked(False)
+        
+    def slot_font_current_style(self):
+        index = self.ACBFStyleClass.currentIndex()
+        if index.isValid():
+            item = self.ACBFStylesModel.item(index.row())
+            font = QFont(self.ACBFfontCombo.currentFont())
+            item.setData(font.family(), role=Qt.UserRole+1)
+            item.setData(self.ACBFdefaultFont.currentText(), role=Qt.UserRole+2)
+            item.setData(self.ACBFBold.isChecked(), role=Qt.UserRole+3)
+            item.setData(self.ACBFItal.isChecked(), role=Qt.UserRole+4)
+            self.ACBFStylesModel.setItem(index.row(), item)
+    
+    def slot_change_regular_color(self):
+        if (self.regularColor.exec_() == QDialog.Accepted):
+            square = QPixmap(32, 32)
+            square.fill(self.regularColor.currentColor())
+            self.btn_acbfRegColor.setIcon(QIcon(square))
+    
+    def slot_change_inverted_color(self):
+        if (self.invertedColor.exec_() == QDialog.Accepted):
+            square = QPixmap(32, 32)
+            square.fill(self.invertedColor.currentColor())
+            self.btn_acbfInvColor.setIcon(QIcon(square))
+
+    """
     Load the UI values from the config dictionary given.
     """
 
@@ -356,6 +509,14 @@ class comic_export_setting_dialog(QDialog):
             self.spn_marginBottom.setValue(config["cropBottom"])
         if "labelsToRemove" in config.keys():
             self.cmbLabelsRemove.setLabels(config["labelsToRemove"])
+        if "textLayerNames" in config.keys():
+            self.ln_text_layer_name.setText(", ".join(config["textLayerNames"]))
+        else:
+            self.ln_text_layer_name.setText("text")
+        if "panelLayerNames" in config.keys():
+            self.ln_panel_layer_name.setText(", ".join(config["panelLayerNames"]))
+        else:
+            self.ln_panel_layer_name.setText("panels")
         self.CBZgroupResize.set_config(config)
         if "CBZactive" in config.keys():
             self.CBZactive.setChecked(config["CBZactive"])
@@ -365,8 +526,26 @@ class comic_export_setting_dialog(QDialog):
         self.TIFFgroupResize.set_config(config)
         if "TIFFactive" in config.keys():
             self.TIFFactive.setChecked(config["TIFFactive"])
+
         if "acbfAuthor" in config.keys():
-            self.lnACBFAuthor.setText(config["acbfAuthor"])
+            if isinstance(config["acbfAuthor"], list):
+                for author in config["acbfAuthor"]:
+                    listItems = []
+                    listItems.append(QStandardItem(author.get("nickname", "")))
+                    listItems.append(QStandardItem(author.get("first-name", "")))
+                    listItems.append(QStandardItem(author.get("initials", "")))
+                    listItems.append(QStandardItem(author.get("last-name", "")))
+                    listItems.append(QStandardItem(author.get("email", "")))
+                    listItems.append(QStandardItem(author.get("homepage", "")))
+                    self.ACBFauthorModel.appendRow(listItems)
+                pass
+            else:
+                listItems = []
+                listItems.append(QStandardItem(config["acbfAuthor"]))  # Nick name
+                for i in range(0, 5):
+                    listItems.append(QStandardItem())  # First name
+                self.ACBFauthorModel.appendRow(listItems)
+
         if "acbfSource" in config.keys():
             self.lnACBFSource.setText(config["acbfSource"])
         if "acbfID" in config.keys():
@@ -380,7 +559,43 @@ class comic_export_setting_dialog(QDialog):
                 item = QStandardItem()
                 item.setText(h)
                 self.ACBFhistoryModel.appendRow(item)
+        if "acbfStyles" in config.keys():
+            styleDict = config.get("acbfStyles", {})
+            for key in self.acbfStylesList:
+                keyDict = styleDict.get(key, {})
+                style = QStandardItem(key.title())
+                style.setCheckable(True)
+                if key in styleDict.keys():
+                    style.setCheckState(Qt.Checked)
+                else:
+                    style.setCheckState(Qt.Unchecked)
+                style.setData(keyDict.get("font", QFont().family()), role=Qt.UserRole+1)
+                style.setData(keyDict.get("genericfont", "sans-serif"), role=Qt.UserRole+2)
+                style.setData(keyDict.get("bold", False), role=Qt.UserRole+3)
+                style.setData(keyDict.get("ital", False), role=Qt.UserRole+4)
+                self.ACBFStylesModel.appendRow(style)
+            keyDict = styleDict.get("general", {})
+            self.regularColor.setCurrentColor(QColor(keyDict.get("color", "#000000")))
+            square = QPixmap(32, 32)
+            square.fill(self.regularColor.currentColor())
+            self.btn_acbfRegColor.setIcon(QIcon(square))
+            keyDict = styleDict.get("inverted", {})
+            self.invertedColor.setCurrentColor(QColor(keyDict.get("color", "#FFFFFF")))
+            square.fill(self.invertedColor.currentColor())
+            self.btn_acbfInvColor.setIcon(QIcon(square))
+        else:
+            for key in self.acbfStylesList:
+                style = QStandardItem(key.title())
+                style.setCheckable(True)
+                style.setCheckState(Qt.Unchecked)
+                style.setData(QFont().family(), role=Qt.UserRole+1)
+                style.setData("sans-serif", role=Qt.UserRole+2)
+                style.setData(False, role=Qt.UserRole+3) #Bold
+                style.setData(False, role=Qt.UserRole+4) #Italic
+                self.ACBFStylesModel.appendRow(style)
         self.CBZgroupResize.setEnabled(self.CBZactive.isChecked())
+        self.lnTranslatorHeader.setText(config.get("translatorHeader", "Translator's Notes"))
+        self.chkIncludeTranslatorComments.setChecked(config.get("includeTranslComment", False))
 
     """
     Store the GUI values into the config dictionary given.
@@ -402,7 +617,21 @@ class comic_export_setting_dialog(QDialog):
         config = self.EPUBgroupResize.get_config(config)
         config["TIFFactive"] = self.TIFFactive.isChecked()
         config = self.TIFFgroupResize.get_config(config)
-        config["acbfAuthor"] = self.lnACBFAuthor.text()
+        authorList = []
+        for row in range(self.ACBFauthorTable.verticalHeader().count()):
+            logicalIndex = self.ACBFauthorTable.verticalHeader().logicalIndex(row)
+            listEntries = ["nickname", "first-name", "initials", "last-name", "email", "homepage"]
+            author = {}
+            for i in range(len(listEntries)):
+                entry = self.ACBFauthorModel.data(self.ACBFauthorModel.index(logicalIndex, i))
+                if entry is None:
+                    entry = " "
+                if entry.isspace() is False and len(entry) > 0:
+                    author[listEntries[i]] = entry
+                elif listEntries[i] in author.keys():
+                    author.pop(listEntries[i])
+            authorList.append(author)
+        config["acbfAuthor"] = authorList
         config["acbfSource"] = self.lnACBFSource.text()
         config["acbfID"] = self.lnACBFID.text()
         config["acbfVersion"] = self.spnACBFVersion.value()
@@ -411,8 +640,33 @@ class comic_export_setting_dialog(QDialog):
             index = self.ACBFhistoryModel.index(r, 0)
             versionList.append(self.ACBFhistoryModel.data(index, Qt.DisplayRole))
         config["acbfHistory"] = versionList
+        
+        acbfStylesDict = {}
+        for row in range(0, self.ACBFStylesModel.rowCount()):
+            entry = self.ACBFStylesModel.item(row)
+            if entry.checkState() == Qt.Checked:
+                key = entry.text().lower()
+                style = {}
+                font = entry.data(role=Qt.UserRole+1)
+                if font is not None:
+                    style["font"] = font
+                genericfont = entry.data(role=Qt.UserRole+2)
+                if font is not None:
+                    style["genericfont"] = genericfont
+                bold = entry.data(role=Qt.UserRole+3)
+                if bold is not None:
+                    style["bold"] = bold
+                italic = entry.data(role=Qt.UserRole+4)
+                if italic is not None:
+                    style["ital"] = italic
+                acbfStylesDict[key] = style
+        acbfStylesDict["general"] = {"color": self.regularColor.currentColor().name()}
+        acbfStylesDict["inverted"] = {"color": self.invertedColor.currentColor().name()}
+        config["acbfStyles"] = acbfStylesDict
+        config["translatorHeader"] = self.lnTranslatorHeader.text()
+        config["includeTranslComment"] = self.chkIncludeTranslatorComments.isChecked()
 
         # Turn this into something that retreives from a line-edit when string freeze is over.
-        config["textLayerNames"] = ["text"]
-        config["panelLayerNames"] = ["panels"]
+        config["textLayerNames"] = self.ln_text_layer_name.text().split(",")
+        config["panelLayerNames"] = self.ln_panel_layer_name.text().split(",")
         return config

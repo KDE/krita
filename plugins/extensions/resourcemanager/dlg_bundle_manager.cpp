@@ -32,6 +32,8 @@
 #include <kis_icon.h>
 #include "kis_action.h"
 #include <kis_resource_server_provider.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #define ICON_SIZE 48
 
@@ -138,30 +140,42 @@ void DlgBundleManager::accept()
         }
 
         if (bundle) {
-            if(!bundle->isInstalled()){
-                bundle->install();
-                //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
-                if(!bundleServer->addResource(bundle, false, false)){
-
-                    feedback = i18n("Couldn't add bundle to resource server");
-                    bundleFeedback.setText(feedback);
-                    bundleFeedback.exec();
-                }
-                if(!bundleServer->removeFromBlacklist(bundle)){
-                    feedback = i18n("Couldn't remove bundle from blacklist");
-                    bundleFeedback.setText(feedback);
-                    bundleFeedback.exec();
-                }
+            bool isKrita3Bundle = false;
+            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
+                isKrita3Bundle = true;
+                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+                group.writeEntry("HideKrita3Bundle", false);
             }
             else {
-            bundleServer->removeFromBlacklist(bundle);
-            //let's assume that bundles that exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
+                if (!bundle->isInstalled()) {
+                    bundle->install();
+                    //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
+                    if (!bundleServer->addResource(bundle, false, false)){
+
+                        feedback = i18n("Couldn't add bundle to resource server");
+                        bundleFeedback.setText(feedback);
+                        bundleFeedback.exec();
+                    }
+                    if (!isKrita3Bundle) {
+                        if (!bundleServer->removeFromBlacklist(bundle)) {
+                            feedback = i18n("Couldn't remove bundle from blacklist");
+                            bundleFeedback.setText(feedback);
+                            bundleFeedback.exec();
+                        }
+                    }
+                }
+                else {
+                    if (!isKrita3Bundle) {
+                        bundleServer->removeFromBlacklist(bundle);
+                    }
+                    //let's assume that bundles that exist and are installed have to be removed from the blacklist, and if they were already this returns false, so that's not a problem.
+                }
             }
         }
         else{
-        QString feedback = i18n("Bundle doesn't exist!");
-        bundleFeedback.setText(feedback);
-        bundleFeedback.exec();
+            QString feedback = i18n("Bundle doesn't exist!");
+            bundleFeedback.setText(feedback);
+            bundleFeedback.exec();
 
         }
     }
@@ -170,11 +184,19 @@ void DlgBundleManager::accept()
         QListWidgetItem *item = m_ui->listInactive->item(i);
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
         KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
-
-
-        if (bundle && bundle->isInstalled()) {
-            bundle->uninstall();
-            bundleServer->removeResourceAndBlacklist(bundle);
+        bool isKrits3Bundle = false;
+        if (bundle) {
+            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
+                isKrits3Bundle = true;
+                KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+                group.writeEntry("HideKrita3Bundle", true);
+            }
+            if (bundle->isInstalled()) {
+                bundle->uninstall();
+                if (!isKrits3Bundle) {
+                    bundleServer->removeResourceAndBlacklist(bundle);
+                }
+            }
         }
     }
 
@@ -184,7 +206,6 @@ void DlgBundleManager::accept()
 
 void DlgBundleManager::addSelected()
 {
-
     Q_FOREACH (QListWidgetItem *item, m_ui->listActive->selectedItems()) {
         m_ui->listInactive->addItem(m_ui->listActive->takeItem(m_ui->listActive->row(item)));
     }

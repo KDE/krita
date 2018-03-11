@@ -44,7 +44,7 @@ inline std::string exiv2Prefix(const KisMetaData::Schema* _schema)
     const QByteArray latin1SchemaUri = _schema->uri().toLatin1();
     std::string prefix = Exiv2::XmpProperties::prefix(latin1SchemaUri.constData());
     if (prefix.empty()) {
-        dbgFile << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
+        dbgMetaData << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
         prefix = _schema->prefix().toLatin1().constData();
         Exiv2::XmpProperties::registerNs(latin1SchemaUri.constData(), prefix);
     }
@@ -61,7 +61,7 @@ void saveStructure(Exiv2::XmpData& xmpData_, const QString& name, const std::str
         Q_ASSERT(it.value().type() != KisMetaData::Value::Structure);   // Can't nest structure
         QString key = QString("%1/%2:%3").arg(name).arg(structPrefix.c_str()).arg(it.key());
         Exiv2::XmpKey ekey(prefix, key.toLatin1().constData());
-        dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
+        dbgMetaData << ppVar(key) << ppVar(ekey.key().c_str());
         Exiv2::Value *v = kmdValueToExivXmpValue(it.value());
         if (v) {
             xmpData_.add(ekey, v);
@@ -72,7 +72,7 @@ void saveStructure(Exiv2::XmpData& xmpData_, const QString& name, const std::str
 
 bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
-    dbgFile << "Save XMP Data";
+    dbgMetaData << "Save XMP Data";
     Exiv2::XmpData xmpData_;
 
     for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
@@ -81,7 +81,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
 
         // Check whether the prefix and namespace are know to exiv2
         std::string prefix = exiv2Prefix(entry.schema());
-        dbgFile << "Saving " << entry.name();
+        dbgMetaData << "Saving " << entry.name();
 
         const KisMetaData::Value& value = entry.value();
 
@@ -93,7 +93,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                 structureSchema = typeInfo->structureSchema();
             }
             if (!structureSchema) {
-                dbgFile << "Unknown schema for " << entry.name();
+                dbgMetaData << "Unknown schema for " << entry.name();
                 structureSchema = entry.schema();
             }
             Q_ASSERT(structureSchema);
@@ -127,7 +127,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     structureSchema = stuctureTypeInfo->structureSchema();
                 }
                 if (!structureSchema) {
-                    dbgFile << "Unknown schema for " << entry.name();
+                    dbgMetaData << "Unknown schema for " << entry.name();
                     structureSchema = entry.schema();
                 }
                 Q_ASSERT(structureSchema);
@@ -136,7 +136,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     saveStructure(xmpData_, QString("%1[%2]").arg(entry.name()).arg(idx + 1), prefix, array[idx].asStructure(), structureSchema);
                 }
             } else {
-                dbgFile << ppVar(key.key().c_str());
+                dbgMetaData << ppVar(key.key().c_str());
                 Exiv2::Value *v = kmdValueToExivXmpValue(value);
                 if (v) {
                     xmpData_.add(key, v);
@@ -218,23 +218,23 @@ bool parseTagName(const QString &tagString,
 bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::ReadOnly);
-    dbgFile << "Load XMP Data";
+    dbgMetaData << "Load XMP Data";
     std::string xmpPacket_;
     QByteArray arr = ioDevice->readAll();
     xmpPacket_.assign(arr.data(), arr.length());
-    dbgFile << xmpPacket_.length();
-//     dbgFile << xmpPacket_.c_str();
+    dbgMetaData << xmpPacket_.length();
+//     dbgMetaData << xmpPacket_.c_str();
     Exiv2::XmpData xmpData_;
     Exiv2::XmpParser::decode(xmpData_, xmpPacket_);
     QMap< const KisMetaData::Schema*, QMap<QString, QMap<QString, KisMetaData::Value> > > structures;
     QMap< const KisMetaData::Schema*, QMap<QString, QVector< QMap<QString, KisMetaData::Value> > > > arraysOfStructures;
     for (Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it) {
-        dbgFile << "Start iteration" << it->key().c_str();
+        dbgMetaData << "Start iteration" << it->key().c_str();
 
         Exiv2::XmpKey key(it->key());
-        dbgFile << key.groupName().c_str() << " " << key.tagName().c_str() << " " << key.ns().c_str();
+        dbgMetaData << key.groupName().c_str() << " " << key.tagName().c_str() << " " << key.ns().c_str();
         if ((key.groupName() == "exif" || key.groupName() == "tiff") && key.tagName() == "NativeDigest") {  // TODO: someone who has time to lose can look in adding support for NativeDigest, it's undocumented use by the XMP SDK to check if exif data has been changed while XMP hasn't been updated
-            dbgFile << "dropped";
+            dbgMetaData << "dropped";
         } else {
             const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix(key.groupName().c_str());
             if (!schema) {
@@ -318,7 +318,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 if (typeInfo && typeInfo->parser()) {
                     v = typeInfo->parser()->parse(valTxt);
                 } else {
-                    dbgFile << "No parser " << tagName;
+                    dbgMetaData << "No parser " << tagName;
                     v = KisMetaData::Value(valTxt);
                 }
                 if (valTxt == "type=\"Struct\"") {
@@ -345,7 +345,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 if (!ignoreValue) {
                     store->addEntry(KisMetaData::Entry(schema, tagName, v));
                 } else {
-                    dbgFile << "Ignoring value for " << tagName << " " << v;
+                    dbgMetaData << "Ignoring value for " << tagName << " " << v;
                 }
             }
         }

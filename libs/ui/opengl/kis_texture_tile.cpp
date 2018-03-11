@@ -197,9 +197,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
         m_needsMipmapRegeneration &&
         !updateInfo.isEntireTileUpdated()) {
 
-        f->glBindTexture(GL_TEXTURE_2D, m_textureId);
         f->glGenerateMipmap(GL_TEXTURE_2D);
-        f->glBindTexture(GL_TEXTURE_2D, 0);
         m_needsMipmapRegeneration = false;
     }
 

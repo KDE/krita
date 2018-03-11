@@ -70,23 +70,26 @@
 #include <kis_action_registry.h>
 
 #include "kis_font_family_combo_box.h"
+#include "kis_signals_blocker.h"
 
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags)
     , m_page(new QWidget(this))
+#ifndef Q_OS_WIN
     , m_charSelectDialog(new KoDialog(this))
+#endif
 {
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
 
     m_textEditorWidget.chkVertical->setVisible(false);
-
+#ifndef Q_OS_WIN
     KCharSelect *charSelector = new KCharSelect(m_charSelectDialog, 0, KCharSelect::AllGuiElements);
     m_charSelectDialog->setMainWidget(charSelector);
     connect(charSelector, SIGNAL(currentCharChanged(QChar)), SLOT(insertCharacter(QChar)));
     m_charSelectDialog->hide();
     m_charSelectDialog->setButtons(KoDialog::Close);
-
+#endif
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
     connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(close()));
     connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
@@ -216,6 +219,8 @@ void SvgTextEditor::switchTextEditorTab()
 
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
+
+
         if (m_shape) {
 
             // Convert the svg text to html XXX: Fix resolution! Also, the rect should be the image rect, not the shape rect.
@@ -273,7 +278,6 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
     actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
 
-    qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget())->setCurrentFont(format.font());
     QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font_size"))->defaultWidget());
     fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(format.font().pointSize()));
 
@@ -282,6 +286,13 @@ void SvgTextEditor::checkFormat()
 
     KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
     qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"))->setCurrentColor(bg);
+
+
+
+    KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+
+    KisSignalsBlocker b(fontComboBox); // this prevents setting the entire selection to one font
+    fontComboBox->setCurrentFont(format.font());
 
     QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
     if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
@@ -409,6 +420,7 @@ void SvgTextEditor::zoomIn()
     m_currentEditor->zoomIn();
 }
 
+#ifndef Q_OS_WIN
 void SvgTextEditor::showInsertSpecialCharacterDialog()
 {
     m_charSelectDialog->setVisible(!m_charSelectDialog->isVisible());
@@ -418,7 +430,7 @@ void SvgTextEditor::insertCharacter(const QChar &c)
 {
     m_currentEditor->textCursor().insertText(QString(c));
 }
-
+#endif
 
 void SvgTextEditor::setTextBold(QFont::Weight weight)
 {
@@ -954,13 +966,13 @@ void SvgTextEditor::createActions()
     // View
     KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
     KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
-
+#ifndef Q_OS_WIN
     // Insert:
     QAction * insertAction = createAction("svg_insert_special_character",
                                           SLOT(showInsertSpecialCharacterDialog()));
     insertAction->setCheckable(true);
     insertAction->setChecked(false);
-
+#endif
     // Format:
     m_richTextActions << createAction("svg_weight_bold",
                                       SLOT(setTextBold()));

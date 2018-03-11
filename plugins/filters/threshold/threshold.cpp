@@ -40,7 +40,7 @@
 #include <kis_processing_information.h>
 #include <kis_selection.h>
 #include <kis_types.h>
-#include <kis_iterator_ng.h>
+#include <KisSequentialIteratorProgress.h>
 
 #include <KoBasicHistogramProducers.h>
 #include "KoColorModelStandardIds.h"
@@ -79,18 +79,14 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 {
     Q_ASSERT(!device.isNull());
 
-    if (progressUpdater) {
-        progressUpdater->setRange(0, applyRect.height() * applyRect.width());
-    }
-
-    int threshold = config->getInt("threshold");
+    const int threshold = config->getInt("threshold");
 
     KoColor white(Qt::white, device->colorSpace());
     KoColor black(Qt::black, device->colorSpace());
 
-    KisSequentialIterator it(device, applyRect);
-    int p = 0;
+    KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
     const int pixelSize = device->colorSpace()->pixelSize();
+
     while (it.nextPixel()) {
         if (device->colorSpace()->intensity8(it.oldRawData()) > threshold) {
             memcpy(it.rawData(), white.data(), pixelSize);
@@ -98,9 +94,6 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
         else {
             memcpy(it.rawData(), black.data(), pixelSize);
         }
-
-        if (progressUpdater) progressUpdater->setValue(p++);
-
     }
 
 }

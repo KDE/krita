@@ -8,7 +8,7 @@ if (UNIX)
 
   ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.6/sip-4.19.6.tar.gz
+        URL https://files.kde.org/krita/build/dependencies/sip-4.19.6.tar.gz
         URL_MD5 6be5cb2c43915ed450a9f74ec110dada
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5
@@ -30,7 +30,7 @@ elseif (MINGW)
     )
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://sourceforge.net/projects/pyqt/files/sip/sip-4.19.6/sip-4.19.6.zip
+        URL https://files.kde.org/krita/build/dependencies/sip-4.19.6.zip
         URL_MD5 6a4080268c2aa9225965415fe8706967
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}

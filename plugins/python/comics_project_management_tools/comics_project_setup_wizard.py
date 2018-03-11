@@ -89,9 +89,19 @@ class ComicsProjectSetupWizard():
         self.cmbLanguage = comics_metadata_dialog.language_combo_box()
         self.cmbLanguage.setToolTip(i18n("The main language the comic is in"))
         self.cmbLanguage.setEntryToCode(str(QLocale.system().name()).split("_")[0])
+        self.cmbCountry = comics_metadata_dialog.country_combo_box()
+        if QLocale.system() != QLocale.c():
+            self.cmbCountry.setEntryToCode(str(QLocale.system().name()).split("_")[-1])
+        else:
+            self.slot_update_countries()
+        self.cmbLanguage.currentIndexChanged.connect(self.slot_update_countries)
         self.lnProjectDirectory = QLabel(self.projectDirectory)
-        self.chkMakeProjectDirectory = QCheckBox(i18n("Make a new directory with the project name."))
-        self.chkMakeProjectDirectory.setToolTip(i18n("This allows you to select a generic comics project directory, in which a new folder will be made for the project using the given project name."))
+        self.chkMakeProjectDirectory = QCheckBox()
+        labelDirectory = QLabel(i18n("Make a new directory with the project name."))
+        labelDirectory.setWordWrap(True)
+        stringDirectoryTooltip = i18n("This allows you to select a generic comics project directory, in which a new folder will be made for the project using the given project name.")
+        self.chkMakeProjectDirectory.setToolTip(stringDirectoryTooltip)
+        labelDirectory.setToolTip(stringDirectoryTooltip)
         self.chkMakeProjectDirectory.setChecked(True)
         self.lnPagesDirectory = QLineEdit()
         self.lnPagesDirectory.setText(i18n("pages"))
@@ -102,9 +112,14 @@ class ComicsProjectSetupWizard():
         self.lnTemplateLocation = QLineEdit()
         self.lnTemplateLocation.setText(i18n("templates"))
         self.lnTemplateLocation.setToolTip(i18n("The name for the folder where the page templates are sought in."))
+
+        self.lnTranslationLocation = QLineEdit()
+        self.lnTranslationLocation.setText(i18n("translations"))
+        self.lnTranslationLocation.setToolTip("This is the location that POT files will be stored to and PO files will be read from.")
         formLayout.addRow(i18n("Comic Concept:"), lnConcept)
         formLayout.addRow(i18n("Project Name:"), projectLayout)
         formLayout.addRow(i18n("Main Language:"), self.cmbLanguage)
+        formLayout.addRow("", self.cmbCountry)
 
         buttonMetaData = QPushButton(i18n("Meta Data"))
         buttonMetaData.clicked.connect(self.slot_edit_meta_data)
@@ -116,10 +131,11 @@ class ComicsProjectSetupWizard():
         folderFormLayout = QFormLayout()
         foldersPage.setLayout(folderFormLayout)
         folderFormLayout.addRow(i18n("Project Directory:"), self.lnProjectDirectory)
-        folderFormLayout.addRow("", self.chkMakeProjectDirectory)
+        folderFormLayout.addRow(self.chkMakeProjectDirectory, labelDirectory)
         folderFormLayout.addRow(i18n("Pages Directory"), self.lnPagesDirectory)
         folderFormLayout.addRow(i18n("Export Directory"), self.lnExportDirectory)
         folderFormLayout.addRow(i18n("Template Directory"), self.lnTemplateLocation)
+        folderFormLayout.addRow(i18n("Translation Directory"), self.lnTranslationLocation)
         folderFormLayout.addRow("", buttonMetaData)
         wizard.addPage(foldersPage)
 
@@ -130,6 +146,7 @@ class ComicsProjectSetupWizard():
             self.pagesDirectory = self.lnPagesDirectory.text()
             self.exportDirectory = self.lnExportDirectory.text()
             self.templateLocation = self.lnTemplateLocation.text()
+            self.translationLocation = self.lnTranslationLocation.text()
             projectPath = Path(self.projectDirectory)
             # Only make a project directory if the checkbox for that has been checked.
             if self.chkMakeProjectDirectory.isChecked():
@@ -143,6 +160,8 @@ class ComicsProjectSetupWizard():
                 Path(projectPath / self.exportDirectory).mkdir()
             if Path(projectPath / self.templateLocation).exists() is False:
                 Path(projectPath / self.templateLocation).mkdir()
+            if Path(projectPath / self.translationLocation).exists() is False:
+                Path(projectPath / self.translationLocation).mkdir()
 
             # Then store the information into the setup diactionary.
             self.setupDictionary["projectName"] = self.lnProjectName.text()
@@ -151,6 +170,7 @@ class ComicsProjectSetupWizard():
             self.setupDictionary["pagesLocation"] = self.pagesDirectory
             self.setupDictionary["exportLocation"] = self.exportDirectory
             self.setupDictionary["templateLocation"] = self.templateLocation
+            self.setupDictionary["translationLocation"] = self.translationLocation
 
             # Finally, write the dictionary into the json file.
             self.writeConfig()
@@ -168,6 +188,15 @@ class ComicsProjectSetupWizard():
         if (dialog.exec_() == QDialog.Accepted):
             self.setupDictionary = dialog.getConfig(self.setupDictionary)
             self.cmbLanguage.setEntryToCode(self.setupDictionary["language"])
+            
+    """
+    Update the country list when the language list changes.
+    """
+    
+    def slot_update_countries(self):
+        code = self.cmbLanguage.codeForCurrentEntry()
+        self.cmbCountry.set_country_for_locale(code)
+        
     """
     Write the actual config to the chosen project directory.
     """

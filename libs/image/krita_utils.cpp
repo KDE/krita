@@ -57,11 +57,12 @@ namespace KritaUtils
 
         QVector<QRect> patches;
 
-        qint32 firstCol = divideFloor(rc.x(), patchSize.width());
-        qint32 firstRow = divideFloor(rc.y(), patchSize.height());
+        const qint32 firstCol = divideFloor(rc.x(), patchSize.width());
+        const qint32 firstRow = divideFloor(rc.y(), patchSize.height());
 
-        qint32 lastCol = divideFloor(rc.x() + rc.width(), patchSize.width());
-        qint32 lastRow = divideFloor(rc.y() + rc.height(), patchSize.height());
+        // TODO: check if -1 is needed here
+        const qint32 lastCol = divideFloor(rc.x() + rc.width(), patchSize.width());
+        const qint32 lastRow = divideFloor(rc.y() + rc.height(), patchSize.height());
 
         for(qint32 i = firstRow; i <= lastRow; i++) {
             for(qint32 j = firstCol; j <= lastCol; j++) {

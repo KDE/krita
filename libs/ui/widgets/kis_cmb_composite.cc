@@ -32,7 +32,7 @@
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
 
 KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
-    KisCategorizedListView(false, parent),
+    KisCategorizedListView(parent),
     m_model(new KisSortedCompositeOpListModel(this))
 {
     setModel(m_model);
@@ -61,7 +61,7 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     m_model(new KisSortedCompositeOpListModel(this)),
     m_allowToHidePopup(true)
 {
-    m_view = new KisCategorizedListView(true);
+    m_view = new KisCategorizedListView();
 
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);

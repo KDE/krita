@@ -46,6 +46,7 @@
 #include "kis_spacing_selection_widget.h"
 #include "kis_signals_blocker.h"
 
+#include "kis_imagepipe_brush.h"
 #include "kis_custom_brush_widget.h"
 #include "kis_clipboard_brush_widget.h"
 #include <kis_config.h>
@@ -318,6 +319,8 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
 
 void KisPredefinedBrushChooser::update(KoResource * resource)
 {
+    QString animatedBrushTipSelectionMode; // incremental, random, etc
+
     {
         KisBrush* brush = dynamic_cast<KisBrush*>(resource);
         m_brush = brush ? brush->clone() : 0;
@@ -335,16 +338,24 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
         } else if (m_brush->brushType() == IMAGE) {
             brushTypeString = i18n("GBR");
         } else if (m_brush->brushType() == PIPE_MASK ) {
-            brushTypeString = i18n("Animated Mask");
+            brushTypeString = i18n("Animated Mask"); // GIH brush
+
+            // cast to GIH brush and grab parasite name
+            //m_brush
+            KisImagePipeBrush* pipeBrush = dynamic_cast<KisImagePipeBrush*>(resource);
+            animatedBrushTipSelectionMode =  pipeBrush->parasiteSelection();
+
+
         } else if (m_brush->brushType() == PIPE_IMAGE ) {
             brushTypeString = i18n("Animated Image");
         }
 
 
-        QString brushDetailsText = QString("%1 (%2 x %3)")
+        QString brushDetailsText = QString("%1 (%2 x %3) %4")
                        .arg(brushTypeString)
                        .arg(m_brush->width())
-                       .arg(m_brush->height());
+                       .arg(m_brush->height())
+                       .arg(animatedBrushTipSelectionMode);
 
         brushDetailsLabel->setText(brushDetailsText);
 

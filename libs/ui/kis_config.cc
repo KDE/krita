@@ -1147,7 +1147,7 @@ void KisConfig::setPresetChooserViewMode(const int mode) const
 
 int KisConfig::presetIconSize(bool defaultValue) const
 {
-    return (defaultValue ? 30 : m_cfg.readEntry("presetIconSize", 30));
+    return (defaultValue ? 60 : m_cfg.readEntry("presetIconSize", 60));
 }
 
 void KisConfig::setPresetIconSize(const int value) const

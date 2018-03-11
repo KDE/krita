@@ -58,7 +58,7 @@ QString AnonymizerFilter::description() const
 
 void AnonymizerFilter::filter(KisMetaData::Store* store) const
 {
-    dbgImage << "Anonymize a store";
+    dbgMetaData << "Anonymize a store";
     const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
     store->removeEntry(dcSchema, "contributor");
     store->removeEntry(dcSchema, "creator");

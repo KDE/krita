@@ -23,10 +23,12 @@ This is a metadata editor that helps out setting the proper metadata
 import sys
 import os  # For finding the script location.
 import csv
+import re
+import types
 from pathlib import Path  # For reading all the files in a directory.
-from PyQt5.QtGui import QStandardItem, QStandardItemModel
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
 from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate
+from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -55,7 +57,7 @@ class multi_entry_completer(QCompleter):
         if split.endswith(" "):
             split = split[:-1]
         return [split]
-
+    
 
 """
 Language combobox that can take locale codes and get the right language for it and visa-versa.
@@ -68,16 +70,30 @@ class language_combo_box(QComboBox):
 
     def __init__(self, parent=None):
         super(QComboBox, self).__init__(parent)
-        mainP = os.path.dirname(__file__)
-        languageP = os.path.join(mainP, "isoLanguagesList.csv")
-        if (os.path.exists(languageP)):
-            file = open(languageP, "r", newline="", encoding="utf8")
-            languageReader = csv.reader(file)
-            for row in languageReader:
-                self.languageList.append(row[0])
-                self.codesList.append(row[1])
-                self.addItem(row[0])
-            file.close()
+        for i in range(1, 357):
+            locale = QLocale(i)
+            if locale and QLocale.languageToString(locale.language()) != "C":
+                codeName = locale.name().split("_")[0]
+                if codeName not in self.codesList:
+                    self.codesList.append(codeName)
+            self.codesList.sort()
+            
+        for lang in self.codesList:
+            locale = QLocale(lang)
+            if locale:
+                languageName = QLocale.languageToString(locale.language())
+                self.languageList.append(languageName.title())
+                self.setIconSize(QSize(32, 22))
+                codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+                painter = QPainter(codeIcon)
+                painter.setBrush(Qt.transparent)
+                codeIcon.fill(Qt.transparent)
+                font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+                painter.setFont(font)
+                painter.setPen(self.palette().color(QPalette.Text))
+                painter.drawText(codeIcon.rect(), Qt.AlignCenter,lang)
+                painter.end()
+                self.addItem(QIcon(QPixmap.fromImage(codeIcon)), languageName.title())
 
     def codeForCurrentEntry(self):
         if self.currentText() in self.languageList:
@@ -89,6 +105,49 @@ class language_combo_box(QComboBox):
         if code in self.codesList:
             self.setCurrentIndex(self.codesList.index(code))
 
+class country_combo_box(QComboBox):
+    countryList = []
+    codesList = []
+
+    def __init__(self, parent=None):
+        super(QComboBox, self).__init__(parent)
+        
+    def set_country_for_locale(self, languageCode):
+        self.clear()
+        self.codesList = []
+        self.countryList = []
+        for locale in QLocale.matchingLocales(QLocale(languageCode).language(), QLocale.AnyScript, QLocale.AnyCountry):
+            codeName = locale.name().split("_")[-1]
+            if codeName not in self.codesList:
+                self.codesList.append(codeName)
+            self.codesList.sort()
+            
+        for country in self.codesList:
+            locale = QLocale(languageCode+"_"+country)
+            if locale:
+                countryName = locale.nativeCountryName()
+                self.countryList.append(countryName.title())
+                self.setIconSize(QSize(32, 22))
+                codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+                painter = QPainter(codeIcon)
+                painter.setBrush(Qt.transparent)
+                codeIcon.fill(Qt.transparent)
+                font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+                painter.setFont(font)
+                painter.setPen(self.palette().color(QPalette.Text))
+                painter.drawText(codeIcon.rect(), Qt.AlignCenter,country)
+                painter.end()
+                self.addItem(QIcon(QPixmap.fromImage(codeIcon)), countryName.title())
+                
+    def codeForCurrentEntry(self):
+        if self.currentText() in self.countryList:
+            return self.codesList[self.countryList.index(self.currentText())]
+
+    def setEntryToCode(self, code):
+        if code == "C":
+            self.setCurrentIndex(0)
+        elif code in self.codesList:
+            self.setCurrentIndex(self.codesList.index(code))
 
 """
 A combobox that fills up with licenses from a CSV, and also sets tooltips from that
@@ -164,8 +223,8 @@ class comic_meta_data_editor(QDialog):
     configGroup = "ComicsProjectManagementTools"
 
     # Translatable genre dictionary that has it's translated entries added to the genrelist and from which the untranslated items are taken.
-    acbfGenreList = {"science_fiction": str(i18n("Science Fiction")), "fantasy": str(i18n("Fantasy")), "adventure": str(i18n("Adventure")), "horror": str(i18n("Horror")), "mystery": str(i18n("Mystery")), "crime": str(i18n("Crime")), "military": str(i18n("Military")), "real_life": str(i18n("Real Life")), "superhero": str(i18n("Superhero")), "humor": str(i18n("Humor")), "western": str(i18n("Western")), "manga": str(i18n("Manga")), "politics": str(i18n("Politics")), "caricature": str(i18n("Caricature")), "sports": str(i18n("Sports")), "history": str(i18n("History")), "biography": str(i18n("Biography")), "education": str(i18n("Education")), "computer": str(i18n("Computer")), "religion": str(i18n("Religion")), "romance": str(i18n("Romance")), "children": str(i18n("Children")), "non-fiction": str(i18n("Non Fiction")), "adult": str(i18n("Adult")), "alternative": str(i18n("Alternative")), "other": str(i18n("Other"))}
-    acbfAuthorRolesList = {"Writer": str(i18n("Writer")), "Adapter": str(i18n("Adapter")), "Artist": str(i18n("Artist")), "Penciller": str(i18n("Penciller")), "Inker": str(i18n("Inker")), "Colorist": str(i18n("Colorist")), "Letterer": str(i18n("Letterer")), "Cover Artist": str(i18n("Cover Artist")), "Photographer": str(i18n("Photographer")), "Editor": str(i18n("Editor")), "Assistant Editor": str(i18n("Assistant Editor")), "Translator": str(i18n("Translator")), "Other": str(i18n("Other"))}
+    acbfGenreList = {"science_fiction": str(i18n("Science Fiction")), "fantasy": str(i18n("Fantasy")), "adventure": str(i18n("Adventure")), "horror": str(i18n("Horror")), "mystery": str(i18n("Mystery")), "crime": str(i18n("Crime")), "military": str(i18n("Military")), "real_life": str(i18n("Real Life")), "superhero": str(i18n("Superhero")), "humor": str(i18n("Humor")), "western": str(i18n("Western")), "manga": str(i18n("Manga")), "politics": str(i18n("Politics")), "caricature": str(i18n("Caricature")), "sports": str(i18n("Sports")), "history": str(i18n("History")), "biography": str(i18n("Biography")), "education": str(i18n("Education")), "computer": str(i18n("Computer")), "religion": str(i18n("Religion")), "romance": str(i18n("Romance")), "children": str(i18n("Children")), "non-fiction": str(i18n("Non Fiction")), "adult": str(i18n("Adult")), "alternative": str(i18n("Alternative")), "artbook": str(i18n("Artbook")), "other": str(i18n("Other"))}
+    acbfAuthorRolesList = {"Writer": str(i18n("Writer")), "Adapter": str(i18n("Adapter")), "Artist": str(i18n("Artist")), "Penciller": str(i18n("Penciller")), "Inker": str(i18n("Inker")), "Colorist": str(i18n("Colorist")), "Letterer": str(i18n("Letterer")), "Cover Artist": str(i18n("Cover Artist")), "Photographer": str(i18n("Photographer")), "Editor": str(i18n("Editor")), "Assistant Editor": str(i18n("Assistant Editor")), "Designer": str(i18n("Designer")), "Translator": str(i18n("Translator")), "Other": str(i18n("Other"))}
 
     def __init__(self):
         super().__init__()
@@ -257,6 +316,8 @@ class comic_meta_data_editor(QDialog):
         self.lnOtherKeywords.setToolTip(i18n("Other keywords that don't fit in the previously mentioned sets. As always, comma-separated"))
 
         self.cmbLanguage = language_combo_box()
+        self.cmbCountry = country_combo_box()
+        self.cmbLanguage.currentIndexChanged.connect(self.slot_update_countries)
         self.cmbReadingMode = QComboBox()
         self.cmbReadingMode.addItem(i18n("Left to Right"))
         self.cmbReadingMode.addItem(i18n("Right to Left"))
@@ -268,6 +329,7 @@ class comic_meta_data_editor(QDialog):
         mformLayout.addRow(i18n("Cover Page:"), self.cmbCoverPage)
         mformLayout.addRow(i18n("Summary:"), self.teSummary)
         mformLayout.addRow(i18n("Language:"), self.cmbLanguage)
+        mformLayout.addRow("", self.cmbCountry)
         mformLayout.addRow(i18n("Reading Direction:"), self.cmbReadingMode)
         mformLayout.addRow(i18n("Genre:"), self.lnGenre)
         mformLayout.addRow(i18n("Characters:"), self.lnCharacters)
@@ -283,7 +345,7 @@ class comic_meta_data_editor(QDialog):
         authorPage.setLayout(QVBoxLayout())
         explanation = QLabel(i18n("The following is a table of the authors that contributed to this comic. You can set their nickname, proper names (first, middle, last), Role (Penciller, Inker, etc), email and homepage."))
         explanation.setWordWrap(True)
-        self.authorModel = QStandardItemModel(0, 7)
+        self.authorModel = QStandardItemModel(0, 8)
         labels = [i18n("Nick Name"), i18n("Given Name"), i18n("Middle Name"), i18n("Family Name"), i18n("Role"), i18n("Email"), i18n("Homepage"), i18n("Language")]
         self.authorModel.setHorizontalHeaderLabels(labels)
         self.authorTable = QTableView()
@@ -329,11 +391,24 @@ class comic_meta_data_editor(QDialog):
         self.license = license_combo_box()  # Maybe ought to make this a QLineEdit...
         self.license.setEditable(True)
         self.license.completer().setCompletionMode(QCompleter.PopupCompletion)
+        dataBaseReference = QVBoxLayout()
+        self.ln_database_name = QLineEdit()
+        self.ln_database_name.setToolTip(i18n("If there's an entry in a comics data base, that should be added here. It is unlikely to be a factor for comics from scratch, but useful when doing a conversion."))
+        self.cmb_entry_type = QComboBox()
+        self.cmb_entry_type.addItems(["IssueID", "SeriesID", "URL"])
+        self.cmb_entry_type.setEditable(True)
+        self.ln_database_entry = QLineEdit()
+        dbHorizontal = QHBoxLayout()
+        dbHorizontal.addWidget(self.ln_database_name)
+        dbHorizontal.addWidget(self.cmb_entry_type)
+        dataBaseReference.addLayout(dbHorizontal)
+        dataBaseReference.addWidget(self.ln_database_entry)
         publisherLayout.addRow(i18n("Name:"), self.publisherName)
         publisherLayout.addRow(i18n("City:"), self.publishCity)
         publisherLayout.addRow(i18n("Date:"), publishDateLayout)
         publisherLayout.addRow(i18n("ISBN:"), self.isbn)
         publisherLayout.addRow(i18n("License:"), self.license)
+        publisherLayout.addRow(i18n("Database:"), dataBaseReference)
 
         mainWidget.addTab(publisherPage, i18n("Publisher"))
     """
@@ -354,6 +429,10 @@ class comic_meta_data_editor(QDialog):
 
     def slot_set_date(self):
         self.publishDate.setDate(QDate().currentDate())
+        
+    def slot_update_countries(self):
+        code = self.cmbLanguage.codeForCurrentEntry()
+        self.cmbCountry.set_country_for_locale(code)
 
     """
     Append keys to autocompletion lists from the directory mainP.
@@ -483,11 +562,20 @@ class comic_meta_data_editor(QDialog):
             self.teSummary.appendPlainText(config["summary"])
         if "genre" in config.keys():
             genreList = []
-            for genre in config["genre"]:
-                if genre in self.acbfGenreList.keys():
-                    genreList.append(self.acbfGenreList[genre])
-                else:
-                    genreList.append(genre)
+            genreListConf = config["genre"]
+            totalMatch = 100
+            if isinstance(config["genre"], dict):
+                genreListConf = config["genre"].keys()
+                totalMatch = 0
+            for genre in genreListConf:
+                genreKey = genre
+                if genre in self.acbfGenreList:
+                    genreKey = self.acbfGenreList[genre]
+                if isinstance(config["genre"], dict):
+                    genreValue = config["genre"][genre]
+                    if genreValue > 0:
+                        genreKey = str(genreKey + "(" + str(genreValue) + ")")
+                genreList.append(genreKey)
             self.lnGenre.setText(", ".join(genreList))
         if "characters" in config.keys():
             self.lnCharacters.setText(", ".join(config["characters"]))
@@ -512,13 +600,15 @@ class comic_meta_data_editor(QDialog):
         if "language" in config.keys():
             code = config["language"]
             if "_" in code:
-                code = code.split("_")[0]
-            self.cmbLanguage.setEntryToCode(code)
+                self.cmbLanguage.setEntryToCode(code.split("_")[0])
+                self.cmbCountry.setEntryToCode(code.split("_")[-1])
+            else:
+                self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
             if config["readingDirection"] is "leftToRight":
-                self.cmbReadingMode.setCurrentIndex(0)
+                self.cmbReadingMode.setCurrentIndex(int(Qt.LeftToRight))
             else:
-                self.cmbReadingMode.setCurrentIndex(1)
+                self.cmbReadingMode.setCurrentIndex(int(Qt.RightToLeft))
         else:
             self.cmbReadingMode.setCurrentIndex(QLocale(self.cmbLanguage.codeForCurrentEntry()).textDirection())
         if "publisherName" in config.keys():
@@ -539,45 +629,26 @@ class comic_meta_data_editor(QDialog):
                 author = authorList[i]
                 if len(author.keys()) > 0:
                     listItems = []
-                    authorNickName = QStandardItem()
-                    if "nickname" in author.keys():
-                        authorNickName.setText(author["nickname"])
-                    listItems.append(authorNickName)
-                    authorFirstName = QStandardItem()
-                    if "first-name" in author.keys():
-                        authorFirstName.setText(author["first-name"])
-                    listItems.append(authorFirstName)
-                    authorMiddleName = QStandardItem()
-                    if "initials" in author.keys():
-                        authorMiddleName.setText(author["initials"])
-                    listItems.append(authorMiddleName)
-                    authorLastName = QStandardItem()
-                    if "last-name" in author.keys():
-                        authorLastName.setText(author["last-name"])
-                    listItems.append(authorLastName)
-                    authorRole = QStandardItem()
-                    if "role" in author.keys():
-                        role = author["role"]
-                        if author["role"] in self.acbfAuthorRolesList.keys():
-                            role = self.acbfAuthorRolesList[author["role"]]
-                        authorRole.setText(role)
-                    listItems.append(authorRole)
-                    authorEMail = QStandardItem()
-                    if "email" in author.keys():
-                        authorEMail.setText(author["email"])
-                    listItems.append(authorEMail)
-                    authorHomePage = QStandardItem()
-                    if "homepage" in author.keys():
-                        authorHomePage.setText(author["homepage"])
-                    listItems.append(authorHomePage)
-                    authorLanguage = QStandardItem()
-                    if "language" in author.keys():
-                        authorLanguage.setText(author["language"])
-                        pass
-                    listItems.append(authorLanguage)
+                    listItems = []
+                    listItems.append(QStandardItem(author.get("nickname", "")))
+                    listItems.append(QStandardItem(author.get("first-name", "")))
+                    listItems.append(QStandardItem(author.get("initials", "")))
+                    listItems.append(QStandardItem(author.get("last-name", "")))
+                    role = author.get("role", "")
+                    if role in self.acbfAuthorRolesList.keys():
+                        role = self.acbfAuthorRolesList[role]
+                    listItems.append(QStandardItem(role))
+                    listItems.append(QStandardItem(author.get("email", "")))
+                    listItems.append(QStandardItem(author.get("homepage", "")))
+                    listItems.append(QStandardItem(author.get("language", "")))
                     self.authorModel.appendRow(listItems)
         else:
             self.slot_add_author()
+        dbRef = config.get("databaseReference", {})
+        self.ln_database_name.setText(dbRef.get("name", ""))
+        self.ln_database_entry.setText(dbRef.get("entry", ""))
+        stringCmbEntryType = self.cmb_entry_type.itemText(0)
+        self.cmb_entry_type.setCurrentText(dbRef.get("type", stringCmbEntryType))
 
     """
     Store the GUI values into the config dictionary given.
@@ -595,13 +666,28 @@ class comic_meta_data_editor(QDialog):
         config["cover"] = self.cmbCoverPage.currentText()
         listkeys = self.lnGenre.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
-            genreList = []
-            for genre in self.lnGenre.text().split(", "):
+            preSplit = self.lnGenre.text().split(",")
+            genreMatcher = re.compile(r'\((\d+)\)')
+            genreList = {}
+            totalValue = 0
+            for key in preSplit:
+                m = genreMatcher.search(key)
+                if m:
+                    genre = str(genreMatcher.sub("", key)).strip()
+                    match = int(m.group()[:-1][1:])
+                else:
+                    genre = key.strip()
+                    match = 0
                 if genre in self.acbfGenreList.values():
                     i = list(self.acbfGenreList.values()).index(genre)
-                    genreList.append(list(self.acbfGenreList.keys())[i])
+                    genreList[list(self.acbfGenreList.keys())[i]] = match
                 else:
-                    genreList.append(genre)
+                    genreList[genre] = match
+                totalValue += match
+            # Normalize the values:
+            for key in genreList.keys():
+                if genreList[key] > 0:
+                    genreList[key] = round(genreList[key] / totalValue * 100)
             config["genre"] = genreList
         elif "genre" in config.keys():
             config.pop("genre")
@@ -620,7 +706,7 @@ class comic_meta_data_editor(QDialog):
         listkeys = self.lnOtherKeywords.text()
         if len(listkeys) > 0 and listkeys.isspace() is False:
             config["otherKeywords"] = self.lnOtherKeywords.text().split(", ")
-        elif "characters" in config.keys():
+        elif "otherKeywords" in config.keys():
             config.pop("otherKeywords")
         text = self.teSummary.toPlainText()
         if len(text) > 0 and text.isspace() is False:
@@ -632,8 +718,8 @@ class comic_meta_data_editor(QDialog):
             config["seriesNumber"] = self.spnSeriesNumber.value()
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
-        config["language"] = str(self.cmbLanguage.codeForCurrentEntry())
-        if self.cmbReadingMode is Qt.LeftToRight:
+        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"_"+self.cmbCountry.codeForCurrentEntry())
+        if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:
             config["readingDirection"] = "rightToLeft"
@@ -661,5 +747,11 @@ class comic_meta_data_editor(QDialog):
         config["publishingDate"] = self.publishDate.date().toString(Qt.ISODate)
         config["isbn-number"] = self.isbn.text()
         config["license"] = self.license.currentText()
+        if self.ln_database_name.text().isalnum() and self.ln_database_entry.text().isalnum():
+            dbRef = {}
+            dbRef["name"] = self.ln_database_name.text()
+            dbRef["entry"] = self.ln_database_entry.text()
+            dbRef["type"] = self.cmb_entry_type.currentText()
+            config["databaseReference"] = dbRef
 
         return config

@@ -29,6 +29,7 @@
 #include <QStandardPaths>
 #include <QGlobalStatic>
 
+
 #include <resources/KoSegmentGradient.h>
 #include <resources/KoStopGradient.h>
 #include "KoColorSpaceRegistry.h"
@@ -114,7 +115,7 @@ private:
     KoAbstractGradient* m_foregroundToBackground;
 };
 
-KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
+KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase *server)
     : QThread()
     , m_server(server)
 {
@@ -123,6 +124,7 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
 
     if (!fileNames.isEmpty()) {
         foreach (const QString &s, fileNames) {
+            qDebug() << "blacklisting" << s << m_fileNames;
             if (m_fileNames.contains(s)) {
                m_fileNames.removeAll(s);
             }

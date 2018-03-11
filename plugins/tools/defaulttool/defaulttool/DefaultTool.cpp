@@ -704,7 +704,6 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         kiscanvas->viewManager()->showFloatingMessage(
                 i18n("This tool only works on vector layers. You probably want the move tool."),
                 QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
-
         return;
     }
 

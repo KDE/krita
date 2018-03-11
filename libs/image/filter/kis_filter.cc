@@ -29,6 +29,8 @@
 #include "kis_selection.h"
 #include "kis_types.h"
 #include <kis_painter.h>
+#include <KoUpdater.h>
+
 
 KoID KisFilter::categoryAdjust()
 {
@@ -126,6 +128,15 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
 
     try {
+        QScopedPointer<KoUpdater> fakeUpdater;
+
+        if (!progressUpdater) {
+            // TODO: remove dependency on KoUpdater, depend on KoProgressProxy,
+            //       it is more lightweight
+            fakeUpdater.reset(new KoDummyUpdater());
+            progressUpdater = fakeUpdater.data();
+        }
+
         processImpl(temporary, applyRect, config, progressUpdater);
     }
     catch (std::bad_alloc) {

@@ -2306,7 +2306,9 @@ KisView* KisMainWindow::newView(QObject *document)
 
 void KisMainWindow::newWindow()
 {
-    KisPart::instance()->createMainWindow()->show();
+    KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
+    mainWindow->initializeGeometry();
+    mainWindow->show();
 }
 
 void KisMainWindow::closeCurrentWindow()

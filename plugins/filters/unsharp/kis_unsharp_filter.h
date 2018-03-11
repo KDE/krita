@@ -51,14 +51,14 @@ private:
                               quint8 threshold,
                               qreal weights[2],
                               qreal factor,
-                              const QBitArray &channelFlags) const;
+                              const QBitArray &channelFlags, KoUpdater *progressUpdater) const;
 
     void processRaw(KisPaintDeviceSP device,
                     const QRect &rect,
                     quint8 threshold,
                     qreal weights[2],
                     qreal factor,
-                    const QBitArray &channelFlags) const;
+                    const QBitArray &channelFlags, KoUpdater *progressUpdater) const;
 };
 
 #endif

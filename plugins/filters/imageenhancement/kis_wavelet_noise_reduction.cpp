@@ -31,6 +31,7 @@
 #include <kis_paint_device.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
+#include "kis_global.h"
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
     : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
@@ -65,25 +66,11 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
                                            ) const
 {
     Q_ASSERT(device);
-    // TODO take selections into account
-    float threshold;
 
     KisFilterConfigurationSP config = _config ? _config : defaultConfiguration();
-
-    threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
-
-    qint32 depth = device->colorSpace()->colorChannelCount();
-
-    int size;
-    int maxrectsize = qMax(applyRect.width(), applyRect.height());
-    for (size = 2; size < maxrectsize; size *= 2) ;
+    const float threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
 
     KisMathToolbox mathToolbox;
-
-    if (progressUpdater) {
-        progressUpdater->setRange(0, mathToolbox.fastWaveletTotalSteps(applyRect) * 2 + size*size*depth);
-    }
-    int count = 0;
 
     //     dbgFilters << size <<"" << maxrectsize <<"" << srcTopLeft.x() <<"" << srcTopLeft.y();
 
@@ -104,10 +91,18 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
         return;
     }
 
-    //     dbgFilters <<"Thresholding...";
-    float* fin = wav->coeffs + wav->depth * wav->size * wav->size;
+    float* const fin = wav->coeffs + wav->depth * pow2(wav->size);
+    float* const begin = wav->coeffs + wav->depth;
 
-    for (float* it = wav->coeffs + wav->depth; it < fin; it++) {
+    const int size = fin - begin;
+    const int progressOffset = int(std::ceil(std::log2(size / 100)));
+    const int progressMask = (1 << progressOffset) - 1;
+    const int numProgressSteps = size >> progressOffset;
+    int pointsProcessed = 0;
+
+    progressUpdater->setRange(0, numProgressSteps);
+
+    for (float* it = begin; it < fin; it++) {
         if (*it > threshold) {
             *it -= threshold;
         } else if (*it < -threshold) {
@@ -115,10 +110,12 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
         } else {
             *it = 0.;
         }
-        if (progressUpdater) progressUpdater->setValue(++count);
-    }
 
-    //     dbgFilters <<"Untransforming...";
+        if (!(pointsProcessed & progressMask)) {
+            progressUpdater->setValue(pointsProcessed >> progressOffset);
+        }
+        pointsProcessed++;
+    }
 
     mathToolbox.fastWaveletUntransformation(device, applyRect, wav, buff);
 

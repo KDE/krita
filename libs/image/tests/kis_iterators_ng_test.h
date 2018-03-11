@@ -45,6 +45,8 @@ private Q_SLOTS:
     void writeBytes();
     void fill();
     void sequentialIter();
+    void sequentialIteratorWithProgress();
+    void sequentialIteratorWithProgressIncomplete();
     void hLineIter();
     void randomAccessor();
 };

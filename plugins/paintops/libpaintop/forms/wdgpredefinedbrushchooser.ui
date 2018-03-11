@@ -134,6 +134,11 @@
      </item>
      <item>
       <widget class="QLabel" name="brushDetailsLabel">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Brush Details</string>
        </property>

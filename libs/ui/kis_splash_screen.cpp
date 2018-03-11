@@ -50,7 +50,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     QImage img = pixmap.toImage();
     QFont font = this->font();
-    font.setPointSize(9);
+    font.setPointSize(11);
     font.setBold(true);
     QFontMetrics metrics(font);
 
@@ -60,7 +60,7 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
 
     // positioning of the text over the image (version)
     // also see setLoadingText() for positiong (loading progress text)
-    int leftEdge = 525-metrics.width(version);
+    int leftEdge = 475-metrics.width(version);
     int topEdge = 58+metrics.ascent();
 
     //draw shadow
@@ -194,7 +194,7 @@ void KisSplashScreen::displayRecentFiles(bool show) {
 void KisSplashScreen::setLoadingText(QString text)
 {
     QFont font = this->font();
-    font.setPointSize(8);
+    font.setPointSize(10);
     font.setItalic(true);
 
     QImage img = m_splashImage;
@@ -204,7 +204,7 @@ void KisSplashScreen::setLoadingText(QString text)
     p.setRenderHint(QPainter::Antialiasing);
 
     // position text for loading text
-    int leftEdge = 525-metrics.width(text);
+    int leftEdge = 475-metrics.width(text);
     int topEdge = m_textTop;
 
     //draw shadow

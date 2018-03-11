@@ -208,8 +208,8 @@ void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg
     spacingWidget->setSpacing(false, cfg->getBool("spacing"));
     nameLineEdit->setText(cfg->getString("name"));
     colorAsMask->setChecked(cfg->getBool("mask"));
-    brushStyle->setCurrentIndex(cfg->getInt("selectionMode"));
-    cmbSelectionMode->setCurrentIndex(cfg->getInt("brushStyle"));
+    brushStyle->setCurrentIndex(cfg->getInt("brushStyle"));
+    cmbSelectionMode->setCurrentIndex(cfg->getInt("selectionMode"));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
@@ -218,8 +218,8 @@ KisPropertiesConfigurationSP KisWdgOptionsBrush::configuration() const
     cfg->setProperty("spacing", spacingWidget->spacing());
     cfg->setProperty("name", nameLineEdit->text());
     cfg->setProperty("mask", colorAsMask->isChecked());
-    cfg->setProperty("selectionMode", brushStyle->currentIndex());
-    cfg->setProperty("brushStyle", cmbSelectionMode->currentIndex());
+    cfg->setProperty("selectionMode", cmbSelectionMode->currentIndex());
+    cfg->setProperty("brushStyle", brushStyle->currentIndex());
     return cfg;
 }
 

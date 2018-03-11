@@ -95,7 +95,9 @@ void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
     if (!activeTool) return;
     if (!activeTool->wantsAutoScroll()) return;
     if (!event.isAccepted()) return;
+    if (!isToolPressed) return;
     if (event.buttons() != Qt::LeftButton) return;
+
 
     widgetScrollPoint = event.pos();
 
@@ -205,8 +207,22 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
     KoToolManager::instance()->priv()->switchInputDevice(id);
     d->mouseDownPoint = ev->pos();
 
-    if (d->tabletPressed) // refuse to send a press unless there was a release first.
+
+    // this tries to make sure another mouse press event doesn't happen
+    // before a release event happens
+    if (d->isToolPressed) {
+        mouseReleaseEvent(ev);
+        d->tabletPressed = false;
+        d->scrollTimer.stop();
+
+        if (d->activeTool) {
+            d->activeTool->mouseReleaseEvent(ev);
+        }
+
+        d->isToolPressed = false;
+
         return;
+    }
 
     QPointF globalPoint = ev->globalPos();
     if (d->multiClickGlobalPoint != globalPoint) {
@@ -243,6 +259,8 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
         d->multiClickCount = 0;
         ev->ignore();
     }
+
+    d->isToolPressed = true;
 }
 
 void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
@@ -305,6 +323,8 @@ void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
     } else {
         event->ignore();
     }
+
+    d->isToolPressed = false;
 }
 
 void KoToolProxy::keyPressEvent(QKeyEvent *event)
@@ -321,6 +341,8 @@ void KoToolProxy::keyReleaseEvent(QKeyEvent *event)
         d->activeTool->keyReleaseEvent(event);
     else
         event->ignore();
+
+    d->isToolPressed = false;
 }
 
 void KoToolProxy::explicitUserStrokeEndRequest()

@@ -554,6 +554,8 @@ echo.
 echo Copying files...
 :: krita.exe
 copy %KRITA_INSTALL_DIR%\bin\krita.exe %pkg_root%\bin
+:: kritarunner.exe
+copy %KRITA_INSTALL_DIR%\bin\kritarunner.exe %pkg_root%\bin
 :: DLLs from bin/
 echo INFO: Copying all DLLs except Qt5* from bin/
 setlocal enableextensions enabledelayedexpansion
@@ -643,6 +645,7 @@ if errorlevel 1 (
 
 :: Copy embedded Python
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\python %pkg_root%\python
+del /q %pkg_root%\python\python.exe %pkg_root%\python\pythonw.exe
 
 :: For chopping relative path
 :: 512 should be enough

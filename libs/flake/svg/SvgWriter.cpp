@@ -249,6 +249,19 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
     QSvgGenerator svgGenerator;
     svgGenerator.setOutputDevice(&svgBuffer);
 
+    /**
+     * HACK ALERT: Qt (and Krita 3.x) has a weird bug, it assumes that all font sizes are
+     *             defined in 96 ppi resolution, even though your the resolution in QSvgGenerator
+     *             is manually set to 72 ppi. So here we do a tricky thing: we set a fake resolution
+     *             to (72 * 72 / 96) = 54 ppi, which guarantees that the text, when painted in 96 ppi,
+     *             will be actually painted in 72 ppi.
+     *
+     * BUG: 389802
+     */
+    if (shape->shapeId() == "TextShapeID") {
+        svgGenerator.setResolution(54);
+    }
+
     QPainter svgPainter;
     svgPainter.begin(&svgGenerator);
     painter.paint(svgPainter, SvgUtil::toUserSpace(bbox).toRect(), bbox);

@@ -58,7 +58,7 @@ public:
     KisViewManager* viewManager;
     KActionCollection *actionCollection;
 
-    QList<KisAction*> actions;
+    QList<QPointer<KisAction>> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
     KisOperationRegistry operationRegistry;
 
@@ -303,28 +303,29 @@ void KisActionManager::updateGUI()
 
 
     // loop through all actions in action manager and determine what should be enabled
-    Q_FOREACH (KisAction* action, d->actions) {
+    Q_FOREACH (QPointer<KisAction> action, d->actions) {
         bool enable;
+        if (action) {
+            if (action->activationFlags() == KisAction::NONE) {
+                enable = true;
+            }
+            else {
+                enable = action->activationFlags() & flags; // combine action flags with updateGUI flags
+            }
 
-        if (action->activationFlags() == KisAction::NONE) {
-            enable = true;
-        }
-        else {
-            enable = action->activationFlags() & flags; // combine action flags with updateGUI flags
-        }
+            enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
 
-        enable = enable && (int)(action->activationConditions() & conditions) == (int)action->activationConditions();
-
-        if (node && enable) {
-            Q_FOREACH (const QString &type, action->excludedNodeTypes()) {
-                if (node->inherits(type.toLatin1())) {
-                    enable = false;
-                    break;
+            if (node && enable) {
+                Q_FOREACH (const QString &type, action->excludedNodeTypes()) {
+                    if (node->inherits(type.toLatin1())) {
+                        enable = false;
+                        break;
+                    }
                 }
             }
-        }
 
-        action->setActionEnabled(enable);
+            action->setActionEnabled(enable);
+        }
     }
 }
 

@@ -132,8 +132,15 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
         d->paramId = transfo->parameterId(d->parameterName);
     }
 
-    qreal v = computeRotationLikeValue(info, 0, false);
-    v = (v) * (this->value());//multiply by strength slider.
+    qreal v = computeSizeLikeValue(info);
+    if (d->parameterName == "h") {
+        v = computeRotationLikeValue(info, 0, false);
+        v = (v) * (this->value());//multiply by strength slider.
+    } else {
+        qreal halfValue = this->value()*0.5;
+        v = (v*this->value()) + (0.5-halfValue);
+        v = (v*2)-1;
+    }
     transfo->setParameter(d->paramId, v);
     transfo->setParameter(3, 0); //sets the type to HSV.
     transfo->setParameter(4, false); //sets the colorize to false.

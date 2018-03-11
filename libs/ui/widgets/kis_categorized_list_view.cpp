@@ -27,8 +27,8 @@
 #include <kis_icon.h>
 #include "kis_debug.h"
 
-KisCategorizedListView::KisCategorizedListView(bool useCheckBoxHack, QWidget* parent):
-    QListView(parent), m_useCheckBoxHack(useCheckBoxHack)
+KisCategorizedListView::KisCategorizedListView(QWidget* parent):
+    QListView(parent)
 {
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotIndexChanged(QModelIndex)));
 }
@@ -71,10 +71,27 @@ void KisCategorizedListView::slotIndexChanged(const QModelIndex& index)
     }
 }
 
-void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &/*roles*/)
+void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int> &roles)
 {
     QListView::dataChanged(topLeft, bottomRight);
     updateRows(topLeft.row(), bottomRight.row()+1);
+
+    // check to see if the data changed was a check box
+    // if it is a checkbox tell the brush edtor that the preset is now "dirty"
+    int i = 0;
+    for (QVector<int>::const_iterator iterator = roles.begin(); iterator != roles.end(); ++iterator) {
+
+        if (Qt::CheckStateRole == roles.at(i) ) {
+            int row = topLeft.row();
+            int column = topLeft.column();
+
+            emit sigEntryChecked(model()->index(row, column));
+        } else if (__CategorizedListModelBase::ExpandCategoryRole == roles.at(i)) {
+           // logic to target the expand/contract menus if needed
+        }
+
+        i++;
+    }
 }
 
 void KisCategorizedListView::rowsInserted(const QModelIndex& parent, int start, int end)
@@ -92,24 +109,6 @@ void KisCategorizedListView::rowsAboutToBeRemoved(const QModelIndex &parent, int
 
 void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 {
-    if (m_useCheckBoxHack) {
-        QModelIndex index = QListView::indexAt(event->pos());
-        if (index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
-            QListView::mousePressEvent(event);
-            QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
-                                     event->pos(),
-                                     event->globalPos(),
-                                     event->button(),
-                                     event->button() | event->buttons(),
-                                     event->modifiers());
-
-            QListView::mouseReleaseEvent(&releaseEvent);
-            emit sigEntryChecked(index);
-            return;
-        }
-
-    }
-
     QListView::mousePressEvent(event);
 
     if(event->button() == Qt::RightButton){
@@ -137,11 +136,6 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
-
-    QModelIndex index = QListView::indexAt(event->pos());
-    if(index.data(__CategorizedListModelBase::isToggledRole).toBool() && index.isValid()){
-        emit sigEntryChecked(index);
-    }
 }
 
 

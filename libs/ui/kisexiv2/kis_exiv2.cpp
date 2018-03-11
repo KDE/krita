@@ -37,10 +37,10 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool f
     case Exiv2::invalidTypeId:
     case Exiv2::lastTypeId:
     case Exiv2::directory:
-        dbgFile << "Invalid value :" << value->typeId() << " value =" << value->toString().c_str();
+        dbgMetaData << "Invalid value :" << value->typeId() << " value =" << value->toString().c_str();
         return KisMetaData::Value();
     case Exiv2::undefined: {
-        dbgFile << "Undefined value :" << value->typeId() << " value =" << value->toString().c_str();
+        dbgMetaData << "Undefined value :" << value->typeId() << " value =" << value->toString().c_str();
         QByteArray array(value->count() , 0);
         value->copy((Exiv2::byte*)array.data(), Exiv2::invalidByteOrder);
         return KisMetaData::Value(QString(array.toBase64()));
@@ -66,14 +66,14 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool f
     case Exiv2::unsignedRational:
         if(value->size() < 2)
         {
-          dbgFile << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
+          dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
           return KisMetaData::Value();
         }
         return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::signedRational:
         if(value->size() < 2)
         {
-          dbgFile << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
+          dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
           return KisMetaData::Value();
         }
         return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
@@ -86,12 +86,12 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool f
     case Exiv2::xmpSeq:
     case Exiv2::langAlt:
     default: {
-        dbgFile << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
+        dbgMetaData << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
         //Q_ASSERT(false); // This point must never be reached !
         return KisMetaData::Value();
     }
     }
-    dbgFile << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
+    dbgMetaData << "Unknown type id :" << value->typeId() << " value =" << value->toString().c_str();
     //Q_ASSERT(false); // This point must never be reached !
     return KisMetaData::Value();
 }
@@ -133,7 +133,7 @@ Exiv2::Value* variantToExivValue(const QVariant& variant, Exiv2::TypeId type)
     case Exiv2::comment:
         return new Exiv2::CommentValue(qPrintable(variant.toString()));
     default:
-        dbgFile << "Unhandled type:" << type;
+        dbgMetaData << "Unhandled type:" << type;
         //Q_ASSERT(false);
         return 0;
     }
@@ -188,12 +188,12 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             return ev;
         }
         default:
-            dbgFile << type << " " << value;
+            dbgMetaData << type << " " << value;
             //Q_ASSERT(false);
         }
     }
     default:
-        dbgFile << type << " " << value;
+        dbgMetaData << type << " " << value;
         //Q_ASSERT(false);
     }
     return 0;

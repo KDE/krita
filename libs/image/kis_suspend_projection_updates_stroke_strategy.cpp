@@ -111,10 +111,14 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         QMutex m_mutex;
     };
 
+    // Suspend job should be a barrier to ensure all
+    // previous lodN strokes reach the GUI. Otherwise,
+    // they will be blocked in
+    // KisImage::notifyProjectionUpdated()
     class SuspendData : public KisStrokeJobData {
     public:
         SuspendData()
-            : KisStrokeJobData(SEQUENTIAL)
+            : KisStrokeJobData(BARRIER)
             {}
     };
 

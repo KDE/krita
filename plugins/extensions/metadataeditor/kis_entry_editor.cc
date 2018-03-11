@@ -93,7 +93,7 @@ void KisEntryEditor::valueChanged()
 void KisEntryEditor::valueEdited()
 {
     QVariant val = d->object->property(d->propertyName.toLatin1());
-    dbgPlugins << "Value edited: " << d->propertyName << val;
+    dbgMetaData << "Value edited: " << d->propertyName << val;
     d->setValue(val);
     emit valueHasBeenEdited();
 }

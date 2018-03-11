@@ -87,9 +87,11 @@ class comics_template_dialog(QDialog):
         self.setWindowTitle(i18n("Add new template"))
         self.setLayout(QVBoxLayout())
 
+        self.templates = QComboBox()
         self.templates.setEnabled(False)
         self.fill_templates()
 
+        self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
         self.buttons.button(QDialogButtonBox.Ok).setEnabled(False)
@@ -292,8 +294,8 @@ class comics_template_create(QDialog):
 
         template = Application.createDocument((wBase + bL + bR), (hBase + bT + bB), self.templateName.text(), "RGBA", "U8", "sRGB built-in", self.DPI.value())
 
-        backgroundNode = template.activeNode()
-        backgroundNode.setName(i18n("Background"))
+        backgroundNode = template.createNode(i18n("Background"), "paintlayer")
+        template.rootNode().addChildNode(backgroundNode, None)
         pixelByteArray = QByteArray()
         pixelByteArray = backgroundNode.pixelData(0, 0, (wBase + bL + bR), (hBase + bT + bB))
         white = int(255)
@@ -302,7 +304,7 @@ class comics_template_create(QDialog):
         backgroundNode.setLocked(True)
 
         sketchNode = template.createNode(i18n("Sketch"), "paintlayer")
-        template.rootNode().setChildNodes([backgroundNode, sketchNode])
+        template.rootNode().addChildNode(sketchNode, backgroundNode)
 
         verticalGuides = []
         verticalGuides.append(bL)

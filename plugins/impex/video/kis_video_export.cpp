@@ -105,7 +105,9 @@ KisPropertiesConfigurationSP KisVideoExport::defaultConfiguration(const QByteArr
 
     cfg->setProperty("h264PresetIndex", 5);
     cfg->setProperty("h264ConstantRateFactor", 23);
-    cfg->setProperty("h264ProfileIndex", 4);
+    // This was 4, 'high422', but Windows media player cannot play this profile, so
+    // lets default to 'baseline' instead.
+    cfg->setProperty("h264ProfileIndex", 0);
     cfg->setProperty("h264TuneIndex", 1);
     cfg->setProperty("TheoraBitrate", 5000);
     cfg->setProperty("CustomLineValue", "");

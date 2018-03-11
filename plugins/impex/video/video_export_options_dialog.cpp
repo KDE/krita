@@ -192,7 +192,7 @@ void VideoExportOptionsDialog::setConfiguration(const KisPropertiesConfiguration
     ui->cmbPreset->setCurrentIndex(m_d->defaultPreset);
     m_d->defaultConstantRateFactor = cfg->getInt("h264ConstantRateFactor", 23);
     ui->intConstantRateFactor->setValue(m_d->defaultConstantRateFactor);
-    m_d->defaultProfile = cfg->getInt("h264ProfileIndex", 4);
+    m_d->defaultProfile = cfg->getInt("h264ProfileIndex", 0);
     ui->cmbProfile->setCurrentIndex(m_d->defaultProfile);
     m_d->defaultTune = cfg->getInt("h264TuneIndex", 1);
     ui->cmbTune->setCurrentIndex(m_d->defaultTune);

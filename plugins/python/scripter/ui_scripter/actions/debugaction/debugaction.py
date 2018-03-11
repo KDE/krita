@@ -35,8 +35,8 @@ class DebugAction(QAction):
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_D))
 
     @property
-    def parent(self):
-        return 'toolBar'
+    def parents(self):
+        return ('toolBar',)
 
     def debug(self):
         if self.scripter.uicontroller.invokeAction('save'):

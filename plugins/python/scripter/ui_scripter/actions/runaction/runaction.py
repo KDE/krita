@@ -47,8 +47,8 @@ class RunAction(QAction):
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
 
     @property
-    def parent(self):
-        return 'toolBar'
+    def parents(self):
+        return ('toolBar',)
 
     def run(self):
         """ This method execute python code from an activeDocument (file) or direct

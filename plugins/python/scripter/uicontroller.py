@@ -130,11 +130,14 @@ class UIController(object):
             m = importlib.import_module(module['module'])
             action_class = getattr(m, module['klass'])
             obj = action_class(self.scripter)
-            parent = self.mainWidget.findChild(QObject, obj.parent)
-            self.actions.append(dict(action=obj, parent=parent))
+            parents = []
+            for parent in obj.parents:
+                parents.append(self.mainWidget.findChild(QObject, parent))
+            self.actions.append(dict(action=obj, parents=parents))
 
         for action in self.actions:
-            action['parent'].addAction(action['action'])
+            for parent in action['parents']:
+                parent.addAction(action['action'])
 
     def loadWidgets(self):
         modulePath = 'scripter.ui_scripter.tabwidgets'

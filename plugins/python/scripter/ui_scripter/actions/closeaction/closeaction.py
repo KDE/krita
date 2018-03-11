@@ -33,8 +33,8 @@ class CloseAction(QAction):
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_Q))
 
     @property
-    def parent(self):
-        return 'File'
+    def parents(self):
+        return ('File',)
 
     def close(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)

@@ -32,10 +32,11 @@ class SaveAction(QAction):
         self.setText('Save')
         self.setObjectName('save')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_S))
+        self.setIcon(Krita.instance().icon("document-save-as"))
 
     @property
-    def parent(self):
-        return 'File'
+    def parents(self):
+        return ('File', 'toolBar')
 
     def save(self):
         text = self.editor.toPlainText()

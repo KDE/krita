@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
-from PyQt5.QtGui import QKeySequence
+from PyQt5.QtGui import QKeySequence, QIcon
 from PyQt5.QtCore import Qt
 
 
@@ -31,10 +31,11 @@ class OpenAction(QAction):
         self.setText('Open')
         self.setObjectName('open')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
+        self.setIcon(Krita.instance().icon("document-open"))
 
     @property
-    def parent(self):
-        return 'File'
+    def parents(self):
+        return ('File', 'toolBar')
 
     def open(self):
         dialog = QFileDialog(self.scripter.uicontroller.mainWidget)

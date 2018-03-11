@@ -15,10 +15,11 @@ class ReloadAction(QAction):
         self.setText('Reload File')
         self.setObjectName('reloadfile')
         self.setShortcut(QKeySequence(Qt.ALT + Qt.Key_R))
+        self.setIcon(Krita.instance().icon("view-refresh"))        
 
     @property
-    def parent(self):
-        return 'File'
+    def parents(self):
+        return ('File', 'toolBar')
 
     def reloadFile(self):
         # get the currently open document's path

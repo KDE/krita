@@ -35,8 +35,8 @@ class SettingsAction(QAction):
         self.setText('Settings')
 
     @property
-    def parent(self):
-        return 'File'
+    def parents(self):
+        return ('File',)
 
     def openSettings(self):
         self.settingsDialog.show()

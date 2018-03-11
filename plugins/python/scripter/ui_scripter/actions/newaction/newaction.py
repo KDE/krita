@@ -31,10 +31,11 @@ class NewAction(QAction):
         self.setText('New')
         self.setObjectName('new')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
+        self.setIcon(Krita.instance().icon("document-new"))
 
     @property
-    def parent(self):
-        return 'File'
+    def parents(self):
+        return ('File', 'toolBar')
 
     def new(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)

@@ -191,11 +191,23 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     return settings;
 }
 
-void KisPaintOpSettings::resetSettings()
+void KisPaintOpSettings::resetSettings(const QStringList &preserveProperties)
 {
-    const QString paintopID = getString("paintop");
+    QStringList allKeys = preserveProperties;
+    allKeys << "paintop";
+
+    QHash<QString, QVariant> preserved;
+    Q_FOREACH (const QString &key, allKeys) {
+        if (hasProperty(key)) {
+            preserved[key] = getProperty(key);
+        }
+    }
+
     clearProperties();
-    setProperty("paintop", paintopID);
+
+    for (auto it = preserved.constBegin(); it != preserved.constEnd(); ++it) {
+        setProperty(it.key(), it.value());
+    }
 }
 
 void KisPaintOpSettings::activate()

@@ -442,11 +442,17 @@ class comics_project_manager_docker(DockWidget):
             date = xmlDoc[0].find(calligra + 'date').text
         author = []
         if ET.iselement(xmlDoc[1].find(calligra + 'creator-first-name')):
-            author.append(xmlDoc[1].find(calligra + 'creator-first-name').text)
+            string = xmlDoc[1].find(calligra + 'creator-first-name').text
+            if string is not None:
+                author.append(string)
         if ET.iselement(xmlDoc[1].find(calligra + 'creator-last-name')):
-            author.append(xmlDoc[1].find(calligra + 'creator-last-name').text)
+            string = xmlDoc[1].find(calligra + 'creator-last-name').text
+            if string is not None:
+                author.append(string)
         if ET.iselement(xmlDoc[1].find(calligra + 'full-name')):
-            author.append(xmlDoc[1].find(calligra + 'full-name').text)
+            string = xmlDoc[1].find(calligra + 'full-name').text
+            if string is not None:
+                author.append(string)
             
         return [name, desc, keywords, date, " ".join(author)]
 

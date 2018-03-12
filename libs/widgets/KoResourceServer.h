@@ -80,19 +80,33 @@ public:
     */
     QString extensions() const { return m_extensions; }
 
-    QStringList fileNames() const
+    QStringList fileNames()
     {
         QStringList extensionList = m_extensions.split(':');
         QStringList fileNames;
 
         foreach (const QString &extension, extensionList) {
             fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive);
+        }
 
+        if (type() == "kis_resourcebundles") {
+            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+            if (group.readEntry("HideKrita3Bundle", true)) {
+                Q_FOREACH(const QString &filename, fileNames) {
+                    if (filename.endsWith("Krita_3_Default_Resources.bundle")) {
+                        if (!m_blackListFileNames.contains(filename)) {
+                            m_blackListFileNames.append(filename);
+                        }
+                    }
+                }
+            }
         }
         return fileNames;
     }
 
 protected:
+
+    QStringList m_blackListFileNames;
 
     friend class KoResourceTagStore;
     virtual KoResource *byMd5(const QByteArray &md5) const = 0;
@@ -294,16 +308,11 @@ public:
         if (m_blackListFileNames.contains(resource->filename())) {
             m_blackListFileNames.removeAll(resource->filename());
             writeBlackListFile();
-            }
-            else{
-                warnWidgets<<"Doesn't contain filename";
-                return false;
-            }
-
-
-        //then return true//
-        return true;
+            return true;
+        }
+        return false;
     }
+
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(PointerType resource){
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
@@ -633,17 +642,15 @@ protected:
             QDomNode n = file.firstChild();
             QDomElement e = n.toElement();
             if (e.tagName() == "name") {
-                filenameList.append((e.text()).replace(QString("~"),QDir::homePath()));
+                // If the krita bundle has landed in the blacklist, skip it.
+                if (type() == "kis_resourcebundles") {
+                    if (e.text().endsWith("Krita_3_Default_Resources.bundle")) {
+                        file = file.nextSiblingElement("file");
+                    }
+                }
+                filenameList.append(e.text().replace(QString("~"), QDir::homePath()));
             }
             file = file.nextSiblingElement("file");
-        }
-
-        if (type() == "kis_resourcebundles") {
-            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
-            if (group.readEntry("HideKrita3Bundle", true)) {
-                QFileInfo fi(KoResourcePaths::getApplicationRoot() + "/share/krita/bundles/Krita_3_Default_Resources.bundle");
-                filenameList << fi.absoluteFilePath();
-            }
         }
 
         return filenameList;
@@ -669,9 +676,15 @@ protected:
         doc.appendChild(root);
 
         Q_FOREACH (QString filename, m_blackListFileNames) {
+
+            // Don't write the krita3 bundle to the blacklist, since its location will change
+            // when using the appimate.
+            if (type() == "kis_resourcebundles") {
+                if (filename.endsWith("Krita_3_Default_Resources.bundle")) continue;
+            }
             QDomElement fileEl = doc.createElement("file");
             QDomElement nameEl = doc.createElement("name");
-            QDomText nameText = doc.createTextNode(filename.replace(QDir::homePath(),QString("~")));
+            QDomText nameText = doc.createTextNode(filename.replace(QDir::homePath(), QString("~")));
             nameEl.appendChild(nameText);
             fileEl.appendChild(nameEl);
             root.appendChild(fileEl);
@@ -719,21 +732,20 @@ private:
     QList<PointerType> m_resources; ///< list of resources in order of addition
     QList<ObserverType*> m_observers;
     QString m_blackListFile;
-    QStringList m_blackListFileNames;
     KoResourceTagStore* m_tagStore;
 
 };
 
 template <class T, class Policy = PointerStoragePolicy<T> >
-    class KoResourceServerSimpleConstruction : public KoResourceServer<T, Policy>
+class KoResourceServerSimpleConstruction : public KoResourceServer<T, Policy>
 {
 public:
     KoResourceServerSimpleConstruction(const QString& type, const QString& extensions)
-: KoResourceServer<T, Policy>(type, extensions)
+        : KoResourceServer<T, Policy>(type, extensions)
     {
     }
 
-typename KoResourceServer<T, Policy>::PointerType createResource( const QString & filename ) override {
+    typename KoResourceServer<T, Policy>::PointerType createResource( const QString & filename ) override {
         return new T(filename);
     }
 };

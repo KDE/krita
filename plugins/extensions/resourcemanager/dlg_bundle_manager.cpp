@@ -141,7 +141,7 @@ void DlgBundleManager::accept()
 
         if (bundle) {
             bool isKrita3Bundle = false;
-            if (bundle->filename().contains("Krita_3_Default_Resources.bundle")) {
+            if (bundle->filename().endsWith("Krita_3_Default_Resources.bundle")) {
                 isKrita3Bundle = true;
                 KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
                 group.writeEntry("HideKrita3Bundle", false);

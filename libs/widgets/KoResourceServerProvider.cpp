@@ -120,16 +120,17 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase *server)
     , m_server(server)
 {
     m_fileNames = m_server->fileNames();
-    QStringList fileNames = m_server->blackListedFiles();
+    QStringList blacklistedFileNames = m_server->blackListedFiles();
 
-    if (!fileNames.isEmpty()) {
-        foreach (const QString &s, fileNames) {
+    if (!blacklistedFileNames.isEmpty()) {
+        foreach (const QString &s, blacklistedFileNames) {
             qDebug() << "blacklisting" << s << m_fileNames;
             if (m_fileNames.contains(s)) {
                m_fileNames.removeAll(s);
             }
         }
     }
+
     connect(qApp, SIGNAL(aboutToQuit()), SLOT(barrier()));
 }
 

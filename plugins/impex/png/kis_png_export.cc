@@ -57,18 +57,6 @@ KisPNGExport::~KisPNGExport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    Q_FOREACH (QWidget* w, wl) {
-        if (w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget")) {
-            dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
-            return true;
-        }
-    }
-    return false;
-}
-
 KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();

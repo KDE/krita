@@ -425,10 +425,6 @@ public:
 
         if (m_data) {
             imageData += estimateDataSize(m_data.data());
-
-            if (!m_frames.isEmpty()) {
-                qWarning() << "WARNING: Extra data object:" << estimateDataSize(m_data.data());
-            }
         }
 
         if (m_lodData) {

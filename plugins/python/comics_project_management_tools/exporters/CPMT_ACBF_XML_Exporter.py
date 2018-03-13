@@ -27,7 +27,7 @@ http://acbf.wikia.com/wiki/ACBF_Specifications
 import os
 import re
 from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
-from PyQt5.QtGui import QImage, QColor
+from PyQt5.QtGui import QImage, QColor, QFont, QRawFont
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from . import CPMT_po_parser as po_parser
 
@@ -63,8 +63,12 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             if "color" in style.keys():
                 styleString += tabs+tabs+"color:"+style["color"]+";\n"
             if "font" in style.keys():
+                fonts = style["font"]
                 genericfont = style.get("genericfont", "sans-serif")
-                styleString += tabs+tabs+"font-family:\""+style["font"]+"\", "+genericfont+";\n"
+                if isinstance(fonts, list):
+                    styleString += tabs+tabs+"font-family:\""+str("\", \"").join(fonts)+"\", "+genericfont+";\n"
+                else:
+                    styleString += tabs+tabs+"font-family:\""+fonts+"\", "+genericfont+";\n"
             if "bold" in style.keys():
                 if style["bold"]:
                     styleString += tabs+tabs+"font-weight: bold;\n"
@@ -396,7 +400,10 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     if key not in skipList:
                         style = stylesDictionary.get(key, {})
                         font = style.get("font", "")
-                        if svg.attribute("family") == font:
+                        if isinstance(fonts, list):
+                            if svg.attribute("family") in font:
+                                type = key
+                        elif svg.attribute("family") == font:
                             type = key
             else:
                 type = None
@@ -646,6 +653,7 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
         pages.append(cover)
 
     data = document.createElement("data")
+    root.appendChild(data)
 
     # Covert pages to base64 strings.
     for i in range(0, len(pages)):
@@ -667,8 +675,6 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
 
                 image.setAttribute("href", "#" + href)
                 data.appendChild(binary)
-
-    root.appendChild(data)
 
     f = open(location, 'w', newline="", encoding="utf-8")
     f.write(document.toString(indent=2))
@@ -743,7 +749,11 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
 def compare_styles(style = {}, fontFamily = str(), fontWeight = str(), fontStyle = str()):
     compare = []
     if "font" in style.keys():
-        compare.append((fontFamily == style.get("font")))
+        font = style.get("font")
+        if isinstance(font, list):
+            compare.append(fontFamily in font)
+        else:
+            compare.append((fontFamily == font))
     if "bold" in style.keys():
         compare.append(fontWeight == "bold" or int(fontWeight) > 400)
     if "ital" in style.keys():

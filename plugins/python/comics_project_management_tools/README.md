@@ -224,4 +224,4 @@ ACBF list:
             4. have acbf_textclass read from the desc.
     - Jump: proly not gonna support this.
     - text url anchors: only used for references.
-    - Font embedding: spec is super vague about this.
+    - Font embedding: spec is super vague about this. (Not possible with QT)

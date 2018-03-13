@@ -219,6 +219,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.comicPageList.setDragEnabled(True)
         self.comicPageList.setDragDropMode(QAbstractItemView.InternalMove)
+        self.comicPageList.setDefaultDropAction(Qt.MoveAction)
         self.comicPageList.setAcceptDrops(True)
         self.comicPageList.setItemDelegate(comic_page_delegate())
         self.pagesModel = QStandardItemModel()

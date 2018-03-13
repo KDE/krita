@@ -188,10 +188,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
-    chkSRGB->setEnabled(sRGB);
+    //chkSRGB->setEnabled(sRGB);
     chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));
 
-    chkForceSRGB->setEnabled(!sRGB);
+    //chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
     chkAuthor->setChecked(cfg->getBool("storeAuthor", false));

@@ -81,8 +81,6 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
         , m_recorder(0)
 {
     if (parent->inherits("KisViewManager")) {
-        m_view = (KisViewManager*) parent;
-
         // Open and play action
         KisAction* action  = createAction("Macro_Open_Play");
         connect(action, SIGNAL(triggered()), this, SLOT(slotOpenPlay()));
@@ -104,7 +102,6 @@ BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
 
 BigBrotherPlugin::~BigBrotherPlugin()
 {
-    m_view = 0;
     delete m_recorder;
 }
 
@@ -114,8 +111,8 @@ void BigBrotherPlugin::slotOpenPlay()
     dbgKrita << m;
     if (!m) return;
     dbgPlugins << "Play the macro";
-    KoUpdaterPtr updater = m_view->createUnthreadedUpdater(i18n("Playing back macro"));
-    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater);
+    KoUpdaterPtr updater = viewManager()->createUnthreadedUpdater(i18n("Playing back macro"));
+    KisMacroPlayer player(m, KisPlayInfo(viewManager()->image(), viewManager()->activeNode()), updater);
     player.start();
     while(player.isRunning())
     {
@@ -130,7 +127,7 @@ void BigBrotherPlugin::slotOpenEdit()
 {
     KisMacro *macro = openMacro();
     if (!macro) return;
-    KisActionsEditorDialog aed(m_view->mainWindow());
+    KisActionsEditorDialog aed(viewManager()->mainWindow());
 
     aed.actionsEditor()->setMacro(macro);
 
@@ -151,7 +148,7 @@ void BigBrotherPlugin::slotStartRecordingMacro()
 
     // Create recorder
     m_recorder = new KisMacro();
-    connect(m_view->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)),
+    connect(viewManager()->image()->actionRecorder(), SIGNAL(addedAction(const KisRecordedAction&)),
             m_recorder, SLOT(addAction(const KisRecordedAction&)));
 }
 
@@ -174,7 +171,7 @@ KisMacro* BigBrotherPlugin::openMacro()
     QStringList mimeFilter;
     mimeFilter << "*.krarec|Recorded actions (*.krarec)";
 
-    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFile, "OpenDocument");
+    KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenDocument");
     dialog.setCaption(i18n("Open Macro"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-recorded-macro");
@@ -213,7 +210,7 @@ KisMacro* BigBrotherPlugin::openMacro()
 
 void BigBrotherPlugin::saveMacro(const KisMacro* macro)
 {
-    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "bigbrother");
+    KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::SaveFile, "bigbrother");
     dialog.setCaption(i18n("Save Macro"));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-recorded-macro");
 

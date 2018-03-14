@@ -53,15 +53,14 @@
 #include "kis_selection_tool_helper.h"
 #include <kis_slider_spin_box.h>
 
-DlgColorRange::DlgColorRange(KisViewManager *view, QWidget *parent)
-        : KoDialog(parent)
-        , m_selectionCommandsAdded(0)
+DlgColorRange::DlgColorRange(KisViewManager *viewManager, QWidget *parent)
+    : KoDialog(parent)
+    , m_selectionCommandsAdded(0)
+    , m_viewManager(viewManager)
 {
     setCaption(i18n("Color Range"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-
-    m_view = view;
 
     m_page = new WdgColorRange(this);
     Q_CHECK_PTR(m_page);
@@ -120,13 +119,13 @@ void DlgColorRange::okClicked()
 
 void DlgColorRange::cancelClicked()
 {
-    if (!m_view) return;
-    if (!m_view->image()) return;
+    if (!m_viewManager) return;
+    if (!m_viewManager->image()) return;
 
     for (int i = 0; i < m_selectionCommandsAdded; i++) {
-        m_view->undoAdapter()->undoLastCommand();
+        m_viewManager->undoAdapter()->undoLastCommand();
     }
-    m_view->canvas()->update();
+    m_viewManager->canvas()->update();
     reject();
 }
 
@@ -154,7 +153,7 @@ void DlgColorRange::slotAdd(bool on)
 
 void DlgColorRange::slotSelectClicked()
 {
-    KisPaintDeviceSP device = m_view->activeDevice();
+    KisPaintDeviceSP device = m_viewManager->activeDevice();
     KIS_ASSERT_RECOVER_RETURN(device);
 
     QRect rc = device->exactBounds();
@@ -165,7 +164,7 @@ void DlgColorRange::slotSelectClicked()
     qint32 x, y, w, h;
     rc.getRect(&x, &y, &w, &h);
 
-    const KoColorSpace *cs = m_view->activeDevice()->colorSpace();
+    const KoColorSpace *cs = m_viewManager->activeDevice()->colorSpace();
     const KoColorSpace *lab = KoColorSpaceRegistry::instance()->lab16();
 
     KoColor match;
@@ -194,9 +193,9 @@ void DlgColorRange::slotSelectClicked()
 
     int fuzziness = m_page->intFuzziness->value();
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_view->activeDevice(), m_view->image()));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_viewManager->activeDevice(), m_viewManager->image()));
 
-    KisHLineConstIteratorSP hiter = m_view->activeDevice()->createHLineConstIteratorNG(x, y, w);
+    KisHLineConstIteratorSP hiter = m_viewManager->activeDevice()->createHLineConstIteratorNG(x, y, w);
     KisHLineIteratorSP selIter = selection->pixelSelection()->createHLineIteratorNG(x, y, w);
 
     for (int row = y; row < h - y; ++row) {
@@ -252,7 +251,7 @@ void DlgColorRange::slotSelectClicked()
     }
 
     selection->pixelSelection()->invalidateOutlineCache();
-    KisSelectionToolHelper helper(m_view->canvasBase(), kundo2_i18n("Color Range Selection"));
+    KisSelectionToolHelper helper(m_viewManager->canvasBase(), kundo2_i18n("Color Range Selection"));
     helper.selectPixelSelection(selection->pixelSelection(), m_mode);
 
     m_page->bnDeselect->setEnabled(true);
@@ -262,10 +261,10 @@ void DlgColorRange::slotSelectClicked()
 
 void DlgColorRange::slotDeselectClicked()
 {
-    if (!m_view) return;
+    if (!m_viewManager) return;
 
 
-    m_view->undoAdapter()->undoLastCommand();
+    m_viewManager->undoAdapter()->undoLastCommand();
     m_selectionCommandsAdded--;
     if (!m_selectionCommandsAdded) {
         m_page->bnDeselect->setEnabled(false);

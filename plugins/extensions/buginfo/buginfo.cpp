@@ -44,7 +44,7 @@ BugInfo::~BugInfo()
 
 void BugInfo::slotBugInfo()
 {
-    DlgBugInfo dlgBugInfo(m_view->mainWindow());
+    DlgBugInfo dlgBugInfo(viewManager()->mainWindow());
     dlgBugInfo.exec();
 }
 

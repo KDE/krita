@@ -54,7 +54,10 @@ protected:
 
     void addOperation(KisOperation* operation);
 
-    QPointer<KisViewManager> m_view;
+    QPointer<KisViewManager> viewManager() const;
+
+private:
+    QPointer<KisViewManager> m_viewManager;
 };
 
 #endif // KIS_VIEW_PLUGIN_H

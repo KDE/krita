@@ -875,7 +875,10 @@ void KisToolTransformConfigWidget::slotSetScaleX(int value)
 
         scaleYBox->blockSignals(true);
         scaleYBox->setValue(calculatedValue);
-        config->setScaleY(calculatedValue / 100.);
+        {
+            KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
+            config->setScaleY(calculatedValue / 100.);
+        }
         scaleYBox->blockSignals(false);
 
         unblockNotifications();
@@ -901,7 +904,10 @@ void KisToolTransformConfigWidget::slotSetScaleY(int value)
         int calculatedValue = int(m_scaleRatio * value);
         scaleXBox->blockSignals(true);
         scaleXBox->setValue(calculatedValue);
-        config->setScaleX(calculatedValue / 100.);
+        {
+            KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
+            config->setScaleX(calculatedValue / 100.);
+        }
         scaleXBox->blockSignals(false);
         unblockNotifications();
     }

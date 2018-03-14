@@ -23,12 +23,12 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
 /**
  * Dialog for converting between color models.
  */
-class ColorSpaceConversion : public KisViewPlugin
+class ColorSpaceConversion : public KisActionPlugin
 {
     Q_OBJECT
 public:

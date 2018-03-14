@@ -22,9 +22,9 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class KisSeparateChannelsPlugin : public KisViewPlugin
+class KisSeparateChannelsPlugin : public KisActionPlugin
 {
     Q_OBJECT
 public:

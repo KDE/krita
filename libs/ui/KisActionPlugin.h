@@ -30,14 +30,14 @@ class KisAction;
 class KisViewManager;
 
 /**
- *  KisViewPlugin is the base for plugins which add actions to the view
+ *  KisActionPlugin is the base for plugins which add actions to the main window
  */
-class KRITAUI_EXPORT KisViewPlugin : public QObject
+class KRITAUI_EXPORT KisActionPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KisViewPlugin(QObject* parent = 0);
-    ~KisViewPlugin() override;
+    KisActionPlugin(QObject *parent = 0);
+    ~KisActionPlugin() override;
 
 protected:
 
@@ -46,15 +46,18 @@ protected:
     *  @param name - title of the action in the krita4.xmlgui file
     *  @param action the action that should be added
     */
-    void addAction(const QString& name, KisAction* action);
+    void addAction(const QString& name, KisAction *action);
 
-    KisAction* createAction(const QString& name);
+    KisAction *createAction(const QString &name);
 
-    void addUIFactory(KisOperationUIFactory* factory);
+    void addUIFactory(KisOperationUIFactory *factory);
 
-    void addOperation(KisOperation* operation);
+    void addOperation(KisOperation *operation);
 
-    QPointer<KisViewManager> m_view;
+    QPointer<KisViewManager> viewManager() const;
+
+private:
+    QPointer<KisViewManager> m_viewManager;
 };
 
 #endif // KIS_VIEW_PLUGIN_H

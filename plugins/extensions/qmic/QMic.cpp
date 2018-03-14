@@ -69,7 +69,7 @@ static const char ack[] = "ack";
 K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>();)
 
 QMic::QMic(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
     , m_gmicApplicator(0)
 {
 #ifndef Q_OS_MAC
@@ -131,7 +131,7 @@ void QMic::slotQMic(bool again)
     m_localServer->listen(m_key);
     connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
     m_pluginProcess = new QProcess(this);
-    connect(m_view, SIGNAL(destroyed(QObject *o)), m_pluginProcess, SLOT(terminate()));
+    connect(viewManager(), SIGNAL(destroyed(QObject *o)), m_pluginProcess, SLOT(terminate()));
     m_pluginProcess->setProcessChannelMode(QProcess::ForwardedChannels);
     connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
     connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
@@ -147,7 +147,7 @@ void QMic::slotQMic(bool again)
 void QMic::connected()
 {
     qDebug() << "connected";
-    if (!m_view) return;
+    if (!viewManager()) return;
 
     QLocalSocket *socket = m_localServer->nextPendingConnection();
     if (!socket) { return; }
@@ -213,14 +213,14 @@ void QMic::connected()
     QString messageBoxWarningText;
 
     if (messageMap.values("command").first() == "gmic_qt_get_image_size") {
-        KisSelectionSP selection = m_view->image()->globalSelection();
+        KisSelectionSP selection = viewManager()->image()->globalSelection();
 
         if (selection) {
             QRect selectionRect = selection->selectedExactRect();
             ba = QByteArray::number(selectionRect.width()) + "," + QByteArray::number(selectionRect.height());
         }
         else {
-            ba = QByteArray::number(m_view->image()->width()) + "," + QByteArray::number(m_view->image()->height());
+            ba = QByteArray::number(viewManager()->image()->width()) + "," + QByteArray::number(viewManager()->image()->height());
         }
     }
     else if (messageMap.values("command").first() == "gmic_qt_get_cropped_images") {
@@ -330,7 +330,7 @@ void QMic::slotGmicFinished(bool successfully, int milliseconds, const QString &
 void QMic::slotStartApplicator(QStringList gmicImages)
 {
     qDebug() << "slotStartApplicator();" << gmicImages;
-    if (!m_view) return;
+    if (!viewManager()) return;
     // Create a vector of gmic images
 
     QVector<gmic_image<float> *> images;
@@ -379,29 +379,29 @@ void QMic::slotStartApplicator(QStringList gmicImages)
 
     // Start the applicator
     KUndo2MagicString actionName = kundo2_i18n("Gmic filter");
-    KisNodeSP rootNode = m_view->image()->root();
-    KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
+    KisNodeSP rootNode = viewManager()->image()->root();
+    KisInputOutputMapper mapper(viewManager()->image(), viewManager()->activeNode());
     KisNodeListSP layers = mapper.inputNodes(m_inputMode);
 
-    m_gmicApplicator->setProperties(m_view->image(), rootNode, images, actionName, layers);
+    m_gmicApplicator->setProperties(viewManager()->image(), rootNode, images, actionName, layers);
     m_gmicApplicator->preview();
     m_gmicApplicator->finish();
 }
 
 bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 {
-    if (!m_view) return false;
+    if (!viewManager()) return false;
 
-    m_view->image()->lock();
+    viewManager()->image()->lock();
 
     m_inputMode = (InputLayerMode)inputMode;
 
     qDebug() << "prepareCroppedImages()" << QString::fromUtf8(*message) << rc << inputMode;
 
-    KisInputOutputMapper mapper(m_view->image(), m_view->activeNode());
+    KisInputOutputMapper mapper(viewManager()->image(), viewManager()->activeNode());
     KisNodeListSP nodes = mapper.inputNodes(m_inputMode);
     if (nodes->isEmpty()) {
-        m_view->image()->unlock();
+        viewManager()->image()->unlock();
         return false;
     }
 
@@ -410,13 +410,13 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
         if (node && node->paintDevice()) {
             QRect cropRect;
 
-            KisSelectionSP selection = m_view->image()->globalSelection();
+            KisSelectionSP selection = viewManager()->image()->globalSelection();
 
             if (selection) {
                 cropRect = selection->selectedExactRect();
             }
             else {
-                cropRect = m_view->image()->bounds();
+                cropRect = viewManager()->image()->bounds();
             }
 
             qDebug() << "Converting node" << node->name() << cropRect;
@@ -455,7 +455,7 @@ bool QMic::prepareCroppedImages(QByteArray *message, QRectF &rc, int inputMode)
 
     qDebug() << QString::fromUtf8(*message);
 
-    m_view->image()->unlock();
+    viewManager()->image()->unlock();
 
     return true;
 }

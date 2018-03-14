@@ -57,18 +57,6 @@ KisPNGExport::~KisPNGExport()
 {
 }
 
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    Q_FOREACH (QWidget* w, wl) {
-        if (w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget")) {
-            dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
-            return true;
-        }
-    }
-    return false;
-}
-
 KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
@@ -188,10 +176,10 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
-    chkSRGB->setEnabled(sRGB);
+    //chkSRGB->setEnabled(sRGB);
     chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));
 
-    chkForceSRGB->setEnabled(!sRGB);
+    //chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
     chkAuthor->setChecked(cfg->getBool("storeAuthor", false));

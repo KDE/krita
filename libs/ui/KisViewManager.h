@@ -50,7 +50,6 @@ class KisUndoAdapter;
 class KisZoomManager;
 class KisPaintopBox;
 class KisActionManager;
-class KisScriptManager;
 class KisInputManager;
 class KoUpdater;
 class KoProgressUpdater;
@@ -163,8 +162,6 @@ public:  // Krita specific interfaces
     KisUndoAdapter *undoAdapter();
 
     KisDocument *document() const;
-
-    KisScriptManager *scriptManager() const;
 
     int viewCount() const;
 

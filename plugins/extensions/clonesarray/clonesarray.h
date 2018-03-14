@@ -19,10 +19,10 @@
 #ifndef CLONESARRAY_H
 #define CLONESARRAY_H
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 #include <kis_types.h>
 
-class ClonesArray : public KisViewPlugin
+class ClonesArray : public KisActionPlugin
 {
     Q_OBJECT
 public:

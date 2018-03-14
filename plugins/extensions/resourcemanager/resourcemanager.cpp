@@ -77,7 +77,7 @@ public:
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
     , d(new Private())
 {
     KisAction *action = new KisAction(i18n("Import Bundles..."), this);
@@ -200,7 +200,7 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
     newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
 
     if (!newBundle->save()) {
-        QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
+        QMessageBox::critical(viewManager()->mainWindow(), i18nc("@title:window", "Krita"), i18n("Could not create the new bundle."));
     }
     else {
         newBundle->setValid(true);
@@ -220,7 +220,7 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
 
 void ResourceManager::slotManageBundles()
 {
-    DlgBundleManager* dlg = new DlgBundleManager(this, m_view->actionManager());
+    DlgBundleManager* dlg = new DlgBundleManager(this, viewManager()->actionManager());
     if (dlg->exec() != QDialog::Accepted) {
         return;
     }
@@ -228,7 +228,7 @@ void ResourceManager::slotManageBundles()
 
 QStringList ResourceManager::importResources(const QString &title, const QStringList &mimes) const
 {
-    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
+    KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::OpenFiles, "krita_resources");
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     dialog.setCaption(title);
     dialog.setMimeTypeFilters(mimes);

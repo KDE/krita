@@ -56,7 +56,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(WaveletDecomposeFactory, "kritawaveletdecompose.json", registerPlugin<WaveletDecompose>();)
 
 WaveletDecompose::WaveletDecompose(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("waveletdecompose");
     connect(action, SIGNAL(triggered()), this, SLOT(slotWaveletDecompose()));
@@ -68,18 +68,18 @@ WaveletDecompose::~WaveletDecompose()
 
 void WaveletDecompose::slotWaveletDecompose()
 {
-    DlgWaveletDecompose dlg(m_view->mainWindow(), "WaveletDecompose");
+    DlgWaveletDecompose dlg(viewManager()->mainWindow(), "WaveletDecompose");
         
     if (dlg.exec() == QDialog::Accepted) {
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        QPointer<KoUpdater> updater = m_view->createUnthreadedUpdater(i18n("Wavelet Decompose"));
+        QPointer<KoUpdater> updater = viewManager()->createUnthreadedUpdater(i18n("Wavelet Decompose"));
 
-        KisImageSP image = m_view->image();
+        KisImageSP image = viewManager()->image();
         if (!image) return;
 
-        if (!m_view->blockUntilOperationsFinished(image)) return;
+        if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
         image->barrierLock();
 
@@ -123,7 +123,7 @@ void WaveletDecompose::slotWaveletDecompose()
         KisUndoAdapter *undo = image->undoAdapter();
         undo->beginMacro(kundo2_i18n("Wavelet decompose"));
         
-        KisNodeCommandsAdapter adapter(m_view);
+        KisNodeCommandsAdapter adapter(viewManager());
         
         KisGroupLayerSP baseGroup = image->rootLayer();
 

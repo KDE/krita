@@ -63,6 +63,7 @@ public:
         LodAvailability, ///<-user choice
         LodSizeThreshold, ///<-user choice
         LodSizeThresholdSupported, ///<-paintop property
+        EffectiveLodAvailablility, ///<- a superposition of user choice, threshold and paintop traits
         EraserMode,
         MirrorHorizontal,
         MirrorVertical,

@@ -62,7 +62,10 @@ protected:
 
     using KisBaseRectsWalker::startTrip;
 
-    void startTripWithMask(KisProjectionLeafSP filthyMask);
+    void startTripWithMask(KisProjectionLeafSP filthyMask, KisMergeWalker::Flags flags);
+
+private:
+    void startTripImpl(KisProjectionLeafSP startLeaf, Flags flags);
 
 private:
     /**

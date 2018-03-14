@@ -28,8 +28,7 @@ public Q_SLOTS:
     void setToolTip(QString tooltip);
     QString tooltip() const;
     void trigger();
-    void setMenu(const QString menu);
-    QString menu() const;
+
 Q_SIGNALS:
     void triggered(bool);
 private:

@@ -17,47 +17,52 @@
  */
 
 
-#include "kis_view_plugin.h"
+#include "KisActionPlugin.h"
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "operations/kis_operation.h"
 
-KisViewPlugin::KisViewPlugin(QObject* parent)
+KisActionPlugin::KisActionPlugin(QObject* parent)
     : QObject(parent)
 {
-    m_view = qobject_cast<KisViewManager*>(parent);
-    Q_ASSERT(m_view);
+    m_viewManager = qobject_cast<KisViewManager*>(parent);
+    Q_ASSERT(m_viewManager);
 }
 
-KisViewPlugin::~KisViewPlugin()
+KisActionPlugin::~KisActionPlugin()
 {
 }
 
-void KisViewPlugin::addAction(const QString& name, KisAction* action)
+void KisActionPlugin::addAction(const QString& name, KisAction* action)
 {
-    if (m_view) {
-        m_view->actionManager()->addAction(name, action);
+    if (m_viewManager) {
+        m_viewManager->actionManager()->addAction(name, action);
     }
 }
 
-KisAction* KisViewPlugin::createAction(const QString& name)
+KisAction* KisActionPlugin::createAction(const QString& name)
 {
-  if (m_view) {
-    return m_view->actionManager()->createAction(name);
+  if (m_viewManager) {
+    return m_viewManager->actionManager()->createAction(name);
   }
   return 0;
 }
 
-void KisViewPlugin::addUIFactory(KisOperationUIFactory* factory)
+void KisActionPlugin::addUIFactory(KisOperationUIFactory* factory)
 {
-    if (m_view) {
-        m_view->actionManager()->registerOperationUIFactory(factory);
+    if (m_viewManager) {
+        m_viewManager->actionManager()->registerOperationUIFactory(factory);
     }
 }
 
-void KisViewPlugin::addOperation(KisOperation* operation)
+void KisActionPlugin::addOperation(KisOperation* operation)
 {
-    if (m_view) {
-        m_view->actionManager()->registerOperation(operation);
+    if (m_viewManager) {
+        m_viewManager->actionManager()->registerOperation(operation);
     }
+}
+
+QPointer<KisViewManager> KisActionPlugin::viewManager() const
+{
+    return m_viewManager;
 }

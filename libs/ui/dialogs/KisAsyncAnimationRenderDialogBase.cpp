@@ -245,6 +245,8 @@ void KisAsyncAnimationRenderDialogBase::tryInitiateFrameRegeneration()
         for (auto &pair : m_d->asyncRenderers) {
             if (!pair.renderer->isActive()) {
                 const int currentDirtyFrame = m_d->stillDirtyFrames.takeFirst();
+
+                initializeRendererForFrame(pair.renderer.get(), pair.image, currentDirtyFrame);
                 pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame);
                 hadWorkOnPreviousCycle = true;
                 m_d->framesInProgress.append(currentDirtyFrame);

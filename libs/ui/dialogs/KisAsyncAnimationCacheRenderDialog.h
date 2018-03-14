@@ -34,6 +34,8 @@ public:
 protected:
     QList<int> calcDirtyFrames() const override;
     KisAsyncAnimationRendererBase* createRenderer(KisImageSP image) override;
+    void initializeRendererForFrame(KisAsyncAnimationRendererBase *renderer,
+                                    KisImageSP image, int frame) override;
 
 private:
     struct Private;

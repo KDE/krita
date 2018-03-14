@@ -19,13 +19,13 @@
 #define _BIGBROTHER_H_
 
 #include <QVariant>
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
 class KisAction;
 class KisMacro;
 class KisViewManager;
 
-class BigBrotherPlugin : public KisViewPlugin
+class BigBrotherPlugin : public KisActionPlugin
 {
     Q_OBJECT
 public:
@@ -43,8 +43,6 @@ private:
     void saveMacro(const KisMacro* macro);
     KisMacro *openMacro();
 private:
-
-    KisViewManager *m_view;
     KisMacro *m_recorder;
     KisAction *m_startRecordingMacroAction;
     KisAction *m_stopRecordingMacroAction;

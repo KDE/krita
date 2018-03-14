@@ -42,7 +42,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(OffsetImageFactory, "kritaoffsetimage.json", registerPlugin<OffsetImage>();)
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("offsetimage");
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetImage()));
@@ -59,10 +59,10 @@ OffsetImage::~OffsetImage()
 
 void OffsetImage::slotOffsetImage()
 {
-    KisImageSP image = m_view->image().toStrongRef();
+    KisImageSP image = viewManager()->image().toStrongRef();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetImage", offsetWrapRect().size());
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindow(), "OffsetImage", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Image");
@@ -83,10 +83,10 @@ void OffsetImage::slotOffsetImage()
 
 void OffsetImage::slotOffsetLayer()
 {
-    KisImageSP image = m_view->image().toStrongRef();
+    KisImageSP image = viewManager()->image().toStrongRef();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(m_view->mainWindow(), "OffsetLayer", offsetWrapRect().size());
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindow(), "OffsetLayer", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
@@ -94,7 +94,7 @@ void OffsetImage::slotOffsetLayer()
 
         if (dlgOffsetImage->exec() == QDialog::Accepted) {
             QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
-            KisNodeSP activeNode = m_view->activeNode();
+            KisNodeSP activeNode = viewManager()->activeNode();
             offsetImpl(actionName, activeNode, offsetPoint);
         }
         delete dlgOffsetImage;
@@ -110,7 +110,7 @@ void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
 
-    KisProcessingApplicator applicator(m_view->image(), node,
+    KisProcessingApplicator applicator(viewManager()->image(), node,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
@@ -124,13 +124,13 @@ void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node
 QRect OffsetImage::offsetWrapRect()
 {
     QRect offsetWrapRect;
-    if (m_view->selection())
+    if (viewManager()->selection())
     {
-        offsetWrapRect = m_view->selection()->selectedExactRect();
+        offsetWrapRect = viewManager()->selection()->selectedExactRect();
     }
     else
     {
-        KisImageSP image = m_view->image().toStrongRef();
+        KisImageSP image = viewManager()->image().toStrongRef();
         if (image) {
             offsetWrapRect = image->bounds();
         }

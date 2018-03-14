@@ -34,7 +34,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(ShearImageFactory, "kritashearimage.json", registerPlugin<ShearImage>();)
 
 ShearImage::ShearImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action = createAction("shearimage");
     connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));
@@ -49,11 +49,11 @@ ShearImage::~ShearImage()
 
 void ShearImage::slotShearImage()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (!image) return;
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearImage");
+    DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindow(), "ShearImage");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Image"));
@@ -61,18 +61,18 @@ void ShearImage::slotShearImage()
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
         qint32 angleY = dlgShearImage->angleY();
-        m_view->imageManager()->shearCurrentImage(angleX, angleY);
+        viewManager()->imageManager()->shearCurrentImage(angleX, angleY);
     }
     delete dlgShearImage;
 }
 
 void ShearImage::slotShearLayer()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (!image) return;
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(m_view->mainWindow(), "ShearLayer");
+    DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindow(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Layer"));
@@ -80,7 +80,7 @@ void ShearImage::slotShearLayer()
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
         qint32 angleY = dlgShearImage->angleY();
-        m_view->nodeManager()->shear(angleX, angleY);
+        viewManager()->nodeManager()->shear(angleX, angleY);
 
     }
     delete dlgShearImage;

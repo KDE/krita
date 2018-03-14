@@ -29,7 +29,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
     , m_autoReload(false)
 {
     qDebug() << "Loading Python plugin";
@@ -82,8 +82,8 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
         dbgScript << "Cannot load pykrita module";
     }
 
-    Q_FOREACH (Extension* ext, Krita::instance()->extensions()) {
-        ext->setup();
+    Q_FOREACH (Extension *extension, Krita::instance()->extensions()) {
+        extension->setup();
     }
 }
 

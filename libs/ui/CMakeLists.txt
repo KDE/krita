@@ -136,7 +136,6 @@ set(kritaui_LIB_SRCS
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
-    kis_script_manager.cpp
     kis_resource_server_provider.cpp
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
@@ -147,7 +146,7 @@ set(kritaui_LIB_SRCS
     kis_workspace_resource.cpp
     kis_action.cpp
     kis_action_manager.cpp
-    kis_view_plugin.cpp
+    KisActionPlugin.cpp
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp

@@ -24,12 +24,13 @@ class TenScriptsExtension(krita.Extension):
        self.scripts = []
 
     def setup(self):
-        action = Application.createAction("ten_scripts", "Ten Scripts")
+        self.readSettings()
+        
+    def createActions(self, window):
+        action = window.createAction("ten_scripts", "Ten Scripts")
         action.setToolTip("Assign ten scripts to ten shortcuts.")
         action.triggered.connect(self.initialize)
-
-        self.readSettings()
-        self.loadActions()
+        self.loadActions(window)
 
     def initialize(self):
         self.uitenscripts = uitenscripts.UITenScripts()
@@ -46,11 +47,10 @@ class TenScriptsExtension(krita.Extension):
 
         Application.writeSetting("tenscripts", "scripts", ','.join(map(str, saved_scripts)))
 
-    def loadActions(self):
+    def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']):
-            action = Application.createAction("execute_script_" + item, "Execute Script " + item)
+            action = window.createAction("execute_script_" + item, "Execute Script " + item, "")
             action.script = None
-            action.setMenu("None")
             action.triggered.connect(self._executeScript)
 
             if index < len(self.scripts):

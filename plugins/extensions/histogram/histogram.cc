@@ -36,7 +36,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(HistogramFactory, "kritahistogram.json", registerPlugin<Histogram>();)
 
 Histogram::Histogram(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction* action  = createAction("histogram");
     connect(action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
@@ -48,11 +48,11 @@ Histogram::~Histogram()
 
 void Histogram::slotActivated()
 {
-    DlgHistogram * dlgHistogram = new DlgHistogram(m_view->mainWindow(), "Histogram");
+    DlgHistogram * dlgHistogram = new DlgHistogram(viewManager()->mainWindow(), "Histogram");
 
     Q_CHECK_PTR(dlgHistogram);
 
-    KisLayerSP layer = m_view->nodeManager()->activeLayer();
+    KisLayerSP layer = viewManager()->nodeManager()->activeLayer();
     if (layer) {
         KisPaintDeviceSP dev = layer->paintDevice();
 

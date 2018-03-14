@@ -36,22 +36,28 @@ KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
     return m_flags == DEFAULT ? KisBaseRectsWalker::UPDATE : KisBaseRectsWalker::UPDATE_NO_FILTHY;
 }
 
-void KisMergeWalker::startTrip(KisProjectionLeafSP startLeaf)
+void KisMergeWalker::startTripImpl(KisProjectionLeafSP startLeaf, KisMergeWalker::Flags flags)
 {
     if(startLeaf->isMask()) {
-        startTripWithMask(startLeaf);
+        startTripWithMask(startLeaf, flags);
         return;
     }
 
     visitHigherNode(startLeaf,
-                    m_flags == DEFAULT ? N_FILTHY : N_ABOVE_FILTHY);
+                    flags == DEFAULT ? N_FILTHY : N_ABOVE_FILTHY);
 
     KisProjectionLeafSP prevLeaf = startLeaf->prevSibling();
     if(prevLeaf)
         visitLowerNode(prevLeaf);
 }
 
-void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask)
+
+void KisMergeWalker::startTrip(KisProjectionLeafSP startLeaf)
+{
+    startTripImpl(startLeaf, m_flags);
+}
+
+void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask, KisMergeWalker::Flags flags)
 {
     /**
      * Under very rare circumstances it may happen that the update
@@ -77,10 +83,10 @@ void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask)
     if (nextLeaf)
         visitHigherNode(nextLeaf, N_ABOVE_FILTHY);
     else if (parentLayer->parent())
-        startTrip(parentLayer->parent());
+        startTripImpl(parentLayer->parent(), DEFAULT);
 
     NodePosition positionToFilthy =
-        (m_flags == DEFAULT ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
+        (flags == DEFAULT ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
         calculateNodePosition(parentLayer);
     registerNeedRect(parentLayer, positionToFilthy);
 
@@ -98,7 +104,7 @@ void KisMergeWalker::visitHigherNode(KisProjectionLeafSP leaf, NodePosition posi
     if (nextLeaf)
         visitHigherNode(nextLeaf, N_ABOVE_FILTHY);
     else if (leaf->parent())
-        startTrip(leaf->parent());
+        startTripImpl(leaf->parent(), DEFAULT);
 
     registerNeedRect(leaf, positionToFilthy);
 }

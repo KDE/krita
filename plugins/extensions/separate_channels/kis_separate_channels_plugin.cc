@@ -46,7 +46,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(KisSeparateChannelsPluginFactory, "kritaseparatechannels.json", registerPlugin<KisSeparateChannelsPlugin>();)
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("separate");
     connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));
@@ -58,17 +58,17 @@ KisSeparateChannelsPlugin::~KisSeparateChannelsPlugin()
 
 void KisSeparateChannelsPlugin::slotSeparate()
 {
-    KisImageSP image = m_view->image();
+    KisImageSP image = viewManager()->image();
     if (!image) return;
 
-    KisLayerSP l = m_view->nodeManager()->activeLayer();
+    KisLayerSP l = viewManager()->nodeManager()->activeLayer();
     if (!l) return;
 
     KisPaintDeviceSP dev = l->paintDevice();
     if (!dev) return;
 
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-                                                image->colorSpace()->name(), m_view->mainWindow(), "Separate");
+                                                image->colorSpace()->name(), viewManager()->mainWindow(), "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));
@@ -82,8 +82,8 @@ void KisSeparateChannelsPlugin::slotSeparate()
 
         QApplication::setOverrideCursor(Qt::BusyCursor);
 
-        KisChannelSeparator separator(m_view);
-        separator.separate(m_view->createUnthreadedUpdater(i18n("Separate Image")),
+        KisChannelSeparator separator(viewManager());
+        separator.separate(viewManager()->createUnthreadedUpdater(i18n("Separate Image")),
                            dlgSeparate->getAlphaOptions(),
                            dlgSeparate->getSource(),
                            dlgSeparate->getOutput(),

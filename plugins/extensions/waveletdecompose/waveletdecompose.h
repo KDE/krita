@@ -22,9 +22,9 @@
 #include <QVariant>
 
 #include <QUrl>
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class WaveletDecompose : public KisViewPlugin
+class WaveletDecompose : public KisActionPlugin
 {
     Q_OBJECT
 public:

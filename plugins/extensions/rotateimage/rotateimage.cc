@@ -41,7 +41,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(RotateImageFactory, "kritarotateimage.json", registerPlugin<RotateImage>();)
 
 RotateImage::RotateImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
 
     KisAction *action  = createAction("rotateimage");
@@ -66,13 +66,13 @@ RotateImage::RotateImage(QObject *parent, const QVariantList &)
     connect(action, SIGNAL(triggered()), this, SLOT(slotRotateLayer()));
 
     action  = createAction("rotateLayer180");
-    connect(action, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotate180()));
+    connect(action, SIGNAL(triggered()), viewManager()->nodeManager(), SLOT(rotate180()));
 
     action  = createAction("rotateLayerCW90");
-    connect(action, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateRight90()));
+    connect(action, SIGNAL(triggered()), viewManager()->nodeManager(), SLOT(rotateRight90()));
 
     action  = createAction("rotateLayerCCW90");
-    connect(action, SIGNAL(triggered()), m_view->nodeManager(), SLOT(rotateLeft90()));
+    connect(action, SIGNAL(triggered()), viewManager()->nodeManager(), SLOT(rotateLeft90()));
 }
 
 RotateImage::~RotateImage()
@@ -81,65 +81,65 @@ RotateImage::~RotateImage()
 
 void RotateImage::slotRotateImage()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (!image) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateImage");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindow(), "RotateImage");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Image"));
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
         double angle = dlgRotateImage->angle() * M_PI / 180;
-        m_view->imageManager()->rotateCurrentImage(angle);
+        viewManager()->imageManager()->rotateCurrentImage(angle);
     }
     delete dlgRotateImage;
 }
 
 void RotateImage::slotRotateImage90()
 {
-    m_view->imageManager()->rotateCurrentImage(M_PI / 2);
+    viewManager()->imageManager()->rotateCurrentImage(M_PI / 2);
 }
 
 void RotateImage::slotRotateImage180()
 {
-    m_view->imageManager()->rotateCurrentImage(M_PI);
+    viewManager()->imageManager()->rotateCurrentImage(M_PI);
 }
 
 void RotateImage::slotRotateImage270()
 {
-    m_view->imageManager()->rotateCurrentImage(- M_PI / 2 + M_PI*2);
+    viewManager()->imageManager()->rotateCurrentImage(- M_PI / 2 + M_PI*2);
 }
 
 void RotateImage::slotMirrorImageVertical()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
     if (!image) return;
-    m_view->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Vertically"), Qt::Vertical);
+    viewManager()->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Vertically"), Qt::Vertical);
 }
 
 void RotateImage::slotMirrorImageHorizontal()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
     if (!image) return;
-    m_view->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Horizontally"), Qt::Horizontal);
+    viewManager()->nodeManager()->mirrorNode(image->rootLayer(), kundo2_i18n("Mirror Image Horizontally"), Qt::Horizontal);
 }
 
 void RotateImage::slotRotateLayer()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (!image) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(m_view->mainWindow(), "RotateLayer");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindow(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Layer"));
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
         double angle = dlgRotateImage->angle() * M_PI / 180;
-        m_view->nodeManager()->rotate(angle);
+        viewManager()->nodeManager()->rotate(angle);
 
     }
     delete dlgRotateImage;

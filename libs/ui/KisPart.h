@@ -135,17 +135,6 @@ public:
     KisMainWindow *currentMainwindow() const;
 
     /**
-     * Add a given action to the list of dynamically defined actions. On creating
-     * a mainwindow, all these actions will be added to the script manager.
-     */
-    void addScriptAction(KisAction *);
-
-    /**
-     * Load actions for currently active main window into KisActionRegistry.
-     */
-    void loadActions();
-
-    /**
      * @return the application-wide KisIdleWatcher.
      */
     KisIdleWatcher *idleWatcher() const;

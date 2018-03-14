@@ -19,7 +19,10 @@ class DocumentToolsExtension(krita.Extension):
         super(DocumentToolsExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("document_tools", "Document Tools")
+        pass
+    
+    def createActions(self, window):
+        action = window.createAction("document_tools", "Document Tools")
         action.setToolTip("Plugin to manipulate properties of selected documents")
         action.triggered.connect(self.initialize)
 

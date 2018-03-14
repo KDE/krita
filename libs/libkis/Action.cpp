@@ -156,14 +156,3 @@ void Action::trigger()
 {
     d->action->trigger();
 }
-
-
-void Action::setMenu(const QString menu)
-{
-    d->action->setProperty("menu", menu);
-}
-
-QString Action::menu() const
-{
-    return d->action->property("menu").toString();
-}

@@ -82,8 +82,8 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
         dbgScript << "Cannot load pykrita module";
     }
 
-    Q_FOREACH (Extension* ext, Krita::instance()->extensions()) {
-        ext->setup();
+    Q_FOREACH (Extension *extension, Krita::instance()->extensions()) {
+        extension->setup();
     }
 }
 

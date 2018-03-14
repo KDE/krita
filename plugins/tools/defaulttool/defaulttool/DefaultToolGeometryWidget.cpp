@@ -76,9 +76,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(positionXSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
     connect(positionYSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
 
-    // TODO: use valueChanged() instead!
-    connect(widthSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
-    connect(heightSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
+    connect(m_sizeAspectLocker.data(), SIGNAL(sliderValueChanged()), this, SLOT(slotResizeShapes()));
 
     KoSelectedShapesProxy *selectedShapesProxy = m_tool->canvas()->selectedShapesProxy();
 

@@ -215,19 +215,19 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             textlayer.setAttribute("show", "True")
             language.appendChild(textlayer)
             translationComments[lang] = []
-            translation = poParser.get_entry_for_key("@meta-title", lang).get("trans", None)
+            translation = poParser.get_entry_for_key("@meta-title "+configDictionary["title"], lang).get("trans", None)
             if translation is not None:
                 bookTitleTr = document.createElement("book-title")
                 bookTitleTr.setAttribute("lang", lang)
                 bookTitleTr.appendChild(document.createTextNode(translation))
                 bookInfo.appendChild(bookTitleTr)
-            translation = poParser.get_entry_for_key("@meta-summary", lang).get("trans", None)
+            translation = poParser.get_entry_for_key("@meta-summary "+configDictionary["summary"], lang).get("trans", None)
             if translation is not None:
                 annotationTr = document.createElement("annotation")
                 annotationTr.setAttribute("lang", lang)
                 annotationTr.appendChild(document.createTextNode(translation))
                 bookInfo.appendChild(annotationTr)
-            translation = poParser.get_entry_for_key("@meta-keywords", lang).get("trans", None)
+            translation = poParser.get_entry_for_key("@meta-keywords "+", ".join(configDictionary["otherKeywords"]), lang).get("trans", None)
             if translation is not None:
                 keywordsTr = document.createElement("keywords")
                 keywordsTr.setAttribute("lang", lang)
@@ -305,8 +305,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
 
     documentInfo = document.createElement("document-info")
     # TODO: ACBF apparantly uses first/middle/last/nick/email/homepage for the document auhtor too...
-    #      The following code compensates for me not understanding this initially. This still needs
-    #      adjustments in the gui.
+    #      The following code compensates for me not understanding this initially.
     if "acbfAuthor" in configDictionary.keys():
         if isinstance(configDictionary["acbfAuthor"], list):
             for e in configDictionary["acbfAuthor"]:
@@ -431,8 +430,6 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 if lightnessT < (lightnessI+lightnessR)*0.5:
                     inverted = "True"
         return [type, inverted]
-    
-    countedPageTitles = 0
     
     listOfPageColors = []
     
@@ -565,15 +562,14 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 pg.appendChild(title)
                 for lang in poParser.get_translation_list():
                     titleTrans = " "
-                    titlekey = "@page-title-"+str(countedPageTitles)
+                    titlekey = "@page-title "+str(data["title"])
                     translationEntry = poParser.get_entry_for_key(titlekey, lang)
                     titleTrans = translationEntry.get("trans", titleTrans)
                     if titleTrans.isspace() is False:
                         titleT = document.createElement("title")
                         titleT.setAttribute("lang", lang)
-                        title.appendChild(document.createTextNode(titleTrans))
+                        titleT.appendChild(document.createTextNode(titleTrans))
                         pg.appendChild(titleT)
-                countedPageTitles += 1
             if "acbf_none" in data["keys"]:
                 pg.setAttribute("transition", "none")
             if "acbf_blend" in data["keys"]:

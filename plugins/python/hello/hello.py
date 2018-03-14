@@ -42,11 +42,13 @@ class HelloExtension(Extension):
         super().__init__(parent)
 
     def setup(self):
+        pass
+
+    def createActions(self, window):
         """
         This is where most of the setup takes place!
         """
-        #qDebug("Hello Setup")
-        action = Krita.instance().createAction("hello_python", "hello", False)
+        action = window.createAction("hello_python", "hello")
         action.triggered.connect(hello)
 
 

@@ -23,12 +23,13 @@ class TenBrushesExtension(krita.Extension):
         self.selectedPresets = []
 
     def setup(self):
-        action = Application.createAction("ten_brushes", "Ten Brushes")
+        self.readSettings()
+        
+    def createActions(self, window):
+        action = window.createAction("ten_brushes", "Ten Brushes")
         action.setToolTip("Assign ten brush presets to ten shortcuts.")
         action.triggered.connect(self.initialize)
-
-        self.readSettings()
-        self.loadActions()
+        self.loadActions(window)
 
     def initialize(self):
         self.uitenbrushes = uitenbrushes.UITenBrushes()
@@ -45,15 +46,12 @@ class TenBrushesExtension(krita.Extension):
             presets.append(button.preset)
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
 
-    def loadActions(self):
+    def loadActions(self, window):
         allPresets = Application.resources("preset")
 
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
-            action = Application.createAction("activate_preset_" + item, "Activate Brush Preset " + item)
-            action.setMenu("None")
+            action = window.createAction("activate_preset_" + item, "Activate Brush Preset " + item, "")
             action.triggered.connect(self.activatePreset)
-            
-            
 
             if index < len(self.selectedPresets) and self.selectedPresets[index] in allPresets:
                 action.preset = self.selectedPresets[index]

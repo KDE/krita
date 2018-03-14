@@ -16,6 +16,7 @@ public Q_SLOTS:
     View *activeView() const /Factory/;
     void activate();
     void close();
+    QAction *createAction(const QString &id, const QString &text = QString(), const QString &menuLocation = QString("tools/scripts"));
 Q_SIGNALS:
     void windowClosed();
 private:

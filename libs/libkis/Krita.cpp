@@ -38,7 +38,6 @@
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_action.h>
-#include <kis_script_manager.h>
 #include <KisViewManager.h>
 #include <KritaVersionWrapper.h>
 #include <kis_filter_registry.h>
@@ -53,6 +52,7 @@
 #include <KoResourceServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
+#include <KisPart.h>
 
 #include "View.h"
 #include "Document.h"
@@ -77,6 +77,7 @@ Krita::Krita(QObject *parent)
     , d(new Private)
 {
     qRegisterMetaType<Notifier*>();
+    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(mainWindowAdded(KisMainWindow*)));
 }
 
 Krita::~Krita()
@@ -348,25 +349,6 @@ Window* Krita::openWindow()
     return new Window(mw);
 }
 
-Action *Krita::createAction(const QString &id, const QString &text, bool addToScriptMenu)
-{
-    KisAction *action = new KisAction(text, this);
-    action->setObjectName(id);
-
-    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    actionRegistry->propertizeAction(action->objectName(), action);
-    bool ok; // We will skip this check
-    int activationFlags = actionRegistry->getActionProperty(id, "activationFlags").toInt(&ok, 2);
-    int activationConditions = actionRegistry->getActionProperty(id, "activationConditions").toInt(&ok, 2);
-    action->setActivationFlags((KisAction::ActivationFlags) activationFlags);
-    action->setActivationConditions((KisAction::ActivationConditions) activationConditions);
-
-    if (addToScriptMenu) {
-        KisPart::instance()->addScriptAction(action);
-    }
-    return new Action(action->objectName(), action);
-}
-
 void Krita::addExtension(Extension* extension)
 {
     d->extensions.append(extension);
@@ -430,4 +412,12 @@ QObject *Krita::fromVariant(const QVariant& v)
     }
     else
         return 0;
+}
+
+void Krita::mainWindowAdded(KisMainWindow *kisWindow)
+{
+    Q_FOREACH(Extension *extension, d->extensions) {
+        Window window(kisWindow);
+        extension->createActions(&window);
+    }
 }

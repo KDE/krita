@@ -70,7 +70,6 @@
 #include "KisDocument.h"
 #include "KoToolManager.h"
 #include "KisViewManager.h"
-#include "kis_script_manager.h"
 #include "KisOpenPane.h"
 
 #include "kis_color_manager.h"
@@ -101,10 +100,7 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
-    QList<KisAction*> scriptActions;
-
     KActionCollection *actionCollection{0};
-
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
 };
@@ -208,9 +204,6 @@ void KisPart::removeDocument(KisDocument *document)
 KisMainWindow *KisPart::createMainWindow()
 {
     KisMainWindow *mw = new KisMainWindow();
-    Q_FOREACH(KisAction *action, d->scriptActions) {
-        mw->viewManager()->scriptManager()->addAction(action);
-    }
     dbgUI <<"mainWindow" << (void*)mw << "added to view" << this;
     d->mainWindows.append(mw);
     emit sigWindowAdded(mw);
@@ -352,10 +345,6 @@ KisMainWindow *KisPart::currentMainwindow() const
 
 }
 
-void KisPart::addScriptAction(KisAction *action)
-{
-    d->scriptActions << action;
-}
 
 KisIdleWatcher* KisPart::idleWatcher() const
 {

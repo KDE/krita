@@ -19,7 +19,10 @@ class ExportLayersExtension(krita.Extension):
         super(ExportLayersExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("export_layers", "Export Layers")
+        pass
+    
+    def createActions(self, window):
+        action = window.createAction("export_layers", "Export Layers")
         action.setToolTip("Plugin to export layers from a document")
         action.triggered.connect(self.initialize)
 

@@ -74,6 +74,10 @@ public:
 
     void forceRepaint();
 
+    void resetCache();
+    bool hasChangedWhileBeingInvisible();
+    void rerenderAfterBeingInvisible();
+
 private Q_SLOTS:
     friend class KisRepaintShapeLayerLayerJob;
     void repaint();
@@ -92,6 +96,8 @@ private:
 
     KisThreadSafeSignalCompressor m_asyncUpdateSignalCompressor;
     volatile bool m_hasUpdateInCompressor = false;
+
+    bool m_hasChangedWhileBeingInvisible = false;
 
     QRegion m_dirtyRegion;
     QMutex m_dirtyRegionMutex;

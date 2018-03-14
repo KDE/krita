@@ -262,6 +262,8 @@ void KisShapeLayerCanvas::repaint()
     KisPainter::copyAreaOptimized(r.topLeft(), dev, m_projection, QRect(QPoint(), r.size()));
 
     m_parentLayer->setDirty(r);
+
+    m_hasChangedWhileBeingInvisible |= !m_parentLayer->visible(true);
 }
 
 KoToolProxy * KisShapeLayerCanvas::toolProxy() const
@@ -307,5 +309,28 @@ void KisShapeLayerCanvas::forceRepaint()
         m_asyncUpdateSignalCompressor.stop();
         slotStartAsyncRepaint();
     }
+}
+
+void KisShapeLayerCanvas::resetCache()
+{
+    m_projection->clear();
+
+    QList<KoShape*> shapes = m_shapeManager->shapes();
+    Q_FOREACH (const KoShape* shape, shapes) {
+        shape->update();
+    }
+}
+
+bool KisShapeLayerCanvas::hasChangedWhileBeingInvisible()
+{
+    return m_hasChangedWhileBeingInvisible;
+}
+
+void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_parentLayer->visible(true))
+
+    m_hasChangedWhileBeingInvisible = false;
+    resetCache();
 }
 

@@ -907,7 +907,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
         metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
-        QMessageBox.information(self, i18n("Scraping success!"), i18n("POT file has been written to:")+fullTranslationPath, QMessageBox.Ok)
+        QMessageBox.information(self, i18n("Scraping success!"), i18n("POT file has been written to: ")+fullTranslationPath, QMessageBox.Ok)
     """
     This is required by the dockwidget class, otherwise unused.
     """

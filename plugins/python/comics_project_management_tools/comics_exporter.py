@@ -227,6 +227,12 @@ class comicsExporter():
             pagesList = self.configDictionary["pages"]
             fileName = str(exportPath)
 
+            """
+            Mini function to handle the setup of this string.
+            """
+            def timeString(timePassed, timeEstimated):
+                return str(i18n("Time passed: {passedString}\n Estimated: {estimated}")).format(passedString=timePassed, estimated=timeEstimated)
+
             for p in range(0, len(pagesList)):
                 pagesDone = str(i18n("{pages} of {pagesTotal} done.")).format(pages=p, pagesTotal=len(pagesList))
 
@@ -239,8 +245,7 @@ class comicsExporter():
                 else:
                     estimatedString = str(u"\u221E")
                 passedString = self.parseTime(timePassed)
-                timeString = str(i18n("Time passed: {passedString}:\n Estimated:{estimated}")).format(passedString=passedString, estimated=estimatedString)
-                self.progress.setLabelText("\n".join([pagesDone, timeString, i18n("Opening next page.")]))
+                self.progress.setLabelText("\n".join([pagesDone, timeString(passedString, estimatedString), i18n("Opening next page")]))
                 qApp.processEvents()
                 # Get the appropriate url and open the page.
                 url = str(Path(self.projectURL) / pagesList[p])
@@ -248,8 +253,7 @@ class comicsExporter():
                 page.waitForDone()
                 
                 # Update the progress bar a little
-                timeString = str(i18n("Time passed: {passedString}:\n Estimated:{estimated}")).format(passedString=self.parseTime(self.timer.elapsed()), estimated=estimatedString)
-                self.progress.setLabelText("\n".join([pagesDone, timeString, i18n("Cleaning up page.")]))
+                self.progress.setLabelText("\n".join([pagesDone, timeString(self.parseTime(self.timer.elapsed()), estimatedString), i18n("Cleaning up page")]))
 
                 # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
@@ -283,8 +287,7 @@ class comicsExporter():
                 for key in sizesList.keys():
                     
                     # Update the progress bar a little
-                    timeString = str(i18n("Time passed: {passedString}:\n Estimated:{estimated}")).format(passedString=self.parseTime(self.timer.elapsed()), estimated=estimatedString)
-                    self.progress.setLabelText("\n".join([pagesDone, timeString, str(i18n("Exporting for {key}")).format(key=key)]))
+                    self.progress.setLabelText("\n".join([pagesDone, timeString(self.parseTime(self.timer.elapsed()), estimatedString), str(i18n("Exporting for {key}")).format(key=key)]))
                     
                     w = sizesList[key]
                     # copy over data
@@ -423,7 +426,6 @@ class comicsExporter():
                 self.handleShapeDescription(shape, list, textOnly)
     """
     Function to get text and panels in a format that acbf will accept
-    TODO: move this to a new file.
     """
 
     def handleShapeDescription(self, shape, list, textOnly=False):

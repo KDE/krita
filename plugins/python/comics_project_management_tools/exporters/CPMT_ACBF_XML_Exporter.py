@@ -612,7 +612,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 ref.setAttribute("lang", lang)
                 ref.setAttribute("id", refID)
                 transHeaderStr = configDictionary.get("translatorHeader", "Translator's Notes")
-                transHeaderStr = poParser.get_entry_for_key("@meta-translator", lang).get("trans", transHeaderStr)
+                transHeaderStr = poParser.get_entry_for_key("@meta-translator "+transHeaderStr, lang).get("trans", transHeaderStr)
                 translatorHeader = document.createElement("p")
                 translatorHeader.appendChild(document.createTextNode(transHeaderStr+":"))
                 ref.appendChild(translatorHeader)

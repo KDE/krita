@@ -46,7 +46,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(KisSeparateChannelsPluginFactory, "kritaseparatechannels.json", registerPlugin<KisSeparateChannelsPlugin>();)
 
 KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("separate");
     connect(action, SIGNAL(triggered(bool)), SLOT(slotSeparate()));

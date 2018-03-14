@@ -20,11 +20,11 @@
 #define BUGINFO_H
 
 #include <QVariant>
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
 class KUndo2MagicString;
 
-class BugInfo : public KisViewPlugin
+class BugInfo : public KisActionPlugin
 {
     Q_OBJECT
 public:

@@ -50,7 +50,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(ImagesplitFactory, "kritaimagesplit.json", registerPlugin<Imagesplit>();)
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("imagesplit");
     connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));

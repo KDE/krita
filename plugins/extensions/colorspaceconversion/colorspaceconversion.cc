@@ -53,7 +53,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ColorSpaceConversionFactory, "kritacolorspaceconversi
 
 
 ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction *action  = m_view->actionManager()->createAction("imagecolorspaceconversion");
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageColorSpaceConversion()));

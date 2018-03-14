@@ -56,7 +56,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(WaveletDecomposeFactory, "kritawaveletdecompose.json", registerPlugin<WaveletDecompose>();)
 
 WaveletDecompose::WaveletDecompose(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("waveletdecompose");
     connect(action, SIGNAL(triggered()), this, SLOT(slotWaveletDecompose()));

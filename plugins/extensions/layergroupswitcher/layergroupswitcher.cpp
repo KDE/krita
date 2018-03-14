@@ -38,7 +38,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(LayerGroupSwitcherFactory, "kritalayergroupswitcher.json", registerPlugin<LayerGroupSwitcher>();)
 
 LayerGroupSwitcher::LayerGroupSwitcher(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Move into previous group"), this);
     addAction("LayerGroupSwitcher/previous", action);

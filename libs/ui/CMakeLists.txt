@@ -145,7 +145,7 @@ set(kritaui_LIB_SRCS
     kis_workspace_resource.cpp
     kis_action.cpp
     kis_action_manager.cpp
-    kis_view_plugin.cpp
+    KisActionPlugin.cpp
     kis_canvas_controls_manager.cpp
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp

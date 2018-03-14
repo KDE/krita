@@ -30,14 +30,14 @@ class KisAction;
 class KisViewManager;
 
 /**
- *  KisViewPlugin is the base for plugins which add actions to the view
+ *  KisActionPlugin is the base for plugins which add actions to the main window
  */
-class KRITAUI_EXPORT KisViewPlugin : public QObject
+class KRITAUI_EXPORT KisActionPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KisViewPlugin(QObject* parent = 0);
-    ~KisViewPlugin() override;
+    KisActionPlugin(QObject* parent = 0);
+    ~KisActionPlugin() override;
 
 protected:
 

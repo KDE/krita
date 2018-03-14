@@ -21,7 +21,7 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
 namespace KisMetaData
 {
@@ -30,7 +30,7 @@ namespace KisMetaData
 /**
  * Template of view plugin
  */
-class metadataeditorPlugin : public KisViewPlugin
+class metadataeditorPlugin : public KisActionPlugin
 {
     Q_OBJECT
 public:

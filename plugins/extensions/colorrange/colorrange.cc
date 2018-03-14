@@ -44,7 +44,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ColorRangeFactory, "kritacolorrange.json", registerPl
 
 
 ColorRange::ColorRange(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction* action = createAction("colorrange");
     connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));

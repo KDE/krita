@@ -69,7 +69,7 @@ static const char ack[] = "ack";
 K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>();)
 
 QMic::QMic(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
     , m_gmicApplicator(0)
 {
 #ifndef Q_OS_MAC

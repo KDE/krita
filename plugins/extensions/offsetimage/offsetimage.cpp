@@ -42,7 +42,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(OffsetImageFactory, "kritaoffsetimage.json", registerPlugin<OffsetImage>();)
 
 OffsetImage::OffsetImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("offsetimage");
     connect(action, SIGNAL(triggered()), this, SLOT(slotOffsetImage()));

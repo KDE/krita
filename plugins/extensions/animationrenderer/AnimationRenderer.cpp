@@ -44,7 +44,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
 
 AnimaterionRenderer::AnimaterionRenderer(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     // Shows the big dialog
     KisAction *action = createAction("render_animation");

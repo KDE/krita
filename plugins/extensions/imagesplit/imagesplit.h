@@ -24,9 +24,9 @@
 #include <QVariant>
 
 #include <QUrl>
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class Imagesplit : public KisViewPlugin
+class Imagesplit : public KisActionPlugin
 {
     Q_OBJECT
 public:

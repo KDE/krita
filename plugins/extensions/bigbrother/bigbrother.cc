@@ -77,7 +77,7 @@ class RecordedActionLoadContext : public KisRecordedActionLoadContext {
 };
 
 BigBrotherPlugin::BigBrotherPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
         , m_recorder(0)
 {
     if (parent->inherits("KisViewManager")) {

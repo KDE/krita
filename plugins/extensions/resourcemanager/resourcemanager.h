@@ -26,12 +26,12 @@
 
 #include <KoResourceServer.h>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 #include "KisResourceBundle.h"
 
 #include "dlg_create_bundle.h"
 
-class ResourceManager : public KisViewPlugin
+class ResourceManager : public KisActionPlugin
 {
     Q_OBJECT
 public:

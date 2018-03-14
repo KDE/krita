@@ -34,7 +34,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(ShearImageFactory, "kritashearimage.json", registerPlugin<ShearImage>();)
 
 ShearImage::ShearImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction *action = createAction("shearimage");
     connect(action,  SIGNAL(triggered()), this, SLOT(slotShearImage()));

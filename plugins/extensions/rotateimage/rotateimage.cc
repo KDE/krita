@@ -41,7 +41,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(RotateImageFactory, "kritarotateimage.json", registerPlugin<RotateImage>();)
 
 RotateImage::RotateImage(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
 
     KisAction *action  = createAction("rotateimage");

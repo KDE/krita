@@ -53,7 +53,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(LayerSplitFactory, "kritalayersplit.json", registerPlugin<LayerSplit>();)
 
 LayerSplit::LayerSplit(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("layersplit");
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSplit()));

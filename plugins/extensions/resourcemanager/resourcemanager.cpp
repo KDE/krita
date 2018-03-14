@@ -77,7 +77,7 @@ public:
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
 
 ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
     , d(new Private())
 {
     KisAction *action = new KisAction(i18n("Import Bundles..."), this);

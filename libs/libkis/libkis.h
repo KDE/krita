@@ -5,7 +5,6 @@
 #include <QByteArray>
 #include <QAction>
 
-class Action;
 class Canvas;
 class Channel;
 class ColorDepth;

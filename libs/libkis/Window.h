@@ -27,8 +27,6 @@
 
 #include <KisMainWindow.h>
 
-class Action;
-
 /**
  * Window represents one Krita mainwindow. A window can have any number
  * of views open on any number of documents.
@@ -87,7 +85,7 @@ public Q_SLOTS:
     void close();
 
     /**
-     * @brief createAction creates an Action object and adds it to the action
+     * @brief createAction creates a QAction object and adds it to the action
      * manager for this Window.
      * @param id The unique id for the action. This will be used to
      *     propertize the action if any .action file is present
@@ -97,7 +95,7 @@ public Q_SLOTS:
      *     be places in. Default is "tools/scripts"
      * @return the new action.
      */
-    Action *createAction(const QString &id, const QString &text = QString(), const QString &menuLocation = QString("tools/scripts"));
+    QAction *createAction(const QString &id, const QString &text = QString(), const QString &menuLocation = QString("tools/scripts"));
 
 Q_SIGNALS:
     /// Emitted when the window is closed.

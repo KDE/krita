@@ -54,7 +54,7 @@ public:
 
 private:
 
-    KisViewManager * m_view;
+    KisViewManager *m_viewManager;
 
 };
 

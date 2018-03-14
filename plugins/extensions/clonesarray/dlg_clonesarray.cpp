@@ -32,11 +32,11 @@
 #include <kis_clone_layer.h>
 
 
-DlgClonesArray::DlgClonesArray(KisViewManager *view, QWidget *parent)
-    :   KoDialog(parent),
-        m_view(view),
-        m_applicator(0),
-        m_baseLayer(m_view->activeLayer())
+DlgClonesArray::DlgClonesArray(KisViewManager *viewManager, QWidget *parent)
+    : KoDialog(parent)
+    , m_viewManager(viewManager)
+    , m_applicator(0)
+    , m_baseLayer(m_viewManager->activeLayer())
 {
     Q_ASSERT(m_baseLayer);
 
@@ -111,8 +111,8 @@ void DlgClonesArray::setClean()
 void DlgClonesArray::updateCheckboxAvailability()
 {
     m_page->columnPreference->setEnabled(
-        m_page->numNegativeColumns->value() > 0 ||
-        m_page->numNegativeRows->value() > 0);
+                m_page->numNegativeColumns->value() > 0 ||
+                m_page->numNegativeRows->value() > 0);
 }
 
 void DlgClonesArray::syncOrthogonalToAngular()
@@ -202,14 +202,14 @@ void DlgClonesArray::reapplyClones()
 {
     cancelClicked();
 
-    KisImageSP image = m_view->image();
+    KisImageSP image = m_viewManager->image();
 
-    if (!m_view->blockUntilOperationsFinished(image)) return;
+    if (!m_viewManager->blockUntilOperationsFinished(image)) return;
 
     m_applicator =
-        new KisProcessingApplicator(image, 0,
-                                    KisProcessingApplicator::NONE,
-                                    KisImageSignalVector() << ModifiedSignal);
+            new KisProcessingApplicator(image, 0,
+                                        KisProcessingApplicator::NONE,
+                                        KisImageSignalVector() << ModifiedSignal);
 
     int columnXOffset = m_page->columnXOffset->value();
     int columnYOffset = m_page->columnYOffset->value();

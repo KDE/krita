@@ -59,7 +59,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view->mainWindow());
+    DlgColorRange *dlgColorRange = new DlgColorRange(viewManager(), viewManager()->mainWindow());
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();
@@ -67,10 +67,10 @@ void ColorRange::slotActivated()
 
 void ColorRange::selectOpaque()
 {
-    KisCanvas2 *canvas = m_view->canvasBase();
-    KisPaintDeviceSP device = m_view->activeNode()->projection();
-    if (!device) device = m_view->activeNode()->paintDevice();
-    if (!device) device = m_view->activeNode()->original();
+    KisCanvas2 *canvas = viewManager()->canvasBase();
+    KisPaintDeviceSP device = viewManager()->activeNode()->projection();
+    if (!device) device = viewManager()->activeNode()->paintDevice();
+    if (!device) device = viewManager()->activeNode()->original();
     KIS_ASSERT_RECOVER_RETURN(canvas && device);
 
     QRect rc = device->exactBounds();

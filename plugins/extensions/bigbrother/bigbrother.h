@@ -43,8 +43,6 @@ private:
     void saveMacro(const KisMacro* macro);
     KisMacro *openMacro();
 private:
-
-    KisViewManager *m_view;
     KisMacro *m_recorder;
     KisAction *m_startRecordingMacroAction;
     KisAction *m_stopRecordingMacroAction;

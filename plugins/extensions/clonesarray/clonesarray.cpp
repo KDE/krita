@@ -46,10 +46,10 @@ ClonesArray::~ClonesArray()
 
 void ClonesArray::slotCreateClonesArray()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
     Q_ASSERT(image); Q_UNUSED(image);
 
-    DlgClonesArray *dialog = new DlgClonesArray(m_view, m_view->mainWindow());
+    DlgClonesArray *dialog = new DlgClonesArray(viewManager(), viewManager()->mainWindow());
     Q_CHECK_PTR(dialog);
 
     if (dialog->exec() == QDialog::Accepted) {

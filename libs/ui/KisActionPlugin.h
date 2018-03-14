@@ -36,7 +36,7 @@ class KRITAUI_EXPORT KisActionPlugin : public QObject
 {
     Q_OBJECT
 public:
-    KisActionPlugin(QObject* parent = 0);
+    KisActionPlugin(QObject *parent = 0);
     ~KisActionPlugin() override;
 
 protected:
@@ -46,13 +46,13 @@ protected:
     *  @param name - title of the action in the krita4.xmlgui file
     *  @param action the action that should be added
     */
-    void addAction(const QString& name, KisAction* action);
+    void addAction(const QString& name, KisAction *action);
 
-    KisAction* createAction(const QString& name);
+    KisAction *createAction(const QString &name);
 
-    void addUIFactory(KisOperationUIFactory* factory);
+    void addUIFactory(KisOperationUIFactory *factory);
 
-    void addOperation(KisOperation* operation);
+    void addOperation(KisOperation *operation);
 
     QPointer<KisViewManager> viewManager() const;
 

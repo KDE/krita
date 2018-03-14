@@ -116,6 +116,30 @@ KisAsyncAnimationRenderDialogBase::~KisAsyncAnimationRenderDialogBase()
 KisAsyncAnimationRenderDialogBase::Result
 KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 {
+    {
+        /**
+         * Since this method can be called from the places where no
+         * view manager is available, we need this manually crafted
+         * ugly construction to "try-lock-cance" the image.
+         */
+
+        bool imageIsIdle = true;
+
+        if (viewManager) {
+            imageIsIdle = viewManager->blockUntilOperationsFinished(m_d->image);
+        } else {
+            imageIsIdle = false;
+            if (m_d->image->tryBarrierLock(true)) {
+                m_d->image->unlock();
+                imageIsIdle = true;
+            }
+        }
+
+        if (!imageIsIdle) {
+            return RenderCancelled;
+        }
+    }
+
     m_d->stillDirtyFrames = calcDirtyFrames();
     m_d->framesInProgress.clear();
     m_d->result = RenderComplete;

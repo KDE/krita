@@ -162,6 +162,12 @@ KisAsyncAnimationRendererBase *KisAsyncAnimationFramesSaveDialog::createRenderer
                                                      m_d->exportConfiguration);
 }
 
+void KisAsyncAnimationFramesSaveDialog::initializeRendererForFrame(KisAsyncAnimationRendererBase *renderer, KisImageSP image, int frame)
+{
+    Q_UNUSED(renderer);
+    Q_UNUSED(image);
+    Q_UNUSED(frame);
+}
 
 QString KisAsyncAnimationFramesSaveDialog::savedFilesMask() const
 {

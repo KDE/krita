@@ -3,7 +3,7 @@
     "Type": "Service",
     "X-KDE-Library": "kritapykrita",
     "X-KDE-ServiceTypes": [
-        "Krita/ViewPlugin"
+        "Krita/ApplicationPlugin"
     ],
     "X-Krita-Version": "28"
 }

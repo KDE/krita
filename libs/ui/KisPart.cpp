@@ -407,7 +407,6 @@ KisMainWindow *KisPart::currentMainwindow() const
 
 }
 
-<<<<<<< HEAD
 KisMainWindow * KisPart::windowById(QUuid id) const
 {
     Q_FOREACH(QPointer<KisMainWindow> mainWindow, d->mainWindows) {
@@ -418,13 +417,6 @@ KisMainWindow * KisPart::windowById(QUuid id) const
 
     return nullptr;
 }
-
-void KisPart::addScriptAction(KisAction *action)
-{
-    d->scriptActions << action;
-}
-=======
->>>>>>> master
 
 KisIdleWatcher* KisPart::idleWatcher() const
 {

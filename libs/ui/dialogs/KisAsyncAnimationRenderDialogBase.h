@@ -129,6 +129,9 @@ protected:
      */
     virtual KisAsyncAnimationRendererBase* createRenderer(KisImageSP image) = 0;
 
+    virtual void initializeRendererForFrame(KisAsyncAnimationRendererBase *renderer,
+                                            KisImageSP image, int frame) = 0;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -19,6 +19,7 @@
 #define LIBKIS_KRITA_H
 
 #include <QObject>
+#include <QAction>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -27,10 +28,8 @@
 #include "Document.h"
 #include "Window.h"
 #include "View.h"
-#include "Action.h"
 #include "Notifier.h"
 
-class QAction;
 
 /**
  * Krita is a singleton class that offers the root access to the Krita object hierarchy.
@@ -79,12 +78,12 @@ public Q_SLOTS:
     /**
      * @return return a list of all actions for the currently active mainWindow.
      */
-    QList<Action*> actions() const;
+    QList<QAction*> actions() const;
 
     /**
      * @return the action that has been registered under the given name, or 0 if no such action exists.
      */
-    Action *action(const QString &name) const;
+    QAction *action(const QString &name) const;
 
     /**
      * @return a list of all open Documents

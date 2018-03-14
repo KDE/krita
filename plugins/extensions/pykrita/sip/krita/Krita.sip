@@ -13,8 +13,8 @@ public Q_SLOTS:
     void setActiveDocument(Document*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
-    QList<Action *> actions() const /Factory/;
-    Action * action(const QString & name) const;
+    QList<QAction *> actions() const;
+    QAction *action(const QString & name) const;
     QList<Document *> documents() const /Factory/;
     QStringList filters() const;
     Filter * filter(const QString &name) const /Factory/;

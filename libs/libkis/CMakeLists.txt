@@ -1,5 +1,4 @@
 set(kritalibkis_LIB_SRCS
-    Action.cpp
     Canvas.cpp
     Channel.cpp
     DockWidget.cpp

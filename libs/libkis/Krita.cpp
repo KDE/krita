@@ -87,21 +87,17 @@ Krita::~Krita()
     delete d;
 }
 
-QList<Action *> Krita::actions() const
+QList<QAction *> Krita::actions() const
 {
-    QList<Action*> actionList;
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
     if (!mainWindow) {
-        return actionList;
+        return QList<QAction*>();
     }
     KActionCollection *actionCollection = mainWindow->actionCollection();
-    Q_FOREACH(QAction *action, actionCollection->actions()) {
-        actionList << new Action(action->objectName(), action);
-    }
-    return actionList;
+    return actionCollection->actions();
 }
 
-Action *Krita::action(const QString &name) const
+QAction *Krita::action(const QString &name) const
 {
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
     if (!mainWindow) {
@@ -109,10 +105,7 @@ Action *Krita::action(const QString &name) const
     }
     KActionCollection *actionCollection = mainWindow->actionCollection();
     QAction *action = actionCollection->action(name);
-    if (action) {
-        return new Action(name, action);
-    }
-    return 0;
+    return action;
 }
 
 Document* Krita::activeDocument() const

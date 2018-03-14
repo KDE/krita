@@ -19,7 +19,9 @@
 
 #include <QMenuBar>
 #include <QObject>
+#include <QAction>
 
+#include <kis_action.h>
 #include <KisMainWindow.h>
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -28,7 +30,7 @@
 
 #include <Document.h>
 #include <View.h>
-#include <Action.h>
+
 
 struct Window::Private {
     Private() {}
@@ -119,7 +121,7 @@ void Window::close()
 }
 
 
-Action *Window::createAction(const QString &id, const QString &text, const QString &menuLocation)
+QAction *Window::createAction(const QString &id, const QString &text, const QString &menuLocation)
 {
     KisAction *action = d->window->viewManager()->actionManager()->createAction(id);
     action->setText(text);
@@ -144,7 +146,7 @@ Action *Window::createAction(const QString &id, const QString &text, const QStri
             found->menu()->addAction(action);
         }
     }
-    return new Action(action->objectName(), action);
+    return action;
 }
 
 

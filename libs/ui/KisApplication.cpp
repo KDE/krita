@@ -230,6 +230,7 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
+//    qDebug() << "addResourceTypes();";
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
@@ -294,25 +295,46 @@ void KisApplication::addResourceTypes()
 
 void KisApplication::loadResources()
 {
+//    qDebug() << "loadResources();";
+
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
     KoResourceServerProvider::instance();
 
-    setSplashScreenLoadingText(i18n("Loading Brushes..."));
-    processEvents();
-    KisBrushServer::instance()->brushServer();
-
     setSplashScreenLoadingText(i18n("Loading Brush Presets..."));
     processEvents();
     KisResourceServerProvider::instance();
+
+    setSplashScreenLoadingText(i18n("Loading Brushes..."));
+    processEvents();
+    KisBrushServer::instance()->brushServer();
 
     setSplashScreenLoadingText(i18n("Loading Bundles..."));
     processEvents();
     KisResourceBundleServerProvider::instance();
 }
 
+void KisApplication::loadResourceTags()
+{
+//    qDebug() << "loadResourceTags()";
+
+    KoResourceServerProvider::instance()->patternServer()->loadTags();
+    KoResourceServerProvider::instance()->gradientServer()->loadTags();
+    KoResourceServerProvider::instance()->paletteServer()->loadTags();
+    KoResourceServerProvider::instance()->svgSymbolCollectionServer()->loadTags();
+    KisBrushServer::instance()->brushServer()->loadTags();
+    KisResourceServerProvider::instance()->workspaceServer()->loadTags();
+    KisResourceServerProvider::instance()->layerStyleCollectionServer()->loadTags();
+    KisResourceBundleServerProvider::instance()->resourceBundleServer()->loadTags();
+    KisResourceServerProvider::instance()->paintOpPresetServer()->loadTags();
+
+    KisResourceServerProvider::instance()->paintOpPresetServer()->clearOldSystemTags();
+}
+
 void KisApplication::loadPlugins()
 {
+//    qDebug() << "loadPlugins();";
+
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
 
@@ -321,10 +343,15 @@ void KisApplication::loadPlugins()
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
     KoColorSpaceRegistry::instance();
+}
 
+void KisApplication::loadGuiPlugins()
+{
+//    qDebug() << "loadGuiPlugins();";
     // Load the krita-specific tools
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
     processEvents();
+//    qDebug() << "loading tools";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
@@ -332,15 +359,16 @@ void KisApplication::loadPlugins()
     // Load dockers
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
     processEvents();
+//    qDebug() << "loading dockers";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();
+    qDebug() << "loading exiv2";
     KisExiv2::initialize();
 }
-
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
@@ -411,11 +439,17 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     addResourceTypes();
 
-    // Load all resources and tags before the plugins do that
-    loadResources();
-
     // Load the plugins
     loadPlugins();
+
+    // Load all resources
+    loadResources();
+
+    // Load all the tags
+    loadResourceTags();
+
+    // Load the gui plugins
+    loadGuiPlugins();
 
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that

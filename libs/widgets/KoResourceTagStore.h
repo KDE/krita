@@ -76,15 +76,6 @@ private:
     void readXMLFile(const QString &tagstore);
     void writeXMLFile(const QString &tagstore);
 
-    /// To check whether the resource belongs to the present server or not
-    bool isServerResource(const QString &resourceName) const;
-
-    /// If resource filenames have no extensions, then we add "-krita.extension".
-    QString adjustedFileName(const QString &fileName) const;
-
-    /// Removes the adjustements before going to the server
-    QStringList removeAdjustedFileNames(QStringList fileNamesList) const;
-
     class Private;
     Private * const d;
 };

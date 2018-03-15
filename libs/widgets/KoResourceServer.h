@@ -70,7 +70,7 @@ public:
 
     virtual int resourceCount() const = 0;
     virtual void loadResources(QStringList filenames) = 0;
-    virtual QStringList blackListedFiles() const = 0;
+    virtual QStringList blackListedFiles() = 0;
     virtual QStringList queryResources(const QString &query) const = 0;
     QString type() const { return m_type; }
 
@@ -87,19 +87,6 @@ public:
 
         foreach (const QString &extension, extensionList) {
             fileNames += KoResourcePaths::findAllResources(type().toLatin1(), extension, KoResourcePaths::Recursive);
-        }
-
-        if (type() == "kis_resourcebundles") {
-            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
-            if (group.readEntry("HideKrita3Bundle", true)) {
-                Q_FOREACH(const QString &filename, fileNames) {
-                    if (filename.endsWith("Krita_3_Default_Resources.bundle")) {
-                        if (!m_blackListFileNames.contains(filename)) {
-                            m_blackListFileNames.append(filename);
-                        }
-                    }
-                }
-            }
         }
         return fileNames;
     }
@@ -155,7 +142,6 @@ public:
         m_blackListFile = KoResourcePaths::locateLocal("data", type + ".blacklist");
         m_blackListFileNames = readBlackListFile();
         m_tagStore = new KoResourceTagStore(this);
-        m_tagStore->loadTags();
     }
 
     ~KoResourceServer() override
@@ -242,9 +228,12 @@ public:
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
-        debugWidgets << "done loading  resources for type " << type();
+//        qDebug() << "done loading  resources for type " << type();
     }
 
+    void loadTags() {
+        m_tagStore->loadTags();
+    }
 
     void clearOldSystemTags() {
         m_tagStore->clearOldSystemTags();
@@ -495,8 +484,21 @@ public:
         notifyResourceChanged(resource);
     }
 
-    QStringList blackListedFiles() const override
+    QStringList blackListedFiles() override
     {
+        if (type() == "kis_resourcebundles") {
+            KConfigGroup group = KSharedConfig::openConfig()->group("BundleHack");
+            if (group.readEntry("HideKrita3Bundle", true)) {
+                Q_FOREACH(const QString &filename, fileNames()) {
+                    if (filename.endsWith("Krita_3_Default_Resources.bundle")) {
+                        if (!m_blackListFileNames.contains(filename)) {
+                            m_blackListFileNames.append(filename);
+                        }
+                    }
+                }
+            }
+//            qDebug() << "blacklisted filenames" << m_blackListFileNames;
+        }
         return m_blackListFileNames;
     }
 
@@ -647,6 +649,7 @@ protected:
             if (e.tagName() == "name") {
                 // If the krita bundle has landed in the blacklist, skip it.
                 if (type() == "kis_resourcebundles") {
+//                    qDebug() << "Checking for not reading bundle" << e.text();
                     if (e.text().endsWith("Krita_3_Default_Resources.bundle")) {
                         file = file.nextSiblingElement("file");
                     }
@@ -655,7 +658,9 @@ protected:
             }
             file = file.nextSiblingElement("file");
         }
-
+//        if (type() == "kis_resourcebundles") {
+//            qDebug() << "Read bundle blacklist" << filenameList;
+//        }
         return filenameList;
     }
 
@@ -683,6 +688,7 @@ protected:
             // Don't write the krita3 bundle to the blacklist, since its location will change
             // when using the appimate.
             if (type() == "kis_resourcebundles") {
+//                qDebug() << "Checking for Not writing krita 3 bundle" << filename;
                 if (filename.endsWith("Krita_3_Default_Resources.bundle")) continue;
             }
             QDomElement fileEl = doc.createElement("file");

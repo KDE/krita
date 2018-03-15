@@ -39,6 +39,7 @@ FilterResourceServerProvider::FilterResourceServerProvider()
         QDir().mkpath(m_filterEffectServer->saveLocation());
     }
     m_filterEffectServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_filterEffectServer->fileNames(), m_filterEffectServer->blackListedFiles()));
+    m_filterEffectServer->loadTags();
 }
 
 FilterResourceServerProvider::~FilterResourceServerProvider()

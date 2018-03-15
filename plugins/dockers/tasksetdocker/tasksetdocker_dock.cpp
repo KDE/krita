@@ -104,6 +104,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     }
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<TasksetResource>(m_rserver));
     m_rserver->loadResources(KoResourceServerProvider::blacklistFileNames(m_rserver->fileNames(), m_rserver->blackListedFiles()));
+    m_rserver->loadTags();
 
     KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));

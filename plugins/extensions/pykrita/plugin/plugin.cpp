@@ -32,7 +32,7 @@ KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
     : KisActionPlugin(parent)
     , m_autoReload(false)
 {
-    qDebug() << "Loading Python plugin";
+    dbgScript << "Loading Python plugin";
 
     PyKrita::InitResult initResult = PyKrita::initialize();
     switch (initResult) {

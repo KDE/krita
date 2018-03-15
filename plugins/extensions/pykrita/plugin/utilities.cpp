@@ -261,9 +261,9 @@ bool Python::libraryLoad()
     if (!s_pythonLibrary) {
 
         QFileInfo fi(PYKRITA_PYTHON_LIBRARY);
-        qDebug() << fi.canonicalFilePath() << fi.exists();
+        dbgScript << fi.canonicalFilePath() << fi.exists();
         if (fi.exists()) {
-            qDebug() << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
+            dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
             s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
         }
         else {
@@ -276,7 +276,7 @@ bool Python::libraryLoad()
             Q_FOREACH(const QString &location, locations) {
                 QDir d(location);
                 QStringList entries = d.entryList(QStringList() << libraryName + "*");
-                qDebug() << entries;
+                dbgScript << entries;
                 Q_FOREACH(const QString &entry, entries) {
                      QFileInfo fi2(location + "/" + entry);
                      if (fi2.exists()) {
@@ -287,13 +287,13 @@ bool Python::libraryLoad()
             }
         }
         if (!s_pythonLibrary) {
-            qDebug() << "Could not create" << PYKRITA_PYTHON_LIBRARY;
+            dbgScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
             return false;
         }
 
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load()) {
-            qDebug() << QString("Could not load %1 -- Reason: %2").arg(s_pythonLibrary->fileName()).arg(s_pythonLibrary->errorString());
+            dbgScript << QString("Could not load %1 -- Reason: %2").arg(s_pythonLibrary->fileName()).arg(s_pythonLibrary->errorString());
             return false;
         }
     }
@@ -344,17 +344,17 @@ bool Python::setPath(const QStringList& scriptPaths)
     // Append the Krita libraries path
     QString pythonLibsPath = findKritaPythonLibsPath("krita-python-libs");
     if (pythonLibsPath.isEmpty()) {
-        qDebug() << "Cannot find krita-python-libs";
+        dbgScript << "Cannot find krita-python-libs";
         return false;
     }
-    qDebug() << "Found krita-python-libs at" << pythonLibsPath;
+    dbgScript << "Found krita-python-libs at" << pythonLibsPath;
     paths.append(pythonLibsPath);
 
 #ifdef Q_OS_LINUX
     // Append the Krita libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
     if (!pythonLibsPath.isEmpty()) {
-        qDebug() << "Found sip at" << pythonLibsPath;
+        dbgScript << "Found sip at" << pythonLibsPath;
         paths.append(pythonLibsPath);
     }
 #endif
@@ -379,7 +379,7 @@ bool Python::setPath(const QStringList& scriptPaths)
         // We're running from an appimage, so we need our local python
         QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
         QString p2 = p.remove("lib").remove("m.so");
-        qDebug() << "\t" << p << p2;
+        dbgScript << "\t" << p << p2;
         originalPath = findKritaPythonLibsPath(p);
         paths.append(originalPath + "/lib-dynload");
         paths.append(originalPath + "/site-packages");
@@ -395,7 +395,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     if (!originalPath.isEmpty()) {
         joinedPaths = joinedPaths + pathSeparator + originalPath;
     }
-    qDebug() << "Setting python paths:" << joinedPaths;
+    dbgScript << "Setting python paths:" << joinedPaths;
 #ifdef Q_OS_WIN
     QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
     joinedPaths.toWCharArray(joinedPathsWChars.data());

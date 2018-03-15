@@ -49,7 +49,7 @@
 #include <kis_image.h>
 
 #include <resources/KoPattern.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_canvas_resource_provider.h"
 
 #include "widgets/kis_iconwidget.h"
@@ -86,7 +86,7 @@ KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const ch
     m_gradientWidget->setToolTip(i18n("Gradients"));
     m_gradientWidget->setFixedSize(32, 32);
 
-    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer(false);
+    KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoAbstractGradient>(rserver));
     m_gradientWidget->setResourceAdapter(adapter);
 }

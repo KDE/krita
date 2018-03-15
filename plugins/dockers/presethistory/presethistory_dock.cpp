@@ -33,7 +33,7 @@
 #include "kis_paintop_box.h"
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_types.h>
 

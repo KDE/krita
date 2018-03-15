@@ -24,7 +24,6 @@
 
 #include "KoResourceServer.h"
 
-class KoResourceLoaderThread;
 class FilterEffectResource;
 
 /// Provides resource server for filter effect resources
@@ -47,7 +46,6 @@ private:
 
     static FilterResourceServerProvider *m_singleton;
     KoResourceServer<FilterEffectResource> *m_filterEffectServer;
-    KoResourceLoaderThread *m_filterEffectThread;
 };
 
 #endif // FILTERRESOURCESERVERPROVIDER_H

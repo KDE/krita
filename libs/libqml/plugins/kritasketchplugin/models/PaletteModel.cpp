@@ -21,7 +21,7 @@
 #include <resources/KoColorSet.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 
 class PaletteModel::Private {
 public:

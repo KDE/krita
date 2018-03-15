@@ -65,7 +65,7 @@
 #include "kis_node_manager.h"
 #include "KisViewManager.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
 
@@ -483,7 +483,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
-    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_eraserName = "eraser_circle";
     m_defaultPresetName = "basic_tip_default";
     bool foundEraser = false;
@@ -774,7 +774,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
     if (toolData == m_tabletToolMap.end()) {
         KisConfig cfg;
-        KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+        KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
             preset = rserver->resourceByName(cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));

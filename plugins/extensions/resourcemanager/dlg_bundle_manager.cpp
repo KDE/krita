@@ -31,7 +31,7 @@
 
 #include <kis_icon.h>
 #include "kis_action.h"
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
@@ -94,7 +94,7 @@ DlgBundleManager::DlgBundleManager(ResourceManager *resourceManager, KisActionMa
 
 void DlgBundleManager::refreshListData()
 {
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
+    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
 
     m_ui->listInactive->clear();
     m_ui->listActive->clear();
@@ -119,7 +119,7 @@ void DlgBundleManager::refreshListData()
 
 void DlgBundleManager::accept()
 {
-    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
+    KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
 
     for (int i = 0; i < m_ui->listActive->count(); ++i) {
         QListWidgetItem *item = m_ui->listActive->item(i);
@@ -238,7 +238,7 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
     else {
 
         QByteArray ba = current->data(Qt::UserRole).toByteArray();
-        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceServerProvider::instance()->resourceBundleServer();
+        KoResourceServer<KisResourceBundle> *bundleServer = KisResourceBundleServerProvider::instance()->resourceBundleServer();
         KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
 
         if (!bundle) {

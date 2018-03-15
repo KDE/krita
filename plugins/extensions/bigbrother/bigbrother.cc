@@ -36,7 +36,7 @@
 #include <kis_debug.h>
 #include <kis_global.h>
 #include <kis_image.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <kis_types.h>
 #include <KisViewManager.h>
 #include <resources/KoPattern.h>

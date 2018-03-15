@@ -60,7 +60,7 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->chkDisregardOpacity->setChecked(cfg.readEntry<bool>("layerspit/disregardopacity", true));
 
     QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
-    KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
     KoColorSet *pal = pserver->resourceByName(paletteName);
     if (pal) {
         m_palette = pal;

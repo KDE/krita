@@ -50,7 +50,7 @@
 #include <kis_node.h>
 #include "kis_config.h"
 
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_lod_availability_widget.h"
 
 #include "kis_signal_auto_connection.h"

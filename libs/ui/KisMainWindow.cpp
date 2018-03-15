@@ -133,7 +133,7 @@
 #include "kis_paintop_box.h"
 #include "KisPart.h"
 #include "KisPrintJob.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_statusbar.h"
 #include "KisView.h"
@@ -277,7 +277,7 @@ KisMainWindow::KisMainWindow()
     : KXmlGuiWindow()
     , d(new Private(this))
 {
-    auto rserver = KisResourceServerProvider::instance()->workspaceServer(false);
+    auto rserver = KisResourceServerProvider::instance()->workspaceServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     d->workspacemodel = new KoResourceModel(adapter, this);
     connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
@@ -2034,7 +2034,7 @@ void KisMainWindow::updateWindowMenu()
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
 
-    auto workspaces = KisResourceServerProvider::instance()->workspaceServer(false)->resources();
+    auto workspaces = KisResourceServerProvider::instance()->workspaceServer()->resources();
     auto m_this = this;
     for (auto &w : workspaces) {
         auto action = workspaceMenu->addAction(w->name());

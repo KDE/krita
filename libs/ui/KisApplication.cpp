@@ -84,7 +84,7 @@
 #include <kis_debug.h>
 #include "kis_action_registry.h"
 #include <kis_brush_server.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
@@ -273,6 +273,7 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tags/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/asl/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/brushes/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gradients/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/paintoppresets/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/palettes/");
@@ -293,37 +294,21 @@ void KisApplication::addResourceTypes()
 
 void KisApplication::loadResources()
 {
-    setSplashScreenLoadingText(i18n("Loading Gradients..."));
+    setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
-    KoResourceServerProvider::instance()->gradientServer(true);
-
-
-    // Load base resources
-    setSplashScreenLoadingText(i18n("Loading Patterns..."));
-    processEvents();
-    KoResourceServerProvider::instance()->patternServer(true);
-
-    setSplashScreenLoadingText(i18n("Loading Palettes..."));
-    processEvents();
-    KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServerProvider::instance();
 
     setSplashScreenLoadingText(i18n("Loading Brushes..."));
     processEvents();
-    KisBrushServer::instance()->brushServer(true);
+    KisBrushServer::instance()->brushServer();
 
-    // load paintop presets
-    setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
+    setSplashScreenLoadingText(i18n("Loading Brush Presets..."));
     processEvents();
-    KisResourceServerProvider::instance()->paintOpPresetServer(true);
+    KisResourceServerProvider::instance();
 
-    // load symbols
-    setSplashScreenLoadingText(i18n("Loading SVG Symbol Collections..."));
+    setSplashScreenLoadingText(i18n("Loading Bundles..."));
     processEvents();
-    KoResourceServerProvider::instance()->svgSymbolCollectionServer(true);
-
-    setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
-    processEvents();
-    KisResourceServerProvider::instance()->resourceBundleServer();
+    KisResourceBundleServerProvider::instance();
 }
 
 void KisApplication::loadPlugins()

@@ -112,7 +112,7 @@
 #include "KisPart.h"
 #include "KisPrintJob.h"
 #include <KoUpdater.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_selection.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"

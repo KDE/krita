@@ -65,7 +65,7 @@
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
 #include <kis_psd_layer_style_resource.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_keyframe_channel.h"
 #include <kis_filter_configuration.h>
 

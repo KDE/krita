@@ -19,7 +19,7 @@
 #include "kis_resource_server_provider_test.h"
 
 #include <QTest>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 
 void KisResourceServerProviderTest::testFetchResource()
 {

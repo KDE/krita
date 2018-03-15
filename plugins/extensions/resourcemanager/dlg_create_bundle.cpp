@@ -36,7 +36,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>

@@ -62,6 +62,7 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     m_allowToHidePopup(true)
 {
     m_view = new KisCategorizedListView();
+    m_view->setCompositeBoxControl(true);
 
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);

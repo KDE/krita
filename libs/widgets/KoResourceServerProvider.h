@@ -48,7 +48,16 @@ public:
     ~KoResourceServerProvider() override;
 
     static KoResourceServerProvider* instance();
+
+    /**
+     * @brief blacklistFileNames filters the filenames with the list of blacklisted file names
+     * @param fileNames all files
+     * @param blacklistedFileNames the files we don't want
+     * @return the result
+     */
     static QStringList blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames);
+
+
     KoResourceServer<KoPattern>* patternServer();
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();

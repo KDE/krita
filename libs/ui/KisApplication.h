@@ -98,7 +98,9 @@ public:
 
     void addResourceTypes();
     void loadResources();
+    void loadResourceTags();
     void loadPlugins();
+    void loadGuiPlugins();
     void initializeGlobals(const KisApplicationArguments &args);
 
 public Q_SLOTS:

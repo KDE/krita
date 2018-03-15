@@ -42,14 +42,15 @@ Q_GLOBAL_STATIC(KisResourceBundleServerProvider, s_instance)
 KisResourceBundleServerProvider::KisResourceBundleServerProvider()
 {
     m_resourceBundleServer = new KoResourceServerSimpleConstruction<KisResourceBundle>("kis_resourcebundles", "*.bundle");
-    m_resourceBundleServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_resourceBundleServer->fileNames(), m_resourceBundleServer->blackListedFiles()));
+    QStringList files = KoResourceServerProvider::blacklistFileNames(m_resourceBundleServer->fileNames(), m_resourceBundleServer->blackListedFiles());
+    qDebug() << "Bundle files to load" << files;
+    m_resourceBundleServer->loadResources(files);
 
     Q_FOREACH (KisResourceBundle *bundle, m_resourceBundleServer->resources()) {
         if (!bundle->install()) {
             warnKrita << "Could not install resources for bundle" << bundle->name();
         }
     }
-    KisResourceServerProvider::instance()->paintOpPresetServer()->clearOldSystemTags();
 }
 
 KisResourceBundleServerProvider::~KisResourceBundleServerProvider()

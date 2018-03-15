@@ -26,7 +26,7 @@ KisActionPlugin::KisActionPlugin(QObject* parent)
     : QObject(parent)
 {
     m_viewManager = qobject_cast<KisViewManager*>(parent);
-    Q_ASSERT(m_viewManager);
+    KIS_ASSERT_RECOVER_NOOP(m_viewManager);
 }
 
 KisActionPlugin::~KisActionPlugin()

@@ -27,7 +27,7 @@
 #include <KisActionPlugin.h>
 #include "PythonPluginManager.h"
 
-class KritaPyQtPlugin : public KisActionPlugin
+class KritaPyQtPlugin : public QObject
 {
     Q_OBJECT
 public:

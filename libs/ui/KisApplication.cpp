@@ -366,7 +366,7 @@ void KisApplication::loadGuiPlugins()
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();
-    qDebug() << "loading exiv2";
+//    qDebug() << "loading exiv2";
     KisExiv2::initialize();
 }
 

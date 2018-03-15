@@ -64,7 +64,6 @@ private Q_SLOTS:
     void contextDeleteCurrentTag();
 
 private:
-    /// pimpl because chooser will most likely get upgraded at some point
     class Private;
     Private* const d;
 

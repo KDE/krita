@@ -27,8 +27,9 @@
 
 #include <KisApplication.h>
 #include <KisMainWindow.h>
+#include <KisPart.h>
 #include <kis_dom_utils.h>
-#include "kis_resource_server_provider.h"
+#include <kis_resource_server_provider.h>
 #include <KisSessionResource.h>
 
 Q_GLOBAL_STATIC(KisWindowLayoutManager, s_instance)
@@ -144,7 +145,22 @@ KisWindowLayoutManager::~KisWindowLayoutManager() {
 
 void KisWindowLayoutManager::setShowImageInAllWindowsEnabled(bool showInAll)
 {
+    bool wasEnabled = d->showImageInAllWindows;
+
     d->showImageInAllWindows = showInAll;
+
+    if (!wasEnabled && showInAll) {
+        KisMainWindow *currentMainWindow = KisPart::instance()->currentMainwindow();
+        if (currentMainWindow) {
+            KisView *activeView = currentMainWindow->activeView();
+            if (activeView) {
+                KisDocument *document = activeView->document();
+                if (document) {
+                   activeDocumentChanged(document);
+                }
+            }
+        }
+    }
 }
 
 bool KisWindowLayoutManager::isShowImageInAllWindowsEnabled() const
@@ -166,6 +182,18 @@ void KisWindowLayoutManager::setPrimaryWorkspaceFollowsFocus(bool enabled, QUuid
 QUuid KisWindowLayoutManager::primaryWindowId() const
 {
     return d->primaryWindow;
+}
+
+void KisWindowLayoutManager::activeDocumentChanged(KisDocument *document)
+{
+    if (d->showImageInAllWindows) {
+        Q_FOREACH(QPointer<KisMainWindow> window, KisPart::instance()->mainWindows()) {
+            const auto view = window->activeView();
+            if (!view || view->document() != document) {
+                window->showDocument(document);
+            }
+        }
+    }
 }
 
 void KisWindowLayoutManager::slotFocusChanged(QWidget *old, QWidget *now)

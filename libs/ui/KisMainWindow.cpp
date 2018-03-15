@@ -1294,13 +1294,7 @@ void KisMainWindow::setActiveView(KisView* view)
     actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
     d->viewManager->setCurrentView(view);
 
-    auto *kisPart = KisPart::instance();
-    if (KisWindowLayoutManager::instance()->isShowImageInAllWindowsEnabled()) {
-        Q_FOREACH(QPointer<KisMainWindow> window, kisPart->mainWindows()) {
-            if (window == this) continue;
-            window->showDocument(view->document());
-        }
-    }
+    KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 }
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)

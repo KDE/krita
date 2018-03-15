@@ -26,6 +26,7 @@
 
 class QScreen;
 class KisWindowLayoutResource;
+class KisDocument;
 
 class KisWindowLayoutManager : public QObject
 {
@@ -67,6 +68,8 @@ public:
      */
     bool isShowImageInAllWindowsEnabled() const;
     void setShowImageInAllWindowsEnabled(bool showInAll);
+
+    void activeDocumentChanged(KisDocument *document);
 
     /**
      * The name of the last activated window layout or session.

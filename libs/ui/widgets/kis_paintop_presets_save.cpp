@@ -28,7 +28,7 @@
 #include <KoFileDialog.h>
 #include "KisImportExportManager.h"
 #include "QDesktopServices"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include <kis_paintop_preset_icon_library.h>
 
 

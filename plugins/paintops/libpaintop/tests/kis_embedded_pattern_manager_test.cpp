@@ -28,7 +28,7 @@
 #include <resources/KoPattern.h>
 
 #include <kis_properties_configuration.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 
 KoPattern *createPattern()
 {

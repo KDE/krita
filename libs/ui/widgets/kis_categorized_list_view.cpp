@@ -52,6 +52,11 @@ QSize KisCategorizedListView::sizeHint() const
     return QSize(width, sh.height());
 }
 
+void KisCategorizedListView::setCompositeBoxControl(bool value)
+{
+    isCompositeBoxControl = value;
+}
+
 void KisCategorizedListView::updateRows(int begin, int end)
 {
     for(; begin!=end; ++begin) {
@@ -111,8 +116,32 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 {
     QListView::mousePressEvent(event);
 
+    QModelIndex index = QListView::indexAt(event->pos());
+
+
+    // hack: the custom compositeop combo box has issues with events being sent
+    // those widgets will run this extra code to help them know if a checkbox is clicked
+    if (isCompositeBoxControl) {
+
+        if (index.isValid() && (event->pos().x() < 25) && (model()->flags(index) & Qt::ItemIsUserCheckable)) {
+            QListView::mousePressEvent(event);
+            QMouseEvent releaseEvent(QEvent::MouseButtonRelease,
+                            event->pos(),
+                            event->globalPos(),
+                            event->button(),
+                            event->button() | event->buttons(),
+                            event->modifiers());
+
+            QListView::mouseReleaseEvent(&releaseEvent);
+            emit sigEntryChecked(index);
+
+            return; // don't worry about running the 'right' click logic below. that is not relevant with composite ops
+        }
+    }
+
+
+
     if(event->button() == Qt::RightButton){
-        QModelIndex index = QListView::indexAt(event->pos());
         QMenu menu(this);
         if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
 

@@ -103,7 +103,7 @@
 #include "kis_statusbar.h"
 #include "widgets/kis_progress_widget.h"
 #include "kis_canvas_resource_provider.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_node_manager.h"
 #include "KisPart.h"
 #include "KisApplication.h"

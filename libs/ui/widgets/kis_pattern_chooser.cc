@@ -42,7 +42,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 {
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this, true);
     m_itemChooser->setPreviewTiled(true);
@@ -77,7 +77,7 @@ KisPatternChooser::~KisPatternChooser()
 KoResource *  KisPatternChooser::currentResource()
 {
     if (!m_itemChooser->currentResource()) {
-        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
         if (rserver->resources().size() > 0) {
             KisSignalsBlocker blocker(m_itemChooser);
             m_itemChooser->setCurrentResource(rserver->resources().first());

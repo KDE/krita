@@ -239,7 +239,7 @@ void KoColorPopupAction::opacityWasChanged( int opacity )
 void KoColorPopupAction::slotTriggered(bool)
 {
     if (d->firstTime) {
-        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer(false);
+        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
         QList<KoColorSet*> palettes = srv->resources();
         if (!palettes.empty()) {
             d->colorSetWidget->setColorSet(palettes.first());

@@ -25,13 +25,12 @@
 
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
+#include <KisResourceBundleServerProvider.h>
 
 #include <brushengine/kis_paintop_preset.h>
 
-#include "KisResourceBundle.h"
 #include "kritaui_export.h"
 
-class KoResourceLoaderThread;
 class KisWorkspaceResource;
 class KisPSDLayerStyleCollectionResource;
 
@@ -48,10 +47,9 @@ public:
 
     static KisResourceServerProvider* instance();
 
-    KoResourceServer<KisResourceBundle> *resourceBundleServer();
-    KisPaintOpPresetResourceServer* paintOpPresetServer(bool block = true);
-    KoResourceServer<KisWorkspaceResource>* workspaceServer(bool block = true);
-    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer(bool block = true);
+    KisPaintOpPresetResourceServer* paintOpPresetServer();
+    KoResourceServer<KisWorkspaceResource>* workspaceServer();
+    KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
 
     void brushBlacklistCleanup();
 
@@ -66,14 +64,6 @@ private:
     KisPaintOpPresetResourceServer *m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
     KoResourceServer<KisPSDLayerStyleCollectionResource> *m_layerStyleCollectionServer;
-    KoResourceServer<KisResourceBundle> *m_resourceBundleServer;
-
-private:
-
-    KoResourceLoaderThread *m_paintOpPresetThread;
-    KoResourceLoaderThread *m_workspaceThread;
-    KoResourceLoaderThread *m_layerStyleCollectionThread;
-
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

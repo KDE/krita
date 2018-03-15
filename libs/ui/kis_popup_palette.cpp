@@ -26,7 +26,7 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_icon_utils.h"
 #include <brushengine/kis_paintop_preset.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include <kis_canvas_resource_provider.h>
 #include <KoTriangleColorSelector.h>
 #include <KisVisualColorSelector.h>

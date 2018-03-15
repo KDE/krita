@@ -242,10 +242,13 @@ public:
         Q_FOREACH (ObserverType* observer, m_observers) {
             observer->syncTaggedResourceView();
         }
-        m_tagStore->clearOldSystemTags();
         debugWidgets << "done loading  resources for type " << type();
     }
 
+
+    void clearOldSystemTags() {
+        m_tagStore->clearOldSystemTags();
+    }
 
     /// Adds an already loaded resource to the server
     bool addResource(PointerType resource, bool save = true, bool infront = false) {

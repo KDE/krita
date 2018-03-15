@@ -190,6 +190,9 @@ void KoResourceTagStore::loadTags()
 {
     QStringList tagFiles = KoResourcePaths::findDirs("tags");
     Q_FOREACH (const QString &tagFile, tagFiles) {
+//        if (d->resourceServer->type() == "kis_paintoppresets") {
+//            qDebug() << "loading tags" << tagFile + d->resourceServer->type() + "_tags.xml";
+//        }
         readXMLFile(tagFile + d->resourceServer->type() + "_tags.xml");
     }
 }
@@ -197,7 +200,9 @@ void KoResourceTagStore::loadTags()
 void KoResourceTagStore::clearOldSystemTags()
 {
     if (d->resourceServer->type() == "kis_paintoppresets") {
+//        qDebug() << "clearOldSystemTags" << d->tagList;
         Q_FOREACH(const QString &systemTag, krita3PresetSystemTags) {
+//            qDebug() << "\t" << systemTag << d->tagList[systemTag];
             if (d->tagList[systemTag] == 0) {
                 d->tagList.remove(systemTag);
             }

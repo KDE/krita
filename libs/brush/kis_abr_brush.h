@@ -26,7 +26,6 @@
 #include <kis_scaling_size_brush.h>
 #include <kis_types.h>
 #include <kis_shared.h>
-#include <brushengine/kis_paint_information.h>
 
 #include "kritabrush_export.h"
 

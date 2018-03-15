@@ -43,7 +43,7 @@ KisResourceBundleServerProvider::KisResourceBundleServerProvider()
 {
     m_resourceBundleServer = new KoResourceServerSimpleConstruction<KisResourceBundle>("kis_resourcebundles", "*.bundle");
     QStringList files = KoResourceServerProvider::blacklistFileNames(m_resourceBundleServer->fileNames(), m_resourceBundleServer->blackListedFiles());
-    qDebug() << "Bundle files to load" << files;
+//    qDebug() << "Bundle files to load" << files;
     m_resourceBundleServer->loadResources(files);
 
     Q_FOREACH (KisResourceBundle *bundle, m_resourceBundleServer->resources()) {

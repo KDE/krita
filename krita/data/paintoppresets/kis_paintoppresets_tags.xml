@@ -50,7 +50,7 @@
  <resource identifier="d)_Ink-4_Pen_Rough.kpp" md5="BvLMfAH5F0Qs1fzzkjJ7kA==">
   <tag>Ink</tag>
  </resource>
- <resource identifier="f)_Bristles-5_Flat.kpp" md5="9yFzzObgUeJqObwgPbvO8w==">
+ <resource identifier="f)_Bristles-5_Flat.kpp" md5="AQ2YRkccT/h1p/CCsUjsrg==">
   <tag>Paint</tag>
   <tag>Sketch</tag>
  </resource>
@@ -301,7 +301,7 @@
   <tag>Textures</tag>
   <tag>Ink</tag>
  </resource>
- <resource identifier="b)_Basic-5_Size_Opacity.kpp" md5="l/wxzgRZT/1Z1VfuslCHuA==">
+ <resource identifier="b)_Basic-5_Size_Opacity.kpp" md5="chzdUO9Ij9cqGcNELbitgA==">
   <tag>Paint</tag>
   <tag>Sketch</tag>
   <tag>Digital</tag>
@@ -358,7 +358,7 @@
  <resource identifier="j)_Watercolor_Fringe.kpp" md5="td7FGG0/Dmq77mVfBfYE0w==">
   <tag>Paint</tag>
  </resource>
- <resource identifier="f)_Bristles-3_Large_Smooth.kpp" md5="FEA1982L+KWZLDU/EVe+2g==">
+ <resource identifier="f)_Bristles-3_Large_Smooth.kpp" md5="lWAUef2+dDe4DCVENH0Vng==">
   <tag>Paint</tag>
  </resource>
  <resource identifier="a)_Eraser_Soft.kpp" md5="WEAiY9JOajZYb6EeTSdeyg==">
@@ -402,7 +402,7 @@
  <resource identifier="k)_Blender_Knife_Edge.kpp" md5="WhYt2U1Ts5uqvCCkvwM25Q==">
   <tag>Paint</tag>
  </resource>
- <resource identifier="b)_Basic-4_Flow_Opacity.kpp" md5="K/shkimOHbaydqtZTuCxtQ==">
+ <resource identifier="b)_Basic-4_Flow_Opacity.kpp" md5="BFT8YqJorap8RdvAi76h2w==">
   <tag>Sketch</tag>
   <tag>Digital</tag>
  </resource>

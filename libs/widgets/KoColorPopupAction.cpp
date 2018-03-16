@@ -78,6 +78,13 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     QWidget *widget = new QWidget(d->menu);
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(widget);
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    KoColorSet* defaultColorSet = rServer->resourceByName("Default");
+    if (defaultColorSet) {
+        d->colorSetWidget->setColorSet(defaultColorSet);
+    } else {
+        d->colorSetWidget->setColorSet(rServer->resources().first());
+    }
 
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup

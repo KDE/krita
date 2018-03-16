@@ -340,6 +340,11 @@ void KoSvgTextShape::relayout()
             for (int i = firstLineIndex; i <= lastLineIndex; i++) {
                 const QTextLine line = layout.lineAt(i);
 
+                // It might happen that the range contains only one (or two)
+                // symbol that is a whitespace symbol. In such a case we should
+                // just skip this (invalid) line.
+                if (!line.isValid()) continue;
+
                 const int posStart = qMax(line.textStart(), rangeStart);
                 const int posEnd = qMin(line.textStart() + line.textLength() - 1, rangeEnd);
 

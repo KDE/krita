@@ -20,7 +20,7 @@ chalk_sparse.png
 chisel_bent_rough.gih
 chisel_dense_smear.png
 chisel_eroded.png
-chisel_knife.svg
+chisel_knife.gbr
 chisel_soft.png
 chisel_streaks.png
 circle_hard_eroded.gih

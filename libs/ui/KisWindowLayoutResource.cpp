@@ -172,8 +172,17 @@ void KisWindowLayoutResource::applyLayout()
 
     QList<QPointer<KisMainWindow>> currentWindows = kisPart->mainWindows();
 
-    d->openNecessaryWindows(currentWindows);
-    d->closeUnneededWindows(currentWindows);
+    if (d->windows.isEmpty()) {
+        // No windows defined (e.g. fresh new session). Leave things as they are, but make sure there's at least one visible main window
+        if (kisPart->mainwindowCount() == 0) {
+            kisPart->createMainWindow();
+        } else {
+            kisPart->mainWindows().first()->show();
+        }
+    } else {
+        d->openNecessaryWindows(currentWindows);
+        d->closeUnneededWindows(currentWindows);
+    }
 
     // Wait for the windows to finish opening / closing before applying saved geometry.
     // If we don't, the geometry may get reset after we apply it.
@@ -353,6 +362,8 @@ void KisWindowLayoutResource::setWindows(const QList<QPointer<KisMainWindow>> &m
     QList<QScreen*> screens = d->getScreensInConsistentOrder();
 
     Q_FOREACH(auto window, mainWindows) {
+        if (!window->isVisible()) continue;
+
         Private::Window state;
         state.windowId = window->id();
         state.geometry = window->saveGeometry();

@@ -117,9 +117,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     cmbStartupSession->addItem(i18n("Open default window"));
     cmbStartupSession->addItem(i18n("Load previous session"));
-    // TODO: before enabling this, fix the bootstrap problem of opening
-    // the first main window if no sessions exist yet
-    //cmbStartupSession->addItem(i18n("Show session manager"));
+    cmbStartupSession->addItem(i18n("Show session manager"));
     cmbStartupSession->setCurrentIndex(cfg.sessionOnStartup());
 
     chkSaveSessionOnQuit->setChecked(cfg.saveSessionOnQuit(false));

@@ -443,25 +443,23 @@ bool KisApplication::start(const KisApplicationArguments &args)
         processEvents();
 
 
-        bool sessionLoaded = false;
+        bool sessionNeeded = true;
         auto sessionMode = cfg.sessionOnStartup();
 
         if (!args.session().isEmpty()) {
-            sessionLoaded = kisPart->restoreSession(args.session());
-        } else if (false && sessionMode == KisConfig::SOS_ShowSessionManager) {
-            // TODO: before enabling this, fix the bootstrap problem of opening
-            // the first main window if no sessions exist yet
-
+            sessionNeeded = !kisPart->restoreSession(args.session());
+        } else if (sessionMode == KisConfig::SOS_ShowSessionManager) {
             showmainWindow = false;
+            sessionNeeded = false;
             kisPart->showSessionManager();
         } else if (sessionMode == KisConfig::SOS_PreviousSession) {
             KConfigGroup sessionCfg = KSharedConfig::openConfig()->group("session");
             const QString &sessionName = sessionCfg.readEntry("previousSession");
 
-            sessionLoaded = kisPart->restoreSession(sessionName);
+            sessionNeeded = !kisPart->restoreSession(sessionName);
         }
 
-        if (!sessionLoaded) {
+        if (sessionNeeded) {
             kisPart->startBlankSession();
         }
 

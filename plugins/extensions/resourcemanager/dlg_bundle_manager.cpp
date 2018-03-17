@@ -253,15 +253,20 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
 
 
         if (bundle) {
+            QFontMetrics metrics(this->font());
 
             m_currentBundle = bundle;
             m_ui->bnEditBundle->setEnabled(true);
 
             m_ui->lblName->setText(bundle->name());
-            m_ui->lblAuthor->setText(bundle->getMeta("author"));
-            m_ui->lblEmail->setText(bundle->getMeta("email"));
-            m_ui->lblLicense->setText(bundle->getMeta("license"));
-            m_ui->lblWebsite->setText(bundle->getMeta("website"));
+            m_ui->lblAuthor->setText(metrics.elidedText(bundle->getMeta("author"), Qt::ElideRight, m_ui->lblAuthor->width()));
+            m_ui->lblAuthor->setToolTip(bundle->getMeta("author"));
+            m_ui->lblEmail->setText(metrics.elidedText(bundle->getMeta("email"), Qt::ElideRight, m_ui->lblEmail->width()));
+            m_ui->lblEmail->setToolTip(bundle->getMeta("email"));
+            m_ui->lblLicense->setText(metrics.elidedText(bundle->getMeta("license"), Qt::ElideRight, m_ui->lblLicense->width()));
+            m_ui->lblLicense->setToolTip(bundle->getMeta("license"));
+            m_ui->lblWebsite->setText(metrics.elidedText(bundle->getMeta("website"), Qt::ElideRight, m_ui->lblWebsite->width()));
+            m_ui->lblWebsite->setToolTip(bundle->getMeta("website"));
             m_ui->lblDescription->setPlainText(bundle->getMeta("description"));
             m_ui->lblCreated->setText(bundle->getMeta("created"));
             m_ui->lblUpdated->setText(bundle->getMeta("updated"));

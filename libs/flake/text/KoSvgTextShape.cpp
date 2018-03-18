@@ -257,10 +257,11 @@ void KoSvgTextShape::relayout()
         for (int i = 0; i <= chunk.offsets.size(); i++) {
             if (i == chunk.offsets.size()) {
                 const int numChars = chunk.text.size() - lastSubChunkStart;
-                if (!numChars) break;
+                if (numChars == 0)
+                    break;
 
                 // fix trailing whitespace problem
-                if (numChars == 1 && chunk.text[i] == ' ') {
+                if (numChars == 1 && i < chunk.text.size() && chunk.text[i] == ' ') {
                     QFontMetrics metrics(chunk.formats.last().format.font());
                     currentTextPos.rx() += metrics.width(' ');
                     break;
@@ -274,8 +275,6 @@ void KoSvgTextShape::relayout()
                 line.setNumColumns(numChars);
                 line.setPosition(currentTextPos - QPointF(0, line.ascent()));
                 currentTextPos.rx() += line.horizontalAdvance();
-
-
             } else {
                 const int numChars = chunk.offsets[i].start - lastSubChunkStart;
 

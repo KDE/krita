@@ -216,6 +216,96 @@ QVector<TextChunk> mergeIntoChunks(const QVector<KoSvgTextChunkShapeLayoutInterf
     return chunks;
 }
 
+/**
+ * Qt's QTextLayout has a weird trait, it doesn't count space characters as
+ * distinct characters in QTextLayout::setNumColumns(), that is, if we want to
+ * position a block of text that starts with a space character in a specific
+ * position, QTextLayout will drop this space and will move the text to the left.
+ *
+ * That is why we have a special wrapper object that ensures that no spaces are
+ * dropped and their horizontal advance parameter is taken into account.
+ */
+struct LayoutChunkWrapper
+{
+    LayoutChunkWrapper(QTextLayout *layout)
+        : m_layout(layout)
+    {
+    }
+
+    QPointF addTextChunk(int startPos, int length, const QPointF &textChunkStartPos)
+    {
+        QPointF currentTextPos = textChunkStartPos;
+
+        const int lastPos = startPos + length - 1;
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
+
+        QTextLine line;
+        std::swap(line, m_danglingLine);
+
+        if (!line.isValid()) {
+            line = m_layout->createLine();
+        }
+
+        // skip all the space characters that were not included into the Qt's text line
+        const int currentLineStart = line.isValid() ? line.textStart() : startPos + length;
+        while (startPos < currentLineStart && startPos <= lastPos) {
+            currentTextPos.rx() += skipSpaceCharacter(startPos);
+            startPos++;
+        }
+
+        if (startPos <= lastPos) {
+            const int numChars = lastPos - startPos + 1;
+
+            line.setNumColumns(numChars);
+            line.setPosition(currentTextPos - QPointF(0, line.ascent()));
+            currentTextPos.rx() += line.horizontalAdvance();
+
+            // skip all the space characters that were not included into the Qt's text line
+            for (int i = line.textStart() + line.textLength(); i < lastPos; i++) {
+                currentTextPos.rx() += skipSpaceCharacter(i);
+            }
+
+        } else {
+            // keep the created but unused line for future use
+            std::swap(line, m_danglingLine);
+        }
+        m_addedChars += length;
+
+        return currentTextPos;
+    }
+
+private:
+    qreal skipSpaceCharacter(int pos) {
+        const QTextCharFormat format =
+            formatForPos(pos, m_layout->formats());
+
+        const QChar skippedChar = m_layout->text()[pos];
+        KIS_SAFE_ASSERT_RECOVER_NOOP(skippedChar.isSpace() || !skippedChar.isPrint());
+
+        QFontMetrics metrics(format.font());
+        return metrics.width(skippedChar);
+    }
+
+    static QTextCharFormat formatForPos(int pos, const QVector<QTextLayout::FormatRange> &formats)
+    {
+        Q_FOREACH (const QTextLayout::FormatRange &range, formats) {
+            if (pos >= range.start && pos < range.start + range.length) {
+                return range.format;
+            }
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "pos should be within the bounds of the layouted text");
+
+        return QTextCharFormat();
+    }
+
+private:
+    int m_addedChars = 0;
+    QTextLayout *m_layout;
+    QTextLine m_danglingLine;
+};
 
 void KoSvgTextShape::relayout()
 {
@@ -254,43 +344,26 @@ void KoSvgTextShape::relayout()
         int lastSubChunkStart = 0;
         QPointF lastSubChunkOffset;
 
+        LayoutChunkWrapper wrapper(layout.get());
+
         for (int i = 0; i <= chunk.offsets.size(); i++) {
-            if (i == chunk.offsets.size()) {
-                const int numChars = chunk.text.size() - lastSubChunkStart;
-                if (!numChars) break;
+            const bool isFinalPass = i == chunk.offsets.size();
 
-                // fix trailing whitespace problem
-                if (numChars == 1 && chunk.text[i] == ' ') {
-                    QFontMetrics metrics(chunk.formats.last().format.font());
-                    currentTextPos.rx() += metrics.width(' ');
-                    break;
-                }
+            const int length =
+                !isFinalPass ?
+                chunk.offsets[i].start - lastSubChunkStart :
+                chunk.text.size() - lastSubChunkStart;
 
-                QTextLine line = layout->createLine();
-                KIS_SAFE_ASSERT_RECOVER(line.isValid()) { break; }
-
+            if (length > 0) {
                 currentTextPos += lastSubChunkOffset;
+                currentTextPos = wrapper.addTextChunk(lastSubChunkStart,
+                                                      length,
+                                                      currentTextPos);
+            }
 
-                line.setNumColumns(numChars);
-                line.setPosition(currentTextPos - QPointF(0, line.ascent()));
-                currentTextPos.rx() += line.horizontalAdvance();
-
-
-            } else {
-                const int numChars = chunk.offsets[i].start - lastSubChunkStart;
-
-                if (numChars > 0) {
-                    QTextLine line = layout->createLine();
-                    KIS_SAFE_ASSERT_RECOVER(line.isValid()) { break; }
-                    line.setNumColumns(numChars);
-
-                    currentTextPos += lastSubChunkOffset;
-                    line.setPosition(currentTextPos - QPointF(0, line.ascent()));
-                    currentTextPos.rx() += line.horizontalAdvance();
-                }
-
-                lastSubChunkStart = chunk.offsets[i].start;
+            if (!isFinalPass) {
                 lastSubChunkOffset = chunk.offsets[i].offset;
+                lastSubChunkStart = chunk.offsets[i].start;
             }
         }
 

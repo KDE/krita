@@ -61,7 +61,7 @@ class UITenScripts(object):
         directoryDialogButton = QPushButton("...")
 
         directoryTextField.setReadOnly(True)
-        label.setText(self.tenscripts.actions[key].shortcut())
+        label.setText(self.tenscripts.actions[key].shortcut().toString())
         directoryTextField.setToolTip("Selected Path")
         directoryDialogButton.setToolTip("Select the script")
         directoryDialogButton.clicked.connect(self._selectScript)

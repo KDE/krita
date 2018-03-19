@@ -126,19 +126,37 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
         m_dab->clear();
     }
 
+    /**
+     * Even though we don't use spacing in hairy brush, we should still
+     * initialize its distance information to ensure drawing angle and
+     * other history-based sensors work fine.
+     */
+    KisPaintInformation pi(pi2);
+    KisPaintInformation::DistanceInformationRegistrar r =
+        pi.registerDistanceInformation(currentDistance);
+
     // Hairy Brush is capable of working with zero scale,
     // so no additional checks for 'zero'ness are needed
-    qreal scale = m_sizeOption.apply(pi2);
+    qreal scale = m_sizeOption.apply(pi);
     scale *= KisLodTransform::lodToScale(painter()->device());
-    qreal rotation = m_rotationOption.apply(pi2);
-    quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
+    qreal rotation = m_rotationOption.apply(pi);
+    quint8 origOpacity = m_opacityOption.apply(painter(), pi);
 
+    // we don't use spacing here (the brush itself is used only once
+    // during initialization), so we should just skip the distance info
+    // update
 
-    m_brush.paintLine(m_dab, m_dev, pi1, pi2, scale * m_properties.scaleFactor, rotation);
+    m_brush.paintLine(m_dab, m_dev, pi1, pi, scale * m_properties.scaleFactor, rotation);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
+
+    // we don't use spacing in hairy brush, but history is
+    // still important for us
+    currentDistance->registerPaintedDab(pi,
+                                        KisSpacingInformation(),
+                                        KisTimingInformation());
 }

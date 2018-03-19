@@ -184,6 +184,9 @@ Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
 Note 2: if you want to build a release, you need to get the binary gettext
 
+Note 3: in order to build fontconfig on macOS, you need to have pkg-config installed.
+You probably need homebrew for that... See http://macappstore.org/pkg-config/ .
+
 archives from files.kde.org/krita/build/dependencies:
 
   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip

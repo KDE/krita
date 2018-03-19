@@ -52,11 +52,16 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());
+
+    // properly initialize fake paint information to avoid warnings
+    KisPaintInformation fakePaintInformation;
+    fakePaintInformation.setRandomSource(new KisRandomSource());
+    fakePaintInformation.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
+
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(source()->colorSpace(), KisDabShape(), KisPaintInformation());
-    }
-    else {
-        brush->mask(dab, painter->paintColor(), KisDabShape(), KisPaintInformation());
+        dab = brush->paintDevice(source()->colorSpace(), KisDabShape(), fakePaintInformation);
+    } else {
+        brush->mask(dab, painter->paintColor(), KisDabShape(), fakePaintInformation);
     }
 
     m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);

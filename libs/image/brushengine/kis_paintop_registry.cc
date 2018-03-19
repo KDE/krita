@@ -74,7 +74,7 @@ void KisPaintOpRegistry::initRegistry()
 KisPaintOpRegistry* KisPaintOpRegistry::instance()
 {
     if (!s_registryInstance.exists()) {
-        dbgRegistry << "initalizing KisPaintOpRegistry";
+        dbgRegistry << "initializing KisPaintOpRegistry";
         s_registryInstance->initRegistry();
     }
     return s_registryInstance;

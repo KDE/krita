@@ -210,7 +210,7 @@ Things I still want to do:
 * clean up path relativeness. (Not sure how much better this can be done)
 * Make label removal just a list? (unsure)
 * PNG and JPEG export settings.
-* maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question. [partialy done, epub still needs this]
+* maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question. [partially done, epub still needs this]
 
 ACBF list:
 

@@ -304,7 +304,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     meta.appendChild(publisherInfo)
 
     documentInfo = document.createElement("document-info")
-    # TODO: ACBF apparantly uses first/middle/last/nick/email/homepage for the document auhtor too...
+    # TODO: ACBF apparently uses first/middle/last/nick/email/homepage for the document author too...
     #      The following code compensates for me not understanding this initially.
     if "acbfAuthor" in configDictionary.keys():
         if isinstance(configDictionary["acbfAuthor"], list):

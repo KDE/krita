@@ -519,7 +519,7 @@ class comicsExporter():
                 listOfPoints.append(point)
         elif docElem.localName == "text":
             # NOTE: This only works for horizontal preformated text. Vertical text needs a different
-            # ordering of the rects, and wraparound should try to take the shape it is wraped in.
+            # ordering of the rects, and wraparound should try to take the shape it is wrapped in.
             family = "sans-serif"
             if docElem.hasAttribute("font-family"):
                 family = docElem.getAttribute("font-family")

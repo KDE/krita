@@ -41,7 +41,7 @@ class translation_scraper():
     translation_folder = str()
     textLayerNameList = []
     translationDict = {}
-    translationKeys = []  # seperate so that the keys will be somewhat according to the order of appearance.
+    translationKeys = []  # separate so that the keys will be somewhat according to the order of appearance.
     pageTitleKeys= []
     projectName = str()
     languageKey = "AA_language"
@@ -234,7 +234,7 @@ class translation_scraper():
         file.write("msgstr " + quote + quote + newLine)
         file.write(newLine)
 
-        file.write("#. The keywords, these need to be comma seperated." + newLine)
+        file.write("#. The keywords, these need to be comma separated." + newLine)
         file.write("msgctxt \"@meta-keywords\"" + newLine)
         file.write("msgid " + quote + metaData.get("keywords", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)

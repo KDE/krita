@@ -22,6 +22,7 @@
 
 #include <QUuid>
 #include <KoColorSpaceConstants.h>
+#include <KoProperties.h>
 
 #include "kis_painter.h"
 #include "kis_image.h"
@@ -85,6 +86,8 @@ namespace KisLayerUtils {
 
         SwitchFrameCommand::SharedStorageSP storage;
         QSet<int> frames;
+        bool useInTimeline = false;
+        bool enableOnionSkins = false;
 
         virtual KisNodeList allSrcNodes() = 0;
 
@@ -104,6 +107,14 @@ namespace KisLayerUtils {
             frames =
                 fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
+
+            useInTimeline = prevLayer->useInTimeline() || currLayer->useInTimeline();
+
+            const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(currLayer.data());
+            if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
+
+            paintLayer = qobject_cast<KisPaintLayer*>(prevLayer.data());
+            if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
         }
 
         KisLayerSP prevLayer;
@@ -125,6 +136,12 @@ namespace KisLayerUtils {
         {
             foreach (KisNodeSP node, mergedNodes) {
                 frames |= fetchLayerFramesRecursive(node);
+                useInTimeline |= node->useInTimeline();
+
+                const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+                if (paintLayer) {
+                    enableOnionSkins |= paintLayer->onionSkinEnabled();
+                }
             }
         }
 
@@ -348,6 +365,13 @@ namespace KisLayerUtils {
                 m_info->dstNode->enableAnimation();
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
+
+            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+
+            KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
+            if (dstPaintLayer) {
+                dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
+            }
         }
 
     private:
@@ -374,7 +398,8 @@ namespace KisLayerUtils {
                 mergedLayerName = m_name;
             }
 
-            m_info->dstNode = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
+            KisPaintLayer *dstPaintLayer = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
+            m_info->dstNode = dstPaintLayer;
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
@@ -408,6 +433,9 @@ namespace KisLayerUtils {
                     m_info->dstLayer()->setChannelFlags(channelFlags);
                 }
             }
+
+            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 
     private:

@@ -79,11 +79,14 @@ cd $BUILD_PREFIX/krita-build
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
 
 # Also find out the revision of Git we built
+# Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
-GIT_REVISION=$(git rev-parse --short HEAD)
-
-# Now use that to generate a combined name we'll distribute
-VERSION=$KRITA_VERSION-$GIT_REVISION
+if [[ -d .git ]]; then
+	GIT_REVISION=$(git rev-parse --short HEAD)
+	VERSION=$KRITA_VERSION-$GIT_REVISION
+else
+	VERSION=$KRITA_VERSION
+fi
 
 # Return to our build root
 cd $BUILD_PREFIX

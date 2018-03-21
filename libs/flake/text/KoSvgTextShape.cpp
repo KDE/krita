@@ -423,23 +423,31 @@ void KoSvgTextShape::relayout()
 
                 const QList<QGlyphRun> glyphRuns = line.glyphRuns(posStart, posEnd - posStart + 1);
                 Q_FOREACH (const QGlyphRun &run, glyphRuns) {
+                    const QPointF firstPosition = run.positions().first();
+                    const quint32 firstGlyphIndex = run.glyphIndexes().first();
+
                     const QPointF lastPosition = run.positions().last();
                     const quint32 lastGlyphIndex = run.glyphIndexes().last();
+
                     const QRawFont rawFont = run.rawFont();
+
+                    const QRectF firstGlyphRect = rawFont.boundingRect(firstGlyphIndex).translated(firstPosition);
                     const QRectF lastGlyphRect = rawFont.boundingRect(lastGlyphIndex).translated(lastPosition);
 
                     QRectF rect = run.boundingRect();
 
                     /**
                      * HACK ALERT: there is a bug in a way how Qt calculates boundingRect()
-                     *             of the glyph run. It doesn't care about right bearings of
-                     *             the last char in the run, therefore it becomes cropped.
+                     *             of the glyph run. It doesn't care about left and right bearings
+                     *             of the border chars in the run, therefore it becomes cropped.
                      *
-                     *             Here we just add a half-char width margin to the right
-                     *             of the glyph run to make sure the glyph is fully painted.
+                     *             Here we just add a half-char width margin to both sides
+                     *             of the glyph run to make sure the glyphs are fully painted.
                      *
                      * BUG: 389528
+                     * BUG: 392068
                      */
+                    rect.setLeft(qMin(rect.left(), lastGlyphRect.left()) - 0.5 * firstGlyphRect.width());
                     rect.setRight(qMax(rect.right(), lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
 
                     wrapper.addCharacterRect(rect.translated(layoutOffset));

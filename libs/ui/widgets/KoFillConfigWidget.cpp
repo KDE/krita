@@ -717,6 +717,8 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 
 void KoFillConfigWidget::shapeChanged()
 {
+    if (d->noSelectionTrackingMode) return;
+
     QList<KoShape*> shapes = currentShapes();
 
     if (shapes.isEmpty() ||

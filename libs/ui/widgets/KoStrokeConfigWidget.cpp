@@ -662,10 +662,12 @@ struct CheckShapeMarkerPolicy
 
 void KoStrokeConfigWidget::selectionChanged()
 {
+    if (d->noSelectionTrackingMode) return;
+
     KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) return;
 
-    // we need to linearize update orider, so force the child widget to update
+    // we need to linearize update order, and force the child widget to update
     // before we start doing it
     d->fillConfigWidget->forceUpdateOnSelectionChanged();
 

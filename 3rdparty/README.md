@@ -3,7 +3,7 @@
 If you need to build Krita's dependencies for the following reasons:
 
 * you develop on Windows and aren't using Craft
-* you develop on OSX and aren't using Homebrew
+* you develop on OSX and aren't using Homebrew, or are on OSX and want to make distributable app bundles
 * you want to build a generic, distro-agnostic version of Krita for Linux
 * you develop on Linux, but some dependencies aren't available for your distribution
 

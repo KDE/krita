@@ -1,8 +1,15 @@
-diff --git a/qtbase/src/corelib/io/qstandardpaths_mac.mm b/qtbase/src/corelib/io/qstandardpaths_mac.mm
+diff --git a/src/corelib/io/qstandardpaths_mac.mm b/src/corelib/io/qstandardpaths_mac.mm
 index e25339a..3bb7a78 100644
---- a/qtbase/src/corelib/io/qstandardpaths_mac.mm
-+++ b/qtbase/src/corelib/io/qstandardpaths_mac.mm
-@@ -203,28 +203,17 @@ static QString baseWritableLocation(QStandardPaths::StandardLocation type,
+--- a/src/corelib/io/qstandardpaths_mac.mm
++++ b/src/corelib/io/qstandardpaths_mac.mm
+@@ -196,42 +196,31 @@
+              it != masks.end(); ++it) {
+             const QString path = baseWritableLocation(type, *it, true);
+             if (!path.isEmpty() && !dirs.contains(path))
+                 dirs.append(path);
+         }
+     }
+ 
      if (type == AppDataLocation || type == AppLocalDataLocation) {
          CFBundleRef mainBundle = CFBundleGetMainBundle();
          if (mainBundle) {
@@ -26,6 +33,8 @@ index e25339a..3bb7a78 100644
 -                dirs.append(resourcesPath);
 -            else
 -                dirs.append(bundlePath + resourcesPath);
+-        }
+-    }
 +            if (QCFType<CFURLRef> resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle)) {
 +                if (QCFType<CFURLRef> absoluteResouresURL = CFURLCopyAbsoluteURL(resourcesURL)) {
 +                    if (QCFType<CFStringRef> path = CFURLCopyFileSystemPath(absoluteResouresURL,
@@ -34,9 +43,17 @@ index e25339a..3bb7a78 100644
 +                    }
 +                }
 +            }
-         }
-     }
++        }
++    }
 +
      const QString localDir = writableLocation(type);
      if (!localDir.isEmpty())
          dirs.prepend(localDir);
+     return dirs;
+ }
+ 
+ #ifndef QT_BOOTSTRAPPED
+ QString QStandardPaths::displayName(StandardLocation type)
+ {
+     // Use "Home" instead of the user's Unix username
+

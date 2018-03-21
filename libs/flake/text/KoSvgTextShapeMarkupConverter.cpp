@@ -534,6 +534,32 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         svgWriter.writeStartElement("tspan");
 
+        const QString text = block.text();
+
+        /**
+         * Mindblowing part: QTextEdit uses a hi-end algorithm for auto-estimation for the text
+         * directionality, so the user expects his text being saved to SVG with the same
+         * directionality. Just emulate behavior of direction="auto", which is not supported by
+         * SVG 1.1
+         *
+         * BUG: 392064
+         */
+
+        bool isRightToLeft = false;
+        for (int i = 0; i < text.size(); i++) {
+            const QChar ch = text[i];
+            if (ch.direction() == QChar::DirR || ch.direction() == QChar::DirAL) {
+                isRightToLeft = true;
+                break;
+            } else if (ch.direction() == QChar::DirL) {
+                break;
+            }
+        }
+
+        if (isRightToLeft) {
+            svgWriter.writeAttribute("direction", "rtl");
+        }
+
         {
             const QString blockStyleString = style(blockCharFormatDiff, blockFormatDiff);
             if (!blockStyleString.isEmpty()) {
@@ -567,8 +593,6 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         prevBlockAscent = line.ascent();
         prevBlockDescent = line.descent();
-
-        QString text = block.text();
 
 
         if (formats.size()>1) {

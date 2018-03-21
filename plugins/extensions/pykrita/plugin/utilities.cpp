@@ -257,7 +257,7 @@ QString Python::lastTraceback() const
 bool Python::libraryLoad()
 {
     // no-op on Windows
-#ifndef Q_OS_WIN
+#ifdef Q_OS_LINUX
     if (!s_pythonLibrary) {
 
         QFileInfo fi(PYKRITA_PYTHON_LIBRARY);
@@ -307,8 +307,8 @@ namespace
 QString findKritaPythonLibsPath(const QString &libdir)
 {
     QDir rootDir(KoResourcePaths::getApplicationRoot());
-    //Q_FOREACH (const QFileInfo &entry, rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs)) {
-    Q_FOREACH (const QFileInfo &entry, rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot)) {
+    QFileInfoList candidates =  rootDir.entryInfoList(QStringList() << "lib*", QDir::Dirs | QDir::NoDotAndDotDot) + rootDir.entryInfoList(QStringList() << "Frameworks", QDir::Dirs | QDir::NoDotAndDotDot);
+    Q_FOREACH (const QFileInfo &entry, candidates) {
         QDir libDir(entry.absoluteFilePath());
         if (libDir.cd(libdir)) {
             return libDir.absolutePath();
@@ -330,19 +330,26 @@ QString findKritaPythonLibsPath(const QString &libdir)
 
 bool Python::setPath(const QStringList& scriptPaths)
 {
+
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
+
+    bool runningInBundle = (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita") || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
+    qDebug() << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
+
 #ifdef Q_OS_WIN
     constexpr char pathSeparator = ';';
 #else
     constexpr char pathSeparator = ':';
 #endif
+
     QString originalPath;
     // Start with the script paths
     QStringList paths(scriptPaths);
 
     // Append the Krita libraries path
     QString pythonLibsPath = findKritaPythonLibsPath("krita-python-libs");
+    qDebug() << "pythonLibsPath (krita-python-libs)" << pythonLibsPath;
     if (pythonLibsPath.isEmpty()) {
         dbgScript << "Cannot find krita-python-libs";
         return false;
@@ -350,9 +357,10 @@ bool Python::setPath(const QStringList& scriptPaths)
     dbgScript << "Found krita-python-libs at" << pythonLibsPath;
     paths.append(pythonLibsPath);
 
-#ifdef Q_OS_LINUX
-    // Append the Krita libraries path
+#ifndef Q_OS_WIN
+    // Append the sip libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
+    qDebug() << "pythonLibsPath (sip)" << pythonLibsPath;
     if (!pythonLibsPath.isEmpty()) {
         dbgScript << "Found sip at" << pythonLibsPath;
         paths.append(pythonLibsPath);

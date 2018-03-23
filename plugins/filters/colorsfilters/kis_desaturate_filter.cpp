@@ -29,6 +29,7 @@
 #include <QSlider>
 #include <QPoint>
 #include <QColor>
+#include <QButtonGroup>
 
 #include <klocalizedstring.h>
 

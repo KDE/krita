@@ -23,6 +23,8 @@
 
 #include <KoUnit.h>
 
+#include <QButtonGroup>
+
 class Q_DECL_HIDDEN KoPageLayoutWidget::Private
 {
 public:

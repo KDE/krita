@@ -23,6 +23,7 @@
 #define _KIS_DLG_PREFERENCES_H_
 
 #include <QWidget>
+#include <QButtonGroup>
 
 #include <kpagedialog.h>
 

@@ -32,6 +32,7 @@
 #include <kis_document_aware_spin_box_unit_manager.h>
 
 #include <QComboBox>
+#include <QButtonGroup>
 
 // used to extend KoUnit in comboboxes
 static const QString percentStr(i18n("Percent (%)"));

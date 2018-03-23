@@ -230,7 +230,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisDoubleSliderSpinBox" name="dblOpacity" native="true"/>
+    <widget class="KisShapePropertySlider" name="dblOpacity" native="true"/>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -266,9 +266,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisShapePropertySlider</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header location="global">KisSelectionPropertySlider.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

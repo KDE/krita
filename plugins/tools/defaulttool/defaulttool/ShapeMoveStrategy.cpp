@@ -37,12 +37,12 @@
 
 #include "kis_debug.h"
 
-ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
+ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked)
     : KoInteractionStrategy(tool)
     , m_start(clicked)
     , m_canvas(tool->canvas())
 {
-    QList<KoShape *> selectedShapes = m_canvas->shapeManager()->selection()->selectedEditableShapes();
+    QList<KoShape *> selectedShapes = selection->selectedEditableShapes();
 
     QRectF boundingRect;
     Q_FOREACH (KoShape *shape, selectedShapes) {
@@ -56,7 +56,6 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
             KoFlake::AnchorPosition(
                 m_canvas->resourceManager()->resource(KoFlake::HotPosition).toInt());
 
-    KoSelection *selection = m_canvas->shapeManager()->selection();
     m_initialOffset = selection->absolutePosition(anchor) - m_start;
     m_canvas->snapGuide()->setIgnoredShapes(KoShape::linearizeSubtree(m_selectedShapes));
 

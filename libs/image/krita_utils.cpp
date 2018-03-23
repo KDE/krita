@@ -383,11 +383,11 @@ namespace KritaUtils
 
         // TODO: if someone feel bored, a more optimized version of this would be welcome
         const QSize size = image.size();
-        for(int i = 0; i < size.height(); ++i) {
-            for(int j = 0; j < size.width(); ++j) {
-                const QRgb pixel = image.pixel(i,j);
+        for(int y = 0; y < size.height(); ++y) {
+            for(int x = 0; x < size.width(); ++x) {
+                const QRgb pixel = image.pixel(x,y);
                 const int gray = qGray(pixel);
-                dstImage.setPixel(i, j, qRgba(gray, gray, gray, qAlpha(pixel)));
+                dstImage.setPixel(x, y, qRgba(gray, gray, gray, qAlpha(pixel)));
             }
         }
 

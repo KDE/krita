@@ -29,7 +29,6 @@
 #include "KoSelection.h"
 #include "KoCanvasBase.h"
 
-
 KoShapeRubberSelectStrategy::KoShapeRubberSelectStrategy(KoToolBase *tool, const QPointF &clicked, bool useSnapToGrid)
     : KoInteractionStrategy(*(new KoShapeRubberSelectStrategyPrivate(tool)))
 {
@@ -106,28 +105,6 @@ void KoShapeRubberSelectStrategy::handleMouseMove(const QPointF &p, Qt::Keyboard
     d->tool->canvas()->updateCanvas(B);
 }
 
-void KoShapeRubberSelectStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
-{
-    Q_D(KoShapeRubberSelectStrategy);
-    Q_UNUSED(modifiers);
-    KoSelection * selection = d->tool->canvas()->shapeManager()->selection();
-
-    const bool useContainedMode = currentMode() == CoveringSelection;
-
-    QList<KoShape *> shapes =
-        d->tool->canvas()->shapeManager()->
-            shapesAt(d->selectedRect(), true, useContainedMode);
-
-    Q_FOREACH (KoShape * shape, shapes) {
-        if (!shape->isSelectable()) continue;
-
-        selection->select(shape);
-    }
-
-    d->tool->repaintDecorations();
-    d->tool->canvas()->updateCanvas(d->selectedRect());
-}
-
 KoShapeRubberSelectStrategy::SelectionMode KoShapeRubberSelectStrategy::currentMode() const
 {
     Q_D(const KoShapeRubberSelectStrategy);
@@ -137,4 +114,9 @@ KoShapeRubberSelectStrategy::SelectionMode KoShapeRubberSelectStrategy::currentM
 KUndo2Command *KoShapeRubberSelectStrategy::createCommand()
 {
     return 0;
+}
+
+QRectF KoShapeRubberSelectStrategy::selectedRectangle() const {
+    Q_D(const KoShapeRubberSelectStrategy);
+    return d->selectedRect();
 }

@@ -31,10 +31,12 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <kis_image.h>
 #include <KisImportExportFilter.h>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
+#include <KisReferenceImage.h>
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
 
@@ -55,13 +57,11 @@ class KoDocumentInfo;
 class KoDocumentInfoDlg;
 class KisImportExportManager;
 class KisUndoStore;
-class KisPaintingAssistant;
 class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
 class QDomDocument;
-
-class KisPart;
+class KisReferenceImagesLayer;
 
 #define KIS_MIME_TYPE "application/x-krita"
 
@@ -557,8 +557,21 @@ public:
      */
     KisNodeSP preActivatedNode() const;
 
+    /// @return the list of assistants associated with this document
     QList<KisPaintingAssistantSP> assistants() const;
-    void setAssistants(const QList<KisPaintingAssistantSP> value);
+
+    /// @replace the current list of assistants with @param value
+    void setAssistants(const QList<KisPaintingAssistantSP> &value);
+
+    /**
+     * Get existing reference images layer or create new if none exists.
+     */
+    KisSharedPtr<KisReferenceImagesLayer> createReferenceImagesLayer(KisImageSP targetImage = KisImageSP());
+
+    /**
+     * Get existing reference images layer or null if none exists.
+     */
+    KisReferenceImagesLayer *referenceImagesLayer() const;
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 

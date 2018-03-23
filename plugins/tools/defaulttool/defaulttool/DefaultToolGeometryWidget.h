@@ -60,7 +60,7 @@ private Q_SLOTS:
     void slotAspectButtonToggled();
     void slotUpdateAspectButton();
 
-    void slotOpacitySliderChanged();
+    void slotOpacitySliderChanged(qreal newOpacity);
     void slotUpdateOpacitySlider();
 
 private:

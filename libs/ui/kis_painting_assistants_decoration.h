@@ -46,7 +46,8 @@ struct AssistantEditorData {
 };
 
 /**
- * This class hold a list of painting assistants.
+ * KisPaintingAssistantsDecoration draws the assistants stored in the document on
+ * the canvas.
  * In the application flow, each canvas holds one of these classes to manage the assistants
  * There is an assistants manager, but that is higher up in the flow and makes sure each view gets one of these
  * Since this is off the canvas level, the decoration can be seen across all tools. The contents from here will be in
@@ -66,7 +67,7 @@ public:
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
-    QList<KisPaintingAssistantSP> assistants();
+    QList<KisPaintingAssistantSP> assistants() const;
 
     /// called when assistant editor is activated
     /// right now this happens when the assistants tool is selected
@@ -123,7 +124,7 @@ public Q_SLOTS:
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
-    void drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);    
+    void drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);
 
 private:

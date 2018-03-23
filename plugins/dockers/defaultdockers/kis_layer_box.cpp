@@ -730,26 +730,26 @@ inline bool isSelectionMask(KisNodeSP node)
 
 KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
 {
-    if (isSelectionMask(startNode) &&
+    if (KisNodeManager::isNodeHidden(startNode, true) &&
             startNode->parent() &&
             !startNode->parent()->parent()) {
 
 
         KisNodeSP node = startNode->prevSibling();
-        while (node && isSelectionMask(node)) {
+        while (node && KisNodeManager::isNodeHidden(node, true)) {
             node = node->prevSibling();
         }
 
         if (!node) {
             node = startNode->nextSibling();
-            while (node && isSelectionMask(node)) {
+            while (node && KisNodeManager::isNodeHidden(node, true)) {
                 node = node->nextSibling();
             }
         }
 
         if (!node) {
             node = m_image->root()->lastChild();
-            while (node && isSelectionMask(node)) {
+            while (node && KisNodeManager::isNodeHidden(node, true)) {
                 node = node->prevSibling();
             }
         }

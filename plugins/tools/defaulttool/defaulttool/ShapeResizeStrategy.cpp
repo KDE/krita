@@ -37,18 +37,18 @@
 
 #include <kis_debug.h>
 
-ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode)
+ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode)
     : KoInteractionStrategy(tool),
       m_forceUniformScalingMode(forceUniformScalingMode)
 {
-    Q_ASSERT(tool->canvas()->shapeManager()->selection());
-    Q_ASSERT(tool->canvas()->shapeManager()->selection()->count() > 0);
-    m_selectedShapes = tool->canvas()->shapeManager()->selection()->selectedEditableShapes();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(selection && selection->count() > 0);
+
+    m_selectedShapes = selection->selectedEditableShapes();
     m_start = clicked;
 
     KoShape *shape = 0;
     if (m_selectedShapes.size() > 1) {
-        shape = tool->canvas()->shapeManager()->selection();
+        shape = selection;
     } else if (m_selectedShapes.size() == 1) {
         shape = m_selectedShapes.first();
     }

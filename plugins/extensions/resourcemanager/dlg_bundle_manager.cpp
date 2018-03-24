@@ -124,6 +124,7 @@ void DlgBundleManager::accept()
     for (int i = 0; i < m_ui->listActive->count(); ++i) {
         QListWidgetItem *item = m_ui->listActive->item(i);
         QByteArray ba = item->data(Qt::UserRole).toByteArray();
+        QString name = item->text();
         KisResourceBundle *bundle = bundleServer->resourceByMD5(ba);
         QMessageBox bundleFeedback;
         bundleFeedback.setIcon(QMessageBox::Warning);
@@ -152,13 +153,13 @@ void DlgBundleManager::accept()
                     //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
                     if (!bundleServer->addResource(bundle, false, false)){
 
-                        feedback = i18n("Couldn't add bundle to resource server");
+                        feedback = QString(i18n("Couldn't add bundle \"%1\" to resource server")).arg(name);
                         bundleFeedback.setText(feedback);
                         bundleFeedback.exec();
                     }
                     if (!isKrita3Bundle) {
                         if (!bundleServer->removeFromBlacklist(bundle)) {
-                            feedback = i18n("Couldn't remove bundle from blacklist");
+                            feedback = QString(i18n("Couldn't remove bundle \"%1\" from blacklist")).arg(name);
                             bundleFeedback.setText(feedback);
                             bundleFeedback.exec();
                         }
@@ -173,7 +174,7 @@ void DlgBundleManager::accept()
             }
         }
         else{
-            QString feedback = i18n("Bundle doesn't exist!");
+            QString feedback = QString(i18n("Bundle \"%1\" doesn't exist!")).arg(name);
             bundleFeedback.setText(feedback);
             bundleFeedback.exec();
 

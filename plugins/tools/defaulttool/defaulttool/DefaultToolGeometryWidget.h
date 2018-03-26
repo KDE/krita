@@ -52,7 +52,8 @@ private Q_SLOTS:
     void slotUpdatePositionBoxes();
     void slotRepositionShapes();
 
-    void slotUpdateSizeBoxes();
+    void slotUpdateSizeBoxes(bool updateAspect = true);
+    void slotUpdateSizeBoxesNoAspectChange();
     void slotResizeShapes();
 
     void slotUpdateCheckboxes();

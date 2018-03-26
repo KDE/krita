@@ -76,25 +76,32 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(positionXSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
     connect(positionYSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
 
-    connect(m_sizeAspectLocker.data(), SIGNAL(sliderValueChanged()), this, SLOT(slotResizeShapes()));
-
     KoSelectedShapesProxy *selectedShapesProxy = m_tool->canvas()->selectedShapesProxy();
 
     connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateCheckboxes()));
     connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));
-    connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
     connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdatePositionBoxes()));
-    connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxes()));
     connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
 
+
+    /**
+     * A huge block of self-blocking acycled connections
+     */
     KisAcyclicSignalConnector *acyclicConnector = new KisAcyclicSignalConnector(this);
     acyclicConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(aspectButtonChanged()), this, SLOT(slotAspectButtonToggled()));
     acyclicConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateAspectButton()));
     acyclicConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateAspectButton()));
+
+    KisAcyclicSignalConnector *sizeConnector = acyclicConnector->createCoordinatedConnector();
+    sizeConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(sliderValueChanged()), this, SLOT(slotResizeShapes()));
+    sizeConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
+
+    KisAcyclicSignalConnector *contentSizeConnector = acyclicConnector->createCoordinatedConnector();
+    contentSizeConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxesNoAspectChange()));
 
 
     // Connect and initialize anchor point resource
@@ -293,7 +300,7 @@ void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
     dblOpacity->setSelection(shapes);
 }
 
-void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
+void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
 {
     if (!isVisible()) return;
 
@@ -312,8 +319,15 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
         KisSignalsBlocker b(widthSpinBox, heightSpinBox);
         widthSpinBox->changeValue(bounds.width());
         heightSpinBox->changeValue(bounds.height());
-        m_sizeAspectLocker->updateAspect();
+        if (updateAspect) {
+            m_sizeAspectLocker->updateAspect();
+        }
     }
+}
+
+void DefaultToolGeometryWidget::slotUpdateSizeBoxesNoAspectChange()
+{
+    slotUpdateSizeBoxes(false);
 }
 
 void DefaultToolGeometryWidget::slotUpdatePositionBoxes()

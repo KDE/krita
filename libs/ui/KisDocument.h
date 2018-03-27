@@ -36,7 +36,6 @@
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
-#include <KisReferenceImage.h>
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
 
@@ -61,7 +60,9 @@ class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
 class QDomDocument;
+class KisReferenceImage;
 class KisReferenceImagesLayer;
+
 
 #define KIS_MIME_TYPE "application/x-krita"
 

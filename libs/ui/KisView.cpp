@@ -83,6 +83,7 @@
 #include "kis_zoom_manager.h"
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
+#include "KisReferenceImage.h"
 #include "KisReferenceImagesDecoration.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"

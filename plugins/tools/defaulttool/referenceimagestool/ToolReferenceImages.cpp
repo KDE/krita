@@ -29,6 +29,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
 #include <KisDocument.h>
+#include <KisReferenceImage.h>
 #include <KisReferenceImagesLayer.h>
 
 #include "ToolReferenceImagesWidget.h"
@@ -41,6 +42,11 @@ ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
 
 ToolReferenceImages::~ToolReferenceImages()
 {
+}
+
+void ToolReferenceImages::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    Q_UNUSED(event);
 }
 
 void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)

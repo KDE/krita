@@ -43,6 +43,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     : QWidget(parent),
       d(new Private(tool))
 {
+    Q_UNUSED(provider);
+
     d->ui = new Ui_WdgToolOptions();
     d->ui->setupUi(this);
 

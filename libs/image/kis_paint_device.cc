@@ -1234,6 +1234,10 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
 {
     if (startRect == endRect) return startRect;
 
+    // the passed extent might have weird invalid structure that
+    // can overflow integer precision when calling startRect.right()
+    if (!startRect.isValid()) return QRect();
+
     // Solution n°2
     int  x, y, w, h;
     int boundLeft, boundTop, boundRight, boundBottom;

@@ -312,10 +312,6 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
              << "-start_number" << QString::number(clipRange.start())
              << "-i" << savedFilesMask;
 
-        // if we are exporting out at a different image size, we apply scaling filter
-        if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
-            args << "-vf" << exportDimensions;
-        }
 
 
         QFileInfo audioFileInfo = animation->audioChannelFileName();
@@ -333,8 +329,17 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
             args << "-i" << audioFileInfo.absoluteFilePath();
         }
 
+
+        // if we are exporting out at a different image size, we apply scaling filter
+        // export options HAVE to go after input options, so make sure this is after the audio import
+        if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
+            args << "-vf" << exportDimensions;
+        }
+
+
         args << additionalOptionsList
              << "-y" << resultFile;
+
 
         result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      framesDir.filePath("log_encode.log"),

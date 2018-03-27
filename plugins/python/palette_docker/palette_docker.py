@@ -47,7 +47,11 @@ class Palette_Docker(DockWidget):
             self.cmb_palettes.addItem(palette_name)
             self.cmb_palettes.model().sort(0)
 
-        self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
+        if self.currentPalette = None and len(allPalettes.keys()) > 0:
+            self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
+        else:
+            self.currentPalette = None
+
         self.cmb_palettes.currentTextChanged.connect(self.slot_paletteChanged)
         layout.addWidget(self.cmb_palettes)  # add combobox to the layout
         self.paletteView = PaletteView()
@@ -239,8 +243,16 @@ class Palette_Docker(DockWidget):
         colorSorter = palette_sortColors.sortColors(self.cmb_palettes.currentText())
         self.paletteView.setPalette(colorSorter.palette())
 
-    def canvasChanged(self, canvas):
-        pass
+        def canvasChanged(self, canvas):
+            self.cmb_palettes.clear()
+
+            allPalettes = Application.resources("palette")
+            for palette_name in allPalettes:
+                self.cmb_palettes.addItem(palette_name)
+                self.cmb_palettes.model().sort(0)
+
+            if self.currentPalette = None and len(allPalettes.keys()) > 0:
+                self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
 
 # Add docker to the application :)
 Application.addDockWidgetFactory(DockWidgetFactory("palette_docker", DockWidgetFactoryBase.DockRight, Palette_Docker))

@@ -430,7 +430,7 @@ void Python::ensureInitialized()
         dbgScript << "Initializing Python interpreter";
         Py_InitializeEx(0);
         if (!Py_IsInitialized()) {
-            errScript << "Could not initialise Python interpreter";
+            errScript << "Could not initialize Python interpreter";
         }
 #if THREADED
         PyEval_InitThreads();

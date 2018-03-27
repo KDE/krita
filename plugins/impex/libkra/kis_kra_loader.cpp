@@ -790,8 +790,6 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
     QString basePath = info.absolutePath();
 
     QString fullPath = QDir(basePath).filePath(QDir::cleanPath(filename));
-    // Entering the event loop to show the messagebox will delete the image, so up the ref by one
-    image->ref();
     if (!QFileInfo(fullPath).exists()) {
 
         qApp->setOverrideCursor(Qt::ArrowCursor);

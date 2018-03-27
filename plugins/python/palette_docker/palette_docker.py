@@ -47,7 +47,7 @@ class Palette_Docker(DockWidget):
             self.cmb_palettes.addItem(palette_name)
             self.cmb_palettes.model().sort(0)
 
-        if self.currentPalette = None and len(allPalettes.keys()) > 0:
+        if len(allPalettes.keys()) > 0:
             self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
         else:
             self.currentPalette = None
@@ -112,9 +112,11 @@ class Palette_Docker(DockWidget):
         self.setWidget(widget)        # add widget to the docker
 
     def slot_paletteChanged(self, name):
-        self.currentPalette = Palette(Application.resources("palette")[name])
-        self.paletteView.setPalette(self.currentPalette)
-        self.slot_fill_combobox()
+        allPalettes = Application.resources("palette")
+        if len(allPalettes) > 0 and name in allPalettes:
+            self.currentPalette = Palette(Application.resources("palette")[name])
+            self.paletteView.setPalette(self.currentPalette)
+            self.slot_fill_combobox()
 
     @pyqtSlot('KoColorSetEntry')
     def slot_swatchSelected(self, entry):
@@ -243,16 +245,15 @@ class Palette_Docker(DockWidget):
         colorSorter = palette_sortColors.sortColors(self.cmb_palettes.currentText())
         self.paletteView.setPalette(colorSorter.palette())
 
-        def canvasChanged(self, canvas):
-            self.cmb_palettes.clear()
+    def canvasChanged(self, canvas):
+        self.cmb_palettes.clear()
+        allPalettes = Application.resources("palette")
+        for palette_name in allPalettes:
+            self.cmb_palettes.addItem(palette_name)
+            self.cmb_palettes.model().sort(0)
 
-            allPalettes = Application.resources("palette")
-            for palette_name in allPalettes:
-                self.cmb_palettes.addItem(palette_name)
-                self.cmb_palettes.model().sort(0)
-
-            if self.currentPalette = None and len(allPalettes.keys()) > 0:
-                self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
+        if self.currentPalette == None and len(allPalettes.keys()) > 0:
+            self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
 
 # Add docker to the application :)
 Application.addDockWidgetFactory(DockWidgetFactory("palette_docker", DockWidgetFactoryBase.DockRight, Palette_Docker))

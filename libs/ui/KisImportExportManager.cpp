@@ -383,8 +383,6 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             KisConfig().setExportConfiguration(typeName, exportConfiguration);
         }
     }
-
-    result.setStatus(KisImportExportFilter::OK);
     return result;
 }
 

@@ -43,6 +43,7 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qopengldebug-gles.patch
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-189539-ANGLE-mingw-fix.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/gerrit-212811_qtbase-angle-d3d11-warp-crash-fix.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/QTBUG-57299.diff
 
       INSTALL_DIR ${EXTPREFIX_qt}
       CONFIGURE_COMMAND <SOURCE_DIR>/configure.bat ${_QT_conf}

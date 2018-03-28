@@ -54,6 +54,8 @@
 #include <QPainter>
 #include <QSvgGenerator>
 
+#include <kis_debug.h>
+
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers)
     : m_writeInlineImages(true)
 {
@@ -238,6 +240,8 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
+    KIS_SAFE_ASSERT_RECOVER(shape);
+
     const QRectF bbox = shape->boundingRect();
 
     // paint shape to the image

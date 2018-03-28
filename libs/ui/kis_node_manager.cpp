@@ -773,7 +773,7 @@ bool KisNodeManager::isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden)
     }
 
     if (isGlobalSelectionHidden && dynamic_cast<KisSelectionMask *>(node.data()) &&
-        node->parent() && !node->parent()->parent()) {
+        (!node->parent() || !node->parent()->parent())) {
         return true;
     }
 

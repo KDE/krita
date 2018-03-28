@@ -25,6 +25,7 @@
 #include <QSharedData>
 #include <QStringList>
 #include "kis_dom_utils.h"
+#include "kis_algebra_2d.h"
 
 template <typename T>
 class KisTridiagonalSystem
@@ -423,6 +424,34 @@ bool KisCubicCurve::isNull() const
 const QString& KisCubicCurve::name() const
 {
     return d->data->name;
+}
+
+qreal KisCubicCurve::interpolateLinear(qreal normalizedValue, const QVector<qreal> &transfer)
+{
+    const qreal maxValue = transfer.size() - 1;
+
+    const qreal bilinearX = qBound(0.0, maxValue * normalizedValue, maxValue);
+    const qreal xFloored = std::floor(bilinearX);
+    const qreal xCeiled = std::ceil(bilinearX);
+
+    const qreal t = bilinearX - xFloored;
+
+    constexpr qreal eps = 1e-6;
+
+    qreal newValue = normalizedValue;
+
+    if (t < eps) {
+        newValue = transfer[int(xFloored)];
+    } else if (t > (1.0 - eps)) {
+        newValue = transfer[int(xCeiled)];
+    } else {
+        qreal a = transfer[int(xFloored)];
+        qreal b = transfer[int(xCeiled)];
+
+        newValue = a + t * (b - a);
+    }
+
+    return KisAlgebra2D::copysign(newValue, normalizedValue);
 }
 
 void KisCubicCurve::setName(const QString& name)

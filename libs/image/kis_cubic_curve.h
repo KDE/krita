@@ -63,6 +63,9 @@ public:
      */
     void setName(const QString& name);
     const QString& name() const;
+
+    static qreal interpolateLinear(qreal normalizedValue, const QVector<qreal> &transfer);
+
 public:
     const QVector<quint16> uint16Transfer(int size = 256) const;
     const QVector<qreal> floatTransfer(int size = 256) const;

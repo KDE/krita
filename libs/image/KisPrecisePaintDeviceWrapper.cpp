@@ -20,6 +20,7 @@
 
 #include <QRegion>
 #include "kis_paint_device.h"
+#include "kis_wrapped_rect.h"
 #include "KisFastDeviceProcessingUtils.h"
 
 #include <KoColor.h>
@@ -150,9 +151,19 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
 
     QRegion requestedRects;
     Q_FOREACH (const QRect &rc, rects) {
-        const QRect croppedRect = rc & srcExtent;
+        if (m_d->srcDevice->defaultBounds()->wrapAroundMode()) {
+            const QRect wrapRect = m_d->srcDevice->defaultBounds()->bounds();
+            KisWrappedRect wrappedRect(rc, wrapRect);
+            Q_FOREACH (const QRect &wrc, wrappedRect) {
+                const QRect croppedRect = wrc & srcExtent;
 
-        requestedRects += croppedRect;
+                requestedRects += croppedRect;
+            }
+        } else {
+            const QRect croppedRect = rc & srcExtent;
+
+            requestedRects += croppedRect;
+        }
     }
 
     QRegion diff(requestedRects);
@@ -203,4 +214,3 @@ void KisPrecisePaintDeviceWrapper::writeRects(const QVector<QRect> &rects)
                                       WriteProcessor(channelCount));
     }
 }
-

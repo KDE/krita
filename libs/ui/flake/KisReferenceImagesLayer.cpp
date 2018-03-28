@@ -69,7 +69,7 @@ public:
 
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP image) override { Q_UNUSED(image); }
+    void setImage(KisImageWSP image) override {}
 
 private:
     KisReferenceImagesLayer *m_layer;

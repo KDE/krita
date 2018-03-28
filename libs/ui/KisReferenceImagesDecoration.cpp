@@ -110,9 +110,6 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
 
 void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
 {
-    Q_UNUSED(converter);
-    Q_UNUSED(canvas);
-
     KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
     if (layer.isNull()) {
         layer = d->layer = view()->document()->referenceImagesLayer();

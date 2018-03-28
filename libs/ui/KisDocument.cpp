@@ -113,7 +113,6 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
-#include <KisReferenceImage.h>
 #include "KisReferenceImagesLayer.h"
 
 #include <mutex>

@@ -120,8 +120,6 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
 
 void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
-    Q_UNUSED(paintcontext);
-
     gc.save();
 
     applyConversion(gc, converter);
@@ -149,18 +147,6 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
 
     gc.restore();
 }
-
-bool KisReferenceImage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
-{
-    Q_UNUSED(context);
-    return false;
-}
-
-void KisReferenceImage::saveOdf(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
-}
-
 
 void KisReferenceImage::setSaturation(qreal saturation)
 {

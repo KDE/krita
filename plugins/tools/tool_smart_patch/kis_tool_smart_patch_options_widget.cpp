@@ -49,8 +49,6 @@ KisToolSmartPatchOptionsWidget::KisToolSmartPatchOptionsWidget(KisCanvasResource
     : QWidget(parent),
       m_d(new Private)
 {
-    Q_UNUSED(provider);
-
     m_d->ui = new Ui_KisToolSmartPatchOptionsWidget();
     m_d->ui->setupUi(this);
 

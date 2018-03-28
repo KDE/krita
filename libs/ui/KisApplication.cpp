@@ -464,7 +464,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
                 KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
                 if (workspace) {
-                    m_mainWindow->restoreWorkspace(workspace->dockerState());
+                    m_mainWindow->restoreWorkspace(workspace);
                 }
             }
 

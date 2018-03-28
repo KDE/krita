@@ -1485,13 +1485,16 @@ int KisMainWindow::viewCount() const
     return d->mdiArea->subWindowList().size();
 }
 
-bool KisMainWindow::restoreWorkspace(const QByteArray &state)
+bool KisMainWindow::restoreWorkspace(KisWorkspaceResource *workspace)
 {
+    QByteArray state = workspace->dockerState();
     QByteArray oldState = saveState();
     const bool showTitlebars = KisConfig().showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
+        dock->setProperty("Locked", false); // Unlock invisible dockers
+        dock->toggleViewAction()->setEnabled(true);
         dock->hide();
         dock->titleBarWidget()->setVisible(showTitlebars);
     }
@@ -1508,12 +1511,15 @@ bool KisMainWindow::restoreWorkspace(const QByteArray &state)
         return false;
     }
 
-
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
         if (dock->titleBarWidget()) {
             const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
             dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
         }
+    }
+
+    if (activeKisView()) {
+        activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
     }
 
     return success;
@@ -2038,8 +2044,9 @@ void KisMainWindow::updateWindowMenu()
     auto m_this = this;
     for (auto &w : workspaces) {
         auto action = workspaceMenu->addAction(w->name());
-        auto ds = w->dockerState();
-        connect(action, &QAction::triggered, this, [=]() { m_this->restoreWorkspace(ds); });
+        connect(action, &QAction::triggered, this, [=]() {
+            m_this->restoreWorkspace(w);
+        });
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
@@ -2257,7 +2264,7 @@ void KisMainWindow::showAboutApplication()
     dlg.exec();
 }
 
-QPointer<KisView>KisMainWindow::activeKisView()
+QPointer<KisView> KisMainWindow::activeKisView()
 {
     if (!d->mdiArea) return 0;
     QMdiSubWindow *activeSubWindow = d->mdiArea->activeSubWindow();
@@ -2474,8 +2481,6 @@ void KisMainWindow::initializeGeometry()
         move(x,y);
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
-    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("State", QByteArray())));
-
     d->fullScreenMode->setChecked(isFullScreen());
 }
 

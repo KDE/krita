@@ -154,26 +154,7 @@ void KisWorkspaceChooser::resourceSelected(KoResource* resource)
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-
-    QMap<QDockWidget *, bool> dockWidgetMap;
-    Q_FOREACH (QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
-        dockWidgetMap[docker] = docker->property("Locked").toBool();
-    }
-
     KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
-    mainWindow->restoreWorkspace(workspace->dockerState());
-    m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
-
-    Q_FOREACH (QDockWidget *docker, dockWidgetMap.keys()) {
-        if (docker->isVisible()) {
-            docker->setProperty("Locked", dockWidgetMap[docker]);
-            docker->updateGeometry();
-        }
-        else {
-            docker->setProperty("Locked", false); // Unlock invisible dockers
-            docker->toggleViewAction()->setEnabled(true);
-        }
-
-    }
+    mainWindow->restoreWorkspace(workspace);
 
 }

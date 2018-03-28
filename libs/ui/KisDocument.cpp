@@ -1121,6 +1121,7 @@ bool KisDocument::openFile()
     KisImportExportFilter::ConversionStatus status;
 
     status = d->importExportManager->importDocument(localFilePath(), typeName);
+
     if (status != KisImportExportFilter::OK) {
         QString msg = KisImportExportFilter::conversionStatusString(status);
         if (!msg.isEmpty()) {

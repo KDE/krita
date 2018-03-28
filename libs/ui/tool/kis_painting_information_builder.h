@@ -48,6 +48,8 @@ public:
     KisPaintInformation hover(const QPointF &imagePoint,
                               const KoPointerEvent *event);
 
+    qreal pressureToCurve(qreal pressure);
+
 protected Q_SLOTS:
     void updateSettings();
 
@@ -67,7 +69,6 @@ private:
      * of different pressures.
      */
     static const int LEVEL_OF_PRESSURE_RESOLUTION;
-    qreal pressureToCurve(qreal pressure);
 
 private:
     QVector<qreal> m_pressureSamples;

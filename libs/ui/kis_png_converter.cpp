@@ -65,6 +65,7 @@
 #include <KoColorModelStandardIds.h>
 #include "dialogs/kis_dlg_png_import.h"
 #include "kis_clipboard.h"
+#include <kis_cursor_override_hijacker.h>
 
 namespace
 {
@@ -572,12 +573,12 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {
                 KisDlgPngImport dlg(m_path, csName.first, csName.second);
-                QApplication::restoreOverrideCursor();
+                KisCursorOverrideHijacker hijacker;
+                Q_UNUSED(hijacker);
                 dlg.exec();
                 if (!dlg.profile().isEmpty()) {
                     profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
                 }
-                QApplication::setOverrideCursor(Qt::WaitCursor);
 
             }
         }

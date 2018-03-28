@@ -240,7 +240,7 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
-    KIS_SAFE_ASSERT_RECOVER(shape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
     const QRectF bbox = shape->boundingRect();
 

@@ -1,0 +1,112 @@
+From fe5edcee602f0ab2912bbdd1a21f4309ed7dbfd6 Mon Sep 17 00:00:00 2001
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Fri, 26 Jan 2018 08:37:40 +0100
+Subject: [PATCH] Windows/QSaveFile: Fix locking issues on Dropbox drives
+
+Add a flag to QTemporaryFileEngine causing the file to be opened in
+non-shared mode, preventing renaming failures caused by the Dropbox
+driver accessing it.
+
+Task-number: QTBUG-57299
+Change-Id: Id7afc3559fd15784d4166efbbd057d592b5e0ab2
+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
+Reviewed-by: Oliver Wolff <oliver.wolff@qt.io>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ src/corelib/io/qsavefile.cpp      |  2 +-
+ src/corelib/io/qtemporaryfile.cpp | 11 +++++++----
+ src/corelib/io/qtemporaryfile_p.h |  7 +++++--
+ 3 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/src/corelib/io/qsavefile.cpp b/src/corelib/io/qsavefile.cpp
+index 56934a9a0f..0cbc8c2234 100644
+--- a/src/corelib/io/qsavefile.cpp
++++ b/src/corelib/io/qsavefile.cpp
+@@ -264,7 +264,7 @@ bool QSaveFile::open(OpenMode mode)
+     }
+ #endif
+ 
+-    d->fileEngine = new QTemporaryFileEngine(&d->finalFileName);
++    d->fileEngine = new QTemporaryFileEngine(&d->finalFileName, QTemporaryFileEngine::Win32NonShared);
+     // if the target file exists, we'll copy its permissions below,
+     // but until then, let's ensure the temporary file is not accessible
+     // to a third party
+diff --git a/src/corelib/io/qtemporaryfile.cpp b/src/corelib/io/qtemporaryfile.cpp
+index 73249d7df8..1983a22c65 100644
+--- a/src/corelib/io/qtemporaryfile.cpp
++++ b/src/corelib/io/qtemporaryfile.cpp
+@@ -207,7 +207,7 @@ QFileSystemEntry::NativePath QTemporaryFileName::generateNext()
+     changed and contain the generated path name.
+ */
+ static bool createFileFromTemplate(NativeFileHandle &file, QTemporaryFileName &templ,
+-                                   quint32 mode, QSystemError &error)
++                                   quint32 mode, int flags, QSystemError &error)
+ {
+     const int maxAttempts = 16;
+     for (int attempt = 0; attempt < maxAttempts; ++attempt) {
+@@ -216,16 +216,18 @@ static bool createFileFromTemplate(NativeFileHandle &file, QTemporaryFileName &t
+ 
+ #if defined(Q_OS_WIN)
+         Q_UNUSED(mode);
++        const DWORD shareMode = (flags & QTemporaryFileEngine::Win32NonShared)
++                                ? 0u : (FILE_SHARE_READ | FILE_SHARE_WRITE);
+ 
+ #  ifndef Q_OS_WINRT
+         file = CreateFile((const wchar_t *)path.constData(),
+                 GENERIC_READ | GENERIC_WRITE,
+-                FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_NEW,
++                shareMode, NULL, CREATE_NEW,
+                 FILE_ATTRIBUTE_NORMAL, NULL);
+ #  else // !Q_OS_WINRT
+         file = CreateFile2((const wchar_t *)path.constData(),
+                 GENERIC_READ | GENERIC_WRITE,
+-                FILE_SHARE_READ | FILE_SHARE_WRITE, CREATE_NEW,
++                shareMode, CREATE_NEW,
+                 NULL);
+ #  endif // Q_OS_WINRT
+ 
+@@ -247,6 +249,7 @@ static bool createFileFromTemplate(NativeFileHandle &file, QTemporaryFileName &t
+             return false;
+         }
+ #else // POSIX
++        Q_UNUSED(flags)
+         file = QT_OPEN(path.constData(),
+                 QT_OPEN_CREAT | QT_OPEN_EXCL | QT_OPEN_RDWR | QT_OPEN_LARGEFILE,
+                 static_cast<mode_t>(mode));
+@@ -366,7 +369,7 @@ bool QTemporaryFileEngine::open(QIODevice::OpenMode openMode)
+         unnamedFile = true;
+         d->fileEntry.clear();
+     } else if (st == CreateUnnamedFileStatus::NotSupported &&
+-               createFileFromTemplate(file, tfn, fileMode, error)) {
++               createFileFromTemplate(file, tfn, fileMode, flags, error)) {
+         filePathIsTemplate = false;
+         unnamedFile = false;
+         d->fileEntry = QFileSystemEntry(tfn.path, QFileSystemEntry::FromNativePath());
+diff --git a/src/corelib/io/qtemporaryfile_p.h b/src/corelib/io/qtemporaryfile_p.h
+index fb8887af53..0fec88d3cd 100644
+--- a/src/corelib/io/qtemporaryfile_p.h
++++ b/src/corelib/io/qtemporaryfile_p.h
+@@ -108,8 +108,10 @@ class QTemporaryFileEngine : public QFSFileEngine
+ {
+     Q_DECLARE_PRIVATE(QFSFileEngine)
+ public:
+-    QTemporaryFileEngine(const QString *templateName)
+-        : templateName(*templateName)
++    enum Flags { Win32NonShared = 0x1 };
++
++    explicit QTemporaryFileEngine(const QString *_templateName, int _flags = 0)
++        : templateName(*_templateName), flags(_flags)
+     {}
+ 
+     void initialize(const QString &file, quint32 mode, bool nameIsTemplate = true)
+@@ -144,6 +146,7 @@ public:
+ 
+     const QString &templateName;
+     quint32 fileMode;
++    int flags = 0;
+     bool filePathIsTemplate;
+     bool filePathWasTemplate;
+     bool unnamedFile = false;
+-- 
+2.13.6
+

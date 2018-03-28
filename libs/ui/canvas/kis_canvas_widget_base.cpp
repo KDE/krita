@@ -143,18 +143,16 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.restore();
     }
 
+    // - some tools do not restore gc, but that is not important here
+    // - we need to disable clipping to draw handles properly
+    gc.setClipping(false);
+    toolProxy()->paint(gc, *m_d->viewConverter);
     gc.restore();
 
     // ask the decorations to paint themselves
     Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
         deco->paint(gc, m_d->coordinatesConverter->widgetToDocument(updateWidgetRect), m_d->coordinatesConverter,m_d->canvas);
     }
-
-    gc.setTransform(transform);
-    // - some tools do not restore gc, but that is not important here
-    // - we need to disable clipping to draw handles properly
-    gc.setClipping(false);
-    toolProxy()->paint(gc, *m_d->viewConverter);
 
     gc.restore();
 }

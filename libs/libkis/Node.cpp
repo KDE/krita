@@ -37,7 +37,6 @@
 #include <kis_generator_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_shape_layer.h>
-#include <KisReferenceImagesLayer.h>
 #include <kis_transparency_mask.h>
 #include <kis_filter_mask.h>
 #include <kis_transform_mask.h>
@@ -363,9 +362,6 @@ QString Node::type() const
     }
     if (qobject_cast<const KisCloneLayer*>(d->node)) {
         return "clonelayer";
-    }
-    if (qobject_cast<const KisReferenceImagesLayer*>(d->node)) {
-        return "referenceimageslayer";
     }
     if (qobject_cast<const KisShapeLayer*>(d->node)) {
         return "vectorlayer";

@@ -20,7 +20,6 @@
 
 #include "kis_guides_config.h"
 #include "KisDocument.h"
-#include <kis_image.h>
 
 
 struct KisChangeGuidesCommand::Private

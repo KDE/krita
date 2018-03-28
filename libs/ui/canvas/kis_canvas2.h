@@ -39,7 +39,6 @@
 #include "kis_canvas_decoration.h"
 #include "kis_painting_assistants_decoration.h"
 #include "input/KisInputActionGroup.h"
-#include "KisReferenceImagesDecoration.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -163,7 +162,7 @@ public: // KoCanvasBase implementation
     void setInputActionGroupsMask(KisInputActionGroupsMask mask) override;
 
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
-    KisReferenceImagesDecorationSP referenceImagesDecoration() const;
+
 
 public: // KisCanvas2 methods
 

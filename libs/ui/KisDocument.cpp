@@ -87,6 +87,7 @@
 #include <kis_selection.h>
 #include <kis_fill_painter.h>
 #include <kis_document_undo_store.h>
+#include <kis_painting_assistants_decoration.h>
 #include <kis_idle_watcher.h>
 #include <kis_signal_auto_connection.h>
 #include <kis_debug.h>
@@ -113,8 +114,6 @@
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
 #include "kis_image_barrier_lock_adapter.h"
-#include "KisReferenceImagesLayer.h"
-
 #include <mutex>
 #include "kis_config_notifier.h"
 #include "kis_async_action_feedback.h"
@@ -318,9 +317,6 @@ public:
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
     QList<KisPaintingAssistantSP> assistants;
-
-    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
-
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -1618,26 +1614,9 @@ QList<KisPaintingAssistantSP> KisDocument::assistants() const
     return d->assistants;
 }
 
-void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
+void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> value)
 {
     d->assistants = value;
-}
-
-KisSharedPtr<KisReferenceImagesLayer> KisDocument::createReferenceImagesLayer(KisImageSP targetImage)
-{
-    if (!d->referenceImagesLayer) {
-        if (targetImage.isNull()) targetImage = d->image;
-
-        d->referenceImagesLayer = new KisReferenceImagesLayer(shapeController(), targetImage);
-        targetImage->addNode(d->referenceImagesLayer, targetImage->root());
-    }
-
-    return d->referenceImagesLayer;
-}
-
-KisReferenceImagesLayer *KisDocument::referenceImagesLayer() const
-{
-    return d->referenceImagesLayer.data();
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

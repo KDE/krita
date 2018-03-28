@@ -143,30 +143,6 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override {
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
-
-    void finishInteraction(Qt::KeyboardModifiers modifiers) override
-    {
-        Q_UNUSED(modifiers);
-        DefaultTool *defaultTool = dynamic_cast<DefaultTool*>(tool());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(defaultTool);
-
-        KoSelection * selection = defaultTool->koSelection();
-
-        const bool useContainedMode = currentMode() == CoveringSelection;
-
-        QList<KoShape *> shapes =
-                defaultTool->shapeManager()->
-                        shapesAt(selectedRectangle(), true, useContainedMode);
-
-        Q_FOREACH (KoShape * shape, shapes) {
-                if (!shape->isSelectable()) continue;
-
-                selection->select(shape);
-            }
-
-        defaultTool->repaintDecorations();
-        defaultTool->canvas()->updateCanvas(selectedRectangle());
-    }
 };
 #include <KoGradientBackground.h>
 #include "KoShapeGradientHandles.h"
@@ -294,6 +270,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
     , m_selectionHandler(new SelectionHandler(this))
+    , m_customEventStrategy(0)
     , m_tabbedOptionWidget(0)
 {
     setupActions();
@@ -588,9 +565,8 @@ void DefaultTool::updateCursor()
 
     QString statusText;
 
-    KoSelection *selection = koSelection();
-    if (selection && selection->count() > 0) { // has a selection
-        bool editable = !selection->selectedEditableShapes().isEmpty();
+    if (koSelection()->count() > 0) { // has a selection
+        bool editable = !koSelection()->selectedEditableShapes().isEmpty();
 
         if (!m_mouseWasInsideHandles) {
             m_angle = rotationOfHandle(m_lastHandle, true);
@@ -699,23 +675,25 @@ void DefaultTool::updateCursor()
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     // this tool only works on a vector layer right now, so give a warning if another layer type is trying to use it
-    if (!isValidForCurrentLayer()) {
-        KisCanvas2 *kiscanvas = static_cast<KisCanvas2 *>(canvas());
+    KisNodeSP currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
+
+    if (currentNode.isNull() || (!currentNode->inherits("KisShapeLayer") && !currentNode->inherits("KisSelectionMask"))) {
+
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         kiscanvas->viewManager()->showFloatingMessage(
-                i18n("This tool only works on vector layers. You probably want the move tool."),
-                QIcon(), 2000, KisFloatingMessage::Medium, Qt::AlignCenter);
+            i18n("This tool only works on vector layers. You probably want the move tool."),
+            QIcon(), 500, KisFloatingMessage::Medium, Qt::AlignCenter);
+
         return;
     }
 
-    KoSelection *selection = koSelection();
-    if (selection) {
-        SelectionDecorator decorator(canvas()->resourceManager());
-        decorator.setSelection(selection);
-        decorator.setHandleRadius(handleRadius());
-        decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-        decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
-        decorator.paint(painter, converter);
-    }
+
+    SelectionDecorator decorator(canvas()->resourceManager());
+    decorator.setSelection(koSelection());
+    decorator.setHandleRadius(handleRadius());
+    decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
+    decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+    decorator.paint(painter, converter);
 
     KoInteractionTool::paint(painter, converter);
 
@@ -723,16 +701,6 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     KoShape::applyConversion(painter, converter);
     canvas()->snapGuide()->paint(painter, converter);
     painter.restore();
-}
-
-bool DefaultTool::isValidForCurrentLayer() const
-{
-    KisNodeSP currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    return !currentNode.isNull() && currentNode->inherits("KisShapeLayer");
-}
-
-KoShapeManager *DefaultTool::shapeManager() const {
-    return canvas()->shapeManager();
 }
 
 void DefaultTool::mousePressEvent(KoPointerEvent *event)
@@ -774,7 +742,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 QRectF DefaultTool::handlesSize()
 {
     KoSelection *selection = koSelection();
-    if (!selection || !selection->count()) return QRectF();
+    if (!selection->count()) return QRectF();
 
     recalcSelectionBox(selection);
 
@@ -798,10 +766,10 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    KoSelection *selection = koSelection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
 
-    KoShape *shape = shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop);
-    if (shape && selection && !selection->isSelected(shape)) {
+    KoShape *shape = canvas()->shapeManager()->shapeAt(event->point, KoFlake::ShapeOnTop);
+    if (shape && !selection->isSelected(shape)) {
 
         if (!(event->modifiers() & Qt::ShiftModifier)) {
             selection->deselectAll();
@@ -886,7 +854,7 @@ void DefaultTool::repaintDecorations()
 void DefaultTool::copy() const
 {
     // all the selected shapes, not only editable!
-    QList<KoShape *> shapes = koSelection()->selectedShapes();
+    QList<KoShape *> shapes = canvas()->selectedShapesProxy()->selection()->selectedShapes();
 
     if (!shapes.isEmpty()) {
         KoDrag drag;
@@ -898,7 +866,7 @@ void DefaultTool::copy() const
 void DefaultTool::deleteSelection()
 {
     QList<KoShape *> shapes;
-    foreach (KoShape *s, koSelection()->selectedShapes()) {
+    foreach (KoShape *s, canvas()->selectedShapesProxy()->selection()->selectedShapes()) {
         if (s->isGeometryProtected()) {
             continue;
         }
@@ -915,7 +883,7 @@ bool DefaultTool::paste()
     return false;
 }
 
-KoSelection *DefaultTool::koSelection() const
+KoSelection *DefaultTool::koSelection()
 {
     Q_ASSERT(canvas());
     Q_ASSERT(canvas()->selectedShapesProxy());
@@ -940,7 +908,7 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
     const KoViewConverter *converter = canvas()->viewConverter();
     KoSelection *selection = koSelection();
 
-    if (!selection || !selection->count() || !converter) {
+    if (!selection->count() || !converter) {
         return KoFlake::NoHandle;
     }
 
@@ -1081,7 +1049,7 @@ void DefaultTool::selectionUngroup()
             }
             newShapes << group->shapes();
             new KoShapeUngroupCommand(group, group->shapes(),
-                                      group->parent() ? QList<KoShape *>() : shapeManager()->topLevelShapes(),
+                                      group->parent() ? QList<KoShape *>() : canvas()->shapeManager()->topLevelShapes(),
                                       cmd);
             canvas()->shapeController()->removeShape(group, cmd);
         }
@@ -1360,7 +1328,7 @@ void DefaultTool::selectionSendToBack()
 
 void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
 {
-    KoSelection *selection = koSelection();
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     if (!selection) {
         return;
     }
@@ -1370,7 +1338,7 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
         return;
     }
 
-    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(selectedShapes, shapeManager(), order);
+    KUndo2Command *cmd = KoShapeReorderCommand::createCommand(selectedShapes, canvas()->shapeManager(), order);
     if (cmd) {
         canvas()->addCommand(cmd);
     }
@@ -1408,8 +1376,8 @@ void DefaultTool::canvasResourceChanged(int key, const QVariant &res)
 
 KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 {
+    KoShapeManager *shapeManager = canvas()->shapeManager();
     KoSelection *selection = koSelection();
-    if (!selection) return nullptr;
 
     bool insideSelection = false;
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
@@ -1475,32 +1443,31 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (handle != KoFlake::NoHandle) {
             // resizing or shearing only with left mouse button
             if (insideSelection) {
-                bool forceUniformScaling = m_tabbedOptionWidget && m_tabbedOptionWidget->useUniformScaling();
-                return new ShapeResizeStrategy(this, selection, event->point, handle, forceUniformScaling);
+                return new ShapeResizeStrategy(this, event->point, handle, m_tabbedOptionWidget->useUniformScaling());
             }
 
             if (handle == KoFlake::TopMiddleHandle || handle == KoFlake::RightMiddleHandle ||
                 handle == KoFlake::BottomMiddleHandle || handle == KoFlake::LeftMiddleHandle) {
 
-                return new ShapeShearStrategy(this, selection, event->point, handle);
+                return new ShapeShearStrategy(this, event->point, handle);
             }
 
             // rotating is allowed for right mouse button too
             if (handle == KoFlake::TopLeftHandle || handle == KoFlake::TopRightHandle ||
                     handle == KoFlake::BottomLeftHandle || handle == KoFlake::BottomRightHandle) {
 
-                return new ShapeRotateStrategy(this, selection, event->point, event->buttons());
+                return new ShapeRotateStrategy(this, event->point, event->buttons());
             }
         }
 
         if (!selectMultiple && !selectNextInStack) {
             if (insideSelection) {
-                return new ShapeMoveStrategy(this, selection, event->point);
+                return new ShapeMoveStrategy(this, event->point);
             }
         }
     }
 
-    KoShape *shape = shapeManager()->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
+    KoShape *shape = shapeManager->shapeAt(event->point, selectNextInStack ? KoFlake::NextUnselected : KoFlake::ShapeOnTop);
 
     if (avoidSelection || (!shape && handle == KoFlake::NoHandle)) {
         if (!selectMultiple) {
@@ -1518,7 +1485,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
     } else if (handle == KoFlake::NoHandle) { // clicked on shape which is not selected
         repaintDecorations();
         if (!selectMultiple) {
-            selection->deselectAll();
+            shapeManager->selection()->deselectAll();
         }
         selection->select(shape);
         repaintDecorations();
@@ -1526,7 +1493,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         if (event->isTabletEvent()) {
             return new NopInteractionStrategy(this);
         }
-        return new ShapeMoveStrategy(this, selection, event->point);
+        return new ShapeMoveStrategy(this, event->point);
     }
     return 0;
 }

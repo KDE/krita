@@ -57,11 +57,6 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
-protected:
-    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> shapes,
-                         KoShapeContainer *parentShape, KUndo2Command *parent,
-                         const KUndo2MagicString &undoString);
-
 private:
     class Private;
     Private * const d;

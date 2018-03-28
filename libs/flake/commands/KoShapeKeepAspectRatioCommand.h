@@ -35,10 +35,11 @@ public:
     /**
      * Constructor
      * @param shapes the shapes affected by the command
-     * @param newKeepAspectRatio the new setting
+     * @param oldKeepAspectRatio the old settings
+     * @param newKeepAspectRatio the new settings
      * @param parent the parent command
      */
-    KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, bool newKeepAspectRatio, KUndo2Command* parent = 0);
+    KoShapeKeepAspectRatioCommand(const QList<KoShape*> &shapes, const QList<bool> &oldKeepAspectRatio, const QList<bool> &newKeepAspectRatio, KUndo2Command* parent = 0);
     ~KoShapeKeepAspectRatioCommand() override;
 
     /// Execute the command

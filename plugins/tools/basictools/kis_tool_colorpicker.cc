@@ -44,9 +44,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_properties_configuration.h"
-#include "KisDocument.h"
-#include "kis_canvas2.h"
-#include "KisReferenceImagesLayer.h"
 
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
@@ -119,79 +116,61 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
     QScopedPointer<boost::lock_guard<KisImage> > imageLocker;
 
-    m_pickedColor.setOpacity(0.0);
+    KisPaintDeviceSP dev;
 
-    if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-        auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-        KisReferenceImagesLayer *referenceImageLayer =
-            kisCanvas->imageView()->document()->referenceImagesLayer();
-
-        if (referenceImageLayer) {
-            QColor color = referenceImageLayer->getPixel(pos);
-            if (color.isValid()) {
-                m_pickedColor.fromQColor(color);
-            }
-        }
+    if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
+            currentNode() && currentNode()->projection()) {
+        dev = currentNode()->projection();
+    }
+    else {
+        imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
+        dev = currentImage()->projection();
     }
 
-    if (m_pickedColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
-        KisPaintDeviceSP dev;
-
-        if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
-            currentNode() && currentNode()->projection()) {
-            dev = currentNode()->projection();
-        }
-        else {
-            imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
-            dev = currentImage()->projection();
+    if (m_config->radius == 1) {
+        QPoint realPos = pos.toPoint();
+        if (currentImage()->wrapAroundModePermitted()) {
+            realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
         }
 
-        if (m_config->radius == 1) {
-            QPoint realPos = pos.toPoint();
-            if (currentImage()->wrapAroundModePermitted()) {
-                realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-            }
+        dev->pixel(realPos.x(), realPos.y(), &m_pickedColor);
+    }
+    else {
 
-            dev->pixel(realPos.x(), realPos.y(), &m_pickedColor);
-        }
-        else {
+        const KoColorSpace* cs = dev->colorSpace();
+        int pixelSize = cs->pixelSize();
 
-            const KoColorSpace *cs = dev->colorSpace();
-            int pixelSize = cs->pixelSize();
+        quint8* dstColor = new quint8[pixelSize];
+        QVector<const quint8*> pixels;
 
-            quint8 *dstColor = new quint8[pixelSize];
-            QVector<const quint8 *> pixels;
+        KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
 
-            KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
+        for (int y = -m_config->radius; y <= m_config->radius; y++) {
+            for (int x = -m_config->radius; x <= m_config->radius; x++) {
+                if (((x * x) + (y * y)) < m_config->radius * m_config->radius) {
 
-            for (int y = -m_config->radius; y <= m_config->radius; y++) {
-                for (int x = -m_config->radius; x <= m_config->radius; x++) {
-                    if (((x * x) + (y * y)) < m_config->radius * m_config->radius) {
+                    QPoint realPos(pos.x() + x, pos.y() + y);
 
-                        QPoint realPos(pos.x() + x, pos.y() + y);
-
-                        if (currentImage()->wrapAroundModePermitted()) {
-                            realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-                        }
-
-                        accessor->moveTo(realPos.x(), realPos.y());
-                        pixels << accessor->oldRawData();
+                    if (currentImage()->wrapAroundModePermitted()) {
+                        realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
                     }
+
+                    accessor->moveTo(realPos.x(), realPos.y());
+                    pixels << accessor->oldRawData();
                 }
             }
-
-
-            const quint8 **cpixels = const_cast<const quint8 **>(pixels.constData());
-            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), dstColor);
-
-            m_pickedColor = KoColor(dstColor, cs);
-
-            delete[] dstColor;
         }
 
-        m_pickedColor.convertTo(dev->compositionSourceColorSpace());
+
+        const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
+        cs->mixColorsOp()->mixColors(cpixels, pixels.size(), dstColor);
+
+        m_pickedColor = KoColor(dstColor, cs);
+
+        delete[] dstColor;
     }
+
+    m_pickedColor.convertTo(dev->compositionSourceColorSpace());
 
     if (m_config->updateColor &&
         m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {

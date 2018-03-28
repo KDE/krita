@@ -22,15 +22,11 @@ set ( defaulttools_SRCS
     connectionTool/ChangeConnectionPointCommand.cpp
     connectionTool/MoveConnectionPointStrategy.cpp
     connectionTool/ConnectionPointWidget.cpp
-
-    referenceimagestool/ToolReferenceImages.cpp
-    referenceimagestool/ToolReferenceImagesWidget.cpp
 )
 
 ki18n_wrap_ui(defaulttools_SRCS
     defaulttool/DefaultToolGeometryWidget.ui
     connectionTool/ConnectionPointWidget.ui
-    referenceimagestool/WdgToolOptions.ui
 )
 
 qt5_add_resources(defaulttools_SRCS defaulttools.qrc)

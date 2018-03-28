@@ -106,8 +106,6 @@ public:
     KisNodeSelectionAdapter* nodeSelectionAdapter() const;
     KisNodeInsertionAdapter* nodeInsertionAdapter() const;
 
-    static bool isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden);
-
 public Q_SLOTS:
 
     /**

@@ -31,7 +31,6 @@
 class KoToolBase;
 class KoShape;
 class KoShapeResizeCommand;
-class KoSelection;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -44,7 +43,7 @@ public:
     /**
      * Constructor
      */
-    ShapeResizeStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode);
+    ShapeResizeStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction, bool forceUniformScalingMode);
     ~ShapeResizeStrategy() override;
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;

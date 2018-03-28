@@ -141,7 +141,7 @@ public:
          {}
 
     KisPaintDeviceSP paintDevice;
-    KisShapeLayerCanvasBase * canvas;
+    KisShapeLayerCanvas * canvas;
     KoShapeBasedDocumentBase* controller;
     int x;
     int y;
@@ -232,18 +232,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     }
 }
 
-KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
-                             KisImageWSP image,
-                             const QString &name,
-                             quint8 opacity,
-                             KisShapeLayerCanvasBase *canvas)
-        : KisExternalLayer(image, name, opacity)
-        , KoShapeLayer(new ShapeLayerContainerModel(this))
-        , m_d(new Private())
-{
-    initShapeLayer(controller, nullptr, canvas);
-}
-
 KisShapeLayer::~KisShapeLayer()
 {
     /**
@@ -260,7 +248,7 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *canvas)
+void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
@@ -275,13 +263,8 @@ void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPain
         m_d->paintDevice = new KisPaintDevice(*copyFromProjection);
     }
 
-    if (!canvas) {
-        auto *slCanvas = new KisShapeLayerCanvas(this, image());
-        slCanvas->setProjection(m_d->paintDevice);
-        canvas = slCanvas;
-    }
-
-    m_d->canvas = canvas;
+    m_d->canvas = new KisShapeLayerCanvas(this, image());
+    m_d->canvas->setProjection(m_d->paintDevice);
     m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
 
@@ -716,7 +699,3 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     return parentCommand;
 }
 
-KoShapeBasedDocumentBase *KisShapeLayer::shapeController() const
-{
-    return m_d->controller;
-}

@@ -32,8 +32,7 @@ class KoToolBase;
 class KoShapeRubberSelectStrategyPrivate;
 
 /**
- * This is a base class for interactions based on dragging a rectangular area on the canvas,
- * such as selection, zooming or shape creation.
+ * Implement the rubber band selection of flake objects.
  *
  * When the user selects stuff in left-to-right way, selection is in "covering"
  * (or "containing") mode, when in "left-to-right" in "crossing" mode
@@ -55,12 +54,11 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
     KUndo2Command *createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 protected:
     /// constructor
     KoShapeRubberSelectStrategy(KoShapeRubberSelectStrategyPrivate &);
-
-    QRectF selectedRectangle() const;
 
     enum SelectionMode {
         CrossingSelection,

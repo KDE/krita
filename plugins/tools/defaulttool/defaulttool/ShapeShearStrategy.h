@@ -29,7 +29,6 @@
 
 class KoToolBase;
 class KoShape;
-class KoSelection;
 
 /**
  * A strategy for the KoInteractionTool.
@@ -45,7 +44,7 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      * @param direction the handle that was grabbed
      */
-    ShapeShearStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked, KoFlake::SelectionHandle direction);
+    ShapeShearStrategy(KoToolBase *tool, const QPointF &clicked, KoFlake::SelectionHandle direction);
     ~ShapeShearStrategy() override {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;

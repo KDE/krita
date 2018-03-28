@@ -42,7 +42,7 @@ class KisGridManager;
 class KisGuidesManager;
 class KisImageManager;
 class KisNodeManager;
-class KisDecorationsManager;
+class KisPaintingAssistantsManager;
 class KisPaintopBox;
 class KisSelectionManager;
 class KisStatusBar;

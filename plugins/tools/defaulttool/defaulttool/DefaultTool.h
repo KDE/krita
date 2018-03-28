@@ -132,12 +132,6 @@ protected:
 
     KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
-protected:
-    friend class SelectionInteractionStrategy;
-    virtual bool isValidForCurrentLayer() const;
-    virtual KoShapeManager *shapeManager() const;
-    virtual KoSelection *koSelection() const;
-
 private:
     class MoveGradientHandleInteractionFactory;
 
@@ -156,6 +150,8 @@ private:
     /// Returns selection rectangle adjusted by handle proximity threshold
     QRectF handlesSize();
 
+    // convenience method;
+    KoSelection *koSelection();
 
     void canvasResourceChanged(int key, const QVariant &res) override;
 
@@ -173,6 +169,7 @@ private:
     qreal m_angle;
     KoToolSelection *m_selectionHandler;
     friend class SelectionHandler;
+    KoInteractionStrategy *m_customEventStrategy;
     QScopedPointer<QMenu> m_contextMenu;
 
     DefaultToolTabbedWidget *m_tabbedOptionWidget;

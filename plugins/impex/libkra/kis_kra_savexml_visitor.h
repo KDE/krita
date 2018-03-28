@@ -90,8 +90,6 @@ private:
     QString m_url;
     bool m_root;
     QStringList m_errorMessages;
-
-    bool saveReferenceImagesLayer(KisExternalLayer *layer);
 };
 
 #endif

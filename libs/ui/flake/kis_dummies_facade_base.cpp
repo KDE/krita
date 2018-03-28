@@ -104,7 +104,7 @@ void KisDummiesFacadeBase::slotLayersChanged()
 
 void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
 {
-    if (!node->inherits("KisSelectionMask") && !node->inherits("KisReferenceImagesLayer")) {
+    if(!node->inherits("KisSelectionMask")) {
         emit sigActivateNode(node);
     }
 }

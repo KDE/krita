@@ -36,7 +36,6 @@ class KoStore;
 class KoViewConverter;
 class KoShapeBasedDocumentBase;
 class KoDocumentResourceManager;
-class KisShapeLayerCanvasBase;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -68,10 +67,8 @@ public:
      */
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     ~KisShapeLayer() override;
-protected:
-    KisShapeLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, KisShapeLayerCanvasBase *canvas);
 private:
-    void initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection = 0, KisShapeLayerCanvasBase *canvas = 0);
+    void initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection = 0);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);
@@ -153,8 +150,6 @@ protected:
 
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
-
-    KoShapeBasedDocumentBase *shapeController() const;
 
 Q_SIGNALS:
     /**

@@ -38,7 +38,7 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="4">
+     <item row="0" column="3">
       <widget class="QToolButton" name="bnAdd">
        <property name="toolTip">
         <string>Add foreground color</string>
@@ -57,7 +57,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="7">
+     <item row="0" column="6">
       <widget class="QToolButton" name="bnRemove">
        <property name="toolTip">
         <string>Delete color</string>
@@ -83,7 +83,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="6">
+     <item row="0" column="5">
       <widget class="QToolButton" name="bnAddGroup">
        <property name="text">
         <string>...</string>
@@ -92,25 +92,18 @@
      </item>
      <item row="0" column="1">
       <widget class="SqueezedComboBox" name="cmbNameList">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="editable">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="5">
+     <item row="0" column="4">
       <widget class="QToolButton" name="bnAddDialog">
        <property name="toolTip">
         <string>Add color</string>

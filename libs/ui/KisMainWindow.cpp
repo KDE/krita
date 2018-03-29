@@ -58,6 +58,7 @@
 #include <QMenuBar>
 #include <KisMimeDatabase.h>
 #include <QMimeData>
+#include <QStackedWidget>
 
 #include <kactioncollection.h>
 #include <QAction>
@@ -103,6 +104,9 @@
 #include <KoResourceModel.h>
 
 #include <KisMimeDatabase.h>
+#include <KisUpdateSchedulerConfigNotifier.h>
+#include <KisImportExportFilter.h>
+
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -117,14 +121,11 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_custom_image_widget.h"
-#include <KisDocument.h>
-#include "KisDocument.h"
 #include "KisDocument.h"
 #include "kis_group_layer.h"
 #include "kis_icon_utils.h"
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_image.h"
-#include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_memory_statistics_server.h"
@@ -141,7 +142,7 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include <KisUpdateSchedulerConfigNotifier.h>
+#include "KisWelcomePage.h"
 
 #include <mutex>
 
@@ -178,10 +179,15 @@ public:
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
         , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
+        , widgetStack(new QStackedWidget(parent))
+        , welcomePage(new KisWelcomePage(parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
+        widgetStack->addWidget(welcomePage);
+        widgetStack->addWidget(mdiArea);
+
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
@@ -248,6 +254,8 @@ public:
 
     Digikam::ThemeManager *themeManager {0};
 
+    QStackedWidget *widgetStack {0};
+    KisWelcomePage *welcomePage {0};
     QMdiArea *mdiArea;
     QMdiSubWindow *activeSubWindow  {0};
     QSignalMapper *windowMapper;
@@ -359,7 +367,8 @@ KisMainWindow::KisMainWindow()
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-    setCentralWidget(d->mdiArea);
+    setCentralWidget(d->widgetStack);
+    d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -2012,6 +2021,7 @@ void KisMainWindow::subWindowActivated()
     d->actionManager()->updateGUI();
 }
 
+
 void KisMainWindow::updateWindowMenu()
 {
     QMenu *menu = d->windowMenu->menu();
@@ -2136,6 +2146,14 @@ void KisMainWindow::updateWindowMenu()
             connect(action, SIGNAL(triggered()), d->windowMapper, SLOT(map()));
             d->windowMapper->setMapping(action, windows.at(i));
         }
+    }
+
+    // Determine whether we should show the mdi area
+    if (windows.count( ) > 0) {
+        d->widgetStack->setCurrentIndex(1);
+    }
+    else {
+        d->widgetStack->setCurrentIndex(0);
     }
 
     updateCaption();

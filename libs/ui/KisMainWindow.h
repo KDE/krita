@@ -244,6 +244,12 @@ public Q_SLOTS:
 
     void notifyChildViewDestroyed(KisView *view);
 
+    /// Set the active view, this will update the undo/redo actions
+    void setActiveView(KisView *view);
+
+    void subWindowActivated();
+
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -359,8 +365,13 @@ private Q_SLOTS:
     void newWindow();
     void closeCurrentWindow();
     void checkSanity();
+
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
+
+    void initializeGeometry();
+    void showManual();
+    void switchTab(int index);
 
 protected:
 
@@ -375,6 +386,10 @@ protected:
 
     void mouseReleaseEvent(QMouseEvent *event) override;
 
+protected:
+
+    void moveEvent(QMoveEvent *e) override;
+
 
 private:
 
@@ -385,19 +400,7 @@ private:
      */
     void addView(KisView *view);
 
-public Q_SLOTS:
-
-    /// Set the active view, this will update the undo/redo actions
-    void setActiveView(KisView *view);
-
-    void subWindowActivated();
-
-
-private:
-
     friend class KisApplication;
-
-
     /**
      * Returns the dockwidget specified by the @p factory. If the dock widget doesn't exist yet it's created.
      * Add a "view_palette_action_menu" action to your view menu if you want to use closable dock widgets.
@@ -428,18 +431,6 @@ private:
     void createActions();
 
     void applyToolBarLayout();
-
-protected:
-
-    void moveEvent(QMoveEvent *e) override;
-
-private Q_SLOTS:
-    void initializeGeometry();
-    void showManual();
-    void switchTab(int index);
-
-private:
-
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

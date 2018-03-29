@@ -385,6 +385,8 @@ set(kritaui_LIB_SRCS
     kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
+
+    KisWelcomePage.cpp
 )
 
 if(WIN32)
@@ -514,14 +516,30 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
 )
 
+qt5_add_resources(kritaui_LIB_SRCS libkritaui.qrc)
+
 
 QT5_WRAP_CPP(kritaui_HEADERS_MOC KisNodePropertyAction_p.h)
 
 add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS} )
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils ${PNG_LIBRARIES} ${EXIV2_LIBRARIES}
+target_link_libraries(kritaui 
+                        KF5::CoreAddons 
+                        KF5::Completion 
+                        KF5::I18n KF5::ItemViews 
+                        Qt5::Network
+                        Qt5::Quick  
+                        Qt5::QuickWidgets 
+                        Qt5::Qml
+                        kritaimpex 
+                        kritacolor 
+                        kritaimage 
+                        kritalibbrush 
+                        kritawidgets 
+                        kritawidgetutils 
+                        ${PNG_LIBRARIES} 
+                        ${EXIV2_LIBRARIES}
 )
 
 if (HAVE_QT_MULTIMEDIA)

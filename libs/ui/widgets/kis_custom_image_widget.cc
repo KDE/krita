@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
+#include <QDialogButtonBox>
 #include <QFile>
 #include <QSpacerItem>
 
@@ -105,12 +106,17 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
             this, SLOT(heightUnitChanged(int)));
     connect(doubleHeight, SIGNAL(valueChanged(double)),
             this, SLOT(heightChanged(double)));
-    connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
-    createButton->setDefault(true);
 
-    // parent widget contains the window
-    connect(cancelNewDocumentButton, SIGNAL(clicked(bool)), this->parentWidget(), SLOT(close()));
-    connect(cancelNewDocumentButton, SIGNAL(clicked(bool)), this->parentWidget(), SLOT(deleteLater()));
+
+    // Create image
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("Create"));
+    connect(newDialogConfirmationButtonBox, SIGNAL(accepted()), this, SLOT(createImage()));
+
+
+    // Cancel Create image button
+    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), this->parentWidget(), SLOT(close()));
+    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), this->parentWidget(), SLOT(deleteLater()));
+
 
 
     bnPortrait->setIcon(KisIconUtils::loadIcon("portrait"));
@@ -131,7 +137,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-    connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
+
+    connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SLOT(setEnabled(bool)));
+
 
     KisConfig cfg;
     intNumLayers->setValue(cfg.numDefaultLayers());
@@ -165,8 +173,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 void KisCustomImageWidget::showEvent(QShowEvent *)
 {
     fillPredefined();
-    this->createButton->setFocus();
-    this->createButton->setEnabled(true);
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setFocus();
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -239,7 +247,7 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    createButton->setEnabled(false);
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);

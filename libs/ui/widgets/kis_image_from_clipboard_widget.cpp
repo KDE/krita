@@ -69,9 +69,10 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-    
-    disconnect(createButton, SIGNAL(clicked()), 0, 0); //disable normal signal
-    connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
+
+
+    disconnect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), 0, 0); //disable normal signal
+    connect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
 }
 
@@ -120,14 +121,14 @@ void KisImageFromClipboard::createClipboardPreview()
         if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
             lblPreview->setPixmap(QPixmap::fromImage(qimage.scaled(75, 75, Qt::KeepAspectRatio)));
             lblPreview->show();
-            createButton->setEnabled(true);
+            newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 
             doubleWidth->setValue(qimage.width());
             doubleHeight->setValue(qimage.height());
         }
     }
     else {
-        createButton->setEnabled(false);
+        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         lblPreview->hide();
     }
     

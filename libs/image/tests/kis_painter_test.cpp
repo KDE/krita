@@ -801,6 +801,67 @@ void KisPainterTest::benchmarkMassiveBltFixed()
     }
 }
 
+#include "kis_lod_transform.h"
+
+inline QRect extentifyRect(const QRect &rc)
+{
+    return KisLodTransform::alignedRect(rc, 6);
+}
+
+void testOptimizedCopyingImpl(const QRect &srcRect,
+                              const QRect &dstRect,
+                              const QRect &srcCopyRect,
+                              const QPoint &dstPt,
+                              const QRect &expectedDstBounds)
+{
+    const QRect expectedDstExtent = extentifyRect(expectedDstBounds);
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP src = new KisPaintDevice(cs);
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    const KoColor color1(Qt::red, cs);
+    const KoColor color2(Qt::blue, cs);
+
+    src->fill(srcRect, color1);
+    dst->fill(dstRect, color2);
+
+    KisPainter::copyAreaOptimized(dstPt, src, dst, srcCopyRect);
+
+    //KIS_DUMP_DEVICE_2(dst, QRect(0,0,5000,5000), "dst", "dd");
+
+    QCOMPARE(dst->exactBounds(), expectedDstBounds);
+    QCOMPARE(dst->extent(), expectedDstExtent);
+}
+
+void KisPainterTest::testOptimizedCopying()
+{
+    const QRect srcRect(1000, 1000, 1000, 1000);
+    const QRect srcCopyRect(0, 0, 5000, 5000);
+
+
+    testOptimizedCopyingImpl(srcRect, QRect(6000, 500, 1000,1000),
+                             srcCopyRect, srcCopyRect.topLeft(),
+                             QRect(1000, 500, 6000, 1500));
+
+    testOptimizedCopyingImpl(srcRect, QRect(4500, 1500, 1000, 1000),
+                             srcCopyRect, srcCopyRect.topLeft(),
+                             QRect(1000, 1000, 4500, 1500));
+
+//    testOptimizedCopyingImpl(srcRect, QRect(2500, 2500, 1000, 1000),
+//                             srcCopyRect, srcCopyRect.topLeft(),
+//                             srcRect);
+
+//    testOptimizedCopyingImpl(srcRect, QRect(1200, 1200, 600, 1600),
+//                             srcCopyRect, srcCopyRect.topLeft(),
+//                             srcRect);
+
+    testOptimizedCopyingImpl(srcRect, QRect(1200, 1200, 600, 600),
+                             srcCopyRect, srcCopyRect.topLeft(),
+                             srcRect);
+
+}
+
 QTEST_MAIN(KisPainterTest)
 
 

@@ -99,7 +99,10 @@ public:
      */
     inline void getTilesPair(qint32 col, qint32 row, bool writable, KisTileSP *tile, KisTileSP *oldTile) {
         *tile = getTile(col, row, writable);
-        *oldTile = m_mementoManager->getCommitedTile(col, row);
+
+        bool unused;
+        *oldTile = m_mementoManager->getCommitedTile(col, row, unused);
+
         if (!*oldTile) {
             *oldTile = *tile;
         }
@@ -115,14 +118,23 @@ public:
             return tile;
 
         } else {
-
-            return m_hashTable->getReadOnlyTileLazy(col,row);
+            bool unused;
+            return m_hashTable->getReadOnlyTileLazy(col, row, unused);
         }
     }
 
+    inline KisTileSP getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile) {
+        return m_hashTable->getReadOnlyTileLazy(col, row, existingTile);
+    }
+
+    inline KisTileSP getOldTile(qint32 col, qint32 row, bool &existingTile) {
+        KisTileSP tile = m_mementoManager->getCommitedTile(col, row, existingTile);
+        return tile ? tile : getReadOnlyTileLazy(col, row, existingTile);
+    }
+
     inline KisTileSP getOldTile(qint32 col, qint32 row) {
-        KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
-        return tile ? tile : getTile(col, row, false);
+        bool unused;
+        return getOldTile(col, row, unused);
     }
 
     KisMementoSP getMemento() {

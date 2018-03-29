@@ -848,13 +848,13 @@ void KisPainterTest::testOptimizedCopying()
                              srcCopyRect, srcCopyRect.topLeft(),
                              QRect(1000, 1000, 4500, 1500));
 
-//    testOptimizedCopyingImpl(srcRect, QRect(2500, 2500, 1000, 1000),
-//                             srcCopyRect, srcCopyRect.topLeft(),
-//                             srcRect);
+    testOptimizedCopyingImpl(srcRect, QRect(2500, 2500, 1000, 1000),
+                             srcCopyRect, srcCopyRect.topLeft(),
+                             srcRect);
 
-//    testOptimizedCopyingImpl(srcRect, QRect(1200, 1200, 600, 1600),
-//                             srcCopyRect, srcCopyRect.topLeft(),
-//                             srcRect);
+    testOptimizedCopyingImpl(srcRect, QRect(1200, 1200, 600, 1600),
+                             srcCopyRect, srcCopyRect.topLeft(),
+                             srcRect);
 
     testOptimizedCopyingImpl(srcRect, QRect(1200, 1200, 600, 600),
                              srcCopyRect, srcCopyRect.topLeft(),

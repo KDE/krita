@@ -442,6 +442,9 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
     if (rect.isEmpty()) return;
 
     const qint32 pixelSize = this->pixelSize();
+    const bool defaultPixelsCoincide =
+        !memcmp(srcDM->defaultPixel(), m_defaultPixel, pixelSize);
+
     const quint32 rowStride = KisTileData::WIDTH * pixelSize;
 
     qint32 firstColumn = xToCol(rect.left());
@@ -453,10 +456,12 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
     for (qint32 row = firstRow; row <= lastRow; ++row) {
         for (qint32 column = firstColumn; column <= lastColumn; ++column) {
 
+            bool srcTileExists = false;
+
             // this is the only variation in the template
             KisTileSP srcTile = useOldSrcData ?
-                srcDM->getOldTile(column, row) :
-                srcDM->getTile(column, row, false);
+                srcDM->getOldTile(column, row, srcTileExists) :
+                srcDM->getReadOnlyTileLazy(column, row, srcTileExists);
 
             QRect tileRect(column*KisTileData::WIDTH, row*KisTileData::HEIGHT,
                            KisTileData::WIDTH, KisTileData::HEIGHT);
@@ -467,16 +472,21 @@ void KisTiledDataManager::bitBltImpl(KisTiledDataManager *srcDM, const QRect &re
                  const bool wasDeleted =
                      m_hashTable->deleteTile(column, row);
 
-                 srcTile->lockForRead();
-                 KisTileData *td = srcTile->tileData();
-                 KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
-                 srcTile->unlock();
+                 if (srcTileExists || !defaultPixelsCoincide) {
+                     srcTile->lockForRead();
+                     KisTileData *td = srcTile->tileData();
+                     KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
+                     srcTile->unlock();
 
-                 m_hashTable->addTile(clonedTile);
+                     m_hashTable->addTile(clonedTile);
 
-                 if (!wasDeleted) {
-                     m_extentManager.notifyTileAdded(column, row);
+                     if (!wasDeleted) {
+                         m_extentManager.notifyTileAdded(column, row);
+                     }
+                 } else if (wasDeleted) {
+                     m_extentManager.notifyTileRemoved(column, row);
                  }
+
             } else {
                 const qint32 lineSize = cloneTileRect.width() * pixelSize;
                 qint32 rowsRemaining = cloneTileRect.height();
@@ -508,6 +518,10 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
 {
     if (rect.isEmpty()) return;
 
+    const qint32 pixelSize = this->pixelSize();
+    const bool defaultPixelsCoincide =
+        !memcmp(srcDM->defaultPixel(), m_defaultPixel, pixelSize);
+
     qint32 firstColumn = xToCol(rect.left());
     qint32 lastColumn = xToCol(rect.right());
 
@@ -522,23 +536,29 @@ void KisTiledDataManager::bitBltRoughImpl(KisTiledDataManager *srcDM, const QRec
              * to check any borders :)
              */
 
+            bool srcTileExists = false;
+
             // this is the only variation in the template
             KisTileSP srcTile = useOldSrcData ?
-                srcDM->getOldTile(column, row) :
-                srcDM->getTile(column, row, false);
+                srcDM->getOldTile(column, row, srcTileExists) :
+                srcDM->getReadOnlyTileLazy(column, row, srcTileExists);
 
             const bool wasDeleted =
                 m_hashTable->deleteTile(column, row);
 
-            srcTile->lockForRead();
-            KisTileData *td = srcTile->tileData();
-            KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
-            srcTile->unlock();
+            if (srcTileExists || !defaultPixelsCoincide) {
+                srcTile->lockForRead();
+                KisTileData *td = srcTile->tileData();
+                KisTileSP clonedTile = KisTileSP(new KisTile(column, row, td, m_mementoManager));
+                srcTile->unlock();
 
-            m_hashTable->addTile(clonedTile);
+                m_hashTable->addTile(clonedTile);
 
-            if (!wasDeleted) {
-                m_extentManager.notifyTileAdded(column, row);
+                if (!wasDeleted) {
+                    m_extentManager.notifyTileAdded(column, row);
+                }
+            } else if (wasDeleted) {
+                m_extentManager.notifyTileRemoved(column, row);
             }
         }
     }

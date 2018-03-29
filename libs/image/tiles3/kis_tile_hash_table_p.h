@@ -153,8 +153,7 @@ void KisTileHashTableTraits<T>::linkTile(TileTypeSP tile, qint32 idx)
 }
 
 template<class T>
-typename KisTileHashTableTraits<T>::TileTypeSP
-KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row, qint32 idx)
+bool KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row, qint32 idx)
 {
     TileTypeSP tile = m_hashTable[idx];
     TileTypeSP prevTile;
@@ -176,15 +175,15 @@ KisTileHashTableTraits<T>::unlinkTile(qint32 col, qint32 row, qint32 idx)
              */
             tile->setNext(TileTypeSP());
             tile->notifyDead();
-            tile = TileTypeSP();
+            tile.clear();
 
             m_numTiles--;
-            return tile;
+            return true;
         }
         prevTile = tile;
     }
 
-    return TileTypeSP();
+    return false;
 }
 
 template<class T>
@@ -257,7 +256,7 @@ KisTileHashTableTraits<T>::getTileLazy(qint32 col, qint32 row,
 
 template<class T>
 typename KisTileHashTableTraits<T>::TileTypeSP
-KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
+KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile)
 {
     const qint32 idx = calculateHash(col, row);
 
@@ -267,7 +266,9 @@ KisTileHashTableTraits<T>::getReadOnlyTileLazy(qint32 col, qint32 row)
     QReadLocker locker(&m_lock);
 
     TileTypeSP tile = getTile(col, row, idx);
-    if (!tile) {
+    existingTile = tile;
+
+    if (!existingTile) {
         tile = new TileType(col, row, m_defaultTileData, 0);
     }
 
@@ -289,13 +290,7 @@ bool KisTileHashTableTraits<T>::deleteTile(qint32 col, qint32 row)
     const qint32 idx = calculateHash(col, row);
 
     QWriteLocker locker(&m_lock);
-    TileTypeSP tile = unlinkTile(col, row, idx);
-
-    /* Done by KisSharedPtr */
-    //if(tile)
-    //    delete tile;
-
-    return bool(tile);
+    return unlinkTile(col, row, idx);
 }
 
 template<class T>

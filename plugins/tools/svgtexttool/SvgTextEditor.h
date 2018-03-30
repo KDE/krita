@@ -127,7 +127,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-    void textUpdated(const QString &svg, const QString &defs);
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
 
 protected:
 

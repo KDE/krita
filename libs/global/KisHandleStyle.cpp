@@ -114,6 +114,19 @@ KisHandleStyle &KisHandleStyle::highlightedPrimaryHandles()
     return *style;
 }
 
+KisHandleStyle &KisHandleStyle::highlightedPrimaryHandlesWithSolidOutline()
+{
+    static QScopedPointer<KisHandleStyle> style;
+
+    if (!style) {
+        style.reset(new KisHandleStyle());
+        style->handleIterations << KisHandleStyle::IterationStyle(highlightOutlineColor, highlightColor);
+        style->lineIterations << KisHandleStyle::IterationStyle(highlightOutlineColor, Qt::NoBrush);
+    }
+
+    return *style;
+}
+
 KisHandleStyle &KisHandleStyle::partiallyHighlightedPrimaryHandles()
 {
     static QScopedPointer<KisHandleStyle> style;

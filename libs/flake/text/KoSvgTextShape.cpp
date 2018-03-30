@@ -43,6 +43,7 @@
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 
+#include <QApplication>
 #include <QThread>
 #include <vector>
 #include <memory>
@@ -66,7 +67,7 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 
     std::vector<std::unique_ptr<QTextLayout>> cachedLayouts;
     std::vector<QPointF> cachedLayoutsOffsets;
-    Qt::HANDLE cachedLayoutsWorkingThread = 0;
+    QThread *cachedLayoutsWorkingThread = 0;
 
 
     void clearAssociatedOutlines(KoShape *rootShape);
@@ -122,13 +123,26 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
      * recreate the layouts in the current thread to be able to render them.
      */
 
-    if (QThread::currentThreadId() != d->cachedLayoutsWorkingThread) {
+    if (QThread::currentThread() != d->cachedLayoutsWorkingThread) {
         relayout();
     }
 
     applyConversion(painter, converter);
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
         d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
+    }
+
+    /**
+     * HACK ALERT:
+     * The layouts of non-gui threads must be destroyed in the same thread
+     * they have been created. Because the thread might be restarted in the
+     * meantime or just destroyed, meaning that the per-thread freetype data
+     * will not be available.
+     */
+    if (QThread::currentThread() != qApp->thread()) {
+        d->cachedLayouts.clear();
+        d->cachedLayoutsOffsets.clear();
+        d->cachedLayoutsWorkingThread = 0;
     }
 }
 
@@ -313,7 +327,7 @@ void KoSvgTextShape::relayout()
 
     d->cachedLayouts.clear();
     d->cachedLayoutsOffsets.clear();
-    d->cachedLayoutsWorkingThread = QThread::currentThreadId();
+    d->cachedLayoutsWorkingThread = QThread::currentThread();
 
     QPointF currentTextPos;
 

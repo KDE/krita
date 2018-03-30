@@ -43,10 +43,6 @@ class LayerModel : public QAbstractListModel
     Q_PROPERTY(bool activeGChannelActive READ activeGChannelActive WRITE setActiveGChannelActive NOTIFY activeGChannelActiveChanged);
     Q_PROPERTY(bool activeBChannelActive READ activeBChannelActive WRITE setActiveBChannelActive NOTIFY activeBChannelActiveChanged);
     Q_PROPERTY(bool activeAChannelActive READ activeAChannelActive WRITE setActiveAChannelActive NOTIFY activeAChannelActiveChanged);
-    Q_PROPERTY(bool activeRChannelLocked READ activeRChannelLocked WRITE setActiveRChannelLocked NOTIFY activeRChannelLockedChanged);
-    Q_PROPERTY(bool activeGChannelLocked READ activeGChannelLocked WRITE setActiveGChannelLocked NOTIFY activeGChannelLockedChanged);
-    Q_PROPERTY(bool activeBChannelLocked READ activeBChannelLocked WRITE setActiveBChannelLocked NOTIFY activeBChannelLockedChanged);
-    Q_PROPERTY(bool activeAChannelLocked READ activeAChannelLocked WRITE setActiveAChannelLocked NOTIFY activeAChannelLockedChanged);
     Q_PROPERTY(QObject* activeFilterConfig READ activeFilterConfig WRITE setActiveFilterConfig NOTIFY activeFilterConfigChanged);
 public:
     enum LayerRoles {
@@ -118,14 +114,6 @@ public:
     void setActiveBChannelActive(bool newActive);
     bool activeAChannelActive() const;
     void setActiveAChannelActive(bool newActive);
-    bool activeRChannelLocked() const;
-    void setActiveRChannelLocked(bool newLocked);
-    bool activeGChannelLocked() const;
-    void setActiveGChannelLocked(bool newLocked);
-    bool activeBChannelLocked() const;
-    void setActiveBChannelLocked(bool newLocked);
-    bool activeAChannelLocked() const;
-    void setActiveAChannelLocked(bool newLocked);
     QObject* activeFilterConfig() const;
     void setActiveFilterConfig(QObject* newConfig);
 Q_SIGNALS:
@@ -143,10 +131,6 @@ Q_SIGNALS:
     void activeGChannelActiveChanged();
     void activeBChannelActiveChanged();
     void activeAChannelActiveChanged();
-    void activeRChannelLockedChanged();
-    void activeGChannelLockedChanged();
-    void activeBChannelLockedChanged();
-    void activeAChannelLockedChanged();
     void activeFilterConfigChanged();
 
 private Q_SLOTS:

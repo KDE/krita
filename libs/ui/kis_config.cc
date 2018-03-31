@@ -1186,16 +1186,6 @@ void KisConfig::setHideDockersFullscreen(const bool value) const
     m_cfg.writeEntry("hideDockersFullScreen", value);
 }
 
-bool KisConfig::showDockerTitleBars(bool defaultValue) const
-{
-    return (defaultValue ? true : m_cfg.readEntry("showDockerTitleBars", true));
-}
-
-void KisConfig::setShowDockerTitleBars(const bool value) const
-{
-    m_cfg.writeEntry("showDockerTitleBars", value);
-}
-
 bool KisConfig::showDockers(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("showDockers", true));

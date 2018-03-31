@@ -22,7 +22,6 @@
 #include "KoToolBoxDocker_p.h"
 #include "KoToolBox_p.h"
 #include "KoToolBoxScrollArea_p.h"
-#include <KoDockWidgetTitleBar.h>
 #include <klocalizedstring.h>
 
 
@@ -38,10 +37,6 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
     connect(this, SIGNAL(topLevelChanged(bool)),
             this, SLOT(updateFloating(bool)));
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setTextVisibilityMode(KoDockWidgetTitleBar::TextCanBeInvisible);
-    titleBar->setToolTip(i18n("Tools"));
-    setTitleBarWidget(titleBar);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)

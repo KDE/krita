@@ -21,8 +21,6 @@
  */
 #include "KoToolDocker.h"
 
-#include <KoDockWidgetTitleBarButton.h>
-#include <KoDockWidgetTitleBar.h>
 #include <KoIcon.h>
 
 #include <klocalizedstring.h>
@@ -200,7 +198,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->tabbed = cfg.readEntry("TabbedMode", false);
 
     setFeatures(DockWidgetMovable|DockWidgetFloatable);
-    setTitleBarWidget(new KoDockWidgetTitleBar(this));
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 

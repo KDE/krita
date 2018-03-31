@@ -29,7 +29,6 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoDockWidgetTitleBar.h>
 #include <KisMainWindow.h>
 #include <resources/KoResource.h>
 

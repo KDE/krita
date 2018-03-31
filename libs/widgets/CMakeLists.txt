@@ -42,7 +42,6 @@ set(kritawidgets_LIB_SRCS
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
-    #KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp

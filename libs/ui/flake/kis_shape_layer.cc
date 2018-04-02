@@ -447,8 +447,16 @@ bool KisShapeLayer::visible(bool recursive) const
 
 void KisShapeLayer::setVisible(bool visible, bool isLoading)
 {
+    const bool oldVisible = this->visible(false);
+
     KoShapeLayer::setVisible(visible);
     KisExternalLayer::setVisible(visible, isLoading);
+
+    if (visible && !oldVisible &&
+        m_d->canvas->hasChangedWhileBeingInvisible()) {
+
+        m_d->canvas->rerenderAfterBeingInvisible();
+    }
 }
 
 void KisShapeLayer::setUserLocked(bool value)
@@ -650,12 +658,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
 
 void KisShapeLayer::resetCache()
 {
-    m_d->paintDevice->clear();
-
-    QList<KoShape*> shapes = m_d->canvas->shapeManager()->shapes();
-    Q_FOREACH (const KoShape* shape, shapes) {
-        shape->update();
-    }
+    m_d->canvas->resetCache();
 }
 
 KUndo2Command* KisShapeLayer::crop(const QRect & rect)

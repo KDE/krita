@@ -526,13 +526,13 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
                 tmpBrush.setColor(draw->attributeNS(KoXmlNS::draw, "color", QString()));
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "distance")) {
-                //todo implemente it into kpresenter
+                //todo implement it into kpresenter
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "display-name")) {
                 //todo implement it into kpresenter
             }
             if (draw->hasAttributeNS(KoXmlNS::draw, "style")) {
-                //todo implemente it into kpresenter
+                //todo implement it into kpresenter
                 QString styleHash = draw->attributeNS(KoXmlNS::draw, "style", QString());
                 if (styleHash == "single") {
                     switch (angle) {

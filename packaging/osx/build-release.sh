@@ -1,5 +1,5 @@
 export MACOSX_DEPLOYMENT_TARGET=10.11
-cmake ../krita-4.0.0.51 \
+cmake ../krita-4.0.0 \
     -DCMAKE_INSTALL_PREFIX=/Users/boud/dev/i \
     -DCMAKE_PREFIX_PATH=/Users/boud/dev/deps \
     -DDEFINE_NO_DEPRECATED=1 -DBUILD_TESTING=OFF \

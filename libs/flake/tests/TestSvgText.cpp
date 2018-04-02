@@ -1077,5 +1077,85 @@ void TestSvgText::testConvertHtmlToSvg()
 
 }
 
+void TestSvgText::testTextWithMultipleRelativeOffsets()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+            "    <text id=\"testRect\" x=\"10\" y=\"40\""
+            "        font-family=\"Verdana\" font-size=\"15\" "
+            "        dy=\"0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0\">"
+            "        Lorem ipsum dolor sit amet"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard("text_multiple_relative_offsets", QSize(300, 80), 72.0);
+}
+
+void TestSvgText::testTextWithMultipleAbsoluteOffsetsArabic()
+{
+    /**
+     * According to the standard, each **absolute** offset defines a
+     * new text chunk, therefore, the arabic text must become
+     * ltr reordered
+     */
+
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+            "    <text id=\"testRect\" x=\"10\" y=\"40\""
+            "        font-family=\"Verdana\" font-size=\"15\" "
+            "        y=\"40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 \">"
+            "        Lo rem اللغة العربية المعيارية الحديثة ip sum"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard("text_multiple_absolute_offsets_arabic", QSize(530, 70), 72.0);
+}
+
+void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
+{
+    /**
+     * According to the standard, **relative** offsets must not define a new
+     * text chunk, therefore, the arabic text must be written in native rtl order,
+     * even though the individual letters are split.
+     */
+
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+            "    <text id=\"testRect\" x=\"10\" y=\"40\""
+            "        font-family=\"Verdana\" font-size=\"15\" "
+            "        dy=\"0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0\">"
+            "        Lo rem اللغة العربية المعيارية الحديثة ip sum"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+
+    QEXPECT_FAIL("", "WARNING: in Krita relative offsets also define a new text chunk, that doesn't comply with SVG standard and must be fixed", Continue);
+    t.test_standard("text_multiple_relative_offsets_arabic", QSize(530, 70), 72.0);
+}
+
+
+
 
 QTEST_MAIN(TestSvgText)

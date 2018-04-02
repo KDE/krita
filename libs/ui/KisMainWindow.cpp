@@ -131,7 +131,7 @@
 #include "kis_paintop_box.h"
 #include "KisPart.h"
 #include "KisPrintJob.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_statusbar.h"
 #include "KisView.h"
@@ -283,7 +283,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     : KXmlGuiWindow()
     , d(new Private(this, uuid))
 {
-    auto rserver = KisResourceServerProvider::instance()->workspaceServer(false);
+    auto rserver = KisResourceServerProvider::instance()->workspaceServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
     d->workspacemodel = new KoResourceModel(adapter, this);
     connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
@@ -1531,26 +1531,28 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
 
 }
 
-bool KisMainWindow::restoreWorkspace(const QByteArray &state)
+bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 {
     QByteArray oldState = saveState();
     const bool showTitlebars = KisConfig().showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        dock->hide();
-        dock->titleBarWidget()->setVisible(showTitlebars);
-    }
+            dock->setProperty("Locked", false); // Unlock invisible dockers
+            dock->toggleViewAction()->setEnabled(true);
+            dock->hide();
+            dock->titleBarWidget()->setVisible(showTitlebars);
+        }
 
     bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
         Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-            if (dock->titleBarWidget()) {
-                dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+                if (dock->titleBarWidget()) {
+                    dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
+                }
             }
-        }
         return false;
     }
 
@@ -1560,6 +1562,17 @@ bool KisMainWindow::restoreWorkspace(const QByteArray &state)
             const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
             dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
         }
+    }
+
+    return success;
+}
+
+bool KisMainWindow::restoreWorkspace(KisWorkspaceResource *workspace)
+{
+    bool success = restoreWorkspaceState(workspace->dockerState());
+
+    if (activeKisView()) {
+        activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
     }
 
     return success;
@@ -1579,7 +1592,7 @@ QByteArray KisMainWindow::borrowWorkspace(KisMainWindow *other)
             KisMainWindow *borrower = KisPart::instance()->windowById(d->workspaceBorrowedBy);
             if (borrower) {
                 QByteArray originalLayout = borrower->borrowWorkspace(this);
-                borrower->restoreWorkspace(currentWorkspace);
+                borrower->restoreWorkspaceState(currentWorkspace);
 
                 d->workspaceBorrowedBy = other->id();
                 return originalLayout;
@@ -1596,8 +1609,8 @@ void KisMainWindow::swapWorkspaces(KisMainWindow *a, KisMainWindow *b)
     QByteArray workspaceA = a->borrowWorkspace(b);
     QByteArray workspaceB = b->borrowWorkspace(a);
 
-    a->restoreWorkspace(workspaceB);
-    b->restoreWorkspace(workspaceA);
+    a->restoreWorkspaceState(workspaceB);
+    b->restoreWorkspaceState(workspaceA);
 }
 
 KisViewManager *KisMainWindow::viewManager() const
@@ -2125,12 +2138,13 @@ void KisMainWindow::updateWindowMenu()
     QMenu *workspaceMenu = d->workspaceMenu->menu();
     workspaceMenu->clear();
 
-    auto workspaces = KisResourceServerProvider::instance()->workspaceServer(false)->resources();
+    auto workspaces = KisResourceServerProvider::instance()->workspaceServer()->resources();
     auto m_this = this;
     for (auto &w : workspaces) {
         auto action = workspaceMenu->addAction(w->name());
-        auto ds = w->dockerState();
-        connect(action, &QAction::triggered, this, [=]() { m_this->restoreWorkspace(ds); });
+        connect(action, &QAction::triggered, this, [=]() {
+            m_this->restoreWorkspace(w);
+        });
     }
     workspaceMenu->addSeparator();
     connect(workspaceMenu->addAction(i18nc("@action:inmenu", "&Import Workspace...")),
@@ -2348,7 +2362,7 @@ void KisMainWindow::showAboutApplication()
     dlg.exec();
 }
 
-QPointer<KisView>KisMainWindow::activeKisView()
+QPointer<KisView> KisMainWindow::activeKisView()
 {
     if (!d->mdiArea) return 0;
     QMdiSubWindow *activeSubWindow = d->mdiArea->activeSubWindow();
@@ -2568,8 +2582,6 @@ void KisMainWindow::initializeGeometry()
         move(x,y);
         setGeometry(geometry().x(), geometry().y(), w, h);
     }
-    restoreWorkspace(QByteArray::fromBase64(cfg.readEntry("State", QByteArray())));
-
     d->fullScreenMode->setChecked(isFullScreen());
 }
 

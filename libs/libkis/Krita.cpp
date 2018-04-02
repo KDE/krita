@@ -45,7 +45,7 @@
 #include <kis_filter_configuration.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>

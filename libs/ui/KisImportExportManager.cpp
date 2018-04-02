@@ -372,6 +372,10 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
 
         if (isAsync) {
             result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+
+            // we should explicitly report that the exporting has been initiated
+            result.setStatus(KisImportExportFilter::OK);
+
         } else if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Saving document..."), 0);
             result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
@@ -383,8 +387,6 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             KisConfig().setExportConfiguration(typeName, exportConfiguration);
         }
     }
-
-    result.setStatus(KisImportExportFilter::OK);
     return result;
 }
 
@@ -613,7 +615,9 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     if (status != KisImportExportFilter::OK) {
         file.cancelWriting();
     } else {
-        file.commit();
+        if (!file.commit()) {
+            status = KisImportExportFilter::CreationError;
+        }
     }
 
     return status;

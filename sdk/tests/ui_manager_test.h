@@ -24,7 +24,7 @@
 #include "ksharedconfig.h"
 #include <kis_filter_configuration.h>
 #include <resources/KoPattern.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_filter_strategy.h"
 #include "kis_selection_manager.h"

@@ -185,10 +185,15 @@ extern "C" int main(int argc, char **argv)
 #endif
     }
 
-    KLocalizedString::setApplicationDomain("krita");
 
-    // first create the application so we can create a pixmap
-    KisApplication app(key, argc, argv);
+    QString root;
+    {
+        // Create a temporary application to get the root
+        QCoreApplication app(argc, argv);
+        Q_UNUSED(app);
+        root = KoResourcePaths::getApplicationRoot();
+    }
+
 
 #ifdef Q_OS_LINUX
     {
@@ -197,22 +202,20 @@ extern "C" int main(int argc, char **argv)
             // We don't want to completely override the default
             originalXdgDataDirs = "/usr/local/share/:/usr/share/";
         }
-        qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share") + ":" + originalXdgDataDirs);
+        qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
     }
 #else
-    qputenv("XDG_DATA_DIRS", QFile::encodeName(KoResourcePaths::getApplicationRoot() + "share"));
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share"));
 #endif
 
     qDebug() << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
-    qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
-    qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
 
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
     {
         QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
         languageoverride.beginGroup(QStringLiteral("Language"));
-        QString language = languageoverride.value(qAppName(), "").toString();
+        QString language = languageoverride.value("krita", "").toString();
 
         qDebug() << "Override language:" << language;
 
@@ -222,11 +225,10 @@ extern "C" int main(int argc, char **argv)
             qputenv("LANG", language.split(":").first().toUtf8());
             QLocale locale(language.split(":").first());
             QLocale::setDefault(locale);
-            qDebug() << "Qt ui languages" << locale.uiLanguages();
         }
+#ifndef Q_OS_LINUX
         else {
             // And if there isn't one, check the one set by the system.
-            // XXX: This doesn't work, for some !@#$% reason.
             QLocale locale = QLocale::system();
             if (locale.name() != QStringLiteral("en")) {
                 qDebug() << "Setting Krita's language to:" << locale;
@@ -234,8 +236,18 @@ extern "C" int main(int argc, char **argv)
                 KLocalizedString::setLanguages(QStringList() << locale.name());
             }
         }
-
+#endif
     }
+
+    // first create the application so we can create a pixmap
+    KisApplication app(key, argc, argv);
+    KLocalizedString::setApplicationDomain("krita");
+
+    qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
+    qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
+    qDebug() << "Qt UI languages" << QLocale::system().uiLanguages() << qgetenv("LANG");
+
+
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());
     QString path = qgetenv("PATH");

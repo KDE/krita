@@ -97,7 +97,12 @@ void KisUpdateScheduler::setThreadsLimit(int value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->processingBlocked);
 
-    barrierLock();
+    /**
+     * Thread limit can be changed without the full-featured barrier
+     * lock, we can avoid waiting for all the jobs to complete. We
+     * should just ensure there is no more jobs in the updater context.
+     */
+    lock();
     m_d->updaterContext.lock();
     m_d->updaterContext.setThreadsLimit(value);
     m_d->updaterContext.unlock();

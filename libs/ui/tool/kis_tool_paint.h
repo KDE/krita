@@ -50,9 +50,6 @@ class KoCompositeOp;
 class KoCanvasBase;
 
 
-// wacom
-const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
-
 class KRITAUI_EXPORT KisToolPaint : public KisTool
 {
 
@@ -124,17 +121,6 @@ protected:
 
     void setupPaintAction(KisRecordedPaintAction* action) override;
 
-    qreal pressureToCurve(qreal pressure){
-        qreal p =  qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION);
-        if (p < 0) {
-            return m_pressureSamples.first();
-        }
-        else if (p < m_pressureSamples.size()) {
-            return m_pressureSamples.at(p);
-        }
-        return m_pressureSamples.last();
-    }
-
     enum NodePaintAbility {
         NONE,
         PAINT,
@@ -162,13 +148,9 @@ private Q_SLOTS:
 
     void slotColorPickingFinished(const KoColor &color);
 
-protected Q_SLOTS:
-    void updateTabletPressureSamples();
-
 protected:
     quint8 m_opacity;
     bool m_paintOutline;
-    QVector<qreal> m_pressureSamples;
     QPointF m_outlineDocPoint;
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;

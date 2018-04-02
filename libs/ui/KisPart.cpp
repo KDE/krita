@@ -64,7 +64,7 @@
 #include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_shape_controller.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"

@@ -600,7 +600,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
      *
      * table.cellAt(1, 0).row() // Will return 0.
      *
-     * In the code below, we rely on this behavior to determine wheather
+     * In the code below, we rely on this behavior to determine whether
      * a cell "vertically" ends in the current row, as those are the only
      * cells that should contribute to the row height.
      */
@@ -704,7 +704,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             if (!rowHasExactHeight) {
                 /*
                  * Now we know how much height this cell contributes to the row,
-                 * and can determine wheather the row height will grow.
+                 * and can determine whether the row height will grow.
                  */
                 if (d->collapsing) {
                     rowBottom = qMax(cellArea->bottom() + cellStyle.bottomPadding(), rowBottom);

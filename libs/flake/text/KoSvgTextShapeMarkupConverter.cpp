@@ -468,7 +468,25 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
     return mostCommonFormat;
 }
 
+qreal calcLineWidth(const QTextBlock &block)
+{
+    const QString blockText = block.text();
 
+    QTextLayout lineLayout;
+    lineLayout.setText(blockText);
+    lineLayout.setFont(block.charFormat().font());
+    lineLayout.setFormats(block.textFormats());
+    lineLayout.setTextOption(block.layout()->textOption());
+
+    lineLayout.beginLayout();
+    QTextLine fullLine = lineLayout.createLine();
+    if (!fullLine.isValid()) {
+        fullLine.setNumColumns(blockText.size());
+    }
+    lineLayout.endLayout();
+
+    return lineLayout.boundingRect().width();
+}
 
 bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
 {
@@ -480,7 +498,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
     svgWriter.setAutoFormatting(true);
 
 
-
+    qreal maxParagraphWidth = 0.0;
     QTextCharFormat mostCommonCharFormat;
     QTextBlockFormat mostCommonBlockFormat;
 
@@ -491,6 +509,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         QList<QTextFormat> allBlockFormats;
 
         while (block.isValid()) {
+            maxParagraphWidth = qMax(maxParagraphWidth, calcLineWidth(block));
+
             allBlockFormats.append(block.blockFormat());
             Q_FOREACH (const QTextLayout::FormatRange &range, block.textFormats()) {
                 QTextFormat format =  range.format;
@@ -534,6 +554,34 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         svgWriter.writeStartElement("tspan");
 
+        const QString text = block.text();
+
+        /**
+         * Mindblowing part: QTextEdit uses a hi-end algorithm for auto-estimation for the text
+         * directionality, so the user expects his text being saved to SVG with the same
+         * directionality. Just emulate behavior of direction="auto", which is not supported by
+         * SVG 1.1
+         *
+         * BUG: 392064
+         */
+
+        bool isRightToLeft = false;
+        for (int i = 0; i < text.size(); i++) {
+            const QChar ch = text[i];
+            if (ch.direction() == QChar::DirR || ch.direction() == QChar::DirAL) {
+                isRightToLeft = true;
+                break;
+            } else if (ch.direction() == QChar::DirL) {
+                break;
+            }
+        }
+
+
+        if (isRightToLeft) {
+            svgWriter.writeAttribute("direction", "rtl");
+            svgWriter.writeAttribute("unicode-bidi", "embed");
+        }
+
         {
             const QString blockStyleString = style(blockCharFormatDiff, blockFormatDiff);
             if (!blockStyleString.isEmpty()) {
@@ -541,12 +589,35 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
             }
         }
 
+        /**
+         * The alignment rule will be inverted while rendering the text in the text shape
+         * (accordign to the standard the alignment is defined not by "left" or "right",
+         * but by "start" and "end", which inverts for rtl text)
+         */
+        Qt::Alignment blockAlignment = block.blockFormat().alignment();
+        if (isRightToLeft) {
+            if (blockAlignment & Qt::AlignLeft) {
+                blockAlignment &= ~Qt::AlignLeft;
+                blockAlignment |= Qt::AlignRight;
+            } else if (blockAlignment & Qt::AlignRight) {
+                blockAlignment &= ~Qt::AlignRight;
+                blockAlignment |= Qt::AlignLeft;
+            }
+        }
+
+        if (blockAlignment & Qt::AlignHCenter) {
+            svgWriter.writeAttribute("x", KisDomUtils::toString(0.5 * maxParagraphWidth) + "pt");
+        } else if (blockAlignment & Qt::AlignRight) {
+            svgWriter.writeAttribute("x", KisDomUtils::toString(maxParagraphWidth) + "pt");
+        } else {
+            svgWriter.writeAttribute("x", "0");
+        }
+
         if (block.blockNumber() > 0) {
             const qreal lineHeightPt =
                 line.ascent() - prevBlockAscent +
                 (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
 
-            svgWriter.writeAttribute("x", "0");
             svgWriter.writeAttribute("dy", KisDomUtils::toString(lineHeightPt) + "pt");
         }
 
@@ -567,8 +638,6 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         prevBlockAscent = line.ascent();
         prevBlockDescent = line.descent();
-
-        QString text = block.text();
 
 
         if (formats.size()>1) {

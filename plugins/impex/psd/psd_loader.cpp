@@ -41,7 +41,7 @@
 
 #include <kis_asl_layer_style_serializer.h>
 #include <kis_psd_layer_style_resource.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 
 #include "psd.h"
 #include "psd_header.h"

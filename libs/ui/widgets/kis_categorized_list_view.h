@@ -33,7 +33,7 @@ public:
     void setModel(QAbstractItemModel* model) override;
 
     QSize sizeHint() const override;
-
+    void setCompositeBoxControl(bool value);
 
 Q_SIGNALS:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
@@ -50,10 +50,9 @@ protected Q_SLOTS:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 
-
-
 private:
-    void updateRows(int begin, int end);
+    void updateRows(int begin, int end);    
+    bool isCompositeBoxControl = false;
 };
 
 #endif // KIS_CATEGORIZED_LIST_VIEW_H_

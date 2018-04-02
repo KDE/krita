@@ -30,7 +30,7 @@
 #include "kis_popup_palette.h"
 #include "kis_paintop_box.h"
 #include "KisViewManager.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_min_heap.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -171,7 +171,7 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     m_maxPresets = cfg.favoritePresets();
     m_colorList = new ColorDataList();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
 }
 
@@ -323,7 +323,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
 {
 
     m_favoritePresetsList.clear();
-    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QStringList presetFilenames = rServer->searchTag(m_currentTag);
     for(int i = 0; i < qMin(m_maxPresets, presetFilenames.size()); i++) {
         KisPaintOpPresetSP pr = rServer->resourceByFilename(presetFilenames.at(i));
@@ -344,7 +344,7 @@ void KisFavoriteResourceManager::init()
 {
     if (!m_initialized) {
         m_initialized = true;
-        KisResourceServerProvider::instance()->paintOpPresetServer(true);
+        KisResourceServerProvider::instance()->paintOpPresetServer();
         m_currentTag = KisConfig().readEntry<QString>("favoritePresetsTag", "★ My Favorites");
 
         updateFavoritePresets();

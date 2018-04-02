@@ -38,13 +38,12 @@ FilterResourceServerProvider::FilterResourceServerProvider()
     if (!QFileInfo(m_filterEffectServer->saveLocation()).exists()) {
         QDir().mkpath(m_filterEffectServer->saveLocation());
     }
-    m_filterEffectThread = new KoResourceLoaderThread(m_filterEffectServer);
-    m_filterEffectThread->start();
+    m_filterEffectServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_filterEffectServer->fileNames(), m_filterEffectServer->blackListedFiles()));
+    m_filterEffectServer->loadTags();
 }
 
 FilterResourceServerProvider::~FilterResourceServerProvider()
 {
-    delete m_filterEffectThread;
     delete m_filterEffectServer;
 }
 
@@ -58,6 +57,5 @@ FilterResourceServerProvider *FilterResourceServerProvider::instance()
 
 KoResourceServer<FilterEffectResource> *FilterResourceServerProvider::filterEffectServer()
 {
-    m_filterEffectThread->barrier();
     return m_filterEffectServer;
 }

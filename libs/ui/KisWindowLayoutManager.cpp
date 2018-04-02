@@ -29,7 +29,7 @@
 #include <KisMainWindow.h>
 #include <KisPart.h>
 #include <kis_dom_utils.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <KisSessionResource.h>
 
 Q_GLOBAL_STATIC(KisWindowLayoutManager, s_instance)
@@ -237,7 +237,7 @@ void KisWindowLayoutManager::slotScreensChanged()
 
     Q_FOREACH(const DisplayLayout *displayLayout, d->displayLayouts) {
         if (displayLayout->matches(screens)) {
-            KoResourceServer<KisWindowLayoutResource> *windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer(false);
+            KoResourceServer<KisWindowLayoutResource> *windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer();
             KisWindowLayoutResource *layout = windowLayoutServer->resourceByName(displayLayout->preferredWindowLayout);
 
             if (layout) {

@@ -192,7 +192,7 @@ KisNode::KisNode(const KisNode & rhs)
 
     // HACK ALERT: we create opacity channel in KisBaseNode, but we cannot
     //             initialize its node from there! So workaround it here!
-    QMap<QString, KisKeyframeChannel*> channels = rhs.keyframeChannels();
+    QMap<QString, KisKeyframeChannel*> channels = keyframeChannels();
     for (auto it = channels.begin(); it != channels.end(); ++it) {
         it.value()->setNode(this);
     }

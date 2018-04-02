@@ -38,7 +38,6 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_config.h>
-#include <kis_cursor_override_hijacker.h>
 
 #include "video_saver.h"
 #include "video_export_options_dialog.h"

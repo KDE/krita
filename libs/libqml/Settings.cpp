@@ -24,7 +24,7 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kis_paintop_preset.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 
 #include "Theme.h"
 #include "PropertyContainer.h"

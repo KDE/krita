@@ -46,7 +46,7 @@ class QDockWidget;
 class KisView;
 class KisViewManager;
 class KoCanvasController;
-
+class KisWorkspaceResource;
 
 /**
  * @brief Main window for Krita
@@ -154,7 +154,8 @@ public:
      * @param state the saved state
      * @return TRUE on success
      */
-    bool restoreWorkspace(const QByteArray &state);
+    bool restoreWorkspace(KisWorkspaceResource *workspace);
+    bool restoreWorkspaceState(const QByteArray &state);
 
     static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);
 
@@ -435,7 +436,7 @@ private:
 
     void saveWindowSettings();
 
-    QPointer<KisView>activeKisView();
+    QPointer<KisView> activeKisView();
 
     void applyDefaultSettings(QPrinter &printer);
 

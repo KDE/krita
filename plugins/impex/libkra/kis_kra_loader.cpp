@@ -65,7 +65,7 @@
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
 #include <kis_psd_layer_style_resource.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_keyframe_channel.h"
 #include <kis_filter_configuration.h>
 #include "KisReferenceImagesLayer.h"
@@ -793,8 +793,6 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
     QString basePath = info.absolutePath();
 
     QString fullPath = QDir(basePath).filePath(QDir::cleanPath(filename));
-    // Entering the event loop to show the messagebox will delete the image, so up the ref by one
-    image->ref();
     if (!QFileInfo(fullPath).exists()) {
 
         qApp->setOverrideCursor(Qt::ArrowCursor);

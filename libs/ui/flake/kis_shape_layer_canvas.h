@@ -47,6 +47,10 @@ public:
     void prepareForDestroying();
     virtual void forceRepaint() = 0;
 
+    bool hasChangedWhileBeingInvisible();
+    virtual void rerenderAfterBeingInvisible() = 0;
+    virtual void resetCache() = 0;
+
     KoShapeManager *shapeManager() const override;
     KoViewConverter *viewConverter() const override;
 
@@ -66,6 +70,7 @@ protected:
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     bool m_isDestroying = false;
+    bool m_hasChangedWhileBeingInvisible = false;
 };
 
 /**
@@ -92,6 +97,9 @@ public:
     void updateCanvas(const QRectF& rc) override;
     void updateCanvas(const QVector<QRectF> &region);
     void forceRepaint() override;
+
+    void resetCache() override;
+    void rerenderAfterBeingInvisible() override;
 
 private Q_SLOTS:
     friend class KisRepaintShapeLayerLayerJob;

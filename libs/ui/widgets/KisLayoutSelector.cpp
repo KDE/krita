@@ -17,7 +17,7 @@
  */
 
 #include <KisWindowLayoutResource.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <KisWindowLayoutManager.h>
 #include "KisLayoutSelector.h"
 #include "KisSessionResource.h"
@@ -38,8 +38,8 @@ KisLayoutSelector::KisLayoutSelector(QWidget *parent)
     : QComboBox(parent)
     , d(new Private)
 {
-    d->windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer(false);
-    d->sessionServer = KisResourceServerProvider::instance()->sessionServer(false);
+    d->windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer();
+    d->sessionServer = KisResourceServerProvider::instance()->sessionServer();
 
     connect(this, SIGNAL(activated(int)), this, SLOT(slotItemChanged(int)));
 

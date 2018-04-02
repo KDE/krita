@@ -193,7 +193,7 @@ void KisWindowLayoutResource::applyLayout()
         KIS_SAFE_ASSERT_RECOVER_BREAK(mainWindow);
 
         mainWindow->restoreGeometry(window.geometry);
-        mainWindow->restoreWorkspace(window.windowState);
+        mainWindow->restoreWorkspaceState(window.windowState);
     }
 
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);

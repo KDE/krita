@@ -136,7 +136,8 @@ set(kritaui_LIB_SRCS
     kis_popup_palette.cpp
     kis_png_converter.cpp
     kis_preference_set_registry.cpp
-    kis_resource_server_provider.cpp
+    KisResourceServerProvider.cpp
+    KisResourceBundleServerProvider.cpp
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc

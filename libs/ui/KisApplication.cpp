@@ -84,7 +84,7 @@
 #include <kis_debug.h>
 #include "kis_action_registry.h"
 #include <kis_brush_server.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <KoResourceServerProvider.h>
 #include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
@@ -232,6 +232,7 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
+//    qDebug() << "addResourceTypes();";
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
@@ -277,6 +278,7 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tags/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/asl/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/brushes/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gradients/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/paintoppresets/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/palettes/");
@@ -297,41 +299,46 @@ void KisApplication::addResourceTypes()
 
 void KisApplication::loadResources()
 {
-    setSplashScreenLoadingText(i18n("Loading Gradients..."));
-    processEvents();
-    KoResourceServerProvider::instance()->gradientServer(true);
+//    qDebug() << "loadResources();";
 
-
-    // Load base resources
-    setSplashScreenLoadingText(i18n("Loading Patterns..."));
+    setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
-    KoResourceServerProvider::instance()->patternServer(true);
+    KoResourceServerProvider::instance();
 
-    setSplashScreenLoadingText(i18n("Loading Palettes..."));
+    setSplashScreenLoadingText(i18n("Loading Brush Presets..."));
     processEvents();
-    KoResourceServerProvider::instance()->paletteServer(false);
+    KisResourceServerProvider::instance();
 
     setSplashScreenLoadingText(i18n("Loading Brushes..."));
     processEvents();
-    KisBrushServer::instance()->brushServer(true);
+    KisBrushServer::instance()->brushServer();
 
-    // load paintop presets
-    setSplashScreenLoadingText(i18n("Loading Paint Operations..."));
+    setSplashScreenLoadingText(i18n("Loading Bundles..."));
     processEvents();
-    KisResourceServerProvider::instance()->paintOpPresetServer(true);
+    KisResourceBundleServerProvider::instance();
+}
 
-    // load symbols
-    setSplashScreenLoadingText(i18n("Loading SVG Symbol Collections..."));
-    processEvents();
-    KoResourceServerProvider::instance()->svgSymbolCollectionServer(true);
+void KisApplication::loadResourceTags()
+{
+//    qDebug() << "loadResourceTags()";
 
-    setSplashScreenLoadingText(i18n("Loading Resource Bundles..."));
-    processEvents();
-    KisResourceServerProvider::instance()->resourceBundleServer();
+    KoResourceServerProvider::instance()->patternServer()->loadTags();
+    KoResourceServerProvider::instance()->gradientServer()->loadTags();
+    KoResourceServerProvider::instance()->paletteServer()->loadTags();
+    KoResourceServerProvider::instance()->svgSymbolCollectionServer()->loadTags();
+    KisBrushServer::instance()->brushServer()->loadTags();
+    KisResourceServerProvider::instance()->workspaceServer()->loadTags();
+    KisResourceServerProvider::instance()->layerStyleCollectionServer()->loadTags();
+    KisResourceBundleServerProvider::instance()->resourceBundleServer()->loadTags();
+    KisResourceServerProvider::instance()->paintOpPresetServer()->loadTags();
+
+    KisResourceServerProvider::instance()->paintOpPresetServer()->clearOldSystemTags();
 }
 
 void KisApplication::loadPlugins()
 {
+//    qDebug() << "loadPlugins();";
+
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
 
@@ -340,10 +347,15 @@ void KisApplication::loadPlugins()
     KisGeneratorRegistry::instance();
     KisPaintOpRegistry::instance();
     KoColorSpaceRegistry::instance();
+}
 
+void KisApplication::loadGuiPlugins()
+{
+//    qDebug() << "loadGuiPlugins();";
     // Load the krita-specific tools
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
     processEvents();
+//    qDebug() << "loading tools";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
@@ -351,15 +363,16 @@ void KisApplication::loadPlugins()
     // Load dockers
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
     processEvents();
+//    qDebug() << "loading dockers";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();
+//    qDebug() << "loading exiv2";
     KisExiv2::initialize();
 }
-
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
@@ -430,11 +443,17 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     addResourceTypes();
 
-    // Load all resources and tags before the plugins do that
-    loadResources();
-
     // Load the plugins
     loadPlugins();
+
+    // Load all resources
+    loadResources();
+
+    // Load all the tags
+    loadResourceTags();
+
+    // Load the gui plugins
+    loadGuiPlugins();
 
     KisPart *kisPart = KisPart::instance();
     if (needsMainWindow) {
@@ -478,7 +497,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
                 KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
                 if (workspace) {
-                    m_mainWindow->restoreWorkspace(workspace->dockerState());
+                    m_mainWindow->restoreWorkspace(workspace);
                 }
             }
 

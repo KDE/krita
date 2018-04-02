@@ -863,6 +863,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
         <item>
          <widget class="QPushButton" name="paintPresetIcon">
+          <property name="toolTip">
+           <string>Fill area with brush preset icon</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -870,6 +873,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="fillLayer">
+          <property name="toolTip">
+           <string>Fill area with current image</string>
+          </property>
           <property name="text">
            <string/>
           </property>

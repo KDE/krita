@@ -78,6 +78,13 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     QWidget *widget = new QWidget(d->menu);
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(widget);
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    KoColorSet* defaultColorSet = rServer->resourceByName("Default");
+    if (defaultColorSet) {
+        d->colorSetWidget->setColorSet(defaultColorSet);
+    } else {
+        d->colorSetWidget->setColorSet(rServer->resources().first());
+    }
 
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup
@@ -239,7 +246,7 @@ void KoColorPopupAction::opacityWasChanged( int opacity )
 void KoColorPopupAction::slotTriggered(bool)
 {
     if (d->firstTime) {
-        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer(false);
+        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
         QList<KoColorSet*> palettes = srv->resources();
         if (!palettes.empty()) {
             d->colorSetWidget->setColorSet(palettes.first());

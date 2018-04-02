@@ -232,8 +232,10 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
                     int subChunkLength = 1;
 
                     for (int j = i + 1; j < transforms.size(); j++) {
-                        if (transforms[j] == baseTransform) {
+                        if (transforms[j].isNull()) {
                             subChunkLength++;
+                        } else {
+                            break;
                         }
                     }
 

@@ -23,6 +23,7 @@
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QLayout>
+#include <QButtonGroup>
 
 #include <kis_icon.h>
 #include "kis_types.h"

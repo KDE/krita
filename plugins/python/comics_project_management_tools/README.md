@@ -210,7 +210,7 @@ Things I still want to do:
 * clean up path relativeness. (Not sure how much better this can be done)
 * Make label removal just a list? (unsure)
 * PNG and JPEG export settings.
-* maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question. [partialy done, epub still needs this]
+* maybe use python minidom for acbf(or export in general), because then we can create a prettier xml file, which is necessary for helping people edit the files in question. [partially done, epub still needs this]
 
 ACBF list:
 
@@ -224,4 +224,4 @@ ACBF list:
             4. have acbf_textclass read from the desc.
     - Jump: proly not gonna support this.
     - text url anchors: only used for references.
-    - Font embedding: spec is super vague about this.
+    - Font embedding: spec is super vague about this. (Not possible with QT)

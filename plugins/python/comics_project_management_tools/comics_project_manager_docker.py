@@ -30,7 +30,7 @@ from math import floor
 import xml.etree.ElementTree as ET
 from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
@@ -219,6 +219,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.comicPageList.setDragEnabled(True)
         self.comicPageList.setDragDropMode(QAbstractItemView.InternalMove)
+        self.comicPageList.setDefaultDropAction(Qt.MoveAction)
         self.comicPageList.setAcceptDrops(True)
         self.comicPageList.setItemDelegate(comic_page_delegate())
         self.pagesModel = QStandardItemModel()
@@ -783,6 +784,7 @@ class comics_project_manager_docker(DockWidget):
         exportSuccess = exporter.export()
         if exportSuccess:
             print("CPMT: Export success! The files have been written to the export folder!")
+            QMessageBox.information(self, "Export success!", "The files have been written to the export folder!", QMessageBox.Ok)
 
     """
     Calls up the comics project setup wizard so users can create a new json file with the basic information.
@@ -905,6 +907,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
         metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
+        QMessageBox.information(self, i18n("Scraping success!"), i18n("POT file has been written to: ")+fullTranslationPath, QMessageBox.Ok)
     """
     This is required by the dockwidget class, otherwise unused.
     """

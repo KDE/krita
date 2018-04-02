@@ -764,7 +764,7 @@ void KisConfig::setPixelGridColor(const QColor & v) const
 
 qreal KisConfig::getPixelGridDrawingThreshold(bool defaultValue) const
 {
-    qreal border = 8.0f;
+    qreal border = 24.0f;
     return (defaultValue ? border : m_cfg.readEntry("pixelGridDrawingThreshold", border));
 }
 

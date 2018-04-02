@@ -29,10 +29,10 @@
 K_PLUGIN_FACTORY_WITH_JSON(KritaPyQtPluginFactory, "kritapykrita.json", registerPlugin<KritaPyQtPlugin>();)
 
 KritaPyQtPlugin::KritaPyQtPlugin(QObject *parent, const QVariantList &)
-    : KisActionPlugin(parent)
+    : QObject(parent)
     , m_autoReload(false)
 {
-    qDebug() << "Loading Python plugin";
+    dbgScript << "Loading Python plugin";
 
     PyKrita::InitResult initResult = PyKrita::initialize();
     switch (initResult) {

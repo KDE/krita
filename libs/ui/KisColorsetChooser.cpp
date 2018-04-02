@@ -34,7 +34,7 @@
 #include <resources/KoColorSet.h>
 
 #include <resources/KoPattern.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "KisViewManager.h"
 #include <QGridLayout>
 #include <QLabel>
@@ -81,13 +81,13 @@ void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
         QRect rect(option.rect.x() + i*size, option.rect.y() + option.rect.height() - size, size, size);
         painter->fillRect(rect, colorSet->getColorGlobal(i).color.toQColor());
     }
-    
+
     painter->restore();
 }
 
 KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
 {
-    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoColorSet>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this);
     m_itemChooser->setItemDelegate(new ColorSetDelegate(this));
@@ -102,7 +102,7 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
                                          cfg.kineticScrollingSensitivity(),
                                          cfg.kineticScrollingScrollbar());
-    
+
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
 

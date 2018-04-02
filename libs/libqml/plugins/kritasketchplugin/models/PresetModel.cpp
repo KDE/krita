@@ -19,7 +19,7 @@
 #include "PresetModel.h"
 
 #include <KoResourceServerAdapter.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_canvas2.h>

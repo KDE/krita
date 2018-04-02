@@ -21,8 +21,9 @@ along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
 A dialog for editing the exporter settings.
 """
 
+from enum import IntEnum
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog, QStyledItemDelegate
 from PyQt5.QtCore import Qt, QUuid
 from krita import *
 
@@ -174,6 +175,24 @@ class labelSelector(QComboBox):
             item = self.itemModel.itemFromIndex(index)
             item.setCheckState(True)
 
+"""
+Little Enum to keep track of where in the item we add styles.
+"""
+class styleEnum(IntEnum):
+    FONT = Qt.UserRole + 1
+    FONTLIST = Qt.UserRole + 2
+    FONTGENERIC = Qt.UserRole + 3
+    BOLD = Qt.UserRole + 4
+    ITALIC = Qt.UserRole + 5
+"""
+A simple delegate to allows editing fonts with a QFontComboBox
+"""
+class font_list_delegate(QStyledItemDelegate):
+    def __init__(self, parent=None):
+        super(QStyledItemDelegate, self).__init__(parent)
+    def createEditor(self, parent, option, index):
+        editor = QFontComboBox(parent)
+        return editor
 
 """
 The comic export settings dialog will allow configuring the export.
@@ -244,9 +263,9 @@ class comic_export_setting_dialog(QDialog):
         self.cmbLabelsRemove = labelSelector()
         formLayers.addRow(i18n("Label for removal:"), self.cmbLabelsRemove)
         self.ln_text_layer_name = QLineEdit()
-        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
+        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma separated."))
         self.ln_panel_layer_name = QLineEdit()
-        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma seperated."))
+        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma separated."))
         formLayers.addRow(i18n("Text Layer Key:"), self.ln_text_layer_name)
         formLayers.addRow(i18n("Panel Layer Key:"), self.ln_panel_layer_name)
 
@@ -330,16 +349,30 @@ class comic_export_setting_dialog(QDialog):
         ACBFStyle.layout().addWidget(self.ACBFStyleClass)
         ACBFStyleEdit = QWidget()
         ACBFStyleEditVB = QVBoxLayout(ACBFStyleEdit)
-        self.ACBFfontCombo = QFontComboBox()
+        self.ACBFuseFont = QCheckBox(i18n("Use Font"))
+        self.ACBFFontList = QListView()
+        self.ACBFFontList.setItemDelegate(font_list_delegate())
+        self.ACBFuseFont.toggled.connect(self.font_slot_enable_font_view)
+        self.ACBFFontListModel = QStandardItemModel()
+        self.ACBFFontListModel.rowsRemoved.connect(self.slot_font_current_style)
+        self.ACBFFontListModel.itemChanged.connect(self.slot_font_current_style)
+        self.btnAcbfAddFont = QPushButton()
+        self.btnAcbfAddFont.setIcon(Application.icon("list-add"))
+        self.btnAcbfAddFont.clicked.connect(self.font_slot_add_font)
+        self.btn_acbf_remove_font = QPushButton()
+        self.btn_acbf_remove_font.setIcon(Application.icon("edit-delete"))
+        self.btn_acbf_remove_font.clicked.connect(self.font_slot_remove_font)
+        self.ACBFFontList.setModel(self.ACBFFontListModel)
         self.ACBFdefaultFont = QComboBox()
         self.ACBFdefaultFont.addItems(["sans-serif", "serif", "monospace", "cursive", "fantasy"])
+        acbfFontButtons = QHBoxLayout()
+        acbfFontButtons.addWidget(self.btnAcbfAddFont)
+        acbfFontButtons.addWidget(self.btn_acbf_remove_font)
         self.ACBFBold = QCheckBox(i18n("Bold"))
         self.ACBFItal = QCheckBox(i18n("Italic"))
         self.ACBFStyleClass.clicked.connect(self.slot_set_style)
         self.ACBFStyleClass.selectionModel().selectionChanged.connect(self.slot_set_style)
         self.ACBFStylesModel.itemChanged.connect(self.slot_set_style)
-        self.ACBFfontCombo.currentFontChanged.connect(self.slot_font_current_style)
-        self.ACBFfontCombo.setEditable(False)
         self.ACBFBold.toggled.connect(self.slot_font_current_style)
         self.ACBFItal.toggled.connect(self.slot_font_current_style)
         colorWidget = QGroupBox(self)
@@ -354,7 +387,9 @@ class comic_export_setting_dialog(QDialog):
         colorWidget.layout().addWidget(self.btn_acbfRegColor)
         colorWidget.layout().addWidget(self.btn_acbfInvColor)
         ACBFStyleEditVB.addWidget(colorWidget)
-        ACBFStyleEditVB.addWidget(self.ACBFfontCombo)
+        ACBFStyleEditVB.addWidget(self.ACBFuseFont)
+        ACBFStyleEditVB.addWidget(self.ACBFFontList)
+        ACBFStyleEditVB.addLayout(acbfFontButtons)
         ACBFStyleEditVB.addWidget(self.ACBFdefaultFont)
         ACBFStyleEditVB.addWidget(self.ACBFBold)
         ACBFStyleEditVB.addWidget(self.ACBFItal)
@@ -449,48 +484,94 @@ class comic_export_setting_dialog(QDialog):
             logicalI = self.ACBFauthorTable.verticalHeader().logicalIndex(i)
             headerLabelList[logicalI] = str(i + 1)
         self.ACBFauthorModel.setVerticalHeaderLabels(headerLabelList)
-        
+    """
+    Set the style item to the gui item's style.
+    """
+    
     def slot_set_style(self):
         index = self.ACBFStyleClass.currentIndex()
         if index.isValid():
             item = self.ACBFStylesModel.item(index.row())
-            font = QFont()
-            font.setFamily(str(item.data(role=Qt.UserRole+1)))
-            self.ACBFfontCombo.setCurrentFont(font)
-            self.ACBFdefaultFont.setCurrentText(str(item.data(role=Qt.UserRole+2)))
-            bold = item.data(role=Qt.UserRole+3)
+            fontUsed = item.data(role=styleEnum.FONT)
+            if fontUsed is not None:
+                self.ACBFuseFont.setChecked(fontUsed)
+            else:
+                self.ACBFuseFont.setChecked(False)
+            self.font_slot_enable_font_view()
+            fontList = item.data(role=styleEnum.FONTLIST)
+            self.ACBFFontListModel.clear()
+            for font in fontList:
+                NewItem = QStandardItem(font)
+                NewItem.setEditable(True)
+                self.ACBFFontListModel.appendRow(NewItem)
+            self.ACBFdefaultFont.setCurrentText(str(item.data(role=styleEnum.FONTGENERIC)))
+            bold = item.data(role=styleEnum.BOLD)
             if bold is not None:
                 self.ACBFBold.setChecked(bold)
             else:
                 self.ACBFBold.setChecked(False)
-            italic = item.data(role=Qt.UserRole+4)
+            italic = item.data(role=styleEnum.ITALIC)
             if italic is not None:
                 self.ACBFItal.setChecked(italic)
             else:
                 self.ACBFItal.setChecked(False)
-        
+    
+    """
+    Set the gui items to the currently selected style.
+    """
+    
     def slot_font_current_style(self):
         index = self.ACBFStyleClass.currentIndex()
         if index.isValid():
             item = self.ACBFStylesModel.item(index.row())
-            font = QFont(self.ACBFfontCombo.currentFont())
-            item.setData(font.family(), role=Qt.UserRole+1)
-            item.setData(self.ACBFdefaultFont.currentText(), role=Qt.UserRole+2)
-            item.setData(self.ACBFBold.isChecked(), role=Qt.UserRole+3)
-            item.setData(self.ACBFItal.isChecked(), role=Qt.UserRole+4)
+            fontList = []
+            for row in range(self.ACBFFontListModel.rowCount()):
+                font = self.ACBFFontListModel.item(row)
+                fontList.append(font.text())
+            item.setData(self.ACBFuseFont.isChecked(), role=styleEnum.FONT)
+            item.setData(fontList, role=styleEnum.FONTLIST)
+            item.setData(self.ACBFdefaultFont.currentText(), role=styleEnum.FONTGENERIC)
+            item.setData(self.ACBFBold.isChecked(), role=styleEnum.BOLD)
+            item.setData(self.ACBFItal.isChecked(), role=styleEnum.ITALIC)
             self.ACBFStylesModel.setItem(index.row(), item)
+    """
+    Change the regular color
+    """
     
     def slot_change_regular_color(self):
         if (self.regularColor.exec_() == QDialog.Accepted):
             square = QPixmap(32, 32)
             square.fill(self.regularColor.currentColor())
             self.btn_acbfRegColor.setIcon(QIcon(square))
+    """
+    change the inverted color
+    """
     
     def slot_change_inverted_color(self):
         if (self.invertedColor.exec_() == QDialog.Accepted):
             square = QPixmap(32, 32)
             square.fill(self.invertedColor.currentColor())
             self.btn_acbfInvColor.setIcon(QIcon(square))
+            
+    def font_slot_enable_font_view(self):
+        self.ACBFFontList.setEnabled(self.ACBFuseFont.isChecked())
+        self.btn_acbf_remove_font.setEnabled(self.ACBFuseFont.isChecked())
+        self.btnAcbfAddFont.setEnabled(self.ACBFuseFont.isChecked())
+        self.ACBFdefaultFont.setEnabled(self.ACBFuseFont.isChecked())
+        if self.ACBFFontListModel.rowCount() < 2:
+                self.btn_acbf_remove_font.setEnabled(False)
+        
+    def font_slot_add_font(self):
+        NewItem = QStandardItem(QFont().family())
+        NewItem.setEditable(True)
+        self.ACBFFontListModel.appendRow(NewItem)
+    
+    def font_slot_remove_font(self):
+        index  = self.ACBFFontList.currentIndex()
+        if index.isValid():
+            self.ACBFFontListModel.removeRow(index.row())
+            if self.ACBFFontListModel.rowCount() < 2:
+                self.btn_acbf_remove_font.setEnabled(False)
 
     """
     Load the UI values from the config dictionary given.
@@ -569,10 +650,22 @@ class comic_export_setting_dialog(QDialog):
                     style.setCheckState(Qt.Checked)
                 else:
                     style.setCheckState(Qt.Unchecked)
-                style.setData(keyDict.get("font", QFont().family()), role=Qt.UserRole+1)
-                style.setData(keyDict.get("genericfont", "sans-serif"), role=Qt.UserRole+2)
-                style.setData(keyDict.get("bold", False), role=Qt.UserRole+3)
-                style.setData(keyDict.get("ital", False), role=Qt.UserRole+4)
+                fontOn = False
+                if "font" in keyDict.keys() or "genericfont" in keyDict.keys():
+                    fontOn = True
+                style.setData(fontOn, role=styleEnum.FONT)
+                if "font" in keyDict:
+                    fontlist = keyDict["font"]
+                    if isinstance(fontlist, list):
+                        font = keyDict.get("font", QFont().family())
+                        style.setData(font, role=styleEnum.FONTLIST)
+                    else:
+                        style.setData([fontlist], role=styleEnum.FONTLIST)
+                else:
+                   style.setData([QFont().family()], role=styleEnum.FONTLIST)
+                style.setData(keyDict.get("genericfont", "sans-serif"), role=styleEnum.FONTGENERIC)
+                style.setData(keyDict.get("bold", False), role=styleEnum.BOLD)
+                style.setData(keyDict.get("ital", False), role=styleEnum.ITALIC)
                 self.ACBFStylesModel.appendRow(style)
             keyDict = styleDict.get("general", {})
             self.regularColor.setCurrentColor(QColor(keyDict.get("color", "#000000")))
@@ -588,10 +681,11 @@ class comic_export_setting_dialog(QDialog):
                 style = QStandardItem(key.title())
                 style.setCheckable(True)
                 style.setCheckState(Qt.Unchecked)
-                style.setData(QFont().family(), role=Qt.UserRole+1)
-                style.setData("sans-serif", role=Qt.UserRole+2)
-                style.setData(False, role=Qt.UserRole+3) #Bold
-                style.setData(False, role=Qt.UserRole+4) #Italic
+                style.setData(False, role=styleEnum.FONT)
+                style.setData(QFont().family(), role=styleEnum.FONTLIST)
+                style.setData("sans-serif", role=styleEnum.FONTGENERIC)
+                style.setData(False, role=styleEnum.BOLD) #Bold
+                style.setData(False, role=styleEnum.ITALIC) #Italic
                 self.ACBFStylesModel.appendRow(style)
         self.CBZgroupResize.setEnabled(self.CBZactive.isChecked())
         self.lnTranslatorHeader.setText(config.get("translatorHeader", "Translator's Notes"))
@@ -647,16 +741,17 @@ class comic_export_setting_dialog(QDialog):
             if entry.checkState() == Qt.Checked:
                 key = entry.text().lower()
                 style = {}
-                font = entry.data(role=Qt.UserRole+1)
-                if font is not None:
-                    style["font"] = font
-                genericfont = entry.data(role=Qt.UserRole+2)
-                if font is not None:
-                    style["genericfont"] = genericfont
-                bold = entry.data(role=Qt.UserRole+3)
+                if entry.data(role=styleEnum.FONT):
+                    font = entry.data(role=styleEnum.FONTLIST)
+                    if font is not None:
+                        style["font"] = font
+                    genericfont = entry.data(role=styleEnum.FONTGENERIC)
+                    if font is not None:
+                        style["genericfont"] = genericfont
+                bold = entry.data(role=styleEnum.BOLD)
                 if bold is not None:
                     style["bold"] = bold
-                italic = entry.data(role=Qt.UserRole+4)
+                italic = entry.data(role=styleEnum.ITALIC)
                 if italic is not None:
                     style["ital"] = italic
                 acbfStylesDict[key] = style

@@ -24,13 +24,14 @@
 #include <QCompleter>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QSlider>
 
 #include <resources/KoResource.h>
 #include <KoResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kis_config.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_icon.h>
 #include <brushengine/kis_paintop_settings.h>

@@ -67,6 +67,8 @@ public:
         m_layer->signalUpdate(m_layer->extent());
     }
 
+    void rerenderAfterBeingInvisible() override {}
+    void resetCache() override {}
     void setImage(KisImageWSP image) override {}
 
 private:

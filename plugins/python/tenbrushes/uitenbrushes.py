@@ -34,8 +34,8 @@ class UITenBrushes(object):
 
         self.presetChooser = krita.PresetChooser(self.mainDialog)
 
-    def initialize(self, tentbrushes):
-        self.tentbrushes = tentbrushes
+    def initialize(self, tenbrushes):
+        self.tenbrushes = tenbrushes
 
         self.loadButtons()
 
@@ -43,14 +43,14 @@ class UITenBrushes(object):
         self.vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
         self.vbox.addWidget(self.presetChooser)
         self.vbox.addWidget(self.buttonBox)
-        
+
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()
         self.mainDialog.exec_()
 
     def loadButtons(self):
-        self.tentbrushes.buttons = []
+        self.tenbrushes.buttons = []
 
         allPresets = Application.resources("preset")
 
@@ -61,16 +61,16 @@ class UITenBrushes(object):
             button.clicked.connect(button.selectPreset)
             button.presetChooser = self.presetChooser
 
-            if self.tentbrushes.actions[index] and self.tentbrushes.actions[index].preset and self.tentbrushes.actions[index].preset in allPresets:
-                p = allPresets[self.tentbrushes.actions[index].preset]
+            if self.tenbrushes.actions[index] and self.tenbrushes.actions[index].preset and self.tenbrushes.actions[index].preset in allPresets:
+                p = allPresets[self.tenbrushes.actions[index].preset]
                 button.preset = p.name()
                 button.setIcon(QIcon(QPixmap.fromImage(p.image())))
 
             buttonLayout.addWidget(button)
-            
-            label = QLabel(self.tentbrushes.actions[index].shortcut())
+
+            label = QLabel(self.tenbrushes.actions[index].shortcut().toString())
             label.setAlignment(Qt.AlignHCenter)
             buttonLayout.addWidget(label)
 
             self.hbox.addLayout(buttonLayout)
-            self.tentbrushes.buttons.append(button)
+            self.tenbrushes.buttons.append(button)

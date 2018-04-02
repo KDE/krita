@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include <KisSessionResource.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
 #include <KisPart.h>
@@ -39,7 +39,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
 }
 
 void KisSessionManagerDialog::updateSessionList() {
-    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer(true);
+    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
 
     lstSessions->clear();
     Q_FOREACH(KisSessionResource *session, server->resources()) {
@@ -57,7 +57,7 @@ void KisSessionManagerDialog::slotNewSession()
 
     auto *session = new KisSessionResource(QString());
 
-    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer(false);
+    KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
     QString saveLocation = server->saveLocation();
     QFileInfo fileInfo(saveLocation + name + session->defaultFileExtension());
     int i = 1;
@@ -112,7 +112,7 @@ KisSessionResource *KisSessionManagerDialog::getSelectedSession() const
 {
     QListWidgetItem *item = lstSessions->currentItem();
     if (item) {
-        KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer(false);
+        KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
         return server->resourceByName(item->text());
     }
     return nullptr;
@@ -128,7 +128,7 @@ void KisSessionManagerDialog::slotDeleteSession()
         QString(i18n("Permanently delete session %1?", session->name())),
         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 
-        KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer(false);
+        KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
         server->removeResourceFromServer(session);
 
         QFile file(session->filename());

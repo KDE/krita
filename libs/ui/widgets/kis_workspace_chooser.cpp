@@ -35,7 +35,7 @@
 #include <KoDockWidgetTitleBar.h>
 #include <resources/KoResource.h>
 
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"
 #include <kis_canvas_resource_provider.h>
@@ -83,10 +83,10 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
 KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
 {
-    KoResourceServer<KisWorkspaceResource> * workspaceServer = KisResourceServerProvider::instance()->workspaceServer(false);
+    KoResourceServer<KisWorkspaceResource> * workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     QSharedPointer<KoAbstractResourceServerAdapter> workspaceAdapter(new KoResourceServerAdapter<KisWorkspaceResource>(workspaceServer));
 
-    KoResourceServer<KisWindowLayoutResource> * windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer(false);
+    KoResourceServer<KisWindowLayoutResource> * windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer();
     QSharedPointer<KoAbstractResourceServerAdapter> windowLayoutAdapter(new KoResourceServerAdapter<KisWindowLayoutResource>(windowLayoutServer));
 
     m_layout = new QGridLayout(this);
@@ -185,27 +185,8 @@ void KisWorkspaceChooser::workspaceSelected(KoResource *resource)
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-
-    QMap<QDockWidget *, bool> dockWidgetMap;
-    Q_FOREACH (QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
-        dockWidgetMap[docker] = docker->property("Locked").toBool();
-    }
-
     KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
-    mainWindow->restoreWorkspace(workspace->dockerState());
-    m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
-
-    Q_FOREACH (QDockWidget *docker, dockWidgetMap.keys()) {
-        if (docker->isVisible()) {
-            docker->setProperty("Locked", dockWidgetMap[docker]);
-            docker->updateGeometry();
-        }
-        else {
-            docker->setProperty("Locked", false); // Unlock invisible dockers
-            docker->toggleViewAction()->setEnabled(true);
-        }
-
-    }
+    mainWindow->restoreWorkspace(workspace);
 
 }
 

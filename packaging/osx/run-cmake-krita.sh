@@ -2,7 +2,7 @@ export MACOSX_DEPLOYMENT_TARGET=10.11
 export DEPS_INSTALL_PREFIX=/Users/boud/dev/deps
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip:$DEPS_INSTALL_PREFIX/lib/python3.5/site-packages:$DEPS_INSTALL_PREFIX/lib/python3.5
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
-cmake ../krita \
+cmake ../$1 \
     -DCMAKE_INSTALL_PREFIX=/Users/boud/dev/i \
     -DCMAKE_PREFIX_PATH=/Users/boud/dev/deps \
     -DDEFINE_NO_DEPRECATED=0 \

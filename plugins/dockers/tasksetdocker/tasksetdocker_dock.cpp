@@ -23,7 +23,6 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QInputDialog>
-#include <QThread>
 #include <QAction>
 
 #include <klocalizedstring.h>
@@ -36,7 +35,7 @@
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
 #include <KisMainWindow.h>
@@ -100,13 +99,12 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
 
     m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");
-
     if (!QFileInfo(m_rserver->saveLocation()).exists()) {
         QDir().mkpath(m_rserver->saveLocation());
     }
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<TasksetResource>(m_rserver));
-    m_taskThread = new KoResourceLoaderThread(m_rserver);
-    m_taskThread->start();
+    m_rserver->loadResources(KoResourceServerProvider::blacklistFileNames(m_rserver->fileNames(), m_rserver->blackListedFiles()));
+    m_rserver->loadTags();
 
     KoResourceItemChooser* itemChooser = new KoResourceItemChooser(adapter, this);
     itemChooser->setItemDelegate(new KisTasksetResourceDelegate(this));
@@ -116,8 +114,7 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     itemChooser->showTaggingBar(true);
     chooserButton->setPopupWidget(itemChooser);
 
-    connect(itemChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(resourceSelected(KoResource*)));
+    connect(itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
 
     setWidget(widget);
 
@@ -131,7 +128,6 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
 TasksetDockerDock::~TasksetDockerDock()
 {
-    delete m_taskThread;
     delete m_rserver;
 }
 
@@ -191,8 +187,6 @@ void TasksetDockerDock::saveClicked()
     if (!ok) {
         return;
     }
-
-    m_taskThread->barrier();
 
     TasksetResource* taskset = new TasksetResource(QString());
 

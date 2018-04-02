@@ -3,7 +3,7 @@
 If you need to build Krita's dependencies for the following reasons:
 
 * you develop on Windows and aren't using Craft
-* you develop on OSX and aren't using Homebrew
+* you develop on OSX and aren't using Homebrew, or are on OSX and want to make distributable app bundles
 * you want to build a generic, distro-agnostic version of Krita for Linux
 * you develop on Linux, but some dependencies aren't available for your distribution
 
@@ -183,6 +183,9 @@ and fontconfig, but I don't know how to make fontconfig find freetype, and on
 Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
 Note 2: if you want to build a release, you need to get the binary gettext
+
+Note 3: in order to build fontconfig on macOS, you need to have pkg-config installed.
+You probably need homebrew for that... See http://macappstore.org/pkg-config/ .
 
 archives from files.kde.org/krita/build/dependencies:
 

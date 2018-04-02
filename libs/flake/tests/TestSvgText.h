@@ -55,6 +55,9 @@ private Q_SLOTS:
     void testEmptyTextChunk();
 
     void testConvertHtmlToSvg();
+    void testTextWithMultipleRelativeOffsets();
+    void testTextWithMultipleAbsoluteOffsetsArabic();
+    void testTextWithMultipleRelativeOffsetsArabic();
 
 };
 

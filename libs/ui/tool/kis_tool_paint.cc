@@ -92,8 +92,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     m_opacity = OPACITY_OPAQUE_U8;
 
-    updateTabletPressureSamples();
-
     m_supportOutline = false;
 
     {
@@ -165,7 +163,6 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     }
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()), Qt::UniqueConnection);
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateTabletPressureSamples()), Qt::UniqueConnection);
 
 }
 
@@ -614,14 +611,6 @@ const KoCompositeOp* KisToolPaint::compositeOp()
 void KisToolPaint::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), quickHelp());
-}
-
-void KisToolPaint::updateTabletPressureSamples()
-{
-    KisConfig cfg;
-    KisCubicCurve curve;
-    curve.fromString(cfg.pressureTabletCurve());
-    m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)

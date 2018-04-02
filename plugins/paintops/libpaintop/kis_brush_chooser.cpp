@@ -359,13 +359,18 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
 
         brushDetailsLabel->setText(brushDetailsText);
 
+        // don't use the brush tip's specific settings if we want to keep what is in our preset
+        if (!preserveBrushPresetSettings->isChecked()) {
+            brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
+                                    m_brush->autoSpacingActive() ?
+                                    m_brush->autoSpacingCoeff() : m_brush->spacing());
 
-        brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
-                                m_brush->autoSpacingActive() ?
-                                m_brush->autoSpacingCoeff() : m_brush->spacing());
+            brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
+            brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
+        }
 
-        brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
-        brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
+
+
 
         // useColorAsMask support is only in gimp brush so far
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());

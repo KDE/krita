@@ -1155,6 +1155,52 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
     t.test_standard("text_multiple_relative_offsets_arabic", QSize(530, 70), 72.0);
 }
 
+void TestSvgText::testTextOutline()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testRect\" x=\"7\" y=\"27\""
+            " "
+            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        normal "
+            "        <tspan text-decoration=\"line-through\">strikethrough</tspan>"
+            "        <tspan text-decoration=\"overline\">overline</tspan>"
+            "        <tspan text-decoration=\"underline\">underline</tspan>"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    QRect renderRect(0, 0, 450, 40);
+
+    SvgRenderTester t (data);
+    t.test_standard("text_outline", renderRect.size(), 72.0);
+
+    KoShape *shape = t.findShape("testRect");
+    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+    QVERIFY(chunkShape);
+
+    KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+
+    QImage canvas(renderRect.size(), QImage::Format_ARGB32);
+    canvas.fill(0);
+    QPainter gc(&canvas);
+    gc.setPen(Qt::NoPen);
+    gc.setBrush(Qt::black);
+    gc.setRenderHint(QPainter::Antialiasing, true);
+    gc.drawPath(textShape->textOutline());
+
+    QVERIFY(TestUtil::checkQImage(canvas, "svg_render", "load_text_outline", "converted_to_path", 3, 5));
+}
+
 
 
 

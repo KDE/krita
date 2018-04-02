@@ -41,7 +41,9 @@
 #include "commands/KoSubpathJoinCommand.h"
 #include <commands/KoMultiPathPointMergeCommand.h>
 #include <commands/KoMultiPathPointJoinCommand.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
 #include "KoParameterShape.h"
+#include <text/KoSvgTextShape.h>
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
@@ -55,6 +57,7 @@
 #include <KisHandlePainterHelper.h>
 #include <KoShapeStrokeModel.h>
 #include "kis_command_utils.h"
+#include "kis_pointer_utils.h"
 
 
 #include <KoIcon.h>
@@ -360,16 +363,61 @@ void KoPathTool::segmentToCurve()
 void KoPathTool::convertToPath()
 {
     Q_D(KoToolBase);
-    QList<KoParameterShape*> shapesToConvert;
+
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
+
+    QList<KoParameterShape*> parameterShapes;
+
     Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
-        if (parameterShape && parameterShape->isParametricShape()) {
-            shapesToConvert.append(parameterShape);
+        KoParameterShape * parameteric = dynamic_cast<KoParameterShape*>(shape);
+        if (parameteric && parameteric->isParametricShape()) {
+            parameterShapes.append(parameteric);
         }
     }
-    if (!shapesToConvert.isEmpty()) {
-        d->canvas->addCommand(new KoParameterToPathCommand(shapesToConvert));
+
+    if (!parameterShapes.isEmpty()) {
+        d->canvas->addCommand(new KoParameterToPathCommand(parameterShapes));
     }
+
+    QList<KoSvgTextShape*> textShapes;
+    Q_FOREACH (KoShape *shape, selection->selectedEditableShapes()) {
+        if (KoSvgTextShape *text = dynamic_cast<KoSvgTextShape*>(shape)) {
+            textShapes.append(text);
+        }
+    }
+
+    if (!textShapes.isEmpty()) {
+        KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Convert to Path")); // TODO: reuse the text from KoParameterToPathCommand
+        const QList<KoShape*> oldSelectedShapes = implicitCastList<KoShape*>(textShapes);
+
+
+        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, selection, false, cmd);
+
+        QList<KoShape*> newSelectedShapes;
+        Q_FOREACH (KoSvgTextShape *shape, textShapes) {
+            const QPainterPath path = shape->textOutline();
+            if (path.isEmpty()) continue;
+
+            KoPathShape *pathShape = KoPathShape::createShapeFromPainterPath(path);
+
+            pathShape->setBackground(shape->background());
+            pathShape->setStroke(shape->stroke());
+            pathShape->setZIndex(shape->zIndex());
+            pathShape->setTransformation(shape->transformation());
+
+            KoShapeContainer *parent = shape->parent();
+            canvas()->shapeController()->addShapeDirect(pathShape, parent, cmd);
+
+            newSelectedShapes << pathShape;
+        }
+
+        canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);
+
+        new KoKeepShapesSelectedCommand({}, newSelectedShapes, selection, true, cmd);
+
+        canvas()->addCommand(cmd);
+    }
+
     updateOptionsWidget();
 }
 
@@ -566,6 +614,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 KoSelection *selection = shapeManager->selection();
 
                 KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
+
                 if (shape && !selection->isSelected(shape)) {
 
                     if (!(event->modifiers() & Qt::ShiftModifier)) {
@@ -1082,6 +1131,19 @@ void KoPathTool::updateActions()
 
     m_actionBreakSegment->setEnabled(canSplitAtSegment);
 
+    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
+    bool haveConvertibleShapes = false;
+    Q_FOREACH (KoShape *shape, selection->selectedEditableShapes()) {
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+        if (textShape ||
+            (parameterShape && parameterShape->isParametricShape())) {
+
+            haveConvertibleShapes = true;
+            break;
+        }
+    }
+    m_actionConvertToPath->setEnabled(haveConvertibleShapes);
 }
 
 void KoPathTool::deactivate()

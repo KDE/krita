@@ -59,6 +59,8 @@ private Q_SLOTS:
     void testTextWithMultipleAbsoluteOffsetsArabic();
     void testTextWithMultipleRelativeOffsetsArabic();
 
+    void testTextOutline();
+
 };
 
 #endif // TESTSVGTEXT_H

@@ -204,7 +204,15 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
          * themselves), and two LoD-specific update commands: one for lodN and
          * another one for lod0.
          */
-        KisStrokeId strokeId = image->startStroke(new KisSimpleStrokeStrategy());
+
+        struct SimpleLodResettingStroke : public KisSimpleStrokeStrategy {
+            SimpleLodResettingStroke()
+            {
+                setClearsRedoOnStart(false);
+            }
+        };
+
+        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke());
         image->endStroke(strokeId);
     }
 

@@ -319,6 +319,8 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
 
 void KisPredefinedBrushChooser::update(KoResource * resource)
 {
+
+
     QString animatedBrushTipSelectionMode; // incremental, random, etc
 
     {
@@ -359,17 +361,22 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
 
         brushDetailsLabel->setText(brushDetailsText);
 
-        // don't use the brush tip's specific settings if we want to keep what is in our preset
-        if (!preserveBrushPresetSettings->isChecked()) {
-            brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
-                                    m_brush->autoSpacingActive() ?
-                                    m_brush->autoSpacingCoeff() : m_brush->spacing());
-
-            brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
-            brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
+        // keep the current preset's tip settings if we are preserving it
+        // this will set the brush's model data to keep what it currently has for size, spacing, etc.
+        if (preserveBrushPresetSettings->isChecked()) {
+            m_brush->setAutoSpacing(brushSpacingSelectionWidget->autoSpacingActive(), brushSpacingSelectionWidget->autoSpacingCoeff());
+            m_brush->setAngle(brushRotationSpinBox->value() * M_PI / 180);
+            m_brush->setSpacing(brushSpacingSelectionWidget->spacing());
+            m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
         }
 
 
+        brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
+                                m_brush->autoSpacingActive() ?
+                                m_brush->autoSpacingCoeff() : m_brush->spacing());
+
+        brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
+        brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
 
 
         // useColorAsMask support is only in gimp brush so far
@@ -380,7 +387,7 @@ void KisPredefinedBrushChooser::update(KoResource * resource)
         useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
 
         emit sigBrushChanged();
-    }
+    }  
 }
 
 void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)

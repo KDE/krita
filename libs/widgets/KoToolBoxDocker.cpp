@@ -22,8 +22,11 @@
 #include "KoToolBoxDocker_p.h"
 #include "KoToolBox_p.h"
 #include "KoToolBoxScrollArea_p.h"
+#include "KoDockRegistry.h"
 #include <klocalizedstring.h>
-
+#include <QLabel>
+#include <QFontMetrics>
+#include <QFrame>
 
 KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     : QDockWidget(i18n("Toolbox"))
@@ -32,6 +35,14 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
 {
     setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     setWidget(m_scrollArea);
+
+    QLabel *w = new QLabel(" ", this);
+    w->setFrameShape(QFrame::StyledPanel);
+    w->setFrameShadow(QFrame::Raised);
+    w->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    w->setMinimumWidth(16);
+    w->setFixedHeight(QFontMetrics(KoDockRegistry::dockFont()).height());
+    setTitleBarWidget(w);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));

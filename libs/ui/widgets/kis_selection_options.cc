@@ -18,6 +18,7 @@
 
 #include "kis_selection_options.h"
 
+#include <QButtonGroup>
 #include <QWidget>
 #include <QRadioButton>
 #include <QComboBox>

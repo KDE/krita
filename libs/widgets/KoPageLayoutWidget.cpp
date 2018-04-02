@@ -22,6 +22,7 @@
 #include <ui_KoPageLayoutWidget.h>
 
 #include <KoUnit.h>
+#include <QButtonGroup>
 
 class Q_DECL_HIDDEN KoPageLayoutWidget::Private
 {

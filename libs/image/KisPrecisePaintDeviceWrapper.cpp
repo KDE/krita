@@ -77,6 +77,30 @@ const KoColorSpace *KisPrecisePaintDeviceWrapper::preciseColorSpace() const
     return m_d->precColorSpace;
 }
 
+KisPaintDeviceSP KisPrecisePaintDeviceWrapper::createPreciseCompositionSourceDevice() const
+{
+    KisPaintDeviceSP result;
+
+    if (m_d->precDevice == m_d->srcDevice) {
+        result = m_d->srcDevice->createCompositionSourceDevice();
+    } else {
+        const KoColorSpace *compositionColorSpace =
+            m_d->srcDevice->compositionSourceColorSpace();
+
+        const KoColorSpace *preciseCompositionColorSpace =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    compositionColorSpace->colorModelId().id(),
+                    Integer16BitsColorDepthID.id(),
+                    compositionColorSpace->profile());
+
+        KisPaintDeviceSP device = new KisPaintDevice(preciseCompositionColorSpace);
+        device->setDefaultBounds(m_d->srcDevice->defaultBounds());
+        result = device;
+    }
+
+    return result;
+}
+
 KisPaintDeviceSP KisPrecisePaintDeviceWrapper::sourceDevice() const
 {
     return m_d->srcDevice;

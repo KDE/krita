@@ -431,7 +431,7 @@ KisDocument::KisDocument(const KisDocument &rhs)
 
     // clone the image with keeping the GUIDs of the layers intact
     // NOTE: we expect the image to be locked!
-    setCurrentImage(rhs.image()->clone(true));
+    setCurrentImage(rhs.image()->clone(true), false);
 
     if (rhs.d->preActivatedNode) {
         // since we clone uuid's, we can use them for lacating new
@@ -657,21 +657,25 @@ void KisDocument::setFileBatchMode(const bool batchMode)
 
 KisDocument* KisDocument::lockAndCloneForSaving()
 {
+    // force update of all the asynchronous nodes before cloning
+    QApplication::processEvents();
+    KisLayerUtils::forceAllDelayedNodesUpdate(d->image->root());
+
+    KisMainWindow *window = KisPart::instance()->currentMainwindow();
+    if (window) {
+        if (window->viewManager()) {
+            if (!window->viewManager()->blockUntilOperationsFinished(d->image)) {
+                return 0;
+            }
+        }
+    }
+
     Private::StrippedSafeSavingLocker locker(&d->savingMutex, d->image);
     if (!locker.successfullyLocked()) {
         return 0;
     }
 
-    KisDocument *clonedDoc = new KisDocument(*this);
-
-    // force update of all the asynchronous nodes
-    clonedDoc->image()->waitForDone();
-    QApplication::processEvents();
-
-    KisLayerUtils::forceAllDelayedNodesUpdate(clonedDoc->image()->root());
-    clonedDoc->image()->waitForDone();
-
-    return clonedDoc;
+    return new KisDocument(*this);
 }
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)
@@ -1672,7 +1676,7 @@ KisImageSP KisDocument::savingImage() const
 }
 
 
-void KisDocument::setCurrentImage(KisImageSP image)
+void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 {
     if (d->image) {
         // Disconnect existing sig/slot connections
@@ -1687,7 +1691,10 @@ void KisDocument::setCurrentImage(KisImageSP image)
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
-    d->image->initialRefreshGraph();
+
+    if (forceInitialUpdate) {
+        d->image->initialRefreshGraph();
+    }
 }
 
 void KisDocument::hackPreliminarySetImage(KisImageSP image)

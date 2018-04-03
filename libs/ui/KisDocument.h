@@ -522,7 +522,7 @@ public:
     /**
      * Set the current image to the specified image and turn undo on.
      */
-    void setCurrentImage(KisImageSP image);
+    void setCurrentImage(KisImageSP image, bool forceInitialUpdate = true);
 
     /**
      * Set the image of the document preliminary, before the document

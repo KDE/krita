@@ -118,7 +118,7 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
     return reference;
 }
 
-void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
+void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &/*paintcontext*/)
 {
     gc.save();
 

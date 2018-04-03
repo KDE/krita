@@ -1131,16 +1131,7 @@ void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(root);
 
-    KisLayerUtils::recursiveApplyNodes(root,
-        [] (KisNodeSP node) {
-            KisDelayedUpdateNodeInterface *delayedUpdate =
-                dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
-
-            if (delayedUpdate) {
-                delayedUpdate->forceUpdateTimedNode();
-            }
-        });
-
+    KisLayerUtils::forceAllDelayedNodesUpdate(root);
     image()->waitForDone();
 }
 

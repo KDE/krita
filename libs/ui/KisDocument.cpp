@@ -657,7 +657,17 @@ KisDocument* KisDocument::lockAndCloneForSaving()
     if (!locker.successfullyLocked()) {
         return 0;
     }
-    return new KisDocument(*this);
+
+    KisDocument *clonedDoc = new KisDocument(*this);
+
+    // force update of all the asynchronous nodes
+    clonedDoc->image()->waitForDone();
+    QApplication::processEvents();
+
+    KisLayerUtils::forceAllDelayedNodesUpdate(clonedDoc->image()->root());
+    clonedDoc->image()->waitForDone();
+
+    return clonedDoc;
 }
 
 bool KisDocument::exportDocumentSync(const QUrl &url, const QByteArray &mimeType, KisPropertiesConfigurationSP exportConfiguration)

@@ -75,9 +75,6 @@ public:
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
     ~KisView() override;
 
-    QAction *undoAction() const;
-    QAction *redoAction() const;
-
     // Temporary while teasing apart view and mainwindow
     void setViewManager(KisViewManager *view);
     KisViewManager *viewManager() const;

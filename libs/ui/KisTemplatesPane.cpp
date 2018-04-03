@@ -22,6 +22,7 @@
 #include "KisTemplateGroup.h"
 #include "KisTemplate.h"
 
+#include <QFileInfo>
 #include <QStandardItemModel>
 #include <QUrl>
 
@@ -52,6 +53,8 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
     KGuiItem::assign(m_openButton, openGItem);
     KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
+
+
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
     m_alwaysUseCheckBox->setVisible(false);
     connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
@@ -59,6 +62,8 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
     QStandardItem* selectItem = 0;
     QStandardItem* rootItem = model()->invisibleRootItem();
     QStandardItem* defaultItem = 0;
+
+    QFileInfo templateFileInfo(fullTemplateName);
 
     Q_FOREACH (KisTemplate* t, group->templates()) {
         if (t->isHidden())
@@ -78,8 +83,18 @@ KisTemplatesPane::KisTemplatesPane(QWidget* parent, const QString& header,
 
         if (d->m_alwaysUseTemplate == t->file()) {
             selectItem = item;
-        } else if (!selectItem && (t->file() == fullTemplateName)) {
-            selectItem = item;
+        }
+        else {
+            if (templateFileInfo.exists()) {
+                if (!selectItem && (t->file() == fullTemplateName)) {
+                    selectItem = item;
+                }
+            }
+            else {
+                if (!selectItem && QFileInfo(t->file()).fileName() == templateFileInfo.fileName()) {
+                    selectItem = item;
+                }
+            }
         }
 
         if (defaultTemplate && (t->file() == defaultTemplate->file())) {

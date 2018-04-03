@@ -37,7 +37,9 @@ cd $BUILD_PREFIX
 #
 
 # Step 0: place the translations where ki18n and Qt look for them
-mv $APPDIR/usr/share/local $APPDIR/usr/share/locale/krita
+if [ -d $BUILD_PREFIX/krita-build/ ] ; then
+    mv $APPDIR/usr/share/local $APPDIR/usr/share/locale/krita
+fi
 
 # Step 1: Copy over all the resources provided by dependencies that we need 
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita

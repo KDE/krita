@@ -972,6 +972,25 @@ void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
     cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
+KisConfig::SessionOnStartup KisConfig::sessionOnStartup(bool defaultValue) const
+{
+    int value = defaultValue ? SOS_BlankSession : m_cfg.readEntry("sessionOnStartup", (int)SOS_BlankSession);
+    return (KisConfig::SessionOnStartup)value;
+}
+void KisConfig::setSessionOnStartup(SessionOnStartup value)
+{
+    m_cfg.writeEntry("sessionOnStartup", (int)value);
+}
+
+bool KisConfig::saveSessionOnQuit(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("saveSessionOnQuit", false);
+}
+void KisConfig::setSaveSessionOnQuit(bool value)
+{
+    m_cfg.writeEntry("saveSessionOnQuit", value);
+}
+
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
 {
     return (defaultValue ? 1.0 : m_cfg.readEntry("OutlineSizeMinimum", 1.0));

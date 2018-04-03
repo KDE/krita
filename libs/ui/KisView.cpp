@@ -54,6 +54,7 @@
 #include <QStatusBar>
 #include <QMoveEvent>
 #include <QTemporaryFile>
+#include <QMdiSubWindow>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -83,6 +84,8 @@
 #include "kis_zoom_manager.h"
 #include "kis_statusbar.h"
 #include "kis_painting_assistants_decoration.h"
+#include "KisReferenceImagesDecoration.h"
+#include "kis_progress_widget.h"
 #include "kis_signal_compressor.h"
 #include "kis_filter_manager.h"
 #include "kis_file_layer.h"
@@ -113,6 +116,7 @@ public:
         , canvas(&viewConverter, resourceManager, _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
+        , referenceImagesDecoration(new KisReferenceImagesDecoration(_q))
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
@@ -141,10 +145,12 @@ public:
     KisViewManager *viewManager = 0;
     KisNodeSP currentNode;
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration;
+    KisReferenceImagesDecorationSP referenceImagesDecoration;
     bool isCurrent = false;
     bool showFloatingMessage = false;
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
+    QMdiSubWindow *subWindow{nullptr};
 
     bool softProofing = false;
     bool gamutCheck = false;
@@ -253,6 +259,9 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
 
+    d->canvas.addDecoration(d->referenceImagesDecoration);
+    d->referenceImagesDecoration->setVisible(true);
+
     d->showFloatingMessage = cfg.showCanvasMessages();
 }
 
@@ -314,7 +323,7 @@ void KisView::showFloatingMessageImpl(const QString &message, const QIcon& icon,
 
 bool KisView::canvasIsMirrored() const
 {
-   return d->canvas.xAxisMirrored() || d->canvas.yAxisMirrored();
+    return d->canvas.xAxisMirrored() || d->canvas.yAxisMirrored();
 }
 
 void KisView::setViewManager(KisViewManager *view)
@@ -382,7 +391,7 @@ void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
      */
 
     if (!d->isCurrent &&
-        (!d->currentNode || !d->currentNode->parent())) {
+            (!d->currentNode || !d->currentNode->parent())) {
 
         d->currentNode = newActiveNode;
     }
@@ -531,23 +540,30 @@ void KisView::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
             QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
 
+            QAction *insertAsReferenceImage = new QAction(i18n("Insert as Reference Image"), &popup);
+            QAction *insertAsReferenceImages = new QAction(i18n("Insert as Reference Images"), &popup);
+
             QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
             popup.addAction(insertAsNewLayer);
             popup.addAction(insertAsNewFileLayer);
             popup.addAction(openInNewDocument);
+            popup.addAction(insertAsReferenceImage);
 
             popup.addAction(insertManyLayers);
             popup.addAction(insertManyFileLayers);
             popup.addAction(openManyDocuments);
+            popup.addAction(insertAsReferenceImages);
 
             insertAsNewLayer->setEnabled(image() && urls.count() == 1);
             insertAsNewFileLayer->setEnabled(image() && urls.count() == 1);
             openInNewDocument->setEnabled(urls.count() == 1);
+            insertAsReferenceImage->setEnabled(image() && urls.count() == 1);
 
             insertManyLayers->setEnabled(image() && urls.count() > 1);
             insertManyFileLayers->setEnabled(image() && urls.count() > 1);
             openManyDocuments->setEnabled(urls.count() > 1);
+            insertAsReferenceImages->setEnabled(image() && urls.count() > 1);
 
             popup.addSeparator();
             popup.addAction(cancel);
@@ -579,12 +595,19 @@ void KisView::dropEvent(QDropEvent *event)
                                                                        KisFileLayer::None, image()->nextLayerName(), OPACITY_OPAQUE_U8);
                             adapter.addNode(fileLayer, viewManager()->activeNode()->parent(), viewManager()->activeNode());
                         }
-                        else {
-                            Q_ASSERT(action == openInNewDocument || action == openManyDocuments);
+                        else if (action == openInNewDocument || action == openManyDocuments) {
                             if (mainWindow()) {
                                 mainWindow()->openDocument(url, KisMainWindow::None);
                             }
                         }
+                        else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
+                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter);
+                            reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
+                            d->referenceImagesDecoration->addReferenceImage(reference);
+
+                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                        }
+
                     }
                     delete tmp;
                     tmp = 0;
@@ -631,6 +654,11 @@ QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 KisMainWindow * KisView::mainWindow() const
 {
     return dynamic_cast<KisMainWindow *>(window());
+}
+
+void KisView::setSubWindow(QMdiSubWindow *subWindow)
+{
+    d->subWindow = subWindow;
 }
 
 QStatusBar * KisView::statusBar() const
@@ -795,6 +823,33 @@ void KisView::syncLastActiveNodeToDocument()
     if (doc) {
         doc->setPreActivatedNode(d->currentNode);
     }
+}
+
+void KisView::saveViewState(KisPropertiesConfiguration &config) const
+{
+    config.setProperty("file", d->document->url());
+    config.setProperty("window", mainWindow()->windowStateConfig().name());
+
+    if (d->subWindow) {
+        config.setProperty("geometry", d->subWindow->saveGeometry().toBase64());
+    }
+
+    config.setProperty("zoomMode", (int)zoomController()->zoomMode());
+    config.setProperty("zoom", d->zoomManager.zoom());
+    d->canvasController.saveCanvasState(config);
+}
+
+void KisView::restoreViewState(const KisPropertiesConfiguration &config)
+{
+    if (d->subWindow) {
+        QByteArray geometry = QByteArray::fromBase64(config.getString("geometry", "").toLatin1());
+        d->subWindow->restoreGeometry(QByteArray::fromBase64(geometry));
+    }
+
+    qreal zoom = config.getFloat("zoom", 1.0f);
+    int zoomMode = config.getInt("zoomMode", (int)KoZoomMode::ZOOM_PAGE);
+    d->zoomManager.zoomController()->setZoom((KoZoomMode::Mode)zoomMode, zoom);
+    d->canvasController.restoreCanvasState(config);
 }
 
 void KisView::setCurrentNode(KisNodeSP node)
@@ -966,4 +1021,9 @@ void KisView::slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &
     resetImageSizeAndScroll(true, oldStillPoint, newStillPoint);
     zoomManager()->updateImageBoundsSnapping();
     zoomManager()->updateGUI();
+}
+
+void KisView::closeView()
+{
+    d->subWindow->close();
 }

@@ -321,7 +321,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
-        if (m_newAssistant->numHandles() <= 1) {          
+        if (m_newAssistant->numHandles() <= 1) {
             addAssistant();
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
@@ -420,7 +420,7 @@ void KisAssistantTool::continuePrimaryAction(KoPointerEvent *event)
                 length += perspectiveline.length();
                 perspectiveline.setLength(length);
                 *assistant->sideHandles()[1] = perspectiveline.p2();
-            }            
+            }
             else if (m_handleDrag == assistant->sideHandles()[2]){
                 QLineF perspectiveline = QLineF(*assistant->handles()[0], *assistant->sideHandles()[2]);
                 qreal length = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]).length();
@@ -543,8 +543,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
     if (m_newAssistant) {
 
         m_newAssistant->setAssistantColor(assistantColor);
-        m_newAssistant->drawAssistant(_gc, canvasSize, m_canvas->coordinatesConverter(), false,m_canvas, true, false);
-
+        m_newAssistant->drawAssistant(_gc, canvasSize, m_canvas->coordinatesConverter(), false, m_canvas, true, false);
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5), QSizeF(m_handleSize, m_handleSize)));

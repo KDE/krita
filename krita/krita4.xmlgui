@@ -15,6 +15,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="file_save_as"/>
       <Action name="file_reload_file"/>
       <Separator/>
+      <Action name="file_sessions"/>
+      <Separator/>
       <Action name="file_import_file"/>
       <Action name="file_export_file"/>
       <Separator/>
@@ -124,6 +126,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
 
       <Action name="view_toggle_painting_assistants"/>
       <Action name="view_toggle_assistant_previews"/>
+      <Action name="view_toggle_reference_images"/>
       <Separator/>
       <Action name="view_palette_action_menu"/>
       <Separator/>
@@ -380,6 +383,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Separator/>
     <Action name="mirror_actions"/>
     <Action name="expanding_spacer_1"/>
+    <Action name="select_layout"/>
     <Action name="workspaces"/>
   </ToolBar>
 </kpartgui>

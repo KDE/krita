@@ -39,6 +39,9 @@
 #include <resources/KoPattern.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_workspace_resource.h>
+#include <KisWindowLayoutResource.h>
+#include <KisSessionResource.h>
+
 #include <kis_psd_layer_style_resource.h>
 
 #include <kis_brush_server.h>
@@ -58,6 +61,12 @@ KisResourceServerProvider::KisResourceServerProvider()
     m_workspaceServer = new KoResourceServerSimpleConstruction<KisWorkspaceResource>("kis_workspaces", "*.kws");
     m_workspaceServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_workspaceServer->fileNames(), m_workspaceServer->blackListedFiles()));
 
+    m_windowLayoutServer = new KoResourceServerSimpleConstruction<KisWindowLayoutResource>("kis_windowlayouts", "*.kwl");
+    m_windowLayoutServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_windowLayoutServer->fileNames(), m_windowLayoutServer->blackListedFiles()));
+
+    m_sessionServer = new KoResourceServerSimpleConstruction<KisSessionResource>("kis_sessions", "*.ksn");
+    m_sessionServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_sessionServer->fileNames(), m_sessionServer->blackListedFiles()));
+
     m_layerStyleCollectionServer = new KoResourceServerSimpleConstruction<KisPSDLayerStyleCollectionResource>("psd_layer_style_collections", "*.asl");
     m_layerStyleCollectionServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_layerStyleCollectionServer->fileNames(), m_layerStyleCollectionServer->blackListedFiles()));
 
@@ -70,6 +79,8 @@ KisResourceServerProvider::~KisResourceServerProvider()
 {
     delete m_paintOpPresetServer;
     delete m_workspaceServer;
+    delete m_sessionServer;
+    delete m_windowLayoutServer;
     delete m_layerStyleCollectionServer;
 }
 
@@ -87,6 +98,16 @@ KisPaintOpPresetResourceServer* KisResourceServerProvider::paintOpPresetServer()
 KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer()
 {
     return m_workspaceServer;
+}
+
+KoResourceServer< KisWindowLayoutResource >* KisResourceServerProvider::windowLayoutServer()
+{
+    return m_windowLayoutServer;
+}
+
+KoResourceServer< KisSessionResource >* KisResourceServerProvider::sessionServer()
+{
+    return m_sessionServer;
 }
 
 KoResourceServer<KisPSDLayerStyleCollectionResource> *KisResourceServerProvider::layerStyleCollectionServer()

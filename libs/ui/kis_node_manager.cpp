@@ -51,6 +51,7 @@
 #include <kis_painter.h>
 #include <kis_paint_layer.h>
 #include <KisMimeDatabase.h>
+#include <KisReferenceImagesLayer.h>
 
 #include "KisPart.h"
 #include "canvas/kis_canvas2.h"
@@ -765,6 +766,20 @@ KisNodeInsertionAdapter* KisNodeManager::nodeInsertionAdapter() const
     return m_d->nodeInsertionAdapter.data();
 }
 
+bool KisNodeManager::isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden)
+{
+    if (dynamic_cast<KisReferenceImagesLayer *>(node.data())) {
+        return true;
+    }
+
+    if (isGlobalSelectionHidden && dynamic_cast<KisSelectionMask *>(node.data()) &&
+        (!node->parent() || !node->parent()->parent())) {
+        return true;
+    }
+
+    return false;
+}
+
 void KisNodeManager::nodeOpacityChanged(qreal opacity, bool finalChange)
 {
     KisNodeSP node = activeNode();
@@ -865,10 +880,6 @@ void KisNodeManager::mirrorNodeY()
     mirrorNode(node, commandName, Qt::Vertical);
 }
 
-inline bool checkForGlobalSelection(KisNodeSP node) {
-    return dynamic_cast<KisSelectionMask*>(node.data()) && node->parent() && !node->parent()->parent();
-}
-
 void KisNodeManager::activateNextNode()
 {
     KisNodeSP activeNode = this->activeNode();
@@ -884,7 +895,7 @@ void KisNodeManager::activateNextNode()
         node = activeNode->parent();
     }
 
-    while(node && checkForGlobalSelection(node)) {
+    while(node && isNodeHidden(node, true)) {
         node = node->nextSibling();
     }
 
@@ -912,7 +923,7 @@ void KisNodeManager::activatePreviousNode()
         activeNode = activeNode->parent();
     }
 
-    while(node && checkForGlobalSelection(node)) {
+    while(node && isNodeHidden(node, true)) {
         node = node->prevSibling();
     }
 

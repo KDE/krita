@@ -60,6 +60,7 @@
 #include <kis_node.h>
 #include <brushengine/kis_paintop_config_widget.h>
 #include <kis_action.h>
+#include <KisLayoutSelector.h>
 
 #include "kis_canvas2.h"
 #include "kis_node_manager.h"
@@ -387,6 +388,11 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     KisActionRegistry::instance()->propertizeAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
     view->actionCollection()->addAction("mirror_actions", action);
+
+    action = new QWidgetAction(this);
+    KisActionRegistry::instance()->propertizeAction("select_layout", action);
+    view->actionCollection()->addAction("select_layout", action);
+    action->setDefaultWidget(new KisLayoutSelector(this));
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("workspaces", action);

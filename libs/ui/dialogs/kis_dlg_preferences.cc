@@ -60,7 +60,7 @@
 #include <kundo2stack.h>
 #include <KoResourcePaths.h>
 #include "kis_action_registry.h"
-
+#include <kis_image.h>
 #include <squeezedcombobox.h>
 #include "kis_clipboard.h"
 #include "widgets/kis_cmb_idlist.h"
@@ -114,6 +114,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+
+    cmbStartupSession->addItem(i18n("Open default window"));
+    cmbStartupSession->addItem(i18n("Load previous session"));
+    cmbStartupSession->addItem(i18n("Show session manager"));
+    cmbStartupSession->setCurrentIndex(cfg.sessionOnStartup());
+
+    chkSaveSessionOnQuit->setChecked(cfg.saveSessionOnQuit(false));
 
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
@@ -186,6 +193,7 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
+
     m_chkNativeFileDialog->setChecked(false);
     intMaxBrushSize->setValue(1000);
 
@@ -224,6 +232,16 @@ CursorStyle GeneralTab::cursorStyle()
 OutlineStyle GeneralTab::outlineStyle()
 {
     return (OutlineStyle)m_cmbOutlineShape->currentIndex();
+}
+
+KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
+{
+    return (KisConfig::SessionOnStartup)cmbStartupSession->currentIndex();
+}
+
+bool GeneralTab::saveSessionOnQuit() const
+{
+    return chkSaveSessionOnQuit->isChecked();
 }
 
 bool GeneralTab::showRootLayer()
@@ -1199,6 +1217,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
+        cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
+        cfg.setSaveSessionOnQuit(dialog->m_general->saveSessionOnQuit());
         cfg.setCalculateAnimationCacheInBackground(dialog->m_general->calculateAnimationCacheInBackground());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");

@@ -24,9 +24,12 @@
 #include <QWidget>
 
 class QLineEdit;
+class QPushButton;
+class QGridLayout;
 class KoResourceItemChooser;
 class KisViewManager;
 class KoResource;
+class KoAbstractResourceServerAdapter;
 
 class KisWorkspaceChooser : public QWidget
 {
@@ -36,13 +39,27 @@ public:
     ~KisWorkspaceChooser() override;
 
 private Q_SLOTS:
-    void slotSave();
-    void resourceSelected( KoResource * resource );
-    
+    void slotSaveWorkspace();
+    void workspaceSelected( KoResource * resource );
+
+    void slotSaveWindowLayout();
+    void windowLayoutSelected( KoResource * resource );
+
 private:
-    KoResourceItemChooser * m_itemChooser;
-    KisViewManager* m_view;
-    QLineEdit* m_nameEdit;
+    struct ChooserWidgets
+    {
+        KoResourceItemChooser *itemChooser;
+        QLineEdit *nameEdit;
+        QPushButton *saveButton;
+    };
+
+    KisViewManager *m_view;
+
+    QGridLayout* m_layout;
+    ChooserWidgets m_workspaceWidgets;
+    ChooserWidgets m_windowLayoutWidgets;
+
+    ChooserWidgets createChooserWidgets(QSharedPointer<KoAbstractResourceServerAdapter> adapter, const QString &title);
 };
 
 #endif // KIS_WORKSPACE_CHOOSER_H

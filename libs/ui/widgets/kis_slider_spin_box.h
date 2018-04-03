@@ -92,6 +92,11 @@ protected:
      */
     virtual void setInternalValue(int value, bool blockUpdateSignal) = 0;
 
+    /**
+     * Allows inheriting classes to directly set the value
+     */
+    void setPrivateValue(int value);
+
 protected Q_SLOTS:
     void contextMenuEvent(QContextMenuEvent * event) override;
     void editLostFocus();

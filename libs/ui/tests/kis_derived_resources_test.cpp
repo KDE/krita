@@ -52,6 +52,7 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
     KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
     KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
+    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
     KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
     KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
     KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");

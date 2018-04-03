@@ -25,9 +25,10 @@
 
 #include <QPointer>
 #include <QPrinter>
+#include <QUuid>
+#include <QUrl>
 
 #include <xmlgui/kxmlguiwindow.h>
-#include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 #include "KisView.h"
@@ -75,17 +76,14 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow();
+    explicit KisMainWindow(QUuid id = QUuid());
 
     /**
      *  Destructor.
      */
     ~KisMainWindow() override;
 
-
-    // If noCleanup is set, KisMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
+    QUuid id() const;
 
     /**
      * @brief showView shows the given view. Override this if you want to show
@@ -118,6 +116,11 @@ public:
     bool openDocument(const QUrl &url, OpenFlags flags);
 
     /**
+     * Activate a view containing the document in this window, creating one if needed.
+     */
+    void showDocument(KisDocument *document);
+
+    /**
      * Saves the document, asking for a filename if necessary.
      *
      * @param saveas if set to TRUE the user is always prompted for a filename
@@ -142,12 +145,19 @@ public:
 
     int viewCount() const;
 
+    void saveWindowState(bool restoreNormalState =false);
+
+    const KConfigGroup &windowStateConfig() const;
+
     /**
      * A wrapper around restoreState
      * @param state the saved state
      * @return TRUE on success
      */
     bool restoreWorkspace(KisWorkspaceResource *workspace);
+    bool restoreWorkspaceState(const QByteArray &state);
+
+    static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);
 
     KisViewManager *viewManager() const;
 
@@ -231,6 +241,9 @@ public Q_SLOTS:
      *  Saves the current document with the current name.
      */
     void slotFileSave();
+
+
+    void slotShowSessionManager();
 
     // XXX: disabled
     KisPrintJob* exportToPdf(QString pdfFileName = QString());
@@ -387,10 +400,12 @@ public Q_SLOTS:
 
     void subWindowActivated();
 
+    void windowFocused();
 
 private:
 
     friend class KisApplication;
+    friend class KisPart;
 
 
     /**
@@ -423,6 +438,8 @@ private:
     void createActions();
 
     void applyToolBarLayout();
+
+    QByteArray borrowWorkspace(KisMainWindow *borrower);
 
 protected:
 

@@ -636,6 +636,7 @@ void KisInputManager::slotAboutToChangeTool()
 
 void KisInputManager::slotToolChanged()
 {
+    if (!d->canvas) return;
     KoToolManager *toolManager = KoToolManager::instance();
     KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
     if (tool) {

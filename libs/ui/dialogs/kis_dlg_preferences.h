@@ -26,6 +26,7 @@
 #include <QButtonGroup>
 
 #include <kpagedialog.h>
+#include <kis_config.h>
 
 #include "kis_global.h"
 #include <squeezedcombobox.h>
@@ -69,12 +70,16 @@ public:
     CursorStyle cursorStyle();
     OutlineStyle outlineStyle();
 
+    KisConfig::SessionOnStartup sessionOnStartup() const;
+    bool saveSessionOnQuit() const;
+
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
     bool hideSplashScreen();
+
     int mdiMode();
     int favoritePresets();
     bool showCanvasMessages();

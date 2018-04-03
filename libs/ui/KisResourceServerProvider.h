@@ -30,8 +30,10 @@
 #include <brushengine/kis_paintop_preset.h>
 
 #include "kritaui_export.h"
+#include "KisWindowLayoutResource.h"
 
 class KisWorkspaceResource;
+class KisSessionResource;
 class KisPSDLayerStyleCollectionResource;
 
 typedef KoResourceServerSimpleConstruction<KisPaintOpPreset, SharedPointerStoragePolicy<KisPaintOpPresetSP> > KisPaintOpPresetResourceServer;
@@ -49,6 +51,8 @@ public:
 
     KisPaintOpPresetResourceServer* paintOpPresetServer();
     KoResourceServer<KisWorkspaceResource>* workspaceServer();
+    KoResourceServer<KisWindowLayoutResource>* windowLayoutServer();
+    KoResourceServer<KisSessionResource>* sessionServer();
     KoResourceServer<KisPSDLayerStyleCollectionResource>* layerStyleCollectionServer();
 
     void brushBlacklistCleanup();
@@ -63,6 +67,8 @@ private:
 
     KisPaintOpPresetResourceServer *m_paintOpPresetServer;
     KoResourceServer<KisWorkspaceResource> *m_workspaceServer;
+    KoResourceServer<KisWindowLayoutResource> *m_windowLayoutServer;
+    KoResourceServer<KisSessionResource> *m_sessionServer;
     KoResourceServer<KisPSDLayerStyleCollectionResource> *m_layerStyleCollectionServer;
 };
 

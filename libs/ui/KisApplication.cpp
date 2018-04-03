@@ -94,6 +94,8 @@
 #include "kis_workspace_resource.h"
 
 #include <KritaVersionWrapper.h>
+#include <dialogs/KisSessionManagerDialog.h>
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -244,6 +246,8 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
     KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
     KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
+    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
+    KoResourcePaths::addResourceType("kis_sessions", "data", "/sessions/");
     KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
     KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
     KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
@@ -413,7 +417,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
     // TODO: fix print & exportAsPdf to work without mainwindow shown
-    const bool showmainWindow = !exportAs; // would be !batchRun;
+    bool showmainWindow = !exportAs; // would be !batchRun;
 
     const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
@@ -451,14 +455,43 @@ bool KisApplication::start(const KisApplicationArguments &args)
     // Load the gui plugins
     loadGuiPlugins();
 
+    KisPart *kisPart = KisPart::instance();
     if (needsMainWindow) {
         // show a mainWindow asap, if we want that
         setSplashScreenLoadingText(i18n("Loading Main Window..."));
         processEvents();
-        m_mainWindow = KisPart::instance()->createMainWindow();
+
+
+        bool sessionNeeded = true;
+        auto sessionMode = cfg.sessionOnStartup();
+
+        if (!args.session().isEmpty()) {
+            sessionNeeded = !kisPart->restoreSession(args.session());
+        } else if (sessionMode == KisConfig::SOS_ShowSessionManager) {
+            showmainWindow = false;
+            sessionNeeded = false;
+            kisPart->showSessionManager();
+        } else if (sessionMode == KisConfig::SOS_PreviousSession) {
+            KConfigGroup sessionCfg = KSharedConfig::openConfig()->group("session");
+            const QString &sessionName = sessionCfg.readEntry("previousSession");
+
+            sessionNeeded = !kisPart->restoreSession(sessionName);
+        }
+
+        if (sessionNeeded) {
+            kisPart->startBlankSession();
+        }
+
+        if (!args.windowLayout().isEmpty()) {
+            KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
+            KisWindowLayoutResource* windowLayout = rserver->resourceByName(args.windowLayout());
+            if (windowLayout) {
+                windowLayout->applyLayout();
+            }
+        }
 
         if (showmainWindow) {
-            m_mainWindow->initializeGeometry();
+            m_mainWindow = kisPart->currentMainwindow();
 
             if (!args.workspace().isEmpty()) {
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
@@ -475,9 +508,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
             if (args.fullScreen()) {
                 m_mainWindow->showFullScreen();
             }
-            else {
-                m_mainWindow->show();
-            }
+        } else {
+            m_mainWindow = kisPart->createMainWindow();
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
@@ -500,7 +532,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (doNewImage) {
         KisDocument *doc = args.image();
         if (doc) {
-            KisPart::instance()->addDocument(doc);
+            kisPart->addDocument(doc);
             m_mainWindow->addViewAndNotifyLoadingCompleted(doc);
         }
     }
@@ -531,7 +563,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                         return 1;
                     }
 
-                    KisDocument *doc = KisPart::instance()->createDocument();
+                    KisDocument *doc = kisPart->createDocument();
                     doc->setFileBatchMode(m_batchRun);
                     doc->openUrl(QUrl::fromLocalFile(fileName));
 

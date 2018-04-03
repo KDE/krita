@@ -32,6 +32,7 @@
 
 class KoToolBase;
 class KoShape;
+class KoSelection;
 
 /**
  * Implements the Move action on an object or selected objects.
@@ -45,7 +46,7 @@ public:
      * @param canvas the canvas interface which will supply things like a selection object
      * @param clicked the initial point that the user depressed (in pt).
      */
-    ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked);
+    ShapeMoveStrategy(KoToolBase *tool, KoSelection *selection, const QPointF &clicked);
     ~ShapeMoveStrategy() override {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;

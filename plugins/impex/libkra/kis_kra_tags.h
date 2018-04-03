@@ -89,6 +89,7 @@ const QString PROFILE = "profile";
 const QString ROTATION = "rotation";
 const QString SELECTION_MASK = "selectionmask";
 const QString SHAPE_LAYER = "shapelayer";
+const QString REFERENCE_IMAGES_LAYER = "referenceimages";
 const QString FILE_LAYER = "filelayer";
 const QString TRANSPARENCY_MASK = "transparencymask";
 const QString COLORIZE_MASK = "colorizemask";

@@ -76,6 +76,19 @@
       <statusTip></statusTip>
     </Action>
 -->
+    <Action name="file_sessions">
+      <icon></icon>
+      <text>Sessions...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Open session manager</toolTip>
+      <iconText>Sessions</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="file_import_file">
       <icon>document-import</icon>
       <text>Open ex&amp;isting Document as Untitled Document...</text>
@@ -933,6 +946,20 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+    <Action name="view_toggle_reference_images">
+      <icon></icon>
+      <text>S&amp;how Reference Images</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Reference Images</toolTip>
+      <iconText>Show Reference Images</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
   </Actions>
 
   <Actions category="Image">
@@ -1763,6 +1790,15 @@
       <whatsThis></whatsThis>
       <toolTip>Mirror</toolTip>
       <iconText>Mirror</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="select_layout">
+      <icon></icon>
+      <text>Layouts</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select layout</toolTip>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

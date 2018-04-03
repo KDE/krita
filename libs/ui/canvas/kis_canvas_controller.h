@@ -24,6 +24,7 @@
 #include "kritaui_export.h"
 #include "kis_types.h"
 
+class KConfigGroup;
 class KisView;
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
@@ -48,6 +49,9 @@ public:
     using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
     bool levelOfDetailMode() const;
+
+    void saveCanvasState(KisPropertiesConfiguration &config) const;
+    void restoreCanvasState(const KisPropertiesConfiguration &config);
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);

@@ -361,7 +361,7 @@ set(kritaui_LIB_SRCS
     KisTemplates.cpp
     KisTemplatesPane.cpp
     KisTemplateTree.cpp
-    KisUndoStackAction.cpp
+    KisUndoActionsUpdateManager.cpp
     KisView.cpp
 
     thememanager.cpp

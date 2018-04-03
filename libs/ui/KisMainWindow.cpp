@@ -140,6 +140,7 @@
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include <KisUpdateSchedulerConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
+#include <KisUndoActionsUpdateManager.h>
 
 #include <mutex>
 
@@ -238,6 +239,8 @@ public:
 
     KRecentFilesAction *recentFiles {0};
     KoResourceModel *workspacemodel {0};
+
+    QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
 
     QString lastExportLocation;
 
@@ -1194,16 +1197,14 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 void KisMainWindow::undo()
 {
     if (activeView()) {
-        activeView()->undoAction()->trigger();
-        d->undo->setText(activeView()->undoAction()->text());
+        activeView()->document()->undoStack()->undo();
     }
 }
 
 void KisMainWindow::redo()
 {
     if (activeView()) {
-        activeView()->redoAction()->trigger();
-        d->redo->setText(activeView()->redoAction()->text());
+        activeView()->document()->undoStack()->redo();
     }
 }
 
@@ -1289,8 +1290,11 @@ void KisMainWindow::setActiveView(KisView* view)
 {
     d->activeView = view;
     updateCaption();
-    actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
-    actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
+
+    if (d->undoActionsUpdateManager) {
+        d->undoActionsUpdateManager->setCurrentDocument(view ? view->document() : 0);
+    }
+
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
@@ -2406,10 +2410,13 @@ void KisMainWindow::createActions()
 //    d->printActionPreview->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->undo = actionManager->createStandardAction(KStandardAction::Undo, this, SLOT(undo()));
-    d->undo ->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    d->undo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->redo = actionManager->createStandardAction(KStandardAction::Redo, this, SLOT(redo()));
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
+
+    d->undoActionsUpdateManager.reset(new KisUndoActionsUpdateManager(d->undo, d->redo));
+    d->undoActionsUpdateManager->setCurrentDocument(d->activeView ? d->activeView->document() : 0);
 
 //    d->exportPdf  = actionManager->createAction("file_export_pdf");
 //    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));

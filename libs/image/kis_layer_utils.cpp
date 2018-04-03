@@ -51,6 +51,7 @@
 #include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "commands/kis_node_property_list_command.h"
+#include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
 #include "krita_utils.h"
 
@@ -146,6 +147,7 @@ namespace KisLayerUtils {
         }
 
         KisNodeList mergedNodes;
+        bool nodesCompositingVaries = false;
 
         KisNodeList allSrcNodes() override {
             return mergedNodes;
@@ -214,6 +216,44 @@ namespace KisLayerUtils {
 
     private:
         MergeDownInfoBaseSP m_info;
+    };
+
+    struct DisableExtraCompositing : public KisCommandUtils::AggregateCommand {
+        DisableExtraCompositing(MergeMultipleInfoSP info) : m_info(info) {}
+
+        void populateChildCommands() override {
+            /**
+             * We disable extra compositing only in case all the layers have
+             * the same compositing properties, therefore, we can just sum them using
+             * Normal blend mode
+             */
+            if (m_info->nodesCompositingVaries) return;
+
+            // we should disable dirty requests on **redo only**, otherwise
+            // the state of the layers will not be recovered on undo
+            m_info->image->disableDirtyRequests();
+
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                if (node->compositeOpId() != COMPOSITE_OVER) {
+                    addCommand(new KisNodeCompositeOpCommand(node, node->compositeOpId(), COMPOSITE_OVER));
+                }
+
+                if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::inheritAlpha, false).toBool()) {
+
+                    KisBaseNode::PropertyList props = node->sectionModelProperties();
+                    KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                             KisLayerPropertiesIcons::inheritAlpha,
+                                                             false);
+
+                    addCommand(new KisNodePropertyListCommand(node, props));
+                }
+            }
+
+            m_info->image->enableDirtyRequests();
+        }
+
+    private:
+        MergeMultipleInfoSP m_info;
     };
 
     struct DisablePassThroughForHeadsOnly : public KisCommandUtils::AggregateCommand {
@@ -406,14 +446,24 @@ namespace KisLayerUtils {
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
 
+
+            auto channelFlagsLazy = [](KisNodeSP node) {
+                KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+                return layer ? layer->channelFlags() : QBitArray();
+            };
+
             QString compositeOpId;
             QBitArray channelFlags;
             bool compositionVaries = false;
+            bool isFirstCycle = true;
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                if (compositeOpId.isEmpty()) {
+                if (isFirstCycle) {
                     compositeOpId = node->compositeOpId();
-                } else if (compositeOpId != node->compositeOpId()) {
+                    channelFlags = channelFlagsLazy(node);
+                    isFirstCycle = false;
+                } else if (compositeOpId != node->compositeOpId() ||
+                           channelFlags != channelFlagsLazy(node)) {
                     compositionVaries = true;
                     break;
                 }
@@ -433,6 +483,8 @@ namespace KisLayerUtils {
                     m_info->dstLayer()->setChannelFlags(channelFlags);
                 }
             }
+
+            m_info->nodesCompositingVaries = compositionVaries;
 
             m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
             dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
@@ -1191,6 +1243,8 @@ namespace KisLayerUtils {
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
             applicator.applyCommand(new FillSelectionMasks(info));
             applicator.applyCommand(new CreateMergedLayerMultiple(info, layerName), KisStrokeJobData::BARRIER);
+            applicator.applyCommand(new DisableExtraCompositing(info));
+            applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
                 foreach (int frame, info->frames) {

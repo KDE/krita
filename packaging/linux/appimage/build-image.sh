@@ -36,9 +36,12 @@ cd $BUILD_PREFIX
 # Now we can get the process started!
 #
 
+# Step 0: place the translations where ki18n and Qt look for them
+mv $APPDIR/usr/share/local $APPDIR/usr/share/locale/krita
+
 # Step 1: Copy over all the resources provided by dependencies that we need 
-cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
+cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/lib/python3.5 $APPDIR/usr/lib
 cp -r $DEPS_INSTALL_PREFIX/sip $APPDIR/usr/lib/

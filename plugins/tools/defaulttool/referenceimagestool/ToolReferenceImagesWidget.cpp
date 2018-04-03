@@ -39,7 +39,7 @@ struct ToolReferenceImagesWidget::Private {
     ToolReferenceImages *tool;
 };
 
-ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider *provider, QWidget *parent)
+ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider */*provider*/, QWidget *parent)
     : QWidget(parent),
       d(new Private(tool))
 {

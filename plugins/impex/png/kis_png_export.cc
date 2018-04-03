@@ -186,7 +186,7 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
 
-    const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
+    //const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
     //chkSRGB->setEnabled(sRGB);
     chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));

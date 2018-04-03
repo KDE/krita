@@ -272,23 +272,25 @@ KoColorSet* KisPaletteModel::colorSet() const
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
     QModelIndex index = QModelIndex();
-    if (colorSet()->nColors()==0) {
+    if (!colorSet() || colorSet()->nColors() == 0) {
         return index;
     }
+
     if (i > (int)colorSet()->nColors()) {
         qWarning()<<"index is too big"<<i<<"/"<<colorSet()->nColors();
         index = this->index(0,0);
     }
+
     if (i < (int)colorSet()->nColorsGroup(0)) {
-        index = QAbstractTableModel::index(i/columnCount(), i%columnCount());
+        index = QAbstractTableModel::index(i/columnCount(), i % columnCount());
         if (!index.isValid()) {
-            index = QAbstractTableModel::index(0,0,QModelIndex());
+            index = QAbstractTableModel::index(0, 0, QModelIndex());
         }
         return index;
     } else {
-        int rowstotal = 1+m_colorSet->nColorsGroup()/columnCount();
-        if (m_colorSet->nColorsGroup()==0) {
-            rowstotal +=1;
+        int rowstotal = 1 + m_colorSet->nColorsGroup() / columnCount();
+        if (m_colorSet->nColorsGroup() == 0) {
+            rowstotal += 1;
         }
         int totalIndexes = colorSet()->nColorsGroup();
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){

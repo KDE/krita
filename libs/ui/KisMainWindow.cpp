@@ -1222,8 +1222,8 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
             if (!closeAllowed) {
                 e->setAccepted(false);
+                return;
             }
-            return;
         }
     }
 

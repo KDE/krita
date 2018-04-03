@@ -502,20 +502,43 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
     QTextCharFormat mostCommonCharFormat;
     QTextBlockFormat mostCommonBlockFormat;
 
+    struct LineInfo {
+        LineInfo() {}
+        LineInfo(QTextBlock _block, int _numSkippedLines)
+            : block(_block), numSkippedLines(_numSkippedLines)
+        {}
+
+        QTextBlock block;
+        int numSkippedLines = 0;
+    };
+
+
+    QVector<LineInfo> lineInfoList;
+
     {
         QTextBlock block = doc->begin();
 
         QList<QTextFormat> allCharFormats;
         QList<QTextFormat> allBlockFormats;
 
-        while (block.isValid()) {
-            maxParagraphWidth = qMax(maxParagraphWidth, calcLineWidth(block));
+        int numSequentialEmptyLines = 0;
 
-            allBlockFormats.append(block.blockFormat());
-            Q_FOREACH (const QTextLayout::FormatRange &range, block.textFormats()) {
-                QTextFormat format =  range.format;
-                allCharFormats.append(format);
+        while (block.isValid()) {
+            if (!block.text().trimmed().isEmpty()) {
+                lineInfoList.append(LineInfo(block, numSequentialEmptyLines));
+                numSequentialEmptyLines = 0;
+
+                maxParagraphWidth = qMax(maxParagraphWidth, calcLineWidth(block));
+
+                allBlockFormats.append(block.blockFormat());
+                Q_FOREACH (const QTextLayout::FormatRange &range, block.textFormats()) {
+                    QTextFormat format =  range.format;
+                    allCharFormats.append(format);
+                }
+            } else {
+                numSequentialEmptyLines++;
             }
+
             block = block.next();
         }
 
@@ -541,7 +564,9 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
     qreal prevBlockAscent = 0.0;
     qreal prevBlockDescent= 0.0;
 
-    while (block.isValid()) {
+    Q_FOREACH (const LineInfo &info, lineInfoList) {
+        QTextBlock block = info.block;
+
         const QTextBlockFormat blockFormatDiff = formatDifference(block.blockFormat(), mostCommonBlockFormat).toBlockFormat();
         QTextCharFormat blockCharFormatDiff = QTextCharFormat();
         const QVector<QTextLayout::FormatRange> formats = block.textFormats();
@@ -618,7 +643,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
                 line.ascent() - prevBlockAscent +
                 (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
 
-            svgWriter.writeAttribute("dy", KisDomUtils::toString(lineHeightPt) + "pt");
+            const qreal currentLineSpacing = (info.numSkippedLines + 1) * lineHeightPt;
+            svgWriter.writeAttribute("dy", KisDomUtils::toString(currentLineSpacing) + "pt");
         }
 
         prevBlockRelativeLineSpacing =
@@ -669,8 +695,6 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
             //check format against
         }
         svgWriter.writeEndElement();
-
-        block = block.next();
     }
     svgWriter.writeEndElement();//text root element.
 

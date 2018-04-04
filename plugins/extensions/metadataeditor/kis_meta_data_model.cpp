@@ -85,6 +85,7 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
             case KisMetaData::Value::Rational:
                 return i18n("Rational");
             }
+            break;
         }
         case 2:
             return m_store->entries()[index.row()].value().toString();

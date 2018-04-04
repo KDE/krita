@@ -169,7 +169,7 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisMainWindow *mainWindow, KisView *view, KoShapeBasedDocumentBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -179,7 +179,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      * light.
      */
     m_d->bootstrapLodBlocked = true;
-    connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+    connect(mainWindow, SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
 
     KisImageConfig config;
 

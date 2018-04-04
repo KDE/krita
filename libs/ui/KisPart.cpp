@@ -228,10 +228,7 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
     return mw;
 }
 
-KisView *KisPart::createView(KisDocument *document,
-                             KoCanvasResourceManager *resourceManager,
-                             KActionCollection *actionCollection,
-                             QWidget *parent)
+KisView *KisPart::createView(KisDocument *document, KisViewManager *viewManager, QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
     KisConfig cfg;
@@ -246,7 +243,7 @@ KisView *KisPart::createView(KisDocument *document,
     grp.sync();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisView *view  = new KisView(document, resourceManager, actionCollection, parent);
+    KisView *view = new KisView(document,  viewManager, parent);
     QApplication::restoreOverrideCursor();
 
     // Record successful canvas creation

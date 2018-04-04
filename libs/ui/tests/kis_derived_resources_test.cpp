@@ -75,7 +75,7 @@ void KisDerivedResourcesTest::test()
     addResourceTypes();
 
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
-    QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
+    QPointer<KisView> view = new KisView(doc, mainWindow->viewManager(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
     KoCanvasResourceManager *manager = viewManager->resourceProvider()->resourceManager();
 

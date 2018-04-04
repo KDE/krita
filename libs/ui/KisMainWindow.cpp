@@ -879,7 +879,7 @@ void KisMainWindow::showDocument(KisDocument *document) {
 
 KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
-    KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
+    KisView *view = KisPart::instance()->createView(document, d->viewManager, this);
     addView(view);
 
     emit guiLoadingFinished();

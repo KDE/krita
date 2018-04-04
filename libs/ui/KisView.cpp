@@ -108,12 +108,12 @@ class Q_DECL_HIDDEN KisView::Private
 public:
     Private(KisView *_q,
             KisDocument *document,
-            KoCanvasResourceManager *resourceManager,
-            KActionCollection *actionCollection)
-        : actionCollection(actionCollection)
+            KisViewManager *viewManager)
+        : actionCollection(viewManager->actionCollection())
+        , viewManager(viewManager)
         , viewConverter()
-        , canvasController(_q, actionCollection)
-        , canvas(&viewConverter, resourceManager, _q, document->shapeController())
+        , canvasController(_q, viewManager->mainWindow(), viewManager->actionCollection())
+        , canvas(&viewConverter, viewManager->resourceProvider()->resourceManager(), viewManager->mainWindow(), _q, document->shapeController())
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , paintingAssistantsDecoration(new KisPaintingAssistantsDecoration(_q))
         , referenceImagesDecoration(new KisReferenceImagesDecoration(_q))
@@ -213,9 +213,9 @@ public:
 
 };
 
-KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent)
     : QWidget(parent)
-    , d(new Private(this, document, resourceManager, actionCollection))
+    , d(new Private(this, document, viewManager))
 {
     Q_ASSERT(document);
     connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
@@ -653,7 +653,7 @@ QPrintDialog *KisView::createPrintDialog(KisPrintJob *printJob, QWidget *parent)
 
 KisMainWindow * KisView::mainWindow() const
 {
-    return dynamic_cast<KisMainWindow *>(window());
+    return d->viewManager->mainWindow();
 }
 
 void KisView::setSubWindow(QMdiSubWindow *subWindow)

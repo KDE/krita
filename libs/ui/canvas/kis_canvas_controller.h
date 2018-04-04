@@ -20,6 +20,7 @@
 #define KIS_CANVAS_CONTROLLER_H
 
 #include <KoCanvasControllerWidget.h>
+#include <libs/flake/KoCanvasSupervisor.h>
 
 #include "kritaui_export.h"
 #include "kis_types.h"
@@ -32,7 +33,7 @@ class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
     Q_OBJECT
 
 public:
-    KisCanvasController(QPointer<KisView>parent, KActionCollection * actionCollection);
+    KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KActionCollection * actionCollection);
     ~KisCanvasController() override;
 
     void setCanvas(KoCanvasBase *canvas) override;

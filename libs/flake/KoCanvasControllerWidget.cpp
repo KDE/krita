@@ -136,15 +136,9 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
 
 void KoCanvasControllerWidget::Private::activate()
 {
-    QWidget *parent = q;
-    while (parent->parentWidget()) {
-        parent = parent->parentWidget();
-    }
-    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
     if (!observerProvider) {
         return;
     }
-
     KoCanvasBase *canvas = q->canvas();
     Q_FOREACH (KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
@@ -157,11 +151,6 @@ void KoCanvasControllerWidget::Private::activate()
 
 void KoCanvasControllerWidget::Private::unsetCanvas()
 {
-    QWidget *parent = q;
-    while (parent->parentWidget()) {
-        parent = parent->parentWidget();
-    }
-    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
     if (!observerProvider) {
         return;
     }
@@ -176,10 +165,10 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 }
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent)
     : QAbstractScrollArea(parent)
     , KoCanvasController(actionCollection)
-    , d(new Private(this))
+    , d(new Private(this, observerProvider))
 {
     // We need to set this as QDeclarativeView sets them a bit different from QAbstractScrollArea
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

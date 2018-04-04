@@ -74,7 +74,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent = 0);
     ~KisView() override;
 
     QAction *undoAction() const;

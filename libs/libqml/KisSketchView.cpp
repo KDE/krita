@@ -303,10 +303,7 @@ void KisSketchView::documentChanged()
 
     connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-    QPointer<KisView> view = qobject_cast<KisView*>(KisPart::instance()->createView(d->doc,
-                                                                                    d->viewManager->resourceProvider()->resourceManager(),
-                                                                                    d->viewManager->actionCollection(),
-                                                                                    QApplication::activeWindow()));
+    QPointer<KisView> view = KisPart::instance()->createView(d->doc, d->viewManager, QApplication::activeWindow());
     view->setViewManager(d->viewManager);
     view->canvasBase()->setFavoriteResourceManager(d->viewManager->paintOpBox()->favoriteResourcesManager());
     view->slotLoadingFinished();

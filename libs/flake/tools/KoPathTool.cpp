@@ -391,7 +391,7 @@ void KoPathTool::convertToPath()
         const QList<KoShape*> oldSelectedShapes = implicitCastList<KoShape*>(textShapes);
 
 
-        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, selection, false, cmd);
+        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
@@ -413,7 +413,7 @@ void KoPathTool::convertToPath()
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);
 
-        new KoKeepShapesSelectedCommand({}, newSelectedShapes, selection, true, cmd);
+        new KoKeepShapesSelectedCommand({}, newSelectedShapes, canvas()->selectedShapesProxy(), true, cmd);
 
         canvas()->addCommand(cmd);
     }

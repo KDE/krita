@@ -1049,10 +1049,10 @@ void DefaultTool::selectionGroup()
     group->setZIndex(groupZIndex);
     // TODO what if only one shape is left?
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Group shapes"));
-    new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
+    new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
     canvas()->shapeController()->addShapeDirect(group, 0, cmd);
     new KoShapeGroupCommand(group, selectedShapes, true, cmd);
-    new KoKeepShapesSelectedCommand({}, {group}, selection, true, cmd);
+    new KoKeepShapesSelectedCommand({}, {group}, canvas()->selectedShapesProxy(), true, cmd);
     canvas()->addCommand(cmd);
 
     // update selection so we can ungroup immediately again
@@ -1077,7 +1077,7 @@ void DefaultTool::selectionUngroup()
         if (group) {
             if (!cmd) {
                 cmd = new KUndo2Command(kundo2_i18n("Ungroup shapes"));
-                new KoKeepShapesSelectedCommand(selectedShapes, {}, selection, false, cmd);
+                new KoKeepShapesSelectedCommand(selectedShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
             }
             newShapes << group->shapes();
             new KoShapeUngroupCommand(group, group->shapes(),
@@ -1087,7 +1087,7 @@ void DefaultTool::selectionUngroup()
         }
     }
     if (cmd) {
-        new KoKeepShapesSelectedCommand({}, newShapes, selection, true, cmd);
+        new KoKeepShapesSelectedCommand({}, newShapes, canvas()->selectedShapesProxy(), true, cmd);
         canvas()->addCommand(cmd);
     }
 }
@@ -1231,7 +1231,7 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
 
     KUndo2Command *cmd = new KUndo2Command(actionName);
 
-    new KoKeepShapesSelectedCommand(editableShapes, {}, selection, false, cmd);
+    new KoKeepShapesSelectedCommand(editableShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
 
     QList<KoShape*> newSelectedShapes;
 
@@ -1248,7 +1248,7 @@ void DefaultTool::selectionBooleanOp(int booleanOp)
 
     canvas()->shapeController()->removeShapes(editableShapes, cmd);
 
-    new KoKeepShapesSelectedCommand({}, newSelectedShapes, selection, true, cmd);
+    new KoKeepShapesSelectedCommand({}, newSelectedShapes, canvas()->selectedShapesProxy(), true, cmd);
 
     canvas()->addCommand(cmd);
 }
@@ -1265,7 +1265,7 @@ void DefaultTool::selectionSplitShapes()
 
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Split Shapes"));
 
-    new KoKeepShapesSelectedCommand(editableShapes, {}, selection, false, cmd);
+    new KoKeepShapesSelectedCommand(editableShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
     QList<KoShape*> newShapes;
 
     Q_FOREACH (KoShape *shape, editableShapes) {
@@ -1283,7 +1283,7 @@ void DefaultTool::selectionSplitShapes()
         }
     }
 
-    new KoKeepShapesSelectedCommand({}, newShapes, selection, true, cmd);
+    new KoKeepShapesSelectedCommand({}, newShapes, canvas()->selectedShapesProxy(), true, cmd);
 
     canvas()->addCommand(cmd);
 }

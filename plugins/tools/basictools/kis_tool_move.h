@@ -66,6 +66,7 @@ public Q_SLOTS:
 public Q_SLOTS:
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    void requestUndoDuringStroke() override;
 
 protected Q_SLOTS:
     void resetCursorStyle() override;

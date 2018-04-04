@@ -28,7 +28,7 @@ if(HAVE_VC)
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 
     message("Following objects are generated from the per-arch lib")
-    message(${__per_arch_factory_objs})
+    message("${__per_arch_factory_objs}")
 endif()
 
 add_subdirectory(tests)

@@ -1,0 +1,1 @@
+from .krita_script_starter import *

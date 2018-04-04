@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!--BBD's Krita Script Starter, Feb 2018 -->
+<head><title>BBD's Krita Script Starter</title>
+</head>
+<body>
+<h3>BBD's Krita Script Starter</h3>
+This script sets up the various files that Krita expects to see 
+when it runs a script. That is:
+<ul><li>the .desktop meta data file</li>
+<li>the package directory</li>
+<li>the __init__.py file</li>
+<li>the main python file for your package</li>
+<li>the Manual.html file for your documentation</li>
+</ul>
+
+It will correctly name your package, do relevant imports, 
+create a class of the relevant type (ie Extension v Docker) 
+and name the class based on the name you choose for your script.
+<p>
+<h3>Usage</h3>
+When you run the script it will present a dialog box. Enter the name 
+of your script in the entry box provided and choose whether you 
+want the script to be an Extension (added to the scripts menu) 
+or a Docker (available to be opened as a docker).  Type in 
+a comment for the script (this is displayed in the Krita dialog
+when enabling scripts) and, if you want, the text of how 
+you want your script to appear in the menu. 
+You can choose to have your script automatically enabled by 
+checking the "Enable Script" checkbox.
+<p>
+These files will be created in the pykrita subfolder of your 
+resources directory. <p>
+<h3>Warning</h3>
+If a script with the name you choose already
+exists a warning will be shown in the status box. If you click 
+Create Script any files that already exist will be overwritten
+without further confirmation, so pay attention to any warnings. 
+
+</body>
+</html>
+

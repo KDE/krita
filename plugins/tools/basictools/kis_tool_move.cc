@@ -279,6 +279,13 @@ void KisToolMove::requestStrokeCancellation()
     cancelStroke();
 }
 
+void KisToolMove::requestUndoDuringStroke()
+{
+    // we shouldn't cancel the stroke on Ctrl+Z, becasue it will not only
+    // cancel the stroke, but also undo the previous command, which we haven't
+    // yet pushed to the stack
+}
+
 void KisToolMove::beginPrimaryAction(KoPointerEvent *event)
 {
     startAction(event, moveToolMode());

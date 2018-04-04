@@ -306,11 +306,15 @@ void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
     switch (action) {
     case PickFgNode:
+        /* Falls through */
     case PickBgNode:
+        /* Falls through */
     case PickFgImage:
+        /* Falls through */
     case PickBgImage:
         delayedAction = action;
         m_colorPickerDelayTimer.start(100);
+        /* Falls through */
     default:
         pickColorWasOverridden();
         KisTool::activateAlternateAction(action);

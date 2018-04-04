@@ -169,6 +169,7 @@ bool psd_read_pattern(QIODevice *io)
                 case 16:
                     length *= 2;
                     pixels *= 2;
+                    break;
                 default:
                     dbgKrita << "Wrong depth for pattern";
                     return false;
@@ -196,6 +197,7 @@ bool psd_read_pattern(QIODevice *io)
                     break;
                 case MultiChannel:
                     length *= 4;
+                    break;
                 default:
                     dbgKrita << "Impossible color mode" << pattern.color_mode;
                     return false;
@@ -203,16 +205,9 @@ bool psd_read_pattern(QIODevice *io)
 
                 QByteArray ba = io->read(len);
                 channelData << Compression::uncompress(length, ba, (Compression::CompressionType)compression_mode);
-
             }
         }
-
-
-
-
-
     }
-
 
     return true;
 }

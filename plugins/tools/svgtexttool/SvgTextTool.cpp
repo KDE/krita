@@ -363,19 +363,17 @@ void SvgTextTool::mouseReleaseEvent(KoPointerEvent *event)
         }
         KoShape *textShape = factory->createShape( params, canvas()->shapeController()->resourceManager());
 
-
-        KoSelection *selection = koSelection();
-
         KUndo2Command *parentCommand = new KUndo2Command();
 
-        new KoKeepShapesSelectedCommand(selection->selectedShapes(), {}, selection, false, parentCommand);
+        new KoKeepShapesSelectedCommand(koSelection()->selectedShapes(), {}, canvas()->selectedShapesProxy(), false, parentCommand);
 
         KUndo2Command *cmd = canvas()->shapeController()->addShape(textShape, 0, parentCommand);
         parentCommand->setText(cmd->text());
 
-        new KoKeepShapesSelectedCommand({}, {textShape}, selection, true, parentCommand);
+        new KoKeepShapesSelectedCommand({}, {textShape}, canvas()->selectedShapesProxy(), true, parentCommand);
 
         canvas()->addCommand(parentCommand);
+
         showEditor();
     }
     event->accept();

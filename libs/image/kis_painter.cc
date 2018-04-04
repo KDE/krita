@@ -1392,12 +1392,14 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
 
     switch (fillStyle) {
     default:
-        // Fall through
+        /* Falls through. */
     case FillStyleGradient:
-        // Currently unsupported, fall through
+        // Currently unsupported
+        /* Falls through. */
     case FillStyleStrokes:
-        // Currently unsupported, fall through
+        // Currently unsupported
         warnImage << "Unknown or unsupported fill style in fillPolygon\n";
+        /* Falls through. */
     case FillStyleForegroundColor:
         fillPainter->fillRect(fillRect, q->paintColor(), OPACITY_OPAQUE_U8);
         break;

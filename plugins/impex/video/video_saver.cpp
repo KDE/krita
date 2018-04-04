@@ -154,11 +154,15 @@ private:
         QEventLoop loop;
         loop.connect(&watcher, SIGNAL(sigProcessingFinished()), SLOT(quit()));
         loop.connect(&ffmpegProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(quit()));
+        loop.connect(&ffmpegProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(quit()));
         loop.connect(&watcher, SIGNAL(sigProgressChanged(int)), &progress, SLOT(setValue(int)));
-        loop.exec();
 
-        // wait for some erroneous case
-        ffmpegProcess.waitForFinished(5000);
+        if (ffmpegProcess.state() != QProcess::NotRunning) {
+            loop.exec();
+
+            // wait for some erroneous case
+            ffmpegProcess.waitForFinished(5000);
+        }
 
         KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
 

@@ -105,8 +105,8 @@ struct KisPaintInformation::Private {
     bool isHoveringMode;
     KisRandomSourceSP randomSource;
     KisPerStrokeRandomSourceSP perStrokeRandomSource;
-    int canvasRotation;
-    bool canvasMirroredH;
+    int canvasRotation {0};
+    bool canvasMirroredH {false};
 
     boost::optional<qreal> drawingAngleOverride;
     bool sanityIsRegistered = false;

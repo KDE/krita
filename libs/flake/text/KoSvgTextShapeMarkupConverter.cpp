@@ -549,6 +549,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
     //Okay, now the actual writing.
 
     QTextBlock block = doc->begin();
+    Q_UNUSED(block);
 
     svgWriter.writeStartElement("text");
 
@@ -640,22 +641,22 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         if (block.blockNumber() > 0) {
             const qreal lineHeightPt =
-                line.ascent() - prevBlockAscent +
-                (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
+                    line.ascent() - prevBlockAscent +
+                    (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
 
             const qreal currentLineSpacing = (info.numSkippedLines + 1) * lineHeightPt;
             svgWriter.writeAttribute("dy", KisDomUtils::toString(currentLineSpacing) + "pt");
         }
 
         prevBlockRelativeLineSpacing =
-            blockFormatDiff.hasProperty(QTextFormat::LineHeight) ?
-                blockFormatDiff.lineHeight() :
-                mostCommonBlockFormat.lineHeight();
+                blockFormatDiff.hasProperty(QTextFormat::LineHeight) ?
+                    blockFormatDiff.lineHeight() :
+                    mostCommonBlockFormat.lineHeight();
 
         prevBlockLineType =
-            blockFormatDiff.hasProperty(QTextFormat::LineHeightType) ?
-                blockFormatDiff.lineHeightType() :
-                mostCommonBlockFormat.lineHeightType();
+                blockFormatDiff.hasProperty(QTextFormat::LineHeightType) ?
+                    blockFormatDiff.lineHeightType() :
+                    mostCommonBlockFormat.lineHeightType();
 
         if (prevBlockLineType == QTextBlockFormat::SingleHeight) {
             //single line will set lineHeight to 100%
@@ -796,8 +797,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                 // mnemonic for a newline is (dy != 0 && x == 0)
 
                 if (svgReader.name() != "text" &&
-                    elementAttributes.hasAttribute("dy") &&
-                    elementAttributes.hasAttribute("x")) {
+                        elementAttributes.hasAttribute("dy") &&
+                        elementAttributes.hasAttribute("x")) {
 
                     QString xString = elementAttributes.value("x").toString();
                     if (xString.contains("pt")) {
@@ -998,12 +999,13 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
 
         if (propertyId == QTextCharFormat::TextVerticalAlignment) {
             QString val = "baseline";
-            if (format.verticalAlignment() == QTextCharFormat::AlignSubScript)
+            if (format.verticalAlignment() == QTextCharFormat::AlignSubScript) {
                 val = QLatin1String("sub");
-            else if (format.verticalAlignment() == QTextCharFormat::AlignSuperScript)
+            }
+            else if (format.verticalAlignment() == QTextCharFormat::AlignSuperScript) {
                 val = QLatin1String("super");
-                c.append("baseline-shift").append(":")
-                        .append(val);
+            }
+            c.append("baseline-shift").append(":").append(val);
         }
 
         if (!c.isEmpty()) {
@@ -1020,27 +1022,27 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         }
     }
 
-        if (format.underlineStyle()!=QTextCharFormat::NoUnderline ||
-                format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
-            QStringList values;
-            QString c;
+    if (format.underlineStyle()!=QTextCharFormat::NoUnderline ||
+            format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
+        QStringList values;
+        QString c;
 
-            if (format.fontUnderline()) {
-                values.append("underline");
-            }
-            if(format.fontOverline()) {
-                values.append("overline");
-            }
-            if(format.fontStrikeOut()) {
-                values.append("line-through");
-            }
-            c.append("text-decoration").append(":")
-                    .append(values.join(" "));
-
-            if (!values.isEmpty()) {
-                style.append(c);
-            }
+        if (format.fontUnderline()) {
+            values.append("underline");
         }
+        if(format.fontOverline()) {
+            values.append("overline");
+        }
+        if(format.fontStrikeOut()) {
+            values.append("line-through");
+        }
+        c.append("text-decoration").append(":")
+                .append(values.join(" "));
+
+        if (!values.isEmpty()) {
+            style.append(c);
+        }
+    }
 
     if (blockFormat.hasProperty(QTextBlockFormat::BlockAlignment)) {
         // TODO: Alignment works incorrectly! The offsets should be calculated

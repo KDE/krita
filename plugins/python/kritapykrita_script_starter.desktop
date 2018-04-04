@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=krita_script_starter
+X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
+Name=Krita Script Starter
+Comment=Create the metadata and file structure for a new Krita script

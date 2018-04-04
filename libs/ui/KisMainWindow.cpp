@@ -814,7 +814,7 @@ KisView *KisMainWindow::activeView() const
 bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
     if (!QFile(url.toLocalFile()).exists()) {
-        if (!flags && BatchMode) {
+        if (!(flags & BatchMode)) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         }
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list

@@ -35,14 +35,12 @@ namespace KisToolUtils {
     bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color, int radius)
     {
         KIS_ASSERT(dev);
-        KoColor pickedColor;
+        const KoColorSpace* cs = dev->colorSpace();
+        KoColor pickedColor(Qt::transparent, cs);
 
         if (radius <= 1) {
             dev->pixel(pos.x(), pos.y(), &pickedColor);
         } else {
-            const KoColorSpace* cs = dev->colorSpace();
-            pickedColor = KoColor(Qt::transparent, cs);
-
             QVector<const quint8*> pixels;
 
             const int effectiveRadius = radius - 1;

@@ -462,6 +462,13 @@ KisPaintDeviceSP KisColorizeMask::coloringProjection() const
     return m_d->coloringProjection;
 }
 
+KisPaintDeviceSP KisColorizeMask::colorPickSourceDevice() const
+{
+    return
+        m_d->shouldShowColoring() && !m_d->coloringProjection->extent().isEmpty() ?
+            m_d->coloringProjection : projection();
+}
+
 QIcon KisColorizeMask::icon() const
 {
     return KisIconUtils::loadIcon("colorizeMask");

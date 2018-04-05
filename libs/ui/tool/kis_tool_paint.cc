@@ -378,7 +378,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
     m_pickingResource = colorPreviewResourceId(pickingJob.action);
 
     KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->projection() : image()->projection();
+        currentNode()->colorPickSourceDevice() : image()->projection();
 
     image()->addJob(m_pickerStrokeId,
                     new KisColorPickerStrokeStrategy::Data(device, imagePoint));

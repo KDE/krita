@@ -269,13 +269,13 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *pat
 
     colorNameCmb->setCurrentIndex(colornames.indexOf(QRegExp(patch->toolTip()+"|Fixed")));
 
-    for(i = 0; i <numRecents; i++)
+    for (i = 0; i <numRecents; i++)
         if(patch == recentPatches[i]) {
             activateRecent(i);
             break;
         }
 
-    if(i == numRecents) // we didn't find it above
+    if (i == numRecents) // we didn't find it above
         addRecent(patch->color());
 }
 

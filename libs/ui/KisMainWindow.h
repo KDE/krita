@@ -363,6 +363,8 @@ private Q_SLOTS:
      */
     void slotThemeChanged();
 
+    void slotDetachCanvas(bool detached);
+
     void undo();
     void redo();
     void updateWindowMenu();

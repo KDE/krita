@@ -225,6 +225,7 @@ public:
     KisAction *mdiPreviousWindow {0};
     KisAction *toggleDockers {0};
     KisAction *toggleDockerTitleBars {0};
+    KisAction *toggleDetachCanvas {0};
     KisAction *fullScreenMode {0};
     KisAction *showSessionManager {0};
 
@@ -254,6 +255,7 @@ public:
     QMdiSubWindow *activeSubWindow  {0};
     QSignalMapper *windowMapper;
     QSignalMapper *documentMapper;
+    QWidget *canvasWindow {0};
 
     QByteArray lastExportedFormat;
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
@@ -372,6 +374,14 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
     connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+
+    d->canvasWindow = new QWidget();
+    d->canvasWindow->setWindowFlags(Qt::Window);
+    actionCollection()->addAssociatedWidget(d->canvasWindow);
+
+    QLayout *cwLayout = new QHBoxLayout(d->canvasWindow);
+    d->canvasWindow->setLayout(cwLayout);
+    cwLayout->addWidget(new QWidget(this));
 
     createActions();
 
@@ -661,6 +671,23 @@ void KisMainWindow::slotThemeChanged()
     }
 
     emit themeChanged();
+}
+
+void KisMainWindow::slotDetachCanvas(bool detach)
+{
+    QWidget *outgoingWidget = takeCentralWidget();
+    QWidget *incomingWidget = d->canvasWindow->layout()->takeAt(0)->widget();
+
+    setCentralWidget(incomingWidget);
+    d->canvasWindow->layout()->addWidget(outgoingWidget);
+
+    if (detach) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(outgoingWidget == d->mdiArea);
+        d->canvasWindow->show();
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(incomingWidget == d->mdiArea);
+        d->canvasWindow->hide();
+    }
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
@@ -1222,8 +1249,8 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
 
             if (!closeAllowed) {
                 e->setAccepted(false);
+                return;
             }
-            return;
         }
     }
 
@@ -1234,6 +1261,7 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     if (childrenList.isEmpty()) {
         d->deferredClosingEvent = e;
         saveWindowState(true);
+        d->canvasWindow->close();
     } else {
         e->setAccepted(false);
     }
@@ -2489,6 +2517,10 @@ void KisMainWindow::createActions()
     d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
     d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
     connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
+
+    d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
+    d->toggleDockerTitleBars->setChecked(false);
+    connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(slotDetachCanvas(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);

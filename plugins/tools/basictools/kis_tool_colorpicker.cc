@@ -139,8 +139,8 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
         KisPaintDeviceSP dev;
 
         if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
-            currentNode() && currentNode()->projection()) {
-            dev = currentNode()->projection();
+            currentNode() && currentNode()->colorPickSourceDevice()) {
+            dev = currentNode()->colorPickSourceDevice();
         }
         else {
             imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));

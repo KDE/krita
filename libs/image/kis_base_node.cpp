@@ -107,6 +107,11 @@ KisBaseNode::~KisBaseNode()
     delete m_d;
 }
 
+KisPaintDeviceSP KisBaseNode::colorPickSourceDevice() const
+{
+    return projection();
+}
+
 quint8 KisBaseNode::opacity() const
 {
     if (m_d->opacityChannel) {

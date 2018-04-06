@@ -28,6 +28,7 @@
 #include <KoFlake.h>
 #include <KoFlakeTypes.h>
 
+class KoShapeFillWrapper;
 class KoCanvasBase;
 class KoShapeBackground;
 class KoShape;
@@ -112,6 +113,8 @@ private:
     void loadCurrentFillFromResourceServer();
 
     void updateWidgetComponentVisbility();
+
+    bool checkNewFillModeIsSame(const KoShapeFillWrapper &w) const;
 
     class Private;
     Private * const d;

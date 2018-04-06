@@ -673,8 +673,15 @@ void KisMainWindow::slotThemeChanged()
     emit themeChanged();
 }
 
-void KisMainWindow::slotDetachCanvas(bool detach)
+bool KisMainWindow::canvasDetached() const
 {
+    return centralWidget() != d->mdiArea;
+}
+
+void KisMainWindow::setCanvasDetached(bool detach)
+{
+    if (detach == canvasDetached()) return;
+
     QWidget *outgoingWidget = takeCentralWidget();
     QWidget *incomingWidget = d->canvasWindow->layout()->takeAt(0)->widget();
 
@@ -688,6 +695,13 @@ void KisMainWindow::slotDetachCanvas(bool detach)
         KIS_SAFE_ASSERT_RECOVER_NOOP(incomingWidget == d->mdiArea);
         d->canvasWindow->hide();
     }
+
+    d->toggleDetachCanvas->setChecked(detach);
+}
+
+QWidget * KisMainWindow::canvasWindow() const
+{
+    return d->canvasWindow;
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
@@ -2520,7 +2534,7 @@ void KisMainWindow::createActions()
 
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
     d->toggleDockerTitleBars->setChecked(false);
-    connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(slotDetachCanvas(bool)));
+    connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
     actionCollection()->addAction("window", d->windowMenu);

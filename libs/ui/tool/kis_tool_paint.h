@@ -175,7 +175,6 @@ private:
 
     bool isPickingAction(AlternateAction action);
 
-
     struct PickingJob {
         PickingJob() {}
         PickingJob(QPointF _documentPixel,

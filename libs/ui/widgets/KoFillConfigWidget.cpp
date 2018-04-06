@@ -741,12 +741,40 @@ void KoFillConfigWidget::shapeChanged()
     }
 }
 
+bool KoFillConfigWidget::checkNewFillModeIsSame(const KoShapeFillWrapper &w) const
+{
+    bool retval = false;
+
+    switch (w.type()) {
+    case KoFlake::None:
+        retval = d->selectedFillIndex == None;
+        break;
+    case KoFlake::Solid:
+        retval = d->selectedFillIndex == Solid && w.color() == d->colorAction->currentColor();
+        break;
+    case KoFlake::Gradient: {
+        QScopedPointer<KoStopGradient> newGradient(KoStopGradient::fromQGradient(w.gradient()));
+
+        retval = d->selectedFillIndex == Gradient && *newGradient == *d->activeGradient;
+        break;
+    }
+    case KoFlake::Pattern:
+        // TODO: not implemented
+        retval = d->selectedFillIndex == Pattern && false;
+        break;
+    }
+
+    return retval;
+}
+
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
     StyleButton newActiveButton = None;
     KoShapeFillWrapper wrapper(shape, d->fillVariant);
+
+    if (checkNewFillModeIsSame(wrapper)) return;
 
     switch (wrapper.type()) {
     case KoFlake::None:

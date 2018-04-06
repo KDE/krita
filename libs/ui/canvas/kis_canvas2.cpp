@@ -140,6 +140,8 @@ public:
     bool effectiveLodAllowedInCanvas() {
         return lodAllowedInCanvas && !bootstrapLodBlocked;
     }
+
+    void setActiveShapeManager(KoShapeManager *shapeManager);
 };
 
 namespace {
@@ -362,10 +364,22 @@ void KisCanvas2::addCommand(KUndo2Command *command)
     m_d->view->document()->addCommand(command);
 }
 
+void KisCanvas2::KisCanvas2Private::setActiveShapeManager(KoShapeManager *shapeManager)
+{
+    if (shapeManager != currentlyActiveShapeManager) {
+        currentlyActiveShapeManager = shapeManager;
+        selectedShapesProxy.setShapeManager(shapeManager);
+    }
+}
+
 KoShapeManager* KisCanvas2::shapeManager() const
 {
     KisNodeSP node = m_d->view->currentNode();
     KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
+
+    if (localShapeManager != m_d->currentlyActiveShapeManager) {
+        m_d->setActiveShapeManager(localShapeManager);
+    }
 
     // sanity check for consistency of the local shape manager
     KIS_SAFE_ASSERT_RECOVER (localShapeManager == m_d->currentlyActiveShapeManager) {
@@ -794,17 +808,12 @@ void KisCanvas2::notifyZoomChanged()
 
 void KisCanvas2::slotTrySwitchShapeManager()
 {
-    QPointer<KoShapeManager> oldManager = m_d->currentlyActiveShapeManager;
-
     KisNodeSP node = m_d->view->currentNode();
 
     QPointer<KoShapeManager> newManager;
     newManager = fetchShapeManagerFromNode(node);
 
-    if (newManager != oldManager) {
-        m_d->currentlyActiveShapeManager = newManager;
-        m_d->selectedShapesProxy.setShapeManager(newManager);
-    }
+    m_d->setActiveShapeManager(newManager);
 }
 
 void KisCanvas2::notifyLevelOfDetailChange()

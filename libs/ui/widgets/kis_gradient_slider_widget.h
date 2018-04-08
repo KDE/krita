@@ -29,6 +29,9 @@ class QMenu;
 class KoGradientSegment;
 class KoSegmentGradient;
 
+/**
+ * @brief The KisGradientSliderWidget class makes it possible to edit gradients.
+ */
 class KisGradientSliderWidget : public QWidget
 {
     Q_OBJECT

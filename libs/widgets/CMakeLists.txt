@@ -83,6 +83,9 @@ set(kritawidgets_LIB_SRCS
     KoAnchorSelectionWidget.cpp
 
     squeezedcombobox.cpp
+
+    KisGradientSlider.cpp
+    KisGradientSliderWidget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

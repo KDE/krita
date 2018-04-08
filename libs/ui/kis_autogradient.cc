@@ -28,12 +28,13 @@
 
 #include "kis_debug.h"
 
-#include "widgets/kis_gradient_slider_widget.h"
+#include "KisGradientSliderWidget.h"
 
 /****************************** KisAutogradient ******************************/
 
 KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption)
-    : QWidget(parent), m_autogradientResource(gradient)
+    : QWidget(parent)
+    , m_autogradientResource(gradient)
 {
     setObjectName(name);
     setupUi(this);

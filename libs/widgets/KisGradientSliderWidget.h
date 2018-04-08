@@ -29,10 +29,12 @@ class QMenu;
 class KoGradientSegment;
 class KoSegmentGradient;
 
+#include "kritawidgets_export.h"
+
 /**
  * @brief The KisGradientSliderWidget class makes it possible to edit gradients.
  */
-class KisGradientSliderWidget : public QWidget
+class KRITAWIDGETS_EXPORT KisGradientSliderWidget : public QWidget
 {
     Q_OBJECT
 

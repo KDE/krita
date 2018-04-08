@@ -19,7 +19,7 @@
  */
 
 // Local includes.
-#include "kis_gradient_slider.h"
+#include "KisGradientSlider.h"
 
 // C++ includes.
 

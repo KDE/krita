@@ -167,9 +167,9 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     if (m_canvas) {
-        if (!m_pixmap.isNull()) {
+        if (!m_oldPixmap.isNull()) {
             QSize newSize = calculatePreviewSize();
-            m_pixmap = m_pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            m_pixmap = m_oldPixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_imageIdleWatcher.startCountdown();
     }
@@ -266,6 +266,7 @@ void OverviewWidget::generateThumbnail()
 void OverviewWidget::updateThumbnail(QImage pixmap)
 {
     m_pixmap = QPixmap::fromImage(pixmap);
+    m_oldPixmap = m_pixmap.copy();
     update();
 }
 

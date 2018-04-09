@@ -96,6 +96,7 @@ private:
     QTransform imageToPreviewTransform();
     QPolygonF previewPolygon();
 
+    QPixmap m_oldPixmap;
     QPixmap m_pixmap;
     QPointer<KisCanvas2> m_canvas;
 

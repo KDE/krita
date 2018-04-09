@@ -821,8 +821,10 @@ void KisPaintopBox::slotCreatePresetFromScratch(QString paintop)
     //manually set the engine to use a new preset.
     KoID id(paintop, KisPaintOpRegistry::instance()->get(paintop)->name());
     KisPaintOpPresetSP preset = defaultPreset(id);
+
+    slotSetPaintop(paintop);  // change the paintop settings area and update the UI
+
     if (!preset) {
-        slotSetPaintop(paintop);  // change the paintop settings area and update the UI
         m_presetsPopup->setCreatingBrushFromScratch(true); // disable UI elements while creating from scratch
         preset = m_resourceProvider->currentPreset();
     } else {

@@ -186,6 +186,6 @@
     <binary>krita</binary>
   </provides>
   <releases>
-    <release date="2018-03-22" version="4.0.0.100"/>
+    <release date="2018-04-09" version="4.0.1.100"/>
   </releases>
 </component>

@@ -20,8 +20,8 @@
 #define TIMELINE_RULER_HEADER_H
 
 #include <QHeaderView>
-
 #include <QScopedPointer>
+#include "kis_action_manager.h"
 
 class QPaintEvent;
 
@@ -36,6 +36,8 @@ public:
     bool setZoom(qreal zoomLevel);
 
     void setModel(QAbstractItemModel *model) override;
+
+    void setActionManager( KisActionManager * actionManager);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;

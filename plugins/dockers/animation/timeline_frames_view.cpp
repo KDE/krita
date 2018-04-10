@@ -131,6 +131,8 @@ struct TimelineFramesView::Private
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
     KoIconToolTip tip;
+
+    KisActionManager * actionMan = 0;
 };
 
 TimelineFramesView::TimelineFramesView(QWidget *parent)
@@ -291,6 +293,18 @@ void TimelineFramesView::setShowInTimeline(KisAction* action)
     m_d->showHideLayerAction = action;
     m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
 }
+
+
+void TimelineFramesView::setActionManager( KisActionManager * actionManager)
+{
+    m_d->actionMan = actionManager;
+    m_d->horizontalRuler->setActionManager(actionManager);
+}
+
+
+
+
+
 
 void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
     QSize buttonSize = w->sizeHint();

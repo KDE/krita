@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 #include <QTableView>
-
+#include "kis_action_manager.h"
 #include "kritaanimationdocker_export.h"
 
 class KisAction;
@@ -42,6 +42,8 @@ public:
     QMap<QString, KisAction*> globalActions() const;
 
     void setShowInTimeline(KisAction *action);
+
+    void setActionManager( KisActionManager * actionManager);
 
 public Q_SLOTS:
     void slotSelectionChanged();

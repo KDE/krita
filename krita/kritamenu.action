@@ -516,6 +516,8 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+
     <Action name="delete_keyframe">
       <icon></icon>
       <text>Delete keyframe</text>
@@ -529,6 +531,7 @@
       <statusTip></statusTip>
     </Action>
   </Actions>
+
 
   <Actions category="Window">
     <text>Window</text>

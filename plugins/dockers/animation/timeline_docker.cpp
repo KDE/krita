@@ -154,4 +154,6 @@ void TimelineDocker::setMainWindow(KisViewManager *view)
     }
 
     m_d->view->setShowInTimeline(actionManager->actionByName("show_in_timeline"));
+
+    m_d->view->setActionManager(actionManager);
 }

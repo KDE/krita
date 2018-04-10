@@ -2151,6 +2151,57 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="insert_n_frames_left">
+      <icon></icon>
+      <text>Insert N Frame Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N Frame Left</toolTip>
+      <iconText>Insert N Frame Left</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="insert_n_frames_right">
+      <icon></icon>
+      <text>Insert N Frame Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N Frame Right</toolTip>
+      <iconText>Insert N Frame Right</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="clear_animation_columns">
+      <icon></icon>
+      <text>Clear Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Clear Columns</toolTip>
+      <iconText>Clear Columns</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="remove_animation_columns">
+      <icon></icon>
+      <text>Remove Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove Columns</toolTip>
+      <iconText>Remove Columns</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+
+
   </Actions>
 
   <Actions category="Layers">

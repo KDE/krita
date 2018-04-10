@@ -186,12 +186,16 @@ extern "C" int main(int argc, char **argv)
     }
 
 
+    QString language;
     QString root;
     {
         // Create a temporary application to get the root
         QCoreApplication app(argc, argv);
         Q_UNUSED(app);
         root = KoResourcePaths::getApplicationRoot();
+        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup(QStringLiteral("Language"));
+        language = languageoverride.value(qAppName(), "").toString();
     }
 
 
@@ -213,10 +217,6 @@ extern "C" int main(int argc, char **argv)
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
     {
-        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-        languageoverride.beginGroup(QStringLiteral("Language"));
-        QString language = languageoverride.value("krita", "").toString();
-
         qDebug() << "Override language:" << language;
 
         if (!language.isEmpty()) {

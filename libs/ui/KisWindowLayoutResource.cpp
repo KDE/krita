@@ -266,7 +266,7 @@ void KisWindowLayoutResource::applyLayout()
         mainWindow->setCanvasDetached(window.canvasDetached);
         if (window.canvasDetached) {
             QWidget *canvasWindow = mainWindow->canvasWindow();
-            mainWindow->restoreGeometry(window.canvasWindowGeometry.data);
+            canvasWindow->restoreGeometry(window.canvasWindowGeometry.data);
         }
     }
 

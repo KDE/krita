@@ -37,7 +37,7 @@ cd $BUILD_PREFIX
 #
 
 # Step 0: place the translations where ki18n and Qt look for them
-if [ -d $$APPDIR/usr/share/locale ] ; then
+if [ -d $APPDIR/usr/share/locale ] ; then
     mv $APPDIR/usr/share/locale $APPDIR/usr/share/krita
 fi
 

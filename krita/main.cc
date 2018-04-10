@@ -96,8 +96,8 @@ typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
 } ORIENTATION_PREFERENCE;
 typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
-    ORIENTATION_PREFERENCE orientation
-);
+        ORIENTATION_PREFERENCE orientation
+        );
 void resetRotation()
 {
     QLibrary user32Lib("user32");
@@ -187,11 +187,15 @@ extern "C" int main(int argc, char **argv)
 
 
     QString root;
+    QString language;
     {
         // Create a temporary application to get the root
         QCoreApplication app(argc, argv);
         Q_UNUSED(app);
         root = KoResourcePaths::getApplicationRoot();
+        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup(QStringLiteral("Language"));
+        language = languageoverride.value("Krita", "").toString();
     }
 
 
@@ -212,33 +216,27 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
-    {
-        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-        languageoverride.beginGroup(QStringLiteral("Language"));
-        QString language = languageoverride.value("krita", "").toString();
 
-        qDebug() << "Override language:" << language;
+    qDebug() << "Override language:" << language;
 
-        if (!language.isEmpty()) {
-            KLocalizedString::setLanguages(language.split(":"));
-            // And override Qt's locale, too
-            qputenv("LANG", language.split(":").first().toUtf8());
-            QLocale locale(language.split(":").first());
-            QLocale::setDefault(locale);
-        }
-#ifndef Q_OS_LINUX
-        else {
-            // And if there isn't one, check the one set by the system.
-            QLocale locale = QLocale::system();
-            if (locale.name() != QStringLiteral("en")) {
-                qDebug() << "Setting Krita's language to:" << locale;
-                qputenv("LANG", locale.name().toLatin1());
-                KLocalizedString::setLanguages(QStringList() << locale.name());
-            }
-        }
-#endif
+    if (!language.isEmpty()) {
+        KLocalizedString::setLanguages(language.split(":"));
+        // And override Qt's locale, too
+        qputenv("LANG", language.split(":").first().toUtf8());
+        QLocale locale(language.split(":").first());
+        QLocale::setDefault(locale);
     }
-
+#ifndef Q_OS_LINUX
+    else {
+        // And if there isn't one, check the one set by the system.
+        QLocale locale = QLocale::system();
+        if (locale.name() != QStringLiteral("en")) {
+            qDebug() << "Setting Krita's language to:" << locale;
+            qputenv("LANG", locale.name().toLatin1());
+            KLocalizedString::setLanguages(QStringList() << locale.name());
+        }
+    }
+#endif
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
     KLocalizedString::setApplicationDomain("krita");

@@ -141,6 +141,7 @@
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include <KisUpdateSchedulerConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
+#include "KisCanvasWindow.h"
 
 #include <mutex>
 
@@ -255,7 +256,7 @@ public:
     QMdiSubWindow *activeSubWindow  {0};
     QSignalMapper *windowMapper;
     QSignalMapper *documentMapper;
-    QWidget *canvasWindow {0};
+    KisCanvasWindow *canvasWindow {0};
 
     QByteArray lastExportedFormat;
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
@@ -375,13 +376,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
     connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
-    d->canvasWindow = new QWidget();
-    d->canvasWindow->setWindowFlags(Qt::Window);
+    d->canvasWindow = new KisCanvasWindow(this);
     actionCollection()->addAssociatedWidget(d->canvasWindow);
-
-    QLayout *cwLayout = new QHBoxLayout(d->canvasWindow);
-    d->canvasWindow->setLayout(cwLayout);
-    cwLayout->addWidget(new QWidget(this));
 
     createActions();
 
@@ -683,10 +679,8 @@ void KisMainWindow::setCanvasDetached(bool detach)
     if (detach == canvasDetached()) return;
 
     QWidget *outgoingWidget = takeCentralWidget();
-    QWidget *incomingWidget = d->canvasWindow->layout()->takeAt(0)->widget();
-
+    QWidget *incomingWidget = d->canvasWindow->swapMainWidget(outgoingWidget);
     setCentralWidget(incomingWidget);
-    d->canvasWindow->layout()->addWidget(outgoingWidget);
 
     if (detach) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(outgoingWidget == d->mdiArea);

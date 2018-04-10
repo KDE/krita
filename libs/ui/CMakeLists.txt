@@ -363,6 +363,7 @@ set(kritaui_LIB_SRCS
     KisTemplateTree.cpp
     KisUndoStackAction.cpp
     KisView.cpp
+    KisCanvasWindow.cpp
 
     thememanager.cpp
 

@@ -195,7 +195,7 @@ extern "C" int main(int argc, char **argv)
         root = KoResourcePaths::getApplicationRoot();
         QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
         languageoverride.beginGroup(QStringLiteral("Language"));
-        language = languageoverride.value("Krita", "").toString();
+        language = languageoverride.value(qAppName(), "").toString();
     }
 
 

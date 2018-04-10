@@ -25,6 +25,7 @@
 
 namespace KisAnimationUtils
 {
+    KUndo2Command* createKeyframeCommand(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy, KUndo2Command *parentCommand = 0);
     void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channel, int time, bool copy);
 
     struct FrameItem {

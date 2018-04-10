@@ -54,6 +54,8 @@ public:
     bool removeFrames(const QModelIndexList &indexes);
     bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames);
 
+    bool removeFramesAndOffset(const QModelIndexList &indexes);
+
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
 

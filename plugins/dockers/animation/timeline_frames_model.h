@@ -51,6 +51,8 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
 
+    bool insertFrames(int dstColumn, const QList<int> &dstRows, int count);
+
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QString &fileName);
 

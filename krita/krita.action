@@ -2344,6 +2344,57 @@
       <statusTip></statusTip>
     </Action>
 
+    <Action name="add_hold_frame">
+      <icon></icon>
+      <text>Insert Hold Frame</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a hold frame after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="add_n_hold_frames">
+      <icon></icon>
+      <text>Insert N Hold Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N hold frames after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_hold_frame">
+      <icon></icon>
+      <text>Remove Hold Frame</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a hold frame after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_n_hold_frames">
+      <icon></icon>
+      <text>Remove N Hold Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove N hold frames after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
   </Actions>
 

@@ -311,6 +311,18 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
 
         action = m_d->actionMan->createAction("remove_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotRemoveFrame()));
+
+        action = m_d->actionMan->createAction("add_hold_frame");
+        connect(action, SIGNAL(triggered()), SLOT(slotInsertHoldFrames()));
+
+        action = m_d->actionMan->createAction("add_n_hold_frames");
+        connect(action, SIGNAL(triggered()), SLOT(slotInsertHoldFramesCustom()));
+
+        action = m_d->actionMan->createAction("remove_hold_frame");
+        connect(action, SIGNAL(triggered()), SLOT(slotRemoveHoldFrames()));
+
+        action = m_d->actionMan->createAction("remove_n_hold_frames");
+        connect(action, SIGNAL(triggered()), SLOT(slotRemoveHoldFramesCustom()));
     }
 }
 
@@ -936,6 +948,12 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 addActionToMenu(&menu, "remove_frames");
                 addActionToMenu(&menu, "remove_frames_and_shift");
                 menu.addSeparator();
+                addActionToMenu(&menu, "add_hold_frame");
+                addActionToMenu(&menu, "remove_hold_frame");
+                menu.addSeparator();
+                addActionToMenu(&menu, "add_n_hold_frames");
+                addActionToMenu(&menu, "remove_n_hold_frames");
+                menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
                 menu.exec(event->globalPos());
 
@@ -958,6 +976,12 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 addActionToMenu(&menu, "insert_n_keyframes_left");
                 menu.addSeparator();
                 addActionToMenu(&menu, "remove_frames_and_shift");
+                menu.addSeparator();
+                addActionToMenu(&menu, "add_hold_frame");
+                addActionToMenu(&menu, "remove_hold_frame");
+                menu.addSeparator();
+                addActionToMenu(&menu, "add_n_hold_frames");
+                addActionToMenu(&menu, "remove_n_hold_frames");
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
                 menu.exec(event->globalPos());
@@ -996,6 +1020,14 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 addActionToMenu(&menu, "remove_frames");
             }
             addActionToMenu(&menu, "remove_frames_and_shift");
+
+            menu.addSeparator();
+            addActionToMenu(&menu, "add_hold_frame");
+            addActionToMenu(&menu, "remove_hold_frame");
+            menu.addSeparator();
+            addActionToMenu(&menu, "add_n_hold_frames");
+            addActionToMenu(&menu, "remove_n_hold_frames");
+
             if (haveFrames) {
                 menu.addSeparator();
                 menu.addAction(m_d->multiframeColorSelectorAction);
@@ -1337,6 +1369,56 @@ void TimelineFramesView::slotRemoveFramesAndShift(bool forceEntireColumn)
 void TimelineFramesView::slotRemoveColumnsAndShift()
 {
     slotRemoveFramesAndShift(true);
+}
+
+void TimelineFramesView::slotInsertHoldFrames(int count)
+{
+    QModelIndexList indexes;
+
+    Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
+        if (m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+            indexes << index;
+        }
+    }
+
+    if (!indexes.isEmpty()) {
+        m_d->model->insertHoldFrames(indexes, count);
+    }
+}
+
+void TimelineFramesView::slotRemoveHoldFrames(int count)
+{
+    slotInsertHoldFrames(-count);
+}
+
+void TimelineFramesView::slotInsertHoldFramesCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Insert hold frames"),
+                                           i18nc("@label:spinbox", "Enter number of frames"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotInsertHoldFrames(count);
+    }
+}
+
+void TimelineFramesView::slotRemoveHoldFramesCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Remove hold frames"),
+                                           i18nc("@label:spinbox", "Enter number of frames"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotRemoveHoldFrames(count);
+    }
 }
 
 

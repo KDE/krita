@@ -739,6 +739,99 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
     return true;
 }
 
+bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int count)
+{
+    if (selectedIndexes.isEmpty() || count == 0) return true;
+
+    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count)));
+
+    {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+
+        QSet<KisKeyframeSP> uniqueKeyframesInSelection;
+
+        Q_FOREACH (const QModelIndex &index, selectedIndexes) {
+            KisNodeSP node = nodeAt(index);
+            KIS_SAFE_ASSERT_RECOVER(node) { continue; }
+
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            if (!channel) continue;
+
+            KisKeyframeSP keyFrame = channel->activeKeyframeAt(index.column());
+
+            if (keyFrame) {
+                uniqueKeyframesInSelection.insert(keyFrame);
+            }
+        }
+
+        int minSelectedTime = std::numeric_limits<int>::max();
+        QList<KisKeyframeSP> keyframesToMove;
+
+        for (auto it = uniqueKeyframesInSelection.begin(); it != uniqueKeyframesInSelection.end(); ++it) {
+            KisKeyframeSP keyframe = *it;
+
+            minSelectedTime = qMin(minSelectedTime, keyframe->time());
+
+            KisKeyframeChannel *channel = keyframe->channel();
+            KisKeyframeSP nextKeyframe = channel->nextKeyframe(keyframe);
+
+            if (nextKeyframe) {
+                keyframesToMove << nextKeyframe;
+            }
+        }
+
+        std::sort(keyframesToMove.begin(), keyframesToMove.end(),
+            [] (KisKeyframeSP lhs, KisKeyframeSP rhs) {
+                return lhs->time() > rhs->time();
+            });
+
+        if (keyframesToMove.isEmpty()) return true;
+
+        const int maxColumn = columnCount();
+
+        if (count > 0) {
+            setLastVisibleFrame(columnCount() + count);
+        }
+
+        Q_FOREACH (KisKeyframeSP keyframe, keyframesToMove) {
+            int plannedFrameMove = count;
+
+            if (count < 0) {
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(keyframe->time() > 0, false);
+
+                KisKeyframeSP prevFrame = keyframe->channel()->previousKeyframe(keyframe);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(prevFrame, false);
+
+                plannedFrameMove = qMax(count, prevFrame->time() - keyframe->time() + 1);
+            }
+
+            KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(keyframe->channel()->node());
+            KIS_SAFE_ASSERT_RECOVER(dummy) { continue; }
+
+            const int row = m_d->converter->rowForDummy(dummy);
+            KIS_SAFE_ASSERT_RECOVER(row >= 0) { continue; }
+
+            QModelIndexList indexes;
+            for (int column = keyframe->time(); column < maxColumn; column++) {
+                indexes << index(row, column);
+            }
+
+            createOffsetFramesCommand(indexes, QPoint(plannedFrameMove, 0), false, parentCommand.data());
+        }
+
+        const int oldTime = m_d->image->animationInterface()->currentUITime();
+        const int newTime = minSelectedTime;
+
+        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
+                                        oldTime,
+                                        newTime, parentCommand.data());
+    }
+
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(), KisStrokeJobData::BARRIER);
+    return true;
+}
+
 
 QString TimelineFramesModel::audioChannelFileName() const
 {

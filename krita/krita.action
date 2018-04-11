@@ -2139,54 +2139,6 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="insert_n_frames_left">
-      <icon></icon>
-      <text>Insert N Frame Left</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert N Frame Left</toolTip>
-      <iconText>Insert N Frame Left</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="insert_n_frames_right">
-      <icon></icon>
-      <text>Insert N Frame Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert N Frame Right</toolTip>
-      <iconText>Insert N Frame Right</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="clear_animation_columns">
-      <icon></icon>
-      <text>Clear Columns</text>
-      <whatsThis></whatsThis>
-      <toolTip>Clear Columns</toolTip>
-      <iconText>Clear Columns</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="remove_animation_columns">
-      <icon></icon>
-      <text>Remove Columns</text>
-      <whatsThis></whatsThis>
-      <toolTip>Remove Columns</toolTip>
-      <iconText>Remove Columns</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
 
     <Action name="insert_keyframes_right">
       <icon></icon>
@@ -2240,9 +2192,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="remove_frames_and_shift">
+    <Action name="remove_frames_and_pull">
       <icon></icon>
-      <text>Remove Frame and Shift</text>
+      <text>Remove Frame and Pull</text>
       <whatsThis></whatsThis>
       <toolTip>Remove keyframes moving the tail of animation to the left</toolTip>
       <iconText></iconText>
@@ -2270,7 +2222,7 @@
       <icon></icon>
       <text>Insert Column Right</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert keyframes to the right of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert column to the right of selection moving the tail of animation to the right</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2318,9 +2270,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="remove_columns_and_shift">
+    <Action name="remove_columns_and_pull">
       <icon></icon>
-      <text>Remove Column and Shift</text>
+      <text>Remove Column and Pull</text>
       <whatsThis></whatsThis>
       <toolTip>Remove columns moving the tail of animation to the left</toolTip>
       <iconText></iconText>
@@ -2335,7 +2287,7 @@
       <icon></icon>
       <text>Remove Column</text>
       <whatsThis></whatsThis>
-      <toolTip>Just remove columns without moving anything around</toolTip>
+      <toolTip>Remove columns without moving anything around</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2344,7 +2296,7 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="add_hold_frame">
+    <Action name="insert_hold_frame">
       <icon></icon>
       <text>Insert Hold Frame</text>
       <whatsThis></whatsThis>
@@ -2357,7 +2309,7 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="add_n_hold_frames">
+    <Action name="insert_n_hold_frames">
       <icon></icon>
       <text>Insert N Hold Frames</text>
       <whatsThis></whatsThis>
@@ -2396,11 +2348,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="add_hold_column">
+    <Action name="insert_hold_column">
       <icon></icon>
       <text>Insert Hold Column</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert a hold column into the frame in the current position</toolTip>
+      <toolTip>Insert a hold column into the frame at the current position</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2409,11 +2361,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="add_n_hold_columns">
+    <Action name="insert_n_hold_columns">
       <icon></icon>
       <text>Insert N Hold Columns</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert N hold columns into the frame in the current position</toolTip>
+      <toolTip>Insert N hold columns into the frame at the current position</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2426,7 +2378,7 @@
       <icon></icon>
       <text>Remove Hold Column</text>
       <whatsThis></whatsThis>
-      <toolTip>Remove a hold column into the frame in the current position</toolTip>
+      <toolTip>Remove a hold column from the frame at the current position</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2439,7 +2391,7 @@
       <icon></icon>
       <text>Remove N Hold Columns</text>
       <whatsThis></whatsThis>
-      <toolTip>Remove N hold columns into the frame in the current position</toolTip>
+      <toolTip>Remove N hold columns from the frame at the current position</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>

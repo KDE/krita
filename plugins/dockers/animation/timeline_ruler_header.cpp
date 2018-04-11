@@ -85,16 +85,16 @@ void TimelineRulerHeader::setActionManager( KisActionManager * actionManager)
         action = actionManager->createAction("insert_n_columns_left");
         connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnsLeftCustom()));
 
-        action = actionManager->createAction("remove_columns_and_shift");
+        action = actionManager->createAction("remove_columns_and_pull");
         connect(action, SIGNAL(triggered()), SIGNAL(sigRemoveColumnsAndShift()));
 
         action = actionManager->createAction("remove_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigRemoveColumns()));
 
-        action = actionManager->createAction("add_hold_column");
+        action = actionManager->createAction("insert_hold_column");
         connect(action, SIGNAL(triggered()), SIGNAL(sigInsertHoldColumns()));
 
-        action = actionManager->createAction("add_n_hold_columns");
+        action = actionManager->createAction("insert_n_hold_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigInsertHoldColumnsCustom()));
 
         action = actionManager->createAction("remove_hold_column");
@@ -445,12 +445,12 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             addActionToMenu(&menu, "insert_n_columns_left");
             menu.addSeparator();
             addActionToMenu(&menu, "remove_columns");
-            addActionToMenu(&menu, "remove_columns_and_shift");
+            addActionToMenu(&menu, "remove_columns_and_pull");
             menu.addSeparator();
-            addActionToMenu(&menu, "add_hold_column");
+            addActionToMenu(&menu, "insert_hold_column");
             addActionToMenu(&menu, "remove_hold_column");
             menu.addSeparator();
-            addActionToMenu(&menu, "add_n_hold_columns");
+            addActionToMenu(&menu, "insert_n_hold_columns");
             addActionToMenu(&menu, "remove_n_hold_columns");
 
             menu.exec(e->globalPos());

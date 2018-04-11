@@ -312,16 +312,16 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
         action = m_d->actionMan->createAction("insert_n_keyframes_left");
         connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesLeftCustom()));
 
-        action = m_d->actionMan->createAction("remove_frames_and_shift");
+        action = m_d->actionMan->createAction("remove_frames_and_pull");
         connect(action, SIGNAL(triggered()), SLOT(slotRemoveFramesAndShift()));
 
         action = m_d->actionMan->createAction("remove_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotRemoveFrame()));
 
-        action = m_d->actionMan->createAction("add_hold_frame");
+        action = m_d->actionMan->createAction("insert_hold_frame");
         connect(action, SIGNAL(triggered()), SLOT(slotInsertHoldFrames()));
 
-        action = m_d->actionMan->createAction("add_n_hold_frames");
+        action = m_d->actionMan->createAction("insert_n_hold_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotInsertHoldFramesCustom()));
 
         action = m_d->actionMan->createAction("remove_hold_frame");
@@ -952,12 +952,12 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 addActionToMenu(&menu, "insert_n_keyframes_left");
                 menu.addSeparator();
                 addActionToMenu(&menu, "remove_frames");
-                addActionToMenu(&menu, "remove_frames_and_shift");
+                addActionToMenu(&menu, "remove_frames_and_pull");
                 menu.addSeparator();
-                addActionToMenu(&menu, "add_hold_frame");
+                addActionToMenu(&menu, "insert_hold_frame");
                 addActionToMenu(&menu, "remove_hold_frame");
                 menu.addSeparator();
-                addActionToMenu(&menu, "add_n_hold_frames");
+                addActionToMenu(&menu, "insert_n_hold_frames");
                 addActionToMenu(&menu, "remove_n_hold_frames");
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
@@ -981,12 +981,12 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 addActionToMenu(&menu, "insert_n_keyframes_right");
                 addActionToMenu(&menu, "insert_n_keyframes_left");
                 menu.addSeparator();
-                addActionToMenu(&menu, "remove_frames_and_shift");
+                addActionToMenu(&menu, "remove_frames_and_pull");
                 menu.addSeparator();
-                addActionToMenu(&menu, "add_hold_frame");
+                addActionToMenu(&menu, "insert_hold_frame");
                 addActionToMenu(&menu, "remove_hold_frame");
                 menu.addSeparator();
-                addActionToMenu(&menu, "add_n_hold_frames");
+                addActionToMenu(&menu, "insert_n_hold_frames");
                 addActionToMenu(&menu, "remove_n_hold_frames");
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
@@ -1025,13 +1025,13 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             if (haveFrames) {
                 addActionToMenu(&menu, "remove_frames");
             }
-            addActionToMenu(&menu, "remove_frames_and_shift");
+            addActionToMenu(&menu, "remove_frames_and_pull");
 
             menu.addSeparator();
-            addActionToMenu(&menu, "add_hold_frame");
+            addActionToMenu(&menu, "insert_hold_frame");
             addActionToMenu(&menu, "remove_hold_frame");
             menu.addSeparator();
-            addActionToMenu(&menu, "add_n_hold_frames");
+            addActionToMenu(&menu, "insert_n_hold_frames");
             addActionToMenu(&menu, "remove_n_hold_frames");
 
             if (haveFrames) {

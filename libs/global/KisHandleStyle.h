@@ -69,6 +69,12 @@ public:
     static KisHandleStyle& highlightedPrimaryHandles();
 
     /**
+     * Same as primary style, but the handles are filled with red color to show
+     * that the user is hovering them and the outline is solid
+     */
+    static KisHandleStyle& highlightedPrimaryHandlesWithSolidOutline();
+
+    /**
      * Used for nodes, which control points are highlighted (the node itself
      * is not highlighted)
      */

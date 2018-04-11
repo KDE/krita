@@ -66,15 +66,15 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool f
     case Exiv2::unsignedRational:
         if(value->size() < 2)
         {
-          dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
-          return KisMetaData::Value();
+            dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
+            return KisMetaData::Value();
         }
         return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::signedRational:
         if(value->size() < 2)
         {
-          dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
-          return KisMetaData::Value();
+            dbgMetaData << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
+            return KisMetaData::Value();
         }
         return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::date:
@@ -166,7 +166,9 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational(value.asRational().numerator, value.asRational().denominator));
         }
     case KisMetaData::Value::OrderedArray:
+        /* Falls through */
     case KisMetaData::Value::UnorderedArray:
+        /* Falls through */
     case KisMetaData::Value::AlternativeArray: {
         switch (type) {
         case Exiv2::unsignedByte:
@@ -187,10 +189,12 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             }
             return ev;
         }
+            break;
         default:
             dbgMetaData << type << " " << value;
             //Q_ASSERT(false);
         }
+        /* Falls through */
     }
     default:
         dbgMetaData << type << " " << value;
@@ -255,7 +259,7 @@ Exiv2::Value* kmdValueToExivXmpValue(const KisMetaData::Value& value)
         Exiv2::Value* arrV = new Exiv2::LangAltValue;
         QMap<QString, KisMetaData::Value> langArray = value.asLangArray();
         for (QMap<QString, KisMetaData::Value>::iterator it = langArray.begin();
-                it != langArray.end(); ++it) {
+             it != langArray.end(); ++it) {
             QString exivVal;
             if (it.key() != "x-default") {
                 exivVal = "lang=" + it.key() + ' ';

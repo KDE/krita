@@ -230,23 +230,7 @@ void KisToolMove::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     KisTool::activate(toolActivation, shapes);
     QRect totalBounds;
 
-    Q_FOREACH (KisNodeSP node, this->selectedNodes()) {
-        if (node && node->projection()) {
-            totalBounds |= node->projection()->nonDefaultPixelArea();
-        }
-    }
-
-    if (image()->globalSelection()) {
-        totalBounds &= image()->globalSelection()->selectedRect();
-    }
-
-    m_startPosition = totalBounds.topLeft();
-
-    if (m_optionsWidget)
-    {
-        KisSignalsBlocker b(m_optionsWidget);
-        m_optionsWidget->slotSetTranslate(m_startPosition);
-    }
+    slotNodeChanged(this->selectedNodes());
 }
 
 
@@ -293,6 +277,13 @@ void KisToolMove::requestStrokeEnd()
 void KisToolMove::requestStrokeCancellation()
 {
     cancelStroke();
+}
+
+void KisToolMove::requestUndoDuringStroke()
+{
+    // we shouldn't cancel the stroke on Ctrl+Z, becasue it will not only
+    // cancel the stroke, but also undo the previous command, which we haven't
+    // yet pushed to the stack
 }
 
 void KisToolMove::beginPrimaryAction(KoPointerEvent *event)
@@ -419,7 +410,7 @@ void KisToolMove::endStroke()
 {
     if (!m_strokeId) return;
 
-    KisImageWSP image = currentImage();
+    KisImageSP image = currentImage();
     image->endStroke(m_strokeId);
     m_strokeId.clear();
     m_currentlyProcessingNodes.clear();
@@ -431,12 +422,18 @@ void KisToolMove::cancelStroke()
 {
     if (!m_strokeId) return;
 
-    KisImageWSP image = currentImage();
+    KisImageSP image = currentImage();
     image->cancelStroke(m_strokeId);
     m_strokeId.clear();
     m_currentlyProcessingNodes.clear();
     m_moveInProgress = false;
     emit moveInProgressChanged();
+
+    // we should reset m_startPosition into the original value when
+    // the stroke is cancelled
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+    canvas->viewManager()->blockUntilOperationsFinishedForced(image);
+    slotNodeChanged(this->selectedNodes());
 }
 
 QWidget* KisToolMove::createOptionWidget()

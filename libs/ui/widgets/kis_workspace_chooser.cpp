@@ -32,7 +32,6 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoDockWidgetTitleBar.h>
 #include <resources/KoResource.h>
 
 #include "KisResourceServerProvider.h"

@@ -306,11 +306,15 @@ void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
     switch (action) {
     case PickFgNode:
+        /* Falls through */
     case PickBgNode:
+        /* Falls through */
     case PickFgImage:
+        /* Falls through */
     case PickBgImage:
         delayedAction = action;
         m_colorPickerDelayTimer.start(100);
+        /* Falls through */
     default:
         pickColorWasOverridden();
         KisTool::activateAlternateAction(action);
@@ -393,10 +397,16 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
     }
 
     KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->projection() : image()->projection();
+        currentNode()->colorPickSourceDevice() : image()->projection();
+
+    // Used for color picker blending.
+    KoColor currentColor = canvas()->resourceManager()->foregroundColor();
+    if( pickingJob.action == PickBgNode || pickingJob.action == PickBgImage ){
+        currentColor = canvas()->resourceManager()->backgroundColor();
+    }
 
     image()->addJob(m_pickerStrokeId,
-                    new KisColorPickerStrokeStrategy::Data(device, imagePoint));
+                    new KisColorPickerStrokeStrategy::Data(device, imagePoint, currentColor));
 }
 
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)

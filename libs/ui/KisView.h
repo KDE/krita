@@ -77,9 +77,6 @@ public:
     KisView(KisDocument *document, KisViewManager *viewManager, QWidget *parent = 0);
     ~KisView() override;
 
-    QAction *undoAction() const;
-    QAction *redoAction() const;
-
     // Temporary while teasing apart view and mainwindow
     void setViewManager(KisViewManager *view);
     KisViewManager *viewManager() const;

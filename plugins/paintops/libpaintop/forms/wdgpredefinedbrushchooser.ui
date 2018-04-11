@@ -158,6 +158,33 @@
        <property name="verticalSpacing">
         <number>10</number>
        </property>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="resetBrushButton">
+         <property name="text">
+          <string>Reset Predefined Tip</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="KisSpacingSelectionWidget" name="brushSpacingSelectionWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="brushRotationLabel">
          <property name="text">
@@ -172,16 +199,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="brushRotationSpinBox" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="brushSizeLabel">
          <property name="text">
@@ -189,13 +206,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="KisSpacingSelectionWidget" name="brushSpacingSelectionWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="useColorAsMaskCheckbox">
+         <property name="text">
+          <string>Use Color as Mask</string>
          </property>
         </widget>
        </item>
@@ -209,17 +223,13 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="useColorAsMaskCheckbox">
-         <property name="text">
-          <string>Use Color as Mask</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="1">
-        <widget class="QPushButton" name="resetBrushButton">
+        <widget class="QCheckBox" name="preserveBrushPresetSettings">
          <property name="text">
-          <string>Reset Predefined Tip</string>
+          <string>Preserve Brush Preset Settings</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

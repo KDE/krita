@@ -11,6 +11,7 @@ set (SvgTextTool_SRCS
     SvgTextToolFactory.cpp
     svgtexttool.qrc
     kis_font_family_combo_box.cpp
+    FontSizeAction.cpp
 )
 
 ki18n_wrap_ui(SvgTextTool_SRCS 

@@ -828,6 +828,10 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
                 i18nc("floating message in transformation tool",
                       "Selected layer cannot be transformed with active transformation mode "),
                  koIcon("object-locked"), 4000, KisFloatingMessage::High);
+
+        // force-reset transform mode to default
+        initTransformMode(mode);
+
         return;
     }
 
@@ -856,6 +860,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
                 i18nc("floating message in transformation tool",
                       "Cannot transform empty layer "),
                 QIcon(), 1000, KisFloatingMessage::Medium);
+
+        // force-reset transform mode to default
+        initTransformMode(mode);
 
         return;
     }
@@ -1131,16 +1138,7 @@ void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(root);
 
-    KisLayerUtils::recursiveApplyNodes(root,
-        [] (KisNodeSP node) {
-            KisDelayedUpdateNodeInterface *delayedUpdate =
-                dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
-
-            if (delayedUpdate) {
-                delayedUpdate->forceUpdateTimedNode();
-            }
-        });
-
+    KisLayerUtils::forceAllDelayedNodesUpdate(root);
     image()->waitForDone();
 }
 

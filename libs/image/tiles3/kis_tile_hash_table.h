@@ -78,11 +78,13 @@ public:
      * parameters set to (qint32_MIN, qint32_MIN).
      * \param col column of the tile
      * \param row row of the tile
+     * \param existingTile returns true if the tile actually exists in the table
+     *                     and it is not a lazily created default wrapper tile
      */
-    TileTypeSP getReadOnlyTileLazy(qint32 col, qint32 row);
+    TileTypeSP getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile);
     void addTile(TileTypeSP tile);
-    void deleteTile(TileTypeSP tile);
-    void deleteTile(qint32 col, qint32 row);
+    bool deleteTile(TileTypeSP tile);
+    bool deleteTile(qint32 col, qint32 row);
 
     void clear();
 
@@ -101,7 +103,7 @@ private:
     TileTypeSP getTileMinefieldWalk(qint32 col, qint32 row, qint32 idx);
     TileTypeSP getTile(qint32 col, qint32 row, qint32 idx);
     void linkTile(TileTypeSP tile, qint32 idx);
-    TileTypeSP unlinkTile(qint32 col, qint32 row, qint32 idx);
+    bool unlinkTile(qint32 col, qint32 row, qint32 idx);
 
     inline void setDefaultTileDataImp(KisTileData *defaultTileData);
     inline KisTileData* defaultTileDataImp() const;

@@ -28,9 +28,13 @@
 #include <QList>
 #include <QPair>
 
-#include <kritaui_export.h>
+#include "kritawidgets_export.h"
 
-class KRITAUI_EXPORT KisGradientSlider : public QWidget
+/**
+ * @brief The KisGradientSlider class is a numerical slider that paints a light-dark
+ * gradient for use in filters and histograms.
+ */
+class KRITAWIDGETS_EXPORT KisGradientSlider : public QWidget
 {
     Q_OBJECT
 

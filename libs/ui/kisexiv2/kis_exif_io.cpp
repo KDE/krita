@@ -125,12 +125,13 @@ inline T fixEndianess(T v, Exiv2::ByteOrder order)
 Exiv2::ByteOrder invertByteOrder(Exiv2::ByteOrder order)
 {
     switch (order) {
-    case Exiv2::invalidByteOrder:
-        warnKrita << "KisExifIO: Can't invert Exiv2::invalidByteOrder";
     case Exiv2::littleEndian:
         return Exiv2::bigEndian;
     case Exiv2::bigEndian:
         return Exiv2::littleEndian;
+    case Exiv2::invalidByteOrder:
+        warnKrita << "KisExifIO: Can't invert Exiv2::invalidByteOrder";
+        return Exiv2::invalidByteOrder;
     }
     return Exiv2::invalidByteOrder;
 }

@@ -21,7 +21,7 @@
 
 #include <QScopedPointer>
 #include <QTableView>
-
+#include "kis_action_manager.h"
 #include "kritaanimationdocker_export.h"
 
 class KisAction;
@@ -39,9 +39,9 @@ public:
 
     void updateGeometries() override;
 
-    QMap<QString, KisAction*> globalActions() const;
-
     void setShowInTimeline(KisAction *action);
+
+    void setActionManager( KisActionManager * actionManager);
 
 public Q_SLOTS:
     void slotSelectionChanged();
@@ -60,7 +60,25 @@ private Q_SLOTS:
 
     void slotNewFrame();
     void slotCopyFrame();
-    void slotRemoveFrame();
+
+
+    void slotInsertKeyframesLeft(int count = -1, bool forceEntireColumn = false);
+    void slotInsertKeyframesRight(int count = -1, bool forceEntireColumn = false);
+
+    void slotInsertKeyframesLeftCustom();
+    void slotInsertKeyframesRightCustom();
+
+    void slotRemoveFrame(bool forceEntireColumn = false, bool needsOffset = false);
+    void slotRemoveFramesAndShift(bool forceEntireColumn = false);
+
+    void slotInsertColumnsLeft(int count = -1);
+    void slotInsertColumnsLeftCustom();
+
+    void slotInsertColumnsRight(int count = -1);
+    void slotInsertColumnsRightCustom();
+
+    void slotRemoveColumns();
+    void slotRemoveColumnsAndShift();
 
     void slotReselectCurrentIndex();
 
@@ -83,6 +101,12 @@ private Q_SLOTS:
 
 private:
     void setFramesPerSecond(int fps);
+    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows);
+
+    void createFrameEditingMenu();
+
+    KisAction* addActionToMenu(QMenu *menu, const QString &actionId);
+    void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,

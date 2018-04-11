@@ -67,7 +67,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     Private(const Private &rhs)
         : worker(rhs.worker),
           params(rhs.params),
-          staticCacheValid(false),
+          staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)

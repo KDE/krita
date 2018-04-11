@@ -200,7 +200,7 @@ void KoShapePrivate::shapeChanged(KoShape::ChangeType type)
     }
 
     Q_FOREACH (KoShape::ShapeChangeListener *listener, listeners) {
-       listener->notifyShapeChangedImpl(type, q);
+        listener->notifyShapeChangedImpl(type, q);
     }
 }
 
@@ -217,74 +217,78 @@ void KoShapePrivate::removeShapeManager(KoShapeManager *manager)
 void KoShapePrivate::convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const
 {
     switch(point.alignment) {
-        case KoConnectionPoint::AlignNone:
-            point.position = KoFlake::toRelative(point.position, shapeSize);
-            point.position.rx() = qBound<qreal>(0.0, point.position.x(), 1.0);
-            point.position.ry() = qBound<qreal>(0.0, point.position.y(), 1.0);
-            break;
-        case KoConnectionPoint::AlignRight:
-            point.position.rx() -= shapeSize.width();
-        case KoConnectionPoint::AlignLeft:
-            point.position.ry() = 0.5*shapeSize.height();
-            break;
-        case KoConnectionPoint::AlignBottom:
-            point.position.ry() -= shapeSize.height();
-        case KoConnectionPoint::AlignTop:
-            point.position.rx() = 0.5*shapeSize.width();
-            break;
-        case KoConnectionPoint::AlignTopLeft:
-            // nothing to do here
-            break;
-        case KoConnectionPoint::AlignTopRight:
-            point.position.rx() -= shapeSize.width();
-            break;
-        case KoConnectionPoint::AlignBottomLeft:
-            point.position.ry() -= shapeSize.height();
-            break;
-        case KoConnectionPoint::AlignBottomRight:
-            point.position.rx() -= shapeSize.width();
-            point.position.ry() -= shapeSize.height();
-            break;
-        case KoConnectionPoint::AlignCenter:
-            point.position.rx() -= 0.5 * shapeSize.width();
-            point.position.ry() -= 0.5 * shapeSize.height();
-            break;
+    case KoConnectionPoint::AlignNone:
+        point.position = KoFlake::toRelative(point.position, shapeSize);
+        point.position.rx() = qBound<qreal>(0.0, point.position.x(), 1.0);
+        point.position.ry() = qBound<qreal>(0.0, point.position.y(), 1.0);
+        break;
+    case KoConnectionPoint::AlignRight:
+        point.position.rx() -= shapeSize.width();
+        break;
+    case KoConnectionPoint::AlignLeft:
+        point.position.ry() = 0.5*shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignBottom:
+        point.position.ry() -= shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignTop:
+        point.position.rx() = 0.5*shapeSize.width();
+        break;
+    case KoConnectionPoint::AlignTopLeft:
+        // nothing to do here
+        break;
+    case KoConnectionPoint::AlignTopRight:
+        point.position.rx() -= shapeSize.width();
+        break;
+    case KoConnectionPoint::AlignBottomLeft:
+        point.position.ry() -= shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignBottomRight:
+        point.position.rx() -= shapeSize.width();
+        point.position.ry() -= shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignCenter:
+        point.position.rx() -= 0.5 * shapeSize.width();
+        point.position.ry() -= 0.5 * shapeSize.height();
+        break;
     }
 }
 
 void KoShapePrivate::convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const
 {
     switch(point.alignment) {
-        case KoConnectionPoint::AlignNone:
-            point.position = KoFlake::toAbsolute(point.position, shapeSize);
-            break;
-        case KoConnectionPoint::AlignRight:
-            point.position.rx() += shapeSize.width();
-        case KoConnectionPoint::AlignLeft:
-            point.position.ry() = 0.5*shapeSize.height();
-            break;
-        case KoConnectionPoint::AlignBottom:
-            point.position.ry() += shapeSize.height();
-        case KoConnectionPoint::AlignTop:
-            point.position.rx() = 0.5*shapeSize.width();
-            break;
-        case KoConnectionPoint::AlignTopLeft:
-            // nothing to do here
-            break;
-        case KoConnectionPoint::AlignTopRight:
-            point.position.rx() += shapeSize.width();
-            break;
-        case KoConnectionPoint::AlignBottomLeft:
-            point.position.ry() += shapeSize.height();
-            break;
-        case KoConnectionPoint::AlignBottomRight:
-            point.position.rx() += shapeSize.width();
-            point.position.ry() += shapeSize.height();
-            break;
-        case KoConnectionPoint::AlignCenter:
-            point.position.rx() += 0.5 * shapeSize.width();
-            point.position.ry() += 0.5 * shapeSize.height();
-            break;
+    case KoConnectionPoint::AlignNone:
+        point.position = KoFlake::toAbsolute(point.position, shapeSize);
+        break;
+    case KoConnectionPoint::AlignRight:
+        point.position.rx() += shapeSize.width();
+        break;
+    case KoConnectionPoint::AlignLeft:
+        point.position.ry() = 0.5*shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignBottom:
+        point.position.ry() += shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignTop:
+        point.position.rx() = 0.5*shapeSize.width();
+        break;
+    case KoConnectionPoint::AlignTopLeft:
+        // nothing to do here
+        break;
+    case KoConnectionPoint::AlignTopRight:
+        point.position.rx() += shapeSize.width();
+        break;
+    case KoConnectionPoint::AlignBottomLeft:
+        point.position.ry() += shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignBottomRight:
+        point.position.rx() += shapeSize.width();
+        point.position.ry() += shapeSize.height();
+        break;
+    case KoConnectionPoint::AlignCenter:
+        point.position.rx() += 0.5 * shapeSize.width();
+        point.position.ry() += 0.5 * shapeSize.height();
+        break;
     }
 }
 
@@ -941,22 +945,22 @@ bool KoShape::setConnectionPoint(int connectionPointId, const KoConnectionPoint 
     const bool insertPoint = !hasConnectionPoint(connectionPointId);
 
     switch(connectionPointId) {
-        case KoConnectionPoint::TopConnectionPoint:
-        case KoConnectionPoint::RightConnectionPoint:
-        case KoConnectionPoint::BottomConnectionPoint:
-        case KoConnectionPoint::LeftConnectionPoint:
-        {
-            KoConnectionPoint::PointId id = static_cast<KoConnectionPoint::PointId>(connectionPointId);
-            d->connectors[id] = KoConnectionPoint::defaultConnectionPoint(id);
-            break;
-        }
-        default:
-        {
-            KoConnectionPoint p = point;
-            d->convertFromShapeCoordinates(p, size());
-            d->connectors[connectionPointId] = p;
-            break;
-        }
+    case KoConnectionPoint::TopConnectionPoint:
+    case KoConnectionPoint::RightConnectionPoint:
+    case KoConnectionPoint::BottomConnectionPoint:
+    case KoConnectionPoint::LeftConnectionPoint:
+    {
+        KoConnectionPoint::PointId id = static_cast<KoConnectionPoint::PointId>(connectionPointId);
+        d->connectors[id] = KoConnectionPoint::defaultConnectionPoint(id);
+        break;
+    }
+    default:
+    {
+        KoConnectionPoint p = point;
+        d->convertFromShapeCoordinates(p, size());
+        d->connectors[connectionPointId] = p;
+        break;
+    }
     }
 
     if(!insertPoint)
@@ -1517,46 +1521,46 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
 
     QString wrap;
     switch (textRunAroundSide()) {
-        case BiggestRunAroundSide:
-            wrap = "biggest";
-            break;
-        case LeftRunAroundSide:
-            wrap = "left";
-            break;
-        case RightRunAroundSide:
-            wrap = "right";
-            break;
-        case EnoughRunAroundSide:
-            wrap = "dynamic";
-            break;
-        case BothRunAroundSide:
-            wrap = "parallel";
-            break;
-        case NoRunAround:
-            wrap = "none";
-            break;
-        case RunThrough:
-            wrap = "run-through";
-            break;
+    case BiggestRunAroundSide:
+        wrap = "biggest";
+        break;
+    case LeftRunAroundSide:
+        wrap = "left";
+        break;
+    case RightRunAroundSide:
+        wrap = "right";
+        break;
+    case EnoughRunAroundSide:
+        wrap = "dynamic";
+        break;
+    case BothRunAroundSide:
+        wrap = "parallel";
+        break;
+    case NoRunAround:
+        wrap = "none";
+        break;
+    case RunThrough:
+        wrap = "run-through";
+        break;
     }
     style.addProperty("style:wrap", wrap, KoGenStyle::GraphicType);
     switch (textRunAroundContour()) {
-        case ContourBox:
-            style.addProperty("style:wrap-contour", "false", KoGenStyle::GraphicType);
-            break;
-        case ContourFull:
-            style.addProperty("style:wrap-contour", "true", KoGenStyle::GraphicType);
-            style.addProperty("style:wrap-contour-mode", "full", KoGenStyle::GraphicType);
-            break;
-        case ContourOutside:
-            style.addProperty("style:wrap-contour", "true", KoGenStyle::GraphicType);
-            style.addProperty("style:wrap-contour-mode", "outside", KoGenStyle::GraphicType);
-            break;
+    case ContourBox:
+        style.addProperty("style:wrap-contour", "false", KoGenStyle::GraphicType);
+        break;
+    case ContourFull:
+        style.addProperty("style:wrap-contour", "true", KoGenStyle::GraphicType);
+        style.addProperty("style:wrap-contour-mode", "full", KoGenStyle::GraphicType);
+        break;
+    case ContourOutside:
+        style.addProperty("style:wrap-contour", "true", KoGenStyle::GraphicType);
+        style.addProperty("style:wrap-contour-mode", "outside", KoGenStyle::GraphicType);
+        break;
     }
     style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold(), KoGenStyle::GraphicType);
     if ((textRunAroundDistanceLeft() == textRunAroundDistanceRight())
-                && (textRunAroundDistanceTop() == textRunAroundDistanceBottom())
-                && (textRunAroundDistanceLeft() == textRunAroundDistanceTop())) {
+            && (textRunAroundDistanceTop() == textRunAroundDistanceBottom())
+            && (textRunAroundDistanceLeft() == textRunAroundDistanceTop())) {
         style.addPropertyPt("fo:margin", textRunAroundDistanceLeft(), KoGenStyle::GraphicType);
     } else {
         style.addPropertyPt("fo:margin-left", textRunAroundDistanceLeft(), KoGenStyle::GraphicType);
@@ -1984,7 +1988,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
     }
     if (!hasCenterGluePoint) {
         d->connectors[d->connectors.count()] = KoConnectionPoint(QPointF(0.5, 0.5),
-                     KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
+                                                                 KoConnectionPoint::AllDirections, KoConnectionPoint::AlignCenter);
     }
     debugFlake << "shape has now" << d->connectors.count() << "glue-points";
 }
@@ -2080,8 +2084,8 @@ QTransform KoShape::parseOdfTransform(const QString &transform)
             QTransform m;
             if (params.count() >= 6) {
                 m.setMatrix(params[0].toDouble(), params[1].toDouble(), 0,
-                            params[2].toDouble(), params[3].toDouble(), 0,
-                            KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]), 1);
+                        params[2].toDouble(), params[3].toDouble(), 0,
+                        KoUnit::parseValue(params[4]), KoUnit::parseValue(params[5]), 1);
             }
             matrix = matrix * m;
         }
@@ -2167,12 +2171,12 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
                 context.xmlWriter().addAttributePt("svg:y", matrix.dy());
             } else {
                 QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
-                            .arg(matrix.m11(), 0, 'f', 11)
-                            .arg(matrix.m12(), 0, 'f', 11)
-                            .arg(matrix.m21(), 0, 'f', 11)
-                            .arg(matrix.m22(), 0, 'f', 11)
-                            .arg(matrix.dx(), 0, 'f', 11)
-                            .arg(matrix.dy(), 0, 'f', 11);
+                        .arg(matrix.m11(), 0, 'f', 11)
+                        .arg(matrix.m12(), 0, 'f', 11)
+                        .arg(matrix.m21(), 0, 'f', 11)
+                        .arg(matrix.m22(), 0, 'f', 11)
+                        .arg(matrix.dx(), 0, 'f', 11)
+                        .arg(matrix.dy(), 0, 'f', 11);
                 context.xmlWriter().addAttribute("draw:transform", m);
             }
         }
@@ -2217,63 +2221,63 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
             }
             QString escapeDirection;
             switch(cp.value().escapeDirection) {
-                case KoConnectionPoint::HorizontalDirections:
-                    escapeDirection = "horizontal";
-                    break;
-                case KoConnectionPoint::VerticalDirections:
-                    escapeDirection = "vertical";
-                    break;
-                case KoConnectionPoint::LeftDirection:
-                    escapeDirection = "left";
-                    break;
-                case KoConnectionPoint::RightDirection:
-                    escapeDirection = "right";
-                    break;
-                case KoConnectionPoint::UpDirection:
-                    escapeDirection = "up";
-                    break;
-                case KoConnectionPoint::DownDirection:
-                    escapeDirection = "down";
-                    break;
-                default:
-                    // fall through
-                    break;
+            case KoConnectionPoint::HorizontalDirections:
+                escapeDirection = "horizontal";
+                break;
+            case KoConnectionPoint::VerticalDirections:
+                escapeDirection = "vertical";
+                break;
+            case KoConnectionPoint::LeftDirection:
+                escapeDirection = "left";
+                break;
+            case KoConnectionPoint::RightDirection:
+                escapeDirection = "right";
+                break;
+            case KoConnectionPoint::UpDirection:
+                escapeDirection = "up";
+                break;
+            case KoConnectionPoint::DownDirection:
+                escapeDirection = "down";
+                break;
+            default:
+                // fall through
+                break;
             }
             if(!escapeDirection.isEmpty()) {
                 context.xmlWriter().addAttribute("draw:escape-direction", escapeDirection);
             }
             QString alignment;
             switch(cp.value().alignment) {
-                case KoConnectionPoint::AlignTopLeft:
-                    alignment = "top-left";
-                    break;
-                case KoConnectionPoint::AlignTop:
-                    alignment = "top";
-                    break;
-                case KoConnectionPoint::AlignTopRight:
-                    alignment = "top-right";
-                    break;
-                case KoConnectionPoint::AlignLeft:
-                    alignment = "left";
-                    break;
-                case KoConnectionPoint::AlignCenter:
-                    alignment = "center";
-                    break;
-                case KoConnectionPoint::AlignRight:
-                    alignment = "right";
-                    break;
-                case KoConnectionPoint::AlignBottomLeft:
-                    alignment = "bottom-left";
-                    break;
-                case KoConnectionPoint::AlignBottom:
-                    alignment = "bottom";
-                    break;
-                case KoConnectionPoint::AlignBottomRight:
-                    alignment = "bottom-right";
-                    break;
-                default:
-                    // fall through
-                    break;
+            case KoConnectionPoint::AlignTopLeft:
+                alignment = "top-left";
+                break;
+            case KoConnectionPoint::AlignTop:
+                alignment = "top";
+                break;
+            case KoConnectionPoint::AlignTopRight:
+                alignment = "top-right";
+                break;
+            case KoConnectionPoint::AlignLeft:
+                alignment = "left";
+                break;
+            case KoConnectionPoint::AlignCenter:
+                alignment = "center";
+                break;
+            case KoConnectionPoint::AlignRight:
+                alignment = "right";
+                break;
+            case KoConnectionPoint::AlignBottomLeft:
+                alignment = "bottom-left";
+                break;
+            case KoConnectionPoint::AlignBottom:
+                alignment = "bottom";
+                break;
+            case KoConnectionPoint::AlignBottomRight:
+                alignment = "bottom-right";
+                break;
+            default:
+                // fall through
+                break;
             }
             if(!alignment.isEmpty()) {
                 context.xmlWriter().addAttribute("draw:align", alignment);

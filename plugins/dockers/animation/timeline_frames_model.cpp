@@ -40,6 +40,7 @@
 #include "kundo2command.h"
 #include "kis_post_execution_undo_adapter.h"
 #include <commands/kis_node_property_list_command.h>
+#include <commands_new/kis_switch_current_time_command.h>
 
 #include "kis_animation_utils.h"
 #include "timeline_color_scheme.h"
@@ -50,6 +51,9 @@
 #include "kis_node_view_color_scheme.h"
 #include "krita_utils.h"
 #include <QApplication>
+#include "kis_processing_applicator.h"
+#include <KisImageBarrierLockerWithFeedback.h>
+
 
 struct TimelineFramesModel::Private
 {
@@ -687,6 +691,54 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
 
     return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
 }
+
+bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows, int count)
+{
+    if (dstRows.isEmpty() || count <= 0) return true;
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count));
+
+    {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+
+        QModelIndexList indexes;
+
+        Q_FOREACH (int row, dstRows) {
+            for (int column = dstColumn; column < columnCount(); column++) {
+                indexes << index(row, column);
+            }
+        }
+
+        setLastVisibleFrame(columnCount() + count - 1);
+
+
+        createOffsetFramesCommand(indexes, QPoint(count, 0), false, parentCommand);
+
+        Q_FOREACH (int row, dstRows) {
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
+            if (!dummy) continue;
+
+            KisNodeSP node = dummy->node();
+            if (!KisAnimationUtils::supportsContentFrames(node)) continue;
+
+            for (int column = dstColumn; column < dstColumn + count; column++) {
+                KisAnimationUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Content.id(), column, false, parentCommand);
+            }
+        }
+
+        const int oldTime = m_d->image->animationInterface()->currentUITime();
+        const int newTime = dstColumn > oldTime ? dstColumn : dstColumn + count - 1;
+
+        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
+                                        oldTime,
+                                        newTime, parentCommand);
+    }
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+
+    return true;
+}
+
 
 QString TimelineFramesModel::audioChannelFileName() const
 {

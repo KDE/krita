@@ -86,6 +86,7 @@ QVariant RecentImagesModel::data(const QModelIndex &index, int role) const
             break;
         case NameRole:
             result = key;
+            break;
         case DateRole:
         {
             QFile f(value);
@@ -93,6 +94,7 @@ QVariant RecentImagesModel::data(const QModelIndex &index, int role) const
                 QFileInfo fi(value);
                 result = fi.lastModified().toString("dd-mm-yyyy (hh:mm)");
             }
+            break;
         }
         default:
             result = "";

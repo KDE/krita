@@ -49,6 +49,7 @@
 #include "brushhud/kis_round_hud_button.h"
 #include <kis_action.h>
 #include "kis_signals_blocker.h"
+#include "kis_canvas_controller.h"
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -702,8 +703,10 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent* event)
         float finalAngle = qAtan2(dY,dX) * 180 / M_PI; // what we need if we have two points, but don't know the angle
         finalAngle = finalAngle + 90; // add 90 degrees so 0 degree position points up
         float angleDifference = finalAngle - m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs, so find it out
-        m_coordinatesConverter->rotate(m_coordinatesConverter->widgetCenterPoint(), angleDifference);
-        m_viewManager->canvasBase()->notifyZoomChanged(); // refreshes the canvas after rotation
+
+        KisCanvasController *canvasController =
+            dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+        canvasController->rotateCanvas(angleDifference);
 
         emit sigUpdateCanvas();
     }

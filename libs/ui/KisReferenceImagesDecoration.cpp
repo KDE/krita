@@ -108,7 +108,7 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
     return view()->document()->referenceImagesLayer() != nullptr;
 }
 
-void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter *converter, KisCanvas2 *canvas)
+void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter */*converter*/, KisCanvas2 */*canvas*/)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
     if (layer.isNull()) {

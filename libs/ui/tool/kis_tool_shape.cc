@@ -206,10 +206,10 @@ void KisToolShape::addShape(KoShape* shape)
 
     // reset selection on the newly added shape :)
     // TODO: think about moving this into controller->addShape?
-    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, selection, false, parentCommand);
+    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, canvas()->selectedShapesProxy(), false, parentCommand);
     KUndo2Command *cmd = canvas()->shapeController()->addShape(shape, 0, parentCommand);
     parentCommand->setText(cmd->text());
-    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, selection, true, parentCommand);
+    new KoKeepShapesSelectedCommand(oldSelectedShapes, {shape}, canvas()->selectedShapesProxy(), true, parentCommand);
 
     canvas()->addCommand(parentCommand);
 }

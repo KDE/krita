@@ -87,9 +87,12 @@ public:
     void rollforward(KisTileHashTable *ht);
 
     /**
-     * Get old tile, whose memento is in the HEAD revision
+     * Get old tile, whose memento is in the HEAD revision.
+     * \p existingTile returns if the tile is actually an existing
+     *                 non-default tile or it was created on the fly
+     *                 from the default tile data
      */
-    KisTileSP getCommitedTile(qint32 col, qint32 row);
+    KisTileSP getCommitedTile(qint32 col, qint32 row, bool &existingTile);
 
     KisMementoSP getMemento();
 

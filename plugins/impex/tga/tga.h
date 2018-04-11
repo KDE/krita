@@ -82,25 +82,23 @@ struct TgaHeaderInfo {
         switch (tga.image_type) {
         case TGA_TYPE_RLE_INDEXED:
             rle = true;
-            // no break is intended!
+            /* Falls through */
         case TGA_TYPE_INDEXED:
             pal = true;
             break;
 
         case TGA_TYPE_RLE_RGB:
             rle = true;
-            // no break is intended!
+            /* Falls through */
         case TGA_TYPE_RGB:
             rgb = true;
             break;
-
         case TGA_TYPE_RLE_GREY:
             rle = true;
-            // no break is intended!
+            /* Falls through */
         case TGA_TYPE_GREY:
             grey = true;
             break;
-
         default:
             // Error, unknown image type.
             break;

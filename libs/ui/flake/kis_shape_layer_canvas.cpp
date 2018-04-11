@@ -49,7 +49,6 @@
 
 KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
     : KoCanvasBase(0)
-    , m_isDestroying(false)
     , m_viewConverter(new KisImageViewConverter(image))
     , m_shapeManager(new KoShapeManager(this))
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))

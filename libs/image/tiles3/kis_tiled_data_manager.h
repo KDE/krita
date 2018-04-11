@@ -32,7 +32,7 @@
 #include "kis_tile_hash_table.h"
 #include "kis_memento_manager.h"
 #include "kis_memento.h"
-
+#include "KisTiledExtentManager.h"
 
 class KisTiledDataManager;
 typedef KisSharedPtr<KisTiledDataManager> KisTiledDataManagerSP;
@@ -99,7 +99,10 @@ public:
      */
     inline void getTilesPair(qint32 col, qint32 row, bool writable, KisTileSP *tile, KisTileSP *oldTile) {
         *tile = getTile(col, row, writable);
-        *oldTile = m_mementoManager->getCommitedTile(col, row);
+
+        bool unused;
+        *oldTile = m_mementoManager->getCommitedTile(col, row, unused);
+
         if (!*oldTile) {
             *oldTile = *tile;
         }
@@ -109,19 +112,29 @@ public:
         if (writable) {
             bool newTile;
             KisTileSP tile = m_hashTable->getTileLazy(col, row, newTile);
-            if (newTile)
-                updateExtent(tile->col(), tile->row());
+            if (newTile) {
+                m_extentManager.notifyTileAdded(col, row);
+            }
             return tile;
 
         } else {
-
-            return m_hashTable->getReadOnlyTileLazy(col,row);
+            bool unused;
+            return m_hashTable->getReadOnlyTileLazy(col, row, unused);
         }
     }
 
+    inline KisTileSP getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile) {
+        return m_hashTable->getReadOnlyTileLazy(col, row, existingTile);
+    }
+
+    inline KisTileSP getOldTile(qint32 col, qint32 row, bool &existingTile) {
+        KisTileSP tile = m_mementoManager->getCommitedTile(col, row, existingTile);
+        return tile ? tile : getReadOnlyTileLazy(col, row, existingTile);
+    }
+
     inline KisTileSP getOldTile(qint32 col, qint32 row) {
-        KisTileSP tile = m_mementoManager->getCommitedTile(col, row);
-        return tile ? tile : getTile(col, row, false);
+        bool unused;
+        return getOldTile(col, row, unused);
     }
 
     KisMementoSP getMemento() {
@@ -319,14 +332,7 @@ private:
     KisMementoManager *m_mementoManager;
     quint8* m_defaultPixel;
     qint32 m_pixelSize;
-
-    /**
-     * Extents stuff
-     */
-    qint32 m_extentMinX;
-    qint32 m_extentMaxX;
-    qint32 m_extentMinY;
-    qint32 m_extentMaxY;
+    KisTiledExtentManager m_extentManager;
 
     mutable QReadWriteLock m_lock;
 
@@ -341,14 +347,11 @@ private:
 private:
     void setDefaultPixelImpl(const quint8 *defPixel);
 
-    QRect extentImpl() const;
-
     bool writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
     qint32 divideRoundDown(qint32 x, const qint32 y) const;
 
-    void updateExtent(qint32 col, qint32 row);
     void recalculateExtent();
 
     quint8* duplicatePixel(qint32 num, const quint8 *pixel);

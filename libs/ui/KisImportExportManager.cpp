@@ -62,6 +62,7 @@
 #include "kis_popup_button.h"
 #include <kis_iterator_ng.h>
 #include "kis_async_action_feedback.h"
+#include "KisReferenceImagesLayer.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -439,7 +440,7 @@ KisImportExportManager::askUserAboutExportConfiguration(
     if (!m_document->assistants().isEmpty() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>assistants</b>. The assistants will not be saved."));
     }
-    if (!m_document->referenceImagesLayer() && to != m_document->nativeFormatMimeType()) {
+    if (m_document->referenceImagesLayer() && m_document->referenceImagesLayer()->shapeCount() > 0 && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>reference images</b>. The reference images will not be saved."));
     }
     if (m_document->guidesConfig().hasGuides() && to != m_document->nativeFormatMimeType()) {

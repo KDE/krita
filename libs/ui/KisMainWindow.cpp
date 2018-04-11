@@ -85,7 +85,6 @@
 #include <kwindowconfig.h>
 
 #include "KoDockFactoryBase.h"
-#include "KoDockWidgetTitleBar.h"
 #include "KoDocumentInfoDlg.h"
 #include "KoDocumentInfo.h"
 #include "KoFileDialog.h"
@@ -141,6 +140,7 @@
 #include "dialogs/kis_dlg_import_image_sequence.h"
 #include <KisUpdateSchedulerConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
+#include <KisUndoActionsUpdateManager.h>
 #include "KisCanvasWindow.h"
 
 #include <mutex>
@@ -241,6 +241,8 @@ public:
 
     KRecentFilesAction *recentFiles {0};
     KoResourceModel *workspacemodel {0};
+
+    QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
 
     QString lastExportLocation;
 
@@ -850,7 +852,7 @@ KisView *KisMainWindow::activeView() const
 bool KisMainWindow::openDocument(const QUrl &url, OpenFlags flags)
 {
     if (!QFile(url.toLocalFile()).exists()) {
-        if (!flags && BatchMode) {
+        if (!(flags & BatchMode)) {
             QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", url.url()));
         }
         d->recentFiles->removeUrl(url); //remove the file from the recent-opened-file-list
@@ -1233,16 +1235,14 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 void KisMainWindow::undo()
 {
     if (activeView()) {
-        activeView()->undoAction()->trigger();
-        d->undo->setText(activeView()->undoAction()->text());
+        activeView()->document()->undoStack()->undo();
     }
 }
 
 void KisMainWindow::redo()
 {
     if (activeView()) {
-        activeView()->redoAction()->trigger();
-        d->redo->setText(activeView()->redoAction()->text());
+        activeView()->document()->undoStack()->redo();
     }
 }
 
@@ -1329,8 +1329,11 @@ void KisMainWindow::setActiveView(KisView* view)
 {
     d->activeView = view;
     updateCaption();
-    actionCollection()->action("edit_undo")->setText(activeView()->undoAction()->text());
-    actionCollection()->action("edit_redo")->setText(activeView()->redoAction()->text());
+
+    if (d->undoActionsUpdateManager) {
+        d->undoActionsUpdateManager->setCurrentDocument(view ? view->document() : 0);
+    }
+
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
@@ -1573,34 +1576,18 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
 bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 {
     QByteArray oldState = saveState();
-    const bool showTitlebars = KisConfig().showDockerTitleBars();
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-            dock->setProperty("Locked", false); // Unlock invisible dockers
-            dock->toggleViewAction()->setEnabled(true);
-            dock->hide();
-            dock->titleBarWidget()->setVisible(showTitlebars);
-        }
+        dock->toggleViewAction()->setEnabled(true);
+        dock->hide();
+    }
 
     bool success = KXmlGuiWindow::restoreState(state);
 
     if (!success) {
         KXmlGuiWindow::restoreState(oldState);
-        Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-                if (dock->titleBarWidget()) {
-                    dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
-                }
-            }
         return false;
-    }
-
-
-    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
-            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
-            dock->titleBarWidget()->setVisible(showTitlebars || (dock->isFloating() && isCollapsed));
-        }
     }
 
     return success;
@@ -1964,16 +1951,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
             return 0;
         }
 
-        KoDockWidgetTitleBar *titleBar = dynamic_cast<KoDockWidgetTitleBar*>(dockWidget->titleBarWidget());
-
-        // Check if the dock widget is supposed to be collapsible
-        if (!dockWidget->titleBarWidget()) {
-            titleBar = new KoDockWidgetTitleBar(dockWidget);
-            dockWidget->setTitleBarWidget(titleBar);
-            titleBar->setCollapsable(factory->isCollapsable());
-        }
-        titleBar->setFont(KoDockRegistry::dockFont());
-
+        dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
 
@@ -2009,20 +1987,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         if (!visible) {
             dockWidget->hide();
         }
-        bool collapsed = factory->defaultCollapsed();
-
-        bool locked = false;
-        group = d->windowStateConfig.group("DockWidget " + factory->id());
-        collapsed = group.readEntry("Collapsed", collapsed);
-        locked = group.readEntry("Locked", locked);
-
-        //dbgKrita << "docker" << factory->id() << dockWidget << "collapsed" << collapsed << "locked" << locked << "titlebar" << titleBar;
-
-        if (titleBar && collapsed)
-            titleBar->setCollapsed(true);
-
-        if (titleBar && locked)
-            titleBar->setLocked(true);
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);
     }
@@ -2485,10 +2449,13 @@ void KisMainWindow::createActions()
 //    d->printActionPreview->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->undo = actionManager->createStandardAction(KStandardAction::Undo, this, SLOT(undo()));
-    d->undo ->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    d->undo->setActivationFlags(KisAction::ACTIVE_IMAGE);
 
     d->redo = actionManager->createStandardAction(KStandardAction::Redo, this, SLOT(redo()));
     d->redo->setActivationFlags(KisAction::ACTIVE_IMAGE);
+
+    d->undoActionsUpdateManager.reset(new KisUndoActionsUpdateManager(d->undo, d->redo));
+    d->undoActionsUpdateManager->setCurrentDocument(d->activeView ? d->activeView->document() : 0);
 
 //    d->exportPdf  = actionManager->createAction("file_export_pdf");
 //    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
@@ -2519,18 +2486,13 @@ void KisMainWindow::createActions()
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
-
     d->toggleDockers = actionManager->createAction("view_toggledockers");
     cfg.showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
-    d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
-    d->toggleDockerTitleBars->setChecked(cfg.showDockerTitleBars());
-    connect(d->toggleDockerTitleBars, SIGNAL(toggled(bool)), SLOT(showDockerTitleBars(bool)));
-
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
-    d->toggleDockerTitleBars->setChecked(false);
+    d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
 
     actionCollection()->addAction("settings_dockers_menu", d->dockWidgetMenu);
@@ -2631,19 +2593,6 @@ void KisMainWindow::initializeGeometry()
 void KisMainWindow::showManual()
 {
     QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
-}
-
-void KisMainWindow::showDockerTitleBars(bool show)
-{
-    Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
-            const bool isCollapsed = (dock->widget() && dock->widget()->isHidden()) || !dock->widget();
-            dock->titleBarWidget()->setVisible(show || (dock->isFloating() && isCollapsed));
-        }
-    }
-
-    KisConfig cfg;
-    cfg.setShowDockerTitleBars(show);
 }
 
 void KisMainWindow::moveEvent(QMoveEvent *e)

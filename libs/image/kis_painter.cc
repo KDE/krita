@@ -138,20 +138,42 @@ void copyAreaOptimizedImpl(const QPoint &dstPt,
 {
     const QRect dstRect(dstPt, srcRect.size());
 
-    const bool srcEmpty = (src->extent() & srcRect).isEmpty();
-    const bool dstEmpty = (dst->extent() & dstRect).isEmpty();
+    const QRect srcExtent = src->extent();
+    const QRect dstExtent = dst->extent();
+
+    const QRect srcSampleRect = srcExtent & srcRect;
+    const QRect dstSampleRect = dstExtent & dstRect;
+
+    const bool srcEmpty = srcSampleRect.isEmpty();
+    const bool dstEmpty = dstSampleRect.isEmpty();
 
     if (!srcEmpty || !dstEmpty) {
         if (srcEmpty) {
             dst->clear(dstRect);
         } else {
+            QRect srcCopyRect = srcRect;
+            QRect dstCopyRect = dstRect;
+
+            if (!srcExtent.contains(srcRect)) {
+                if (src->defaultPixel() == dst->defaultPixel()) {
+                    const QRect dstSampleInSrcCoords = dstSampleRect.translated(srcRect.topLeft() - dstPt);
+
+                    if (dstSampleInSrcCoords.isEmpty() || srcSampleRect.contains(dstSampleInSrcCoords)) {
+                        srcCopyRect = srcSampleRect;
+                    } else {
+                        srcCopyRect = srcSampleRect | dstSampleInSrcCoords;
+                    }
+                    dstCopyRect = QRect(dstPt + srcCopyRect.topLeft() - srcRect.topLeft(), srcCopyRect.size());
+                }
+            }
+
             KisPainter gc(dst);
             gc.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
 
             if (useOldData) {
-                gc.bitBltOldData(dstRect.topLeft(), src, srcRect);
+                gc.bitBltOldData(dstCopyRect.topLeft(), src, srcCopyRect);
             } else {
-                gc.bitBlt(dstRect.topLeft(), src, srcRect);
+                gc.bitBlt(dstCopyRect.topLeft(), src, srcCopyRect);
             }
         }
     }
@@ -1370,12 +1392,14 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
 
     switch (fillStyle) {
     default:
-        // Fall through
+        /* Falls through. */
     case FillStyleGradient:
-        // Currently unsupported, fall through
+        // Currently unsupported
+        /* Falls through. */
     case FillStyleStrokes:
-        // Currently unsupported, fall through
+        // Currently unsupported
         warnImage << "Unknown or unsupported fill style in fillPolygon\n";
+        /* Falls through. */
     case FillStyleForegroundColor:
         fillPainter->fillRect(fillRect, q->paintColor(), OPACITY_OPAQUE_U8);
         break;

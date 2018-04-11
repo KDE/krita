@@ -42,7 +42,6 @@ set(kritawidgets_LIB_SRCS
     KoResourceItemView.cpp
     KoResourceTagStore.cpp
     KoRuler.cpp
-    #KoRulerController.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -50,8 +49,6 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
-    KoDockWidgetTitleBar.cpp
-    KoDockWidgetTitleBarButton.cpp
     KoResourceFiltering.cpp
     KoResourceModelBase.cpp
     KoTitledTabWidget.cpp
@@ -86,6 +83,9 @@ set(kritawidgets_LIB_SRCS
     KoAnchorSelectionWidget.cpp
 
     squeezedcombobox.cpp
+
+    KisGradientSlider.cpp
+    KisGradientSliderWidget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

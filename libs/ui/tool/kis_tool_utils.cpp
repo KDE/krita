@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,15 +16,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #include <kis_tool_utils.h>
 
-#include <KoColorSpace.h>
 #include <KoMixColorsOp.h>
-#include <kis_paint_device.h>
-#include <kis_layer.h>
 #include <kis_group_layer.h>
-#include <kis_wrapped_rect.h>
-#include <kis_image.h>
 #include <kis_transaction.h>
 #include <kis_sequential_iterator.h>
 #include <kis_properties_configuration.h>
@@ -32,17 +29,16 @@
 
 namespace KisToolUtils {
 
-    bool pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color, int radius)
+    bool pick(KisPaintDeviceSP dev, const QPoint &pos, KoColor *color, KoColor *previousColor, int radius, int blend)
     {
         KIS_ASSERT(dev);
-        KoColor pickedColor;
+        const KoColorSpace* cs = dev->colorSpace();
+        KoColor pickedColor(Qt::transparent, cs);
 
+        // Ctrl picker sampling radius.
         if (radius <= 1) {
             dev->pixel(pos.x(), pos.y(), &pickedColor);
         } else {
-            const KoColorSpace* cs = dev->colorSpace();
-            pickedColor = KoColor(Qt::transparent, cs);
-
             QVector<const quint8*> pixels;
 
             const int effectiveRadius = radius - 1;
@@ -61,8 +57,24 @@ namespace KisToolUtils {
                 }
             }
 
-            const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
+            const quint8 **cpixels = const_cast<const quint8**>(pixels.constData());
             cs->mixColorsOp()->mixColors(cpixels, pixels.size(), pickedColor.data());
+        }
+        
+        // Ctrl picker color blending.
+        if (previousColor && blend < 100) {
+            //Scale from 0..100% to 0..255 range for mixOp weights.
+            quint8 blendScaled = static_cast<quint8>(blend * 2.55f);
+
+            const quint8 *colors[2];
+            colors[0] = previousColor->data();
+            colors[1] = pickedColor.data();
+            qint16 weights[2];
+            weights[0] = 255 - blendScaled;
+            weights[1] = blendScaled;
+
+            const KoMixColorsOp *mixOp = dev->colorSpace()->mixColorsOp();
+            mixOp->mixColors(colors, weights, 2, pickedColor.data());
         }
 
         pickedColor.convertTo(dev->compositionSourceColorSpace());
@@ -148,6 +160,7 @@ namespace KisToolUtils {
         , normaliseValues(false)
         , sampleMerged(true)
         , radius(1)
+        , blend(100)
     {
     }
 
@@ -165,6 +178,7 @@ namespace KisToolUtils {
         props.setProperty("normaliseValues", normaliseValues);
         props.setProperty("sampleMerged", sampleMerged);
         props.setProperty("radius", radius);
+        props.setProperty("blend", blend);
 
         KConfigGroup config =  KSharedConfig::openConfig()->group(CONFIG_GROUP_NAME);
 
@@ -184,6 +198,7 @@ namespace KisToolUtils {
         normaliseValues = props.getBool("normaliseValues", false);
         sampleMerged = props.getBool("sampleMerged", !defaultActivation ? false : true);
         radius = props.getInt("radius", 1);
+        blend = props.getInt("blend", 100);
     }
 
 }

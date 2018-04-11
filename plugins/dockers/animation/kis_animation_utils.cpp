@@ -50,12 +50,11 @@ namespace KisAnimationUtils {
     const QString removeOpacityKeyframeActionName = i18n("Remove opacity keyframe");
     const QString removeTransformKeyframeActionName = i18n("Remove transform keyframe");
 
-    void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(!image->locked());
-
+    KUndo2Command* createKeyframeCommand(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy, KUndo2Command *parentCommand) {
         KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
             copy ? kundo2_i18n("Copy Keyframe") :
                    kundo2_i18n("Add Keyframe"),
+            parentCommand,
 
             [image, node, channelId, time, copy] () mutable -> KUndo2Command* {
                 bool result = false;
@@ -101,6 +100,11 @@ namespace KisAnimationUtils {
                 return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
         });
 
+        return cmd;
+    }
+
+    void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy) {
+        KUndo2Command *cmd = createKeyframeCommand(image, node, channelId, time, copy);
         KisProcessingApplicator::runSingleCommandStroke(image, cmd, KisStrokeJobData::BARRIER);
     }
 

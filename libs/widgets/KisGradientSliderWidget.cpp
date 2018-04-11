@@ -17,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "widgets/kis_gradient_slider_widget.h"
+#include "KisGradientSliderWidget.h"
 #include <QPainter>
 #include <QContextMenuEvent>
 #include <QPixmap>

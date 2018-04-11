@@ -61,6 +61,7 @@
 #include <KoIconToolTip.h>
 #include <QStandardPaths>
 #include <QWidgetAction>
+#include <QInputDialog>
 
 #include "config-qtmultimedia.h"
 
@@ -110,12 +111,6 @@ struct TimelineFramesView::Private
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
 
-    QMenu *frameCreationMenu;
-    QMenu *frameEditingMenu;
-
-    QMenu *multipleFrameEditingMenu;
-    QMap<QString, KisAction*> globalActions;
-
     KisZoomButton *zoomDragButton;
 
     bool dragInProgress;
@@ -131,6 +126,8 @@ struct TimelineFramesView::Private
     QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r) const;
 
     KoIconToolTip tip;
+
+    KisActionManager * actionMan = 0;
 };
 
 TimelineFramesView::TimelineFramesView(QWidget *parent)
@@ -155,6 +152,15 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     m_d->horizontalRuler = new TimelineRulerHeader(this);
     this->setHorizontalHeader(m_d->horizontalRuler);
+
+    connect(m_d->horizontalRuler, SIGNAL(sigInsertColumnsLeft()), SLOT(slotInsertColumnsLeft()));
+    connect(m_d->horizontalRuler, SIGNAL(sigInsertColumnsRight()), SLOT(slotInsertColumnsRight()));
+
+    connect(m_d->horizontalRuler, SIGNAL(sigInsertColumnsLeftCustom()), SLOT(slotInsertColumnsLeftCustom()));
+    connect(m_d->horizontalRuler, SIGNAL(sigInsertColumnsRightCustom()), SLOT(slotInsertColumnsRightCustom()));
+
+    connect(m_d->horizontalRuler, SIGNAL(sigRemoveColumns()), SLOT(slotRemoveColumns()));
+    connect(m_d->horizontalRuler, SIGNAL(sigRemoveColumnsAndShift()), SLOT(slotRemoveColumnsAndShift()));
 
     m_d->layersHeader = new TimelineLayersHeader(this);
 
@@ -237,27 +243,15 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     /********** Frame Editing Context Menu ***********************************************/
 
-    m_d->frameCreationMenu = new QMenu(this);
-    m_d->frameCreationMenu->addAction(KisAnimationUtils::addFrameActionName, this, SLOT(slotNewFrame()));
-    m_d->frameCreationMenu->addAction(KisAnimationUtils::duplicateFrameActionName, this, SLOT(slotCopyFrame()));
-
     m_d->colorSelector = new KisColorLabelSelectorWidget(this);
     m_d->colorSelectorAction = new QWidgetAction(this);
     m_d->colorSelectorAction->setDefaultWidget(m_d->colorSelector);
     connect(m_d->colorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
 
-    m_d->frameEditingMenu = new QMenu(this);
-    m_d->frameEditingMenu->addAction(KisAnimationUtils::removeFrameActionName, this, SLOT(slotRemoveFrame()));
-    m_d->frameEditingMenu->addAction(m_d->colorSelectorAction);
-
     m_d->multiframeColorSelector = new KisColorLabelSelectorWidget(this);
     m_d->multiframeColorSelectorAction = new QWidgetAction(this);
     m_d->multiframeColorSelectorAction->setDefaultWidget(m_d->multiframeColorSelector);
     connect(m_d->multiframeColorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
-
-    m_d->multipleFrameEditingMenu = new QMenu(this);
-    m_d->multipleFrameEditingMenu->addAction(KisAnimationUtils::removeFramesActionName, this, SLOT(slotRemoveFrame()));
-    m_d->multipleFrameEditingMenu->addAction(m_d->multiframeColorSelectorAction);
 
     /********** Zoom Button **************************************************************/
 
@@ -281,15 +275,60 @@ TimelineFramesView::~TimelineFramesView()
 {
 }
 
-QMap<QString, KisAction*> TimelineFramesView::globalActions() const
-{
-    return m_d->globalActions;
-}
-
 void TimelineFramesView::setShowInTimeline(KisAction* action)
 {
     m_d->showHideLayerAction = action;
     m_d->layerEditingMenu->addAction(m_d->showHideLayerAction);
+}
+
+void TimelineFramesView::setActionManager( KisActionManager * actionManager)
+{
+    m_d->actionMan = actionManager;
+    m_d->horizontalRuler->setActionManager(actionManager);
+
+
+    if (actionManager) {
+        KisAction *action = 0;
+
+        // TODO: move here!
+        // "add_blank_frame" is initialized in AnimationDocker
+        // "add_duplicate_frame" is initialized in AnimationDocker
+
+        action = m_d->actionMan->createAction("insert_keyframes_right");
+        connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesRight()));
+
+        action = m_d->actionMan->createAction("insert_n_keyframes_right");
+        connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesRightCustom()));
+
+        action = m_d->actionMan->createAction("insert_keyframes_left");
+        connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesLeft()));
+
+        action = m_d->actionMan->createAction("insert_n_keyframes_left");
+        connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesLeftCustom()));
+
+        action = m_d->actionMan->createAction("remove_frames_and_shift");
+        connect(action, SIGNAL(triggered()), SLOT(slotRemoveFramesAndShift()));
+
+        action = m_d->actionMan->createAction("remove_frames");
+        connect(action, SIGNAL(triggered()), SLOT(slotRemoveFrame()));
+    }
+}
+
+void TimelineFramesView::createFrameEditingMenu()
+{
+
+}
+
+KisAction *TimelineFramesView::addActionToMenu(QMenu *menu, const QString &actionId)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->actionMan, 0);
+
+    KisAction *action = m_d->actionMan->actionByName(actionId);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(action, 0);
+
+    menu->addAction(action);
+
+    return action;
 }
 
 void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
@@ -612,7 +651,7 @@ void TimelineFramesView::slotDataChanged(const QModelIndex &topLeft, const QMode
 
     if (selectedColumn != index.column() && !m_d->dragInProgress) {
         int row= index.isValid() ? index.row() : 0;
-        setCurrentIndex(m_d->model->index(row, selectedColumn));
+        selectionModel()->setCurrentIndex(m_d->model->index(row, selectedColumn), QItemSelectionModel::ClearAndSelect);
     }
 }
 
@@ -887,9 +926,41 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                     m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 
-                m_d->frameEditingMenu->exec(event->globalPos());
+                QMenu menu;
+                addActionToMenu(&menu, "insert_keyframes_right");
+                addActionToMenu(&menu, "insert_keyframes_left");
+                menu.addSeparator();
+                addActionToMenu(&menu, "insert_n_keyframes_right");
+                addActionToMenu(&menu, "insert_n_keyframes_left");
+                menu.addSeparator();
+                addActionToMenu(&menu, "remove_frames");
+                addActionToMenu(&menu, "remove_frames_and_shift");
+                menu.addSeparator();
+                menu.addAction(m_d->colorSelectorAction);
+                menu.exec(event->globalPos());
+
             } else {
-                m_d->frameCreationMenu->exec(event->globalPos());
+                {
+                    KisSignalsBlocker b(m_d->colorSelector);
+                    KisImageConfig cfg;
+                    const int labelIndex = cfg.defaultFrameColorLabel();
+                    m_d->colorSelector->setCurrentIndex(labelIndex);
+                }
+
+                QMenu menu;
+                addActionToMenu(&menu, "add_blank_frame");
+                addActionToMenu(&menu, "add_duplicate_frame");
+                menu.addSeparator();
+                addActionToMenu(&menu, "insert_keyframes_right");
+                addActionToMenu(&menu, "insert_keyframes_left");
+                menu.addSeparator();
+                addActionToMenu(&menu, "insert_n_keyframes_right");
+                addActionToMenu(&menu, "insert_n_keyframes_left");
+                menu.addSeparator();
+                addActionToMenu(&menu, "remove_frames_and_shift");
+                menu.addSeparator();
+                menu.addAction(m_d->colorSelectorAction);
+                menu.exec(event->globalPos());
             }
         } else if (numSelectedItems > 1) {
             int labelIndex = -1;
@@ -909,15 +980,27 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 }
             }
 
-            if (!haveFrames) {
-                m_d->multiframeColorSelectorAction->setVisible(false);
-            } else {
+            if (haveFrames) {
                 KisSignalsBlocker b(m_d->multiframeColorSelector);
                 m_d->multiframeColorSelector->setCurrentIndex(labelIndex);
-                m_d->multiframeColorSelectorAction->setVisible(true);
             }
 
-            m_d->multipleFrameEditingMenu->exec(event->globalPos());
+            QMenu menu;
+            addActionToMenu(&menu, "insert_keyframes_right");
+            addActionToMenu(&menu, "insert_keyframes_left");
+            menu.addSeparator();
+            addActionToMenu(&menu, "insert_n_keyframes_right");
+            addActionToMenu(&menu, "insert_n_keyframes_left");
+            menu.addSeparator();
+            if (haveFrames) {
+                addActionToMenu(&menu, "remove_frames");
+            }
+            addActionToMenu(&menu, "remove_frames_and_shift");
+            if (haveFrames) {
+                menu.addSeparator();
+                menu.addAction(m_d->multiframeColorSelectorAction);
+            }
+            menu.exec(event->globalPos());
         }
     } else if (event->button() == Qt::MidButton) {
         QModelIndex index = model()->buddy(indexAt(event->pos()));
@@ -1047,6 +1130,8 @@ void TimelineFramesView::slotRemoveLayer()
     model()->removeRow(index.row());
 }
 
+
+// TODO: this method is unused atm, please forward the actions from Animation Docker here!
 void TimelineFramesView::slotNewFrame()
 {
     QModelIndex index = currentIndex();
@@ -1059,6 +1144,7 @@ void TimelineFramesView::slotNewFrame()
     m_d->model->createFrame(index);
 }
 
+// TODO: this method is unused atm, please forward the actions from Animation Docker here!
 void TimelineFramesView::slotCopyFrame()
 {
     QModelIndex index = currentIndex();
@@ -1071,22 +1157,188 @@ void TimelineFramesView::slotCopyFrame()
     m_d->model->copyFrame(index);
 }
 
-void TimelineFramesView::slotRemoveFrame()
+void TimelineFramesView::calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows)
 {
-    QModelIndexList indexes = selectionModel()->selectedIndexes();
+    minColumn = std::numeric_limits<int>::max();
+    maxColumn = std::numeric_limits<int>::min();
 
-    for (auto it = indexes.begin(); it != indexes.end(); /*noop*/) {
-        if (!m_d->model->data(*it, TimelineFramesModel::FrameEditableRole).toBool()) {
-            it = indexes.erase(it);
-        } else {
-            ++it;
+    Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
+        if (!m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) continue;
+
+        rows.insert(index.row());
+        minColumn = qMin(minColumn, index.column());
+        maxColumn = qMax(maxColumn, index.column());
+    }
+}
+
+void TimelineFramesView::insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn)
+{
+    if (forceEntireColumn) {
+        rows.clear();
+        for (int i = 0; i < m_d->model->rowCount(); i++) {
+            if (!m_d->model->data(m_d->model->index(i, insertAtColumn), TimelineFramesModel::FrameEditableRole).toBool()) continue;
+            rows.insert(i);
+        }
+    }
+
+    if (!rows.isEmpty()) {
+        m_d->model->insertFrames(insertAtColumn, rows.toList(), count);
+    }
+}
+
+void TimelineFramesView::slotInsertKeyframesLeft(int count, bool forceEntireColumn)
+{
+    QSet<int> rows;
+    int minColumn = 0;
+    int maxColumn = 0;
+
+    calculateSelectionMetrics(minColumn, maxColumn, rows);
+
+    if (count <= 0) {
+        count = qMax(1, maxColumn - minColumn + 1);
+    }
+
+    insertFramesImpl(minColumn, count, rows, forceEntireColumn);
+}
+
+void TimelineFramesView::slotInsertKeyframesRight(int count, bool forceEntireColumn)
+{
+    QSet<int> rows;
+    int minColumn = 0;
+    int maxColumn = 0;
+
+    calculateSelectionMetrics(minColumn, maxColumn, rows);
+
+    if (count <= 0) {
+        count = qMax(1, maxColumn - minColumn + 1);
+    }
+
+    insertFramesImpl(maxColumn + 1, count, rows, forceEntireColumn);
+}
+
+void TimelineFramesView::slotInsertColumnsLeft(int count)
+{
+    slotInsertKeyframesLeft(count, true);
+}
+
+void TimelineFramesView::slotInsertColumnsRight(int count)
+{
+    slotInsertKeyframesRight(count, true);
+}
+
+void TimelineFramesView::slotInsertKeyframesLeftCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Insert left"),
+                                           i18nc("@label:spinbox", "Enter number of frames"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotInsertKeyframesLeft(count);
+    }
+}
+
+
+void TimelineFramesView::slotInsertKeyframesRightCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Insert right"),
+                                           i18nc("@label:spinbox", "Enter number of frames"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotInsertKeyframesRight(count);
+    }
+}
+
+void TimelineFramesView::slotInsertColumnsLeftCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Insert left"),
+                                           i18nc("@label:spinbox", "Enter number of columns"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotInsertColumnsLeft(count);
+    }
+}
+
+
+void TimelineFramesView::slotInsertColumnsRightCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Insert right"),
+                                           i18nc("@label:spinbox", "Enter number of columns"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotInsertColumnsRight(count);
+    }
+}
+
+void TimelineFramesView::slotRemoveFrame(bool forceEntireColumn, bool needsOffset)
+{
+    QModelIndexList indexes;
+
+    if (forceEntireColumn) {
+        QSet<int> rows;
+        int minColumn = 0;
+        int maxColumn = 0;
+
+        calculateSelectionMetrics(minColumn, maxColumn, rows);
+
+        rows.clear();
+        for (int i = 0; i < m_d->model->rowCount(); i++) {
+            if (!m_d->model->data(m_d->model->index(i, minColumn), TimelineFramesModel::FrameEditableRole).toBool()) continue;
+
+            for (int column = minColumn; column <= maxColumn; column++) {
+                indexes << m_d->model->index(i, column);
+            }
+        }
+    } else {
+        Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
+            if (m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+                indexes << index;
+            }
         }
     }
 
     if (!indexes.isEmpty()) {
-        m_d->model->removeFrames(indexes);
+        if (needsOffset) {
+            m_d->model->removeFramesAndOffset(indexes);
+        } else {
+            m_d->model->removeFrames(indexes);
+        }
     }
 }
+
+void TimelineFramesView::slotRemoveColumns()
+{
+    slotRemoveFrame(true);
+}
+
+void TimelineFramesView::slotRemoveFramesAndShift(bool forceEntireColumn)
+{
+    slotRemoveFrame(forceEntireColumn, true);
+}
+
+void TimelineFramesView::slotRemoveColumnsAndShift()
+{
+    slotRemoveFramesAndShift(true);
+}
+
 
 bool TimelineFramesView::viewportEvent(QEvent *event)
 {

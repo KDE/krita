@@ -69,7 +69,7 @@ public:
 
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP image) override {}
+    void setImage(KisImageWSP /*image*/) override {}
 
 private:
     KisReferenceImagesLayer *m_layer;
@@ -102,7 +102,7 @@ bool KisReferenceImagesLayer::accept(KisNodeVisitor &visitor)
     return visitor.visit(this);
 }
 
-void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) 
+void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
 {
     visitor.visit(this, undoAdapter);
 }

@@ -79,7 +79,6 @@
 #include "KisPrintJob.h"
 #include "kis_shape_controller.h"
 #include "kis_tool_freehand.h"
-#include "KisUndoStackAction.h"
 #include "KisViewManager.h"
 #include "kis_zoom_manager.h"
 #include "kis_statusbar.h"
@@ -120,9 +119,6 @@ public:
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
     {
     }
-
-    KisUndoStackAction *undo = 0;
-    KisUndoStackAction *redo = 0;
 
     bool inOperation; //in the middle of an operation (no screen refreshing)?
 
@@ -224,9 +220,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     d->document = document;
 
     setFocusPolicy(Qt::StrongFocus);
-
-    d->undo = new KisUndoStackAction(d->document->undoStack(), KisUndoStackAction::UNDO);
-    d->redo = new KisUndoStackAction(d->document->undoStack(), KisUndoStackAction::RED0);
 
     QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
@@ -408,16 +401,6 @@ void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)
     if (!d->isCurrent) {
         d->currentNode = newActiveNode;
     }
-}
-
-QAction *KisView::undoAction() const
-{
-    return d->undo;
-}
-
-QAction *KisView::redoAction() const
-{
-    return d->redo;
 }
 
 KoZoomController *KisView::zoomController() const

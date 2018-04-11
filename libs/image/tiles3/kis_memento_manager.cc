@@ -215,7 +215,7 @@ void KisMementoManager::commit()
     KisTileDataStore::instance()->kickPooler();
 }
 
-KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
+KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row, bool &existingTile)
 {
     /**
      * Our getOldTile mechanism is supposed to return current
@@ -225,7 +225,7 @@ KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row)
     if(!namedTransactionInProgress())
         return KisTileSP();
 
-    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row);
+    KisMementoItemSP mi = m_headsHashTable.getReadOnlyTileLazy(col, row, existingTile);
     Q_ASSERT(mi);
     return mi->tile(0);
 }

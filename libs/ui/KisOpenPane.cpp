@@ -91,30 +91,6 @@ private:
     int m_widgetIndex;
 };
 
-
-class KoSectionListDelegate : public QStyledItemDelegate
-{
-public:
-    KoSectionListDelegate(QObject* parent = 0) : QStyledItemDelegate(parent) { }
-
-    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
-    {
-        QStyledItemDelegate::paint(painter, option, index);
-
-        if(!(option.state & (int)(QStyle::State_Active && QStyle::State_Enabled)))
-        {
-            int ypos = option.rect.y() + ((option.rect.height() - 2) / 2);
-            QRect lineRect(option.rect.left(), ypos, option.rect.width(), 2);
-            QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomRight());
-            gradient.setColorAt(option.direction == Qt::LeftToRight ? 0 : 1, option.palette.color(QPalette::Text));
-            gradient.setColorAt(option.direction == Qt::LeftToRight ? 1 : 0, Qt::transparent);
-
-            painter->fillRect(lineRect, gradient);
-        }
-    }
-};
-
-
 class KisOpenPanePrivate : public Ui_KisOpenPaneBase
 {
 public:
@@ -137,7 +113,7 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
 
     m_mimeFilter = mimeFilter;
 
-    KoSectionListDelegate* delegate = new KoSectionListDelegate(d->m_sectionList);
+    QStyledItemDelegate* delegate = new QStyledItemDelegate(d->m_sectionList);
     d->m_sectionList->setItemDelegate(delegate);
 
     connect(d->m_sectionList, SIGNAL(itemSelectionChanged()),

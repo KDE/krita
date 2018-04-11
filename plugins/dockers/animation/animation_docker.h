@@ -39,7 +39,7 @@ public:
     QString observerName() override { return "AnimationDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager *kisview) override;
+    void setMainWindow(KisViewManager *kisview) override;    
 
 private Q_SLOTS:
     void slotPreviousFrame();
@@ -115,6 +115,8 @@ private:
 
     void addKeyframe(const QString &channel, bool copy);
     void deleteKeyframe(const QString &channel);
+
+    void setActions(KisActionManager* actionManager);
 };
 
 

@@ -32,7 +32,7 @@
 
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
-#include "kis_gradient_slider.h"
+#include "KisGradientSlider.h"
 #include "kis_histogram.h"
 #include <kis_layer.h>
 #include "kis_paint_device.h"

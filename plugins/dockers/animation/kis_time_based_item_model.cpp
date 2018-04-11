@@ -335,6 +335,28 @@ bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoin
     return cmd;
 }
 
+bool KisTimeBasedItemModel::removeFramesAndOffset(const QModelIndexList &indexes)
+{
+    if (indexes.isEmpty()) return true;
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indexes.size()));
+
+    {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+
+        Q_FOREACH (const QModelIndex &index, indexes) {
+            QModelIndexList movedIndexes;
+            for (int column = index.column() + 1; column < columnCount(); column++) {
+                movedIndexes << this->index(index.row(), column);
+            }
+            createOffsetFramesCommand(movedIndexes, QPoint(-1, 0), false, parentCommand);
+        }
+    }
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    return true;
+}
+
 void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 {
     if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {

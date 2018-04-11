@@ -90,7 +90,7 @@ void KisSessionManagerDialog::slotRenameSession()
     updateSessionList();
 }
 
-void KisSessionManagerDialog::slotSessionDoubleClicked(QListWidgetItem* item)
+void KisSessionManagerDialog::slotSessionDoubleClicked(QListWidgetItem* /*item*/)
 {
     slotSwitchSession();
     slotClose();

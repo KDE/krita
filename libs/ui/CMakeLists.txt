@@ -222,8 +222,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_gradient_chooser.cc
-    widgets/kis_gradient_slider_widget.cc
-    widgets/kis_gradient_slider.cpp
     widgets/kis_iconwidget.cc
     widgets/kis_mask_widgets.cpp
     widgets/kis_meta_data_merge_strategy_chooser_widget.cc
@@ -361,7 +359,7 @@ set(kritaui_LIB_SRCS
     KisTemplates.cpp
     KisTemplatesPane.cpp
     KisTemplateTree.cpp
-    KisUndoStackAction.cpp
+    KisUndoActionsUpdateManager.cpp
     KisView.cpp
     KisCanvasWindow.cpp
 

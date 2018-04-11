@@ -27,6 +27,7 @@
 #include <QFontComboBox>
 #include <QPointer>
 
+class KoSelection;
 class SvgTextEditor;
 class KoSvgTextShape;
 
@@ -58,10 +59,13 @@ protected:
     /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
+    KoSelection *koSelection() const;
+    KoSvgTextShape *selectedShape() const;
+
 private Q_SLOTS:
 
     void showEditor();
-    void textUpdated(const QString &svg, const QString &defs);
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
 
     /**
      * @brief generateDefs
@@ -79,8 +83,6 @@ private Q_SLOTS:
     void storeDefaults();
 
 private:
-    KoSvgTextShape *m_shape;
-    KoSvgTextShape *m_hoverShape;
     QPointer<SvgTextEditor> m_editor;
     QPushButton *m_edit;
     QPointF m_dragStart;
@@ -90,6 +92,8 @@ private:
     QComboBox *m_defPointSize;
     QButtonGroup *m_defAlignment;
     KConfigGroup m_configGroup;
+
+    QRectF m_hoveredShapeHighlightRect;
 };
 
 #endif

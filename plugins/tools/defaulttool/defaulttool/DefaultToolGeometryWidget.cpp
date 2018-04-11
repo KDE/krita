@@ -260,23 +260,23 @@ void DefaultToolGeometryWidget::slotUpdateAspectButton()
     aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
 }
 
-namespace {
-qreal calculateCommonShapeTransparency(const QList<KoShape*> &shapes)
-{
-    qreal commonTransparency = -1.0;
+//namespace {
+//qreal calculateCommonShapeTransparency(const QList<KoShape*> &shapes)
+//{
+//    qreal commonTransparency = -1.0;
 
-    Q_FOREACH (KoShape *shape, shapes) {
-        if (commonTransparency < 0) {
-            commonTransparency = shape->transparency();
-        } else if (!qFuzzyCompare(commonTransparency, shape->transparency())) {
-            commonTransparency = -1.0;
-            break;
-        }
-    }
+//    Q_FOREACH (KoShape *shape, shapes) {
+//        if (commonTransparency < 0) {
+//            commonTransparency = shape->transparency();
+//        } else if (!qFuzzyCompare(commonTransparency, shape->transparency())) {
+//            commonTransparency = -1.0;
+//            break;
+//        }
+//    }
 
-    return commonTransparency;
-}
-}
+//    return commonTransparency;
+//}
+//}
 
 void DefaultToolGeometryWidget::slotOpacitySliderChanged(qreal newOpacity)
 {

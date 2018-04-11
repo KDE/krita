@@ -43,6 +43,7 @@
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 
+#include <QApplication>
 #include <QThread>
 #include <vector>
 #include <memory>
@@ -66,7 +67,7 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 
     std::vector<std::unique_ptr<QTextLayout>> cachedLayouts;
     std::vector<QPointF> cachedLayoutsOffsets;
-    Qt::HANDLE cachedLayoutsWorkingThread = 0;
+    QThread *cachedLayoutsWorkingThread = 0;
 
 
     void clearAssociatedOutlines(KoShape *rootShape);
@@ -122,13 +123,26 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
      * recreate the layouts in the current thread to be able to render them.
      */
 
-    if (QThread::currentThreadId() != d->cachedLayoutsWorkingThread) {
+    if (QThread::currentThread() != d->cachedLayoutsWorkingThread) {
         relayout();
     }
 
     applyConversion(painter, converter);
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
         d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
+    }
+
+    /**
+     * HACK ALERT:
+     * The layouts of non-gui threads must be destroyed in the same thread
+     * they have been created. Because the thread might be restarted in the
+     * meantime or just destroyed, meaning that the per-thread freetype data
+     * will not be available.
+     */
+    if (QThread::currentThread() != qApp->thread()) {
+        d->cachedLayouts.clear();
+        d->cachedLayoutsOffsets.clear();
+        d->cachedLayoutsWorkingThread = 0;
     }
 }
 
@@ -139,6 +153,81 @@ void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &conve
     Q_UNUSED(paintContext);
 
     // do nothing! everything is painted in paintComponent()
+}
+
+QPainterPath KoSvgTextShape::textOutline()
+{
+    Q_D(KoSvgTextShape);
+
+    QPainterPath result;
+    result.setFillRule(Qt::WindingFill);
+
+
+    for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
+        const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
+        const QTextLayout *layout = d->cachedLayouts[i].get();
+
+        for (int j = 0; j < layout->lineCount(); j++) {
+            QTextLine line = layout->lineAt(j);
+
+            Q_FOREACH (const QGlyphRun &run, line.glyphRuns()) {
+                const QVector<quint32> indexes = run.glyphIndexes();
+                const QVector<QPointF> positions = run.positions();
+                const QRawFont font = run.rawFont();
+
+                KIS_SAFE_ASSERT_RECOVER(indexes.size() == positions.size()) { continue; }
+
+                for (int k = 0; k < indexes.size(); k++) {
+                    QPainterPath glyph = font.pathForGlyph(indexes[k]);
+                    glyph.translate(positions[k] + layoutOffset);
+                    result += glyph;
+                }
+
+                const qreal thickness = font.lineThickness();
+                const QRectF runBounds = run.boundingRect();
+
+                if (run.overline()) {
+                    // the offset is calculated to be consistent with the way how Qt renders the text
+                    const qreal y = line.y();
+                    QRectF overlineBlob(runBounds.x(), y, runBounds.width(), thickness);
+                    overlineBlob.translate(layoutOffset);
+
+                    QPainterPath path;
+                    path.addRect(overlineBlob);
+
+                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    result += path;
+                }
+
+                if (run.strikeOut()) {
+                    // the offset is calculated to be consistent with the way how Qt renders the text
+                    const qreal y = line.y() + 0.5 * line.height();
+                    QRectF strikeThroughBlob(runBounds.x(), y, runBounds.width(), thickness);
+                    strikeThroughBlob.translate(layoutOffset);
+
+                    QPainterPath path;
+                    path.addRect(strikeThroughBlob);
+
+                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    result += path;
+                }
+
+                if (run.underline()) {
+                    const qreal y = line.y() + line.ascent() + font.underlinePosition();
+                    QRectF underlineBlob(runBounds.x(), y, runBounds.width(), thickness);
+                    underlineBlob.translate(layoutOffset);
+
+                    QPainterPath path;
+                    path.addRect(underlineBlob);
+
+                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    result += path;
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 void KoSvgTextShape::resetTextShape()
@@ -313,7 +402,7 @@ void KoSvgTextShape::relayout()
 
     d->cachedLayouts.clear();
     d->cachedLayoutsOffsets.clear();
-    d->cachedLayoutsWorkingThread = QThread::currentThreadId();
+    d->cachedLayoutsWorkingThread = QThread::currentThread();
 
     QPointF currentTextPos;
 

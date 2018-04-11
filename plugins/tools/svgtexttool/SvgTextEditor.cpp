@@ -70,6 +70,7 @@
 #include <kis_action_registry.h>
 
 #include "kis_font_family_combo_box.h"
+#include "FontSizeAction.h"
 #include "kis_signals_blocker.h"
 
 SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
@@ -194,10 +195,10 @@ void SvgTextEditor::save()
                     qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
-            emit textUpdated(svg, styles);
+            emit textUpdated(m_shape, svg, styles);
         }
         else {
-            emit textUpdated(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
+            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
@@ -278,8 +279,8 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
     actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
 
-    QComboBox *fontSizeCombo = qobject_cast<QComboBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font_size"))->defaultWidget());
-    fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(format.font().pointSize()));
+    FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
+    fontSizeAction->setFontSize(format.font().pointSize());
 
     KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
     qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"))->setCurrentColor(fg);
@@ -848,16 +849,16 @@ void SvgTextEditor::setFont(const QString &fontName)
     }
 }
 
-void SvgTextEditor::setFontSize(const QString &fontSize)
+void SvgTextEditor::setFontSize(qreal fontSize)
 {
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         QTextCharFormat format;
-        format.setFontPointSize((qreal)fontSize.toInt());
+        format.setFontPointSize(fontSize);
         m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
     } else {
         QTextCursor cursor = m_textEditorWidget.svgTextEdit->textCursor();
         if (cursor.hasSelection()) {
-            QString selectionModified = "<tspan style=\"font-size:"+fontSize+";\">" + cursor.selectedText() + "</tspan>";
+            QString selectionModified = "<tspan style=\"font-size:" + QString::number(fontSize) + ";\">" + cursor.selectedText() + "</tspan>";
             cursor.removeSelectedText();
             cursor.insertText(selectionModified);
         }
@@ -1035,19 +1036,12 @@ void SvgTextEditor::createActions()
     m_richTextActions << fontComboAction;
     actionRegistry->propertizeAction("svg_font", fontComboAction);
 
-    QWidgetAction *fontSizeAction = new QWidgetAction(this);
+    QWidgetAction *fontSizeAction = new FontSizeAction(this);
     fontSizeAction->setToolTip(i18n("Size"));
-    QComboBox *fontSizeCombo = new QComboBox();
-    Q_FOREACH (int size, QFontDatabase::standardSizes()) {
-        fontSizeCombo->addItem(QString::number(size));
-    }
-    fontSizeCombo->setCurrentIndex(QFontDatabase::standardSizes().indexOf(QApplication::font().pointSize()));
-    connect(fontSizeCombo, SIGNAL(activated(QString)), SLOT(setFontSize(QString)));
-    fontSizeAction->setDefaultWidget(fontSizeCombo);
+    connect(fontSizeAction, SIGNAL(fontSizeChanged(qreal)), this, SLOT(setFontSize(qreal)));
     actionCollection()->addAction("svg_font_size", fontSizeAction);
     m_richTextActions << fontSizeAction;
     actionRegistry->propertizeAction("svg_font_size", fontSizeAction);
-
 
     KoColorPopupAction *fgColor = new KoColorPopupAction(this);
     fgColor->setCurrentColor(QColor(Qt::black));

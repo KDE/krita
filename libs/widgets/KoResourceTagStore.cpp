@@ -309,9 +309,9 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
 
 //    qDebug() << "\treadXMLFile()." << tagstore  << d->resourceServer->type() << "Server has" << d->resourceServer->resourceCount() << "resources";
     if (d->resourceServer->type() == "kis_paintoppresets") {
-        Q_FOREACH(const QString &line, kisBacktrace().split("\n")) {
+//        Q_FOREACH(const QString &line, kisBacktrace().split("\n")) {
 //            qDebug() << line;
-        }
+//        }
     }
 
     QFile f(inputFile);

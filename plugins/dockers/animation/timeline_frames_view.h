@@ -120,6 +120,18 @@ private:
     KisAction* addActionToMenu(QMenu *menu, const QString &actionId);
     void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
 
+    int defaultNumberOfFramesToAdd() const;
+    void setDefaultNumberOfFramesToAdd(int value) const;
+
+    int defaultNumberOfColumnsToAdd() const;
+    void setDefaultNumberOfColumnsToAdd(int value) const;
+
+    int defaultNumberOfFramesToRemove() const;
+    void setDefaultNumberOfFramesToRemove(int value) const;
+
+    int defaultNumberOfColumnsToRemove() const;
+    void setDefaultNumberOfColumnsToRemove(int value) const;
+
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const override;

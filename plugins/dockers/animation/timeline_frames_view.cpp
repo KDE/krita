@@ -41,6 +41,8 @@
 #include <kis_signals_blocker.h>
 #include <kis_image_config.h>
 
+#include "KSharedConfig"
+
 #include "kis_debug.h"
 #include "timeline_frames_item_delegate.h"
 
@@ -1267,14 +1269,14 @@ void TimelineFramesView::slotInsertColumnsRight(int count)
 void TimelineFramesView::slotInsertKeyframesLeftCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert left"),
                                            i18nc("@label:spinbox", "Enter number of frames"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfFramesToAdd(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfFramesToAdd(count);
         slotInsertKeyframesLeft(count);
     }
 }
@@ -1283,14 +1285,14 @@ void TimelineFramesView::slotInsertKeyframesLeftCustom()
 void TimelineFramesView::slotInsertKeyframesRightCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert right"),
                                            i18nc("@label:spinbox", "Enter number of frames"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfFramesToAdd(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfFramesToAdd(count);
         slotInsertKeyframesRight(count);
     }
 }
@@ -1298,14 +1300,14 @@ void TimelineFramesView::slotInsertKeyframesRightCustom()
 void TimelineFramesView::slotInsertColumnsLeftCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert left"),
                                            i18nc("@label:spinbox", "Enter number of columns"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfColumnsToAdd(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfColumnsToAdd(count);
         slotInsertColumnsLeft(count);
     }
 }
@@ -1314,14 +1316,14 @@ void TimelineFramesView::slotInsertColumnsLeftCustom()
 void TimelineFramesView::slotInsertColumnsRightCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert right"),
                                            i18nc("@label:spinbox", "Enter number of columns"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfColumnsToAdd(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfColumnsToAdd(count);
         slotInsertColumnsRight(count);
     }
 }
@@ -1411,14 +1413,14 @@ void TimelineFramesView::slotRemoveHoldFrames(int count, bool forceEntireColumn)
 void TimelineFramesView::slotInsertHoldFramesCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert hold frames"),
                                            i18nc("@label:spinbox", "Enter number of frames"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfFramesToAdd(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfFramesToAdd(count);
         slotInsertHoldFrames(count);
     }
 }
@@ -1426,14 +1428,14 @@ void TimelineFramesView::slotInsertHoldFramesCustom()
 void TimelineFramesView::slotRemoveHoldFramesCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Remove hold frames"),
                                            i18nc("@label:spinbox", "Enter number of frames"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfFramesToRemove(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfFramesToRemove(count);
         slotRemoveHoldFrames(count);
     }
 }
@@ -1451,14 +1453,14 @@ void TimelineFramesView::slotRemoveHoldColumns(int count)
 void TimelineFramesView::slotInsertHoldColumnsCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert hold columns"),
                                            i18nc("@label:spinbox", "Enter number of columns"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfColumnsToAdd(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfColumnsToAdd(count);
         slotInsertHoldColumns(count);
     }
 }
@@ -1466,18 +1468,65 @@ void TimelineFramesView::slotInsertHoldColumnsCustom()
 void TimelineFramesView::slotRemoveHoldColumnsCustom()
 {
     bool ok = false;
-
-    // TODO: save previous entered value till the end of the session
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Remove hold columns"),
                                            i18nc("@label:spinbox", "Enter number of columns"),
-                                           1, 1, 10000, 1, &ok);
+                                           defaultNumberOfColumnsToRemove(),
+                                           1, 10000, 1, &ok);
 
     if (ok) {
+        setDefaultNumberOfColumnsToRemove(count);
         slotRemoveHoldColumns(count);
     }
 }
 
+int TimelineFramesView::defaultNumberOfFramesToAdd() const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    return cfg.readEntry("defaultNumberOfFramesToAdd", 1);
+}
+
+void TimelineFramesView::setDefaultNumberOfFramesToAdd(int value) const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    cfg.writeEntry("defaultNumberOfFramesToAdd", value);
+}
+
+int TimelineFramesView::defaultNumberOfColumnsToAdd() const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    return cfg.readEntry("defaultNumberOfColumnsToAdd", 1);
+}
+
+void TimelineFramesView::setDefaultNumberOfColumnsToAdd(int value) const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    cfg.writeEntry("defaultNumberOfColumnsToAdd", value);
+}
+
+int TimelineFramesView::defaultNumberOfFramesToRemove() const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    return cfg.readEntry("defaultNumberOfFramesToRemove", 1);
+}
+
+void TimelineFramesView::setDefaultNumberOfFramesToRemove(int value) const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    cfg.writeEntry("defaultNumberOfFramesToRemove", value);
+}
+
+int TimelineFramesView::defaultNumberOfColumnsToRemove() const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    return cfg.readEntry("defaultNumberOfColumnsToRemove", 1);
+}
+
+void TimelineFramesView::setDefaultNumberOfColumnsToRemove(int value) const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    cfg.writeEntry("defaultNumberOfColumnsToRemove", value);
+}
 
 bool TimelineFramesView::viewportEvent(QEvent *event)
 {

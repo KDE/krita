@@ -31,6 +31,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_processing_applicator.h"
 #include "KisImageBarrierLockerWithFeedback.h"
+#include "commands_new/kis_switch_current_time_command.h"
 
 struct KisTimeBasedItemModel::Private
 {
@@ -279,7 +280,7 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
     return true;
 }
 
-KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand)
+KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand, bool moveEmptyFrames)
 {
     if (srcIndexes.isEmpty()) return 0;
     if (offset.isNull()) return 0;
@@ -302,7 +303,7 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
         }
 
         Q_FOREACH(KisKeyframeChannel *channel, channelsAt(srcIndex)) {
-            if (channel->keyframeAt(srcIndex.column())) {
+            if (moveEmptyFrames ||  channel->keyframeAt(srcIndex.column())) {
                 srcFrameItems << KisAnimationUtils::FrameItem(srcNode, channel->id(), srcIndex.column());
                 dstFrameItems << KisAnimationUtils::FrameItem(dstNode, channel->id(), dstIndex.column());
             }
@@ -335,9 +336,16 @@ bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoin
     return cmd;
 }
 
-bool KisTimeBasedItemModel::removeFramesAndOffset(const QModelIndexList &indexes)
+bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indexes)
 {
     if (indexes.isEmpty()) return true;
+
+    std::sort(indexes.begin(), indexes.end(),
+              [] (const QModelIndex &lhs, const QModelIndex &rhs) {
+                  return lhs.column() > rhs.column();
+              });
+
+    const int minColumn = indexes.last().column();
 
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indexes.size()));
 
@@ -349,8 +357,16 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(const QModelIndexList &indexes
             for (int column = index.column() + 1; column < columnCount(); column++) {
                 movedIndexes << this->index(index.row(), column);
             }
-            createOffsetFramesCommand(movedIndexes, QPoint(-1, 0), false, parentCommand);
+            createOffsetFramesCommand(movedIndexes, QPoint(-1, 0), false, parentCommand, true);
         }
+
+        const int oldTime = m_d->image->animationInterface()->currentUITime();
+        const int newTime = minColumn;
+
+        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
+                                        oldTime,
+                                        newTime, parentCommand);
+
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);

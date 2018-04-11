@@ -37,7 +37,6 @@ KisCanvasWindow::KisCanvasWindow(KisMainWindow *mainWindow)
 
     QLayout *layout = new QHBoxLayout(this);
     setLayout(layout);
-    layout->addWidget(new QWidget(this));
 }
 
 KisCanvasWindow::~KisCanvasWindow() {}
@@ -50,7 +49,9 @@ void KisCanvasWindow::closeEvent(QCloseEvent *event)
 
 QWidget * KisCanvasWindow::swapMainWidget(QWidget *newWidget)
 {
-    QWidget *oldWidget = layout()->takeAt(0)->widget();
-    layout()->addWidget(newWidget);
+    QWidget *oldWidget = (layout()->count() > 0) ? (layout()->takeAt(0)->widget()) : nullptr;
+    if (newWidget) {
+        layout()->addWidget(newWidget);
+    }
     return oldWidget;
 }

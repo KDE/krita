@@ -678,9 +678,12 @@ void KisMainWindow::setCanvasDetached(bool detach)
 {
     if (detach == canvasDetached()) return;
 
-    QWidget *outgoingWidget = takeCentralWidget();
+    QWidget *outgoingWidget = centralWidget() ? takeCentralWidget() : nullptr;
     QWidget *incomingWidget = d->canvasWindow->swapMainWidget(outgoingWidget);
-    setCentralWidget(incomingWidget);
+
+    if (incomingWidget) {
+        setCentralWidget(incomingWidget);
+    }
 
     if (detach) {
         KIS_SAFE_ASSERT_RECOVER_NOOP(outgoingWidget == d->mdiArea);
@@ -1388,7 +1391,7 @@ void KisMainWindow::mouseReleaseEvent(QMouseEvent *event)
      * need to make a canvas first, will find the new image
      * dialog on click.
      */
-    if (centralWidget()->geometry().contains(event->pos())
+    if (centralWidget() && centralWidget()->geometry().contains(event->pos())
             && KisPart::instance()->documents().size()==0 && event->button() == Qt::LeftButton) {
         this->slotFileNew();
         event->accept();

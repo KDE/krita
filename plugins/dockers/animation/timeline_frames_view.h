@@ -80,11 +80,17 @@ private Q_SLOTS:
     void slotRemoveColumns();
     void slotRemoveColumnsAndShift();
 
-    void slotInsertHoldFrames(int count = 1);
-    void slotInsertHoldFramesCustom();
+    void slotInsertHoldFrames(int count = 1, bool forceEntireColumn = false);
+    void slotRemoveHoldFrames(int count = 1, bool forceEntireColumn = false);
 
-    void slotRemoveHoldFrames(int count = 1);
+    void slotInsertHoldFramesCustom();
     void slotRemoveHoldFramesCustom();
+
+    void slotInsertHoldColumns(int count = 1);
+    void slotRemoveHoldColumns(int count = 1);
+
+    void slotInsertHoldColumnsCustom();
+    void slotRemoveHoldColumnsCustom();
 
     void slotReselectCurrentIndex();
 

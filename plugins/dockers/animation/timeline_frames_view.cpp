@@ -162,6 +162,12 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->horizontalRuler, SIGNAL(sigRemoveColumns()), SLOT(slotRemoveColumns()));
     connect(m_d->horizontalRuler, SIGNAL(sigRemoveColumnsAndShift()), SLOT(slotRemoveColumnsAndShift()));
 
+    connect(m_d->horizontalRuler, SIGNAL(sigInsertHoldColumns()), SLOT(slotInsertHoldColumns()));
+    connect(m_d->horizontalRuler, SIGNAL(sigRemoveHoldColumns()), SLOT(slotRemoveHoldColumns()));
+
+    connect(m_d->horizontalRuler, SIGNAL(sigInsertHoldColumnsCustom()), SLOT(slotInsertHoldColumnsCustom()));
+    connect(m_d->horizontalRuler, SIGNAL(sigRemoveHoldColumnsCustom()), SLOT(slotRemoveHoldColumnsCustom()));
+
     m_d->layersHeader = new TimelineLayersHeader(this);
 
     m_d->layersHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -1371,13 +1377,24 @@ void TimelineFramesView::slotRemoveColumnsAndShift()
     slotRemoveFramesAndShift(true);
 }
 
-void TimelineFramesView::slotInsertHoldFrames(int count)
+void TimelineFramesView::slotInsertHoldFrames(int count, bool forceEntireColumn)
 {
     QModelIndexList indexes;
 
-    Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
-        if (m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
-            indexes << index;
+    if (!forceEntireColumn) {
+        Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
+            if (m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+                indexes << index;
+            }
+        }
+    } else {
+        const int column = selectionModel()->currentIndex().column();
+
+        for (int i = 0; i < m_d->model->rowCount(); i++) {
+            const QModelIndex index = m_d->model->index(i, column);
+            if (m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+                indexes << index;
+            }
         }
     }
 
@@ -1386,9 +1403,9 @@ void TimelineFramesView::slotInsertHoldFrames(int count)
     }
 }
 
-void TimelineFramesView::slotRemoveHoldFrames(int count)
+void TimelineFramesView::slotRemoveHoldFrames(int count, bool forceEntireColumn)
 {
-    slotInsertHoldFrames(-count);
+    slotInsertHoldFrames(-count, forceEntireColumn);
 }
 
 void TimelineFramesView::slotInsertHoldFramesCustom()
@@ -1418,6 +1435,46 @@ void TimelineFramesView::slotRemoveHoldFramesCustom()
 
     if (ok) {
         slotRemoveHoldFrames(count);
+    }
+}
+
+void TimelineFramesView::slotInsertHoldColumns(int count)
+{
+    slotInsertHoldFrames(count, true);
+}
+
+void TimelineFramesView::slotRemoveHoldColumns(int count)
+{
+    slotRemoveHoldFrames(count, true);
+}
+
+void TimelineFramesView::slotInsertHoldColumnsCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Insert hold columns"),
+                                           i18nc("@label:spinbox", "Enter number of columns"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotInsertHoldColumns(count);
+    }
+}
+
+void TimelineFramesView::slotRemoveHoldColumnsCustom()
+{
+    bool ok = false;
+
+    // TODO: save previous entered value till the end of the session
+    const int count = QInputDialog::getInt(this,
+                                           i18nc("@title:window", "Remove hold columns"),
+                                           i18nc("@label:spinbox", "Enter number of columns"),
+                                           1, 1, 10000, 1, &ok);
+
+    if (ok) {
+        slotRemoveHoldColumns(count);
     }
 }
 

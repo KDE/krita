@@ -170,6 +170,8 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->horizontalRuler, SIGNAL(sigInsertHoldColumnsCustom()), SLOT(slotInsertHoldColumnsCustom()));
     connect(m_d->horizontalRuler, SIGNAL(sigRemoveHoldColumnsCustom()), SLOT(slotRemoveHoldColumnsCustom()));
 
+    connect(m_d->horizontalRuler, SIGNAL(sigMirrorColumns()), SLOT(slotMirrorColumns()));
+
     m_d->layersHeader = new TimelineLayersHeader(this);
 
     m_d->layersHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -331,6 +333,9 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
 
         action = m_d->actionMan->createAction("remove_n_hold_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotRemoveHoldFramesCustom()));
+
+        action = m_d->actionMan->createAction("mirror_frames");
+        connect(action, SIGNAL(triggered()), SLOT(slotMirrorFrames()));
     }
 }
 
@@ -1036,6 +1041,9 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             addActionToMenu(&menu, "insert_n_hold_frames");
             addActionToMenu(&menu, "remove_n_hold_frames");
 
+            menu.addSeparator();
+            addActionToMenu(&menu, "mirror_frames");
+
             if (haveFrames) {
                 menu.addSeparator();
                 menu.addAction(m_d->multiframeColorSelectorAction);
@@ -1197,7 +1205,7 @@ void TimelineFramesView::slotCopyFrame()
     m_d->model->copyFrame(index);
 }
 
-void TimelineFramesView::calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows)
+void TimelineFramesView::calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const
 {
     minColumn = std::numeric_limits<int>::max();
     maxColumn = std::numeric_limits<int>::min();
@@ -1328,7 +1336,7 @@ void TimelineFramesView::slotInsertColumnsRightCustom()
     }
 }
 
-void TimelineFramesView::slotRemoveFrame(bool forceEntireColumn, bool needsOffset)
+QModelIndexList TimelineFramesView::calculateSelectionSpan(bool forceEntireColumn) const
 {
     QModelIndexList indexes;
 
@@ -1354,6 +1362,13 @@ void TimelineFramesView::slotRemoveFrame(bool forceEntireColumn, bool needsOffse
             }
         }
     }
+
+    return indexes;
+}
+
+void TimelineFramesView::slotRemoveFrame(bool forceEntireColumn, bool needsOffset)
+{
+    const QModelIndexList indexes = calculateSelectionSpan(forceEntireColumn);
 
     if (!indexes.isEmpty()) {
         if (needsOffset) {
@@ -1478,6 +1493,20 @@ void TimelineFramesView::slotRemoveHoldColumnsCustom()
         setDefaultNumberOfColumnsToRemove(count);
         slotRemoveHoldColumns(count);
     }
+}
+
+void TimelineFramesView::slotMirrorFrames(bool forceEntireColumn)
+{
+    const QModelIndexList indexes = calculateSelectionSpan(forceEntireColumn);
+
+    if (!indexes.isEmpty()) {
+        m_d->model->mirrorFrames(indexes);
+    }
+}
+
+void TimelineFramesView::slotMirrorColumns()
+{
+    slotMirrorFrames(true);
 }
 
 int TimelineFramesView::defaultNumberOfFramesToAdd() const

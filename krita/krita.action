@@ -2207,7 +2207,7 @@
 
     <Action name="remove_frames">
       <icon></icon>
-      <text>Remove Frame</text>
+      <text>Remove Keyframe</text>
       <whatsThis></whatsThis>
       <toolTip>Just remove keyframes without moving anything around</toolTip>
       <iconText></iconText>
@@ -2400,6 +2400,31 @@
       <statusTip></statusTip>
     </Action>
 
+    <Action name="mirror_frames">
+      <icon></icon>
+      <text>Mirror Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror frames' position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="mirror_columns">
+      <icon></icon>
+      <text>Mirror Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror columns' position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
   </Actions>
 

@@ -102,6 +102,9 @@ void TimelineRulerHeader::setActionManager( KisActionManager * actionManager)
 
         action = actionManager->createAction("remove_n_hold_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigRemoveHoldColumnsCustom()));
+
+        action = actionManager->createAction("mirror_columns");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigMirrorColumns()));
     }
 }
 
@@ -452,6 +455,11 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             menu.addSeparator();
             addActionToMenu(&menu, "insert_n_hold_columns");
             addActionToMenu(&menu, "remove_n_hold_columns");
+
+            if (numSelectedColumns > 1) {
+                menu.addSeparator();
+                addActionToMenu(&menu, "mirror_columns");
+            }
 
             menu.exec(e->globalPos());
 

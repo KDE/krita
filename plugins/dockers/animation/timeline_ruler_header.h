@@ -74,6 +74,8 @@ Q_SIGNALS:
     void sigInsertHoldColumnsCustom();
     void sigRemoveHoldColumnsCustom();
 
+    void sigMirrorColumns();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

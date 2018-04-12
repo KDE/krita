@@ -56,6 +56,8 @@ public:
 
     bool removeFramesAndOffset(QModelIndexList indexes);
 
+    bool mirrorFrames(QModelIndexList indexes);
+
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
 

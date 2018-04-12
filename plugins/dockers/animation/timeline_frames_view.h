@@ -92,6 +92,9 @@ private Q_SLOTS:
     void slotInsertHoldColumnsCustom();
     void slotRemoveHoldColumnsCustom();
 
+    void slotMirrorFrames(bool forceEntireColumn = false);
+    void slotMirrorColumns();
+
     void slotReselectCurrentIndex();
 
     void slotUpdateInfiniteFramesCount();
@@ -113,12 +116,14 @@ private Q_SLOTS:
 
 private:
     void setFramesPerSecond(int fps);
-    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows);
+    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
 
     void createFrameEditingMenu();
 
     KisAction* addActionToMenu(QMenu *menu, const QString &actionId);
     void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
+
+    QModelIndexList calculateSelectionSpan(bool forceEntireColumn) const;
 
     int defaultNumberOfFramesToAdd() const;
     void setDefaultNumberOfFramesToAdd(int value) const;

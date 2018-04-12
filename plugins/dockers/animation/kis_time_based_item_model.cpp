@@ -32,6 +32,7 @@
 #include "kis_processing_applicator.h"
 #include "KisImageBarrierLockerWithFeedback.h"
 #include "commands_new/kis_switch_current_time_command.h"
+#include "kis_command_utils.h"
 
 struct KisTimeBasedItemModel::Private
 {
@@ -370,6 +371,55 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indexes)
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    return true;
+}
+
+bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
+{
+    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18n("Mirror Frames")));
+
+    {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+
+        QMap<int, QModelIndexList> rowsList;
+
+        Q_FOREACH (const QModelIndex &index, indexes) {
+            rowsList[index.row()].append(index);
+        }
+
+
+        Q_FOREACH (int row, rowsList.keys()) {
+            QModelIndexList &list = rowsList[row];
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!list.isEmpty(), false);
+
+            std::sort(list.begin(), list.end(),
+                [] (const QModelIndex &lhs, const QModelIndex &rhs) {
+                    return lhs.column() < rhs.column();
+                });
+
+            auto srcIt = list.begin();
+            auto dstIt = list.end();
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(srcIt != dstIt, false);
+            --dstIt;
+
+            QList<KisKeyframeChannel*> channels = channelsAt(*srcIt).values();
+
+            while (srcIt < dstIt) {
+                Q_FOREACH (KisKeyframeChannel *channel, channels) {
+                    channel->swapFrames(srcIt->column(), dstIt->column(), parentCommand.data());
+                }
+
+                srcIt++;
+                dstIt--;
+            }
+        }
+    }
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image,
+                                                    new KisCommandUtils::SkipFirstRedoWrapper(parentCommand.take()),
+                                                    KisStrokeJobData::BARRIER);
     return true;
 }
 

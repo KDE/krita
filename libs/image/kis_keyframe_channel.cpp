@@ -173,6 +173,29 @@ bool KisKeyframeChannel::moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo
     return true;
 }
 
+bool KisKeyframeChannel::swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand)
+{
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    if (lhsTime == rhsTime) return false;
+
+    KisKeyframeSP lhsFrame = keyframeAt(lhsTime);
+    KisKeyframeSP rhsFrame = keyframeAt(rhsTime);
+
+    if (!lhsFrame && !rhsFrame) return false;
+
+    if (lhsFrame && !rhsFrame) {
+        moveKeyframe(lhsFrame, rhsTime, parentCommand);
+    } else if (!lhsFrame && rhsFrame) {
+        moveKeyframe(rhsFrame, lhsTime, parentCommand);
+    } else {
+        KUndo2Command *cmd = new KisSwapFramesCommand(this, lhsFrame, rhsFrame, parentCommand);
+        cmd->redo();
+    }
+
+    return true;
+}
+
 bool KisKeyframeChannel::deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate)
 {
     LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
@@ -212,6 +235,42 @@ void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeSP keyframe, int newTime)
 
     requestUpdate(rangeSrc, rectSrc);
     requestUpdate(rangeDst, rectDst);
+}
+
+void KisKeyframeChannel::swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe)
+{
+    KIS_ASSERT_RECOVER_RETURN(lhsKeyframe);
+    KIS_ASSERT_RECOVER_RETURN(rhsKeyframe);
+
+    KisTimeRange rangeLhs = affectedFrames(lhsKeyframe->time());
+    KisTimeRange rangeRhs = affectedFrames(rhsKeyframe->time());
+
+    const QRect rectLhsSrc = affectedRect(lhsKeyframe);
+    const QRect rectRhsSrc = affectedRect(rhsKeyframe);
+
+    const int lhsTime = lhsKeyframe->time();
+    const int rhsTime = rhsKeyframe->time();
+
+    emit sigKeyframeAboutToBeMoved(lhsKeyframe, rhsTime);
+    emit sigKeyframeAboutToBeMoved(rhsKeyframe, lhsTime);
+
+    m_d->keys.remove(lhsTime);
+    m_d->keys.remove(rhsTime);
+
+    rhsKeyframe->setTime(lhsTime);
+    lhsKeyframe->setTime(rhsTime);
+
+    m_d->keys.insert(lhsTime, rhsKeyframe);
+    m_d->keys.insert(rhsTime, lhsKeyframe);
+
+    emit sigKeyframeMoved(lhsKeyframe, lhsTime);
+    emit sigKeyframeMoved(rhsKeyframe, rhsTime);
+
+    const QRect rectLhsDst = affectedRect(lhsKeyframe);
+    const QRect rectRhsDst = affectedRect(rhsKeyframe);
+
+    requestUpdate(rangeLhs, rectLhsSrc | rectRhsDst);
+    requestUpdate(rangeRhs, rectRhsSrc | rectLhsDst);
 }
 
 KisKeyframeSP KisKeyframeChannel::replaceKeyframeAt(int time, KisKeyframeSP newKeyframe)

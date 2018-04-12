@@ -66,6 +66,7 @@ public:
     KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);
     bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
     bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    bool swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
@@ -151,9 +152,11 @@ private:
     void removeKeyframeLogical(KisKeyframeSP keyframe);
     bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
+    void swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe);
 
     friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;
+    friend class KisSwapFramesCommand;
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);

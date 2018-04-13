@@ -95,6 +95,15 @@ private Q_SLOTS:
     void slotMirrorFrames(bool forceEntireColumn = false);
     void slotMirrorColumns();
 
+
+    void slotCopyFrames(bool forceEntireColumn = false);
+    void slotCutFrames(bool forceEntireColumn = false);
+    void slotPasteFrames(bool forceEntireColumn = false);
+
+    void slotCopyColumns();
+    void slotCutColumns();
+    void slotPasteColumns();
+
     void slotReselectCurrentIndex();
 
     void slotUpdateInfiniteFramesCount();
@@ -123,7 +132,8 @@ private:
     KisAction* addActionToMenu(QMenu *menu, const QString &actionId);
     void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
 
-    QModelIndexList calculateSelectionSpan(bool forceEntireColumn) const;
+    QModelIndexList calculateSelectionSpan(bool forceEntireColumn, bool editableOnly = true) const;
+    void cutCopyImpl(bool forceEntireColumn, bool copy);
 
     int defaultNumberOfFramesToAdd() const;
     void setDefaultNumberOfFramesToAdd(int value) const;

@@ -538,13 +538,20 @@ void TimelineFramesModel::setLastClickedIndex(const QModelIndex &index)
 
 QMimeData* TimelineFramesModel::mimeData(const QModelIndexList &indexes) const
 {
+    return mimeDataExtended(indexes, m_d->lastClickedIndex, UndefinedPolicy);
+}
+
+QMimeData *TimelineFramesModel::mimeDataExtended(const QModelIndexList &indexes,
+                                                 const QModelIndex &baseIndex,
+                                                 TimelineFramesModel::MimeCopyPolicy copyPolicy) const
+{
     QMimeData *data = new QMimeData();
 
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
 
-    const int baseRow = m_d->lastClickedIndex.row();
-    const int baseColumn = m_d->lastClickedIndex.column();
+    const int baseRow = baseIndex.row();
+    const int baseColumn = baseIndex.column();
 
     stream << indexes.size();
     stream << baseRow << baseColumn;
@@ -553,6 +560,7 @@ QMimeData* TimelineFramesModel::mimeData(const QModelIndexList &indexes) const
         stream << index.row() - baseRow << index.column() - baseColumn;
     }
 
+    stream << int(copyPolicy);
     data->setData("application/x-krita-frame", encoded);
 
     return data;
@@ -582,16 +590,18 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
     Q_UNUSED(row);
     Q_UNUSED(column);
 
+    return dropMimeDataExtended(data, action, parent);
+}
+
+bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAction action, const QModelIndex &parent, bool *dataMoved)
+{
     bool result = false;
 
-    if ((action != Qt::MoveAction &&
-         action != Qt::CopyAction) || !parent.isValid()) return result;
-
-    const bool copyFrames = action == Qt::CopyAction;
+    if ((action != Qt::MoveAction && action != Qt::CopyAction) ||
+        !parent.isValid()) return result;
 
     QByteArray encoded = data->data("application/x-krita-frame");
     QDataStream stream(&encoded, QIODevice::ReadOnly);
-
 
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
@@ -606,6 +616,23 @@ bool TimelineFramesModel::dropMimeData(const QMimeData *data, Qt::DropAction act
         int srcColumn = baseColumn + relColumn;
 
         srcIndexes << index(srcRow, srcColumn);
+    }
+
+    MimeCopyPolicy copyPolicy = UndefinedPolicy;
+
+    if (!stream.atEnd()) {
+        int value = 0;
+        stream >> value;
+        copyPolicy = MimeCopyPolicy(value);
+    }
+
+    const bool copyFrames =
+        copyPolicy == UndefinedPolicy ?
+        action == Qt::CopyAction :
+        copyPolicy == CopyFramesPolicy;
+
+    if (dataMoved) {
+        *dataMoved = !copyFrames;
     }
 
     const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);

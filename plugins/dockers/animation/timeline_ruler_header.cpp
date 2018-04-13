@@ -105,6 +105,15 @@ void TimelineRulerHeader::setActionManager( KisActionManager * actionManager)
 
         action = actionManager->createAction("mirror_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigMirrorColumns()));
+
+        action = actionManager->createAction("copy_columns_to_clipboard");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigCopyColumns()));
+
+        action = actionManager->createAction("cut_columns_to_clipboard");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigCutColumns()));
+
+        action = actionManager->createAction("paste_columns_from_clipboard");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigPasteColumns()));
     }
 }
 
@@ -441,6 +450,10 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             }
 
             QMenu menu;
+            addActionToMenu(&menu, "cut_columns_to_clipboard");
+            addActionToMenu(&menu, "copy_columns_to_clipboard");
+            addActionToMenu(&menu, "paste_columns_from_clipboard");
+            menu.addSeparator();
             addActionToMenu(&menu, "insert_columns_right");
             addActionToMenu(&menu, "insert_columns_left");
             menu.addSeparator();

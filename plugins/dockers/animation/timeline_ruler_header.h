@@ -76,6 +76,10 @@ Q_SIGNALS:
 
     void sigMirrorColumns();
 
+    void sigCutColumns();
+    void sigCopyColumns();
+    void sigPasteColumns();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

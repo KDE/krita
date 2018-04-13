@@ -2426,6 +2426,84 @@
       <statusTip></statusTip>
     </Action>
 
+    <Action name="copy_frames_to_clipboard">
+      <icon></icon>
+      <text>Copy to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_frames_to_clipboard">
+      <icon></icon>
+      <text>Cut to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="paste_frames_from_clipboard">
+      <icon></icon>
+      <text>Paste from Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste frames from clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="copy_columns_to_clipboard">
+      <icon></icon>
+      <text>Copy Columns to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy columns to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_columns_to_clipboard">
+      <icon></icon>
+      <text>Cut Columns to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut columns to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="paste_columns_from_clipboard">
+      <icon></icon>
+      <text>Paste Columns from Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste columns from clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
   </Actions>
 
 

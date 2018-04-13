@@ -65,6 +65,9 @@
 #include <QWidgetAction>
 #include <QInputDialog>
 
+#include <QClipboard>
+#include <QMimeData>
+
 #include "config-qtmultimedia.h"
 
 typedef QPair<QRect, QModelIndex> QItemViewPaintPair;
@@ -171,6 +174,10 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->horizontalRuler, SIGNAL(sigRemoveHoldColumnsCustom()), SLOT(slotRemoveHoldColumnsCustom()));
 
     connect(m_d->horizontalRuler, SIGNAL(sigMirrorColumns()), SLOT(slotMirrorColumns()));
+
+    connect(m_d->horizontalRuler, SIGNAL(sigCopyColumns()), SLOT(slotCopyColumns()));
+    connect(m_d->horizontalRuler, SIGNAL(sigCutColumns()), SLOT(slotCutColumns()));
+    connect(m_d->horizontalRuler, SIGNAL(sigPasteColumns()), SLOT(slotPasteColumns()));
 
     m_d->layersHeader = new TimelineLayersHeader(this);
 
@@ -336,6 +343,16 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
 
         action = m_d->actionMan->createAction("mirror_frames");
         connect(action, SIGNAL(triggered()), SLOT(slotMirrorFrames()));
+
+        action = m_d->actionMan->createAction("copy_frames_to_clipboard");
+        connect(action, SIGNAL(triggered()), SLOT(slotCopyFrames()));
+
+        action = m_d->actionMan->createAction("cut_frames_to_clipboard");
+        connect(action, SIGNAL(triggered()), SLOT(slotCutFrames()));
+
+        action = m_d->actionMan->createAction("paste_frames_from_clipboard");
+        connect(action, SIGNAL(triggered()), SLOT(slotPasteFrames()));
+
     }
 }
 
@@ -952,6 +969,10 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 }
 
                 QMenu menu;
+                addActionToMenu(&menu, "cut_frames_to_clipboard");
+                addActionToMenu(&menu, "copy_frames_to_clipboard");
+                addActionToMenu(&menu, "paste_frames_from_clipboard");
+                menu.addSeparator();
                 addActionToMenu(&menu, "insert_keyframes_right");
                 addActionToMenu(&menu, "insert_keyframes_left");
                 menu.addSeparator();
@@ -979,6 +1000,10 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 }
 
                 QMenu menu;
+                addActionToMenu(&menu, "cut_frames_to_clipboard");
+                addActionToMenu(&menu, "copy_frames_to_clipboard");
+                addActionToMenu(&menu, "paste_frames_from_clipboard");
+                menu.addSeparator();
                 addActionToMenu(&menu, "add_blank_frame");
                 addActionToMenu(&menu, "add_duplicate_frame");
                 menu.addSeparator();
@@ -1023,6 +1048,10 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             }
 
             QMenu menu;
+            addActionToMenu(&menu, "cut_frames_to_clipboard");
+            addActionToMenu(&menu, "copy_frames_to_clipboard");
+            addActionToMenu(&menu, "paste_frames_from_clipboard");
+            menu.addSeparator();
             addActionToMenu(&menu, "insert_keyframes_right");
             addActionToMenu(&menu, "insert_keyframes_left");
             menu.addSeparator();
@@ -1336,7 +1365,7 @@ void TimelineFramesView::slotInsertColumnsRightCustom()
     }
 }
 
-QModelIndexList TimelineFramesView::calculateSelectionSpan(bool forceEntireColumn) const
+QModelIndexList TimelineFramesView::calculateSelectionSpan(bool forceEntireColumn, bool editableOnly) const
 {
     QModelIndexList indexes;
 
@@ -1349,7 +1378,8 @@ QModelIndexList TimelineFramesView::calculateSelectionSpan(bool forceEntireColum
 
         rows.clear();
         for (int i = 0; i < m_d->model->rowCount(); i++) {
-            if (!m_d->model->data(m_d->model->index(i, minColumn), TimelineFramesModel::FrameEditableRole).toBool()) continue;
+            if (editableOnly &&
+                !m_d->model->data(m_d->model->index(i, minColumn), TimelineFramesModel::FrameEditableRole).toBool()) continue;
 
             for (int column = minColumn; column <= maxColumn; column++) {
                 indexes << m_d->model->index(i, column);
@@ -1357,7 +1387,7 @@ QModelIndexList TimelineFramesView::calculateSelectionSpan(bool forceEntireColum
         }
     } else {
         Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
-            if (m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+            if (!editableOnly || m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
                 indexes << index;
             }
         }
@@ -1507,6 +1537,78 @@ void TimelineFramesView::slotMirrorFrames(bool forceEntireColumn)
 void TimelineFramesView::slotMirrorColumns()
 {
     slotMirrorFrames(true);
+}
+
+void TimelineFramesView::cutCopyImpl(bool forceEntireColumn, bool copy)
+{
+    const QModelIndexList indexes = calculateSelectionSpan(forceEntireColumn, !copy);
+    if (indexes.isEmpty()) return;
+
+    int minColumn = std::numeric_limits<int>::max();
+    int minRow = std::numeric_limits<int>::max();
+
+    Q_FOREACH (const QModelIndex &index, indexes) {
+        minRow = qMin(minRow, index.row());
+        minColumn = qMin(minColumn, index.column());
+    }
+
+    const QModelIndex baseIndex = m_d->model->index(minRow, minColumn);
+
+    QMimeData *data = m_d->model->mimeDataExtended(indexes,
+                                                   baseIndex,
+                                                   copy ?
+                                                       TimelineFramesModel::CopyFramesPolicy :
+                                                       TimelineFramesModel::MoveFramesPolicy);
+    if (data) {
+        QClipboard *cb = QApplication::clipboard();
+        cb->setMimeData(data);
+    }
+}
+
+void TimelineFramesView::slotCopyFrames(bool forceEntireColumn)
+{
+    cutCopyImpl(forceEntireColumn, true);
+}
+
+void TimelineFramesView::slotCutFrames(bool forceEntireColumn)
+{
+    cutCopyImpl(forceEntireColumn, false);
+}
+
+void TimelineFramesView::slotPasteFrames(bool forceEntireColumn)
+{
+    const QModelIndex currentIndex =
+        !forceEntireColumn ? this->currentIndex() : m_d->model->index(0, this->currentIndex().column());
+
+    if (!currentIndex.isValid()) return;
+
+    QClipboard *cb = QApplication::clipboard();
+    const QMimeData *data = cb->mimeData();
+
+    if (data && data->hasFormat("application/x-krita-frame")) {
+
+        bool dataMoved = false;
+        bool result = m_d->model->dropMimeDataExtended(data, Qt::MoveAction, currentIndex, &dataMoved);
+
+        if (result && dataMoved) {
+            cb->clear();
+        }
+    }
+}
+
+void TimelineFramesView::slotCutColumns()
+{
+    slotCutFrames(true);
+}
+
+void TimelineFramesView::slotPasteColumns()
+{
+    slotPasteFrames(true);
+}
+
+void TimelineFramesView::slotCopyColumns()
+{
+    slotCopyFrames(true);
 }
 
 int TimelineFramesView::defaultNumberOfFramesToAdd() const

@@ -36,6 +36,14 @@ class KisAnimationPlayer;
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
     Q_OBJECT
+
+public:
+    enum MimeCopyPolicy {
+        UndefinedPolicy = 0,
+        MoveFramesPolicy,
+        CopyFramesPolicy
+    };
+
 public:
     TimelineFramesModel(QObject *parent);
     ~TimelineFramesModel() override;
@@ -76,7 +84,11 @@ public:
     Qt::DropActions supportedDropActions() const override;
     QStringList mimeTypes() const override;
     QMimeData * mimeData(const QModelIndexList &indexes) const override;
+    QMimeData * mimeDataExtended(const QModelIndexList &indexes, const QModelIndex &baseIndex, MimeCopyPolicy copyPolicy) const;
     bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
+
+    bool dropMimeDataExtended(const QMimeData *data, Qt::DropAction action, const QModelIndex &parent, bool *dataMoved = 0);
+
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     bool insertRows(int row, int count, const QModelIndex &parent) override;

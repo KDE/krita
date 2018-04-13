@@ -454,20 +454,25 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             addActionToMenu(&menu, "copy_columns_to_clipboard");
             addActionToMenu(&menu, "paste_columns_from_clipboard");
             menu.addSeparator();
-            addActionToMenu(&menu, "insert_columns_right");
-            addActionToMenu(&menu, "insert_columns_left");
+
+            QMenu *frames = menu.addMenu(i18nc("@item:inmenu", "Keyframe Columns"));
+            addActionToMenu(frames, "insert_columns_right");
+            addActionToMenu(frames, "insert_columns_left");
             menu.addSeparator();
-            addActionToMenu(&menu, "insert_n_columns_right");
-            addActionToMenu(&menu, "insert_n_columns_left");
+            addActionToMenu(frames, "insert_n_columns_right");
+            addActionToMenu(frames, "insert_n_columns_left");
+
+            QMenu *hold = menu.addMenu(i18nc("@item:inmenu", "Hold Frame Columns"));
+            addActionToMenu(hold, "insert_hold_column");
+            addActionToMenu(hold, "remove_hold_column");
+            menu.addSeparator();
+            addActionToMenu(hold, "insert_n_hold_columns");
+            addActionToMenu(hold, "remove_n_hold_columns");
+
             menu.addSeparator();
             addActionToMenu(&menu, "remove_columns");
             addActionToMenu(&menu, "remove_columns_and_pull");
-            menu.addSeparator();
-            addActionToMenu(&menu, "insert_hold_column");
-            addActionToMenu(&menu, "remove_hold_column");
-            menu.addSeparator();
-            addActionToMenu(&menu, "insert_n_hold_columns");
-            addActionToMenu(&menu, "remove_n_hold_columns");
+
 
             if (numSelectedColumns > 1) {
                 menu.addSeparator();

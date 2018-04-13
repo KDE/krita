@@ -286,6 +286,13 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     connect(&m_d->selectionChangedCompressor, SIGNAL(timeout()),
             SLOT(slotSelectionChanged()));
+    connect(&m_d->selectionChangedCompressor, SIGNAL(timeout()),
+            SLOT(slotUpdateFrameActions()));
+
+    {
+        QClipboard *cb = QApplication::clipboard();
+        connect(cb, SIGNAL(dataChanged()), SLOT(slotUpdateFrameActions()));
+    }
 }
 
 TimelineFramesView::~TimelineFramesView()
@@ -356,12 +363,7 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
     }
 }
 
-void TimelineFramesView::createFrameEditingMenu()
-{
-
-}
-
-KisAction *TimelineFramesView::addActionToMenu(QMenu *menu, const QString &actionId)
+KisAction *TimelineFramesView::addActionToMenu(QMenu *menu, const QString &actionId) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->actionMan, 0);
 
@@ -927,6 +929,40 @@ void TimelineFramesView::dragLeaveEvent(QDragLeaveEvent *event)
     QAbstractItemView::dragLeaveEvent(event);
 }
 
+void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions)
+{
+    slotUpdateFrameActions();
+
+    addActionToMenu(menu, "cut_frames_to_clipboard");
+    addActionToMenu(menu, "copy_frames_to_clipboard");
+    addActionToMenu(menu, "paste_frames_from_clipboard");
+    menu->addSeparator();
+
+    if (addFrameCreationActions) {
+        addActionToMenu(menu, "add_blank_frame");
+        addActionToMenu(menu, "add_duplicate_frame");
+        menu->addSeparator();
+    }
+
+    QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Keyframes"));
+    addActionToMenu(frames, "insert_keyframes_right");
+    addActionToMenu(frames, "insert_keyframes_left");
+    frames->addSeparator();
+    addActionToMenu(frames, "insert_n_keyframes_right");
+    addActionToMenu(frames, "insert_n_keyframes_left");
+
+    QMenu *hold = menu->addMenu(i18nc("@item:inmenu", "Hold Frames"));
+    addActionToMenu(hold, "insert_hold_frame");
+    addActionToMenu(hold, "remove_hold_frame");
+    hold->addSeparator();
+    addActionToMenu(hold, "insert_n_hold_frames");
+    addActionToMenu(hold, "remove_n_hold_frames");
+
+    menu->addSeparator();
+    addActionToMenu(menu, "remove_frames");
+    addActionToMenu(menu, "remove_frames_and_pull");
+}
+
 void TimelineFramesView::mousePressEvent(QMouseEvent *event)
 {
     QPersistentModelIndex index = indexAt(event->pos());
@@ -969,24 +1005,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 }
 
                 QMenu menu;
-                addActionToMenu(&menu, "cut_frames_to_clipboard");
-                addActionToMenu(&menu, "copy_frames_to_clipboard");
-                addActionToMenu(&menu, "paste_frames_from_clipboard");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_keyframes_right");
-                addActionToMenu(&menu, "insert_keyframes_left");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_n_keyframes_right");
-                addActionToMenu(&menu, "insert_n_keyframes_left");
-                menu.addSeparator();
-                addActionToMenu(&menu, "remove_frames");
-                addActionToMenu(&menu, "remove_frames_and_pull");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_hold_frame");
-                addActionToMenu(&menu, "remove_hold_frame");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_n_hold_frames");
-                addActionToMenu(&menu, "remove_n_hold_frames");
+                createFrameEditingMenuActions(&menu, false);
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
                 menu.exec(event->globalPos());
@@ -1000,26 +1019,8 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
                 }
 
                 QMenu menu;
-                addActionToMenu(&menu, "cut_frames_to_clipboard");
-                addActionToMenu(&menu, "copy_frames_to_clipboard");
-                addActionToMenu(&menu, "paste_frames_from_clipboard");
-                menu.addSeparator();
-                addActionToMenu(&menu, "add_blank_frame");
-                addActionToMenu(&menu, "add_duplicate_frame");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_keyframes_right");
-                addActionToMenu(&menu, "insert_keyframes_left");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_n_keyframes_right");
-                addActionToMenu(&menu, "insert_n_keyframes_left");
-                menu.addSeparator();
-                addActionToMenu(&menu, "remove_frames_and_pull");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_hold_frame");
-                addActionToMenu(&menu, "remove_hold_frame");
-                menu.addSeparator();
-                addActionToMenu(&menu, "insert_n_hold_frames");
-                addActionToMenu(&menu, "remove_n_hold_frames");
+                createFrameEditingMenuActions(&menu, true);
+
                 menu.addSeparator();
                 menu.addAction(m_d->colorSelectorAction);
                 menu.exec(event->globalPos());
@@ -1048,35 +1049,11 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             }
 
             QMenu menu;
-            addActionToMenu(&menu, "cut_frames_to_clipboard");
-            addActionToMenu(&menu, "copy_frames_to_clipboard");
-            addActionToMenu(&menu, "paste_frames_from_clipboard");
-            menu.addSeparator();
-            addActionToMenu(&menu, "insert_keyframes_right");
-            addActionToMenu(&menu, "insert_keyframes_left");
-            menu.addSeparator();
-            addActionToMenu(&menu, "insert_n_keyframes_right");
-            addActionToMenu(&menu, "insert_n_keyframes_left");
-            menu.addSeparator();
-            if (haveFrames) {
-                addActionToMenu(&menu, "remove_frames");
-            }
-            addActionToMenu(&menu, "remove_frames_and_pull");
-
-            menu.addSeparator();
-            addActionToMenu(&menu, "insert_hold_frame");
-            addActionToMenu(&menu, "remove_hold_frame");
-            menu.addSeparator();
-            addActionToMenu(&menu, "insert_n_hold_frames");
-            addActionToMenu(&menu, "remove_n_hold_frames");
-
+            createFrameEditingMenuActions(&menu, false);
             menu.addSeparator();
             addActionToMenu(&menu, "mirror_frames");
-
-            if (haveFrames) {
-                menu.addSeparator();
-                menu.addAction(m_d->multiframeColorSelectorAction);
-            }
+            menu.addSeparator();
+            menu.addAction(m_d->multiframeColorSelectorAction);
             menu.exec(event->globalPos());
         }
     } else if (event->button() == Qt::MidButton) {
@@ -1173,6 +1150,55 @@ void TimelineFramesView::slotUpdateLayersMenu()
             action->setData(i++);
         }
     }
+}
+
+void TimelineFramesView::slotUpdateFrameActions()
+{
+    if (!m_d->actionMan) return;
+
+    const QModelIndexList editableIndexes = calculateSelectionSpan(false, true);
+    const bool hasEditableFrames = !editableIndexes.isEmpty();
+
+    bool hasExistingFrames = false;
+    Q_FOREACH (const QModelIndex &index, editableIndexes) {
+        if (model()->data(index, TimelineFramesModel::FrameExistsRole).toBool()) {
+            hasExistingFrames = true;
+            break;
+        }
+    }
+
+    auto enableAction = [this] (const QString &id, bool value) {
+        KisAction *action = m_d->actionMan->actionByName(id);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(action);
+        action->setEnabled(value);
+    };
+
+    enableAction("insert_keyframes_right", hasEditableFrames);
+    enableAction("insert_n_keyframes_right", hasEditableFrames);
+
+    enableAction("insert_keyframes_left", hasEditableFrames);
+    enableAction("insert_n_keyframes_left", hasEditableFrames);
+
+    enableAction("remove_frames", hasEditableFrames && hasExistingFrames);
+    enableAction("remove_frames_and_pull", hasEditableFrames);
+
+    enableAction("insert_hold_frame", hasEditableFrames);
+    enableAction("insert_n_hold_frames", hasEditableFrames);
+
+    enableAction("remove_hold_frame", hasEditableFrames);
+    enableAction("remove_n_hold_frames", hasEditableFrames);
+
+    enableAction("mirror_frames", hasEditableFrames && editableIndexes.size() > 1);
+
+    enableAction("copy_frames_to_clipboard", true);
+    enableAction("cut_frames_to_clipboard", hasEditableFrames);
+
+    QClipboard *cp = QApplication::clipboard();
+    const QMimeData *data = cp->mimeData();
+
+    enableAction("paste_frames_from_clipboard", data && data->hasFormat("application/x-krita-frame"));
+
+    //TODO: update column actions!
 }
 
 void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)

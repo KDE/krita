@@ -49,6 +49,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotUpdateLayersMenu();
+    void slotUpdateFrameActions();
 
     void slotAddNewLayer();
     void slotAddExistingLayer(QAction *action);
@@ -127,10 +128,10 @@ private:
     void setFramesPerSecond(int fps);
     void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
 
-    void createFrameEditingMenu();
-
-    KisAction* addActionToMenu(QMenu *menu, const QString &actionId);
+    KisAction* addActionToMenu(QMenu *menu, const QString &actionId) const;
     void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
+
+    void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
 
     QModelIndexList calculateSelectionSpan(bool forceEntireColumn, bool editableOnly = true) const;
     void cutCopyImpl(bool forceEntireColumn, bool copy);

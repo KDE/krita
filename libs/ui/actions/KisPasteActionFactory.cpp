@@ -39,6 +39,9 @@
 #include "kis_algebra_2d.h"
 #include <KoShapeMoveCommand.h>
 #include <KoShapeReorderCommand.h>
+#include "kis_time_range.h"
+#include "kis_keyframe_channel.h"
+#include "kis_raster_keyframe_channel.h"
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -194,8 +197,9 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         return;
     }
 
+    KisTimeRange range;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true);
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &range);
 
     if (clip) {
         if (pasteAtCursorPosition) {
@@ -209,9 +213,21 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         }
 
         KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-        KisPaintLayer *newLayer = new KisPaintLayer(image.data(), image->nextLayerName() + i18n("(pasted)"), OPACITY_OPAQUE_U8, clip);
+        KisPaintLayerSP newLayer = new KisPaintLayer(image.data(),
+                                                     image->nextLayerName() + i18n("(pasted)"),
+                                                     OPACITY_OPAQUE_U8);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
+
+        if (range.isValid()) {
+            newLayer->enableAnimation();
+            KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
+            KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
+            rasterChannel->importFrame(range.start(), clip, 0);
+            rasterChannel->addKeyframe(range.end() + 1, 0);
+        } else {
+            newLayer->paintDevice()->makeCloneFromRough(clip, clip->extent());
+        }
 
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
         KisProcessingApplicator *ap = beginAction(view, cmd->text());

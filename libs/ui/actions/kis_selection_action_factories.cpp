@@ -61,6 +61,9 @@
 #include "KisPart.h"
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
+#include "kis_image_animation_interface.h"
+#include "kis_time_range.h"
+#include "kis_keyframe_channel.h"
 
 
 #include <processing/fill_processing_visitor.h>
@@ -71,7 +74,10 @@
 
 namespace ActionHelper {
 
-    void copyFromDevice(KisViewManager *view, KisPaintDeviceSP device, bool makeSharpClip = false)
+    void copyFromDevice(KisViewManager *view,
+                        KisPaintDeviceSP device,
+                        bool makeSharpClip = false,
+                        const KisTimeRange &range = KisTimeRange())
     {
         KisImageWSP image = view->image();
         if (!image) return;
@@ -126,7 +132,7 @@ namespace ActionHelper {
             }
         }
 
-        KisClipboard::instance()->setClip(clip, rc.topLeft());
+        KisClipboard::instance()->setClip(clip, rc.topLeft(), range);
     }
 
 }
@@ -303,7 +309,15 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                 return;
             }
 
-            ActionHelper::copyFromDevice(view, dev, makeSharpClip);
+            KisTimeRange range;
+
+            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            if (channel) {
+                const int currentTime = image->animationInterface()->currentTime();
+                range = channel->affectedFrames(currentTime);
+            }
+
+            ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
         }
 
         if (willCut) {

@@ -43,6 +43,7 @@
 #include <kis_annotation.h>
 #include <kis_node.h>
 #include <kis_image.h>
+#include <kis_time_range.h>
 
 // local
 #include "kis_config.h"
@@ -76,7 +77,7 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeRange &range)
 {
     if (!dev)
         return;
@@ -91,7 +92,6 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
     
-
     // Layer data
     if (store->open("layerdata")) {
         if (!dev->write(writer)) {
@@ -100,6 +100,12 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
             delete store;
             return;
         }
+        store->close();
+    }
+
+    // copied frame time limits
+    if (range.isValid() && store->open("timeRange")) {
+        store->write(QString("%1 %2").arg(range.start()).arg(range.end()).toLatin1());
         store->close();
     }
 
@@ -163,9 +169,18 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
+{
+    setClip(dev, topLeft, KisTimeRange());
+}
+
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeRange *clipRange)
 {
     QByteArray mimeType("application/x-krita-selection");
+
+    if (clipRange) {
+        *clipRange = KisTimeRange();
+    }
 
     QClipboard *cb = QApplication::clipboard();
     const QMimeData *cbData = cb->mimeData();
@@ -238,6 +253,18 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup)
                     QPoint diff = imageBounds.center() - clipBounds.center();
                     clip->setX(clip->x() + diff.x());
                     clip->setY(clip->y() + diff.y());
+                }
+
+                if (store->hasFile("timeRange") && clipRange) {
+                    store->open("timeRange");
+                    QString str = store->read(store->size());
+                    store->close();
+                    QStringList list = str.split(' ');
+                    if (list.size() == 2) {
+                        KisTimeRange range(list[0].toInt(), list[1].toInt(), true);
+                        *clipRange = range;
+                        qDebug() << "Pasted time range" << range;
+                    }
                 }
             }
         }

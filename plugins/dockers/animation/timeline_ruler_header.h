@@ -50,7 +50,6 @@ protected:
     void changeEvent(QEvent *event) override;
 
 private:
-    KisAction *addActionToMenu(QMenu *menu, const QString &actionId);
     void updateMinimumSize();
 
     void paintSpan(QPainter *painter, int userFrameId,

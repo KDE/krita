@@ -2034,8 +2034,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_blank_frame">
-      <icon></icon>
-      <text>Add blank frame</text>
+      <icon>addblankframe</icon>
+      <text>Create Blank Frame</text>
       <whatsThis></whatsThis>
       <toolTip>Add blank frame</toolTip>
       <iconText>Add blank frame</iconText>
@@ -2046,8 +2046,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_duplicate_frame">
-      <icon></icon>
-      <text>Copy Frame</text>
+      <icon>addduplicateframe</icon>
+      <text>Create Duplicate Frame</text>
       <whatsThis></whatsThis>
       <toolTip>Add duplicate frame</toolTip>
       <iconText>Add duplicate frame</iconText>
@@ -2206,10 +2206,10 @@
     </Action>
 
     <Action name="remove_frames">
-      <icon></icon>
+      <icon>deletekeyframe</icon>
       <text>Remove Keyframe</text>
       <whatsThis></whatsThis>
-      <toolTip>Just remove keyframes without moving anything around</toolTip>
+      <toolTip>Remove keyframes without moving anything around</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>

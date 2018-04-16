@@ -424,19 +424,6 @@ int getColumnCount(const QModelIndexList &indexes, int *leftmostCol, int *rightm
     return columns.size();
 }
 
-KisAction *TimelineRulerHeader::addActionToMenu(QMenu *menu, const QString &actionId)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->actionMan, 0);
-
-    KisAction *action = m_d->actionMan->actionByName(actionId);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(action, 0);
-
-    menu->addAction(action);
-
-    return action;
-}
-
-
 void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
 {
     int logical = logicalIndexAt(e->pos());
@@ -450,33 +437,33 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             }
 
             QMenu menu;
-            addActionToMenu(&menu, "cut_columns_to_clipboard");
-            addActionToMenu(&menu, "copy_columns_to_clipboard");
-            addActionToMenu(&menu, "paste_columns_from_clipboard");
+            KisActionManager::safePopulateMenu(&menu, "cut_columns_to_clipboard", m_d->actionMan);
+            KisActionManager::safePopulateMenu(&menu, "copy_columns_to_clipboard", m_d->actionMan);
+            KisActionManager::safePopulateMenu(&menu, "paste_columns_from_clipboard", m_d->actionMan);
             menu.addSeparator();
 
             QMenu *frames = menu.addMenu(i18nc("@item:inmenu", "Keyframe Columns"));
-            addActionToMenu(frames, "insert_columns_right");
-            addActionToMenu(frames, "insert_columns_left");
+            KisActionManager::safePopulateMenu(frames, "insert_columns_right", m_d->actionMan);
+            KisActionManager::safePopulateMenu(frames, "insert_columns_left", m_d->actionMan);
             menu.addSeparator();
-            addActionToMenu(frames, "insert_n_columns_right");
-            addActionToMenu(frames, "insert_n_columns_left");
+            KisActionManager::safePopulateMenu(frames, "insert_n_columns_right", m_d->actionMan);
+            KisActionManager::safePopulateMenu(frames, "insert_n_columns_left", m_d->actionMan);
 
             QMenu *hold = menu.addMenu(i18nc("@item:inmenu", "Hold Frame Columns"));
-            addActionToMenu(hold, "insert_hold_column");
-            addActionToMenu(hold, "remove_hold_column");
+            KisActionManager::safePopulateMenu(hold, "insert_hold_column", m_d->actionMan);
+            KisActionManager::safePopulateMenu(hold, "remove_hold_column", m_d->actionMan);
             menu.addSeparator();
-            addActionToMenu(hold, "insert_n_hold_columns");
-            addActionToMenu(hold, "remove_n_hold_columns");
+            KisActionManager::safePopulateMenu(hold, "insert_n_hold_columns", m_d->actionMan);
+            KisActionManager::safePopulateMenu(hold, "remove_n_hold_columns", m_d->actionMan);
 
             menu.addSeparator();
-            addActionToMenu(&menu, "remove_columns");
-            addActionToMenu(&menu, "remove_columns_and_pull");
+            KisActionManager::safePopulateMenu(&menu, "remove_columns", m_d->actionMan);
+            KisActionManager::safePopulateMenu(&menu, "remove_columns_and_pull", m_d->actionMan);
 
 
             if (numSelectedColumns > 1) {
                 menu.addSeparator();
-                addActionToMenu(&menu, "mirror_columns");
+                KisActionManager::safePopulateMenu(&menu, "mirror_columns", m_d->actionMan);
             }
 
             menu.exec(e->globalPos());

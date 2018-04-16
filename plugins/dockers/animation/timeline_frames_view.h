@@ -128,7 +128,6 @@ private:
     void setFramesPerSecond(int fps);
     void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
 
-    KisAction* addActionToMenu(QMenu *menu, const QString &actionId) const;
     void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
 
     void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);

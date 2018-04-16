@@ -34,6 +34,7 @@
 #include "kis_clipboard.h"
 #include <kis_image_animation_interface.h>
 
+#include <QMenu>
 #include "QFile"
 #include <QDomDocument>
 #include <QDomElement>
@@ -368,6 +369,16 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     addAction(standardAction->objectName(), action);
     delete standardAction;
     return action;
+}
+
+void KisActionManager::safePopulateMenu(QMenu *menu, const QString &actionId, KisActionManager *actionManager)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(actionManager);
+
+    KisAction *action = actionManager->actionByName(actionId);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(action);
+
+    menu->addAction(action);
 }
 
 void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)

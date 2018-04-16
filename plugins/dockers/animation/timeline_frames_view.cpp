@@ -314,9 +314,11 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
     if (actionManager) {
         KisAction *action = 0;
 
-        // TODO: move here!
-        // "add_blank_frame" is initialized in AnimationDocker
-        // "add_duplicate_frame" is initialized in AnimationDocker
+        action = m_d->actionMan->createAction("add_blank_frame");
+        connect(action, SIGNAL(triggered()), SLOT(slotNewFrame()));
+
+        action = m_d->actionMan->createAction("add_duplicate_frame");
+        connect(action, SIGNAL(triggered()), SLOT(slotNewFrame()));
 
         action = m_d->actionMan->createAction("insert_keyframes_right");
         connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesRight()));
@@ -361,18 +363,6 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
         connect(action, SIGNAL(triggered()), SLOT(slotPasteFrames()));
 
     }
-}
-
-KisAction *TimelineFramesView::addActionToMenu(QMenu *menu, const QString &actionId) const
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->actionMan, 0);
-
-    KisAction *action = m_d->actionMan->actionByName(actionId);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(action, 0);
-
-    menu->addAction(action);
-
-    return action;
 }
 
 void resizeToMinimalSize(QAbstractButton *w, int minimalSize) {
@@ -933,34 +923,34 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 {
     slotUpdateFrameActions();
 
-    addActionToMenu(menu, "cut_frames_to_clipboard");
-    addActionToMenu(menu, "copy_frames_to_clipboard");
-    addActionToMenu(menu, "paste_frames_from_clipboard");
+    KisActionManager::safePopulateMenu(menu, "cut_frames_to_clipboard", m_d->actionMan);
+    KisActionManager::safePopulateMenu(menu, "copy_frames_to_clipboard", m_d->actionMan);
+    KisActionManager::safePopulateMenu(menu, "paste_frames_from_clipboard", m_d->actionMan);
     menu->addSeparator();
 
     if (addFrameCreationActions) {
-        addActionToMenu(menu, "add_blank_frame");
-        addActionToMenu(menu, "add_duplicate_frame");
+        KisActionManager::safePopulateMenu(menu, "add_blank_frame", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "add_duplicate_frame", m_d->actionMan);
         menu->addSeparator();
     }
 
     QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Keyframes"));
-    addActionToMenu(frames, "insert_keyframes_right");
-    addActionToMenu(frames, "insert_keyframes_left");
+    KisActionManager::safePopulateMenu(frames, "insert_keyframes_right", m_d->actionMan);
+    KisActionManager::safePopulateMenu(frames, "insert_keyframes_left", m_d->actionMan);
     frames->addSeparator();
-    addActionToMenu(frames, "insert_n_keyframes_right");
-    addActionToMenu(frames, "insert_n_keyframes_left");
+    KisActionManager::safePopulateMenu(frames, "insert_n_keyframes_right", m_d->actionMan);
+    KisActionManager::safePopulateMenu(frames, "insert_n_keyframes_left", m_d->actionMan);
 
     QMenu *hold = menu->addMenu(i18nc("@item:inmenu", "Hold Frames"));
-    addActionToMenu(hold, "insert_hold_frame");
-    addActionToMenu(hold, "remove_hold_frame");
+    KisActionManager::safePopulateMenu(hold, "insert_hold_frame", m_d->actionMan);
+    KisActionManager::safePopulateMenu(hold, "remove_hold_frame", m_d->actionMan);
     hold->addSeparator();
-    addActionToMenu(hold, "insert_n_hold_frames");
-    addActionToMenu(hold, "remove_n_hold_frames");
+    KisActionManager::safePopulateMenu(hold, "insert_n_hold_frames", m_d->actionMan);
+    KisActionManager::safePopulateMenu(hold, "remove_n_hold_frames", m_d->actionMan);
 
     menu->addSeparator();
-    addActionToMenu(menu, "remove_frames");
-    addActionToMenu(menu, "remove_frames_and_pull");
+    KisActionManager::safePopulateMenu(menu, "remove_frames", m_d->actionMan);
+    KisActionManager::safePopulateMenu(menu, "remove_frames_and_pull", m_d->actionMan);
 }
 
 void TimelineFramesView::mousePressEvent(QMouseEvent *event)
@@ -1051,7 +1041,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             QMenu menu;
             createFrameEditingMenuActions(&menu, false);
             menu.addSeparator();
-            addActionToMenu(&menu, "mirror_frames");
+            KisActionManager::safePopulateMenu(&menu, "mirror_frames", m_d->actionMan);
             menu.addSeparator();
             menu.addAction(m_d->multiframeColorSelectorAction);
             menu.exec(event->globalPos());
@@ -1233,13 +1223,11 @@ void TimelineFramesView::slotRemoveLayer()
     model()->removeRow(index.row());
 }
 
-
-// TODO: this method is unused atm, please forward the actions from Animation Docker here!
 void TimelineFramesView::slotNewFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-            !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }
@@ -1247,12 +1235,11 @@ void TimelineFramesView::slotNewFrame()
     m_d->model->createFrame(index);
 }
 
-// TODO: this method is unused atm, please forward the actions from Animation Docker here!
 void TimelineFramesView::slotCopyFrame()
 {
     QModelIndex index = currentIndex();
     if (!index.isValid() ||
-            !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
+        !m_d->model->data(index, TimelineFramesModel::FrameEditableRole).toBool()) {
 
         return;
     }

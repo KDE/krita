@@ -318,7 +318,7 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
         connect(action, SIGNAL(triggered()), SLOT(slotNewFrame()));
 
         action = m_d->actionMan->createAction("add_duplicate_frame");
-        connect(action, SIGNAL(triggered()), SLOT(slotNewFrame()));
+        connect(action, SIGNAL(triggered()), SLOT(slotCopyFrame()));
 
         action = m_d->actionMan->createAction("insert_keyframes_right");
         connect(action, SIGNAL(triggered()), SLOT(slotInsertKeyframesRight()));

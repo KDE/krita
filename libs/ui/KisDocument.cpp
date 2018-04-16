@@ -775,11 +775,16 @@ void KisDocument::slotAutoSave()
 
     emit statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
 
-    bool started =
-        initiateSavingInBackground(i18n("Autosaving..."),
-                                   this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
-                                   KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
-                                   0);
+    bool started = false;
+
+    if (d->image->isIdle()) {
+        started = initiateSavingInBackground(i18n("Autosaving..."),
+                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
+                                             KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
+                                             0);
+    } else {
+        emit statusBarMessage(i18n("Autosaving postponed: document is busy..."), errorMessageTimeout);
+    }
 
     if (!started) {
         const int emergencyAutoSaveInterval = 10; // sec

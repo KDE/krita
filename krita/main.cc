@@ -55,6 +55,7 @@
 #include <kis_tablet_support_win8.h>
 #include <kis_config.h>
 #include <QLibrary>
+#include <QMessageBox>
 
 #elif defined HAVE_X11
 #include <kis_xi2_event_filter.h>
@@ -321,22 +322,41 @@ extern "C" int main(int argc, char **argv)
 #if defined Q_OS_WIN
     {
         KisConfig cfg;
-        bool isUsingWin8PointerInput = false;
+        if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
+            cfg.setUseWin8PointerInput(false);
+        }
+        if (!cfg.useWin8PointerInput()) {
+            bool hasWinTab = KisTabletSupportWin::init();
+            if (!hasWinTab) {
+                if (KisTabletSupportWin8::isPenDeviceAvailable()) {
+                    // Use WinInk automatically
+                    cfg.setUseWin8PointerInput(true);
+                } else if (!cfg.readEntry("WarnedAboutMissingWinTab", false)) {
+                    if (KisTabletSupportWin8::isAvailable()) {
+                        QMessageBox::information(nullptr,
+                                i18n("Krita Tablet Support"),
+                                i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
+                                QMessageBox::Ok, QMessageBox::Ok);
+                    } else {
+                        QMessageBox::information(nullptr,
+                                i18n("Krita Tablet Support"),
+                                i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
+                                QMessageBox::Ok, QMessageBox::Ok);
+                    }
+                    cfg.writeEntry("WarnedAboutMissingWinTab", true);
+                }
+            }
+        }
         if (cfg.useWin8PointerInput()) {
             KisTabletSupportWin8 *penFilter = new KisTabletSupportWin8();
             if (penFilter->init()) {
                 // penFilter.registerPointerDeviceNotifications();
                 app.installNativeEventFilter(penFilter);
-                isUsingWin8PointerInput = true;
                 qDebug() << "Using Win8 Pointer Input for tablet support";
             } else {
                 qDebug() << "No Win8 Pointer Input available";
                 delete penFilter;
             }
-        }
-        if (!isUsingWin8PointerInput) {
-            KisTabletSupportWin::init();
-            // app.installNativeEventFilter(new KisTabletSupportWin());
         }
     }
 #endif
@@ -365,4 +385,3 @@ extern "C" int main(int argc, char **argv)
 
     return state;
 }
-

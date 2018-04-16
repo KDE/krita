@@ -91,6 +91,14 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
         slotGuidesConfigUpdateRequested(m_canvas->viewManager()->document()->guidesConfig());
         QRect rc = m_canvas->image()->bounds();
         m_configWidget->setGridDivision(rc.width() / 2, rc.height() / 2);
+
+        // isometric grid only available with OpenGL
+        if (m_canvas->canvasIsOpenGL()) {
+            m_configWidget->enableIsometricGrid(true);
+        } else {
+            m_configWidget->enableIsometricGrid(false);
+        }
+
     }
 }
 

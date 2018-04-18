@@ -20,16 +20,10 @@
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
-#include <kis_types.h>
-#include <QWidget>
-#include <QQueue>
 #include <QPushButton>
 #include <QSlider>
-#include <KoColorDisplayRendererInterface.h>
-#include "kis_action_manager.h"
 #include "KisViewManager.h"
 #include "kactioncollection.h"
-#include "kis_coordinates_converter.h"
 #include "kis_tool_button.h"
 #include "kis_highlighted_button.h"
 #include <KisColorSelectorInterface.h>
@@ -69,7 +63,7 @@ public:
     int selectedColor() const;
     void setParent(QWidget *parent);
 
-    void tabletEvent(QTabletEvent * event) override;
+    void tabletEvent(QTabletEvent *event) override;
 
 protected:
 
@@ -92,7 +86,6 @@ protected:
     void setHoveredColor(int x);
     int hoveredColor() const;
 
-
 private:
     void setVisible(bool b) override;
 
@@ -105,21 +98,21 @@ private:
 
     int numSlots();
     void adjustLayout(const QPoint &p);
-private:
 
+private:
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
 
-    KisCoordinatesConverter* m_coordinatesConverter;
+    KisCoordinatesConverter *m_coordinatesConverter;
 
-    KisViewManager* m_viewManager;
-    KisActionManager* m_actionManager;
-    KisFavoriteResourceManager* m_resourceManager;
-    KisColorSelectorInterface* m_triangleColorSelector {0};
+    KisViewManager *m_viewManager;
+    KisActionManager *m_actionManager;
+    KisFavoriteResourceManager *m_resourceManager;
+    KisColorSelectorInterface *m_triangleColorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
-    KActionCollection* m_actionCollection;
+    KActionCollection *m_actionCollection;
 
     QTimer m_timer;
 
@@ -175,8 +168,6 @@ private Q_SLOTS:
     void slotCanvasonlyModeClicked();
     void slotZoomToOneHundredPercentClicked();
     void slotZoomSliderChanged(int zoom);
-
-
 };
 
 #endif // KIS_POPUP_PALETTE_H

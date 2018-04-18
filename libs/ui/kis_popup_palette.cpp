@@ -33,6 +33,7 @@
 #include <QMenu>
 #include <QWhatsThis>
 #include <QVBoxLayout>
+#include <QElapsedTimer>
 #include "kis_signal_compressor.h"
 #include "brushhud/kis_brush_hud.h"
 #include "brushhud/kis_round_hud_button.h"
@@ -361,6 +362,10 @@ void KisPopupPalette::showPopupPalette(const QPoint &p)
 void KisPopupPalette::showPopupPalette(bool show)
 {
     if (show) {
+        m_hadMousePressSinceOpening = false;
+        m_timeSinceOpening.start();
+
+
         // don't set the zoom slider if we are outside of the zoom slider bounds. It will change the zoom level to within
         // the bounds and cause the canvas to jump between the slider's min and max
         if (m_coordinatesConverter->zoomInPercent() > zoomSliderMinValue &&
@@ -707,6 +712,15 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
+    /**
+     * Tablet support code generates a spurious right-click right after opening
+     * the window, so we should ignore it. Next right-click will be used for
+     * closing the popup palette
+     */
+    if (!m_hadMousePressSinceOpening && m_timeSinceOpening.elapsed() > 100) {
+        m_hadMousePressSinceOpening = true;
+    }
+
     if (event->button() == Qt::LeftButton) {
 
         //in favorite brushes area
@@ -796,10 +810,19 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
     QPointF point = event->localPos();
     event->accept();
 
+    // see a comment in KisPopupPalette::mousePressEvent
+    if (m_hadMousePressSinceOpening &&
+        event->buttons() == Qt::NoButton &&
+        event->button() == Qt::RightButton) {
+
+        showPopupPalette(false);
+        return;
+    }
+
     m_isOverCanvasRotationIndicator = false;
     m_isRotatingCanvasIndicator = false;
 
-    if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+    if (event->button() == Qt::LeftButton) {
         QPainterPath pathColor(drawDonutPathFull(m_popupPaletteSize / 2, m_popupPaletteSize / 2, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
 
         //in favorite brushes area

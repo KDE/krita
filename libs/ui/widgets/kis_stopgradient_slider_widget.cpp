@@ -70,10 +70,13 @@ void KisStopGradientSliderWidget::setGradientResource(KoStopGradient* gradient)
 {
     m_gradient = gradient ? gradient : m_defaultGradient.data();
 
-    if (m_selectedStop >= 0) {
+    if (m_gradient && m_selectedStop >= 0) {
         m_selectedStop = qBound(0, m_selectedStop, m_gradient->stops().size() - 1);
         emit sigSelectedStop(m_selectedStop);
+    } else {
+        m_selectedStop = -1;
     }
+
 }
 
 void KisStopGradientSliderWidget::paintHandle(qreal position, const QColor &color, bool isSelected, QPainter *painter)

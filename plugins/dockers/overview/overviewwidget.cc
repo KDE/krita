@@ -180,10 +180,21 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
     if (m_canvas) {
         QPointF previewPos = event->pos() - previewOrigin();
 
-        if (previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
-            m_lastPos = previewPos;
-            m_dragging = true;
+        if (!previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
+            // Move view to be centered on where the mouse clicked in the preview.
+            QTransform previewToImage = imageToPreviewTransform().inverted();
+            const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
+
+            QPointF newImagePos = previewToImage.map(previewPos);
+            QPointF newWidgetPos = converter->imageToWidget<QPointF>(newImagePos);
+
+            const QRect& canvasRect = m_canvas->canvasWidget()->rect();
+            newWidgetPos -= QPointF(canvasRect.width() / 2.0f, canvasRect.height() / 2.0f);
+
+            m_canvas->canvasController()->pan(newWidgetPos.toPoint());
         }
+        m_lastPos = previewPos;
+        m_dragging = true;
     }
     event->accept();
     update();

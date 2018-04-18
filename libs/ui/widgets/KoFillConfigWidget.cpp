@@ -334,6 +334,8 @@ void KoFillConfigWidget::activate()
     } else {
         loadCurrentFillFromResourceServer();
     }
+
+    updateWidgetComponentVisbility();
 }
 
 void KoFillConfigWidget::deactivate()
@@ -430,6 +432,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
 
     if (buttonId >= None && buttonId <= Pattern) {
         d->selectedFillIndex = static_cast<KoFillConfigWidget::StyleButton>(buttonId);
+        updateWidgetComponentVisbility();
     }
 }
 

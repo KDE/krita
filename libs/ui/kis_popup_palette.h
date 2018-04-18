@@ -20,6 +20,7 @@
 #ifndef KIS_POPUP_PALETTE_H
 #define KIS_POPUP_PALETTE_H
 
+#include <QElapsedTimer>
 #include <QPushButton>
 #include <QSlider>
 #include "KisViewManager.h"
@@ -103,6 +104,10 @@ private:
     int m_hoveredPreset {0};
     int m_hoveredColor {0};
     int m_selectedColor {0};
+
+    QElapsedTimer m_timeSinceOpening;
+    bool m_hadMousePressSinceOpening {false};
+
 
     KisCoordinatesConverter *m_coordinatesConverter;
 

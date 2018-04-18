@@ -121,6 +121,8 @@ private Q_SLOTS:
     void slotColorLabelChanged(int index);
     void slotUpdateIcons();
 
+    void slotAddLayerBnClicked();
+
     void updateThumbnail();
     void updateAvailableLabels();
     void updateLayerFiltering();

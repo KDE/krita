@@ -681,9 +681,9 @@ QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)
 
 void KisView::closeEvent(QCloseEvent *event)
 {
-    // Check whether we're the last view
+    // Check whether we're the last (user visible) view
     int viewCount = KisPart::instance()->viewCount(document());
-    if (viewCount > 1) {
+    if (viewCount > 1 || !isVisible()) {
         // there are others still, so don't bother the user
         event->accept();
         return;

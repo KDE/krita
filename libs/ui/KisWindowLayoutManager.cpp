@@ -188,6 +188,8 @@ void KisWindowLayoutManager::activeDocumentChanged(KisDocument *document)
 {
     if (d->showImageInAllWindows) {
         Q_FOREACH(QPointer<KisMainWindow> window, KisPart::instance()->mainWindows()) {
+            if (window->isHidden()) continue;
+
             const auto view = window->activeView();
             if (!view || view->document() != document) {
                 window->showDocument(document);

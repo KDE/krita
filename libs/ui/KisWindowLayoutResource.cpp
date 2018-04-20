@@ -82,6 +82,10 @@ struct KisWindowLayoutResource::Private
 
             if (!keep) {
                 windowsToClose.append(mainWindow);
+
+                // Set the window hidden to prevent "show image in all windows" feature from opening new views on it
+                // while we migrate views onto the remaining windows
+                mainWindow->hide();
             }
         }
 

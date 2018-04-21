@@ -818,7 +818,8 @@ void KisView::saveViewState(KisPropertiesConfiguration &config) const
     }
 
     config.setProperty("zoomMode", (int)zoomController()->zoomMode());
-    config.setProperty("zoom", d->zoomManager.zoom());
+    config.setProperty("zoom", d->canvas.coordinatesConverter()->zoom());
+
     d->canvasController.saveCanvasState(config);
 }
 

@@ -84,6 +84,8 @@ void KisSessionManagerDialog::slotRenameSession()
     if (name.isNull() || name.isEmpty()) return;
 
     KisSessionResource *session = getSelectedSession();
+    if (!session) return;
+
     session->setName(name);
     session->save();
 
@@ -128,10 +130,12 @@ void KisSessionManagerDialog::slotDeleteSession()
         QString(i18n("Permanently delete session %1?", session->name())),
         QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
 
+        const QString filename = session->filename();
+
         KoResourceServer<KisSessionResource> *server = KisResourceServerProvider::instance()->sessionServer();
         server->removeResourceFromServer(session);
 
-        QFile file(session->filename());
+        QFile file(filename);
         file.remove();
 
         updateSessionList();

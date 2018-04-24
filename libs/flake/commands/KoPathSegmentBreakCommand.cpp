@@ -31,12 +31,9 @@ KoPathSegmentBreakCommand::KoPathSegmentBreakCommand(const KoPathPointData & poi
 {
     if (m_pointData.pathShape->isClosedSubpath(m_pointData.pointIndex.first)) {
         m_startIndex = m_pointData.pointIndex;
-        KoPathPoint * before = m_pointData.pathShape->pointByIndex(m_startIndex);
-        if (before->properties() & KoPathPoint::CloseSubpath) {
-            m_startIndex.second = 0;
-        } else {
-            ++m_startIndex.second;
-        }
+
+        const int numPoints = m_pointData.pathShape->subpathPointCount(m_startIndex.first);
+        m_startIndex.second = (m_startIndex.second + 1) % numPoints;
     }
     setText(kundo2_i18n("Break subpath"));
 }

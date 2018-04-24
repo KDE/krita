@@ -25,6 +25,7 @@
 #include <QPointF>
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
+#include <boost/optional.hpp>
 
 /// The undo / redo command for joining two subpath end points
 class KoSubpathJoinCommand : public KUndo2Command
@@ -46,13 +47,19 @@ public:
     void redo() override;
     /// revert the actions done in redo
     void undo() override;
+
+private:
+    bool closeSubpathMode() const;
+
 private:
     KoPathPointData m_pointData1;
     KoPathPointData m_pointData2;
     KoPathPointIndex m_splitIndex;
-    // the control points have to be stored in document positions
-    QPointF m_oldControlPoint1;
-    QPointF m_oldControlPoint2;
+
+    // the control points have to be stored in shape coordinates
+    boost::optional<QPointF> m_savedControlPoint1;
+    boost::optional<QPointF> m_savedControlPoint2;
+
     KoPathPoint::PointProperties m_oldProperties1;
     KoPathPoint::PointProperties m_oldProperties2;
     enum Reverse {

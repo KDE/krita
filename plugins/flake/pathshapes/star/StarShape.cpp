@@ -259,6 +259,8 @@ void StarShape::createPoints(int requiredPointCount)
             d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 void StarShape::setSize(const QSizeF &newSize)

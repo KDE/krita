@@ -457,6 +457,8 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
             }
             scale = scaleX / m_viewBox.width();
         }
+
+        notifyPointsChanged();
     }
     return retval;
 }

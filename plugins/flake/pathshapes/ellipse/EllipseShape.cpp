@@ -306,6 +306,8 @@ void EllipseShape::updatePath(const QSizeF &size)
         d->subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
 
+    notifyPointsChanged();
+
     normalize();
 }
 
@@ -328,6 +330,8 @@ void EllipseShape::createPoints(int requiredPointCount)
             d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 void EllipseShape::updateKindHandle()

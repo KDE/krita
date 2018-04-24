@@ -243,6 +243,8 @@ void SpiralShape::createPath(const QSizeF &size)
     }
     //m_handles[1] = QPointF(center.x(), (m_clockwise ? -1.0 : 1.0) * m_radius + center.y());
     m_points = *d->subpaths[0];
+
+    notifyPointsChanged();
 }
 
 void SpiralShape::updateKindHandle()

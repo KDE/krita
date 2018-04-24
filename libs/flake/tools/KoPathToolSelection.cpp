@@ -193,7 +193,15 @@ QList<KoPathShape*> KoPathToolSelection::selectedShapes() const
 
 void KoPathToolSelection::setSelectedShapes(const QList<KoPathShape*> shapes)
 {
+    Q_FOREACH(KoPathShape *shape, m_selectedShapes) {
+        shape->removeShapeChangeListener(this);
+    }
+
     m_selectedShapes = shapes;
+
+    Q_FOREACH(KoPathShape *shape, m_selectedShapes) {
+        shape->addShapeChangeListener(this);
+    }
 }
 
 void KoPathToolSelection::repaint()
@@ -241,4 +249,58 @@ void KoPathToolSelection::update()
 bool KoPathToolSelection::hasSelection()
 {
     return !m_selectedPoints.isEmpty();
+}
+
+void KoPathToolSelection::recommendPointSelectionChange(KoPathShape *shape, const QList<KoPathPointIndex> &newSelection)
+{
+    QSet<KoPathPoint*> selectedShapePoints = m_shapePointMap.value(shape, QSet<KoPathPoint*>());
+
+    Q_FOREACH (KoPathPoint *point, selectedShapePoints) {
+        remove(point);
+    }
+
+    Q_FOREACH (const KoPathPointIndex &index, newSelection) {
+        KoPathPoint *point = shape->pointByIndex(index);
+        KIS_SAFE_ASSERT_RECOVER(point) { continue; }
+
+        add(point, false);
+    }
+
+    repaint();
+    emit selectionChanged();
+}
+
+void KoPathToolSelection::notifyPathPointsChanged(KoPathShape *shape)
+{
+    QSet<KoPathPoint*> selectedShapePoints = m_shapePointMap.value(shape, QSet<KoPathPoint*>());
+
+    Q_FOREACH (KoPathPoint *point, selectedShapePoints) {
+        m_selectedPoints.remove(point);
+    }
+    m_shapePointMap.remove(shape);
+
+    m_tool->notifyPathPointsChanged(shape);
+
+    repaint();
+    emit selectionChanged();
+}
+
+void KoPathToolSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    if (type == KoShape::Deleted) {
+        // we cannot select non-path shapes, so static cast is safe here
+        KIS_SAFE_ASSERT_RECOVER_NOOP(shape->shapeId() == KoPathShapeId);
+
+        if (KoPathShape *pathShape = static_cast<KoPathShape*>(shape)) {
+
+            QSet<KoPathPoint*> selectedShapePoints = m_shapePointMap.value(pathShape, QSet<KoPathPoint*>());
+            Q_FOREACH (KoPathPoint *point, selectedShapePoints) {
+                m_selectedPoints.remove(point);
+            }
+            m_shapePointMap.remove(pathShape);
+            m_selectedShapes.removeAll(pathShape);
+        }
+    }
+
+    KoPathShape::PointSelectionChangeListener::notifyShapeChanged(type, shape);
 }

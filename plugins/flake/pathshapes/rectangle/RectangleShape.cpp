@@ -266,6 +266,8 @@ void RectangleShape::updatePath(const QSizeF &size)
     // last point stops and closes path
     points.last()->setProperty(KoPathPoint::StopSubpath);
     points.last()->setProperty(KoPathPoint::CloseSubpath);
+
+    notifyPointsChanged();
 }
 
 void RectangleShape::createPoints(int requiredPointCount)
@@ -287,6 +289,8 @@ void RectangleShape::createPoints(int requiredPointCount)
             d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 qreal RectangleShape::cornerRadiusX() const

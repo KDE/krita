@@ -95,6 +95,8 @@ public:
 
     QMap<KoFlake::MarkerPosition, QExplicitlySharedDataPointer<KoMarker>> markersNew;
     bool autoFillMarkers;
+
+    QList<KoPathShape::PointSelectionChangeListener*> pointChangeListeners;
 };
 
 #endif

@@ -505,11 +505,11 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
         newNode->setGraphListener(m_d->graphListener);
     }
 
-    childNodeChanged(newNode);
-
     if (m_d->graphListener) {
         m_d->graphListener->nodeHasBeenAdded(this, idx);
     }
+
+    childNodeChanged(newNode);
 
     return true;
 }
@@ -533,11 +533,11 @@ bool KisNode::remove(quint32 index)
             m_d->nodes.removeAt(index);
         }
 
-        childNodeChanged(removedNode);
-
         if (m_d->graphListener) {
             m_d->graphListener->nodeHasBeenRemoved(this, index);
         }
+
+        childNodeChanged(removedNode);
 
         return true;
     }

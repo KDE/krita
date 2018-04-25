@@ -475,13 +475,11 @@ KisNodeSP KisNode::findChildByName(const QString &name)
 
 bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 {
-    Q_ASSERT(newNode);
-
-    if (!newNode) return false;
-    if (aboveThis && aboveThis->parent().data() != this) return false;
-    if (!allowAsChild(newNode)) return false;
-    if (newNode->parent()) return false;
-    if (index(newNode) >= 0) return false;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(newNode, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!aboveThis || aboveThis->parent().data() == this, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(allowAsChild(newNode), false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!newNode->parent(), false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index(newNode) < 0, false);
 
     int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 

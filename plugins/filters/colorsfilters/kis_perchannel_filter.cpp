@@ -124,7 +124,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
-    m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
+        m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
     }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
@@ -173,6 +173,8 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     int i;
     int height = 256;
     QPixmap pix(256, height);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_histogram, pix);
+
 
     bool logarithmic = m_page->chkLogarithmic->isChecked();
 
@@ -194,8 +196,7 @@ inline QPixmap KisPerChannelConfigWidget::getHistogram()
     const VirtualChannelInfo &info = m_virtualChannels[m_activeVChannel];
 
 
-    if (m_histogram && info.type() == VirtualChannelInfo::REAL)
-    {
+    if (info.type() == VirtualChannelInfo::REAL) {
         m_histogram->setChannel(info.pixelIndex());
 
         double highest = (double)m_histogram->calculations().getHighest();

@@ -107,7 +107,7 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
                  m_texturesInfo->type, fd);
 
 #ifdef USE_PIXEL_BUFFERS
-    if (m_useBuffer) {
+    if (m_useBuffer && m_glBuffer) {
         m_glBuffer->release();
     }
 #endif

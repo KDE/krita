@@ -76,7 +76,7 @@ struct Bone {
 
 struct SpriterSlot {
     QString name;
-    bool defaultAttachmentFlag;
+    bool defaultAttachmentFlag = false;
 };
 
 struct SpriterObject {

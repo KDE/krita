@@ -828,7 +828,6 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer, KoShapeSavingContext &c
     }
     else if (style() == KoListStyle::ImageItem) {
         KoImageData *imageData = d->stylesPrivate.value(KoListStyle::BulletImage).value<KoImageData *>();
-        Q_ASSERT(imageData->priv()->collection);
         if (imageData && imageData->priv()->collection) {
             writer->startElement("text:list-level-style-image");
             writer->addAttribute("xlink:show", "embed");

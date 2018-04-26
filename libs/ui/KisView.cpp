@@ -653,12 +653,13 @@ QStatusBar * KisView::statusBar() const
 void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isAutoSaving)
 {
     QStatusBar *sb = statusBar();
-    if (sb)
+    if (sb) {
         sb->showMessage(text, timeout);
+    }
 
     KisConfig cfg;
 
-    if (sb->isHidden() ||
+    if (!sb || sb->isHidden() ||
         (!isAutoSaving && cfg.forceShowSaveMessages()) ||
         (cfg.forceShowAutosaveMessages() && isAutoSaving)) {
 
@@ -669,8 +670,9 @@ void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isA
 void KisView::slotClearStatusText()
 {
     QStatusBar *sb = statusBar();
-    if (sb)
+    if (sb) {
         sb->clearMessage();
+    }
 }
 
 QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)

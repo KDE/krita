@@ -42,6 +42,7 @@
 #include "tools/KoZoomTool.h"
 #include "kis_action_registry.h"
 #include "KoToolFactoryBase.h"
+#include "kis_assert.h"
 
 #include <krita_container_utils.h>
 
@@ -489,7 +490,7 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
         }
     }
     KoCreateShapesTool *createShapesTool = dynamic_cast<KoCreateShapesTool*>(toolsHash.value(KoCreateShapesTool_ID));
-    Q_ASSERT(createShapesTool);
+    KIS_ASSERT(createShapesTool);
     QString id = KoShapeRegistry::instance()->keys()[0];
     createShapesTool->setShapeId(id);
 

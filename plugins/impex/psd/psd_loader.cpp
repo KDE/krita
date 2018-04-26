@@ -131,7 +131,8 @@ KisImageBuilder_Result PSDLoader::decode(QIODevice *io)
     }
 
     // Creating the KisImage
-    QString name = dynamic_cast<QFile*>(io) ? dynamic_cast<QFile*>(io)->fileName() : "Imported";
+    QFile *file = dynamic_cast<QFile*>(io);
+    QString name = file ? file->fileName() : "Imported";
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
     m_image->lock();

@@ -425,9 +425,9 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
         if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
             KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
             KisLayer *l = qobject_cast<KisLayer*>(parent.data());
-            KisSelectionMaskSP selMask = l->selectionMask();
-            if (m && m->active() && l && l->selectionMask())
-                selMask->setActive(false);
+            if (m && m->active() && l && l->selectionMask()) {
+                l->selectionMask()->setActive(false);
+            }
         }
         m_d->commandsAdapter.moveNode(node, parent, index);
     }

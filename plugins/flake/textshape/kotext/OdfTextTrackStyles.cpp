@@ -67,6 +67,7 @@ OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
 
 OdfTextTrackStyles::~OdfTextTrackStyles()
 {
+    delete m_changeCommand;
 }
 
 void OdfTextTrackStyles::beginEdit()

@@ -50,6 +50,7 @@ KoAnchorTextRange::KoAnchorTextRange(KoShapeAnchor *parent, const QTextCursor &c
 
 KoAnchorTextRange::~KoAnchorTextRange()
 {
+    delete d_ptr;
 }
 
 KoShapeAnchor *KoAnchorTextRange::anchor() const

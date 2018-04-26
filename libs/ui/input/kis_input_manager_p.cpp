@@ -419,8 +419,8 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
                                                 const QList<Qt::Key> &modifiers,
                                                 KisShortcutConfiguration::MouseWheelMovement wheelAction)
 {
-    KisSingleActionShortcut *keyShortcut =
-        new KisSingleActionShortcut(action, index);
+    QScopedPointer<KisSingleActionShortcut> keyShortcut(
+        new KisSingleActionShortcut(action, index));
 
     KisSingleActionShortcut::WheelAction a;
     switch(wheelAction) {
@@ -444,7 +444,7 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     }
 
     keyShortcut->setWheel(QSet<Qt::Key>::fromList(modifiers), a);
-    matcher.addShortcut(keyShortcut);
+    matcher.addShortcut(keyShortcut.take());
 }
 
 void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)

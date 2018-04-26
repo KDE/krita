@@ -103,7 +103,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice* io)
 
                 dbgFile << "Going to read layer" << i << "pos" << io->pos();
                 dbgFile << "== Enter PSDLayerRecord";
-                PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
+                QScopedPointer<PSDLayerRecord> layerRecord(new PSDLayerRecord(m_header));
                 if (!layerRecord->read(io)) {
                     error = QString("Could not load layer %1: %2").arg(i).arg(layerRecord->error);
                     return false;
@@ -112,7 +112,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice* io)
                 dbgFile << "Finished reading layer" << i << layerRecord->layerName << "blending mode"
                         << layerRecord->blendModeKey << io->pos()
                         << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
-                layers << layerRecord;
+                layers << layerRecord.take();
             }
         }
 
@@ -581,9 +581,6 @@ void PSDLayerMaskSection::writeImpl(QIODevice* io, KisNodeSP rootLayer)
             SAFE_WRITE_EX(io, globalMaskSize);
         }
 
-        {
-            PsdAdditionalLayerInfoBlock globalInfoSection(m_header);
-            globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
-        }
+        globalInfoSection.writePattBlockEx(io, mergedPatternsXmlDoc);
     }
 }

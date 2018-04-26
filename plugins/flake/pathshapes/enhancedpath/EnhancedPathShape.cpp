@@ -422,7 +422,7 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
     if (m_pathStretchPointX != -1 && m_pathStretchPointY != -1) {
         qreal scaleX = size.width();
         qreal scaleY = size.height();
-        if (m_viewBox.width() / m_viewBox.height() < scaleX / scaleY) {
+        if (qreal(m_viewBox.width()) / m_viewBox.height() < qreal(scaleX) / scaleY) {
             qreal deltaX = (scaleX * m_viewBox.height()) / scaleY - m_viewBox.width();
             foreach (KoSubpath *subpath, d->subpaths) {
                 foreach (KoPathPoint *currPoint, *subpath) {
@@ -439,7 +439,7 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
                 }
             }
             scale = scaleY / m_viewBox.height();
-        } else if (m_viewBox.width() / m_viewBox.height() > scaleX / scaleY) {
+        } else if (qreal(m_viewBox.width()) / m_viewBox.height() > qreal(scaleX) / scaleY) {
             qreal deltaY = (m_viewBox.width() * scaleY) / scaleX - m_viewBox.height();
             foreach (KoSubpath *subpath, d->subpaths) {
                 foreach (KoPathPoint *currPoint, *subpath) {

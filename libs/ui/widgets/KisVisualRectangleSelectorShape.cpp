@@ -98,8 +98,8 @@ QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
 
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate)
 {
-    qreal x = m_barWidth/2;
-    qreal y = m_barWidth/2;
+    qreal x = 0.5 * m_barWidth;
+    qreal y = 0.5 * m_barWidth;
     qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional) {

@@ -198,7 +198,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     double textureScale = settings->getDouble("Texture/Pattern/Scale");
     if ( textureOffsetX*textureScale> maxTextureSize || textureOffsetY*textureScale > maxTextureSize) {
         int maxSize = qMax(textureOffsetX, textureOffsetY);
-        double result = maxTextureSize/maxSize;
+        double result = qreal(maxTextureSize) / maxSize;
         settings->setProperty("Texture/Pattern/Scale", result);
     }
     if (m_currentPreset->paintOp().id() == "spraybrush") {

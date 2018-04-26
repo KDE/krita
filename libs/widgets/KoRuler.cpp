@@ -85,7 +85,7 @@ void RulerTabChooser::paintEvent(QPaintEvent *)
     painter.setBrush(palette().color(QPalette::Text));
     painter.setRenderHint( QPainter::Antialiasing );
 
-    qreal x= width()/2;
+    qreal x = 0.5 * width();
     painter.translate(0,-height()/2+5);
 
     switch (m_type) {

@@ -528,7 +528,7 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
     if (!qFuzzyCompare(t.m33(), 1.0)) {
         const qreal invM33 = 1.0 / t.m33();
 
-        for (auto row : rows) {
+        for (auto &row : rows) {
             row *= invM33;
         }
     }

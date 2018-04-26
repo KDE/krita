@@ -130,7 +130,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     QString license = i18n("<html>"
                            "<head/>"
                            "<body>"
-                           "<h1 align=\"center\"><b>Your Rights</h1>"
+                           "<h1 align=\"center\"><b>Your Rights</b></h1>"
                            "<p>Krita is released under the GNU General Public License (version 2 or any later version).</p>"
                            "<p>This license grants people a number of freedoms:</p>"
                            "<ul>"

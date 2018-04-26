@@ -239,7 +239,7 @@
           <string>%</string>
          </property>
          <property name="maximum">
-          <double>6400.000000000000000</double>
+          <double>9999.000000000000000</double>
          </property>
         </widget>
        </item>

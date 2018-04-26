@@ -280,7 +280,7 @@ void HairyBrush::saturationDepletion(Bristle * bristle, KoColor &bristleColor, q
     m_transfo->transform(bristleColor.data(), bristleColor.data() , 1);
 }
 
-void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& /*bristleColor*/, qreal pressure, qreal inkDeplation)
+void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal pressure, qreal inkDeplation)
 {
     qreal opacity = OPACITY_OPAQUE_F;
     if (m_properties->useWeights) {
@@ -296,6 +296,7 @@ void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& /*bristleColor*/, q
     }
 
     opacity = qBound(0.0, opacity, 1.0);
+    bristleColor.setOpacity(opacity);
 }
 
 inline void HairyBrush::addBristleInk(Bristle *bristle,const QPointF &pos, const KoColor &color)

@@ -40,21 +40,21 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
     // Make mask animated
     mask.getKeyframeChannel(KisKeyframeChannel::TransformArguments.id(), true);
 
-    KisModifyTransformMaskCommand *command;
-
     args.setMode(ToolTransformArgs::FREE_TRANSFORM);
     args.setScaleX(0.75);
-    command = new KisModifyTransformMaskCommand(&mask, toQShared(new KisTransformMaskAdapter(args)));
-    command->redo();
+    QScopedPointer<KisModifyTransformMaskCommand> command1(
+        new KisModifyTransformMaskCommand(&mask, toQShared(new KisTransformMaskAdapter(args))));
+    command1->redo();
 
     p.image->animationInterface()->switchCurrentTimeAsync(10);
     p.image->waitForDone();
 
     args.setScaleX(0.5);
-    command = new KisModifyTransformMaskCommand(&mask, toQShared(new KisTransformMaskAdapter(args)));
-    command->redo();
+    QScopedPointer<KisModifyTransformMaskCommand> command2(
+        new KisModifyTransformMaskCommand(&mask, toQShared(new KisTransformMaskAdapter(args))));
+    command2->redo();
 
-    KisAnimatedTransformMaskParameters *params_out;
+    KisAnimatedTransformMaskParameters *params_out = 0;
 
     params_out = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask.transformParams().data());
     QVERIFY(params_out != 0);

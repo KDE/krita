@@ -404,8 +404,8 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
 
-    if (image.format() != QImage::Format_RGB32 ||
-        image.format() != QImage::Format_ARGB32 ||
+    if (image.format() != QImage::Format_RGB32 &&
+        image.format() != QImage::Format_ARGB32 &&
         image.format() != QImage::Format_ARGB32_Premultiplied) {
 
         image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);

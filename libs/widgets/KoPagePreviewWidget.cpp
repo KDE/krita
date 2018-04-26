@@ -61,8 +61,8 @@ void KoPagePreviewWidget::paintEvent(QPaintEvent *event)
     const bool pageSpread = (d->pageLayout.bindingSide >= 0 && d->pageLayout.pageEdge >= 0);
     qreal sheetWidth = pageWidth / (pageSpread?2:1);
 
-    qreal zoomH = (height() * 90 / 100) / pageHeight;
-    qreal zoomW = (width() * 90 / 100) / pageWidth;
+    qreal zoomH = (height() * 90.0 / 100.0) / pageHeight;
+    qreal zoomW = (width() * 90.0 / 100.0) / pageWidth;
     qreal zoom = qMin( zoomW, zoomH );
 
     pageWidth *= zoom;

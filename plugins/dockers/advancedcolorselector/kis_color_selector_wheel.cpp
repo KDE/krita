@@ -217,18 +217,19 @@ KoColor KisColorSelectorWheel::colorAt(int x, int y, bool forceValid)
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());
 
-    qreal xRel = x-width()/2.;
-    qreal yRel = y-height()/2.;
+    const qreal xRel = x - 0.5 * width();
+    const qreal yRel = y - 0.5 * height();
+    const qreal minDimension = qMin(width(), height());
 
     qreal radius = sqrt(xRel*xRel+yRel*yRel);
-    if(radius > qMin(width(), height())/2) {
+    if (radius > 0.5 * minDimension) {
         if (!forceValid) {
             return color;
         } else {
-            radius = qMin(width(), height())/2;
+            radius = 0.5 * minDimension;
         }
     }
-    radius /= qMin(width(), height())/2.;
+    radius /= 0.5 * minDimension;
 
     qreal angle = std::atan2(yRel, xRel);
     angle += M_PI;

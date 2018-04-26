@@ -205,7 +205,7 @@ void KisBrushExport::initializeCapabilities()
 
 void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
-    spacingWidget->setSpacing(false, cfg->getBool("spacing"));
+    spacingWidget->setSpacing(false, cfg->getDouble("spacing"));
     nameLineEdit->setText(cfg->getString("name"));
     colorAsMask->setChecked(cfg->getBool("mask"));
     brushStyle->setCurrentIndex(cfg->getInt("brushStyle"));

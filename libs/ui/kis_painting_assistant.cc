@@ -352,8 +352,8 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
 
 void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
 {
-    int id;
-    double x,y ;
+    int id = 0;
+    double x = 0.0, y = 0.0;
     store->open(path);
     QByteArray data = store->read(store->size());
     QXmlStreamReader xml(data);

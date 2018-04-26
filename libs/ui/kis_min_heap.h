@@ -32,20 +32,22 @@ template <typename T, int N> class KisMinHeap
 {
 public:
 
-    KisMinHeap(): m_list(0) {
-        m_size = N;
-        m_last = 0;
-
-        m_list = new PriorityNode <T>* [N];
+    KisMinHeap()
+        : m_last(0),
+          m_size(N),
+          m_list(new PriorityNode <T>* [N])
+    {
     }
 
-    inline KisMinHeap(const T& data, int key) {
-        KisMinHeap();
+    inline KisMinHeap(const T& data, int key)
+        : KisMinHeap()
+    {
         append(data, key);
     }
 
-    inline KisMinHeap(PriorityNode<T>* node) {
-        KisMinHeap();
+    inline KisMinHeap(PriorityNode<T>* node)
+        : KisMinHeap()
+    {
         append(node);
     }
 

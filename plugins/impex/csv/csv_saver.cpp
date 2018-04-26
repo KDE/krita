@@ -93,9 +93,10 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
     else {
         // something is wrong: the local file name is not .csv!
         // trying the given (probably temporary) filename as well
-        // XXX: unbreak this!
-        if (path.right(4).toUpper() == ".CSV")
+
+        KIS_SAFE_ASSERT_RECOVER(0 && "Wrong extension of the saved file!") {
             path = path.left(path.size() - 4);
+        }
     }
     path.append(".frames");
 

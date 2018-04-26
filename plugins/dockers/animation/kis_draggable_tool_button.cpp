@@ -57,11 +57,8 @@ int KisDraggableToolButton::continueDrag(const QPoint &pos)
         m_orientation = Qt::Horizontal;
     }
 
-    if (m_orientation == Qt::Horizontal) {
-        value = diff.x();
-    } else {
-        value = -diff.y();
-    }
+    // people like it more when the they can zoom by dragging in both directions
+    Q_UNUSED(m_orientation);
 
     value = diff.x() - diff.y();
 

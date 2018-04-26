@@ -534,7 +534,7 @@ bool KoColorSet::addGroup(const QString &groupName)
         return false;
     }
     d->groupNames.append(groupName);
-    d->groups[groupName];
+    d->groups[groupName] = QVector<KoColorSetEntry>();
     return true;
 }
 

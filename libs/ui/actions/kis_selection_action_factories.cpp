@@ -320,60 +320,58 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
         }
 
-        if (willCut) {
-            KUndo2Command *command = 0;
+        KUndo2Command *command = 0;
 
-            if (node->hasEditablePaintDevice()) {
-                struct ClearSelection : public KisTransactionBasedCommand {
-                    ClearSelection(KisNodeSP node, KisSelectionSP sel)
-                        : m_node(node), m_sel(sel) {}
-                    KisNodeSP m_node;
-                    KisSelectionSP m_sel;
+        if (willCut && node->hasEditablePaintDevice()) {
+            struct ClearSelection : public KisTransactionBasedCommand {
+                ClearSelection(KisNodeSP node, KisSelectionSP sel)
+                    : m_node(node), m_sel(sel) {}
+                KisNodeSP m_node;
+                KisSelectionSP m_sel;
 
-                    KUndo2Command* paint() override {
-                        KisSelectionSP cutSelection = m_sel;
-                        // Shrinking the cutting area was previously used
-                        // for getting seamless cut-paste. Now we use makeSharpClip
-                        // instead.
-                        // QRect originalRect = cutSelection->selectedExactRect();
-                        // static const int preciseSelectionThreshold = 16;
-                        //
-                        // if (originalRect.width() > preciseSelectionThreshold ||
-                        //     originalRect.height() > preciseSelectionThreshold) {
-                        //     cutSelection = new KisSelection(*m_sel);
-                        //     delete cutSelection->flatten();
-                        //
-                        //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
-                        //
-                        //     QRect processingRect = filter->changeRect(originalRect);
-                        //     filter->process(cutSelection->pixelSelection(), processingRect);
-                        // }
+                KUndo2Command* paint() override {
+                    KisSelectionSP cutSelection = m_sel;
+                    // Shrinking the cutting area was previously used
+                    // for getting seamless cut-paste. Now we use makeSharpClip
+                    // instead.
+                    // QRect originalRect = cutSelection->selectedExactRect();
+                    // static const int preciseSelectionThreshold = 16;
+                    //
+                    // if (originalRect.width() > preciseSelectionThreshold ||
+                    //     originalRect.height() > preciseSelectionThreshold) {
+                    //     cutSelection = new KisSelection(*m_sel);
+                    //     delete cutSelection->flatten();
+                    //
+                    //     KisSelectionFilter* filter = new KisShrinkSelectionFilter(1, 1, false);
+                    //
+                    //     QRect processingRect = filter->changeRect(originalRect);
+                    //     filter->process(cutSelection->pixelSelection(), processingRect);
+                    // }
 
-                        KisTransaction transaction(m_node->paintDevice());
-                        m_node->paintDevice()->clearSelection(cutSelection);
-                        m_node->setDirty(cutSelection->selectedRect());
-                        return transaction.endAndTake();
-                    }
-                };
+                    KisTransaction transaction(m_node->paintDevice());
+                    m_node->paintDevice()->clearSelection(cutSelection);
+                    m_node->setDirty(cutSelection->selectedRect());
+                    return transaction.endAndTake();
+                }
+            };
 
-                command = new ClearSelection(node, selection);
-            }
-
-            KUndo2MagicString actionName = willCut ?
-                                           kundo2_i18n("Cut") :
-                                           kundo2_i18n("Copy");
-            KisProcessingApplicator *ap = beginAction(view, actionName);
-
-            if (command) {
-                ap->applyCommand(command,
-                                 KisStrokeJobData::SEQUENTIAL,
-                                 KisStrokeJobData::NORMAL);
-            }
-
-            KisOperationConfiguration config(id());
-            config.setProperty("will-cut", willCut);
-            endAction(ap, config.toXML());
+            command = new ClearSelection(node, selection);
         }
+
+        KUndo2MagicString actionName = willCut ?
+                    kundo2_i18n("Cut") :
+                    kundo2_i18n("Copy");
+        KisProcessingApplicator *ap = beginAction(view, actionName);
+
+        if (command) {
+            ap->applyCommand(command,
+                             KisStrokeJobData::SEQUENTIAL,
+                             KisStrokeJobData::NORMAL);
+        }
+
+        KisOperationConfiguration config(id());
+        config.setProperty("will-cut", willCut);
+        endAction(ap, config.toXML());
     }
 }
 

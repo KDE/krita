@@ -69,18 +69,13 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(KisDocument *document, QIOD
 {
     Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
 
-
-    if (!pdoc) {
-        return KisPDFImport::InvalidFormat;
-    }
-
-    pdoc->setRenderHint(Poppler::Document::Antialiasing, true);
-    pdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
-
     if (!pdoc) {
         dbgFile << "Error when reading the PDF";
         return KisImportExportFilter::StorageCreationError;
     }
+
+    pdoc->setRenderHint(Poppler::Document::Antialiasing, true);
+    pdoc->setRenderHint(Poppler::Document::TextAntialiasing, true);
 
     while (pdoc->isLocked()) {
         KPasswordDialog dlg(0);

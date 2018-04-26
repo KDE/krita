@@ -63,6 +63,7 @@ void KisMetaDataTest::testRationals()
         KisMetaData::Rational sr2(14, 10);
         QVERIFY(sr == sr);
         QVERIFY(!(sr == sr2));
+        QVERIFY(sr != sr2);
     }
     {
         KisMetaData::Rational sr(10, 14);
@@ -71,6 +72,7 @@ void KisMetaDataTest::testRationals()
         KisMetaData::Rational sr2(14, 10);
         QVERIFY(sr == sr);
         QVERIFY(!(sr == sr2));
+        QVERIFY(sr != sr2);
     }
 }
 

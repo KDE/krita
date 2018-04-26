@@ -66,6 +66,7 @@
 #include "dialogs/kis_dlg_png_import.h"
 #include "kis_clipboard.h"
 #include <kis_cursor_override_hijacker.h>
+#include "kis_undo_stores.h"
 
 namespace
 {
@@ -622,8 +623,8 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     // Creating the KisImageSP
     if (m_image == 0) {
-        m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
-        Q_CHECK_PTR(m_image);
+        KisUndoStore *store = m_doc ? m_doc->createUndoStore() : new KisSurrogateUndoStore();
+        m_image = new KisImage(store, width, height, cs, "built image");
     }
 
     // Read resolution
@@ -667,14 +668,13 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
             }
         }
     }
-
     // Read image data
-    KisPNGReaderAbstract* reader = 0;
+    QScopedPointer<KisPNGReaderAbstract> reader;
     try {
         if (interlace_type == PNG_INTERLACE_ADAM7) {
-            reader = new KisPNGReaderFullImage(png_ptr, info_ptr, width, height);
+            reader.reset(new KisPNGReaderFullImage(png_ptr, info_ptr, width, height));
         } else {
-            reader = new KisPNGReaderLineByLine(png_ptr, info_ptr, width, height);
+            reader.reset(new KisPNGReaderLineByLine(png_ptr, info_ptr, width, height));
         }
     } catch (std::bad_alloc& e) {
         // new png_byte[] may raise such an exception if the image
@@ -796,8 +796,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-
-    delete reader;
     return KisImageBuilder_RESULT_OK;
 
 }
@@ -970,10 +968,10 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     Q_ASSERT(color_type > -1);
 
     // Try to compute a table of color if the colorspace is RGB8f
-    png_colorp palette = 0;
+    QScopedArrayPointer<png_color> palette;
     int num_palette = 0;
     if (!options.alpha && options.tryToSaveAsIndexed && KoID(device->colorSpace()->id()) == KoID("RGBA")) { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
-        palette = new png_color[255];
+        palette.reset(new png_color[255]);
 
         KisSequentialIterator it(device, imageRect);
 
@@ -1014,7 +1012,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
                 color_nb_bits = 8;
             }
         } else {
-            delete [] palette;
+            palette.reset();
         }
     }
 
@@ -1038,9 +1036,14 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     /*if (!options.saveSRGBProfile && sRGB) {
         png_set_sRGB_gAMA_and_cHRM(png_ptr, info_ptr, PNG_sRGB_INTENT_PERCEPTUAL);
     }*/
+
+
+    // we should ensure we don't access non-existing palette object
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(palette || color_type != PNG_COLOR_TYPE_PALETTE, KisImageBuilder_RESULT_FAILURE);
+
     // set the palette
     if (color_type == PNG_COLOR_TYPE_PALETTE) {
-        png_set_PLTE(png_ptr, info_ptr, palette, num_palette);
+        png_set_PLTE(png_ptr, info_ptr, palette.data(), num_palette);
     }
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
@@ -1188,26 +1191,48 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     // Write the PNG
     //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, 0);
 
+    struct RowPointersStruct {
+        RowPointersStruct(const QSize &size, int pixelSize)
+            : numRows(size.height())
+        {
+            rows = new png_byte*[numRows];
+
+            for (int i = 0; i < numRows; i++) {
+                rows[i] = new png_byte[size.width() * pixelSize];
+            }
+        }
+
+        ~RowPointersStruct() {
+            for (int i = 0; i < numRows; i++) {
+                delete[] rows[i];
+            }
+            delete[] rows;
+        }
+
+        const int numRows = 0;
+        png_byte** rows = 0;
+    };
+
+
     // Fill the data structure
-    png_byte** row_pointers = new png_byte*[imageRect.height()];
+    RowPointersStruct rowPointers(imageRect.size(), device->pixelSize());
+
     int row = 0;
     for (int y = imageRect.y(); y < imageRect.y() + imageRect.height(); y++, row++) {
         KisHLineConstIteratorSP it = device->createHLineConstIteratorNG(imageRect.x(), y, imageRect.width());
-
-        row_pointers[row] = new png_byte[imageRect.width() * device->pixelSize()];
 
         switch (color_type) {
         case PNG_COLOR_TYPE_GRAY:
         case PNG_COLOR_TYPE_GRAY_ALPHA:
             if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[row]);
+                quint16 *dst = reinterpret_cast<quint16 *>(rowPointers.rows[row]);
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[0];
                     if (options.alpha) *(dst++) = d[1];
                 } while (it->nextPixel());
             } else {
-                quint8 *dst = row_pointers[row];
+                quint8 *dst = rowPointers.rows[row];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[0];
@@ -1218,7 +1243,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
             if (color_nb_bits == 16) {
-                quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[row]);
+                quint16 *dst = reinterpret_cast<quint16 *>(rowPointers.rows[row]);
                 do {
                     const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
                     *(dst++) = d[2];
@@ -1227,7 +1252,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
                     if (options.alpha) *(dst++) = d[3];
                 } while (it->nextPixel());
             } else {
-                quint8 *dst = row_pointers[row];
+                quint8 *dst = rowPointers.rows[row];
                 do {
                     const quint8 *d = it->oldRawData();
                     *(dst++) = d[2];
@@ -1238,7 +1263,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
             }
             break;
         case PNG_COLOR_TYPE_PALETTE: {
-            quint8 *dst = row_pointers[row];
+            quint8 *dst = rowPointers.rows[row];
             KisPNGWriteStream writestream(dst, color_nb_bits);
             do {
                 const quint8 *d = it->oldRawData();
@@ -1255,26 +1280,17 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         }
             break;
         default:
-            delete[] row_pointers;
             return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
 
-    png_write_image(png_ptr, row_pointers);
+    png_write_image(png_ptr, rowPointers.rows);
 
     // Writing is over
     png_write_end(png_ptr, info_ptr);
 
     // Free memory
     png_destroy_write_struct(&png_ptr, &info_ptr);
-    for (int y = 0; y < imageRect.height(); y++) {
-        delete[] row_pointers[y];
-    }
-    delete[] row_pointers;
-
-    if (color_type == PNG_COLOR_TYPE_PALETTE) {
-        delete [] palette;
-    }
     return KisImageBuilder_RESULT_OK;
 }
 

@@ -665,7 +665,7 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
 
     if (id.isEmpty()) return false;
 
-    KoSvgSymbol *svgSymbol = new KoSvgSymbol();
+    QScopedPointer<KoSvgSymbol> svgSymbol(new KoSvgSymbol());
 
     // ensure that the clip path is loaded in local coordinates system
     m_context.pushGraphicsContext(e, false);
@@ -674,24 +674,23 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
 
     QString title = e.firstChildElement("title").toElement().text();
 
-    KoShape *symbolShape = parseGroup(e);
+    QScopedPointer<KoShape> symbolShape(parseGroup(e));
 
     m_context.popGraphicsContext();
 
     if (!symbolShape) return false;
 
-    svgSymbol->shape = symbolShape;
+    svgSymbol->shape = symbolShape.take();
     svgSymbol->title = title;
     svgSymbol->id = id;
     if (title.isEmpty()) svgSymbol->title = id;
 
     if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
         debugFlake << "Symbol" << id << "seems to be empty, discarding";
-        delete svgSymbol;
         return false;
     }
 
-    m_symbols << svgSymbol;
+    m_symbols << svgSymbol.take();
 
     return true;
 }
@@ -1259,8 +1258,7 @@ KoShape* SvgParser::parseUse(const KoXmlElement &e, DeferredUseStore* deferredUs
     const bool gotDef = m_context.hasDefinition(key);
     if (gotDef) {
         return resolveUse(e, key);
-    }
-    if (!gotDef && deferredUseStore) {
+    } else if (deferredUseStore) {
         deferredUseStore->add(&e, key);
         return 0;
     }

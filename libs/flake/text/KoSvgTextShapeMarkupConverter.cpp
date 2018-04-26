@@ -1022,8 +1022,9 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
         }
     }
 
-    if (format.underlineStyle()!=QTextCharFormat::NoUnderline ||
-            format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
+    if (format.underlineStyle() != QTextCharFormat::NoUnderline &&
+        format.underlineStyle() != QTextCharFormat::SpellCheckUnderline) {
+
         QStringList values;
         QString c;
 

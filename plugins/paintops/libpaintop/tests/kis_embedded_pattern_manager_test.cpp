@@ -153,7 +153,7 @@ KoPattern* findOnServer(QByteArray md5)
 void checkOneConfig(NameStatus nameStatus, bool hasMd5,
                     QString expectedName, bool isOnServer)
 {
-    KoPattern *basePattern = createPattern();
+    QScopedPointer<KoPattern> basePattern(createPattern());
 
     KoPattern *initialPattern = findOnServer(basePattern->md5());
     QCOMPARE((bool)initialPattern, isOnServer);
@@ -175,7 +175,6 @@ void checkOneConfig(NameStatus nameStatus, bool hasMd5,
 
     // will be deleted by the server
     // delete pattern;
-    delete basePattern;
 }
 
 

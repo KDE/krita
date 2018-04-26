@@ -249,11 +249,8 @@ void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
     QCOMPARE(queue.sizeMetric(), 0);
     QVERIFY(jobsList.isEmpty());
 
-
+    // we cannot use scoped pointers for the jobs, since they become owned by the queue
     KisSpontaneousJob *job1 = new KisNoopSpontaneousJob(false);
-    KisSpontaneousJob *job2 = new KisNoopSpontaneousJob(false);
-    KisSpontaneousJob *job3 = new KisNoopSpontaneousJob(true);
-
     queue.addSpontaneousJob(job1);
 
     QVERIFY(!queue.isEmpty());
@@ -261,6 +258,7 @@ void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
     QCOMPARE(jobsList.size(), 1);
     QCOMPARE(jobsList[0], job1);
 
+    KisSpontaneousJob *job2 = new KisNoopSpontaneousJob(false);
     queue.addSpontaneousJob(job2);
 
     QVERIFY(!queue.isEmpty());
@@ -269,6 +267,7 @@ void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()
     QCOMPARE(jobsList[0], job1);
     QCOMPARE(jobsList[1], job2);
 
+    KisSpontaneousJob *job3 = new KisNoopSpontaneousJob(true);
     queue.addSpontaneousJob(job3);
 
     QVERIFY(!queue.isEmpty());

@@ -1316,7 +1316,6 @@ bool KoPathShape::separate(QList<KoPathShape*> & separatedPaths)
 
     Q_FOREACH (KoSubpath* subpath, d->subpaths) {
         KoPathShape *shape = new KoPathShape();
-        if (! shape) continue;
 
         shape->setStroke(stroke());
         shape->setBackground(background());
@@ -1700,6 +1699,7 @@ QPainterPath KoPathShape::pathStroke(const QPen &pen) const
     QPair<KoPathSegment, KoPathSegment> firstSegments;
     QPair<KoPathSegment, KoPathSegment> lastSegments;
 
+    // TODO: these variables are never(!) initialized!
     KoPathPoint *firstPoint = 0;
     KoPathPoint *lastPoint = 0;
     KoPathPoint *secondPoint = 0;

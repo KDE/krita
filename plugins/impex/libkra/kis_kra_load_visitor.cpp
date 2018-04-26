@@ -531,7 +531,7 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
             } else {
                 kfc->fromXML(e);
             }
-            kfc = loadDeprecatedFilter(kfc);
+            loadDeprecatedFilter(kfc);
             return true;
         }
     }
@@ -660,7 +660,7 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
     }
 }
 
-KisFilterConfigurationSP KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfigurationSP cfg)
+void KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfigurationSP cfg)
 {
     if (cfg->getString("legacy") == "left edge detections") {
         cfg->setProperty("horizRadius", 1);
@@ -691,5 +691,4 @@ KisFilterConfigurationSP KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfig
         cfg->setProperty("lockAspect", true);
         cfg->setProperty("transparency", false);
     }
-    return cfg;
 }

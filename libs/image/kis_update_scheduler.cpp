@@ -278,11 +278,7 @@ void KisUpdateScheduler::explicitRegenerateLevelOfDetail()
 
 int KisUpdateScheduler::currentLevelOfDetail() const
 {
-    int levelOfDetail = -1;
-
-    if (levelOfDetail < 0) {
-        levelOfDetail = m_d->updaterContext.currentLevelOfDetail();
-    }
+    int levelOfDetail = m_d->updaterContext.currentLevelOfDetail();
 
     if (levelOfDetail < 0) {
         levelOfDetail = m_d->updatesQueue.overrideLevelOfDetail();

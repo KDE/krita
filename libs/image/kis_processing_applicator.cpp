@@ -222,11 +222,11 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
 {
     KisLayerUtils::FrameJobs jobs;
 
-    if (m_flags.testFlag(RECURSIVE)) {
-        KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
-    } else {
-        KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
-    }
+    // TODO: implement a nonrecursive case when !m_flags.testFlag(RECURSIVE)
+    //       (such case is not yet used anywhere)
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
+
+    KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
 
     if (jobs.isEmpty()) {
         applyVisitor(visitor, sequentiality, exclusivity);

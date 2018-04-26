@@ -124,9 +124,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("increase_brush_size", dynamic_cast<QAction *>(actionManager->actionByName("increase_brush_size")));
     addAction("decrease_brush_size", dynamic_cast<QAction *>(actionManager->actionByName("decrease_brush_size")));
 
-    if (kiscanvas && kiscanvas->viewManager()) {
-        connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
-    }
+    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->resourceProvider(), SLOT(slotPainting()));
 
     m_colorPickerDelayTimer.setSingleShot(true);
     connect(&m_colorPickerDelayTimer, SIGNAL(timeout()), this, SLOT(activatePickColorDelayed()));

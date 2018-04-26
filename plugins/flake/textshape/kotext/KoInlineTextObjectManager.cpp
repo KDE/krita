@@ -266,8 +266,8 @@ void KoInlineTextObjectManager::documentInformationUpdated(const QString &info, 
         setProperty(KoInlineObject::AuthorName, data);
     else if (info == "initial")
         setProperty(KoInlineObject::AuthorInitials, data);
-    else if (info == "title")
-        setProperty(KoInlineObject::SenderTitle, data);
+//    else if (info == "title") // TODO: find a correct tag name
+//        setProperty(KoInlineObject::SenderTitle, data);
     else if (info == "email")
         setProperty(KoInlineObject::SenderEmail, data);
     else if (info == "telephone")

@@ -239,8 +239,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::mergeInShape(QList<KoShape *> shap
                 reindexedIndexes << newShapeZIndex;
             }
         } else {
-            if (newShapeZIndex != originalShapeZIndex &&
-                zIndex >= newShapeZIndex &&
+            if (zIndex >= newShapeZIndex &&
                 zIndex <= lastOccupiedShapeZIndex) {
 
                 lastOccupiedShapeZIndex = zIndex + 1;

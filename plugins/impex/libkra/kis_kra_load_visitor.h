@@ -87,7 +87,7 @@ private:
      * conversion needs to be handled in the perchannel class because those filters
      * have their own xml loading functionality.
      */
-    KisFilterConfigurationSP loadDeprecatedFilter(KisFilterConfigurationSP cfg);
+    void loadDeprecatedFilter(KisFilterConfigurationSP cfg);
 
 private:
     KisImageSP m_image;

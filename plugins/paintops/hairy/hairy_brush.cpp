@@ -296,6 +296,7 @@ void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal
     }
 
     opacity = qBound(0.0, opacity, 1.0);
+    bristleColor.setOpacity(opacity);
 }
 
 inline void HairyBrush::addBristleInk(Bristle *bristle,const QPointF &pos, const KoColor &color)

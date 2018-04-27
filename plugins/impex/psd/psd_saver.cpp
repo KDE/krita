@@ -103,9 +103,9 @@ KisImageSP PSDSaver::image()
 
 KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
 {
-    if (!m_image)
+    if (!m_image) {
         return KisImageBuilder_RESULT_EMPTY;
-
+    }
     if (m_image->width() > 30000 || m_image->height() > 30000) {
         return KisImageBuilder_RESULT_FAILURE;
     }
@@ -129,7 +129,8 @@ KisImageBuilder_Result PSDSaver::buildFile(QIODevice *io)
                                                                           m_image->colorSpace()->colorDepthId().id());
 
     if (colordef.first == COLORMODE_UNKNOWN || colordef.second == 0 || colordef.second == 32) {
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        m_image->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb16(), KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(), m_image->colorSpace()->colorDepthId().id());
     }
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;

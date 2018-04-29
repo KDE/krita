@@ -68,6 +68,14 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants();
 
+
+    /// getter and setter functions for what assistant is currently selected
+    /// this is used to control some tool options that are specific to a assistant
+    KisPaintingAssistantSP selectedAssistant();
+    void setSelectedAssistant(KisPaintingAssistantSP assistant);
+    void deselectAssistant();
+
+
     /// called when assistant editor is activated
     /// right now this happens when the assistants tool is selected
     void activateAssistantsEditor();
@@ -110,6 +118,8 @@ public:
 
 Q_SIGNALS:
     void assistantChanged();
+    void selectedAssistantChanged();
+
 public Q_SLOTS:
 
     /// toggles whether the assistant is active or not

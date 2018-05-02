@@ -10,7 +10,7 @@ to reproduce AppImage-only bugs in Krita.
 ## Prerequisites
 
 Firstly we need to download deps and Krita source tree. These steps are not
-included into the *Dockerfile* to save internael bandwidth (most Krita
+included into the *Dockerfile* to save internal bandwidth (most Krita
 developers already have al least one clone of Krita source tree).
 
 ```bash

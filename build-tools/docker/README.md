@@ -54,9 +54,9 @@ developer tools into the container, e.g. GDB, Valgring, ccmake and QtCreator.
 To do that, execute the following from yout **host** console:
 
 ```bash
-sudo docker exec -ti apt install gdb
-sudo docker exec -ti apt install valgrind
-sudo docker exec -ti apt install cmake-curses-gui
+sudo docker exec -ti krita-build apt install gdb
+sudo docker exec -ti krita-build apt install valgrind
+sudo docker exec -ti krita-build apt install cmake-curses-gui
 
 # inside the container
 cd ~/persistent

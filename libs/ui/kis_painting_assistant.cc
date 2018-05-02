@@ -19,6 +19,8 @@
  */
 
 #include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+
 #include "kis_painting_assistant.h"
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
@@ -164,7 +166,6 @@ void KisPaintingAssistant::setSnappingActive(bool set)
 {
     d->isSnappingActive = set;
 }
-
 
 void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
@@ -330,11 +331,6 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeStartElement("assistant");
     xml.writeAttribute("type",d->id);
     xml.writeAttribute("active", QString::number(d->isSnappingActive));
-
-
-    saveCustomXml(&xml); // if any specific assistants have custom XML data to save to
-
-    // write individual handle data
     xml.writeStartElement("handles");
     Q_FOREACH (const KisPaintingAssistantHandleSP handle, d->handles) {
         int id = handleMap.size();
@@ -354,11 +350,6 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     return data;
 }
 
-void KisPaintingAssistant::saveCustomXml(QXmlStreamWriter* xml)
-{
-    Q_UNUSED(xml);
-}
-
 void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
 {
     int id = 0;
@@ -373,8 +364,6 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                 QStringRef active = xml.attributes().value("active");
                 d->isSnappingActive = (active != "0");
             }
-
-            loadCustomXml(&xml);
 
             if (xml.name() == "handle") {
                 QString strId = xml.attributes().value("id").toString(),
@@ -396,12 +385,6 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
         }
     }
     store->close();
-}
-
-bool KisPaintingAssistant::loadCustomXml(QXmlStreamReader* xml)
-{
-    Q_UNUSED(xml);
-    return true;
 }
 
 void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistantsElement,int count)

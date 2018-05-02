@@ -82,17 +82,9 @@ private:
     void addAssistant();
     void removeAssistant(KisPaintingAssistantSP assistant);
 
-    void assistantSelected(KisPaintingAssistantSP assistant);
-
-    void updateToolOptionsUI();
-
-
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-
-
-    void slotChangeVanishingPointAngle(double value);
 
 private Q_SLOTS:
     void removeAllAssistants();

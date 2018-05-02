@@ -106,5 +106,5 @@ folder under */var* directory. You might not have enough space there for buildin
 folder into another location, where there is enough space.
 
 ```bash
-echo 'DOCKER_OPTS="-g /home/devel5/docker"' > /etc/default/docker
+echo 'DOCKER_OPTS="-g /home/devel5/docker"' >> /etc/default/docker
 ```

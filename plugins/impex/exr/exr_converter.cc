@@ -608,12 +608,17 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
     bool topLevelRGBFound = false;
     info.name = HDR_LAYER;
 
+    QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B"
+                                                     << ".A" << ".R" << ".G" << ".B"
+                                                     << "A." << "R." << "G." << "B."
+                                                     << "A." << "R." << "G." << "B."
+                                                     << ".alpha" << ".red" << ".green" << ".blue";
+
     for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
         const Imf::Channel &channel = i.channel();
         dbgFile << "Channel name = " << i.name() << " type = " << channel.type;
 
         QString qname = i.name();
-        QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B"  << ".A" << ".R" << ".G" << ".B"  << "A." << "R." << "G." << "B.";;
         if (topLevelChannelNames.contains(qname)) {
             topLevelRGBFound = true;
             dbgFile << "Found top-level channel" << qname;
@@ -648,13 +653,22 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
         for (Imf::ChannelList::ConstIterator j = layerBegin;
              j != layerEnd; ++j) {
             const Imf::Channel &channel = j.channel();
-            dbgFile << "\tchannel " << j.name() << " type = " << channel.type;
 
             info.updateImageType(imfTypeToKisType(channel.type));
 
             QString qname = j.name();
             QStringList list = qname.split('.');
             QString layersuffix = list.last();
+
+            dbgFile << "\tchannel " << j.name() << "suffix" << layersuffix << " type = " << channel.type;
+
+            // Nuke writes the channels for sublayers as .red instead of .R, so convert those.
+            // See https://bugs.kde.org/show_bug.cgi?id=393771
+            if (topLevelChannelNames.contains("." + layersuffix)) {
+                layersuffix = layersuffix.at(0).toUpper();
+            }
+            dbgFile << "\t\tsuffix" << layersuffix;
+
 
             if (list.size() > 1) {
                 info.name = list[list.size()-2];
@@ -663,6 +677,7 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
 
             info.channelMap[layersuffix] = qname;
         }
+
         if (info.imageType != IT_UNKNOWN && info.imageType != IT_UNSUPPORTED) {
             informationObjects.push_back(info);
             if (imageType < info.imageType) {

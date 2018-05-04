@@ -19,6 +19,7 @@
 
 #include <QDesktopServices>
 #include <QLayout>
+#include <QMenu>
 
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
@@ -97,6 +98,7 @@ void ToolReferenceImages::slotSelectionChanged()
 {
     KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
     m_optionsWidget->selectionChanged(layer->shapeManager()->selection());
+    updateActions();
 }
 
 QList<QPointer<QWidget>> ToolReferenceImages::createOptionWidgets()
@@ -149,4 +151,14 @@ KoSelection *ToolReferenceImages::koSelection() const
 {
     auto manager = shapeManager();
     return manager ? manager->selection() : nullptr;
+}
+
+void ToolReferenceImages::updateDistinctiveActions(const QList<KoShape*> &)
+{
+    action("object_group")->setEnabled(false);
+    action("object_unite")->setEnabled(false);
+    action("object_intersect")->setEnabled(false);
+    action("object_subtract")->setEnabled(false);
+    action("object_split")->setEnabled(false);
+    action("object_ungroup")->setEnabled(false);
 }

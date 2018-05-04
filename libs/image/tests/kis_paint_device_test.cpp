@@ -2176,7 +2176,7 @@ void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
     QCOMPARE(o.m_frames.size(), 2);
     //QVERIFY(o.m_currentData == o.m_frames[0]);
 
-    KisPaintDeviceSP newDev = new KisPaintDevice(*dev, true, 0);
+    KisPaintDeviceSP newDev = new KisPaintDevice(*dev, KritaUtils::CopyAllFrames);
 
     QVERIFY(channel->keyframeAt(0));
     QVERIFY(channel->keyframeAt(10));

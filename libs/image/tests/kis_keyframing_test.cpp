@@ -489,7 +489,7 @@ void KisKeyframingTest::testMovingFrames()
     srcChannel->addKeyframe(10);
     srcChannel->addKeyframe(50);
 
-    KisPaintDeviceSP dev2 = new KisPaintDevice(*dev, true);
+    KisPaintDeviceSP dev2 = new KisPaintDevice(*dev, KritaUtils::CopyAllFrames);
     KisRasterKeyframeChannel * dstChannel = dev->keyframeChannel();
 
 

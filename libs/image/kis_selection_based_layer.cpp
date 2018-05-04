@@ -59,10 +59,12 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
           KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
           m_d(new Private())
 {
-    if (!selection)
+    if (!selection) {
         initSelection();
-    else
+    } else {
         setInternalSelection(selection);
+    }
+
     KisImageSP imageSP = image.toStrongRef();
     if (!imageSP) {
         return;
@@ -223,6 +225,13 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->setParentNode(this);
         m_d->selection->updateProjection();
+
+        KisPixelSelectionSP pixelSelection = m_d->selection->pixelSelection();
+        if (pixelSelection->framesInterface()) {
+            addKeyframeChannel(pixelSelection->keyframeChannel());
+            enableAnimation();
+        }
+
     } else {
         m_d->selection = 0;
     }

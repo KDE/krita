@@ -81,7 +81,7 @@ void KisSelection::copyFrom(const KisSelection &rhs)
     m_d->parentNode = 0; // not supposed to be shared
 
     Q_ASSERT(rhs.m_d->pixelSelection);
-    m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection);
+    m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection, KritaUtils::CopyAllFrames);
     m_d->pixelSelection->setParentSelection(this);
 
 

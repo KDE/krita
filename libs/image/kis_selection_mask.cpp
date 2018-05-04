@@ -70,7 +70,6 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
     : KisMask(rhs)
     , m_d(new Private(this))
 {
-    setActive(false);
     m_d->image = rhs.image();
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);

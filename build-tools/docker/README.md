@@ -54,9 +54,9 @@ developer tools into the container, e.g. GDB, Valgring, ccmake and QtCreator.
 To do that, execute the following from yout **host** console:
 
 ```bash
-sudo docker exec -ti krita-build apt install gdb
-sudo docker exec -ti krita-build apt install valgrind
-sudo docker exec -ti krita-build apt install cmake-curses-gui
+sudo docker exec -ti -u root krita-build apt install gdb
+sudo docker exec -ti -u root krita-build apt install valgrind
+sudo docker exec -ti -u root krita-build apt install cmake-curses-gui
 
 # inside the container
 cd ~/persistent
@@ -65,6 +65,10 @@ wget http://master.qt.io/archive/online_installers/3.0/qt-unified-linux-x64-3.0.
 
 # when going through the setup wizard select not to install any
 # extra Qt libraries, install QtCreator only!
+
+# to start QtCreator without the conflicts to with Krita's Qt paths, type
+# in your **host** console:
+sudo docker exec -ti krita-build /home/appimage//Qt/Tools/QtCreator/bin/qtcreator
 
 ```
 

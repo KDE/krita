@@ -299,16 +299,25 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
     setRoot(newRoot);
 
-    if (exactCopy) {
+    if (exactCopy || rhs.m_d->isolatedRootNode) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
             [&linearizedNodes](KisNodeSP node) {
                 linearizedNodes.enqueue(node);
             });
         KisLayerUtils::recursiveApplyNodes(newRoot,
-            [&linearizedNodes](KisNodeSP node) {
+            [&linearizedNodes, exactCopy, &rhs, this](KisNodeSP node) {
                 KisNodeSP refNode = linearizedNodes.dequeue();
-                node->setUuid(refNode->uuid());
+
+                if (exactCopy) {
+                    node->setUuid(refNode->uuid());
+                }
+
+                if (rhs.m_d->isolatedRootNode &&
+                    rhs.m_d->isolatedRootNode == refNode) {
+
+                    m_d->isolatedRootNode = node;
+                }
             });
     }
 

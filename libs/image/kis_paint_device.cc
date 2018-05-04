@@ -1007,7 +1007,7 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs, KritaUtils::DeviceCopy
         // copy data objects with or without frames
         m_d->cloneAllDataObjects(rhs.m_d, copyMode == KritaUtils::CopyAllFrames);
 
-        if (copyMode == KritaUtils::CopyAllFrames) {
+        if (copyMode == KritaUtils::CopyAllFrames && rhs.m_d->framesInterface) {
             KIS_ASSERT_RECOVER_RETURN(rhs.m_d->framesInterface);
             KIS_ASSERT_RECOVER_RETURN(rhs.m_d->contentChannel);
             m_d->framesInterface.reset(new KisPaintDeviceFramesInterface(this));

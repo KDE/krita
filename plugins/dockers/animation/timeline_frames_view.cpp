@@ -1164,6 +1164,9 @@ void TimelineFramesView::slotUpdateFrameActions()
         action->setEnabled(value);
     };
 
+    enableAction("add_blank_frame", hasEditableFrames);
+    enableAction("add_duplicate_frame", hasEditableFrames);
+
     enableAction("insert_keyframes_right", hasEditableFrames);
     enableAction("insert_n_keyframes_right", hasEditableFrames);
 

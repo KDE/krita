@@ -83,7 +83,7 @@ void WaveletDecompose::slotWaveletDecompose()
 
         image->barrierLock();
 
-        KisPaintDeviceSP projection = new KisPaintDevice(*(image->projection()), false, 0);
+        KisPaintDeviceSP projection = new KisPaintDevice(*(image->projection()));
         if (!projection) return;
        
         const KoColorSpace *cs = projection->colorSpace();
@@ -103,7 +103,7 @@ void WaveletDecompose::slotWaveletDecompose()
         for(int level = 0; level < scales; ++level){
         
             //copy original
-            KisPaintDeviceSP blur = new KisPaintDevice(*original, false, 0);
+            KisPaintDeviceSP blur = new KisPaintDevice(*original);
            
             //blur it
             KisWaveletKernel::applyWavelet(blur, rc, 1 << level, 1 << level, flags, 0);

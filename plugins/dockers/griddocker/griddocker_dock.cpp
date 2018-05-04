@@ -68,7 +68,7 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
     m_canvas = canvas ? dynamic_cast<KisCanvas2*>(canvas) : 0;
     setEnabled(m_canvas);
 
-    if (m_canvas) {
+    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         m_canvasConnections.addConnection(
             m_canvas->viewManager()->gridManager(),
             SIGNAL(sigRequestUpdateGridConfig(const KisGridConfig&)),

@@ -12,6 +12,8 @@ sudo docker run -P -t -d \
   -v /etc/localtime:/etc/localtime:ro \
   -e DISPLAY=$DISPLAY \
   -h $HOSTNAME \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
   --device /dev/dri \
   --device /dev/snd \
   -p127.0.0.1:2022:22 \

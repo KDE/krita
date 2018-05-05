@@ -27,17 +27,16 @@ namespace dialogs {
 
 class TabletTestDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	TabletTestDialog(QWidget *parent=nullptr);
-	~TabletTestDialog();
+    TabletTestDialog(QWidget *parent=nullptr);
+    ~TabletTestDialog();
 
 private:
-	Ui_TabletTest *m_ui;
+    Ui_TabletTest *m_ui;
 
 };
 
 }
 
 #endif
-

@@ -18,21 +18,29 @@
 */
 
 #include "tablettester.h"
-#include "widgets/tablettest.h"
-using widgets::TabletTester; // work around missing namespace in UIC generated code
+#include "tablettest.h"
 #include "ui_tablettest.h"
 
-#include "../main.h"
-
-namespace dialogs {
-
 TabletTestDialog::TabletTestDialog( QWidget *parent) :
-    QDialog(parent)
+    QDialog(parent, Qt::Window)
 {
     m_ui = new Ui_TabletTest;
     m_ui->setupUi(this);
 
-    connect(static_cast<DrawpileApp*>(qApp), &DrawpileApp::eraserNear, this, [this](bool near) {
+    qApp->installEventFilter(this);
+}
+
+TabletTestDialog::~TabletTestDialog()
+{
+    qApp->removeEventFilter(this);
+    delete m_ui;
+}
+
+bool TabletTestDialog::eventFilter(QObject *watched, QEvent *e) {
+    Q_UNUSED(watched);
+    if(e->type() == QEvent::TabletEnterProximity || e->type() == QEvent::TabletLeaveProximity) {
+        QTabletEvent *te = static_cast<QTabletEvent*>(e);
+        bool near = te->pointerType()==QTabletEvent::Eraser;
         QString msg;
         if(near)
             msg = QStringLiteral("Eraser brought near");
@@ -40,12 +48,6 @@ TabletTestDialog::TabletTestDialog( QWidget *parent) :
             msg = QStringLiteral("Eraser taken away");
 
         m_ui->logView->appendPlainText(msg);
-    });
-}
-
-TabletTestDialog::~TabletTestDialog()
-{
-    delete m_ui;
-}
-
+    }
+    return QDialog::eventFilter(watched, e);
 }

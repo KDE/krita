@@ -190,6 +190,9 @@ class TabletSettingsTab : public QWidget {
 public:
     TabletSettingsTab(QWidget *parent = 0, const char  *name = 0);
 
+private Q_SLOTS:
+    void slotTabletTest();
+
 public:
     void setDefault();
     WdgTabletSettings  *m_page;

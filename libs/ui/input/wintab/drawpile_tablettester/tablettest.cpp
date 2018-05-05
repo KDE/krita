@@ -22,10 +22,6 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#ifndef DESIGNER_PLUGIN
-namespace widgets {
-#endif
-
 TabletTester::TabletTester(QWidget *parent)
     : QWidget(parent), m_mouseDown(false), m_tabletDown(false)
 {
@@ -66,7 +62,7 @@ void TabletTester::paintEvent(QPaintEvent *e)
 
 void TabletTester::mousePressEvent(QMouseEvent *e)
 {
-    emit eventReport(QString("Mouse press X=%1 Y=%2 B=%3").arg(e->x()).arg(e->y()).arg(e->button()));
+    Q_EMIT eventReport(QString("Mouse press X=%1 Y=%2 B=%3").arg(e->x()).arg(e->y()).arg(e->button()));
     m_mouseDown = true;
     m_mousePath.clear();
     update();
@@ -74,7 +70,7 @@ void TabletTester::mousePressEvent(QMouseEvent *e)
 
 void TabletTester::mouseMoveEvent(QMouseEvent *e)
 {
-    emit eventReport(QString("Mouse move X=%1 Y=%2 B=%3").arg(e->x()).arg(e->y()).arg(e->buttons()));
+    Q_EMIT eventReport(QString("Mouse move X=%1 Y=%2 B=%3").arg(e->x()).arg(e->y()).arg(e->buttons()));
     m_mousePath << e->pos();
     update();
 }
@@ -82,7 +78,7 @@ void TabletTester::mouseMoveEvent(QMouseEvent *e)
 void TabletTester::mouseReleaseEvent(QMouseEvent *e)
 {
     Q_UNUSED(e);
-    emit eventReport(QString("Mouse release"));
+    Q_EMIT eventReport(QString("Mouse release"));
     m_mouseDown = false;
 }
 
@@ -131,9 +127,5 @@ void TabletTester::tabletEvent(QTabletEvent *e)
         }
     }
 
-    emit eventReport(msg);
+    Q_EMIT eventReport(msg);
 }
-
-#ifndef DESIGNER_PLUGIN
-}
-#endif

@@ -22,23 +22,15 @@
 
 #include <QWidget>
 
-#ifndef DESIGNER_PLUGIN
-namespace widgets {
-#define PLUGIN_EXPORT
-#else
-#include <QtUiPlugin/QDesignerExportWidget>
-#define PLUGIN_EXPORT QDESIGNER_WIDGET_EXPORT
-#endif
-
-class PLUGIN_EXPORT TabletTester : public QWidget {
+class TabletTester : public QWidget {
     Q_OBJECT
 public:
     TabletTester(QWidget *parent=nullptr);
 
-public slots:
+public Q_SLOTS:
     void clear();
 
-signals:
+Q_SIGNALS:
     void eventReport(const QString &msg);
 
 protected:
@@ -55,10 +47,5 @@ private:
     bool m_mouseDown;
     bool m_tabletDown;
 };
-
-#ifndef DESIGNER_PLUGIN
-}
-#endif
-
 
 #endif

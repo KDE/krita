@@ -82,6 +82,7 @@
 #include <kis_signals_blocker.h>
 
 #include "input/config/kis_input_configuration_page.h"
+#include "input/wintab/drawpile_tablettester/tablettester.h"
 
 #ifdef Q_OS_WIN
 #  include <kis_tablet_support_win8.h>
@@ -645,6 +646,13 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 #else
     m_page->grpTabletApi->setVisible(false);
 #endif
+    connect(m_page->btnTabletTest, SIGNAL(clicked()), SLOT(slotTabletTest()));
+}
+
+void TabletSettingsTab::slotTabletTest()
+{
+    TabletTestDialog tabletTestDialog(this);
+    tabletTestDialog.exec();
 }
 
 

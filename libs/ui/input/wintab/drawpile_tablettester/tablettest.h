@@ -31,29 +31,29 @@ namespace widgets {
 #endif
 
 class PLUGIN_EXPORT TabletTester : public QWidget {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	TabletTester(QWidget *parent=nullptr);
+    TabletTester(QWidget *parent=nullptr);
 
 public slots:
-	void clear();
+    void clear();
 
 signals:
-	void eventReport(const QString &msg);
+    void eventReport(const QString &msg);
 
 protected:
-	void paintEvent(QPaintEvent *e) override;
-	void mousePressEvent(QMouseEvent *e) override;
-	void mouseMoveEvent(QMouseEvent *e) override;
-	void mouseReleaseEvent(QMouseEvent *e) override;
-	void tabletEvent(QTabletEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    void tabletEvent(QTabletEvent *e) override;
 
 private:
-	QPolygon m_mousePath;
-	QPolygon m_tabletPath;
+    QPolygon m_mousePath;
+    QPolygon m_tabletPath;
 
-	bool m_mouseDown;
-	bool m_tabletDown;
+    bool m_mouseDown;
+    bool m_tabletDown;
 };
 
 #ifndef DESIGNER_PLUGIN
@@ -62,4 +62,3 @@ private:
 
 
 #endif
-

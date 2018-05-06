@@ -84,6 +84,9 @@ void KisIdleWatcher::setTrackedImages(const QVector<KisImageSP> &images)
             m_d->trackedImages << image;
             m_d->connectionsStore.addConnection(image, SIGNAL(sigImageModified()),
                                                 this, SLOT(slotImageModified()));
+
+            m_d->connectionsStore.addConnection(image, SIGNAL(sigIsolatedModeChanged()),
+                                                this, SLOT(slotImageModified()));
         }
     }
 }

@@ -64,6 +64,7 @@
 #include "kis_image_signal_router.h"
 #include "kis_image_animation_interface.h"
 #include "kis_stroke_strategy.h"
+#include "kis_simple_stroke_strategy.h"
 #include "kis_image_barrier_locker.h"
 
 
@@ -1304,40 +1305,75 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
 
 bool KisImage::startIsolatedMode(KisNodeSP node)
 {
-    if (!tryBarrierLock()) return false;
+    struct StartIsolatedModeStroke : public KisSimpleStrokeStrategy {
+        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
+            : KisSimpleStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+              m_node(node),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT);
+            setClearsRedoOnStart(false);
+        }
 
-    unlock();
+        void initStrokeCallback() {
+            m_image->m_d->isolatedRootNode = m_node;
+            emit m_image->sigIsolatedModeChanged();
 
-    m_d->isolatedRootNode = node;
-    emit sigIsolatedModeChanged();
+            // the GUI uses our thread to do the color space conversion so we
+            // need to emit this signal in multiple threads
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
 
-    // the GUI uses our thread to do the color space conversion so we
-    // need to emit this signal in multiple threads
-    m_d->notifyProjectionUpdatedInPatches(bounds());
+            m_image->invalidateAllFrames();
+        }
 
-    invalidateAllFrames();
+    private:
+        KisNodeSP m_node;
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this));
+    endStroke(id);
+
     return true;
 }
 
 void KisImage::stopIsolatedMode()
 {
-    if (!m_d->isolatedRootNode)  return;
+    struct StopIsolatedModeStroke : public KisSimpleStrokeStrategy {
+        StopIsolatedModeStroke(KisImageSP image)
+            : KisSimpleStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT);
+            setClearsRedoOnStart(false);
+        }
 
-    KisNodeSP oldRootNode = m_d->isolatedRootNode;
-    m_d->isolatedRootNode = 0;
+        void initStrokeCallback() {
+            if (!m_image->m_d->isolatedRootNode)  return;
 
-    emit sigIsolatedModeChanged();
+            //KisNodeSP oldRootNode = m_image->m_d->isolatedRootNode;
+            m_image->m_d->isolatedRootNode = 0;
 
-    // the GUI uses our thread to do the color space conversion so we
-    // need to emit this signal in multiple threads
-    m_d->notifyProjectionUpdatedInPatches(bounds());
-    invalidateAllFrames();
+            emit m_image->sigIsolatedModeChanged();
 
-    // TODO: Substitute notifyProjectionUpdated() with this code
-    // when update optimization is implemented
-    //
-    // QRect updateRect = bounds() | oldRootNode->extent();
-    // oldRootNode->setDirty(updateRect);
+            // the GUI uses our thread to do the color space conversion so we
+            // need to emit this signal in multiple threads
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
+            m_image->invalidateAllFrames();
+
+            // TODO: Substitute notifyProjectionUpdated() with this code
+            // when update optimization is implemented
+            //
+            // QRect updateRect = bounds() | oldRootNode->extent();
+            // oldRootNode->setDirty(updateRect);
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new StopIsolatedModeStroke(this));
+    endStroke(id);
 }
 
 KisNodeSP KisImage::isolatedModeRoot() const

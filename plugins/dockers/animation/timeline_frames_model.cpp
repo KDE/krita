@@ -53,7 +53,7 @@
 #include <QApplication>
 #include "kis_processing_applicator.h"
 #include <KisImageBarrierLockerWithFeedback.h>
-#include "kis_clone_info.h"
+#include "kis_node_uuid_info.h"
 
 
 struct TimelineFramesModel::Private
@@ -634,7 +634,7 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
         KisNodeSP srcNode;
 
         if (!nodeUuid.isNull()) {
-            KisCloneInfo nodeInfo(nodeUuid);
+            KisNodeUuidInfo nodeInfo(nodeUuid);
             srcNode = nodeInfo.findNode(m_d->image->root());
         } else {
             QModelIndex index = this->index(srcRow, srcColumn);

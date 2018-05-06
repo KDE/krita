@@ -51,7 +51,7 @@ struct Q_DECL_HIDDEN KisCloneLayer::Private
     KisLodCapableLayerOffset offset;
 
     KisLayerSP copyFrom;
-    KisCloneInfo copyFromInfo;
+    KisNodeUuidInfo copyFromInfo;
     CopyLayerType type;
 };
 
@@ -294,12 +294,12 @@ CopyLayerType KisCloneLayer::copyType() const
     return m_d->type;
 }
 
-KisCloneInfo KisCloneLayer::copyFromInfo() const
+KisNodeUuidInfo KisCloneLayer::copyFromInfo() const
 {
-    return m_d->copyFrom ? KisCloneInfo(m_d->copyFrom) : m_d->copyFromInfo;
+    return m_d->copyFrom ? KisNodeUuidInfo(m_d->copyFrom) : m_d->copyFromInfo;
 }
 
-void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
+void KisCloneLayer::setCopyFromInfo(KisNodeUuidInfo info)
 {
     Q_ASSERT(!m_d->copyFrom);
     m_d->copyFromInfo = info;

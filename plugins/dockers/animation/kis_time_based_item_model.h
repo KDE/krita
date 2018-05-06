@@ -52,7 +52,6 @@ public:
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
     bool removeFrames(const QModelIndexList &indexes);
-    bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames);
 
     bool removeFramesAndOffset(QModelIndexList indexes);
 

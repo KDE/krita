@@ -525,6 +525,45 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
     }
 }
 
+bool KisKeyframeChannel::swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand)
+{
+    if (srcChannel->id() != id()) {
+        warnKrita << "Cannot copy frames from different ids:" << ppVar(srcChannel->id()) << ppVar(id());
+        return KisKeyframeSP();
+    }
+
+    LAZY_INITIALIZE_PARENT_COMMAND(parentCommand);
+
+    KisKeyframeSP srcFrame = srcChannel->keyframeAt(srcTime);
+    KisKeyframeSP dstFrame = keyframeAt(dstTime);
+
+    if (!dstFrame && srcFrame) {
+        copyExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
+        srcChannel->deleteKeyframe(srcFrame, parentCommand);
+    } else if (dstFrame && !srcFrame) {
+        srcChannel->copyExternalKeyframe(this, dstTime, srcTime, parentCommand);
+        deleteKeyframe(dstFrame, parentCommand);
+    } else if (dstFrame && srcFrame) {
+        const int fakeFrameTime = -1;
+
+        KisKeyframeSP newKeyframe = createKeyframe(fakeFrameTime, KisKeyframeSP(), parentCommand);
+        uploadExternalKeyframe(srcChannel, srcTime, newKeyframe);
+
+        srcChannel->copyExternalKeyframe(this, dstTime, srcTime, parentCommand);
+
+        // do not recreate frame!
+        deleteKeyframeImpl(dstFrame, parentCommand, false);
+
+        newKeyframe->setTime(dstTime);
+
+        KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newKeyframe->time(), newKeyframe, parentCommand);
+        cmd->redo();
+    }
+
+    return true;
+}
+
+
 KisKeyframeSP KisKeyframeChannel::copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand)
 {
     if (srcChannel->id() != id()) {

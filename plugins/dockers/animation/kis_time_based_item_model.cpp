@@ -321,22 +321,6 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
                                                       parentCommand);
 }
 
-bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames)
-{
-    KUndo2Command *cmd = 0;
-
-    {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
-        cmd = createOffsetFramesCommand(srcIndexes, offset, copyFrames);
-    }
-
-    if (cmd) {
-        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd, KisStrokeJobData::BARRIER);
-    }
-
-    return cmd;
-}
-
 bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indexes)
 {
     if (indexes.isEmpty()) return true;

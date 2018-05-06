@@ -53,6 +53,7 @@
 #include <QApplication>
 #include "kis_processing_applicator.h"
 #include <KisImageBarrierLockerWithFeedback.h>
+#include "kis_clone_info.h"
 
 
 struct TimelineFramesModel::Private
@@ -557,7 +558,14 @@ QMimeData *TimelineFramesModel::mimeDataExtended(const QModelIndexList &indexes,
     stream << baseRow << baseColumn;
 
     Q_FOREACH (const QModelIndex &index, indexes) {
+        KisNodeSP node = nodeAt(index);
+        KIS_SAFE_ASSERT_RECOVER(node) { continue; }
+
         stream << index.row() - baseRow << index.column() - baseColumn;
+
+        const QByteArray uuidData = node->uuid().toRfc4122();
+        stream << int(uuidData.size());
+        stream.writeRawData(uuidData.data(), uuidData.size());
     }
 
     stream << int(copyPolicy);
@@ -606,16 +614,46 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
     int size, baseRow, baseColumn;
     stream >> size >> baseRow >> baseColumn;
 
-    QModelIndexList srcIndexes;
+    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
+
+    KisAnimationUtils::FrameMovePairList frameMoves;
 
     for (int i = 0; i < size; i++) {
         int relRow, relColumn;
         stream >> relRow >> relColumn;
 
-        int srcRow = baseRow + relRow;
-        int srcColumn = baseColumn + relColumn;
+        const int srcRow = baseRow + relRow;
+        const int srcColumn = baseColumn + relColumn;
 
-        srcIndexes << index(srcRow, srcColumn);
+        int uuidLen = 0;
+        stream >> uuidLen;
+        QByteArray uuidData(uuidLen, '\0');
+        stream.readRawData(uuidData.data(), uuidLen);
+        QUuid nodeUuid = QUuid::fromRfc4122(uuidData);
+
+        KisNodeSP srcNode;
+
+        if (!nodeUuid.isNull()) {
+            KisCloneInfo nodeInfo(nodeUuid);
+            srcNode = nodeInfo.findNode(m_d->image->root());
+        } else {
+            QModelIndex index = this->index(srcRow, srcColumn);
+            srcNode = nodeAt(index);
+        }
+
+        KIS_SAFE_ASSERT_RECOVER(srcNode) { continue; }
+
+        const QModelIndex dstIndex = this->index(srcRow + offset.y(), srcColumn + offset.x());
+        if (!dstIndex.isValid()) continue;
+
+        KisNodeSP dstNode = nodeAt(dstIndex);
+        KIS_SAFE_ASSERT_RECOVER(dstNode) { continue; }
+
+        Q_FOREACH (KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
+            KisAnimationUtils::FrameItem srcItem(srcNode, channel->id(), srcColumn);
+            KisAnimationUtils::FrameItem dstItem(dstNode, channel->id(), dstIndex.column());
+            frameMoves << std::make_pair(srcItem, dstItem);
+        }
     }
 
     MimeCopyPolicy copyPolicy = UndefinedPolicy;
@@ -635,9 +673,18 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
         *dataMoved = !copyFrames;
     }
 
-    const QPoint offset(parent.column() - baseColumn, parent.row() - baseRow);
+    KUndo2Command *cmd = 0;
 
-    return offsetFrames(srcIndexes, offset, copyFrames);
+    if (!frameMoves.isEmpty()) {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, 0);
+    }
+
+    if (cmd) {
+        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd, KisStrokeJobData::BARRIER);
+    }
+
+    return cmd;
 }
 
 Qt::ItemFlags TimelineFramesModel::flags(const QModelIndex &index) const

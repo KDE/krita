@@ -237,8 +237,10 @@ void KisPresetSaveWidget::savePreset()
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         }
+
+        // we should not load() the brush right after saving because it will reset all our saved
+        // eraser size and opacity values
         curPreset->save();
-        curPreset->load();
     }
 
 

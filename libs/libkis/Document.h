@@ -196,7 +196,7 @@ public Q_SLOTS:
      *
      * @return QColor
      */
-    QColor backGroundColor();
+    QColor backgroundColor();
 
     /**
      * @brief setBackGroundColor sets the background color of the document. It will trigger a projection

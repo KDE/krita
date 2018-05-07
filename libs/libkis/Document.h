@@ -190,6 +190,22 @@ public Q_SLOTS:
      */
     bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
 
+    /**
+     * @brief backgroundColor returns the current background color of the document. The color will
+     * also include the opacity.
+     *
+     * @return QColor
+     */
+    QColor backGroundColor();
+
+    /**
+     * @brief setBackGroundColor sets the background color of the document. It will trigger a projection
+     * update.
+     *
+     * @param color A QColor. The color will be converted from sRGB.
+     * @return bool
+     */
+    bool setBackGroundColor(const QColor &color);
 
     /**
      * @brief documentInfo creates and XML document representing document and author information.

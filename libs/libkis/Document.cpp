@@ -199,7 +199,7 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
     return true;
 }
 
-QColor Document::backGroundColor()
+QColor Document::backgroundColor()
 {
     if (!d->document) return QColor();
     if (!d->document->image()) return QColor();

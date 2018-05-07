@@ -699,9 +699,11 @@ public:
      */
     KisProofingConfigurationSP proofingConfiguration() const;
 
-public:
+public Q_SLOTS:
     bool startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
+
+public:
     KisNodeSP isolatedModeRoot() const;
 
 Q_SIGNALS:
@@ -850,6 +852,12 @@ Q_SIGNALS:
      *
      */
     void sigProofingConfigChanged();
+
+    /**
+     * Internal signal for asynchronously requesting isolated mode to stop. Don't use it
+     * outside KisImage, use sigIsolatedModeChanged() instead.
+     */
+    void sigInternalStopIsolatedModeRequested();
 
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();

@@ -248,6 +248,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 {
     // make sure KisImage belongs to the GUI thread
     moveToThread(qApp->thread());
+    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
 
     setObjectName(name);
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
@@ -283,6 +284,7 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
 {
     // make sure KisImage belongs to the GUI thread
     moveToThread(qApp->thread());
+    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
 
     setObjectName(rhs.objectName());
 
@@ -356,7 +358,7 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 
     KisNodeSP newNode = parent->at(index);
     if (!dynamic_cast<KisSelectionMask*>(newNode.data())) {
-        stopIsolatedMode();
+        emit sigInternalStopIsolatedModeRequested();
     }
 }
 
@@ -364,7 +366,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
     KisNodeSP deletedNode = parent->at(index);
     if (!dynamic_cast<KisSelectionMask*>(deletedNode.data())) {
-        stopIsolatedMode();
+        emit sigInternalStopIsolatedModeRequested();
     }
 
     KisNodeGraphListener::aboutToRemoveANode(parent, index);
@@ -1174,7 +1176,7 @@ KoColor KisImage::defaultProjectionColor() const
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
-    stopIsolatedMode();
+    emit sigInternalStopIsolatedModeRequested();
 
     KoColor defaultProjectionColor(Qt::transparent, m_d->colorSpace);
 
@@ -1339,6 +1341,8 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
 
 void KisImage::stopIsolatedMode()
 {
+    if (!m_d->isolatedRootNode)  return;
+
     struct StopIsolatedModeStroke : public KisSimpleStrokeStrategy {
         StopIsolatedModeStroke(KisImageSP image)
             : KisSimpleStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),

@@ -199,13 +199,13 @@ public Q_SLOTS:
     QColor backgroundColor();
 
     /**
-     * @brief setBackGroundColor sets the background color of the document. It will trigger a projection
+     * @brief setBackgroundColor sets the background color of the document. It will trigger a projection
      * update.
      *
      * @param color A QColor. The color will be converted from sRGB.
      * @return bool
      */
-    bool setBackGroundColor(const QColor &color);
+    bool setBackgroundColor(const QColor &color);
 
     /**
      * @brief documentInfo creates and XML document representing document and author information.

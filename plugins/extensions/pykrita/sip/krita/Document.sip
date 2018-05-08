@@ -27,7 +27,7 @@ public Q_SLOTS:
     bool setColorProfile(const QString &colorProfile);
     bool setColorSpace(const QString &value, const QString &colorDepth, const QString &colorProfile);
     QColor backgroundColor();
-    bool setBackGroundColor(const QColor &color);
+    bool setBackgroundColor(const QColor &color);
     QString documentInfo() const;
     void setDocumentInfo(const QString &document);
     QString fileName() const;

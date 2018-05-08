@@ -52,7 +52,6 @@
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
-#include <kis_layer_utils.h>
 
 #include <KisMimeDatabase.h>
 #include <KoColor.h>
@@ -208,7 +207,7 @@ QColor Document::backgroundColor()
     return color.toQColor();
 }
 
-bool Document::setBackGroundColor(const QColor &color)
+bool Document::setBackgroundColor(const QColor &color)
 {
     if (!d->document) return false;
     if (!d->document->image()) return false;

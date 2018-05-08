@@ -102,7 +102,7 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     if (!copyFrames) {
         init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
     } else {
-        init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), true, this), rhs.m_d->paintChannelFlags);
+        init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames), rhs.m_d->paintChannelFlags);
 
         m_d->contentChannel = m_d->paintDevice->keyframeChannel();
         addKeyframeChannel(m_d->contentChannel);
@@ -174,8 +174,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     }
 
     if (!m_d->contentChannel ||
-            (m_d->contentChannel && m_d->contentChannel->keyframeCount() <= 1) ||
-            !onionSkinEnabled()) {
+        (m_d->contentChannel->keyframeCount() <= 1) || !onionSkinEnabled()) {
 
         m_d->onionSkinCache.reset();
     }

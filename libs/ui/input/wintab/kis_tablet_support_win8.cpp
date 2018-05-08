@@ -60,7 +60,7 @@ class Win8PointerInputApi
     FUNC(GetPointerPenInfoHistory) \
     FUNC(GetPointerType) \
     /* Pointer Device Functions */ \
-    /*FUNC(GetPointerDevices)*/ \
+    FUNC(GetPointerDevices) \
     /*FUNC(GetPointerDeviceProperties)*/ \
     FUNC(GetPointerDevice) \
     FUNC(GetPointerDeviceRects) \
@@ -338,6 +338,39 @@ bool KisTabletSupportWin8::isAvailable()
 {
     // Just try loading the APIs
     return api.init();
+}
+
+bool KisTabletSupportWin8::isPenDeviceAvailable()
+{
+    if (!api.init()) {
+        return false;
+    }
+    UINT32 deviceCount = 0;
+    if (!api.GetPointerDevices(&deviceCount, nullptr)) {
+        dbgTablet << "GetPointerDevices failed";
+        return false;
+    }
+    if (deviceCount == 0) {
+        dbgTablet << "No pointer devices";
+        return false;
+    }
+    QVector<POINTER_DEVICE_INFO> devices(deviceCount);
+    if (!api.GetPointerDevices(&deviceCount, devices.data())) {
+        dbgTablet << "GetPointerDevices failed";
+        return false;
+    }
+    bool hasPenDevice = false;
+    Q_FOREACH (const POINTER_DEVICE_INFO &device, devices) {
+        dbgTablet << "Found pointer device" << static_cast<void *>(device.device)
+                  << QString::fromWCharArray(device.productString)
+                  << "type:" << device.pointerDeviceType;
+        if (device.pointerDeviceType == POINTER_DEVICE_TYPE_INTEGRATED_PEN ||
+            device.pointerDeviceType == POINTER_DEVICE_TYPE_EXTERNAL_PEN) {
+            hasPenDevice = true;
+        }
+    }
+    dbgTablet << "hasPenDevice:" << hasPenDevice;
+    return hasPenDevice;
 }
 
 bool KisTabletSupportWin8::init()

@@ -515,6 +515,10 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 TextTool::~TextTool()
 {
     delete m_toolSelection;
+
+    KIS_SAFE_ASSERT_RECOVER (!m_currentCommand) {
+        delete m_currentCommand;
+    }
 }
 
 void TextTool::showEditTip()
@@ -2825,12 +2829,12 @@ void TextTool::createStyleFromCurrentBlockFormat(const QString &name)
 
 void TextTool::createStyleFromCurrentCharFormat(const QString &name)
 {
+    KoCharacterStyle blankStyle;
     KoTextDocument document(m_textShapeData->document());
     KoStyleManager *styleManager = document.styleManager();
     KoCharacterStyle *originalCharStyle = styleManager->characterStyle(m_textEditor.data()->charFormat().intProperty(KoCharacterStyle::StyleId));
     KoCharacterStyle *autoStyle;
     if (!originalCharStyle) {
-        KoCharacterStyle blankStyle;
         originalCharStyle = &blankStyle;
         autoStyle = originalCharStyle->autoStyle(m_textEditor.data()->charFormat(), m_textEditor.data()->blockCharFormat());
         autoStyle->setParentStyle(0);

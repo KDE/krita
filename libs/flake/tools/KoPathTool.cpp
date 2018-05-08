@@ -551,6 +551,8 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             KoPathPointIndex index = shape->pathPointIndex(m_activeSegment->segmentStart);
             KoPathSegment segment = shape->segmentByIndex(index).toCubic();
 
+            KIS_SAFE_ASSERT_RECOVER_RETURN(segment.isValid());
+
             KisHandlePainterHelper helper =
                 KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
@@ -985,6 +987,19 @@ void KoPathTool::slotSelectionChanged()
     initializeWithShapes(shapes);
 }
 
+void KoPathTool::notifyPathPointsChanged(KoPathShape *shape)
+{
+    Q_UNUSED(shape);
+
+    // active handle and selection might have already become invalid, so just
+    // delete them without dereferencing anything...
+
+    delete m_activeHandle;
+    m_activeHandle = 0;
+    delete m_activeSegment;
+    m_activeSegment = 0;
+}
+
 void KoPathTool::clearActivePointSelectionReferences()
 {
     delete m_activeHandle;
@@ -994,8 +1009,6 @@ void KoPathTool::clearActivePointSelectionReferences()
 
     m_pointSelection.clear();
 }
-
-#include "kis_pointer_utils.h"
 
 void KoPathTool::initializeWithShapes(const QList<KoShape*> shapes)
 {

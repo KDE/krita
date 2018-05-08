@@ -31,6 +31,8 @@
 #include "kis_keyframe_channel.h"
 #include "kis_processing_applicator.h"
 #include "KisImageBarrierLockerWithFeedback.h"
+#include "commands_new/kis_switch_current_time_command.h"
+#include "kis_command_utils.h"
 
 struct KisTimeBasedItemModel::Private
 {
@@ -279,7 +281,7 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
     return true;
 }
 
-KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand)
+KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand, bool moveEmptyFrames)
 {
     if (srcIndexes.isEmpty()) return 0;
     if (offset.isNull()) return 0;
@@ -302,7 +304,7 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
         }
 
         Q_FOREACH(KisKeyframeChannel *channel, channelsAt(srcIndex)) {
-            if (channel->keyframeAt(srcIndex.column())) {
+            if (moveEmptyFrames ||  channel->keyframeAt(srcIndex.column())) {
                 srcFrameItems << KisAnimationUtils::FrameItem(srcNode, channel->id(), srcIndex.column());
                 dstFrameItems << KisAnimationUtils::FrameItem(dstNode, channel->id(), dstIndex.column());
             }
@@ -319,20 +321,90 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
                                                       parentCommand);
 }
 
-bool KisTimeBasedItemModel::offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames)
+bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indexes)
 {
-    KUndo2Command *cmd = 0;
+    if (indexes.isEmpty()) return true;
+
+    std::sort(indexes.begin(), indexes.end(),
+              [] (const QModelIndex &lhs, const QModelIndex &rhs) {
+                  return lhs.column() > rhs.column();
+              });
+
+    const int minColumn = indexes.last().column();
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indexes.size()));
 
     {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
-        cmd = createOffsetFramesCommand(srcIndexes, offset, copyFrames);
+
+        Q_FOREACH (const QModelIndex &index, indexes) {
+            QModelIndexList movedIndexes;
+            for (int column = index.column() + 1; column < columnCount(); column++) {
+                movedIndexes << this->index(index.row(), column);
+            }
+            createOffsetFramesCommand(movedIndexes, QPoint(-1, 0), false, parentCommand, true);
+        }
+
+        const int oldTime = m_d->image->animationInterface()->currentUITime();
+        const int newTime = minColumn;
+
+        new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
+                                        oldTime,
+                                        newTime, parentCommand);
+
     }
 
-    if (cmd) {
-        KisProcessingApplicator::runSingleCommandStroke(m_d->image, cmd, KisStrokeJobData::BARRIER);
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+    return true;
+}
+
+bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
+{
+    QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18n("Mirror Frames")));
+
+    {
+        KisImageBarrierLockerWithFeedback locker(m_d->image);
+
+        QMap<int, QModelIndexList> rowsList;
+
+        Q_FOREACH (const QModelIndex &index, indexes) {
+            rowsList[index.row()].append(index);
+        }
+
+
+        Q_FOREACH (int row, rowsList.keys()) {
+            QModelIndexList &list = rowsList[row];
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!list.isEmpty(), false);
+
+            std::sort(list.begin(), list.end(),
+                [] (const QModelIndex &lhs, const QModelIndex &rhs) {
+                    return lhs.column() < rhs.column();
+                });
+
+            auto srcIt = list.begin();
+            auto dstIt = list.end();
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(srcIt != dstIt, false);
+            --dstIt;
+
+            QList<KisKeyframeChannel*> channels = channelsAt(*srcIt).values();
+
+            while (srcIt < dstIt) {
+                Q_FOREACH (KisKeyframeChannel *channel, channels) {
+                    channel->swapFrames(srcIt->column(), dstIt->column(), parentCommand.data());
+                }
+
+                srcIt++;
+                dstIt--;
+            }
+        }
     }
 
-    return cmd;
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image,
+                                                    new KisCommandUtils::SkipFirstRedoWrapper(parentCommand.take()),
+                                                    KisStrokeJobData::BARRIER);
+    return true;
 }
 
 void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)

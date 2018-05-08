@@ -77,9 +77,9 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 
 void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context)
 {
-    if (! shape->isVisible(false)) {
+    if (!shape->isVisible(false)) {
         context.shapeWriter().addAttribute("display", "none");
-    } if (shape->transparency() > 0.0) {
+    } else if (shape->transparency() > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
     }
 }

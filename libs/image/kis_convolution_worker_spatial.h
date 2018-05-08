@@ -203,7 +203,7 @@ public:
                 }
 
             }
-        } else if (traversingDirection == Vertical) {
+        } else /* if (traversingDirection == Vertical) */ {
             if(hasProgressUpdater) {
                 this->m_progress->setRange(0, areaSize.width());
             }

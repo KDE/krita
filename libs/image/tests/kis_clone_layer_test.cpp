@@ -243,7 +243,7 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     QCOMPARE(image->root()->lastChild()->name(), QString("clone_of_p1"));
     QCOMPARE(image->root()->firstChild()->name(), QString("paint1"));
 
-    KUndo2Command *cmd1 = new KisImageLayerRemoveCommand(image, paintLayer1);
+    QScopedPointer<KUndo2Command> cmd1(new KisImageLayerRemoveCommand(image, paintLayer1));
 
     image->barrierLock();
     cmd1->redo();
@@ -254,7 +254,7 @@ void KisCloneLayerTest::testUndoingRemovingSource()
 
     KisNodeSP reincarnatedLayer = image->root()->lastChild();
 
-    KUndo2Command *cmd2 = new KisImageLayerRemoveCommand(image, reincarnatedLayer);
+    QScopedPointer<KUndo2Command> cmd2(new KisImageLayerRemoveCommand(image, reincarnatedLayer));
 
     image->barrierLock();
     cmd2->redo();
@@ -277,9 +277,6 @@ void KisCloneLayerTest::testUndoingRemovingSource()
     QVERIFY(image->root()->lastChild() != KisNodeSP(cloneLayer1));
 
     cmd2->redo();
-
-    delete cmd1;
-    delete cmd2;
 }
 
 void KisCloneLayerTest::testDuplicateGroup()
@@ -350,7 +347,7 @@ struct CyclingTester {
     KisLayerSP cloneOfGroup2;
 };
 
-inline void addIfNotPresent(KisNodeSP node, CyclingTester &t, KisNodeSP group1Child, KisNodeSP group2Child)
+inline void addIfNotAnyOf(KisNodeSP node, CyclingTester &t, KisNodeSP group1Child, KisNodeSP group2Child)
 {
     if(node != group1Child && node != group2Child) {
         t.image->addNode(node);
@@ -363,9 +360,9 @@ inline void addIfNotPresent(KisNodeSP node, CyclingTester &t, KisNodeSP group1Ch
  */
 inline void testCyclingCase(CyclingTester &t, KisNodeSP group1Child, KisNodeSP group2Child, bool expected)
 {
-    addIfNotPresent(t.groupLayer2, t, group1Child, group2Child);
-    addIfNotPresent(t.cloneOfGroup1, t, group1Child, group2Child);
-    addIfNotPresent(t.cloneOfGroup2, t, group1Child, group2Child);
+    addIfNotAnyOf(t.groupLayer2, t, group1Child, group2Child);
+    addIfNotAnyOf(t.cloneOfGroup1, t, group1Child, group2Child);
+    addIfNotAnyOf(t.cloneOfGroup2, t, group1Child, group2Child);
 
     t.image->addNode(t.groupLayer1);
 
@@ -385,7 +382,6 @@ void KisCloneLayerTest::testCyclingGroupLayer()
     testCyclingCase(t, t.groupLayer2, t.cloneOfGroup1, false);
 
     testCyclingCase(t, t.cloneOfGroup1, 0, false);
-    testCyclingCase(t, t.cloneOfGroup1, t.cloneOfGroup2, false);
 
     testCyclingCase(t, t.cloneOfGroup2, 0, true);
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);

@@ -653,12 +653,13 @@ QStatusBar * KisView::statusBar() const
 void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isAutoSaving)
 {
     QStatusBar *sb = statusBar();
-    if (sb)
+    if (sb) {
         sb->showMessage(text, timeout);
+    }
 
     KisConfig cfg;
 
-    if (sb->isHidden() ||
+    if (!sb || sb->isHidden() ||
         (!isAutoSaving && cfg.forceShowSaveMessages()) ||
         (cfg.forceShowAutosaveMessages() && isAutoSaving)) {
 
@@ -669,8 +670,9 @@ void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isA
 void KisView::slotClearStatusText()
 {
     QStatusBar *sb = statusBar();
-    if (sb)
+    if (sb) {
         sb->clearMessage();
+    }
 }
 
 QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)
@@ -681,9 +683,9 @@ QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)
 
 void KisView::closeEvent(QCloseEvent *event)
 {
-    // Check whether we're the last view
+    // Check whether we're the last (user visible) view
     int viewCount = KisPart::instance()->viewCount(document());
-    if (viewCount > 1) {
+    if (viewCount > 1 || !isVisible()) {
         // there are others still, so don't bother the user
         event->accept();
         return;
@@ -818,7 +820,8 @@ void KisView::saveViewState(KisPropertiesConfiguration &config) const
     }
 
     config.setProperty("zoomMode", (int)zoomController()->zoomMode());
-    config.setProperty("zoom", d->zoomManager.zoom());
+    config.setProperty("zoom", d->canvas.coordinatesConverter()->zoom());
+
     d->canvasController.saveCanvasState(config);
 }
 

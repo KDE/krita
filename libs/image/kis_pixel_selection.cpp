@@ -72,8 +72,8 @@ KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSe
     m_d->parentSelection = parentSelection;
 }
 
-KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
-        : KisPaintDevice(rhs)
+KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::DeviceCopyMode copyMode)
+        : KisPaintDevice(rhs, copyMode)
         , KisSelectionComponent(rhs)
         , m_d(new Private)
 {

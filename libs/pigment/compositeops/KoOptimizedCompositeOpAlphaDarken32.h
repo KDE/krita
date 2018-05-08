@@ -59,7 +59,13 @@ struct AlphaDarkenCompositor32 {
         Vc::float_v src_alpha;
         Vc::float_v dst_alpha;
 
+        // we don't use directly passed value
+        Q_UNUSED(opacity);
+
+        // instead we should use opacity premultiplied by flow
+        opacity = oparams.premultipliedOpacity;
         Vc::float_v opacity_vec(255.0 * oparams.premultipliedOpacity);
+
         Vc::float_v average_opacity_vec(255.0 * oparams.averageOpacity);
         Vc::float_v flow_norm_vec(oparams.flow);
 
@@ -190,6 +196,7 @@ struct AlphaDarkenCompositor32 {
         float srcAlphaNorm;
         float mskAlphaNorm;
 
+        Q_UNUSED(opacity);
         opacity = oparams.premultipliedOpacity;
 
         if (haveMask) {

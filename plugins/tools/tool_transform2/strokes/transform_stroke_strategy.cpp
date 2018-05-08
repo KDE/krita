@@ -163,7 +163,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::NORMAL);
 
                 td->node->setDirty(oldExtent | td->node->extent());
-            } if (KisExternalLayer *extLayer =
+            } else if (KisExternalLayer *extLayer =
                   dynamic_cast<KisExternalLayer*>(td->node.data())) {
 
                 if (td->config.mode() == ToolTransformArgs::FREE_TRANSFORM ||

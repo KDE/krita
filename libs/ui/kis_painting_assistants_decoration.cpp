@@ -33,6 +33,7 @@
 #include "KisViewManager.h"
 
 #include <QPainter>
+#include <QApplication>
 
 struct KisPaintingAssistantsDecoration::Private {
     Private()
@@ -47,6 +48,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool outlineVisible;
     bool snapOnlyOneAssistant;
     KisPaintingAssistantSP firstAssistant;
+    KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
     QColor m_assistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
     bool m_isEditingAssistants = false;
@@ -290,6 +292,23 @@ QList<KisPaintingAssistantSP> KisPaintingAssistantsDecoration::assistants() cons
     return assistants;
 }
 
+KisPaintingAssistantSP KisPaintingAssistantsDecoration::selectedAssistant()
+{
+    return d->selectedAssistant;
+}
+
+void KisPaintingAssistantsDecoration::setSelectedAssistant(KisPaintingAssistantSP assistant)
+{
+    d->selectedAssistant = assistant;
+    emit selectedAssistantChanged();
+}
+
+void KisPaintingAssistantsDecoration::deselectAssistant()
+{
+    d->selectedAssistant.clear();
+}
+
+
 void KisPaintingAssistantsDecoration::setAssistantVisible(bool set)
 {
     d->assistantVisible=set;
@@ -421,6 +440,17 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     QPainterPath bgPath;
     bgPath.addRoundedRect(QRectF(actionsBGRectangle.x(), actionsBGRectangle.y(), 110, 40), 6, 6);
     QPen stroke(QColor(60, 60, 60, 80), 2);
+
+    // if the assistant is selected, make outline stroke fatter and use theme's highlight color
+    // for better visual feedback
+    if (selectedAssistant()) { // there might not be a selected assistant, so do not seg fault
+        if (assistant->buttonPosition() == selectedAssistant()->buttonPosition()) {
+            stroke.setWidth(4);
+            stroke.setColor(qApp->palette().color(QPalette::Highlight));
+        }
+    }
+
+    // draw the final result
     gc.setPen(stroke);
     gc.fillPath(bgPath, backgroundColor);
     gc.drawPath(bgPath);
@@ -438,5 +468,6 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     }
 
     gc.drawPixmap(iconDeletePosition, d->m_iconDelete);
+
 
 }

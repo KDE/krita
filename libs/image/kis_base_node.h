@@ -499,7 +499,7 @@ public:
     void setUseInTimeline(bool value);
 
     bool isAnimated() const;
-    virtual void enableAnimation();
+    void enableAnimation();
 
     virtual void setImage(KisImageWSP image);
 

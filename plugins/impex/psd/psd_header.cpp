@@ -109,7 +109,7 @@ bool PSDHeader::valid()
             return false;
         }
     }
-    else if (version == 2) {
+    else /* if (version == 2) */ {
         if (height < 1 || height > 300000) {
             error = QString("Height out of range: %1").arg(height);
             return false;

@@ -39,8 +39,6 @@ public:
 
     void updateGeometries() override;
 
-    QMap<QString, KisAction*> globalActions() const;
-
     void setShowInTimeline(KisAction *action);
 
     void setActionManager( KisActionManager * actionManager);
@@ -51,6 +49,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotUpdateLayersMenu();
+    void slotUpdateFrameActions();
 
     void slotAddNewLayer();
     void slotAddExistingLayer(QAction *action);
@@ -62,7 +61,49 @@ private Q_SLOTS:
 
     void slotNewFrame();
     void slotCopyFrame();
-    void slotRemoveFrame();
+
+
+    void slotInsertKeyframesLeft(int count = -1, bool forceEntireColumn = false);
+    void slotInsertKeyframesRight(int count = -1, bool forceEntireColumn = false);
+
+    void slotInsertKeyframesLeftCustom();
+    void slotInsertKeyframesRightCustom();
+
+    void slotRemoveFrame(bool forceEntireColumn = false, bool needsOffset = false);
+    void slotRemoveFramesAndShift(bool forceEntireColumn = false);
+
+    void slotInsertColumnsLeft(int count = -1);
+    void slotInsertColumnsLeftCustom();
+
+    void slotInsertColumnsRight(int count = -1);
+    void slotInsertColumnsRightCustom();
+
+    void slotRemoveColumns();
+    void slotRemoveColumnsAndShift();
+
+    void slotInsertHoldFrames(int count = 1, bool forceEntireColumn = false);
+    void slotRemoveHoldFrames(int count = 1, bool forceEntireColumn = false);
+
+    void slotInsertHoldFramesCustom();
+    void slotRemoveHoldFramesCustom();
+
+    void slotInsertHoldColumns(int count = 1);
+    void slotRemoveHoldColumns(int count = 1);
+
+    void slotInsertHoldColumnsCustom();
+    void slotRemoveHoldColumnsCustom();
+
+    void slotMirrorFrames(bool forceEntireColumn = false);
+    void slotMirrorColumns();
+
+
+    void slotCopyFrames(bool forceEntireColumn = false);
+    void slotCutFrames(bool forceEntireColumn = false);
+    void slotPasteFrames(bool forceEntireColumn = false);
+
+    void slotCopyColumns();
+    void slotCutColumns();
+    void slotPasteColumns();
 
     void slotReselectCurrentIndex();
 
@@ -85,6 +126,26 @@ private Q_SLOTS:
 
 private:
     void setFramesPerSecond(int fps);
+    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
+
+    void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
+
+    void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
+
+    QModelIndexList calculateSelectionSpan(bool forceEntireColumn, bool editableOnly = true) const;
+    void cutCopyImpl(bool forceEntireColumn, bool copy);
+
+    int defaultNumberOfFramesToAdd() const;
+    void setDefaultNumberOfFramesToAdd(int value) const;
+
+    int defaultNumberOfColumnsToAdd() const;
+    void setDefaultNumberOfColumnsToAdd(int value) const;
+
+    int defaultNumberOfFramesToRemove() const;
+    void setDefaultNumberOfFramesToRemove(int value) const;
+
+    int defaultNumberOfColumnsToRemove() const;
+    void setDefaultNumberOfColumnsToRemove(int value) const;
 
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,

@@ -111,6 +111,8 @@ boost::optional<KoColor> KisStopGradientEditor::currentActiveStopColor() const
 
 void KisStopGradientEditor::stopChanged(int stop)
 {
+    if (!m_gradient) return;
+
     const bool hasStopSelected = stop >= 0;
 
     opacitySlider->setEnabled(hasStopSelected);
@@ -130,6 +132,8 @@ void KisStopGradientEditor::stopChanged(int stop)
 
 void KisStopGradientEditor::colorChanged(const KoColor& color)
 {
+    if (!m_gradient) return;
+
     QList<KoGradientStop> stops = m_gradient->stops();
 
     int currentStop = gradientSlider->selectedStop();
@@ -149,6 +153,8 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
 
 void KisStopGradientEditor::opacityChanged(qreal value)
 {
+    if (!m_gradient) return;
+
     QList<KoGradientStop> stops = m_gradient->stops();
 
     int currentStop = gradientSlider->selectedStop();
@@ -169,13 +175,16 @@ void KisStopGradientEditor::opacityChanged(qreal value)
 
 void KisStopGradientEditor::nameChanged()
 {
-     m_gradient->setName(nameedit->text());
+    if (!m_gradient) return;
 
-     emit sigGradientChanged();
+    m_gradient->setName(nameedit->text());
+    emit sigGradientChanged();
 }
 
 void KisStopGradientEditor::reverse()
 {
+    if (!m_gradient) return;
+
     QList<KoGradientStop> stops = m_gradient->stops();
     QList<KoGradientStop> reversedStops;
     for(const KoGradientStop& stop : stops) {

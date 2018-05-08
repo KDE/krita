@@ -137,21 +137,6 @@ void AnimationDocker::setMainWindow(KisViewManager *view)
     m_mainWindow = view->mainWindow();
 }
 
-void AnimationDocker::slotAddBlankFrame()
-{
-    addKeyframe(KisKeyframeChannel::Content.id(), false);
-}
-
-void AnimationDocker::slotAddDuplicateFrame()
-{
-    addKeyframe(KisKeyframeChannel::Content.id(), true);
-}
-
-void AnimationDocker::slotDeleteKeyframe()
-{
-    deleteKeyframe(KisKeyframeChannel::Content.id());
-}
-
 void AnimationDocker::slotAddOpacityKeyframe()
 {
     addKeyframe(KisKeyframeChannel::Opacity.id(), false);
@@ -434,10 +419,6 @@ void AnimationDocker::slotUpdateIcons()
     m_lastFrameAction->setIcon(KisIconUtils::loadIcon("lastframe"));
 
     updatePlayPauseIcon();
-    m_addBlankFrameAction->setIcon(KisIconUtils::loadIcon("addblankframe"));
-    m_addDuplicateFrameAction->setIcon(KisIconUtils::loadIcon("addduplicateframe"));
-    m_deleteKeyframeAction->setIcon(KisIconUtils::loadIcon("deletekeyframe"));
-
     updateLazyFrameIcon();
     updateDropFramesIcon();
 
@@ -490,8 +471,8 @@ void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
     if (!node.isNull()) {
         if (KisAnimationUtils::supportsContentFrames(node)) {
             isNodeAnimatable = true;
-            m_newKeyframeMenu->addAction(m_addBlankFrameAction);
-            m_deleteKeyframeMenu->addAction(m_deleteKeyframeAction);
+            KisActionManager::safePopulateMenu(m_newKeyframeMenu, "add_blank_frame", m_actionManager);
+            KisActionManager::safePopulateMenu(m_deleteKeyframeMenu, "remove_frames", m_actionManager);
         }
 
         if (node->inherits("KisLayer")) {
@@ -538,7 +519,8 @@ void AnimationDocker::deleteKeyframe(const QString &channel)
 
 void AnimationDocker::setActions(KisActionManager *actionMan)
 {
-    KisActionManager *actionManager = actionMan;
+    m_actionManager = actionMan;
+    if (!m_actionManager) return;
 
     m_previousFrameAction = new KisAction(i18n("Previous Frame"), m_animationWidget->btnPreviousFrame);
     m_previousFrameAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -569,17 +551,16 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
     m_playPauseAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
     m_animationWidget->btnPlay->setDefaultAction(m_playPauseAction);
 
-    m_addBlankFrameAction = new KisAction(KisAnimationUtils::addFrameActionName, m_animationWidget->btnAddKeyframe);
-    m_addBlankFrameAction->setActivationFlags(KisAction::ACTIVE_NODE);
-    m_animationWidget->btnAddKeyframe->setDefaultAction(m_addBlankFrameAction);
+    KisAction *action = 0;
 
-    m_addDuplicateFrameAction = new KisAction(KisAnimationUtils::duplicateFrameActionName, m_animationWidget->btnAddDuplicateFrame);
-    m_addDuplicateFrameAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-    m_animationWidget->btnAddDuplicateFrame->setDefaultAction(m_addDuplicateFrameAction);
+    action = m_actionManager->createAction("add_blank_frame");
+    m_animationWidget->btnAddKeyframe->setDefaultAction(action);
 
-    m_deleteKeyframeAction = new KisAction(KisAnimationUtils::removeFrameActionName, m_animationWidget->btnDeleteKeyframe);
-    m_deleteKeyframeAction->setActivationFlags(KisAction::ACTIVE_NODE);
-    m_animationWidget->btnDeleteKeyframe->setDefaultAction(m_deleteKeyframeAction);
+    action = m_actionManager->createAction("add_duplicate_frame");
+    m_animationWidget->btnAddDuplicateFrame->setDefaultAction(action);
+
+    action = m_actionManager->createAction("remove_frames");
+    m_animationWidget->btnDeleteKeyframe->setDefaultAction(action);
 
     m_newKeyframeMenu = new QMenu(this);
     m_animationWidget->btnAddKeyframe->setMenu(m_newKeyframeMenu);
@@ -597,14 +578,14 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
 
 
     // other new stuff
-    actionManager->addAction("previous_frame", m_previousFrameAction);
-    actionManager->addAction("next_frame", m_nextFrameAction);
+    m_actionManager->addAction("previous_frame", m_previousFrameAction);
+    m_actionManager->addAction("next_frame", m_nextFrameAction);
 
-    actionManager->addAction("previous_keyframe", m_previousKeyFrameAction);
-    actionManager->addAction("next_keyframe", m_nextKeyFrameAction);
+    m_actionManager->addAction("previous_keyframe", m_previousKeyFrameAction);
+    m_actionManager->addAction("next_keyframe", m_nextKeyFrameAction);
 
-    actionManager->addAction("first_frame", m_firstFrameAction);
-    actionManager->addAction("last_frame", m_lastFrameAction);
+    m_actionManager->addAction("first_frame", m_firstFrameAction);
+    m_actionManager->addAction("last_frame", m_lastFrameAction);
 
     {
         KisImageConfig cfg;
@@ -626,15 +607,10 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
 
 
      // these actions are created in the setupActionButton() above, so we need to add actions after that
-     actionManager->addAction("lazy_frame", m_lazyFrameAction);
-     actionManager->addAction("drop_frames", m_dropFramesAction);
+     m_actionManager->addAction("lazy_frame", m_lazyFrameAction);
+     m_actionManager->addAction("drop_frames", m_dropFramesAction);
 
-     actionManager->addAction("toggle_playback", m_playPauseAction);
-     actionManager->addAction("add_blank_frame", m_addBlankFrameAction);
-     actionManager->addAction("add_duplicate_frame", m_addDuplicateFrameAction);
-
-     actionManager->addAction("delete_keyframe", m_deleteKeyframeAction);
-
+     m_actionManager->addAction("toggle_playback", m_playPauseAction);
 
     QFont font;
     font.setPointSize(1.7 * font.pointSize());
@@ -652,9 +628,6 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
 
     connect(m_playPauseAction, SIGNAL(triggered()), this, SLOT(slotPlayPause()));
 
-    connect(m_addBlankFrameAction, SIGNAL(triggered()), this, SLOT(slotAddBlankFrame()));
-    connect(m_addDuplicateFrameAction, SIGNAL(triggered()), this, SLOT(slotAddDuplicateFrame()));
-    connect(m_deleteKeyframeAction, SIGNAL(triggered()), this, SLOT(slotDeleteKeyframe()));
     connect(m_lazyFrameAction, SIGNAL(toggled(bool)), this, SLOT(slotLazyFrameChanged(bool)));
     connect(m_dropFramesAction, SIGNAL(toggled(bool)), this, SLOT(slotDropFramesChanged(bool)));
 

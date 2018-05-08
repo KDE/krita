@@ -334,18 +334,15 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_image->unblockUpdates();
 
-    bool retval = true;
-
     if (!m_kraLoader->warningMessages().isEmpty()) {
-       m_doc->setWarningMessage(m_kraLoader->warningMessages().join("\n"));
-        retval = true;
-    }
-    if (retval) {
-        m_activeNodes = m_kraLoader->selectedNodes();
-        m_assistants = m_kraLoader->assistants();
+        // warnings do not interrupt loading process, so we do not return here
+        m_doc->setWarningMessage(m_kraLoader->warningMessages().join("\n"));
     }
 
-    return retval;
+    m_activeNodes = m_kraLoader->selectedNodes();
+    m_assistants = m_kraLoader->assistants();
+
+    return true;
 }
 
 void KraConverter::cancel()

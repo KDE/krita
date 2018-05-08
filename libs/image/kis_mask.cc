@@ -88,6 +88,12 @@ KisMask::KisMask(const KisMask& rhs)
     if (rhs.m_d->selection) {
         m_d->selection = new KisSelection(*rhs.m_d->selection.data());
         m_d->selection->setParentNode(this);
+
+        KisPixelSelectionSP pixelSelection = m_d->selection->pixelSelection();
+        if (pixelSelection->framesInterface()) {
+            addKeyframeChannel(pixelSelection->keyframeChannel());
+            enableAnimation();
+        }
     }
 }
 

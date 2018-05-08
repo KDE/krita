@@ -52,7 +52,10 @@ public:
     bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role) override;
 
     bool removeFrames(const QModelIndexList &indexes);
-    bool offsetFrames(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames);
+
+    bool removeFramesAndOffset(QModelIndexList indexes);
+
+    bool mirrorFrames(QModelIndexList indexes);
 
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
@@ -77,7 +80,7 @@ protected:
     virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
     KisImageWSP image() const;
 
-    KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0);
+    KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0, bool moveEmptyFrames = true);
 
 private Q_SLOTS:
     void slotFramerateChanged();

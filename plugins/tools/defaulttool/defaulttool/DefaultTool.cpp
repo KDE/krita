@@ -1567,24 +1567,6 @@ void DefaultTool::updateActions()
     action("object_align_vertical_center")->setEnabled(alignmentEnabled);
     action("object_align_vertical_bottom")->setEnabled(alignmentEnabled);
 
-
-    action("object_group")->setEnabled(multipleSelected);
-
-    action("object_unite")->setEnabled(multipleSelected);
-    action("object_intersect")->setEnabled(multipleSelected);
-    action("object_subtract")->setEnabled(multipleSelected);
-
-    bool hasShapesWithMultipleSegments = false;
-    Q_FOREACH (KoShape *shape, editableShapes) {
-        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
-        if (pathShape && pathShape->subpathCount() > 1) {
-            hasShapesWithMultipleSegments = true;
-            break;
-        }
-    }
-    action("object_split")->setEnabled(hasShapesWithMultipleSegments);
-
-
     const bool distributionEnabled = editableShapes.size() > 2;
 
     action("object_distribute_horizontal_left")->setEnabled(distributionEnabled);
@@ -1597,18 +1579,41 @@ void DefaultTool::updateActions()
     action("object_distribute_vertical_bottom")->setEnabled(distributionEnabled);
     action("object_distribute_vertical_gaps")->setEnabled(distributionEnabled);
 
-
-    bool hasGroupShape = false;
-    foreach (KoShape *shape, editableShapes) {
-        if (dynamic_cast<KoShapeGroup *>(shape)) {
-            hasGroupShape = true;
-            break;
-        }
-    }
-    action("object_ungroup")->setEnabled(hasGroupShape);
+    updateDistinctiveActions(editableShapes);
 
     emit selectionChanged(editableShapes.size());
 }
+
+void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes) {
+    const bool multipleSelected = editableShapes.size() > 1;
+
+    action("object_group")->setEnabled(multipleSelected);
+
+    action("object_unite")->setEnabled(multipleSelected);
+    action("object_intersect")->setEnabled(multipleSelected);
+    action("object_subtract")->setEnabled(multipleSelected);
+
+    bool hasShapesWithMultipleSegments = false;
+    Q_FOREACH (KoShape *shape, editableShapes) {
+            KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+            if (pathShape && pathShape->subpathCount() > 1) {
+                hasShapesWithMultipleSegments = true;
+                break;
+            }
+        }
+    action("object_split")->setEnabled(hasShapesWithMultipleSegments);
+
+
+    bool hasGroupShape = false;
+            foreach (KoShape *shape, editableShapes) {
+            if (dynamic_cast<KoShapeGroup *>(shape)) {
+                hasGroupShape = true;
+                break;
+            }
+        }
+    action("object_ungroup")->setEnabled(hasGroupShape);
+}
+
 
 KoToolSelection *DefaultTool::selection()
 {
@@ -1665,6 +1670,17 @@ QMenu* DefaultTool::popupActionsMenu()
     }
 
     return m_contextMenu.data();
+}
+
+void DefaultTool::addTransformActions(QMenu *menu) const {
+    menu->addAction(action("object_transform_rotate_90_cw"));
+    menu->addAction(action("object_transform_rotate_90_ccw"));
+    menu->addAction(action("object_transform_rotate_180"));
+    menu->addSeparator();
+    menu->addAction(action("object_transform_mirror_horizontally"));
+    menu->addAction(action("object_transform_mirror_vertically"));
+    menu->addSeparator();
+    menu->addAction(action("object_transform_reset"));
 }
 
 void DefaultTool::explicitUserStrokeEndRequest()

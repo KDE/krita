@@ -463,11 +463,12 @@ void KisLayer::updateSelectionMask()
 {
     KoProperties properties;
     properties.setProperty("active", true);
+    properties.setProperty("visible", true);
     QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
 
     // return the first visible mask
     Q_FOREACH (KisNodeSP mask, masks) {
-        if (mask->visible()) {
+        if (mask) {
             m_d->selectionMask = dynamic_cast<KisSelectionMask*>(mask.data());
             return;
         }

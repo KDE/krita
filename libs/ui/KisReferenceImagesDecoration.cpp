@@ -121,6 +121,7 @@ void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &up
     } else {
         QTransform transform = view()->viewConverter()->imageToWidgetTransform();
         if (!KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
+            d->previousTransform = transform;
             d->updateBufferByWidgetCoordinates(QRectF(0, 0, view()->width(), view()->height()));
         }
     }

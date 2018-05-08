@@ -46,7 +46,7 @@
 #include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_decoration.h>
 #include "kis_global.h"
-
+#include "VanishingPointAssistant.h"
 
 #include <math.h>
 
@@ -64,6 +64,7 @@ KisAssistantTool::~KisAssistantTool()
 
 void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+
     KisTool::activate(toolActivation, shapes);
 
     m_canvas->paintingAssistantsDecoration()->activateAssistantsEditor();
@@ -75,6 +76,12 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
 
     m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
     m_handleSize = 17;
+
+    if (m_optionsWidget) {
+        m_canvas->paintingAssistantsDecoration()->deselectAssistant();
+
+        updateToolOptionsUI();
+    }
 
     m_canvas->updateCanvas();
 }
@@ -115,16 +122,30 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
     // we probably need to stop storing a reference in m_handles and call the assistants directly
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
 
+
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
-        // find out which handle on all assistants is closes to the mouse position
-        Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
-            double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
-            if (dist < minDist) {
-                minDist = dist;
-                m_handleDrag = handle;
+
+        // find out which handle on all assistants is closest to the mouse position
+        // vanishing points have "side handles", so make sure to include that
+        {
+            QList<KisPaintingAssistantHandleSP> allAssistantHandles;
+            allAssistantHandles.append(assistant->handles());
+            allAssistantHandles.append(assistant->sideHandles());
+
+            Q_FOREACH (const KisPaintingAssistantHandleSP handle, allAssistantHandles) {
+
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+                if (dist < minDist) {
+                    minDist = dist;
+                    m_handleDrag = handle;
+
+                    assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+                }
             }
         }
+
+
 
 
         if(m_handleDrag && assistant->id() == "perspective") {
@@ -297,6 +318,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             m_cursorStart = event->point;
             m_currentAdjustment = QPointF();
             m_internalMode = MODE_EDITING;
+
+
+            assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+
             return;
         }
 
@@ -314,6 +339,8 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             newAssistantAllowed = false;
             assistant->setSnappingActive(!assistant->isSnappingActive()); // toggle
             assistant->uncache();//this updates the chache of the assistant, very important.
+
+            assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
         }
     }
     if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visiblity//
@@ -500,11 +527,16 @@ void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+    m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
+    updateToolOptionsUI(); // vanishing point assistant will get an extra option
+
     KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant.data());
     if (grid) {
         m_canvas->viewManager()->resourceProvider()->addPerspectiveGrid(grid);
     }
     m_newAssistant.clear();
+
+
 }
 
 void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
@@ -515,6 +547,56 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
     }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+
+    m_canvas->paintingAssistantsDecoration()->deselectAssistant();
+    updateToolOptionsUI();
+}
+
+void KisAssistantTool::assistantSelected(KisPaintingAssistantSP assistant)
+{
+     m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(assistant);
+     updateToolOptionsUI();
+}
+
+void KisAssistantTool::updateToolOptionsUI()
+{
+     KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+
+
+
+     if (m_selectedAssistant) {
+         bool isVanishingPointAssistant = m_selectedAssistant->id() == "vanishing point";
+         m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
+
+         if (isVanishingPointAssistant) {
+             QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
+             m_options.vanishingPointAngleSpinbox->setValue(assis->referenceLineDensity());
+         }
+
+     } else {
+         // nothing selected, so hide UI controls
+         m_options.vanishingPointAngleSpinbox->setVisible(false);
+     }
+}
+
+void KisAssistantTool::slotChangeVanishingPointAngle(double value)
+{
+    if ( m_canvas->paintingAssistantsDecoration()->assistants().length() == 0) {
+        return;
+    }
+
+    // get the selected assistant and change the angle value
+    KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+    if (m_selectedAssistant) {
+        bool isVanishingPointAssistant = m_selectedAssistant->id() == "vanishing point";
+
+        if (isVanishingPointAssistant) {
+            QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
+            assis->setReferenceLineDensity((float)value);
+        }
+    }
+
+    m_canvas->canvasWidget()->update();
 }
 
 void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
@@ -584,6 +666,9 @@ void KisAssistantTool::removeAllAssistants()
     m_canvas->paintingAssistantsDecoration()->removeAll();
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
+
+    m_canvas->paintingAssistantsDecoration()->deselectAssistant();
+    updateToolOptionsUI();
 }
 
 void KisAssistantTool::loadAssistants()
@@ -643,6 +728,10 @@ void KisAssistantTool::loadAssistants()
                 } else {
                     errors = true;
                 }
+            } else {
+                if (assistant) {
+                    assistant->loadCustomXml(&xml);
+                }
             }
             break;
         case QXmlStreamReader::EndElement:
@@ -672,6 +761,7 @@ void KisAssistantTool::loadAssistants()
         default:
             break;
         }
+
     }
     if (assistant) {
         errors = true;
@@ -710,9 +800,18 @@ void KisAssistantTool::saveAssistants()
     }
     xml.writeEndElement();
     xml.writeStartElement("assistants");
+
+
+
+
     Q_FOREACH (const KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
         xml.writeStartElement("assistant");
         xml.writeAttribute("type", assistant->id());
+
+        // custom assistant properties like angle density on vanishing point
+        assistant->saveCustomXml(&xml);
+
+        // handle information
         xml.writeStartElement("handles");
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
             xml.writeStartElement("handle");
@@ -772,8 +871,12 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.assistantsOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotAssistantOpacityChanged()));
 
 
+        connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
+
+
         m_options.assistantsColor->setColor(QColor(176, 176, 176, 255)); // grey default for all assistants
         m_options.assistantsOpacitySlider->setValue(100); // 100%
+        m_options.assistantsOpacitySlider->setPrefix(i18n("Opacity: "));
         m_options.assistantsOpacitySlider->setSuffix(" %");
 
         m_assistantsOpacity = m_options.assistantsOpacitySlider->value()*0.01;
@@ -781,6 +884,16 @@ QWidget *KisAssistantTool::createOptionWidget()
         QColor newColor = m_options.assistantsColor->color();
         newColor.setAlpha(m_assistantsOpacity*255);
         m_canvas->paintingAssistantsDecoration()->setAssistantsColor(newColor);
+
+        m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
+        m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));
+        m_options.vanishingPointAngleSpinbox->setRange(1.0, 30.0);
+        m_options.vanishingPointAngleSpinbox->setSingleStep(0.5);
+
+
+        m_options.vanishingPointAngleSpinbox->setVisible(false);
+
+
     }
     return m_optionsWidget;
 }

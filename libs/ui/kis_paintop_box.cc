@@ -60,7 +60,6 @@
 #include <kis_node.h>
 #include <brushengine/kis_paintop_config_widget.h>
 #include <kis_action.h>
-#include <KisLayoutSelector.h>
 
 #include "kis_canvas2.h"
 #include "kis_node_manager.h"
@@ -252,16 +251,18 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
             slSize    = m_sliderChooser[i]->addWidget<KisDoubleSliderSpinBox>("size", i18n("Size:"));
         }
 
-        slOpacity->setRange(0.0, 1.0, 2);
-        slOpacity->setValue(1.0);
-        slOpacity->setSingleStep(0.05);
+        slOpacity->setRange(0, 100, 0);
+        slOpacity->setValue(100);
+        slOpacity->setSingleStep(5);
+        slOpacity->setSuffix("%");
         slOpacity->setMinimumWidth(qMax(sliderWidth, slOpacity->sizeHint().width()));
         slOpacity->setFixedHeight(iconsize);
         slOpacity->setBlockUpdateSignalOnDrag(true);
 
-        slFlow->setRange(0.0, 1.0, 2);
-        slFlow->setValue(1.0);
-        slFlow->setSingleStep(0.05);
+        slFlow->setRange(0, 100, 0);
+        slFlow->setValue(100);
+        slFlow->setSingleStep(5);
+        slFlow->setSuffix("%");
         slFlow->setMinimumWidth(qMax(sliderWidth, slFlow->sizeHint().width()));
         slFlow->setFixedHeight(iconsize);
         slFlow->setBlockUpdateSignalOnDrag(true);
@@ -388,11 +389,6 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     KisActionRegistry::instance()->propertizeAction("mirror_actions", action);
     action->setDefaultWidget(mirrorActions);
     view->actionCollection()->addAction("mirror_actions", action);
-
-    action = new QWidgetAction(this);
-    KisActionRegistry::instance()->propertizeAction("select_layout", action);
-    view->actionCollection()->addAction("select_layout", action);
-    action->setDefaultWidget(new KisLayoutSelector(this));
 
     action = new QWidgetAction(this);
     KisActionRegistry::instance()->propertizeAction("workspaces", action);
@@ -757,7 +753,14 @@ void KisPaintopBox::setSliderValue(const QString& sliderID, qreal value)
     for (int i = 0; i < 3; ++i) {
         KisDoubleSliderSpinBox* slider = m_sliderChooser[i]->getWidget<KisDoubleSliderSpinBox>(sliderID);
         KisSignalsBlocker b(slider);
-        slider->setValue(value);
+
+        if (sliderID == "opacity" || sliderID == "flow") { // opacity and flows UI stored at 0-100%
+            slider->setValue(value*100);
+        } else {
+            slider->setValue(value); // brush size
+        }
+
+
     }
 }
 
@@ -1018,8 +1021,10 @@ void KisPaintopBox::sliderChanged(int n)
 
     KisSignalsBlocker blocker(m_optionWidget);
 
-    qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value();
-    qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value();
+    // flow and opacity are shown as 0-100% on the UI, but their data is actually 0-1. Convert those two values
+    // back for further work
+    qreal opacity = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("opacity")->value()/100;
+    qreal flow    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("flow")->value()/100;
     qreal size    = m_sliderChooser[n]->getWidget<KisDoubleSliderSpinBox>("size")->value();
 
 

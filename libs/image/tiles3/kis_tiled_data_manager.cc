@@ -140,7 +140,6 @@ bool KisTiledDataManager::write(KisPaintDeviceWriter &store)
 }
 bool KisTiledDataManager::read(QIODevice *stream)
 {
-    if (!stream) return false;
     clear();
 
     QWriteLocker locker(&m_lock);

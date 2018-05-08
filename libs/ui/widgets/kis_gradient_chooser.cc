@@ -161,8 +161,7 @@ void KisGradientChooser::slotUpdateIcons()
 void KisGradientChooser::update(KoResource * resource)
 {
     KoAbstractGradient *gradient = static_cast<KoAbstractGradient *>(resource);
-    m_lbName->setText(i18n(gradient->name().toUtf8().data()));
-
+    m_lbName->setText(gradient ? i18n(gradient->name().toUtf8().data()) : "");
     m_editGradient->setEnabled(gradient && gradient->removable());
 }
 

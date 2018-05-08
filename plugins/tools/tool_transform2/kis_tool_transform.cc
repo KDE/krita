@@ -770,7 +770,11 @@ void KisToolTransform::requestStrokeEnd()
 
 void KisToolTransform::requestStrokeCancellation()
 {
-    cancelStroke();
+    if (m_currentArgs.isIdentity()) {
+        cancelStroke();
+    } else {
+        slotResetTransform();
+    }
 }
 
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)

@@ -469,8 +469,7 @@ void SvgTextEditor::setTextWeightNormal()
 
 void SvgTextEditor::setTextWeightDemi()
 {
-    if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight()>QFont::Normal
-            && m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight()<QFont::Normal) {
+    if (m_textEditorWidget.richTextEdit->textCursor().charFormat().fontWeight() != QFont::Normal) {
         setTextBold(QFont::Normal);
     } else {
         setTextBold(QFont::DemiBold);

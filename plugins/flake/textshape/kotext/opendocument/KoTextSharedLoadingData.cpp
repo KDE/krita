@@ -591,7 +591,7 @@ KoParagraphStyle *KoTextSharedLoadingData::paragraphStyle(const QString &name, b
 
 QList<KoParagraphStyle *> KoTextSharedLoadingData::paragraphStyles(bool stylesDotXml) const
 {
-    return stylesDotXml ? d->paragraphStylesDotXmlStyles.values() : d->paragraphStylesDotXmlStyles.values();
+    return stylesDotXml ? d->paragraphStylesDotXmlStyles.values() : d->paragraphContentDotXmlStyles.values();
 }
 
 KoCharacterStyle *KoTextSharedLoadingData::characterStyle(const QString &name, bool stylesDotXml) const

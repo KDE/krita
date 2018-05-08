@@ -272,8 +272,6 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
 
-    widgets/KisLayoutSelector.cpp
-
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 

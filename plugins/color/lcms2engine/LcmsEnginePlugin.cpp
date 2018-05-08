@@ -113,9 +113,8 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 
     // Load the profiles
     if (!profileFilenames.empty()) {
-        KoColorProfile *profile = 0;
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
-            profile = new IccColorProfile(*it);
+            KoColorProfile *profile = new IccColorProfile(*it);
             Q_CHECK_PTR(profile);
 
             profile->load();

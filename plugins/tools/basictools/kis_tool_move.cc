@@ -198,8 +198,7 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
                     direction == Left ? QPoint(-moveStep,  0) :
                                         QPoint( moveStep,  0) ;
 
-    const bool showCoordinates =
-        m_optionsWidget ? m_optionsWidget->showCoordinates() : true;
+    const bool showCoordinates = m_optionsWidget->showCoordinates();
 
     if (showCoordinates) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

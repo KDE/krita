@@ -17,31 +17,31 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "kis_clone_info.h"
+#include "kis_node_uuid_info.h"
 
 #include "kis_debug.h"
 
-KisCloneInfo::KisCloneInfo()
+KisNodeUuidInfo::KisNodeUuidInfo()
 {
 }
 
-KisCloneInfo::KisCloneInfo(const QUuid& uuid)
+KisNodeUuidInfo::KisNodeUuidInfo(const QUuid& uuid)
 {
     m_uuid = uuid;
 }
 
-KisCloneInfo::KisCloneInfo(const QString& name)
+KisNodeUuidInfo::KisNodeUuidInfo(const QString& name)
 {
     m_name = name;
 }
 
-KisCloneInfo::KisCloneInfo(KisNodeSP node)
+KisNodeUuidInfo::KisNodeUuidInfo(KisNodeSP node)
 {
     m_uuid = node->uuid();
     m_name = node->name();
 }
 
-KisNodeSP KisCloneInfo::findNode(KisNodeSP rootNode)
+KisNodeSP KisNodeUuidInfo::findNode(KisNodeSP rootNode)
 {
     if (check(rootNode))
         return rootNode;
@@ -56,7 +56,7 @@ KisNodeSP KisCloneInfo::findNode(KisNodeSP rootNode)
     return node;
 }
 
-bool KisCloneInfo::check(KisNodeSP node)
+bool KisNodeUuidInfo::check(KisNodeSP node)
 {
     if (m_uuid == node->uuid())                     // every node has valid uuid
         return true;

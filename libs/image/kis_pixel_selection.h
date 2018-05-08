@@ -47,7 +47,7 @@ public:
     /**
      * Copy the selection
      */
-    KisPixelSelection(const KisPixelSelection& rhs);
+    KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot);
 
     ~KisPixelSelection() override;
 

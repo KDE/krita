@@ -61,7 +61,6 @@ bool psd_read_pattern(QIODevice *io)
 {
     quint32 pattern_length;
     psd_pattern pattern;
-    memset(&pattern, 0, sizeof(psd_pattern));
 
     psdread(io, &pattern_length);
     pattern_length = (pattern_length + 3) & ~3;

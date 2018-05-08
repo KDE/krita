@@ -54,6 +54,13 @@ class KisPaintDeviceFramesInterface;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
+namespace KritaUtils {
+enum DeviceCopyMode {
+    CopySnapshot = 0,
+    CopyAllFrames
+};
+}
+
 
 /**
  * A paint device contains the actual pixel data and offers methods
@@ -93,12 +100,12 @@ public:
     /**
      * Creates a copy of this device.
      *
-     * If \p copyFrames is false, the newly created device clones the
+     * If \p copyMode is CopySnapshot, the newly created device clones the
      * current frame of \p rhs only (default and efficient
-     * behavior). If \p copyFrames is true, the new device is a deep
+     * behavior). If \p copyFrames is CopyAllFrames, the new device is a deep
      * copy of the source with all the frames included.
      */
-    KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false, KisNode *newParentNode = 0);
+    KisPaintDevice(const KisPaintDevice& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot, KisNode *newParentNode = 0);
     ~KisPaintDevice() override;
 
 protected:

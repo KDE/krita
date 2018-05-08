@@ -462,6 +462,18 @@ public:
     bool autoFillMarkers() const;
     void setAutoFillMarkers(bool value);
 
+public:
+    struct KRITAFLAKE_EXPORT PointSelectionChangeListener : public ShapeChangeListener {
+        void notifyShapeChanged(ChangeType type, KoShape *shape) override;
+        virtual void recommendPointSelectionChange(KoPathShape *shape, const QList<KoPathPointIndex> &newSelection) = 0;
+        virtual void notifyPathPointsChanged(KoPathShape *shape) = 0;
+    };
+
+    void recommendPointSelectionChange(const QList<KoPathPointIndex> &newSelection);
+
+protected:
+    void notifyPointsChanged();
+
 private:
     /// constructor: to be used in cloneShape(), not in descendants!
     /// \internal

@@ -278,6 +278,7 @@ Item {
         height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
+    }
     Flickable {
         id: configNeeded;
         visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;

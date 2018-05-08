@@ -38,7 +38,7 @@ class QPainter;
 * This class handles the selection of points. It makes sure
 * the canvas is repainted when the selection changes.
 */
-class KRITAFLAKE_EXPORT KoPathToolSelection : public KoToolSelection
+class KRITAFLAKE_EXPORT KoPathToolSelection : public KoToolSelection, public KoPathShape::PointSelectionChangeListener
 {
     Q_OBJECT
 
@@ -144,6 +144,11 @@ public:
 
     /// reimplemented from KoToolSelection
     bool hasSelection() override;
+
+
+    void recommendPointSelectionChange(KoPathShape *shape, const QList<KoPathPointIndex> &newSelection);
+    void notifyPathPointsChanged(KoPathShape *shape) override;
+    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape);
 
 Q_SIGNALS:
     void selectionChanged();

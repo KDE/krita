@@ -270,6 +270,20 @@ public:
     {
     }
 
+    void init() override {
+        QList<KisSelectionMaskSP> *newActiveMasks;
+
+        if (isFinalizing()) {
+            newActiveMasks = &m_activeAfter;
+        } else {
+            newActiveMasks = &m_activeBefore;
+        }
+
+        Q_FOREACH (KisSelectionMaskSP mask, *newActiveMasks) {
+            mask->setActive(false);
+        }
+    }
+
     void end() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
@@ -488,6 +502,14 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
 
         const int indexOfActiveNode = filteredNodes.indexOf(m_activeNode);
         QList<KisSelectionMaskSP> activeMasks = findActiveSelectionMasks(filteredNodes);
+
+        // we will deactivate the masks before processing, so we should
+        // save their list in a convenient form
+        QSet<KisNodeSP> activeMaskNodes;
+        Q_FOREACH (KisSelectionMaskSP mask, activeMasks) {
+            activeMaskNodes.insert(mask);
+        }
+
         const bool haveActiveMasks = !activeMasks.isEmpty();
 
         if (!newParent) return;
@@ -497,6 +519,15 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                                                                m_image, false));
 
         if (haveActiveMasks) {
+            /**
+             * We should first disable the currently active masks, after the operation
+             * completed their cloned counterparts will be activated instead.
+             *
+             * HINT: we should deactivate the masks before cloning, because otherwise
+             *       KisGroupLayer::allowAsChild() will not let the second mask to be
+             *       added to the list of child nodes. See bug 382315.
+             */
+
             addCommand(new ActivateSelectionMasksCommand(activeMasks,
                                                          QList<KisSelectionMaskSP>(),
                                                          false));
@@ -517,7 +548,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                 }
 
                 newNodes << newNode;
-                if (haveActiveMasks && toActiveSelectionMask(node)) {
+                if (haveActiveMasks && activeMaskNodes.contains(node)) {
                     KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
                     newActiveMasks << mask;
                 }
@@ -534,7 +565,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                 KisNodeSP newNode = node;
 
                 newNodes << newNode;
-                if (haveActiveMasks && toActiveSelectionMask(node)) {
+                if (haveActiveMasks && activeMaskNodes.contains(node)) {
                     KisSelectionMaskSP mask = dynamic_cast<KisSelectionMask*>(newNode.data());
                     newActiveMasks << mask;
                 }
@@ -552,6 +583,10 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
 
 
         if (haveActiveMasks) {
+            /**
+             * Activate the cloned counterparts of the masks after the operation
+             * is complete.
+             */
             addCommand(new ActivateSelectionMasksCommand(QList<KisSelectionMaskSP>(),
                                                          newActiveMasks,
                                                          true));

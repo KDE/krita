@@ -84,7 +84,7 @@ KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 int KisRasterKeyframeChannel::frameId(KisKeyframeSP keyframe) const
 {
     KisRasterKeyframe *key = dynamic_cast<KisRasterKeyframe*>(keyframe.data());
-    Q_ASSERT(key != 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(key, -1);
     return key->frameId;
 }
 

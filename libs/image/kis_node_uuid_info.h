@@ -17,22 +17,22 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef KIS_CLONE_INFO_H
-#define KIS_CLONE_INFO_H
+#ifndef kis_node_uuid_info_H
+#define kis_node_uuid_info_H
 
 #include <QUuid>
 #include <QString>
 #include "kritaimage_export.h"
 #include "kis_node.h"
 
-class KRITAIMAGE_EXPORT KisCloneInfo
+class KRITAIMAGE_EXPORT KisNodeUuidInfo
 {
 
 public:
-    KisCloneInfo();
-    KisCloneInfo(const QUuid& uuid);
-    KisCloneInfo(const QString& name);
-    KisCloneInfo(KisNodeSP node);
+    KisNodeUuidInfo();
+    KisNodeUuidInfo(const QUuid& uuid);
+    KisNodeUuidInfo(const QString& name);
+    KisNodeUuidInfo(KisNodeSP node);
     
 public:
     QUuid uuid()
@@ -56,4 +56,4 @@ private:
     QString m_name;
 };
 
-#endif // KIS_CLONE_INFO_H
+#endif // kis_node_uuid_info_H

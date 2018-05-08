@@ -36,10 +36,10 @@
 #include <kis_external_layer_iface.h>
 
 struct KisOpenRasterStackSaveVisitor::Private {
-    Private() : currentElement(0) {}
+    Private() {}
     KisOpenRasterSaveContext* saveContext;
     QDomDocument layerStack;
-    QDomElement* currentElement;
+    QDomElement currentElement;
     vKisNodeSP activeNodes;
 };
 
@@ -105,10 +105,10 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGeneratorLayer* layer)
 
 bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
 {
-    QDomElement* previousElt = d->currentElement;
+    QDomElement previousElt = d->currentElement;
 
     QDomElement elt = d->layerStack.createElement("stack");
-    d->currentElement = &elt;
+    d->currentElement = elt;
     saveLayerInfo(elt, layer);
     QString isolate = "isolate";
     if (layer->passThroughMode()) {
@@ -117,8 +117,8 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
     elt.setAttribute("isolation", isolate);
     visitAll(layer);
 
-    if (previousElt) {
-        previousElt->insertBefore(elt, QDomNode());
+    if (!previousElt.isNull()) {
+        previousElt.insertBefore(elt, QDomNode());
         d->currentElement = previousElt;
     } else {
         QDomElement imageElt = d->layerStack.createElement("image");
@@ -134,7 +134,7 @@ bool KisOpenRasterStackSaveVisitor::visit(KisGroupLayer *layer)
         imageElt.setAttribute("yres", yRes);
         imageElt.appendChild(elt);
         d->layerStack.insertBefore(imageElt, QDomNode());
-        d->currentElement = 0;
+        d->currentElement = QDomElement();
         d->saveContext->saveStack(d->layerStack);
     }
 
@@ -166,7 +166,7 @@ bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     elt.setAttribute("src", filename);
-    d->currentElement->insertBefore(elt, QDomNode());
+    d->currentElement.insertBefore(elt, QDomNode());
 
     return true;
 }

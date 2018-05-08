@@ -181,7 +181,7 @@ class Palette_Docker(DockWidget):
     def slot_add_entry(self):
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
-                color = self.canvas().view().foreGroundColor()
+                color = self.canvas().view().foregroundColor()
                 success = self.paletteView.addEntryWithDialog(color)
                 if success is True:
                     self.slot_fill_combobox()

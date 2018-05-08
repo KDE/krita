@@ -224,8 +224,9 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
 
     if (handleConnected(KoConnectionShape::StartHandle) && handleConnected(KoConnectionShape::EndHandle)) {
         QPointF intersection;
-        bool connected = false;
-        do {
+
+        // TODO: check if this loop actually ever exits? (DK)
+        while (true) {
             // first check if directions from current edge points intersect
             if (intersects(edgePoint1, direction1, edgePoint2, direction2, intersection)) {
                 // directions intersect, we have another edge point and be done
@@ -249,7 +250,7 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
                 // we are not going into the same direction, so switch direction
                 direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
             }
-        } while (! connected);
+        }
     }
 
     path.append(edges1);

@@ -60,11 +60,24 @@ private:
                    const QPalette &palette,
                    const QPen &gridPen) const;
 
-private Q_SLOTS:
-    void slotInsertColumnLeft();
-    void slotInsertColumnRight();
-    void slotClearColumns(bool removeColumns = false);
-    void slotRemoveColumns();
+Q_SIGNALS:
+    void sigInsertColumnsLeft();
+    void sigInsertColumnsRight();
+    void sigInsertColumnsLeftCustom();
+    void sigInsertColumnsRightCustom();
+    void sigRemoveColumns();
+    void sigRemoveColumnsAndShift();
+
+    void sigInsertHoldColumns();
+    void sigRemoveHoldColumns();
+    void sigInsertHoldColumnsCustom();
+    void sigRemoveHoldColumnsCustom();
+
+    void sigMirrorColumns();
+
+    void sigCutColumns();
+    void sigCopyColumns();
+    void sigPasteColumns();
 
 private:
     struct Private;

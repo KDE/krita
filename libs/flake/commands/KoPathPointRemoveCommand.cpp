@@ -182,6 +182,9 @@ void KoPathPointRemoveCommand::undo()
 {
     KUndo2Command::undo();
     KoPathShape * lastPathShape = 0;
+
+    QMap<KoPathShape *, QList<KoPathPointIndex>> pointsMap;
+
     for (int i = 0; i < d->pointDataList.size(); ++i) {
         const KoPathPointData &pd = d->pointDataList.at(i);
         if (lastPathShape && lastPathShape != pd.pathShape) {
@@ -190,10 +193,18 @@ void KoPathPointRemoveCommand::undo()
         }
         pd.pathShape->insertPoint(d->points[i], pd.pointIndex);
         lastPathShape = pd.pathShape;
+
+        pointsMap[pd.pathShape].append(pd.pointIndex);
     }
+
     if (lastPathShape) {
         lastPathShape->normalize();
         lastPathShape->update();
     }
+
+    for (auto it = pointsMap.constBegin(); it != pointsMap.constEnd(); ++it) {
+        it.key()->recommendPointSelectionChange(it.value());
+    }
+
     d->deletePoints = false;
 }

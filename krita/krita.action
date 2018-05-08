@@ -2034,8 +2034,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_blank_frame">
-      <icon></icon>
-      <text>Add blank frame</text>
+      <icon>addblankframe</icon>
+      <text>Create Blank Frame</text>
       <whatsThis></whatsThis>
       <toolTip>Add blank frame</toolTip>
       <iconText>Add blank frame</iconText>
@@ -2046,8 +2046,8 @@
       <statusTip></statusTip>
     </Action>
     <Action name="add_duplicate_frame">
-      <icon></icon>
-      <text>Copy Frame</text>
+      <icon>addduplicateframe</icon>
+      <text>Create Duplicate Frame</text>
       <whatsThis></whatsThis>
       <toolTip>Add duplicate frame</toolTip>
       <iconText>Add duplicate frame</iconText>
@@ -2129,18 +2129,6 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="add_blank_frame">
-      <icon></icon>
-      <text>Add blank frame</text>
-      <whatsThis></whatsThis>
-      <toolTip>Add blank frame</toolTip>
-      <iconText>Add blank frame</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="show_in_timeline">
       <icon></icon>
       <text>Show in Timeline</text>
@@ -2151,56 +2139,370 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="insert_n_frames_left">
-      <icon></icon>
-      <text>Insert N Frame Left</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert N Frame Left</toolTip>
-      <iconText>Insert N Frame Left</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="insert_n_frames_right">
-      <icon></icon>
-      <text>Insert N Frame Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert N Frame Right</toolTip>
-      <iconText>Insert N Frame Right</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="clear_animation_columns">
-      <icon></icon>
-      <text>Clear Columns</text>
-      <whatsThis></whatsThis>
-      <toolTip>Clear Columns</toolTip>
-      <iconText>Clear Columns</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="remove_animation_columns">
-      <icon></icon>
-      <text>Remove Columns</text>
-      <whatsThis></whatsThis>
-      <toolTip>Remove Columns</toolTip>
-      <iconText>Remove Columns</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-  </Actions>
 
+    <Action name="insert_keyframes_right">
+      <icon></icon>
+      <text>Insert Keyframe Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert keyframes to the right of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_keyframes_left">
+      <icon></icon>
+      <text>Insert Keyframe Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert keyframes to the left of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_n_keyframes_right">
+      <icon></icon>
+      <text>Insert N Keyframes Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert several keyframes to the right of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_n_keyframes_left">
+      <icon></icon>
+      <text>Insert N Keyframes Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert several keyframes to the left of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_frames_and_pull">
+      <icon></icon>
+      <text>Remove Frame and Pull</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove keyframes moving the tail of animation to the left</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_frames">
+      <icon>deletekeyframe</icon>
+      <text>Remove Keyframe</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove keyframes without moving anything around</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_columns_right">
+      <icon></icon>
+      <text>Insert Column Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert column to the right of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_columns_left">
+      <icon></icon>
+      <text>Insert Column Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert column to the left of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_n_columns_right">
+      <icon></icon>
+      <text>Insert N Columns Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert several columns to the right of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_n_columns_left">
+      <icon></icon>
+      <text>Insert N Columns Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert several columns to the left of selection moving the tail of animation to the right</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_columns_and_pull">
+      <icon></icon>
+      <text>Remove Column and Pull</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove columns moving the tail of animation to the left</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_columns">
+      <icon></icon>
+      <text>Remove Column</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove columns without moving anything around</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_hold_frame">
+      <icon></icon>
+      <text>Insert Hold Frame</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a hold frame after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_n_hold_frames">
+      <icon></icon>
+      <text>Insert N Hold Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N hold frames after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_hold_frame">
+      <icon></icon>
+      <text>Remove Hold Frame</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove a hold frame after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_n_hold_frames">
+      <icon></icon>
+      <text>Remove N Hold Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove N hold frames after every keyframe</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_hold_column">
+      <icon></icon>
+      <text>Insert Hold Column</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert a hold column into the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="insert_n_hold_columns">
+      <icon></icon>
+      <text>Insert N Hold Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Insert N hold columns into the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_hold_column">
+      <icon></icon>
+      <text>Remove Hold Column</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove a hold column from the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="remove_n_hold_columns">
+      <icon></icon>
+      <text>Remove N Hold Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Remove N hold columns from the frame at the current position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="mirror_frames">
+      <icon></icon>
+      <text>Mirror Frames</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror frames' position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="mirror_columns">
+      <icon></icon>
+      <text>Mirror Columns</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror columns' position</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="copy_frames_to_clipboard">
+      <icon></icon>
+      <text>Copy to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_frames_to_clipboard">
+      <icon></icon>
+      <text>Cut to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut frames to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="paste_frames_from_clipboard">
+      <icon></icon>
+      <text>Paste from Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste frames from clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="copy_columns_to_clipboard">
+      <icon></icon>
+      <text>Copy Columns to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Copy columns to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="cut_columns_to_clipboard">
+      <icon></icon>
+      <text>Cut Columns to Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Cut columns to clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="paste_columns_from_clipboard">
+      <icon></icon>
+      <text>Paste Columns from Clipboard</text>
+      <whatsThis></whatsThis>
+      <toolTip>Paste columns from clipboard</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
   </Actions>
 

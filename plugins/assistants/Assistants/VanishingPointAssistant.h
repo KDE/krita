@@ -50,7 +50,13 @@ public:
     QPointF buttonPosition() const override;
     int numHandles() const override { return 1; }
 
-    bool isAssistantComplete() const;
+    float referenceLineDensity();
+    void setReferenceLineDensity(float value);
+
+    bool isAssistantComplete() const;    
+
+    void saveCustomXml(QXmlStreamWriter* xml) override;
+    bool loadCustomXml(QXmlStreamReader* xml) override;
 
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
@@ -58,6 +64,9 @@ protected:
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     KisCanvas2 *m_canvas;
+
+    float m_referenceLineDensity = 15.0;
+
 };
 
 class VanishingPointAssistantFactory : public KisPaintingAssistantFactory

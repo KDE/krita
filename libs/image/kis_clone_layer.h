@@ -23,7 +23,7 @@
 #include "kis_layer.h"
 
 #include <kritaimage_export.h>
-#include "kis_clone_info.h"
+#include "kis_node_uuid_info.h"
 
 class KisNodeVisitor;
 
@@ -94,8 +94,8 @@ public:
      * from layer is set when all layers have been created, not during
      * loading.
      */
-    void setCopyFromInfo(KisCloneInfo info);
-    KisCloneInfo copyFromInfo() const;
+    void setCopyFromInfo(KisNodeUuidInfo info);
+    KisNodeUuidInfo copyFromInfo() const;
 
     void setCopyFrom(KisLayerSP layer);
     KisLayerSP copyFrom() const;

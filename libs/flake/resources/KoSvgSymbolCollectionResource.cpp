@@ -65,7 +65,7 @@ void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &c
 QImage KoSvgSymbol::icon()
 {
     KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
-    Q_ASSERT(group);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(group, QImage());
 
     QRectF rc = group->boundingRect().normalized();
 

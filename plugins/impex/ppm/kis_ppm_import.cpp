@@ -236,11 +236,11 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
     KisImageSP image = new KisImage(document->createUndoStore(), width, height, colorSpace, "built image");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    KisPpmFlow* ppmFlow = 0;
+    QScopedPointer<KisPpmFlow> ppmFlow;
     if (isAscii) {
-        ppmFlow = new KisAsciiPpmFlow(io);
+        ppmFlow.reset(new KisAsciiPpmFlow(io));
     } else {
-        ppmFlow = new KisBinaryPpmFlow(io, pixelsize * width);
+        ppmFlow.reset(new KisBinaryPpmFlow(io, pixelsize * width));
     }
 
     for (int v = 0; v < height; ++v) {

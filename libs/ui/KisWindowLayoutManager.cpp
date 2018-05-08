@@ -39,8 +39,6 @@ struct KisWindowLayoutManager::Private {
     bool primaryWorkspaceFollowsFocus{false};
     QUuid primaryWindow;
 
-    QString lastLayoutName;
-
     QVector<DisplayLayout*> displayLayouts;
 
     void loadDisplayLayouts() {
@@ -188,6 +186,8 @@ void KisWindowLayoutManager::activeDocumentChanged(KisDocument *document)
 {
     if (d->showImageInAllWindows) {
         Q_FOREACH(QPointer<KisMainWindow> window, KisPart::instance()->mainWindows()) {
+            if (window->isHidden()) continue;
+
             const auto view = window->activeView();
             if (!view || view->document() != document) {
                 window->showDocument(document);
@@ -207,16 +207,8 @@ void KisWindowLayoutManager::slotFocusChanged(QWidget *old, QWidget *now)
     newMainWindow->windowFocused();
 }
 
-QString KisWindowLayoutManager::lastLayoutName()
-{
-    return d->lastLayoutName;
-}
-
 void KisWindowLayoutManager::setLastUsedLayout(const KisWindowLayoutResource *layout)
 {
-    // For layout selector, accept both window layouts and sessions
-    d->lastLayoutName = layout->name();
-
     // For automatic switching, only allow a window layout proper
     auto *session = dynamic_cast<const KisSessionResource*>(layout);
     if (session) return;

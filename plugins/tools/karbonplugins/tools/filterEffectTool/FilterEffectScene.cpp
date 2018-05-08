@@ -297,7 +297,7 @@ QList<ConnectionSource> FilterEffectScene::selectedEffectItems() const
 
     Q_FOREACH (QGraphicsItem *item, selectedGraphicsItems) {
         EffectItemBase *effectItem = dynamic_cast<EffectItemBase *>(item);
-        if (!item) {
+        if (!effectItem) {
             continue;
         }
 

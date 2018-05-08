@@ -16,10 +16,10 @@ public Q_SLOTS:
     Canvas * canvas() const /Factory/;
     void activateResource(Resource *resource);
 
-    ManagedColor *foreGroundColor() const /Factory/;
+    ManagedColor *foregroundColor() const /Factory/;
     void setForeGroundColor(ManagedColor *color);
 
-    ManagedColor *backGroundColor() const /Factory/;
+    ManagedColor *backgroundColor() const /Factory/;
     void setBackGroundColor(ManagedColor *color);
 
     Resource *currentBrushPreset() const /Factory/;

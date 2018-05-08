@@ -233,8 +233,8 @@ bool KisKraSaveVisitor::visit(KisTransformMask *mask)
     QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
     if (m_store->open(location)) {
         QByteArray a = doc.toByteArray();
-        bool retval = true;
-        retval = (m_store->write(a) == a.size());
+        bool retval = m_store->write(a) == a.size();
+
         if (!retval) {
             warnFile << "Could not write transform mask configuration";
         }

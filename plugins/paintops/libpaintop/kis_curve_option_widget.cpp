@@ -80,18 +80,20 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     m_curveOptionWidget->label_ymin->setText(minLabel);
     m_curveOptionWidget->label_ymax->setText(maxLabel);
 
-    m_curveOptionWidget->slider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
-    m_curveOptionWidget->slider->setValue(curveOption->value());
+    // strength settings is shown as 0-100%
+    m_curveOptionWidget->strengthSlider->setRange(curveOption->minValue()*100, curveOption->maxValue()*100, 0);
+    m_curveOptionWidget->strengthSlider->setValue(curveOption->value()*100);
+    m_curveOptionWidget->strengthSlider->setPrefix(i18n("Strength: "));
+    m_curveOptionWidget->strengthSlider->setSuffix(i18n("%"));
+
 
     if (hideSlider) {
-         m_curveOptionWidget->slider->hide();
-         m_curveOptionWidget->strengthLabel->hide();
+         m_curveOptionWidget->strengthSlider->hide();
     }
-
 
     connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
     connect(m_curveOptionWidget->curveMode, SIGNAL(currentIndexChanged(int)), SLOT(updateMode()));
-    connect(m_curveOptionWidget->slider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));
+    connect(m_curveOptionWidget->strengthSlider, SIGNAL(valueChanged(qreal)), SLOT(updateValues()));
 }
 
 KisCurveOptionWidget::~KisCurveOptionWidget()
@@ -112,7 +114,7 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     m_curveOption->readOptionSetting(setting);
 
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
-    m_curveOptionWidget->slider->setValue(m_curveOption->value());
+    m_curveOptionWidget->strengthSlider->setValue(m_curveOption->value()*100);
     m_curveOptionWidget->checkBoxUseSameCurve->setChecked(m_curveOption->isSameCurveUsed());
     m_curveOptionWidget->curveMode->setCurrentIndex(m_curveOption->getCurveMode());
 
@@ -185,7 +187,7 @@ void KisCurveOptionWidget::updateLabelsOfCurrentSensor()
 
 void KisCurveOptionWidget::updateValues()
 {
-    m_curveOption->setValue(m_curveOptionWidget->slider->value());
+    m_curveOption->setValue(m_curveOptionWidget->strengthSlider->value()/100.0); // convert back to 0-1 for data
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
     disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emitSettingChanged();

@@ -530,7 +530,7 @@ void KisHSXColorSliderInput::update()
         m_hue=(hue*360.0);
     }
 
-    if (val==0 || val>0.999) {
+    if (val == 0) {
         m_sat = sat_backup;
     }
     else{

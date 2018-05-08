@@ -284,6 +284,21 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> fi
     nodeView->blockSignals(false);
 }
 
+void KisLayerBox::slotAddLayerBnClicked()
+{
+    if (m_canvas) {
+        KisNodeList nodes = m_nodeManager->selectedNodes();
+
+        if (nodes.size() == 1) {
+            KisAction *action = m_canvas->viewManager()->actionManager()->actionByName("add_new_paint_layer");
+            action->trigger();
+        } else {
+            KisAction *action = m_canvas->viewManager()->actionManager()->actionByName("create_quick_group");
+            action->trigger();
+        }
+    }
+}
+
 void KisLayerBox::setMainWindow(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
@@ -294,7 +309,7 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
                           action);
     }
 
-    connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
+    connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), this, SLOT(slotAddLayerBnClicked()));
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 
     KisActionManager *actionManager = kisview->actionManager();

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Jouni Pentikäinen <joupent@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISLAYOUTSELECTOR_H
-#define KISLAYOUTSELECTOR_H
+#ifndef KOPATHMERGEUTILS_H
+#define KOPATHMERGEUTILS_H
 
-#include <QComboBox>
+#include <boost/optional.hpp>
 
-class KisLayoutSelector : public QComboBox
-{
-    Q_OBJECT
+#include <QPointF>
 
-public:
-    KisLayoutSelector(QWidget *parent = 0);
-    ~KisLayoutSelector();
+class KoPathPoint;
 
-private Q_SLOTS:
-    void slotItemChanged(int);
+namespace KritaUtils {
 
-private:
-    void updateItems();
+boost::optional<QPointF> fetchControlPoint(KoPathPoint *pt, bool takeFirst);
+void makeSymmetric(KoPathPoint *pt, bool copyFromFirst);
+void restoreControlPoint(KoPathPoint *pt, bool restoreFirst, boost::optional<QPointF> savedPoint);
 
-    struct Private;
-    QScopedPointer<Private> d;
-};
+}
 
-#endif
+
+#endif // KOPATHMERGEUTILS_H

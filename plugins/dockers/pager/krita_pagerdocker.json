@@ -1,9 +1,0 @@
-{
-  "Id": "Pager Docker",
-  "Type": "Service",
-  "X-KDE-Library": "kritapagerdocker",
-  "X-KDE-ServiceTypes": [
-    "Krita/Dock"
-  ],
-  "X-Krita-Version": "28"
-}

@@ -332,7 +332,7 @@ psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len,
         state = inflate(&stream, Z_PARTIAL_FLUSH);
         if(state == Z_STREAM_END)
             break;
-        if(state == Z_DATA_ERROR || state != Z_OK)
+        if(state != Z_OK)
             break;
     }  while (stream.avail_out > 0);
 

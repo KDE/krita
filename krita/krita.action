@@ -1336,10 +1336,10 @@
     </Action>
     <Action name="InteractionTool">
       <icon></icon>
-      <text>Shape Manipulation Tool</text>
+      <text>Select Shapes Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Shape Manipulation Tool</toolTip>
-      <iconText>Shape Manipulation Tool</iconText>
+      <toolTip>Select Shapes Tool</toolTip>
+      <iconText>Select Shapes Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

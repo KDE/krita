@@ -423,6 +423,7 @@ endif()
         canvas/kis_animation_player.cpp
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
+        KisFrameDataSerializer.cpp
     )
 
 if(UNIX)

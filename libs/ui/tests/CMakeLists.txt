@@ -32,6 +32,9 @@ ecm_add_tests(
     LINK_LIBRARIES kritaui kritaimage Qt5::Test
 )
 
+ecm_add_test( KisFrameSerializerTest.cpp
+    TEST_NAME krita-ui-KisFrameSerializerTest
+    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 ecm_add_test( kis_selection_decoration_test.cpp ../../../sdk/tests/stroke_testing_utils.cpp
     TEST_NAME krita-ui-KisSelectionDecorationTest

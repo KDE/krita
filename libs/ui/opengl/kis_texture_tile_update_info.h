@@ -64,6 +64,14 @@ public:
         allocate(pixelSize);
     }
 
+    DataBuffer(DataBuffer &&rhs)
+        : m_data(rhs.m_data),
+          m_pixelSize(rhs.m_pixelSize),
+          m_pool(rhs.m_pool)
+    {
+        rhs.m_data = 0;
+    }
+
     ~DataBuffer() {
         if (m_data) {
             m_pool->free(m_data, m_pixelSize);
@@ -91,6 +99,8 @@ public:
     }
 
 private:
+    Q_DISABLE_COPY(DataBuffer)
+
     quint8 *m_data;
     int m_pixelSize;
     KisTextureTileInfoPoolSP m_pool;

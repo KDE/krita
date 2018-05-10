@@ -36,7 +36,7 @@
 #include <kconfiggroup.h>
 #include <QIcon>
 
-KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
+KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, const QPixmap &pixmap_x2, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
 #ifdef Q_OS_LINUX
               | Qt::WindowStaysOnTopHint
@@ -49,6 +49,11 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     QImage img = pixmap.toImage();
+    if (devicePixelRatio() > 1) {
+        img = pixmap_x2.toImage();
+        img.setDevicePixelRatio(devicePixelRatioF());
+    }
+
     QFont font = this->font();
     font.setPointSize(11);
     font.setBold(true);

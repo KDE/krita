@@ -242,14 +242,15 @@ public:
         }
     }
 
-    KoColorConversionTransformation *generateProofingTransform(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
-                                                       KoColorConversionTransformation::Intent renderingIntent,
-                                                       KoColorConversionTransformation::Intent proofingIntent,
-                                                       KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                       KoColor gamutWarning,
-                                                       double adaptationState)
+    static KoColorConversionTransformation *generateProofingTransform(const KoColorSpace* srcCS,
+                                                                      const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
+                                                                      KoColorConversionTransformation::Intent renderingIntent,
+                                                                      KoColorConversionTransformation::Intent proofingIntent,
+                                                                      KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                      KoColor gamutWarning,
+                                                                      double adaptationState)
     {
-        return m_patchColorSpace->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
+        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
     }
 
     inline quint8* data() const {
@@ -301,7 +302,7 @@ public:
         return m_tileRow;
     }
 
-    inline quint32 pixelSize() const {
+    inline int pixelSize() const {
         return m_patchColorSpace->pixelSize();
     }
 

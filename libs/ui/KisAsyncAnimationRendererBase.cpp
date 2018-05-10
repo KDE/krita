@@ -25,7 +25,7 @@
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
 
-struct KisAsyncAnimationRendererBase::Private
+struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
 {
 
     KisSignalAutoConnectionsStore imageRequestConnections;

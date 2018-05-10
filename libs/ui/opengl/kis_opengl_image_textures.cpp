@@ -59,13 +59,10 @@ KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMa
 KisOpenGLImageTextures::KisOpenGLImageTextures()
     : m_image(0)
     , m_monitorProfile(0)
-    , m_proofingConfig(0)
-    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
-    , m_allChannelsSelected(true)
     , m_useOcio(false)
     , m_initialized(false)
 {
@@ -86,12 +83,10 @@ KisOpenGLImageTextures::KisOpenGLImageTextures(KisImageWSP image,
     , m_monitorProfile(monitorProfile)
     , m_renderingIntent(renderingIntent)
     , m_conversionFlags(conversionFlags)
-    , m_createNewProofingTransform(true)
     , m_tilesDestinationColorSpace(0)
     , m_internalColorManagementActive(true)
     , m_checkerTexture(0)
     , m_glFuncs(0)
-    , m_allChannelsSelected(true)
     , m_useOcio(false)
     , m_initialized(false)
 {
@@ -111,7 +106,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     // we use local static object for creating pools shared among
     // different images
     static KisTextureTileInfoPoolRegistry s_poolRegistry;
-    m_infoChunksPool = s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height);
+    m_updateInfoBuilder.setTextureInfoPool(s_poolRegistry.getPool(m_texturesInfo.width, m_texturesInfo.height));
 
     m_glFuncs->glGenTextures(1, &m_checkerTexture);
     createImageTextureTiles();
@@ -180,15 +175,6 @@ KisOpenGLImageTexturesSP KisOpenGLImageTextures::getImageTextures(KisImageWSP im
     }
 }
 
-QRect KisOpenGLImageTextures::calculateTileRect(int col, int row) const
-{
-    return m_image->bounds() &
-            QRect(col * m_texturesInfo.effectiveWidth,
-                  row * m_texturesInfo.effectiveHeight,
-                  m_texturesInfo.effectiveWidth,
-                  m_texturesInfo.effectiveHeight);
-}
-
 void KisOpenGLImageTextures::createImageTextureTiles()
 {
 
@@ -224,7 +210,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
         m_textureTiles.reserve((lastRow+1)*m_numCols);
         for (int row = 0; row <= lastRow; row++) {
             for (int col = 0; col <= lastCol; col++) {
-                QRect tileRect = calculateTileRect(col, row);
+                QRect tileRect = m_updateInfoBuilder.calculateTileRect(col, row, m_image);
 
                 KisTextureTile *tile = new KisTextureTile(tileRect,
                                                           &m_texturesInfo,
@@ -266,108 +252,8 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheNoConversion(const QRec
 // TODO: add sanity checks about the conformance of the passed srcImage!
 KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect, KisImageSP srcImage, bool convertColorSpace)
 {
-    const KoColorSpace *dstCS = m_tilesDestinationColorSpace;
-
-    ConversionOptions options;
-
-    if (convertColorSpace) {
-        options = ConversionOptions(dstCS, m_renderingIntent, m_conversionFlags);
-    }
-
-    KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo(options);
-
-    QRect updateRect = rect & srcImage->bounds();
-    if (updateRect.isEmpty() || !(m_initialized)) return info;
-
-    /**
-     * Why the rect is artificial? That's easy!
-     * It does not represent any real piece of the image. It is
-     * intentionally stretched to get through the overlappping
-     * stripes of neutrality and poke neighbouring tiles.
-     * Thanks to the rect we get the coordinates of all the tiles
-     * involved into update process
-     */
-
-    QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
-    artificialRect &= srcImage->bounds();
-
-    int firstColumn = xToCol(artificialRect.left());
-    int lastColumn = xToCol(artificialRect.right());
-    int firstRow = yToRow(artificialRect.top());
-    int lastRow = yToRow(artificialRect.bottom());
-
-    QBitArray channelFlags; // empty by default
-
-    if (m_channelFlags.size() != srcImage->projection()->colorSpace()->channels().size()) {
-        setChannelFlags(QBitArray());
-    }
-    if (!m_useOcio) { // Ocio does its own channel flipping
-        if (!m_allChannelsSelected) { // and we do it only if necessary
-            channelFlags = m_channelFlags;
-        }
-    }
-
-    qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
-    info->tileList.reserve(numItems);
-
-    const QRect bounds = srcImage->bounds();
-    const int levelOfDetail = srcImage->currentLevelOfDetail();
-
-    QRect alignedUpdateRect = updateRect;
-    QRect alignedBounds = bounds;
-
-    if (levelOfDetail) {
-        alignedUpdateRect = KisLodTransform::alignedRect(alignedUpdateRect, levelOfDetail);
-        alignedBounds = KisLodTransform::alignedRect(alignedBounds, levelOfDetail);
-    }
-
-    for (int col = firstColumn; col <= lastColumn; col++) {
-        for (int row = firstRow; row <= lastRow; row++) {
-
-            const QRect tileRect = calculateTileRect(col, row);
-            const QRect tileTextureRect = stretchRect(tileRect, m_texturesInfo.border);
-
-            QRect alignedTileTextureRect = levelOfDetail ?
-                        KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
-                        tileTextureRect;
-
-            KisTextureTileUpdateInfoSP tileInfo(
-                        new KisTextureTileUpdateInfo(col, row,
-                                                     alignedTileTextureRect,
-                                                     alignedUpdateRect,
-                                                     alignedBounds,
-                                                     levelOfDetail,
-                                                     m_infoChunksPool));
-            // Don't update empty tiles
-            if (tileInfo->valid()) {
-                tileInfo->retrieveData(srcImage->projection(), channelFlags, m_onlyOneChannelSelected, m_selectedChannelIndex);
-
-                //create transform
-                if (m_createNewProofingTransform) {
-                    const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_proofingConfig->proofingModel,m_proofingConfig->proofingDepth,m_proofingConfig->proofingProfile);
-                    m_proofingTransform.reset(tileInfo->generateProofingTransform(dstCS, proofingSpace, m_renderingIntent, m_proofingConfig->intent, m_proofingConfig->conversionFlags, m_proofingConfig->warningColor, m_proofingConfig->adaptationState));
-                    m_createNewProofingTransform = false;
-                }
-
-                if (convertColorSpace) {
-                    if (m_proofingConfig && m_proofingTransform && m_proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
-                        tileInfo->proofTo(dstCS, m_proofingConfig->conversionFlags, m_proofingTransform.data());
-                    } else {
-                        tileInfo->convertTo(dstCS, m_renderingIntent, m_conversionFlags);
-                    }
-                }
-
-                info->tileList.append(tileInfo);
-            }
-            else {
-                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << srcImage->bounds();
-            }
-        }
-    }
-
-    info->assignDirtyImageRect(rect);
-    info->assignLevelOfDetail(levelOfDetail);
-    return info;
+    if (!m_initialized) return new KisOpenGLUpdateInfo();
+    return m_updateInfoBuilder.buildUpdateInfo(rect, srcImage, convertColorSpace);
 }
 
 void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
@@ -463,34 +349,47 @@ void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProf
     m_renderingIntent = renderingIntent;
     m_conversionFlags = conversionFlags;
 
+    m_updateInfoBuilder.setConversionOptions(
+        ConversionOptions(m_tilesDestinationColorSpace,
+                          m_renderingIntent,
+                          m_conversionFlags));
+
     createImageTextureTiles();
 }
 
 void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
 {
-    m_channelFlags = channelFlags;
+    QBitArray targetChannelFlags = channelFlags;
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
     QList<KoChannelInfo*> channelInfo = projectionCs->channels();
 
-    if (m_channelFlags.size() != channelInfo.size()) {
-        m_channelFlags = QBitArray();
+    if (targetChannelFlags.size() != channelInfo.size()) {
+        targetChannelFlags = QBitArray();
     }
 
-    for (int i = 0; i < m_channelFlags.size(); ++i) {
-        if (m_channelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
+    int selectedChannelIndex = -1;
+
+    for (int i = 0; i < targetChannelFlags.size(); ++i) {
+        if (targetChannelFlags.testBit(i) && channelInfo[i]->channelType() == KoChannelInfo::COLOR) {
             selectedChannels++;
-            m_selectedChannelIndex = i;
+            selectedChannelIndex = i;
         }
     }
-    m_allChannelsSelected = (selectedChannels == m_channelFlags.size());
-    m_onlyOneChannelSelected = (selectedChannels == 1);
+    const bool allChannelsSelected = (selectedChannels == targetChannelFlags.size());
+    const bool onlyOneChannelSelected = (selectedChannels == 1);
+
+    // OCIO has its own channel swizzling
+    if (allChannelsSelected || m_useOcio) {
+        m_updateInfoBuilder.setChannelFlags(QBitArray(), false, -1);
+    } else {
+        m_updateInfoBuilder.setChannelFlags(targetChannelFlags, onlyOneChannelSelected, selectedChannelIndex);
+    }
 }
 
 void KisOpenGLImageTextures::setProofingConfig(KisProofingConfigurationSP proofingConfig)
 {
-    m_proofingConfig = proofingConfig;
-    m_createNewProofingTransform = true;
+    m_updateInfoBuilder.setProofingConfig(proofingConfig);
 }
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
@@ -515,6 +414,10 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 
     texturesInfo->effectiveWidth = texturesInfo->width - 2 * texturesInfo->border;
     texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;
+
+    m_updateInfoBuilder.setTextureBorder(texturesInfo->border);
+    m_updateInfoBuilder.setEffectiveTextureSize(
+        QSize(texturesInfo->effectiveWidth, texturesInfo->effectiveHeight));
 }
 
 bool KisOpenGLImageTextures::internalColorManagementActive() const
@@ -680,5 +583,10 @@ void KisOpenGLImageTextures::updateTextureFormat()
             KoColorSpaceRegistry::instance()->colorSpace(destinationColorModelId.id(),
                                                          destinationColorDepthId.id(),
                                                          profile);
+
+    m_updateInfoBuilder.setConversionOptions(
+        ConversionOptions(m_tilesDestinationColorSpace,
+                          m_renderingIntent,
+                          m_conversionFlags));
 }
 

@@ -22,6 +22,8 @@
 #include <QObject>
 #include "kis_types.h"
 
+#include "kritaui_export.h"
+
 /**
  * KisAsyncAnimationRendererBase is a special class represinting a
  * single worker thread inside KisAsyncAnimationRenderDialogBase. It connects
@@ -32,7 +34,7 @@
  * should override these two methods to do the actual work.
  */
 
-class KisAsyncAnimationRendererBase : public QObject
+class KRITAUI_EXPORT KisAsyncAnimationRendererBase : public QObject
 {
     Q_OBJECT
 public:

@@ -134,7 +134,7 @@ void EXRExport::initializeCapabilities()
             << QPair<KoID, KoID>(GrayColorModelID, Float32BitsColorDepthID)
             << QPair<KoID, KoID>(XYZAColorModelID, Float16BitsColorDepthID)
             << QPair<KoID, KoID>(XYZAColorModelID, Float32BitsColorDepthID);
-    addSupportedColorModels(supportedColorModels, "TIFF");
+    addSupportedColorModels(supportedColorModels, "EXR");
 }
 
 

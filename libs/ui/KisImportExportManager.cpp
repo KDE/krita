@@ -613,15 +613,17 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     KisImportExportFilter::ConversionStatus status =
             filter->convert(m_document, &file, exportConfiguration);
 
-    if (status != KisImportExportFilter::OK) {
-        file.cancelWriting();
-    } else {
-        if (!file.commit()) {
-            status = KisImportExportFilter::CreationError;
+    if (filter->supportsIO()) {
+        if (status != KisImportExportFilter::OK) {
+            file.cancelWriting();
+        } else {
+            if (!file.commit()) {
+                status = KisImportExportFilter::CreationError;
+            }
         }
     }
-
     return status;
+
 }
 
 #include <KisMimeDatabase.h>

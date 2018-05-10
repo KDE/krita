@@ -104,7 +104,7 @@ KisActionManager::~KisActionManager()
            addElement("toolTip" , action->toolTip());
            addElement("iconText" , action->iconText());
            addElement("shortcut" , action->shortcut().toString());
-           addElement("activationFlags" , QString::number(action->activationFlags(),2));;
+           addElement("activationFlags" , QString::number(action->activationFlags(),2));
            addElement("activationConditions" , QString::number(action->activationConditions(),2));
            addElement("defaultShortcut" , action->defaultShortcut().toString());
            addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));

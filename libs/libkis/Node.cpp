@@ -400,7 +400,7 @@ QIcon Node::icon() const
 bool Node::visible() const
 {
     if (!d->node) return false;
-    return d->node->visible();;
+    return d->node->visible();
 }
 
 void Node::setVisible(bool visible)

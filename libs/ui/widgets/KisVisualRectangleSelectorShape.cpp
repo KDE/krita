@@ -270,7 +270,7 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
         }
         else {
             x = qMax(((qreal)coordinate.x()-offset)/((qreal)width()-offset*2), 0.0);
-            y = qMax(((qreal)coordinate.y()-offset)/((qreal)height()-offset*2), 0.0);;
+            y = qMax(((qreal)coordinate.y()-offset)/((qreal)height()-offset*2), 0.0);
         }
     }
     return QPointF(x, y);

@@ -347,7 +347,7 @@ quint32 KoColorSet::insertBefore(const KoColorSetEntry &c, qint32 index, const Q
     if (d->groups.contains(groupName)) {
         d->groups[groupName].insert(index, c);
     } else if (groupName.isEmpty()){
-        d->colors.insert(index, c);;
+        d->colors.insert(index, c);
     } else {
         warnPigment << "Couldn't find group to insert to";
     }

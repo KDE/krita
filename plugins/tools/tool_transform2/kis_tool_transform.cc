@@ -122,9 +122,9 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     m_optionsWidget = 0;
 
     warpAction = new KisAction(i18n("Warp"));
-    liquifyAction = new KisAction(i18n("Liquify"));;
-    cageAction = new KisAction(i18n("Cage"));;
-    freeTransformAction = new KisAction(i18n("Free"));;
+    liquifyAction = new KisAction(i18n("Liquify"));
+    cageAction = new KisAction(i18n("Cage"));
+    freeTransformAction = new KisAction(i18n("Free"));
     perspectiveAction = new KisAction(i18n("Perspective"));
 
     // extra actions for free transform that are in the tool options

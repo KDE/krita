@@ -692,7 +692,7 @@ Qt::MouseButtons QXcbConnection::xiToQtMouseButtons(xXIDeviceEvent *xiDeviceEven
 
 
     int len = xiDeviceEvent->buttons_len;
-    const uint32_t *buttons = reinterpret_cast<const quint32*>(&xiDeviceEvent[1]);;
+    const uint32_t *buttons = reinterpret_cast<const quint32*>(&xiDeviceEvent[1]);
 
     Qt::MouseButtons qtbuttons = Qt::NoButton;
 

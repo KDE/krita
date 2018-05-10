@@ -70,7 +70,7 @@ struct Bone {
 
     ~Bone() {
         qDeleteAll(bones);
-        bones.clear();;
+        bones.clear();
     }
 };
 

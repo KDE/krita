@@ -178,7 +178,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
         setValid(false);
         return false;
     }
-    setValid(true);;
+    setValid(true);
     setImage(d->symbols[0]->icon());
     return true;
 }

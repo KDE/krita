@@ -154,7 +154,7 @@ QString KisFileLayer::path() const
         return m_filename;
     }
     else {
-        return QDir(m_basePath).filePath(QDir::cleanPath(m_filename));;
+        return QDir(m_basePath).filePath(QDir::cleanPath(m_filename));
     }
 }
 

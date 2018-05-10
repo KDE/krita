@@ -33,6 +33,7 @@
 #include <klocalizedstring.h>
 
 #include "../../krita/data/splash/splash_screen.xpm"
+#include "../../krita/data/splash/splash_screen_x2.xpm"
 #include "kis_splash_screen.h"
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
@@ -45,7 +46,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     QTabWidget *wdg = new QTabWidget;
     vlayout->addWidget(wdg);
 
-    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), true);
+    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm), true);
     splash->setWindowFlags(Qt::Widget);
     splash->displayLinks(true);
     splash->setFixedSize(splash->sizeHint());

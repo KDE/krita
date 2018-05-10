@@ -24,9 +24,9 @@
 
 
 KisImageLockCommand::KisImageLockCommand(KisImageWSP image, bool lockImage)
-    : KisImageCommand(kundo2_noi18n("lock image"), image),
-      m_lockImage(lockImage)
+    : KisImageCommand(kundo2_noi18n("lock image"), image)
 {
+    Q_UNUSED(lockImage)
 }
 
 void KisImageLockCommand::redo()
@@ -35,10 +35,7 @@ void KisImageLockCommand::redo()
     if (!image) {
         return;
     }
-
-    if (!lockImage) {
-        image->refreshGraph();
-    }
+    image->refreshGraph();
 }
 
 void KisImageLockCommand::undo()
@@ -47,9 +44,6 @@ void KisImageLockCommand::undo()
     if (!image) {
         return;
     }
-
-    if (lockImage) {
-        image->refreshGraph();
-    }
+    image->refreshGraph();
 }
 

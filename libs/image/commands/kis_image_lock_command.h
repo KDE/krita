@@ -42,9 +42,6 @@ public:
 
     void redo() override;
     void undo() override;
-
-private:
-    bool m_lockImage;
 };
 
 

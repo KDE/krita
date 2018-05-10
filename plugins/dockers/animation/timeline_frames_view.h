@@ -51,6 +51,10 @@ private Q_SLOTS:
     void slotUpdateLayersMenu();
     void slotUpdateFrameActions();
 
+    void slotSetStartTimeToCurrentPosition();
+    void slotSetEndTimeToCurrentPosition();
+    void slotUpdatePlackbackRange();
+
     void slotAddNewLayer();
     void slotAddExistingLayer(QAction *action);
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);

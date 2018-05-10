@@ -146,9 +146,22 @@ const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
     return m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range) {
+void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
+{
     m_d->fullClipRange = range;
     emit sigFullClipRangeChanged();
+}
+
+void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
+{
+    KisTimeRange newRange(column,  m_d->fullClipRange.end(), false);
+    setFullClipRange(newRange);
+}
+
+void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
+{
+    KisTimeRange newRange(m_d->fullClipRange.start(), column, false);
+    setFullClipRange(newRange);
 }
 
 const KisTimeRange& KisImageAnimationInterface::playbackRange() const

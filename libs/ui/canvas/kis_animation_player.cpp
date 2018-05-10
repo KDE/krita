@@ -162,6 +162,7 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
 
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
+
     slotAudioChannelChanged();
 }
 
@@ -291,15 +292,16 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
     m_d->timer->stop();
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const KisTimeRange &range = animation->playbackRange();
-    if (!range.isValid()) return;
+    const KisTimeRange &playBackRange = animation->playbackRange();
+    if (!playBackRange.isValid()) return;
 
     const int fps = animation->framerate();
 
     m_d->initialFrame = animation->currentUITime();
-    m_d->firstFrame = range.start();
-    m_d->lastFrame = range.end();
+    m_d->firstFrame = playBackRange.start();
+    m_d->lastFrame = playBackRange.end();
     m_d->expectedFrame = qBound(m_d->firstFrame, m_d->expectedFrame, m_d->lastFrame);
+
 
     m_d->expectedInterval = qreal(1000) / fps / m_d->playbackSpeed;
     m_d->lastTimerInterval = m_d->expectedInterval;

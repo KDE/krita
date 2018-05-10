@@ -939,3 +939,13 @@ void TimelineFramesModel::setAudioVolume(qreal value)
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
     m_d->image->animationInterface()->setAudioVolume(value);
 }
+
+void TimelineFramesModel::setFullClipRangeStart(int column)
+{
+    m_d->image->animationInterface()->setFullClipRangeStartTime(column);
+}
+
+void TimelineFramesModel::setFullClipRangeEnd(int column)
+{
+    m_d->image->animationInterface()->setFullClipRangeEndTime(column);
+}

@@ -118,6 +118,10 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
                 this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
+        connect (animation, SIGNAL(sigFullClipRangeChanged()), this, SLOT(updateClipRange()));
+
+
+
         slotGlobalTimeChanged();
         slotCurrentNodeChanged(m_canvas->viewManager()->nodeManager()->activeNode());
     }
@@ -493,6 +497,12 @@ void AnimationDocker::slotCurrentNodeChanged(KisNodeSP node)
     m_animationWidget->btnAddKeyframe->setEnabled(isNodeAnimatable);
     m_animationWidget->btnAddDuplicateFrame->setEnabled(isNodeAnimatable);
     m_animationWidget->btnDeleteKeyframe->setEnabled(isNodeAnimatable);
+}
+
+void AnimationDocker::updateClipRange()
+{
+    m_animationWidget->spinFromFrame->setValue(m_canvas->image()->animationInterface()->fullClipRange().start());
+    m_animationWidget->spinToFrame->setValue(m_canvas->image()->animationInterface()->fullClipRange().end());
 }
 
 void AnimationDocker::addKeyframe(const QString &channel, bool copy)

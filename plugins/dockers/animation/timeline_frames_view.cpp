@@ -363,6 +363,17 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
         action = m_d->actionMan->createAction("paste_frames_from_clipboard");
         connect(action, SIGNAL(triggered()), SLOT(slotPasteFrames()));
 
+        action = m_d->actionMan->createAction("set_start_time");
+        connect(action, SIGNAL(triggered()), SLOT(slotSetStartTimeToCurrentPosition()));
+
+        action = m_d->actionMan->createAction("set_end_time");
+        connect(action, SIGNAL(triggered()), SLOT(slotSetEndTimeToCurrentPosition()));
+
+        action = m_d->actionMan->createAction("update_playback_range");
+        connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
+
+
+
     }
 }
 
@@ -551,6 +562,9 @@ void TimelineFramesView::slotAudioVolumeChanged(int value)
 {
     m_d->model->setAudioVolume(qreal(value) / 100.0);
 }
+
+
+
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
 {
@@ -924,20 +938,33 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 {
     slotUpdateFrameActions();
 
+    // calculate if selection range is set. This will determine if the update playback range is available
+    QSet<int> rows;
+    int minColumn = 0;
+    int maxColumn = 0;
+    calculateSelectionMetrics(minColumn, maxColumn, rows);
+
+    bool selectionExists = minColumn != maxColumn;
+
+
+    if (selectionExists) {
+            KisActionManager::safePopulateMenu(menu, "update_playback_range", m_d->actionMan);
+    } else {
+        KisActionManager::safePopulateMenu(menu, "set_start_time", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "set_end_time", m_d->actionMan);
+    }
+    menu->addSeparator();
+
+
     KisActionManager::safePopulateMenu(menu, "cut_frames_to_clipboard", m_d->actionMan);
     KisActionManager::safePopulateMenu(menu, "copy_frames_to_clipboard", m_d->actionMan);
     KisActionManager::safePopulateMenu(menu, "paste_frames_from_clipboard", m_d->actionMan);
+
     menu->addSeparator();
-
-    if (addFrameCreationActions) {
-        KisActionManager::safePopulateMenu(menu, "add_blank_frame", m_d->actionMan);
-        KisActionManager::safePopulateMenu(menu, "add_duplicate_frame", m_d->actionMan);
-        menu->addSeparator();
-    }
-
     QMenu *frames = menu->addMenu(i18nc("@item:inmenu", "Keyframes"));
     KisActionManager::safePopulateMenu(frames, "insert_keyframes_right", m_d->actionMan);
     KisActionManager::safePopulateMenu(frames, "insert_keyframes_left", m_d->actionMan);
+
     frames->addSeparator();
     KisActionManager::safePopulateMenu(frames, "insert_n_keyframes_right", m_d->actionMan);
     KisActionManager::safePopulateMenu(frames, "insert_n_keyframes_left", m_d->actionMan);
@@ -945,6 +972,7 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
     QMenu *hold = menu->addMenu(i18nc("@item:inmenu", "Hold Frames"));
     KisActionManager::safePopulateMenu(hold, "insert_hold_frame", m_d->actionMan);
     KisActionManager::safePopulateMenu(hold, "remove_hold_frame", m_d->actionMan);
+
     hold->addSeparator();
     KisActionManager::safePopulateMenu(hold, "insert_n_hold_frames", m_d->actionMan);
     KisActionManager::safePopulateMenu(hold, "remove_n_hold_frames", m_d->actionMan);
@@ -952,6 +980,14 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
     menu->addSeparator();
     KisActionManager::safePopulateMenu(menu, "remove_frames", m_d->actionMan);
     KisActionManager::safePopulateMenu(menu, "remove_frames_and_pull", m_d->actionMan);
+
+    menu->addSeparator();
+    if (addFrameCreationActions) {
+        KisActionManager::safePopulateMenu(menu, "add_blank_frame", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "add_duplicate_frame", m_d->actionMan);
+        menu->addSeparator();
+    }
+
 }
 
 void TimelineFramesView::mousePressEvent(QMouseEvent *event)
@@ -1193,6 +1229,28 @@ void TimelineFramesView::slotUpdateFrameActions()
     enableAction("paste_frames_from_clipboard", data && data->hasFormat("application/x-krita-frame"));
 
     //TODO: update column actions!
+}
+
+void TimelineFramesView::slotSetStartTimeToCurrentPosition()
+{
+     m_d->model->setFullClipRangeStart(this->currentIndex().column());
+}
+
+void TimelineFramesView::slotSetEndTimeToCurrentPosition()
+{
+    m_d->model->setFullClipRangeEnd(this->currentIndex().column());
+}
+
+void TimelineFramesView::slotUpdatePlackbackRange()
+{
+    QSet<int> rows;
+    int minColumn = 0;
+    int maxColumn = 0;
+
+    calculateSelectionMetrics(minColumn, maxColumn, rows);
+
+    m_d->model->setFullClipRangeStart(minColumn);
+    m_d->model->setFullClipRangeEnd(maxColumn);
 }
 
 void TimelineFramesView::slotLayerContextMenuRequested(const QPoint &globalPos)

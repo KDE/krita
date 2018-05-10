@@ -41,14 +41,15 @@ class KoColorSpace;
 struct ConversionOptions;
 
 
-class KisOpenGLUpdateInfoBuilder
+class KRITAUI_EXPORT KisOpenGLUpdateInfoBuilder
 {
 public:
     KisOpenGLUpdateInfoBuilder();
     ~KisOpenGLUpdateInfoBuilder();
 
     KisOpenGLUpdateInfoSP buildUpdateInfo(const QRect& rect, KisImageSP srcImage, bool convertColorSpace);
-    QRect calculateTileRect(int col, int row, KisImageSP image) const;
+    QRect calculatePhysicalTileRect(int col, int row, const QRect &imageBounds, int levelOfDetail) const;
+    QRect calculateEffectiveTileRect(int col, int row, const QRect &imageBounds) const;
     int xToCol(int x) const;
     int yToRow(int y) const;
 

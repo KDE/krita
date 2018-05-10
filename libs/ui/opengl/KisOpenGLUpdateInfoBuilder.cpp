@@ -17,6 +17,7 @@
  */
 #include "KisOpenGLUpdateInfoBuilder.h"
 
+// TODO: conversion options into a separate file!
 #include "kis_update_info.h"
 #include "opengl/kis_texture_tile_info_pool.h"
 
@@ -36,7 +37,7 @@ struct KRITAUI_NO_EXPORT KisOpenGLUpdateInfoBuilder::Private
     int selectedChannelIndex = -1;
 
     int textureBorder = 0;
-    QSize textureSize;
+    QSize effectiveTextureSize;
 
     KisProofingConfigurationSP proofingConfig;
     QScopedPointer<KoColorConversionTransformation> proofingTransform;
@@ -65,12 +66,18 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->pool, info);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->conversionOptions.m_destinationColorSpace, info);
 
+    auto needCreateProofingTransform =
+        [this] () {
+            return !m_d->proofingTransform &&
+                m_d->proofingConfig &&
+                m_d->proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
+        };
+
     // lazily create transform
-    if (convertColorSpace &&
-        !m_d->proofingTransform && m_d->proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
+    if (convertColorSpace && needCreateProofingTransform()) {
 
         QWriteLocker locker(&m_d->lock);
-        if (!m_d->proofingTransform && m_d->proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing)) {
+        if (needCreateProofingTransform()) {
             const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_d->proofingConfig->proofingModel,
                                                                                              m_d->proofingConfig->proofingDepth,
                                                                                              m_d->proofingConfig->proofingProfile);
@@ -131,12 +138,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
-            const QRect tileRect = calculateTileRect(col, row, srcImage);
-            const QRect tileTextureRect = kisGrowRect(tileRect, m_d->textureBorder);
-
-            QRect alignedTileTextureRect = levelOfDetail ?
-                        KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
-                        tileTextureRect;
+            const QRect alignedTileTextureRect = calculatePhysicalTileRect(col, row, srcImage->bounds(), levelOfDetail);
 
             KisTextureTileUpdateInfoSP tileInfo(
                         new KisTextureTileUpdateInfo(col, row,
@@ -160,7 +162,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                 info->tileList.append(tileInfo);
             }
             else {
-                dbgUI << "Trying to create an empty tileinfo record" << col << row << tileTextureRect << updateRect << srcImage->bounds();
+                dbgUI << "Trying to create an empty tileinfo record" << col << row << alignedTileTextureRect << updateRect << srcImage->bounds();
             }
         }
     }
@@ -170,23 +172,36 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     return info;
 }
 
-QRect KisOpenGLUpdateInfoBuilder::calculateTileRect(int col, int row, KisImageSP image) const
+QRect KisOpenGLUpdateInfoBuilder::calculateEffectiveTileRect(int col, int row, const QRect &imageBounds) const
 {
-    return image->bounds() &
-            QRect(col * m_d->textureSize.width(),
-                  row * m_d->textureSize.height(),
-                  m_d->textureSize.width(),
-                  m_d->textureSize.height());
+    return imageBounds &
+            QRect(col * m_d->effectiveTextureSize.width(),
+                  row * m_d->effectiveTextureSize.height(),
+                  m_d->effectiveTextureSize.width(),
+                  m_d->effectiveTextureSize.height());
 }
+
+QRect KisOpenGLUpdateInfoBuilder::calculatePhysicalTileRect(int col, int row, const QRect &imageBounds, int levelOfDetail) const
+{
+    const QRect tileRect = calculateEffectiveTileRect(col, row, imageBounds);
+    const QRect tileTextureRect = kisGrowRect(tileRect, m_d->textureBorder);
+
+    const QRect alignedTileTextureRect = levelOfDetail ?
+                KisLodTransform::alignedRect(tileTextureRect, levelOfDetail) :
+                tileTextureRect;
+
+    return alignedTileTextureRect;
+}
+
 
 int KisOpenGLUpdateInfoBuilder::xToCol(int x) const
 {
-    return x / m_d->textureSize.width();
+    return x / m_d->effectiveTextureSize.width();
 }
 
 int KisOpenGLUpdateInfoBuilder::yToRow(int y) const
 {
-    return y / m_d->textureSize.height();
+    return y / m_d->effectiveTextureSize.height();
 }
 
 const KoColorSpace *KisOpenGLUpdateInfoBuilder::destinationColorSpace() const
@@ -223,7 +238,7 @@ void KisOpenGLUpdateInfoBuilder::setEffectiveTextureSize(const QSize &size)
 {
     QWriteLocker lock(&m_d->lock);
 
-    m_d->textureSize = size;
+    m_d->effectiveTextureSize = size;
 }
 
 void KisOpenGLUpdateInfoBuilder::setTextureInfoPool(KisTextureTileInfoPoolSP pool)

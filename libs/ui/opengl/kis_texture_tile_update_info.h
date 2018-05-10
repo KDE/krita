@@ -72,6 +72,11 @@ public:
         rhs.m_data = 0;
     }
 
+    DataBuffer& operator=(DataBuffer &&rhs) {
+        swap(rhs);
+        return *this;
+    }
+
     ~DataBuffer() {
         if (m_data) {
             m_pool->free(m_data, m_pixelSize);
@@ -92,6 +97,7 @@ public:
     void swap(DataBuffer &other) {
         std::swap(other.m_pixelSize, m_pixelSize);
         std::swap(other.m_data, m_data);
+        std::swap(other.m_pool, m_pool);
     }
 
     int size() const {
@@ -133,6 +139,8 @@ public:
         m_patchLevelOfDetail = levelOfDetail;
 
         if (m_patchLevelOfDetail) {
+            // TODO: check if isBottommost() works correctly when m_originalPatchRect gets aligned
+            //       and m_currentImageRect has non-aligned size
             m_originalPatchRect = KisLodTransform::alignedRect(m_originalPatchRect, m_patchLevelOfDetail);
             m_patchRect = KisLodTransform::scaledRect(m_originalPatchRect, m_patchLevelOfDetail);
             m_tileRect = KisLodTransform::scaledRect(m_originalTileRect, m_patchLevelOfDetail);
@@ -270,6 +278,10 @@ public:
         return m_patchRect.size();
     }
 
+    inline QRect realPatchRect() const {
+        return m_patchRect;
+    }
+
     inline QSize realTileSize() const {
         return m_tileRect.size();
     }
@@ -306,12 +318,25 @@ public:
         return m_patchColorSpace->pixelSize();
     }
 
+    inline const KoColorSpace* patchColorSpace() const {
+        return m_patchColorSpace;
+    }
+
     inline quint32 patchPixelsLength() const {
         return m_patchPixels.size();
     }
 
     inline bool valid() const {
         return m_patchRect.isValid();
+    }
+
+    inline DataBuffer&& takePixelData() {
+        return std::move(m_patchPixels);
+    }
+
+    inline void putPixelData(DataBuffer &&buffer, const KoColorSpace *colorSpace) {
+        m_patchPixels = std::move(buffer);
+        m_patchColorSpace = colorSpace;
     }
 
 private:

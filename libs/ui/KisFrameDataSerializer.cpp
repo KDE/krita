@@ -21,7 +21,7 @@
 #include <QTemporaryDir>
 
 
-struct KisFrameDataSerializer::Private
+struct KRITAUI_NO_EXPORT KisFrameDataSerializer::Private
 {
     Private(const QString &frameCachePath, KisTextureTileInfoPoolSP _pool)
         : framesDir(
@@ -101,10 +101,9 @@ void KisFrameDataSerializer::saveFrame(const KisFrameDataSerializer::Frame &fram
 
         stream << tile.col;
         stream << tile.row;
-        stream << tile.size.width();
-        stream << tile.size.height();
+        stream << tile.rect;
 
-        const int bufferSize = frame.pixelSize * tile.size.width() * tile.size.height();
+        const int bufferSize = frame.pixelSize * tile.rect.width() * tile.rect.height();
         stream.writeRawData((char*)tile.data.data(), bufferSize);
     }
 
@@ -134,10 +133,9 @@ KisFrameDataSerializer::Frame KisFrameDataSerializer::loadFrame(int frameId)
         FrameTile tile(m_d->pool);
         stream >> tile.col;
         stream >> tile.row;
-        stream >> tile.size.rwidth();
-        stream >> tile.size.rheight();
+        stream >> tile.rect;
 
-        const int bufferSize = frame.pixelSize * tile.size.width() * tile.size.height();
+        const int bufferSize = frame.pixelSize * tile.rect.width() * tile.rect.height();
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(bufferSize <= m_d->pool->chunkSize(frame.pixelSize),
                                              KisFrameDataSerializer::Frame());
 
@@ -164,6 +162,11 @@ void KisFrameDataSerializer::forgetFrame(int frameId)
     QFile::remove(framePath);
 }
 
+KisTextureTileInfoPoolSP KisFrameDataSerializer::tileInfoPool() const
+{
+    return m_d->pool;
+}
+
 boost::optional<qreal> KisFrameDataSerializer::estimateFrameUniqueness(const KisFrameDataSerializer::Frame &lhs, const KisFrameDataSerializer::Frame &rhs, qreal portion)
 {
     if (lhs.pixelSize != rhs.pixelSize) return boost::none;
@@ -180,13 +183,13 @@ boost::optional<qreal> KisFrameDataSerializer::estimateFrameUniqueness(const Kis
 
         if (lhsTile.col != rhsTile.col ||
             lhsTile.row != rhsTile.row ||
-            lhsTile.size != rhsTile.size) {
+            lhsTile.rect != rhsTile.rect) {
 
             return boost::none;
         }
 
         if (sampleStep > 0) {
-            const int numPixels = lhsTile.size.width() * lhsTile.size.height();
+            const int numPixels = lhsTile.rect.width() * lhsTile.rect.height();
             for (int j = 0; j < numPixels; j += sampleStep) {
                 quint8 *lhsDataPtr = lhsTile.data.data() + j * pixelSize;
                 quint8 *rhsDataPtr = rhsTile.data.data() + j * pixelSize;
@@ -234,7 +237,7 @@ bool KisFrameDataSerializer::processFrames(KisFrameDataSerializer::Frame &dst, c
         const FrameTile &srcTile = src.frameTiles[i];
         FrameTile &dstTile = dst.frameTiles[i];
 
-        const int numBytes = srcTile.size.width() * srcTile.size.height() * src.pixelSize;
+        const int numBytes = srcTile.rect.width() * srcTile.rect.height() * src.pixelSize;
         const int numQWords = numBytes / 8;
 
         const quint64 *srcDataPtr = reinterpret_cast<const quint64*>(srcTile.data.data());

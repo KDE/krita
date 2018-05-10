@@ -210,7 +210,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
         m_textureTiles.reserve((lastRow+1)*m_numCols);
         for (int row = 0; row <= lastRow; row++) {
             for (int col = 0; col <= lastCol; col++) {
-                QRect tileRect = m_updateInfoBuilder.calculateTileRect(col, row, m_image);
+                QRect tileRect = m_updateInfoBuilder.calculateEffectiveTileRect(col, row, m_image->bounds());
 
                 KisTextureTile *tile = new KisTextureTile(tileRect,
                                                           &m_texturesInfo,

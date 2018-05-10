@@ -21,6 +21,8 @@
 #include <KisFrameDataSerializer.h>
 #include "opengl/kis_texture_tile_info_pool.h"
 
+#include <testutil.h>
+
 #include <QTest>
 
 static const int maxTileSize = 256;
@@ -35,10 +37,10 @@ KisFrameDataSerializer::Frame generateTestFrame(int frameId, KisTextureTileInfoP
         KisFrameDataSerializer::FrameTile tile(pool);
         tile.col = i * 10;
         tile.row = i * 20;
-        tile.size = QSize(qMin(i * 5, maxTileSize), qMin(i * 7, maxTileSize));
+        tile.rect = QRect(QPoint(i, 2 * i), QSize(qMin(i * 5, maxTileSize), qMin(i * 7, maxTileSize)));
         tile.data.allocate(frame.pixelSize);
 
-        const int numPixels = tile.size.width() * tile.size.height();
+        const int numPixels = tile.rect.width() * tile.rect.height();
         qint32 *dataPtr = reinterpret_cast<qint32*>(tile.data.data());
 
         for (int j = 0; j < numPixels; j++) {
@@ -48,16 +50,8 @@ KisFrameDataSerializer::Frame generateTestFrame(int frameId, KisTextureTileInfoP
         frame.frameTiles.push_back(std::move(tile));
     }
 
-    return frame;
+    return std::move(frame);
 }
-
-#define KIS_COMPARE_RF(expr, ref) \
-    if ((expr) != (ref)) { \
-        qDebug() << "Compared values are not the same at line" << __LINE__; \
-        qDebug() << "    Actual  : " << #expr << "=" << (expr); \
-        qDebug() << "    Expected: " << #ref << "=" << (ref); \
-        return false; \
-    }
 
 bool verifyTestFrame(int frameId, const KisFrameDataSerializer::Frame &frame)
 {
@@ -70,9 +64,11 @@ bool verifyTestFrame(int frameId, const KisFrameDataSerializer::Frame &frame)
 
         KIS_COMPARE_RF(tile.col, i * 10);
         KIS_COMPARE_RF(tile.row, i * 20);
-        KIS_COMPARE_RF(tile.size, QSize(qMin(i * 5, maxTileSize), qMin(i * 7, maxTileSize)));
+        KIS_COMPARE_RF(tile.rect.x(), i);
+        KIS_COMPARE_RF(tile.rect.y(), 2 * i);
+        KIS_COMPARE_RF(tile.rect.size(), QSize(qMin(i * 5, maxTileSize), qMin(i * 7, maxTileSize)));
 
-        const int numPixels = tile.size.width() * tile.size.height();
+        const int numPixels = tile.rect.width() * tile.rect.height();
         qint32 *dataPtr = reinterpret_cast<qint32*>(tile.data.data());
 
         for (int j = 0; j < numPixels; j++) {
@@ -140,7 +136,7 @@ void randomizeFrame(KisFrameDataSerializer::Frame &frame, qreal portion)
     // randomly reset 50% of the pixels
     KisRandomSource rnd(1);
     for (KisFrameDataSerializer::FrameTile &tile : frame.frameTiles) {
-        const int numPixels = tile.size.width() * tile.size.height();
+        const int numPixels = tile.rect.width() * tile.rect.height();
         qint32 *pixelPtr = reinterpret_cast<qint32*>(tile.data.data());
 
         for (int j = 0; j < numPixels; j++) {

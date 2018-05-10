@@ -425,6 +425,7 @@ endif()
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
         KisFrameDataSerializer.cpp
+        KisFrameCacheStore.cpp
     )
 
 if(UNIX)

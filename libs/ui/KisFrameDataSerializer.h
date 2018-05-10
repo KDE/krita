@@ -36,14 +36,30 @@ public:
     struct FrameTile
     {
         FrameTile(KisTextureTileInfoPoolSP pool) : data(pool) {}
+
+        FrameTile(FrameTile &&rhs) = default;
+        FrameTile& operator=(FrameTile &&rhs) = default;
+
+        FrameTile(const FrameTile &rhs) = delete;
+        FrameTile& operator=(FrameTile &rhs) = delete;
+
+
         int col = -1;
         int row = -1;
-        QSize size;
+        QRect rect;
         DataBuffer data;
     };
 
     struct Frame
     {
+        Frame() = default;
+
+        Frame(Frame&&rhs) = default;
+        Frame& operator=(Frame &&rhs) = default;
+
+        Frame(const Frame &rhs) = delete;
+        Frame& operator=(Frame &rhs) = delete;
+
         int frameId = -1;
         int pixelSize = 0;
         std::vector<FrameTile> frameTiles;
@@ -64,6 +80,8 @@ public:
     bool hasFrame(int frameId) const;
     void forgetFrame(int frameId);
 
+    KisTextureTileInfoPoolSP tileInfoPool() const;
+
     static boost::optional<qreal> estimateFrameUniqueness(const Frame &lhs, const Frame &rhs, qreal portion);
     static bool subtractFrames(Frame &dst, const Frame &src);
     static void addFrames(Frame &dst, const Frame &src);
@@ -76,7 +94,7 @@ private:
     Q_DISABLE_COPY(KisFrameDataSerializer)
 
     struct Private;
-    QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif // KISFRAMEDATASERIALIZER_H

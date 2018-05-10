@@ -1044,16 +1044,22 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisPaint
 
     Imf::PixelType pixelType = Imf::NUM_PIXELTYPES;
 
-    if(layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+    if (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
         pixelType = Imf::HALF;
-    } else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID)
-    {
+    }
+    else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         pixelType = Imf::FLOAT;
     }
-
-    if(pixelType >= Imf::NUM_PIXELTYPES)
-    {
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    else {
+        const KoColorSpace *cs = 0;
+        if (layer->colorSpace()->colorModelId() == GrayAColorModelID) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float16BitsColorDepthID.id());
+        }
+        else {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
+        }
+        image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+        pixelType = Imf::HALF;
     }
 
 
@@ -1287,6 +1293,17 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroup
     qint32 height = image->height();
     qint32 width = image->width();
     Imf::Header header(width, height);
+
+    if (image->colorSpace()->colorDepthId() != Float16BitsColorDepthID && image->colorSpace()->colorDepthId() != Float32BitsColorDepthID) {
+        const KoColorSpace *cs = 0;
+        if (layer->colorSpace()->colorModelId() == GrayAColorModelID) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Float16BitsColorDepthID.id());
+        }
+        else {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
+        }
+        image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    }
 
     QList<ExrPaintLayerSaveInfo> informationObjects;
     d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);

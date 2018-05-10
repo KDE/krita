@@ -84,7 +84,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
         res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 
-    dbgFile << " Result =" << res;
+    dbgFile  << " Result =" << res;
     switch (res) {
     case KisImageBuilder_RESULT_INVALID_ARG:
         document->setErrorMessage(i18n("This layer cannot be saved to EXR."));
@@ -107,7 +107,9 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
         return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_OK:
-        document->setErrorMessage(exrConverter.errorMessage());
+        if (!exrConverter.errorMessage().isNull()) {
+            document->setErrorMessage(exrConverter.errorMessage());
+        }
         return KisImportExportFilter::OK;
     default:
         break;

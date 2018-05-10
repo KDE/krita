@@ -35,7 +35,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(slotDeleteSession()));
     connect(btnClose, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-    connect(lstSessions, SIGNAL(itemDoubleClicked(QListWidgetItem *item)), this, SLOT(slotSessionDoubleClicked(QListWidgetItem* item)));
+    connect(lstSessions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotSessionDoubleClicked(QListWidgetItem*)));
 }
 
 void KisSessionManagerDialog::updateSessionList() {

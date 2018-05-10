@@ -99,8 +99,8 @@ typedef enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
 } ORIENTATION_PREFERENCE;
 typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
-    ORIENTATION_PREFERENCE orientation
-);
+        ORIENTATION_PREFERENCE orientation
+        );
 void resetRotation()
 {
     QLibrary user32Lib("user32");
@@ -189,8 +189,8 @@ extern "C" int main(int argc, char **argv)
     }
 
 
-    QString language;
     QString root;
+    QString language;
     {
         // Create a temporary application to get the root
         QCoreApplication app(argc, argv);
@@ -219,6 +219,7 @@ extern "C" int main(int argc, char **argv)
 
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
+
     qDebug() << "Override language:" << language;
 
     if (!language.isEmpty()) {
@@ -251,9 +252,8 @@ extern "C" int main(int argc, char **argv)
             qputenv("LANG", uiLanguages.first().toLocal8Bit());
             KLocalizedString::setLanguages(uiLanguages);
         }
-#endif
     }
-
+#endif
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
     KLocalizedString::setApplicationDomain("krita");

@@ -19,6 +19,7 @@
 
 #include "KisDocument.h"
 #include "kis_layer_utils.h"
+#include "kis_image.h"
 
 struct KRITAIMAGE_NO_EXPORT KisCloneDocumentStroke::Private
 {

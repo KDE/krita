@@ -22,7 +22,7 @@
 #include "kis_paint_information.h"
 #include "kis_paintop_utils.h"
 #include "kis_paintop_settings.h"
-#include "kis_airbrush_option.h"
+#include "kis_airbrush_option_widget.h"
 #include "kis_pressure_spacing_option.h"
 #include "kis_pressure_rate_option.h"
 
@@ -47,7 +47,7 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        bool autoSpacingActive,
                                        qreal autoSpacingCoeff,
                                        qreal lodScale,
-                                       const KisAirbrushOption *airbrushOption,
+                                       const KisAirbrushOptionWidget *airbrushOption,
                                        const KisPressureSpacingOption *spacingOption,
                                        const KisPaintInformation &pi)
 {
@@ -77,7 +77,7 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
  * @param rateOption - The pressure-curve airbrush rate option. Can be null for paintops that don't
  *                     support a pressure-based airbrush rate.
  */
-KisTimingInformation effectiveTiming(const KisAirbrushOption *airbrushOption,
+KisTimingInformation effectiveTiming(const KisAirbrushOptionWidget *airbrushOption,
                                      const KisPressureRateOption *rateOption,
                                      const KisPaintInformation &pi)
 {

@@ -31,7 +31,7 @@
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_gradient_option.h>
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_compositeop_option.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include "kis_texture_option.h"

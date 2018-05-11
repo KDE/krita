@@ -25,13 +25,13 @@
  * Allows the user to activate airbrushing of the brush mask (brush is painted at the same position over and over)
  * Rate is set in milliseconds.
  */
-class PAINTOP_EXPORT KisAirbrushOption : public KisPaintOpOption
+class PAINTOP_EXPORT KisAirbrushOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 
 public:
-    KisAirbrushOption(bool enabled = true, bool canIgnoreSpacing = true);
-    ~KisAirbrushOption() override;
+    KisAirbrushOptionWidget(bool enabled = true, bool canIgnoreSpacing = true);
+    ~KisAirbrushOptionWidget() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;

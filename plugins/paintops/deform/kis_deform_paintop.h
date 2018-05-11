@@ -22,7 +22,7 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
 
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_rotation_option.h>
@@ -58,7 +58,7 @@ private:
     DeformOption m_properties;
     KisBrushSizeOptionProperties m_sizeProperties;
 
-    KisAirbrushOption m_airbrushOption;
+    KisAirbrushOptionWidget m_airbrushOptionWidget;
 
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

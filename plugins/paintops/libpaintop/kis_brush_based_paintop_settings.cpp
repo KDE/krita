@@ -19,7 +19,7 @@
 #include "kis_brush_based_paintop_settings.h"
 
 #include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
 #include "kis_brush_server.h"

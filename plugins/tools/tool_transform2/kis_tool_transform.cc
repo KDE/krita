@@ -133,14 +133,10 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     rotateNinteyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
     rotateNinteyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
 
+    applyTransformation = new KisAction(i18n("Apply"));
+    resetTransformation = new KisAction(i18n("Reset"));
+
     m_contextMenu.reset(new QMenu());
-
-    connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));
-    connect(perspectiveAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToPerspectiveType()));
-    connect(freeTransformAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToFreeTransformType()));
-    connect(liquifyAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToLiquifyType()));
-    connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
-
 
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
@@ -366,7 +362,9 @@ QMenu*  KisToolTransform::popupActionsMenu()
             m_contextMenu->addAction(rotateNinteyCCWAction);
         }
 
-
+        m_contextMenu->addSeparator();
+        m_contextMenu->addAction(applyTransformation);
+        m_contextMenu->addAction(resetTransformation);
     }
 
     return m_contextMenu.data();
@@ -1092,6 +1090,16 @@ QWidget* KisToolTransform::createOptionWidget() {
     connect(mirrorVericalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
     connect(rotateNinteyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
     connect(rotateNinteyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
+
+
+    connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));
+    connect(perspectiveAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToPerspectiveType()));
+    connect(freeTransformAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToFreeTransformType()));
+    connect(liquifyAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToLiquifyType()));
+    connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
+
+    connect(applyTransformation, SIGNAL(triggered(bool)), this, SLOT(slotApplyTransform()));
+    connect(resetTransformation, SIGNAL(triggered(bool)), this, SLOT(slotResetTransform()));
 
 
     updateOptionWidget();

@@ -304,12 +304,15 @@ private:
     KisAction* cageAction;
     KisAction* freeTransformAction;
     KisAction* perspectiveAction;
+    KisAction* applyTransformation;
+    KisAction* resetTransformation;
 
     // a few extra context click options if free transform is active
     KisAction* mirrorHorizontalAction;
     KisAction* mirrorVericalAction;
     KisAction* rotateNinteyCWAction;
     KisAction* rotateNinteyCCWAction;
+
 
 
 

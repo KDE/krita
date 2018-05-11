@@ -42,6 +42,7 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
+#include "kis_painter.h"
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -187,7 +188,7 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
 }
 
 }
-#include "kis_painter.h"
+
 void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view)
 {
     KisImageSP image = view->image();

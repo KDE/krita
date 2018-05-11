@@ -69,7 +69,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPaint
     Q_UNUSED(image);
     Q_UNUSED(node);
 
-    m_airbrushOption.readOptionSetting(settings);
+    m_airbrushOptionWidget.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
@@ -316,10 +316,10 @@ KisSpacingInformation KisSketchPaintOp::updateSpacingImpl(const KisPaintInformat
 {
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOption, nullptr, info);
+                                                   &m_airbrushOptionWidget, nullptr, info);
 }
 
 KisTimingInformation KisSketchPaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOptionWidget, &m_rateOption, info);
 }

@@ -24,7 +24,7 @@
 #include "kis_spray_paintop_settings.h"
 #include "kis_sprayop_option.h"
 #include "kis_spray_shape_option.h"
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 
 struct KisSprayPaintOpSettings::Private
 {

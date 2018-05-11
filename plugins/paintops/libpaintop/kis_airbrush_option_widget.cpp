@@ -15,7 +15,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kis_airbrush_option.h"
+#include "kis_airbrush_option_widget.h"
 #include "kis_paintop_settings.h"
 #include <klocalizedstring.h>
 
@@ -48,7 +48,7 @@ public:
     }
 };
 
-struct KisAirbrushOption::Private {
+struct KisAirbrushOptionWidget::Private {
 public:
     bool ignoreSpacing;
     // We store the airbrush interval (in milliseconds) instead of the rate because the interval is
@@ -57,7 +57,7 @@ public:
     QScopedPointer<KisAirbrushWidget> configPage;
 };
 
-KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
+KisAirbrushOptionWidget::KisAirbrushOptionWidget(bool enabled, bool canIgnoreSpacing)
     : KisPaintOpOption(KisPaintOpOption::COLOR, enabled)
     , m_d(new Private())
 {
@@ -76,12 +76,12 @@ KisAirbrushOption::KisAirbrushOption(bool enabled, bool canIgnoreSpacing)
     updateInterval();
 }
 
-KisAirbrushOption::~KisAirbrushOption()
+KisAirbrushOptionWidget::~KisAirbrushOptionWidget()
 {
     delete m_d;
 }
 
-void KisAirbrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisAirbrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KIS_SAFE_ASSERT_RECOVER (m_d->airbrushInterval > 0.0) {
         m_d->airbrushInterval = 1.0;
@@ -91,7 +91,7 @@ void KisAirbrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting)
     setting->setProperty(AIRBRUSH_IGNORE_SPACING, m_d->ignoreSpacing);
 }
 
-void KisAirbrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
+void KisAirbrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     setChecked(setting->getBool(AIRBRUSH_ENABLED));
     // Update settings in the widget. The widget's signals should cause the changes to be propagated
@@ -101,29 +101,29 @@ void KisAirbrushOption::readOptionSetting(const KisPropertiesConfigurationSP set
                                                                         false));
 }
 
-qreal KisAirbrushOption::airbrushInterval() const
+qreal KisAirbrushOptionWidget::airbrushInterval() const
 {
     return m_d->airbrushInterval;
 }
 
-bool KisAirbrushOption::ignoreSpacing() const
+bool KisAirbrushOptionWidget::ignoreSpacing() const
 {
     return m_d->ignoreSpacing;
 }
 
-void KisAirbrushOption::slotIntervalChanged()
+void KisAirbrushOptionWidget::slotIntervalChanged()
 {
     updateInterval();
     emitSettingChanged();
 }
 
-void KisAirbrushOption::slotIgnoreSpacingChanged()
+void KisAirbrushOptionWidget::slotIgnoreSpacingChanged()
 {
     updateIgnoreSpacing();
     emitSettingChanged();
 }
 
-void KisAirbrushOption::updateInterval()
+void KisAirbrushOptionWidget::updateInterval()
 {
     // Get rate in dabs per second, then convert to interval in milliseconds.
     qreal rate = m_d->configPage->sliderRate->value();
@@ -133,7 +133,7 @@ void KisAirbrushOption::updateInterval()
     m_d->airbrushInterval = 1000.0 / rate;
 }
 
-void KisAirbrushOption::updateIgnoreSpacing()
+void KisAirbrushOptionWidget::updateIgnoreSpacing()
 {
     m_d->ignoreSpacing = m_d->configPage->checkBoxIgnoreSpacing->isChecked();
 }

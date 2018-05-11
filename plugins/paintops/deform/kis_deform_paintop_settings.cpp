@@ -21,7 +21,7 @@
 
 #include <kis_brush_size_option.h>
 
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_deform_option.h>
 
 struct KisDeformPaintOpSettings::Private

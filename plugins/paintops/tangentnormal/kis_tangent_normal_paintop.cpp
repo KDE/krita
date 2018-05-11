@@ -43,7 +43,7 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP sett
     Q_UNUSED(image);
     //Init, read settings, etc//
     m_tangentTiltOption.readOptionSetting(settings);
-    m_airbrushOption.readOptionSetting(settings);
+    m_airbrushOptionWidget.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_flowOption.readOptionSetting(settings);
@@ -180,13 +180,13 @@ KisSpacingInformation KisTangentNormalPaintOp::updateSpacingImpl(const KisPaintI
 
 KisTimingInformation KisTangentNormalPaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOptionWidget, &m_rateOption, info);
 }
 
 KisSpacingInformation KisTangentNormalPaintOp::computeSpacing(const KisPaintInformation &info,
                                                               qreal scale, qreal rotation) const
 {
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOptionWidget, &m_spacingOption, info);
 }
 
 void KisTangentNormalPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

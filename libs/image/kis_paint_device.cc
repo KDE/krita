@@ -650,6 +650,8 @@ QRegion KisPaintDevice::Private::regionForLodSyncing() const
 
 KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int newLod)
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(newLod > 0);
+
     Data *srcData = currentNonLodData();
 
     Data *lodData = new Data(srcData, false);

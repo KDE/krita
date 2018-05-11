@@ -172,16 +172,22 @@
   <url type="help">https://docs.krita.org/Category:Tutorials</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://cdn.kde.org/screenshots/krita/2016-05-24_screenshot_002.png</image>
+      <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_001.png</image>
     </screenshot>
     <screenshot type="default">
-      <image>https://cdn.kde.org/screenshots/krita/2016-05-24_screenshot_003.png</image>
+      <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_002.png</image>
     </screenshot>
     <screenshot type="default">
-      <image>https://cdn.kde.org/screenshots/krita/2016-05-24_screenshot_004.png</image>
+      <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_003.png</image>
     </screenshot>
     <screenshot type="default">
-      <image>https://cdn.kde.org/screenshots/krita/2016-05-24_screenshot_005.png</image>
+      <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_004.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_005.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>
   <update_contact>foundation@krita.org</update_contact>

@@ -264,7 +264,7 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");
-        mimeType.suffixes = QStringList() << "nef" << "cr2" << "sr2" << "crw" << "pef" << "x3f" << "kdc" << "mrw" << "arw" << "k25" << "dcr" << "orf" << "raw" << "raw" << "raf" << "srf" << "dng";
+        mimeType.suffixes = QStringList() << "rw2" << "nef" << "cr2" << "sr2" << "crw" << "pef" << "x3f" << "kdc" << "mrw" << "arw" << "k25" << "dcr" << "orf" << "raw" << "raw" << "raf" << "srf" << "dng";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-extension-exr";

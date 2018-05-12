@@ -123,6 +123,10 @@ void KisKeyframe::setColorLabel(int label)
     m_d->colorLabel = label;
 }
 
+bool KisKeyframe::hasContent() const {
+    return true;
+}
+
 KisKeyframeChannel *KisKeyframe::channel() const
 {
     return m_d->channel;

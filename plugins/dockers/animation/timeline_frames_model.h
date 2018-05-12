@@ -132,6 +132,7 @@ protected:
 
 private Q_SLOTS:
     void slotDummyChanged(KisNodeDummy *dummy);
+    void slotImageContentChanged();
     void processUpdateQueue();
 
 public Q_SLOTS:

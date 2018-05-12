@@ -770,6 +770,7 @@ QPixmap TimelineFramesView::Private::renderToPixmap(const QModelIndexList &index
         option.rect = paintPairs.at(j).first.translated(-r->topLeft());
         const QModelIndex &current = paintPairs.at(j).second;
         //adjustViewOptionsForIndex(&option, current);
+
         q->itemDelegate(current)->paint(&painter, option, current);
     }
     return pixmap;

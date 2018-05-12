@@ -104,6 +104,20 @@ struct TimelineFramesModel::Private
         return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
+    bool frameHasContent(int row, int column) {
+
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return false;
+
+        // first check if we are a key frame
+        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
+        if (!frame) return false;
+
+        return frame->hasContent();
+    }
+
     bool specialKeyframeExists(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
@@ -122,7 +136,7 @@ struct TimelineFramesModel::Private
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
         if (!primaryChannel) return -1;
 
-        KisKeyframeSP frame = primaryChannel->keyframeAt(column);
+        KisKeyframeSP frame = primaryChannel->activeKeyframeAt(column);
         if (!frame) return -1;
 
         return frame->colorLabel();
@@ -260,6 +274,7 @@ void TimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, 
                 SIGNAL(sigAudioChannelChanged()), SIGNAL(sigAudioChannelChanged()));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
+        connect(m_d->image, SIGNAL(sigImageModified()), SLOT(slotImageContentChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
@@ -279,6 +294,16 @@ void TimelineFramesModel::slotDummyChanged(KisNodeDummy *dummy)
         m_d->updateQueue.append(dummy);
     }
     m_d->updateTimer.start();
+}
+
+void TimelineFramesModel::slotImageContentChanged()
+{
+    if (m_d->activeLayerIndex < 0) return;
+
+    KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
+    if (!dummy) return;
+
+    slotDummyChanged(dummy);
 }
 
 void TimelineFramesModel::processUpdateQueue()
@@ -338,6 +363,9 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     }
     case FrameEditableRole: {
         return m_d->layerEditable(index.row());
+    }
+    case FrameHasContent: {
+        return m_d->frameHasContent(index.row(), index.column());
     }
     case FrameExistsRole: {
         return m_d->frameExists(index.row(), index.column());

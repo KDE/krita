@@ -42,13 +42,15 @@ public:
 
         KoColor color(Qt::black, colorSpace);
 
-        QImage vectorImage = convertMaskToQImage(brush, color);
-        QImage scalarImage = convertMaskToQImage(vBrush, color);
+        QImage scalarImage = convertMaskToQImage(brush, color);
+        QImage vectorImage = convertMaskToQImage(vBrush, color);
 
         // Generate images before testing to asses visualy any difference
         scalarImage.save(QString("scalar2.png"),"PNG");
         vectorImage.save(QString("vector2.png"),"PNG");
 
+        QPoint tmp;
+        QVERIFY(TestUtil::compareQImages(tmp,scalarImage, vectorImage, 0, 5));
         // Check error deviation between values is less than 0.05
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {

@@ -110,7 +110,13 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICM",  KoResourcePaths::Recursive);
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
-
+#ifdef Q_OS_WIN
+    const QString windowsProfilePath("C:/Windows/System32/spool/drivers/color");
+    QDir windowsProfileDir(windowsProfilePath);
+    Q_FOREACH(const QString &entry, windowsProfileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
+        profileFilenames << windowsProfilePath + "/" + entry;
+    }
+#endif
     // Load the profiles
     if (!profileFilenames.empty()) {
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {

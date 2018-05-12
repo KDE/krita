@@ -572,8 +572,8 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
      */
 
     /**
-     * The algorithm below doesn't correctly handel the case when the two pointers actually
-     * point to the same shape. So just check it is advance to guarantee strict weak ordering
+     * The algorithm below doesn't correctly handle the case when the two pointers actually
+     * point to the same shape. So just check it in advance to guarantee strict weak ordering
      * relation requirement
      */
     if (s1 == s2) return false;

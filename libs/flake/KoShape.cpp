@@ -571,6 +571,14 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
      *          inside KoShapeCreateCommand.
      */
 
+    /**
+     * The algorithm below doesn't correctly handel the case when the two pointers actually
+     * point to the same shape. So just check it is advance to guarantee strict weak ordering
+     * relation requirement
+     */
+    if (s1 == s2) return false;
+
+
     // First sort according to runThrough which is sort of a master level
     KoShape *parentShapeS1 = s1->parent();
     KoShape *parentShapeS2 = s2->parent();

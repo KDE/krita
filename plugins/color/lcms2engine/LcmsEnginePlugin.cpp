@@ -121,7 +121,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
 #ifdef Q_OS_WIN
     QString winPath = QString::fromUtf8(qgetenv("windir"));
     winPath.replace('\\','/');
-    iccProfileDirs.append(winPath + "/Spool/Drivers/Color/");
+    iccProfileDirs.append(winPath + "/System32/Spool/Drivers/Color/");
 
 #endif
     Q_FOREACH(const QString &iccProfiledir, iccProfileDirs) {

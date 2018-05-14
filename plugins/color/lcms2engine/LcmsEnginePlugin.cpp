@@ -66,16 +66,16 @@
 #include "colorspaces/ycbcr_f32/YCbCrF32ColorSpace.h"
 
 #include <KoConfig.h>
+
 #ifdef HAVE_OPENEXR
-#include <half.h>
-
-#ifdef HAVE_LCMS24
-#include "colorspaces/gray_f16/GrayF16ColorSpace.h"
-#include "colorspaces/xyz_f16/XyzF16ColorSpace.h"
-#include "colorspaces/rgb_f16/RgbF16ColorSpace.h"
+#   include <half.h>
+#   ifdef HAVE_LCMS24
+#       include "colorspaces/gray_f16/GrayF16ColorSpace.h"
+#       include "colorspaces/xyz_f16/XyzF16ColorSpace.h"
+#       include "colorspaces/rgb_f16/RgbF16ColorSpace.h"
+#   endif
 #endif
 
-#endif
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
     qCritical() << "Lcms2 error: " << ErrorCode << Text;
@@ -110,13 +110,26 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICM",  KoResourcePaths::Recursive);
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
     profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
-#ifdef Q_OS_WIN
-    const QString windowsProfilePath("C:/Windows/System32/spool/drivers/color");
-    QDir windowsProfileDir(windowsProfilePath);
-    Q_FOREACH(const QString &entry, windowsProfileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
-        profileFilenames << windowsProfilePath + "/" + entry;
-    }
+
+    QStringList iccProfileDirs;
+
+#ifdef Q_OS_MAC
+    iccProfileDirs.append(QDir::homePath() + "/Library/ColorSync/Profiles/");
+    iccProfileDirs.append("/System/Library/ColorSync/Profiles/");
+    iccProfileDirs.append("/Library/ColorSync/Profiles/");
 #endif
+#ifdef Q_OS_WIN
+    QString winPath = QString::fromUtf8(qgetenv("windir"));
+    winPath.replace('\\','/');
+    iccProfileDirs.append(winPath + "/Spool/Drivers/Color/");
+
+#endif
+    Q_FOREACH(const QString &iccProfiledir, iccProfileDirs) {
+        QDir profileDir(iccProfiledir);
+        Q_FOREACH(const QString &entry, profileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
+            profileFilenames << iccProfiledir + "/" + entry;
+        }
+    }
     // Load the profiles
     if (!profileFilenames.empty()) {
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {

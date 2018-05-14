@@ -262,6 +262,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "kts";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-reference-images";
+        mimeType.description = i18nc("description of a file type", "Krita Reference Image Collection");
+        mimeType.suffixes = QStringList() << "krf";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");
         mimeType.suffixes = QStringList() << "rw2" << "nef" << "cr2" << "sr2" << "crw" << "pef" << "x3f" << "kdc" << "mrw" << "arw" << "k25" << "dcr" << "orf" << "raw" << "raw" << "raf" << "srf" << "dng";

@@ -314,6 +314,7 @@ set_package_properties(Qt5Multimedia PROPERTIES
 macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
 configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
 
+if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
         DESCRIPTION "QtQuick"
@@ -329,7 +330,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "http://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
-
+endif()
 
 if (NOT WIN32 AND NOT APPLE)
 

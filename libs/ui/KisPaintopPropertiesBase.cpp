@@ -23,7 +23,6 @@ KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
 {
 }
 
-
 void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP settings)
 {
     readOptionSettingImpl(settings.data());

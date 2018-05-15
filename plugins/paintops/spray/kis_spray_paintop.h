@@ -64,7 +64,7 @@ private:
     SprayBrush m_sprayBrush;
     qreal m_xSpacing, m_ySpacing, m_spacing;
     bool m_isPresetValid;
-    KisAirbrushOptionWidget m_airbrushOptionWidget;
+    KisAirbrushOptionProperties m_airbrushOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

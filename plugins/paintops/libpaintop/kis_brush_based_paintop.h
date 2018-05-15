@@ -73,7 +73,7 @@ public:
     KisSpacingInformation effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const;
     KisSpacingInformation effectiveSpacing(qreal scale,
                                            qreal rotation,
-                                           const KisAirbrushOptionWidget *airbrushOption,
+                                           const KisAirbrushOptionProperties *airbrushOption,
                                            const KisPressureSpacingOption *spacingOption,
                                            const KisPaintInformation &pi) const;
 

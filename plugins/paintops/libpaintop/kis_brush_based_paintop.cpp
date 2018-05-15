@@ -136,7 +136,7 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal 
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
-                                                             const KisAirbrushOptionWidget *airbrushOption,
+                                                             const KisAirbrushOptionProperties *airbrushOption,
                                                              const KisPressureSpacingOption *spacingOption,
                                                              const KisPaintInformation &pi) const
 {

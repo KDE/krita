@@ -42,7 +42,7 @@ KisDeformPaintOpSettings::~KisDeformPaintOpSettings()
 
 void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
 {
-    BrushSizeOption option;
+    KisBrushSizeOptionProperties option;
     option.readOptionSetting(this);
     option.brush_diameter = value;
     option.writeOptionSetting(this);
@@ -50,7 +50,7 @@ void KisDeformPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisDeformPaintOpSettings::paintOpSize() const
 {
-    BrushSizeOption option;
+    KisBrushSizeOptionProperties option;
     option.readOptionSetting(this);
     return option.brush_diameter;
 }
@@ -201,14 +201,14 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    BrushSizeOption option;
+                    KisBrushSizeOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(int(option.brush_rotation));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    BrushSizeOption option;
+                    KisBrushSizeOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.brush_rotation = prop->value().toInt();
                     option.writeOptionSetting(prop->settings().data());

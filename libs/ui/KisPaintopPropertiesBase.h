@@ -37,10 +37,10 @@
  * it atm, but we still can create a special interface for accepting raw pointers,
  * which will be used automatically, when 'this' is passed.
  */
-class KRITAUI_EXPORT KisBaseOption
+class KRITAUI_EXPORT KisPaintopPropertiesBase
 {
 public:
-    virtual ~KisBaseOption();
+    virtual ~KisPaintopPropertiesBase();
 
     void readOptionSetting(KisPropertiesConfigurationSP settings);
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const;

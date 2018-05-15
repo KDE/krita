@@ -38,7 +38,7 @@ KisGridPaintOpSettings::KisGridPaintOpSettings()
 
 void KisGridPaintOpSettings::setPaintOpSize(qreal value)
 {
-    GridOption option;
+    KisGridOpProperties option;
     option.readOptionSetting(this);
     option.grid_width = value;
     option.grid_height = value;
@@ -47,7 +47,7 @@ void KisGridPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisGridPaintOpSettings::paintOpSize() const
 {
-    GridOption option;
+    KisGridOpProperties option;
     option.readOptionSetting(this);
 
     return option.grid_width;
@@ -116,14 +116,14 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    GridOption option;
+                    KisGridOpProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(int(option.grid_division_level));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    GridOption option;
+                    KisGridOpProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.grid_division_level = prop->value().toInt();
                     option.writeOptionSetting(prop->settings().data());

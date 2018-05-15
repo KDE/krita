@@ -53,7 +53,7 @@ private:
 
 };
 
-class KisSprayProperties : public KisBaseOption
+class KisSprayOptionProperties : public KisPaintopPropertiesBase
 {
 public:
     quint16 diameter;

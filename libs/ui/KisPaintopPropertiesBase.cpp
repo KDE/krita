@@ -16,30 +16,30 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_base_option.h"
+#include "KisPaintopPropertiesBase.h"
 #include "kis_properties_configuration.h"
 
-KisBaseOption::~KisBaseOption()
+KisPaintopPropertiesBase::~KisPaintopPropertiesBase()
 {
 }
 
 
-void KisBaseOption::readOptionSetting(KisPropertiesConfigurationSP settings)
+void KisPaintopPropertiesBase::readOptionSetting(KisPropertiesConfigurationSP settings)
 {
     readOptionSettingImpl(settings.data());
 }
 
-void KisBaseOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
+void KisPaintopPropertiesBase::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
     writeOptionSettingImpl(settings.data());
 }
 
-void KisBaseOption::readOptionSetting(const KisPropertiesConfiguration *settings)
+void KisPaintopPropertiesBase::readOptionSetting(const KisPropertiesConfiguration *settings)
 {
     readOptionSettingImpl(settings);
 }
 
-void KisBaseOption::writeOptionSetting(KisPropertiesConfiguration *settings) const
+void KisPaintopPropertiesBase::writeOptionSetting(KisPropertiesConfiguration *settings) const
 {
     writeOptionSettingImpl(settings);
 }

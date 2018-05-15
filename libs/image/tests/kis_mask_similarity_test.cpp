@@ -30,13 +30,12 @@
 class KisMaskSimilarityTester
 {
 public:
-    KisMaskSimilarityTester(KisBrushMaskApplicatorBase* _legacy, KisBrushMaskApplicatorBase* _vectorized, QRect _bounds)
+    KisMaskSimilarityTester(KisBrushMaskApplicatorBase *_legacy, KisBrushMaskApplicatorBase *_vectorized, QRect _bounds)
         : legacy(_legacy)
         , vectorized(_vectorized)
         , m_bounds(_bounds)
     {
         KisFixedPaintDeviceSP m_paintDev = new KisFixedPaintDevice(m_colorSpace);
-
         m_paintDev->setRect(m_bounds);
         m_paintDev->initialize(255);
 
@@ -65,7 +64,6 @@ public:
         vectorImage.invertPixels();
         vectorImage.save(QString("vector_mask.png"),"PNG");
 
-
         // Check for differences, max error .5% of pixel mismatch
         int tolerance(m_bounds.width() * m_bounds.height() * .005f);
         // qDebug() << "tolerance: " << tolerance;
@@ -92,10 +90,10 @@ public:
 private:
 
 protected:
-    const KoColorSpace* m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    const KoColorSpace *m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
-    KisBrushMaskApplicatorBase* legacy;
-    KisBrushMaskApplicatorBase* vectorized;
+    KisBrushMaskApplicatorBase *legacy;
+    KisBrushMaskApplicatorBase *vectorized;
     QRect m_bounds;
     KisFixedPaintDeviceSP m_paintDev;
 };
@@ -114,9 +112,10 @@ void KisMaskSimilarityTest::testCircleMask()
     {
     KisCircleMaskGenerator circVectr(20, 1.0, 0.5, 0.5, 2, true);
     KisCircleMaskGenerator circScalar(circVectr);
-    circScalar.resetMaskApplicator(true);
 
+    circScalar.resetMaskApplicator(true);
     KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect40);
+
     circVectr.resetMaskApplicator(true);
     KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect40);
     }

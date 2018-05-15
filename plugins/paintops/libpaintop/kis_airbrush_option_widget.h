@@ -63,10 +63,15 @@ private:
     Private *const m_d;
 };
 
-//class KisAirbrushOptionProperties : public KisPaintopPropertiesBase
-//{
-//protected:
-//};
+struct KisAirbrushOptionProperties : public KisPaintopPropertiesBase
+{
+    bool enabled {false};
+    qreal airbrushInterval {1000.0 / 20.0};
+    bool ignoreSpacing {false};
+
+    void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override;
+    void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
+};
 
 
 #endif

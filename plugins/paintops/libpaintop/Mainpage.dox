@@ -40,7 +40,7 @@ The following classes are important:
 <li>Classes derived from KisPaintOpOption. These classes create a configuration
   widget. That means that you cannot construct any those objects in a
   KisPaintOp. KisPaintOps are created in non-gui threads.
-<li>Classes derived from KisCurveOption.KisCurveOption classes have a generic GUI widget,
+<li>Classes derived from KisCurveOption. KisCurveOption classes have a generic GUI widget,
   KisCurveOptionWidget. So, in contrast to KisPaintOpOption classes, KisCurveOption
   instances can and will be created in the constructor of KisPaintOp paintops.
   This class can manage to read and write its settings directly.

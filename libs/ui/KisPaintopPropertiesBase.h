@@ -26,7 +26,10 @@
 /**
  * This is a special base class for all the options that load/save
  * settings into a properties objects and do *not* store the properties
- * themselves. This class adapts your option to allow its easy use with
+ * themselves. A KisPaintOpOption derived class generates a QWidget for
+ * its configuration page. This cannot be created from a KisPaintO[
+ *
+ * This class adapts your option to allow its easy use with
  * both raw pointers and shared pointers.
  *
  * Motivation:

@@ -37,6 +37,11 @@ class KisPaintopLodLimitations;
  * (for example, a curve), a user-visible name and can
  * be serialized and deserialized into KisPaintOpPresets
  *
+ * Because KisPaintOpOption classes create a QWidget in
+ * their constructor (the configuration page) you CANNOT
+ * create those objects in a KisPaintOp. KisPaintOps are
+ * created in non-gui threads.
+ *
  * Options are disabled by default.
  */
 class KRITAUI_EXPORT KisPaintOpOption : public QObject

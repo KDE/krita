@@ -20,6 +20,25 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <cmath>
 
+#include <config-vc.h>
+#ifdef HAVE_VC
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
+#if defined _MSC_VER
+// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
+#pragma warning ( push )
+#pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4800 )
+#endif
+#include <Vc/Vc>
+#include <Vc/IO>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
+#endif
+
 #include <QDomDocument>
 #include <QVector>
 #include <QPointF>
@@ -29,8 +48,11 @@
 #include "kis_fast_math.h"
 
 #include "kis_base_mask_generator.h"
-#include "kis_gauss_circle_mask_generator.h"
 #include "kis_antialiasing_fade_maker.h"
+#include "kis_brush_mask_applicator_factories.h"
+#include "kis_brush_mask_applicator_base.h"
+#include "kis_gauss_circle_mask_generator.h"
+#include "kis_gauss_circle_mask_generator_p.h"
 
 #define M_SQRT_2 1.41421356237309504880
 
@@ -40,31 +62,6 @@
 #define erf(x) boost::math::erf(x)
 #endif
 
-
-struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
-{
-    Private(bool enableAntialiasing)
-        : fadeMaker(*this, enableAntialiasing)
-    {
-    }
-
-    Private(const Private &rhs)
-        : ycoef(rhs.ycoef),
-        fade(rhs.fade),
-        center(rhs.center),
-        distfactor(rhs.distfactor),
-        alphafactor(rhs.alphafactor),
-        fadeMaker(rhs.fadeMaker, *this)
-    {
-    }
-
-    qreal ycoef;
-    qreal fade;
-    qreal center, distfactor, alphafactor;
-    KisAntialiasingFadeMaker1D<Private> fadeMaker;
-
-    inline quint8 value(qreal dist) const;
-};
 
 KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, CIRCLE, GaussId),
@@ -76,12 +73,16 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal r
     else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
     d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
+
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+
 }
 
 KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(const KisGaussCircleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisMaskGenerator* KisGaussCircleMaskGenerator::clone() const
@@ -107,6 +108,21 @@ inline quint8 KisGaussCircleMaskGenerator::Private::value(qreal dist) const
     dist *= distfactor;
     quint8 ret = alphafactor * (erf(dist + center) - erf(dist - center));
     return (quint8) 255 - ret;
+}
+
+bool KisGaussCircleMaskGenerator::shouldSupersample() const
+{
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
+}
+
+bool KisGaussCircleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample() && spikes() == 2;
+}
+
+KisBrushMaskApplicatorBase* KisGaussCircleMaskGenerator::applicator()
+{
+    return d->applicator.data();
 }
 
 quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const

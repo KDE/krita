@@ -20,6 +20,7 @@
 
 #include "kis_circle_mask_generator.h"
 #include "kis_circle_mask_generator_p.h"
+#include "kis_gauss_circle_mask_generator_p.h"
 #include "kis_brush_mask_applicators.h"
 #include "kis_brush_mask_applicator_base.h"
 
@@ -40,6 +41,14 @@ MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::Ret
 MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
     return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
+}
+
+template<>
+template<>
+MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
+MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+{
+    return new KisBrushMaskVectorApplicator<KisGaussCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 #if defined HAVE_VC
@@ -128,6 +137,86 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             vOne.store(bufferPointer, Vc::Aligned);
         }
 
+        currentIndices = currentIndices + increment;
+
+        bufferPointer += Vc::float_v::size();
+    }
+}
+
+
+struct KisGaussCircleMaskGenerator::FastRowProcessor
+{
+    FastRowProcessor(KisGaussCircleMaskGenerator *maskGenerator)
+        : d(maskGenerator->d.data()) {}
+
+    template<Vc::Implementation _impl>
+    void process(float* buffer, int width, float y, float cosa, float sina,
+                 float centerX, float centerY);
+
+    KisGaussCircleMaskGenerator::Private *d;
+};
+
+template<> void KisGaussCircleMaskGenerator::
+FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
+                                   float centerX, float centerY)
+{
+    float widthHalf = width/2;
+
+    float y_ = (y - widthHalf) / width;
+    float sinay_ = sina * y_;
+    float cosay_ = cosa * y_;
+
+    float gStd = .1515 * (d->fade + .30);
+    float gDen = 1/(2*3.1415 * pow2(gStd));
+    float gExpDen = 2 * pow2(gStd);
+
+    float gMax = gDen * std::exp( -0.02/ gExpDen);
+    float gMin = gDen * std::exp( -0.5/ gExpDen);
+
+
+
+    float* bufferPointer = buffer;
+
+    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero() - widthHalf;
+
+    Vc::float_v increment((float)Vc::float_v::size());
+    Vc::float_v vCenterX(centerX);
+
+    Vc::float_v vCosa(cosa);
+    Vc::float_v vSina(sina);
+    Vc::float_v vCosaY_(cosay_);
+    Vc::float_v vSinaY_(sinay_);
+
+    Vc::float_v vYCoeff(d->ycoef);
+
+    Vc::float_v vOne(Vc::One);
+    Vc::float_v vZero(Vc::Zero);
+
+    for (int i=0; i < width; i+= Vc::float_v::size()){
+        Vc::float_v x_ = currentIndices / width;
+
+
+        Vc::float_v xr_ = -(pow2(x_) + pow2(y_)) / gExpDen;
+        Vc::float_v n = gDen * xr_.apply([](float f) { return std::exp(f); });
+        Vc::float_v vNormFade = -(n - gMin)/(gMax - gMin) + 1.1f;
+
+        Vc::float_m outsideMask = vNormFade > vOne;
+
+        if (!outsideMask.isFull()) {
+
+            Vc::float_v vFade = vNormFade;
+
+            Vc::float_m mask = vNormFade < vZero;
+            vFade.setZero(mask);
+
+            // Mask out the outer circe of the mask
+            vFade(outsideMask) = vOne;
+
+            vFade.store(bufferPointer, Vc::Aligned);
+        } else {
+            // Mask out everything outside the circle
+            vOne.store(bufferPointer, Vc::Aligned);
+        }
         currentIndices = currentIndices + increment;
 
         bufferPointer += Vc::float_v::size();

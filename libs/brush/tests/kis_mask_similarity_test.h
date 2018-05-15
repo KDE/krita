@@ -27,6 +27,7 @@ class KisMaskSimilarityTest : public QObject
 private Q_SLOTS:
 
     void testCircleMask();
+    void testGaussCircleMask();
 };
 
 #endif

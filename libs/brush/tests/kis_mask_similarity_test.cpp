@@ -45,6 +45,10 @@ public:
         QImage vectorImage = convertMaskToQImage(brush, color);
         QImage scalarImage = convertMaskToQImage(vBrush, color);
 
+        // Generate images before testing to asses visualy any difference
+        scalarImage.save(QString("scalar2.png"),"PNG");
+        vectorImage.save(QString("vector2.png"),"PNG");
+
         // Check error deviation between values is less than 0.05
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
@@ -52,9 +56,6 @@ public:
                 QVERIFY(error < 5);
             }
         }
-
-        scalarImage.save(QString("scalar2.png"),"PNG");
-        vectorImage.save(QString("vector2.png"),"PNG");
     }
 
 private:
@@ -87,6 +88,13 @@ void KisMaskSimilarityTest::testCircleMask()
     KisMaskSimilarityTester(
         new KisCircleMaskGenerator(40, 1.0, 0.5, 0.5, 3, true),
         new KisCircleMaskGenerator(40, 1.0, 0.5, 0.5, 2, true));
+}
+
+void KisMaskSimilarityTest::testGaussCircleMask()
+{
+    KisMaskSimilarityTester(
+        new KisGaussCircleMaskGenerator(40, 1.0, 0.5, 0.5, 3, true),
+        new KisGaussCircleMaskGenerator(40, 1.0, 0.5, 0.5, 2, true));
 }
 
 QTEST_MAIN(KisMaskSimilarityTest)

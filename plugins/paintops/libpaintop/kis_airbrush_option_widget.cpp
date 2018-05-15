@@ -150,7 +150,7 @@ void KisAirbrushOptionProperties::readOptionSettingImpl(const KisPropertiesConfi
     ignoreSpacing = setting->getBool(AIRBRUSH_IGNORE_SPACING, false);
 }
 
-void KisAirbrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const{
+void KisAirbrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
     setting->setProperty(AIRBRUSH_ENABLED, enabled);
     setting->setProperty(AIRBRUSH_RATE, 1000.0 / airbrushInterval > 0 ? airbrushInterval : 1.0);
     setting->setProperty(AIRBRUSH_IGNORE_SPACING, ignoreSpacing);

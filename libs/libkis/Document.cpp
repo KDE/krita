@@ -440,6 +440,7 @@ bool Document::close()
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
             view->close();
+            view->closeView();
             view->deleteLater();
         }
     }

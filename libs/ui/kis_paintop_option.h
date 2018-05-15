@@ -24,7 +24,7 @@
 #include <kritaui_export.h>
 #include <kis_properties_configuration.h>
 #include <brushengine/kis_locked_properties_proxy.h>
-#include <kis_base_option.h>
+#include <KisPaintopPropertiesBase.h>
 
 class QWidget;
 class QString;
@@ -74,13 +74,13 @@ public:
     void startReadOptionSetting(const KisPropertiesConfigurationSP setting);
     void startWriteOptionSetting(KisPropertiesConfigurationSP setting) const;
 
-    QWidget* configurationPage() const;
+    QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
 protected:
 
-    void setConfigurationPage(QWidget * page);
+    void setConfigurationPage(QWidget *page);
 
 protected:
     /**

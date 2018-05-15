@@ -55,10 +55,10 @@ private:
 
 private:
     KisShapeProperties m_shapeProperties;
-    KisSprayProperties m_properties;
+    KisSprayOptionProperties m_properties;
     KisShapeDynamicsProperties m_shapeDynamicsProperties;
     KisColorProperties m_colorProperties;
-    KisBrushOption m_brushOption;
+    KisBrushOptionProperties m_brushOption;
 
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;

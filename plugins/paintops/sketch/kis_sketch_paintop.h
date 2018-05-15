@@ -76,7 +76,7 @@ private:
     KisOffsetScaleOption m_offsetScaleOption;
     KisAirbrushOptionWidget m_airbrushOptionWidget;
 
-    KisBrushOption m_brushOption;
+    KisBrushOptionProperties m_brushOption;
     SketchProperties m_sketchProperties;
 
     QVector<QPointF> m_points;

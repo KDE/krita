@@ -43,7 +43,7 @@ private:
 
 };
 
-class CurveOption : public KisBaseOption
+class KisCurveOptionProperties : public KisPaintopPropertiesBase
 {
 public:
     bool curve_paint_connection_line;

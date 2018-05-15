@@ -63,4 +63,10 @@ private:
     Private *const m_d;
 };
 
+//class KisAirbrushOptionProperties : public KisPaintopPropertiesBase
+//{
+//protected:
+//};
+
+
 #endif

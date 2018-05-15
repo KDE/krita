@@ -24,6 +24,8 @@
 
 #include "kis_brush_mask_applicator_base.h"
 #include "kis_mask_generator.h"
+#include "krita_utils.h"
+
 
 class KisMaskSimilarityTester
 {
@@ -33,70 +35,64 @@ public:
         , vectorized(_vectorized)
         , m_bounds(_bounds)
     {
-        KoColor color(Qt::black, colorSpace);
-        KisFixedPaintDeviceSP m_paintDev = new KisFixedPaintDevice(colorSpace);
+        KisFixedPaintDeviceSP m_paintDev = new KisFixedPaintDevice(m_colorSpace);
 
         m_paintDev->setRect(m_bounds);
-        m_paintDev->initialize();
+        m_paintDev->initialize(255);
 
-
-        MaskProcessingData data(m_paintDev, colorSpace,
+        MaskProcessingData data(m_paintDev, m_colorSpace,
                                 0.0, 1.0,
-                                m_bounds.width() / 2, m_bounds.height() / 2,0);
+                                m_bounds.width() / 2.0, m_bounds.height() / 2.0,0);
 
+        // Start legacy scalar processing
         legacy->initializeData(&data);
         legacy->process(m_bounds);
 
-        QImage scalarImage = m_paintDev->convertToQImage(colorSpace->profile());
-        scalarImage.save(QString("scalar_v2.png"),"PNG");
+        QImage scalarImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
+        scalarImage.invertPixels();
+        scalarImage.save(QString("scalar_mask.png"),"PNG");
+
+        // Start vector processing
+        m_paintDev->initialize(255);
+        vectorized->initializeData(&data);
+//        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(m_paintDev->bounds(), QSize(3, 3));
+//        Q_FOREACH (const QRect &rc, rects) {
+//            vectorized->process(rc);
+//        }
+        vectorized->process(m_bounds);
+
+        QImage vectorImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
+        vectorImage.invertPixels();
+        vectorImage.save(QString("vector_mask.png"),"PNG");
 
 
-//        vectorized->process(bounds);
+        // Check for differences, max error .5% of pixel mismatch
+        int tolerance(m_bounds.width() * m_bounds.height() * .005f);
+        // qDebug() << "tolerance: " << tolerance;
+        QPoint tmpPt;
+        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, tolerance));
 
-//        QImage scalarImage = convertMaskToQImage(device, color);
-
-//        KisBrushSP brush = initializeBrush(legacy);
-//        KisBrushSP vBrush = initializeBrush(vectorized);
-
-
-
-//        QImage scalarImage = convertMaskToQImage(brush, color);
-//        QImage vectorImage = convertMaskToQImage(vBrush, color);
-
-//        // Generate images before testing to asses visualy any difference
-//        scalarImage.save(QString("scalar_new.png"),"PNG");
-//        vectorImage.save(QString("vector2.png"),"PNG");
-
-//        QPoint tmp;
-//        QVERIFY(TestUtil::compareQImages(tmp,scalarImage, vectorImage, 0, 5));
-//        // Check error deviation between values is less than 0.05
-        for (int i = 0; i < scalarImage.width(); ++i) {
-            for (int j = 0; j < scalarImage.height(); ++j) {
-                qDebug() << scalarImage.pixelColor(i,j);
-//                qint16 error(qFabs(scalarImage.pixelColor(i,j).alphaF() - vectorImage.pixelColor(i,j).alphaF()) * 100);
-//                QVERIFY(error < 5);
-            }
-        }
+        // Check error deviation between values is less than 0.05
+// Development debug.
+//        int equals = 0;
+//        for (int i = 0; i < scalarImage.width(); ++i) {
+//            for (int j = 0; j < scalarImage.height(); ++j) {
+//                if (scalarImage.pixelColor(i,j) == vectorImage.pixelColor(i,j)){
+//                    equals++;
+//                } else {
+//                    qDebug() << scalarImage.pixelColor(i,j) << " " << vectorImage.pixelColor(i,j);
+//                }
+//            }
+//        }
+//        qDebug() << "Equal Pixels: " << equals;
+//        qDebug() << scalarImage;
+//        qDebug() << vectorImage;
     }
 
 private:
-//    KisBrushSP initializeBrush(KisMaskGenerator *mg){
-//        KisBrushSP brush = new KisAutoBrush(mg, 1.0, 0.0);
-//        brush->setSpacing(0.15);
-//        brush->setAutoSpacing(true, 0.1);
-//        return brush;
-//    };
-
-//    QImage convertMaskToQImage(KisFixedPaintDeviceSP dev, KoColor color){
-        //KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(colorSpace);
-        //brush->mask(dev, color, shape, info);
-//        return dev->convertToQImage(colorSpace->profile());
-//    };
 
 protected:
-    const KoColorSpace* colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-//    KisPaintInformation info = KisPaintInformation(QPointF(40.0, 10.0), 0.5);
-//    KisDabShape shape = KisDabShape(1.0,1.0,1.0);
+    const KoColorSpace* m_colorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     KisBrushMaskApplicatorBase* legacy;
     KisBrushMaskApplicatorBase* vectorized;
@@ -107,10 +103,23 @@ protected:
 
 void KisMaskSimilarityTest::testCircleMask()
 {
-    QRect bounds(0,0,40,40);
-    KisMaskSimilarityTester(
-        (new KisCircleMaskGenerator(40, 1.0, 0.5, 0.5, 3, true))->applicator(),
-        (new KisCircleMaskGenerator(40, 1.0, 0.5, 0.5, 2, true))->applicator(), bounds);
+//    QRect rect500(0,0,500,500);
+//    {
+//    KisCircleMaskGenerator circScalar(250, 1.0, 0.5, 0.5, 2, true);
+//    KisCircleMaskGenerator circVectr(250, 1.0, 0.5, 0.5, 2, true);
+//    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect500);
+//    }
+
+    QRect rect40(0,0,40,40);
+    {
+    KisCircleMaskGenerator circVectr(20, 1.0, 0.5, 0.5, 2, true);
+    KisCircleMaskGenerator circScalar(circVectr);
+    circScalar.resetMaskApplicator(true);
+
+    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect40);
+    circVectr.resetMaskApplicator(true);
+    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect40);
+    }
 }
 
 //void KisMaskSimilarityTest::testGaussCircleMask()

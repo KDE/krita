@@ -9,7 +9,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-from exportlayers import exportlayersdialog
+from . import exportlayersdialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
                              QDialogButtonBox, QVBoxLayout, QFrame,
@@ -127,17 +127,20 @@ class UIExportLayers(object):
         self.msgBox.exec_()
 
     def mkdir(self, directory):
+        target_directory = self.directoryTextField.text() + directory
+        if os.path.exists(target_directory) and os.path.isdir(target_directory):
+            return
+
         try:
-            os.makedirs(self.directoryTextField.text() + directory)
+            os.makedirs(target_directory)
         except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
+            raise e
 
     def export(self, document):
         Application.setBatchmode(self.batchmodeCheckBox.isChecked())
 
         documentName = document.fileName() if document.fileName() else 'Untitled'
-        fileName, extension = str(documentName).rsplit('/', maxsplit=1)[-1].split('.', maxsplit=1)
+        fileName, extension = os.path.splitext(os.path.basename(documentName))
         self.mkdir('/' + fileName)
 
         self._exportLayers(document.rootNode(), self.formatsComboBox.currentText(), '/' + fileName)
@@ -150,7 +153,7 @@ class UIExportLayers(object):
         for node in parentNode.childNodes():
             newDir = ''
             if node.type() == 'grouplayer':
-                newDir = parentDir + '/' + node.name()
+                newDir = os.path.join(parentDir, node.name())
                 self.mkdir(newDir)
             elif not self.exportFilterLayersCheckBox.isChecked() and 'filter' in node.type():
                 continue
@@ -164,8 +167,9 @@ class UIExportLayers(object):
                 elif '[png]' in nodeName:
                     _fileFormat = 'png'
 
-                layerFileName = '{0}{1}/{2}.{3}'.format(self.directoryTextField.text(), parentDir, node.name(), _fileFormat)
-                teste = node.save(layerFileName, self.xResSpinBox.value(), self.yResSpinBox.value())
+                layerFileName = '{0}{1}/{2}.{3}'.format(self.directoryTextField.text(),
+                                                        parentDir, node.name(), _fileFormat)
+                node.save(layerFileName, self.xResSpinBox.value(), self.yResSpinBox.value())
 
             if node.childNodes():
                 self._exportLayers(node, fileFormat, newDir)

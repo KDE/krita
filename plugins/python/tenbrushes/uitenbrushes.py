@@ -12,7 +12,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import (QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout)
-from tenbrushes import tenbrushesdialog, dropbutton
+from . import tenbrushesdialog, dropbutton
 import krita
 
 
@@ -43,7 +43,6 @@ class UITenBrushes(object):
         self.vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
         self.vbox.addWidget(self.presetChooser)
         self.vbox.addWidget(self.buttonBox)
-
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()

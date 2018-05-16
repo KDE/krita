@@ -76,7 +76,11 @@ namespace PyKrita
             return initStatus;
         }
 
+#if defined(IS_PY3K)
         if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PyInit_pykrita)) {
+#else
+        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, initpykrita)) {
+#endif
             initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;
             return initStatus;
         }
@@ -101,6 +105,7 @@ namespace PyKrita
 
         pluginManagerInstance.reset(new PythonPluginManager());
 
+#if defined(IS_PY3K)
         // Initialize our built-in module.
         auto pykritaModule = PyInit_pykrita();
 
@@ -109,6 +114,9 @@ namespace PyKrita
             return initStatus;
             //return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
         }
+#else
+        initpykrita();
+#endif
 
         initStatus = INIT_OK;
         return initStatus;
@@ -412,7 +420,9 @@ bool Python::setPath(const QStringList& scriptPaths)
     if (KoResourcePaths::getApplicationRoot().contains(".mount_Krita")) {
         QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
         joinedPaths.toWCharArray(joinedPathsWChars.data());
-        Py_SetPath(joinedPathsWChars.data());
+        PyRun_SimpleString("import sys; import os");
+        QString pathCommand = QString("sys.path += '") + joinedPaths + QString("'.split(os.pathsep)");
+        PyRun_SimpleString(pathCommand.toUtf8().constData());
     }
     else {
         qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());

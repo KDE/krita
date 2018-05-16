@@ -10,7 +10,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 import krita
-from tenbrushes import uitenbrushes
+from . import uitenbrushes
 
 
 class TenBrushesExtension(krita.Extension):
@@ -24,7 +24,7 @@ class TenBrushesExtension(krita.Extension):
 
     def setup(self):
         self.readSettings()
-        
+
     def createActions(self, window):
         action = window.createAction("ten_brushes", "Ten Brushes")
         action.setToolTip("Assign ten brush presets to ten shortcuts.")

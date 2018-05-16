@@ -44,7 +44,7 @@ class NewAction(QAction):
         msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         msgBox.setDefaultButton(QMessageBox.Save)
 
-        ret = msgBox.exec()
+        ret = msgBox.exec_()
 
         if ret == QMessageBox.Cancel:
             return

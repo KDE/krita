@@ -9,23 +9,29 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
+import sys
+
 from PyQt5.QtWidgets import QMessageBox
 import krita
-from tenscripts import uitenscripts
-import importlib
+from . import uitenscripts
+
+if sys.version_info[0] > 2:
+    import importlib
+else:
+    import imp
 
 
 class TenScriptsExtension(krita.Extension):
 
     def __init__(self, parent):
-       super(TenScriptsExtension, self).__init__(parent)
+        super(TenScriptsExtension, self).__init__(parent)
 
-       self.actions = []
-       self.scripts = []
+        self.actions = []
+        self.scripts = []
 
     def setup(self):
         self.readSettings()
-        
+
     def createActions(self, window):
         action = window.createAction("ten_scripts", "Ten Scripts")
         action.setToolTip("Assign ten scripts to ten shortcuts.")
@@ -62,10 +68,13 @@ class TenScriptsExtension(krita.Extension):
         script = self.sender().script
         if script:
             try:
-                spec = importlib.util.spec_from_file_location("users_script", script)
-                users_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(users_module)
-                
+                if sys.version_info[0] > 2:
+                    spec = importlib.util.spec_from_file_location("users_script", script)
+                    users_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(users_module)
+                else:
+                    users_module = imp.load_source("users_script", script)
+
                 if hasattr(users_module, 'main') and callable(users_module.main):
                     users_module.main()
 

@@ -59,6 +59,13 @@ bool PythonPlugin::isValid() const
         dbgScript << "Ignore desktop file w/o a module to import";
         return false;
     }
+#if PY_MAJOR_VERSION == 2
+    // Check if the plug-in is compatible with Python 2 or not.
+    if (m_properties["X-Python-2-Compatible"].toBool() != true) {
+        dbgScript << "Ignoring plug-in. It is marked incompatible with Python 2.";
+        return false;
+    }
+#endif
 
     return true;
 }

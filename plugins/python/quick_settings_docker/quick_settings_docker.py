@@ -28,7 +28,7 @@ class QuickSettingsDocker(DockWidget):
     # Init the docker
 
     def __init__(self):
-        super().__init__()
+        super(QuickSettingsDocker, self).__init__()
         # make base-widget and layout
         widget = QWidget()
         layout = QVBoxLayout()
@@ -133,7 +133,7 @@ class QuickSettingsDocker(DockWidget):
             brush.setColor(self.brushSizeTableView.palette().color(QPalette.Text))
             circlePainter.setBrush(brush)
             circlePainter.setPen(QPen(QBrush(Qt.transparent), 0))
-            circlePainter.setOpacity(self.opacityList[s] / 100)
+            circlePainter.setOpacity(float(self.opacityList[s]) / 100.0)
             circlePainter.drawEllipse(QPointF(32, 32), 32, 32)
             circlePainter.end()
             brushImage = QPixmap.fromImage(img)
@@ -159,14 +159,14 @@ class QuickSettingsDocker(DockWidget):
     @pyqtSlot('QModelIndex')
     def setBrushOpacity(self, index):
         i = index.row()
-        brushOpacity = self.opacityList[i] / 100
+        brushOpacity = float(self.opacityList[i]) / 100.0
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0:
             Application.activeWindow().views()[0].setPaintingOpacity(brushOpacity)
 
     @pyqtSlot('QModelIndex')
     def setBrushFlow(self, index):
         i = index.row()
-        brushOpacity = self.opacityList[i] / 100
+        brushOpacity = float(self.opacityList[i]) / 100.0
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0:
             Application.activeWindow().views()[0].setPaintingFlow(brushOpacity)
 

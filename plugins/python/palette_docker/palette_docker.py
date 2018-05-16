@@ -32,7 +32,7 @@ class Palette_Docker(DockWidget):
     # Init the docker
 
     def __init__(self):
-        super().__init__()
+        super(Palette_Docker, self).__init__()
         # make base-widget and layout
         widget = QWidget()
         layout = QVBoxLayout()
@@ -142,7 +142,7 @@ class Palette_Docker(DockWidget):
             pass
         palette = self.currentPalette
         self.colorComboBox.clear()
-        self.colorList.clear()
+        self.colorList = list()
         for i in range(palette.colorsCountTotal()):
             entry = palette.colorSetEntryByIndex(i)
             color = palette.colorForEntry(entry).colorForCanvas(self.canvas())

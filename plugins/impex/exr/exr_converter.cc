@@ -33,6 +33,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDomDocument>
+#include <QThread>
 
 #include <QFileInfo>
 
@@ -167,6 +168,10 @@ EXRConverter::EXRConverter(KisDocument *doc, bool showNotifications)
 {
     d->doc = doc;
     d->showNotifications = showNotifications;
+
+    // Set thread count for IlmImf library
+    Imf::setGlobalThreadCount(QThread::idealThreadCount());
+    dbgFile << "EXR Threadcount was set to: " << QThread::idealThreadCount();
 }
 
 EXRConverter::~EXRConverter()
@@ -373,35 +378,37 @@ void EXRConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
 {
     typedef Rgba<_T_> Rgba;
 
-    QVector<Rgba> pixels(width);
+    QVector<Rgba> pixels(width * height);
 
     bool hasAlpha = info.channelMap.contains("A");
 
-    for (int y = 0; y < height; ++y) {
-        Imf::FrameBuffer frameBuffer;
-        Rgba* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
-                Imf::Slice(ptype, (char *) &frameBufferData->r,
+    Imf::FrameBuffer frameBuffer;
+    Rgba* frameBufferData = (pixels.data()) - xstart - ystart * width;
+    frameBuffer.insert(info.channelMap["R"].toLatin1().constData(),
+            Imf::Slice(ptype, (char *) &frameBufferData->r,
+                       sizeof(Rgba) * 1,
+                       sizeof(Rgba) * width));
+    frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
+            Imf::Slice(ptype, (char *) &frameBufferData->g,
+                       sizeof(Rgba) * 1,
+                       sizeof(Rgba) * width));
+    frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
+            Imf::Slice(ptype, (char *) &frameBufferData->b,
+                       sizeof(Rgba) * 1,
+                       sizeof(Rgba) * width));
+    if (hasAlpha) {
+        frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
+                Imf::Slice(ptype, (char *) &frameBufferData->a,
                            sizeof(Rgba) * 1,
                            sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
-                Imf::Slice(ptype, (char *) &frameBufferData->g,
-                           sizeof(Rgba) * 1,
-                           sizeof(Rgba) * width));
-        frameBuffer.insert(info.channelMap["B"].toLatin1().constData(),
-                Imf::Slice(ptype, (char *) &frameBufferData->b,
-                           sizeof(Rgba) * 1,
-                           sizeof(Rgba) * width));
-        if (hasAlpha) {
-            frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
-                    Imf::Slice(ptype, (char *) &frameBufferData->a,
-                               sizeof(Rgba) * 1,
-                               sizeof(Rgba) * width));
-        }
+    }
 
-        file.setFrameBuffer(frameBuffer);
-        file.readPixels(ystart + y);
-        Rgba *rgba = pixels.data();
+    file.setFrameBuffer(frameBuffer);
+    file.readPixels(ystart, height + ystart - 1);
+    Rgba *rgba = pixels.data();
+
+    for (int y = 0; y < height; ++y)
+    {
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
         do {
 
@@ -424,7 +431,6 @@ void EXRConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
             ++rgba;
         } while (it->nextPixel());
     }
-
 }
 
 template<typename _T_>
@@ -436,7 +442,7 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
     KIS_ASSERT_RECOVER_RETURN(
                 layer->paintDevice()->colorSpace()->colorModelId() == GrayAColorModelID);
 
-    QVector<pixel_type> pixels(width);
+    QVector<pixel_type> pixels(width * height);
 
     Q_ASSERT(info.channelMap.contains("G"));
     dbgFile << "G -> " << info.channelMap["G"];
@@ -445,25 +451,26 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
     dbgFile << "Has Alpha:" << hasAlpha;
 
 
-    for (int y = 0; y < height; ++y) {
-        Imf::FrameBuffer frameBuffer;
-        pixel_type* frameBufferData = (pixels.data()) - xstart - (ystart + y) * width;
-        frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
-                Imf::Slice(ptype, (char *) &frameBufferData->gray,
+    Imf::FrameBuffer frameBuffer;
+    pixel_type* frameBufferData = (pixels.data()) - xstart - ystart * width;
+    frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
+            Imf::Slice(ptype, (char *) &frameBufferData->gray,
+                       sizeof(pixel_type) * 1,
+                       sizeof(pixel_type) * width));
+
+    if (hasAlpha) {
+        frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
+                Imf::Slice(ptype, (char *) &frameBufferData->alpha,
                            sizeof(pixel_type) * 1,
                            sizeof(pixel_type) * width));
+    }
 
-        if (hasAlpha) {
-            frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
-                    Imf::Slice(ptype, (char *) &frameBufferData->alpha,
-                               sizeof(pixel_type) * 1,
-                               sizeof(pixel_type) * width));
-        }
+    file.setFrameBuffer(frameBuffer);
+    file.readPixels(ystart, height + ystart - 1);
 
-        file.setFrameBuffer(frameBuffer);
-        file.readPixels(ystart + y);
+    pixel_type *srcPtr = pixels.data();
 
-        pixel_type *srcPtr = pixels.data();
+    for (int y = 0; y < height; ++y) {
         KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
         do {
 

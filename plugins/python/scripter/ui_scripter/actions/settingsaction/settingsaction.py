@@ -40,7 +40,7 @@ class SettingsAction(QAction):
 
     def openSettings(self):
         self.settingsDialog.show()
-        self.settingsDialog.exec()
+        self.settingsDialog.exec_()
 
     def readSettings(self):
         self.settingsDialog.readSettings(self.scripter.settings)

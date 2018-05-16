@@ -18,12 +18,10 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 
 # Importing the relevant dependencies:
-import sys
-import math
 from krita import *
 
 
-class sortColors:
+class sortColors(object):
 
     def __init__(self, name):
         # We want people to select a palette...

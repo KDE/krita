@@ -9,7 +9,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-from documenttools import documenttoolsdialog
+from . import documenttoolsdialog
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QAbstractItemView,
                              QDialogButtonBox, QVBoxLayout, QFrame, QTabWidget,
@@ -71,7 +71,8 @@ class UIDocumentTools(object):
         modules = []
 
         for classPath in toolsModule.ToolClasses:
-            _module, _klass = classPath.rsplit('.', maxsplit=1)
+            _module = classPath[:classPath.rfind(".")]
+            _klass = classPath[classPath.rfind(".") + 1:]
             modules.append(dict(module='{0}.{1}'.format(modulePath, _module),
                                 klass=_klass))
 

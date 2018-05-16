@@ -11,7 +11,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtCore import QAbstractItemModel, QFile, QIODevice, QModelIndex, Qt
 from PyQt5.QtWidgets import QApplication, QTreeView
-from filtermanager.components import filtermanagertreeitem
+from . import filtermanagertreeitem
 from PyQt5.QtGui import QPixmap
 
 

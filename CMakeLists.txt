@@ -194,6 +194,7 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
+option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
 
 include(MacroJPEG)
 
@@ -218,18 +219,31 @@ int main(int argc, char *argv[]) {
 endfunction()
 
 if(MINGW)
-    find_package(PythonInterp 3.6 EXACT)
-    find_package(PythonLibs 3.6 EXACT)
+    if(ENABLE_PYTHON_2)
+        message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
+    else(ENABLE_PYTHON_2)
+        find_package(PythonInterp 3.6 EXACT)
+        find_package(PythonLibs 3.6 EXACT)
+    endif(ENABLE_PYTHON_2)
     if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
-        find_package(PythonLibrary 3.6)
+        if(ENABLE_PYTHON_2)
+            find_package(PythonLibrary 2.7)
+        else(ENABLE_PYTHON_2)
+            find_package(PythonLibrary 3.6)
+        endif(ENABLE_PYTHON_2)
         TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
         if (NOT CAN_USE_PYTHON_LIBS)
             message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
         endif (NOT CAN_USE_PYTHON_LIBS)
     endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 else(MINGW)
-    find_package(PythonInterp 3.0)
-    find_package(PythonLibrary 3.0)
+    if(ENABLE_PYTHON_2)
+        find_package(PythonInterp 2.7)
+        find_package(PythonLibrary 2.7)
+    else(ENABLE_PYTHON_2)
+        find_package(PythonInterp 3.0)
+        find_package(PythonLibrary 3.0)
+    endif(ENABLE_PYTHON_2)
 endif(MINGW)
 
  ########################
@@ -459,7 +473,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost 1.55 REQUIRED COMPONENTS system) 
+find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
@@ -621,7 +635,7 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
-if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm") 
+if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
     if(NOT MSVC)
         find_package(Vc 1.1.0)
         set_package_properties(Vc PROPERTIES

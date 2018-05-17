@@ -133,14 +133,14 @@ struct ExrPaintLayerSaveInfo {
 struct EXRConverter::Private {
     Private()
         : doc(0)
-        , warnedAboutChangedAlpha(false)
+        , alphaWasModified(false)
         , showNotifications(false)
     {}
 
     KisImageSP image;
     KisDocument *doc;
 
-    bool warnedAboutChangedAlpha;
+    bool alphaWasModified;
     bool showNotifications;
 
     QString errorMessage;
@@ -302,7 +302,6 @@ void EXRConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
 
     if (!srcPixel.checkMultipliedColorsConsistent()) {
 
-        bool alphaWasModified = false;
         channel_type newAlpha = srcPixel.alpha();
 
         pixel_type __dstPixelData;
@@ -320,35 +319,11 @@ void EXRConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
             }
 
             newAlpha += alphaEpsilon<channel_type>();
-            alphaWasModified = true;
+            this->alphaWasModified = true;
         }
 
         *pixel = dstPixel.pixel;
 
-        if (alphaWasModified &&
-                !this->warnedAboutChangedAlpha) {
-
-            QString msg =
-                    i18nc("@info",
-                          "The image contains pixels with zero alpha channel and non-zero "
-                          "color channels. Krita will have to modify those pixels to have "
-                          "at least some alpha. The initial values will <i>not</i> "
-                          "be reverted on saving the image back."
-                          "<br/><br/>"
-                          "This will hardly make any visual difference just keep it in mind."
-                          "<br/><br/>"
-                          "<note>Modified alpha will have a range from %1 to %2</note>",
-                          alphaEpsilon<channel_type>(),
-                          alphaNoiseThreshold<channel_type>());
-
-            if (this->showNotifications) {
-                QMessageBox::information(0, i18nc("@title:window", "EXR image will be modified"), msg);
-            } else {
-                warnKrita << "WARNING:" << msg;
-            }
-
-            this->warnedAboutChangedAlpha = true;
-        }
 
     } else if (srcPixel.alpha() > 0.0) {
         srcPixel.setUnmultiplied(srcPixel.pixel, srcPixel.alpha());
@@ -889,6 +864,23 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
             d->image->addNode(layer, groupLayerParent);
         } else {
             dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
+        }
+    }
+
+    // After reading the image, notify the user about changed alpha.
+    if (d->alphaWasModified) {
+        QString msg =
+                i18nc("@info",
+                      "The image contains pixels with zero alpha channel and non-zero "
+                      "color channels. Krita has modified those pixels to have "
+                      "at least some alpha. The initial values will <i>not</i> "
+                      "be reverted on saving the image back."
+                      "<br/><br/>"
+                      "This will hardly make any visual difference just keep it in mind.");
+        if (d->showNotifications) {
+            QMessageBox::information(0, i18nc("@title:window", "EXR image has been modified"), msg);
+        } else {
+            warnKrita << "WARNING:" << msg;
         }
     }
 

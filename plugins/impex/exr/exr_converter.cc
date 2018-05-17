@@ -407,9 +407,9 @@ void EXRConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
     file.readPixels(ystart, height + ystart - 1);
     Rgba *rgba = pixels.data();
 
-    for (int y = 0; y < height; ++y)
+    for (int y = ystart; y < ystart + height; ++y)
     {
-        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(xstart, y, width);
         do {
 
             if (hasAlpha) {
@@ -470,8 +470,8 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     pixel_type *srcPtr = pixels.data();
 
-    for (int y = 0; y < height; ++y) {
-        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+    for (int y = ystart; y < height + ystart; ++y) {
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(xstart, y, width);
         do {
 
             if (hasAlpha) {
@@ -576,6 +576,8 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
     Imf::InputFile file(QFile::encodeName(filename));
 
     Imath::Box2i dw = file.header().dataWindow();
+    Imath::Box2i displayWindow = file.header().displayWindow();
+
     int width = dw.max.x - dw.min.x + 1;
     int height = dw.max.y - dw.min.y + 1;
     int dx = dw.min.x;
@@ -799,7 +801,11 @@ KisImageBuilder_Result EXRConverter::decode(const QString &filename)
     }
 
     // Create the image
-    d->image = new KisImage(d->doc->createUndoStore(), width, height, colorSpace, "");
+    //  Make sure the created image is the same size as the displayWindow since
+    //  the dataWindow can be cropped in some cases.
+    int displayWidth = displayWindow.max.x - displayWindow.min.x + 1;
+    int displayHeight = displayWindow.max.y - displayWindow.min.y + 1;
+    d->image = new KisImage(d->doc->createUndoStore(), displayWidth, displayHeight, colorSpace, "");
 
     if (!d->image) {
         return KisImageBuilder_RESULT_FAILURE;

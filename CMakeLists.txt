@@ -10,7 +10,7 @@ if (OVERRIDE_QT_VERSION)
     set(MIN_QT_VERSION 5.4.0)
 endif()
 
-set(MIN_FRAMEWORKS_VERSION 5.7.0)
+set(MIN_FRAMEWORKS_VERSION 5.22.0)
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
@@ -252,7 +252,7 @@ endif(MINGW)
 #########################
 ########################
 
-find_package(ECM 5.19 REQUIRED NOMODULE)
+find_package(ECM 5.22 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)

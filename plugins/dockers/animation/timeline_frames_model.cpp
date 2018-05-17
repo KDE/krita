@@ -794,9 +794,10 @@ bool TimelineFramesModel::copyFrame(const QModelIndex &dstIndex)
     return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), true);
 }
 
-bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows, int count)
+bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing)
 {
     if (dstRows.isEmpty() || count <= 0) return true;
+    timing = qMax(timing, 1);
 
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Insert frame", "Insert %1 frames", count));
 
@@ -811,10 +812,9 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
             }
         }
 
-        setLastVisibleFrame(columnCount() + count - 1);
+        setLastVisibleFrame(columnCount() + (count * timing) - 1);
 
-
-        createOffsetFramesCommand(indexes, QPoint(count, 0), false, parentCommand);
+        createOffsetFramesCommand(indexes, QPoint((count * timing), 0), false, parentCommand);
 
         Q_FOREACH (int row, dstRows) {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
@@ -823,13 +823,13 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
             KisNodeSP node = dummy->node();
             if (!KisAnimationUtils::supportsContentFrames(node)) continue;
 
-            for (int column = dstColumn; column < dstColumn + count; column++) {
+            for (int column = dstColumn; column < dstColumn + (count * timing); column += timing) {
                 KisAnimationUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Content.id(), column, false, parentCommand);
             }
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();
-        const int newTime = dstColumn > oldTime ? dstColumn : dstColumn + count - 1;
+        const int newTime = dstColumn > oldTime ? dstColumn : dstColumn + (count * timing) - 1;
 
         new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
                                         oldTime,
@@ -933,7 +933,6 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(), KisStrokeJobData::BARRIER);
     return true;
 }
-
 
 QString TimelineFramesModel::audioChannelFileName() const
 {

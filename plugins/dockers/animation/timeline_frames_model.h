@@ -59,7 +59,7 @@ public:
     bool createFrame(const QModelIndex &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
 
-    bool insertFrames(int dstColumn, const QList<int> &dstRows, int count);
+    bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
 
     bool insertHoldFrames(QModelIndexList selectedIndexes, int count);
 

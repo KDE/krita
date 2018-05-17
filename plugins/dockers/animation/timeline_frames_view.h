@@ -27,7 +27,6 @@
 class KisAction;
 class TimelineWidget;
 
-
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
 {
     Q_OBJECT
@@ -55,20 +54,19 @@ private Q_SLOTS:
     void slotSetEndTimeToCurrentPosition();
     void slotUpdatePlackbackRange();
 
+    // Layer
     void slotAddNewLayer();
     void slotAddExistingLayer(QAction *action);
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-
     void slotRemoveLayer();
-
     void slotLayerContextMenuRequested(const QPoint &globalPos);
 
+    // New, Copy, Insert and Remove Frames
     void slotNewFrame();
     void slotCopyFrame();
 
-
-    void slotInsertKeyframesLeft(int count = -1, bool forceEntireColumn = false);
-    void slotInsertKeyframesRight(int count = -1, bool forceEntireColumn = false);
+    void slotInsertKeyframesLeft(int count = 1, int timing = 1, bool forceEntireColumn = false);
+    void slotInsertKeyframesRight(int count = 1, int timing = 1, bool forceEntireColumn = false);
 
     void slotInsertKeyframesLeftCustom();
     void slotInsertKeyframesRightCustom();
@@ -76,10 +74,10 @@ private Q_SLOTS:
     void slotRemoveFrame(bool forceEntireColumn = false, bool needsOffset = false);
     void slotRemoveFramesAndShift(bool forceEntireColumn = false);
 
-    void slotInsertColumnsLeft(int count = -1);
+    void slotInsertColumnsLeft(int count = 1, int timing = 1);
     void slotInsertColumnsLeftCustom();
 
-    void slotInsertColumnsRight(int count = -1);
+    void slotInsertColumnsRight(int count = 1, int timing = 1);
     void slotInsertColumnsRightCustom();
 
     void slotRemoveColumns();
@@ -100,7 +98,7 @@ private Q_SLOTS:
     void slotMirrorFrames(bool forceEntireColumn = false);
     void slotMirrorColumns();
 
-
+    // Copy-paste
     void slotCopyFrames(bool forceEntireColumn = false);
     void slotCutFrames(bool forceEntireColumn = false);
     void slotPasteFrames(bool forceEntireColumn = false);
@@ -121,7 +119,7 @@ private Q_SLOTS:
     void slotColorLabelChanged(int);
     void slotEnsureRowVisible(int row);
 
-
+    // Audio
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);
     void slotAudioChannelRemove();
@@ -132,7 +130,7 @@ private:
     void setFramesPerSecond(int fps);
     void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
 
-    void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
+    void insertFramesImpl(int insertAtColumn, int count, int timing, QSet<int> rows, bool forceEntireColumn);
 
     void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
 

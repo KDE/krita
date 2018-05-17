@@ -22,6 +22,7 @@
 
 #include "timeline_ruler_header.h"
 #include "timeline_layers_header.h"
+#include "timeline_insert_keyframe_dialog.h"
 
 #include <cmath>
 #include <limits>
@@ -112,9 +113,10 @@ struct TimelineFramesView::Private
     QAction *audioMuteAction;
     KisSliderSpinBox *volumeSlider;
 
-
     QMenu *layerEditingMenu;
     QMenu *existingLayersMenu;
+
+    TimelineInsertKeyframeDialog *insertKeyframeDialog;
 
     KisZoomButton *zoomDragButton;
 
@@ -192,7 +194,6 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(slotUpdateInfiniteFramesCount()));
     connect(horizontalScrollBar(), SIGNAL(sliderReleased()), SLOT(slotUpdateInfiniteFramesCount()));
 
-
     /********** New Layer Menu ***********************************************************/
 
     m_d->addLayersButton = new QToolButton(this);
@@ -269,6 +270,10 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->multiframeColorSelectorAction = new QWidgetAction(this);
     m_d->multiframeColorSelectorAction->setDefaultWidget(m_d->multiframeColorSelector);
     connect(m_d->multiframeColorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &TimelineFramesView::slotColorLabelChanged);
+
+    /********** Insert Keyframes Dialog **************************************************/
+
+    m_d->insertKeyframeDialog = new TimelineInsertKeyframeDialog(this);
 
     /********** Zoom Button **************************************************************/
 
@@ -371,9 +376,6 @@ void TimelineFramesView::setActionManager( KisActionManager * actionManager)
 
         action = m_d->actionMan->createAction("update_playback_range");
         connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
-
-
-
     }
 }
 
@@ -562,9 +564,6 @@ void TimelineFramesView::slotAudioVolumeChanged(int value)
 {
     m_d->model->setAudioVolume(qreal(value) / 100.0);
 }
-
-
-
 
 void TimelineFramesView::slotUpdateInfiniteFramesCount()
 {
@@ -988,7 +987,6 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
         KisActionManager::safePopulateMenu(menu, "add_duplicate_frame", m_d->actionMan);
         menu->addSeparator();
     }
-
 }
 
 void TimelineFramesView::mousePressEvent(QMouseEvent *event)
@@ -1324,7 +1322,7 @@ void TimelineFramesView::calculateSelectionMetrics(int &minColumn, int &maxColum
     }
 }
 
-void TimelineFramesView::insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn)
+void TimelineFramesView::insertFramesImpl(int insertAtColumn, int count, int timing, QSet<int> rows, bool forceEntireColumn)
 {
     if (forceEntireColumn) {
         rows.clear();
@@ -1335,11 +1333,11 @@ void TimelineFramesView::insertFramesImpl(int insertAtColumn, int count, QSet<in
     }
 
     if (!rows.isEmpty()) {
-        m_d->model->insertFrames(insertAtColumn, rows.toList(), count);
+        m_d->model->insertFrames(insertAtColumn, rows.toList(), count, timing);
     }
 }
 
-void TimelineFramesView::slotInsertKeyframesLeft(int count, bool forceEntireColumn)
+void TimelineFramesView::slotInsertKeyframesLeft(int count, int timing, bool forceEntireColumn)
 {
     QSet<int> rows;
     int minColumn = 0;
@@ -1351,10 +1349,10 @@ void TimelineFramesView::slotInsertKeyframesLeft(int count, bool forceEntireColu
         count = qMax(1, maxColumn - minColumn + 1);
     }
 
-    insertFramesImpl(minColumn, count, rows, forceEntireColumn);
+    insertFramesImpl(minColumn, count, timing, rows, forceEntireColumn);
 }
 
-void TimelineFramesView::slotInsertKeyframesRight(int count, bool forceEntireColumn)
+void TimelineFramesView::slotInsertKeyframesRight(int count, int timing, bool forceEntireColumn)
 {
     QSet<int> rows;
     int minColumn = 0;
@@ -1366,78 +1364,52 @@ void TimelineFramesView::slotInsertKeyframesRight(int count, bool forceEntireCol
         count = qMax(1, maxColumn - minColumn + 1);
     }
 
-    insertFramesImpl(maxColumn + 1, count, rows, forceEntireColumn);
+    insertFramesImpl(maxColumn + 1, count, timing, rows, forceEntireColumn);
 }
 
-void TimelineFramesView::slotInsertColumnsLeft(int count)
+void TimelineFramesView::slotInsertColumnsLeft(int count, int timing)
 {
-    slotInsertKeyframesLeft(count, true);
+    slotInsertKeyframesLeft(count, timing, true);
 }
 
-void TimelineFramesView::slotInsertColumnsRight(int count)
+void TimelineFramesView::slotInsertColumnsRight(int count, int timing)
 {
-    slotInsertKeyframesRight(count, true);
+    slotInsertKeyframesRight(count, timing, true);
 }
 
 void TimelineFramesView::slotInsertKeyframesLeftCustom()
 {
-    bool ok = false;
-    const int count = QInputDialog::getInt(this,
-                                           i18nc("@title:window", "Insert left"),
-                                           i18nc("@label:spinbox", "Enter number of frames"),
-                                           defaultNumberOfFramesToAdd(),
-                                           1, 10000, 1, &ok);
+    int count, timing;
 
-    if (ok) {
-        setDefaultNumberOfFramesToAdd(count);
-        slotInsertKeyframesLeft(count);
+    if (m_d->insertKeyframeDialog->promptUserSettings(count, timing)) {
+        slotInsertKeyframesLeft(count, timing, false);
     }
 }
 
-
 void TimelineFramesView::slotInsertKeyframesRightCustom()
 {
-    bool ok = false;
-    const int count = QInputDialog::getInt(this,
-                                           i18nc("@title:window", "Insert right"),
-                                           i18nc("@label:spinbox", "Enter number of frames"),
-                                           defaultNumberOfFramesToAdd(),
-                                           1, 10000, 1, &ok);
+    int count, timing;
 
-    if (ok) {
-        setDefaultNumberOfFramesToAdd(count);
-        slotInsertKeyframesRight(count);
+    if (m_d->insertKeyframeDialog->promptUserSettings(count, timing)) {
+        slotInsertKeyframesRight(count, timing, false);
     }
 }
 
 void TimelineFramesView::slotInsertColumnsLeftCustom()
 {
-    bool ok = false;
-    const int count = QInputDialog::getInt(this,
-                                           i18nc("@title:window", "Insert left"),
-                                           i18nc("@label:spinbox", "Enter number of columns"),
-                                           defaultNumberOfColumnsToAdd(),
-                                           1, 10000, 1, &ok);
+    int count, timing;
 
-    if (ok) {
-        setDefaultNumberOfColumnsToAdd(count);
-        slotInsertColumnsLeft(count);
+    if (m_d->insertKeyframeDialog->promptUserSettings(count, timing)) {
+        slotInsertColumnsLeft(count, timing);
     }
 }
 
-
 void TimelineFramesView::slotInsertColumnsRightCustom()
 {
-    bool ok = false;
-    const int count = QInputDialog::getInt(this,
-                                           i18nc("@title:window", "Insert right"),
-                                           i18nc("@label:spinbox", "Enter number of columns"),
-                                           defaultNumberOfColumnsToAdd(),
-                                           1, 10000, 1, &ok);
+    int count, timing;
 
-    if (ok) {
-        setDefaultNumberOfColumnsToAdd(count);
-        slotInsertColumnsRight(count);
+    if (m_d->insertKeyframeDialog->promptUserSettings(count, timing)) {
+        slotInsertColumnsRight(count, timing);
     }
 }
 

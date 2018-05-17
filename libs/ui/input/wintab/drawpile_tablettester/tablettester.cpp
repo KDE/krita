@@ -40,12 +40,22 @@ bool TabletTestDialog::eventFilter(QObject *watched, QEvent *e) {
     Q_UNUSED(watched);
     if(e->type() == QEvent::TabletEnterProximity || e->type() == QEvent::TabletLeaveProximity) {
         QTabletEvent *te = static_cast<QTabletEvent*>(e);
-        bool near = te->pointerType()==QTabletEvent::Eraser;
+        bool isEraser = te->pointerType() == QTabletEvent::Eraser;
+        bool isNear = e->type() == QEvent::TabletEnterProximity;
         QString msg;
-        if(near)
-            msg = QStringLiteral("Eraser brought near");
-        else
-            msg = QStringLiteral("Eraser taken away");
+        if(isEraser) {
+            if (isNear) {
+                msg = QStringLiteral("Eraser brought near");
+            } else {
+                msg = QStringLiteral("Eraser taken away");
+            }
+        } else {
+            if (isNear) {
+                msg = QStringLiteral("Pen tip brought near");
+            } else {
+                msg = QStringLiteral("Pen tip taken away");
+            }
+        }
 
         m_ui->logView->appendPlainText(msg);
     }

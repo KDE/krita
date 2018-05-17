@@ -421,6 +421,8 @@ endif()
         canvas/kis_animation_player.cpp
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
+        input/wintab/drawpile_tablettester/tablettester.cpp
+        input/wintab/drawpile_tablettester/tablettest.cpp
     )
 
 if(UNIX)
@@ -522,6 +524,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
+    input/wintab/drawpile_tablettester/tablettest.ui
 
 )
 

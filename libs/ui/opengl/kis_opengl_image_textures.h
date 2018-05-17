@@ -139,6 +139,8 @@ public:
 
     void slotImageSizeChanged(qint32 w, qint32 h);
 
+    KisOpenGLUpdateInfoBuilder& updateInfoBuilder();
+
 protected:
 
     KisOpenGLImageTextures(KisImageWSP image, const KoColorProfile *monitorProfile,

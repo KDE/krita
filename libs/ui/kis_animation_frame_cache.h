@@ -51,6 +51,8 @@ public:
     QImage getFrame(int time);
     bool uploadFrame(int time);
 
+    bool shouldUploadNewFrame(int newTime, int oldTime) const;
+
     enum CacheStatus {
         Cached,
         Uncached,

@@ -345,7 +345,7 @@ void KisAnimationPlayer::play()
 
     slotUpdatePlaybackTimer();
     m_d->expectedFrame = m_d->firstFrame;
-    m_d->lastPaintedFrame = m_d->firstFrame;
+    m_d->lastPaintedFrame = -1;
 
     connectCancelSignals();
 
@@ -448,12 +448,24 @@ void KisAnimationPlayer::uploadFrame(int frame)
         }
     }
 
-    if (m_d->canvas->frameCache() && m_d->canvas->frameCache()->uploadFrame(frame)) {
-        m_d->canvas->updateCanvas();
 
-        m_d->useFastFrameUpload = true;
-        emit sigFrameChanged();
-    } else {
+    bool useFallbackUploadMethod = !m_d->canvas->frameCache();
+
+    if (m_d->canvas->frameCache() &&
+        m_d->canvas->frameCache()->shouldUploadNewFrame(frame, m_d->lastPaintedFrame)) {
+
+
+        if (m_d->canvas->frameCache()->uploadFrame(frame)) {
+            m_d->canvas->updateCanvas();
+
+            m_d->useFastFrameUpload = true;
+            emit sigFrameChanged();
+        } else {
+            useFallbackUploadMethod = true;
+        }
+    }
+
+    if (useFallbackUploadMethod) {
         m_d->useFastFrameUpload = false;
 
         m_d->canvas->image()->barrierLock(true);
@@ -471,21 +483,23 @@ void KisAnimationPlayer::uploadFrame(int frame)
         const int elapsed = m_d->realFpsTimer.restart();
         m_d->realFpsAccumulator(elapsed);
 
-        int numFrames = frame - m_d->lastPaintedFrame;
-        if (numFrames < 0) {
-            numFrames += m_d->lastFrame - m_d->firstFrame + 1;
-        }
+        if (m_d->lastPaintedFrame >= 0) {
+            int numFrames = frame - m_d->lastPaintedFrame;
+            if (numFrames < 0) {
+                numFrames += m_d->lastFrame - m_d->firstFrame + 1;
+            }
 
-        m_d->droppedFramesPortion(qreal(int(numFrames != 1)));
+            m_d->droppedFramesPortion(qreal(int(numFrames != 1)));
 
-        if (numFrames > 0) {
-            m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
-        }
+            if (numFrames > 0) {
+                m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
+            }
 
 #ifdef PLAYER_DEBUG_FRAMERATE
-        qDebug() << "    RFPS:" << 1000.0 / m_d->realFpsAccumulator.rollingMean()
-                 << "DFPS:" << 1000.0 / m_d->droppedFpsAccumulator.rollingMean() << ppVar(numFrames);
+            qDebug() << "    RFPS:" << 1000.0 / m_d->realFpsAccumulator.rollingMean()
+                     << "DFPS:" << 1000.0 / m_d->droppedFpsAccumulator.rollingMean() << ppVar(numFrames);
 #endif /* PLAYER_DEBUG_FRAMERATE */
+        }
     }
 
     m_d->lastPaintedFrame = frame;

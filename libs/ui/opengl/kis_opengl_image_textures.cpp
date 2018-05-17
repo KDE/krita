@@ -342,6 +342,11 @@ void KisOpenGLImageTextures::slotImageSizeChanged(qint32 /*w*/, qint32 /*h*/)
     createImageTextureTiles();
 }
 
+KisOpenGLUpdateInfoBuilder &KisOpenGLImageTextures::updateInfoBuilder()
+{
+    return m_updateInfoBuilder;
+}
+
 void KisOpenGLImageTextures::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
     //dbgUI << "Setting monitor profile to" << monitorProfile->name() << renderingIntent << conversionFlags;

@@ -106,8 +106,7 @@ class TestFramesRenderer : public KisAsyncAnimationRendererBase
 
 public:
     TestFramesRenderer()
-        : m_pool(m_poolRegistry.getPool(maxTileSize, maxTileSize)),
-          m_store(m_pool)
+        : m_pool(m_poolRegistry.getPool(maxTileSize, maxTileSize))
     {
         m_updateInfoBuilder.setTextureInfoPool(m_pool);
 

@@ -104,6 +104,14 @@ public:
         return m_data ? m_pool->chunkSize(m_pixelSize) : 0;
     }
 
+    KisTextureTileInfoPoolSP pool() const {
+        return m_pool;
+    }
+
+    int pixelSize() const {
+        return m_pixelSize;
+    }
+
 private:
     Q_DISABLE_COPY(DataBuffer)
 

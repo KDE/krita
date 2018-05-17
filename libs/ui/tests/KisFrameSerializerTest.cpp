@@ -27,13 +27,12 @@
 
 static const int maxTileSize = 256;
 
-KisFrameDataSerializer::Frame generateTestFrame(int frameId, KisTextureTileInfoPoolSP pool)
+KisFrameDataSerializer::Frame generateTestFrame(int frameSeed, KisTextureTileInfoPoolSP pool)
 {
     KisFrameDataSerializer::Frame frame;
-    frame.frameId = frameId;
     frame.pixelSize = 4;
 
-    for (int i = 0; i < qBound(1, frameId * 5, 100); i++) {
+    for (int i = 0; i < qBound(1, frameSeed * 5, 100); i++) {
         KisFrameDataSerializer::FrameTile tile(pool);
         tile.col = i * 10;
         tile.row = i * 20;
@@ -44,7 +43,7 @@ KisFrameDataSerializer::Frame generateTestFrame(int frameId, KisTextureTileInfoP
         qint32 *dataPtr = reinterpret_cast<qint32*>(tile.data.data());
 
         for (int j = 0; j < numPixels; j++) {
-            *dataPtr++ = frameId + j;
+            *dataPtr++ = frameSeed + j;
         }
 
         frame.frameTiles.push_back(std::move(tile));
@@ -53,11 +52,10 @@ KisFrameDataSerializer::Frame generateTestFrame(int frameId, KisTextureTileInfoP
     return std::move(frame);
 }
 
-bool verifyTestFrame(int frameId, const KisFrameDataSerializer::Frame &frame)
+bool verifyTestFrame(int frameSeed, const KisFrameDataSerializer::Frame &frame)
 {
-    KIS_COMPARE_RF(frame.frameId, frameId);
     KIS_COMPARE_RF(frame.pixelSize, 4);
-    KIS_COMPARE_RF(int(frame.frameTiles.size()), qBound(1, frameId * 5, 100));
+    KIS_COMPARE_RF(int(frame.frameTiles.size()), qBound(1, frameSeed * 5, 100));
 
     for (int i = 0; i < int(frame.frameTiles.size()); i++) {
         const KisFrameDataSerializer::FrameTile &tile = frame.frameTiles[i];
@@ -72,7 +70,7 @@ bool verifyTestFrame(int frameId, const KisFrameDataSerializer::Frame &frame)
         qint32 *dataPtr = reinterpret_cast<qint32*>(tile.data.data());
 
         for (int j = 0; j < numPixels; j++) {
-            KIS_COMPARE_RF(*dataPtr++, frameId + j);
+            KIS_COMPARE_RF(*dataPtr++, frameSeed + j);
         }
     }
 
@@ -87,46 +85,50 @@ void KisFrameSerializerTest::testFrameDataSerialization()
     KisTextureTileInfoPoolSP pool = poolRegistry.getPool(maxTileSize, maxTileSize);
 
 
-    KisFrameDataSerializer serializer(pool);
+    KisFrameDataSerializer serializer;
 
     KisFrameDataSerializer::Frame testFrame1 = generateTestFrame(2, pool);
     KisFrameDataSerializer::Frame testFrame2 = generateTestFrame(3, pool);
     KisFrameDataSerializer::Frame testFrame3 = generateTestFrame(503, pool);
+    int testFrameId1 = -1;
+    int testFrameId2 = -1;
+    int testFrameId3 = -1;
 
 
-    serializer.saveFrame(testFrame1);
-    QCOMPARE(serializer.hasFrame(2), true);
-    QCOMPARE(serializer.hasFrame(3), false);
-    QCOMPARE(serializer.hasFrame(503), false);
 
-    serializer.saveFrame(testFrame2);
-    QCOMPARE(serializer.hasFrame(2), true);
-    QCOMPARE(serializer.hasFrame(3), true);
-    QCOMPARE(serializer.hasFrame(503), false);
+    testFrameId1 = serializer.saveFrame(testFrame1);
+    QCOMPARE(serializer.hasFrame(testFrameId1), true);
+    QCOMPARE(serializer.hasFrame(testFrameId2), false);
+    QCOMPARE(serializer.hasFrame(testFrameId3), false);
 
-    serializer.saveFrame(testFrame3);
-    QCOMPARE(serializer.hasFrame(2), true);
-    QCOMPARE(serializer.hasFrame(3), true);
-    QCOMPARE(serializer.hasFrame(503), true);
+    testFrameId2 = serializer.saveFrame(testFrame2);
+    QCOMPARE(serializer.hasFrame(testFrameId1), true);
+    QCOMPARE(serializer.hasFrame(testFrameId2), true);
+    QCOMPARE(serializer.hasFrame(testFrameId3), false);
 
-    QVERIFY(verifyTestFrame(2, serializer.loadFrame(2)));
-    QVERIFY(verifyTestFrame(3, serializer.loadFrame(3)));
-    QVERIFY(verifyTestFrame(503, serializer.loadFrame(503)));
+    testFrameId3 = serializer.saveFrame(testFrame3);
+    QCOMPARE(serializer.hasFrame(testFrameId1), true);
+    QCOMPARE(serializer.hasFrame(testFrameId2), true);
+    QCOMPARE(serializer.hasFrame(testFrameId3), true);
 
-    serializer.forgetFrame(3);
-    QCOMPARE(serializer.hasFrame(2), true);
-    QCOMPARE(serializer.hasFrame(3), false);
-    QCOMPARE(serializer.hasFrame(503), true);
+    QVERIFY(verifyTestFrame(2, serializer.loadFrame(testFrameId1, pool)));
+    QVERIFY(verifyTestFrame(3, serializer.loadFrame(testFrameId2, pool)));
+    QVERIFY(verifyTestFrame(503, serializer.loadFrame(testFrameId3, pool)));
 
-    serializer.forgetFrame(503);
-    QCOMPARE(serializer.hasFrame(2), true);
-    QCOMPARE(serializer.hasFrame(3), false);
-    QCOMPARE(serializer.hasFrame(503), false);
+    serializer.forgetFrame(testFrameId2);
+    QCOMPARE(serializer.hasFrame(testFrameId1), true);
+    QCOMPARE(serializer.hasFrame(testFrameId2), false);
+    QCOMPARE(serializer.hasFrame(testFrameId3), true);
 
-    serializer.forgetFrame(2);
-    QCOMPARE(serializer.hasFrame(2), false);
-    QCOMPARE(serializer.hasFrame(3), false);
-    QCOMPARE(serializer.hasFrame(503), false);
+    serializer.forgetFrame(testFrameId3);
+    QCOMPARE(serializer.hasFrame(testFrameId1), true);
+    QCOMPARE(serializer.hasFrame(testFrameId2), false);
+    QCOMPARE(serializer.hasFrame(testFrameId3), false);
+
+    serializer.forgetFrame(testFrameId1);
+    QCOMPARE(serializer.hasFrame(testFrameId1), false);
+    QCOMPARE(serializer.hasFrame(testFrameId2), false);
+    QCOMPARE(serializer.hasFrame(testFrameId3), false);
 }
 
 #include "kis_random_source.h"

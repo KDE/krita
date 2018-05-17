@@ -248,6 +248,12 @@ void KisOpenGLUpdateInfoBuilder::setTextureInfoPool(KisTextureTileInfoPoolSP poo
     m_d->pool = pool;
 }
 
+KisTextureTileInfoPoolSP KisOpenGLUpdateInfoBuilder::textureInfoPool() const
+{
+    QReadLocker lock(&m_d->lock);
+    return m_d->pool;
+}
+
 void KisOpenGLUpdateInfoBuilder::setProofingConfig(KisProofingConfigurationSP config)
 {
     QWriteLocker lock(&m_d->lock);

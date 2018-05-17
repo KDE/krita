@@ -62,6 +62,7 @@ public:
     void setEffectiveTextureSize(const QSize &size);
 
     void setTextureInfoPool(KisTextureTileInfoPoolSP pool);
+    KisTextureTileInfoPoolSP textureInfoPool() const;
 
     void setProofingConfig(KisProofingConfigurationSP config);
     KisProofingConfigurationSP proofingConfig() const;

@@ -15,49 +15,45 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISFRAMECACHESTORE_H
-#define KISFRAMECACHESTORE_H
+#ifndef KISFRAMECACHESWAPPER_H
+#define KISFRAMECACHESWAPPER_H
 
 #include "kritaui_export.h"
 #include <QScopedPointer>
-#include "kis_types.h"
 
 #include "opengl/kis_texture_tile_info_pool.h"
 
 class KisOpenGLUpdateInfoBuilder;
 
+template<class T>
+class KisSharedPtr;
+
 class KisOpenGLUpdateInfo;
 typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 
+
 /**
- * KisFrameCacheStore is a middle-level class for reading/writing
- * animation frames on disk. Its main responsibilities:
+ * KisFrameCacheSwapper is the most highlevel facade of the frame
+ * swapping infrastructure. The main responsibilities of the class:
  *
- * 1) Convert frames from KisOpenGLUpdateInfo format into a serializable
- *    KisFrameDataSerializer::Frame format.
+ * 1) Asynchronously predict and prefetch the pending frames from disk
+ *    and maintain a short in-memory cache of these frames (already
+ *    converted into KisOpenGLUpdateInfo)
  *
- * 2) Calculate differences between the frames and decide which
- *    frame will be a keyframe for other frames.
- *
- * 3) The keyframes will be used as a base for difference
- *    calculation and stored in a short in-memory cache to avoid
- *    fetching them from disk too often.
- *
- * 4) The in-memory cache of the keyframes is stored in serializable
- *    KisFrameDataSerializer::Frame format.
+ * 2) Pass all the other requests to the lower-level API,
+ *    like KisFrameCacheStore
  */
 
-class KRITAUI_EXPORT KisFrameCacheStore
+class KRITAUI_EXPORT KisFrameCacheSwapper
 {
 public:
-    KisFrameCacheStore();
-    KisFrameCacheStore(const QString &frameCachePath);
-
-    ~KisFrameCacheStore();
+    KisFrameCacheSwapper(const KisOpenGLUpdateInfoBuilder &builder);
+    KisFrameCacheSwapper(const KisOpenGLUpdateInfoBuilder &builder, const QString &frameCachePath);
+    ~KisFrameCacheSwapper();
 
     // WARNING: after transferring \p info to saveFrame() the object becomes invalid
     void saveFrame(int frameId, KisOpenGLUpdateInfoSP info);
-    KisOpenGLUpdateInfoSP loadFrame(int frameId, const KisOpenGLUpdateInfoBuilder &builder);
+    KisOpenGLUpdateInfoSP loadFrame(int frameId);
 
     void moveFrame(int srcFrameId, int dstFrameId);
 
@@ -69,4 +65,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif // KISFRAMECACHESTORE_H
+#endif // KISFRAMECACHESWAPPER_H

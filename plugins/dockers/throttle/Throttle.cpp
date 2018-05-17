@@ -36,6 +36,21 @@
 
 #include "KisUpdateSchedulerConfigNotifier.h"
 
+#include <QVersionNumber>
+
+namespace
+{
+
+bool shouldSetAcceptTouchEvents()
+{
+    // See https://bugreports.qt.io/browse/QTBUG-66718
+    static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
+    static bool retval = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
+    return retval;
+}
+
+} // namespace
+
 
 ThreadManager::ThreadManager(QObject *parent)
     : QObject(parent),
@@ -81,6 +96,9 @@ void ThreadManager::slotDoUpdateConfig()
 Throttle::Throttle(QWidget *parent)
     : QQuickWidget(parent)
 {
+    if (shouldSetAcceptTouchEvents()) {
+        setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     m_threadManager = new ThreadManager();
     // In % of available cores...
     engine()->rootContext()->setContextProperty("ThreadManager", m_threadManager);

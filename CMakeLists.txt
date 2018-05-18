@@ -745,3 +745,8 @@ foreach(tst ${KRITA_BROKEN_TESTS})
 endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+  find_package(KF5I18n CONFIG REQUIRED)
+  ki18n_install(po)
+endif()

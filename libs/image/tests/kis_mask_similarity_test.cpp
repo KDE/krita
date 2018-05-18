@@ -60,11 +60,6 @@ public:
         vectorImage.invertPixels(); // Make pixel color black
         vectorImage.save(QString("vector_mask.png"),"PNG");
 
-        // Check for differences, max error .5% of pixel mismatch
-        int tolerance(m_bounds.width() * m_bounds.height() * .005f);
-        QPoint tmpPt;
-        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, tolerance));
-
 // Development debug.
 // Count number of identical pixels
 //        int equals = 0;
@@ -78,6 +73,11 @@ public:
 //            }
 //        }
 //        qDebug() << "Equal Pixels: " << equals;
+
+        // Check for differences, max error .5% of pixel mismatch
+        int tolerance = m_bounds.width() * m_bounds.height() * .005f;
+        QPoint tmpPt;
+        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 1, tolerance));
     }
 
 private:

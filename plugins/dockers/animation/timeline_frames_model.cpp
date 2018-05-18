@@ -852,6 +852,8 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
 
         QSet<KisKeyframeSP> uniqueKeyframesInSelection;
 
+        int minSelectedTime = std::numeric_limits<int>::max();
+
         Q_FOREACH (const QModelIndex &index, selectedIndexes) {
             KisNodeSP node = nodeAt(index);
             KIS_SAFE_ASSERT_RECOVER(node) { continue; }
@@ -859,6 +861,7 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
             KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
             if (!channel) continue;
 
+            minSelectedTime = qMin(minSelectedTime, index.column());
             KisKeyframeSP keyFrame = channel->activeKeyframeAt(index.column());
 
             if (keyFrame) {
@@ -866,13 +869,10 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
             }
         }
 
-        int minSelectedTime = std::numeric_limits<int>::max();
         QList<KisKeyframeSP> keyframesToMove;
 
         for (auto it = uniqueKeyframesInSelection.begin(); it != uniqueKeyframesInSelection.end(); ++it) {
             KisKeyframeSP keyframe = *it;
-
-            minSelectedTime = qMin(minSelectedTime, keyframe->time());
 
             KisKeyframeChannel *channel = keyframe->channel();
             KisKeyframeSP nextKeyframe = channel->nextKeyframe(keyframe);
@@ -905,6 +905,8 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(prevFrame, false);
 
                 plannedFrameMove = qMax(count, prevFrame->time() - keyframe->time() + 1);
+
+                minSelectedTime = qMin(minSelectedTime, prevFrame->time());
             }
 
             KisNodeDummy *dummy = m_d->dummiesFacade->dummyForNode(keyframe->channel()->node());

@@ -1285,7 +1285,7 @@ QString EXRConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
     return doc.toString();
 }
 
-KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroupLayerSP layer)
+KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroupLayerSP layer, bool flatten)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -1310,35 +1310,44 @@ KisImageBuilder_Result EXRConverter::buildFile(const QString &filename, KisGroup
         image->convertImageColorSpace(cs, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     }
 
-    QList<ExrPaintLayerSaveInfo> informationObjects;
-    d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);
-
-    if(informationObjects.isEmpty()) {
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (flatten) {
+        image->waitForDone(); // This is to make sure we have a full image to project.
+        KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
+        KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
+        return buildFile(filename, l);
     }
+    else {
 
-    d->makeLayerNamesUnique(informationObjects);
+        QList<ExrPaintLayerSaveInfo> informationObjects;
+        d->recBuildPaintLayerSaveInfo(informationObjects, "", layer);
 
-    QByteArray extraLayersInfo = d->fetchExtraLayersInfo(informationObjects).toUtf8();
-    if (!extraLayersInfo.isNull()) {
-        header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
-    }
-    dbgFile << informationObjects.size() << " layers to save";
+        if(informationObjects.isEmpty()) {
+            return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+        }
 
-    Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
-        if (info.pixelType < Imf::NUM_PIXELTYPES) {
-            Q_FOREACH (const QString& channel, info.channels) {
-                dbgFile << channel << " " << info.pixelType;
-                header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
+        d->makeLayerNamesUnique(informationObjects);
+
+        QByteArray extraLayersInfo = d->fetchExtraLayersInfo(informationObjects).toUtf8();
+        if (!extraLayersInfo.isNull()) {
+            header.insert(EXR_KRITA_LAYERS, Imf::StringAttribute(extraLayersInfo.constData()));
+        }
+        dbgFile << informationObjects.size() << " layers to save";
+
+        Q_FOREACH (const ExrPaintLayerSaveInfo& info, informationObjects) {
+            if (info.pixelType < Imf::NUM_PIXELTYPES) {
+                Q_FOREACH (const QString& channel, info.channels) {
+                    dbgFile << channel << " " << info.pixelType;
+                    header.channels().insert(channel.toUtf8().data(), Imf::Channel(info.pixelType));
+                }
             }
         }
+
+        // Open file for writing
+        Imf::OutputFile file(QFile::encodeName(filename), header);
+
+        encodeData(file, informationObjects, width, height);
+        return KisImageBuilder_RESULT_OK;
     }
-
-    // Open file for writing
-    Imf::OutputFile file(QFile::encodeName(filename), header);
-
-    encodeData(file, informationObjects, width, height);
-    return KisImageBuilder_RESULT_OK;
 }
 
 void EXRConverter::cancel()

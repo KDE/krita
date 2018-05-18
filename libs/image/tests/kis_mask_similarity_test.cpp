@@ -48,30 +48,25 @@ public:
         legacy->process(m_bounds);
 
         QImage scalarImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
-        scalarImage.invertPixels();
+        scalarImage.invertPixels(); // Make pixel color black
         scalarImage.save(QString("scalar_mask.png"),"PNG");
 
         // Start vector processing
         m_paintDev->initialize(255);
         vectorized->initializeData(&data);
-//        QVector<QRect> rects = KritaUtils::splitRectIntoPatches(m_paintDev->bounds(), QSize(3, 3));
-//        Q_FOREACH (const QRect &rc, rects) {
-//            vectorized->process(rc);
-//        }
         vectorized->process(m_bounds);
 
         QImage vectorImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
-        vectorImage.invertPixels();
+        vectorImage.invertPixels(); // Make pixel color black
         vectorImage.save(QString("vector_mask.png"),"PNG");
 
         // Check for differences, max error .5% of pixel mismatch
         int tolerance(m_bounds.width() * m_bounds.height() * .005f);
-        // qDebug() << "tolerance: " << tolerance;
         QPoint tmpPt;
         QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, tolerance));
 
-        // Check error deviation between values is less than 0.05
 // Development debug.
+// Count number of identical pixels
 //        int equals = 0;
 //        for (int i = 0; i < scalarImage.width(); ++i) {
 //            for (int j = 0; j < scalarImage.height(); ++j) {
@@ -83,8 +78,6 @@ public:
 //            }
 //        }
 //        qDebug() << "Equal Pixels: " << equals;
-//        qDebug() << scalarImage;
-//        qDebug() << vectorImage;
     }
 
 private:
@@ -101,23 +94,13 @@ protected:
 
 void KisMaskSimilarityTest::testCircleMask()
 {
-//    QRect rect500(0,0,500,500);
-//    {
-//    KisCircleMaskGenerator circScalar(250, 1.0, 0.5, 0.5, 2, true);
-//    KisCircleMaskGenerator circVectr(250, 1.0, 0.5, 0.5, 2, true);
-//    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect500);
-//    }
-
-    QRect rect40(0,0,40,40);
+    QRect bounds(0,0,500,500);
     {
-    KisCircleMaskGenerator circVectr(20, 1.0, 0.5, 0.5, 2, true);
+    KisCircleMaskGenerator circVectr(480, 1.0, 0.5, 0.5, 2, true);
     KisCircleMaskGenerator circScalar(circVectr);
 
-    circScalar.resetMaskApplicator(true);
-    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect40);
-
-    circVectr.resetMaskApplicator(true);
-    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), rect40);
+    circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds);
     }
 }
 

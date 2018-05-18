@@ -69,8 +69,10 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal r
 {
     d->ycoef = 1.0 / ratio;
     d->fade = 1.0 - (fh + fv) / 2.0;
+
     if (d->fade == 0.0) d->fade = 1e-6;
     else if (d->fade == 1.0) d->fade = 1.0 - 1e-6; // would become undefined for fade == 0 or 1
+
     d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
 
@@ -140,4 +142,9 @@ quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
     }
 
     return d->value(dist);
+}
+
+void KisGaussCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
 }

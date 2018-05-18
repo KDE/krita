@@ -48,6 +48,8 @@ public:
     bool shouldVectorize() const override;
     KisBrushMaskApplicatorBase* applicator() override;
 
+    void resetMaskApplicator(bool forceScalar);
+
 private:
 
     qreal norme(qreal a, qreal b) const {

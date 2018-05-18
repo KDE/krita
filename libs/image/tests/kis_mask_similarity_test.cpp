@@ -104,12 +104,17 @@ void KisMaskSimilarityTest::testCircleMask()
     }
 }
 
-//void KisMaskSimilarityTest::testGaussCircleMask()
-//{
-//    QRect bounds(0,0,40,40);
-//    KisMaskSimilarityTester(
-//        (new KisGaussCircleMaskGenerator(40, 1.0, 0.5, 0.5, 3, true))->applicator(),
-//        (new KisGaussCircleMaskGenerator(40, 1.0, 0.5, 0.5, 2, true))->applicator(), bounds);
-//}
+void KisMaskSimilarityTest::testGaussCircleMask()
+{
+    QRect bounds(0,0,500,500);
+    {
+    KisGaussCircleMaskGenerator circVectr(480, 1.0, 0.5, 0.5, 2, true);
+    circVectr.setDiameter(480);
+    KisGaussCircleMaskGenerator circScalar(circVectr);
+
+    circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds);
+    }
+}
 
 QTEST_MAIN(KisMaskSimilarityTest)

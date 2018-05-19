@@ -34,4 +34,17 @@ public:
 
 };
 
+class KisHSVCurveAdjustmentFactory : public KoColorTransformationFactory
+{
+public:
+
+    KisHSVCurveAdjustmentFactory();
+
+    QList< QPair< KoID, KoID > > supportedModels() const override;
+
+    KoColorTransformation* createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const override;
+
+};
+
+
 #endif

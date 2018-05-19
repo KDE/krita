@@ -59,6 +59,9 @@ QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
         cs->colorModelId() != GrayColorModelID &&
         cs->colorModelId() != AlphaColorModelID;
 
+    const bool supportsHue = supportsLightness;
+    const bool supportSaturation = supportsLightness;
+
     QVector<VirtualChannelInfo> vchannels;
 
     QList<KoChannelInfo *> sortedChannels =
@@ -71,6 +74,14 @@ QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
     Q_FOREACH (KoChannelInfo *channel, sortedChannels) {
         int pixelIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), sortedChannels);
         vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel, cs);
+    }
+
+    if (supportsHue) {
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::HUE, -1, 0, cs);
+    }
+
+    if (supportSaturation) {
+        vchannels << VirtualChannelInfo(VirtualChannelInfo::SATURATION, -1, 0, cs);
     }
 
     if (supportsLightness) {
@@ -535,11 +546,15 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     }
 
     bool colorsNull = true;
+    bool hueNull = true;
+    bool saturationNull = true;
     bool lightnessNull = true;
     bool allColorsNull = true;
     int alphaIndexInReal = -1;
 
     QVector<QVector<quint16> > realTransfers;
+    QVector<quint16> hueTransfer;
+    QVector<quint16> saturationTransfer;
     QVector<quint16> lightnessTransfer;
     QVector<quint16> allColorsTransfer;
 
@@ -553,6 +568,20 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
 
             if (colorsNull && !originalCurves[i].isNull()) {
                 colorsNull = false;
+            }
+        } else if (virtualChannels[i].type() == VirtualChannelInfo::HUE) {
+            KIS_ASSERT_RECOVER_NOOP(hueTransfer.isEmpty());
+            hueTransfer = originalTransfers[i];
+
+            if (hueNull && !originalCurves[i].isNull()) {
+                hueNull = false;
+            }
+        } else if (virtualChannels[i].type() == VirtualChannelInfo::SATURATION) {
+            KIS_ASSERT_RECOVER_NOOP(saturationTransfer.isEmpty());
+            saturationTransfer = originalTransfers[i];
+
+            if (saturationNull && !originalCurves[i].isNull()) {
+                saturationNull = false;
             }
         } else if (virtualChannels[i].type() == VirtualChannelInfo::LIGHTNESS) {
             KIS_ASSERT_RECOVER_NOOP(lightnessTransfer.isEmpty());
@@ -571,6 +600,8 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
         }
     }
 
+    KoColorTransformation *hueTransform = 0;
+    KoColorTransformation *saturationTransform = 0;
     KoColorTransformation *lightnessTransform = 0;
     KoColorTransformation *allColorsTransform = 0;
     KoColorTransformation *colorTransform = 0;
@@ -590,6 +621,28 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
 
         colorTransform = cs->createPerChannelAdjustment(transfers);
         delete [] transfers;
+    }
+
+    if (!hueNull) {
+        QHash<QString, QVariant> params;
+        params["curve"] = QVariant::fromValue(hueTransfer);
+        params["channel"] = 0;
+        params["lumaRed"]   = cs->lumaCoefficients()[0];
+        params["lumaGreen"] = cs->lumaCoefficients()[1];
+        params["lumaBlue"]  = cs->lumaCoefficients()[2];
+
+        hueTransform = cs->createColorTransformation("hsv_curve_adjustment", params);
+    }
+
+    if (!saturationNull) {
+        QHash<QString, QVariant> params;
+        params["curve"] = QVariant::fromValue(saturationTransfer);
+        params["channel"] = 1;
+        params["lumaRed"]   = cs->lumaCoefficients()[0];
+        params["lumaGreen"] = cs->lumaCoefficients()[1];
+        params["lumaBlue"]  = cs->lumaCoefficients()[2];
+
+        saturationTransform = cs->createColorTransformation("hsv_curve_adjustment", params);
     }
 
     if (!lightnessNull) {
@@ -617,6 +670,8 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     QVector<KoColorTransformation*> allTransforms;
     allTransforms << colorTransform;
     allTransforms << allColorsTransform;
+    allTransforms << hueTransform;
+    allTransforms << saturationTransform;
     allTransforms << lightnessTransform;
 
     return KoCompositeColorTransformation::createOptimizedCompositeTransform(allTransforms);

@@ -23,6 +23,8 @@
 #include <half.h>
 #endif
 
+#include <QByteArray>
+
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
@@ -383,6 +385,154 @@ private:
     bool m_colorize;
 };
 
+template<typename _channel_type_,typename traits>
+class KisHSVCurveAdjustment : public KoColorTransformation
+{
+    typedef traits RGBTrait;
+    typedef typename RGBTrait::Pixel RGBPixel;
+
+public:
+    KisHSVCurveAdjustment() :
+        m_lumaRed(0.0),
+        m_lumaGreen(0.0),
+        m_lumaBlue(0.0)
+    {}
+
+    QList<QString> parameters() const override
+    {
+      QList<QString> list;
+      list << "curve" << "channel" << "lumaRed" << "lumaGreen"<< "lumaBlue";
+      return list;
+    }
+
+    int parameterId(const QString& name) const override
+    {
+        if (name == "curve") {
+            return PAR_CURVE;
+        } else if (name == "channel") {
+            return PAR_CHANNEL;
+        } else if (name == "lumaRed") {
+            return PAR_LUMA_R;
+        } else if (name == "lumaGreen") {
+            return PAR_LUMA_G;
+        } else if (name == "lumaBlue") {
+            return PAR_LUMA_B;
+        }
+        return -1;
+    }
+
+    /**
+    * curve: adjustment curve as QVector<quin16>
+    * channel: which channel to adjust
+    *   0 = hue, 1 = saturation, 2 = value
+    * luma Red/Green/Blue: Used for luma calculations.
+    */
+    void setParameter(int id, const QVariant& parameter) override
+    {
+        switch(id)
+        {
+        case PAR_CURVE:
+            m_curve = parameter.value<QVector<quint16>>();
+            break;
+        case PAR_CHANNEL: {
+            int channel = parameter.toInt();
+            KIS_ASSERT_RECOVER_RETURN(0 <= channel && channel < 3 && "Channel must be 0, 1 or 2. Ignored!");
+            m_channel = channel;
+            } break;
+        case PAR_LUMA_R:
+            m_lumaRed = parameter.toDouble();
+            break;
+        case PAR_LUMA_G:
+            m_lumaGreen = parameter.toDouble();
+            break;
+        case PAR_LUMA_B:
+            m_lumaBlue = parameter.toDouble();
+            break;
+        default:
+            KIS_ASSERT_RECOVER_NOOP(false && "Unknown parameter ID. Ignored!");
+        }
+    }
+
+    void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
+    {
+        const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
+        RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
+        float r = 0.0;
+        float g = 0.0;
+        float b = 0.0;
+
+        float max = m_curve.size() - 1;
+        float component[3];
+        float &hue = component[0];
+
+        while (nPixels > 0) {
+            RGBToHSV(
+                SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue),
+                &component[0], &component[1], &component[2]
+            );
+
+            // Normalize hue to 0.0 to 1.0 range
+            hue /= 360.0f;
+
+            component[m_channel] = lookupComponent(component[m_channel], max);
+
+            hue *= 360.0f;
+            if (hue > 360) hue -= 360;
+            if (hue < 0) hue += 360;
+
+            HSVToRGB(component[0], component[1], component[2], &r, &g, &b);
+
+            clamp< _channel_type_ >(&r, &g, &b);
+            dst->red = SCALE_FROM_FLOAT(r);
+            dst->green = SCALE_FROM_FLOAT(g);
+            dst->blue = SCALE_FROM_FLOAT(b);
+            dst->alpha = src->alpha;
+
+            --nPixels;
+            ++src;
+            ++dst;
+        }
+    }
+
+    const float SCALE_FROM_16BIT = 1.0f / 0xFFFF;
+    float lookupComponent(float x, float max) const
+    {
+        // No curve for this component? Pass through modified
+        if (max < 2) return x;
+
+        float lookup = x * max;
+        float base = floor(lookup);
+        float offset = lookup - base;
+
+        if (base >= max) {
+            base = max - 1.0f;
+            offset = 1.0f;
+        }
+        int index = (int)base;
+
+        return ((1.0f - offset) * m_curve[index]
+                + offset        * m_curve[index + 1]) * SCALE_FROM_16BIT;
+    }
+
+
+private:
+    enum ParameterID
+    {
+        PAR_CURVE,
+        PAR_CHANNEL,
+        PAR_LUMA_R,
+        PAR_LUMA_G,
+        PAR_LUMA_B,
+    };
+
+    QVector<quint16> m_curve;
+    int m_channel;
+
+    /* Note: the filter currently only supports HSV, so these are
+     * unused, but will be needed once HSL, etc.
+     */
+    qreal m_lumaRed, m_lumaGreen, m_lumaBlue;
+};
 
 KisHSVAdjustmentFactory::KisHSVAdjustmentFactory()
     : KoColorTransformationFactory("hsv_adjustment")
@@ -420,6 +570,50 @@ KoColorTransformation* KisHSVAdjustmentFactory::createTransformation(const KoCol
         adj = new KisHSVAdjustment< float, KoRgbTraits < float > >();
     } else {
         dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisHSVAdjustmentFactory::createTransformation";
+        return 0;
+    }
+    adj->setParameters(parameters);
+    return adj;
+
+}
+
+
+KisHSVCurveAdjustmentFactory::KisHSVCurveAdjustmentFactory()
+    : KoColorTransformationFactory("hsv_curve_adjustment")
+{
+}
+
+QList< QPair< KoID, KoID > > KisHSVCurveAdjustmentFactory::supportedModels() const
+{
+    QList< QPair< KoID, KoID > > l;
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer8BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Integer16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float16BitsColorDepthID));
+    l.append(QPair< KoID, KoID >(RGBAColorModelID , Float32BitsColorDepthID));
+    return l;
+}
+
+KoColorTransformation* KisHSVCurveAdjustmentFactory::createTransformation(const KoColorSpace* colorSpace, QHash<QString, QVariant> parameters) const
+{
+    KoColorTransformation * adj;
+    if (colorSpace->colorModelId() != RGBAColorModelID) {
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisHSVCurveAdjustmentFactory::createTransformation";
+        return 0;
+    }
+    if (colorSpace->colorDepthId() == Integer8BitsColorDepthID) {
+        adj = new KisHSVCurveAdjustment< quint8, KoBgrTraits < quint8 > >();
+    } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
+        adj = new KisHSVCurveAdjustment< quint16, KoBgrTraits < quint16 > >();
+    }
+#ifdef HAVE_OPENEXR
+    else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
+        adj = new KisHSVCurveAdjustment< half, KoRgbTraits < half > >();
+    }
+#endif
+    else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
+        adj = new KisHSVCurveAdjustment< float, KoRgbTraits < float > >();
+    } else {
+        dbgKrita << "Unsupported color space " << colorSpace->id() << " in KisHSVCurveAdjustmentFactory::createTransformation";
         return 0;
     }
     adj->setParameters(parameters);

@@ -37,7 +37,15 @@ VirtualChannelInfo::VirtualChannelInfo(Type type,
       m_pixelIndex(pixelIndex),
       m_realChannelInfo(realChannelInfo)
 {
-    if (m_type == LIGHTNESS) {
+    if (m_type == HUE) {
+        m_nameOverride = i18n("Hue");
+        m_valueTypeOverride = KoChannelInfo::FLOAT32;
+        m_channelSizeOverride = 4;
+    } else if (m_type == SATURATION) {
+        m_nameOverride = i18n("Saturation");
+        m_valueTypeOverride = KoChannelInfo::FLOAT32;
+        m_channelSizeOverride = 4;
+    } else if (m_type == LIGHTNESS) {
         m_nameOverride = i18n("Lightness");
         m_valueTypeOverride = KoChannelInfo::FLOAT32;
         m_channelSizeOverride = 4;

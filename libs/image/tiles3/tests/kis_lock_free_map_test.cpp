@@ -1,0 +1,123 @@
+#include "kis_lock_free_map_test.h"
+
+#include <QDebug>
+
+#include "kis_debug.h"
+#include "tiles3/LockFreeMap/ConcurrentMap_Leapfrog.h"
+
+#define NUM_TYPES 2
+
+// high-concurrency
+#define NUM_CYCLES 50000
+#define NUM_THREADS 10
+
+typedef ConcurrentMap_Leapfrog<int, int> ConcurrentMap;
+
+class StressJobLockless : public QRunnable
+{
+public:
+    StressJobLockless(ConcurrentMap &map)
+        : m_map(map), m_insertSum(0), m_eraseSum(0)
+    {
+    }
+
+    qint64 insertSum()
+    {
+        return m_insertSum;
+    }
+
+    qint64 eraseSum()
+    {
+        return m_eraseSum;
+    }
+
+protected:
+    void run() override
+    {
+        QSBR::Context context = QSBR::instance().createContext();
+
+        for (int i = 1; i < NUM_CYCLES + 1; i++) {
+            auto type = i % NUM_TYPES;
+
+            switch (type) {
+            case 0:
+                m_eraseSum += m_map.erase(i);
+                break;
+            case 1:
+                m_eraseSum += m_map.assign(i + 1, i + 1);
+                m_insertSum += i + 1;
+                break;
+            }
+
+            if (i % 10000 == 0) {
+                QSBR::instance().update(context);
+            }
+        }
+
+        QSBR::instance().destroyContext(context);
+    }
+
+private:
+    ConcurrentMap &m_map;
+    qint64 m_insertSum;
+    qint64 m_eraseSum;
+};
+
+void LockfreeMapTest::testOperations()
+{
+    ConcurrentMap map;
+    qint64 totalSum = 0;
+
+    for (auto i = 1; i < NUM_CYCLES + 1; i++) {
+        totalSum += i + 1;
+        map.assign(i, i + 1);
+    }
+
+    for (auto i = 1; i < NUM_CYCLES + 1; i++) {
+        ConcurrentMap::Value result = map.erase(i);
+        totalSum -= result;
+
+        QVERIFY(result);
+        QCOMPARE(i, result - 1);
+    }
+
+    QVERIFY(totalSum == 0);
+}
+
+void LockfreeMapTest::stressTestLockless()
+{
+    QList<StressJobLockless *> jobsList;
+    ConcurrentMap map;
+
+    for (auto i = 0; i < NUM_THREADS; ++i) {
+        StressJobLockless *task = new StressJobLockless(map);
+        task->setAutoDelete(false);
+        jobsList.append(task);
+    }
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(NUM_THREADS);
+
+    QBENCHMARK {
+        for (auto &job : jobsList)
+        {
+            pool.start(job);
+        }
+
+        pool.waitForDone();
+    }
+
+    qint64 totalSum = 0;
+
+    for (auto i = 0; i < NUM_THREADS; i++) {
+        StressJobLockless *job = jobsList.takeLast();
+        totalSum += job->insertSum();
+        totalSum -= job->eraseSum();
+
+        delete job;
+    }
+
+    QVERIFY(totalSum == 0);
+}
+
+QTEST_GUILESS_MAIN(LockfreeMapTest)

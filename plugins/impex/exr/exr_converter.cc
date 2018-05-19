@@ -382,29 +382,25 @@ void EXRConverter::Private::decodeData4(Imf::InputFile& file, ExrPaintLayerInfo&
     file.readPixels(ystart, height + ystart - 1);
     Rgba *rgba = pixels.data();
 
-    for (int y = ystart; y < ystart + height; ++y)
-    {
-        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(xstart, y, width);
-        do {
+    QRect paintRegion(xstart, ystart, width, height);
+    KisSequentialIterator it(layer->paintDevice(), paintRegion);
+    while (it.nextPixel()) {
+        if (hasAlpha) {
+            unmultiplyAlpha<RgbPixelWrapper<_T_> >(rgba);
+        }
 
-            if (hasAlpha) {
-                unmultiplyAlpha<RgbPixelWrapper<_T_> >(rgba);
-            }
+        typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it.rawData());
 
-            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it->rawData());
+        dst->red = rgba->r;
+        dst->green = rgba->g;
+        dst->blue = rgba->b;
+        if (hasAlpha) {
+            dst->alpha = rgba->a;
+        } else {
+            dst->alpha = 1.0;
+        }
 
-            dst->red = rgba->r;
-            dst->green = rgba->g;
-            dst->blue = rgba->b;
-            if (hasAlpha) {
-                dst->alpha = rgba->a;
-            } else {
-                dst->alpha = 1.0;
-            }
-
-
-            ++rgba;
-        } while (it->nextPixel());
+        ++rgba;
     }
 }
 
@@ -445,23 +441,21 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     pixel_type *srcPtr = pixels.data();
 
-    for (int y = ystart; y < height + ystart; ++y) {
-        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(xstart, y, width);
-        do {
+    QRect paintRegion(xstart, ystart, width, height);
+    KisSequentialIterator it(layer->paintDevice(), paintRegion);
+    do {
 
-            if (hasAlpha) {
-                unmultiplyAlpha<GrayPixelWrapper<_T_> >(srcPtr);
-            }
+        if (hasAlpha) {
+            unmultiplyAlpha<GrayPixelWrapper<_T_> >(srcPtr);
+        }
 
-            pixel_type* dstPtr = reinterpret_cast<pixel_type*>(it->rawData());
+        pixel_type* dstPtr = reinterpret_cast<pixel_type*>(it.rawData());
 
-            dstPtr->gray = srcPtr->gray;
-            dstPtr->alpha = hasAlpha ? srcPtr->alpha : channel_type(1.0);
+        dstPtr->gray = srcPtr->gray;
+        dstPtr->alpha = hasAlpha ? srcPtr->alpha : channel_type(1.0);
 
-            ++srcPtr;
-        } while (it->nextPixel());
-    }
-
+        ++srcPtr;
+    } while (it.nextPixel());
 }
 
 bool recCheckGroup(const ExrGroupLayerInfo& group, QStringList list, int idx1, int idx2)

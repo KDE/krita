@@ -336,6 +336,7 @@ set(kritaui_LIB_SRCS
     KisAutoSaveRecoveryDialog.cpp
     KisDetailsPane.cpp
     KisDocument.cpp
+    KisCloneDocumentStroke.cpp
     KisNodeDelegate.cpp
     kis_node_view_visibility_delegate.cpp
     KisNodeToolTip.cpp

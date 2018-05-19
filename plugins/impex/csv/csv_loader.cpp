@@ -97,7 +97,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
 
     CSVReadLine readLine;
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
-    importDoc->setAutoSaveDelay(0);
+    importDoc->setInfiniteAutoSaveInterval();
     importDoc->setFileBatchMode(true);
 
     KisView *setView(0);

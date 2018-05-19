@@ -37,8 +37,8 @@ namespace {
  * These strings are added intentionally so we could relayout the threshold slider after
  * the string freeze for 4.0. Please translate them :)
  */
-static const QString stringForInstantPreviewThreshold1 = i18nc("@label:slider", "Threshold:");
-static const QString stringForInstantPreviewThreshold2 = i18nc("@label:slider", "Instant preview threshold:");
+static const KLocalizedString stringForInstantPreviewThreshold1 = ki18nc("@label:slider", "Threshold:");
+static const KLocalizedString stringForInstantPreviewThreshold2 = ki18nc("@label:slider", "Instant preview threshold:");
 }
 
 

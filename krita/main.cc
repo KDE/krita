@@ -238,6 +238,16 @@ extern "C" int main(int argc, char **argv)
             for (QString &uiLanguage : uiLanguages) {
                 uiLanguage.replace(QChar('-'), QChar('_'));
             }
+            for (int i = 0; i < uiLanguages.size(); i++) {
+                QString uiLanguage = uiLanguages[i];
+                // Strip the country code
+                int idx = uiLanguage.indexOf(QChar('_'));
+                if (idx != -1) {
+                    uiLanguage = uiLanguage.left(idx);
+                    uiLanguages.insert(i + 1, uiLanguage);
+                    i++;
+                }
+            }
             qDebug() << "Setting Krita's language to:" << uiLanguages;
             qputenv("LANG", uiLanguages.first().toLocal8Bit());
             KLocalizedString::setLanguages(uiLanguages);

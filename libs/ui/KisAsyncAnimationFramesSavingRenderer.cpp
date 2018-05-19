@@ -36,7 +36,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
           exportConfiguration(_exportConfiguration)
     {
 
-        savingDoc->setAutoSaveDelay(0);
+        savingDoc->setInfiniteAutoSaveInterval();
         savingDoc->setFileBatchMode(true);
 
         KisImageSP savingImage = new KisImage(savingDoc->createUndoStore(),

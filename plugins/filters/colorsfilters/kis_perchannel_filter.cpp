@@ -51,199 +51,26 @@
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
 
-QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs)
-{
-    const bool supportsLightness =
-        cs->colorModelId() != LABAColorModelID &&
-        cs->colorModelId() != GrayAColorModelID &&
-        cs->colorModelId() != GrayColorModelID &&
-        cs->colorModelId() != AlphaColorModelID;
-
-    const bool supportsHue = supportsLightness;
-    const bool supportSaturation = supportsLightness;
-
-    QVector<VirtualChannelInfo> vchannels;
-
-    QList<KoChannelInfo *> sortedChannels =
-        KoChannelInfo::displayOrderSorted(cs->channels());
-
-    if (supportsLightness) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::ALL_COLORS, -1, 0, cs);
-    }
-
-    Q_FOREACH (KoChannelInfo *channel, sortedChannels) {
-        int pixelIndex = KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), sortedChannels);
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::REAL, pixelIndex, channel, cs);
-    }
-
-    if (supportsHue) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::HUE, -1, 0, cs);
-    }
-
-    if (supportSaturation) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::SATURATION, -1, 0, cs);
-    }
-
-    if (supportsLightness) {
-        vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0, cs);
-    }
-
-    return vchannels;
-}
-
 KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
-        : KisConfigWidget(parent, f), m_histogram(0)
+        : KisMultiChannelConfigWidgetBase(parent, dev, f)
 {
-    Q_ASSERT(dev);
-    m_page = new WdgPerChannel(this);
+    KisMultiChannelFilterConfigurationBase::initDefaultCurves(m_curves, m_virtualChannels.size());
+    init();
 
-    QHBoxLayout * layout = new QHBoxLayout(this);
-    Q_CHECK_PTR(layout);
-    layout->setContentsMargins(0,0,0,0);
-    layout->addWidget(m_page);
-
-    m_dev = dev;
-    m_activeVChannel = 0;
-    const KoColorSpace *targetColorSpace = dev->compositionSourceColorSpace();
-
-    // fill in the channel chooser, in the display order, but store the pixel index as well.
-
-    m_virtualChannels = getVirtualChannels(targetColorSpace);
-    const int virtualChannelCount = m_virtualChannels.size();
-
-    KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
-                                                        virtualChannelCount);
-    for (int i = 0; i < virtualChannelCount; i++) {
-        const VirtualChannelInfo &info = m_virtualChannels[i];
-
-        m_page->cmbChannel->addItem(info.name(), info.pixelIndex());
-        m_curves[i].setName(info.name());
-    }
-
-    connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
-    connect((QObject*)(m_page->chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(logHistView()));
-    connect((QObject*)(m_page->resetButton), SIGNAL(clicked()), this, SLOT(resetCurve()));
-
-    // create the horizontal and vertical gradient labels
-    m_page->hgradient->setPixmap(createGradient(Qt::Horizontal));
-    m_page->vgradient->setPixmap(createGradient(Qt::Vertical));
-
-    // init histogram calculator
-    QList<QString> keys =
-        KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(targetColorSpace);
-
-    if(keys.size() > 0) {
-        KoHistogramProducerFactory *hpf;
-        hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
-        m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
-    }
-
-    connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
-
-    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
-
-    {
-        KisSignalsBlocker b(m_page->curveWidget);
-        m_page->curveWidget->setCurve(m_curves[0]);
-        setActiveChannel(0);
-    }
+    // These are not used here, while the rest of the dialog
+    // is shared with KisCrossChannelConfigWidget
+    m_page->lblDriverChannel->hide();
+    m_page->cmbDriverChannel->hide();
 }
 
 KisPerChannelConfigWidget::~KisPerChannelConfigWidget()
-{
-    delete m_histogram;
-}
-
-inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)
-{
-    int width;
-    int height;
-    int *i, inc, col;
-    int x = 0, y = 0;
-
-    if (orient == Qt::Horizontal) {
-        i = &x; inc = 1; col = 0;
-        width = 256; height = 1;
-    } else {
-        i = &y; inc = -1; col = 255;
-        width = 1; height = 256;
-    }
-
-    QPixmap gradientpix(width, height);
-    QPainter p(&gradientpix);
-    p.setPen(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-    for (; *i < 256; (*i)++, col += inc) {
-        p.setPen(QColor(col, col, col));
-        p.drawPoint(x, y);
-    }
-    return gradientpix;
-}
-
-inline QPixmap KisPerChannelConfigWidget::getHistogram()
-{
-    int i;
-    int height = 256;
-    QPixmap pix(256, height);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_histogram, pix);
-
-
-    bool logarithmic = m_page->chkLogarithmic->isChecked();
-
-    if (logarithmic)
-        m_histogram->setHistogramType(LOGARITHMIC);
-    else
-        m_histogram->setHistogramType(LINEAR);
-
-
-    QPalette appPalette = QApplication::palette();
-
-    pix.fill(QColor(appPalette.color(QPalette::Base)));
-
-    QPainter p(&pix);
-    p.setPen(QColor(appPalette.color(QPalette::Text)));
-    p.save();
-    p.setOpacity(0.2);
-
-    const VirtualChannelInfo &info = m_virtualChannels[m_activeVChannel];
-
-
-    if (info.type() == VirtualChannelInfo::REAL) {
-        m_histogram->setChannel(info.pixelIndex());
-
-        double highest = (double)m_histogram->calculations().getHighest();
-
-        qint32 bins = m_histogram->producer()->numberOfBins();
-
-        if (m_histogram->getHistogramType() == LINEAR) {
-            double factor = (double)height / highest;
-            for (i = 0; i < bins; ++i) {
-                p.drawLine(i, height, i, height - int(m_histogram->getValue(i) * factor));
-            }
-        } else {
-            double factor = (double)height / (double)log(highest);
-            for (i = 0; i < bins; ++i) {
-                p.drawLine(i, height, i, height - int(log((double)m_histogram->getValue(i)) * factor));
-            }
-        }
-    }
-
-    p.restore();
-
-    return pix;
-}
+{}
 
 #define BITS_PER_BYTE 8
 #define pwr2(p) (1<<p)
-
-void KisPerChannelConfigWidget::setActiveChannel(int ch)
+void KisPerChannelConfigWidget::updateChannelRange()
 {
-    m_curves[m_activeVChannel] = m_page->curveWidget->curve();
-
-    m_activeVChannel = ch;
-    m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);
-    m_page->curveWidget->setPixmap(getHistogram());
-    m_page->cmbChannel->setCurrentIndex(m_activeVChannel);
-
+    int ch = m_activeVChannel;
 
     // Getting range accepted by channel
     VirtualChannelInfo &currentVChannel = m_virtualChannels[m_activeVChannel];
@@ -289,7 +116,7 @@ void KisPerChannelConfigWidget::setActiveChannel(int ch)
 }
 
 
-KisPropertiesConfigurationSP  KisPerChannelConfigWidget::configuration() const
+KisPropertiesConfigurationSP KisPerChannelConfigWidget::configuration() const
 {
     int numChannels = m_virtualChannels.size();
     KisPropertiesConfigurationSP cfg = new KisPerChannelFilterConfiguration(numChannels);
@@ -316,7 +143,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
          */
 
         const int virtualChannelCount = m_virtualChannels.size();
-        KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
+        KisMultiChannelFilterConfigurationBase::initDefaultCurves(m_curves,
                                                             virtualChannelCount);
 
         for (int i = 0; i < virtualChannelCount; i++) {
@@ -341,169 +168,27 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
 }
 
 
-KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int nCh)
-        : KisColorTransformationConfiguration("perchannel", 1)
-{
-    initDefaultCurves(m_curves, nCh);
-    updateTransfers();
-}
+KisPerChannelFilterConfiguration::KisPerChannelFilterConfiguration(int channelCount)
+        : KisMultiChannelFilterConfigurationBase(channelCount, "perchannel", 1)
+{}
 
 KisPerChannelFilterConfiguration::~KisPerChannelFilterConfiguration()
 {
 }
 
-bool KisPerChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
-{
-    return (int)dev->compositionSourceColorSpace()->channelCount() == m_curves.size();
-}
-
-void KisPerChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
-{
-    m_curves.clear();
-    m_curves = curves;
-
-    updateTransfers();
-}
-
-void KisPerChannelFilterConfiguration::initDefaultCurves(QList<KisCubicCurve> &curves, int nCh)
-{
-    curves.clear();
-    for (int i = 0; i < nCh; i++) {
-        curves.append(KisCubicCurve());
-    }
-}
-
-void KisPerChannelFilterConfiguration::updateTransfers()
-{
-    m_transfers.resize(m_curves.size());
-    for (int i = 0; i < m_curves.size(); i++) {
-        m_transfers[i] = m_curves[i].uint16Transfer();
-    }
-}
-
-const QVector<QVector<quint16> >&
-KisPerChannelFilterConfiguration::transfers() const
-{
-    return m_transfers;
-}
-
-const QList<KisCubicCurve>&
-KisPerChannelFilterConfiguration::curves() const
-{
-    return m_curves;
-}
-
-void KisPerChannelFilterConfiguration::fromLegacyXML(const QDomElement& root)
-{
-    fromXML(root);
-}
-
 void KisPerChannelFilterConfiguration::fromXML(const QDomElement& root)
 {
-    QList<KisCubicCurve> curves;
-    quint16 numTransfers = 0;
-    int version;
-    version  = root.attribute("version").toInt();
-
-    QDomElement e = root.firstChild().toElement();
-    QString attributeName;
-    KisCubicCurve curve;
-    quint16 index;
-    while (!e.isNull()) {
-        if ((attributeName = e.attribute("name")) == "nTransfers") {
-            numTransfers = e.text().toUShort();
-        } else {
-            QRegExp rx("curve(\\d+)");
-            if (rx.indexIn(attributeName, 0) != -1) {
-
-                index = rx.cap(1).toUShort();
-                index = qMin(index, quint16(curves.count()));
-
-                if (!e.text().isEmpty()) {
-                    curve.fromString(e.text());
-                }
-                curves.insert(index, curve);
-            }
-        }
-        e = e.nextSiblingElement();
-    }
-
-    //prepend empty curves for the brightness contrast filter.
-    if(getString("legacy") == "brightnesscontrast") {
-        if (getString("colorModel") == LABAColorModelID.id()) {
-            curves.append(KisCubicCurve());
-            curves.append(KisCubicCurve());
-            curves.append(KisCubicCurve());
-        } else {
-            int extraChannels = 5;
-            if (getString("colorModel") == CMYKAColorModelID.id()) {
-                extraChannels = 6;
-            } else if (getString("colorModel") == GrayAColorModelID.id()) {
-                extraChannels = 0;
-            }
-            for(int c = 0; c < extraChannels; c ++) {
-                curves.insert(0, KisCubicCurve());
-            }
-        }
-    }
-    if (!numTransfers)
-        return;
-
-    setVersion(version);
-    setCurves(curves);
-}
-
-/**
- * Inherited from KisPropertiesConfiguration
- */
-//void KisPerChannelFilterConfiguration::fromXML(const QString& s)
-
-void addParamNode(QDomDocument& doc,
-                  QDomElement& root,
-                  const QString &name,
-                  const QString &value)
-{
-    QDomText text = doc.createTextNode(value);
-    QDomElement t = doc.createElement("param");
-    t.setAttribute("name", name);
-    t.appendChild(text);
-    root.appendChild(t);
+    // TODO
+    KisColorTransformationConfiguration::fromXML(root);
 }
 
 void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
 {
-    /**
-     * <params version=1>
-     *       <param name="nTransfers">3</param>
-     *       <param name="curve0">0,0;0.5,0.5;1,1;</param>
-     *       <param name="curve1">0,0;1,1;</param>
-     *       <param name="curve2">0,0;1,1;</param>
-     * </params>
-     */
-
-    root.setAttribute("version", version());
-
-    QDomText text;
-    QDomElement t;
-
-    addParamNode(doc, root, "nTransfers", QString::number(m_curves.size()));
-
-    KisCubicCurve curve;
-    QString paramName;
-
-    for (int i = 0; i < m_curves.size(); ++i) {
-        QString name = QLatin1String("curve") + QString::number(i);
-        QString value = m_curves[i].toString();
-
-        addParamNode(doc, root, name, value);
-    }
+    // TODO
+    KisColorTransformationConfiguration::toXML(doc, root);
 }
 
-/**
- * Inherited from KisPropertiesConfiguration
- */
-//QString KisPerChannelFilterConfiguration::toXML()
-
+// KisPerChannelFilter
 
 KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))
 {
@@ -538,7 +223,8 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
      * transforms in display order? Why on Earth it works?! Is it
      * documented anywhere?
      */
-    const QVector<VirtualChannelInfo> virtualChannels = getVirtualChannels(cs);
+    const QVector<VirtualChannelInfo> virtualChannels =
+            KisMultiChannelFilterConfigurationBase::getVirtualChannels(cs);
 
     if (originalTransfers.size() != int(virtualChannels.size())) {
         // We got an illegal number of colorchannels :(
@@ -626,7 +312,8 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     if (!hueNull) {
         QHash<QString, QVariant> params;
         params["curve"] = QVariant::fromValue(hueTransfer);
-        params["channel"] = 0;
+        params["channel"] = 3; // see KisHSVCurveAdjustment::enumChannel
+        params["relative"] = false;
         params["lumaRed"]   = cs->lumaCoefficients()[0];
         params["lumaGreen"] = cs->lumaCoefficients()[1];
         params["lumaBlue"]  = cs->lumaCoefficients()[2];
@@ -637,7 +324,8 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
     if (!saturationNull) {
         QHash<QString, QVariant> params;
         params["curve"] = QVariant::fromValue(saturationTransfer);
-        params["channel"] = 1;
+        params["channel"] = 4; // see KisHSVCurveAdjustment::enumChannel
+        params["relative"] = false;
         params["lumaRed"]   = cs->lumaCoefficients()[0];
         params["lumaGreen"] = cs->lumaCoefficients()[1];
         params["lumaBlue"]  = cs->lumaCoefficients()[2];
@@ -681,14 +369,4 @@ bool KisPerChannelFilter::needsTransparentPixels(const KisFilterConfigurationSP 
 {
     Q_UNUSED(config);
     return cs->colorModelId() == AlphaColorModelID;
-}
-
-void KisPerChannelConfigWidget::logHistView()
-{
-    m_page->curveWidget->setPixmap(getHistogram());
-}
-
-void KisPerChannelConfigWidget::resetCurve()
-{
-        m_page->curveWidget->reset();
 }

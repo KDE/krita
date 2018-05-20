@@ -103,7 +103,7 @@ public:
     {
 
         //if (m_model="RGBA" || m_colorize) {
-        /*It'd be nice to have LCH automatically selector for LAB in the future, but I don't know how to select LAB 
+        /*It'd be nice to have LCH automatically selector for LAB in the future, but I don't know how to select LAB
          * */
             const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
             RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
@@ -191,7 +191,7 @@ public:
 
                         sat *= (m_adj_s + 1.0);
                         //sat = qBound(0.0, sat, 1.0);
-                        
+
                         intensity += (m_adj_v);
 
                         HCIToRGB(hue/360.0, sat, intensity, &red, &green, &blue);
@@ -223,7 +223,7 @@ public:
                         r = red;
                         g = green;
                         b = blue;
-                        
+
                     } else if (m_type == 4) {
 
                         qreal red = SCALE_TO_FLOAT(src->red);
@@ -267,7 +267,7 @@ public:
             qreal a = SCALE_TO_FLOAT(src->a);
             qreal b = SCALE_TO_FLOAT(src->b);
             qreal L, C, H;
-            
+
             while (nPixels > 0) {
                 if (m_type = 4) {
                     a *= (m_adj_h + 1.0);
@@ -333,7 +333,7 @@ public:
         }
         return -1;
     }
-    
+
     /**
     * name - "h", "s" or "v"
     * (h)ue in range <-1.0, 1.0> ( for user, show as -180, 180 or 0, 360 for colorize)
@@ -392,6 +392,16 @@ class KisHSVCurveAdjustment : public KoColorTransformation
     typedef typename RGBTrait::Pixel RGBPixel;
 
 public:
+    enum enumChannel {
+        chRed = 0,
+        chGreen = 1,
+        chBlue = 2,
+        chHue = 3,
+        chSaturation = 4,
+        chValue = 5,
+        chChannelCount
+    };
+
     KisHSVCurveAdjustment() :
         m_lumaRed(0.0),
         m_lumaGreen(0.0),
@@ -401,7 +411,7 @@ public:
     QList<QString> parameters() const override
     {
       QList<QString> list;
-      list << "curve" << "channel" << "lumaRed" << "lumaGreen"<< "lumaBlue";
+      list << "curve" << "channel" << "driverChannel" << "relative" << "lumaRed" << "lumaGreen"<< "lumaBlue";
       return list;
     }
 
@@ -411,6 +421,10 @@ public:
             return PAR_CURVE;
         } else if (name == "channel") {
             return PAR_CHANNEL;
+        } else if (name == "driverChannel") {
+            return PAR_DRIVER_CHANNEL;
+        } else if (name == "relative") {
+            return PAR_RELATIVE;
         } else if (name == "lumaRed") {
             return PAR_LUMA_R;
         } else if (name == "lumaGreen") {
@@ -434,11 +448,25 @@ public:
         case PAR_CURVE:
             m_curve = parameter.value<QVector<quint16>>();
             break;
-        case PAR_CHANNEL: {
+        case PAR_CHANNEL:
+        case PAR_DRIVER_CHANNEL: {
             int channel = parameter.toInt();
-            KIS_ASSERT_RECOVER_RETURN(0 <= channel && channel < 3 && "Channel must be 0, 1 or 2. Ignored!");
-            m_channel = channel;
+            if (!(0 <= channel && channel < chChannelCount)) {
+
+                qDebug() << "Invalid channel!!! " << channel;
+                return;
+            }
+            //KIS_ASSERT_RECOVER_RETURN(0 <= channel && channel < chChannelCount && "Invalid channel. Ignored!");
+
+            if (id == PAR_CHANNEL) {
+                m_channel = channel;
+            } else {
+                m_driverChannel = channel;
+            }
             } break;
+        case PAR_RELATIVE:
+            m_relative = parameter.toBool();
+            break;
         case PAR_LUMA_R:
             m_lumaRed = parameter.toDouble();
             break;
@@ -457,30 +485,46 @@ public:
     {
         const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
-        float r = 0.0;
-        float g = 0.0;
-        float b = 0.0;
-
         float max = m_curve.size() - 1;
-        float component[3];
-        float &hue = component[0];
+
+        float component[chChannelCount];
+        float &h = component[chHue];
+        float &s = component[chSaturation];
+        float &v = component[chValue];
+        float &r = component[chRed];
+        float &g = component[chGreen];
+        float &b = component[chBlue];
+
+        int driverChannel = m_relative ? m_driverChannel : m_channel;
 
         while (nPixels > 0) {
+            component[chRed] = src->red;
+            component[chGreen] = src->green;
+            component[chBlue] = src->blue;
+
             RGBToHSV(
                 SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue),
-                &component[0], &component[1], &component[2]
+                &h, &s, &v
             );
 
             // Normalize hue to 0.0 to 1.0 range
-            hue /= 360.0f;
+            h /= 360.0f;
 
-            component[m_channel] = lookupComponent(component[m_channel], max);
+            float adjustment = lookupComponent(component[driverChannel], max);
+            if (m_relative) {
+                component[m_channel] += adjustment - 0.5f; // fixme: ducttape
+            } else {
+                component[m_channel] = adjustment;
+            }
 
-            hue *= 360.0f;
-            if (hue > 360) hue -= 360;
-            if (hue < 0) hue += 360;
+            h *= 360.0f;
 
-            HSVToRGB(component[0], component[1], component[2], &r, &g, &b);
+            if (h > 360) h -= 360;
+            if (h < 0) h += 360;
+
+            if (m_channel > chBlue) {
+                HSVToRGB(h, s, v, &r, &g, &b);
+            }
 
             clamp< _channel_type_ >(&r, &g, &b);
             dst->red = SCALE_FROM_FLOAT(r);
@@ -499,6 +543,7 @@ public:
     {
         // No curve for this component? Pass through modified
         if (max < 2) return x;
+        if (x < 0) return m_curve[0];
 
         float lookup = x * max;
         float base = floor(lookup);
@@ -516,17 +561,21 @@ public:
 
 
 private:
-    enum ParameterID
+    enum enumParameterID
     {
         PAR_CURVE,
         PAR_CHANNEL,
+        PAR_DRIVER_CHANNEL,
+        PAR_RELATIVE,
         PAR_LUMA_R,
         PAR_LUMA_G,
         PAR_LUMA_B,
     };
 
     QVector<quint16> m_curve;
-    int m_channel;
+    int m_channel = 0;
+    int m_driverChannel = 0;
+    bool m_relative = false;
 
     /* Note: the filter currently only supports HSV, so these are
      * unused, but will be needed once HSL, etc.

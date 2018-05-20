@@ -75,10 +75,7 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
     KisImageBuilder_Result res;
 
     if (configuration->getBool("flatten")) {
-        KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-        KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
-        res = exrConverter.buildFile(filename(), l);
+        res = exrConverter.buildFile(filename(), image->rootLayer(), true);
     }
     else {
         res = exrConverter.buildFile(filename(), image->rootLayer());

@@ -120,6 +120,13 @@ if(NOT IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
 endif()
 
 
+# Place Krita installer files in the right place
+file(COPY "${CMAKE_CURRENT_LIST_DIR}/installer/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/"
+    FILES_MATCHING PATTERN "*"
+)
+
+
 # Build installer
 message(STATUS "Building installer...")
 set(KRITA_VERSION_NUMBER "@KRITA_STABLE_VERSION_MAJOR@.@KRITA_STABLE_VERSION_MINOR@.@KRITA_VERSION_RELEASE@.@KRITA_VERSION_REVISION@")

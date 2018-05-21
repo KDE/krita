@@ -222,7 +222,7 @@ SectionEnd
 
 Section "${KRITA_PRODUCTNAME}" SEC_product_main
 	# TODO: Maybe switch to explicit file list?
-	File /r ${KRITA_PACKAGE_ROOT}\bin
+	File /r /x ffmpeg.exe /x ffmpeg_README.txt /x ffmpeg_LICENSE.txt ${KRITA_PACKAGE_ROOT}\bin
 	File /r ${KRITA_PACKAGE_ROOT}\lib
 	File /r ${KRITA_PACKAGE_ROOT}\share
 	File /r ${KRITA_PACKAGE_ROOT}\python
@@ -276,6 +276,14 @@ Section "Shell Integration" SEC_shellex
 	                 "KritaExePath" "$INSTDIR\bin\krita.exe"
 SectionEnd
 
+!ifdef HAS_FFMPEG
+Section "Bundled FFmpeg" SEC_ffmpeg
+	File /oname=bin\ffmpeg.exe ${KRITA_PACKAGE_ROOT}\bin\ffmpeg.exe
+	File /oname=bin\ffmpeg_LICENSE.txt ${KRITA_PACKAGE_ROOT}\bin\ffmpeg_LICENSE.txt
+	File /oname=bin\ffmpeg_README.txt ${KRITA_PACKAGE_ROOT}\bin\ffmpeg_README.txt
+SectionEnd
+!endif
+
 Section "-Main_refreshShell"
 	${RefreshShell}
 SectionEnd
@@ -285,6 +293,9 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_remove_old_version} "Remove previously installed Krita $KritaNsisVersion ($KritaNsisBitness-bit)."
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_product_main} "${KRITA_PRODUCTNAME} ${KRITA_VERSION_DISPLAY}$\r$\n$\r$\nVersion: ${KRITA_VERSION}"
 	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_shellex} "Shell Extension component to provide thumbnails and file properties display for Krita files.$\r$\n$\r$\nVersion: ${KRITASHELLEX_VERSION}"
+!ifdef HAS_FFMPEG
+	!insertmacro MUI_DESCRIPTION_TEXT ${SEC_ffmpeg} "Install a bundled version of FFmpeg for exporting animations."
+!endif
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Section "un.Shell Integration"

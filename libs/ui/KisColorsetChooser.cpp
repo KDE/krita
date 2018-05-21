@@ -116,12 +116,12 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_itemChooser, 0, 0, 1, 3);
-    layout->addWidget(new QLabel(i18n("Name:"), this), 1, 0, 1, 1);
-    layout->addWidget(m_nameEdit, 1, 1, 1, 2);
-    layout->addWidget(new QLabel(i18n("Columns:"), this), 2, 0, 1, 1);
-    layout->addWidget(m_columnEdit, 2, 1, 1, 1);
-    layout->addWidget(saveButton, 2, 2, 1, 1);
     layout->setColumnStretch(1, 1);
+    // layout->addWidget(saveButton, 2, 2, 1, 1);
+    // layout->addWidget(m_nameEdit, 1, 1, 1, 2);
+    // layout->addWidget(new QLabel(i18n("Name:"), this), 1, 0, 1, 1);
+    // layout->addWidget(m_columnEdit, 2, 1, 1, 1);
+    // layout->addWidget(new QLabel(i18n("Columns:"), this), 2, 0, 1, 1);
 }
 
 KisColorsetChooser::~KisColorsetChooser()

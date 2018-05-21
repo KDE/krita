@@ -235,6 +235,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_presets_save.cpp
     widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
+    widgets/KisPaletteChooser.cpp
 
     widgets/kis_popup_button.cc
     widgets/kis_preset_chooser.cpp
@@ -491,6 +492,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgrectangleconstraints.ui
     forms/wdgimportimagesequence.ui
     forms/wdgstrokeselectionproperties.ui
+    forms/WdgPaletteChooser.ui
     forms/KisDetailsPaneBase.ui
     forms/KisOpenPaneBase.ui
     forms/wdgstopgradienteditor.ui

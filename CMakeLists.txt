@@ -736,7 +736,7 @@ check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
 if(WIN32)
-    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/ConfigureInstallerNsis.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/installer/ConfigureInstallerNsis.cmake)
 endif()
 
 message("\nBroken tests:")

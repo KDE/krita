@@ -491,18 +491,36 @@ QString DlgAnimationRenderer::findFFMpeg()
     QStringList proposedPaths;
 
     QString customPath = KisConfig().customFFMpegPath();
-    proposedPaths << customPath;
-    proposedPaths << customPath + QDir::separator() + "ffmpeg";
+    if (!customPath.isEmpty()) {
+        proposedPaths << customPath;
+        proposedPaths << customPath + QDir::separator() + "ffmpeg";
+    }
 
+#ifndef Q_OS_WIN
     proposedPaths << QDir::homePath() + "/bin/ffmpeg";
     proposedPaths << "/usr/bin/ffmpeg";
     proposedPaths << "/usr/local/bin/ffmpeg";
+#endif
     proposedPaths << KoResourcePaths::getApplicationRoot() +
         QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
 
-    Q_FOREACH (const QString &path, proposedPaths) {
+    Q_FOREACH (QString path, proposedPaths) {
         if (path.isEmpty()) continue;
 
+#ifdef Q_OS_WIN
+        path = QDir::toNativeSeparators(QDir::cleanPath(path));
+        if (path.endsWith(QDir::separator())) {
+            continue;
+        }
+        if (!path.endsWith(".exe")) {
+            if (!QFile::exists(path)) {
+                path += ".exe";
+                if (!QFile::exists(path)) {
+                    continue;
+                }
+            }
+        }
+#endif
         QProcess testProcess;
         testProcess.start(path, QStringList() << "-version");
         if (testProcess.waitForStarted(1000)) {

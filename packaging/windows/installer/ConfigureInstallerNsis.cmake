@@ -15,7 +15,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/MakeinstallerNsis.cmake
 )
 
 install(FILES ${CMAKE_CURRENT_LIST_DIR}/installer_krita.nsi
-              ${CMAKE_CURRENT_LIST_DIR}/krita_versions_detect.nsh
+#              ${CMAKE_CURRENT_LIST_DIR}/krita_versions_detect.nsh
               ${CMAKE_CURRENT_LIST_DIR}/license_gpl-3.0.rtf
     DESTINATION ${CMAKE_INSTALL_PREFIX}/installer
 )

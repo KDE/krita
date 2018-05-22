@@ -21,7 +21,6 @@ set(kritawidgetutils_LIB_SRCS
     KoUpdaterPrivate_p.cpp
     KoProperties.cpp
     KoFileDialog.cpp
-    KoResourcePaths.cpp
 
     kis_num_parser.cpp
     kis_spin_box_unit_manager.cpp

@@ -216,6 +216,19 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="invert_selection">
+      <icon></icon>
+      <text>&amp;Invert Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Invert current selection</toolTip>
+      <iconText>Invert Selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut>Ctrl+Shift+I</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
   </Actions>
 
   <Actions category="Painting">
@@ -478,18 +491,6 @@
       <iconText>Move to Canvas Center Y</iconText>
       <activationFlags>10000</activationFlags>
       <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="invert">
-      <icon></icon>
-      <text>&amp;Invert Selection</text>
-      <whatsThis></whatsThis>
-      <toolTip>Invert current selection</toolTip>
-      <iconText>Invert Selection</iconText>
-      <activationFlags>10000000000</activationFlags>
-      <activationConditions>100</activationConditions>
-      <shortcut>Ctrl+Shift+I</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

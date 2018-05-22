@@ -1015,10 +1015,10 @@
     </Action>
     <Action name="krita_filter_colorbalance">
       <icon></icon>
-      <text>Colo&amp;r Balance..</text>
+      <text>Colo&amp;r Balance...</text>
       <whatsThis></whatsThis>
-      <toolTip>Color Balance..</toolTip>
-      <iconText>Color Balance..</iconText>
+      <toolTip>Color Balance</toolTip>
+      <iconText>Color Balance</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+B</shortcut>
@@ -1438,8 +1438,8 @@
       <icon></icon>
       <text>Bezier Curve Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Bezier Curve Tool. Shift-mouseclick ends the curve.</toolTip>
-      <iconText>Bezier Curve Tool. Shift-mouseclick ends the curve.</iconText>
+      <toolTip>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</toolTip>
+      <iconText>Bezier Curve Tool. Shift-mouseclick or double-click ends the curve.</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

@@ -159,28 +159,18 @@ struct KisGaussCircleMaskGenerator::FastRowProcessor
 template<> void KisGaussCircleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
-{
-    float widthHalf = width/2;
-
-    float y_ = (y - widthHalf) / width;
+{   
+    float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
 
-    float gStd = .1515 * (d->fade + .30);
-    float gDen = 1/(2*3.1415 * pow2(gStd));
-    float gExpDen = 2 * pow2(gStd);
-
-    float gMax = gDen * std::exp( -0.02/ gExpDen);
-    float gMin = gDen * std::exp( -0.5/ gExpDen);
-
-
-
     float* bufferPointer = buffer;
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero() - widthHalf;
+    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
 
     Vc::float_v increment((float)Vc::float_v::size());
     Vc::float_v vCenterX(centerX);
+    Vc::float_v vCenter(d->center);
 
     Vc::float_v vCosa(cosa);
     Vc::float_v vSina(sina);
@@ -188,38 +178,53 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vSinaY_(sinay_);
 
     Vc::float_v vYCoeff(d->ycoef);
+    Vc::float_v vDistfactor(d->distfactor);
+    Vc::float_v vAlphafactor(d->alphafactor);
 
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
 
     for (int i=0; i < width; i+= Vc::float_v::size()){
-        Vc::float_v x_ = currentIndices / width;
 
+        Vc::float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr_ = -(pow2(x_) + pow2(y_)) / gExpDen;
-        Vc::float_v n = gDen * xr_.apply([](float f) { return std::exp(f); });
-        Vc::float_v vNormFade = -(n - gMin)/(gMax - gMin) + 1.1f;
+        Vc::float_v xr = x_ * vCosa - vSinaY_;
+        Vc::float_v yr = x_ * vSina + vCosaY_;
 
-        Vc::float_m outsideMask = vNormFade > vOne;
+        Vc::float_v dist = sqrt(pow2(xr) + pow2(yr * vYCoeff));
 
-        if (!outsideMask.isFull()) {
+//        Vc::float_m fadeMask = d->fadeMaker.needFade
 
-            Vc::float_v vFade = vNormFade;
+//        Vc::float_m outsideMask = dist > vOne;
 
-            Vc::float_m mask = vNormFade < vZero;
+//        if (!outsideMask.isFull()) {
+            Vc::float_v valDist = dist * vDistfactor;
+            Vc::float_v fullFade = vAlphafactor * (
+                        (valDist + vCenter).apply([](float f) { return erff(f); }) -
+                        (valDist - vCenter).apply([](float f) { return erff(f); }) );
+
+            //255 * n * (normeFade - 1) / (normeFade - n)
+            Vc::float_v vFade = (255.f - fullFade) / 255.f;
+
+//            for (size_t i = 0; i < Vc::float_v::size(); i++){
+//                qDebug() << vFade[i];
+//            }
+//            // Mask in the inner circe of the mask
+            Vc::float_m mask = vFade < vZero;
             vFade.setZero(mask);
 
             // Mask out the outer circe of the mask
-            vFade(outsideMask) = vOne;
+            mask = vFade > vOne;
+            vFade(mask) = vOne;
 
             vFade.store(bufferPointer, Vc::Aligned);
-        } else {
-            // Mask out everything outside the circle
-            vOne.store(bufferPointer, Vc::Aligned);
-        }
-        currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+//        } else {
+//          vOne.store(bufferPointer, Vc::Aligned);
+//      }
+      currentIndices = currentIndices + increment;
+
+      bufferPointer += Vc::float_v::size();
     }
 }
 

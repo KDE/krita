@@ -228,6 +228,9 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
     texCoords[5] = QVector2D(rc.right(), rc.bottom());
 }
 
+#include <QWindow>
+#include <QScreen>
+
 void KisOpenGLCanvas2::initializeGL()
 {
     KisOpenGL::initializeContext(context());
@@ -289,6 +292,13 @@ void KisOpenGLCanvas2::initializeGL()
     Sync::init(context());
 
     d->canvasInitialized = true;
+
+    ENTER_FUNCTION() << ppVar(devicePixelRatioF());
+    ENTER_FUNCTION() << ppVar(window()->windowHandle());
+
+    if (window()->windowHandle()) {
+        ENTER_FUNCTION() << ppVar(window()->windowHandle()->screen());
+    }
 }
 
 /**
@@ -626,7 +636,7 @@ void KisOpenGLCanvas2::drawImage()
     projectionMatrix.ortho(0, width(), height(), 0, NEAR_VAL, FAR_VAL);
 
     // Set view/projection matrices
-    QMatrix4x4 modelMatrix(converter->imageToWidgetTransform());
+    QMatrix4x4 modelMatrix(converter->imageToDisplayDeviceTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ModelViewProjection), modelMatrix);
@@ -638,9 +648,9 @@ void KisOpenGLCanvas2::drawImage()
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
-    qreal scaleX, scaleY;
-    converter->imageScale(&scaleX, &scaleY);
-    d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
+    const qreal effectiveDeviceScale = converter->effectiveDeviceZoom();
+
+    d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) effectiveDeviceScale);
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::TexelSize), (GLfloat) d->openGLImageTextures->texelSize());
 
     QRect ir = d->openGLImageTextures->storedImageBounds();
@@ -739,7 +749,7 @@ void KisOpenGLCanvas2::drawImage()
 
             if (currentLodPlane > 0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-            } else if (SCALE_MORE_OR_EQUAL_TO(scaleX, scaleY, 2.0)) {
+            } else if (effectiveDeviceScale >= 2.0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             } else {
@@ -757,7 +767,7 @@ void KisOpenGLCanvas2::drawImage()
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
                     break;
                 case KisOpenGL::HighQualityFiltering:
-                    if (SCALE_LESS_THAN(scaleX, scaleY, 0.5)) {
+                    if (effectiveDeviceScale < 0.5) {
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
                     } else {
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

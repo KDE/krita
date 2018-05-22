@@ -72,12 +72,21 @@ public:
     bool yAxisMirrored() const;
     QPoint resetRotation(QPointF center);
 
+    void setDevicePixelRatio(qreal value);
+    qreal devicePixelRatio() const;
+
     void setZoom(qreal zoom) override;
 
     /**
      * A composition of to scale methods: zoom level + image resolution
      */
     qreal effectiveZoom() const;
+
+    /**
+     * A composition of effectiveZoom() and device pixel ratio used for
+     * scaling in HiDPI mode
+     */
+    qreal effectiveDeviceZoom() const;
 
     template<class T> typename _Private::Traits<T>::Result
     imageToViewport(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform(), obj); }
@@ -121,6 +130,9 @@ public:
     QTransform viewportToWidgetTransform() const;
     QTransform flakeToWidgetTransform() const;
     QTransform documentToWidgetTransform() const;
+
+    QTransform widgetToDisplayDeviceTransform() const;
+    QTransform imageToDisplayDeviceTransform() const;
 
     void getQPainterCheckersInfo(QTransform *transform,
                                  QPointF *brushOrigin,

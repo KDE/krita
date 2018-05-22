@@ -253,6 +253,9 @@ private Q_SLOTS:
     void slotImageNodeRemoved(KisNodeSP node);
     void slotContinueRemoveNode(KisNodeSP newActiveNode);
 
+    void slotScreenChanged(QScreen *screen);
+    void slotUpdateDevicePixelRatio();
+
 Q_SIGNALS:
     // From KisImage
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);

@@ -55,6 +55,7 @@
 #include <QMoveEvent>
 #include <QTemporaryFile>
 #include <QMdiSubWindow>
+#include <QScreen>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -91,6 +92,8 @@
 #include "krita_utils.h"
 #include "input/kis_input_manager.h"
 #include "KisRemoteFileFetcher.h"
+#include "KisMainWindow.h"
+#include <QWindow>
 
 //static
 QString KisView::newObjectName()
@@ -150,6 +153,9 @@ public:
 
     bool softProofing = false;
     bool gamutCheck = false;
+
+    QScreen *currentScreen = 0;
+    KisSignalAutoConnectionsStore screenConnectionsStore;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -358,6 +364,8 @@ void KisView::setViewManager(KisViewManager *view)
             SLOT(slotContinueRemoveNode(KisNodeSP)),
             Qt::AutoConnection);
 
+    //slotScreenChanged(d->viewManager->mainWindow()->windowHandle()->screen());
+
     d->viewManager->updateGUI();
 
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
@@ -401,6 +409,33 @@ void KisView::slotContinueRemoveNode(KisNodeSP newActiveNode)
     if (!d->isCurrent) {
         d->currentNode = newActiveNode;
     }
+}
+
+void KisView::slotScreenChanged(QScreen *screen)
+{
+    // TODO: rerender canvas display if the zoom actually changed
+
+    ENTER_FUNCTION() << ppVar(screen);
+
+    d->screenConnectionsStore.clear();
+    d->currentScreen = screen;
+
+    if (screen) {
+        d->screenConnectionsStore.addConnection(
+            screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
+            this, SLOT(slotUpdateDevicePixelRatio()));
+    }
+    slotUpdateDevicePixelRatio();
+}
+
+void KisView::slotUpdateDevicePixelRatio()
+{
+    ENTER_FUNCTION();
+
+    const qreal ratio =
+        d->currentScreen ? d->currentScreen->devicePixelRatio() : 1.0;
+
+    d->viewConverter.setDevicePixelRatio(ratio);
 }
 
 KoZoomController *KisView::zoomController() const

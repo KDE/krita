@@ -274,6 +274,10 @@ private Q_SLOTS:
 
     void bootstrapFinished();
 
+    void slotScreenChanged(QScreen *screen);
+    void slotUpdateDevicePixelRatio();
+
+
 public:
 
     bool isPopupPaletteVisible() const;

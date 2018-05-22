@@ -28,6 +28,8 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include <QDesktopWidget>
+#include <QScreen>
+#include <QWindow>
 
 #include <kis_debug.h>
 
@@ -69,6 +71,7 @@
 #include "KisView.h"
 #include "kis_canvas_controller.h"
 #include "kis_grid_config.h"
+#include "kis_signal_auto_connection.h"
 
 #include "kis_animation_player.h"
 #include "kis_animation_frame_cache.h"
@@ -136,6 +139,7 @@ public:
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
+    KisSignalAutoConnectionsStore screenConnectionsStore;
 
     bool effectiveLodAllowedInCanvas() {
         return lodAllowedInCanvas && !bootstrapLodBlocked;
@@ -187,6 +191,13 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     m_d->updateSignalCompressor.setDelay(1000 / config.fpsLimit());
     m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+
+    QWindow *window = view->mainWindow()->window()->windowHandle();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(window);
+
+    connect(window, SIGNAL(screenChanged(QScreen*)), this, SLOT(slotScreenChanged(QScreen*)));
+    slotScreenChanged(window->screen());
+
 }
 
 void KisCanvas2::setup()
@@ -1017,6 +1028,36 @@ void KisCanvas2::bootstrapFinished()
 
     m_d->bootstrapLodBlocked = false;
     setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
+}
+
+void KisCanvas2::slotScreenChanged(QScreen *screen)
+{
+    // TODO: rerender canvas display if the zoom actually changed
+
+    ENTER_FUNCTION() << ppVar(screen);
+
+    m_d->screenConnectionsStore.clear();
+
+    if (screen) {
+        m_d->screenConnectionsStore.addConnection(
+            screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
+            this, SLOT(slotUpdateDevicePixelRatio()));
+    }
+    slotUpdateDevicePixelRatio();
+}
+
+void KisCanvas2::slotUpdateDevicePixelRatio()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->view);
+
+    QWindow *window = m_d->view->mainWindow()->window()->windowHandle();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(window);
+
+    const qreal ratio = window->screen()->devicePixelRatio();
+
+    ENTER_FUNCTION() << ppVar(ratio);
+
+    m_d->coordinatesConverter->setDevicePixelRatio(ratio);
 }
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)

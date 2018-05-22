@@ -44,6 +44,8 @@ struct KisCoordinatesConverter::Private {
     QTransform imageToDocument;
     QTransform documentToFlake;
     QTransform widgetToViewport;
+
+    qreal devicePixelRatio = 1.0;
 };
 
 /**
@@ -129,6 +131,7 @@ void KisCoordinatesConverter::recalculateTransformations()
     QRectF rrect = irect & wrect;
 
     QTransform reversedTransform = flakeToWidgetTransform().inverted();
+    reversedTransform *= QTransform::fromScale(m_d->devicePixelRatio, m_d->devicePixelRatio);
     QRectF     canvasBounds      = reversedTransform.mapRect(rrect);
     QPointF    offset            = canvasBounds.topLeft();
 
@@ -192,6 +195,11 @@ qreal KisCoordinatesConverter::effectiveZoom() const
 
     // zoom by average of x and y
     return 0.5 * (scaleX + scaleY);
+}
+
+qreal KisCoordinatesConverter::effectiveDeviceZoom() const
+{
+    return effectiveZoom() * m_d->devicePixelRatio;
 }
 
 QPoint KisCoordinatesConverter::rotate(QPointF center, qreal angle)
@@ -277,6 +285,19 @@ QPoint KisCoordinatesConverter::resetRotation(QPointF center)
     return m_d->documentOffset.toPoint();
 }
 
+void KisCoordinatesConverter::setDevicePixelRatio(qreal value)
+{
+    ENTER_FUNCTION() << ppVar(value);
+
+    m_d->devicePixelRatio = value;
+    recalculateTransformations();
+}
+
+qreal KisCoordinatesConverter::devicePixelRatio() const
+{
+    return m_d->devicePixelRatio;
+}
+
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
     return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToWidget;
 }
@@ -296,6 +317,18 @@ QTransform KisCoordinatesConverter::flakeToWidgetTransform() const {
 QTransform KisCoordinatesConverter::documentToWidgetTransform() const
 {
     return m_d->documentToFlake * m_d->flakeToWidget;
+}
+
+QTransform KisCoordinatesConverter::widgetToDisplayDeviceTransform() const
+{
+    return QTransform::fromScale(m_d->devicePixelRatio, m_d->devicePixelRatio);
+}
+
+QTransform KisCoordinatesConverter::imageToDisplayDeviceTransform() const
+{
+    //return m_d->imageToDocument * m_d->documentToFlake * QTransform::fromScale(m_d->devicePixelRatio, m_d->devicePixelRatio) * m_d->flakeToWidget;
+    return imageToWidgetTransform() * widgetToDisplayDeviceTransform();
+
 }
 
 QTransform KisCoordinatesConverter::viewportToWidgetTransform() const {
@@ -347,11 +380,11 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(const QRectF &viewportRect,
         *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());
     }
     else {
-        *textureTransform = viewportToWidgetTransform();
+        *textureTransform = viewportToWidgetTransform() * widgetToDisplayDeviceTransform();
         *textureRect = viewportRect;
     }
 
-    *modelTransform = viewportToWidgetTransform();
+    *modelTransform = viewportToWidgetTransform() * widgetToDisplayDeviceTransform();
     *modelRect = viewportRect;
 }
 

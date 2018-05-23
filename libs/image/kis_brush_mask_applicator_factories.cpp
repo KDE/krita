@@ -181,8 +181,14 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vDistfactor(d->distfactor);
     Vc::float_v vAlphafactor(d->alphafactor);
 
+    Vc::float_v vFadeRadius(d->fadeMaker.getRadius());
+    Vc::float_v vFadeStartValue(d->fadeMaker.getFadeStartValue());
+    Vc::float_v vFadeAFadeStart(d->fadeMaker.getAntialiasingFadeStart());
+    Vc::float_v vFadeAFadeCoeff(d->fadeMaker.getAntialiasingFadeCoeff());
+
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
+    Vc::float_v vValMax(255.f);
 
     for (int i=0; i < width; i+= Vc::float_v::size()){
 
@@ -193,35 +199,45 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         Vc::float_v dist = sqrt(pow2(xr) + pow2(yr * vYCoeff));
 
-//        Vc::float_m fadeMask = d->fadeMaker.needFade
+        // BEGIN FadeMaker needFade vectorized
+        // follow fademaker rules for outsideMask
+        Vc::float_m outsideMask = dist > vFadeRadius;
+        dist(outsideMask) = vOne;
 
-//        Vc::float_m outsideMask = dist > vOne;
+        Vc::float_m fadeStartMask = dist > vFadeAFadeStart;
+        dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue + (dist - vFadeAFadeStart) * vFadeAFadeCoeff) / vValMax;
 
-//        if (!outsideMask.isFull()) {
+        Vc::float_m excludeMask = outsideMask | fadeStartMask;
+
+        if (!excludeMask.isFull()) {
             Vc::float_v valDist = dist * vDistfactor;
-            Vc::float_v fullFade = vAlphafactor * (
-                        (valDist + vCenter).apply([](float f) { return erff(f); }) -
-                        (valDist - vCenter).apply([](float f) { return erff(f); }) );
+            Vc::float_v fullFade = vAlphafactor * ( d->vErf(valDist + vCenter) - d->vErf(valDist - vCenter));
 
-            //255 * n * (normeFade - 1) / (normeFade - n)
-            Vc::float_v vFade = (255.f - fullFade) / 255.f;
+            Vc::float_m mask;
+            // Mask in the inner circe of the mask
+            mask = fullFade < vZero;
+            fullFade.setZero(mask);
 
-//            for (size_t i = 0; i < Vc::float_v::size(); i++){
-//                qDebug() << vFade[i];
-//            }
-//            // Mask in the inner circe of the mask
-            Vc::float_m mask = vFade < vZero;
-            vFade.setZero(mask);
+            // Mask (value - value), presicion errors.
+            mask = fullFade >= vValMax;
+            Vc::float_v vFade = (vValMax - fullFade) / vValMax;
+            vFade(mask) = vZero;
 
-            // Mask out the outer circe of the mask
-            mask = vFade > vOne;
-            vFade(mask) = vOne;
+            // filter nan and inf. Vc uses float, imprecission errors are frequent
+            mask = Vc::isfinite(vFade);
+            vFade(!mask) = vOne;
 
+            // Mask the inner circe of the mask
+            mask = vFade < vZero;
+            vFade(mask) = vZero;
+
+            // return original dist values before vFade transform
+            vFade(excludeMask) = dist;
             vFade.store(bufferPointer, Vc::Aligned);
 
-//        } else {
-//          vOne.store(bufferPointer, Vc::Aligned);
-//      }
+        } else {
+          dist.store(bufferPointer, Vc::Aligned);
+      }
       currentIndices = currentIndices + increment;
 
       bufferPointer += Vc::float_v::size();

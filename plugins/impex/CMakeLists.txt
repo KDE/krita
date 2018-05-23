@@ -48,3 +48,9 @@ add_subdirectory(kra)
 if (GIF_FOUND)
     add_subdirectory(gif)
 endif()
+
+#
+# Look for libheif; needs a findHeif.cmake module
+# if (HEIF_FOUND)
+    add_subdirectory(heif)
+# endif()

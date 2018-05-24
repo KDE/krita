@@ -53,6 +53,7 @@
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"
 #include "kis_paint_layer.h"
+#include "kis_projection_leaf.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
@@ -1313,11 +1314,15 @@ bool KisImage::startIsolatedMode(KisNodeSP node)
               m_node(node),
               m_image(image)
         {
-            this->enableJob(JOB_INIT);
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
             setClearsRedoOnStart(false);
         }
 
         void initStrokeCallback() {
+            // pass-though node don't have any projection prepared, so we should
+            // explicitly regenerate it before activating isolated mode.
+            m_node->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
+
             m_image->m_d->isolatedRootNode = m_node;
             emit m_image->sigIsolatedModeChanged();
 

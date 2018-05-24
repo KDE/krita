@@ -28,6 +28,7 @@ class TestResourceCacheDb : public QObject
 private Q_SLOTS:
     void initTestCase();
     void testCreateDatabase();
+    void testLookupTables();
     void cleanupTestCase();
 private:
 };

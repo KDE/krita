@@ -43,6 +43,12 @@ public:
     KisResourceCacheDb();
     ~KisResourceCacheDb();
 
+    /**
+     * @brief isValid
+     * @return true if the database has been correctly created
+     */
+    bool isValid() const;
+
 private:
 
     class Private;

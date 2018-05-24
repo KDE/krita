@@ -1,1 +1,1 @@
-INSERT into origin_types (id, type) VALUES(?,?);
+INSERT into origin_types (id, name) VALUES(?,?);

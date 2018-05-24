@@ -33,6 +33,8 @@ class KisResourceCacheDb::Private
 {
 public:
 
+    bool valid {false};
+
     QSqlError initDb();
 };
 
@@ -43,10 +45,16 @@ KisResourceCacheDb::KisResourceCacheDb()
     if (err.isValid()) {
         qWarning() << "Could not initialize the database:" << err;
     }
+    d->valid = !err.isValid();
 }
 
 KisResourceCacheDb::~KisResourceCacheDb()
 {
+}
+
+bool KisResourceCacheDb::isValid() const
+{
+    return d->valid;
 }
 
 QSqlError KisResourceCacheDb::Private::initDb()
@@ -80,14 +88,58 @@ QSqlError KisResourceCacheDb::Private::initDb()
 
     Q_FOREACH(const QString &table, tables) {
         QFile f(":/create_" + table + ".sql");
-        qDebug() << "Running SQL" << f;
         if (f.open(QFile::ReadOnly)) {
             QString sql(f.readAll());
             if (!query.exec(sql)) {
                 return db.lastError();
             }
         }
+        else {
+            return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(table), QSqlError::StatementError);
+        }
     }
 
+    {
+        QStringList originTypes = QStringList() << "INSTALLATION" // Installed by Krita
+                                                << "BUNDLE" // Bundle installed by the user
+                                                << "ADOBE_LIBRARY" // ABR or ASL or similar Adobe resource library
+                                                << "USER"; // Installed or created by the user
+        QFile f(":/fill_origin_types.sql");
+        f.open(QFile::ReadOnly);
+        QString sql = f.readAll();
+
+        Q_FOREACH(const QString &originType, originTypes) {
+            query.addBindValue(originTypes.indexOf(originType));
+            query.addBindValue(originType);
+            if (!query.exec(sql)) {
+                qDebug() << "Could not insert" << originType;
+                return db.lastError();
+            }
+        }
+    }
+
+    {
+        QStringList resourceTypes = QStringList() << "BRUSH_TIP"
+                                                  << "GRADIENT"
+                                                  << "PAINTOP_PRESET"
+                                                  << "COLORSET"
+                                                  << "PATTERN"
+                                                  << "SYMBOL_LIBRARY"
+                                                  << "TEMPLATE"
+                                                  << "WORKSPACE"
+                                                  << "SESSION";
+        QFile f(":/fill_resource_types.sql");
+        f.open(QFile::ReadOnly);
+        QString sql = f.readAll();
+
+        Q_FOREACH(const QString &resourceType, resourceTypes) {
+            query.addBindValue(resourceTypes.indexOf(resourceType));
+            query.addBindValue(resourceType);
+            if (!query.exec(sql)) {
+                qDebug() << "Could not insert" << resourceType;
+                return db.lastError();
+            }
+        }
+    }
     return QSqlError();
 }

@@ -42,6 +42,9 @@ void TestResourceCacheDb::testCreateDatabase()
 {
     KisResourceCacheDb cacheDb;
     Q_UNUSED(cacheDb);
+
+    QVERIFY(cacheDb.isValid());
+
     QSqlDatabase sqlDb = QSqlDatabase::database();
 
     QStringList tables = QStringList() << "origin_types"
@@ -57,6 +60,11 @@ void TestResourceCacheDb::testCreateDatabase()
     Q_FOREACH(const QString &table, tables) {
         QVERIFY2(dbTables.contains(table), table.toLatin1());
     }
+
+}
+
+void TestResourceCacheDb::testLookupTables()
+{
 
 }
 

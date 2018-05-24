@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2018 Dirk Farin <farin@struktur.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,13 +24,6 @@
 
 #include <KisImportExportManager.h>
 
-#include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-
-
-
-
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 
@@ -47,7 +40,7 @@
 
 #include "HeifConverter.h"
 
-#include "libheif/heif.h"
+#include "libheif/heif-cxx.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_heif_import.json", registerPlugin<HeifImport>();)
@@ -60,110 +53,118 @@ HeifImport::~HeifImport()
 {
 }
 
+static KisImportExportFilter::ConversionStatus setHeifError(KisDocument* document,
+                                                            heif::Error error)
+{
+  switch (error.get_code()) {
+  case heif_error_Ok:
+        return KisImportExportFilter::OK;
+
+  case heif_error_Input_does_not_exist:
+    // this should never happen because we do not read from file names
+    document->setErrorMessage(i18n("Internal error."));
+    return KisImportExportFilter::InternalError;
+
+  case heif_error_Invalid_input:
+  case heif_error_Decoder_plugin_error:
+    document->setErrorMessage(i18n("The HEIF file is corrupted."));
+    return KisImportExportFilter::ParsingError;
+
+  case heif_error_Unsupported_filetype:
+  case heif_error_Unsupported_feature:
+    document->setErrorMessage(i18n("Krita does support this type of HEIF file."));
+    return KisImportExportFilter::NotImplemented;
+
+  case heif_error_Usage_error:
+  case heif_error_Encoder_plugin_error:
+    // this should never happen if we use libheif in the correct way
+    document->setErrorMessage(i18n("Internal libheif API error."));
+    return KisImportExportFilter::InternalError;
+
+  case heif_error_Memory_allocation_error:
+    document->setErrorMessage(i18n("Could not allocate memory."));
+    return KisImportExportFilter::StorageCreationError;
+
+  default:
+    // we only get here when we forgot to handle an error ID
+    document->setErrorMessage(i18n("Unknown error."));
+    return KisImportExportFilter::InternalError;
+  }
+}
+
+
 KisImportExportFilter::ConversionStatus HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     //HeifConverter imageBuilder(document, !batchMode());
 
-    /*
-    switch (imageBuilder.buildImage(filename())) {
-    case KisImageBuilder_RESULT_UNSUPPORTED:
-    case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-        document->setErrorMessage(i18n("Krita does support this type of EXR file."));
-        return KisImportExportFilter::NotImplemented;
 
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        document->setErrorMessage(i18n("This is not a HEIF file."));
-        return KisImportExportFilter::BadMimeType;
-
-    case KisImageBuilder_RESULT_NO_URI:
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        document->setErrorMessage(i18n("The HEIF file does not exist."));
-        return KisImportExportFilter::FileNotFound;
-
-    case KisImageBuilder_RESULT_BAD_FETCH:
-    case KisImageBuilder_RESULT_EMPTY:
-        document->setErrorMessage(i18n("The HEIF file is corrupted."));
-        return KisImportExportFilter::ParsingError;
-
-    case KisImageBuilder_RESULT_FAILURE:
-        document->setErrorMessage(i18n("Krita could not create a new image."));
-        return KisImportExportFilter::InternalError;
-
-    case KisImageBuilder_RESULT_OK:
-        Q_ASSERT(imageBuilder.image());
-        document -> setCurrentImage(imageBuilder.image());
-        return KisImportExportFilter::OK;
-
-    default:
-        break;
-    }
-    */
-
+    // Load the file into memory and decode from there
+    // TODO: There will be a loader-API in libheif that we should use to connect to QUIDevice
 
     qint64 fileLength = io->bytesAvailable();
     char* mem = new char[fileLength];
     io->read(mem, fileLength);
 
-    struct heif_context* ctx = heif_context_alloc();
+    try {
+      heif::Context ctx;
+      ctx.read_from_memory(mem, fileLength);
 
-    struct heif_error error;
-    error = heif_context_read_from_memory(ctx, mem, fileLength, NULL);
+
+      // decode primary image
+
+      heif::ImageHandle handle = ctx.get_primary_image_handle();
+      heif::Image heifimage = handle.decode_image(heif_colorspace_RGB, heif_chroma_444);
+
+      int width =handle.get_width();
+      int height=handle.get_height();
+      bool hasAlpha = handle.has_alpha_channel();
 
 
-    struct heif_image_handle* handle;
-    error = heif_context_get_primary_image_handle(ctx, &handle);
-    if (error.code) {
-    }
+      // convert HEIF image to Krita KisDocument
 
-    struct heif_image* heifimage;
-    error = heif_decode_image(handle, &heifimage,
-                              heif_colorspace_RGB, heif_chroma_444,
-                              NULL);
-    if (error.code) {
-    }
+      int strideR, strideG, strideB, strideA;
+      const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
+      const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
+      const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
+      const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
 
-    int width =heif_image_handle_get_width(handle);
-    int height=heif_image_handle_get_height(handle);
-    bool hasAlpha = heif_image_handle_has_alpha_channel(handle);
+      const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+      KisImageSP image = new KisImage(document->createUndoStore(), width,height, colorSpace,
+                                      "HEIF image");
 
-    int strideR, strideG, strideB, strideA;
-    const uint8_t* imgR = heif_image_get_plane_readonly(heifimage, heif_channel_R, &strideR);
-    const uint8_t* imgG = heif_image_get_plane_readonly(heifimage, heif_channel_G, &strideG);
-    const uint8_t* imgB = heif_image_get_plane_readonly(heifimage, heif_channel_B, &strideB);
-    const uint8_t* imgA = heif_image_get_plane_readonly(heifimage, heif_channel_Alpha, &strideA);
+      KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(document->createUndoStore(), width,height, colorSpace, "heif image");
+      for (int y=0;y<height;y++) {
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
 
-    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
+        for (int x=0;x<width;x++) {
+          KoBgrTraits<quint8>::setRed(it->rawData(), imgR[y*strideR+x]);
+          KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[y*strideG+x]);
+          KoBgrTraits<quint8>::setBlue(it->rawData(), imgB[y*strideB+x]);
 
-    for (int y=0;y<height;y++) {
-      KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
-
-      for (int x=0;x<width;x++) {
-        KoBgrTraits<quint8>::setRed(it->rawData(), imgR[y*strideR+x]);
-        KoBgrTraits<quint8>::setGreen(it->rawData(), imgG[y*strideG+x]);
-        KoBgrTraits<quint8>::setBlue(it->rawData(), imgB[y*strideB+x]);
-
-        if (hasAlpha) {
-          colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
+          if (hasAlpha) {
+            colorSpace->setOpacity(it->rawData(), quint8(imgA[y*strideA+x]), 1);
         }
-        else {
-          colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-        }
+          else {
+            colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
+          }
 
-        it->nextPixel();
+          it->nextPixel();
+        }
       }
+
+      image->addNode(layer.data(), image->rootLayer().data());
+
+      delete[] mem;
+
+      document->setCurrentImage(image);
+      return KisImportExportFilter::OK;
     }
+    catch (heif::Error err) {
+      delete[] mem;
 
-    image->addNode(layer.data(), image->rootLayer().data());
-
-    delete[] mem;
-
-    document->setCurrentImage(image);
-    return KisImportExportFilter::OK;
-
-    //return KisImportExportFilter::StorageCreationError;
+      return setHeifError(document, err);
+    }
 }
 
 #include <HeifImport.moc>

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2018 Dirk Farin <farin@struktur.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,38 +39,89 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 
+#include "kis_iterator_ng.h"
+
 #include "HeifConverter.h"
+
+#include "libheif/heif-cxx.h"
 
 
 class KisExternalLayer;
 
-K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_heif_export.json", registerPlugin<EXRExport>();)
+K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_heif_export.json", registerPlugin<HeifExport>();)
 
-EXRExport::EXRExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+HeifExport::HeifExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
 {
 }
 
-EXRExport::~EXRExport()
+HeifExport::~HeifExport()
 {
 }
 
-KisPropertiesConfigurationSP EXRExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisPropertiesConfigurationSP HeifExport::defaultConfiguration(const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("quality", 100);
+    cfg->setProperty("quality", 50);
     cfg->setProperty("lossless", true);
     return cfg;
 }
 
-KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
+KisConfigWidget *HeifExport::createConfigurationWidget(QWidget *parent, const QByteArray &/*from*/, const QByteArray &/*to*/) const
 {
     return new KisWdgOptionsHeif(parent);
 }
 
-KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+
+
+class Writer_QIODevice : public heif::Context::Writer
+{
+public:
+  Writer_QIODevice(QIODevice* io)
+    : m_io(io)
+  {
+  }
+
+  heif_error write(heif::Context&, const void* data, size_t size) override {
+    qint64 n = m_io->write((const char*)data,size);
+    if (n != (qint64)size) {
+      QString error = m_io->errorString();
+
+      heif_error err = {
+        heif_error_Encoding_error,
+        heif_suberror_Cannot_write_output_data,
+        "Could not write output data" };
+
+      return err;
+    }
+
+    struct heif_error heif_error_ok = { heif_error_Ok, heif_suberror_Unspecified, "Success" };
+    return heif_error_ok;
+  }
+
+private:
+  QIODevice* m_io;
+};
+
+
+KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
     KisImageSP image = document->savingImage();
 
+    int quality = configuration->getInt("quality", 50);
+    bool lossless = configuration->getBool("lossless", false);
+
+    bool has_alpha = false; // TODO
+
+    try {
+      // --- use standard HEVC encoder
+
+      heif::Encoder encoder(heif_compression_HEVC);
+
+      encoder.set_lossy_quality(quality);
+      encoder.set_lossless(lossless);
+
+
+    /*
     HeifConverter heifConverter(document, !batchMode());
 
     KisImageBuilder_Result res;
@@ -106,27 +157,90 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
 
     document->setErrorMessage(i18n("Internal Error"));
     return KisImportExportFilter::InternalError;
+    */
 
+
+      // --- convert KisImage to HEIF image ---
+
+      int width = image->width();
+      int height = image->height();
+
+      heif::Context ctx;
+
+      heif::Image img;
+      img.create(width,height, heif_colorspace_RGB, heif_chroma_444);
+      img.add_plane(heif_channel_R, width,height, 8);
+      img.add_plane(heif_channel_G, width,height, 8);
+      img.add_plane(heif_channel_B, width,height, 8);
+
+
+      uint8_t* ptrR;
+      uint8_t* ptrG;
+      uint8_t* ptrB;
+      uint8_t* ptrA;
+      int strideR,strideG,strideB,strideA;
+
+      ptrR = img.get_plane(heif_channel_R, &strideR);
+      ptrG = img.get_plane(heif_channel_G, &strideG);
+      ptrB = img.get_plane(heif_channel_B, &strideB);
+
+      if (has_alpha) {
+        img.add_plane(heif_channel_Alpha, width,height, 8);
+        ptrA = img.get_plane(heif_channel_Alpha, &strideA);
+      }
+
+
+      KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
+
+      for (int y=0; y<height; y++) {
+        KisHLineIteratorSP it = pd->createHLineIteratorNG(0, y, width);
+
+        for (int x=0; x<width; x++) {
+          ptrR[y*strideR+x] = KoBgrTraits<quint8>::red(it->rawData());
+          ptrG[y*strideG+x] = KoBgrTraits<quint8>::green(it->rawData());
+          ptrB[y*strideB+x] = KoBgrTraits<quint8>::blue(it->rawData());
+
+          if (has_alpha) {
+            ptrA[y*strideA+x] = 255; // TODO: how do I get alpha channel data
+          }
+
+          it->nextPixel();
+        }
+      }
+
+
+
+      // --- encode and write image
+
+      ctx.encode_image(img, encoder);
+
+      Writer_QIODevice writer(io);
+
+      ctx.write(writer);
+    }
+    catch (heif::Error err) {
+    }
+
+    return KisImportExportFilter::OK;
 }
 
-void EXRExport::initializeCapabilities()
+void HeifExport::initializeCapabilities()
 {
     // This checks before saving for what the file format supports: anything that is supported needs to be mentioned here
 
+  /*
     addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
+  */
 
     QList<QPair<KoID, KoID> > supportedColorModels;
     supportedColorModels << QPair<KoID, KoID>()
-            << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
-            << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
-            << QPair<KoID, KoID>(GrayAColorModelID, Float16BitsColorDepthID)
-            << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID)
-            << QPair<KoID, KoID>(GrayColorModelID, Float16BitsColorDepthID)
-            << QPair<KoID, KoID>(GrayColorModelID, Float32BitsColorDepthID)
-            << QPair<KoID, KoID>(XYZAColorModelID, Float16BitsColorDepthID)
-            << QPair<KoID, KoID>(XYZAColorModelID, Float32BitsColorDepthID);
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
+          /*<< QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)*/
+            ;
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
 
@@ -134,16 +248,15 @@ void EXRExport::initializeCapabilities()
 void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     chkLossless->setChecked(cfg->getBool("lossless", true));
-    sliderQuality->setValue(cfg->getInt("quality", 100));
+    sliderQuality->setValue(cfg->getInt("quality", 50));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
 {
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
-    cfg->setProperty("flatten", chkLossless->isChecked());
+    cfg->setProperty("lossless", chkLossless->isChecked());
     cfg->setProperty("quality", sliderQuality->value());
     return cfg;
 }
 
 #include <HeifExport.moc>
-

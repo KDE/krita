@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2018 Dirk Farin <farin@struktur.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,15 +42,15 @@ public:
 };
 
 
-class EXRExport : public KisImportExportFilter
+class HeifExport : public KisImportExportFilter
 {
     Q_OBJECT
 public:
-    EXRExport(QObject *parent, const QVariantList &);
-    ~EXRExport() override;
+    HeifExport(QObject *parent, const QVariantList &);
+    ~HeifExport() override;
 
     // This should return true if the library can work with a QIODevice, and doesn't want to open the file by itself
-    bool supportsIO() const override { return false; }
+    bool supportsIO() const override { return true; }
 
     KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,56 +16,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "KisResourceCacheDb.h"
 
+#include "TestResourceCacheDb.h"
+#include <QTest>
 #include <QtSql>
 #include <QStandardPaths>
 #include <QDir>
-#include <QDirIterator>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
-const QString dbDriver = "QSQLITE";
+#include <KisResourceCacheDb.h>
 
-
-class KisResourceCacheDb::Private
+void TestResourceCacheDb::initTestCase()
 {
-public:
-
-    QSqlError initDb();
-};
-
-KisResourceCacheDb::KisResourceCacheDb()
-    : d(new Private())
-{
-    QSqlError err = d->initDb();
-    if (err.isValid()) {
-        qWarning() << "Could not initialize the database:" << err;
-    }
-}
-
-KisResourceCacheDb::~KisResourceCacheDb()
-{
-}
-
-QSqlError KisResourceCacheDb::Private::initDb()
-{
-    QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
-
     const KConfigGroup group(KSharedConfig::openConfig(), "ResourceManagement");
-
     QDir dbLocation(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
-    if (!dbLocation.exists()) {
-        dbLocation.mkpath(dbLocation.path());
+    if (dbLocation.exists()) {
+        QFile(dbLocation.path() + "/" + ResourceCacheDbFilename).remove();
+        dbLocation.rmpath(dbLocation.path());
     }
+}
 
-    QString dbFile(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + ResourceCacheDbFilename));
-    db.setDatabaseName(dbFile);
-
-    if (!db.open()) {
-        return db.lastError();
-    }
+void TestResourceCacheDb::testCreateDatabase()
+{
+    KisResourceCacheDb cacheDb;
+    Q_UNUSED(cacheDb);
+    QSqlDatabase sqlDb = QSqlDatabase::database();
 
     QStringList tables = QStringList() << "origin_types"
                                        << "resource_types"
@@ -75,19 +52,24 @@ QSqlError KisResourceCacheDb::Private::initDb()
                                        << "translations"
                                        << "versioned_resources"
                                        << "resource_tags";
-
-    QSqlQuery query;
+    QStringList dbTables = sqlDb.tables();
 
     Q_FOREACH(const QString &table, tables) {
-        QFile f(":/create_" + table + ".sql");
-        qDebug() << "Running SQL" << f;
-        if (f.open(QFile::ReadOnly)) {
-            QString sql(f.readAll());
-            if (!query.exec(sql)) {
-                return db.lastError();
-            }
-        }
+        QVERIFY2(dbTables.contains(table), table.toLatin1());
     }
 
-    return QSqlError();
 }
+
+void TestResourceCacheDb::cleanupTestCase()
+{
+    const KConfigGroup group(KSharedConfig::openConfig(), "ResourceManagement");
+    QDir dbLocation(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    bool res = QFile(dbLocation.path() + "/" + ResourceCacheDbFilename).remove();
+    Q_ASSERT(res);
+    res = dbLocation.rmpath(dbLocation.path());
+    Q_ASSERT(res);
+
+}
+
+QTEST_MAIN(TestResourceCacheDb)
+

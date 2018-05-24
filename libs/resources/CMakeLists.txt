@@ -1,17 +1,13 @@
+add_subdirectory(tests)
 
 set(kritaresources_LIB_SRCS
     KisResourceCacheDb.cpp
 )
 
-qt5_add_resources(kritawidgetutils_LIB_SRCS sql.qrc)
-
-
-# help plugin trader find installed plugins when run from uninstalled tests
-if (BUILD_TESTING)
-    add_definitions(-DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
-endif()
+qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)
 
 add_library(kritaresources SHARED ${kritaresources_LIB_SRCS})
+
 generate_export_header(kritaresources BASE_NAME kritaresources)
 
 target_link_libraries(kritaresources

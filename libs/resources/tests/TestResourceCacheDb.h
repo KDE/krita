@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,37 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISRESOURCECACHEDB_H
-#define KISRESOURCECACHEDB_H
+#ifndef TESTRESOURCECACHEDB_H
+#define TESTRESOURCECACHEDB_H
 
 #include <QObject>
-#include <QScopedPointer>
 
-#include <kritaresources_export.h>
-
-const QString ResourceCacheDbFilename = "resourcecache.sqlite";
-
-/**
- * @brief The KisResourceCacheDb class encapsulates the database that
- * caches information about the resources available to the user.
- */
-class KRITARESOURCES_EXPORT KisResourceCacheDb
+class TestResourceCacheDb : public QObject
 {
-public:
-
-    enum class ResourceCacheDbStatus {
-        OK,
-        NoDatabase,
-    };
-
-    KisResourceCacheDb();
-    ~KisResourceCacheDb();
-
+    Q_OBJECT
+private Q_SLOTS:
+    void initTestCase();
+    void testCreateDatabase();
+    void cleanupTestCase();
 private:
-
-    class Private;
-    QScopedPointer<Private> d;
-
 };
 
-#endif // KISRESOURCECACHEDB_H
+#endif

@@ -23,15 +23,11 @@
 #include <QStandardPaths>
 #include <QDir>
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-
 #include <KisResourceCacheDb.h>
 
 void TestResourceCacheDb::initTestCase()
 {
-    const KConfigGroup group(KSharedConfig::openConfig(), "ResourceManagement");
-    QDir dbLocation(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     if (dbLocation.exists()) {
         QFile(dbLocation.path() + "/" + ResourceCacheDbFilename).remove();
         dbLocation.rmpath(dbLocation.path());
@@ -40,7 +36,7 @@ void TestResourceCacheDb::initTestCase()
 
 void TestResourceCacheDb::testCreateDatabase()
 {
-    KisResourceCacheDb cacheDb;
+    KisResourceCacheDb cacheDb(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     Q_UNUSED(cacheDb);
 
     QVERIFY(cacheDb.isValid());
@@ -70,8 +66,7 @@ void TestResourceCacheDb::testLookupTables()
 
 void TestResourceCacheDb::cleanupTestCase()
 {
-    const KConfigGroup group(KSharedConfig::openConfig(), "ResourceManagement");
-    QDir dbLocation(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     bool res = QFile(dbLocation.path() + "/" + ResourceCacheDbFilename).remove();
     Q_ASSERT(res);
     res = dbLocation.rmpath(dbLocation.path());

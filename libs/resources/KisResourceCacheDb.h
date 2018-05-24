@@ -35,17 +35,16 @@ class KRITARESOURCES_EXPORT KisResourceCacheDb
 {
 public:
 
-    enum class ResourceCacheDbStatus {
-        OK,
-        NoDatabase,
-    };
-
-    KisResourceCacheDb();
+    /**
+     * @brief KisResourceCacheDb create a resource cache database.
+     * @param location the location of the database
+     */
+    explicit KisResourceCacheDb(const QString &location);
     ~KisResourceCacheDb();
 
     /**
      * @brief isValid
-     * @return true if the database has been correctly created
+     * @return true if the database has been correctly created, false if the database cannot be used
      */
     bool isValid() const;
 

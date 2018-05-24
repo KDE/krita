@@ -23,11 +23,8 @@
 #include <QDir>
 #include <QDirIterator>
 
-#include <kconfiggroup.h>
-#include <ksharedconfig.h>
-
 const QString dbDriver = "QSQLITE";
-
+const QString dbLocationKey = "cachedblocation";
 
 class KisResourceCacheDb::Private
 {
@@ -35,13 +32,13 @@ public:
 
     bool valid {false};
 
-    QSqlError initDb();
+    QSqlError initDb(const QString &location);
 };
 
-KisResourceCacheDb::KisResourceCacheDb()
+KisResourceCacheDb::KisResourceCacheDb(const QString &location)
     : d(new Private())
 {
-    QSqlError err = d->initDb();
+    QSqlError err = d->initDb(location);
     if (err.isValid()) {
         qWarning() << "Could not initialize the database:" << err;
     }
@@ -57,19 +54,16 @@ bool KisResourceCacheDb::isValid() const
     return d->valid;
 }
 
-QSqlError KisResourceCacheDb::Private::initDb()
+QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
 
-    const KConfigGroup group(KSharedConfig::openConfig(), "ResourceManagement");
-
-    QDir dbLocation(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    QDir dbLocation(location);
     if (!dbLocation.exists()) {
         dbLocation.mkpath(dbLocation.path());
     }
 
-    QString dbFile(group.readEntry<QString>("cachedb", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/" + ResourceCacheDbFilename));
-    db.setDatabaseName(dbFile);
+    db.setDatabaseName(location + "/" + ResourceCacheDbFilename);
 
     if (!db.open()) {
         return db.lastError();

@@ -120,45 +120,6 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
       encoder.set_lossless(lossless);
 
 
-    /*
-    HeifConverter heifConverter(document, !batchMode());
-
-    KisImageBuilder_Result res;
-
-    res = heifConverter.buildFile(filename(), image);
-
-    dbgFile  << " Result =" << res;
-    switch (res) {
-    case KisImageBuilder_RESULT_INVALID_ARG:
-        document->setErrorMessage(i18n("This layer cannot be saved to HEIF."));
-        return KisImportExportFilter::WrongFormat;
-
-    case KisImageBuilder_RESULT_EMPTY:
-        document->setErrorMessage(i18n("The layer does not have an image associated with it."));
-        return KisImportExportFilter::WrongFormat;
-
-    case KisImageBuilder_RESULT_NO_URI:
-        document->setErrorMessage(i18n("The filename is empty."));
-        return KisImportExportFilter::CreationError;
-
-    case KisImageBuilder_RESULT_NOT_LOCAL:
-        document->setErrorMessage(i18n("HEIF images cannot be saved remotely."));
-        return KisImportExportFilter::InternalError;
-
-    case KisImageBuilder_RESULT_OK:
-        if (!heifConverter.errorMessage().isNull()) {
-            document->setErrorMessage(heifConverter.errorMessage());
-        }
-        return KisImportExportFilter::OK;
-    default:
-        break;
-    }
-
-    document->setErrorMessage(i18n("Internal Error"));
-    return KisImportExportFilter::InternalError;
-    */
-
-
       // --- convert KisImage to HEIF image ---
 
       int width = image->width();

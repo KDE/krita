@@ -7,7 +7,7 @@ add_definitions(${HEIF_DEFINITIONS})
 
 set(kritaheifimport_SOURCES
     HeifImport.cpp
-    HeifConverter.cpp
+    HeifError.cpp
 )
 
 add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
@@ -20,7 +20,7 @@ install(TARGETS kritaheifimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritaheifexport_SOURCES
     HeifExport.cpp
-    HeifConverter.cpp
+    HeifError.cpp
 )
 
 ki18n_wrap_ui(kritaheifexport_SOURCES WdgHeifExport.ui )

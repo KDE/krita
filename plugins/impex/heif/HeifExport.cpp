@@ -18,6 +18,7 @@
  */
 
 #include "HeifExport.h"
+#include "HeifError.h"
 
 #include <QCheckBox>
 #include <QSlider>
@@ -40,8 +41,6 @@
 #include <kis_paint_layer.h>
 
 #include "kis_iterator_ng.h"
-
-#include "HeifConverter.h"
 
 #include "libheif/heif-cxx.h"
 
@@ -219,6 +218,7 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
       ctx.write(writer);
     }
     catch (heif::Error err) {
+      return setHeifError(document, err);
     }
 
     return KisImportExportFilter::OK;

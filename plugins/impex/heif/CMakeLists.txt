@@ -1,7 +1,9 @@
-include_directories(SYSTEM ${HEIF_INCLUDE_DIR} )
+pkg_check_modules (HEIF libheif)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${HEIF_CFLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${HEIF_CFLAGS}")
 
 add_definitions(${HEIF_DEFINITIONS})
-
 
 set(kritaheifimport_SOURCES
     HeifImport.cpp
@@ -10,8 +12,8 @@ set(kritaheifimport_SOURCES
 
 add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
 
-target_link_libraries(kritaheifimport kritaui kritalibkra 
-    ${OPENHEIF_LIBRARIES} 
+target_link_libraries(kritaheifimport kritaui kritalibkra
+    ${HEIF_LDFLAGS} ${HEIF_LIBRARIES}
 )
 
 install(TARGETS kritaheifimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
@@ -25,7 +27,7 @@ ki18n_wrap_ui(kritaheifexport_SOURCES WdgHeifExport.ui )
 
 add_library(kritaheifexport MODULE ${kritaheifexport_SOURCES})
 
-target_link_libraries(kritaheifexport kritaui kritalibkra kritaimpex ${HEIF_LIBRARIES} )
+target_link_libraries(kritaheifexport kritaui kritalibkra kritaimpex ${HEIF_LDFLAGS} ${HEIF_LIBRARIES} )
 
 install(TARGETS kritaheifexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

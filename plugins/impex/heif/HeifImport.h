@@ -30,7 +30,7 @@ class HeifImport : public KisImportExportFilter
 public:
     HeifImport(QObject *parent, const QVariantList &);
     ~HeifImport() override;
-    bool supportsIO() const override { return false; }
+    bool supportsIO() const override { return true; }
     KisImportExportFilter::ConversionStatus convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 };
 

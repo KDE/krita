@@ -23,6 +23,8 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QApplication>
+#include <QScopedPointer>
+#include <QBuffer>
 
 #include <kpluginfactory.h>
 #include <QFileInfo>
@@ -41,6 +43,15 @@
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
+
+#include <metadata/kis_meta_data_store.h>
+#include <metadata/kis_meta_data_entry.h>
+#include <metadata/kis_meta_data_value.h>
+#include <metadata/kis_meta_data_schema.h>
+#include <metadata/kis_meta_data_schema_registry.h>
+#include <metadata/kis_meta_data_filter_registry_model.h>
+#include <metadata/kis_exif_info_visitor.h>
+#include <metadata/kis_meta_data_io_backend.h>
 
 #include "kis_iterator_ng.h"
 
@@ -119,6 +130,37 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
     bool lossless = configuration->getBool("lossless", false);
 
     bool has_alpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
+
+    KisExifInfoVisitor exivInfoVisitor;
+    exivInfoVisitor.visit(image->rootLayer().data());
+
+    QScopedPointer<KisMetaData::Store> metaDataStore;
+    if (exivInfoVisitor.metaDataCount() == 1) {
+        metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
+    }
+    else {
+        metaDataStore.reset(new KisMetaData::Store());
+    }
+
+    if (!metaDataStore->empty()) {
+        {
+            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            QBuffer buffer;
+            exifIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
+            QByteArray data = buffer.data();
+            // Write the data to the file
+        }
+        {
+            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            QBuffer buffer;
+            xmpIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
+            QByteArray data = buffer.data();
+            // Write the data to the file
+        }
+    }
+
+    // If we want to add information from the document to the metadata,
+    // we should do that here.
 
     try {
         // --- use standard HEVC encoder

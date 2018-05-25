@@ -22,7 +22,7 @@
 
 #include <KisDocument.h>
 
-#include "libheif/heif-cxx.h"
+#include "libheif/heif_cxx.h"
 
 
 KisImportExportFilter::ConversionStatus setHeifError(KisDocument* document,

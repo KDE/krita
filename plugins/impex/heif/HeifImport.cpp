@@ -45,7 +45,7 @@
 #include "kis_iterator_ng.h"
 
 
-#include "libheif/heif-cxx.h"
+#include "libheif/heif_cxx.h"
 
 
 K_PLUGIN_FACTORY_WITH_JSON(ImportFactory, "krita_heif_import.json", registerPlugin<HeifImport>();)

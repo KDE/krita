@@ -55,7 +55,7 @@
 
 #include "kis_iterator_ng.h"
 
-#include "libheif/heif-cxx.h"
+#include "libheif/heif_cxx.h"
 
 
 class KisExternalLayer;

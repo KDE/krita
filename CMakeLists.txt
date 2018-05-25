@@ -532,6 +532,13 @@ set_package_properties(GIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
 
+find_package(HEIF)
+set_package_properties(HEIF PROPERTIES
+    DESCRIPTION "Library for loading and saving heif files."
+    URL "https://github.com/strukturag/libheif"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita HEIF filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES

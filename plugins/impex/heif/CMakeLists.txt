@@ -1,8 +1,5 @@
-pkg_check_modules (HEIF libheif)
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${HEIF_CFLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${HEIF_CFLAGS}")
-
 add_definitions(${HEIF_DEFINITIONS})
 
 set(kritaheifimport_SOURCES

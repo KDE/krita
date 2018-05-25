@@ -109,7 +109,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
     exivInfoVisitor.visit(image->rootLayer().data());
 
     QScopedPointer<KisMetaData::Store> metaDataStore;
-    if (exivInfoVisitor.countPaintLayer() == 1) {
+    if (exivInfoVisitor.metaDataCount() == 1) {
         metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
     }
     else {
@@ -169,7 +169,7 @@ KisImportExportFilter::ConversionStatus KisJPEGExport::convert(KisDocument *docu
         }
     }
 
-    KisImageBuilder_Result res = kpc.buildFile(io, l, options, metaDataStore);
+    KisImageBuilder_Result res = kpc.buildFile(io, l, options, metaDataStore.data());
 
     if (res == KisImageBuilder_RESULT_OK) {
         return KisImportExportFilter::OK;

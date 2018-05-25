@@ -93,7 +93,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
     KisMetaData::Store *eI = 0;
-    if (eIV.countPaintLayer() == 1) {
+    if (eIV.metaDataCount() == 1) {
         eI = eIV.exifInfo();
     }
     if (eI) {

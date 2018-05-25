@@ -40,11 +40,7 @@ class KisExifInfoVisitor : public KisNodeVisitor
 {
 public:
 
-    KisExifInfoVisitor() :
-            m_exifInfo(0),
-            m_countPaintLayer(0) { }
-public:
-
+    KisExifInfoVisitor() { }
 
     bool visit(KisNode*) override {
         return true;
@@ -78,8 +74,8 @@ public:
     }
 
     bool visit(KisPaintLayer* layer) override {
-        m_countPaintLayer++;
         if (!layer->metaData()->empty()) {
+            m_metaDataObjectsEncountered++;
             m_exifInfo = layer->metaData();
         }
         return true;
@@ -90,17 +86,20 @@ public:
         return visitAll(layer, true);
     }
 
-
 public:
-    inline uint countPaintLayer() {
-        return m_countPaintLayer;
+    inline uint metaDataCount()
+    {
+        qDebug() << "number of layers with metadata" << m_metaDataObjectsEncountered;
+        return m_metaDataObjectsEncountered;
     }
-    inline KisMetaData::Store* exifInfo() {
+
+    inline KisMetaData::Store* exifInfo()
+    {
         return m_exifInfo;
     }
 private:
-    KisMetaData::Store* m_exifInfo;
-    uint m_countPaintLayer;
+    KisMetaData::Store *m_exifInfo {0};
+    int m_metaDataObjectsEncountered {0};
 };
 
 #endif

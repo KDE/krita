@@ -118,23 +118,51 @@ KisImportExportFilter::ConversionStatus HeifImport::convert(KisDocument *documen
 
         image->addNode(layer.data(), image->rootLayer().data());
 
-        // Read exif information
-        {
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
-            // The exif data should be copied into the byte array
-            QByteArray ba;
-            QBuffer buf(&ba);
-            exifIO->loadFrom(layer->metaData(), &buf);
-        }
 
-        // Read XMP information
-        {
+
+        // --- Iterate through all metadata blocks and extract Exif and XMP metadata ---
+
+        std::vector<heif_item_id> metadata_IDs = handle.get_list_of_metadata_block_IDs();
+
+        for (heif_item_id id : metadata_IDs) {
+
+          if (handle.get_metadata_type(id) == "Exif") {
+            // Read exif information
+
+            std::vector<uint8_t> exif_data = handle.get_metadata(id);
+
+            if (exif_data.size()>4) {
+              uint32_t skip = ((exif_data[0]<<24) | (exif_data[1]<<16) | (exif_data[2]<<8) | exif_data[3]) + 4;
+
+              if (exif_data.size()>skip) {
+                KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+
+                // Copy the exif data into the byte array
+                QByteArray ba;
+                ba.append((char*)(exif_data.data()+skip), exif_data.size()-skip);
+                QBuffer buf(&ba);
+                exifIO->loadFrom(layer->metaData(), &buf);
+              }
+            }
+          }
+
+          if (handle.get_metadata_type(id) == "mime" &&
+              handle.get_metadata_content_type(id) == "application/rdf+xml") {
+            // Read XMP information
+
+            std::vector<uint8_t> xmp_data = handle.get_metadata(id);
+
             KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
-            // The xmp data should be copied into the byte array
+
+            // Copy the xmp data into the byte array
             QByteArray ba;
+            ba.append((char*)(xmp_data.data()), xmp_data.size());
+
             QBuffer buf(&ba);
             xmpIO->loadFrom(layer->metaData(), &buf);
+          }
         }
+
         delete[] mem;
 
 

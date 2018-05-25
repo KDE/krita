@@ -124,6 +124,7 @@ ecm_add_tests(
     kis_marker_painter_test.cpp
     kis_lazy_brush_test.cpp
     kis_colorize_mask_test.cpp
+    kis_mask_similarity_test.cpp
 
     NAME_PREFIX "krita-image-"
     LINK_LIBRARIES kritaimage Qt5::Test)

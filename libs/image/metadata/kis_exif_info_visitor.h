@@ -25,6 +25,17 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 
+/**
+ * @brief The KisExifInfoVisitor class looks for a layer with metadata.
+ *
+ * If there is more than one layer with metadata, the metadata provided
+ * by the visitor is the metadata associated with the last layer that
+ * had metadata on it. Only use the metadata if only one layer with
+ * metadata was found.
+ *
+ * The metadata pointer is OWNED by the layer.
+ *
+ */
 class KisExifInfoVisitor : public KisNodeVisitor
 {
 public:

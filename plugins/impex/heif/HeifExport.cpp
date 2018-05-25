@@ -93,7 +93,7 @@ public:
     {
     }
 
-    heif_error write(heif::Context&, const void* data, size_t size) override {
+    heif_error write(const void* data, size_t size) override {
         qint64 n = m_io->write((const char*)data,size);
         if (n != (qint64)size) {
             QString error = m_io->errorString();

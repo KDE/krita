@@ -220,4 +220,10 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     return cfg;
 }
 
+void KisWdgOptionsHeif::toggleQualitySlider(bool toggle)
+{
+    // Disable the quality slider if lossless is true
+    sliderQuality->setEnabled(!toggle);
+}
+
 #include <HeifExport.moc>

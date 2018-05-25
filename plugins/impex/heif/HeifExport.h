@@ -35,10 +35,16 @@ public:
         : KisConfigWidget(parent)
     {
         setupUi(this);
+        connect(chkLossless, SIGNAL(toggled(bool)), SLOT(toggleQualitySlider(bool)));
     }
 
     void setConfiguration(const KisPropertiesConfigurationSP  cfg) override;
     KisPropertiesConfigurationSP configuration() const override;
+
+private Q_SLOTS:
+
+    void toggleQualitySlider(bool toggle);
+
 };
 
 

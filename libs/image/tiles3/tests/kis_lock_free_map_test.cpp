@@ -11,7 +11,7 @@
 #define NUM_CYCLES 50000
 #define NUM_THREADS 10
 
-typedef ConcurrentMap_Leapfrog<int, int> ConcurrentMap;
+typedef ConcurrentMap_Leapfrog<qint32, qint32> ConcurrentMap;
 
 class StressJobLockless : public QRunnable
 {
@@ -118,6 +118,25 @@ void LockfreeMapTest::stressTestLockless()
     }
 
     QVERIFY(totalSum == 0);
+}
+
+void LockfreeMapTest::iteratorTest()
+{
+    ConcurrentMap map;
+    qint32 sum = 0;
+    for (qint32 i = 2; i < 100; ++i) {
+        map.assign(i, i);
+        sum += i;
+    }
+
+    ConcurrentMap::Iterator iter(map);
+    qint32 testSum = 0;
+    while (iter.isValid()) {
+        testSum += iter.getValue();
+        iter.next();
+    }
+
+    QVERIFY(sum == testSum);
 }
 
 QTEST_GUILESS_MAIN(LockfreeMapTest)

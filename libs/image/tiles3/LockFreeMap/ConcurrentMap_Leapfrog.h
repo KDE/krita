@@ -21,7 +21,7 @@ public:
     typedef V Value;
     typedef KT KeyTraits;
     typedef VT ValueTraits;
-    typedef typename BestFit<Key>::Unsigned Hash;
+    typedef quint32 Hash;
     typedef Leapfrog<ConcurrentMap_Leapfrog> Details;
 
 private:
@@ -335,13 +335,6 @@ public:
         bool isValid() const
         {
             return m_value != Value(ValueTraits::NullValue);
-        }
-
-        Key getKey() const
-        {
-            Q_ASSERT(isValid());
-            // Since we've forbidden concurrent inserts (for now), nonatomic would suffice here, but let's plan ahead:
-            return KeyTraits::dehash(m_hash);
         }
 
         Value getValue() const

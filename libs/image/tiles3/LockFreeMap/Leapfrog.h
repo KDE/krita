@@ -11,7 +11,6 @@
 #ifndef LEAPFROG_H
 #define LEAPFROG_H
 
-#include "Util.h"
 #include "MapTraits.h"
 #include "SimpleJobCoordinator.h"
 #include "QSBR.h"
@@ -62,7 +61,7 @@ struct Leapfrog {
             Q_ASSERT(tableSize >= 4);
             quint64 numGroups = tableSize >> 2;
             Table* table = (Table*) std::malloc(sizeof(Table) + sizeof(CellGroup) * numGroups);
-            new(table) Table(tableSize - 1);
+            new (table) Table(tableSize - 1);
 
             for (quint64 i = 0; i < numGroups; i++) {
                 CellGroup* group = table->getCellGroups() + i;
@@ -117,7 +116,7 @@ struct Leapfrog {
         {
             TableMigration* migration =
                 (TableMigration*) std::malloc(sizeof(TableMigration) + sizeof(TableMigration::Source) * numSources);
-            new(migration) TableMigration(map);
+            new (migration) TableMigration(map);
 
             migration->m_workerStatus.storeNonatomic(0);
             migration->m_overflowed.storeNonatomic(false);

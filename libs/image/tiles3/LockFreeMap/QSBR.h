@@ -63,7 +63,7 @@ private:
         m_pendingActions.swap(m_deferredActions);
         m_remaining = m_numContexts;
 
-        for (quint64 i = 0; i < m_status.size(); i++) {
+        for (qint32 i = 0; i < m_status.size(); i++) {
             m_status[i].wasIdle = 0;
         }
     }
@@ -123,7 +123,7 @@ public:
             }
         }
 
-        for (quint64 i = 0; i < actions.size(); i++) {
+        for (qint32 i = 0; i < actions.size(); i++) {
             actions[i]();
         }
     }
@@ -170,7 +170,7 @@ public:
             onAllQuiescentStatesPassed(actions);
         }
 
-        for (quint64 i = 0; i < actions.size(); i++) {
+        for (qint32 i = 0; i < actions.size(); i++) {
             actions[i]();
         }
     }
@@ -180,13 +180,13 @@ public:
         // This is like saying that all contexts are quiescent,
         // so we can issue all actions at once.
         // No lock is taken.
-        for (quint64 i = 0; i < m_pendingActions.size(); i++) {
+        for (qint32 i = 0; i < m_pendingActions.size(); i++) {
             m_pendingActions[i]();
         }
 
         m_pendingActions.clear();
 
-        for (quint64 i = 0; i < m_deferredActions.size(); i++) {
+        for (qint32 i = 0; i < m_deferredActions.size(); i++) {
             m_deferredActions[i]();
         }
 

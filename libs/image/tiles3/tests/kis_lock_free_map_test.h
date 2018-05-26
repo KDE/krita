@@ -10,6 +10,7 @@ class LockfreeMapTest : public QObject
 private Q_SLOTS:
     void testOperations();
     void stressTestLockless();
+    void iteratorTest();
 };
 
 #endif // KIS_LOCK_FREE_MAP_TEST_H

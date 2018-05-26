@@ -11,30 +11,44 @@
 #ifndef MAPTRAITS_H
 #define MAPTRAITS_H
 
-#include "Util.h"
+#include <QtCore>
+#include <QDebug>
+
+inline quint64 roundUpPowerOf2(quint64 v)
+{
+    v--;
+    v |= v >> 1;
+    v |= v >> 2;
+    v |= v >> 4;
+    v |= v >> 8;
+    v |= v >> 16;
+    v |= v >> 32;
+    v++;
+    return v;
+}
+
+inline bool isPowerOf2(quint64 v)
+{
+    return (v & (v - 1)) == 0;
+}
 
 template <class T>
 struct DefaultKeyTraits {
     typedef T Key;
-    typedef typename BestFit<T>::Unsigned Hash;
+    typedef quint32 Hash;
     static const Key NullKey = Key(0);
     static const Hash NullHash = Hash(0);
 
     static Hash hash(T key)
     {
-        return avalanche(Hash(key));
-    }
-
-    static Key dehash(Hash hash)
-    {
-        return (T) deavalanche(hash);
+        return std::hash<qint32>()(Hash(key)) & std::hash<qint32>()(Hash(key));
     }
 };
 
 template <class T>
 struct DefaultValueTraits {
     typedef T Value;
-    typedef typename BestFit<T>::Unsigned IntType;
+    typedef quint32 IntType;
     static const IntType NullValue = 0;
     static const IntType Redirect = 1;
 };

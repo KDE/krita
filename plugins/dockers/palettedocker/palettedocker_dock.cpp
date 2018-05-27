@@ -187,13 +187,13 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
         for (quint32 i = 0; i< colorSet->nColors(); i++) {
             KoColorSetEntry entry = colorSet->getColorGlobal(i);
             QPixmap colorSquare = QPixmap(32, 32);
-            if (entry.spotColor) {
+            if (entry.spotColor()) {
                 QImage img = QImage(32, 32, QImage::Format_ARGB32);
                 QPainter circlePainter;
                 img.fill(Qt::transparent);
                 circlePainter.begin(&img);
                 QBrush brush = QBrush(Qt::SolidPattern);
-                brush.setColor(entry.color.toQColor());
+                brush.setColor(entry.color().toQColor());
                 circlePainter.setBrush(brush);
                 QPen pen = circlePainter.pen();
                 pen.setColor(Qt::transparent);
@@ -203,11 +203,11 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
                 circlePainter.end();
                 colorSquare = QPixmap::fromImage(img);
             } else {
-                colorSquare.fill(entry.color.toQColor());
+                colorSquare.fill(entry.color().toQColor());
             }
-            QString name = entry.name;
-            if (!entry.id.isEmpty()){
-                name = entry.id + " - " + entry.name;
+            QString name = entry.name();
+            if (!entry.id().isEmpty()){
+                name = entry.id() + " - " + entry.name();
             }
             m_wdgPaletteDock->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
         }
@@ -269,7 +269,7 @@ void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
     }
     if (m_resourceProvider) {
-        m_resourceProvider->setFGColor(entry.color);
+        m_resourceProvider->setFGColor(entry.color());
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);
@@ -283,7 +283,7 @@ void PaletteDockerDock::entrySelectedBack(KoColorSetEntry entry)
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
     }
     if (m_resourceProvider) {
-        m_resourceProvider->setBGColor(entry.color);
+        m_resourceProvider->setBGColor(entry.color());
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);

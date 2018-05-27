@@ -382,9 +382,6 @@ set(kritaui_LIB_SRCS
     KisMultiFeedRSSModel.cpp
     KisRemoteFileFetcher.cpp
 
-    KisPaletteModel.cpp
-    kis_palette_delegate.cpp
-    kis_palette_view.cpp
     KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
     KisWindowLayoutResource.cpp
@@ -395,6 +392,13 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
+
+    kis_palette_delegate.cpp
+    kis_palette_view.cpp
+    KisPaletteModel.cpp
+    KisPaletteListView.cpp
+    KisPaletteListDelegate.cpp
+    KisPaletteListModel.cpp
 )
 
 if(WIN32)

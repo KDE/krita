@@ -243,7 +243,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 
     if (m_config->addPalette) {
         KoColorSetEntry ent;
-        ent.color = m_pickedColor;
+        ent.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
         KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());

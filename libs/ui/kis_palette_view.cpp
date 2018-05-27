@@ -114,10 +114,10 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
             groupName = QString();
         }
         KoColorSetEntry newEntry;
-        newEntry.color = bnColor->color();
-        newEntry.name = lnName->text();
-        newEntry.id = lnIDName->text();
-        newEntry.spotColor = chkSpot->isChecked();
+        newEntry.setColor(bnColor->color());
+        newEntry.setName(lnName->text());
+        newEntry.setId(lnIDName->text());
+        newEntry.setSpotColor(chkSpot->isChecked());
         m_d->model->addColorSetEntry(newEntry, groupName);
         m_d->model->colorSet()->save();
         return true;
@@ -182,7 +182,7 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
             currentI = selectedIndexes().first();
         }
         if (currentI.isValid()) {
-            if (m_d->model->colorSetEntryFromIndex(currentI).color==color) {
+            if (m_d->model->colorSetEntryFromIndex(currentI).color()==color) {
                 return;
             }
         }
@@ -327,15 +327,15 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
             editableItems->addRow(i18n("Name"), lnGroupName);
             editableItems->addRow(i18n("Color"), bnColor);
             editableItems->addRow(i18n("Spot"), chkSpot);
-            lnGroupName->setText(entry.name);
-            lnIDName->setText(entry.id);
-            bnColor->setColor(entry.color);
-            chkSpot->setChecked(entry.spotColor);
+            lnGroupName->setText(entry.name());
+            lnIDName->setText(entry.id());
+            bnColor->setColor(entry.color());
+            chkSpot->setChecked(entry.spotColor());
             if (group->exec() == KoDialog::Accepted) {
-                entry.name = lnGroupName->text();
-                entry.id = lnIDName->text();
-                entry.color = bnColor->color();
-                entry.spotColor = chkSpot->isChecked();
+                entry.setName(lnGroupName->text());
+                entry.setId(lnIDName->text());
+                entry.setColor(bnColor->color());
+                entry.setSpotColor(chkSpot->isChecked());
                 m_d->model->colorSet()->changeColorSetEntry(entry, entryList.at(0), entryList.at(1).toUInt());
                 m_d->model->colorSet()->save();
             }

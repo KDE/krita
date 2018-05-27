@@ -2,8 +2,9 @@
 #define KISPALETTECHOOSER_H
 
 #include <QWidget>
-#include "ui_WdgPaletteChooser.h"
+#include <KoResourceItemChooser.h>
 #include "kritaui_export.h"
+#include "ui_WdgPaletteChooser.h"
 
 class KRITAUI_EXPORT KisPaletteChooser : public QWidget
 {

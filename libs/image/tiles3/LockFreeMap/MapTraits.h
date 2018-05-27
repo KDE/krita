@@ -41,7 +41,7 @@ struct DefaultKeyTraits {
 
     static Hash hash(T key)
     {
-        return std::hash<qint32>()(Hash(key)) & std::hash<qint32>()(Hash(key));
+        return std::hash<Hash>()(Hash(key));
     }
 };
 

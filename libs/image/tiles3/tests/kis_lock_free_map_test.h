@@ -11,6 +11,7 @@ private Q_SLOTS:
     void testOperations();
     void stressTestLockless();
     void iteratorTest();
+    void testWrapper();
 };
 
 #endif // KIS_LOCK_FREE_MAP_TEST_H

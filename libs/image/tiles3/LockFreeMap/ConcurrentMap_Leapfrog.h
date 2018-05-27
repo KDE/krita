@@ -12,6 +12,7 @@
 #define CONCURRENTMAP_LEAPFROG_H
 
 #include "Leapfrog.h"
+#include <QDebug>
 
 template <typename K, typename V, class KT = DefaultKeyTraits<K>, class VT = DefaultValueTraits<V> >
 class ConcurrentMap_Leapfrog
@@ -205,7 +206,7 @@ public:
 
                 if (m_cell->value.compareExchangeStrong(m_value, Value(ValueTraits::NullValue), Consume)) {
                     // Exchange was successful and a non-NULL value was erased and returned by reference in m_value.
-                    Q_ASSERT(m_value != ValueTraits::NullValue); // Implied by the test at the start of the loop.
+//                    Q_ASSERT(m_value != ValueTraits::NullValue); // Implied by the test at the start of the loop.
                     Value result = m_value;
                     m_value = Value(ValueTraits::NullValue); // Leave the mutator in a valid state
                     return result;
@@ -343,6 +344,57 @@ public:
             return m_value;
         }
     };
+};
+
+struct Foo {
+    void destroy()
+    {
+        delete this;
+    }
+};
+
+template <class T>
+class KisLockFreeMap
+{
+public:
+    KisLockFreeMap() : m_currentThreads(0)
+    {
+        m_context = QSBR::instance().createContext();
+    }
+
+    ~KisLockFreeMap()
+    {
+        QSBR::instance().destroyContext(m_context);
+    }
+
+    T insert(qint32 key, T value)
+    {
+        return m_map.assign(key, value);
+    }
+
+    void erase(qint32 key)
+    {
+        qint32 currentThreads = m_currentThreads.fetchAdd(1, ConsumeRelease);
+        T val = m_map.erase(key);
+        if (QTypeInfo<T>::isPointer) {
+            QSBR::instance().enqueue(&Foo::destroy, val);
+        }
+        qint32 expected = 1;
+        if (m_currentThreads.compareExchangeStrong(expected, currentThreads, Consume)) {
+            QSBR::instance().update(m_context);
+        }
+        m_currentThreads.fetchSub(1, ConsumeRelease);
+    }
+
+    T get(qint32 key)
+    {
+        return m_map.get(key);
+    }
+
+    ConcurrentMap_Leapfrog<qint32, T> m_map;
+private:
+    QSBR::Context m_context;
+    Atomic<qint32> m_currentThreads;
 };
 
 #endif // CONCURRENTMAP_LEAPFROG_H

@@ -4,6 +4,7 @@
 
 #include "kis_debug.h"
 #include "tiles3/LockFreeMap/ConcurrentMap_Leapfrog.h"
+#include "kis_shared_ptr.h"
 
 #define NUM_TYPES 2
 
@@ -137,6 +138,58 @@ void LockfreeMapTest::iteratorTest()
     }
 
     QVERIFY(sum == testSum);
+}
+
+class StressJobWrapper : public QRunnable
+{
+public:
+    StressJobWrapper(KisLockFreeMap<Foo*> &map) : m_map(map) {}
+
+protected:
+    void run() override
+    {
+        for (int i = 1; i < NUM_CYCLES + 1; i++) {
+            auto type = i % NUM_TYPES;
+
+            switch (type) {
+            case 0:
+                m_map.erase(i);
+                break;
+            case 1:
+                m_map.insert(i + 1, new Foo);
+                break;
+            }
+        }
+    }
+
+private:
+    KisLockFreeMap<Foo*> &m_map;
+};
+
+void LockfreeMapTest::testWrapper()
+{
+    QThreadPool pool;
+    pool.setMaxThreadCount(NUM_THREADS);
+    KisLockFreeMap<Foo*> map;
+
+    for (auto i = 0; i < NUM_THREADS; ++i) {
+        StressJobWrapper *task = new StressJobWrapper(map);
+        task->setAutoDelete(true);
+        pool.start(task);
+    }
+
+    pool.waitForDone();
+
+    ConcurrentMap_Leapfrog<qint32, Foo*>::Iterator iter(map.m_map);
+
+    qint32 sum = 0;
+    while (iter.isValid()) {
+        if (iter.getValue()) {
+            ++sum;
+        }
+        iter.next();
+    }
+    qDebug() << sum;
 }
 
 QTEST_GUILESS_MAIN(LockfreeMapTest)

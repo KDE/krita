@@ -64,6 +64,8 @@ public:
     void forgetFrame(int frameId);
     bool hasFrame(int frameId) const;
 
+    int frameLevelOfDetail(int frameId) const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

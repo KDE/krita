@@ -34,6 +34,9 @@ class KisSharedPtr;
 class KisImage;
 typedef KisSharedPtr<KisImage> KisImageSP;
 
+class KisPaintDevice;
+typedef KisSharedPtr<KisPaintDevice> KisPaintDeviceSP;
+
 class KisOpenGLUpdateInfo;
 typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 
@@ -48,6 +51,8 @@ public:
     ~KisOpenGLUpdateInfoBuilder();
 
     KisOpenGLUpdateInfoSP buildUpdateInfo(const QRect& rect, KisImageSP srcImage, bool convertColorSpace);
+    KisOpenGLUpdateInfoSP buildUpdateInfo(const QRect& rect, KisPaintDeviceSP projection, const QRect &bounds, int levelOfDetail, bool convertColorSpace);
+
     QRect calculatePhysicalTileRect(int col, int row, const QRect &imageBounds, int levelOfDetail) const;
     QRect calculateEffectiveTileRect(int col, int row, const QRect &imageBounds) const;
     int xToCol(int x) const;

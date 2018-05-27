@@ -65,6 +65,25 @@ public:
     KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
+
+    /**
+     * @return the currectly set levelOfDetail on which new frames will be generated
+     */
+    int desiredLevelOfDetail() const;
+
+    /**
+     * Set level of detail on which new requested cache frames will be generated.
+     * When \p levelOfDetail > 0, the generated frames are forcefully scaled down to
+     * the requested level of detail.
+     */
+    void setDesiredLevelOfDetail(int levelOfDetail);
+
+    /**
+     * Drops all the frames with worse level of detail values than the current
+     * desired level of detail.
+     */
+    void dropLowQualityFrames(const KisTimeRange &range);
+
 Q_SIGNALS:
     void changed();
 

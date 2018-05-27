@@ -58,9 +58,14 @@ KisOpenGLUpdateInfoBuilder::~KisOpenGLUpdateInfoBuilder()
 
 KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &rect, KisImageSP srcImage, bool convertColorSpace)
 {
+    return buildUpdateInfo(rect, srcImage->projection(), srcImage->bounds(), srcImage->currentLevelOfDetail(), convertColorSpace);
+}
+
+KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &rect, KisPaintDeviceSP projection, const QRect &bounds, int levelOfDetail, bool convertColorSpace)
+{
     KisOpenGLUpdateInfoSP info = new KisOpenGLUpdateInfo();
 
-    QRect updateRect = rect & srcImage->bounds();
+    QRect updateRect = rect & bounds;
     if (updateRect.isEmpty()) return info;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->pool, info);
@@ -83,7 +88,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                                                                                              m_d->proofingConfig->proofingProfile);
 
             m_d->proofingTransform.reset(KisTextureTileUpdateInfo::generateProofingTransform(
-                                             srcImage->projection()->colorSpace(),
+                                             projection->colorSpace(),
                                              m_d->conversionOptions.m_destinationColorSpace,
                                              proofingSpace,
                                              m_d->conversionOptions.m_renderingIntent,
@@ -106,7 +111,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
      */
 
     QRect artificialRect = kisGrowRect(updateRect, m_d->textureBorder);
-    artificialRect &= srcImage->bounds();
+    artificialRect &= bounds;
 
     int firstColumn = xToCol(artificialRect.left());
     int lastColumn = xToCol(artificialRect.right());
@@ -116,16 +121,13 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     QBitArray channelFlags; // empty by default
 
     if (!m_d->channelFlags.isEmpty() &&
-        m_d->channelFlags.size() == srcImage->projection()->colorSpace()->channels().size()) {
+        m_d->channelFlags.size() == projection->colorSpace()->channels().size()) {
 
         channelFlags = m_d->channelFlags;
     }
 
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
-
-    const QRect bounds = srcImage->bounds();
-    const int levelOfDetail = srcImage->currentLevelOfDetail();
 
     QRect alignedUpdateRect = updateRect;
     QRect alignedBounds = bounds;
@@ -138,7 +140,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     for (int col = firstColumn; col <= lastColumn; col++) {
         for (int row = firstRow; row <= lastRow; row++) {
 
-            const QRect alignedTileTextureRect = calculatePhysicalTileRect(col, row, srcImage->bounds(), levelOfDetail);
+            const QRect alignedTileTextureRect = calculatePhysicalTileRect(col, row, bounds, levelOfDetail);
 
             KisTextureTileUpdateInfoSP tileInfo(
                         new KisTextureTileUpdateInfo(col, row,
@@ -149,7 +151,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                                                      m_d->pool));
             // Don't update empty tiles
             if (tileInfo->valid()) {
-                tileInfo->retrieveData(srcImage->projection(), channelFlags, m_d->onlyOneChannelSelected, m_d->selectedChannelIndex);
+                tileInfo->retrieveData(projection, channelFlags, m_d->onlyOneChannelSelected, m_d->selectedChannelIndex);
 
                 if (convertColorSpace) {
                     if (m_d->proofingTransform) {
@@ -162,7 +164,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                 info->tileList.append(tileInfo);
             }
             else {
-                dbgUI << "Trying to create an empty tileinfo record" << col << row << alignedTileTextureRect << updateRect << srcImage->bounds();
+                dbgUI << "Trying to create an empty tileinfo record" << col << row << alignedTileTextureRect << updateRect << bounds;
             }
         }
     }

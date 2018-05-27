@@ -72,3 +72,8 @@ bool KisFrameCacheSwapper::hasFrame(int frameId) const
 {
     return m_d->frameStore.hasFrame(frameId);
 }
+
+int KisFrameCacheSwapper::frameLevelOfDetail(int frameId) const
+{
+    return m_d->frameStore.frameLevelOfDetail(frameId);
+}

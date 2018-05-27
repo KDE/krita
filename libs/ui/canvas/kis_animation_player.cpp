@@ -328,6 +328,8 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
+            m_d->canvas->frameCache()->dropLowQualityFrames(range);
+
             KisAsyncAnimationCacheRenderDialog dlg(m_d->canvas->frameCache(),
                                                    range,
                                                    200);

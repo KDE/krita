@@ -344,3 +344,9 @@ bool KisFrameCacheStore::hasFrame(int frameId) const
 {
     return m_d->savedFrames.contains(frameId);
 }
+
+int KisFrameCacheStore::frameLevelOfDetail(int frameId) const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->savedFrames.contains(frameId), 0);
+    return m_d->savedFrames[frameId]->levelOfDetail();
+}

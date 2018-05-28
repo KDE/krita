@@ -12,7 +12,6 @@
 #define MAPTRAITS_H
 
 #include <QtCore>
-#include <QDebug>
 
 inline quint64 roundUpPowerOf2(quint64 v)
 {

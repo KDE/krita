@@ -3,14 +3,11 @@
 
 #include <QTest>
 
-class LockfreeMapTest : public QObject
+class LockFreeMapTest : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
-    void testOperations();
-    void stressTestLockless();
-    void iteratorTest();
     void testWrapper();
 };
 

@@ -8,14 +8,13 @@
   See the LICENSE file for more information.
 ------------------------------------------------------------------------*/
 
-#ifndef CONCURRENTMAP_LEAPFROG_H
-#define CONCURRENTMAP_LEAPFROG_H
+#ifndef CONCURRENTMAP_H
+#define CONCURRENTMAP_H
 
-#include "Leapfrog.h"
-#include <QDebug>
+#include "leapfrog.h"
 
 template <typename K, typename V, class KT = DefaultKeyTraits<K>, class VT = DefaultValueTraits<V> >
-class ConcurrentMap_Leapfrog
+class ConcurrentMap
 {
 public:
     typedef K Key;
@@ -23,17 +22,17 @@ public:
     typedef KT KeyTraits;
     typedef VT ValueTraits;
     typedef quint32 Hash;
-    typedef Leapfrog<ConcurrentMap_Leapfrog> Details;
+    typedef Leapfrog<ConcurrentMap> Details;
 
 private:
     Atomic<typename Details::Table*> m_root;
 
 public:
-    ConcurrentMap_Leapfrog(quint64 capacity = Details::InitialSize) : m_root(Details::Table::create(capacity))
+    ConcurrentMap(quint64 capacity = Details::InitialSize) : m_root(Details::Table::create(capacity))
     {
     }
 
-    ~ConcurrentMap_Leapfrog()
+    ~ConcurrentMap()
     {
         typename Details::Table* table = m_root.loadNonatomic();
         table->destroy();
@@ -61,15 +60,15 @@ public:
     class Mutator
     {
     private:
-        friend class ConcurrentMap_Leapfrog;
+        friend class ConcurrentMap;
 
-        ConcurrentMap_Leapfrog& m_map;
+        ConcurrentMap& m_map;
         typename Details::Table* m_table;
         typename Details::Cell* m_cell;
         Value m_value;
 
         // Constructor: Find existing cell
-        Mutator(ConcurrentMap_Leapfrog& map, Key key, bool) : m_map(map), m_value(Value(ValueTraits::NullValue))
+        Mutator(ConcurrentMap& map, Key key, bool) : m_map(map), m_value(Value(ValueTraits::NullValue))
         {
             Hash hash = KeyTraits::hash(key);
             for (;;) {
@@ -92,7 +91,7 @@ public:
         }
 
         // Constructor: Insert or find cell
-        Mutator(ConcurrentMap_Leapfrog& map, Key key) : m_map(map), m_value(Value(ValueTraits::NullValue))
+        Mutator(ConcurrentMap& map, Key key) : m_map(map), m_value(Value(ValueTraits::NullValue))
         {
             Hash hash = KeyTraits::hash(key);
             for (;;) {
@@ -302,7 +301,7 @@ public:
         Value m_value;
 
     public:
-        Iterator(ConcurrentMap_Leapfrog& map)
+        Iterator(ConcurrentMap& map)
         {
             // Since we've forbidden concurrent inserts (for now), nonatomic would suffice here, but let's plan ahead:
             m_table = map.m_root.load(Consume);
@@ -344,57 +343,6 @@ public:
             return m_value;
         }
     };
-};
-
-struct Foo {
-    void destroy()
-    {
-        delete this;
-    }
-};
-
-template <class T>
-class KisLockFreeMap
-{
-public:
-    KisLockFreeMap() : m_currentThreads(0)
-    {
-        m_context = QSBR::instance().createContext();
-    }
-
-    ~KisLockFreeMap()
-    {
-        QSBR::instance().destroyContext(m_context);
-    }
-
-    T insert(qint32 key, T value)
-    {
-        return m_map.assign(key, value);
-    }
-
-    void erase(qint32 key)
-    {
-        qint32 currentThreads = m_currentThreads.fetchAdd(1, ConsumeRelease);
-        T val = m_map.erase(key);
-        if (QTypeInfo<T>::isPointer) {
-            QSBR::instance().enqueue(&Foo::destroy, val);
-        }
-        qint32 expected = 1;
-        if (m_currentThreads.compareExchangeStrong(expected, currentThreads, Consume)) {
-            QSBR::instance().update(m_context);
-        }
-        m_currentThreads.fetchSub(1, ConsumeRelease);
-    }
-
-    T get(qint32 key)
-    {
-        return m_map.get(key);
-    }
-
-    ConcurrentMap_Leapfrog<qint32, T> m_map;
-private:
-    QSBR::Context m_context;
-    Atomic<qint32> m_currentThreads;
 };
 
 #endif // CONCURRENTMAP_LEAPFROG_H

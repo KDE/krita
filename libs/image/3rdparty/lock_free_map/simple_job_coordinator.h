@@ -14,7 +14,8 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QMutexLocker>
-#include "Atomic.h"
+
+#include "atomic.h"
 
 class SimpleJobCoordinator
 {

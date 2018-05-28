@@ -15,8 +15,6 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-// TODO: Think about changing signature for std::function for more flexible usage
-
 #define CALL_MEMBER(obj, pmf) ((obj).*(pmf))
 
 class QSBR

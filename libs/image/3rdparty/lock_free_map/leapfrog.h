@@ -11,9 +11,9 @@
 #ifndef LEAPFROG_H
 #define LEAPFROG_H
 
-#include "MapTraits.h"
-#include "SimpleJobCoordinator.h"
-#include "QSBR.h"
+#include "map_traits.h"
+#include "simple_job_coordinator.h"
+#include "qsbr.h"
 
 template <class Map>
 struct Leapfrog {

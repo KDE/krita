@@ -494,7 +494,6 @@ void KisAnimationPlayer::uploadFrame(int frame)
             m_d->canvas->updateCanvas();
 
             m_d->useFastFrameUpload = true;
-            emit sigFrameChanged();
         } else {
             useFallbackUploadMethod = true;
         }
@@ -508,8 +507,6 @@ void KisAnimationPlayer::uploadFrame(int frame)
 
         // no OpenGL cache or the frame just not cached yet
         animationInterface->switchCurrentTimeAsync(frame);
-
-        emit sigFrameChanged();
     }
 
     if (!m_d->realFpsTimer.isValid()) {
@@ -538,7 +535,7 @@ void KisAnimationPlayer::uploadFrame(int frame)
     }
 
     m_d->lastPaintedFrame = frame;
-
+    emit sigFrameChanged();
 }
 
 qreal KisAnimationPlayer::effectiveFps() const

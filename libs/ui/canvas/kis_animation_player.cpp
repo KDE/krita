@@ -25,6 +25,7 @@
 //#define PLAYER_DEBUG_FRAMERATE
 
 #include "kis_global.h"
+#include "kis_algebra_2d.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -240,7 +241,9 @@ void KisAnimationPlayer::slotRegionOfInterestChanged()
         const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
         const KisTimeRange &range = animation->playbackRange();
 
-        const QRect needRect = m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect();
+        const QRect needRect =
+            m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
+            m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
 
         if (range.isValid() &&
             !m_d->canvas->frameCache()->framesHaveValidRoi(range, needRect)) {
@@ -351,8 +354,11 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
-            const QRect regionOfInterest = m_d->canvas->regionOfInterest();
+            const int dimensionLimit = 2500;
+            const int maxImageDimension = KisAlgebra2D::maxDimension(m_d->canvas->image()->bounds());
 
+            const QRect regionOfInterest =
+                maxImageDimension > dimensionLimit ? m_d->canvas->regionOfInterest() : QRect();
 
             m_d->canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest);
 

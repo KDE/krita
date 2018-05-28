@@ -205,7 +205,7 @@ public:
 
                 if (m_cell->value.compareExchangeStrong(m_value, Value(ValueTraits::NullValue), Consume)) {
                     // Exchange was successful and a non-NULL value was erased and returned by reference in m_value.
-//                    Q_ASSERT(m_value != ValueTraits::NullValue); // Implied by the test at the start of the loop.
+                    Q_ASSERT(m_value != Value(ValueTraits::NullValue)); // Implied by the test at the start of the loop.
                     Value result = m_value;
                     m_value = Value(ValueTraits::NullValue); // Leave the mutator in a valid state
                     return result;

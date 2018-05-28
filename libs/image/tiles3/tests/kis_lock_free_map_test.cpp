@@ -15,6 +15,7 @@
 class Wrapper : public KisShared
 {
 public:
+    Wrapper() {}
     Wrapper(qint32 member) : m_member(member) {}
 
     qint32 member()
@@ -78,7 +79,6 @@ private:
     KisTileHashTableTraits2<Wrapper> &m_map;
     qint64 m_eraseSum;
     qint64 m_insertSum;
-    qint64 m_getSum;
 };
 
 void LockFreeMapTest::testWrapper()
@@ -107,7 +107,7 @@ void LockFreeMapTest::testWrapper()
     qint64 insertSum = 0;
     qint64 eraseSum = 0;
 
-    for (auto i = 0; i < NUM_THREADS; i++) {
+    for (qint32 i = 0; i < NUM_THREADS; ++i) {
         StressJobWrapper *job = jobs.takeLast();
         eraseSum += job->eraseSum();
         insertSum += job->insertSum();

@@ -43,6 +43,7 @@ public:
         qint32 currentThreads = m_rawPointerUsers.fetchAdd(1, ConsumeRelease);
 
         TileType *result = m_map.erase(key);
+        TileTypeSP ptr(result);
         if (result) {
             MemoryReclaimer *tmp = new MemoryReclaimer(result);
             QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
@@ -54,7 +55,7 @@ public:
         }
 
         m_rawPointerUsers.fetchSub(1, ConsumeRelease);
-        return TileTypeSP(result);
+        return ptr;
     }
 
     TileTypeSP get(qint32 key)

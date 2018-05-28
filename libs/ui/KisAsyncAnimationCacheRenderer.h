@@ -31,7 +31,7 @@ public:
     void setFrameCache(KisAnimationFrameCacheSP cache);
 
 protected:
-    void frameCompletedCallback(int frame) override;
+    void frameCompletedCallback(int frame, const QRegion &requestedRegion) override;
     void frameCancelledCallback(int frame) override;
     void clearFrameRegenerationState(bool isCancelled) override;
 

@@ -89,6 +89,8 @@ public:
         return m_tileRectInTexturePixels;
     }
 
+    QRectF imageRectInTexturePixels(const QRect &imageRect) const;
+
     void bindToActiveTexture();
     int currentLodPlane() const;
 

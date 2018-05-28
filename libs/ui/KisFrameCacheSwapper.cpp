@@ -48,9 +48,9 @@ KisFrameCacheSwapper::~KisFrameCacheSwapper()
 {
 }
 
-void KisFrameCacheSwapper::saveFrame(int frameId, KisOpenGLUpdateInfoSP info)
+void KisFrameCacheSwapper::saveFrame(int frameId, KisOpenGLUpdateInfoSP info, const QRect &imageBounds)
 {
-    m_d->frameStore.saveFrame(frameId, info);
+    m_d->frameStore.saveFrame(frameId, info, imageBounds);
 }
 
 KisOpenGLUpdateInfoSP KisFrameCacheSwapper::loadFrame(int frameId)
@@ -76,4 +76,9 @@ bool KisFrameCacheSwapper::hasFrame(int frameId) const
 int KisFrameCacheSwapper::frameLevelOfDetail(int frameId) const
 {
     return m_d->frameStore.frameLevelOfDetail(frameId);
+}
+
+QRect KisFrameCacheSwapper::frameDirtyRect(int frameId) const
+{
+    return m_d->frameStore.frameDirtyRect(frameId);
 }

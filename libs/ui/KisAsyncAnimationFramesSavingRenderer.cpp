@@ -92,10 +92,15 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame)
+void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
     if (!image) return;
+
+    KIS_SAFE_ASSERT_RECOVER (requestedRegion == image->bounds()) {
+        emit sigCancelRegenerationInternal(frame);
+        return;
+    }
 
     m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
 

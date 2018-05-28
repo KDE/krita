@@ -42,9 +42,16 @@ public:
     virtual ~KisAsyncAnimationRendererBase();
 
     /**
-     * Initiates the rendering of the frame \p frame on an image \p image
+     * Initiates the rendering of the frame \p frame on an image \p image.
+     * Only \p regionOfInterest is regenerated. If \p regionOfInterest is
+     * empty, then entire bounds of the image is regenerated.
      */
-    virtual void startFrameRegeneration(KisImageSP image, int frame);
+    void startFrameRegeneration(KisImageSP image, int frame, const QRegion &regionOfInterest);
+
+    /**
+     * Convenience overload that regenerates the full image
+     */
+    void startFrameRegeneration(KisImageSP image, int frame);
 
     /**
      * @return true if the regeneration process is in progress
@@ -95,7 +102,7 @@ protected:
      * NOTE3: In case of failure, notifyFrameCancelled(). The same threading
      *        rules apply.
      */
-    virtual void frameCompletedCallback(int frame) = 0;
+    virtual void frameCompletedCallback(int frame, const QRegion &requestedRegion) = 0;
 
     /**
      * @brief frameCancelledCallback is called when the rendering of

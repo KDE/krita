@@ -64,6 +64,7 @@ public:
           lastPaintedFrame(0),
           playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE),
           stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE),
+          regionOfInterestUpdateCompressor(1000, KisSignalCompressor::POSTPONE),
           audioOffsetTolerance(-1)
           {}
 
@@ -103,6 +104,7 @@ public:
     QScopedPointer<KisSyncedAudioPlayback> syncedAudio;
     QScopedPointer<KisSignalCompressorWithParam<int> > audioSyncScrubbingCompressor;
     KisSignalCompressor stopAudioOnScrubbingCompressor;
+    KisSignalCompressor regionOfInterestUpdateCompressor;
 
     int audioOffsetTolerance;
 
@@ -163,6 +165,10 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
     slotAudioChannelChanged();
+
+    connect(m_d->canvas, SIGNAL(sigRegionOfInterestChanged(QRect)), &m_d->regionOfInterestUpdateCompressor, SLOT(start()));
+    connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotRegionOfInterestChanged()));
+    slotRegionOfInterestChanged();
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
@@ -226,6 +232,23 @@ void KisAnimationPlayer::slotOnAudioError(const QString &fileName, const QString
 {
     QString errorMessage(i18nc("floating on-canvas message", "Cannot open audio: \"%1\"\nError: %2", fileName, message));
     m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("warning"));
+}
+
+void KisAnimationPlayer::slotRegionOfInterestChanged()
+{
+    if (isPlaying() && m_d->canvas->frameCache()) {
+        const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+        const KisTimeRange &range = animation->playbackRange();
+
+        const QRect needRect = m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect();
+
+        if (range.isValid() &&
+            !m_d->canvas->frameCache()->framesHaveValidRoi(range, needRect)) {
+
+            stop();
+            play();
+        }
+    }
 }
 
 void KisAnimationPlayer::connectCancelSignals()
@@ -328,11 +351,16 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
-            m_d->canvas->frameCache()->dropLowQualityFrames(range);
+            const QRect regionOfInterest = m_d->canvas->regionOfInterest();
+
+
+            m_d->canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest);
 
             KisAsyncAnimationCacheRenderDialog dlg(m_d->canvas->frameCache(),
                                                    range,
                                                    200);
+
+            dlg.setRegionOfInterest(regionOfInterest);
 
             KisAsyncAnimationCacheRenderDialog::Result result =
                 dlg.regenerateRange(m_d->canvas->viewManager());
@@ -340,6 +368,8 @@ void KisAnimationPlayer::play()
             if (result != KisAsyncAnimationCacheRenderDialog::RenderComplete) {
                 return;
             }
+
+            m_d->canvas->setRenderingLimit(regionOfInterest);
         }
     }
 
@@ -355,6 +385,8 @@ void KisAnimationPlayer::play()
         KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
         m_d->syncedAudio->play(m_d->frameToMSec(m_d->firstFrame, animationInterface->framerate()));
     }
+
+    emit sigPlaybackStarted();
 }
 
 void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
@@ -367,6 +399,7 @@ void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
 
     timer->stop();
     playing = false;
+    canvas->setRenderingLimit(QRect());
 
     if (doUpdates) {
         KisImageAnimationInterface *animation = canvas->image()->animationInterface();

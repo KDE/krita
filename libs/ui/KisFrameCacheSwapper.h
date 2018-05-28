@@ -52,7 +52,7 @@ public:
     ~KisFrameCacheSwapper();
 
     // WARNING: after transferring \p info to saveFrame() the object becomes invalid
-    void saveFrame(int frameId, KisOpenGLUpdateInfoSP info);
+    void saveFrame(int frameId, KisOpenGLUpdateInfoSP info, const QRect &imageBounds);
     KisOpenGLUpdateInfoSP loadFrame(int frameId);
 
     void moveFrame(int srcFrameId, int dstFrameId);
@@ -61,6 +61,8 @@ public:
     bool hasFrame(int frameId) const;
 
     int frameLevelOfDetail(int frameId) const;
+
+    QRect frameDirtyRect(int frameId) const;
 
 private:
     struct Private;

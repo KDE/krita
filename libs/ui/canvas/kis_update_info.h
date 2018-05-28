@@ -79,6 +79,8 @@ public:
 
     int levelOfDetail() const override;
 
+    bool tryMergeWith(const KisOpenGLUpdateInfo& rhs);
+
 private:
     QRect m_dirtyImageRect;
     int m_levelOfDetail;

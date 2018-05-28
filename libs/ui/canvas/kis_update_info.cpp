@@ -84,3 +84,15 @@ int KisOpenGLUpdateInfo::levelOfDetail() const
 {
     return m_levelOfDetail;
 }
+
+bool KisOpenGLUpdateInfo::tryMergeWith(const KisOpenGLUpdateInfo &rhs)
+{
+    if (m_levelOfDetail != rhs.m_levelOfDetail) return false;
+
+    // TODO: that makes the algorithm of updates compressor incorrect!
+    m_dirtyImageRect |= rhs.m_dirtyImageRect;
+
+    tileList.append(rhs.tileList);
+
+    return true;
+}

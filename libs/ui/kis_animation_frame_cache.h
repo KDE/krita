@@ -62,7 +62,7 @@ public:
 
     KisImageWSP image();
 
-    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image) const;
+    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
 
 
@@ -82,7 +82,9 @@ public:
      * Drops all the frames with worse level of detail values than the current
      * desired level of detail.
      */
-    void dropLowQualityFrames(const KisTimeRange &range);
+    void dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest);
+
+    bool framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest);
 
 Q_SIGNALS:
     void changed();

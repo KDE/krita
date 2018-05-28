@@ -374,6 +374,14 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     }
 }
 
+QRectF KisTextureTile::imageRectInTexturePixels(const QRect &imageRect) const
+{
+    return relativeRect(m_textureRectInImagePixels,
+                        imageRect,
+                        m_texturesInfo);
+
+}
+
 #ifdef USE_PIXEL_BUFFERS
 void KisTextureTile::createTextureBuffer(const char *data, int size)
 {

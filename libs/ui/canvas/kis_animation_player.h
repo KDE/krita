@@ -65,9 +65,11 @@ private Q_SLOTS:
     void slotAudioChannelChanged();
     void slotAudioVolumeChanged();
     void slotOnAudioError(const QString &fileName, const QString &message);
+    void slotRegionOfInterestChanged();
 
 Q_SIGNALS:
     void sigFrameChanged();
+    void sigPlaybackStarted();
     void sigPlaybackStopped();
     void sigPlaybackStatisticsUpdated();
 

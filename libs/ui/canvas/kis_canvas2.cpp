@@ -91,6 +91,8 @@
 #include <KisStrokeSpeedMonitor.h>
 #include "opengl/kis_opengl_canvas_debugger.h"
 
+#include "kis_algebra_2d.h"
+
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
 
@@ -103,6 +105,7 @@ public:
         , selectedShapesProxy(&shapeManager)
         , toolProxy(parent)
         , displayColorConverter(resourceManager, view)
+        , regionOfInterestUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     {
     }
 
@@ -137,6 +140,11 @@ public:
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
+
+    KisSignalCompressor regionOfInterestUpdateCompressor;
+    QRect regionOfInterest;
+
+    QRect renderingLimit;
 
     bool effectiveLodAllowedInImage() {
         return lodAllowedInImage && !bootstrapLodBlocked;
@@ -232,6 +240,7 @@ void KisCanvas2::setup()
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
+    connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateRegionOfInterest()));
 
     initializeFpsDecoration();
 }
@@ -809,6 +818,39 @@ void KisCanvas2::notifyZoomChanged()
 
     notifyLevelOfDetailChange();
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
+
+    m_d->regionOfInterestUpdateCompressor.start();
+}
+
+QRect KisCanvas2::regionOfInterest() const
+{
+    return m_d->regionOfInterest;
+}
+
+void KisCanvas2::slotUpdateRegionOfInterest()
+{
+    const QRect oldRegionOfInterest = m_d->regionOfInterest;
+
+    const qreal ratio = 0.25;
+    const QRect proposedRoi = KisAlgebra2D::blowRect(m_d->coordinatesConverter->widgetRectInImagePixels(), ratio).toAlignedRect();
+
+    const QRect imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
+
+    m_d->regionOfInterest = imageRect.contains(proposedRoi) ? proposedRoi : imageRect;
+
+    if (m_d->regionOfInterest != oldRegionOfInterest) {
+        emit sigRegionOfInterestChanged(m_d->regionOfInterest);
+    }
+}
+
+void KisCanvas2::setRenderingLimit(const QRect &rc)
+{
+    m_d->renderingLimit = rc;
+}
+
+QRect KisCanvas2::renderingLimit() const
+{
+    return m_d->renderingLimit;
 }
 
 void KisCanvas2::slotTrySwitchShapeManager()
@@ -889,6 +931,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     emit documentOffsetUpdateFinished();
 
     updateCanvas();
+
+    m_d->regionOfInterestUpdateCompressor.start();
 }
 
 void KisCanvas2::slotConfigChanged()
@@ -955,14 +999,14 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 {
     m_d->popupPalette = new KisPopupPalette(viewManager(), m_d->coordinatesConverter, favoriteResourceManager, displayColorConverter()->displayRendererInterface(),
                                             m_d->view->resourceProvider(), m_d->canvasWidget->widget());
-    connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotZoomChanged(int)));
+    connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotPopupPaletteRequestedZoomChange(int)));
     connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
     connect(m_d->view->mainWindow(), SIGNAL(themeChanged()), m_d->popupPalette, SLOT(slotUpdateIcons()));
 
     m_d->popupPalette->showPopupPalette(false);
 }
 
-void KisCanvas2::slotZoomChanged(int zoom ) {
+void KisCanvas2::slotPopupPaletteRequestedZoomChange(int zoom ) {
     m_d->view->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, (qreal)(zoom/100.0)); // 1.0 is 100% zoom
     notifyZoomChanged();
 }

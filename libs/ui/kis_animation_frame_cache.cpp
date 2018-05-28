@@ -54,6 +54,8 @@ struct KisAnimationFrameCache::Private
     KisFrameCacheSwapper swapper;
     int desiredLevelOfDetail = 0;
 
+    KisOpenGLUpdateInfoSP fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod);
+
     struct Frame
     {
         KisOpenGLUpdateInfoSP openGlFrame;
@@ -110,7 +112,7 @@ struct KisAnimationFrameCache::Private
 
         const int length = range.isInfinite() ? -1 : range.end() - range.start() + 1;
         newFrames.insert(range.start(), length);
-        swapper.saveFrame(range.start(), info);
+        swapper.saveFrame(range.start(), info, image->bounds());
     }
 
     /**
@@ -166,6 +168,17 @@ struct KisAnimationFrameCache::Private
 
         return cacheChanged;
     }
+
+    int effectiveLevelOfDetail(const QRect &rc) const {
+        // TODO: make configurable
+        const int frameSizeLimit = 2500;
+        const int maxDimension = KisAlgebra2D::maxDimension(rc);
+
+        const qreal minLod = -std::log2(qreal(frameSizeLimit) / maxDimension);
+        const int lodLimit = qMax(0, qCeil(minLod));
+        return qMax(desiredLevelOfDetail, lodLimit);
+    }
+
 
     // TODO: verify that we don't have any leak here!
     typedef QMap<KisOpenGLImageTexturesSP, KisAnimationFrameCache*> CachesMap;
@@ -252,7 +265,21 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
     }
 }
 
-KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageSP image) const
+KisOpenGLUpdateInfoSP KisAnimationFrameCache::Private::fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod)
+{
+    if (lod > 0) {
+        KisPaintDeviceSP tempDevice = new KisPaintDevice(image->projection()->colorSpace());
+        tempDevice->prepareClone(image->projection());
+        image->projection()->generateLodCloneDevice(tempDevice, image->projection()->extent(), lod);
+
+        const QRect fetchRect = KisLodTransform::alignedRect(requestedRect, lod);
+        return textures->updateInfoBuilder().buildUpdateInfo(fetchRect, tempDevice, image->bounds(), lod, true);
+    } else {
+        return textures->updateCache(requestedRect, image);
+    }
+}
+
+KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const
 {
     if (time != image->animationInterface()->currentTime()) {
         qWarning() << "WARNING: KisAnimationFrameCache::frameReady image's time doesn't coincide with the requested time!";
@@ -262,16 +289,21 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageS
     // the frames are always generated at full scale
     KIS_SAFE_ASSERT_RECOVER_NOOP(image->currentLevelOfDetail() == 0);
 
-    if (m_d->desiredLevelOfDetail > 0) {
-        KisPaintDeviceSP tempDevice = new KisPaintDevice(image->projection()->colorSpace());
-        tempDevice->prepareClone(image->projection());
-        image->projection()->generateLodCloneDevice(tempDevice, image->projection()->extent(), m_d->desiredLevelOfDetail);
+    const int lod = m_d->effectiveLevelOfDetail(requestedRegion.boundingRect());
 
-        const QRect rect = KisLodTransform::alignedRect(image->bounds(), m_d->desiredLevelOfDetail);
-        return m_d->textures->updateInfoBuilder().buildUpdateInfo(rect, tempDevice, image->bounds(), m_d->desiredLevelOfDetail, true);
-    } else {
-        return m_d->textures->updateCache(image->bounds(), image);
+    KisOpenGLUpdateInfoSP totalInfo;
+
+    Q_FOREACH (const QRect &rc, requestedRegion.rects()) {
+        KisOpenGLUpdateInfoSP info = m_d->fetchFrameDataImpl(image, rc, lod);
+        if (!totalInfo) {
+            totalInfo = info;
+        } else {
+            const bool result = totalInfo->tryMergeWith(*info);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(result);
+        }
     }
+
+    return totalInfo;
 }
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
@@ -291,17 +323,10 @@ int KisAnimationFrameCache::desiredLevelOfDetail() const
 
 void KisAnimationFrameCache::setDesiredLevelOfDetail(int levelOfDetail)
 {
-    // TODO: make configurable
-    const int frameSizeLimit = 2500;
-    const int maxDimension = KisAlgebra2D::maxDimension(m_d->image->bounds());
-
-    const qreal minLod = -std::log2(qreal(frameSizeLimit) / maxDimension);
-    const int lodLimit = qMax(0, qCeil(minLod));
-
-    m_d->desiredLevelOfDetail = qMax(levelOfDetail, lodLimit);
+    m_d->desiredLevelOfDetail = levelOfDetail;
 }
 
-void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range)
+void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest)
 {
     if (m_d->newFrames.isEmpty()) return;
 
@@ -318,11 +343,42 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range)
             continue;
         }
 
-        if (m_d->swapper.frameLevelOfDetail(frameId) > m_d->desiredLevelOfDetail) {
+        if (m_d->swapper.frameLevelOfDetail(frameId) > m_d->desiredLevelOfDetail ||
+            !m_d->swapper.frameDirtyRect(frameId).contains(regionOfInterest)) {
+
             m_d->swapper.forgetFrame(frameId);
             it = m_d->newFrames.erase(it);
         } else {
             ++it;
         }
     }
+}
+
+bool KisAnimationFrameCache::framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest)
+{
+    if (m_d->newFrames.isEmpty()) return false;
+
+    auto it = m_d->newFrames.upperBound(range.start());
+
+    if (it != m_d->newFrames.begin()) it--;
+
+    while (it.key() <= range.end()) {
+        const int frameId = it.key();
+        const int frameLength = it.value();
+
+        if (frameId + frameLength - 1 < range.start()) {
+            ++it;
+            continue;
+        }
+
+        // TODO: also check continuity of the frames
+
+        if (!m_d->swapper.frameDirtyRect(frameId).contains(regionOfInterest)) {
+            return false;
+        }
+
+        ++it;
+    }
+
+    return true;
 }

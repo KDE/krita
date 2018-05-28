@@ -124,11 +124,14 @@ public:
         connect(this, SIGNAL(sigCancelRegenerationInternal(int)), SLOT(notifyFrameCancelled(int)));
     }
 
-    void frameCompletedCallback(int frame) override {
+    void frameCompletedCallback(int frame, const QRegion &requestedRegion) override {
         ENTER_FUNCTION() << ppVar(frame);
 
         KisImageSP image = requestedImage();
         KIS_SAFE_ASSERT_RECOVER_NOOP(frame == image->animationInterface()->currentTime());
+
+        // by default we request update for the entire image
+        KIS_SAFE_ASSERT_RECOVER_NOOP(requestedRegion == image->bounds());
 
         KisOpenGLUpdateInfoSP info = m_updateInfoBuilder.buildUpdateInfo(image->bounds(), image, true);
 
@@ -136,7 +139,7 @@ public:
         qDebug() << ppVar(info->tileList.size());
 
         KisOpenGLUpdateInfoSP infoForSave = m_updateInfoBuilder.buildUpdateInfo(image->bounds(), image, true);
-        m_store.saveFrame(11, infoForSave);
+        m_store.saveFrame(11, infoForSave, image->bounds());
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_store.hasFrame(11));
 

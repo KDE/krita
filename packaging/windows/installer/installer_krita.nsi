@@ -368,6 +368,9 @@ Function .onInit
 	!insertmacro SetSectionFlag ${SEC_product_main} ${SF_RO}
 	!insertmacro SetSectionFlag ${SEC_product_main} ${SF_BOLD}
 	!insertmacro SetSectionFlag ${SEC_remove_old_version} ${SF_RO}
+!ifdef HAS_FFMPEG
+	!insertmacro SetSectionFlag ${SEC_ffmpeg} ${SF_RO}
+!endif
 	StrCpy $CreateDesktopIcon 1 # Create desktop icon by default
 	${IfNot} ${AtLeastWin7}
 		${IfNot} ${Silent}

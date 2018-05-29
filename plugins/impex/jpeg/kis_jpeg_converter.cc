@@ -322,6 +322,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
                     GETJOCTET(marker->data[4]) != (JOCTET) 0x00 ||
                     GETJOCTET(marker->data[5]) != (JOCTET) 0x00)
                 continue; /* no Exif header */
+
             dbgFile << "Found exif information of length :" << marker->data_length;
             KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
@@ -392,7 +393,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(QIODevice *io)
                 if (sizeIptc) {
                     // Decode the IPTC data
                     QByteArray byteArray((const char*)(record + sizeHdr), sizeIptc);
-                    iptcIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
+                    QBuffer buf(&byteArray);
+                    iptcIO->loadFrom(layer->metaData(), &buf);
                 } else {
                     dbgFile << "IPTC Not found in Photoshop marker";
                 }

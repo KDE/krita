@@ -265,43 +265,19 @@ QString Python::lastTraceback() const
 bool Python::libraryLoad()
 {
     // no-op on Windows
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
     if (!s_pythonLibrary) {
 
         QFileInfo fi(PYKRITA_PYTHON_LIBRARY);
-        qDebug() << fi.canonicalFilePath() << fi.exists();
-        if (fi.exists()) {
-            qDebug() << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
-            s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
-        }
-        else {
-            QString libraryName = fi.fileName();
-            QString applicationRoot = KoResourcePaths::getApplicationRoot();
-            QStringList locations;
-            locations << applicationRoot + "/lib"
-                      << applicationRoot + "/lib64"
-                      << applicationRoot + "/lib/X64_86-linux-gnu";
-            Q_FOREACH(const QString &location, locations) {
-                QDir d(location);
-                QStringList entries = d.entryList(QStringList() << libraryName + "*");
-                qDebug() << entries;
-                Q_FOREACH(const QString &entry, entries) {
-                     QFileInfo fi2(location + "/" + entry);
-                     if (fi2.exists()) {
-                        s_pythonLibrary = new QLibrary(fi2.canonicalFilePath());
-                        break;
-                     }
-                }
-            }
-        }
-        if (!s_pythonLibrary) {
-            qDebug() << "Could not create" << PYKRITA_PYTHON_LIBRARY;
-            return false;
-        }
-
+        // get the filename of the configured Python library, without the .so suffix
+        const QString libraryName = fi.completeBaseName();
+        // 1.0 is the SONAME of the shared Python library
+        s_pythonLibrary = new QLibrary(libraryName, "1.0");
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load()) {
             qDebug() << QString("Could not load %1 -- Reason: %2").arg(s_pythonLibrary->fileName()).arg(s_pythonLibrary->errorString());
+            delete s_pythonLibrary;
+            s_pythonLibrary = 0;
             return false;
         }
     }

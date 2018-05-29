@@ -56,7 +56,6 @@
 #include "ui_wdgpalettedock.h"
 #include "kis_palette_delegate.h"
 #include "kis_palette_view.h"
-#include "KisPaletteChooser.h"
 
 PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
@@ -68,47 +67,46 @@ PaletteDockerDock::PaletteDockerDock( )
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
     m_wdgPaletteDock->setupUi(mainWidget);
+    m_wdgPaletteDock->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
+    m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnRemove->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnAdd->setEnabled(false);
+    m_wdgPaletteDock->bnRemove->setEnabled(false);
+    m_wdgPaletteDock->bnAddDialog->setVisible(false);
+    m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
+    m_wdgPaletteDock->bnAddGroup->setIconSize(QSize(16, 16));
+
+
+    m_model = new KisPaletteModel(this);
+    m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
+
+    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
+    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
+    connect(m_wdgPaletteDock->bnAddGroup, SIGNAL(clicked(bool)), m_wdgPaletteDock->paletteView, SLOT(addGroupWithDialog()));
+
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
 
-    m_model = new KisPaletteModel(this);
-    m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
+    m_colorSetChooser = new KisColorsetChooser(this);
+    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
+    m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
+    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
+
+    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList(int)));
     KisConfig cfg;
-    QString defaultPaletteName = cfg.defaultPalette();
-    KoColorSet* defaultColorSet = rServer->resourceByName(defaultPaletteName);
+    QString defaultPalette = cfg.defaultPalette();
+    KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
     if (defaultColorSet) {
         setColorSet(defaultColorSet);
     }
-
-    m_wdgPaletteDock->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnRemove->setIcon(KisIconUtils::loadIcon("list-remove"));
-    m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnAdd->setEnabled(false);
-    m_wdgPaletteDock->bnRemove->setEnabled(false);
-    // m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
-
-    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
-    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
-
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
-
-    // m_colorSetChooser = new KisColorsetChooser(this);
-    // connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
-    m_paletteChooser = new KisPaletteChooser(this);
-
-    m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
-    // set text to be the name of current palette
-    m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
-    m_wdgPaletteDock->bnColorSets->setText(defaultPaletteName);
-    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_paletteChooser);
-
-    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList(int)));
 }
 
 PaletteDockerDock::~PaletteDockerDock()

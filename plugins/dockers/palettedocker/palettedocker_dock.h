@@ -37,7 +37,6 @@ class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class KisColorsetChooser;
 class KisPaletteModel;
-class KisPaletteChooser;
 class Ui_WdgPaletteDock;
 
 
@@ -79,7 +78,6 @@ private:
     QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
     KoColorSet *m_currentColorSet;
     KisColorsetChooser *m_colorSetChooser;
-    KisPaletteChooser *m_paletteChooser;
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
 };

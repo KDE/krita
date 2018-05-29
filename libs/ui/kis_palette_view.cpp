@@ -342,14 +342,3 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
         }
     }
 }
-
-void KisPaletteView::contextMenuEvent(QContextMenuEvent *event)
-{
-    QMenu swatchRightClickMenu(this);
-    swatchRightClickMenu.addAction(i18n("Add foreground color"));
-    swatchRightClickMenu.addAction(i18n("Add background color"));
-    swatchRightClickMenu.addAction(i18n("Rename swatch"));
-    swatchRightClickMenu.addAction(i18n("Switch with another swatch"));
-    swatchRightClickMenu.addAction(i18n("Delete swatch"));
-    swatchRightClickMenu.exec(event->globalPos());
-}

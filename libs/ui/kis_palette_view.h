@@ -21,7 +21,6 @@
 #define __KIS_PALETTE_VIEW_H
 
 #include <QScopedPointer>
-#include <QContextMenuEvent>
 #include <KoTableView.h>
 #include <KoColorSet.h>
 #include "kritaui_export.h"
@@ -39,8 +38,6 @@ public:
 
     void setPaletteModel(KisPaletteModel *model);
     KisPaletteModel* paletteModel() const;
-
-    void contextMenuEvent(QContextMenuEvent *event) override;
 
     /**
      * @brief updateRows
@@ -72,7 +69,6 @@ public Q_SLOTS:
     /**
      * @brief addGroupWithDialog
      * summons a little dialog to name the new group.
-     * @attention should be moved to colorSetChooser
      */
     bool addGroupWithDialog();
     /**

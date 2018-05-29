@@ -21,7 +21,6 @@ ecm_add_tests(
     kis_shape_commands_test.cpp
     kis_shape_layer_test.cpp
     kis_stop_gradient_editor_test.cpp
-    KisPaletteModel_test.cpp
     NAME_PREFIX "krita-ui-"
     LINK_LIBRARIES kritaui Qt5::Test
 )

@@ -15,34 +15,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISFRAMECACHESWAPPER_H
-#define KISFRAMECACHESWAPPER_H
+#ifndef KISINMEMORYFRAMECACHESWAPPER_H
+#define KISINMEMORYFRAMECACHESWAPPER_H
 
 #include <QScopedPointer>
 
 #include "KisAbstractFrameCacheSwapper.h"
+#include "opengl/kis_texture_tile_info_pool.h"
 
 class KisOpenGLUpdateInfoBuilder;
 
 
-/**
- * KisFrameCacheSwapper is the most highlevel facade of the frame
- * swapping infrastructure. The main responsibilities of the class:
- *
- * 1) Asynchronously predict and prefetch the pending frames from disk
- *    and maintain a short in-memory cache of these frames (already
- *    converted into KisOpenGLUpdateInfo)
- *
- * 2) Pass all the other requests to the lower-level API,
- *    like KisFrameCacheStore
- */
-
-class KRITAUI_EXPORT KisFrameCacheSwapper : public KisAbstractFrameCacheSwapper
+class KRITAUI_EXPORT KisInMemoryFrameCacheSwapper : public KisAbstractFrameCacheSwapper
 {
 public:
-    KisFrameCacheSwapper(const KisOpenGLUpdateInfoBuilder &builder);
-    KisFrameCacheSwapper(const KisOpenGLUpdateInfoBuilder &builder, const QString &frameCachePath);
-    ~KisFrameCacheSwapper();
+    KisInMemoryFrameCacheSwapper();
+    ~KisInMemoryFrameCacheSwapper();
 
     // WARNING: after transferring \p info to saveFrame() the object becomes invalid
     void saveFrame(int frameId, KisOpenGLUpdateInfoSP info, const QRect &imageBounds) override;
@@ -62,4 +50,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif // KISFRAMECACHESWAPPER_H
+#endif // KISINMEMORYFRAMECACHESWAPPER_H

@@ -28,7 +28,9 @@
 #include "KisPart.h"
 #include "kis_animation_cache_populator.h"
 
+#include <KisAbstractFrameCacheSwapper.h>
 #include "KisFrameCacheSwapper.h"
+#include "KisInMemoryFrameCacheSwapper.h"
 
 #include "opengl/kis_opengl_image_textures.h"
 
@@ -40,7 +42,8 @@ struct KisAnimationFrameCache::Private
 {
     Private(KisOpenGLImageTexturesSP _textures)
         : textures(_textures),
-          swapper(textures->updateInfoBuilder())
+          swapper(new KisFrameCacheSwapper(textures->updateInfoBuilder()))
+          //swapper(new KisInMemoryFrameCacheSwapper())
     {
         image = textures->image();
     }
@@ -51,7 +54,8 @@ struct KisAnimationFrameCache::Private
 
     KisOpenGLImageTexturesSP textures;
     KisImageWSP image;
-    KisFrameCacheSwapper swapper;
+
+    QScopedPointer<KisAbstractFrameCacheSwapper> swapper;
     int desiredLevelOfDetail = 0;
 
     KisOpenGLUpdateInfoSP fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod);
@@ -103,7 +107,7 @@ struct KisAnimationFrameCache::Private
     KisOpenGLUpdateInfoSP getFrame(int time)
     {
         const int frameId = getFrameIdAtTime(time);
-        return frameId >= 0 ? swapper.loadFrame(frameId) : 0;
+        return frameId >= 0 ? swapper->loadFrame(frameId) : 0;
     }
 
     void addFrame(KisOpenGLUpdateInfoSP info, const KisTimeRange& range)
@@ -112,7 +116,7 @@ struct KisAnimationFrameCache::Private
 
         const int length = range.isInfinite() ? -1 : range.end() - range.start() + 1;
         newFrames.insert(range.start(), length);
-        swapper.saveFrame(range.start(), info, image->bounds());
+        swapper->saveFrame(range.start(), info, image->bounds());
     }
 
     /**
@@ -146,9 +150,9 @@ struct KisAnimationFrameCache::Private
                     int newLength = frameIsInfinite ? -1 : (end - newStart + 1);
 
                     newFrames.insert(newStart, newLength);
-                    swapper.moveFrame(start, newStart);
+                    swapper->moveFrame(start, newStart);
                 } else {
-                    swapper.forgetFrame(start);
+                    swapper->forgetFrame(start);
                 }
 
                 it = newFrames.erase(it);
@@ -343,10 +347,10 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, con
             continue;
         }
 
-        if (m_d->swapper.frameLevelOfDetail(frameId) > m_d->desiredLevelOfDetail ||
-            !m_d->swapper.frameDirtyRect(frameId).contains(regionOfInterest)) {
+        if (m_d->swapper->frameLevelOfDetail(frameId) > m_d->desiredLevelOfDetail ||
+            !m_d->swapper->frameDirtyRect(frameId).contains(regionOfInterest)) {
 
-            m_d->swapper.forgetFrame(frameId);
+            m_d->swapper->forgetFrame(frameId);
             it = m_d->newFrames.erase(it);
         } else {
             ++it;
@@ -379,7 +383,7 @@ bool KisAnimationFrameCache::framesHaveValidRoi(const KisTimeRange &range, const
             return false;
         }
 
-        if (!m_d->swapper.frameDirtyRect(frameId).contains(regionOfInterest)) {
+        if (!m_d->swapper->frameDirtyRect(frameId).contains(regionOfInterest)) {
             return false;
         }
 

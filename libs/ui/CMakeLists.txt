@@ -428,6 +428,8 @@ endif()
         KisFrameDataSerializer.cpp
         KisFrameCacheStore.cpp
         KisFrameCacheSwapper.cpp
+        KisAbstractFrameCacheSwapper.cpp
+        KisInMemoryFrameCacheSwapper.cpp
     )
 
 if(UNIX)

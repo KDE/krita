@@ -26,10 +26,6 @@ class KisAboutApplication : public QDialog
 public:
     explicit KisAboutApplication(QWidget *parent = 0);
 
-private Q_SLOTS:
-
-    void linkClicked(const QString &url);
-
 };
 
 #endif // KIS_ABOUT_APPLICATION_H

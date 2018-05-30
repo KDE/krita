@@ -23,7 +23,7 @@
 #include <QTabWidget>
 #include <QLabel>
 #include <QTextEdit>
-#include <QScrollArea>
+#include <QTextBrowser>
 #include <QString>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -160,12 +160,9 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     wdgTab->addTab(lblLicense, i18n("License"));
 
-    QScrollArea *scrollArea = new QScrollArea();
-    QLabel *lblThirdParty = new QLabel(scrollArea);
-    lblThirdParty->setTextFormat(Qt::RichText);
-    connect(lblThirdParty, SIGNAL(linkActivated(QString)), SLOT(linkClicked(QString)));
+    QTextBrowser *lblThirdParty = new QTextBrowser();
+    lblThirdParty->setOpenExternalLinks(true);
     QFile thirdPartyFile(":/libraries.txt");
-    qDebug() << thirdPartyFile.exists();
     if (thirdPartyFile.open(QIODevice::ReadOnly)) {
         ba = thirdPartyFile.readAll();
 
@@ -187,7 +184,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
         thirdPartyHtml.append("<ul></p></body></html>");
         lblThirdParty->setText(thirdPartyHtml);
     }
-    wdgTab->addTab(scrollArea, i18n("Third-party libraries"));
+    wdgTab->addTab(lblThirdParty, i18n("Third-party libraries"));
 
 
     QPushButton *bnClose = new QPushButton(i18n("Close"));
@@ -201,14 +198,5 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
 
     vlayout->addLayout(hlayout);
-
-}
-
-void KisAboutApplication::linkClicked(const QString &url)
-{
-    QUrl _url = QUrl::fromUserInput(url);
-    if (!_url.isLocalFile()) {
-        QDesktopServices::openUrl(_url);
-    }
 
 }

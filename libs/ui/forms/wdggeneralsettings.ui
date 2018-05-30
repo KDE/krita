@@ -479,19 +479,6 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="2">
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="Miscellaneous">
@@ -611,22 +598,6 @@
          </property>
          <property name="value">
           <number>30</number>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Number of Palette Presets</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -765,6 +736,49 @@
          </property>
         </widget>
        </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Number of Palette Presets</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>&amp;Resources</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_4">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Cache location:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="KisFileNameRequester" name="urlCacheLocation" native="true"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>Resource Folder:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="KisFileNameRequester" name="urlResourceFolder" native="true"/>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -781,6 +795,12 @@
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisFileNameRequester</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_file_name_requester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

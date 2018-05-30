@@ -65,7 +65,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
         m_defaultFileName = i18n("Untitled");
     }
 
-    m_page = new WdgAnimaterionRenderer(this);
+    m_page = new WdgAnimationRenderer(this);
     m_page->layout()->setMargin(0);
 
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
@@ -267,7 +267,7 @@ void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP
     }
 
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
-    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));    
+    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
     m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));
     m_page->sequenceStart->setValue(cfg->getInt("sequence_start", m_image->animationInterface()->playbackRange().start()));
 

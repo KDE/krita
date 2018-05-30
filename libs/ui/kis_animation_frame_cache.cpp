@@ -362,21 +362,28 @@ bool KisAnimationFrameCache::framesHaveValidRoi(const KisTimeRange &range, const
 
     if (it != m_d->newFrames.begin()) it--;
 
+    int expectedNextFrameStart = it.key();
+
     while (it.key() <= range.end()) {
         const int frameId = it.key();
         const int frameLength = it.value();
 
         if (frameId + frameLength - 1 < range.start()) {
+            expectedNextFrameStart = frameId + frameLength;
             ++it;
             continue;
         }
 
-        // TODO: also check continuity of the frames
+        if (expectedNextFrameStart != frameId) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(expectedNextFrameStart < frameId);
+            return false;
+        }
 
         if (!m_d->swapper.frameDirtyRect(frameId).contains(regionOfInterest)) {
             return false;
         }
 
+        expectedNextFrameStart = frameId + frameLength;
         ++it;
     }
 

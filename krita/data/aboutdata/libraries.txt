@@ -3,7 +3,7 @@ DrMingw,https://github.com/jrfonseca/drmingw,LGPLv2.1
 Eigen3,http://eigen.tuxfamily.org,MPL2
 Exiv2,http://www.exiv2.org,GPLv2
 Expat,https://github.com/libexpat/libexpat,MIT
-ffmpeg,https://www.ffmpeg.org,LGPL2.1+
+#ffmpeg,https://www.ffmpeg.org,LGPL2.1+
 fftw3,http://www.fftw.org/,GPLv2+
 fontconfig,https://www.freedesktop.org/wiki/Software/fontconfig/,BSD
 freetype,https://www.freetype.org/,FTL or GPLv2

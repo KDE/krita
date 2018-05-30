@@ -65,7 +65,6 @@ public:
           lastPaintedFrame(0),
           playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE),
           stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE),
-          regionOfInterestUpdateCompressor(1000, KisSignalCompressor::POSTPONE),
           audioOffsetTolerance(-1)
           {}
 
@@ -105,7 +104,6 @@ public:
     QScopedPointer<KisSyncedAudioPlayback> syncedAudio;
     QScopedPointer<KisSignalCompressorWithParam<int> > audioSyncScrubbingCompressor;
     KisSignalCompressor stopAudioOnScrubbingCompressor;
-    KisSignalCompressor regionOfInterestUpdateCompressor;
 
     int audioOffsetTolerance;
 
@@ -166,10 +164,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioChannelChanged()), SLOT(slotAudioChannelChanged()));
     connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigAudioVolumeChanged()), SLOT(slotAudioVolumeChanged()));
     slotAudioChannelChanged();
-
-    connect(m_d->canvas, SIGNAL(sigRegionOfInterestChanged(QRect)), &m_d->regionOfInterestUpdateCompressor, SLOT(start()));
-    connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotRegionOfInterestChanged()));
-    slotRegionOfInterestChanged();
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
@@ -233,25 +227,6 @@ void KisAnimationPlayer::slotOnAudioError(const QString &fileName, const QString
 {
     QString errorMessage(i18nc("floating on-canvas message", "Cannot open audio: \"%1\"\nError: %2", fileName, message));
     m_d->canvas->viewManager()->showFloatingMessage(errorMessage, KisIconUtils::loadIcon("warning"));
-}
-
-void KisAnimationPlayer::slotRegionOfInterestChanged()
-{
-    if (isPlaying() && m_d->canvas->frameCache()) {
-        const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-        const KisTimeRange &range = animation->playbackRange();
-
-        const QRect needRect =
-            m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
-            m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
-
-        if (range.isValid() &&
-            !m_d->canvas->frameCache()->framesHaveValidRoi(range, needRect)) {
-
-            stop();
-            play();
-        }
-    }
 }
 
 void KisAnimationPlayer::connectCancelSignals()

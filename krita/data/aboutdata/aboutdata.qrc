@@ -5,5 +5,6 @@
         <file>credits.txt</file>
         <file>developers.txt</file>
         <file>LICENSE</file>
+        <file>libraries.txt</file>
     </qresource>
 </RCC>

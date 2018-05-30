@@ -57,10 +57,8 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
-if (LINUX)
-    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
-        add_definitions(-Werror=delete-incomplete)
-    endif()
+if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
+    add_definitions(-Werror=delete-incomplete)
 endif()
 
  ######################
@@ -532,6 +530,13 @@ set_package_properties(GIF PROPERTIES
     URL "http://giflib.sourceforge.net/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
+
+find_package(HEIF "1.2.0")
+set_package_properties(HEIF PROPERTIES
+    DESCRIPTION "Library for loading and saving heif files."
+    URL "https://github.com/strukturag/libheif"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita HEIF filter")
 
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})

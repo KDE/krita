@@ -19,6 +19,7 @@
 #ifndef __TIMELINE_FRAMES_MODEL_H
 #define __TIMELINE_FRAMES_MODEL_H
 
+
 #include <QScopedPointer>
 #include <QIcon>
 
@@ -86,9 +87,9 @@ public:
     Qt::DropActions supportedDragActions() const override;
     Qt::DropActions supportedDropActions() const override;
     QStringList mimeTypes() const override;
-    QMimeData * mimeData(const QModelIndexList &indexes) const override;
-    QMimeData * mimeDataExtended(const QModelIndexList &indexes, const QModelIndex &baseIndex, MimeCopyPolicy copyPolicy) const;
-    bool dropMimeData(const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    QMimeData *mimeDataExtended(const QModelIndexList &indexes, const QModelIndex &baseIndex, MimeCopyPolicy copyPolicy) const;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
     bool dropMimeDataExtended(const QMimeData *data, Qt::DropAction action, const QModelIndex &parent, bool *dataMoved = 0);
 

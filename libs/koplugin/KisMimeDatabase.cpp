@@ -282,6 +282,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "psb";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "image/heic";
+        mimeType.description = i18nc("description of a file type", "HEIC/HEIF Image");
+        mimeType.suffixes = QStringList() << "heic" << "heif";
+        s_mimeDatabase << mimeType;
+
         debugPlugin << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }
 }

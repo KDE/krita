@@ -2141,24 +2141,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_keyframes_right">
-      <icon></icon>
-      <text>Insert Keyframe Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert keyframes to the right of selection moving the tail of animation to the right</toolTip>
-      <iconText></iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-
-    <Action name="insert_keyframes_left">
+    <Action name="insert_keyframe_left">
       <icon></icon>
       <text>Insert Keyframe Left</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert keyframes to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert keyframes to the left of selection, moving the tail of animation to the right.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2167,11 +2154,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_keyframes_right">
+    <Action name="insert_keyframe_right">
       <icon></icon>
-      <text>Insert N Keyframes Right</text>
+      <text>Insert Keyframe Right</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several keyframes to the right of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert keyframes to the right of selection, moving the tail of animation to the right.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2180,11 +2167,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_keyframes_left">
+    <Action name="insert_multiple_keyframes">
       <icon></icon>
-      <text>Insert N Keyframes Left</text>
+      <text>Insert Multiple Keyframes</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several keyframes to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert several keyframes based on user parameters.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2219,24 +2206,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_columns_right">
-      <icon></icon>
-      <text>Insert Column Right</text>
-      <whatsThis></whatsThis>
-      <toolTip>Insert column to the right of selection moving the tail of animation to the right</toolTip>
-      <iconText></iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-
-    <Action name="insert_columns_left">
+    <Action name="insert_column_left">
       <icon></icon>
       <text>Insert Column Left</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert column to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert column to the left of selection, moving the tail of animation to the right</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2245,11 +2219,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_columns_right">
+    <Action name="insert_column_right">
       <icon></icon>
-      <text>Insert N Columns Right</text>
+      <text>Insert Column Right</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several columns to the right of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert column to the right of selection, moving the tail of animation to the right</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2258,11 +2232,11 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_columns_left">
+    <Action name="insert_multiple_columns">
       <icon></icon>
-      <text>Insert N Columns Left</text>
+      <text>Insert Multiple Columns</text>
       <whatsThis></whatsThis>
-      <toolTip>Insert several columns to the left of selection moving the tail of animation to the right</toolTip>
+      <toolTip>Insert several columns based on user parameters.</toolTip>
       <iconText></iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>
@@ -2310,9 +2284,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_hold_frames">
+    <Action name="insert_multiple_hold_frames">
       <icon></icon>
-      <text>Insert N Hold Frames</text>
+      <text>Insert Multiple Hold Frames</text>
       <whatsThis></whatsThis>
       <toolTip>Insert N hold frames after every keyframe</toolTip>
       <iconText></iconText>
@@ -2336,9 +2310,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="remove_n_hold_frames">
+    <Action name="remove_multiple_hold_frames">
       <icon></icon>
-      <text>Remove N Hold Frames</text>
+      <text>Remove Multiple Hold Frames</text>
       <whatsThis></whatsThis>
       <toolTip>Remove N hold frames after every keyframe</toolTip>
       <iconText></iconText>
@@ -2362,9 +2336,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="insert_n_hold_columns">
+    <Action name="insert_multiple_hold_columns">
       <icon></icon>
-      <text>Insert N Hold Columns</text>
+      <text>Insert Multiple Hold Columns</text>
       <whatsThis></whatsThis>
       <toolTip>Insert N hold columns into the frame at the current position</toolTip>
       <iconText></iconText>
@@ -2388,9 +2362,9 @@
       <statusTip></statusTip>
     </Action>
 
-    <Action name="remove_n_hold_columns">
+    <Action name="remove_multiple_hold_columns">
       <icon></icon>
-      <text>Remove N Hold Columns</text>
+      <text>Remove Multiple Hold Columns</text>
       <whatsThis></whatsThis>
       <toolTip>Remove N hold columns from the frame at the current position</toolTip>
       <iconText></iconText>

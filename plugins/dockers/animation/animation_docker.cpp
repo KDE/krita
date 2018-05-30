@@ -122,6 +122,8 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         slotGlobalTimeChanged();
         slotCurrentNodeChanged(m_canvas->viewManager()->nodeManager()->activeNode());
     }
+
+    slotUpdateIcons();
 }
 
 void AnimationDocker::unsetCanvas()

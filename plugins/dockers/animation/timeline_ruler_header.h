@@ -37,7 +37,7 @@ public:
 
     void setModel(QAbstractItemModel *model) override;
 
-    void setActionManager( KisActionManager * actionManager);
+    void setActionManager(KisActionManager *actionManager);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -61,10 +61,10 @@ private:
                    const QPen &gridPen) const;
 
 Q_SIGNALS:
-    void sigInsertColumnsLeft();
-    void sigInsertColumnsRight();
-    void sigInsertColumnsLeftCustom();
-    void sigInsertColumnsRightCustom();
+    void sigInsertColumnLeft();
+    void sigInsertColumnRight();
+    void sigInsertMultipleColumns();
+
     void sigRemoveColumns();
     void sigRemoveColumnsAndShift();
 

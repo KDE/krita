@@ -94,6 +94,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
+    //
+    // Cursor Tab
+    //
     m_cmbCursorShape->addItem(i18n("No Cursor"));
     m_cmbCursorShape->addItem(i18n("Tool Icon"));
     m_cmbCursorShape->addItem(i18n("Arrow"));
@@ -104,18 +107,62 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("Black Pixel"));
     m_cmbCursorShape->addItem(i18n("White Pixel"));
 
+    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
+
     m_cmbOutlineShape->addItem(i18n("No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));
     m_cmbOutlineShape->addItem(i18n("Preview Outline"));
     m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
 
+    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+
+    m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+
+    KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
+    cursorColor.fromQColor(cfg.getCursorMainColor());
+    cursorColorBtutton->setColor(cursorColor);
+
+    //
+    // Window Tab
+    //
+    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
+
+    m_backgroundimage->setText(cfg.getMDIBackgroundImage());
+    connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
+    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
+
+    KoColor mdiColor;
+    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
+    m_mdiColor->setColor(mdiColor);
+
+    m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+
+    m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", false).toBool());
+
+    m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
+
+    //
+    // Tools tab
+    //
+    m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
+    m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
+    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+
     m_cmbKineticScrollingGesture->addItem(i18n("Disabled"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Click Drag"));
 
-    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
-    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+    m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
+    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
+    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
 
+    //
+    // Miscellaneous
+    //
     cmbStartupSession->addItem(i18n("Open default window"));
     cmbStartupSession->addItem(i18n("Load previous session"));
     cmbStartupSession->addItem(i18n("Show session manager"));
@@ -123,15 +170,23 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkSaveSessionOnQuit->setChecked(cfg.saveSessionOnQuit(false));
 
-    chkShowRootLayer->setChecked(cfg.showRootLayer());
-
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
     m_autosaveSpinBox->setValue(autosaveInterval / 60);
     m_autosaveCheckBox->setChecked(autosaveInterval > 0);
-    m_undoStackSize->setValue(cfg.undoStackLimit());
+
+    m_chkCompressKra->setChecked(cfg.compressKra());
+
     m_backupFileCheckBox->setChecked(cfg.backupFile());
-    m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+
+    m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
+
+    m_undoStackSize->setValue(cfg.undoStackLimit());
+
+    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
+
+    chkShowRootLayer->setChecked(cfg.showRootLayer());
+
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
@@ -148,36 +203,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));
 
-    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
-    m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
-    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
-    KoColor mdiColor;
-    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
-    m_mdiColor->setColor(mdiColor);
-    m_backgroundimage->setText(cfg.getMDIBackgroundImage());
-    m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
-    m_chkCompressKra->setChecked(cfg.compressKra());
-
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", false).toBool());
-    m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
-
-    m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
-    m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
-    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
-    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
-    m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
-    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
-    m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
     m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground());
 
-    KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
-    cursorColor.fromQColor(cfg.getCursorMainColor());
-    cursorColorBtutton->setColor(cursorColor);
 
-    connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
-    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 }
 
 void GeneralTab::setDefault()

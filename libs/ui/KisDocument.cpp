@@ -45,6 +45,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
+#include <KoDialog.h>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>

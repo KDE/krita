@@ -92,6 +92,7 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
+#include <KisAutoSaveRecoveryDialog.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
@@ -100,13 +101,15 @@ namespace {
 const QTime appStartTime(QTime::currentTime());
 }
 
-class KisApplicationPrivate
+class KisApplication::Private
 {
 public:
-    KisApplicationPrivate()
-        : splashScreen(0)
-    {}
+    Private() {}
     QPointer<KisSplashScreen> splashScreen;
+    KisAutoSaveRecoveryDialog *autosaveDialog {0};
+    QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
+    bool batchRun {false};
+
 };
 
 class KisApplication::ResetStarting
@@ -151,10 +154,7 @@ public:
 
 KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     : QtSingleApplication(key, argc, argv)
-    , d(new KisApplicationPrivate)
-    , m_autosaveDialog(0)
-    , m_mainWindow(0)
-    , m_batchRun(false)
+    , d(new Private)
 {
 #ifdef Q_OS_OSX
     setMouseCoalescingEnabled(false);
@@ -412,14 +412,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
 
-    m_batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
+    d->batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
     // print & exportAsPdf do user interaction ATM
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
     // TODO: fix print & exportAsPdf to work without mainwindow shown
     bool showmainWindow = !exportAs; // would be !batchRun;
 
-    const bool showSplashScreen = !m_batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
+    const bool showSplashScreen = !d->batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
     if (showSplashScreen && d->splashScreen) {
         d->splashScreen->show();
         d->splashScreen->repaint();
@@ -491,31 +491,31 @@ bool KisApplication::start(const KisApplicationArguments &args)
         }
 
         if (showmainWindow) {
-            m_mainWindow = kisPart->currentMainwindow();
+            d->mainWindow = kisPart->currentMainwindow();
 
             if (!args.workspace().isEmpty()) {
                 KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
                 KisWorkspaceResource* workspace = rserver->resourceByName(args.workspace());
                 if (workspace) {
-                    m_mainWindow->restoreWorkspace(workspace);
+                    d->mainWindow->restoreWorkspace(workspace);
                 }
             }
 
             if (args.canvasOnly()) {
-                m_mainWindow->viewManager()->switchCanvasOnly(true);
+                d->mainWindow->viewManager()->switchCanvasOnly(true);
             }
 
             if (args.fullScreen()) {
-                m_mainWindow->showFullScreen();
+                d->mainWindow->showFullScreen();
             }
         } else {
-            m_mainWindow = kisPart->createMainWindow();
+            d->mainWindow = kisPart->createMainWindow();
         }
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
     // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
-    if (!m_batchRun) {
+    if (!d->batchRun) {
         checkAutosaveFiles();
     }
 
@@ -533,7 +533,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
         KisDocument *doc = args.image();
         if (doc) {
             kisPart->addDocument(doc);
-            m_mainWindow->addViewAndNotifyLoadingCompleted(doc);
+            d->mainWindow->addViewAndNotifyLoadingCompleted(doc);
         }
     }
 
@@ -547,10 +547,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
             // are we just trying to open a template?
             if (doTemplate) {
                 // called in mix with batch options? ignore and silently skip
-                if (m_batchRun) {
+                if (d->batchRun) {
                     continue;
                 }
-                if (createNewDocFromTemplate(fileName, m_mainWindow)) {
+                if (createNewDocFromTemplate(fileName, d->mainWindow)) {
                     ++numberOfOpenDocuments;
                 }
                 // now try to load
@@ -564,7 +564,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     }
 
                     KisDocument *doc = kisPart->createDocument();
-                    doc->setFileBatchMode(m_batchRun);
+                    doc->setFileBatchMode(d->batchRun);
                     doc->openUrl(QUrl::fromLocalFile(fileName));
 
                     qApp->processEvents(); // For vector layers to be updated
@@ -576,18 +576,18 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
-                else if (m_mainWindow) {
-                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    if (m_mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
+                else if (d->mainWindow) {
+                    KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                    if (d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
                         if (print) {
-                            m_mainWindow->slotFilePrint();
+                            d->mainWindow->slotFilePrint();
                             nPrinted++;
                             // TODO: trigger closing of app once printing is done
                         }
                         else if (exportAsPdf) {
-                            KisPrintJob *job = m_mainWindow->exportToPdf(exportFileName);
+                            KisPrintJob *job = d->mainWindow->exportToPdf(exportFileName);
                             if (job)
-                                connect (job, SIGNAL(destroyed(QObject*)), m_mainWindow,
+                                connect (job, SIGNAL(destroyed(QObject*)), d->mainWindow,
                                          SLOT(slotFileQuit()), Qt::QueuedConnection);
                             nPrinted++;
                         } else {
@@ -602,7 +602,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
             }
         }
 
-        if (m_batchRun) {
+        if (d->batchRun) {
             return nPrinted > 0;
         }
     }
@@ -621,7 +621,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
 KisApplication::~KisApplication()
 {
-    delete d;
 }
 
 void KisApplication::setSplashScreen(QWidget *splashScreen)
@@ -688,7 +687,7 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
                 createNewDocFromTemplate(filename, mw);
             }
             else if (QFile(filename).exists()) {
-                KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
                 mw->openDocument(QUrl::fromLocalFile(filename), flags);
             }
         }
@@ -699,7 +698,7 @@ void KisApplication::fileOpenRequested(const QString &url)
 {
     KisMainWindow *mainWindow = KisPart::instance()->mainWindows().first();
     if (mainWindow) {
-        KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+        KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
         mainWindow->openDocument(QUrl::fromLocalFile(url), flags);
     }
 }
@@ -707,7 +706,7 @@ void KisApplication::fileOpenRequested(const QString &url)
 
 void KisApplication::checkAutosaveFiles()
 {
-    if (m_batchRun) return;
+    if (d->batchRun) return;
 
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!
@@ -730,11 +729,11 @@ void KisApplication::checkAutosaveFiles()
             // hide the splashscreen to see the dialog
             d->splashScreen->hide();
         }
-        m_autosaveDialog = new KisAutoSaveRecoveryDialog(autosaveFiles, activeWindow());
-        QDialog::DialogCode result = (QDialog::DialogCode) m_autosaveDialog->exec();
+        d->autosaveDialog = new KisAutoSaveRecoveryDialog(autosaveFiles, activeWindow());
+        QDialog::DialogCode result = (QDialog::DialogCode) d->autosaveDialog->exec();
 
         if (result == QDialog::Accepted) {
-            QStringList filesToRecover = m_autosaveDialog->recoverableFiles();
+            QStringList filesToRecover = d->autosaveDialog->recoverableFiles();
             Q_FOREACH (const QString &autosaveFile, autosaveFiles) {
                 if (!filesToRecover.contains(autosaveFile)) {
                     QFile::remove(dir.absolutePath() + "/" + autosaveFile);
@@ -751,16 +750,16 @@ void KisApplication::checkAutosaveFiles()
                 const QUrl url = QUrl::fromLocalFile(dir.absolutePath() + QLatin1Char('/') + autoSaveFile);
                 autosaveUrls << url;
             }
-            if (m_mainWindow) {
+            if (d->mainWindow) {
                 Q_FOREACH (const QUrl &url, autosaveUrls) {
-                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    m_mainWindow->openDocument(url, flags | KisMainWindow::RecoveryFile);
+                    KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                    d->mainWindow->openDocument(url, flags | KisMainWindow::RecoveryFile);
                 }
             }
         }
         // cleanup
-        delete m_autosaveDialog;
-        m_autosaveDialog = nullptr;
+        delete d->autosaveDialog;
+        d->autosaveDialog = nullptr;
     }
 }
 
@@ -802,7 +801,7 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QUrl templateURL;
         templateURL.setPath(templateBase.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path() + '/' + templateName);
 
-        KisMainWindow::OpenFlags batchFlags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+        KisMainWindow::OpenFlags batchFlags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
         if (mainWindow->openDocument(templateURL, KisMainWindow::Import | batchFlags)) {
             dbgUI << "Template loaded...";
             return true;

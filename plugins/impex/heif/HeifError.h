@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2018 Dirk Farin <farin@struktur.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -13,19 +13,19 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_ABOUT_APPLICATION_H
-#define KIS_ABOUT_APPLICATION_H
 
-#include <QDialog>
+#ifndef HEIF_ERROR_H_
+#define HEIF_ERROR_H_
 
-class KisAboutApplication : public QDialog
-{
-    Q_OBJECT
-public:
-    explicit KisAboutApplication(QWidget *parent = 0);
+#include <KisDocument.h>
 
-};
+#include "libheif/heif_cxx.h"
 
-#endif // KIS_ABOUT_APPLICATION_H
+
+KisImportExportFilter::ConversionStatus setHeifError(KisDocument* document,
+                                                     heif::Error error);
+
+#endif

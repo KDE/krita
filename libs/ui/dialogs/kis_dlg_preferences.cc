@@ -57,6 +57,8 @@
 #include <KoVBox.h>
 #include <KoResourcePaths.h>
 
+#include <KisResourceCacheDb.h>
+
 #include "KisProofingConfiguration.h"
 #include "KoColorConversionTransformation.h"
 #include "KoColorSpace.h"
@@ -212,7 +214,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     m_urlCacheDbLocation->setMode(KoFileDialog::OpenDirectory);
     m_urlCacheDbLocation->setConfigurationName("cachedb_location");
-    m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>("ResourceCacheDbDirectory", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
 
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
@@ -263,7 +265,7 @@ void GeneralTab::setDefault()
     cursorColor.fromQColor(cfg.getCursorMainColor(true));
     cursorColorBtutton->setColor(cursorColor);
 
-    m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>("ResourceCacheDbDirectory", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>("ResourceDirectory", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
 }
 
@@ -1299,7 +1301,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());
 
-        cfg.writeEntry("ResourceCacheDbDirectory", dialog->m_general->m_urlCacheDbLocation->fileName());
+        cfg.writeEntry(KisResourceCacheDb::dbLocationKey, dialog->m_general->m_urlCacheDbLocation->fileName());
         cfg.writeEntry("ResourceDirectory", dialog->m_general->m_urlResourceFolder->fileName());
 
         // Color settings

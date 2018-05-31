@@ -93,7 +93,7 @@
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
 #include <KisAutoSaveRecoveryDialog.h>
-
+#include <KisResourceCacheDb.h>
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
@@ -105,6 +105,7 @@ class KisApplication::Private
 {
 public:
     Private() {}
+    KisResourceCacheDb resourceDatabase;
     QPointer<KisSplashScreen> splashScreen;
     KisAutoSaveRecoveryDialog *autosaveDialog {0};
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup

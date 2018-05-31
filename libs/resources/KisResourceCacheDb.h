@@ -25,21 +25,26 @@
 
 #include <kritaresources_export.h>
 
-const QString ResourceCacheDbFilename = "resourcecache.sqlite";
 
 /**
  * @brief The KisResourceCacheDb class encapsulates the database that
  * caches information about the resources available to the user.
+ *
+ * KisApplication creates and initializes the database. All other methods
+ * are static and can be used from anywhere.
  */
 class KRITARESOURCES_EXPORT KisResourceCacheDb
 {
 public:
 
+    static const QString dbLocationKey;
+    static const QString ResourceCacheDbFilename;
+    static const QString databaseVersion;
+
     /**
      * @brief KisResourceCacheDb create a resource cache database.
-     * @param location the location of the database
      */
-    explicit KisResourceCacheDb(const QString &location);
+    explicit KisResourceCacheDb();
     ~KisResourceCacheDb();
 
     /**
@@ -48,7 +53,18 @@ public:
      */
     bool isValid() const;
 
+    /**
+     * @brief initialize
+     * @param location the location of the database
+     * @return true if the database has been initialized correctly
+     */
+    bool initialize(const QString &location) const;
+
 private:
+
+    friend class TestResourceCacheDb;
+    static const QStringList resourceTypes;
+    static const QStringList originTypes;
 
     class Private;
     QScopedPointer<Private> d;

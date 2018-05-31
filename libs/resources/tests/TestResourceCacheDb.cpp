@@ -29,21 +29,22 @@ void TestResourceCacheDb::initTestCase()
 {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     if (dbLocation.exists()) {
-        QFile(dbLocation.path() + "/" + ResourceCacheDbFilename).remove();
+        QFile(dbLocation.path() + "/" + KisResourceCacheDb::ResourceCacheDbFilename).remove();
         dbLocation.rmpath(dbLocation.path());
     }
 }
 
 void TestResourceCacheDb::testCreateDatabase()
 {
-    KisResourceCacheDb cacheDb(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    Q_UNUSED(cacheDb);
-
+    KisResourceCacheDb cacheDb;
+    bool res = cacheDb.initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QVERIFY(res);
     QVERIFY(cacheDb.isValid());
 
     QSqlDatabase sqlDb = QSqlDatabase::database();
 
-    QStringList tables = QStringList() << "origin_types"
+    QStringList tables = QStringList() << "version_information"
+                                       << "origin_types"
                                        << "resource_types"
                                        << "stores"
                                        << "tags"
@@ -56,22 +57,31 @@ void TestResourceCacheDb::testCreateDatabase()
     Q_FOREACH(const QString &table, tables) {
         QVERIFY2(dbTables.contains(table), table.toLatin1());
     }
-
 }
 
 void TestResourceCacheDb::testLookupTables()
 {
+    QSqlQuery query;
+    bool r = query.exec("SELECT COUNT(*) FROM origin_types");
+    QVERIFY(r);
+    QVERIFY(query.lastError() == QSqlError());
+    query.first();
+    QVERIFY(query.value(0).toInt() == KisResourceCacheDb::originTypes.count());
 
+    r = query.exec("SELECT COUNT(*) FROM resource_types");
+    QVERIFY(r);
+    QVERIFY(query.lastError() == QSqlError());
+    query.first();
+    QVERIFY(query.value(0).toInt() == KisResourceCacheDb::resourceTypes.count());
 }
 
 void TestResourceCacheDb::cleanupTestCase()
 {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    bool res = QFile(dbLocation.path() + "/" + ResourceCacheDbFilename).remove();
+    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::ResourceCacheDbFilename).remove();
     Q_ASSERT(res);
     res = dbLocation.rmpath(dbLocation.path());
     Q_ASSERT(res);
-
 }
 
 QTEST_MAIN(TestResourceCacheDb)

@@ -14,6 +14,7 @@ target_link_libraries(kritaresources
     PUBLIC
         Qt5::Core
     PRIVATE
+        kritaversion
         Qt5::Sql
         KF5::ConfigCore
         KF5::CoreAddons

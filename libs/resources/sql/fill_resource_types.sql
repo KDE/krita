@@ -1,1 +1,1 @@
-INSERT into resource_types (id, name) VALUES(?,?);
+INSERT INTO resource_types (name) VALUES (?);

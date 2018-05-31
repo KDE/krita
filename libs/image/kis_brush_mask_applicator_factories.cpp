@@ -160,8 +160,6 @@ template<> void KisGaussCircleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {   
-    const bool antialiasOn = d->fadeMaker.getAliasingEnabled();
-
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -206,12 +204,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_m outsideMask = dist > vFadeRadius;
         dist(outsideMask) = vOne;
 
-        Vc::float_m fadeStartMask(false);
-        // if antialias is off, do not process
-        if(antialiasOn){
-            Vc::float_m fadeStartMask = dist > vFadeAFadeStart;
-            dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue + (dist - vFadeAFadeStart) * vFadeAFadeCoeff) / vValMax;
-        }
+        Vc::float_m fadeStartMask = dist > vFadeAFadeStart;
+        dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue + (dist - vFadeAFadeStart) * vFadeAFadeCoeff) / vValMax;
 
         Vc::float_m excludeMask = outsideMask | fadeStartMask;
 

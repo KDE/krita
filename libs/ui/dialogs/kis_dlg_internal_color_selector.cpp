@@ -322,13 +322,13 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
     for (quint32 i = 0; i< set->nColors(); i++) {
         KoColorSetEntry entry = set->getColorGlobal(i);
         QPixmap colorSquare = QPixmap(32, 32);
-        if (entry.spotColor) {
+        if (entry.spotColor()) {
             QImage img = QImage(32, 32, QImage::Format_ARGB32);
             QPainter circlePainter;
             img.fill(Qt::transparent);
             circlePainter.begin(&img);
             QBrush brush = QBrush(Qt::SolidPattern);
-            brush.setColor(entry.color.toQColor());
+            brush.setColor(entry.color().toQColor());
             circlePainter.setBrush(brush);
             QPen pen = circlePainter.pen();
             pen.setColor(Qt::transparent);
@@ -338,11 +338,11 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
             circlePainter.end();
             colorSquare = QPixmap::fromImage(img);
         } else {
-            colorSquare.fill(entry.color.toQColor());
+            colorSquare.fill(entry.color().toQColor());
         }
-        QString name = entry.name;
-        if (!entry.id.isEmpty()){
-            name = entry.id + " - " + entry.name;
+        QString name = entry.name();
+        if (!entry.id().isEmpty()){
+            name = entry.id() + " - " + entry.name();
         }
         m_ui->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
     }
@@ -367,7 +367,7 @@ void KisDlgInternalColorSelector::slotSetColorFromColorList()
 
 void KisDlgInternalColorSelector::slotSetColorFromColorSetEntry(KoColorSetEntry entry)
 {
-    slotColorUpdated(entry.color);
+    slotColorUpdated(entry.color());
 }
 
 void KisDlgInternalColorSelector::showEvent(QShowEvent *event)

@@ -118,14 +118,14 @@ class Palette_Docker(DockWidget):
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()
 
-    @pyqtSlot('KoColorSetEntry')
+    @pyqtSlot('PaletteEntry')
     def slot_swatchSelected(self, entry):
-        print("entry " + entry.name)
+        print("entry " + entry.name())
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
-                name = entry.name
+                name = entry.name()
                 if len(entry.id) > 0:
-                    name = entry.id + " - " + entry.name
+                    name = entry.id() + " - " + entry.name()
                 if len(name) > 0:
                     if name in self.colorList:
                         self.colorComboBox.setCurrentIndex(self.colorList.index(name))
@@ -147,7 +147,7 @@ class Palette_Docker(DockWidget):
             entry = palette.colorSetEntryByIndex(i)
             color = palette.colorForEntry(entry).colorForCanvas(self.canvas())
             colorSquare = QPixmap(12, 12)
-            if entry.spotColor is True:
+            if entry.spotColor() is True:
                 img = colorSquare.toImage()
                 circlePainter = QPainter()
                 img.fill(self.colorComboBox.palette().color(QPalette.Base))
@@ -161,9 +161,9 @@ class Palette_Docker(DockWidget):
                 colorSquare = QPixmap.fromImage(img)
             else:
                 colorSquare.fill(color)
-            name = entry.name
-            if len(entry.id) > 0:
-                name = entry.id + " - " + entry.name
+            name = entry.name()
+            if len(entry.id()) > 0:
+                name = entry.id() + " - " + entry.name()
             self.colorList.append(name)
             self.colorComboBox.addItem(QIcon(colorSquare), name)
         self.colorComboBox.setEditable(True)

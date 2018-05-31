@@ -59,6 +59,9 @@ set(kritawidgets_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
+    KisPaletteModel.cpp
+    kis_palette_delegate.cpp
+    kis_palette_view.cpp
 
     KoPageLayoutWidget.cpp
     KoPageLayoutDialog.cpp

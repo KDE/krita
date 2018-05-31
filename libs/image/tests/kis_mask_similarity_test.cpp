@@ -19,11 +19,14 @@
 #include "kis_mask_similarity_test.h"
 
 #include <QTest>
+#include <QPointF>
+
 #include <KoColor.h>
 #include <testutil.h>
 
 #include "kis_brush_mask_applicator_base.h"
 #include "kis_mask_generator.h"
+#include "kis_cubic_curve.h"
 #include "krita_utils.h"
 
 
@@ -96,7 +99,7 @@ void KisMaskSimilarityTest::testCircleMask()
 {
     QRect bounds(0,0,500,500);
     {
-    KisCircleMaskGenerator circVectr(480, 1.0, 0.5, 0.5, 2, true);
+    KisCircleMaskGenerator circVectr(496, 1.0, 0.5, 0.5, 2, true);
     KisCircleMaskGenerator circScalar(circVectr);
 
     circScalar.resetMaskApplicator(true); // Force usage of scalar backend
@@ -108,9 +111,24 @@ void KisMaskSimilarityTest::testGaussCircleMask()
 {
     QRect bounds(0,0,500,500);
     {
-    KisGaussCircleMaskGenerator circVectr(480, 1.0, 0.5, 0.5, 2, true);
+    KisGaussCircleMaskGenerator circVectr(496, 1.0, 0.5, 0.5, 2, true);
     circVectr.setDiameter(480);
     KisGaussCircleMaskGenerator circScalar(circVectr);
+
+    circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+    KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds);
+    }
+}
+
+void KisMaskSimilarityTest::testSoftCircleMask()
+{
+    QRect bounds(0,0,500,500);
+    KisCubicCurve pointsCurve;
+    pointsCurve.fromString(QString("0,1;1,0"));
+    {
+    KisCurveCircleMaskGenerator circVectr(496, 1.0, 0.5, 0.5, 2, pointsCurve,true);
+    circVectr.setSoftness(1.0);
+    KisCurveCircleMaskGenerator circScalar(circVectr);
 
     circScalar.resetMaskApplicator(true); // Force usage of scalar backend
     KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds);

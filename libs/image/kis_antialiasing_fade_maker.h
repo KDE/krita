@@ -99,6 +99,10 @@ public:
         return m_antialiasingFadeCoeff;
     }
 
+    bool getAliasingEnabled(){
+        return m_enableAntialiasing;
+    }
+
 private:
     qreal m_radius;
     quint8 m_fadeStartValue;

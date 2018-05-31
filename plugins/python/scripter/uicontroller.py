@@ -15,14 +15,14 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
-from PyQt5.QtGui import QTextCursor, QPalette, QFontInfo
+from PyQt5.QtCore import Qt, QObject, QFileInfo, QRect
+from PyQt5.QtGui import QTextCursor, QPalette
 from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QLabel, QVBoxLayout, QMessageBox,
                              QSplitter, QSizePolicy)
-from PyQt5.QtCore import Qt, QObject, QFileInfo, pyqtSlot, QRect
-from scripter.ui_scripter.syntax import syntax, syntaxstyles
-from scripter.ui_scripter.editor import pythoneditor
-from scripter import scripterdialog
+from .ui_scripter.syntax import syntax, syntaxstyles
+from .ui_scripter.editor import pythoneditor
+from . import scripterdialog
 import importlib
 
 KEY_GEOMETRY = "geometry"
@@ -122,7 +122,8 @@ class UIController(object):
         modules = []
 
         for class_path in actions_module.action_classes:
-            _module, _klass = class_path.rsplit('.', maxsplit=1)
+            _module = class_path[:class_path.rfind(".")]
+            _klass = class_path[class_path.rfind(".") + 1:]
             modules.append(dict(module='{0}.{1}'.format(module_path, _module),
                                 klass=_klass))
 
@@ -141,8 +142,9 @@ class UIController(object):
         widgetsModule = importlib.import_module(modulePath)
         modules = []
 
-        for classPath in widgetsModule.widgetClasses:
-            _module, _klass = classPath.rsplit('.', maxsplit=1)
+        for class_path in widgetsModule.widgetClasses:
+            _module = class_path[:class_path.rfind(".")]
+            _klass = class_path[class_path.rfind(".") + 1:]
             modules.append(dict(module='{0}.{1}'.format(modulePath, _module),
                                 klass=_klass))
 

@@ -56,7 +56,7 @@ KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisP
     m_particleBrush.setProperties(&m_properties);
     m_particleBrush.initParticles();
 
-    m_airbrushOptionWidget.readOptionSetting(settings);
+    m_airbrushOption.readOptionSetting(settings);
 
     m_rateOption.readOptionSetting(settings);
     m_rateOption.resetAllSensors();
@@ -78,12 +78,12 @@ KisSpacingInformation KisParticlePaintOp::updateSpacingImpl(const KisPaintInform
 {
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOptionWidget, nullptr, info);
+                                                   &m_airbrushOption, nullptr, info);
 }
 
 KisTimingInformation KisParticlePaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOptionWidget, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }
 
 void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,

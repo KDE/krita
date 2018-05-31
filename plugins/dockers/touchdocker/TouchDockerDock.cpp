@@ -52,6 +52,21 @@
 #include <DocumentManager.h>
 #include <KisSketchView.h>
 
+#include <QVersionNumber>
+
+namespace
+{
+
+bool shouldSetAcceptTouchEvents()
+{
+    // See https://bugreports.qt.io/browse/QTBUG-66718
+    static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
+    static bool retval = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
+    return retval;
+}
+
+} // namespace
+
 class TouchDockerDock::Private
 {
 public:
@@ -99,6 +114,9 @@ TouchDockerDock::TouchDockerDock()
     }
 
     m_quickWidget = new QQuickWidget(this);
+    if (shouldSetAcceptTouchEvents()) {
+        m_quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     setWidget(m_quickWidget);
     setEnabled(true);
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
@@ -309,6 +327,9 @@ KoDialog *TouchDockerDock::createDialog(const QString qml)
     dlg->setButtons(KoDialog::None);
 
     QQuickWidget *quickWidget = new QQuickWidget(this);
+    if (shouldSetAcceptTouchEvents()) {
+        quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     dlg->setMainWidget(quickWidget);
 
     setEnabled(true);

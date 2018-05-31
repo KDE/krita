@@ -56,9 +56,9 @@ private:
 
     DeformBrush m_deformBrush;
     DeformOption m_properties;
-    BrushSizeOption m_sizeProperties;
+    KisBrushSizeOptionProperties m_sizeProperties;
 
-    KisAirbrushOptionWidget m_airbrushOptionWidget;
+    KisAirbrushOptionProperties m_airbrushOption;
 
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

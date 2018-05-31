@@ -78,7 +78,7 @@ protected:
 
 
 private:
-    KisAirbrushOptionWidget m_airbrushOptionWidget;
+    KisAirbrushOptionProperties m_airbrushOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRatioOption m_ratioOption;
     KisPressureSpacingOption m_spacingOption;

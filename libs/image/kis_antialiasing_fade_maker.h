@@ -83,6 +83,22 @@ public:
         return false;
     }
 
+    qreal getRadius(){
+        return m_radius;
+    }
+
+    qreal getAntialiasingFadeStart(){
+        return m_antialiasingFadeStart;
+    }
+
+    qreal getFadeStartValue() {
+        return m_fadeStartValue;
+    }
+
+    qreal getAntialiasingFadeCoeff(){
+        return m_antialiasingFadeCoeff;
+    }
+
 private:
     qreal m_radius;
     quint8 m_fadeStartValue;

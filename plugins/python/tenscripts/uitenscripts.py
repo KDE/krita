@@ -13,7 +13,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
                              QLineEdit, QScrollArea, QGridLayout, QFileDialog,
                              QLabel, QDialogButtonBox)
-from tenscripts import tenscriptsdialog
+from . import tenscriptsdialog
 import krita
 
 
@@ -27,7 +27,7 @@ class UITenScripts(object):
         self.layout = QVBoxLayout(self.mainDialog)
         self.baseWidget = QWidget()
         self.baseArea = QWidget()
-        self.scrollArea =  QScrollArea()
+        self.scrollArea = QScrollArea()
         self.scriptsLayout = QGridLayout()
 
         self.buttonBox.accepted.connect(self.mainDialog.accept)
@@ -86,7 +86,7 @@ class UITenScripts(object):
         dialog = QFileDialog(self.mainDialog)
         dialog.setNameFilter('Python files (*.py)')
 
-        if dialog.exec():
+        if dialog.exec_():
             selectedFile = dialog.selectedFiles()[0]
             obj = self.mainDialog.sender()
             textField = self.scriptsLayout.itemAt(self.scriptsLayout.indexOf(obj)-1).widget()

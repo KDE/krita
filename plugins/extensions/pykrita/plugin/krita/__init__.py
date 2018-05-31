@@ -1,14 +1,16 @@
+from __future__ import print_function
+
 import pykrita
 import os
 import sys
-
-import signal
-signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 from .api import *
 from .decorators import *
 from .dockwidgetfactory import *
 from PyKrita import krita
+
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 krita_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, krita_path)
@@ -26,7 +28,10 @@ except ImportError:
 import excepthook
 excepthook.install()
 
-import builtins
+if sys.version_info[0] > 2:
+    import builtins
+else:
+    import __builtin__ as builtins
 builtins.i18n = lambda s: QCoreApplication.translate("PyKrita", s)
 builtins.Scripter = Krita.instance()
 builtins.Application = Krita.instance()

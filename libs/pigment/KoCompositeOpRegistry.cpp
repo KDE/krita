@@ -132,7 +132,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[9], KoID(COMPOSITE_COLOR_HSV         , i18n("Color HSV")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_HUE_HSV           , i18n("Hue HSV")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_SATURATION_HSV    , i18n("Saturation HSV")));
-    m_map.insert(m_categories[9], KoID(COMPOSITE_VALUE             , i18n("Value")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_VALUE             , i18nc("HSV Value", "Value")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_DEC_SATURATION_HSV, i18n("Decrease Saturation HSV")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_DEC_VALUE         , i18n("Decrease Value")));

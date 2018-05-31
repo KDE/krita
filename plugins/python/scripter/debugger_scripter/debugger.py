@@ -17,7 +17,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
 import bdb
 import multiprocessing
-import asyncio
+import sys
+if sys.version_info[0] > 2:
+    import asyncio
+else:
+    import trollius as asyncio
 from . import debuggerformatter
 
 
@@ -97,7 +101,9 @@ class Debugger(bdb.Bdb):
 
         while True:
             if self.applicationq.empty():
-                yield from asyncio.sleep(0.3)
+                # 'yield from' is not available in Python 2.
+                for i in asyncio.sleep(0.3):
+                    yield i
             else:
                 while not self.applicationq.empty():
                     self.application_data.update(self.applicationq.get())
@@ -106,15 +112,15 @@ class Debugger(bdb.Bdb):
 
     @asyncio.coroutine
     def start(self):
-        yield from self.display()
+        yield self.display()
 
     @asyncio.coroutine
     def step(self):
         self.debugq.put("step")
-        yield from self.display()
+        yield self.display()
 
     @asyncio.coroutine
     def stop(self):
         self.debugq.put("stop")
         self.applicationq.put({"quit": True})
-        yield from self.display()
+        yield self.display()

@@ -139,3 +139,8 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
     d->transformedFadeX = d->xfadecoef * safeSoftnessCoeff;
     d->transformedFadeY = d->yfadecoef * safeSoftnessCoeff;
 }
+
+void KisCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
+}

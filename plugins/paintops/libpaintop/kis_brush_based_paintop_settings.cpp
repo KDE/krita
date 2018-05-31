@@ -40,7 +40,7 @@ struct BrushReader {
     }
 
     const KisBrushBasedPaintOpSettings *m_parent;
-    KisBrushOption m_option;
+    KisBrushOptionProperties m_option;
 };
 
 struct BrushWriter {
@@ -59,7 +59,7 @@ struct BrushWriter {
     }
 
     KisBrushBasedPaintOpSettings *m_parent;
-    KisBrushOption m_option;
+    KisBrushOptionProperties m_option;
 };
 
 

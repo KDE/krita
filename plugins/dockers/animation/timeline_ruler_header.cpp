@@ -55,10 +55,6 @@ TimelineRulerHeader::TimelineRulerHeader(QWidget *parent)
 {
     setSectionResizeMode(QHeaderView::Fixed);
     setDefaultSectionSize(18);
-
-
-
-
 }
 
 TimelineRulerHeader::~TimelineRulerHeader()
@@ -66,24 +62,21 @@ TimelineRulerHeader::~TimelineRulerHeader()
 }
 
 
-void TimelineRulerHeader::setActionManager( KisActionManager * actionManager)
+void TimelineRulerHeader::setActionManager(KisActionManager *actionManager)
 {
     m_d->actionMan = actionManager;
 
     if (actionManager) {
         KisAction *action;
 
-        action = actionManager->createAction("insert_columns_right");
-        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnsRight()));
+        action = actionManager->createAction("insert_column_left");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnLeft()));
 
-        action = actionManager->createAction("insert_n_columns_right");
-        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnsRightCustom()));
+        action = actionManager->createAction("insert_column_right");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnRight()));
 
-        action = actionManager->createAction("insert_columns_left");
-        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnsLeft()));
-
-        action = actionManager->createAction("insert_n_columns_left");
-        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertColumnsLeftCustom()));
+        action = actionManager->createAction("insert_multiple_columns");
+        connect(action, SIGNAL(triggered()), SIGNAL(sigInsertMultipleColumns()));
 
         action = actionManager->createAction("remove_columns_and_pull");
         connect(action, SIGNAL(triggered()), SIGNAL(sigRemoveColumnsAndShift()));
@@ -94,13 +87,13 @@ void TimelineRulerHeader::setActionManager( KisActionManager * actionManager)
         action = actionManager->createAction("insert_hold_column");
         connect(action, SIGNAL(triggered()), SIGNAL(sigInsertHoldColumns()));
 
-        action = actionManager->createAction("insert_n_hold_columns");
+        action = actionManager->createAction("insert_multiple_hold_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigInsertHoldColumnsCustom()));
 
         action = actionManager->createAction("remove_hold_column");
         connect(action, SIGNAL(triggered()), SIGNAL(sigRemoveHoldColumns()));
 
-        action = actionManager->createAction("remove_n_hold_columns");
+        action = actionManager->createAction("remove_multiple_hold_columns");
         connect(action, SIGNAL(triggered()), SIGNAL(sigRemoveHoldColumnsCustom()));
 
         action = actionManager->createAction("mirror_columns");
@@ -440,26 +433,30 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
             KisActionManager::safePopulateMenu(&menu, "cut_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "copy_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "paste_columns_from_clipboard", m_d->actionMan);
-            menu.addSeparator();
-
-            QMenu *frames = menu.addMenu(i18nc("@item:inmenu", "Keyframe Columns"));
-            KisActionManager::safePopulateMenu(frames, "insert_columns_right", m_d->actionMan);
-            KisActionManager::safePopulateMenu(frames, "insert_columns_left", m_d->actionMan);
-            menu.addSeparator();
-            KisActionManager::safePopulateMenu(frames, "insert_n_columns_right", m_d->actionMan);
-            KisActionManager::safePopulateMenu(frames, "insert_n_columns_left", m_d->actionMan);
-
-            QMenu *hold = menu.addMenu(i18nc("@item:inmenu", "Hold Frame Columns"));
-            KisActionManager::safePopulateMenu(hold, "insert_hold_column", m_d->actionMan);
-            KisActionManager::safePopulateMenu(hold, "remove_hold_column", m_d->actionMan);
-            menu.addSeparator();
-            KisActionManager::safePopulateMenu(hold, "insert_n_hold_columns", m_d->actionMan);
-            KisActionManager::safePopulateMenu(hold, "remove_n_hold_columns", m_d->actionMan);
 
             menu.addSeparator();
+
+            {   //Frame Columns Submenu
+                QMenu *frames = menu.addMenu(i18nc("@item:inmenu", "Keyframe Columns"));
+                KisActionManager::safePopulateMenu(frames, "insert_column_left", m_d->actionMan);
+                KisActionManager::safePopulateMenu(frames, "insert_column_right", m_d->actionMan);
+                frames->addSeparator();
+                KisActionManager::safePopulateMenu(frames, "insert_multiple_columns", m_d->actionMan);
+            }
+
+            {   //Hold Columns Submenu
+                QMenu *hold = menu.addMenu(i18nc("@item:inmenu", "Hold Frame Columns"));
+                KisActionManager::safePopulateMenu(hold, "insert_hold_column", m_d->actionMan);
+                KisActionManager::safePopulateMenu(hold, "remove_hold_column", m_d->actionMan);
+                hold->addSeparator();
+                KisActionManager::safePopulateMenu(hold, "insert_multiple_hold_columns", m_d->actionMan);
+                KisActionManager::safePopulateMenu(hold, "remove_multiple_hold_columns", m_d->actionMan);
+            }
+
+            menu.addSeparator();
+
             KisActionManager::safePopulateMenu(&menu, "remove_columns", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "remove_columns_and_pull", m_d->actionMan);
-
 
             if (numSelectedColumns > 1) {
                 menu.addSeparator();

@@ -48,7 +48,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
 
     m_dev = node ? node->paintDevice() : 0;
 
-    KisBrushOption brushOption;
+    KisBrushOptionProperties brushOption;
     brushOption.readOptionSetting(settings);
     KisBrushSP brush = brushOption.brush();
     KisFixedPaintDeviceSP dab = cachedDab(painter->device()->compositionSourceColorSpace());

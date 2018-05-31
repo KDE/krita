@@ -33,6 +33,7 @@ public:
     KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs);
 
     KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
+    QVector<KisReferenceImage*> referenceImages() const;
 
     QColor getPixel(QPointF position) const;
 

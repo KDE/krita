@@ -158,7 +158,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_reselect = actionManager->createAction("reselect");
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
-    m_invert = actionManager->createAction("invert");
+    m_invert = actionManager->createAction("invert_selection");
     m_invert->setOperationID("invertselection");
 
     actionManager->registerOperation(new KisInvertSelectionOperation);

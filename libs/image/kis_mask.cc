@@ -309,32 +309,65 @@ QRect KisMask::needRect(const QRect &rect,  PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     QRect resultRect = rect;
-    if (m_d->selection)
-        resultRect &= m_d->selection->selectedRect();
+    if (m_d->selection) {
+        QRect selectionExtent = m_d->selection->selectedRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            selectionExtent |= temporaryTarget->extent();
+        }
+
+        resultRect &= selectionExtent;
+    }
 
     return resultRect;
 }
 
 QRect KisMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
-    Q_UNUSED(pos);
-    QRect resultRect = rect;
-    if (m_d->selection)
-        resultRect &= m_d->selection->selectedRect();
-
-    return resultRect;
+    return KisMask::needRect(rect, pos);
 }
 
 QRect KisMask::extent() const
 {
-    return m_d->selection ? m_d->selection->selectedRect() :
-           parent() ? parent()->extent() : QRect();
+    QRect resultRect;
+
+    if (m_d->selection) {
+        resultRect = m_d->selection->selectedRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            resultRect |= temporaryTarget->extent();
+        }
+    } else if (KisNodeSP parent = this->parent()) {
+        resultRect = parent->extent();
+    }
+
+    return resultRect;
 }
 
 QRect KisMask::exactBounds() const
 {
-    return m_d->selection ? m_d->selection->selectedExactRect() :
-           parent() ? parent()->exactBounds() : QRect();
+    QRect resultRect;
+
+    if (m_d->selection) {
+        resultRect = m_d->selection->selectedExactRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            resultRect |= temporaryTarget->exactBounds();
+        }
+    } else if (KisNodeSP parent = this->parent()) {
+        resultRect = parent->exactBounds();
+    }
+
+    return resultRect;
 }
 
 qint32 KisMask::x() const

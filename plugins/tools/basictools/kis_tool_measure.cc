@@ -66,7 +66,6 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
     unitBox->setCurrentIndex(m_unit.indexInListForUi(KoUnit::ListAll));
 
     optionLayout->addWidget(unitBox, 0, 2);
-    optionLayout->addWidget(new QLabel(i18n("Degree:"), this), 1, 2);
     optionLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding), 2, 0, 1, 2);
 }
 
@@ -78,7 +77,7 @@ void KisToolMeasureOptionsWidget::slotSetDistance(double distance)
 
 void KisToolMeasureOptionsWidget::slotSetAngle(double angle)
 {
-    m_angleLabel->setText(QString("%1").arg(angle, 5, 'f', 1));
+    m_angleLabel->setText(QString(i18nc("angle value in degrees", "%1°")).arg(angle, 5, 'f', 1));
 }
 
 void KisToolMeasureOptionsWidget::slotUnitChanged(int index)

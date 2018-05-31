@@ -58,7 +58,7 @@ KisDeformPaintOp::KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPaint
 
     m_sizeProperties.readOptionSetting(settings);
     m_properties.readOptionSetting(settings);
-    m_airbrushOptionWidget.readOptionSetting(settings);
+    m_airbrushOption.readOptionSetting(settings);
 
     // sensors
     m_sizeOption.readOptionSetting(settings);
@@ -151,10 +151,10 @@ KisSpacingInformation KisDeformPaintOp::updateSpacingImpl(const KisPaintInformat
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false, m_spacing, false,
                                                    1.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOptionWidget, nullptr, info);
+                                                   &m_airbrushOption, nullptr, info);
 }
 
 KisTimingInformation KisDeformPaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOptionWidget, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }

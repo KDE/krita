@@ -77,7 +77,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->ui->intEdgeDetectionSize->setRange(0, 100);
     m_d->ui->intEdgeDetectionSize->setExponentRatio(2.0);
     m_d->ui->intEdgeDetectionSize->setSuffix(i18n(" px"));
-    m_d->ui->intEdgeDetectionSize->setPrefix("Edge detection: ");
+    m_d->ui->intEdgeDetectionSize->setPrefix(i18n("Edge detection: "));
     m_d->ui->intEdgeDetectionSize->setToolTip(
         i18nc("@info:tooltip",
               "Activate for images with vast solid areas. "
@@ -87,7 +87,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
     m_d->ui->intRadius->setRange(0, 1000);
     m_d->ui->intRadius->setExponentRatio(3.0);
     m_d->ui->intRadius->setSuffix(i18n(" px"));
-    m_d->ui->intRadius->setPrefix("Gap close hint: ");
+    m_d->ui->intRadius->setPrefix(i18n("Gap close hint: "));
     m_d->ui->intRadius->setToolTip(
         i18nc("@info:tooltip",
               "The mask will try to close non-closed contours "
@@ -95,7 +95,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->ui->intCleanUp->setRange(0, 100);
     m_d->ui->intCleanUp->setSuffix(i18n(" %"));
-    m_d->ui->intCleanUp->setPrefix("Clean up: ");
+    m_d->ui->intCleanUp->setPrefix(i18n("Clean up: "));
     m_d->ui->intCleanUp->setToolTip(
         i18nc("@info:tooltip",
               "The mask will try to remove parts of the key strokes "

@@ -308,6 +308,10 @@ void Node::setLocked(bool value)
     d->node->setUserLocked(value);
 }
 
+bool Node::hasExtents()
+{
+    return !d->node->extent().isEmpty();
+}
 
 QString Node::name() const
 {

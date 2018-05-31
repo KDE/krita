@@ -70,7 +70,7 @@
           <item>
            <widget class="QRadioButton" name="radioPasteMonitor">
             <property name="text">
-             <string>Assume &amp;monitor profile (like you see it in the other application)</string>
+             <string>Assume &amp;monitor profile (like you see it in other applications)</string>
             </property>
            </widget>
           </item>
@@ -402,6 +402,11 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>KisCmbIDList</class>
+   <extends>QComboBox</extends>
+   <header>widgets/kis_cmb_idlist.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
@@ -411,11 +416,6 @@
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisCmbIDList</class>
-   <extends>QComboBox</extends>
-   <header>widgets/kis_cmb_idlist.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

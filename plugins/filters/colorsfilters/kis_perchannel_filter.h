@@ -28,33 +28,55 @@
 #include <filter/kis_color_transformation_configuration.h>
 #include <kis_config_widget.h>
 #include <kis_paint_device.h>
+#include "ui_wdg_perchannel.h"
 
 #include "virtual_channel_info.h"
 
-#include "kis_multichannel_filter_base.h"
+
+class WdgPerChannel : public QWidget, public Ui::WdgPerChannel
+{
+    Q_OBJECT
+
+public:
+    WdgPerChannel(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
+};
 
 class KisPerChannelFilterConfiguration
-        : public KisMultiChannelFilterConfigurationBase
+        : public KisColorTransformationConfiguration
 {
 public:
-    KisPerChannelFilterConfiguration(int channelCount);
+    KisPerChannelFilterConfiguration(int n);
     ~KisPerChannelFilterConfiguration() override;
 
-    /*
     using KisFilterConfiguration::fromXML;
     using KisFilterConfiguration::toXML;
     using KisFilterConfiguration::fromLegacyXML;
-    */
 
-    using KisFilterConfiguration::fromXML;
-    using KisFilterConfiguration::toXML;
+    void fromLegacyXML(const QDomElement& root) override;
+
     void fromXML(const QDomElement& e) override;
     void toXML(QDomDocument& doc, QDomElement& root) const override;
+
+    void setCurves(QList<KisCubicCurve> &curves) override;
+    static inline void initDefaultCurves(QList<KisCubicCurve> &curves, int nCh);
+    bool isCompatible(const KisPaintDeviceSP) const override;
+
+    const QVector<QVector<quint16> >& transfers() const;
+    const QList<KisCubicCurve>& curves() const override;
+private:
+    QList<KisCubicCurve> m_curves;
+
+private:
+    void updateTransfers();
+private:
+    QVector<QVector<quint16> > m_transfers;
 };
 
 
 /**
- * This class is a filter to adjust channels independently
+ * This class is generic for filters that affect channel separately
  */
 class KisPerChannelFilter
         : public KisColorTransformationFilter
@@ -75,7 +97,7 @@ public:
 private:
 };
 
-class KisPerChannelConfigWidget : public KisMultiChannelConfigWidgetBase
+class KisPerChannelConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 
@@ -84,10 +106,34 @@ public:
     ~KisPerChannelConfigWidget() override;
 
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
-    KisPropertiesConfigurationSP configuration() const override;
+    KisPropertiesConfigurationSP  configuration() const override;
 
-protected:
-    void updateChannelRange() override;
+private Q_SLOTS:
+    virtual void setActiveChannel(int ch);
+    void logHistView();
+    void resetCurve();
+
+
+private:
+
+    QVector<VirtualChannelInfo> m_virtualChannels;
+    int m_activeVChannel;
+
+
+    // private routines
+    inline QPixmap getHistogram();
+    inline QPixmap createGradient(Qt::Orientation orient /*, int invert (not used now) */);
+
+    // members
+    WdgPerChannel * m_page;
+    KisPaintDeviceSP m_dev;
+    KisHistogram *m_histogram;
+    mutable QList<KisCubicCurve> m_curves;
+
+    // scales for displaying color numbers
+    double m_scale;
+    double m_shift;
+    bool checkReset;
 };
 
 #endif

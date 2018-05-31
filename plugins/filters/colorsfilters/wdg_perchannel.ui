@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>456</height>
+    <width>376</width>
+    <height>384</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -319,31 +319,11 @@
     </layout>
    </item>
    <item row="0" column="1" colspan="2">
-    <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="2">
-      <widget class="QCheckBox" name="chkLogarithmic">
-       <property name="text">
-        <string>Logarithmic</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" rowspan="2">
-      <widget class="QComboBox" name="cmbChannel"/>
-     </item>
-     <item row="0" column="3" rowspan="2">
-      <widget class="QPushButton" name="resetButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Reset</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="2">
+    <layout class="QHBoxLayout" stretch="1,2,2,1,0">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item>
       <widget class="QLabel" name="textLabel1">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -359,7 +339,10 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item>
+      <widget class="QComboBox" name="cmbChannel"/>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -372,16 +355,23 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="cmbDriverChannel"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="lblDriverChannel">
+     <item>
+      <widget class="QCheckBox" name="chkLogarithmic">
        <property name="text">
-        <string>Driver channel</string>
+        <string>Logarithmic</string>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Reset</string>
        </property>
       </widget>
      </item>

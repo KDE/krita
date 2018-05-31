@@ -379,6 +379,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
 {
     KisConfig cfg;
 
+    d->resourceDatabase.initialize(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+
 #if defined(Q_OS_WIN)
 #ifdef ENV32BIT
 

@@ -257,7 +257,7 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 void KisScratchPad::pick(KoPointerEvent *event)
 {
     KoColor color;
-    if (KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint(), &color)) {
+    if (KisToolUtils::pickColor(color, m_paintLayer->projection(), event->point.toPoint())) {
         emit colorSelected(color);
     }
 }

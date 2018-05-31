@@ -1223,12 +1223,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="krita_filter_invert">
+    <Action name="invert_selection">
       <icon></icon>
-      <text>&amp;Invert</text>
+      <text>&amp;Invert Selection</text>
       <whatsThis></whatsThis>
-      <toolTip>Invert</toolTip>
-      <iconText>Invert</iconText>
+      <toolTip>Invert Selection</toolTip>
+      <iconText>Invert Selection</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+I</shortcut>
@@ -1511,10 +1511,10 @@
     </Action>
     <Action name="Recording_Stop_Recording_Macro">
       <icon>media-playback-stop</icon>
-      <text>Stop &amp;recording actions</text>
+      <text>Stop &amp;recording macro</text>
       <whatsThis></whatsThis>
-      <toolTip>Stop recording actions</toolTip>
-      <iconText>Stop recording actions</iconText>
+      <toolTip>Stop recording macro</toolTip>
+      <iconText>Stop recording macro</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

@@ -39,8 +39,6 @@ struct KisWindowLayoutManager::Private {
     bool primaryWorkspaceFollowsFocus{false};
     QUuid primaryWindow;
 
-    QString lastLayoutName;
-
     QVector<DisplayLayout*> displayLayouts;
 
     void loadDisplayLayouts() {
@@ -130,8 +128,9 @@ KisWindowLayoutManager::KisWindowLayoutManager()
 {
     d->loadDisplayLayouts();
 
-    connect(qobject_cast<KisApplication*>(KisApplication::instance()), SIGNAL(slotFocusChanged(QWidget*, QWidget*)),
-            this, SLOT(focusChanged(QWidget*, QWidget*)));
+    connect(qobject_cast<KisApplication*>(KisApplication::instance()),
+            SIGNAL(focusChanged(QWidget*, QWidget*)),
+            this, SLOT(slotFocusChanged(QWidget*, QWidget*)));
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(slotScreensChanged()));
     connect(QApplication::desktop(), SIGNAL(screenCountChanged(int)), this, SLOT(slotScreensChanged()));
@@ -209,16 +208,8 @@ void KisWindowLayoutManager::slotFocusChanged(QWidget *old, QWidget *now)
     newMainWindow->windowFocused();
 }
 
-QString KisWindowLayoutManager::lastLayoutName()
-{
-    return d->lastLayoutName;
-}
-
 void KisWindowLayoutManager::setLastUsedLayout(const KisWindowLayoutResource *layout)
 {
-    // For layout selector, accept both window layouts and sessions
-    d->lastLayoutName = layout->name();
-
     // For automatic switching, only allow a window layout proper
     auto *session = dynamic_cast<const KisSessionResource*>(layout);
     if (session) return;

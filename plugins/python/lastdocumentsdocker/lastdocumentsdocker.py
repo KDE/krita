@@ -11,7 +11,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
 import krita
-from lastdocumentsdocker import lastdocumentslistmodel
+from . import lastdocumentslistmodel
 
 
 class LastDocumentsDocker(krita.DockWidget):

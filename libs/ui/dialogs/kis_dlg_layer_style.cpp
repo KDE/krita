@@ -630,7 +630,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbShadowMode, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnShadowColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
-    connect(ui.intOpacity2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));;
+    connect(ui.intOpacity2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     // Contour
     m_contour->ui.intRange->setRange(1, 100);

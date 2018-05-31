@@ -19,6 +19,7 @@
 #ifndef __TIMELINE_FRAMES_VIEW_H
 #define __TIMELINE_FRAMES_VIEW_H
 
+
 #include <QScopedPointer>
 #include <QTableView>
 #include "kis_action_manager.h"
@@ -27,10 +28,20 @@
 class KisAction;
 class TimelineWidget;
 
+enum TimelineDirection : short
+{
+    LEFT = -1,
+    BEFORE = -1,
+
+    RIGHT = 1,
+    AFTER = 1
+};
+
 
 class KRITAANIMATIONDOCKER_EXPORT TimelineFramesView : public QTableView
 {
     Q_OBJECT
+
 public:
     TimelineFramesView(QWidget *parent);
     ~TimelineFramesView() override;
@@ -41,7 +52,7 @@ public:
 
     void setShowInTimeline(KisAction *action);
 
-    void setActionManager( KisActionManager * actionManager);
+    void setActionManager(KisActionManager *actionManager);
 
 public Q_SLOTS:
     void slotSelectionChanged();
@@ -51,59 +62,60 @@ private Q_SLOTS:
     void slotUpdateLayersMenu();
     void slotUpdateFrameActions();
 
+    void slotSetStartTimeToCurrentPosition();
+    void slotSetEndTimeToCurrentPosition();
+    void slotUpdatePlackbackRange();
+
+    // Layer
     void slotAddNewLayer();
     void slotAddExistingLayer(QAction *action);
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
-
     void slotRemoveLayer();
-
     void slotLayerContextMenuRequested(const QPoint &globalPos);
 
-    void slotNewFrame();
-    void slotCopyFrame();
+    // New, Insert and Remove Frames
+    void slotAddBlankFrame();
+    void slotAddDuplicateFrame();
 
+    void slotInsertKeyframeLeft() {insertKeyframes(-1, 1, TimelineDirection::LEFT, false);}
+    void slotInsertKeyframeRight() {insertKeyframes(-1, 1, TimelineDirection::RIGHT, false);}
 
-    void slotInsertKeyframesLeft(int count = -1, bool forceEntireColumn = false);
-    void slotInsertKeyframesRight(int count = -1, bool forceEntireColumn = false);
+    void slotInsertKeyframeColumnLeft() {insertKeyframes(-1, 1, TimelineDirection::LEFT, true);}
+    void slotInsertKeyframeColumnRight() {insertKeyframes(-1, 1, TimelineDirection::RIGHT, true);}
 
-    void slotInsertKeyframesLeftCustom();
-    void slotInsertKeyframesRightCustom();
+    void slotInsertMultipleKeyframes() {insertMultipleKeyframes(false);}
+    void slotInsertMultipleKeyframeColumns() {insertMultipleKeyframes(true);}
 
-    void slotRemoveFrame(bool forceEntireColumn = false, bool needsOffset = false);
-    void slotRemoveFramesAndShift(bool forceEntireColumn = false);
+    void slotRemoveSelectedFrames(bool entireColumn = false, bool needsOffset = false);
+    void slotRemoveSelectedFramesAndShift() {slotRemoveSelectedFrames(false, true);}
 
-    void slotInsertColumnsLeft(int count = -1);
-    void slotInsertColumnsLeftCustom();
+    void slotRemoveSelectedColumns() {slotRemoveSelectedFrames(true);}
+    void slotRemoveSelectedColumnsAndShift() {slotRemoveSelectedFrames(true, true);}
 
-    void slotInsertColumnsRight(int count = -1);
-    void slotInsertColumnsRightCustom();
+    void slotInsertHoldFrame() {insertOrRemoveHoldFrames(1);}
+    void slotRemoveHoldFrame() {insertOrRemoveHoldFrames(-1);}
 
-    void slotRemoveColumns();
-    void slotRemoveColumnsAndShift();
+    void slotInsertHoldFrameColumn() {insertOrRemoveHoldFrames(1,true);}
+    void slotRemoveHoldFrameColumn() {insertOrRemoveHoldFrames(-1,true);}
 
-    void slotInsertHoldFrames(int count = 1, bool forceEntireColumn = false);
-    void slotRemoveHoldFrames(int count = 1, bool forceEntireColumn = false);
+    void slotInsertMultipleHoldFrames() {insertOrRemoveMultipleHoldFrames(true);}
+    void slotRemoveMultipleHoldFrames() {insertOrRemoveMultipleHoldFrames(false);}
 
-    void slotInsertHoldFramesCustom();
-    void slotRemoveHoldFramesCustom();
+    void slotInsertMultipleHoldFrameColumns() {insertOrRemoveMultipleHoldFrames(true, true);}
+    void slotRemoveMultipleHoldFrameColumns() {insertOrRemoveMultipleHoldFrames(false, true);}
 
-    void slotInsertHoldColumns(int count = 1);
-    void slotRemoveHoldColumns(int count = 1);
+    void slotMirrorFrames(bool entireColumn = false);
+    void slotMirrorColumns() {slotMirrorFrames(true);}
 
-    void slotInsertHoldColumnsCustom();
-    void slotRemoveHoldColumnsCustom();
+    // Copy-paste
+    void slotCopyFrames() {cutCopyImpl(false, true);}
+    void slotCutFrames() {cutCopyImpl(false, false);}
 
-    void slotMirrorFrames(bool forceEntireColumn = false);
-    void slotMirrorColumns();
+    void slotCopyColumns() {cutCopyImpl(true, true);}
+    void slotCutColumns() {cutCopyImpl(true, false);}
 
-
-    void slotCopyFrames(bool forceEntireColumn = false);
-    void slotCutFrames(bool forceEntireColumn = false);
-    void slotPasteFrames(bool forceEntireColumn = false);
-
-    void slotCopyColumns();
-    void slotCutColumns();
-    void slotPasteColumns();
+    void slotPasteFrames(bool entireColumn = false);
+    void slotPasteColumns() {slotPasteFrames(true);}
 
     void slotReselectCurrentIndex();
 
@@ -117,7 +129,7 @@ private Q_SLOTS:
     void slotColorLabelChanged(int);
     void slotEnsureRowVisible(int row);
 
-
+    // Audio
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);
     void slotAudioChannelRemove();
@@ -126,14 +138,28 @@ private Q_SLOTS:
 
 private:
     void setFramesPerSecond(int fps);
+
     void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
 
-    void insertFramesImpl(int insertAtColumn, int count, QSet<int> rows, bool forceEntireColumn);
+    /*   Insert new keyframes/columns.
+     *
+     *   count        - Number of frames to add. If <0, use number of currently SELECTED frames.
+     *   timing       - Animation timing of frames to be added (on 1s, 2s, 3s, etc.)
+     *   direction    - Insert frames before (left) or after (right) selection scrubber.
+     *   entireColumn - Create frames on all layers (rows) instead of just the active layer?
+     */
+    void insertKeyframes(int count = 1, int timing = 1,
+                         TimelineDirection direction = TimelineDirection::LEFT, bool entireColumn = false);
+    void insertMultipleKeyframes(bool entireColumn = false);
+
+    void insertOrRemoveHoldFrames(int count, bool entireColumn = false);
+    void insertOrRemoveMultipleHoldFrames(bool insertion, bool entireColumn = false);
+
+    void cutCopyImpl(bool entireColumn, bool copy);
 
     void createFrameEditingMenuActions(QMenu *menu, bool addFrameCreationActions);
 
-    QModelIndexList calculateSelectionSpan(bool forceEntireColumn, bool editableOnly = true) const;
-    void cutCopyImpl(bool forceEntireColumn, bool copy);
+    QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
 
     int defaultNumberOfFramesToAdd() const;
     void setDefaultNumberOfFramesToAdd(int value) const;
@@ -161,7 +187,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
-    void rowsInserted(const QModelIndex& parent, int start, int end) override;
+    void rowsInserted(const QModelIndex &parent, int start, int end) override;
     bool viewportEvent(QEvent *event) override;
 
 private:

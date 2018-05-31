@@ -82,6 +82,7 @@ void KisToolColorPicker::deactivate()
 
 void KisToolColorPicker::pickColor(const QPointF &pos)
 {
+    // Timer check.
     if (m_colorPickerDelayTimer.isActive()) {
         return;
     }
@@ -94,6 +95,7 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
 
     m_pickedColor.setOpacity(0.0);
 
+    // Pick from reference images.
     if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
         auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
@@ -120,67 +122,9 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
             dev = currentImage()->projection();
         }
 
-        // Color sampling radius.
-        if (m_config->radius == 1) {
-            QPoint realPos = pos.toPoint();
-            if (currentImage()->wrapAroundModePermitted()) {
-                realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-            }
+        KoColor previousColor = canvas()->resourceManager()->foregroundColor();
 
-            dev->pixel(realPos.x(), realPos.y(), &m_pickedColor);
-        }
-        else {
-            const KoColorSpace *cs = dev->colorSpace();
-            int pixelSize = cs->pixelSize();
-
-            quint8 *dstColor = new quint8[pixelSize];
-            QVector<const quint8 *> pixels;
-
-            KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
-
-            for (int y = -m_config->radius; y <= m_config->radius; y++) {
-                for (int x = -m_config->radius; x <= m_config->radius; x++) {
-                    if (((x * x) + (y * y)) < m_config->radius * m_config->radius) {
-
-                        QPoint realPos(pos.x() + x, pos.y() + y);
-
-                        if (currentImage()->wrapAroundModePermitted()) {
-                            realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-                        }
-
-                        accessor->moveTo(realPos.x(), realPos.y());
-                        pixels << accessor->oldRawData();
-                    }
-                }
-            }
-
-            const quint8 **cpixels = const_cast<const quint8 **>(pixels.constData());
-            cs->mixColorsOp()->mixColors(cpixels, pixels.size(), dstColor);
-
-            m_pickedColor = KoColor(dstColor, cs);
-
-            delete[] dstColor;
-        }
-
-        // Color blending.
-        if(m_config->blend < 100){
-            //Scale from 0..100% to 0..255 range for mixOp weights.
-            quint8 blendScaled = static_cast<quint8>(m_config->blend * 2.55f);
-
-            KoColor previousColor = canvas()->resourceManager()->foregroundColor();
-
-            const quint8 *colors[2];
-            colors[0] = previousColor.data();
-            colors[1] = m_pickedColor.data();
-            qint16 weights[2];
-            weights[0] = 255 - blendScaled;
-            weights[1] = blendScaled;
-
-            const KoMixColorsOp *mixOp = dev->colorSpace()->mixColorsOp();
-            mixOp->mixColors(colors, weights, 2, m_pickedColor.data());
-        }
-
-        m_pickedColor.convertTo(dev->compositionSourceColorSpace());
+        KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend); /*!*/
 
         if (m_config->updateColor &&
                 m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
@@ -243,7 +187,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 
     if (m_config->addPalette) {
         KoColorSetEntry ent;
-        ent.color = m_pickedColor;
+        ent.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
         KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());

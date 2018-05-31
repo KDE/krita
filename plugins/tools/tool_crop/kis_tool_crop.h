@@ -35,7 +35,8 @@
 #include "flake/kis_node_shape.h"
 #include "ui_wdg_tool_crop.h"
 #include "kis_constrained_rect.h"
-
+#include "kis_action.h"
+#include "kistoolcropconfigwidget.h"
 
 class QRect;
 struct DecorationLine;
@@ -84,6 +85,8 @@ public:
     void canvasResourceChanged(int key, const QVariant &res) override;
 
     void paint(QPainter &painter, const KoViewConverter &converter) override;
+
+    QMenu* popupActionsMenu() override;
 
     CropToolType cropType() const;
     bool cropTypeSelectable() const;
@@ -184,6 +187,13 @@ private:
     QRect m_lastCanvasUpdateRect;
 
     KConfigGroup configGroup;
+    KisToolCropConfigWidget* optionsWidget;
+
+    QScopedPointer<QMenu> m_contextMenu;
+    KisAction* applyCrop;
+    KisAction* growToggleOption;
+    KisAction* centerToggleOption;
+
 
     enum handleType {
         None = 0,

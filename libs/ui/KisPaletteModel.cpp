@@ -143,10 +143,10 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
                 switch (role) {
                 case Qt::ToolTipRole:
                 case Qt::DisplayRole: {
-                    return entry.name;
+                    return entry.name();
                 }
                 case Qt::BackgroundRole: {
-                    QColor color = m_displayRenderer->toQColor(entry.color);
+                    QColor color = m_displayRenderer->toQColor(entry.color());
                     return QBrush(color);
                 }
                 case IsHeaderRole: {
@@ -490,12 +490,17 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             int indexInGroup;
             QString colorXml;
 
-            stream >> entry.name
-                    >> entry.id
-                    >> entry.spotColor
+            QString name, id;
+            bool spotColor;
+            stream >> name
+                    >> id
+                    >> spotColor
                     >> indexInGroup
                     >> oldGroupName
                     >> colorXml;
+            entry.setName(name);
+            entry.setId(id);
+            entry.setSpotColor(spotColor);
 
             QDomDocument doc;
             doc.setContent(colorXml);
@@ -503,7 +508,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             QDomElement c = e.firstChildElement();
             if (!c.isNull()) {
                 QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
-                entry.color = KoColor::fromXML(c, colorDepthId);
+                entry.setColor(KoColor::fromXML(c, colorDepthId));
             }
 
             QModelIndex index = this->index(endRow, endColumn);
@@ -603,13 +608,13 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 
             QDomDocument doc;
             QDomElement root = doc.createElement("Color");
-            root.setAttribute("bitdepth", entry.color.colorSpace()->colorDepthId().id());
+            root.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
             doc.appendChild(root);
-            entry.color.toXML(doc, root);
+            entry.color().toXML(doc, root);
 
-            stream << entry.name
-                   << entry.id
-                   << entry.spotColor
+            stream << entry.name()
+                   << entry.id()
+                   << entry.spotColor()
                    << indexInGroup
                    << groupName
                    << doc.toString();

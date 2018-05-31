@@ -80,7 +80,7 @@
 #include <kis_canvas_resource_provider.h>
 
 
-KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
+KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_showColorPreview(false),
       m_colorPreviewShowComparePlate(false),
@@ -107,7 +107,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         m_standardBrushSizes.push_back(maxSize);
     }
 
-    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
     KisActionManager *actionManager = kiscanvas->viewManager()->actionManager();
 
     // XXX: Perhaps a better place for these?
@@ -343,7 +343,6 @@ void KisToolPaint::activatePickColorDelayed()
     };
 
     repaintDecorations();
-
 }
 
 bool KisToolPaint::isPickingAction(AlternateAction action) {
@@ -500,10 +499,10 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 QWidget * KisToolPaint::createOptionWidget()
 {
-    QWidget * optionWidget = new QWidget();
+    QWidget *optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
-    QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
+    QVBoxLayout *verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setContentsMargins(0,0,0,0);
     verticalLayout->setSpacing(5);
@@ -523,10 +522,10 @@ QWidget * KisToolPaint::createOptionWidget()
     m_optionsWidgetLayout->setSpacing(5);
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(KisIconUtils::loadIcon("help-contents"), QString(), optionWidget);
+        QPushButton *push = new QPushButton(KisIconUtils::loadIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
-        QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);
+        QHBoxLayout *hLayout = new QHBoxLayout(optionWidget);
         hLayout->addWidget(push);
         hLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
         verticalLayout->addLayout(hLayout);
@@ -625,7 +624,7 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {
     KisTool::setupPaintAction(action);
     action->setOpacity(m_opacity / qreal(255.0));
-    const KoCompositeOp* op = compositeOp();
+    const KoCompositeOp *op = compositeOp();
     if (op) {
         action->setCompositeOp(op->id());
     }

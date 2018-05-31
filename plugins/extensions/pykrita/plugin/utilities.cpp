@@ -76,7 +76,11 @@ namespace PyKrita
             return initStatus;
         }
 
+#if defined(IS_PY3K)
         if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PyInit_pykrita)) {
+#else
+        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, initpykrita)) {
+#endif
             initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;
             return initStatus;
         }
@@ -101,6 +105,7 @@ namespace PyKrita
 
         pluginManagerInstance.reset(new PythonPluginManager());
 
+#if defined(IS_PY3K)
         // Initialize our built-in module.
         auto pykritaModule = PyInit_pykrita();
 
@@ -109,6 +114,9 @@ namespace PyKrita
             return initStatus;
             //return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
         }
+#else
+        initpykrita();
+#endif
 
         initStatus = INIT_OK;
         return initStatus;
@@ -257,43 +265,19 @@ QString Python::lastTraceback() const
 bool Python::libraryLoad()
 {
     // no-op on Windows
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
     if (!s_pythonLibrary) {
 
         QFileInfo fi(PYKRITA_PYTHON_LIBRARY);
-        dbgScript << fi.canonicalFilePath() << fi.exists();
-        if (fi.exists()) {
-            dbgScript << "Creating s_pythonLibrary" << PYKRITA_PYTHON_LIBRARY;
-            s_pythonLibrary = new QLibrary(PYKRITA_PYTHON_LIBRARY);
-        }
-        else {
-            QString libraryName = fi.fileName();
-            QString applicationRoot = KoResourcePaths::getApplicationRoot();
-            QStringList locations;
-            locations << applicationRoot + "/lib"
-                      << applicationRoot + "/lib64"
-                      << applicationRoot + "/lib/X64_86-linux-gnu";
-            Q_FOREACH(const QString &location, locations) {
-                QDir d(location);
-                QStringList entries = d.entryList(QStringList() << libraryName + "*");
-                dbgScript << entries;
-                Q_FOREACH(const QString &entry, entries) {
-                     QFileInfo fi2(location + "/" + entry);
-                     if (fi2.exists()) {
-                        s_pythonLibrary = new QLibrary(fi2.canonicalFilePath());
-                        break;
-                     }
-                }
-            }
-        }
-        if (!s_pythonLibrary) {
-            dbgScript << "Could not create" << PYKRITA_PYTHON_LIBRARY;
-            return false;
-        }
-
+        // get the filename of the configured Python library, without the .so suffix
+        const QString libraryName = fi.completeBaseName();
+        // 1.0 is the SONAME of the shared Python library
+        s_pythonLibrary = new QLibrary(libraryName, "1.0");
         s_pythonLibrary->setLoadHints(QLibrary::ExportExternalSymbolsHint);
         if (!s_pythonLibrary->load()) {
             dbgScript << QString("Could not load %1 -- Reason: %2").arg(s_pythonLibrary->fileName()).arg(s_pythonLibrary->errorString());
+            delete s_pythonLibrary;
+            s_pythonLibrary = 0;
             return false;
         }
     }
@@ -412,7 +396,9 @@ bool Python::setPath(const QStringList& scriptPaths)
     if (KoResourcePaths::getApplicationRoot().contains(".mount_Krita")) {
         QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
         joinedPaths.toWCharArray(joinedPathsWChars.data());
-        Py_SetPath(joinedPathsWChars.data());
+        PyRun_SimpleString("import sys; import os");
+        QString pathCommand = QString("sys.path += '") + joinedPaths + QString("'.split(os.pathsep)");
+        PyRun_SimpleString(pathCommand.toUtf8().constData());
     }
     else {
         qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());

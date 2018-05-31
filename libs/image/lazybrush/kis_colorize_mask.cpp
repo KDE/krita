@@ -377,6 +377,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 
 void KisColorizeMask::slotUpdateOnDirtyParent()
 {
+    KIS_ASSERT_RECOVER_RETURN(parent());
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 

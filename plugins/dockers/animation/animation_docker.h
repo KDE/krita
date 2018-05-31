@@ -78,6 +78,8 @@ private Q_SLOTS:
 
     void slotCurrentNodeChanged(KisNodeSP node);
 
+    void updateClipRange();
+
 private:
 
     QPointer<KisCanvas2> m_canvas;

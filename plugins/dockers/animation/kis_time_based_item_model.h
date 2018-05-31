@@ -72,7 +72,8 @@ public:
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
-        UserRole
+        UserRole,
+        FrameHasContent // is it an empty frame with nothing in it?
     };
 
 protected:
@@ -82,12 +83,11 @@ protected:
 
     KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0, bool moveEmptyFrames = true);
 
+
 private Q_SLOTS:
     void slotFramerateChanged();
     void slotCurrentTimeChanged(int time);
-
     void slotCacheChanged();
-
     void slotInternalScrubPreviewRequested(int time);
 
     void slotPlaybackFrameChanged();

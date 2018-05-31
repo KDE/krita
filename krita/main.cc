@@ -41,6 +41,8 @@
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
+#include "data/splash/splash_screen_x2.xpm"
+#include "data/splash/splash_holidays_x2.xpm"
 #include "KisDocument.h"
 #include "kis_splash_screen.h"
 #include "KisPart.h"
@@ -223,7 +225,7 @@ extern "C" int main(int argc, char **argv)
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toUtf8());
+        qputenv("LANG", language.split(":").first().toLocal8Bit());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
     }
@@ -232,9 +234,23 @@ extern "C" int main(int argc, char **argv)
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
         if (locale.name() != QStringLiteral("en")) {
-            qDebug() << "Setting Krita's language to:" << locale;
-            qputenv("LANG", locale.name().toLatin1());
-            KLocalizedString::setLanguages(QStringList() << locale.name());
+            QStringList uiLanguages = locale.uiLanguages();
+            for (QString &uiLanguage : uiLanguages) {
+                uiLanguage.replace(QChar('-'), QChar('_'));
+            }
+            for (int i = 0; i < uiLanguages.size(); i++) {
+                QString uiLanguage = uiLanguages[i];
+                // Strip the country code
+                int idx = uiLanguage.indexOf(QChar('_'));
+                if (idx != -1) {
+                    uiLanguage = uiLanguage.left(idx);
+                    uiLanguages.insert(i + 1, uiLanguage);
+                    i++;
+                }
+            }
+            qDebug() << "Setting Krita's language to:" << uiLanguages;
+            qputenv("LANG", uiLanguages.first().toLocal8Bit());
+            KLocalizedString::setLanguages(uiLanguages);
         }
     }
 #endif
@@ -309,10 +325,10 @@ extern "C" int main(int argc, char **argv)
         QWidget *splash = 0;
         if (currentDate > QDate(currentDate.year(), 12, 4) ||
                 currentDate < QDate(currentDate.year(), 1, 9)) {
-            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm));
+            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_holidays_xpm), QPixmap(splash_holidays_x2_xpm));
         }
         else {
-            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm));
+            splash = new KisSplashScreen(app.applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm));
         }
 
         app.setSplashScreen(splash);

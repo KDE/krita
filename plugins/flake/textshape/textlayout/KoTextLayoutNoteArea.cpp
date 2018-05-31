@@ -148,7 +148,7 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         QTextLayout::FormatRange contTextRange;
         contTextRange.start = 0;
         contTextRange.length = contNote.length();
-        contTextRange.format = block.charFormat();;
+        contTextRange.format = block.charFormat();
         contTextLayouts.append(contTextRange);
         d->postLayout->setAdditionalFormats(contTextLayouts);
 

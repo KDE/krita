@@ -42,6 +42,8 @@
 #include <flake/kis_node_shape.h>
 #include <kis_tool.h>
 #include <kis_canvas2.h>
+#include <kis_action.h>
+
 
 #include "tool_transform_args.h"
 #include "tool_transform_changes_tracker.h"
@@ -145,6 +147,8 @@ public:
     void beginActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void continueActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
     void endActionImpl(KoPointerEvent *event, bool usePrimaryAction, KisTool::AlternateAction action);
+    QMenu* popupActionsMenu() override;
+
 
     void activatePrimaryAction() override;
     void deactivatePrimaryAction() override;
@@ -227,6 +231,7 @@ public Q_SLOTS:
 
 private:
     QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool recursive);
+    QScopedPointer<QMenu> m_contextMenu;
 
     bool clearDevices(const QList<KisNodeSP> &nodes);
     void transformClearedDevices();
@@ -292,6 +297,25 @@ private:
     TransformTransactionProperties m_transaction;
     TransformChangesTracker m_changesTracker;
 
+
+    /// actions for the context click menu
+    KisAction* warpAction;
+    KisAction* liquifyAction;
+    KisAction* cageAction;
+    KisAction* freeTransformAction;
+    KisAction* perspectiveAction;
+    KisAction* applyTransformation;
+    KisAction* resetTransformation;
+
+    // a few extra context click options if free transform is active
+    KisAction* mirrorHorizontalAction;
+    KisAction* mirrorVericalAction;
+    KisAction* rotateNinteyCWAction;
+    KisAction* rotateNinteyCCWAction;
+
+
+
+
     /**
      * This artificial rect is used to store the image to flake
      * transformation. We check against this rect to get to know
@@ -315,6 +339,15 @@ private Q_SLOTS:
     void slotResetTransform();
     void slotRestartTransform();
     void slotEditingFinished();
+
+
+    // context menu options for updating the transform type
+    // this is to help with discoverability since come people can't find the tool options
+    void slotUpdateToWarpType();
+    void slotUpdateToPerspectiveType();
+    void slotUpdateToFreeTransformType();
+    void slotUpdateToLiquifyType();
+    void slotUpdateToCageType();
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

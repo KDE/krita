@@ -26,7 +26,7 @@
 
 #include <kis_pressure_size_option.h>
 #include <kis_tangent_tilt_option.h>
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
@@ -71,7 +71,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption m_scatterOption;
     KisTangentTiltOption m_tangentTiltOption;
-    KisAirbrushOption m_airbrushOption;
+    KisAirbrushOptionProperties m_airbrushOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureFlowOption m_flowOption;

@@ -478,9 +478,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (colorModelId == RGBAColorModelID) {
         if (colorDepthId == Float16BitsColorDepthID) {
 
-            if (KisOpenGL::hasOpenGLES()) {
+            if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
                 m_texturesInfo.internalFormat = GL_RGBA16F;
-                dbgUI << "Using half (GLES)";
+                dbgUI << "Using half (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA16F_ARB;
                 dbgUI << "Using ARB half";
@@ -495,10 +495,10 @@ void KisOpenGLImageTextures::updateTextureFormat()
             haveBuiltInOpenExr = true;
 #endif
 
-            if (haveBuiltInOpenExr && KisOpenGL::hasOpenGLES()) {
+            if (haveBuiltInOpenExr && (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3())) {
                 m_texturesInfo.type = GL_HALF_FLOAT;
                 destinationColorDepthId = Float16BitsColorDepthID;
-                dbgUI << "Pixel type half (GLES)";
+                dbgUI << "Pixel type half (GLES or GL3)";
             } else if (haveBuiltInOpenExr && ctx->hasExtension("GL_ARB_half_float_pixel")) {
                 m_texturesInfo.type = GL_HALF_FLOAT_ARB;
                 destinationColorDepthId = Float16BitsColorDepthID;
@@ -511,9 +511,9 @@ void KisOpenGLImageTextures::updateTextureFormat()
             m_texturesInfo.format = GL_RGBA;
         }
         else if (colorDepthId == Float32BitsColorDepthID) {
-            if (KisOpenGL::hasOpenGLES()) {
+            if (KisOpenGL::hasOpenGLES() || KisOpenGL::hasOpenGL3()) {
                 m_texturesInfo.internalFormat = GL_RGBA32F;
-                dbgUI << "Using float (GLES)";
+                dbgUI << "Using float (GLES or GL3)";
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";

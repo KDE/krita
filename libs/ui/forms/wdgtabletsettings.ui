@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>569</width>
-    <height>366</height>
+    <height>433</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -152,7 +152,7 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -164,6 +164,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QPushButton" name="btnTabletTest">
+     <property name="text">
+      <string>Open Tablet Tester...</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="grpTabletApi">

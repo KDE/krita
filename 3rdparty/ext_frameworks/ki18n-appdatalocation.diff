@@ -1,22 +1,22 @@
 diff --git a/src/kcatalog.cpp b/src/kcatalog.cpp
-index 7711e9b..b6280ed 100644
+index c18d40f..b0ed09d 100644
 --- a/src/kcatalog.cpp
 +++ b/src/kcatalog.cpp
-@@ -112,7 +112,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
- {
-     QString relpath = QString::fromLatin1("%1/LC_MESSAGES/%2.mo")
-                       .arg(language, QFile::decodeName(domain));
+@@ -128,7 +128,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
+         }
+     }
+ 
 -    QString file = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
 +    QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
-                                           QString::fromLatin1("locale/") + relpath);
+                                           QStringLiteral("locale/") + relpath);
      QString localeDir;
      if (file.isEmpty()) {
-@@ -127,7 +127,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
+@@ -143,7 +143,7 @@ QString KCatalog::catalogLocaleDir(const QByteArray &domain,
  QSet<QString> KCatalog::availableCatalogLanguages(const QByteArray &domain_)
  {
      QString domain = QFile::decodeName(domain_);
 -    QStringList localeDirPaths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
 +    QStringList localeDirPaths = QStandardPaths::locateAll(QStandardPaths::AppDataLocation,
-                                  QString::fromLatin1("locale"),
+                                  QStringLiteral("locale"),
                                   QStandardPaths::LocateDirectory);
-     QSet<QString> availableLanguages;
+ 

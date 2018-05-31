@@ -98,7 +98,7 @@ void KoGlobal::createListOfLanguages()
     QStringList translationList = KoResourcePaths::findAllResources("locale",
                                         QString::fromLatin1("*/entry.desktop"))
             + KoResourcePaths::findAllResources("locale",
-                                                QString::fromLatin1("*/kf5_entry.desktop"));;
+                                                QString::fromLatin1("*/kf5_entry.desktop"));
     translationList.removeDuplicates();
     for (QStringList::Iterator it = translationList.begin();
             it != translationList.end(); ++it) {

@@ -32,6 +32,7 @@
 #include "timeline_frames_model.h"
 #include "timeline_frames_view.h"
 #include "kis_animation_frame_cache.h"
+#include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_node_manager.h"
 

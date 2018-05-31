@@ -66,7 +66,7 @@ int calculateNumberMemoryAllowedClones(KisImageSP image)
     const qint64 allowedMemory = 0.8 * stats.tilesHardLimit - stats.realMemorySize;
     const qint64 cloneSize = stats.projectionsSize;
 
-    return allowedMemory > 0 ? allowedMemory / cloneSize : 0;
+    return cloneSize > 0 ? allowedMemory / cloneSize : 0;
 }
 
 }

@@ -939,7 +939,7 @@ KUndo2Command* KisPaintDevice::Private::convertColorSpace(const KoColorSpace * d
 
     KUndo2Command *parentCommand = new DeviceChangeColorSpaceCommand(q);
 
-    QList<Data*> dataObjects = allDataObjects();;
+    QList<Data*> dataObjects = allDataObjects();
 
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
@@ -966,7 +966,7 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
         KoColorSpaceRegistry::instance()->colorSpace(colorSpace()->colorModelId().id(), colorSpace()->colorDepthId().id(), profile);
     if (!dstColorSpace) return false;
 
-    QList<Data*> dataObjects = allDataObjects();;
+    QList<Data*> dataObjects = allDataObjects();
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
         data->assignColorSpace(dstColorSpace);
@@ -979,7 +979,7 @@ bool KisPaintDevice::Private::assignProfile(const KoColorProfile * profile)
 
 void KisPaintDevice::Private::init(const KoColorSpace *cs, const quint8 *defaultPixel)
 {
-    QList<Data*> dataObjects = allDataObjects();;
+    QList<Data*> dataObjects = allDataObjects();
     Q_FOREACH (Data *data, dataObjects) {
         if (!data) continue;
 

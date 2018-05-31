@@ -179,7 +179,7 @@ void readGrayPixel(const QMap<quint16, QByteArray> &channelBytes,
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
 
-    pixelPtr->gray  = readChannelValue<Traits>(channelBytes, 0, col, unitValue);;
+    pixelPtr->gray  = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
     pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
 }
 

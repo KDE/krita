@@ -9,8 +9,8 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-from colorspace import colorspacedialog
-from colorspace.components import colormodelcombobox, colordepthcombobox, colorprofilecombobox
+from . import colorspacedialog
+from .components import colormodelcombobox, colordepthcombobox, colorprofilecombobox
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
                              QAbstractItemView, QComboBox, QDialogButtonBox,
@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
                              QHBoxLayout, QAbstractScrollArea)
 from PyQt5.QtGui import QIcon
 import krita
-from colorspace import resources_rc
+from . import resources_rc
 
 
 class UIColorSpace(object):

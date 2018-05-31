@@ -35,6 +35,7 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QMatrix4x4>
+#include <QMenu>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -119,6 +120,23 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
     m_optionsWidget = 0;
+
+    warpAction = new KisAction(i18n("Warp"));
+    liquifyAction = new KisAction(i18n("Liquify"));
+    cageAction = new KisAction(i18n("Cage"));
+    freeTransformAction = new KisAction(i18n("Free"));
+    perspectiveAction = new KisAction(i18n("Perspective"));
+
+    // extra actions for free transform that are in the tool options
+    mirrorHorizontalAction = new KisAction(i18n("Mirror Horizontal"));
+    mirrorVericalAction = new KisAction(i18n("Mirror Vertical"));
+    rotateNinteyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
+    rotateNinteyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
+
+    applyTransformation = new KisAction(i18n("Apply"));
+    resetTransformation = new KisAction(i18n("Reset"));
+
+    m_contextMenu.reset(new QMenu());
 
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
@@ -321,6 +339,35 @@ void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryActio
 
     updateOptionWidget();
     updateApplyResetAvailability();
+}
+
+QMenu*  KisToolTransform::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+
+        // add a quick switch to different transform types
+        m_contextMenu->addAction(freeTransformAction);
+        m_contextMenu->addAction(perspectiveAction);
+        m_contextMenu->addAction(warpAction);
+        m_contextMenu->addAction(cageAction);
+        m_contextMenu->addAction(liquifyAction);
+
+        // extra options if free transform is selected
+        if (transformMode() == ToolTransformArgs::FREE_TRANSFORM) {
+            m_contextMenu->addSeparator();
+            m_contextMenu->addAction(mirrorHorizontalAction);
+            m_contextMenu->addAction(mirrorVericalAction);
+            m_contextMenu->addAction(rotateNinteyCWAction);
+            m_contextMenu->addAction(rotateNinteyCCWAction);
+        }
+
+        m_contextMenu->addSeparator();
+        m_contextMenu->addAction(applyTransformation);
+        m_contextMenu->addAction(resetTransformation);
+    }
+
+    return m_contextMenu.data();
 }
 
 void KisToolTransform::beginPrimaryAction(KoPointerEvent *event)
@@ -1038,6 +1085,23 @@ QWidget* KisToolTransform::createOptionWidget() {
     connect(m_optionsWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
 
+
+    connect(mirrorHorizontalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipX()));
+    connect(mirrorVericalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
+    connect(rotateNinteyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
+    connect(rotateNinteyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
+
+
+    connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));
+    connect(perspectiveAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToPerspectiveType()));
+    connect(freeTransformAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToFreeTransformType()));
+    connect(liquifyAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToLiquifyType()));
+    connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
+
+    connect(applyTransformation, SIGNAL(triggered(bool)), this, SLOT(slotApplyTransform()));
+    connect(resetTransformation, SIGNAL(triggered(bool)), this, SLOT(slotResetTransform()));
+
+
     updateOptionWidget();
 
     return m_optionsWidget;
@@ -1138,6 +1202,7 @@ void KisToolTransform::slotRestartTransform()
     startStroke(savedArgs.mode(), true);
 }
 
+
 void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(root);
@@ -1146,10 +1211,34 @@ void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
     image()->waitForDone();
 }
 
-
 void KisToolTransform::slotEditingFinished()
 {
     commitChanges();
+}
+
+void KisToolTransform::slotUpdateToWarpType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::WarpTransformMode);
+}
+
+void KisToolTransform::slotUpdateToPerspectiveType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::PerspectiveTransformMode);
+}
+
+void KisToolTransform::slotUpdateToFreeTransformType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::FreeTransformMode);
+}
+
+void KisToolTransform::slotUpdateToLiquifyType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::LiquifyTransformMode);
+}
+
+void KisToolTransform::slotUpdateToCageType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::CageTransformMode);
 }
 
 void KisToolTransform::setShearY(double shear)

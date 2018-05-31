@@ -1,0 +1,166 @@
+cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+
+set(ARCH_IS_32_BIT @INSTALLER_NSIS_IS_32_BIT@)
+if(ARCH_IS_32_BIT)
+    set(ARG_ARCH "/DKRITA_INSTALLER_32")
+    set(FILENAME_ARCH "-x86")
+else()
+    set(ARG_ARCH "/DKRITA_INSTALLER_64")
+    set(FILENAME_ARCH "-x64")
+endif()
+
+if(NOT IS_DIRECTORY "${KRITA_PACKAGE_ROOT}")
+    message(FATAL_ERROR "KRITA_PACKAGE_ROOT not set")
+endif()
+
+if(NOT DEFINED OUTPUT_FILEPATH)
+    set(OUTPUT_FILEPATH "${CMAKE_CURRENT_BINARY_DIR}/krita-setup${FILENAME_ARCH}.exe")
+endif()
+
+if(NOT DEFINED DOWNLOAD_DIR)
+    set(DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+endif()
+
+
+# Download and find NSIS
+if(NOT DEFINED NO_DOWNLOAD_NSIS)
+    set(DOWNLOAD_NSIS_VERSION "3.02.1")
+    message(STATUS "Downloading NSIS...")
+    if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
+        file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
+    endif()
+    file(DOWNLOAD "https://files.kde.org/krita/build/dependencies/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
+        "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
+        EXPECTED_HASH SHA1=06c791f9cf668d945564316c9c947ebb4cc469e9
+    )
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xfz "${DOWNLOAD_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}.zip"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+        RESULT_VARIABLE result_extract
+    )
+    if(NOT result_extract EQUAL 0)
+        message(FATAL_ERROR "Failed to extract NSIS")
+    endif()
+    if(NOT IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}")
+        message(FATAL_ERROR "Failed to find NSIS after extracting")
+    endif()
+    find_program(TOOL_MAKENSIS
+        NAMES makensis.exe
+        PATHS
+            "${CMAKE_CURRENT_BINARY_DIR}/nsis-${DOWNLOAD_NSIS_VERSION}"
+        NO_DEFAULT_PATH
+    )
+else()
+    find_program(TOOL_MAKENSIS
+        NAMES makensis.exe
+        HINTS
+            "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\NSIS]"
+            "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NSIS]"
+            "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\NSIS\\Unicode]"
+            "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NSIS\\Unicode]"
+    )
+endif()
+if(NOT TOOL_MAKENSIS)
+    message(FATAL_ERROR "Failed to find makensis.exe")
+endif()
+execute_process(COMMAND "${TOOL_MAKENSIS}" "/version"
+    OUTPUT_VARIABLE MAKENSIS_VERSION
+)
+# Check version is v3.*
+if(NOT MAKENSIS_VERSION MATCHES "^v3\\.")
+    message(FATAL_ERROR "Expected NSIS version v3.*, got ${MAKENSIS_VERSION}")
+endif()
+message(STATUS "NSIS version ${MAKENSIS_VERSION}")
+
+
+# Check if package contains debug symbols
+file(TO_CMAKE_PATH "${KRITA_PACKAGE_ROOT}" KRITA_PACKAGE_ROOT_PATCHED)
+file(GLOB_RECURSE globForDebugFiles
+    "${KRITA_PACKAGE_ROOT_PATCHED}/*.debug"
+)
+if(globForDebugFiles)
+    if(REMOVE_DEBUG)
+        message(STATUS "Removing debug symbols")
+		foreach(debugFileItem ${globForDebugFiles})
+			get_filename_component(debugFileDir "${debugFileItem}" DIRECTORY)
+			get_filename_component(debugDirName "${debugFileDir}" NAME)
+			if(debugDirName STREQUAL ".debug")
+				if(EXISTS "${debugFileDir}")
+					message(STATUS "Deleting ${debugFileDir}")
+					file(REMOVE_RECURSE "${debugFileDir}")
+				endif()
+			else()
+				message(STATUS "Deleting ${debugFileItem}")
+				file(REMOVE "${debugFileItem}")
+			endif()
+		endforeach()
+    else()
+        message(FATAL_ERROR "${KRITA_PACKAGE_ROOT} seems to contain debug symbols. Set REMOVE_DEBUG to true if you want to remove them.")
+    endif()
+endif()
+
+
+# Download installer script package
+message(STATUS "Downloading NSIS script package...")
+if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
+    file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
+endif()
+file(DOWNLOAD "https://github.com/alvinhochun/KritaShellExtension/releases/download/v1.2.4b/krita-nsis-v1.2.4b.zip"
+    "${DOWNLOAD_DIR}/krita-nsis.zip"
+    EXPECTED_HASH SHA1=43c5bade13fb885e8546dac4486b8e2df62dc692
+)
+execute_process(COMMAND ${CMAKE_COMMAND} -E tar xfz "${DOWNLOAD_DIR}/krita-nsis.zip"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    RESULT_VARIABLE result_extract
+)
+if(NOT result_extract EQUAL 0)
+    message(FATAL_ERROR "Failed to extract krita-nsis package")
+endif()
+if(NOT IS_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
+    message(FATAL_ERROR "Failed to find krita-nsis after extracting")
+endif()
+
+
+# Place Krita installer files in the right place
+file(COPY "${CMAKE_CURRENT_LIST_DIR}/installer/"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/"
+    FILES_MATCHING PATTERN "*"
+)
+
+
+# Detect FFmpeg (currently optional)
+if(EXISTS "${KRITA_PACKAGE_ROOT}/bin/ffmpeg.exe"
+    AND EXISTS "${KRITA_PACKAGE_ROOT}/bin/ffmpeg_LICENSE.txt"
+    AND EXISTS "${KRITA_PACKAGE_ROOT}/bin/ffmpeg_README.txt"
+)
+    set(ARG_HAS_FFMPEG "/DHAS_FFMPEG")
+else()
+    set(ARG_HAS_FFMPEG "/DNO_HAS_FFMPEG")
+endif()
+
+
+# Build installer
+message(STATUS "Building installer...")
+set(KRITA_VERSION_NUMBER "@KRITA_STABLE_VERSION_MAJOR@.@KRITA_STABLE_VERSION_MINOR@.@KRITA_VERSION_RELEASE@.@KRITA_VERSION_REVISION@")
+set(KRITA_VERSION_STRING "@KRITA_VERSION_STRING@")
+set(KRITA_GIT_SHA1_STRING "@KRITA_GIT_SHA1_STRING@")
+if(KRITA_GIT_SHA1_STRING)
+    set(KRITA_VERSION_STRING "${KRITA_VERSION_STRING} (git ${KRITA_GIT_SHA1_STRING})")
+endif()
+execute_process(COMMAND "${TOOL_MAKENSIS}"
+    "${ARG_ARCH}"
+    "/DKRITA_VERSION=${KRITA_VERSION_NUMBER}"
+    "/DKRITA_VERSION_DISPLAY=${KRITA_VERSION_STRING}"
+    "/DKRITA_INSTALLER_OUTPUT_DIR="
+    "/DKRITA_INSTALLER_OUTPUT_NAME=${OUTPUT_FILEPATH}"
+    "/DKRITA_PACKAGE_ROOT=${KRITA_PACKAGE_ROOT}"
+    "${ARG_HAS_FFMPEG}"
+    "/XSetCompressor /SOLID lzma"
+    "/V3"
+    "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis/installer_krita.nsi"
+    RESULT_VARIABLE result_makensis
+)
+if(NOT result_makensis EQUAL 0)
+    message(FATAL_ERROR "Failed to build installer")
+endif()
+
+message(STATUS "Built installer")

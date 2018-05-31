@@ -179,7 +179,7 @@ QStringList Krita::colorModels() const
     Q_FOREACH(KoID id, ids) {
         colorModelsIds << id.id();
     }
-    return colorModelsIds.toList();;
+    return colorModelsIds.toList();
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
@@ -189,7 +189,7 @@ QStringList Krita::colorDepths(const QString &colorModel) const
     Q_FOREACH(KoID id, ids) {
         colorDepthsIds << id.id();
     }
-    return colorDepthsIds.toList();;
+    return colorDepthsIds.toList();
 }
 
 QStringList Krita::filterStrategies() const
@@ -331,8 +331,10 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
 Document* Krita::openDocument(const QString &filename)
 {
     KisDocument *document = KisPart::instance()->createDocument();
+    document->setFileBatchMode(this->batchmode());
     KisPart::instance()->addDocument(document);
     document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
+    document->setFileBatchMode(false);
     return new Document(document);
 }
 

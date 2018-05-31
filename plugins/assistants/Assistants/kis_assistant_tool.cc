@@ -605,7 +605,7 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         *m_newAssistant->handles().back() = event->point;
 
     } else if (m_newAssistant && m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
-        QPointF translate = event->point - m_dragEnd;;
+        QPointF translate = event->point - m_dragEnd;
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator = (QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);

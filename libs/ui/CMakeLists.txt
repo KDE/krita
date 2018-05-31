@@ -87,7 +87,7 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
-    kis_base_option.cpp
+    KisPaintopPropertiesBase.cpp
     kis_canvas_resource_provider.cpp
     kis_derived_resources.cpp
     kis_categories_mapper.cpp
@@ -273,8 +273,6 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
 
-    widgets/KisLayoutSelector.cpp
-
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -430,6 +428,9 @@ endif()
         KisFrameCacheSwapper.cpp
         KisAbstractFrameCacheSwapper.cpp
         KisInMemoryFrameCacheSwapper.cpp
+
+        input/wintab/drawpile_tablettester/tablettester.cpp
+        input/wintab/drawpile_tablettester/tablettest.cpp
     )
 
 if(UNIX)
@@ -531,6 +532,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
+    input/wintab/drawpile_tablettester/tablettest.ui
 
 )
 

@@ -76,6 +76,7 @@ set(kritapigment_SRCS
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
+    resources/KoColorSetEntry.cpp
     resources/KoPattern.cpp
     resources/KoResource.cpp
     resources/KoMD5Generator.cpp

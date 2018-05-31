@@ -41,6 +41,7 @@
 #include <ksharedconfig.h>
 
 #include <resources/KoColorSet.h>
+#include <resources/KoColorSetEntry.h>
 #include <KoColorPatch.h>
 #include <KoEditColorSetDialog.h>
 #include <KoColorSpaceRegistry.h>
@@ -84,16 +85,16 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             patch->setFrameStyle(QFrame::Plain | QFrame::Box);
             patch->setLineWidth(1);
             KoColorSetEntry c = colorSet->getColorGlobal(i);
-            patch->setColor(c.color);
-            patch->setToolTip(c.name);
+            patch->setColor(c.color());
+            patch->setToolTip(c.name());
             connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
             colorGroupLayout->addWidget(patch, p/columns, p%columns);
             patch->setDisplayRenderer(displayRenderer);
             patchWidgetList.append(patch);
-            colornames.append(c.name);
+            colornames.append(c.name());
             QPixmap colorsquare = QPixmap(12,12);
-            colorsquare.fill(c.color.toQColor());
-            colorNameCmb->addItem(QIcon(colorsquare), c.name);
+            colorsquare.fill(c.color().toQColor());
+            colorNameCmb->addItem(QIcon(colorsquare), c.name());
             ++p;
         }
         colorSetLayout->addWidget(defaultGroupContainer);
@@ -115,16 +116,16 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
                 patch->setFrameStyle(QFrame::Plain | QFrame::Box);
                 patch->setLineWidth(1);
                 KoColorSetEntry c = colorSet->getColorGroup(i, groupName);
-                patch->setColor(c.color);
-                patch->setToolTip(c.name);
+                patch->setColor(c.color());
+                patch->setToolTip(c.name());
                 connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
                 groupLayout->addWidget(patch, p/columns, p%columns);
                 patch->setDisplayRenderer(displayRenderer);
                 patchWidgetList.append(patch);
-                colornames.append(c.name);
+                colornames.append(c.name());
                 QPixmap colorsquare = QPixmap(12,12);
-                colorsquare.fill(c.color.toQColor());
-                colorNameCmb->addItem(QIcon(colorsquare), c.name);
+                colorsquare.fill(c.color().toQColor());
+                colorNameCmb->addItem(QIcon(colorsquare), c.name());
                 ++p;
             }
             colorSetLayout->addWidget(groupbox);

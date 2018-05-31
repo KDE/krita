@@ -57,6 +57,10 @@ void TestResourceCacheDb::testCreateDatabase()
     Q_FOREACH(const QString &table, tables) {
         QVERIFY2(dbTables.contains(table), table.toLatin1());
     }
+
+    res = cacheDb.initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QVERIFY(res);
+    QVERIFY(cacheDb.isValid());
 }
 
 void TestResourceCacheDb::testLookupTables()

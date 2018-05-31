@@ -84,13 +84,17 @@ bool KisResourceCacheDb::initialize(const QString &location) const
 
 QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
+    if (!QSqlDatabase::connectionNames().isEmpty()) {
+        return QSqlError();
+    }
 
     QDir dbLocation(location);
     if (!dbLocation.exists()) {
         dbLocation.mkpath(dbLocation.path());
     }
 
+
+    QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
     db.setDatabaseName(location + "/" + ResourceCacheDbFilename);
 
     if (!db.open()) {

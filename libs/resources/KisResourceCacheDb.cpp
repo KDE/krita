@@ -25,6 +25,8 @@
 
 #include <KritaVersionWrapper.h>
 
+#include <kis_debug.h>
+
 const QString dbDriver = "QSQLITE";
 
 const QStringList KisResourceCacheDb::resourceTypes = QStringList() << "BRUSH_TIP"
@@ -85,6 +87,7 @@ bool KisResourceCacheDb::initialize(const QString &location) const
 QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
 {
     if (!QSqlDatabase::connectionNames().isEmpty()) {
+        infoResources << "Already connected to resource cache database";
         return QSqlError();
     }
 
@@ -93,11 +96,11 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
         dbLocation.mkpath(dbLocation.path());
     }
 
-
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
     db.setDatabaseName(location + "/" + ResourceCacheDbFilename);
 
     if (!db.open()) {
+        infoResources << "Could not connect to resource cache database";
         return db.lastError();
     }
 
@@ -111,34 +114,45 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                                        << "versioned_resources"
                                        << "resource_tags";
 
+    QStringList dbTables;
     // Verify whether we should recreate the database
     {
         bool allTablesPresent = true;
-        QStringList dbTables = db.tables();
+        dbTables = db.tables();
         Q_FOREACH(const QString &table, tables) {
             if (!dbTables.contains(table)) {
                 allTablesPresent = false;
             }
         }
 
-        if (allTablesPresent) {
+        bool schemaIsOutDated = false;
+
+        if (dbTables.contains("version_information")) {
             // Verify the version number
-            return QSqlError();
+            QSqlQuery query;
+            query.exec("SELECT database_version, krita_version, creation_date"
+                       "FROM version_information"
+                       "ORDER BY id DESC LIMIT 1");
+            if (query.size() > 0) {
+                query.first();
+                QString schemaVersion = query.value(0).toString();
+                QString kritaVersion = query.value(1).toString();
+                QString creationDate = query.value(2).toString();
+
+                infoResources << "Database version" << schemaVersion
+                              << "Krita version that created the database" << kritaVersion
+                              << "At" << creationDate;
+
+                if (schemaVersion != databaseVersion) {
+                    warnResources << "Database schema is outdated, migration is needed";
+                    schemaIsOutDated = true;
+                }
+            }
         }
-        else {
-            // Clear the look-up tables
-            if (dbTables.contains("origin_types")) {
-                QSqlQuery query;
-                if (!query.exec("DELETE * FROM origin_types;")) {
-                    qWarning() << "Could not clear table origin_types" << db.lastError();
-                }
-            }
-            if (dbTables.contains("resource_types")) {
-                QSqlQuery query;
-                if (!query.exec("DELETE * FROM resource_types;")) {
-                    qWarning() << "Could not cleare table resource_types" << db.lastError();
-                }
-            }
+
+        if (allTablesPresent && !schemaIsOutDated) {
+            infoResources << "All tables are present and up to date";
+            return QSqlError();
         }
     }
 
@@ -151,6 +165,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                 qWarning() << "Could not create table" << table;
                 return db.lastError();
             }
+            infoResources << "Created table" << table;
         }
         else {
             return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(table), QSqlError::StatementError);
@@ -158,6 +173,13 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     }
 
     {
+        if (dbTables.contains("origin_types")) {
+            QSqlQuery query;
+            if (!query.exec("DELETE * FROM origin_types;")) {
+                qWarning() << "Could not clear table origin_types" << db.lastError();
+            }
+        }
+
         QFile f(":/fill_origin_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
@@ -170,6 +192,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                     return db.lastError();
                 }
             }
+            infoResources << "Filled lookup table origin_types";
         }
         else {
             return QSqlError("Error executing SQL", QString("Could not find SQL fill_origin_types.sql."), QSqlError::StatementError);
@@ -177,6 +200,12 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     }
 
     {
+        if (dbTables.contains("resource_types")) {
+            QSqlQuery query;
+            if (!query.exec("DELETE * FROM resource_types;")) {
+                qWarning() << "Could not cleare table resource_types" << db.lastError();
+            }
+        }
         QFile f(":/fill_resource_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
@@ -189,6 +218,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                     return db.lastError();
                 }
             }
+            infoResources << "Filled lookup table resource_types";
         }
         else {
             return QSqlError("Error executing SQL", QString("Could not find SQL fill_resource_types.sql."), QSqlError::StatementError);
@@ -208,6 +238,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                 qWarning() << "Could not insert the current version" << db.lastError() << query.executedQuery();
                 return db.lastError();
             }
+            infoResources << "Filled version table";
         }
         else {
             return QSqlError("Error executing SQL", QString("Could not find SQL fill_version_information.sql."), QSqlError::StatementError);

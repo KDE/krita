@@ -32,6 +32,9 @@
 #include "KisFrameCacheSwapper.h"
 #include "KisInMemoryFrameCacheSwapper.h"
 
+#include "kis_image_config.h"
+#include "kis_config_notifier.h"
+
 #include "opengl/kis_opengl_image_textures.h"
 
 #include <kis_algebra_2d.h>
@@ -41,9 +44,7 @@
 struct KisAnimationFrameCache::Private
 {
     Private(KisOpenGLImageTexturesSP _textures)
-        : textures(_textures),
-          swapper(new KisFrameCacheSwapper(textures->updateInfoBuilder()))
-          //swapper(new KisInMemoryFrameCacheSwapper())
+        : textures(_textures)
     {
         image = textures->image();
     }
@@ -56,7 +57,7 @@ struct KisAnimationFrameCache::Private
     KisImageWSP image;
 
     QScopedPointer<KisAbstractFrameCacheSwapper> swapper;
-    int desiredLevelOfDetail = 0;
+    int frameSizeLimit = 777;
 
     KisOpenGLUpdateInfoSP fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod);
 
@@ -174,13 +175,13 @@ struct KisAnimationFrameCache::Private
     }
 
     int effectiveLevelOfDetail(const QRect &rc) const {
-        // TODO: make configurable
-        const int frameSizeLimit = 2500;
+        if (!frameSizeLimit) return 0;
+
         const int maxDimension = KisAlgebra2D::maxDimension(rc);
 
         const qreal minLod = -std::log2(qreal(frameSizeLimit) / maxDimension);
         const int lodLimit = qMax(0, qCeil(minLod));
-        return qMax(desiredLevelOfDetail, lodLimit);
+        return lodLimit;
     }
 
 
@@ -214,7 +215,11 @@ const QList<KisAnimationFrameCache *> KisAnimationFrameCache::caches()
 KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures)
     : m_d(new Private(textures))
 {
+    // create swapping backend
+    slotConfigChanged();
+
     connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
 KisAnimationFrameCache::~KisAnimationFrameCache()
@@ -269,6 +274,22 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
     }
 }
 
+void KisAnimationFrameCache::slotConfigChanged()
+{
+    m_d->newFrames.clear();
+
+    KisImageConfig cfg;
+
+    if (cfg.useOnDiskAnimationCacheSwapping()) {
+        m_d->swapper.reset(new KisFrameCacheSwapper(m_d->textures->updateInfoBuilder(), cfg.swapDir()));
+    } else {
+        m_d->swapper.reset(new KisInMemoryFrameCacheSwapper());
+    }
+
+    m_d->frameSizeLimit = cfg.useAnimationCacheFrameSizeLimit() ? cfg.animationCacheFrameSizeLimit() : 0;
+    emit changed();
+}
+
 KisOpenGLUpdateInfoSP KisAnimationFrameCache::Private::fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod)
 {
     if (lod > 0) {
@@ -320,17 +341,7 @@ void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, i
     emit changed();
 }
 
-int KisAnimationFrameCache::desiredLevelOfDetail() const
-{
-    return m_d->desiredLevelOfDetail;
-}
-
-void KisAnimationFrameCache::setDesiredLevelOfDetail(int levelOfDetail)
-{
-    m_d->desiredLevelOfDetail = levelOfDetail;
-}
-
-void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest)
+void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest, const QRect &minimalRect)
 {
     if (m_d->newFrames.isEmpty()) return;
 
@@ -347,9 +358,10 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, con
             continue;
         }
 
-        if (m_d->swapper->frameLevelOfDetail(frameId) > m_d->desiredLevelOfDetail ||
-            !m_d->swapper->frameDirtyRect(frameId).contains(regionOfInterest)) {
+        const QRect frameRect = m_d->swapper->frameDirtyRect(frameId);
+        const int frameLod = m_d->swapper->frameLevelOfDetail(frameId);
 
+        if (frameLod > m_d->effectiveLevelOfDetail(regionOfInterest) || !frameRect.contains(minimalRect)) {
             m_d->swapper->forgetFrame(frameId);
             it = m_d->newFrames.erase(it);
         } else {

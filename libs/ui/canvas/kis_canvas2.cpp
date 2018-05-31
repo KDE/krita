@@ -136,7 +136,6 @@ public:
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
     bool lodAllowedInImage = false;
-    bool lodAllowedInFrameCache = false;
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
@@ -148,10 +147,6 @@ public:
 
     bool effectiveLodAllowedInImage() {
         return lodAllowedInImage && !bootstrapLodBlocked;
-    }
-
-    bool effectiveLodAllowedInFrameCache() {
-        return lodAllowedInFrameCache && !bootstrapLodBlocked;
     }
 
     void setActiveShapeManager(KoShapeManager *shapeManager);
@@ -865,11 +860,7 @@ void KisCanvas2::slotTrySwitchShapeManager()
 
 void KisCanvas2::notifyLevelOfDetailChange()
 {
-    if (!m_d->effectiveLodAllowedInImage() &&
-        !m_d->effectiveLodAllowedInFrameCache()) {
-
-        return;
-    }
+    if (!m_d->effectiveLodAllowedInImage()) return;
 
     const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
 
@@ -881,10 +872,6 @@ void KisCanvas2::notifyLevelOfDetailChange()
     if (m_d->effectiveLodAllowedInImage()) {
         KisImageSP image = this->image();
         image->setDesiredLevelOfDetail(lod);
-    }
-
-    if (m_d->frameCache) {
-        m_d->frameCache->setDesiredLevelOfDetail(m_d->effectiveLodAllowedInFrameCache() ? lod : 0);
     }
 }
 
@@ -1084,13 +1071,12 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
         qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
     }
 
-    m_d->lodAllowedInFrameCache =
+    m_d->lodAllowedInImage =
+        value &&
         m_d->currentCanvasIsOpenGL &&
         KisOpenGL::supportsLoD() &&
         (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
          m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
-
-    m_d->lodAllowedInImage = value && m_d->lodAllowedInFrameCache;
 
     KisImageSP image = this->image();
 

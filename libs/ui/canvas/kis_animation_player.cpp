@@ -41,6 +41,9 @@
 #include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
 
+#include "kis_image_config.h"
+#include <limits>
+
 #include "KisViewManager.h"
 #include "kis_icon_utils.h"
 
@@ -329,13 +332,25 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
-            const int dimensionLimit = 2500;
+            KisImageConfig cfg;
+
+            const int dimensionLimit =
+                cfg.useAnimationCacheFrameSizeLimit() ?
+                cfg.animationCacheFrameSizeLimit() :
+                std::numeric_limits<int>::max();
+
             const int maxImageDimension = KisAlgebra2D::maxDimension(m_d->canvas->image()->bounds());
 
             const QRect regionOfInterest =
-                maxImageDimension > dimensionLimit ? m_d->canvas->regionOfInterest() : QRect();
+                cfg.useAnimationCacheRegionOfInterest() && maxImageDimension > dimensionLimit ?
+                m_d->canvas->regionOfInterest() :
+                QRect();
 
-            m_d->canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest);
+            const QRect minimalNeedRect =
+                m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
+                m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
+
+            m_d->canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest, minimalNeedRect);
 
             KisAsyncAnimationCacheRenderDialog dlg(m_d->canvas->frameCache(),
                                                    range,

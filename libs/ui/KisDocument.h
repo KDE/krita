@@ -592,13 +592,17 @@ public:
 
     /**
      * Get existing reference images layer or create new if none exists.
+     *
+     * TODO: use setReferenceImagesLayer() combined with undo commands instead
      */
-    KisSharedPtr<KisReferenceImagesLayer> createReferenceImagesLayer(KisImageSP targetImage = KisImageSP());
+    KRITAUI_DEPRECATED KisSharedPtr<KisReferenceImagesLayer> getOrCreateReferenceImagesLayer(KisImageSP targetImage = KisImageSP());
 
     /**
      * Get existing reference images layer or null if none exists.
      */
     KisReferenceImagesLayer *referenceImagesLayer() const;
+
+    void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 

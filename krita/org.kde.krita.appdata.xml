@@ -6,6 +6,7 @@
   <project_license>GPL-3.0-only</project_license>
   <developer_name>Krita Foundation</developer_name>
   <developer_name xml:lang="ca">Fundació Krita</developer_name>
+  <developer_name xml:lang="ca-valencia">Fundació Krita</developer_name>
   <developer_name xml:lang="nl">Krita Foundation</developer_name>
   <developer_name xml:lang="pt">Fundação do Krita</developer_name>
   <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>

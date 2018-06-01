@@ -39,7 +39,7 @@ KisImportExportFilter::ConversionStatus setHeifError(KisDocument* document,
 
   case heif_error_Unsupported_filetype:
   case heif_error_Unsupported_feature:
-    document->setErrorMessage(i18n("Krita does support this type of HEIF file."));
+    document->setErrorMessage(i18n("Krita does not support this type of HEIF file."));
     return KisImportExportFilter::NotImplemented;
 
   case heif_error_Usage_error:

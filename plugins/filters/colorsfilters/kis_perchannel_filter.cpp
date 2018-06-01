@@ -100,7 +100,7 @@ void KisPerChannelConfigWidget::updateChannelControls()
         break;
     }
 
-    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, min, max);
+    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, min, max, min, max);
 }
 
 
@@ -198,35 +198,35 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
                 alphaIndexInReal = realTransfers.size() - 1;
             }
 
-            if (colorsNull && !originalCurves[i].isNull()) {
+            if (colorsNull && !originalCurves[i].isIdentity()) {
                 colorsNull = false;
             }
         } else if (virtualChannels[i].type() == VirtualChannelInfo::HUE) {
             KIS_ASSERT_RECOVER_NOOP(hueTransfer.isEmpty());
             hueTransfer = originalTransfers[i];
 
-            if (hueNull && !originalCurves[i].isNull()) {
+            if (hueNull && !originalCurves[i].isIdentity()) {
                 hueNull = false;
             }
         } else if (virtualChannels[i].type() == VirtualChannelInfo::SATURATION) {
             KIS_ASSERT_RECOVER_NOOP(saturationTransfer.isEmpty());
             saturationTransfer = originalTransfers[i];
 
-            if (saturationNull && !originalCurves[i].isNull()) {
+            if (saturationNull && !originalCurves[i].isIdentity()) {
                 saturationNull = false;
             }
         } else if (virtualChannels[i].type() == VirtualChannelInfo::LIGHTNESS) {
             KIS_ASSERT_RECOVER_NOOP(lightnessTransfer.isEmpty());
             lightnessTransfer = originalTransfers[i];
 
-            if (lightnessNull && !originalCurves[i].isNull()) {
+            if (lightnessNull && !originalCurves[i].isIdentity()) {
                 lightnessNull = false;
             }
         } else if (virtualChannels[i].type() == VirtualChannelInfo::ALL_COLORS) {
             KIS_ASSERT_RECOVER_NOOP(allColorsTransfer.isEmpty());
             allColorsTransfer = originalTransfers[i];
 
-            if (allColorsNull && !originalCurves[i].isNull()) {
+            if (allColorsNull && !originalCurves[i].isIdentity()) {
                 allColorsNull = false;
             }
         }

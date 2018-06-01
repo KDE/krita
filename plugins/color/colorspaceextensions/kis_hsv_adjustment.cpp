@@ -103,7 +103,7 @@ public:
     {
 
         //if (m_model="RGBA" || m_colorize) {
-        /*It'd be nice to have LCH automatically selector for LAB in the future, but I don't know how to select LAB 
+        /*It'd be nice to have LCH automatically selector for LAB in the future, but I don't know how to select LAB
          * */
             const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
             RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
@@ -191,7 +191,7 @@ public:
 
                         sat *= (m_adj_s + 1.0);
                         //sat = qBound(0.0, sat, 1.0);
-                        
+
                         intensity += (m_adj_v);
 
                         HCIToRGB(hue/360.0, sat, intensity, &red, &green, &blue);
@@ -223,7 +223,7 @@ public:
                         r = red;
                         g = green;
                         b = blue;
-                        
+
                     } else if (m_type == 4) {
 
                         qreal red = SCALE_TO_FLOAT(src->red);
@@ -267,7 +267,7 @@ public:
             qreal a = SCALE_TO_FLOAT(src->a);
             qreal b = SCALE_TO_FLOAT(src->b);
             qreal L, C, H;
-            
+
             while (nPixels > 0) {
                 if (m_type = 4) {
                     a *= (m_adj_h + 1.0);
@@ -333,7 +333,7 @@ public:
         }
         return -1;
     }
-    
+
     /**
     * name - "h", "s" or "v"
     * (h)ue in range <-1.0, 1.0> ( for user, show as -180, 180 or 0, 360 for colorize)
@@ -436,7 +436,7 @@ public:
             break;
         case PAR_CHANNEL: {
             int channel = parameter.toInt();
-            KIS_ASSERT_RECOVER_RETURN(0 <= channel && channel < 3 && "Channel must be 0, 1 or 2. Ignored!");
+            KIS_ASSERT_RECOVER_RETURN(0 <= channel && channel < KisHSVCurve::ChannelCount && "Invalid channel. Ignored!");
             m_channel = channel;
             } break;
         case PAR_LUMA_R:
@@ -457,36 +457,47 @@ public:
     {
         const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
-        float r = 0.0;
-        float g = 0.0;
-        float b = 0.0;
-
         float max = m_curve.size() - 1;
-        float component[3];
-        float &hue = component[0];
+
+        float component[KisHSVCurve::ChannelCount];
+
+        // Aliases for convenience
+        float &h = component[KisHSVCurve::Hue];
+        float &s = component[KisHSVCurve::Saturation];
+        float &v = component[KisHSVCurve::Value];
+        float &r = component[KisHSVCurve::Red];
+        float &g = component[KisHSVCurve::Green];
+        float &b = component[KisHSVCurve::Blue];
+        float &a = component[KisHSVCurve::Alpha];
 
         while (nPixels > 0) {
-            RGBToHSV(
-                SCALE_TO_FLOAT(src->red), SCALE_TO_FLOAT(src->green), SCALE_TO_FLOAT(src->blue),
-                &component[0], &component[1], &component[2]
-            );
+            r = SCALE_TO_FLOAT(src->red);
+            g = SCALE_TO_FLOAT(src->green);
+            b = SCALE_TO_FLOAT(src->blue);
+            a = SCALE_TO_FLOAT(src->alpha);
+
+            RGBToHSV(r, g, b, &h, &s, &v);
 
             // Normalize hue to 0.0 to 1.0 range
-            hue /= 360.0f;
+            h /= 360.0f;
 
             component[m_channel] = lookupComponent(component[m_channel], max);
 
-            hue *= 360.0f;
-            if (hue > 360) hue -= 360;
-            if (hue < 0) hue += 360;
+            h *= 360.0f;
+            if (h > 360) h -= 360;
+            if (h < 0) h += 360;
 
-            HSVToRGB(component[0], component[1], component[2], &r, &g, &b);
+            if (m_channel >= KisHSVCurve::Hue) {
+                HSVToRGB(h, s, v, &r, &g, &b);
+            }
 
             clamp< _channel_type_ >(&r, &g, &b);
+            FLOAT_CLAMP(&a);
+
             dst->red = SCALE_FROM_FLOAT(r);
             dst->green = SCALE_FROM_FLOAT(g);
             dst->blue = SCALE_FROM_FLOAT(b);
-            dst->alpha = src->alpha;
+            dst->alpha = SCALE_FROM_FLOAT(a);
 
             --nPixels;
             ++src;
@@ -497,8 +508,9 @@ public:
     const float SCALE_FROM_16BIT = 1.0f / 0xFFFF;
     float lookupComponent(float x, float max) const
     {
-        // No curve for this component? Pass through modified
+        // No curve for this component? Pass through unmodified
         if (max < 2) return x;
+        if (x < 0) return m_curve[0];
 
         float lookup = x * max;
         float base = floor(lookup);
@@ -533,6 +545,7 @@ private:
      */
     qreal m_lumaRed, m_lumaGreen, m_lumaBlue;
 };
+
 
 KisHSVAdjustmentFactory::KisHSVAdjustmentFactory()
     : KoColorTransformationFactory("hsv_adjustment")

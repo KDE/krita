@@ -346,7 +346,7 @@ void KisAnimationPlayer::play()
             const QRect regionOfInterest =
                 cfg.useAnimationCacheRegionOfInterest() && maxImageDimension > dimensionLimit ?
                 m_d->canvas->regionOfInterest() :
-                QRect();
+                m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
 
             const QRect minimalNeedRect =
                 m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &

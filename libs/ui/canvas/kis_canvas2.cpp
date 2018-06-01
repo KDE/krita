@@ -21,6 +21,9 @@
 
 #include "kis_canvas2.h"
 
+#include <functional>
+#include <numeric>
+
 #include <QApplication>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -120,7 +123,7 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
     bool vastScrolling;
 
-    KisSignalCompressor updateSignalCompressor;
+    KisSignalCompressor canvasUpdateCompressor;
     QRect savedUpdateRect;
 
     QBitArray channelFlags;
@@ -139,6 +142,8 @@ public:
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
+
+    KisSignalCompressor frameRenderStartCompressor;
 
     KisSignalCompressor regionOfInterestUpdateCompressor;
     QRect regionOfInterest;
@@ -193,8 +198,11 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 
     KisImageConfig config;
 
-    m_d->updateSignalCompressor.setDelay(1000 / config.fpsLimit());
-    m_d->updateSignalCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+    m_d->canvasUpdateCompressor.setDelay(1000 / config.fpsLimit());
+    m_d->canvasUpdateCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
+
+    m_d->frameRenderStartCompressor.setDelay(1000 / config.fpsLimit());
+    m_d->frameRenderStartCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
 }
 
 void KisCanvas2::setup()
@@ -234,7 +242,13 @@ void KisCanvas2::setup()
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-    connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
+    connect(&m_d->canvasUpdateCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
+
+    connect(this, SIGNAL(sigCanvasCacheUpdated()), &m_d->frameRenderStartCompressor, SLOT(start()));
+    connect(&m_d->frameRenderStartCompressor, SIGNAL(timeout()), SLOT(updateCanvasProjection()));
+
+    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
+
     connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateRegionOfInterest()));
 
     initializeFpsDecoration();
@@ -542,10 +556,8 @@ void KisCanvas2::initializeImage()
     m_d->toolProxy.initializeImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
-    connect(this, SIGNAL(sigCanvasCacheUpdated()), SLOT(updateCanvasProjection()));
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
-    connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
     connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
 
     connectCurrentCanvas();
@@ -736,21 +748,37 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
 void KisCanvas2::updateCanvasProjection()
 {
+    QVector<KisUpdateInfoSP> infoObjects;
     while (KisUpdateInfoSP info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
-        QRect vRect = m_d->canvasWidget->updateCanvasProjection(info);
-        if (!vRect.isEmpty()) {
-            updateCanvasWidgetImpl(m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect());
-        }
+        infoObjects << info;
     }
+
+    QVector<QRect> viewportRects = m_d->canvasWidget->updateCanvasProjection(infoObjects);
+
+    const QRect vRect = std::accumulate(viewportRects.constBegin(), viewportRects.constEnd(),
+                                        QRect(), std::bit_or<QRect>());
 
     // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
     if (m_d->currentCanvasIsOpenGL) {
-        updateCanvasWidgetImpl();
+        m_d->savedUpdateRect = QRect();
+
+        // we already had a compression in frameRenderStartCompressor, so force the update directly
+        slotDoCanvasUpdate();
+    } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
+        m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
+
+        // we already had a compression in frameRenderStartCompressor, so force the update directly
+        slotDoCanvasUpdate();
     }
 }
 
 void KisCanvas2::slotDoCanvasUpdate()
 {
+    /**
+     * WARNING: in isBusy() we access openGL functions without making the painting
+     * context current. We hope that currently active context will be Qt's one,
+     * which is shared with our own.
+     */
     if (m_d->canvasWidget->isBusy()) {
         // just restarting the timer
         updateCanvasWidgetImpl(m_d->savedUpdateRect);
@@ -770,11 +798,11 @@ void KisCanvas2::slotDoCanvasUpdate()
 
 void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 {
-    if (!m_d->updateSignalCompressor.isActive() ||
+    if (!m_d->canvasUpdateCompressor.isActive() ||
         !m_d->savedUpdateRect.isEmpty()) {
         m_d->savedUpdateRect |= rc;
     }
-    m_d->updateSignalCompressor.start();
+    m_d->canvasUpdateCompressor.start();
 }
 
 void KisCanvas2::updateCanvas()

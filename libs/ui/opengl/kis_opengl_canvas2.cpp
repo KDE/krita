@@ -909,19 +909,36 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     if (isOpenGLUpdateInfo) {
         d->openGLImageTextures->recalculateCache(info);
     }
+    return QRect(); // FIXME: Implement dirty rect for OpenGL
+}
 
+QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+{
 #ifdef Q_OS_OSX
     /**
-     * There is a bug on OSX: if we issue frame redraw before the tiles finished
-     * uploading, the tiles will become corrupted. Depending on the GPU/driver
-     * version either the tile itself, or its mipmaps will become totally
-     * transparent.
+     * On OSX openGL defferent (shared) contexts have different execution queues.
+     * It means that the textures uploading and their painting can be easily reordered.
+     * To overcome the issue, we should ensure that the textures are uploaded in the
+     * same openGL context as the painting is done.
      */
 
-    glFinish();
+    QOpenGLContext *oldContext = QOpenGLContext::currentContext();
+    QSurface *oldSurface = oldContext ? oldContext->surface() : 0;
+
+    this->makeCurrent();
 #endif
 
-    return QRect(); // FIXME: Implement dirty rect for OpenGL
+    QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
+
+#ifdef Q_OS_OSX
+    if (oldContext) {
+        oldContext->makeCurrent(oldSurface);
+    } else {
+        this->doneCurrent();
+    }
+#endif
+
+    return result;
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

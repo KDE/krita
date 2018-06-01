@@ -79,6 +79,7 @@ public:
 
     // Called from KisCanvas2::updateCanvasProjection
     virtual QRect updateCanvasProjection(KisUpdateInfoSP info) = 0;
+    virtual QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) = 0;
 
     /**
      * Returns true if the asynchromous engine of the canvas

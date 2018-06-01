@@ -39,6 +39,8 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "KisDocument.h"
+#include "kis_update_info.h"
+
 
 struct KisCanvasWidgetBase::Private
 {
@@ -238,6 +240,17 @@ KisCanvas2 *KisCanvasWidgetBase::canvas() const
 KisCoordinatesConverter* KisCanvasWidgetBase::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;
+}
+
+QVector<QRect> KisCanvasWidgetBase::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+{
+    QVector<QRect> dirtyViewRects;
+
+    Q_FOREACH (KisUpdateInfoSP info, infoObjects) {
+        dirtyViewRects << this->updateCanvasProjection(info);
+    }
+
+    return dirtyViewRects;
 }
 
 KoToolProxy *KisCanvasWidgetBase::toolProxy() const

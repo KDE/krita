@@ -57,6 +57,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
         : KisMultiChannelConfigWidget(parent, dev, f)
 {
     init();
+
+    // These are not used by this filter,
+    // but the dialog is shared with KisCrossChannelFilter
+    m_page->lblDriverChannel->hide();
+    m_page->cmbDriverChannel->hide();
 }
 
 KisPerChannelConfigWidget::~KisPerChannelConfigWidget()
@@ -259,6 +264,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
         QHash<QString, QVariant> params;
         params["curve"] = QVariant::fromValue(hueTransfer);
         params["channel"] = KisHSVCurve::Hue;
+        params["relative"] = false;
         params["lumaRed"]   = cs->lumaCoefficients()[0];
         params["lumaGreen"] = cs->lumaCoefficients()[1];
         params["lumaBlue"]  = cs->lumaCoefficients()[2];
@@ -270,6 +276,7 @@ KoColorTransformation* KisPerChannelFilter::createTransformation(const KoColorSp
         QHash<QString, QVariant> params;
         params["curve"] = QVariant::fromValue(saturationTransfer);
         params["channel"] = KisHSVCurve::Saturation;
+        params["relative"] = false;
         params["lumaRed"]   = cs->lumaCoefficients()[0];
         params["lumaGreen"] = cs->lumaCoefficients()[1];
         params["lumaBlue"]  = cs->lumaCoefficients()[2];

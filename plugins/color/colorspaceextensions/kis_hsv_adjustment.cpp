@@ -401,7 +401,7 @@ public:
     QList<QString> parameters() const override
     {
       QList<QString> list;
-      list << "curve" << "channel" << "lumaRed" << "lumaGreen"<< "lumaBlue";
+      list << "curve" << "channel" << "driverChannel" << "relative" << "lumaRed" << "lumaGreen"<< "lumaBlue";
       return list;
     }
 
@@ -411,6 +411,10 @@ public:
             return PAR_CURVE;
         } else if (name == "channel") {
             return PAR_CHANNEL;
+        } else if (name == "driverChannel") {
+            return PAR_DRIVER_CHANNEL;
+        } else if (name == "relative") {
+            return PAR_RELATIVE;
         } else if (name == "lumaRed") {
             return PAR_LUMA_R;
         } else if (name == "lumaGreen") {
@@ -423,8 +427,11 @@ public:
 
     /**
     * curve: adjustment curve as QVector<quin16>
-    * channel: which channel to adjust
-    *   0 = hue, 1 = saturation, 2 = value
+    * channel: which channel to adjust. See KisHSVCurve::ColorChannel.
+    * driverChannel: which channel to use as source for adjustments.
+    * relative:
+    *   false: use curve for direct lookup.
+    *   true: add adjustment to original. In this mode, the curve range is mapped to -1.0 to 1.0
     * luma Red/Green/Blue: Used for luma calculations.
     */
     void setParameter(int id, const QVariant& parameter) override
@@ -434,11 +441,20 @@ public:
         case PAR_CURVE:
             m_curve = parameter.value<QVector<quint16>>();
             break;
-        case PAR_CHANNEL: {
+        case PAR_CHANNEL:
+        case PAR_DRIVER_CHANNEL: {
             int channel = parameter.toInt();
             KIS_ASSERT_RECOVER_RETURN(0 <= channel && channel < KisHSVCurve::ChannelCount && "Invalid channel. Ignored!");
-            m_channel = channel;
+
+            if (id == PAR_CHANNEL) {
+                m_channel = channel;
+            } else {
+                m_driverChannel = channel;
+            }
             } break;
+        case PAR_RELATIVE:
+            m_relative = parameter.toBool();
+            break;
         case PAR_LUMA_R:
             m_lumaRed = parameter.toDouble();
             break;
@@ -458,6 +474,8 @@ public:
         const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
         RGBPixel* dst = reinterpret_cast<RGBPixel*>(dstU8);
         float max = m_curve.size() - 1;
+
+        int driverChannel = m_relative ? m_driverChannel : m_channel;
 
         float component[KisHSVCurve::ChannelCount];
 
@@ -481,7 +499,26 @@ public:
             // Normalize hue to 0.0 to 1.0 range
             h /= 360.0f;
 
-            component[m_channel] = lookupComponent(component[m_channel], max);
+            float adjustment = lookupComponent(component[driverChannel], max);
+
+            if (m_relative) {
+                // Curve uses range 0.0 to 1.0, but for adjustment we need -1.0 to 1.0
+                adjustment = 2.0f * adjustment - 1.0f;
+
+                if (m_channel == KisHSVCurve::AllColors) {
+                    r += adjustment;
+                    g += adjustment;
+                    b += adjustment;
+                } else {
+                    component[m_channel] += adjustment;
+                }
+            } else {
+                if (m_channel == KisHSVCurve::AllColors) {
+                    r = b = g = adjustment;
+                } else {
+                    component[m_channel] = adjustment;
+                }
+            }
 
             h *= 360.0f;
             if (h > 360) h -= 360;
@@ -532,13 +569,17 @@ private:
     {
         PAR_CURVE,
         PAR_CHANNEL,
+        PAR_DRIVER_CHANNEL,
+        PAR_RELATIVE,
         PAR_LUMA_R,
         PAR_LUMA_G,
         PAR_LUMA_B,
     };
 
     QVector<quint16> m_curve;
-    int m_channel;
+    int m_channel = 0;
+    int m_driverChannel = 0;
+    bool m_relative = false;
 
     /* Note: the filter currently only supports HSV, so these are
      * unused, but will be needed once HSL, etc.

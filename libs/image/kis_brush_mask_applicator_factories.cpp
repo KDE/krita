@@ -209,11 +209,10 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_m fadeStartMask(false);
         // if antialias is off, do not process
         if(antialiasOn){
-            Vc::float_m fadeStartMask = dist > vFadeAFadeStart;
+            fadeStartMask = dist > vFadeAFadeStart;
             dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue + (dist - vFadeAFadeStart) * vFadeAFadeCoeff) / vValMax;
         }
-
-        Vc::float_m excludeMask = outsideMask | fadeStartMask;
+        Vc::float_m excludeMask(outsideMask | fadeStartMask);
 
         if (!excludeMask.isFull()) {
             Vc::float_v valDist = dist * vDistfactor;

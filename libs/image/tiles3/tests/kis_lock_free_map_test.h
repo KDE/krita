@@ -8,7 +8,8 @@ class LockFreeMapTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void testWrapper();
+    void testMainOperations();
+    void testLazy();
 };
 
 #endif // KIS_LOCK_FREE_MAP_TEST_H

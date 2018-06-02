@@ -42,7 +42,7 @@ public:
 
     TileTypeSP erase(qint32 key)
     {
-        qint32 currentThreads = m_rawPointerUsers.fetchAdd(1, Relaxed);
+        qint32 currentThreads = m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileType *result = m_map.erase(key);
         TileTypeSP ptr(result);
 
@@ -51,42 +51,36 @@ public:
             QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
         }
 
-        qint32 expected = 1;
-
-        if (m_rawPointerUsers.compareExchangeStrong(expected, currentThreads, Relaxed)) {
+        if (m_rawPointerUsers.testAndSetRelaxed(1, currentThreads)) {
             QSBR::instance().update(m_context);
         }
 
-        m_rawPointerUsers.fetchSub(1, Relaxed);
+        m_rawPointerUsers.fetchAndSubRelaxed(1);
         return ptr;
     }
 
     TileTypeSP get(qint32 key)
     {
-        m_rawPointerUsers.fetchAdd(1, Relaxed);
+        m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileTypeSP result(m_map.get(key));
-        m_rawPointerUsers.fetchSub(1, Relaxed);
+        m_rawPointerUsers.fetchAndSubRelaxed(1);
         return result;
     }
 
     TileTypeSP getLazy(qint32 key)
     {
-        m_rawPointerUsers.fetchAdd(1, Relaxed);
+        m_rawPointerUsers.fetchAndAddRelaxed(1);
         typename ConcurrentMap<qint32, TileType *>::Mutator iter = m_map.insertOrFind(key);
-        m_rawPointerUsers.fetchSub(1, Relaxed);
+        TileTypeSP value(iter.getValue());
+        m_rawPointerUsers.fetchAndSubRelaxed(1);
 
-        if (!iter.getValue()) {
-            TileTypeSP value(new TileType);
+        if (!value.data()) {
+            value.attach(new TileType);
             TileTypeSP::ref(&value, value.data());
-            TileType *result = iter.exchangeValue(value.data());
-
-            if (result) {
-                MemoryReclaimer *tmp = new MemoryReclaimer(result);
-                QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
-            }
+            iter.exchangeValue(value.data());
         }
 
-        return TileTypeSP(iter.getValue());
+        return value;
     }
 
 private:
@@ -107,7 +101,7 @@ private:
 
     ConcurrentMap<qint32, TileType *> m_map;
     QSBR::Context m_context;
-    Atomic<qint32> m_rawPointerUsers;
+    QAtomicInt m_rawPointerUsers;
 };
 
 #endif // KIS_TILEHASHTABLE_2_H

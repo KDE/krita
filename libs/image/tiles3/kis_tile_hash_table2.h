@@ -71,16 +71,20 @@ public:
     {
         m_rawPointerUsers.fetchAndAddRelaxed(1);
         typename ConcurrentMap<qint32, TileType *>::Mutator iter = m_map.insertOrFind(key);
-        TileTypeSP value(iter.getValue());
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
 
-        if (!value.data()) {
-            value.attach(new TileType);
+        if (!iter.getValue()) {
+            TileTypeSP value(new TileType);
             TileTypeSP::ref(&value, value.data());
-            iter.exchangeValue(value.data());
+
+            if (iter.exchangeValue(value.data()) == value.data()) {
+                MemoryReclaimer *tmp = new MemoryReclaimer(value.data());
+                QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
+            }
         }
 
-        return value;
+        TileTypeSP result(iter.getValue());
+        m_rawPointerUsers.fetchAndSubRelaxed(1);
+        return result;
     }
 
 private:

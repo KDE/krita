@@ -53,6 +53,8 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
     // vectorized erf function, precision 1e-5
     Vc::float_v vErf(Vc::float_v x) {
         Vc::float_v xa = abs(x);
+        Vc::float_m precisionLimit(xa >= 9.3f); // wrong result for any number beyond this
+        xa(precisionLimit) = 0;
         Vc::float_v sign(Vc::One);
         Vc::float_m invertMask = x < 0.f;
         sign(invertMask) = -1.f;
@@ -67,6 +69,7 @@ struct Q_DECL_HIDDEN KisGaussCircleMaskGenerator::Private
 
         Vc::float_v t = 1.0f / (1.0f + p * xa);
         Vc::float_v y = 1.0f - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * exp(-xa * xa);
+        y(precisionLimit) = 1.0f;
         return sign * y;
     }
     #endif /* defined HAVE_VC */

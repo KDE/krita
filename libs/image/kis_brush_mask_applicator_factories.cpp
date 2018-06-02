@@ -219,22 +219,20 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             Vc::float_v fullFade = vAlphafactor * ( d->vErf(valDist + vCenter) - d->vErf(valDist - vCenter));
 
             Vc::float_m mask;
+            // Mask  undefined values, out of range are out of mask
+            mask = Vc::isfinite(fullFade);
+            fullFade.setZero(!mask);
+
             // Mask in the inner circe of the mask
             mask = fullFade < vZero;
             fullFade.setZero(mask);
 
+            // Mask the outter circle
+            mask = fullFade > 254.974f;
+            fullFade(mask) = vValMax;
+
             // Mask (value - value), presicion errors.
-            mask = fullFade >= vValMax;
             Vc::float_v vFade = (vValMax - fullFade) / vValMax;
-            vFade(mask) = vZero;
-
-            // filter nan and inf. Vc uses float, imprecission errors are frequent
-            mask = Vc::isfinite(vFade);
-            vFade(!mask) = vOne;
-
-            // Mask the inner circe of the mask
-            mask = vFade < vZero;
-            vFade(mask) = vZero;
 
             // return original dist values before vFade transform
             vFade(excludeMask) = dist;

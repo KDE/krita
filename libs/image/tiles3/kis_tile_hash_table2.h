@@ -29,6 +29,7 @@ public:
 
     TileTypeSP insert(qint32 key, TileTypeSP value)
     {
+        m_rawPointerUsers.fetchAndAddOrdered(1);
         TileTypeSP::ref(&value, value.data());
         TileType *result = m_map.assign(key, value.data());
 
@@ -37,12 +38,14 @@ public:
             QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
         }
 
-        return TileTypeSP(result);
+        TileTypeSP ptr(result);
+        m_rawPointerUsers.fetchAndSubOrdered(1);
+        return ptr;
     }
 
     TileTypeSP erase(qint32 key)
     {
-        qint32 currentThreads = m_rawPointerUsers.fetchAndAddRelaxed(1);
+        m_rawPointerUsers.fetchAndAddOrdered(1);
         TileType *result = m_map.erase(key);
         TileTypeSP ptr(result);
 
@@ -51,25 +54,25 @@ public:
             QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
         }
 
-        if (m_rawPointerUsers.testAndSetRelaxed(1, currentThreads)) {
+        if (m_rawPointerUsers == 1) {
             QSBR::instance().update(m_context);
         }
 
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
+        m_rawPointerUsers.fetchAndSubOrdered(1);
         return ptr;
     }
 
     TileTypeSP get(qint32 key)
     {
-        m_rawPointerUsers.fetchAndAddRelaxed(1);
+        m_rawPointerUsers.fetchAndAddOrdered(1);
         TileTypeSP result(m_map.get(key));
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
+        m_rawPointerUsers.fetchAndSubOrdered(1);
         return result;
     }
 
     TileTypeSP getLazy(qint32 key)
     {
-        m_rawPointerUsers.fetchAndAddRelaxed(1);
+        m_rawPointerUsers.fetchAndAddOrdered(1);
         typename ConcurrentMap<qint32, TileType *>::Mutator iter = m_map.insertOrFind(key);
 
         if (!iter.getValue()) {
@@ -77,13 +80,12 @@ public:
             TileTypeSP::ref(&value, value.data());
 
             if (iter.exchangeValue(value.data()) == value.data()) {
-                MemoryReclaimer *tmp = new MemoryReclaimer(value.data());
-                QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
+                TileTypeSP::deref(&value, value.data());
             }
         }
 
         TileTypeSP result(iter.getValue());
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
+        m_rawPointerUsers.fetchAndSubOrdered(1);
         return result;
     }
 
@@ -96,7 +98,7 @@ private:
         {
             TileTypeSP::deref(reinterpret_cast<TileTypeSP *>(this), d);
             this->MemoryReclaimer::~MemoryReclaimer();
-            std::free(this);
+            delete this;
         }
 
     private:

@@ -60,7 +60,7 @@ void LockFreeMapTest::testMainOperations()
     QList<StressJob *> jobs;
     KisTileHashTableTraits2<Wrapper> map;
 
-    auto func = [&](qint64 &eraseSum, qint64 &insertSum) {
+    auto func = [&](qint64 & eraseSum, qint64 & insertSum) {
         for (qint32 i = 1; i < numCycles + 1; ++i) {
             auto type = i % numTypes;
 
@@ -73,7 +73,7 @@ void LockFreeMapTest::testMainOperations()
                 break;
             }
             case 1: {
-                auto result = map.insert(i, new Wrapper(i));
+                auto result = map.insert(i, KisSharedPtr<Wrapper>(new Wrapper(i)));
                 if (result.data()) {
                     insertSum -= result->member();
                 }

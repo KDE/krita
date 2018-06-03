@@ -71,11 +71,6 @@ qreal KoZoomMode::maximumZoom()
     return maximumZoomValue;
 }
 
-qreal KoZoomMode::clampZoom(qreal zoom)
-{
-    return qMin(maximumZoomValue, qMax(minimumZoomValue, zoom));
-}
-
 void KoZoomMode::setMinimumZoom(qreal zoom)
 {
     Q_ASSERT(zoom > 0.0f);

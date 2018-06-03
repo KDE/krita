@@ -63,24 +63,9 @@ public:
         vectorImage.invertPixels(); // Make pixel color black
         vectorImage.save(QString("vector_mask.png"),"PNG");
 
-// Development debug.
-// Count number of identical pixels
-//        int equals = 0;
-//        for (int i = 0; i < scalarImage.width(); ++i) {
-//            for (int j = 0; j < scalarImage.height(); ++j) {
-//                if (scalarImage.pixelColor(i,j) == vectorImage.pixelColor(i,j)){
-//                    equals++;
-//                } else {
-//                    qDebug() << scalarImage.pixelColor(i,j) << " " << vectorImage.pixelColor(i,j);
-//                }
-//            }
-//        }
-//        qDebug() << "Equal Pixels: " << equals;
-
-        // Check for differences, max error .5% of pixel mismatch
-        int tolerance = m_bounds.width() * m_bounds.height() * .005f;
+        // Check for differences, max errors: 0
         QPoint tmpPt;
-        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 1, tolerance));
+        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 2, 0));
     }
 
 private:

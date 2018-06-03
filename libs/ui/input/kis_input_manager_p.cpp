@@ -467,7 +467,7 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
 
 bool KisInputManager::Private::addNativeGestureShortcut(KisAbstractInputAction* action, int index, KisShortcutConfiguration::GestureAction gesture)
 {
-    // each platform should decide here which gestures are handled via QtNativeGestureEvent.
+    // Qt5 only implements QNativeGestureEvent for macOS
     Qt::NativeGestureType type;
     switch (gesture) {
 #ifdef Q_OS_OSX

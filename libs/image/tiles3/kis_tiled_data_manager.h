@@ -29,7 +29,8 @@
 //#include "kis_debug.h"
 #include "kritaimage_export.h"
 
-#include "kis_tile_hash_table.h"
+//#include "kis_tile_hash_table.h"
+#include "kis_tile_hash_table2.h"
 #include "kis_memento_manager.h"
 #include "kis_memento.h"
 #include "KisTiledExtentManager.h"

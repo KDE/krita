@@ -115,12 +115,12 @@ void FreehandStrokeBenchmark::initTestCase()
 
 void FreehandStrokeBenchmark::testDefaultTip()
 {
-    benchmarkBrush("testing_1000px_auto_deafult.kpp");
+//    benchmarkBrush("testing_1000px_auto_deafult.kpp");
 }
 
 void FreehandStrokeBenchmark::testSoftTip()
 {
-    benchmarkBrush("testing_1000px_auto_soft.kpp");
+//    benchmarkBrush("testing_1000px_auto_soft.kpp");
 }
 
 void FreehandStrokeBenchmark::testGaussianTip()
@@ -130,12 +130,12 @@ void FreehandStrokeBenchmark::testGaussianTip()
 
 void FreehandStrokeBenchmark::testStampTip()
 {
-    benchmarkBrush("testing_1000px_stamp_450_rotated.kpp");
+//    benchmarkBrush("testing_1000px_stamp_450_rotated.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip()
 {
-    benchmarkBrush("testing_200px_colorsmudge_default.kpp");
+//    benchmarkBrush("testing_200px_colorsmudge_default.kpp");
 }
 
 QTEST_MAIN(FreehandStrokeBenchmark)

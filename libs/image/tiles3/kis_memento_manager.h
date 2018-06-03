@@ -22,7 +22,8 @@
 #include <QList>
 
 #include "kis_memento_item.h"
-#include "kis_tile_hash_table.h"
+//#include "kis_tile_hash_table.h"
+#include "kis_tile_hash_table2.h"
 
 typedef QList<KisMementoItemSP> KisMementoItemList;
 typedef QListIterator<KisMementoItemSP> KisMementoItemListIterator;
@@ -38,9 +39,19 @@ typedef QList<KisHistoryItem> KisHistoryList;
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
 
-typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
-typedef KisTileHashTableIteratorTraits<KisMementoItem, QWriteLocker> KisMementoItemHashTableIterator;
-typedef KisTileHashTableIteratorTraits<KisMementoItem, QReadLocker> KisMementoItemHashTableIteratorConst;
+template <class T>
+class KisTileHashTableTraits2;
+
+template <class T>
+class KisTileHashTableIteratorTraits2;
+
+//typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
+//typedef KisTileHashTableIteratorTraits<KisMementoItem, QWriteLocker> KisMementoItemHashTableIterator;
+//typedef KisTileHashTableIteratorTraits<KisMementoItem, QReadLocker> KisMementoItemHashTableIteratorConst;
+
+typedef KisTileHashTableTraits2<KisMementoItem> KisMementoItemHashTable;
+typedef KisTileHashTableIteratorTraits2<KisMementoItem> KisMementoItemHashTableIterator;
+typedef KisTileHashTableIteratorTraits2<KisMementoItem> KisMementoItemHashTableIteratorConst;
 
 
 class KRITAIMAGE_EXPORT KisMementoManager

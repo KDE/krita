@@ -142,7 +142,8 @@ void LockFreeMapTest::testLazy()
                 break;
             }
             case 1: {
-                auto result = map.getLazy(i, KisSharedPtr<Wrapper>(new Wrapper()));
+                bool newTile = false;
+                auto result = map.getLazy(i, KisSharedPtr<Wrapper>(new Wrapper()), newTile);
                 if (result.data()) {
                     insertSum += result->member();
                 }

@@ -63,11 +63,7 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         // If it isn't an OpenGL canvas
         if (qobject_cast<QOpenGLWidget*>(canvasWidget) == 0) {
             QPoint diff = q->documentOffset() - pt;
-            if (q->canvasMode() == Spreadsheet && canvasWidget->layoutDirection() == Qt::RightToLeft) {
-                canvasWidget->scroll(-diff.x(), diff.y());
-            } else {
-                canvasWidget->scroll(diff.x(), diff.y());
-            }
+            canvasWidget->scroll(diff.x(), diff.y());
         }
     }
 

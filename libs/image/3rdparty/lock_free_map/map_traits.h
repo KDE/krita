@@ -31,6 +31,26 @@ inline bool isPowerOf2(quint64 v)
     return (v & (v - 1)) == 0;
 }
 
+inline quint32 avalanche(quint32 h)
+{
+    h ^= h >> 16;
+    h *= 0x85ebca6b;
+    h ^= h >> 13;
+    h *= 0xc2b2ae35;
+    h ^= h >> 16;
+    return h;
+}
+
+inline quint32 deavalanche(quint32 h)
+{
+    h ^= h >> 16;
+    h *= 0x7ed1b41d;
+    h ^= (h ^ (h >> 13)) >> 13;
+    h *= 0xa5cb9243;
+    h ^= h >> 16;
+    return h;
+}
+
 template <class T>
 struct DefaultKeyTraits {
     typedef T Key;
@@ -40,7 +60,12 @@ struct DefaultKeyTraits {
 
     static Hash hash(T key)
     {
-        return std::hash<Hash>()(Hash(key));
+        return avalanche(Hash(key));
+    }
+
+    static Key dehash(Hash hash)
+    {
+        return (T) deavalanche(hash);
     }
 };
 

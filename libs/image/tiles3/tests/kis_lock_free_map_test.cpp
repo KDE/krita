@@ -12,7 +12,9 @@ class Wrapper : public KisShared
 {
 public:
     Wrapper() : m_member(0) {}
-    Wrapper(qint32 member) : m_member(member) {}
+    Wrapper(qint32 col, qint32 row,
+            KisTileData *defaultTileData, KisMementoManager* mm)
+        : m_member(col) {}
 
     qint32 member()
     {
@@ -73,7 +75,7 @@ void LockFreeMapTest::testMainOperations()
                 break;
             }
             case 1: {
-                auto result = map.insert(i, KisSharedPtr<Wrapper>(new Wrapper(i)));
+                auto result = map.insert(i, KisSharedPtr<Wrapper>(new Wrapper(i, 0, 0, 0)));
                 if (result.data()) {
                     insertSum -= result->member();
                 }
@@ -127,7 +129,7 @@ void LockFreeMapTest::testLazy()
     QList<StressJob *> jobs;
     KisTileHashTableTraits2<Wrapper> map;
 
-    auto func = [&](qint64 &eraseSum, qint64 &insertSum) {
+    auto func = [&](qint64 & eraseSum, qint64 & insertSum) {
         for (qint32 i = 1; i < numCycles + 1; ++i) {
             auto type = i % numTypes;
 
@@ -140,7 +142,7 @@ void LockFreeMapTest::testLazy()
                 break;
             }
             case 1: {
-                auto result = map.getLazy(i);
+                auto result = map.getLazy(i, KisSharedPtr<Wrapper>(new Wrapper()));
                 if (result.data()) {
                     insertSum += result->member();
                 }

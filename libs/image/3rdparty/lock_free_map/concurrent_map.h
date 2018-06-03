@@ -337,6 +337,13 @@ public:
             return m_value != Value(ValueTraits::NullValue);
         }
 
+        Key getKey() const
+        {
+            Q_ASSERT(isValid());
+            // Since we've forbidden concurrent inserts (for now), nonatomic would suffice here, but let's plan ahead:
+            return KeyTraits::dehash(m_hash);
+        }
+
         Value getValue() const
         {
             Q_ASSERT(isValid());

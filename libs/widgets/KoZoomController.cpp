@@ -97,18 +97,6 @@ QSizeF KoZoomController::pageSize() const
     return d->pageSize;
 }
 
-void KoZoomController::setTextMinMax(qreal min, qreal max)
-{
-    if(d->textMinX == min && d->textMaxX == max) {
-        return;
-    }
-    d->textMinX = min;
-    d->textMaxX = max;
-
-    if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
-        setZoom(KoZoomMode::ZOOM_TEXT, 0);
-}
-
 void KoZoomController::setDocumentSize(const QSizeF &documentSize, bool recalculateCenter)
 {
     d->documentSize = documentSize;
@@ -149,7 +137,6 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
 
     qreal oldEffectiveZoom = d->action->effectiveZoom();
     QSize oldPageViewportSize = documentToViewport(d->pageSize);
-    QSize oldTextViewportSize = documentToViewport(QSizeF(d->textMaxX-d->textMinX, 1));
 
     if(!qFuzzyCompare(d->zoomHandler->resolutionX(), resolutionX) ||
             !qFuzzyCompare(d->zoomHandler->resolutionY(), resolutionY)) {
@@ -173,12 +160,6 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         zoom = qMin(zoom, (d->canvasController->viewportSize().height() - 2 * d->fitMargin)
                     / (oldPageViewportSize.height() / d->zoomHandler->zoom()));
 
-        d->action->setSelectedZoomMode(mode);
-        d->action->setEffectiveZoom(zoom);
-    }
-    else if (mode == KoZoomMode::ZOOM_TEXT) {
-        zoom = (d->canvasController->viewportSize().width() - 2 * d->fitMargin)
-                / (oldTextViewportSize.width() / d->zoomHandler->zoom());
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);
     }

@@ -52,8 +52,6 @@ public:
             setZoom(KoZoomMode::ZOOM_WIDTH, -1);
         if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
             setZoom(KoZoomMode::ZOOM_PAGE, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
-            setZoom(KoZoomMode::ZOOM_TEXT, -1);
     }
 
     /// when the canvas controller wants us to change zoom

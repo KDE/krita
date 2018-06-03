@@ -54,9 +54,9 @@ void KoZoomController::Private::init(KoCanvasController *co,
     connect(canvasController->proxyObject, SIGNAL( zoomRelative(const qreal, const QPointF& ) ), parent, SLOT( requestZoomRelative( const qreal, const QPointF& ) ) );
 }
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, QObject *parent)
     : QObject(parent),
-      d(new Private(this, specialButtons))
+      d(new Private(this))
 {
     d->init(co, zh, actionCollection);
 }

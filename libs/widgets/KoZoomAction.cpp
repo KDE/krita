@@ -61,8 +61,6 @@ public:
 
     qreal effectiveZoom;
 
-    KoZoomAction::SpecialButtons specialButtons;
-
     QList<qreal> generateSliderZoomLevels() const;
     QList<qreal> filterMenuZoomLevels(const QList<qreal> &zoomLevels) const;
 
@@ -119,7 +117,6 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     , d(new Private(this))
 {
     d->zoomModes = zoomModes;
-    d->specialButtons = 0;
     setIcon(koIcon("zoom-original"));
     setEditable( true );
     setMaxComboViewCount( 15 );
@@ -270,7 +267,7 @@ void KoZoomAction::zoomOut()
 
 QWidget * KoZoomAction::createWidget(QWidget *parent)
 {
-    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
+    KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->sliderLookup.size() - 1);
     connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
@@ -301,11 +298,6 @@ void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
     setCurrentAction(modeString);
 
     emit currentZoomLevelChanged(modeString);
-}
-
-void KoZoomAction::setSpecialButtons( SpecialButtons buttons )
-{
-    d->specialButtons = buttons;
 }
 
 void KoZoomAction::setAspectMode(bool status)

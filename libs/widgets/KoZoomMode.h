@@ -48,11 +48,6 @@ public:
     /// \return the to QString converted and translated Mode \c mode
     static QString toString(Mode mode);
 
-    /// \param mode the mode name
-    /// \return true if \c mode isn't dependent on windowsize
-    static bool isConstant(const QString& mode)
-    { return toMode(mode) == ZOOM_CONSTANT; }
-
     /**
      * Return the minimum zoom possible for documents.
      *
@@ -65,15 +60,6 @@ public:
      * \return The maximum zoom possible.
      */
     static qreal maximumZoom();
-    /**
-     * Clamp the zoom value so that mimimumZoom <= zoom <= maximumZoom.
-     *
-     * \param zoom The value to clamp.
-     *
-     * \return minimumZoom if zoom < minimumZoom, maximumZoom if zoom >
-     * maximumZoom, zoom if otherwise.
-     */
-    static qreal clampZoom(qreal zoom);
 
     /**
      * Set the minimum zoom possible for documents.
@@ -83,6 +69,7 @@ public:
      * 
      * \param zoom The minimum zoom to use.
      */
+
     static void setMinimumZoom(qreal zoom);
     /**
      * Set the maximum zoom possible for documents.

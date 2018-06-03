@@ -193,9 +193,6 @@ void KoZoomAction::regenerateItems(const qreal zoom, bool asCurrent)
     if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
     }
-    if(d->zoomModes & KoZoomMode::ZOOM_TEXT) {
-        values << KoZoomMode::toString(KoZoomMode::ZOOM_TEXT);
-    }
     if(d->zoomModes & KoZoomMode::ZOOM_PAGE) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
     }

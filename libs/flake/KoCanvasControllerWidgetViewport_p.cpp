@@ -393,16 +393,8 @@ void Viewport::resetLayout()
         if (marginRight > 0) resizeW = viewW - marginRight;
         if (marginBottom > 0) resizeH = viewH - marginBottom;
     }
-    if (m_parent->canvasMode() == KoCanvasController::AlignTop) {
-        // have up to m_margin pixels at top.
-        moveY = qMin(m_margin, moveY);
-    }
     if (m_canvas) {
-        QRect geom;
-        if (m_parent->canvasMode() == KoCanvasController::Infinite)
-            geom = QRect(0, 0, viewW, viewH);
-        else
-            geom = QRect(moveX, moveY, resizeW, resizeH);
+        QRect geom = QRect(0, 0, viewW, viewH);
         if (m_canvas->geometry() != geom) {
             m_canvas->setGeometry(geom);
             m_canvas->update();

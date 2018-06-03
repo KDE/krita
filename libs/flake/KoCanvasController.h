@@ -70,13 +70,6 @@ class KoCanvasControllerProxyObject;
 class KRITAFLAKE_EXPORT KoCanvasController
 {
 public:
-    /// An enum to alter the positioning and size of the canvas inside the canvas controller
-    enum CanvasMode {
-        AlignTop,     ///< canvas is top aligned if smaller than the viewport
-        Centered,     ///< canvas is centered if smaller than the viewport
-        Infinite,     ///< canvas is never smaller than the viewport
-        Spreadsheet   ///< same as Infinite, but supports right-to-left layouts
-    };
 
     // proxy QObject: use this to connect to slots and signals.
     QPointer<KoCanvasControllerProxyObject> proxyObject;
@@ -99,15 +92,6 @@ public:
      * Set the new margin to pad the canvas with.
      */
     virtual void setMargin(int margin);
-
-    /**
-     * Sets the how the canvas behaves if the zoomed document becomes smaller than the viewport.
-     * @param mode the new canvas mode, CanvasMode::Centered is the default value
-     */
-    virtual void setCanvasMode(KoCanvasController::CanvasMode mode);
-
-    /// Returns the current canvas mode
-    virtual KoCanvasController::CanvasMode canvasMode() const;
 
     /**
      * compatibility with QAbstractScrollArea

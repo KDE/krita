@@ -41,6 +41,7 @@ public:
     bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
 
     static QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs);
+    static int findChannel(const QVector<VirtualChannelInfo> &virtualChannels, const VirtualChannelInfo::Type &channelType);
 
 protected:
     KisMultiChannelFilter(const KoID &id, const QString &entry);
@@ -112,6 +113,7 @@ protected Q_SLOTS:
 protected:
     void init();
     void resetCurves();
+    void setActiveChannel(int ch);
 
     virtual void updateChannelControls() = 0;
     virtual KisPropertiesConfigurationSP getDefaultConfiguration() = 0;
@@ -123,12 +125,9 @@ protected:
     int m_activeVChannel = 0;
     mutable QList<KisCubicCurve> m_curves;
 
-    WdgPerChannel * m_page;
     KisPaintDeviceSP m_dev;
+    WdgPerChannel * m_page;
     KisHistogram *m_histogram;
-
-private:
-    void setActiveChannel(int ch);
 };
 
 #endif

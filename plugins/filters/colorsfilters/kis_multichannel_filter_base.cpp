@@ -104,6 +104,17 @@ QVector<VirtualChannelInfo> KisMultiChannelFilter::getVirtualChannels(const KoCo
     return vchannels;
 }
 
+int KisMultiChannelFilter::findChannel(const QVector<VirtualChannelInfo> &virtualChannels,
+                                       const VirtualChannelInfo::Type &channelType)
+{
+    for (int i = 0; i < virtualChannels.size(); i++) {
+        if (virtualChannels[i].type() == channelType) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 
 KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(int channelCount, const QString & name, qint32 version)
         : KisColorTransformationConfiguration(name, version)

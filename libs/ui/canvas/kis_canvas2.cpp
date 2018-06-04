@@ -94,6 +94,8 @@
 #include <KisStrokeSpeedMonitor.h>
 #include "opengl/kis_opengl_canvas_debugger.h"
 
+#include "kis_algebra_2d.h"
+
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
 
@@ -106,6 +108,7 @@ public:
         , selectedShapesProxy(&shapeManager)
         , toolProxy(parent)
         , displayColorConverter(resourceManager, view)
+        , regionOfInterestUpdateCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     {
     }
 
@@ -135,15 +138,20 @@ public:
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
     KisAnimationPlayer *animationPlayer;
     KisAnimationFrameCacheSP frameCache;
-    bool lodAllowedInCanvas;
+    bool lodAllowedInImage = false;
     bool bootstrapLodBlocked;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
 
     KisSignalCompressor frameRenderStartCompressor;
 
-    bool effectiveLodAllowedInCanvas() {
-        return lodAllowedInCanvas && !bootstrapLodBlocked;
+    KisSignalCompressor regionOfInterestUpdateCompressor;
+    QRect regionOfInterest;
+
+    QRect renderingLimit;
+
+    bool effectiveLodAllowedInImage() {
+        return lodAllowedInImage && !bootstrapLodBlocked;
     }
 
     void setActiveShapeManager(KoShapeManager *shapeManager);
@@ -202,11 +210,11 @@ void KisCanvas2::setup()
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
-    m_d->lodAllowedInCanvas = cfg.levelOfDetailEnabled();
+    m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
 
     createCanvas(cfg.useOpenGL());
 
-    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
+    setLodAllowedInCanvas(m_d->lodAllowedInImage);
     m_d->animationPlayer = new KisAnimationPlayer(this);
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -240,6 +248,8 @@ void KisCanvas2::setup()
     connect(&m_d->frameRenderStartCompressor, SIGNAL(timeout()), SLOT(updateCanvasProjection()));
 
     connect(this, SIGNAL(sigContinueResizeImage(qint32,qint32)), SLOT(finishResizingImage(qint32,qint32)));
+
+    connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateRegionOfInterest()));
 
     initializeFpsDecoration();
 }
@@ -563,9 +573,9 @@ void KisCanvas2::connectCurrentCanvas()
     }
 
     startResizingImage();
+    setLodAllowedInCanvas(m_d->lodAllowedInImage);
 
-    emit imageChanged(image);
-    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
+    emit sigCanvasEngineChanged();
 }
 
 void KisCanvas2::resetCanvas(bool useOpenGL)
@@ -831,6 +841,39 @@ void KisCanvas2::notifyZoomChanged()
 
     notifyLevelOfDetailChange();
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
+
+    m_d->regionOfInterestUpdateCompressor.start();
+}
+
+QRect KisCanvas2::regionOfInterest() const
+{
+    return m_d->regionOfInterest;
+}
+
+void KisCanvas2::slotUpdateRegionOfInterest()
+{
+    const QRect oldRegionOfInterest = m_d->regionOfInterest;
+
+    const qreal ratio = 0.25;
+    const QRect proposedRoi = KisAlgebra2D::blowRect(m_d->coordinatesConverter->widgetRectInImagePixels(), ratio).toAlignedRect();
+
+    const QRect imageRect = m_d->coordinatesConverter->imageRectInImagePixels();
+
+    m_d->regionOfInterest = imageRect.contains(proposedRoi) ? proposedRoi : imageRect;
+
+    if (m_d->regionOfInterest != oldRegionOfInterest) {
+        emit sigRegionOfInterestChanged(m_d->regionOfInterest);
+    }
+}
+
+void KisCanvas2::setRenderingLimit(const QRect &rc)
+{
+    m_d->renderingLimit = rc;
+}
+
+QRect KisCanvas2::renderingLimit() const
+{
+    return m_d->renderingLimit;
 }
 
 void KisCanvas2::slotTrySwitchShapeManager()
@@ -845,17 +888,19 @@ void KisCanvas2::slotTrySwitchShapeManager()
 
 void KisCanvas2::notifyLevelOfDetailChange()
 {
-    if (!m_d->effectiveLodAllowedInCanvas()) return;
-
-    KisImageSP image = this->image();
+    if (!m_d->effectiveLodAllowedInImage()) return;
 
     const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
 
     KisConfig cfg;
     const int maxLod = cfg.numMipmapLevels();
 
-    int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
-    image->setDesiredLevelOfDetail(lod);
+    const int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
+
+    if (m_d->effectiveLodAllowedInImage()) {
+        KisImageSP image = this->image();
+        image->setDesiredLevelOfDetail(lod);
+    }
 }
 
 const KoColorProfile *  KisCanvas2::monitorProfile()
@@ -901,6 +946,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     emit documentOffsetUpdateFinished();
 
     updateCanvas();
+
+    m_d->regionOfInterestUpdateCompressor.start();
 }
 
 void KisCanvas2::slotConfigChanged()
@@ -967,14 +1014,14 @@ void KisCanvas2::setFavoriteResourceManager(KisFavoriteResourceManager* favorite
 {
     m_d->popupPalette = new KisPopupPalette(viewManager(), m_d->coordinatesConverter, favoriteResourceManager, displayColorConverter()->displayRendererInterface(),
                                             m_d->view->resourceProvider(), m_d->canvasWidget->widget());
-    connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotZoomChanged(int)));
+    connect(m_d->popupPalette, SIGNAL(zoomLevelChanged(int)), this, SLOT(slotPopupPaletteRequestedZoomChange(int)));
     connect(m_d->popupPalette, SIGNAL(sigUpdateCanvas()), this, SLOT(updateCanvas()));
     connect(m_d->view->mainWindow(), SIGNAL(themeChanged()), m_d->popupPalette, SLOT(slotUpdateIcons()));
 
     m_d->popupPalette->showPopupPalette(false);
 }
 
-void KisCanvas2::slotZoomChanged(int zoom ) {
+void KisCanvas2::slotPopupPaletteRequestedZoomChange(int zoom ) {
     m_d->view->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, (qreal)(zoom/100.0)); // 1.0 is 100% zoom
     notifyZoomChanged();
 }
@@ -1043,7 +1090,7 @@ void KisCanvas2::bootstrapFinished()
     if (!m_d->bootstrapLodBlocked) return;
 
     m_d->bootstrapLodBlocked = false;
-    setLodAllowedInCanvas(m_d->lodAllowedInCanvas);
+    setLodAllowedInCanvas(m_d->lodAllowedInImage);
 }
 
 void KisCanvas2::setLodAllowedInCanvas(bool value)
@@ -1052,28 +1099,28 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
         qWarning() << "WARNING: Level of Detail functionality is available only with openGL + GLSL 1.3 support";
     }
 
-    m_d->lodAllowedInCanvas =
-            value &&
-            m_d->currentCanvasIsOpenGL &&
-            KisOpenGL::supportsLoD() &&
-            (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
-             m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
+    m_d->lodAllowedInImage =
+        value &&
+        m_d->currentCanvasIsOpenGL &&
+        KisOpenGL::supportsLoD() &&
+        (m_d->openGLFilterMode == KisOpenGL::TrilinearFilterMode ||
+         m_d->openGLFilterMode == KisOpenGL::HighQualityFiltering);
 
     KisImageSP image = this->image();
 
-    if (m_d->effectiveLodAllowedInCanvas() != !image->levelOfDetailBlocked()) {
-
-        image->setLevelOfDetailBlocked(!m_d->effectiveLodAllowedInCanvas());
-        notifyLevelOfDetailChange();
+    if (m_d->effectiveLodAllowedInImage() != !image->levelOfDetailBlocked()) {
+        image->setLevelOfDetailBlocked(!m_d->effectiveLodAllowedInImage());
     }
 
+    notifyLevelOfDetailChange();
+
     KisConfig cfg;
-    cfg.setLevelOfDetailEnabled(m_d->lodAllowedInCanvas);
+    cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
 }
 
 bool KisCanvas2::lodAllowedInCanvas() const
 {
-    return m_d->lodAllowedInCanvas;
+    return m_d->lodAllowedInImage;
 }
 
 void KisCanvas2::slotShowPopupPalette(const QPoint &p)

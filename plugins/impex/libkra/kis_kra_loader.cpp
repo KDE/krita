@@ -559,7 +559,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
 
             if (node.nodeName().toUpper() == LAYERS.toUpper() || node.nodeName().toUpper() == MASKS.toUpper()) {
                 for (child = node.lastChild(); !child.isNull(); child = child.previousSibling()) {
-                    KisNodeSP node = loadNode(child.toElement(), image, parent);
+                    KisNodeSP node = loadNode(child.toElement(), image);
                     if (node) {
                         image->nextLayerName(); // Make sure the nameserver is current with the number of nodes.
                         image->addNode(node, parent);
@@ -575,7 +575,7 @@ KisNodeSP KisKraLoader::loadNodes(const KoXmlElement& element, KisImageSP image,
     return parent;
 }
 
-KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image)
 {
     // Nota bene: If you add new properties to layers, you should
     // ALWAYS define a default value in case the property is not
@@ -659,15 +659,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageSP image, 
     else if (nodeType == CLONE_LAYER)
         node = loadCloneLayer(element, image, name, colorSpace, opacity);
     else if (nodeType == FILTER_MASK)
-        node = loadFilterMask(element, parent);
+        node = loadFilterMask(element);
     else if (nodeType == TRANSFORM_MASK)
-        node = loadTransformMask(element, parent);
+        node = loadTransformMask(element);
     else if (nodeType == TRANSPARENCY_MASK)
-        node = loadTransparencyMask(element, parent);
+        node = loadTransparencyMask(element);
     else if (nodeType == SELECTION_MASK)
-        node = loadSelectionMask(image, element, parent);
+        node = loadSelectionMask(image, element);
     else if (nodeType == COLORIZE_MASK)
-        node = loadColorizeMask(image, element, parent, colorSpace);
+        node = loadColorizeMask(image, element, colorSpace);
     else if (nodeType == FILE_LAYER)
         node = loadFileLayer(element, image, name, opacity);
     else if (nodeType == REFERENCE_IMAGES_LAYER)
@@ -974,9 +974,8 @@ KisNodeSP KisKraLoader::loadCloneLayer(const KoXmlElement& element, KisImageSP i
 }
 
 
-KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element)
 {
-    Q_UNUSED(parent);
     QString attr;
     KisFilterMask* mask;
     QString filtername;
@@ -1005,10 +1004,9 @@ KisNodeSP KisKraLoader::loadFilterMask(const KoXmlElement& element, KisNodeSP pa
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element)
 {
     Q_UNUSED(element);
-    Q_UNUSED(parent);
 
     KisTransformMask* mask;
 
@@ -1022,19 +1020,17 @@ KisNodeSP KisKraLoader::loadTransformMask(const KoXmlElement& element, KisNodeSP
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadTransparencyMask(const KoXmlElement& element)
 {
     Q_UNUSED(element);
-    Q_UNUSED(parent);
     KisTransparencyMask* mask = new KisTransparencyMask();
     Q_CHECK_PTR(mask);
 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadSelectionMask(KisImageSP image, const KoXmlElement& element, KisNodeSP parent)
+KisNodeSP KisKraLoader::loadSelectionMask(KisImageSP image, const KoXmlElement& element)
 {
-    Q_UNUSED(parent);
     KisSelectionMaskSP mask = new KisSelectionMask(image);
     bool active = element.attribute(ACTIVE, "1") == "0" ? false : true;
     mask->setActive(active);
@@ -1043,9 +1039,8 @@ KisNodeSP KisKraLoader::loadSelectionMask(KisImageSP image, const KoXmlElement& 
     return mask;
 }
 
-KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& element, KisNodeSP parent, const KoColorSpace *colorSpace)
+KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const KoXmlElement& element, const KoColorSpace *colorSpace)
 {
-    Q_UNUSED(parent);
     KisColorizeMaskSP mask = new KisColorizeMask();
     const bool editKeystrokes = element.attribute(COLORIZE_EDIT_KEYSTROKES, "1") == "0" ? false : true;
     const bool showColoring = element.attribute(COLORIZE_SHOW_COLORING, "1") == "0" ? false : true;
@@ -1186,7 +1181,10 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
 
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = m_d->document->createReferenceImagesLayer(image);
+    KisSharedPtr<KisReferenceImagesLayer> layer =
+        new KisReferenceImagesLayer(m_d->document->shapeController(), image);
+
+    m_d->document->setReferenceImagesLayer(layer);
 
     for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toLower() == "referenceimage") {

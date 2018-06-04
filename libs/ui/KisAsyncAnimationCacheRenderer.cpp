@@ -43,13 +43,13 @@ void KisAsyncAnimationCacheRenderer::setFrameCache(KisAnimationFrameCacheSP cach
     m_d->requestedCache = cache;
 }
 
-void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame)
+void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
 {
     KisAnimationFrameCacheSP cache = m_d->requestedCache;
     KisImageSP image = requestedImage();
     if (!cache || !image) return;
 
-    m_d->requestInfo = cache->fetchFrameData(frame, image);
+    m_d->requestInfo = cache->fetchFrameData(frame, image, requestedRegion);
     emit sigCompleteRegenerationInternal(frame);
 }
 

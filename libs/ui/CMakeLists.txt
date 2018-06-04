@@ -163,6 +163,7 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     opengl/kis_opengl_shader_loader.cpp
     opengl/kis_texture_tile_info_pool.cpp
+    opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
     recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
@@ -422,6 +423,12 @@ endif()
         canvas/kis_animation_player.cpp
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
+        KisFrameDataSerializer.cpp
+        KisFrameCacheStore.cpp
+        KisFrameCacheSwapper.cpp
+        KisAbstractFrameCacheSwapper.cpp
+        KisInMemoryFrameCacheSwapper.cpp
+
         input/wintab/drawpile_tablettester/tablettester.cpp
         input/wintab/drawpile_tablettester/tablettest.cpp
     )

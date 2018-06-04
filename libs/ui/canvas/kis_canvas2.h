@@ -207,8 +207,25 @@ public: // KisCanvas2 methods
     KisAnimationPlayer *animationPlayer() const;
     void refetchDataFromImage();
 
+    /**
+     * @return area of the image (in image coordinates) that is visible on the canvas
+     * with a small margin selected by the user
+     */
+    QRect regionOfInterest() const;
+
+    /**
+     * Set aftificial limit outside which the image will not be rendered
+     * \p rc is measured in image pixels
+     */
+    void setRenderingLimit(const QRect &rc);
+
+    /**
+     * @return aftificial limit outside which the image will not be rendered
+     */
+    QRect renderingLimit() const;
+
 Q_SIGNALS:
-    void imageChanged(KisImageWSP image);
+    void sigCanvasEngineChanged();
 
     void sigCanvasCacheUpdated();
     void sigContinueResizeImage(qint32 w, qint32 h);
@@ -217,6 +234,8 @@ Q_SIGNALS:
 
     // emitted whenever the canvas widget thinks sketch should update
     void updateCanvasRequested(const QRect &rc);
+
+    void sigRegionOfInterestChanged(const QRect &roi);
 
 public Q_SLOTS:
 
@@ -234,7 +253,7 @@ public Q_SLOTS:
     void slotSoftProofing(bool softProofing);
     void slotGamutCheck(bool gamutCheck);
     void slotChangeProofingConfig();
-    void slotZoomChanged(int zoom);
+    void slotPopupPaletteRequestedZoomChange(int zoom);
 
     void channelSelectionChanged();
 
@@ -273,6 +292,8 @@ private Q_SLOTS:
     void slotDoCanvasUpdate();
 
     void bootstrapFinished();
+
+    void slotUpdateRegionOfInterest();
 
 public:
 

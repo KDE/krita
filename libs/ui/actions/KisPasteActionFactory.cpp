@@ -42,6 +42,7 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
+#include "kis_painter.h"
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,

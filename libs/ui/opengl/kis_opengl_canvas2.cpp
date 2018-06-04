@@ -485,6 +485,11 @@ void KisOpenGLCanvas2::drawCheckers()
                 converter->imageRectInViewportPixels() :
                 converter->widgetToViewport(this->rect());
 
+    if (!canvas()->renderingLimit().isEmpty()) {
+        const QRect vrect = converter->imageToViewport(canvas()->renderingLimit()).toAlignedRect();
+        viewportRect &= vrect;
+    }
+
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
 
@@ -638,6 +643,12 @@ void KisOpenGLCanvas2::drawImage()
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
+    const QRect renderingLimit = canvas()->renderingLimit();
+
+    if (!renderingLimit.isEmpty()) {
+        widgetRectInImagePixels &= renderingLimit;
+    }
+
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
@@ -699,8 +710,18 @@ void KisOpenGLCanvas2::drawImage()
              * "history reasons" in calculation of right()
              * and bottom() coordinates of integer rects.
              */
-            QRectF textureRect(tile->tileRectInTexturePixels());
-            QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
+
+            QRectF textureRect;
+            QRectF modelRect;
+
+            if (renderingLimit.isEmpty()) {
+                textureRect = tile->tileRectInTexturePixels();
+                modelRect = tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            } else {
+                const QRect limitedTileRect = tile->tileRectInImagePixels() & renderingLimit;
+                textureRect = tile->imageRectInTexturePixels(limitedTileRect);
+                modelRect = limitedTileRect.translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            }
 
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {

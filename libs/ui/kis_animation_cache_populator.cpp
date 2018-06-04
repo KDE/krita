@@ -313,4 +313,5 @@ void KisAnimationCachePopulator::slotConfigChanged()
 {
     KisConfig cfg;
     m_d->calculateAnimationCacheInBackground = cfg.calculateAnimationCacheInBackground();
+    QTimer::singleShot(1000, this, SLOT(slotRequestRegeneration()));
 }

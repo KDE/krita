@@ -62,8 +62,6 @@ public:
      */
     virtual void activate();
 
-    void setDrawShadow(bool drawShadow) override;
-
     void setCanvas(KoCanvasBase *canvas) override;
 
     KoCanvasBase *canvas() const override;

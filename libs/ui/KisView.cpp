@@ -229,7 +229,6 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
     d->canvasController.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    d->canvasController.setDrawShadow(false);
     d->canvasController.setVastScrolling(cfg.vastScrolling());
     d->canvasController.setCanvas(&d->canvas);
 

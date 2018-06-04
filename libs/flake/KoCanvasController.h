@@ -104,15 +104,6 @@ public:
     virtual QSize viewportSize() const = 0;
 
     /**
-     * Set the shadow option -- by default the canvas controller draws
-     * a black shadow around the canvas widget, which you may or may
-     * not want.
-     *
-     * @param drawShadow if true, the shadow is drawn, if false, not
-     */
-    virtual void setDrawShadow(bool drawShadow) = 0;
-
-    /**
      * Set the new canvas to be shown as a child
      * Calling this will emit canvasRemoved() if there was a canvas before, and will emit
      * canvasSet() with the new canvas.
@@ -454,7 +445,6 @@ public:
 
     void scrollContentsBy(int /*dx*/, int /*dy*/) override {}
     QSize viewportSize() const override { return QSize(); }
-    void setDrawShadow(bool /*drawShadow*/) override {}
     void setCanvas(KoCanvasBase *canvas) override {Q_UNUSED(canvas)}
     KoCanvasBase *canvas() const override {return 0;}
     int visibleHeight() const override {return 0;}

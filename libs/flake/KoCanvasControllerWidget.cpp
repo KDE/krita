@@ -227,11 +227,6 @@ QSize KoCanvasControllerWidget::viewportSize() const
     return viewport()->size();
 }
 
-void KoCanvasControllerWidget::setDrawShadow(bool drawShadow)
-{
-    d->viewportWidget->setDrawShadow(drawShadow);
-}
-
 void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
 {
     proxyObject->emitSizeChanged(resizeEvent->size());

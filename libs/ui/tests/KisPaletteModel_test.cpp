@@ -18,3 +18,4 @@ private slots:
     void changePaletteSize()
     {}
 };
+include "KisPaletteModel_test.moc"

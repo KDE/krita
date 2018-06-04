@@ -232,7 +232,10 @@ bool KisAnimationFrameCache::uploadFrame(int time)
     KisOpenGLUpdateInfoSP info = m_d->getFrame(time);
 
     if (!info) {
-        KisPart::instance()->cachePopulator()->regenerate(this, time);
+        // Do nothing!
+        //
+        // Previously we were trying to start cache regeneration in this point,
+        // but it caused even bigger slowdowns when scrubbing
     } else {
         m_d->textures->recalculateCache(info);
     }

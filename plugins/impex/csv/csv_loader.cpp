@@ -223,8 +223,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             readLine.rewind();
             field = readLine.nextField();
             step = 4;
-            //no break!
-
+            /* Falls through. */
         case 4 :    //level header
 
             if (field == "#Layers") {
@@ -265,9 +264,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             if ((field.size() < 2) || (field[0] != '#') || !field[1].isDigit()) break;
 
             step = 5;
-
-            //no break!
-
+            /* Falls through. */
         case 5 :    //frames
 
             if ((field.size() < 2) || (field[0] != '#') || !field[1].isDigit()) break;

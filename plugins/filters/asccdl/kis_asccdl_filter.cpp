@@ -115,7 +115,7 @@ void KisASCCDLTransformation::transform(const quint8 *src, quint8 *dst, qint32 n
     while (nPixels--) {
         m_cs->normalisedChannelsValue(src, normalised);
 
-        for (int c=0; c<m_cs->channelCount(); c++){
+        for (uint c = 0; c < m_cs->channelCount(); c++){
             if (m_cs->channels().at(c)->channelType()!=KoChannelInfo::ALPHA) {
                 normalised[c] = qPow( (normalised.at(c)*m_slope.at(c))+m_offset.at(c), m_power.at(c));
             }

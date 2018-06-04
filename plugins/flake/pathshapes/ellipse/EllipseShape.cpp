@@ -475,6 +475,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
             break;
         case Chord:
             context.shapeWriter().addAttribute("sodipodi:arc-type", "chord");
+            /* Falls through. */
         case Arc:
             context.shapeWriter().addAttribute("sodipodi:open", "true");
             break;

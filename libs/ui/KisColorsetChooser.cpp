@@ -40,7 +40,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QLineEdit>
-#include <kis_canvas_resource_provider.h>
+
 #include <kis_config.h>
 
 #include "kis_int_parse_spin_box.h"

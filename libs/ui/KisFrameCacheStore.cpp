@@ -186,7 +186,7 @@ void KisFrameCacheStore::saveFrame(int frameId, KisOpenGLUpdateInfoSP info, cons
     frame.pixelSize = pixelSize;
 
     for (auto it = info->tileList.begin(); it != info->tileList.end(); ++it) {
-        KisFrameDataSerializer::FrameTile tile(0); // TODO: fix null!
+        KisFrameDataSerializer::FrameTile tile(KisTextureTileInfoPoolSP(0)); // TODO: fix the pool should never be null!
         tile.col = (*it)->tileCol();
         tile.row = (*it)->tileRow();
         tile.rect = (*it)->realPatchRect();

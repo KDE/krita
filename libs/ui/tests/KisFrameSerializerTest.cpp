@@ -162,7 +162,7 @@ void KisFrameSerializerTest::testFrameUniquenessEstimation()
     boost::optional<qreal> result;
 
     result = KisFrameDataSerializer::estimateFrameUniqueness(testFrame1, testFrame2, 0.1);
-    QVERIFY(result);
+    QVERIFY(!!result);
     QVERIFY(qFuzzyCompare(*result, 0.0));
 
     KisFrameDataSerializer::Frame testFrame3 = generateTestFrame(3, pool);
@@ -174,7 +174,7 @@ void KisFrameSerializerTest::testFrameUniquenessEstimation()
     randomizeFrame(testFrame2, 0.5);
 
     result = KisFrameDataSerializer::estimateFrameUniqueness(testFrame1, testFrame2, 0.01);
-    QVERIFY(result);
+    QVERIFY(!!result);
     QVERIFY(*result >= 0.45);
     QVERIFY(*result <= 0.55);
 }
@@ -191,7 +191,7 @@ void KisFrameSerializerTest::testFrameArithmetics()
     boost::optional<qreal> result =
         KisFrameDataSerializer::estimateFrameUniqueness(testFrame1, testFrame2, 0.01);
 
-    QVERIFY(result);
+    QVERIFY(!!result);
     QVERIFY(*result >= 0.15);
     QVERIFY(*result <= 0.25);
 
@@ -214,7 +214,7 @@ void KisFrameSerializerTest::testFrameArithmetics()
         KisFrameDataSerializer::addFrames(testFrame3, testFrame1);
 
         result = KisFrameDataSerializer::estimateFrameUniqueness(testFrame3, testFrame2, 1.0);
-        QVERIFY(result);
+        QVERIFY(!!result);
         QVERIFY(*result == 0.0);
     }
 }

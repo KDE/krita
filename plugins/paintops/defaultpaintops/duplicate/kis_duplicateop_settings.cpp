@@ -187,14 +187,14 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.duplicate_healing);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.duplicate_healing = prop->value().toBool();
                     option.writeOptionSetting(prop->settings().data());
@@ -214,14 +214,14 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.duplicate_move_source_point);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.duplicate_move_source_point = prop->value().toBool();
                     option.writeOptionSetting(prop->settings().data());

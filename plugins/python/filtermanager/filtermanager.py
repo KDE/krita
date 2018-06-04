@@ -10,7 +10,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 import krita
-from filtermanager import uifiltermanager
+from . import uifiltermanager
 
 
 class FilterManagerExtension(krita.Extension):
@@ -20,7 +20,7 @@ class FilterManagerExtension(krita.Extension):
 
     def setup(self):
         pass
-    
+
     def createActions(self, window):
         action = window.createAction("filter_manager", "Filter Manager")
         action.setToolTip("Plugin to filters management")

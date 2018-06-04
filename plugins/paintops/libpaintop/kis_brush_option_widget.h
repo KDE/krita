@@ -67,7 +67,7 @@ private Q_SLOTS:
 private:
 
     KisBrushSelectionWidget * m_brushSelectionWidget;
-    KisBrushOption m_brushOption;
+    KisBrushOptionProperties m_brushOption;
 
 };
 

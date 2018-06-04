@@ -37,7 +37,7 @@ public:
 public:
     KisImageBuilder_Result buildImage(const QString &filename);
     KisImageBuilder_Result buildFile(const QString &filename, KisPaintLayerSP layer);
-    KisImageBuilder_Result buildFile(const QString &filename, KisGroupLayerSP layer);
+    KisImageBuilder_Result buildFile(const QString &filename, KisGroupLayerSP layer, bool flatten=false);
     /**
      * Retrieve the constructed image
      */

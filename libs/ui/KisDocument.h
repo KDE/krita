@@ -42,6 +42,8 @@
 
 #include "kritaui_export.h"
 
+#include <memory>
+
 class QString;
 
 class KUndo2Command;
@@ -275,10 +277,20 @@ public:
     bool loadNativeFormat(const QString & file);
 
     /**
-     * Activate/deactivate/configure the autosave feature.
-     * @param delay in seconds, 0 to disable
+     * Set standard autosave interval that is set by a config file
      */
-    void setAutoSaveDelay(int delay);
+    void setNormalAutoSaveInterval();
+
+    /**
+     * Set emergency interval that autosave uses when the image is busy,
+     * by default it is 10 sec
+     */
+    void setEmergencyAutoSaveInterval();
+
+    /**
+     * Disable autosave
+     */
+    void setInfiniteAutoSaveInterval();
 
     /**
      * @return the information concerning this document.
@@ -439,10 +451,19 @@ private Q_SLOTS:
     void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
     void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+    void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
+
 private:
 
     friend class KisPart;
     friend class SafeSavingLocker;
+
+    bool initiateSavingInBackground(const QString actionName,
+                                    const QObject *receiverObject, const char *receiverMethod,
+                                    const KritaUtils::ExportFileJob &job,
+                                    KisPropertiesConfigurationSP exportConfiguration,
+                                    std::unique_ptr<KisDocument> &&optionalClonedDocument);
 
     bool initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
@@ -454,6 +475,12 @@ private:
                                  const QByteArray &mimeType,
                                  bool showWarnings,
                                  KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Activate/deactivate/configure the autosave feature.
+     * @param delay in seconds, 0 to disable
+     */
+    void setAutoSaveDelay(int delay);
 
     /**
      * Generate a name for the document.
@@ -604,6 +631,8 @@ private:
     QString prettyPathOrUrl() const;
 
     bool openUrlInternal(const QUrl &url);
+
+    void slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument);
 
     class Private;
     Private *const d;

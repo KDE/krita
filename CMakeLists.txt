@@ -5,12 +5,8 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.6.0)
-option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
-if (OVERRIDE_QT_VERSION)
-    set(MIN_QT_VERSION 5.4.0)
-endif()
 
-set(MIN_FRAMEWORKS_VERSION 5.7.0)
+set(MIN_FRAMEWORKS_VERSION 5.18.0)
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
@@ -61,10 +57,8 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
-if (LINUX)
-    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
-        add_definitions(-Werror=delete-incomplete)
-    endif()
+if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
+    add_definitions(-Werror=delete-incomplete)
 endif()
 
  ######################
@@ -194,6 +188,7 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
+option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
 
 include(MacroJPEG)
 
@@ -218,18 +213,31 @@ int main(int argc, char *argv[]) {
 endfunction()
 
 if(MINGW)
-    find_package(PythonInterp 3.6 EXACT)
-    find_package(PythonLibs 3.6 EXACT)
+    if(ENABLE_PYTHON_2)
+        message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
+    else(ENABLE_PYTHON_2)
+        find_package(PythonInterp 3.6 EXACT)
+        find_package(PythonLibs 3.6 EXACT)
+    endif(ENABLE_PYTHON_2)
     if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
-        find_package(PythonLibrary 3.6)
+        if(ENABLE_PYTHON_2)
+            find_package(PythonLibrary 2.7)
+        else(ENABLE_PYTHON_2)
+            find_package(PythonLibrary 3.6)
+        endif(ENABLE_PYTHON_2)
         TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
         if (NOT CAN_USE_PYTHON_LIBS)
             message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct. Python will be disabled.")
         endif (NOT CAN_USE_PYTHON_LIBS)
     endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 else(MINGW)
-    find_package(PythonInterp 3.0)
-    find_package(PythonLibrary 3.0)
+    if(ENABLE_PYTHON_2)
+        find_package(PythonInterp 2.7)
+        find_package(PythonLibrary 2.7)
+    else(ENABLE_PYTHON_2)
+        find_package(PythonInterp 3.0)
+        find_package(PythonLibrary 3.0)
+    endif(ENABLE_PYTHON_2)
 endif(MINGW)
 
  ########################
@@ -238,7 +246,7 @@ endif(MINGW)
 #########################
 ########################
 
-find_package(ECM 5.19 REQUIRED NOMODULE)
+find_package(ECM 5.22 REQUIRED NOMODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
@@ -314,6 +322,7 @@ set_package_properties(Qt5Multimedia PROPERTIES
 macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
 configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
 
+if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
         DESCRIPTION "QtQuick"
@@ -329,7 +338,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "http://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
-
+endif()
 
 if (NOT WIN32 AND NOT APPLE)
 
@@ -458,7 +467,7 @@ if (APPLE)
 endif()
 
 add_definitions(-DBOOST_ALL_NO_LIB)
-find_package(Boost 1.55 REQUIRED COMPONENTS system) 
+find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 ##
 ## Test for GNU Scientific Library
@@ -520,6 +529,13 @@ set_package_properties(GIF PROPERTIES
     URL "http://giflib.sourceforge.net/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
+
+find_package(HEIF "1.2.0")
+set_package_properties(HEIF PROPERTIES
+    DESCRIPTION "Library for loading and saving heif files."
+    URL "https://github.com/strukturag/libheif"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita HEIF filter")
 
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
@@ -620,7 +636,7 @@ endif()
 set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 set(HAVE_VC FALSE)
-if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm") 
+if (NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
     if(NOT MSVC)
         find_package(Vc 1.1.0)
         set_package_properties(Vc PROPERTIES
@@ -721,7 +737,7 @@ check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
 if(WIN32)
-    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/ConfigureInstallerNsis.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/installer/ConfigureInstallerNsis.cmake)
 endif()
 
 message("\nBroken tests:")
@@ -730,3 +746,8 @@ foreach(tst ${KRITA_BROKEN_TESTS})
 endforeach()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+  find_package(KF5I18n CONFIG REQUIRED)
+  ki18n_install(po)
+endif()

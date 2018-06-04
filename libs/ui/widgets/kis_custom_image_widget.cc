@@ -276,7 +276,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
                                      i18n("Linear gamma RGB color spaces are not supposed to be used "
                                           "in 8-bit integer modes. It is suggested to use 16-bit integer "
                                           "or any floating point colorspace for linear profiles.\n\n"
-                                          "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                          "Press \"Ok\" to create a 8-bit integer linear RGB color space "
                                           "or \"Cancel\" to return to the settings dialog."),
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 

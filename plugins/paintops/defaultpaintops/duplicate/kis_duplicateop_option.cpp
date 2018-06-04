@@ -104,7 +104,7 @@ void KisDuplicateOpOption::setCloneFromProjection(bool cloneFromProjection)
 
 void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    DuplicateOption op;
+    KisDuplicateOptionProperties op;
 
     op.duplicate_healing = healing();
     op.duplicate_correct_perspective = correctPerspective();
@@ -116,7 +116,7 @@ void KisDuplicateOpOption::writeOptionSetting(KisPropertiesConfigurationSP setti
 
 void KisDuplicateOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    DuplicateOption op;
+    KisDuplicateOptionProperties op;
     op.readOptionSetting(setting);
 
     m_optionWidget->cbHealing->setChecked(op.duplicate_healing);

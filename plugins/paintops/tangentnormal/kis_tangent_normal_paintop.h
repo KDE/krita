@@ -71,7 +71,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption m_scatterOption;
     KisTangentTiltOption m_tangentTiltOption;
-    KisAirbrushOptionWidget m_airbrushOptionWidget;
+    KisAirbrushOptionProperties m_airbrushOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureFlowOption m_flowOption;

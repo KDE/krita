@@ -33,7 +33,7 @@ PluginSettings::PluginSettings(QWidget *parent)
 {
     setupUi(this);
     fileRequester->setFileName(gmicQtPath());
-    fileRequester->setConfiguratioName("gmic_qt");
+    fileRequester->setConfigurationName("gmic_qt");
     fileRequester->setStartDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 }
 

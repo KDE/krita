@@ -9,8 +9,8 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-from filtermanager import filtermanagerdialog
-from filtermanager.components import (filtercombobox, filtermanagertreemodel)
+from . import filtermanagerdialog
+from .components import (filtercombobox, filtermanagertreemodel)
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
                              QVBoxLayout, QFrame, QAbstractScrollArea, QWidget,

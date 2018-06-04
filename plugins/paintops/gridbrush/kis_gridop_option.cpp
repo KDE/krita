@@ -145,7 +145,7 @@ qreal KisGridOpOption::scale() const
 
 void KisGridOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    GridOption op;
+    KisGridOpProperties op;
 
     op.grid_width = gridWidth();
     op.grid_height = gridHeight();
@@ -161,7 +161,7 @@ void KisGridOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
 
 void KisGridOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    GridOption op;
+    KisGridOpProperties op;
     op.readOptionSetting(setting);
 
     m_options->gridWidthSPBox->setValue(op.grid_width);

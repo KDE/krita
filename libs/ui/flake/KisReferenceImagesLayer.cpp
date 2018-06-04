@@ -88,6 +88,19 @@ KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *re
     return new AddReferenceImageCommand(this, referenceImage);
 }
 
+QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
+{
+    QVector<KisReferenceImage*> references;
+
+    Q_FOREACH(auto shape, shapes()) {
+        KisReferenceImage *referenceImage = dynamic_cast<KisReferenceImage*>(shape);
+        if (referenceImage) {
+            references.append(referenceImage);
+        }
+    }
+    return references;
+}
+
 void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
     shapeManager()->paint(painter, *converter(), false);
 }

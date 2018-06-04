@@ -45,6 +45,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
+#include <KoDialog.h>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -118,6 +119,7 @@
 #include <mutex>
 #include "kis_config_notifier.h"
 #include "kis_async_action_feedback.h"
+#include "KisCloneDocumentStroke.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -225,6 +227,7 @@ public:
     Private(KisDocument *q)
         : docInfo(new KoDocumentInfo(q)) // deleted by QObject
         , importExportManager(new KisImportExportManager(q)) // deleted manually
+        , autoSaveTimer(new QTimer(q))
         , undoStack(new UndoStack(q)) // deleted by QObject
         , m_bAutoDetectedMime(false)
         , modified(false)
@@ -249,6 +252,7 @@ public:
         , importExportManager(new KisImportExportManager(q))
         , mimeType(rhs.mimeType)
         , outputMimeType(rhs.outputMimeType)
+        , autoSaveTimer(new QTimer(q))
         , undoStack(new UndoStack(q))
         , guidesConfig(rhs.guidesConfig)
         , m_bAutoDetectedMime(rhs.m_bAutoDetectedMime)
@@ -282,13 +286,14 @@ public:
     QByteArray mimeType; // The actual mimetype of the document
     QByteArray outputMimeType; // The mimetype to use when saving
 
-    QTimer autoSaveTimer;
+    QTimer *autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     QString lastWarningMessage;
     int autoSaveDelay = 300; // in seconds, 0 to disable.
     bool modifiedAfterAutosave = false;
     bool isAutosaving = false;
     bool disregardAutosaveFailure = false;
+    int autoSaveFailureCount = 0;
 
     KUndo2Stack *undoStack = 0;
 
@@ -403,7 +408,7 @@ KisDocument::KisDocument()
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
-    connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(newObjectName());
 
     // preload the krita resources
@@ -421,7 +426,7 @@ KisDocument::KisDocument(const KisDocument &rhs)
 {
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(slotUndoStackCleanChanged(bool)));
-    connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    connect(d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
     setObjectName(rhs.objectName());
 
     d->shapeController = new KisShapeController(this, d->nserver),
@@ -452,8 +457,8 @@ KisDocument::~KisDocument()
      */
     KisPaintDevice::createMemoryReleaseObject()->deleteLater();
 
-    d->autoSaveTimer.disconnect(this);
-    d->autoSaveTimer.stop();
+    d->autoSaveTimer->disconnect(this);
+    d->autoSaveTimer->stop();
 
     delete d->importExportManager;
 
@@ -703,9 +708,25 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
                                              const KritaUtils::ExportFileJob &job,
                                              KisPropertiesConfigurationSP exportConfiguration)
 {
+    return initiateSavingInBackground(actionName, receiverObject, receiverMethod,
+                                      job, exportConfiguration, std::unique_ptr<KisDocument>());
+}
+
+bool KisDocument::initiateSavingInBackground(const QString actionName,
+                                             const QObject *receiverObject, const char *receiverMethod,
+                                             const KritaUtils::ExportFileJob &job,
+                                             KisPropertiesConfigurationSP exportConfiguration,
+                                             std::unique_ptr<KisDocument> &&optionalClonedDocument)
+{
     KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), false);
 
-    QScopedPointer<KisDocument> clonedDocument(lockAndCloneForSaving());
+    QScopedPointer<KisDocument> clonedDocument;
+
+    if (!optionalClonedDocument) {
+        clonedDocument.reset(lockAndCloneForSaving());
+    } else {
+        clonedDocument.reset(optionalClonedDocument.release());
+    }
 
     // we block saving until the current saving is finished!
     if (!clonedDocument || !d->savingMutex.tryLock()) {
@@ -776,30 +797,52 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportFilter::Co
     emit sigCompleteBackgroundSaving(job, status, errorMessage);
 }
 
-void KisDocument::slotAutoSave()
+void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument)
 {
     if (!d->modified || !d->modifiedAfterAutosave) return;
     const QString autoSaveFileName = generateAutoSaveFileName(localFilePath());
 
     emit statusBarMessage(i18n("Autosaving... %1", autoSaveFileName), successMessageTimeout);
 
+    const bool hadClonedDocument = bool(optionalClonedDocument);
     bool started = false;
 
-    if (d->image->isIdle()) {
+    if (d->image->isIdle() || hadClonedDocument) {
         started = initiateSavingInBackground(i18n("Autosaving..."),
                                              this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
                                              KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
-                                             0);
+                                             0,
+                                             std::move(optionalClonedDocument));
     } else {
         emit statusBarMessage(i18n("Autosaving postponed: document is busy..."), errorMessageTimeout);
     }
 
-    if (!started) {
-        const int emergencyAutoSaveInterval = 10; // sec
-        setAutoSaveDelay(emergencyAutoSaveInterval);
+    if (!started && !hadClonedDocument && d->autoSaveFailureCount >= 3) {
+        KisCloneDocumentStroke *stroke = new KisCloneDocumentStroke(this);
+        connect(stroke, SIGNAL(sigDocumentCloned(KisDocument*)),
+                this, SLOT(slotInitiateAsyncAutosaving(KisDocument*)),
+                Qt::BlockingQueuedConnection);
+
+        KisStrokeId strokeId = d->image->startStroke(stroke);
+        d->image->endStroke(strokeId);
+
+        setInfiniteAutoSaveInterval();
+
+    } else if (!started) {
+        setEmergencyAutoSaveInterval();
     } else {
         d->modifiedAfterAutosave = false;
     }
+}
+
+void KisDocument::slotAutoSave()
+{
+    slotAutoSaveImpl(std::unique_ptr<KisDocument>());
+}
+
+void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
+{
+    slotAutoSaveImpl(std::unique_ptr<KisDocument>(clonedDocument));
 }
 
 void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
@@ -809,8 +852,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
     const QString fileName = QFileInfo(job.filePath).fileName();
 
     if (status != KisImportExportFilter::OK) {
-        const int emergencyAutoSaveInterval = 10; // sec
-        setAutoSaveDelay(emergencyAutoSaveInterval);
+        setEmergencyAutoSaveInterval();
         emit statusBarMessage(i18nc("%1 --- failing file name, %2 --- error message",
                                     "Error during autosaving %1: %2",
                                     fileName,
@@ -820,9 +862,10 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
         d->autoSaveDelay = cfg.autoSaveInterval();
 
         if (!d->modifiedWhileSaving) {
-            d->autoSaveTimer.stop(); // until the next change
+            d->autoSaveTimer->stop(); // until the next change
+            d->autoSaveFailureCount = 0;
         } else {
-            setAutoSaveDelay(d->autoSaveDelay); // restart the timer
+            setNormalAutoSaveInterval();
         }
 
         emit statusBarMessage(i18n("Finished autosaving %1", fileName), successMessageTimeout);
@@ -899,7 +942,7 @@ void KisDocument::finishExportInBackground()
 void KisDocument::setReadWrite(bool readwrite)
 {
     d->readwrite = readwrite;
-    setAutoSaveDelay(d->autoSaveDelay);
+    setNormalAutoSaveInterval();
 
     Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
         mainWindow->setReadWrite(readwrite);
@@ -908,14 +951,29 @@ void KisDocument::setReadWrite(bool readwrite)
 
 void KisDocument::setAutoSaveDelay(int delay)
 {
-    //qDebug() << "setting autosave delay from" << d->autoSaveDelay << "to" << delay;
-    d->autoSaveDelay = delay;
-    if (isReadWrite() && d->autoSaveDelay > 0) {
-        d->autoSaveTimer.start(d->autoSaveDelay * 1000);
+    if (isReadWrite() && delay > 0) {
+        d->autoSaveTimer->start(delay * 1000);
+    } else {
+        d->autoSaveTimer->stop();
     }
-    else {
-        d->autoSaveTimer.stop();
-    }
+}
+
+void KisDocument::setNormalAutoSaveInterval()
+{
+    setAutoSaveDelay(d->autoSaveDelay);
+    d->autoSaveFailureCount = 0;
+}
+
+void KisDocument::setEmergencyAutoSaveInterval()
+{
+    const int emergencyAutoSaveInterval = 10; /* sec */
+    setAutoSaveDelay(emergencyAutoSaveInterval);
+    d->autoSaveFailureCount++;
+}
+
+void KisDocument::setInfiniteAutoSaveInterval()
+{
+    setAutoSaveDelay(-1);
 }
 
 KoDocumentInfo *KisDocument::documentInfo() const
@@ -1209,7 +1267,7 @@ void KisDocument::setModified(bool mod)
 
     if (mod && !d->modifiedAfterAutosave) {
         // First change since last autosave -> start the autosave timer
-        setAutoSaveDelay(d->autoSaveDelay);
+        setNormalAutoSaveInterval();
     }
     d->modifiedAfterAutosave |= mod;
     d->modifiedWhileSaving |= mod;
@@ -1401,7 +1459,8 @@ void KisDocument::slotConfigChanged()
 {
     KisConfig cfg;
     d->undoStack->setUndoLimit(cfg.undoStackLimit());
-    setAutoSaveDelay(cfg.autoSaveInterval());
+    d->autoSaveDelay = cfg.autoSaveInterval();
+    setNormalAutoSaveInterval();
 }
 
 void KisDocument::clearUndoHistory()

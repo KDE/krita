@@ -29,5 +29,25 @@ option provides a graphical view for editing that option (as a page
 in an option popup) and possible also the code necessary for applying
 the effects of that option to the paint device as part of painting.
 
+The following classes are important:
+
+<ul>
+<li>KisPaintOp: this is the engine for a certain kind of brush. It will
+ be created in non-gui threads and keeps its state in a KisPaintOpSettings
+ object.
+<li>KisPaintOpSettings: this is a KisPropertiesConfiguration subclass that
+ stores the settings for all the options that make up a paintop.
+<li>Classes derived from KisPaintOpOption. These classes create a configuration
+  widget. That means that you cannot construct any those objects in a
+  KisPaintOp. KisPaintOps are created in non-gui threads.
+<li>Classes derived from KisCurveOption. KisCurveOption classes have a generic GUI widget,
+  KisCurveOptionWidget. So, in contrast to KisPaintOpOption classes, KisCurveOption
+  instances can and will be created in the constructor of KisPaintOp paintops.
+  This class can manage to read and write its settings directly.
+<li>Classes derived from KisPaintopPropertiesBase. These classes are non-gui,
+  and can read and write KisPropertiesConfiguration objects created by
+  KisPaintOpOption.
+</ul>
+
 */
 // DOXYGEN_SET_IGNORE_PREFIX = Kis Ko K

@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Id": "Krita HEIF Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/heic",
+    "X-KDE-Library": "kritaexrexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": "1",
+    "X-KDE-Extensions" : "heif,heic"
+}

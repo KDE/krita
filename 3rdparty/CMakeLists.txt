@@ -5,7 +5,7 @@ project (krita-and-all-its-deps)
 # Parameters: EXTERNALS_DOWNLOAD_DIR place to download all packages
 #             INSTALL_ROOT place to install everything to
 #             MXE_TOOLCHAIN: the toolchain file to cross-compile using MXE
-# 
+#
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
 
@@ -37,11 +37,11 @@ set(EXTPREFIX "${TOP_INST_DIR}")
 set(CMAKE_PREFIX_PATH "${EXTPREFIX}")
 
 if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
-    SET(GLOBAL_PROFILE 
-        -DCMAKE_MODULE_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_EXE_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_SHARED_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_STATIC_LINKER_FLAGS=/machine:x64 
+    SET(GLOBAL_PROFILE
+        -DCMAKE_MODULE_LINKER_FLAGS=/machine:x64
+        -DCMAKE_EXE_LINKER_FLAGS=/machine:x64
+        -DCMAKE_SHARED_LINKER_FLAGS=/machine:x64
+        -DCMAKE_STATIC_LINKER_FLAGS=/machine:x64
     )
 endif ()
 
@@ -105,16 +105,16 @@ endif()
 
 if (MSYS)
 	set(PATCH_COMMAND patch)
-    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} 
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
                            -DCMAKE_TOOLCHAIN_FILE=${MXE_TOOLCHAIN}
                            -DCMAKE_FIND_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                            -DCMAKE_SYSTEM_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
-                           -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include 
+                           -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
                            -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib
                            -DZLIB_ROOT=${CMAKE_PREFIX_PATH}
     )
     set(GLOBAL_AUTOMAKE_PROFILE  --host=i686-pc-mingw32 )
-endif() 
+endif()
 
 if (APPLE)
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_MACOSX_RPATH=ON -DKDE_SKIP_RPATH_SETTINGS=ON -DBUILD_WITH_INSTALL_RPATH=ON -DAPPLE_SUPPRESS_X11_WARNING=ON)
@@ -144,8 +144,12 @@ endfunction()
 if (MINGW)
 	option(ENABLE_PYTHON_DEPS "Enable Python deps (sip, pyqt)" ON)
 	if (ENABLE_PYTHON_DEPS)
-		find_package(PythonInterp 3.6 EXACT)
-		find_package(PythonLibs 3.6 EXACT)
+        if (ENABLE_PYTHON_2)
+            message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
+        else(ENABLE_PYTHON_2)
+            find_package(PythonInterp 3.6 EXACT)
+            find_package(PythonLibs 3.6 EXACT)
+        endif(ENABLE_PYTHON_2)
 		if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 			message(STATUS "Python requirements met.")
 			TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
@@ -203,6 +207,7 @@ endif (ENABLE_PYTHON_DEPS OR NOT MINGW)
 
 if (MSVC OR MINGW)
     add_subdirectory( ext_drmingw )
+#    add_subdirectory( ext_ffmpeg )
 endif (MSVC OR MINGW)
 
 if (NOT APPLE)

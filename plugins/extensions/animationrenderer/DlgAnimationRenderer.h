@@ -31,12 +31,12 @@ class KisImportExportFilter;
 class KisConfigWidget;
 class QHBoxLayout;
 
-class WdgAnimaterionRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
+class WdgAnimationRenderer : public QWidget, public Ui::WdgAnimaterionRenderer
 {
     Q_OBJECT
 
 public:
-    WdgAnimaterionRenderer(QWidget *parent)
+    WdgAnimationRenderer(QWidget *parent)
         : QWidget(parent)
     {
         setupUi(this);
@@ -96,7 +96,7 @@ private:
 
     KisImageSP m_image;
     KisDocument *m_doc;
-    WdgAnimaterionRenderer *m_page {0};
+    WdgAnimationRenderer *m_page {0};
     QList<QSharedPointer<KisImportExportFilter>> m_renderFilters;
     KisConfigWidget *m_encoderConfigWidget {0};
     KisConfigWidget *m_frameExportConfigWidget {0};

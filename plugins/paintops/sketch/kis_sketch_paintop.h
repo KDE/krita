@@ -74,9 +74,9 @@ private:
     KisDensityOption m_densityOption;
     KisLineWidthOption m_lineWidthOption;
     KisOffsetScaleOption m_offsetScaleOption;
-    KisAirbrushOptionWidget m_airbrushOptionWidget;
+    KisAirbrushOptionProperties m_airbrushOption;
 
-    KisBrushOption m_brushOption;
+    KisBrushOptionProperties m_brushOption;
     SketchProperties m_sketchProperties;
 
     QVector<QPointF> m_points;

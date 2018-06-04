@@ -225,7 +225,7 @@ public: // KisCanvas2 methods
     QRect renderingLimit() const;
 
 Q_SIGNALS:
-    void imageChanged(KisImageWSP image);
+    void sigCanvasEngineChanged();
 
     void sigCanvasCacheUpdated();
     void sigContinueResizeImage(qint32 w, qint32 h);

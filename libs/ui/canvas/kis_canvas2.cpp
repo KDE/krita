@@ -573,9 +573,9 @@ void KisCanvas2::connectCurrentCanvas()
     }
 
     startResizingImage();
-
-    emit imageChanged(image);
     setLodAllowedInCanvas(m_d->lodAllowedInImage);
+
+    emit sigCanvasEngineChanged();
 }
 
 void KisCanvas2::resetCanvas(bool useOpenGL)

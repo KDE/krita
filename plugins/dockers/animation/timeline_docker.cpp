@@ -106,7 +106,7 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
         KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(doc->shapeController());
         m_d->model->setDummiesFacade(kritaShapeController, m_d->canvas->image());
 
-        m_d->model->setFrameCache(m_d->canvas->frameCache());
+        slotUpdateFrameCache();
         m_d->model->setAnimationPlayer(m_d->canvas->animationPlayer());
 
         m_d->model->setNodeManipulationInterface(
@@ -124,7 +124,11 @@ void TimelineDocker::setCanvas(KoCanvasBase * canvas)
 
         m_d->canvasConnections.addConnection(
                     m_d->canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()),
-                    this, SLOT(slotUpdateIcons()) );
+                    this, SLOT(slotUpdateIcons()));
+
+        m_d->canvasConnections.addConnection(
+                    m_d->canvas, SIGNAL(sigCanvasEngineChanged()),
+                    this, SLOT(slotUpdateFrameCache()));
     }
 
 }
@@ -134,6 +138,11 @@ void TimelineDocker::slotUpdateIcons()
     if (m_d->view) {
         m_d->view->slotUpdateIcons();
     }
+}
+
+void TimelineDocker::slotUpdateFrameCache()
+{
+    m_d->model->setFrameCache(m_d->canvas->frameCache());
 }
 
 void TimelineDocker::unsetCanvas()

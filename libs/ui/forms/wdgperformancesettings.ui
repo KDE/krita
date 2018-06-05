@@ -415,7 +415,7 @@
           <item>
            <widget class="QRadioButton" name="optInMemory">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Animation frame cache will be stored in RAM completely without any limitations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;WARNING:&lt;/span&gt; please make sure your computer has enough RAM &lt;span style=&quot; text-decoration: underline;&quot;&gt;above&lt;/span&gt; the amount you requested in General tab. Otherwise you migh face system freezes.&lt;/p&gt;&lt;p&gt;* for 1 second of FullHD@25fps video you need extra 200 MiB of memory&lt;/p&gt;&lt;p&gt;* for 1 second of 4K UltraHD@25fps video you need extra 800 MiB of memory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Animation frame cache will be stored in RAM completely without any limitations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;WARNING:&lt;/span&gt; please make sure your computer has enough RAM &lt;span style=&quot; text-decoration: underline;&quot;&gt;above&lt;/span&gt; the amount you requested in General tab. Otherwise you might face system freezes.&lt;/p&gt;&lt;p&gt;* for 1 second of FullHD@25fps video you need extra 200 MiB of memory&lt;/p&gt;&lt;p&gt;* for 1 second of 4K UltraHD@25fps video you need extra 800 MiB of memory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
              <string>In-memory</string>

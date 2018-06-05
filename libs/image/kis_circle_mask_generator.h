@@ -49,6 +49,8 @@ public:
     void setSoftness(qreal softness) override;
     void setScale(qreal scaleX, qreal scaleY) override;
 
+    void resetMaskApplicator(bool forceScalar);
+
 private:
 
     qreal norme(qreal a, qreal b) const {

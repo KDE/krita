@@ -45,9 +45,7 @@ public:
     int dpiX() const;
     int dpiY() const;
     bool doTemplate() const;
-    bool print() const;
     bool exportAs() const;
-    bool exportAsPdf() const;
     QString exportFileName() const;
     QString workspace() const;
     QString windowLayout() const;
@@ -57,7 +55,6 @@ public:
     bool fullScreen() const;
     bool doNewImage() const;
     KisDocument *image() const;
-
 
 private:
 

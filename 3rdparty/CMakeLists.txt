@@ -207,6 +207,7 @@ endif (ENABLE_PYTHON_DEPS OR NOT MINGW)
 
 if (MSVC OR MINGW)
     add_subdirectory( ext_drmingw )
+#    add_subdirectory( ext_ffmpeg )
 endif (MSVC OR MINGW)
 
 if (NOT APPLE)

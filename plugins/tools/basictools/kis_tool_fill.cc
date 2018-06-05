@@ -205,12 +205,12 @@ QWidget* KisToolFill::createOptionWidget()
     m_featherWidget = new KisSliderSpinBox(widget);
     m_featherWidget->setObjectName("feather");
     m_featherWidget->setRange(0, 40);
-    m_featherWidget->setSingleStep(1);   
+    m_featherWidget->setSingleStep(1);
     m_featherWidget->setSuffix(i18n(" px"));
 
     QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
     m_checkUsePattern = new QCheckBox(QString(), widget);
-    m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
+    m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
 
     QLabel *lbl_sampleMerged = new QLabel(i18n("Limit to current layer:"), widget);
     m_checkSampleMerged = new QCheckBox(QString(), widget);

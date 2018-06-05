@@ -29,7 +29,7 @@ KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, 
 {
     ui->setupUi(this);
     m_types << "prewitt"<< "sobol"<< "simple";
-    m_types_translatable << i18n("Prewitt") << i18n("Sobol") << i18n("Simple");
+    m_types_translatable << i18n("Prewitt") << i18n("Sobel") << i18n("Simple");
     QStringList swizzle;
     swizzle<< "X+" << "X-" << "Y+" << "Y-" << "Z+" << "Z-";
 

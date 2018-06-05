@@ -55,9 +55,8 @@ int KisPPUpdateInfo::levelOfDetail() const
     return 0;
 }
 
-KisOpenGLUpdateInfo::KisOpenGLUpdateInfo(ConversionOptions options)
-    : m_options(options),
-      m_levelOfDetail(0)
+KisOpenGLUpdateInfo::KisOpenGLUpdateInfo()
+    : m_levelOfDetail(0)
 {
 }
 
@@ -81,22 +80,19 @@ QRect KisOpenGLUpdateInfo::dirtyImageRect() const
     return m_dirtyImageRect;
 }
 
-bool KisOpenGLUpdateInfo::needsConversion() const
-{
-    return m_options.m_needsConversion;
-}
-void KisOpenGLUpdateInfo::convertColorSpace()
-{
-    KIS_ASSERT_RECOVER_RETURN(needsConversion());
-
-    Q_FOREACH (KisTextureTileUpdateInfoSP tileInfo, tileList) {
-        tileInfo->convertTo(m_options.m_destinationColorSpace,
-                            m_options.m_renderingIntent,
-                            m_options.m_conversionFlags);
-    }
-}
-
 int KisOpenGLUpdateInfo::levelOfDetail() const
 {
     return m_levelOfDetail;
+}
+
+bool KisOpenGLUpdateInfo::tryMergeWith(const KisOpenGLUpdateInfo &rhs)
+{
+    if (m_levelOfDetail != rhs.m_levelOfDetail) return false;
+
+    // TODO: that makes the algorithm of updates compressor incorrect!
+    m_dirtyImageRect |= rhs.m_dirtyImageRect;
+
+    tileList.append(rhs.tileList);
+
+    return true;
 }

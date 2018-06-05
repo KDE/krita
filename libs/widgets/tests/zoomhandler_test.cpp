@@ -77,8 +77,6 @@ void zoomhandler_test::testApi()
 
     zoomHandler.setZoomMode( KoZoomMode::ZOOM_CONSTANT );
     QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_CONSTANT );
-    zoomHandler.setZoomMode( KoZoomMode::ZOOM_WIDTH );
-    QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_WIDTH );
     zoomHandler.setZoomMode( KoZoomMode::ZOOM_PAGE );
     QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_PAGE );
 

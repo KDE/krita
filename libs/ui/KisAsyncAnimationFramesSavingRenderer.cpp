@@ -36,7 +36,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
           exportConfiguration(_exportConfiguration)
     {
 
-        savingDoc->setAutoSaveDelay(0);
+        savingDoc->setInfiniteAutoSaveInterval();
         savingDoc->setFileBatchMode(true);
 
         KisImageSP savingImage = new KisImage(savingDoc->createUndoStore(),
@@ -92,10 +92,15 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame)
+void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
     if (!image) return;
+
+    KIS_SAFE_ASSERT_RECOVER (requestedRegion == image->bounds()) {
+        emit sigCancelRegenerationInternal(frame);
+        return;
+    }
 
     m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
 

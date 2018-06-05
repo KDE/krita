@@ -110,7 +110,7 @@ void ToolReferenceImages::loadReferenceImages()
 
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could open '%1'.", filename));
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not open '%1'.", filename));
         return;
     }
 
@@ -146,7 +146,7 @@ void ToolReferenceImages::saveReferenceImages()
 
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly)) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could open '%1' for saving.", filename));
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not open '%1' for saving.", filename));
         return;
     }
 
@@ -209,7 +209,7 @@ KisReferenceImagesLayer *ToolReferenceImages::getOrCreteReferenceImagesLayer()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisDocument *document = kisCanvas->imageView()->document();
 
-    return document->createReferenceImagesLayer().data();
+    return document->getOrCreateReferenceImagesLayer().data();
 }
 
 KoSelection *ToolReferenceImages::koSelection() const

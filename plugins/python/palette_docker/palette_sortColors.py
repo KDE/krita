@@ -52,7 +52,7 @@ class sortColors(object):
         colorCount = self.currentPalette.colorsCountGroup(groupName)
         for i in range(colorCount - 1, -1, -1):
             entry = self.currentPalette.colorSetEntryFromGroup((i), groupName)
-            l[entry.id + " " + str(i)] = entry
+            l[entry.id() + " " + str(i)] = entry
             self.currentPalette.removeEntry((i), groupName)
 
         for s in sorted(l):

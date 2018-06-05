@@ -407,6 +407,12 @@ public:
     void uploadLodDataStruct(LodDataStruct *dst);
     QRegion regionForLodSyncing() const;
 
+    void updateLodDataManager(KisDataManager *srcDataManager,
+                              KisDataManager *dstDataManager, const QPoint &srcOffset, const QPoint &dstOffset,
+                              const QRect &originalRect, int lod);
+
+    void generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod);
+
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 
@@ -650,6 +656,8 @@ QRegion KisPaintDevice::Private::regionForLodSyncing() const
 
 KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int newLod)
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(newLod > 0);
+
     Data *srcData = currentNonLodData();
 
     Data *lodData = new Data(srcData, false);
@@ -683,15 +691,13 @@ KisPaintDevice::LodDataStruct* KisPaintDevice::Private::createLodDataStruct(int 
     return lodStruct;
 }
 
-void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRect &originalRect)
+void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManager,
+                                                   KisDataManager *dstDataManager,
+                                                   const QPoint &srcOffset,
+                                                   const QPoint &dstOffset,
+                                                   const QRect &originalRect,
+                                                   int lod)
 {
-    LodDataStructImpl *dst = dynamic_cast<LodDataStructImpl*>(_dst);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(dst);
-
-    Data *lodData = dst->lodData.data();
-    Data *srcData = currentNonLodData();
-
-    const int lod = lodData->levelOfDetail();
     const int srcStepSize = 1 << lod;
 
     KIS_ASSERT_RECOVER_RETURN(lod > 0);
@@ -702,7 +708,7 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
 
     KIS_ASSERT_RECOVER_NOOP(srcRect.width() / srcStepSize == dstRect.width());
 
-    const int pixelSize = srcData->dataManager()->pixelSize();
+    const int pixelSize = srcDataManager->pixelSize();
 
     int rowsAccumulated = 0;
     int columnsAccumulated = 0;
@@ -731,8 +737,8 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
         weights[srcCellSize - 1] = averageWeight - extraWeight;
     }
 
-    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcData->dataManager().data(), srcData->x(), srcData->y()), srcRect);
-    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), lodData->dataManager().data(), lodData->x(), lodData->y()), dstRect);
+    InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcDataManager, srcOffset.x(), srcOffset.y()), srcRect);
+    InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), dstDataManager, dstOffset.x(), dstOffset.y()), dstRect);
 
     int rowsRemaining = srcRect.height();
     while (rowsRemaining > 0) {
@@ -778,6 +784,33 @@ void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRe
 
         rowsRemaining--;
     }
+}
+
+void KisPaintDevice::Private::updateLodDataStruct(LodDataStruct *_dst, const QRect &originalRect)
+{
+    LodDataStructImpl *dst = dynamic_cast<LodDataStructImpl*>(_dst);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(dst);
+
+    Data *lodData = dst->lodData.data();
+    Data *srcData = currentNonLodData();
+
+    const int lod = lodData->levelOfDetail();
+
+    updateLodDataManager(srcData->dataManager().data(), lodData->dataManager().data(),
+                         QPoint(srcData->x(), srcData->y()),
+                         QPoint(lodData->x(), lodData->y()),
+                         originalRect, lod);
+}
+
+void KisPaintDevice::Private::generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(fastBitBltPossible(dst));
+
+    Data *srcData = currentNonLodData();
+    updateLodDataManager(srcData->dataManager().data(), dst->dataManager().data(),
+                         QPoint(srcData->x(), srcData->y()),
+                         QPoint(dst->x(), dst->y()),
+                         originalRect, lod);
 }
 
 void KisPaintDevice::Private::uploadLodDataStruct(LodDataStruct *_dst)
@@ -2023,6 +2056,11 @@ void KisPaintDevice::updateLodDataStruct(LodDataStruct *dst, const QRect &srcRec
 void KisPaintDevice::uploadLodDataStruct(LodDataStruct *dst)
 {
     m_d->uploadLodDataStruct(dst);
+}
+
+void KisPaintDevice::generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod)
+{
+    m_d->generateLodCloneDevice(dst, originalRect, lod);
 }
 
 

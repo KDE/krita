@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
-  <id>org.kde.krita.desktop</id>
+  <id>org.kde.krita</id>
+  <launchable type="desktop-id">org.kde.krita.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+  <developer_name>Krita Foundation</developer_name>
+  <developer_name xml:lang="ca">Fundació Krita</developer_name>
+  <developer_name xml:lang="ca-valencia">Fundació Krita</developer_name>
+  <developer_name xml:lang="nl">Krita Foundation</developer_name>
+  <developer_name xml:lang="pt">Fundação do Krita</developer_name>
+  <developer_name xml:lang="pt-BR">Krita Foundation</developer_name>
+  <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>
+  <developer_name xml:lang="uk">Фундація Krita</developer_name>
+  <developer_name xml:lang="x-test">xxKrita Foundationxx</developer_name>
+  <update_contact>foundation@krita.org</update_contact>
   <name>Krita</name>
   <name xml:lang="ar">كريتا</name>
   <name xml:lang="ast">Krita</name>
@@ -196,7 +208,31 @@
       <image>https://cdn.kde.org/screenshots/krita/2018-03-17_screenshot_006.png</image>
     </screenshot>
   </screenshots>
-  <update_contact>foundation@krita.org</update_contact>
+  <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+  <categories>
+    <category>Graphics</category>
+  </categories>
   <project_group>KDE</project_group>
   <provides>
     <binary>krita</binary>

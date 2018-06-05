@@ -229,7 +229,7 @@ KisBaseNode::PropertyList KisLayer::sectionModelProperties() const
     const KoCompositeOp * compositeOp = this->compositeOp();
 
     if (compositeOp) {
-        l << KisBaseNode::Property(KoID("compositeop", i18n("Composite Mode")), compositeOp->description());
+        l << KisBaseNode::Property(KoID("compositeop", i18n("Blending Mode")), compositeOp->description());
     }
 
     if (m_d->layerStyle && !m_d->layerStyle->isEmpty()) {

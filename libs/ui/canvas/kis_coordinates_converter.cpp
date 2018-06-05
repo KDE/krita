@@ -407,6 +407,11 @@ QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
     return widgetToFlake(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
+QRectF KisCoordinatesConverter::widgetRectInImagePixels() const
+{
+    return widgetToImage(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
+}
+
 QPointF KisCoordinatesConverter::flakeCenterPoint() const
 {
     QRectF widgetRect = widgetRectInFlakePixels();

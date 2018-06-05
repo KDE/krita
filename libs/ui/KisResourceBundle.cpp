@@ -460,7 +460,7 @@ bool KisResourceBundle::install()
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         gradientServer->addTag(res, tag);
                     }
-                    gradientServer->addTag(res, name());
+                    //gradientServer->addTag(res, name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -504,7 +504,7 @@ bool KisResourceBundle::install()
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         patternServer->addTag(res, tag);
                     }
-                    patternServer->addTag(res, name());
+                    //patternServer->addTag(res, name());
                 }
 
             }
@@ -554,7 +554,7 @@ bool KisResourceBundle::install()
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         brushServer->addTag(res.data(), tag);
                     }
-                    brushServer->addTag(res.data(), name());
+                    //brushServer->addTag(res.data(), name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -599,7 +599,7 @@ bool KisResourceBundle::install()
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         paletteServer->addTag(res, tag);
                     }
-                    paletteServer->addTag(res, name());
+                    //paletteServer->addTag(res, name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -643,7 +643,7 @@ bool KisResourceBundle::install()
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         workspaceServer->addTag(res, tag);
                     }
-                    workspaceServer->addTag(res, name());
+                    //workspaceServer->addTag(res, name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -692,7 +692,7 @@ bool KisResourceBundle::install()
                     Q_FOREACH (const QString &tag, ref.tagList) {
                         paintoppresetServer->addTag(res.data(), tag);
                     }
-                    paintoppresetServer->addTag(res.data(), name());
+                    //paintoppresetServer->addTag(res.data(), name());
                 }
                 else {
                     //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
@@ -722,7 +722,7 @@ bool KisResourceBundle::uninstall()
     m_installed = false;
     QStringList tags = getTagsList();
     tags << m_manifest.tags();
-    tags << name();
+    //tags << name();
 
     KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gradients")) {

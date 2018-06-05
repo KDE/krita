@@ -40,7 +40,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QLineEdit>
-#include <kis_canvas_resource_provider.h>
+
 #include <kis_config.h>
 
 #include "kis_int_parse_spin_box.h"
@@ -79,7 +79,7 @@ void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     int size = 7;
     for (quint32 i = 0; i < colorSet->nColors() && i*size < (quint32)option.rect.width(); i++) {
         QRect rect(option.rect.x() + i*size, option.rect.y() + option.rect.height() - size, size, size);
-        painter->fillRect(rect, colorSet->getColorGlobal(i).color.toQColor());
+        painter->fillRect(rect, colorSet->getColorGlobal(i).color().toQColor());
     }
 
     painter->restore();
@@ -116,12 +116,12 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_itemChooser, 0, 0, 1, 3);
-    layout->addWidget(new QLabel(i18n("Name:"), this), 1, 0, 1, 1);
-    layout->addWidget(m_nameEdit, 1, 1, 1, 2);
-    layout->addWidget(new QLabel(i18n("Columns:"), this), 2, 0, 1, 1);
-    layout->addWidget(m_columnEdit, 2, 1, 1, 1);
-    layout->addWidget(saveButton, 2, 2, 1, 1);
     layout->setColumnStretch(1, 1);
+    layout->addWidget(saveButton, 2, 2, 1, 1);
+    layout->addWidget(m_nameEdit, 1, 1, 1, 2);
+    layout->addWidget(new QLabel(i18n("Name:"), this), 1, 0, 1, 1);
+    layout->addWidget(m_columnEdit, 2, 1, 1, 1);
+    layout->addWidget(new QLabel(i18n("Columns:"), this), 2, 0, 1, 1);
 }
 
 KisColorsetChooser::~KisColorsetChooser()

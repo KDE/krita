@@ -78,7 +78,7 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
         channelFlags = device->colorSpace()->channelFlags();
     }
 
-    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobolVector;
+    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
     if (config->getString("type") == "prewitt") {
         type = KisEdgeDetectionKernel::Prewit;
     } else if (config->getString("type") == "simple") {

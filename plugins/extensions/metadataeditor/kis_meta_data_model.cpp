@@ -106,7 +106,7 @@ QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, 
         case 1:
             return i18n("Type");
         case 2:
-            return i18n("Value");
+            return i18nc("Metadata item value", "Value");
         }
     }
     return QVariant();

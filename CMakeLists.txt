@@ -5,12 +5,8 @@ message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 set(MIN_QT_VERSION 5.6.0)
-option(OVERRIDE_QT_VERSION "Use this to make it possible to build with Qt < 5.6.0. There will be bugs." OFF)
-if (OVERRIDE_QT_VERSION)
-    set(MIN_QT_VERSION 5.4.0)
-endif()
 
-set(MIN_FRAMEWORKS_VERSION 5.22.0)
+set(MIN_FRAMEWORKS_VERSION 5.18.0)
 
 if (POLICY CMP0002)
     cmake_policy(SET CMP0002 OLD)
@@ -61,10 +57,8 @@ if (APPLE)
     add_definitions(-mmacosx-version-min=10.11 -Wno-macro-redefined -Wno-deprecated-register)
 endif()
 
-if (LINUX)
-    if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WINDOWS)
-        add_definitions(-Werror=delete-incomplete)
-    endif()
+if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
+    add_definitions(-Werror=delete-incomplete)
 endif()
 
  ######################
@@ -132,19 +126,6 @@ if(GIT_SHA1)
        set(KRITA_GIT_BRANCH_STRING "(detached HEAD)")
    endif()
 endif()
-
-if(NOT DEFINED RELEASE_BUILD)
-    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
-    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
-    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
-    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
-    if (INDEX EQUAL -1)
-        set(RELEASE_BUILD FALSE)
-    else()
-        set(RELEASE_BUILD TRUE)
-    endif()
-endif()
-message(STATUS "Release build: ${RELEASE_BUILD}")
 
 # create test make targets
 enable_testing()
@@ -536,6 +517,13 @@ set_package_properties(GIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
 
+find_package(HEIF "1.2.0")
+set_package_properties(HEIF PROPERTIES
+    DESCRIPTION "Library for loading and saving heif files."
+    URL "https://github.com/strukturag/libheif"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita HEIF filter")
+
 set(LIBRAW_MIN_VERSION  "0.16")
 find_package(LibRaw ${LIBRAW_MIN_VERSION})
 set_package_properties(LibRaw PROPERTIES
@@ -736,7 +724,7 @@ check_function_exists(powf HAVE_POWF)
 configure_file(config-powf.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powf.h)
 
 if(WIN32)
-    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/ConfigureInstallerNsis.cmake)
+    include(${CMAKE_CURRENT_LIST_DIR}/packaging/windows/installer/ConfigureInstallerNsis.cmake)
 endif()
 
 message("\nBroken tests:")

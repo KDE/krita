@@ -954,6 +954,16 @@ bool KisMainWindow::hackIsSaving() const
     return !l.owns_lock();
 }
 
+bool KisMainWindow::installBundle(const QString &fileName) const
+{
+    QFileInfo from(fileName);
+    QFileInfo to(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
+    if (to.exists()) {
+        QFile::remove(to.canonicalFilePath());
+    }
+    return QFile::copy(fileName, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
+}
+
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting)
 {
     if (!document) {
@@ -1314,7 +1324,13 @@ void KisMainWindow::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
-            openDocument(url, None);
+            if (url.toLocalFile().endsWith(".bundle")) {
+                bool r = installBundle(url.toLocalFile());
+                qDebug() << "\t" << r;
+            }
+            else {
+                openDocument(url, None);
+            }
         }
     }
 }

@@ -225,7 +225,7 @@ extern "C" int main(int argc, char **argv)
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
-        qputenv("LANG", language.split(":").first().toUtf8());
+        qputenv("LANG", language.split(":").first().toLocal8Bit());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
     }
@@ -234,9 +234,23 @@ extern "C" int main(int argc, char **argv)
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
         if (locale.name() != QStringLiteral("en")) {
-            qDebug() << "Setting Krita's language to:" << locale;
-            qputenv("LANG", locale.name().toLatin1());
-            KLocalizedString::setLanguages(QStringList() << locale.name());
+            QStringList uiLanguages = locale.uiLanguages();
+            for (QString &uiLanguage : uiLanguages) {
+                uiLanguage.replace(QChar('-'), QChar('_'));
+            }
+            for (int i = 0; i < uiLanguages.size(); i++) {
+                QString uiLanguage = uiLanguages[i];
+                // Strip the country code
+                int idx = uiLanguage.indexOf(QChar('_'));
+                if (idx != -1) {
+                    uiLanguage = uiLanguage.left(idx);
+                    uiLanguages.insert(i + 1, uiLanguage);
+                    i++;
+                }
+            }
+            qDebug() << "Setting Krita's language to:" << uiLanguages;
+            qputenv("LANG", uiLanguages.first().toLocal8Bit());
+            KLocalizedString::setLanguages(uiLanguages);
         }
     }
 #endif
@@ -282,7 +296,7 @@ extern "C" int main(int argc, char **argv)
     if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
-        const bool batchRun = (args.print() || args.exportAs() || args.exportAsPdf());
+        const bool batchRun = args.exportAs();
 
         if (!batchRun) {
             QByteArray ba = args.serialize();

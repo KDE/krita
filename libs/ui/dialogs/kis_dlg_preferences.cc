@@ -94,6 +94,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
+    //
+    // Cursor Tab
+    //
     m_cmbCursorShape->addItem(i18n("No Cursor"));
     m_cmbCursorShape->addItem(i18n("Tool Icon"));
     m_cmbCursorShape->addItem(i18n("Arrow"));
@@ -104,18 +107,63 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbCursorShape->addItem(i18n("Black Pixel"));
     m_cmbCursorShape->addItem(i18n("White Pixel"));
 
+    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
+
     m_cmbOutlineShape->addItem(i18n("No Outline"));
     m_cmbOutlineShape->addItem(i18n("Circle Outline"));
     m_cmbOutlineShape->addItem(i18n("Preview Outline"));
     m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
 
+    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+
+    m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+    m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline());
+
+    KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
+    cursorColor.fromQColor(cfg.getCursorMainColor());
+    cursorColorBtutton->setColor(cursorColor);
+
+    //
+    // Window Tab
+    //
+    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
+
+    m_backgroundimage->setText(cfg.getMDIBackgroundImage());
+    connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
+    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
+
+    KoColor mdiColor;
+    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
+    m_mdiColor->setColor(mdiColor);
+
+    m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
+
+    m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
+
+    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", false).toBool());
+
+    m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
+
+    //
+    // Tools tab
+    //
+    m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
+    m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
+    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+
     m_cmbKineticScrollingGesture->addItem(i18n("Disabled"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Click Drag"));
 
-    m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
-    m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
+    m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
+    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
+    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
 
+    //
+    // Miscellaneous
+    //
     cmbStartupSession->addItem(i18n("Open default window"));
     cmbStartupSession->addItem(i18n("Load previous session"));
     cmbStartupSession->addItem(i18n("Show session manager"));
@@ -123,15 +171,23 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkSaveSessionOnQuit->setChecked(cfg.saveSessionOnQuit(false));
 
-    chkShowRootLayer->setChecked(cfg.showRootLayer());
-
     int autosaveInterval = cfg.autoSaveInterval();
     //convert to minutes
     m_autosaveSpinBox->setValue(autosaveInterval / 60);
     m_autosaveCheckBox->setChecked(autosaveInterval > 0);
-    m_undoStackSize->setValue(cfg.undoStackLimit());
+
+    m_chkCompressKra->setChecked(cfg.compressKra());
+
     m_backupFileCheckBox->setChecked(cfg.backupFile());
-    m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+
+    m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
+
+    m_undoStackSize->setValue(cfg.undoStackLimit());
+
+    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
+
+    chkShowRootLayer->setChecked(cfg.showRootLayer());
+
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
@@ -147,37 +203,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", dontUseNative));
 
     intMaxBrushSize->setValue(cfg.readEntry("maximumBrushSize", 1000));
-
-    m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
-    m_chkRubberBand->setChecked(cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
-    m_favoritePresetsSpinBox->setValue(cfg.favoritePresets());
-    KoColor mdiColor;
-    mdiColor.fromQColor(cfg.getMDIBackgroundColor());
-    m_mdiColor->setColor(mdiColor);
-    m_backgroundimage->setText(cfg.getMDIBackgroundImage());
-    m_chkCanvasMessages->setChecked(cfg.showCanvasMessages());
-    m_chkCompressKra->setChecked(cfg.compressKra());
-
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
-    m_chkHiDPI->setChecked(kritarc.value("EnableHiDPI", false).toBool());
-    m_chkSingleApplication->setChecked(kritarc.value("EnableSingleApplication", true).toBool());
-
-    m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
-    m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
-    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
-    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
-    m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
-    chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
-    m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport());
-    m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground());
-
-    KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
-    cursorColor.fromQColor(cfg.getCursorMainColor());
-    cursorColorBtutton->setColor(cursorColor);
-
-    connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
-    connect(clearBgImageButton, SIGNAL(clicked()), SLOT(clearBackgroundImage()));
 }
 
 void GeneralTab::setDefault()
@@ -193,6 +218,7 @@ void GeneralTab::setDefault()
     m_undoStackSize->setValue(cfg.undoStackLimit(true));
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
+    m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
 
     m_chkNativeFileDialog->setChecked(false);
@@ -218,7 +244,6 @@ void GeneralTab::setDefault()
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
-    m_chkCacheAnimatioInBackground->setChecked(cfg.calculateAnimationCacheInBackground(true));
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
     cursorColor.fromQColor(cfg.getCursorMainColor(true));
@@ -321,12 +346,6 @@ bool GeneralTab::convertToImageColorspaceOnImport()
 {
     return m_chkConvertOnImport->isChecked();
 }
-
-bool GeneralTab::calculateAnimationCacheInBackground()
-{
-    return m_chkCacheAnimatioInBackground->isChecked();
-}
-
 
 void GeneralTab::getBackgroundImage()
 {
@@ -765,6 +784,19 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     connect(sliderThreadsLimit, SIGNAL(valueChanged(int)), SLOT(slotThreadsLimitChanged(int)));
     connect(sliderFrameClonesLimit, SIGNAL(valueChanged(int)), SLOT(slotFrameClonesLimitChanged(int)));
 
+    intCachedFramesSizeLimit->setRange(1, 10000);
+    intCachedFramesSizeLimit->setSuffix(i18n(" px"));
+    intCachedFramesSizeLimit->setSingleStep(1);
+    intCachedFramesSizeLimit->setPageStep(1000);
+
+    intRegionOfInterestMargin->setRange(1, 100);
+    intRegionOfInterestMargin->setSuffix(i18n(" %"));
+    intRegionOfInterestMargin->setSingleStep(1);
+    intRegionOfInterestMargin->setPageStep(10);
+
+    connect(chkCachedFramesSizeLimit, SIGNAL(toggled(bool)), intCachedFramesSizeLimit, SLOT(setEnabled(bool)));
+    connect(chkUseRegionOfInterest, SIGNAL(toggled(bool)), intRegionOfInterestMargin, SLOT(setEnabled(bool)));
+
     load(false);
 }
 
@@ -800,7 +832,22 @@ void PerformanceTab::load(bool requestDefault)
         chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
         chkBrushSpeedLogging->setChecked(cfg2.enableBrushSpeedLogging(requestDefault));
         chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
+        chkBackgroundCacheGeneration->setChecked(cfg2.calculateAnimationCacheInBackground(requestDefault));
     }
+
+    if (cfg.useOnDiskAnimationCacheSwapping(requestDefault)) {
+        optOnDisk->setChecked(true);
+    } else {
+        optInMemory->setChecked(true);
+    }
+
+    chkCachedFramesSizeLimit->setChecked(cfg.useAnimationCacheFrameSizeLimit(requestDefault));
+    intCachedFramesSizeLimit->setValue(cfg.animationCacheFrameSizeLimit(requestDefault));
+    intCachedFramesSizeLimit->setEnabled(chkCachedFramesSizeLimit->isChecked());
+
+    chkUseRegionOfInterest->setChecked(cfg.useAnimationCacheRegionOfInterest(requestDefault));
+    intRegionOfInterestMargin->setValue(cfg.animationCacheRegionOfInterestMargin(requestDefault) * 100.0);
+    intRegionOfInterestMargin->setEnabled(chkUseRegionOfInterest->isChecked());
 }
 
 void PerformanceTab::save()
@@ -827,7 +874,17 @@ void PerformanceTab::save()
         cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
         cfg2.setEnableBrushSpeedLogging(chkBrushSpeedLogging->isChecked());
         cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
+        cfg2.setCalculateAnimationCacheInBackground(chkBackgroundCacheGeneration->isChecked());
     }
+
+    cfg.setUseOnDiskAnimationCacheSwapping(optOnDisk->isChecked());
+
+    cfg.setUseAnimationCacheFrameSizeLimit(chkCachedFramesSizeLimit->isChecked());
+    cfg.setAnimationCacheFrameSizeLimit(intCachedFramesSizeLimit->value());
+
+    cfg.setUseAnimationCacheRegionOfInterest(chkUseRegionOfInterest->isChecked());
+    cfg.setAnimationCacheRegionOfInterestMargin(intRegionOfInterestMargin->value() / 100.0);
+
 }
 
 void PerformanceTab::selectSwapDir()
@@ -1224,10 +1281,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setNewOutlineStyle(dialog->m_general->outlineStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
+        cfg.setForceAlwaysFullSizedOutline(!dialog->m_general->m_changeBrushOutline->isChecked());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
         cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
         cfg.setSaveSessionOnQuit(dialog->m_general->saveSessionOnQuit());
-        cfg.setCalculateAnimationCacheInBackground(dialog->m_general->calculateAnimationCacheInBackground());
 
         KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
         group.writeEntry("DontUseNativeFileDialog", !dialog->m_general->m_chkNativeFileDialog->isChecked());

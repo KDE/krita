@@ -123,11 +123,6 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     KoCanvasControllerWidget::setCanvas(canvas);
 }
 
-void KisCanvasController::changeCanvasWidget(QWidget *widget)
-{
-    KoCanvasControllerWidget::changeCanvasWidget(widget);
-}
-
 void KisCanvasController::activate()
 {
     KoCanvasControllerWidget::activate();

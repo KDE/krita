@@ -282,24 +282,21 @@ KisCanvas2::~KisCanvas2()
     delete m_d;
 }
 
-void KisCanvas2::setCanvasWidget(QWidget * widget)
+void KisCanvas2::setCanvasWidget(KisAbstractCanvasWidget *widget)
 {
-    KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
-    Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     if (m_d->popupPalette) {
-        m_d->popupPalette->setParent(widget);
+        m_d->popupPalette->setParent(widget->widget());
     }
 
-    if(m_d->canvasWidget != 0)
-    {
-        tmp->setDecorations(m_d->canvasWidget->decorations());
+    if (m_d->canvasWidget != 0) {
+        widget->setDecorations(m_d->canvasWidget->decorations());
 
         // Redundant check for the constructor case, see below
         if(viewManager() != 0)
             viewManager()->inputManager()->removeTrackedCanvas(this);
     }
 
-    m_d->canvasWidget = tmp;
+    m_d->canvasWidget = widget;
 
     // Either tmp was null or we are being called by KisCanvas2 constructor that is called by KisView
     // constructor, so the view manager still doesn't exists.
@@ -312,15 +309,14 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
         m_d->canvasWidget->addDecoration(manager);
     }
 
-    widget->setAutoFillBackground(false);
-    widget->setAttribute(Qt::WA_OpaquePaintEvent);
-    widget->setMouseTracking(true);
-    widget->setAcceptDrops(true);
+    widget->widget()->setAutoFillBackground(false);
+    widget->widget()->setAttribute(Qt::WA_OpaquePaintEvent);
+    widget->widget()->setMouseTracking(true);
+    widget->widget()->setAcceptDrops(true);
 
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
-    if (controller) {
-        Q_ASSERT(controller->canvas() == this);
-        controller->changeCanvasWidget(widget);
+    if (controller && controller->canvas() == this) {
+        controller->changeCanvasWidget(widget->widget());
     }
 }
 

@@ -164,13 +164,13 @@ public:
     virtual bool needsAsynchronousUpdates() const;
 
     /**
-     * This enum defines the current mode for painting an outline.
+     * This structure defines the current mode for painting an outline.
      */
-    enum OutlineMode {
-        CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
-        CursorIsCircleOutline,
-        CursorNoOutline,
-        CursorTiltOutline
+    struct OutlineMode {
+        bool isVisible = false;
+        bool forceCircle = false;
+        bool showTiltDecoration = false;
+        bool forceFullSize = false;
     };
 
     /**
@@ -178,7 +178,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode);
 
     /**
     * Helpers for drawing the brush outline

@@ -385,13 +385,13 @@ bool KisPaintOpSettings::needsAsynchronousUpdates() const
     return false;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         path = ellipseOutline(10, 10, 1.0, 0);
 
-        if (mode == CursorTiltOutline) {
+        if (mode.showTiltDecoration) {
             path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
 

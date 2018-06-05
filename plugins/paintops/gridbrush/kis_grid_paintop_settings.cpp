@@ -62,21 +62,21 @@ bool KisGridPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         qreal sizex = getInt(GRID_WIDTH) * getDouble(GRID_SCALE);
         qreal sizey = getInt(GRID_HEIGHT) * getDouble(GRID_SCALE);
         QRectF rc(0, 0, sizex, sizey);
         rc.translate(-rc.center());
         path.addRect(rc);
 
-        path = outlineFetcher()->fetchOutline(info, this, path);
+        path = outlineFetcher()->fetchOutline(info, this, path, mode);
 
-        if (mode == CursorTiltOutline) {
+        if (mode.showTiltDecoration) {
             QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), sizex * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;

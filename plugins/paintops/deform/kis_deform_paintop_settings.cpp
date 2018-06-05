@@ -71,19 +71,19 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     }
 }
 
-QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         qreal width = getInt(BRUSH_DIAMETER);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
         path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));
 
-        path = outlineFetcher()->fetchOutline(info, this, path);
+        path = outlineFetcher()->fetchOutline(info, this, path, mode);
 
-        if (mode == CursorTiltOutline) {
+        if (mode.showTiltDecoration) {
             QPainterPath tiltLine = makeTiltIndicator(info, QPointF(0.0, 0.0), width * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;

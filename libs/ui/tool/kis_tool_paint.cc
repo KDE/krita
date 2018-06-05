@@ -721,7 +721,6 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
-    outlineMode = KisPaintOpSettings::CursorNoOutline;
 
     if (isOutlineEnabled() &&
         (mode() == KisTool::GESTURE_MODE ||
@@ -731,14 +730,19 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
-        if(cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
-            outlineMode = KisPaintOpSettings::CursorIsCircleOutline;
+        outlineMode.isVisible = true;
+
+        if (cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
+            outlineMode.forceCircle = true;
         } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
-            outlineMode = KisPaintOpSettings::CursorTiltOutline;
+            outlineMode.forceCircle = true;
+            outlineMode.showTiltDecoration = true;
         } else {
-            outlineMode = KisPaintOpSettings::CursorIsOutline;
+            // noop
         }
     }
+
+    outlineMode.forceFullSize = cfg.forceAlwaysFullSizedOutline();
 
     m_outlineDocPoint = outlineDocPoint;
     m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);

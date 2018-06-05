@@ -66,20 +66,20 @@ bool KisSprayPaintOpSettings::paintIncremental()
 }
 
 
-QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         qreal width = getInt(SPRAY_DIAMETER);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);
         path = ellipseOutline(width, height, getDouble(SPRAY_SCALE), getDouble(SPRAY_ROTATION));
 
-        path = outlineFetcher()->fetchOutline(info, this, path);
+        path = outlineFetcher()->fetchOutline(info, this, path, mode);
 
-        if (mode == CursorTiltOutline) {
+        if (mode.forceFullSize) {
             QPainterPath tiltLine =
                 makeTiltIndicator(info, QPointF(0.0, 0.0), width * 0.5, 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, 0, 0));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, 1.0, 0.0, true, 0, 0));
         }
     }
     return path;

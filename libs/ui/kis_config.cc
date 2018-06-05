@@ -960,6 +960,16 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
 }
 
+bool KisConfig::forceAlwaysFullSizedOutline(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("forceAlwaysFullSizedOutline", false));
+}
+
+void KisConfig::setForceAlwaysFullSizedOutline(bool value) const
+{
+    m_cfg.writeEntry("forceAlwaysFullSizedOutline", value);
+}
+
 bool KisConfig::hideSplashScreen(bool defaultValue) const
 {
     KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");

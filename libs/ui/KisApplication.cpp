@@ -407,16 +407,12 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
-    const bool print = args.print();
     const bool exportAs = args.exportAs();
-    const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
 
-    d->batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
-    // print & exportAsPdf do user interaction ATM
+    d->batchRun = (exportAs || !exportFileName.isEmpty());
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
-    // TODO: fix print & exportAsPdf to work without mainwindow shown
     bool showmainWindow = !exportAs; // would be !batchRun;
 
     const bool showSplashScreen = !d->batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
@@ -514,7 +510,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
-    // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
+    // Check for autosave files that can be restored, if we're not running a batchrun (test)
     if (!d->batchRun) {
         checkAutosaveFiles();
     }
@@ -541,7 +537,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
         // Loop through arguments
-        short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {
             QString fileName = args.filenames().at(argNumber);
             // are we just trying to open a template?
@@ -573,37 +568,19 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
                         dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
-                    nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
                 else if (d->mainWindow) {
                     KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
                     if (d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
-                        if (print) {
-                            d->mainWindow->slotFilePrint();
-                            nPrinted++;
-                            // TODO: trigger closing of app once printing is done
-                        }
-                        else if (exportAsPdf) {
-                            KisPrintJob *job = d->mainWindow->exportToPdf(exportFileName);
-                            if (job)
-                                connect (job, SIGNAL(destroyed(QObject*)), d->mainWindow,
-                                         SLOT(slotFileQuit()), Qt::QueuedConnection);
-                            nPrinted++;
-                        } else {
-                            // Normal case, success
-                            numberOfOpenDocuments++;
-                        }
+                        // Normal case, success
+                        numberOfOpenDocuments++;
                     } else {
                         // .... if failed
                         // delete doc; done by openDocument
                     }
                 }
             }
-        }
-
-        if (d->batchRun) {
-            return nPrinted > 0;
         }
     }
 

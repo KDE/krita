@@ -98,12 +98,18 @@ void benchmarkBrush(const QString &presetName)
 {
     FreehandStrokeBenchmarkTester tester(presetName);
 
-    for (int i = 1; i <= QThread::idealThreadCount(); i++) {
-        tester.setCpuCoresLimit(i);
-        tester.benchmark();
+//    for (int i = 1; i <= QThread::idealThreadCount(); i++) {
+//        tester.setCpuCoresLimit(i);
+//        tester.benchmark();
 
-        qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(i).arg(tester.lastStrokeTime()));
-    }
+//        qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(i).arg(tester.lastStrokeTime()));
+//    }
+
+    qint32 threadCount = QThread::idealThreadCount();
+    tester.setCpuCoresLimit(threadCount);
+    tester.benchmark();
+
+    qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(threadCount).arg(tester.lastStrokeTime()));
 }
 
 #include <KoResourcePaths.h>

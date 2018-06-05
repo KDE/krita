@@ -72,6 +72,7 @@ public:
     TileTypeSP getLazy(qint32 key, TileTypeSP value, bool &newTile)
     {
         m_rawPointerUsers.fetchAndAddRelaxed(1);
+        newTile = false;
         typename ConcurrentMap<qint32, TileType *>::Mutator iter = m_map.insertOrFind(key);
 
         if (!iter.getValue()) {
@@ -81,9 +82,8 @@ public:
                 TileTypeSP::deref(&value, value.data());
             } else {
                 m_numTiles.fetchAndAddRelaxed(1);
+                newTile = true;
             }
-
-            newTile = true;
         }
 
         TileTypeSP result(iter.getValue());

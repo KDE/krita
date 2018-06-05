@@ -124,7 +124,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
         path = outlineFetcher()->fetchOutline(info, this, realOutline, finalScale, brush->angle());
 
         if (mode == CursorTiltOutline) {
-            QPainterPath tiltLine = makeTiltIndicator(info,
+            const QPainterPath tiltLine = makeTiltIndicator(info,
                 realOutline.boundingRect().center(),
                 realOutline.boundingRect().width() * 0.5,
                 3.0);

@@ -170,8 +170,7 @@ public:
         CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
         CursorIsCircleOutline,
         CursorNoOutline,
-        CursorTiltOutline,
-        CursorColorOutline
+        CursorTiltOutline
     };
 
     /**

@@ -79,17 +79,6 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);
         path = ellipseOutline(width, height, getDouble(BRUSH_SCALE), getDouble(BRUSH_ROTATION));
 
-        QPainterPath tiltLine;
-        QLineF tiltAngle(QPointF(0.0,0.0), QPointF(0.0,width));
-        tiltAngle.setLength(qMax(width*0.5, 50.0) * (1 - info.tiltElevation(info, 60.0, 60.0, true)));
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))-3.0);
-        tiltLine.moveTo(tiltAngle.p1());
-        tiltLine.lineTo(tiltAngle.p2());
-        tiltAngle.setAngle((360.0 - fmod(KisPaintInformation::tiltDirection(info, true) * 360.0 + 270.0, 360.0))+3.0);
-        tiltLine.lineTo(tiltAngle.p2());
-        tiltLine.lineTo(tiltAngle.p1());
-
-
         path = outlineFetcher()->fetchOutline(info, this, path);
 
         if (mode == CursorTiltOutline) {

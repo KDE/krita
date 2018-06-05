@@ -727,8 +727,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         (mode() == KisTool::GESTURE_MODE ||
          ((cfg.newOutlineStyle() == OUTLINE_FULL ||
            cfg.newOutlineStyle() == OUTLINE_CIRCLE ||
-           cfg.newOutlineStyle() == OUTLINE_TILT ||
-           cfg.newOutlineStyle() == OUTLINE_COLOR ) &&
+           cfg.newOutlineStyle() == OUTLINE_TILT) &&
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
@@ -736,8 +735,6 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
             outlineMode = KisPaintOpSettings::CursorIsCircleOutline;
         } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
             outlineMode = KisPaintOpSettings::CursorTiltOutline;
-        } else if(cfg.newOutlineStyle() == OUTLINE_COLOR) {
-            outlineMode = KisPaintOpSettings::CursorColorOutline;
         } else {
             outlineMode = KisPaintOpSettings::CursorIsOutline;
         }

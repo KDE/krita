@@ -51,10 +51,10 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         qreal diameter = qMax(brush->width(), brush->height());
         path = ellipseOutline(diameter, diameter, 1.0, 0.0/*brush->scale(), brush->angle()*/);
 
-        QPainterPath tiltLine =
-            makeTiltIndicator(info, path.boundingRect().center(), diameter * 0.5, 3.0);
         path = outlineFetcher()->fetchOutline(info, this, path);
         if (mode == CursorTiltOutline) {
+            QPainterPath tiltLine =
+                makeTiltIndicator(info, path.boundingRect().center(), diameter * 0.5, 3.0);
             tiltLine.translate(info.pos());
             path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, 1.0, 0.0, true, path.boundingRect().center().x(), path.boundingRect().center().y()));
         }

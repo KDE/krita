@@ -133,19 +133,6 @@ if(GIT_SHA1)
    endif()
 endif()
 
-if(NOT DEFINED RELEASE_BUILD)
-    # estimate mode by CMAKE_BUILD_TYPE content if not set on cmdline
-    string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
-    set(RELEASE_BUILD_TYPES "release" "relwithdebinfo" "minsizerel")
-    list(FIND RELEASE_BUILD_TYPES "${CMAKE_BUILD_TYPE_TOLOWER}" INDEX)
-    if (INDEX EQUAL -1)
-        set(RELEASE_BUILD FALSE)
-    else()
-        set(RELEASE_BUILD TRUE)
-    endif()
-endif()
-message(STATUS "Release build: ${RELEASE_BUILD}")
-
 # create test make targets
 enable_testing()
 # collect list of broken tests, empty here to start fresh with each cmake run

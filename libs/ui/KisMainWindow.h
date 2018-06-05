@@ -176,6 +176,9 @@ public:
      */
     bool hackIsSaving() const;
 
+    /// Copy the given file into the bundle directory.
+    bool installBundle(const QString &fileName) const;
+
 Q_SIGNALS:
 
     /**

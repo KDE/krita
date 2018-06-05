@@ -229,7 +229,7 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
-//    qDebug() << "addResourceTypes();";
+    //    qDebug() << "addResourceTypes();";
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
@@ -294,7 +294,7 @@ void KisApplication::addResourceTypes()
 
 void KisApplication::loadResources()
 {
-//    qDebug() << "loadResources();";
+    //    qDebug() << "loadResources();";
 
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
@@ -315,7 +315,7 @@ void KisApplication::loadResources()
 
 void KisApplication::loadResourceTags()
 {
-//    qDebug() << "loadResourceTags()";
+    //    qDebug() << "loadResourceTags()";
 
     KoResourceServerProvider::instance()->patternServer()->loadTags();
     KoResourceServerProvider::instance()->gradientServer()->loadTags();
@@ -332,7 +332,7 @@ void KisApplication::loadResourceTags()
 
 void KisApplication::loadPlugins()
 {
-//    qDebug() << "loadPlugins();";
+    //    qDebug() << "loadPlugins();";
 
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
@@ -346,11 +346,11 @@ void KisApplication::loadPlugins()
 
 void KisApplication::loadGuiPlugins()
 {
-//    qDebug() << "loadGuiPlugins();";
+    //    qDebug() << "loadGuiPlugins();";
     // Load the krita-specific tools
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
     processEvents();
-//    qDebug() << "loading tools";
+    //    qDebug() << "loading tools";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
@@ -358,14 +358,14 @@ void KisApplication::loadGuiPlugins()
     // Load dockers
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
     processEvents();
-//    qDebug() << "loading dockers";
+    //    qDebug() << "loading dockers";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();
-//    qDebug() << "loading exiv2";
+    //    qDebug() << "loading exiv2";
     KisExiv2::initialize();
 }
 
@@ -538,15 +538,15 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
                 else if (m_mainWindow) {
-                    KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    if (m_mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
-
-                        // Normal case, success
-                        numberOfOpenDocuments++;
-
-                    } else {
-                        // .... if failed
-                        // delete doc; done by openDocument
+                    if (fileName.endsWith(".bundle")) {
+                        m_mainWindow->installBundle(fileName);
+                    }
+                    else {
+                        KisMainWindow::OpenFlags flags = m_batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+                        if (m_mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
+                            // Normal case, success
+                            numberOfOpenDocuments++;
+                        }
                     }
                 }
             }
@@ -578,7 +578,7 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 void KisApplication::setSplashScreenLoadingText(QString textToLoad)
 {
     if (d->splashScreen) {
-       //d->splashScreen->loadingLabel->setText(textToLoad);
+        //d->splashScreen->loadingLabel->setText(textToLoad);
         d->splashScreen->setLoadingText(textToLoad);
         d->splashScreen->repaint();
     }

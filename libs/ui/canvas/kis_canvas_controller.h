@@ -35,7 +35,6 @@ public:
     ~KisCanvasController() override;
 
     void setCanvas(KoCanvasBase *canvas) override;
-    void changeCanvasWidget(QWidget *widget) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;

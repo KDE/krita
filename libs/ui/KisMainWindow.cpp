@@ -958,7 +958,6 @@ bool KisMainWindow::installBundle(const QString &fileName) const
 {
     QFileInfo from(fileName);
     QFileInfo to(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
-    qDebug() << "from" << from << "to" << to;
     if (to.exists()) {
         QFile::remove(to.canonicalFilePath());
     }

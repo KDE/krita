@@ -42,7 +42,6 @@ enum OutlineStyle {
     OUTLINE_CIRCLE,
     OUTLINE_FULL,
     OUTLINE_TILT,
-    OUTLINE_COLOR,
 
     N_OUTLINE_STYLE_SIZE
 };

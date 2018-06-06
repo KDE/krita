@@ -248,6 +248,9 @@ public:
     bool showOutlineWhilePainting(bool defaultValue = false) const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
+    bool forceAlwaysFullSizedOutline(bool defaultValue = false) const;
+    void setForceAlwaysFullSizedOutline(bool value) const;
+
     bool hideSplashScreen(bool defaultValue = false) const;
     void setHideSplashScreen(bool hideSplashScreen) const;
 

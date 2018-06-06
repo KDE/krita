@@ -121,6 +121,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
 
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting());
+    m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline());
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
     cursorColor.fromQColor(cfg.getCursorMainColor());
@@ -232,6 +233,7 @@ void GeneralTab::setDefault()
     m_undoStackSize->setValue(cfg.undoStackLimit(true));
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
+    m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
     m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
 
     m_chkNativeFileDialog->setChecked(false);
@@ -1297,6 +1299,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setNewOutlineStyle(dialog->m_general->outlineStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
+        cfg.setForceAlwaysFullSizedOutline(!dialog->m_general->m_changeBrushOutline->isChecked());
         cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
         cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
         cfg.setSaveSessionOnQuit(dialog->m_general->saveSessionOnQuit());

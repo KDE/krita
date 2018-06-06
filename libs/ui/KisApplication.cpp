@@ -56,7 +56,6 @@
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 #include <KoDpi.h>
-#include "KoGlobal.h"
 #include "KoConfig.h"
 #include <resources/KoHashGeneratorProvider.h>
 #include <KoResourcePaths.h>
@@ -425,9 +424,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 
     KoHashGeneratorProvider::instance()->setGenerator("MD5", new KisMD5Generator());
-
-    // Initialize all Krita directories etc.
-    KoGlobal::initialize();
 
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
     Digikam::ThemeManager themeManager;

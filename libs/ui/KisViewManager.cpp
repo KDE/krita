@@ -70,7 +70,6 @@
 #include <KoZoomHandler.h>
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
-#include <KoGlobal.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "input/kis_input_manager.h"
@@ -1345,7 +1344,7 @@ void KisViewManager::setShowFloatingMessage(bool show)
 
 void KisViewManager::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty() || profileName == i18nc("choice for author profile", "Anonymous")) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else {
@@ -1366,7 +1365,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     d->actionAuthor->clear();
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
-    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup authorGroup(KSharedConfig::openConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
     QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
     QStringList filters = QStringList() << "*.authorinfo";
@@ -1382,7 +1381,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
 
     if (profileName == "anonymous" || profileName.isEmpty()) {

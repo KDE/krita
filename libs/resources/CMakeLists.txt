@@ -2,6 +2,8 @@ add_subdirectory(tests)
 
 set(kritaresources_LIB_SRCS
     KisResourceCacheDb.cpp
+    KisResourceLoader.cpp
+    KisResourceLoaderRegistry.cpp
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)
@@ -13,6 +15,7 @@ generate_export_header(kritaresources BASE_NAME kritaresources)
 target_link_libraries(kritaresources
     PUBLIC
         Qt5::Core
+        Qt5::Widgets
     PRIVATE
         kritaversion
         kritaglobal

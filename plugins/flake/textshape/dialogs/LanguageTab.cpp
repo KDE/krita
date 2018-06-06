@@ -18,7 +18,6 @@
 */
 
 #include "LanguageTab.h"
-#include "KoGlobal.h"
 
 #include <KoCharacterStyle.h>
 #include <KoIcon.h>
@@ -37,8 +36,8 @@ LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWid
     widget.languageListSearchLine->setListWidget(widget.languageList);
 
     //TODO use fl
-    const QStringList langNames = KoGlobal::listOfLanguages();
-    const QStringList langTags = KoGlobal::listOfLanguageTags();
+    const QStringList langNames;
+    const QStringList langTags;
     QSet<QString> spellCheckLanguages;
 
     widget.languageList->addItem(QString("None"));
@@ -70,17 +69,13 @@ LanguageTab::~LanguageTab()
 
 void LanguageTab::save(KoCharacterStyle *style) const
 {
-    if (!widget.languageList->currentItem() || widget.languageList->currentItem()->text() == "None") { //TODO i18n
-        style->setLanguage(QString());
-    } else {
-        style->setLanguage(KoGlobal::tagOfLanguage(widget.languageList->currentItem()->text()));
-    }
+    style->setLanguage(QString());
 }
 
-void LanguageTab::setDisplay(KoCharacterStyle *style)
+void LanguageTab::setDisplay(KoCharacterStyle *)
 {
     if (m_uniqueFormat) {
-        const QString &name = KoGlobal::languageFromTag(style->language());
+        const QString name;
 
         QList<QListWidgetItem *> items = widget.languageList->findItems(name,
                                          Qt::MatchFixedString);

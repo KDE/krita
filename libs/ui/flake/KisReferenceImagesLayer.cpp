@@ -64,7 +64,8 @@ public:
 
     void forceRepaint() override
     {
-        m_layer->signalUpdate(m_layer->extent());
+        QRectF rect = KoShape::boundingRect(m_layer->shapes());
+        m_layer->signalUpdate(m_viewConverter->documentToView(rect));
     }
 
     void rerenderAfterBeingInvisible() override {}

@@ -43,6 +43,8 @@ class VirtualChannelInfo
 public:
     enum Type {
         REAL,
+        HUE,
+        SATURATION,
         LIGHTNESS,
         ALL_COLORS
     };

@@ -105,12 +105,11 @@ class KisApplication::Private
 {
 public:
     Private() {}
-    KisResourceCacheDb resourceDatabase;
     QPointer<KisSplashScreen> splashScreen;
     KisAutoSaveRecoveryDialog *autosaveDialog {0};
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
-
+    KisResourceCacheDb resourceDatabase;
 };
 
 class KisApplication::ResetStarting
@@ -233,7 +232,7 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 
 void KisApplication::addResourceTypes()
 {
-//    qDebug() << "addResourceTypes();";
+    //    qDebug() << "addResourceTypes();";
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
@@ -300,7 +299,7 @@ void KisApplication::addResourceTypes()
 
 void KisApplication::loadResources()
 {
-//    qDebug() << "loadResources();";
+    //    qDebug() << "loadResources();";
 
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
@@ -321,7 +320,7 @@ void KisApplication::loadResources()
 
 void KisApplication::loadResourceTags()
 {
-//    qDebug() << "loadResourceTags()";
+    //    qDebug() << "loadResourceTags()";
 
     KoResourceServerProvider::instance()->patternServer()->loadTags();
     KoResourceServerProvider::instance()->gradientServer()->loadTags();
@@ -338,7 +337,7 @@ void KisApplication::loadResourceTags()
 
 void KisApplication::loadPlugins()
 {
-//    qDebug() << "loadPlugins();";
+    //    qDebug() << "loadPlugins();";
 
     KoShapeRegistry* r = KoShapeRegistry::instance();
     r->add(new KisShapeSelectionFactory());
@@ -352,11 +351,11 @@ void KisApplication::loadPlugins()
 
 void KisApplication::loadGuiPlugins()
 {
-//    qDebug() << "loadGuiPlugins();";
+    //    qDebug() << "loadGuiPlugins();";
     // Load the krita-specific tools
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Tool..."));
     processEvents();
-//    qDebug() << "loading tools";
+    //    qDebug() << "loading tools";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
@@ -364,14 +363,14 @@ void KisApplication::loadGuiPlugins()
     // Load dockers
     setSplashScreenLoadingText(i18n("Loading Plugins for Krita/Dock..."));
     processEvents();
-//    qDebug() << "loading dockers";
+    //    qDebug() << "loading dockers";
     KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
                                      QString::fromLatin1("[X-Krita-Version] == 28"));
 
     // XXX_EXIV: make the exiv io backends real plugins
     setSplashScreenLoadingText(i18n("Loading Plugins Exiv/IO..."));
     processEvents();
-//    qDebug() << "loading exiv2";
+    //    qDebug() << "loading exiv2";
     KisExiv2::initialize();
 }
 
@@ -410,16 +409,12 @@ bool KisApplication::start(const KisApplicationArguments &args)
 
     const bool doNewImage = args.doNewImage();
     const bool doTemplate = args.doTemplate();
-    const bool print = args.print();
     const bool exportAs = args.exportAs();
-    const bool exportAsPdf = args.exportAsPdf();
     const QString exportFileName = args.exportFileName();
 
-    d->batchRun = (print || exportAs || exportAsPdf || !exportFileName.isEmpty());
-    // print & exportAsPdf do user interaction ATM
+    d->batchRun = (exportAs || !exportFileName.isEmpty());
     const bool needsMainWindow = !exportAs;
     // only show the mainWindow when no command-line mode option is passed
-    // TODO: fix print & exportAsPdf to work without mainwindow shown
     bool showmainWindow = !exportAs; // would be !batchRun;
 
     const bool showSplashScreen = !d->batchRun && qEnvironmentVariableIsEmpty("NOSPLASH");
@@ -517,7 +512,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
-    // Check for autosave files that can be restored, if we're not running a batchrun (test, print, export to pdf)
+    // Check for autosave files that can be restored, if we're not running a batchrun (test)
     if (!d->batchRun) {
         checkAutosaveFiles();
     }
@@ -544,7 +539,6 @@ bool KisApplication::start(const KisApplicationArguments &args)
     int argsCount = args.filenames().count();
     if (argsCount > 0) {
         // Loop through arguments
-        short int nPrinted = 0;
         for (int argNumber = 0; argNumber < argsCount; argNumber++) {
             QString fileName = args.filenames().at(argNumber);
             // are we just trying to open a template?
@@ -576,37 +570,22 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     if (!doc->exportDocumentSync(QUrl::fromLocalFile(exportFileName), outputMimetype.toLatin1())) {
                         dbgKrita << "Could not export " << fileName << "to" << exportFileName << ":" << doc->errorMessage();
                     }
-                    nPrinted++;
                     QTimer::singleShot(0, this, SLOT(quit()));
                 }
                 else if (d->mainWindow) {
-                    KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
-                    if (d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
-                        if (print) {
-                            d->mainWindow->slotFilePrint();
-                            nPrinted++;
-                            // TODO: trigger closing of app once printing is done
-                        }
-                        else if (exportAsPdf) {
-                            KisPrintJob *job = d->mainWindow->exportToPdf(exportFileName);
-                            if (job)
-                                connect (job, SIGNAL(destroyed(QObject*)), d->mainWindow,
-                                         SLOT(slotFileQuit()), Qt::QueuedConnection);
-                            nPrinted++;
-                        } else {
+                    if (fileName.endsWith(".bundle")) {
+                        d->mainWindow->installBundle(fileName);
+                    }
+                    else {
+                        KisMainWindow::OpenFlags flags = d->batchRun ? KisMainWindow::BatchMode : KisMainWindow::None;
+
+                        if (d->mainWindow->openDocument(QUrl::fromLocalFile(fileName), flags)) {
                             // Normal case, success
                             numberOfOpenDocuments++;
                         }
-                    } else {
-                        // .... if failed
-                        // delete doc; done by openDocument
                     }
                 }
             }
-        }
-
-        if (d->batchRun) {
-            return nPrinted > 0;
         }
     }
 
@@ -634,7 +613,7 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
 void KisApplication::setSplashScreenLoadingText(QString textToLoad)
 {
     if (d->splashScreen) {
-       //d->splashScreen->loadingLabel->setText(textToLoad);
+        //d->splashScreen->loadingLabel->setText(textToLoad);
         d->splashScreen->setLoadingText(textToLoad);
         d->splashScreen->repaint();
     }

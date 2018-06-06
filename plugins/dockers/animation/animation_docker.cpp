@@ -109,6 +109,7 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updatePlayPauseIcon()));
+        connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStarted()), this, SLOT(updatePlayPauseIcon()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updateDropFramesIcon()));
         connect(m_animationWidget->doublePlaySpeed,
                 SIGNAL(valueChanged(double)),
@@ -125,6 +126,8 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
         slotGlobalTimeChanged();
         slotCurrentNodeChanged(m_canvas->viewManager()->nodeManager()->activeNode());
     }
+
+    slotUpdateIcons();
 }
 
 void AnimationDocker::unsetCanvas()

@@ -61,8 +61,8 @@ KoSubpathJoinCommand::KoSubpathJoinCommand(const KoPathPointData &pointData1, co
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);
     KoPathPoint * point2 = pathShape->pointByIndex(m_pointData2.pointIndex);
 
-    m_savedControlPoint1 = KritaUtils::fetchControlPoint(point1, m_reverse && ReverseFirst);
-    m_savedControlPoint2 = KritaUtils::fetchControlPoint(point2, !(m_reverse && ReverseSecond));
+    m_savedControlPoint1 = KritaUtils::fetchControlPoint(point1, m_reverse & ReverseFirst);
+    m_savedControlPoint2 = KritaUtils::fetchControlPoint(point2, !(m_reverse & ReverseSecond));
 
     m_oldProperties1 = point1->properties();
     m_oldProperties2 = point2->properties();

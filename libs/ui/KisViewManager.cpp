@@ -287,6 +287,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     d->controlFrame.setup(parent);
 
+
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
@@ -317,6 +318,13 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     KisConfig cfg;
     d->showFloatingMessage = cfg.showCanvasMessages();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor foreground(Qt::black, cs);
+    d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
+    KoColor background(Qt::white, cs);
+    d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
+
+
 
 }
 
@@ -429,19 +437,12 @@ void KisViewManager::setCurrentView(KisView *view)
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
-            if (!preset) {
+            if (!preset && !rserver->resources().isEmpty()) {
                 preset = rserver->resources().first();
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset.data());
             }
-
-            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-            KoColor foreground(Qt::black, cs);
-            d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
-            KoColor background(Qt::white, cs);
-            d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
-
         }
 
         KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());

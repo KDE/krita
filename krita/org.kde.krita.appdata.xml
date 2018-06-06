@@ -5,6 +5,14 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <developer_name>Krita Foundation</developer_name>
+  <developer_name xml:lang="ca">Fundació Krita</developer_name>
+  <developer_name xml:lang="ca-valencia">Fundació Krita</developer_name>
+  <developer_name xml:lang="nl">Krita Foundation</developer_name>
+  <developer_name xml:lang="pt">Fundação do Krita</developer_name>
+  <developer_name xml:lang="pt-BR">Krita Foundation</developer_name>
+  <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>
+  <developer_name xml:lang="uk">Фундація Krita</developer_name>
+  <developer_name xml:lang="x-test">xxKrita Foundationxx</developer_name>
   <update_contact>foundation@krita.org</update_contact>
   <name>Krita</name>
   <name xml:lang="ar">كريتا</name>

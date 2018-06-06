@@ -47,7 +47,7 @@ for (k, v) in resources.items():
     for x in range(palette.numberOfEntries()):
         entry = palette.colorSetEntryByIndex(x)
         c = palette.colorForEntry(entry);
-        print(x, entry.name, entry.id, entry.spotColor, c.toQString())
+        print(x, entry.name(), entry.id(), entry.spotColor(), c.toQString())
  * @endcode
  */
 

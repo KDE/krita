@@ -485,6 +485,11 @@ void KisOpenGLCanvas2::drawCheckers()
                 converter->imageRectInViewportPixels() :
                 converter->widgetToViewport(this->rect());
 
+    if (!canvas()->renderingLimit().isEmpty()) {
+        const QRect vrect = converter->imageToViewport(canvas()->renderingLimit()).toAlignedRect();
+        viewportRect &= vrect;
+    }
+
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
 
@@ -638,6 +643,12 @@ void KisOpenGLCanvas2::drawImage()
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
+    const QRect renderingLimit = canvas()->renderingLimit();
+
+    if (!renderingLimit.isEmpty()) {
+        widgetRectInImagePixels &= renderingLimit;
+    }
+
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
@@ -699,8 +710,18 @@ void KisOpenGLCanvas2::drawImage()
              * "history reasons" in calculation of right()
              * and bottom() coordinates of integer rects.
              */
-            QRectF textureRect(tile->tileRectInTexturePixels());
-            QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
+
+            QRectF textureRect;
+            QRectF modelRect;
+
+            if (renderingLimit.isEmpty()) {
+                textureRect = tile->tileRectInTexturePixels();
+                modelRect = tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            } else {
+                const QRect limitedTileRect = tile->tileRectInImagePixels() & renderingLimit;
+                textureRect = tile->imageRectInTexturePixels(limitedTileRect);
+                modelRect = limitedTileRect.translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            }
 
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {
@@ -888,19 +909,36 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     if (isOpenGLUpdateInfo) {
         d->openGLImageTextures->recalculateCache(info);
     }
+    return QRect(); // FIXME: Implement dirty rect for OpenGL
+}
 
+QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+{
 #ifdef Q_OS_OSX
     /**
-     * There is a bug on OSX: if we issue frame redraw before the tiles finished
-     * uploading, the tiles will become corrupted. Depending on the GPU/driver
-     * version either the tile itself, or its mipmaps will become totally
-     * transparent.
+     * On OSX openGL defferent (shared) contexts have different execution queues.
+     * It means that the textures uploading and their painting can be easily reordered.
+     * To overcome the issue, we should ensure that the textures are uploaded in the
+     * same openGL context as the painting is done.
      */
 
-    glFinish();
+    QOpenGLContext *oldContext = QOpenGLContext::currentContext();
+    QSurface *oldSurface = oldContext ? oldContext->surface() : 0;
+
+    this->makeCurrent();
 #endif
 
-    return QRect(); // FIXME: Implement dirty rect for OpenGL
+    QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
+
+#ifdef Q_OS_OSX
+    if (oldContext) {
+        oldContext->makeCurrent(oldSurface);
+    } else {
+        this->doneCurrent();
+    }
+#endif
+
+    return result;
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

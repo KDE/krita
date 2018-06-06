@@ -67,8 +67,10 @@ public:
     QSpinBox *m_intOut;
 
     /* Working range of them */
-    int m_inOutMin;
-    int m_inOutMax;
+    int m_inMin;
+    int m_inMax;
+    int m_outMin;
+    int m_outMax;
 
     /**
      * State functions.
@@ -95,8 +97,8 @@ public:
      * In/Out controls to normalized
      * range of spline (and reverse)
      */
-    double io2sp(int x);
-    int sp2io(double x);
+    double io2sp(int x, int min, int max);
+    int sp2io(double x, int min, int max);
 
 
     /**
@@ -135,16 +137,16 @@ KisCurveWidget::Private::Private(KisCurveWidget *parent)
     m_curveWidget = parent;
 }
 
-double KisCurveWidget::Private::io2sp(int x)
+double KisCurveWidget::Private::io2sp(int x, int min, int max)
 {
-    int rangeLen = m_inOutMax - m_inOutMin;
-    return double(x - m_inOutMin) / rangeLen;
+    int rangeLen = max - min;
+    return double(x - min) / rangeLen;
 }
 
-int KisCurveWidget::Private::sp2io(double x)
+int KisCurveWidget::Private::sp2io(double x, int min, int max)
 {
-    int rangeLen = m_inOutMax - m_inOutMin;
-    return int(x*rangeLen + 0.5) + m_inOutMin;
+    int rangeLen = max - min;
+    return int(x*rangeLen + 0.5) + min;
 }
 
 
@@ -231,8 +233,8 @@ void KisCurveWidget::Private::syncIOControls()
         m_intIn->blockSignals(true);
         m_intOut->blockSignals(true);
 
-        m_intIn->setValue(sp2io(m_curve.points()[m_grab_point_index].x()));
-        m_intOut->setValue(sp2io(m_curve.points()[m_grab_point_index].y()));
+        m_intIn->setValue(sp2io(m_curve.points()[m_grab_point_index].x(), m_inMin, m_inMax));
+        m_intOut->setValue(sp2io(m_curve.points()[m_grab_point_index].y(), m_outMin, m_outMax));
 
         m_intIn->blockSignals(false);
         m_intOut->blockSignals(false);

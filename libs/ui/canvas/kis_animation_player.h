@@ -69,6 +69,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void sigFrameChanged();
+    void sigPlaybackStarted();
     void sigPlaybackStopped();
     void sigPlaybackStatisticsUpdated();
     void sigFullClipRangeChanged();

@@ -44,19 +44,16 @@ QString KoZoomMode::toString(Mode mode)
 
 KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
 {
-    if(mode == i18n(modes[ZOOM_WIDTH]))
+    if (mode == i18n(modes[ZOOM_WIDTH]))
         return ZOOM_WIDTH;
     else
-    if(mode == i18n(modes[ZOOM_PAGE]))
-        return ZOOM_PAGE;
-    else
-     if(mode == i18n(modes[ZOOM_PIXELS]))
-        return ZOOM_PIXELS;
-    else
-     if(mode == i18n(modes[ZOOM_TEXT]))
-        return ZOOM_TEXT;
-    else
-       return ZOOM_CONSTANT;
+        if (mode == i18n(modes[ZOOM_PAGE]))
+            return ZOOM_PAGE;
+        else
+            if (mode == i18n(modes[ZOOM_PIXELS]))
+                return ZOOM_PIXELS;
+            else
+                return ZOOM_CONSTANT;
     // we return ZOOM_CONSTANT else because then we can pass '10%' or '15%'
     // or whatever, it's automatically converted. ZOOM_CONSTANT is
     // changeable, whereas all other zoom modes (non-constants) are normal
@@ -72,11 +69,6 @@ qreal KoZoomMode::minimumZoom()
 qreal KoZoomMode::maximumZoom()
 {
     return maximumZoomValue;
-}
-
-qreal KoZoomMode::clampZoom(qreal zoom)
-{
-    return qMin(maximumZoomValue, qMax(minimumZoomValue, zoom));
 }
 
 void KoZoomMode::setMinimumZoom(qreal zoom)

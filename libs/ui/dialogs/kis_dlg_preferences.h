@@ -91,8 +91,6 @@ public:
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
 
-    bool calculateAnimationCacheInBackground();
-
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();

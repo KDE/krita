@@ -208,6 +208,7 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     layout->setValid(true);
 
     KisWindowLayoutManager::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
+    KisWindowLayoutManager::instance()->setPrimaryWorkspaceFollowsFocus(primaryWorkspaceFollowsFocus, thisWindow->id());
 
     KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
     QString saveLocation = rserver->saveLocation();

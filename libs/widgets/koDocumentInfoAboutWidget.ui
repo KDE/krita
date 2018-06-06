@@ -11,21 +11,14 @@
    </rect>
   </property>
   <layout class="QGridLayout">
-   <item row="8" column="0" colspan="3">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="1">
+   <item row="10" column="1">
     <widget class="QLabel" name="lblModified">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="12" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="lblLastPrintedDesc">
      <property name="text">
       <string>Last printed:</string>
@@ -35,14 +28,157 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="0" column="1" colspan="2">
+    <widget class="QLabel" name="filePathLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="lblModifiedDesc">
+     <property name="text">
+      <string>Modified:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="Line" name="filePathSeparatorLine">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="3">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lblLicense">
+     <property name="text">
+      <string>License/Rights:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="QLineEdit" name="leLicense"/>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lblTypeDesc">
+     <property name="text">
+      <string>Type:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lblKeywordsDesc">
+     <property name="text">
+      <string>&amp;Keywords:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>leKeywords</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="lblRevisionDesc">
+     <property name="text">
+      <string>Revision number:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLineEdit" name="leSubject"/>
+   </item>
+   <item row="4" column="1" colspan="2">
+    <widget class="QLineEdit" name="leKeywords">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QLineEdit" name="leTitle"/>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="lblCreatedDesc">
+     <property name="text">
+      <string>Created:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="lblEditingDesc">
+     <property name="text">
+      <string>Total editing ti&amp;me:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>pbReset</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lbCommentsDesc">
+     <property name="text">
+      <string>Description:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+     </property>
+     <property name="buddy">
+      <cstring>meDescription</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1">
+    <widget class="QLabel" name="lblEditing">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="filePathInfoLabel">
+     <property name="text">
+      <string>Path:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
     <widget class="QLabel" name="lblCreated">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="13" column="2">
+   <item row="12" column="2">
     <widget class="QPushButton" name="pbReset">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -58,148 +194,25 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="lblModifiedDesc">
-     <property name="text">
-      <string>Modified:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="13" column="1">
-    <widget class="QLabel" name="lblEditing">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lbCommentsDesc">
-     <property name="text">
-      <string>Description:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-     </property>
-     <property name="buddy">
-      <cstring>meDescription</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0">
-    <widget class="QLabel" name="lblRevisionDesc">
-     <property name="text">
-      <string>Revision number:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lblKeywordsDesc">
-     <property name="text">
-      <string>Keywords:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>leKeywords</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="filePathInfoLabel">
-     <property name="text">
-      <string>Path:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="1">
     <widget class="QLabel" name="lblRevision">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QLabel" name="filePathLabel">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
+   <item row="6" column="1" colspan="2">
+    <widget class="QTextEdit" name="meDescription"/>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lbLanguageDesc">
-     <property name="text">
-      <string>Language:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lblSubjectDesc">
-     <property name="text">
-      <string>Subject:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>leSubject</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="QComboBox" name="cbLanguage"/>
-   </item>
-   <item row="12" column="1">
-    <widget class="QLabel" name="lblLastPrinted">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="Line" name="filePathSeparatorLine">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="lblTypeDesc">
-     <property name="text">
-      <string>Type:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lblEditingDesc">
-     <property name="text">
-      <string>Total editing time:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>pbReset</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1">
+   <item row="8" column="1">
     <widget class="QLabel" name="lblType">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1">
+    <widget class="QLabel" name="lblLastPrinted">
      <property name="text">
       <string/>
      </property>
@@ -218,44 +231,18 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
-    <widget class="QLineEdit" name="leKeywords">
+   <item row="3" column="0">
+    <widget class="QLabel" name="lblSubjectDesc">
      <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="lblCreatedDesc">
-     <property name="text">
-      <string>Created:</string>
+      <string>Sub&amp;ject:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QLineEdit" name="leSubject"/>
-   </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QLineEdit" name="leTitle"/>
-   </item>
-   <item row="7" column="1" colspan="2">
-    <widget class="QTextEdit" name="meDescription"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lblLicense">
-     <property name="text">
-      <string>License/Rights:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <property name="buddy">
+      <cstring>leSubject</cstring>
      </property>
     </widget>
-   </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="QLineEdit" name="leLicense"/>
    </item>
   </layout>
  </widget>

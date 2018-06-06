@@ -25,7 +25,6 @@
 
 #include <kritaresources_export.h>
 
-
 /**
  * @brief The KisResourceCacheDb class encapsulates the database that
  * caches information about the resources available to the user.

@@ -107,7 +107,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     QStringList tables = QStringList() << "version_information"
                                        << "origin_types"
                                        << "resource_types"
-                                       << "stores"
+                                       << "storages"
                                        << "tags"
                                        << "resources"
                                        << "translations"
@@ -129,24 +129,27 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
 
         if (dbTables.contains("version_information")) {
             // Verify the version number
-            QSqlQuery query;
-            query.exec("SELECT database_version, krita_version, creation_date"
-                       "FROM version_information"
-                       "ORDER BY id DESC LIMIT 1");
-            if (query.size() > 0) {
-                query.first();
-                QString schemaVersion = query.value(0).toString();
-                QString kritaVersion = query.value(1).toString();
-                QString creationDate = query.value(2).toString();
+            QFile f(":/get_version_information.sql");
+            if (f.open(QFile::ReadOnly)) {
+                QSqlQuery query(f.readAll());
+                if (query.size() > 0) {
+                    query.first();
+                    QString schemaVersion = query.value(0).toString();
+                    QString kritaVersion = query.value(1).toString();
+                    QString creationDate = query.value(2).toString();
 
-                infoResources << "Database version" << schemaVersion
-                              << "Krita version that created the database" << kritaVersion
-                              << "At" << creationDate;
+                    infoResources << "Database version" << schemaVersion
+                                  << "Krita version that created the database" << kritaVersion
+                                  << "At" << creationDate;
 
-                if (schemaVersion != databaseVersion) {
-                    warnResources << "Database schema is outdated, migration is needed";
-                    schemaIsOutDated = true;
+                    if (schemaVersion != databaseVersion) {
+                        warnResources << "Database schema is outdated, migration is needed";
+                        schemaIsOutDated = true;
+                    }
                 }
+            }
+            else {
+                return QSqlError("Error executing SQL", "Could not open get_version_information.sql", QSqlError::StatementError);
             }
         }
 
@@ -159,9 +162,8 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     Q_FOREACH(const QString &table, tables) {
         QFile f(":/create_" + table + ".sql");
         if (f.open(QFile::ReadOnly)) {
-            QString sql(f.readAll());
             QSqlQuery query;
-            if (!query.exec(sql)) {
+            if (!query.exec(f.readAll())) {
                 qWarning() << "Could not create table" << table;
                 return db.lastError();
             }
@@ -184,8 +186,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &originType, originTypes) {
-                QSqlQuery query;
-                query.prepare(sql);
+                QSqlQuery query(sql);
                 query.addBindValue(originType);
                 if (!query.exec()) {
                     qWarning() << "Could not insert" << originType << db.lastError() << query.executedQuery();
@@ -210,8 +211,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &resourceType, resourceTypes) {
-                QSqlQuery query;
-                query.prepare(sql);
+                QSqlQuery query(sql);
                 query.addBindValue(resourceType);
                 if (!query.exec()) {
                     qWarning() << "Could not insert" << resourceType << db.lastError() << query.executedQuery();
@@ -235,7 +235,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
             query.addBindValue(KritaVersionWrapper::versionString());
             query.addBindValue(QDateTime::currentDateTimeUtc().toString());
             if (!query.exec()) {
-                qWarning() << "Could not insert the current version" << db.lastError() << query.executedQuery();
+                qWarning() << "Could not insert the current version" << db.lastError() << query.executedQuery() << query.boundValues();
                 return db.lastError();
             }
             infoResources << "Filled version table";

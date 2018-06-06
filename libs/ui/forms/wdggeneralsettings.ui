@@ -802,6 +802,12 @@
    <extends>QPushButton</extends>
    <header>kis_color_button.h</header>
   </customwidget>
+  <customwidget>
+   <class>KisFileNameRequester</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_file_name_requester.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

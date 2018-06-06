@@ -46,7 +46,7 @@ void TestResourceCacheDb::testCreateDatabase()
     QStringList tables = QStringList() << "version_information"
                                        << "origin_types"
                                        << "resource_types"
-                                       << "stores"
+                                       << "storages"
                                        << "tags"
                                        << "resources"
                                        << "translations"

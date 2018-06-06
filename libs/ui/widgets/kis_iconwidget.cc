@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <QStyleOption>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoResourceServerAdapter.h>
 
 

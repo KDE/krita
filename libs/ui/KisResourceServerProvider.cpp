@@ -30,7 +30,7 @@
 
 #include <KoResourcePaths.h>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>

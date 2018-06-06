@@ -47,7 +47,7 @@
 #include "KoResourceItemView.h"
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "KoResourceTaggingManager.h"
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"

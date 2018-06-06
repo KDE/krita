@@ -23,7 +23,7 @@
 #include <QCommandLineOption>
 
 #include <KisApplication.h>
-#include <resources/KoHashGeneratorProvider.h>
+#include <KoHashGeneratorProvider.h>
 #include "kis_md5_generator.h"
 #include "PythonPluginManager.h"
 #include <opengl/kis_opengl.h>

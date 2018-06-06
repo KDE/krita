@@ -23,7 +23,7 @@
 #include <QString>
 #include <QHash>
 
-#include <kritapigment_export.h>
+#include <kritaresources_export.h>
 
 class QDomDocument;
 class QDomElement;
@@ -32,7 +32,7 @@ class QDomElement;
  * The KoResource class provides a representation of resources.  This
  * includes, but not limited to, brushes and patterns.
  */
-class KRITAPIGMENT_EXPORT KoResource
+class KRITARESOURCES_EXPORT KoResource
 {
 public:
 

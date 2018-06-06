@@ -27,7 +27,7 @@
 #include <QImage>
 #include <QPainter>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 
 #include <KoShape.h>
 #include <KoShapeGroup.h>

@@ -32,7 +32,7 @@
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 
 #include "KisResourceServerProvider.h"
 #include "kis_workspace_resource.h"

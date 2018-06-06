@@ -22,7 +22,7 @@
 #include <QMetaType>
 
 #include "KoColorSpace.h"
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 
 class KoAbstractGradient;

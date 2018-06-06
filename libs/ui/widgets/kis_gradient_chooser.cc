@@ -27,7 +27,7 @@
 
 #include <klocalizedstring.h>
 #include <resources/KoAbstractGradient.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <resources/KoSegmentGradient.h>
 #include <KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>

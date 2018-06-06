@@ -18,7 +18,7 @@
 #ifndef KOPATTERN_H
 #define KOPATTERN_H
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 
 #include <QMetaType>

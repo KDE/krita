@@ -28,6 +28,8 @@
 
 #include <kritaresources_export.h>
 
+class KoResource;
+
 /**
  * @brief The KisResourceLoader class is an abstract interface
  * class that must be implemented by actual resource classes and
@@ -67,9 +69,23 @@ public:
      */
     virtual bool save(QIODevice &dev) const = 0;
 
-    virtual QImage thumbnail() const = 0;
+    QImage thumbnail() const;
 
-    virtual QString name() const = 0;
+    QString name() const;
+
+    /// XXX: make shared pointer
+    KoResource *resource() const;
+
+
+protected:
+
+    void setType(const QString &type);
+
+    void setThumbnail(const QImage &thumbnail);
+
+    void setName(const QString &name);
+
+    void setResource(KoResource *resource);
 
 private:
 

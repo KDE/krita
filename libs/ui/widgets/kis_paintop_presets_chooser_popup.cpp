@@ -26,7 +26,7 @@
 #include <QWidgetAction>
 #include <QSlider>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>

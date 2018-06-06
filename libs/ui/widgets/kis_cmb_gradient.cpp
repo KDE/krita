@@ -23,7 +23,7 @@
 #include <QApplication>
 
 #include <KoCheckerBoardPainter.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <resources/KoAbstractGradient.h>
 #include "kis_gradient_chooser.h"
 

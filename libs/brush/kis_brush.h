@@ -22,7 +22,7 @@
 
 #include <QImage>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 
 #include <kis_types.h>
 #include <kis_shared.h>

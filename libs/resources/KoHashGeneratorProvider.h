@@ -22,11 +22,11 @@
 #include <QHash>
 #include <QMutex>
 
-#include <kritapigment_export.h>
+#include <kritaresources_export.h>
 
 class KoHashGenerator;
 
-class KRITAPIGMENT_EXPORT KoHashGeneratorProvider
+class KRITARESOURCES_EXPORT KoHashGeneratorProvider
 {
 public:
     KoHashGeneratorProvider();

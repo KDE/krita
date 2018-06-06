@@ -19,7 +19,7 @@
 #ifndef TASKSET_RESOURCE_H
 #define TASKSET_RESOURCE_H
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <QStringList>
 
 
@@ -29,14 +29,14 @@ class TasksetResource : public KoResource
 public:
     TasksetResource(const QString& filename);
     ~TasksetResource() override;
-    
+
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
 
     QString defaultFileExtension() const override;
-    
+
     void setActionList(const QStringList actions);
     QStringList actionList();
 

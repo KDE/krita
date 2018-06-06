@@ -28,7 +28,7 @@
 #include <klocalizedstring.h>
 #include <qlineedit.h>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 
 KoLineEditAction::KoLineEditAction(QObject* parent)
     : QWidgetAction(parent)

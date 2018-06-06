@@ -23,7 +23,11 @@ class KisResourceLoader::Private
 {
 public:
     QString folder;
+    QString type;
+    QString name;
+    QImage thumbnail {QString("UNKNOWN")};
     QStringList mimetypes;
+    KoResource *resource {0};
 };
 
 
@@ -46,4 +50,29 @@ QStringList KisResourceLoader::mimetypes() const
 QString KisResourceLoader::folder() const
 {
     return d->folder;
+}
+
+KoResource *KisResourceLoader::resource() const
+{
+    return d->resource;
+}
+
+void KisResourceLoader::setType(const QString &type)
+{
+    d->type = type;
+}
+
+void KisResourceLoader::setThumbnail(const QImage &thumbnail)
+{
+    d->thumbnail = thumbnail;
+}
+
+void KisResourceLoader::setName(const QString &name)
+{
+    d->name = name;
+}
+
+void KisResourceLoader::setResource(KoResource *resource)
+{
+    d->resource = resource;
 }

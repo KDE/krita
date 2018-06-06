@@ -21,9 +21,9 @@
 
 #include "KoHashGenerator.h"
 
-#include <kritapigment_export.h>
+#include <kritaresources_export.h>
 
-class KRITAPIGMENT_EXPORT KoMD5Generator : public KoHashGenerator
+class KRITARESOURCES_EXPORT KoMD5Generator : public KoHashGenerator
 {
 public:
     KoMD5Generator();

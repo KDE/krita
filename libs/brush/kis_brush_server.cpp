@@ -23,7 +23,7 @@
 #include <QGlobalStatic>
 #include <KoResourcePaths.h>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoResourceServerProvider.h>
 
 #include <kis_debug.h>

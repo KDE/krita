@@ -24,7 +24,7 @@
 #include "KoResourceItemView.h"
 #include "KoResourceModel.h"
 #include "KoResourceItemDelegate.h"
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "KoCheckerBoardPainter.h"
 #include "KoShapeBackground.h"
 #include <resources/KoAbstractGradient.h>

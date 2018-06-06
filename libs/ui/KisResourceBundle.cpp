@@ -38,8 +38,8 @@
 #include <QStringList>
 #include <QMessageBox>
 
-#include <resources/KoHashGeneratorProvider.h>
-#include <resources/KoHashGenerator.h>
+#include <KoHashGeneratorProvider.h>
+#include <KoHashGenerator.h>
 #include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>

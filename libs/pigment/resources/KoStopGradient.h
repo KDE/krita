@@ -23,7 +23,7 @@
 
 #include "KoColor.h"
 #include <resources/KoAbstractGradient.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <kritapigment_export.h>
 #include <boost/operators.hpp>
 

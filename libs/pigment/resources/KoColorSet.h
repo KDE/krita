@@ -25,7 +25,7 @@
 #include <QVector>
 #include <QScopedPointer>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "KoColor.h"
 #include "KoColorSetEntry.h"
 

@@ -18,7 +18,7 @@
 #ifndef KIS_PSD_LAYER_STYLE_RESOURCE_H
 #define KIS_PSD_LAYER_STYLE_RESOURCE_H
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <QVector>
 
 #include <kritaui_export.h>

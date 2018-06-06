@@ -32,7 +32,7 @@
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoShapeController.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>

@@ -23,7 +23,7 @@
 #include <QMap>
 #include <QString>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "kis_gbr_brush.h"
 #include "kis_global.h"
 

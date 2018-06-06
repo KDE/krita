@@ -20,7 +20,7 @@
 #ifndef FILTEREFFECTRESOURCE_H
 #define FILTEREFFECTRESOURCE_H
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoXmlReader.h>
 #include <QDomDocument>
 

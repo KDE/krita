@@ -38,7 +38,7 @@
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
 #include "KoResourceModel.h"
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "KoResourceItemChooserContextMenu.h"
 
 #include <kconfiggroup.h>

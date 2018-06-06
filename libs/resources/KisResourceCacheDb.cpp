@@ -37,7 +37,8 @@ const QStringList KisResourceCacheDb::resourceTypes = QStringList() << "BRUSH_TI
                                                                     << "SYMBOL_LIBRARY"
                                                                     << "TEMPLATE"
                                                                     << "WORKSPACE"
-                                                                    << "SESSION";
+                                                                    << "SESSION"
+                                                                    << "UNKNOWN";
 
 const QStringList KisResourceCacheDb::originTypes = QStringList() << "INSTALLATION" // Installed by Krita
                                                                   << "BUNDLE" // Bundle installed by the user

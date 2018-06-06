@@ -30,7 +30,9 @@ class DummyResourceLoader : public KisResourceLoader {
 public:
     DummyResourceLoader()
         : KisResourceLoader("dummy", QStringList() << "x-application/dummy")
-    {}
+    {
+        setType("UNKNOWN");
+    }
 
     QString id() const override
     {
@@ -47,15 +49,6 @@ public:
         return true;
     }
 
-    QImage thumbnail() const override
-    {
-        return QImage();
-    }
-
-    QString name() const override
-    {
-        return ("onedummy");
-    }
 
 };
 

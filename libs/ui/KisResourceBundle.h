@@ -25,7 +25,7 @@
 
 #include <KoXmlWriter.h>
 
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include "KisResourceBundleManifest.h"
 
 #include "kritaui_export.h"

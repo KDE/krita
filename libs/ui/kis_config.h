@@ -73,6 +73,9 @@ public:
     qreal defImageResolution(bool defaultValue = false) const;
     void defImageResolution(qreal res) const;
 
+    int preferredVectorImportResolutionPPI(bool defaultValue = false) const;
+    void setPreferredVectorImportResolutionPPI(int value) const;
+
     /**
      * @return the id of the default color model used for creating new images.
      */

@@ -210,6 +210,16 @@ void KisConfig::defImageResolution(qreal res) const
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
 }
 
+int KisConfig::preferredVectorImportResolutionPPI(bool defaultValue) const
+{
+    return defaultValue ? 100.0 : m_cfg.readEntry("preferredVectorImportResolution", 100.0);
+}
+
+void KisConfig::setPreferredVectorImportResolutionPPI(int value) const
+{
+    m_cfg.writeEntry("preferredVectorImportResolution", value);
+}
+
 void cleanOldCursorStyleKeys(KConfigGroup &cfg)
 {
     if (cfg.hasKey("newCursorStyle") &&

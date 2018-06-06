@@ -73,7 +73,7 @@ private:
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
 
     KisReferenceImagesLayer *referenceImagesLayer() const;
-    KisReferenceImagesLayer *getOrCreteReferenceImagesLayer();
+    KisReferenceImagesLayer *getOrCreateReferenceImagesLayer();
 };
 
 

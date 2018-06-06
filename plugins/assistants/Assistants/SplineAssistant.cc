@@ -158,7 +158,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 
     {  // Draw bezier handles control lines only if we are editing the assistant
         gc.save();
-        QColor assistantColor = m_canvas->paintingAssistantsDecoration()->assistantsColor();
+        QColor assistantColor = useCustomColor() ? assistantCustomColor() : assistantsGlobalColor();
         QPen bezierlinePen(assistantColor);
         bezierlinePen.setStyle(Qt::DotLine);
         bezierlinePen.setWidth(1);

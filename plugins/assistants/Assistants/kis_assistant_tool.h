@@ -84,9 +84,6 @@ private:
 
     void assistantSelected(KisPaintingAssistantSP assistant);
 
-    void updateToolOptionsUI();
-
-
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -98,11 +95,15 @@ private Q_SLOTS:
     void removeAllAssistants();
     void saveAssistants();
     void loadAssistants();
+    void updateToolOptionsUI();
 
     /// send the color and opacity information from the UI to the kis_painting_decoration
     /// which manages the assistants
-    void slotAssistantsColorChanged(const QColor&);
-    void slotAssistantOpacityChanged();
+    void slotGlobalAssistantsColorChanged(const QColor&);
+    void slotGlobalAssistantOpacityChanged();
+
+    void slotUpdateCustomColor();
+    void slotcustomOpacityChanged();
 
 protected:
     /// Draws the editor widget controls with move, activate, and delete
@@ -148,8 +149,10 @@ private:
 
     // what color and opacity will the assistants have
     // all assistant types will share this setting
-    QColor m_assistantColor;
-    float m_assistantsOpacity;
+    QColor m_assistantGlobalColor;
+    float m_assistantsGlobalOpacity;
+
+    float m_assistantCustomOpacity;
 
 };
 

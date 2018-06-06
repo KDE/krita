@@ -125,7 +125,7 @@ void KisAnimationUtilsTest::test()
     frameMoves << std::make_pair(FrameItem(layer1, "content", 10), FrameItem(layer1, "content", 20));
     frameMoves << std::make_pair(FrameItem(layer1, "content", 20), FrameItem(layer1, "content", 0));
 
-    QScopedPointer<KUndo2Command> cmd(createMoveKeyframesCommand(frameMoves, false));
+    QScopedPointer<KUndo2Command> cmd(createMoveKeyframesCommand(frameMoves, false, false));
     cmd->redo();
 
     QVector<std::tuple<int, QRect, QRect>> referenceRects;
@@ -150,7 +150,7 @@ void KisAnimationUtilsTest::test()
     frameMoves << std::make_pair(FrameItem(layer2, "content", 10), FrameItem(layer1, "content", 10));
     frameMoves << std::make_pair(FrameItem(layer1, "content", 20), FrameItem(layer2, "content", 20));
 
-    cmd.reset(createMoveKeyframesCommand(frameMoves, false));
+    cmd.reset(createMoveKeyframesCommand(frameMoves, false, false));
     cmd->redo();
 
     referenceRects << std::make_tuple( 0, QRect()              , QRect( 0, 10, 10, 10));
@@ -176,7 +176,7 @@ void KisAnimationUtilsTest::test()
     frameMoves << std::make_pair(FrameItem(layer2, "content", 10), FrameItem(layer1, "content", 10));
     frameMoves << std::make_pair(FrameItem(layer2, "content", 20), FrameItem(layer1, "content", 20));
 
-    cmd.reset(createMoveKeyframesCommand(frameMoves, false));
+    cmd.reset(createMoveKeyframesCommand(frameMoves, false, false));
     cmd->redo();
 
     referenceRects << std::make_tuple( 0, QRect( 0, 10, 10, 10), QRect( 0, 0, 10, 10));
@@ -203,7 +203,7 @@ void KisAnimationUtilsTest::test()
     frameMoves << std::make_pair(FrameItem(layer2, "content", 10), FrameItem(layer1, "content",  9));
     frameMoves << std::make_pair(FrameItem(layer2, "content", 20), FrameItem(layer1, "content", 20));
 
-    cmd.reset(createMoveKeyframesCommand(frameMoves, false));
+    cmd.reset(createMoveKeyframesCommand(frameMoves, false, false));
     cmd->redo();
 
     referenceRects << std::make_tuple( 0, QRect( 0, 10, 10, 10), QRect( 0, 0, 10, 10));

@@ -281,7 +281,7 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
     return true;
 }
 
-KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand, bool moveEmptyFrames)
+KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, bool moveEmptyFrames, KUndo2Command *parentCommand)
 {
     if (srcIndexes.isEmpty()) return 0;
     if (offset.isNull()) return 0;
@@ -298,10 +298,7 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
 
         KisNodeSP srcNode = nodeAt(srcIndex);
         KisNodeSP dstNode = nodeAt(dstIndex);
-
-        if (!srcNode || !dstNode) {
-            return 0;
-        }
+        if (!srcNode || !dstNode) return 0;
 
         Q_FOREACH(KisKeyframeChannel *channel, channelsAt(srcIndex)) {
             if (moveEmptyFrames || channel->keyframeAt(srcIndex.column())) {
@@ -318,31 +315,32 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
         KisAnimationUtils::createMoveKeyframesCommand(srcFrameItems,
                                                       dstFrameItems,
                                                       copyFrames,
+                                                      moveEmptyFrames,
                                                       parentCommand);
 }
 
-bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indexes)
+bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indicesToRemove)
 {
-    if (indexes.isEmpty()) return true;
+    if (indicesToRemove.isEmpty()) return true;
 
-    std::sort(indexes.begin(), indexes.end(),
+    std::sort(indicesToRemove.begin(), indicesToRemove.end(),
               [] (const QModelIndex &lhs, const QModelIndex &rhs) {
                   return lhs.column() > rhs.column();
               });
 
-    const int minColumn = indexes.last().column();
+    const int minColumn = indicesToRemove.last().column();
 
-    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indexes.size()));
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indicesToRemove.size()));
 
     {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
 
-        Q_FOREACH (const QModelIndex &index, indexes) {
-            QModelIndexList movedIndexes;
+        Q_FOREACH (const QModelIndex &index, indicesToRemove) {
+            QModelIndexList indicesToOffset;
             for (int column = index.column() + 1; column < columnCount(); column++) {
-                movedIndexes << this->index(index.row(), column);
+                indicesToOffset << this->index(index.row(), column);
             }
-            createOffsetFramesCommand(movedIndexes, QPoint(-1, 0), false, parentCommand, true);
+            createOffsetFramesCommand(indicesToOffset, QPoint(-1, 0), false, true, parentCommand);
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();

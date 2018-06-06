@@ -174,18 +174,6 @@ namespace KisAnimationUtils {
         std::sort(points->begin(), points->end(), LessOperator(offset));
     }
 
-    KUndo2Command* createMoveKeyframesCommand(const FrameItemList &srcFrames,
-                                              const FrameItemList &dstFrames,
-                                              bool copy,
-                                              KUndo2Command *parentCommand) {
-
-        FrameMovePairList movedFrames;
-        for (int i = 0; i < srcFrames.size(); i++) {
-            movedFrames << std::make_pair(srcFrames[i], dstFrames[i]);
-        }
-        return createMoveKeyframesCommand(movedFrames, copy, parentCommand);
-    }
-
     bool supportsContentFrames(KisNodeSP node)
     {
         return node->inherits("KisPaintLayer") || node->inherits("KisFilterMask") || node->inherits("KisTransparencyMask") || node->inherits("KisSelectionBasedLayer");
@@ -202,19 +190,17 @@ namespace KisAnimationUtils {
         KisKeyframeChannel *dstChannel = dstNode->getKeyframeChannel(dst.channel, true);
 
         if (srcNode == dstNode) {
-            // TODO: add warning!
-            if (!srcChannel) return;
+            if (!srcChannel) return; // TODO: add warning!
 
             srcChannel->swapFrames(srcTime, dstTime, parentCommand);
         } else {
-            // TODO: add warning!
-            if (!srcChannel || !dstChannel) return;
+            if (!srcChannel || !dstChannel) return; // TODO: add warning!
 
             dstChannel->swapExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
         }
     }
 
-    void moveOneFrameItem(const FrameItem &src, const FrameItem &dst, bool copy, KUndo2Command *parentCommand)
+    void moveOneFrameItem(const FrameItem &src, const FrameItem &dst, bool copy, bool moveEmptyFrames, KUndo2Command *parentCommand)
     {
         const int srcTime = src.time;
         KisNodeSP srcNode = src.node;
@@ -225,24 +211,28 @@ namespace KisAnimationUtils {
         KisKeyframeChannel *dstChannel = dstNode->getKeyframeChannel(dst.channel, true);
 
         if (srcNode == dstNode) {
-            // TODO: add warning!
-            if (!srcChannel) return;
+            if (!srcChannel) return; // TODO: add warning!
 
             KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
+            KisKeyframeSP dstKeyFrame = srcChannel->keyframeAt(dstTime);
             if (srcKeyframe) {
                 if (copy) {
                     srcChannel->copyKeyframe(srcKeyframe, dstTime, parentCommand);
                 } else {
                     srcChannel->moveKeyframe(srcKeyframe, dstTime, parentCommand);
                 }
+            } else {
+                if (dstKeyFrame && moveEmptyFrames && !copy) {
+                    //Destination is effectively replaced by an empty frame.
+                    dstChannel->deleteKeyframe(dstKeyFrame, parentCommand);
+                }
             }
         } else {
-            // TODO: add warning!
-            if (!srcChannel || !dstChannel) return;
+            if (!srcChannel || !dstChannel) return; // TODO: add warning!
 
             KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
-            // TODO: add warning!
-            if (!srcKeyframe) return;
+
+            if (!srcKeyframe) return; // TODO: add warning!
 
             dstChannel->copyExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
 
@@ -252,39 +242,53 @@ namespace KisAnimationUtils {
         }
     }
 
-    KUndo2Command *createMoveKeyframesCommand(const FrameMovePairList &movePairs, bool copy, KUndo2Command *parentCommand)
+    KUndo2Command* createMoveKeyframesCommand(const FrameItemList &srcFrames,
+                                              const FrameItemList &dstFrames,
+                                              bool copy,
+                                              bool moveEmpty,
+                                              KUndo2Command *parentCommand)
+    {
+        FrameMovePairList srcDstPairs;
+        for (int i = 0; i < srcFrames.size(); i++) {
+            srcDstPairs << std::make_pair(srcFrames[i], dstFrames[i]);
+        }
+        return createMoveKeyframesCommand(srcDstPairs, copy, moveEmpty, parentCommand);
+    }
+
+    KUndo2Command* createMoveKeyframesCommand(const FrameMovePairList &srcDstPairs,
+                                              bool copy,
+                                              bool moveEmptyFrames,
+                                              KUndo2Command *parentCommand)
     {
         KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
 
             !copy ?
                 kundo2_i18np("Move Keyframe",
                              "Move %1 Keyframes",
-                             movePairs.size()) :
+                             srcDstPairs.size()) :
                 kundo2_i18np("Copy Keyframe",
                              "Copy %1 Keyframes",
-                             movePairs.size()),
+                             srcDstPairs.size()),
 
             parentCommand,
 
-            [movePairs, copy] () -> KUndo2Command* {
+            [srcDstPairs, copy, moveEmptyFrames] () -> KUndo2Command* {
                 bool result = false;
 
                 QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
 
                 using MoveChain = QList<FrameItem>;
-
-
                 QHash<FrameItem, MoveChain> moveMap;
-                Q_FOREACH (const FrameMovePair &pair, movePairs) {
+                Q_FOREACH (const FrameMovePair &pair, srcDstPairs) {
                     moveMap.insert(pair.first, {pair.second});
                 }
 
                 auto it = moveMap.begin();
                 while (it != moveMap.end()) {
                     MoveChain &chain = it.value();
-                    const FrameItem &lastFrame = chain.last();
+                    const FrameItem &previousFrame = chain.last();
 
-                    auto tailIt = moveMap.find(lastFrame);
+                    auto tailIt = moveMap.find(previousFrame);
 
                     if (tailIt == it || tailIt == moveMap.end()) {
                         ++it;
@@ -315,7 +319,7 @@ namespace KisAnimationUtils {
                         FrameItem srcItem = *frameIt++;
 
                         if (!isCycle) {
-                            moveOneFrameItem(srcItem, dstItem, copy, cmd.data());
+                            moveOneFrameItem(srcItem, dstItem, copy, moveEmptyFrames, cmd.data());
                         } else {
                             swapOneFrameItem(srcItem, dstItem, cmd.data());
                         }

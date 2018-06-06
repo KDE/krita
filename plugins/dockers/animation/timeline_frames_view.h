@@ -86,7 +86,7 @@ private Q_SLOTS:
     void slotInsertMultipleKeyframes() {insertMultipleKeyframes(false);}
     void slotInsertMultipleKeyframeColumns() {insertMultipleKeyframes(true);}
 
-    void slotRemoveSelectedFrames(bool entireColumn = false, bool needsOffset = false);
+    void slotRemoveSelectedFrames(bool entireColumn = false, bool pull = false);
     void slotRemoveSelectedFramesAndShift() {slotRemoveSelectedFrames(false, true);}
 
     void slotRemoveSelectedColumns() {slotRemoveSelectedFrames(true);}

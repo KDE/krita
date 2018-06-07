@@ -20,6 +20,7 @@
 #ifndef KISRESOURCESTORAGE_H
 #define KISRESOURCESTORAGE_H
 
+#include <QSharedPointer>
 #include <QScopedPointer>
 
 #include <kritaresources_export.h>
@@ -39,5 +40,7 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+typedef QSharedPointer<KisResourceStorage> KisResourceStorageSP;
 
 #endif // KISRESOURCESTORAGE_H

@@ -26,9 +26,10 @@
 #include <QScopedPointer>
 #include <QSharedPointer>
 
+#include <KoResource.h>
+
 #include <kritaresources_export.h>
 
-class KoResource;
 
 /**
  * @brief The KisResourceLoader class is an abstract interface
@@ -73,9 +74,7 @@ public:
 
     QString name() const;
 
-    /// XXX: make shared pointer
-    KoResource *resource() const;
-
+    KoResourceSP resource() const;
 
 protected:
 
@@ -85,7 +84,7 @@ protected:
 
     void setName(const QString &name);
 
-    void setResource(KoResource *resource);
+    void setResource(KoResourceSP resource);
 
 private:
 

@@ -97,7 +97,7 @@ public:
     /// @return the default file extension which should be used when saving the resource
     virtual QString defaultFileExtension() const;
 
-    /// @return true if the resource is permanent and can't be removed by the user    
+    /// @return true if the resource is permanent and can't be removed by the user
     bool permanent() const;
     void setPermanent(bool permanent);
 
@@ -126,6 +126,8 @@ static inline uint qHash(const KoResource &resource)
 {
     return qHash(resource.md5());
 }
+
+typedef QSharedPointer<KoResource> KoResourceSP;
 
 #endif // KORESOURCE_H_
 

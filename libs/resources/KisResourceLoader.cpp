@@ -19,6 +19,8 @@
 
 #include "KisResourceLoader.h"
 
+#include <KoResource.h>
+
 class KisResourceLoader::Private
 {
 public:
@@ -27,7 +29,7 @@ public:
     QString name;
     QImage thumbnail {QString("UNKNOWN")};
     QStringList mimetypes;
-    KoResource *resource {0};
+    KoResourceSP resource {0};
 };
 
 
@@ -52,7 +54,7 @@ QString KisResourceLoader::folder() const
     return d->folder;
 }
 
-KoResource *KisResourceLoader::resource() const
+KoResourceSP KisResourceLoader::resource() const
 {
     return d->resource;
 }
@@ -72,7 +74,7 @@ void KisResourceLoader::setName(const QString &name)
     d->name = name;
 }
 
-void KisResourceLoader::setResource(KoResource *resource)
+void KisResourceLoader::setResource(KoResourceSP resource)
 {
     d->resource = resource;
 }

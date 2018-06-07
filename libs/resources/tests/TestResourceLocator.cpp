@@ -65,7 +65,7 @@ void TestResourceLocator::testLocator()
 
 void TestResourceLocator::cleanupTestCase()
 {
-//    cleanDstLocation();
+    cleanDstLocation();
 }
 
 bool TestResourceLocator::cleanDstLocation()

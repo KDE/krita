@@ -58,6 +58,7 @@
 #include <KoResourcePaths.h>
 
 #include <KisResourceCacheDb.h>
+#include <KisResourceLocator.h>
 
 #include "KisProofingConfiguration.h"
 #include "KoColorConversionTransformation.h"
@@ -217,7 +218,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
-    m_urlResourceFolder->setFileName(cfg.readEntry<QString>("ResourceDirectory", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
 }
 
 void GeneralTab::setDefault()
@@ -265,7 +266,7 @@ void GeneralTab::setDefault()
     cursorColorBtutton->setColor(cursorColor);
 
     m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
-    m_urlResourceFolder->setFileName(cfg.readEntry<QString>("ResourceDirectory", QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -1333,7 +1334,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());
 
         cfg.writeEntry(KisResourceCacheDb::dbLocationKey, dialog->m_general->m_urlCacheDbLocation->fileName());
-        cfg.writeEntry("ResourceDirectory", dialog->m_general->m_urlResourceFolder->fileName());
+        cfg.writeEntry(KisResourceLocator::resourceLocationKey, dialog->m_general->m_urlResourceFolder->fileName());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

@@ -19,18 +19,101 @@
 
 #include "KisResourceLocator.h"
 
+#include <QList>
+#include <QDir>
+#include <QFileInfo>
+#include <QMessageBox>
+
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+#include <klocalizedstring.h>
+
+#include "KisResourceStorage.h"
+
+const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
+const QStringList KisResourceLocator::resourceTypeFolders = QStringList()
+        << "tags"
+        << "asl"
+        << "bundles"
+        << "brushes"
+        << "gradients"
+        << "paintoppresets"
+        << "palettes"
+        << "patterns"
+        << "taskset"
+        << "workspaces"
+        << "input"
+        << "pykrita"
+        << "symbols"
+        << "color-schemes"
+        << "preset_icons"
+        << "preset_icons/tool_icons"
+        << "preset_icons/emblem_icons";
+
 class KisResourceLocator::Private {
 public:
-
+    QString resourceLocation;
+    QList<KisResourceStorageSP> storages;
+    QStringList errorMessages;
 };
 
 KisResourceLocator::KisResourceLocator()
     : d(new Private())
 {
-
 }
 
 KisResourceLocator::~KisResourceLocator()
 {
+}
 
+KisResourceLocator::LocatorError KisResourceLocator::initialize()
+{
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+
+    QFileInfo fi(d->resourceLocation);
+
+    if (!fi.exists()) {
+        if (!QDir().mkpath(d->resourceLocation)) {
+            d->errorMessages << i18n("Could not create the resource location at %1.", d->resourceLocation);
+            return LocatorError::CannotCreateLocation;
+        }
+    }
+
+    if (!fi.isWritable()) {
+        d->errorMessages << i18n("The resource location at %1 is not writable.", d->resourceLocation);
+        return LocatorError::LocationReadOnly;
+    }
+
+    if (QDir(d->resourceLocation).isEmpty()) {
+        KisResourceLocator::LocatorError res = firstTimeInstallation();
+        if (res != LocatorError::Ok) {
+            return res;
+        }
+    }
+
+
+
+    return LocatorError::Ok;
+}
+
+KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation()
+{
+    Q_FOREACH(const QString &folder, resourceTypeFolders) {
+        QFileInfo fi(d->resourceLocation + "/" + folder + "/");
+        QDir dir;
+        if (!fi.exists()) {
+            if (!dir.mkpath(fi.canonicalFilePath())) {
+                d->errorMessages << i18n("Could not create the resource location at %1.", fi.canonicalPath());
+                return LocatorError::CannotCreateLocation;
+            }
+        }
+        if (!fi.isWritable()) {
+            d->errorMessages << i18n("The resource location at %1 is not writable.", fi.canonicalPath());
+            return LocatorError::LocationReadOnly;
+        }
+    }
+
+    return LocatorError::Ok;
 }

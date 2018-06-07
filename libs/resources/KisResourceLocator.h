@@ -21,6 +21,8 @@
 #define KISRESOURCELOCATOR_H
 
 #include <QScopedPointer>
+#include <QStringList>
+#include <QString>
 
 #include <kritaresources_export.h>
 
@@ -32,9 +34,27 @@
 class KRITARESOURCES_EXPORT KisResourceLocator
 {
 public:
+
+    static const QString resourceLocationKey;
+    static const QStringList resourceTypeFolders;
+
     KisResourceLocator();
     ~KisResourceLocator();
+
+    enum class LocatorError {
+        Ok,
+        LocationReadOnly,
+        CannotCreateLocation
+    };
+
+    LocatorError initialize();
+
+    QString lastErrorMessage() const;
+
 private:
+
+    LocatorError firstTimeInstallation();
+
     class Private;
     QScopedPointer<Private> d;
 };

@@ -51,7 +51,7 @@
 #include <kis_color_manager.h>
 
 KisConfig::KisConfig()
-    : m_cfg( KSharedConfig::openConfig()->group(""))
+    : m_cfg(KSharedConfig::openConfig()->group(""))
 {
 }
 

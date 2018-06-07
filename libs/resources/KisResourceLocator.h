@@ -55,7 +55,7 @@ public:
      */
     LocatorError initialize(const QString &installationResourcesLocation);
 
-    QString lastErrorMessage() const;
+    QStringList errorMessages() const;
 
 private:
 

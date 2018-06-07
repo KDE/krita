@@ -19,6 +19,7 @@
 
 #include "KisResourceLocator.h"
 
+#include <QDebug>
 #include <QList>
 #include <QDir>
 #include <QFileInfo>
@@ -71,13 +72,13 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
 
     if (!fi.exists()) {
         if (!QDir().mkpath(d->resourceLocation)) {
-            d->errorMessages << i18n("Could not create the resource location at %1.", d->resourceLocation);
+            d->errorMessages << i18n("1. Could not create the resource location at %1.", d->resourceLocation);
             return LocatorError::CannotCreateLocation;
         }
     }
 
     if (!fi.isWritable()) {
-        d->errorMessages << i18n("The resource location at %1 is not writable.", d->resourceLocation);
+        d->errorMessages << i18n("2. The resource location at %1 is not writable.", d->resourceLocation);
         return LocatorError::LocationReadOnly;
     }
 
@@ -91,28 +92,28 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
     return LocatorError::Ok;
 }
 
+QStringList KisResourceLocator::errorMessages() const
+{
+    return d->errorMessages;
+}
+
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(const QString &installationResourcesLocation)
 {
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
-        QFileInfo fi(d->resourceLocation + '/' + folder + '/');
-        QDir dir;
-        if (!fi.exists()) {
-            if (!dir.mkpath(fi.canonicalFilePath())) {
-                d->errorMessages << i18n("Could not create the resource location at %1.", fi.canonicalPath());
+        QDir dir(d->resourceLocation + '/' + folder + '/');
+        if (!dir.exists()) {
+            if (!dir.mkpath(dir.path())) {
+                d->errorMessages << i18n("3. Could not create the resource location at %1.", dir.path());
                 return LocatorError::CannotCreateLocation;
             }
-        }
-        if (!fi.isWritable()) {
-            d->errorMessages << i18n("The resource location at %1 is not writable.", fi.canonicalPath());
-            return LocatorError::LocationReadOnly;
         }
     }
 
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
-        QDir dir(installationResourcesLocation + "/share/krita" + folder + '/');
+        QDir dir(installationResourcesLocation + "/share/krita/" + folder + '/');
         if (dir.exists()) {
             Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable | QDir::NoDotAndDotDot)) {
-                QFile f(dir.canonicalPath() + entry);
+                QFile f(dir.canonicalPath() + '/'+ entry);
                 bool r = f.copy(d->resourceLocation + '/' + folder + '/' + entry);
                 if (!r) {
                     d->errorMessages << "Could not copy resource" << f.fileName() << "to the resource folder";

@@ -42,14 +42,16 @@ void TestResourceLocator::initTestCase()
     srcLocation = QString(FILES_DATA_DIR);
     QVERIFY2(QDir(srcLocation).exists(), srcLocation.toUtf8());
     dstLocation = QString(FILES_DEST_DIR);
-
     cleanDstLocation();
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    cfg.writeEntry(KisResourceLocator::resourceLocationKey, dstLocation);
 }
 
 void TestResourceLocator::testLocator()
 {
     KisResourceLocator locator;
     KisResourceLocator::LocatorError r = locator.initialize(dstLocation);
+    if (!locator.errorMessages().isEmpty()) qDebug() << locator.errorMessages();
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(dstLocation).exists());
     Q_FOREACH(const QString &folder, KisResourceLocator::resourceTypeFolders) {
@@ -63,7 +65,7 @@ void TestResourceLocator::testLocator()
 
 void TestResourceLocator::cleanupTestCase()
 {
-    cleanDstLocation();
+//    cleanDstLocation();
 }
 
 bool TestResourceLocator::cleanDstLocation()

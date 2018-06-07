@@ -21,12 +21,65 @@
 
 #include <QTest>
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
+
 #include <KisResourceLocator.h>
 
+#ifndef FILES_DATA_DIR
+#error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
+#endif
+
+#ifndef FILES_DEST_DIR
+#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
+#endif
+
+
+
+void TestResourceLocator::initTestCase()
+{
+    srcLocation = QString(FILES_DATA_DIR);
+    QVERIFY2(QDir(srcLocation).exists(), srcLocation.toUtf8());
+    dstLocation = QString(FILES_DEST_DIR);
+
+    cleanDstLocation();
+}
 
 void TestResourceLocator::testLocator()
 {
+    KisResourceLocator locator;
+    KisResourceLocator::LocatorError r = locator.initialize(dstLocation);
+    QVERIFY(r == KisResourceLocator::LocatorError::Ok);
+    QVERIFY(QDir(dstLocation).exists());
+    Q_FOREACH(const QString &folder, KisResourceLocator::resourceTypeFolders) {
+        QDir dstDir(dstLocation + '/' + folder + '/');
+        QDir srcDir(srcLocation + '/' + folder + '/');
 
+        QVERIFY(dstDir.exists());
+        QVERIFY(dstDir.entryList(QDir::NoDotAndDotDot) == srcDir.entryList(QDir::NoDotAndDotDot));
+    }
+}
+
+void TestResourceLocator::cleanupTestCase()
+{
+    cleanDstLocation();
+}
+
+bool TestResourceLocator::cleanDstLocation()
+{
+    if (QDir(dstLocation).exists()) {
+        Q_FOREACH(const QString &folder, KisResourceLocator::resourceTypeFolders) {
+            QDir dir(dstLocation + '/' + folder + '/');
+            if (dir.exists()) {
+                Q_FOREACH(const QString &entry, dir.entryList(QDir::NoDotAndDotDot)) {
+                    QFile f(dir.canonicalPath() + '/' + entry);
+                    f.remove();
+                }
+            }
+        }
+    }
+    return QDir().rmpath(dstLocation);
 }
 
 QTEST_MAIN(TestResourceLocator)

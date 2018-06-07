@@ -47,13 +47,19 @@ public:
         CannotCreateLocation
     };
 
-    LocatorError initialize();
+    /**
+     * @brief initialize Setup the resource locator for use.
+     *
+     * @param installationResourcesLocation the place where the resources
+     * that come packaged with Krita reside.
+     */
+    LocatorError initialize(const QString &installationResourcesLocation);
 
     QString lastErrorMessage() const;
 
 private:
 
-    LocatorError firstTimeInstallation();
+    LocatorError firstTimeInstallation(const QString &installationResourcesLocation);
 
     class Private;
     QScopedPointer<Private> d;

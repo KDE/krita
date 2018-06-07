@@ -26,8 +26,16 @@ class TestResourceLocator : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testLocator();
+    void cleanupTestCase();
 private:
+
+    bool cleanDstLocation();
+
+    QString srcLocation;
+    QString dstLocation;
+
 };
 
 #endif

@@ -88,7 +88,7 @@ QString getInstallationPrefix() {
      QString appPath = qApp->applicationDirPath();
 
      appPath.chop(QString("MacOS/").length());
-     
+
      bool makeInstall = QDir(appPath + "/../../../share/kritaplugins").exists();
      bool inBundle = QDir(appPath + "/Resources/kritaplugins").exists();
 
@@ -358,7 +358,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
 }
 
 
-QStringList filesInDir(const QString &startdir, const QString & filter, bool recursive)
+QStringList KoResourcePaths::filesInDir(const QString &startdir, const QString & filter, bool recursive)
 {
     QStringList result;
 

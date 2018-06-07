@@ -230,6 +230,8 @@ public:
      */
     static bool isReady();
 
+    static QStringList filesInDir(const QString &startdir, const QString & filter, bool recursive);
+
 private:
 
     void addResourceTypeInternal(const QString &type, const QString &basetype,

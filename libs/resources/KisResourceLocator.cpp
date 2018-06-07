@@ -29,6 +29,7 @@
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
+#include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
@@ -43,13 +44,7 @@ const QStringList KisResourceLocator::resourceTypeFolders = QStringList()
         << "patterns"
         << "taskset"
         << "workspaces"
-        << "input"
-        << "pykrita"
-        << "symbols"
-        << "color-schemes"
-        << "preset_icons"
-        << "preset_icons/tool_icons"
-        << "preset_icons/emblem_icons";
+        << "symbols";
 
 class KisResourceLocator::Private {
 public:
@@ -67,7 +62,7 @@ KisResourceLocator::~KisResourceLocator()
 {
 }
 
-KisResourceLocator::LocatorError KisResourceLocator::initialize()
+KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &installationResourcesLocation)
 {
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -87,21 +82,19 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize()
     }
 
     if (QDir(d->resourceLocation).isEmpty()) {
-        KisResourceLocator::LocatorError res = firstTimeInstallation();
+        KisResourceLocator::LocatorError res = firstTimeInstallation(installationResourcesLocation);
         if (res != LocatorError::Ok) {
             return res;
         }
     }
 
-
-
     return LocatorError::Ok;
 }
 
-KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation()
+KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(const QString &installationResourcesLocation)
 {
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
-        QFileInfo fi(d->resourceLocation + "/" + folder + "/");
+        QFileInfo fi(d->resourceLocation + '/' + folder + '/');
         QDir dir;
         if (!fi.exists()) {
             if (!dir.mkpath(fi.canonicalFilePath())) {
@@ -112,6 +105,19 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation()
         if (!fi.isWritable()) {
             d->errorMessages << i18n("The resource location at %1 is not writable.", fi.canonicalPath());
             return LocatorError::LocationReadOnly;
+        }
+    }
+
+    Q_FOREACH(const QString &folder, resourceTypeFolders) {
+        QDir dir(installationResourcesLocation + "/share/krita" + folder + '/');
+        if (dir.exists()) {
+            Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable | QDir::NoDotAndDotDot)) {
+                QFile f(dir.canonicalPath() + entry);
+                bool r = f.copy(d->resourceLocation + '/' + folder + '/' + entry);
+                if (!r) {
+                    d->errorMessages << "Could not copy resource" << f.fileName() << "to the resource folder";
+                }
+            }
         }
     }
 

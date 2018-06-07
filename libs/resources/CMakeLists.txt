@@ -4,9 +4,13 @@ set(kritaresources_LIB_SRCS
     KisResourceCacheDb.cpp
     KisResourceLoader.cpp
     KisResourceLoaderRegistry.cpp
+    KisResourceLocator.cpp
+    KisResourceStorage.cpp
+
     KoResource.cpp
     KoMD5Generator.cpp
     KoHashGeneratorProvider.cpp
+
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)

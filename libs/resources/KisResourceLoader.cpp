@@ -19,7 +19,7 @@
 
 #include "KisResourceLoader.h"
 
-#include <KoResource.h>
+
 
 class KisResourceLoader::Private
 {

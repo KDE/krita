@@ -705,7 +705,7 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
     if (!frameMoves.isEmpty()) {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
-        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, 0);
+        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, false, 0);
     }
 
     if (cmd) {
@@ -814,7 +814,7 @@ bool TimelineFramesModel::insertFrames(int dstColumn, const QList<int> &dstRows,
 
         setLastVisibleFrame(columnCount() + (count * timing) - 1);
 
-        createOffsetFramesCommand(indexes, QPoint((count * timing), 0), false, parentCommand);
+        createOffsetFramesCommand(indexes, QPoint((count * timing), 0), false, false, parentCommand);
 
         Q_FOREACH (int row, dstRows) {
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
@@ -920,7 +920,7 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
                 indexes << index(row, column);
             }
 
-            createOffsetFramesCommand(indexes, QPoint(plannedFrameMove, 0), false, parentCommand.data());
+            createOffsetFramesCommand(indexes, QPoint(plannedFrameMove, 0), false, false, parentCommand.data());
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();

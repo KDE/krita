@@ -116,7 +116,17 @@ public:
 
     /// grabs the assistant color/opacity specified from the tool options
     /// each assistant might have to use this differently, so just save a reference
-    void setAssistantColor(QColor color);
+    void setAssistantGlobalColor(QColor color);
+    QColor assistantsGlobalColor();
+
+    /// should this assistant use a custom color for the display? global color will be used if this is false
+    bool useCustomColor();
+    void setUseCustomColor(bool useCustomColor);
+
+    /// getter and setter for assistant's custom color
+    void setAssistantCustomColor(QColor color);
+    QColor assistantCustomColor();
+
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();

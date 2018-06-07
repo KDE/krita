@@ -53,7 +53,7 @@ public:
 
     bool removeFrames(const QModelIndexList &indexes);
 
-    bool removeFramesAndOffset(QModelIndexList indexes);
+    bool removeFramesAndOffset(QModelIndexList indicesToRemove);
 
     bool mirrorFrames(QModelIndexList indexes);
 
@@ -81,7 +81,9 @@ protected:
     virtual QMap<QString, KisKeyframeChannel *> channelsAt(QModelIndex index) const = 0;
     KisImageWSP image() const;
 
-    KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, KUndo2Command *parentCommand = 0, bool moveEmptyFrames = true);
+    KUndo2Command* createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset,
+                                             bool copyFrames, bool moveEmptyFrames,
+                                             KUndo2Command *parentCommand = 0);
 
 
 private Q_SLOTS:

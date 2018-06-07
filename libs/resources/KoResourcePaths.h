@@ -22,7 +22,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <kritaplugin_export.h>
+#include <kritaresources_export.h>
 
 
 /**
@@ -39,7 +39,7 @@
  * checks. In the future these should be converted to qloggingcategory to enable
  * convenient enable/disable functionality.
  */
-class KRITAPLUGIN_EXPORT KoResourcePaths
+class KRITARESOURCES_EXPORT KoResourcePaths
 {
 public:
 

@@ -10,7 +10,7 @@ set(kritaresources_LIB_SRCS
     KoResource.cpp
     KoMD5Generator.cpp
     KoHashGeneratorProvider.cpp
-
+    KoResourcePaths.cpp
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)

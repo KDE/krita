@@ -4,7 +4,6 @@ set(kritaplugin_LIB_SRCS
     KoJsonTrader.cpp
     KisMimeDatabase.cpp
     KritaPluginDebug.cpp
-    KoResourcePaths.cpp
 )
 
 # help plugin trader find installed plugins when run from uninstalled tests

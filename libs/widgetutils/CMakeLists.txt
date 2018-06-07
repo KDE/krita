@@ -110,6 +110,7 @@ target_link_libraries(kritawidgetutils
         Qt5::Core
         KF5::ItemViews
         kritaglobal
+        kritaresources
     PRIVATE
         Qt5::PrintSupport
         KF5::I18n

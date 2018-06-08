@@ -20,12 +20,14 @@
 #include "TestResourceLocator.h"
 
 #include <QTest>
+#include <QVersionNumber>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
 #include <KisResourceLocator.h>
+#include <KritaVersionWrapper.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -61,6 +63,11 @@ void TestResourceLocator::testLocator()
         QVERIFY(dstDir.exists());
         QVERIFY(dstDir.entryList(QDir::NoDotAndDotDot) == srcDir.entryList(QDir::NoDotAndDotDot));
     }
+
+    QFile f(dstLocation + '/' + "KRITA_RESOURCE_VERSION");
+    f.open(QFile::ReadOnly);
+    QVersionNumber version = QVersionNumber::fromString(QString::fromUtf8(f.readAll()));
+    QVERIFY(version == QVersionNumber::fromString(KritaVersionWrapper::versionString()));
 }
 
 void TestResourceLocator::cleanupTestCase()

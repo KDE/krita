@@ -27,6 +27,8 @@
 
 #include <kis_debug.h>
 
+#include "KisResourceLocator.h"
+
 const QString dbDriver = "QSQLITE";
 
 const QStringList KisResourceCacheDb::resourceTypes = QStringList() << "BRUSH_TIP"
@@ -144,6 +146,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                                   << "At" << creationDate;
 
                     if (schemaVersion != databaseVersion) {
+                        // XXX: Implement migration
                         warnResources << "Database schema is outdated, migration is needed";
                         schemaIsOutDated = true;
                     }

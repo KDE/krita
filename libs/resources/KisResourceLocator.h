@@ -59,7 +59,17 @@ public:
 
 private:
 
-    LocatorError firstTimeInstallation(const QString &installationResourcesLocation);
+    enum class InitalizationStatus {
+        Unknown,      // We don't know whether Krita has run on this system for this resource location yet
+        Initialized,  // Everything is ready to start synchronizing the database
+        FirstRun,     // Krita hasn't run for this resource location yet
+        FirstUpdate,  // Krita was installed, but it's a version from before the resource locator existed, only user-defined resources are present
+        Updating      // Krita is updating from an older version with a resource locator
+    };
+
+    LocatorError firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation);
+    LocatorError synchronizeDb();
+
 
     class Private;
     QScopedPointer<Private> d;

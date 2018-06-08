@@ -24,12 +24,14 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QVersionNumber>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
 
+#include <KritaVersionWrapper.h>
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
 
@@ -65,6 +67,8 @@ KisResourceLocator::~KisResourceLocator()
 
 KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &installationResourcesLocation)
 {
+    InitalizationStatus initalizationStatus = InitalizationStatus::Unknown;
+
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     d->resourceLocation = cfg.readEntry(resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 
@@ -75,6 +79,7 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
             d->errorMessages << i18n("1. Could not create the resource location at %1.", d->resourceLocation);
             return LocatorError::CannotCreateLocation;
         }
+        initalizationStatus = InitalizationStatus::FirstRun;
     }
 
     if (!fi.isWritable()) {
@@ -82,8 +87,25 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
         return LocatorError::LocationReadOnly;
     }
 
-    if (QDir(d->resourceLocation).isEmpty()) {
-        KisResourceLocator::LocatorError res = firstTimeInstallation(installationResourcesLocation);
+    // Check whether we're updating from an older version
+    if (initalizationStatus != InitalizationStatus::FirstRun && !QDir(installationResourcesLocation).entryList().contains("KRITA_RESOURCE_VERSION")) {
+        initalizationStatus = InitalizationStatus::FirstUpdate;
+    }
+    else {
+        QFile fi(installationResourcesLocation + '/' + "KRITA_RESOURCE_VERSION");
+        fi.open(QFile::ReadOnly);
+        QVersionNumber resource_version = QVersionNumber::fromString(QString::fromUtf8(fi.readAll()));
+        QVersionNumber krita_version = QVersionNumber::fromString(KritaVersionWrapper::versionString());
+        if (krita_version > resource_version) {
+            initalizationStatus = InitalizationStatus::Updating;
+        }
+        else {
+            initalizationStatus = InitalizationStatus::Initialized;
+        }
+    }
+
+    if (initalizationStatus != InitalizationStatus::Initialized) {
+        KisResourceLocator::LocatorError res = firstTimeInstallation(initalizationStatus, installationResourcesLocation);
         if (res != LocatorError::Ok) {
             return res;
         }
@@ -97,8 +119,10 @@ QStringList KisResourceLocator::errorMessages() const
     return d->errorMessages;
 }
 
-KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(const QString &installationResourcesLocation)
+KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
 {
+    Q_UNUSED(initalizationStatus);
+
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
         QDir dir(d->resourceLocation + '/' + folder + '/');
         if (!dir.exists()) {
@@ -122,5 +146,15 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(const
         }
     }
 
+    QFile f(installationResourcesLocation + '/' + "KRITA_RESOURCE_VERSION");
+    f.open(QFile::WriteOnly);
+    f.write(KritaVersionWrapper::versionString().toUtf8());
+    f.close();
+
+    return LocatorError::Ok;
+}
+
+KisResourceLocator::LocatorError KisResourceLocator::synchronizeDb()
+{
     return LocatorError::Ok;
 }

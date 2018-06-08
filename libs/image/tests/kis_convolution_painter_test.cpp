@@ -437,4 +437,38 @@ void KisConvolutionPainterTest::testGaussianDetailsFFTW()
     testGaussianDetails(true);
 }
 
+#include "kis_transaction.h"
+
+void KisConvolutionPainterTest::testDilate()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    const QRect imageRect(0,0,256,256);
+    dev->fill(QRect(50,50,100,20), KoColor(Qt::white, cs));
+    dev->fill(QRect(150,50,20,100), KoColor(Qt::white, cs));
+
+    TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "initial");
+
+    KisGaussianKernel::applyDilate(dev, imageRect, 10, QBitArray(), 0);
+
+    TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "dilate10");
+}
+
+void KisConvolutionPainterTest::testErode()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    const QRect imageRect(0,0,256,256);
+    dev->fill(QRect(50,50,100,20), KoColor(Qt::white, cs));
+    dev->fill(QRect(150,50,20,100), KoColor(Qt::white, cs));
+
+    TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "initial");
+
+    KisGaussianKernel::applyErodeU8(dev, imageRect, 5, QBitArray(), 0);
+
+    TestUtil::checkQImage(dev->convertToQImage(0, imageRect), "convolution_painter_test", "dilate", "erode5");
+}
+
 QTEST_MAIN(KisConvolutionPainterTest)

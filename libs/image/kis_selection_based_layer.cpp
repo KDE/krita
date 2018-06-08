@@ -295,25 +295,48 @@ void KisSelectionBasedLayer::setDirty()
 
 QRect KisSelectionBasedLayer::extent() const
 {
-    Q_ASSERT(image());
-    KisImageSP imageSP = image().toStrongRef();
-    if (!imageSP) {
-        return QRect();
+    QRect resultRect;
+
+    if (m_d->selection) {
+        resultRect = m_d->selection->selectedRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            resultRect |= temporaryTarget->extent();
+        }
+
+    } else {
+        KisImageSP image = this->image().toStrongRef();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image, QRect());
+        resultRect = image->bounds();
     }
-    return m_d->selection ?
-           m_d->selection->selectedRect() : imageSP->bounds();
+
+    return resultRect;
 }
 
 QRect KisSelectionBasedLayer::exactBounds() const
 {
-    Q_ASSERT(image());
-    KisImageSP imageSP = image().toStrongRef();
-    if (!imageSP) {
-        return QRect();
+    QRect resultRect;
+
+    if (m_d->selection) {
+        resultRect = m_d->selection->selectedExactRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            resultRect |= temporaryTarget->exactBounds();
+        }
+
+    } else {
+        KisImageSP image = this->image().toStrongRef();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image, QRect());
+        resultRect = image->bounds();
     }
 
-    return m_d->selection ?
-           m_d->selection->selectedExactRect() : imageSP->bounds();
+    return resultRect;
 }
 
 QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)

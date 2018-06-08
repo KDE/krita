@@ -58,6 +58,20 @@ public:
                          qreal coeff,
                          const QBitArray &channelFlags,
                          KoUpdater *progressUpdater);
+
+    static Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> createDilateMatrix(qreal radius);
+
+    static void applyDilate(KisPaintDeviceSP device,
+                            const QRect& rect,
+                            qreal radius,
+                            const QBitArray &channelFlags,
+                            KoUpdater *progressUpdater);
+
+    static void applyErodeU8(KisPaintDeviceSP device,
+                             const QRect& rect,
+                             qreal radius,
+                             const QBitArray &channelFlags,
+                             KoUpdater *progressUpdater);
 };
 
 #endif /* __KIS_GAUSSIAN_KERNEL_H */

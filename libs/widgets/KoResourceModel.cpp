@@ -28,7 +28,7 @@
 #include <math.h>
 
 KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent)
-    : KoResourceModelBase(parent)
+    : QAbstractTableModel(parent)
     , m_resourceAdapter(resourceAdapter)
     , m_columnCount(4)
 {

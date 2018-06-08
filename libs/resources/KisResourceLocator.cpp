@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QList>
 #include <QDir>
+#include <QDirIterator>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QVersionNumber>
@@ -34,6 +35,7 @@
 #include <KritaVersionWrapper.h>
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
+#include "KisResourceCacheDb.h"
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 const QStringList KisResourceLocator::resourceTypeFolders = QStringList()
@@ -109,9 +111,20 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
         if (res != LocatorError::Ok) {
             return res;
         }
+        initalizationStatus = InitalizationStatus::Initialized;
     }
 
-    return LocatorError::Ok;
+    // Add the folder
+    d->storages.append(QSharedPointer<KisResourceStorage>::create(d->resourceLocation));
+
+    // And add bundles and adobe libraries
+    QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
+    QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
+    while (iter.hasNext()) {
+        d->storages.append(QSharedPointer<KisResourceStorage>::create(iter.filePath()));
+    }
+
+    return synchronizeDb();
 }
 
 QStringList KisResourceLocator::errorMessages() const

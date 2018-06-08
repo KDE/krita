@@ -19,18 +19,56 @@
 
 #include "KisResourceStorage.h"
 
+#include <kzip.h>
+
+#include <QFileInfo>
+
 class KisResourceStorage::Private {
 public:
+    QString location;
+    bool valid {false};
+    KisResourceStorage::StorageType storageType {KisResourceStorage::StorageType::Unknown};
 };
 
 
-KisResourceStorage::KisResourceStorage()
+KisResourceStorage::KisResourceStorage(const QString &location)
     : d(new Private())
 {
-
+    d->location = location;
+    QFileInfo fi(d->location);
+    if (fi.isDir()) {
+        d->storageType = StorageType::Folder;
+        d->valid = fi.isWritable();
+    }
+    else {
+        if (d->location.endsWith(".bundle")) {
+            d->storageType = StorageType::Bundle;
+            // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
+            d->valid = (fi.isReadable() && KZip(d->location).open(QIODevice::ReadOnly));
+        }
+        else if (d->location.endsWith(".abr")) {
+            d->storageType = StorageType::AdobeBrushLibrary;
+            d->valid = fi.isReadable();
+        }
+        else if (d->location.endsWith(".asl")) {
+            d->storageType = StorageType::AdobeStyleLibrary;
+            d->valid = fi.isReadable();
+        }
+    }
 }
 
 KisResourceStorage::~KisResourceStorage()
 {
 
+}
+
+KisResourceStorage::StorageType KisResourceStorage::type() const
+{
+    return d->storageType;
+}
+
+
+bool KisResourceStorage::valid() const
+{
+    return d->valid;
 }

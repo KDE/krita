@@ -30,6 +30,7 @@ target_link_libraries(kritaresources
         KF5::ConfigCore
         KF5::CoreAddons
         KF5::I18n
+        KF5::Archive
 )
 
 set_target_properties(kritaresources PROPERTIES

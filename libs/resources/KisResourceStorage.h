@@ -22,6 +22,7 @@
 
 #include <QSharedPointer>
 #include <QScopedPointer>
+#include <QString>
 
 #include <kritaresources_export.h>
 
@@ -34,12 +35,26 @@
 class KRITARESOURCES_EXPORT KisResourceStorage
 {
 public:
-    KisResourceStorage();
+
+    enum class StorageType {
+        Unknown,
+        Folder,
+        Bundle,
+        AdobeBrushLibrary,
+        AdobeStyleLibrary
+    };
+
+    KisResourceStorage(const QString &location);
     ~KisResourceStorage();
+
+    bool valid() const;
+    StorageType type() const;
+
 private:
     class Private;
     QScopedPointer<Private> d;
 };
+
 
 typedef QSharedPointer<KisResourceStorage> KisResourceStorageSP;
 

@@ -42,13 +42,13 @@ const QStringList KisResourceCacheDb::resourceTypes = QStringList() << "BRUSH_TI
                                                                     << "SESSION"
                                                                     << "UNKNOWN";
 
-const QStringList KisResourceCacheDb::originTypes = QStringList() << "INSTALLATION" // Installed by Krita
-                                                                  << "BUNDLE" // Bundle installed by the user
-                                                                  << "ADOBE_LIBRARY" // ABR or ASL or similar Adobe resource library
-                                                                  << "USER"; // Installed or created by the user
+const QStringList KisResourceCacheDb::storageTypes = QStringList() << "FOLDER"
+                                                                  << "BUNDLE"
+                                                                  << "ADOBE_BRUSH_LIBRARY"
+                                                                  << "ADOBE_STYLE_LIBRARY"; // Installed or created by the user
 
 const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
-const QString KisResourceCacheDb::ResourceCacheDbFilename {"resourcecache.sqlite"};
+const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
 const QString KisResourceCacheDb::databaseVersion {"0.0.1"};
 
 
@@ -100,7 +100,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     }
 
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
-    db.setDatabaseName(location + "/" + ResourceCacheDbFilename);
+    db.setDatabaseName(location + "/" + resourceCacheDbFilename);
 
     if (!db.open()) {
         infoResources << "Could not connect to resource cache database";
@@ -189,7 +189,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
         QFile f(":/fill_origin_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
-            Q_FOREACH(const QString &originType, originTypes) {
+            Q_FOREACH(const QString &originType, storageTypes) {
                 QSqlQuery query(sql);
                 query.addBindValue(originType);
                 if (!query.exec()) {

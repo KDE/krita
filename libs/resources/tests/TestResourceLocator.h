@@ -22,19 +22,25 @@
 
 #include <QObject>
 
+#include <KisResourceLocator.h>
+
 class TestResourceLocator : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
-    void testLocator();
+    void testLocatorInitalization();
+    void testLocatorSynchronization();
     void cleanupTestCase();
 private:
 
     bool cleanDstLocation();
 
-    QString srcLocation;
-    QString dstLocation;
+    QString m_srcLocation;
+    QString m_dstLocation;
+
+    KisResourceLocator m_locator;
+
 
 };
 

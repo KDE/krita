@@ -25,39 +25,29 @@
 
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceLoader.h>
+#include <KoResource.h>
 
-class DummyResourceLoader : public KisResourceLoader {
+class Dummy : public KoResource {
 public:
-    DummyResourceLoader()
-        : KisResourceLoader("dummy", QStringList() << "x-application/dummy")
-    {
-        setType("UNKNOWN");
-    }
-
-    QString id() const override
-    {
-        return "dummy";
-    }
-
-    bool load(QIODevice&) override
-    {
-        return true;
-    }
-
-    bool save(QIODevice&) const override
-    {
-        return true;
-    }
-
-
+    Dummy(const QString &f) : KoResource(f) {}
+    bool load() override { return true; }
+    bool loadFromDevice(QIODevice *) override { return true; }
+    bool save() override { return true; }
 };
 
 void TestResourceLoaderRegistry::testRegistry()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
-    QSharedPointer<KisResourceLoader> loader(new DummyResourceLoader);
+
+    KisResourceLoader<Dummy> *loader = new KisResourceLoader<Dummy>("dummy", "dummy", QStringList() << "x-dummy");
     reg->add(loader);
     QVERIFY(reg->count() == 1);
+
+    KisResourceLoaderBase *l2 = reg->get("dummy");
+    QFile f;
+    KoResourceSP res = l2->load("test", f);
+    QVERIFY(res.data());
+    QVERIFY(dynamic_cast<Dummy*>(res.data()));
 }
 
 QTEST_MAIN(TestResourceLoaderRegistry)

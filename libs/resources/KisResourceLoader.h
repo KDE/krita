@@ -36,62 +36,80 @@
  * class that must be implemented by actual resource classes and
  * registered with the KisResourceLoaderRegistry.
  */
-class KRITARESOURCES_EXPORT KisResourceLoader
+class KRITARESOURCES_EXPORT KisResourceLoaderBase
 {
 public:
 
-    KisResourceLoader(const QString &folder, const QStringList &mimetypes);
-    virtual ~KisResourceLoader();
+    KisResourceLoaderBase(const QString &id, const QString &folder, const QStringList &mimetypes)
+    {
+        m_id = id;
+        m_folder = folder;
+        m_mimetypes = mimetypes;
+    }
+
+    virtual ~KisResourceLoaderBase()
+    {
+    }
 
     /**
      * @return the mimetypes this resource can load
      */
-    QStringList mimetypes() const;
+    QStringList mimetypes() const
+    {
+        return m_mimetypes;
+    }
 
     /**
      * @return the folder in the resource storage where resources
      * of this type are located
      */
-    QString folder() const;
+    QString folder() const
+    {
+        return m_folder;
+    }
 
+    QString resourceType() const
+    {
+        return id();
+    }
 
     /// For registration in KisResourceLoaderRegistry
-    virtual QString id() const = 0;
+    QString id() const
+    {
+        return m_id;
+    }
 
     /**
      * Load this resource.
      * @return true if loading the resource succeeded.
      */
-    virtual bool load(QIODevice &dev) = 0;
-
-    /**
-     * Save this resource.
-     *@return true if saving the resource succeeded.
-     */
-    virtual bool save(QIODevice &dev) const = 0;
-
-    QImage thumbnail() const;
-
-    QString name() const;
-
-    KoResourceSP resource() const;
-
-protected:
-
-    void setType(const QString &type);
-
-    void setThumbnail(const QImage &thumbnail);
-
-    void setName(const QString &name);
-
-    void setResource(KoResourceSP resource);
+    virtual KoResourceSP load(const QString &name, QIODevice &dev) { Q_UNUSED(name); Q_UNUSED(dev); return 0; };
 
 private:
+    QString m_id;
+    QString m_folder;
+    QStringList m_mimetypes;
 
-    class Private;
-    QScopedPointer<Private> d;
 };
 
-typedef QSharedPointer<KisResourceLoader> KisResourceLoaderSP;
+template<typename T>
+class KRITARESOURCES_EXPORT KisResourceLoader : public KisResourceLoaderBase {
+public:
+    KisResourceLoader(const QString &id, const QString &folder, const QStringList &mimetypes)
+        : KisResourceLoaderBase(id, folder, mimetypes)
+    {
+    }
+
+    KoResourceSP load(const QString &name, QIODevice &dev) override
+    {
+        QSharedPointer<T> resource = QSharedPointer<T>::create(name);
+        if (resource->loadFromDevice(&dev)) {
+            return resource;
+        }
+        return 0;
+    }
+};
+
+
 
 #endif // KISRESOURCELOADER_H

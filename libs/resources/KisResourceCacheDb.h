@@ -36,9 +36,11 @@ class KRITARESOURCES_EXPORT KisResourceCacheDb
 {
 public:
 
-    static const QString dbLocationKey;
-    static const QString ResourceCacheDbFilename;
-    static const QString databaseVersion;
+    static const QString dbLocationKey; ///< configuration key for the location of the database
+    static const QString resourceCacheDbFilename; ///< filename of the database
+    static const QString databaseVersion; ///< current schema version
+    static const QStringList resourceTypes; ///< all types of resources
+    static const QStringList storageTypes; ///< kinds of places where resources can be stored
 
     /**
      * @brief KisResourceCacheDb create a resource cache database.
@@ -61,9 +63,6 @@ public:
 
 private:
 
-    friend class TestResourceCacheDb;
-    static const QStringList resourceTypes;
-    static const QStringList originTypes;
 
     class Private;
     QScopedPointer<Private> d;

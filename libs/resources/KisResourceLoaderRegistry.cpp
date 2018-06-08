@@ -28,6 +28,7 @@ KisResourceLoaderRegistry::KisResourceLoaderRegistry(QObject *parent)
 
 KisResourceLoaderRegistry::~KisResourceLoaderRegistry()
 {
+    qDeleteAll(values());
 }
 
 KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()

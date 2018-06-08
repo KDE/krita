@@ -29,7 +29,7 @@ void TestResourceCacheDb::initTestCase()
 {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     if (dbLocation.exists()) {
-        QFile(dbLocation.path() + "/" + KisResourceCacheDb::ResourceCacheDbFilename).remove();
+        QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
         dbLocation.rmpath(dbLocation.path());
     }
 }
@@ -70,7 +70,7 @@ void TestResourceCacheDb::testLookupTables()
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();
-    QVERIFY(query.value(0).toInt() == KisResourceCacheDb::originTypes.count());
+    QVERIFY(query.value(0).toInt() == KisResourceCacheDb::storageTypes.count());
 
     r = query.exec("SELECT COUNT(*) FROM resource_types");
     QVERIFY(r);
@@ -82,7 +82,7 @@ void TestResourceCacheDb::testLookupTables()
 void TestResourceCacheDb::cleanupTestCase()
 {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::ResourceCacheDbFilename).remove();
+    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
     Q_ASSERT(res);
     res = dbLocation.rmpath(dbLocation.path());
     Q_ASSERT(res);

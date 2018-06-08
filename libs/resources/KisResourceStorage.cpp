@@ -59,7 +59,6 @@ KisResourceStorage::KisResourceStorage(const QString &location)
 
 KisResourceStorage::~KisResourceStorage()
 {
-
 }
 
 QString KisResourceStorage::location() const
@@ -70,6 +69,16 @@ QString KisResourceStorage::location() const
 KisResourceStorage::StorageType KisResourceStorage::type() const
 {
     return d->storageType;
+}
+
+KoResourceSP KisResourceStorage::resource(const QString &url)
+{
+    return 0;
+}
+
+QVector<KoResourceSP> KisResourceStorage::resources(const QString &resourceType)
+{
+    return QVector<KoResourceSP>();
 }
 
 

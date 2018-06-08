@@ -26,7 +26,7 @@
 
 #include <kritaresources_export.h>
 
-class KRITARESOURCES_EXPORT KisResourceLoaderRegistry : public QObject, public KoGenericRegistry<KisResourceLoaderSP>
+class KRITARESOURCES_EXPORT KisResourceLoaderRegistry : public QObject, public KoGenericRegistry<KisResourceLoaderBase*>
 {
     Q_OBJECT
 public:

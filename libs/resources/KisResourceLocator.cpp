@@ -38,6 +38,8 @@
 #include "KisResourceCacheDb.h"
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
+
+
 const QStringList KisResourceLocator::resourceTypeFolders = QStringList()
         << "tags"
         << "asl"

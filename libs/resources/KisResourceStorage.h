@@ -23,6 +23,10 @@
 #include <QSharedPointer>
 #include <QScopedPointer>
 #include <QString>
+#include <QDateTime>
+
+
+#include <KoResource.h>
 
 #include <kritaresources_export.h>
 
@@ -35,6 +39,11 @@
 class KRITARESOURCES_EXPORT KisResourceStorage
 {
 public:
+
+    struct ResourceItem {
+        QString url;
+        QDateTime lastModified;
+    };
 
     enum class StorageType {
         Unknown,
@@ -50,6 +59,9 @@ public:
     QString location() const;
     bool valid() const;
     StorageType type() const;
+
+    KoResourceSP resource(const QString &url);
+    QVector<KoResourceSP> resources(const QString &resourceType);
 
 private:
     class Private;

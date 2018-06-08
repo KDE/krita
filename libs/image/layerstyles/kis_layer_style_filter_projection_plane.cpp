@@ -80,7 +80,7 @@ QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNode
 
 void KisLayerStyleFilterProjectionPlane::apply(KisPainter *painter, const QRect &rect)
 {
-    m_d->projection.apply(painter->device(), rect);
+    m_d->projection.apply(painter->device(), rect, m_d->environment.data());
 }
 
 KisPaintDeviceList KisLayerStyleFilterProjectionPlane::getLodCapableDevices() const

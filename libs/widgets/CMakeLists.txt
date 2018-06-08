@@ -50,7 +50,6 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
     KoResourceFiltering.cpp
-    KoResourceModelBase.cpp
     KoTitledTabWidget.cpp
 
     KoToolBoxButton.cpp

@@ -26,11 +26,14 @@
 
 #include "kis_painter.h"
 #include "kis_paint_device.h"
+#include "kis_layer_style_filter_environment.h"
 
 
 struct ProjectionStruct {
     KisPaintDeviceSP device;
     QString compositeOpId;
+    quint8 opacity = OPACITY_OPAQUE_U8;
+    QBitArray channelFlags;
 };
 
 typedef QMap<QString, ProjectionStruct> PlanesMap;
@@ -56,7 +59,11 @@ QString KisMultipleProjection::defaultProjectionId()
     return "00_default";
 }
 
-KisPaintDeviceSP KisMultipleProjection::getProjection(const QString &id, const QString &compositeOpId, KisPaintDeviceSP prototype)
+KisPaintDeviceSP KisMultipleProjection::getProjection(const QString &id,
+                                                      const QString &compositeOpId,
+                                                      quint8 opacity,
+                                                      const QBitArray &channelFlags,
+                                                      KisPaintDeviceSP prototype)
 {
     QReadLocker readLocker(&m_d->lock);
 
@@ -64,6 +71,8 @@ KisPaintDeviceSP KisMultipleProjection::getProjection(const QString &id, const Q
 
     if (constIt == m_d->planes.constEnd() ||
         constIt->compositeOpId != compositeOpId ||
+        constIt->opacity != opacity ||
+        constIt->channelFlags != channelFlags ||
         *constIt->device->colorSpace() != *prototype->colorSpace()) {
 
         readLocker.unlock();
@@ -77,12 +86,16 @@ KisPaintDeviceSP KisMultipleProjection::getProjection(const QString &id, const Q
                 plane.device = new KisPaintDevice(prototype->colorSpace());
                 plane.device->prepareClone(prototype);
                 plane.compositeOpId = compositeOpId;
+                plane.opacity = opacity;
+                plane.channelFlags = channelFlags;
                 writeIt = m_d->planes.insert(id, plane);
             } else if (writeIt->compositeOpId != compositeOpId ||
                        *writeIt->device->colorSpace() != *prototype->colorSpace()) {
 
                 writeIt->device->prepareClone(prototype);
                 writeIt->compositeOpId = compositeOpId;
+                writeIt->opacity = opacity;
+                writeIt->channelFlags = channelFlags;
             }
 
             return writeIt->device;
@@ -116,7 +129,7 @@ void KisMultipleProjection::clear(const QRect &rc)
     }
 }
 
-void KisMultipleProjection::apply(KisPaintDeviceSP dstDevice, const QRect &rect)
+void KisMultipleProjection::apply(KisPaintDeviceSP dstDevice, const QRect &rect, KisLayerStyleFilterEnvironment *env)
 {
     QReadLocker readLocker(&m_d->lock);
 
@@ -126,6 +139,7 @@ void KisMultipleProjection::apply(KisPaintDeviceSP dstDevice, const QRect &rect)
     for (; it != end; ++it) {
         KisPainter gc(dstDevice);
         gc.setCompositeOp(it->compositeOpId);
+        env->setupFinalPainter(&gc, it->opacity, it->channelFlags);
         gc.bitBlt(rect.topLeft(), it->device, rect);
     }
 }

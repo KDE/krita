@@ -149,5 +149,60 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
                                   "heavy_labyrinth_top_left_selection"));
 }
 
+void KisFillPainterTest::testPatternFill()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dst = new KisPaintDevice(cs);
+
+    KisPaintDeviceSP pattern = new KisPaintDevice(cs);
+    pattern->fill(QRect(0,0,32,32), KoColor(Qt::red, cs));
+    pattern->fill(QRect(32,32,32,32), KoColor(Qt::red, cs));
+    pattern->fill(QRect(32,0,32,32), KoColor(Qt::yellow, cs));
+    pattern->fill(QRect(0,32,32,32), KoColor(Qt::white, cs));
+
+    const QRect fillRect(-128,-128,384,384);
+    KisFillPainter painter(dst);
+
+
+    { // fill aligned
+        const QRect patternRect = pattern->exactBounds();
+        painter.fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), pattern, patternRect);
+        dst->fill(QRect(0,0,10,10), KoColor(Qt::black, cs));
+
+        QImage resultImage =
+                dst->convertToQImage(0,
+                                     fillRect.x(), fillRect.y(),
+                                     fillRect.width(), fillRect.height());
+
+        QVERIFY(TestUtil::checkQImage(resultImage,
+                                      "fill_painter",
+                                      "patterns_fill_",
+                                      "null_origin"));
+    }
+
+    { // fill with offset
+        dst->clear();
+        pattern->setX(7);
+        pattern->setY(-13);
+
+
+        const QRect patternRect = pattern->exactBounds();
+
+        painter.fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), pattern, patternRect);
+        dst->fill(QRect(0,0,10,10), KoColor(Qt::black, cs));
+
+        QImage resultImage =
+                dst->convertToQImage(0,
+                                     fillRect.x(), fillRect.y(),
+                                     fillRect.width(), fillRect.height());
+
+        QVERIFY(TestUtil::checkQImage(resultImage,
+                                      "fill_painter",
+                                      "patterns_fill_",
+                                      "custom_origin"));
+    }
+
+}
+
 
 QTEST_MAIN(KisFillPainterTest)

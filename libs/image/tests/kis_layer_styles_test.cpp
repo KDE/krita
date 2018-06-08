@@ -113,7 +113,7 @@ void testDropShadowImpl(const TestConfig &config,
 
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
 
-    projection.apply(dst, dstRect);
+    projection.apply(dst, dstRect, &env);
 
     QImage resultImage =
         dst->convertToQImage(0, dstRect);

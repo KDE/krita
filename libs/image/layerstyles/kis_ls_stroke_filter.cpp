@@ -111,15 +111,13 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QString compositeOp = config->blendMode();
     const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
-    KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(), compositeOp, srcDevice);
-    dstDevice->clear(applyRect);
+    KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(),
+                                                    compositeOp,
+                                                    opacityU8,
+                                                    QBitArray(),
+                                                    srcDevice);
 
-    KisPainter gc(dstDevice);
-    gc.setCompositeOp(COMPOSITE_OVER);
-    env->setupFinalPainter(&gc, opacityU8, QBitArray());
-    gc.setSelection(baseSelection);
-
-    gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
+    KisPainter::copyAreaOptimized(applyRect.topLeft(), fillDevice, dstDevice, applyRect, baseSelection);
 }
 
 void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,

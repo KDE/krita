@@ -90,19 +90,21 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
     }
 
     // Check whether we're updating from an older version
-    if (initalizationStatus != InitalizationStatus::FirstRun && !QDir(installationResourcesLocation).entryList().contains("KRITA_RESOURCE_VERSION")) {
-        initalizationStatus = InitalizationStatus::FirstUpdate;
-    }
-    else {
-        QFile fi(installationResourcesLocation + '/' + "KRITA_RESOURCE_VERSION");
-        fi.open(QFile::ReadOnly);
-        QVersionNumber resource_version = QVersionNumber::fromString(QString::fromUtf8(fi.readAll()));
-        QVersionNumber krita_version = QVersionNumber::fromString(KritaVersionWrapper::versionString());
-        if (krita_version > resource_version) {
-            initalizationStatus = InitalizationStatus::Updating;
+    if (initalizationStatus != InitalizationStatus::FirstRun) {
+        QFile fi(d->resourceLocation + '/' + "KRITA_RESOURCE_VERSION");
+        if (!fi.exists()) {
+            initalizationStatus = InitalizationStatus::FirstUpdate;
         }
         else {
-            initalizationStatus = InitalizationStatus::Initialized;
+            fi.open(QFile::ReadOnly);
+            QVersionNumber resource_version = QVersionNumber::fromString(QString::fromUtf8(fi.readAll()));
+            QVersionNumber krita_version = QVersionNumber::fromString(KritaVersionWrapper::versionString());
+            if (krita_version > resource_version) {
+                initalizationStatus = InitalizationStatus::Updating;
+            }
+            else {
+                initalizationStatus = InitalizationStatus::Initialized;
+            }
         }
     }
 
@@ -121,10 +123,11 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
     QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
     QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
     while (iter.hasNext()) {
+        iter.next();
         d->storages.append(QSharedPointer<KisResourceStorage>::create(iter.filePath()));
     }
 
-    return synchronizeDb();
+    return LocatorError::Ok;
 }
 
 QStringList KisResourceLocator::errorMessages() const
@@ -139,7 +142,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
         QDir dir(d->resourceLocation + '/' + folder + '/');
         if (!dir.exists()) {
-            if (!dir.mkpath(dir.path())) {
+            if (!QDir().mkpath(d->resourceLocation + '/' + folder + '/')) {
                 d->errorMessages << i18n("3. Could not create the resource location at %1.", dir.path());
                 return LocatorError::CannotCreateLocation;
             }
@@ -147,9 +150,9 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
     }
 
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
-        QDir dir(installationResourcesLocation + "/share/krita/" + folder + '/');
+        QDir dir(installationResourcesLocation + '/' + folder + '/');
         if (dir.exists()) {
-            Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable | QDir::NoDotAndDotDot)) {
+            Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable)) {
                 QFile f(dir.canonicalPath() + '/'+ entry);
                 bool r = f.copy(d->resourceLocation + '/' + folder + '/' + entry);
                 if (!r) {
@@ -159,7 +162,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
         }
     }
 
-    QFile f(installationResourcesLocation + '/' + "KRITA_RESOURCE_VERSION");
+    QFile f(d->resourceLocation + '/' + "KRITA_RESOURCE_VERSION");
     f.open(QFile::WriteOnly);
     f.write(KritaVersionWrapper::versionString().toUtf8());
     f.close();
@@ -167,7 +170,10 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
     return LocatorError::Ok;
 }
 
-KisResourceLocator::LocatorError KisResourceLocator::synchronizeDb()
+bool KisResourceLocator::synchronizeDb()
 {
-    return LocatorError::Ok;
+    Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
+        qDebug() << "Storage" << storage->location() << storage->valid();
+    }
+    return true;
 }

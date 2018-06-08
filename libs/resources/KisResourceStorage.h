@@ -47,6 +47,7 @@ public:
     KisResourceStorage(const QString &location);
     ~KisResourceStorage();
 
+    QString location() const;
     bool valid() const;
     StorageType type() const;
 

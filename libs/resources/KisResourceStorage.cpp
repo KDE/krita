@@ -62,6 +62,11 @@ KisResourceStorage::~KisResourceStorage()
 
 }
 
+QString KisResourceStorage::location() const
+{
+    return d->location;
+}
+
 KisResourceStorage::StorageType KisResourceStorage::type() const
 {
     return d->storageType;

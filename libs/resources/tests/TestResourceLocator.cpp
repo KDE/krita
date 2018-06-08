@@ -21,6 +21,7 @@
 
 #include <QTest>
 #include <QVersionNumber>
+#include <QDirIterator>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -37,8 +38,6 @@
 #error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
 #endif
 
-
-
 void TestResourceLocator::initTestCase()
 {
     srcLocation = QString(FILES_DATA_DIR);
@@ -52,7 +51,7 @@ void TestResourceLocator::initTestCase()
 void TestResourceLocator::testLocator()
 {
     KisResourceLocator locator;
-    KisResourceLocator::LocatorError r = locator.initialize(dstLocation);
+    KisResourceLocator::LocatorError r = locator.initialize(srcLocation);
     if (!locator.errorMessages().isEmpty()) qDebug() << locator.errorMessages();
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(dstLocation).exists());
@@ -61,13 +60,17 @@ void TestResourceLocator::testLocator()
         QDir srcDir(srcLocation + '/' + folder + '/');
 
         QVERIFY(dstDir.exists());
-        QVERIFY(dstDir.entryList(QDir::NoDotAndDotDot) == srcDir.entryList(QDir::NoDotAndDotDot));
+        QVERIFY(dstDir.entryList(QDir::Files | QDir::NoDotAndDotDot) == srcDir.entryList(QDir::Files | QDir::NoDotAndDotDot));
     }
 
     QFile f(dstLocation + '/' + "KRITA_RESOURCE_VERSION");
+    QVERIFY(f.exists());
     f.open(QFile::ReadOnly);
     QVersionNumber version = QVersionNumber::fromString(QString::fromUtf8(f.readAll()));
     QVERIFY(version == QVersionNumber::fromString(KritaVersionWrapper::versionString()));
+
+    locator.synchronizeDb();
+
 }
 
 void TestResourceLocator::cleanupTestCase()
@@ -78,17 +81,27 @@ void TestResourceLocator::cleanupTestCase()
 bool TestResourceLocator::cleanDstLocation()
 {
     if (QDir(dstLocation).exists()) {
-        Q_FOREACH(const QString &folder, KisResourceLocator::resourceTypeFolders) {
-            QDir dir(dstLocation + '/' + folder + '/');
-            if (dir.exists()) {
-                Q_FOREACH(const QString &entry, dir.entryList(QDir::NoDotAndDotDot)) {
-                    QFile f(dir.canonicalPath() + '/' + entry);
-                    f.remove();
-                }
+        {
+            QDirIterator iter(dstLocation, QStringList() << "*", QDir::Files, QDirIterator::Subdirectories);
+            while (iter.hasNext()) {
+                iter.next();
+                QFile f(iter.filePath());
+                bool r = f.remove();
+                //qDebug() << (r ? "Removed" : "Failed to remove") << iter.filePath();
             }
         }
+        {
+            QDirIterator iter(dstLocation, QStringList() << "*", QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+            while (iter.hasNext()) {
+                iter.next();
+                bool r = QDir(iter.filePath()).rmpath(iter.filePath());
+                //qDebug() << (r ? "Removed" : "Failed to remove") << iter.filePath();
+            }
+        }
+
+        return QDir().rmpath(dstLocation);
     }
-    return QDir().rmpath(dstLocation);
+    return true;
 }
 
 QTEST_MAIN(TestResourceLocator)

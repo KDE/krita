@@ -57,6 +57,8 @@ public:
 
     QStringList errorMessages() const;
 
+    bool synchronizeDb();
+
 private:
 
     enum class InitalizationStatus {
@@ -64,11 +66,11 @@ private:
         Initialized,  // Everything is ready to start synchronizing the database
         FirstRun,     // Krita hasn't run for this resource location yet
         FirstUpdate,  // Krita was installed, but it's a version from before the resource locator existed, only user-defined resources are present
-        Updating      // Krita is updating from an older version with a resource locator
+        Updating      // Krita is updating from an older version with resource locator
     };
 
     LocatorError firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation);
-    LocatorError synchronizeDb();
+
 
 
     class Private;

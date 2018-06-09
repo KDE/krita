@@ -21,6 +21,7 @@ class TenBrushesExtension(krita.Extension):
         self.actions = []
         self.buttons = []
         self.selectedPresets = []
+        self.oldPreset = None
 
     def setup(self):
         self.readSettings()
@@ -63,7 +64,12 @@ class TenBrushesExtension(krita.Extension):
     def activatePreset(self):
         allPresets = Application.resources("preset")
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
-            Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
+            currentPreset = Application.activeWindow().views()[0].currentBrushPreset()
+            if self.sender().preset == currentPreset.name():
+                Application.activeWindow().views()[0].activateResource(self.oldPreset)
+            else:
+                self.oldPreset = Application.activeWindow().views()[0].currentBrushPreset()
+                Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
 
 
 Scripter.addExtension(TenBrushesExtension(Application))

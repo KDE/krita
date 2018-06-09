@@ -105,24 +105,6 @@ int KisLayerStyleFilterEnvironment::currentLevelOfDetail() const
         m_d->sourceLayer->original()->defaultBounds()->currentLevelOfDetail() : 0;
 }
 
-QPainterPath KisLayerStyleFilterEnvironment::layerOutlineCache() const
-{
-    // TODO: make it really cachable!
-    Q_ASSERT(m_d->sourceLayer);
-    KisPaintDeviceSP srcDevice = m_d->sourceLayer->projection();
-    QRect srcRect = srcDevice->exactBounds();
-    if (srcRect.isEmpty()) return QPainterPath();
-
-    KisSelectionSP baseSelection =
-        KisLsUtils::selectionFromAlphaChannel(srcDevice, srcRect);
-    KisPixelSelectionSP selection = baseSelection->pixelSelection();
-
-    // needs no 'invalidate' call
-    selection->recalculateOutlineCache();
-
-    return selection->outlineCache();
-}
-
 void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,
                                                        quint8 opacity,
                                                        const QBitArray &channelFlags) const

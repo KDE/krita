@@ -27,8 +27,9 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
-#include <KisResourceLocator.h>
 #include <KritaVersionWrapper.h>
+
+#include <KisResourceLocator.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -40,6 +41,7 @@
 
 void TestResourceLocator::initTestCase()
 {
+    m_locator = KisResourceLocator::instance();
     m_srcLocation = QString(FILES_DATA_DIR);
     QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());
     m_dstLocation = QString(FILES_DEST_DIR);
@@ -50,8 +52,8 @@ void TestResourceLocator::initTestCase()
 
 void TestResourceLocator::testLocatorInitalization()
 {
-    KisResourceLocator::LocatorError r = m_locator.initialize(m_srcLocation);
-    if (!m_locator.errorMessages().isEmpty()) qDebug() << m_locator.errorMessages();
+    KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
+    if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
     Q_FOREACH(const QString &folder, KisResourceLocator::resourceTypeFolders) {
@@ -71,7 +73,7 @@ void TestResourceLocator::testLocatorInitalization()
 
 void TestResourceLocator::testLocatorSynchronization()
 {
-    QVERIFY(m_locator.synchronizeDb());
+    QVERIFY(m_locator->synchronizeDb());
 }
 
 void TestResourceLocator::cleanupTestCase()

@@ -19,6 +19,7 @@
 
 #include "KisResourceLocator.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QList>
 #include <QDir>
@@ -60,9 +61,19 @@ public:
     QStringList errorMessages;
 };
 
-KisResourceLocator::KisResourceLocator()
-    : d(new Private())
+KisResourceLocator::KisResourceLocator(QObject *parent)
+    : QObject(parent)
+    , d(new Private())
 {
+}
+
+KisResourceLocator *KisResourceLocator::instance()
+{
+    KisResourceLocator *locator = qApp->findChild<KisResourceLocator *>(QString());
+    if (!locator) {
+        locator = new KisResourceLocator(qApp);
+    }
+    return locator;
 }
 
 KisResourceLocator::~KisResourceLocator()

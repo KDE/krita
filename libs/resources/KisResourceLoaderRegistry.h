@@ -32,7 +32,7 @@ class KRITARESOURCES_EXPORT KisResourceLoaderRegistry : public QObject, public K
 public:
     ~KisResourceLoaderRegistry() override;
 
-    static KisResourceLoaderRegistry* instance();
+    static KisResourceLoaderRegistry *instance();
 
 private:
 

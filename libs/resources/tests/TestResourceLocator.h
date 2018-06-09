@@ -22,7 +22,8 @@
 
 #include <QObject>
 
-#include <KisResourceLocator.h>
+class KisResourceLocator;
+
 
 class TestResourceLocator : public QObject
 {
@@ -39,7 +40,7 @@ private:
     QString m_srcLocation;
     QString m_dstLocation;
 
-    KisResourceLocator m_locator;
+    KisResourceLocator *m_locator;
 
 
 };

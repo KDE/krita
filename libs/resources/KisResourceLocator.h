@@ -20,6 +20,7 @@
 #ifndef KISRESOURCELOCATOR_H
 #define KISRESOURCELOCATOR_H
 
+#include <QObject>
 #include <QScopedPointer>
 #include <QStringList>
 #include <QString>
@@ -31,14 +32,16 @@
  * The KisResourceLocator class is used to find resources of
  * a certain type.
  */
-class KRITARESOURCES_EXPORT KisResourceLocator
+class KRITARESOURCES_EXPORT KisResourceLocator : public QObject
 {
+    Q_OBJECT
 public:
 
     static const QString resourceLocationKey;
     static const QStringList resourceTypeFolders;
 
-    KisResourceLocator();
+    static KisResourceLocator *instance();
+
     ~KisResourceLocator();
 
     enum class LocatorError {
@@ -60,6 +63,10 @@ public:
     bool synchronizeDb();
 
 private:
+
+    KisResourceLocator(QObject *parent);
+    KisResourceLocator(const KisResourceLocator&);
+    KisResourceLocator operator=(const KisResourceLocator&);
 
     enum class InitalizationStatus {
         Unknown,      // We don't know whether Krita has run on this system for this resource location yet

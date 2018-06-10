@@ -121,7 +121,7 @@ void FreehandStrokeBenchmark::initTestCase()
 
 void FreehandStrokeBenchmark::testDefaultTip()
 {
-//    benchmarkBrush("testing_1000px_auto_deafult.kpp");
+    benchmarkBrush("testing_1000px_auto_deafult.kpp");
 }
 
 void FreehandStrokeBenchmark::testSoftTip()
@@ -131,7 +131,7 @@ void FreehandStrokeBenchmark::testSoftTip()
 
 void FreehandStrokeBenchmark::testGaussianTip()
 {
-    benchmarkBrush("testing_1000px_auto_gaussian.kpp");
+//    benchmarkBrush("testing_1000px_auto_gaussian.kpp");
 }
 
 void FreehandStrokeBenchmark::testStampTip()

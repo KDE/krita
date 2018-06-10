@@ -24,6 +24,9 @@
 #include "kis_assert.h"
 #include "kis_global.h"
 
+#include "kis_debug.h"
+#include <QThread>
+
 namespace {
 
 inline bool addTileToMap(int index, QMap<int, int> *map)
@@ -76,7 +79,7 @@ void KisTiledExtentManager::notifyTileAdded(int col, int row)
     QMutexLocker l(&m_mutex);
 
     bool needsUpdateExtent = false;
-
+    qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(row) << ppVar(col);
     needsUpdateExtent |= addTileToMap(col, &m_colMap);
     needsUpdateExtent |= addTileToMap(row, &m_rowMap);
 
@@ -90,7 +93,7 @@ void KisTiledExtentManager::notifyTileRemoved(int col, int row)
     QMutexLocker l(&m_mutex);
 
     bool needsUpdateExtent = false;
-
+    qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(row) << ppVar(col);
     needsUpdateExtent |= removeTileFromMap(col, &m_colMap);
     needsUpdateExtent |= removeTileFromMap(row, &m_rowMap);
 

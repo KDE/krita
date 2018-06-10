@@ -57,7 +57,8 @@ public:
 class KisCrossChannelFilterConfiguration : public KisMultiChannelFilterConfiguration
 {
 public:
-    KisCrossChannelFilterConfiguration(int n);
+    KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs);
+
     ~KisCrossChannelFilterConfiguration() override;
 
     const QVector<int> driverChannels() const;

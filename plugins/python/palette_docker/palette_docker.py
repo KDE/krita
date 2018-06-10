@@ -62,6 +62,11 @@ class Palette_Docker(DockWidget):
         self.colorComboBox = QComboBox()
         self.colorList = list()
         buttonLayout.addWidget(self.colorComboBox)
+        self.bnSetColor = QToolButton()
+        self.bnSetColor.setText("Set")
+        self.bnSetColor.clicked.connect(self.slot_get_color_from_combobox)
+        buttonLayout.addWidget(self.bnSetColor)
+        
         self.addEntry = QAction(self)
         self.addEntry.setIconText("+")
         self.addEntry.triggered.connect(self.slot_add_entry)
@@ -120,7 +125,6 @@ class Palette_Docker(DockWidget):
 
     @pyqtSlot('PaletteEntry')
     def slot_swatchSelected(self, entry):
-        print("entry " + entry.name())
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
                 name = entry.name()
@@ -171,7 +175,7 @@ class Palette_Docker(DockWidget):
         self.colorComboBox.completer().setCompletionMode(QCompleter.PopupCompletion)
         self.colorComboBox.completer().setCaseSensitivity(False)
         self.colorComboBox.completer().setFilterMode(Qt.MatchContains)
-        self.colorComboBox.currentIndexChanged.connect(self.slot_get_color_from_combobox)
+        
 
     def slot_get_color_from_combobox(self):
         if self.currentPalette is not None:
@@ -228,7 +232,6 @@ class Palette_Docker(DockWidget):
             Resource = Application.resources("palette")[self.cmb_palettes.currentText()]
             Resource.setName(paletteName.text())
             self.currentPalette = Palette(Resource)
-            print(paletteColumns.value())
             self.currentPalette.setColumnCount(paletteColumns.value())
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()

@@ -64,7 +64,7 @@ public:
 
     void forceRepaint() override
     {
-        m_layer->signalUpdate(m_layer->extent());
+        m_layer->signalUpdate(m_layer->boundingImageRect());
     }
 
     void rerenderAfterBeingInvisible() override {}
@@ -123,6 +123,11 @@ void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapt
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
     emit sigUpdateCanvas(rect);
+}
+
+QRectF KisReferenceImagesLayer::boundingImageRect() const
+{
+    return converter()->documentToView(boundingRect());
 }
 
 QColor KisReferenceImagesLayer::getPixel(QPointF position) const

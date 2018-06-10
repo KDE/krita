@@ -53,7 +53,7 @@ void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoS
     // Add code here to initialize your tool when it got activated
     DefaultTool::activate(toolActivation, shapes);
 
-    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
     connect(layer, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 }
 
@@ -80,13 +80,13 @@ void ToolReferenceImages::addReferenceImage()
     if (!QFileInfo(filename).exists()) return;
 
     auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter());
-    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
     kisCanvas->imageView()->document()->addCommand(layer->addReferenceImage(reference));
 }
 
 void ToolReferenceImages::removeAllReferenceImages()
 {
-    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
     canvas()->addCommand(canvas()->shapeController()->removeShapes(layer->shapes()));
 }
 
@@ -161,7 +161,7 @@ void ToolReferenceImages::saveReferenceImages()
 
 void ToolReferenceImages::slotSelectionChanged()
 {
-    KisReferenceImagesLayer *layer = getOrCreteReferenceImagesLayer();
+    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
     m_optionsWidget->selectionChanged(layer->shapeManager()->selection());
     updateActions();
 }
@@ -204,12 +204,12 @@ KisReferenceImagesLayer *ToolReferenceImages::referenceImagesLayer() const
     return document->referenceImagesLayer();
 }
 
-KisReferenceImagesLayer *ToolReferenceImages::getOrCreteReferenceImagesLayer()
+KisReferenceImagesLayer *ToolReferenceImages::getOrCreateReferenceImagesLayer()
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KisDocument *document = kisCanvas->imageView()->document();
 
-    return document->createReferenceImagesLayer().data();
+    return document->getOrCreateReferenceImagesLayer().data();
 }
 
 KoSelection *ToolReferenceImages::koSelection() const

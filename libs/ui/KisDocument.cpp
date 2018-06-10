@@ -1702,7 +1702,7 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     d->assistants = value;
 }
 
-KisSharedPtr<KisReferenceImagesLayer> KisDocument::createReferenceImagesLayer(KisImageSP targetImage)
+KisSharedPtr<KisReferenceImagesLayer> KisDocument::getOrCreateReferenceImagesLayer(KisImageSP targetImage)
 {
     if (!d->referenceImagesLayer) {
         if (targetImage.isNull()) targetImage = d->image;
@@ -1714,9 +1714,15 @@ KisSharedPtr<KisReferenceImagesLayer> KisDocument::createReferenceImagesLayer(Ki
     return d->referenceImagesLayer;
 }
 
+// TODO: change signature to return a shared pointer
 KisReferenceImagesLayer *KisDocument::referenceImagesLayer() const
 {
     return d->referenceImagesLayer.data();
+}
+
+void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+{
+    d->referenceImagesLayer = layer;
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)

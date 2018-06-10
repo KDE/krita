@@ -386,7 +386,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
         auto *referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
         if (referencesLayer) {
             QColor color = referencesLayer->getPixel(imagePoint);
-            if (color.isValid() && !color.alpha() == 0) {
+            if (color.isValid() && color.alpha() != 0) {
                 slotColorPickingFinished(KoColor(color, image()->colorSpace()));
                 return;
             }
@@ -721,27 +721,28 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     KisConfig cfg;
     KisPaintOpSettings::OutlineMode outlineMode;
-    outlineMode = KisPaintOpSettings::CursorNoOutline;
 
     if (isOutlineEnabled() &&
         (mode() == KisTool::GESTURE_MODE ||
          ((cfg.newOutlineStyle() == OUTLINE_FULL ||
            cfg.newOutlineStyle() == OUTLINE_CIRCLE ||
-           cfg.newOutlineStyle() == OUTLINE_TILT ||
-           cfg.newOutlineStyle() == OUTLINE_COLOR ) &&
+           cfg.newOutlineStyle() == OUTLINE_TILT) &&
           ((mode() == HOVER_MODE) ||
            (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
 
-        if(cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
-            outlineMode = KisPaintOpSettings::CursorIsCircleOutline;
+        outlineMode.isVisible = true;
+
+        if (cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
+            outlineMode.forceCircle = true;
         } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
-            outlineMode = KisPaintOpSettings::CursorTiltOutline;
-        } else if(cfg.newOutlineStyle() == OUTLINE_COLOR) {
-            outlineMode = KisPaintOpSettings::CursorColorOutline;
+            outlineMode.forceCircle = true;
+            outlineMode.showTiltDecoration = true;
         } else {
-            outlineMode = KisPaintOpSettings::CursorIsOutline;
+            // noop
         }
     }
+
+    outlineMode.forceFullSize = cfg.forceAlwaysFullSizedOutline();
 
     m_outlineDocPoint = outlineDocPoint;
     m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);

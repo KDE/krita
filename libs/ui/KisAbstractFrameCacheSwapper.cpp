@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,22 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "KisAbstractFrameCacheSwapper.h"
 
-#include "kis_resource_server_provider_test.h"
-
-#include <QTest>
-#include "KisResourceServerProvider.h"
-
-void KisResourceServerProviderTest::testFetchResource()
+KisAbstractFrameCacheSwapper::~KisAbstractFrameCacheSwapper()
 {
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-    Q_UNUSED(rserver);
-    // get a known preset by name
-    // modify it
-    // get it a second time
-    // check...
-
 }
-
-
-QTEST_MAIN(KisResourceServerProviderTest)

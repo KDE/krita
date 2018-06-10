@@ -34,7 +34,7 @@ public:
 
     KisHairyPaintOpSettings();
     using KisBrushBasedPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
 
 };
 

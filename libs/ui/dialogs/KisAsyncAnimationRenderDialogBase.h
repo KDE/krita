@@ -87,6 +87,17 @@ public:
     virtual Result regenerateRange(KisViewManager *viewManager);
 
     /**
+     * Set area of image that will be regenerated. If \p roi is empty,
+     * full area of the image is regenerated.
+     */
+    void setRegionOfInterest(const QRegion &roi);
+
+    /**
+     * @see setRegionOfInterest()
+     */
+    QRegion regionOfInterest() const;
+
+    /**
      * @brief setting batch mode to true will prevent any dialogs or message boxes from
      *        showing on screen. Please take it into account that using batch mode prevents
      *        some potentially dangerous recovery execution paths (e.g. delete the existing

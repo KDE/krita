@@ -139,12 +139,41 @@ struct KisPaintingAssistant::Private {
         }
     } cachedTransform;
 
-    QColor assistantColor;
+
+    QColor assistantGlobalColor;     // color to paint with if a custom color is not set
+
+    bool useCustomColor = false;
+    QColor assistantCustomColor;
 };
 
-void KisPaintingAssistant::setAssistantColor(QColor color)
+void KisPaintingAssistant::setAssistantGlobalColor(QColor color)
 {
-    d->assistantColor = color;
+    d->assistantGlobalColor = color;
+}
+
+bool KisPaintingAssistant::useCustomColor()
+{
+    return d->useCustomColor;
+}
+
+void KisPaintingAssistant::setUseCustomColor(bool useCustomColor)
+{
+    d->useCustomColor = useCustomColor;
+}
+
+void KisPaintingAssistant::setAssistantCustomColor(QColor color)
+{
+    d->assistantCustomColor = color;
+}
+
+QColor KisPaintingAssistant::assistantsGlobalColor()
+{
+    return d->assistantGlobalColor;
+}
+
+QColor KisPaintingAssistant::assistantCustomColor()
+{
+    return d->assistantCustomColor;
 }
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
@@ -168,13 +197,16 @@ void KisPaintingAssistant::setSnappingActive(bool set)
 
 void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
-    int alpha = d->assistantColor.alpha();
+
+    QColor paintingColor = useCustomColor() ? assistantCustomColor() : d->assistantGlobalColor;
+    int alpha = paintingColor.alpha();
+
     if (!isSnappingOn) {
-        alpha = d->assistantColor.alpha() *0.2;
+        alpha = alpha *0.2;
     }
 
     painter.save();
-    QPen pen_a(QColor(d->assistantColor.red(), d->assistantColor.green(), d->assistantColor.blue(), alpha), 2);
+    QPen pen_a(QColor(paintingColor.red(), paintingColor.green(), paintingColor.blue(), alpha), 2);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
@@ -183,8 +215,10 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
 
 void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
 {
+    QColor paintingColor = useCustomColor() ? assistantCustomColor() : d->assistantGlobalColor;
+
     painter.save();
-    QPen pen_a(d->assistantColor, 1);
+    QPen pen_a(paintingColor, 1);
     pen_a.setStyle(Qt::SolidLine);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
@@ -330,6 +364,9 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeStartElement("assistant");
     xml.writeAttribute("type",d->id);
     xml.writeAttribute("active", QString::number(d->isSnappingActive));
+    xml.writeAttribute("useCustomColor", QString::number(d->useCustomColor));
+    xml.writeAttribute("customColor",  KisPaintingAssistantsDecoration::qColorToQString(d->assistantCustomColor));
+
 
 
     saveCustomXml(&xml); // if any specific assistants have custom XML data to save to
@@ -370,8 +407,29 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
             if (xml.name() == "assistant") {
+
                 QStringRef active = xml.attributes().value("active");
-                d->isSnappingActive = (active != "0");
+                setSnappingActive( (active != "0")  );
+
+                // load custom shared assistant properties
+                if ( xml.attributes().hasAttribute("useCustomColor")) {
+                    QStringRef useCustomColor = xml.attributes().value("useCustomColor");
+
+                    bool usingColor = false;
+                    if (useCustomColor.toString() == "1") {
+                        usingColor = true;
+                    }
+
+                    setUseCustomColor(usingColor);
+                }
+
+                if ( xml.attributes().hasAttribute("customColor")) {
+                    QStringRef customColor = xml.attributes().value("customColor");
+
+                    setAssistantCustomColor( KisPaintingAssistantsDecoration::qStringToQColor(customColor.toString()) );
+
+                }
+
             }
 
             loadCustomXml(&xml);

@@ -32,6 +32,13 @@ ecm_add_tests(
     LINK_LIBRARIES kritaui kritaimage Qt5::Test
 )
 
+ecm_add_test( KisFrameSerializerTest.cpp
+    TEST_NAME krita-ui-KisFrameSerializerTest
+    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
+
+ecm_add_test( KisFrameCacheStoreTest.cpp
+    TEST_NAME krita-ui-KisFrameCacheStoreTest
+    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 ecm_add_test( kis_selection_decoration_test.cpp ../../../sdk/tests/stroke_testing_utils.cpp
     TEST_NAME krita-ui-KisSelectionDecorationTest
@@ -51,10 +58,6 @@ ecm_add_test( kis_model_index_converter_test.cpp ../../../sdk/tests/testutil.cpp
 
 ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
     TEST_NAME krita-ui-KisCategorizedListModelTest
-    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
-
-ecm_add_test( kis_resource_server_provider_test.cpp modeltest.cpp
-    TEST_NAME krita-ui-KisResourceServerProviderTest
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.cpp

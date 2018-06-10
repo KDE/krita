@@ -56,11 +56,19 @@
 
 // KisCrossChannelFilterConfiguration
 
-KisCrossChannelFilterConfiguration::KisCrossChannelFilterConfiguration(int channelCount)
-        : KisMultiChannelFilterConfiguration(channelCount, "crosschannel", 1)
+KisCrossChannelFilterConfiguration::KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs)
+    : KisMultiChannelFilterConfiguration(channelCount, "crosschannel", 1)
 {
     init();
-    m_driverChannels.resize(channelCount);
+
+    int defaultDriver = 0;
+
+    if (cs) {
+        QVector<VirtualChannelInfo> virtualChannels = KisMultiChannelFilter::getVirtualChannels(cs);
+        defaultDriver = qMax(0, KisMultiChannelFilter::findChannel(virtualChannels, VirtualChannelInfo::LIGHTNESS));
+    }
+
+    m_driverChannels.fill(defaultDriver, channelCount);
 }
 
 KisCrossChannelFilterConfiguration::~KisCrossChannelFilterConfiguration()
@@ -119,7 +127,6 @@ KisCubicCurve KisCrossChannelFilterConfiguration::getDefaultCurve()
     return KisCubicCurve(points);
 }
 
-
 KisCrossChannelConfigWidget::KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisMultiChannelConfigWidget(parent, dev, f)
 {
@@ -152,11 +159,27 @@ void KisCrossChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_driverChannels = cfg->driverChannels();
 
     KisMultiChannelConfigWidget::setConfiguration(config);
+
+    // Show the first channel with a curve, or saturation by default
+
+    int initialChannel = -1;
+    for (int i = 0; i < m_virtualChannels.size(); i++) {
+        if (!m_curves[i].isConstant(0.5)) {
+            initialChannel = i;
+            break;
+        }
+    }
+
+    if (initialChannel < 0) {
+        initialChannel = qMax(0, KisMultiChannelFilter::findChannel(m_virtualChannels, VirtualChannelInfo::SATURATION));
+    }
+
+    setActiveChannel(initialChannel);
 }
 
 KisPropertiesConfigurationSP KisCrossChannelConfigWidget::configuration() const
 {
-    auto *cfg = new KisCrossChannelFilterConfiguration(m_virtualChannels.count());
+    auto *cfg = new KisCrossChannelFilterConfiguration(m_virtualChannels.count(), m_dev->colorSpace());
     KisPropertiesConfigurationSP cfgSP = cfg;
 
     m_curves[m_activeVChannel] = m_page->curveWidget->curve();
@@ -177,7 +200,7 @@ void KisCrossChannelConfigWidget::updateChannelControls()
 
 KisPropertiesConfigurationSP KisCrossChannelConfigWidget::getDefaultConfiguration()
 {
-    return new KisCrossChannelFilterConfiguration(m_virtualChannels.size());
+    return new KisCrossChannelFilterConfiguration(m_virtualChannels.size(), m_dev->colorSpace());
 }
 
 void KisCrossChannelConfigWidget::slotDriverChannelSelected(int index)
@@ -205,7 +228,7 @@ KisConfigWidget * KisCrossChannelFilter::createConfigurationWidget(QWidget *pare
 
 KisFilterConfigurationSP  KisCrossChannelFilter::factoryConfiguration() const
 {
-    return new KisCrossChannelFilterConfiguration(0);
+    return new KisCrossChannelFilterConfiguration(0, nullptr);
 }
 
 int mapChannel(const VirtualChannelInfo &channel) {

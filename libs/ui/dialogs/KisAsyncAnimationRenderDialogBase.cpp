@@ -97,6 +97,7 @@ struct KisAsyncAnimationRenderDialogBase::Private
     QList<int> framesInProgress;
     int dirtyFramesCount = 0;
     Result result = RenderComplete;
+    QRegion regionOfInterest;
 
     int numDirtyFramesLeft() const {
         return stillDirtyFrames.size() + framesInProgress.size();
@@ -223,6 +224,16 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
     return m_d->result;
 }
 
+void KisAsyncAnimationRenderDialogBase::setRegionOfInterest(const QRegion &roi)
+{
+    m_d->regionOfInterest = roi;
+}
+
+QRegion KisAsyncAnimationRenderDialogBase::regionOfInterest() const
+{
+    return m_d->regionOfInterest;
+}
+
 void KisAsyncAnimationRenderDialogBase::slotFrameCompleted(int frame)
 {
     Q_UNUSED(frame);
@@ -271,7 +282,7 @@ void KisAsyncAnimationRenderDialogBase::tryInitiateFrameRegeneration()
                 const int currentDirtyFrame = m_d->stillDirtyFrames.takeFirst();
 
                 initializeRendererForFrame(pair.renderer.get(), pair.image, currentDirtyFrame);
-                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame);
+                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame, m_d->regionOfInterest);
                 hadWorkOnPreviousCycle = true;
                 m_d->framesInProgress.append(currentDirtyFrame);
                 break;

@@ -89,9 +89,11 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 
     while (it.nextPixel()) {
         if (device->colorSpace()->intensity8(it.oldRawData()) > threshold) {
+            white.setOpacity(device->colorSpace()->opacityU8(it.oldRawData()));
             memcpy(it.rawData(), white.data(), pixelSize);
         }
         else {
+            black.setOpacity(device->colorSpace()->opacityU8(it.oldRawData()));
             memcpy(it.rawData(), black.data(), pixelSize);
         }
     }

@@ -67,7 +67,7 @@ void KisPainter::Private::applyDevice(const QRect &applyRect,
             const int dabX = dstX - dabRect.x();
             const int dabY = dstY - dabRect.y();
 
-            localParamInfo.srcRowStart   = dab.device->constData() + dabX * pixelSize + dabY * dabRowStride;
+            localParamInfo.srcRowStart   = dab.device->constData() + dabX * srcPixelSize + dabY * dabRowStride;
             localParamInfo.srcRowStride  = dabRowStride;
             localParamInfo.setOpacityAndAverage(dab.opacity, dab.averageOpacity);
             localParamInfo.flow = dab.flow;
@@ -131,7 +131,7 @@ void KisPainter::Private::applyDeviceWithSelection(const QRect &applyRect,
             const int dabX = dstX - dabRect.x();
             const int dabY = dstY - dabRect.y();
 
-            localParamInfo.srcRowStart   = dab.device->constData() + dabX * pixelSize + dabY * dabRowStride;
+            localParamInfo.srcRowStart   = dab.device->constData() + dabX * srcPixelSize + dabY * dabRowStride;
             localParamInfo.srcRowStride  = dabRowStride;
             localParamInfo.setOpacityAndAverage(dab.opacity, dab.averageOpacity);
             localParamInfo.flow = dab.flow;

@@ -386,7 +386,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
         auto *referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
         if (referencesLayer) {
             QColor color = referencesLayer->getPixel(imagePoint);
-            if (color.isValid() && !color.alpha() == 0) {
+            if (color.isValid() && color.alpha() != 0) {
                 slotColorPickingFinished(KoColor(color, image()->colorSpace()));
                 return;
             }

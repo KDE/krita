@@ -26,6 +26,7 @@ public:
 
 private:
     Atomic<typename Details::Table*> m_root;
+    QSBR m_gc;
 
 public:
     ConcurrentMap(quint64 capacity = Details::InitialSize) : m_root(Details::Table::create(capacity))
@@ -36,6 +37,11 @@ public:
     {
         typename Details::Table* table = m_root.loadNonatomic();
         table->destroy();
+    }
+
+    QSBR &getGC()
+    {
+        return m_gc;
     }
 
     // publishTableMigration() is called by exactly one thread from Details::TableMigration::run()

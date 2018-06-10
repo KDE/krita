@@ -68,17 +68,11 @@ private:
         }
     }
 
-    QSBR() : m_freeIndex(-1), m_numContexts(0), m_remaining(0)
-    {
-    }
-
 public:
     typedef qint16 Context;
 
-    static QSBR &instance()
+    QSBR() : m_freeIndex(-1), m_numContexts(0), m_remaining(0)
     {
-        static QSBR m_instance;
-        return m_instance;
     }
 
     Context createContext()

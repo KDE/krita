@@ -541,7 +541,7 @@ endMigration:
     }
 
     // We're done with this TableMigration. Queue it for GC.
-    QSBR::instance().enqueue(&TableMigration::destroy, this);
+    m_map.getGC().enqueue(&TableMigration::destroy, this);
 }
 
 #endif // LEAPFROG_H

@@ -33,7 +33,7 @@ public:
 
         if (result) {
             MemoryReclaimer *tmp = new MemoryReclaimer(result);
-            QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
         } else {
             m_numTiles.fetchAndAddRelaxed(1);
         }
@@ -52,11 +52,11 @@ public:
         if (result) {
             m_numTiles.fetchAndSubRelaxed(1);
             MemoryReclaimer *tmp = new MemoryReclaimer(result);
-            QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
         }
 
         if (m_rawPointerUsers == 1) {
-            QSBR::instance().update(m_context);
+            m_map.getGC().update(m_context);
         }
 
         m_rawPointerUsers.fetchAndSubRelaxed(1);
@@ -83,7 +83,7 @@ public:
 
             if (result) {
                 MemoryReclaimer *tmp = new MemoryReclaimer(result);
-                QSBR::instance().enqueue(&MemoryReclaimer::destroy, tmp);
+                m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
             } else {
                 newTile = true;
                 m_numTiles.fetchAndAddRelaxed(1);
@@ -231,9 +231,10 @@ private:
 
 template <class T>
 KisTileHashTableTraits2<T>::KisTileHashTableTraits2()
-    : m_context(QSBR::instance().createContext()), m_rawPointerUsers(0), m_numTiles(0),
+    : m_rawPointerUsers(0), m_numTiles(0),
       m_defaultTileData(0), m_mementoManager(0)
 {
+    m_context = m_map.getGC().createContext();
 }
 
 template <class T>
@@ -259,7 +260,7 @@ template <class T>
 KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 {
     clear();
-    QSBR::instance().destroyContext(m_context);
+    m_map.getGC().destroyContext(m_context);
 }
 
 template<class T>

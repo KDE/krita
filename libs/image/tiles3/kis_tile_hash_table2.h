@@ -6,7 +6,6 @@
 #include "3rdparty/lock_free_map/concurrent_map.h"
 
 #include "kis_tile.h"
-#include "kis_debug.h"
 
 #include <boost/functional/hash.hpp>
 
@@ -40,7 +39,6 @@ public:
         }
 
         TileTypeSP ptr(result);
-        qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(ptr.data()) << ppVar(key);
         m_rawPointerUsers.fetchAndSubRelaxed(1);
         return ptr;
     }
@@ -61,7 +59,6 @@ public:
             QSBR::instance().update(m_context);
         }
 
-        qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(ptr.data()) << ppVar(key);
         m_rawPointerUsers.fetchAndSubRelaxed(1);
         return ptr;
     }
@@ -70,7 +67,6 @@ public:
     {
         m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileTypeSP result(m_map.get(key));
-        qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(result.data()) << ppVar(key);
         m_rawPointerUsers.fetchAndSubRelaxed(1);
         return result;
     }
@@ -96,7 +92,6 @@ public:
             tile = value;
         }
 
-        qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(tile.data()) << ppVar(key);
         m_rawPointerUsers.fetchAndSubRelaxed(1);
         return tile;
     }
@@ -194,35 +189,36 @@ class KisTileHashTableIteratorTraits2
 public:
     typedef T TileType;
     typedef KisSharedPtr<T> TileTypeSP;
+    typedef typename ConcurrentMap<quint32, TileType*>::Iterator Iterator;
 
-    KisTileHashTableIteratorTraits2(KisTileHashTableTraits2<T> *ht) : m_ht(ht)
+    KisTileHashTableIteratorTraits2(KisTileHashTableTraits2<T> *ht) : m_ht(ht), m_iter(ht->iterator())
     {
     }
 
     void next()
     {
-        m_ht->iterator().next();
+        const_cast<Iterator &>(m_iter).next();
     }
 
     TileTypeSP tile() const
     {
-        return TileTypeSP(m_ht->iterator().getValue());
+        return TileTypeSP(const_cast<Iterator &>(m_iter).getValue());
     }
 
     bool isDone() const
     {
-        return m_ht->iterator().isValid();
+        return const_cast<Iterator &>(m_iter).isValid();
     }
 
     void deleteCurrent()
     {
-        m_ht->erase(m_ht->iterator().getKey());
+        m_ht->erase(const_cast<Iterator &>(m_iter).getKey());
         next();
     }
 
     void moveCurrentToHashTable(KisTileHashTableTraits2<T> *newHashTable)
     {
-        TileTypeSP tile = m_ht->iterator().getValue();
+        TileTypeSP tile = const_cast<Iterator &>(m_iter).getValue();
         next();
         m_ht->deleteTile(tile);
         newHashTable->addTile(tile);
@@ -230,6 +226,7 @@ public:
 
 private:
     KisTileHashTableTraits2<T> *m_ht;
+    const typename ConcurrentMap<quint32, TileType*>::Iterator &m_iter;
 };
 
 template <class T>
@@ -275,7 +272,6 @@ template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getExistingTile(qint32 col, qint32 row)
 {
     quint32 idx = calculateHash(col, row);
-    qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(row) << ppVar(col) << ppVar(idx);
     return get(idx);
 }
 
@@ -284,7 +280,6 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
 {
     TileTypeSP tile(new TileType(col, row, m_defaultTileData, m_mementoManager));
     quint32 idx = calculateHash(col, row);
-    qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(row) << ppVar(col) << ppVar(idx);
     return getLazy(idx, tile, newTile);
 }
 
@@ -307,7 +302,6 @@ template <class T>
 void KisTileHashTableTraits2<T>::addTile(TileTypeSP tile)
 {
     quint32 idx = calculateHash(tile->col(), tile->row());
-    qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(tile->row()) << ppVar(tile->col()) << ppVar(idx);
     insert(idx, tile);
 }
 
@@ -321,7 +315,6 @@ template <class T>
 bool KisTileHashTableTraits2<T>::deleteTile(qint32 col, qint32 row)
 {
     quint32 idx = calculateHash(col, row);
-    qDebug() << Q_FUNC_INFO << ppVar(QThread::currentThreadId()) << ppVar(row) << ppVar(col) << ppVar(idx);
     return erase(idx) != nullptr;
 }
 

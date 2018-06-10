@@ -98,18 +98,12 @@ void benchmarkBrush(const QString &presetName)
 {
     FreehandStrokeBenchmarkTester tester(presetName);
 
-//    for (int i = 1; i <= QThread::idealThreadCount(); i++) {
-//        tester.setCpuCoresLimit(i);
-//        tester.benchmark();
+    for (int i = 1; i <= QThread::idealThreadCount(); i++) {
+        tester.setCpuCoresLimit(i);
+        tester.benchmark();
 
-//        qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(i).arg(tester.lastStrokeTime()));
-//    }
-
-    qint32 threadCount = QThread::idealThreadCount();
-    tester.setCpuCoresLimit(threadCount);
-    tester.benchmark();
-
-    qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(threadCount).arg(tester.lastStrokeTime()));
+        qDebug() << qPrintable(QString("Cores: %1 Time: %2 (ms)").arg(i).arg(tester.lastStrokeTime()));
+    }
 }
 
 #include <KoResourcePaths.h>
@@ -126,22 +120,22 @@ void FreehandStrokeBenchmark::testDefaultTip()
 
 void FreehandStrokeBenchmark::testSoftTip()
 {
-//    benchmarkBrush("testing_1000px_auto_soft.kpp");
+    benchmarkBrush("testing_1000px_auto_soft.kpp");
 }
 
 void FreehandStrokeBenchmark::testGaussianTip()
 {
-//    benchmarkBrush("testing_1000px_auto_gaussian.kpp");
+    benchmarkBrush("testing_1000px_auto_gaussian.kpp");
 }
 
 void FreehandStrokeBenchmark::testStampTip()
 {
-//    benchmarkBrush("testing_1000px_stamp_450_rotated.kpp");
+    benchmarkBrush("testing_1000px_stamp_450_rotated.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip()
 {
-//    benchmarkBrush("testing_200px_colorsmudge_default.kpp");
+    benchmarkBrush("testing_200px_colorsmudge_default.kpp");
 }
 
 QTEST_MAIN(FreehandStrokeBenchmark)

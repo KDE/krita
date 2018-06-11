@@ -2232,15 +2232,20 @@ void KisMainWindow::updateWindowMenu()
 
 
     // Determine whether we should show the mdi area
-    if (windows.count( ) > 0) {
-        qWarning() << "setting windows to 1";
-         d->widgetStack->setCurrentIndex(1);
+    bool showMdiArea = windows.count( ) > 0;
+    if (showMdiArea) { // show mdiArea
+       d->widgetStack->setCurrentIndex(1);
     }
     else {
-       qWarning() << "setting windows to 0";
        d->widgetStack->setCurrentIndex(0);
     }
 
+    // make sure toolbar is enabled when we have a document open
+    Q_FOREACH (QToolBar *tb, toolBars()) {
+        if (tb->objectName() == "BrushesAndStuff") {
+            tb->setEnabled(showMdiArea);
+        }
+    }
 
 
 

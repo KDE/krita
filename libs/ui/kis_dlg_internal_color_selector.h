@@ -19,7 +19,7 @@
 #ifndef KISINTERNALCOLORSELECTOR_H
 #define KISINTERNALCOLORSELECTOR_H
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoColorDisplayRendererInterface.h"
@@ -34,7 +34,7 @@
  *
  * A non-modal color selector dialog that is not a plugin and can thus be used for filters.
  */
-class KRITAUI_EXPORT KisDlgInternalColorSelector : public QDialog
+class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 public:
@@ -89,6 +89,15 @@ public:
      * @param chooseAlpha - Whether or not the alpha-choosing functionality should be used.
      */
     static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
+
+    /**
+     * @brief getColor
+     * Wrapper function that enables makes this class interchangable with QColorDialog sometimes.
+     */
+    static KoColor getColor(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString())
+    {
+        return getModalColorDialog(color, parent, caption);
+    }
 
     /**
      * @brief getCurrentColor

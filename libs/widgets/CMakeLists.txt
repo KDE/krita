@@ -89,6 +89,10 @@ set(kritawidgets_LIB_SRCS
 
     KisGradientSlider.cpp
     KisGradientSliderWidget.cpp
+
+    kis_color_input.cpp
+
+    kis_spinbox_color_selector.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -103,7 +107,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
-target_link_libraries(kritawidgets kritaodf kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
+target_link_libraries(kritawidgets kritaodf kritaglobal kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
 
 if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})

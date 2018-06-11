@@ -23,6 +23,8 @@
 #include <QPointer>
 #include <QCompleter>
 
+#include <KConfigGroup>
+
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
 #include <KisPaletteModel.h>
@@ -32,14 +34,12 @@
 #include <KoResourceServer.h>
 
 #include "kis_signal_compressor.h"
-#include "KisViewManager.h"
 #include "KoColorDisplayRendererInterface.h"
 
-#include "kis_spinbox_color_selector.h"
+// #include "kis_spinbox_color_selector.h"
 
 #include "kis_dlg_internal_color_selector.h"
 #include "ui_wdgdlginternalcolorselector.h"
-#include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_color_input.h"
 #include "kis_icon_utils.h"
@@ -102,7 +102,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     // For some bizare reason, the modal dialog doesn't like having the colorset set, so let's not.
     if (config.paletteBox) {
         //TODO: Add disable signal as well. Might be not necessary...?
-        KisConfig cfg;
+        KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
         QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
         KoColorSet *savedPal = rServer->resourceByName(paletteName);
@@ -299,7 +299,7 @@ void KisDlgInternalColorSelector::focusInEvent(QFocusEvent *)
 void KisDlgInternalColorSelector::slotFinishUp()
 {
     setPreviousColor(m_d->currentColor);
-    KisConfig cfg;
+    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     if (m_d->paletteModel) {
         if (m_d->paletteModel->colorSet()) {
             cfg.writeEntry("internal_selector_active_color_set", m_d->paletteModel->colorSet()->name());

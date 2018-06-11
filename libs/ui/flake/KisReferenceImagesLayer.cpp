@@ -80,7 +80,7 @@ KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shape
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
-    : KisShapeLayer(rhs)
+    : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *referenceImage)

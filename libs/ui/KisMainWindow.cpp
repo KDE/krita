@@ -143,6 +143,7 @@
 #include <KisUpdateSchedulerConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
+#include "KisWelcomePageWidget.h"
 
 #include <mutex>
 
@@ -180,7 +181,7 @@ public:
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
         , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
-        , welcomePage(new QWidget(parent))
+        , welcomePage(new KisWelcomePageWidget(parent))
         , widgetStack(new QStackedWidget(parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
@@ -259,7 +260,7 @@ public:
 
     Digikam::ThemeManager *themeManager {0};
 
-    QWidget *welcomePage {0};
+    KisWelcomePageWidget *welcomePage {0};
 
 
     QStackedWidget *widgetStack {0};

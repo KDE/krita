@@ -260,6 +260,15 @@ public Q_SLOTS:
 
     void notifyChildViewDestroyed(KisView *view);
 
+    /// Set the active view, this will update the undo/redo actions
+    void setActiveView(KisView *view);
+
+    void subWindowActivated();
+
+    void windowFocused();
+
+
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -370,8 +379,14 @@ private Q_SLOTS:
     void newWindow();
     void closeCurrentWindow();
     void checkSanity();
+
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
+
+    void initializeGeometry();
+    void showManual();
+    void switchTab(int index);
+
 
 protected:
 
@@ -385,6 +400,7 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void moveEvent(QMoveEvent *e) override;
 
 
 private:
@@ -396,18 +412,6 @@ private:
      */
     void addView(KisView *view);
 
-public Q_SLOTS:
-
-    /// Set the active view, this will update the undo/redo actions
-    void setActiveView(KisView *view);
-
-    void subWindowActivated();
-
-    void windowFocused();
-
-private:
-
-    friend class KisApplication;
     friend class KisPart;
 
 
@@ -444,17 +448,8 @@ private:
 
     QByteArray borrowWorkspace(KisMainWindow *borrower);
 
-protected:
-
-    void moveEvent(QMoveEvent *e) override;
-
-private Q_SLOTS:
-    void initializeGeometry();
-    void showManual();
-    void switchTab(int index);
 
 private:
-
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

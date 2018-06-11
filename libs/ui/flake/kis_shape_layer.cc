@@ -164,13 +164,13 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
 {
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller, KisShapeLayerCanvasBase *canvas)
         : KisExternalLayer(_rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
     // copy the projection to avoid extra round of updates!
-    initShapeLayer(controller, _rhs.m_d->paintDevice);
+    initShapeLayer(controller, _rhs.m_d->paintDevice, canvas);
 
     /**
      * The transformaitons of the added shapes are automatically merged into the transformation

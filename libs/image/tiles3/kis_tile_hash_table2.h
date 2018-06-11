@@ -75,25 +75,22 @@ public:
     {
         m_rawPointerUsers.fetchAndAddRelaxed(1);
         newTile = false;
-        TileTypeSP tile(m_map.get(key));
+        typename ConcurrentMap<quint32, TileType*>::Mutator iter = m_map.insertOrFind(key);
 
-        if (!tile.data()) {
+        if (!iter.getValue()) {
             TileTypeSP::ref(&value, value.data());
-            TileType *result = m_map.assign(key, value.data());
 
-            if (result) {
-                MemoryReclaimer *tmp = new MemoryReclaimer(result);
-                m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
+            if (iter.exchangeValue(value.data()) == value.data()) {
+                TileTypeSP::deref(&value, value.data());
             } else {
                 newTile = true;
                 m_numTiles.fetchAndAddRelaxed(1);
             }
-
-            tile = value;
         }
 
+        TileTypeSP result(iter.getValue());
         m_rawPointerUsers.fetchAndSubRelaxed(1);
-        return tile;
+        return result;
     }
 
     bool isEmpty()

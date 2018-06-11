@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtGui import QTextCursor
 
 
-class DocWrapper:
+class DocWrapper(object):
 
     def __init__(self, textdocument):
         self.textdocument = textdocument

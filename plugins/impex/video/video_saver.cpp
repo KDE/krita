@@ -235,7 +235,11 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     const KisTimeRange fullRange = animation->fullClipRange();
     const int frameRate = configuration->getInt("framerate", animation->framerate());
 
-    const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
+    const int sequenceNumberingOffset = configuration->getInt("sequence_start", 0);
+    const KisTimeRange clipRange(sequenceNumberingOffset + configuration->getInt("first_frame", fullRange.start()),
+                                 sequenceNumberingOffset + configuration->getInt("last_frame", fullRange.end())
+    );
+
     const bool includeAudio = configuration->getBool("include_audio", true);
 
     const int exportHeight = configuration->getInt("height", int(m_image->height()));

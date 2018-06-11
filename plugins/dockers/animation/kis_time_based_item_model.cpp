@@ -304,7 +304,7 @@ KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList 
         }
 
         Q_FOREACH(KisKeyframeChannel *channel, channelsAt(srcIndex)) {
-            if (moveEmptyFrames ||  channel->keyframeAt(srcIndex.column())) {
+            if (moveEmptyFrames || channel->keyframeAt(srcIndex.column())) {
                 srcFrameItems << KisAnimationUtils::FrameItem(srcNode, channel->id(), srcIndex.column());
                 dstFrameItems << KisAnimationUtils::FrameItem(dstNode, channel->id(), dstIndex.column());
             }
@@ -350,8 +350,8 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indexes)
 
         new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
                                         oldTime,
-                                        newTime, parentCommand);
-
+                                        newTime,
+                                        parentCommand);
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);

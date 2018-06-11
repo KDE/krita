@@ -66,7 +66,7 @@ void KisColorSliderInput::init()
     switch (m_type){
     case 0: m_name=i18n("Hue"); break;
     case 1: m_name=i18n("Saturation"); break;
-    case 2: m_name=i18n("Value"); break;
+    case 2: m_name=i18nc("HSV Value","Value"); break;
     case 3: m_name=i18n("Hue"); break;
     case 4: m_name=i18n("Saturation"); break;
     case 5: m_name=i18n("Lightness"); break;

@@ -60,7 +60,7 @@ SprayBrush::~SprayBrush()
     delete m_transfo;
 }
 
-void SprayBrush::setProperties(KisSprayProperties * properties,
+void SprayBrush::setProperties(KisSprayOptionProperties * properties,
                                KisColorProperties * colorProperties,
                                KisShapeProperties * shapeProperties,
                                KisShapeDynamicsProperties * shapeDynamicsProperties,

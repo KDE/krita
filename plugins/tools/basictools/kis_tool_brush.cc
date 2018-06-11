@@ -420,7 +420,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkAssistant = new QCheckBox(optionsWidget);
     m_chkAssistant->setText(i18n("Snap to Assistants"));
 
-    assistantWidget->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
+    assistantWidget->setToolTip(i18n("You need to add Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     addOptionWidgetOption(assistantWidget, m_chkAssistant);
 

@@ -87,24 +87,6 @@ QBrush TimelineColorScheme::headerActive() const
     return selectorColor();
 }
 
-QColor TimelineColorScheme::frameColor(bool present, bool active) const
-{
-    QColor color = Qt::transparent;
-
-    if (present && !active) {
-        color = m_d->baseColor;
-    } else if (present && active) {
-        QColor bgColor = qApp->palette().color(QPalette::Base);
-        int darkenCoeff = bgColor.value() > 128 ? 130 : 80;
-        color = m_d->baseColor.darker(darkenCoeff);
-    } else if (!present && active) {
-        QColor bgColor = qApp->palette().color(QPalette::Base);
-        return KritaUtils::blendColors(m_d->baseColor, bgColor, 0.2);
-    }
-
-    return color;
-}
-
 QColor TimelineColorScheme::onionSkinsSliderEnabledColor() const
 {
     return m_d->baseColor;

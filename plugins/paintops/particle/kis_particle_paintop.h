@@ -54,7 +54,7 @@ private:
     KisParticleBrushProperties m_properties;
     KisPaintDeviceSP m_dab;
     ParticleBrush m_particleBrush;
-    KisAirbrushOptionWidget m_airbrushOptionWidget;
+    KisAirbrushOptionProperties m_airbrushOption;
     KisPressureRateOption m_rateOption;
     bool m_first;
 };

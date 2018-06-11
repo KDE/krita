@@ -75,7 +75,7 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
      */
     m_brush->setThreadingAllowed(false);
 
-    m_airbrushOptionWidget.readOptionSetting(settings);
+    m_airbrushOption.readOptionSetting(settings);
 
     m_opacityOption.readOptionSetting(settings);
     m_flowOption.readOptionSetting(settings);
@@ -167,7 +167,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
 
     KisSpacingInformation spacingInfo =
-        effectiveSpacing(scale, rotation, &m_airbrushOptionWidget, &m_spacingOption, info);
+        effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 
     // gather statistics about dabs
     m_avgSpacing(spacingInfo.scalarApprox());
@@ -392,12 +392,12 @@ KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &i
 {
     const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(info);
-    return effectiveSpacing(scale, rotation, &m_airbrushOptionWidget, &m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
 }
 
 KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOptionWidget, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
 }
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

@@ -18,8 +18,11 @@
 #include "ToolReferenceImages.h"
 
 #include <QDesktopServices>
+#include <QFile>
 #include <QLayout>
 #include <QMenu>
+#include <QMessageBox>
+#include <QVector>
 
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
@@ -33,6 +36,7 @@
 #include <KisReferenceImagesLayer.h>
 
 #include "ToolReferenceImagesWidget.h"
+#include "KisReferenceImageCollection.h"
 
 ToolReferenceImages::ToolReferenceImages(KoCanvasBase * canvas)
     : DefaultTool(canvas)
@@ -88,10 +92,71 @@ void ToolReferenceImages::removeAllReferenceImages()
 
 void ToolReferenceImages::loadReferenceImages()
 {
+      auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+
+    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
+    dialog.setCaption(i18n("Load Reference Images"));
+
+    QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+    if (!locations.isEmpty()) {
+        dialog.setDefaultDir(locations.first());
+    }
+
+    QString filename = dialog.filename();
+    if (filename.isEmpty()) return;
+    if (!QFileInfo(filename).exists()) return;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not open '%1'.", filename));
+        return;
+    }
+
+    KisReferenceImageCollection collection;
+    if (collection.load(&file)) {
+        KisReferenceImagesLayer *layer = referenceImagesLayer();
+
+        Q_FOREACH(KisReferenceImage *reference, collection.referenceImages()) {
+            layer->addShape(reference);
+        }
+    } else {
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
+    }
+    file.close();
 }
 
 void ToolReferenceImages::saveReferenceImages()
 {
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas)
+
+    KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
+    dialog.setCaption(i18n("Save Reference Images"));
+
+    QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+    if (!locations.isEmpty()) {
+        dialog.setDefaultDir(locations.first());
+    }
+
+    QString filename = dialog.filename();
+    if (filename.isEmpty()) return;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not open '%1' for saving.", filename));
+        return;
+    }
+
+    KisReferenceImageCollection collection(referenceImagesLayer()->referenceImages());
+    bool ok = collection.save(&file);
+    file.close();
+
+    if (!ok) {
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Failed to save reference images.", filename));
+    }
 }
 
 void ToolReferenceImages::slotSelectionChanged()

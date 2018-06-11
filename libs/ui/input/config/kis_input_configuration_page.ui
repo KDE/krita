@@ -16,7 +16,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Profile</string>
+        <string>Input Profile</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -76,8 +76,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>677</width>
-        <height>446</height>
+        <width>671</width>
+        <height>429</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">

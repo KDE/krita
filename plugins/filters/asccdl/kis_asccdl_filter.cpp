@@ -39,7 +39,7 @@ KritaASCCDL::~KritaASCCDL()
 
 }
 
-KisFilterASCCDL::KisFilterASCCDL(): KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Slope, Offset, Power.."))
+KisFilterASCCDL::KisFilterASCCDL(): KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Slope, Offset, Power..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

@@ -88,6 +88,9 @@ void KisAirbrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP se
     }
     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
     setting->setProperty(AIRBRUSH_RATE, 1000.0 / m_d->airbrushInterval);
+
+    qDebug() << "writeOptionSetting. Interval:" << m_d->airbrushInterval << "Calculated rate" << 1000.0 / m_d->airbrushInterval << "Rate in widget" << m_d->configPage->sliderRate->value();
+
     setting->setProperty(AIRBRUSH_IGNORE_SPACING, m_d->ignoreSpacing);
 }
 
@@ -97,8 +100,9 @@ void KisAirbrushOptionWidget::readOptionSetting(const KisPropertiesConfiguration
     // Update settings in the widget. The widget's signals should cause the changes to be propagated
     // to this->m_d as well.
     m_d->configPage->sliderRate->setValue(setting->getDouble(AIRBRUSH_RATE, DEFAULT_RATE));
-    m_d->configPage->checkBoxIgnoreSpacing->setChecked(setting->getBool(AIRBRUSH_IGNORE_SPACING,
-                                                                        false));
+
+    qDebug() << "readOptionSetting. Interval:" << m_d->airbrushInterval << "Rate from settings" << setting->getDouble(AIRBRUSH_RATE, DEFAULT_RATE) << "Rate in widget" << m_d->configPage->sliderRate->value();
+    m_d->configPage->checkBoxIgnoreSpacing->setChecked(setting->getBool(AIRBRUSH_IGNORE_SPACING, false));
 }
 
 qreal KisAirbrushOptionWidget::airbrushInterval() const
@@ -131,9 +135,23 @@ void KisAirbrushOptionWidget::updateInterval()
         rate = 1.0;
     }
     m_d->airbrushInterval = 1000.0 / rate;
+    qDebug() << "updateInterval();. Interval:" << m_d->airbrushInterval << "Rate in widget" << m_d->configPage->sliderRate->value();
 }
 
 void KisAirbrushOptionWidget::updateIgnoreSpacing()
 {
     m_d->ignoreSpacing = m_d->configPage->checkBoxIgnoreSpacing->isChecked();
+}
+
+
+void KisAirbrushOptionProperties::readOptionSettingImpl(const KisPropertiesConfiguration *setting){
+    enabled = setting->getBool(AIRBRUSH_ENABLED);
+    airbrushInterval = 1000.0 / setting->getDouble(AIRBRUSH_RATE, DEFAULT_RATE);
+    ignoreSpacing = setting->getBool(AIRBRUSH_IGNORE_SPACING, false);
+}
+
+void KisAirbrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const {
+    setting->setProperty(AIRBRUSH_ENABLED, enabled);
+    setting->setProperty(AIRBRUSH_RATE, airbrushInterval > 0 ? 1000.0 / airbrushInterval : 1.0);
+    setting->setProperty(AIRBRUSH_IGNORE_SPACING, ignoreSpacing);
 }

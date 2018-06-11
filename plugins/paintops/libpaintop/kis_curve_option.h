@@ -39,6 +39,11 @@ class KisDynamicSensor;
  *
  * Note: it is NOT a KisPaintOpOption, even though the API is pretty similar!
  *
+ * KisCurveOption classes have a generic GUI widget, KisCurveOptionWidget. So,
+ * in contrast to KisPaintOpOption classes, KisCurveOption instances can and
+ * will be created in the constructor of KisPaintOp paintops. This class can
+ * manage to read and write its settings directly.
+ *
  */
 class PAINTOP_EXPORT KisCurveOption
 {

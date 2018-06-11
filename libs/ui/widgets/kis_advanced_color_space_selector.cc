@@ -420,8 +420,8 @@ void KisAdvancedColorSpaceSelector::fillDescription()
 
     if (currentDepthStr == "U8") {
         d->colorSpaceSelector->textProfileDescription->append("<p>"+i18nc("When the selected Bitdepth is 8",
-                                                                    "<b>8 bit integer</b>: The default amount of colors per channel. Each channel will have 256 values available, "
-                                                                    "leading to a total amount of 256*amount of channels. Recommended to use for images intended for the web, "
+                                                                    "<b>8 bit integer</b>: The default number of colors per channel. Each channel will have 256 values available, "
+                                                                    "leading to a total amount of colors of 256 to the power of the number of channels. Recommended to use for images intended for the web, "
                                                                     "or otherwise simple images.")+"</p>");
     }
     else if (currentDepthStr == "U16") {

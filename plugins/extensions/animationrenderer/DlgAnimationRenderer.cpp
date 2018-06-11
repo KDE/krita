@@ -65,7 +65,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
         m_defaultFileName = i18n("Untitled");
     }
 
-    m_page = new WdgAnimaterionRenderer(this);
+    m_page = new WdgAnimationRenderer(this);
     m_page->layout()->setMargin(0);
 
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
@@ -267,7 +267,7 @@ void DlgAnimationRenderer::setSequenceConfiguration(KisPropertiesConfigurationSP
     }
 
     m_page->dirRequester->setFileName(cfg->getString("directory", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
-    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));    
+    m_page->intStart->setValue(cfg->getInt("first_frame", m_image->animationInterface()->playbackRange().start()));
     m_page->intEnd->setValue(cfg->getInt("last_frame", m_image->animationInterface()->playbackRange().end()));
     m_page->sequenceStart->setValue(cfg->getInt("sequence_start", m_image->animationInterface()->playbackRange().start()));
 
@@ -491,18 +491,36 @@ QString DlgAnimationRenderer::findFFMpeg()
     QStringList proposedPaths;
 
     QString customPath = KisConfig().customFFMpegPath();
-    proposedPaths << customPath;
-    proposedPaths << customPath + QDir::separator() + "ffmpeg";
+    if (!customPath.isEmpty()) {
+        proposedPaths << customPath;
+        proposedPaths << customPath + QDir::separator() + "ffmpeg";
+    }
 
+#ifndef Q_OS_WIN
     proposedPaths << QDir::homePath() + "/bin/ffmpeg";
     proposedPaths << "/usr/bin/ffmpeg";
     proposedPaths << "/usr/local/bin/ffmpeg";
+#endif
     proposedPaths << KoResourcePaths::getApplicationRoot() +
         QDir::separator() + "bin" + QDir::separator() + "ffmpeg";
 
-    Q_FOREACH (const QString &path, proposedPaths) {
+    Q_FOREACH (QString path, proposedPaths) {
         if (path.isEmpty()) continue;
 
+#ifdef Q_OS_WIN
+        path = QDir::toNativeSeparators(QDir::cleanPath(path));
+        if (path.endsWith(QDir::separator())) {
+            continue;
+        }
+        if (!path.endsWith(".exe")) {
+            if (!QFile::exists(path)) {
+                path += ".exe";
+                if (!QFile::exists(path)) {
+                    continue;
+                }
+            }
+        }
+#endif
         QProcess testProcess;
         testProcess.start(path, QStringList() << "-version");
         if (testProcess.waitForStarted(1000)) {

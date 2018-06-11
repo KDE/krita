@@ -2,7 +2,7 @@
 Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=colorspace
-X-Python-2-Compatible=false
+X-Python-2-Compatible=true
 X-Krita-Manual=Manual.html
 Name=Color Space
 Name[ar]=الفضاء اللونيّ
@@ -45,5 +45,5 @@ Comment[sv]=Insticksprogram för att ändra färgrymd för valda dokument
 Comment[tr]=Seçili belgede renk aralığını değiştirmek için eklenti
 Comment[uk]=Додаток для зміни простору кольорів у позначених документах
 Comment[x-test]=xxPlugin to change color space to selected documentsxx
-Comment[zh_CN]=将颜色空间改为所选文档的插件
+Comment[zh_CN]=用于更改选定文档色彩空间的插件
 Comment[zh_TW]=用於變更色彩空間為選定文件的外掛程式

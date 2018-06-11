@@ -58,6 +58,8 @@
 #include <QMenuBar>
 #include <KisMimeDatabase.h>
 #include <QMimeData>
+#include <QStackedWidget>
+
 
 #include <kactioncollection.h>
 #include <QAction>
@@ -178,11 +180,16 @@ public:
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
         , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
+        , welcomePage(new QWidget(parent))
+        , widgetStack(new QStackedWidget(parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
         if (id.isNull()) this->id = QUuid::createUuid();
+
+        widgetStack->addWidget(welcomePage);
+        widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
@@ -251,6 +258,11 @@ public:
     QCloseEvent *deferredClosingEvent {0};
 
     Digikam::ThemeManager *themeManager {0};
+
+    QWidget *welcomePage {0};
+
+
+    QStackedWidget *widgetStack {0};
 
     QMdiArea *mdiArea;
     QMdiSubWindow *activeSubWindow  {0};
@@ -369,7 +381,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-    setCentralWidget(d->mdiArea);
+    setCentralWidget(d->widgetStack);
+    d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -2090,6 +2103,7 @@ void KisMainWindow::windowFocused()
     }
 }
 
+
 void KisMainWindow::updateWindowMenu()
 {
     QMenu *menu = d->windowMenu->menu();
@@ -2215,6 +2229,20 @@ void KisMainWindow::updateWindowMenu()
             d->windowMapper->setMapping(action, windows.at(i));
         }
     }
+
+
+    // Determine whether we should show the mdi area
+    if (windows.count( ) > 0) {
+        qWarning() << "setting windows to 1";
+         d->widgetStack->setCurrentIndex(1);
+    }
+    else {
+       qWarning() << "setting windows to 0";
+       d->widgetStack->setCurrentIndex(0);
+    }
+
+
+
 
     updateCaption();
 }

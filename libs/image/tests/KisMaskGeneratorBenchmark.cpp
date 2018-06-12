@@ -113,7 +113,7 @@ void KisMaskGeneratorBenchmark::testCircularSoftScalarMask()
 {
     QRect bounds(0,0,1000,1000);
     KisCubicCurve pointsCurve;
-    pointsCurve.fromString(QString("0,0;1,1"));
+    pointsCurve.fromString(QString("0,1;1,0"));
     {
     KisCurveCircleMaskGenerator circScalar(1000, 1.0, 0.5, 0.5, 2, pointsCurve, true);
     circScalar.setSoftness(0.5);
@@ -127,7 +127,7 @@ void KisMaskGeneratorBenchmark::testCircularSoftVectorMask()
 {
     QRect bounds(0,0,1000,1000);
     KisCubicCurve pointsCurve;
-    pointsCurve.fromString(QString("1,0;1,0"));
+    pointsCurve.fromString(QString("0,1;1,0"));
     {
     KisCurveCircleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, pointsCurve, true);
     circVectr.setSoftness(0.5);

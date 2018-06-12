@@ -301,6 +301,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCurveResolution(d->curveResolution);
 
     Vc::float_v vCurvedData(Vc::Zero);
+    Vc::float_v vCurvedData1(Vc::Zero);
 
     Vc::float_v vFadeRadius(d->fadeMaker.getRadius());
     Vc::float_v vFadeStartValue(d->fadeMaker.getFadeStartValue());
@@ -343,7 +344,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             Vc::float_v alphaValueF = valDist - vFloatAlphaValue;
 
             vCurvedData.gather(curveDataPointer,vAlphaValue);
-            Vc::float_v vCurvedData1(curveDataPointer,vAlphaValue + 1);
+            vCurvedData1.gather(curveDataPointer,vAlphaValue + 1);
+//            Vc::float_v vCurvedData1(curveDataPointer,vAlphaValue + 1);
 
             // vAlpha
             Vc::float_v fullFade = (
@@ -355,19 +357,10 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             mask = fullFade < vZero;
             fullFade.setZero(mask);
 
-            // Mask (value - value), presicion errors.
-            mask = fullFade >= 1.0f;
+            // Mask outer circle of mask
+            mask = fullFade >= vOne;
             Vc::float_v vFade = (1.0f - fullFade);
-            vFade(mask) = vZero;
-
-
-            // filter nan and inf. Vc uses float, imprecission errors are frequent
-            mask = Vc::isfinite(vFade);
-            vFade(!mask) = vOne;
-
-            // Mask the inner circe of the mask
-            mask = vFade < vZero;
-            vFade(mask) = vZero;
+            vFade.setZero(mask);
 
             // return original dist values before vFade transform
             vFade(excludeMask) = dist;

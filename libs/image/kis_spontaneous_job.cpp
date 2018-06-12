@@ -1,4 +1,6 @@
 /*
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -14,28 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __MODIFY_TRANSFORM_MASK_COMMAND_H
-#define __MODIFY_TRANSFORM_MASK_COMMAND_H
+#include "kis_spontaneous_job.h"
 
-#include "kundo2command.h"
-#include "kis_types.h"
-#include "kritatooltransform_export.h"
-#include "KoID.h"
 
-class KisAnimatedTransformMaskParameters;
+bool KisSpontaneousJob::isExclusive() const
+{
+    return m_isExclusive;
+}
 
-class KRITATOOLTRANSFORM_EXPORT KisModifyTransformMaskCommand : public KUndo2Command {
-public:
-    KisModifyTransformMaskCommand(KisTransformMaskSP mask, KisTransformMaskParamsInterfaceSP params);
+void KisSpontaneousJob::setExclusive(bool value)
+{
 
-    void redo() override;
-    void undo() override;
-
-private:
-    KisTransformMaskSP m_mask;
-    KisTransformMaskParamsInterfaceSP m_params;
-    KisTransformMaskParamsInterfaceSP m_oldParams;
-    bool m_wasHidden;
-};
-
-#endif
+}

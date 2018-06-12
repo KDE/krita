@@ -61,6 +61,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
         connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
         connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
+
     }
 }
 

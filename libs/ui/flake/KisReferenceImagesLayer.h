@@ -35,6 +35,7 @@ public:
     KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
     QVector<KisReferenceImage*> referenceImages() const;
 
+    QRectF boundingImageRect() const;
     QColor getPixel(QPointF position) const;
 
     void paintReferences(QPainter &painter);

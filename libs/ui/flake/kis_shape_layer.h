@@ -58,7 +58,7 @@ public:
 
     KisShapeLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
-    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller);
+    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller, KisShapeLayerCanvasBase *canvas = 0);
     /**
      * Merge constructor.
      *

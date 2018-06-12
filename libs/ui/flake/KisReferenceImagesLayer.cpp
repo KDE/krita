@@ -64,8 +64,7 @@ public:
 
     void forceRepaint() override
     {
-        QRectF rect = KoShape::boundingRect(m_layer->shapes());
-        m_layer->signalUpdate(m_viewConverter->documentToView(rect));
+        m_layer->signalUpdate(m_layer->boundingImageRect());
     }
 
     void rerenderAfterBeingInvisible() override {}
@@ -81,7 +80,7 @@ KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shape
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
-    : KisShapeLayer(rhs)
+    : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImage(KisReferenceImage *referenceImage)
@@ -124,6 +123,11 @@ void KisReferenceImagesLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapt
 void KisReferenceImagesLayer::signalUpdate(const QRectF &rect)
 {
     emit sigUpdateCanvas(rect);
+}
+
+QRectF KisReferenceImagesLayer::boundingImageRect() const
+{
+    return converter()->documentToView(boundingRect());
 }
 
 QColor KisReferenceImagesLayer::getPixel(QPointF position) const

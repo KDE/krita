@@ -391,6 +391,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     createActions();
 
+    // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
+    d->welcomePage->setMainWindow(this);
+
     setAutoSaveSettings(d->windowStateConfig, false);
 
     subWindowActivated();

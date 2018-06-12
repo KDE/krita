@@ -21,6 +21,9 @@
 #define KISWELCOMEPAGEWIDGET_H
 
 #include "kritaui_export.h"
+#include "KisViewManager.h"
+#include "KisMainWindow.h"
+
 #include <QWidget>
 #include "ui_KisWelcomePage.h"
 
@@ -32,6 +35,25 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
     public:
     explicit KisWelcomePageWidget(QWidget *parent);
     ~KisWelcomePageWidget() override;
+
+    void setMainWindow(KisMainWindow* mainWindow);
+
+private:
+    KisMainWindow* mainWindow;
+
+private Q_SLOTS:
+    void slotNewFileClicked();
+    void slotOpenFileClicked();
+
+    /// go to URL links
+    void slotGoToManual();
+
+    void slotGettingStarted();
+    void slotSupportKrita();
+    void slotUserCommunity();
+    void slotKritaWebsite();
+    void slotSourceCode();
+
 };
 
 #endif // KISWELCOMEPAGEWIDGET_H

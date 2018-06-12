@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include "ui_KisWelcomePage.h"
+#include <QStandardItemModel>
 
 /// A widget for diplaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage
@@ -38,12 +39,17 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
 
     void setMainWindow(KisMainWindow* mainWindow);
 
+
+
 private:
     KisMainWindow* mainWindow;
+    QStandardItemModel *recentFilesModel;
 
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
+
+    void recentDocumentClicked(QModelIndex index);
 
     /// go to URL links
     void slotGoToManual();

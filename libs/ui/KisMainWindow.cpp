@@ -387,8 +387,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
-    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
-    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
     createActions();
 
@@ -745,6 +744,12 @@ void KisMainWindow::saveRecentFiles()
         }
     }
 }
+
+QList<QUrl> KisMainWindow::recentFilesUrls()
+{
+    return  d->recentFiles->urls();
+}
+
 
 void KisMainWindow::reloadRecentFileList()
 {

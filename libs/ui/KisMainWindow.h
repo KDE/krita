@@ -108,6 +108,11 @@ public:
     void addRecentURL(const QUrl &url);
 
     /**
+     * get list of URL strings for recent files
+     */
+    QList<QUrl> recentFilesUrls();
+
+    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *

@@ -24,11 +24,22 @@
 #include "kactioncollection.h"
 #include "kis_action.h"
 
+#include "KConfigGroup"
+#include "KSharedConfig"
+
+#include <QListWidget>
+#include <QListWidgetItem>
+#include "kis_icon_utils.h"
+#include "KoStore.h"
+
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 {
    Q_UNUSED(parent);
    setupUi(this);
+
+   recentDocumentsListView->viewport()->setAutoFillBackground(false);
+   recentDocumentsListView->setSpacing(5);
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -46,6 +57,48 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
 
 
+        // grab recent files data
+        recentFilesModel = new QStandardItemModel();
+
+        for (int i = 0; i < mainWindow->recentFilesUrls().length(); i++ ) {
+
+           QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
+           QString recentFileUrlPath = mainWindow->recentFilesUrls().at(i).toString();
+           QString fileName = recentFileUrlPath.split("/").last();
+
+
+           // get thumbnail -- almost all Krita-supported formats save a thumbnail
+           // this was mostly copied from the KisAutoSaveRecorvery file
+           KoStore* store = KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read);
+           if (store) {
+               if(store->open(QString("Thumbnails/thumbnail.png"))
+                  || store->open(QString("preview.png"))) {
+
+                   QByteArray bytes = store->read(store->size());
+                   store->close();
+                   QImage img;
+                   img.loadFromData(bytes);
+                   recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+               }else {
+                   recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
+               }
+
+               delete store;
+           } else {
+               recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
+           }
+
+
+           // set the recent object with the data
+           recentItem->setText(fileName); // what to display for the item
+           recentItem->setToolTip(recentFileUrlPath);
+
+           recentFilesModel->appendRow(recentItem);
+        }
+
+        recentDocumentsListView->setIconSize(QSize(48, 48));
+        recentDocumentsListView->setModel(recentFilesModel);
+        connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
 
 
         // we need the view manager to actually call actions, so don't create the connections
@@ -66,9 +119,11 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 }
 
 
-
-
-
+void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
+{
+    QString fileUrl = index.data(Qt::ToolTipRole).toString();
+    mainWindow->openDocument(QUrl(fileUrl), KisMainWindow::None );
+}
 
 
 void KisWelcomePageWidget::slotNewFileClicked()

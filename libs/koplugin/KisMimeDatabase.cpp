@@ -257,6 +257,16 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "kws";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-windowlayout";
+        mimeType.description = i18nc("description of a file type", "Krita Window Layout");
+        mimeType.suffixes = QStringList() << "ksn";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "application/x-krita-session";
+        mimeType.description = i18nc("description of a file type", "Krita Session");
+        mimeType.suffixes = QStringList() << "ksn";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "application/x-krita-taskset";
         mimeType.description = i18nc("description of a file type", "Krita Taskset");
         mimeType.suffixes = QStringList() << "kts";

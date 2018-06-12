@@ -34,7 +34,8 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
-
+#include <KisResourceLoader.h>
+#include <KisResourceLoaderRegistry.h>
 #include <KisResourceServerProvider.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
@@ -97,6 +98,8 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
     saveButton->setEnabled(false);
 
     chooserButton->setIcon(KisIconUtils::loadIcon("edit-copy"));
+
+    KisResourceLoaderRegistry::instance()->add(new KisResourceLoader<TasksetResource>("taskset", "taskset", QStringList() << "application/x-krita-taskset"));
 
     m_rserver = new KoResourceServerSimpleConstruction<TasksetResource>("kis_taskset", "*.kts");
     if (!QFileInfo(m_rserver->saveLocation()).exists()) {

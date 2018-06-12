@@ -46,6 +46,7 @@
 #include <QSysInfo>
 #include <QTimer>
 #include <QWidget>
+#include <QImageReader>
 
 #include <klocalizedstring.h>
 #include <kdesktopfile.h>
@@ -92,9 +93,25 @@
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
 #include <KisAutoSaveRecoveryDialog.h>
-#include <KisResourceCacheDb.h>
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
+
+#include <KisResourceLocator.h>
+#include <KisResourceLoader.h>
+#include <KisResourceLoaderRegistry.h>
+
+#include <kis_gbr_brush.h>
+#include <kis_png_brush.h>
+#include <kis_svg_brush.h>
+#include <kis_imagepipe_brush.h>
+#include <KoColorSet.h>
+#include <KoSegmentGradient.h>
+#include <KoStopGradient.h>
+#include <KoPattern.h>
+#include <kis_workspace_resource.h>
+#include <KisSessionResource.h>
+#include <resources/KoSvgSymbolCollectionResource.h>
+
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -108,7 +125,6 @@ public:
     KisAutoSaveRecoveryDialog *autosaveDialog {0};
     QPointer<KisMainWindow> mainWindow; // The first mainwindow we create on startup
     bool batchRun {false};
-    KisResourceCacheDb resourceDatabase;
 };
 
 class KisApplication::ResetStarting
@@ -298,6 +314,42 @@ void KisApplication::addResourceTypes()
 
 void KisApplication::loadResources()
 {
+    KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
+
+    reg->add(new KisResourceLoader<KisPaintOpPreset>("kis_paintoppresets", "paintoppresets",  QStringList() << "application/x-krita-paintoppreset"));
+
+    reg->add(new KisResourceLoader<KisResourceBundle>("kis_resourcebundles", "bundles", QStringList() << "application/x-krita-bundle"));
+
+    reg->add(new KisResourceLoader<KisGbrBrush>("gbr_brushes", "brushes", QStringList() << "image/x-gimp-brush"));
+    reg->add(new KisResourceLoader<KisImagePipeBrush>("gih_brushes", "brushes", QStringList() << "image/x-gimp-brush-animated"));
+    reg->add(new KisResourceLoader<KisSvgBrush>("gbr_brushes", "brushes", QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisPngBrush>("png_brushes", "brushes", QStringList() << "image/png"));
+
+    reg->add(new KisResourceLoader<KoSegmentGradient>("segmented_gradients", "gradients", QStringList() << "application/x-gimp-gradient"));
+    reg->add(new KisResourceLoader<KoStopGradient>("stop_gradients", "gradients", QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
+
+    reg->add(new KisResourceLoader<KoColorSet>("kopalettes", "palettes",
+                                     QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
+                                               << KisMimeDatabase::mimeTypeForSuffix("gpl")
+                                               << KisMimeDatabase::mimeTypeForSuffix("pal")
+                                               << KisMimeDatabase::mimeTypeForSuffix("act")
+                                               << KisMimeDatabase::mimeTypeForSuffix("aco")
+                                               << KisMimeDatabase::mimeTypeForSuffix("css")
+                                               << KisMimeDatabase::mimeTypeForSuffix("colors")
+                                               << KisMimeDatabase::mimeTypeForSuffix("xml")
+                                               << KisMimeDatabase::mimeTypeForSuffix("sbz")));
+
+    QList<QByteArray> src = QImageReader::supportedMimeTypes();
+    QStringList allImageMimes;
+    Q_FOREACH(const QByteArray ba, src) {
+        allImageMimes << QString::fromUtf8(ba);
+    }
+    reg->add(new KisResourceLoader<KoPattern>("ko_patterns", "patterns", allImageMimes));
+    reg->add(new KisResourceLoader<KisWorkspaceResource>("workspaces", "workspaces", QStringList() << "application/x-krita-workspace"));
+    reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisSessionResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
+    reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", QStringList() << "application/x-krita-session"));
+
     //    qDebug() << "loadResources();";
 
     setSplashScreenLoadingText(i18n("Loading Resources..."));
@@ -376,8 +428,6 @@ void KisApplication::loadGuiPlugins()
 bool KisApplication::start(const KisApplicationArguments &args)
 {
     KisConfig cfg;
-
-    d->resourceDatabase.initialize(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
 
 #if defined(Q_OS_WIN)
 #ifdef ENV32BIT

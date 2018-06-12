@@ -156,7 +156,7 @@ public:
 
         m_runnableJob = spontaneousJob;
 
-        m_exclusive = false;
+        m_exclusive = spontaneousJob->isExclusive();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
 

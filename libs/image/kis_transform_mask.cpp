@@ -107,6 +107,7 @@ KisTransformMask::KisTransformMask()
             new KisDumbTransformMaskParams()));
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
+    connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
 
     KisImageConfig cfg;
     m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
@@ -432,6 +433,17 @@ void KisTransformMask::forceUpdateTimedNode()
         m_d->updateSignalCompressor.stop();
         slotDelayedStaticUpdate();
     }
+}
+
+void KisTransformMask::threadSafeForceStaticImageUpdate()
+{
+    emit sigInternalForceStaticImageUpdate();
+}
+
+void KisTransformMask::slotInternalForceStaticImageUpdate()
+{
+    m_d->updateSignalCompressor.stop();
+    slotDelayedStaticUpdate();
 }
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)

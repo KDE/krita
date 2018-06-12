@@ -23,11 +23,12 @@
 #include "kis_layer.h"
 #include "kis_image.h"
 #include "kis_abstract_projection_plane.h"
-
+#include "kis_transform_mask_params_interface.h"
 
 KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskSP mask)
     : m_mask(mask)
 {
+    setExclusive(true);
 }
 
 bool KisRecalculateTransformMaskJob::overrides(const KisSpontaneousJob *_otherJob)
@@ -58,14 +59,31 @@ void KisRecalculateTransformMaskJob::run()
     KisImageSP image = layer->image();
     Q_ASSERT(image);
 
+
     /**
-     * When we call requestProjectionUpdateNoFilthy() on a layer,
-     * its masks' change rect is not counted, because it is considered
-     * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
-     * rect manually to get the correct update
+     * Depending on whether the mask is hidden we should either
+     * update it entirely via the setDirty() call, or we can use a
+     * lightweight approach by directly regenerating the
+     * precalculated static image using
+     * KisRecalculateTransformMaskJob.
      */
-    QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
-    image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds());
+    if (m_mask->transformParams()->isHidden()) {
+        QRect updateRect = m_mask->extent();
+
+        if (layer->original()) {
+            updateRect |= layer->original()->defaultBounds()->bounds();
+        }
+        m_mask->setDirty(updateRect);
+    } else {
+        /**
+         * When we call requestProjectionUpdateNoFilthy() on a layer,
+         * its masks' change rect is not counted, because it is considered
+         * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
+         * rect manually to get the correct update
+         */
+        QRect updateRect = layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds());
+    }
 }
 
 int KisRecalculateTransformMaskJob::levelOfDetail() const

@@ -307,9 +307,17 @@ public:
         Value m_value;
 
     public:
+        Iterator() = default;
         Iterator(ConcurrentMap& map)
         {
             // Since we've forbidden concurrent inserts (for now), nonatomic would suffice here, but let's plan ahead:
+            m_table = map.m_root.load(Consume);
+            m_idx = -1;
+            next();
+        }
+
+        void setMap(ConcurrentMap& map)
+        {
             m_table = map.m_root.load(Consume);
             m_idx = -1;
             next();

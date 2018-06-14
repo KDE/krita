@@ -83,6 +83,7 @@
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 #include <kwindowconfig.h>
+#include <kformat.h>
 
 #include "KoDockFactoryBase.h"
 #include "KoDocumentInfoDlg.h"
@@ -767,7 +768,7 @@ void KisMainWindow::updateCaption()
 
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
         }
 
 

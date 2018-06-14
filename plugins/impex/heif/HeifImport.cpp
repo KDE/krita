@@ -59,18 +59,32 @@ HeifImport::~HeifImport()
 }
 
 
+class Reader_QIODevice : public heif::Context::Reader {
+public:
+  Reader_QIODevice(QIODevice* device) : m_device(device) { m_total_length=m_device->bytesAvailable(); }
+
+  int64_t get_position() const { return m_device->pos(); }
+  int read(void* data, size_t size) { return m_device->read((char*)data,size) != size; }
+  int seek(int64_t position) { return !m_device->seek(position); }
+  heif_reader_grow_status wait_for_file_size(int64_t target_size) {
+    return (target_size > m_total_length) ? heif_reader_grow_status_size_beyond_eof : heif_reader_grow_status_size_reached;
+  }
+
+private:
+  QIODevice* m_device;
+  int64_t m_total_length;
+};
+
+
+
 KisImportExportFilter::ConversionStatus HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    // Load the file into memory and decode from there
-    // TODO: There will be a loader-API in libheif that we should use to connect to QIODevice
-
-    qint64 fileLength = io->bytesAvailable();
-    char* mem = new char[fileLength];
-    io->read(mem, fileLength);
+    // Wrap input stream into heif Reader object
+    Reader_QIODevice reader(io);
 
     try {
         heif::Context ctx;
-        ctx.read_from_memory(mem, fileLength);
+        ctx.read_from_reader(reader);
 
 
         // decode primary image
@@ -163,15 +177,11 @@ KisImportExportFilter::ConversionStatus HeifImport::convert(KisDocument *documen
           }
         }
 
-        delete[] mem;
-
 
         document->setCurrentImage(image);
         return KisImportExportFilter::OK;
     }
     catch (heif::Error err) {
-        delete[] mem;
-
         return setHeifError(document, err);
     }
 }

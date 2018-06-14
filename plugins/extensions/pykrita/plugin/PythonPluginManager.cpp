@@ -28,6 +28,7 @@
 #include <QSettings>
 #include <KoResourcePaths.h>
 #include <KConfigCore/KConfig>
+#include <KConfigCore/KDesktopFile>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KSharedConfig>
 #include <KConfigCore/KConfigGroup>
@@ -274,16 +275,16 @@ void PythonPluginManager::scanPlugins()
 
     Q_FOREACH(const QString &desktopFile, desktopFiles) {
 
-        QSettings s(desktopFile, QSettings::IniFormat);
-        s.beginGroup("Desktop Entry");
-        if (s.value("ServiceTypes").toString() == "Krita/PythonPlugin") {
+        const KDesktopFile df(desktopFile);
+        const KConfigGroup dg = df.desktopGroup();
+        if (dg.readEntry("ServiceTypes") == "Krita/PythonPlugin") {
             PythonPlugin plugin;
-            plugin.m_comment = s.value("Comment").toString();
-            plugin.m_name = s.value("Name").toString();
-            plugin.m_moduleName = s.value("X-KDE-Library").toString();
-            plugin.m_properties["X-Python-2-Compatible"] = s.value("X-Python-2-Compatible", false).toBool();
+            plugin.m_comment = df.readComment();
+            plugin.m_name = df.readName();
+            plugin.m_moduleName = dg.readEntry("X-KDE-Library");
+            plugin.m_properties["X-Python-2-Compatible"] = dg.readEntry("X-Python-2-Compatible", false);
 
-            QString manual = s.value("X-Krita-Manual").toString();
+            QString manual = dg.readEntry("X-Krita-Manual");
             if (!manual.isEmpty()) {
                 QFile f(QFileInfo(desktopFile).path() + "/" + plugin.m_moduleName + "/" + manual);
                 if (f.exists()) {

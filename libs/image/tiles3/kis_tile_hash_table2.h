@@ -38,9 +38,8 @@ public:
             m_numTiles.fetchAndAddRelaxed(1);
         }
 
-        TileTypeSP ptr(result);
         m_rawPointerUsers.fetchAndSubRelaxed(1);
-        return ptr;
+        return TileTypeSP(result);
     }
 
     TileTypeSP erase(quint32 key)
@@ -55,9 +54,9 @@ public:
             m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
         }
 
-//        if (m_rawPointerUsers == 1) {
-//            m_map.getGC().update(m_context);
-//        }
+        if (m_rawPointerUsers == 1) {
+            m_map.getGC().update(m_context);
+        }
 
         m_rawPointerUsers.fetchAndSubRelaxed(1);
         return ptr;
@@ -67,6 +66,11 @@ public:
     {
         m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileTypeSP result(m_map.get(key));
+
+        if (m_rawPointerUsers == 1) {
+            m_map.getGC().update(m_context);
+        }
+
         m_rawPointerUsers.fetchAndSubRelaxed(1);
         return result;
     }
@@ -89,9 +93,14 @@ public:
                 m_numTiles.fetchAndAddRelaxed(1);
             }
 
+            newTile = true;
             tile = m_map.get(key);
         } else {
             tile = mutator.getValue();
+        }
+
+        if (m_rawPointerUsers == 1) {
+            m_map.getGC().update(m_context);
         }
 
         m_rawPointerUsers.fetchAndSubRelaxed(1);

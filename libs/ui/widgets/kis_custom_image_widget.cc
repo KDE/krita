@@ -35,6 +35,7 @@
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 
+#include <KFormat>
 
 #include <kis_debug.h>
 
@@ -499,27 +500,13 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
     int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize * cs->pixelSize();
-    QString byte = i18n("bytes");
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for kilobyte", "KB");
-    }
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for megabyte", "MB");
-    }
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for gigabyte", "GB");
-    }
-    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: size in unites of arg6. Arg6: KB, MB or GB",
-                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 %6 of RAM.",
+    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: image size",
+                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 of RAM.",
                          width,
                          height,
                          cs->name(),
                          bitSize,
-                         layerSize,
-                         byte);
+                         KFormat().formatByteSize(layerSize));
     lblDocumentInfo->setText(text);
 }
 

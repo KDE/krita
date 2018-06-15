@@ -2570,7 +2570,17 @@ void KisMainWindow::showManual()
 
 void KisMainWindow::moveEvent(QMoveEvent *e)
 {
-    if (qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(e->oldPos())) {
+    /**
+     * For checking if the display number has changed or not we should always use
+     * positional overload, not using QWidget overload. Otherwise we might get
+     * inconsistency, because screenNumber(widget) can return -1, but screenNumber(pos)
+     * will always return the nearest screen.
+     */
+
+    const int oldScreen = qApp->desktop()->screenNumber(e->oldPos());
+    const int newScreen = qApp->desktop()->screenNumber(e->pos());
+
+    if (oldScreen != newScreen) {
         KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

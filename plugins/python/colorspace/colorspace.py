@@ -22,8 +22,8 @@ class ColorSpaceExtension(krita.Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("color_space", "Color Space")
-        action.setToolTip("Plugin to change color space to selected documents")
+        action = window.createAction("color_space", i18n("Color Space"))
+        action.setToolTip(i18n("Plugin to change color space of selected documents."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

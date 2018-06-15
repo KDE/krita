@@ -58,12 +58,12 @@ class UITenScripts(object):
         rowLayout = QHBoxLayout()
         label = QLabel()
         directoryTextField = QLineEdit()
-        directoryDialogButton = QPushButton("...")
+        directoryDialogButton = QPushButton(i18n("..."))
 
         directoryTextField.setReadOnly(True)
         label.setText(self.tenscripts.actions[key].shortcut().toString())
-        directoryTextField.setToolTip("Selected Path")
-        directoryDialogButton.setToolTip("Select the script")
+        directoryTextField.setToolTip(i18n("Selected path"))
+        directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)
 
         self.scriptsLayout.addWidget(label, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
@@ -84,7 +84,7 @@ class UITenScripts(object):
 
     def _selectScript(self):
         dialog = QFileDialog(self.mainDialog)
-        dialog.setNameFilter('Python files (*.py)')
+        dialog.setNameFilter(i18n("Python files (*.py)"))
 
         if dialog.exec_():
             selectedFile = dialog.selectedFiles()[0]

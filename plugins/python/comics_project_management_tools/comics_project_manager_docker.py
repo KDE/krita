@@ -833,7 +833,7 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_batch_resize(self):
         dialog = QDialog()
-        dialog.setWindowTitle(i18n("Risize all pages."))
+        dialog.setWindowTitle(i18n("Resize all pages."))
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)

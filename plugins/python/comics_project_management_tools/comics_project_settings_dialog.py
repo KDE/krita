@@ -126,7 +126,7 @@ class comics_project_details_editor(QDialog):
         self.templateLocation = path_select(question=i18n("Where are the templates?"), projectUrl=self.projectUrl)
         self.translationLocation = path_select(question=i18n("Where are the translations?"), projectUrl=self.projectUrl)
         self.keyLocation = path_select(question=i18n("Where are the extra auto-completion keys located?"))
-        self.keyLocation.setToolTip(i18n("The location for extra autocompletion keys in the meta-data editor. Point this at a folder containing key_characters/key_format/key_genre/key_rating/key_author_roles/key_other with inside txt files(csv for tating) containing the extra auto-completion keys, each on a new line. This path is stored in the krita configuration, and not the project configuration."))
+        self.keyLocation.setToolTip(i18n("The location for extra autocompletion keys in the metadata editor. Point this at a folder containing key_characters/key_format/key_genre/key_rating/key_author_roles/key_other with inside txt files (csv for rating) containing the extra auto-completion keys, each on a new line. This path is stored in the Krita configuration, and not the project configuration."))
         self.templateLocation.locationChanged.connect(self.refill_templates)
 
         layout.addRow(i18n("Project Name:"), self.lnProjectName)

@@ -63,9 +63,9 @@ public:
         if (rhs.isInfinite() || isInfinite()) {
             m_end = std::numeric_limits<int>::min();
         } else if (!isValid()) {
-            m_end = rhs.end();
+            m_end = rhs.m_end;
         } else {
-            m_end = std::max(m_end, rhs.end());
+            m_end = std::max(m_end, rhs.m_end);
         }
 
         return *this;
@@ -76,16 +76,16 @@ public:
             return *this;
         } else if (!rhs.isValid()) {
             m_start = rhs.start();
-            m_end = rhs.end();
+            m_end = rhs.m_end;
             return *this;
         } else {
             m_start = std::max(m_start, rhs.start());
         }
 
         if (isInfinite()) {
-            m_end = rhs.end();
+            m_end = rhs.m_end;
         } else if (!rhs.isInfinite()) {
-            m_end = std::min(m_end, rhs.end());
+            m_end = std::min(m_end, rhs.m_end);
         }
 
         return *this;

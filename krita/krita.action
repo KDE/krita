@@ -1310,10 +1310,10 @@
     </Action>
     <Action name="KritaShape/KisToolLazyBrush">
       <icon></icon>
-      <text>Lazy Brush Tool</text>
+      <text>Colorize Mask Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Lazy Brush Tool</toolTip>
-      <iconText>Lazy Brush Tool</iconText>
+      <toolTip>Colorize Mask Tool</toolTip>
+      <iconText>Colorize Mask Tool</iconText>
       <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>

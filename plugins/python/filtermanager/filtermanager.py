@@ -22,8 +22,8 @@ class FilterManagerExtension(krita.Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("filter_manager", "Filter Manager")
-        action.setToolTip("Plugin to filters management")
+        action = window.createAction("filter_manager", i18n("Filter Manager"))
+        action.setToolTip(i18n("Plugin to filters management."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

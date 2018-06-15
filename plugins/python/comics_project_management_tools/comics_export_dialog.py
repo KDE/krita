@@ -263,9 +263,9 @@ class comic_export_setting_dialog(QDialog):
         self.cmbLabelsRemove = labelSelector()
         formLayers.addRow(i18n("Label for removal:"), self.cmbLabelsRemove)
         self.ln_text_layer_name = QLineEdit()
-        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma separated."))
+        self.ln_text_layer_name.setToolTip(i18n("These are keywords that can be used to identify text layers. A layer only needs to contain the keyword to be recognized. Keywords should be comma separated."))
         self.ln_panel_layer_name = QLineEdit()
-        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognised. Keywords should be comma separated."))
+        self.ln_panel_layer_name.setToolTip(i18n("These are keywords that can be used to identify panel layers. A layer only needs to contain the keyword to be recognized. Keywords should be comma separated."))
         formLayers.addRow(i18n("Text Layer Key:"), self.ln_text_layer_name)
         formLayers.addRow(i18n("Panel Layer Key:"), self.ln_panel_layer_name)
 

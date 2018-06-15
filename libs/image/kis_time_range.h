@@ -96,6 +96,7 @@ public:
     }
 
     inline int end() const {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isInfinite(), m_start);
         return m_end;
     }
 

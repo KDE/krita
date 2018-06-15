@@ -109,7 +109,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 
 
     // Create image
-    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("Create"));
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("&Create"));
     connect(newDialogConfirmationButtonBox, SIGNAL(accepted()), this, SLOT(createImage()));
 
 

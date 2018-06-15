@@ -146,8 +146,8 @@ class comicsExporter():
                     sizesList["TIFF"] = self.configDictionary["TIFF"]
             # Export the pngs according to the sizeslist.
             # Create a progress dialog.
-            self.progress = QProgressDialog("Preparing export.", str(), 0, lengthProcess)
-            self.progress.setWindowTitle("Exporting comic...")
+            self.progress = QProgressDialog(i18n("Preparing export."), str(), 0, lengthProcess)
+            self.progress.setWindowTitle(i18n("Exporting Comic..."))
             self.progress.setCancelButton(None)
             self.timer = QElapsedTimer()
             self.timer.start()
@@ -165,7 +165,7 @@ class comicsExporter():
                     self.acbfLocation = str(exportPath / "metadata" / str(title + ".acbf"))
 
                     locationStandAlone = str(exportPath / str(title + ".acbf"))
-                    self.progress.setLabelText("Saving out ACBF and\nACBF standalone")
+                    self.progress.setLabelText(i18n("Saving out ACBF and\nACBF standalone"))
                     self.progress.setValue(self.progress.value()+2)
                     export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone, self.projectURL)
                     print("CPMT: Exported to ACBF", export_success)
@@ -176,12 +176,12 @@ class comicsExporter():
                     export_success = self.export_to_cbz(exportPath)
                     print("CPMT: Exported to CBZ", export_success)
                 if "EPUB" in sizesList.keys():
-                    self.progress.setLabelText("Saving out EPUB")
+                    self.progress.setLabelText(i18n("Saving out EPUB"))
                     self.progress.setValue(self.progress.value()+1)
                     export_success = exporters.EPUB.export(self.configDictionary, self.projectURL, self.pagesLocationList["EPUB"])
                     print("CPMT: Exported to EPUB", export_success)
         else:
-            QMessageBox.warning(self, i18n("Export not possible"), i18n("Nothing to export,\nurl not set."), QMessageBox.Ok)
+            QMessageBox.warning(self, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.Ok)
             print("CPMT: Nothing to export, url not set.")
 
         return export_success
@@ -194,12 +194,12 @@ class comicsExporter():
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
             title = self.configDictionary["title"]
-        self.progress.setLabelText("Saving out CoMet\nmetadata file")
+        self.progress.setLabelText(i18n("Saving out CoMet\nmetadata file"))
         self.progress.setValue(self.progress.value()+1)
         self.cometLocation = str(exportPath / "metadata" / str(title + " CoMet.xml"))
         export_success = exporters.CoMet.write_xml(self.configDictionary, self.pagesLocationList["CBZ"], self.cometLocation)
         self.comicRackInfo = str(exportPath / "metadata" / "ComicInfo.xml")
-        self.progress.setLabelText("Saving out Comicrack\nmetadata file")
+        self.progress.setLabelText(i18n("Saving out Comicrack\nmetadata file"))
         self.progress.setValue(self.progress.value()+1)
         export_success = exporters.comic_rack_xml.write_xml(self.configDictionary, self.pagesLocationList["CBZ"], self.comicRackInfo)
         self.package_cbz(exportPath)
@@ -374,7 +374,7 @@ class comicsExporter():
             print("CPMT: Export has finished. If there are memory leaks, they are caused by file layers.")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
-        QMessageBox.warning(self, i18n("Export not possible"), i18n("Export not happening because\nthere aren't any pages."), QMessageBox.Ok)
+        QMessageBox.warning(self, i18n("Export not Possible"), i18n("Export not happening because there are no pages."), QMessageBox.Ok)
         return False
 
     """
@@ -631,7 +631,7 @@ class comicsExporter():
         cbzArchive.write(self.cometLocation, Path(self.cometLocation).name)
         cbzArchive.write(self.comicRackInfo, Path(self.comicRackInfo).name)
         comic_book_info_json_dump = str()
-        self.progress.setLabelText("Saving out Comicbook\ninfo metadata file")
+        self.progress.setLabelText(i18n("Saving out Comicbook\ninfo metadata file"))
         self.progress.setValue(self.progress.value()+1)
         comic_book_info_json_dump = exporters.comic_book_info.writeJson(self.configDictionary)
         cbzArchive.comment = comic_book_info_json_dump.encode("utf-8")
@@ -641,7 +641,7 @@ class comicsExporter():
             for page in self.pagesLocationList["CBZ"]:
                 if (Path(page).exists()):
                     cbzArchive.write(page, Path(page).name)
-        self.progress.setLabelText("Packaging CBZ")
+        self.progress.setLabelText(i18n("Packaging CBZ"))
         self.progress.setValue(self.progress.value()+1)
         # Close the zip file when done.
         cbzArchive.close()

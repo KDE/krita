@@ -84,7 +84,7 @@ class comics_template_dialog(QDialog):
     def __init__(self, templateDirectory):
         super().__init__()
         self.templateDirectory = templateDirectory
-        self.setWindowTitle(i18n("Add new template"))
+        self.setWindowTitle(i18n("Add new Template"))
         self.setLayout(QVBoxLayout())
 
         self.templates = QComboBox()
@@ -100,9 +100,9 @@ class comics_template_dialog(QDialog):
         self.layout().addWidget(self.buttons)
         mainWidget.setLayout(QVBoxLayout())
 
-        btn_create = QPushButton(i18n("Create a template"))
+        btn_create = QPushButton(i18n("Create Template"))
         btn_create.clicked.connect(self.slot_create_template)
-        btn_import = QPushButton(i18n("Import templates"))
+        btn_import = QPushButton(i18n("Import Templates"))
         btn_import.clicked.connect(self.slot_import_template)
         mainWidget.layout().addWidget(self.templates)
         mainWidget.layout().addWidget(btn_create)
@@ -142,7 +142,7 @@ class comics_template_create(QDialog):
     def __init__(self, templateDirectory):
         super().__init__()
         self.templateDirectory = templateDirectory
-        self.setWindowTitle(i18n("Create new template"))
+        self.setWindowTitle(i18n("Create new Template"))
         self.setLayout(QVBoxLayout())
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.accept)

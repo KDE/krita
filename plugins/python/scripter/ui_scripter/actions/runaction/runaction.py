@@ -22,6 +22,7 @@ import sys
 import traceback
 import inspect
 from . import docwrapper
+import krita
 
 if sys.version_info[0] > 2:
     import importlib
@@ -46,7 +47,7 @@ class RunAction(QAction):
 
         self.triggered.connect(self.run)
 
-        self.setText('Run')
+        self.setText(i18n("Run"))
         self.setToolTip('Run Ctrl+R')
         self.setIcon(QIcon(':/icons/run.svg'))
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))

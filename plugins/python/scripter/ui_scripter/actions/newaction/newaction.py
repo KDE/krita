@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction, QMessageBox
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
+import krita
 
 
 class NewAction(QAction):
@@ -28,7 +29,7 @@ class NewAction(QAction):
 
         self.triggered.connect(self.new)
 
-        self.setText('New')
+        self.setText(i18n("New"))
         self.setObjectName('new')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
 
@@ -39,8 +40,8 @@ class NewAction(QAction):
     def new(self):
         msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)
 
-        msgBox.setText("The document has been modified.")
-        msgBox.setInformativeText("Do you want to save your changes?")
+        msgBox.setText(i18n("The document has been modified."))
+        msgBox.setInformativeText(i18n("Do you want to save your changes?"))
         msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
         msgBox.setDefaultButton(QMessageBox.Save)
 

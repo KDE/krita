@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon
 from scripter import resources_rc
+import krita
 
 
 class ClearAction(QAction):
@@ -29,7 +30,7 @@ class ClearAction(QAction):
 
         self.triggered.connect(self.clear)
 
-        self.setText('Clear')
+        self.setText(i18n("Clear"))
         # path to the icon
         # self.setIcon(QIcon(':/icons/clear.svg'))
 

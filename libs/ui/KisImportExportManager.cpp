@@ -422,7 +422,8 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         bool *alsoAsKra)
 {
 
-    if (QThread::currentThread() == qApp->thread()) return false;
+    // prevents the animation renderer from running this code
+    if (QThread::currentThread() != qApp->thread()) return false;
 
     const QString mimeUserDescription = KisMimeDatabase::descriptionForMimeType(to);
 

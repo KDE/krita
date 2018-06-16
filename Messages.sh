@@ -23,5 +23,8 @@ kundo2_aware_xgettext krita.pot i18ndata rc.cpp \
                   `find . -name \*.cc -o -name \*.h  -o -name \*.cpp | \
                   grep -v '/tests/' | grep -v './sdk/templates' | grep -v './krita/crashreporter/'`
 
+# Extract the messages in Python plugins.
+$XGETTEXT -L Python `find . -name \*.py` -j -o $podir/krita.pot
+
 # Clean up
 rm -f i18ndata rc.cpp

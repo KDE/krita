@@ -22,8 +22,8 @@ class DocumentToolsExtension(krita.Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("document_tools", "Document Tools")
-        action.setToolTip("Plugin to manipulate properties of selected documents")
+        action = window.createAction("document_tools", i18n("Document Tools"))
+        action.setToolTip(i18n("Plugin to manipulate properties of selected documents."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

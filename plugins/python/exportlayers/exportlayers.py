@@ -22,8 +22,8 @@ class ExportLayersExtension(krita.Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("export_layers", "Export Layers")
-        action.setToolTip("Plugin to export layers from a document")
+        action = window.createAction("export_layers", i18n("Export Layers"))
+        action.setToolTip(i18n("Plugin to export layers from a document."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

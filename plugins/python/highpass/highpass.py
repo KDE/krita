@@ -24,13 +24,13 @@ class HighpassExtension(Extension):
         pass
     
     def createActions(self, window):
-        action = window.createAction("high_pass_filter", "High Pass")
+        action = window.createAction("high_pass_filter", i18n("High Pass"))
         action.triggered.connect(self.showDialog)
 
     def showDialog(self):
         doc = Application.activeDocument()
         if doc == None:
-            QMessageBox.information(Application.activeWindow().qwindow(), "Highpass Filter", "There is no active image.")
+            QMessageBox.information(Application.activeWindow().qwindow(), i18n("High Pass Filter"), i18n("There is no active image."))
             return
 
         self.dialog = QDialog(Application.activeWindow().qwindow())
@@ -41,11 +41,11 @@ class HighpassExtension(Extension):
 
         self.cmbMode = QComboBox()
         self.cmbMode.addItems(["Color", "Preserve DC", "Greyscale", "Greyscale, Apply Chroma", "Redrobes"])
-        self.keepOriginal = QCheckBox("Keep Original Layer")
+        self.keepOriginal = QCheckBox(i18n("Keep original layer"))
         self.keepOriginal.setChecked(True)
         form = QFormLayout()
-        form.addRow("Filter Radius", self.intRadius)
-        form.addRow("Mode", self.cmbMode)
+        form.addRow(i18n("Filter radius:"), self.intRadius)
+        form.addRow(i18n("Mode:"), self.cmbMode)
         form.addRow("", self.keepOriginal)
 
         self.buttonBox = QDialogButtonBox(self.dialog)

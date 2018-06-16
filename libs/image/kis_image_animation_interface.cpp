@@ -148,6 +148,7 @@ const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
 
 void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->fullClipRange = range;
     emit sigFullClipRangeChanged();
 }
@@ -171,6 +172,7 @@ const KisTimeRange& KisImageAnimationInterface::playbackRange() const
 
 void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->playbackRange = range;
     emit sigPlaybackRangeChanged();
 }

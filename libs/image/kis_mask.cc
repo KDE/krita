@@ -253,11 +253,15 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
         m_d->selection->updateProjection(applyRect);
 
         KisSelectionSP effectiveSelection = m_d->selection;
-        QRect effectiveExtent = effectiveSelection->selectedRect();
+        QRect effectiveExtent;
 
         {
             // Access temporary target under the lock held
             KisIndirectPaintingSupport::ReadLocker l(this);
+
+            // extent of m_d->selection should also be accessed under a lock,
+            // because it might be being merged in by the temporary target atm
+            effectiveExtent = effectiveSelection->selectedRect();
 
             if (hasTemporaryTarget()) {
                 effectiveExtent |= temporaryTarget()->extent();

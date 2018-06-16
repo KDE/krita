@@ -86,8 +86,6 @@ public:
     void hideAllStatusBarItems();
     void showAllStatusBarItems();
 
-    static QString formatSize(qint64 size);
-
     KoProgressUpdater *progressUpdater();
 
 public Q_SLOTS:

@@ -225,9 +225,6 @@ KisFrameDataSerializer::Frame KisFrameDataSerializer::loadFrame(int frameId, Kis
 
     file.close();
 
-    CC.addVal(compressionTime / 1000);
-    CC.addTotal(loadingTime.nsecsElapsed() / 1000);
-
     return frame;
 }
 

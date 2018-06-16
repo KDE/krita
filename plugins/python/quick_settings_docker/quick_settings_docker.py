@@ -33,7 +33,7 @@ class QuickSettingsDocker(DockWidget):
         widget = QWidget()
         layout = QVBoxLayout()
         widget.setLayout(layout)
-        self.setWindowTitle("Quick Settings Docker")
+        self.setWindowTitle(i18n("Quick Settings Docker"))
         tabWidget = QTabWidget()
 
         self.brushSizeTableView = QListView()
@@ -57,9 +57,9 @@ class QuickSettingsDocker(DockWidget):
         self.brushFlowTableView.setUniformItemSizes(True)
         self.brushFlowTableView.setSelectionMode(QListView.SingleSelection)
 
-        tabWidget.addTab(self.brushSizeTableView, "Size")
-        tabWidget.addTab(self.brushOpacityTableView, "Opacity")
-        tabWidget.addTab(self.brushFlowTableView, "Flow")
+        tabWidget.addTab(self.brushSizeTableView, i18n("Size"))
+        tabWidget.addTab(self.brushOpacityTableView, i18n("Opacity"))
+        tabWidget.addTab(self.brushFlowTableView, i18n("Flow"))
         layout.addWidget(tabWidget)
         self.setWidget(widget)  # Add the widget to the docker.
 

@@ -35,7 +35,6 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
     setWindowTitle(i18nc("@title:window","Insert Keyframes"));
     setModal(true);
     setLayout(new QVBoxLayout(this));
-
     {   // Count and Spacing Forms.
         QWidget *forms = new QWidget(this);
         layout()->addWidget(forms);
@@ -46,13 +45,12 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
         frameTimingSpinbox.setMinimum(1);
         frameTimingSpinbox.setValue(1);
 
-        QFormLayout *LO = new QFormLayout(this);
-        forms->setLayout(LO);
+        QFormLayout *LO = new QFormLayout(forms);
+
 
         LO->addRow(QString(i18nc("@label:spinbox", "Number of frames:")), &frameCountSpinbox);
         LO->addRow(QString(i18nc("@label:spinbox", "Frame timing:")), &frameTimingSpinbox);
     }
-
     {   // Side Buttons.
         QGroupBox *sideRadioButtons = new QGroupBox(i18nc("@label:group","Side:"), this);
         layout()->addWidget(sideRadioButtons);
@@ -61,13 +59,11 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
         rightAfter = new QRadioButton(i18nc("@label:radio", "Right / After"), sideRadioButtons);
         leftBefore->setChecked(true);
 
-        QVBoxLayout *LO = new QVBoxLayout(this);
-        sideRadioButtons->setLayout(LO);
+        QVBoxLayout *LO = new QVBoxLayout(sideRadioButtons);
 
         LO->addWidget(leftBefore);
         LO->addWidget(rightAfter);
     }
-
     {   // Cancel / OK Buttons.
         QDialogButtonBox *buttonbox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
         layout()->addWidget(buttonbox);

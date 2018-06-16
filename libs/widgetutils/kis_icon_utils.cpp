@@ -122,7 +122,7 @@ QIcon loadIcon(const QString &name)
     }
 
     QIcon icon = QIcon::fromTheme(name);
-    qWarning() << "\tfalling back on QIcon::FromTheme:" << name;
+    //qDebug() << "falling back on QIcon::FromTheme:" << name;
     s_icons.insert(icon.cacheKey(), name);
 #if defined CACHE_ICONS
     s_cache.insert(name, icon);

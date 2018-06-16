@@ -319,7 +319,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
 
     bool runningInBundle = (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita") || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
-    qDebug() << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
+    dbgScript << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
 
 #ifdef Q_OS_WIN
     constexpr char pathSeparator = ';';
@@ -333,7 +333,7 @@ bool Python::setPath(const QStringList& scriptPaths)
 
     // Append the Krita libraries path
     QString pythonLibsPath = findKritaPythonLibsPath("krita-python-libs");
-    qDebug() << "pythonLibsPath (krita-python-libs)" << pythonLibsPath;
+    dbgScript << "pythonLibsPath (krita-python-libs)" << pythonLibsPath;
     if (pythonLibsPath.isEmpty()) {
         dbgScript << "Cannot find krita-python-libs";
         return false;
@@ -344,7 +344,7 @@ bool Python::setPath(const QStringList& scriptPaths)
 #ifndef Q_OS_WIN
     // Append the sip libraries path
     pythonLibsPath = findKritaPythonLibsPath("sip");
-    qDebug() << "pythonLibsPath (sip)" << pythonLibsPath;
+    dbgScript << "pythonLibsPath (sip)" << pythonLibsPath;
     if (!pythonLibsPath.isEmpty()) {
         dbgScript << "Found sip at" << pythonLibsPath;
         paths.append(pythonLibsPath);

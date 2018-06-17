@@ -260,11 +260,11 @@ set(kritaui_LIB_SRCS
     widgets/kis_preset_live_preview_view.cpp
     widgets/KoDualColorButton.cpp
     widgets/kis_color_button.cpp
-    widgets/KisVisualColorSelector.cpp
-    widgets/KisVisualColorSelectorShape.cpp
-    widgets/KisVisualEllipticalSelectorShape.cpp
-    widgets/KisVisualRectangleSelectorShape.cpp
-    widgets/KisVisualTriangleSelectorShape.cpp
+    # widgets/KisVisualColorSelector.cpp
+    # widgets/KisVisualColorSelectorShape.cpp
+    # widgets/KisVisualEllipticalSelectorShape.cpp
+    # widgets/KisVisualRectangleSelectorShape.cpp
+    # widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
 
@@ -389,7 +389,7 @@ set(kritaui_LIB_SRCS
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
 
-    kis_dlg_internal_color_selector.cpp
+    # kis_dlg_internal_color_selector.cpp
 )
 
 if(WIN32)

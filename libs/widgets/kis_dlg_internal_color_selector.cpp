@@ -28,7 +28,7 @@
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
 #include <KisPaletteModel.h>
-#include <KisColorsetChooser.h>
+#include <KisPaletteChooser.h>
 #include <kis_palette_view.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>

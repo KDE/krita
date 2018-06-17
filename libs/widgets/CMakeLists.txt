@@ -93,6 +93,15 @@ set(kritawidgets_LIB_SRCS
     kis_color_input.cpp
 
     kis_spinbox_color_selector.cpp
+
+    kis_dlg_internal_color_selector.cpp
+    KisPaletteChooser.cpp
+
+    KisVisualColorSelector.cpp
+    KisVisualColorSelectorShape.cpp
+    KisVisualEllipticalSelectorShape.cpp
+    KisVisualRectangleSelectorShape.cpp
+    KisVisualTriangleSelectorShape.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -103,6 +112,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
+    WdgPaletteChooser.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

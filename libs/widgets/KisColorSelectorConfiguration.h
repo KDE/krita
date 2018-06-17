@@ -21,9 +21,9 @@
 #include <QString>
 #include <QStringList>
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
-class KRITAUI_EXPORT KisColorSelectorConfiguration {
+class KRITAWIDGETS_EXPORT KisColorSelectorConfiguration {
 
 public:
 

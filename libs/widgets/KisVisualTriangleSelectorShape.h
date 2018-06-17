@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KISVISUALCOLORSELECTOR_H
-#define KISVISUALCOLORSELECTOR_H
+#ifndef KIS_VISUAL_TRIANGLE_SELECTOR_SHAPE_H
+#define KIS_VISUAL_TRIANGLE_SELECTOR_SHAPE_H
 
 #include <QWidget>
 #include <QScopedPointer>
@@ -31,24 +31,25 @@
 #include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
-class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape
+class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT
 public:
     enum singelDTypes{border, borderMirrored};
-    explicit KisVisualEllipticalSelectorShape(QWidget *parent,
-                                              Dimensions dimension,
-                                              ColorModel model,
-                                              const KoColorSpace *cs,
-                                              int channel1, int channel2,
-                                              const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int barWidth=20,
-                                              KisVisualEllipticalSelectorShape::singelDTypes d = KisVisualEllipticalSelectorShape::border
+    explicit KisVisualTriangleSelectorShape(QWidget *parent,
+                                            Dimensions dimension,
+                                            ColorModel model,
+                                            const KoColorSpace *cs,
+                                            int channel1, int channel2,
+                                            const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(),
+                                            int barwidth=20
             );
-    ~KisVisualEllipticalSelectorShape() override;
+    ~KisVisualTriangleSelectorShape() override;
 
     void setBorderWidth(int width) override;
+    void setTriangle();
 
     /**
      * @brief getSpaceForSquare
@@ -58,18 +59,21 @@ public:
     QRect getSpaceForSquare(QRect geom) override;
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
+
 protected:
     void resizeEvent(QResizeEvent *) override;
+
 private:
+
     QPointF convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) override;
     QPointF convertWidgetCoordinateToShapeCoordinate(QPoint coordinate) override;
 
-
     singelDTypes m_type;
     int m_barWidth;
+    QPolygon m_triangle;
+    QPointF m_center;
+    qreal m_radius;
     QRegion getMaskMap() override;
     void drawCursor() override;
-    QSize sizeHint() const override;
 };
-
-#endif // KISVISUALCOLORSELECTOR_H
+#endif

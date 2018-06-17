@@ -31,7 +31,7 @@
 #include "KisVisualColorSelector.h"
 #include "KisColorSelectorConfiguration.h"
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * @brief The KisVisualColorSelectorShape class

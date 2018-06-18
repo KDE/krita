@@ -160,7 +160,6 @@ public:
 
     QDockWidget* createDockWidget() override {
         KoToolDocker* dockWidget = new KoToolDocker();
-        dockWidget->setTabEnabled(false);
         return dockWidget;
     }
 

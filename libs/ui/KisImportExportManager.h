@@ -98,7 +98,7 @@ public:
      * information here.
      * Optionally, @p extraNativeMimeTypes are added after the native mimetype.
      */
-    static QStringList mimeFilter(Direction direction);
+    static QStringList supportedMimeTypes(Direction direction);
 
     /**
      * @brief filterForMimeType loads the relevant import/export plugin and returns it. The caller

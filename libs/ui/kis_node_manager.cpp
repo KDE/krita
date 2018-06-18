@@ -1016,7 +1016,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export));
     QString filename = dialog.filename();
 
     if (filename.isEmpty()) return;

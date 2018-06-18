@@ -50,7 +50,7 @@ struct KisPaintingAssistantsDecoration::Private {
     KisPaintingAssistantSP firstAssistant;
     KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
-    QColor m_assistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
+    QColor m_globalAssistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
     bool m_isEditingAssistants = false;
     bool m_outlineVisible = false;
     int m_handleSize = 14; // size of editor handles on assistants
@@ -207,7 +207,7 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
 
-        assistant->setAssistantColor(assistantsColor());
+        assistant->setAssistantGlobalColor(globalAssistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
 
         if (isEditingAssistants()) {
@@ -227,7 +227,10 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 {
         QTransform initialTransform = converter->documentToWidgetTransform();
 
+        QColor colorToPaint = assistant->useCustomColor() ? assistant->assistantCustomColor() : assistant->assistantsGlobalColor();
+
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+
 
             QPointF transformedHandle = initialTransform.map(*handle);
             QRectF ellipse(transformedHandle -  QPointF(handleSize() * 0.5, handleSize() * 0.5), QSizeF(handleSize(), handleSize()));
@@ -237,7 +240,7 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 
             gc.save();
             gc.setPen(Qt::NoPen);
-            gc.setBrush(assistantsColor());
+            gc.setBrush(colorToPaint);
             gc.drawPath(path);
             gc.restore();
         }
@@ -252,7 +255,7 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 
              gc.save();
              gc.setPen(Qt::NoPen);
-             gc.setBrush(assistantsColor());
+             gc.setBrush(colorToPaint);
              gc.drawPath(path);
              gc.restore();
          }
@@ -349,13 +352,13 @@ void KisPaintingAssistantsDecoration::toggleOutlineVisible()
     setOutlineVisible(!outlineVisibility());
 }
 
-QColor KisPaintingAssistantsDecoration::assistantsColor() {
-    return d->m_assistantsColor;
+QColor KisPaintingAssistantsDecoration::globalAssistantsColor() {
+    return d->m_globalAssistantsColor;
 }
 
-void KisPaintingAssistantsDecoration::setAssistantsColor(QColor color)
+void KisPaintingAssistantsDecoration::setGlobalAssistantsColor(QColor color)
 {
-    d->m_assistantsColor = color;
+    d->m_globalAssistantsColor = color;
     uncache();
 }
 
@@ -471,3 +474,21 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
 
 }
+
+QString KisPaintingAssistantsDecoration::qColorToQString(QColor color)
+{
+    // color channels will usually have 0-255
+    QString customColor = QString::number(color.red()).append(",")
+                         .append(QString::number(color.blue())).append(",")
+                         .append(QString::number(color.green())).append(",")
+                         .append(QString::number(color.alpha()));
+
+    return customColor;
+}
+
+QColor KisPaintingAssistantsDecoration::qStringToQColor(QString colorString)
+{
+    QStringList colorComponents = colorString.split(',');
+    return QColor(colorComponents[0].toInt(), colorComponents[1].toInt(), colorComponents[2].toInt(), colorComponents[3].toInt());
+}
+

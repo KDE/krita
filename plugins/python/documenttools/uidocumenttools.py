@@ -25,7 +25,7 @@ class UIDocumentTools(object):
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
-        self.refreshButton = QPushButton("Refresh")
+        self.refreshButton = QPushButton(i18n("Refresh"))
         self.widgetDocuments = QListWidget()
         self.tabTools = QTabWidget()
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -48,7 +48,7 @@ class UIDocumentTools(object):
         self.documentLayout.addWidget(self.widgetDocuments)
         self.documentLayout.addWidget(self.refreshButton)
 
-        self.formLayout.addRow('Documents', self.documentLayout)
+        self.formLayout.addRow(i18n("Documents:"), self.documentLayout)
         self.formLayout.addRow(self.tabTools)
 
         self.line = QFrame()
@@ -60,7 +60,7 @@ class UIDocumentTools(object):
         self.mainLayout.addWidget(self.buttonBox)
 
         self.mainDialog.resize(500, 300)
-        self.mainDialog.setWindowTitle("Document Tools")
+        self.mainDialog.setWindowTitle(i18n("Document Tools"))
         self.mainDialog.setSizeGripEnabled(True)
         self.mainDialog.show()
         self.mainDialog.activateWindow()
@@ -101,7 +101,7 @@ class UIDocumentTools(object):
         if selectedDocuments:
             widget = self.tabTools.currentWidget()
             widget.adjust(selectedDocuments)
-            self.msgBox.setText("The selected documents has been modified.")
+            self.msgBox.setText(i18n("The selected documents has been modified."))
         else:
-            self.msgBox.setText("Select at least one document.")
+            self.msgBox.setText(i18n("Select at least one document."))
         self.msgBox.exec_()

@@ -64,21 +64,21 @@ namespace KisAnimationUtils
 
     void sortPointsForSafeMove(QModelIndexList *points, const QPoint &offset);
 
-    KUndo2Command* createMoveKeyframesCommand(const FrameItemList &srcFrames,
-                                              const FrameItemList &dstFrames,
-                                              bool copy, KUndo2Command *parentCommand = 0);
+    KUndo2Command* createMoveKeyframesCommand(const FrameItemList &srcFrames, const FrameItemList &dstFrames,
+                                              bool copy, bool moveEmpty, KUndo2Command *parentCommand = 0);
 
 
     /**
      * @brief implements safe moves of the frames (even if there are cycling move dependencies)
      * @param movePairs the jobs for the moves
      * @param copy shows if the frames should be copied or not
+     * @param moveEmpty allows an empty frame to replace a populated one
      * @param parentCommand the command that should be a parent of the created command
      * @return a created undo command
      */
     KRITAANIMATIONDOCKER_EXPORT
     KUndo2Command* createMoveKeyframesCommand(const FrameMovePairList &movePairs,
-                                                  bool copy, KUndo2Command *parentCommand = 0);
+                                              bool copy, bool moveEmptyFrames, KUndo2Command *parentCommand = 0);
 
     bool supportsContentFrames(KisNodeSP node);
 

@@ -41,8 +41,6 @@ public:
     QRect defaultBounds() const;
     int currentLevelOfDetail() const;
 
-    QPainterPath layerOutlineCache() const;
-
     void setupFinalPainter(KisPainter *gc,
                            quint8 opacity,
                            const QBitArray &channelFlags) const;

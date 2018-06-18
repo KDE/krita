@@ -32,9 +32,6 @@ public:
     void undo() override;
 
 private:
-    void updateMask(bool isHidden);
-
-private:
     KisTransformMaskSP m_mask;
     KisTransformMaskParamsInterfaceSP m_params;
     KisTransformMaskParamsInterfaceSP m_oldParams;

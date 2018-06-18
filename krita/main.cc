@@ -49,6 +49,7 @@
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
 #include "input/KisQtWidgetsTweaker.h"
+#include <kis_debug.h>
 
 #if defined Q_OS_WIN
 #include <windows.h>
@@ -111,11 +112,11 @@ void resetRotation()
     pSetDisplayAutoRotationPreferences_t pSetDisplayAutoRotationPreferences
             = reinterpret_cast<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
     if (!pSetDisplayAutoRotationPreferences) {
-        qDebug() << "Failed to load function SetDisplayAutoRotationPreferences";
+        dbgKrita << "Failed to load function SetDisplayAutoRotationPreferences";
         return;
     }
     bool result = pSetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE);
-    qDebug() << "SetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE) returned" << result;
+    dbgKrita << "SetDisplayAutoRotationPreferences(ORIENTATION_PREFERENCE_NONE) returned" << result;
 }
 } // namespace
 #endif
@@ -215,12 +216,12 @@ extern "C" int main(int argc, char **argv)
     qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share"));
 #endif
 
-    qDebug() << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
+    dbgKrita << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
 
     // Now that the paths are set, set the language. First check the override from the language
     // selection dialog.
 
-    qDebug() << "Override language:" << language;
+    dbgKrita << "Override language:" << language;
 
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
@@ -248,7 +249,7 @@ extern "C" int main(int argc, char **argv)
                     i++;
                 }
             }
-            qDebug() << "Setting Krita's language to:" << uiLanguages;
+            dbgKrita << "Setting Krita's language to:" << uiLanguages;
             qputenv("LANG", uiLanguages.first().toLocal8Bit());
             KLocalizedString::setLanguages(uiLanguages);
         }
@@ -258,9 +259,9 @@ extern "C" int main(int argc, char **argv)
     KisApplication app(key, argc, argv);
     KLocalizedString::setApplicationDomain("krita");
 
-    qDebug() << "Available translations" << KLocalizedString::availableApplicationTranslations();
-    qDebug() << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
-    qDebug() << "Qt UI languages" << QLocale::system().uiLanguages() << qgetenv("LANG");
+    dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();
+    dbgKrita << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
+    dbgKrita << "Qt UI languages" << QLocale::system().uiLanguages() << qgetenv("LANG");
 
 
 #ifdef Q_OS_WIN
@@ -272,7 +273,7 @@ extern "C" int main(int argc, char **argv)
                                       + appdir.absolutePath() + ";"
                                       + path));
 
-    qDebug() << "PATH" << qgetenv("PATH");
+    dbgKrita << "PATH" << qgetenv("PATH");
 #endif
 
     if (qApp->applicationDirPath().contains(KRITA_BUILD_DIR)) {
@@ -296,7 +297,7 @@ extern "C" int main(int argc, char **argv)
     if (singleApplication && app.isRunning()) {
         // only pass arguments to main instance if they are not for batch processing
         // any batch processing would be done in this separate instance
-        const bool batchRun = (args.print() || args.exportAs() || args.exportAsPdf());
+        const bool batchRun = args.exportAs();
 
         if (!batchRun) {
             QByteArray ba = args.serialize();
@@ -368,9 +369,9 @@ extern "C" int main(int argc, char **argv)
             if (penFilter->init()) {
                 // penFilter.registerPointerDeviceNotifications();
                 app.installNativeEventFilter(penFilter);
-                qDebug() << "Using Win8 Pointer Input for tablet support";
+                dbgKrita << "Using Win8 Pointer Input for tablet support";
             } else {
-                qDebug() << "No Win8 Pointer Input available";
+                dbgKrita << "No Win8 Pointer Input available";
                 delete penFilter;
             }
         }

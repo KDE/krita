@@ -6,7 +6,6 @@ set(kritawidgets_LIB_SRCS
     KoGradientEditWidget.cpp
     KoVBox.cpp
     KoDialog.cpp
-    KoGlobal.cpp
     KoZoomWidget.cpp
     KoTagToolButton.cpp
     KoTagChooserWidget.cpp
@@ -25,7 +24,6 @@ set(kritawidgets_LIB_SRCS
     KoZoomHandler.cpp
     KoZoomMode.cpp
     KoDpi.cpp
-    KoGlobal.cpp
     KoColorPatch.cpp
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
@@ -50,7 +48,6 @@ set(kritawidgets_LIB_SRCS
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
     KoResourceFiltering.cpp
-    KoResourceModelBase.cpp
     KoTitledTabWidget.cpp
 
     KoToolBoxButton.cpp
@@ -71,9 +68,8 @@ set(kritawidgets_LIB_SRCS
     KoMarkerItemDelegate.cpp
 
     KoDocumentInfoDlg.cpp
-    KoGlobal.cpp
     KoTableView.cpp
-    
+
     WidgetsDebug.cpp
 
     kis_file_name_requester.cpp

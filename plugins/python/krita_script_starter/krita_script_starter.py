@@ -31,7 +31,6 @@ from PyQt5.QtCore import QStandardPaths, QSettings
 from PyQt5.QtWidgets import QApplication,  QWidget,  QMessageBox
 import PyQt5.uic as uic
 
-
 try: 
     import krita
     CONTEXT_KRITA = True
@@ -107,11 +106,14 @@ class {class_name}(Extension):
         super().__init__(parent)
 
     def setup(self):
-        app = Krita.instance()
-        action = app.createAction(EXTENSION_ID, MENU_ENTRY)
+        pass
+        
+    def createActions(self, window):
+        action = window.createAction(EXTENSION_ID, MENU_ENTRY, "tools/scripts")
         # parameter 1 =  the name that Krita uses to identify the action
         # parameter 2 = the text to be added to the menu entry for this script
-        action.triggered.connect(self.action_triggered)
+        # parameter 3 = location of menu entry
+        action.triggered.connect(self.action_triggered)        
         
     def action_triggered(self):
         pass # your active code goes here. 
@@ -182,12 +184,20 @@ class KritaScriptStarter(EXTENSION):
         target_directory = os.path.join(target_directory, "pykrita")
         self.target_directory = target_directory
 
-        if CONTEXT_KRITA:
-            app = Krita.instance()
-            action = app.createAction(MAIN_KRITA_ID, MAIN_KRITA_MENU_ENTRY)
-            # parameter 1 =  the name that Krita uses to identify the action
-            # parameter 2 = the text to be added to the menu entry for this script
-            action.triggered.connect(self.action_triggered) 
+#        if CONTEXT_KRITA:
+#            app = Krita.instance()
+#            action = app.createAction(MAIN_KRITA_ID, MAIN_KRITA_MENU_ENTRY)
+#            # parameter 1 =  the name that Krita uses to identify the action
+#            # parameter 2 = the text to be added to the menu entry for this script
+#            action.triggered.connect(self.action_triggered) 
+
+    def createActions(self,  window):
+        """ Called by Krita to create actions."""
+        action = window.createAction(MAIN_KRITA_ID, MAIN_KRITA_MENU_ENTRY, "tools/scripts")
+        # parameter 1 =  the name that Krita uses to identify the action
+        # parameter 2 = the text to be added to the menu entry for this script
+        # parameter 3 = location of menu entry
+        action.triggered.connect(self.action_triggered)
  
     def action_triggered(self):
         self.ui.show()

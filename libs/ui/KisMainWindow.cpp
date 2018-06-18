@@ -83,6 +83,7 @@
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 #include <kwindowconfig.h>
+#include <kformat.h>
 
 #include "KoDockFactoryBase.h"
 #include "KoDocumentInfoDlg.h"
@@ -159,7 +160,6 @@ public:
 
     QDockWidget* createDockWidget() override {
         KoToolDocker* dockWidget = new KoToolDocker();
-        dockWidget->setTabEnabled(false);
         return dockWidget;
     }
 
@@ -767,7 +767,7 @@ void KisMainWindow::updateCaption()
 
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
         }
 
 
@@ -952,6 +952,16 @@ bool KisMainWindow::hackIsSaving() const
     StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
     std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
     return !l.owns_lock();
+}
+
+bool KisMainWindow::installBundle(const QString &fileName) const
+{
+    QFileInfo from(fileName);
+    QFileInfo to(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
+    if (to.exists()) {
+        QFile::remove(to.canonicalFilePath());
+    }
+    return QFile::copy(fileName, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bundles/" + from.fileName());
 }
 
 bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExporting)
@@ -1314,7 +1324,13 @@ void KisMainWindow::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
-            openDocument(url, None);
+            if (url.toLocalFile().endsWith(".bundle")) {
+                bool r = installBundle(url.toLocalFile());
+                qDebug() << "\t" << r;
+            }
+            else {
+                openDocument(url, None);
+            }
         }
     }
 }
@@ -2554,7 +2570,17 @@ void KisMainWindow::showManual()
 
 void KisMainWindow::moveEvent(QMoveEvent *e)
 {
-    if (qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(e->oldPos())) {
+    /**
+     * For checking if the display number has changed or not we should always use
+     * positional overload, not using QWidget overload. Otherwise we might get
+     * inconsistency, because screenNumber(widget) can return -1, but screenNumber(pos)
+     * will always return the nearest screen.
+     */
+
+    const int oldScreen = qApp->desktop()->screenNumber(e->oldPos());
+    const int newScreen = qApp->desktop()->screenNumber(e->pos());
+
+    if (oldScreen != newScreen) {
         KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

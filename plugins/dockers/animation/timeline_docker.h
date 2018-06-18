@@ -43,6 +43,7 @@ public:
 
 public Q_SLOTS:
     void slotUpdateIcons();
+    void slotUpdateFrameCache();
 
 private:
     struct Private;

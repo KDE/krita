@@ -70,7 +70,6 @@
 #include <KoZoomHandler.h>
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
-#include <KoGlobal.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "input/kis_input_manager.h"
@@ -287,6 +286,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     d->controlFrame.setup(parent);
 
+
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
 
@@ -317,6 +317,13 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     KisConfig cfg;
     d->showFloatingMessage = cfg.showCanvasMessages();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor foreground(Qt::black, cs);
+    d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
+    KoColor background(Qt::white, cs);
+    d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
+
+
 
 }
 
@@ -429,19 +436,12 @@ void KisViewManager::setCurrentView(KisView *view)
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
-            if (!preset) {
+            if (!preset && !rserver->resources().isEmpty()) {
                 preset = rserver->resources().first();
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset.data());
             }
-
-            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-            KoColor foreground(Qt::black, cs);
-            d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
-            KoColor background(Qt::white, cs);
-            d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
-
         }
 
         KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
@@ -1344,7 +1344,7 @@ void KisViewManager::setShowFloatingMessage(bool show)
 
 void KisViewManager::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty() || profileName == i18nc("choice for author profile", "Anonymous")) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else {
@@ -1365,7 +1365,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     d->actionAuthor->clear();
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
-    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup authorGroup(KSharedConfig::openConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
     QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
     QStringList filters = QStringList() << "*.authorinfo";
@@ -1381,7 +1381,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
 
     if (profileName == "anonymous" || profileName.isEmpty()) {

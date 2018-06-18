@@ -477,6 +477,21 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
 template<class DevicePolicy>
 bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy)
 {
+    {
+        const int pixelSize = device->colorSpace()->pixelSize();
+        KoColor color(Qt::transparent, device->colorSpace());
+
+        if (m_store->open(location + ".defaultpixel")) {
+            if (m_store->size() == pixelSize) {
+                m_store->read((char*)color.data(), pixelSize);
+            }
+
+            m_store->close();
+        }
+
+        policy.setDefaultPixel(device, color);
+    }
+
     if (m_store->open(location)) {
         if (!policy.read(device, m_store->device())) {
             m_warningMessages << i18n("Could not read pixel data: %1.", location);
@@ -488,15 +503,6 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
     } else {
         m_warningMessages << i18n("Could not load pixel data: %1.", location);
         return true;
-    }
-    if (m_store->open(location + ".defaultpixel")) {
-        int pixelSize = device->colorSpace()->pixelSize();
-        if (m_store->size() == pixelSize) {
-            KoColor color(Qt::transparent, device->colorSpace());
-            m_store->read((char*)color.data(), pixelSize);
-            policy.setDefaultPixel(device, color);
-        }
-        m_store->close();
     }
 
     return true;
@@ -580,6 +586,13 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
 
 bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP dstSelection)
 {
+    // by default the selection is expected to be fully transparent
+    {
+        KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
+        KoColor transparent(Qt::transparent, pixelSelection->colorSpace());
+        pixelSelection->setDefaultPixel(transparent);
+    }
+
     // Pixel selection
     bool result = true;
     QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;

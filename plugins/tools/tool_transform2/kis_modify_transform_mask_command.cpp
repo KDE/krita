@@ -52,8 +52,7 @@ void KisModifyTransformMaskCommand::redo() {
     }
 
     m_mask->setTransformParams(params);
-
-    updateMask(m_params->isHidden());
+    m_mask->threadSafeForceStaticImageUpdate();
 }
 
 void KisModifyTransformMaskCommand::undo() {
@@ -65,32 +64,5 @@ void KisModifyTransformMaskCommand::undo() {
     }
 
     m_mask->setTransformParams(m_oldParams);
-
-    updateMask(m_oldParams->isHidden());
-}
-
-void KisModifyTransformMaskCommand::updateMask(bool isHidden) {
-    /**
-     * Depending on whether the mask is hidden we should either
-     * update it entirely via the setDirty() call, or we can use a
-     * lightweight approach by directly regenerating the
-     * precalculated static image using
-     * KisRecalculateTransformMaskJob.
-     */
-
-    if (!isHidden) {
-        KisRecalculateTransformMaskJob updateJob(m_mask);
-        updateJob.run();
-    } else {
-        m_mask->recaclulateStaticImage();
-
-        QRect updateRect = m_mask->extent();
-
-        KisNodeSP parent = m_mask->parent();
-        if (parent && parent->original()) {
-            updateRect |= parent->original()->defaultBounds()->bounds();
-        }
-
-        m_mask->setDirty(updateRect);
-    }
+    m_mask->threadSafeForceStaticImageUpdate();
 }

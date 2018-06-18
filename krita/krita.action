@@ -1310,10 +1310,10 @@
     </Action>
     <Action name="KritaShape/KisToolLazyBrush">
       <icon></icon>
-      <text>Lazy Brush Tool</text>
+      <text>Colorize Mask Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Lazy Brush Tool</toolTip>
-      <iconText>Lazy Brush Tool</iconText>
+      <toolTip>Colorize Mask Tool</toolTip>
+      <iconText>Colorize Mask Tool</iconText>
       <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>
@@ -1355,32 +1355,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="TextTool">
-      <icon></icon>
-      <text>Text Editing Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Text editing</toolTip>
-      <iconText>Text editing</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="KisToolSelectOutline">
       <icon></icon>
       <text>Outline Selection Tool</text>
       <whatsThis></whatsThis>
       <toolTip>Outline Selection Tool</toolTip>
       <iconText>Outline Selection Tool</iconText>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="ArtisticTextTool">
-      <icon></icon>
-      <text>Artistic Text Tool</text>
-      <whatsThis></whatsThis>
-      <toolTip>Artistic text editing</toolTip>
-      <iconText>Artistic text editing</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -2858,7 +2838,7 @@
       <whatsThis></whatsThis>
       <toolTip>Create a group layer containing selected layers</toolTip>
       <iconText>Quick Group</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+G</shortcut>
       <isCheckable>false</isCheckable>

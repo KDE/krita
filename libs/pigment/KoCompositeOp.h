@@ -51,6 +51,7 @@ public:
     static QString categoryHSV();
     static QString categoryMix();
     static QString categoryMisc();
+    static QString categoryQuadratic();
 
     struct KRITAPIGMENT_EXPORT ParameterInfo
     {

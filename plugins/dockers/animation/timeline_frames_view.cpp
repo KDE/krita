@@ -1369,15 +1369,15 @@ QModelIndexList TimelineFramesView::calculateSelectionSpan(bool entireColumn, bo
     return indexes;
 }
 
-void TimelineFramesView::slotRemoveSelectedFrames(bool entireColumn, bool needsOffset)
+void TimelineFramesView::slotRemoveSelectedFrames(bool entireColumn, bool pull)
 {
-    const QModelIndexList indexes = calculateSelectionSpan(entireColumn);
+    const QModelIndexList selectedIndices = calculateSelectionSpan(entireColumn);
 
-    if (!indexes.isEmpty()) {
-        if (needsOffset) {
-            m_d->model->removeFramesAndOffset(indexes);
+    if (!selectedIndices.isEmpty()) {
+        if (pull) {
+            m_d->model->removeFramesAndOffset(selectedIndices);
         } else {
-            m_d->model->removeFrames(indexes);
+            m_d->model->removeFrames(selectedIndices);
         }
     }
 }
@@ -1439,24 +1439,25 @@ void TimelineFramesView::slotMirrorFrames(bool entireColumn)
 
 void TimelineFramesView::cutCopyImpl(bool entireColumn, bool copy)
 {
-    const QModelIndexList indexes = calculateSelectionSpan(entireColumn, !copy);
-    if (indexes.isEmpty()) return;
+    const QModelIndexList selectedIndices = calculateSelectionSpan(entireColumn, !copy);
+    if (selectedIndices.isEmpty()) return;
 
     int minColumn = std::numeric_limits<int>::max();
     int minRow = std::numeric_limits<int>::max();
 
-    Q_FOREACH (const QModelIndex &index, indexes) {
+    Q_FOREACH (const QModelIndex &index, selectedIndices) {
         minRow = qMin(minRow, index.row());
         minColumn = qMin(minColumn, index.column());
     }
 
     const QModelIndex baseIndex = m_d->model->index(minRow, minColumn);
 
-    QMimeData *data = m_d->model->mimeDataExtended(indexes,
+    QMimeData *data = m_d->model->mimeDataExtended(selectedIndices,
                                                    baseIndex,
                                                    copy ?
                                                        TimelineFramesModel::CopyFramesPolicy :
                                                        TimelineFramesModel::MoveFramesPolicy);
+
     if (data) {
         QClipboard *cb = QApplication::clipboard();
         cb->setMimeData(data);

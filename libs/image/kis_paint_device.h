@@ -842,6 +842,8 @@ public:
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
     void uploadLodDataStruct(LodDataStruct *dst);
 
+    void generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod);
+
     void setProjectionDevice(bool value);
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 

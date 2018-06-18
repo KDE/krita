@@ -25,6 +25,7 @@
 //#define PLAYER_DEBUG_FRAMERATE
 
 #include "kis_global.h"
+#include "kis_algebra_2d.h"
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -39,6 +40,9 @@
 #include <QFileInfo>
 #include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
+
+#include "kis_image_config.h"
+#include <limits>
 
 #include "KisViewManager.h"
 #include "kis_icon_utils.h"
@@ -330,9 +334,31 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
+            KisImageConfig cfg;
+
+            const int dimensionLimit =
+                cfg.useAnimationCacheFrameSizeLimit() ?
+                cfg.animationCacheFrameSizeLimit() :
+                std::numeric_limits<int>::max();
+
+            const int maxImageDimension = KisAlgebra2D::maxDimension(m_d->canvas->image()->bounds());
+
+            const QRect regionOfInterest =
+                cfg.useAnimationCacheRegionOfInterest() && maxImageDimension > dimensionLimit ?
+                m_d->canvas->regionOfInterest() :
+                m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
+
+            const QRect minimalNeedRect =
+                m_d->canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
+                m_d->canvas->coordinatesConverter()->imageRectInImagePixels();
+
+            m_d->canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest, minimalNeedRect);
+
             KisAsyncAnimationCacheRenderDialog dlg(m_d->canvas->frameCache(),
                                                    range,
                                                    200);
+
+            dlg.setRegionOfInterest(regionOfInterest);
 
             KisAsyncAnimationCacheRenderDialog::Result result =
                 dlg.regenerateRange(m_d->canvas->viewManager());
@@ -340,6 +366,8 @@ void KisAnimationPlayer::play()
             if (result != KisAsyncAnimationCacheRenderDialog::RenderComplete) {
                 return;
             }
+
+            m_d->canvas->setRenderingLimit(regionOfInterest);
         }
     }
 
@@ -347,7 +375,7 @@ void KisAnimationPlayer::play()
 
     slotUpdatePlaybackTimer();
     m_d->expectedFrame = m_d->firstFrame;
-    m_d->lastPaintedFrame = m_d->firstFrame;
+    m_d->lastPaintedFrame = -1;
 
     connectCancelSignals();
 
@@ -355,6 +383,8 @@ void KisAnimationPlayer::play()
         KisImageAnimationInterface *animationInterface = m_d->canvas->image()->animationInterface();
         m_d->syncedAudio->play(m_d->frameToMSec(m_d->firstFrame, animationInterface->framerate()));
     }
+
+    emit sigPlaybackStarted();
 }
 
 void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
@@ -367,6 +397,7 @@ void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
 
     timer->stop();
     playing = false;
+    canvas->setRenderingLimit(QRect());
 
     if (doUpdates) {
         KisImageAnimationInterface *animation = canvas->image()->animationInterface();
@@ -450,12 +481,23 @@ void KisAnimationPlayer::uploadFrame(int frame)
         }
     }
 
-    if (m_d->canvas->frameCache() && m_d->canvas->frameCache()->uploadFrame(frame)) {
-        m_d->canvas->updateCanvas();
 
-        m_d->useFastFrameUpload = true;
-        emit sigFrameChanged();
-    } else {
+    bool useFallbackUploadMethod = !m_d->canvas->frameCache();
+
+    if (m_d->canvas->frameCache() &&
+        m_d->canvas->frameCache()->shouldUploadNewFrame(frame, m_d->lastPaintedFrame)) {
+
+
+        if (m_d->canvas->frameCache()->uploadFrame(frame)) {
+            m_d->canvas->updateCanvas();
+
+            m_d->useFastFrameUpload = true;
+        } else {
+            useFallbackUploadMethod = true;
+        }
+    }
+
+    if (useFallbackUploadMethod) {
         m_d->useFastFrameUpload = false;
 
         m_d->canvas->image()->barrierLock(true);
@@ -463,8 +505,6 @@ void KisAnimationPlayer::uploadFrame(int frame)
 
         // no OpenGL cache or the frame just not cached yet
         animationInterface->switchCurrentTimeAsync(frame);
-
-        emit sigFrameChanged();
     }
 
     if (!m_d->realFpsTimer.isValid()) {
@@ -473,25 +513,27 @@ void KisAnimationPlayer::uploadFrame(int frame)
         const int elapsed = m_d->realFpsTimer.restart();
         m_d->realFpsAccumulator(elapsed);
 
-        int numFrames = frame - m_d->lastPaintedFrame;
-        if (numFrames < 0) {
-            numFrames += m_d->lastFrame - m_d->firstFrame + 1;
-        }
+        if (m_d->lastPaintedFrame >= 0) {
+            int numFrames = frame - m_d->lastPaintedFrame;
+            if (numFrames < 0) {
+                numFrames += m_d->lastFrame - m_d->firstFrame + 1;
+            }
 
-        m_d->droppedFramesPortion(qreal(int(numFrames != 1)));
+            m_d->droppedFramesPortion(qreal(int(numFrames != 1)));
 
-        if (numFrames > 0) {
-            m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
-        }
+            if (numFrames > 0) {
+                m_d->droppedFpsAccumulator(qreal(elapsed) / numFrames);
+            }
 
 #ifdef PLAYER_DEBUG_FRAMERATE
-        qDebug() << "    RFPS:" << 1000.0 / m_d->realFpsAccumulator.rollingMean()
-                 << "DFPS:" << 1000.0 / m_d->droppedFpsAccumulator.rollingMean() << ppVar(numFrames);
+            qDebug() << "    RFPS:" << 1000.0 / m_d->realFpsAccumulator.rollingMean()
+                     << "DFPS:" << 1000.0 / m_d->droppedFpsAccumulator.rollingMean() << ppVar(numFrames);
 #endif /* PLAYER_DEBUG_FRAMERATE */
+        }
     }
 
     m_d->lastPaintedFrame = frame;
-
+    emit sigFrameChanged();
 }
 
 qreal KisAnimationPlayer::effectiveFps() const

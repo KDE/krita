@@ -28,16 +28,17 @@
 
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile.h"
-#include "KisProofingConfiguration.h"
-#include <KoColorProofingConversionTransformation.h>
+#include "KisOpenGLUpdateInfoBuilder.h"
 
 class KisOpenGLImageTextures;
-
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
 
 class KoColorProfile;
 class KisTextureTileUpdateInfoPoolCollection;
 typedef QSharedPointer<KisTextureTileInfoPool> KisTextureTileInfoPoolSP;
+
+class KisProofingConfiguration;
+typedef QSharedPointer<KisProofingConfiguration> KisProofingConfigurationSP;
 
 /**
  * A set of OpenGL textures that contains the projection of a KisImage.
@@ -138,6 +139,8 @@ public:
 
     void slotImageSizeChanged(qint32 w, qint32 h);
 
+    KisOpenGLUpdateInfoBuilder& updateInfoBuilder();
+
 protected:
 
     KisOpenGLImageTextures(KisImageWSP image, const KoColorProfile *monitorProfile,
@@ -152,8 +155,6 @@ protected:
 
 private:
 
-    QRect calculateTileRect(int col, int row) const;
-
     void getTextureSize(KisGLTexturesInfo *texturesInfo);
 
     void updateTextureFormat();
@@ -165,10 +166,6 @@ private:
     const KoColorProfile *m_monitorProfile;
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
-
-    KisProofingConfigurationSP m_proofingConfig;
-    QScopedPointer<KoColorConversionTransformation> m_proofingTransform;
-    bool m_createNewProofingTransform;
 
     /**
      * If the destination color space coincides with the one of the image,
@@ -192,15 +189,11 @@ private:
     QVector<KisTextureTile*> m_textureTiles;
 
     QOpenGLFunctions *m_glFuncs;
-    QBitArray m_channelFlags;
-    bool m_allChannelsSelected;
-    bool m_onlyOneChannelSelected;
-    int m_selectedChannelIndex;
 
     bool m_useOcio;
     bool m_initialized;
 
-    KisTextureTileInfoPoolSP m_infoChunksPool;
+    KisOpenGLUpdateInfoBuilder m_updateInfoBuilder;
 
 private:
     typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;

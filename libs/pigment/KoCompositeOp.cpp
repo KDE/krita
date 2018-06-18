@@ -41,6 +41,7 @@ QString KoCompositeOp::categoryHSL()        { return i18n("HSL");        }
 QString KoCompositeOp::categoryHSV()        { return i18n("HSV");        }
 QString KoCompositeOp::categoryMix()        { return i18n("Mix");        }
 QString KoCompositeOp::categoryMisc()       { return i18n("Misc");       }
+QString KoCompositeOp::categoryQuadratic()       { return i18n("Quadratic");       }
 
 KoCompositeOp::ParameterInfo::ParameterInfo()
     : opacity(1.0f),

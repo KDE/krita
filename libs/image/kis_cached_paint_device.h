@@ -20,6 +20,8 @@
 #define __KIS_CACHED_PAINT_DEVICE_H
 
 #include "tiles3/kis_lockless_stack.h"
+#include "kis_paint_device.h"
+#include "kis_selection.h"
 
 class KisCachedPaintDevice
 {

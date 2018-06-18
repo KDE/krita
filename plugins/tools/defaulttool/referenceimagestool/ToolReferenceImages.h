@@ -73,7 +73,7 @@ private:
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
 
     KisReferenceImagesLayer *referenceImagesLayer() const;
-    KisReferenceImagesLayer *getOrCreteReferenceImagesLayer();
+    KisReferenceImagesLayer *getOrCreateReferenceImagesLayer();
 };
 
 
@@ -85,7 +85,7 @@ public:
         setToolTip(i18n("Reference Images Tool"));
         setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
-        setPriority(0);
+        setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 

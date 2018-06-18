@@ -21,7 +21,9 @@
 
 #include <kpluginfactory.h>
 #include <QFileInfo>
+#include "kis_config.h"
 
+#include <QInputDialog>
 #include <KisDocument.h>
 #include <kis_image.h>
 
@@ -48,7 +50,26 @@ KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *docum
 
     const QString baseXmlDir = QFileInfo(filename()).canonicalPath();
 
-    const qreal resolutionPPI = 100;
+    KisConfig cfg;
+
+    qreal resolutionPPI = cfg.preferredVectorImportResolutionPPI(true);
+
+    if (!batchMode()) {
+        bool okay = false;
+        const QString name = QFileInfo(filename()).fileName();
+        resolutionPPI = QInputDialog::getInt(0,
+                                             i18n("Import SVG"),
+                                             i18n("Enter preferred resolution (PPI) for \"%1\"", name),
+                                             cfg.preferredVectorImportResolutionPPI(),
+                                             0, 100000, 1, &okay);
+
+        if (!okay) {
+            return KisImportExportFilter::UserCancelled;
+        }
+
+        cfg.setPreferredVectorImportResolutionPPI(resolutionPPI);
+    }
+
     const qreal resolution = resolutionPPI / 72.0;
 
     QSizeF fragmentSize;

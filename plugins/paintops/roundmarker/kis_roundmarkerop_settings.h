@@ -45,7 +45,7 @@ public:
         return 1000.0;
     }
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings) override;
 

@@ -48,6 +48,14 @@
 
 #include "qimage_test_util.h"
 
+#define KIS_COMPARE_RF(expr, ref) \
+    if ((expr) != (ref)) { \
+        qDebug() << "Compared values are not the same at line" << __LINE__; \
+        qDebug() << "    Actual  : " << #expr << "=" << (expr); \
+        qDebug() << "    Expected: " << #ref << "=" << (ref); \
+        return false; \
+    }
+
 /**
  * Routines that are useful for writing efficient tests
  */

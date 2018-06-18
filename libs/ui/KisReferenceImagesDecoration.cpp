@@ -61,20 +61,27 @@ struct KisReferenceImagesDecoration::Private {
     }
 
 private:
-    void updateBuffer(const QRectF &widgetRect, const QRectF &imageRect)
+    void updateBuffer(QRectF widgetRect, QRectF imageRect)
     {
         KisCoordinatesConverter *viewConverter = q->view()->viewConverter();
         QTransform transform = viewConverter->imageToWidgetTransform();
 
         if (buffer.image.isNull() || !buffer.bounds().contains(widgetRect)) {
-            // TODO: only use enough buffer to cover the BB of the shapes
-            buffer.position = QPointF();
-            buffer.image = QImage(q->view()->width(), q->view()->height(), QImage::Format_ARGB32);
+            const QRectF boundingImageRect = layer->boundingImageRect();
+            const QRectF boundingWidgetRect = q->view()->viewConverter()->imageToWidget(boundingImageRect);
+            widgetRect = boundingWidgetRect.intersected(q->view()->rect());
+
+            buffer.position = widgetRect.topLeft();
+            buffer.image = QImage(widgetRect.size().toSize(), QImage::Format_ARGB32);
             buffer.image.fill(Qt::transparent);
+
+            imageRect = q->view()->viewConverter()->widgetToImage(widgetRect);
         }
 
         QPainter gc(&buffer.image);
-        gc.setTransform(transform);
+
+        gc.translate(-buffer.position);
+        gc.setTransform(transform, true);
 
         gc.save();
         gc.setCompositionMode(QPainter::CompositionMode_Source);
@@ -96,7 +103,7 @@ KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = view()->document()->createReferenceImagesLayer();
+    KisSharedPtr<KisReferenceImagesLayer> layer = view()->document()->getOrCreateReferenceImagesLayer();
     KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
 
     KUndo2Command *cmd = layer->addReferenceImage(referenceImage);

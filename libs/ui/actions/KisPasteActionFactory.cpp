@@ -42,6 +42,7 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
+#include "kis_painter.h"
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -224,7 +225,10 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
             KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
             rasterChannel->importFrame(range.start(), clip, 0);
-            rasterChannel->addKeyframe(range.end() + 1, 0);
+
+            if (!range.isInfinite()) {
+                rasterChannel->addKeyframe(range.end() + 1, 0);
+            }
         } else {
             const QRect rc = clip->extent();
             KisPainter::copyAreaOptimized(rc.topLeft(), clip, newLayer->paintDevice(), rc);

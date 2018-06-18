@@ -139,6 +139,7 @@ public:
     QRectF imageRectInViewportPixels() const;
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
+    QRectF widgetRectInImagePixels() const;
     QRect imageRectInImagePixels() const;
     QRectF imageRectInDocumentPixels() const;
 

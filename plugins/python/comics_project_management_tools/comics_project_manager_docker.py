@@ -285,7 +285,7 @@ class comics_project_manager_docker(DockWidget):
 
         self.action_add_page = QAction(i18n("Add Page"), self)
         self.action_add_page.triggered.connect(self.slot_add_new_page_single)
-        self.action_add_template = QAction(i18n("Add Page From Template"), self)
+        self.action_add_template = QAction(i18n("Add Page from Template"), self)
         self.action_add_template.triggered.connect(self.slot_add_new_page_from_template)
         self.action_add_existing = QAction(i18n("Add Existing Pages"), self)
         self.action_add_existing.triggered.connect(self.slot_add_page_from_url)
@@ -297,7 +297,7 @@ class comics_project_manager_docker(DockWidget):
         self.action_show_page_viewer = QAction(i18n("View Page In Window"), self)
         self.action_show_page_viewer.triggered.connect(self.slot_show_page_viewer)
         self.action_scrape_authors = QAction(i18n("Scrape Author Info"), self)
-        self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This doesn't check for duplicates."))
+        self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This does not check for duplicates."))
         self.action_scrape_authors.triggered.connect(self.slot_scrape_author_list)
         self.action_scrape_translations = QAction(i18n("Scrape Text for Translation"), self)
         self.action_scrape_translations.triggered.connect(self.slot_scrape_translations)
@@ -342,7 +342,7 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_open_config(self):
-        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the json comic config file."), filter=str(i18n("json files") + "(*.json)"))[0]
+        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))[0]
         if os.path.exists(self.path_to_config) is True:
             configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
             self.setupDictionary = json.load(configFile)
@@ -374,7 +374,7 @@ class comics_project_manager_docker(DockWidget):
         progress = QProgressDialog()
         progress.setMinimum(0)
         progress.setMaximum(len(pagesList))
-        progress.setWindowTitle(i18n("Loading pages..."))
+        progress.setWindowTitle(i18n("Loading Pages..."))
         for url in pagesList:
             absurl = os.path.join(self.projecturl, url)
             if (os.path.exists(absurl)):
@@ -784,7 +784,7 @@ class comics_project_manager_docker(DockWidget):
         exportSuccess = exporter.export()
         if exportSuccess:
             print("CPMT: Export success! The files have been written to the export folder!")
-            QMessageBox.information(self, "Export success!", "The files have been written to the export folder!", QMessageBox.Ok)
+            QMessageBox.information(self, i18n("Export success"), i18n("The files have been written to the export folder."), QMessageBox.Ok)
 
     """
     Calls up the comics project setup wizard so users can create a new json file with the basic information.
@@ -833,7 +833,7 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_batch_resize(self):
         dialog = QDialog()
-        dialog.setWindowTitle(i18n("Risize all pages."))
+        dialog.setWindowTitle(i18n("Resize all Pages"))
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
@@ -845,7 +845,7 @@ class comics_project_manager_docker(DockWidget):
 
         if dialog.exec_() == QDialog.Accepted:
             progress = QProgressDialog(i18n("Resizing pages..."), str(), 0, len(self.setupDictionary["pages"]))
-            progress.setWindowTitle(i18n("Resizing pages."))
+            progress.setWindowTitle(i18n("Resizing Pages"))
             progress.setCancelButton(None)
             timer = QElapsedTimer()
             timer.start()
@@ -907,7 +907,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
         metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
-        QMessageBox.information(self, i18n("Scraping success!"), i18n("POT file has been written to: ")+fullTranslationPath, QMessageBox.Ok)
+        QMessageBox.information(self, i18n("Scraping success"), str(i18n("POT file has been written to: {file}")).format(file=fullTranslationPath), QMessageBox.Ok)
     """
     This is required by the dockwidget class, otherwise unused.
     """

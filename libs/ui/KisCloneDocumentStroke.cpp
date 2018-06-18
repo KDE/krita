@@ -20,6 +20,9 @@
 #include "KisDocument.h"
 #include "kis_layer_utils.h"
 
+#include <QApplication>
+
+
 struct KRITAIMAGE_NO_EXPORT KisCloneDocumentStroke::Private
 {
     Private(KisDocument *_document)
@@ -35,7 +38,7 @@ KisCloneDocumentStroke::KisCloneDocumentStroke(KisDocument *document)
       m_d(new Private(document))
 {
     setClearsRedoOnStart(false);
-    setRequestsOtherStrokesToEnd(false); // TODO: ???
+    setRequestsOtherStrokesToEnd(false);
     enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
 }
@@ -48,8 +51,6 @@ void KisCloneDocumentStroke::initStrokeCallback()
 {
     KisLayerUtils::forceAllDelayedNodesUpdate(m_d->document->image()->root());
 }
-
-#include <QApplication>
 
 void KisCloneDocumentStroke::finishStrokeCallback()
 {

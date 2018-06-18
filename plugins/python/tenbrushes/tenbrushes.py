@@ -21,13 +21,14 @@ class TenBrushesExtension(krita.Extension):
         self.actions = []
         self.buttons = []
         self.selectedPresets = []
+        self.oldPreset = None
 
     def setup(self):
         self.readSettings()
 
     def createActions(self, window):
-        action = window.createAction("ten_brushes", "Ten Brushes")
-        action.setToolTip("Assign ten brush presets to ten shortcuts.")
+        action = window.createAction("ten_brushes", i18n("Ten Brushes"))
+        action.setToolTip(i18n("Assign ten brush presets to ten shortcuts."))
         action.triggered.connect(self.initialize)
         self.loadActions(window)
 
@@ -50,7 +51,7 @@ class TenBrushesExtension(krita.Extension):
         allPresets = Application.resources("preset")
 
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
-            action = window.createAction("activate_preset_" + item, "Activate Brush Preset " + item, "")
+            action = window.createAction("activate_preset_" + item, str(i18n("Activate Brush Preset {num}")).format(num=item), "")
             action.triggered.connect(self.activatePreset)
 
             if index < len(self.selectedPresets) and self.selectedPresets[index] in allPresets:
@@ -63,7 +64,12 @@ class TenBrushesExtension(krita.Extension):
     def activatePreset(self):
         allPresets = Application.resources("preset")
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
-            Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
+            currentPreset = Application.activeWindow().views()[0].currentBrushPreset()
+            if self.sender().preset == currentPreset.name():
+                Application.activeWindow().views()[0].activateResource(self.oldPreset)
+            else:
+                self.oldPreset = Application.activeWindow().views()[0].currentBrushPreset()
+                Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
 
 
 Scripter.addExtension(TenBrushesExtension(Application))

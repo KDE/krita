@@ -354,7 +354,7 @@ QMenu*  KisToolTransform::popupActionsMenu()
         m_contextMenu->addAction(liquifyAction);
 
         // extra options if free transform is selected
-        if (transformMode() == ToolTransformArgs::FREE_TRANSFORM) {
+        if (transformMode() == FreeTransformMode) {
             m_contextMenu->addSeparator();
             m_contextMenu->addAction(mirrorHorizontalAction);
             m_contextMenu->addAction(mirrorVericalAction);

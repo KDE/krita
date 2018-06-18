@@ -48,7 +48,7 @@ class HelloExtension(Extension):
         """
         This is where most of the setup takes place!
         """
-        action = window.createAction("hello_python", "hello")
+        action = window.createAction("hello_python", i18n("Hello"))
         action.triggered.connect(hello)
 
 

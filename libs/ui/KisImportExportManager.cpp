@@ -159,7 +159,7 @@ QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportD
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KisImportExportManager::mimeFilter(Direction direction)
+QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
 {
     // Find the right mimetype by the extension
     QSet<QString> mimeTypes;

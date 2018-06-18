@@ -21,9 +21,9 @@
 
 #include "kritaui_export.h"
 #include "KisBasicInternalColorSelector.h"
-#include "kis_screen_color_picker.h"
+#include "KisScreenColorPicker.h"
 
-/*
+/**
  * A color selector with a screen color picker.
  *
  * KisScreenColorPicker needs lots of resources in the library kritaui and

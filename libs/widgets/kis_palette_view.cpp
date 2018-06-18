@@ -60,7 +60,6 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     //setAutoFillBackground(true);
     //setPalette(pal);
 
-    /// what's paletteviewsectionsize used for?
     int defaultSectionSize = 12;
     /// int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
@@ -263,8 +262,6 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
        } else {
            horizontalHeader()->setDefaultSectionSize(setSize);
            verticalHeader()->setDefaultSectionSize(setSize);
-           /// KisConfig cfg;
-           /// cfg.setPaletteDockerPaletteViewSectionSize(setSize);
        }
 
         event->accept();
@@ -305,7 +302,6 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
         QLineEdit *lnIDName = new QLineEdit(group);
         QLineEdit *lnGroupName = new QLineEdit(group);
         KisColorButton *bnColor = new KisColorButton(group);
-        // bnColor->setPaletteViewEnabled(false);
         QCheckBox *chkSpot = new QCheckBox(group);
 
         if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {

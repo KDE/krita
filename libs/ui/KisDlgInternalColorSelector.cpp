@@ -19,8 +19,8 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
-#include "kis_dlg_internal_color_selector.h"
-#include "kis_screen_color_picker.h"
+#include "KisDlgInternalColorSelector.h"
+#include "KisScreenColorPicker.h"
 
 KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget* parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
     : KisBasicInternalColorSelector(parent, color, config, caption, displayRenderer)

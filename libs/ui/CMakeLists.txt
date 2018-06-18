@@ -255,8 +255,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
-    widgets/kis_screen_color_picker.cpp
     widgets/kis_preset_live_preview_view.cpp
+    widgets/KisScreenColorPicker.cpp
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
@@ -382,7 +382,7 @@ set(kritaui_LIB_SRCS
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
 
-    kis_dlg_internal_color_selector.cpp
+    KisDlgInternalColorSelector.cpp
 )
 
 if(WIN32)

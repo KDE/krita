@@ -274,4 +274,4 @@ bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
 
 
 
-#include "kis_screen_color_picker.moc"
+#include "KisScreenColorPicker.moc"

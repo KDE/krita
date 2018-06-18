@@ -520,8 +520,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
-
-    wdgdlginternalcolorselector.ui
 )
 
 

@@ -351,9 +351,11 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, con
 
     auto it = m_d->newFrames.upperBound(range.start());
 
+    // the vector is guaranteed to be non-empty,
+    // so decrementing iterator is safe
     if (it != m_d->newFrames.begin()) it--;
 
-    while (it.key() <= range.end()) {
+    while (it != m_d->newFrames.end() && it.key() <= range.end()) {
         const int frameId = it.key();
         const int frameLength = it.value();
 

@@ -59,6 +59,9 @@ set(kritawidgets_LIB_SRCS
     KisPaletteModel.cpp
     kis_palette_delegate.cpp
     kis_palette_view.cpp
+    KisPaletteListModel.cpp
+    KisPaletteListView.cpp
+    KisPaletteListDelegate.cpp
 
     KoPageLayoutWidget.cpp
     KoPageLayoutDialog.cpp

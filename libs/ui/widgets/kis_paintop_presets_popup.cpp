@@ -678,7 +678,9 @@ void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
     // Make sure resizing doesn't push this widget out of the screen
     QRect screenRect = QApplication::desktop()->availableGeometry(this);
-    QRect newPositionRect = kisEnsureInRect(this->rect(), screenRect);
+    QRect newPositionRect(this->parentWidget()->mapToGlobal(QPoint(0, 0)),
+                          this->size());
+    newPositionRect = kisEnsureInRect(newPositionRect, screenRect);
     this->parentWidget()->setGeometry(newPositionRect);
 }
 

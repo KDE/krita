@@ -97,7 +97,7 @@ void KisPopupButton::showPopupWidget()
     if (m_d->popupWidget && !m_d->frame->isVisible()) {
         m_d->frame->raise();
         m_d->frame->show();
-        // adjustPosition();
+        adjustPosition();
     }
     else {
         hidePopupWidget();

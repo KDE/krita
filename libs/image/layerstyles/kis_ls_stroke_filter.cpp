@@ -91,12 +91,12 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
         knockOutSelection->makeCloneFromRough(selection, needRect);
 
         if (config->position() == psd_stroke_outside) {
-            KisGaussianKernel::applyDilate(selection, needRect, 2 * config->size(), QBitArray(), 0);
+            KisGaussianKernel::applyDilate(selection, needRect, 2 * config->size(), QBitArray(), 0, true);
         } else if (config->position() == psd_stroke_inside) {
-            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 2 * config->size(), QBitArray(), 0);
+            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 2 * config->size(), QBitArray(), 0, true);
         } else if (config->position() == psd_stroke_center) {
-            KisGaussianKernel::applyDilate(selection, needRect, config->size(), QBitArray(), 0);
-            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, config->size(), QBitArray(), 0);
+            KisGaussianKernel::applyDilate(selection, needRect, config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, config->size(), QBitArray(), 0, true);
         }
 
         KisPainter gc(selection);

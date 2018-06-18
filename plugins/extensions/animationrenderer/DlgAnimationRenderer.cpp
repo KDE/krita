@@ -104,7 +104,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     m_page->chkIncludeAudio->setEnabled(hasAudio);
     m_page->chkIncludeAudio->setChecked(hasAudio && !doc->image()->animationInterface()->isAudioMuted());
 
-    QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     mimes.sort();
     Q_FOREACH(const QString &mime, mimes) {
         QString description = KisMimeDatabase::descriptionForMimeType(mime);

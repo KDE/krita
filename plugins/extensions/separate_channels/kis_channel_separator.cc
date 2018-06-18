@@ -237,7 +237,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 KoFileDialog dialog(m_viewManager->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-                dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
+                dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export));
                 QUrl url = QUrl::fromUserInput(dialog.filename());
 
                 if (url.isEmpty())

@@ -105,7 +105,7 @@ void KisPresetSaveWidget::loadImageFromFile()
 {
     // create a dialog to retrieve an image file.
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     QString filename = dialog.filename(); // the filename() returns the entire path & file name, not just the file name
 

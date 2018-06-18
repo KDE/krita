@@ -33,7 +33,7 @@
 #include <QStyleOptionButton>
 
 #include <KoColor.h>
-#include <kis_dlg_internal_color_selector.h>
+#include <KisBasicInternalColorSelector.h>
 
 class KisColorButton::KisColorButtonPrivate
 {
@@ -52,7 +52,7 @@ public:
     KoColor col;
     QPoint mPos;
 #ifndef Q_OS_OSX
-    QPointer<KisDlgInternalColorSelector> dialogPtr;
+    QPointer<KisBasicInternalColorSelector> dialogPtr;
 #else
     QPointer<QColorDialog> dialogPtr;
 #endif
@@ -322,7 +322,7 @@ void KisColorButton::mouseMoveEvent(QMouseEvent *e)
 void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 {
 #ifndef Q_OS_OSX
-    KisDlgInternalColorSelector *dialog = dialogPtr.data();
+    KisBasicInternalColorSelector *dialog = dialogPtr.data();
 #else
     QColorDialog *dialog = dialogPtr.data();
 #endif
@@ -338,10 +338,10 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
         return;
     }
 
-    KisDlgInternalColorSelector::Config cfg;
+    KisBasicInternalColorSelector::Config cfg;
     cfg.paletteBox = q->paletteViewEnabled();
 #ifndef Q_OS_OSX
-    dialog = new KisDlgInternalColorSelector(q,
+    dialog = new KisBasicInternalColorSelector(q,
                                           q->color(),
                                           cfg,
                                           i18n("Choose a color"));
@@ -363,7 +363,7 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
 void KisColorButton::KisColorButtonPrivate::_k_colorChosen()
 {
 #ifndef Q_OS_OSX
-    KisDlgInternalColorSelector *dialog = dialogPtr.data();
+    KisBasicInternalColorSelector *dialog = dialogPtr.data();
 #else
     QColorDialog *dialog = dialogPtr.data();
 #endif

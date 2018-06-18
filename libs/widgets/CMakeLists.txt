@@ -94,7 +94,7 @@ set(kritawidgets_LIB_SRCS
 
     kis_spinbox_color_selector.cpp
 
-    kis_dlg_internal_color_selector.cpp
+    KisBasicInternalColorSelector.cpp
     KisPaletteChooser.cpp
 
     KisVisualColorSelector.cpp
@@ -102,6 +102,8 @@ set(kritawidgets_LIB_SRCS
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
+    kis_popup_button.cc
+    kis_color_button.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -113,11 +115,25 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
     WdgPaletteChooser.ui
+    WdgBasicInternalColorSelector.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
-target_link_libraries(kritawidgets kritaodf kritaglobal kritaflake kritapigment kritawidgetutils Qt5::PrintSupport KF5::CoreAddons KF5::ConfigGui KF5::GuiAddons KF5::WidgetsAddons KF5::ConfigCore KF5::Completion)
+target_link_libraries(kritawidgets
+    kritaodf
+    kritaglobal
+    kritaflake
+    kritapigment
+    kritawidgetutils
+    Qt5::PrintSupport
+    KF5::CoreAddons
+    KF5::ConfigGui
+    KF5::GuiAddons
+    KF5::WidgetsAddons
+    KF5::ConfigCore
+    KF5::Completion
+)
 
 if(X11_FOUND)
     target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})

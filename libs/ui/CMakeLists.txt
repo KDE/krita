@@ -234,7 +234,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
-    widgets/kis_popup_button.cc
     widgets/kis_preset_chooser.cpp
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc
@@ -259,12 +258,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_screen_color_picker.cpp
     widgets/kis_preset_live_preview_view.cpp
     widgets/KoDualColorButton.cpp
-    widgets/kis_color_button.cpp
-    # widgets/KisVisualColorSelector.cpp
-    # widgets/KisVisualColorSelectorShape.cpp
-    # widgets/KisVisualEllipticalSelectorShape.cpp
-    # widgets/KisVisualRectangleSelectorShape.cpp
-    # widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
 
@@ -389,7 +382,7 @@ set(kritaui_LIB_SRCS
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
 
-    # kis_dlg_internal_color_selector.cpp
+    kis_dlg_internal_color_selector.cpp
 )
 
 if(WIN32)

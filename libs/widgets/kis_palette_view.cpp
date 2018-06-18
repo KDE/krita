@@ -33,6 +33,7 @@
 #include <QComboBox>
 #include <QMenu>
 
+#include "kis_color_button.h"
 
 struct KisPaletteView::Private
 {
@@ -92,7 +93,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
     QLineEdit *lnIDName = new QLineEdit(window);
     QLineEdit *lnName = new QLineEdit(window);
-    SimpleColorButton *bnColor = new SimpleColorButton(window);
+    KisColorButton *bnColor = new KisColorButton(window);
     QCheckBox *chkSpot = new QCheckBox(window);
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
     editableItems->addRow(i18n("Group"), cmbGroups);
@@ -303,7 +304,7 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
         group->mainWidget()->setLayout(editableItems);
         QLineEdit *lnIDName = new QLineEdit(group);
         QLineEdit *lnGroupName = new QLineEdit(group);
-        SimpleColorButton *bnColor = new SimpleColorButton(group);
+        KisColorButton *bnColor = new KisColorButton(group);
         // bnColor->setPaletteViewEnabled(false);
         QCheckBox *chkSpot = new QCheckBox(group);
 

@@ -27,11 +27,13 @@
 #include <QWindow>
 #include <QTimer>
 
+// #include "KisMainWindow.h"
+#include <kis_canvas2.h>
+
+#include "kis_shared_ptr.h"
 #include "kis_icon.h"
 #include "kis_screen_color_picker.h"
-// #include "KisMainWindow.h"
 #include "kis_image.h"
-#include <kis_canvas2.h>
 #include "kis_wrapped_rect.h"
 #include "KisPart.h"
 

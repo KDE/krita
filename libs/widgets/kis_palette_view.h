@@ -117,39 +117,4 @@ private Q_SLOTS:
     void modifyEntry(QModelIndex index);
 };
 
-class KisPaletteView::SimpleColorButton : public QPushButton
-{
-    Q_OBJECT
-public:
-    SimpleColorButton(QWidget *parent = nullptr)
-        : QPushButton(parent)
-        , m_color(KoColor())
-    {
-        m_color.fromQColor(QColor(0, 0, 0));
-        connect(this, SIGNAL(clicked()), this, SLOT(getColor()));
-        updateIcon();
-    }
-    KoColor color() const {
-        return m_color;
-    }
-    void setColor(KoColor c) {
-        m_color = c;
-        updateIcon();
-    }
-private Q_SLOTS:
-    void getColor() {
-        QColor qc = QColorDialog::getColor(m_color.toQColor(), this);
-        KoColor kc;
-        kc.fromQColor(qc);
-        m_color = kc;
-        updateIcon();
-    }
-private:
-    void updateIcon() {
-        QPixmap iconPixmap = QPixmap(32, 32);
-        iconPixmap.fill(m_color.toQColor());
-        setIcon(QIcon(iconPixmap));
-    }
-    KoColor m_color;
-};
 #endif /* __KIS_PALETTE_VIEW_H */

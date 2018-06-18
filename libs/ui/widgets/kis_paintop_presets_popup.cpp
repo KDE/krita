@@ -32,6 +32,7 @@
 #include <QShowEvent>
 #include <QFontDatabase>
 #include <QWidgetAction>
+#include <QDesktopWidget>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -61,6 +62,7 @@
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
 
+class KisPopupButton;
 
 struct KisPaintOpPresetsPopup::Private
 {
@@ -73,6 +75,7 @@ public:
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     KisFavoriteResourceManager *favoriteResManager;
+    KisPopupButton *popupButton; // button that invokes this popup
 
     bool detached;
     bool ignoreHideEvents;
@@ -673,7 +676,10 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
-    emit sizeChanged();
+    // Make sure resizing doesn't push this widget out of the screen
+    QRect screenRect = QApplication::desktop()->availableGeometry(this);
+    QRect newPositionRect = kisEnsureInRect(this->rect(), screenRect);
+    this->parentWidget()->setGeometry(newPositionRect);
 }
 
 bool KisPaintOpPresetsPopup::detached() const

@@ -43,7 +43,8 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
         << KoID("hsy"       , i18n("HSY"))
         << KoID("hsi"       , i18n("HSI"))
         << KoID("hsl"       , i18n("HSL"))
-        << KoID("hsv"       , i18n("HSV"));
+        << KoID("hsv"       , i18n("HSV"))
+        << KoID("quadratic" , i18n("Quadratic"));
 
     m_map.insert(m_categories[0], KoID(COMPOSITE_ADD             , i18n("Addition")));
     m_map.insert(m_categories[0], KoID(COMPOSITE_SUBTRACT        , i18n("Subtract")));
@@ -137,6 +138,11 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[9], KoID(COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_DEC_VALUE         , i18n("Decrease Value")));
     m_map.insert(m_categories[9], KoID(COMPOSITE_INC_VALUE         , i18n("Increase Value")));
+    
+    m_map.insert(m_categories[10], KoID(COMPOSITE_REFLECT          , i18n("Reflect")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_GLOW             , i18n("Glow")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_FREEZE           , i18n("Freeze")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_HEAT             , i18n("Heat")));
 }
 
 const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()

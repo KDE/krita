@@ -29,6 +29,7 @@
 
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
+#include <kformat.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -243,40 +244,12 @@ void KisStatusBar::updateSelectionIcon()
     m_selectionStatus->setIcon(icon);
 }
 
-QString KisStatusBar::formatSize(qint64 size)
-{
-    qint64 K = 1024;
-    QString suffix = i18nc("very shortened \'byte\' suffix (for statusbar)", "b");
-    qreal realSize = size;
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened KiB suffix (for statusbar)", "K");
-    }
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened MiB suffix (for statusbar)", "M");
-    }
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened GiB suffix (for statusbar)", "G");
-    }
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened TiB suffix (for statusbar)", "T");
-    }
-
-    return QString("%2%3").arg(QString::number(realSize, 'f', 1)).arg(suffix);
-}
-
 void KisStatusBar::updateMemoryStatus()
 {
     KisMemoryStatisticsServer::Statistics stats =
         KisMemoryStatisticsServer::instance()
         ->fetchMemoryStatistics(m_imageView ? m_imageView->image() : 0);
+    const KFormat format;
 
     const QString imageStatsMsg =
             i18nc("tooltip on statusbar memory reporting button (image stats)",
@@ -284,10 +257,10 @@ void KisStatusBar::updateMemoryStatus()
                   "  - layers:\t\t %2\n"
                   "  - projections:\t %3\n"
                   "  - instant preview:\t %4\n",
-                  formatSize(stats.imageSize),
-                  formatSize(stats.layersSize),
-                  formatSize(stats.projectionsSize),
-                  formatSize(stats.lodSize));
+                  format.formatByteSize(stats.imageSize),
+                  format.formatByteSize(stats.layersSize),
+                  format.formatByteSize(stats.projectionsSize),
+                  format.formatByteSize(stats.lodSize));
 
     const QString memoryStatsMsg =
             i18nc("tooltip on statusbar memory reporting button (total stats)",
@@ -297,21 +270,21 @@ void KisStatusBar::updateMemoryStatus()
                   "  undo data:\t %7\n"
                   "\n"
                   "Swap used:\t %8",
-                  formatSize(stats.totalMemorySize),
-                  formatSize(stats.totalMemoryLimit),
+                  format.formatByteSize(stats.totalMemorySize),
+                  format.formatByteSize(stats.totalMemoryLimit),
 
-                  formatSize(stats.realMemorySize),
-                  formatSize(stats.tilesHardLimit),
+                  format.formatByteSize(stats.realMemorySize),
+                  format.formatByteSize(stats.tilesHardLimit),
 
-                  formatSize(stats.poolSize),
-                  formatSize(stats.tilesPoolLimit),
+                  format.formatByteSize(stats.poolSize),
+                  format.formatByteSize(stats.tilesPoolLimit),
 
-                  formatSize(stats.historicalMemorySize),
-                  formatSize(stats.swapSize));
+                  format.formatByteSize(stats.historicalMemorySize),
+                  format.formatByteSize(stats.swapSize));
 
     QString longStats = imageStatsMsg + "\n" + memoryStatsMsg;
 
-    QString shortStats = formatSize(stats.imageSize);
+    QString shortStats = format.formatByteSize(stats.imageSize);
     QIcon icon;
     const qint64 warnLevel = stats.tilesHardLimit - stats.tilesHardLimit / 8;
 

@@ -367,6 +367,8 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
                                                        from, to,
                                                        batchMode(), showWarnings,
                                                        &alsoAsKra);
+
+
         if (!batchMode() && !askUser) {
             return KisImportExportFilter::UserCancelled;
         }
@@ -410,8 +412,7 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
 }
 
-bool
-KisImportExportManager::askUserAboutExportConfiguration(
+bool KisImportExportManager::askUserAboutExportConfiguration(
         QSharedPointer<KisImportExportFilter> filter,
         KisPropertiesConfigurationSP exportConfiguration,
         const QByteArray &from,
@@ -420,6 +421,9 @@ KisImportExportManager::askUserAboutExportConfiguration(
         const bool showWarnings,
         bool *alsoAsKra)
 {
+
+    // prevents the animation renderer from running this code
+    if (QThread::currentThread() != qApp->thread()) return false;
 
     const QString mimeUserDescription = KisMimeDatabase::descriptionForMimeType(to);
 

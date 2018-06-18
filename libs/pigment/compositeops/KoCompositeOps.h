@@ -153,6 +153,11 @@ struct AddGeneralOps<Traits, true>
          add<&cfExclusion<Arg>            >(cs, COMPOSITE_EXCLUSION            , i18n("Exclusion")            , KoCompositeOp::categoryNegative());
          add<&cfEquivalence<Arg>          >(cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
          add<&cfAdditiveSubtractive<Arg>  >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE , i18n("Additive-Subtractive") , KoCompositeOp::categoryNegative());
+         
+         add<&cfReflect<Arg>  >(cs, COMPOSITE_REFLECT                       , i18n("Reflect")              , KoCompositeOp::categoryQuadratic());
+         add<&cfGlow<Arg>  >(cs, COMPOSITE_GLOW                             , i18n("Glow")                 , KoCompositeOp::categoryQuadratic());
+         add<&cfFreeze<Arg>  >(cs, COMPOSITE_FREEZE                         , i18n("Freeze")               , KoCompositeOp::categoryQuadratic());
+         add<&cfHeat<Arg>  >(cs, COMPOSITE_HEAT                             , i18n("Heat")                 , KoCompositeOp::categoryQuadratic());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
      }

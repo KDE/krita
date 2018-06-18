@@ -83,6 +83,7 @@
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 #include <kwindowconfig.h>
+#include <kformat.h>
 
 #include "KoDockFactoryBase.h"
 #include "KoDocumentInfoDlg.h"
@@ -767,7 +768,7 @@ void KisMainWindow::updateCaption()
 
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
         }
 
 
@@ -2570,7 +2571,17 @@ void KisMainWindow::showManual()
 
 void KisMainWindow::moveEvent(QMoveEvent *e)
 {
-    if (qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(e->oldPos())) {
+    /**
+     * For checking if the display number has changed or not we should always use
+     * positional overload, not using QWidget overload. Otherwise we might get
+     * inconsistency, because screenNumber(widget) can return -1, but screenNumber(pos)
+     * will always return the nearest screen.
+     */
+
+    const int oldScreen = qApp->desktop()->screenNumber(e->oldPos());
+    const int newScreen = qApp->desktop()->screenNumber(e->pos());
+
+    if (oldScreen != newScreen) {
         KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

@@ -23,7 +23,7 @@ class AssignProfileDialog(Extension):
     def assignProfile(self):
         doc = Application.activeDocument()
         if doc is None:
-            QMessageBox.information(Application.activeWindow().qwindow(), "Assign Profile", "There is no active document.")
+            QMessageBox.information(Application.activeWindow().qwindow(), i18n("Assign Profile"), i18n("There is no active document."))
             return
 
         self.dialog = QDialog(Application.activeWindow().qwindow())
@@ -53,7 +53,7 @@ class AssignProfileDialog(Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("assing_profile_to_image", "Assign Profile to Image")
+        action = window.createAction("assing_profile_to_image", i18n("Assign Profile to Image"))
         action.triggered.connect(self.assignProfile)
 
 

@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction, QMessageBox
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
+import krita
 
 
 class ReloadAction(QAction):
@@ -29,7 +30,7 @@ class ReloadAction(QAction):
 
         self.triggered.connect(self.reloadFile)
 
-        self.setText('Reload File')
+        self.setText(i18n("Reload File"))
         self.setObjectName('reloadfile')
         self.setShortcut(QKeySequence(Qt.ALT + Qt.Key_R))
 
@@ -43,8 +44,8 @@ class ReloadAction(QAction):
         document = self.scripter.documentcontroller._activeDocument
         if document is None:
             QMessageBox.critical(self.scripter.uicontroller.mainWidget,
-                                 'No existing document',
-                                 'Please specify a document by opening it before reloading')
+                                 i18n("No existing document"),
+                                 i18n("Please specify a document by opening it before reloading"))
             return
         else:
             curr_doc_fpath = document.filePath

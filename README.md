@@ -11,7 +11,7 @@ This repository contains the current, Qt5-based, development version of Krita 3.
 
 
 ### User Manual
-https://docs.krita.org/Category:User_Manual
+https://docs.krita.org/en/user_manual.html
 
 ### Development Notes and Build Instructions
 If you're building on Windows or OSX you'll need to build some third-party dependencies first. You should look at the README in the 3rdparty folder for directions. 

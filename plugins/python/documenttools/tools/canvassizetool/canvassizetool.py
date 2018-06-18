@@ -11,6 +11,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtWidgets import (QWidget, QSpinBox, QHBoxLayout,
                              QVBoxLayout, QFormLayout)
+import krita
 
 
 class CanvasSizeTool(QWidget):
@@ -40,9 +41,9 @@ class CanvasSizeTool(QWidget):
         self.offsetLayout.addWidget(self.xOffsetSpinBox)
         self.offsetLayout.addWidget(self.yOffsetSpinBox)
 
-        self.layout.addRow('Width', self.widthSpinBox)
-        self.layout.addRow('Height', self.heightSpinBox)
-        self.layout.addRow('Offset', self.offsetLayout)
+        self.layout.addRow(i18n("Width:"), self.widthSpinBox)
+        self.layout.addRow(i18n("Height:"), self.heightSpinBox)
+        self.layout.addRow(i18n("Offset:"), self.offsetLayout)
 
     def adjust(self, documents):
         for document in documents:

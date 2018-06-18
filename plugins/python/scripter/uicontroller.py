@@ -24,6 +24,7 @@ from .ui_scripter.syntax import syntax, syntaxstyles
 from .ui_scripter.editor import pythoneditor
 from . import scripterdialog
 import importlib
+import krita
 
 KEY_GEOMETRY = "geometry"
 DEFAULT_GEOMETRY = QRect(600, 200, 400, 500)
@@ -93,7 +94,7 @@ class UIController(object):
         vbox.addWidget(self.splitter)
         vbox.addWidget(self.statusBar)
 
-        self.mainWidget.setWindowTitle("Scripter")
+        self.mainWidget.setWindowTitle(i18n("Scripter"))
         self.mainWidget.setSizeGripEnabled(True)
         self.mainWidget.show()
         self.mainWidget.activateWindow()
@@ -170,7 +171,7 @@ class UIController(object):
                 return widget
 
     def showException(self, exception):
-        QMessageBox.critical(self.editor, "Error running script", str(exception))
+        QMessageBox.critical(self.editor, i18n("Error Running Script"), str(exception))
 
     def setDocumentEditor(self, document):
         self.editor.clear()

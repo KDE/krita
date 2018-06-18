@@ -40,7 +40,7 @@ class UITenBrushes(object):
         self.loadButtons()
 
         self.vbox.addLayout(self.hbox)
-        self.vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
+        self.vbox.addWidget(QLabel(i18n("Select the brush preset, then click on the button you want to use to select the preset")))
         self.vbox.addWidget(self.presetChooser)
         self.vbox.addWidget(self.buttonBox)
 

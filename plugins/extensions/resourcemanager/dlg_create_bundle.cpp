@@ -427,7 +427,7 @@ void DlgCreateBundle::getPreviewImage()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
     dialog.setCaption(i18n("Select file to use as bundle icon"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     m_previewImage = dialog.filename();
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);

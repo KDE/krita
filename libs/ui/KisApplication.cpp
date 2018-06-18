@@ -315,19 +315,19 @@ void KisApplication::loadResources()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
-    reg->add(new KisResourceLoader<KisPaintOpPreset>("kis_paintoppresets", "paintoppresets",  QStringList() << "application/x-krita-paintoppreset"));
+    reg->add(new KisResourceLoader<KisPaintOpPreset>("paintoppresets", "paintoppresets",  QStringList() << "application/x-krita-paintoppreset"));
 
-    reg->add(new KisResourceLoader<KisResourceBundle>("kis_resourcebundles", "bundles", QStringList() << "application/x-krita-bundle"));
+    reg->add(new KisResourceLoader<KisResourceBundle>("resourcebundles", "bundles", QStringList() << "application/x-krita-bundle"));
 
     reg->add(new KisResourceLoader<KisGbrBrush>("gbr_brushes", "brushes", QStringList() << "image/x-gimp-brush"));
     reg->add(new KisResourceLoader<KisImagePipeBrush>("gih_brushes", "brushes", QStringList() << "image/x-gimp-brush-animated"));
-    reg->add(new KisResourceLoader<KisSvgBrush>("gbr_brushes", "brushes", QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KisSvgBrush>("svg_brushes", "brushes", QStringList() << "image/svg+xml"));
     reg->add(new KisResourceLoader<KisPngBrush>("png_brushes", "brushes", QStringList() << "image/png"));
 
     reg->add(new KisResourceLoader<KoSegmentGradient>("segmented_gradients", "gradients", QStringList() << "application/x-gimp-gradient"));
     reg->add(new KisResourceLoader<KoStopGradient>("stop_gradients", "gradients", QStringList() << "application/x-karbon-gradient" << "image/svg+xml"));
 
-    reg->add(new KisResourceLoader<KoColorSet>("kopalettes", "palettes",
+    reg->add(new KisResourceLoader<KoColorSet>("palettes", "palettes",
                                      QStringList() << KisMimeDatabase::mimeTypeForSuffix("kpl")
                                                << KisMimeDatabase::mimeTypeForSuffix("gpl")
                                                << KisMimeDatabase::mimeTypeForSuffix("pal")
@@ -343,13 +343,13 @@ void KisApplication::loadResources()
     Q_FOREACH(const QByteArray ba, src) {
         allImageMimes << QString::fromUtf8(ba);
     }
-    reg->add(new KisResourceLoader<KoPattern>("ko_patterns", "patterns", allImageMimes));
+    reg->add(new KisResourceLoader<KoPattern>("patterns", "patterns", allImageMimes));
     reg->add(new KisResourceLoader<KisWorkspaceResource>("workspaces", "workspaces", QStringList() << "application/x-krita-workspace"));
     reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", QStringList() << "image/svg+xml"));
     reg->add(new KisResourceLoader<KisSessionResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
     reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", QStringList() << "application/x-krita-session"));
 
-    //    qDebug() << "loadResources();";
+    qDebug() << "loadResources()" << reg->keys();
 
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
@@ -366,6 +366,8 @@ void KisApplication::loadResources()
     setSplashScreenLoadingText(i18n("Loading Bundles..."));
     processEvents();
     KisResourceBundleServerProvider::instance();
+
+
 }
 
 void KisApplication::loadResourceTags()

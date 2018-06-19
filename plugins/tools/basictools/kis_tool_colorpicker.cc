@@ -99,7 +99,7 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
     if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
         auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-        KisReferenceImagesLayer *referenceImageLayer =
+        KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer =
             kisCanvas->imageView()->document()->referenceImagesLayer();
 
         if (referenceImageLayer) {

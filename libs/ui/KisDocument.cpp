@@ -1702,26 +1702,21 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     d->assistants = value;
 }
 
-KisSharedPtr<KisReferenceImagesLayer> KisDocument::getOrCreateReferenceImagesLayer(KisImageSP targetImage)
-{
-    if (!d->referenceImagesLayer) {
-        if (targetImage.isNull()) targetImage = d->image;
-
-        d->referenceImagesLayer = new KisReferenceImagesLayer(shapeController(), targetImage);
-        targetImage->addNode(d->referenceImagesLayer, targetImage->root());
-    }
-
-    return d->referenceImagesLayer;
-}
-
-// TODO: change signature to return a shared pointer
-KisReferenceImagesLayer *KisDocument::referenceImagesLayer() const
+KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
 {
     return d->referenceImagesLayer.data();
 }
 
-void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
+    if (updateImage) {
+        if (layer) {
+            d->image->addNode(layer);
+        } else {
+            d->image->removeNode(d->referenceImagesLayer);
+        }
+    }
+
     d->referenceImagesLayer = layer;
 }
 

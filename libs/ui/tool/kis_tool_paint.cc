@@ -383,7 +383,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
     if (!fromCurrentNode) {
         auto *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-        auto *referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
+        KisSharedPtr<KisReferenceImagesLayer> referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
         if (referencesLayer) {
             QColor color = referencesLayer->getPixel(imagePoint);
             if (color.isValid() && color.alpha() != 0) {

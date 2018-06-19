@@ -74,7 +74,7 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
     }
 
     if (m_imageView && !referenceImagesDecoration()) {
-        KisReferenceImagesDecoration *deco = new KisReferenceImagesDecoration(m_imageView);
+        KisReferenceImagesDecoration *deco = new KisReferenceImagesDecoration(m_imageView, imageView->document());
         m_imageView->canvasBase()->addDecoration(deco);
     }
 

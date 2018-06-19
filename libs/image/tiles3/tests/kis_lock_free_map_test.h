@@ -9,7 +9,6 @@ class LockFreeMapTest : public QObject
 
 private Q_SLOTS:
     void testMainOperations();
-    void testLazy();
 };
 
 #endif // KIS_LOCK_FREE_MAP_TEST_H

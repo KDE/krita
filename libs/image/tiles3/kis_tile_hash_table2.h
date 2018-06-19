@@ -5,8 +5,8 @@
 #include "kis_shared_ptr.h"
 #include "3rdparty/lock_free_map/concurrent_map.h"
 
+#include "kis_lockless_stack.h"
 #include "kis_tile.h"
-
 #include <boost/functional/hash.hpp>
 
 template <class T>
@@ -27,89 +27,43 @@ public:
 
     TileTypeSP insert(quint32 key, TileTypeSP value)
     {
-        m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileTypeSP::ref(&value, value.data());
         TileType *result = m_map.assign(key, value.data());
 
         if (result) {
-            MemoryReclaimer *tmp = new MemoryReclaimer(result);
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
+            m_map.getGC().enqueue(new MemoryReclaimer(result));
         } else {
             m_numTiles.fetchAndAddRelaxed(1);
         }
 
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
+//        m_map.getGC().update();
         return TileTypeSP(result);
     }
 
     TileTypeSP erase(quint32 key)
     {
-        m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileType *result = m_map.erase(key);
         TileTypeSP ptr(result);
 
         if (result) {
             m_numTiles.fetchAndSubRelaxed(1);
-            MemoryReclaimer *tmp = new MemoryReclaimer(result);
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
+            m_map.getGC().enqueue(new MemoryReclaimer(result));
         }
 
-        if (m_rawPointerUsers == 1) {
-            m_map.getGC().update(m_context);
-        }
-
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
+//        m_map.getGC().update();
         return ptr;
     }
 
     TileTypeSP get(quint32 key)
     {
-        m_rawPointerUsers.fetchAndAddRelaxed(1);
         TileTypeSP result(m_map.get(key));
-
-        if (m_rawPointerUsers == 1) {
-            m_map.getGC().update(m_context);
-        }
-
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
+//        m_map.getGC().update();
         return result;
-    }
-
-    TileTypeSP getLazy(quint32 key, TileTypeSP value, bool &newTile)
-    {
-        m_rawPointerUsers.fetchAndAddRelaxed(1);
-        newTile = false;
-        TileType *tile;
-        typename ConcurrentMap<quint32, TileType*>::Mutator mutator = m_map.insertOrFind(key);
-
-        if (!mutator.getValue()) {
-            TileTypeSP::ref(&value, value.data());
-            TileType *result = mutator.exchangeValue(value.data());
-
-            if (result) {
-                MemoryReclaimer *tmp = new MemoryReclaimer(result);
-                m_map.getGC().enqueue(&MemoryReclaimer::destroy, tmp);
-            } else {
-                m_numTiles.fetchAndAddRelaxed(1);
-            }
-
-            newTile = true;
-            tile = m_map.get(key);
-        } else {
-            tile = mutator.getValue();
-        }
-
-        if (m_rawPointerUsers == 1) {
-            m_map.getGC().update(m_context);
-        }
-
-        m_rawPointerUsers.fetchAndSubRelaxed(1);
-        return TileTypeSP(tile);
     }
 
     bool isEmpty()
     {
-        return !m_numTiles;
+        return !m_numTiles.load();
     }
 
     bool tileExists(qint32 col, qint32 row);
@@ -150,11 +104,11 @@ public:
     void clear();
 
     void setDefaultTileData(KisTileData *defaultTileData);
-    KisTileData* defaultTileData() const;
+    KisTileData* defaultTileData();
 
     qint32 numTiles()
     {
-        return m_numTiles;
+        return m_numTiles.load();
     }
 
     void debugPrintInfo();
@@ -168,15 +122,11 @@ public:
 private:
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
-    struct MemoryReclaimer {
+    struct MemoryReclaimer : public Property {
         MemoryReclaimer(TileType *data) : d(data) {}
-        ~MemoryReclaimer() = default;
-
-        void destroy()
+        ~MemoryReclaimer()
         {
             TileTypeSP::deref(reinterpret_cast<TileTypeSP *>(this), d);
-            this->MemoryReclaimer::~MemoryReclaimer();
-            delete this;
         }
 
     private:
@@ -185,10 +135,9 @@ private:
 
 private:
     ConcurrentMap<quint32, TileType*> m_map;
-    QSBR::Context m_context;
-    QAtomicInt m_rawPointerUsers;
     QAtomicInt m_numTiles;
     QReadWriteLock m_rwLock;
+    KisLocklessStack<TileType*> m_stack;
 
     KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
@@ -214,7 +163,7 @@ public:
 
     TileTypeSP tile() const
     {
-        return m_iter.getValue();
+        return TileTypeSP(m_iter.getValue());
     }
 
     bool isDone() const
@@ -243,10 +192,8 @@ private:
 
 template <class T>
 KisTileHashTableTraits2<T>::KisTileHashTableTraits2()
-    : m_rawPointerUsers(0), m_numTiles(0),
-      m_defaultTileData(0), m_mementoManager(0)
+    : m_numTiles(0), m_rwLock(QReadWriteLock::NonRecursive), m_defaultTileData(0), m_mementoManager(0)
 {
-    m_context = m_map.getGC().createContext();
 }
 
 template <class T>
@@ -271,8 +218,7 @@ KisTileHashTableTraits2<T>::KisTileHashTableTraits2(const KisTileHashTableTraits
 template <class T>
 KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 {
-    clear();
-    m_map.getGC().destroyContext(m_context);
+//    clear();
 }
 
 template<class T>
@@ -291,19 +237,38 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getE
 template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getTileLazy(qint32 col, qint32 row, bool &newTile)
 {
+    newTile = false;
     TileTypeSP tile;
-    {
-        QReadLocker guard(&m_rwLock);
-        tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
-    }
     quint32 idx = calculateHash(col, row);
-    return getLazy(idx, tile, newTile);
+    typename ConcurrentMap<quint32, TileType*>::Mutator mutator = m_map.insertOrFind(idx);
+
+    if (!mutator.getValue()) {
+        {
+            QReadLocker guard(&m_rwLock);
+            tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
+        }
+        TileTypeSP::ref(&tile, tile.data());
+        TileType *result = mutator.exchangeValue(tile.data());
+
+        if (result) {
+            m_map.getGC().enqueue(new MemoryReclaimer(result));
+        } else {
+            m_numTiles.fetchAndAddRelaxed(1);
+        }
+
+        newTile = true;
+        tile = m_map.get(idx);
+    } else {
+        tile = mutator.getValue();
+    }
+
+//    m_map.getGC().update();
+    return tile;
 }
 
 template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile)
 {
-    m_rawPointerUsers.fetchAndAddRelaxed(1);
     quint32 idx = calculateHash(col, row);
     TileTypeSP tile(m_map.get(idx));
     existingTile = tile;
@@ -313,7 +278,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
         tile = new TileType(col, row, m_defaultTileData, 0);
     }
 
-    m_rawPointerUsers.fetchAndSubRelaxed(1);
+//    m_map.getGC().update();
     return tile;
 }
 
@@ -363,8 +328,9 @@ inline void KisTileHashTableTraits2<T>::setDefaultTileData(KisTileData *defaultT
 }
 
 template <class T>
-inline KisTileData* KisTileHashTableTraits2<T>::defaultTileData() const
+inline KisTileData* KisTileHashTableTraits2<T>::defaultTileData()
 {
+    QReadLocker guard(&m_rwLock);
     return m_defaultTileData;
 }
 

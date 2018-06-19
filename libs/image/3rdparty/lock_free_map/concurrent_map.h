@@ -26,7 +26,8 @@ public:
 
 private:
     Atomic<typename Details::Table*> m_root;
-    QSBR m_gc;
+//    QSBR m_gc;
+    GarbageCollector<Property> m_gc;
 
 public:
     ConcurrentMap(quint64 capacity = Details::InitialSize) : m_root(Details::Table::create(capacity))
@@ -39,7 +40,12 @@ public:
         table->destroy();
     }
 
-    QSBR &getGC()
+//    QSBR &getGC()
+//    {
+//        return m_gc;
+//    }
+
+    GarbageCollector<Property> &getGC()
     {
         return m_gc;
     }

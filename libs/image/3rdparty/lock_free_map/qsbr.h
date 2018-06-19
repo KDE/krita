@@ -17,6 +17,88 @@
 
 #define CALL_MEMBER(obj, pmf) ((obj).*(pmf))
 
+struct Property {
+    Property() = default;
+    virtual ~Property() = default;
+};
+
+template <class T>
+class GarbageCollector
+{
+public:
+    ~GarbageCollector()
+    {
+        cleanUpNodes();
+    }
+
+    void enqueue(T *data)
+    {
+        m_rawPointerUsers.ref();
+
+        Node *newNode = new Node(data);
+        Node *head;
+
+        do {
+            head = m_freeNodes.loadAcquire();
+            newNode->next = head;
+        } while (!m_freeNodes.testAndSetRelease(head, newNode));
+
+        m_rawPointerUsers.deref();
+    }
+
+    void update()
+    {
+        m_rawPointerUsers.ref();
+
+        if (m_rawPointerUsers == 1) {
+            Node *head = m_freeNodes.loadAcquire();
+            if (!(reinterpret_cast<std::uintptr_t>(head) & 1)) {
+                if (m_freeNodes.testAndSetOrdered(head, reinterpret_cast<Node *>(reinterpret_cast<std::uintptr_t>(head) | 1))) {
+                    if (m_rawPointerUsers == 1) {
+                        if (m_freeNodes.testAndSetOrdered(reinterpret_cast<Node *>(reinterpret_cast<std::uintptr_t>(head) | 1), 0)) {
+                            cleanUpNodes();
+                        }
+                    } else {
+                        m_freeNodes.testAndSetOrdered(reinterpret_cast<Node *>(reinterpret_cast<std::uintptr_t>(head) | 1), head);
+                    }
+                }
+            }
+        }
+
+        m_rawPointerUsers.deref();
+    }
+
+private:
+    struct Node {
+        Node(T *data) : d(data) {}
+
+        Node *next;
+        T* d;
+    };
+
+    inline void cleanUpNodes()
+    {
+        Node *head = m_freeNodes.fetchAndStoreOrdered(0);
+        if (head) {
+            freeList(head);
+        }
+    }
+
+    inline void freeList(Node *first)
+    {
+        Node *next;
+        while (first) {
+            next = first->next;
+            delete first;
+            first = next;
+        }
+    }
+
+private:
+    QAtomicInt m_rawPointerUsers;
+    QAtomicPointer<Node> m_freeNodes;
+};
+
 class QSBR
 {
 private:

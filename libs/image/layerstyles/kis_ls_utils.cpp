@@ -109,13 +109,13 @@ namespace KisLsUtils
         return rc.adjusted(-halfSize, -halfSize, halfSize, halfSize);
     }
 
-    void applyGaussian(KisPixelSelectionSP selection,
-                       const QRect &applyRect,
-                       qreal radius)
+    void applyGaussianWithTransaction(KisPixelSelectionSP selection,
+                                      const QRect &applyRect,
+                                      qreal radius)
     {
         KisGaussianKernel::applyGaussian(selection, applyRect,
                                          radius, radius,
-                                         QBitArray(), 0);
+                                         QBitArray(), 0, true);
     }
 
     namespace Private {

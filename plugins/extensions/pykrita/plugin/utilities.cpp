@@ -394,7 +394,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     joinedPaths.toWCharArray(joinedPathsWChars.data());
     Py_SetPath(joinedPathsWChars.data());
 #else
-    if (KoResourcePaths::getApplicationRoot().contains(".mount_Krita")) {
+    if (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita")) {
         QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
         joinedPaths.toWCharArray(joinedPathsWChars.data());
         PyRun_SimpleString("import sys; import os");

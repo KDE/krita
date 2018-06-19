@@ -280,6 +280,7 @@ bool Python::libraryLoad()
             s_pythonLibrary = 0;
             return false;
         }
+        dbgScript << QString("Loaded %1").arg(s_pythonLibrary->fileName());
     }
 #endif
     return true;

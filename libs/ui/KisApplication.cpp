@@ -96,6 +96,7 @@
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
+#include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
 #include <KisResourceLoader.h>
 #include <KisResourceLoaderRegistry.h>
@@ -349,7 +350,19 @@ void KisApplication::loadResources()
     reg->add(new KisResourceLoader<KisSessionResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
     reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", QStringList() << "application/x-krita-session"));
 
-    qDebug() << "loadResources()" << reg->keys();
+    KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
+    if (r != KisResourceLocator::LocatorError::Ok ) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n'));
+        qApp->quit();
+    }
+
+    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+
+    if (!KisResourceLocator::instance()->synchronizeDb()) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n'));
+        qApp->quit();
+    }
+
 
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();

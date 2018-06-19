@@ -51,43 +51,15 @@ const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
 const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
 const QString KisResourceCacheDb::databaseVersion {"0.0.1"};
 
+bool KisResourceCacheDb::s_valid {false};
 
-
-class KisResourceCacheDb::Private
+bool KisResourceCacheDb::isValid()
 {
-public:
-
-    bool valid {false};
-
-    QSqlError initDb(const QString &location);
-};
-
-KisResourceCacheDb::KisResourceCacheDb()
-    : d(new Private())
-{
+    return s_valid;
 }
 
-KisResourceCacheDb::~KisResourceCacheDb()
-{
-}
 
-bool KisResourceCacheDb::isValid() const
-{
-    return d->valid;
-}
-
-bool KisResourceCacheDb::initialize(const QString &location) const
-{
-    QSqlError err = d->initDb(location);
-    if (err.isValid()) {
-        qWarning() << "Could not initialize the database:" << err;
-    }
-    d->valid = !err.isValid();
-
-    return d->valid;
-}
-
-QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
+QSqlError initDb(const QString &location)
 {
     if (!QSqlDatabase::connectionNames().isEmpty()) {
         infoResources << "Already connected to resource cache database";
@@ -100,7 +72,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     }
 
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
-    db.setDatabaseName(location + "/" + resourceCacheDbFilename);
+    db.setDatabaseName(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
     if (!db.open()) {
         infoResources << "Could not connect to resource cache database";
@@ -145,7 +117,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
                                   << "Krita version that created the database" << kritaVersion
                                   << "At" << creationDate;
 
-                    if (schemaVersion != databaseVersion) {
+                    if (schemaVersion != KisResourceCacheDb::databaseVersion) {
                         // XXX: Implement migration
                         warnResources << "Database schema is outdated, migration is needed";
                         schemaIsOutDated = true;
@@ -189,7 +161,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
         QFile f(":/fill_origin_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
-            Q_FOREACH(const QString &originType, storageTypes) {
+            Q_FOREACH(const QString &originType, KisResourceCacheDb::storageTypes) {
                 QSqlQuery query(sql);
                 query.addBindValue(originType);
                 if (!query.exec()) {
@@ -214,7 +186,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
         QFile f(":/fill_resource_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
-            Q_FOREACH(const QString &resourceType, resourceTypes) {
+            Q_FOREACH(const QString &resourceType, KisResourceCacheDb::resourceTypes) {
                 QSqlQuery query(sql);
                 query.addBindValue(resourceType);
                 if (!query.exec()) {
@@ -235,7 +207,7 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
             QString sql = f.readAll();
             QSqlQuery query;
             query.prepare(sql);
-            query.addBindValue(databaseVersion);
+            query.addBindValue(KisResourceCacheDb::databaseVersion);
             query.addBindValue(KritaVersionWrapper::versionString());
             query.addBindValue(QDateTime::currentDateTimeUtc().toString());
             if (!query.exec()) {
@@ -250,4 +222,15 @@ QSqlError KisResourceCacheDb::Private::initDb(const QString &location)
     }
 
     return QSqlError();
+}
+
+bool KisResourceCacheDb::initialize(const QString &location)
+{
+    QSqlError err = initDb(location);
+    if (err.isValid()) {
+        qWarning() << "Could not initialize the database:" << err;
+    }
+    s_valid = !err.isValid();
+
+    return s_valid;
 }

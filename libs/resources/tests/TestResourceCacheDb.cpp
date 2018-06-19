@@ -36,10 +36,9 @@ void TestResourceCacheDb::initTestCase()
 
 void TestResourceCacheDb::testCreateDatabase()
 {
-    KisResourceCacheDb cacheDb;
-    bool res = cacheDb.initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    bool res = KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     QVERIFY(res);
-    QVERIFY(cacheDb.isValid());
+    QVERIFY(KisResourceCacheDb::isValid());
 
     QSqlDatabase sqlDb = QSqlDatabase::database();
 
@@ -58,9 +57,9 @@ void TestResourceCacheDb::testCreateDatabase()
         QVERIFY2(dbTables.contains(table), table.toLatin1());
     }
 
-    res = cacheDb.initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    res = KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     QVERIFY(res);
-    QVERIFY(cacheDb.isValid());
+    QVERIFY(KisResourceCacheDb::isValid());
 }
 
 void TestResourceCacheDb::testLookupTables()

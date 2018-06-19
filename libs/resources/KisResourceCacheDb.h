@@ -21,7 +21,6 @@
 #define KISRESOURCECACHEDB_H
 
 #include <QObject>
-#include <QScopedPointer>
 
 #include <kritaresources_export.h>
 
@@ -43,30 +42,24 @@ public:
     static const QStringList storageTypes; ///< kinds of places where resources can be stored
 
     /**
-     * @brief KisResourceCacheDb create a resource cache database.
-     */
-    explicit KisResourceCacheDb();
-    ~KisResourceCacheDb();
-
-    /**
      * @brief isValid
      * @return true if the database has been correctly created, false if the database cannot be used
      */
-    bool isValid() const;
+    static bool isValid();
 
     /**
      * @brief initialize
      * @param location the location of the database
      * @return true if the database has been initialized correctly
      */
-    bool initialize(const QString &location) const;
+    static bool initialize(const QString &location);
 
 private:
 
+    explicit KisResourceCacheDb();
+    ~KisResourceCacheDb();
 
-    class Private;
-    QScopedPointer<Private> d;
-
+    static bool s_valid;
 };
 
 #endif // KISRESOURCECACHEDB_H

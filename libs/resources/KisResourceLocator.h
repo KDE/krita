@@ -77,7 +77,7 @@ private:
     };
 
     LocatorError firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation);
-
+    void findStorages();
 
 
     class Private;

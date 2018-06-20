@@ -24,6 +24,7 @@
 #include <QMessageBox>
 #include <QVector>
 
+#include <KoSelection.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
@@ -34,6 +35,7 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KisReferenceImagesLayer.h>
+#include <kis_image.h>
 
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
@@ -50,16 +52,35 @@ ToolReferenceImages::~ToolReferenceImages()
 
 void ToolReferenceImages::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    // Add code here to initialize your tool when it got activated
     DefaultTool::activate(toolActivation, shapes);
 
-    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
-    connect(layer, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+
+    auto referenceImageLayer = document()->referenceImagesLayer();
+    if (referenceImageLayer) {
+        setReferenceImageLayer(referenceImageLayer);
+    }
 }
 
 void ToolReferenceImages::deactivate()
 {
     DefaultTool::deactivate();
+}
+
+void ToolReferenceImages::slotNodeAdded(KisNodeSP node)
+{
+    auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
+
+    if (referenceImagesLayer) {
+        setReferenceImageLayer(referenceImagesLayer);
+    }
+}
+
+void ToolReferenceImages::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+{
+    m_layer = layer;
+    connect(layer.data(), SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
 }
 
 void ToolReferenceImages::addReferenceImage()
@@ -80,19 +101,22 @@ void ToolReferenceImages::addReferenceImage()
     if (!QFileInfo(filename).exists()) return;
 
     auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter());
-    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
-    kisCanvas->imageView()->document()->addCommand(layer->addReferenceImage(reference));
+
+    KisDocument *doc = document();
+    doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
 }
 
 void ToolReferenceImages::removeAllReferenceImages()
 {
-    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
-    canvas()->addCommand(canvas()->shapeController()->removeShapes(layer->shapes()));
+    auto layer = m_layer.toStrongRef();
+    if (!layer) return;
+
+    canvas()->addCommand(layer->removeReferenceImages(document(), layer->shapes()));
 }
 
 void ToolReferenceImages::loadReferenceImages()
 {
-      auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
     KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
@@ -116,11 +140,13 @@ void ToolReferenceImages::loadReferenceImages()
 
     KisReferenceImageCollection collection;
     if (collection.load(&file)) {
-        KisReferenceImagesLayer *layer = referenceImagesLayer();
-
-        Q_FOREACH(KisReferenceImage *reference, collection.referenceImages()) {
-            layer->addShape(reference);
+        QList<KoShape*> shapes;
+        Q_FOREACH(auto *reference, collection.referenceImages()) {
+            shapes.append(reference);
         }
+
+        KisDocument *doc = document();
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, shapes));
     } else {
         QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
     }
@@ -129,6 +155,9 @@ void ToolReferenceImages::loadReferenceImages()
 
 void ToolReferenceImages::saveReferenceImages()
 {
+    auto layer = m_layer.toStrongRef();
+    if (!layer || layer->shapeCount() == 0) return;
+
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas)
 
@@ -150,7 +179,7 @@ void ToolReferenceImages::saveReferenceImages()
         return;
     }
 
-    KisReferenceImageCollection collection(referenceImagesLayer()->referenceImages());
+    KisReferenceImageCollection collection(layer->referenceImages());
     bool ok = collection.save(&file);
     file.close();
 
@@ -161,7 +190,9 @@ void ToolReferenceImages::saveReferenceImages()
 
 void ToolReferenceImages::slotSelectionChanged()
 {
-    KisReferenceImagesLayer *layer = getOrCreateReferenceImagesLayer();
+    auto layer = m_layer.toStrongRef();
+    if (!layer) return;
+
     m_optionsWidget->selectionChanged(layer->shapeManager()->selection());
     updateActions();
 }
@@ -192,24 +223,8 @@ bool ToolReferenceImages::isValidForCurrentLayer() const
 
 KoShapeManager *ToolReferenceImages::shapeManager() const
 {
-    auto layer = referenceImagesLayer();
-    return layer ? referenceImagesLayer()->shapeManager() : nullptr;
-}
-
-KisReferenceImagesLayer *ToolReferenceImages::referenceImagesLayer() const
-{
-    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KisDocument *document = kisCanvas->imageView()->document();
-
-    return document->referenceImagesLayer();
-}
-
-KisReferenceImagesLayer *ToolReferenceImages::getOrCreateReferenceImagesLayer()
-{
-    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KisDocument *document = kisCanvas->imageView()->document();
-
-    return document->getOrCreateReferenceImagesLayer().data();
+    auto layer = m_layer.toStrongRef();
+    return layer ? layer->shapeManager() : nullptr;
 }
 
 KoSelection *ToolReferenceImages::koSelection() const
@@ -226,4 +241,22 @@ void ToolReferenceImages::updateDistinctiveActions(const QList<KoShape*> &)
     action("object_subtract")->setEnabled(false);
     action("object_split")->setEnabled(false);
     action("object_ungroup")->setEnabled(false);
+}
+
+void ToolReferenceImages::deleteSelection()
+{
+    auto layer = m_layer.toStrongRef();
+    if (!layer) return;
+
+    QList<KoShape *> shapes = koSelection()->selectedShapes();
+
+    if (!shapes.empty()) {
+        canvas()->addCommand(layer->removeReferenceImages(document(), shapes));
+    }
+}
+
+KisDocument *ToolReferenceImages::document() const
+{
+    auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    return kisCanvas->imageView()->document();
 }

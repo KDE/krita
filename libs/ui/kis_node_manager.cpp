@@ -623,6 +623,11 @@ void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 {
     if (node == activeNode()) return;
+
+    // the node must still be in the graph, some asynchronous
+    // signals may easily break this requirement
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node->graphListener());
+
     slotSomethingActivatedNodeImpl(node);
 
     if (node) {
@@ -636,6 +641,10 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
 {
     if (node == activeNode()) return;
+
+    // the node must still be in the graph, some asynchronous
+    // signals may easily break this requirement
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node->graphListener());
 
     slotSomethingActivatedNodeImpl(node);
 
@@ -1016,7 +1025,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
     KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export));
     QString filename = dialog.filename();
 
     if (filename.isEmpty()) return;

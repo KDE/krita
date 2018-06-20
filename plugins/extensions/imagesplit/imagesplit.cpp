@@ -98,7 +98,7 @@ void Imagesplit::slotImagesplit()
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     QString defaultMime = QString::fromLatin1(viewManager()->document()->mimeType());
     int defaultMimeIndex = 0;
 
@@ -139,7 +139,7 @@ void Imagesplit::slotImagesplit()
             KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
             dialog.setCaption(i18n("Save Image on Split"));
             dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-            QStringList mimeFilter = viewManager()->document()->importExportManager()->mimeFilter(KisImportExportManager::Export);
+            QStringList mimeFilter = viewManager()->document()->importExportManager()->supportedMimeTypes(KisImportExportManager::Export);
             QString defaultMime = QString::fromLatin1(viewManager()->document()->mimeType());
             dialog.setMimeTypeFilters(mimeFilter, defaultMime);
 

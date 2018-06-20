@@ -805,7 +805,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const KoXmlElement& element, KisImageSP im
         if (result == QMessageBox::Yes) {
 
             KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-            dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+            dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
             dialog.setDefaultDir(basePath);
             QString url = dialog.filename();
 
@@ -1184,7 +1184,7 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisIm
     KisSharedPtr<KisReferenceImagesLayer> layer =
         new KisReferenceImagesLayer(m_d->document->shapeController(), image);
 
-    m_d->document->setReferenceImagesLayer(layer);
+    m_d->document->setReferenceImagesLayer(layer, false);
 
     for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toLower() == "referenceimage") {

@@ -472,7 +472,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     KisImageSP image = m_view->image();
     if (!image) return;
 
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);
@@ -833,7 +833,7 @@ void KisLayerManager::layersUpdated()
 
 void KisLayerManager::saveGroupLayers()
 {
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);

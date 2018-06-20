@@ -34,7 +34,7 @@ public:
         : KisExportCheckBase(id, level, customWarning)
     {
         if (customWarning.isEmpty()) {
-            m_warning = i18nc("image conversion warning", "The image has <b>more than one layer</b>. Only the flattened image will be saved.");
+            m_warning = i18nc("image conversion warning", "The image has <b>more than one layer or a mask or an active selection</b>. Only the flattened image will be saved.");
         }
     }
 

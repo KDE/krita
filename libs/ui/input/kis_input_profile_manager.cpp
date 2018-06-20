@@ -274,8 +274,8 @@ void KisInputProfileManager::loadProfiles()
         }
     }
 
-    QString profilePathsStr(profilePaths.join("' AND '"));
-    qDebug() << "input profiles were read from '" << qUtf8Printable(profilePathsStr) << "'.";
+//    QString profilePathsStr(profilePaths.join("' AND '"));
+//    qDebug() << "input profiles were read from '" << qUtf8Printable(profilePathsStr) << "'.";
 
     KisConfig cfg;
     QString currentProfile = cfg.currentInputProfile();

@@ -399,7 +399,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     }
 
     if (config->soften()) {
-        KisLsUtils::applyGaussian(bumpmapSelection, d.applyGaussianRect, config->soften());
+        KisLsUtils::applyGaussianWithTransaction(bumpmapSelection, d.applyGaussianRect, config->soften());
     }
 
 

@@ -43,7 +43,7 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
     setDefaultButton(Ok);
     QWidget * page = new QWidget(this);
     dlgWidget.setupUi(page);
-    QStringList mimes = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
+    QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
     // Nesting .kra files is not supported, so do not offer that option. See https://bugs.kde.org/show_bug.cgi?id=386515
     mimes.removeAll("application/x-krita");
     dlgWidget.wdgUrlRequester->setMimeTypeFilters(mimes);

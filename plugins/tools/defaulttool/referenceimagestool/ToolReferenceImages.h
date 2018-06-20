@@ -47,6 +47,8 @@ public:
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
 
+    void deleteSelection() override;
+
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
@@ -66,14 +68,16 @@ public Q_SLOTS:
     void saveReferenceImages();
     void loadReferenceImages();
 
+    void slotNodeAdded(KisNodeSP node);
     void slotSelectionChanged();
 
 private:
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
+    KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
 
-    KisReferenceImagesLayer *referenceImagesLayer() const;
-    KisReferenceImagesLayer *getOrCreateReferenceImagesLayer();
+    KisDocument *document() const;
+    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
 };
 
 
@@ -85,7 +89,7 @@ public:
         setToolTip(i18n("Reference Images Tool"));
         setSection(TOOL_TYPE_VIEW);
         setIconName(koIconNameCStr("krita_tool_reference_images"));
-        setPriority(0);
+        setPriority(2);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     };
 

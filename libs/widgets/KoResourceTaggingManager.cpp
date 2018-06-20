@@ -329,6 +329,8 @@ void KoResourceTaggingManager::tagSearchLineEditTextChanged(const QString& lineE
     ///FIXME: fix completer
     //     d->tagCompleter = new QCompleter(tagNamesList(lineEditText),this);
     //    d->tagSearchLineEdit->setCompleter(d->tagCompleter);
+
+    emit updateView();
 }
 
 void KoResourceTaggingManager::tagSaveButtonPressed()

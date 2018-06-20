@@ -42,9 +42,9 @@ namespace KisLsUtils
 
     void findEdge(KisPixelSelectionSP selection, const QRect &applyRect, const bool edgeHidden);
     QRect growRectFromRadius(const QRect &rc, int radius);
-    void applyGaussian(KisPixelSelectionSP selection,
-                       const QRect &applyRect,
-                       qreal radius);
+    void applyGaussianWithTransaction(KisPixelSelectionSP selection,
+                                      const QRect &applyRect,
+                                      qreal radius);
 
     static const int FULL_PERCENT_RANGE = 100;
     void adjustRange(KisPixelSelectionSP selection, const QRect &applyRect, const int range);

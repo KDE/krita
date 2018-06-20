@@ -42,10 +42,11 @@ const QStringList KisResourceCacheDb::resourceTypes = QStringList() << "BRUSH_TI
                                                                     << "SESSION"
                                                                     << "UNKNOWN";
 
-const QStringList KisResourceCacheDb::storageTypes = QStringList() << "FOLDER"
-                                                                  << "BUNDLE"
-                                                                  << "ADOBE_BRUSH_LIBRARY"
-                                                                  << "ADOBE_STYLE_LIBRARY"; // Installed or created by the user
+const QStringList KisResourceCacheDb::storageTypes = QStringList() << "UNKNOWN"
+                                                                   << "FOLDER"
+                                                                   << "BUNDLE"
+                                                                   << "ADOBE_BRUSH_LIBRARY"
+                                                                   << "ADOBE_STYLE_LIBRARY"; // Installed or created by the user
 
 const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
 const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
@@ -57,7 +58,6 @@ bool KisResourceCacheDb::isValid()
 {
     return s_valid;
 }
-
 
 QSqlError initDb(const QString &location)
 {
@@ -135,6 +135,7 @@ QSqlError initDb(const QString &location)
         }
     }
 
+    // Create tables
     Q_FOREACH(const QString &table, tables) {
         QFile f(":/create_" + table + ".sql");
         if (f.open(QFile::ReadOnly)) {
@@ -150,6 +151,25 @@ QSqlError initDb(const QString &location)
         }
     }
 
+    // Create indexes
+    QStringList indexes = QStringList() << "storages";
+
+    Q_FOREACH(const QString &index, indexes) {
+        QFile f(":/create_index_" + index + ".sql");
+        if (f.open(QFile::ReadOnly)) {
+            QSqlQuery query;
+            if (!query.exec(f.readAll())) {
+                qWarning() << "Could not create index" << index;
+                return db.lastError();
+            }
+            infoResources << "Created table" << index;
+        }
+        else {
+            return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(index), QSqlError::StatementError);
+        }
+    }
+
+    // Fill lookup tables
     {
         if (dbTables.contains("origin_types")) {
             QSqlQuery query;
@@ -234,3 +254,64 @@ bool KisResourceCacheDb::initialize(const QString &location)
 
     return s_valid;
 }
+
+bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString folder)
+{
+    qDebug() << folder << storage->resources(folder).count();
+    return true;
+}
+
+bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstalled)
+{
+    bool r = true;
+
+    if (!s_valid) return false;
+
+    {
+        QSqlQuery q;
+        r = q.prepare("SELECT * FROM storages WHERE location = :location");
+        q.bindValue(":location", storage->location());
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not select from storages";
+            return r;
+        }
+        if (q.first()) {
+            //qDebug() << "This storage already exists";
+            return true;
+        }
+    }
+
+    {
+        QSqlQuery q;
+
+        r = q.prepare("INSERT INTO storages "
+                      "(origin_type_id, location, datestamp, pre_installed, active)"
+                      "VALUES"
+                      "(:origin_type_id, :location, :datestamp, :pre_installed, :active);");
+
+        if (!r) {
+            qWarning() << "Could not prepare query" << q.lastError();
+            return r;
+        }
+
+        q.bindValue(":origin_type_id", static_cast<int>(storage->type()));
+        q.bindValue(":location", storage->location());
+        q.bindValue(":datestamp", storage->timestamp().toMSecsSinceEpoch());
+        q.bindValue(":pre_installed", preinstalled);
+        q.bindValue(":active", preinstalled ? 1 : 0);
+
+        r = q.exec();
+
+        if (!r) qWarning() << "Could not execute query" << q.lastError();
+    }
+    return r;
+}
+
+bool KisResourceCacheDb::synchronize(KisResourceStorageSP storage)
+{
+    // Find the storage in the database
+    qDebug() << storage->location() << storage->timestamp();
+    return true;
+}
+

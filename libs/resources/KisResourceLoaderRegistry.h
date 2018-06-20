@@ -34,6 +34,8 @@ public:
 
     static KisResourceLoaderRegistry *instance();
 
+    QStringList resourceFolders() const;
+
 private:
 
     KisResourceLoaderRegistry(QObject *parent);

@@ -27,6 +27,7 @@
 
 #include <kritaresources_export.h>
 
+#include <KisResourceStorage.h>
 
 /**
  * The KisResourceLocator class is used to find resources of
@@ -38,7 +39,6 @@ class KRITARESOURCES_EXPORT KisResourceLocator : public QObject
 public:
 
     static const QString resourceLocationKey;
-    static const QStringList resourceTypeFolders;
 
     static KisResourceLocator *instance();
 
@@ -47,7 +47,8 @@ public:
     enum class LocatorError {
         Ok,
         LocationReadOnly,
-        CannotCreateLocation
+        CannotCreateLocation,
+        CannotInitializeDb
     };
 
     /**
@@ -64,6 +65,8 @@ public:
 
 private:
 
+    friend class TestResourceLocator;
+
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);
     KisResourceLocator operator=(const KisResourceLocator&);
@@ -77,8 +80,10 @@ private:
     };
 
     LocatorError firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation);
-    void findStorages();
+    bool initializeDb();
 
+    void findStorages();
+    QList<KisResourceStorageSP> storages() const;
 
     class Private;
     QScopedPointer<Private> d;

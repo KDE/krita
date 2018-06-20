@@ -22,14 +22,18 @@
 #include <QTest>
 #include <QVersionNumber>
 #include <QDirIterator>
+#include <QSqlError>
+#include <QSqlQuery>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
 #include <KritaVersionWrapper.h>
+#include <KisResourceCacheDb.h>
 
 #include <KisResourceLocator.h>
+#include <KisResourceLoaderRegistry.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
@@ -39,8 +43,22 @@
 #error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
 #endif
 
+class Dummy : public KoResource {
+public:
+    Dummy(const QString &f) : KoResource(f) {}
+    bool load() override { return true; }
+    bool loadFromDevice(QIODevice *) override { return true; }
+    bool save() override { return true; }
+};
+
 void TestResourceLocator::initTestCase()
 {
+    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (dbLocation.exists()) {
+        QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
+        dbLocation.rmpath(dbLocation.path());
+    }
+
     m_locator = KisResourceLocator::instance();
     m_srcLocation = QString(FILES_DATA_DIR);
     QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());
@@ -48,15 +66,33 @@ void TestResourceLocator::initTestCase()
     cleanDstLocation();
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_dstLocation);
+
+    const QStringList resourceTypeFolders = QStringList()
+            << "tags"
+            << "asl"
+            << "bundles"
+            << "brushes"
+            << "gradients"
+            << "paintoppresets"
+            << "palettes"
+            << "patterns"
+            << "taskset"
+            << "workspaces"
+            << "symbols";
+
+    Q_FOREACH(const QString &folder, resourceTypeFolders) {
+        KisResourceLoaderRegistry::instance()->add(folder, new KisResourceLoader<Dummy>("dummy" + folder, folder, QStringList() << "x-dummy"));
+    }
 }
 
 void TestResourceLocator::testLocatorInitalization()
 {
+    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
     if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
-    Q_FOREACH(const QString &folder, KisResourceLocator::resourceTypeFolders) {
+    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
         QDir dstDir(m_dstLocation + '/' + folder + '/');
         QDir srcDir(m_srcLocation + '/' + folder + '/');
 
@@ -69,6 +105,20 @@ void TestResourceLocator::testLocatorInitalization()
     f.open(QFile::ReadOnly);
     QVersionNumber version = QVersionNumber::fromString(QString::fromUtf8(f.readAll()));
     QVERIFY(version == QVersionNumber::fromString(KritaVersionWrapper::versionString()));
+
+}
+
+void TestResourceLocator::testStorageInitialization()
+{
+    Q_FOREACH(KisResourceStorageSP storage, m_locator->storages()) {
+        QVERIFY(KisResourceCacheDb::addStorage(storage, true));
+    }
+    QSqlQuery query;
+    bool r = query.exec("SELECT COUNT(*) FROM storages");
+    QVERIFY(r);
+    QVERIFY(query.lastError() == QSqlError());
+    query.first();
+    QVERIFY(query.value(0).toInt() == m_locator->storages().count());
 }
 
 void TestResourceLocator::testLocatorSynchronization()
@@ -78,6 +128,12 @@ void TestResourceLocator::testLocatorSynchronization()
 
 void TestResourceLocator::cleanupTestCase()
 {
+    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
+    Q_ASSERT(res);
+    res = dbLocation.rmpath(dbLocation.path());
+    Q_ASSERT(res);
+
     cleanDstLocation();
 }
 

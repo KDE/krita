@@ -45,20 +45,22 @@ public:
         QDateTime lastModified;
     };
 
-    enum class StorageType {
-        Unknown,
-        Folder,
-        Bundle,
-        AdobeBrushLibrary,
-        AdobeStyleLibrary
+    enum class StorageType : int {
+        Unknown = 0,
+        Folder = 1,
+        Bundle = 2,
+        AdobeBrushLibrary = 3,
+        AdobeStyleLibrary = 4
     };
 
     KisResourceStorage(const QString &location);
     ~KisResourceStorage();
 
+    QString name() const;
     QString location() const;
     bool valid() const;
     StorageType type() const;
+    QDateTime timestamp() const;
 
     KoResourceSP resource(const QString &url);
     QVector<KoResourceSP> resources(const QString &resourceType);

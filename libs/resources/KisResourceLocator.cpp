@@ -37,22 +37,10 @@
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
 #include "KisResourceCacheDb.h"
+#include "KisResourceLoaderRegistry.h"
 
 const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 
-
-const QStringList KisResourceLocator::resourceTypeFolders = QStringList()
-        << "tags"
-        << "asl"
-        << "bundles"
-        << "brushes"
-        << "gradients"
-        << "paintoppresets"
-        << "palettes"
-        << "patterns"
-        << "taskset"
-        << "workspaces"
-        << "symbols";
 
 class KisResourceLocator::Private {
 public:
@@ -143,7 +131,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
 {
     Q_UNUSED(initalizationStatus);
 
-    Q_FOREACH(const QString &folder, resourceTypeFolders) {
+    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
         QDir dir(d->resourceLocation + '/' + folder + '/');
         if (!dir.exists()) {
             if (!QDir().mkpath(d->resourceLocation + '/' + folder + '/')) {
@@ -153,14 +141,14 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
         }
     }
 
-    Q_FOREACH(const QString &folder, resourceTypeFolders) {
+    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
         QDir dir(installationResourcesLocation + '/' + folder + '/');
         if (dir.exists()) {
             Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable)) {
                 QFile f(dir.canonicalPath() + '/'+ entry);
                 bool r = f.copy(d->resourceLocation + '/' + folder + '/' + entry);
                 if (!r) {
-                    d->errorMessages << "Could not copy resource" << f.fileName() << "to the resource folder";
+                    d->errorMessages << i18n("Could not copy resource %1 to the resource folder").arg(f.fileName());
                 }
             }
         }
@@ -171,11 +159,40 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
     f.write(KritaVersionWrapper::versionString().toUtf8());
     f.close();
 
+    if (!initializeDb()) {
+        return LocatorError::CannotInitializeDb;
+    }
+
     return LocatorError::Ok;
+}
+
+bool KisResourceLocator::initializeDb()
+{
+    QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
+    QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
+    while (iter.hasNext()) {
+        iter.next();
+        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(iter.filePath());
+        if (!KisResourceCacheDb::addStorage(storage, true)) {
+            d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(iter.filePath()));
+            return false;
+        }
+        Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
+            if (!KisResourceCacheDb::addResources(storage, folder)) {
+                d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(folder));
+                return false;
+            }
+        }
+    }
+    KisResourceCacheDb::addStorage(QSharedPointer<KisResourceStorage>::create(d->resourceLocation), false);
+
+    return true;
 }
 
 void KisResourceLocator::findStorages()
 {
+    d->storages.clear();
+
     // Add the folder
     d->storages.append(QSharedPointer<KisResourceStorage>::create(d->resourceLocation));
 
@@ -186,14 +203,20 @@ void KisResourceLocator::findStorages()
         iter.next();
         d->storages.append(QSharedPointer<KisResourceStorage>::create(iter.filePath()));
     }
+}
 
-
+QList<KisResourceStorageSP> KisResourceLocator::storages() const
+{
+    return d->storages;
 }
 
 bool KisResourceLocator::synchronizeDb()
 {
+    d->errorMessages.clear();
     Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
-
+        if (!KisResourceCacheDb::synchronize(storage)) {
+            d->errorMessages.append(i18n("Could not synchronize %1 with the database").arg(storage->location()));
+        }
     }
-    return true;
+    return d->errorMessages.isEmpty();
 }

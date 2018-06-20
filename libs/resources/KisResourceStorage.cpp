@@ -25,6 +25,7 @@
 
 class KisResourceStorage::Private {
 public:
+    QString name;
     QString location;
     bool valid {false};
     KisResourceStorage::StorageType storageType {KisResourceStorage::StorageType::Unknown};
@@ -37,6 +38,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
     d->location = location;
     QFileInfo fi(d->location);
     if (fi.isDir()) {
+        d->name = location;
         d->storageType = StorageType::Folder;
         d->valid = fi.isWritable();
     }
@@ -61,6 +63,11 @@ KisResourceStorage::~KisResourceStorage()
 {
 }
 
+QString KisResourceStorage::name() const
+{
+    return d->name;
+}
+
 QString KisResourceStorage::location() const
 {
     return d->location;
@@ -69,6 +76,11 @@ QString KisResourceStorage::location() const
 KisResourceStorage::StorageType KisResourceStorage::type() const
 {
     return d->storageType;
+}
+
+QDateTime KisResourceStorage::timestamp() const
+{
+    return QFileInfo(d->location).lastModified();
 }
 
 KoResourceSP KisResourceStorage::resource(const QString &url)

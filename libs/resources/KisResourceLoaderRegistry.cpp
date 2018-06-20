@@ -39,3 +39,12 @@ KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()
     }
     return reg;
 }
+
+QStringList KisResourceLoaderRegistry::resourceFolders() const
+{
+    QStringList r;
+    Q_FOREACH(KisResourceLoaderBase *loader, values()) {
+        r << loader->folder();
+    }
+    return r;
+}

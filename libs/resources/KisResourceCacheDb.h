@@ -24,6 +24,8 @@
 
 #include <kritaresources_export.h>
 
+#include <KisResourceStorage.h>
+
 /**
  * @brief The KisResourceCacheDb class encapsulates the database that
  * caches information about the resources available to the user.
@@ -56,8 +58,18 @@ public:
 
 private:
 
+    friend class KisResourceLocator;
+    friend class TestResourceLocator;
+    friend class TestResourceCacheDb;
+
     explicit KisResourceCacheDb();
     ~KisResourceCacheDb();
+    KisResourceCacheDb operator=(const KisResourceCacheDb&);
+
+    static bool addResources(KisResourceStorageSP storage, QString folder);
+    static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
+    static bool synchronize(KisResourceStorageSP storage);
+
 
     static bool s_valid;
 };

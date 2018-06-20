@@ -245,6 +245,8 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
         }
     }
 
+    nodeColorSpace = 0;
+
     if (node) {
         KisPaintDeviceSP device = findValidDevice(node);
 
@@ -252,7 +254,7 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
             device->compositionSourceColorSpace() :
             node->colorSpace();
 
-        KIS_ASSERT_RECOVER_NOOP(nodeColorSpace);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(nodeColorSpace);
 
         if (device) {
             q->connect(device, SIGNAL(profileChanged(const KoColorProfile*)),
@@ -261,7 +263,9 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
                        SLOT(slotUpdateCurrentNodeColorSpace()), Qt::UniqueConnection);
         }
 
-    } else {
+    }
+
+    if (!nodeColorSpace) {
         nodeColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
 

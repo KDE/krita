@@ -352,14 +352,17 @@ void KisApplication::loadResources()
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
     if (r != KisResourceLocator::LocatorError::Ok ) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n'));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("Krita will quit now."));
         qApp->quit();
     }
 
-    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("Could not create the resources cache database. Krita will quit now."));
+        qApp->quit();
+    }
 
     if (!KisResourceLocator::instance()->synchronizeDb()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n'));
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("Krita will quit now."));
         qApp->quit();
     }
 

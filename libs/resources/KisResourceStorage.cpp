@@ -19,9 +19,15 @@
 
 #include "KisResourceStorage.h"
 
+#include <QFileInfo>
+
 #include <kzip.h>
 
-#include <QFileInfo>
+#include "KisStoragePlugin.h"
+#include "KisFolderStorage.h"
+#include "KisBundleStorage.h"
+#include "KisAbrStorage.h"
+#include "KisAslStorage.h"
 
 class KisResourceStorage::Private {
 public:
@@ -29,6 +35,7 @@ public:
     QString location;
     bool valid {false};
     KisResourceStorage::StorageType storageType {KisResourceStorage::StorageType::Unknown};
+    QScopedPointer<KisStoragePlugin> storagePlugin;
 };
 
 
@@ -38,21 +45,25 @@ KisResourceStorage::KisResourceStorage(const QString &location)
     d->location = location;
     QFileInfo fi(d->location);
     if (fi.isDir()) {
+        d->storagePlugin.reset(new KisFolderStorage(location));
         d->name = location;
         d->storageType = StorageType::Folder;
         d->valid = fi.isWritable();
     }
     else {
         if (d->location.endsWith(".bundle")) {
+            d->storagePlugin.reset(new KisBundleStorage(location));
             d->storageType = StorageType::Bundle;
             // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
             d->valid = (fi.isReadable() && KZip(d->location).open(QIODevice::ReadOnly));
         }
         else if (d->location.endsWith(".abr")) {
+            d->storagePlugin.reset(new KisAbrStorage(location));
             d->storageType = StorageType::AdobeBrushLibrary;
             d->valid = fi.isReadable();
         }
         else if (d->location.endsWith(".asl")) {
+            d->storagePlugin.reset(new KisAslStorage(location));
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = fi.isReadable();
         }
@@ -83,14 +94,24 @@ QDateTime KisResourceStorage::timestamp() const
     return QFileInfo(d->location).lastModified();
 }
 
-KoResourceSP KisResourceStorage::resource(const QString &url)
+KisResourceStorage::ResourceItem KisResourceStorage::resourceItem(const QString &url)
 {
-    return 0;
+    return d->storagePlugin->resourceItem(url);
 }
 
-QVector<KoResourceSP> KisResourceStorage::resources(const QString &resourceType)
+KisResourceStorage::ResourceItemIterator KisResourceStorage::resourceItems(const QString &resourceType)
 {
-    return QVector<KoResourceSP>();
+    return d->storagePlugin->resourceItems(resourceType);
+}
+
+KoResourceSP KisResourceStorage::resource(const QString &url)
+{
+    return d->storagePlugin->resource(url);
+}
+
+KisResourceStorage::ResourceIterator KisResourceStorage::resources(const QString &resourceType)
+{
+    return d->storagePlugin->resources(resourceType);
 }
 
 

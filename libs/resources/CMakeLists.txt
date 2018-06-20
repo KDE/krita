@@ -7,6 +7,12 @@ set(kritaresources_LIB_SRCS
     KisResourceLocator.cpp
     KisResourceStorage.cpp
 
+    KisStoragePlugin.cpp
+    KisAbrStorage.cpp
+    KisAslStorage.cpp
+    KisBundleStorage.cpp
+    KisFolderStorage.cpp
+
     KoResource.cpp
     KoMD5Generator.cpp
     KoHashGeneratorProvider.cpp

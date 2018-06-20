@@ -66,6 +66,7 @@ private:
     ~KisResourceCacheDb();
     KisResourceCacheDb operator=(const KisResourceCacheDb&);
 
+    static bool addResource(KoResourceSP resource);
     static bool addResources(KisResourceStorageSP storage, QString folder);
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
     static bool synchronize(KisResourceStorageSP storage);

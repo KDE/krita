@@ -30,6 +30,7 @@
 
 #include <kritaresources_export.h>
 
+
 /**
  * The KisResourceStorage class is the base class for
  * places where resources can be stored. Examples are
@@ -40,9 +41,42 @@ class KRITARESOURCES_EXPORT KisResourceStorage
 {
 public:
 
+    /// XXX: replace the default implementations with = 0 when all iterators have been implemented
+
+    /// A resource item is simply an entry in the storage,
     struct ResourceItem {
+
+        virtual ~ResourceItem() {}
+
         QString url;
+        QString type;
         QDateTime lastModified;
+        virtual QByteArray md5sum() const {return QByteArray();}
+    };
+
+
+    class ResourceItemIterator
+    {
+    public:
+
+        virtual ~ResourceItemIterator() {}
+
+        virtual bool hasNext() const {return false;};
+        virtual void next() const{};
+
+
+        virtual QString url() const {return QString();}
+        virtual QString type() const {return QString();}
+        virtual QDateTime lastModified() const {return QDateTime();}
+        virtual QByteArray md5sum() const {return QByteArray();}
+    };
+
+    class ResourceIterator : public ResourceItemIterator
+    {
+    public:
+        virtual ~ResourceIterator() {}
+
+        virtual KoResourceSP resource() const {return 0;}
     };
 
     enum class StorageType : int {
@@ -62,8 +96,12 @@ public:
     StorageType type() const;
     QDateTime timestamp() const;
 
+
+    ResourceItem resourceItem(const QString &url);
+    ResourceItemIterator resourceItems(const QString &resourceType);
+
     KoResourceSP resource(const QString &url);
-    QVector<KoResourceSP> resources(const QString &resourceType);
+    ResourceIterator resources(const QString &resourceType);
 
 private:
     class Private;

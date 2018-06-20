@@ -319,7 +319,7 @@ bool Python::setPath(const QStringList& scriptPaths)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
 
-    bool runningInBundle = (KoResourcePaths::getApplicationRoot().toLower().contains(qgetenv("APPDIR")) || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
+    bool runningInBundle = ((!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().toLower().contains(qgetenv("APPDIR"))) || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));
     dbgScript << "Python::setPath. Script paths:" << scriptPaths << runningInBundle;
 
 #ifdef Q_OS_WIN

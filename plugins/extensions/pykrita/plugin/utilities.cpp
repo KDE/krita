@@ -395,11 +395,16 @@ bool Python::setPath(const QStringList& scriptPaths)
     Py_SetPath(joinedPathsWChars.data());
 #else
     if (KoResourcePaths::getApplicationRoot().toLower().contains(".mount_krita")) {
+
         QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
         joinedPaths.toWCharArray(joinedPathsWChars.data());
-        PyRun_SimpleString("import sys; import os");
-        QString pathCommand = QString("sys.path += '") + joinedPaths + QString("'.split(os.pathsep)");
-        PyRun_SimpleString(pathCommand.toUtf8().constData());
+        Py_SetPath(joinedPathsWChars.data());
+
+//        QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
+//        joinedPaths.toWCharArray(joinedPathsWChars.data());
+//        PyRun_SimpleString("import sys; import os");
+//        QString pathCommand = QString("sys.path += '") + joinedPaths + QString("'.split(os.pathsep)");
+//        PyRun_SimpleString(pathCommand.toUtf8().constData());
     }
     else {
         qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());

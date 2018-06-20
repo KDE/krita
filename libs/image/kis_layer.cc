@@ -75,6 +75,20 @@ public:
         return m_projection;
     }
 
+    void tryCopyFrom(const KisSafeProjection &rhs) {
+        QMutexLocker locker(&m_lock);
+
+        if (!rhs.m_projection) return;
+
+        if (!m_reusablePaintDevice) {
+            m_reusablePaintDevice = new KisPaintDevice(*rhs.m_projection);
+            m_projection = m_reusablePaintDevice;
+        } else {
+            m_projection = m_reusablePaintDevice;
+            m_projection->makeCloneFromRough(rhs.m_projection, rhs.m_projection->extent());
+        }
+    }
+
     void freeDevice() {
         QMutexLocker locker(&m_lock);
         m_projection = 0;
@@ -157,6 +171,8 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->image = rhs.m_d->image;
         m_d->metaDataStore = new KisMetaData::Store(*rhs.m_d->metaDataStore);
         m_d->channelFlags = rhs.m_d->channelFlags;
+
+        m_d->safeProjection.tryCopyFrom(rhs.m_d->safeProjection);
 
         setName(rhs.name());
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));

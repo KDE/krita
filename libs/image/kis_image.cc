@@ -40,7 +40,6 @@
 #include <KoCompositeOpRegistry.h>
 #include "KisProofingConfiguration.h"
 
-#include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
 #include "kis_change_profile_visitor.h"
@@ -140,7 +139,6 @@ public:
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
         , postExecutionUndoAdapter(undoStore.data(), _q)
-        , recorder(_q)
         , signalRouter(_q)
         , animationInterface(_animationInterface)
         , scheduler(_q, _q)
@@ -216,8 +214,6 @@ public:
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
     KisPostExecutionUndoAdapter postExecutionUndoAdapter;
-
-    KisActionRecorder recorder;
 
     vKisAnnotationSP annotations;
 
@@ -1153,11 +1149,6 @@ KisUndoStore* KisImage::undoStore()
 KisUndoAdapter* KisImage::undoAdapter() const
 {
     return &m_d->legacyUndoAdapter;
-}
-
-KisActionRecorder* KisImage::actionRecorder() const
-{
-    return &m_d->recorder;
 }
 
 void KisImage::setDefaultProjectionColor(const KoColor &color)

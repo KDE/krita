@@ -311,13 +311,6 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Menu name="tools">
       <text>&amp;Tools</text>
       <Menu name="scripts"><text>Scripts</text></Menu>
-      <Menu name="Macro Recording">
-        <text>Macros</text>
-        <Action name="Recording_Start_Recording_Macro"/>
-        <Action name="Recording_Stop_Recording_Macro"/>
-        <Action name="Macro_Open_Play"/>
-        <Action name="Macro_Open_Edit"/>
-      </Menu>
     </Menu>
     <Menu name="settings">
       <text>Setti&amp;ngs</text>

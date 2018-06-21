@@ -330,7 +330,6 @@ private:
     friend class KisCrashFilterTest;
     friend class KoColorSpacesBenchmark;
     friend class TestKoColorSpaceSanity;
-    friend class KisActionRecorderTest;
     friend class TestColorConversionSystem;
     friend class FriendOfColorSpaceRegistry;
 

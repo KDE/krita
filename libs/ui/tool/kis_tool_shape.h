@@ -71,8 +71,6 @@ protected:
 
     qreal currentStrokeWidth() const;
 
-    void setupPaintAction(KisRecordedPaintAction* action) override;
-
     void addShape(KoShape* shape);
 
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);

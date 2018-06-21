@@ -24,7 +24,7 @@
 /**
  * This class represents a simple update just that should be
  * executed by the updates system from time to time, without
- * any recording or undo support. Just some useful update that
+ * any undo support. Just some useful update that
  * can be run concurrently with other types updates.
  */
 class KRITAIMAGE_EXPORT KisSpontaneousJob : public KisRunnable

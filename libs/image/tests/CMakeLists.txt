@@ -85,7 +85,6 @@ ecm_add_tests(
     kis_simple_stroke_strategy_test.cpp
     kis_stroke_strategy_undo_command_based_test.cpp
     kis_strokes_queue_test.cpp
-    kis_macro_test.cpp
     kis_mask_test.cpp
     kis_math_toolbox_test.cpp
     kis_name_server_test.cpp
@@ -96,9 +95,6 @@ ecm_add_tests(
     kis_distance_information_test.cpp
     kis_paintop_test.cpp
     kis_pattern_test.cpp
-    kis_recorded_action_factory_registry_test.cpp
-    kis_recorded_action_test.cpp
-    kis_recorded_filter_action_test.cpp
     kis_selection_mask_test.cpp
     kis_shared_ptr_test.cpp
     kis_bsplines_test.cpp
@@ -110,8 +106,8 @@ ecm_add_tests(
     kis_filter_config_widget_test.cpp
     kis_mask_generator_test.cpp
     kis_cubic_curve_test.cpp
-    kis_node_query_path_test.cpp
     kis_fixed_point_maths_test.cpp
+    kis_node_query_path_test.cpp
     kis_filter_weights_buffer_test.cpp
     kis_filter_weights_applicator_test.cpp
     kis_fill_interval_test.cpp

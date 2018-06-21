@@ -43,11 +43,8 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
-#include <recorder/kis_recorded_paint_action.h>
-#include <recorder/kis_recorded_path_paint_action.h>
 #include "kis_figure_painting_tool_helper.h"
-#include <recorder/kis_node_query_path.h>
-#include <recorder/kis_action_recorder.h>
+#include <kis_node_query_path.h>
 
 #include <KoSelectedShapesProxy.h>
 #include <KoSelection.h>
@@ -140,16 +137,6 @@ qreal KisToolShape::currentStrokeWidth() const
     return canvas()->unit().fromUserValue(sizeInPx);
 }
 
-void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
-{
-    KisToolPaint::setupPaintAction(action);
-    action->setFillStyle(fillStyle());
-    action->setStrokeStyle(strokeStyle());
-    action->setGenerator(currentGenerator());
-    action->setPattern(currentPattern());
-    action->setGradient(currentGradient());
-}
-
 void KisToolShape::addShape(KoShape* shape)
 {
     KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
@@ -220,8 +207,6 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     if (!node || !blockUntilOperationsFinished()) {
         return;
     }
-    // Get painting options
-    KisPaintOpPresetSP preset = currentPaintOpPreset();
 
     // Compute the outline
     KisImageSP image = this->image();
@@ -229,44 +214,6 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
     QPainterPath mapedOutline = matrix.map(pathShape->outline());
-
-    // Recorde the paint action
-    KisRecordedPathPaintAction bezierCurvePaintAction(
-            KisNodeQueryPath::absolutePath(node),
-            preset,
-            KisDistanceInitInfo());
-    bezierCurvePaintAction.setPaintColor(currentFgColor());
-    QPointF lastPoint, nextPoint;
-    int elementCount = mapedOutline.elementCount();
-    for (int i = 0; i < elementCount; i++) {
-        QPainterPath::Element element = mapedOutline.elementAt(i);
-        switch (element.type) {
-        case QPainterPath::MoveToElement:
-            if (i != 0) {
-                qFatal("Unhandled"); // XXX: I am not sure the tool can produce such element, deal with it when it can
-            }
-            lastPoint =  QPointF(element.x, element.y);
-            break;
-        case QPainterPath::LineToElement:
-            nextPoint =  QPointF(element.x, element.y);
-            bezierCurvePaintAction.addLine(KisPaintInformation(lastPoint), KisPaintInformation(nextPoint));
-            lastPoint = nextPoint;
-            break;
-        case QPainterPath::CurveToElement:
-            nextPoint =  QPointF(mapedOutline.elementAt(i + 2).x, mapedOutline.elementAt(i + 2).y);
-            bezierCurvePaintAction.addCurve(KisPaintInformation(lastPoint),
-                                             QPointF(mapedOutline.elementAt(i).x,
-                                                     mapedOutline.elementAt(i).y),
-                                             QPointF(mapedOutline.elementAt(i + 1).x,
-                                                     mapedOutline.elementAt(i + 1).y),
-                                             KisPaintInformation(nextPoint));
-            lastPoint = nextPoint;
-            break;
-        default:
-            continue;
-        }
-    }
-    image->actionRecorder()->addAction(bezierCurvePaintAction);
 
     if (node->hasEditablePaintDevice()) {
         KisFigurePaintingToolHelper helper(name,

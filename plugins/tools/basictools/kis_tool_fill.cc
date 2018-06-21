@@ -49,9 +49,6 @@
 #include <widgets/kis_cmb_composite.h>
 #include <widgets/kis_slider_spin_box.h>
 #include <kis_cursor.h>
-#include <recorder/kis_recorded_fill_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-#include <recorder/kis_action_recorder.h>
 #include "kis_resources_snapshot.h"
 
 #include <processing/fill_processing_visitor.h>
@@ -125,23 +122,6 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *event)
          !image()->bounds().contains(m_startPos))) {
 
         return;
-    }
-
-    // TODO: remove this block after recording refactoring
-    if (image()) {
-        KisNodeSP projectionNode;
-        if(m_unmerged) {
-            projectionNode = currentNode();
-        } else {
-            projectionNode = image()->root();
-        }
-        KisRecordedFillPaintAction paintAction(KisNodeQueryPath::absolutePath(currentNode()), m_startPos, KisNodeQueryPath::absolutePath(projectionNode));
-        setupPaintAction(&paintAction);
-        paintAction.setPattern(currentPattern());
-        if(m_usePattern) {
-            paintAction.setFillStyle(KisPainter::FillStylePattern);
-        }
-        image()->actionRecorder()->addAction(paintAction);
     }
 
     bool useFastMode = m_useFastMode->isChecked();

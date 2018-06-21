@@ -70,7 +70,6 @@
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
 #include "kis_canvas_resource_provider.h"
-#include <recorder/kis_recorded_paint_action.h>
 #include "kis_tool_utils.h"
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paintop_preset.h>
@@ -618,16 +617,6 @@ const KoCompositeOp* KisToolPaint::compositeOp()
 void KisToolPaint::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), quickHelp());
-}
-
-void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
-{
-    KisTool::setupPaintAction(action);
-    action->setOpacity(m_opacity / qreal(255.0));
-    const KoCompositeOp *op = compositeOp();
-    if (op) {
-        action->setCompositeOp(op->id());
-    }
 }
 
 KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()

@@ -14,7 +14,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/generator
     ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
     ${CMAKE_CURRENT_SOURCE_DIR}/processing
-    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
 
     ${CMAKE_SOURCE_DIR}/sdk/tests
 )
@@ -286,21 +285,6 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_type_info.cc
    metadata/kis_meta_data_validator.cc
    metadata/kis_meta_data_value.cc
-   recorder/kis_action_recorder.cc
-   recorder/kis_macro.cc
-   recorder/kis_macro_player.cc
-   recorder/kis_node_query_path.cc
-   recorder/kis_play_info.cc
-   recorder/kis_recorded_action.cc
-   recorder/kis_recorded_action_factory_registry.cc
-   recorder/kis_recorded_action_load_context.cpp
-   recorder/kis_recorded_action_save_context.cpp
-   recorder/kis_recorded_filter_action.cpp
-   recorder/kis_recorded_fill_paint_action.cpp
-   recorder/kis_recorded_node_action.cc
-   recorder/kis_recorded_paint_action.cpp
-   recorder/kis_recorded_path_paint_action.cpp
-   recorder/kis_recorded_shape_paint_action.cpp
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp
@@ -328,6 +312,8 @@ set(kritaimage_LIB_SRCS
    layerstyles/gimp_bump_map.cpp
 
    KisProofingConfiguration.cpp
+
+   kis_node_query_path.cc
 )
 
 set(einspline_SRCS
@@ -381,7 +367,6 @@ target_include_directories(kritaimage
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/recorder>
 )
 
 set_target_properties(kritaimage PROPERTIES

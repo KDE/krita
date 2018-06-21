@@ -60,8 +60,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
 
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
-                                   kundo2_i18n("Multibrush Stroke"),
-                                   recordingAdapter());
+                                   kundo2_i18n("Multibrush Stroke"));
     resetHelper(m_helper);
     if (image()) {
         m_axesPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());

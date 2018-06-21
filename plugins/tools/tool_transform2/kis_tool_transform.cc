@@ -1011,7 +1011,7 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
-            if (node->isEditable() &&
+            if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
                 (!node->inherits("KisTransformMask") || node == root)) {

@@ -1,5 +1,0 @@
-because KoUpdater was moved to komvc, Krita/Image now
-depends on komvc again -- this is not right, since it
-makes it impossible to use krita/image outside a calligra
-mvc application framework, so KoUpdater must be moved out
-again.

@@ -57,7 +57,6 @@
 #include <kis_painting_assistants_decoration.h>
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
-#include "kis_recording_adapter.h"
 #include "strokes/freehand_stroke.h"
 
 using namespace std::placeholders; // For _1 placeholder
@@ -76,17 +75,14 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     setMaskSyntheticEvents(KisConfig().disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
-    m_recordingAdapter = new KisRecordingAdapter();
-    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText, m_recordingAdapter);
+    m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText);
 
-    connect(m_helper, SIGNAL(requestExplicitUpdateOutline()),
-            SLOT(explicitUpdateOutline()));
+    connect(m_helper, SIGNAL(requestExplicitUpdateOutline()), SLOT(explicitUpdateOutline()));
 }
 
 KisToolFreehand::~KisToolFreehand()
 {
     delete m_helper;
-    delete m_recordingAdapter;
     delete m_infoBuilder;
 }
 
@@ -140,11 +136,6 @@ void KisToolFreehand::resetCursorStyle()
 KisPaintingInformationBuilder* KisToolFreehand::paintingInformationBuilder() const
 {
     return m_infoBuilder;
-}
-
-KisRecordingAdapter* KisToolFreehand::recordingAdapter() const
-{
-    return m_recordingAdapter;
 }
 
 void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)

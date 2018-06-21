@@ -1,4 +1,3 @@
-add_subdirectory( bigbrother )
 add_subdirectory( imagesplit )
 add_subdirectory( clonesarray )
 add_subdirectory( colorrange )

@@ -26,8 +26,7 @@ class KisToolLineHelper : private KisToolFreehandHelper
 {
 public:
     KisToolLineHelper(KisPaintingInformationBuilder *infoBuilder,
-                      const KUndo2MagicString &transactionText,
-                      KisRecordingAdapter *recordingAdapter = 0);
+                      const KUndo2MagicString &transactionText);
 
     ~KisToolLineHelper() override;
 

@@ -41,15 +41,8 @@
 #include "kis_figure_painting_tool_helper.h"
 #include "kis_canvas2.h"
 
-
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_path_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
 #include "kis_painting_information_builder.h"
 #include "kis_tool_line_helper.h"
-
-#define ENABLE_RECORDING
 
 const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 {
@@ -237,7 +230,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
     if (m_chkShowPreview->isChecked()) {
         // If the cursor has moved a significant amount, immediately clear the
         // current preview and redraw. Otherwise, do slow redraws periodically.
-        auto updateDistance = (pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength(); 
+        auto updateDistance = (pixelToView(m_lastUpdatedPoint) - pixelToView(pos)).manhattanLength();
         if (updateDistance > 10) {
             m_helper->clearPaint();
             m_longStrokeUpdateCompressor.stop();

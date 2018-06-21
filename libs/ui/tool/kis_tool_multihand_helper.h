@@ -28,8 +28,7 @@ class KRITAUI_EXPORT KisToolMultihandHelper : public KisToolFreehandHelper
 
 public:
     KisToolMultihandHelper(KisPaintingInformationBuilder *infoBuilder,
-                           const KUndo2MagicString &transactionText,
-                           KisRecordingAdapter *recordingAdapter = 0);
+                           const KUndo2MagicString &transactionText);
     ~KisToolMultihandHelper() override;
 
     void setupTransformations(const QVector<QTransform> &transformations);

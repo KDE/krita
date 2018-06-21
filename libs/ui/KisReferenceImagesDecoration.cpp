@@ -71,6 +71,8 @@ private:
             const QRectF boundingWidgetRect = q->view()->viewConverter()->imageToWidget(boundingImageRect);
             widgetRect = boundingWidgetRect.intersected(q->view()->rect());
 
+            if (widgetRect.isNull()) return;
+
             buffer.position = widgetRect.topLeft();
             buffer.image = QImage(widgetRect.size().toSize(), QImage::Format_ARGB32);
             buffer.image.fill(Qt::transparent);
@@ -93,21 +95,26 @@ private:
     }
 };
 
-KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent)
+KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> parent, KisDocument *document)
     : KisCanvasDecoration("referenceImagesDecoration", parent)
     , d(new Private(this))
-{}
+{
+    connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+
+    auto referenceImageLayer = document->referenceImagesLayer();
+    if (referenceImageLayer) {
+        setReferenceImageLayer(referenceImageLayer);
+    }
+}
 
 KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 {}
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
-    KisSharedPtr<KisReferenceImagesLayer> layer = view()->document()->getOrCreateReferenceImagesLayer();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
-
-    KUndo2Command *cmd = layer->addReferenceImage(referenceImage);
-    view()->document()->addCommand(cmd);
+    KisDocument *document = view()->document();
+    KUndo2Command *cmd = KisReferenceImagesLayer::addReferenceImages(document, {referenceImage});
+    document->addCommand(cmd);
 }
 
 bool KisReferenceImagesDecoration::documentHasReferenceImages() const
@@ -118,22 +125,25 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
 void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter */*converter*/, KisCanvas2 */*canvas*/)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
-    if (layer.isNull()) {
-        layer = d->layer = view()->document()->referenceImagesLayer();
-        if (layer.isNull()) return;
 
-        connect(layer.data(), SIGNAL(sigUpdateCanvas(const QRectF&)), this, SLOT(slotReferenceImagesChanged(const QRectF&)));
-
-        d->updateBufferByWidgetCoordinates(updateRect);
-    } else {
+    if (!layer.isNull()) {
         QTransform transform = view()->viewConverter()->imageToWidgetTransform();
         if (!KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
             d->previousTransform = transform;
             d->updateBufferByWidgetCoordinates(QRectF(0, 0, view()->width(), view()->height()));
         }
-    }
 
-    gc.drawImage(d->buffer.position, d->buffer.image);
+        gc.drawImage(d->buffer.position, d->buffer.image);
+    }
+}
+
+void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node)
+{
+    auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
+
+    if (referenceImagesLayer) {
+        setReferenceImageLayer(referenceImagesLayer);
+    }
 }
 
 void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirtyRect)
@@ -142,4 +152,13 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
 
     QRectF documentRect = view()->viewConverter()->imageToDocument(dirtyRect);
     view()->canvasBase()->updateCanvas(documentRect);
+}
+
+void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+{
+    d->layer = layer;
+    connect(
+            layer.data(), SIGNAL(sigUpdateCanvas(const QRectF&)),
+            this, SLOT(slotReferenceImagesChanged(const QRectF&))
+    );
 }

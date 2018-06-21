@@ -1184,7 +1184,7 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisIm
     KisSharedPtr<KisReferenceImagesLayer> layer =
         new KisReferenceImagesLayer(m_d->document->shapeController(), image);
 
-    m_d->document->setReferenceImagesLayer(layer);
+    m_d->document->setReferenceImagesLayer(layer, false);
 
     for (QDomElement child = elem.firstChildElement(); !child.isNull(); child = child.nextSiblingElement()) {
         if (child.nodeName().toLower() == "referenceimage") {

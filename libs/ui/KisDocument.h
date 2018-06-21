@@ -591,18 +591,11 @@ public:
     void setAssistants(const QList<KisPaintingAssistantSP> &value);
 
     /**
-     * Get existing reference images layer or create new if none exists.
-     *
-     * TODO: use setReferenceImagesLayer() combined with undo commands instead
-     */
-    KRITAUI_DEPRECATED KisSharedPtr<KisReferenceImagesLayer> getOrCreateReferenceImagesLayer(KisImageSP targetImage = KisImageSP());
-
-    /**
      * Get existing reference images layer or null if none exists.
      */
-    KisReferenceImagesLayer *referenceImagesLayer() const;
+    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer() const;
 
-    void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
+    void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage);
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
 

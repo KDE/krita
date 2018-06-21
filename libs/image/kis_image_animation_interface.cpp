@@ -360,20 +360,15 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
     if (node->inherits("KisSelectionMask")) return;
 
-    KisKeyframeChannel *channel =
-        node->getKeyframeChannel(KisKeyframeChannel::Content.id());
 
+    const int currentTime = m_d->currentTime();
     KisTimeRange invalidateRange;
 
     if (recursive) {
-        KisTimeRange::calculateTimeRangeRecursive(node, currentTime(), invalidateRange, false);
-    } else if (channel) {
-        const int currentTime = m_d->currentTime();
-        invalidateRange = channel->affectedFrames(currentTime);
+        KisTimeRange::calculateTimeRangeRecursive(node, currentTime, invalidateRange, false);
     } else {
-        invalidateRange = KisTimeRange::infinite(0);
+        invalidateRange = KisTimeRange::calculateNodeAffectedFrames(node, currentTime);
     }
-
 
     // we compress the updated rect (atm, no one uses it anyway)
     QRect unitedRect;

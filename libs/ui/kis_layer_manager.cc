@@ -423,10 +423,10 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     layer->setCompositeOpId(newCompositeOp);
 
     KisNodeSP parent = source->parent();
-    KisNodeSP above = source;
+    KisNodeSP above = source->prevSibling();
 
     while (parent && !parent->allowAsChild(layer)) {
-        above = above->parent();
+        above = above ? above->parent() : source->parent();
         parent = above ? above->parent() : 0;
     }
 
@@ -435,8 +435,8 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     }
 
     m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
-    m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->removeNode(source);
+    m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->endMacro();
 
 }

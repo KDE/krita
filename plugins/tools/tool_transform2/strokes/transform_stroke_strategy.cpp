@@ -40,6 +40,7 @@
 
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
+                                                 KisNodeList processedNodes,
                                                  KisSelectionSP selection,
                                                  KisStrokeUndoFacade *undoFacade)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
@@ -70,8 +71,9 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
         putDeviceCache(rootNode->paintDevice(), m_previewDevice);
     }
 
-    Q_ASSERT(m_previewDevice);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_previewDevice);
     m_savedRootNode = rootNode;
+    m_savedProcessedNodes = processedNodes;
 }
 
 TransformStrokeStrategy::~TransformStrokeStrategy()
@@ -264,6 +266,7 @@ struct TransformExtraData : public KUndo2CommandExtraData
 {
     ToolTransformArgs savedTransformArgs;
     KisNodeSP rootNode;
+    KisNodeList transformedNodes;
 };
 
 void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
@@ -271,17 +274,19 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
     TransformExtraData *data = new TransformExtraData();
     data->savedTransformArgs = m_savedTransformArgs;
     data->rootNode = m_savedRootNode;
+    data->transformedNodes = m_savedProcessedNodes;
 
     command->setExtraData(data);
 }
 
-bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode)
+bool TransformStrokeStrategy::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes)
 {
     const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
 
     if (data) {
         *args = data->savedTransformArgs;
         *rootNode = data->rootNode;
+        *transformedNodes = data->transformedNodes;
     }
 
     return bool(data);

@@ -27,7 +27,6 @@
 
 
 typedef Eigen::Matrix<qreal, 2, 1> KisVector2D;
-typedef Eigen::Matrix<qreal, 3, 1> KisVector3D;
 
 inline KisVector2D toKisVector2D(const QPointF& p)
 {
@@ -43,19 +42,5 @@ inline QPointF toQPointF(const ExpressionType& expr)
 {
     return QPointF(expr.x(), expr.y());
 }
-
-template<typename ExpressionType>
-inline QVector2D toQVector2D(const ExpressionType& expr){
-    return QVector2D(expr.x(), expr.y());
-}
-
-inline KisVector2D nullKisVector2D()
-{
-    KisVector2D v;
-    v(0) = 0.0;
-    v(1) = 0.0;
-    return v;
-}
-
 
 #endif

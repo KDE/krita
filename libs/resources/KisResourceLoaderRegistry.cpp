@@ -20,6 +20,7 @@
 #include "KisResourceLoaderRegistry.h"
 
 #include <QApplication>
+#include <QString>
 
 KisResourceLoaderRegistry::KisResourceLoaderRegistry(QObject *parent)
     : QObject(parent)
@@ -40,11 +41,11 @@ KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()
     return reg;
 }
 
-QStringList KisResourceLoaderRegistry::resourceFolders() const
+QSet<QString> KisResourceLoaderRegistry::resourceFolders() const
 {
     QStringList r;
     Q_FOREACH(KisResourceLoaderBase *loader, values()) {
         r << loader->folder();
     }
-    return r;
+    return QSet<QString>::fromList(r);
 }

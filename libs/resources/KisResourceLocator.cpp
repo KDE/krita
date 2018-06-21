@@ -146,9 +146,10 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
         if (dir.exists()) {
             Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable)) {
                 QFile f(dir.canonicalPath() + '/'+ entry);
-                bool r = f.copy(d->resourceLocation + '/' + folder + '/' + entry);
-                if (!r) {
-                    d->errorMessages << i18n("Could not copy resource %1 to the resource folder").arg(f.fileName());
+                if (!QFileInfo(d->resourceLocation + '/' + folder + '/' + entry).exists()) {
+                    if (!f.copy(d->resourceLocation + '/' + folder + '/' + entry)) {
+                        d->errorMessages << i18n("Could not copy resource %1 to %2").arg(f.fileName()).arg(d->resourceLocation + '/' + folder + '/' + entry);
+                    }
                 }
             }
         }

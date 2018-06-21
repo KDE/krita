@@ -20,8 +20,10 @@
 #ifndef KISRESOURCELOADERREGISTRY_H
 #define KISRESOURCELOADERREGISTRY_H
 
-#include <KoGenericRegistry.h>
 #include <QObject>
+#include <QSet>
+
+#include <KoGenericRegistry.h>
 #include "KisResourceLoader.h"
 
 #include <kritaresources_export.h>
@@ -34,7 +36,7 @@ public:
 
     static KisResourceLoaderRegistry *instance();
 
-    QStringList resourceFolders() const;
+    QSet<QString> resourceFolders() const;
 
 private:
 

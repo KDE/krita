@@ -312,7 +312,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::setReady();
 }
 
-void KisApplication::loadResources()
+bool KisApplication::loadResources()
 {
     KisResourceLoaderRegistry *reg = KisResourceLoaderRegistry::instance();
 
@@ -352,18 +352,18 @@ void KisApplication::loadResources()
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
     if (r != KisResourceLocator::LocatorError::Ok ) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("Krita will quit now."));
-        qApp->quit();
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
+        return false;
     }
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("Could not create the resources cache database. Krita will quit now."));
-        qApp->quit();
+        return false;
     }
 
     if (!KisResourceLocator::instance()->synchronizeDb()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("Krita will quit now."));
-        qApp->quit();
+        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
+        return false;
     }
 
 
@@ -383,7 +383,7 @@ void KisApplication::loadResources()
     processEvents();
     KisResourceBundleServerProvider::instance();
 
-
+    return true;
 }
 
 void KisApplication::loadResourceTags()
@@ -508,7 +508,9 @@ bool KisApplication::start(const KisApplicationArguments &args)
     loadPlugins();
 
     // Load all resources
-    loadResources();
+    if (!loadResources()) {
+        return false;
+    }
 
     // Load all the tags
     loadResourceTags();

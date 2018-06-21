@@ -357,7 +357,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             // vAlpha
             Vc::float_v fullFade = (
-                (1.0f - alphaValueF) * vCurvedData +
+                (vOne - alphaValueF) * vCurvedData +
                 alphaValueF * vCurvedData1);
 
             Vc::float_m mask;
@@ -367,7 +367,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             // Mask outer circle of mask
             mask = fullFade >= vOne;
-            Vc::float_v vFade = (1.0f - fullFade);
+            Vc::float_v vFade = (vOne - fullFade);
             vFade.setZero(mask);
 
             // return original dist values before vFade transform

@@ -29,7 +29,6 @@ public:
     virtual ~KisAbrStorage();
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
-    KisResourceStorage::ResourceItemIterator resourceItems(const QString &resourceType) override;
 
     KoResourceSP resource(const QString &url) override;
     KisResourceStorage::ResourceIterator resources(const QString &resourceType) override;

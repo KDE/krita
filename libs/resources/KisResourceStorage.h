@@ -47,35 +47,28 @@ public:
     struct ResourceItem {
 
         virtual ~ResourceItem() {}
-
         QString url;
-        QString type;
+        QString resourceType;
         QDateTime lastModified;
         virtual QByteArray md5sum() const {return QByteArray();}
     };
 
 
-    class ResourceItemIterator
+    class ResourceIterator
     {
     public:
 
-        virtual ~ResourceItemIterator() {}
+        virtual ~ResourceIterator() {}
 
         virtual bool hasNext() const {return false;};
         virtual void next() const{};
 
-
         virtual QString url() const {return QString();}
         virtual QString type() const {return QString();}
         virtual QDateTime lastModified() const {return QDateTime();}
+        /// This only loads the resource when called
         virtual QByteArray md5sum() const {return QByteArray();}
-    };
-
-    class ResourceIterator : public ResourceItemIterator
-    {
-    public:
-        virtual ~ResourceIterator() {}
-
+        /// This only loads the resource when called
         virtual KoResourceSP resource() const {return 0;}
     };
 
@@ -96,10 +89,7 @@ public:
     StorageType type() const;
     QDateTime timestamp() const;
 
-
     ResourceItem resourceItem(const QString &url);
-    ResourceItemIterator resourceItems(const QString &resourceType);
-
     KoResourceSP resource(const QString &url);
     ResourceIterator resources(const QString &resourceType);
 

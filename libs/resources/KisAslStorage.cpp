@@ -35,11 +35,6 @@ KisResourceStorage::ResourceItem KisAslStorage::resourceItem(const QString &url)
     return KisResourceStorage::ResourceItem();
 }
 
-KisResourceStorage::ResourceItemIterator KisAslStorage::resourceItems(const QString &resourceType)
-{
-    return KisResourceStorage::ResourceItemIterator();
-}
-
 KoResourceSP KisAslStorage::resource(const QString &url)
 {
     return 0;

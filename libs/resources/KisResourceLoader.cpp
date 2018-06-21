@@ -16,6 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <KisResourceLoader.h>
+
+#include <KisMimeDatabase.h>
+
+/**
+ * @return a set of filters ("*.bla,*.foo") that is suitable for filtering
+ * the contents of a directory.
+ */
+QStringList KisResourceLoaderBase::filters() const
+{
+    QStringList filters;
+    Q_FOREACH(const QString &mimeType, mimetypes()) {
+        QStringList suffixes = KisMimeDatabase::suffixesForMimeType(mimeType);
+        Q_FOREACH(const QString &suffix, suffixes) {
+                filters << "*." + suffix;
+        }
+    }
+    return filters;
+}
 
 #include "KisResourceLoader.h"
 

@@ -173,6 +173,7 @@ bool KisResourceLocator::initializeDb()
     QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
     while (iter.hasNext()) {
         iter.next();
+        qDebug() << "Considering storage" << iter.filePath();
         KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(iter.filePath());
         if (!KisResourceCacheDb::addStorage(storage, true)) {
             d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(iter.filePath()));

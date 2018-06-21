@@ -258,8 +258,21 @@ bool KisResourceCacheDb::initialize(const QString &location)
 
 bool KisResourceCacheDb::addResource(KoResourceSP resource)
 {
-    // XXX
-    return false;
+    bool r = true;
+
+    if (!s_valid) {
+        qWarning() << "KisResourceCacheDb::addResource: The database is not valid";
+        return false;
+    }
+
+    if (!resource || !resource->valid()) {
+        qWarning() << "KisResourceCacheDb::addResource: The resource is not valid";
+        return false;
+    }
+
+
+
+    return r;
 }
 
 bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString folder)
@@ -279,7 +292,10 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 {
     bool r = true;
 
-    if (!s_valid) return false;
+    if (!s_valid) {
+        qWarning() << "The database is not valid";
+        return false;
+    }
 
     {
         QSqlQuery q;

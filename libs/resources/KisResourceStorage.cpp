@@ -99,11 +99,6 @@ KisResourceStorage::ResourceItem KisResourceStorage::resourceItem(const QString 
     return d->storagePlugin->resourceItem(url);
 }
 
-KisResourceStorage::ResourceItemIterator KisResourceStorage::resourceItems(const QString &resourceType)
-{
-    return d->storagePlugin->resourceItems(resourceType);
-}
-
 KoResourceSP KisResourceStorage::resource(const QString &url)
 {
     return d->storagePlugin->resource(url);

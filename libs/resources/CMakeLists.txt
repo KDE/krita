@@ -33,6 +33,7 @@ target_link_libraries(kritaresources
         Qt5::Sql
         kritaversion
         kritaglobal
+        kritaplugin
         KF5::ConfigCore
         KF5::CoreAddons
         KF5::I18n

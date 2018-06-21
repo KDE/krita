@@ -33,11 +33,6 @@ KisResourceStorage::ResourceItem KisBundleStorage::resourceItem(const QString &u
     return KisResourceStorage::ResourceItem();
 }
 
-KisResourceStorage::ResourceItemIterator KisBundleStorage::resourceItems(const QString &resourceType)
-{
-    return KisResourceStorage::ResourceItemIterator();
-}
-
 KoResourceSP KisBundleStorage::resource(const QString &url)
 {
     return 0;

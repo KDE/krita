@@ -52,6 +52,12 @@ public:
     }
 
     /**
+     * @return a set of filters ("*.bla,*.foo") that is suitable for filtering
+     * the contents of a directory.
+     */
+    QStringList filters() const;
+
+    /**
      * @return the mimetypes this resource can load
      */
     QStringList mimetypes() const

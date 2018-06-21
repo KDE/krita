@@ -39,8 +39,6 @@ public:
     virtual ~KisStoragePlugin();
 
     virtual KisResourceStorage::ResourceItem resourceItem(const QString &url) = 0;
-    virtual KisResourceStorage::ResourceItemIterator resourceItems(const QString &resourceType) = 0;
-
     virtual KoResourceSP resource(const QString &url) = 0;
     virtual KisResourceStorage::ResourceIterator resources(const QString &resourceType) = 0;
 

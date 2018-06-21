@@ -27,8 +27,6 @@ class KisVecTest : public QObject
 private Q_SLOTS:
 
     void testCreation();
-    void testVec2D();
-    void testVec3D();
 
 };
 

@@ -194,16 +194,6 @@ public:
         return false;
     }
 
-    qreal getXLimit() { return m_xLimit; }
-    qreal getYLimit() { return m_yLimit; }
-
-    qreal getXFadeLimitStart() { return m_xFadeLimitStart; }
-    qreal getYFadeLimitStart() { return m_yFadeLimitStart; }
-    qreal getXFadeCoeff(){ return m_xFadeCoeff; }
-    qreal getYFadeCoeff(){ return m_yFadeCoeff; }
-
-    bool getAliasingEnabled() { return m_enableAntialiasing; }
-
 private:
     qreal m_xLimit;
     qreal m_yLimit;

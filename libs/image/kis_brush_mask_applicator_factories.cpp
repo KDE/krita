@@ -22,7 +22,6 @@
 #include "kis_circle_mask_generator_p.h"
 #include "kis_gauss_circle_mask_generator_p.h"
 #include "kis_curve_circle_mask_generator_p.h"
-#include "kis_gauss_rect_mask_generator_p.h"
 
 #include "kis_brush_mask_applicators.h"
 #include "kis_brush_mask_applicator_base.h"
@@ -54,20 +53,13 @@ MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator>
     return new KisBrushMaskVectorApplicator<KisGaussCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
+
 template<>
 template<>
 MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
 MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
     return new KisBrushMaskVectorApplicator<KisCurveCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
-}
-
-template<>
-template<>
-MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
-MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
-{
-    return new KisBrushMaskVectorApplicator<KisGaussRectangleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 
@@ -376,135 +368,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         } else {
           dist.store(bufferPointer, Vc::Aligned);
-      }
-      currentIndices = currentIndices + increment;
-
-      bufferPointer += Vc::float_v::size();
-    }
-}
-
-struct KisGaussRectangleMaskGenerator::FastRowProcessor
-{
-    FastRowProcessor(KisGaussRectangleMaskGenerator *maskGenerator)
-        : d(maskGenerator->d.data()) {}
-
-    template<Vc::Implementation _impl>
-    void process(float* buffer, int width, float y, float cosa, float sina,
-                 float centerX, float centerY);
-
-    KisGaussRectangleMaskGenerator::Private *d;
-};
-
-template<> void KisGaussRectangleMaskGenerator::
-FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
-                                   float centerX, float centerY)
-{
-    const bool antialiasOn = d->fadeMaker.getAliasingEnabled();
-
-    float y_ = y - centerY;
-    float sinay_ = sina * y_;
-    float cosay_ = cosa * y_;
-
-    float* bufferPointer = buffer;
-
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
-
-    Vc::float_v increment((float)Vc::float_v::size());
-    Vc::float_v vCenterX(centerX);
-
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
-
-    Vc::float_v vhalfWidth(d->halfWidth);
-    Vc::float_v vhalfHeight(d->halfHeight);
-    Vc::float_v vXFade(d->xfade);
-    Vc::float_v vYFade(d->yfade);
-
-    Vc::float_v vAlphafactor(d->alphafactor);
-
-    Vc::float_v vXLimit(d->fadeMaker.getXLimit());
-    Vc::float_v vYLimit(d->fadeMaker.getYLimit());
-    Vc::float_v vXFadeLimitStart(d->fadeMaker.getXFadeLimitStart());
-    Vc::float_v vYFadeLimitStart(d->fadeMaker.getYFadeLimitStart());
-    Vc::float_v vXFadeCoeff(d->fadeMaker.getXFadeCoeff());
-    Vc::float_v vYFadeCoeff(d->fadeMaker.getYFadeCoeff());
-
-    Vc::float_v vOne(Vc::One);
-    Vc::float_v vZero(Vc::Zero);
-    Vc::float_v vValMax(255.f);
-
-    for (int i=0; i < width; i+= Vc::float_v::size()){
-
-        Vc::float_v x_ = currentIndices - vCenterX;
-
-        Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = abs(x_ * vSina + vCosaY_);
-
-        Vc::float_v vValue;
-
-        // BEGIN FadeMaker needFade vectorized 2D
-        Vc::float_v xra = abs(xr);
-        Vc::float_m outXMask = xr > vXLimit;
-        Vc::float_m outYMask = yr > vYLimit;
-
-        Vc::float_m excludeMask(outXMask | outYMask);
-        vValue(excludeMask) = vOne;
-
-        if (!excludeMask.isFull()) {
-            Vc::float_v fullFade = vValMax - (vAlphafactor * (d->vErf((vhalfWidth + xr) * vXFade) + d->vErf((vhalfWidth - xr) * vXFade))
-                                        * (d->vErf((vhalfHeight + yr) * vYFade) + d->vErf((vhalfHeight - yr) * vYFade)));
-            // if antialias is off, do not process
-            Vc::float_m fadeXStartMask(false);
-            Vc::float_m fadeYStartMask(false);
-
-            if(antialiasOn){
-                Vc::float_v fadeValue;
-                Vc::SimdArray<quint16,Vc::float_v::size()> vBaseValue(fullFade);
-
-                fadeXStartMask = xra > vXFadeLimitStart;
-                fadeXStartMask = (fadeXStartMask ^ excludeMask) & fadeXStartMask;
-                if (!fadeXStartMask.isFull()) {
-                    fadeValue = vBaseValue + (vValMax - vBaseValue) * (xra - vXFadeLimitStart) * vXFadeCoeff;
-                    fadeValue(fadeXStartMask & ((yr > vYFadeLimitStart) & (fadeValue < vValMax)) ) =
-                            fadeValue + (vValMax - fadeValue) * (yr - vYFadeLimitStart) * vYFadeCoeff;
-                    fullFade(fadeXStartMask) = fadeValue;
-                }
-
-                fadeYStartMask = yr > vYFadeLimitStart;
-                fadeYStartMask = (fadeYStartMask ^ fadeXStartMask) & fadeYStartMask;
-                if (!fadeYStartMask.isFull()) {
-                    fadeValue = vBaseValue + (vValMax - vBaseValue) * (yr - vYFadeLimitStart) * vYFadeCoeff;
-                    fadeValue(fadeYStartMask & ((xra > vXFadeLimitStart) & (fadeValue < vValMax)) ) =
-                            fadeValue + (vValMax - fadeValue) * (xra - vXFadeLimitStart) * vXFadeCoeff;
-                    fullFade(fadeYStartMask) = fadeValue;
-                }
-            }
-
-            Vc::float_m mask;
-            // Mask  undefined values, out of range are out of mask
-            mask = Vc::isfinite(fullFade);
-            fullFade.setZero(!mask);
-
-            // Mask in the inner circe of the mask
-            mask = fullFade < vZero;
-            fullFade.setZero(mask);
-
-            // Mask the outter circle
-            mask = fullFade > 254.974f;
-            fullFade(mask) = vValMax;
-
-            // Mask (value - value), presicion errors.
-            Vc::float_v vFade = fullFade / vValMax;
-
-
-            // return original vValue values before vFade transform
-            vFade(excludeMask) = vValue;
-            vFade.store(bufferPointer, Vc::Aligned);
-
-        } else {
-          vValue.store(bufferPointer, Vc::Aligned);
       }
       currentIndices = currentIndices + increment;
 

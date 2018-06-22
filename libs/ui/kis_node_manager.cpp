@@ -622,11 +622,13 @@ void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 
 void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 {
-    if (node == activeNode()) return;
-
     // the node must still be in the graph, some asynchronous
     // signals may easily break this requirement
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!node || node->graphListener());
+    if (node && !node->graphListener()) {
+        node = 0;
+    }
+
+    if (node == activeNode()) return;
 
     slotSomethingActivatedNodeImpl(node);
 
@@ -640,11 +642,13 @@ void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 
 void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
 {
-    if (node == activeNode()) return;
-
     // the node must still be in the graph, some asynchronous
     // signals may easily break this requirement
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!node || node->graphListener());
+    if (node && !node->graphListener()) {
+        node = 0;
+    }
+
+    if (node == activeNode()) return;
 
     slotSomethingActivatedNodeImpl(node);
 

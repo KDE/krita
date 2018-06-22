@@ -65,14 +65,15 @@ public:
         QImage vectorImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
         vectorImage.invertPixels(); // Make pixel color black
 
-        if (renderImage) {
-            scalarImage.save(QString(getTypeName(type) + "_scalar_mask.png"),"PNG");
-            vectorImage.save(QString(getTypeName(type) +"_vector_mask.png"),"PNG");
-        }
 
         // Check for differences, max errors: 0
         QPoint tmpPt;
         QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 2, 0));
+
+        if (renderImage || QTest::currentTestFailed()) {
+            scalarImage.save(QString(getTypeName(type) + "_scalar_mask.png"),"PNG");
+            vectorImage.save(QString(getTypeName(type) + "_vector_mask.png"),"PNG");
+        }
     }
 
 private:
@@ -175,6 +176,34 @@ void KisMaskSimilarityTest::testSoftCircleMask()
 
             circScalar.resetMaskApplicator(true); // Force usage of scalar backend
             KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds,CIRC_SOFT,false);
+        }
+    } } } // end for
+}
+
+void KisMaskSimilarityTest::testGaussRectMask()
+{
+    QRect bounds(0,0,540,540);
+    {
+        KisGaussRectangleMaskGenerator circVectr(500, 1.0, .5, .5, 2, true);
+        KisGaussRectangleMaskGenerator circScalar(circVectr);
+
+        circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+        KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds, RECT_GAUSS);
+    }
+    // Exahustive test
+    for (size_t i = 0; i <= 100; i += 3){
+        for (size_t j = 0; j <= 100; j += 3){
+            for (size_t k = 0; k <= 100; k += 15){
+        {
+            KisGaussRectangleMaskGenerator circVectr(500, k/100.f, i/100.f, j/100.f, 2, true);
+            KisGaussRectangleMaskGenerator circScalar(circVectr);
+
+            circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+            KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds,RECT_GAUSS,false);
+            if (QTest::currentTestFailed()) {
+                qDebug() << "failed at Ratio: " << k << ", fh: "<< i <<", fv: "<< j;
+                std::exit(1);
+            }
         }
     } } } // end for
 }

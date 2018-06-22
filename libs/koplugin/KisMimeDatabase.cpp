@@ -227,11 +227,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "ocio";
         s_mimeDatabase << mimeType;
 
-        mimeType.mimeType = "application/x-krita-recorded-macro";
-        mimeType.description = i18nc("description of a file type", "Krita Recorded Action");
-        mimeType.suffixes = QStringList() << "krarec";
-        s_mimeDatabase << mimeType;
-
         mimeType.mimeType = "application/x-gimp-gradient";
         mimeType.description = i18nc("description of a file type", "GIMP Gradients");
         mimeType.suffixes = QStringList() << "ggr";

@@ -91,7 +91,6 @@
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
 //new
-#include "kis_recorded_path_paint_action.h"
 #include "kis_node_query_path.h"
 #include "kis_tool_shape.h"
 

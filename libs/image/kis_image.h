@@ -43,7 +43,6 @@ class KoColorSpace;
 class KoColor;
 
 class KisCompositeProgressProxy;
-class KisActionRecorder;
 class KisUndoStore;
 class KisUndoAdapter;
 class KisImageSignalRouter;
@@ -387,11 +386,6 @@ public:
      * Return current undo store of the image
      */
     KisUndoStore* undoStore();
-
-    /**
-     * @return the action recorder associated with this image
-     */
-    KisActionRecorder* actionRecorder() const;
 
     /**
      * Tell the image it's modified; this emits the sigImageModified

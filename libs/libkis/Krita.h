@@ -327,6 +327,8 @@ add_document_to_window()
     // Internal only: for use with mikro.py
     static QObject *fromVariant(const QVariant& v);
 
+    static QString krita_i18n(const QString &text);
+
 private Q_SLOTS:
 
     void mainWindowAdded(KisMainWindow *window);

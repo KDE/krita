@@ -17,6 +17,7 @@
  */
 
 #include "kis_brush_mask_applicator_factories.h"
+#include "vc_extra_math.h"
 
 #include "kis_circle_mask_generator.h"
 #include "kis_circle_mask_generator_p.h"
@@ -236,7 +237,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         if (!excludeMask.isFull()) {
             Vc::float_v valDist = dist * vDistfactor;
-            Vc::float_v fullFade = vAlphafactor * ( d->vErf(valDist + vCenter) - d->vErf(valDist - vCenter));
+            Vc::float_v fullFade = vAlphafactor * (  VcExtraMath::erf(valDist + vCenter) -  VcExtraMath::erf(valDist - vCenter));
 
             Vc::float_m mask;
             // Mask  undefined values, out of range are out of mask
@@ -453,8 +454,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         vValue(excludeMask) = vOne;
 
         if (!excludeMask.isFull()) {
-            Vc::float_v fullFade = vValMax - (vAlphafactor * (d->vErf((vhalfWidth + xr) * vXFade) + d->vErf((vhalfWidth - xr) * vXFade))
-                                        * (d->vErf((vhalfHeight + yr) * vYFade) + d->vErf((vhalfHeight - yr) * vYFade)));
+            Vc::float_v fullFade = vValMax - (vAlphafactor * (VcExtraMath::erf((vhalfWidth + xr) * vXFade) + VcExtraMath::erf((vhalfWidth - xr) * vXFade))
+                                        * (VcExtraMath::erf((vhalfHeight + yr) * vYFade) + VcExtraMath::erf((vhalfHeight - yr) * vYFade)));
             // if antialias is off, do not process
             Vc::float_m fadeXStartMask(false);
             Vc::float_m fadeYStartMask(false);

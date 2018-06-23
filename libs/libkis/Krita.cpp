@@ -22,6 +22,7 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -407,6 +408,11 @@ QObject *Krita::fromVariant(const QVariant& v)
     }
     else
         return 0;
+}
+
+QString Krita::krita_i18n(const QString &text)
+{
+    return i18n(text.toUtf8().constData());
 }
 
 void Krita::mainWindowAdded(KisMainWindow *kisWindow)

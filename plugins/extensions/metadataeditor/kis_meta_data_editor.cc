@@ -74,7 +74,7 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
         }
 
         const QString uiFileName = rootElement.attribute("uiFile");
-        const QString pageName = rootElement.attribute("name");
+        const QString pageName = i18nc("metadata editor page", rootElement.attribute("name").toUtf8());
         const QString iconName = rootElement.attribute("icon");
         if (uiFileName == "") continue;
 

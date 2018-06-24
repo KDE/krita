@@ -376,12 +376,31 @@ bool Python::setPath(const QStringList& scriptPaths)
     if (runningInBundle) {
         // We're running from an appimage, so we need our local python
         QString p = QFileInfo(PYKRITA_PYTHON_LIBRARY).fileName();
+#ifdef Q_OS_MAC
+        QString p2 = p.remove("lib").remove("m.dy");
+#else
         QString p2 = p.remove("lib").remove("m.so");
+#endif
         dbgScript << "\t" << p << p2;
         originalPath = findKritaPythonLibsPath(p);
-        paths.append(originalPath + "/lib-dynload");
-        paths.append(originalPath + "/site-packages");
-        paths.append(originalPath + "/site-packages/PyQt5");
+#ifdef Q_OS_MAC
+        // Are we running with a system Python library instead?
+        if (originalPath.isEmpty()) {
+            // Keep the original Python search path.
+            originalPath = QString::fromWCharArray(Py_GetPath());
+            QString d = QFileInfo(PYKRITA_PYTHON_LIBRARY).absolutePath();
+
+            paths.append(d + "/" + p2 + "/site-packages");
+            paths.append(d + "/" + p2 + "/site-packages/PyQt5");
+        }
+        else {
+#endif
+            paths.append(originalPath + "/lib-dynload");
+            paths.append(originalPath + "/site-packages");
+            paths.append(originalPath + "/site-packages/PyQt5");
+#ifdef Q_OS_MAC
+        }
+#endif
     }
     else {
         // Use the system path

@@ -28,36 +28,44 @@ public:
     TileTypeSP insert(quint32 key, TileTypeSP value)
     {
         TileTypeSP::ref(&value, value.data());
-        TileType *result = m_map.assign(key, value.data());
+        TileTypeSP result = m_map.assign(key, value.data());
 
-        if (result) {
-            m_map.getGC().enqueue(new MemoryReclaimer(result));
+        if (result.data()) {
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result.data()));
         } else {
             m_numTiles.fetchAndAddRelaxed(1);
         }
 
-//        m_map.getGC().update();
-        return TileTypeSP(result);
+        if (!m_map.migrationInProcess()) {
+            m_map.getGC().update();
+        }
+
+        return result;
     }
 
     TileTypeSP erase(quint32 key)
     {
-        TileType *result = m_map.erase(key);
-        TileTypeSP ptr(result);
+        TileTypeSP result = m_map.erase(key);
 
         if (result) {
             m_numTiles.fetchAndSubRelaxed(1);
-            m_map.getGC().enqueue(new MemoryReclaimer(result));
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result.data()));
         }
 
-//        m_map.getGC().update();
-        return ptr;
+        if (!m_map.migrationInProcess()) {
+            m_map.getGC().update();
+        }
+
+        return result;
     }
 
     TileTypeSP get(quint32 key)
     {
         TileTypeSP result(m_map.get(key));
-//        m_map.getGC().update();
+        if (!m_map.migrationInProcess()) {
+            m_map.getGC().update();
+        }
+
         return result;
     }
 
@@ -122,11 +130,14 @@ public:
 private:
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
-    struct MemoryReclaimer : public Property {
+    struct MemoryReclaimer {
         MemoryReclaimer(TileType *data) : d(data) {}
-        ~MemoryReclaimer()
+
+        void destroy()
         {
             TileTypeSP::deref(reinterpret_cast<TileTypeSP *>(this), d);
+            this->MemoryReclaimer::~MemoryReclaimer();
+            delete this;
         }
 
     private:
@@ -218,7 +229,8 @@ KisTileHashTableTraits2<T>::KisTileHashTableTraits2(const KisTileHashTableTraits
 template <class T>
 KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 {
-//    clear();
+    clear();
+    m_map.getGC().flush();
 }
 
 template<class T>
@@ -248,10 +260,10 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
             tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
         }
         TileTypeSP::ref(&tile, tile.data());
-        TileType *result = mutator.exchangeValue(tile.data());
+        TileTypeSP result = mutator.exchangeValue(tile.data());
 
-        if (result) {
-            m_map.getGC().enqueue(new MemoryReclaimer(result));
+        if (result.data()) {
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result.data()));
         } else {
             m_numTiles.fetchAndAddRelaxed(1);
         }
@@ -262,7 +274,10 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
         tile = mutator.getValue();
     }
 
-//    m_map.getGC().update();
+    if (!m_map.migrationInProcess()) {
+        m_map.getGC().update();
+    }
+
     return tile;
 }
 
@@ -278,7 +293,10 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
         tile = new TileType(col, row, m_defaultTileData, 0);
     }
 
-//    m_map.getGC().update();
+    if (!m_map.migrationInProcess()) {
+        m_map.getGC().update();
+    }
+
     return tile;
 }
 
@@ -351,7 +369,6 @@ quint32 KisTileHashTableTraits2<T>::calculateHash(qint32 col, qint32 row)
     boost::hash_combine(seed, col);
     boost::hash_combine(seed, row);
     return seed;
-//    return (((row << 5) + (col & 0x1F)) & 0x3FF) + 1;
 }
 
 typedef KisTileHashTableTraits2<KisTile> KisTileHashTable;

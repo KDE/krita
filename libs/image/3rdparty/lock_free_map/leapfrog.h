@@ -93,7 +93,7 @@ struct Leapfrog {
         }
     };
 
-    class TableMigration : public SimpleJobCoordinator::Job, public Property
+    class TableMigration : public SimpleJobCoordinator::Job
     {
     public:
         struct Source {
@@ -128,24 +128,18 @@ struct Leapfrog {
 
         virtual ~TableMigration() override
         {
-            // Destroy all source tables.
-            for (quint64 i = 0; i < m_numSources; i++) {
-                if (getSources()[i].table) {
-                    getSources()[i].table->destroy();
-                }
-            }
         }
 
-//        void destroy()
-//        {
-//            // Destroy all source tables.
-//            for (quint64 i = 0; i < m_numSources; i++)
-//                if (getSources()[i].table)
-//                    getSources()[i].table->destroy();
-//            // Delete the migration object itself.
-//            this->TableMigration::~TableMigration();
-//            std::free(this);
-//        }
+        void destroy()
+        {
+            // Destroy all source tables.
+            for (quint64 i = 0; i < m_numSources; i++)
+                if (getSources()[i].table)
+                    getSources()[i].table->destroy();
+            // Delete the migration object itself.
+            this->TableMigration::~TableMigration();
+            std::free(this);
+        }
 
         Source* getSources() const
         {
@@ -547,7 +541,7 @@ endMigration:
     }
 
     // We're done with this TableMigration. Queue it for GC.
-//    m_map.getGC().enqueue(this);
+    m_map.getGC().enqueue(&TableMigration::destroy, this);
 }
 
 #endif // LEAPFROG_H

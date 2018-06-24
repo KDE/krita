@@ -12,6 +12,7 @@
 #define CONCURRENTMAP_H
 
 #include "leapfrog.h"
+#include "tiles3/kis_lockless_stack.h"
 
 template <typename K, typename V, class KT = DefaultKeyTraits<K>, class VT = DefaultValueTraits<V> >
 class ConcurrentMap
@@ -26,8 +27,7 @@ public:
 
 private:
     Atomic<typename Details::Table*> m_root;
-//    QSBR m_gc;
-    GarbageCollector<Property> m_gc;
+    QSBR m_gc;
 
 public:
     ConcurrentMap(quint64 capacity = Details::InitialSize) : m_root(Details::Table::create(capacity))
@@ -40,14 +40,14 @@ public:
         table->destroy();
     }
 
-//    QSBR &getGC()
-//    {
-//        return m_gc;
-//    }
-
-    GarbageCollector<Property> &getGC()
+    QSBR &getGC()
     {
         return m_gc;
+    }
+
+    bool migrationInProcess()
+    {
+        return (quint64) m_root.loadNonatomic()->jobCoordinator.loadConsume() != 1;
     }
 
     // publishTableMigration() is called by exactly one thread from Details::TableMigration::run()

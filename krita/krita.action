@@ -1635,6 +1635,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="ToolReferenceImages">
+      <icon></icon>
+      <text>Reference Images Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reference Images Tool</toolTip>
+      <iconText>Reference Images Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 
   <Actions category="Blending Modes">

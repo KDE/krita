@@ -16,6 +16,10 @@ ACTIONFILES=`find . -name \*.action`
 # extracti18n.pl extracts additional data from brushes, palettes etc.
 perl extracti18n.pl >> rc.cpp
 
+# Extract the name of configuration pages in the metadata editor plugin.
+$EXTRACTATTR --attr=MetaDataEditor,name --context='metadata editor page' \
+  plugins/extensions/metadataeditor/editors/*.xmlgui >> rc.cpp
+
 # Ignore sdk/templates which contains templates for writing future plugins.
 # Also ignore crashreporter, it has it's own catalog
 # None of the placeholder strings inside will be seen by users.

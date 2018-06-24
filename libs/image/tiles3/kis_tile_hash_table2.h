@@ -231,6 +231,7 @@ KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 {
     clear();
     m_map.getGC().flush();
+    setDefaultTileData(0);
 }
 
 template<class T>

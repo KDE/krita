@@ -382,8 +382,6 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
-
-    KisDlgInternalColorSelector.cpp
 )
 
 if(WIN32)

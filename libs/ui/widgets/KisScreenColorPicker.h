@@ -23,6 +23,7 @@
 #include <QMouseEvent>
 
 #include "KoColor.h"
+#include <KisScreenColorPickerBase.h>
 
 #include "kritaui_export.h"
 
@@ -31,7 +32,7 @@
  * Based on the original QColorDialog's screen color picker, this class provides a button
  * that can be used to activate a colorpicker that can pick from anywhere on the screen.
  */
-class KRITAUI_EXPORT KisScreenColorPicker : public QWidget
+class KRITAUI_EXPORT KisScreenColorPicker : public KisScreenColorPickerBase
 {
     Q_OBJECT
 public:
@@ -45,7 +46,9 @@ public:
     bool handleColorPickingKeyPress(QKeyEvent *e);
 
     /// reloads icon(s) when theme is updated
-    void updateIcons();
+    void updateIcons() override;
+
+    static KisScreenColorPicker *createScreenColorPicker(QWidget *parent = 0) {return new KisScreenColorPicker(parent);}
 
 Q_SIGNALS:
     void sigNewColorPicked(KoColor c);

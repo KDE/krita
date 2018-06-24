@@ -36,6 +36,7 @@
 #include "kis_wrapped_rect.h"
 #include "KisPart.h"
 #include "KisScreenColorPicker.h"
+#include "KisDlgInternalColorSelector.h"
 
 struct KisScreenColorPicker::Private
 {
@@ -54,7 +55,7 @@ struct KisScreenColorPicker::Private
 #endif
 };
 
-KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : QWidget(parent), m_d(new Private)
+KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     this->setLayout(layout);
@@ -82,7 +83,7 @@ KisScreenColorPicker::~KisScreenColorPicker()
 
 void KisScreenColorPicker::updateIcons()
 {
-        m_d->screenColorPickerButton->setIcon(kisIcon("krita_tool_color_picker"));
+    m_d->screenColorPickerButton->setIcon(kisIcon("krita_tool_color_picker"));
 }
 
 KoColor KisScreenColorPicker::currentColor()
@@ -272,6 +273,6 @@ bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-
+std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
 
 #include "KisScreenColorPicker.moc"

@@ -3,7 +3,7 @@
 
 #include <QAbstractItemDelegate>
 
-class KisPaletteListDelegate : public QAbstractItemDelegate
+class KisPaletteListDelegate
 {
 public:
     KisPaletteListDelegate();

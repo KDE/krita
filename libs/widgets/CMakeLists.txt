@@ -59,9 +59,9 @@ set(kritawidgets_LIB_SRCS
     KisPaletteModel.cpp
     kis_palette_delegate.cpp
     kis_palette_view.cpp
-    KisPaletteListModel.cpp
-    KisPaletteListView.cpp
-    KisPaletteListDelegate.cpp
+    # KisPaletteListModel.cpp
+    # KisPaletteListView.cpp
+    # KisPaletteListDelegate.cpp
 
     KoPageLayoutWidget.cpp
     KoPageLayoutDialog.cpp
@@ -94,7 +94,7 @@ set(kritawidgets_LIB_SRCS
     kis_spinbox_color_selector.cpp
 
     KisDlgInternalColorSelector.cpp
-    KisPaletteChooser.cpp
+    KisPaletteListWidget.cpp
 
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
@@ -114,7 +114,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    WdgPaletteChooser.ui
+    WdgPaletteListWidget.ui
     WdgDlgInternalColorSelector.ui
 )
 

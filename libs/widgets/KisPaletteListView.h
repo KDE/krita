@@ -11,7 +11,7 @@ public:
     virtual ~KisPaletteListView();
 
 private:
-    struct Private;
+    class Private;
     Private *m_d;
 };
 

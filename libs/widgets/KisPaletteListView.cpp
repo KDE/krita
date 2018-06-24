@@ -4,22 +4,34 @@
 #include "KisPaletteListModel.h"
 #include "KisPaletteListDelegate.h"
 
-struct KisPaletteListView::Private
+class KisPaletteListView::Private
 {
+public:
+    Private(KisPaletteListView *view)
+        : model(new KisPaletteListModel(view))
+        , delegate(new KisPaletteListDelegate(view))
+        , m_view(view)
+    { }
+    ~Private()
+    {
+        delete model;
+        delete delegate;
+    }
+public:
     QPointer<KisPaletteListModel> model;
     QPointer<KisPaletteListDelegate> delegate;
+private:
+    KisPaletteListView *m_view;
 };
 
 KisPaletteListView::~KisPaletteListView()
 {
-    // delete model;
-    // delete delegate;
+    delete m_d;
 }
 
 KisPaletteListView::KisPaletteListView(QWidget *parent)
-//    : QAbstractItemView(parent)
-//    , m_d(new Private)
+    : QAbstractItemView(parent)
+    , m_d(new Private)
 {
-    // m_d->model = new KisPaletteListModel;
-    // setModel(m_d->model);
+     setModel(m_d->model);
 }

@@ -33,8 +33,8 @@ class TenScriptsExtension(krita.Extension):
         self.readSettings()
 
     def createActions(self, window):
-        action = window.createAction("ten_scripts", "Ten Scripts")
-        action.setToolTip("Assign ten scripts to ten shortcuts.")
+        action = window.createAction("ten_scripts", i18n("Ten Scripts"))
+        action.setToolTip(i18n("Assign ten scripts to ten shortcuts."))
         action.triggered.connect(self.initialize)
         self.loadActions(window)
 
@@ -55,7 +55,7 @@ class TenScriptsExtension(krita.Extension):
 
     def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']):
-            action = window.createAction("execute_script_" + item, "Execute Script " + item, "")
+            action = window.createAction("execute_script_" + item, str(i18n("Execute Script {num}")).format(num=item), "")
             action.script = None
             action.triggered.connect(self._executeScript)
 
@@ -78,11 +78,11 @@ class TenScriptsExtension(krita.Extension):
                 if hasattr(users_module, 'main') and callable(users_module.main):
                     users_module.main()
 
-                self.showMessage('script {0} executed'.format(self.sender().script))
+                self.showMessage(str(i18n("Script {0} executed")).format(self.sender().script))
             except Exception as e:
                 self.showMessage(str(e))
         else:
-            self.showMessage("You didn't assign a script to that action")
+            self.showMessage(i18n("You did not assign a script to that action"))
 
     def showMessage(self, message):
         self.msgBox  = QMessageBox(Application.activeWindow().qwindow())

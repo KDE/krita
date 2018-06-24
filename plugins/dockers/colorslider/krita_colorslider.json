@@ -1,9 +1,0 @@
-{
-    "Id": "ColorSlider",
-    "Type": "Service",
-    "X-KDE-Library": "kritacolorslider",
-    "X-KDE-ServiceTypes": [
-        "Krita/Dock"
-    ],
-    "X-Krita-Version": "28"
-}

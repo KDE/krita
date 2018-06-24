@@ -85,6 +85,7 @@
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 #include <kwindowconfig.h>
+#include <kformat.h>
 
 #include "KoDockFactoryBase.h"
 #include "KoDocumentInfoDlg.h"
@@ -163,7 +164,6 @@ public:
 
     QDockWidget* createDockWidget() override {
         KoToolDocker* dockWidget = new KoToolDocker();
-        dockWidget->setTabEnabled(false);
         return dockWidget;
     }
 
@@ -790,7 +790,7 @@ void KisMainWindow::updateCaption()
 
 
         if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KisStatusBar::formatSize(m_fileSizeStats.imageSize)).append( ")");
+            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
         }
 
 
@@ -916,7 +916,7 @@ QStringList KisMainWindow::showOpenFileDialog(bool isImporting)
 {
     KoFileDialog dialog(this, KoFileDialog::ImportFiles, "OpenDocument");
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     dialog.setCaption(isImporting ? i18n("Import Images") : i18n("Open Images"));
 
     return dialog.filenames();
@@ -1049,9 +1049,9 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
     QUrl suggestedURL = document->url();
 
-    QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList mimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
-    mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    mimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     if (!mimeFilter.contains(oldMimeFormat)) {
         dbgUI << "KisMainWindow::saveDocument no export filter for" << oldMimeFormat;
 
@@ -1402,7 +1402,7 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::slotFileNew()
 {
-    const QStringList mimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Import);
+    const QStringList mimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
 
     KisOpenPane *startupWidget = new KisOpenPane(this, mimeFilter, QStringLiteral("templates/"));
     startupWidget->setWindowModality(Qt::WindowModal);
@@ -2619,7 +2619,17 @@ void KisMainWindow::showManual()
 
 void KisMainWindow::moveEvent(QMoveEvent *e)
 {
-    if (qApp->desktop()->screenNumber(this) != qApp->desktop()->screenNumber(e->oldPos())) {
+    /**
+     * For checking if the display number has changed or not we should always use
+     * positional overload, not using QWidget overload. Otherwise we might get
+     * inconsistency, because screenNumber(widget) can return -1, but screenNumber(pos)
+     * will always return the nearest screen.
+     */
+
+    const int oldScreen = qApp->desktop()->screenNumber(e->oldPos());
+    const int newScreen = qApp->desktop()->screenNumber(e->pos());
+
+    if (oldScreen != newScreen) {
         KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

@@ -131,33 +131,6 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
 
     bool has_alpha = configuration->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
 
-    KisExifInfoVisitor exivInfoVisitor;
-    exivInfoVisitor.visit(image->rootLayer().data());
-
-    QScopedPointer<KisMetaData::Store> metaDataStore;
-    if (exivInfoVisitor.metaDataCount() == 1) {
-        metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
-    }
-    else {
-        metaDataStore.reset(new KisMetaData::Store());
-    }
-
-    if (!metaDataStore->empty()) {
-        {
-            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
-            QBuffer buffer;
-            exifIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
-            QByteArray data = buffer.data();
-            // Write the data to the file
-        }
-        {
-            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
-            QBuffer buffer;
-            xmpIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
-            QByteArray data = buffer.data();
-            // Write the data to the file
-        }
-    }
 
     // If we want to add information from the document to the metadata,
     // we should do that here.
@@ -218,7 +191,46 @@ KisImportExportFilter::ConversionStatus HeifExport::convert(KisDocument *documen
 
         // --- encode and write image
 
-        ctx.encode_image(img, encoder);
+        heif::ImageHandle handle = ctx.encode_image(img, encoder);
+
+
+
+        // --- add Exif / XMP metadata
+
+        KisExifInfoVisitor exivInfoVisitor;
+        exivInfoVisitor.visit(image->rootLayer().data());
+
+        QScopedPointer<KisMetaData::Store> metaDataStore;
+        if (exivInfoVisitor.metaDataCount() == 1) {
+          metaDataStore.reset(new KisMetaData::Store(*exivInfoVisitor.exifInfo()));
+        }
+        else {
+          metaDataStore.reset(new KisMetaData::Store());
+        }
+
+        if (!metaDataStore->empty()) {
+          {
+            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            QBuffer buffer;
+            exifIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
+            QByteArray data = buffer.data();
+
+            // Write the data to the file
+            ctx.add_exif_metadata(handle, data.constData(), data.size());
+          }
+          {
+            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            QBuffer buffer;
+            xmpIO->saveTo(metaDataStore.data(), &buffer, KisMetaData::IOBackend::NoHeader); // Or JpegHeader? Or something else?
+            QByteArray data = buffer.data();
+
+            // Write the data to the file
+            ctx.add_XMP_metadata(handle, data.constData(), data.size());
+          }
+        }
+
+
+        // --- write HEIF file
 
         Writer_QIODevice writer(io);
 

@@ -35,8 +35,8 @@ class inkscapeSVGExporter:
         self.currentPalette = Palette(allPalettes[self.paletteName])
         self.export()
         done = QMessageBox()
-        done.setWindowTitle("Export successful")
-        done.setText(self.paletteName + " has been exported to " + self.fileName + "!")
+        done.setWindowTitle(i18n("Export Successful"))
+        done.setText(str(i18n("{input} has been exported to {output}.")).format(input=self.paletteName, output=self.fileName))
         done.exec_()
         pass
 

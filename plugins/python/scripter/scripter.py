@@ -29,7 +29,7 @@ class ScripterExtension(Extension):
         pass
 
     def createActions(self, window):
-        action = window.createAction("python_scripter", "Scripter")
+        action = window.createAction("python_scripter", i18n("Scripter"))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

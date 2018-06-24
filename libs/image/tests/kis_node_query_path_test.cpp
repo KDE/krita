@@ -20,7 +20,7 @@
 
 #include <QTest>
 
-#include "recorder/kis_node_query_path.h"
+#include "kis_node_query_path.h"
 #include <kis_node.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>

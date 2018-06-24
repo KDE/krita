@@ -31,10 +31,6 @@
 #include "kis_shape_tool_helper.h"
 #include "kis_figure_painting_tool_helper.h"
 
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_shape_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
 #include <KoCanvasController.h>
 #include <KoShapeStroke.h>
 
@@ -61,12 +57,6 @@ void KisToolRectangle::finishRect(const QRectF &rect)
 {
     if (rect.isNull() || !blockUntilOperationsFinished())
         return;
-
-    if (image()) {
-        KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Rectangle, rect);
-        setupPaintAction(&linePaintAction);
-        image()->actionRecorder()->addAction(linePaintAction);
-    }
 
     if (!currentNode()->inherits("KisShapeLayer")) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Rectangle"),

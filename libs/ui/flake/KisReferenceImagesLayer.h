@@ -32,7 +32,8 @@ public:
     KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image);
     KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs);
 
-    KUndo2Command * addReferenceImage(KisReferenceImage *referenceImage);
+    static KUndo2Command * addReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);
+    KUndo2Command * removeReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);
     QVector<KisReferenceImage*> referenceImages() const;
 
     QRectF boundingImageRect() const;
@@ -58,8 +59,9 @@ Q_SIGNALS:
 
 private:
     void signalUpdate(const QRectF &rect);
-    friend struct AddReferenceImageCommand;
-    friend struct ReferenceImagesCanvas;
+    friend struct AddReferenceImagesCommand;
+    friend struct RemoveReferenceImagesCommand;
+    friend class ReferenceImagesCanvas;
 };
 
 

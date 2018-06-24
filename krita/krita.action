@@ -1310,10 +1310,10 @@
     </Action>
     <Action name="KritaShape/KisToolLazyBrush">
       <icon></icon>
-      <text>Lazy Brush Tool</text>
+      <text>Colorize Mask Tool</text>
       <whatsThis></whatsThis>
-      <toolTip>Lazy Brush Tool</toolTip>
-      <iconText>Lazy Brush Tool</iconText>
+      <toolTip>Colorize Mask Tool</toolTip>
+      <iconText>Colorize Mask Tool</iconText>
       <shortcut></shortcut>
       <statusTip></statusTip>
     </Action>
@@ -1631,6 +1631,16 @@
       <whatsThis></whatsThis>
       <toolTip>Gradient editing</toolTip>
       <iconText>Gradient editing</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="ToolReferenceImages">
+      <icon></icon>
+      <text>Reference Images Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reference Images Tool</toolTip>
+      <iconText>Reference Images Tool</iconText>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

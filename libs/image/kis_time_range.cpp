@@ -40,14 +40,13 @@ QDebug operator<<(QDebug dbg, const KisTimeRange &r)
 void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive)
 {
     if (!node->visible()) return;
-    Q_FOREACH (const KisKeyframeChannel *channel, node->keyframeChannels()) {
-        if (exclusive) {
-            // Intersection
-            range &= channel->identicalFrames(time);
-        } else {
-            // Union
-            range |= channel->affectedFrames(time);
-        }
+
+    if (exclusive) {
+        // Intersection
+        range &= calculateNodeIdenticalFrames(node, time);
+    } else {
+        // Union
+        range |= calculateNodeAffectedFrames(node, time);
     }
 
     KisNodeSP child = node->firstChild();
@@ -55,6 +54,51 @@ void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, Ki
         calculateTimeRangeRecursive(child, time, range, exclusive);
         child = child->nextSibling();
     }
+}
+
+KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int time)
+{
+    KisTimeRange range = KisTimeRange::infinite(0);
+
+    const QMap<QString, KisKeyframeChannel*> channels =
+        node->keyframeChannels();
+
+    if (channels.isEmpty() ||
+        !channels.contains(KisKeyframeChannel::Content.id())) {
+
+        return range;
+    }
+
+    Q_FOREACH (const KisKeyframeChannel *channel, channels) {
+        // Intersection
+        range &= channel->identicalFrames(time);
+    }
+
+    return range;
+}
+
+KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int time)
+{
+    KisTimeRange range;
+
+    if (!node->visible()) return range;
+
+    const QMap<QString, KisKeyframeChannel*> channels =
+        node->keyframeChannels();
+
+    if (channels.isEmpty() ||
+        !channels.contains(KisKeyframeChannel::Content.id())) {
+
+        range = KisTimeRange::infinite(0);
+        return range;
+    }
+
+    Q_FOREACH (const KisKeyframeChannel *channel, channels) {
+        // Union
+        range |= channel->affectedFrames(time);
+    }
+
+    return range;
 }
 
 namespace KisDomUtils {

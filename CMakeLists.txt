@@ -69,11 +69,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "4.1.0-pre-alpha")
+set(KRITA_VERSION_STRING "4.2.0-pre-alpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 4)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 1)
+set(KRITA_STABLE_VERSION_MINOR 2)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -517,7 +517,7 @@ set_package_properties(GIF PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
 
-find_package(HEIF "1.2.0")
+find_package(HEIF "1.3.0")
 set_package_properties(HEIF PROPERTIES
     DESCRIPTION "Library for loading and saving heif files."
     URL "https://github.com/strukturag/libheif"

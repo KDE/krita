@@ -31,6 +31,9 @@ private Q_SLOTS:
 
     void testCircularGaussScalarMask();
     void testCircularGaussVectorMask();
+
+    void testCircularSoftScalarMask();
+    void testCircularSoftVectorMask();
 };
 
 #endif // KISMASKGENERATORBENCHMARK_H

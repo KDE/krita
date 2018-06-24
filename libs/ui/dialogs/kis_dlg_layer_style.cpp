@@ -76,6 +76,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     QWidget *page = new QWidget(this);
     wdgLayerStyles.setupUi(page);
     setMainWidget(page);
+    wdgLayerStyles.chkPreview->setVisible(false);
 
     connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(notifyGuiConfigChanged()));
 

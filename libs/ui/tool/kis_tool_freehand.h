@@ -33,11 +33,8 @@
 class KoPointerEvent;
 class KoCanvasBase;
 
-
-
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
-class KisRecordingAdapter;
 
 
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
@@ -83,7 +80,6 @@ protected:
 
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
-    KisRecordingAdapter* recordingAdapter() const;
     void resetHelper(KisToolFreehandHelper *helper);
 
 protected Q_SLOTS:
@@ -120,7 +116,6 @@ protected:
 private:
     KisPaintingInformationBuilder *m_infoBuilder;
     KisToolFreehandHelper *m_helper;
-    KisRecordingAdapter *m_recordingAdapter;
 
     QPointF m_initialGestureDocPoint;
     QPointF m_lastDocumentPoint;

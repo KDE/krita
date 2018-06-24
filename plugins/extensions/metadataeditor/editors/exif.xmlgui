@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <MetaDataEditor name="Exif" uiFile="exif.ui" icon="camera-photo">
     <EntryEditor editorName = "editBrightnessValue"
                 schemaUri = "http://ns.adobe.com/exif/1.0/"

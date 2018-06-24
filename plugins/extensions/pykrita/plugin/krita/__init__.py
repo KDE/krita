@@ -32,7 +32,7 @@ if sys.version_info[0] > 2:
     import builtins
 else:
     import __builtin__ as builtins
-builtins.i18n = lambda s: QCoreApplication.translate("PyKrita", s)
+builtins.i18n = Krita.krita_i18n
 builtins.Scripter = Krita.instance()
 builtins.Application = Krita.instance()
 builtins.Krita = Krita.instance()

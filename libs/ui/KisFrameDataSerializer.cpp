@@ -18,9 +18,11 @@
 #include "KisFrameDataSerializer.h"
 
 #include <cstring>
-#include <QTemporaryDir>
-#include "tiles3/swap/kis_lzf_compression.h"
 
+#include <QTemporaryDir>
+#include <QElapsedTimer>
+
+#include "tiles3/swap/kis_lzf_compression.h"
 
 struct KRITAUI_NO_EXPORT KisFrameDataSerializer::Private
 {
@@ -147,11 +149,6 @@ int KisFrameDataSerializer::saveFrame(const KisFrameDataSerializer::Frame &frame
     return frameId;
 }
 
-#include "../sdk/tests/testutil.h"
-#include <QElapsedTimer>
-
-TestUtil::MeasureAvgPortion CC(10);
-
 KisFrameDataSerializer::Frame KisFrameDataSerializer::loadFrame(int frameId, KisTextureTileInfoPoolSP pool)
 {
     KisLzfCompression compression;
@@ -227,9 +224,6 @@ KisFrameDataSerializer::Frame KisFrameDataSerializer::loadFrame(int frameId, Kis
     }
 
     file.close();
-
-    CC.addVal(compressionTime / 1000);
-    CC.addTotal(loadingTime.nsecsElapsed() / 1000);
 
     return frame;
 }

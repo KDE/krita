@@ -572,7 +572,7 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
     QString formattedBrushName = resource->name().replace("_", " ");
 
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
-    m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(currentBrushEngineName.append(" ").append("Engine"));
+    m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(i18nc("%1 is the name of a brush engine", "%1 Engine", currentBrushEngineName));
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);
     m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name()); // use file name
 

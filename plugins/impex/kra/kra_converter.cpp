@@ -285,7 +285,6 @@ bool KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
 
     m_kraLoader = new KisKraLoader(m_doc, syntaxVersion);
 
-    // Legacy from the multi-image .kra file period.
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {

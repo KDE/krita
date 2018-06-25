@@ -10,6 +10,9 @@
 #include <boost/functional/hash.hpp>
 
 template <class T>
+class KisTileHashTableIteratorTraits2;
+
+template <class T>
 class KisTileHashTableTraits2
 {
     static constexpr bool isInherited = std::is_convertible<T*, KisShared*>::value;
@@ -20,54 +23,9 @@ public:
     typedef KisSharedPtr<T> TileTypeSP;
     typedef KisWeakSharedPtr<T> TileTypeWSP;
 
-    KisTileHashTableTraits2();
     KisTileHashTableTraits2(KisMementoManager *mm);
     KisTileHashTableTraits2(const KisTileHashTableTraits2<T> &ht, KisMementoManager *mm);
     ~KisTileHashTableTraits2();
-
-    void insert(quint32 key, TileTypeSP value)
-    {
-        TileTypeSP::ref(&value, value.data());
-        TileType *result = m_map.assign(key, value.data());
-
-        if (result) {
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
-        } else {
-            m_numTiles.fetchAndAddRelaxed(1);
-        }
-
-        if (!m_map.migrationInProcess()) {
-            m_map.getGC().update();
-        }
-    }
-
-    bool erase(quint32 key)
-    {
-        bool wasDeleted = false;
-        TileType *result = m_map.erase(key);
-
-        if (result) {
-            wasDeleted = true;
-            m_numTiles.fetchAndSubRelaxed(1);
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
-        }
-
-        if (!m_map.migrationInProcess()) {
-            m_map.getGC().update();
-        }
-
-        return wasDeleted;
-    }
-
-    TileTypeSP get(quint32 key)
-    {
-        TileTypeSP result = m_map.get(key);
-        if (!m_map.migrationInProcess()) {
-            m_map.getGC().update();
-        }
-
-        return result;
-    }
 
     bool isEmpty()
     {
@@ -122,14 +80,9 @@ public:
     void debugPrintInfo();
     void debugMaxListLength(qint32 &min, qint32 &max);
 
-    ConcurrentMap<quint32, TileType*> &map()
-    {
-        return m_map;
-    }
+    friend class KisTileHashTableIteratorTraits2<T>;
 
 private:
-    static inline quint32 calculateHash(qint32 col, qint32 row);
-
     struct MemoryReclaimer {
         MemoryReclaimer(TileType *data) : d(data) {}
 
@@ -144,12 +97,64 @@ private:
         TileType *d;
     };
 
+    inline quint32 calculateHash(qint32 col, qint32 row)
+    {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, col);
+        boost::hash_combine(seed, row);
+        return seed;
+    }
+
+    inline void insert(quint32 key, TileTypeSP value)
+    {
+        TileTypeSP::ref(&value, value.data());
+        TileType *result = m_map.assign(key, value.data());
+
+        if (result) {
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
+        } else {
+            m_numTiles.fetchAndAddRelaxed(1);
+        }
+
+        if (!m_map.migrationInProcess()) {
+            m_map.getGC().update();
+        }
+    }
+
+    inline bool erase(quint32 key)
+    {
+        bool wasDeleted = false;
+        TileType *result = m_map.erase(key);
+
+        if (result) {
+            wasDeleted = true;
+            m_numTiles.fetchAndSubRelaxed(1);
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
+        }
+
+        if (!m_map.migrationInProcess()) {
+            m_map.getGC().update();
+        }
+
+        return wasDeleted;
+    }
+
+    inline TileTypeSP get(quint32 key)
+    {
+        TileTypeSP result = m_map.get(key);
+
+        if (!m_map.migrationInProcess()) {
+            m_map.getGC().update();
+        }
+
+        return result;
+    }
+
 private:
     ConcurrentMap<quint32, TileType*> m_map;
-    QAtomicInt m_numTiles;
     QReadWriteLock m_rwLock;
-    KisLocklessStack<TileType*> m_stack;
 
+    QAtomicInt m_numTiles;
     KisTileData *m_defaultTileData;
     KisMementoManager *m_mementoManager;
 };
@@ -164,7 +169,7 @@ public:
 
     KisTileHashTableIteratorTraits2(KisTileHashTableTraits2<T> *ht) : m_ht(ht)
     {
-        m_iter.setMap(m_ht->map());
+        m_iter.setMap(m_ht->m_map);
     }
 
     void next()
@@ -198,20 +203,13 @@ public:
 
 private:
     KisTileHashTableTraits2<T> *m_ht;
-    typename ConcurrentMap<quint32, TileType*>::Iterator m_iter;
+    Iterator m_iter;
 };
 
 template <class T>
-KisTileHashTableTraits2<T>::KisTileHashTableTraits2()
-    : m_numTiles(0), m_rwLock(QReadWriteLock::NonRecursive), m_defaultTileData(0), m_mementoManager(0)
-{
-}
-
-template <class T>
 KisTileHashTableTraits2<T>::KisTileHashTableTraits2(KisMementoManager *mm)
-    : KisTileHashTableTraits2()
+    : m_numTiles(0), m_defaultTileData(0), m_mementoManager(mm)
 {
-    m_mementoManager = mm;
 }
 
 template <class T>
@@ -362,15 +360,6 @@ void KisTileHashTableTraits2<T>::debugPrintInfo()
 template <class T>
 void KisTileHashTableTraits2<T>::debugMaxListLength(qint32 &min, qint32 &max)
 {
-}
-
-template <class T>
-quint32 KisTileHashTableTraits2<T>::calculateHash(qint32 col, qint32 row)
-{
-    std::size_t seed = 0;
-    boost::hash_combine(seed, col);
-    boost::hash_combine(seed, row);
-    return seed;
 }
 
 typedef KisTileHashTableTraits2<KisTile> KisTileHashTable;

@@ -71,7 +71,6 @@ public:
         if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
             QVector<Action> actions;
             actions.swap(m_actions);
-            m_actions.clear();
             m_isProcessing.clear(std::memory_order_release);
 
             for (auto &action : actions) {

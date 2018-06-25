@@ -14,7 +14,6 @@ ecm_add_tests(
     kis_tiled_data_manager_test.cpp
     kis_low_memory_tests.cpp
     kis_lockless_stack_test.cpp
-    kis_lock_free_map_test.cpp
     NAME_PREFIX "krita-image-tiles3-"
     LINK_LIBRARIES kritaimage Qt5::Test)
 

@@ -25,13 +25,13 @@ public:
     KisTileHashTableTraits2(const KisTileHashTableTraits2<T> &ht, KisMementoManager *mm);
     ~KisTileHashTableTraits2();
 
-    TileTypeSP insert(quint32 key, TileTypeSP value)
+    void insert(quint32 key, TileTypeSP value)
     {
         TileTypeSP::ref(&value, value.data());
-        TileTypeSP result = m_map.assign(key, value.data());
+        TileType *result = m_map.assign(key, value.data());
 
-        if (result.data()) {
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result.data()));
+        if (result) {
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
         } else {
             m_numTiles.fetchAndAddRelaxed(1);
         }
@@ -39,29 +39,29 @@ public:
         if (!m_map.migrationInProcess()) {
             m_map.getGC().update();
         }
-
-        return result;
     }
 
-    TileTypeSP erase(quint32 key)
+    bool erase(quint32 key)
     {
-        TileTypeSP result = m_map.erase(key);
+        bool wasDeleted = false;
+        TileType *result = m_map.erase(key);
 
         if (result) {
+            wasDeleted = true;
             m_numTiles.fetchAndSubRelaxed(1);
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result.data()));
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
         }
 
         if (!m_map.migrationInProcess()) {
             m_map.getGC().update();
         }
 
-        return result;
+        return wasDeleted;
     }
 
     TileTypeSP get(quint32 key)
     {
-        TileTypeSP result(m_map.get(key));
+        TileTypeSP result = m_map.get(key);
         if (!m_map.migrationInProcess()) {
             m_map.getGC().update();
         }
@@ -135,7 +135,7 @@ private:
 
         void destroy()
         {
-            TileTypeSP::deref(reinterpret_cast<TileTypeSP *>(this), d);
+            TileTypeSP::deref(reinterpret_cast<TileTypeSP*>(this), d);
             this->MemoryReclaimer::~MemoryReclaimer();
             delete this;
         }
@@ -230,14 +230,15 @@ template <class T>
 KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 {
     clear();
-    m_map.getGC().flush();
+    m_map.getGC().update();
     setDefaultTileData(0);
 }
 
 template<class T>
 bool KisTileHashTableTraits2<T>::tileExists(qint32 col, qint32 row)
 {
-    return get(calculateHash(col, row)) != nullptr;
+    quint32 idx = calculateHash(col, row);
+    return get(idx);
 }
 
 template <class T>
@@ -261,15 +262,15 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
             tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
         }
         TileTypeSP::ref(&tile, tile.data());
-        TileTypeSP result = mutator.exchangeValue(tile.data());
+        TileType *result = mutator.exchangeValue(tile.data());
 
-        if (result.data()) {
-            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result.data()));
+        if (result) {
+            m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
         } else {
+            newTile = true;
             m_numTiles.fetchAndAddRelaxed(1);
         }
 
-        newTile = true;
         tile = m_map.get(idx);
     } else {
         tile = mutator.getValue();
@@ -286,7 +287,7 @@ template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getReadOnlyTileLazy(qint32 col, qint32 row, bool &existingTile)
 {
     quint32 idx = calculateHash(col, row);
-    TileTypeSP tile(m_map.get(idx));
+    TileTypeSP tile = m_map.get(idx);
     existingTile = tile;
 
     if (!existingTile) {
@@ -318,7 +319,7 @@ template <class T>
 bool KisTileHashTableTraits2<T>::deleteTile(qint32 col, qint32 row)
 {
     quint32 idx = calculateHash(col, row);
-    return erase(idx) != 0;
+    return erase(idx);
 }
 
 template<class T>

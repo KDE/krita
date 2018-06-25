@@ -95,6 +95,7 @@ set(kritawidgets_LIB_SRCS
 
     KisDlgInternalColorSelector.cpp
     KisPaletteListWidget.cpp
+    KisPaletteListWidget_p.cpp
 
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp

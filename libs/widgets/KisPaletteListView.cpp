@@ -13,15 +13,12 @@ public:
         , m_view(view)
     { }
     ~Private()
-    {
-        delete model;
-        delete delegate;
-    }
+    { }
 public:
-    QPointer<KisPaletteListModel> model;
-    QPointer<KisPaletteListDelegate> delegate;
+    QScopedPointer<KisPaletteListModel> model;
+    QScopedPointer<KisPaletteListDelegate> delegate;
 private:
-    KisPaletteListView *m_view;
+    QPointer<KisPaletteListView> m_view;
 };
 
 KisPaletteListView::~KisPaletteListView()

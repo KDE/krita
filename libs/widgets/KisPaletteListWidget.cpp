@@ -4,34 +4,9 @@
 
 #include <kis_icon.h>
 
-#include "KisPaletteListWidget.h"
-#include "KoResourceItemChooser.h"
-#include "KoResourceServer.h"
-#include "KoResourceServerAdapter.h"
-#include "KoResourceServerProvider.h"
-#include "KoColorSet.h"
 #include <ui_WdgPaletteListWidget.h>
-
-struct KisPaletteListWidget::Private
-{
-    Private(KisPaletteListWidget *a_c)
-        : c(a_c)
-        , rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
-        , skeletonWidget(new KoResourceItemChooser(rAdapter, a_c))
-    {
-        skeletonWidget->hide();
-    }
-    ~Private()
-    { }
-    QPointer<KisPaletteListWidget> c;
-    QSharedPointer<KoResourceServerAdapter<KoColorSet> > rAdapter;
-    /**
-     * @brief
-     *  widget that holds operations
-     * in contrary, palette chooser itself mainly holds the GUI
-     **/
-    QScopedPointer<KoResourceItemChooser> skeletonWidget;
-};
+#include "KisPaletteListWidget.h"
+#include "KisPaletteListWidget_p.h"
 
 KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     : QWidget(parent)
@@ -44,6 +19,8 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->bnEdit->setIcon(KisIconUtils::loadIcon("edit-rename"));
     m_ui->bnImport->setIcon(KisIconUtils::loadIcon("document-import"));
     m_ui->bnExport->setIcon(KisIconUtils::loadIcon("document-export"));
+    m_ui->tableViewPalette->setItemDelegate(m_d->delegate.data());
+    m_ui->tableViewPalette->setModel(m_d->model.data());
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()

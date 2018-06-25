@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QListView" name="listViewPalette"/>
+    <widget class="KoResourceItemView" name="tableViewPalette"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -79,6 +79,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KoResourceItemView</class>
+   <extends>QTableView</extends>
+   <header>KoResourceItemView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -236,6 +236,7 @@ public:
         , lastMod(firstMod)
         , nserver(new KisNameServer(1))
         , imageIdleWatcher(2000 /*ms*/)
+        , globalAssistantsColor(KisConfig().defaultAssistantsColor())
         , savingLock(&savingMutex)
         , batchMode(false)
     {
@@ -271,6 +272,7 @@ public:
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
     {
+        // TODO: clone assistants
     }
 
     ~Private() {

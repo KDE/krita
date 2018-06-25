@@ -109,12 +109,11 @@ public:
     /// uncache all assistants
     void uncache();
 
-    /// retrieves the assistants color specified in the tool options
-    /// all assistants will share the same color
-    QColor globalAssistantsColor();
-
     int handleSize();
     void setHandleSize(int handleSize);
+
+    QColor globalAssistantsColor();
+    void setGlobalAssistantsColor(QColor color);
 
 Q_SIGNALS:
     void assistantChanged();
@@ -127,7 +126,6 @@ public Q_SLOTS:
 
     /// toggles whether there will be a preview of the assistant result when painting
     void toggleOutlineVisible();
-    void setGlobalAssistantsColor(QColor color);
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 

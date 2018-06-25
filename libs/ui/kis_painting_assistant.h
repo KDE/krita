@@ -114,10 +114,7 @@ public:
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 
-    /// grabs the assistant color/opacity specified from the tool options
-    /// each assistant might have to use this differently, so just save a reference
-    void setAssistantGlobalColor(QColor color);
-    QColor assistantsGlobalColor();
+    QColor effectiveAssistantColor() const;
 
     /// should this assistant use a custom color for the display? global color will be used if this is false
     bool useCustomColor();
@@ -126,6 +123,8 @@ public:
     /// getter and setter for assistant's custom color
     void setAssistantCustomColor(QColor color);
     QColor assistantCustomColor();
+
+    void setAssistantGlobalColorCache(const QColor &color);
 
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);

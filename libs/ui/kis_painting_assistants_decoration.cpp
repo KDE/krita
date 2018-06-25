@@ -42,8 +42,7 @@ struct KisPaintingAssistantsDecoration::Private {
         , snapOnlyOneAssistant(true)
         , firstAssistant(0)
         , aFirstStroke(false)
-        , m_globalAssistantsColor(QColor(176, 176, 176, 255)),
-          m_handleSize(14)
+        , m_handleSize(14)
     {}
 
     bool assistantVisible;
@@ -52,7 +51,6 @@ struct KisPaintingAssistantsDecoration::Private {
     KisPaintingAssistantSP firstAssistant;
     KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
-    QColor m_globalAssistantsColor;
     bool m_isEditingAssistants = false;
     bool m_outlineVisible = false;
     int m_handleSize; // size of editor handles on assistants
@@ -92,6 +90,7 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
     if (assistants.contains(assistant)) return;
 
     assistants.append(assistant);
+    assistant->setAssistantGlobalColorCache(view()->document()->assistantsGlobalColor());
 
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
@@ -208,8 +207,6 @@ void KisPaintingAssistantsDecoration::drawDecoration(QPainter& gc, const QRectF&
     }
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-
-        assistant->setAssistantGlobalColor(globalAssistantsColor());
         assistant->drawAssistant(gc, updateRect, converter, true, canvas, assistantVisibility(), d->m_outlineVisible);
 
         if (isEditingAssistants()) {
@@ -229,7 +226,7 @@ void KisPaintingAssistantsDecoration::drawHandles(KisPaintingAssistantSP assista
 {
         QTransform initialTransform = converter->documentToWidgetTransform();
 
-        QColor colorToPaint = assistant->useCustomColor() ? assistant->assistantCustomColor() : assistant->assistantsGlobalColor();
+        QColor colorToPaint = assistant->effectiveAssistantColor();
 
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, assistant->handles()) {
 
@@ -354,18 +351,21 @@ void KisPaintingAssistantsDecoration::toggleOutlineVisible()
     setOutlineVisible(!outlineVisibility());
 }
 
-QColor KisPaintingAssistantsDecoration::globalAssistantsColor() {
-    return d->m_globalAssistantsColor;
+QColor KisPaintingAssistantsDecoration::globalAssistantsColor()
+{
+    return view()->document()->assistantsGlobalColor();
 }
 
 void KisPaintingAssistantsDecoration::setGlobalAssistantsColor(QColor color)
 {
-    d->m_globalAssistantsColor = color;
-
-
     // view()->document() is referenced multiple times in this class
     // it is used to later store things in the KRA file when saving.
     view()->document()->setAssistantsGlobalColor(color);
+
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+        assistant->setAssistantGlobalColorCache(color);
+    }
+
     uncache();
 }
 

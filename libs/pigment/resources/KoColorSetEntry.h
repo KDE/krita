@@ -32,12 +32,13 @@ public:
 
 public:
     QString name() const { return m_name; }
-    void setName(const QString &name) { m_name = name; }
     QString id() const { return m_id; }
-    void setId(const QString &id) { m_id = id; }
     KoColor color() const { return m_color; }
-    void setColor(const KoColor &color) { m_color = color; }
     bool spotColor() const { return m_spotColor; }
+
+    void setName(const QString &name) { m_name = name; }
+    void setId(const QString &id) { m_id = id; }
+    void setColor(const KoColor &color) { m_color = color; }
     void setSpotColor(bool spotColor) { m_spotColor = spotColor; }
 
 public:

@@ -255,8 +255,7 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
-
-bool KisResourceCacheDb::addResource(KoResourceSP resource)
+bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, KoResourceSP resource)
 {
     bool r = true;
 
@@ -270,7 +269,10 @@ bool KisResourceCacheDb::addResource(KoResourceSP resource)
         return false;
     }
 
+    // Check whether it already exists
 
+
+    // Insert it
 
     return r;
 }
@@ -281,7 +283,7 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString fold
     while(iter.hasNext()) {
         iter.next();
         KoResourceSP res = iter.resource();
-        if (!addResource(res)) {
+        if (!addResource(storage, res)) {
             qWarning() << "Could not add resource" << res->filename() << "to the database";
         }
     }

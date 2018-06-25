@@ -30,20 +30,23 @@ void KisPaletteListWidget::Private::Delegate::paint(QPainter * painter,
     KoResource* resource = static_cast<KoResource*>(index.internalPointer());
     KoColorSet* colorSet = static_cast<KoColorSet*>(resource);
 
+    QRect previewRect(option.rect.x() + 2,
+                      option.rect.y() + 2,
+                      option.rect.height() - 4,
+                      option.rect.height() - 4);
+
+    painter->drawImage(previewRect, colorSet->image());
+
     if (option.state & QStyle::State_Selected) {
         painter->fillRect(option.rect, option.palette.highlight());
+        painter->drawImage(previewRect, colorSet->image());
         painter->setPen(option.palette.highlightedText().color());
-    }
-    else {
+    } else {
         painter->setBrush(option.palette.text().color());
     }
-    painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, colorSet->name());
-
-    int size = 7;
-    for (quint32 i = 0; i < colorSet->nColors() && i*size < (quint32)option.rect.width(); i++) {
-        QRect rect(option.rect.x() + i*size, option.rect.y() + option.rect.height() - size, size, size);
-        painter->fillRect(rect, colorSet->getColorGlobal(i).color().toQColor());
-    }
+    painter->drawText(option.rect.x() + previewRect.width() + 5,
+                      option.rect.y() + painter->fontMetrics().ascent() + 5,
+                      colorSet->name());
 
     painter->restore();
 }

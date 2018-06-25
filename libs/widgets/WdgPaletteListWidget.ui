@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="KoResourceItemView" name="tableViewPalette"/>
+    <widget class="KoResourceItemView" name="viewPalette"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

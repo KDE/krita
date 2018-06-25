@@ -19,8 +19,9 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->bnEdit->setIcon(KisIconUtils::loadIcon("edit-rename"));
     m_ui->bnImport->setIcon(KisIconUtils::loadIcon("document-import"));
     m_ui->bnExport->setIcon(KisIconUtils::loadIcon("document-export"));
-    m_ui->tableViewPalette->setItemDelegate(m_d->delegate.data());
-    m_ui->tableViewPalette->setModel(m_d->model.data());
+    m_ui->viewPalette->setItemDelegate(m_d->delegate.data());
+    m_ui->viewPalette->setModel(m_d->model.data());
+    m_ui->viewPalette->verticalHeader()->setDefaultSectionSize(30); // set row height
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()

@@ -42,6 +42,8 @@ struct KisPaintingAssistantsDecoration::Private {
         , snapOnlyOneAssistant(true)
         , firstAssistant(0)
         , aFirstStroke(false)
+        , m_globalAssistantsColor(QColor(176, 176, 176, 255)),
+          m_handleSize(14)
     {}
 
     bool assistantVisible;
@@ -50,10 +52,10 @@ struct KisPaintingAssistantsDecoration::Private {
     KisPaintingAssistantSP firstAssistant;
     KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
-    QColor m_globalAssistantsColor = QColor(176, 176, 176, 255); // kis_assistant_tool has same default color specified
+    QColor m_globalAssistantsColor;
     bool m_isEditingAssistants = false;
     bool m_outlineVisible = false;
-    int m_handleSize = 14; // size of editor handles on assistants
+    int m_handleSize; // size of editor handles on assistants
 
     // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
     // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
@@ -359,6 +361,11 @@ QColor KisPaintingAssistantsDecoration::globalAssistantsColor() {
 void KisPaintingAssistantsDecoration::setGlobalAssistantsColor(QColor color)
 {
     d->m_globalAssistantsColor = color;
+
+
+    // view()->document() is referenced multiple times in this class
+    // it is used to later store things in the KRA file when saving.
+    view()->document()->setAssistantsGlobalColor(color);
     uncache();
 }
 
@@ -474,21 +481,3 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
 
 }
-
-QString KisPaintingAssistantsDecoration::qColorToQString(QColor color)
-{
-    // color channels will usually have 0-255
-    QString customColor = QString::number(color.red()).append(",")
-                         .append(QString::number(color.blue())).append(",")
-                         .append(QString::number(color.green())).append(",")
-                         .append(QString::number(color.alpha()));
-
-    return customColor;
-}
-
-QColor KisPaintingAssistantsDecoration::qStringToQColor(QString colorString)
-{
-    QStringList colorComponents = colorString.split(',');
-    return QColor(colorComponents[0].toInt(), colorComponents[1].toInt(), colorComponents[2].toInt(), colorComponents[3].toInt());
-}
-

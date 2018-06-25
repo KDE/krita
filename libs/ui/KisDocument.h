@@ -590,6 +590,12 @@ public:
     /// @replace the current list of assistants with @param value
     void setAssistants(const QList<KisPaintingAssistantSP> &value);
 
+
+    void setAssistantsGlobalColor(QColor color);
+    QColor assistantsGlobalColor();
+
+
+
     /**
      * Get existing reference images layer or null if none exists.
      */

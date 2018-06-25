@@ -116,10 +116,6 @@ public:
     int handleSize();
     void setHandleSize(int handleSize);
 
-    /// helper functions when converting between QColor when saving to XML
-    static QString qColorToQString(QColor color);
-    static QColor qStringToQColor(QString colorString);
-
 Q_SIGNALS:
     void assistantChanged();
     void selectedAssistantChanged();

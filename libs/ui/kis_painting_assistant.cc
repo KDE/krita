@@ -22,6 +22,7 @@
 #include "kis_painting_assistant.h"
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
+#include "kis_dom_utils.h"
 #include <kis_canvas2.h>
 #include "kis_tool.h"
 
@@ -365,7 +366,7 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeAttribute("type",d->id);
     xml.writeAttribute("active", QString::number(d->isSnappingActive));
     xml.writeAttribute("useCustomColor", QString::number(d->useCustomColor));
-    xml.writeAttribute("customColor",  KisPaintingAssistantsDecoration::qColorToQString(d->assistantCustomColor));
+    xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(d->assistantCustomColor));
 
 
 
@@ -420,13 +421,13 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                         usingColor = true;
                     }
 
+
                     setUseCustomColor(usingColor);
                 }
 
                 if ( xml.attributes().hasAttribute("customColor")) {
                     QStringRef customColor = xml.attributes().value("customColor");
-
-                    setAssistantCustomColor( KisPaintingAssistantsDecoration::qStringToQColor(customColor.toString()) );
+                    setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
                 }
 

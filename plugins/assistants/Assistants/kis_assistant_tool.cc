@@ -29,6 +29,7 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <KColorButton>
+#include "kis_dom_utils.h"
 #include <QMessageBox>
 
 #include <KoIcon.h>
@@ -74,12 +75,13 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_internalMode = MODE_CREATION;
     m_assistantHelperYOffset = 10;
 
-    m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
+
     m_handleSize = 17;
+    m_canvas->paintingAssistantsDecoration()->setHandleSize(m_handleSize);
+
 
     if (m_optionsWidget) {
         m_canvas->paintingAssistantsDecoration()->deselectAssistant();
-
         updateToolOptionsUI();
     }
 
@@ -768,7 +770,8 @@ void KisAssistantTool::loadAssistants()
 
                if ( xml.attributes().hasAttribute("useCustomColor")) {
                    QStringRef customColor = xml.attributes().value("customColor");
-                   assistant->setAssistantCustomColor( KisPaintingAssistantsDecoration::qStringToQColor(customColor.toString()) );
+                   assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
+
                }
            }
 
@@ -832,7 +835,7 @@ void KisAssistantTool::saveAssistants()
     QXmlStreamWriter xml(&data);
     xml.writeStartDocument();
     xml.writeStartElement("paintingassistant");
-    xml.writeAttribute("color", KisPaintingAssistantsDecoration::qColorToQString(m_canvas->paintingAssistantsDecoration()->globalAssistantsColor()) ); // global color if no custom color used
+    xml.writeAttribute("color", KisDomUtils::qColorToQString(m_canvas->paintingAssistantsDecoration()->globalAssistantsColor()) ); // global color if no custom color used
 
 
     xml.writeStartElement("handles");
@@ -855,7 +858,8 @@ void KisAssistantTool::saveAssistants()
         xml.writeStartElement("assistant");
         xml.writeAttribute("type", assistant->id());
         xml.writeAttribute("useCustomColor", QString::number(assistant->useCustomColor()));
-        xml.writeAttribute("customColor",  KisPaintingAssistantsDecoration::qColorToQString(assistant->assistantCustomColor()));
+        xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(assistant->assistantCustomColor()));
+
 
 
         // custom assistant properties like angle density on vanishing point
@@ -923,11 +927,22 @@ QWidget *KisAssistantTool::createOptionWidget()
 
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
 
+        // initialize UI elements with existing data if possible
+        if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
+             QColor newColor = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor();
+             m_options.assistantsColor->setColor(newColor); // grey default for all assistants
+             int startingAlpha = (float)newColor.alpha()/255.0 * 100;
+             m_options.assistantsGlobalOpacitySlider->setValue(startingAlpha);
 
-        m_options.assistantsColor->setColor(QColor(176, 176, 176, 255)); // grey default for all assistants
-        m_options.assistantsGlobalOpacitySlider->setValue(100); // 100%
+        } else {
+            m_options.assistantsColor->setColor(QColor(176, 176, 176, 255)); // grey default for all assistants
+            m_options.assistantsGlobalOpacitySlider->setValue(100); // 100%
+        }
+
         m_options.assistantsGlobalOpacitySlider->setPrefix(i18n("Opacity: "));
         m_options.assistantsGlobalOpacitySlider->setSuffix(" %");
+
+
         m_assistantsGlobalOpacity = m_options.assistantsGlobalOpacitySlider->value()*0.01;
 
 
@@ -940,11 +955,6 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.useCustomAssistantColor, SIGNAL(clicked(bool)), this, SLOT(slotUpdateCustomColor()));
         connect(m_options.customAssistantColorButton, SIGNAL(changed(QColor)), this, SLOT(slotUpdateCustomColor()));
         connect(m_options.customColorOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotcustomOpacityChanged()));
-
-
-        QColor newColor = m_options.assistantsColor->color();
-        newColor.setAlpha(m_assistantsGlobalOpacity*255);
-        m_canvas->paintingAssistantsDecoration()->setGlobalAssistantsColor(newColor);
 
         m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
         m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));

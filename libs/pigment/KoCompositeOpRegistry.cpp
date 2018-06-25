@@ -66,6 +66,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[2], KoID(COMPOSITE_PIN_LIGHT   , i18n("Pin Light")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_VIVID_LIGHT , i18n("Vivid Light")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_HARD_LIGHT  , i18n("Hard Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_PEGTOP_DELPHI, i18n("Soft Light (Pegtop-Delphi)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")));
     m_map.insert(m_categories[2], KoID(COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light")));
@@ -76,6 +77,9 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[3], KoID(COMPOSITE_ADDITIVE_SUBTRACTIVE, i18n("Additive Subtractive")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EXCLUSION            , i18n("Exclusion")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_NEGATION             , i18n("Negation")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_PHOENIX              , i18n("Phoenix")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_SIGNED_DIFFERENCE    , i18n("Signed Difference")));
 
     m_map.insert(m_categories[4], KoID(COMPOSITE_OVER            , i18n("Normal")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_BEHIND          , i18n("Behind")));
@@ -93,6 +97,9 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[4], KoID(COMPOSITE_DESTINATION_ATOP, i18n("Destination Atop")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_DESTINATION_IN  , i18n("Destination In")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_OVERLAY    , i18n("Hard Overlay")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_INTERPOLATE     , i18n("Interpolate")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_PENUMBRAA       , i18n("Penumbra A")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_PENUMBRAB       , i18n("Penumbra B")));
 
     m_map.insert(m_categories[5], KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap")));
     m_map.insert(m_categories[5], KoID(COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Map")));
@@ -143,6 +150,10 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[10], KoID(COMPOSITE_GLOW             , i18n("Glow")));
     m_map.insert(m_categories[10], KoID(COMPOSITE_FREEZE           , i18n("Freeze")));
     m_map.insert(m_categories[10], KoID(COMPOSITE_HEAT             , i18n("Heat")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_GLEAT            , i18n("Gleat")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_HELOW            , i18n("Helow")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_REEZE            , i18n("Reeze")));
+    m_map.insert(m_categories[10], KoID(COMPOSITE_FRECT            , i18n("Frect")));
 }
 
 const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()

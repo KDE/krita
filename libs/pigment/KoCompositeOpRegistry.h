@@ -53,6 +53,9 @@ const QString COMPOSITE_DIVIDE                = "divide";
 const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
 const QString COMPOSITE_ADDITIVE_SUBTRACTIVE  = "additive_subtractive";
+const QString COMPOSITE_NEGATION              = "negation";
+const QString COMPOSITE_PHOENIX               = "phoenix";
+const QString COMPOSITE_SIGNED_DIFFERENCE     = "signed_difference";
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";
 const QString COMPOSITE_ALLANON       = "allanon";
@@ -66,6 +69,9 @@ const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
 const QString COMPOSITE_GREATER       = "greater";
 const QString COMPOSITE_HARD_OVERLAY  = "hard overlay";
+const QString COMPOSITE_INTERPOLATE   = "interpolate";
+const QString COMPOSITE_PENUMBRAA     = "penumbra a";
+const QString COMPOSITE_PENUMBRAB     = "penumbra b";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.
@@ -77,6 +83,7 @@ const QString COMPOSITE_DODGE        = "dodge";
 const QString COMPOSITE_LINEAR_DODGE = "linear_dodge";
 const QString COMPOSITE_SCREEN       = "screen";
 const QString COMPOSITE_HARD_LIGHT   = "hard_light";
+const QString COMPOSITE_SOFT_LIGHT_PEGTOP_DELPHI = "soft_light_pegtop_delphi";
 const QString COMPOSITE_SOFT_LIGHT_PHOTOSHOP = "soft_light";
 const QString COMPOSITE_SOFT_LIGHT_SVG  = "soft_light_svg";
 const QString COMPOSITE_GAMMA_LIGHT  = "gamma_light";
@@ -142,6 +149,10 @@ const QString COMPOSITE_REFLECT   = "reflect";
 const QString COMPOSITE_GLOW      = "glow";
 const QString COMPOSITE_FREEZE    = "freeze";
 const QString COMPOSITE_HEAT      = "heat";
+const QString COMPOSITE_GLEAT     = "gleat";
+const QString COMPOSITE_HELOW     = "helow";
+const QString COMPOSITE_REEZE     = "reeze";
+const QString COMPOSITE_FRECT     = "frect";
 
 
 

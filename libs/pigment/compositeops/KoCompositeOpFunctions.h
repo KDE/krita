@@ -457,13 +457,13 @@ template<class T>
 inline T cfGlow(T src, T dst) {
     using namespace Arithmetic;
         // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
-    
-    if(dst == unitValue<T>()) {
-        return unitValue<T>();
-    }
 
     if(src == zeroValue<T>()) {
         return zeroValue<T>();
+    }
+    
+    if(dst == unitValue<T>()) {
+        return unitValue<T>();
     }
     
     return clamp<T>(div(mul(src, src), inv(dst)));
@@ -473,31 +473,158 @@ template<class T>
 inline T cfReflect(T src, T dst) {
     using namespace Arithmetic;
     
-    return (cfGlow(dst,src)); 
-}
-
-template<class T>
-inline T cfHeat(T src, T dst) {
-    using namespace Arithmetic;
-            // Heat, and Freeze only works properly on 8-bit images. It does not work properly on any other color depth. For now, if Heat and Freeze are proven useful for 8-bit painting, then there should be some way of solving this issue.
+    if(src == unitValue<T>()) {
+        return unitValue<T>();
+    }
     
     if(dst == zeroValue<T>()) {
         return zeroValue<T>();
     }
     
-    if(src == unitValue<T>()) {
+    
+    return clamp<T>(div(mul(dst, dst), inv(src)));
+}
+
+template<class T>
+inline T cfHeat(T src, T dst) {
+    using namespace Arithmetic;
+    
+    if(dst == unitValue<T>()) {
         return unitValue<T>();
     }
+
+    if(src == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
     
-    return inv(clamp<T>(div(mul(inv(src), inv(src)),dst)));
+    return inv(cfGlow(inv(src),inv(dst)));
+    
 }
 
 template<class T>
 inline T cfFreeze(T src, T dst) {
     using namespace Arithmetic;
     
-    return clamp<T>(cfHeat(dst,src)); 
+    return (cfHeat(dst,src)); 
 }
 
+template<class T>
+inline T cfHelow(T src, T dst) {
+    using namespace Arithmetic;
+        // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
+    
+    if(cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
+        return cfHeat(src,dst);
+    }
+    
+    return (cfGlow(src,dst));
+}
+
+template<class T>
+inline T cfFrect(T src, T dst) {
+    using namespace Arithmetic;
+    
+    if(cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
+        return cfFreeze(src,dst);
+    }
+    
+    return (cfReflect(src,dst));
+}
+
+template<class T>
+inline T cfGleat(T src, T dst) {
+    using namespace Arithmetic;
+        // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
+    
+    if(dst == unitValue<T>()) {
+        return unitValue<T>();
+    }    
+    
+    if(cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
+        return cfGlow(src,dst);
+    }
+    
+    return (cfHeat(src,dst));
+}
+
+template<class T>
+inline T cfReeze(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return (cfGleat(dst,src)); 
+}
+
+template<class T>
+inline T cfInterpolate(T src, T dst) {
+    using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+                    // Interpolate does not work on integer images due to cos (pi*src), and cos (pi*dst). Another issue to be solved.
+
+    composite_type half = cfAllanon(unitValue<T>(),zeroValue<T>());
+    composite_type four = cfAllanon(cfAllanon(unitValue<T>(),zeroValue<T>()),zeroValue<T>());
+    composite_type seta = cos(pi*src);
+    composite_type setb = cos(pi*dst);
+    
+    return clamp<T>(half - seta * four - setb * four);
+}
+
+
+template<class T>
+inline T cfPenumbraB(T src, T dst) {
+    using namespace Arithmetic;
+    
+        if(dst == unitValue<T>()) {
+        return unitValue<T>();
+    }    
+    if(dst+src < unitValue<T>()) {
+        return (cfColorDodge(dst,src)/2);
+    }
+        if(src == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+    
+    return inv(clamp<T>(div(inv(dst),src)/2));
+}
+
+template<class T>
+inline T cfPenumbraA(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return (cfPenumbraB(dst,src)); 
+}
+
+template<class T>
+inline T cfSoftLightPegtopDelphi(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return clamp<T>(cfAddition(mul(dst,cfScreen(src,dst)),mul(mul(src,dst),inv(dst)))); 
+}
+
+template<class T>
+inline T cfNegation(T src, T dst) {
+    using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        
+    composite_type unit = unitValue<T>();
+    composite_type a = unit - src - dst;
+    composite_type s = abs(a);
+    composite_type d = unit - s;
+        
+    return T(d);
+}
+
+template<class T>
+inline T cfPhoenix(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return clamp<T>(inv(cfDifference(src,dst))); 
+}
+
+template<class T>
+inline T cfSignedDifference(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return clamp<T>((src-dst)/2 + halfValue<T>()); 
+}
 
 #endif // KOCOMPOSITEOP_FUNCTIONS_H_

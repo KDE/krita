@@ -514,7 +514,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
     QString location;
     QMap<int ,KisPaintingAssistantHandleSP> handleMap;
     KisPaintingAssistant* assistant = 0;
-    QColor globalColor = m_d->document->assistantsGlobalColor();
+    const QColor globalColor = m_d->document->assistantsGlobalColor();
 
     QMap<QString,QString>::const_iterator loadedAssistant = m_d->assistantsFilenames.constBegin();
     while (loadedAssistant != m_d->assistantsFilenames.constEnd()){
@@ -525,7 +525,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);
-            assistant->setAssistantGlobalColor(globalColor);
+            assistant->setAssistantGlobalColorCache(globalColor);
 
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){

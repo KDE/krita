@@ -250,9 +250,6 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->canvas.addDecoration(d->paintingAssistantsDecoration);
     d->paintingAssistantsDecoration->setVisible(true);
 
-    d->canvas.paintingAssistantsDecoration()->setGlobalAssistantsColor(d->document->assistantsGlobalColor());
-
-
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
 

@@ -4,10 +4,7 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 #include "3rdparty/lock_free_map/concurrent_map.h"
-
-#include "kis_lockless_stack.h"
 #include "kis_tile.h"
-#include <boost/functional/hash.hpp>
 
 template <class T>
 class KisTileHashTableIteratorTraits2;
@@ -99,10 +96,11 @@ private:
 
     inline quint32 calculateHash(qint32 col, qint32 row)
     {
-        std::size_t seed = 0;
-        boost::hash_combine(seed, col);
-        boost::hash_combine(seed, row);
-        return seed;
+        if (col == 0 && row == 0) {
+            row += 1001;
+        }
+
+        return ((row << 16) | (col & 0xFFFF));
     }
 
     inline void insert(quint32 key, TileTypeSP value)

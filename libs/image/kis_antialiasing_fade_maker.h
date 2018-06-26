@@ -83,25 +83,30 @@ public:
         return false;
     }
 
-    qreal getRadius(){
-        return m_radius;
+#if defined HAVE_VC
+    Vc::float_m needFade(Vc::float_v &dist) {
+        const Vc::float_v vOne(Vc::One);
+        const Vc::float_v vValMax(255.f);
+
+        Vc::float_v vRadius(m_radius);
+        Vc::float_v vFadeStartValue(m_fadeStartValue);
+        Vc::float_v vAntialiasingFadeStart(m_antialiasingFadeStart);
+        Vc::float_v vAntialiasingFadeCoeff(m_antialiasingFadeCoeff);
+
+        Vc::float_m outsideMask = dist > vRadius;
+        dist(outsideMask) = vOne;
+
+        Vc::float_m fadeStartMask(false);
+
+        if(m_enableAntialiasing){
+            fadeStartMask = dist > vAntialiasingFadeStart;
+            dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue +
+                                                                (dist - vAntialiasingFadeStart) * vAntialiasingFadeCoeff) / vValMax;
+        }
+        return (outsideMask | fadeStartMask);
     }
 
-    qreal getAntialiasingFadeStart(){
-        return m_antialiasingFadeStart;
-    }
-
-    qreal getFadeStartValue() {
-        return m_fadeStartValue;
-    }
-
-    qreal getAntialiasingFadeCoeff(){
-        return m_antialiasingFadeCoeff;
-    }
-
-    bool getAliasingEnabled(){
-        return m_enableAntialiasing;
-    }
+#endif /* defined HAVE_VC */
 
 private:
     qreal m_radius;

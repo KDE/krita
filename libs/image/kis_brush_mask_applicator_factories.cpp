@@ -181,8 +181,6 @@ template<> void KisGaussCircleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {   
-    const bool antialiasOn = d->fadeMaker.getAliasingEnabled();
-
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -204,12 +202,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vDistfactor(d->distfactor);
     Vc::float_v vAlphafactor(d->alphafactor);
 
-    Vc::float_v vFadeRadius(d->fadeMaker.getRadius());
-    Vc::float_v vFadeStartValue(d->fadeMaker.getFadeStartValue());
-    Vc::float_v vFadeAFadeStart(d->fadeMaker.getAntialiasingFadeStart());
-    Vc::float_v vFadeAFadeCoeff(d->fadeMaker.getAntialiasingFadeCoeff());
-
-    Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
     Vc::float_v vValMax(255.f);
 
@@ -222,18 +214,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         Vc::float_v dist = sqrt(pow2(xr) + pow2(yr * vYCoeff));
 
-        // BEGIN FadeMaker needFade vectorized
-        // follow fademaker rules for outsideMask
-        Vc::float_m outsideMask = dist > vFadeRadius;
-        dist(outsideMask) = vOne;
-
-        Vc::float_m fadeStartMask(false);
-        // if antialias is off, do not process
-        if(antialiasOn){
-            fadeStartMask = dist > vFadeAFadeStart;
-            dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue + (dist - vFadeAFadeStart) * vFadeAFadeCoeff) / vValMax;
-        }
-        Vc::float_m excludeMask(outsideMask | fadeStartMask);
+        // Apply FadeMaker mask and operations
+        Vc::float_m excludeMask = d->fadeMaker.needFade(dist);
 
         if (!excludeMask.isFull()) {
             Vc::float_v valDist = dist * vDistfactor;
@@ -285,8 +267,6 @@ template<> void KisCurveCircleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {
-    const bool antialiasOn = d->fadeMaker.getAliasingEnabled();
-
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -312,14 +292,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
     Vc::float_v vCurvedData(Vc::Zero);
     Vc::float_v vCurvedData1(Vc::Zero);
 
-    Vc::float_v vFadeRadius(d->fadeMaker.getRadius());
-    Vc::float_v vFadeStartValue(d->fadeMaker.getFadeStartValue());
-    Vc::float_v vFadeAFadeStart(d->fadeMaker.getAntialiasingFadeStart());
-    Vc::float_v vFadeAFadeCoeff(d->fadeMaker.getAntialiasingFadeCoeff());
-
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
-    Vc::float_v vValMax(255.f);
 
     for (int i=0; i < width; i+= Vc::float_v::size()){
 
@@ -330,19 +304,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         Vc::float_v dist = pow2(xr * vXCoeff) + pow2(yr * vYCoeff);
 
-        // BEGIN FadeMaker needFade vectorized
-        // follow fademaker rules for outsideMask
-        Vc::float_m outsideMask = dist > vFadeRadius;
-        dist(outsideMask) = vOne;
-
-        Vc::float_m fadeStartMask(false);
-        // if antialias is off, do not process
-        if(antialiasOn){
-            fadeStartMask = dist > vFadeAFadeStart;
-            dist((outsideMask ^ fadeStartMask) & fadeStartMask) = (vFadeStartValue + (dist - vFadeAFadeStart) * vFadeAFadeCoeff) / vValMax;
-        }
-
-        Vc::float_m excludeMask = outsideMask | fadeStartMask;
+        // Apply FadeMaker mask and operations
+        Vc::float_m excludeMask = d->fadeMaker.needFade(dist);
 
         if (!excludeMask.isFull()) {
             Vc::float_v valDist = dist * vCurveResolution;

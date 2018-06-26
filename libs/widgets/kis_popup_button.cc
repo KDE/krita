@@ -30,7 +30,6 @@
 
 #include "kis_global.h"
 #include <kis_debug.h>
-// #include <kis_paintop_presets_popup.h>
 
 struct KisPopupButton::Private {
     Private()

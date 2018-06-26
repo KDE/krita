@@ -27,7 +27,6 @@
 #include <QWindow>
 #include <QTimer>
 
-// #include "KisMainWindow.h"
 #include <kis_canvas2.h>
 
 #include "kis_shared_ptr.h"

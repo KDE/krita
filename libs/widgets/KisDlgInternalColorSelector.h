@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISBASICINTERNALCOLORSELECTOR_H
-#define KISBASICINTERNALCOLORSELECTOR_H
+#ifndef KISDLGINTERNALCOLORSELECTOR_H
+#define KISDLGINTERNALCOLORSELECTOR_H
 
 #include "kritawidgets_export.h"
 #include "KoColor.h"
@@ -94,15 +94,6 @@ public:
      * @param chooseAlpha - Whether or not the alpha-choosing functionality should be used.
      */
     static KoColor getModalColorDialog(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString());
-
-    /**
-     * @brief getColor
-     * Wrapper function that enables makes this class interchangable with QColorDialog sometimes.
-     */
-    static KoColor getColor(const KoColor color, QWidget* parent = Q_NULLPTR, QString caption = QString())
-    {
-        return getModalColorDialog(color, parent, caption);
-    }
 
     /**
      * @brief getCurrentColor
@@ -197,13 +188,9 @@ private:
     void updateAllElements(QObject *source);
 
 private:
-    /**
-     * the UI, made protected so that elements can be added;
-     * for now only the screen color picker is added
-     */
     Ui_WdgDlgInternalColorSelector *m_ui;
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer
 };
 
-#endif // KISBASICINTERNALCOLORSELECTOR_H
+#endif // KISDLGINTERNALCOLORSELECTOR_H

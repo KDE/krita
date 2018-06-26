@@ -20,19 +20,21 @@
 
 #include <QWheelEvent>
 #include <QHeaderView>
-
-#include "kis_palette_delegate.h"
-#include "KisPaletteModel.h"
-#include <KLocalizedString>
-#include <KoDialog.h>
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <KoColorPopupButton.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QMenu>
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLocalizedString>
+
+#include <KoDialog.h>
+
+#include "kis_palette_delegate.h"
+#include "KisPaletteModel.h"
 #include "kis_color_button.h"
 
 struct KisPaletteView::Private
@@ -54,14 +56,13 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 //    setDragDropMode(QAbstractItemView::InternalMove);
     setDropIndicatorShown(true);
 
-    /// KisConfig cfg;
+    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     //QPalette pal(palette());
     //pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
     //setAutoFillBackground(true);
     //setPalette(pal);
 
-    int defaultSectionSize = 12;
-    /// int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
+    int defaultSectionSize = cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
     verticalHeader()->setDefaultSectionSize(defaultSectionSize);
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
@@ -99,7 +100,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     editableItems->addRow(i18n("ID"), lnIDName);
     editableItems->addRow(i18n("Name"), lnName);
     editableItems->addRow(i18n("Color"), bnColor);
-    editableItems->addRow(i18n("Spot"), chkSpot);
+    editableItems->addRow(i18nc("Spot Color", "Spot"), chkSpot);
     cmbGroups->setCurrentIndex(0);
     lnName->setText(i18nc("Part of a default name for a color","Color")+" "+QString::number(m_d->model->colorSet()->nColors()+1));
     lnIDName->setText(QString::number(m_d->model->colorSet()->nColors()+1));
@@ -262,6 +263,8 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
        } else {
            horizontalHeader()->setDefaultSectionSize(setSize);
            verticalHeader()->setDefaultSectionSize(setSize);
+           KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
+           cfg.writeEntry("paletteDockerPaletteViewSectionSize", setSize);
        }
 
         event->accept();
@@ -296,7 +299,7 @@ void KisPaletteView::entrySelection(bool foreground) {
 
 void KisPaletteView::modifyEntry(QModelIndex index) {
     if (m_d->allowPaletteModification) {
-        KoDialog *group = new KoDialog();
+        KoDialog *group = new KoDialog(this);
         QFormLayout *editableItems = new QFormLayout(group);
         group->mainWidget()->setLayout(editableItems);
         QLineEdit *lnIDName = new QLineEdit(group);

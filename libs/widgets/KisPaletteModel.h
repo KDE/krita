@@ -25,7 +25,6 @@
 
 #include <KoColorDisplayRendererInterface.h>
 
-/// #include <kis_types.h>
 #include "kritawidgets_export.h"
 #include <KoColorSet.h>
 #include <QScopedPointer>

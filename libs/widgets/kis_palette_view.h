@@ -101,7 +101,6 @@ protected:
 
 private:
     struct Private;
-    class SimpleColorButton;
     const QScopedPointer<Private> m_d;
 private Q_SLOTS:
     /**

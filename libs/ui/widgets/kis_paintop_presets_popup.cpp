@@ -57,12 +57,9 @@
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings_update_proxy.h>
 
-
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
-
-class KisPopupButton;
 
 struct KisPaintOpPresetsPopup::Private
 {
@@ -75,7 +72,6 @@ public:
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     KisFavoriteResourceManager *favoriteResManager;
-    KisPopupButton *popupButton; // button that invokes this popup
 
     bool detached;
     bool ignoreHideEvents;
@@ -675,11 +671,13 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
 
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 {
-    QWidget::resizeEvent(event);
-    // Make sure resizing doesn't push this widget out of the screen
-    QRect screenRect = QApplication::desktop()->availableGeometry(this);
-    QRect newPositionRect = kisEnsureInRect(parentWidget()->geometry(), screenRect);
-    parentWidget()->setGeometry(newPositionRect);
+    if (parentWidget()) {
+        QWidget::resizeEvent(event);
+        // Make sure resizing doesn't push this widget out of the screen
+        QRect screenRect = QApplication::desktop()->availableGeometry(this);
+        QRect newPositionRect = kisEnsureInRect(parentWidget()->geometry(), screenRect);
+        parentWidget()->setGeometry(newPositionRect);
+    }
 }
 
 bool KisPaintOpPresetsPopup::detached() const

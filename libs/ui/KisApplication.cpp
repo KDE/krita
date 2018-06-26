@@ -92,8 +92,6 @@
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
 #include <KisAutoSaveRecoveryDialog.h>
-#include <KisDlgInternalColorSelector.h>
-#include <KisScreenColorPicker.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>

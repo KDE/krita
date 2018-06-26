@@ -34,8 +34,6 @@
 #include <resources/KoColorSet.h>
 
 #include <resources/KoPattern.h>
-// #include "KisResourceServerProvider.h"
-// #include "KisViewManager.h"
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>

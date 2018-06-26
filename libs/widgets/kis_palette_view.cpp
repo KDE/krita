@@ -100,7 +100,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     editableItems->addRow(i18n("ID"), lnIDName);
     editableItems->addRow(i18n("Name"), lnName);
     editableItems->addRow(i18n("Color"), bnColor);
-    editableItems->addRow(i18nc("Spot Color", "Spot"), chkSpot);
+    editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
     cmbGroups->setCurrentIndex(0);
     lnName->setText(i18nc("Part of a default name for a color","Color")+" "+QString::number(m_d->model->colorSet()->nColors()+1));
     lnIDName->setText(QString::number(m_d->model->colorSet()->nColors()+1));

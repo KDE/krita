@@ -177,14 +177,13 @@ private Q_SLOTS:
 protected:
     void showEvent(QShowEvent *event);
 
+private:
+    void focusInEvent(QFocusEvent *) override;
     /**
      * @brief updateAllElements
      * Updates each widget with the new element, and if it's responsible for the update sents
      * a signal out that there's a new color.
      */
-
-private:
-    void focusInEvent(QFocusEvent *) override;
     void updateAllElements(QObject *source);
 
 private:

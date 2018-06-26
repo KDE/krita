@@ -30,7 +30,7 @@
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
 #include <KisPaletteModel.h>
-#include <KisPaletteListWidget.h>
+#include <KisColorsetChooser.h>
 #include <kis_palette_view.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -62,7 +62,7 @@ struct KisDlgInternalColorSelector::Private
     const KoColorDisplayRendererInterface *displayRenderer;
     KisHexColorInput *hexColorInput = 0;
     KisPaletteModel *paletteModel = 0;
-    KisPaletteListWidget *colorSetChooser = 0;
+    KisColorsetChooser *colorSetChooser = 0;
     KisScreenColorPickerBase *screenColorPicker = 0;
 };
 
@@ -98,7 +98,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_d->paletteModel = new KisPaletteModel(this);
         m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     }
-    m_ui->paletteList->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    m_ui->bnColorsetChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     // For some bizare reason, the modal dialog doesn't like having the colorset set, so let's not.
     if (config.paletteBox) {
         //TODO: Add disable signal as well. Might be not necessary...?
@@ -121,15 +121,15 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         connect(m_ui->paletteBox, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(slotSetColorFromColorSetEntry(KoColorSetEntry)));
         connect(m_ui->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetColorFromColorList()));
         //m_ui->paletteBox->setDisplayRenderer(displayRenderer);
-        m_d->colorSetChooser = new KisPaletteListWidget(this);
+        m_d->colorSetChooser = new KisColorsetChooser(this);
         connect(m_d->colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
 
-        m_ui->paletteList->setPopupWidget(m_d->colorSetChooser);
+        m_ui->bnColorsetChooser->setPopupWidget(m_d->colorSetChooser);
 
     } else {
         m_ui->paletteBox->setEnabled(false);
         m_ui->cmbNameList->setEnabled(false);
-        m_ui->paletteList->setEnabled(false);
+        m_ui->bnColorsetChooser->setEnabled(false);
     }
 
     if (config.prevNextButtons) {

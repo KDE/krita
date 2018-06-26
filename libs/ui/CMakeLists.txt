@@ -372,7 +372,6 @@ set(kritaui_LIB_SRCS
     KisMultiFeedRSSModel.cpp
     KisRemoteFileFetcher.cpp
 
-    KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
     KisWindowLayoutResource.cpp
     KisWindowLayoutManager.cpp

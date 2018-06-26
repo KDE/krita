@@ -94,8 +94,6 @@ set(kritawidgets_LIB_SRCS
     kis_spinbox_color_selector.cpp
 
     KisDlgInternalColorSelector.cpp
-    KisPaletteListWidget.cpp
-    KisPaletteListWidget_p.cpp
 
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
@@ -105,6 +103,8 @@ set(kritawidgets_LIB_SRCS
     kis_popup_button.cc
     kis_color_button.cpp
     KisScreenColorPickerBase.cpp
+
+    KisColorsetChooser.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -115,7 +115,6 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
-    WdgPaletteListWidget.ui
     WdgDlgInternalColorSelector.ui
 )
 

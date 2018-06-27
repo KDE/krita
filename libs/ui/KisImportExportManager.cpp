@@ -159,7 +159,7 @@ QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportD
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KisImportExportManager::mimeFilter(Direction direction)
+QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
 {
     // Find the right mimetype by the extension
     QSet<QString> mimeTypes;
@@ -423,7 +423,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
 {
 
     // prevents the animation renderer from running this code
-    if (QThread::currentThread() != qApp->thread()) return false;
+
 
     const QString mimeUserDescription = KisMimeDatabase::descriptionForMimeType(to);
 
@@ -438,7 +438,11 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         errors = checker.errors();
     }
 
-    KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
+    KisConfigWidget *wdg = 0;
+
+    if (QThread::currentThread() == qApp->thread()) {
+        wdg = filter->createConfigurationWidget(0, from, to);
+    }
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.
     if (!m_document->assistants().isEmpty() && to != m_document->nativeFormatMimeType()) {

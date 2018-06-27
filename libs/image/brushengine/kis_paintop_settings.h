@@ -61,7 +61,7 @@ const QString SPACING_USE_UPDATES = "PaintOpSettings/updateSpacingBetweenDabs";
  * between two creations. There is one KisPaintOpSettings per input device (mouse, tablet,
  * etc...).
  *
- * The settings may be stored in a preset or a recorded brush stroke. Note that if your
+ * The settings may be stored in a preset. Note that if your
  * paintop's settings subclass has data that is not stored as a property, that data is not
  * saved and restored.
  *

@@ -129,6 +129,8 @@ public:
 
     static void calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive);
 
+    static KisTimeRange calculateNodeIdenticalFrames(const KisNode *node, int time);
+    static KisTimeRange calculateNodeAffectedFrames(const KisNode *node, int time);
 
 private:
     int m_start;

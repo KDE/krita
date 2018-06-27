@@ -236,6 +236,7 @@ public:
         , lastMod(firstMod)
         , nserver(new KisNameServer(1))
         , imageIdleWatcher(2000 /*ms*/)
+        , globalAssistantsColor(KisConfig().defaultAssistantsColor())
         , savingLock(&savingMutex)
         , batchMode(false)
     {
@@ -266,10 +267,12 @@ public:
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
         , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
+        , globalAssistantsColor(rhs.globalAssistantsColor)
         , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
     {
+        // TODO: clone assistants
     }
 
     ~Private() {
@@ -323,6 +326,8 @@ public:
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
     QList<KisPaintingAssistantSP> assistants;
+
+    QColor globalAssistantsColor;
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
@@ -1702,26 +1707,21 @@ void KisDocument::setAssistants(const QList<KisPaintingAssistantSP> &value)
     d->assistants = value;
 }
 
-KisSharedPtr<KisReferenceImagesLayer> KisDocument::getOrCreateReferenceImagesLayer(KisImageSP targetImage)
-{
-    if (!d->referenceImagesLayer) {
-        if (targetImage.isNull()) targetImage = d->image;
-
-        d->referenceImagesLayer = new KisReferenceImagesLayer(shapeController(), targetImage);
-        targetImage->addNode(d->referenceImagesLayer, targetImage->root());
-    }
-
-    return d->referenceImagesLayer;
-}
-
-// TODO: change signature to return a shared pointer
-KisReferenceImagesLayer *KisDocument::referenceImagesLayer() const
+KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
 {
     return d->referenceImagesLayer.data();
 }
 
-void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer)
+void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
+    if (updateImage) {
+        if (layer) {
+            d->image->addNode(layer);
+        } else {
+            d->image->removeNode(d->referenceImagesLayer);
+        }
+    }
+
     d->referenceImagesLayer = layer;
 }
 
@@ -1794,4 +1794,14 @@ bool KisDocument::isAutosaving() const
 QString KisDocument::exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
     return errorMessage.isEmpty() ? KisImportExportFilter::conversionStatusString(status) : errorMessage;
+}
+
+void KisDocument::setAssistantsGlobalColor(QColor color)
+{
+    d->globalAssistantsColor = color;
+}
+
+QColor KisDocument::assistantsGlobalColor()
+{
+    return d->globalAssistantsColor;
 }

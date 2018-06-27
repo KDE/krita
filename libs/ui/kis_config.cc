@@ -1961,6 +1961,17 @@ void KisConfig::setCalculateAnimationCacheInBackground(bool value)
     m_cfg.writeEntry("calculateAnimationCacheInBackground", value);
 }
 
+QColor KisConfig::defaultAssistantsColor(bool defaultValue) const
+{
+    static const QColor defaultColor = QColor(176, 176, 176, 255);
+    return defaultValue ? defaultColor : m_cfg.readEntry("defaultAssistantsColor", defaultColor);
+}
+
+void KisConfig::setDefaultAssistantsColor(const QColor &color) const
+{
+    m_cfg.writeEntry("defaultAssistantsColor", color);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

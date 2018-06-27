@@ -58,6 +58,7 @@ public Q_SLOTS:
 
     static Krita * instance();
     static QObject * fromVariant(const QVariant & v);
+    static QString krita_i18n(const QString &text);
 private:
     Krita(const Krita &); // Generated
 };

@@ -47,6 +47,8 @@ public:
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
 
+    void deleteSelection() override;
+
 protected:
     QList<QPointer<QWidget>> createOptionWidgets() override;
     QWidget *createOptionWidget() override;
@@ -66,14 +68,16 @@ public Q_SLOTS:
     void saveReferenceImages();
     void loadReferenceImages();
 
+    void slotNodeAdded(KisNodeSP node);
     void slotSelectionChanged();
 
 private:
     friend class ToolReferenceImagesWidget;
     ToolReferenceImagesWidget *m_optionsWidget = nullptr;
+    KisWeakSharedPtr<KisReferenceImagesLayer> m_layer;
 
-    KisReferenceImagesLayer *referenceImagesLayer() const;
-    KisReferenceImagesLayer *getOrCreateReferenceImagesLayer();
+    KisDocument *document() const;
+    void setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer);
 };
 
 

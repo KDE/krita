@@ -163,15 +163,6 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
-    recorder/kis_node_query_path_editor.cc
-    recorder/kis_recorded_action_creator.cc
-    recorder/kis_recorded_action_creator_factory.cc
-    recorder/kis_recorded_action_creator_factory_registry.cc
-    recorder/kis_recorded_action_editor_factory.cc
-    recorder/kis_recorded_action_editor_factory_registry.cc
-    recorder/kis_recorded_filter_action_editor.cc
-    recorder/kis_recorded_filter_action_creator.cpp
-    recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_rectangle_constraint_widget.cpp
@@ -185,7 +176,6 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
     tool/kis_figure_painting_tool_helper.cpp
-    tool/kis_recording_adapter.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
     tool/kis_tool_ellipse_base.cpp
@@ -476,7 +466,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgdlgfilelayer.ui
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui
-    forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui

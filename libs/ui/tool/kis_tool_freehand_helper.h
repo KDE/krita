@@ -34,7 +34,6 @@
 class KoPointerEvent;
 class KoCanvasResourceManager;
 class KisPaintingInformationBuilder;
-class KisRecordingAdapter;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
@@ -49,7 +48,6 @@ public:
 
     KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                           const KUndo2MagicString &transactionText = KUndo2MagicString(),
-                          KisRecordingAdapter *recordingAdapter = 0,
                           KisSmoothingOptions *smoothingOptions = 0);
     ~KisToolFreehandHelper() override;
 

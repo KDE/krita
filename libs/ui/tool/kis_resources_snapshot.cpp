@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
-#include "recorder/kis_recorded_paint_action.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_algebra_2d.h"
@@ -221,24 +220,6 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
      */
     painter->setPaintOpPreset(m_d->currentPaintOpPreset->createMaskingPreset(),
                               m_d->currentNode, m_d->image);
-}
-
-void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
-{
-    action->setPaintOpPreset(m_d->currentPaintOpPreset);
-    action->setPaintIncremental(!needsIndirectPainting());
-
-    action->setPaintColor(m_d->currentFgColor);
-    action->setBackgroundColor(m_d->currentBgColor);
-    action->setGenerator(m_d->currentGenerator);
-    action->setGradient(m_d->currentGradient);
-    action->setPattern(m_d->currentPattern);
-
-    action->setOpacity(m_d->opacity / qreal(OPACITY_OPAQUE_U8));
-    action->setCompositeOp(m_d->compositeOp->id());
-
-    action->setStrokeStyle(m_d->strokeStyle);
-    action->setFillStyle(m_d->fillStyle);
 }
 
 KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() const

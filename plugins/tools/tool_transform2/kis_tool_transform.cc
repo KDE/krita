@@ -82,6 +82,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
 
+#include "krita_container_utils.h"
 #include "kis_layer_utils.h"
 #include <KisDelayedUpdateNodeInterface.h>
 
@@ -659,21 +660,25 @@ bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, T
 
     const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
     KisNodeSP oldRootNode;
+    KisNodeList oldTransformedNodes;
 
     if (lastCommand &&
-        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode) &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode, &oldTransformedNodes) &&
         args->mode() == mode &&
         oldRootNode == currentNode) {
 
-        args->saveContinuedState();
+        KisNodeList perspectiveTransformedNodes = fetchNodesList(mode, currentNode, m_workRecursively);
 
-        image()->undoAdapter()->undoLastCommand();
+        if (KritaUtils::compareListsUnordered(oldTransformedNodes, perspectiveTransformedNodes)) {
+            args->saveContinuedState();
+            image()->undoAdapter()->undoLastCommand();
 
-        // FIXME: can we make it async?
-        image()->waitForDone();
-        forceRepaintDelayedLayers(oldRootNode);
+            // FIXME: can we make it async?
+            image()->waitForDone();
+            forceRepaintDelayedLayers(oldRootNode);
 
-        result = true;
+            result = true;
+        }
     }
 
     return result;
@@ -887,7 +892,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     }
 
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image().data());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, nodesList, resources->activeSelection(), image().data());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = strategy->realSelection();
@@ -1006,7 +1011,7 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
-            if (node->isEditable() &&
+            if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
                 (!node->inherits("KisTransformMask") || node == root)) {

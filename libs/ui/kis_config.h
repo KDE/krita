@@ -558,6 +558,9 @@ public:
     bool calculateAnimationCacheInBackground(bool defaultValue = false) const;
     void setCalculateAnimationCacheInBackground(bool value);
 
+    QColor defaultAssistantsColor(bool defaultValue = false) const;
+    void setDefaultAssistantsColor(const QColor &color) const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

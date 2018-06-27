@@ -110,8 +110,6 @@ protected:
         return QString();
     }
 
-    void setupPaintAction(KisRecordedPaintAction* action) override;
-
     enum NodePaintAbility {
         NONE,
         PAINT,

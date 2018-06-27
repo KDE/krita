@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS versioned_resources (
 ,   resource_id INTEGER
 ,   storage_id INTEGER
 ,   version INTEGER
-,   location TEXT
+,   location TEXT NOT NULL
 ,   datestamp TEXT
 ,   deleted INTEGER
 ,   checksum TEXT

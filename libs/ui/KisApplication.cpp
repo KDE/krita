@@ -318,8 +318,6 @@ bool KisApplication::loadResources()
 
     reg->add(new KisResourceLoader<KisPaintOpPreset>("paintoppresets", "paintoppresets",  QStringList() << "application/x-krita-paintoppreset"));
 
-    reg->add(new KisResourceLoader<KisResourceBundle>("resourcebundles", "bundles", QStringList() << "application/x-krita-bundle"));
-
     reg->add(new KisResourceLoader<KisGbrBrush>("gbr_brushes", "brushes", QStringList() << "image/x-gimp-brush"));
     reg->add(new KisResourceLoader<KisImagePipeBrush>("gih_brushes", "brushes", QStringList() << "image/x-gimp-brush-animated"));
     reg->add(new KisResourceLoader<KisSvgBrush>("svg_brushes", "brushes", QStringList() << "image/svg+xml"));

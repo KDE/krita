@@ -115,7 +115,7 @@ QString KoResource::shortFilename() const
 
 QString KoResource::name() const
 {
-    return d->name;
+    return (!d->name.isEmpty() ? d->name : shortFilename());
 }
 
 void KoResource::setName(const QString& name)

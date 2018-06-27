@@ -65,7 +65,10 @@ private:
     ~KisResourceCacheDb();
     KisResourceCacheDb operator=(const KisResourceCacheDb&);
 
-    static bool addResource(KisResourceStorageSP storage, KoResourceSP resource, const QString &resourceType);
+    static int  resourceIdForResource(KoResourceSP resource, const QString &resourceType);
+    static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
+    static bool hasResource(KisResourceStorageSP storage, KoResourceSP resource, const QString &resourceType);
+    static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString folder);
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
     static bool synchronize(KisResourceStorageSP storage);

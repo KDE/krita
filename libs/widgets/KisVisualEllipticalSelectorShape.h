@@ -31,8 +31,6 @@
 #include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
-#include "kritawidgets_export.h"
-
 class KisVisualEllipticalSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT

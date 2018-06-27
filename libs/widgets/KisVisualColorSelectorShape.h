@@ -31,8 +31,6 @@
 #include "KisVisualColorSelector.h"
 #include "KisColorSelectorConfiguration.h"
 
-#include "kritawidgets_export.h"
-
 /**
  * @brief The KisVisualColorSelectorShape class
  * A 2d widget can represent at maximum 2 coordinates.

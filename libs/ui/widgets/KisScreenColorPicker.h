@@ -60,7 +60,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateColorPicking();
 protected:
-    void changeEvent(QEvent *event);
+    void changeEvent(QEvent *event) override;
 private:
     struct Private; //The private struct
     const QScopedPointer<Private> m_d; //the private pointer

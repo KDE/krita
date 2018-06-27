@@ -2,7 +2,6 @@
  * This file is part of the KDE project
  * Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
- * Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,13 +34,15 @@ public:
 
 public:
     QString name() const { return m_name; }
-    QString id() const { return m_id; }
-    KoColor color() const { return m_color; }
-    bool spotColor() const { return m_spotColor; }
-
     void setName(const QString &name) { m_name = name; }
+
+    QString id() const { return m_id; }
     void setId(const QString &id) { m_id = id; }
+
+    KoColor color() const { return m_color; }
     void setColor(const KoColor &color) { m_color = color; }
+
+    bool spotColor() const { return m_spotColor; }
     void setSpotColor(bool spotColor) { m_spotColor = spotColor; }
 
 public:

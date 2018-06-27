@@ -52,7 +52,7 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
-    ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
+    //ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
     ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
@@ -301,11 +301,12 @@ void KisColorSelectorSettings::changedColorDocker(int index)
         ui->colorSliderOptions->hide();
         ui->hotKeyOptions->hide();
     }
-    else if (index == 1) {  // color slider options selected
-        ui->advancedColorSelectorOptions->hide();
-        ui->hotKeyOptions->hide();
-        ui->colorSliderOptions->show();
-    } else {
+//    else if (index == 1) {  // color slider options selected
+//        ui->advancedColorSelectorOptions->hide();
+//        ui->hotKeyOptions->hide();
+//        ui->colorSliderOptions->show();
+//    }
+    else {
        ui->colorSliderOptions->hide();
        ui->advancedColorSelectorOptions->hide();
        ui->hotKeyOptions->show();

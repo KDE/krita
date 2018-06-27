@@ -55,7 +55,7 @@ struct KoColorSet::Private {
     KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString comment;
-    qint32 columns;
+    qint32 columns {0}; // Set the default value that the GIMP uses...
     QVector<KoColorSetEntry> colors; //ungrouped colors
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.
     QMap<QString, QVector<KoColorSetEntry>> groups; //grouped colors.
@@ -99,15 +99,13 @@ KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
     , d(new Private())
 {
-    // Implemented in KoResource class
-    d->columns = 0; // Set the default value that the GIMP uses...
 }
 
 KoColorSet::KoColorSet()
     : KoResource(QString())
     , d(new Private())
 {
-    d->columns = 0; // Set the default value that the GIMP uses...
+
 }
 
 /// Create an copied palette
@@ -592,6 +590,7 @@ bool KoColorSet::loadGpl()
     QStringList lines = s.split('\n', QString::SkipEmptyParts);
 
     if (lines.size() < 3) {
+        warnPigment << "Not enough lines in palette file: " << filename();
         return false;
     }
 
@@ -600,22 +599,27 @@ bool KoColorSet::loadGpl()
     KoColorSetEntry e;
 
     // Read name
-    if (!lines[0].startsWith("GIMP") || !lines[1].startsWith("Name: ")) {
+
+
+    if (!lines[0].startsWith("GIMP") || !lines[1].toLower().contains("name")) {
         warnPigment << "Illegal Gimp palette file: " << filename();
         return false;
     }
 
-    setName(i18n(lines[1].mid(strlen("Name: ")).trimmed().toLatin1()));
+    setName(i18n(lines[1].split(":")[1].trimmed().toLatin1()));
 
     index = 2;
 
     // Read columns
-    if (lines[index].startsWith("Columns: ")) {
-        columns = lines[index].mid(strlen("Columns: ")).trimmed();
+    if (lines[index].toLower().contains("columns")) {
+        columns = lines[index].split(":")[1].trimmed();
         d->columns = columns.toInt();
         index = 3;
     }
+
+
     for (qint32 i = index; i < lines.size(); i++) {
+
         if (lines[i].startsWith('#')) {
             d->comment += lines[i].mid(1).trimmed() + ' ';
         } else if (!lines[i].isEmpty()) {
@@ -731,7 +735,7 @@ bool KoColorSet::loadPsp()
         g = qBound(0, g, 255);
         b = qBound(0, b, 255);
 
-        e.setColor(KoColor(QColor(r, g, b), 
+        e.setColor(KoColor(QColor(r, g, b),
                     KoColorSpaceRegistry::instance()->rgb8()));
 
         QString name = a.join(" ");

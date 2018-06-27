@@ -236,6 +236,7 @@ public:
         , lastMod(firstMod)
         , nserver(new KisNameServer(1))
         , imageIdleWatcher(2000 /*ms*/)
+        , globalAssistantsColor(KisConfig().defaultAssistantsColor())
         , savingLock(&savingMutex)
         , batchMode(false)
     {
@@ -266,10 +267,12 @@ public:
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
         , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
+        , globalAssistantsColor(rhs.globalAssistantsColor)
         , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
     {
+        // TODO: clone assistants
     }
 
     ~Private() {
@@ -323,6 +326,8 @@ public:
     QScopedPointer<KisSignalAutoConnection> imageIdleConnection;
 
     QList<KisPaintingAssistantSP> assistants;
+
+    QColor globalAssistantsColor;
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
@@ -1789,4 +1794,14 @@ bool KisDocument::isAutosaving() const
 QString KisDocument::exportErrorToUserMessage(KisImportExportFilter::ConversionStatus status, const QString &errorMessage)
 {
     return errorMessage.isEmpty() ? KisImportExportFilter::conversionStatusString(status) : errorMessage;
+}
+
+void KisDocument::setAssistantsGlobalColor(QColor color)
+{
+    d->globalAssistantsColor = color;
+}
+
+QColor KisDocument::assistantsGlobalColor()
+{
+    return d->globalAssistantsColor;
 }

@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QString>
+#include <QDebug>
 
 KisResourceLoaderRegistry::KisResourceLoaderRegistry(QObject *parent)
     : QObject(parent)
@@ -41,11 +42,41 @@ KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()
     return reg;
 }
 
-QSet<QString> KisResourceLoaderRegistry::resourceFolders() const
+KisResourceLoaderBase *KisResourceLoaderRegistry::loader(const QString &resourceType, const QString &mimetype) const
+{
+    Q_FOREACH(KisResourceLoaderBase *loader, resourceTypeLoaders(resourceType)) {
+        if (loader->mimetypes().contains(mimetype)) return loader;
+    }
+    return 0;
+}
+
+QVector<KisResourceLoaderBase *> KisResourceLoaderRegistry::resourceTypeLoaders(const QString &resourceType) const
+{
+    QVector<KisResourceLoaderBase *> r;
+    Q_FOREACH(KisResourceLoaderBase *loader, values()) {
+        if (loader->resourceType() == resourceType) {
+            r << loader;
+        }
+    }
+    return r;
+}
+
+QStringList KisResourceLoaderRegistry::filters(const QString &resourceType) const
+{
+    QStringList r;
+    Q_FOREACH(KisResourceLoaderBase *loader, resourceTypeLoaders(resourceType)) {
+        r.append(loader->filters());
+    }
+    return r;
+}
+
+
+
+QSet<QString> KisResourceLoaderRegistry::resourceTypes() const
 {
     QStringList r;
     Q_FOREACH(KisResourceLoaderBase *loader, values()) {
-        r << loader->folder();
+        r << loader->resourceType();
     }
     return QSet<QString>::fromList(r);
 }

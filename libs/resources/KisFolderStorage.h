@@ -22,7 +22,9 @@
 
 #include <KisStoragePlugin.h>
 
-class KisFolderStorage : public KisStoragePlugin
+#include <kritaresources_export.h>
+
+class KRITARESOURCES_EXPORT KisFolderStorage : public KisStoragePlugin
 {
 public:
     KisFolderStorage(const QString &location);
@@ -30,7 +32,7 @@ public:
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;
-    KisResourceStorage::ResourceIterator resources(const QString &resourceType) override;
+    QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
 
 };
 

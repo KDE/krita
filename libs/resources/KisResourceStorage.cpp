@@ -20,6 +20,7 @@
 #include "KisResourceStorage.h"
 
 #include <QFileInfo>
+#include <QDebug>
 
 #include <kzip.h>
 
@@ -104,7 +105,7 @@ KoResourceSP KisResourceStorage::resource(const QString &url)
     return d->storagePlugin->resource(url);
 }
 
-KisResourceStorage::ResourceIterator KisResourceStorage::resources(const QString &resourceType)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType)
 {
     return d->storagePlugin->resources(resourceType);
 }

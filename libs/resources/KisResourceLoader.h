@@ -40,10 +40,10 @@ class KRITARESOURCES_EXPORT KisResourceLoaderBase
 {
 public:
 
-    KisResourceLoaderBase(const QString &id, const QString &folder, const QStringList &mimetypes)
+    KisResourceLoaderBase(const QString &resourceSubType, const QString &resourceType, const QStringList &mimetypes)
     {
-        m_id = id;
-        m_folder = folder;
+        m_resourceSubType = resourceSubType;
+        m_resourceType = resourceType;
         m_mimetypes = mimetypes;
     }
 
@@ -69,12 +69,12 @@ public:
      * @return the folder in the resource storage where resources
      * of this type are located
      */
-    QString folder() const
+    QString resourceType() const
     {
-        return m_folder;
+        return m_resourceType;
     }
 
-    QString resourceType() const
+    QString resourceSubType() const
     {
         return id();
     }
@@ -82,7 +82,7 @@ public:
     /// For registration in KisResourceLoaderRegistry
     QString id() const
     {
-        return m_id;
+        return m_resourceSubType;
     }
 
     /**
@@ -92,8 +92,8 @@ public:
     virtual KoResourceSP load(const QString &name, QIODevice &dev) { Q_UNUSED(name); Q_UNUSED(dev); return 0; };
 
 private:
-    QString m_id;
-    QString m_folder;
+    QString m_resourceSubType;
+    QString m_resourceType;
     QStringList m_mimetypes;
 
 };

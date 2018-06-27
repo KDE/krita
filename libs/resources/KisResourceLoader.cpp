@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <KisResourceLoader.h>
-
+#include <QDebug>
 #include <KisMimeDatabase.h>
 
 /**
@@ -33,6 +33,7 @@ QStringList KisResourceLoaderBase::filters() const
                 filters << "*." + suffix;
         }
     }
+
     return filters;
 }
 

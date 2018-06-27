@@ -92,7 +92,7 @@ void TestResourceLocator::testLocatorInitalization()
     if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
-    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
+    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
         QDir dstDir(m_dstLocation + '/' + folder + '/');
         QDir srcDir(m_srcLocation + '/' + folder + '/');
 

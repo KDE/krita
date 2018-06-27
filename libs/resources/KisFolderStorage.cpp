@@ -20,7 +20,7 @@
 #include "KisFolderStorage.h"
 
 #include <QDirIterator>
-
+#include <KisMimeDatabase.h>
 #include <kis_debug.h>
 
 #include <KisResourceLoaderRegistry.h>
@@ -32,7 +32,7 @@ public:
 
     QByteArray md5sum() const override
     {
-        KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->get(resourceType);
+        KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(folder, KisMimeDatabase::mimeTypeForFile(url));
         if (loader) {
             QFile f(url);
             f.open(QFile::ReadOnly);
@@ -53,10 +53,8 @@ public:
         : m_location(location)
         , m_resourceType(resourceType)
     {
-        m_loader = KisResourceLoaderRegistry::instance()->get(resourceType);
-        KIS_ASSERT(m_loader);
         m_dirIterator.reset(new QDirIterator(location + '/' + resourceType,
-                                         m_loader->filters(),
+                                         KisResourceLoaderRegistry::instance()->filters(resourceType),
                                          QDir::Files | QDir::Readable,
                                          QDirIterator::Subdirectories));
     }
@@ -109,17 +107,22 @@ public:
 protected:
 
     bool loadResourceInternal() const {
-        if (!m_resource && m_resource->filename() != m_dirIterator->filePath()) {
+        if (!m_resource || (m_resource && m_resource->filename() != m_dirIterator->filePath())) {
             QFile f(m_dirIterator->filePath());
             f.open(QFile::ReadOnly);
-            const_cast<FolderIterator*>(this)->m_resource = m_loader->load(m_dirIterator->filePath(), f);
+            if (!m_loader) {
+                const_cast<FolderIterator*>(this)->m_loader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
+            }
+            if (m_loader) {
+                const_cast<FolderIterator*>(this)->m_resource = m_loader->load(m_dirIterator->filePath(), f);
+            }
             f.close();
         }
         return !m_resource.isNull();
     }
 
-    KoResourceSP m_resource;
     KisResourceLoaderBase *m_loader {0};
+    KoResourceSP m_resource;
     QScopedPointer<QDirIterator> m_dirIterator;
     const QString m_location;
     const QString m_resourceType;
@@ -140,9 +143,8 @@ KisResourceStorage::ResourceItem KisFolderStorage::resourceItem(const QString &u
     QFileInfo fi(url);
     FolderItem item;
     item.url = url;
-    item.resourceType = fi.path().split("/").last();
+    item.folder = fi.path().split("/").last();
     item.lastModified = fi.lastModified();
-
     return item;
 }
 
@@ -158,7 +160,7 @@ KoResourceSP KisFolderStorage::resource(const QString &url)
     return res;
 }
 
-KisResourceStorage::ResourceIterator KisFolderStorage::resources(const QString &resourceType)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources(const QString &resourceType)
 {
-    return FolderIterator(location(), resourceType);
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new FolderIterator(location(), resourceType));
 }

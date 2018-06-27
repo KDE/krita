@@ -18,6 +18,22 @@
  */
 
 #include "KisAslStorage.h"
+#include <KisResourceStorage.h>
+
+class AslIterator : public KisResourceStorage::ResourceIterator
+{
+public:
+    bool hasNext() const override {return false; }
+    void next() const override {}
+
+    QString url() const override { return QString(); }
+    QString type() const override { return QString(); }
+    QDateTime lastModified() const override { return QDateTime(); }
+    /// This only loads the resource when called
+    QByteArray md5sum() const override { return QByteArray(); }
+    /// This only loads the resource when called
+    KoResourceSP resource() const override { return 0; }
+};
 
 KisAslStorage::KisAslStorage(const QString &location)
     : KisStoragePlugin(location)
@@ -40,7 +56,7 @@ KoResourceSP KisAslStorage::resource(const QString &url)
     return 0;
 }
 
-KisResourceStorage::ResourceIterator KisAslStorage::resources(const QString &resourceType)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &resourceType)
 {
-    return KisResourceStorage::ResourceIterator();
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new AslIterator);
 }

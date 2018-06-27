@@ -24,23 +24,13 @@
 #include <QDirIterator>
 
 #include <KritaVersionWrapper.h>
-
+#include <klocalizedstring.h>
 #include <kis_debug.h>
 
 #include "KisResourceLocator.h"
+#include "KisResourceLoaderRegistry.h"
 
 const QString dbDriver = "QSQLITE";
-
-const QStringList KisResourceCacheDb::resourceTypes = QStringList() << "BRUSH_TIP"
-                                                                    << "GRADIENT"
-                                                                    << "PAINTOP_PRESET"
-                                                                    << "COLORSET"
-                                                                    << "PATTERN"
-                                                                    << "SYMBOL_LIBRARY"
-                                                                    << "TEMPLATE"
-                                                                    << "WORKSPACE"
-                                                                    << "SESSION"
-                                                                    << "UNKNOWN";
 
 const QStringList KisResourceCacheDb::storageTypes = QStringList() << "UNKNOWN"
                                                                    << "FOLDER"
@@ -206,7 +196,7 @@ QSqlError initDb(const QString &location)
         QFile f(":/fill_resource_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
-            Q_FOREACH(const QString &resourceType, KisResourceCacheDb::resourceTypes) {
+            Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
                 QSqlQuery query(sql);
                 query.addBindValue(resourceType);
                 if (!query.exec()) {
@@ -255,7 +245,7 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
-bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, KoResourceSP resource)
+bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, KoResourceSP resource, const QString &resourceType)
 {
     bool r = true;
 
@@ -269,8 +259,37 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, KoResourceSP 
         return false;
     }
 
-    // Check whether it already exists
+    /*    // Check whether it already exists
+    if (hasResource(storage, resource)) {
+        r = addResourceVersion(storage, resource);
+    }
+    else*/ {
+        QSqlQuery q;
+        r = q.prepare("INSERT INTO resources "
+                      "(resource_type_id, name, tooltip, thumbnail, status)"
+                      "VALUES"
+                      "((select id from resource_types where name = :resource_type), :name, :tooltip, :thumbnail, :status);");
 
+        if (!r) {
+            qWarning() << "Could not prepare addResource statement" << q.lastError();
+            return r;
+        }
+
+        q.bindValue(":resource_type", resourceType);
+        q.bindValue(":name", resource->name());
+        q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+        q.bindValue(":thumbnail", resource->image());
+        q.bindValue(":status", 1);
+
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute addResource statement" << q.boundValues() << q.lastError();
+            return r;
+        }
+    }
+    // Then add a new version
+
+    qDebug() << "Adding" << resource->filename();
 
     // Insert it
 
@@ -279,12 +298,14 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, KoResourceSP 
 
 bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString folder)
 {
-    KisResourceStorage::ResourceIterator iter = storage->resources(folder);
-    while(iter.hasNext()) {
-        iter.next();
-        KoResourceSP res = iter.resource();
-        if (!addResource(storage, res)) {
-            qWarning() << "Could not add resource" << res->filename() << "to the database";
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(folder);
+    while(iter->hasNext()) {
+        iter->next();
+        KoResourceSP res = iter->resource();
+        if (res) {
+            if (!addResource(storage, res, iter->type())) {
+                qWarning() << "Could not add resource" << res->filename() << "to the database";
+            }
         }
     }
     return true;

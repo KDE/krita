@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISASLSTORAGE_H
-#define KISASLSTORAGE_H
+#ifndef TESTFOLDERSTORAGE_H
+#define TESTFOLDERSTORAGE_H
 
-#include <KisStoragePlugin.h>
+#include <QObject>
 
-class KisAslStorage : public KisStoragePlugin
+class TestFolderStorage : public QObject
 {
-public:
-    KisAslStorage(const QString &location);
-    virtual ~KisAslStorage();
-
-    KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
-    KoResourceSP resource(const QString &url) override;
-    QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
-
+    Q_OBJECT
+private Q_SLOTS:
+    void testStorage();
+private:
 };
 
-#endif // KISASLSTORAGE_H
+#endif

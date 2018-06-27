@@ -25,7 +25,6 @@
 #include <QString>
 #include <QDateTime>
 
-
 #include <KoResource.h>
 
 #include <kritaresources_export.h>
@@ -48,6 +47,7 @@ public:
 
         virtual ~ResourceItem() {}
         QString url;
+        QString folder;
         QString resourceType;
         QDateTime lastModified;
         virtual QByteArray md5sum() const {return QByteArray();}
@@ -60,16 +60,16 @@ public:
 
         virtual ~ResourceIterator() {}
 
-        virtual bool hasNext() const {return false;};
-        virtual void next() const{};
+        virtual bool hasNext() const = 0;
+        virtual void next() const = 0;
 
-        virtual QString url() const {return QString();}
-        virtual QString type() const {return QString();}
-        virtual QDateTime lastModified() const {return QDateTime();}
+        virtual QString url() const = 0;
+        virtual QString type() const = 0;
+        virtual QDateTime lastModified() const = 0;
         /// This only loads the resource when called
-        virtual QByteArray md5sum() const {return QByteArray();}
+        virtual QByteArray md5sum() const = 0;
         /// This only loads the resource when called
-        virtual KoResourceSP resource() const {return 0;}
+        virtual KoResourceSP resource() const = 0;
     };
 
     enum class StorageType : int {
@@ -91,7 +91,7 @@ public:
 
     ResourceItem resourceItem(const QString &url);
     KoResourceSP resource(const QString &url);
-    ResourceIterator resources(const QString &resourceType);
+    QSharedPointer<ResourceIterator> resources(const QString &resourceType);
 
 private:
     class Private;

@@ -40,7 +40,6 @@ public:
     static const QString dbLocationKey; ///< configuration key for the location of the database
     static const QString resourceCacheDbFilename; ///< filename of the database
     static const QString databaseVersion; ///< current schema version
-    static const QStringList resourceTypes; ///< all types of resources
     static const QStringList storageTypes; ///< kinds of places where resources can be stored
 
     /**
@@ -66,7 +65,7 @@ private:
     ~KisResourceCacheDb();
     KisResourceCacheDb operator=(const KisResourceCacheDb&);
 
-    static bool addResource(KisResourceStorageSP storage, KoResourceSP resource);
+    static bool addResource(KisResourceStorageSP storage, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString folder);
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
     static bool synchronize(KisResourceStorageSP storage);

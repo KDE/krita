@@ -17,21 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISASLSTORAGE_H
-#define KISASLSTORAGE_H
+#ifndef KISRESOURCEMODEL_H
+#define KISRESOURCEMODEL_H
 
-#include <KisStoragePlugin.h>
+#include <QSqlRelationalTableModel>
 
-class KisAslStorage : public KisStoragePlugin
+class KisResourceModel : public QSqlRelationalTableModel
 {
+    Q_OBJECT
 public:
-    KisAslStorage(const QString &location);
-    virtual ~KisAslStorage();
-
-    KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
-    KoResourceSP resource(const QString &url) override;
-    QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
-
+    KisResourceModel();
 };
 
-#endif // KISASLSTORAGE_H
+#endif // KISRESOURCEMODEL_H

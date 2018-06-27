@@ -30,7 +30,7 @@ public:
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;
-    KisResourceStorage::ResourceIterator resources(const QString &resourceType) override;
+    QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
 };
 
 #endif // KISBUNDLESTORAGE_H

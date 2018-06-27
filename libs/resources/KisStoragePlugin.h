@@ -40,7 +40,7 @@ public:
 
     virtual KisResourceStorage::ResourceItem resourceItem(const QString &url) = 0;
     virtual KoResourceSP resource(const QString &url) = 0;
-    virtual KisResourceStorage::ResourceIterator resources(const QString &resourceType) = 0;
+    virtual QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) = 0;
 
 protected:
     QString location() const;

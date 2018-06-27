@@ -24,6 +24,7 @@
 #include <QDir>
 
 #include <KisResourceCacheDb.h>
+#include <KisResourceLoaderRegistry.h>
 
 void TestResourceCacheDb::initTestCase()
 {
@@ -75,7 +76,7 @@ void TestResourceCacheDb::testLookupTables()
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();
-    QVERIFY(query.value(0).toInt() == KisResourceCacheDb::resourceTypes.count());
+    QVERIFY(query.value(0).toInt() == KisResourceLoaderRegistry::instance()->resourceTypes().count());
 }
 
 void TestResourceCacheDb::cleanupTestCase()

@@ -129,9 +129,10 @@ QStringList KisResourceLocator::errorMessages() const
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
 {
+    qDebug() << "firstTimeInstallation" << installationResourcesLocation;
     Q_UNUSED(initalizationStatus);
 
-    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
+    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
         QDir dir(d->resourceLocation + '/' + folder + '/');
         if (!dir.exists()) {
             if (!QDir().mkpath(d->resourceLocation + '/' + folder + '/')) {
@@ -141,7 +142,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
         }
     }
 
-    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
+    Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
         QDir dir(installationResourcesLocation + '/' + folder + '/');
         if (dir.exists()) {
             Q_FOREACH(const QString &entry, dir.entryList(QDir::Files | QDir::Readable)) {
@@ -169,24 +170,24 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
 
 bool KisResourceLocator::initializeDb()
 {
-    QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
-    QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
-    while (iter.hasNext()) {
-        iter.next();
-        qDebug() << "Considering storage" << iter.filePath();
-        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(iter.filePath());
-        if (!KisResourceCacheDb::addStorage(storage, true)) {
-            d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(iter.filePath()));
-            return false;
+    qDebug() << "initalizeDb";
+    findStorages();
+
+    Q_FOREACH(KisResourceStorageSP storage, d->storages) {
+
+        if (!KisResourceCacheDb::addStorage(storage, (storage->type() == KisResourceStorage::StorageType::Folder ? false : true))) {
+            d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(storage->location()));
         }
-        Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceFolders()) {
+
+        Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+            qDebug() << "Adding storage" << storage->location() << "folder" << folder;
             if (!KisResourceCacheDb::addResources(storage, folder)) {
                 d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(folder));
-                return false;
             }
         }
     }
-    KisResourceCacheDb::addStorage(QSharedPointer<KisResourceStorage>::create(d->resourceLocation), false);
+
+    qDebug() << d->errorMessages;
 
     return true;
 }

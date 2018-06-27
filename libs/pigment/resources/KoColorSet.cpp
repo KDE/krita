@@ -55,7 +55,7 @@ struct KoColorSet::Private {
     KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString comment;
-    qint32 columns {1};
+    qint32 columns {0}; // Set the default value that the GIMP uses...
     QVector<KoColorSetEntry> colors; //ungrouped colors
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.
     QMap<QString, QVector<KoColorSetEntry>> groups; //grouped colors.
@@ -99,15 +99,13 @@ KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
     , d(new Private())
 {
-    // Implemented in KoResource class
-    d->columns = 0; // Set the default value that the GIMP uses...
 }
 
 KoColorSet::KoColorSet()
     : KoResource(QString())
     , d(new Private())
 {
-    d->columns = 0; // Set the default value that the GIMP uses...
+
 }
 
 /// Create an copied palette

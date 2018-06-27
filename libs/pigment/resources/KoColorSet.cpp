@@ -55,7 +55,7 @@ struct KoColorSet::Private {
     KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString comment;
-    qint32 columns;
+    qint32 columns {1};
     QVector<KoColorSetEntry> colors; //ungrouped colors
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.
     QMap<QString, QVector<KoColorSetEntry>> groups; //grouped colors.

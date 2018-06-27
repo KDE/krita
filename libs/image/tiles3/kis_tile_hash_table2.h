@@ -97,10 +97,11 @@ private:
     inline quint32 calculateHash(qint32 col, qint32 row)
     {
         if (col == 0 && row == 0) {
-            row += 1001;
+            col = 0x7FFF;
+            row = 0x7FFF;
         }
 
-        return ((row << 16) | (col & 0xFFFF));
+        return ((static_cast<quint32>(row) << 16) | (static_cast<quint32>(col) & 0xFFFF));
     }
 
     inline void insert(quint32 key, TileTypeSP value)

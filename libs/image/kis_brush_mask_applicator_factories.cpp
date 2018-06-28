@@ -222,10 +222,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             Vc::float_v fullFade = vAlphafactor * (  VcExtraMath::erf(valDist + vCenter) -  VcExtraMath::erf(valDist - vCenter));
 
             Vc::float_m mask;
-            // Mask  undefined values, out of range are out of mask
-            mask = Vc::isfinite(fullFade);
-            fullFade.setZero(!mask);
-
             // Mask in the inner circe of the mask
             mask = fullFade < vZero;
             fullFade.setZero(mask);
@@ -411,9 +407,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             d->fadeMaker.apply2DFader(fullFade,excludeMask,xr,yr);
 
             Vc::float_m mask;
-            // Mask  undefined values, out of range are out of mask
-            mask = Vc::isfinite(fullFade);
-            fullFade.setZero(!mask);
 
             // Mask in the inner circe of the mask
             mask = fullFade < vZero;
@@ -425,7 +418,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             // Mask (value - value), presicion errors.
             Vc::float_v vFade = fullFade / vValMax;
-
 
             // return original vValue values before vFade transform
             vFade(excludeMask) = vValue;

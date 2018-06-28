@@ -400,7 +400,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_v vValue;
 
         // check if we need to apply fader on values
-        Vc::float_m excludeMask(d->fadeMaker.needFade(xr,yr));
+        Vc::float_m excludeMask = d->fadeMaker.needFade(xr,yr);
         vValue(excludeMask) = vOne;
 
         if (!excludeMask.isFull()) {

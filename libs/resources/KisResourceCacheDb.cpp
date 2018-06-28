@@ -362,7 +362,14 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         q.bindValue(":name", resource->name());
         q.bindValue(":filename", resource->filename());
         q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
-        q.bindValue(":thumbnail", resource->image());
+
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        resource->image().save(&buf, "PNG");
+        buf.close();
+        q.bindValue(":thumbnail", ba);
+
         q.bindValue(":status", 1);
 
         r = q.exec();

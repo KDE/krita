@@ -160,7 +160,7 @@ class comicsExporter():
                 if "CBZ" in sizesList.keys():
                     title = self.configDictionary["projectName"]
                     if "title" in self.configDictionary.keys():
-                        title = self.configDictionary["title"]
+                        title = str(self.configDictionary["title"]).replace(" ", "_")
 
                     self.acbfLocation = str(exportPath / "metadata" / str(title + ".acbf"))
 
@@ -193,7 +193,7 @@ class comicsExporter():
     def export_to_cbz(self, exportPath):
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
-            title = self.configDictionary["title"]
+            title = str(self.configDictionary["title"]).replace(" ", "_")
         self.progress.setLabelText(i18n("Saving out CoMet\nmetadata file"))
         self.progress.setValue(self.progress.value()+1)
         self.cometLocation = str(exportPath / "metadata" / str(title + " CoMet.xml"))
@@ -618,7 +618,7 @@ class comicsExporter():
         # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
-            title = self.configDictionary["title"]
+            title = str(self.configDictionary["title"]).replace(" ", "_")
 
         # Get the appropriate path.
         url = str(exportPath / str(title + ".cbz"))

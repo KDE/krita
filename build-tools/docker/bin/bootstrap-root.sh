@@ -2,7 +2,7 @@
 
 if [ -d ./persistent/krita ]; then
    for i in 'bin default-home'; do
-       if [ ! -d $i ]
+       if [ ! -d "$i" ]; then
           mkdir $i
        fi
    done

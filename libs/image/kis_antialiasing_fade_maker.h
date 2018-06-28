@@ -199,15 +199,58 @@ public:
         return false;
     }
 
-    qreal getXLimit() { return m_xLimit; }
-    qreal getYLimit() { return m_yLimit; }
+#if defined HAVE_VC
+    Vc::float_m needFade(Vc::float_v &xr, Vc::float_v &yr) const {
 
-    qreal getXFadeLimitStart() { return m_xFadeLimitStart; }
-    qreal getYFadeLimitStart() { return m_yFadeLimitStart; }
-    qreal getXFadeCoeff(){ return m_xFadeCoeff; }
-    qreal getYFadeCoeff(){ return m_yFadeCoeff; }
+        Vc::float_v vXLimit(m_xLimit);
+        Vc::float_v vYLimit(m_yLimit);
 
-    bool getAliasingEnabled() { return m_enableAntialiasing; }
+
+        Vc::float_m outXMask = xr > vXLimit;
+        Vc::float_m outYMask = yr > vYLimit;
+
+        return (outXMask | outYMask);
+    }
+
+    // Apply fader separatedly to avoid calculating vValue twice.
+    void apply2DFader(Vc::float_v &vValue, Vc::float_m &excludeMask, Vc::float_v &xr, Vc::float_v &yr) const {
+        const Vc::float_v vValMax(255.f);
+
+        if(m_enableAntialiasing){
+            Vc::float_v vXFadeLimitStart(m_xFadeLimitStart);
+            Vc::float_v vYFadeLimitStart(m_yFadeLimitStart);
+            Vc::float_v vXFadeCoeff(m_xFadeCoeff);
+            Vc::float_v vYFadeCoeff(m_yFadeCoeff);
+
+            Vc::float_v xra = abs(xr);
+            Vc::float_m fadeXStartMask(false);
+            Vc::float_m fadeYStartMask(false);
+
+            Vc::float_v fadeValue;
+            Vc::SimdArray<quint16,Vc::float_v::size()> vBaseValue(vValue);
+
+            fadeXStartMask = xra > vXFadeLimitStart;
+            fadeXStartMask = (fadeXStartMask ^ excludeMask) & fadeXStartMask;
+            if (!fadeXStartMask.isFull()) {
+                fadeValue = vBaseValue + (vValMax - vBaseValue) * (xra - vXFadeLimitStart) * vXFadeCoeff;
+                fadeValue(fadeXStartMask & ((yr > vYFadeLimitStart) & (fadeValue < vValMax)) ) =
+                        fadeValue + (vValMax - fadeValue) * (yr - vYFadeLimitStart) * vYFadeCoeff;
+                vValue(fadeXStartMask) = fadeValue;
+            }
+
+            fadeYStartMask = yr > vYFadeLimitStart;
+            fadeYStartMask = (fadeYStartMask ^ fadeXStartMask) & fadeYStartMask;
+            if (!fadeYStartMask.isFull()) {
+                fadeValue = vBaseValue + (vValMax - vBaseValue) * (yr - vYFadeLimitStart) * vYFadeCoeff;
+                fadeValue(fadeYStartMask & ((xra > vXFadeLimitStart) & (fadeValue < vValMax)) ) =
+                        fadeValue + (vValMax - fadeValue) * (xra - vXFadeLimitStart) * vXFadeCoeff;
+                vValue(fadeYStartMask) = fadeValue;
+            }
+        }
+        return;
+    }
+
+#endif /* defined HAVE_VC */
 
 private:
     qreal m_xLimit;

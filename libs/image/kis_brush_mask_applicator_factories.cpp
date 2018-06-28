@@ -363,8 +363,6 @@ template<> void KisGaussRectangleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
 {
-    const bool antialiasOn = d->fadeMaker.getAliasingEnabled();
-
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -388,13 +386,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
     Vc::float_v vAlphafactor(d->alphafactor);
 
-    Vc::float_v vXLimit(d->fadeMaker.getXLimit());
-    Vc::float_v vYLimit(d->fadeMaker.getYLimit());
-    Vc::float_v vXFadeLimitStart(d->fadeMaker.getXFadeLimitStart());
-    Vc::float_v vYFadeLimitStart(d->fadeMaker.getYFadeLimitStart());
-    Vc::float_v vXFadeCoeff(d->fadeMaker.getXFadeCoeff());
-    Vc::float_v vYFadeCoeff(d->fadeMaker.getYFadeCoeff());
-
     Vc::float_v vOne(Vc::One);
     Vc::float_v vZero(Vc::Zero);
     Vc::float_v vValMax(255.f);
@@ -408,43 +399,16 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
         Vc::float_v vValue;
 
-        // BEGIN FadeMaker needFade vectorized 2D
-        Vc::float_v xra = abs(xr);
-        Vc::float_m outXMask = xr > vXLimit;
-        Vc::float_m outYMask = yr > vYLimit;
-
-        Vc::float_m excludeMask(outXMask | outYMask);
+        // check if we need to apply fader on values
+        Vc::float_m excludeMask(d->fadeMaker.needFade(xr,yr));
         vValue(excludeMask) = vOne;
 
         if (!excludeMask.isFull()) {
             Vc::float_v fullFade = vValMax - (vAlphafactor * (VcExtraMath::erf((vhalfWidth + xr) * vXFade) + VcExtraMath::erf((vhalfWidth - xr) * vXFade))
                                         * (VcExtraMath::erf((vhalfHeight + yr) * vYFade) + VcExtraMath::erf((vhalfHeight - yr) * vYFade)));
-            // if antialias is off, do not process
-            Vc::float_m fadeXStartMask(false);
-            Vc::float_m fadeYStartMask(false);
 
-            if(antialiasOn){
-                Vc::float_v fadeValue;
-                Vc::SimdArray<quint16,Vc::float_v::size()> vBaseValue(fullFade);
-
-                fadeXStartMask = xra > vXFadeLimitStart;
-                fadeXStartMask = (fadeXStartMask ^ excludeMask) & fadeXStartMask;
-                if (!fadeXStartMask.isFull()) {
-                    fadeValue = vBaseValue + (vValMax - vBaseValue) * (xra - vXFadeLimitStart) * vXFadeCoeff;
-                    fadeValue(fadeXStartMask & ((yr > vYFadeLimitStart) & (fadeValue < vValMax)) ) =
-                            fadeValue + (vValMax - fadeValue) * (yr - vYFadeLimitStart) * vYFadeCoeff;
-                    fullFade(fadeXStartMask) = fadeValue;
-                }
-
-                fadeYStartMask = yr > vYFadeLimitStart;
-                fadeYStartMask = (fadeYStartMask ^ fadeXStartMask) & fadeYStartMask;
-                if (!fadeYStartMask.isFull()) {
-                    fadeValue = vBaseValue + (vValMax - vBaseValue) * (yr - vYFadeLimitStart) * vYFadeCoeff;
-                    fadeValue(fadeYStartMask & ((xra > vXFadeLimitStart) & (fadeValue < vValMax)) ) =
-                            fadeValue + (vValMax - fadeValue) * (xra - vXFadeLimitStart) * vXFadeCoeff;
-                    fullFade(fadeYStartMask) = fadeValue;
-                }
-            }
+            // apply antialias fader
+            d->fadeMaker.apply2DFader(fullFade,excludeMask,xr,yr);
 
             Vc::float_m mask;
             // Mask  undefined values, out of range are out of mask

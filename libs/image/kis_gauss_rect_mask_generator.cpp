@@ -128,11 +128,6 @@ quint8 KisGaussRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     return d->value(xr, yr);
 }
 
-bool KisGaussRectangleMaskGenerator::shouldSupersample() const
-{
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
-}
-
 bool KisGaussRectangleMaskGenerator::shouldVectorize() const
 {
     return !shouldSupersample() && spikes() == 2;

@@ -9,16 +9,29 @@ to reproduce AppImage-only bugs in Krita.
 
 ## Prerequisites
 
-Firstly we need to download deps and Krita source tree. These steps are not
+Firstly make sure you have Docker installed
+
+```bash
+sudo apt install docker docker.io
+```
+
+Then you need to download deps and Krita source tree. These steps are not
 included into the *Dockerfile* to save internal bandwidth (most Krita
 developers already have al least one clone of Krita source tree).
 
 ```bash
+# create directory structure for container control directory
+mkdir -p krita-master/persistent
+cd krita-master
+
+# copy/chechout Krita sources to 'persistent/krita'
+cp -r /path/to/sources/krita ./persistent/krita
+
+# initialize control scripts and the Dockerfile
+./persistent/krita/build-tools/docker/bin/bootstrap-root.sh
+
 # download the deps archive
 ./bin/bootstrap-deps.sh
-
-# mount/copy/chechout Krita sources to 'persistent/krita'
-cp -r /path/to/sources/krita ./persistent/krita
 ```
 
 ## Build the docker image and run the container

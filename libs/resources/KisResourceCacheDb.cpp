@@ -75,7 +75,6 @@ QSqlError initDb(const QString &location)
                                        << "storages"
                                        << "tags"
                                        << "resources"
-                                       << "translations"
                                        << "versioned_resources"
                                        << "resource_tags";
 
@@ -414,9 +413,9 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     return r;
 }
 
-bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString folder)
+bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString resourceType)
 {
-    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(folder);
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
     while(iter->hasNext()) {
         iter->next();
         KoResourceSP res = iter->resource();
@@ -427,6 +426,16 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString fold
         }
     }
     return true;
+}
+
+bool KisResourceCacheDb::addTag(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
+{
+    return false;
+}
+
+bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceType)
+{
+    return false;
 }
 
 bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstalled)

@@ -10,7 +10,6 @@
         <file alias="create_resource_types.sql">sql/create_resource_types.sql</file>
         <file alias="fill_resource_types.sql">sql/fill_resource_types.sql</file>
         <file alias="create_resources.sql">sql/create_resources.sql</file>
-        <file alias="create_translations.sql">sql/create_translations.sql</file>
         <file alias="create_versioned_resources.sql">sql/create_versioned_resources.sql</file>
         <file alias="create_resource_tags.sql">sql/create_resource_tags.sql</file>
         <file alias="get_version_information.sql">sql/get_version_information.sql</file>

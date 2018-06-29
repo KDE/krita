@@ -69,8 +69,14 @@ private:
     static bool addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource);
     static bool hasResource(KisResourceStorageSP storage, KoResourceSP resource, const QString &resourceType);
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
-    static bool addResources(KisResourceStorageSP storage, QString folder);
+    static bool addResources(KisResourceStorageSP storage, QString resourceType);
+
+    static bool addTag(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
+    static bool addTags(KisResourceStorageSP storage, QString resourceType);
+
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
+
+
     static bool synchronize(KisResourceStorageSP storage);
 
 

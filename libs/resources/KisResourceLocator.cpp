@@ -184,6 +184,9 @@ bool KisResourceLocator::initializeDb()
             if (!KisResourceCacheDb::addResources(storage, folder)) {
                 d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(folder));
             }
+            if (!KisResourceCacheDb::addTags(storage, folder)) {
+                d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database").arg(folder));
+            }
         }
     }
 

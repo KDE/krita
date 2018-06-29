@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TESTFOLDERSTORAGE_H
-#define TESTFOLDERSTORAGE_H
+#ifndef TESTTAGLOADER_H
+#define TESTTAGLOADER_H
 
 #include <QObject>
 
-class TestFolderStorage : public QObject
+class TestTagLoader : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testStorage();
+    void testLoadTag();
 private:
 };
 

@@ -33,6 +33,7 @@ class KConfigBackendPrivate;
 class KEntryMap;
 class QFile;
 class QByteArray;
+class QIODevice;
 
 /**
  * \class KConfigBackend kconfigbackend_p.h <KConfigBackend>
@@ -184,6 +185,7 @@ public:
 protected:
     KConfigBackend();
     void setLocalFilePath(const QString &file);
+    void setLocalIODevice(QIODevice &io);
 
 private:
     KConfigBackendPrivate *const d;

@@ -34,11 +34,13 @@
  */
 class QIODevice;
 
-class KisTagLoader
+#include "kritaresources_export.h"
+
+class KRITARESOURCES_EXPORT KisTagLoader
 {
 public:
     KisTagLoader();
-    virtual ~KisTagLoader() {}
+    virtual ~KisTagLoader();
 
     QString name() const;
     void setName(QString &name) const;

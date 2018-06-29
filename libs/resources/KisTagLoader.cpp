@@ -20,14 +20,22 @@
 #include "KisTagLoader.h"
 
 #include <QIODevice>
+#include <QLocale>
 
-#include <kconfigini_p.h>
+#include "kconfigini_p.h"
+#include "kconfigbackend_p.h"
+#include "kconfigdata.h"
 
 class KisTagLoader::Private {
 };
 
 KisTagLoader::KisTagLoader()
 {
+}
+
+KisTagLoader::~KisTagLoader()
+{
+
 }
 
 QString KisTagLoader::name() const
@@ -62,6 +70,16 @@ void KisTagLoader::setComment(const QString &comment) const
 
 bool KisTagLoader::load(QIODevice &io)
 {
+    KEntryMap map;
+    KConfigIniBackend ini;
+    KConfigBackend::ParseInfo r = ini.parseConfigIO(io, QLocale().name().toUtf8(), map, KConfigBackend::ParseOption::ParseGlobal, false);
+    if (!r == KConfigBackend::ParseInfo::ParseOk) {
+        if (!io.isOpen()) {
+            io.open(QIODevice::ReadOnly);
+        }
+        io.reset();
+        qWarning() << "Could not load this tag file" << QString::fromUtf8(io.readAll());
+    }
     return false;
 }
 

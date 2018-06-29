@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TestFolderStorage.h"
+#include "TestTagLoader.h"
 #include <QTest>
 
-#include <KisFolderStorage.h>
+#include <KisTagLoader.h>
 #include <KisResourceLoader.h>
 #include <KoResource.h>
 #include <KisResourceLoaderRegistry.h>
@@ -28,32 +28,34 @@
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
-class Dummy : public KoResource {
-public:
-    Dummy(const QString &f) : KoResource(f) {}
-    bool load() override { return true; }
-    bool loadFromDevice(QIODevice *) override { return true; }
-    bool save() override { return true; }
-};
 
-
-void TestFolderStorage ::testStorage()
+void TestTagLoader ::testLoadTag()
 {
-    KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
+    KisTagLoader tagLoader;
+    QFile f(QString(FILES_DATA_DIR) + "/paintoppresets/test.deskop");
+    f.open(QFile::ReadOnly);
 
-    KisResourceLoaderRegistry::instance()->add("brushes", new KisResourceLoader<Dummy>("dummy", "brushes", QStringList() << "image/x-gimp-brush"));
-    QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources("brushes");
-    QVERIFY(iter->hasNext());
-    int count = 0;
-    while (iter->hasNext()) {
-        qDebug() << iter->url() << iter->type() << iter->lastModified();
-        iter->next();
-        count++;
+    {
+        bool r = tagLoader.load(f);
+        f.close();
+        QVERIFY(r);
+        QVERIFY(tagLoader.name() == "* Favorites");
+        QVERIFY(tagLoader.comment() == "Your favorite brush presets");
+        QVERIFY(tagLoader.url() == "* Favorites");
     }
-    QVERIFY(count == 1);
 
+    QLocale nl(QLocale::Dutch, QLocale::Netherlands);
+    QLocale::setDefault(nl);
 
+    {
+        bool r = tagLoader.load(f);
+        f.close();
+        QVERIFY(r);
+        QVERIFY(tagLoader.name() == "* Favorieten");
+        QVERIFY(tagLoader.comment() == "Jouw favoriete penseel presets");
+        QVERIFY(tagLoader.url() == "* Favorites");
+    }
 }
 
-QTEST_MAIN(TestFolderStorage)
+QTEST_MAIN(TestTagLoader)
 

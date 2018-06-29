@@ -54,10 +54,15 @@ static QByteArray lookup(const KConfigIniBackend::BufferFragment &fragment, QHas
     return cache->insert(fragment, fragment.toByteArray()).value();
 }
 
-QString KConfigIniBackend::warningProlog(const QFile &file, int line)
+QString KConfigIniBackend::warningProlog(const QIODevice &file, int line)
 {
-    return QStringLiteral("KConfigIni: In file %2, line %1: ")
-           .arg(line).arg(file.fileName());
+    const QFile *f = dynamic_cast<const QFile*>(&file);
+    if (f) {
+        return QStringLiteral("KConfigIni: In file %2, line %1: ").arg(line).arg(f->fileName());
+    }
+    else {
+        return QStringLiteral("KConfigIni: line %1: ").arg(line);
+    }
 }
 
 KConfigIniBackend::KConfigIniBackend()
@@ -69,8 +74,7 @@ KConfigIniBackend::~KConfigIniBackend()
 {
 }
 
-KConfigBackend::ParseInfo
-KConfigIniBackend::parseConfig(const QByteArray &currentLocale, KEntryMap &entryMap,
+KConfigBackend::ParseInfo KConfigIniBackend::parseConfig(const QByteArray &currentLocale, KEntryMap &entryMap,
                                ParseOptions options)
 {
     return parseConfig(currentLocale, entryMap, options, false);
@@ -78,25 +82,31 @@ KConfigIniBackend::parseConfig(const QByteArray &currentLocale, KEntryMap &entry
 
 // merging==true is the merging that happens at the beginning of writeConfig:
 // merge changes in the on-disk file with the changes in the KConfig object.
-KConfigBackend::ParseInfo
-KConfigIniBackend::parseConfig(const QByteArray &currentLocale, KEntryMap &entryMap,
-                               ParseOptions options, bool merging)
+KConfigBackend::ParseInfo KConfigIniBackend::parseConfig(const QByteArray &currentLocale, KEntryMap &entryMap, ParseOptions options, bool merging)
 {
     if (filePath().isEmpty() || !QFile::exists(filePath())) {
         return ParseOk;
     }
 
+    QFile file(filePath());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return ParseOpenError;
+    }
+
+    return parseConfigIO(file, currentLocale, entryMap, options, merging);
+}
+
+
+// merging==true is the merging that happens at the beginning of writeConfig:
+// merge changes in the on-disk file with the changes in the KConfig object.
+KConfigBackend::ParseInfo KConfigIniBackend::parseConfigIO(QIODevice &file, const QByteArray &currentLocale, KEntryMap &entryMap, ParseOptions options, bool merging)
+{
     const QByteArray currentLanguage = currentLocale.split('_').first();
 
     bool bDefault = options & ParseDefaults;
     bool allowExecutableValues = options & ParseExpansions;
 
     QByteArray currentGroup("<default>");
-
-    QFile file(filePath());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return ParseOpenError;
-    }
 
     QList<QByteArray> immutableGroups;
 
@@ -726,7 +736,7 @@ QByteArray KConfigIniBackend::stringToPrintable(const QByteArray &aString, Strin
     return result;
 }
 
-char KConfigIniBackend::charFromHex(const char *str, const QFile &file, int line)
+char KConfigIniBackend::charFromHex(const char *str, const QIODevice &file, int line)
 {
     unsigned char ret = 0;
     for (int i = 0; i < 2; i++) {
@@ -750,7 +760,7 @@ char KConfigIniBackend::charFromHex(const char *str, const QFile &file, int line
     return char(ret);
 }
 
-void KConfigIniBackend::printableToString(BufferFragment *aString, const QFile &file, int line)
+void KConfigIniBackend::printableToString(BufferFragment *aString, const QIODevice &file, int line)
 {
     if (aString->isEmpty() || aString->indexOf('\\') == -1) {
         return;

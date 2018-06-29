@@ -17,25 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISFOLDERSTORAGE_H
-#define KISFOLDERSTORAGE_H
+#ifndef KISTAGLOADER_H
+#define KISTAGLOADER_H
 
-#include <KisStoragePlugin.h>
-
-#include <kritaresources_export.h>
-
-class KRITARESOURCES_EXPORT KisFolderStorage : public KisStoragePlugin
+/**
+ * @brief The KisTagLoader loads a tag from a .tag file.
+ * A .tag file is a .desktop file. The following fields
+ * are important:
+ *
+ * name: the name of the tag, which can be translated
+ * comment: a tooltip for the tag, which can be translagted
+ * url: the untranslated name of the tag
+ */
+class KisTagLoader
 {
 public:
-    KisFolderStorage(const QString &location);
-    virtual ~KisFolderStorage();
-
-    KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
-    KoResourceSP resource(const QString &url) override;
-    QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
-    QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
-
-
+    KisTagLoader();
 };
 
-#endif // KISFOLDERSTORAGE_H
+#endif // KISTAGLOADER_H

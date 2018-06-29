@@ -25,6 +25,36 @@
 
 #include <KisResourceLoaderRegistry.h>
 
+class FolderTagIterator : public KisResourceStorage::TagIterator
+{
+public:
+
+    FolderTagIterator(const QString &location, const QString &resourceType)
+        : m_location(location)
+        , m_resourceType(resourceType)
+    {
+        m_dirIterator.reset(new QDirIterator(location + '/' + resourceType,
+                                             QStringList() << "*.tag",
+                                             QDir::Files | QDir::Readable,
+                                             QDirIterator::Subdirectories));
+    }
+
+    bool hasNext() const override {return false; }
+    void next() const override {}
+
+    QString url() const override { return QString(); }
+    QString name() const override { return QString(); }
+    QString comment() const override {return QString(); }
+
+
+private:
+
+    QScopedPointer<QDirIterator> m_dirIterator;
+    QString m_location;
+    QString m_resourceType;
+};
+
+
 class FolderItem : public KisResourceStorage::ResourceItem
 {
 public:
@@ -54,9 +84,9 @@ public:
         , m_resourceType(resourceType)
     {
         m_dirIterator.reset(new QDirIterator(location + '/' + resourceType,
-                                         KisResourceLoaderRegistry::instance()->filters(resourceType),
-                                         QDir::Files | QDir::Readable,
-                                         QDirIterator::Subdirectories));
+                                             KisResourceLoaderRegistry::instance()->filters(resourceType),
+                                             QDir::Files | QDir::Readable,
+                                             QDirIterator::Subdirectories));
     }
 
     ~FolderIterator() override {}
@@ -163,4 +193,9 @@ KoResourceSP KisFolderStorage::resource(const QString &url)
 QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new FolderIterator(location(), resourceType));
+}
+
+QSharedPointer<KisResourceStorage::TagIterator> KisFolderStorage::tags(const QString &resourceType)
+{
+    return QSharedPointer<KisResourceStorage::TagIterator>(new FolderTagIterator(location(), resourceType));
 }

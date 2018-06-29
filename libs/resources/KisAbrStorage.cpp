@@ -20,6 +20,27 @@
 #include "KisAbrStorage.h"
 #include "KisResourceStorage.h"
 
+class AbrTagIterator : public KisResourceStorage::TagIterator
+{
+public:
+    AbrTagIterator(const QString &location, const QString &resourceType)
+        : m_location(location)
+        , m_resourceType(resourceType)
+    {}
+
+    bool hasNext() const override {return false; }
+    void next() const override {}
+
+    QString url() const override { return QString(); }
+    QString name() const override { return QString(); }
+    QString comment() const override {return QString(); }
+
+private:
+
+    QString m_location;
+    QString m_resourceType;
+};
+
 class AbrIterator : public KisResourceStorage::ResourceIterator
 {
 public:
@@ -60,4 +81,9 @@ KoResourceSP KisAbrStorage::resource(const QString &url)
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAbrStorage::resources(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new AbrIterator);
+}
+
+QSharedPointer<KisResourceStorage::TagIterator> KisAbrStorage::tags(const QString &resourceType)
+{
+    return QSharedPointer<KisResourceStorage::TagIterator>(new AbrTagIterator(location(), resourceType));
 }

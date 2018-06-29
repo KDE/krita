@@ -32,6 +32,7 @@ public:
 
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
+    QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
 
 };
 

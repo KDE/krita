@@ -17,25 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISFOLDERSTORAGE_H
-#define KISFOLDERSTORAGE_H
+#include "KisTagLoader.h"
 
-#include <KisStoragePlugin.h>
-
-#include <kritaresources_export.h>
-
-class KRITARESOURCES_EXPORT KisFolderStorage : public KisStoragePlugin
+KisTagLoader::KisTagLoader()
 {
-public:
-    KisFolderStorage(const QString &location);
-    virtual ~KisFolderStorage();
 
-    KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
-    KoResourceSP resource(const QString &url) override;
-    QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
-    QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
-
-
-};
-
-#endif // KISFOLDERSTORAGE_H
+}

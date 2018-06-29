@@ -53,6 +53,20 @@ public:
         virtual QByteArray md5sum() const {return QByteArray();}
     };
 
+    class TagIterator
+    {
+    public:
+        virtual ~TagIterator() {}
+        virtual bool hasNext() const = 0;
+        virtual void next() const = 0;
+
+        /// The untranslated name of the tag, to be used for making connections to resources
+        virtual QString url() const = 0;
+        /// The translated name of the tag, to be shown in the GUI
+        virtual QString name() const = 0;
+        /// An extra, optional comment for the tag
+        virtual QString comment() const = 0;
+    };
 
     class ResourceIterator
     {

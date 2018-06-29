@@ -20,6 +20,29 @@
 #include "KisAslStorage.h"
 #include <KisResourceStorage.h>
 
+class AslTagIterator : public KisResourceStorage::TagIterator
+{
+public:
+
+    AslTagIterator(const QString &location, const QString &resourceType)
+        : m_location(location)
+        , m_resourceType(resourceType)
+    {}
+
+    bool hasNext() const override {return false; }
+    void next() const override {}
+
+    QString url() const override { return QString(); }
+    QString name() const override { return QString(); }
+    QString comment() const override {return QString(); }
+
+private:
+
+    QString m_location;
+    QString m_resourceType;
+
+};
+
 class AslIterator : public KisResourceStorage::ResourceIterator
 {
 public:
@@ -59,4 +82,9 @@ KoResourceSP KisAslStorage::resource(const QString &url)
 QSharedPointer<KisResourceStorage::ResourceIterator> KisAslStorage::resources(const QString &resourceType)
 {
     return QSharedPointer<KisResourceStorage::ResourceIterator>(new AslIterator);
+}
+
+QSharedPointer<KisResourceStorage::TagIterator> KisAslStorage::tags(const QString &resourceType)
+{
+    return QSharedPointer<KisResourceStorage::TagIterator>(new AslTagIterator(location(), resourceType));
 }

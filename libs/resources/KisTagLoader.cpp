@@ -26,10 +26,17 @@
 #include "kconfigbackend_p.h"
 #include "kconfigdata.h"
 
+#include <kis_debug.h>
+
 class KisTagLoader::Private {
+public:
+    QString url;
+    QString name;
+    QString comment;
 };
 
 KisTagLoader::KisTagLoader()
+    : d(new Private)
 {
 }
 
@@ -40,47 +47,58 @@ KisTagLoader::~KisTagLoader()
 
 QString KisTagLoader::name() const
 {
-    return QString();
+    return d->name;
 }
 
 void KisTagLoader::setName(QString &name) const
 {
-
+    d->name = name;
 }
 
 QString KisTagLoader::url() const
 {
-    return QString();
+    return d->url;
 }
 
 void KisTagLoader::setUrl(const QString &url) const
 {
-
+    d->url = url;
 }
 
 QString KisTagLoader::comment() const
 {
-    return QString();
+    return d->comment;
 }
 
 void KisTagLoader::setComment(const QString &comment) const
 {
-
+    d->comment = comment;
 }
 
 bool KisTagLoader::load(QIODevice &io)
 {
+    if (!io.isOpen()) {
+        io.open(QIODevice::ReadOnly);
+    }
+    KIS_ASSERT(io.isOpen());
+
     KEntryMap map;
     KConfigIniBackend ini;
     KConfigBackend::ParseInfo r = ini.parseConfigIO(io, QLocale().name().toUtf8(), map, KConfigBackend::ParseOption::ParseGlobal, false);
     if (!r == KConfigBackend::ParseInfo::ParseOk) {
-        if (!io.isOpen()) {
-            io.open(QIODevice::ReadOnly);
-        }
         io.reset();
         qWarning() << "Could not load this tag file" << QString::fromUtf8(io.readAll());
+        return false;
     }
-    return false;
+
+    QString type = map.getEntry("Desktop Entry", "Type");
+    if (type != "Tag") return false;
+
+    d->url = map.getEntry("Desktop Entry", "URL");
+    d->name = map.getEntry("Desktop Entry", "Name");
+    d->comment = map.getEntry("Desktop Entry", "Comment");
+
+    return true;
 }
 
 bool KisTagLoader::save(QIODevice &io)

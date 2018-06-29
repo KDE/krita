@@ -21,7 +21,7 @@
 #include <QTest>
 #include <QBuffer>
 
-#include <KisTagLoader.h>
+#include <KisTag.h>
 #include <KisResourceLoader.h>
 #include <KoResource.h>
 #include <KisResourceLoaderRegistry.h>
@@ -32,7 +32,7 @@
 
 void TestTagLoader ::testLoadTag()
 {
-    KisTagLoader tagLoader;
+    KisTag tagLoader;
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
 
     QVERIFY(f.exists());
@@ -66,7 +66,7 @@ void TestTagLoader ::testLoadTag()
 
 void TestTagLoader::testSaveTag()
 {
-    KisTagLoader tagLoader;
+    KisTag tagLoader;
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
 
     QVERIFY(f.exists());

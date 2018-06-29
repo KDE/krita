@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KisTagLoader.h"
+#include "KisTag.h"
 
 #include <QIODevice>
 #include <QLocale>
@@ -32,14 +32,14 @@
 
 #include <kis_debug.h>
 
-const QByteArray KisTagLoader::s_group {"Desktop Entry"};
-const QByteArray KisTagLoader::s_type {"Type"};
-const QByteArray KisTagLoader::s_tag {"Tag"};
-const QByteArray KisTagLoader::s_name {"Name"};
-const QByteArray KisTagLoader::s_url {"URL"};
-const QByteArray KisTagLoader::s_comment {"Comment"};
+const QByteArray KisTag::s_group {"Desktop Entry"};
+const QByteArray KisTag::s_type {"Type"};
+const QByteArray KisTag::s_tag {"Tag"};
+const QByteArray KisTag::s_name {"Name"};
+const QByteArray KisTag::s_url {"URL"};
+const QByteArray KisTag::s_comment {"Comment"};
 
-class KisTagLoader::Private {
+class KisTag::Private {
 public:
     QString url;
     QString name;
@@ -135,50 +135,50 @@ public:
 
 };
 
-KisTagLoader::KisTagLoader()
+KisTag::KisTag()
     : d(new Private)
 {
 }
 
-KisTagLoader::~KisTagLoader()
+KisTag::~KisTag()
 {
 
 }
 
-QString KisTagLoader::name() const
+QString KisTag::name() const
 {
     return d->name;
 }
 
-void KisTagLoader::setName(const QString &name) const
+void KisTag::setName(const QString &name) const
 {
     d->map.setEntry(s_group, s_name, name, KEntryMap::EntryDirty);
     d->name = name;
 }
 
-QString KisTagLoader::url() const
+QString KisTag::url() const
 {
     return d->url;
 }
 
-void KisTagLoader::setUrl(const QString &url) const
+void KisTag::setUrl(const QString &url) const
 {
     d->map.setEntry(s_group, s_url, url, KEntryMap::EntryDirty);
     d->url = url;
 }
 
-QString KisTagLoader::comment() const
+QString KisTag::comment() const
 {
     return d->comment;
 }
 
-void KisTagLoader::setComment(const QString &comment) const
+void KisTag::setComment(const QString &comment) const
 {
     d->map.setEntry(s_group, s_comment, comment, KEntryMap::EntryDirty);
     d->comment = comment;
 }
 
-bool KisTagLoader::load(QIODevice &io)
+bool KisTag::load(QIODevice &io)
 {
     if (!io.isOpen()) {
         io.open(QIODevice::ReadOnly);
@@ -205,7 +205,7 @@ bool KisTagLoader::load(QIODevice &io)
     return true;
 }
 
-bool KisTagLoader::save(QIODevice &io)
+bool KisTag::save(QIODevice &io)
 {
     KConfigIniBackend ini;
     ini.writeEntries(QLocale().name().toUtf8(), io, d->map);

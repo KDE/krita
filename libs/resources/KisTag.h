@@ -23,7 +23,7 @@
 #include <QString>
 #include <QScopedPointer>
 /**
- * @brief The KisTagLoader loads a tag from a .tag file.
+ * @brief The KisTag loads a tag from a .tag file.
  * A .tag file is a .desktop file. The following fields
  * are important:
  *
@@ -36,11 +36,11 @@ class QIODevice;
 
 #include "kritaresources_export.h"
 
-class KRITARESOURCES_EXPORT KisTagLoader
+class KRITARESOURCES_EXPORT KisTag
 {
 public:
-    KisTagLoader();
-    virtual ~KisTagLoader();
+    KisTag();
+    virtual ~KisTag();
 
     QString name() const;
     void setName(const QString &name) const;

@@ -27,6 +27,8 @@
 
 #include <KoResource.h>
 
+#include <KisTag.h>
+
 #include <kritaresources_export.h>
 
 
@@ -66,6 +68,9 @@ public:
         virtual QString name() const = 0;
         /// An extra, optional comment for the tag
         virtual QString comment() const = 0;
+
+        /// A tag object on which we can set properties and which we can save
+        virtual QSharedPointer<KisTag> tag() const = 0;
     };
 
     class ResourceIterator

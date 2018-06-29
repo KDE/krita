@@ -22,6 +22,7 @@
 #include <QDirIterator>
 #include <KisMimeDatabase.h>
 #include <kis_debug.h>
+#include <KisTag.h>
 
 #include <KisResourceLoaderRegistry.h>
 
@@ -40,18 +41,42 @@ public:
     }
 
     bool hasNext() const override { return m_dirIterator->hasNext(); }
-    void next() const override { m_dirIterator->next(); }
+    void next() const override
+    {
+        m_dirIterator->next();
+        load(const_cast<KisTag*>(&m_tag));
+    }
 
-    QString url() const override { return QString(); }
-    QString name() const override { return QString(); }
-    QString comment() const override {return QString(); }
+    QString url() const override { return m_tag.url(); }
+    QString name() const override { return m_tag.name(); }
+    QString comment() const override {return m_tag.comment(); }
 
+    QSharedPointer<KisTag> tag() const
+    {
+        QSharedPointer<KisTag> t(new KisTag());
+        load(t.data());
+        return t;
+    }
 
 private:
+
+    bool load(KisTag *tag) const
+    {
+        QFile f(m_dirIterator->filePath());
+        if (f.exists()) {
+            f.open(QFile::ReadOnly);
+            if (!tag->load(f)) {
+                qWarning() << m_dirIterator << "is not a valid tag desktop file";
+                return false;
+            }
+        }
+        return true;
+    }
 
     QScopedPointer<QDirIterator> m_dirIterator;
     QString m_location;
     QString m_resourceType;
+    KisTag m_tag;
 };
 
 
@@ -140,18 +165,18 @@ protected:
         if (!m_resource || (m_resource && m_resource->filename() != m_dirIterator->filePath())) {
             QFile f(m_dirIterator->filePath());
             f.open(QFile::ReadOnly);
-            if (!m_loader) {
-                const_cast<FolderIterator*>(this)->m_loader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
+            if (!m_tag) {
+                const_cast<FolderIterator*>(this)->m_tag = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
             }
-            if (m_loader) {
-                const_cast<FolderIterator*>(this)->m_resource = m_loader->load(m_dirIterator->filePath(), f);
+            if (m_tag) {
+                const_cast<FolderIterator*>(this)->m_resource = m_tag->load(m_dirIterator->filePath(), f);
             }
             f.close();
         }
         return !m_resource.isNull();
     }
 
-    KisResourceLoaderBase *m_loader {0};
+    KisResourceLoaderBase *m_tag {0};
     KoResourceSP m_resource;
     QScopedPointer<QDirIterator> m_dirIterator;
     const QString m_location;

@@ -13,7 +13,7 @@ set(kritaresources_LIB_SRCS
     KisBundleStorage.cpp
     KisFolderStorage.cpp
 
-    KisTagLoader.cpp
+    KisTag.cpp
 
     KoResource.cpp
     KoMD5Generator.cpp

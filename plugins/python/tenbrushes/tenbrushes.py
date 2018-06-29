@@ -21,6 +21,9 @@ class TenBrushesExtension(krita.Extension):
         self.actions = []
         self.buttons = []
         self.selectedPresets = []
+        # Indicates whether we want to activate the previous-selected brush
+        # on the second press of the shortcut
+        self.activatePrev = True
         self.oldPreset = None
 
     def setup(self):
@@ -38,6 +41,9 @@ class TenBrushesExtension(krita.Extension):
 
     def readSettings(self):
         self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+        setting = Application.readSetting("", "tenbrushesActivatePrev2ndPress", "True")
+        # we should not get anything other than 'True' and 'False'
+        self.activatePrev = setting == 'True'
 
     def writeSettings(self):
         presets = []
@@ -46,6 +52,8 @@ class TenBrushesExtension(krita.Extension):
             self.actions[index].preset = button.preset
             presets.append(button.preset)
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
+        Application.writeSetting("", "tenbrushesActivatePrev2ndPress",
+                                 str(self.activatePrev))
 
     def loadActions(self, window):
         allPresets = Application.resources("preset")
@@ -65,7 +73,7 @@ class TenBrushesExtension(krita.Extension):
         allPresets = Application.resources("preset")
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
             currentPreset = Application.activeWindow().views()[0].currentBrushPreset()
-            if self.sender().preset == currentPreset.name():
+            if self.activatePrev and self.sender().preset == currentPreset.name():
                 Application.activeWindow().views()[0].activateResource(self.oldPreset)
             else:
                 self.oldPreset = Application.activeWindow().views()[0].currentBrushPreset()

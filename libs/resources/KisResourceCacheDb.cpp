@@ -428,14 +428,21 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     return true;
 }
 
-bool KisResourceCacheDb::addTag(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
+bool KisResourceCacheDb::addTag(KisResourceStorageSP storage, const QString &resourceType, const QString url, const QString name, const QString comment)
 {
     return false;
 }
 
 bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceType)
 {
-    return false;
+    QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
+    while(iter->hasNext()) {
+        iter->next();
+        if (!addTag(storage, resourceType, iter->url(), iter->name(), iter->comment())) {
+            qWarning() << "Could not add resource" << res->filename() << "to the database";
+        }
+    }
+    return true;
 }
 
 bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstalled)

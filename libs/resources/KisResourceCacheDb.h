@@ -71,7 +71,7 @@ private:
     static bool addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
     static bool addResources(KisResourceStorageSP storage, QString resourceType);
 
-    static bool addTag(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType);
+    static bool addTag(KisResourceStorageSP storage, const QString &resourceType, const QString url, const QString name, const QString comment);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);

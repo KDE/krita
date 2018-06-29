@@ -266,6 +266,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
     KoResourcePaths::addResourceType("symbols", "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
+    KoResourcePaths::addResourceType("ko_gamutmasks", "data", "/gamutmasks/", true);
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -296,6 +297,7 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
 
     // Indicate that it is now safe for users of KoResourcePaths to load resources
     KoResourcePaths::setReady();

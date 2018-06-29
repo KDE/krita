@@ -36,6 +36,7 @@ class KoResource;
 class KoCanvasBase;
 class KisViewManager;
 class KoPattern;
+class KoGamutMask;
 class KisFilterConfiguration;
 
 #include <kis_abstract_perspective_grid.h>
@@ -53,6 +54,7 @@ public:
     enum Resources {
         HdrExposure = KoCanvasResourceManager::KritaStart + 1,
         CurrentPattern,
+        CurrentGamutMask,
         CurrentGradient,
         CurrentDisplayProfile,
         CurrentKritaNode,
@@ -114,6 +116,8 @@ public:
     KisImageWSP currentImage() const;
 
     KisNodeSP currentNode() const;
+
+    KoGamutMask* currentGamutMask() const;
 
     KisPaintOpPresetSP currentPreset() const;
     void setPaintOpPreset(const KisPaintOpPresetSP preset);
@@ -186,6 +190,10 @@ public Q_SLOTS:
     void slotNodeActivated(const KisNodeSP node);
     void slotPainting();
 
+    void slotGamutMaskActivated(KoGamutMask* mask);
+    void slotGamutMaskUnset();
+    void slotGamutMaskPreviewUpdate();
+
     /**
      * Set the image size in pixels. The resource provider will store
      * the image size in postscript points.
@@ -225,6 +233,9 @@ Q_SIGNALS:
     void moveMirrorVerticalCenter();
     void moveMirrorHorizontalCenter();
 
+    void sigGamutMaskChanged(KoGamutMask* mask);
+    void sigGamutMaskUnset();
+    void sigGamutMaskPreviewUpdate();
 
 private:
 

@@ -64,6 +64,9 @@ public:
 
     bool saveDetached(SvgSavingContext &savingContext);
 
+    void setDocumentTitle(QString title);
+    void setDocumentDescription(QString description);
+
 private:
     void saveShapes(const QList<KoShape*> shapes, SvgSavingContext &savingContext);
 
@@ -75,6 +78,8 @@ private:
 
     QList<KoShape*> m_toplevelShapes;
     bool m_writeInlineImages;
+    QString m_documentTitle;
+    QString m_documentDescription;
 };
 
 #endif // SVGWRITER_H

@@ -30,25 +30,29 @@
 #include <cmath>
 
 #include <kis_config.h>
+#include <kis_arcs_constants.h>
+#include <resources/KoGamutMask.h>
+#include <KisGamutMaskViewConverter.h>
 
 #include "kis_color_selector.h"
 
-static const int MIN_NUM_HUE_PIECES       = 1;
-static const int MAX_NUM_HUE_PIECES       = 48;
-static const int MIN_NUM_LIGHT_PIECES     = 1;
-static const int MAX_NUM_LIGHT_PIECES     = 30;
-static const int MIN_NUM_SATURATION_RINGS = 1;
-static const int MAX_NUM_SATURATION_RINGS = 20;
+KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type)
+    : QWidget(parent)
+    , m_colorSpace(type)
+    , m_inverseSaturation(false)
+    , m_relativeLight(true)
+    , m_light(0.5f)
+    , m_selectedColorRole(Acs::Foreground)
+    , m_clickedRing(-1)
+    , m_gamutMaskOn(false)
+    , m_widgetUpdatesSelf(false)
+    , m_grayColor(QColor(128,128,128,255))
+    , m_gamutMaskColor(QColor(128,128,128,255))
+    , m_currentGamutMask(nullptr)
+    , m_maskPreviewActive(true)
+{    
+    m_viewConverter = new KisGamutMaskViewConverter();
 
-KisColorSelector::KisColorSelector(QWidget* parent, KisColor::Type type):
-    QWidget(parent),
-    m_colorSpace(type),
-    m_inverseSaturation(false),
-    m_relativeLight(false),
-    m_light(0.5f),
-    m_selectedColorRole(Acs::Foreground),
-    m_clickedRing(-1)
-{
     recalculateRings(9, 12);
     recalculateAreas(9);
     selectColor(KisColor(Qt::red, KisColor::HSY));
@@ -112,14 +116,36 @@ void KisColorSelector::selectColor(const KisColor& color)
 
 void KisColorSelector::setFgColor(const KisColor& fgColor)
 {
-    m_fgColor = KisColor(fgColor, m_colorSpace);
-    update();
+    if (!m_widgetUpdatesSelf) {
+        m_fgColor = KisColor(fgColor, m_colorSpace);
+        dbgPlugins << "KisColorSelector::setFgColor: m_fgColor set to:"
+                   << "H:" << m_fgColor.getH()
+                   << "S:" << m_fgColor.getS()
+                   << "X:" << m_fgColor.getX();
+
+        m_selectedColor = KisColor(fgColor, m_colorSpace);
+        dbgPlugins << "KisColorSelector::setFgColor: m_selectedColor set to:"
+                   << "H:" << m_selectedColor.getH()
+                   << "S:" << m_selectedColor.getS()
+                   << "X:" << m_selectedColor.getX();
+        update();
+    } else {
+        dbgPlugins << "KisColorSelector::setFgColor: m_widgetUpdatesSelf == true, not updating color";
+    }
 }
 
 void KisColorSelector::setBgColor(const KisColor& bgColor)
 {
-    m_bgColor = KisColor(bgColor, m_colorSpace);
-    update();
+    if (!m_widgetUpdatesSelf) {
+        m_bgColor = KisColor(bgColor, m_colorSpace);
+        dbgPlugins << "KisColorSelector::setBgColor: m_bgColor set to:"
+                   << "H:" << m_bgColor.getH()
+                   << "S:" << m_bgColor.getS()
+                   << "X:" << m_bgColor.getX();
+        update();
+    } else {
+        dbgPlugins << "KisColorSelector::setBgColor: m_widgetUpdatesSelf == true, not updating color";
+    }
 }
 
 void KisColorSelector::resetRings()
@@ -165,14 +191,91 @@ void KisColorSelector::setInverseSaturation(bool inverse)
     }
 }
 
-QPointF KisColorSelector::mapCoord(const QPointF& pt, const QRectF& rect) const
+void KisColorSelector::setGamutMask(KoGamutMask* gamutMask)
 {
-    qreal w = rect.width()  / 2.0;
-    qreal h = rect.height() / 2.0;
-    qreal x = pt.x() - (rect.x() + w);
-    qreal y = pt.y() - (rect.y() + h);
+    if (!gamutMask) {
+        return;
+    }
+
+    m_currentGamutMask = gamutMask;
+    m_viewConverter->setViewSize(m_renderAreaSize);
+    m_viewConverter->setMaskSize(m_currentGamutMask->maskSize());
+    update();
+}
+
+KoGamutMask* KisColorSelector::gamutMask()
+{
+    return m_currentGamutMask;
+}
+
+bool KisColorSelector::maskPreviewActive()
+{
+    return m_maskPreviewActive;
+}
+
+void KisColorSelector::setMaskPreviewActive(bool value)
+{
+    m_maskPreviewActive = value;
+}
+
+bool KisColorSelector::gamutMaskOn()
+{
+    return m_gamutMaskOn;
+}
+
+
+void KisColorSelector::setGamutMaskOn(bool gamutMaskOn)
+{
+    // do not allow the mask on, if it is a nullptr
+    if (m_currentGamutMask) {
+        m_gamutMaskOn = gamutMaskOn;
+        update();
+    }
+}
+
+void KisColorSelector::setEnforceGamutMask(bool enforce)
+{
+    m_enforceGamutMask = enforce;
+    update();
+}
+
+QPointF KisColorSelector::mapCoordToView(const QPointF& pt, const QRectF& viewRect) const
+{
+    qreal w = viewRect.width()  / 2.0;
+    qreal h = viewRect.height() / 2.0;
+
+    qreal x = pt.x() + 1.0;
+    qreal y = (pt.y()) + 1.0;
+
+    return QPointF(x*w, y*h);
+}
+
+QPointF KisColorSelector::mapCoordToUnit(const QPointF& pt, const QRectF& viewRect) const
+{
+    qreal w = viewRect.width()  / 2.0;
+    qreal h = viewRect.height() / 2.0;
+    qreal x = pt.x() - (viewRect.x() + w);
+    qreal y = pt.y() - (viewRect.y() + h);
     return QPointF(x/w, y/h);
 }
+
+QPointF KisColorSelector::mapColorToUnit(const KisColor& color, bool invertSaturation) const
+{
+    qreal angle = color.getH() * 2.0 * M_PI;
+
+    qreal radius;
+    if (invertSaturation && m_inverseSaturation) {
+        radius = 1.0 - color.getS();
+    } else {
+        radius = color.getS();
+    }
+
+    qreal x = std::cos(angle)*radius;
+    qreal y = std::sin(-angle)*radius;
+
+    return QPointF(x,y);
+}
+
 
 qint8 KisColorSelector::getLightIndex(const QPointF& pt) const
 {
@@ -273,10 +376,14 @@ void KisColorSelector::recalculateAreas(quint8 numLightPieces)
     int x = (width  - size) / 2;
     int y = (height - size) / 2;
 
+    m_renderAreaSize = QSize(size,size);
+    m_viewConverter->setViewSize(m_renderAreaSize);
+
     m_renderArea     = QRect(x+stripThick, y, size, size);
     m_lightStripArea = QRect(0, 0, stripThick, QWidget::height());
 
-    m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32);
+    m_renderBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
+    m_maskBuffer   = QImage(size, size, QImage::Format_ARGB32_Premultiplied);
     m_numLightPieces = numLightPieces;
 }
 
@@ -321,8 +428,34 @@ void KisColorSelector::createRing(ColorRing& ring, quint8 numPieces, qreal inner
     }
 }
 
+bool KisColorSelector::colorIsClear(const KisColor &color)
+{
+    if (m_gamutMaskOn && m_currentGamutMask) {
+
+        QPointF colorCoord = mapCoordToView(mapColorToUnit(color, false), m_renderArea);
+        bool isClear = m_currentGamutMask->coordIsClear(colorCoord, *m_viewConverter, m_maskPreviewActive);
+
+        if (isClear) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } else {
+        return true;
+    }
+
+    return false;
+}
+
+
 void KisColorSelector::requestUpdateColorAndPreview(const KisColor &color, Acs::ColorRole role)
 {
+    dbgPlugins << "KisColorSelector::requestUpdateColorAndPreview: requesting update to: "
+               << "H:" << color.getH()
+               << "S:" << color.getS()
+               << "X:" << color.getX();
+
     m_updateColorCompressor->start(qMakePair(color, role));
 }
 
@@ -336,21 +469,30 @@ void KisColorSelector::slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole>
     m_selectedColor          = color.first;
     m_selectedColorRole = color.second;
 
+    dbgPlugins << "KisColorSelector::slotUpdateColorAndPreview: m_selectedColor set to:"
+               << "H:" << m_selectedColor.getH()
+               << "S:" << m_selectedColor.getS()
+               << "X:" << m_selectedColor.getX()
+               << "role:" << m_selectedColorRole;
+
+
     if (selectAsFgColor) { emit sigFgColorChanged(m_selectedColor); }
     else                 { emit sigBgColorChanged(m_selectedColor); }
 }
 
-void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& ring, const QRect& rect)
+void KisColorSelector::drawRing(QPainter& painter, int ringIndex, KisColorSelector::ColorRing& ring, const QRect& rect)
 {
-    painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.resetTransform();
     painter.translate(rect.width()/2, rect.height()/2);
 
     if (ring.pieced.size() > 1) {
         painter.rotate(-ring.getShift().degrees());
         painter.scale(rect.width()/2, rect.height()/2);
-        painter.setPen(Qt::NoPen);
-
+//        painter.setPen(Qt::NoPen);
+        QPen normalPen = QPen(QBrush(m_grayColor), 0.005);
+        QPen clearMaskPen = QPen(QBrush(Qt::white), 0.005);
         QBrush brush(Qt::SolidPattern);
 
         for(int i=0; i<ring.pieced.size(); ++i) {
@@ -362,8 +504,20 @@ void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& 
             color.setS(ring.saturation);
             color.setX(getLight(m_light, hue, m_relativeLight));
 
-            brush.setColor(color.getQColor());
-            painter.fillPath(ring.pieced[i], brush);
+            if(m_gamutMaskOn && m_enforceGamutMask && colorIsClear(color)) {
+                painter.setPen(clearMaskPen);
+            } else {
+                painter.setPen(normalPen);
+            }
+
+            if ((m_enforceGamutMask) && (!colorIsClear(color))) {
+                brush.setColor(m_gamutMaskColor);
+            } else {
+                brush.setColor(color.getQColor());
+            }
+            painter.setBrush(brush);
+
+            painter.drawPath(ring.pieced[i]);
         }
     }
     else {
@@ -390,7 +544,8 @@ void KisColorSelector::drawRing(QPainter& painter, KisColorSelector::ColorRing& 
         painter.fillPath(ring.pieced[0], QBrush(gradient));
     }
 
-    painter.resetTransform();
+//    painter.resetTransform();
+    painter.restore();
 }
 
 void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
@@ -399,18 +554,22 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
     painter.resetTransform();
     painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
     painter.scale(rect.width()/2, rect.height()/2);
-    painter.setPen(QPen(QBrush(Qt::gray), 0.005));
+
+    QPen normalPen = QPen(QBrush(m_grayColor), 0.005);
+    QPen selectedPen = QPen(QBrush(Qt::red), 0.01);
+
+    painter.setPen(normalPen);
 
     if (getNumPieces() > 1) {
-        for(int i=0; i<getNumRings(); ++i) {
-            painter.resetTransform();
-            painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
-            painter.scale(rect.width()/2, rect.height()/2);
-            painter.rotate(-m_colorRings[i].getShift().degrees());
+//        for(int i=0; i<getNumRings(); ++i) {
+//            painter.resetTransform();
+//            painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
+//            painter.scale(rect.width()/2, rect.height()/2);
+//            painter.rotate(-m_colorRings[i].getShift().degrees());
 
-            for(int j=0; j<m_colorRings[i].pieced.size(); ++j)
-                painter.drawPath(m_colorRings[i].pieced[j]);
-        }
+//            for(int j=0; j<m_colorRings[i].pieced.size(); ++j)
+//                painter.drawPath(m_colorRings[i].pieced[j]);
+//        }
 
         if (m_selectedRing >= 0 && m_selectedPiece >= 0) {
             painter.resetTransform();
@@ -418,7 +577,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
             painter.rotate(-m_colorRings[m_selectedRing].getShift().degrees());
             painter.scale(rect.width()/2, rect.height()/2);
 
-            painter.setPen(QPen(QBrush(Qt::red), 0.01));
+            painter.setPen(selectedPen);
             painter.drawPath(m_colorRings[m_selectedRing].pieced[m_selectedPiece]);
         }
     }
@@ -427,17 +586,15 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
             qreal rad = m_colorRings[i].outerRadius;
             painter.drawEllipse(QRectF(-rad, -rad, rad*2.0, rad*2.0));
         }
-    }
 
-    if (m_selectedRing >= 0) {
-        qreal iRad = m_colorRings[m_selectedRing].innerRadius;
-        qreal oRad = m_colorRings[m_selectedRing].outerRadius;
+        if (m_selectedRing >= 0) {
+            qreal iRad = m_colorRings[m_selectedRing].innerRadius;
+            qreal oRad = m_colorRings[m_selectedRing].outerRadius;
 
-        painter.setPen(QPen(QBrush(Qt::red), 0.005));
-        painter.drawEllipse(QRectF(-iRad, -iRad, iRad*2.0, iRad*2.0));
-        painter.drawEllipse(QRectF(-oRad, -oRad, oRad*2.0, oRad*2.0));
+            painter.setPen(selectedPen);
+            painter.drawEllipse(QRectF(-iRad, -iRad, iRad*2.0, iRad*2.0));
+            painter.drawEllipse(QRectF(-oRad, -oRad, oRad*2.0, oRad*2.0));
 
-        if (getNumPieces() <= 1) {
             float c = std::cos(-m_selectedColor.getH() * PI2);
             float s = std::sin(-m_selectedColor.getH() * PI2);
             painter.drawLine(QPointF(c*iRad, s*iRad), QPointF(c*oRad, s*oRad));
@@ -449,7 +606,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 {
     bool     isVertical = true;
     qreal    penSize    = qreal(qMin(QWidget::width(), QWidget::height())) / 200.0;
-    KisColor color(m_selectedColor);
+    KisColor color(m_fgColor);
 
     painter.resetTransform();
 
@@ -475,6 +632,11 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 
             if (i == m_selectedLightPiece)
                 painter.drawRect(r);
+
+            if (m_showValueScaleNumbers) {
+                int valueNumber = light*100;
+                painter.drawText(r, Qt::AlignCenter, QString::number(valueNumber));
+            }
         }
     }
     else {
@@ -515,6 +677,51 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
     }
 }
 
+void KisColorSelector::drawBlip(QPainter& painter, const QRect& rect)
+{
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.resetTransform();
+    painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
+    painter.scale(rect.width()/2, rect.height()/2);
+
+    QPointF fgColorPos = mapColorToUnit(m_fgColor);
+
+    dbgPlugins << "KisColorSelector::drawBlip: "
+               << "colorPoint H:" << m_fgColor.getH() << " S:" << m_fgColor.getS()
+               << "-> coord X:" << fgColorPos.x() << " Y:" << fgColorPos.y();
+
+
+    painter.setPen(QPen(QBrush(Qt::white), 0.01));
+    painter.drawEllipse(fgColorPos, 0.05, 0.05);
+
+    painter.setPen(QPen(QBrush(Qt::black), 0.01));
+    painter.setBrush(m_fgColor.getQColor());
+    painter.drawEllipse(fgColorPos, 0.04, 0.04);
+}
+
+void KisColorSelector::drawGamutMaskShape(QPainter &painter, const QRect &rect)
+{
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    painter.resetTransform();
+    painter.translate(rect.width()/2, rect.height()/2);
+    painter.scale(rect.width()/2, rect.height()/2);
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(m_gamutMaskColor);
+
+    painter.drawEllipse(QPointF(0,0), 1.0, 1.0);
+
+    painter.resetTransform();
+//    painter.setCompositionMode(QPainter::CompositionMode_Xor);
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+
+    m_currentGamutMask->paint(painter, *m_viewConverter, m_maskPreviewActive);
+
+    painter.restore();
+}
+
 void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
 {
     // 0 red    -> (1,0,0)
@@ -530,23 +737,64 @@ void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
     QPainter imgPainter(&m_renderBuffer);
     QPainter wdgPainter(this);
 
-    QRect fgRect(0, 0                  , QWidget::width(), QWidget::height()/2);
-    QRect bgRect(0, QWidget::height()/2, QWidget::width(), QWidget::height()/2);
+    // draw the fg and bg color previews
+    // QPainter settings must be saved and restored afterwards, otherwise the wheel drawing is totally broken
+    wdgPainter.save();
+    wdgPainter.setRenderHint(QPainter::Antialiasing, true);
+
+    QRect fgRect(0, 0, QWidget::width(), QWidget::height());
     wdgPainter.fillRect(fgRect, m_fgColor.getQColor());
-    wdgPainter.fillRect(bgRect, m_bgColor.getQColor());
+
+    int bgSide = qMin(QWidget::width()*0.15,QWidget::height()*0.15);
+
+    if (m_showBgColor) {
+        QPointF bgPolyPoints[3] = {
+            QPointF(QWidget::width(), QWidget::height()),
+            QPointF(QWidget::width()-bgSide, QWidget::height()),
+            QPointF(QWidget::width(), QWidget::height()-bgSide)
+        };
+
+        wdgPainter.setBrush(m_bgColor.getQColor());
+        wdgPainter.setPen(m_bgColor.getQColor());
+        wdgPainter.drawPolygon(bgPolyPoints, 3);
+    }
+
+    wdgPainter.restore();
 
     for(int i=0; i<m_colorRings.size(); ++i)
-        drawRing(imgPainter, m_colorRings[i], m_renderArea);
+        drawRing(imgPainter, i, m_colorRings[i], m_renderArea);
 
     wdgPainter.drawImage(m_renderArea, m_renderBuffer);
 
+
+    // draw the mask either in continuous mode or in discrete mode when enforcing is turned off
+    // if enforcing is turned on in discrete mode,
+    // drawRing function takes care of delineating the mask swatches
+    if (m_gamutMaskOn
+            && ((getNumPieces() == 1) || (!m_enforceGamutMask))) {
+
+        m_maskBuffer.fill(0);
+        QPainter maskPainter(&m_maskBuffer);
+        drawGamutMaskShape(maskPainter, m_renderArea);
+
+        wdgPainter.drawImage(m_renderArea, m_maskBuffer);
+    }
+
     drawOutline   (wdgPainter, m_renderArea);
+
     drawLightStrip(wdgPainter, m_lightStripArea);
+
+    if (m_showColorBlip) {
+        drawBlip (wdgPainter, m_renderArea);
+    }
 }
 
 void KisColorSelector::mousePressEvent(QMouseEvent* event)
 {
-    m_clickPos       = mapCoord(event->localPos(), m_renderArea);
+    m_widgetUpdatesSelf = true;
+    dbgPlugins << "KisColorSelector::mousePressEvent: m_widgetUpdatesSelf = true";
+
+    m_clickPos       = mapCoordToUnit(event->localPos(), m_renderArea);
     m_mouseMoved     = false;
     m_pressedButtons = event->buttons();
     m_clickedRing    = getSaturationIndex(m_clickPos);
@@ -566,20 +814,26 @@ void KisColorSelector::mousePressEvent(QMouseEvent* event)
         }
         else {
             Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - RAD_90;
-            m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
-            m_selectedColor.setS(getSaturation(m_clickedRing));
-            m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-            requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
-            m_selectedRing = m_clickedRing;
-            m_mouseMoved   = true;
-            update();
+
+            KisColor color;
+            color.setH(angle.scaled(0.0f, 1.0f));
+            color.setS(getSaturation(m_clickedRing));
+            color.setX(getLight(m_light, color.getH(), m_relativeLight));
+
+            if ((!m_enforceGamutMask) || colorIsClear(color)) {
+                m_selectedColor.setHSX(color.getH(), color.getS(), color.getX());
+                requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
+                m_selectedRing = m_clickedRing;
+                m_mouseMoved   = true;
+                update();
+            }
         }
     }
 }
 
 void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
 {
-    QPointF dragPos = mapCoord(event->localPos(), m_renderArea);
+    QPointF dragPos = mapCoordToUnit(event->localPos(), m_renderArea);
     qint8   clickedLightPiece = getLightIndex(event->localPos());
 
     if (clickedLightPiece >= 0) {
@@ -612,8 +866,10 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
                 color.setH(angle.scaled(0.0f, 1.0f));
                 color.setX(getLight(m_light, color.getH(), m_relativeLight));
 
-                m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
-                requestUpdateColorAndPreview(color, m_selectedColorRole);
+                if ((!m_enforceGamutMask) || colorIsClear(color)) {
+                    m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
+                    requestUpdateColorAndPreview(color, m_selectedColorRole);
+                }
             }
 
             m_mouseMoved = true;
@@ -621,9 +877,15 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* event)
     }
     else {
         Radian angle = std::atan2(dragPos.x(), dragPos.y()) - RAD_90;
-        m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
-        m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
-        requestUpdateColorAndPreview(m_selectedColor, m_selectedColorRole);
+        KisColor color;
+        color.setH(angle.scaled(0.0f, 1.0f));
+        color.setS(getSaturation(m_clickedRing));
+        color.setX(getLight(m_light, color.getH(), m_relativeLight));
+
+        if ((!m_enforceGamutMask) || colorIsClear(color)) {
+            m_selectedColor.setHSX(color.getH(), color.getS(), color.getX());
+            requestUpdateColorAndPreview(m_selectedColor, m_selectedColorRole);
+        }
     }
 
     update();
@@ -633,30 +895,46 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* /*event*/)
 {
     if (!m_mouseMoved && m_clickedRing >= 0) {
         Radian angle = std::atan2(m_clickPos.x(), m_clickPos.y()) - RAD_90;
+        KisColor color;
 
-        m_selectedRing  = m_clickedRing;
-        m_selectedPiece = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
+        qint8 hueIndex = getHueIndex(angle, m_colorRings[m_clickedRing].getShift());
 
-        if (getNumPieces() > 1)
-            m_selectedColor.setH(getHue(m_selectedPiece, m_colorRings[m_clickedRing].getShift()));
-        else
-            m_selectedColor.setH(angle.scaled(0.0f, 1.0f));
+        if (getNumPieces() > 1) {
+            color.setH(getHue(hueIndex, m_colorRings[m_clickedRing].getShift()));
+        } else {
+            color.setH(angle.scaled(0.0f, 1.0f));
+        }
 
-        m_selectedColor.setS(getSaturation(m_selectedRing));
-        m_selectedColor.setX(getLight(m_light, m_selectedColor.getH(), m_relativeLight));
+        color.setS(getSaturation(m_clickedRing));
+        color.setX(getLight(m_light, color.getH(), m_relativeLight));
 
-        requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
+        if ((!m_enforceGamutMask) || colorIsClear(color)) {
+            m_selectedColor.setHSX(color.getH(), color.getS(), color.getX());
+            m_selectedPiece = hueIndex;
+            m_selectedRing = m_clickedRing;
+            requestUpdateColorAndPreview(m_selectedColor, Acs::buttonsToRole(Qt::NoButton, m_pressedButtons));
+        }
     }
     else if (m_mouseMoved)
         requestUpdateColorAndPreview(m_selectedColor, m_selectedColorRole);
 
     m_clickedRing = -1;
+
+    m_widgetUpdatesSelf = false;
+    dbgPlugins << "KisColorSelector::ReleasePressEvent: m_widgetUpdatesSelf = false";
+
     update();
 }
 
 void KisColorSelector::resizeEvent(QResizeEvent* /*event*/)
 {
     recalculateAreas(quint8(getNumLightPieces()));
+}
+
+void KisColorSelector::leaveEvent(QEvent* /*e*/)
+{
+    m_widgetUpdatesSelf = false;
+    dbgPlugins << "KisColorSelector::leaveEvent: m_widgetUpdatesSelf = false";
 }
 
 void KisColorSelector::saveSettings()
@@ -676,6 +954,17 @@ void KisColorSelector::saveSettings()
     cfg.writeEntry("ArtColorSel.SelColorX", m_selectedColor.getX());
     cfg.writeEntry("ArtColorSel.SelColorA", m_selectedColor.getA());
 
+    cfg.writeEntry("ArtColorSel.defaultHueSteps", quint32(m_defaultHueSteps));
+    cfg.writeEntry("ArtColorSel.defaultSaturationSteps", quint32(m_defaultSaturationSteps));
+    cfg.writeEntry("ArtColorSel.defaultValueScaleSteps", quint32(m_defaultValueScaleSteps));
+
+    cfg.writeEntry("ArtColorSel.showBgColor", m_showBgColor);
+    cfg.writeEntry("ArtColorSel.showColorBlip", m_showColorBlip);
+    cfg.writeEntry("ArtColorSel.showValueScaleNumber", m_showValueScaleNumbers);
+    cfg.writeEntry("ArtColorSel.enforceGamutMask", m_enforceGamutMask);
+
+    cfg.writeEntry("ArtColorSel.maskPreviewActive", m_maskPreviewActive);
+
     QList<float> angles;
 
     for(int i=0; i<m_colorRings.size(); ++i)
@@ -689,7 +978,11 @@ void KisColorSelector::loadSettings()
     KisConfig cfg;
     setColorSpace(KisColor::Type(cfg.readEntry<qint32>("ArtColorSel.ColorSpace" , KisColor::HSY)));
 
-    setNumLightPieces(cfg.readEntry("ArtColorSel.LightPieces", 19));
+    m_defaultHueSteps = cfg.readEntry("ArtColorSel.defaultHueSteps", DEFAULT_HUE_STEPS);
+    m_defaultSaturationSteps = cfg.readEntry("ArtColorSel.defaultSaturationSteps", DEFAULT_SATURATION_STEPS);
+    m_defaultValueScaleSteps = cfg.readEntry("ArtColorSel.defaultValueScaleSteps", DEFAULT_VALUE_SCALE_STEPS);
+
+    setNumLightPieces(cfg.readEntry("ArtColorSel.LightPieces", DEFAULT_VALUE_SCALE_STEPS));
 
     m_selectedColor.setH(cfg.readEntry<float>("ArtColorSel.SelColorH", 0.0f));
     m_selectedColor.setS(cfg.readEntry<float>("ArtColorSel.SelColorS", 0.0f));
@@ -697,12 +990,10 @@ void KisColorSelector::loadSettings()
     m_selectedColor.setA(1.0f);
 
     setInverseSaturation(cfg.readEntry<bool>("ArtColorSel.InversedSaturation", false));
-    setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", false));
+    setLight(cfg.readEntry<float>("ArtColorSel.Light", 0.5f), cfg.readEntry<bool>("ArtColorSel.RelativeLight", true));
 
-    recalculateRings(
-                cfg.readEntry("ArtColorSel.NumRings"  , 11),
-                cfg.readEntry("ArtColorSel.RingPieces", 12)
-                );
+    setNumRings(cfg.readEntry("ArtColorSel.NumRings"  , DEFAULT_SATURATION_STEPS));
+    setNumPieces(cfg.readEntry("ArtColorSel.RingPieces", DEFAULT_HUE_STEPS));
 
     QList<float> angles = cfg.readList<float>("ArtColorSel.RingAngles");
 
@@ -712,6 +1003,56 @@ void KisColorSelector::loadSettings()
         }
     }
 
+    m_showBgColor = cfg.readEntry("ArtColorSel.showBgColor", true);
+    m_showColorBlip = cfg.readEntry("ArtColorSel.showColorBlip", true);
+    m_showValueScaleNumbers = cfg.readEntry("ArtColorSel.showValueScaleNumber", false);
+    m_enforceGamutMask = cfg.readEntry("ArtColorSel.enforceGamutMask", true);
+
+    m_maskPreviewActive = cfg.readEntry("ArtColorSel.maskPreviewActive", true);
+
     selectColor(m_selectedColor);
     update();
 }
+
+void KisColorSelector::setDefaultHueSteps(int num)
+{
+    num = qBound(MIN_NUM_HUE_PIECES, num, MAX_NUM_HUE_PIECES);
+    m_defaultHueSteps = num;
+}
+
+void KisColorSelector::setDefaultSaturationSteps(int num)
+{
+    num = qBound(MIN_NUM_SATURATION_RINGS, num, MAX_NUM_SATURATION_RINGS);
+    m_defaultSaturationSteps = num;
+}
+
+void KisColorSelector::setDefaultValueScaleSteps(int num)
+{
+    num = qBound(MIN_NUM_LIGHT_PIECES, num, MAX_NUM_LIGHT_PIECES);
+    m_defaultValueScaleSteps = num;
+}
+
+void KisColorSelector::setShowColorBlip(bool value) {
+    m_showColorBlip = value;
+    update();
+}
+
+void KisColorSelector::setShowBgColor(bool value)
+{
+    m_showBgColor = value;
+    update();
+}
+
+void KisColorSelector::setShowValueScaleNumbers(bool value)
+{
+    m_showValueScaleNumbers = value;
+    update();
+}
+
+bool KisColorSelector::saturationIsInvertible()
+{
+    if (!m_gamutMaskOn) return true;
+    bool b = (m_enforceGamutMask && getNumPieces() == 1) ? false : true;
+    return b;
+}
+

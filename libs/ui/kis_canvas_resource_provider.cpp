@@ -153,6 +153,16 @@ KisNodeSP KisCanvasResourceProvider::currentNode() const
     return m_view->activeNode();
 }
 
+KoGamutMask *KisCanvasResourceProvider::currentGamutMask() const
+{
+    if (m_resourceManager->hasResource(CurrentGamutMask)) {
+        return m_resourceManager->resource(CurrentGamutMask).value<KoGamutMask*>();
+    }
+    else {
+        return nullptr;
+    }
+}
+
 KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 {
     KisPaintOpPresetSP preset = m_resourceManager->resource(CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
@@ -352,6 +362,25 @@ void KisCanvasResourceProvider::slotPainting()
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }
+}
+
+void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMask *mask)
+{
+    QVariant v;
+    v.setValue<KoGamutMask*>(mask);
+    m_resourceManager->setResource(CurrentGamutMask, v);
+    emit sigGamutMaskChanged(mask);
+}
+
+void KisCanvasResourceProvider::slotGamutMaskUnset()
+{
+    m_resourceManager->clearResource(CurrentGamutMask);
+    emit sigGamutMaskUnset();
+}
+
+void KisCanvasResourceProvider::slotGamutMaskPreviewUpdate()
+{
+    emit sigGamutMaskPreviewUpdate();
 }
 
 void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)

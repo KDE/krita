@@ -20,6 +20,8 @@
 #ifndef KISTAGLOADER_H
 #define KISTAGLOADER_H
 
+#include <QString>
+#include <QScopedPointer>
 /**
  * @brief The KisTagLoader loads a tag from a .tag file.
  * A .tag file is a .desktop file. The following fields
@@ -28,11 +30,32 @@
  * name: the name of the tag, which can be translated
  * comment: a tooltip for the tag, which can be translagted
  * url: the untranslated name of the tag
+ *
  */
+class QIODevice;
+
 class KisTagLoader
 {
 public:
     KisTagLoader();
+    virtual ~KisTagLoader() {}
+
+    QString name() const;
+    void setName(QString &name) const;
+
+    QString url() const;
+    void setUrl(const QString &url) const;
+
+    QString comment() const;
+    void setComment(const QString &comment) const;
+
+    bool load(QIODevice &io);
+    bool save(QIODevice &io);
+
+private:
+
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif // KISTAGLOADER_H

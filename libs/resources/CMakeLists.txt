@@ -13,10 +13,16 @@ set(kritaresources_LIB_SRCS
     KisBundleStorage.cpp
     KisFolderStorage.cpp
 
+    KisTagLoader.cpp
+
     KoResource.cpp
     KoMD5Generator.cpp
     KoHashGeneratorProvider.cpp
     KoResourcePaths.cpp
+    
+    kconfigini.cpp
+    kconfigdata.cpp
+    kconfigbackend.cpp
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)

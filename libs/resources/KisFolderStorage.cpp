@@ -39,8 +39,8 @@ public:
                                              QDirIterator::Subdirectories));
     }
 
-    bool hasNext() const override {return false; }
-    void next() const override {}
+    bool hasNext() const override { return m_dirIterator->hasNext(); }
+    void next() const override { m_dirIterator->next(); }
 
     QString url() const override { return QString(); }
     QString name() const override { return QString(); }

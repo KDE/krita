@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2017 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,56 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KisTagLoader.h"
+#ifndef TESTFOLDERSTORAGE_H
+#define TESTFOLDERSTORAGE_H
 
-#include <QIODevice>
+#include <QObject>
 
-#include <kconfigini_p.h>
-
-class KisTagLoader::Private {
+class TestFolderStorage : public QObject
+{
+    Q_OBJECT
+private Q_SLOTS:
+    void testStorage();
+private:
 };
 
-KisTagLoader::KisTagLoader()
-{
-}
-
-QString KisTagLoader::name() const
-{
-    return QString();
-}
-
-void KisTagLoader::setName(QString &name) const
-{
-
-}
-
-QString KisTagLoader::url() const
-{
-    return QString();
-}
-
-void KisTagLoader::setUrl(const QString &url) const
-{
-
-}
-
-QString KisTagLoader::comment() const
-{
-    return QString();
-}
-
-void KisTagLoader::setComment(const QString &comment) const
-{
-
-}
-
-bool KisTagLoader::load(QIODevice &io)
-{
-    return false;
-}
-
-bool KisTagLoader::save(QIODevice &io)
-{
-    return false;
-}
-
+#endif

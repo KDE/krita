@@ -57,6 +57,7 @@
 #include <KoVBox.h>
 
 #include <klocalizedstring.h>
+#include <kformat.h>
 #include <kundo2stack.h>
 #include <KoResourcePaths.h>
 #include "kis_action_registry.h"
@@ -710,8 +711,8 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     : WdgPerformanceSettings(parent, name)
 {
     KisImageConfig cfg;
-    const int totalRAM = cfg.totalRAM();
-    lblTotalMemory->setText(i18n("%1 MiB", totalRAM));
+    const double totalRAM = cfg.totalRAM();
+    lblTotalMemory->setText(KFormat().formatByteSize(totalRAM * 1024 * 1024, 0, KFormat::IECBinaryDialect, KFormat::UnitMegaByte));
 
     sliderMemoryLimit->setSuffix(i18n(" %"));
     sliderMemoryLimit->setRange(1, 100, 2);

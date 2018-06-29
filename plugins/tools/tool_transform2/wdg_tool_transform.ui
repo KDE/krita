@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>479</width>
+    <width>489</width>
     <height>674</height>
    </rect>
   </property>
@@ -250,7 +250,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -1535,7 +1535,10 @@
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
               <property name="minimum">
-               <number>0</number>
+               <number>2</number>
+              </property>
+              <property name="maximum">
+               <number>30</number>
               </property>
               <property name="value">
                <number>3</number>
@@ -2198,7 +2201,7 @@
  <connections/>
  <buttongroups>
   <buttongroup name="freeTransformRadioGroup"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="cageTransformButtonGroup"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

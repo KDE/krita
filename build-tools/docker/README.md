@@ -9,31 +9,45 @@ to reproduce AppImage-only bugs in Krita.
 
 ## Prerequisites
 
-Firstly we need to download deps and Krita source tree. These steps are not
+Firstly make sure you have Docker installed
+
+```bash
+sudo apt install docker docker.io
+```
+
+Then you need to download deps and Krita source tree. These steps are not
 included into the *Dockerfile* to save internal bandwidth (most Krita
 developers already have al least one clone of Krita source tree).
 
 ```bash
+# create directory structure for container control directory
+mkdir -p krita-master/persistent
+cd krita-master
+
+# copy/chechout Krita sources to 'persistent/krita'
+cp -r /path/to/sources/krita ./persistent/krita
+
+# initialize control scripts and the Dockerfile
+./persistent/krita/build-tools/docker/bin/bootstrap-root.sh
+
 # download the deps archive
 ./bin/bootstrap-deps.sh
-
-# mount/copy/chechout Krita sources to 'persistent/krita'
-mkdir -p persistent/krita
-sudo mount --bind ../../ ./persistent/krita
 ```
 
 ## Build the docker image and run the container
 
 ```bash
 ./bin/build_image krita-deps
-./bin/run_container krita-deps krita-build
+./bin/run_container krita-deps krita-master
 ```
 
 ## Enter the container and build Krita
 
 ```bash
-# enter the docker container
-./bin/enter_container krita-build
+# enter the docker container (the name will be
+# fetched automatically from '.container_name' file)
+
+./bin/enter
 
 # ... now your are inside the container with all the deps prepared ...
 
@@ -49,27 +63,20 @@ krita
 
 ## Extra developer tools
 
-If you want to develop Krita, you might want to install at least some
-developer tools into the container, e.g. GDB, Valgring, ccmake and QtCreator.
-To do that, execute the following from yout **host** console:
+To install QtCreator, enter container and start the installer, downloaded while
+fetching dependencies. Make sure you install it into '~/qtcreator' directory
+without any version suffixes, then you will be able to use the script below:
 
 ```bash
-sudo docker exec -ti -u root krita-build apt install gdb
-sudo docker exec -ti -u root krita-build apt install valgrind
-sudo docker exec -ti -u root krita-build apt install cmake-curses-gui
-
 # inside the container
-cd ~/persistent
-wget http://master.qt.io/archive/online_installers/3.0/qt-unified-linux-x64-3.0.4-online.run
-./qt-unified-linux-x64-3.0.4-online.run
+./persistent/qt-creator-opensource-linux-x86_64-4.6.2.run
+```
 
-# when going through the setup wizard select not to install any
-# extra Qt libraries, install QtCreator only!
+To start QtCreator:
 
-# to start QtCreator without the conflicts to with Krita's Qt paths, type
-# in your **host** console:
-sudo docker exec -ti krita-build /home/appimage//Qt/Tools/QtCreator/bin/qtcreator
-
+```bash
+# from the host
+./bin/qtcreator
 ```
 
 ## Stopping the container and cleaning up
@@ -79,14 +86,18 @@ all the currently running processes are killed (just ensure you logout from all 
 terminals before stopping).
 
 ```bash
-sudo docker stop krita-build
+# stop the container
+./bin/stop
+
+# start the container
+./bin/start
 ```
 
 If you don't need your container/image anymore, you can delete them from the docker
 
 ```bash
 # remove the container
-sudo docker rm krita-build
+sudo docker rm krita-master
 
 # remove the image
 sudo docker rmi krita-deps

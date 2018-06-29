@@ -56,6 +56,12 @@ public:
 
 private:
 
+    static const QByteArray s_group;
+    static const QByteArray s_type;
+    static const QByteArray s_tag;
+    static const QByteArray s_name;
+    static const QByteArray s_url;
+    static const QByteArray s_comment;
     class Private;
     QScopedPointer<Private> d;
 };

@@ -42,20 +42,30 @@ void TestTagLoader ::testLoadTag()
 
     bool r = tagLoader.load(f);
 
+    f.close();
+
     QVERIFY(r);
-//    QVERIFY(tagLoader.name() == "* Favorites");
-//    QVERIFY(tagLoader.comment() == "Your favorite brush presets");
-//    QVERIFY(tagLoader.url() == "* Favorites");
+    QVERIFY(tagLoader.name() == "* Favorites");
+    QVERIFY(tagLoader.comment() == "Your favorite brush presets");
+    QVERIFY(tagLoader.url() == "* Favorites");
 
-//    QLocale nl(QLocale::Dutch, QLocale::Netherlands);
-//    QLocale::setDefault(nl);
+    QLocale nl(QLocale::Dutch, QLocale::Netherlands);
+    QLocale::setDefault(nl);
 
-//    bool r = tagLoader.load(f);
+    f.open(QFile::ReadOnly);
+    QVERIFY(f.isOpen());
+    r = tagLoader.load(f);
+    f.close();
 
-//    QVERIFY(r);
-//    QVERIFY(tagLoader.name() == "* Favorieten");
-//    QVERIFY(tagLoader.comment() == "Jouw favoriete penseel presets");
-//    QVERIFY(tagLoader.url() == "* Favorites");
+    QVERIFY(r);
+    QVERIFY(tagLoader.name() == "* Favorieten");
+    QVERIFY(tagLoader.comment() == "Jouw favoriete penseel presets");
+    QVERIFY(tagLoader.url() == "* Favorites");
+
+}
+
+void TestTagLoader::testSaveTag()
+{
 
 }
 

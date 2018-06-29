@@ -27,6 +27,7 @@ class TestTagLoader : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testLoadTag();
+    void testSaveTag();
 private:
 };
 

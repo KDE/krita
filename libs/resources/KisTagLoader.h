@@ -43,7 +43,7 @@ public:
     virtual ~KisTagLoader();
 
     QString name() const;
-    void setName(QString &name) const;
+    void setName(const QString &name) const;
 
     QString url() const;
     void setUrl(const QString &url) const;

@@ -150,7 +150,7 @@ QString KisTagLoader::name() const
     return d->name;
 }
 
-void KisTagLoader::setName(QString &name) const
+void KisTagLoader::setName(const QString &name) const
 {
     d->map.setEntry(s_group, s_name, name, KEntryMap::EntryDirty);
     d->name = name;

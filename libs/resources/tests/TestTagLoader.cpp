@@ -19,6 +19,7 @@
 
 #include "TestTagLoader.h"
 #include <QTest>
+#include <QBuffer>
 
 #include <KisTagLoader.h>
 #include <KisResourceLoader.h>
@@ -34,7 +35,6 @@ void TestTagLoader ::testLoadTag()
     KisTagLoader tagLoader;
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
 
-    qDebug() << f.fileName();
     QVERIFY(f.exists());
 
     f.open(QFile::ReadOnly);
@@ -66,6 +66,28 @@ void TestTagLoader ::testLoadTag()
 
 void TestTagLoader::testSaveTag()
 {
+    KisTagLoader tagLoader;
+    QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
+
+    QVERIFY(f.exists());
+
+    f.open(QFile::ReadOnly);
+    QVERIFY(f.isOpen());
+
+    bool r = tagLoader.load(f);
+    QVERIFY(r);
+
+    tagLoader.setName(QString("Test"));
+
+    QByteArray ba;
+    QBuffer buf(&ba);
+    buf.open(QBuffer::WriteOnly);
+
+    tagLoader.save(buf);
+
+    buf.close();
+
+    QVERIFY(ba == QByteArray("[Desktop Entry]\nComment[nl_NL]=Jouw favoriete penseel presets\nComment=Your favorite brush presets\nName=Test\nType=Tag\nURL=* Favorites\n"));
 
 }
 

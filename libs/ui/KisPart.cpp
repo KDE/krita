@@ -44,7 +44,6 @@
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
 #include <KoDialog.h>
-#include <kdesktopfile.h>
 #include <QMessageBox>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>

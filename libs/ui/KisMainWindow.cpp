@@ -1335,6 +1335,9 @@ void KisMainWindow::setActiveView(KisView* view)
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
+    d->welcomePage->showDropAreaIndicator(true);
+
+
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
@@ -1345,6 +1348,8 @@ void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 
 void KisMainWindow::dropEvent(QDropEvent *event)
 {
+    d->welcomePage->showDropAreaIndicator(false);
+
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
@@ -1382,6 +1387,8 @@ void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
 
 void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
 {
+        d->welcomePage->showDropAreaIndicator(false);
+
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();
     }

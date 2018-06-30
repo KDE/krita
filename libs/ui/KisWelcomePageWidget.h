@@ -39,7 +39,8 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
 
     void setMainWindow(KisMainWindow* mainWindow);
 
-
+public Q_SLOTS:
+    void showDropAreaIndicator(bool show);
 
 private:
     KisMainWindow* mainWindow;

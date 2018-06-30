@@ -80,6 +80,16 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
    // giving the drag area messaging a dotted border
    QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name());
    dragImageHereLabel->setStyleSheet(dottedBorderStyle);
+
+
+   // make drop area QFrame have a dotted line
+   dropFrameBorder->setObjectName("dropAreaIndicator");
+   QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 4px dotted white }";
+   dropFrameBorder->setStyleSheet(dropFrameStyle);
+
+   // only show drop area when we have a document over the empty area
+   showDropAreaIndicator(false);
+
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -155,6 +165,22 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
         connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
         connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
+    }
+}
+
+void KisWelcomePageWidget::showDropAreaIndicator(bool show)
+{
+    if (!show) {
+        QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 0px }";
+        dropFrameBorder->setStyleSheet(dropFrameStyle);
+    } else {
+        QColor textColor = qApp->palette().color(QPalette::Text);
+        QColor backgroundColor = qApp->palette().color(QPalette::Background);
+        QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+
+        // QColor.name() turns it into a hex/web format
+        QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 2px dotted ").append(blendedColor.name()).append(" }") ;
+        dropFrameBorder->setStyleSheet(dropFrameStyle);
     }
 }
 

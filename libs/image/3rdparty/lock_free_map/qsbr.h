@@ -39,13 +39,14 @@ private:
     };
 
     QMutex m_mutex;
-    QVector<Action> m_actions;
+    QVector<Action> m_pendingActions;
+    QVector<Action> m_deferedActions;
     std::atomic_flag m_isProcessing = ATOMIC_FLAG_INIT;
 
 public:
 
     template <class T>
-    void enqueue(void (T::*pmf)(), T* target)
+    void enqueue(void (T::*pmf)(), T* target, bool migration = false)
     {
         struct Closure {
             void (T::*pmf)();
@@ -62,20 +63,45 @@ public:
         while (m_isProcessing.test_and_set(std::memory_order_acquire)) {
         }
 
-        m_actions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+        if (migration) {
+            m_deferedActions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+        } else {
+            m_pendingActions.append(Action(Closure::thunk, &closure, sizeof(closure)));
+        }
+
         m_isProcessing.clear(std::memory_order_release);
     }
 
-    void update()
+    void update(bool migration)
     {
         if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
             QVector<Action> actions;
-            actions.swap(m_actions);
+            actions.swap(m_pendingActions);
+
+            if (!migration) {
+                m_pendingActions.swap(m_deferedActions);
+            }
+
             m_isProcessing.clear(std::memory_order_release);
 
             for (auto &action : actions) {
                 action();
             }
+        }
+    }
+
+    void flush()
+    {
+        if (!m_isProcessing.test_and_set(std::memory_order_acquire)) {
+            for (auto &action : m_pendingActions) {
+                action();
+            }
+
+            for (auto &action : m_deferedActions) {
+                action();
+            }
+
+            m_isProcessing.clear(std::memory_order_release);
         }
     }
 };

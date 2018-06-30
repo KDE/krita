@@ -15,7 +15,10 @@
 #include <QWaitCondition>
 #include <QMutexLocker>
 
+#include "kis_assert.h"
 #include "atomic.h"
+
+#define SANITY_CHECK
 
 class SimpleJobCoordinator
 {
@@ -83,7 +86,9 @@ public:
 
     void runOne(Job* job)
     {
-        Q_ASSERT(job != (Job*) m_job.load(Relaxed));
+#ifdef SANITY_CHECK
+        KIS_ASSERT_RECOVER_NOOP(job != (Job*) m_job.load(Relaxed));
+#endif // SANITY_CHECK
         storeRelease(job);
         job->run();
     }

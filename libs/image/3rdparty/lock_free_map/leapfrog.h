@@ -13,7 +13,9 @@
 
 #include "map_traits.h"
 #include "simple_job_coordinator.h"
-#include "qsbr.h"
+#include "kis_assert.h"
+
+#define SANITY_CHECK
 
 template <class Map>
 struct Leapfrog {
@@ -57,8 +59,10 @@ struct Leapfrog {
 
         static Table* create(quint64 tableSize)
         {
-            Q_ASSERT(isPowerOf2(tableSize));
-            Q_ASSERT(tableSize >= 4);
+#ifdef SANITY_CHECK
+            KIS_ASSERT_RECOVER_NOOP(isPowerOf2(tableSize));
+            KIS_ASSERT_RECOVER_NOOP(tableSize >= 4);
+#endif // SANITY_CHECK
             quint64 numGroups = tableSize >> 2;
             Table* table = (Table*) std::malloc(sizeof(Table) + sizeof(CellGroup) * numGroups);
             new (table) Table(tableSize - 1);
@@ -152,8 +156,10 @@ struct Leapfrog {
 
     static Cell* find(Hash hash, Table* table)
     {
-        Q_ASSERT(table);
-        Q_ASSERT(hash != KeyTraits::NullHash);
+#ifdef SANITY_CHECK
+        KIS_ASSERT_RECOVER_NOOP(table);
+        KIS_ASSERT_RECOVER_NOOP(hash != KeyTraits::NullHash);
+#endif // SANITY_CHECK
         quint64 sizeMask = table->sizeMask;
         // Optimistically check hashed cell even though it might belong to another bucket
         quint64 idx = hash & sizeMask;
@@ -188,8 +194,10 @@ struct Leapfrog {
     enum InsertResult { InsertResult_AlreadyFound, InsertResult_InsertedNew, InsertResult_Overflow };
     static InsertResult insertOrFind(Hash hash, Table* table, Cell*& cell, quint64& overflowIdx)
     {
-        Q_ASSERT(table);
-        Q_ASSERT(hash != KeyTraits::NullHash);
+#ifdef SANITY_CHECK
+        KIS_ASSERT_RECOVER_NOOP(table);
+        KIS_ASSERT_RECOVER_NOOP(hash != KeyTraits::NullHash);
+#endif // SANITY_CHECK
         quint64 sizeMask = table->sizeMask;
         quint64 idx = quint64(hash);
 
@@ -237,7 +245,9 @@ struct Leapfrog {
                     } while (probeHash == KeyTraits::NullHash);
                 }
 
-                Q_ASSERT(((probeHash ^ hash) & sizeMask) == 0); // Only hashes in same bucket can be linked
+#ifdef SANITY_CHECK
+                KIS_ASSERT_RECOVER_NOOP(((probeHash ^ hash) & sizeMask) == 0); // Only hashes in same bucket can be linked
+#endif // SANITY_CHECK
                 if (probeHash == hash) {
                     return InsertResult_AlreadyFound;
                 }
@@ -245,7 +255,9 @@ struct Leapfrog {
                 // Reached the end of the link chain for this bucket.
                 // Switch to linear probing until we reserve a new cell or find a late-arriving cell in the same bucket.
                 quint64 prevLinkIdx = idx;
-                Q_ASSERT(qint64(maxIdx - idx) >= 0); // Nobody would have linked an idx that's out of range.
+#ifdef SANITY_CHECK
+                KIS_ASSERT_RECOVER_NOOP(qint64(maxIdx - idx) >= 0); // Nobody would have linked an idx that's out of range.
+#endif // SANITY_CHECK
                 quint64 linearProbesRemaining = qMin(maxIdx - idx, quint64(LinearSearchLimit));
 
                 while (linearProbesRemaining-- > 0) {
@@ -258,7 +270,9 @@ struct Leapfrog {
                         // It's an empty cell. Try to reserve it.
                         if (cell->hash.compareExchangeStrong(probeHash, hash, Relaxed)) {
                             // Success. We've reserved the cell. Link it to previous cell in same bucket.
-                            Q_ASSERT(probeDelta == 0);
+#ifdef SANITY_CHECK
+                            KIS_ASSERT_RECOVER_NOOP(probeDelta == 0);
+#endif // SANITY_CHECK
                             quint8 desiredDelta = idx - prevLinkIdx;
                             prevLink->store(desiredDelta, Relaxed);
                             return InsertResult_InsertedNew;
@@ -386,16 +400,20 @@ bool Leapfrog<Map>::TableMigration::migrateRange(Table* srcTable, quint64 startI
 
                 // We've got a key/value pair to migrate.
                 // Reserve a destination cell in the destination.
-                Q_ASSERT(srcHash != KeyTraits::NullHash);
-                Q_ASSERT(srcValue != Value(ValueTraits::NullValue));
-                Q_ASSERT(srcValue != Value(ValueTraits::Redirect));
+#ifdef SANITY_CHECK
+                KIS_ASSERT_RECOVER_NOOP(srcHash != KeyTraits::NullHash);
+                KIS_ASSERT_RECOVER_NOOP(srcValue != Value(ValueTraits::NullValue));
+                KIS_ASSERT_RECOVER_NOOP(srcValue != Value(ValueTraits::Redirect));
+#endif // SANITY_CHECK
                 Cell* dstCell;
                 quint64 overflowIdx;
                 InsertResult result = insertOrFind(srcHash, m_destination, dstCell, overflowIdx);
                 // During migration, a hash can only exist in one place among all the source tables,
                 // and it is only migrated by one thread. Therefore, the hash will never already exist
                 // in the destination table:
-                Q_ASSERT(result != InsertResult_AlreadyFound);
+#ifdef SANITY_CHECK
+                KIS_ASSERT_RECOVER_NOOP(result != InsertResult_AlreadyFound);
+#endif // SANITY_CHECK
                 if (result == InsertResult_Overflow) {
                     // Destination overflow.
                     // This can happen for several reasons. For example, the source table could have
@@ -411,7 +429,9 @@ bool Leapfrog<Map>::TableMigration::migrateRange(Table* srcTable, quint64 startI
                     dstCell->value.store(srcValue, Relaxed);
                     // Try to place a Redirect marker in srcValue.
                     Value doubleCheckedSrcValue = srcCell->value.compareExchange(srcValue, Value(ValueTraits::Redirect), Relaxed);
-                    Q_ASSERT(doubleCheckedSrcValue != Value(ValueTraits::Redirect)); // Only one thread can redirect a cell at a time.
+#ifdef SANITY_CHECK
+                    KIS_ASSERT_RECOVER_NOOP(doubleCheckedSrcValue != Value(ValueTraits::Redirect)); // Only one thread can redirect a cell at a time.
+#endif // SANITY_CHECK
                     if (doubleCheckedSrcValue == srcValue) {
                         // No racing writes to the src. We've successfully placed the Redirect marker.
                         // srcValue was non-NULL when we decided to migrate it, but it may have changed to NULL
@@ -446,7 +466,9 @@ void Leapfrog<Map>::TableMigration::run()
         }
     } while (!m_workerStatus.compareExchangeWeak(probeStatus, probeStatus + 2, Relaxed, Relaxed));
     // # of workers has been incremented, and the end flag is clear.
-    Q_ASSERT((probeStatus & 1) == 0);
+#ifdef SANITY_CHECK
+    KIS_ASSERT_RECOVER_NOOP((probeStatus & 1) == 0);
+#endif // SANITY_CHECK
 
     // Iterate over all source tables.
     for (quint64 s = 0; s < m_numSources; s++) {
@@ -480,7 +502,9 @@ void Leapfrog<Map>::TableMigration::run()
             }
 
             qint64 prevRemaining = m_unitsRemaining.fetchSub(1, Relaxed);
-            Q_ASSERT(prevRemaining > 0);
+#ifdef SANITY_CHECK
+            KIS_ASSERT_RECOVER_NOOP(prevRemaining > 0);
+#endif // SANITY_CHECK
             if (prevRemaining == 1) {
                 // *** SUCCESSFUL MIGRATION ***
                 // That was the last chunk to migrate.
@@ -500,7 +524,9 @@ endMigration:
 
     // We're the very last worker thread.
     // Perform the appropriate post-migration step depending on whether the migration succeeded or failed.
-    Q_ASSERT(probeStatus == 3);
+#ifdef SANITY_CHECK
+    KIS_ASSERT_RECOVER_NOOP(probeStatus == 3);
+#endif // SANITY_CHECK
     bool overflowed = m_overflowed.loadNonatomic(); // No racing writes at this point
     if (!overflowed) {
         // The migration succeeded. This is the most likely outcome. Publish the new subtree.
@@ -541,7 +567,7 @@ endMigration:
     }
 
     // We're done with this TableMigration. Queue it for GC.
-    m_map.getGC().enqueue(&TableMigration::destroy, this);
+    m_map.getGC().enqueue(&TableMigration::destroy, this, true);
 }
 
 #endif // LEAPFROG_H

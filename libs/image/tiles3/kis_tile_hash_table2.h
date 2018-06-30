@@ -6,6 +6,21 @@
 #include "3rdparty/lock_free_map/concurrent_map.h"
 #include "kis_tile.h"
 
+#define SANITY_CHECK
+
+/**
+ * This is a  template for a hash table that stores  tiles (or some other
+ * objects  resembling tiles).   Actually, this  object should  only have
+ * col()/row() methods and be able to answer setNext()/next() requests to
+ * be   stored   here.    It   is   used   in   KisTiledDataManager   and
+ * KisMementoManager.
+ *
+ * How to use:
+ *   1) each hash must be unique, otherwise tiles would rewrite each-other
+ *   2) 0 key is reserved, so can't be used
+ *   3) col and row must be less than 0x7FFF to garantee uniqueness of hash for each pair
+ */
+
 template <class T>
 class KisTileHashTableIteratorTraits2;
 
@@ -96,6 +111,10 @@ private:
 
     inline quint32 calculateHash(qint32 col, qint32 row)
     {
+#ifdef SANITY_CHECK
+        KIS_ASSERT_RECOVER_NOOP(row < 0x7FFF && col < 0x7FFF)
+#endif // SANITY_CHECK
+
         if (col == 0 && row == 0) {
             col = 0x7FFF;
             row = 0x7FFF;
@@ -115,9 +134,7 @@ private:
             m_numTiles.fetchAndAddRelaxed(1);
         }
 
-        if (!m_map.migrationInProcess()) {
-            m_map.getGC().update();
-        }
+        m_map.getGC().update(m_map.migrationInProcess());
     }
 
     inline bool erase(quint32 key)
@@ -131,21 +148,14 @@ private:
             m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
         }
 
-        if (!m_map.migrationInProcess()) {
-            m_map.getGC().update();
-        }
-
+        m_map.getGC().update(m_map.migrationInProcess());
         return wasDeleted;
     }
 
     inline TileTypeSP get(quint32 key)
     {
         TileTypeSP result = m_map.get(key);
-
-        if (!m_map.migrationInProcess()) {
-            m_map.getGC().update();
-        }
-
+        m_map.getGC().update(m_map.migrationInProcess());
         return result;
     }
 
@@ -227,7 +237,7 @@ template <class T>
 KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 {
     clear();
-    m_map.getGC().update();
+    m_map.getGC().flush();
     setDefaultTileData(0);
 }
 
@@ -273,10 +283,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
         tile = mutator.getValue();
     }
 
-    if (!m_map.migrationInProcess()) {
-        m_map.getGC().update();
-    }
-
+    m_map.getGC().update(m_map.migrationInProcess());
     return tile;
 }
 
@@ -292,10 +299,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
         tile = new TileType(col, row, m_defaultTileData, 0);
     }
 
-    if (!m_map.migrationInProcess()) {
-        m_map.getGC().update();
-    }
-
+    m_map.getGC().update(m_map.migrationInProcess());
     return tile;
 }
 

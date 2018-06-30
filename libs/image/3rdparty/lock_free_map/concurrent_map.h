@@ -12,7 +12,7 @@
 #define CONCURRENTMAP_H
 
 #include "leapfrog.h"
-#include "tiles3/kis_lockless_stack.h"
+#include "qsbr.h"
 
 template <typename K, typename V, class KT = DefaultKeyTraits<K>, class VT = DefaultValueTraits<V> >
 class ConcurrentMap
@@ -57,7 +57,6 @@ public:
         // There are no racing calls to this function.
         typename Details::Table* oldRoot = m_root.loadNonatomic();
         m_root.store(migration->m_destination, Release);
-        Q_ASSERT(oldRoot == migration->getSources()[0].table);
         // Caller will GC the TableMigration and the source table.
     }
 
@@ -151,9 +150,6 @@ public:
 
         Value exchangeValue(Value desired)
         {
-            Q_ASSERT(desired != Value(ValueTraits::NullValue));
-            Q_ASSERT(desired != Value(ValueTraits::Redirect));
-            Q_ASSERT(m_cell); // Cell must have been found or inserted
             for (;;) {
                 Value oldValue = m_value;
                 if (m_cell->value.compareExchangeStrong(m_value, desired, ConsumeRelease)) {
@@ -209,7 +205,6 @@ public:
 
         Value eraseValue()
         {
-            Q_ASSERT(m_cell); // Cell must have been found or inserted
             for (;;) {
                 if (m_value == Value(ValueTraits::NullValue)) {
                     return Value(m_value);
@@ -217,7 +212,6 @@ public:
 
                 if (m_cell->value.compareExchangeStrong(m_value, Value(ValueTraits::NullValue), Consume)) {
                     // Exchange was successful and a non-NULL value was erased and returned by reference in m_value.
-                    Q_ASSERT(m_value != Value(ValueTraits::NullValue)); // Implied by the test at the start of the loop.
                     Value result = m_value;
                     m_value = Value(ValueTraits::NullValue); // Leave the mutator in a valid state
                     return result;
@@ -331,8 +325,6 @@ public:
 
         void next()
         {
-            Q_ASSERT(m_table);
-            Q_ASSERT(isValid() || m_idx == -1); // Either the Iterator is already valid, or we've just started iterating.
             while (++m_idx <= m_table->sizeMask) {
                 // Index still inside range of table.
                 typename Details::CellGroup* group = m_table->getCellGroups() + (m_idx >> 2);
@@ -342,7 +334,6 @@ public:
                 if (m_hash != KeyTraits::NullHash) {
                     // Cell has been reserved.
                     m_value = cell->value.load(Relaxed);
-                    Q_ASSERT(m_value != Value(ValueTraits::Redirect));
                     if (m_value != Value(ValueTraits::NullValue))
                         return; // Yield this cell.
                 }
@@ -359,14 +350,12 @@ public:
 
         Key getKey() const
         {
-            Q_ASSERT(isValid());
             // Since we've forbidden concurrent inserts (for now), nonatomic would suffice here, but let's plan ahead:
             return KeyTraits::dehash(m_hash);
         }
 
         Value getValue() const
         {
-            Q_ASSERT(isValid());
             return m_value;
         }
     };

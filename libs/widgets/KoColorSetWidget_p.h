@@ -45,6 +45,7 @@
 #include <KoColorDisplayRendererInterface.h>
 
 class KoColorPatch;
+class KisPaletteView;
 
 class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
@@ -54,7 +55,7 @@ public:
     QVBoxLayout *mainLayout;
     bool firstShowOfContainer;
     QWidget *colorSetContainer;
-    QScrollArea *scrollArea;
+    KisPaletteView *paletteView;
     QVBoxLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
     KoColorPatch *recentPatches[6];

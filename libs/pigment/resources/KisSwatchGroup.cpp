@@ -1,6 +1,5 @@
 #include "KisSwatchGroup.h"
 
-KisSwatch KisSwatchGroup::NULLENTRY = KisSwatch();
 quint32 KisSwatchGroup::DEFAULT_N_COLUMN = 16;
 
 KisSwatchGroup::KisSwatchGroup()
@@ -50,6 +49,10 @@ bool KisSwatchGroup::removeEntry(int x, int y)
 
 void KisSwatchGroup::setNColumns(int nColumns)
 {
+    Q_ASSERT(nColumns >= 0);
+    for (int i = nColumns; i < m_colorMatrix.size(); i++) {
+        m_nColors -= m_colorMatrix[i].size();
+    }
     m_colorMatrix.resize(nColumns);
 }
 
@@ -62,11 +65,11 @@ KisSwatch KisSwatchGroup::getEntry(int x, int y) const
 int KisSwatchGroup::nRows() const
 {
     int res = 0;
-    Q_FOREACH(const Column &c, m_colorMatrix) {
+    Q_FOREACH (const Column &c, m_colorMatrix) {
         if (c.empty()) {
             continue;
         }
-        res = res >= c.lastKey() ? res : c.lastKey();
+        res = res > c.lastKey() ? res : c.lastKey();
     }
     return res + 1;
 }

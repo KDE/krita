@@ -64,7 +64,8 @@ bool PaletteView::addEntryWithDialog(ManagedColor *color)
 bool PaletteView::addGroupWithDialog()
 {
     if (d->model->colorSet()) {
-        return d->widget->addGroupWithDialog();
+        // d->widget->addGroupWithDialog();
+        return false;
     }
     return false;
 }

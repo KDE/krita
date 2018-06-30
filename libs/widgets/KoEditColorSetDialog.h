@@ -57,7 +57,6 @@ private:
     QGridLayout *m_gridLayout;
     QScrollArea *m_scrollArea;
     KoColorSet *m_activeColorSet;
-    KoColorPatch *m_activePatch;
     uint m_initialColorSetCount;
     bool m_activeColorSetRequested;
 };

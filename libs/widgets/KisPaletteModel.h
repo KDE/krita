@@ -62,7 +62,7 @@ public:
      * convert the KoColor to the displayable QColor. Default is the
      * dumb renderer.
      */
-    void setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer);
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
     /**
      * @brief indexFromId
@@ -105,13 +105,6 @@ public:
      * @return if successful
      */
     bool removeEntry(QModelIndex index, bool keepColors=true);
-    /**
-     * @brief addGroup
-     * Adds a group to the list.
-     * @param groupName
-     * @return if successful
-     */
-    bool addGroup(QString groupName = QString());
 
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
@@ -135,15 +128,15 @@ public:
 
     Qt::DropActions supportedDropActions() const override;
 
-
-
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
 
 private:
-    KoColorSet* m_colorSet;
-    QPointer<KoColorDisplayRendererInterface> m_displayRenderer;
     QModelIndex getLastEntryIndex();
+
+private:
+    QPointer<KoColorSet> m_colorSet;
+    QPointer<const KoColorDisplayRendererInterface> m_displayRenderer;
 };
 
 #endif

@@ -21,6 +21,8 @@
 
 #include "KoColorSetEntry.h"
 
+int KoColorSetEntry::NULLPOSITON = -1;
+
 KoColorSetEntry::KoColorSetEntry()
     : m_spotColor(false)
 { }
@@ -30,4 +32,3 @@ KoColorSetEntry::KoColorSetEntry(const KoColor &color, const QString &name)
     , m_name(name)
     , m_spotColor(false)
 { }
-

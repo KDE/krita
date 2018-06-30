@@ -28,6 +28,7 @@
 #include <resources/KoResource.h>
 #include "KoColor.h"
 #include "KoColorSetEntry.h"
+#include "KoColorSetEntryGroup.h"
 
 /**
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
@@ -76,6 +77,7 @@ public:
 
     void setColumnCount(int columns);
     int columnCount();
+    int rowCount();
     /**
      * @brief comment
      * @return the comment.
@@ -85,12 +87,11 @@ public:
     void setComment(QString comment);
 
 public:
-
     /**
      * @brief add Add a color to the palette.
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
-    void add(const KoColorSetEntry &, QString groupName = QString());
+    void add(KoColorSetEntry, const QString &groupName = QString());
 
     /**
      * @brief insertBefore insert color before index into group.
@@ -100,7 +101,7 @@ public:
      */
     quint32 insertBefore(const KoColorSetEntry &, qint32 index, const QString &groupName = QString());
 
-    void removeAt(quint32 index, QString groupName = QString());
+    void removeAt(quint32 x, quint32 y, QString groupName = QString());
 
     /**
      * @brief getColorGlobal
@@ -108,7 +109,7 @@ public:
      * @param globalIndex the global index over the whole palette.
      * @return the entry.
      */
-    KoColorSetEntry getColorGlobal(quint32 globalIndex);
+    KoColorSetEntry getColorGlobal(quint32 x, quint32 y);
     /**
      * @brief getColorGroup
      * A function for getting the color from a specific group.
@@ -116,10 +117,10 @@ public:
      * @param index the index within the group.
      * @return the entry
      */
-    KoColorSetEntry getColorGroup(quint32 index, QString groupName = QString());
+    KoColorSetEntry getColorGroup(quint32 x, quint32 y, QString groupName = QString());
 
-    QString findGroupByGlobalIndex(quint32 globalIndex, quint32 *index);
-    QString findGroupByColorName(const QString &name, quint32 *index);
+    QString findGroupByGlobalIndex(quint32 x, quint32 y);
+    QString findGroupByColorName(const QString &name, quint32 *x, quint32 *y);
     QString findGroupByID(const QString &id,quint32 *index);
 
     /**
@@ -128,9 +129,17 @@ public:
      */
     QStringList getGroupNames();
 
+    /**
+     * @brief getGroupByName
+     * @param groupName
+     * @param if success
+     * @return group found
+     */
+    const KoColorSetEntryGroup &getGroupByName(const QString &groupName, bool &success) const;
+
     bool changeGroupName(QString oldGroupName, QString newGroupName);
 
-    bool changeColorSetEntry(KoColorSetEntry entry, QString groupName, quint32 index);
+    bool changeColorSetEntry(KoColorSetEntry entry, QString groupName);
 
     /**
      * @brief nColorsGroup

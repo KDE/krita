@@ -48,9 +48,15 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
+#include <kis_palette_view.h>
+#include <kis_palette_delegate.h>
+#include <KisPaletteModel.h>
+
 void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
 {
-    delete colorSetContainer;
+    if (colorSetContainer) {
+        delete colorSetContainer;
+    }
     colorSetContainer = new QWidget();
     colorSetLayout = new QVBoxLayout();
     colorSetLayout->setMargin(3);
@@ -69,16 +75,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
     colornames.clear();
     colorNameCmb->clear();
 
-    QWidget *defaultGroupContainer = new QWidget();
-    QGridLayout *colorGroupLayout = new QGridLayout();
-    for(int i = 0; i<columns; i++) {
-        colorGroupLayout->setColumnMinimumWidth(i, patchSize);
-    }
-    defaultGroupContainer->setMinimumWidth(columns*patchSize);
-    defaultGroupContainer->setMaximumWidth(columns*patchSize);
-    colorGroupLayout->setSpacing(0);
-    colorGroupLayout->setMargin(0);
-    defaultGroupContainer->setLayout(colorGroupLayout);
+    /*
     if (colorSet) {
         for( quint32 i = 0, p= 0; i < colorSet->nColorsGroup(); i++) {
             KoColorPatch *patch = new KoColorPatch(colorSetContainer);
@@ -111,28 +108,33 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             groupbox->setMaximumWidth(columns*patchSize);
             groupbox->setLayout(groupLayout);
             groupbox->setFlat(true);
-            for( quint32 i = 0, p= 0; i < colorSet->nColorsGroup(groupName); i++) {
-                KoColorPatch *patch = new KoColorPatch(colorSetContainer);
-                patch->setFrameStyle(QFrame::Plain | QFrame::Box);
-                patch->setLineWidth(1);
-                KoColorSetEntry c = colorSet->getColorGroup(i, groupName);
-                patch->setColor(c.color());
-                patch->setToolTip(c.name());
-                connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
-                groupLayout->addWidget(patch, p/columns, p%columns);
-                patch->setDisplayRenderer(displayRenderer);
-                patchWidgetList.append(patch);
-                colornames.append(c.name());
-                QPixmap colorsquare = QPixmap(12,12);
-                colorsquare.fill(c.color().toQColor());
-                colorNameCmb->addItem(QIcon(colorsquare), c.name());
-                ++p;
-            }
             colorSetLayout->addWidget(groupbox);
         }
     }
 
     scrollArea->setWidget(colorSetContainer);
+    */
+    qobject_cast<KisPaletteModel*>(paletteView->model())->setColorSet(colorSet);
+    /*
+    for( quint32 i = 0, p= 0; i < colorSet->nColorsGroup(groupName); i++) {
+        KoColorPatch *patch = new KoColorPatch(colorSetContainer);
+        patch->setFrameStyle(QFrame::Plain | QFrame::Box);
+        patch->setLineWidth(1);
+        KoColorSetEntry c = colorSet->getColorGroup(i, groupName);
+        patch->setColor(c.color());
+        patch->setToolTip(c.name());
+        connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+        groupLayout->addWidget(patch, p/columns, p%columns);
+        patch->setDisplayRenderer(displayRenderer);
+        patchWidgetList.append(patch);
+        colornames.append(c.name());
+        QPixmap colorsquare = QPixmap(12,12);
+        colorsquare.fill(c.color().toQColor());
+        colorNameCmb->addItem(QIcon(colorsquare), c.name());
+        ++p;
+    }
+    */
+
     connect(colorNameCmb, SIGNAL(activated(QString)), thePublic, SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 }
 
@@ -208,7 +210,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     ,d(new KoColorSetWidgetPrivate())
 {
     d->thePublic = this;
-    d->colorSet = 0;
 
     d->firstShowOfContainer = true;
 
@@ -229,15 +230,18 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     color.fromQColor(QColor(128,0,0));
     d->addRecent(color);
 
-    d->scrollArea = new QScrollArea();
-    d->scrollArea->setBackgroundRole(QPalette::Dark);
-    d->mainLayout->addWidget(d->scrollArea);
+    d->paletteView = new KisPaletteView(this);
+    KisPaletteModel *paletteModel = new KisPaletteModel(d->paletteView);
+    d->colorSet = new KoColorSet();
+    paletteModel->setDisplayRenderer(d->displayRenderer);
+    paletteModel->setColorSet(d->colorSet);
+    d->paletteView->setPaletteModel(paletteModel);
+    d->mainLayout->addWidget(d->paletteView);
+
     d->colorNameCmb = new QComboBox(this);
     d->colorNameCmb->setEditable(true);
     d->colorNameCmb->setInsertPolicy(QComboBox::NoInsert);
     d->mainLayout->addWidget(d->colorNameCmb);
-    d->fillColors();
-
 
     d->addRemoveButton = new QToolButton(this);
     d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
@@ -246,9 +250,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addWidget(d->addRemoveButton);
 
     setLayout(d->mainLayout);
-
-    KoColorSet *colorSet = new KoColorSet();
-    d->colorSet = colorSet;
     d->fillColors();
 }
 

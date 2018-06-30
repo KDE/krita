@@ -179,8 +179,7 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_wdgPaletteDock->paletteView->updateRows();
     m_wdgPaletteDock->cmbNameList->clear();
 
-
-
+    /*
     if (colorSet && colorSet->nColors()>0) {
         for (quint32 i = 0; i< colorSet->nColors(); i++) {
             KoColorSetEntry entry = colorSet->getColorGlobal(i);
@@ -210,9 +209,7 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
             m_wdgPaletteDock->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
         }
     }
-
-
-
+    */
 
     QCompleter *completer = new QCompleter(m_wdgPaletteDock->cmbNameList->model());
     completer->setCompletionMode(QCompleter::PopupCompletion);
@@ -232,7 +229,7 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 void PaletteDockerDock::setColorFromNameList(int index)
 {
     if (m_model && m_currentColorSet) {
-        entrySelected(m_currentColorSet->getColorGlobal(index));
+        // entrySelected(m_currentColorSet->getColorGlobal(index));
         m_wdgPaletteDock->paletteView->blockSignals(true);
         m_wdgPaletteDock->cmbNameList->blockSignals(true);
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);

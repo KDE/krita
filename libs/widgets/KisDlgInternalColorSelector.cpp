@@ -333,6 +333,7 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
     }
     m_d->paletteModel->setColorSet(set);
     m_ui->cmbNameList->clear();
+    /*
     for (quint32 i = 0; i< set->nColors(); i++) {
         KoColorSetEntry entry = set->getColorGlobal(i);
         QPixmap colorSquare = QPixmap(32, 32);
@@ -360,6 +361,7 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
         }
         m_ui->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
     }
+    */
     QCompleter *completer = new QCompleter(m_ui->cmbNameList->model());
     completer->setCompletionMode(QCompleter::PopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -371,7 +373,7 @@ void KisDlgInternalColorSelector::slotSetColorFromColorList()
 {
     int index = m_ui->cmbNameList->currentIndex();
     if (m_d->paletteModel) {
-        slotSetColorFromColorSetEntry(m_d->paletteModel->colorSet()->getColorGlobal(index));
+        // slotSetColorFromColorSetEntry(m_d->paletteModel->colorSet()->getColorGlobal(index));
         m_ui->paletteBox->blockSignals(true);
         m_ui->paletteBox->selectionModel()->clearSelection();
         m_ui->paletteBox->selectionModel()->setCurrentIndex(m_d->paletteModel->indexFromId(index), QItemSelectionModel::Select);

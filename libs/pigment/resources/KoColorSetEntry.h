@@ -29,6 +29,8 @@
 class KRITAPIGMENT_EXPORT KoColorSetEntry
 {
 public:
+    static int NULLPOSITON;
+public:
     KoColorSetEntry();
     KoColorSetEntry(const KoColor &color, const QString &name);
 
@@ -50,7 +52,7 @@ public:
         return m_color == rhs.m_color && m_name == rhs.m_name;
     }
 
-private:
+protected:
     KoColor m_color;
     QString m_name;
     QString m_id;

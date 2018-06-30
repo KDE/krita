@@ -95,15 +95,20 @@ int Palette::colorsCountGroup(QString name)
 
 KoColorSetEntry Palette::colorSetEntryByIndex(int index)
 {
+    /*
     if (!d->palette) return KoColorSetEntry();
     return d->palette->getColorGlobal(index);
+    */
+    return KoColorSetEntry();
 }
 
 KoColorSetEntry Palette::colorSetEntryFromGroup(int index, const QString &groupName)
 {
+    /*
     if (!d->palette) return KoColorSetEntry();
-
     return d->palette->getColorGroup(index, groupName);
+    */
+    return KoColorSetEntry();
 }
 
 ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
@@ -120,7 +125,7 @@ void Palette::addEntry(KoColorSetEntry entry, QString groupName)
 
 void Palette::removeEntry(int index, const QString &groupName)
 {
-    d->palette->removeAt(index, groupName);
+    // d->palette->removeAt(index, groupName);
 }
 
 void Palette::insertEntry(int index, KoColorSetEntry entry, QString groupName)
@@ -130,7 +135,8 @@ void Palette::insertEntry(int index, KoColorSetEntry entry, QString groupName)
 
 bool Palette::editEntry(int index, KoColorSetEntry entry, QString groupName)
 {
-    return d->palette->changeColorSetEntry(entry, groupName, index);
+    // return d->palette->changeColorSetEntry(entry, groupName, index);
+    return true;
 }
 
 bool Palette::changeGroupName(QString oldGroupName, QString newGroupName)

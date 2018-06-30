@@ -73,11 +73,6 @@ public Q_SLOTS:
      */
     bool addEntryWithDialog(KoColor color);
     /**
-     * @brief addGroupWithDialog
-     * summons a little dialog to name the new group.
-     */
-    bool addGroupWithDialog();
-    /**
      * remove entry with a dialog window.(Necessary for groups.
      */
     bool removeEntryWithDialog(QModelIndex index);

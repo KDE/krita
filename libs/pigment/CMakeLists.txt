@@ -77,6 +77,8 @@ set(kritapigment_SRCS
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
     resources/KoColorSetEntry.cpp
+    resources/KisSwatch.cpp
+    resources/KisSwatchGroup.cpp
     resources/KoPattern.cpp
     resources/KoResource.cpp
     resources/KoMD5Generator.cpp

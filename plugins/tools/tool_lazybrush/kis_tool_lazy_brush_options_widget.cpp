@@ -172,6 +172,7 @@ void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
 
 void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &color)
 {
+    /*
     int selectedIndex = -1;
 
     for (quint32 i = 0; i < m_d->colorSet.nColors(); i++) {
@@ -197,6 +198,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
     if (newIndex != m_d->ui->colorView->currentIndex()) {
         m_d->ui->colorView->setCurrentIndex(newIndex);
     }
+    */
 }
 
 void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
@@ -296,9 +298,11 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
 
     KisColorizeMask::KeyStrokeColors colors;
 
+    /*
     for (quint32 i = 0; i < m_d->colorSet.nColors(); i++) {
         colors.colors << m_d->colorSet.getColorGlobal(i).color();
     }
+    */
 
     colors.transparentIndex = value ? activeIndex : -1;
 
@@ -316,7 +320,7 @@ void KisToolLazyBrushOptionsWidget::slotRemove()
     KIS_ASSERT_RECOVER_RETURN(activeIndex >= 0);
 
 
-    const KoColor color = m_d->colorSet.getColorGlobal((quint32)activeIndex).color();
+    const KoColor color; //m_d->colorSet.getColorGlobal((quint32)activeIndex).color();
     m_d->activeMask->removeKeyStroke(color);
 }
 

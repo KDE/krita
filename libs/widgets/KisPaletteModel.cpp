@@ -41,7 +41,7 @@ KisPaletteModel::~KisPaletteModel()
 {
 }
 
-void KisPaletteModel::setDisplayRenderer(KoColorDisplayRendererInterface *displayRenderer)
+void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
     if (displayRenderer) {
         if (m_displayRenderer) {
@@ -61,25 +61,6 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
     endResetModel();
 }
 
-QModelIndex KisPaletteModel::getLastEntryIndex()
-{
-    int endRow = rowCount();
-    int endColumn = columnCount();
-    if (m_colorSet->nColors()>0) {
-        QModelIndex i = this->index(endRow, endColumn, QModelIndex());
-        while (qvariant_cast<QStringList>(i.data(RetrieveEntryRole)).isEmpty()) {
-            i = this->index(endRow, endColumn);
-            endColumn -=1;
-            if (endColumn<0) {
-                endColumn = columnCount();
-                endRow-=1;
-            }
-        }
-        return i;
-    }
-    return QModelIndex();
-}
-
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     KoColorSetEntry entry;
@@ -89,6 +70,7 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         quint32 indexInGroup = 0;
         QString indexGroupName = QString();
 
+        /*
         int rowstotal = m_colorSet->nColorsGroup()/columnCount();
         if (index.row()<=rowstotal && (quint32)(index.row()*columnCount()+index.column())<m_colorSet->nColorsGroup()) {
             indexInGroup = (quint32)(index.row()*columnCount()+index.column());
@@ -96,6 +78,9 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         if (m_colorSet->nColorsGroup()==0) {
             rowstotal+=1; //always add one for the default group when considering groups.
         }
+        */
+
+        /*
         Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
             //we make an int for the rows added by the current group.
             int newrows = 1+m_colorSet->nColorsGroup(groupName)/columnCount();
@@ -119,6 +104,7 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
             //add the new rows to the totalrows we've looked at.
             rowstotal += newrows;
         }
+        */
         if (groupNameRow) {
             switch (role) {
             case Qt::ToolTipRole:
@@ -136,27 +122,25 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
             }
             }
         } else {
-            if (indexInGroup < m_colorSet->nColorsGroup(indexGroupName)) {
-                entry = m_colorSet->getColorGroup(indexInGroup, indexGroupName);
-                switch (role) {
-                case Qt::ToolTipRole:
-                case Qt::DisplayRole: {
-                    return entry.name();
-                }
-                case Qt::BackgroundRole: {
-                    QColor color = m_displayRenderer->toQColor(entry.color());
-                    return QBrush(color);
-                }
-                case IsHeaderRole: {
-                    return false;
-                }
-                case RetrieveEntryRole: {
-                    QStringList entryList;
-                    entryList.append(indexGroupName);
-                    entryList.append(QString::number(indexInGroup));
-                    return entryList;
-                }
-                }
+            entry = m_colorSet->getColorGroup(index.row(), index.column(), indexGroupName);
+            switch (role) {
+            case Qt::ToolTipRole:
+            case Qt::DisplayRole: {
+                return entry.name();
+            }
+            case Qt::BackgroundRole: {
+                QColor color = m_displayRenderer->toQColor(entry.color());
+                return QBrush(color);
+            }
+            case IsHeaderRole: {
+                return false;
+            }
+            case RetrieveEntryRole: {
+                QStringList entryList;
+                entryList.append(indexGroupName);
+                // entryList.append(QString::number(indexInGroup));
+                return entryList;
+            }
             }
         }
     }
@@ -165,6 +149,7 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 
 int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
 {
+    /*
     if (!m_colorSet) {
         return 0;
     }
@@ -193,6 +178,13 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
         return countedrows;
     }
     return m_colorSet->nColors()/15 + 1;
+    */
+    if (m_colorSet) {
+        return m_colorSet->rowCount() // count of color rows
+                + m_colorSet->getGroupNames().size() // rows from names
+                + 1; // take 0 into account
+    }
+    return 0;
 }
 
 int KisPaletteModel::columnCount(const QModelIndex& /*parent*/) const
@@ -216,7 +208,8 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (m_colorSet) {
-
+        return QAbstractTableModel::index(row, column, parent);
+        /*
         //make an int to hold the amount of rows we've looked at. The initial is the total rows in the default group.
         int rowstotal = m_colorSet->nColorsGroup()/columnCount();
         if (row<=rowstotal && (quint32)(row*columnCount()+column)<m_colorSet->nColorsGroup()) {
@@ -251,6 +244,7 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
             //add the new rows to the totalrows we've looked at.
             rowstotal += newrows;
         }
+        */
     }
     return QModelIndex();
 }
@@ -269,6 +263,8 @@ KoColorSet* KisPaletteModel::colorSet() const
 
 QModelIndex KisPaletteModel::indexFromId(int i) const
 {
+    return QModelIndex();
+    /*
     QModelIndex index = QModelIndex();
     if (!colorSet() || colorSet()->nColors() == 0) {
         return index;
@@ -310,10 +306,12 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
         }
     }
     return index;
+    */
 }
 
 int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 {
+    /*
     if (index.isValid()==false) {
         return -1;
         qWarning()<<"invalid index";
@@ -338,10 +336,13 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
     //then add the index.
     i += entryList.at(1).toUInt();
     return i;
+    */
+    return 0;
 }
 
 KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
+    /*
     KoColorSetEntry blank =  KoColorSetEntry();
     if (!index.isValid()) {
         return blank;
@@ -353,30 +354,19 @@ KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index
     QString groupName = entryList.at(0);
     quint32 indexInGroup = entryList.at(1).toUInt();
     return m_colorSet->getColorGroup(indexInGroup, groupName);
+    */
+    return KoColorSetEntry();
 }
 
 bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
 {
-    int col = m_colorSet->nColorsGroup(groupName)%columnCount();
-    QModelIndex i = getLastEntryIndex();
-    if (col+1 > columnCount()) {
-        beginInsertRows(QModelIndex(), i.row(), i.row()+1);
-    }
-    if ((int)m_colorSet->nColors() < columnCount()) {
-        beginInsertColumns(QModelIndex(), m_colorSet->nColors(), m_colorSet->nColors()+1);
-    }
-    m_colorSet->add(entry, groupName);
-    if (col + 1 > columnCount()) {
-        endInsertRows();
-    }
-    if (m_colorSet->nColors() < (quint32)columnCount()) {
-        endInsertColumns();
-    }
     return true;
 }
 
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
+    return true;
+    /*
     QStringList entryList =  qvariant_cast<QStringList>(index.data(RetrieveEntryRole));
     if (entryList.empty()) {
         return false;
@@ -404,19 +394,12 @@ bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
         endRemoveRows();
     }
     return true;
-}
-
-bool KisPaletteModel::addGroup(QString groupName)
-{
-    QModelIndex i = getLastEntryIndex();
-    beginInsertRows(QModelIndex(), i.row(), i.row()+1);
-    m_colorSet->addGroup(groupName);
-    endInsertRows();
-    return true;
+    */
 }
 
 bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    /*
     Q_ASSERT(!parent.isValid());
 
     int beginRow = qMax(0, row);
@@ -427,11 +410,15 @@ bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)
 
     endRemoveRows();
     return true;
+    */
+    return true;
 }
 
 bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                                    int row, int column, const QModelIndex &parent)
 {
+    return true;
+    /*
     if (!data->hasFormat("krita/x-colorsetentry") && !data->hasFormat("krita/x-colorsetgroup")) {
         return false;
     }
@@ -514,12 +501,11 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 endRow+=1;
             }
             if (index.isValid()) {
-                /*this is to figure out the row of the old color.
-                 * That way we can in turn avoid moverows from complaining the
-                 * index is out of bounds when using index.
-                 * Makes me wonder if we shouldn't just insert the index of the
-                 * old color when requesting the mimetype...
-                 */
+                // this is to figure out the row of the old color.
+                // That way we can in turn avoid moverows from complaining the
+                // index is out of bounds when using index.
+                // Makes me wonder if we shouldn't just insert the index of the
+                // old color when requesting the mimetype...
                 int i = indexInGroup;
                 if (oldGroupName != QString()) {
                     colorSet()->nColorsGroup("");
@@ -581,10 +567,13 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     }
 
     return true;
+    */
 }
 
 QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 {
+    return new QMimeData();
+    /*
     QMimeData *mimeData = new QMimeData();
     QByteArray encodedData;
 
@@ -629,6 +618,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 
     mimeData->setData(mimeTypeName, encodedData);
     return mimeData;
+    */
 }
 
 QStringList KisPaletteModel::mimeTypes() const

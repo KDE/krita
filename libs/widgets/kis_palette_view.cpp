@@ -39,8 +39,19 @@
 
 struct KisPaletteView::Private
 {
-    KisPaletteModel *model = nullptr;
-    bool allowPaletteModification = true;
+    Private()
+        : model(Q_NULLPTR)
+        , allowPaletteModification(true)
+    {
+        entryClickedMenu.addAction("Add foreground color");
+        entryClickedMenu.addAction("Choose a color to add");
+        entryClickedMenu.addAction("Rename this spot");
+        entryClickedMenu.addAction("Switch with another spot");
+        entryClickedMenu.addAction("Delete color");
+    }
+    KisPaletteModel *model;
+    QMenu entryClickedMenu;
+    bool allowPaletteModification;
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
@@ -74,15 +85,18 @@ KisPaletteView::~KisPaletteView()
 
 void KisPaletteView::setCrossedKeyword(const QString &value)
 {
+    /*
     KisPaletteDelegate *delegate =
         dynamic_cast<KisPaletteDelegate*>(itemDelegate());
     KIS_ASSERT_RECOVER_RETURN(delegate);
 
     delegate->setCrossedKeyword(value);
+    */
 }
 
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
+    /*
     KoDialog *window = new KoDialog(this);
     window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
     QFormLayout *editableItems = new QFormLayout(window);
@@ -122,29 +136,14 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
         return true;
     }
     return false;
-}
-
-// should be move to colorSetChooser
-bool KisPaletteView::addGroupWithDialog()
-{
-    KoDialog *window = new KoDialog();
-    window->setWindowTitle(i18nc("@title:window","Add a new group"));
-    QFormLayout *editableItems = new QFormLayout();
-    window->mainWidget()->setLayout(editableItems);
-    QLineEdit *lnName = new QLineEdit();
-    editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
-    lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
-    if (window->exec() == KoDialog::Accepted) {
-        QString groupName = lnName->text();
-        m_d->model->addGroup(groupName);
-        m_d->model->colorSet()->save();
-        return true;
-    }
-    return false;
+    */
+    return true;
 }
 
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
+    return true;
+    /*
     bool keepColors = true;
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         KoDialog *window = new KoDialog();
@@ -164,10 +163,12 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         m_d->model->colorSet()->save();
     }
     return true;
+    */
 }
 
 void KisPaletteView::trySelectClosestColor(KoColor color)
 {
+    /*
     KoColorSet* color_set = m_d->model->colorSet();
     if (!color_set)
         return;
@@ -190,6 +191,7 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
     QModelIndex index = m_d->model->indexFromId(i);
     this->selectionModel()->clearSelection();
     this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+    */
 }
 
 void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
@@ -197,14 +199,18 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
     bool foreground = false;
     if (event->button()== Qt::LeftButton) {
         foreground = true;
+    } else if (event->button() == Qt::RightButton) {
+        m_d->entryClickedMenu.exec();
     }
     entrySelection(foreground);
 }
 
 void KisPaletteView::paletteModelChanged()
 {
+    /*
     updateView();
     updateRows();
+    */
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
@@ -220,7 +226,6 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     connect(m_d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(modelReset()), this, SLOT(paletteModelChanged()));
-
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -230,6 +235,7 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 
 void KisPaletteView::updateRows()
 {
+    /*
     this->clearSpans();
     if (m_d->model) {
         for (int r=0; r<=m_d->model->rowCount(); r++) {
@@ -242,6 +248,7 @@ void KisPaletteView::updateRows()
             }
         }
     }
+    */
 }
 
 void KisPaletteView::setAllowModification(bool allow)
@@ -274,6 +281,7 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 }
 
 void KisPaletteView::entrySelection(bool foreground) {
+    /*
     QModelIndex index;
     if (selectedIndexes().size()<=0) {
         return;
@@ -295,9 +303,12 @@ void KisPaletteView::entrySelection(bool foreground) {
             emit(indexEntrySelected(index));
         }
     }
+    */
 }
 
-void KisPaletteView::modifyEntry(QModelIndex index) {
+void KisPaletteView::modifyEntry(QModelIndex index)
+{
+    /*
     if (m_d->allowPaletteModification) {
         KoDialog *group = new KoDialog(this);
         QFormLayout *editableItems = new QFormLayout(group);
@@ -339,4 +350,5 @@ void KisPaletteView::modifyEntry(QModelIndex index) {
             }
         }
     }
+    */
 }

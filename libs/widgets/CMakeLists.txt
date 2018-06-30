@@ -88,15 +88,25 @@ set(kritawidgets_LIB_SRCS
 
     kis_color_input.cpp
 
+    # classes used by internal color selector
     kis_spinbox_color_selector.cpp
-
-    KisDlgInternalColorSelector.cpp
 
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
+    KisScreenColorPickerBase.cpp
+
+    KisDlgInternalColorSelector.cpp
+
+    KisPaletteListWidget.cpp
+    KisPaletteListWidget_p.cpp
+
+    KisPaletteModel.cpp
+    kis_palette_delegate.cpp
+    kis_palette_view.cpp
+
     kis_popup_button.cc
     kis_color_button.cpp
     KisScreenColorPickerBase.cpp

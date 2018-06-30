@@ -21,6 +21,7 @@
 
 #include <sys/types.h>
 #include <QtEndian> // qFromLittleEndian
+#include <QtMath> // qMax
 
 #include <QImage>
 #include <QPoint>
@@ -44,21 +45,22 @@
 #include <klocalizedstring.h>
 
 #include <KoStore.h>
+#include <QList>
 #include "KoColor.h"
+#include "KoColorSet.h"
 #include "KoColorSetEntry.h"
+#include "KoColorSetEntryGroup.h"
 #include "KoColorProfile.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorModelStandardIds.h"
-
 
 struct KoColorSet::Private {
     KoColorSet::PaletteType paletteType;
     QByteArray data;
     QString comment;
-    qint32 columns {0}; // Set the default value that the GIMP uses...
-    QVector<KoColorSetEntry> colors; //ungrouped colors
+    qint32 columns;
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.
-    QMap<QString, QVector<KoColorSetEntry>> groups; //grouped colors.
+    QMap<QString, KoColorSetEntryGroup> groups; //grouped colors.
 };
 
 KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba) {
@@ -117,7 +119,7 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     setFilename(rhs.filename());
     d->comment = rhs.d->comment;
     d->columns = rhs.d->columns;
-    d->colors = rhs.d->colors;
+    d->global = rhs.d->global;
     d->groupNames = rhs.d->groupNames;
     d->groups = rhs.d->groups;
     setValid(true);
@@ -135,7 +137,7 @@ bool KoColorSet::load()
         warnPigment << "Can't open file " << filename();
         return false;
     }
-    bool res =  loadFromDevice(&file);
+    bool res = loadFromDevice(&file);
     file.close();
     return res;
 }
@@ -181,7 +183,7 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 
 bool KoColorSet::init()
 {
-    d->colors.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
+    d->global.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
     d->groups.clear();
     d->groupNames.clear();
 
@@ -236,20 +238,13 @@ bool KoColorSet::init()
         d->columns = 10;
     }
 
-    QImage img(d->columns * 4, (d->colors.size() / d->columns) * 4, QImage::Format_ARGB32);
+    QImage img(d->columns * 4, d->global.nRows() * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
-    int counter = 0;
-    for(int i = 0; i < d->columns; ++i) {
-        for (int j = 0; j < (d->colors.size() / d->columns); ++j) {
-            if (counter < d->colors.size()) {
-                QColor c = d->colors.at(counter).color().toQColor();
-                gc.fillRect(i * 4, j * 4, 4, 4, c);
-                counter++;
-            }
-            else {
-                break;
-            }
+    Q_FOREACH (const KoColorSetEntryGroup::Column &col, d->global.colors()) {
+        Q_FOREACH (const KoColorSetEntry &entry, col.values()) {
+            QColor c = entry.color().toQColor();
+            gc.fillRect(entry.x() * 4, entry.y() * 4, 4, 4, c);
         }
     }
     setImage(img);
@@ -264,14 +259,18 @@ bool KoColorSet::saveGpl(QIODevice *dev) const
     QTextStream stream(dev);
     stream << "GIMP Palette\nName: " << name() << "\nColumns: " << d->columns << "\n#\n";
 
-    for (int i = 0; i < d->colors.size(); i++) {
-        const KoColorSetEntry& entry = d->colors.at(i);
-        QColor c = entry.color().toQColor();
-        stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
-        if (entry.name().isEmpty())
-            stream << "Untitled\n";
-        else
-            stream << entry.name() << "\n";
+    for (int y = 0; y < d->global.nRows(); y++) {
+        for (int x = 0; x < d->columns; x++) {
+            bool colorPresent;
+            const KoColorSetEntry& entry = d->global.getEntry(x, y, colorPresent);
+            if (!colorPresent) { continue; }
+            QColor c = entry.color().toQColor();
+            stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
+            if (entry.name().isEmpty())
+                stream << "Untitled\n";
+            else
+                stream << entry.name() << "\n";
+        }
     }
 
     return true;
@@ -279,22 +278,15 @@ bool KoColorSet::saveGpl(QIODevice *dev) const
 
 quint32 KoColorSet::nColors()
 {
-    if (d->colors.isEmpty()) return 0;
-
-    quint32 total = d->colors.size();
-    if (!d->groups.empty()) {
-        Q_FOREACH (const QVector<KoColorSetEntry> &group, d->groups.values()) {
-            total += group.size();
-        }
-    }
-    return total;
+    return d->global.nColors();
 }
 
-quint32 KoColorSet::nColorsGroup(QString groupName) {
+quint32 KoColorSet::nColorsGroup(QString groupName)
+{
     if (d->groups.contains(groupName)) {
-        return d->groups.value(groupName).size();
-    } else if (groupName.isEmpty() && !d->colors.isEmpty()){
-        return d->colors.size();
+        return d->groups[groupName].nColors();
+    } else if (groupName.isEmpty()) {
+        return d->global.nColors();
     } else {
         return 0;
     }
@@ -302,11 +294,12 @@ quint32 KoColorSet::nColorsGroup(QString groupName) {
 
 quint32 KoColorSet::getIndexClosestColor(const KoColor color, bool useGivenColorSpace)
 {
+    /*
     quint32 closestIndex = 0;
     quint8 highestPercentage = 0;
     quint8 testPercentage = 0;
     KoColor compare = color;
-    for (quint32 i=0; i<nColors(); i++) {
+    for (quint32 i=0; i < nColors(); i++) {
         KoColor entry = getColorGlobal(i).color();
         if (useGivenColorSpace == true && compare.colorSpace() != entry.colorSpace()) {
             entry.convertTo(compare.colorSpace());
@@ -322,25 +315,34 @@ quint32 KoColorSet::getIndexClosestColor(const KoColor color, bool useGivenColor
         }
     }
     return closestIndex;
+    */
+    return 0;
 }
 
 QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpace)
 {
+    /*
     int i = getIndexClosestColor(color, useGivenColorSpace);
     return getColorGlobal(i).name();
+    */
+    return QString();
 }
 
-void KoColorSet::add(const KoColorSetEntry & c, QString groupName)
+void KoColorSet::add(KoColorSetEntry c, const QString &groupName)
 {
-    if (d->groups.contains(groupName) || d->groupNames.contains(groupName)) {
-        d->groups[groupName].push_back(c);
-    } else {
-        d->colors.push_back(c);
+    KoColorSetEntryGroup &modifiedGroup =
+            d->groups.contains(groupName) || d->groupNames.contains(groupName)
+            ? d->groups[groupName] : d->global;
+    if (c.x() == KoColorSetEntry::NULLPOSITON) {
+        c.setX(d->global.nColors() % d->columns);
+        c.setY(qMax(modifiedGroup.nRows(), modifiedGroup.nColors() / d->columns));
     }
+    modifiedGroup.setEntry(c);
 }
 
 quint32 KoColorSet::insertBefore(const KoColorSetEntry &c, qint32 index, const QString &groupName)
 {
+    /*
     quint32 newIndex = index;
     if (d->groups.contains(groupName)) {
         d->groups[groupName].insert(index, c);
@@ -350,59 +352,67 @@ quint32 KoColorSet::insertBefore(const KoColorSetEntry &c, qint32 index, const Q
         warnPigment << "Couldn't find group to insert to";
     }
     return newIndex;
+    */
+    return 0;
 }
 
-void KoColorSet::removeAt(quint32 index, QString groupName)
+void KoColorSet::removeAt(quint32 x, quint32 y, QString groupName)
 {
+    /*
     if (d->groups.contains(groupName)){
-        if ((quint32)d->groups.value(groupName).size()>index) {
-            d->groups[groupName].remove(index);
+        if ((quint32)d->groups.value(groupName).size()>x) {
+            d->groups[groupName].remove(x);
         }
     } else {
-        if ((quint32)d->colors.size()>index) {
-            d->colors.remove(index);
+        if ((quint32)d->colors.size()>x) {
+            d->colors.remove(x);
         }
+    }
+    */
+    if (x >= d->columns || x < 0)
+        return;
+    if (d->groups.contains(groupName)){
+            d->groups[groupName].removeEntry(x, y);
+    } else {
+            d->global.removeEntry(x, y);
     }
 }
 
 void KoColorSet::clear()
 {
-    d->colors.clear();
+    d->global.clear();
     d->groups.clear();
+    d->groupNames.clear();
 }
 
-KoColorSetEntry KoColorSet::getColorGlobal(quint32 index)
+KoColorSetEntry KoColorSet::getColorGlobal(quint32 x, quint32 y)
 {
     KoColorSetEntry e;
-    quint32 groupIndex = index;
-    QString groupName = findGroupByGlobalIndex(index, &groupIndex);
-    e = getColorGroup(groupIndex, groupName);
+    QString groupName = findGroupByGlobalIndex(x, y);
+    e = getColorGroup(x, y, groupName);
     return e;
 }
 
-KoColorSetEntry KoColorSet::getColorGroup(quint32 index, QString groupName)
+KoColorSetEntry KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
 {
     KoColorSetEntry e;
+    bool entryFound;
     if (d->groups.contains(groupName)) {
-        if (nColorsGroup(groupName)>index) {
-            e = d->groups.value(groupName).at(index);
-        } else {
-            warnPigment<<index<<"is above"<<nColorsGroup(groupName)<<"of"<<groupName;
-        }
-    } else if (groupName.isEmpty() || groupName == QString()) {
-        if (nColorsGroup(groupName)>index) {
-            e = d->colors.at(index);
-        } else {
-            warnPigment<<index<<"is above the size of the default group:"<<nColorsGroup(groupName);
-        }
+        e = d->groups[groupName].getEntry(x, y, entryFound);
+    } else if (groupName.isEmpty()) {
+        e = d->global.getEntry(x, y, entryFound);
     } else {
-        warnPigment << "Color group "<<groupName<<" not found";
+        warnPigment << "Color group "<< groupName <<" not found";
+    }
+    if (!entryFound) {
+        warnPigment << x << " " << y <<"doesn't exist in" << nColorsGroup(groupName);
     }
     return e;
 }
 
-QString KoColorSet::findGroupByGlobalIndex(quint32 globalIndex, quint32 *index)
+QString KoColorSet::findGroupByGlobalIndex(quint32 x, quint32 y)
 {
+    /*
     *index = globalIndex;
     QString groupName = QString();
     if ((quint32)d->colors.size()<=*index) {
@@ -422,25 +432,31 @@ QString KoColorSet::findGroupByGlobalIndex(quint32 globalIndex, quint32 *index)
         }
     }
     return groupName;
+    */
+    return QString();
 }
 
-QString KoColorSet::findGroupByColorName(const QString &name, quint32 *index)
+QString KoColorSet::findGroupByColorName(const QString &name, quint32 *x, quint32 *y)
 {
-    *index = 0;
     QString groupName = QString();
-    for (int i = 0; i<d->colors.size(); i++) {
-        if(d->colors.at(i).name() == name) {
-            *index = (quint32)i;
-            return groupName;
+    Q_FOREACH (const KoColorSetEntryGroup::Column & col, d->global.colors()) {
+        Q_FOREACH (const KoColorSetEntry & entry, col.values()) {
+            if (entry.name() == name) {
+                *x = static_cast<quint32>(entry.x());
+                *y = static_cast<quint32>(entry.y());
+                return groupName;
+            }
         }
     }
     QStringList groupNames = getGroupNames();
     Q_FOREACH (QString name, groupNames) {
-        for (int i=0; i<d->groups[name].size(); i++) {
-            if(d->groups[name].at(i).name() == name) {
-                *index = (quint32)i;
-                groupName = name;
-                return groupName;
+        Q_FOREACH (const KoColorSetEntryGroup::Column & col, d->groups[name].colors()) {
+            Q_FOREACH (const KoColorSetEntry & entry, col.values()) {
+                if (entry.name() == name) {
+                    *x = static_cast<quint32>(entry.x());
+                    *y = static_cast<quint32>(entry.y());
+                    return groupName;
+                }
             }
         }
     }
@@ -448,6 +464,7 @@ QString KoColorSet::findGroupByColorName(const QString &name, quint32 *index)
 }
 
 QString KoColorSet::findGroupByID(const QString &id, quint32 *index) {
+    /*
     *index = 0;
     QString groupName = QString();
     for (int i = 0; i<d->colors.size(); i++) {
@@ -467,11 +484,13 @@ QString KoColorSet::findGroupByID(const QString &id, quint32 *index) {
         }
     }
     return groupName;
+    */
+    return QString();
 }
 
 QStringList KoColorSet::getGroupNames()
 {
-    if (d->groupNames.size()<d->groups.size()) {
+    if (d->groupNames.size() != d->groups.size()) {
         warnPigment << "mismatch between groups and the groupnames list.";
         return QStringList(d->groups.keys());
     }
@@ -483,25 +502,25 @@ bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
     if (d->groupNames.contains(oldGroupName)==false) {
         return false;
     }
-    QVector<KoColorSetEntry> dummyList = d->groups.value(oldGroupName);
+    KoColorSetEntryGroup tmp = d->groups.value(oldGroupName);
     d->groups.remove(oldGroupName);
-    d->groups[newGroupName] = dummyList;
+    d->groups[newGroupName] = tmp;
     //rename the string in the stringlist;
     int index = d->groupNames.indexOf(oldGroupName);
     d->groupNames.replace(index, newGroupName);
     return true;
 }
 
-bool KoColorSet::changeColorSetEntry(KoColorSetEntry entry, QString groupName, quint32 index)
+bool KoColorSet::changeColorSetEntry(KoColorSetEntry entry,
+                                     QString groupName)
 {
-    if (index>=nColorsGroup(groupName) || (d->groupNames.contains(groupName)==false &&  groupName.size()>0)) {
+    if (!d->groupNames.contains(groupName)) {
         return false;
     }
-
-    if (groupName==QString()) {
-        d->colors[index] = entry;
+    if (groupName.isEmpty()) {
+        d->global.setEntry(entry);
     } else {
-        d->groups[groupName][index] = entry;
+        d->groups[groupName].setEntry(entry);
     }
     return true;
 }
@@ -509,6 +528,10 @@ bool KoColorSet::changeColorSetEntry(KoColorSetEntry entry, QString groupName, q
 void KoColorSet::setColumnCount(int columns)
 {
     d->columns = columns;
+    d->global.setNColumns(columns);
+    for (KoColorSetEntryGroup &g : d->groups.values()) { // Q_FOREACH doesn't accept non const refs
+        g.setNColumns(columns);
+    }
 }
 
 int KoColorSet::columnCount()
@@ -532,7 +555,7 @@ bool KoColorSet::addGroup(const QString &groupName)
         return false;
     }
     d->groupNames.append(groupName);
-    d->groups[groupName] = QVector<KoColorSetEntry>();
+    d->groups[groupName] = KoColorSetEntryGroup();
     return true;
 }
 
@@ -555,12 +578,20 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
     if (!d->groups.contains(groupName)) {
         return false;
     }
+
     if (keepColors) {
-        for (int i = 0; i<d->groups.value(groupName).size(); i++) {
-            d->colors.append(d->groups.value(groupName).at(i));
+        // put all colors directly below global
+        KoColorSetEntry newEntry;
+        Q_FOREACH (const KoColorSetEntryGroup::Column & col, d->groups[groupName].colors()) {
+            Q_FOREACH (const KoColorSetEntry & entry, col.values()) {
+                newEntry = entry;
+                newEntry.setY(entry.y() + d->global.nRows());
+                d->global.setEntry(newEntry);
+            }
         }
     }
-    for(int n = 0; n<d->groupNames.size(); n++) {
+
+    for (int n = 0; n<d->groupNames.size(); n++) {
         if (d->groupNames.at(n) == groupName) {
             d->groupNames.removeAt(n);
         }
@@ -736,7 +767,7 @@ bool KoColorSet::loadPsp()
         b = qBound(0, b, 255);
 
         e.setColor(KoColor(QColor(r, g, b),
-                    KoColorSpaceRegistry::instance()->rgb8()));
+                           KoColorSpaceRegistry::instance()->rgb8()));
 
         QString name = a.join(" ");
         e.setName(name.isEmpty() ? i18n("Untitled") : name);
@@ -912,28 +943,8 @@ bool KoColorSet::saveKpl(QIODevice *dev) const
         root.setAttribute("name", name());
         root.setAttribute("comment", d->comment);
         root.setAttribute("columns", d->columns);
-        Q_FOREACH(const KoColorSetEntry &entry, d->colors) {
-
-            // Only save non-builtin profiles.=
-            const KoColorProfile *profile = entry.color().colorSpace()->profile();
-            if (!profile->fileName().isEmpty()) {
-                profiles << profile;
-                profileMap[profile] = entry.color().colorSpace();
-            }
-            QDomElement el = doc.createElement("ColorSetEntry");
-            el.setAttribute("name", entry.name());
-            el.setAttribute("id", entry.id());
-            el.setAttribute("spot", entry.spotColor() ? "true" : "false");
-            el.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
-            entry.color().toXML(doc, el);
-            root.appendChild(el);
-        }
-        Q_FOREACH(const QString &groupName, d->groupNames) {
-            QDomElement gl = doc.createElement("Group");
-            gl.setAttribute("name", groupName);
-            root.appendChild(gl);
-            Q_FOREACH(const KoColorSetEntry &entry, d->groups.value(groupName)) {
-
+        Q_FOREACH(const KoColorSetEntryGroup::Column &col, d->global.colors()) {
+            Q_FOREACH(const KoColorSetEntry &entry, col.values()) {
                 // Only save non-builtin profiles.=
                 const KoColorProfile *profile = entry.color().colorSpace()->profile();
                 if (!profile->fileName().isEmpty()) {
@@ -946,7 +957,30 @@ bool KoColorSet::saveKpl(QIODevice *dev) const
                 el.setAttribute("spot", entry.spotColor() ? "true" : "false");
                 el.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
                 entry.color().toXML(doc, el);
-                gl.appendChild(el);
+                root.appendChild(el);
+            }
+        }
+        Q_FOREACH(const QString &groupName, d->groupNames) {
+            QDomElement gl = doc.createElement("Group");
+            gl.setAttribute("name", groupName);
+            root.appendChild(gl);
+            Q_FOREACH(const KoColorSetEntryGroup::Column &col, d->groups[groupName].colors()) {
+                Q_FOREACH(const KoColorSetEntry &entry, col.values()) {
+
+                    // Only save non-builtin profiles.=
+                    const KoColorProfile *profile = entry.color().colorSpace()->profile();
+                    if (!profile->fileName().isEmpty()) {
+                        profiles << profile;
+                        profileMap[profile] = entry.color().colorSpace();
+                    }
+                    QDomElement el = doc.createElement("ColorSetEntry");
+                    el.setAttribute("name", entry.name());
+                    el.setAttribute("id", entry.id());
+                    el.setAttribute("spot", entry.spotColor() ? "true" : "false");
+                    el.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
+                    entry.color().toXML(doc, el);
+                    gl.appendChild(el);
+                }
             }
         }
 
@@ -1046,12 +1080,11 @@ bool KoColorSet::loadKpl()
             QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
             KoColorSetEntry entry;
 
-
             entry.setColor(KoColor::fromXML(c.firstChildElement(), colorDepthId));
             entry.setName(c.attribute("name"));
             entry.setId(c.attribute("id"));
             entry.setSpotColor(c.attribute("spot", "false") == "true" ? true : false);
-            d->colors << entry;
+            d->global.setEntry(entry);
 
             c = c.nextSiblingElement("ColorSetEntry");
 
@@ -1574,4 +1607,27 @@ bool KoColorSet::loadSbz() {
 
     buf.close();
     return true;
+}
+
+const KoColorSetEntryGroup &KoColorSet::getGroupByName (const QString &groupName, bool &success) const
+{
+    if (groupName.isEmpty()) {
+        success = true;
+        return d->global;
+    }
+    if (d->groupNames.contains(groupName)) {
+        success = true;
+        return d->groups[groupName];
+    }
+    success = false;
+    return d->global;
+}
+
+int KoColorSet::rowCount()
+{
+    int res = d->global.nRows();
+    Q_FOREACH (QString name, d->groupNames) {
+        res += d->groups[name].nRows();
+    }
+    return res;
 }

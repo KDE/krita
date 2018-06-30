@@ -38,18 +38,19 @@
 // debug
 #include <WidgetsDebug.h>
 
+#include "kis_palette_view.h"
+#include "KisPaletteModel.h"
+
 KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent)
     : QWidget(parent),
     m_colorSets(palettes),
     m_gridLayout(0),
     m_activeColorSet(0),
-    m_activePatch(0),
     m_initialColorSetCount(palettes.count()),
     m_activeColorSetRequested(false)
 {
     widget.setupUi(this);
     foreach (KoColorSet *colorSet, m_colorSets) {
-        //colorSet->load(); resources are loaded at startup...
         widget.selector->addItem(colorSet->name());
     }
     connect(widget.selector, SIGNAL(currentIndexChanged(int)), this, SLOT(setActiveColorSet(int)));
@@ -119,7 +120,6 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     if (m_gridLayout) {
         qDeleteAll(m_gridLayout->children());
         delete m_gridLayout;
-        m_activePatch = 0;
     }
 
     QWidget *wdg = new QWidget(m_scrollArea);
@@ -134,7 +134,14 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     if (m_activeColorSet) {
         columns = m_activeColorSet->columnCount();
         if (columns==0){columns=16;}
-        widget.remove->setEnabled(false);
+        KisPaletteView *paletteView = new KisPaletteView(this);
+        KisPaletteModel *paletteModel = new KisPaletteModel(paletteView);
+        QSharedPointer<KoColorSet> colorSet(new KoColorSet());
+        // paletteModel->setDisplayRenderer(displayRenderer);
+        paletteModel->setColorSet(colorSet.data());
+        paletteView->setPaletteModel(paletteModel);
+        m_gridLayout->addWidget(paletteView);
+        /*
         for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
@@ -143,6 +150,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
             connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
             m_gridLayout->addWidget(patch, i/columns, i%columns);
         }
+        */
     }
     m_scrollArea->setMinimumWidth(columns*(12+2));
 
@@ -153,13 +161,6 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
 void KoEditColorSetWidget::setTextLabel(KoColorPatch *patch)
 {
     widget.colorName->setText(patch->toolTip());
-    if (m_activePatch) {
-        m_activePatch->setFrameShape(QFrame::NoFrame);
-        m_activePatch->setFrameShadow(QFrame::Plain);
-    }
-    m_activePatch = patch;
-    m_activePatch->setFrameShape(QFrame::Panel);
-    m_activePatch->setFrameShadow(QFrame::Raised);
     widget.remove->setEnabled(true);
 }
 
@@ -186,6 +187,7 @@ void KoEditColorSetWidget::addColor()
 void KoEditColorSetWidget::removeColor()
 {
     Q_ASSERT(m_activeColorSet);
+    /*
     for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
         KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
         if (m_activePatch->color() == c.color()) {
@@ -194,6 +196,7 @@ void KoEditColorSetWidget::removeColor()
             break;
         }
     }
+    */
 }
 
 void KoEditColorSetWidget::open()

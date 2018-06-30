@@ -9,7 +9,6 @@
 class KRITAPIGMENT_EXPORT KisSwatchGroup
 {
 private:
-    static KisSwatch NULLENTRY;
     static quint32 DEFAULT_N_COLUMN;
 
 public:
@@ -19,17 +18,23 @@ public:
     KisSwatchGroup();
     void setName(const QString &name) { m_name = name; }
     QString name() const { return m_name; }
-    int nRows() const;
     void setNColumns(int nColumns);
     int nColumns() const { return m_colorMatrix.size(); }
+    int nRows() const;
     int nColors() const { return m_nColors; }
 
     const QVector<Column> &colors() const { return m_colorMatrix; }
 
+    /**
+     * @brief checkEntry checks if position x and y has an entry
+     * @param x
+     * @param y
+     * @return
+     */
     bool checkEntry(int x, int y) const;
     void setEntry(const KisSwatch &e, int x, int y);
     KisSwatch getEntry (int x, int y) const;
-    void removeEntry(int x, int y);
+    bool removeEntry(int x, int y);
 
     void clear() { m_colorMatrix.clear(); }
 

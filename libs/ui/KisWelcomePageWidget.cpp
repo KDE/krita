@@ -30,6 +30,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include "kis_icon_utils.h"
+#include "krita_utils.h"
 #include "KoStore.h"
 
 
@@ -40,6 +41,45 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
    recentDocumentsListView->setSpacing(5);
+
+
+
+   QColor textColor = qApp->palette().color(QPalette::Text);
+   QColor backgroundColor = qApp->palette().color(QPalette::Background);
+
+   // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
+   QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+   QString blendedStyle = QString("color: ").append(blendedColor.name());
+
+
+   // what labels to change the color...
+   startTitleLabel->setStyleSheet(blendedStyle);
+   recentDocumentsLabel->setStyleSheet(blendedStyle);
+   helpTitleLabel->setStyleSheet(blendedStyle);
+   manualLink->setStyleSheet(blendedStyle);
+   gettingStartedLink->setStyleSheet(blendedStyle);
+   supportKritaLink->setStyleSheet(blendedStyle);
+   userCommunityLink->setStyleSheet(blendedStyle);
+   kritaWebsiteLink->setStyleSheet(blendedStyle);
+   sourceCodeLink->setStyleSheet(blendedStyle);
+
+   recentDocumentsListView->setStyleSheet(blendedStyle);
+
+   newFileLink->setStyleSheet(blendedStyle);
+   openFileLink->setStyleSheet(blendedStyle);
+   dragImageHereLabel->setStyleSheet(blendedStyle);
+
+
+
+   // add icons for new and open settings to make them stand out a bit more
+   openFileLink->setIconSize(QSize(30, 30));
+   newFileLink->setIconSize(QSize(30, 30));
+   openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
+   newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
+
+   // giving the drag area messaging a dotted border
+   QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name());
+   dragImageHereLabel->setStyleSheet(dottedBorderStyle);
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -59,8 +99,9 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 
         // grab recent files data
         recentFilesModel = new QStandardItemModel();
+        int recentDocumentsIterator = mainWindow->recentFilesUrls().length() > 5 ? 5 : mainWindow->recentFilesUrls().length(); // grab at most 5
 
-        for (int i = 0; i < mainWindow->recentFilesUrls().length(); i++ ) {
+        for (int i = 0; i < recentDocumentsIterator; i++ ) {
 
            QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
            QString recentFileUrlPath = mainWindow->recentFilesUrls().at(i).toString();
@@ -114,7 +155,6 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
         connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
         connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
-
     }
 }
 

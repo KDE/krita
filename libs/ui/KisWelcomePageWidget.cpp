@@ -41,9 +41,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
    recentDocumentsListView->setSpacing(5);
-
-
-    slotUpdateThemeColors();
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -78,7 +75,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
         connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
 
-
+        slotUpdateThemeColors();
     }
 }
 
@@ -146,61 +143,57 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
 
     // needed for updating icon color for files that don't have a preview
-    populateRecentDocuments();
-
+    if (mainWindow) {
+        populateRecentDocuments();
+    }
 }
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
+    // grab recent files data
+    recentFilesModel = new QStandardItemModel();
+    int recentDocumentsIterator = mainWindow->recentFilesUrls().length() > 5 ? 5 : mainWindow->recentFilesUrls().length(); // grab at most 5
+
+    for (int i = 0; i < recentDocumentsIterator; i++ ) {
+
+       QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
+       QString recentFileUrlPath = mainWindow->recentFilesUrls().at(i).toString();
+       QString fileName = recentFileUrlPath.split("/").last();
 
 
-    if (mainWindow) {
+       // get thumbnail -- almost all Krita-supported formats save a thumbnail
+       // this was mostly copied from the KisAutoSaveRecorvery file
+       KoStore* store = KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read);
+       if (store) {
+           if(store->open(QString("Thumbnails/thumbnail.png"))
+              || store->open(QString("preview.png"))) {
 
-
-
-        // grab recent files data
-        recentFilesModel = new QStandardItemModel();
-        int recentDocumentsIterator = mainWindow->recentFilesUrls().length() > 5 ? 5 : mainWindow->recentFilesUrls().length(); // grab at most 5
-
-        for (int i = 0; i < recentDocumentsIterator; i++ ) {
-
-           QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
-           QString recentFileUrlPath = mainWindow->recentFilesUrls().at(i).toString();
-           QString fileName = recentFileUrlPath.split("/").last();
-
-
-           // get thumbnail -- almost all Krita-supported formats save a thumbnail
-           // this was mostly copied from the KisAutoSaveRecorvery file
-           KoStore* store = KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read);
-           if (store) {
-               if(store->open(QString("Thumbnails/thumbnail.png"))
-                  || store->open(QString("preview.png"))) {
-
-                   QByteArray bytes = store->read(store->size());
-                   store->close();
-                   QImage img;
-                   img.loadFromData(bytes);
-                   recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
-               }else {
-                   recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-               }
-
-               delete store;
-           } else {
+               QByteArray bytes = store->read(store->size());
+               store->close();
+               QImage img;
+               img.loadFromData(bytes);
+               recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+           }else {
                recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
            }
 
+           delete store;
+       } else {
+           recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
+       }
 
-           // set the recent object with the data
-           recentItem->setText(fileName); // what to display for the item
-           recentItem->setToolTip(recentFileUrlPath);
 
-           recentFilesModel->appendRow(recentItem);
-
-           recentDocumentsListView->setIconSize(QSize(48, 48));
-           recentDocumentsListView->setModel(recentFilesModel);
-        }
+       // set the recent object with the data
+       recentItem->setText(fileName); // what to display for the item
+       recentItem->setToolTip(recentFileUrlPath);
+       recentFilesModel->appendRow(recentItem);
     }
+
+    recentDocumentsListView->setIconSize(QSize(48, 48));
+    recentDocumentsListView->setModel(recentFilesModel);
+
+
+
 }
 
 

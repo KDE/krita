@@ -40,15 +40,18 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
     void setMainWindow(KisMainWindow* mainWindow);
 
 public Q_SLOTS:
+    /// if a document is placed over this area, a dotted line will appear as an indicator
+    /// that it is a droppable area. KisMainwindow is what triggers this
     void showDropAreaIndicator(bool show);
+
     void slotUpdateThemeColors();
 
 private:
     KisMainWindow* mainWindow;
     QStandardItemModel *recentFilesModel;
 
-    /// this could be called multiple times. If someone changes the theme, the icons need to be reloaded
-    /// to have the updated icon theme
+    /// this could be called multiple times. If a recent document doesn't
+    /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
 private Q_SLOTS:

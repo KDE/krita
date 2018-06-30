@@ -747,7 +747,7 @@ void KisMainWindow::saveRecentFiles()
 
 QList<QUrl> KisMainWindow::recentFilesUrls()
 {
-    return  d->recentFiles->urls();
+    return d->recentFiles->urls();
 }
 
 

@@ -23,6 +23,7 @@
 #include "kis_tile.h"
 
 
+
 /**
  * This is a  template for a hash table that stores  tiles (or some other
  * objects  resembling tiles).   Actually, this  object should  only have

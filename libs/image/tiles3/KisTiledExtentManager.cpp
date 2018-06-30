@@ -24,7 +24,6 @@
 #include "kis_assert.h"
 #include "kis_global.h"
 
-
 namespace {
 
 inline bool addTileToMap(int index, QMap<int, int> *map)

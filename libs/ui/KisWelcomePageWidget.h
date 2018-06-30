@@ -41,10 +41,15 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
 
 public Q_SLOTS:
     void showDropAreaIndicator(bool show);
+    void slotUpdateThemeColors();
 
 private:
     KisMainWindow* mainWindow;
     QStandardItemModel *recentFilesModel;
+
+    /// this could be called multiple times. If someone changes the theme, the icons need to be reloaded
+    /// to have the updated icon theme
+    void populateRecentDocuments();
 
 private Q_SLOTS:
     void slotNewFileClicked();

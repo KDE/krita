@@ -43,53 +43,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
    recentDocumentsListView->setSpacing(5);
 
 
-
-   QColor textColor = qApp->palette().color(QPalette::Text);
-   QColor backgroundColor = qApp->palette().color(QPalette::Background);
-
-   // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
-   QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
-   QString blendedStyle = QString("color: ").append(blendedColor.name());
-
-
-   // what labels to change the color...
-   startTitleLabel->setStyleSheet(blendedStyle);
-   recentDocumentsLabel->setStyleSheet(blendedStyle);
-   helpTitleLabel->setStyleSheet(blendedStyle);
-   manualLink->setStyleSheet(blendedStyle);
-   gettingStartedLink->setStyleSheet(blendedStyle);
-   supportKritaLink->setStyleSheet(blendedStyle);
-   userCommunityLink->setStyleSheet(blendedStyle);
-   kritaWebsiteLink->setStyleSheet(blendedStyle);
-   sourceCodeLink->setStyleSheet(blendedStyle);
-
-   recentDocumentsListView->setStyleSheet(blendedStyle);
-
-   newFileLink->setStyleSheet(blendedStyle);
-   openFileLink->setStyleSheet(blendedStyle);
-   dragImageHereLabel->setStyleSheet(blendedStyle);
-
-
-
-   // add icons for new and open settings to make them stand out a bit more
-   openFileLink->setIconSize(QSize(30, 30));
-   newFileLink->setIconSize(QSize(30, 30));
-   openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
-   newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
-
-   // giving the drag area messaging a dotted border
-   QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name());
-   dragImageHereLabel->setStyleSheet(dottedBorderStyle);
-
-
-   // make drop area QFrame have a dotted line
-   dropFrameBorder->setObjectName("dropAreaIndicator");
-   QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 4px dotted white }";
-   dropFrameBorder->setStyleSheet(dropFrameStyle);
-
-   // only show drop area when we have a document over the empty area
-   showDropAreaIndicator(false);
-
+    slotUpdateThemeColors();
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -105,6 +59,103 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         // set the shortcut links from actions
         newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
         openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
+
+        populateRecentDocuments();
+        connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
+
+
+        // we need the view manager to actually call actions, so don't create the connections
+        // until after the view manager is set
+        connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
+        connect(openFileLink, SIGNAL(clicked(bool)), this, SLOT(slotOpenFileClicked()));
+
+        // URL link connections
+        connect(manualLink, SIGNAL(clicked(bool)), this, SLOT(slotGoToManual()));
+
+        connect(gettingStartedLink, SIGNAL(clicked(bool)), this, SLOT(slotGettingStarted()));
+        connect(supportKritaLink, SIGNAL(clicked(bool)), this, SLOT(slotSupportKrita()));
+        connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
+        connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
+        connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
+
+
+    }
+}
+
+void KisWelcomePageWidget::showDropAreaIndicator(bool show)
+{
+    if (!show) {
+        QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 0px }";
+        dropFrameBorder->setStyleSheet(dropFrameStyle);
+    } else {
+        QColor textColor = qApp->palette().color(QPalette::Text);
+        QColor backgroundColor = qApp->palette().color(QPalette::Background);
+        QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+
+        // QColor.name() turns it into a hex/web format
+        QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 2px dotted ").append(blendedColor.name()).append(" }") ;
+        dropFrameBorder->setStyleSheet(dropFrameStyle);
+    }
+}
+
+void KisWelcomePageWidget::slotUpdateThemeColors()
+{
+
+    QColor textColor = qApp->palette().color(QPalette::Text);
+    QColor backgroundColor = qApp->palette().color(QPalette::Background);
+
+    // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
+    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+    QString blendedStyle = QString("color: ").append(blendedColor.name());
+
+
+    // what labels to change the color...
+    startTitleLabel->setStyleSheet(blendedStyle);
+    recentDocumentsLabel->setStyleSheet(blendedStyle);
+    helpTitleLabel->setStyleSheet(blendedStyle);
+    manualLink->setStyleSheet(blendedStyle);
+    gettingStartedLink->setStyleSheet(blendedStyle);
+    supportKritaLink->setStyleSheet(blendedStyle);
+    userCommunityLink->setStyleSheet(blendedStyle);
+    kritaWebsiteLink->setStyleSheet(blendedStyle);
+    sourceCodeLink->setStyleSheet(blendedStyle);
+
+    recentDocumentsListView->setStyleSheet(blendedStyle);
+
+    newFileLink->setStyleSheet(blendedStyle);
+    openFileLink->setStyleSheet(blendedStyle);
+    dragImageHereLabel->setStyleSheet(blendedStyle);
+
+    // giving the drag area messaging a dotted border
+    QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name());
+    dragImageHereLabel->setStyleSheet(dottedBorderStyle);
+
+
+    // make drop area QFrame have a dotted line
+    dropFrameBorder->setObjectName("dropAreaIndicator");
+    QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 4px dotted white }";
+    dropFrameBorder->setStyleSheet(dropFrameStyle);
+
+    // only show drop area when we have a document over the empty area
+    showDropAreaIndicator(false);
+
+    // add icons for new and open settings to make them stand out a bit more
+    openFileLink->setIconSize(QSize(30, 30));
+    newFileLink->setIconSize(QSize(30, 30));
+    openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
+    newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
+
+    // needed for updating icon color for files that don't have a preview
+    populateRecentDocuments();
+
+}
+
+void KisWelcomePageWidget::populateRecentDocuments()
+{
+
+
+    if (mainWindow) {
+
 
 
         // grab recent files data
@@ -145,42 +196,10 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
            recentItem->setToolTip(recentFileUrlPath);
 
            recentFilesModel->appendRow(recentItem);
+
+           recentDocumentsListView->setIconSize(QSize(48, 48));
+           recentDocumentsListView->setModel(recentFilesModel);
         }
-
-        recentDocumentsListView->setIconSize(QSize(48, 48));
-        recentDocumentsListView->setModel(recentFilesModel);
-        connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
-
-
-        // we need the view manager to actually call actions, so don't create the connections
-        // until after the view manager is set
-        connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
-        connect(openFileLink, SIGNAL(clicked(bool)), this, SLOT(slotOpenFileClicked()));
-
-        // URL link connections
-        connect(manualLink, SIGNAL(clicked(bool)), this, SLOT(slotGoToManual()));
-
-        connect(gettingStartedLink, SIGNAL(clicked(bool)), this, SLOT(slotGettingStarted()));
-        connect(supportKritaLink, SIGNAL(clicked(bool)), this, SLOT(slotSupportKrita()));
-        connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
-        connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
-        connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
-    }
-}
-
-void KisWelcomePageWidget::showDropAreaIndicator(bool show)
-{
-    if (!show) {
-        QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 0px }";
-        dropFrameBorder->setStyleSheet(dropFrameStyle);
-    } else {
-        QColor textColor = qApp->palette().color(QPalette::Text);
-        QColor backgroundColor = qApp->palette().color(QPalette::Background);
-        QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
-
-        // QColor.name() turns it into a hex/web format
-        QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 2px dotted ").append(blendedColor.name()).append(" }") ;
-        dropFrameBorder->setStyleSheet(dropFrameStyle);
     }
 }
 

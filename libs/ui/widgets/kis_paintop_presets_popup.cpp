@@ -32,6 +32,7 @@
 #include <QShowEvent>
 #include <QFontDatabase>
 #include <QWidgetAction>
+#include <QDesktopWidget>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -56,11 +57,9 @@
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings_update_proxy.h>
 
-
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
-
 
 struct KisPaintOpPresetsPopup::Private
 {
@@ -673,7 +672,12 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
-    emit sizeChanged();
+    if (parentWidget()) {
+        // Make sure resizing doesn't push this widget out of the screen
+        QRect screenRect = QApplication::desktop()->availableGeometry(this);
+        QRect newPositionRect = kisEnsureInRect(parentWidget()->geometry(), screenRect);
+        parentWidget()->setGeometry(newPositionRect);
+    }
 }
 
 bool KisPaintOpPresetsPopup::detached() const

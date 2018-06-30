@@ -31,9 +31,9 @@ class KoColorSlider;
 class QLineEdit;
 
 #include <KoColorDisplayRendererInterface.h>
-#include "kritaui_export.h"
+#include "kritawidgetutils_export.h"
 
-class KRITAUI_EXPORT KisColorInput : public QWidget
+class KRITAWIDGETUTILS_EXPORT KisColorInput : public QWidget
 {
     Q_OBJECT
 public:
@@ -57,7 +57,7 @@ protected:
     bool m_usePercentage;
 };
 
-class KRITAUI_EXPORT KisIntegerColorInput : public KisColorInput
+class KRITAWIDGETUTILS_EXPORT KisIntegerColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
@@ -75,7 +75,7 @@ private:
 };
 
 
-class KRITAUI_EXPORT KisFloatColorInput : public KisColorInput
+class KRITAWIDGETUTILS_EXPORT KisFloatColorInput : public KisColorInput
 {
     Q_OBJECT
 public:
@@ -92,7 +92,7 @@ private:
     qreal m_maxValue;
 };
 
-class KRITAUI_EXPORT KisHexColorInput : public KisColorInput
+class KRITAWIDGETUTILS_EXPORT KisHexColorInput : public KisColorInput
 {
     Q_OBJECT
 public:

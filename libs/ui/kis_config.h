@@ -461,9 +461,6 @@ public:
     bool lineSmoothingStabilizeSensors(bool defaultValue = false) const;
     void setLineSmoothingStabilizeSensors(bool value);
 
-    int paletteDockerPaletteViewSectionSize(bool defaultValue = false) const;
-    void setPaletteDockerPaletteViewSectionSize(int value) const;
-
     int tabletEventsDelay(bool defaultValue = false) const;
     void setTabletEventsDelay(int value);
 
@@ -560,6 +557,9 @@ public:
 
     bool calculateAnimationCacheInBackground(bool defaultValue = false) const;
     void setCalculateAnimationCacheInBackground(bool value);
+
+    QColor defaultAssistantsColor(bool defaultValue = false) const;
+    void setDefaultAssistantsColor(const QColor &color) const;
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

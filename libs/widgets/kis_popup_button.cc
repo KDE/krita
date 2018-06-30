@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "widgets/kis_popup_button.h"
+#include "kis_popup_button.h"
 
 #include <QPointer>
 #include <QApplication>
@@ -30,8 +30,6 @@
 
 #include "kis_global.h"
 #include <kis_debug.h>
-#include <kis_paintop_presets_popup.h>
-
 
 struct KisPopupButton::Private {
     Private()
@@ -85,13 +83,6 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
         m_d->popupWidget = widget;
         m_d->popupWidget->setParent(m_d->frame.data());
         m_d->frameLayout->addWidget(m_d->popupWidget);
-
-        // Workaround for bug 279740, preset popup widget resizes after it's shown for the first time
-        // so we catch that and correct the position
-        KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(widget);
-        if (presetPopup) {
-            connect(presetPopup, SIGNAL(sizeChanged()), this, SLOT(adjustPosition()));
-        }
     }
 }
 
@@ -140,11 +131,6 @@ void KisPopupButton::paintPopupArrow()
 
 void KisPopupButton::adjustPosition()
 {
-    KisPaintOpPresetsPopup* presetPopup = dynamic_cast<KisPaintOpPresetsPopup*>(m_d->popupWidget.data());
-    if (presetPopup && presetPopup->detached()) {
-        return;
-    }
-
     QSize popSize = m_d->popupWidget->size();
     QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 

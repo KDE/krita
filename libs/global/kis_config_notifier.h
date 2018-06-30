@@ -21,13 +21,13 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "kritaui_export.h"
+#include "kritaglobal_export.h"
 
 /**
  * An object that emits a signal to inform interested parties that the
  * configuration settings have changed.
  */
-class KRITAUI_EXPORT KisConfigNotifier : public QObject
+class KRITAGLOBAL_EXPORT KisConfigNotifier : public QObject
 {
     Q_OBJECT
 public:

@@ -21,15 +21,21 @@
 #define __KIS_PALETTE_VIEW_H
 
 #include <QScopedPointer>
+
+#include <QColorDialog>
+#include <QPushButton>
+#include <QPixmap>
+#include <QIcon>
+
 #include <KoTableView.h>
 #include <KoColorSet.h>
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
 class KisPaletteModel;
 class QWheelEvent;
 
 
-class KRITAUI_EXPORT KisPaletteView : public KoTableView
+class KRITAWIDGETS_EXPORT KisPaletteView : public KoTableView
 {
     Q_OBJECT
 public:

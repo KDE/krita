@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * Copyright (C) Michael Zhou <simeirxh@gmail.com>, (C) 2018
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +17,4 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PARTICLEPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_PARTICLEPAINTOP_SETTINGS_WIDGET_H_
-
-#include <kis_paintop_settings_widget.h>
-
-#include "ui_wdgparticleoptions.h"
-#include "kis_popup_button.h"
-
-class KisPaintActionTypeOption;
-class KisParticleOpOption;
-
-class KisParticlePaintOpSettingsWidget : public KisPaintOpSettingsWidget
-{
-    Q_OBJECT
-
-public:
-    KisParticlePaintOpSettingsWidget(QWidget* parent = 0);
-    ~KisParticlePaintOpSettingsWidget() override;
-
-    KisPropertiesConfigurationSP configuration() const override;
-
-public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisParticleOpOption* m_particleOption;
-
-};
-
-#endif
+#include <KisScreenColorPickerBase.h>

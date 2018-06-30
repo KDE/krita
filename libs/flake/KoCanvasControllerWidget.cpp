@@ -63,7 +63,7 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         // If it isn't an OpenGL canvas
         if (qobject_cast<QOpenGLWidget*>(canvasWidget) == 0) {
             QPoint diff = q->documentOffset() - pt;
-            canvasWidget->scroll(diff.x(), diff.y());
+            canvasWidget->scroll(diff.x(), diff.y(), canvasWidget->rect());
         }
     }
 

@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ * Copyright (C) Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>, (C) 2016
+ * Copyright (C) Michael Zhou <simeirxh@gmail.com>, (C) 2018
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +17,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PALETTE_DELEGATE_H
-#define __KIS_PALETTE_DELEGATE_H
+#ifndef KISSCREENCOLORPICKERBASE_H
+#define KISSCREENCOLORPICKERBASE_H
+#include <QWidget>
+#include "kritawidgets_export.h"
 
-#include <QAbstractItemDelegate>
+class KoColor;
 
-#include "kritaui_export.h"
-
-
-class KRITAUI_EXPORT KisPaletteDelegate : public QAbstractItemDelegate
+class KRITAWIDGETS_EXPORT KisScreenColorPickerBase : public QWidget
 {
+    Q_OBJECT
 public:
-    KisPaletteDelegate(QObject * parent = 0);
-    ~KisPaletteDelegate() override;
-
-    void setCrossedKeyword(const QString &value);
-
-    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
-
-private:
-    QString m_crossedKeyword;
+    KisScreenColorPickerBase(QWidget *parent = 0) : QWidget(parent) { }
+    virtual ~KisScreenColorPickerBase() { }
+    /// reloads icon(s) when theme is updated
+    virtual void updateIcons() = 0;
+Q_SIGNALS:
+    void sigNewColorPicked(KoColor);
 };
 
-#endif /* __KIS_PALETTE_DELEGATE_H */
+#endif // KISSCREENCOLORPICKERBASE_H

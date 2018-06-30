@@ -20,27 +20,28 @@
 
 #include <QWheelEvent>
 #include <QHeaderView>
-
-#include "kis_palette_delegate.h"
-#include "KisPaletteModel.h"
-#include "kis_config.h"
-#include <KLocalizedString>
-#include <KoDialog.h>
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <kis_color_button.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QMenu>
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLocalizedString>
+
+#include <KoDialog.h>
+
+#include "kis_palette_delegate.h"
+#include "KisPaletteModel.h"
+#include "kis_color_button.h"
 
 struct KisPaletteView::Private
 {
     KisPaletteModel *model = nullptr;
     bool allowPaletteModification = true;
 };
-
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : KoTableView(parent)
@@ -55,13 +56,13 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 //    setDragDropMode(QAbstractItemView::InternalMove);
     setDropIndicatorShown(true);
 
-    KisConfig cfg;
+    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     //QPalette pal(palette());
     //pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
     //setAutoFillBackground(true);
     //setPalette(pal);
 
-    int defaultSectionSize = cfg.paletteDockerPaletteViewSectionSize();
+    int defaultSectionSize = cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
     horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
     verticalHeader()->setDefaultSectionSize(defaultSectionSize);
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
@@ -82,19 +83,18 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
-    KoDialog *window = new KoDialog();
+    KoDialog *window = new KoDialog(this);
     window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
-    QFormLayout *editableItems = new QFormLayout();
+    QFormLayout *editableItems = new QFormLayout(window);
     window->mainWidget()->setLayout(editableItems);
-    QComboBox *cmbGroups = new QComboBox();
+    QComboBox *cmbGroups = new QComboBox(window);
     QString defaultGroupName = i18nc("Name for default group", "Default");
     cmbGroups->addItem(defaultGroupName);
     cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
-    QLineEdit *lnIDName = new QLineEdit();
-    QLineEdit *lnName = new QLineEdit();
-    KisColorButton *bnColor = new KisColorButton();
-    bnColor->setPaletteViewEnabled(false);
-    QCheckBox *chkSpot = new QCheckBox();
+    QLineEdit *lnIDName = new QLineEdit(window);
+    QLineEdit *lnName = new QLineEdit(window);
+    KisColorButton *bnColor = new KisColorButton(window);
+    QCheckBox *chkSpot = new QCheckBox(window);
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
     editableItems->addRow(i18n("Group"), cmbGroups);
     editableItems->addRow(i18n("ID"), lnIDName);
@@ -107,7 +107,6 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     bnColor->setColor(color);
     chkSpot->setChecked(false);
 
-    //
     if (window->exec() == KoDialog::Accepted) {
         QString groupName = cmbGroups->currentText();
         if (groupName == defaultGroupName) {
@@ -264,8 +263,8 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
        } else {
            horizontalHeader()->setDefaultSectionSize(setSize);
            verticalHeader()->setDefaultSectionSize(setSize);
-           KisConfig cfg;
-           cfg.setPaletteDockerPaletteViewSectionSize(setSize);
+           KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
+           cfg.writeEntry("paletteDockerPaletteViewSectionSize", setSize);
        }
 
         event->accept();
@@ -300,14 +299,13 @@ void KisPaletteView::entrySelection(bool foreground) {
 
 void KisPaletteView::modifyEntry(QModelIndex index) {
     if (m_d->allowPaletteModification) {
-        KoDialog *group = new KoDialog();
-        QFormLayout *editableItems = new QFormLayout();
+        KoDialog *group = new KoDialog(this);
+        QFormLayout *editableItems = new QFormLayout(group);
         group->mainWidget()->setLayout(editableItems);
-        QLineEdit *lnIDName = new QLineEdit();
-        QLineEdit *lnGroupName = new QLineEdit();
-        KisColorButton *bnColor = new KisColorButton();
-        bnColor->setPaletteViewEnabled(false);
-        QCheckBox *chkSpot = new QCheckBox();
+        QLineEdit *lnIDName = new QLineEdit(group);
+        QLineEdit *lnGroupName = new QLineEdit(group);
+        KisColorButton *bnColor = new KisColorButton(group);
+        QCheckBox *chkSpot = new QCheckBox(group);
 
         if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
             QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));

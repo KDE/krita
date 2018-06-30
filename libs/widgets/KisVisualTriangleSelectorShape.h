@@ -31,8 +31,6 @@
 #include "KisColorSelectorConfiguration.h"
 #include "KisVisualColorSelectorShape.h"
 
-#include "kritaui_export.h"
-
 class KisVisualTriangleSelectorShape : public KisVisualColorSelectorShape
 {
     Q_OBJECT

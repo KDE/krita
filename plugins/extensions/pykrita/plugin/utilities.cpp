@@ -319,9 +319,9 @@ bool Python::setPath(const QStringList& scriptPaths)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!Py_IsInitialized(), false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!isPythonPathSet, false);
 
-    qDebug() << ">>>>>>>>>>>" << qgetenv("APPDIR")
-             << KoResourcePaths::getApplicationRoot()
-             << (!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR")));
+//    qDebug() << ">>>>>>>>>>>" << qgetenv("APPDIR")
+//             << KoResourcePaths::getApplicationRoot()
+//             << (!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR")));
 
 
     bool runningInBundle = ((!qgetenv("APPDIR").isNull() && KoResourcePaths::getApplicationRoot().contains(qgetenv("APPDIR"))) || KoResourcePaths::getApplicationRoot().toLower().contains("krita.app"));

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,31 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PARTICLEPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_PARTICLEPAINTOP_SETTINGS_WIDGET_H_
+#ifndef __KIS_PALETTE_DELEGATE_H
+#define __KIS_PALETTE_DELEGATE_H
 
-#include <kis_paintop_settings_widget.h>
+#include <QAbstractItemDelegate>
 
-#include "ui_wdgparticleoptions.h"
-#include "kis_popup_button.h"
+#include "kritawidgets_export.h"
 
-class KisPaintActionTypeOption;
-class KisParticleOpOption;
 
-class KisParticlePaintOpSettingsWidget : public KisPaintOpSettingsWidget
+class KRITAWIDGETS_EXPORT KisPaletteDelegate : public QAbstractItemDelegate
 {
-    Q_OBJECT
-
 public:
-    KisParticlePaintOpSettingsWidget(QWidget* parent = 0);
-    ~KisParticlePaintOpSettingsWidget() override;
+    KisPaletteDelegate(QObject * parent = 0);
+    ~KisPaletteDelegate() override;
 
-    KisPropertiesConfigurationSP configuration() const override;
+    void setCrossedKeyword(const QString &value);
 
-public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisParticleOpOption* m_particleOption;
+    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
+    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 
+private:
+    QString m_crossedKeyword;
 };
 
-#endif
+#endif /* __KIS_PALETTE_DELEGATE_H */

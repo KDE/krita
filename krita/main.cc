@@ -31,6 +31,9 @@
 #include <QLocale>
 #include <QSettings>
 #include <QByteArray>
+#include <QMessageBox>
+
+#include <QOperatingSystemVersion>
 
 #include <time.h>
 
@@ -38,6 +41,7 @@
 #include <KisLoggingManager.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
+#include <kis_config.h>
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
@@ -56,9 +60,7 @@
 #include <stdlib.h>
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
-#include <kis_config.h>
 #include <QLibrary>
-#include <QMessageBox>
 
 #elif defined HAVE_X11
 #include <kis_xi2_event_filter.h>
@@ -335,30 +337,51 @@ extern "C" int main(int argc, char **argv)
         app.setSplashScreen(splash);
     }
 
-
 #if defined Q_OS_WIN
+    KisConfig cfg;
+    bool supportedWindowsVersion = true;
+#if QT_VERSION >= 0x050900
+    QOperatingSystemVersion osVersion = QOperatingSystemVersion::current();
+    if (osVersion.type() == QOperatingSystemVersion::Windows) {
+        if (osVersion.majorVersion() >= QOperatingSystemVersion::Windows7.majorVersion()) {
+            supportedWindowsVersion  = true;
+        }
+        else {
+            supportedWindowsVersion  = false;
+            if (cfg.readEntry("WarnedAboutUnsupportedWindows", false)) {
+                QMessageBox::information(0,
+                                         i18nc("@title:window", "Krita: Warning"),
+                                         i18n("You are running an unsupported version of Windows: %1.\n"
+                                              "This is not recommended. Do not report any bugs.\n"
+                                              "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10.").arg(osVersion.name()));
+                cfg.writeEntry("WarnedAboutUnsupportedWindows", true);
+
+            }
+        }
+    }
+#endif
+
     {
-        KisConfig cfg;
         if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
             cfg.setUseWin8PointerInput(false);
         }
         if (!cfg.useWin8PointerInput()) {
             bool hasWinTab = KisTabletSupportWin::init();
-            if (!hasWinTab) {
+            if (!hasWinTab && supportedWindowsVersion) {
                 if (KisTabletSupportWin8::isPenDeviceAvailable()) {
                     // Use WinInk automatically
                     cfg.setUseWin8PointerInput(true);
                 } else if (!cfg.readEntry("WarnedAboutMissingWinTab", false)) {
                     if (KisTabletSupportWin8::isAvailable()) {
                         QMessageBox::information(nullptr,
-                                i18n("Krita Tablet Support"),
-                                i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
-                                QMessageBox::Ok, QMessageBox::Ok);
+                                                 i18n("Krita Tablet Support"),
+                                                 i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
+                                                 QMessageBox::Ok, QMessageBox::Ok);
                     } else {
                         QMessageBox::information(nullptr,
-                                i18n("Krita Tablet Support"),
-                                i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
-                                QMessageBox::Ok, QMessageBox::Ok);
+                                                 i18n("Krita Tablet Support"),
+                                                 i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
+                                                 QMessageBox::Ok, QMessageBox::Ok);
                     }
                     cfg.writeEntry("WarnedAboutMissingWinTab", true);
                 }

@@ -26,11 +26,9 @@
 #include <KoColor.h>
 
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
-
-#include <kis_layer.h>
-#include <kis_paint_layer.h>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent),

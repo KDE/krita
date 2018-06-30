@@ -1651,16 +1651,6 @@ void KisConfig::setLineSmoothingStabilizeSensors(bool value)
     m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
 }
 
-int KisConfig::paletteDockerPaletteViewSectionSize(bool defaultValue) const
-{
-    return (defaultValue ? 12 : m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12));
-}
-
-void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
-{
-    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
-}
-
 int KisConfig::tabletEventsDelay(bool defaultValue) const
 {
     return (defaultValue ? 10 : m_cfg.readEntry("tabletEventsDelay", 10));
@@ -1969,6 +1959,17 @@ bool KisConfig::calculateAnimationCacheInBackground(bool defaultValue) const
 void KisConfig::setCalculateAnimationCacheInBackground(bool value)
 {
     m_cfg.writeEntry("calculateAnimationCacheInBackground", value);
+}
+
+QColor KisConfig::defaultAssistantsColor(bool defaultValue) const
+{
+    static const QColor defaultColor = QColor(176, 176, 176, 255);
+    return defaultValue ? defaultColor : m_cfg.readEntry("defaultAssistantsColor", defaultColor);
+}
+
+void KisConfig::setDefaultAssistantsColor(const QColor &color) const
+{
+    m_cfg.writeEntry("defaultAssistantsColor", color);
 }
 
 #include <QDomDocument>

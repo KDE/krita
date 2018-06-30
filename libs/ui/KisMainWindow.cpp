@@ -2519,6 +2519,9 @@ void KisMainWindow::createActions()
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
+
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
+
     d->toggleDockers = actionManager->createAction("view_toggledockers");
     cfg.showDockers(true);
     d->toggleDockers->setChecked(true);

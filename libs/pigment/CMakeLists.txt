@@ -76,6 +76,7 @@ set(kritapigment_SRCS
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
+    resources/KoColorSet_p.cpp
     resources/KoColorSetEntry.cpp
     resources/KisSwatch.cpp
     resources/KisSwatchGroup.cpp

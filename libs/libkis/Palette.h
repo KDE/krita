@@ -156,7 +156,7 @@ public:
      * @param entry
      * @param groupName
      */
-    void insertEntry(int index, KoColorSetEntry entry, QString groupName = QString());
+    // void insertEntry(int index, KoColorSetEntry entry, QString groupName = QString());
     /**
      * @brief editEntry
      * Changes the entry at @param index by replacing it with @param entry.

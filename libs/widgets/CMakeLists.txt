@@ -123,6 +123,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
+    WdgPaletteListWidget.ui
 )
 
 add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})

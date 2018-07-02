@@ -170,7 +170,7 @@ void KoEditColorSetWidget::addColor()
 
     color = QColorDialog::getColor(color);
     if (color.isValid()) {
-        KoColorSetEntry newEntry(
+        KisSwatch newEntry(
                     KoColor(color, KoColorSpaceRegistry::instance()->rgb8()),
                     QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:")));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);

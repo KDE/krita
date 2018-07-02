@@ -3,15 +3,16 @@
 
 #include <QObject>
 
+#include <KoColorSet.h>
+
 class TestKoColorSet : public QObject
 {
     Q_OBJECT
 public:
     explicit TestKoColorSet(QObject *parent = nullptr);
 
-signals:
-
-public slots:
+private Q_SLOTS:
+private:
 };
 
 #endif // TESTKOCOLORSET_H

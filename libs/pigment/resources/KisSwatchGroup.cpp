@@ -1,10 +1,31 @@
+/*  This file is part of the KDE project
+    Copyright (c) 2005 Boudewijn Rempt <boud@valdyas.org>
+    Copyright (c) 2016 L. E. Segovia <leo.segovia@siggraph.org>
+    Copyright (c) 2018 Michael Zhou <simerixh@gmail.com>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+ */
+
 #include "KisSwatchGroup.h"
 
 quint32 KisSwatchGroup::DEFAULT_N_COLUMN = 16;
 
 KisSwatchGroup::KisSwatchGroup()
-    : m_nColors(0)
-    , m_colorMatrix(DEFAULT_N_COLUMN)
+    : m_colorMatrix(DEFAULT_N_COLUMN)
+    , m_nColors(0)
     , m_nLastRowEntries(0)
 { }
 
@@ -50,8 +71,8 @@ bool KisSwatchGroup::removeEntry(int x, int y)
 void KisSwatchGroup::setNColumns(int nColumns)
 {
     Q_ASSERT(nColumns >= 0);
-    for (int i = nColumns; i < m_colorMatrix.size(); i++) {
-        m_nColors -= m_colorMatrix[i].size();
+    Q_FOREACH (const Column &col, m_colorMatrix) {
+        m_nColors -= col.size();
     }
     m_colorMatrix.resize(nColumns);
 }
@@ -64,6 +85,11 @@ KisSwatch KisSwatchGroup::getEntry(int x, int y) const
 
 int KisSwatchGroup::nRows() const
 {
+    /*
+     * shouldn't have too great a performance impact...
+     * add a heap to keep track of last row if there is one
+     */
+
     int res = 0;
     Q_FOREACH (const Column &c, m_colorMatrix) {
         if (c.empty()) {
@@ -72,4 +98,25 @@ int KisSwatchGroup::nRows() const
         res = res > c.lastKey() ? res : c.lastKey();
     }
     return res + 1;
+}
+
+void KisSwatchGroup::addEntry(const KisSwatch &e)
+{
+    if (nColumns() == 0) {
+        setNColumns(DEFAULT_N_COLUMN);
+    }
+    int maxY = nRows() - 1;
+    int y = maxY;
+    for (int x = m_colorMatrix.size() - 1; x >= 0; x--) {
+        if (checkEntry(x, maxY)) {
+            // if the last entry's at the rightmost column,
+            // add e to the leftmost column of the next row
+            if (++x == m_colorMatrix.size()) {
+                x = 0;
+                y++;
+            }
+            // else just add it to the right
+            setEntry(e, x, y);
+        }
+    }
 }

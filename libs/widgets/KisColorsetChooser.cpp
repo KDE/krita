@@ -56,6 +56,7 @@ public:
 
 void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
+    /*
     painter->save();
     if (! index.isValid())
         return;
@@ -73,12 +74,18 @@ void ColorSetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, colorSet->name());
 
     int size = 7;
-    for (quint32 i = 0; i < colorSet->nColors() && i*size < (quint32)option.rect.width(); i++) {
-        QRect rect(option.rect.x() + i*size, option.rect.y() + option.rect.height() - size, size, size);
-        painter->fillRect(rect, colorSet->getColorGlobal(i).color().toQColor());
+    for (quint32 x = 0; x < colorSet->columnCount(); x++) {
+        for (quint32 y = 0; y < colorSet->rowCount(); y++) {
+            QRect rect(option.rect.x() + x * size,
+                       option.rect.y() + option.rect.height() - size,
+                       size,
+                       size);
+            painter->fillRect(rect, colorSet->getColorGlobal(x, y).color().toQColor());
+        }
     }
 
     painter->restore();
+    */
 }
 
 KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)

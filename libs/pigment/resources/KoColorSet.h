@@ -27,8 +27,8 @@
 
 #include <resources/KoResource.h>
 #include "KoColor.h"
-#include "KoColorSetEntry.h"
-#include "KoColorSetEntryGroup.h"
+#include "KisSwatch.h"
+#include "KisSwatchGroup.h"
 
 /**
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
@@ -58,10 +58,7 @@ public:
      * a Krita palette,
      * a Scribus palette or a SwatchBooker palette.
      */
-    explicit KoColorSet(const QString &filename);
-
-    /// Create an empty color set
-    KoColorSet();
+    explicit KoColorSet(const QString &filename = QString());
 
     /// Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
@@ -91,17 +88,7 @@ public:
      * @brief add Add a color to the palette.
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
-    void add(KoColorSetEntry, const QString &groupName = QString());
-
-    /**
-     * @brief insertBefore insert color before index into group.
-     * @param index
-     * @param groupName name of the group that the color goes into.
-     * @return new index of index after the prepending.
-     */
-    quint32 insertBefore(const KoColorSetEntry &, qint32 index, const QString &groupName = QString());
-
-    void removeAt(quint32 x, quint32 y, QString groupName = QString());
+    void add(KisSwatch, const QString &groupName = QString());
 
     /**
      * @brief getColorGlobal
@@ -109,7 +96,7 @@ public:
      * @param globalIndex the global index over the whole palette.
      * @return the entry.
      */
-    KoColorSetEntry getColorGlobal(quint32 x, quint32 y);
+    KisSwatch getColorGlobal(quint32 x, quint32 y);
     /**
      * @brief getColorGroup
      * A function for getting the color from a specific group.
@@ -117,11 +104,8 @@ public:
      * @param index the index within the group.
      * @return the entry
      */
-    KoColorSetEntry getColorGroup(quint32 x, quint32 y, QString groupName = QString());
+    KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName = QString());
 
-    QString findGroupByGlobalIndex(quint32 x, quint32 y);
-    QString findGroupByColorName(const QString &name, quint32 *x, quint32 *y);
-    QString findGroupByID(const QString &id,quint32 *index);
 
     /**
      * @brief getGroupNames
@@ -129,17 +113,7 @@ public:
      */
     QStringList getGroupNames();
 
-    /**
-     * @brief getGroupByName
-     * @param groupName
-     * @param if success
-     * @return group found
-     */
-    const KoColorSetEntryGroup &getGroupByName(const QString &groupName, bool &success) const;
-
     bool changeGroupName(QString oldGroupName, QString newGroupName);
-
-    bool changeColorSetEntry(KoColorSetEntry entry, QString groupName);
 
     /**
      * @brief nColorsGroup
@@ -181,17 +155,6 @@ public:
     void clear();
 
     /**
-     * @brief getIndexClosestColor
-     * function that matches the color to all colors in the colorset, and returns the index
-     * of the closest match.
-     * @param color the color you wish to compare.
-     * @param useGivenColorSpace whether to use the color space of the color given
-     * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
-     * @return returns the int of the closest match.
-     */
-    quint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
-
-    /**
      * @brief closestColorName
      * convenience function to get the name of the closest match.
      * @param color
@@ -200,27 +163,42 @@ public:
      */
     QString closestColorName(KoColor color, bool useGivenColorSpace = true);
 
+    /*
+     * No one seems to be using these methods...
+     */
+    // QString findGroupByGlobalIndex(quint32 x, quint32 y);
+    // QString findGroupByColorName(const QString &name, quint32 *x, quint32 *y);
+    // QString findGroupByID(const QString &id,quint32 *index);
+    // void removeAt(quint32 x, quint32 y, QString groupName = QString());
+    /**
+     * @brief getGroupByName
+     * @param groupName
+     * @param if success
+     * @return group found
+     */
+    // const KisSwatchGroup &getGroupByName(const QString &groupName, bool &success) const;
+    // bool changeColorSetEntry(KisSwatch entry, QString groupName);
+    /**
+     * @brief getIndexClosestColor
+     * function that matches the color to all colors in the colorset, and returns the index
+     * of the closest match.
+     * @param color the color you wish to compare.
+     * @param useGivenColorSpace whether to use the color space of the color given
+     * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
+     * @return returns the int of the closest match.
+     */
+    // quint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
+    /**
+     * @brief insertBefore insert color before index into group.
+     * @param index
+     * @param groupName name of the group that the color goes into.
+     * @return new index of index after the prepending.
+     */
+    // quint32 insertBefore(const KisSwatch &, qint32 index, const QString &groupName = QString());
+
+
 private:
-
-
-    bool init();
-
-    bool saveGpl(QIODevice *dev) const;
-    bool loadGpl();
-
-    bool loadAct();
-    bool loadRiff();
-    bool loadPsp();
-    bool loadAco();
-    bool loadXml();
-    bool loadSbz();
-
-    bool saveKpl(QIODevice *dev) const;
-    bool loadKpl();
-
-
-
-    struct Private;
+    class Private;
     const QScopedPointer<Private> d;
 
 };

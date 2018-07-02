@@ -128,10 +128,12 @@ void Palette::removeEntry(int index, const QString &groupName)
     // d->palette->removeAt(index, groupName);
 }
 
+/*
 void Palette::insertEntry(int index, KoColorSetEntry entry, QString groupName)
 {
     d->palette->insertBefore(entry, index, groupName);
 }
+*/
 
 bool Palette::editEntry(int index, KoColorSetEntry entry, QString groupName)
 {

@@ -187,7 +187,7 @@ public:
     inline bool isNull() const {
         return (d == 0);
     }
-private:
+
     inline static void ref(const KisSharedPtr<T>* sp, T* t)
     {
 #ifndef HAVE_MEMORY_LEAK_TRACKER
@@ -199,10 +199,7 @@ private:
             t->ref();
         }
     }
-    inline void ref() const
-    {
-        ref(this, d);
-    }
+
     inline static bool deref(const KisSharedPtr<T>* sp, T* t)
     {
 #ifndef HAVE_MEMORY_LEAK_TRACKER
@@ -216,6 +213,13 @@ private:
         }
         return true;
     }
+
+private:    
+    inline void ref() const
+    {
+        ref(this, d);
+    }
+
     inline void deref() const
     {
         bool v = deref(this, d);
@@ -227,6 +231,7 @@ private:
     Q_UNUSED(v);
 #endif
     }
+
 private:
     mutable T* d;
 };

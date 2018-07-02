@@ -247,11 +247,11 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
-    d->canvas.addDecoration(d->paintingAssistantsDecoration);
-    d->paintingAssistantsDecoration->setVisible(true);
-
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
+
+    d->canvas.addDecoration(d->paintingAssistantsDecoration);
+    d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }

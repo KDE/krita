@@ -342,7 +342,6 @@ QString KoColorSet::findGroupByGlobalIndex(quint32 x, quint32 y)
         }
     }
     return groupName;
-    return QString();
 }
 
 QString KoColorSet::findGroupByColorName(const QString &name, quint32 *x, quint32 *y)

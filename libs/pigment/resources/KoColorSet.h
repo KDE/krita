@@ -97,6 +97,7 @@ public:
      * @return the entry.
      */
     KisSwatch getColorGlobal(quint32 x, quint32 y);
+
     /**
      * @brief getColorGroup
      * A function for getting the color from a specific group.
@@ -105,7 +106,6 @@ public:
      * @return the entry
      */
     KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName = QString());
-
 
     /**
      * @brief getGroupNames

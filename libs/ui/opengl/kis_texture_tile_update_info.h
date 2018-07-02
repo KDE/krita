@@ -169,7 +169,7 @@ public:
 
         // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
         //      the display shader
-        if (!channelFlags.isEmpty()) {
+        if (!channelFlags.isEmpty() && selectedChannelIndex >= 0 && selectedChannelIndex < m_patchColorSpace->channels().size()) {
             DataBuffer conversionCache(m_patchColorSpace->pixelSize(), m_pool);
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();

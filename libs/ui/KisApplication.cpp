@@ -595,6 +595,7 @@ void KisApplication::hideSplashScreen()
     }
 }
 
+
 bool KisApplication::notify(QObject *receiver, QEvent *event)
 {
     try {

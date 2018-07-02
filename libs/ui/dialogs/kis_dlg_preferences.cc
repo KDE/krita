@@ -189,8 +189,6 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkShowRootLayer->setChecked(cfg.showRootLayer());
 
-    m_hideSplashScreen->setChecked(cfg.hideSplashScreen());
-
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
 #ifdef Q_OS_UNIX
@@ -220,7 +218,6 @@ void GeneralTab::setDefault()
     m_backupFileCheckBox->setChecked(cfg.backupFile(true));
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
-    m_hideSplashScreen->setChecked(cfg.hideSplashScreen(true));
 
     m_chkNativeFileDialog->setChecked(false);
     intMaxBrushSize->setValue(1000);
@@ -293,11 +290,6 @@ int GeneralTab::undoStackSize()
 bool GeneralTab::showOutlineWhilePainting()
 {
     return m_showOutlinePainting->isChecked();
-}
-
-bool GeneralTab::hideSplashScreen()
-{
-    return m_hideSplashScreen->isChecked();
 }
 
 int GeneralTab::mdiMode()
@@ -1318,7 +1310,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(dialog->m_general->showOutlineWhilePainting());
         cfg.setForceAlwaysFullSizedOutline(!dialog->m_general->m_changeBrushOutline->isChecked());
-        cfg.setHideSplashScreen(dialog->m_general->hideSplashScreen());
         cfg.setSessionOnStartup(dialog->m_general->sessionOnStartup());
         cfg.setSaveSessionOnQuit(dialog->m_general->saveSessionOnQuit());
 

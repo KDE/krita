@@ -980,18 +980,6 @@ void KisConfig::setForceAlwaysFullSizedOutline(bool value) const
     m_cfg.writeEntry("forceAlwaysFullSizedOutline", value);
 }
 
-bool KisConfig::hideSplashScreen(bool defaultValue) const
-{
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    return (defaultValue ? true : cfg.readEntry("HideSplashAfterStartup", true));
-}
-
-void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
-{
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
-}
-
 KisConfig::SessionOnStartup KisConfig::sessionOnStartup(bool defaultValue) const
 {
     int value = defaultValue ? SOS_BlankSession : m_cfg.readEntry("sessionOnStartup", (int)SOS_BlankSession);

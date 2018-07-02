@@ -125,6 +125,18 @@ public:
      */
     void showDocument(KisDocument *document);
 
+
+    /**
+     * Toggles between showing the welcome screen and the MDI area
+     *
+     *  hack: There seems to be a bug that prevents events happening to the MDI area if it
+     *  isn't actively displayed (set in the widgetStack). This can cause things like the title bar
+     *  not to update correctly Before doing any actions related to opening or creating documents,
+     *  make sure to switch this first to make sure everything can communicate to the MDI area correctly
+     */
+    void showWelcomeScreen(bool show);
+
+
     /**
      * Saves the document, asking for a filename if necessary.
      *

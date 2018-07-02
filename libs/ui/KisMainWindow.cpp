@@ -904,6 +904,8 @@ void KisMainWindow::showDocument(KisDocument *document) {
 
 KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
+    showWelcomeScreen(false); // see workaround in function header
+
     KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
     addView(view);
 
@@ -1405,6 +1407,11 @@ void KisMainWindow::switchTab(int index)
     if (!tabBar) return;
 
     tabBar->setCurrentIndex(index);
+}
+
+void KisMainWindow::showWelcomeScreen(bool show)
+{
+     d->widgetStack->setCurrentIndex(!show);
 }
 
 void KisMainWindow::slotFileNew()
@@ -2237,23 +2244,11 @@ void KisMainWindow::updateWindowMenu()
     }
 
 
-    // Determine whether we should show the mdi area
+
     bool showMdiArea = windows.count( ) > 0;
-    if (showMdiArea) { // show mdiArea
-       d->widgetStack->setCurrentIndex(1);
+    if (!showMdiArea) {
+        showWelcomeScreen(true); // see workaround in function in header
     }
-    else {
-       d->widgetStack->setCurrentIndex(0);
-    }
-
-    // make sure toolbar is enabled when we have a document open
-    Q_FOREACH (QToolBar *tb, toolBars()) {
-        if (tb->objectName() == "BrushesAndStuff") {
-            tb->setEnabled(showMdiArea);
-        }
-    }
-
-
 
     // enable/disable the toolbox docker if there are no documents open
     Q_FOREACH (QObject* widget, children()) {
@@ -2265,12 +2260,6 @@ void KisMainWindow::updateWindowMenu()
             }
         }
     }
-
-
-
-
-
-
 
     updateCaption();
 }

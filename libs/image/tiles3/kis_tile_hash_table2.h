@@ -18,7 +18,7 @@
  * How to use:
  *   1) each hash must be unique, otherwise tiles would rewrite each-other
  *   2) 0 key is reserved, so can't be used
- *   3) col and row must be less than 0x7FFF to garantee uniqueness of hash for each pair
+ *   3) col and row must be less than 0x7FFF to guarantee uniqueness of hash for each pair
  */
 
 template <class T>
@@ -152,16 +152,14 @@ private:
         return wasDeleted;
     }
 
-    inline TileTypeSP get(quint32 key)
-    {
-        TileTypeSP result = m_map.get(key);
-        m_map.getGC().update(m_map.migrationInProcess());
-        return result;
-    }
-
 private:
     ConcurrentMap<quint32, TileType*> m_map;
-    QReadWriteLock m_rwLock;
+
+    /**
+     * We still need something to guard changes in m_defaultTileData,
+     * otherwise there will be concurrent read/writes, resulting in broken memory.
+     */
+    QReadWriteLock m_defaultPixelDataLock;
 
     QAtomicInt m_numTiles;
     KisTileData *m_defaultTileData;
@@ -244,15 +242,16 @@ KisTileHashTableTraits2<T>::~KisTileHashTableTraits2()
 template<class T>
 bool KisTileHashTableTraits2<T>::tileExists(qint32 col, qint32 row)
 {
-    quint32 idx = calculateHash(col, row);
-    return get(idx);
+    return getExistingTile(col, row);
 }
 
 template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getExistingTile(qint32 col, qint32 row)
 {
     quint32 idx = calculateHash(col, row);
-    return get(idx);
+    TileTypeSP result = m_map.get(idx);
+    m_map.getGC().update(m_map.migrationInProcess());
+    return result;
 }
 
 template <class T>
@@ -265,7 +264,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
 
     if (!mutator.getValue()) {
         {
-            QReadLocker guard(&m_rwLock);
+            QReadLocker guard(&m_defaultPixelDataLock);
             tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
         }
         TileTypeSP::ref(&tile, tile.data());
@@ -295,7 +294,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
     existingTile = tile;
 
     if (!existingTile) {
-        QReadLocker guard(&m_rwLock);
+        QReadLocker guard(&m_defaultPixelDataLock);
         tile = new TileType(col, row, m_defaultTileData, 0);
     }
 
@@ -336,7 +335,7 @@ void KisTileHashTableTraits2<T>::clear()
 template <class T>
 inline void KisTileHashTableTraits2<T>::setDefaultTileData(KisTileData *defaultTileData)
 {
-    QWriteLocker guard(&m_rwLock);
+    QWriteLocker guard(&m_defaultPixelDataLock);
     if (m_defaultTileData) {
         m_defaultTileData->release();
         m_defaultTileData = 0;
@@ -351,7 +350,7 @@ inline void KisTileHashTableTraits2<T>::setDefaultTileData(KisTileData *defaultT
 template <class T>
 inline KisTileData* KisTileHashTableTraits2<T>::defaultTileData()
 {
-    QReadLocker guard(&m_rwLock);
+    QReadLocker guard(&m_defaultPixelDataLock);
     return m_defaultTileData;
 }
 

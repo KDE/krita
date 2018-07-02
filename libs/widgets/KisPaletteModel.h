@@ -87,7 +87,7 @@ public:
      * @param index the QModelIndex
      * @return the kocolorsetentry
      */
-    KoColorSetEntry colorSetEntryFromIndex(const QModelIndex &index) const;
+    KisSwatch colorSetEntryFromIndex(const QModelIndex &index) const;
 
     /**
      * @brief addColorSetEntry

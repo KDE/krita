@@ -51,15 +51,13 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
 {
     setFilename(rhs.filename());
     d->comment = rhs.d->comment;
-    d->global = rhs.d->global;
     d->groupNames = rhs.d->groupNames;
     d->groups = rhs.d->groups;
     setValid(true);
 }
 
 KoColorSet::~KoColorSet()
-{
-}
+{ }
 
 bool KoColorSet::load()
 {
@@ -115,7 +113,7 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 
 quint32 KoColorSet::nColors()
 {
-    return d->global.nColors();
+    return d->groups[Private::GLOBAL_GROUP_NAME].nColors();
 }
 
 quint32 KoColorSet::nColorsGroup(QString groupName)
@@ -123,7 +121,7 @@ quint32 KoColorSet::nColorsGroup(QString groupName)
     if (d->groups.contains(groupName)) {
         return d->groups[groupName].nColors();
     } else if (groupName.isEmpty()) {
-        return d->global.nColors();
+        return d->groups[Private::GLOBAL_GROUP_NAME].nColors();
     } else {
         return 0;
     }
@@ -136,7 +134,7 @@ QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpac
     quint8 testPercentage = 0;
     KoColor compare = color;
     QString res;
-    for (int x = 0; x < d->global.nColumns(); x++) {
+    for (int x = 0; x < d->groups[Private::GLOBAL_GROUP_NAME].nColumns(); x++) {
         for (int y = 0; y < rowCount(); y++ ) {
             KisSwatch entry = getColorGlobal(x, y);
             KoColor color = entry.color();
@@ -183,8 +181,8 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y)
             yInGroup -= d->groups[groupName].nRows();
         }
     }
-    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == QString()
-            ? d->global : d->groups[nameGroupFoundIn];
+    const KisSwatchGroup &groupFoundIn = d->groups[nameGroupFoundIn == QString()
+            ? Private::GLOBAL_GROUP_NAME : nameGroupFoundIn];
     Q_ASSERT(groupFoundIn.checkEntry(x, yInGroup));
     return groupFoundIn.getEntry(x, yInGroup);
 }
@@ -230,7 +228,7 @@ bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
 
 void KoColorSet::setColumnCount(int columns)
 {
-    d->global.setNColumns(columns);
+    d->groups[Private::GLOBAL_GROUP_NAME].setNColumns(columns);
     for (KisSwatchGroup &g : d->groups.values()) { // Q_FOREACH doesn't accept non const refs
         g.setNColumns(columns);
     }
@@ -238,7 +236,7 @@ void KoColorSet::setColumnCount(int columns)
 
 int KoColorSet::columnCount()
 {
-    return d->global.nColumns();
+    return d->groups[Private::GLOBAL_GROUP_NAME].nColumns();
 }
 
 QString KoColorSet::comment()
@@ -283,11 +281,11 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
 
     if (keepColors) {
         // put all colors directly below global
-        int startingRow = d->global.nRows();
+        int startingRow = d->groups[Private::GLOBAL_GROUP_NAME].nRows();
         for (int x = 0; x < d->groups[groupName].nColumns(); x++) {
             for (int y = 0; y < d->groups[groupName].nRows(); y++) {
                 if (d->groups[groupName].checkEntry(x, y)) {
-                    d->global.setEntry(d->groups[groupName].getEntry(x, y),
+                    d->groups[Private::GLOBAL_GROUP_NAME].setEntry(d->groups[groupName].getEntry(x, y),
                                        x,
                                        y + startingRow);
                 }
@@ -313,7 +311,7 @@ QString KoColorSet::defaultFileExtension() const
 
 int KoColorSet::rowCount()
 {
-    int res = d->global.nRows();
+    int res = d->groups[Private::GLOBAL_GROUP_NAME].nRows();
     Q_FOREACH (QString name, d->groupNames) {
         res += d->groups[name].nRows();
     }

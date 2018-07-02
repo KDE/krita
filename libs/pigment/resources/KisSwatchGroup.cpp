@@ -71,8 +71,10 @@ bool KisSwatchGroup::removeEntry(int x, int y)
 void KisSwatchGroup::setNColumns(int nColumns)
 {
     Q_ASSERT(nColumns >= 0);
-    Q_FOREACH (const Column &col, m_colorMatrix) {
-        m_nColors -= col.size();
+    if (nColumns < m_colorMatrix.size()) {
+        for (int i = m_colorMatrix.size() - 1; i <= nColumns; i-- ) {
+            m_nColors -= m_colorMatrix[i].size();
+        }
     }
     m_colorMatrix.resize(nColumns);
 }

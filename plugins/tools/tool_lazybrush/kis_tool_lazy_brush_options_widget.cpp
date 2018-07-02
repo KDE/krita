@@ -120,9 +120,9 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    m_d->colorSet.add(KoColorSetEntry(KoColor(Qt::red, cs), "color1"));
-    m_d->colorSet.add(KoColorSetEntry(KoColor(Qt::green, cs), "color2"));
-    m_d->colorSet.add(KoColorSetEntry(KoColor(Qt::blue, cs), "color3"));
+    m_d->colorSet.add(KisSwatch(KoColor(Qt::red, cs), "color1"));
+    m_d->colorSet.add(KisSwatch(KoColor(Qt::green, cs), "color2"));
+    m_d->colorSet.add(KisSwatch(KoColor(Qt::blue, cs), "color3"));
 
     m_d->colorModel->setColorSet(&m_d->colorSet);
 }
@@ -161,7 +161,7 @@ void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
     const int i = m_d->colorModel->idFromIndex(index);
 
     if (i >= 0 && i < (int)m_d->colorSet.nColors()) {
-        KoColorSetEntry entry = m_d->colorModel->colorSetEntryFromIndex(index);
+        KisSwatch entry = m_d->colorModel->colorSetEntryFromIndex(index);
         m_d->provider->setFGColor(entry.color());
     }
 
@@ -212,7 +212,7 @@ void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
 
         for (int i = 0; i < colors.colors.size(); i++) {
             const QString name = i == m_d->transparentColorIndex ? "transparent" : "";
-            m_d->colorSet.add(KoColorSetEntry(colors.colors[i], name));
+            m_d->colorSet.add(KisSwatch(colors.colors[i], name));
         }
     }
 

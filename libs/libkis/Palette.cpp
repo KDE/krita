@@ -18,6 +18,7 @@
 
 #include "Palette.h"
 #include <KoColorSet.h>
+#include <KisSwatch.h>
 #include <ManagedColor.h>
 
 struct Palette::Private {
@@ -93,32 +94,32 @@ int Palette::colorsCountGroup(QString name)
     return d->palette->nColorsGroup(name);
 }
 
-KoColorSetEntry Palette::colorSetEntryByIndex(int index)
+KisSwatch Palette::colorSetEntryByIndex(int index)
 {
     /*
     if (!d->palette) return KoColorSetEntry();
     return d->palette->getColorGlobal(index);
     */
-    return KoColorSetEntry();
+    return KisSwatch();
 }
 
-KoColorSetEntry Palette::colorSetEntryFromGroup(int index, const QString &groupName)
+KisSwatch Palette::colorSetEntryFromGroup(int index, const QString &groupName)
 {
     /*
     if (!d->palette) return KoColorSetEntry();
     return d->palette->getColorGroup(index, groupName);
     */
-    return KoColorSetEntry();
+    return KisSwatch();
 }
 
-ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
+ManagedColor *Palette::colorForEntry(KisSwatch entry)
 {
     if (!d->palette) return 0;
     ManagedColor *color = new ManagedColor(entry.color());
     return color;
 }
 
-void Palette::addEntry(KoColorSetEntry entry, QString groupName)
+void Palette::addEntry(KisSwatch entry, QString groupName)
 {
     d->palette->add(entry, groupName);
 }
@@ -135,7 +136,7 @@ void Palette::insertEntry(int index, KoColorSetEntry entry, QString groupName)
 }
 */
 
-bool Palette::editEntry(int index, KoColorSetEntry entry, QString groupName)
+bool Palette::editEntry(int index, KisSwatch entry, QString groupName)
 {
     // return d->palette->changeColorSetEntry(entry, groupName, index);
     return true;

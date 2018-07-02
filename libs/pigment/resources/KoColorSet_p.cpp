@@ -194,9 +194,8 @@ quint16 readShort(QIODevice *io) {
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
-    , global(groups[GLOBAL_GROUP_NAME])
 {
-
+    groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
 }
 
 bool KoColorSet::Private::init()
@@ -252,12 +251,12 @@ bool KoColorSet::Private::init()
     }
     colorSet->setValid(res);
 
-    QImage img(global.nColumns() * 4, global.nRows() * 4, QImage::Format_ARGB32);
+    QImage img(groups[GLOBAL_GROUP_NAME].nColumns() * 4, groups[GLOBAL_GROUP_NAME].nRows() * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
-    for (int x = 0; x < global.nColumns(); x++) {
-        for (int y = 0; y < global.nRows(); y++) {
-            QColor c = global.getEntry(x, y).color().toQColor();
+    for (int x = 0; x < groups[GLOBAL_GROUP_NAME].nColumns(); x++) {
+        for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
+            QColor c = groups[GLOBAL_GROUP_NAME].getEntry(x, y).color().toQColor();
             gc.fillRect(x * 4, y * 4, 4, 4, c);
         }
     }
@@ -274,12 +273,12 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
     int columns = 0;
     stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << columns << "\n#\n";
 
-    for (int y = 0; y < global.nRows(); y++) {
+    for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
         for (int x = 0; x < columns; x++) {
-            if (!global.checkEntry(x, y)) {
+            if (!groups[GLOBAL_GROUP_NAME].checkEntry(x, y)) {
                 continue;
             }
-            const KisSwatch& entry = global.getEntry(x, y);
+            const KisSwatch& entry = groups[GLOBAL_GROUP_NAME].getEntry(x, y);
             QColor c = entry.color().toQColor();
             stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
             if (entry.name().isEmpty())
@@ -329,7 +328,7 @@ bool KoColorSet::Private::loadGpl()
     if (lines[index].toLower().contains("columns")) {
         columnsText = lines[index].split(":")[1].trimmed();
         columns = columnsText.toInt();
-        global.setNColumns(columns);
+        groups[GLOBAL_GROUP_NAME].setNColumns(columns);
         index = 3;
     }
 
@@ -354,7 +353,7 @@ bool KoColorSet::Private::loadGpl()
             QString name = a.join(" ");
             e.setName(name.isEmpty() ? i18n("Untitled") : name);
 
-            global.addEntry(e);
+            groups[GLOBAL_GROUP_NAME].addEntry(e);
         }
     }
     return true;
@@ -370,7 +369,7 @@ bool KoColorSet::Private::loadAct()
         quint8 g = data[i+1];
         quint8 b = data[i+2];
         e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
-        global.addEntry(e);
+        groups[GLOBAL_GROUP_NAME].addEntry(e);
     }
     return true;
 }
@@ -393,7 +392,7 @@ bool KoColorSet::Private::loadRiff()
         quint8 g = data[i+1];
         quint8 b = data[i+2];
         e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
-        global.addEntry(e);
+        groups[GLOBAL_GROUP_NAME].addEntry(e);
     }
     return true;
 }
@@ -432,7 +431,7 @@ bool KoColorSet::Private::loadPsp()
         QString name = a.join(" ");
         e.setName(name.isEmpty() ? i18n("Untitled") : name);
 
-        global.addEntry(e);
+        groups[GLOBAL_GROUP_NAME].addEntry(e);
     }
     return true;
 }
@@ -501,7 +500,7 @@ bool KoColorSet::Private::loadKpl()
             entry.setName(c.attribute("name"));
             entry.setId(c.attribute("id"));
             entry.setSpotColor(c.attribute("spot", "false") == "true" ? true : false);
-            global.addEntry(entry);
+            groups[GLOBAL_GROUP_NAME].addEntry(entry);
 
             c = c.nextSiblingElement("ColorSetEntry");
         }
@@ -620,7 +619,7 @@ bool KoColorSet::Private::loadAco()
             Q_UNUSED(v2);
         }
         if (!skip) {
-            global.addEntry(e);
+            groups[GLOBAL_GROUP_NAME].addEntry(e);
         }
     }
     return true;
@@ -969,7 +968,7 @@ bool KoColorSet::Private::loadSbz() {
                     return false;
                 }
                 if (materialsBook.contains(id)) {
-                    global.addEntry(materialsBook.value(id));
+                    groups[GLOBAL_GROUP_NAME].addEntry(materialsBook.value(id));
                 }
                 else {
                     warnPigment << "Invalid swatch definition (material not found) (line" << swatch.lineNumber() << ", column" << swatch.columnNumber() << ")";
@@ -1058,9 +1057,9 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute("version", "1.0");
         root.setAttribute("name", colorSet->name());
         root.setAttribute("comment", comment);
-        root.setAttribute("columns", global.nColumns());
-        for (int x = 0; x < global.nColumns(); x++) {
-            for (int y = 0; y < global.nRows(); y++) {
+        root.setAttribute("columns", groups[GLOBAL_GROUP_NAME].nColumns());
+        for (int x = 0; x < groups[GLOBAL_GROUP_NAME].nColumns(); x++) {
+            for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
                 // Only save non-builtin profiles.=
                 /*
                 const KoColorProfile *profile = entry.color().colorSpace()->profile();

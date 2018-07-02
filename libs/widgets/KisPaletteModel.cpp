@@ -340,7 +340,7 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
     return 0;
 }
 
-KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
+KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
     /*
     KoColorSetEntry blank =  KoColorSetEntry();
@@ -355,7 +355,7 @@ KoColorSetEntry KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index
     quint32 indexInGroup = entryList.at(1).toUInt();
     return m_colorSet->getColorGroup(indexInGroup, groupName);
     */
-    return KoColorSetEntry();
+    return KisSwatch();
 }
 
 bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)

@@ -121,14 +121,14 @@ public:
      * @param index the global index
      * @return the colorset entry
      */
-    KoColorSetEntry colorSetEntryByIndex(int index);
+    KisSwatch colorSetEntryByIndex(int index);
     /**
      * @brief colorSetEntryFromGroup
      * @param index index in the group.
      * @param groupName the name of the group to get the color from.
      * @return the colorsetentry.
      */
-    KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);
+    KisSwatch colorSetEntryFromGroup(int index, const QString &groupName);
 
     /**
      * @brief colorForEntry
@@ -136,14 +136,14 @@ public:
      * @param entry the entry
      * @return the ManagedColorObject
      */
-    ManagedColor *colorForEntry(KoColorSetEntry entry);
+    ManagedColor *colorForEntry(KisSwatch entry);
     /**
      * @brief addEntry
      * add an entry to a group. Gets appended to the end.
      * @param entry the entry
      * @param groupName the name of the group to add to.
      */
-    void addEntry(KoColorSetEntry entry, QString groupName = QString());
+    void addEntry(KisSwatch entry, QString groupName = QString());
     /**
      * @brief removeEntry
      * remove the entry at @param index from the group @param groupName.
@@ -163,7 +163,7 @@ public:
      * @param groupName the group at which the index is.
      * @return whether it was successful.
      */
-    bool editEntry (int index, KoColorSetEntry entry, QString groupName = QString());
+    bool editEntry (int index, KisSwatch entry, QString groupName = QString());
     /**
      * @brief changeGroupName
      * change the group name.

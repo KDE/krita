@@ -54,8 +54,6 @@ public:
     // after all the threads participating in the migration have completed their work.
     void publishTableMigration(typename Details::TableMigration* migration)
     {
-        // There are no racing calls to this function.
-        typename Details::Table* oldRoot = m_root.loadNonatomic();
         m_root.store(migration->m_destination, Release);
         // Caller will GC the TableMigration and the source table.
     }

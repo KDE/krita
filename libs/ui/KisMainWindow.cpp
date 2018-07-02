@@ -1396,10 +1396,6 @@ void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
     }
 }
 
-void KisMainWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-
-}
 
 void KisMainWindow::switchTab(int index)
 {

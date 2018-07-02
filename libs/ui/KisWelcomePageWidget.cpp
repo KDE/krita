@@ -189,7 +189,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
        recentFilesModel->appendRow(recentItem);
     }
 
-    recentDocumentsListView->setIconSize(QSize(48, 48));
+    recentDocumentsListView->setIconSize(QSize(40, 40));
     recentDocumentsListView->setModel(recentFilesModel);
 
 

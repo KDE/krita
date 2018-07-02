@@ -306,7 +306,7 @@
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>10</number>
+           <number>30</number>
           </property>
           <item>
            <widget class="QPushButton" name="sourceCodeLink">
@@ -397,7 +397,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>10</height>
+            <height>20</height>
            </size>
           </property>
          </spacer>
@@ -615,8 +615,17 @@
           <property name="showDropIndicator" stdset="0">
            <bool>false</bool>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
+          <property name="movement">
+           <enum>QListView::Snap</enum>
+          </property>
+          <property name="resizeMode">
+           <enum>QListView::Fixed</enum>
+          </property>
           <property name="spacing">
-           <number>2</number>
+           <number>0</number>
           </property>
           <property name="viewMode">
            <enum>QListView::ListMode</enum>
@@ -625,7 +634,7 @@
            <bool>true</bool>
           </property>
           <property name="wordWrap">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>

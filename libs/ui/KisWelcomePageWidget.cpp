@@ -40,7 +40,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
    setupUi(this);
 
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
-   recentDocumentsListView->setSpacing(5);
+   recentDocumentsListView->setSpacing(2);
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -102,7 +102,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     QColor backgroundColor = qApp->palette().color(QPalette::Background);
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
-    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
+    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.65);
     QString blendedStyle = QString("color: ").append(blendedColor.name());
 
 
@@ -130,7 +130,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
     // make drop area QFrame have a dotted line
     dropFrameBorder->setObjectName("dropAreaIndicator");
-    QString dropFrameStyle = "QFrame#dropAreaIndicator { border: 4px dotted white }";
+    QString dropFrameStyle = QString("QFrame#dropAreaIndicator { border: 4px dotted ").append(blendedColor.name()).append("}");
     dropFrameBorder->setStyleSheet(dropFrameStyle);
 
     // only show drop area when we have a document over the empty area

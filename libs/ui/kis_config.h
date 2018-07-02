@@ -254,9 +254,6 @@ public:
     bool forceAlwaysFullSizedOutline(bool defaultValue = false) const;
     void setForceAlwaysFullSizedOutline(bool value) const;
 
-    bool hideSplashScreen(bool defaultValue = false) const;
-    void setHideSplashScreen(bool hideSplashScreen) const;
-
     enum SessionOnStartup {
         SOS_BlankSession,
         SOS_PreviousSession,

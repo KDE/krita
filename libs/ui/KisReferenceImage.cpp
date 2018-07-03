@@ -53,6 +53,20 @@ struct KisReferenceImage::Private {
         QString filename = src.mid(7);
         image.load(filename);
     }
+
+    void updateCache() {
+        if (saturation < 1.0) {
+            cachedImage = KritaUtils::convertQImageToGrayA(image);
+
+            if (saturation > 0.0) {
+                QPainter gc2(&cachedImage);
+                gc2.setOpacity(saturation);
+                gc2.drawImage(QPoint(), image);
+            }
+        } else {
+            cachedImage = image;
+        }
+    }
 };
 
 
@@ -130,18 +144,9 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
     QTransform transform = QTransform::fromScale(shapeSize.width() / d->image.width(), shapeSize.height() / d->image.height());
 
     if (d->cachedImage.isNull()) {
-        if (d->saturation < 1.0) {
-            d->cachedImage = KritaUtils::convertQImageToGrayA(d->image);
-
-            if (d->saturation > 0.0) {
-                QPainter gc2(&d->cachedImage);
-                gc2.setOpacity(d->saturation);
-                gc2.drawImage(QPoint(), d->image);
-            }
-        } else {
-            d->cachedImage = d->image;
-        }
+        d->updateCache();
     }
+
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
     gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
     gc.setTransform(transform, true);
@@ -185,7 +190,11 @@ QColor KisReferenceImage::getPixel(QPointF position)
     const QTransform transform = absoluteTransformation(nullptr).inverted() * scale;
     const QPointF localPosition = position * transform;
 
-    return d->image.pixelColor(localPosition.toPoint());
+    if (d->cachedImage.isNull()) {
+        d->updateCache();
+    }
+
+    return d->cachedImage.pixelColor(localPosition.toPoint());
 }
 
 void KisReferenceImage::saveXml(QDomDocument &document, QDomElement &parentElement, int id)

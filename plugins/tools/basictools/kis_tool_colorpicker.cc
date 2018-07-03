@@ -102,7 +102,7 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
         KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer =
             kisCanvas->imageView()->document()->referenceImagesLayer();
 
-        if (referenceImageLayer) {
+        if (referenceImageLayer && kisCanvas->referenceImagesDecoration()->visible()) {
             QColor color = referenceImageLayer->getPixel(pos);
             if (color.isValid()) {
                 m_pickedColor.fromQColor(color);

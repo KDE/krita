@@ -53,9 +53,15 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         mainWindow = mainWin;
 
 
-        // set the shortcut links from actions
-        newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
-        openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
+        // set the shortcut links from actions (only if a shortcut exists)
+        if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
+            newFileLinkShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() + QString(")"));
+        }
+
+        if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
+            openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
+        }
+
 
         populateRecentDocuments();
         connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
@@ -102,7 +108,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     QColor backgroundColor = qApp->palette().color(QPalette::Background);
 
     // make the welcome screen labels a subtle color so it doesn't clash with the main UI elements
-    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.65);
+    QColor blendedColor = KritaUtils::blendColors(textColor, backgroundColor, 0.8);
     QString blendedStyle = QString("color: ").append(blendedColor.name());
 
 
@@ -116,15 +122,17 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     userCommunityLink->setStyleSheet(blendedStyle);
     kritaWebsiteLink->setStyleSheet(blendedStyle);
     sourceCodeLink->setStyleSheet(blendedStyle);
+    newFileLinkShortcut->setStyleSheet(blendedStyle);
+    openFileShortcut->setStyleSheet(blendedStyle);
 
     recentDocumentsListView->setStyleSheet(blendedStyle);
 
     newFileLink->setStyleSheet(blendedStyle);
     openFileLink->setStyleSheet(blendedStyle);
-    dragImageHereLabel->setStyleSheet(blendedStyle);
+
 
     // giving the drag area messaging a dotted border
-    QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name());
+    QString dottedBorderStyle = QString("border: 2px dotted ").append(blendedColor.name()).append("; color:").append(blendedColor.name()).append( ";");
     dragImageHereLabel->setStyleSheet(dottedBorderStyle);
 
 

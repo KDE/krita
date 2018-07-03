@@ -481,13 +481,19 @@
           </item>
           <item>
            <widget class="QLabel" name="newFileLinkShortcut">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <underline>false</underline>
              </font>
             </property>
             <property name="text">
-             <string>newFileShortcut</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -537,13 +543,19 @@
           </item>
           <item>
            <widget class="QLabel" name="openFileShortcut">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <underline>false</underline>
              </font>
             </property>
             <property name="text">
-             <string>openFileShortcut</string>
+             <string/>
             </property>
            </widget>
           </item>

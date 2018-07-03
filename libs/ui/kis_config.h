@@ -461,9 +461,6 @@ public:
     bool lineSmoothingStabilizeSensors(bool defaultValue = false) const;
     void setLineSmoothingStabilizeSensors(bool value);
 
-    int paletteDockerPaletteViewSectionSize(bool defaultValue = false) const;
-    void setPaletteDockerPaletteViewSectionSize(int value) const;
-
     int tabletEventsDelay(bool defaultValue = false) const;
     void setTabletEventsDelay(int value);
 

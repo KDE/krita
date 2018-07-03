@@ -22,7 +22,7 @@
 #include <QList>
 
 #include "kis_memento_item.h"
-#include "kis_tile_hash_table.h"
+#include "config-hash-table-implementaion.h"
 
 typedef QList<KisMementoItemSP> KisMementoItemList;
 typedef QListIterator<KisMementoItemSP> KisMementoItemListIterator;
@@ -38,9 +38,19 @@ typedef QList<KisHistoryItem> KisHistoryList;
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
 
+#ifdef USE_LOCK_FREE_HASH_TABLE
+#include "kis_tile_hash_table2.h"
+
+typedef KisTileHashTableTraits2<KisMementoItem> KisMementoItemHashTable;
+typedef KisTileHashTableIteratorTraits2<KisMementoItem> KisMementoItemHashTableIterator;
+typedef KisTileHashTableIteratorTraits2<KisMementoItem> KisMementoItemHashTableIteratorConst;
+#else
+#include "kis_tile_hash_table.h"
+
 typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
 typedef KisTileHashTableIteratorTraits<KisMementoItem, QWriteLocker> KisMementoItemHashTableIterator;
 typedef KisTileHashTableIteratorTraits<KisMementoItem, QReadLocker> KisMementoItemHashTableIteratorConst;
+#endif // USE_LOCK_FREE_HASH_TABLE
 
 
 class KRITAIMAGE_EXPORT KisMementoManager

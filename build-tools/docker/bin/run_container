@@ -5,6 +5,11 @@ if [ "$#" -ne 2 ]; then
   exit 1
 fi
 
+NVIDIA_OPTS=
+if [ -e /dev/nvidiactl ]; then
+   NVIDIA_OPTS+="--device /dev/nvidia0 --device /dev/nvidiactl --device /dev/nvidia-uvm"
+fi
+
 sudo docker run -P -t -d \
   -v $(pwd)/persistent/:/home/appimage/persistent/:rw \
   -v /tmp/.X11-unix/:/tmp/.X11-unix \
@@ -16,6 +21,11 @@ sudo docker run -P -t -d \
   --security-opt seccomp=unconfined \
   --device /dev/dri \
   --device /dev/snd \
-  -p127.0.0.1:2022:22 \
+  $NVIDIA_OPTS \
   --name $2 \
-  $1
+  $1 || exit 1
+
+if [ ! -f .container_name ]; then
+    echo $2 > .container_name
+fi
+

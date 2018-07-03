@@ -77,7 +77,7 @@ private:
     KisPaletteModel *m_model;
     QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
     KoColorSet *m_currentColorSet;
-    KisColorsetChooser *m_colorSetChooser;
+    KisColorsetChooser *m_paletteChooser;
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
 };

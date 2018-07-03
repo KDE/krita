@@ -171,7 +171,8 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
        // get thumbnail -- almost all Krita-supported formats save a thumbnail
        // this was mostly copied from the KisAutoSaveRecorvery file
-       KoStore* store = KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read);
+       QScopedPointer<KoStore> store(  KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read) );
+
        if (store) {
            if(store->open(QString("Thumbnails/thumbnail.png"))
               || store->open(QString("preview.png"))) {
@@ -181,11 +182,11 @@ void KisWelcomePageWidget::populateRecentDocuments()
                QImage img;
                img.loadFromData(bytes);
                recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+
            }else {
                recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
            }
 
-           delete store;
        } else {
            recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
        }
@@ -195,6 +196,8 @@ void KisWelcomePageWidget::populateRecentDocuments()
        recentItem->setText(fileName); // what to display for the item
        recentItem->setToolTip(recentFileUrlPath);
        recentFilesModel->appendRow(recentItem);
+
+
     }
 
     recentDocumentsListView->setIconSize(QSize(40, 40));

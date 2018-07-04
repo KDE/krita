@@ -251,6 +251,8 @@ void KisCanvas2::setup()
 
     connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateRegionOfInterest()));
 
+    connect(m_d->view->document(), SIGNAL(sigReferenceImagesChanged()), this, SLOT(slotReferenceImagesChanged()));
+
     initializeFpsDecoration();
 }
 
@@ -860,6 +862,11 @@ void KisCanvas2::slotUpdateRegionOfInterest()
     if (m_d->regionOfInterest != oldRegionOfInterest) {
         emit sigRegionOfInterestChanged(m_d->regionOfInterest);
     }
+}
+
+void KisCanvas2::slotReferenceImagesChanged()
+{
+    canvasController()->resetScrollBars();
 }
 
 void KisCanvas2::setRenderingLimit(const QRect &rc)

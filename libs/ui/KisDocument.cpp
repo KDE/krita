@@ -1714,6 +1714,10 @@ KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
 
 void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
+    if (d->referenceImagesLayer) {
+        d->referenceImagesLayer->disconnect(this);
+    }
+
     if (updateImage) {
         if (layer) {
             d->image->addNode(layer);
@@ -1723,6 +1727,11 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     }
 
     d->referenceImagesLayer = layer;
+
+    if (d->referenceImagesLayer) {
+        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(const QRectF&)),
+                this, SIGNAL(sigReferenceImagesChanged()));
+    }
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)
@@ -1804,4 +1813,15 @@ void KisDocument::setAssistantsGlobalColor(QColor color)
 QColor KisDocument::assistantsGlobalColor()
 {
     return d->globalAssistantsColor;
+}
+
+QRectF KisDocument::documentBounds() const
+{
+    QRectF bounds = d->image->bounds();
+
+    if (d->referenceImagesLayer) {
+        bounds |= d->referenceImagesLayer->boundingImageRect();
+    }
+
+    return bounds;
 }

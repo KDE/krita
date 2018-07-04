@@ -20,6 +20,7 @@
 #define KISTILEDEXTENTMANAGER_H
 
 #include <QMutex>
+#include <QReadWriteLock>
 #include <QMap>
 #include <QRect>
 #include "kritaimage_export.h"
@@ -42,9 +43,11 @@ private:
     void updateExtent();
 
 private:
-    mutable QMutex m_mutex;
-    QMap<int, int> m_colMap;
-    QMap<int, int> m_rowMap;
+    mutable QReadWriteLock m_mutex;
+    QReadWriteLock m_colMapGuard;
+    QReadWriteLock m_rowMapGuard;
+    QMap<int, QAtomicInt> m_colMap;
+    QMap<int, QAtomicInt> m_rowMap;
     QRect m_currentExtent;
 };
 

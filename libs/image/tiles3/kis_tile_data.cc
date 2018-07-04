@@ -35,6 +35,12 @@ typedef boost::singleton_pool<KisTileData, TILE_SIZE_8BPP, boost::default_user_a
 const qint32 KisTileData::WIDTH = __TILE_DATA_WIDTH;
 const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
 
+KisLocklessStack<quint8*> KisTileData::m_4Pool;
+KisLocklessStack<quint8*> KisTileData::m_8Pool;
+KisLocklessStack<quint8*> KisTileData::m_16Pool;
+KisLocklessStack<quint8*> KisTileData::m_32Pool;
+KisLocklessStack<quint8*> KisTileData::m_defaultPool;
+
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
     : m_state(NORMAL),
@@ -72,7 +78,7 @@ KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
       m_pixelSize(rhs.m_pixelSize),
       m_store(rhs.m_store)
 {
-    if(checkFreeMemory) {
+    if (checkFreeMemory) {
         m_store->checkFreeMemory();
     }
     m_data = allocateData(m_pixelSize);
@@ -90,7 +96,7 @@ void KisTileData::fillWithPixel(const quint8 *defPixel)
 {
     quint8 *it = m_data;
 
-    for (int i = 0; i < WIDTH*HEIGHT; i++, it += m_pixelSize) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++, it += m_pixelSize) {
         memcpy(it, defPixel, m_pixelSize);
     }
 }
@@ -103,7 +109,7 @@ void KisTileData::releaseMemory()
     }
 
     KisTileData *clone = 0;
-    while(m_clonesStack.pop(clone)) {
+    while (m_clonesStack.pop(clone)) {
         delete clone;
     }
 
@@ -120,15 +126,36 @@ quint8* KisTileData::allocateData(const qint32 pixelSize)
 {
     quint8 *ptr = 0;
 
-    switch(pixelSize) {
-    case 4:
-        ptr = (quint8*)BoostPool4BPP::malloc();
+    switch (pixelSize) {
+    case 4: {
+        if (!m_4Pool.pop(ptr)) {
+            ptr = (quint8*)BoostPool4BPP::malloc();
+        }
         break;
-    case 8:
-        ptr = (quint8*)BoostPool8BPP::malloc();
+    }
+    case 8: {
+        if (!m_8Pool.pop(ptr)) {
+            ptr = (quint8*)BoostPool8BPP::malloc();
+        }
         break;
-    default:
-        ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+    }
+    case 16: {
+        if (!m_16Pool.pop(ptr)) {
+            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+        }
+        break;
+    }
+    case 32: {
+        if (!m_32Pool.pop(ptr)) {
+            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+        }
+        break;
+    }
+    default: {
+        if (!m_defaultPool.pop(ptr)) {
+            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+        }
+    }
     }
 
     return ptr;
@@ -136,15 +163,26 @@ quint8* KisTileData::allocateData(const qint32 pixelSize)
 
 void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
 {
-    switch(pixelSize) {
+    switch (pixelSize) {
     case 4:
-        BoostPool4BPP::free(ptr);
+        m_4Pool.push(ptr);
+//        BoostPool4BPP::free(ptr);
         break;
     case 8:
-        BoostPool8BPP::free(ptr);
+        m_8Pool.push(ptr);
+//        BoostPool8BPP::free(ptr);
+        break;
+    case 16:
+        m_8Pool.push(ptr);
+//        BoostPool8BPP::free(ptr);
+        break;
+    case 32:
+        m_8Pool.push(ptr);
+//        BoostPool8BPP::free(ptr);
         break;
     default:
-        free(ptr);
+        m_defaultPool.push(ptr);
+//        free(ptr);
     }
 }
 
@@ -166,12 +204,12 @@ void KisTileData::releaseInternalPools()
 
         KisTileDataStoreIterator *iter = KisTileDataStore::instance()->beginIteration();
 
-        while(iter->hasNext()) {
+        while (iter->hasNext()) {
             KisTileData *item = iter->next();
 
             // first release all the clones
             KisTileData *clone = 0;
-            while(item->m_clonesStack.pop(clone)) {
+            while (item->m_clonesStack.pop(clone)) {
                 delete clone;
             }
 

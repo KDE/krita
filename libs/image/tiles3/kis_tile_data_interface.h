@@ -264,6 +264,13 @@ private:
     //qint32 m_timeStamp;
 
     KisTileDataStore *m_store;
+
+    //FIXME: m_defaultPool can store 16/32, so must be divided on several
+    static KisLocklessStack<quint8*> m_4Pool;
+    static KisLocklessStack<quint8*> m_8Pool;
+    static KisLocklessStack<quint8*> m_16Pool;
+    static KisLocklessStack<quint8*> m_32Pool;
+    static KisLocklessStack<quint8*> m_defaultPool;
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

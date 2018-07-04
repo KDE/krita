@@ -135,4 +135,25 @@ void KisMaskGeneratorBenchmark::testCircularSoftVectorMask()
     }
 }
 
+void KisMaskGeneratorBenchmark::testRectangularGaussScalarMask()
+{
+    QRect bounds(0,0,1000,1000);
+    {
+    KisGaussRectangleMaskGenerator circScalar(1000, 1.0, 0.5, 0.5, 2, true);
+//    circScalar.setDiameter(1000);
+    circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+
+    KisMaskGeneratorBenchmarkTester(circScalar.applicator(), bounds);
+    }
+}
+void KisMaskGeneratorBenchmark::testRectangularGaussVectorMask()
+{
+    QRect bounds(0,0,1000,1000);
+    {
+    KisGaussRectangleMaskGenerator circVectr(1000, 1.0, 0.5, 0.5, 2, true);
+//    circVectr.setDiameter(1000);
+    KisMaskGeneratorBenchmarkTester(circVectr.applicator(), bounds);
+    }
+}
+
 QTEST_MAIN(KisMaskGeneratorBenchmark)

@@ -183,6 +183,11 @@ void utils::StrokeTester::benchmark()
     doStroke(false, false, false, false);
 }
 
+void utils::StrokeTester::testSimpleStrokeNoVerification()
+{
+    doStroke(false, false, true, false);
+}
+
 void utils::StrokeTester::testOneStroke(bool cancelled,
                                         bool indirectPainting,
                                         bool externalLayer,

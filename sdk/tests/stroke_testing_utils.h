@@ -46,6 +46,7 @@ namespace utils {
         void testSimpleStroke();
         void test();
         void benchmark();
+        void testSimpleStrokeNoVerification();
 
         void setNumIterations(int value);
         void setBaseFuzziness(int value);

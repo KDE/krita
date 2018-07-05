@@ -296,6 +296,8 @@ private Q_SLOTS:
 
     void slotUpdateRegionOfInterest();
 
+    void slotReferenceImagesChanged();
+
 public:
 
     bool isPopupPaletteVisible() const;

@@ -445,6 +445,8 @@ Q_SIGNALS:
 
     void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
+    void sigReferenceImagesChanged();
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
@@ -604,6 +606,11 @@ public:
     void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage);
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Return the bounding box of the image and associated elements (e.g. reference images)
+     */
+    QRectF documentBounds() const;
 
 Q_SIGNALS:
 

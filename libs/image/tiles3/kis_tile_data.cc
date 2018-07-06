@@ -205,7 +205,7 @@ void KisTileData::releaseInternalPools()
         KisTileDataStoreIterator *iter = KisTileDataStore::instance()->beginIteration();
 
         while (iter->hasNext()) {
-            KisTileData *item = iter->next();
+            KisTileData *item = iter->peekNext();
 
             // first release all the clones
             KisTileData *clone = 0;
@@ -216,7 +216,7 @@ void KisTileData::releaseInternalPools()
             // check if the tile data has actually been pooled
             if (item->m_pixelSize != 4 &&
                 item->m_pixelSize != 8) {
-
+                iter->next();
                 continue;
             }
 
@@ -225,6 +225,7 @@ void KisTileData::releaseInternalPools()
                 const bool locked = item->m_swapLock.tryLockForWrite();
                 if (!locked) {
                     failedToLock = true;
+                    iter->next();
                     break;
                 }
 
@@ -233,6 +234,7 @@ void KisTileData::releaseInternalPools()
                 memoryChunks << QByteArray((const char*)item->m_data, chunkSize);
             }
 
+            iter->next();
         }
 
         if (!failedToLock) {

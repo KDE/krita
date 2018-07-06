@@ -27,6 +27,8 @@
 #include "swap/kis_tile_data_swapper.h"
 #include "swap/kis_swapped_data_store.h"
 
+#include "3rdparty/lock_free_map/concurrent_map.h"
+
 class KisTileDataStoreIterator;
 class KisTileDataStoreReverseIterator;
 class KisTileDataStoreClockIterator;
@@ -60,14 +62,14 @@ public:
      * or in a swap file
      */
     inline qint32 numTiles() const {
-        return m_numTiles + m_swappedStore.numTiles();
+        return m_numTiles.loadAcquire() + m_swappedStore.numTiles();
     }
 
     /**
      * Returns the number of tiles present in memory only
      */
     inline qint32 numTilesInMemory() const {
-        return m_numTiles;
+        return m_numTiles.loadAcquire();
     }
 
     inline void checkFreeMemory() {
@@ -78,7 +80,7 @@ public:
      * \see m_memoryMetric
      */
     inline qint64 memoryMetric() const {
-        return m_memoryMetric;
+        return m_memoryMetric.loadAcquire();
     }
 
     KisTileDataStoreIterator* beginIteration();
@@ -159,18 +161,22 @@ private:
     friend class KisTileDataPoolerTest;
     KisSwappedDataStore m_swappedStore;
 
-    KisTileDataListIterator m_clockIterator;
+//    KisTileDataListIterator m_clockIterator;
 
     QMutex m_listLock;
     KisTileDataList m_tileDataList;
-    qint32 m_numTiles;
+//    qint32 m_numTiles;
+    QAtomicInt m_numTiles;
 
     /**
      * This metric is used for computing the volume
      * of memory occupied by tile data objects.
      * metric = num_bytes / (KisTileData::WIDTH * KisTileData::HEIGHT)
      */
-    qint64 m_memoryMetric;
+//    qint64 m_memoryMetric;
+    QBasicAtomicInteger<qint64> m_memoryMetric;
+    ConcurrentMap<quint64, KisTileData*> m_tileDataMap;
+    QBasicAtomicInteger<quint64> m_counter;
 };
 
 template<typename T>

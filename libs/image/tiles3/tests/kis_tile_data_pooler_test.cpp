@@ -80,7 +80,7 @@ void KisTileDataPoolerTest::testCycles()
         KisTileDataStore::instance()->beginIteration();
 
     while(iter->hasNext()) {
-        item = iter->next();
+        item = iter->peekNext();
 
         int expectedClones;
 
@@ -100,6 +100,8 @@ void KisTileDataPoolerTest::testCycles()
         PRETTY_TILE(i, item);
         QCOMPARE(item->m_clonesStack.size(), expectedClones);
         i++;
+
+        iter->next();
     }
 
 

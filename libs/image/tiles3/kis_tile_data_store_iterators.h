@@ -18,6 +18,9 @@
 #ifndef KIS_TILE_DATA_STORE_ITERATORS_H_
 #define KIS_TILE_DATA_STORE_ITERATORS_H_
 
+#include "3rdparty/lock_free_map/concurrent_map.h"
+#include "kis_tile_data.h"
+
 /**
  * KisTileDataStoreIterator,
  * KisTileDataStoreReverseIterator,
@@ -34,141 +37,234 @@
 
 class KisTileDataStoreIterator
 {
+//public:
+//    KisTileDataStoreIterator(KisTileDataList &list, KisTileDataStore *store)
+//        : m_list(list),
+//          m_store(store)
+//    {
+//        m_iterator = m_list.begin();
+//        m_end = m_list.end();
+//    }
+
+//    inline KisTileData* peekNext() {
+//        return *m_iterator;
+//    }
+
+//    inline KisTileData* next() {
+//        return *(m_iterator++);
+//    }
+
+//    inline bool hasNext() const {
+//        return m_iterator != m_end;
+//    }
+
+//    inline bool trySwapOut(KisTileData *td) {
+//        if(td->m_listIterator == m_iterator)
+//            m_iterator++;
+
+//        return m_store->trySwapTileData(td);
+//    }
+
+//private:
+//    KisTileDataList &m_list;
+//    KisTileDataListIterator m_iterator;
+//    KisTileDataListIterator m_end;
+//    KisTileDataStore *m_store;
 public:
-    KisTileDataStoreIterator(KisTileDataList &list, KisTileDataStore *store)
-        : m_list(list),
+    KisTileDataStoreIterator(ConcurrentMap<quint64, KisTileData*> &map, KisTileDataStore *store)
+        : m_map(map),
           m_store(store)
     {
-        m_iterator = m_list.begin();
-        m_end = m_list.end();
+        m_iterator.setMap(m_map);
     }
 
     inline KisTileData* peekNext() {
-        return *m_iterator;
+        return m_iterator.getValue();
     }
 
-    inline KisTileData* next() {
-        return *(m_iterator++);
+    inline void next() {
+        m_iterator.next();
     }
 
     inline bool hasNext() const {
-        return m_iterator != m_end;
+        return m_iterator.isValid();
     }
 
     inline bool trySwapOut(KisTileData *td) {
-        if(td->m_listIterator == m_iterator)
-            m_iterator++;
+//        if(td->m_tileNumber == m_iterator.getValue()->m_tileNumber)
+//            m_iterator.next();
 
         return m_store->trySwapTileData(td);
     }
 
 private:
-    KisTileDataList &m_list;
-    KisTileDataListIterator m_iterator;
-    KisTileDataListIterator m_end;
+    ConcurrentMap<quint64, KisTileData*> &m_map;
+    ConcurrentMap<quint64, KisTileData*>::Iterator m_iterator;
     KisTileDataStore *m_store;
 };
 
 class KisTileDataStoreReverseIterator
 {
+//public:
+//    KisTileDataStoreReverseIterator(KisTileDataList &list, KisTileDataStore *store)
+//        : m_list(list),
+//          m_store(store)
+//    {
+//        m_iterator = m_list.end();
+//        m_begin = m_list.begin();
+//    }
+
+//    inline KisTileData* peekNext() {
+//        return *(m_iterator-1);
+//    }
+
+//    inline KisTileData* next() {
+//        return *(--m_iterator);
+//    }
+
+//    inline bool hasNext() const {
+//        return m_iterator != m_begin;
+//    }
+
+//    inline bool trySwapOut(KisTileData *td) {
+//        if(td->m_listIterator == m_iterator)
+//            m_iterator++;
+
+//        return m_store->trySwapTileData(td);
+//    }
+
+//private:
+//    KisTileDataList &m_list;
+//    KisTileDataListIterator m_iterator;
+//    KisTileDataListIterator m_begin;
+//    KisTileDataStore *m_store;
 public:
-    KisTileDataStoreReverseIterator(KisTileDataList &list, KisTileDataStore *store)
-        : m_list(list),
+    KisTileDataStoreReverseIterator(ConcurrentMap<quint64, KisTileData*> &map, KisTileDataStore *store)
+        : m_map(map),
           m_store(store)
     {
-        m_iterator = m_list.end();
-        m_begin = m_list.begin();
+        m_iterator.setMap(m_map);
     }
 
     inline KisTileData* peekNext() {
-        return *(m_iterator-1);
+        return m_iterator.getValue();
     }
 
-    inline KisTileData* next() {
-        return *(--m_iterator);
+    inline void next() {
+        m_iterator.next();
     }
 
     inline bool hasNext() const {
-        return m_iterator != m_begin;
+        return m_iterator.isValid();
     }
 
     inline bool trySwapOut(KisTileData *td) {
-        if(td->m_listIterator == m_iterator)
-            m_iterator++;
+//        if(td->m_tileNumber == m_iterator.getValue()->m_tileNumber)
+//            m_iterator.next();
 
         return m_store->trySwapTileData(td);
     }
 
 private:
-    KisTileDataList &m_list;
-    KisTileDataListIterator m_iterator;
-    KisTileDataListIterator m_begin;
+    ConcurrentMap<quint64, KisTileData*> &m_map;
+    ConcurrentMap<quint64, KisTileData*>::Iterator m_iterator;
     KisTileDataStore *m_store;
 };
 
 class KisTileDataStoreClockIterator
 {
+//public:
+//    KisTileDataStoreClockIterator(KisTileDataListIterator startItem, KisTileDataList &list, KisTileDataStore *store)
+//        : m_list(list),
+//          m_store(store)
+//    {
+//        m_end = m_list.end();
+
+//        if(startItem == m_list.begin() ||
+//           startItem == m_end) {
+//            m_iterator = m_list.begin();
+//            m_startItem = m_end;
+//            m_endReached = true;
+//        }
+//        else  {
+//            m_startItem = startItem;
+//            m_iterator = startItem;
+//            m_endReached = false;
+//        }
+//    }
+
+//    inline KisTileData* peekNext() {
+//        if(m_iterator == m_end) {
+//            m_iterator = m_list.begin();
+//            m_endReached = true;
+//        }
+
+//        return *m_iterator;
+//    }
+
+//    inline KisTileData* next() {
+//        if(m_iterator == m_end) {
+//            m_iterator = m_list.begin();
+//            m_endReached = true;
+//        }
+
+//        return *(m_iterator++);
+//    }
+
+//    inline bool hasNext() const {
+//        return !(m_endReached && m_iterator == m_startItem);
+//    }
+
+//    inline bool trySwapOut(KisTileData *td) {
+//        if(td->m_listIterator == m_iterator)
+//            m_iterator++;
+
+//        return m_store->trySwapTileData(td);
+//    }
+
+//private:
+//    friend class KisTileDataStore;
+//    inline KisTileDataListIterator getFinalPosition() {
+//        return m_iterator;
+//    }
+
+//private:
+//    KisTileDataList &m_list;
+//    bool m_endReached;
+//    KisTileDataListIterator m_iterator;
+//    KisTileDataListIterator m_startItem;
+//    KisTileDataListIterator m_end;
+//    KisTileDataStore *m_store;
 public:
-    KisTileDataStoreClockIterator(KisTileDataListIterator startItem, KisTileDataList &list, KisTileDataStore *store)
-        : m_list(list),
+    KisTileDataStoreClockIterator(ConcurrentMap<quint64, KisTileData*> &map, KisTileDataStore *store)
+        : m_map(map),
           m_store(store)
     {
-        m_end = m_list.end();
-
-        if(startItem == m_list.begin() ||
-           startItem == m_end) {
-            m_iterator = m_list.begin();
-            m_startItem = m_end;
-            m_endReached = true;
-        }
-        else  {
-            m_startItem = startItem;
-            m_iterator = startItem;
-            m_endReached = false;
-        }
+        m_iterator.setMap(m_map);
     }
 
     inline KisTileData* peekNext() {
-        if(m_iterator == m_end) {
-            m_iterator = m_list.begin();
-            m_endReached = true;
-        }
-
-        return *m_iterator;
+        return m_iterator.getValue();
     }
 
-    inline KisTileData* next() {
-        if(m_iterator == m_end) {
-            m_iterator = m_list.begin();
-            m_endReached = true;
-        }
-
-        return *(m_iterator++);
+    inline void next() {
+        m_iterator.next();
     }
 
     inline bool hasNext() const {
-        return !(m_endReached && m_iterator == m_startItem);
+        return m_iterator.isValid();
     }
 
     inline bool trySwapOut(KisTileData *td) {
-        if(td->m_listIterator == m_iterator)
-            m_iterator++;
+//        if(td->m_tileNumber == m_iterator.getValue()->m_tileNumber)
+//            m_iterator.next();
 
         return m_store->trySwapTileData(td);
     }
 
 private:
-    friend class KisTileDataStore;
-    inline KisTileDataListIterator getFinalPosition() {
-        return m_iterator;
-    }
-
-private:
-    KisTileDataList &m_list;
-    bool m_endReached;
-    KisTileDataListIterator m_iterator;
-    KisTileDataListIterator m_startItem;
-    KisTileDataListIterator m_end;
+    ConcurrentMap<quint64, KisTileData*> &m_map;
+    ConcurrentMap<quint64, KisTileData*>::Iterator m_iterator;
     KisTileDataStore *m_store;
 };
 

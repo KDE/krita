@@ -49,15 +49,18 @@ void KisTileDataStoreTest::testClockIterator()
     KisTileData *item;
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[0]);
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[1]);
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[2]);
 
     QVERIFY(!iter->hasNext());
@@ -69,7 +72,8 @@ void KisTileDataStoreTest::testClockIterator()
     iter = KisTileDataStore::instance()->beginClockIteration();
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[0]);
 
     KisTileDataStore::instance()->endIteration(iter);
@@ -79,15 +83,18 @@ void KisTileDataStoreTest::testClockIterator()
     iter = KisTileDataStore::instance()->beginClockIteration();
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[1]);
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[2]);
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[0]);
 
     QVERIFY(!iter->hasNext());
@@ -104,11 +111,13 @@ void KisTileDataStoreTest::testClockIterator()
     iter = KisTileDataStore::instance()->beginClockIteration();
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[2]);
 
     QVERIFY(iter->hasNext());
-    item = iter->next();
+    item = iter->peekNext();
+    iter->next();
     QCOMPARE(item, tileDataList[0]);
 
     QVERIFY(!iter->hasNext());

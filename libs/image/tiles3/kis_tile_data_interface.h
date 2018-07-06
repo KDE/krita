@@ -202,7 +202,8 @@ private:
      * Iterator that points to a position in the list
      * where the tile data is stored
      */
-    KisTileDataListIterator m_listIterator;
+//    KisTileDataListIterator m_listIterator;
+    int m_tileNumber;
 
 private:
     /**

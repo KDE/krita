@@ -204,12 +204,17 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
     KisTileData *item;
 
     while(iter->hasNext()) {
-        item = iter->next();
+        item = iter->peekNext();
 
-        if(freedMetric >= needToFreeMetric) break;
+        if(freedMetric >= needToFreeMetric) {
+            iter->next();
+            break;
+        }
 
-
-        if(!strategy::isInteresting(item)) continue;
+        if(!strategy::isInteresting(item)) {
+            iter->next();
+            continue;
+        }
 
         if(strategy::swapOutFirst(item)) {
             if(iter->trySwapOut(item)) {
@@ -221,6 +226,7 @@ qint64 KisTileDataSwapper::pass(qint64 needToFreeMetric)
             additionalCandidates.append(item);
         }
 
+        iter->next();
     }
 
     Q_FOREACH (item, additionalCandidates) {

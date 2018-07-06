@@ -310,7 +310,7 @@ void KisTileDataPooler::getLists(Iter *iter,
     KisTileData *item;
 
     while(iter->hasNext()) {
-        item = iter->next();
+        item = iter->peekNext();
 
         tryFreeOrphanedClones(item);
 
@@ -331,6 +331,8 @@ void KisTileDataPooler::getLists(Iter *iter,
         } else {
             statRealMemory += item->pixelSize();
         }
+
+        iter->next();
     }
 
     DEBUG_LISTS(memoryOccupied,
@@ -406,8 +408,9 @@ void KisTileDataPooler::debugTileStatistics()
     KisTileData *item;
 
     while(iter->hasNext()) {
-        item = iter->next();
+        item = iter->peekNext();
         preallocatedTiles += item->m_clonesStack.size();
+        iter->next();
     }
 
     m_store->endIteration(iter);

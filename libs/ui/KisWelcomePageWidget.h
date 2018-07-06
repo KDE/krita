@@ -46,17 +46,19 @@ public Q_SLOTS:
 
     void slotUpdateThemeColors();
 
-private:
-    KisMainWindow* mainWindow;
-    QStandardItemModel *recentFilesModel;
-
     /// this could be called multiple times. If a recent document doesn't
     /// have a preview, an icon is used that needs to be updated
     void populateRecentDocuments();
 
+
+private:
+    KisMainWindow* mainWindow;
+    QStandardItemModel *recentFilesModel;
+
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
+    void slotClearRecentFiles();
 
     void recentDocumentClicked(QModelIndex index);
 

@@ -81,6 +81,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
         connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
         connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
+        connect(poweredByKDELink, SIGNAL(clicked(bool)), this, SLOT(slotKDESiteLink()));
 
 
         slotUpdateThemeColors();
@@ -127,7 +128,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
     clearRecentFilesLink->setStyleSheet(blendedStyle);
-
+    poweredByKDELink->setStyleSheet(blendedStyle);
     recentDocumentsListView->setStyleSheet(blendedStyle);
 
     newFileLink->setStyleSheet(blendedStyle);
@@ -260,4 +261,9 @@ void KisWelcomePageWidget::slotKritaWebsite()
 void KisWelcomePageWidget::slotSourceCode()
 {
     QDesktopServices::openUrl(QUrl("https://phabricator.kde.org/source/krita/"));
+}
+
+void KisWelcomePageWidget::slotKDESiteLink()
+{
+    QDesktopServices::openUrl(QUrl("https://userbase.kde.org/What_is_KDE"));
 }

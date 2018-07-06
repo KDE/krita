@@ -750,11 +750,18 @@ QList<QUrl> KisMainWindow::recentFilesUrls()
     return d->recentFiles->urls();
 }
 
+void KisMainWindow::clearRecentFiles()
+{
+    d->recentFiles->clear();
+}
+
 
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
+
+
 
 void KisMainWindow::updateCaption()
 {
@@ -2244,6 +2251,7 @@ void KisMainWindow::updateWindowMenu()
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
+        d->welcomePage->populateRecentDocuments(); // update recent documents since they probably changed
     }
 
     // enable/disable the toolbox docker if there are no documents open
@@ -2442,6 +2450,8 @@ void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
     KisConfig cfg;
+
+
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));

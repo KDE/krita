@@ -80,6 +80,8 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
         connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
         connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
+        connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
+
 
         slotUpdateThemeColors();
     }
@@ -124,6 +126,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     sourceCodeLink->setStyleSheet(blendedStyle);
     newFileLinkShortcut->setStyleSheet(blendedStyle);
     openFileShortcut->setStyleSheet(blendedStyle);
+    clearRecentFilesLink->setStyleSheet(blendedStyle);
 
     recentDocumentsListView->setStyleSheet(blendedStyle);
 
@@ -202,9 +205,6 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     recentDocumentsListView->setIconSize(QSize(40, 40));
     recentDocumentsListView->setModel(recentFilesModel);
-
-
-
 }
 
 
@@ -223,6 +223,13 @@ void KisWelcomePageWidget::slotNewFileClicked()
 void KisWelcomePageWidget::slotOpenFileClicked()
 {
     mainWindow->slotFileOpen();
+}
+
+void KisWelcomePageWidget::slotClearRecentFiles()
+{
+    mainWindow->clearRecentFiles();
+    mainWindow->reloadRecentFileList();
+    populateRecentDocuments();
 }
 
 void KisWelcomePageWidget::slotGoToManual()

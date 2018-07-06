@@ -113,6 +113,12 @@ public:
     QList<QUrl> recentFilesUrls();
 
     /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
+
+    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *
@@ -284,6 +290,11 @@ public Q_SLOTS:
 
     void windowFocused();
 
+    /**
+     * Reloads the recent documents list.
+     */
+    void reloadRecentFileList();
+
 
 
 private Q_SLOTS:
@@ -363,6 +374,7 @@ private Q_SLOTS:
      */
     void slotReloadFile();
 
+
     /**
      * File --> Import
      *
@@ -441,10 +453,6 @@ private:
 
     bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
 
-    /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
 
     /**
      * Updates the window caption based on the document info and path.

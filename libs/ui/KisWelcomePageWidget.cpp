@@ -204,6 +204,13 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     }
 
+
+    // hide clear and Recent files title if there are none
+    bool hasRecentFiles = mainWindow->recentFilesUrls().length() > 0;
+    recentDocumentsLabel->setVisible(hasRecentFiles);
+    clearRecentFilesLink->setVisible(hasRecentFiles);
+
+
     recentDocumentsListView->setIconSize(QSize(40, 40));
     recentDocumentsListView->setModel(recentFilesModel);
 }

@@ -24,6 +24,7 @@
 #include "kis_gauss_circle_mask_generator_p.h"
 #include "kis_curve_circle_mask_generator_p.h"
 #include "kis_gauss_rect_mask_generator_p.h"
+#include "kis_curve_rect_mask_generator_p.h"
 
 #include "kis_brush_mask_applicators.h"
 #include "kis_brush_mask_applicator_base.h"
@@ -69,6 +70,14 @@ MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicat
 MaskApplicatorFactory<KisGaussRectangleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
     return new KisBrushMaskVectorApplicator<KisGaussRectangleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
+}
+
+template<>
+template<>
+MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
+MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+{
+    return new KisBrushMaskVectorApplicator<KisCurveRectangleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 
@@ -402,6 +411,113 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         if (!excludeMask.isFull()) {
             Vc::float_v fullFade = vValMax - (vAlphafactor * (VcExtraMath::erf((vhalfWidth + xr) * vXFade) + VcExtraMath::erf((vhalfWidth - xr) * vXFade))
                                         * (VcExtraMath::erf((vhalfHeight + yr) * vYFade) + VcExtraMath::erf((vhalfHeight - yr) * vYFade)));
+
+            // apply antialias fader
+            d->fadeMaker.apply2DFader(fullFade,excludeMask,xr,yr);
+
+            Vc::float_m mask;
+
+            // Mask in the inner circe of the mask
+            mask = fullFade < vZero;
+            fullFade.setZero(mask);
+
+            // Mask the outter circle
+            mask = fullFade > 254.974f;
+            fullFade(mask) = vValMax;
+
+            // Mask (value - value), presicion errors.
+            Vc::float_v vFade = fullFade / vValMax;
+
+            // return original vValue values before vFade transform
+            vFade(excludeMask) = vValue;
+            vFade.store(bufferPointer, Vc::Aligned);
+
+        } else {
+          vValue.store(bufferPointer, Vc::Aligned);
+      }
+      currentIndices = currentIndices + increment;
+
+      bufferPointer += Vc::float_v::size();
+    }
+}
+
+struct KisCurveRectangleMaskGenerator::FastRowProcessor
+{
+    FastRowProcessor(KisCurveRectangleMaskGenerator *maskGenerator)
+        : d(maskGenerator->d.data()) {}
+
+    template<Vc::Implementation _impl>
+    void process(float* buffer, int width, float y, float cosa, float sina,
+                 float centerX, float centerY);
+
+    KisCurveRectangleMaskGenerator::Private *d;
+};
+
+template<> void KisCurveRectangleMaskGenerator::
+FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
+                                   float centerX, float centerY)
+{
+    float y_ = y - centerY;
+    float sinay_ = sina * y_;
+    float cosay_ = cosa * y_;
+
+    float* bufferPointer = buffer;
+
+    qreal* curveDataPointer = d->curveData.data();
+
+    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+
+    Vc::float_v increment((float)Vc::float_v::size());
+    Vc::float_v vCenterX(centerX);
+
+    Vc::float_v vCosa(cosa);
+    Vc::float_v vSina(sina);
+    Vc::float_v vCosaY_(cosay_);
+    Vc::float_v vSinaY_(sinay_);
+
+    Vc::float_v vYCoeff(d->ycoeff);
+    Vc::float_v vXCoeff(d->xcoeff);
+    Vc::float_v vCurveResolution(d->curveResolution);
+
+    Vc::float_v vOne(Vc::One);
+    Vc::float_v vZero(Vc::Zero);
+    Vc::float_v vValMax(255.f);
+
+    for (int i=0; i < width; i+= Vc::float_v::size()){
+
+        Vc::float_v x_ = currentIndices - vCenterX;
+
+        Vc::float_v xr = x_ * vCosa - vSinaY_;
+        Vc::float_v yr = abs(x_ * vSina + vCosaY_);
+
+        Vc::float_v vValue;
+
+        // check if we need to apply fader on values
+        Vc::float_m excludeMask = d->fadeMaker.needFade(xr,yr);
+        vValue(excludeMask) = vOne;
+
+        if (!excludeMask.isFull()) {
+            // We need to mask the extra area given for aliniation
+            // the next operation should never give values above 1
+            Vc::float_v preSIndex = abs(xr) * vXCoeff;
+            Vc::float_v preTIndex = abs(yr) * vYCoeff;
+
+            preSIndex(preSIndex > vOne) = vOne;
+            preTIndex(preTIndex > vOne) = vOne;
+
+            Vc::SimdArray<quint16,Vc::float_v::size()> sIndex( round(preSIndex * vCurveResolution));
+            Vc::SimdArray<quint16,Vc::float_v::size()> tIndex( round(preTIndex * vCurveResolution));
+
+            Vc::SimdArray<quint16,Vc::float_v::size()> sIndexInverted = vCurveResolution - sIndex;
+            Vc::SimdArray<quint16,Vc::float_v::size()> tIndexInverted = vCurveResolution - tIndex;
+
+            Vc::float_v vCurvedDataSIndex(curveDataPointer, sIndex);
+            Vc::float_v vCurvedDataTIndex(curveDataPointer, tIndex);
+            Vc::float_v vCurvedDataSIndexInv(curveDataPointer, sIndexInverted);
+            Vc::float_v vCurvedDataTIndexInv(curveDataPointer, tIndexInverted);
+
+            Vc::float_v fullFade = vValMax * (vOne - (vCurvedDataSIndex * (vOne - vCurvedDataSIndexInv) *
+                                    vCurvedDataTIndex * (vOne - vCurvedDataTIndexInv)));
 
             // apply antialias fader
             d->fadeMaker.apply2DFader(fullFade,excludeMask,xr,yr);

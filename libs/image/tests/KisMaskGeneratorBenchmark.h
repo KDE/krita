@@ -25,7 +25,6 @@ class KisMaskGeneratorBenchmark : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-
     void testDefaultScalarMask();
     void testDefaultVectorMask();
 
@@ -37,6 +36,10 @@ private Q_SLOTS:
 
     void testRectangularGaussScalarMask();
     void testRectangularGaussVectorMask();
+
+    void testRectangularSoftScalarMask();
+    void testRectangularSoftVectorMask();
+
 };
 
 #endif // KISMASKGENERATORBENCHMARK_H

@@ -65,14 +65,14 @@ public:
         QImage vectorImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
         vectorImage.invertPixels(); // Make pixel color black
 
-        // Check for differences, max errors: 0
-        QPoint tmpPt;
-        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 2, 0));
-
         if (renderImage || QTest::currentTestFailed()) {
             scalarImage.save(QString(getTypeName(type) + "_scalar_mask.png"),"PNG");
             vectorImage.save(QString(getTypeName(type) + "_vector_mask.png"),"PNG");
         }
+        // Check for differences, max errors: 0
+        QPoint tmpPt;
+        QVERIFY(TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 2, 0));
+
     }
 
 
@@ -115,6 +115,17 @@ public:
                     KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type,false);
                     break;
 
+                    }
+                case RECT_SOFT:
+                    {
+                    KisCubicCurve pointsCurve;
+                    pointsCurve.fromString(QString("0,1;1,0"));
+                    KisCurveRectangleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, pointsCurve, true);
+                    KisCurveRectangleMaskGenerator bCircScalar(bCircVectr);
+                    bCircScalar.resetMaskApplicator(true); // Force usage of scalar backend
+
+                    KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type,false);
+                    break;
                     }
                 default:
                     {
@@ -165,7 +176,7 @@ protected:
 
 void KisMaskSimilarityTest::testCircleMask()
 {
-    QRect bounds(0,0,500,500);
+    QRect bounds(0,0,700,700);
     {
     KisCircleMaskGenerator circVectr(499.5, 1.0, 0.5, 0.5, 2, true);
     KisCircleMaskGenerator circScalar(circVectr);
@@ -177,7 +188,7 @@ void KisMaskSimilarityTest::testCircleMask()
 
 void KisMaskSimilarityTest::testGaussCircleMask()
 {
-    QRect bounds(0,0,520,520);
+    QRect bounds(0,0,700,700);
     {
         KisGaussCircleMaskGenerator circVectr(499.5, 1.0, 1, 1, 2, true);
         circVectr.setDiameter(499.5);
@@ -192,7 +203,7 @@ void KisMaskSimilarityTest::testGaussCircleMask()
 
 void KisMaskSimilarityTest::testSoftCircleMask()
 {
-    QRect bounds(0,0,520,520);
+    QRect bounds(0,0,700,700);
     KisCubicCurve pointsCurve;
     pointsCurve.fromString(QString("0,1;1,0"));
     {
@@ -210,7 +221,7 @@ void KisMaskSimilarityTest::testSoftCircleMask()
 
 void KisMaskSimilarityTest::testGaussRectMask()
 {
-    QRect bounds(0,0,540,540);
+    QRect bounds(0,0,700,700);
     {
         KisGaussRectangleMaskGenerator circVectr(499.5, 1.0, 0.5, 0.2, 2, true);
         KisGaussRectangleMaskGenerator circScalar(circVectr);
@@ -220,6 +231,22 @@ void KisMaskSimilarityTest::testGaussRectMask()
     }
 
     KisMaskSimilarityTester::exahustiveTest(bounds,RECT_GAUSS);
+}
+
+void KisMaskSimilarityTest::testSoftRectMask()
+{
+    QRect bounds(0,0,700,700);
+    KisCubicCurve pointsCurve;
+    pointsCurve.fromString(QString("0,1;1,0"));
+    {
+        KisCurveRectangleMaskGenerator circVectr(499.5, 1.0, 0.5, 0.2, 2, pointsCurve, true);
+        KisCurveRectangleMaskGenerator circScalar(circVectr);
+        circVectr.setDiameter(499.5);
+
+        circScalar.resetMaskApplicator(true); // Force usage of scalar backend
+        KisMaskSimilarityTester(circScalar.applicator(), circVectr.applicator(), bounds, RECT_SOFT);
+    }
+    KisMaskSimilarityTester::exahustiveTest(bounds,RECT_SOFT);
 }
 
 QTEST_MAIN(KisMaskSimilarityTest)

@@ -32,7 +32,8 @@ class QDomDocument;
  */
 class KRITAIMAGE_EXPORT KisCurveRectangleMaskGenerator : public KisMaskGenerator
 {
-
+public:
+    struct FastRowProcessor;
 public:
 
     KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve& curve, bool antialiasEdges);
@@ -48,9 +49,13 @@ public:
     
     void setSoftness(qreal softness) override;
 
+    bool shouldVectorize() const override;
+    KisBrushMaskApplicatorBase* applicator() override;
+    void resetMaskApplicator(bool forceScalar);
+
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> d;
 };
 
 #endif

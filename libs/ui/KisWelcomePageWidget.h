@@ -70,6 +70,7 @@ private Q_SLOTS:
     void slotUserCommunity();
     void slotKritaWebsite();
     void slotSourceCode();
+    void slotKDESiteLink();
 
 };
 

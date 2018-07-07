@@ -265,16 +265,14 @@ bool KisReferenceImage::saveImage(KoStore *store) const
         return false;
     }
 
+    bool saved = false;
+
     KoStoreDevice storeDev(store);
-    if (!storeDev.open(QIODevice::WriteOnly)) {
-        return false;
+    if (storeDev.open(QIODevice::WriteOnly)) {
+        saved = d->image.save(&storeDev, "PNG");
     }
 
-    if (!d->image.save(&storeDev, "PNG")) {
-        return false;
-    }
-
-    return store->close();
+    return store->close() && saved;
 }
 
 bool KisReferenceImage::loadImage(KoStore *store)

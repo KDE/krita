@@ -94,10 +94,15 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
     if (auto* referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
+        result = true;
         Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
             auto *reference = dynamic_cast<KisReferenceImage*>(shape);
             KIS_ASSERT_RECOVER_RETURN_VALUE(reference, false);
-            reference->saveImage(m_store);
+            bool saved = reference->saveImage(m_store);
+            if (!saved) {
+                m_errorMessages << i18n("Failed to save reference image %1.", reference->url());
+                result = false;
+            }
         }
     }
     else if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {

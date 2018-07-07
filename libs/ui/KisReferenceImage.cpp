@@ -20,13 +20,13 @@
 #include "KisReferenceImage.h"
 
 #include <QImage>
+#include <QMessageBox>
 #include <QPainter>
 
 #include <kundo2command.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoTosContainer_p.h>
-
 #include <krita_utils.h>
 #include <kis_coordinates_converter.h>
 #include <kis_dom_utils.h>
@@ -48,10 +48,10 @@ struct KisReferenceImage::Private {
         : q(q)
     {}
 
-    void loadFromFile() {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(src.startsWith("file://"));
+    bool loadFromFile() {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(src.startsWith("file://"), false);
         QString filename = src.mid(7);
-        image.load(filename);
+        return image.load(filename);
     }
 
     void updateCache() {
@@ -119,15 +119,25 @@ KisReferenceImage::KisReferenceImage(const KisReferenceImage &rhs)
 KisReferenceImage::~KisReferenceImage()
 {}
 
-KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const KisCoordinatesConverter &converter)
+KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent)
 {
     KisReferenceImage *reference = new KisReferenceImage();
     reference->d->src = QString("file://") + filename;
-    reference->d->loadFromFile();
+    bool ok = reference->d->loadFromFile();
 
-    QRect r = QRect(QPoint(), reference->d->image.size());
-    QSizeF shapeSize = converter.imageToDocument(r).size();
-    reference->setSize(shapeSize);
+    if (ok) {
+        QRect r = QRect(QPoint(), reference->d->image.size());
+        QSizeF shapeSize = converter.imageToDocument(r).size();
+        reference->setSize(shapeSize);
+    } else {
+        delete reference;
+
+        if (parent) {
+            QMessageBox::critical(parent, i18nc("@title:window", "Krita"), i18n("Could not load %1.", filename));
+        }
+
+        return nullptr;
+    }
 
     return reference;
 }
@@ -180,6 +190,17 @@ bool KisReferenceImage::embed()
 bool KisReferenceImage::hasLocalFile()
 {
     return d->src.startsWith("file://");
+}
+
+QString KisReferenceImage::url() const
+{
+    return d->src;
+}
+
+void KisReferenceImage::setUrl(const QString &url)
+{
+    d->src = url;
+    d->embed = false;
 }
 
 QColor KisReferenceImage::getPixel(QPointF position)
@@ -268,8 +289,7 @@ bool KisReferenceImage::saveImage(KoStore *store) const
 bool KisReferenceImage::loadImage(KoStore *store)
 {
     if (d->src.startsWith("file://")) {
-        d->loadFromFile();
-        return true;
+        return d->loadFromFile();
     }
 
     if (!store->open(d->src)) {

@@ -582,11 +582,14 @@ void KisView::dropEvent(QDropEvent *event)
                             }
                         }
                         else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
-                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter);
-                            reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
-                            d->referenceImagesDecoration->addReferenceImage(reference);
+                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter, this);
 
-                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            if (reference) {
+                                reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
+                                d->referenceImagesDecoration->addReferenceImage(reference);
+
+                                KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            }
                         }
 
                     }

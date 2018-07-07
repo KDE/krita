@@ -139,15 +139,15 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
 
             while (!reference->loadImage(m_store)) {
-                if (!reference->hasLocalFile()) {
-                    m_errorMessages << i18n("Could not load embedded reference image %1 ", reference->url());
+                if (reference->embed()) {
+                    m_errorMessages << i18n("Could not load embedded reference image %1 ", reference->internalFile());
                     break;
                 } else {
                     QString msg = i18nc(
                         "@info",
                         "A reference image linked to an external file could not be loaded.\n\n"
                         "Path: %1\n\n"
-                        "Do you want to select another location?", reference->url());
+                        "Do you want to select another location?", reference->filename());
 
                     int locateManually = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
@@ -161,7 +161,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
                     if (url.isEmpty()) {
                         break;
                     } else {
-                        reference->setUrl(QString("file://") + url);
+                        reference->setFilename(url);
                     }
                 }
             }

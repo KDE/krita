@@ -35,7 +35,12 @@
 
 struct KisReferenceImage::Private {
     KisReferenceImage *q;
-    QString src;
+
+    // Filename within .kra (for embedding)
+    QString internalFilename;
+
+    // File on disk (for linking)
+    QString externalFilename;
 
     QImage image;
     QImage cachedImage;
@@ -49,9 +54,8 @@ struct KisReferenceImage::Private {
     {}
 
     bool loadFromFile() {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(src.startsWith("file://"), false);
-        QString filename = src.mid(7);
-        return image.load(filename);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
+        return image.load(externalFilename);
     }
 };
 
@@ -108,7 +112,7 @@ KisReferenceImage::~KisReferenceImage()
 KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent)
 {
     KisReferenceImage *reference = new KisReferenceImage();
-    reference->d->src = QString("file://") + filename;
+    reference->d->externalFilename = filename;
     bool ok = reference->d->loadFromFile();
 
     if (ok) {
@@ -173,7 +177,7 @@ qreal KisReferenceImage::saturation() const
 
 void KisReferenceImage::setEmbed(bool embed)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(embed || d->src.startsWith("file://"));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(embed || !d->externalFilename.isEmpty());
     d->embed = embed;
 }
 
@@ -184,17 +188,23 @@ bool KisReferenceImage::embed()
 
 bool KisReferenceImage::hasLocalFile()
 {
-    return d->src.startsWith("file://");
+    return !d->externalFilename.isEmpty();
 }
 
-QString KisReferenceImage::url() const
+QString KisReferenceImage::filename() const
 {
-    return d->src;
+    return d->externalFilename;
 }
 
-void KisReferenceImage::setUrl(const QString &url)
+QString KisReferenceImage::internalFile() const
 {
-    d->src = url;
+    return d->internalFilename;
+}
+
+
+void KisReferenceImage::setFilename(const QString &filename)
+{
+    d->externalFilename = filename;
     d->embed = false;
 }
 
@@ -216,9 +226,11 @@ void KisReferenceImage::saveXml(QDomDocument &document, QDomElement &parentEleme
     QDomElement element = document.createElement("referenceimage");
 
     if (d->embed) {
-        d->src = QString("reference_images/%1.png").arg(id);
+        d->internalFilename = QString("reference_images/%1.png").arg(id);
     }
-    element.setAttribute("src", d->src);
+    
+    const QString src = d->embed ? d->internalFilename : (QString("file://") + d->externalFilename);
+    element.setAttribute("src", src);
 
     const QSizeF &shapeSize = size();
     element.setAttribute("width", KisDomUtils::toString(shapeSize.width()));
@@ -237,8 +249,14 @@ KisReferenceImage * KisReferenceImage::fromXml(const QDomElement &elem)
     auto *reference = new KisReferenceImage();
 
     const QString &src = elem.attribute("src");
-    reference->d->src = src;
-    reference->d->embed = !src.startsWith("file://");
+
+    if (src.startsWith("file://")) {
+        reference->d->externalFilename = src.mid(7);
+        reference->d->embed = false;
+    } else {
+        reference->d->internalFilename = src;
+        reference->d->embed = true;
+    }
 
     qreal width = KisDomUtils::toDouble(elem.attribute("width", "100"));
     qreal height = KisDomUtils::toDouble(elem.attribute("height", "100"));
@@ -261,7 +279,7 @@ bool KisReferenceImage::saveImage(KoStore *store) const
 {
     if (!d->embed) return true;
 
-    if (!store->open(d->src)) {
+    if (!store->open(d->internalFilename)) {
         return false;
     }
 
@@ -277,11 +295,11 @@ bool KisReferenceImage::saveImage(KoStore *store) const
 
 bool KisReferenceImage::loadImage(KoStore *store)
 {
-    if (d->src.startsWith("file://")) {
+    if (!d->embed) {
         return d->loadFromFile();
     }
 
-    if (!store->open(d->src)) {
+    if (!store->open(d->internalFilename)) {
         return false;
     }
 

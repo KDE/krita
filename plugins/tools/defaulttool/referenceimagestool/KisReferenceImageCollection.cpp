@@ -93,7 +93,7 @@ bool KisReferenceImageCollection::load(QIODevice *io)
         if (reference->loadImage(store.data())) {
             references.append(reference);
         } else {
-            failures << reference->url();
+            failures << (reference->embed() ? reference->internalFile() : reference->filename());
             delete reference;
         }
         element = element.nextSiblingElement("referenceimage");

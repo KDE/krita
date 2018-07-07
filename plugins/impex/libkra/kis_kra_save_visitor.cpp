@@ -100,7 +100,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
             KIS_ASSERT_RECOVER_RETURN_VALUE(reference, false);
             bool saved = reference->saveImage(m_store);
             if (!saved) {
-                m_errorMessages << i18n("Failed to save reference image %1.", reference->url());
+                m_errorMessages << i18n("Failed to save reference image %1.", reference->internalFile());
                 result = false;
             }
         }

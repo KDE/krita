@@ -71,8 +71,9 @@ public:
     bool embed();
     bool hasLocalFile();
 
-    void setUrl(const QString &url);
-    QString url() const;
+    void setFilename(const QString &filename);
+    QString filename() const;
+    QString internalFile() const;
 
     void paint(QPainter &gc, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 

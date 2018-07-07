@@ -505,11 +505,11 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             preSIndex(preSIndex > vOne) = vOne;
             preTIndex(preTIndex > vOne) = vOne;
 
-            Vc::SimdArray<quint16,Vc::float_v::size()> sIndex( round(preSIndex * vCurveResolution));
-            Vc::SimdArray<quint16,Vc::float_v::size()> tIndex( round(preTIndex * vCurveResolution));
+            Vc::float_v::IndexType sIndex( round(preSIndex * vCurveResolution));
+            Vc::float_v::IndexType tIndex( round(preTIndex * vCurveResolution));
 
-            Vc::SimdArray<quint16,Vc::float_v::size()> sIndexInverted = vCurveResolution - sIndex;
-            Vc::SimdArray<quint16,Vc::float_v::size()> tIndexInverted = vCurveResolution - tIndex;
+            Vc::float_v::IndexType sIndexInverted = vCurveResolution - sIndex;
+            Vc::float_v::IndexType tIndexInverted = vCurveResolution - tIndex;
 
             Vc::float_v vCurvedDataSIndex(curveDataPointer, sIndex);
             Vc::float_v vCurvedDataTIndex(curveDataPointer, tIndex);

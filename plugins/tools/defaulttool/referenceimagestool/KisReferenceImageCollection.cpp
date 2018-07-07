@@ -103,7 +103,7 @@ bool KisReferenceImageCollection::load(QIODevice *io)
         QMessageBox::warning(
                 0,
                 i18nc("@title:window", "Krita"),
-                "The following reference images could not be loaded:\n" + failures.join('\n'),
+                i18n("The following reference images could not be loaded:\n%1", failures.join('\n')),
                 QMessageBox::Ok, QMessageBox::Ok
         );
 

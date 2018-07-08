@@ -164,10 +164,21 @@ QRect KisTiledExtentManager::extent() const
 
 void KisTiledExtentManager::updateExtent()
 {
-    KIS_ASSERT_RECOVER_RETURN((m_colArray[0] == 0) == (m_rowArray[0] == 0));
+    bool colArrayEmpty = false;
+    bool rowArrayEmpty = false;
+    {
+        QReadLocker l(&m_colArrayLock);
+        colArrayEmpty = m_colArray[0] == 0;
+    }
+    {
+        QReadLocker l(&m_rowArrayLock);
+        rowArrayEmpty = m_rowArray[0] == 0;
+    }
+
+    KIS_ASSERT_RECOVER_RETURN(colArrayEmpty == rowArrayEmpty);
 
     // here we check for only one map for efficiency reasons
-    if (m_colArray[0] == 0) {
+    if (colArrayEmpty && rowArrayEmpty) {
         QWriteLocker l(&m_mutex);
         m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
     } else {

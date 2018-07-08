@@ -34,8 +34,6 @@ public:
         : KoColorSetEntry(color, name)
     { }
     virtual ~KisSwatch() { }
-public:
-    KisSwatch &operator =(const KisSwatch &source);
 };
 
 #endif // KISSWATCH_H

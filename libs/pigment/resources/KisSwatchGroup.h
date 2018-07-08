@@ -109,7 +109,6 @@ private:
     QString m_name;
     QVector<Column> m_colorMatrix;
     int m_nColors;
-    int m_nLastRowEntries;
 };
 
 #endif // KISSWATCHGROUP_H

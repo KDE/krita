@@ -30,6 +30,16 @@ public:
     Private(KoColorSet *a_colorSet);
 
 public:
+    KisSwatchGroup &global() {
+        Q_ASSERT(groups.contains(GLOBAL_GROUP_NAME));
+        return groups[GLOBAL_GROUP_NAME];
+    }
+    const KisSwatchGroup &global() const {
+        Q_ASSERT(groups.contains(GLOBAL_GROUP_NAME));
+        return groups[GLOBAL_GROUP_NAME];
+    }
+
+public:
     bool init();
 
     bool saveGpl(QIODevice *dev) const;

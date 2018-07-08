@@ -26,7 +26,6 @@ quint32 KisSwatchGroup::DEFAULT_N_COLUMN = 16;
 KisSwatchGroup::KisSwatchGroup()
     : m_colorMatrix(DEFAULT_N_COLUMN)
     , m_nColors(0)
-    , m_nLastRowEntries(0)
 { }
 
 void KisSwatchGroup::setEntry(const KisSwatch &e, int x, int y)
@@ -107,6 +106,12 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
     if (nColumns() == 0) {
         setNColumns(DEFAULT_N_COLUMN);
     }
+
+    if (m_nColors == 0) {
+        setEntry(e, 0, 0);
+        return;
+    }
+
     int maxY = nRows() - 1;
     int y = maxY;
     for (int x = m_colorMatrix.size() - 1; x >= 0; x--) {
@@ -119,6 +124,7 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
             }
             // else just add it to the right
             setEntry(e, x, y);
+            break;
         }
     }
 }

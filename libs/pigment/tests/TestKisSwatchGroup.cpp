@@ -80,4 +80,20 @@ void TestKisSwatchGroup::testChangeColumnNumber()
     QCOMPARE(newNRows, g.nRows());
 }
 
+void TestKisSwatchGroup::testAddEntry()
+{
+    KisSwatchGroup g2;
+    g2.setNColumns(3);
+    for (int i = 0; i != 3; i++) {
+        g2.addEntry(KisSwatch());
+    }
+    QCOMPARE(g2.nRows(), 1);
+    QCOMPARE(g2.nColumns(), 3);
+    QCOMPARE(g2.nColors(), 3);
+    g2.addEntry(KisSwatch());
+    QCOMPARE(g2.nRows(), 2);
+    QCOMPARE(g2.nColumns(), 3);
+    QCOMPARE(g2.nColors(), 4);
+}
+
 QTEST_GUILESS_MAIN(TestKisSwatchGroup)

@@ -200,7 +200,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
     if (event->button()== Qt::LeftButton) {
         foreground = true;
     } else if (event->button() == Qt::RightButton) {
-        m_d->entryClickedMenu.exec();
+        m_d->entryClickedMenu.exec(QCursor::pos());
     }
     entrySelection(foreground);
 }

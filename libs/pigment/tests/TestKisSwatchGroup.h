@@ -15,6 +15,7 @@ private Q_SLOTS:
     void testReplaceEntries();
     void testRemoveEntries();
     void testChangeColumnNumber();
+    void testAddEntry();
 private:
     KisSwatchGroup g;
     QHash<QPair<int, int>, KisSwatch> testSwatches;

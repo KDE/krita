@@ -113,6 +113,14 @@ public:
      */
     QStringList getGroupNames();
 
+    /**
+     * @brief getGroup
+     * @param name
+     * @return the group with the name given; global group if no parameter is given
+     * null pointer if not found.
+     */
+    KisSwatchGroup *getGroup(const QString &name = QString());
+
     bool changeGroupName(QString oldGroupName, QString newGroupName);
 
     /**

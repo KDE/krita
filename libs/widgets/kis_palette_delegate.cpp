@@ -44,7 +44,7 @@ void KisPaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 {
     painter->save();
 
-    if (! index.isValid())
+    if (!index.isValid())
         return;
 
     const bool isSelected = option.state & QStyle::State_Selected;

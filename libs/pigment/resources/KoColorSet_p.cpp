@@ -196,13 +196,16 @@ KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
 {
     groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
+    groupNames.append(GLOBAL_GROUP_NAME);
 }
 
 bool KoColorSet::Private::init()
 {
-    // global.clear(); // just in case this is a reload (eg by KoEditColorSetDialog),
-    groups.clear();
+    // just in case this is a reload (eg by KoEditColorSetDialog),
     groupNames.clear();
+    groups.clear();
+    groupNames.append(GLOBAL_GROUP_NAME);
+    groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
 
     if (colorSet->filename().isNull()) {
         warnPigment << "Cannot load palette" << colorSet->name() << "there is no filename set";
@@ -251,12 +254,12 @@ bool KoColorSet::Private::init()
     }
     colorSet->setValid(res);
 
-    QImage img(groups[GLOBAL_GROUP_NAME].nColumns() * 4, groups[GLOBAL_GROUP_NAME].nRows() * 4, QImage::Format_ARGB32);
+    QImage img(global().nColumns() * 4, global().nRows() * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
-    for (int x = 0; x < groups[GLOBAL_GROUP_NAME].nColumns(); x++) {
-        for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
-            QColor c = groups[GLOBAL_GROUP_NAME].getEntry(x, y).color().toQColor();
+    for (int x = 0; x < global().nColumns(); x++) {
+        for (int y = 0; y < global().nRows(); y++) {
+            QColor c = global().getEntry(x, y).color().toQColor();
             gc.fillRect(x * 4, y * 4, 4, 4, c);
         }
     }
@@ -273,12 +276,12 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
     int columns = 0;
     stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << columns << "\n#\n";
 
-    for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
+    for (int y = 0; y < global().nRows(); y++) {
         for (int x = 0; x < columns; x++) {
-            if (!groups[GLOBAL_GROUP_NAME].checkEntry(x, y)) {
+            if (!global().checkEntry(x, y)) {
                 continue;
             }
-            const KisSwatch& entry = groups[GLOBAL_GROUP_NAME].getEntry(x, y);
+            const KisSwatch& entry = global().getEntry(x, y);
             QColor c = entry.color().toQColor();
             stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
             if (entry.name().isEmpty())
@@ -328,12 +331,11 @@ bool KoColorSet::Private::loadGpl()
     if (lines[index].toLower().contains("columns")) {
         columnsText = lines[index].split(":")[1].trimmed();
         columns = columnsText.toInt();
-        groups[GLOBAL_GROUP_NAME].setNColumns(columns);
+        global().setNColumns(columns);
         index = 3;
     }
 
 
-    int x = 0, y = 0;
     for (qint32 i = index; i < lines.size(); i++) {
         if (lines[i].startsWith('#')) {
             comment += lines[i].mid(1).trimmed() + ' ';
@@ -353,9 +355,15 @@ bool KoColorSet::Private::loadGpl()
             QString name = a.join(" ");
             e.setName(name.isEmpty() ? i18n("Untitled") : name);
 
-            groups[GLOBAL_GROUP_NAME].addEntry(e);
+            global().addEntry(e);
+            if (colorSet->name() == "Markers")
+                warnPigment << "loadGpl - i:" << i;
         }
     }
+    warnPigment << "loadGpl - set name:" << colorSet->name();
+    warnPigment << "loadGpl - color count:" << global().nColors();
+    warnPigment << "loadGpl - row count:" << global().nRows();
+    warnPigment << "loadGpl - column count:" << global().nColumns();
     return true;
 }
 
@@ -369,7 +377,7 @@ bool KoColorSet::Private::loadAct()
         quint8 g = data[i+1];
         quint8 b = data[i+2];
         e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
-        groups[GLOBAL_GROUP_NAME].addEntry(e);
+        global().addEntry(e);
     }
     return true;
 }

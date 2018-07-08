@@ -129,7 +129,6 @@ quint32 KoColorSet::nColorsGroup(QString groupName)
 
 QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpace)
 {
-    int closestX = 0, closestY = 0;
     quint8 highestPercentage = 0;
     quint8 testPercentage = 0;
     KoColor compare = color;
@@ -158,7 +157,7 @@ QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpac
 void KoColorSet::add(KisSwatch c, const QString &groupName)
 {
     KisSwatchGroup &modifiedGroup = d->groups.contains(groupName)
-            ? d->groups[groupName] : d->groups[QString()];
+            ? d->groups[groupName] : d->global();
     modifiedGroup.addEntry(c);
 }
 
@@ -181,8 +180,8 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y)
             yInGroup -= d->groups[groupName].nRows();
         }
     }
-    const KisSwatchGroup &groupFoundIn = d->groups[nameGroupFoundIn == QString()
-            ? Private::GLOBAL_GROUP_NAME : nameGroupFoundIn];
+    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == QString()
+            ? d->global() : d->groups[nameGroupFoundIn];
     Q_ASSERT(groupFoundIn.checkEntry(x, yInGroup));
     return groupFoundIn.getEntry(x, yInGroup);
 }
@@ -190,15 +189,10 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y)
 KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
 {
     KisSwatch e;
-    bool entryFound;
-    const KisSwatchGroup &sourceGroup = d->groups.contains(groupName)
-            ? d->groups[groupName] : d->groups[QString()];
-    // warnPigment << "Color group "<< groupName <<" not found";
-    entryFound = sourceGroup.checkEntry(x, y);
-    if (entryFound) {
+    const KisSwatchGroup &sourceGroup = groupName == QString()
+            ? d->global() : d->groups[groupName];
+    if (sourceGroup.checkEntry(x, y)) {
         e = sourceGroup.getEntry(x, y);
-    } else {
-        warnPigment << x << " " << y <<"doesn't exist in" << nColorsGroup(groupName);
     }
     return e;
 }
@@ -207,6 +201,7 @@ QStringList KoColorSet::getGroupNames()
 {
     if (d->groupNames.size() != d->groups.size()) {
         warnPigment << "mismatch between groups and the groupnames list.";
+        warnPigment << "<" << d->groupNames.size() << " " << d->groups.size() << ">";
         return QStringList(d->groups.keys());
     }
     return d->groupNames;
@@ -311,11 +306,22 @@ QString KoColorSet::defaultFileExtension() const
 
 int KoColorSet::rowCount()
 {
-    int res = d->groups[Private::GLOBAL_GROUP_NAME].nRows();
-    Q_FOREACH (QString name, d->groupNames) {
+    int res = 0;
+    for (const QString &name : d->groupNames) {
         res += d->groups[name].nRows();
     }
     return res;
+}
+
+KisSwatchGroup *KoColorSet::getGroup(const QString &name)
+{
+    if (name.isEmpty()) {
+        return &(d->global());
+    }
+    if (!d->groups.contains(name)) {
+        return Q_NULLPTR;
+    }
+    return &(d->groups[name]);
 }
 
 /*

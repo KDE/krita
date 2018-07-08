@@ -51,7 +51,7 @@ public:
 
     QDockWidget* createDockWidget() override
     {
-        LogDockerDock * dockWidget = new LogDockerDock();
+                                        LogDockerDock * dockWidget = new LogDockerDock();
         dockWidget->setObjectName(id());
 
         return dockWidget;

@@ -33,7 +33,21 @@ public:
     void unsetCanvas() override {}
 
 private Q_SLOTS:
+
+    void toggleLogging(bool toggle);
+    void clearLog();
+    void saveLog();
+    void settings();
+
 private:
+    static QTextEdit *s_textEdit;
+    static QTextCharFormat s_debug;
+    static QTextCharFormat s_info;
+    static QTextCharFormat s_warning;
+    static QTextCharFormat s_critical;
+    static QTextCharFormat s_fatal;
+    static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 };
 
 

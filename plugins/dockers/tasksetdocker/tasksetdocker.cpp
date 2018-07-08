@@ -17,28 +17,17 @@
 
 #include "tasksetdocker.h"
 
-#include <stdlib.h>
-#include <stdint.h>
-
-#include <QTimer>
-
-
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
 
 #include <KoDockFactoryBase.h>
-
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "KisViewManager.h"
-
-#include "tasksetdocker_dock.h"
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(TasksetDockerPluginFactory, "krita_tasksetdocker.json", registerPlugin<TasksetDockerPlugin>();)
+#include "tasksetdocker_dock.h"
+
+K_PLUGIN_FACTORY_WITH_JSON(TasksetDockerPluginFactory,
+                           "krita_tasksetdocker.json",
+                           registerPlugin<TasksetDockerPlugin>();)
 
 class TasksetDockerDockFactory : public KoDockFactoryBase {
 public:
@@ -59,7 +48,7 @@ public:
     QDockWidget* createDockWidget() override
     {
         TasksetDockerDock * dockWidget = new TasksetDockerDock();
-        
+
         dockWidget->setObjectName(id());
 
         return dockWidget;

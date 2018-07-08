@@ -44,11 +44,17 @@ private:
 
 private:
     mutable QReadWriteLock m_mutex;
-    QReadWriteLock m_colMapGuard;
-    QReadWriteLock m_rowMapGuard;
-    QMap<int, QAtomicInt> m_colMap;
-    QMap<int, QAtomicInt> m_rowMap;
     QRect m_currentExtent;
+
+    QAtomicInt m_minCol;
+    QAtomicInt m_maxCol;
+    QAtomicInt m_colArray[1024];
+    QReadWriteLock m_colArrayLock;
+
+    QAtomicInt m_minRow;
+    QAtomicInt m_maxRow;
+    QAtomicInt m_rowArray[1024];
+    QReadWriteLock m_rowArrayLock;
 };
 
 #endif // KISTILEDEXTENTMANAGER_H

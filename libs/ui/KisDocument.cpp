@@ -1247,12 +1247,6 @@ bool KisDocument::loadNativeFormat(const QString & file_)
     return openUrl(QUrl::fromLocalFile(file_));
 }
 
-void KisDocument::setModified()
-{
-    d->modified = true;
-
-}
-
 void KisDocument::setModified(bool mod)
 {
     if (mod) {
@@ -1270,12 +1264,12 @@ void KisDocument::setModified(bool mod)
     //dbgUI<<" url:" << url.path();
     //dbgUI<<" mod="<<mod<<" MParts mod="<<KisParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 
-    if (mod && !d->modifiedAfterAutosave) {
+    if (mod && !d->autoSaveTimer->isActive()) {
         // First change since last autosave -> start the autosave timer
         setNormalAutoSaveInterval();
     }
-    d->modifiedAfterAutosave |= mod;
-    d->modifiedWhileSaving |= mod;
+    d->modifiedAfterAutosave = mod;
+    d->modifiedWhileSaving = mod;
 
     if (mod == isModified())
         return;

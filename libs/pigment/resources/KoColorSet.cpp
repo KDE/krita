@@ -86,12 +86,14 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 
 bool KoColorSet::save()
 {
+    /*
     QFile file(filename());
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
     saveToDevice(&file);
     file.close();
+    */
     return true;
 }
 
@@ -201,7 +203,6 @@ QStringList KoColorSet::getGroupNames()
 {
     if (d->groupNames.size() != d->groups.size()) {
         warnPigment << "mismatch between groups and the groupnames list.";
-        warnPigment << "<" << d->groupNames.size() << " " << d->groups.size() << ">";
         return QStringList(d->groups.keys());
     }
     return d->groupNames;

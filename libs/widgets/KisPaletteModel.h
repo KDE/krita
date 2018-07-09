@@ -94,7 +94,7 @@ public:
      * proper function to handle adding entries.
      * @return whether successful.
      */
-    bool addColorSetEntry(KoColorSetEntry entry, QString groupName=QString());
+    bool addColorSetEntry(KisSwatch entry, QString groupName=QString());
     /**
      * @brief removeEntry
      * proper function to remove the colorsetentry at the given index.

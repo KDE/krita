@@ -34,10 +34,6 @@ public:
         Q_ASSERT(groups.contains(GLOBAL_GROUP_NAME));
         return groups[GLOBAL_GROUP_NAME];
     }
-    const KisSwatchGroup &global() const {
-        Q_ASSERT(groups.contains(GLOBAL_GROUP_NAME));
-        return groups[GLOBAL_GROUP_NAME];
-    }
 
 public:
     bool init();

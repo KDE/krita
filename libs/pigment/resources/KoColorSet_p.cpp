@@ -276,12 +276,18 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
     int columns = 0;
     stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << columns << "\n#\n";
 
-    for (int y = 0; y < global().nRows(); y++) {
+    /*
+     * Qt doesn't provide an interface to get a const reference to a QHash, that is
+     * the underlying data structure of groups. Therefore, directly use
+     * groups[GLOBAL_GROUP_NAME] so that saveGpl can stay const
+     */
+
+    for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
         for (int x = 0; x < columns; x++) {
-            if (!global().checkEntry(x, y)) {
+            if (!groups[GLOBAL_GROUP_NAME].checkEntry(x, y)) {
                 continue;
             }
-            const KisSwatch& entry = global().getEntry(x, y);
+            const KisSwatch& entry = groups[GLOBAL_GROUP_NAME].getEntry(x, y);
             QColor c = entry.color().toQColor();
             stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
             if (entry.name().isEmpty())
@@ -356,14 +362,8 @@ bool KoColorSet::Private::loadGpl()
             e.setName(name.isEmpty() ? i18n("Untitled") : name);
 
             global().addEntry(e);
-            if (colorSet->name() == "Markers")
-                warnPigment << "loadGpl - i:" << i;
         }
     }
-    warnPigment << "loadGpl - set name:" << colorSet->name();
-    warnPigment << "loadGpl - color count:" << global().nColors();
-    warnPigment << "loadGpl - row count:" << global().nRows();
-    warnPigment << "loadGpl - column count:" << global().nColumns();
     return true;
 }
 

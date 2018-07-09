@@ -94,6 +94,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_ui->visualSelector->hide();
     }
 
+    m_d->colorSetChooser = new KisColorsetChooser(this);
+    connect(m_d->colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
     if (!m_d->paletteModel) {
         m_d->paletteModel = new KisPaletteModel(this);
         m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
@@ -121,8 +123,6 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         connect(m_ui->paletteBox, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(slotSetColorFromColorSetEntry(KoColorSetEntry)));
         connect(m_ui->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetColorFromColorList()));
         //m_ui->paletteBox->setDisplayRenderer(displayRenderer);
-        m_d->colorSetChooser = new KisColorsetChooser(this);
-        connect(m_d->colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
 
         m_ui->bnColorsetChooser->setPopupWidget(m_d->colorSetChooser);
 

@@ -35,7 +35,7 @@ class KisPaletteModel;
 class QWheelEvent;
 
 
-class KRITAWIDGETS_EXPORT KisPaletteView : public KoTableView
+class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 {
     Q_OBJECT
 public:

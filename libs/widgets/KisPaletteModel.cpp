@@ -84,21 +84,23 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
             entryList.append(QString::number(0));
             return entryList;
         }
-        default: // should not happen
-            return false;
         }
     } else {
-        KisSwatch entry = m_colorSet->getColorGroup(index.row(), index.column(), groupName);
-        if (!(m_colorSet->getGroup(groupName)->checkEntry(index.row(), index.column()))) {
-            return false;
+        bool entryPresent = m_colorSet->getGroup(groupName)->checkEntry(index.row(), index.column());
+        KisSwatch entry;
+        if (entryPresent) {
+             entry = m_colorSet->getColorGroup(index.row(), index.column(), groupName);
         }
         switch (role) {
         case Qt::ToolTipRole:
         case Qt::DisplayRole: {
-            return entry.name();
+            return entryPresent ? entry.name() : i18n("Empty slot");
         }
         case Qt::BackgroundRole: {
-            QColor color = m_displayRenderer->toQColor(entry.color());
+            QColor color(0, 0, 0, 0);
+            if (entryPresent) {
+                color = m_displayRenderer->toQColor(entry.color());
+            }
             return QBrush(color);
         }
         case IsHeaderRole: {
@@ -109,10 +111,9 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
             entryList.append(groupName);
             return entryList;
         }
-        default: // should not happen
-            return false;
         }
     }
+    return QVariant(); // should not happen
 }
 
 int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
@@ -148,9 +149,9 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
+    Q_ASSERT(m_colorSet);
     int yInGroup = row;
     KisSwatchGroup *group = Q_NULLPTR;
-    Q_ASSERT(m_colorSet);
     for (const QString &currGroupName : m_colorSet->getGroupNames()) {
         if (yInGroup >= m_colorSet->getGroup(currGroupName)->nRows()) {
             // minus 1 for group name line
@@ -260,59 +261,39 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 
 KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
-    /*
-    KoColorSetEntry blank =  KoColorSetEntry();
-    if (!index.isValid()) {
-        return blank;
-    }
-    QStringList entryList = qvariant_cast<QStringList>(data(index, RetrieveEntryRole));
-    if (entryList.isEmpty()) {
-        return blank;
-    }
-    QString groupName = entryList.at(0);
-    quint32 indexInGroup = entryList.at(1).toUInt();
-    return m_colorSet->getColorGroup(indexInGroup, groupName);
-    */
     return KisSwatch();
 }
 
-bool KisPaletteModel::addColorSetEntry(KoColorSetEntry entry, QString groupName)
+bool KisPaletteModel::addColorSetEntry(KisSwatch entry, QString groupName)
 {
+    KisSwatchGroup *group = m_colorSet->getGroup(groupName);
+    if (group->nColors() % group->nColumns() == 0) {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        m_colorSet->add(entry, groupName);
+        endInsertRows();
+    } else {
+        m_colorSet->add(entry, groupName);
+    }
+    m_colorSet->save();
     return true;
 }
 
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
-    return true;
-    /*
     QStringList entryList =  qvariant_cast<QStringList>(index.data(RetrieveEntryRole));
     if (entryList.empty()) {
         return false;
     }
-    QString groupName = entryList.at(0);
-    quint32 indexInGroup = entryList.at(1).toUInt();
 
-    if (qvariant_cast<bool>(index.data(IsHeaderRole))==false) {
-        if (index.column()-1<0
-                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
-                && index.row()-1>0
-                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
-            beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
-        }
-        m_colorSet->removeAt(indexInGroup, groupName);
-        if (index.column()-1<0
-                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
-                && index.row()-1>0
-                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
-            endRemoveRows();
-        }
+    if (qvariant_cast<bool>(data(index, IsHeaderRole))==false) {
+        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.row(), index.column());
     } else {
-        beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
+        QString groupName = static_cast<KisSwatchGroup*>(index.internalPointer())->name();
+        beginRemoveRows(QModelIndex(), index.row(), index.row());
         m_colorSet->removeGroup(groupName, keepColors);
         endRemoveRows();
     }
     return true;
-    */
 }
 
 bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)

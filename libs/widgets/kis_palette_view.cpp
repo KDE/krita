@@ -36,6 +36,7 @@
 #include "kis_palette_delegate.h"
 #include "KisPaletteModel.h"
 #include "kis_color_button.h"
+#include <KisSwatch.h>
 
 struct KisPaletteView::Private
 {
@@ -55,7 +56,7 @@ struct KisPaletteView::Private
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
-    : KoTableView(parent)
+    : QTableView(parent)
     , m_d(new Private)
 {
     setShowGrid(false);
@@ -96,7 +97,6 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
-    /*
     KoDialog *window = new KoDialog(this);
     window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
     QFormLayout *editableItems = new QFormLayout(window);
@@ -126,24 +126,19 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
         if (groupName == defaultGroupName) {
             groupName = QString();
         }
-        KoColorSetEntry newEntry;
+        KisSwatch newEntry;
         newEntry.setColor(bnColor->color());
         newEntry.setName(lnName->text());
         newEntry.setId(lnIDName->text());
         newEntry.setSpotColor(chkSpot->isChecked());
         m_d->model->addColorSetEntry(newEntry, groupName);
-        m_d->model->colorSet()->save();
         return true;
     }
     return false;
-    */
-    return true;
 }
 
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
-    return true;
-    /*
     bool keepColors = true;
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         KoDialog *window = new KoDialog();
@@ -163,7 +158,6 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         m_d->model->colorSet()->save();
     }
     return true;
-    */
 }
 
 void KisPaletteView::trySelectClosestColor(KoColor color)
@@ -207,10 +201,8 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 
 void KisPaletteView::paletteModelChanged()
 {
-    /*
-    updateView();
-    updateRows();
-    */
+    // updateView();
+    // updateRows();
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
@@ -276,7 +268,7 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 
         event->accept();
     } else {
-        KoTableView::wheelEvent(event);
+        QTableView::wheelEvent(event);
     }
 }
 

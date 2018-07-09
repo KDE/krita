@@ -73,17 +73,13 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
-    m_wdgPaletteDock->bnAddDialog->setVisible(false);
-    m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
-    m_wdgPaletteDock->bnAddGroup->setIconSize(QSize(16, 16));
-
+    // m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
 
     m_model = new KisPaletteModel(this);
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
     connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
-    connect(m_wdgPaletteDock->bnAddGroup, SIGNAL(clicked(bool)), m_wdgPaletteDock->paletteView, SLOT(addGroupWithDialog()));
 
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
@@ -175,8 +171,8 @@ void PaletteDockerDock::resourceChanged(KoColorSet *resource)
 void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
 {
     m_model->setColorSet(colorSet);
-    m_wdgPaletteDock->paletteView->updateView();
-    m_wdgPaletteDock->paletteView->updateRows();
+    // m_wdgPaletteDock->paletteView->updateView();
+    // m_wdgPaletteDock->paletteView->updateRows();
     m_wdgPaletteDock->cmbNameList->clear();
 
     /*
@@ -243,7 +239,6 @@ void PaletteDockerDock::setColorFromNameList(int index)
 void PaletteDockerDock::addColorForeground()
 {
     if (m_resourceProvider) {
-        //setup dialog
         m_wdgPaletteDock->paletteView->addEntryWithDialog(m_resourceProvider->fgColor());
     }
 }

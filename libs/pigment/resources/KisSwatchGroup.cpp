@@ -92,7 +92,7 @@ int KisSwatchGroup::nRows() const
      */
 
     int res = 0;
-    Q_FOREACH (const Column &c, m_colorMatrix) {
+    for (const Column &c : m_colorMatrix) {
         if (c.empty()) {
             continue;
         }

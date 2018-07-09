@@ -40,7 +40,9 @@ void KisPaletteDelegate::setCrossedKeyword(const QString &value)
     m_crossedKeyword = value;
 }
 
-void KisPaletteDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+void KisPaletteDelegate::paint(QPainter *painter,
+                               const QStyleOptionViewItem &option,
+                               const QModelIndex &index) const
 {
     painter->save();
 

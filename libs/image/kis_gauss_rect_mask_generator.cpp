@@ -100,7 +100,7 @@ void KisGaussRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->halfHeight = height * 0.5 - 2.5 * yfade;
     d->alphafactor = 255.0 / (4.0 * erf(d->halfWidth * d->xfade) * erf(d->halfHeight * d->yfade));
 
-    if (isnan(d->alphafactor)) d->alphafactor = 0.0f; // erf can return nan if ratio is 0
+    if (std::isnan(d->alphafactor)) d->alphafactor = 0.0f; // erf can return nan if ratio is 0
 
     d->fadeMaker.setLimits(0.5 * width, 0.5 * height);
 }

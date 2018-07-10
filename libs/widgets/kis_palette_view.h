@@ -48,8 +48,6 @@ public:
     KisPaletteModel* paletteModel() const;
 
 public:
-    int sizeHintForColumn(int column) const override;
-    int sizeHintForRow(int row) const override;
 
     /**
      * @brief setAllowModification
@@ -104,7 +102,6 @@ private Q_SLOTS:
     void modifyEntry(QModelIndex index);
 
 private:
-    void updateEntrySize();
 
 private:
     struct Private;

@@ -44,7 +44,7 @@ void KisPaletteDelegate::paint(QPainter *painter,
 
     const int minSize = qMin(option.rect.width(), option.rect.height());
     const bool isSelected = option.state & QStyle::State_Selected;
-    const int borderWidth = 1;
+    const int borderWidth = 3;
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));

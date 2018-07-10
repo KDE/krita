@@ -81,10 +81,10 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         }
         }
     } else {
-        bool entryPresent = m_colorSet->getGroup(groupName)->checkEntry(index.row(), index.column());
+        bool entryPresent = m_colorSet->getGroup(groupName)->checkEntry(index.column(), index.row());
         KisSwatch entry;
         if (entryPresent) {
-             entry = m_colorSet->getColorGroup(index.row(), index.column(), groupName);
+             entry = m_colorSet->getColorGroup(index.column(), index.row(), groupName);
         }
         switch (role) {
         case Qt::ToolTipRole:
@@ -161,7 +161,7 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
         yInGroup = Q_INFINITY;
         column = Q_INFINITY;
     }
-    return createIndex(column, yInGroup, group);
+    return createIndex(yInGroup, column, group);
 }
 
 void KisPaletteModel::setColorSet(KoColorSet* colorSet)
@@ -277,13 +277,12 @@ bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
     if (qvariant_cast<bool>(data(index, IsHeaderRole))==false) {
-        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.row(), index.column());
+        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(), index.row());
     } else {
         QString groupName = static_cast<KisSwatchGroup*>(index.internalPointer())->name();
         beginRemoveRows(QModelIndex(), index.row(), index.row());
         m_colorSet->removeGroup(groupName, keepColors);
         endRemoveRows();
-        emit dataChanged(index, index);
     }
     return true;
 }
@@ -510,6 +509,6 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
-    group->setEntry(entry, index.row(), index.column());
+    group->setEntry(entry, index.column(), index.row());
     emit dataChanged(index, index);
 }

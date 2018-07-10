@@ -46,6 +46,7 @@ public:
     QString observerName() override { return "LogDockerDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override {}
+    void setMainWindow(QMainWindow *mainWindow) override;
 
 private Q_SLOTS:
 
@@ -54,7 +55,7 @@ private Q_SLOTS:
     void saveLog();
     void settings();
     void insertMessage(QtMsgType type, const QString &msg);
-
+    void changeTheme();
 
 private:
 

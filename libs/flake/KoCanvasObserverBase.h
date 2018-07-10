@@ -25,6 +25,7 @@ class KoCanvasObserverBasePrivate;
 
 #include "kritaflake_export.h"
 #include <QString>
+#include <QMainWindow>
 
 /**
  * An abstract canvas observer interface class.
@@ -56,6 +57,12 @@ public:
      * @return observed canvas, can be 0
      */
     KoCanvasBase* observedCanvas() const;
+
+    /**
+     * @brief setMainWindow provides a pointer to the mainwindow this docker belongs to.
+     */
+    virtual void setMainWindow(QMainWindow *mainWindow) {Q_UNUSED(mainWindow)};
+
 protected:
     /**
      * re-implement this method in your canvas observer. It will be called

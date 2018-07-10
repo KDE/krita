@@ -142,7 +142,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         paletteView->setPaletteModel(paletteModel);
         m_gridLayout->addWidget(paletteView);
         /*
-        for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
+        for (quint32 i = 0; i < m_activeColorSet->colorCount(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
             patch->setColor(c.color());
@@ -179,7 +179,7 @@ void KoEditColorSetWidget::addColor()
         connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
-        m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/m_activeColorSet->columnCount(), m_activeColorSet->nColors()%m_activeColorSet->columnCount());
+        m_gridLayout->addWidget(patch, m_activeColorSet->colorCount()/m_activeColorSet->columnCount(), m_activeColorSet->colorCount()%m_activeColorSet->columnCount());
         m_activeColorSet->add(newEntry);
     }
 }
@@ -188,7 +188,7 @@ void KoEditColorSetWidget::removeColor()
 {
     Q_ASSERT(m_activeColorSet);
     /*
-    for (quint32 i = 0; i < m_activeColorSet->nColors(); i++) {
+    for (quint32 i = 0; i < m_activeColorSet->colorCount(); i++) {
         KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
         if (m_activePatch->color() == c.color()) {
             m_activeColorSet->removeAt(i);

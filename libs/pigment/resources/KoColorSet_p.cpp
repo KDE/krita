@@ -254,11 +254,11 @@ bool KoColorSet::Private::init()
     }
     colorSet->setValid(res);
 
-    QImage img(global().nColumns() * 4, global().nRows() * 4, QImage::Format_ARGB32);
+    QImage img(global().columnCount() * 4, global().rowCount() * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
-    for (int x = 0; x < global().nColumns(); x++) {
-        for (int y = 0; y < global().nRows(); y++) {
+    for (int x = 0; x < global().columnCount(); x++) {
+        for (int y = 0; y < global().rowCount(); y++) {
             QColor c = global().getEntry(x, y).color().toQColor();
             gc.fillRect(x * 4, y * 4, 4, 4, c);
         }
@@ -282,7 +282,7 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
      * groups[GLOBAL_GROUP_NAME] so that saveGpl can stay const
      */
 
-    for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
+    for (int y = 0; y < groups[GLOBAL_GROUP_NAME].rowCount(); y++) {
         for (int x = 0; x < columns; x++) {
             if (!groups[GLOBAL_GROUP_NAME].checkEntry(x, y)) {
                 continue;
@@ -337,7 +337,7 @@ bool KoColorSet::Private::loadGpl()
     if (lines[index].toLower().contains("columns")) {
         columnsText = lines[index].split(":")[1].trimmed();
         columns = columnsText.toInt();
-        global().setNColumns(columns);
+        global().setColumnCount(columns);
         index = 3;
     }
 
@@ -1065,9 +1065,9 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute("version", "1.0");
         root.setAttribute("name", colorSet->name());
         root.setAttribute("comment", comment);
-        root.setAttribute("columns", groups[GLOBAL_GROUP_NAME].nColumns());
-        for (int x = 0; x < groups[GLOBAL_GROUP_NAME].nColumns(); x++) {
-            for (int y = 0; y < groups[GLOBAL_GROUP_NAME].nRows(); y++) {
+        root.setAttribute("columns", groups[GLOBAL_GROUP_NAME].columnCount());
+        for (int x = 0; x < groups[GLOBAL_GROUP_NAME].columnCount(); x++) {
+            for (int y = 0; y < groups[GLOBAL_GROUP_NAME].rowCount(); y++) {
                 // Only save non-builtin profiles.=
                 /*
                 const KoColorProfile *profile = entry.color().colorSpace()->profile();
@@ -1089,8 +1089,8 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
             QDomElement gl = doc.createElement("Group");
             gl.setAttribute("name", groupName);
             root.appendChild(gl);
-            for (int x = 0; x < groups[groupName].nColumns(); x++) {
-                for (int y = 0; y < groups[groupName].nRows(); y++) {
+            for (int x = 0; x < groups[groupName].columnCount(); x++) {
+                for (int y = 0; y < groups[groupName].rowCount(); y++) {
                     // Only save non-builtin profiles.=
                     /*
                     const KoColorProfile *profile = entry.color().colorSpace()->profile();

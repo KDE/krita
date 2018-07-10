@@ -146,9 +146,9 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     int yInGroup = row;
     KisSwatchGroup *group = Q_NULLPTR;
     for (const QString &currGroupName : m_colorSet->getGroupNames()) {
-        if (yInGroup >= m_colorSet->getGroup(currGroupName)->nRows()) {
+        if (yInGroup >= m_colorSet->getGroup(currGroupName)->rowCount()) {
             // minus 1 for group name line
-            yInGroup = yInGroup - m_colorSet->getGroup(currGroupName)->nRows() - 1;
+            yInGroup = yInGroup - m_colorSet->getGroup(currGroupName)->rowCount() - 1;
         } else {
             group = m_colorSet->getGroup(currGroupName);
             break;
@@ -181,7 +181,7 @@ QModelIndex KisPaletteModel::indexFromId(int i) const
     return QModelIndex();
     /*
     QModelIndex index = QModelIndex();
-    if (!colorSet() || colorSet()->nColors() == 0) {
+    if (!colorSet() || colorSet()->colorCount() == 0) {
         return index;
     }
 
@@ -263,7 +263,7 @@ KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) cons
 bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
 {
     KisSwatchGroup *group = m_colorSet->getGroup(groupName);
-    if (group->checkEntry(group->nColumns(), group->nRows())) {
+    if (group->checkEntry(group->columnCount(), group->rowCount())) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         m_colorSet->add(entry, groupName);
         endInsertRows();

@@ -133,7 +133,7 @@ public:
      * @brief nColors
      * @return total colors in palette.
      */
-    quint32 nColors();
+    quint32 colorCount();
 
     /**
      * @brief addGroup

@@ -28,17 +28,10 @@
 
 KisPaletteDelegate::KisPaletteDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
-{
-}
+{ }
 
 KisPaletteDelegate::~KisPaletteDelegate()
-{
-}
-
-void KisPaletteDelegate::setCrossedKeyword(const QString &value)
-{
-    m_crossedKeyword = value;
-}
+{ }
 
 void KisPaletteDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
@@ -49,43 +42,33 @@ void KisPaletteDelegate::paint(QPainter *painter,
     if (!index.isValid())
         return;
 
-    const bool isSelected = option.state & QStyle::State_Selected;
     const int minSize = qMin(option.rect.width(), option.rect.height());
-    const int maxWidth = qBound(2, minSize / 6, 4);
-    const int width = isSelected ? maxWidth : 1;
+    const bool isSelected = option.state & QStyle::State_Selected;
+    const int borderWidth = 1;
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
         QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());
         }
-        QRect paintRect = kisGrowRect(option.rect, -width);
+        QRect paintRect = kisGrowRect(option.rect, -borderWidth);
         painter->drawText(paintRect, name);
     } else {
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());
+        } else {
+            option.palette.background();
         }
-        QRect paintRect = kisGrowRect(option.rect, -width);
+        QRect paintRect = kisGrowRect(option.rect, -borderWidth);
         QBrush brush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
         painter->fillRect(paintRect, brush);
     }
+
     painter->restore();
-
-    QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
-    if (!m_crossedKeyword.isNull() && name.toLower().contains(m_crossedKeyword)) {
-        QRect crossRect = kisGrowRect(option.rect, -maxWidth);
-
-        painter->save();
-        painter->setRenderHint(QPainter::Antialiasing, true);
-        painter->setPen(QPen(Qt::white, 2.5));
-        painter->drawLine(crossRect.topLeft(), crossRect.bottomRight());
-        painter->setPen(QPen(Qt::red, 1.0));
-        painter->drawLine(crossRect.topLeft(), crossRect.bottomRight());
-        painter->restore();
-    }
 }
 
-QSize KisPaletteDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const
+QSize KisPaletteDelegate::sizeHint(const QStyleOptionViewItem &option,
+                                   const QModelIndex &) const
 {
     return option.decorationSize;
 }

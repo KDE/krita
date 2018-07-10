@@ -26,6 +26,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QMenu>
+#include <QtMath> // qFloor
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -37,6 +38,8 @@
 #include "KisPaletteModel.h"
 #include "kis_color_button.h"
 #include <KisSwatch.h>
+
+int KisPaletteView::MINROWHEIGHT = 10;
 
 struct KisPaletteView::Private
 {
@@ -116,8 +119,8 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     editableItems->addRow(i18n("Color"), bnColor);
     editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
     cmbGroups->setCurrentIndex(0);
-    lnName->setText(i18nc("Part of a default name for a color","Color")+" "+QString::number(m_d->model->colorSet()->nColors()+1));
-    lnIDName->setText(QString::number(m_d->model->colorSet()->nColors()+1));
+    lnName->setText(i18nc("Part of a default name for a color","Color")+" "+QString::number(m_d->model->colorSet()->colorCount()+1));
+    lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount()+1));
     bnColor->setColor(color);
     chkSpot->setChecked(false);
 
@@ -221,9 +224,6 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void KisPaletteView::paletteModelChanged()
-{ }
-
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {
@@ -320,4 +320,17 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         }
     }
     */
+}
+
+int KisPaletteView::sizeHintForColumn(int column) const
+{
+    Q_UNUSED(column);
+    return qFloor(width() / m_d->model->columnCount());
+}
+
+int KisPaletteView::sizeHintForRow(int row) const
+{
+    Q_UNUSED(row);
+    int columnWidth = sizeHintForColumn(0);
+    return columnWidth < MINROWHEIGHT ? MINROWHEIGHT : columnWidth;
 }

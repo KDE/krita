@@ -59,7 +59,7 @@ int PaletteColorsModel::rowCount(const QModelIndex &parent) const
         return 0;
     if (!d->colorSet)
         return 0;
-    return d->colorSet->nColors();
+    return d->colorSet->colorCount();
 }
 
 QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
@@ -135,7 +135,7 @@ void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
     if ( !d->view )
         return;
 
-    if (index >= 0 && index < (int)d->colorSet->nColors()) {
+    if (index >= 0 && index < (int)d->colorSet->colorCount()) {
         /*
         if (setBackgroundColor)
             d->view->resourceProvider()->setBGColor(d->colorSet->getColorGlobal(index).color());

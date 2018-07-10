@@ -67,7 +67,7 @@ bool KisSwatchGroup::removeEntry(int x, int y)
     }
 }
 
-void KisSwatchGroup::setNColumns(int nColumns)
+void KisSwatchGroup::setColumnCount(int nColumns)
 {
     Q_ASSERT(nColumns >= 0);
     if (nColumns < m_colorMatrix.size()) {
@@ -84,7 +84,7 @@ KisSwatch KisSwatchGroup::getEntry(int x, int y) const
     return m_colorMatrix[x][y];
 }
 
-int KisSwatchGroup::nRows() const
+int KisSwatchGroup::rowCount() const
 {
     /*
      * shouldn't have too great a performance impact...
@@ -103,8 +103,8 @@ int KisSwatchGroup::nRows() const
 
 void KisSwatchGroup::addEntry(const KisSwatch &e)
 {
-    if (nColumns() == 0) {
-        setNColumns(DEFAULT_N_COLUMN);
+    if (columnCount() == 0) {
+        setColumnCount(DEFAULT_N_COLUMN);
     }
 
     if (m_nColors == 0) {
@@ -112,7 +112,7 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
         return;
     }
 
-    int maxY = nRows() - 1;
+    int maxY = rowCount() - 1;
     int y = maxY;
     for (int x = m_colorMatrix.size() - 1; x >= 0; x--) {
         if (checkEntry(x, maxY)) {

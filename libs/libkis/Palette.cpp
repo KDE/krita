@@ -37,7 +37,7 @@ Palette::~Palette()
 int Palette::numberOfEntries() const
 {
     if (!d->palette) return 0;
-    return d->palette->nColors();
+    return d->palette->colorCount();
 }
 
 int Palette::columnCount()
@@ -85,7 +85,7 @@ bool Palette::removeGroup(QString name, bool keepColors)
 int Palette::colorsCountTotal()
 {
     if (!d->palette) return 0;
-    return d->palette->nColors();
+    return d->palette->colorCount();
 }
 
 int Palette::colorsCountGroup(QString name)

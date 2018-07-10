@@ -182,8 +182,8 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_wdgPaletteDock->cmbNameList->clear();
 
     /*
-    if (colorSet && colorSet->nColors()>0) {
-        for (quint32 i = 0; i< colorSet->nColors(); i++) {
+    if (colorSet && colorSet->colorCount()>0) {
+        for (quint32 i = 0; i< colorSet->colorCount(); i++) {
             KoColorSetEntry entry = colorSet->getColorGlobal(i);
             QPixmap colorSquare = QPixmap(32, 32);
             if (entry.spotColor()) {

@@ -38,6 +38,8 @@ class QWheelEvent;
 class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 {
     Q_OBJECT
+private:
+    static int MINROWHEIGHT;
 public:
     KisPaletteView(QWidget *parent = 0);
     ~KisPaletteView() override;
@@ -45,11 +47,9 @@ public:
     void setPaletteModel(KisPaletteModel *model);
     KisPaletteModel* paletteModel() const;
 
-    /**
-     * @brief updateRows
-     * update the rows so they have the proper columnspanning.
-     */
-    void updateRows();
+public:
+    int sizeHintForColumn(int column) const override;
+    int sizeHintForRow(int row) const override;
 
     /**
      * @brief setAllowModification
@@ -65,6 +65,14 @@ public:
      * @param value
      */
     void setCrossedKeyword(const QString &value);
+    /**
+     * add an entry with a dialog window.
+     */
+    bool addEntryWithDialog(KoColor color);
+    /**
+     * remove entry with a dialog window.(Necessary for groups.
+     */
+    bool removeEntryWithDialog(QModelIndex index);
 
 Q_SIGNALS:
     /**
@@ -77,20 +85,15 @@ Q_SIGNALS:
     void sigSetEntry(const QModelIndex &index);
 
 public Q_SLOTS:
-    void paletteModelChanged();
-    /**
-     * add an entry with a dialog window.
-     */
-    bool addEntryWithDialog(KoColor color);
-    /**
-     * remove entry with a dialog window.(Necessary for groups.
-     */
-    bool removeEntryWithDialog(QModelIndex index);
     /**
      *  This tries to select the closest color in the palette.
      *  This doesn't update the foreground color, just the visual selection.
      */
     void trySelectClosestColor(KoColor color);
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 
 private Q_SLOTS:
     /**
@@ -99,9 +102,7 @@ private Q_SLOTS:
      * if modification isn't allow(@see setAllowModification), this does nothing.
      */
     void modifyEntry(QModelIndex index);
-protected:
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
+private:
 
 private:
     struct Private;

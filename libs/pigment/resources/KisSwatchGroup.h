@@ -50,11 +50,11 @@ public:
     void setName(const QString &name) { m_name = name; }
     QString name() const { return m_name; }
 
-    void setNColumns(int nColumns);
-    int nColumns() const { return m_colorMatrix.size(); }
+    void setColumnCount(int nColumns);
+    int columnCount() const { return m_colorMatrix.size(); }
 
-    int nRows() const;
-    int nColors() const { return m_nColors; }
+    int rowCount() const;
+    int colorCount() const { return m_nColors; }
 
     /**
      * @brief checkEntry

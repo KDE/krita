@@ -334,7 +334,7 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
     m_d->paletteModel->setColorSet(set);
     m_ui->cmbNameList->clear();
     /*
-    for (quint32 i = 0; i< set->nColors(); i++) {
+    for (quint32 i = 0; i< set->colorCount(); i++) {
         KoColorSetEntry entry = set->getColorGlobal(i);
         QPixmap colorSquare = QPixmap(32, 32);
         if (entry.spotColor()) {

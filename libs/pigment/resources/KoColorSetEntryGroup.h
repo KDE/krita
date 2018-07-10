@@ -17,11 +17,10 @@ public:
 
 public:
     KoColorSetEntryGroup();
-    int nColors() const { return m_nColors; }
-    int nRows() const { return m_nRows.lastKey(); } // last is the largest
-    void setNColors(int n) { m_nColors = n; }
+    int colorCount() const { return m_nColors; }
+    int rowCount() const { return m_nRows.lastKey(); } // last is the largest
     void setEntry(KoColorSetEntry e);
-    void setNColumns(int nColumns);
+    void setColumnCount(int nColumns);
     const QVector<Column> &colors() const { return m_colors; }
     void removeEntry(int x, int y);
     void clear() { m_colors.clear(); }

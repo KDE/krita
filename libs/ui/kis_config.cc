@@ -50,15 +50,18 @@
 
 #include <kis_color_manager.h>
 
-KisConfig::KisConfig()
+KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
+    , m_readOnly(readOnly)
 {
 }
 
 KisConfig::~KisConfig()
 {
+    if (m_readOnly) return;
+
     if (qApp->thread() != QThread::currentThread()) {
-        //dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping..." << kisBacktrace();
         return;
     }
 

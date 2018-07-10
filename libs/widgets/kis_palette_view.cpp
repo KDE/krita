@@ -33,7 +33,7 @@
 
 #include <KoDialog.h>
 
-#include "kis_palette_delegate.h"
+#include "KisPaletteDelegate.h"
 #include "KisPaletteModel.h"
 #include "kis_color_button.h"
 #include <KisSwatch.h>

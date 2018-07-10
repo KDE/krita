@@ -52,10 +52,11 @@
 #include <squeezedcombobox.h>
 
 #include "KisPaletteModel.h"
-#include "ui_wdgpalettedock.h"
-#include "kis_palette_delegate.h"
+#include "KisPaletteDelegate.h"
 #include "kis_palette_view.h"
 #include <KisPaletteListWidget.h>
+
+#include "ui_wdgpalettedock.h"
 
 PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))

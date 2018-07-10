@@ -49,7 +49,7 @@
 #include <KoResourceServerProvider.h>
 
 #include <kis_palette_view.h>
-#include <kis_palette_delegate.h>
+#include <KisPaletteDelegate.h>
 #include <KisPaletteModel.h>
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()

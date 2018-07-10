@@ -23,14 +23,14 @@
 #include "kis_base_node.h"
 
 #include "kis_types.h"
-#include "kis_mask.h"
+#include "kis_effect_mask.h"
 
 /**
  * An selection mask is a single channel mask that applies a
  * particular selection to the layer the mask belongs to. A selection
  * can contain both vector and pixel selection components.
 */
-class KRITAIMAGE_EXPORT KisSelectionMask : public KisMask
+class KRITAIMAGE_EXPORT KisSelectionMask : public KisEffectMask
 {
     Q_OBJECT
 public:
@@ -49,6 +49,11 @@ public:
     KisNodeSP clone() const override {
         return KisNodeSP(new KisSelectionMask(*this));
     }
+
+    QRect decorateRect(KisPaintDeviceSP &src,
+                       KisPaintDeviceSP &dst,
+                       const QRect & rc,
+                       PositionToFilthy maskPos) const override;
 
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);

@@ -52,9 +52,10 @@ public:
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
-    : KisMask("selection")
+    : KisEffectMask()
     , m_d(new Private(this))
 {
+    setName("selection");
     setActive(false);
 
     m_d->image = image;
@@ -67,7 +68,7 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
-    : KisMask(rhs)
+    : KisEffectMask(rhs)
     , m_d(new Private(this))
 {
     m_d->image = rhs.image();
@@ -88,12 +89,23 @@ QIcon KisSelectionMask::icon() const {
     return KisIconUtils::loadIcon("selectionMask");
 }
 
+QRect KisSelectionMask::decorateRect(KisPaintDeviceSP &src, KisPaintDeviceSP &dst, const QRect &rc, KisNode::PositionToFilthy maskPos) const
+{
+    Q_UNUSED(src);
+    Q_UNUSED(maskPos);
+
+    // TODO: add mask color configuration
+    dst->fill(rc, KoColor(Qt::red, dst->colorSpace()));
+
+    return rc;
+}
+
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
     if (selection) {
-        KisMask::setSelection(selection);
+        KisEffectMask::setSelection(selection);
     } else {
-        KisMask::setSelection(new KisSelection());
+        KisEffectMask::setSelection(new KisSelection());
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
         KisFillPainter gc(KisPaintDeviceSP(this->selection()->pixelSelection().data()));
@@ -127,7 +139,7 @@ KisBaseNode::PropertyList KisSelectionMask::sectionModelProperties() const
 
 void KisSelectionMask::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
-    KisMask::setSectionModelProperties(properties);
+    KisEffectMask::setSectionModelProperties(properties);
     setActive(properties.at(2).state.toBool());
 }
 

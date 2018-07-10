@@ -23,6 +23,7 @@
 #include "kis_layer.h"
 #include "kis_mask.h"
 #include "kis_group_layer.h"
+#include "kis_selection_mask.h"
 #include "kis_adjustment_layer.h"
 
 #include "krita_utils.h"
@@ -40,6 +41,24 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
     static bool checkPassThrough(const KisNode *node) {
         const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(node);
         return group && group->passThroughMode();
+    }
+
+    static bool isSelectionMask(const KisNode *node) {
+        return qobject_cast<const KisSelectionMask*>(node);
+    }
+
+    static KisNodeSP skipSelectionMasksForward(KisNodeSP node) {
+        while (node && isSelectionMask(node)) {
+            node = node->nextSibling();
+        }
+        return node;
+    }
+
+    static KisNodeSP skipSelectionMasksBackward(KisNodeSP node) {
+        while (node && isSelectionMask(node)) {
+            node = node->prevSibling();
+        }
+        return node;
     }
 
     bool checkParentPassThrough() {
@@ -69,7 +88,11 @@ KisProjectionLeaf::~KisProjectionLeaf()
 
 KisProjectionLeafSP KisProjectionLeaf::parent() const
 {
-    KisNodeSP node = m_d->node->parent();
+    KisNodeSP node;
+
+    if (!Private::isSelectionMask(m_d->node)) {
+        node = m_d->node->parent();
+    }
 
     while (node && Private::checkPassThrough(node)) {
         node = node->parent();
@@ -85,6 +108,7 @@ KisProjectionLeafSP KisProjectionLeaf::firstChild() const
 
     if (!m_d->checkThisPassThrough()) {
         node = m_d->node->firstChild();
+        node = Private::skipSelectionMasksForward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -96,6 +120,7 @@ KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 
     if (!m_d->checkThisPassThrough()) {
         node = m_d->node->lastChild();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -103,20 +128,27 @@ KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 
 KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
 {
+    if (Private::isSelectionMask(m_d->node)) {
+        return KisProjectionLeafSP();
+    }
+
     KisNodeSP node;
 
     if (m_d->checkThisPassThrough()) {
         node = m_d->node->lastChild();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     if (!node) {
         node = m_d->node->prevSibling();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     const KisProjectionLeaf *leaf = this;
     while (!node && leaf->m_d->checkParentPassThrough()) {
         leaf = leaf->node()->parent()->projectionLeaf().data();
         node = leaf->node()->prevSibling();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -124,14 +156,21 @@ KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
 
 KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
 {
+    if (Private::isSelectionMask(m_d->node)) {
+        return KisProjectionLeafSP();
+    }
+
     KisNodeSP node = m_d->node->nextSibling();
+    node = Private::skipSelectionMasksForward(node);
 
     while (node && Private::checkPassThrough(node) && node->firstChild()) {
         node = node->firstChild();
+        node = Private::skipSelectionMasksForward(node);
     }
 
     if (!node && m_d->checkParentPassThrough()) {
         node = m_d->node->parent();
+        node = Private::skipSelectionMasksForward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();

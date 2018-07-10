@@ -143,7 +143,7 @@ struct KisPaintingAssistant::Private {
     QColor assistantGlobalColorCache = QColor(Qt::red);     // color to paint with if a custom color is not set
 
     bool useCustomColor = false;
-    QColor assistantCustomColor = KisConfig().defaultAssistantsColor();
+    QColor assistantCustomColor = KisConfig(true).defaultAssistantsColor();
 };
 
 bool KisPaintingAssistant::useCustomColor()

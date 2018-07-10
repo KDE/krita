@@ -49,11 +49,15 @@
 #include <config-ocio.h>
 
 #include <kis_color_manager.h>
+#include <kis_debug.h>
 
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
     , m_readOnly(readOnly)
 {
+    if (!readOnly) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+    }
 }
 
 KisConfig::~KisConfig()
@@ -61,7 +65,7 @@ KisConfig::~KisConfig()
     if (m_readOnly) return;
 
     if (qApp->thread() != QThread::currentThread()) {
-        dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping..." << kisBacktrace();
+        dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Called from:" << kisBacktrace();
         return;
     }
 
@@ -446,7 +450,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
     if (screen < 0) return 0;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString monitorId;
     if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);

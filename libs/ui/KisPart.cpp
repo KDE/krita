@@ -234,7 +234,7 @@ KisView *KisPart::createView(KisDocument *document,
                              QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
-    KisConfig cfg;
+    KisConfig cfg(false);
     KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
         cfg.setUseOpenGL(false);
@@ -339,7 +339,7 @@ bool KisPart::closeSession(bool keepWindows)
     }
 
     if (d->currentSession) {
-        KisConfig kisCfg;
+        KisConfig kisCfg(false);
         if (kisCfg.saveSessionOnQuit(false)) {
 
             d->currentSession->storeCurrentWindows();

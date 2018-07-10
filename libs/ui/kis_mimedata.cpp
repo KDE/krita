@@ -142,7 +142,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     Q_ASSERT(m_nodes.size() > 0);
 
     if (mimetype == "application/x-qt-image") {
-        KisConfig cfg;
+        KisConfig cfg(true);
 
         KisDocument *doc = createDocument(m_nodes, m_image);
 
@@ -332,9 +332,9 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         device->convertFromQImage(qimage, 0);
 
-		if (image) {
-			nodes << new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
-		}
+        if (image) {
+            nodes << new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, device);
+        }
 
         alwaysRecenter = true;
     }

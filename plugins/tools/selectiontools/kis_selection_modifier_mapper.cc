@@ -89,7 +89,7 @@ void KisSelectionModifierMapper::slotConfigChanged()
 
 void KisSelectionModifierMapper::Private::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (!cfg.switchSelectionCtrlAlt()) {
         replaceModifiers   = Qt::ControlModifier;
         intersectModifiers = (Qt::KeyboardModifiers)(Qt::AltModifier | Qt::ShiftModifier);

@@ -145,7 +145,7 @@ public:
         , axesCenter(QPointF(0.5, 0.5))
     {
         {
-            KisImageConfig cfg;
+            KisImageConfig cfg(true);
             if (cfg.enableProgressReporting()) {
                 scheduler.setProgressProxy(&compositeProgressProxy);
             }
@@ -1283,7 +1283,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 
 void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
 {
-    KisImageConfig imageConfig;
+    KisImageConfig imageConfig(true);
     int patchWidth = imageConfig.updatePatchWidth();
     int patchHeight = imageConfig.updatePatchHeight();
 

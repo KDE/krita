@@ -50,7 +50,7 @@ KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *docum
 
     const QString baseXmlDir = QFileInfo(filename()).canonicalPath();
 
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     qreal resolutionPPI = cfg.preferredVectorImportResolutionPPI(true);
 

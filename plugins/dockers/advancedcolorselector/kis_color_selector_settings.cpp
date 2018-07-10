@@ -171,13 +171,10 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
     cfg.writeEntry("zoomSize", ui->popupSize->value());
 
-
-
     bool useCustomColorSpace =  ui->useDifferentColorSpaceCheckbox->isChecked();
     const KoColorSpace* colorSpace = useCustomColorSpace ? ui->colorSpace->currentColorSpace() : 0;
 
-
-    KisConfig kisconfig;
+    KisConfig kisconfig(false);
     kisconfig.setCustomColorSelectorColorSpace(colorSpace);
 
     //color patches
@@ -405,7 +402,7 @@ void KisColorSelectorSettings::loadPreferences()
 
 
     {
-        KisConfig kisconfig;
+        KisConfig kisconfig(true);
         const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
 
         if (cs) {

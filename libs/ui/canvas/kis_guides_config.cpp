@@ -227,14 +227,14 @@ bool KisGuidesConfig::hasGuides() const
 
 void KisGuidesConfig::loadStaticData()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->guidesLineType = LineTypeInternal(cfg.guidesLineStyle());
     d->guidesColor = cfg.guidesColor();
 }
 
 void KisGuidesConfig::saveStaticData() const
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setGuidesLineStyle(d->guidesLineType);
     cfg.setGuidesColor(d->guidesColor);
 }

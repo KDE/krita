@@ -526,7 +526,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.touchEndEvent(tevent);
         } else {
 #endif
-            d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
+            d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
 #ifdef Q_OS_OSX
@@ -584,9 +584,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
 bool KisInputManager::startTouch(bool &retval)
 {
-    d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
+    d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
     // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
-    if (KisConfig().disableTouchOnCanvas()) {
+    if (KisConfig(true).disableTouchOnCanvas()) {
         d->eatOneMousePress();
     }
     if (d->tryHidePopupPalette()) {

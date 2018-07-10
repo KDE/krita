@@ -196,7 +196,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     m_d->bootstrapLodBlocked = true;
     connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
 
-    KisImageConfig config;
+    KisImageConfig config(false);
 
     m_d->canvasUpdateCompressor.setDelay(1000 / config.fpsLimit());
     m_d->canvasUpdateCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
@@ -208,7 +208,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 void KisCanvas2::setup()
 {
     // a bit of duplication from slotConfigChanged()
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
 
@@ -258,7 +258,7 @@ void KisCanvas2::setup()
 
 void KisCanvas2::initializeFpsDecoration()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     const bool shouldShowDebugOverlay =
         (canvasIsOpenGL() && cfg.enableOpenGLFramerateLogging()) ||
@@ -502,7 +502,7 @@ void KisCanvas2::createQPainterCanvas()
 
 void KisCanvas2::createOpenGLCanvas()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
@@ -518,7 +518,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->prescaledProjection = 0;
     m_d->frameCache = 0;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QDesktopWidget dw;
     const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
     m_d->displayColorConverter.setMonitorProfile(profile);
@@ -583,7 +583,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     if (!m_d->canvasWidget) {
         return;
     }
-    KisConfig cfg;
+    KisConfig cfg(true);
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
          m_d->openGLFilterMode != cfg.openGLFilteringMode());
@@ -601,7 +601,7 @@ void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
     if (m_d->currentCanvasIsOpenGL) {
         startUpdateCanvasProjection(imageRect);
     } else {
-        KisImageConfig imageConfig;
+        KisImageConfig imageConfig(true);
         int patchWidth = imageConfig.updatePatchWidth();
         int patchHeight = imageConfig.updatePatchHeight();
 
@@ -650,7 +650,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     m_d->proofingConfig = this->image()->proofingConfiguration();
     if (!m_d->proofingConfig) {
         qDebug()<<"Canvas: No proofing config found, generating one.";
-        KisImageConfig cfg;
+        KisImageConfig cfg(false);
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
@@ -713,7 +713,7 @@ KisProofingConfigurationSP KisCanvas2::proofingConfiguration() const
     if (!m_d->proofingConfig) {
         m_d->proofingConfig = this->image()->proofingConfiguration();
         if (!m_d->proofingConfig) {
-            m_d->proofingConfig = KisImageConfig().defaultProofingconfiguration();
+            m_d->proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
         }
     }
     return m_d->proofingConfig;
@@ -895,7 +895,7 @@ void KisCanvas2::notifyLevelOfDetailChange()
 
     const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     const int maxLod = cfg.numMipmapLevels();
 
     const int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
@@ -955,7 +955,7 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 
 void KisCanvas2::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
 
     resetCanvas(cfg.useOpenGL());
@@ -1117,7 +1117,7 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     notifyLevelOfDetailChange();
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
 }
 

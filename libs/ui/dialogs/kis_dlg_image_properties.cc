@@ -64,8 +64,6 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    KisConfig cfg;
-
     m_page->lblWidthValue->setText(QString::number(image->width()));
     m_page->lblHeightValue->setText(QString::number(image->height()));
 
@@ -91,7 +89,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_proofingConfig = m_image->proofingConfiguration();
     if (!m_proofingConfig) {
         m_page->chkSaveProofing->setChecked(false);
-        m_proofingConfig = KisImageConfig().defaultProofingconfiguration();
+        m_proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
     }
     else {
         m_page->chkSaveProofing->setChecked(true);

@@ -215,6 +215,8 @@ void KisReferenceImage::setFilename(const QString &filename)
 
 QColor KisReferenceImage::getPixel(QPointF position)
 {
+    if (transparency() == 1.0) return Qt::transparent;
+
     const QSizeF shapeSize = size();
     const QTransform scale = QTransform::fromScale(d->image.width() / shapeSize.width(), d->image.height() / shapeSize.height());
 

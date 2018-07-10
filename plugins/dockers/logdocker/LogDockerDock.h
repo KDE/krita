@@ -23,6 +23,21 @@
 #include <KoCanvasObserverBase.h>
 
 #include "ui_WdgLogDocker.h"
+class MessageSender : public QObject
+{
+      Q_OBJECT
+public:
+
+    MessageSender() : QObject() {}
+    ~MessageSender() override {}
+
+    void sendMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+Q_SIGNALS:
+
+    void emitMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+};
 
 class LogDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLogDocker {
     Q_OBJECT
@@ -38,9 +53,14 @@ private Q_SLOTS:
     void clearLog();
     void saveLog();
     void settings();
+    void insertMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 
 private:
-    static QTextEdit *s_textEdit;
+
+    void applyCategories();
+
+    static MessageSender *s_messageSender;
     static QTextCharFormat s_debug;
     static QTextCharFormat s_info;
     static QTextCharFormat s_warning;

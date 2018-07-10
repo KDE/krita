@@ -609,9 +609,9 @@ void KisInputManager::slotCompressedMoveEvent()
 
         (void) d->handleCompressedTabletEvent(d->compressedMoveEvent.data());
         d->compressedMoveEvent.reset();
-        dbgInput << "Compressed move event received.";
+        //dbgInput << "Compressed move event received.";
     } else {
-        dbgInput << "Unexpected empty move event";
+        //dbgInput << "Unexpected empty move event";
     }
 }
 

@@ -272,8 +272,6 @@ void LogDockerDock::applyCategories()
 
     filters << cfgToString("krita.lib.pigment=%1", cfg.readEntry("pigment", false));
 
-    qDebug() << filters.join("\n");
-
     QLoggingCategory::setFilterRules(filters.join("\n"));
 }
 

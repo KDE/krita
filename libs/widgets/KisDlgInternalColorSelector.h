@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISINTERNALCOLORSELECTOR_H
-#define KISINTERNALCOLORSELECTOR_H
+#ifndef KISDLGINTERNALCOLORSELECTOR_H
+#define KISDLGINTERNALCOLORSELECTOR_H
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 #include "KoColor.h"
 #include "KoColorSpace.h"
 #include "KoColorDisplayRendererInterface.h"
@@ -27,17 +27,24 @@
 
 #include <QScopedPointer>
 
-#include "ui_wdgdlginternalcolorselector.h"
+#include "KisScreenColorPickerBase.h"
+#include "ui_WdgDlgInternalColorSelector.h"
 
 /**
  * @brief The KisInternalColorSelector class
  *
  * A non-modal color selector dialog that is not a plugin and can thus be used for filters.
  */
-class KRITAUI_EXPORT KisDlgInternalColorSelector : public QDialog
+class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
+
 public:
+
+
+    static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
+
+
     struct Config
     {
         Config() :
@@ -170,16 +177,10 @@ private Q_SLOTS:
 
 
 protected:
-
     void showEvent(QShowEvent *event);
 
 private:
-    Ui_WdgDlgInternalColorSelector *m_ui; //the UI
-    struct Private; //The private struct
-    const QScopedPointer<Private> m_d; //the private pointer
-
-
-
+    void focusInEvent(QFocusEvent *) override;
     /**
      * @brief updateAllElements
      * Updates each widget with the new element, and if it's responsible for the update sents
@@ -187,7 +188,10 @@ private:
      */
     void updateAllElements(QObject *source);
 
-    void focusInEvent(QFocusEvent *) override;
+private:
+    Ui_WdgDlgInternalColorSelector *m_ui;
+    struct Private; //The private struct
+    const QScopedPointer<Private> m_d; //the private pointer
 };
 
-#endif // KISINTERNALCOLORSELECTOR_H
+#endif // KISDLGINTERNALCOLORSELECTOR_H

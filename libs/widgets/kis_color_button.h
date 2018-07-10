@@ -21,7 +21,7 @@
 
 #ifndef KisColorButton_H
 #define KisColorButton_H
-#include <kritaui_export.h>
+#include <kritawidgets_export.h>
 
 #include <KoColor.h>
 #include <QPushButton>
@@ -36,7 +36,7 @@ class KisColorButtonPrivate;
 *
 * \image html KisColorButton.png "KDE Color Button"
 */
-class KRITAUI_EXPORT KisColorButton : public QPushButton
+class KRITAWIDGETS_EXPORT KisColorButton : public QPushButton
 {
     Q_OBJECT
 

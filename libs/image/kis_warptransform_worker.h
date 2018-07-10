@@ -47,6 +47,7 @@ class KRITAIMAGE_EXPORT KisWarpTransformWorker : public QObject
 
 public:
     typedef enum WarpType_ {AFFINE_TRANSFORM = 0, SIMILITUDE_TRANSFORM, RIGID_TRANSFORM, N_MODES} WarpType;
+    typedef enum WarpCalculation_ {GRID = 0, DRAW} WarpCalculation;
 
     static QPointF affineTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
     static QPointF similitudeTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha);
@@ -75,6 +76,7 @@ private:
 
 private:
     WarpMathFunction m_warpMathFunction;
+    WarpCalculation m_warpCalc;
     QVector<QPointF> m_origPoint;
     QVector<QPointF> m_transfPoint;
     qreal m_alpha;

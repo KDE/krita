@@ -29,10 +29,10 @@ class QLineEdit;
 class KoResourceItemChooser;
 class KoResource;
 
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
 
-class KRITAUI_EXPORT KisColorsetChooser : public QWidget
+class KRITAWIDGETS_EXPORT KisColorsetChooser : public QWidget
 {
     Q_OBJECT
 public:

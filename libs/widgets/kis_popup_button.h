@@ -22,13 +22,13 @@
 
 #include <QPushButton>
 
-#include <kritaui_export.h>
+#include <kritawidgets_export.h>
 
 /**
  * This class is a convenience class for a button that
  * when clicked displays a popup widget.
  */
-class KRITAUI_EXPORT KisPopupButton : public QPushButton
+class KRITAWIDGETS_EXPORT KisPopupButton : public QPushButton
 {
 
     Q_OBJECT
@@ -57,13 +57,19 @@ public:
      */
     void setPopupWidgetWidth(int w);
 
+    /**
+     * @brief adjustPosition
+     * adjusts the position of the popup widget based on the position
+     * of this button and the size of the widget
+     */
+    void adjustPosition();
+
 public Q_SLOTS:
 
     void showPopupWidget();
 
     void hidePopupWidget();
 
-    void adjustPosition();
 protected:
     void paintEvent(QPaintEvent* event) override;
     

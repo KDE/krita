@@ -30,7 +30,7 @@
 
 #include "KisColorSelectorConfiguration.h"
 #include "KisColorSelectorInterface.h"
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 
 /**
  * @brief The KisVisualColorSelector class
@@ -40,7 +40,7 @@
  * Unlike other color selectors, this one draws the full gamut of the given
  * colorspace.
  */
-class KRITAUI_EXPORT KisVisualColorSelector : public KisColorSelectorInterface
+class KRITAWIDGETS_EXPORT KisVisualColorSelector : public KisColorSelectorInterface
 {
     Q_OBJECT
 public:

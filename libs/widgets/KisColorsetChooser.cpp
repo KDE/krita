@@ -34,14 +34,10 @@
 #include <resources/KoColorSet.h>
 
 #include <resources/KoPattern.h>
-#include "KisResourceServerProvider.h"
-#include "KisViewManager.h"
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>
 #include <QLineEdit>
-
-#include <kis_config.h>
 
 #include "kis_int_parse_spin_box.h"
 
@@ -98,10 +94,10 @@ KisColorsetChooser::KisColorsetChooser(QWidget* parent): QWidget(parent)
     connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 
-    KisConfig cfg;
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("");
+    m_itemChooser->configureKineticScrolling(cfg.readEntry("KineticScrollingGesture", 0),
+                                             cfg.readEntry("KineticScrollingSensitivity", 75),
+                                             cfg.readEntry("KineticScrollingScrollbar", true));
 
     QPushButton* saveButton = new QPushButton(i18n("Save"));
     connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));

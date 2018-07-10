@@ -21,6 +21,6 @@ prepend PKG_CONFIG_PATH $DEPSDIR/lib/pkgconfig
 prepend CMAKE_PREFIX_PATH $DEPSDIR
 
 #prepend PYTHONPATH $DEPSDIR/lib/python3.5/
-#prepend PYTHONPATH $DEPSDIR/sip
+prepend PYTHONPATH $DEPSDIR/sip
 
 #prepend PYQT_SIP_DIR_OVERRIDE $DEPSDIR/share/sip

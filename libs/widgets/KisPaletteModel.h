@@ -25,8 +25,7 @@
 
 #include <KoColorDisplayRendererInterface.h>
 
-#include <kis_types.h>
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 #include <KoColorSet.h>
 #include <QScopedPointer>
 
@@ -36,7 +35,7 @@ class KoColorSet;
  * @brief The KisPaletteModel class
  * This, together with kis_palette_view and kis_palette_delegate forms a mvc way to access kocolorsets.
  */
-class KRITAUI_EXPORT KisPaletteModel : public QAbstractTableModel
+class KRITAWIDGETS_EXPORT KisPaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:

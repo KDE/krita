@@ -23,6 +23,10 @@
 #include <QPointer>
 #include <QCompleter>
 
+#include <functional>
+
+#include <KConfigGroup>
+
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
 #include <KisPaletteModel.h>
@@ -32,18 +36,18 @@
 #include <KoResourceServer.h>
 
 #include "kis_signal_compressor.h"
-#include "KisViewManager.h"
 #include "KoColorDisplayRendererInterface.h"
 
 #include "kis_spinbox_color_selector.h"
 
-#include "kis_dlg_internal_color_selector.h"
-#include "ui_wdgdlginternalcolorselector.h"
-#include "kis_config.h"
+#include "KisDlgInternalColorSelector.h"
+#include "ui_WdgDlgInternalColorSelector.h"
 #include "kis_config_notifier.h"
 #include "kis_color_input.h"
 #include "kis_icon_utils.h"
 #include "squeezedcombobox.h"
+
+std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = 0;
 
 struct KisDlgInternalColorSelector::Private
 {
@@ -59,6 +63,7 @@ struct KisDlgInternalColorSelector::Private
     KisHexColorInput *hexColorInput = 0;
     KisPaletteModel *paletteModel = 0;
     KisColorsetChooser *colorSetChooser = 0;
+    KisScreenColorPickerBase *screenColorPicker = 0;
 };
 
 KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColor color, Config config, const QString &caption, const KoColorDisplayRendererInterface *displayRenderer)
@@ -88,21 +93,16 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     } else {
         m_ui->visualSelector->hide();
     }
-    if (config.screenColorPicker) {
-        connect(m_ui->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
-    } else {
-        m_ui->screenColorPicker->hide();
-    }
 
     if (!m_d->paletteModel) {
         m_d->paletteModel = new KisPaletteModel(this);
         m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     }
-    m_ui->paletteList->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    m_ui->bnColorsetChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     // For some bizare reason, the modal dialog doesn't like having the colorset set, so let's not.
     if (config.paletteBox) {
         //TODO: Add disable signal as well. Might be not necessary...?
-        KisConfig cfg;
+        KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
         QString paletteName = cfg.readEntry("internal_selector_active_color_set", QString());
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
         KoColorSet *savedPal = rServer->resourceByName(paletteName);
@@ -124,12 +124,12 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_d->colorSetChooser = new KisColorsetChooser(this);
         connect(m_d->colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
 
-        m_ui->paletteList->setPopupWidget(m_d->colorSetChooser);
+        m_ui->bnColorsetChooser->setPopupWidget(m_d->colorSetChooser);
 
     } else {
         m_ui->paletteBox->setEnabled(false);
         m_ui->cmbNameList->setEnabled(false);
-        m_ui->paletteList->setEnabled(false);
+        m_ui->bnColorsetChooser->setEnabled(false);
     }
 
     if (config.prevNextButtons) {
@@ -150,6 +150,18 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         connect(m_d->hexColorInput, SIGNAL(updated()), SLOT(slotSetColorFromHex()));
         m_ui->rightPane->addWidget(m_d->hexColorInput);
         m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
+    }
+
+    // screen color picker is in kritaui, so a dependency inversion is used to get it
+    m_ui->screenColorPickerWidget->setLayout(new QHBoxLayout(m_ui->screenColorPickerWidget));
+    if (s_screenColorPickerFactory) {
+        m_d->screenColorPicker = s_screenColorPickerFactory(m_ui->screenColorPickerWidget);
+        m_ui->screenColorPickerWidget->layout()->addWidget(m_d->screenColorPicker);
+        if (config.screenColorPicker) {
+            connect(m_d->screenColorPicker, SIGNAL(sigNewColorPicked(KoColor)),this, SLOT(slotColorUpdated(KoColor)));
+        } else {
+            m_d->screenColorPicker->hide();
+        }
     }
 
     connect(this, SIGNAL(signalForegroundColorChosen(KoColor)), this, SLOT(slotLockSelector()));
@@ -282,7 +294,9 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
         m_d->compressColorChanges->start();
     }
 
-    m_ui->screenColorPicker->updateIcons();
+    if (m_d->screenColorPicker) {
+        m_d->screenColorPicker->updateIcons();
+    }
 }
 
 
@@ -299,7 +313,7 @@ void KisDlgInternalColorSelector::focusInEvent(QFocusEvent *)
 void KisDlgInternalColorSelector::slotFinishUp()
 {
     setPreviousColor(m_d->currentColor);
-    KisConfig cfg;
+    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     if (m_d->paletteModel) {
         if (m_d->paletteModel->colorSet()) {
             cfg.writeEntry("internal_selector_active_color_set", m_d->paletteModel->colorSet()->name());

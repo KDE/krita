@@ -20,7 +20,7 @@
 #define KISSPINBOXCOLORSELECTOR_H
 
 #include <QWidget>
-#include "kritaui_export.h"
+#include "kritawidgets_export.h"
 #include <QScopedPointer>
 #include "KoColor.h"
 #include "KoColorSpace.h"
@@ -30,7 +30,7 @@
  * This will give a widget with spinboxes depending on the color space
  * Take responsibility for changing the color space.
  */
-class KRITAUI_EXPORT KisSpinboxColorSelector : public QWidget
+class KRITAWIDGETS_EXPORT KisSpinboxColorSelector : public QWidget
 {
     Q_OBJECT
 public:

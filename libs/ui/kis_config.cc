@@ -1651,16 +1651,6 @@ void KisConfig::setLineSmoothingStabilizeSensors(bool value)
     m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
 }
 
-int KisConfig::paletteDockerPaletteViewSectionSize(bool defaultValue) const
-{
-    return (defaultValue ? 12 : m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12));
-}
-
-void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
-{
-    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
-}
-
 int KisConfig::tabletEventsDelay(bool defaultValue) const
 {
     return (defaultValue ? 10 : m_cfg.readEntry("tabletEventsDelay", 10));

@@ -22,13 +22,16 @@
 #include "flake/kis_shape_layer.h"
 #include "flake/KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
+#include <KisImportExportManager.h>
 
 #include <QRect>
 #include <QBuffer>
 #include <QByteArray>
+#include <QMessageBox>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoFileDialog.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
 
@@ -134,7 +137,34 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
         Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
             auto *reference = dynamic_cast<KisReferenceImage*>(shape);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
-            reference->loadImage(m_store);
+
+            while (!reference->loadImage(m_store)) {
+                if (reference->embed()) {
+                    m_errorMessages << i18n("Could not load embedded reference image %1 ", reference->internalFile());
+                    break;
+                } else {
+                    QString msg = i18nc(
+                        "@info",
+                        "A reference image linked to an external file could not be loaded.\n\n"
+                        "Path: %1\n\n"
+                        "Do you want to select another location?", reference->filename());
+
+                    int locateManually = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+                    QString url;
+                    if (locateManually == QMessageBox::Yes) {
+                        KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+                        dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
+                        url = dialog.filename();
+                    }
+
+                    if (url.isEmpty()) {
+                        break;
+                    } else {
+                        reference->setFilename(url);
+                    }
+                }
+            }
         }
     } else if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
 

@@ -1247,12 +1247,6 @@ bool KisDocument::loadNativeFormat(const QString & file_)
     return openUrl(QUrl::fromLocalFile(file_));
 }
 
-void KisDocument::setModified()
-{
-    d->modified = true;
-
-}
-
 void KisDocument::setModified(bool mod)
 {
     if (mod) {
@@ -1270,12 +1264,12 @@ void KisDocument::setModified(bool mod)
     //dbgUI<<" url:" << url.path();
     //dbgUI<<" mod="<<mod<<" MParts mod="<<KisParts::ReadWritePart::isModified()<<" isModified="<<isModified();
 
-    if (mod && !d->modifiedAfterAutosave) {
+    if (mod && !d->autoSaveTimer->isActive()) {
         // First change since last autosave -> start the autosave timer
         setNormalAutoSaveInterval();
     }
-    d->modifiedAfterAutosave |= mod;
-    d->modifiedWhileSaving |= mod;
+    d->modifiedAfterAutosave = mod;
+    d->modifiedWhileSaving = mod;
 
     if (mod == isModified())
         return;
@@ -1714,6 +1708,10 @@ KisSharedPtr<KisReferenceImagesLayer> KisDocument::referenceImagesLayer() const
 
 void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage)
 {
+    if (d->referenceImagesLayer) {
+        d->referenceImagesLayer->disconnect(this);
+    }
+
     if (updateImage) {
         if (layer) {
             d->image->addNode(layer);
@@ -1723,6 +1721,11 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     }
 
     d->referenceImagesLayer = layer;
+
+    if (d->referenceImagesLayer) {
+        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(const QRectF&)),
+                this, SIGNAL(sigReferenceImagesChanged()));
+    }
 }
 
 void KisDocument::setPreActivatedNode(KisNodeSP activatedNode)
@@ -1804,4 +1807,15 @@ void KisDocument::setAssistantsGlobalColor(QColor color)
 QColor KisDocument::assistantsGlobalColor()
 {
     return d->globalAssistantsColor;
+}
+
+QRectF KisDocument::documentBounds() const
+{
+    QRectF bounds = d->image->bounds();
+
+    if (d->referenceImagesLayer) {
+        bounds |= d->referenceImagesLayer->boundingImageRect();
+    }
+
+    return bounds;
 }

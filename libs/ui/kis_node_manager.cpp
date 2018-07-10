@@ -383,7 +383,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     connect(action, SIGNAL(triggered()), this, SLOT(slotSplitAlphaSaveMerged()));
 
     connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotUpdateIsolateModeAction()));
-    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryFinishIsolatedMode()));
+    connect(this, SIGNAL(sigNodeActivated(KisNodeSP)), SLOT(slotTryRestartIsolatedMode()));
 }
 
 void KisNodeManager::updateGUI()
@@ -471,13 +471,13 @@ void KisNodeManager::toggleIsolateMode(bool checked)
 {
     KisImageWSP image = m_d->view->image();
 
-    if (checked) {
-        KisNodeSP activeNode = this->activeNode();
+    KisNodeSP activeNode = this->activeNode();
+    if (checked && activeNode) {
+
         // Transform and colorize masks don't have pixel data...
         if (activeNode->inherits("KisTransformMask") ||
             activeNode->inherits("KisColorizeMask")) return;
 
-        KIS_ASSERT_RECOVER_RETURN(activeNode);
         if (!image->startIsolatedMode(activeNode)) {
             KisAction *action = m_d->view->actionManager()->actionByName("isolate_layer");
             action->setChecked(false);
@@ -498,7 +498,7 @@ void KisNodeManager::slotUpdateIsolateModeAction()
     action->setChecked(isolatedRootNode && isolatedRootNode == activeNode);
 }
 
-void KisNodeManager::slotTryFinishIsolatedMode()
+void KisNodeManager::slotTryRestartIsolatedMode()
 {
     KisNodeSP isolatedRootNode = m_d->view->image()->isolatedModeRoot();
     if (!isolatedRootNode) return;

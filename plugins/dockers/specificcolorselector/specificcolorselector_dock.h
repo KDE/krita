@@ -38,7 +38,7 @@ public:
     /// reimplemented from KoCanvasObserverBase/KisMainwindowObserver
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
 
 private:
     QPointer<KisCanvas2> m_canvas;

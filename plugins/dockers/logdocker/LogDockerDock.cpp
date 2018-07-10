@@ -78,9 +78,9 @@ void LogDockerDock::setCanvas(KoCanvasBase *)
     setEnabled(true);
 }
 
-void LogDockerDock::setMainWindow(QMainWindow *mainWindow)
+void LogDockerDock::setViewManager(KisViewManager *kisview)
 {
-    connect(static_cast<KisMainWindow*>(mainWindow), SIGNAL(themeChanged()), SLOT(changeTheme()));
+    connect(static_cast<KisMainWindow*>(kisview->mainWindow()), SIGNAL(themeChanged()), SLOT(changeTheme()));
 }
 
 void LogDockerDock::toggleLogging(bool toggle)

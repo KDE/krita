@@ -135,7 +135,7 @@ void AnimationDocker::unsetCanvas()
     setCanvas(0);
 }
 
-void AnimationDocker::setMainWindow(KisViewManager *view)
+void AnimationDocker::setViewManager(KisViewManager *view)
 {
     setActions(view->actionManager());
 

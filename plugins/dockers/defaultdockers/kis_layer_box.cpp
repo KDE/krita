@@ -299,7 +299,7 @@ void KisLayerBox::slotAddLayerBnClicked()
     }
 }
 
-void KisLayerBox::setMainWindow(KisViewManager* kisview)
+void KisLayerBox::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 

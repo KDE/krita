@@ -123,7 +123,7 @@ PaletteDockerDock::~PaletteDockerDock()
     delete m_wdgPaletteDock;
 }
 
-void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
+void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));

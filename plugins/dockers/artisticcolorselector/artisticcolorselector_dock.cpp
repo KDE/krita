@@ -108,7 +108,7 @@ ArtisticColorSelectorDock::~ArtisticColorSelectorDock()
     delete m_resetMenu;
 }
 
-void ArtisticColorSelectorDock::setMainWindow(KisViewManager* kisview)
+void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor().toQColor());

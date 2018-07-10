@@ -20,7 +20,7 @@
 
 #include <QDockWidget>
 
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 
 #include "ui_WdgLogDocker.h"
 class MessageSender : public QObject
@@ -39,14 +39,14 @@ Q_SIGNALS:
 
 };
 
-class LogDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgLogDocker {
+class LogDockerDock : public QDockWidget, public KisMainwindowObserver, public Ui_WdgLogDocker {
     Q_OBJECT
 public:
     LogDockerDock( );
     QString observerName() override { return "LogDockerDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override {}
-    void setMainWindow(QMainWindow *mainWindow) override;
+    void setViewManager(KisViewManager* kisview) override;
 
 private Q_SLOTS:
 

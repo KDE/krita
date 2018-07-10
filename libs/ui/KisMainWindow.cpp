@@ -374,7 +374,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         observer->setObservedCanvas(0);
         KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
         if (mainwindowObserver) {
-            mainwindowObserver->setMainWindow(d->viewManager);
+            mainwindowObserver->setViewManager(d->viewManager);
         }
     }
 
@@ -1960,10 +1960,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(dockWidget);
-        if (observer) {
-            observer->setMainWindow(this);
-        }
 
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);

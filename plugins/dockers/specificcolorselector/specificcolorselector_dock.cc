@@ -64,7 +64,7 @@ void SpecificColorSelectorDock::unsetCanvas()
     m_colorSelector->setDisplayConverter(0);
 }
 
-void SpecificColorSelectorDock::setMainWindow(KisViewManager* kisview)
+void SpecificColorSelectorDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
     connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));

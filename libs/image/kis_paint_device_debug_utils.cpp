@@ -41,6 +41,6 @@ void kis_debug_save_device_incremental(KisPaintDeviceSP device,
         saveRect = device->exactBounds();
     }
 
-    qDebug() << "Dumping:" << filename;
+    dbgImage << "Dumping:" << filename;
     device->convertToQImage(0, saveRect).save(filename);
 }

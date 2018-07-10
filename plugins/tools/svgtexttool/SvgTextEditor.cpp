@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QComboBox>
-#include <QDebug>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QFontComboBox>
@@ -223,20 +222,6 @@ void SvgTextEditor::switchTextEditorTab()
 
 
         if (m_shape) {
-
-            // Convert the svg text to html XXX: Fix resolution! Also, the rect should be the image rect, not the shape rect.
-            /**
-            if (!converter.convertFromSvg(m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(),
-                                          m_shape->boundingRect(), 72.0)) {
-                qDebug() << "Eeek 3";
-            }
-            QString html;
-            if (!converter.convertToHtml(&html)) {
-                qDebug() << "Eeek 4";
-            }
-
-            m_textEditorWidget.richTextEdit->document()->setHtml(html);
-            */
             QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
             if (!converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
                 qWarning()<<"new converter svgToDoc doesn't work!";
@@ -607,7 +592,6 @@ void SvgTextEditor::increaseTextSize()
     if (pointSize<0) {
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
     }
-    qDebug()<<pointSize;
     format.setFontPointSize(pointSize+1.0);
     m_textEditorWidget.richTextEdit->mergeCurrentCharFormat(format);
 }
@@ -722,7 +706,6 @@ void SvgTextEditor::setSettings()
 
     settingsDialog.setButtons(KoDialog::Ok | KoDialog::Cancel);
     if (settingsDialog.exec() == QDialog::Accepted) {
-        qDebug() << "saving settings";
         // save  and set the settings
         QStringList writingSystems;
         for (int i = 0; i < writingSystemsModel->rowCount(); i++) {

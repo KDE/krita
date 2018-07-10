@@ -52,6 +52,7 @@
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
 
+#include <FlakeDebug.h>
 
 struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 {
@@ -580,7 +581,7 @@ KoSvgTextShapeFactory::KoSvgTextShapeFactory()
 
 KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    qDebug() << "Create default svg text shape";
+    debugFlake << "Create default svg text shape";
 
     KoSvgTextShape *shape = new KoSvgTextShape();
     shape->setShapeId(KoSvgTextShape_SHAPEID);
@@ -591,7 +592,7 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *do
                              QRectF(0, 0, 200, 60),
                              documentResources->shapeController()->pixelsPerInch());
 
-    qDebug() << converter.errors() << converter.warnings();
+    debugFlake << converter.errors() << converter.warnings();
 
     return shape;
 }

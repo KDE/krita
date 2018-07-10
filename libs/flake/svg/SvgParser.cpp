@@ -103,14 +103,14 @@ struct SvgParser::DeferredUseStore {
         if (id.isEmpty())
             return;
 
-        // qDebug() << "Checking id: " << id;
+        // debugFlake << "Checking id: " << id;
         auto i = std::partition(m_uses.begin(), m_uses.end(),
                                 [&](const El& e) -> bool {return e.m_key != id;});
 
         while (i != m_uses.end()) {
             const El& el = m_uses.back();
             if (m_parse->m_context.hasDefinition(el.m_key)) {
-                // qDebug() << "Found pending use for id: " << el.m_key;
+                // debugFlake << "Found pending use for id: " << el.m_key;
                 shape = m_parse->resolveUse(*(el.m_useElement), el.m_key);
                 if (shape) {
                     shapes.append(shape);
@@ -377,7 +377,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
         }
         gradHelper.setGradient(g);
     } else {
-        qDebug() << "WARNING: Failed to parse gradient with tag" << e.tagName();
+        debugFlake << "WARNING: Failed to parse gradient with tag" << e.tagName();
     }
 
     // handle spread method
@@ -1262,7 +1262,7 @@ KoShape* SvgParser::parseUse(const KoXmlElement &e, DeferredUseStore* deferredUs
         deferredUseStore->add(&e, key);
         return 0;
     }
-    qDebug() << "WARNING: Did not find reference for svg 'use' element. Skipping. Id: "
+    debugFlake << "WARNING: Did not find reference for svg 'use' element. Skipping. Id: "
              << key;
     return 0;
 }

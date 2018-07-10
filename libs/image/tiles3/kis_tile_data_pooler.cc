@@ -43,7 +43,7 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 
 #define RUNTIME_SANITY_CHECK(td) do {                                   \
         if(td->m_usersCount < td->m_refCount) {                         \
-            qDebug("**** Suspicious tiledata: 0x%X (clones: %d, users: %d, refs: %d) ****", \
+            qInfo("**** Suspicious tiledata: 0x%X (clones: %d, users: %d, refs: %d) ****", \
                    td, td->m_clonesStack.size(),                         \
                    (int)td->m_usersCount, (int)td->m_refCount);         \
         }                                                               \

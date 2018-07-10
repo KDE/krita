@@ -1264,8 +1264,6 @@ void KisViewManager::updateIcons()
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         Q_FOREACH (QDockWidget* dock, dockers) {
-            dbgKrita << "name " << dock->objectName();
-
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {

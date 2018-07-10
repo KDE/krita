@@ -197,6 +197,11 @@ void LogDockerDock::settings()
     chkMetaData->setChecked(cfg.readEntry("metadata_41016", false));
     layout->addWidget(chkMetaData);
 
+    QCheckBox *chkPigment = new QCheckBox(i18n("Color Management"), page);
+    chkPigment->setChecked(cfg.readEntry("pigment", false));
+    layout->addWidget(chkPigment);
+
+
     if (dlg.exec()) {
         // Apply the new settings
         cfg.writeEntry("resources_30009", chkResources->isChecked());
@@ -217,6 +222,7 @@ void LogDockerDock::settings()
         cfg.writeEntry("tablet_41014", chkTablet->isChecked());
         cfg.writeEntry("opengl_41015", chkOpenGL->isChecked());
         cfg.writeEntry("metadata_41016", chkMetaData->isChecked());
+        cfg.writeEntry("pigment", chkPigment->isChecked());
 
         applyCategories();
     }
@@ -237,12 +243,24 @@ void LogDockerDock::applyCategories()
     filters << cfgToString("krita.lib.resources=%1", cfg.readEntry("resources_30009", false));
     filters << cfgToString("krita.core=%1", cfg.readEntry("image_41001", false));
     filters << cfgToString("krita.registry=%1", cfg.readEntry("registry_41002", false));
+
     filters << cfgToString("krita.tools=%1", cfg.readEntry("tools_41003", false));
+    filters << cfgToString("krita.lib.flake=%1", cfg.readEntry("tools_41003", false));
+
     filters << cfgToString("krita.tiles=%1", cfg.readEntry("tiles_41004", false));
     filters << cfgToString("krita.filters=%1", cfg.readEntry("filters_41005", false));
+
     filters << cfgToString("krita.plugins=%1", cfg.readEntry("plugins_41006", false));
+    filters << cfgToString("krita.lib.plugin=%1", cfg.readEntry("plugins_41006", false));
+
     filters << cfgToString("krita.ui=%1", cfg.readEntry("ui_41007", false));
+    filters << cfgToString("krita.widgets=%1", cfg.readEntry("ui_41007", false));
+    filters << cfgToString("krita.widgetutils=%1", cfg.readEntry("ui_41007", false));
+
     filters << cfgToString("krita.file=%1", cfg.readEntry("file_41008", false));
+    filters << cfgToString("krita.lib.store=%1", cfg.readEntry("file_41008", false));
+    filters << cfgToString("krita.lib.odf=%1", cfg.readEntry("file_41008", false));
+
     filters << cfgToString("krita.math=%1", cfg.readEntry("math_41009", false));
     filters << cfgToString("krita.grender=%1", cfg.readEntry("render_41010", false));
     filters << cfgToString("krita.scripting=%1", cfg.readEntry("script_41011", false));
@@ -251,6 +269,8 @@ void LogDockerDock::applyCategories()
     filters << cfgToString("krita.tablet=%1", cfg.readEntry("tablet_41014", false));
     filters << cfgToString("krita.opengl=%1", cfg.readEntry("opengl_41015", false));
     filters << cfgToString("krita.metadata=%1", cfg.readEntry("metadata_41016", false));
+
+    filters << cfgToString("krita.lib.pigment=%1", cfg.readEntry("pigment", false));
 
     qDebug() << filters.join("\n");
 

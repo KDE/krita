@@ -102,7 +102,9 @@ private Q_SLOTS:
      * if modification isn't allow(@see setAllowModification), this does nothing.
      */
     void modifyEntry(QModelIndex index);
+
 private:
+    void updateEntrySize();
 
 private:
     struct Private;

@@ -65,21 +65,25 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     setShowGrid(false);
     horizontalHeader()->setVisible(false);
     verticalHeader()->setVisible(false);
+
+    // set the size of swatches
+    horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    horizontalHeader()->setMinimumSectionSize(MINROWHEIGHT);
+
     setItemDelegate(new KisPaletteDelegate());
 
+    setDropIndicatorShown(true);
 //    setDragEnabled(true);
 //    setDragDropMode(QAbstractItemView::InternalMove);
-    setDropIndicatorShown(true);
 
-    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
+    // KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     //QPalette pal(palette());
     //pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
     //setAutoFillBackground(true);
     //setPalette(pal);
 
-    int defaultSectionSize = cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
-    horizontalHeader()->setDefaultSectionSize(defaultSectionSize);
-    verticalHeader()->setDefaultSectionSize(defaultSectionSize);
+    // int defaultSectionSize = cfg.readEntry("paletteDockerPaletteViewSectionSize", 12);
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
 }
 
@@ -215,6 +219,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
         bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
         if (slotEmpty) {
             emit sigSetEntry(index);
+            update(index);
         } else {
             KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
             Q_ASSERT(group);
@@ -231,7 +236,7 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     }
     m_d->model = model;
     setModel(model);
-    // paletteModelChanged();
+    // updateEntrySize();
     /*
     connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
@@ -273,6 +278,15 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
     } else {
         QTableView::wheelEvent(event);
     }
+}
+
+void KisPaletteView::updateEntrySize()
+{
+    qDebug() << "updateEntrySize called";
+    // horizontalHeader()->setDefaultSectionSize(sizeHintForRow(0));
+    // verticalHeader()->setDefaultSectionSize(sizeHintForColumn(0));
+    resizeColumnsToContents();
+    resizeRowsToContents();
 }
 
 void KisPaletteView::modifyEntry(QModelIndex index)
@@ -324,6 +338,11 @@ void KisPaletteView::modifyEntry(QModelIndex index)
 
 int KisPaletteView::sizeHintForColumn(int column) const
 {
+    qDebug() << "sizeHintForColumn called: total width" << width();
+    qDebug() << "sizeHintForColumn called: what I give" << qFloor(width() / m_d->model->columnCount());
+    if (m_d->model->columnCount() == 0) {
+        return width();
+    }
     Q_UNUSED(column);
     return qFloor(width() / m_d->model->columnCount());
 }
@@ -332,5 +351,8 @@ int KisPaletteView::sizeHintForRow(int row) const
 {
     Q_UNUSED(row);
     int columnWidth = sizeHintForColumn(0);
+    qDebug() << "sizeHintForRow called: total height" << height();
+    qDebug() << "sizeHintForRow called: column width" << columnWidth;
+    qDebug() << "sizeHintForRow called: what I give" << (columnWidth < MINROWHEIGHT ? MINROWHEIGHT : columnWidth);
     return columnWidth < MINROWHEIGHT ? MINROWHEIGHT : columnWidth;
 }

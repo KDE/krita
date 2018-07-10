@@ -37,7 +37,7 @@ class KisSnapConfig;
 class KRITAUI_EXPORT KisConfig
 {
 public:
-    KisConfig();
+    KisConfig(bool readOnly = false);
     ~KisConfig();
 
     bool disableTouchOnCanvas(bool defaultValue = false) const;
@@ -592,6 +592,7 @@ private:
 
 private:
     mutable KConfigGroup m_cfg;
+    bool m_readOnly;
 };
 
 #endif // KIS_CONFIG_H_

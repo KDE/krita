@@ -17,8 +17,6 @@
 
 #include "EmfHeader.h"
 
-#include <QDebug>
-
 namespace Libemf
 {
 

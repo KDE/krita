@@ -525,7 +525,7 @@ void ColorSettingsTab::installProfile()
     }
 
     KisConfig cfg(true);
-    refillMonitorProfiles(KoID("RGBA"));
+    refillMonitorProfiles(KoID("RGBA", ""));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
@@ -556,7 +556,7 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
         }
     }
     else {
-        refillMonitorProfiles(KoID("RGBA"));
+        refillMonitorProfiles(KoID("RGBA", ""));
 
         for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
             if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {

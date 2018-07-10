@@ -2453,8 +2453,6 @@ void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
 
-
-
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
     actionManager->createStandardAction(KStandardAction::Quit, this, SLOT(slotFileQuit()));

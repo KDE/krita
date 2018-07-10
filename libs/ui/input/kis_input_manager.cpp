@@ -609,9 +609,9 @@ void KisInputManager::slotCompressedMoveEvent()
 
         (void) d->handleCompressedTabletEvent(d->compressedMoveEvent.data());
         d->compressedMoveEvent.reset();
-        dbgKrita << "Compressed move event received.";
+        dbgInput << "Compressed move event received.";
     } else {
-        dbgKrita << "Unexpected empty move event";
+        dbgInput << "Unexpected empty move event";
     }
 }
 
@@ -683,6 +683,6 @@ void KisInputManager::profileChanged()
         }
     }
     else {
-        dbgKrita << "No Input Profile Found: canvas interaction will be impossible";
+        dbgInput << "No Input Profile Found: canvas interaction will be impossible";
     }
 }

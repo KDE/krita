@@ -519,21 +519,21 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     double greenX, greenY;
     double blueX, blueY;
     png_get_cHRM(png_ptr,info_ptr, &whitePointX, &whitePointY, &redX, &redY, &greenX, &greenY, &blueX, &blueY);
-    qDebug() << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
+    dbgFile << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
 #endif
 
     // https://www.w3.org/TR/PNG/#11gAMA
 #if defined(PNG_GAMMA_SUPPORTED)
     double gamma;
     png_get_gAMA(png_ptr, info_ptr, &gamma);
-    qDebug() << "gAMA" << gamma;
+    dbgFile << "gAMA" << gamma;
 #endif
 
     // https://www.w3.org/TR/PNG/#11sRGB
 #if defined(PNG_sRGB_SUPPORTED)
     int sRGBIntent;
     png_get_sRGB(png_ptr, info_ptr, &sRGBIntent);
-    qDebug() << "sRGB" << sRGBIntent;
+    dbgFile << "sRGB" << sRGBIntent;
 #endif
 
     bool fromBlender = false;

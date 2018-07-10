@@ -81,8 +81,13 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(addColorForeground()));
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(removeColor()));
 
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(sigColorSelected(const KoColor &)),
+            this, SLOT(slotSetForegroundColor(const KoColor &)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(const KisSwatch &)),
+            this, SLOT(entrySelectedBack(const KisSwatch &)));
+
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
+            this, SLOT(slotSetEntryByForeground(QModelIndex)));
 
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
@@ -252,14 +257,10 @@ void PaletteDockerDock::removeColor()
     m_wdgPaletteDock->paletteView->removeEntryWithDialog(index);
 }
 
-void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
+void PaletteDockerDock::slotSetForegroundColor(const KoColor &color)
 {
-    if (m_wdgPaletteDock->paletteView->currentIndex().isValid()) {
-        quint32 index = m_model->idFromIndex(m_wdgPaletteDock->paletteView->currentIndex());
-        m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
-    }
     if (m_resourceProvider) {
-        m_resourceProvider->setFGColor(entry.color());
+        m_resourceProvider->setFGColor(color);
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);
@@ -299,3 +300,7 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 }
 
 
+void PaletteDockerDock::slotSetEntryByForeground(const QModelIndex &index)
+{
+    m_model->setEntry(KisSwatch(m_resourceProvider->fgColor()), index);
+}

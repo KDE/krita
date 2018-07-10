@@ -131,7 +131,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
         newEntry.setName(lnName->text());
         newEntry.setId(lnIDName->text());
         newEntry.setSpotColor(chkSpot->isChecked());
-        m_d->model->addColorSetEntry(newEntry, groupName);
+        m_d->model->addEntry(newEntry, groupName);
         return true;
     }
     return false;
@@ -190,20 +190,39 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
 
 void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 {
-    bool foreground = false;
-    if (event->button()== Qt::LeftButton) {
-        foreground = true;
-    } else if (event->button() == Qt::RightButton) {
+    if (event->button() == Qt::RightButton) {
         m_d->entryClickedMenu.exec(QCursor::pos());
+        return;
     }
-    entrySelection(foreground);
+
+    if (selectedIndexes().size() <= 0) {
+        return;
+    }
+
+    QModelIndex index;
+    if (selectedIndexes().last().isValid()) {
+        index = selectedIndexes().last();
+    } else if (selectedIndexes().first().isValid()) {
+        index = selectedIndexes().first();
+    } else {
+        return;
+    }
+
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole)) == false) {
+        bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
+        if (slotEmpty) {
+            emit sigSetEntry(index);
+        } else {
+            KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+            Q_ASSERT(group);
+            KoColor color = group->getEntry(index.row(), index.column()).color();
+            emit sigColorSelected(color);
+        }
+    }
 }
 
 void KisPaletteView::paletteModelChanged()
-{
-    // updateView();
-    // updateRows();
-}
+{ }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
@@ -212,35 +231,19 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     }
     m_d->model = model;
     setModel(model);
-    paletteModelChanged();
+    // paletteModelChanged();
+    /*
     connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
     connect(m_d->model, SIGNAL(modelReset()), this, SLOT(paletteModelChanged()));
+    */
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
 {
     return m_d->model;
-}
-
-void KisPaletteView::updateRows()
-{
-    /*
-    this->clearSpans();
-    if (m_d->model) {
-        for (int r=0; r<=m_d->model->rowCount(); r++) {
-            QModelIndex index = m_d->model->index(r, 0);
-            if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
-                setSpan(r, 0, 1, m_d->model->columnCount());
-                setRowHeight(r, this->fontMetrics().lineSpacing()+6);
-            } else {
-                this->setRowHeight(r, this->columnWidth(0));
-            }
-        }
-    }
-    */
 }
 
 void KisPaletteView::setAllowModification(bool allow)
@@ -270,32 +273,6 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
     } else {
         QTableView::wheelEvent(event);
     }
-}
-
-void KisPaletteView::entrySelection(bool foreground) {
-    /*
-    QModelIndex index;
-    if (selectedIndexes().size()<=0) {
-        return;
-    }
-    if (selectedIndexes().last().isValid()) {
-        index = selectedIndexes().last();
-    } else if (selectedIndexes().first().isValid()) {
-        index = selectedIndexes().first();
-    } else {
-        return;
-    }
-    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))==false) {
-        KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
-        if (foreground) {
-            emit(entrySelected(entry));
-            emit(indexEntrySelected(index));
-        } else {
-            emit(entrySelectedBackGround(entry));
-            emit(indexEntrySelected(index));
-        }
-    }
-    */
 }
 
 void KisPaletteView::modifyEntry(QModelIndex index)

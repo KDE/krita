@@ -23,6 +23,7 @@
 #define KISSWATCH_H
 
 #include <KoColorSetEntry.h>
+#include <QString>
 
 #include <kritapigment_export.h>
 
@@ -30,7 +31,7 @@ class KRITAPIGMENT_EXPORT KisSwatch : public KoColorSetEntry
 {
 public:
     KisSwatch() : KoColorSetEntry() { }
-    KisSwatch(const KoColor &color, const QString &name)
+    KisSwatch(const KoColor &color, const QString &name = QString())
         : KoColorSetEntry(color, name)
     { }
     virtual ~KisSwatch() { }

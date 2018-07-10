@@ -63,10 +63,8 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
-    Q_ASSERT(index.row() >= 0 && index.row() < rowCount());
-    Q_ASSERT(index.column() >= 0 && index.column() < columnCount());
-
-    bool groupNameRow = index.row() == -1;
+    // row is set to infinity when it's group name row
+    bool groupNameRow = index.row() == Q_INFINITY;
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     QString groupName = group->name();
     if (groupNameRow) {
@@ -78,11 +76,8 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         case IsHeaderRole: {
             return true;
         }
-        case RetrieveEntryRole: {
-            QStringList entryList;
-            entryList.append(groupName);
-            entryList.append(QString::number(0));
-            return entryList;
+        case CheckSlotRole: {
+            return true;
         }
         }
     } else {
@@ -106,14 +101,12 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
         case IsHeaderRole: {
             return false;
         }
-        case RetrieveEntryRole: {
-            QStringList entryList;
-            entryList.append(groupName);
-            return entryList;
+        case CheckSlotRole: {
+            return entryPresent;
         }
         }
     }
-    return QVariant(); // should not happen
+    return QVariant();
 }
 
 int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
@@ -158,13 +151,16 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
             yInGroup = yInGroup - m_colorSet->getGroup(currGroupName)->nRows() - 1;
         } else {
             group = m_colorSet->getGroup(currGroupName);
-            if (!group->checkEntry(column, yInGroup)) {
-                return QModelIndex();
-            }
             break;
         }
     }
     Q_ASSERT(group);
+    // signals that it's a group name row;
+    // wanted to use -1, but indexes with negative row/column are not valid
+    if (yInGroup == -1) {
+        yInGroup = Q_INFINITY;
+        column = Q_INFINITY;
+    }
     return createIndex(column, yInGroup, group);
 }
 
@@ -264,10 +260,10 @@ KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) cons
     return KisSwatch();
 }
 
-bool KisPaletteModel::addColorSetEntry(KisSwatch entry, QString groupName)
+bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
 {
     KisSwatchGroup *group = m_colorSet->getGroup(groupName);
-    if (group->nColors() % group->nColumns() == 0) {
+    if (group->checkEntry(group->nColumns(), group->nRows())) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         m_colorSet->add(entry, groupName);
         endInsertRows();
@@ -280,11 +276,6 @@ bool KisPaletteModel::addColorSetEntry(KisSwatch entry, QString groupName)
 
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
-    QStringList entryList =  qvariant_cast<QStringList>(index.data(RetrieveEntryRole));
-    if (entryList.empty()) {
-        return false;
-    }
-
     if (qvariant_cast<bool>(data(index, IsHeaderRole))==false) {
         static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.row(), index.column());
     } else {
@@ -292,24 +283,8 @@ bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
         beginRemoveRows(QModelIndex(), index.row(), index.row());
         m_colorSet->removeGroup(groupName, keepColors);
         endRemoveRows();
+        emit dataChanged(index, index);
     }
-    return true;
-}
-
-bool KisPaletteModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    /*
-    Q_ASSERT(!parent.isValid());
-
-    int beginRow = qMax(0, row);
-    int endRow = qMin(row + count - 1, (int)m_colorSet->nColors() - 1);
-    beginRemoveRows(parent, beginRow, endRow);
-
-    // Find the palette entry at row, count, remove from KoColorSet
-
-    endRemoveRows();
-    return true;
-    */
     return true;
 }
 
@@ -528,4 +503,13 @@ QStringList KisPaletteModel::mimeTypes() const
 Qt::DropActions KisPaletteModel::supportedDropActions() const
 {
     return Qt::MoveAction;
+}
+
+void KisPaletteModel::setEntry(const KisSwatch &entry,
+                               const QModelIndex &index)
+{
+    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+    Q_ASSERT(group);
+    group->setEntry(entry, index.row(), index.column());
+    emit dataChanged(index, index);
 }

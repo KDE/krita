@@ -66,6 +66,16 @@ public:
      */
     void setCrossedKeyword(const QString &value);
 
+Q_SIGNALS:
+    /**
+     * @brief sigColorSelected
+     * used to tell other components, e.g. PaletteDocker, the color selected for
+     * foreground
+     * @param color
+     */
+    void sigColorSelected(const KoColor &color);
+    void sigSetEntry(const QModelIndex &index);
+
 public Q_SLOTS:
     void paletteModelChanged();
     /**
@@ -81,15 +91,14 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void trySelectClosestColor(KoColor color);
-Q_SIGNALS:
+
+private Q_SLOTS:
     /**
-     * @brief entrySelected
-     * signals when an entry is selected.
-     * @param entry the selected entry.
+     * @brief modifyEntry
+     * function for changing the entry at the given index.
+     * if modification isn't allow(@see setAllowModification), this does nothing.
      */
-    void entrySelected(KoColorSetEntry entry);
-    void entrySelectedBackGround(KoColorSetEntry entry);
-    void indexEntrySelected(QModelIndex index);
+    void modifyEntry(QModelIndex index);
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
@@ -97,18 +106,6 @@ protected:
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
-private Q_SLOTS:
-    /**
-     * @brief entrySelection
-     * the function that will emit entrySelected when the entry changes.
-     */
-    void entrySelection(bool foreground = true);
-    /**
-     * @brief modifyEntry
-     * function for changing the entry at the given index.
-     * if modification isn't allow(@see setAllowModification), this does nothing.
-     */
-    void modifyEntry(QModelIndex index);
 };
 
 #endif /* __KIS_PALETTE_VIEW_H */

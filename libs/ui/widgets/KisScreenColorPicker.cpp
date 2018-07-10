@@ -273,5 +273,3 @@ bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
 }
 
 std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
-
-#include "KisScreenColorPicker.moc"

@@ -51,7 +51,6 @@ public:
     void unsetCanvas() override;
 
 public: // KoResourceServerObserver
-
     void unsetResourceServer() override;
     void resourceAdded(KoColorSet *) override {}
     void removingResource(KoColorSet *resource) override;
@@ -63,7 +62,9 @@ public: // KoResourceServerObserver
 private Q_SLOTS:
     void addColorForeground();
     void removeColor();
-    void entrySelected(KoColorSetEntry entry);
+
+    void slotSetEntryByForeground(const QModelIndex &index);
+    void slotSetForegroundColor(const KoColor &color);
     void entrySelectedBack(KoColorSetEntry entry);
     void setColorSet(KoColorSet* colorSet);
 

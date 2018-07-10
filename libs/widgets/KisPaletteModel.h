@@ -44,13 +44,41 @@ public:
 
     enum AdditionalRoles {
         IsHeaderRole       = Qt::UserRole + 1,
-        ExpandCategoryRole = Qt::UserRole + 2,
-        RetrieveEntryRole  = Qt::UserRole + 3
+        RetrieveEntryRole  = Qt::UserRole + 3,
+        CheckSlotRole = Qt::UserRole + 4
     };
 
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    /**
+     * @brief setData
+     * setData is not used as KoColor is not a QVariant
+     * use setEntry, addEntry and removeEntry instead
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+     */
+
+    /**
+     * @brief addEntry
+     * proper function to handle adding entries.
+     * @return whether successful.
+     */
+    bool addEntry(KisSwatch entry, QString groupName=QString());
+
+    void setEntry(const KisSwatch &entry, const QModelIndex &index);
+
+    /**
+     * @brief removeEntry
+     * proper function to remove the colorsetentry at the given index.
+     * The consolidtes both removeentry and removegroup.
+     * @param keepColors: This bool determines whether, when deleting a group,
+     * the colors should be added to the default group. This is usually desirable,
+     * so hence the default is true.
+     * @return if successful
+     */
+    bool removeEntry(QModelIndex index, bool keepColors=true);
+
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+
     Qt::ItemFlags flags(const QModelIndex& index) const override;
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
@@ -90,25 +118,6 @@ public:
     KisSwatch colorSetEntryFromIndex(const QModelIndex &index) const;
 
     /**
-     * @brief addColorSetEntry
-     * proper function to handle adding entries.
-     * @return whether successful.
-     */
-    bool addColorSetEntry(KisSwatch entry, QString groupName=QString());
-    /**
-     * @brief removeEntry
-     * proper function to remove the colorsetentry at the given index.
-     * The consolidtes both removeentry and removegroup.
-     * @param keepColors: This bool determines whether, when deleting a group,
-     * the colors should be added to the default group. This is usually desirable,
-     * so hence the default is true.
-     * @return if successful
-     */
-    bool removeEntry(QModelIndex index, bool keepColors=true);
-
-    bool removeRows(int row, int count, const QModelIndex &parent) override;
-
-    /**
      * @brief dropMimeData
      * This is an overridden function that handles dropped mimedata.
      * right now only colorsetentries and colorsetgroups are handled.
@@ -127,6 +136,8 @@ public:
     QStringList mimeTypes() const override;
 
     Qt::DropActions supportedDropActions() const override;
+
+public Q_SLOTS:
 
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();

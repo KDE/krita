@@ -23,80 +23,107 @@
 #include "kis_tile_data_interface.h"
 #include "kis_assert.h"
 #include "kis_global.h"
+#include "kis_debug.h"
 
-namespace {
-
-inline bool addTileToMap(int index, QAtomicInt array[],
-                         QAtomicInt &min, QAtomicInt &max, QReadWriteLock &lock)
+KisTiledExtentManager::Data::Data()
+    : m_min(INT_MAX), m_max(INT_MIN)
 {
-    QReadLocker l(&lock);
-    KIS_ASSERT_RECOVER_NOOP(array[512 + index].loadAcquire() >= 0);
+    QWriteLocker l(&m_lock);
+    m_capacity = InitialBufferSize;
+    m_offset = m_capacity >> 1;
+    m_buffer = new QAtomicInt[m_capacity];
+}
 
+KisTiledExtentManager::Data::~Data()
+{
+    QWriteLocker l(&m_lock);
+    delete m_buffer;
+}
+
+inline bool KisTiledExtentManager::Data::add(int index)
+{
+    QReadLocker l(&m_lock);
+    int currentIndex = m_offset + index;
+
+    KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
     bool needsUpdateExtent = false;
-    if (min > index) min.storeRelease(index);
-    if (max < index) max.storeRelease(index);
 
-    if (!array[512 + index].fetchAndAddOrdered(1)) {
-        array[0].ref();
+    if (m_min > index) m_min.storeRelease(index);
+    if (m_max < index) m_max.storeRelease(index);
+
+    if (!m_buffer[currentIndex].fetchAndAddOrdered(1)) {
+        m_count.ref();
         needsUpdateExtent = true;
     }
 
     return needsUpdateExtent;
 }
 
-void updateMin(QAtomicInt array[], QAtomicInt &min)
+inline bool KisTiledExtentManager::Data::remove(int index)
 {
-    for (int i = 1; i < 1024; ++i) {
-        if (array[i] > 0) {
-            min.storeRelease(array[i]);
-            break;
-        }
-    }
-}
+    QReadLocker l(&m_lock);
+    int currentIndex = m_offset + index;
 
-void updateMax(QAtomicInt array[], QAtomicInt &max)
-{
-    for (int i = 1023; i > 0; ++i) {
-        if (array[i] > 0) {
-            max.storeRelease(array[i]);
-            break;
-        }
-    }
-}
-
-inline bool removeTileFromMap(int index, QAtomicInt array[],
-                              QAtomicInt &min, QAtomicInt &max, QReadWriteLock &lock)
-{
-    QReadLocker l(&lock);
-    KIS_ASSERT_RECOVER_NOOP(array[512 + index].loadAcquire() >= 0);
-
+    KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
     bool needsUpdateExtent = false;
-    array[512 + index].deref();
 
-    if (!array[512 + index].loadAcquire()) {
-        if (min == index) {
-            updateMin(array, min);
-        }
+    if (!m_buffer[currentIndex].fetchAndSubOrdered(1)) {
+        if (m_min == index) updateMin();
+        if (m_max == index) updateMax();
 
-        if (max == index) {
-            updateMax(array, max);
-        }
-
-        array[0].deref();
+        m_count.deref();
         needsUpdateExtent = true;
     }
 
     return needsUpdateExtent;
 }
 
+void KisTiledExtentManager::Data::clear()
+{
+    m_count.storeRelease(0);
+    QWriteLocker l(&m_lock);
 
+    for (int i = 0; i < m_capacity; ++i) {
+        m_buffer[i] = 0;
+    }
+}
+
+bool KisTiledExtentManager::Data::isEmpty()
+{
+    return m_count.loadAcquire() == 0;
+}
+
+int KisTiledExtentManager::Data::min()
+{
+    return m_min.loadAcquire();
+}
+
+int KisTiledExtentManager::Data::max()
+{
+    return m_max.loadAcquire();
+}
+
+void KisTiledExtentManager::Data::updateMin()
+{
+    for (int i = 0; i < m_capacity; ++i) {
+        if (m_buffer[i] > 0) {
+            m_min.storeRelease(m_buffer[i]);
+            break;
+        }
+    }
+}
+
+void KisTiledExtentManager::Data::updateMax()
+{
+    for (int i = m_capacity - 1; i >= 0; ++i) {
+        if (m_buffer[i] > 0) {
+            m_max.storeRelease(m_buffer[i]);
+            break;
+        }
+    }
 }
 
 KisTiledExtentManager::KisTiledExtentManager()
-    : m_minCol(INT_MAX),
-      m_maxCol(INT_MIN),
-      m_minRow(INT_MAX),
-      m_maxRow(INT_MIN)
 {
 }
 
@@ -104,8 +131,8 @@ void KisTiledExtentManager::notifyTileAdded(int col, int row)
 {
     bool needsUpdateExtent = false;
 
-    needsUpdateExtent |= addTileToMap(col, m_colArray, m_minCol, m_maxCol, m_colArrayLock);
-    needsUpdateExtent |= addTileToMap(row, m_rowArray, m_minRow, m_maxRow, m_rowArrayLock);
+    needsUpdateExtent |= m_colsData.add(col);
+    needsUpdateExtent |= m_rowsData.add(row);
 
     if (needsUpdateExtent) {
         updateExtent();
@@ -116,31 +143,22 @@ void KisTiledExtentManager::notifyTileRemoved(int col, int row)
 {
     bool needsUpdateExtent = false;
 
-    needsUpdateExtent |= removeTileFromMap(col, m_colArray, m_minCol, m_maxCol, m_colArrayLock);
-    needsUpdateExtent |= removeTileFromMap(row, m_rowArray, m_minRow, m_maxRow, m_rowArrayLock);
+    needsUpdateExtent |= m_colsData.remove(col);
+    needsUpdateExtent |= m_rowsData.remove(row);
 
     if (needsUpdateExtent) {
         updateExtent();
     }
 }
 
-void clearArray(QAtomicInt array[], QReadWriteLock &lock)
-{
-    QWriteLocker l(&lock);
-
-    for (int i = 0; i < 1024; ++i) {
-        array[i] = 0;
-    }
-}
-
 void KisTiledExtentManager::replaceTileStats(const QVector<QPoint> &indexes)
 {
-    clearArray(m_colArray, m_colArrayLock);
-    clearArray(m_rowArray, m_rowArrayLock);
+    m_colsData.clear();
+    m_rowsData.clear();
 
     Q_FOREACH (const QPoint &index, indexes) {
-        addTileToMap(index.x(), m_colArray, m_minCol, m_maxCol, m_colArrayLock);
-        addTileToMap(index.y(), m_rowArray, m_minRow, m_maxRow, m_rowArrayLock);
+        m_colsData.add(index.x());
+        m_rowsData.add(index.y());
     }
 
     updateExtent();
@@ -148,8 +166,8 @@ void KisTiledExtentManager::replaceTileStats(const QVector<QPoint> &indexes)
 
 void KisTiledExtentManager::clear()
 {
-    clearArray(m_colArray, m_colArrayLock);
-    clearArray(m_rowArray, m_rowArrayLock);
+    m_colsData.clear();
+    m_rowsData.clear();
 
     QWriteLocker l(&m_mutex);
     m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
@@ -164,28 +182,19 @@ QRect KisTiledExtentManager::extent() const
 
 void KisTiledExtentManager::updateExtent()
 {
-    bool colArrayEmpty = false;
-    bool rowArrayEmpty = false;
-    {
-        QReadLocker l(&m_colArrayLock);
-        colArrayEmpty = m_colArray[0] == 0;
-    }
-    {
-        QReadLocker l(&m_rowArrayLock);
-        rowArrayEmpty = m_rowArray[0] == 0;
-    }
+    bool colsEmpty = m_colsData.isEmpty();
+    bool rowsEmpty = m_rowsData.isEmpty();
 
-    KIS_ASSERT_RECOVER_RETURN(colArrayEmpty == rowArrayEmpty);
+    KIS_ASSERT_RECOVER_RETURN(colsEmpty == rowsEmpty);
 
-    // here we check for only one map for efficiency reasons
-    if (colArrayEmpty && rowArrayEmpty) {
+    if (colsEmpty && rowsEmpty) {
         QWriteLocker l(&m_mutex);
         m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
     } else {
-        const int minX = m_minCol.loadAcquire() * KisTileData::WIDTH;
-        const int maxPlusOneX = (m_maxCol.loadAcquire() + 1) * KisTileData::WIDTH;
-        const int minY = m_minRow.loadAcquire() * KisTileData::HEIGHT;
-        const int maxPlusOneY = (m_maxRow.loadAcquire() + 1) * KisTileData::HEIGHT;
+        const int minX = m_colsData.min() * KisTileData::WIDTH;
+        const int maxPlusOneX = (m_colsData.max() + 1) * KisTileData::WIDTH;
+        const int minY = m_rowsData.min() * KisTileData::HEIGHT;
+        const int maxPlusOneY = (m_rowsData.max() + 1) * KisTileData::HEIGHT;
 
         QWriteLocker l(&m_mutex);
         m_currentExtent =
@@ -194,4 +203,3 @@ void KisTiledExtentManager::updateExtent()
                   maxPlusOneY - minY);
     }
 }
-

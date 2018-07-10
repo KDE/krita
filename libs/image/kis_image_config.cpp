@@ -40,8 +40,8 @@
 #endif
 
 KisImageConfig::KisImageConfig(bool readOnly)
-    : m_config( KSharedConfig::openConfig()->group(QString())),
-      m_readOnly(readOnly)
+    : m_config(KSharedConfig::openConfig()->group(QString()))
+    , m_readOnly(readOnly)
 {
 #ifdef Q_OS_OSX
     // clear /var/folders/ swap path set by old broken Krita swap implementation in order to use new default swap dir.

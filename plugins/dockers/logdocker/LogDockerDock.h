@@ -31,11 +31,11 @@ public:
     MessageSender() : QObject() {}
     ~MessageSender() override {}
 
-    void sendMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    void sendMessage(QtMsgType type, const QString &msg);
 
 Q_SIGNALS:
 
-    void emitMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    void emitMessage(QtMsgType type, const QString &msg);
 
 };
 
@@ -53,7 +53,7 @@ private Q_SLOTS:
     void clearLog();
     void saveLog();
     void settings();
-    void insertMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    void insertMessage(QtMsgType type, const QString &msg);
 
 
 private:

@@ -103,7 +103,7 @@ void OnionSkinsDocker::unsetCanvas()
 {
 }
 
-void OnionSkinsDocker::setMainWindow(KisViewManager *view)
+void OnionSkinsDocker::setViewManager(KisViewManager *view)
 {
     KisActionManager *actionManager = view->actionManager();
 

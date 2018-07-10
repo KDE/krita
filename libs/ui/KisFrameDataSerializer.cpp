@@ -130,7 +130,7 @@ int KisFrameDataSerializer::saveFrame(const KisFrameDataSerializer::Frame &frame
         const int compressedSize =
             compression.compress(tile.data.data(), frameByteSize, buffer, maxBufferSize);
 
-        ENTER_FUNCTION() << ppVar(compressedSize) << ppVar(frameByteSize);
+        //ENTER_FUNCTION() << ppVar(compressedSize) << ppVar(frameByteSize);
 
         const bool isCompressed = compressedSize < frameByteSize;
         stream << isCompressed;

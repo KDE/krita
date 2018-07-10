@@ -64,7 +64,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
     m_page->layout()->setMargin(0);
     m_page->setObjectName(name);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
     _heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
@@ -124,7 +124,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
 DlgLayerSize::~DlgLayerSize()
 {
 
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     cfg.writeEntry<bool>(PARAM_KEEP_AR, m_page->aspectRatioBtn->keepAspectRatio());
     cfg.writeEntry<bool>(PARAM_KEEP_PROP, m_page->constrainProportionsCkb->isChecked());

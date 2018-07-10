@@ -281,7 +281,7 @@ void KisAnimationFrameCache::slotConfigChanged()
 {
     m_d->newFrames.clear();
 
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     if (cfg.useOnDiskAnimationCacheSwapping()) {
         m_d->swapper.reset(new KisFrameCacheSwapper(m_d->textures->updateInfoBuilder(), cfg.swapDir()));

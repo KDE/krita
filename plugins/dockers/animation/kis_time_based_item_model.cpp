@@ -84,7 +84,7 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
     : QAbstractTableModel(parent)
     , m_d(new Private())
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     using namespace std::placeholders;
     std::function<void (int)> callback(

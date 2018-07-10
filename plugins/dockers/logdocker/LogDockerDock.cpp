@@ -53,8 +53,8 @@ LogDockerDock::LogDockerDock( )
 
     bnToggle->setIcon(koIcon("view-list-text"));
     connect(bnToggle, SIGNAL(clicked(bool)), SLOT(toggleLogging(bool)));
-    bnToggle->setChecked(KisConfig().readEntry<bool>("logviewer_enabled", false));
-    toggleLogging(KisConfig().readEntry<bool>("logviewer_enabled", false));
+    bnToggle->setChecked(KisConfig(true).readEntry<bool>("logviewer_enabled", false));
+    toggleLogging(KisConfig(true).readEntry<bool>("logviewer_enabled", false));
 
     bnClear->setIcon(koIcon("edit-clear"));
     connect(bnClear, SIGNAL(clicked(bool)), SLOT(clearLog()));
@@ -86,7 +86,7 @@ void LogDockerDock::setCanvas(KoCanvasBase *canvas)
 
 void LogDockerDock::toggleLogging(bool toggle)
 {
-    KisConfig().writeEntry<bool>("logviewer_enabled", toggle);
+    KisConfig(false).writeEntry<bool>("logviewer_enabled", toggle);
     if (toggle) {
         qInstallMessageHandler(messageHandler);
         applyCategories();

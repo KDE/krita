@@ -99,8 +99,7 @@ KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store, qint32 memoryLimit
         m_memoryLimit = memoryLimit;
     }
     else {
-        KisImageConfig config;
-        m_memoryLimit = MiB_TO_METRIC(config.poolLimit());
+        m_memoryLimit = MiB_TO_METRIC(KisImageConfig(true).poolLimit());
     }
 }
 
@@ -417,6 +416,5 @@ void KisTileDataPooler::debugTileStatistics()
 
 void KisTileDataPooler::testingRereadConfig()
 {
-    KisImageConfig config;
-    m_memoryLimit = MiB_TO_METRIC(config.poolLimit());
+    m_memoryLimit = MiB_TO_METRIC(KisImageConfig(true).poolLimit());
 }

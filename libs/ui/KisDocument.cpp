@@ -236,7 +236,7 @@ public:
         , lastMod(firstMod)
         , nserver(new KisNameServer(1))
         , imageIdleWatcher(2000 /*ms*/)
-        , globalAssistantsColor(KisConfig().defaultAssistantsColor())
+        , globalAssistantsColor(KisConfig(true).defaultAssistantsColor())
         , savingLock(&savingMutex)
         , batchMode(false)
     {
@@ -529,7 +529,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
         return false;
     }
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (cfg.backupFile() && filePathInfo.exists()) {
         KBackup::backupFile(job.filePath);
     }
@@ -863,7 +863,7 @@ void KisDocument::slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, K
                                     fileName,
                                     exportErrorToUserMessage(status, errorMessage)), errorMessageTimeout);
     } else {
-        KisConfig cfg;
+        KisConfig cfg(true);
         d->autoSaveDelay = cfg.autoSaveInterval();
 
         if (!d->modifiedWhileSaving) {
@@ -1456,7 +1456,7 @@ void KisDocument::slotUndoStackCleanChanged(bool value)
 
 void KisDocument::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->undoStack->setUndoLimit(cfg.undoStackLimit());
     d->autoSaveDelay = cfg.autoSaveInterval();
     setNormalAutoSaveInterval();
@@ -1604,8 +1604,6 @@ bool KisDocument::newImage(const QString& name,
 {
     Q_ASSERT(cs);
 
-    KisConfig cfg;
-
     KisImageSP image;
     KisPaintLayerSP layer;
 
@@ -1652,6 +1650,7 @@ bool KisDocument::newImage(const QString& name,
         layer->setDirty(QRect(0, 0, width, height));
     }
 
+    KisConfig cfg(false);
     cfg.defImageWidth(width);
     cfg.defImageHeight(height);
     cfg.defImageResolution(imageResolution);

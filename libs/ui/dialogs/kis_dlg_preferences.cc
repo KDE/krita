@@ -93,7 +93,7 @@
 GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     : WdgGeneralSettings(_parent, _name)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     //
     // Cursor Tab
@@ -208,7 +208,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
 void GeneralTab::setDefault()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle(true));
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle(true));
@@ -440,7 +440,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page = new WdgColorSettings(this);
     l->addWidget(m_page, 0, 0);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
     connect(m_page->chkUseSystemMonitorProfile, SIGNAL(toggled(bool)), this, SLOT(toggleAllowMonitorProfileSelection(bool)));
@@ -473,7 +473,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
 
-    KisImageConfig cfgImage;
+    KisImageConfig cfgImage(true);
 
     KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
     m_page->sldAdaptationState->setMaximum(20);
@@ -533,7 +533,7 @@ void ColorSettingsTab::installProfile()
         iccEngine->addProfile(saveLocation + QFileInfo(profileName).fileName());
     }
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     refillMonitorProfiles(KoID("RGBA", ""));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
@@ -546,8 +546,9 @@ void ColorSettingsTab::installProfile()
 
 void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
 {
+    KisConfig cfg(true);
+
     if (useSystemProfile) {
-        KisConfig cfg;
         QStringList devices = KisColorManager::instance()->devices();
         if (devices.size() == QApplication::desktop()->screenCount()) {
             for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
@@ -564,7 +565,6 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
         }
     }
     else {
-        KisConfig cfg;
         refillMonitorProfiles(KoID("RGBA", ""));
 
         for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
@@ -581,8 +581,8 @@ void ColorSettingsTab::setDefault()
 
     refillMonitorProfiles(KoID("RGBA", ""));
 
-    KisConfig cfg;
-    KisImageConfig cfgImage;
+    KisConfig cfg(true);
+    KisImageConfig cfgImage(true);
     KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration();
     const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
     if (proofingSpace) {
@@ -646,7 +646,7 @@ void TabletSettingsTab::setDefault()
 
 #ifdef Q_OS_WIN
     if (KisTabletSupportWin8::isAvailable()) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         m_page->radioWintab->setChecked(!cfg.useWin8PointerInput(true));
         m_page->radioWin8PointerInput->setChecked(cfg.useWin8PointerInput(true));
     } else {
@@ -665,7 +665,7 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
     m_page = new WdgTabletSettings(this);
     l->addWidget(m_page, 0, 0);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     KisCubicCurve curve;
     curve.fromString( cfg.pressureTabletCurve() );
 
@@ -697,9 +697,9 @@ void TabletSettingsTab::slotTabletTest()
 //---------------------------------------------------------------------------------------------------
 #include "kis_acyclic_signal_connector.h"
 
-int getTotalRAM() {
-    KisImageConfig cfg;
-    return cfg.totalRAM();
+int getTotalRAM()
+{
+    return KisImageConfig(true).totalRAM();
 }
 
 int PerformanceTab::realTilesRAM()
@@ -710,7 +710,7 @@ int PerformanceTab::realTilesRAM()
 PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     : WdgPerformanceSettings(parent, name)
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
     const double totalRAM = cfg.totalRAM();
     lblTotalMemory->setText(KFormat().formatByteSize(totalRAM * 1024 * 1024, 0, KFormat::IECBinaryDialect, KFormat::UnitMegaByte));
 
@@ -808,7 +808,7 @@ PerformanceTab::~PerformanceTab()
 
 void PerformanceTab::load(bool requestDefault)
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     sliderMemoryLimit->setValue(cfg.memoryHardLimitPercent(requestDefault));
     sliderPoolLimit->setValue(cfg.memoryPoolLimitPercent(requestDefault));
@@ -829,7 +829,7 @@ void PerformanceTab::load(bool requestDefault)
     sliderFpsLimit->setValue(cfg.fpsLimit(requestDefault));
 
     {
-        KisConfig cfg2;
+        KisConfig cfg2(true);
         chkOpenGLFramerateLogging->setChecked(cfg2.enableOpenGLFramerateLogging(requestDefault));
         chkBrushSpeedLogging->setChecked(cfg2.enableBrushSpeedLogging(requestDefault));
         chkDisableVectorOptimizations->setChecked(cfg2.enableAmdVectorizationWorkaround(requestDefault));
@@ -853,7 +853,7 @@ void PerformanceTab::load(bool requestDefault)
 
 void PerformanceTab::save()
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(false);
 
     cfg.setMemoryHardLimitPercent(sliderMemoryLimit->value());
     cfg.setMemorySoftLimitPercent(sliderUndoLimit->value());
@@ -871,7 +871,7 @@ void PerformanceTab::save()
     cfg.setFpsLimit(sliderFpsLimit->value());
 
     {
-        KisConfig cfg2;
+        KisConfig cfg2(true);
         cfg2.setEnableOpenGLFramerateLogging(chkOpenGLFramerateLogging->isChecked());
         cfg2.setEnableBrushSpeedLogging(chkBrushSpeedLogging->isChecked());
         cfg2.setEnableAmdVectorizationWorkaround(chkDisableVectorOptimizations->isChecked());
@@ -890,7 +890,7 @@ void PerformanceTab::save()
 
 void PerformanceTab::selectSwapDir()
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
     QString swapDir = cfg.swapDir();
     swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
     if (swapDir.isEmpty()) {
@@ -920,11 +920,11 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     : WdgDisplaySettings(parent, name)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     const QString rendererOpenGLText = i18nc("canvas renderer", "OpenGL");
-    const QString rendererAngleText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
 #ifdef Q_OS_WIN
+    const QString rendererAngleText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
     cmbRenderer->clear();
     QString qtPreferredRendererText;
     if (KisOpenGL::getQtPreferredOpenGLRenderer() == KisOpenGL::RendererAngle) {
@@ -1038,7 +1038,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
 void DisplaySettingsTab::setDefault()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     cmbRenderer->setCurrentIndex(0);
 #ifdef Q_OS_WIN
     if (!(KisOpenGL::getSupportedOpenGLRenderers() &
@@ -1096,7 +1096,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 //---------------------------------------------------------------------------------------------------
 FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSettingsBase(parent)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     chkDockers->setChecked(cfg.hideDockersFullscreen());
     chkMenu->setChecked(cfg.hideMenuFullscreen());
@@ -1109,7 +1109,7 @@ FullscreenSettingsTab::FullscreenSettingsTab(QWidget* parent) : WdgFullscreenSet
 
 void FullscreenSettingsTab::setDefault()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     chkDockers->setChecked(cfg.hideDockersFullscreen(true));
     chkMenu->setChecked(cfg.hideMenuFullscreen(true));
     chkScrollbars->setChecked(cfg.hideScrollbarsFullscreen(true));
@@ -1277,7 +1277,7 @@ bool KisDlgPreferences::editPreferences()
     bool baccept = (dialog->exec() == Accepted);
     if (baccept) {
         // General settings
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setNewCursorStyle(dialog->m_general->cursorStyle());
         cfg.setNewOutlineStyle(dialog->m_general->outlineStyle());
         cfg.setShowRootLayer(dialog->m_general->showRootLayer());
@@ -1331,7 +1331,7 @@ bool KisDlgPreferences::editPreferences()
         }
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
 
-        KisImageConfig cfgImage;
+        KisImageConfig cfgImage(false);
         cfgImage.setDefaultProofingConfig(dialog->m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
                                           dialog->m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
                                           dialog->m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),

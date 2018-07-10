@@ -66,7 +66,7 @@ KisOpenGLImageTextures::KisOpenGLImageTextures()
     , m_useOcio(false)
     , m_initialized(false)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_renderingIntent = (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
 
     m_conversionFlags = KoColorConversionTransformation::HighQuality;
@@ -137,7 +137,7 @@ KisImageSP KisOpenGLImageTextures::image() const
 
 bool KisOpenGLImageTextures::imageCanShareTextures()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (cfg.useOcio()) return false;
     if (KisPart::instance()->mainwindowCount() == 1) return true;
     if (qApp->desktop()->screenCount() == 1) return true;
@@ -197,7 +197,7 @@ void KisOpenGLImageTextures::createImageTextureTiles()
     const int pixelSize = m_tilesDestinationColorSpace->pixelSize();
     QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
-    KisConfig config;
+    KisConfig config(true);
     KisOpenGL::FilterMode mode = (KisOpenGL::FilterMode)config.openGLFilteringMode();
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
@@ -399,7 +399,7 @@ void KisOpenGLImageTextures::setProofingConfig(KisProofingConfigurationSP proofi
 
 void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     const GLint preferredTextureSize = cfg.openGLTextureSize();
 
@@ -552,7 +552,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
     if (!m_internalColorManagementActive &&
             colorModelId != destinationColorModelId) {
 
-        KisConfig cfg;
+        KisConfig cfg(false);
         KisConfig::OcioColorManagementMode cm = cfg.ocioColorManagementMode();
 
         if (cm != KisConfig::INTERNAL) {

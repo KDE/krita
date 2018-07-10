@@ -218,7 +218,7 @@ bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionV
 {
     bool result = false;
 
-    if (KisAlgebra2D::maxDimension(selectionViewRect) < KisConfig().selectionViewSizeMinimum() &&
+    if (KisAlgebra2D::maxDimension(selectionViewRect) < KisConfig(true).selectionViewSizeMinimum() &&
         (action == SELECTION_INTERSECT || action == SELECTION_REPLACE)) {
 
         // Queueing this action to ensure we avoid a race condition when unlocking the node system

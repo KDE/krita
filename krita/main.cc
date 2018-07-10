@@ -335,7 +335,7 @@ extern "C" int main(int argc, char **argv)
     }
 
 #if defined Q_OS_WIN
-    KisConfig cfg;
+    KisConfig cfg(false);
     bool supportedWindowsVersion = true;
 #if QT_VERSION >= 0x050900
     QOperatingSystemVersion osVersion = QOperatingSystemVersion::current();

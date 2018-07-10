@@ -276,7 +276,7 @@ bool KisCanvasController::wrapAroundMode() const
 
 void KisCanvasController::slotTogglePixelGrid(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.enablePixelGrid(value);
 
     KisConfigNotifier::instance()->notifyPixelGridModeChanged();

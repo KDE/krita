@@ -167,7 +167,7 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     , m_blockUpdates(false)
     , m_initialized(false)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_maxPresets = cfg.favoritePresets();
     m_colorList = new ColorDataList();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
@@ -209,7 +209,7 @@ QList<QImage> KisFavoriteResourceManager::favoritePresetImages()
 void KisFavoriteResourceManager::setCurrentTag(const QString& tagName)
 {
     m_currentTag = tagName;
-    KisConfig().writeEntry<QString>("favoritePresetsTag", tagName);
+    KisConfig(false).writeEntry<QString>("favoritePresetsTag", tagName);
     updateFavoritePresets();
 }
 
@@ -335,7 +335,7 @@ void KisFavoriteResourceManager::updateFavoritePresets()
 
 void KisFavoriteResourceManager::configChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_maxPresets = cfg.favoritePresets();
     updateFavoritePresets();
 }
@@ -345,7 +345,7 @@ void KisFavoriteResourceManager::init()
     if (!m_initialized) {
         m_initialized = true;
         KisResourceServerProvider::instance()->paintOpPresetServer();
-        m_currentTag = KisConfig().readEntry<QString>("favoritePresetsTag", "★ My Favorites");
+        m_currentTag = KisConfig(true).readEntry<QString>("favoritePresetsTag", "★ My Favorites");
 
         updateFavoritePresets();
     }

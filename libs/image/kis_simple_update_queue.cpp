@@ -72,7 +72,7 @@ void KisSimpleUpdateQueue::updateSettings()
 {
     QMutexLocker locker(&m_lock);
 
-    KisImageConfig config;
+    KisImageConfig config(true);
 
     m_patchWidth = config.updatePatchWidth();
     m_patchHeight = config.updatePatchHeight();

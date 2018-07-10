@@ -380,7 +380,7 @@ void KisApplication::loadGuiPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
 #if defined(Q_OS_WIN)
 #ifdef ENV32BIT

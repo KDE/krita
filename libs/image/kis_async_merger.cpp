@@ -219,7 +219,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         if(currentLeaf->isRoot()) continue;
 
         // All the masks should be filtered by the walkers
-        Q_ASSERT(currentLeaf->isLayer());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(currentLeaf->isLayer());
 
         QRect applyRect = item.m_applyRect;
 

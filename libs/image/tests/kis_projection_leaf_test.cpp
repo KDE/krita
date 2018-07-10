@@ -19,7 +19,10 @@
 #include "kis_projection_leaf_test.h"
 
 #include <QTest>
+
+#define USE_DOCUMENT 0
 #include "qimage_based_test.h"
+
 #include "kis_projection_leaf.h"
 #include "kis_group_layer.h"
 

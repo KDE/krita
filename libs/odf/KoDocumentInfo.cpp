@@ -109,7 +109,6 @@ QDomDocument KoDocumentInfo::save(QDomDocument &doc)
 void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
 {
     if (!m_authorTags.contains(info) && !m_contactTags.contains(info) && !info.contains("contact-mode-")) {
-        qDebug()<<info<<"dun exist";
         return;
     }
 
@@ -119,7 +118,6 @@ void KoDocumentInfo::setAuthorInfo(const QString &info, const QString &data)
 void KoDocumentInfo::setActiveAuthorInfo(const QString &info, const QString &data)
 {
     if (!m_authorTags.contains(info) && !m_contactTags.contains(info) && !info.contains("contact-mode-")) {
-        qDebug()<<info<<"doesn't exist";
         return;
     }
     if (m_contactTags.contains(info)) {

@@ -28,6 +28,7 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
+#include <KisPart.h>
 #include <KoDialog.h>
 #include <KoCanvasBase.h>
 #include <KoIcon.h>
@@ -65,23 +66,21 @@ LogDockerDock::LogDockerDock( )
     bnSettings->setIcon(koIcon("configure"));
     connect(bnSettings, SIGNAL(clicked(bool)), SLOT(settings()));
 
-    s_debug.setForeground(Qt::white);
-    s_info.setForeground(Qt::yellow);
-    s_warning.setForeground(QColor(255, 80, 0));
-    s_critical.setForeground(Qt::red);
-    s_fatal.setForeground(Qt::red);
-    s_fatal.setFontWeight(QFont::Bold);
-
     qRegisterMetaType<QtMsgType>("QtMsgType");
-
     connect(s_messageSender, SIGNAL(emitMessage(QtMsgType,QString)), this, SLOT(insertMessage(QtMsgType,QString)), Qt::AutoConnection);
+
+    applyCategories();
+    changeTheme();
 }
 
-void LogDockerDock::setCanvas(KoCanvasBase *canvas)
+void LogDockerDock::setCanvas(KoCanvasBase *)
 {
-    Q_UNUSED(canvas);
     setEnabled(true);
+}
 
+void LogDockerDock::setMainWindow(QMainWindow *mainWindow)
+{
+    connect(static_cast<KisMainWindow*>(mainWindow), SIGNAL(themeChanged()), SLOT(changeTheme()));
 }
 
 void LogDockerDock::toggleLogging(bool toggle)
@@ -290,6 +289,27 @@ void LogDockerDock::insertMessage(QtMsgType type, const QString &msg)
 
     cursor.endEditBlock();
     txtLogViewer->verticalScrollBar()->setValue(txtLogViewer->verticalScrollBar()->maximum());
+}
+
+void LogDockerDock::changeTheme()
+{
+    clearLog();
+    QColor background = qApp->palette().background().color();
+    if (background.value() > 100) {
+        s_debug.setForeground(Qt::black);
+        s_info.setForeground(Qt::darkGreen);
+        s_warning.setForeground(Qt::darkYellow);
+        s_critical.setForeground(Qt::darkRed);
+        s_fatal.setForeground(Qt::darkRed);
+    }
+    else {
+        s_debug.setForeground(Qt::white);
+        s_info.setForeground(Qt::green);
+        s_warning.setForeground(Qt::yellow);
+        s_critical.setForeground(Qt::red);
+        s_fatal.setForeground(Qt::red);
+    }
+    s_fatal.setFontWeight(QFont::Bold);
 }
 
 void MessageSender::sendMessage(QtMsgType type, const QString &msg)

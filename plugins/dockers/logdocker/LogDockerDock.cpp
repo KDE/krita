@@ -72,7 +72,9 @@ LogDockerDock::LogDockerDock( )
     s_fatal.setForeground(Qt::red);
     s_fatal.setFontWeight(QFont::Bold);
 
-    connect(s_messageSender, SIGNAL(emitMessage(QtMsgType,QMessageLogContext,QString)), this, SLOT(insertMessage(QtMsgType,QMessageLogContext,QString)), Qt::AutoConnection);
+    qRegisterMetaType<QtMsgType>("QtMsgType");
+
+    connect(s_messageSender, SIGNAL(emitMessage(QtMsgType,QString)), this, SLOT(insertMessage(QtMsgType,QString)), Qt::AutoConnection);
 }
 
 void LogDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -256,12 +258,12 @@ void LogDockerDock::applyCategories()
     QLoggingCategory::setFilterRules(filters.join("\n"));
 }
 
-void LogDockerDock::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void LogDockerDock::messageHandler(QtMsgType type, const QMessageLogContext &/*context*/, const QString &msg)
 {
-    s_messageSender->sendMessage(type, context, msg);
+    s_messageSender->sendMessage(type, msg);
 }
 
-void LogDockerDock::insertMessage(QtMsgType type, const QMessageLogContext &/*context*/, const QString &msg)
+void LogDockerDock::insertMessage(QtMsgType type, const QString &msg)
 {
     QTextDocument *doc = txtLogViewer->document();
     QTextCursor cursor(doc);
@@ -290,7 +292,7 @@ void LogDockerDock::insertMessage(QtMsgType type, const QMessageLogContext &/*co
     txtLogViewer->verticalScrollBar()->setValue(txtLogViewer->verticalScrollBar()->maximum());
 }
 
-void MessageSender::sendMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+void MessageSender::sendMessage(QtMsgType type, const QString &msg)
 {
-    emit emitMessage(type, context, msg);
+    emit emitMessage(type, msg);
 }

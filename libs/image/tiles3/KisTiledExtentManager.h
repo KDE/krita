@@ -28,6 +28,35 @@
 
 class KRITAIMAGE_EXPORT KisTiledExtentManager
 {
+    static const int InitialBufferSize = 4096;
+
+    class Data
+    {
+    public:
+        Data();
+        ~Data();
+
+        inline bool add(int index);
+        inline bool remove(int index);
+        void clear();
+        bool isEmpty();
+        int min();
+        int max();
+
+    private:
+        void updateMin();
+        void updateMax();
+
+    private:
+        QAtomicInt m_min;
+        QAtomicInt m_max;
+        int m_offset;
+        int m_capacity;
+        QAtomicInt m_count;
+        QAtomicInt *m_buffer;
+        QReadWriteLock m_lock;
+    };
+
 public:
     KisTiledExtentManager();
 
@@ -44,11 +73,9 @@ private:
 
 private:
     mutable QReadWriteLock m_mutex;
-    QReadWriteLock m_colMapGuard;
-    QReadWriteLock m_rowMapGuard;
-    QMap<int, QAtomicInt> m_colMap;
-    QMap<int, QAtomicInt> m_rowMap;
     QRect m_currentExtent;
+    Data m_colsData;
+    Data m_rowsData;
 };
 
 #endif // KISTILEDEXTENTMANAGER_H

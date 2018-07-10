@@ -38,8 +38,6 @@ const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
 KisLocklessStack<quint8*> KisTileData::m_4Pool;
 KisLocklessStack<quint8*> KisTileData::m_8Pool;
 KisLocklessStack<quint8*> KisTileData::m_16Pool;
-KisLocklessStack<quint8*> KisTileData::m_32Pool;
-KisLocklessStack<quint8*> KisTileData::m_defaultPool;
 
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
@@ -127,35 +125,17 @@ quint8* KisTileData::allocateData(const qint32 pixelSize)
     quint8 *ptr = 0;
 
     switch (pixelSize) {
-    case 4: {
-        if (!m_4Pool.pop(ptr)) {
-            ptr = (quint8*)BoostPool4BPP::malloc();
-        }
+    case 4:
+        if (!m_4Pool.pop(ptr)) ptr = (quint8*)BoostPool4BPP::malloc();
         break;
-    }
-    case 8: {
-        if (!m_8Pool.pop(ptr)) {
-            ptr = (quint8*)BoostPool8BPP::malloc();
-        }
+    case 8:
+        if (!m_8Pool.pop(ptr)) ptr = (quint8*)BoostPool8BPP::malloc();
         break;
-    }
-    case 16: {
-        if (!m_16Pool.pop(ptr)) {
-            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
-        }
+    case 16:
+        if (!m_16Pool.pop(ptr)) ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
         break;
-    }
-    case 32: {
-        if (!m_32Pool.pop(ptr)) {
-            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
-        }
+    default:
         break;
-    }
-    default: {
-        if (!m_defaultPool.pop(ptr)) {
-            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
-        }
-    }
     }
 
     return ptr;
@@ -173,16 +153,11 @@ void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
 //        BoostPool8BPP::free(ptr);
         break;
     case 16:
-        m_8Pool.push(ptr);
-//        BoostPool8BPP::free(ptr);
-        break;
-    case 32:
-        m_8Pool.push(ptr);
+        m_16Pool.push(ptr);
 //        BoostPool8BPP::free(ptr);
         break;
     default:
-        m_defaultPool.push(ptr);
-//        free(ptr);
+        break;
     }
 }
 

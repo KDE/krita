@@ -46,13 +46,25 @@ void TestFolderStorage ::testStorage()
     QVERIFY(iter->hasNext());
     int count = 0;
     while (iter->hasNext()) {
-        qDebug() << iter->url() << iter->type() << iter->lastModified();
         iter->next();
+        qDebug() << iter->url() << iter->type() << iter->lastModified();
         count++;
     }
     QVERIFY(count == 1);
+}
 
-
+void TestFolderStorage::testTagIterator()
+{
+    KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
+    QSharedPointer<KisResourceStorage::TagIterator> iter = folderStorage.tags("paintoppresets");
+    QVERIFY(iter->hasNext());
+    int count = 0;
+    while (iter->hasNext()) {
+        iter->next();
+        qDebug() << iter->url() << iter->name() << iter->tag();
+        count++;
+    }
+    QVERIFY(count == 1);
 }
 
 QTEST_MAIN(TestFolderStorage)

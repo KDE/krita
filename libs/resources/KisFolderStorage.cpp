@@ -40,27 +40,30 @@ public:
                                              QDirIterator::Subdirectories));
     }
 
-    bool hasNext() const override { return m_dirIterator->hasNext(); }
+    bool hasNext() const override
+    {
+        return m_dirIterator->hasNext();
+    }
+
     void next() const override
     {
         m_dirIterator->next();
-        load(const_cast<KisTag*>(&m_tag));
+        const_cast<FolderTagIterator*>(this)->m_tag.reset(new KisTag);
+        load(m_tag);
     }
 
-    QString url() const override { return m_tag.url(); }
-    QString name() const override { return m_tag.name(); }
-    QString comment() const override {return m_tag.comment(); }
+    QString url() const override { return m_tag ? m_tag->url() : QString(); }
+    QString name() const override { return m_tag ? m_tag->name() : QString(); }
+    QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
 
     QSharedPointer<KisTag> tag() const
     {
-        QSharedPointer<KisTag> t(new KisTag());
-        load(t.data());
-        return t;
+        return m_tag;
     }
 
 private:
 
-    bool load(KisTag *tag) const
+    bool load(QSharedPointer<KisTag> tag) const
     {
         QFile f(m_dirIterator->filePath());
         if (f.exists()) {
@@ -76,7 +79,7 @@ private:
     QScopedPointer<QDirIterator> m_dirIterator;
     QString m_location;
     QString m_resourceType;
-    KisTag m_tag;
+    QSharedPointer<KisTag> m_tag;
 };
 
 

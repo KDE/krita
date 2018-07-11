@@ -27,6 +27,7 @@ class TestFolderStorage : public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testStorage();
+    void testTagIterator();
 private:
 };
 

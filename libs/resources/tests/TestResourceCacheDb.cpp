@@ -49,7 +49,6 @@ void TestResourceCacheDb::testCreateDatabase()
                                        << "storages"
                                        << "tags"
                                        << "resources"
-                                       << "translations"
                                        << "versioned_resources"
                                        << "resource_tags";
     QStringList dbTables = sqlDb.tables();

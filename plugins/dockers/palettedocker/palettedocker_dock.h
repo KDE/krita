@@ -46,7 +46,7 @@ public:
     PaletteDockerDock();
     ~PaletteDockerDock() override;
     QString observerName() override { return "PaletteDockerDock"; }
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
@@ -70,7 +70,7 @@ private Q_SLOTS:
     void entrySelectedBack(KoColorSetEntry entry);
     void slotSetColorSet(KoColorSet* colorSet);
 
-    void setColorFromNameList(int index);
+    void slotNameListSelection(int index);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);

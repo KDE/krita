@@ -31,7 +31,7 @@
 void KisLowMemoryTests::initTestCase()
 {
     // hard limit of 1MiB, no undo in memory, no clones
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMemoryHardLimitPercent(1.1 * 100.0 / KisImageConfig::totalRAM());
     config.setMemorySoftLimitPercent(0);
     config.setMemoryPoolLimitPercent(0);

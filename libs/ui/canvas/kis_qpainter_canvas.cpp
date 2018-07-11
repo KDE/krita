@@ -240,7 +240,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_d->checkBrush = QBrush(createCheckersImage());
     m_d->scrollCheckers = cfg.scrollCheckers();

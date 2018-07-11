@@ -102,7 +102,7 @@ LutDockerDock::LutDockerDock()
     setupUi(m_page);
     setWidget(m_page);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_chkUseOcio->setChecked(cfg.useOcio());
     connect(m_chkUseOcio, SIGNAL(toggled(bool)), SLOT(updateDisplaySettings()));
     connect(m_colorManagement, SIGNAL(currentIndexChanged(int)), SLOT(slotColorManagementModeChanged()));
@@ -419,7 +419,7 @@ void LutDockerDock::updateDisplaySettings()
 
 void LutDockerDock::writeControls()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     cfg.setUseOcio(m_chkUseOcio->isChecked());
     cfg.setOcioColorManagementMode((KisConfig::OcioColorManagementMode) m_colorManagement->currentIndex());
@@ -445,7 +445,7 @@ void LutDockerDock::selectOcioConfiguration()
     QFile f(filename);
     if (f.exists()) {
         m_txtConfigurationPath->setText(filename);
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setOcioConfigurationPath(filename);
         writeControls();
         resetOcioConfiguration();
@@ -454,7 +454,7 @@ void LutDockerDock::selectOcioConfiguration()
 
 void LutDockerDock::resetOcioConfiguration()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_ocioConfig.reset();
 
     try {
@@ -496,7 +496,7 @@ void LutDockerDock::refillControls()
     KIS_ASSERT_RECOVER_RETURN(m_ocioConfig);
 
     { // Color Management Mode
-        KisConfig cfg;
+        KisConfig cfg(true);
         KisSignalsBlocker modeBlocker(m_colorManagement);
         m_colorManagement->setCurrentIndex((int) cfg.ocioColorManagementMode());
     }
@@ -558,7 +558,7 @@ void LutDockerDock::refillControls()
 
     { // Lock Current Color
         KisSignalsBlocker locker(m_btnConvertCurrentColor);
-        KisConfig cfg;
+        KisConfig cfg(true);
         m_btnConvertCurrentColor->setChecked(cfg.ocioLockColorVisualRepresentation());
     }
 
@@ -608,7 +608,7 @@ void LutDockerDock::selectLut()
     QFile f(filename);
     if (f.exists() && filename != m_txtLut->text()) {
         m_txtLut->setText(filename);
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setOcioLutPath(filename);
         updateDisplaySettings();
     }

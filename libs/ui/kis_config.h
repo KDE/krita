@@ -26,8 +26,8 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-#include "kis_global.h"
-#include "kis_properties_configuration.h"
+#include <kis_global.h>
+#include <kis_properties_configuration.h>
 #include "kritaui_export.h"
 
 class KoColorProfile;
@@ -37,7 +37,13 @@ class KisSnapConfig;
 class KRITAUI_EXPORT KisConfig
 {
 public:
-    KisConfig();
+    /**
+     * @brief KisConfig create a kisconfig object
+     * @param readOnly if true, there will be no call to sync when the object is deleted.
+     *  Any KisConfig object created in a thread must be read-only.
+     */
+    KisConfig(bool readOnly);
+
     ~KisConfig();
 
     bool disableTouchOnCanvas(bool defaultValue = false) const;
@@ -592,6 +598,7 @@ private:
 
 private:
     mutable KConfigGroup m_cfg;
+    bool m_readOnly;
 };
 
 #endif // KIS_CONFIG_H_

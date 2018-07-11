@@ -142,7 +142,7 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SLOT(setEnabled(bool)));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     intNumLayers->setValue(cfg.numDefaultLayers());
     KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
     bcol.fromQColor(cfg.defaultBackgroundColor());
@@ -307,7 +307,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
 
     doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     cfg.setNumDefaultLayers(intNumLayers->value());
     cfg.setDefaultBackgroundOpacity(backgroundOpacity());
     cfg.setDefaultBackgroundColor(cmbColor->color().toQColor());

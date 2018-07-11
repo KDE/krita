@@ -103,8 +103,8 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_paletteChooser);
 
-    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList(int)));
-    KisConfig cfg;
+    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(slotNameListSelection(int)));
+    KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
     KoColorSet* defaultPalette = rServer->resourceByName(defaultPaletteName);
     if (defaultPalette) {
@@ -118,7 +118,7 @@ PaletteDockerDock::~PaletteDockerDock()
     rServer->removeObserver(this);
 
     if (m_currentColorSet) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         cfg.setDefaultPalette(m_currentColorSet->name());
     }
 
@@ -126,7 +126,7 @@ PaletteDockerDock::~PaletteDockerDock()
     delete m_wdgPaletteDock;
 }
 
-void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
+void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
@@ -187,12 +187,12 @@ void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
 {
     m_wdgPaletteDock->cmbNameList->clear();
 
-    if (!colorSet || !colorSet->colorCount()>0) {
+    if (!colorSet || !(colorSet->colorCount()>0)) {
         return;
     }
 
-    for (quint32 x = 0; x < colorSet->columnCount(); x++) {
-        for (quint32 y = 0; y < colorSet->rowCount(); y++) {
+    for (int x = 0; x < colorSet->columnCount(); x++) {
+        for (int y = 0; y < colorSet->rowCount(); y++) {
             KoColorSetEntry entry = colorSet->getColorGlobal(x, y);
             QPixmap colorSquare = QPixmap(32, 32);
             if (entry.spotColor()) {
@@ -235,15 +235,18 @@ void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
     }
 }
 
-void PaletteDockerDock::setColorFromNameList(int index)
+void PaletteDockerDock::slotNameListSelection(int index)
 {
     if (m_model && m_currentColorSet) {
         entrySelected(m_currentColorSet->getColorGlobal(index));
+
         m_wdgPaletteDock->paletteView->blockSignals(true);
         m_wdgPaletteDock->cmbNameList->blockSignals(true);
+
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
         m_wdgPaletteDock->paletteView->selectionModel()->clearSelection();
         m_wdgPaletteDock->paletteView->selectionModel()->setCurrentIndex(m_model->indexFromId(index), QItemSelectionModel::Select);
+
         m_wdgPaletteDock->paletteView->blockSignals(false);
         m_wdgPaletteDock->cmbNameList->blockSignals(false);
     }

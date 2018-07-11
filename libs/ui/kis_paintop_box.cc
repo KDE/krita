@@ -109,7 +109,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
 
     setObjectName(name);
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_dirtyPresetsEnabled = cfg.useDirtyPresets();
     m_eraserBrushSizeEnabled = cfg.useEraserBrushSize();
     m_eraserBrushOpacityEnabled = cfg.useEraserBrushOpacity();
@@ -513,7 +513,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
 KisPaintopBox::~KisPaintopBox()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
     while (iter.hasNext()) {
         iter.next();
@@ -782,7 +782,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     m_currTabletToolID = TabletToolID(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
@@ -1280,21 +1280,21 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
         m_presetsPopup->updateViewSettings();
     }
     m_dirtyPresetsEnabled = value;
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setUseDirtyPresets(m_dirtyPresetsEnabled);
 
 }
 void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
 {
     m_eraserBrushSizeEnabled = value;
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setUseEraserBrushSize(m_eraserBrushSizeEnabled);
 }
 
 void KisPaintopBox::slotEraserBrushOpacityToggled(bool value)
 {
     m_eraserBrushOpacityEnabled = value;
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setUseEraserBrushOpacity(m_eraserBrushOpacityEnabled);
 }
 
@@ -1303,7 +1303,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (!cfg.toolOptionsInDocker() && m_toolOptionsPopupButton) {
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
     }

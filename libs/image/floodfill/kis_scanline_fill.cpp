@@ -328,7 +328,7 @@ public:
         qint32 *groupMapPtr = reinterpret_cast<qint32*>(m_groupMapIt->rawData());
 
         if (*groupMapPtr != 0) {
-            qDebug() << ppVar(*groupMapPtr) << ppVar(m_groupIndex);
+            dbgImage << ppVar(*groupMapPtr) << ppVar(m_groupIndex);
         }
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(*groupMapPtr == 0);

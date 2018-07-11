@@ -47,7 +47,7 @@ void removeTempFiles(const QString &filesMask)
 void runRenderingTest(KisImageSP image, int numCores, int numClones)
 {
     {
-        KisImageConfig cfg;
+        KisImageConfig cfg(false);
         cfg.setMaxNumberOfThreads(numCores);
         cfg.setFrameRenderingClones(numClones);
     }

@@ -96,6 +96,9 @@
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
+#include "widgets/KisScreenColorPicker.h"
+#include "KisDlgInternalColorSelector.h"
+
 namespace {
 const QTime appStartTime(QTime::currentTime());
 }
@@ -158,6 +161,9 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #ifdef Q_OS_OSX
     setMouseCoalescingEnabled(false);
 #endif
+
+    KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
+
 
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
@@ -374,7 +380,7 @@ void KisApplication::loadGuiPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
 #if defined(Q_OS_WIN)
 #ifdef ENV32BIT

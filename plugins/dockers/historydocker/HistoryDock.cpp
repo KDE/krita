@@ -62,7 +62,7 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas)
         KUndo2Stack* undoStack = canvas->shapeController()->resourceManager()->undoStack();
 
         m_undoView->setStack(undoStack);
-        KisConfig cfg;
+        KisConfig cfg(true);
         m_undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
         m_undoView->stack()->setTimeT1(cfg.stackT1());
         m_undoView->stack()->setTimeT2(cfg.stackT2());

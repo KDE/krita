@@ -138,7 +138,7 @@ void KisAnimationCurveDocker::unsetCanvas()
     setCanvas(0);
 }
 
-void KisAnimationCurveDocker::setMainWindow(KisViewManager *kisview)
+void KisAnimationCurveDocker::setViewManager(KisViewManager *kisview)
 {
     connect(kisview->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
     slotUpdateIcons();

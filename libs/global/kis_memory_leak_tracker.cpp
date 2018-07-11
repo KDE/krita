@@ -34,7 +34,6 @@ KisMemoryLeakTracker* KisMemoryLeakTracker::instance()
 {
     return s_instance;
 }
-
 #ifdef HAVE_MEMORY_LEAK_TRACKER
 
 #include <QHash>
@@ -114,7 +113,7 @@ KisMemoryLeakTracker::KisMemoryLeakTracker() : d(new Private)
 KisMemoryLeakTracker::~KisMemoryLeakTracker()
 {
     if (d->whatWhoWhen.isEmpty()) {
-        qDebug() << "No leak detected.";
+        qInfo() << "No leak detected.";
     } else {
         qWarning() << "****************************************";
         qWarning() << (d->whatWhoWhen.size()) << " leaks have been detected";
@@ -179,21 +178,21 @@ void KisMemoryLeakTracker::dumpReferences(const void* what)
     }
 
     WhatInfo& info = d->whatWhoWhen[what];
-    qDebug() << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
+    qInfo() << "Object " << what << "(" << info.name << ") is still referenced by " << info.infos.size() << " objects:";
     for (QHash<const void*, BacktraceInfo*>::iterator it2 = info.infos.begin();
             it2 != info.infos.end(); ++it2) {
-        qDebug() << "Referenced by " << it2.key() << " at:";
+        qInfo() << "Referenced by " << it2.key() << " at:";
 #ifdef HAVE_BACKTRACE_SUPPORT
         BacktraceInfo* info = it2.value();
         char** strings = backtrace_symbols(info->trace, info->size);
         for (int i = 0; i < info->size; ++i) {
-            qDebug() << strings[i];
+            qInfo() << strings[i];
         }
 #else
-            qDebug() << "Enable backtrace support in kis_memory_leak_tracker.cpp";
+            qInfo() << "Enable backtrace support in kis_memory_leak_tracker.cpp";
 #endif
     }
-    qDebug() << "=====";
+    qInfo() << "=====";
 }
 
 #else

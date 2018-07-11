@@ -72,7 +72,7 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
 
     gc.setClipping(false);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString printerProfileName = cfg.printerProfile();
     const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
 

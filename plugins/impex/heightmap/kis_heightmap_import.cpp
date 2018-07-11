@@ -95,7 +95,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
 
     connect(wdg, SIGNAL(statusUpdated(bool)), kdb, SLOT(enableButtonOk(bool)));
 
-    KisConfig config;
+    KisConfig config(true);
 
     QString filterConfig = config.importConfiguration(mimeType());
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration);
@@ -152,7 +152,7 @@ KisImportExportFilter::ConversionStatus KisHeightMapImport::convert(KisDocument 
         bo = QDataStream::BigEndian;
         cfg->setProperty("endianness", 0);
     }
-    KisConfig().setExportConfiguration(mimeType(), cfg);
+    KisConfig(true).setExportConfiguration(mimeType(), cfg);
 
     QDataStream s(io);
     s.setByteOrder(bo);

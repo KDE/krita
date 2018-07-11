@@ -30,6 +30,7 @@ private Q_SLOTS:
     void testDefaultTip();
     void testSoftTip();
     void testGaussianTip();
+    void testRectGaussianTip();
     void testStampTip();
 
     void testColorsmudgeDefaultTip();

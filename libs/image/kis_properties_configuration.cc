@@ -316,7 +316,7 @@ void KisPropertiesConfiguration::dump() const
 {
     QMap<QString, QVariant>::Iterator it;
     for (it = d->properties.begin(); it != d->properties.end(); ++it) {
-        qDebug() << it.key() << " = " << it.value() << it.value().typeName();
+        dbgImage << it.key() << " = " << it.value() << it.value().typeName();
     }
 
 }

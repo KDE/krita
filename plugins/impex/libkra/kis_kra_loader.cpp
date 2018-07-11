@@ -275,8 +275,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageSP(0);
             }
         }
-        KisImageConfig cfgImage;
-        KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }
@@ -400,7 +399,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
             KisProofingConfigurationSP proofingConfig = image->proofingConfiguration();
             if (!proofingConfig) {
-                proofingConfig = KisImageConfig().defaultProofingconfiguration();
+                proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
             }
 
             if (proofingProfileRes) {

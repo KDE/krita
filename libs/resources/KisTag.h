@@ -22,6 +22,10 @@
 
 #include <QString>
 #include <QScopedPointer>
+class QIODevice;
+
+#include "kritaresources_export.h"
+
 /**
  * @brief The KisTag loads a tag from a .tag file.
  * A .tag file is a .desktop file. The following fields
@@ -32,10 +36,6 @@
  * url: the untranslated name of the tag
  *
  */
-class QIODevice;
-
-#include "kritaresources_export.h"
-
 class KRITARESOURCES_EXPORT KisTag
 {
 public:

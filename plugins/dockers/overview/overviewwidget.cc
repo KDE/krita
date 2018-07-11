@@ -89,7 +89,7 @@ OverviewWidget::OverviewWidget(QWidget * parent)
     , m_imageIdleWatcher(250)
 {
     setMouseTracking(true);
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_outlineColor = qApp->palette().color(QPalette::Highlight);
 }
 

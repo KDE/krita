@@ -1418,6 +1418,10 @@ QString KoPathShape::toString(const QTransform &matrix) const
         // iterate over all points of the current subpath
         for (; pointIt != (*pathIt)->constEnd(); ++pointIt) {
             KoPathPoint *currPoint(*pointIt);
+            if (!currPoint) {
+                qWarning() << "Found a zero point in the shape's path!";
+                continue;
+            }
             // first point of subpath ?
             if (currPoint == firstPoint) {
                 // are we starting a subpath ?

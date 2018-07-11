@@ -71,7 +71,7 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     d->node = node;
 
     d->uiFilterDialog.filterSelection->setView(view);
-    d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig().showFilterGallery());
+    d->uiFilterDialog.filterSelection->showFilterGallery(KisConfig(true).showFilterGallery());
 
     d->uiFilterDialog.pushButtonCreateMaskEffect->show();
     connect(d->uiFilterDialog.pushButtonCreateMaskEffect, SIGNAL(pressed()), SLOT(createMask()));
@@ -102,13 +102,13 @@ KisDlgFilter::KisDlgFilter(KisViewManager *view, KisNodeSP node, KisFilterManage
     KConfigGroup group( KSharedConfig::openConfig(), "filterdialog");
     d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 
-    restoreGeometry(KisConfig().readEntry("filterdialog/geometry", QByteArray()));
+    restoreGeometry(KisConfig(true).readEntry("filterdialog/geometry", QByteArray()));
 
 }
 
 KisDlgFilter::~KisDlgFilter()
 {
-    KisConfig().writeEntry("filterdialog/geometry", saveGeometry());
+    KisConfig(false).writeEntry("filterdialog/geometry", saveGeometry());
     delete d;
 }
 
@@ -172,7 +172,7 @@ void KisDlgFilter::slotOnAccept()
 
     d->uiFilterDialog.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    KisConfig().setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
+    KisConfig(false).setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
 }
 
 void KisDlgFilter::slotOnReject()
@@ -181,7 +181,7 @@ void KisDlgFilter::slotOnReject()
         d->filterManager->cancel();
     }
 
-    KisConfig().setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
+    KisConfig(false).setShowFilterGallery(d->uiFilterDialog.filterSelection->isFilterGalleryVisible());
 }
 
 void KisDlgFilter::createMask()

@@ -165,7 +165,7 @@ public Q_SLOTS:
     void toggleIsolateActiveNode();
     void toggleIsolateMode(bool checked);
     void slotUpdateIsolateModeAction();
-    void slotTryFinishIsolatedMode();
+    void slotTryRestartIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     void createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);

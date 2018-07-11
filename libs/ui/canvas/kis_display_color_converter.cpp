@@ -275,7 +275,7 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
 
 void KisDisplayColorConverter::Private::selectPaintingColorSpace()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     paintingColorSpace = cfg.customColorSelectorColorSpace();
 
     if (!paintingColorSpace || displayFilter) {
@@ -336,8 +336,8 @@ void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter>
 
 
     { // sanity check
-        KisConfig cfg;
-        //KIS_ASSERT_RECOVER_NOOP(cfg.useOcio() == (bool) m_d->displayFilter);
+        // KisConfig cfg;
+        // KIS_ASSERT_RECOVER_NOOP(cfg.useOcio() == (bool) m_d->displayFilter);
     }
 
     m_d->selectPaintingColorSpace();
@@ -347,7 +347,7 @@ void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter>
 KoColorConversionTransformation::Intent
 KisDisplayColorConverter::renderingIntent()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     return (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
 }
 
@@ -357,7 +357,7 @@ KisDisplayColorConverter::conversionFlags()
     KoColorConversionTransformation::ConversionFlags conversionFlags =
         KoColorConversionTransformation::HighQuality;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     if (cfg.useBlackPointCompensation()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     if (!cfg.allowLCMSOptimization()) conversionFlags |= KoColorConversionTransformation::NoOptimization;

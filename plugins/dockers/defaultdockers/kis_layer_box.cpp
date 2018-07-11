@@ -154,7 +154,7 @@ KisLayerBox::KisLayerBox()
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -299,7 +299,7 @@ void KisLayerBox::slotAddLayerBnClicked()
     }
 }
 
-void KisLayerBox::setMainWindow(KisViewManager* kisview)
+void KisLayerBox::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 

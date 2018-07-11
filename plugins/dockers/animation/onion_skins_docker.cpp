@@ -45,7 +45,7 @@ OnionSkinsDocker::OnionSkinsDocker(QWidget *parent) :
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
 
-    KisImageConfig config;
+    KisImageConfig config(true);
     ui->setupUi(mainWidget);
 
     ui->doubleTintFactor->setMinimum(0);
@@ -103,7 +103,7 @@ void OnionSkinsDocker::unsetCanvas()
 {
 }
 
-void OnionSkinsDocker::setMainWindow(KisViewManager *view)
+void OnionSkinsDocker::setViewManager(KisViewManager *view)
 {
     KisActionManager *actionManager = view->actionManager();
 
@@ -145,13 +145,12 @@ void OnionSkinsDocker::slotShowAdditionalSettings(bool value)
     QIcon icon = KisIconUtils::loadIcon(value ? "arrow-down" : "arrow-up");
     ui->btnShowHide->setIcon(icon);
 
-    KisImageConfig config;
-    config.setShowAdditionalOnionSkinsSettings(value);
+    KisImageConfig(false).setShowAdditionalOnionSkinsSettings(value);
 }
 
 void OnionSkinsDocker::changed()
 {
-    KisImageConfig config;
+    KisImageConfig config(false);
 
     KisEqualizerWidget::EqualizerValues v = m_equalizerWidget->getValues();
     config.setNumberOfOnionSkins(v.maxDistance);
@@ -170,7 +169,7 @@ void OnionSkinsDocker::changed()
 
 void OnionSkinsDocker::loadSettings()
 {
-    KisImageConfig config;
+    KisImageConfig config(true);
 
     KisSignalsBlocker b(ui->doubleTintFactor,
                         ui->btnBackwardColor,

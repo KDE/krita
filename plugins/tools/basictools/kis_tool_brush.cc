@@ -211,7 +211,7 @@ void KisToolBrush::setUseScalableDistance(bool value)
 
 void KisToolBrush::resetCursorStyle()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     CursorStyle cursorStyle = cfg.newCursorStyle();
 
     // When the stabilizer is in use, we avoid using the brush outline cursor,
@@ -460,7 +460,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), magnetismLabel, SLOT(setVisible(bool)));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;

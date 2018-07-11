@@ -275,7 +275,7 @@ void KisColorizeStrokeStrategy::cancelStrokeCallback()
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
     if (!cfg.useLodForColorizeMask()) return 0;
 
     KisColorizeStrokeStrategy *clone = new KisColorizeStrokeStrategy(*this, levelOfDetail);

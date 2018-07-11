@@ -767,7 +767,7 @@ public:
             } else if (m_bLabelArea.contains(pt) && findInRects(m_bLabelRects, pt) && !out_edge_index--) {
                 dst_vertex = vertex_descriptor(0, 0, vertex_descriptor::LABEL_B);
             } else {
-                qDebug() << ppVar(vertex) << ppVar(out_edge_index) << ppVar(out_degree(vertex));
+                dbgImage << ppVar(vertex) << ppVar(out_edge_index) << ppVar(out_degree(vertex));
                 qFatal("Wrong edge sub-index");
             }
             break;

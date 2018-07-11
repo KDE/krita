@@ -50,7 +50,7 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
     Q_FOREACH (QString stringName, profileNames) {
         dlgWidget.cmbProfile->addSqueezedItem(stringName);
     }
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString profile = cfg.readEntry<QString>("pngImportProfile", KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId));
     dlgWidget.cmbProfile->setCurrent(profile);
 }
@@ -58,7 +58,7 @@ KisDlgPngImport::KisDlgPngImport(const QString &path, const QString &colorModelI
 QString KisDlgPngImport::profile() const
 {
     QString p = dlgWidget.cmbProfile->itemHighlighted();
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry("pngImportProfile", p);
     return p;
 }

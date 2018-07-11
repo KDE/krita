@@ -61,7 +61,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
     dialogs/kis_delayed_save_dialog.cpp
-    dialogs/kis_dlg_internal_color_selector.cpp
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
     flake/kis_node_dummies_graph.cpp
@@ -95,7 +94,6 @@ set(kritaui_LIB_SRCS
     kis_categorized_item_delegate.cpp
     kis_clipboard.cc
     kis_config.cc
-    kis_config_notifier.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
@@ -227,7 +225,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
-    widgets/kis_popup_button.cc
     widgets/kis_preset_chooser.cpp
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc
@@ -249,17 +246,9 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
-    widgets/kis_spinbox_color_selector.cpp
-    widgets/kis_screen_color_picker.cpp
     widgets/kis_preset_live_preview_view.cpp
+    widgets/KisScreenColorPicker.cpp
     widgets/KoDualColorButton.cpp
-    widgets/kis_color_input.cpp
-    widgets/kis_color_button.cpp
-    widgets/KisVisualColorSelector.cpp
-    widgets/KisVisualColorSelectorShape.cpp
-    widgets/KisVisualEllipticalSelectorShape.cpp
-    widgets/KisVisualRectangleSelectorShape.cpp
-    widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
 
@@ -373,10 +362,6 @@ set(kritaui_LIB_SRCS
     KisMultiFeedRSSModel.cpp
     KisRemoteFileFetcher.cpp
 
-    KisPaletteModel.cpp
-    kis_palette_delegate.cpp
-    kis_palette_view.cpp
-    KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
     KisWindowLayoutResource.cpp
     KisWindowLayoutManager.cpp
@@ -496,7 +481,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     brushhud/kis_dlg_brush_hud_config.ui
-    forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
@@ -522,7 +506,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
-
 )
 
 

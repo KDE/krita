@@ -105,9 +105,14 @@ KoResourceSP KisResourceStorage::resource(const QString &url)
     return d->storagePlugin->resource(url);
 }
 
-QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType)
+QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType) const
 {
     return d->storagePlugin->resources(resourceType);
+}
+
+QSharedPointer<KisResourceStorage::TagIterator> KisResourceStorage::tags(const QString &resourceType) const
+{
+    return d->storagePlugin->tags(resourceType);
 }
 
 

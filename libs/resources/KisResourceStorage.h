@@ -110,7 +110,8 @@ public:
 
     ResourceItem resourceItem(const QString &url);
     KoResourceSP resource(const QString &url);
-    QSharedPointer<ResourceIterator> resources(const QString &resourceType);
+    QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
+    QSharedPointer<TagIterator> tags(const QString &resourceType) const;
 
 private:
     class Private;

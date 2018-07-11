@@ -40,10 +40,20 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->bnEdit->setIcon(KisIconUtils::loadIcon("edit-rename"));
     m_ui->bnImport->setIcon(KisIconUtils::loadIcon("document-import"));
     m_ui->bnExport->setIcon(KisIconUtils::loadIcon("document-export"));
-    m_ui->viewPalette->setItemDelegate(m_d->delegate.data());
-    m_ui->viewPalette->setModel(m_d->model.data());
-    m_ui->viewPalette->verticalHeader()->setDefaultSectionSize(30); // set row height
+
+    m_d->itemChooser->setItemDelegate(m_d->delegate.data());
+    m_d->itemChooser->setRowHeight(40); // set row height
+    m_d->itemChooser->setColumnCount(1);
+    m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
+    m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
+
+    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource *)), SLOT(slotPaletteResourceSelected(KoResource*)));
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()
 { }
+
+void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
+{
+    emit sigPaletteSelected(static_cast<KoColorSet*>(r));
+}

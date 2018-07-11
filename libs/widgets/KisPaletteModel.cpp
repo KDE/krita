@@ -166,8 +166,8 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
 
 void KisPaletteModel::setColorSet(KoColorSet* colorSet)
 {
-    m_colorSet = colorSet;
     beginResetModel();
+    m_colorSet = colorSet;
     endResetModel();
 }
 

@@ -16,10 +16,12 @@ public:
     virtual ~KisPaletteListWidget();
 
 Q_SIGNALS:
-    void paletteSelected(KoColorSet*);
-
+    void sigPaletteSelected(KoColorSet*);
 
 public Q_SLOTS:
+
+private Q_SLOTS:
+    void slotPaletteResourceSelected(KoResource *);
 
 private:
     QScopedPointer<Ui_WdgPaletteListWidget> m_ui;

@@ -73,8 +73,8 @@ public:
     QString defaultFileExtension() const override;
 
     void setColumnCount(int columns);
-    int columnCount();
-    int rowCount();
+    int columnCount() const;
+    int rowCount() const;
     /**
      * @brief comment
      * @return the comment.
@@ -88,7 +88,8 @@ public:
      * @brief add Add a color to the palette.
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
-    void add(KisSwatch, const QString &groupName = QString());
+    void add(const KisSwatch &, const QString &groupName = QString());
+    void setEntry(const KisSwatch &e, int x, int y, const QString &groupName = QString());
 
     /**
      * @brief getColorGlobal
@@ -96,7 +97,7 @@ public:
      * @param globalIndex the global index over the whole palette.
      * @return the entry.
      */
-    KisSwatch getColorGlobal(quint32 x, quint32 y);
+    KisSwatch getColorGlobal(quint32 x, quint32 y) const;
 
     /**
      * @brief getColorGroup
@@ -124,16 +125,10 @@ public:
     bool changeGroupName(QString oldGroupName, QString newGroupName);
 
     /**
-     * @brief nColorsGroup
-     * @param groupName string name of the group, when not specified, returns unsorted colors.
-     * @return the amount of colors in this group.
-     */
-    quint32 nColorsGroup(QString groupName = QString());
-    /**
      * @brief nColors
      * @return total colors in palette.
      */
-    quint32 colorCount();
+    quint32 colorCount() const;
 
     /**
      * @brief addGroup

@@ -60,18 +60,23 @@ public: // KoResourceServerObserver
     void syncTagRemoval(const QString&) override {}
 
 private Q_SLOTS:
-    void addColorForeground();
-    void removeColor();
+    void slotAddColor();
+    void slotRemoveColor();
+    void slotEditEntry();
 
     void slotSetEntryByForeground(const QModelIndex &index);
     void slotSetForegroundColor(const KoColor &color);
+
     void entrySelectedBack(KoColorSetEntry entry);
-    void setColorSet(KoColorSet* colorSet);
+    void slotSetColorSet(KoColorSet* colorSet);
 
     void setColorFromNameList(int index);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
+
+private:
+    void resetNameList(const KoColorSet *colorSet);
 
 private:    
     Ui_WdgPaletteDock* m_wdgPaletteDock;

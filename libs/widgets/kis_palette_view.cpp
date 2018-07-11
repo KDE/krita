@@ -70,11 +70,26 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     horizontalHeader()->setVisible(false);
     verticalHeader()->setVisible(false);
 
+    /*
+     * without this, a cycle might be created:
+     * the view streches to right border, and this make it need a scroll bar;
+     * after the bar is added, the view shrinks to the bar, and this makes it
+     * no longer need the bar any more, and the bar is removed again
+     */
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    setSelectionMode(QAbstractItemView::SingleSelection);
+
     // set the size of swatches
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     horizontalHeader()->setMinimumSectionSize(MINROWHEIGHT);
+    horizontalHeader()->setMaximumSectionSize(MINROWHEIGHT);
+    verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader()->setMinimumSectionSize(MINROWHEIGHT);
+    verticalHeader()->setDefaultSectionSize(MINROWHEIGHT);
+    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
 
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(modifyEntry(QModelIndex)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotModifyEntry(QModelIndex)));
 
 //    setDragEnabled(true);
 //    setDragDropMode(QAbstractItemView::InternalMove);
@@ -206,14 +221,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
-    QModelIndex index;
-    if (selectedIndexes().last().isValid()) {
-        index = selectedIndexes().last();
-    } else if (selectedIndexes().first().isValid()) {
-        index = selectedIndexes().first();
-    } else {
-        return;
-    }
+    QModelIndex index = currentIndex();
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole)) == false) {
         bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
@@ -236,13 +244,6 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     }
     m_d->model = model;
     setModel(model);
-    /*
-    connect(m_d->model, SIGNAL(layoutChanged(QList<QPersistentModelIndex>,QAbstractItemModel::LayoutChangeHint)), this, SLOT(paletteModelChanged()));
-    connect(m_d->model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(paletteModelChanged()));
-    connect(m_d->model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
-    connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(paletteModelChanged()));
-    connect(m_d->model, SIGNAL(modelReset()), this, SLOT(paletteModelChanged()));
-    */
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -283,7 +284,6 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 
 void KisPaletteView::modifyEntry(QModelIndex index)
 {
-    /*
     if (m_d->allowPaletteModification) {
         KoDialog *group = new KoDialog(this);
         QFormLayout *editableItems = new QFormLayout(group);
@@ -300,11 +300,10 @@ void KisPaletteView::modifyEntry(QModelIndex index)
             if (group->exec() == KoDialog::Accepted) {
                 m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
                 m_d->model->colorSet()->save();
-                updateRows();
             }
             //rename the group.
         } else {
-            KoColorSetEntry entry = m_d->model->colorSetEntryFromIndex(index);
+            KisSwatch entry = m_d->model->colorSetEntryFromIndex(index);
             QStringList entryList = qvariant_cast<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
             chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
             editableItems->addRow(i18n("ID"), lnIDName);
@@ -320,10 +319,22 @@ void KisPaletteView::modifyEntry(QModelIndex index)
                 entry.setId(lnIDName->text());
                 entry.setColor(bnColor->color());
                 entry.setSpotColor(chkSpot->isChecked());
-                m_d->model->colorSet()->changeColorSetEntry(entry, entryList.at(0), entryList.at(1).toUInt());
+                m_d->model->colorSet()->setEntry(entry, index.column(), index.row());
                 m_d->model->colorSet()->save();
             }
         }
     }
-    */
+    update(index);
+}
+
+void KisPaletteView::slotModifyEntry(const QModelIndex &index)
+{
+    modifyEntry(index);
+}
+
+void KisPaletteView::slotResizeVerticalHeader(int, int, int newSize)
+{
+    verticalHeader()->setDefaultSectionSize(newSize);
+    verticalHeader()->setMaximumSectionSize(newSize);
+    verticalHeader()->resizeSections(QHeaderView::Fixed);
 }

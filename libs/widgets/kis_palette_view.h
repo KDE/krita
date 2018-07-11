@@ -34,7 +34,6 @@
 class KisPaletteModel;
 class QWheelEvent;
 
-
 class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 {
     Q_OBJECT
@@ -71,6 +70,12 @@ public:
      * remove entry with a dialog window.(Necessary for groups.
      */
     bool removeEntryWithDialog(QModelIndex index);
+    /**
+     * @brief modifyEntry
+     * function for changing the entry at the given index.
+     * if modification isn't allow(@see setAllowModification), this does nothing.
+     */
+    void modifyEntry(QModelIndex index);
 
 Q_SIGNALS:
     /**
@@ -88,18 +93,14 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void trySelectClosestColor(KoColor color);
+    void slotModifyEntry(const QModelIndex &);
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
 
 private Q_SLOTS:
-    /**
-     * @brief modifyEntry
-     * function for changing the entry at the given index.
-     * if modification isn't allow(@see setAllowModification), this does nothing.
-     */
-    void modifyEntry(QModelIndex index);
+    void slotResizeVerticalHeader(int, int, int newSize);
 
 private:
 

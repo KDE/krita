@@ -33,7 +33,6 @@ public:
     bool addGroup(QString name);
     bool removeGroup(QString name, bool keepColors);
     int colorsCountTotal();
-    int colorsCountGroup(QString name);
     KisSwatch colorSetEntryByIndex(int index);
     KisSwatch colorSetEntryFromGroup(int index, const QString &groupName);
     ManagedColor *colorForEntry(KisSwatch entry) /Factory/;

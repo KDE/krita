@@ -27,13 +27,6 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="KisPopupButton" name="bnColorSets">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="KisPaletteView" name="paletteView">
      <property name="minimumSize">
       <size>
@@ -44,29 +37,14 @@
     </widget>
    </item>
    <item>
+    <widget class="SqueezedComboBox" name="cmbNameList">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="4">
-      <widget class="QToolButton" name="bnRemove">
-       <property name="toolTip">
-        <string>Delete color</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset theme="list-remove"/>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="1">
       <spacer name="hBottomSpacer">
        <property name="orientation">
@@ -80,23 +58,28 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="0">
-      <widget class="SqueezedComboBox" name="cmbNameList">
-       <property name="editable">
-        <bool>true</bool>
+     <item row="2" column="4">
+      <widget class="QPushButton" name="bnRename">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-rename">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QToolButton" name="bnAdd">
+     <item row="2" column="5">
+      <widget class="QToolButton" name="bnRemove">
        <property name="toolTip">
-        <string>Add foreground color</string>
+        <string>Delete color</string>
        </property>
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="list-add"/>
+        <iconset theme="list-remove">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -110,12 +93,32 @@
       </widget>
      </item>
      <item row="2" column="3">
-      <widget class="QPushButton" name="bnRename">
+      <widget class="QToolButton" name="bnAdd">
+       <property name="toolTip">
+        <string>Add foreground color</string>
+       </property>
        <property name="text">
-        <string/>
+        <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-rename"/>
+        <iconset theme="list-add">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="KisPopupButton" name="bnColorSets">
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>

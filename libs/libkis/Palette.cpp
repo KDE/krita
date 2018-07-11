@@ -88,12 +88,6 @@ int Palette::colorsCountTotal()
     return d->palette->colorCount();
 }
 
-int Palette::colorsCountGroup(QString name)
-{
-    if (!d->palette) return 0;
-    return d->palette->nColorsGroup(name);
-}
-
 KisSwatch Palette::colorSetEntryByIndex(int index)
 {
     /*

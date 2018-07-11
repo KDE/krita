@@ -300,9 +300,10 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     d->drawGrid(p, wWidth, wHeight);
 
-    KisConfig cfg;
-    if (cfg.antialiasCurves())
+    KisConfig cfg(true);
+    if (cfg.antialiasCurves()) {
         p.setRenderHint(QPainter::Antialiasing);
+    }
 
     // Draw curve.
     double curY;

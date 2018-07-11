@@ -29,7 +29,7 @@ class PatternDockerDock : public QDockWidget, public KisMainwindowObserver {
 public:
     PatternDockerDock( );
 
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 

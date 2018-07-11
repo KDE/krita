@@ -55,7 +55,7 @@ KisPaintingInformationBuilder::~KisPaintingInformationBuilder()
 
 void KisPaintingInformationBuilder::updateSettings()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     KisCubicCurve curve;
     curve.fromString(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);

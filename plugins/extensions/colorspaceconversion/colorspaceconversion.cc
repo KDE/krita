@@ -72,7 +72,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     if (!image) return;
 
     DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindow(), "ColorSpaceConversion");
-    bool allowLCMSOptimization = KisConfig().allowLCMSOptimization();
+    bool allowLCMSOptimization = KisConfig(true).allowLCMSOptimization();
     dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->setChecked(allowLCMSOptimization);
     Q_CHECK_PTR(dlgColorSpaceConversion);
 

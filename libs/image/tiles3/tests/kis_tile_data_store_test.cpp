@@ -144,7 +144,7 @@ void KisTileDataStoreTest::testLeaks()
 
 void KisTileDataStoreTest::testSwapping()
 {
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMemoryHardLimitPercent(100.0 / KisImageConfig::totalRAM());
     config.setMemorySoftLimitPercent(0);
 

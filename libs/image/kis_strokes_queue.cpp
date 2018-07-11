@@ -641,11 +641,11 @@ void KisStrokesQueue::debugDumpAllStrokes()
 {
     QMutexLocker locker(&m_d->mutex);
 
-    qDebug() <<"===";
+    dbgImage <<"===";
     Q_FOREACH (KisStrokeSP stroke, m_d->strokesQueue) {
-        qDebug() << ppVar(stroke->name()) << ppVar(stroke->type()) << ppVar(stroke->numJobs()) << ppVar(stroke->isInitialized()) << ppVar(stroke->isCancelled());
+        dbgImage << ppVar(stroke->name()) << ppVar(stroke->type()) << ppVar(stroke->numJobs()) << ppVar(stroke->isInitialized()) << ppVar(stroke->isCancelled());
     }
-    qDebug() <<"===";
+    dbgImage <<"===";
 }
 
 void KisStrokesQueue::setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory)

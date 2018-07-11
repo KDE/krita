@@ -311,7 +311,7 @@ void KisAnimationCachePopulator::slotRegeneratorFrameReady()
 
 void KisAnimationCachePopulator::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->calculateAnimationCacheInBackground = cfg.calculateAnimationCacheInBackground();
     QTimer::singleShot(1000, this, SLOT(slotRequestRegeneration()));
 }

@@ -262,7 +262,7 @@ void KisZoomAction::cursorMoved(const QPointF &lastPos, const QPointF &pos)
 
     if (d->mode == ZoomModeShortcut ||
         d->mode == RelativeZoomModeShortcut) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         float coeff;
         if (cfg.readEntry<bool>("InvertMiddleClickZoom", false)) {
             coeff = 1.0 - qreal(diff.y()) / stepCont;

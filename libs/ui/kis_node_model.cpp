@@ -175,20 +175,20 @@ void KisNodeModel::slotIsolatedModeChanged()
 
 bool KisNodeModel::showGlobalSelection() const
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     return cfg.showGlobalSelection();
 }
 
 void KisNodeModel::setShowGlobalSelection(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setShowGlobalSelection(value);
     updateSettings();
 }
 
 void KisNodeModel::updateSettings()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     bool oldShowRootLayer = m_d->showRootLayer;
     bool oldShowGlobalSelection = m_d->showGlobalSelection;
     m_d->showRootLayer = cfg.showRootLayer();

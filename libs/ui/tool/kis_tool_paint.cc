@@ -94,7 +94,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     m_supportOutline = false;
 
     {
-        int maxSize = KisConfig().readEntry("maximumBrushSize", 1000);
+        int maxSize = KisConfig(true).readEntry("maximumBrushSize", 1000);
 
         int brushSize = 1;
         do {
@@ -198,7 +198,7 @@ void KisToolPaint::deactivate()
 
 QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (cfg.newOutlineStyle() == OUTLINE_NONE) return originalOutline;
 
     const qreal minThresholdSize = cfg.outlineSizeMinimum();
@@ -696,7 +696,7 @@ QRectF KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
 {
     if (!m_showColorPreview) return QRect();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
     const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
@@ -708,7 +708,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 {
     if (!m_supportOutline) return;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     KisPaintOpSettings::OutlineMode outlineMode;
 
     if (isOutlineEnabled() &&

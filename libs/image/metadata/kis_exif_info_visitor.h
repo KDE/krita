@@ -89,7 +89,7 @@ public:
 public:
     inline uint metaDataCount()
     {
-        qDebug() << "number of layers with metadata" << m_metaDataObjectsEncountered;
+        dbgImage << "number of layers with metadata" << m_metaDataObjectsEncountered;
         return m_metaDataObjectsEncountered;
     }
 

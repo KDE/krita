@@ -346,7 +346,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
 {
     // Layer data
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_store->setCompressionEnabled(cfg.compressKra());
 
     KisPaintDeviceFramesInterface *frameInterface = device->framesInterface();

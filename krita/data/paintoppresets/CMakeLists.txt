@@ -5,5 +5,13 @@ b\)_Basic-5_Size_default.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
 
 install( FILES
-    kis_paintoppresets_tags.xml
-DESTINATION  ${DATA_INSTALL_DIR}/krita/tags)
+    "* Favorites.desktop"
+    "Pixel Art.desktop"
+    Digital.desktop        
+    Erasers.desktop
+    FX.desktop   
+    Ink.desktop  
+    Paint.desktop        
+    Sketch.desktop
+    Textures.desktop
+DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)

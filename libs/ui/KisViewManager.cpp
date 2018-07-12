@@ -411,7 +411,10 @@ void KisViewManager::setCurrentView(KisView *view)
 
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
-        //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
+//        connect(d->currentImageView->canvasController()->proxyObject,
+//                SIGNAL(documentMousePositionChanged(QPointF)),
+//                &d->statusBar,
+//                SLOT(documentMousePositionChanged(QPointF)));
 
         // Restore the last used brush preset, color and background color.
         if (first) {

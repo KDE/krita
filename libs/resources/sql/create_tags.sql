@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS tags (
 ,   url TEXT
 ,   name TEXT
 ,   comment TEXT
-,   storage_id INTEGER
+,   resource_type_id INTEGER
 ,   active INTEGER
-,   FOREIGN KEY(storage_id) REFERENCES storages(id)
+,   FOREIGN KEY(resource_type_id) REFERENCES resource_types(id)
+,   UNIQUE (url, resource_type_id)
 );

@@ -56,14 +56,14 @@ public:
     QString name() const override { return m_tag ? m_tag->name() : QString(); }
     QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
 
-    QSharedPointer<KisTag> tag() const
+    KisTagSP tag() const
     {
         return m_tag;
     }
 
 private:
 
-    bool load(QSharedPointer<KisTag> tag) const
+    bool load(KisTagSP tag) const
     {
         QFile f(m_dirIterator->filePath());
         if (f.exists()) {
@@ -79,7 +79,7 @@ private:
     QScopedPointer<QDirIterator> m_dirIterator;
     QString m_location;
     QString m_resourceType;
-    QSharedPointer<KisTag> m_tag;
+    KisTagSP m_tag;
 };
 
 

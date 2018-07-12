@@ -95,12 +95,12 @@ QSqlError initDb(const QString &location)
             // Verify the version number
             QFile f(":/get_version_information.sql");
             if (f.open(QFile::ReadOnly)) {
-                QSqlQuery query(f.readAll());
-                if (query.size() > 0) {
-                    query.first();
-                    QString schemaVersion = query.value(0).toString();
-                    QString kritaVersion = query.value(1).toString();
-                    QString creationDate = query.value(2).toString();
+                QSqlQuery q(f.readAll());
+                if (q.size() > 0) {
+                    q.first();
+                    QString schemaVersion = q.value(0).toString();
+                    QString kritaVersion = q.value(1).toString();
+                    QString creationDate = q.value(2).toString();
 
                     infoResources << "Database version" << schemaVersion
                                   << "Krita version that created the database" << kritaVersion
@@ -128,8 +128,8 @@ QSqlError initDb(const QString &location)
     Q_FOREACH(const QString &table, tables) {
         QFile f(":/create_" + table + ".sql");
         if (f.open(QFile::ReadOnly)) {
-            QSqlQuery query;
-            if (!query.exec(f.readAll())) {
+            QSqlQuery q;
+            if (!q.exec(f.readAll())) {
                 qWarning() << "Could not create table" << table;
                 return db.lastError();
             }
@@ -146,8 +146,8 @@ QSqlError initDb(const QString &location)
     Q_FOREACH(const QString &index, indexes) {
         QFile f(":/create_index_" + index + ".sql");
         if (f.open(QFile::ReadOnly)) {
-            QSqlQuery query;
-            if (!query.exec(f.readAll())) {
+            QSqlQuery q;
+            if (!q.exec(f.readAll())) {
                 qWarning() << "Could not create index" << index;
                 return db.lastError();
             }
@@ -161,8 +161,8 @@ QSqlError initDb(const QString &location)
     // Fill lookup tables
     {
         if (dbTables.contains("origin_types")) {
-            QSqlQuery query;
-            if (!query.exec("DELETE * FROM origin_types;")) {
+            QSqlQuery q;
+            if (!q.exec("DELETE * FROM origin_types;")) {
                 qWarning() << "Could not clear table origin_types" << db.lastError();
             }
         }
@@ -171,10 +171,10 @@ QSqlError initDb(const QString &location)
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &originType, KisResourceCacheDb::storageTypes) {
-                QSqlQuery query(sql);
-                query.addBindValue(originType);
-                if (!query.exec()) {
-                    qWarning() << "Could not insert" << originType << db.lastError() << query.executedQuery();
+                QSqlQuery q(sql);
+                q.addBindValue(originType);
+                if (!q.exec()) {
+                    qWarning() << "Could not insert" << originType << db.lastError() << q.executedQuery();
                     return db.lastError();
                 }
             }
@@ -187,8 +187,8 @@ QSqlError initDb(const QString &location)
 
     {
         if (dbTables.contains("resource_types")) {
-            QSqlQuery query;
-            if (!query.exec("DELETE * FROM resource_types;")) {
+            QSqlQuery q;
+            if (!q.exec("DELETE * FROM resource_types;")) {
                 qWarning() << "Could not cleare table resource_types" << db.lastError();
             }
         }
@@ -196,10 +196,10 @@ QSqlError initDb(const QString &location)
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-                QSqlQuery query(sql);
-                query.addBindValue(resourceType);
-                if (!query.exec()) {
-                    qWarning() << "Could not insert" << resourceType << db.lastError() << query.executedQuery();
+                QSqlQuery q(sql);
+                q.addBindValue(resourceType);
+                if (!q.exec()) {
+                    qWarning() << "Could not insert" << resourceType << db.lastError() << q.executedQuery();
                     return db.lastError();
                 }
             }
@@ -214,13 +214,13 @@ QSqlError initDb(const QString &location)
         QFile f(":/fill_version_information.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
-            QSqlQuery query;
-            query.prepare(sql);
-            query.addBindValue(KisResourceCacheDb::databaseVersion);
-            query.addBindValue(KritaVersionWrapper::versionString());
-            query.addBindValue(QDateTime::currentDateTimeUtc().toString());
-            if (!query.exec()) {
-                qWarning() << "Could not insert the current version" << db.lastError() << query.executedQuery() << query.boundValues();
+            QSqlQuery q;
+            q.prepare(sql);
+            q.addBindValue(KisResourceCacheDb::databaseVersion);
+            q.addBindValue(KritaVersionWrapper::versionString());
+            q.addBindValue(QDateTime::currentDateTimeUtc().toString());
+            if (!q.exec()) {
+                qWarning() << "Could not insert the current version" << db.lastError() << q.executedQuery() << q.boundValues();
                 return db.lastError();
             }
             infoResources << "Filled version table";
@@ -248,60 +248,130 @@ int KisResourceCacheDb::resourceIdForResource(KoResourceSP resource, const QStri
 {
     QFile f(":/select_resource_id.sql");
     f.open(QFile::ReadOnly);
-    QSqlQuery query;
-    if (!query.prepare(f.readAll())) {
-        qWarning() << "Could not read and prepare resourceIdForResource" << query.lastError();
+    QSqlQuery q;
+    if (!q.prepare(f.readAll())) {
+        qWarning() << "Could not read and prepare resourceIdForResource" << q.lastError();
         return false;
     }
 
-    query.bindValue(":name", resource->name());
-    query.bindValue(":filename", resource->filename());
-    query.bindValue(":resource_type", resourceType);
+    q.bindValue(":name", resource->name());
+    q.bindValue(":filename", resource->filename());
+    q.bindValue(":resource_type", resourceType);
 
-    if (!query.exec()) {
-        qWarning() << "Could not query resourceIdForResource" << query.boundValues() << query.lastError();
+    if (!q.exec()) {
+        qWarning() << "Could not query resourceIdForResource" << q.boundValues() << q.lastError();
         return -1;
     }
-    if (!query.first()) {
-        qWarning() << "Could not find this reosurce" <<  resource->filename() << query.boundValues() << query.lastError();
+    if (!q.first()) {
+        qWarning() << "Could not find this reosurce" <<  resource->filename() << q.boundValues() << q.lastError();
         return -1;
     }
-    return query.value(0).toInt();
+    return q.value(0).toInt();
 
+}
+
+bool KisResourceCacheDb::resourceNeedsUpdating(int resourceId, QDateTime timestamp)
+{
+    QSqlQuery q;
+    if (!q.prepare("SELECT timestamp\n"
+                  "FROM   versioned_resources\n"
+                  "WHERE  resourceId = :resource_id\n"
+                  "AND    version = (SELECT MAX(version)\n"
+                  "                  FROM   versioned_resources\n"
+                   "                  WHERE  resource_id = :resource_id);")) {
+        qWarning() << "Could not prepare resourceNeedsUpdating statement";
+        return false;
+    }
+
+    q.bindValue(":resource_id", resourceId);
+
+    if (!q.exec()) {
+        qDebug() << "Could not query for the most recent timestamp" << q.boundValues() << q.lastError();
+        return false;
+    }
+
+    if (!q.first()) {
+        qWarning() << "Inconsistent database: could not find a version for resource with Id" << resourceId;
+        return false;
+    }
+
+    QVariant resourceTimeStamp = q.value(0);
+
+    if (!resourceTimeStamp.isValid()) {
+        qWarning() << "Could not retrieve timestamp from versioned_resources" << resourceId;
+    }
+
+    return (timestamp > QDateTime::fromString(resourceTimeStamp.toString()));
 }
 
 bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource)
 {
     bool r = false;
 
-    QSqlQuery q;
-    r = q.prepare("INSERT INTO versioned_resources "
-                  "(resource_id, storage_id, version, location, datestamp, deleted, checksum)"
-                  "VALUES"
-                  "(:resource_id,"
-                  ",    (SELECT id FROM storages "
-                  "      WHERE location = :storage_location)"
-                  ",    (SELECT MAX(version) + 1 FROM versioned_resources"
-                  "      WHERE  resource_id = :resource_id)"
-                  ", :location, :datestamp, 0, :checksum"
-                  ");");
+    // Create the new version
+    {
+        QSqlQuery q;
+        r = q.prepare("INSERT INTO versioned_resources \n"
+                      "(resource_id, storage_id, version, location, datestamp, deleted, checksum)\n"
+                      "VALUES\n"
+                      "(:resource_id,\n"
+                      ",    (SELECT id FROM storages \n"
+                      "      WHERE location = :storage_location)\n"
+                      ",    (SELECT MAX(version) + 1 FROM versioned_resources\n"
+                      "      WHERE  resource_id = :resource_id)\n"
+                      ", :location, :datestamp, 0, :checksum\n"
+                      ");");
 
-    if (!r) {
-        qWarning() << "Could not prepare addResourceVersion statement" << q.lastError();
-        return r;
+        if (!r) {
+            qWarning() << "Could not prepare addResourceVersion statement" << q.lastError();
+            return r;
+        }
+
+        q.bindValue(":resource_id", resourceId);
+        q.bindValue(":storage_location", storage->location());
+        q.bindValue(":location", resource->filename());
+        q.bindValue(":datestamp", timestamp.toString()); // XXX: make the right format for sqlite to work with
+        q.bindValue(":deleted", 0);
+        q.bindValue(":checksum", resource->md5());
+
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute addResourceVersion statement" << q.boundValues() << q.lastError();
+            return r;
+        }
+    }
+    // Update the resource itself
+    {
+        QSqlQuery q;
+        r = q.prepare("UPDATE resources\n"
+                      "SET name = :name\n"
+                      ", filename = :filename\n"
+                      ", tooltip = :tooltip\n"
+                      ", thumbnail = :thumbnail)\n"
+                      "WHERE resourceId = :resourceId");
+        if (!r) {
+            qWarning() << "Could not prepare updateResource statement" << q.lastError();
+            return r;
+        }
+        q.bindValue(":name", resource->name());
+        q.bindValue(":filename", resource->filename());
+        q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+
+        QByteArray ba;
+        QBuffer buf(&ba);
+        buf.open(QBuffer::WriteOnly);
+        resource->image().save(&buf, "PNG");
+        buf.close();
+        q.bindValue(":thumbnail", ba);
+
+        q.bindValue(":resource_id", resourceId);
+
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not update resource" << q.boundValues() << q.lastError();
+        }
     }
 
-    q.bindValue(":resource_id", resourceId);
-    q.bindValue(":storage_location", storage->location());
-    q.bindValue(":location", resource->filename());
-    q.bindValue(":datestamp", timestamp.toString()); // XXX: make the right format for sqlite to work with
-    q.bindValue(":deleted", 0);
-    q.bindValue(":checksum", resource->md5());
-
-    r = q.exec();
-    if (!r) {
-        qWarning() << "Could not execute addResourceVersion statement" << q.boundValues() << q.lastError();
-    }
     return r;
 }
 
@@ -309,18 +379,18 @@ bool KisResourceCacheDb::hasResource(KisResourceStorageSP storage, KoResourceSP 
 {
     QFile f(":/select_resource.sql");
     if (f.open(QFile::ReadOnly)) {
-        QSqlQuery query;
-        if (!query.prepare(f.readAll())) {
-            qWarning() << "Could not read and prepare select_resource.sql" << query.lastError();
+        QSqlQuery q;
+        if (!q.prepare(f.readAll())) {
+            qWarning() << "Could not read and prepare select_resource.sql" << q.lastError();
             return false;
         }
-        query.bindValue(":storage", storage->location());
-        query.bindValue(":location", resource->filename());
-        query.bindValue(":resource_type", resourceType);
-        if (!query.exec()) {
-            qWarning() << "Could not query resources" << query.boundValues() << query.lastError();
+        q.bindValue(":storage", storage->location());
+        q.bindValue(":location", resource->filename());
+        q.bindValue(":resource_type", resourceType);
+        if (!q.exec()) {
+            qWarning() << "Could not query resources" << q.boundValues() << q.lastError();
         }
-        return query.first();
+        return q.first();
     }
     qWarning() << "Could not open select_resource.sql";
     return false;
@@ -343,7 +413,9 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     // Check whether it already exists
     if (hasResource(storage, resource, resourceType)) {
         int resourceId = resourceIdForResource(resource, resourceType);
-        r = addResourceVersion(resourceId, timestamp, storage, resource);
+        if (resourceNeedsUpdating(resourceId, timestamp)) {
+            r = addResourceVersion(resourceId, timestamp, storage, resource);
+        }
     }
     else {
         QSqlQuery q;
@@ -428,9 +500,58 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
     return true;
 }
 
-bool KisResourceCacheDb::addTag(KisResourceStorageSP storage, const QString &resourceType, const QString url, const QString name, const QString comment)
+bool KisResourceCacheDb::hasTag(const QString &url, const QString &resourceType)
 {
+    QFile f(":/select_tag.sql");
+    if (f.open(QFile::ReadOnly)) {
+        QSqlQuery q;
+        if (!q.prepare(f.readAll())) {
+            qWarning() << "Could not read and prepare select_tag.sql" << q.lastError();
+            return false;
+        }
+        q.bindValue(":url", url);
+        q.bindValue(":resource_type", resourceType);
+        if (!q.exec()) {
+            qWarning() << "Could not query tags" << q.boundValues() << q.lastError();
+        }
+        return q.first();
+    }
+    qWarning() << "Could not open select_tag.sql";
     return false;
+}
+
+bool KisResourceCacheDb::addTag(const QString &resourceType, const QString url, const QString name, const QString comment)
+{
+    if (hasTag(url, resourceType)) {
+        return true;
+    }
+
+    QSqlQuery q;
+    if (!q.prepare("INSERT INTO tags\n"
+                   "( url, name, comment, resource_type_id, active)\n"
+                   "VALUES\n"
+                   "( :url\n"
+                   ", :name\n"
+                   ", :comment\n"
+                   ", (SELECT id\n"
+                   "   FROM   resource_types\n"
+                   "   WHERE  name = :resource_type)\n"
+                   ", 1"
+                   ");")) {
+        qWarning() << "Could not prepare add tag statement" << q.lastError();
+        return false;
+    }
+
+    q.bindValue(":url", url);
+    q.bindValue(":name", name);
+    q.bindValue(":comment", comment);
+    q.bindValue(":resource_type", resourceType);
+
+    if (!q.exec()) {
+        qWarning() << "Could not insert tag" << q.boundValues() << q.lastError();
+    }
+
+    return true;
 }
 
 bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceType)
@@ -438,8 +559,11 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
     while(iter->hasNext()) {
         iter->next();
-        if (!addTag(storage, resourceType, iter->url(), iter->name(), iter->comment())) {
-            qWarning() << "Could not add resource" << iter->url() << "to the database";
+        if (!addTag(resourceType, iter->url(), iter->name(), iter->comment())) {
+            qWarning() << "Could not add tag" << iter->url() << "to the database";
+        }
+        else {
+            qDebug() << "Added tag" << iter->url();
         }
     }
     return true;

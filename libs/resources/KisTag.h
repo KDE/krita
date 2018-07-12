@@ -22,6 +22,8 @@
 
 #include <QString>
 #include <QScopedPointer>
+#include <QSharedPointer>
+
 class QIODevice;
 
 #include "kritaresources_export.h"
@@ -65,5 +67,7 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+typedef QSharedPointer<KisTag> KisTagSP;
 
 #endif // KISTAGLOADER_H

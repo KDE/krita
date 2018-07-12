@@ -70,7 +70,7 @@ public:
         virtual QString comment() const = 0;
 
         /// A tag object on which we can set properties and which we can save
-        virtual QSharedPointer<KisTag> tag() const = 0;
+        virtual KisTagSP tag() const = 0;
     };
 
     class ResourceIterator

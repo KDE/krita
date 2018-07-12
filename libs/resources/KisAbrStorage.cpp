@@ -34,7 +34,7 @@ public:
     QString url() const override { return QString(); }
     QString name() const override { return QString(); }
     QString comment() const override {return QString(); }
-    QSharedPointer<KisTag> tag() const override { return 0; }
+    KisTagSP tag() const override { return 0; }
 private:
 
     QString m_location;

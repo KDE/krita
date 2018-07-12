@@ -30,6 +30,7 @@
 
 #include "kis_refresh_subtree_walker.h"
 #include "kis_async_merger.h"
+#include "kis_node_graph_listener.h"
 
 
 struct Q_DECL_HIDDEN KisProjectionLeaf::Private
@@ -69,6 +70,27 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
         return checkPassThrough(node);
     }
 
+    KisProjectionLeafSP overlayProjectionLeaf() const {
+        return node && node->graphListener() && node->graphListener()->graphOverlayNode() ?
+            node->graphListener()->graphOverlayNode()->projectionLeaf() : 0;
+    }
+
+    bool isTopmostNode() const {
+        return !skipSelectionMasksForward(node->nextSibling()) &&
+            node->parent() &&
+            !node->parent()->parent();
+    }
+
+    KisNodeSP findRoot() const {
+        KisNodeSP root = node;
+
+        while (root->parent()) {
+            root = root->parent();
+        }
+
+        return root;
+    }
+
     void temporarySetPassThrough(bool value) {
         KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node);
         if (!group) return;
@@ -90,7 +112,11 @@ KisProjectionLeafSP KisProjectionLeaf::parent() const
 {
     KisNodeSP node;
 
-    if (!Private::isSelectionMask(m_d->node)) {
+    if (Private::isSelectionMask(m_d->node)) {
+        if (m_d->overlayProjectionLeaf() == this) {
+            node = m_d->findRoot();
+        }
+    } else {
         node = m_d->node->parent();
     }
 
@@ -111,12 +137,26 @@ KisProjectionLeafSP KisProjectionLeaf::firstChild() const
         node = Private::skipSelectionMasksForward(node);
     }
 
+    if (!node && isRoot()) {
+        KisProjectionLeafSP overlayLeaf = m_d->overlayProjectionLeaf();
+        if (overlayLeaf) {
+            return overlayLeaf;
+        }
+    }
+
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
 }
 
 KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 {
     KisNodeSP node;
+
+    if (isRoot()) {
+        KisProjectionLeafSP overlayLeaf = m_d->overlayProjectionLeaf();
+        if (overlayLeaf) {
+            return overlayLeaf;
+        }
+    }
 
     if (!m_d->checkThisPassThrough()) {
         node = m_d->node->lastChild();
@@ -129,7 +169,15 @@ KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
 {
     if (Private::isSelectionMask(m_d->node)) {
-        return KisProjectionLeafSP();
+        KisProjectionLeafSP leaf;
+
+        if (m_d->overlayProjectionLeaf() == this) {
+            KisNodeSP node = m_d->findRoot()->lastChild();
+            node = Private::skipSelectionMasksBackward(node);
+            leaf = node->projectionLeaf();
+        }
+
+        return leaf;
     }
 
     KisNodeSP node;
@@ -158,6 +206,11 @@ KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
 {
     if (Private::isSelectionMask(m_d->node)) {
         return KisProjectionLeafSP();
+    }
+
+    KisProjectionLeafSP overlayLeaf = m_d->overlayProjectionLeaf();
+    if (overlayLeaf && m_d->isTopmostNode()) {
+        return overlayLeaf;
     }
 
     KisNodeSP node = m_d->node->nextSibling();

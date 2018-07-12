@@ -50,10 +50,12 @@ public:
         return KisNodeSP(new KisSelectionMask(*this));
     }
 
-    QRect decorateRect(KisPaintDeviceSP &src,
-                       KisPaintDeviceSP &dst,
-                       const QRect & rc,
-                       PositionToFilthy maskPos) const override;
+    void mergeInMaskInternal(KisPaintDeviceSP projection,
+                             KisSelectionSP effectiveSelection,
+                             const QRect &applyRect, const QRect &preparedNeedRect,
+                             KisNode::PositionToFilthy maskPos) const override;
+
+    bool paintsOutsideSelection() const override;
 
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
@@ -67,6 +69,12 @@ public:
     void setVisible(bool visible, bool isLoading = false) override;
     bool active() const;
     void setActive(bool active);
+
+    QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+    QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+
+    QRect extent() const override;
+    QRect exactBounds() const override;
 
     /**
      * This method works like the one in KisSelection, but it

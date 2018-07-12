@@ -189,7 +189,7 @@ struct KisGaussCircleMaskGenerator::FastRowProcessor
 template<> void KisGaussCircleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
                                    float centerX, float centerY)
-{   
+{
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -315,7 +315,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         if (!excludeMask.isFull()) {
             Vc::float_v valDist = dist * vCurveResolution;
             // truncate
-            Vc::SimdArray<quint16,Vc::float_v::size()> vAlphaValue(valDist);
+            Vc::float_v::IndexType vAlphaValue(valDist);
             Vc::float_v vFloatAlphaValue = vAlphaValue;
 
             Vc::float_v alphaValueF = valDist - vFloatAlphaValue;

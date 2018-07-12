@@ -69,7 +69,7 @@ void KisStatusBar::setup()
     m_selectionStatus = new QToolButton();
     m_selectionStatus->setIconSize(QSize(16,16));
     m_selectionStatus->setAutoRaise(true);
-    m_selectionStatus->setEnabled(false);   
+    m_selectionStatus->setEnabled(false);
     updateSelectionIcon();
 
     m_statusBar = m_view->mainWindow()->statusBar();

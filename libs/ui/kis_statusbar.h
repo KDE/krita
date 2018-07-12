@@ -76,13 +76,11 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 
 public:
 
-    KisStatusBar(KisViewManager *view);
+    explicit KisStatusBar(KisViewManager *view);
     ~KisStatusBar() override;
 
     void setup();
     void setView(QPointer<KisView> imageView);
-    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
-    void removeStatusBarItem(QWidget *widget);
     void hideAllStatusBarItems();
     void showAllStatusBarItems();
 
@@ -110,11 +108,14 @@ Q_SIGNALS:
     void memoryStatusUpdated();
 
 private:
-   void updateMemoryStatus();
+
+    void removeStatusBarItem(QWidget *widget);
+    void addStatusBarItem(QWidget *widget, int stretch = 0, bool permanent = false);
+    void updateMemoryStatus();
 
 private:
 
-    QPointer<KisViewManager> m_view;
+    QPointer<KisViewManager> m_viewManager;
     QPointer<KisView> m_imageView;
     QPointer<QStatusBar> m_statusBar;
     KisProgressWidget *m_progress;
@@ -126,7 +127,6 @@ private:
 
     KSqueezedTextLabel *m_statusBarStatusLabel;
     KSqueezedTextLabel *m_statusBarProfileLabel;
-
 
     QString m_shortMemoryTag;
     QString m_longMemoryTag;

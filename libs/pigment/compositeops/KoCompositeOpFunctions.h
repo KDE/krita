@@ -457,10 +457,6 @@ template<class T>
 inline T cfGlow(T src, T dst) {
     using namespace Arithmetic;
         // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
-
-    if(src == zeroValue<T>()) {
-        return zeroValue<T>();
-    }
     
     if(dst == unitValue<T>()) {
         return unitValue<T>();
@@ -468,37 +464,24 @@ inline T cfGlow(T src, T dst) {
     
     return clamp<T>(div(mul(src, src), inv(dst)));
 }
-    
+
 template<class T>
 inline T cfReflect(T src, T dst) {
     using namespace Arithmetic;
     
-    if(src == unitValue<T>()) {
-        return unitValue<T>();
-    }
     
-    if(dst == zeroValue<T>()) {
-        return zeroValue<T>();
-    }
-    
-    
-    return clamp<T>(div(mul(dst, dst), inv(src)));
+    return clamp<T>(cfGlow(dst,src));
 }
 
 template<class T>
 inline T cfHeat(T src, T dst) {
     using namespace Arithmetic;
     
-    if(dst == unitValue<T>()) {
-        return unitValue<T>();
-    }
-
-    if(src == zeroValue<T>()) {
+    if(dst == zeroValue<T>()) {
         return zeroValue<T>();
     }
     
-    return inv(cfGlow(inv(src),inv(dst)));
-    
+    return inv(clamp<T>(div(mul(inv(src), inv(src)),dst)));
 }
 
 template<class T>

@@ -612,6 +612,9 @@ namespace Arithmetic
     inline T blend(T src, T srcAlpha, T dst, T dstAlpha, T cfValue) {
         return mul(inv(srcAlpha), dstAlpha, dst) + mul(inv(dstAlpha), srcAlpha, src) + mul(dstAlpha, srcAlpha, cfValue);
     }
+
+    template<class T>
+    inline T epsilon() { return KoColorSpaceMathsTraits<T>::epsilon; }
 }
 
 struct HSYType

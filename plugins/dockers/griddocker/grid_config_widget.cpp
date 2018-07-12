@@ -269,7 +269,7 @@ void GridConfigWidget::slotGridGuiChanged()
 
 void GridConfigWidget::slotPreferencesUpdated()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     enableIsometricGrid(cfg.useOpenGL()); // Isometric view needs OpenGL
 }
 

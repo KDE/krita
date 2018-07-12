@@ -122,7 +122,7 @@ KisToolOptionsPopup::KisToolOptionsPopup(QWidget *parent)
     KConfigGroup group( KSharedConfig::openConfig(), "GUI");
     setFont(KoDockRegistry::dockFont());
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->detached = !cfg.paintopPopupDetached();
     d->ignoreHideEvents = false;
 
@@ -185,11 +185,10 @@ void KisToolOptionsPopup::switchDetached(bool show)
             d->ignoreHideEvents = false;
         }
         else {
-            KisConfig cfg;
             parentWidget()->hide();
         }
 
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setToolOptionsPopupDetached(d->detached);
     }
 }

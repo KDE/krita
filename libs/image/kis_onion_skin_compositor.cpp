@@ -87,7 +87,7 @@ struct KisOnionSkinCompositor::Private
 
     void refreshConfig()
     {
-        KisImageConfig config;
+        KisImageConfig config(true);
 
         numberOfSkins = config.numberOfOnionSkins();
         tintFactor = config.onionSkinTintFactor();

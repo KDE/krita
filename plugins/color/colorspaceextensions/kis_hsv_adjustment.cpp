@@ -469,6 +469,7 @@ public:
         }
     }
 
+    const float SCALE_FROM_16BIT = 1.0f / 0xFFFF;
     void transform(const quint8 *srcU8, quint8 *dstU8, qint32 nPixels) const override
     {
         const RGBPixel* src = reinterpret_cast<const RGBPixel*>(srcU8);
@@ -499,7 +500,7 @@ public:
             // Normalize hue to 0.0 to 1.0 range
             h /= 360.0f;
 
-            float adjustment = lookupComponent(component[driverChannel], max);
+            float adjustment = lookupComponent(component[driverChannel], max) * SCALE_FROM_16BIT;
 
             if (m_relative) {
                 // Curve uses range 0.0 to 1.0, but for adjustment we need -1.0 to 1.0
@@ -542,7 +543,7 @@ public:
         }
     }
 
-    const float SCALE_FROM_16BIT = 1.0f / 0xFFFF;
+
     float lookupComponent(float x, float max) const
     {
         // No curve for this component? Pass through unmodified
@@ -559,8 +560,8 @@ public:
         }
         int index = (int)base;
 
-        return ((1.0f - offset) * m_curve[index]
-                + offset        * m_curve[index + 1]) * SCALE_FROM_16BIT;
+        return (1.0f - offset) * m_curve[index]
+                     + offset  * m_curve[index + 1];
     }
 
 

@@ -61,7 +61,7 @@ void KisInfinityManager::imagePositionChanged()
     const QRect imageRect = m_canvas->coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
     const QRect widgetRect = m_canvas->canvasWidget()->rect();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     qreal vastScrolling = cfg.vastScrolling();
 
     int xReserve = vastScrolling * widgetRect.width();
@@ -143,7 +143,7 @@ void KisInfinityManager::drawDecoration(QPainter& gc, const QRectF& updateArea, 
     gc.save();
     gc.setTransform(QTransform(), false);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QColor color = cfg.canvasBorderColor();
     gc.fillPath(m_decorationPath, color.darker(115));
 

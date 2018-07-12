@@ -30,7 +30,7 @@
 
 void KisOnionSkinCompositorTest::testComposite()
 {
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setOnionSkinTintFactor(64);
     config.setOnionSkinTintColorBackward(Qt::blue);
     config.setOnionSkinTintColorForward(Qt::red);
@@ -139,7 +139,7 @@ void KisOnionSkinCompositorTest::testSettings()
     i->switchCurrentTimeAsync(1);
     p.image->waitForDone();
 
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setOnionSkinOpacity(-1, 32);
     config.setOnionSkinOpacity(1, 192);
     config.setOnionSkinOpacity(2, 64);

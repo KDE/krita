@@ -231,7 +231,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
     d->canvas.setup();
 
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     d->canvasController.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -247,11 +247,11 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
-    d->canvas.addDecoration(d->paintingAssistantsDecoration);
-    d->paintingAssistantsDecoration->setVisible(true);
-
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
+
+    d->canvas.addDecoration(d->paintingAssistantsDecoration);
+    d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }
@@ -582,11 +582,14 @@ void KisView::dropEvent(QDropEvent *event)
                             }
                         }
                         else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
-                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter);
-                            reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
-                            d->referenceImagesDecoration->addReferenceImage(reference);
+                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter, this);
 
-                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            if (reference) {
+                                reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
+                                d->referenceImagesDecoration->addReferenceImage(reference);
+
+                                KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            }
                         }
 
                     }
@@ -655,7 +658,7 @@ void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isA
         sb->showMessage(text, timeout);
     }
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     if (!sb || sb->isHidden() ||
         (!isAutoSaving && cfg.forceShowSaveMessages()) ||

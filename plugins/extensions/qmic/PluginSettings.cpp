@@ -39,7 +39,7 @@ PluginSettings::PluginSettings(QWidget *parent)
 
 PluginSettings::~PluginSettings()
 {
-    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
+    KisConfig(false).writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
 }
 
 QString PluginSettings::id()
@@ -70,7 +70,7 @@ QString PluginSettings::gmicQtPath()
     gmicqt += ".exe";
 #endif
 
-    QString gmic_qt_path = KisConfig().readEntry<QString>("gmic_qt_plugin_path", "");
+    QString gmic_qt_path = KisConfig(true).readEntry<QString>("gmic_qt_plugin_path", "");
     if (!gmic_qt_path.isEmpty() && QFileInfo(gmic_qt_path).exists()) {
         return gmic_qt_path;
     }
@@ -104,7 +104,7 @@ QString PluginSettings::gmicQtPath()
 
 void PluginSettings::savePreferences() const
 {
-    KisConfig().writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
+    KisConfig(false).writeEntry<QString>("gmic_qt_plugin_path", fileRequester->fileName());
     Q_EMIT(settingsChanged());
 }
 

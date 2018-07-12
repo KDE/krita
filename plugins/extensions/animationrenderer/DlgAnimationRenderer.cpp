@@ -55,7 +55,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
     , m_doc(doc)
     , m_defaultFileName(QFileInfo(doc->url().toLocalFile()).completeBaseName())
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     setCaption(i18n("Render Animation"));
     setButtons(Ok | Cancel);
@@ -184,7 +184,7 @@ DlgAnimationRenderer::DlgAnimationRenderer(KisDocument *doc, QWidget *parent)
 
 DlgAnimationRenderer::~DlgAnimationRenderer()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     cfg.writeEntry<QString>("AnimationRenderer/last_sequence_export_location", m_page->dirRequester->fileName());
     cfg.writeEntry<int>("AnimationRenderer/render_type", m_page->cmbRenderType->currentIndex());
@@ -399,7 +399,7 @@ void DlgAnimationRenderer::selectRenderOptions()
             if (!dlg.exec()) {
                 m_encoderConfigWidget->setConfiguration(filter->lastSavedConfiguration());
             } else {
-                KisConfig().setExportConfiguration(mimetype.toLatin1(), m_encoderConfigWidget->configuration());
+                KisConfig(false).setExportConfiguration(mimetype.toLatin1(), m_encoderConfigWidget->configuration());
             }
             dlg.setMainWidget(0);
             m_encoderConfigWidget->hide();
@@ -442,13 +442,13 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
 
 void DlgAnimationRenderer::ffmpegLocationChanged(const QString &s)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setCustomFFMpegPath(s);
 }
 
 void DlgAnimationRenderer::updateExportUIOptions() {
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     // read in what type to export to. Defaults to image sequence only
     QString exportType = cfg.readEntry<QString>("AnimationRenderer/export_type", "ImageSequence");
@@ -490,7 +490,7 @@ QString DlgAnimationRenderer::findFFMpeg()
 
     QStringList proposedPaths;
 
-    QString customPath = KisConfig().customFFMpegPath();
+    QString customPath = KisConfig(true).customFFMpegPath();
     if (!customPath.isEmpty()) {
         proposedPaths << customPath;
         proposedPaths << customPath + QDir::separator() + "ffmpeg";
@@ -542,7 +542,7 @@ QString DlgAnimationRenderer::findFFMpeg()
 
 void DlgAnimationRenderer::slotExportTypeChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     bool willEncodeVideo =
         m_page->shouldExportAll->isChecked() || m_page->shouldExportOnlyVideo->isChecked();

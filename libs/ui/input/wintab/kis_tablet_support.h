@@ -115,7 +115,7 @@ struct QTabletDeviceData
 
     public:
         SavedAxesData()
-            : m_workaroundX11SmoothPressureSteps(KisConfig().workaroundX11SmoothPressureSteps()),
+            : m_workaroundX11SmoothPressureSteps(KisConfig(true).workaroundX11SmoothPressureSteps()),
               m_pressureAverage(m_workaroundX11SmoothPressureSteps)
         {
             for (int i = 0; i < NAxes; i++) {

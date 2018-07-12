@@ -1,3 +1,4 @@
+*.orig
 __pycache__
 *.trace
 build

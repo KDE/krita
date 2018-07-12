@@ -203,7 +203,7 @@ void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
 
 QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     if(checkSize < 0)
         checkSize = cfg.checkSize();
@@ -223,7 +223,7 @@ QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 
 void KisCanvasWidgetBase::notifyConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->borderColor = cfg.canvasBorderColor();
 }
 

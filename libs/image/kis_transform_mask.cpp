@@ -108,9 +108,7 @@ KisTransformMask::KisTransformMask()
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
     connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
-
-    KisImageConfig cfg;
-    m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
+    m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
 }
 
 KisTransformMask::~KisTransformMask()
@@ -255,7 +253,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        dbgImage << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "recalc_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -264,7 +262,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         m_d->worker.runPartialDst(src, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
+        dbgImage << "Partial" << name() << ppVar(src->exactBounds()) << ppVar(src->extent()) << ppVar(dst->exactBounds()) << ppVar(dst->extent()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "partial_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
@@ -273,7 +271,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
 
 #ifdef DEBUG_RENDERING
-        qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
+        dbgImage << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
         KIS_DUMP_DEVICE_2(src, DUMP_RECT, "fetch_src", "dd");
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "fetch_dst", "dd");
 #endif /* DEBUG_RENDERING */

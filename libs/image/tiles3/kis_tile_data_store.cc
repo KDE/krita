@@ -71,7 +71,8 @@ KisTileDataStore::KisTileDataStore()
       m_swapper(this),
       m_numTiles(0),
       m_memoryMetric(0),
-      m_counter(1)
+      m_counter(1),
+      m_clockIndex(1)
 {
 //    m_clockIterator = m_tileDataList.end();
     m_pooler.start();
@@ -83,10 +84,10 @@ KisTileDataStore::~KisTileDataStore()
     m_pooler.terminatePooler();
     m_swapper.terminateSwapper();
 
-    if(numTiles() > 0) {
-         errKrita << "Warning: some tiles have leaked:";
-         errKrita << "\tTiles in memory:" << numTilesInMemory() << "\n"
-                    << "\tTotal tiles:" << numTiles();
+    if (numTiles() > 0) {
+        errKrita << "Warning: some tiles have leaked:";
+        errKrita << "\tTiles in memory:" << numTilesInMemory() << "\n"
+                 << "\tTotal tiles:" << numTiles();
     }
 }
 
@@ -152,6 +153,12 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 //    m_tileDataList.erase(tempIterator);
 //    m_numTiles--;
 //    m_memoryMetric -= td->pixelSize();
+    if (m_clockIndex == td->m_tileNumber) {
+        do {
+            m_clockIndex.ref();
+        } while (!m_tileDataMap.get(m_clockIndex.loadAcquire()) && m_clockIndex < m_counter);
+    }
+
     int index = td->m_tileNumber;
     td->m_tileNumber = -1;
     m_tileDataMap.erase(index);
@@ -202,10 +209,9 @@ void KisTileDataStore::freeTileData(KisTileData *td)
     m_iteratorLock.lockForRead();
     td->m_swapLock.lockForWrite();
 
-    if(!td->data()) {
+    if (!td->data()) {
         m_swappedStore.forgetTileData(td);
-    }
-    else {
+    } else {
         unregisterTileDataImp(td);
     }
 
@@ -223,7 +229,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 
     td->m_swapLock.lockForRead();
 
-    while(!td->data()) {
+    while (!td->data()) {
         td->m_swapLock.unlock();
 
         /**
@@ -246,7 +252,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
          * m_listLock.
          */
 
-        if(!td->data()) {
+        if (!td->data()) {
             td->m_swapLock.lockForWrite();
 
             m_swappedStore.swapInTileData(td);
@@ -273,9 +279,9 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
      */
 
     bool result = false;
-    if(!td->m_swapLock.tryLockForWrite()) return result;
+    if (!td->m_swapLock.tryLockForWrite()) return result;
 
-    if(td->data()) {
+    if (td->data()) {
         unregisterTileDataImp(td);
         if (m_swappedStore.trySwapOutTileData(td)) {
             result = true;
@@ -323,11 +329,11 @@ KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
 //    m_listLock.lock();
 //    return new KisTileDataStoreClockIterator(m_clockIterator, m_tileDataList, this);
     m_iteratorLock.lockForWrite();
-    return new KisTileDataStoreClockIterator(m_tileDataMap, this);
+    return new KisTileDataStoreClockIterator(m_tileDataMap, m_clockIndex.loadAcquire(), this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 {
-//    m_clockIterator = iterator->getFinalPosition();
+    m_clockIndex = iterator->getFinalPosition();
     delete iterator;
     m_iteratorLock.unlock();
 //    m_listLock.unlock();
@@ -347,7 +353,7 @@ void KisTileDataStore::debugSwapAll()
 {
     KisTileDataStoreIterator* iter = beginIteration();
     KisTileData *item;
-    while(iter->hasNext()) {
+    while (iter->hasNext()) {
         item = iter->next();
         iter->trySwapOut(item);
     }
@@ -373,7 +379,8 @@ void KisTileDataStore::debugClear()
 //    m_memoryMetric = 0;
 }
 
-void KisTileDataStore::testingRereadConfig() {
+void KisTileDataStore::testingRereadConfig()
+{
     m_pooler.testingRereadConfig();
     m_swapper.testingRereadConfig();
     kickPooler();

@@ -19,6 +19,7 @@
 #define KIS_TILE_DATA_STORE_ITERATORS_H_
 
 #include "kis_tile_data.h"
+#include "kis_debug.h"
 
 /**
  * KisTileDataStoreIterator,
@@ -249,20 +250,42 @@ class KisTileDataStoreClockIterator
 //    KisTileDataListIterator m_end;
 //    KisTileDataStore *m_store;
 public:
-    KisTileDataStoreClockIterator(ConcurrentMap<int, KisTileData*> &map, KisTileDataStore *store)
+    KisTileDataStoreClockIterator(ConcurrentMap<int, KisTileData*> &map,
+                                  int startIndex,
+                                  KisTileDataStore *store)
         : m_map(map),
           m_store(store)
     {
         m_iterator.setMap(m_map);
+        m_startItem = m_map.get(startIndex);
+
+        if (m_iterator.getValue() == m_startItem || !m_startItem) {
+            m_endReached = true;
+        } else {
+            while (m_iterator.getValue() != m_startItem) {
+                m_iterator.next();
+            }
+            m_endReached = false;
+        }
     }
 
     inline KisTileData* peekNext()
     {
+        if (!m_iterator.isValid()) {
+            m_iterator.setMap(m_map);
+            m_endReached = true;
+        }
+
         return m_iterator.getValue();
     }
 
     inline KisTileData* next()
     {
+        if (!m_iterator.isValid()) {
+            m_iterator.setMap(m_map);
+            m_endReached = true;
+        }
+
         KisTileData *current = m_iterator.getValue();
         m_iterator.next();
         return current;
@@ -270,7 +293,7 @@ public:
 
     inline bool hasNext() const
     {
-        return m_iterator.isValid();
+        return !(m_endReached && m_iterator.getValue() == m_startItem);
     }
 
     inline bool trySwapOut(KisTileData *td)
@@ -283,8 +306,17 @@ public:
     }
 
 private:
+    friend class KisTileDataStore;
+    inline int getFinalPosition()
+    {
+        return m_iterator.getValue()->m_tileNumber;
+    }
+
+private:
     ConcurrentMap<int, KisTileData*> &m_map;
     ConcurrentMap<int, KisTileData*>::Iterator m_iterator;
+    KisTileData *m_startItem;
+    bool m_endReached;
     KisTileDataStore *m_store;
 };
 

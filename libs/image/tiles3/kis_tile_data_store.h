@@ -184,6 +184,7 @@ private:
     QAtomicInt m_numTiles;
     QAtomicInt m_memoryMetric;
     QAtomicInt m_counter;
+    QAtomicInt m_clockIndex;
     ConcurrentMap<int, KisTileData*> m_tileDataMap;
     QReadWriteLock m_iteratorLock;
 };

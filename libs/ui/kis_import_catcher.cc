@@ -35,7 +35,6 @@
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
-#include "kis_statusbar.h"
 #include "kis_progress_widget.h"
 #include "kis_config.h"
 #include "KisPart.h"

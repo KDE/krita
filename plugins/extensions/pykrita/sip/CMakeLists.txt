@@ -12,7 +12,7 @@ set(SIP_INCLUDES
     ${PYQT_SIP_DIR_OVERRIDE}
      ./krita)
 
-if(${PYQT5_VERSION} VERSION_GREATER "050b00")
+if(${PYQT5_VERSION} VERSION_GREATER "5.11.0")
     set(SIP_NAME -n PyQt5.sip)
 endif()
 

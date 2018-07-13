@@ -38,6 +38,7 @@
 #include "kis_config_notifier.h"
 #include "kis_painting_tweaks.h"
 #include "KisView.h"
+#include "kis_selection_mask.h"
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
@@ -91,10 +92,15 @@ bool KisSelectionDecoration::selectionIsActive()
 
 void KisSelectionDecoration::selectionChanged()
 {
-    const bool hasOverlayMask = view()->image()->hasOverlaySelectionMask();
+    KisSelectionMaskSP mask = qobject_cast<KisSelectionMask*>(view()->currentNode().data());
+    if (!mask || !mask->active() || !mask->visible(true)) {
+        mask = 0;
+    }
+    view()->image()->setOverlaySelectionMask(mask);
+
     KisSelectionSP selection = view()->selection();
 
-    if (!hasOverlayMask && selection && selectionIsActive()) {
+    if (!mask && selection && selectionIsActive()) {
         if ((m_mode == Ants && selection->outlineCacheValid()) ||
             (m_mode == Mask && selection->thumbnailImageValid())) {
 

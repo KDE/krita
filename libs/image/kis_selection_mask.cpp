@@ -180,9 +180,10 @@ void KisSelectionMask::setSectionModelProperties(const KisBaseNode::PropertyList
 
 void KisSelectionMask::setVisible(bool visible, bool isLoading)
 {
+    const bool oldVisible = this->visible(false);
     setNodeProperty("visible", visible);
 
-    if (!isLoading) {
+    if (!isLoading && visible != oldVisible) {
         if (selection())
             selection()->setVisible(visible);
         emit(visibilityChanged(visible));
@@ -201,14 +202,15 @@ void KisSelectionMask::setActive(bool active)
 
     if (active && parentLayer) {
         KisSelectionMaskSP activeMask = parentLayer->selectionMask();
-        if (activeMask) {
+        if (activeMask && activeMask != this) {
             activeMask->setActive(false);
         }
     }
 
+    const bool oldActive = this->active();
     setNodeProperty("active", active);
 
-    if (image) {
+    if (image && oldActive != active) {
         image->nodeChanged(this);
         image->undoAdapter()->emitSelectionChanged();
     }

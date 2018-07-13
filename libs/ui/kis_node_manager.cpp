@@ -153,7 +153,6 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         maskManager.activateMask(0);
         layerManager.activateLayer(0);
         previouslyActiveNode = q->activeNode();
-        imageView->image()->setOverlaySelectionMask(0);
     } else {
 
         previouslyActiveNode = q->activeNode();
@@ -182,10 +181,6 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
             // XXX_NODE: for now, masks cannot be nested.
             layerManager.activateLayer(static_cast<KisLayer*>(node->parent().data()));
         }
-
-        // TODO: multiple views problem!!!
-        KisSelectionMaskSP mask = qobject_cast<KisSelectionMask*>(node.data());
-        imageView->image()->setOverlaySelectionMask(mask);
     }
     return true;
 }

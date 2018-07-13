@@ -1,4 +1,5 @@
 add_subdirectory(tests)
+add_subdirectory(dbexplorer)
 
 set(kritaresources_LIB_SRCS
     KisResourceCacheDb.cpp

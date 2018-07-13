@@ -1,0 +1,9 @@
+{
+    "Id": "Cache Db Explorer Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritadbexplorer",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

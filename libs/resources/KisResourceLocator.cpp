@@ -182,13 +182,13 @@ bool KisResourceLocator::initializeDb()
             d->errorMessages.append(i18n("Could not add storage %1 to the cache database").arg(storage->location()));
         }
 
-        Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-            qDebug() << "Adding storage" << storage->location() << "folder" << folder;
-            if (!KisResourceCacheDb::addResources(storage, folder)) {
-                d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(folder));
+        Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+            qDebug() << "Adding storage" << storage->location() << "folder" << resourceType;
+            if (!KisResourceCacheDb::addResources(storage, resourceType)) {
+                d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(resourceType));
             }
-            if (!KisResourceCacheDb::addTags(storage, folder)) {
-                d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database").arg(folder));
+            if (!KisResourceCacheDb::addTags(storage, resourceType)) {
+                d->errorMessages.append(i18n("Could not add tags for resource type %1 to the cache database").arg(resourceType));
             }
         }
     }

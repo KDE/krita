@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS storages (
 ,   pre_installed INTEGER
 ,   active INTEGER
 ,   FOREIGN KEY(origin_type_id) REFERENCES origin_types(id)
+,   UNIQUE(location)
 );

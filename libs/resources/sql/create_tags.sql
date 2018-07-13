@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS tags (
 ,   comment TEXT
 ,   resource_type_id INTEGER
 ,   active INTEGER
+,   timestamp INTEGER
 ,   FOREIGN KEY(resource_type_id) REFERENCES resource_types(id)
 ,   UNIQUE (url, resource_type_id)
 );

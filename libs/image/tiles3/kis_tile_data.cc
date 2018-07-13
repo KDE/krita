@@ -37,6 +37,23 @@ const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
 
 SimpleCache KisTileData::m_cache;
 
+SimpleCache::~SimpleCache()
+{
+    quint8 *ptr = 0;
+
+    while (m_4Pool.pop(ptr)) {
+        BoostPool4BPP::free(ptr);
+    }
+
+    while (m_8Pool.pop(ptr)) {
+        BoostPool8BPP::free(ptr);
+    }
+
+    while (m_16Pool.pop(ptr)) {
+        free(ptr);
+    }
+}
+
 
 KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
     : m_state(NORMAL),

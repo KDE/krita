@@ -45,6 +45,7 @@ class SimpleCache
 {
 public:
     SimpleCache() = default;
+    ~SimpleCache();
 
     bool push(int pixelSize, quint8 *&ptr)
     {

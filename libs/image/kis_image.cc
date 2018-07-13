@@ -424,6 +424,8 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
             if (m_mask) {
                 m_mask->setDirty();
             }
+
+            m_image->undoAdapter()->emitSelectionChanged();
         }
 
     private:
@@ -436,6 +438,11 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 }
 
 KisSelectionMaskSP KisImage::overlaySelectionMask() const
+{
+    return m_d->overlaySelectionMask;
+}
+
+bool KisImage::hasOverlaySelectionMask() const
 {
     return m_d->overlaySelectionMask;
 }

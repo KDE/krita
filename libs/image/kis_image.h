@@ -194,6 +194,11 @@ public:
     KisSelectionMaskSP overlaySelectionMask() const;
 
     /**
+     * \see setOverlaySelectionMask
+     */
+    bool hasOverlaySelectionMask() const;
+
+    /**
      * @return the global selection object or 0 if there is none. The
      * global selection is always read-write.
      */

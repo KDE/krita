@@ -91,9 +91,10 @@ bool KisSelectionDecoration::selectionIsActive()
 
 void KisSelectionDecoration::selectionChanged()
 {
+    const bool hasOverlayMask = view()->image()->hasOverlaySelectionMask();
     KisSelectionSP selection = view()->selection();
 
-    if (selection && selectionIsActive()) {
+    if (!hasOverlayMask && selection && selectionIsActive()) {
         if ((m_mode == Ants && selection->outlineCacheValid()) ||
             (m_mode == Mask && selection->thumbnailImageValid())) {
 

@@ -69,6 +69,7 @@
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
+#include "kis_selection_manager.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -2068,6 +2069,12 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::windowFocused()
 {
+    /**
+     * Notify selection manager so that it could update selection mask overlay
+     */
+    viewManager()->selectionManager()->selectionChanged();
+
+
     auto *kisPart = KisPart::instance();
     auto *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;

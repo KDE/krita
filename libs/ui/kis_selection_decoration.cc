@@ -39,6 +39,7 @@
 #include "kis_painting_tweaks.h"
 #include "KisView.h"
 #include "kis_selection_mask.h"
+#include <KisPart.h>
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
@@ -96,7 +97,12 @@ void KisSelectionDecoration::selectionChanged()
     if (!mask || !mask->active() || !mask->visible(true)) {
         mask = 0;
     }
-    view()->image()->setOverlaySelectionMask(mask);
+
+    if (!view()->isCurrent() ||
+        view()->viewManager()->mainWindow() == KisPart::instance()->currentMainwindow()) {
+
+        view()->image()->setOverlaySelectionMask(mask);
+    }
 
     KisSelectionSP selection = view()->selection();
 

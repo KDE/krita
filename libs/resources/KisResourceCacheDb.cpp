@@ -70,7 +70,7 @@ QSqlError initDb(const QString &location)
     }
 
     QStringList tables = QStringList() << "version_information"
-                                       << "origin_types"
+                                       << "storage_types"
                                        << "resource_types"
                                        << "storages"
                                        << "tags"
@@ -160,14 +160,14 @@ QSqlError initDb(const QString &location)
 
     // Fill lookup tables
     {
-        if (dbTables.contains("origin_types")) {
+        if (dbTables.contains("storage_types")) {
             QSqlQuery q;
-            if (!q.exec("DELETE * FROM origin_types;")) {
-                qWarning() << "Could not clear table origin_types" << db.lastError();
+            if (!q.exec("DELETE * FROM storage_types;")) {
+                qWarning() << "Could not clear table storage_types" << db.lastError();
             }
         }
 
-        QFile f(":/fill_origin_types.sql");
+        QFile f(":/fill_storage_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &originType, KisResourceCacheDb::storageTypes) {
@@ -178,10 +178,10 @@ QSqlError initDb(const QString &location)
                     return db.lastError();
                 }
             }
-            infoResources << "Filled lookup table origin_types";
+            infoResources << "Filled lookup table storage_types";
         }
         else {
-            return QSqlError("Error executing SQL", QString("Could not find SQL fill_origin_types.sql."), QSqlError::StatementError);
+            return QSqlError("Error executing SQL", QString("Could not find SQL fill_storage_types.sql."), QSqlError::StatementError);
         }
     }
 
@@ -631,16 +631,16 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         QSqlQuery q;
 
         r = q.prepare("INSERT INTO storages "
-                      "(origin_type_id, location, timestamp, pre_installed, active)"
+                      "(storage_type_id, location, timestamp, pre_installed, active)"
                       "VALUES"
-                      "(:origin_type_id, :location, :timestamp, :pre_installed, :active);");
+                      "(:storage_type_id, :location, :timestamp, :pre_installed, :active);");
 
         if (!r) {
             qWarning() << "Could not prepare query" << q.lastError();
             return r;
         }
 
-        q.bindValue(":origin_type_id", static_cast<int>(storage->type()));
+        q.bindValue(":storage_type_id", static_cast<int>(storage->type()));
         q.bindValue(":location", storage->location());
         q.bindValue(":timestamp", storage->timestamp().toMSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);

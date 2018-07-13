@@ -44,7 +44,7 @@ void TestResourceCacheDb::testCreateDatabase()
     QSqlDatabase sqlDb = QSqlDatabase::database();
 
     QStringList tables = QStringList() << "version_information"
-                                       << "origin_types"
+                                       << "storage_types"
                                        << "resource_types"
                                        << "storages"
                                        << "tags"
@@ -65,7 +65,7 @@ void TestResourceCacheDb::testCreateDatabase()
 void TestResourceCacheDb::testLookupTables()
 {
     QSqlQuery query;
-    bool r = query.exec("SELECT COUNT(*) FROM origin_types");
+    bool r = query.exec("SELECT COUNT(*) FROM storage_types");
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();

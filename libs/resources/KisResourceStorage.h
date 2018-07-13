@@ -92,11 +92,11 @@ public:
     };
 
     enum class StorageType : int {
-        Unknown = 0,
-        Folder = 1,
-        Bundle = 2,
-        AdobeBrushLibrary = 3,
-        AdobeStyleLibrary = 4
+        Unknown = 1,
+        Folder = 2,
+        Bundle = 3,
+        AdobeBrushLibrary = 4,
+        AdobeStyleLibrary = 5
     };
 
     KisResourceStorage(const QString &location);

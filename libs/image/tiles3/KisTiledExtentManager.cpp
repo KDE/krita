@@ -25,7 +25,7 @@
 #include "kis_global.h"
 
 KisTiledExtentManager::Data::Data()
-    : m_min(INT_MAX), m_max(INT_MIN)
+    : m_min(INT_MAX), m_max(INT_MIN), m_count(0)
 {
     QWriteLocker l(&m_lock);
     m_capacity = InitialBufferSize;
@@ -57,13 +57,13 @@ inline bool KisTiledExtentManager::Data::add(int index)
     if (!m_buffer[currentIndex].loadAcquire()) {
         QWriteLocker lock(&m_extentGuard);
 
-        if (!m_buffer[currentIndex].loadAcquire()) {
-            m_buffer[currentIndex].storeRelease(1);
+        if (!m_buffer[currentIndex].load()) {
+            m_buffer[currentIndex].store(1);
 
-            if (m_min > index) m_min.storeRelease(index);
-            if (m_max < index) m_max.storeRelease(index);
+            if (m_min > index) m_min = index;
+            if (m_max < index) m_max = index;
 
-            m_count.ref();
+            ++m_count;
             needsUpdateExtent = true;
         } else {
             m_buffer[currentIndex].ref();
@@ -93,13 +93,13 @@ inline bool KisTiledExtentManager::Data::remove(int index)
     if (m_buffer[currentIndex].loadAcquire() == 1) {
         QWriteLocker lock(&m_extentGuard);
 
-        if (m_buffer[currentIndex].loadAcquire() == 1) {
-            m_buffer[currentIndex].storeRelease(0);
+        if (m_buffer[currentIndex].load() == 1) {
+            m_buffer[currentIndex].store(0);
 
             if (m_min == index) updateMin();
             if (m_max == index) updateMax();
 
-            m_count.ref();
+            --m_count;
             needsUpdateExtent = true;
         } else {
             KIS_ASSERT_RECOVER_NOOP(0 && "sanity check failed: the tile has already been removed!");
@@ -113,27 +113,33 @@ inline bool KisTiledExtentManager::Data::remove(int index)
 
 void KisTiledExtentManager::Data::clear()
 {
-    m_count.storeRelease(0);
     QWriteLocker l(&m_lock);
-
     for (int i = 0; i < m_capacity; ++i) {
-        m_buffer[i].storeRelease(0);
+        m_buffer[i].store(0);
     }
+
+    QWriteLocker lock(&m_extentGuard);
+    m_count = 0;
 }
+
+/*
+ * We don't take locks in isEmpty(), min() and max(),
+ * cause it will be taken in updateExtent()
+ */
 
 bool KisTiledExtentManager::Data::isEmpty()
 {
-    return m_count.loadAcquire() == 0;
+    return m_count == 0;
 }
 
 int KisTiledExtentManager::Data::min()
 {
-    return m_min.loadAcquire();
+    return m_min;
 }
 
 int KisTiledExtentManager::Data::max()
 {
-    return m_max.loadAcquire();
+    return m_max;
 }
 
 void KisTiledExtentManager::Data::migrate(int index)
@@ -154,7 +160,7 @@ void KisTiledExtentManager::Data::migrate(int index)
         int start = m_offset - oldOffset;
 
         for (int i = 0; i < oldCapacity; ++i) {
-            newBuffer[start + i].storeRelease(m_buffer[i].loadAcquire());
+            newBuffer[start + i].store(m_buffer[i].load());
         }
 
         delete[] m_buffer;
@@ -162,11 +168,19 @@ void KisTiledExtentManager::Data::migrate(int index)
     }
 }
 
+/*
+ * We don't take locks in updateMin() and updateMax(),
+ * cause it will be taken in add/remove when incrementing from 0 to 1
+ * or decrementing from 1 to 0
+ */
+
 void KisTiledExtentManager::Data::updateMin()
 {
     for (int i = 0; i < m_capacity; ++i) {
-        if (m_buffer[i].loadAcquire() > 0) {
-            m_min.storeRelease(m_buffer[i].loadAcquire());
+        int current = m_buffer[i].load();
+
+        if (current > 0) {
+            m_min = current;
             break;
         }
     }
@@ -175,8 +189,10 @@ void KisTiledExtentManager::Data::updateMin()
 void KisTiledExtentManager::Data::updateMax()
 {
     for (int i = m_capacity - 1; i >= 0; ++i) {
-        if (m_buffer[i].loadAcquire() > 0) {
-            m_max.storeRelease(m_buffer[i].loadAcquire());
+        int current = m_buffer[i].load();
+
+        if (current > 0) {
+            m_max = current;
             break;
         }
     }

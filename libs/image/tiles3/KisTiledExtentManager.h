@@ -52,11 +52,11 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         void updateMax();
 
     private:
-        QAtomicInt m_min;
-        QAtomicInt m_max;
+        int m_min;
+        int m_max;
         int m_offset;
         int m_capacity;
-        QAtomicInt m_count;
+        int m_count;
         QAtomicInt *m_buffer;
         QReadWriteLock m_lock;
     };

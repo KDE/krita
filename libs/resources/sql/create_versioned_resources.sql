@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS versioned_resources (
 ,   storage_id INTEGER
 ,   version INTEGER
 ,   location TEXT NOT NULL
-,   datestamp TEXT
+,   timestamp TEXT
 ,   deleted INTEGER
 ,   checksum TEXT
 ,   FOREIGN KEY(resource_id) REFERENCES resources(id)

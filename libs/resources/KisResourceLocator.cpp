@@ -116,9 +116,11 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
         }
         initalizationStatus = InitalizationStatus::Initialized;
     }
-
-    findStorages();
-
+    else {
+        if (!synchronizeDb()) {
+            return LocatorError::CannotSynchronizeDb;
+        }
+    }
     return LocatorError::Ok;
 }
 
@@ -171,6 +173,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
 bool KisResourceLocator::initializeDb()
 {
     qDebug() << "initalizeDb";
+    d->errorMessages.clear();
     findStorages();
 
     Q_FOREACH(KisResourceStorageSP storage, d->storages) {
@@ -219,8 +222,9 @@ QList<KisResourceStorageSP> KisResourceLocator::storages() const
 bool KisResourceLocator::synchronizeDb()
 {
     d->errorMessages.clear();
+    findStorages();
     Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
-        if (!KisResourceCacheDb::synchronize(storage)) {
+        if (!KisResourceCacheDb::synchronizeStorage(storage)) {
             d->errorMessages.append(i18n("Could not synchronize %1 with the database").arg(storage->location()));
         }
     }

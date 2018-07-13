@@ -53,7 +53,7 @@ public:
     /**
      * @return the list of folders for which resource loaders have been registered
      */
-    QSet<QString> resourceTypes() const;
+    QStringList resourceTypes() const;
 
 private:
 

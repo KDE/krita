@@ -77,9 +77,8 @@ private:
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
-
-
-    static bool synchronize(KisResourceStorageSP storage);
+    static bool updateStorage(KisResourceStorageSP storage);
+    static bool synchronizeStorage(KisResourceStorageSP storage);
 
 
     static bool s_valid;

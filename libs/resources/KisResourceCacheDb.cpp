@@ -310,14 +310,14 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     {
         QSqlQuery q;
         r = q.prepare("INSERT INTO versioned_resources \n"
-                      "(resource_id, storage_id, version, location, datestamp, deleted, checksum)\n"
+                      "(resource_id, storage_id, version, location, timestamp, deleted, checksum)\n"
                       "VALUES\n"
                       "(:resource_id,\n"
                       ",    (SELECT id FROM storages \n"
                       "      WHERE location = :storage_location)\n"
                       ",    (SELECT MAX(version) + 1 FROM versioned_resources\n"
                       "      WHERE  resource_id = :resource_id)\n"
-                      ", :location, :datestamp, 0, :checksum\n"
+                      ", :location, :timestamp, 0, :checksum\n"
                       ");");
 
         if (!r) {
@@ -328,7 +328,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         q.bindValue(":resource_id", resourceId);
         q.bindValue(":storage_location", storage->location());
         q.bindValue(":location", resource->filename());
-        q.bindValue(":datestamp", timestamp.toString()); // XXX: make the right format for sqlite to work with
+        q.bindValue(":timestamp", timestamp.toString()); // XXX: make the right format for sqlite to work with
         q.bindValue(":deleted", 0);
         q.bindValue(":checksum", resource->md5());
 
@@ -429,14 +429,14 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     // Then add a new version
     QSqlQuery q;
     r = q.prepare("INSERT INTO versioned_resources "
-                  "(resource_id, storage_id, version, location, datestamp, deleted, checksum)"
+                  "(resource_id, storage_id, version, location, timestamp, deleted, checksum)"
                   "VALUES"
                   "(:resource_id"
                   ",    (SELECT id FROM storages "
                   "      WHERE location = :storage_location)"
                   ", 1"
                   ", :location"
-                  ", :datestamp"
+                  ", :timestamp"
                   ", 0"
                   ", :checksum"
                   ");");
@@ -449,7 +449,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":resource_id", resourceId);
     q.bindValue(":storage_location", storage->location());
     q.bindValue(":location", resource->filename());
-    q.bindValue(":datestamp", timestamp.toString()); // XXX: make the right format for sqlite to work with
+    q.bindValue(":timestamp", timestamp.toString()); // XXX: make the right format for sqlite to work with
     q.bindValue(":deleted", 0);
     q.bindValue(":checksum", resource->md5());
 
@@ -592,7 +592,6 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
         if (!addTag(resourceType, iter->url(), iter->name(), iter->comment())) {
             qWarning() << "Could not add tag" << iter->url() << "to the database";
         }
-        qDebug() << iter->tag()->defaultResources();
         if (!iter->tag()->defaultResources().isEmpty()) {
             Q_FOREACH(const QString &resourceName, iter->tag()->defaultResources()) {
                 if (!tagResource(storage, resourceName, iter->tag(), resourceType)) {
@@ -632,9 +631,9 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         QSqlQuery q;
 
         r = q.prepare("INSERT INTO storages "
-                      "(origin_type_id, location, datestamp, pre_installed, active)"
+                      "(origin_type_id, location, timestamp, pre_installed, active)"
                       "VALUES"
-                      "(:origin_type_id, :location, :datestamp, :pre_installed, :active);");
+                      "(:origin_type_id, :location, :timestamp, :pre_installed, :active);");
 
         if (!r) {
             qWarning() << "Could not prepare query" << q.lastError();
@@ -643,7 +642,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
         q.bindValue(":origin_type_id", static_cast<int>(storage->type()));
         q.bindValue(":location", storage->location());
-        q.bindValue(":datestamp", storage->timestamp().toMSecsSinceEpoch());
+        q.bindValue(":timestamp", storage->timestamp().toMSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled);
         q.bindValue(":active", preinstalled ? 1 : 0);
 
@@ -654,10 +653,56 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
     return r;
 }
 
-bool KisResourceCacheDb::synchronize(KisResourceStorageSP storage)
+bool KisResourceCacheDb::updateStorage(KisResourceStorageSP storage)
 {
+    return false;
+}
+
+bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
+{
+    if (!s_valid) {
+        qWarning() << "KisResourceCacheDb::addResource: The database is not valid";
+        return false;
+    }
+
+
     // Find the storage in the database
     qDebug() << storage->location() << storage->timestamp();
+
+    // Only check the time stamp for container storages, not the contents
+    if (storage->type() != KisResourceStorage::StorageType::Folder) {
+        QSqlQuery q;
+        if (!q.prepare("SELECT timestamp"
+                       "FROM   storages"
+                       "WHERE  location = :location\n")) {
+            qWarning() << "Could not prepare storage timestamp statement" << q.lastError();
+        }
+        q.bindValue(":location", storage->location());
+        if (!q.exec()) {
+            qWarning() << "Could not execute storage timestamp statement" << q.boundValues() << q.lastError();
+        }
+        if (!q.first()) {
+            // This is a new storage, the user must have dropped it in the path before restarting Krita, so add it.
+            addStorage(storage, false);
+        }
+        if (storage->timestamp() > QDateTime::fromString(q.value(0).toString())) {
+            if (!updateStorage(storage)) {
+                qWarning() << "Could not update storage" << storage->location() << "to a newer version";
+            }
+        }
+    }
+    else {
+        QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
+        while(iter->hasNext()) {
+            iter->next();
+            KoResourceSP res = iter->resource();
+            if (res) {
+                if (!addResource(storage, iter->lastModified(), res, iter->type())) {
+                    qWarning() << "Could not add resource" << res->filename() << "to the database";
+                }
+            }
+        }
+    }
     return true;
 }
 

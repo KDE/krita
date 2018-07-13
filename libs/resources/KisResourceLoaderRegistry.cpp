@@ -67,16 +67,20 @@ QStringList KisResourceLoaderRegistry::filters(const QString &resourceType) cons
     Q_FOREACH(KisResourceLoaderBase *loader, resourceTypeLoaders(resourceType)) {
         r.append(loader->filters());
     }
+    r.removeDuplicates();
+    r.sort();
     return r;
 }
 
 
 
-QSet<QString> KisResourceLoaderRegistry::resourceTypes() const
+QStringList KisResourceLoaderRegistry::resourceTypes() const
 {
     QStringList r;
     Q_FOREACH(KisResourceLoaderBase *loader, values()) {
         r << loader->resourceType();
     }
-    return QSet<QString>::fromList(r);
+    r.removeDuplicates();
+    r.sort();
+    return r;
 }

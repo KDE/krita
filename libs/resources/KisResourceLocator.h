@@ -48,7 +48,8 @@ public:
         Ok,
         LocationReadOnly,
         CannotCreateLocation,
-        CannotInitializeDb
+        CannotInitializeDb,
+        CannotSynchronizeDb
     };
 
     /**
@@ -60,8 +61,6 @@ public:
     LocatorError initialize(const QString &installationResourcesLocation);
 
     QStringList errorMessages() const;
-
-    bool synchronizeDb();
 
 private:
 
@@ -80,7 +79,12 @@ private:
     };
 
     LocatorError firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation);
+
+    // First time installation
     bool initializeDb();
+
+    // Synchronize on restarting Krita to see whether the user has added any storages or resources to the resources location
+    bool synchronizeDb();
 
     void findStorages();
     QList<KisResourceStorageSP> storages() const;

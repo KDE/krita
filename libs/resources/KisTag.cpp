@@ -38,12 +38,15 @@ const QByteArray KisTag::s_tag {"Tag"};
 const QByteArray KisTag::s_name {"Name"};
 const QByteArray KisTag::s_url {"URL"};
 const QByteArray KisTag::s_comment {"Comment"};
+const QByteArray KisTag::s_defaultResources {"Default Resources"};
 
 class KisTag::Private {
 public:
+    bool valid {false};
     QString url;
     QString name;
     QString comment;
+    QStringList defaultResources;
     KEntryMap map;
 };
 
@@ -54,7 +57,11 @@ KisTag::KisTag()
 
 KisTag::~KisTag()
 {
+}
 
+bool KisTag::valid() const
+{
+    return d->valid;
 }
 
 QString KisTag::name() const
@@ -62,7 +69,7 @@ QString KisTag::name() const
     return d->name;
 }
 
-void KisTag::setName(const QString &name) const
+void KisTag::setName(const QString &name)
 {
     d->map.setEntry(s_group, s_name, name, KEntryMap::EntryDirty);
     d->name = name;
@@ -73,7 +80,7 @@ QString KisTag::url() const
     return d->url;
 }
 
-void KisTag::setUrl(const QString &url) const
+void KisTag::setUrl(const QString &url)
 {
     d->map.setEntry(s_group, s_url, url, KEntryMap::EntryDirty);
     d->url = url;
@@ -84,10 +91,20 @@ QString KisTag::comment() const
     return d->comment;
 }
 
-void KisTag::setComment(const QString &comment) const
+void KisTag::setComment(const QString &comment)
 {
     d->map.setEntry(s_group, s_comment, comment, KEntryMap::EntryDirty);
     d->comment = comment;
+}
+
+QStringList KisTag::defaultResources() const
+{
+    return d->defaultResources;
+}
+
+void KisTag::setDefaultResources(const QStringList &defaultResources)
+{
+    d->defaultResources = defaultResources;
 }
 
 bool KisTag::load(QIODevice &io)
@@ -113,6 +130,8 @@ bool KisTag::load(QIODevice &io)
     d->url = d->map.getEntry(s_group, s_url);
     d->name = d->map.getEntry(s_group, s_name, QString(), KEntryMap::SearchLocalized);
     d->comment = d->map.getEntry(s_group, s_comment, QString(), KEntryMap::SearchLocalized);
+    d->defaultResources = d->map.getEntry(s_group, s_defaultResources, QString()).split(',', QString::SkipEmptyParts);
+    d->valid = true;
 
     return true;
 }
@@ -120,6 +139,12 @@ bool KisTag::load(QIODevice &io)
 bool KisTag::save(QIODevice &io)
 {
     KConfigIniBackend ini;
+
+    d->map.setEntry(s_group, s_url, d->url, KEntryMap::EntryDirty);
+    d->map.setEntry(s_group, s_name, d->name, KEntryMap::EntryDirty);
+    d->map.setEntry(s_group, s_comment, d->comment, KEntryMap::EntryDirty);
+    d->map.setEntry(s_group, s_defaultResources, d->defaultResources.join(','), KEntryMap::EntryDirty);
+
     ini.writeEntries(QLocale().name().toUtf8(), io, d->map);
     return true;
 }

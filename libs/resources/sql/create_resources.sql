@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS resources (
 ,   thumbnail BLOB
 ,   status INTEGER
 ,   FOREIGN KEY(resource_type_id) REFERENCES resource_types(id)
-,   UNIQUE(resource_type_id, name, filename)
+,   UNIQUE(resource_type_id, name)
+,   UNIQUE(filename)
 );

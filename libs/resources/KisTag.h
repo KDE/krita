@@ -44,14 +44,19 @@ public:
     KisTag();
     virtual ~KisTag();
 
+    bool valid() const;
+
     QString name() const;
-    void setName(const QString &name) const;
+    void setName(const QString &name);
 
     QString url() const;
-    void setUrl(const QString &url) const;
+    void setUrl(const QString &url);
 
     QString comment() const;
-    void setComment(const QString &comment) const;
+    void setComment(const QString &comment);
+
+    QStringList defaultResources() const;
+    void setDefaultResources(const QStringList &defaultResources);
 
     bool load(QIODevice &io);
     bool save(QIODevice &io);
@@ -64,6 +69,7 @@ private:
     static const QByteArray s_name;
     static const QByteArray s_url;
     static const QByteArray s_comment;
+    static const QByteArray s_defaultResources;
     class Private;
     QScopedPointer<Private> d;
 };

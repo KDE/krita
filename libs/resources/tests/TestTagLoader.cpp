@@ -66,7 +66,7 @@ void TestTagLoader ::testLoadTag()
 
 void TestTagLoader::testSaveTag()
 {
-    KisTag tagLoader;
+    KisTag tag1;
     QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
 
     QVERIFY(f.exists());
@@ -74,20 +74,25 @@ void TestTagLoader::testSaveTag()
     f.open(QFile::ReadOnly);
     QVERIFY(f.isOpen());
 
-    bool r = tagLoader.load(f);
+    bool r = tag1.load(f);
     QVERIFY(r);
 
-    tagLoader.setName(QString("Test"));
+    tag1.setName(QString("Test"));
 
     QByteArray ba;
     QBuffer buf(&ba);
     buf.open(QBuffer::WriteOnly);
 
-    tagLoader.save(buf);
+    tag1.save(buf);
 
     buf.close();
-
-    QVERIFY(ba == QByteArray("[Desktop Entry]\nComment[nl_NL]=Jouw favoriete penseel presets\nComment=Your favorite brush presets\nName=Test\nType=Tag\nURL=* Favorites\n"));
+    buf.open(QBuffer::ReadOnly);
+    KisTag tag2;
+    tag2.load(buf);
+    QVERIFY(tag2.url() == tag1.url());
+    QVERIFY(tag2.name() == tag1.name());
+    QVERIFY(tag2.comment() == tag1.comment());
+    QVERIFY(tag2.defaultResources() == tag1.defaultResources());
 
 }
 

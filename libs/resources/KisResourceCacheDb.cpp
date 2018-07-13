@@ -244,18 +244,17 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
-int KisResourceCacheDb::resourceIdForResource(KoResourceSP resource, const QString &resourceType)
+int KisResourceCacheDb::resourceIdForResource(const QString &resourceFileName, const QString &resourceType)
 {
     QFile f(":/select_resource_id.sql");
     f.open(QFile::ReadOnly);
     QSqlQuery q;
     if (!q.prepare(f.readAll())) {
         qWarning() << "Could not read and prepare resourceIdForResource" << q.lastError();
-        return false;
+        return -1;
     }
 
-    q.bindValue(":name", resource->name());
-    q.bindValue(":filename", resource->filename());
+    q.bindValue(":filename", resourceFileName);
     q.bindValue(":resource_type", resourceType);
 
     if (!q.exec()) {
@@ -263,7 +262,6 @@ int KisResourceCacheDb::resourceIdForResource(KoResourceSP resource, const QStri
         return -1;
     }
     if (!q.first()) {
-        qWarning() << "Could not find this reosurce" <<  resource->filename() << q.boundValues() << q.lastError();
         return -1;
     }
     return q.value(0).toInt();
@@ -274,10 +272,10 @@ bool KisResourceCacheDb::resourceNeedsUpdating(int resourceId, QDateTime timesta
 {
     QSqlQuery q;
     if (!q.prepare("SELECT timestamp\n"
-                  "FROM   versioned_resources\n"
-                  "WHERE  resourceId = :resource_id\n"
-                  "AND    version = (SELECT MAX(version)\n"
-                  "                  FROM   versioned_resources\n"
+                   "FROM   versioned_resources\n"
+                   "WHERE  resourceId = :resource_id\n"
+                   "AND    version = (SELECT MAX(version)\n"
+                   "                  FROM   versioned_resources\n"
                    "                  WHERE  resource_id = :resource_id);")) {
         qWarning() << "Could not prepare resourceNeedsUpdating statement";
         return false;
@@ -375,27 +373,6 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
     return r;
 }
 
-bool KisResourceCacheDb::hasResource(KisResourceStorageSP storage, KoResourceSP resource, const QString &resourceType)
-{
-    QFile f(":/select_resource.sql");
-    if (f.open(QFile::ReadOnly)) {
-        QSqlQuery q;
-        if (!q.prepare(f.readAll())) {
-            qWarning() << "Could not read and prepare select_resource.sql" << q.lastError();
-            return false;
-        }
-        q.bindValue(":storage", storage->location());
-        q.bindValue(":location", resource->filename());
-        q.bindValue(":resource_type", resourceType);
-        if (!q.exec()) {
-            qWarning() << "Could not query resources" << q.boundValues() << q.lastError();
-        }
-        return q.first();
-    }
-    qWarning() << "Could not open select_resource.sql";
-    return false;
-}
-
 bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime timestamp, KoResourceSP resource, const QString &resourceType)
 {
     bool r = false;
@@ -411,8 +388,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     // Check whether it already exists
-    if (hasResource(storage, resource, resourceType)) {
-        int resourceId = resourceIdForResource(resource, resourceType);
+    int resourceId = resourceIdForResource(resource->filename(), resourceType);
+    if (resourceId > -1) {
         if (resourceNeedsUpdating(resourceId, timestamp)) {
             r = addResourceVersion(resourceId, timestamp, storage, resource);
         }
@@ -450,7 +427,6 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
         }
     }
     // Then add a new version
-    int resourceId = resourceIdForResource(resource, resourceType);
     QSqlQuery q;
     r = q.prepare("INSERT INTO versioned_resources "
                   "(resource_id, storage_id, version, location, datestamp, deleted, checksum)"
@@ -496,6 +472,60 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
                 qWarning() << "Could not add resource" << res->filename() << "to the database";
             }
         }
+    }
+    return true;
+}
+
+bool KisResourceCacheDb::tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType)
+{
+    // Get resource id
+    int resourceId = resourceIdForResource(storage->location() + "/" + resourceType + "/" + resourceName, resourceType);
+
+    if (resourceId < 0) {
+        qWarning() << "Could not find resource to tag" << storage->location() + "/" + resourceName << resourceType;
+        return false;
+    }
+
+    // Get tag id
+    int tagId {-1};
+    {
+        QFile f(":/select_tag.sql");
+        if (f.open(QFile::ReadOnly)) {
+            QSqlQuery q;
+            if (!q.prepare(f.readAll())) {
+                qWarning() << "Could not read and prepare select_tag.sql" << q.lastError();
+                return false;
+            }
+            q.bindValue(":url", tag->url());
+            q.bindValue(":resource_type", resourceType);
+
+            if (!q.exec()) {
+                qWarning() << "Could not query tags" << q.boundValues() << q.lastError();
+                return false;
+            }
+
+            if (!q.first()) {
+                qWarning() << "Could not find tag" << q.boundValues() << q.lastError();
+                return false;
+            }
+
+            tagId = q.value(0).toInt();
+        }
+    }
+
+    QSqlQuery q;
+    if (!q.prepare("INSERT INTO resource_tags\n"
+                   "(resource_id, tag_id)\n"
+                   "VALUES\n"
+                   "(:resource_id, :tag_id);")) {
+        qWarning() << "Could not prepare tagResource statement" << q.lastError();
+        return false;
+    }
+    q.bindValue(":resource_id", resourceId);
+    q.bindValue(":tag_id", tagId);
+    if (!q.exec()) {
+        qWarning() << "Could not execute tagResource stagement" << q.boundValues() << q.lastError();
+        return false;
     }
     return true;
 }
@@ -562,8 +592,13 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
         if (!addTag(resourceType, iter->url(), iter->name(), iter->comment())) {
             qWarning() << "Could not add tag" << iter->url() << "to the database";
         }
-        else {
-            qDebug() << "Added tag" << iter->url();
+        qDebug() << iter->tag()->defaultResources();
+        if (!iter->tag()->defaultResources().isEmpty()) {
+            Q_FOREACH(const QString &resourceName, iter->tag()->defaultResources()) {
+                if (!tagResource(storage, resourceName, iter->tag(), resourceType)) {
+                    qWarning() << "Could not tag resource" << resourceName << "with tag" << iter->url();
+                }
+            }
         }
     }
     return true;

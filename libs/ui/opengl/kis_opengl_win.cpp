@@ -29,7 +29,6 @@
 
 #include <kis_debug.h>
 #include <kis_config.h>
-#include <KisLoggingManager.h>
 
 #include <boost/optional.hpp>
 
@@ -187,14 +186,6 @@ void KisOpenGL::probeWindowsQpaOpenGL(int argc, char **argv, QString userRendere
 
     qDebug() << "Probing Qt OpenGL detection:";
     {
-        KisLoggingManager::ScopedLogCapturer logCapturer(
-            "qt.qpa.gl",
-            [](QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-                Q_UNUSED(type)
-                Q_UNUSED(context)
-                qpaDetectionLog.append(msg);
-            }
-        );
         {
             QGuiApplication app(argc, argv);
             qpaDetectionResult = checkQpaOpenGLStatus();

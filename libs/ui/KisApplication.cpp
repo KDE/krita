@@ -365,13 +365,6 @@ bool KisApplication::loadResources()
         return false;
     }
 
-
-    if (!KisResourceLocator::instance()->synchronizeDb()) {
-        QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
-        return false;
-    }
-
-
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();
     KoResourceServerProvider::instance();

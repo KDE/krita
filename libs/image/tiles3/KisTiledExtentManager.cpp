@@ -54,12 +54,22 @@ inline bool KisTiledExtentManager::Data::add(int index)
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
     bool needsUpdateExtent = false;
 
-    if (m_min > index) m_min.storeRelease(index);
-    if (m_max < index) m_max.storeRelease(index);
+    if (!m_buffer[currentIndex].loadAcquire()) {
+        QWriteLocker lock(&m_extentGuard);
 
-    if (!m_buffer[currentIndex].fetchAndAddOrdered(1)) {
-        m_count.ref();
-        needsUpdateExtent = true;
+        if (!m_buffer[currentIndex].loadAcquire()) {
+            m_buffer[currentIndex].storeRelease(1);
+
+            if (m_min > index) m_min.storeRelease(index);
+            if (m_max < index) m_max.storeRelease(index);
+
+            m_count.ref();
+            needsUpdateExtent = true;
+        } else {
+            m_buffer[currentIndex].ref();
+        }
+    } else {
+        m_buffer[currentIndex].ref();
     }
 
     return needsUpdateExtent;
@@ -80,12 +90,22 @@ inline bool KisTiledExtentManager::Data::remove(int index)
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() > 0);
     bool needsUpdateExtent = false;
 
-    if (!m_buffer[currentIndex].fetchAndSubOrdered(1)) {
-        if (m_min == index) updateMin();
-        if (m_max == index) updateMax();
+    if (m_buffer[currentIndex].loadAcquire() == 1) {
+        QWriteLocker lock(&m_extentGuard);
 
-        m_count.deref();
-        needsUpdateExtent = true;
+        if (m_buffer[currentIndex].loadAcquire() == 1) {
+            m_buffer[currentIndex].storeRelease(0);
+
+            if (m_min == index) updateMin();
+            if (m_max == index) updateMax();
+
+            m_count.ref();
+            needsUpdateExtent = true;
+        } else {
+            KIS_ASSERT_RECOVER_NOOP(0 && "sanity check failed: the tile has already been removed!");
+        }
+    } else {
+        m_buffer[currentIndex].deref();
     }
 
     return needsUpdateExtent;
@@ -208,26 +228,28 @@ void KisTiledExtentManager::clear()
     m_colsData.clear();
     m_rowsData.clear();
 
-    QWriteLocker l(&m_mutex);
+    QWriteLocker cl(&m_colsData.m_extentGuard);
+    QWriteLocker rl(&m_rowsData.m_extentGuard);
     m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
-
 }
 
 QRect KisTiledExtentManager::extent() const
 {
-    QReadLocker l(&m_mutex);
+    QReadLocker cl(&m_colsData.m_extentGuard);
+    QReadLocker rl(&m_rowsData.m_extentGuard);
     return m_currentExtent;
 }
 
 void KisTiledExtentManager::updateExtent()
 {
+    QWriteLocker cl(&m_colsData.m_extentGuard);
+    QWriteLocker rl(&m_rowsData.m_extentGuard);
+
     bool colsEmpty = m_colsData.isEmpty();
     bool rowsEmpty = m_rowsData.isEmpty();
-
     KIS_ASSERT_RECOVER_RETURN(colsEmpty == rowsEmpty);
 
     if (colsEmpty && rowsEmpty) {
-        QWriteLocker l(&m_mutex);
         m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
     } else {
         const int minX = m_colsData.min() * KisTileData::WIDTH;
@@ -235,7 +257,6 @@ void KisTiledExtentManager::updateExtent()
         const int minY = m_rowsData.min() * KisTileData::HEIGHT;
         const int maxPlusOneY = (m_rowsData.max() + 1) * KisTileData::HEIGHT;
 
-        QWriteLocker l(&m_mutex);
         m_currentExtent =
             QRect(minX, minY,
                   maxPlusOneX - minX,

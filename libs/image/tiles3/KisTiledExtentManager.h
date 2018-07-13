@@ -43,6 +43,9 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         int min();
         int max();
 
+    public:
+        mutable QReadWriteLock m_extentGuard;
+
     private:
         void migrate(int index);
         void updateMin();
@@ -73,7 +76,6 @@ private:
     void updateExtent();
 
 private:
-    mutable QReadWriteLock m_mutex;
     QRect m_currentExtent;
     Data m_colsData;
     Data m_rowsData;

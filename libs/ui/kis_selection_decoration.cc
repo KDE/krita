@@ -36,6 +36,8 @@
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include "kis_image_config.h"
+#include "KisImageConfigNotifier.h"
 #include "kis_painting_tweaks.h"
 #include "KisView.h"
 #include "kis_selection_mask.h"
@@ -55,6 +57,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
                                    ANT_LENGTH, ANT_SPACE);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
     m_antsTimer = new QTimer(this);
@@ -147,8 +150,9 @@ void KisSelectionDecoration::slotStartUpdateSelection()
 void KisSelectionDecoration::slotConfigChanged()
 {
     KisConfig cfg;
+    KisImageConfig imageConfig;
 
-    m_maskColor = cfg.selectionOverlayMaskColor();
+    m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
 }
 

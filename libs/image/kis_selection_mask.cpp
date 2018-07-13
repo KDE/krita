@@ -37,6 +37,9 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_cached_paint_device.h"
 
+#include "kis_image_config.h"
+#include "KisImageConfigNotifier.h"
+
 
 struct Q_DECL_HIDDEN KisSelectionMask::Private
 {
@@ -44,14 +47,17 @@ public:
     Private(KisSelectionMask *_q)
         : q(_q)
         , updatesCompressor(0)
+        , maskColor(Qt::green, KoColorSpaceRegistry::instance()->rgb8())
     {}
     KisSelectionMask *q;
     KisImageWSP image;
     KisCachedPaintDevice paintDeviceCache;
     KisCachedSelection cachedSelection;
     KisThreadSafeSignalCompressor *updatesCompressor;
+    KoColor maskColor;
 
     void slotSelectionChangedCompressed();
+    void slotConfigChanged();
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
@@ -68,6 +74,9 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->moveToThread(image->thread());
+
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    m_d->slotConfigChanged();
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
@@ -80,6 +89,9 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->moveToThread(m_d->image->thread());
+
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    m_d->slotConfigChanged();
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -102,11 +114,8 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
     Q_UNUSED(preparedNeedRect);
     if (!effectiveSelection) return;
 
-    // TODO: make configurable
-    const KoColor maskColor(QColor(255, 0, 0, 200), projection->colorSpace());
-
     KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
-    fillDevice->setDefaultPixel(KoColor(maskColor, fillDevice->colorSpace()));
+    fillDevice->setDefaultPixel(m_d->maskColor);
 
     const QRect selectionExtent = effectiveSelection->selectedRect();
 
@@ -269,6 +278,21 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
     if (!currentSelection) return;
 
     currentSelection->notifySelectionChanged();
+}
+
+void KisSelectionMask::Private::slotConfigChanged()
+{
+    const KoColorSpace *cs = image ?
+        image->colorSpace() :
+        KoColorSpaceRegistry::instance()->rgb8();
+
+    KisImageConfig cfg;
+
+    maskColor = KoColor(cfg.selectionOverlayMaskColor(), cs);
+
+    if (image && image->overlaySelectionMask() == q) {
+        q->setDirty();
+    }
 }
 
 #include "moc_kis_selection_mask.cpp"

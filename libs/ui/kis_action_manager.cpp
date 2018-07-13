@@ -176,6 +176,7 @@ KisAction *KisActionManager::createAction(const QString &name)
 {
     KisAction *a = actionByName(name); // Check if the action already exists
     if (a) {
+        dbgAction << name << "already exists";
         return a;
     }
 

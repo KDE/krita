@@ -254,7 +254,7 @@ QList<QString> KisActionRegistry::registeredShortcutIds() const
 bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
 {
     if (!d->actionInfoList.contains(name)) {
-        warnAction << "No XML data found for action" << name;
+        warnAction << "propertizeAction: No XML data found for action" << name;
         return false;
     }
 
@@ -296,7 +296,7 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
     ActionInfoItem info = d->actionInfo(name);
     QDomElement actionXml = info.xmlData;
     if (actionXml.text().isEmpty()) {
-        dbgAction << "No XML data found for action" << name;
+        dbgAction << "getActionProperty: No XML data found for action" << name;
         return QString();
     }
 
@@ -309,9 +309,11 @@ void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
         KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+    dbgAction << "Action Definitions" << actionDefinitions;
 
     // Extract actions all XML .action files.
     Q_FOREACH (const QString &actionDefinition, actionDefinitions)  {
+        dbgAction << "\tLoading Action File" << actionDefinition;
         QDomDocument doc;
         QFile f(actionDefinition);
         f.open(QFile::ReadOnly);
@@ -342,6 +344,7 @@ void KisActionRegistry::Private::loadActionFiles()
                 if (actionXml.tagName() == "Action") {
                     // Read name from format <Action name="save">
                     QString name      = actionXml.attribute("name");
+                    dbgAction << "\t\tloading xml data for action" << name;
 
                     // Bad things
                     if (name.isEmpty()) {

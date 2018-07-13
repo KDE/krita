@@ -41,6 +41,51 @@ typedef KisTileDataList::iterator KisTileDataListIterator;
 typedef KisTileDataList::const_iterator KisTileDataListConstIterator;
 
 
+class SimpleCache
+{
+public:
+    SimpleCache() = default;
+
+    bool push(int pixelSize, quint8 *&ptr)
+    {
+        switch (pixelSize) {
+        case 4:
+            m_4Pool.push(ptr);
+            break;
+        case 8:
+            m_8Pool.push(ptr);
+            break;
+        case 16:
+            m_16Pool.push(ptr);
+            break;
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool pop(int pixelSize, quint8 *&ptr)
+    {
+        switch (pixelSize) {
+        case 4:
+            return m_4Pool.pop(ptr);
+        case 8:
+            return m_8Pool.pop(ptr);
+        case 16:
+            return m_16Pool.pop(ptr);
+        default:
+            return false;
+        }
+    }
+
+private:
+    KisLocklessStack<quint8*> m_4Pool;
+    KisLocklessStack<quint8*> m_8Pool;
+    KisLocklessStack<quint8*> m_16Pool;
+};
+
+
 /**
  * Stores actual tile's data
  */
@@ -137,7 +182,7 @@ public:
      *
      * Effectively equivalent to: (mementoed() && numUsers() <= 1)
      */
-     inline bool historical() const;
+    inline bool historical() const;
 
     /**
      * Used for swapping purposes only.
@@ -265,10 +310,7 @@ private:
     //qint32 m_timeStamp;
 
     KisTileDataStore *m_store;
-
-    static KisLocklessStack<quint8*> m_4Pool;
-    static KisLocklessStack<quint8*> m_8Pool;
-    static KisLocklessStack<quint8*> m_16Pool;
+    static SimpleCache m_cache;
 
 public:
     static const qint32 WIDTH;

@@ -261,7 +261,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    const QList<KisEffectMaskSP> &effectMasks() const;
+    QList<KisEffectMaskSP> effectMasks() const;
 
     /**
      * @return the list of effect masks up to a certain node

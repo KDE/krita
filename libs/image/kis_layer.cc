@@ -571,7 +571,7 @@ KisSelectionSP KisLayer::selection() const
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-const QList<KisEffectMaskSP> &KisLayer::effectMasks() const
+QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
     return m_d->masksCache.effectMasks();
 }

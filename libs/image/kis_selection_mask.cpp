@@ -103,30 +103,31 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
     if (!effectiveSelection) return;
 
     // TODO: make configurable
-    const KoColor maskColor(Qt::red, projection->colorSpace());
+    const KoColor maskColor(QColor(255, 0, 0, 200), projection->colorSpace());
+
+    KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
+    fillDevice->setDefaultPixel(KoColor(maskColor, fillDevice->colorSpace()));
 
     const QRect selectionExtent = effectiveSelection->selectedRect();
 
     if (selectionExtent.contains(applyRect) || selectionExtent.intersects(applyRect)) {
-        KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
-        fillDevice->setDefaultPixel(KoColor(Qt::red, fillDevice->colorSpace()));
-
         KisSelectionSP invertedSelection = m_d->cachedSelection.getSelection();
 
         invertedSelection->pixelSelection()->makeCloneFromRough(effectiveSelection->pixelSelection(), applyRect);
         invertedSelection->pixelSelection()->invert();
 
-        KisPainter::copyAreaOptimized(applyRect.topLeft(),
-                                      fillDevice,
-                                      projection,
-                                      applyRect,
-                                      invertedSelection);
+        KisPainter gc(projection);
+        gc.setSelection(invertedSelection);
+        gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
 
         m_d->cachedSelection.putSelection(invertedSelection);
-        m_d->paintDeviceCache.putDevice(fillDevice);
+
     } else {
-        projection->fill(applyRect, maskColor);
+        KisPainter gc(projection);
+        gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
     }
+
+    m_d->paintDeviceCache.putDevice(fillDevice);
 }
 
 bool KisSelectionMask::paintsOutsideSelection() const

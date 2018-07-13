@@ -36,13 +36,20 @@ KisTiledExtentManager::Data::Data()
 KisTiledExtentManager::Data::~Data()
 {
     QWriteLocker l(&m_lock);
-    delete m_buffer;
+    delete[] m_buffer;
 }
 
 inline bool KisTiledExtentManager::Data::add(int index)
 {
     QReadLocker l(&m_lock);
     int currentIndex = m_offset + index;
+
+    if (currentIndex < 0 || currentIndex >= m_capacity) {
+        l.unlock();
+        migrate(index);
+        l.relock();
+        currentIndex = m_offset + index;
+    }
 
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
     bool needsUpdateExtent = false;
@@ -63,7 +70,14 @@ inline bool KisTiledExtentManager::Data::remove(int index)
     QReadLocker l(&m_lock);
     int currentIndex = m_offset + index;
 
-    KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
+    if (currentIndex < 0 || currentIndex >= m_capacity) {
+        l.unlock();
+        migrate(index);
+        l.relock();
+        currentIndex = m_offset + index;
+    }
+
+    KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() > 0);
     bool needsUpdateExtent = false;
 
     if (!m_buffer[currentIndex].fetchAndSubOrdered(1)) {
@@ -83,7 +97,7 @@ void KisTiledExtentManager::Data::clear()
     QWriteLocker l(&m_lock);
 
     for (int i = 0; i < m_capacity; ++i) {
-        m_buffer[i] = 0;
+        m_buffer[i].storeRelease(0);
     }
 }
 
@@ -102,11 +116,37 @@ int KisTiledExtentManager::Data::max()
     return m_max.loadAcquire();
 }
 
+void KisTiledExtentManager::Data::migrate(int index)
+{
+    QWriteLocker l(&m_lock);
+    int oldCapacity = m_capacity;
+    int oldOffset = m_offset;
+    int currentIndex = m_offset + index;
+
+    while (currentIndex < 0 || currentIndex >= m_capacity) {
+        m_capacity <<= 1;
+        m_offset <<= 1;
+        currentIndex = m_offset + index;
+    }
+
+    if (m_capacity != oldCapacity) {
+        QAtomicInt *newBuffer = new QAtomicInt[m_capacity];
+        int start = m_offset - oldOffset;
+
+        for (int i = 0; i < oldCapacity; ++i) {
+            newBuffer[start + i].storeRelease(m_buffer[i].loadAcquire());
+        }
+
+        delete[] m_buffer;
+        m_buffer = newBuffer;
+    }
+}
+
 void KisTiledExtentManager::Data::updateMin()
 {
     for (int i = 0; i < m_capacity; ++i) {
-        if (m_buffer[i] > 0) {
-            m_min.storeRelease(m_buffer[i]);
+        if (m_buffer[i].loadAcquire() > 0) {
+            m_min.storeRelease(m_buffer[i].loadAcquire());
             break;
         }
     }
@@ -115,8 +155,8 @@ void KisTiledExtentManager::Data::updateMin()
 void KisTiledExtentManager::Data::updateMax()
 {
     for (int i = m_capacity - 1; i >= 0; ++i) {
-        if (m_buffer[i] > 0) {
-            m_max.storeRelease(m_buffer[i]);
+        if (m_buffer[i].loadAcquire() > 0) {
+            m_max.storeRelease(m_buffer[i].loadAcquire());
             break;
         }
     }

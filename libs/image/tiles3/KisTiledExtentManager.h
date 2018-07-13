@@ -28,7 +28,7 @@
 
 class KRITAIMAGE_EXPORT KisTiledExtentManager
 {
-    static const int InitialBufferSize = 4096;
+    static const int InitialBufferSize = 8;
 
     class Data
     {
@@ -44,6 +44,7 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         int max();
 
     private:
+        void migrate(int index);
         void updateMin();
         void updateMax();
 

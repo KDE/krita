@@ -273,7 +273,7 @@ bool KisResourceCacheDb::resourceNeedsUpdating(int resourceId, QDateTime timesta
     QSqlQuery q;
     if (!q.prepare("SELECT timestamp\n"
                    "FROM   versioned_resources\n"
-                   "WHERE  resourceId = :resource_id\n"
+                   "WHERE  resource_id = :resource_id\n"
                    "AND    version = (SELECT MAX(version)\n"
                    "                  FROM   versioned_resources\n"
                    "                  WHERE  resource_id = :resource_id);")) {
@@ -297,9 +297,9 @@ bool KisResourceCacheDb::resourceNeedsUpdating(int resourceId, QDateTime timesta
 
     if (!resourceTimeStamp.isValid()) {
         qWarning() << "Could not retrieve timestamp from versioned_resources" << resourceId;
+        return false;
     }
-
-    return (timestamp > QDateTime::fromSecsSinceEpoch(resourceTimeStamp.toInt()));
+    return (timestamp.toSecsSinceEpoch() > resourceTimeStamp.toInt());
 }
 
 bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp, KisResourceStorageSP storage, KoResourceSP resource)
@@ -312,10 +312,10 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
         r = q.prepare("INSERT INTO versioned_resources \n"
                       "(resource_id, storage_id, version, location, timestamp, deleted, checksum)\n"
                       "VALUES\n"
-                      "(:resource_id,\n"
-                      ",    (SELECT id FROM storages \n"
+                      "( :resource_id\n"
+                      ", (SELECT id FROM storages \n"
                       "      WHERE location = :storage_location)\n"
-                      ",    (SELECT MAX(version) + 1 FROM versioned_resources\n"
+                      ", (SELECT MAX(version) + 1 FROM versioned_resources\n"
                       "      WHERE  resource_id = :resource_id)\n"
                       ", :location, :timestamp, 0, :checksum\n"
                       ");");
@@ -733,7 +733,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         if (!q.value(0).isValid()) {
             qWarning() << "Could not retrieve timestamp for storage" << storage->location();
         }
-        if (storage->timestamp() > QDateTime::fromSecsSinceEpoch(q.value(0).toInt())) {
+        if (storage->timestamp().toSecsSinceEpoch() > q.value(0).toInt()) {
             if (!deleteStorage(storage)) {
                 qWarning() << "Could not delete storage" << storage->location();
             }

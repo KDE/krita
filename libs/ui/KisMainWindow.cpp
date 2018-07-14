@@ -2251,7 +2251,10 @@ void KisMainWindow::updateWindowMenu()
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
-        d->welcomePage->populateRecentDocuments(); // update recent documents since they probably changed
+
+        // keep the recent file list updated when going back to welcome screen
+        reloadRecentFileList();
+        d->welcomePage->populateRecentDocuments();
     }
 
     // enable/disable the toolbox docker if there are no documents open

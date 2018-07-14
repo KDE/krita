@@ -32,7 +32,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
-
+#include "kis_assert.h"
 
 #include <QGlobalStatic>
 

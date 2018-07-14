@@ -22,12 +22,12 @@
 
 #include <QColor>
 #include <QMetaType>
+#include <QtGlobal>
 #include "kritapigment_export.h"
 #include "KoColorConversionTransformation.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColorSpaceTraits.h"
 #include <boost/operators.hpp>
-#include "kis_assert.h"
 
 
 class QDomDocument;

@@ -165,7 +165,7 @@ void LogDockerDock::settings()
     chkFile->setChecked(cfg.readEntry("file_41008", false));
     layout->addWidget(chkFile);
 
-    QCheckBox *chkMath = new QCheckBox(i18n("Mathematics and calcuations"), page);
+    QCheckBox *chkMath = new QCheckBox(i18n("Mathematics and calculations"), page);
     chkMath->setChecked(cfg.readEntry("math_41009", false));
     layout->addWidget(chkMath);
 

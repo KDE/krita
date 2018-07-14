@@ -39,6 +39,12 @@ SimpleCache KisTileData::m_cache;
 
 SimpleCache::~SimpleCache()
 {
+    clear();
+}
+
+void SimpleCache::clear()
+{
+    QWriteLocker l(&m_cacheLock);
     quint8 *ptr = 0;
 
     while (m_4Pool.pop(ptr)) {
@@ -224,6 +230,7 @@ void KisTileData::releaseInternalPools()
 
         if (!failedToLock) {
             // purge the pools memory
+            m_cache.clear();
             BoostPool4BPP::purge_memory();
             BoostPool8BPP::purge_memory();
 

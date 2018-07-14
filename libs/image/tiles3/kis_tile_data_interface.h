@@ -49,6 +49,7 @@ public:
 
     bool push(int pixelSize, quint8 *&ptr)
     {
+        QReadLocker l(&m_cacheLock);
         switch (pixelSize) {
         case 4:
             m_4Pool.push(ptr);
@@ -68,6 +69,7 @@ public:
 
     bool pop(int pixelSize, quint8 *&ptr)
     {
+        QReadLocker l(&m_cacheLock);
         switch (pixelSize) {
         case 4:
             return m_4Pool.pop(ptr);
@@ -80,7 +82,10 @@ public:
         }
     }
 
+    void clear();
+
 private:
+    QReadWriteLock m_cacheLock;
     KisLocklessStack<quint8*> m_4Pool;
     KisLocklessStack<quint8*> m_8Pool;
     KisLocklessStack<quint8*> m_16Pool;

@@ -41,12 +41,12 @@ KisSnapConfig::~KisSnapConfig()
 
 void KisSnapConfig::saveStaticData() const
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.saveSnapConfig(*this);
 }
 
 void KisSnapConfig::loadStaticData()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     cfg.loadSnapConfig(this);
 }

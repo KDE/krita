@@ -65,12 +65,7 @@ bool KoDerivedResourceConverter::notifySourceChanged(const QVariant &sourceValue
 QVariant KoDerivedResourceConverter::readFromSource(const QVariant &sourceValue)
 {
     const QVariant result = fromSource(sourceValue);
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->lastKnownValue.isNull() ||
-                                 result == m_d->lastKnownValue);
-
     m_d->lastKnownValue = result;
-
     return m_d->lastKnownValue;
 }
 

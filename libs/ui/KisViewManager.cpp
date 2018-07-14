@@ -268,20 +268,20 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     // These initialization functions must wait until KisViewManager ctor is complete.
     d->statusBar.setup();
     d->persistentImageProgressUpdater =
-        d->statusBar.progressUpdater()->startSubtask(1, "", true);
+            d->statusBar.progressUpdater()->startSubtask(1, "", true);
     // reset state to "completed"
     d->persistentImageProgressUpdater->setRange(0,100);
     d->persistentImageProgressUpdater->setValue(100);
 
     d->persistentUnthreadedProgressUpdater =
-        d->statusBar.progressUpdater()->startSubtask(1, "", true);
-        // reset state to "completed"
+            d->statusBar.progressUpdater()->startSubtask(1, "", true);
+    // reset state to "completed"
     d->persistentUnthreadedProgressUpdater->setRange(0,100);
     d->persistentUnthreadedProgressUpdater->setValue(100);
 
     d->persistentUnthreadedProgressUpdaterRouter.reset(
-        new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
-                              KoProgressUpdater::Unthreaded));
+                new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
+                                      KoProgressUpdater::Unthreaded));
     d->persistentUnthreadedProgressUpdaterRouter->setAutoNestNames(true);
 
     d->controlFrame.setup(parent);
@@ -315,7 +315,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     KisInputProfileManager::instance()->loadProfiles();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->showFloatingMessage = cfg.showCanvasMessages();
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KoColor foreground(Qt::black, cs);
@@ -330,7 +330,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
 KisViewManager::~KisViewManager()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     if (resourceProvider() && resourceProvider()->currentPreset()) {
         cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
         cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
@@ -411,11 +411,16 @@ void KisViewManager::setCurrentView(KisView *view)
 
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
-        //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
+
+        if (KisConfig(true).readEntry<bool>("EnablePositionLabel", false)) {
+            connect(d->currentImageView->canvasController()->proxyObject,
+                    SIGNAL(documentMousePositionChanged(QPointF)),
+                    &d->statusBar,
+                    SLOT(documentMousePositionChanged(QPointF)));
+        }
 
         // Restore the last used brush preset, color and background color.
         if (first) {
-            KisConfig cfg;
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
             QString defaultPresetName = "basic_tip_default";
             bool foundTip = false;
@@ -430,6 +435,7 @@ void KisViewManager::setCurrentView(KisView *view)
                     foundTip = true;
                 }
             }
+            KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
             if (!preset) {
@@ -497,21 +503,21 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->canvasController()->setFocus();
 
         d->viewConnections.addUniqueConnection(
-            image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
-            resourceProvider(), SLOT(slotImageSizeChanged()));
+                    image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+                    resourceProvider(), SLOT(slotImageSizeChanged()));
 
         d->viewConnections.addUniqueConnection(
-            image(), SIGNAL(sigResolutionChanged(double,double)),
-            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    image(), SIGNAL(sigResolutionChanged(double,double)),
+                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
         d->viewConnections.addUniqueConnection(
-            image(), SIGNAL(sigNodeChanged(KisNodeSP)),
-            this, SLOT(updateGUI()));
+                    image(), SIGNAL(sigNodeChanged(KisNodeSP)),
+                    this, SLOT(updateGUI()));
 
         d->viewConnections.addUniqueConnection(
-            d->currentImageView->zoomManager()->zoomController(),
-            SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    d->currentImageView->zoomManager()->zoomController(),
+                    SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
     }
 
@@ -564,16 +570,6 @@ QWidget* KisViewManager::canvas() const
 KisStatusBar * KisViewManager::statusBar() const
 {
     return &d->statusBar;
-}
-
-void KisViewManager::addStatusBarItem(QWidget *widget, int stretch, bool permanent)
-{
-    d->statusBar.addStatusBarItem(widget, stretch, permanent);
-}
-
-void KisViewManager::removeStatusBarItem(QWidget *widget)
-{
-    d->statusBar.removeStatusBarItem(widget);
 }
 
 KisPaintopBox* KisViewManager::paintOpBox() const
@@ -669,7 +665,7 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 
 void KisViewManager::createActions()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->saveIncremental = actionManager()->createAction("save_incremental_version");
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
@@ -1132,14 +1128,14 @@ void KisViewManager::showStatusBar(bool toggled)
     KisMainWindow *mw = mainWindow();
     if(mw && mw->statusBar()) {
         mw->statusBar()->setVisible(toggled);
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setShowStatusBar(toggled);
     }
 }
 
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     KisMainWindow* main = mainWindow();
 
     if(!main) {
@@ -1264,8 +1260,6 @@ void KisViewManager::updateIcons()
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         Q_FOREACH (QDockWidget* dock, dockers) {
-            dbgKrita << "name " << dock->objectName();
-
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {
@@ -1278,7 +1272,7 @@ void KisViewManager::updateIcons()
 }
 void KisViewManager::initializeStatusBarVisibility()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->mainWindow->statusBar()->setVisible(cfg.showStatusBar());
 }
 
@@ -1313,7 +1307,7 @@ void KisViewManager::showHideScrollbars()
     if (!d->currentImageView) return;
     if (!d->currentImageView->canvasController()) return;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     bool toggled = actionCollection()->action("view_show_canvas_only")->isChecked();
 
     if ( (toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars()) ) {
@@ -1327,13 +1321,13 @@ void KisViewManager::showHideScrollbars()
 
 void KisViewManager::slotSaveShowRulersState(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setShowRulers(value);
 }
 
 void KisViewManager::slotSaveRulersTrackMouseState(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setRulersTrackMouse(value);
 }
 
@@ -1397,6 +1391,6 @@ void KisViewManager::slotUpdatePixelGridAction()
 
     KisSignalsBlocker b(d->showPixelGrid);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
 }

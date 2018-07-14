@@ -45,7 +45,7 @@ namespace KritaUtils
 
     QSize optimalPatchSize()
     {
-        KisImageConfig cfg;
+        KisImageConfig cfg(true);
         return QSize(cfg.updatePatchWidth(),
                      cfg.updatePatchHeight());
     }

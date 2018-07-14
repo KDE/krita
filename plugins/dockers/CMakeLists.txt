@@ -29,3 +29,4 @@ if(NOT APPLE AND HAVE_QT_QUICK)
     endif()
 endif()
 
+add_subdirectory(logdocker)

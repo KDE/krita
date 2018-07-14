@@ -503,9 +503,6 @@ private:
      */
     bool openFile();
 
-    /** @internal */
-    void setModified();
-
 public:
 
     bool isAutosaving() const override;

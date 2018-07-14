@@ -678,12 +678,12 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
                 delete m_activeHandle;
 
                 if (KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(parameterShape)) {
-                    //qDebug() << "handleId" << handleId;
+                    //debugFlake << "handleId" << handleId;
                     m_activeHandle = new ConnectionHandle(this, connectionShape, handleId);
                     m_activeHandle->repaint();
                     return;
                 } else {
-                    //qDebug() << "handleId" << handleId;
+                    //debugFlake << "handleId" << handleId;
                     m_activeHandle = new ParameterHandle(this, parameterShape, handleId);
                     m_activeHandle->repaint();
                     return;

@@ -147,7 +147,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setMinimumHeight(150);
     m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
                                          cfg.kineticScrollingSensitivity(),
                                          cfg.kineticScrollingScrollbar());
@@ -387,7 +387,7 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
         useColorAsMaskCheckbox->setEnabled(m_brush->hasColor() && gimpBrush);
 
         emit sigBrushChanged();
-    }  
+    }
 }
 
 void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResource *resource)

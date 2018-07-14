@@ -45,9 +45,6 @@ KoZipStore::KoZipStore(const QString & _filename, Mode mode, const QByteArray & 
                        bool writeMimetype)
     : KoStore(mode, writeMimetype)
 {
-//    qDebug() << "KoZipStore Constructor filename =" << _filename
-//               << " mode = " << int(mode)
-//               << " mimetype = " << appIdentification;
     Q_D(KoStore);
 
     d->localFileName = _filename;
@@ -61,10 +58,6 @@ KoZipStore::KoZipStore(QIODevice *dev, Mode mode, const QByteArray & appIdentifi
                        bool writeMimetype)
     : KoStore(mode, writeMimetype)
 {
-//    qDebug() << "KoZipStore Constructor device =" << dev
-//               << " mode = " << int(mode)
-//               << " mimetype = " << appIdentification;
-
     m_pZip = new SaveZip(dev);
     init(appIdentification);
 }
@@ -98,11 +91,6 @@ KoZipStore::KoZipStore(QWidget* window, const QUrl &_url, const QString & _filen
 KoZipStore::~KoZipStore()
 {
     Q_D(KoStore);
-//    bool sf = false;
-//    if (m_pZip && m_pZip->device()) {
-//        sf = true;
-//    }
-//    qDebug() << "KoZipStore::~KoZipStore" << d->localFileName << m_pZip << m_pZip->device() << "savefile" << sf;
     if (m_pZip->device() && m_pZip->device()->inherits("QSaveFile")) {
         m_pZip->resetDevice(); // otherwise, kzip's destructor will call close(), which aborts on a qsavefile
     }
@@ -133,7 +121,6 @@ void KoZipStore::init(const QByteArray& appIdentification)
         return;
 
     if (d->mode == Write) {
-        //debugStore <<"KoZipStore::init writing mimetype" << appIdentification;
 
         m_pZip->setCompression(KZip::NoCompression);
         m_pZip->setExtraField(KZip::NoExtraField);
@@ -199,8 +186,6 @@ qint64 KoZipStore::write(const char* _data, qint64 _len)
 {
     Q_D(KoStore);
     if (_len == 0) return 0;
-    //debugStore <<"KoZipStore::write" << _len;
-
     if (!d->isOpen) {
         errorStore << "KoStore: You must open before writing" << endl;
         return 0;

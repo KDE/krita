@@ -177,7 +177,7 @@ public:
             int pixelSize = m_patchColorSpace->pixelSize();
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
-            KisConfig cfg;
+            KisConfig cfg(true);
 
             if (onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
                 int selectedChannelPos = channelInfo[selectedChannelIndex]->pos();

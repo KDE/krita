@@ -304,7 +304,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->workspacemodel = new KoResourceModel(adapter, this);
     connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
 
-    KisConfig cfg;
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -340,6 +339,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
+    KisConfig cfg(true);
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
@@ -374,7 +374,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         observer->setObservedCanvas(0);
         KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
         if (mainwindowObserver) {
-            mainwindowObserver->setMainWindow(d->viewManager);
+            mainwindowObserver->setViewManager(d->viewManager);
         }
     }
 
@@ -596,7 +596,7 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setAttribute(Qt::WA_DeleteOnClose, true);
         connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
@@ -1426,7 +1426,7 @@ void KisMainWindow::slotFileNew()
     startupWidget->setWindowTitle(i18n("Create new document"));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     int w = cfg.defImageWidth();
     int h = cfg.defImageHeight();
@@ -1901,7 +1901,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setFullscreenMode(fullScreen);
 
     if (fullScreen) {
@@ -2292,7 +2292,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
 void KisMainWindow::configChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     d->mdiArea->setViewMode(viewMode);
     Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
@@ -2452,7 +2452,6 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
-    KisConfig cfg;
 
 
 
@@ -2521,7 +2520,7 @@ void KisMainWindow::createActions()
     connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
 
     d->toggleDockers = actionManager->createAction("view_toggledockers");
-    cfg.showDockers(true);
+    KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 

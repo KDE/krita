@@ -169,7 +169,7 @@ option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just igno
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
 add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
 
-option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." OFF)
+option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
 configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
 add_feature_info("Lock free hash table" USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking.")
 
@@ -180,6 +180,9 @@ option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
 option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
+
+option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
+add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
 include(MacroJPEG)
 

@@ -133,7 +133,7 @@ void KisSelectionDecoration::slotStartUpdateSelection()
 
 void KisSelectionDecoration::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_maskColor = cfg.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();

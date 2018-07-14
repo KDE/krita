@@ -147,7 +147,7 @@ KisInputManager::Private::Private(KisInputManager *qq)
     , priorityEventFilterSeqNo(0)
     , canvasSwitcher(this, qq)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
 
     moveEventCompressor.setDelay(cfg.tabletEventsDelay());

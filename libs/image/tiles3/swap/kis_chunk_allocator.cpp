@@ -137,7 +137,7 @@ void KisChunkAllocator::debugChunks()
     KisChunkDataListIterator i;
 
     for(i = m_list.begin(); i != m_list.end(); ++i) {
-        qDebug("chunk #%lld: [%lld %lld]", idx++, i->m_begin, i->m_end);
+        qInfo("chunk #%lld: [%lld %lld]", idx++, i->m_begin, i->m_end);
     }
 }
 
@@ -196,14 +196,14 @@ qreal KisChunkAllocator::debugFragmentation(bool toStderr)
         fragmentation = qreal(free) / totalSize;
 
     if(toStderr) {
-        qDebug() << "Hard store limit:\t" << m_storeMaxSize;
-        qDebug() << "Slab size:\t\t" << m_storeSlabSize;
-        qDebug() << "Num slabs:\t\t" << m_storeSize / m_storeSlabSize;
-        qDebug() << "Store size:\t\t" << m_storeSize;
-        qDebug() << "Total used:\t\t" << totalSize;
-        qDebug() << "Allocated:\t\t" << allocated;
-        qDebug() << "Free:\t\t\t" << free;
-        qDebug() << "Fragmentation:\t\t" << fragmentation;
+        qInfo() << "Hard store limit:\t" << m_storeMaxSize;
+        qInfo() << "Slab size:\t\t" << m_storeSlabSize;
+        qInfo() << "Num slabs:\t\t" << m_storeSize / m_storeSlabSize;
+        qInfo() << "Store size:\t\t" << m_storeSize;
+        qInfo() << "Total used:\t\t" << totalSize;
+        qInfo() << "Allocated:\t\t" << allocated;
+        qInfo() << "Free:\t\t\t" << free;
+        qInfo() << "Fragmentation:\t\t" << fragmentation;
         DEBUG_FAIL_COUNTER();
     }
 

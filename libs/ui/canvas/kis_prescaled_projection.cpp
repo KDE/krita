@@ -128,7 +128,7 @@ void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *co
 
 void KisPrescaledProjection::updateSettings()
 {
-    KisImageConfig imageConfig;
+    KisImageConfig imageConfig(false);
     m_d->updatePatchSize.setWidth(imageConfig.updatePatchWidth());
     m_d->updatePatchSize.setHeight(imageConfig.updatePatchHeight());
 }

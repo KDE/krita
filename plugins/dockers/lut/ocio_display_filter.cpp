@@ -126,7 +126,7 @@ void OcioDisplayFilter::updateProcessor()
         inputColorSpaceName = config->getColorSpaceNameByIndex(0);
     }
     if (!look) {
-	look = config->getLookNameByIndex(0);
+    look = config->getLookNameByIndex(0);
     }
 
     if (!displayDevice || !view || !inputColorSpaceName) {
@@ -293,7 +293,7 @@ template <class F>
 bool OcioDisplayFilter::updateShaderImpl(F *f) {
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (!cfg.useOpenGL()) return false;
 
     if (!m_shaderDirty) return false;

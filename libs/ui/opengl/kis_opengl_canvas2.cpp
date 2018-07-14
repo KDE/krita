@@ -144,7 +144,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
     d->openGLImageTextures =
@@ -243,7 +243,7 @@ void KisOpenGLCanvas2::initializeGL()
     }
 #endif
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
@@ -336,7 +336,7 @@ void KisOpenGLCanvas2::initializeDisplayShader()
  */
 void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
@@ -356,7 +356,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 void KisOpenGLCanvas2::paintGL()
 {
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
@@ -374,7 +374,7 @@ void KisOpenGLCanvas2::paintGL()
     gc.end();
 
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
@@ -799,7 +799,7 @@ void KisOpenGLCanvas2::drawImage()
 
 void KisOpenGLCanvas2::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
     d->scrollCheckers = cfg.scrollCheckers();
 
@@ -814,7 +814,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 
 void KisOpenGLCanvas2::slotPixelGridModeChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
     d->pixelGridEnabled = cfg.pixelGridEnabled();

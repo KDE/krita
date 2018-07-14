@@ -125,7 +125,7 @@ void KisCompositeOpListModel::removeFavoriteEntry(const KoID &entry)
 
 void KisCompositeOpListModel::readFavoriteCompositeOpsFromConfig()
 {
-    KisConfig   config;
+    KisConfig config(true);
     Q_FOREACH (const QString &op, config.favoriteCompositeOps()) {
         KoID entry = KoCompositeOpRegistry::instance().getKoID(op);
 
@@ -148,6 +148,6 @@ void KisCompositeOpListModel::writeFavoriteCompositeOpsToConfig() const
         list.append(item->data()->id());
     }
 
-    KisConfig config;
+    KisConfig config(false);
     config.setFavoriteCompositeOps(list);
 }

@@ -33,7 +33,7 @@ WdgImagesplit::WdgImagesplit(QWidget* parent)
 {
     setupUi(this);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     intHorizontalSplitLines->setValue(cfg.horizontalSplitLines());
     intVerticalSplitLines->setValue(cfg.verticalSplitLines());

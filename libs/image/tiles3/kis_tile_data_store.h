@@ -62,7 +62,6 @@ public:
      */
     inline qint32 numTiles() const
     {
-//        return m_numTiles + m_swappedStore.numTiles();
         return m_numTiles.loadAcquire() + m_swappedStore.numTiles();
     }
 
@@ -71,7 +70,6 @@ public:
      */
     inline qint32 numTilesInMemory() const
     {
-//        return m_numTiles;
         return m_numTiles.loadAcquire();
     }
 
@@ -85,7 +83,6 @@ public:
      */
     inline qint64 memoryMetric() const
     {
-//        return m_memoryMetric;
         return m_memoryMetric.loadAcquire();
     }
 
@@ -169,18 +166,11 @@ private:
     friend class KisTileDataPoolerTest;
     KisSwappedDataStore m_swappedStore;
 
-//    KisTileDataListIterator m_clockIterator;
-
-//    QMutex m_listLock;
-//    KisTileDataList m_tileDataList;
-//    qint32 m_numTiles;
-
     /**
      * This metric is used for computing the volume
      * of memory occupied by tile data objects.
      * metric = num_bytes / (KisTileData::WIDTH * KisTileData::HEIGHT)
      */
-//    qint64 m_memoryMetric;
     QAtomicInt m_numTiles;
     QAtomicInt m_memoryMetric;
     QAtomicInt m_counter;

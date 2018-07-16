@@ -28,7 +28,7 @@
 
 class KRITAIMAGE_EXPORT KisTiledExtentManager
 {
-    static const int InitialBufferSize = 8;
+    static const qint32 InitialBufferSize = 8;
 
     class Data
     {
@@ -36,26 +36,29 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         Data();
         ~Data();
 
-        inline bool add(int index);
-        inline bool remove(int index);
+        inline bool add(qint32 index);
+        inline bool remove(qint32 index);
+        void replace(const QVector<qint32> &indexes);
         void clear();
         bool isEmpty();
-        int min();
-        int max();
+        qint32 min();
+        qint32 max();
 
     public:
         mutable QReadWriteLock m_minMaxLock;
 
     private:
-        void migrate(int index);
-        void updateMin();
-        void updateMax();
+        inline void unsafeAdd(qint32 index);
+        inline void unsafeMigrate(qint32 index);
+        inline void migrate(qint32 index);
+        inline void updateMin();
+        inline void updateMax();
 
     private:
-        int m_min;
-        int m_max;
-        int m_offset;
-        int m_capacity;
+        qint32 m_min;
+        qint32 m_max;
+        qint32 m_offset;
+        qint32 m_capacity;
         QAtomicInt m_count;
         QAtomicInt *m_buffer;
         QReadWriteLock m_lock;
@@ -64,12 +67,10 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
 public:
     KisTiledExtentManager();
 
-    void notifyTileAdded(int col, int row);
-    void notifyTileRemoved(int col, int row);
+    void notifyTileAdded(qint32 col, qint32 row);
+    void notifyTileRemoved(qint32 col, qint32 row);
     void replaceTileStats(const QVector<QPoint> &indexes);
-
     void clear();
-
     QRect extent() const;
 
 private:

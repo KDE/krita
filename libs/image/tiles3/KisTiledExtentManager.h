@@ -45,7 +45,7 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         qint32 max();
 
     public:
-        mutable QReadWriteLock m_minMaxLock;
+        QReadWriteLock m_updateLock;
 
     private:
         inline void unsafeAdd(qint32 index);
@@ -61,7 +61,7 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         qint32 m_capacity;
         QAtomicInt m_count;
         QAtomicInt *m_buffer;
-        QReadWriteLock m_lock;
+        QReadWriteLock m_migrationLock;
     };
 
 public:

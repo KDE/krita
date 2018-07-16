@@ -96,6 +96,7 @@ public:
           m_store(store)
     {
         m_iterator.setMap(m_map);
+        m_finalPosition = m_iterator.getValue()->m_tileNumber;
         m_startItem = m_map.get(startIndex);
 
         if (m_iterator.getValue() == m_startItem || !m_startItem) {
@@ -148,6 +149,10 @@ private:
     friend class KisTileDataStore;
     inline int getFinalPosition()
     {
+        if (!m_iterator.isValid()) {
+            return m_finalPosition;
+        }
+
         return m_iterator.getValue()->m_tileNumber;
     }
 
@@ -157,6 +162,7 @@ private:
     KisTileData *m_startItem;
     bool m_endReached;
     KisTileDataStore *m_store;
+    int m_finalPosition;
 };
 
 #endif /* KIS_TILE_DATA_STORE_ITERATORS_H_ */

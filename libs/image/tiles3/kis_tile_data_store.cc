@@ -311,6 +311,7 @@ void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 
 void KisTileDataStore::debugPrintList()
 {
+    QWriteLocker l(&m_iteratorLock);
     ConcurrentMap<int, KisTileData*>::Iterator iter(m_tileDataMap);
     KisTileData *item = 0;
 

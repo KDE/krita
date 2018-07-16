@@ -477,6 +477,10 @@ template<class T>
 inline T cfHeat(T src, T dst) {
     using namespace Arithmetic;
     
+    if(src == unitValue<T>()) {
+        return unitValue<T>();
+    }
+    
     if(dst == zeroValue<T>()) {
         return zeroValue<T>();
     }
@@ -509,6 +513,10 @@ inline T cfFrect(T src, T dst) {
     
     if(cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
         return cfFreeze(src,dst);
+    }
+    
+    if(dst == zeroValue<T>()) {
+        return zeroValue<T>();
     }
     
     return (cfReflect(src,dst));

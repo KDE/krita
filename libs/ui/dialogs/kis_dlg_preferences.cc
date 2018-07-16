@@ -462,7 +462,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_monitorProfileWidgets << cmb;
     }
 
-    refillMonitorProfiles(KoID("RGBA", ""));
+    refillMonitorProfiles(KoID("RGBA"));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
@@ -534,7 +534,7 @@ void ColorSettingsTab::installProfile()
     }
 
     KisConfig cfg;
-    refillMonitorProfiles(KoID("RGBA", ""));
+    refillMonitorProfiles(KoID("RGBA"));
 
     for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
         if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
@@ -564,9 +564,8 @@ void ColorSettingsTab::toggleAllowMonitorProfileSelection(bool useSystemProfile)
         }
     }
     else {
+        refillMonitorProfiles(KoID("RGBA"));
         KisConfig cfg;
-        refillMonitorProfiles(KoID("RGBA", ""));
-
         for(int i = 0; i < QApplication::desktop()->screenCount(); ++i) {
             if (m_monitorProfileWidgets[i]->contains(cfg.monitorProfile(i))) {
                 m_monitorProfileWidgets[i]->setCurrent(cfg.monitorProfile(i));
@@ -579,7 +578,7 @@ void ColorSettingsTab::setDefault()
 {
     m_page->cmbWorkingColorSpace->setCurrent("RGBA");
 
-    refillMonitorProfiles(KoID("RGBA", ""));
+    refillMonitorProfiles(KoID("RGBA"));
 
     KisConfig cfg;
     KisImageConfig cfgImage;

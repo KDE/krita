@@ -29,5 +29,4 @@ const KoID FiltersCategoryEdgeDetectionId("edge_filters", i18n("Edge Detection")
 const KoID FiltersCategoryEmbossId("emboss_filters", i18n("Emboss"));
 const KoID FiltersCategoryEnhanceId("enhance_filters", i18n("Enhance"));
 const KoID FiltersCategoryMapId("map_filters", i18n("Map"));
-const KoID FiltersCategoryNonPhotorealisticId("nonphotorealistic_filters", i18n("Non-photorealistic"));
 const KoID FiltersCategoryOtherId("other_filters", i18n("Other"));

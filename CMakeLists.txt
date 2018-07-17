@@ -48,6 +48,9 @@ if (POLICY CMP0064)
     cmake_policy(SET CMP0064 OLD)
 endif()
 
+if (POLICY CMP0071)
+    cmake_policy(SET CMP0071 OLD)
+endif()
 
 if (APPLE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)

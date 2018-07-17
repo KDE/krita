@@ -42,6 +42,7 @@
 #include <kis_random_generator.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
@@ -62,7 +63,7 @@ KritaRandomPickFilter::~KritaRandomPickFilter()
 {
 }
 
-KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i18n("&Random Pick..."))
+KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), FiltersCategoryOtherId, i18n("&Random Pick..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

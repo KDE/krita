@@ -30,6 +30,7 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include "KisGradientSlider.h"
@@ -61,7 +62,7 @@ KritaThreshold::~KritaThreshold()
 }
 
 KisFilterThreshold::KisFilterThreshold()
-    : KisFilter(id(), categoryAdjust(), i18n("&Threshold..."))
+    : KisFilter(id(), FiltersCategoryAdjustId, i18n("&Threshold..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 

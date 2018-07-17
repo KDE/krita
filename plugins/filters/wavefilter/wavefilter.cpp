@@ -39,6 +39,7 @@
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <kis_paint_device.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include "kis_wdg_wave.h"
@@ -95,7 +96,7 @@ KritaWaveFilter::~KritaWaveFilter()
 {
 }
 
-KisFilterWave::KisFilterWave() : KisFilter(id(), categoryOther(), i18n("&Wave..."))
+KisFilterWave::KisFilterWave() : KisFilter(id(), FiltersCategoryOtherId, i18n("&Wave..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(false);

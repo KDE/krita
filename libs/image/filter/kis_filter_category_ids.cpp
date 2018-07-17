@@ -21,12 +21,12 @@
 
 #include <klocalizedstring.h>
 
-const KoID FiltersCategoryAdjustId("adjust_filters", i18n("Adjust"));
-const KoID FiltersCategoryArtisticId("artistic_filters", i18n("Artistic"));
-const KoID FiltersCategoryBlurId("blur_filters", i18n("Blur"));
-const KoID FiltersCategoryColorId("color_filters", i18n("Colors"));
-const KoID FiltersCategoryEdgeDetectionId("edge_filters", i18n("Edge Detection"));
-const KoID FiltersCategoryEmbossId("emboss_filters", i18n("Emboss"));
-const KoID FiltersCategoryEnhanceId("enhance_filters", i18n("Enhance"));
-const KoID FiltersCategoryMapId("map_filters", i18n("Map"));
-const KoID FiltersCategoryOtherId("other_filters", i18n("Other"));
+const KoID FiltersCategoryAdjustId("adjust_filters", ki18n("Adjust"));
+const KoID FiltersCategoryArtisticId("artistic_filters", ki18n("Artistic"));
+const KoID FiltersCategoryBlurId("blur_filters", ki18n("Blur"));
+const KoID FiltersCategoryColorId("color_filters", ki18n("Colors"));
+const KoID FiltersCategoryEdgeDetectionId("edge_filters", ki18n("Edge Detection"));
+const KoID FiltersCategoryEmbossId("emboss_filters", ki18n("Emboss"));
+const KoID FiltersCategoryEnhanceId("enhance_filters", ki18n("Enhance"));
+const KoID FiltersCategoryMapId("map_filters", ki18n("Map"));
+const KoID FiltersCategoryOtherId("other_filters", ki18n("Other"));

@@ -59,7 +59,7 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         qint32 m_max;
         qint32 m_offset;
         qint32 m_capacity;
-        QAtomicInt m_count;
+        qint32 m_count;
         QAtomicInt *m_buffer;
         QReadWriteLock m_migrationLock;
     };

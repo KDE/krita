@@ -622,7 +622,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         if (!fileBatchMode()) {
             const QString filePath = job.filePath;
-            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, errorMessage));
+            QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("Could not save %1\nReason: %2", filePath, exportErrorToUserMessage(status, errorMessage)));
         }
     } else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {

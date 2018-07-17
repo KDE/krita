@@ -26,3 +26,4 @@ GRTAGS
 GSYMS
 BROWSE
 *.kate-swp
+/po/

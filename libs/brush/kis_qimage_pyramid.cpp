@@ -266,6 +266,8 @@ QSize levelSize = image.size();
 QImage KisQImagePyramid::createImage(KisDabShape const& shape,
                                      qreal subPixelX, qreal subPixelY) const
 {
+    if (m_levels.isEmpty()) return QImage();
+
     qreal baseScale = -1.0;
     int level = findNearestLevel(shape.scale(), &baseScale);
 
@@ -316,3 +318,16 @@ QImage KisQImagePyramid::createImage(KisDabShape const& shape,
     return dstImage;
 }
 
+QImage KisQImagePyramid::getClosest(QTransform transform, qreal *scale) const
+{
+    if (m_levels.isEmpty()) return QImage();
+
+    // Estimate scale
+    QSizeF transformedUnitSquare = transform.mapRect(QRectF(0, 0, 1, 1)).size();
+    qreal x = qAbs(transformedUnitSquare.width());
+    qreal y = qAbs(transformedUnitSquare.height());
+    qreal estimatedScale = (x > y) ? transformedUnitSquare.width() : transformedUnitSquare.height();
+
+    int level = findNearestLevel(estimatedScale, scale);
+    return m_levels[level].image;
+}

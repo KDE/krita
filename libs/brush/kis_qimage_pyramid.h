@@ -28,6 +28,7 @@
 class BRUSH_EXPORT KisQImagePyramid
 {
 public:
+    KisQImagePyramid() = default;
     KisQImagePyramid(const QImage &baseImage);
     ~KisQImagePyramid();
 
@@ -39,6 +40,8 @@ public:
 
     QImage createImage(KisDabShape const&,
                        qreal subPixelX, qreal subPixelY) const;
+
+    QImage getClosest(QTransform transform, qreal *scale) const;
 
 private:
     friend class KisGbrBrushTest;

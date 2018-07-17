@@ -19,6 +19,7 @@
 
 #include "kis_hsv_adjustment_filter.h"
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -90,7 +91,7 @@ inline const WidgetSlidersConfig& getCurrentWidgetConfig(int type, bool colorize
 }
 
 KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
+        : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&HSV Adjustment..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
     setSupportsPainting(true);

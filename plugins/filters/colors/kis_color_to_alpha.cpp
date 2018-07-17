@@ -28,6 +28,7 @@
 #include "kis_progress_update_helper.h"
 #include <kis_paint_device.h>
 #include <kis_selection.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
@@ -37,7 +38,7 @@
 #include <KisSequentialIteratorProgress.h>
 
 KisFilterColorToAlpha::KisFilterColorToAlpha()
-    : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
+    : KisFilter(id(), FiltersCategoryColorId, i18n("&Color to Alpha..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

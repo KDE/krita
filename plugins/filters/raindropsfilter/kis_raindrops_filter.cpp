@@ -39,6 +39,7 @@
 #include "KoIntegerMaths.h"
 #include <KoUpdater.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
 #include <kis_global.h>
@@ -53,7 +54,7 @@
 
 
 KisRainDropsFilter::KisRainDropsFilter()
-    : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Raindrops..."))
+    : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Raindrops..."))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);

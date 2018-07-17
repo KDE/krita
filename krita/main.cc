@@ -33,7 +33,9 @@
 #include <QByteArray>
 #include <QMessageBox>
 
+#if QT_VERSION >= 0x050900
 #include <QOperatingSystemVersion>
+#endif
 
 #include <time.h>
 

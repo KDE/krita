@@ -25,6 +25,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include "kis_config_widget.h"
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -36,7 +37,7 @@
 #include <KisSequentialIteratorProgress.h>
 
 
-KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map..."))
+KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), FiltersCategoryMapId, i18n("&Gradient Map..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);

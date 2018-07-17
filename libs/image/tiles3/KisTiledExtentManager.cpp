@@ -54,17 +54,25 @@ inline bool KisTiledExtentManager::Data::add(qint32 index)
 
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() >= 0);
     bool needsUpdateExtent = false;
-    QReadLocker rl(&m_updateLock);
+    QReadLocker rl(&m_extentLock);
 
-    if (!m_buffer[currentIndex].fetchAndAddOrdered(1)) {
+    if (!m_buffer[currentIndex].loadAcquire()) {
         rl.unlock();
-        QWriteLocker wl(&m_updateLock);
+        QWriteLocker wl(&m_extentLock);
 
-        if (m_min > index) m_min = index;
-        if (m_max < index) m_max = index;
+        if (!m_buffer[currentIndex].load()) {
+            m_buffer[currentIndex].store(1);
 
-        needsUpdateExtent = true;
-        ++m_count;
+            if (m_min > index) m_min = index;
+            if (m_max < index) m_max = index;
+
+            ++m_count;
+            needsUpdateExtent = true;
+        } else {
+            m_buffer[currentIndex].ref();
+        }
+    } else {
+        m_buffer[currentIndex].ref();
     }
 
     return needsUpdateExtent;
@@ -84,17 +92,25 @@ inline bool KisTiledExtentManager::Data::remove(qint32 index)
 
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() > 0);
     bool needsUpdateExtent = false;
-    QReadLocker rl(&m_updateLock);
+    QReadLocker rl(&m_extentLock);
 
-    if (!m_buffer[currentIndex].deref()) {
+    if (m_buffer[currentIndex].loadAcquire() == 1) {
         rl.unlock();
-        QWriteLocker wl(&m_updateLock);
+        QWriteLocker wl(&m_extentLock);
 
-        if (m_min == index) updateMin();
-        if (m_max == index) updateMax();
+        if (m_buffer[currentIndex].load() == 1) {
+            m_buffer[currentIndex].store(0);
 
-        needsUpdateExtent = true;
-        --m_count;
+            if (m_min == index) updateMin();
+            if (m_max == index) updateMax();
+
+            --m_count;
+            needsUpdateExtent = true;
+        } else {
+            KIS_ASSERT_RECOVER_NOOP(0 && "sanity check failed: the tile has already been removed!");
+        }
+    } else {
+        m_buffer[currentIndex].deref();
     }
 
     return needsUpdateExtent;
@@ -103,7 +119,7 @@ inline bool KisTiledExtentManager::Data::remove(qint32 index)
 void KisTiledExtentManager::Data::replace(const QVector<qint32> &indexes)
 {
     QWriteLocker lock(&m_migrationLock);
-    QWriteLocker l(&m_updateLock);
+    QWriteLocker l(&m_extentLock);
 
     for (qint32 i = 0; i < m_capacity; ++i) {
         m_buffer[i].store(0);
@@ -121,7 +137,7 @@ void KisTiledExtentManager::Data::replace(const QVector<qint32> &indexes)
 void KisTiledExtentManager::Data::clear()
 {
     QWriteLocker lock(&m_migrationLock);
-    QWriteLocker l(&m_updateLock);
+    QWriteLocker l(&m_extentLock);
 
     for (qint32 i = 0; i < m_capacity; ++i) {
         m_buffer[i].store(0);
@@ -278,8 +294,8 @@ QRect KisTiledExtentManager::extent() const
 
 void KisTiledExtentManager::updateExtent()
 {
-    QReadLocker cl(&m_colsData.m_updateLock);
-    QReadLocker rl(&m_rowsData.m_updateLock);
+    QReadLocker cl(&m_colsData.m_extentLock);
+    QReadLocker rl(&m_rowsData.m_extentLock);
 
     bool colsEmpty = m_colsData.isEmpty();
     bool rowsEmpty = m_rowsData.isEmpty();

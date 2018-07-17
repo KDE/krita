@@ -28,7 +28,7 @@
 
 class KRITAIMAGE_EXPORT KisTiledExtentManager
 {
-    static const qint32 InitialBufferSize = 8;
+    static const qint32 InitialBufferSize = 256;
 
     class Data
     {
@@ -45,7 +45,7 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         qint32 max();
 
     public:
-        QReadWriteLock m_updateLock;
+        QReadWriteLock m_extentLock;
 
     private:
         inline void unsafeAdd(qint32 index);

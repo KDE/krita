@@ -61,7 +61,7 @@ void SimpleCache::clear()
 }
 
 
-KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
+KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store, bool checkFreeMemory)
     : m_state(NORMAL),
       m_mementoFlag(0),
       m_age(0),
@@ -70,7 +70,9 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
       m_pixelSize(pixelSize),
       m_store(store)
 {
-    m_store->checkFreeMemory();
+    if (checkFreeMemory) {
+        m_store->checkFreeMemory();
+    }
     m_data = allocateData(m_pixelSize);
 
     fillWithPixel(defPixel);

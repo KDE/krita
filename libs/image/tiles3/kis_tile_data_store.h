@@ -138,11 +138,12 @@ public:
      */
     void ensureTileDataLoaded(KisTileData *td);
 
+    void registerTileData(KisTileData *td);
+    void unregisterTileData(KisTileData *td);
+
 private:
     KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
 
-    void registerTileData(KisTileData *td);
-    void unregisterTileData(KisTileData *td);
     inline void registerTileDataImp(KisTileData *td);
     inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();

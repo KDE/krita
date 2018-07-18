@@ -100,6 +100,7 @@ public:
         m_startItem = m_map.get(startIndex);
 
         if (m_iterator.getValue() == m_startItem || !m_startItem) {
+            m_startItem = 0;
             m_endReached = true;
         } else {
             while (m_iterator.getValue() != m_startItem) {

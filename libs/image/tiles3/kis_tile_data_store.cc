@@ -302,6 +302,7 @@ KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
     m_iteratorLock.lockForWrite();
     return new KisTileDataStoreClockIterator(m_tileDataMap, m_clockIndex.loadAcquire(), this);
 }
+
 void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 {
     m_clockIndex = iterator->getFinalPosition();

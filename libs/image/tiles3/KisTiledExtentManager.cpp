@@ -30,7 +30,7 @@ KisTiledExtentManager::Data::Data()
 {
     QWriteLocker lock(&m_migrationLock);
     m_capacity = InitialBufferSize;
-    m_offset = m_capacity >> 1;
+    m_offset = 0;
     m_buffer = new QAtomicInt[m_capacity];
 }
 
@@ -182,18 +182,10 @@ void KisTiledExtentManager::Data::unsafeAdd(qint32 index)
 void KisTiledExtentManager::Data::unsafeMigrate(qint32 index)
 {
     qint32 oldCapacity = m_capacity;
-    qint32 oldOffset = m_offset;
     qint32 currentIndex = m_offset + index;
 
-    while (currentIndex < 0 || currentIndex >= m_capacity) {
-        m_capacity <<= 1;
-        m_offset <<= 1;
-        currentIndex = m_offset + index;
-    }
-
-    if (m_capacity != oldCapacity) {
+    auto reallocFunc = [&](qint32 start) {
         QAtomicInt *newBuffer = new QAtomicInt[m_capacity];
-        qint32 start = m_offset - oldOffset;
 
         for (qint32 i = 0; i < oldCapacity; ++i) {
             newBuffer[start + i].store(m_buffer[i].load());
@@ -201,6 +193,38 @@ void KisTiledExtentManager::Data::unsafeMigrate(qint32 index)
 
         delete[] m_buffer;
         m_buffer = newBuffer;
+    };
+
+    if (currentIndex < 0) {
+        qint32 oldOffset = m_offset;
+        m_offset = -index;
+        qint32 start = m_offset - oldOffset;
+        qint32 count = m_max - m_min + 1;
+        qint32 capacity = m_offset + start + count;
+
+        while (capacity >= m_capacity) {
+            m_capacity <<= 1;
+        }
+
+        if (m_capacity != oldCapacity) {
+            reallocFunc(start);
+        } else {
+            for (qint32 i = count; i >= 0; --i) {
+                m_buffer[start + i].store(m_buffer[i].load());
+            }
+
+            for (qint32 i = 0; i < start; ++i) {
+                m_buffer[i].store(0);
+            }
+        }
+    } else {
+        while (currentIndex >= m_capacity) {
+            m_capacity <<= 1;
+        }
+
+        if (m_capacity != oldCapacity) {
+            reallocFunc(0);
+        }
     }
 }
 
@@ -212,7 +236,9 @@ void KisTiledExtentManager::Data::migrate(qint32 index)
 
 void KisTiledExtentManager::Data::updateMin()
 {
-    for (qint32 i = 0; i < m_capacity; ++i) {
+    qint32 start = m_min + m_offset + 1;
+
+    for (qint32 i = start; i < m_capacity; ++i) {
         qint32 current = m_buffer[i].load();
 
         if (current > 0) {
@@ -224,7 +250,9 @@ void KisTiledExtentManager::Data::updateMin()
 
 void KisTiledExtentManager::Data::updateMax()
 {
-    for (qint32 i = m_capacity - 1; i >= 0; --i) {
+    qint32 start = m_max + m_offset - 1;
+
+    for (qint32 i = start; i >= 0; --i) {
         qint32 current = m_buffer[i].load();
 
         if (current > 0) {

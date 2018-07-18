@@ -70,6 +70,7 @@ public:
      * remove entry with a dialog window.(Necessary for groups.
      */
     bool removeEntryWithDialog(QModelIndex index);
+    void removeSelectedEntry();
     /**
      * @brief modifyEntry
      * function for changing the entry at the given index.
@@ -79,12 +80,12 @@ public:
 
 Q_SIGNALS:
     /**
-     * @brief sigColorSelected
-     * used to tell other components, e.g. PaletteDocker, the color selected for
+     * @brief sigEntrySelected
+     * used to tell other components, e.g. PaletteDocker, the color entry selected for
      * foreground
      * @param color
      */
-    void sigColorSelected(const KoColor &color);
+    void sigEntrySelected(const KisSwatch &entry);
     void sigSetEntry(const QModelIndex &index);
 
 public Q_SLOTS:

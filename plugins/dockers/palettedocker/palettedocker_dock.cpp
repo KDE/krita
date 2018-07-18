@@ -83,8 +83,8 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(slotRemoveColor()));
     connect(m_wdgPaletteDock->bnRename, SIGNAL(clicked(bool)), this, SLOT(slotEditEntry()));
 
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(sigColorSelected(const KoColor &)),
-            this, SLOT(slotSetForegroundColor(const KoColor &)));
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(sigEntrySelected(const KoColor &)),
+            this, SLOT(slotSetForegroundColor(const KisSwatch &)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(const KisSwatch &)),
             this, SLOT(entrySelectedBack(const KisSwatch &)));
 
@@ -186,6 +186,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
 void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
 {
     m_wdgPaletteDock->cmbNameList->clear();
+    m_indexList.clear();
 
     if (!colorSet || !(colorSet->colorCount()>0)) {
         return;
@@ -193,7 +194,7 @@ void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
 
     for (int x = 0; x < colorSet->columnCount(); x++) {
         for (int y = 0; y < colorSet->rowCount(); y++) {
-            KoColorSetEntry entry = colorSet->getColorGlobal(x, y);
+            KisSwatch entry = colorSet->getColorGlobal(x, y);
             QPixmap colorSquare = QPixmap(32, 32);
             if (entry.spotColor()) {
                 QImage img = QImage(32, 32, QImage::Format_ARGB32);
@@ -218,6 +219,7 @@ void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
                 name = entry.id() + " - " + entry.name();
             }
             m_wdgPaletteDock->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
+            m_indexList.append(QPair<int, int>(x, y));
         }
     }
 
@@ -237,19 +239,21 @@ void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
 
 void PaletteDockerDock::slotNameListSelection(int index)
 {
+    /*
     if (m_model && m_currentColorSet) {
-        entrySelected(m_currentColorSet->getColorGlobal(index));
-
-        m_wdgPaletteDock->paletteView->blockSignals(true);
+        KisPaletteView *view = m_wdgPaletteDock->paletteView;
+        view->blockSignals(true);
         m_wdgPaletteDock->cmbNameList->blockSignals(true);
 
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
-        m_wdgPaletteDock->paletteView->selectionModel()->clearSelection();
-        m_wdgPaletteDock->paletteView->selectionModel()->setCurrentIndex(m_model->indexFromId(index), QItemSelectionModel::Select);
+        view->selectionModel()->clearSelection();
+        view->selectionModel()->setCurrentIndex(QModelIndex(m_indexList[index].first, m_indexList[index].second),
+                                                QItemSelectionModel::Select);
 
-        m_wdgPaletteDock->paletteView->blockSignals(false);
+        view->blockSignals(false);
         m_wdgPaletteDock->cmbNameList->blockSignals(false);
     }
+    */
 }
 
 void PaletteDockerDock::slotAddColor()
@@ -268,10 +272,10 @@ void PaletteDockerDock::slotRemoveColor()
     m_wdgPaletteDock->paletteView->removeEntryWithDialog(index);
 }
 
-void PaletteDockerDock::slotSetForegroundColor(const KoColor &color)
+void PaletteDockerDock::slotSetForegroundColor(const KisSwatch &entry)
 {
     if (m_resourceProvider) {
-        m_resourceProvider->setFGColor(color);
+        m_resourceProvider->setFGColor(entry.color());
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);

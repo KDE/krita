@@ -30,6 +30,8 @@ class QGridLayout;
 class QScrollArea;
 class KoColorPatch;
 class KoColorSet;
+class KisSwatch;
+class KisPaletteView;
 
 class KoEditColorSetWidget : public QWidget
 {
@@ -45,7 +47,7 @@ public:
 
 private Q_SLOTS:
     void setActiveColorSet(int index);
-    void setTextLabel(KoColorPatch *patch);
+    void setTextLabel(const KisSwatch &entry);
     void addColor();
     void removeColor();
     void open();
@@ -58,6 +60,7 @@ private:
     QScrollArea *m_scrollArea;
     KoColorSet *m_activeColorSet;
     uint m_initialColorSetCount;
+    KisPaletteView *m_paletteView;
     bool m_activeColorSetRequested;
 };
 

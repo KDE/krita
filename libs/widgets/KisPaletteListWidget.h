@@ -7,6 +7,7 @@
 #include "KoColorSet.h"
 
 #include "kritawidgets_export.h"
+class KisPaletteListWidgetPrivate;
 
 class KRITAWIDGETS_EXPORT KisPaletteListWidget : public QWidget
 {
@@ -25,8 +26,7 @@ private Q_SLOTS:
 
 private:
     QScopedPointer<Ui_WdgPaletteListWidget> m_ui;
-    struct Private;
-    QScopedPointer<Private> m_d;
+    QScopedPointer<KisPaletteListWidgetPrivate> m_d;
 };
 
 #endif // KISPALETTECHOOSER_H

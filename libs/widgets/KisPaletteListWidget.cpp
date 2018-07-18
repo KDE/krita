@@ -32,7 +32,7 @@ bool KisPaletteView::addGroupWithDialog()
 KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     : QWidget(parent)
     , m_ui(new Ui_WdgPaletteListWidget)
-    , m_d(new Private(this))
+    , m_d(new KisPaletteListWidgetPrivate(this))
 {
     m_ui->setupUi(this);
     m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));

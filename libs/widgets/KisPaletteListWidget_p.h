@@ -5,6 +5,7 @@
 #include <QListView>
 #include <QAbstractListModel>
 #include <QPointer>
+#include <QCheckBox>
 
 #include "KisPaletteListWidget.h"
 #include "KoResourceModel.h"
@@ -15,23 +16,23 @@
 #include "KoResourceServerProvider.h"
 #include "KoColorSet.h"
 
-struct KisPaletteListWidget::Private
+struct KisPaletteListWidgetPrivate
 {
-    class Delegate;
     class View;
+    class Delegate;
     class Model;
-    Private(KisPaletteListWidget *);
-    virtual ~Private();
+    KisPaletteListWidgetPrivate(KisPaletteListWidget *);
+    virtual ~KisPaletteListWidgetPrivate();
 
     QPointer<KisPaletteListWidget> c;
     QSharedPointer<KoResourceServerAdapter<KoColorSet> > rAdapter;
     QSharedPointer<KoResourceItemChooser> itemChooser;
 
-    QScopedPointer<KoResourceModel> model;
+    QScopedPointer<Model> model;
     QScopedPointer<Delegate> delegate;
 };
 
-class KisPaletteListWidget::Private::Delegate : public QAbstractItemDelegate
+class KisPaletteListWidgetPrivate::Delegate : public QAbstractItemDelegate
 {
 public:
     Delegate(QObject *);
@@ -42,28 +43,40 @@ public:
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 };
 
-KisPaletteListWidget::Private::Private(KisPaletteListWidget *a_c)
+class KisPaletteListWidgetPrivate::Model : public KoResourceModel
+{
+public:
+    Model(const QSharedPointer<KoResourceServerAdapter<KoColorSet> > &rAdapter, QObject *parent = Q_NULLPTR)
+        : KoResourceModel(rAdapter, parent)
+    { }
+    ~Model() override { }
+
+    Qt::ItemFlags flags(const QModelIndex &index) const override
+    { return KoResourceModel::flags(index) | Qt::ItemIsUserCheckable; }
+};
+
+KisPaletteListWidgetPrivate::KisPaletteListWidgetPrivate(KisPaletteListWidget *a_c)
     : c(a_c)
     , rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
     , itemChooser(new KoResourceItemChooser(rAdapter, a_c))
-    , model(new KoResourceModel(rAdapter, a_c))
+    , model(new Model(rAdapter, a_c))
     , delegate(new Delegate(a_c))
 {
     itemChooser->showButtons(false);
     model->setColumnCount(1);
 }
 
-KisPaletteListWidget::Private::~Private()
+KisPaletteListWidgetPrivate::~KisPaletteListWidgetPrivate()
 {  }
 
-KisPaletteListWidget::Private::Delegate::Delegate(QObject *parent)
+KisPaletteListWidgetPrivate::Delegate::Delegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {  }
 
-KisPaletteListWidget::Private::Delegate::~Delegate()
+KisPaletteListWidgetPrivate::Delegate::~Delegate()
 {  }
 
-void KisPaletteListWidget::Private::Delegate::paint(QPainter * painter,
+void KisPaletteListWidgetPrivate::Delegate::paint(QPainter * painter,
                                                     const QStyleOptionViewItem & option,
                                                     const QModelIndex & index) const
 {
@@ -95,10 +108,12 @@ void KisPaletteListWidget::Private::Delegate::paint(QPainter * painter,
     painter->restore();
 }
 
-inline QSize KisPaletteListWidget::Private::Delegate::sizeHint(const QStyleOptionViewItem & option,
+inline QSize KisPaletteListWidgetPrivate::Delegate::sizeHint(const QStyleOptionViewItem & option,
                                                                const QModelIndex &) const
 {
     return option.decorationSize;
 }
+
+
 
 #endif // KISPALETTELISTWIDGET_P_H

@@ -22,7 +22,10 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QScopedPointer>
+#include <QVector>
 #include <QPointer>
+#include <QPair>
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerAdapter.h>
@@ -65,7 +68,7 @@ private Q_SLOTS:
     void slotEditEntry();
 
     void slotSetEntryByForeground(const QModelIndex &index);
-    void slotSetForegroundColor(const KoColor &color);
+    void slotSetForegroundColor(const KisSwatch &entry);
 
     void entrySelectedBack(KoColorSetEntry entry);
     void slotSetColorSet(KoColorSet* colorSet);
@@ -86,6 +89,7 @@ private:
     KisPaletteListWidget *m_paletteChooser;
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
+    QVector<QPair<int, int> > m_indexList; // vector used to associate the name list to indexes
 };
 
 

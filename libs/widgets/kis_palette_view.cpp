@@ -231,8 +231,8 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
         } else {
             KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
             Q_ASSERT(group);
-            KoColor color = group->getEntry(index.column(), index.row()).color();
-            emit sigColorSelected(color);
+            KisSwatch entry = group->getEntry(index.column(), index.row());
+            emit sigEntrySelected(entry);
         }
     }
 }
@@ -337,4 +337,12 @@ void KisPaletteView::slotResizeVerticalHeader(int, int, int newSize)
     verticalHeader()->setDefaultSectionSize(newSize);
     verticalHeader()->setMaximumSectionSize(newSize);
     verticalHeader()->resizeSections(QHeaderView::Fixed);
+}
+
+void KisPaletteView::removeSelectedEntry()
+{
+    if (selectedIndexes().size() <= 0) {
+        return;
+    }
+    m_d->model->removeEntry(currentIndex());
 }

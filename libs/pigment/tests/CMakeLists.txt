@@ -28,7 +28,7 @@ ecm_add_tests(
     TestColorConversion.cpp
     TestKoColorSpaceMaths.cpp
     TestKisSwatchGroup.cpp
-    TestKoColorSet.cpp
+    # TestKoColorSet.cpp
 
     NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment Qt5::Test)

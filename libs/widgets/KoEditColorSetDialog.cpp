@@ -123,7 +123,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     }
 
     QWidget *wdg = new QWidget(m_scrollArea);
-    m_gridLayout = new QGridLayout();
+    m_gridLayout = new QGridLayout(this);
     m_gridLayout->setMargin(0);
     m_gridLayout->setSpacing(2);
 
@@ -134,13 +134,14 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     if (m_activeColorSet) {
         columns = m_activeColorSet->columnCount();
         if (columns==0){columns=16;}
-        KisPaletteView *paletteView = new KisPaletteView(this);
-        KisPaletteModel *paletteModel = new KisPaletteModel(paletteView);
+        m_paletteView = new KisPaletteView(this);
+        KisPaletteModel *paletteModel = new KisPaletteModel(m_paletteView);
         QSharedPointer<KoColorSet> colorSet(new KoColorSet());
         // paletteModel->setDisplayRenderer(displayRenderer);
         paletteModel->setColorSet(colorSet.data());
-        paletteView->setPaletteModel(paletteModel);
-        m_gridLayout->addWidget(paletteView);
+        m_paletteView->setPaletteModel(paletteModel);
+        m_gridLayout->addWidget(m_paletteView);
+        connect(m_paletteView, SIGNAL(sigEntrySelected(KisSwatch)), SLOT(setTextLabel(KisSwatch)));
         /*
         for (quint32 i = 0; i < m_activeColorSet->colorCount(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
@@ -158,9 +159,9 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
     m_scrollArea->setWidget(wdg);
 }
 
-void KoEditColorSetWidget::setTextLabel(KoColorPatch *patch)
+void KoEditColorSetWidget::setTextLabel(const KisSwatch &entry)
 {
-    widget.colorName->setText(patch->toolTip());
+    widget.colorName->setText(entry.name());
     widget.remove->setEnabled(true);
 }
 
@@ -187,6 +188,7 @@ void KoEditColorSetWidget::addColor()
 void KoEditColorSetWidget::removeColor()
 {
     Q_ASSERT(m_activeColorSet);
+    m_paletteView->removeSelectedEntry();
     /*
     for (quint32 i = 0; i < m_activeColorSet->colorCount(); i++) {
         KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);

@@ -627,6 +627,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
             file.cancelWriting();
         } else {
             if (!file.commit()) {
+                m_document->setErrorMessage(file.errorString());
                 status = KisImportExportFilter::CreationError;
             }
         }

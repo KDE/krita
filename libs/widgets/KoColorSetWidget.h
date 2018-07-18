@@ -24,11 +24,14 @@
 #include <QWidgetAction>
 #include <QFrame>
 
-#include "kritawidgets_export.h"
+#include <KisSwatch.h>
 #include <KoColorDisplayRendererInterface.h>
+
+#include "kritawidgets_export.h"
 
 class KoColor;
 class KoColorSet;
+class KoColorPatch;
 
 /**
  * @short A colormanaged widget for choosing a color from a colorset
@@ -95,8 +98,20 @@ Q_SIGNALS:
      */
     void widgetSizeChanged(const QSize &size);
 
+private Q_SLOTS:
+    /**
+     * @brief slotPatchTriggered
+     * Triggered when a recent patch is triggered
+     */
+    void slotPatchTriggered(KoColorPatch *);
+    /**
+     * @brief slotEntrySelected
+     * Triggered when a color is choose from the palette view
+     */
+    void slotEntrySelected(const KisSwatch &);
+
 private:
-    Q_PRIVATE_SLOT(d, void colorTriggered(KoColorPatch *))
+    Q_PRIVATE_SLOT(d, void slotColorTriggered(const KoColor &))
     Q_PRIVATE_SLOT(d, void addRemoveColors())
     Q_PRIVATE_SLOT(d, void setColorFromString(QString s))
 

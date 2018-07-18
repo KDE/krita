@@ -64,14 +64,13 @@ public:
     QStringList colornames;
     int numRecents;
 
-    void colorTriggered(KoColorPatch *patch);
+    void slotColorTriggered(const KoColor &color);
     void addRecent(const KoColor &);
     void activateRecent(int i);
     void fillColors();
     void addRemoveColors();
     void setColorFromString(QString s);
 
-    QList<KoColorPatch*> patchWidgetList;
     const KoColorDisplayRendererInterface *displayRenderer;
 
 };

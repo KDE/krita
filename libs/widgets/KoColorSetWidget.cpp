@@ -47,6 +47,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
+#include <KoResourceServerAdapter.h>
 
 #include <kis_palette_view.h>
 #include <KisPaletteDelegate.h>
@@ -58,7 +59,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
         delete colorSetContainer;
     }
     colorSetContainer = new QWidget();
-    colorSetLayout = new QVBoxLayout();
+    colorSetLayout = new QVBoxLayout(colorSetContainer);
     colorSetLayout->setMargin(3);
     colorSetLayout->setSpacing(0); // otherwise the use can click where there is none
     colorSetContainer->setBackgroundRole(QPalette::Dark);
@@ -69,12 +70,12 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
     }
 
     colorSetContainer->setLayout(colorSetLayout);
-    patchWidgetList.clear();
     colornames.clear();
     colorNameCmb->clear();
 
     qobject_cast<KisPaletteModel*>(paletteView->model())->setColorSet(colorSet);
 
+    connect(paletteView, SIGNAL(sigEntrySelected(KisSwatch)), thePublic, SLOT());
     connect(colorNameCmb, SIGNAL(activated(QString)), thePublic, SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 }
 
@@ -121,7 +122,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
         recentPatches[numRecents]->setFrameShape(QFrame::StyledPanel);
         recentPatches[numRecents]->setDisplayRenderer(displayRenderer);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
-        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(slotPatchTriggered(KoColorPatch *)));
         numRecents++;
     }
     // shift colors to the right
@@ -152,7 +153,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->firstShowOfContainer = true;
 
-    d->mainLayout = new QVBoxLayout();
+    d->mainLayout = new QVBoxLayout(this);
     d->mainLayout->setMargin(4);
     d->mainLayout->setSpacing(2);
 
@@ -171,11 +172,10 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->paletteView = new KisPaletteView(this);
     KisPaletteModel *paletteModel = new KisPaletteModel(d->paletteView);
-    d->colorSet = new KoColorSet();
     paletteModel->setDisplayRenderer(d->displayRenderer);
-    paletteModel->setColorSet(d->colorSet);
     d->paletteView->setPaletteModel(paletteModel);
     d->mainLayout->addWidget(d->paletteView);
+    connect(d->paletteView, SIGNAL(sigEntrySelected(KisSwatch)), SLOT(slotEntrySelected(KisSwatch)));
 
     d->colorNameCmb = new QComboBox(this);
     d->colorNameCmb->setEditable(true);
@@ -202,29 +202,18 @@ KoColorSetWidget::~KoColorSetWidget()
     delete d;
 }
 
-void KoColorSetWidget::KoColorSetWidgetPrivate::colorTriggered(KoColorPatch *patch)
+void KoColorSetWidget::KoColorSetWidgetPrivate::slotColorTriggered(const KoColor &color)
 {
-    int i;
-
-    emit thePublic->colorChanged(patch->color(), true);
-
-    colorNameCmb->setCurrentIndex(colornames.indexOf(QRegExp(patch->toolTip()+"|Fixed")));
-
-    for (i = 0; i <numRecents; i++)
-        if(patch == recentPatches[i]) {
-            activateRecent(i);
-            break;
-        }
-
-    if (i == numRecents) // we didn't find it above
-        addRecent(patch->color());
+    emit thePublic->colorChanged(color, true);
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::setColorFromString(QString s)
 {
+    /*
     int i = colornames.indexOf(QRegExp(s+"|Fixed"));
     i = qMax(i,0);
     colorTriggered(patchWidgetList.at(i));
+    */
 }
 
 void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
@@ -251,9 +240,6 @@ void KoColorSetWidget::setDisplayRenderer(const KoColorDisplayRendererInterface 
 {
     if (displayRenderer) {
         d->displayRenderer = displayRenderer;
-        Q_FOREACH(KoColorPatch *p, d->patchWidgetList) {
-            p->setDisplayRenderer(displayRenderer);
-        }
         for (int i=0; i<6; i++) {
             if (d->recentPatches[i]) {
                 d->recentPatches[i]->setDisplayRenderer(displayRenderer);
@@ -266,6 +252,33 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 {
     emit widgetSizeChanged(event->size());
     QFrame::resizeEvent(event);
+}
+
+void KoColorSetWidget::slotEntrySelected(const KisSwatch &entry)
+{
+    d->slotColorTriggered(entry.color());
+
+    d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(entry.name()+"|Fixed")));
+}
+
+void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
+{
+    d->slotColorTriggered(patch->color());
+
+    int i;
+
+    for (i = 0; i < d->numRecents; i++) {
+        if(patch == d->recentPatches[i]) {
+            d->activateRecent(i);
+            break;
+        }
+    }
+
+    if (i == d->numRecents) { // we didn't find it above
+        d->addRecent(patch->color());
+    }
+
+    d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(patch->toolTip()+"|Fixed")));
 }
 
 //have to include this because of Q_PRIVATE_SLOT

@@ -766,7 +766,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         QList<int> resourceIdList;
         Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
             QSqlQuery q;
-            if (q.prepare("SELECT id, filename\n"
+            if (!q.prepare("SELECT id, filename\n"
                           "FROM   resources\n"
                           "WHERE  resource_type_id = (SELECT id\n"
                           "                           FROM   resource_types\n"

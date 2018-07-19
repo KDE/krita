@@ -41,13 +41,64 @@ typedef KisTileDataList::iterator KisTileDataListIterator;
 typedef KisTileDataList::const_iterator KisTileDataListConstIterator;
 
 
+class SimpleCache
+{
+public:
+    SimpleCache() = default;
+    ~SimpleCache();
+
+    bool push(int pixelSize, quint8 *&ptr)
+    {
+        QReadLocker l(&m_cacheLock);
+        switch (pixelSize) {
+        case 4:
+            m_4Pool.push(ptr);
+            break;
+        case 8:
+            m_8Pool.push(ptr);
+            break;
+        case 16:
+            m_16Pool.push(ptr);
+            break;
+        default:
+            return false;
+        }
+
+        return true;
+    }
+
+    bool pop(int pixelSize, quint8 *&ptr)
+    {
+        QReadLocker l(&m_cacheLock);
+        switch (pixelSize) {
+        case 4:
+            return m_4Pool.pop(ptr);
+        case 8:
+            return m_8Pool.pop(ptr);
+        case 16:
+            return m_16Pool.pop(ptr);
+        default:
+            return false;
+        }
+    }
+
+    void clear();
+
+private:
+    QReadWriteLock m_cacheLock;
+    KisLocklessStack<quint8*> m_4Pool;
+    KisLocklessStack<quint8*> m_8Pool;
+    KisLocklessStack<quint8*> m_16Pool;
+};
+
+
 /**
  * Stores actual tile's data
  */
 class KisTileData
 {
 public:
-    KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store);
+    KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store, bool checkFreeMemory = true);
 
 private:
     KisTileData(const KisTileData& rhs, bool checkFreeMemory = true);
@@ -137,7 +188,7 @@ public:
      *
      * Effectively equivalent to: (mementoed() && numUsers() <= 1)
      */
-     inline bool historical() const;
+    inline bool historical() const;
 
     /**
      * Used for swapping purposes only.
@@ -202,7 +253,7 @@ private:
      * Iterator that points to a position in the list
      * where the tile data is stored
      */
-    KisTileDataListIterator m_listIterator;
+    int m_tileNumber = -1;
 
 private:
     /**
@@ -264,6 +315,8 @@ private:
     //qint32 m_timeStamp;
 
     KisTileDataStore *m_store;
+    static SimpleCache m_cache;
+
 public:
     static const qint32 WIDTH;
     static const qint32 HEIGHT;

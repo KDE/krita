@@ -26,6 +26,7 @@
 #include "kis_tile_data_pooler.h"
 #include "swap/kis_tile_data_swapper.h"
 #include "swap/kis_swapped_data_store.h"
+#include "3rdparty/lock_free_map/concurrent_map.h"
 
 class KisTileDataStoreIterator;
 class KisTileDataStoreReverseIterator;
@@ -59,26 +60,30 @@ public:
      * Returns total number of tiles present: in memory
      * or in a swap file
      */
-    inline qint32 numTiles() const {
-        return m_numTiles + m_swappedStore.numTiles();
+    inline qint32 numTiles() const
+    {
+        return m_numTiles.loadAcquire() + m_swappedStore.numTiles();
     }
 
     /**
      * Returns the number of tiles present in memory only
      */
-    inline qint32 numTilesInMemory() const {
-        return m_numTiles;
+    inline qint32 numTilesInMemory() const
+    {
+        return m_numTiles.loadAcquire();
     }
 
-    inline void checkFreeMemory() {
+    inline void checkFreeMemory()
+    {
         m_swapper.checkFreeMemory();
     }
 
     /**
      * \see m_memoryMetric
      */
-    inline qint64 memoryMetric() const {
-        return m_memoryMetric;
+    inline qint64 memoryMetric() const
+    {
+        return m_memoryMetric.loadAcquire();
     }
 
     KisTileDataStoreIterator* beginIteration();
@@ -90,12 +95,14 @@ public:
     KisTileDataStoreClockIterator* beginClockIteration();
     void endIteration(KisTileDataStoreClockIterator* iterator);
 
-    inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel) {
+    inline KisTileData* createDefaultTileData(qint32 pixelSize, const quint8 *defPixel)
+    {
         return allocTileData(pixelSize, defPixel);
     }
 
     // Called by The Memento Manager after every commit
-    inline void kickPooler() {
+    inline void kickPooler()
+    {
         m_pooler.kick();
 
         //FIXME: maybe, rename a function?
@@ -131,11 +138,12 @@ public:
      */
     void ensureTileDataLoaded(KisTileData *td);
 
+    void registerTileData(KisTileData *td);
+    void unregisterTileData(KisTileData *td);
+
 private:
     KisTileData *allocTileData(qint32 pixelSize, const quint8 *defPixel);
 
-    void registerTileData(KisTileData *td);
-    void unregisterTileData(KisTileData *td);
     inline void registerTileDataImp(KisTileData *td);
     inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();
@@ -159,18 +167,17 @@ private:
     friend class KisTileDataPoolerTest;
     KisSwappedDataStore m_swappedStore;
 
-    KisTileDataListIterator m_clockIterator;
-
-    QMutex m_listLock;
-    KisTileDataList m_tileDataList;
-    qint32 m_numTiles;
-
     /**
      * This metric is used for computing the volume
      * of memory occupied by tile data objects.
      * metric = num_bytes / (KisTileData::WIDTH * KisTileData::HEIGHT)
      */
-    qint64 m_memoryMetric;
+    QAtomicInt m_numTiles;
+    QAtomicInt m_memoryMetric;
+    QAtomicInt m_counter;
+    QAtomicInt m_clockIndex;
+    ConcurrentMap<int, KisTileData*> m_tileDataMap;
+    QReadWriteLock m_iteratorLock;
 };
 
 template<typename T>

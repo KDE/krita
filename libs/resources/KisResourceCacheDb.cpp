@@ -286,7 +286,7 @@ bool KisResourceCacheDb::resourceNeedsUpdating(int resourceId, QDateTime timesta
     q.bindValue(":resource_id", resourceId);
 
     if (!q.exec()) {
-        qDebug() << "Could not query for the most recent timestamp" << q.boundValues() << q.lastError();
+        qWarning() << "Could not query for the most recent timestamp" << q.boundValues() << q.lastError();
         return false;
     }
 
@@ -427,6 +427,8 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
             qWarning() << "Could not execute addResource statement" << q.boundValues() << q.lastError();
             return r;
         }
+
+        resourceId = resourceIdForResource(resource->filename(), resourceType);
     }
     // Then add a new version
     QSqlQuery q;
@@ -624,7 +626,6 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
             return r;
         }
         if (q.first()) {
-            //qDebug() << "This storage already exists";
             return true;
         }
     }
@@ -644,7 +645,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
 
         q.bindValue(":storage_type_id", static_cast<int>(storage->type()));
         q.bindValue(":location", storage->location());
-        q.bindValue(":timestamp", storage->timestamp().toMSecsSinceEpoch());
+        q.bindValue(":timestamp", storage->timestamp().toSecsSinceEpoch());
         q.bindValue(":pre_installed", preinstalled ? 1 : 0);
         q.bindValue(":active", 1);
 
@@ -713,7 +714,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     }
 
     // Find the storage in the database
-    qDebug() << storage->location() << storage->timestamp();
 
     // Only check the time stamp for container storages, not the contents
     if (storage->type() != KisResourceStorage::StorageType::Folder) {
@@ -776,7 +776,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             }
             q.bindValue(":resource_type", resourceType);
             if (!q.exec()) {
-                qWarning() << "Could not exec resource by type query" << q.boundValues(), q.lastError();
+                qWarning() << "Could not exec resource by type query" << q.boundValues() << q.lastError();
                 continue;
             }
             while (q.nextResult()) {

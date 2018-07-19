@@ -87,12 +87,12 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setMinimumSectionSize(MINROWHEIGHT);
     verticalHeader()->setDefaultSectionSize(MINROWHEIGHT);
-    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
 
+    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotModifyEntry(QModelIndex)));
 
-//    setDragEnabled(true);
-//    setDragDropMode(QAbstractItemView::InternalMove);
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
 
     // KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     //QPalette pal(palette());
@@ -235,6 +235,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
             emit sigEntrySelected(entry);
         }
     }
+
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)

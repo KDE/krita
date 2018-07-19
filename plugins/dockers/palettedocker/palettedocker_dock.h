@@ -70,7 +70,6 @@ private Q_SLOTS:
     void slotSetEntryByForeground(const QModelIndex &index);
     void slotSetForegroundColor(const KisSwatch &entry);
 
-    void entrySelectedBack(KoColorSetEntry entry);
     void slotSetColorSet(KoColorSet* colorSet);
 
     void slotNameListSelection(int index);

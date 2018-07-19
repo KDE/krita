@@ -83,7 +83,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(slotRemoveColor()));
     connect(m_wdgPaletteDock->bnRename, SIGNAL(clicked(bool)), this, SLOT(slotEditEntry()));
 
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(sigEntrySelected(const KoColor &)),
+    connect(m_wdgPaletteDock->paletteView, SIGNAL(sigEntrySelected(const KisSwatch &)),
             this, SLOT(slotSetForegroundColor(const KisSwatch &)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(const KisSwatch &)),
             this, SLOT(entrySelectedBack(const KisSwatch &)));
@@ -134,8 +134,6 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),m_wdgPaletteDock->paletteView, SLOT(trySelectClosestColor(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
-
-
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -277,23 +275,6 @@ void PaletteDockerDock::slotSetForegroundColor(const KisSwatch &entry)
     if (m_resourceProvider) {
         m_resourceProvider->setFGColor(entry.color());
     }
-    if (m_currentColorSet->removable()) {
-        m_wdgPaletteDock->bnRemove->setEnabled(true);
-    }
-}
-
-void PaletteDockerDock::entrySelectedBack(KoColorSetEntry entry)
-{
-    if (m_wdgPaletteDock->paletteView->currentIndex().isValid()) {
-        quint32 index = m_model->idFromIndex(m_wdgPaletteDock->paletteView->currentIndex());
-        m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
-    }
-    if (m_resourceProvider) {
-        m_resourceProvider->setBGColor(entry.color());
-    }
-    if (m_currentColorSet->removable()) {
-        m_wdgPaletteDock->bnRemove->setEnabled(true);
-    }
 }
 
 void PaletteDockerDock::saveToWorkspace(KisWorkspaceResource* workspace)
@@ -317,6 +298,9 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 void PaletteDockerDock::slotSetEntryByForeground(const QModelIndex &index)
 {
     m_model->setEntry(KisSwatch(m_resourceProvider->fgColor()), index);
+    if (m_currentColorSet->removable()) {
+        m_wdgPaletteDock->bnRemove->setEnabled(true);
+    }
 }
 
 void PaletteDockerDock::slotEditEntry()

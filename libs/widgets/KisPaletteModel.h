@@ -80,6 +80,18 @@ public:
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+    /**
+     * @brief index
+     * @param row
+     * @param column
+     * @param parent
+     * @return the index of for the data at row, column
+     * if the data is a color entry, the internal pointer points to the group
+     * the entry belongs to, and the row and column are row number and column
+     * number inside the group.
+     * if the data is a group, the row number and group number is Q_INFINIFY,
+     * and the internal pointer also points to the group
+     */
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
     void setColorSet(KoColorSet* colorSet);

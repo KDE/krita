@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Andrey Kamakin <a.kamakin@icloud.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,6 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #ifndef KIS_TILE_DATA_STORE_ITERATORS_H_
 #define KIS_TILE_DATA_STORE_ITERATORS_H_
 

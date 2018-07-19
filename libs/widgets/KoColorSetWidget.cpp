@@ -155,9 +155,11 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->bottomLayout->setStretch(0, 0); // minimize chooser button
     d->bottomLayout->setStretch(1, 1); // maximize color name cmb
 
+    /*
     d->addRemoveButton = new QToolButton(this);
     d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
     d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    */
 
     d->mainLayout = new QVBoxLayout(this);
     d->mainLayout->setMargin(4);
@@ -165,13 +167,13 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addLayout(d->recentsLayout);
     d->mainLayout->addWidget(d->paletteView);
     d->mainLayout->addLayout(d->bottomLayout);
-    d->mainLayout->addWidget(d->addRemoveButton);
+    // d->mainLayout->addWidget(d->addRemoveButton);
 
     setLayout(d->mainLayout);
 
     connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotPaletteChoosen(KoColorSet*)));
     connect(d->paletteView, SIGNAL(sigEntrySelected(KisSwatch)), SLOT(slotEntrySelected(KisSwatch)));
-    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
+    // connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
     connect(d->colorNameCmb, SIGNAL(activated(QString)), SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();

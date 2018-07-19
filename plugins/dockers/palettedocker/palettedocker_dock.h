@@ -63,6 +63,7 @@ public: // KoResourceServerObserver
     void syncTagRemoval(const QString&) override {}
 
 private Q_SLOTS:
+    void slotImportPalette();
     void slotAddColor();
     void slotRemoveColor();
     void slotEditEntry();

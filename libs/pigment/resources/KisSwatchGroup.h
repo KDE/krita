@@ -22,10 +22,13 @@
 #ifndef KISSWATCHGROUP_H
 #define KISSWATCHGROUP_H
 
-#include "kritapigment_export.h"
-#include <QVector>
-#include <QMap> // Used to keep track of the last row. Qt doesn't provide a priority queue...
 #include "KisSwatch.h"
+
+#include "kritapigment_export.h"
+
+#include <QVector>
+#include <QList>
+#include <QMap>
 
 /**
  * @brief The KisSwatchGroup class stores a matrix of color swatches
@@ -55,6 +58,7 @@ public:
 
     int rowCount() const;
     int colorCount() const { return m_nColors; }
+    QList<KisSwatch> colors() const;
 
     /**
      * @brief checkEntry

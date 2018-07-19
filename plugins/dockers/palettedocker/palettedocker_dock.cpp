@@ -32,7 +32,7 @@
 
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
-
+#include <KoFileDialog.h>
 #include <kis_icon.h>
 #include <kis_layer.h>
 #include <kis_node_manager.h>
@@ -311,4 +311,15 @@ void PaletteDockerDock::slotEditEntry()
         return;
     }
     m_wdgPaletteDock->paletteView->modifyEntry(index);
+}
+
+void PaletteDockerDock::slotImportPalette()
+{
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
+    dialog.setDefaultDir(m_activeColorSet->filename());
+    dialog.setMimeTypeFilters(QStringList() << "application/x-gimp-color-palette");
+    QString fileName = dialog.filename();
+    KoColorSet *colorSet = new KoColorSet(fileName);
+    colorSet->load();
+    m_paletteChooser->
 }

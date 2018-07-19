@@ -128,3 +128,12 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
         }
     }
 }
+
+QList<KisSwatch> KisSwatchGroup::colors() const
+{
+    QList<KisSwatch> res(0);
+    for (const Column &c : m_colorMatrix) {
+        res += c.values();
+    }
+    return res;
+}

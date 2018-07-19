@@ -40,7 +40,7 @@ public:
     static const QString dbLocationKey; ///< configuration key for the location of the database
     static const QString resourceCacheDbFilename; ///< filename of the database
     static const QString databaseVersion; ///< current schema version
-    static const QStringList storageTypes; ///< kinds of places where resources can be stored
+    static QStringList storageTypes; ///< kinds of places where resources can be stored
 
     /**
      * @brief isValid

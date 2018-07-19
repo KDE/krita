@@ -22,6 +22,7 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QDirIterator>
+#include <QStringList>
 
 #include <KritaVersionWrapper.h>
 #include <klocalizedstring.h>
@@ -32,15 +33,10 @@
 
 const QString dbDriver = "QSQLITE";
 
-const QStringList KisResourceCacheDb::storageTypes = QStringList() << "UNKNOWN"
-                                                                   << "FOLDER"
-                                                                   << "BUNDLE"
-                                                                   << "ADOBE_BRUSH_LIBRARY"
-                                                                   << "ADOBE_STYLE_LIBRARY"; // Installed or created by the user
-
 const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
 const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
 const QString KisResourceCacheDb::databaseVersion {"0.0.1"};
+QStringList KisResourceCacheDb::storageTypes { QStringList() };
 
 bool KisResourceCacheDb::s_valid {false};
 
@@ -51,6 +47,12 @@ bool KisResourceCacheDb::isValid()
 
 QSqlError initDb(const QString &location)
 {
+    KisResourceCacheDb::storageTypes << i18n("Unknown")
+                                     << i18n("Folder")
+                                     << i18n("Bundle")
+                                     << i18n("Abobe Brush Library")
+                                     << i18n("Adobe Style Library");
+
     if (!QSqlDatabase::connectionNames().isEmpty()) {
         infoResources << "Already connected to resource cache database";
         return QSqlError();
@@ -189,7 +191,7 @@ QSqlError initDb(const QString &location)
         if (dbTables.contains("resource_types")) {
             QSqlQuery q;
             if (!q.exec("DELETE * FROM resource_types;")) {
-                qWarning() << "Could not cleare table resource_types" << db.lastError();
+                qWarning() << "Could not clear table resource_types" << db.lastError();
             }
         }
         QFile f(":/fill_resource_types.sql");
@@ -218,7 +220,7 @@ QSqlError initDb(const QString &location)
             q.prepare(sql);
             q.addBindValue(KisResourceCacheDb::databaseVersion);
             q.addBindValue(KritaVersionWrapper::versionString());
-            q.addBindValue(QDateTime::currentDateTimeUtc().toString());
+            q.addBindValue(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
             if (!q.exec()) {
                 qWarning() << "Could not insert the current version" << db.lastError() << q.executedQuery() << q.boundValues();
                 return db.lastError();
@@ -743,16 +745,64 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         }
     }
     else {
+
+        // Check whether everything in the storage is in the database
+        QMap<QString, QStringList> typeResourceMap;
         Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+            typeResourceMap.insert(resourceType, QStringList());
             QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage->resources(resourceType);
             while(iter->hasNext()) {
                 iter->next();
                 KoResourceSP res = iter->resource();
+                typeResourceMap[resourceType] << iter->url();
                 if (res) {
                     if (!addResource(storage, iter->lastModified(), res, iter->type())) {
                         qWarning() << "Could not add resource" << res->filename() << "to the database";
                     }
                 }
+            }
+        }
+        // Remove everything from the database which is no longer in the storage
+        QList<int> resourceIdList;
+        Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+            QSqlQuery q;
+            if (q.prepare("SELECT id, filename\n"
+                          "FROM   resources\n"
+                          "WHERE  resource_type_id = (SELECT id\n"
+                          "                           FROM   resource_types\n"
+                          "                           WHERE  name == :resource_type);")) {
+                qWarning() << "Could not prepare resource by type query" << q.lastError();
+                continue;
+            }
+            q.bindValue(":resource_type", resourceType);
+            if (!q.exec()) {
+                qWarning() << "Could not exec resource by type query" << q.boundValues(), q.lastError();
+                continue;
+            }
+            while (q.nextResult()) {
+                if (!typeResourceMap[resourceType].contains(q.value(1).toString())) {
+                    resourceIdList << q.value(0).toInt();
+                }
+            }
+        }
+        QSqlQuery deleteResources;
+        if (!deleteResources.prepare("DELETE FROM resources WHERE id = :id")) {
+            qWarning() << "Could not prepare delete Resources query";
+        }
+        QSqlQuery deleteResourceVersions;
+        if (!deleteResourceVersions.prepare("DELETE FROM versioned_resources WHERE resource_id = :id")) {
+            qWarning() << "Could not prepare delete Resources query";
+        }
+
+        Q_FOREACH(int id, resourceIdList) {
+            deleteResourceVersions.bindValue(":id", id);
+            if (!deleteResourceVersions.exec()) {
+                qWarning() << "Could not delete resource version" << deleteResourceVersions.boundValues() << deleteResourceVersions.lastError();
+            }
+
+            deleteResources.bindValue(":id", id);
+            if (!deleteResources.exec()) {
+                qWarning() << "Could not delete resource" << deleteResources.boundValues() << deleteResources.lastError();
             }
         }
     }

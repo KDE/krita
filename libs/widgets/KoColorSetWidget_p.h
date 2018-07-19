@@ -40,6 +40,7 @@
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
+#include <KoResourceServer.h>
 
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -64,7 +65,6 @@ public:
     QStringList colornames;
     int numRecents;
 
-    void slotColorTriggered(const KoColor &color);
     void addRecent(const KoColor &);
     void activateRecent(int i);
     void fillColors();
@@ -72,7 +72,7 @@ public:
     void setColorFromString(QString s);
 
     const KoColorDisplayRendererInterface *displayRenderer;
-
+    KoResourceServer<KoColorSet>* rServer;
 };
 
 #endif

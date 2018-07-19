@@ -64,25 +64,17 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
     colorSetLayout->setSpacing(0); // otherwise the use can click where there is none
     colorSetContainer->setBackgroundRole(QPalette::Dark);
 
-    int columns = 16;
-    if (colorSet) {
-        columns = colorSet->columnCount();
-    }
-
     colorSetContainer->setLayout(colorSetLayout);
     colornames.clear();
     colorNameCmb->clear();
 
-    qobject_cast<KisPaletteModel*>(paletteView->model())->setColorSet(colorSet);
-
-    connect(paletteView, SIGNAL(sigEntrySelected(KisSwatch)), thePublic, SLOT());
+    connect(paletteView, SIGNAL(sigEntrySelected(KisSwatch)), thePublic, SLOT(slotEntrySelected(KisSwatch)));
     connect(colorNameCmb, SIGNAL(activated(QString)), thePublic, SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 {
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-    QList<KoColorSet*> palettes = srv->resources();
+    QList<KoColorSet*> palettes = rServer->resources();
 
     Q_ASSERT(colorSet);
     KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
@@ -92,7 +84,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
         if( cs && !palettes.contains( cs ) ) {
             int i = 1;
             QFileInfo fileInfo;
-            QString savePath = srv->saveLocation();
+            QString savePath = rServer->saveLocation();
 
             do {
                 fileInfo.setFile(savePath + QString("%1.%2").arg(i++, 4, 10, QChar('0')).arg(colorSet->defaultFileExtension()));
@@ -103,7 +95,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
             cs->setValid( true );
 
             // add new colorset to predefined colorsets
-            if (!srv->addResource(cs)) {
+            if (!rServer->addResource(cs)) {
                 delete cs;
                 cs = 0;
             }
@@ -117,11 +109,11 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
 {
-    if(numRecents<6) {
+    if(numRecents < 6) {
         recentPatches[numRecents] = new KoColorPatch(thePublic);
         recentPatches[numRecents]->setFrameShape(QFrame::StyledPanel);
         recentPatches[numRecents]->setDisplayRenderer(displayRenderer);
-        recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
+        recentsLayout->insertWidget(numRecents + 1, recentPatches[numRecents]);
         connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(slotPatchTriggered(KoColorPatch *)));
         numRecents++;
     }
@@ -157,8 +149,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->setMargin(4);
     d->mainLayout->setSpacing(2);
 
-    d->colorSetContainer = 0;
-
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
@@ -177,6 +167,13 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addWidget(d->paletteView);
     connect(d->paletteView, SIGNAL(sigEntrySelected(KisSwatch)), SLOT(slotEntrySelected(KisSwatch)));
 
+    d->rServer = KoResourceServerProvider::instance()->paletteServer();
+    QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
+    if (!defaultColorSet && d->rServer->resources().count() > 0) {
+        defaultColorSet = d->rServer->resources().first();
+    }
+    setColorSet(defaultColorSet);
+
     d->colorNameCmb = new QComboBox(this);
     d->colorNameCmb->setEditable(true);
     d->colorNameCmb->setInsertPolicy(QComboBox::NoInsert);
@@ -189,22 +186,13 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addWidget(d->addRemoveButton);
 
     setLayout(d->mainLayout);
-    d->fillColors();
+
+    connect(d->colorNameCmb, SIGNAL(activated(QString)), SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 }
 
 KoColorSetWidget::~KoColorSetWidget()
 {
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-    QList<KoColorSet*> palettes = srv->resources();
-    if (!palettes.contains(d->colorSet)) {
-        delete d->colorSet;
-    }
     delete d;
-}
-
-void KoColorSetWidget::KoColorSetWidgetPrivate::slotColorTriggered(const KoColor &color)
-{
-    emit thePublic->colorChanged(color, true);
 }
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::setColorFromString(QString s)
@@ -221,14 +209,8 @@ void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
     if (!colorSet) return;
     if (colorSet == d->colorSet) return;
 
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-    QList<KoColorSet*> palettes = srv->resources();
-    if (!palettes.contains(d->colorSet)) {
-        delete d->colorSet;
-    }
-
+    d->paletteView->paletteModel()->setColorSet(colorSet.data());
     d->colorSet = colorSet;
-    d->fillColors();
 }
 
 KoColorSet* KoColorSetWidget::colorSet()
@@ -256,14 +238,14 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 
 void KoColorSetWidget::slotEntrySelected(const KisSwatch &entry)
 {
-    d->slotColorTriggered(entry.color());
+    emit colorChanged(entry.color(), true);
 
     d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(entry.name()+"|Fixed")));
 }
 
 void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
 {
-    d->slotColorTriggered(patch->color());
+    emit colorChanged(patch->color(), true);
 
     int i;
 

@@ -111,7 +111,6 @@ private Q_SLOTS:
     void slotEntrySelected(const KisSwatch &);
 
 private:
-    Q_PRIVATE_SLOT(d, void slotColorTriggered(const KoColor &))
     Q_PRIVATE_SLOT(d, void addRemoveColors())
     Q_PRIVATE_SLOT(d, void setColorFromString(QString s))
 

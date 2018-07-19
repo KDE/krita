@@ -113,12 +113,12 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     connect(this, SIGNAL(triggered()), this, SLOT(emitColorChanged()));
 
-    connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(colorWasSelected(const KoColor &, bool)));
-
-    connect( d->colorChooser, SIGNAL( colorChanged( const QColor &) ),
-             this, SLOT( colorWasEdited( const QColor &) ) );
-    connect( d->opacitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(opacityWasChanged(int)));
+    connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)),
+            this, SLOT(colorWasSelected(const KoColor &, bool)));
+    connect(d->colorChooser, SIGNAL(colorChanged(const QColor &)),
+            this, SLOT(colorWasEdited( const QColor &)));
+    connect(d->opacitySlider, SIGNAL(valueChanged(int)),
+            this, SLOT(opacityWasChanged(int)));
 }
 
 KoColorPopupAction::~KoColorPopupAction()
@@ -244,16 +244,4 @@ void KoColorPopupAction::opacityWasChanged( int opacity )
     d->currentColor.setOpacity( quint8(opacity) );
 
     emitColorChanged();
-}
-
-void KoColorPopupAction::slotTriggered(bool)
-{
-    if (d->firstTime) {
-        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-        QList<KoColorSet*> palettes = srv->resources();
-        if (!palettes.empty()) {
-            d->colorSetWidget->setColorSet(palettes.first());
-        }
-        d->firstTime = false;
-    }
 }

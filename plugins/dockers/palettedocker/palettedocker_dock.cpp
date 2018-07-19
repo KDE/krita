@@ -27,9 +27,13 @@
 #include <QColorDialog>
 #include <QCompleter>
 #include <QComboBox>
+#include <QAction>
+#include <QMenu>
+#include <QCheckBox>
+#include <QFormLayout>
+#include <QLineEdit>
 
 #include <klocalizedstring.h>
-
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
@@ -46,9 +50,6 @@
 #include <kis_canvas2.h>
 #include <KoDialog.h>
 #include <kis_color_button.h>
-#include <QCheckBox>
-#include <QFormLayout>
-#include <QLineEdit>
 #include <squeezedcombobox.h>
 
 #include "KisPaletteModel.h"
@@ -64,14 +65,25 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_currentColorSet(0)
     , m_resourceProvider(0)
     , m_canvas(0)
+    , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add foreground color")))
+    , m_actAddWithDlg(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Choose a color to add")))
+    , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
+    , m_actSwitch(new QAction(i18n("Switch with another spot")))
+    , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
 {
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
+
     m_wdgPaletteDock->setupUi(mainWidget);
-    m_wdgPaletteDock->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
-    m_wdgPaletteDock->bnRemove->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    m_wdgPaletteDock->bnAdd->setDefaultAction(m_actAdd.data());
+    m_wdgPaletteDock->bnRemove->setDefaultAction(m_actRemove.data());
+    m_wdgPaletteDock->bnRename->setDefaultAction(m_actModify.data());
+
+    // to make sure their icons have the same size
     m_wdgPaletteDock->bnRemove->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnRename->setIconSize(QSize(16, 16));
+    m_wdgPaletteDock->bnAdd->setIconSize(QSize(16, 16));
+
     m_wdgPaletteDock->bnAdd->setEnabled(false);
     m_wdgPaletteDock->bnRemove->setEnabled(false);
     // m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
@@ -79,15 +91,13 @@ PaletteDockerDock::PaletteDockerDock( )
     m_model = new KisPaletteModel(this);
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
-    connect(m_wdgPaletteDock->bnAdd, SIGNAL(clicked(bool)), this, SLOT(slotAddColor()));
-    connect(m_wdgPaletteDock->bnRemove, SIGNAL(clicked(bool)), this, SLOT(slotRemoveColor()));
-    connect(m_wdgPaletteDock->bnRename, SIGNAL(clicked(bool)), this, SLOT(slotEditEntry()));
-
+    connect(m_actAdd.data(), SIGNAL(triggered()), this, SLOT(slotAddColor()));
+    connect(m_actRemove.data(), SIGNAL(triggered()), this, SLOT(slotRemoveColor()));
+    connect(m_actModify.data(), SIGNAL(triggered()), this, SLOT(slotEditEntry()));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigEntrySelected(const KisSwatch &)),
             this, SLOT(slotSetForegroundColor(const KisSwatch &)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(const KisSwatch &)),
             this, SLOT(entrySelectedBack(const KisSwatch &)));
-
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
             this, SLOT(slotSetEntryByForeground(QModelIndex)));
 
@@ -316,10 +326,9 @@ void PaletteDockerDock::slotEditEntry()
 void PaletteDockerDock::slotImportPalette()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
-    dialog.setDefaultDir(m_activeColorSet->filename());
+    dialog.setDefaultDir(m_currentColorSet->filename());
     dialog.setMimeTypeFilters(QStringList() << "application/x-gimp-color-palette");
     QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
-    m_paletteChooser->
 }

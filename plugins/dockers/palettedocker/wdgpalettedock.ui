@@ -58,17 +58,6 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="4">
-      <widget class="QPushButton" name="bnRename">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="edit-rename">
-         <normaloff>.</normaloff>.</iconset>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="5">
       <widget class="QToolButton" name="bnRemove">
        <property name="toolTip">
@@ -119,6 +108,17 @@
       <widget class="KisPopupButton" name="bnColorSets">
        <property name="text">
         <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QToolButton" name="bnRename">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-rename">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>

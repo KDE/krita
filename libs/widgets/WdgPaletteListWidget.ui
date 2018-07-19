@@ -54,7 +54,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="bnAdd">
+       <widget class="QToolButton" name="bnAdd">
         <property name="icon">
          <iconset theme="add">
           <normaloff>.</normaloff>.</iconset>
@@ -62,7 +62,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bnEdit">
+       <widget class="QToolButton" name="bnEdit">
         <property name="icon">
          <iconset theme="edit">
           <normaloff>.</normaloff>.</iconset>
@@ -70,7 +70,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bnExport">
+       <widget class="QToolButton" name="bnExport">
         <property name="icon">
          <iconset theme="document-export">
           <normaloff>.</normaloff>.</iconset>
@@ -78,7 +78,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bnImport">
+       <widget class="QToolButton" name="bnImport">
         <property name="icon">
          <iconset theme="document-open">
           <normaloff>.</normaloff>.</iconset>
@@ -86,7 +86,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="bnRemove">
+       <widget class="QToolButton" name="bnRemove">
         <property name="icon">
          <iconset theme="list-remove">
           <normaloff>.</normaloff>.</iconset>

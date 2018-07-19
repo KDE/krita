@@ -26,6 +26,8 @@
 #include <QVector>
 #include <QPointer>
 #include <QPair>
+#include <QAction>
+#include <QMenu>
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerAdapter.h>
@@ -90,6 +92,13 @@ private:
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
     QVector<QPair<int, int> > m_indexList; // vector used to associate the name list to indexes
+
+    QSharedPointer<QAction> m_actAdd;
+    QSharedPointer<QAction> m_actAddWithDlg;
+    QSharedPointer<QAction> m_actSwitch;
+    QSharedPointer<QAction> m_actRemove;
+    QSharedPointer<QAction> m_actModify;
+    QMenu m_viewContextMenu;
 };
 
 

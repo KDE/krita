@@ -31,7 +31,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
-
+#include <kis_icon_utils.h>
 #include <KoDialog.h>
 
 #include "KisPaletteDelegate.h"
@@ -44,8 +44,6 @@ int KisPaletteView::MINROWHEIGHT = 10;
 struct KisPaletteView::Private
 {
     Private()
-        : model(Q_NULLPTR)
-        , allowPaletteModification(true)
     {
         entryClickedMenu.addAction("Add foreground color");
         entryClickedMenu.addAction("Choose a color to add");
@@ -53,22 +51,30 @@ struct KisPaletteView::Private
         entryClickedMenu.addAction("Switch with another spot");
         entryClickedMenu.addAction("Delete color");
     }
-    KisPaletteModel *model;
+    QPointer<KisPaletteModel> model;
     QMenu entryClickedMenu;
     bool allowPaletteModification;
+    QAction actAdd;
+    QAction actAddWithDlg;
+    QAction actModify;
+    QAction actSwitch;
+    QAction actRemove;
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
     , m_d(new Private)
 {
+    m_d->allowPaletteModification = true;
+
     setItemDelegate(new KisPaletteDelegate(this));
+
 
     setShowGrid(true);
     setDropIndicatorShown(true);
-
-    horizontalHeader()->setVisible(false);
-    verticalHeader()->setVisible(false);
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
+    setSelectionMode(QAbstractItemView::SingleSelection);
 
     /*
      * without this, a cycle might be created:
@@ -78,9 +84,9 @@ KisPaletteView::KisPaletteView(QWidget *parent)
      */
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    setSelectionMode(QAbstractItemView::SingleSelection);
-
     // set the size of swatches
+    horizontalHeader()->setVisible(false);
+    verticalHeader()->setVisible(false);
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     horizontalHeader()->setMinimumSectionSize(MINROWHEIGHT);
     horizontalHeader()->setMaximumSectionSize(MINROWHEIGHT);
@@ -91,14 +97,11 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotModifyEntry(QModelIndex)));
 
-    setDragEnabled(true);
-    setDragDropMode(QAbstractItemView::InternalMove);
-
-    // KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
-    //QPalette pal(palette());
-    //pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
-    //setAutoFillBackground(true);
-    //setPalette(pal);
+    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
+    QPalette pal(palette());
+    // pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
+    setAutoFillBackground(true);
+    setPalette(pal);
 
 }
 
@@ -286,26 +289,27 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 void KisPaletteView::modifyEntry(QModelIndex index)
 {
     if (m_d->allowPaletteModification) {
-        KoDialog *group = new KoDialog(this);
-        QFormLayout *editableItems = new QFormLayout(group);
-        group->mainWidget()->setLayout(editableItems);
-        QLineEdit *lnIDName = new QLineEdit(group);
-        QLineEdit *lnGroupName = new QLineEdit(group);
-        KisColorButton *bnColor = new KisColorButton(group);
-        QCheckBox *chkSpot = new QCheckBox(group);
+        KoDialog *dlg = new KoDialog();
+        QFormLayout *editableItems = new QFormLayout(dlg);
+        dlg->mainWidget()->setLayout(editableItems);
+        QLineEdit *lnIDName = new QLineEdit(dlg);
+        QLineEdit *lnGroupName = new QLineEdit(dlg);
+        KisColorButton *bnColor = new KisColorButton(dlg);
+        QCheckBox *chkSpot = new QCheckBox(dlg);
 
         if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
             QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
             editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
             lnGroupName->setText(groupName);
-            if (group->exec() == KoDialog::Accepted) {
+            if (dlg->exec() == KoDialog::Accepted) {
                 m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
                 m_d->model->colorSet()->save();
             }
             //rename the group.
         } else {
-            KisSwatch entry = m_d->model->colorSetEntryFromIndex(index);
-            QStringList entryList = qvariant_cast<QStringList>(index.data(KisPaletteModel::RetrieveEntryRole));
+            KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+            Q_ASSERT(group);
+            KisSwatch entry = group->getEntry(index.column(), index.row());
             chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
             editableItems->addRow(i18n("ID"), lnIDName);
             editableItems->addRow(i18n("Name"), lnGroupName);
@@ -315,7 +319,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
             lnIDName->setText(entry.id());
             bnColor->setColor(entry.color());
             chkSpot->setChecked(entry.spotColor());
-            if (group->exec() == KoDialog::Accepted) {
+            if (dlg->exec() == KoDialog::Accepted) {
                 entry.setName(lnGroupName->text());
                 entry.setId(lnIDName->text());
                 entry.setColor(bnColor->color());
@@ -324,6 +328,8 @@ void KisPaletteView::modifyEntry(QModelIndex index)
                 m_d->model->colorSet()->save();
             }
         }
+
+        delete dlg;
     }
     update(index);
 }

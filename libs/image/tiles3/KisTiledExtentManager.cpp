@@ -101,8 +101,8 @@ inline bool KisTiledExtentManager::Data::remove(qint32 index)
         if (m_buffer[currentIndex].load() == 1) {
             m_buffer[currentIndex].store(0);
 
-            if (m_min == index) updateMin();
-            if (m_max == index) updateMax();
+            if (m_min == index) updateMinOnRemove();
+            if (m_max == index) updateMaxOnRemove();
 
             --m_count;
             needsUpdateExtent = true;
@@ -234,7 +234,7 @@ void KisTiledExtentManager::Data::migrate(qint32 index)
     unsafeMigrate(index);
 }
 
-void KisTiledExtentManager::Data::updateMin()
+void KisTiledExtentManager::Data::updateMinOnRemove()
 {
     qint32 start = m_min + m_offset + 1;
 
@@ -248,7 +248,7 @@ void KisTiledExtentManager::Data::updateMin()
     }
 }
 
-void KisTiledExtentManager::Data::updateMax()
+void KisTiledExtentManager::Data::updateMaxOnRemove()
 {
     qint32 start = m_max + m_offset - 1;
 

@@ -51,8 +51,8 @@ class KRITAIMAGE_EXPORT KisTiledExtentManager
         inline void unsafeAdd(qint32 index);
         inline void unsafeMigrate(qint32 index);
         inline void migrate(qint32 index);
-        inline void updateMin();
-        inline void updateMax();
+        inline void updateMinOnRemove();
+        inline void updateMaxOnRemove();
 
     private:
         qint32 m_min;

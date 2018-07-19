@@ -12,13 +12,9 @@ set(SIP_INCLUDES
     ${PYQT_SIP_DIR_OVERRIDE}
      ./krita)
 
-if(${PYQT5_VERSION_STR} VERSION_GREATER "5.10.0")
-    set(SIP_NAME -n PyQt5.sip)
-endif()
-
 set(SIP_CONCAT_PARTS 1)
 set(SIP_TAGS ALL WS_X11 ${PYQT5_VERSION_TAG})
-set(SIP_EXTRA_OPTIONS -g -x PyKDE_QVector ${SIP_NAME})
+set(SIP_EXTRA_OPTIONS -g -x PyKDE_QVector ${PYQT5_SIP_NAME})
 
 set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${LIB_INSTALL_DIR}/krita-python-libs)
 file(GLOB PYKRITA_KRITA_sip_files ./krita/*.sip)

@@ -69,7 +69,7 @@ void TestResourceCacheDb::testLookupTables()
     QVERIFY(r);
     QVERIFY(query.lastError() == QSqlError());
     query.first();
-    QVERIFY(query.value(0).toInt() == KisResourceCacheDb::storageTypes.count());
+    QVERIFY(query.value(0).toInt() == 5);
 
     r = query.exec("SELECT COUNT(*) FROM resource_types");
     QVERIFY(r);

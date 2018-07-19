@@ -1,7 +1,6 @@
-SELECT id
+SELECT tags.id
 FROM   tags
-WHERE  url = :url
-AND    resource_type_id =
-    (SELECT resource_type_id
-     FROM   resource_types
-     WHERE  name = :resource_type);
+,      resource_types
+WHERE  tags.url = :url
+AND    resource_types.id = tags.resource_type_id
+AND    resource_types.name = :resource_type;

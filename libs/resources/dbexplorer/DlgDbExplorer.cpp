@@ -21,8 +21,10 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 
+#include <QDataWidgetMapper>
 #include <QTableView>
-#include <QtSql/QSqlTableModel>
+#include <QtSql>
+
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     : KoDialog(parent)
@@ -36,10 +38,52 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
     setMainWidget(m_page);
 
-    QSqlTableModel *storagesModel = new QSqlTableModel(this);
-    QSqlTableModel *tagsModel = new QSqlTableModel(this);
-    QSqlTableModel *resourcesModel = new QSqlTableModel(this);
-    QSqlTableModel *versionModel = new QSqlTableModel(this);
+    QSqlRelationalTableModel *storagesModel = new QSqlRelationalTableModel(this, QSqlDatabase::database());
+    storagesModel->setTable("storages");
+    storagesModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
+    storagesModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
+    storagesModel->setRelation(1, QSqlRelation("storage_types", "id", "name"));
+    storagesModel->setHeaderData(2, Qt::Horizontal, i18n("Location"));
+    storagesModel->setHeaderData(3, Qt::Horizontal, i18n("Creation Date"));
+    storagesModel->setHeaderData(4, Qt::Horizontal, i18n("Preinstalled"));
+    storagesModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
+    storagesModel->select();
+    m_page->tableStorages->setModel(storagesModel);
+    m_page->tableStorages->hideColumn(0);
+    m_page->tableStorages->setItemDelegate(new QSqlRelationalDelegate(m_page->tableStorages));
+    m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);;
+
+
+    QSqlTableModel *resourcesModel = new QSqlTableModel(this, QSqlDatabase::database());
+    resourcesModel->setTable("resources");
+    resourcesModel->select();
+    m_page->tableResources->setModel(resourcesModel);
+    m_page->tableResources->hideColumn(0);
+    m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
+
+    QSqlTableModel *tagsModel = new QSqlTableModel(this, QSqlDatabase::database());
+    tagsModel->setTable("tags");
+    tagsModel->select();
+    m_page->tableTags->setModel(tagsModel);
+    m_page->tableTags->hideColumn(0);
+    m_page->tableTags->setSelectionMode(QAbstractItemView::SingleSelection);;
+
+    {
+        QSqlTableModel *versionModel = new QSqlTableModel(this, QSqlDatabase::database());
+        versionModel->setTable("version_information");
+        versionModel->setHeaderData(0, Qt::Horizontal, "id");
+        versionModel->setHeaderData(1, Qt::Horizontal, "database_version");
+        versionModel->setHeaderData(2, Qt::Horizontal, "krita_version");
+        versionModel->setHeaderData(3, Qt::Horizontal, "creation_date");
+        versionModel->select();
+        QSqlRecord r = versionModel->record(0);
+
+        m_page->lblDatabaseVersion->setText(r.value("database_version").toString());
+        m_page->lblKritaVersion->setText(r.value("krita_version").toString());
+        m_page->lblCreationDate->setText(r.value("creation_date").toString());
+    }
+
+
 }
 
 DlgDbExplorer::~DlgDbExplorer()

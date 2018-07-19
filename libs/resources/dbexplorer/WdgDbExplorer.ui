@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>439</height>
+    <width>975</width>
+    <height>545</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -101,7 +101,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLabel" name="txtDatabaseVersion">
+        <widget class="QLabel" name="lblDatabaseVersion">
          <property name="text">
           <string>TextLabel</string>
          </property>
@@ -115,7 +115,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLabel" name="txtKritaVersion">
+        <widget class="QLabel" name="lblKritaVersion">
          <property name="text">
           <string>TextLabel</string>
          </property>
@@ -129,7 +129,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLabel" name="txtCreationDate">
+        <widget class="QLabel" name="lblCreationDate">
          <property name="text">
           <string>TextLabel</string>
          </property>

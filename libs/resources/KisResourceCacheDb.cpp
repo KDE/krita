@@ -770,7 +770,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                            "FROM   resources\n"
                            ",      resource_types\n"
                            "WHERE  resources.resource_type_id = resource_types.id\n"
-                           "AND    resource_types.name == :resource_type);")) {
+                           "AND    resource_types.name == :resource_type;")) {
                 qWarning() << "Could not prepare resource by type query" << q.lastError();
                 continue;
             }

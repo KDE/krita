@@ -56,7 +56,7 @@ public:
     QString name() const override { return m_tag ? m_tag->name() : QString(); }
     QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
 
-    KisTagSP tag() const
+    KisTagSP tag() const override
     {
         return m_tag;
     }

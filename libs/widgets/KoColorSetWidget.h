@@ -109,6 +109,7 @@ private Q_SLOTS:
      * Triggered when a color is choose from the palette view
      */
     void slotEntrySelected(const KisSwatch &);
+    void slotPaletteChoosen(KoColorSet *);
 
 private:
     Q_PRIVATE_SLOT(d, void addRemoveColors())

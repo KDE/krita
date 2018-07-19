@@ -104,6 +104,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_paletteChooser);
 
     connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(slotNameListSelection(int)));
+
     KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
     KoColorSet* defaultPalette = rServer->resourceByName(defaultPaletteName);

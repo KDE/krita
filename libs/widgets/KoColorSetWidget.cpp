@@ -20,7 +20,6 @@
 #include "KoColorSetWidget.h"
 #include "KoColorSetWidget_p.h"
 
-#include <QTimer>
 #include <QApplication>
 #include <QSize>
 #include <QToolButton>
@@ -52,25 +51,7 @@
 #include <kis_palette_view.h>
 #include <KisPaletteDelegate.h>
 #include <KisPaletteModel.h>
-
-void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
-{
-    if (colorSetContainer) {
-        delete colorSetContainer;
-    }
-    colorSetContainer = new QWidget();
-    colorSetLayout = new QVBoxLayout(colorSetContainer);
-    colorSetLayout->setMargin(3);
-    colorSetLayout->setSpacing(0); // otherwise the use can click where there is none
-    colorSetContainer->setBackgroundRole(QPalette::Dark);
-
-    colorSetContainer->setLayout(colorSetLayout);
-    colornames.clear();
-    colorNameCmb->clear();
-
-    connect(paletteView, SIGNAL(sigEntrySelected(KisSwatch)), thePublic, SLOT(slotEntrySelected(KisSwatch)));
-    connect(colorNameCmb, SIGNAL(activated(QString)), thePublic, SLOT(setColorFromString(QString)), Qt::UniqueConnection);
-}
+#include <kis_icon_utils.h>
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
 {
@@ -139,19 +120,12 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::activateRecent(int i)
 
 KoColorSetWidget::KoColorSetWidget(QWidget *parent)
    : QFrame(parent)
-    ,d(new KoColorSetWidgetPrivate())
+   , d(new KoColorSetWidgetPrivate())
 {
     d->thePublic = this;
 
-    d->firstShowOfContainer = true;
-
-    d->mainLayout = new QVBoxLayout(this);
-    d->mainLayout->setMargin(4);
-    d->mainLayout->setSpacing(2);
-
     d->numRecents = 0;
-    d->recentsLayout = new QHBoxLayout();
-    d->mainLayout->addLayout(d->recentsLayout);
+    d->recentsLayout = new QHBoxLayout;
     d->recentsLayout->setMargin(0);
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
@@ -162,10 +136,43 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->paletteView = new KisPaletteView(this);
     KisPaletteModel *paletteModel = new KisPaletteModel(d->paletteView);
-    paletteModel->setDisplayRenderer(d->displayRenderer);
     d->paletteView->setPaletteModel(paletteModel);
+    paletteModel->setDisplayRenderer(d->displayRenderer);
+
+    d->paletteChooser = new KisPaletteListWidget(this);
+    d->paletteChooserButton = new KisPopupButton(this);
+    d->paletteChooserButton->setPopupWidget(d->paletteChooser);
+    d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
+    d->paletteChooserButton->setToolTip(i18n("Choose palette"));
+
+    d->colorNameCmb = new QComboBox(this);
+    d->colorNameCmb->setEditable(true);
+    d->colorNameCmb->setInsertPolicy(QComboBox::NoInsert);
+
+    d->bottomLayout = new QHBoxLayout;
+    d->bottomLayout->addWidget(d->paletteChooserButton);
+    d->bottomLayout->addWidget(d->colorNameCmb);
+    d->bottomLayout->setStretch(0, 0); // minimize chooser button
+    d->bottomLayout->setStretch(1, 1); // maximize color name cmb
+
+    d->addRemoveButton = new QToolButton(this);
+    d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
+    d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    d->mainLayout = new QVBoxLayout(this);
+    d->mainLayout->setMargin(4);
+    d->mainLayout->setSpacing(2);
+    d->mainLayout->addLayout(d->recentsLayout);
     d->mainLayout->addWidget(d->paletteView);
+    d->mainLayout->addLayout(d->bottomLayout);
+    d->mainLayout->addWidget(d->addRemoveButton);
+
+    setLayout(d->mainLayout);
+
+    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotPaletteChoosen(KoColorSet*)));
     connect(d->paletteView, SIGNAL(sigEntrySelected(KisSwatch)), SLOT(slotEntrySelected(KisSwatch)));
+    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
+    connect(d->colorNameCmb, SIGNAL(activated(QString)), SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
     QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
@@ -173,21 +180,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
         defaultColorSet = d->rServer->resources().first();
     }
     setColorSet(defaultColorSet);
-
-    d->colorNameCmb = new QComboBox(this);
-    d->colorNameCmb->setEditable(true);
-    d->colorNameCmb->setInsertPolicy(QComboBox::NoInsert);
-    d->mainLayout->addWidget(d->colorNameCmb);
-
-    d->addRemoveButton = new QToolButton(this);
-    d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
-    d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
-    d->mainLayout->addWidget(d->addRemoveButton);
-
-    setLayout(d->mainLayout);
-
-    connect(d->colorNameCmb, SIGNAL(activated(QString)), SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 }
 
 KoColorSetWidget::~KoColorSetWidget()
@@ -240,7 +232,7 @@ void KoColorSetWidget::slotEntrySelected(const KisSwatch &entry)
 {
     emit colorChanged(entry.color(), true);
 
-    d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(entry.name()+"|Fixed")));
+    // d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(entry.name()+"|Fixed")));
 }
 
 void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
@@ -260,7 +252,13 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
         d->addRecent(patch->color());
     }
 
-    d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(patch->toolTip()+"|Fixed")));
+    // d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(patch->toolTip()+"|Fixed")));
+}
+
+void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)
+{
+    d->colorSet = colorSet;
+    d->paletteView->paletteModel()->setColorSet(colorSet);
 }
 
 //have to include this because of Q_PRIVATE_SLOT

@@ -41,6 +41,8 @@
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
 #include <KoResourceServer.h>
+#include <kis_popup_button.h>
+#include <KisPaletteListWidget.h>
 
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -52,27 +54,28 @@ class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
     QPointer<KoColorSet> colorSet;
-    QTimer m_timer;
-    QVBoxLayout *mainLayout;
-    bool firstShowOfContainer;
-    QWidget *colorSetContainer;
+
     KisPaletteView *paletteView;
+    KisPaletteListWidget *paletteChooser;
+    KisPopupButton *paletteChooserButton;
+
+    QVBoxLayout *mainLayout;
     QVBoxLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
+    QHBoxLayout *bottomLayout;
+
     KoColorPatch *recentPatches[6];
     QToolButton *addRemoveButton;
     QComboBox *colorNameCmb;
-    QStringList colornames;
     int numRecents;
+
+    const KoColorDisplayRendererInterface *displayRenderer;
+    KoResourceServer<KoColorSet> *rServer;
 
     void addRecent(const KoColor &);
     void activateRecent(int i);
-    void fillColors();
     void addRemoveColors();
     void setColorFromString(QString s);
-
-    const KoColorDisplayRendererInterface *displayRenderer;
-    KoResourceServer<KoColorSet>* rServer;
 };
 
 #endif

@@ -34,12 +34,29 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     , m_ui(new Ui_WdgPaletteListWidget)
     , m_d(new KisPaletteListWidgetPrivate(this))
 {
+    m_d->actAdd.reset(new QAction(KisIconUtils::loadIcon("list-add"),
+                                  i18n("Add a new palette")));
+    m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("list-remove"),
+                                     i18n("Remove current palette")));
+    m_d->actModify.reset(new QAction(KisIconUtils::loadIcon("edit-rename"),
+                                     i18n("Rename choosen palette")));
+    m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import"),
+                                     i18n("Import a new palette from file")));
+    m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export"),
+                                     i18n("Export current palette to file")));
+
     m_ui->setupUi(this);
-    m_ui->bnAdd->setIcon(KisIconUtils::loadIcon("list-add"));
-    m_ui->bnRemove->setIcon(KisIconUtils::loadIcon("list-remove"));
-    m_ui->bnEdit->setIcon(KisIconUtils::loadIcon("edit-rename"));
-    m_ui->bnImport->setIcon(KisIconUtils::loadIcon("document-import"));
-    m_ui->bnExport->setIcon(KisIconUtils::loadIcon("document-export"));
+    m_ui->bnAdd->setDefaultAction(m_d->actAdd.data());
+    m_ui->bnRemove->setDefaultAction(m_d->actRemove.data());
+    m_ui->bnEdit->setDefaultAction(m_d->actModify.data());
+    m_ui->bnImport->setDefaultAction(m_d->actImport.data());
+    m_ui->bnExport->setDefaultAction(m_d->actExport.data());
+
+    connect(m_d->actAdd.data(), SIGNAL(triggered()), SLOT(slotAdd()));
+    connect(m_d->actRemove.data(), SIGNAL(triggered()), SLOT(slotRemove()));
+    connect(m_d->actModify.data(), SIGNAL(triggered()), SLOT(slotModify()));
+    connect(m_d->actImport.data(), SIGNAL(triggered()), SLOT(slotImport()));
+    connect(m_d->actExport.data(), SIGNAL(triggered()), SLOT(slotExport()));
 
     m_d->itemChooser->setItemDelegate(m_d->delegate.data());
     m_d->itemChooser->setRowHeight(40); // set row height
@@ -57,3 +74,93 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
     emit sigPaletteSelected(static_cast<KoColorSet*>(r));
 }
+
+void KisPaletteListWidget::slotAdd()
+{
+
+}
+
+void KisPaletteListWidget::slotRemove()
+{
+
+}
+
+void KisPaletteListWidget::slotModify()
+{
+
+}
+
+void KisPaletteListWidget::slotImport()
+{
+
+}
+
+void KisPaletteListWidget::slotExport()
+{
+
+}
+
+/************************* KisPaletteListWidgetPrivate **********************/
+
+KisPaletteListWidgetPrivate::KisPaletteListWidgetPrivate(KisPaletteListWidget *a_c)
+    : c(a_c)
+    , rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
+    , itemChooser(new KoResourceItemChooser(rAdapter, a_c))
+    , model(new Model(rAdapter, a_c))
+    , delegate(new Delegate(a_c))
+{
+    itemChooser->showButtons(false);
+    model->setColumnCount(1);
+}
+
+KisPaletteListWidgetPrivate::~KisPaletteListWidgetPrivate()
+{  }
+
+/******************* KisPaletteListWidgetPrivate::Delegate ******************/
+
+KisPaletteListWidgetPrivate::Delegate::Delegate(QObject *parent)
+    : QAbstractItemDelegate(parent)
+{  }
+
+KisPaletteListWidgetPrivate::Delegate::~Delegate()
+{  }
+
+void KisPaletteListWidgetPrivate::Delegate::paint(QPainter * painter,
+                                                    const QStyleOptionViewItem & option,
+                                                    const QModelIndex & index) const
+{
+    painter->save();
+    if (!index.isValid())
+        return;
+
+    KoResource* resource = static_cast<KoResource*>(index.internalPointer());
+    KoColorSet* colorSet = static_cast<KoColorSet*>(resource);
+
+    QRect previewRect(option.rect.x() + 2,
+                      option.rect.y() + 2,
+                      option.rect.height() - 4,
+                      option.rect.height() - 4);
+
+    painter->drawImage(previewRect, colorSet->image());
+
+    if (option.state & QStyle::State_Selected) {
+        painter->fillRect(option.rect, option.palette.highlight());
+        painter->drawImage(previewRect, colorSet->image());
+        painter->setPen(option.palette.highlightedText().color());
+    } else {
+        painter->setBrush(option.palette.text().color());
+    }
+    painter->drawText(option.rect.x() + previewRect.width() + 10,
+                      option.rect.y() + painter->fontMetrics().ascent() + 5,
+                      colorSet->name());
+
+    painter->restore();
+}
+
+inline QSize KisPaletteListWidgetPrivate::Delegate::sizeHint(const QStyleOptionViewItem & option,
+                                                               const QModelIndex &) const
+{
+    return option.decorationSize;
+}
+
+

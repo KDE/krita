@@ -21,8 +21,15 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+private:
+
 private Q_SLOTS:
     void slotPaletteResourceSelected(KoResource *);
+    void slotAdd();
+    void slotRemove();
+    void slotModify();
+    void slotImport();
+    void slotExport();
 
 private:
     QScopedPointer<Ui_WdgPaletteListWidget> m_ui;

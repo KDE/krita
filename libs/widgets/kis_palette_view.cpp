@@ -192,7 +192,7 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
     if (!color_set)
         return;
     //also don't select if the color is the same as the current selection
-    if (selectedIndexes().size()>0) {
+    if (selectedIndexes().size() > 0) {
         QModelIndex currentI = currentIndex();
         if (!currentI.isValid()) {
             currentI = selectedIndexes().last();
@@ -263,27 +263,6 @@ void KisPaletteView::setAllowModification(bool allow)
 void KisPaletteView::wheelEvent(QWheelEvent *event)
 {
     QTableView::wheelEvent(event);
-    /*
-    if (event->modifiers() & Qt::ControlModifier) {
-        int numDegrees = event->delta() / 8;
-        int numSteps = numDegrees / 7;
-        int curSize = horizontalHeader()->sectionSize(0);
-        int setSize = numSteps + curSize;
-
-       if ( (event->delta() <= 0) && (setSize <= 8) ) {
-           // Ignore scroll-zooming down below a certain size
-       } else {
-           horizontalHeader()->setDefaultSectionSize(setSize);
-           verticalHeader()->setDefaultSectionSize(setSize);
-           KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
-           cfg.writeEntry("paletteDockerPaletteViewSectionSize", setSize);
-       }
-
-        event->accept();
-    } else {
-        QTableView::wheelEvent(event);
-    }
-    */
 }
 
 void KisPaletteView::modifyEntry(QModelIndex index)

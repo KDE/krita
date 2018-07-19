@@ -257,7 +257,6 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
     QSqlRelationalTableModel *tagsModel = new TagModel(this, QSqlDatabase::database());
     tagsModel->setTable("tags");
-    tagsModel->select();
     tagsModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
     tagsModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
     tagsModel->setRelation(1, QSqlRelation("resource_types", "id", "name"));
@@ -265,6 +264,7 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     tagsModel->setHeaderData(3, Qt::Horizontal, i18n("Name"));
     tagsModel->setHeaderData(4, Qt::Horizontal, i18n("Comment"));
     tagsModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
+    tagsModel->select();
 
     m_page->tableTags->setModel(tagsModel);
     m_page->tableTags->hideColumn(0);

@@ -41,6 +41,9 @@ KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
     , d(new Private(this))
 {
+    if (!filename.isEmpty()) {
+        setValid(true);
+    }
 }
 
 /// Create an copied palette

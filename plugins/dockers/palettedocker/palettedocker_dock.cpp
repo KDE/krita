@@ -96,8 +96,6 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_actModify.data(), SIGNAL(triggered()), this, SLOT(slotEditEntry()));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigEntrySelected(const KisSwatch &)),
             this, SLOT(slotSetForegroundColor(const KisSwatch &)));
-    connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(const KisSwatch &)),
-            this, SLOT(entrySelectedBack(const KisSwatch &)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
             this, SLOT(slotSetEntryByForeground(QModelIndex)));
 

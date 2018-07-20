@@ -99,11 +99,6 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
             this, SLOT(slotSetEntryByForeground(QModelIndex)));
 
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
-    m_serverAdapter->connectToResourceServer();
-    rServer->addObserver(this);
-
     m_paletteChooser = new KisPaletteListWidget(this);
     connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetColorSet(KoColorSet*)));
 
@@ -115,6 +110,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
     KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     KoColorSet* defaultPalette = rServer->resourceByName(defaultPaletteName);
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
@@ -123,9 +119,6 @@ PaletteDockerDock::PaletteDockerDock( )
 
 PaletteDockerDock::~PaletteDockerDock()
 {
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    rServer->removeObserver(this);
-
     if (m_currentColorSet) {
         KisConfig cfg(true);
         cfg.setDefaultPalette(m_currentColorSet->name());
@@ -163,30 +156,8 @@ void PaletteDockerDock::unsetCanvas()
     m_canvas = 0;
 }
 
-void PaletteDockerDock::unsetResourceServer()
-{
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    rServer->removeObserver(this);
-}
-
-void PaletteDockerDock::removingResource(KoColorSet *resource)
-{
-    if (resource == m_currentColorSet) {
-        slotSetColorSet(0);
-    }
-}
-
-void PaletteDockerDock::resourceChanged(KoColorSet *resource)
-{
-    slotSetColorSet(resource);
-}
-
-
 void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
 {
-    if (!colorSet) {
-        return;
-    }
     m_currentColorSet = colorSet;
     m_model->setColorSet(colorSet);
     m_wdgPaletteDock->bnColorSets->setText(colorSet->name());
@@ -249,7 +220,7 @@ void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
 
 void PaletteDockerDock::slotNameListSelection(int index)
 {
-    /*
+/*
     if (m_model && m_currentColorSet) {
         KisPaletteView *view = m_wdgPaletteDock->paletteView;
         view->blockSignals(true);

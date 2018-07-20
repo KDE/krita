@@ -25,199 +25,7 @@
 #include <QTableView>
 #include <QtSql>
 
-class StorageDelegate : public QSqlRelationalDelegate
-{
-    Q_OBJECT
-public:
-    StorageDelegate(QObject *parent)
-        : QSqlRelationalDelegate(parent)
-    {}
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const override
-    {
-        QStyleOptionViewItem viewItemOption(option);
-        // Only do this if we are accessing the column with boolean variables.
-        if (index.column() == 4 || index.column() == 5) {
-            // This basically changes the rectangle in which the check box is drawn.
-            const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-            QRect newRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
-                                                QSize(option.decorationSize.width() +
-                                                      5,option.decorationSize.height()),
-                                                QRect(option.rect.x() + textMargin, option.rect.y(),
-                                                      option.rect.width() -
-                                                      (2 * textMargin), option.rect.height()));
-            viewItemOption.rect = newRect;
-        }
-        // Draw the check box using the new rectangle.
-        QSqlRelationalDelegate::paint(painter, viewItemOption, index);
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const override
-    {
-        return QSqlRelationalDelegate::sizeHint(option, index);
-    }
-
-    bool editorEvent(QEvent */*event*/, QAbstractItemModel */*model*/,
-                     const QStyleOptionViewItem &/*option*/,
-                     const QModelIndex &/*index*/) override
-    {
-        return false;
-    }
-
-    QWidget *createEditor(QWidget */*parent*/, const QStyleOptionViewItem &/*option*/,
-                          const QModelIndex &/*index*/) const override
-    {
-        return nullptr;
-    }
-};
-
-class StorageModel : public QSqlRelationalTableModel
-{
-public:
-    StorageModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase())
-        : QSqlRelationalTableModel(parent, db)
-    {}
-
-    ~StorageModel() override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-};
-
-StorageModel::~StorageModel()
-{
-}
-
-Qt::ItemFlags StorageModel::flags(const QModelIndex &index) const
-{
-    Qt::ItemFlags f = QSqlRelationalTableModel::flags((index));
-    if (index.column() == 4 || index.column() == 5) {
-        f |= Qt::ItemIsUserCheckable;
-    }
-    return f;
-}
-
-QVariant StorageModel::data(const QModelIndex &index, int role) const
-{
-    QVariant d = QSqlRelationalTableModel::data(index, Qt::DisplayRole);
-    if (role == Qt::DisplayRole) {
-        if (index.column() == 3) {
-            d = QVariant::fromValue<QString>(QDateTime::fromSecsSinceEpoch(d.toInt()).toString());
-        }
-        if (index.column() == 4 || index.column() == 5) {
-            return QVariant();
-        }
-    }
-    else if (role == Qt::CheckStateRole) {
-        if (index.column() == 4 || index.column() == 5) {
-            if (d.toInt() == 0) {
-                return Qt::Unchecked;
-            }
-            else {
-                return Qt::Checked;
-            }
-        }
-        return QVariant();
-    }
-    return d;
-}
-
-class TagDelegate : public QSqlRelationalDelegate
-{
-    Q_OBJECT
-public:
-    TagDelegate(QObject *parent)
-        : QSqlRelationalDelegate(parent)
-    {}
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const override
-    {
-        QStyleOptionViewItem viewItemOption(option);
-        // Only do this if we are accessing the column with boolean variables.
-        if (index.column() == 5) {
-            // This basically changes the rectangle in which the check box is drawn.
-            const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-            QRect newRect = QStyle::alignedRect(option.direction, Qt::AlignCenter,
-                                                QSize(option.decorationSize.width() +
-                                                      5,option.decorationSize.height()),
-                                                QRect(option.rect.x() + textMargin, option.rect.y(),
-                                                      option.rect.width() -
-                                                      (2 * textMargin), option.rect.height()));
-            viewItemOption.rect = newRect;
-        }
-        // Draw the check box using the new rectangle.
-        QSqlRelationalDelegate::paint(painter, viewItemOption, index);
-    }
-
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const override
-    {
-        return QSqlRelationalDelegate::sizeHint(option, index);
-    }
-
-    bool editorEvent(QEvent */*event*/, QAbstractItemModel */*model*/,
-                     const QStyleOptionViewItem &/*option*/,
-                     const QModelIndex &/*index*/) override
-    {
-        return false;
-    }
-
-    QWidget *createEditor(QWidget */*parent*/, const QStyleOptionViewItem &/*option*/,
-                          const QModelIndex &/*index*/) const override
-    {
-        return nullptr;
-    }
-};
-
-
-class TagModel : public QSqlRelationalTableModel
-{
-public:
-    TagModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase())
-        : QSqlRelationalTableModel(parent, db)
-    {}
-
-    ~TagModel() override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-};
-
-TagModel::~TagModel()
-{
-}
-
-Qt::ItemFlags TagModel::flags(const QModelIndex &index) const
-{
-    Qt::ItemFlags f = QSqlRelationalTableModel::flags((index));
-    if (index.column() == 5) {
-        f |= Qt::ItemIsUserCheckable;
-    }
-    return f;
-}
-
-QVariant TagModel::data(const QModelIndex &index, int role) const
-{
-    QVariant d = QSqlRelationalTableModel::data(index, Qt::DisplayRole);
-    if (role == Qt::DisplayRole) {
-        if (index.column() == 5) {
-            return QVariant();
-        }
-    }
-    else if (role == Qt::CheckStateRole) {
-        if (index.column() == 5) {
-            if (d.toInt() == 0) {
-                return Qt::Unchecked;
-            }
-            else {
-                return Qt::Checked;
-            }
-        }
-        return QVariant();
-    }
-    return d;
-}
+#include <TableModel.h>
 
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
@@ -232,45 +40,64 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 
     setMainWidget(m_page);
 
-    QSqlRelationalTableModel *storagesModel = new StorageModel(this, QSqlDatabase::database());
-    storagesModel->setTable("storages");
-    storagesModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
-    storagesModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
-    storagesModel->setRelation(1, QSqlRelation("storage_types", "id", "name"));
-    storagesModel->setHeaderData(2, Qt::Horizontal, i18n("Location"));
-    storagesModel->setHeaderData(3, Qt::Horizontal, i18n("Creation Date"));
-    storagesModel->setHeaderData(4, Qt::Horizontal, i18n("Preinstalled"));
-    storagesModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
-    storagesModel->select();
-    m_page->tableStorages->setModel(storagesModel);
-    m_page->tableStorages->hideColumn(0);
-    m_page->tableStorages->setItemDelegate(new StorageDelegate(m_page->tableStorages));
-    m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);;
-    m_page->tableStorages->resizeColumnsToContents();
+    {
+        TableModel *storagesModel = new TableModel(this, QSqlDatabase::database());
+        TableDelegate *storagesDelegate = new TableDelegate(m_page->tableStorages);
+        storagesModel->setTable("storages");
+        storagesModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
+        storagesModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
+        storagesModel->setRelation(1, QSqlRelation("storage_types", "id", "name"));
+        storagesModel->setHeaderData(2, Qt::Horizontal, i18n("Location"));
+        storagesModel->setHeaderData(3, Qt::Horizontal, i18n("Creation Date"));
+        storagesModel->addDateTimeColumn(3);
+        storagesDelegate->addDateTimeColumn(3);
+        storagesModel->setHeaderData(4, Qt::Horizontal, i18n("Preinstalled"));
+        storagesModel->addBooleanColumn(4);
+        storagesDelegate->addBooleanColumn(4);
+        storagesModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
+        storagesModel->addBooleanColumn(5);
+        storagesDelegate->addBooleanColumn(5);
+        storagesModel->select();
+        m_page->tableStorages->setModel(storagesModel);
+        m_page->tableStorages->hideColumn(0);
+        m_page->tableStorages->setItemDelegate(storagesDelegate);
+        m_page->tableStorages->setSelectionMode(QAbstractItemView::SingleSelection);;
+        m_page->tableStorages->resizeColumnsToContents();
+    }
 
-    QSqlTableModel *resourcesModel = new QSqlTableModel(this, QSqlDatabase::database());
-    resourcesModel->setTable("resources");
-    resourcesModel->select();
-    m_page->tableResources->setModel(resourcesModel);
-    m_page->tableResources->hideColumn(0);
-    m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
+    {
+        TableModel *resourcesModel = new TableModel(this, QSqlDatabase::database());
+        TableDelegate *resourcesDelegate = new TableDelegate(m_page->tableStorages);
+        resourcesModel->setTable("resources");
+        resourcesModel->select();
+        m_page->tableResources->setModel(resourcesModel);
+        m_page->tableResources->setItemDelegate(resourcesDelegate);
+        m_page->tableResources->hideColumn(0);
+        m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
+    }
 
-    QSqlRelationalTableModel *tagsModel = new TagModel(this, QSqlDatabase::database());
-    tagsModel->setTable("tags");
-    tagsModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
-    tagsModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
-    tagsModel->setRelation(1, QSqlRelation("resource_types", "id", "name"));
-    tagsModel->setHeaderData(2, Qt::Horizontal, i18n("Tag"));
-    tagsModel->setHeaderData(3, Qt::Horizontal, i18n("Name"));
-    tagsModel->setHeaderData(4, Qt::Horizontal, i18n("Comment"));
-    tagsModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
-    tagsModel->select();
+    {
+        TableModel *tagsModel = new TableModel(this, QSqlDatabase::database());
+        TableDelegate *tagsDelegate = new TableDelegate(m_page->tableStorages);
+        tagsDelegate->setEditable(true);
+        tagsModel->setTable("tags");
+        tagsModel->setHeaderData(0, Qt::Horizontal, i18n("Id"));
+        tagsModel->setHeaderData(1, Qt::Horizontal, i18n("Type"));
+        tagsModel->setRelation(1, QSqlRelation("resource_types", "id", "name"));
+        tagsModel->setHeaderData(2, Qt::Horizontal, i18n("Tag"));
+        tagsModel->setHeaderData(3, Qt::Horizontal, i18n("Name"));
+        tagsModel->setHeaderData(4, Qt::Horizontal, i18n("Comment"));
+        tagsModel->setHeaderData(5, Qt::Horizontal, i18n("Active"));
+        tagsModel->addBooleanColumn(5);
+        tagsDelegate->addBooleanColumn(5);
+        tagsModel->select();
 
-    m_page->tableTags->setModel(tagsModel);
-    m_page->tableTags->hideColumn(0);
-    m_page->tableTags->setItemDelegate(new TagDelegate(m_page->tableTags));
-    m_page->tableTags->setSelectionMode(QAbstractItemView::SingleSelection);
-    m_page->tableTags->resizeColumnsToContents();
+        m_page->tableTags->setModel(tagsModel);
+        m_page->tableTags->hideColumn(0);
+        m_page->tableTags->setItemDelegate(tagsDelegate);
+        m_page->tableTags->setSelectionMode(QAbstractItemView::SingleSelection);
+        m_page->tableTags->resizeColumnsToContents();
+    }
 
     {
         QSqlTableModel *versionModel = new QSqlTableModel(this, QSqlDatabase::database());
@@ -293,5 +120,3 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
 DlgDbExplorer::~DlgDbExplorer()
 {
 }
-
-#include "DlgDbExplorer.moc"

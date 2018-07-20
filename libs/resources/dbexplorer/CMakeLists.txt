@@ -1,6 +1,7 @@
 set(kritadbexplorer_SOURCES 
     DbExplorer.cpp 
     DlgDbExplorer.cpp       
+    TableModel.cpp
 )
 
 ki18n_wrap_ui(kritadbexplorer_SOURCES WdgDbExplorer.ui )

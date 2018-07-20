@@ -184,6 +184,9 @@ void PaletteDockerDock::resourceChanged(KoColorSet *resource)
 
 void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
 {
+    if (!colorSet) {
+        return;
+    }
     m_currentColorSet = colorSet;
     m_model->setColorSet(colorSet);
     m_wdgPaletteDock->bnColorSets->setText(colorSet->name());

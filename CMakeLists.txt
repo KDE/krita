@@ -48,6 +48,9 @@ if (POLICY CMP0064)
     cmake_policy(SET CMP0064 OLD)
 endif()
 
+if (POLICY CMP0071)
+    cmake_policy(SET CMP0071 OLD)
+endif()
 
 if (APPLE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
@@ -180,6 +183,9 @@ option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
 option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
+
+option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
+add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
 include(MacroJPEG)
 

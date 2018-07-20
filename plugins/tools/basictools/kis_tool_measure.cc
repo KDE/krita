@@ -35,6 +35,7 @@
 #include "KoPointerEvent.h"
 #include "KoCanvasBase.h"
 #include <KoViewConverter.h>
+#include "krita_utils.h"
 
 #define INNER_RADIUS 50
 
@@ -77,7 +78,7 @@ void KisToolMeasureOptionsWidget::slotSetDistance(double distance)
 
 void KisToolMeasureOptionsWidget::slotSetAngle(double angle)
 {
-    m_angleLabel->setText(QString(i18nc("angle value in degrees", "%1°")).arg(angle, 5, 'f', 1));
+    m_angleLabel->setText(i18nc("angle value in degrees", "%1°", KritaUtils::prettyFormatReal(angle)));
 }
 
 void KisToolMeasureOptionsWidget::slotUnitChanged(int index)

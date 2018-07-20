@@ -41,10 +41,11 @@
 #include "kis_processing_information.h"
 #include "kis_selection.h"
 #include "kis_types.h"
+#include <filter/kis_filter_category_ids.h>
 #include "filter/kis_color_transformation_configuration.h"
 
 KisLevelFilter::KisLevelFilter()
-        : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels..."))
+        : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Levels..."))
 {
     setShortcut(QKeySequence(Qt::CTRL + Qt::Key_L));
     setSupportsPainting(false);

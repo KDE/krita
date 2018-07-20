@@ -33,6 +33,7 @@
 #include <kis_image.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
@@ -56,7 +57,7 @@ FastColorTransferPlugin::~FastColorTransferPlugin()
 {
 }
 
-KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), categoryColors(), i18n("&Color Transfer..."))
+KisFilterFastColorTransfer::KisFilterFastColorTransfer() : KisFilter(id(), FiltersCategoryColorId, i18n("&Color Transfer..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsThreading(false);

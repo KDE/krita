@@ -453,6 +453,10 @@ void KMainWindow::closeEvent(QCloseEvent *e)
     }
 
     if (queryClose()) {
+        // widgets will start destroying themselves at this point and we don't
+        // want to save state anymore after this as it might be incorrect
+        d->autoSaveSettings = false;
+        d->letDirtySettings = false;
         e->accept();
     } else {
         e->ignore();    //if the window should not be closed, don't close it

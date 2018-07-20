@@ -181,7 +181,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     if (paintopID.isEmpty())
         return 0;
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID, ""));
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID));
     QMapIterator<QString, QVariant> i(getProperties());
     while (i.hasNext()) {
         i.next();

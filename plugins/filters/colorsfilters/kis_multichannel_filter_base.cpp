@@ -42,6 +42,7 @@
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_config_widget.h"
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -52,7 +53,7 @@
 #include "widgets/kis_curve_widget.h"
 
 KisMultiChannelFilter::KisMultiChannelFilter(const KoID& id, const QString &entry)
-        : KisColorTransformationFilter(id, categoryAdjust(), entry)
+        : KisColorTransformationFilter(id, FiltersCategoryAdjustId, entry)
 {
     setSupportsPainting(true);
     setColorSpaceIndependence(TO_LAB16);

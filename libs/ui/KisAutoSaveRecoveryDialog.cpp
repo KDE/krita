@@ -212,7 +212,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
         KoStore* store = KoStore::createStore(path, KoStore::Read);
 
         if (store) {
-            if(store->open(QString("Thumbnails/thumbnail.png"))
+            if (store->open(QString("Thumbnails/thumbnail.png"))
                || store->open(QString("preview.png"))) {
                 // Hooray! No long delay for the user...
                 QByteArray bytes = store->read(store->size());

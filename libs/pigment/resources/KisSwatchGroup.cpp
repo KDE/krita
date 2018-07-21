@@ -112,7 +112,9 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
             if (++x == m_colorMatrix.size()) {
                 x = 0;
                 y++;
-                m_rowCount++;
+                if (y == m_rowCount) {
+                    m_rowCount++;
+                }
             }
             // else just add it to the right
             setEntry(e, x, y);
@@ -141,7 +143,7 @@ QList<KisSwatchGroup::SwatchInfo> KisSwatchGroup::infoList() const
     for (const Column &c : m_colorMatrix) {
         int row = 0;
         for (const KisSwatch &s : c.values()) {
-            SwatchInfo i = {s, column, c.keys()[row++]};
+            SwatchInfo i = {s, c.keys()[row++], column};
             res.append(i);
         }
         column++;

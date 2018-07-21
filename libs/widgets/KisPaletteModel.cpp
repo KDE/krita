@@ -31,9 +31,9 @@
 #include <KoColorDisplayRendererInterface.h>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
-    : QAbstractTableModel(parent),
-      m_colorSet(0),
-      m_displayRenderer(KoDumbColorDisplayRenderer::instance())
+    : QAbstractTableModel(parent)
+    , m_colorSet(0)
+    , m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
 }
 
@@ -65,48 +65,11 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     // row is set to infinity when it's group name row
     bool groupNameRow = index.row() == Q_INFINITY;
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    QString groupName = group->name();
     if (groupNameRow) {
-        switch (role) {
-        case Qt::ToolTipRole:
-        case Qt::DisplayRole: {
-            return groupName;
-        }
-        case IsHeaderRole: {
-            return true;
-        }
-        case CheckSlotRole: {
-            return true;
-        }
-        }
+        return dataForGroupNameRow(index, role);
     } else {
-        bool entryPresent = m_colorSet->getGroup(groupName)->checkEntry(index.column(), index.row());
-        KisSwatch entry;
-        if (entryPresent) {
-             entry = m_colorSet->getColorGroup(index.column(), index.row(), groupName);
-        }
-        switch (role) {
-        case Qt::ToolTipRole:
-        case Qt::DisplayRole: {
-            return entryPresent ? entry.name() : i18n("Empty slot");
-        }
-        case Qt::BackgroundRole: {
-            QColor color(0, 0, 0, 0);
-            if (entryPresent) {
-                color = m_displayRenderer->toQColor(entry.color());
-            }
-            return QBrush(color);
-        }
-        case IsHeaderRole: {
-            return false;
-        }
-        case CheckSlotRole: {
-            return entryPresent;
-        }
-        }
+        return dataForSwatch(index, role);
     }
-    return QVariant();
 }
 
 int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
@@ -132,9 +95,11 @@ int KisPaletteModel::columnCount(const QModelIndex& /*parent*/) const
 Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 {
     if (index.isValid()) {
-        return Qt::ItemIsSelectable | Qt::ItemIsEnabled
-                | Qt::ItemIsUserCheckable
-                | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        return  Qt::ItemIsSelectable |
+                Qt::ItemIsEnabled |
+                Qt::ItemIsUserCheckable |
+                Qt::ItemIsDragEnabled |
+                Qt::ItemIsDropEnabled;
     }
     return Qt::ItemIsDropEnabled;
 }
@@ -276,7 +241,7 @@ bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
 
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
-    if (qvariant_cast<bool>(data(index, IsHeaderRole))==false) {
+    if (qvariant_cast<bool>(data(index, IsGroupNameRole))==false) {
         static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(), index.row());
     } else {
         QString groupName = static_cast<KisSwatchGroup*>(index.internalPointer())->name();
@@ -370,7 +335,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             }
 
             QModelIndex index = this->index(endRow, endColumn);
-            if (qvariant_cast<bool>(index.data(IsHeaderRole))){
+            if (qvariant_cast<bool>(index.data(IsGroupNameRole))){
                 endRow+=1;
             }
             if (index.isValid()) {
@@ -410,7 +375,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
                 int location = entryInGroup.toInt();
                 // Insert the entry
-                if (groupName==oldGroupName && qvariant_cast<bool>(index.data(IsHeaderRole))==true) {
+                if (groupName==oldGroupName && qvariant_cast<bool>(index.data(IsGroupNameRole))==true) {
                     groupName=QString();
                     location=m_colorSet->nColorsGroup();
                 }
@@ -455,7 +420,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
     //Q_FOREACH(const QModelIndex &index, indexes) {
     QModelIndex index = indexes.last();
     if (index.isValid()) {
-        if (qvariant_cast<bool>(index.data(IsHeaderRole))==false) {
+        if (qvariant_cast<bool>(index.data(IsGroupNameRole))==false) {
             KoColorSetEntry entry = colorSetEntryFromIndex(index);
             QStringList entryList = qvariant_cast<QStringList>(index.data(RetrieveEntryRole));
             QString groupName = QString();
@@ -511,4 +476,59 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), index.row());
     emit dataChanged(index, index);
+}
+
+QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) const
+{
+    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
+    Q_ASSERT(group);
+    QString groupName = group->name();
+    switch (role) {
+    case Qt::ToolTipRole:
+    case Qt::DisplayRole: {
+        return groupName;
+    }
+    case IsGroupNameRole: {
+        return true;
+    }
+    case CheckSlotRole: {
+        return true;
+    }
+    default: {
+        return QVariant();
+    }
+    }
+}
+
+QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
+{
+    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
+    Q_ASSERT(group);
+    bool entryPresent = group->checkEntry(idx.column(), idx.row());
+    KisSwatch entry;
+    if (entryPresent) {
+        entry = group->getEntry(idx.column(), idx.row());
+    }
+    switch (role) {
+    case Qt::ToolTipRole:
+    case Qt::DisplayRole: {
+        return entryPresent ? entry.name() : i18n("Empty slot");
+    }
+    case Qt::BackgroundRole: {
+        QColor color(0, 0, 0, 0);
+        if (entryPresent) {
+            color = m_displayRenderer->toQColor(entry.color());
+        }
+        return QBrush(color);
+    }
+    case IsGroupNameRole: {
+        return false;
+    }
+    case CheckSlotRole: {
+        return entryPresent;
+    }
+    default: {
+        return QVariant();
+    }
+    }
 }

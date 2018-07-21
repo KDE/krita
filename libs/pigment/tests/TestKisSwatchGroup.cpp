@@ -92,6 +92,12 @@ void TestKisSwatchGroup::testAddEntry()
     QCOMPARE(g2.rowCount(), 1);
     QCOMPARE(g2.columnCount(), 3);
     QCOMPARE(g2.colorCount(), 3);
+    for (int i = 0; i != 4; i++) {
+        g2.addEntry(KisSwatch());
+    }
+    QCOMPARE(g2.rowCount(), 3);
+    QCOMPARE(g2.columnCount(), 3);
+    QCOMPARE(g2.colorCount(), 7);
 }
 
 QTEST_GUILESS_MAIN(TestKisSwatchGroup)

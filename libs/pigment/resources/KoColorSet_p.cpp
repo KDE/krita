@@ -257,11 +257,9 @@ bool KoColorSet::Private::init()
     QImage img(global().columnCount() * 4, global().rowCount() * 4, QImage::Format_ARGB32);
     QPainter gc(&img);
     gc.fillRect(img.rect(), Qt::darkGray);
-    for (int x = 0; x < global().columnCount(); x++) {
-        for (int y = 0; y < global().rowCount(); y++) {
-            QColor c = global().getEntry(x, y).color().toQColor();
-            gc.fillRect(x * 4, y * 4, 4, 4, c);
-        }
+    for (const KisSwatchGroup::SwatchInfo &info : global().infoList()) {
+        QColor c = info.swatch.color().toQColor();
+        gc.fillRect(info.column * 4, info.row * 4, 4, 4, c);
     }
     colorSet->setImage(img);
 

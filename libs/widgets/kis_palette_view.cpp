@@ -165,7 +165,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
     bool keepColors = true;
-    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
         KoDialog *window = new KoDialog();
         window->setWindowTitle(i18nc("@title:window","Removing Group"));
         QFormLayout *editableItems = new QFormLayout();
@@ -226,7 +226,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 
     QModelIndex index = currentIndex();
 
-    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole)) == false) {
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
         bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
         if (slotEmpty) {
             emit sigSetEntry(index);
@@ -276,7 +276,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         KisColorButton *bnColor = new KisColorButton(dlg);
         QCheckBox *chkSpot = new QCheckBox(dlg);
 
-        if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+        if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
             QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
             editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
             lnGroupName->setText(groupName);

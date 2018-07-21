@@ -46,7 +46,7 @@ void KisPaletteDelegate::paint(QPainter *painter,
     const bool isSelected = option.state & QStyle::State_Selected;
     const int borderWidth = 3;
 
-    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsHeaderRole))) {
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
         QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());

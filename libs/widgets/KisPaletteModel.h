@@ -33,7 +33,9 @@ class KoColorSet;
 
 /**
  * @brief The KisPaletteModel class
- * This, together with kis_palette_view and kis_palette_delegate forms a mvc way to access kocolorsets.
+ * This, together with KisPaletteView and KisPaletteDelegate forms a mvc way to access kocolorsets.
+ * A display renderer is given to this model to convert KoColor to QColor when
+ * colors are requested
  */
 class KRITAWIDGETS_EXPORT KisPaletteModel : public QAbstractTableModel
 {
@@ -43,7 +45,7 @@ public:
     ~KisPaletteModel() override;
 
     enum AdditionalRoles {
-        IsHeaderRole       = Qt::UserRole + 1,
+        IsGroupNameRole       = Qt::UserRole + 1,
         RetrieveEntryRole  = Qt::UserRole + 3,
         CheckSlotRole = Qt::UserRole + 4
     };
@@ -156,6 +158,8 @@ private Q_SLOTS:
     void slotDisplayConfigurationChanged();
 
 private /* methods */:
+    QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;
+    QVariant dataForSwatch(const QModelIndex &idx, int role) const;
 
 private /* member variables */:
     QPointer<KoColorSet> m_colorSet;

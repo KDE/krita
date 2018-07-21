@@ -48,7 +48,45 @@ public:
         CheckSlotRole = Qt::UserRole + 4
     };
 
+public /* overriden methods */: // QAbstractTableModel
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    /**
+     * @brief index
+     * @param row
+     * @param column
+     * @param parent
+     * @return the index of for the data at row, column
+     * if the data is a color entry, the internal pointer points to the group
+     * the entry belongs to, and the row and column are row number and column
+     * number inside the group.
+     * if the data is a group, the row number and group number is Q_INFINIFY,
+     * and the internal pointer also points to the group
+     */
+    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+    /**
+     * @brief dropMimeData
+     * This is an overridden function that handles dropped mimedata.
+     * right now only colorsetentries and colorsetgroups are handled.
+     * @return
+     */
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+                      int row, int column, const QModelIndex &parent) override;
+    /**
+     * @brief mimeData
+     * gives the mimedata for a kocolorsetentry or a kocolorsetgroup.
+     * @param indexes
+     * @return the mimedata for the given indices
+     */
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+
+    QStringList mimeTypes() const override;
+
+    Qt::DropActions supportedDropActions() const override;
     /**
      * @brief setData
      * setData is not used as KoColor is not a QVariant
@@ -56,6 +94,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
      */
 
+public /* methods */:
     /**
      * @brief addEntry
      * proper function to handle adding entries.
@@ -75,24 +114,6 @@ public:
      * @return if successful
      */
     bool removeEntry(QModelIndex index, bool keepColors=true);
-
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
-    /**
-     * @brief index
-     * @param row
-     * @param column
-     * @param parent
-     * @return the index of for the data at row, column
-     * if the data is a color entry, the internal pointer points to the group
-     * the entry belongs to, and the row and column are row number and column
-     * number inside the group.
-     * if the data is a group, the row number and group number is Q_INFINIFY,
-     * and the internal pointer also points to the group
-     */
-    QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
     void setColorSet(KoColorSet* colorSet);
     KoColorSet* colorSet() const;
@@ -129,35 +150,14 @@ public:
      */
     KisSwatch colorSetEntryFromIndex(const QModelIndex &index) const;
 
-    /**
-     * @brief dropMimeData
-     * This is an overridden function that handles dropped mimedata.
-     * right now only colorsetentries and colorsetgroups are handled.
-     * @return
-     */
-    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
-                      int row, int column, const QModelIndex &parent) override;
-    /**
-     * @brief mimeData
-     * gives the mimedata for a kocolorsetentry or a kocolorsetgroup.
-     * @param indexes
-     * @return the mimedata for the given indices
-     */
-    QMimeData *mimeData(const QModelIndexList &indexes) const override;
-
-    QStringList mimeTypes() const override;
-
-    Qt::DropActions supportedDropActions() const override;
-
 public Q_SLOTS:
 
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
 
-private:
-    QModelIndex getLastEntryIndex();
+private /* methods */:
 
-private:
+private /* member variables */:
     QPointer<KoColorSet> m_colorSet;
     QPointer<const KoColorDisplayRendererInterface> m_displayRenderer;
 };

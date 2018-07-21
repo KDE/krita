@@ -41,24 +41,35 @@
  */
 class KRITAPIGMENT_EXPORT KisSwatchGroup
 {
-private:
-    static quint32 DEFAULT_N_COLUMN;
+private /* static variables */:
+    static quint32 DEFAULT_COLUMN_COUNT;
+    static quint32 DEFAULT_ROW_COUNT;
 
-private:
+private /* typedef */:
     typedef QMap<int, KisSwatch> Column;
 
-public:
+public /* struct */:
+    struct SwatchInfo {
+        KisSwatch swatch;
+        int row;
+        int column;
+    };
+
+public /* methods */:
     KisSwatchGroup();
 
     void setName(const QString &name) { m_name = name; }
     QString name() const { return m_name; }
 
-    void setColumnCount(int nColumns);
+    void setColumnCount(int columnCount);
     int columnCount() const { return m_colorMatrix.size(); }
 
-    int rowCount() const;
-    int colorCount() const { return m_nColors; }
-    QList<KisSwatch> colors() const;
+    void setRowCount(int newRowCount);
+    int rowCount() const { return m_rowCount; }
+
+    int colorCount() const { return m_colorCount; }
+
+    QList<SwatchInfo> infoList() const;
 
     /**
      * @brief checkEntry
@@ -109,10 +120,11 @@ public:
 
     void clear() { m_colorMatrix.clear(); }
 
-private:
+private /* member variables */:
     QString m_name;
     QVector<Column> m_colorMatrix;
-    int m_nColors;
+    int m_colorCount;
+    int m_rowCount;
 };
 
 #endif // KISSWATCHGROUP_H

@@ -81,6 +81,7 @@ void KisPaletteListWidget::slotAdd()
 {
     KoColorSet *newColorSet = new KoColorSet("new palette");
     m_d->rAdapter->addResource(newColorSet);
+    m_d->itemChooser->setCurrentResource(newColorSet);
 }
 
 void KisPaletteListWidget::slotRemove()

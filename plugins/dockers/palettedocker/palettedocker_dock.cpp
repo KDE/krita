@@ -148,7 +148,6 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     m_canvas = static_cast<KisCanvas2*>(canvas);
 }
 
-
 void PaletteDockerDock::unsetCanvas()
 {
     setEnabled(false);

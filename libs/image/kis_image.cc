@@ -205,6 +205,7 @@ public:
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
+    KisSelectionMaskSP targetOverlaySelectionMask; // the overlay switching stroke will try to switch into this mask
     KisSelectionMaskSP overlaySelectionMask;
     QList<KisLayerCompositionSP> compositions;
     KisNodeSP isolatedRootNode;
@@ -395,10 +396,11 @@ void KisImage::invalidateAllFrames()
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 {
-    struct SetOverlaySelectionStroke : public KisSimpleStrokeStrategy {
-        SetOverlaySelectionStroke(KisSelectionMaskSP mask, KisImageSP image)
-            : KisSimpleStrokeStrategy("set-overlay-selection-mask", kundo2_noi18n("set-overlay-selection-mask")),
-              m_mask(mask),
+    m_d->targetOverlaySelectionMask = mask;
+
+    struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {
+        UpdateOverlaySelectionStroke(KisImageSP image)
+            : KisSimpleStrokeStrategy("update-overlay-selection-mask", kundo2_noi18n("update-overlay-selection-mask")),
               m_image(image)
         {
             this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
@@ -407,13 +409,14 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 
         void initStrokeCallback() {
             KisSelectionMaskSP oldMask = m_image->m_d->overlaySelectionMask;
-            if (oldMask == m_mask) return;
+            KisSelectionMaskSP newMask = m_image->m_d->targetOverlaySelectionMask;
+            if (oldMask == newMask) return;
 
-            KIS_SAFE_ASSERT_RECOVER_RETURN(!m_mask || m_mask->graphListener() == m_image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!newMask || newMask->graphListener() == m_image);
 
-            m_image->m_d->overlaySelectionMask = m_mask;
+            m_image->m_d->overlaySelectionMask = newMask;
 
-            if (oldMask || m_mask) {
+            if (oldMask || newMask) {
                 m_image->m_d->rootLayer->notifyChildMaskChanged();
             }
 
@@ -421,19 +424,18 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
                 m_image->m_d->rootLayer->setDirty(oldMask->extent());
             }
 
-            if (m_mask) {
-                m_mask->setDirty();
+            if (newMask) {
+                newMask->setDirty();
             }
 
             m_image->undoAdapter()->emitSelectionChanged();
         }
 
     private:
-        KisSelectionMaskSP m_mask;
         KisImageSP m_image;
     };
 
-    KisStrokeId id = startStroke(new SetOverlaySelectionStroke(mask, this));
+    KisStrokeId id = startStroke(new UpdateOverlaySelectionStroke(this));
     endStroke(id);
 }
 

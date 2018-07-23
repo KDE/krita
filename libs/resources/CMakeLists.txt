@@ -17,6 +17,8 @@ set(kritaresources_LIB_SRCS
     KisTag.cpp
 
     KoResource.cpp
+    KoResourceBundle.cpp
+    KoResourceBundleManifest.cpp
     KoMD5Generator.cpp
     KoHashGeneratorProvider.cpp
     KoResourcePaths.cpp
@@ -41,6 +43,7 @@ target_link_libraries(kritaresources
         kritaversion
         kritaglobal
         kritaplugin
+        kritastore
         KF5::ConfigCore
         KF5::CoreAddons
         KF5::I18n

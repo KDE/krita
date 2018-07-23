@@ -36,6 +36,7 @@
 #include <KisImportExportManager.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
+#include <KoResourceServerProvider.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -70,6 +71,7 @@
 #include <kis_filter_configuration.h>
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
+#include <KoColorSet.h>
 
 #include "KisDocument.h"
 #include "kis_config.h"
@@ -360,6 +362,24 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
     }
 
+    for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+        QDomElement e = child.toElement();
+        if (e.tagName() == PALETTES) {
+            QList<const KoColorSet*> paletteList;
+            for (QDomElement paletteElement = e.lastChildElement();
+                 !paletteElement.isNull();
+                 paletteElement = paletteElement.previousSiblingElement()) {
+                QString paletteName = paletteElement.attribute("filename");
+                KoColorSet* palette = new KoColorSet(paletteName);
+                palette->setName(paletteElement.attribute("name"));
+                paletteList.append(palette);
+            }
+            m_d->document->setPaletteList(paletteList);
+            break;
+        }
+    }
+
+
     return image;
 }
 
@@ -484,6 +504,19 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
     loadAssistants(store, uri, external);
+}
+
+void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
+{
+    KoResourceServer<KoColorSet> *pServer = KoResourceServerProvider::instance()->paletteServer();
+    for (const KoColorSet *palette : doc->paletteList()) {
+        KoColorSet *newPalette = new KoColorSet(palette->name());
+        QByteArray data = store->read(Q_INFINITY);
+        newPalette->fromByteArray(data);
+        delete palette;
+        palette = newPalette;
+        pServer->addResource(newPalette);
+    }
 }
 
 vKisNodeSP KisKraLoader::selectedNodes() const

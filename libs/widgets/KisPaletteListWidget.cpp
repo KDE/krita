@@ -85,7 +85,6 @@ void KisPaletteListWidget::slotAdd()
     m_d->rAdapter->addResource(newColorSet);
     m_d->itemChooser->setCurrentResource(newColorSet);
 
-    qDebug () << "emitting list changed sig";
     emit sigPaletteListChanged();
 }
 

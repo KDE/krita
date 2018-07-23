@@ -135,6 +135,13 @@ QByteArray KoColorSet::toByteArray() const
     return res;
 }
 
+bool KoColorSet::fromByteArray(QByteArray &data)
+{
+    QBuffer buf(&data);
+    buf.open(QIODevice::ReadOnly);
+    return loadFromDevice(&buf);
+}
+
 KoColorSet::PaletteType KoColorSet::paletteType() const
 {
     return d->paletteType;

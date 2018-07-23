@@ -100,6 +100,7 @@ public /* methods */:
     void setIsGlobal(bool);
 
     QByteArray toByteArray() const;
+    bool fromByteArray(QByteArray &data);
 
     /**
      * @brief add Add a color to the palette.

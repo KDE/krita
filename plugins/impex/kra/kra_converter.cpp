@@ -334,6 +334,7 @@ bool KraConverter::completeLoading(KoStore* store)
     m_image->blockUpdates();
 
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
+    m_kraLoader->loadPalettes(store, m_doc);
 
     m_image->unblockUpdates();
 

@@ -149,7 +149,6 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 
 bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &uri)
 {
-    qDebug() << "saving palettes";
     bool res = false;
     KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     for (const KoResource *palette : rServer->resources()) {

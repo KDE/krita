@@ -123,11 +123,9 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
 
 QByteArray KoColorSet::toByteArray() const
 {
-    // only GPL temporarily
     QBuffer s;
     s.open(QIODevice::WriteOnly);
-    warnPigment << "toByteArray";
-    if (!d->saveGpl(&s)) {
+    if (!saveToDevice(&s)) {
         return QByteArray();
     }
     s.close();

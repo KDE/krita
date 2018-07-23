@@ -1,3 +1,21 @@
+/*
+ *  Copyright (c) 2018 Andrey Kamakin <a.kamakin@icloud.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #ifndef KIS_TILEHASHTABLE_2_H
 #define KIS_TILEHASHTABLE_2_H
 
@@ -125,6 +143,7 @@ private:
 
     inline void insert(quint32 key, TileTypeSP value)
     {
+        QReadLocker l(&m_iteratorLock);
         TileTypeSP::ref(&value, value.data());
         TileType *result = m_map.assign(key, value.data());
 
@@ -160,6 +179,7 @@ private:
      * otherwise there will be concurrent read/writes, resulting in broken memory.
      */
     QReadWriteLock m_defaultPixelDataLock;
+    QReadWriteLock m_iteratorLock;
 
     QAtomicInt m_numTiles;
     KisTileData *m_defaultTileData;
@@ -176,7 +196,13 @@ public:
 
     KisTileHashTableIteratorTraits2(KisTileHashTableTraits2<T> *ht) : m_ht(ht)
     {
+        m_ht->m_iteratorLock.lockForWrite();
         m_iter.setMap(m_ht->m_map);
+    }
+
+    ~KisTileHashTableIteratorTraits2()
+    {
+        m_ht->m_iteratorLock.unlock();
     }
 
     void next()
@@ -224,7 +250,9 @@ KisTileHashTableTraits2<T>::KisTileHashTableTraits2(const KisTileHashTableTraits
     : KisTileHashTableTraits2(mm)
 {
     setDefaultTileData(ht.m_defaultTileData);
+    QWriteLocker l(const_cast<QReadWriteLock *>(&ht.m_iteratorLock));
     typename ConcurrentMap<quint32, TileType*>::Iterator iter(const_cast<ConcurrentMap<quint32, TileType*> &>(ht.m_map));
+
     while (iter.isValid()) {
         insert(iter.getKey(), iter.getValue());
         iter.next();
@@ -257,6 +285,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getE
 template <class T>
 typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getTileLazy(qint32 col, qint32 row, bool &newTile)
 {
+    QReadLocker l(&m_iteratorLock);
     newTile = false;
     TileTypeSP tile;
     quint32 idx = calculateHash(col, row);
@@ -325,7 +354,9 @@ bool KisTileHashTableTraits2<T>::deleteTile(qint32 col, qint32 row)
 template<class T>
 void KisTileHashTableTraits2<T>::clear()
 {
+    QWriteLocker l(&m_iteratorLock);
     typename ConcurrentMap<quint32, TileType*>::Iterator iter(m_map);
+
     while (iter.isValid()) {
         erase(iter.getKey());
         iter.next();

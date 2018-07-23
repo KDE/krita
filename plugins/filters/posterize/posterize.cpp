@@ -32,6 +32,7 @@
 #include <kis_types.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 
@@ -51,7 +52,7 @@ Posterize::~Posterize()
 {
 }
 
-KisFilterPosterize::KisFilterPosterize() : KisColorTransformationFilter(id(), categoryArtistic(), i18n("&Posterize..."))
+KisFilterPosterize::KisFilterPosterize() : KisColorTransformationFilter(id(), FiltersCategoryArtisticId, i18n("&Posterize..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

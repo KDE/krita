@@ -614,6 +614,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     file.setDirectWriteFallback(true);
 
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
+        m_document->setErrorMessage(file.errorString());
         file.cancelWriting();
         return KisImportExportFilter::CreationError;
     }
@@ -626,6 +627,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
             file.cancelWriting();
         } else {
             if (!file.commit()) {
+                m_document->setErrorMessage(file.errorString());
                 status = KisImportExportFilter::CreationError;
             }
         }

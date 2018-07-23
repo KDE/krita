@@ -29,12 +29,13 @@
 #include <widgets/kis_multi_double_filter_widget.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 #include <kis_paint_device.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include "kis_global.h"
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-    : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
+    : KisFilter(id(), FiltersCategoryEnhanceId, i18n("&Wavelet Noise Reducer..."))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);

@@ -26,6 +26,7 @@
 #include <KoUpdater.h>
 #include <KoCompositeOps.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include "kis_filter_configuration.h"
 #include <kis_filter_registry.h>
 
@@ -51,7 +52,7 @@ KritaHalftone::~KritaHalftone()
 }
 
 KisHalftoneFilter::KisHalftoneFilter()
-    : KisFilter(id(), categoryArtistic(), i18n("&Halftone..."))
+    : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Halftone..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 

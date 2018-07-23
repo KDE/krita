@@ -45,13 +45,14 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 #include <kis_types.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_paint_device.h>
 #include "widgets/kis_multi_integer_filter_widget.h"
 
 
-KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Oilpaint..."))
+KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Oilpaint..."))
 {
     setSupportsPainting(true);
     setSupportsThreading(false);

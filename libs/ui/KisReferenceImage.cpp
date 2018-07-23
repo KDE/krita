@@ -32,10 +32,9 @@
 #include <kis_dom_utils.h>
 #include <SvgUtil.h>
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
+#include <libs/brush/kis_qimage_pyramid.h>
 
 struct KisReferenceImage::Private {
-    KisReferenceImage *q;
-
     // Filename within .kra (for embedding)
     QString internalFilename;
 
@@ -44,14 +43,11 @@ struct KisReferenceImage::Private {
 
     QImage image;
     QImage cachedImage;
+    KisQImagePyramid mipmap;
 
     qreal saturation{1.0};
     int id{-1};
     bool embed{true};
-
-    explicit Private(KisReferenceImage *q)
-        : q(q)
-    {}
 
     bool loadFromFile() {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!externalFilename.isEmpty(), false);
@@ -70,6 +66,8 @@ struct KisReferenceImage::Private {
         } else {
             cachedImage = image;
         }
+
+        mipmap = KisQImagePyramid(cachedImage);
     }
 };
 
@@ -110,7 +108,7 @@ void KisReferenceImage::SetSaturationCommand::redo()
 }
 
 KisReferenceImage::KisReferenceImage()
-    : d(new Private(this))
+    : d(new Private())
 {
     setKeepAspectRatio(true);
 }
@@ -161,10 +159,14 @@ void KisReferenceImage::paint(QPainter &gc, const KoViewConverter &converter, Ko
         d->updateCache();
     }
 
-    gc.setRenderHint(QPainter::SmoothPixmapTransform);
+    qreal scale;
+    QImage prescaled = d->mipmap.getClosest(gc.transform() * transform, &scale);
+    transform.scale(1.0 / scale, 1.0 / scale);
+
+    gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     gc.setClipRect(QRectF(QPointF(), shapeSize), Qt::IntersectClip);
     gc.setTransform(transform, true);
-    gc.drawImage(QPoint(), d->cachedImage);
+    gc.drawImage(QPoint(), prescaled);
 
     gc.restore();
 }

@@ -396,6 +396,8 @@ void KisImage::invalidateAllFrames()
 
 void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
 {
+    if (m_d->targetOverlaySelectionMask == mask) return;
+
     m_d->targetOverlaySelectionMask = mask;
 
     struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {

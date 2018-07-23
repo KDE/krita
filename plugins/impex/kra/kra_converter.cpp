@@ -134,6 +134,10 @@ KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
     if (!result) {
         qWarning() << "saving binary data failed";
     }
+    result = m_kraSaver->savePalettes(m_store, m_image, m_doc->url().toLocalFile());
+    if (!result) {
+        qWarning() << "saving palettes data failed";
+    }
 
     if (!m_store->finalize()) {
         return KisImageBuilder_RESULT_FAILURE;

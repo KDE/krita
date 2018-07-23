@@ -41,26 +41,6 @@ KisPaletteModel::~KisPaletteModel()
 {
 }
 
-void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
-{
-    if (displayRenderer) {
-        if (m_displayRenderer) {
-            disconnect(m_displayRenderer, 0, this, 0);
-        }
-        m_displayRenderer = displayRenderer;
-        connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
-                SLOT(slotDisplayConfigurationChanged()));
-    } else {
-        m_displayRenderer = KoDumbColorDisplayRenderer::instance();
-    }
-}
-
-void KisPaletteModel::slotDisplayConfigurationChanged()
-{
-    beginResetModel();
-    endResetModel();
-}
-
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     // row is set to infinity when it's group name row
@@ -531,4 +511,24 @@ QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
         return QVariant();
     }
     }
+}
+
+void KisPaletteModel::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer) {
+        if (m_displayRenderer) {
+            disconnect(m_displayRenderer, 0, this, 0);
+        }
+        m_displayRenderer = displayRenderer;
+        connect(m_displayRenderer, SIGNAL(displayConfigurationChanged()),
+                SLOT(slotDisplayConfigurationChanged()));
+    } else {
+        m_displayRenderer = KoDumbColorDisplayRenderer::instance();
+    }
+}
+
+void KisPaletteModel::slotDisplayConfigurationChanged()
+{
+    beginResetModel();
+    endResetModel();
 }

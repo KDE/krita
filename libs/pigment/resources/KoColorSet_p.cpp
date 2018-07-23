@@ -194,6 +194,7 @@ quint16 readShort(QIODevice *io) {
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
+    , isGlobal(true)
 {
     groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
     groupNames.append(GLOBAL_GROUP_NAME);

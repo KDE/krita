@@ -44,6 +44,8 @@ public:
 
     bool saveBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external, bool includeMerge);
 
+    bool savePalettes(KoStore *store, KisImageSP image, const QString &uri);
+
     /// @return a list with everything that went wrong while saving
     QStringList errorMessages() const;
 

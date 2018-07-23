@@ -79,7 +79,9 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 
 void KisPaletteListWidget::slotAdd()
 {
-    KoColorSet *newColorSet = new KoColorSet("new palette");
+    KoColorSet *newColorSet = new KoColorSet("New palette");
+    newColorSet->setPaletteType(KoColorSet::GPL);
+    newColorSet->setIsGlobal(false);
     m_d->rAdapter->addResource(newColorSet);
     m_d->itemChooser->setCurrentResource(newColorSet);
 }
@@ -114,7 +116,7 @@ KisPaletteListWidgetPrivate::KisPaletteListWidgetPrivate(KisPaletteListWidget *a
     , itemChooser(new KoResourceItemChooser(rAdapter, a_c))
     , model(new Model(rAdapter, a_c))
     , delegate(new Delegate(a_c))
-{ }
+{  }
 
 KisPaletteListWidgetPrivate::~KisPaletteListWidgetPrivate()
 {  }

@@ -37,13 +37,14 @@
 #include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
 
+// #include "PaletteListSaver.h"
+
 class KisViewManager;
 class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class KisPaletteListWidget;
 class KisPaletteModel;
 class Ui_WdgPaletteDock;
-
 
 class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver
 {
@@ -75,10 +76,23 @@ private Q_SLOTS:
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 
-private:
+private /* methods */:
     void resetNameList(const KoColorSet *colorSet);
 
-private:    
+private /* friends */:
+    /**
+     * @brief PaletteListSaver
+     * saves non-global palette list to KisDocument.
+     * Actually, this should be implemented in
+     * KisPaletteListWidget, but that class is in the
+     * library kritawidgets, while KisDocument is in
+     * kritaui, which depends on kritawidgets...
+     *
+     * Hope one day kritaui can finally be cleaned up...
+     */
+    friend class PaletteListSaver;
+
+private /* member variables */:
     Ui_WdgPaletteDock* m_wdgPaletteDock;
     KisPaletteModel *m_model;
     KoColorSet *m_currentColorSet;

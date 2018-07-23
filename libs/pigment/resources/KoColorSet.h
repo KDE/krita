@@ -31,6 +31,7 @@
 #include "KisSwatchGroup.h"
 
 /**
+ * Also called palette.
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
@@ -60,30 +61,46 @@ public:
      */
     explicit KoColorSet(const QString &filename = QString());
 
-    /// Explicit copy constructor (KoResource copy constructor is private)
+    // Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
 
+public /* overridden methods */: // KoResource
     ~KoColorSet() override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
-
     QString defaultFileExtension() const override;
 
+
+public /* methods */:
     void setColumnCount(int columns);
     int columnCount() const;
-    int rowCount() const;
-    /**
-     * @brief comment
-     * @return the comment.
-     */
-    QString comment();
 
     void setComment(QString comment);
+    QString comment();
 
-public:
+    int rowCount() const;
+    quint32 colorCount() const;
+
+    PaletteType paletteType() const;
+    void setPaletteType(PaletteType paletteType);
+
+    /**
+     * @brief isGlobal
+     * A global color set is a set stored in the config directory
+     * Such a color set would be opened every time Krita is launched.
+     *
+     * A non-global color set, on contrary, would be stored in a kra file,
+     * and would only be opened when that file is opened by Krita.
+     * @return
+     */
+    bool isGlobal() const;
+    void setIsGlobal(bool);
+
+    QByteArray toByteArray() const;
+
     /**
      * @brief add Add a color to the palette.
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
@@ -124,11 +141,6 @@ public:
 
     bool changeGroupName(QString oldGroupName, QString newGroupName);
 
-    /**
-     * @brief nColors
-     * @return total colors in palette.
-     */
-    quint32 colorCount() const;
 
     /**
      * @brief addGroup

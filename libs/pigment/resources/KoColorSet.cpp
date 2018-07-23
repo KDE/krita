@@ -27,6 +27,7 @@
 #include <QTextCodec>
 #include <QHash>
 #include <QStringList>
+#include <QBuffer>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -89,15 +90,19 @@ bool KoColorSet::loadFromDevice(QIODevice *dev)
 
 bool KoColorSet::save()
 {
-    /*
-    QFile file(filename());
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
+    if (d->isGlobal) {
+        // save to resource dir
+        /*
+        QFile file(filename());
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            return false;
+        }
+        saveToDevice(&file);
+        file.close();
+        */
+        return true;
     }
-    saveToDevice(&file);
-    file.close();
-    */
-    return true;
+    return true; // is not global
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
@@ -115,6 +120,33 @@ bool KoColorSet::saveToDevice(QIODevice *dev) const
     }
     return res;
 }
+
+QByteArray KoColorSet::toByteArray() const
+{
+    // only GPL temporarily
+    QBuffer s;
+    s.open(QIODevice::WriteOnly);
+    warnPigment << "toByteArray";
+    if (!d->saveGpl(&s)) {
+        return QByteArray();
+    }
+    s.close();
+    s.open(QIODevice::ReadOnly);
+    QByteArray res = s.readAll();
+    s.close();
+    return res;
+}
+
+KoColorSet::PaletteType KoColorSet::paletteType() const
+{
+    return d->paletteType;
+}
+
+void KoColorSet::setPaletteType(PaletteType paletteType)
+{
+    d->paletteType = paletteType;
+}
+
 
 quint32 KoColorSet::colorCount() const
 {
@@ -322,6 +354,16 @@ KisSwatchGroup *KoColorSet::getGroup(const QString &name)
         return Q_NULLPTR;
     }
     return &(d->groups[name]);
+}
+
+bool KoColorSet::isGlobal() const
+{
+    return d->isGlobal;
+}
+
+void KoColorSet::setIsGlobal(bool isGlobal)
+{
+    d->isGlobal = isGlobal;
 }
 
 /*

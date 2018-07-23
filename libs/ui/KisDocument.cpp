@@ -331,6 +331,8 @@ public:
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
+    QList<KoColorSet*> paletteList;
+
     KisGridConfig gridConfig;
 
     StdLockableWrapper<QMutex> savingLock;
@@ -1475,6 +1477,16 @@ KisGridConfig KisDocument::gridConfig() const
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
     d->gridConfig = config;
+}
+
+const QList<KoColorSet*> &KisDocument::paletteList() const
+{
+    return d->paletteList;
+}
+
+void KisDocument::setPaletteList(const QList<KoColorSet*> &paletteList)
+{
+    d->paletteList = paletteList;
 }
 
 const KisGuidesConfig& KisDocument::guidesConfig() const

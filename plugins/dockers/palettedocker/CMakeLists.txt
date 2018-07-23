@@ -1,4 +1,6 @@
-set(KRITA_PALETTEDOCKER_SOURCES palettedocker.cpp palettedocker_dock.cpp )
+set(KRITA_PALETTEDOCKER_SOURCES
+    palettedocker.cpp palettedocker_dock.cpp
+    )
 
 ki18n_wrap_ui(KRITA_PALETTEDOCKER_SOURCES
     wdgpalettedock.ui

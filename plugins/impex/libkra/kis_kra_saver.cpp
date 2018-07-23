@@ -26,6 +26,7 @@
 #include <QDomElement>
 #include <QString>
 #include <QStringList>
+#include <QScopedPointer>
 
 #include <QUrl>
 #include <QBuffer>
@@ -35,6 +36,9 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoColorSet.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
@@ -141,6 +145,27 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     imageElement.appendChild(animationElement);
 
     return imageElement;
+}
+
+bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &uri)
+{
+    qDebug() << "saving palettes";
+    bool res = false;
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    for (const KoResource *palette : rServer->resources()) {
+        const KoColorSet *colorSet = static_cast<const KoColorSet*>(palette);
+        if (!colorSet) { continue; }
+        if (!colorSet->isGlobal()) {
+            if (!store->open(colorSet->name())) {
+                m_d->errorMessages << i18n("could not save palettes");
+                return false;
+            }
+            store->write(colorSet->toByteArray());
+            store->close();
+            res = true;
+        }
+    }
+    return res;
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)

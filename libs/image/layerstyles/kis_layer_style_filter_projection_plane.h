@@ -30,6 +30,7 @@ class KisLayerStyleFilterProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
     KisLayerStyleFilterProjectionPlane(KisLayer *sourceLayer);
+    KisLayerStyleFilterProjectionPlane(const KisLayerStyleFilterProjectionPlane &rhs, KisLayer *sourceLayer, KisPSDLayerStyleSP clonedStyle);
     ~KisLayerStyleFilterProjectionPlane() override;
 
     void setStyle(KisLayerStyleFilter *filter, KisPSDLayerStyleSP style);
@@ -47,5 +48,8 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+typedef QSharedPointer<KisLayerStyleFilterProjectionPlane> KisLayerStyleFilterProjectionPlaneSP;
+typedef QWeakPointer<KisLayerStyleFilterProjectionPlane> KisLayerStyleFilterProjectionPlaneWSP;
 
 #endif /* __KIS_LAYER_STYLE_FILTER_PROJECTION_PLANE_H */

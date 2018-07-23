@@ -38,6 +38,7 @@
 #include "KoBasicHistogramProducers.h"
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -85,7 +86,7 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 
-KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Auto Contrast"))
+KisAutoContrast::KisAutoContrast() : KisFilter(id(), FiltersCategoryAdjustId, i18n("&Auto Contrast"))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);

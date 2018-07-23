@@ -63,8 +63,10 @@ PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
     , m_wdgPaletteDock(new Ui_WdgPaletteDock())
     , m_currentColorSet(0)
+    , m_view(0)
     , m_resourceProvider(0)
     , m_canvas(0)
+    , m_saver(new PaletteListSaver(this))
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add foreground color")))
     , m_actAddWithDlg(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Choose a color to add")))
     , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
@@ -91,22 +93,22 @@ PaletteDockerDock::PaletteDockerDock( )
     m_model = new KisPaletteModel(this);
     m_wdgPaletteDock->paletteView->setPaletteModel(m_model);
 
-    connect(m_actAdd.data(), SIGNAL(triggered()), this, SLOT(slotAddColor()));
-    connect(m_actRemove.data(), SIGNAL(triggered()), this, SLOT(slotRemoveColor()));
-    connect(m_actModify.data(), SIGNAL(triggered()), this, SLOT(slotEditEntry()));
+    connect(m_actAdd.data(), SIGNAL(triggered()), SLOT(slotAddColor()));
+    connect(m_actRemove.data(), SIGNAL(triggered()), SLOT(slotRemoveColor()));
+    connect(m_actModify.data(), SIGNAL(triggered()), SLOT(slotEditEntry()));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigEntrySelected(const KisSwatch &)),
-            this, SLOT(slotSetForegroundColor(const KisSwatch &)));
+            SLOT(slotSetForegroundColor(const KisSwatch &)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
-            this, SLOT(slotSetEntryByForeground(QModelIndex)));
+            SLOT(slotSetEntryByForeground(QModelIndex)));
 
     m_paletteChooser = new KisPaletteListWidget(this);
-    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetColorSet(KoColorSet*)));
+    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
 
     m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
     m_wdgPaletteDock->bnColorSets->setPopupWidget(m_paletteChooser);
 
-    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(slotNameListSelection(int)));
+    connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), SLOT(slotNameListSelection(int)));
 
     KisConfig cfg(true);
     QString defaultPaletteName = cfg.defaultPalette();
@@ -115,6 +117,8 @@ PaletteDockerDock::PaletteDockerDock( )
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
     }
+
+    connect(m_paletteChooser, SIGNAL(sigPaletteListChanged()), m_saver.data(), SLOT(slotSetPaletteList()));
 }
 
 PaletteDockerDock::~PaletteDockerDock()
@@ -124,12 +128,12 @@ PaletteDockerDock::~PaletteDockerDock()
         cfg.setDefaultPalette(m_currentColorSet->name());
     }
 
-    delete m_wdgPaletteDock->paletteView->itemDelegate();
     delete m_wdgPaletteDock;
 }
 
 void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
+    m_view = kisview;
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));

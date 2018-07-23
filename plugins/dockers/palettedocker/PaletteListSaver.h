@@ -2,7 +2,8 @@
 #define PALETTELISTSAVER_H
 
 #include <QObject>
-#include <palettedocker_dock.h>
+
+class PaletteDockerDock;
 
 class PaletteListSaver : public QObject
 {
@@ -10,8 +11,8 @@ class PaletteListSaver : public QObject
 public:
     PaletteListSaver(PaletteDockerDock *dockerDock, QObject *parent = Q_NULLPTR);
 
-public Q_SLOTS:
-    slotSetPaletteList();
+private Q_SLOTS:
+    void slotSetPaletteList();
 
 private:
     PaletteDockerDock *m_dockerDock;

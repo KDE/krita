@@ -36,8 +36,9 @@
 
 #include <kis_canvas2.h>
 #include <kis_mainwindow_observer.h>
+#include <KisView.h>
 
-// #include "PaletteListSaver.h"
+#include "PaletteListSaver.h"
 
 class KisViewManager;
 class KisCanvasResourceProvider;
@@ -97,15 +98,17 @@ private /* member variables */:
     KisPaletteModel *m_model;
     KoColorSet *m_currentColorSet;
     KisPaletteListWidget *m_paletteChooser;
+    KisViewManager *m_view;
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
     QVector<QPair<int, int> > m_indexList; // vector used to associate the name list to indexes
+    QScopedPointer<PaletteListSaver> m_saver;
 
-    QSharedPointer<QAction> m_actAdd;
-    QSharedPointer<QAction> m_actAddWithDlg;
-    QSharedPointer<QAction> m_actSwitch;
-    QSharedPointer<QAction> m_actRemove;
-    QSharedPointer<QAction> m_actModify;
+    QScopedPointer<QAction> m_actAdd;
+    QScopedPointer<QAction> m_actAddWithDlg;
+    QScopedPointer<QAction> m_actSwitch;
+    QScopedPointer<QAction> m_actRemove;
+    QScopedPointer<QAction> m_actModify;
     QMenu m_viewContextMenu;
 };
 

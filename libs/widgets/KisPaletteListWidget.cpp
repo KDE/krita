@@ -84,6 +84,9 @@ void KisPaletteListWidget::slotAdd()
     newColorSet->setIsGlobal(false);
     m_d->rAdapter->addResource(newColorSet);
     m_d->itemChooser->setCurrentResource(newColorSet);
+
+    qDebug () << "emitting list changed sig";
+    emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotRemove()
@@ -91,16 +94,18 @@ void KisPaletteListWidget::slotRemove()
     if (m_d->itemChooser->currentResource()) {
         m_d->rAdapter->removeResource(m_d->itemChooser->currentResource());
     }
+
+    emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotModify()
 {
-
+    emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotImport()
 {
-
+    emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotExport()
@@ -167,5 +172,3 @@ inline QSize KisPaletteListWidgetPrivate::Delegate::sizeHint(const QStyleOptionV
 {
     return option.decorationSize;
 }
-
-

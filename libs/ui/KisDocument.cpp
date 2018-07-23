@@ -269,6 +269,7 @@ public:
         , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
         , globalAssistantsColor(rhs.globalAssistantsColor)
         , gridConfig(rhs.gridConfig)
+        , paletteList(rhs.paletteList)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
     {
@@ -331,7 +332,7 @@ public:
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
-    QList<KoColorSet*> paletteList;
+    QList<const KoColorSet*> paletteList;
 
     KisGridConfig gridConfig;
 
@@ -1479,12 +1480,12 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     d->gridConfig = config;
 }
 
-const QList<KoColorSet*> &KisDocument::paletteList() const
+const QList<const KoColorSet *> &KisDocument::paletteList() const
 {
     return d->paletteList;
 }
 
-void KisDocument::setPaletteList(const QList<KoColorSet*> &paletteList)
+void KisDocument::setPaletteList(const QList<const KoColorSet *> &paletteList)
 {
     d->paletteList = paletteList;
 }

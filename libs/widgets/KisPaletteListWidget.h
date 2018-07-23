@@ -7,6 +7,7 @@
 #include "KoColorSet.h"
 
 #include "kritawidgets_export.h"
+
 class KisPaletteListWidgetPrivate;
 
 class KRITAWIDGETS_EXPORT KisPaletteListWidget : public QWidget
@@ -18,6 +19,7 @@ public:
 
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSet*);
+    void sigPaletteListChanged();
 
 public Q_SLOTS:
 

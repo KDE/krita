@@ -150,16 +150,16 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &uri)
 {
     bool res = false;
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-    for (const KoResource *palette : rServer->resources()) {
-        const KoColorSet *colorSet = static_cast<const KoColorSet*>(palette);
-        if (!colorSet) { continue; }
-        if (!colorSet->isGlobal()) {
-            if (!store->open(colorSet->name())) {
+    if (m_d->doc->paletteList().size() == 0) {
+        return true;
+    }
+    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+        if (!palette->isGlobal()) {
+            if (!store->open(palette->name())) {
                 m_d->errorMessages << i18n("could not save palettes");
                 return false;
             }
-            store->write(colorSet->toByteArray());
+            store->write(palette->toByteArray());
             store->close();
             res = true;
         }

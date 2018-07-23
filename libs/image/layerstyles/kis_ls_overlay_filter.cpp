@@ -52,7 +52,16 @@ KisLsOverlayFilter::KisLsOverlayFilter(Mode mode)
 {
 }
 
+KisLsOverlayFilter::KisLsOverlayFilter(const KisLsOverlayFilter &rhs)
+    : KisLayerStyleFilter(rhs),
+      m_mode(rhs.m_mode)
+{
+}
 
+KisLayerStyleFilter *KisLsOverlayFilter::clone() const
+{
+    return new KisLsOverlayFilter(*this);
+}
 
 void KisLsOverlayFilter::applyOverlay(KisPaintDeviceSP srcDevice,
                                       KisMultipleProjection *dst,

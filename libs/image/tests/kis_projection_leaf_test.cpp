@@ -402,4 +402,67 @@ void KisProjectionLeafTest::testSkippedSelectionMasks()
     QVERIFY(!selection6->projectionLeaf()->prevSibling());
 }
 
+void KisProjectionLeafTest::testSelectionMaskOverlay()
+{
+    TestImage t;
+
+    KisGroupLayerSP group1 = new KisGroupLayer(t.image, "group1", OPACITY_OPAQUE_U8);
+    KisPaintLayerSP paint2 = new KisPaintLayer(t.image, "paint2", OPACITY_OPAQUE_U8);
+    KisSelectionMaskSP selection3 = new KisSelectionMask(t.image);
+    selection3->setName("selection3");
+    selection3->setSelection(new KisSelection(new KisSelectionDefaultBounds(paint2->paintDevice(), t.image)));
+
+    t.image->addNode(group1, t.image->root(), t.findBlur1());
+
+    t.image->addNode(paint2, group1);
+    t.image->addNode(selection3, paint2);
+
+    t.image->setOverlaySelectionMask(selection3);
+
+    t.image->waitForDone();
+
+
+    qDebug() << "== Nodes";
+    printNodes(t.image->root());
+
+    {
+        qDebug() << "== Leafs backward";
+
+        QList<QString> refNodes;
+        refNodes << "root"
+                 << "selection3"
+                 << "paint1"
+                 << "tmask1"
+                 << "group1"
+                     << "paint2"
+                 << "blur1"
+                 << "clone1";
+
+        printLeafsBackward(t.image->root()->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Leafs forward";
+
+        QList<QString> refNodes;
+        refNodes << "root"
+                 << "clone1"
+                 << "blur1"
+                 << "group1"
+                     << "paint2"
+                 << "paint1"
+                 << "tmask1"
+                 << "selection3";
+
+        printLeafsForward(t.image->root()->projectionLeaf(), refNodes);
+    }
+
+    {
+        qDebug() << "== Parents for selection3";
+        QList<QString> refNodes;
+        refNodes << "selection3" << "root";
+        printParents(selection3->projectionLeaf(), refNodes);
+    }
+}
+
 QTEST_MAIN(KisProjectionLeafTest)

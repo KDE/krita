@@ -50,6 +50,16 @@ KisLsDropShadowFilter::KisLsDropShadowFilter(Mode mode)
 {
 }
 
+KisLsDropShadowFilter::KisLsDropShadowFilter(const KisLsDropShadowFilter &rhs)
+    : KisLayerStyleFilter(rhs),
+      m_mode(rhs.m_mode)
+{
+}
+
+KisLayerStyleFilter *KisLsDropShadowFilter::clone() const
+{
+    return new KisLsDropShadowFilter(*this);
+}
 
 struct ShadowRectsData
 {

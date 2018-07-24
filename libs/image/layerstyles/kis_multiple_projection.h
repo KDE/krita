@@ -29,6 +29,7 @@ class KRITAIMAGE_EXPORT KisMultipleProjection
 {
 public:
     KisMultipleProjection();
+    KisMultipleProjection(const KisMultipleProjection &rhs);
     ~KisMultipleProjection();
 
     static QString defaultProjectionId();

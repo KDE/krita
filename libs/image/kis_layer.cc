@@ -142,7 +142,7 @@ struct Q_DECL_HIDDEN KisLayer::Private
     KisCloneLayersList clonesList;
 
     KisPSDLayerStyleSP layerStyle;
-    KisAbstractProjectionPlaneSP layerStyleProjectionPlane;
+    KisLayerStyleProjectionPlaneSP layerStyleProjectionPlane;
 
     KisAbstractProjectionPlaneSP projectionPlane;
 
@@ -178,7 +178,16 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
 
         if (rhs.m_d->layerStyle) {
-            setLayerStyle(rhs.m_d->layerStyle->clone());
+            m_d->layerStyle = rhs.m_d->layerStyle->clone();
+
+            KIS_SAFE_ASSERT_RECOVER_NOOP(rhs.m_d->layerStyleProjectionPlane);
+
+            if (rhs.m_d->layerStyleProjectionPlane) {
+                m_d->layerStyleProjectionPlane = toQShared(
+                    new KisLayerStyleProjectionPlane(*rhs.m_d->layerStyleProjectionPlane,
+                                                     this,
+                                                     m_d->layerStyle));
+            }
         }
         notifyChildMaskChanged(KisNodeSP());
     }
@@ -226,9 +235,9 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
     if (layerStyle) {
         m_d->layerStyle = layerStyle;
 
-        KisAbstractProjectionPlaneSP plane = !layerStyle->isEmpty() ?
-            KisAbstractProjectionPlaneSP(new KisLayerStyleProjectionPlane(this)) :
-            KisAbstractProjectionPlaneSP(0);
+        KisLayerStyleProjectionPlaneSP plane = !layerStyle->isEmpty() ?
+            KisLayerStyleProjectionPlaneSP(new KisLayerStyleProjectionPlane(this)) :
+            KisLayerStyleProjectionPlaneSP(0);
 
         m_d->layerStyleProjectionPlane = plane;
     } else {
@@ -784,7 +793,7 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
-        m_d->layerStyleProjectionPlane : m_d->projectionPlane;
+        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) : m_d->projectionPlane;
 }
 
 KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const

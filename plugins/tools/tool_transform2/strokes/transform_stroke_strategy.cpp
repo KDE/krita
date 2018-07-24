@@ -88,7 +88,7 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
             const int pixelSize = m_previewDevice->colorSpace()->pixelSize();
 
 
-            KisImageConfig cfg;
+            KisImageConfig cfg(true);
             KoColor pixel(cfg.selectionOverlayMaskColor(), m_previewDevice->colorSpace());
 
             const qreal coeff = 1.0 / 255.0;

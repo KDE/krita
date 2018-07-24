@@ -20,9 +20,6 @@ struct RiffHeader {
     quint16 colorcount;
 };
 
-KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
-void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);
-bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml);
 
 class KoColorSet::Private
 {
@@ -34,7 +31,6 @@ public:
         Q_ASSERT(groups.contains(GLOBAL_GROUP_NAME));
         return groups[GLOBAL_GROUP_NAME];
     }
-
 public:
     bool init();
 
@@ -62,6 +58,11 @@ public:
 
 public:
     static QString GLOBAL_GROUP_NAME;
+
+private:
+    KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
+    void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);
+    bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml);
 };
 
 #endif // KOCOLORSET_P_H

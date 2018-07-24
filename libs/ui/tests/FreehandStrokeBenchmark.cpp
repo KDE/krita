@@ -128,6 +128,11 @@ void FreehandStrokeBenchmark::testGaussianTip()
     benchmarkBrush("testing_1000px_auto_gaussian.kpp");
 }
 
+void FreehandStrokeBenchmark::testRectangularTip()
+{
+    benchmarkBrush("testing_1000px_auto_rectangular.kpp");
+}
+
 void FreehandStrokeBenchmark::testRectGaussianTip()
 {
     benchmarkBrush("testing_1000px_auto_gaussian_rect.kpp");

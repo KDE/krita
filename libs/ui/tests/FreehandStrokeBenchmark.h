@@ -31,6 +31,7 @@ private Q_SLOTS:
     void testSoftTip();
     void testGaussianTip();
 
+    void testRectangularTip();
     void testRectGaussianTip();
     void testRectSoftTip();
 

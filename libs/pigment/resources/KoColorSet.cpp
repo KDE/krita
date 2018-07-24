@@ -50,14 +50,12 @@ KoColorSet::KoColorSet(const QString& filename)
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
     : QObject(0)
-    , KoResource(QString())
+    , KoResource(rhs)
     , d(new Private(this))
 {
-    setFilename(rhs.filename());
     d->comment = rhs.d->comment;
     d->groupNames = rhs.d->groupNames;
     d->groups = rhs.d->groups;
-    setValid(true);
 }
 
 KoColorSet::~KoColorSet()
@@ -126,6 +124,7 @@ QByteArray KoColorSet::toByteArray() const
     QBuffer s;
     s.open(QIODevice::WriteOnly);
     if (!saveToDevice(&s)) {
+        warnPigment << "saving palette failed:" << name();
         return QByteArray();
     }
     s.close();

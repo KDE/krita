@@ -263,6 +263,7 @@ bool KoColorSet::Private::init()
         gc.fillRect(info.column * 4, info.row * 4, 4, 4, c);
     }
     colorSet->setImage(img);
+    colorSet->setValid(res);
 
     // save some memory
     data.clear();
@@ -271,9 +272,11 @@ bool KoColorSet::Private::init()
 
 bool KoColorSet::Private::saveGpl(QIODevice *dev) const
 {
+    Q_ASSERT(dev->isOpen());
+    Q_ASSERT(dev->isWritable());
+
     QTextStream stream(dev);
-    int columns = 0;
-    stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << columns << "\n#\n";
+    stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << colorSet->columnCount() << "\n#\n";
 
     /*
      * Qt doesn't provide an interface to get a const reference to a QHash, that is
@@ -282,7 +285,7 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
      */
 
     for (int y = 0; y < groups[GLOBAL_GROUP_NAME].rowCount(); y++) {
-        for (int x = 0; x < columns; x++) {
+        for (int x = 0; x < colorSet->columnCount(); x++) {
             if (!groups[GLOBAL_GROUP_NAME].checkEntry(x, y)) {
                 continue;
             }

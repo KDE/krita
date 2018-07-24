@@ -362,6 +362,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
     }
 
+    // reading palettes from XML
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         QDomElement e = child.toElement();
         if (e.tagName() == PALETTES) {
@@ -371,7 +372,6 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
                  paletteElement = paletteElement.previousSiblingElement()) {
                 QString paletteName = paletteElement.attribute("filename");
                 KoColorSet* palette = new KoColorSet(paletteName);
-                palette->setName(paletteElement.attribute("name"));
                 paletteList.append(palette);
             }
             m_d->document->setPaletteList(paletteList);
@@ -509,13 +509,16 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
     KoResourceServer<KoColorSet> *pServer = KoResourceServerProvider::instance()->paletteServer();
-    for (const KoColorSet *palette : doc->paletteList()) {
-        KoColorSet *newPalette = new KoColorSet(palette->name());
-        QByteArray data = store->read(Q_INFINITY);
+    // below is a non-const ref to a non-const pointer to a const KoColorSet
+    for (KoColorSet const * &palette : doc->paletteList()) {
+        KoColorSet *newPalette = new KoColorSet(palette->filename());
+        store->open(m_d->imageName + PALETTE_PATH + palette->filename());
+        QByteArray data = store->read(store->size());
         newPalette->fromByteArray(data);
         delete palette;
         palette = newPalette;
         pServer->addResource(newPalette);
+        store->close();
     }
 }
 

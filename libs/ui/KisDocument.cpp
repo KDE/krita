@@ -1480,7 +1480,7 @@ void KisDocument::setGridConfig(const KisGridConfig &config)
     d->gridConfig = config;
 }
 
-const QList<const KoColorSet *> &KisDocument::paletteList() const
+QList<const KoColorSet *> &KisDocument::paletteList()
 {
     return d->paletteList;
 }

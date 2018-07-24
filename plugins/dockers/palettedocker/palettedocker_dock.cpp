@@ -101,6 +101,11 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
             SLOT(slotSetEntryByForeground(QModelIndex)));
 
+    m_viewContextMenu.addAction(m_actAddWithDlg.data());
+    m_viewContextMenu.addAction(m_actRemove.data());
+    m_viewContextMenu.addAction(m_actModify.data());
+    m_viewContextMenu.addAction(m_actSwitch.data());
+
     m_paletteChooser = new KisPaletteListWidget(this);
     connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
 

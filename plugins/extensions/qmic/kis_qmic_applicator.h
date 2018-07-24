@@ -39,7 +39,7 @@ public:
     ~KisQmicApplicator();
     void setProperties(KisImageWSP image, KisNodeSP node, QVector<gmic_image<float> *> images, const KUndo2MagicString &actionName, KisNodeListSP kritaNodes);
 
-    void preview();
+    void apply();
     void cancel();
     void finish();
 

@@ -164,8 +164,8 @@ void KoPathShape::saveContourOdf(KoShapeSavingContext &context, const QSizeF &sc
 
         if (currPoint && !(currPoint->activeControlPoint1() || currPoint->activeControlPoint2())) {
             context.xmlWriter().startElement("draw:contour-polygon");
-            context.xmlWriter().addAttributePt("svg:width", size().width());
-            context.xmlWriter().addAttributePt("svg:height", size().height());
+            context.xmlWriter().addAttribute("svg:width", size().width());
+            context.xmlWriter().addAttribute("svg:height", size().height());
 
             const QSizeF s(size());
             QString viewBox = QString("0 0 %1 %2").arg(qRound(1000*s.width())).arg(qRound(1000*s.height()));

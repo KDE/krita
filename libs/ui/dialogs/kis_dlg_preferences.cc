@@ -995,7 +995,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
        grpOpenGL->setMaximumHeight(0);
     }
 
-    KisImageConfig imageCfg;
+    KisImageConfig imageCfg(false);
 
     KoColor c;
     c.fromQColor(imageCfg.selectionOverlayMaskColor());

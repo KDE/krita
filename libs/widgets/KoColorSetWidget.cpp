@@ -42,7 +42,6 @@
 #include <resources/KoColorSet.h>
 #include <resources/KoColorSetEntry.h>
 #include <KoColorPatch.h>
-#include <KoEditColorSetDialog.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -52,41 +51,6 @@
 #include <KisPaletteDelegate.h>
 #include <KisPaletteModel.h>
 #include <kis_icon_utils.h>
-
-void KoColorSetWidget::KoColorSetWidgetPrivate::addRemoveColors()
-{
-    QList<KoColorSet*> palettes = rServer->resources();
-
-    Q_ASSERT(colorSet);
-    KoEditColorSetDialog *dlg = new KoEditColorSetDialog(palettes, colorSet->name(), thePublic);
-    if (dlg->exec() == KoDialog::Accepted ) { // always reload the color set
-        KoColorSet *cs = dlg->activeColorSet();
-        // check if the selected colorset is predefined
-        if( cs && !palettes.contains( cs ) ) {
-            int i = 1;
-            QFileInfo fileInfo;
-            QString savePath = rServer->saveLocation();
-
-            do {
-                fileInfo.setFile(savePath + QString("%1.%2").arg(i++, 4, 10, QChar('0')).arg(colorSet->defaultFileExtension()));
-            }
-            while (fileInfo.exists());
-
-            cs->setFilename( fileInfo.filePath() );
-            cs->setValid( true );
-
-            // add new colorset to predefined colorsets
-            if (!rServer->addResource(cs)) {
-                delete cs;
-                cs = 0;
-            }
-        }
-        if (cs) {
-            thePublic->setColorSet(cs);
-        }
-    }
-    delete dlg;
-}
 
 void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
 {
@@ -233,6 +197,7 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
 void KoColorSetWidget::slotEntrySelected(const KisSwatch &entry)
 {
     emit colorChanged(entry.color(), true);
+    d->addRecent(entry.color());
 
     // d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(entry.name()+"|Fixed")));
 }

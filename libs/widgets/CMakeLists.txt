@@ -28,7 +28,6 @@ set(kritawidgets_LIB_SRCS
     KoColorPopupAction.cpp
     KoColorSetWidget.cpp
     KoColorSlider.cpp
-    KoEditColorSetDialog.cpp
     KoTriangleColorSelector.cpp
     KoResourcePopupAction.cpp
     KoIconToolTip.cpp
@@ -110,7 +109,6 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoConfigAuthorPage.ui
     koDocumentInfoAboutWidget.ui
     koDocumentInfoAuthorWidget.ui
-    KoEditColorSet.ui
     wdg_file_name_requester.ui
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui

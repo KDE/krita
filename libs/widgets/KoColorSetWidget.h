@@ -112,7 +112,6 @@ private Q_SLOTS:
     void slotPaletteChoosen(KoColorSet *);
 
 private:
-    Q_PRIVATE_SLOT(d, void addRemoveColors())
     Q_PRIVATE_SLOT(d, void setColorFromString(QString s))
 
     class KoColorSetWidgetPrivate;

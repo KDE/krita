@@ -114,6 +114,11 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
     Q_UNUSED(preparedNeedRect);
     if (!effectiveSelection) return;
 
+    {
+        KisSelectionSP mainMaskSelection = this->selection();
+        if (mainMaskSelection && !mainMaskSelection->isVisible()) return;
+    }
+
     KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
     fillDevice->setDefaultPixel(m_d->maskColor);
 

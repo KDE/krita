@@ -296,7 +296,7 @@ void KisSelectionMask::Private::slotConfigChanged()
         image->colorSpace() :
         KoColorSpaceRegistry::instance()->rgb8();
 
-    KisImageConfig cfg;
+    KisImageConfig cfg(false);
 
     maskColor = KoColor(cfg.selectionOverlayMaskColor(), cs);
 

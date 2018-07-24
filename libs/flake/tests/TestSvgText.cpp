@@ -531,7 +531,7 @@ void TestSvgText::testHindiText()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"4\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"FreeSans\" font-size=\"15\" fill=\"blue\" >"
             "मौखिक रूप से हिंदी के काफी सामान"
             "    </text>"
 
@@ -540,6 +540,12 @@ void TestSvgText::testHindiText()
             "</svg>";
 
     SvgRenderTester t (data);
+
+    QFont testFont("FreeSans");
+    if (!QFontInfo(testFont).exactMatch()) {
+        QEXPECT_FAIL(0, "FreeSans found is *not* found! Hindi rendering might be broken!", Continue);
+    }
+
     t.test_standard("text_hindi", QSize(260, 30), 72);
 }
 
@@ -611,6 +617,7 @@ void TestSvgText::testTextSpacing()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_letter_word_spacing", QSize(340, 250), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -647,6 +654,7 @@ void TestSvgText::testTextDecorations()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_decorations", QSize(290, 135), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -876,6 +884,7 @@ void TestSvgText::testMulticolorText()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_multicolor", QSize(30, 30), 72.0);
 }
 
@@ -1095,6 +1104,7 @@ void TestSvgText::testTextWithMultipleRelativeOffsets()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_relative_offsets", QSize(300, 80), 72.0);
 }
 
@@ -1182,6 +1192,7 @@ void TestSvgText::testTextOutline()
     QRect renderRect(0, 0, 450, 40);
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_outline", renderRect.size(), 72.0);
 
     KoShape *shape = t.findShape("testRect");

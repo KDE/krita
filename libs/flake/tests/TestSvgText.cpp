@@ -1160,9 +1160,11 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
 
     SvgRenderTester t (data);
 
-
+    // we cannot expect more than one failure
+#ifndef USE_ROUND_TRIP
     QEXPECT_FAIL("", "WARNING: in Krita relative offsets also define a new text chunk, that doesn't comply with SVG standard and must be fixed", Continue);
     t.test_standard("text_multiple_relative_offsets_arabic", QSize(530, 70), 72.0);
+#endif
 }
 
 void TestSvgText::testTextOutline()

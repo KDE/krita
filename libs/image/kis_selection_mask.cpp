@@ -116,7 +116,12 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
 
     {
         KisSelectionSP mainMaskSelection = this->selection();
-        if (mainMaskSelection && !mainMaskSelection->isVisible()) return;
+        if (mainMaskSelection &&
+            (!mainMaskSelection->isVisible() ||
+             mainMaskSelection->pixelSelection()->defaultBounds()->externalFrameActive())) {
+
+            return;
+        }
     }
 
     KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);

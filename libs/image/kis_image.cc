@@ -423,7 +423,7 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
             }
 
             if (oldMask) {
-                m_image->m_d->rootLayer->setDirty(oldMask->extent());
+                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMask->extent());
             }
 
             if (newMask) {

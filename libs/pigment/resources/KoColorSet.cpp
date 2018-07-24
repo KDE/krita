@@ -41,7 +41,6 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamAttributes>
 #include <QtEndian> // qFromLittleEndian
-#include <QStringList>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -1586,8 +1585,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
     QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "application/x-krita-palette", KoStore::Zip));
     if (!store || store->bad()) return false;
 
-    QSet<const KoColorProfile *> profiles;
-    QMap<const KoColorProfile*, const KoColorSpace*> profileMap;
+    QSet<const KoColorSpace *> colorSpaces;
 
     {
         QDomDocument doc;
@@ -1596,48 +1594,12 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute("name", colorSet->name());
         root.setAttribute("comment", comment);
         root.setAttribute("columns", groups[GLOBAL_GROUP_NAME].columnCount());
-        for (int x = 0; x < groups[GLOBAL_GROUP_NAME].columnCount(); x++) {
-            for (int y = 0; y < groups[GLOBAL_GROUP_NAME].rowCount(); y++) {
-                // Only save non-builtin profiles.=
-                /*
-                const KoColorProfile *profile = entry.color().colorSpace()->profile();
-                if (!profile->fileName().isEmpty()) {
-                    profiles << profile;
-                    profileMap[profile] = entry.color().colorSpace();
-                }
-                QDomElement el = doc.createElement("ColorSetEntry");
-                el.setAttribute("name", entry.name());
-                el.setAttribute("id", entry.id());
-                el.setAttribute("spot", entry.spotColor() ? "true" : "false");
-                el.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
-                entry.color().toXML(doc, el);
-                root.appendChild(el);
-                */
-            }
-        }
-        Q_FOREACH(const QString &groupName, groupNames) {
+        saveKplGroup(doc, root, colorSet->getGroup(GLOBAL_GROUP_NAME), colorSpaces);
+        for (const QString &groupName : groupNames) {
             QDomElement gl = doc.createElement("Group");
             gl.setAttribute("name", groupName);
             root.appendChild(gl);
-            for (int x = 0; x < groups[groupName].columnCount(); x++) {
-                for (int y = 0; y < groups[groupName].rowCount(); y++) {
-                    // Only save non-builtin profiles.=
-                    /*
-                    const KoColorProfile *profile = entry.color().colorSpace()->profile();
-                    if (!profile->fileName().isEmpty()) {
-                        profiles << profile;
-                        profileMap[profile] = entry.color().colorSpace();
-                    }
-                    QDomElement el = doc.createElement("ColorSetEntry");
-                    el.setAttribute("name", entry.name());
-                    el.setAttribute("id", entry.id());
-                    el.setAttribute("spot", entry.spotColor() ? "true" : "false");
-                    el.setAttribute("bitdepth", entry.color().colorSpace()->colorDepthId().id());
-                    entry.color().toXML(doc, el);
-                    gl.appendChild(el);
-                    */
-                }
-            }
+            saveKplGroup(doc, gl, colorSet->getGroup(groupName), colorSpaces);
         }
 
         doc.appendChild(root);
@@ -1650,17 +1612,17 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
     QDomDocument doc;
     QDomElement profileElement = doc.createElement("Profiles");
 
-    Q_FOREACH(const KoColorProfile *profile, profiles) {
-        QString fn = QFileInfo(profile->fileName()).fileName();
+    for (const KoColorSpace *colorSpace : colorSpaces) {
+        QString fn = QFileInfo(colorSpace->profile()->fileName()).fileName();
         if (!store->open(fn)) { return false; }
-        QByteArray profileRawData = profile->rawData();
+        QByteArray profileRawData = colorSpace->profile()->rawData();
         if (!store->write(profileRawData)) { return false; }
         if (!store->close()) { return false; }
         QDomElement el = doc.createElement("Profile");
         el.setAttribute("filename", fn);
-        el.setAttribute("name", profile->name());
-        el.setAttribute("colorModelId", profileMap[profile]->colorModelId().id());
-        el.setAttribute("colorDepthId", profileMap[profile]->colorDepthId().id());
+        el.setAttribute("name", colorSpace->profile()->name());
+        el.setAttribute("colorModelId", colorSpace->colorModelId().id());
+        el.setAttribute("colorDepthId", colorSpace->colorDepthId().id());
         profileElement.appendChild(el);
 
     }
@@ -1671,4 +1633,28 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
     if (!store->close()) { return false; }
 
     return store->finalize();
+}
+
+void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
+                                       QDomElement &ele,
+                                       const KisSwatchGroup *group,
+                                       QSet<const KoColorSpace *> &colorSetSet) const
+{
+    for (const SwatchInfoType & info : group->infoList()) {
+        const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
+        // Only save non-builtin profiles.=
+        if (!profile->fileName().isEmpty()) {
+            colorSetSet.insert(info.swatch.color().colorSpace());
+        }
+        QDomElement el = doc.createElement("ColorSetEntry");
+        el.setAttribute("name", info.swatch.name());
+        el.setAttribute("id", info.swatch.id());
+        el.setAttribute("spot", info.swatch.spotColor() ? "true" : "false");
+        el.setAttribute("bitdepth", info.swatch.color().colorSpace()->colorDepthId().id());
+        QDomElement positionEle = doc.createElement("Position");
+        positionEle.setAttribute("row", info.row);
+        positionEle.setAttribute("column", info.column);
+        info.swatch.color().toXML(doc, el);
+        ele.appendChild(el);
+    }
 }

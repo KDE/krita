@@ -219,4 +219,3 @@ private:
 
 };
 #endif // KOCOLORSET
-

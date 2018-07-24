@@ -3,6 +3,7 @@
 
 #include <QHash>
 #include <QXmlStreamReader>
+#include <QDomElement>
 #include <QPointer>
 
 #include <KisSwatch.h>
@@ -23,6 +24,9 @@ struct RiffHeader {
 
 class KoColorSet::Private
 {
+private:
+    typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
+
 public:
     Private(KoColorSet *a_colorSet);
 
@@ -63,6 +67,8 @@ private:
     KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
     void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);
     bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml);
+    void saveKplGroup(QDomDocument &doc, QDomElement &ele,
+                      const KisSwatchGroup *group, QSet<const KoColorSpace *> &colorSetSet) const;
 };
 
 #endif // KOCOLORSET_P_H

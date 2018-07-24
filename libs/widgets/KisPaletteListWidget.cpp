@@ -79,9 +79,8 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 
 void KisPaletteListWidget::slotAdd()
 {
-    /* Try to let GPL work for now */
-    KoColorSet *newColorSet = new KoColorSet("new_palette.gpl");
-    newColorSet->setPaletteType(KoColorSet::GPL);
+    KoColorSet *newColorSet = new KoColorSet("new_palette.kpl");
+    newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
     newColorSet->setName("New Palette");
     m_d->rAdapter->addResource(newColorSet);

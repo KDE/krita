@@ -141,7 +141,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="KisPopupButton" name="bnColorsetChooser">
+          <widget class="KisPopupButton" name="bnPaletteChooser">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
              <horstretch>0</horstretch>

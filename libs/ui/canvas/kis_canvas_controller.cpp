@@ -23,7 +23,7 @@
 #include <QTabletEvent>
 
 #include <klocalizedstring.h>
-
+#include <kactioncollection.h>
 #include "kis_canvas_decoration.h"
 #include "kis_paintop_transformation_connector.h"
 #include "kis_coordinates_converter.h"
@@ -261,6 +261,11 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
         m_d->view->viewManager()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
                                                           "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
+    else if (value) {
+        QAction *action = m_d->view->viewManager()->actionCollection()->action("wrap_around_mode");
+        QString shortcut = action ? action->shortcut().toString() : "W";
+        m_d->view->viewManager()->showFloatingMessage(i18n("Entering Wraparound mode. Press '%1' to leave Wraparound mode.", shortcut), QIcon());
+    }
 
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);
@@ -276,7 +281,7 @@ bool KisCanvasController::wrapAroundMode() const
 
 void KisCanvasController::slotTogglePixelGrid(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.enablePixelGrid(value);
 
     KisConfigNotifier::instance()->notifyPixelGridModeChanged();

@@ -24,6 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -47,7 +48,7 @@ KritaEdgeDetectionFilter::~KritaEdgeDetectionFilter()
 {
 }
 
-KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), categoryEdgeDetection(), i18n("&Edge Detection..."))
+KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), FiltersCategoryEdgeDetectionId, i18n("&Edge Detection..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

@@ -150,7 +150,6 @@ void Parser::outputBytes( QDataStream &stream, int numBytes )
     quint8 scratch;
     for ( int i = 0; i < numBytes; ++i ) {
         stream >> scratch;
-	//qDebug("byte(%i):%c", i, scratch);
     }
 }
 

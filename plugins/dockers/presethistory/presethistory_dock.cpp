@@ -72,7 +72,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
     connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(canvasResourceChanged(int,QVariant)));
 
     if (!m_initialized) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
         KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         Q_FOREACH (const QString &p, presetHistory) {
@@ -94,7 +94,7 @@ void PresetHistoryDock::unsetCanvas()
         KisPaintOpPresetSP preset = v.value<KisPaintOpPresetSP>();
         presetHistory << preset->name();
     }
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry("presethistory", presetHistory.join(","));
 }
 

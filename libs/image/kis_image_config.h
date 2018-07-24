@@ -27,7 +27,7 @@
 class KRITAIMAGE_EXPORT KisImageConfig
 {
 public:
-    KisImageConfig(bool readOnly = false);
+    KisImageConfig(bool readOnly);
     ~KisImageConfig();
 
     bool enableProgressReporting(bool requestDefault = false) const;

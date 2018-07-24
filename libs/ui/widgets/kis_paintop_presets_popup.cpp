@@ -141,7 +141,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
-    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig(true).presetChooserViewMode();
 
     QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
@@ -183,7 +183,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // show/hide buttons
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
@@ -466,7 +466,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         m_d->settingsWidget = dynamic_cast<KisPaintOpConfigWidget*>(widget);
         KIS_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         if (m_d->settingsWidget->supportScratchBox() && cfg.scratchpadVisible()) {
             slotSwitchScratchpad(true);
         } else {
@@ -533,11 +533,10 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
 
         }
         else {
-            KisConfig cfg;
             parentWidget()->hide();
         }
 
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setPaintopPopupDetached(m_d->detached);
     }
 }
@@ -702,7 +701,7 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     }
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setScratchpadVisible(visible);
 }
 
@@ -809,7 +808,7 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     }
 
     // we store whether the scratchpad if visible in the config.
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (cfg.scratchpadVisible()) {
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     } else {

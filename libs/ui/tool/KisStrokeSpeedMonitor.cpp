@@ -105,7 +105,7 @@ void KisStrokeSpeedMonitor::resetAccumulatedValues()
 
 void KisStrokeSpeedMonitor::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->haveStrokeSpeedMeasurement = cfg.enableBrushSpeedLogging();
     resetAccumulatedValues();
     emit sigStatsUpdated();

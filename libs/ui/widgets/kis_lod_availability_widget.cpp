@@ -77,7 +77,7 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         connect(m_d->btnLod, SIGNAL(customContextMenuRequested(QPoint)),
                 this, SLOT(showLodThresholdWidget(QPoint)));
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         m_d->thresholdSlider = new KisDoubleSliderSpinBox(m_d->thresholdMenu.data());
 
         m_d->thresholdSlider->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);

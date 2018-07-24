@@ -72,7 +72,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_only_one_assistant = true;
 
     setSupportOutline(true);
-    setMaskSyntheticEvents(KisConfig().disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
+    setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
 
     m_infoBuilder = new KisToolFreehandPaintingInformationBuilder(this);
     m_helper = new KisToolFreehandHelper(m_infoBuilder, transactionText);
@@ -99,7 +99,7 @@ KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
 
 void KisToolFreehand::resetCursorStyle()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     switch (cfg.newCursorStyle()) {
     case CURSOR_STYLE_NO_CURSOR:
@@ -351,7 +351,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     qreal scaleY = 0;
     canvas2->coordinatesConverter()->imageScale(&scaleX, &scaleY);
 
-    const qreal maxBrushSize = KisConfig().readEntry("maximumBrushSize", 1000);
+    const qreal maxBrushSize = KisConfig(true).readEntry("maximumBrushSize", 1000);
     const qreal effectiveMaxDragSize = 0.5 * screenRect.width();
     const qreal effectiveMaxBrushSize = qMin(maxBrushSize, effectiveMaxDragSize / scaleX);
 

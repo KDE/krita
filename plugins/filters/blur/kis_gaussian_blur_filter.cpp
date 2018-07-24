@@ -30,6 +30,7 @@
 
 #include "ui_wdg_gaussian_blur.h"
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -40,7 +41,7 @@
 #include <math.h>
 
 
-KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Gaussian Blur..."))
+KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&Gaussian Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

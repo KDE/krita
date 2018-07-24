@@ -52,7 +52,7 @@
 
 #ifdef DEBUG_MERGER
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)            \
-    qDebug() << message << type << ":" << leaf->node()->name() << rect
+    dbgImage << message << type << ":" << leaf->node()->name() << rect
 #else
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)
 #endif

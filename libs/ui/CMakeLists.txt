@@ -81,6 +81,7 @@ set(kritaui_LIB_SRCS
     brushhud/kis_dlg_brush_hud_config.cpp
     brushhud/kis_brush_hud_properties_list.cpp
     brushhud/kis_brush_hud_properties_config.cpp
+
     kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
@@ -150,10 +151,13 @@ set(kritaui_LIB_SRCS
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
+    KisWelcomePageWidget.cpp
+
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
+
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp
@@ -251,7 +255,7 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-
+    
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -480,6 +484,8 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgstopgradienteditor.ui
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
+    forms/KisWelcomePage.ui
+
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui

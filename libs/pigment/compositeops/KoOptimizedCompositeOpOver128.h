@@ -58,7 +58,7 @@ struct OverCompositor128 {
         static quint32 countFour = 0;
 
         if (++countTotal % 250000 == 0) {
-            qDebug() << "count" << countOne << countTwo << countThree << countFour << countTotal << opacity;
+            qInfo() << "count" << countOne << countTwo << countThree << countFour << countTotal << opacity;
         }
 #endif
         Q_UNUSED(oparams);
@@ -164,7 +164,7 @@ struct OverCompositor128 {
         static int xx = 0;
         bool display = xx > 45 && xx < 50;
         if (display) {
-            qDebug() << "O" << s[alpha_pos] << srcAlpha << haveMask << opacity;
+            qInfo() << "O" << s[alpha_pos] << srcAlpha << haveMask << opacity;
         }
 #endif
 
@@ -189,7 +189,7 @@ struct OverCompositor128 {
 
 #if INFO_DEBUG
             if (display) {
-                qDebug() << "params" << srcBlendNorm << allChannelsFlag << alphaLocked << dstAlpha << haveMask;
+                qInfo() << "params" << srcBlendNorm << allChannelsFlag << alphaLocked << dstAlpha << haveMask;
             }
 #endif
             if(allChannelsFlag) {
@@ -204,7 +204,7 @@ struct OverCompositor128 {
                 } else if (srcBlendNorm != 0.0){
 #if INFO_DEBUG
                     if (display) {
-                        qDebug() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
+                        qInfo() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
                     }
 #endif
                     d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
@@ -230,7 +230,7 @@ struct OverCompositor128 {
             }
 #if INFO_DEBUG
             if (display) {
-                qDebug() << "result" << d[0] << d[1] << d[2] << d[3];
+                qInfo() << "result" << d[0] << d[1] << d[2] << d[3];
             }
             ++xx;
 #endif

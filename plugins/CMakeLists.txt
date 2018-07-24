@@ -21,6 +21,7 @@ add_subdirectory( generators )
 add_subdirectory( impex )
 add_subdirectory( paintops )
 add_subdirectory( tools )
+add_subdirectory( qt )
 
 if (HAVE_PYQT5 AND HAVE_SIP AND HAVE_PYTHONLIBS)
     add_subdirectory( python )

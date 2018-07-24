@@ -37,7 +37,7 @@ void KisSwappedDataStoreTest::testRoundTrip()
     const quint8 defaultPixel = 128;
     const qint32 NUM_TILES = 10000;
 
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMaxSwapSize(4);
     config.setSwapSlabSize(1);
     config.setSwapWindowSize(1);
@@ -103,7 +103,7 @@ void KisSwappedDataStoreTest::testRandomAccess()
     const qint32 NUM_CYCLES = 50000;
     const qint32 NUM_TILES = 10000;
 
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMaxSwapSize(40);
     config.setSwapSlabSize(1);
     config.setSwapWindowSize(1);

@@ -38,7 +38,7 @@
 #include <resources/KoPattern.h>
 
 KisPatternChooser::KisPatternChooser(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     m_lbName = new QLabel(this);
 
@@ -62,10 +62,10 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
+                                             cfg.kineticScrollingSensitivity(),
+                                             cfg.kineticScrollingScrollbar());
 
     setLayout(mainLayout);
 }

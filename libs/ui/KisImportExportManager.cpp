@@ -387,7 +387,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         }
 
         if (exportConfiguration) {
-            KisConfig().setExportConfiguration(typeName, exportConfiguration);
+            KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }
     return result;
@@ -532,7 +532,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         QCheckBox *chkAlsoAsKra = 0;
         if (showWarnings && !warnings.isEmpty()) {
             chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
-            chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
+            chkAlsoAsKra->setChecked(KisConfig(true).readEntry<bool>("AlsoSaveAsKra", false));
             layout->addWidget(chkAlsoAsKra);
         }
 
@@ -547,7 +547,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
 
         *alsoAsKra = false;
         if (chkAlsoAsKra) {
-            KisConfig().writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
+            KisConfig(false).writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
             *alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
@@ -614,6 +614,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     file.setDirectWriteFallback(true);
 
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
+        m_document->setErrorMessage(file.errorString());
         file.cancelWriting();
         return KisImportExportFilter::CreationError;
     }
@@ -626,6 +627,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
             file.cancelWriting();
         } else {
             if (!file.commit()) {
+                m_document->setErrorMessage(file.errorString());
                 status = KisImportExportFilter::CreationError;
             }
         }

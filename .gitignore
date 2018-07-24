@@ -1,3 +1,4 @@
+*.orig
 __pycache__
 *.trace
 build
@@ -25,3 +26,4 @@ GRTAGS
 GSYMS
 BROWSE
 *.kate-swp
+/po/

@@ -50,7 +50,7 @@
 struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     Private(KisUpdateScheduler *_q, KisProjectionUpdateListener *p)
         : q(_q)
-        , updaterContext(KisImageConfig().maxNumberOfThreads(), q)
+        , updaterContext(KisImageConfig(true).maxNumberOfThreads(), q)
         , projectionUpdateListener(p)
     {}
 
@@ -314,10 +314,8 @@ KisPostExecutionUndoAdapter *KisUpdateScheduler::lodNPostExecutionUndoAdapter() 
 void KisUpdateScheduler::updateSettings()
 {
     m_d->updatesQueue.updateSettings();
-
-    KisImageConfig config;
+    KisImageConfig config(true);
     m_d->defaultBalancingRatio = config.schedulerBalancingRatio();
-
     setThreadsLimit(config.maxNumberOfThreads());
 }
 

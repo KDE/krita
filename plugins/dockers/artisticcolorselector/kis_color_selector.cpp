@@ -661,7 +661,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* /*event*/)
 
 void KisColorSelector::saveSettings()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry("ArtColorSel.ColorSpace" , qint32(m_colorSpace));
     cfg.writeEntry("ArtColorSel.NumRings"   , m_colorRings.size());
     cfg.writeEntry("ArtColorSel.RingPieces" , qint32(m_numPieces));
@@ -686,7 +686,7 @@ void KisColorSelector::saveSettings()
 
 void KisColorSelector::loadSettings()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     setColorSpace(KisColor::Type(cfg.readEntry<qint32>("ArtColorSel.ColorSpace" , KisColor::HSY)));
 
     setNumLightPieces(cfg.readEntry("ArtColorSel.LightPieces", 19));

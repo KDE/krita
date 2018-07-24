@@ -40,9 +40,12 @@
 #endif
 
 KisImageConfig::KisImageConfig(bool readOnly)
-    : m_config( KSharedConfig::openConfig()->group(QString())),
-      m_readOnly(readOnly)
+    : m_config(KSharedConfig::openConfig()->group(QString()))
+    , m_readOnly(readOnly)
 {
+    if (!readOnly) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+    }
 #ifdef Q_OS_OSX
     // clear /var/folders/ swap path set by old broken Krita swap implementation in order to use new default swap dir.
     QString swap = m_config.readEntry("swaplocation", "");

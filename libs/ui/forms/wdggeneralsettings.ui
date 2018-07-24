@@ -684,28 +684,6 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="1">
-        <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>75</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="minimum">
-          <number>10</number>
-         </property>
-         <property name="maximum">
-          <number>30</number>
-         </property>
-        </widget>
-       </item>
        <item row="12" column="1">
         <widget class="QCheckBox" name="chkShowRootLayer">
          <property name="text">
@@ -714,13 +692,6 @@
         </widget>
        </item>
        <item row="13" column="1">
-        <widget class="QCheckBox" name="m_hideSplashScreen">
-         <property name="text">
-          <string>Hide splash screen on startup</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="1">
         <widget class="QCheckBox" name="m_chkNativeFileDialog">
          <property name="toolTip">
           <string>Warning: if you enable this setting and the file dialogs do weird stuff, do not report a bug.</string>
@@ -730,14 +701,14 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
+       <item row="15" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Maximum brush size:</string>
          </property>
         </widget>
        </item>
-       <item row="16" column="1">
+       <item row="15" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QSpinBox" name="intMaxBrushSize">
@@ -773,7 +744,7 @@
          </item>
         </layout>
        </item>
-       <item row="17" column="1">
+       <item row="16" column="1">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -785,6 +756,28 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="10" column="1">
+        <widget class="KisIntParseSpinBox" name="m_favoritePresetsSpinBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="minimum">
+          <number>10</number>
+         </property>
+         <property name="maximum">
+          <number>30</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

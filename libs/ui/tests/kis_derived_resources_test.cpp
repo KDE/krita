@@ -34,7 +34,7 @@
 #include <KisViewManager.h>
 #include <kis_paintop_settings.h>
 #include <KoResourcePaths.h>
-
+#include <kis_config.h>
 #include "testutil.h"
 
 void addResourceTypes()
@@ -63,6 +63,9 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
+
+    KisConfig cfg(false);
+    cfg.setUseOpenGL(false);
 
 }
 

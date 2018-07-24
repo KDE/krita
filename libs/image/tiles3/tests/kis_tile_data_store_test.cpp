@@ -32,21 +32,28 @@
 
 void KisTileDataStoreTest::testClockIterator()
 {
-    KisTileDataStore::instance()->debugClear();
+    KisTileDataStore *store = KisTileDataStore::instance();
+    store->debugClear();
 
     const qint32 pixelSize = 1;
     quint8 defaultPixel = 128;
 
     QList<KisTileData*> tileDataList;
+    KisTileData *item;
 
-    tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
-    tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
-    tileDataList.append(KisTileDataStore::instance()->createDefaultTileData(pixelSize, &defaultPixel));
+    item = new KisTileData(pixelSize, &defaultPixel, store, false);
+    store->registerTileData(item);
+    tileDataList.append(item);
+    item = new KisTileData(pixelSize, &defaultPixel, store, false);
+    store->registerTileData(item);
+    tileDataList.append(item);
+    item = new KisTileData(pixelSize, &defaultPixel, store, false);
+    store->registerTileData(item);
+    tileDataList.append(item);
 
 
     /// First, full cycle!
-    KisTileDataStoreClockIterator *iter = KisTileDataStore::instance()->beginClockIteration();
-    KisTileData *item;
+    KisTileDataStoreClockIterator *iter = store->beginClockIteration();
 
     QVERIFY(iter->hasNext());
     item = iter->next();
@@ -54,29 +61,33 @@ void KisTileDataStoreTest::testClockIterator()
 
     QVERIFY(iter->hasNext());
     item = iter->next();
-    QCOMPARE(item, tileDataList[1]);
+    QCOMPARE(item, tileDataList[2]);
 
     QVERIFY(iter->hasNext());
     item = iter->next();
-    QCOMPARE(item, tileDataList[2]);
+    QCOMPARE(item, tileDataList[1]);
 
     QVERIFY(!iter->hasNext());
 
-    KisTileDataStore::instance()->endIteration(iter);
+    store->endIteration(iter);
 
 
     /// Second, iterate until the second item!
-    iter = KisTileDataStore::instance()->beginClockIteration();
+    iter = store->beginClockIteration();
 
     QVERIFY(iter->hasNext());
     item = iter->next();
     QCOMPARE(item, tileDataList[0]);
 
-    KisTileDataStore::instance()->endIteration(iter);
+    store->endIteration(iter);
 
 
     /// Third, check the position restored!
-    iter = KisTileDataStore::instance()->beginClockIteration();
+    iter = store->beginClockIteration();
+
+    QVERIFY(iter->hasNext());
+    item = iter->next();
+    QCOMPARE(item, tileDataList[2]);
 
     QVERIFY(iter->hasNext());
     item = iter->next();
@@ -84,24 +95,20 @@ void KisTileDataStoreTest::testClockIterator()
 
     QVERIFY(iter->hasNext());
     item = iter->next();
-    QCOMPARE(item, tileDataList[2]);
-
-    QVERIFY(iter->hasNext());
-    item = iter->next();
     QCOMPARE(item, tileDataList[0]);
 
     QVERIFY(!iter->hasNext());
 
-    KisTileDataStore::instance()->endIteration(iter);
+    store->endIteration(iter);
 
 
-    /// By this moment KisTileDataStore::instance()->m_clockIterator has been set
-    /// onto the second (tileDataList[1]) item.
+    /// By this moment clock index has been set
+    /// onto the last item.
     /// Let's try remove it and see what will happen...
 
-    KisTileDataStore::instance()->freeTileData(tileDataList[1]);
+    store->freeTileData(tileDataList[0]);
 
-    iter = KisTileDataStore::instance()->beginClockIteration();
+    iter = store->beginClockIteration();
 
     QVERIFY(iter->hasNext());
     item = iter->next();
@@ -109,14 +116,14 @@ void KisTileDataStoreTest::testClockIterator()
 
     QVERIFY(iter->hasNext());
     item = iter->next();
-    QCOMPARE(item, tileDataList[0]);
+    QCOMPARE(item, tileDataList[1]);
 
     QVERIFY(!iter->hasNext());
 
-    KisTileDataStore::instance()->endIteration(iter);
+    store->endIteration(iter);
 
-    KisTileDataStore::instance()->freeTileData(tileDataList[0]);
-    KisTileDataStore::instance()->freeTileData(tileDataList[2]);
+    store->freeTileData(tileDataList[2]);
+    store->freeTileData(tileDataList[1]);
 }
 
 void KisTileDataStoreTest::testLeaks()
@@ -144,7 +151,7 @@ void KisTileDataStoreTest::testLeaks()
 
 void KisTileDataStoreTest::testSwapping()
 {
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMemoryHardLimitPercent(100.0 / KisImageConfig::totalRAM());
     config.setMemorySoftLimitPercent(0);
 

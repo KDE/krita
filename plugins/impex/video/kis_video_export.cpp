@@ -59,7 +59,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(KisDocument *doc
 {
     QString ffmpegPath = configuration->getString("ffmpeg_path");
     if (ffmpegPath.isEmpty()) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         ffmpegPath = cfg.customFFMpegPath();
         if (ffmpegPath.isEmpty()) {
             const QString warningMessage =

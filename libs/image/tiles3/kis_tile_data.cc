@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Andrey Kamakin <a.kamakin@icloud.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,8 +36,33 @@ typedef boost::singleton_pool<KisTileData, TILE_SIZE_8BPP, boost::default_user_a
 const qint32 KisTileData::WIDTH = __TILE_DATA_WIDTH;
 const qint32 KisTileData::HEIGHT = __TILE_DATA_HEIGHT;
 
+SimpleCache KisTileData::m_cache;
 
-KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store)
+SimpleCache::~SimpleCache()
+{
+    clear();
+}
+
+void SimpleCache::clear()
+{
+    QWriteLocker l(&m_cacheLock);
+    quint8 *ptr = 0;
+
+    while (m_4Pool.pop(ptr)) {
+        BoostPool4BPP::free(ptr);
+    }
+
+    while (m_8Pool.pop(ptr)) {
+        BoostPool8BPP::free(ptr);
+    }
+
+    while (m_16Pool.pop(ptr)) {
+        free(ptr);
+    }
+}
+
+
+KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store, bool checkFreeMemory)
     : m_state(NORMAL),
       m_mementoFlag(0),
       m_age(0),
@@ -45,7 +71,9 @@ KisTileData::KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataSt
       m_pixelSize(pixelSize),
       m_store(store)
 {
-    m_store->checkFreeMemory();
+    if (checkFreeMemory) {
+        m_store->checkFreeMemory();
+    }
     m_data = allocateData(m_pixelSize);
 
     fillWithPixel(defPixel);
@@ -72,7 +100,7 @@ KisTileData::KisTileData(const KisTileData& rhs, bool checkFreeMemory)
       m_pixelSize(rhs.m_pixelSize),
       m_store(rhs.m_store)
 {
-    if(checkFreeMemory) {
+    if (checkFreeMemory) {
         m_store->checkFreeMemory();
     }
     m_data = allocateData(m_pixelSize);
@@ -90,7 +118,7 @@ void KisTileData::fillWithPixel(const quint8 *defPixel)
 {
     quint8 *it = m_data;
 
-    for (int i = 0; i < WIDTH*HEIGHT; i++, it += m_pixelSize) {
+    for (int i = 0; i < WIDTH * HEIGHT; i++, it += m_pixelSize) {
         memcpy(it, defPixel, m_pixelSize);
     }
 }
@@ -103,7 +131,7 @@ void KisTileData::releaseMemory()
     }
 
     KisTileData *clone = 0;
-    while(m_clonesStack.pop(clone)) {
+    while (m_clonesStack.pop(clone)) {
         delete clone;
     }
 
@@ -120,15 +148,18 @@ quint8* KisTileData::allocateData(const qint32 pixelSize)
 {
     quint8 *ptr = 0;
 
-    switch(pixelSize) {
-    case 4:
-        ptr = (quint8*)BoostPool4BPP::malloc();
-        break;
-    case 8:
-        ptr = (quint8*)BoostPool8BPP::malloc();
-        break;
-    default:
-        ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+    if (!m_cache.pop(pixelSize, ptr)) {
+        switch (pixelSize) {
+        case 4:
+            ptr = (quint8*)BoostPool4BPP::malloc();
+            break;
+        case 8:
+            ptr = (quint8*)BoostPool8BPP::malloc();
+            break;
+        default:
+            ptr = (quint8*) malloc(pixelSize * WIDTH * HEIGHT);
+            break;
+        }
     }
 
     return ptr;
@@ -136,15 +167,18 @@ quint8* KisTileData::allocateData(const qint32 pixelSize)
 
 void KisTileData::freeData(quint8* ptr, const qint32 pixelSize)
 {
-    switch(pixelSize) {
-    case 4:
-        BoostPool4BPP::free(ptr);
-        break;
-    case 8:
-        BoostPool8BPP::free(ptr);
-        break;
-    default:
-        free(ptr);
+    if (!m_cache.push(pixelSize, ptr)) {
+        switch (pixelSize) {
+        case 4:
+            BoostPool4BPP::free(ptr);
+            break;
+        case 8:
+            BoostPool8BPP::free(ptr);
+            break;
+        default:
+            free(ptr);
+            break;
+        }
     }
 }
 
@@ -166,12 +200,12 @@ void KisTileData::releaseInternalPools()
 
         KisTileDataStoreIterator *iter = KisTileDataStore::instance()->beginIteration();
 
-        while(iter->hasNext()) {
+        while (iter->hasNext()) {
             KisTileData *item = iter->next();
 
             // first release all the clones
             KisTileData *clone = 0;
-            while(item->m_clonesStack.pop(clone)) {
+            while (item->m_clonesStack.pop(clone)) {
                 delete clone;
             }
 
@@ -199,6 +233,7 @@ void KisTileData::releaseInternalPools()
 
         if (!failedToLock) {
             // purge the pools memory
+            m_cache.clear();
             BoostPool4BPP::purge_memory();
             BoostPool8BPP::purge_memory();
 

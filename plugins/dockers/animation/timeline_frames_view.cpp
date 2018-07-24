@@ -456,9 +456,7 @@ void TimelineFramesView::slotColorLabelChanged(int label)
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
         m_d->model->setData(index, label, TimelineFramesModel::FrameColorLabelIndexRole);
     }
-
-    KisImageConfig config;
-    config.setDefaultFrameColorLabel(label);
+    KisImageConfig(false).setDefaultFrameColorLabel(label);
 }
 
 void TimelineFramesView::slotSelectAudioChannelFile()
@@ -1019,8 +1017,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             } else {
                 {
                     KisSignalsBlocker b(m_d->colorSelector);
-                    KisImageConfig cfg;
-                    const int labelIndex = cfg.defaultFrameColorLabel();
+                    const int labelIndex = KisImageConfig(true).defaultFrameColorLabel();
                     m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 

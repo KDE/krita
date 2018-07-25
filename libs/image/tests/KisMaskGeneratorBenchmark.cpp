@@ -36,8 +36,8 @@ class KisMaskGeneratorBenchmarkTester
 {
 public:
     KisMaskGeneratorBenchmarkTester(KisBrushMaskApplicatorBase *_applicatorBase, QRect _bounds)
-        : applicatorBase(_applicatorBase)
-        , m_bounds(_bounds)
+        : m_bounds(_bounds),
+          applicatorBase(_applicatorBase)
     {
         KisFixedPaintDeviceSP m_paintDev = new KisFixedPaintDevice(m_colorSpace);
         m_paintDev->setRect(m_bounds);

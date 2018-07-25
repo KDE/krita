@@ -92,14 +92,14 @@ int KisSimpleUpdateQueue::overrideLevelOfDetail() const
 void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
 {
     updaterContext.lock();
+    m_rwLock.lockForRead();
 //    QMutexLocker locker(&m_lock);
-    QWriteLocker l(&m_rwLock);
 
     while(updaterContext.hasSpareThread() &&
           processOneJob(updaterContext));
 
-    l.unlock();
 //    locker.unlock();
+    m_rwLock.unlock();
     updaterContext.unlock();
 }
 
@@ -119,16 +119,29 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
             !item->checksumValid()) {
 
+            m_rwLock.unlock();
+            m_rwLock.lockForWrite();
+
             m_overrideLevelOfDetail = item->levelOfDetail();
             item->recalculate(item->requestedRect());
             m_overrideLevelOfDetail = -1;
+
+            m_rwLock.unlock();
+            m_rwLock.lockForRead();
         }
 
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
             updaterContext.isJobAllowed(item)) {
-
             updaterContext.addMergeJob(item);
+
+            m_rwLock.unlock();
+            m_rwLock.lockForWrite();
+
             iter.remove();
+
+            m_rwLock.unlock();
+            m_rwLock.lockForRead();
+
             jobAdded = true;
             break;
         }
@@ -335,7 +348,9 @@ void KisSimpleUpdateQueue::optimize()
 //    QMutexLocker locker(&m_lock);
     QWriteLocker l(&m_rwLock);
 
-    if(m_updatesList.size() <= 1) return;
+    if(m_updatesList.size() <= 1) {
+        return;
+    }
 
     KisBaseRectsWalkerSP baseWalker = m_updatesList.first();
     QRect baseRect = baseWalker->requestedRect();

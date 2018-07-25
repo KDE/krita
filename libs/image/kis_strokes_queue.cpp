@@ -565,7 +565,7 @@ void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
 {
     updaterContext.lock();
 //    m_d->mutex.lock();
-    m_d->m_rwLock.lockForWrite();
+    m_d->m_rwLock.lockForRead();
 
     while(updaterContext.hasSpareThread() &&
           processOneJob(updaterContext,
@@ -717,13 +717,21 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
                                  snapshot == HasMergeJob);
     const bool hasMergeJobs = snapshot & HasMergeJob;
 
-    if(checkStrokeState(hasStrokeJobs, levelOfDetail) &&
-       checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
+    if (checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
        checkSequentialProperty(snapshot, externalJobsPending)) {
 
-        KisStrokeSP stroke = m_d->strokesQueue.head();
-        updaterContext.addStrokeJob(stroke->popOneJob());
-        result = true;
+        if (checkStrokeState(hasStrokeJobs, levelOfDetail)) {
+            KisStrokeSP stroke = m_d->strokesQueue.head();
+
+            m_d->m_rwLock.unlock();
+            m_d->m_rwLock.lockForWrite();
+            KisStrokeJob *job = stroke->popOneJob();
+            m_d->m_rwLock.unlock();
+            m_d->m_rwLock.lockForRead();
+
+            updaterContext.addStrokeJob(job);
+            result = true;
+        }
     }
 
     return result;
@@ -758,10 +766,16 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * stroke might end up in loaded, but uninitialized state.
          */
         if (!m_d->currentStrokeLoaded) {
+            m_d->m_rwLock.unlock();
+            m_d->m_rwLock.lockForWrite();
+
             m_d->needsExclusiveAccess = stroke->isExclusive();
             m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
             m_d->balancingRatioOverride = stroke->balancingRatioOverride();
             m_d->currentStrokeLoaded = true;
+
+            m_d->m_rwLock.unlock();
+            m_d->m_rwLock.lockForRead();
         }
 
         result = true;
@@ -772,15 +786,24 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * arrive here unloaded.
          */
         if (!m_d->currentStrokeLoaded) {
+            m_d->m_rwLock.unlock();
+            m_d->m_rwLock.lockForWrite();
+
             m_d->needsExclusiveAccess = stroke->isExclusive();
             m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
             m_d->balancingRatioOverride = stroke->balancingRatioOverride();
             m_d->currentStrokeLoaded = true;
+
+            m_d->m_rwLock.unlock();
+            m_d->m_rwLock.lockForRead();
         }
 
         result = true;
     }
     else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
+        m_d->m_rwLock.unlock();
+        m_d->m_rwLock.lockForWrite();
+
         m_d->tryClearUndoOnStrokeCompletion(stroke);
 
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
@@ -790,6 +813,9 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         m_d->currentStrokeLoaded = false;
 
         m_d->switchDesiredLevelOfDetail(false);
+
+        m_d->m_rwLock.unlock();
+        m_d->m_rwLock.lockForRead();
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false, runningLevelOfDetail);

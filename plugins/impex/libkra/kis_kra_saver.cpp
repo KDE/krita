@@ -161,6 +161,7 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
         if (!palette->isGlobal()) {
             if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
                 m_d->errorMessages << i18n("could not save palettes");
+                qDebug() << "KisKraSaver::savePalettes:" << "failed to open";
                 return false;
             }
             store->write(palette->toByteArray());
@@ -168,6 +169,7 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
             res = true;
         }
     }
+    qDebug() << "KisKraSaver::savePalettes:" << res << m_d->doc->paletteList().size();
     return res;
 }
 

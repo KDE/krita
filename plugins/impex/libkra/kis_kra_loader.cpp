@@ -515,6 +515,7 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         store->open(m_d->imageName + PALETTE_PATH + palette->filename());
         QByteArray data = store->read(store->size());
         newPalette->fromByteArray(data);
+        newPalette->setIsGlobal(false);
         delete palette;
         palette = newPalette;
         pServer->addResource(newPalette);

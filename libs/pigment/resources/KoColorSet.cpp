@@ -711,13 +711,12 @@ bool KoColorSet::Private::loadScribusXmlPalette(KoColorSet *set, QXmlStreamReade
     return true;
 }
 
-quint16 readShort(QIODevice *io) {
+quint16 KoColorSet::Private::readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
     return qFromBigEndian(val);
 }
-
 
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
@@ -979,7 +978,7 @@ bool KoColorSet::Private::loadKpl()
     buf.open(QBuffer::ReadOnly);
 
     QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-palette", KoStore::Zip));
-    if (!store || store->bad()) return false;
+    if (!store || store->bad()) { return false; }
 
     if (store->hasFile("profiles.xml")) {
         if (!store->open("profiles.xml")) { return false; }
@@ -1028,37 +1027,13 @@ bool KoColorSet::Private::loadKpl()
         colorSet->setColumnCount(e.attribute("columns").toInt());
         comment = e.attribute("comment");
 
-        QDomElement c = e.firstChildElement("ColorSetEntry");
-        while (!c.isNull()) {
-            QString colorDepthId = c.attribute("bitdepth", Integer8BitsColorDepthID.id());
-            KisSwatch entry;
+        loadKplGroup(doc, e, colorSet->getGroup(GLOBAL_GROUP_NAME));
 
-            entry.setColor(KoColor::fromXML(c.firstChildElement(), colorDepthId));
-            entry.setName(c.attribute("name"));
-            entry.setId(c.attribute("id"));
-            entry.setSpotColor(c.attribute("spot", "false") == "true" ? true : false);
-            groups[GLOBAL_GROUP_NAME].addEntry(entry);
-
-            c = c.nextSiblingElement("ColorSetEntry");
-        }
         QDomElement g = e.firstChildElement("Group");
         while (!g.isNull()) {
             QString groupName = g.attribute("name");
             colorSet->addGroup(groupName);
-            QDomElement cg = g.firstChildElement("ColorSetEntry");
-            while (!cg.isNull()) {
-                QString colorDepthId = cg.attribute("bitdepth", Integer8BitsColorDepthID.id());
-                KisSwatch entry;
-
-                entry.setColor(KoColor::fromXML(cg.firstChildElement(), colorDepthId));
-                entry.setName(cg.attribute("name"));
-                entry.setId(cg.attribute("id"));
-                entry.setSpotColor(cg.attribute("spot", "false") == "true" ? true : false);
-                groups[groupName].addEntry(entry);
-
-                cg = cg.nextSiblingElement("ColorSetEntry");
-
-            }
+            loadKplGroup(doc, g, colorSet->getGroup(groupName));
             g = g.nextSiblingElement("Group");
         }
     }
@@ -1594,8 +1569,12 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute("name", colorSet->name());
         root.setAttribute("comment", comment);
         root.setAttribute("columns", groups[GLOBAL_GROUP_NAME].columnCount());
+        root.setAttribute("rows", colorSet->rowCount());
+
         saveKplGroup(doc, root, colorSet->getGroup(GLOBAL_GROUP_NAME), colorSpaces);
+
         for (const QString &groupName : groupNames) {
+            if (groupName == GLOBAL_GROUP_NAME) { continue; }
             QDomElement gl = doc.createElement("Group");
             gl.setAttribute("name", groupName);
             root.appendChild(gl);
@@ -1636,25 +1615,73 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 }
 
 void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
-                                       QDomElement &ele,
+                                       QDomElement &parentEle,
                                        const KisSwatchGroup *group,
                                        QSet<const KoColorSpace *> &colorSetSet) const
 {
+    parentEle.setAttribute("rows", QString::number(group->rowCount()));
+    parentEle.setAttribute("columns", QString::number(group->columnCount()));
+
     for (const SwatchInfoType & info : group->infoList()) {
         const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
         // Only save non-builtin profiles.=
         if (!profile->fileName().isEmpty()) {
             colorSetSet.insert(info.swatch.color().colorSpace());
         }
-        QDomElement el = doc.createElement("ColorSetEntry");
-        el.setAttribute("name", info.swatch.name());
-        el.setAttribute("id", info.swatch.id());
-        el.setAttribute("spot", info.swatch.spotColor() ? "true" : "false");
-        el.setAttribute("bitdepth", info.swatch.color().colorSpace()->colorDepthId().id());
+        QDomElement swatchEle = doc.createElement("ColorSetEntry");
+        swatchEle.setAttribute("name", info.swatch.name());
+        swatchEle.setAttribute("id", info.swatch.id());
+        swatchEle.setAttribute("spot", info.swatch.spotColor() ? "true" : "false");
+        swatchEle.setAttribute("bitdepth", info.swatch.color().colorSpace()->colorDepthId().id());
+        info.swatch.color().toXML(doc, swatchEle);
+
         QDomElement positionEle = doc.createElement("Position");
         positionEle.setAttribute("row", info.row);
         positionEle.setAttribute("column", info.column);
-        info.swatch.color().toXML(doc, el);
-        ele.appendChild(el);
+        swatchEle.appendChild(positionEle);
+
+        parentEle.appendChild(swatchEle);
+    }
+}
+
+void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElement &parentEle, KisSwatchGroup *group)
+{
+    Q_UNUSED(doc);
+    if (!parentEle.attribute("column").isNull()) {
+        group->setColumnCount(parentEle.attribute("column").toInt());
+    }
+    if (!parentEle.attribute("row").isNull()) {
+        group->setColumnCount(parentEle.attribute("row").toInt());
+    }
+
+    for (QDomElement swatchEle = parentEle.firstChildElement("ColorSetEntry");
+         !swatchEle.isNull();
+         swatchEle = swatchEle.nextSiblingElement("ColorSetEntry")) {
+        QString colorDepthId = swatchEle.attribute("bitdepth", Integer8BitsColorDepthID.id());
+        KisSwatch entry;
+
+        entry.setColor(KoColor::fromXML(swatchEle.firstChildElement(), colorDepthId));
+        entry.setName(swatchEle.attribute("name"));
+        entry.setId(swatchEle.attribute("id"));
+        entry.setSpotColor(swatchEle.attribute("spot", "false") == "true" ? true : false);
+        QDomElement positionEle = swatchEle.firstChildElement("Position");
+        if (!positionEle.isNull()) {
+            int rowNumber = positionEle.attribute("row").toInt();
+            int columnNumber = positionEle.attribute("column").toInt();
+            if (columnNumber < 0 ||
+                    columnNumber >= group->columnCount() ||
+                    rowNumber < 0 ||
+                    rowNumber >= group->rowCount()
+                    ) {
+                warnPigment << "Swatch" << entry.name()
+                            << "from group" << group->name()
+                            << "of palette" << colorSet->name()
+                            << "has invalid position.";
+                continue;
+            }
+            group->setEntry(entry, columnNumber, rowNumber);
+        } else {
+            group->addEntry(entry);
+        }
     }
 }

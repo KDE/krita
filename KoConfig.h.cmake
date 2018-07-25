@@ -62,4 +62,4 @@
 #define KRITA_BUILD_DIR "${CMAKE_BINARY_DIR}"
 
 /* This variable contains the path to the data install dir */
-#define KRITA_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}"
+#define KRITA_EXTRA_RESOURCE_DIRS "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}:${CMAKE_SOURCE_DIR}/krita/data"

@@ -39,6 +39,8 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
+#include <sdk/tests/kistest.h>
+
 void TestDocument::testSetColorSpace()
 {
     KisDocument *kisdoc = KisPart::instance()->createDocument();
@@ -215,5 +217,5 @@ void TestDocument::testCreateFillLayer()
 
 
 
-QTEST_MAIN(TestDocument)
+KISTEST_MAIN(TestDocument)
 

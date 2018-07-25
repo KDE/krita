@@ -21,6 +21,8 @@
 
 #include <QTest>
 
+#include <sdk/tests/testutil.h>
+
 #include "ui_manager_test.h"
 
 class SelectionManagerTester : public TestUtil::UiManagerTest
@@ -415,4 +417,4 @@ void KisSelectionManagerTest::testScanline16bit()
 
 }
 
-QTEST_MAIN(KisSelectionManagerTest)
+KISTEST_MAIN(KisSelectionManagerTest)

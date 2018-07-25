@@ -22,7 +22,7 @@
 #include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
-
+#include <sdk/tests/kistest.h>
 #include <QTest>
 #include <FlakeDebug.h>
 
@@ -561,4 +561,4 @@ void TestPointMergeCommand::testMultipathJoinShapesSingleShapeStartToEnd()
 
 
 
-QTEST_MAIN(TestPointMergeCommand)
+KISTEST_MAIN(TestPointMergeCommand)

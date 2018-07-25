@@ -144,4 +144,4 @@ void KisDerivedResourcesTest::test()
     delete mainWindow;
 }
 
-QTEST_MAIN(KisDerivedResourcesTest)
+KISTEST_MAIN(KisDerivedResourcesTest)

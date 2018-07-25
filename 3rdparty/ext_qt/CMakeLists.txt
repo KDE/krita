@@ -3,13 +3,13 @@ if (WIN32)
     list(APPEND _QT_conf -skip qt3d -skip qtactiveqt -skip qtcanvas3d
         -skip qtconnectivity -skip qtdoc -skip qtenginio -skip qtgraphicaleffects
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
-        -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
+        -skip qtwebchannel -skip qtwebsockets
         -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools
         -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-ssl
         -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
-        -skip qtspeech -skip qtvirtualkeyboard -skip qwinextras
+        -skip qtspeech -skip qtvirtualkeyboard
         #
         -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
         #

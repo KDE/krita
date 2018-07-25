@@ -41,7 +41,7 @@ KisImportQmicProcessingVisitor::KisImportQmicProcessingVisitor(const KisNodeList
       m_dstRect(dstRect),
       m_selection(selection)
 {
-    qDebug() << "KisImportQmicProcessingVisitor";
+    dbgPlugins << "KisImportQmicProcessingVisitor";
 }
 
 
@@ -49,7 +49,7 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
                                                             KisPaintDeviceSP dst, KisSelectionSP selection, const QRect &dstRect)
 {
 
-    qDebug() << "KisImportQmicProcessingVisitor::gmicImageToPaintDevice();";
+    dbgPlugins << "KisImportQmicProcessingVisitor::gmicImageToPaintDevice();";
     if (selection) {
         KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, src, 255.0f);
@@ -70,7 +70,7 @@ void KisImportQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
     int index = m_nodes->indexOf(node);
     if (index >= 0) {
         gmic_image<float> *gimg = m_images[index];
-        qDebug() << "Importing layer index" << index << "Size: "<< gimg->_width << "x" << gimg->_height << "colorchannels: " << gimg->_spectrum;
+        dbgPlugins << "Importing layer index" << index << "Size: "<< gimg->_width << "x" << gimg->_height << "colorchannels: " << gimg->_spectrum;
 
         KisPaintDeviceSP dst = node->paintDevice();
         KisTransaction transaction(dst);

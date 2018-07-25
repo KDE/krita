@@ -31,6 +31,8 @@ class KRITAIMAGE_EXPORT KisLsSatinFilter : public KisLayerStyleFilter
 public:
     KisLsSatinFilter();
 
+    KisLayerStyleFilter* clone() const override;
+
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
                          const QRect &applyRect,
@@ -39,6 +41,9 @@ public:
 
     QRect neededRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
+
+private:
+    KisLsSatinFilter(const KisLsSatinFilter &rhs);
 };
 
 #endif

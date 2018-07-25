@@ -264,10 +264,10 @@ static KoColorTransformation* createTransformation(const KoColorSpace* colorSpac
 
 void KisQmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicUnitValue)
 {
+    dbgPlugins << "convertFromGmicFast";
     const KoColorSpace * dstColorSpace = dst->colorSpace();
-    KoColorTransformation * gmicToDstPixelFormat = createTransformationFromGmic(dstColorSpace,gmicImage._spectrum,gmicUnitValue);
-    if (gmicToDstPixelFormat == 0)
-    {
+    KoColorTransformation * gmicToDstPixelFormat = createTransformationFromGmic(dstColorSpace, gmicImage._spectrum, gmicUnitValue);
+    if (gmicToDstPixelFormat == 0) {
             dbgPlugins << "Fall-back to slow color conversion";
             convertFromGmicImage(gmicImage, dst, gmicUnitValue);
             return;
@@ -281,25 +281,23 @@ void KisQmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
     width  = width < 0  ? 0 : width;
     height = height < 0 ? 0 : height;
 
-
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
     // this function always convert to rgba or rgb with various color depth
     quint32 dstNumChannels = rgbaFloat32bitcolorSpace->channelCount();
+
     // number of channels that we will copy
     quint32 numChannels = gmicImage._spectrum;
 
     // gmic image has 4, 3, 2, 1 channel
     QVector<float *> planes(dstNumChannels);
     int channelOffset = gmicImage._width * gmicImage._height;
-    for (unsigned int channelIndex = 0; channelIndex < gmicImage._spectrum; channelIndex++)
-    {
+    for (unsigned int channelIndex = 0; channelIndex < gmicImage._spectrum; channelIndex++) {
         planes[channelIndex] = gmicImage._data + channelOffset * channelIndex;
     }
 
-    for (unsigned int channelIndex = gmicImage._spectrum; channelIndex < dstNumChannels; channelIndex++)
-    {
+    for (unsigned int channelIndex = gmicImage._spectrum; channelIndex < dstNumChannels; channelIndex++) {
         planes[channelIndex] = 0; //turn off
     }
 
@@ -314,16 +312,14 @@ void KisQmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, K
     int tileHeight = it->numContiguousRows(dst->y());
     Q_ASSERT(tileWidth == 64);
     Q_ASSERT(tileHeight == 64);
-    quint8 * convertedTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
+    quint8 *convertedTile = new quint8[rgbaFloat32bitcolorSpace->pixelSize() * tileWidth * tileHeight];
 
     // grayscale and rgb case does not have alpha, so let's fill 4th channel of rgba tile with opacity opaque
-    if (gmicImage._spectrum == 1 || gmicImage._spectrum == 3)
-    {
+    if (gmicImage._spectrum == 1 || gmicImage._spectrum == 3) {
         quint32 nPixels = tileWidth * tileHeight;
         quint32 pixelIndex = 0;
         KoRgbF32Traits::Pixel* srcPixel = reinterpret_cast<KoRgbF32Traits::Pixel*>(convertedTile);
-        while (pixelIndex < nPixels)
-        {
+        while (pixelIndex < nPixels) {
             srcPixel->alpha = gmicUnitValue;
             ++srcPixel;
             ++pixelIndex;
@@ -404,14 +400,14 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev, gmic_i
     KoColorTransformation * pixelToGmicPixelFormat = createTransformation(dev->colorSpace());
     if (pixelToGmicPixelFormat == 0)
     {
-        qDebug() << "Fall-back to slow color conversion method";
+        dbgPlugins << "Fall-back to slow color conversion method";
         convertToGmicImage(dev, gmicImage, rc);
         return;
     }
 
     if (rc.isEmpty())
     {
-        qDebug() << "Image rectangle is empty! Using supplied gmic layer dimension";
+        dbgPlugins << "Image rectangle is empty! Using supplied gmic layer dimension";
         rc = QRect(0, 0, gmicImage->_width, gmicImage->_height);
     }
 
@@ -599,15 +595,12 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
 
 void KisQmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue)
 {
+    dbgPlugins << "convertFromGmicSlow";
     Q_ASSERT(!dst.isNull());
     const KoColorSpace *rgbaFloat32bitcolorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                 Float32BitsColorDepthID.id(),
                                                                                                 KoColorSpaceRegistry::instance()->rgb8()->profile());
     const KoColorSpace *dstColorSpace = dst->colorSpace();
-    if (dstColorSpace == 0)
-    {
-        dstColorSpace = rgbaFloat32bitcolorSpace;
-    }
 
     KisPaintDeviceSP dev = dst;
     int greenOffset = gmicImage._width * gmicImage._height;

@@ -67,8 +67,9 @@ private Q_SLOTS:
     void slotRemoveColor();
     void slotEditEntry();
 
-    void slotSetEntryByForeground(const QModelIndex &index);
-    void slotSetForegroundColor(const KisSwatch &entry);
+    void slotPaletteIndexSelected(const QModelIndex &index);
+    void setEntryByForeground(const QModelIndex &index);
+    void setForegroundColor(const KisSwatch &entry);
 
     void slotSetColorSet(KoColorSet* colorSet);
 

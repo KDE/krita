@@ -79,14 +79,7 @@ public:
     void modifyEntry(QModelIndex index);
 
 Q_SIGNALS:
-    /**
-     * @brief sigEntrySelected
-     * used to tell other components, e.g. PaletteDocker, the color entry selected for
-     * foreground
-     * @param color
-     */
-    void sigEntrySelected(const KisSwatch &entry);
-    void sigSetEntry(const QModelIndex &index);
+    void sigIndexSelected(const QModelIndex &index);
 
 public Q_SLOTS:
     /**

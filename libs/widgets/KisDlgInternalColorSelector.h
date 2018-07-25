@@ -173,7 +173,7 @@ private Q_SLOTS:
 
     void slotSetColorFromColorList();
 
-    void slotSetColorFromColorSetEntry(const KisSwatch &entry);
+    void slotSetColorFromPaletteIndex(const QModelIndex &index);
 
 
 protected:

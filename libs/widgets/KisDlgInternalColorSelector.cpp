@@ -120,8 +120,10 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
             }
         }
 
-        connect(m_ui->paletteBox, SIGNAL(sigEntrySelected(KisSwatch)), this, SLOT(slotSetColorFromColorSetEntry(KisSwatch)));
-        connect(m_ui->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetColorFromColorList()));
+        connect(m_ui->paletteBox, SIGNAL(sigIndexSelected(QModelIndex)), this,
+                SLOT(slotSetColorFromPaletteIndex(QModelIndex)));
+        connect(m_ui->cmbNameList, SIGNAL(currentIndexChanged(int)),
+                this, SLOT(slotSetColorFromColorList()));
 
         m_ui->bnPaletteChooser->setPopupWidget(m_d->paletteChooser);
     } else {
@@ -379,8 +381,11 @@ void KisDlgInternalColorSelector::slotSetColorFromColorList()
     }
 }
 
-void KisDlgInternalColorSelector::slotSetColorFromColorSetEntry(const KisSwatch &entry)
+void KisDlgInternalColorSelector::slotSetColorFromPaletteIndex(const QModelIndex &index)
 {
+    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+    Q_ASSERT(group);
+    KisSwatch entry = group->getEntry(index.column(), index.row());
     slotColorUpdated(entry.color());
 }
 

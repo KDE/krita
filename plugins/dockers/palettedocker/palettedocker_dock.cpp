@@ -97,10 +97,8 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_actAdd.data(), SIGNAL(triggered()), SLOT(slotAddColor()));
     connect(m_actRemove.data(), SIGNAL(triggered()), SLOT(slotRemoveColor()));
     connect(m_actModify.data(), SIGNAL(triggered()), SLOT(slotEditEntry()));
-    connect(m_ui->paletteView, SIGNAL(sigEntrySelected(const KisSwatch &)),
-            SLOT(slotSetForegroundColor(const KisSwatch &)));
-    connect(m_ui->paletteView, SIGNAL(sigSetEntry(QModelIndex)),
-            SLOT(slotSetEntryByForeground(QModelIndex)));
+    connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
+            SLOT(slotPaletteIndexSelected(QModelIndex)));
 
     m_viewContextMenu.addAction(m_actAddWithDlg.data());
     m_viewContextMenu.addAction(m_actRemove.data());
@@ -222,7 +220,7 @@ void PaletteDockerDock::slotRemoveColor()
     m_ui->paletteView->removeEntryWithDialog(index);
 }
 
-void PaletteDockerDock::slotSetForegroundColor(const KisSwatch &entry)
+void PaletteDockerDock::setForegroundColor(const KisSwatch &entry)
 {
     if (m_resourceProvider) {
         m_resourceProvider->setFGColor(entry.color());
@@ -247,7 +245,20 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
     }
 }
 
-void PaletteDockerDock::slotSetEntryByForeground(const QModelIndex &index)
+void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
+{
+    bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
+    if (slotEmpty) {
+        setEntryByForeground(index);
+    } else {
+        KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+        Q_ASSERT(group);
+        KisSwatch entry = group->getEntry(index.column(), index.row());
+        setForegroundColor(entry);
+    }
+}
+
+void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
 {
     m_model->setEntry(KisSwatch(m_resourceProvider->fgColor()), index);
     if (m_currentColorSet->removable()) {

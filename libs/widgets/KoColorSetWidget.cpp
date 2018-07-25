@@ -136,7 +136,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     setLayout(d->mainLayout);
 
     connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotPaletteChoosen(KoColorSet*)));
-    connect(d->paletteView, SIGNAL(sigEntrySelected(KisSwatch)), SLOT(slotEntrySelected(KisSwatch)));
+    connect(d->paletteView, SIGNAL(sigIndexSelected(QModelIndex)), SLOT(slotPaletteIndexSelected(QModelIndex)));
     // connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
     connect(d->colorNameCmb, SIGNAL(activated(QString)), SLOT(setColorFromString(QString)), Qt::UniqueConnection);
 
@@ -194,8 +194,11 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
     QFrame::resizeEvent(event);
 }
 
-void KoColorSetWidget::slotEntrySelected(const KisSwatch &entry)
+void KoColorSetWidget::slotPaletteIndexSelected(const KisSwatch &entry)
 {
+    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+    Q_ASSERT(group);
+    KisSwatch entry = group->getEntry(index.column(), index.row());
     emit colorChanged(entry.color(), true);
     d->addRecent(entry.color());
 

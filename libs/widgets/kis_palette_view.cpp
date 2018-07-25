@@ -227,16 +227,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
     QModelIndex index = currentIndex();
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
-        bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
-        if (slotEmpty) {
-            emit sigSetEntry(index);
-            update(index);
-        } else {
-            KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-            Q_ASSERT(group);
-            KisSwatch entry = group->getEntry(index.column(), index.row());
-            emit sigEntrySelected(entry);
-        }
+        emit sigIndexSelected(index);
     }
 
 }

@@ -94,14 +94,13 @@ private /* friends */:
     friend class PaletteListSaver;
 
 private /* member variables */:
-    Ui_WdgPaletteDock* m_wdgPaletteDock;
+    Ui_WdgPaletteDock* m_ui;
     KisPaletteModel *m_model;
     KoColorSet *m_currentColorSet;
     KisPaletteListWidget *m_paletteChooser;
     KisViewManager *m_view;
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
-    QVector<QPair<int, int> > m_indexList; // vector used to associate the name list to indexes
     QScopedPointer<PaletteListSaver> m_saver;
 
     QScopedPointer<QAction> m_actAdd;

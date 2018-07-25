@@ -37,7 +37,7 @@
     </widget>
    </item>
    <item>
-    <widget class="SqueezedComboBox" name="cmbNameList">
+    <widget class="KisPaletteComboBox" name="cmbNameList">
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -138,9 +138,9 @@
    <header location="global">kis_palette_view.h</header>
   </customwidget>
   <customwidget>
-   <class>SqueezedComboBox</class>
+   <class>KisPaletteComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">squeezedcombobox.h</header>
+   <header>KisPaletteComboBox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

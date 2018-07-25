@@ -194,7 +194,7 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
     QFrame::resizeEvent(event);
 }
 
-void KoColorSetWidget::slotPaletteIndexSelected(const KisSwatch &entry)
+void KoColorSetWidget::slotPaletteIndexSelected(const QModelIndex &index)
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);

@@ -99,6 +99,8 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_actModify.data(), SIGNAL(triggered()), SLOT(slotEditEntry()));
     connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
             SLOT(slotPaletteIndexSelected(QModelIndex)));
+    connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
+            m_ui->cmbNameList, SLOT(slotSwatchSelected(QModelIndex)));
 
     m_viewContextMenu.addAction(m_actAddWithDlg.data());
     m_viewContextMenu.addAction(m_actRemove.data());

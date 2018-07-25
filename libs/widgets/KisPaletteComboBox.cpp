@@ -37,27 +37,30 @@ void KisPaletteComboBox::slotPaletteChanged()
 {
     if (QPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
     clear();
-    QVector<KisSwatch> swatchList;
+    QVector<SwatchInfoType> infoList;
     for (const QString &groupName : m_model->colorSet()->getGroupNames()) {
         const KisSwatchGroup *group = m_model->colorSet()->getGroup(groupName);
         for (const SwatchInfoType &info : group->infoList()) {
-            swatchList.append(info.swatch);
+            infoList.append(info);
         }
     }
-    std::sort(swatchList.begin(), swatchList.end(), swatchLess);
-    for (const KisSwatch &swatch: swatchList) {
+    std::sort(infoList.begin(), infoList.end(), swatchLess);
+    for (int i = 0; i != infoList.size(); i++) {
+        const SwatchInfoType &info = infoList[i];
+        const KisSwatch &swatch = info.swatch;
         QPixmap colorSquare = createColorSquare(swatch);
         QString name = swatch.name();
         if (!swatch.id().isEmpty()){
             name = swatch.id() + " - " + swatch.name();
         }
         addItem(QIcon(colorSquare), name);
+        m_posIdxMap[SwatchPosType(info.column, info.row)] = i;
     }
 }
 
-bool KisPaletteComboBox::swatchLess(const KisSwatch &first, const KisSwatch &second)
+bool KisPaletteComboBox::swatchLess(const SwatchInfoType &first, const SwatchInfoType &second)
 {
-    return first.name() < second.name();
+    return first.swatch.name() < second.swatch.name();
 }
 
 QPixmap KisPaletteComboBox::createColorSquare(const KisSwatch &swatch) const
@@ -84,7 +87,7 @@ QPixmap KisPaletteComboBox::createColorSquare(const KisSwatch &swatch) const
     return colorSquare;
 }
 
-void KisPaletteComboBox::slotSwatchSelected(const KisSwatch &swatch) const
+void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
 {
-
+    setCurrentIndex(m_posIdxMap[SwatchPosType(index.column(), index.row())]);
 }

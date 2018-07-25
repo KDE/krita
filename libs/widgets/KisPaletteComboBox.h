@@ -8,6 +8,8 @@
 #include <QPointer>
 #include <QScopedPointer>
 #include <QPixmap>
+#include <QPair>
+#include <QHash>
 
 #include <KisPaletteModel.h>
 
@@ -16,12 +18,7 @@ class KRITAWIDGETS_EXPORT KisPaletteComboBox : public QComboBox
     Q_OBJECT
 private /* typedef */:
     typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
-
-private /* struct */:
-    struct SwatchPos {
-        int row;
-        int column;
-    };
+    typedef QPair<int, int> SwatchPosType; // first is column #, second is row #
 
 public:
     explicit KisPaletteComboBox(QWidget *parent = Q_NULLPTR);
@@ -32,15 +29,16 @@ public /* methods */:
 
 private Q_SLOTS:
     void slotPaletteChanged();
-    void slotSwatchSelected(const KisSwatch &swatch) const;
+    void slotSwatchSelected(const QModelIndex &index);
 
 private /* methods */:
     QPixmap createColorSquare(const KisSwatch &swatch) const;
-    static bool swatchLess(const KisSwatch &, const KisSwatch &);
+    static bool swatchLess(const SwatchInfoType &, const SwatchInfoType &);
 
 private /* member variables */:
     QScopedPointer<QCompleter> m_completer;
     QPointer<const KisPaletteModel> m_model;
+    QHash<QPair<int, int>, int> m_posIdxMap; // map from pos in table to idx here
 };
 
 #endif // KISPALETTECOLORNAMELIST_H

@@ -148,12 +148,14 @@ void KisBaseNodeTest::testOpacityKeyframing()
     p.image->projection()->pixel(16, 16, &sample);
     QCOMPARE(sample, QColor(63, 192, 0, 255));
 
-    p.image->animationInterface()->requestTimeSwitchNonGUI(10);
+    p.image->animationInterface()->switchCurrentTimeAsync(10);
     p.image->waitForDone();
+
     p.image->projection()->pixel(16, 16, &sample);
     QCOMPARE(sample, QColor(127, 128, 0, 255));
 
-    p.image->animationInterface()->requestTimeSwitchNonGUI(30);
+    p.image->animationInterface()->switchCurrentTimeAsync(30);
+    p.image->waitForDone();
 
     layer2->setOpacity(32);
     QCOMPARE(opacityChannel->scalarValue(key2), 32.0);
@@ -168,7 +170,7 @@ void KisBaseNodeTest::testOpacityKeyframing()
     key1->setInterpolationTangents(QPointF(), QPointF(0,0));
     key2->setInterpolationTangents(QPointF(0,0), QPointF());
 
-    p.image->animationInterface()->requestTimeSwitchNonGUI(10);
+    p.image->animationInterface()->switchCurrentTimeAsync(10);
     p.image->waitForDone();
     p.image->projection()->pixel(16, 16, &sample);
 

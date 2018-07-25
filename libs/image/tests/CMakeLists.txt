@@ -168,10 +168,9 @@ ecm_add_test(KisWatershedWorkerTest.cpp
 #    TEST_NAME krita-image-KisProcessingsTest
 #LINK_LIBRARIES kritaimage Qt5::Test)
 
-# image/tests cannot use stuff that needs kisdocument
-#    kis_projection_leaf_test.cpp
-#    TEST_NAME kritaimage-projection_leaf_test
-#    LINK_LIBRARIES kritaimage Qt5::Test)
+ecm_add_test(kis_projection_leaf_test.cpp
+    TEST_NAME KisProjectionLeafTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
 
 

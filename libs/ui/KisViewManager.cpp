@@ -112,6 +112,7 @@
 #include <KoUpdater.h>
 #include "KisResourceServerProvider.h"
 #include "kis_selection.h"
+#include "kis_selection_mask.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"
 #include "kis_shape_layer.h"
@@ -643,10 +644,9 @@ bool KisViewManager::selectionEditable()
 {
     KisLayerSP layer = activeLayer();
     if (layer) {
-        KoProperties properties;
-        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
-        if (masks.size() == 1) {
-            return masks[0]->isEditable();
+        KisSelectionMaskSP mask = layer->selectionMask();
+        if (mask) {
+            return mask->isEditable();
         }
     }
     // global selection is always editable

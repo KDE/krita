@@ -290,7 +290,7 @@ void KisNodeTest::testChildNodes()
     QStringList nodeTypes;
     nodeTypes << "TestNodeA" << "TestNodeB";
     QList<KisNodeSP> subSetOfNodeTypes = root->childNodes(nodeTypes, KoProperties());
-    QVERIFY(subSetOfNodeTypes.count() == 2);   // a, b
+    QCOMPARE(subSetOfNodeTypes.count(), 2);   // a, b
 
     nodeTypes.clear();
     nodeTypes << "TestNodeB" << "TestNodeC";
@@ -298,12 +298,12 @@ void KisNodeTest::testChildNodes()
     props.setProperty("visible", false);
     props.setProperty("locked", true);
     QList<KisNodeSP> subsetOfTypesAndProps = root->childNodes(nodeTypes, props);
-    QVERIFY(subsetOfTypesAndProps.count() == 1);   // b
+    QCOMPARE(subsetOfTypesAndProps.count(), 1);   // b
 
     KoProperties props2;
-    props.setProperty("visible", false);
-    QList<KisNodeSP> subSetOfProps = root->childNodes(QStringList(), props);
-    QVERIFY(subSetOfProps.count() == 2);   // b, c
+    props2.setProperty("visible", false);
+    QList<KisNodeSP> subSetOfProps = root->childNodes(QStringList(), props2);
+    QCOMPARE(subSetOfProps.count(), 2);   // b, c
 }
 
 void KisNodeTest::testDirtyRegion()

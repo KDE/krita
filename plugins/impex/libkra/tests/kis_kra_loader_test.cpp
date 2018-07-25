@@ -38,6 +38,8 @@
 #include "kis_keyframe_channel.h"
 #include "kis_time_range.h"
 
+#include  <sdk/tests/kistest.h>
+
 void KisKraLoaderTest::initTestCase()
 {
     KisFilterRegistry::instance();
@@ -169,4 +171,4 @@ void KisKraLoaderTest::testLoadAnimated()
 }
 
 
-QTEST_MAIN(KisKraLoaderTest)
+KISTEST_MAIN(KisKraLoaderTest)

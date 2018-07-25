@@ -34,6 +34,7 @@
 #include "kis_node_model.h"
 #include "kis_color_filter_combo.h"
 
+#include <sdk/tests/testutil.h>
 
 void KisNodeViewTest::init()
 {
@@ -117,4 +118,4 @@ void KisNodeViewTest::testColorLabels()
     dlg.exec();
 }
 
-QTEST_MAIN(KisNodeViewTest)
+KISTEST_MAIN(KisNodeViewTest)

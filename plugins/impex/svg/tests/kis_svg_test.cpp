@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
+#include  <sdk/tests/kistest.h>
 
 #include "filestest.h"
 
@@ -35,5 +35,6 @@ void KisSvgTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
 }
-QTEST_MAIN(KisSvgTest)
+
+KISTEST_MAIN(KisSvgTest)
 

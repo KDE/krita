@@ -30,7 +30,7 @@
 #include <KoUpdater.h>
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
-
+#include <kistest.h>
 
 void KisAnimationExporterTest::testAnimationExport()
 {
@@ -90,4 +90,4 @@ void KisAnimationExporterTest::testAnimationExport()
     QCOMPARE(exported, frame2);
 }
 
-QTEST_MAIN(KisAnimationExporterTest)
+KISTEST_MAIN(KisAnimationExporterTest)

@@ -32,7 +32,7 @@
 
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
-
+#include <sdk/tests/testutil.h>
 
 void KisShapeCommandsTest::testGrouping()
 {
@@ -226,4 +226,4 @@ void KisShapeCommandsTest::testResizeShapeNormalized()
     testResizeShape(true);
 }
 
-QTEST_MAIN(KisShapeCommandsTest)
+KISTEST_MAIN(KisShapeCommandsTest)

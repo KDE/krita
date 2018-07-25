@@ -61,7 +61,7 @@ if (APPLE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-    add_definitions(-Werror=delete-incomplete)
+
 endif()
 
  ######################
@@ -305,7 +305,6 @@ include (MacroEnsureOutOfSourceBuild)
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
 
 
-
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 
@@ -401,8 +400,12 @@ add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fext-numeric-literals")
+endif()
+
+option(KRITA_DEVS "For Krita developers. This modifies the DEBUG build type to use -O3 -g, while still enabling Q_ASSERT. This is necessary because the Qt5 cmake modules normally append QT_NO_DEBUG to any build type that is not labeled Debug")
+if (KRITA_DEVS)
+    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g" CACHE STRING "" FORCE)
 endif()
 
 if(UNIX)

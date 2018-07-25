@@ -27,6 +27,7 @@
 #include <QStack>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QReadWriteLock>
 
 #include <KoIcon.h>
 #include <kis_icon.h>
@@ -60,23 +61,33 @@
 class KisSafeProjection {
 public:
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
-        QMutexLocker locker(&m_lock);
+//        QMutexLocker locker(&m_lock);
+        QReadLocker rl(&m_rwLock);
 
         if (!m_reusablePaintDevice) {
+            rl.unlock();
+            QWriteLocker wl(&m_rwLock);
             m_reusablePaintDevice = new KisPaintDevice(*prototype);
         }
+
+        rl.relock();
+
         if(!m_projection ||
            *m_projection->colorSpace() != *prototype->colorSpace()) {
+            rl.unlock();
+            QWriteLocker wl(&m_rwLock);
             m_projection = m_reusablePaintDevice;
             m_projection->makeCloneFromRough(prototype, prototype->extent());
             m_projection->setProjectionDevice(true);
         }
 
+        rl.relock();
         return m_projection;
     }
 
     void tryCopyFrom(const KisSafeProjection &rhs) {
-        QMutexLocker locker(&m_lock);
+//        QMutexLocker locker(&m_lock);
+        QWriteLocker l(&m_rwLock);
 
         if (!rhs.m_projection) return;
 
@@ -90,7 +101,8 @@ public:
     }
 
     void freeDevice() {
-        QMutexLocker locker(&m_lock);
+//        QMutexLocker locker(&m_lock);
+        QWriteLocker l(&m_rwLock);
         m_projection = 0;
         if(m_reusablePaintDevice) {
             m_reusablePaintDevice->clear();
@@ -98,7 +110,8 @@ public:
     }
 
 private:
-    QMutex m_lock;
+//    QMutex m_lock;
+    QReadWriteLock m_rwLock;
     KisPaintDeviceSP m_projection;
     KisPaintDeviceSP m_reusablePaintDevice;
 };

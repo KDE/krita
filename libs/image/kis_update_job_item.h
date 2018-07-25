@@ -93,7 +93,7 @@ public:
             setDone();
 
 
-            emit sigDoSomeUsefulWork();
+//            emit sigDoSomeUsefulWork();
 
             // may flip the current state from Waiting -> Running again
             emit sigJobFinished();

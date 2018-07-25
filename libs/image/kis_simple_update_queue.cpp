@@ -61,7 +61,8 @@ KisSimpleUpdateQueue::KisSimpleUpdateQueue()
 
 KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QWriteLocker l(&m_rwLock);
 
     while (!m_spontaneousJobsList.isEmpty()) {
         delete m_spontaneousJobsList.takeLast();
@@ -70,7 +71,8 @@ KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 
 void KisSimpleUpdateQueue::updateSettings()
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QWriteLocker l(&m_rwLock);
 
     KisImageConfig config(true);
 
@@ -90,16 +92,20 @@ int KisSimpleUpdateQueue::overrideLevelOfDetail() const
 void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
 {
     updaterContext.lock();
+//    QMutexLocker locker(&m_lock);
+    QWriteLocker l(&m_rwLock);
 
     while(updaterContext.hasSpareThread() &&
           processOneJob(updaterContext));
 
+    l.unlock();
+//    locker.unlock();
     updaterContext.unlock();
 }
 
 bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
 
     KisBaseRectsWalkerSP item;
     KisMutableWalkersListIterator iter(m_updatesList);
@@ -207,15 +213,17 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
     }
 
     if (!walkers.isEmpty()) {
-        m_lock.lock();
+//        m_lock.lock();
+        QWriteLocker l(&m_rwLock);
         m_updatesList.append(walkers);
-        m_lock.unlock();
+//        m_lock.unlock();
     }
 }
 
 void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QWriteLocker l(&m_rwLock);
 
     KisSpontaneousJob *item;
     KisMutableSpontaneousJobsListIterator iter(m_spontaneousJobsList);
@@ -236,13 +244,15 @@ void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 
 bool KisSimpleUpdateQueue::isEmpty() const
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QReadLocker l(&m_rwLock);
     return m_updatesList.isEmpty() && m_spontaneousJobsList.isEmpty();
 }
 
 qint32 KisSimpleUpdateQueue::sizeMetric() const
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QReadLocker l(&m_rwLock);
     return m_updatesList.size() + m_spontaneousJobsList.size();
 }
 
@@ -284,7 +294,8 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
                                        int levelOfDetail,
                                        KisBaseRectsWalker::UpdateType type)
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QWriteLocker l(&m_rwLock);
 
     QRect baseRect = rc;
 
@@ -321,7 +332,8 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
 
 void KisSimpleUpdateQueue::optimize()
 {
-    QMutexLocker locker(&m_lock);
+//    QMutexLocker locker(&m_lock);
+    QWriteLocker l(&m_rwLock);
 
     if(m_updatesList.size() <= 1) return;
 

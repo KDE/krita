@@ -42,9 +42,11 @@
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
-    QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
+    qDebug() << qAppName();
 
-    Q_FOREACH (const KoColorSpace* cs, colorsapces) {
+    QList<const KoColorSpace*> colorspaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
+
+    Q_FOREACH (const KoColorSpace* cs, colorspaces) {
 
         QString csId = cs->id();
         // ALL THESE COLORSPACES ARE BROKEN: WE NEED UNITTESTS FOR COLORSPACES!
@@ -862,6 +864,6 @@ void KisPainterTest::testOptimizedCopying()
 
 }
 
-QTEST_MAIN(KisPainterTest)
+KISTEST_MAIN(KisPainterTest)
 
 

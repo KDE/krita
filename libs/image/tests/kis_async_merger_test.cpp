@@ -65,7 +65,7 @@ void KisAsyncMergerTest::testMerger()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
@@ -186,7 +186,7 @@ void KisAsyncMergerTest::testFullRefreshWithClones()
 
     KisFilterSP filter = KisFilterRegistry::instance()->value("invert");
     Q_ASSERT(filter);
-    KisFilterConfigurationSP configuration = filter->defaultConfiguration(0);
+    KisFilterConfigurationSP configuration = filter->defaultConfiguration();
     Q_ASSERT(configuration);
 
     KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);

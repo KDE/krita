@@ -22,17 +22,24 @@ ecm_add_tests(
     kis_stop_gradient_editor_test.cpp
     kis_file_layer_test.cpp
     kis_multinode_property_test.cpp
+    kis_dom_utils_test.cpp
+    kis_transform_worker_test.cpp
+    kis_perspective_transform_worker_test.cpp
+    kis_cs_conversion_test.cpp
+    kis_processings_test.cpp
+    KisFrameSerializerTest.cpp
+    KisFrameCacheStoreTest.cpp
+    kis_animation_exporter_test.cpp
     NAME_PREFIX "krita-ui-"
     LINK_LIBRARIES kritaui Qt5::Test
 )
 
-ecm_add_test( KisFrameSerializerTest.cpp
-    TEST_NAME krita-ui-KisFrameSerializerTest
+ecm_add_test(
+    kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
+    TEST_NAME krita-ui-KisInputManagerTest
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
-ecm_add_test( KisFrameCacheStoreTest.cpp
-    TEST_NAME krita-ui-KisFrameCacheStoreTest
-    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
+
 
 ecm_add_test( kis_selection_decoration_test.cpp ../../../sdk/tests/stroke_testing_utils.cpp
     TEST_NAME krita-ui-KisSelectionDecorationTest
@@ -58,17 +65,11 @@ ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.
     TEST_NAME krita-ui-KisNodeJugglerCompressedTest
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
-ecm_add_test(
-    kis_animation_exporter_test.cpp
-    TEST_NAME kritaui-animation_exporter_test
-    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
-
 set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)
 qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
 ecm_add_test(${kis_node_view_test_SRCS}
-    TEST_NAME krita-image-kis_node_view_test
+    TEST_NAME krita-ui-kis_node_view_test
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
-
 
 
 ##### Tests that currently fail and should be fixed #####
@@ -172,8 +173,14 @@ krita_add_broken_unit_test(
     TEST_NAME krita-ui-ResourceBundleTest
     LINK_LIBRARIES kritaui kritalibbrush kritalibpaintop Qt5::Test)
 
-# FIXME this test doesn't compile
-ecm_add_test(
-    kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
-    TEST_NAME krita-ui-KisInputManagerTest
-    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
+krita_add_broken_unit_test(
+    kis_image_animation_interface_test.cpp
+    TEST_NAME krita-ui-ImageAnimationInterface-Test
+    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+
+krita_add_broken_unit_test(
+    kis_onion_skin_compositor_test.cpp
+    TEST_NAME krita-ui-OnionSkinCompositor-Test
+    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+
+    

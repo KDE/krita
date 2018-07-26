@@ -347,8 +347,6 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
     if (! gradient)
         return QString();
 
-    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
-
     const QString spreadMethod[3] = {
         QString("pad"),
         QString("reflect"),

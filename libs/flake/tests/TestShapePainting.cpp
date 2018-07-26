@@ -25,7 +25,7 @@
 #include "KoShapeManager.h"
 #include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
-
+#include <sdk/tests/kistest.h>
 #include <MockShapes.h>
 
 #include <QTest>
@@ -320,5 +320,4 @@ void TestShapePainting::testGroupUngroup()
     }
 }
 
-
-QTEST_MAIN(TestShapePainting)
+KISTEST_MAIN(TestShapePainting)

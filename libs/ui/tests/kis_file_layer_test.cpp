@@ -143,4 +143,4 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_MAIN(KisFileLayerTest)
+KISTEST_MAIN(KisFileLayerTest)

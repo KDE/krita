@@ -27,6 +27,8 @@
 #include <KoResource.h>
 #include "KoResourceServerProvider.h"
 
+#include "sdk/tests/kistest.h"
+
 void KoResourceTaggingTest::testInitialization()
 {
     KoResourceTagStore tagStore(KoResourceServerProvider::instance()->patternServer());
@@ -141,4 +143,4 @@ void KoResourceTaggingTest::testReadWriteXML()
     QVERIFY(resources.size() == 0);
 }
 
-QTEST_MAIN(KoResourceTaggingTest)
+KISTEST_MAIN(KoResourceTaggingTest)

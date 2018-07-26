@@ -18,12 +18,11 @@
 
 #include "kis_exr_test.h"
 
-
-
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
+#include  <sdk/tests/kistest.h>
+
 #include <half.h>
 #include <KisMimeDatabase.h>
 #include "filestest.h"
@@ -90,6 +89,6 @@ void KisExrTest::testRoundTrip()
 
 }
 
-QTEST_MAIN(KisExrTest)
+KISTEST_MAIN(KisExrTest)
 
 

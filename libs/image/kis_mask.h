@@ -197,10 +197,19 @@ protected:
      * Made public in KisEffectMask
      */
     void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy maskPos) const;
+
+    virtual void mergeInMaskInternal(KisPaintDeviceSP projection,
+                                     KisSelectionSP effectiveSelection,
+                                     const QRect &applyRect, const QRect &preparedNeedRect,
+                                     PositionToFilthy maskPos) const;
+
+
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
+
+    virtual bool paintsOutsideSelection() const;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 

@@ -23,6 +23,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 
+#include "sdk/tests/kistest.h"
 
 void TestKoColorSpaceSanity::testChannelsInfo()
 {
@@ -62,4 +63,4 @@ void TestKoColorSpaceSanity::testChannelsInfo()
     }
 }
 
-QTEST_GUILESS_MAIN(TestKoColorSpaceSanity)
+KISTEST_MAIN(TestKoColorSpaceSanity)

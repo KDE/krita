@@ -31,7 +31,7 @@ KisTiledExtentManager::Data::Data()
 {
     QWriteLocker lock(&m_migrationLock);
     m_capacity = InitialBufferSize;
-    m_offset = 0;
+    m_offset = 1;
     m_buffer = new QAtomicInt[m_capacity];
 }
 
@@ -83,13 +83,6 @@ inline bool KisTiledExtentManager::Data::remove(qint32 index)
 {
     QReadLocker lock(&m_migrationLock);
     qint32 currentIndex = m_offset + index;
-
-    if (currentIndex < 0 || currentIndex >= m_capacity) {
-        lock.unlock();
-        migrate(index);
-        lock.relock();
-        currentIndex = m_offset + index;
-    }
 
     KIS_ASSERT_RECOVER_NOOP(m_buffer[currentIndex].loadAcquire() > 0);
     bool needsUpdateExtent = false;
@@ -183,10 +176,21 @@ void KisTiledExtentManager::Data::unsafeAdd(qint32 index)
 void KisTiledExtentManager::Data::unsafeMigrate(qint32 index)
 {
     qint32 oldCapacity = m_capacity;
+    qint32 oldOffset = m_offset;
     qint32 currentIndex = m_offset + index;
 
-    auto reallocFunc = [&](qint32 start) {
+    while (currentIndex < 0 || currentIndex >= m_capacity) {
+        m_capacity <<= 1;
+
+        if (currentIndex < 0) {
+            m_offset <<= 1;
+            currentIndex = m_offset + index;
+        }
+    }
+
+    if (m_capacity != oldCapacity) {
         QAtomicInt *newBuffer = new QAtomicInt[m_capacity];
+        qint32 start = m_offset - oldOffset;
 
         for (qint32 i = 0; i < oldCapacity; ++i) {
             newBuffer[start + i].store(m_buffer[i].load());
@@ -194,38 +198,6 @@ void KisTiledExtentManager::Data::unsafeMigrate(qint32 index)
 
         delete[] m_buffer;
         m_buffer = newBuffer;
-    };
-
-    if (currentIndex < 0) {
-        qint32 oldOffset = m_offset;
-        m_offset = -index;
-        qint32 start = m_offset - oldOffset;
-        qint32 count = m_max - m_min + 1;
-        qint32 capacity = m_offset + start + count;
-
-        while (capacity >= m_capacity) {
-            m_capacity <<= 1;
-        }
-
-        if (m_capacity != oldCapacity) {
-            reallocFunc(start);
-        } else {
-            for (qint32 i = count; i >= 0; --i) {
-                m_buffer[start + i].store(m_buffer[i].load());
-            }
-
-            for (qint32 i = 0; i < start; ++i) {
-                m_buffer[i].store(0);
-            }
-        }
-    } else {
-        while (currentIndex >= m_capacity) {
-            m_capacity <<= 1;
-        }
-
-        if (m_capacity != oldCapacity) {
-            reallocFunc(0);
-        }
     }
 }
 

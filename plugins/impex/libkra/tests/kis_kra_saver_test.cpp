@@ -56,6 +56,7 @@
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
+#include  <sdk/tests/kistest.h>
 
 void KisKraSaverTest::initTestCase()
 {
@@ -546,4 +547,4 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_MAIN(KisKraSaverTest)
+KISTEST_MAIN(KisKraSaverTest)

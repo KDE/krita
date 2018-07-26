@@ -47,6 +47,7 @@ void KisShapeSelectionTest::testAddChild()
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 
+
     QRect rect(50, 50, 100, 100);
     QTransform matrix;
     matrix.scale(1 / image->xRes(), 1 / image->yRes());
@@ -65,12 +66,14 @@ void KisShapeSelectionTest::testAddChild()
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
+    selection->updateProjection();
+
     QTest::qWait(500);
     image->waitForDone();
 
     QCOMPARE(selection->selectedExactRect(), QRect(50, 50, 100, 100));
 
-    selection->updateProjection();
+
 }
 
 QTEST_MAIN(KisShapeSelectionTest)

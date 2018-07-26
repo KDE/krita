@@ -267,7 +267,9 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
 
 QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
 {
-    return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+    return m_d->currentPaintOpPreset ?
+            m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp()
+              : COMPOSITE_ALPHA_DARKEN;
 }
 
 bool KisResourcesSnapshot::needsMaskingBrushRendering() const

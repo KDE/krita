@@ -533,7 +533,7 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
         elementWriter.startElement("style:columns");
         // seems these two are mandatory
         elementWriter.addAttribute("fo:column-count", columnCount());
-        elementWriter.addAttributePt("fo:column-gap", columnGapWidth());
+        elementWriter.addAttribute("fo:column-gap", columnGapWidth());
         columnsKeys.removeOne(ColumnCount);
         columnsKeys.removeOne(ColumnGapWidth);
 
@@ -554,7 +554,7 @@ void KoSectionStyle::saveOdf(KoGenStyle &style)
                                                KoColumns::separatorVerticalAlignmentString(separatorVerticalAlignment()));
                     break;
                 case SeparatorWidth:
-                    elementWriter.addAttributePt("style:width",
+                    elementWriter.addAttribute("style:width",
                                                  separatorWidth());
                     break;
                 case SeparatorHeight:

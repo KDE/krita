@@ -158,8 +158,6 @@ private Q_SLOTS:
 
     void testMarkersDifferent();
 
-    void testMarkersFillAsShape();
-
     void testGradientRecoveringTrasnform();
     void testMarkersOnClosedPath();
     void testMarkersAngularUnits();
@@ -168,6 +166,10 @@ private Q_SLOTS:
     void testSodipodiArcShapeOpen();
     void testKritaChordShape();
     void testSodipodiChordShape();
+
+    void testMarkersFillAsShape();
+private:
+
 };
 
 #endif // TESTSVGPARSER_H

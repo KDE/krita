@@ -73,6 +73,16 @@ KisLsStrokeFilter::KisLsStrokeFilter()
 {
 }
 
+KisLsStrokeFilter::KisLsStrokeFilter(const KisLsStrokeFilter &rhs)
+    : KisLayerStyleFilter(rhs)
+{
+}
+
+KisLayerStyleFilter *KisLsStrokeFilter::clone() const
+{
+    return new KisLsStrokeFilter(*this);
+}
+
 void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
                                     KisMultipleProjection *dst,
                                     const QRect &applyRect,

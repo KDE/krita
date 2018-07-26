@@ -304,9 +304,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     connect(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
-    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            d->controlFrame.paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
-
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 

@@ -215,7 +215,7 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        warnWidgets << "Loading resource " << front << "failed";
+                        warnWidgets << "Loading resource " << front << "failed." << type();
                         Policy::deleteResource(resource);
                     }
                 }

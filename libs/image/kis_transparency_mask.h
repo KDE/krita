@@ -59,6 +59,8 @@ public:
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+
+    bool paintsOutsideSelection() const override;
 };
 
 #endif //_KIS_TRANSPARENCY_MASK_

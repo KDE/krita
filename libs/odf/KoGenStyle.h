@@ -349,7 +349,7 @@ public:
      *  (unlike QString::number and setNum, which default to 6 digits),
      *  and the unit name ("pt") is appended to it.
      */
-    void addAttributePt(const QString &attrName, qreal attrValue);
+    void addAttribute(const QString &attrName, qreal attrValue);
 
     /**
      * Add an attribute that represents a percentage value as defined in ODF

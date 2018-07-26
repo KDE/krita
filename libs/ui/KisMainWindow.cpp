@@ -71,6 +71,7 @@
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
+#include "kis_selection_manager.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -142,7 +143,7 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include <KisUpdateSchedulerConfigNotifier.h>
+#include <KisImageConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
@@ -647,7 +648,7 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
-        KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
+        KisImageConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -2097,6 +2098,12 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::windowFocused()
 {
+    /**
+     * Notify selection manager so that it could update selection mask overlay
+     */
+    viewManager()->selectionManager()->selectionChanged();
+
+
     auto *kisPart = KisPart::instance();
     auto *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;

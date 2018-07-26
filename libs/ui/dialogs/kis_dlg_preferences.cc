@@ -995,13 +995,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
        grpOpenGL->setMaximumHeight(0);
     }
 
+    KisImageConfig imageCfg(false);
+
     KoColor c;
-    c.fromQColor(cfg.selectionOverlayMaskColor());
+    c.fromQColor(imageCfg.selectionOverlayMaskColor());
     c.setOpacity(1.0);
     btnSelectionOverlayColor->setColor(c);
     sldSelectionOverlayOpacity->setRange(0.0, 1.0, 2);
     sldSelectionOverlayOpacity->setSingleStep(0.05);
-    sldSelectionOverlayOpacity->setValue(cfg.selectionOverlayMaskColor().alphaF());
+    sldSelectionOverlayOpacity->setValue(imageCfg.selectionOverlayMaskColor().alphaF());
 
     intCheckSize->setValue(cfg.checkSize());
     chkMoving->setChecked(cfg.scrollCheckers());
@@ -1369,7 +1371,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideScrollbars(dialog->m_displaySettings->hideScrollbars->isChecked());
         KoColor c = dialog->m_displaySettings->btnSelectionOverlayColor->color();
         c.setOpacity(dialog->m_displaySettings->sldSelectionOverlayOpacity->value());
-        cfg.setSelectionOverlayMaskColor(c.toQColor());
+        cfgImage.setSelectionOverlayMaskColor(c.toQColor());
         cfg.setAntialiasCurves(dialog->m_displaySettings->chkCurveAntialiasing->isChecked());
         cfg.setAntialiasSelectionOutline(dialog->m_displaySettings->chkSelectionOutlineAntialiasing->isChecked());
         cfg.setShowSingleChannelAsColor(dialog->m_displaySettings->chkChannelsAsColor->isChecked());

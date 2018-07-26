@@ -1,4 +1,4 @@
-/*
+/*ls
  *  Copyright (c) 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -29,18 +29,17 @@ class KisQmicTests : public QObject
     Q_OBJECT
 
 private:
-    gmic_image<float> m_qmicImage;
     QImage m_qimage;
 
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-
+    void testConvertToGmic();
     void testConvertGrayScaleQmic();
     void testConvertGrayScaleAlphaQmic();
     void testConvertRGBqmic();
     void testConvertRGBAqmic();
-    void testConvertToGmic();
+
 };
 
 #endif

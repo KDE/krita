@@ -48,6 +48,11 @@ private Q_SLOTS:
     void benchmarkDrawThickLine();
     void benchmarkDrawQtLine();
     void benchmarkDrawScanLine();
+
+    void benchmarkBitBlt2();
+    void benchmarkBitBltOldData();
+    void benchmarkMassiveBltFixed();
+
     
 };
 

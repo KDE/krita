@@ -39,6 +39,8 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
+#include  <sdk/tests/kistest.h>
+
 void TestFilter::testApply()
 {
     KisDocument *kisdoc = KisPart::instance()->createDocument();
@@ -98,5 +100,5 @@ void TestFilter::testStartFilter()
     }
 }
 
-QTEST_MAIN(TestFilter)
+KISTEST_MAIN(TestFilter)
 

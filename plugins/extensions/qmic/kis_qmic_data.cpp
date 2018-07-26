@@ -17,6 +17,7 @@
  */
 
 #include "kis_qmic_data.h"
+#include <kis_debug.h>
 
 const float KisQmicData::INVALID_PROGRESS_VALUE = -2.0f;
 

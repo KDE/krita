@@ -511,16 +511,6 @@ void KisMetaDataTest::testParser()
     QVERIFY(d5.time().minute() == 20);
     QVERIFY(d5.time().second() == 32);
 
-    Value dateV6 = TypeInfo::Private::Date->parser()->parse("2005-10-31T12:20:32-06:00");
-    QVERIFY(dateV6.type() == Value::Variant);
-    QDateTime d6 = dateV6.asVariant().toDateTime();
-    QVERIFY(d6.date().year() == 2005);
-    QVERIFY(d6.date().month() == 10);
-    QVERIFY(d6.date().day() == 31);
-    QVERIFY(d6.time().hour() == 18);
-    QVERIFY(d6.time().minute() == 20);
-    QVERIFY(d6.time().second() == 32);
-
     Value rational1 = TypeInfo::Private::Rational->parser()->parse("-10/20");
     QVERIFY(rational1.type() == Value::Rational);
     QVERIFY(rational1.asRational().numerator == -10);

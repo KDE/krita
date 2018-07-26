@@ -30,6 +30,8 @@
 #include "kis_meta_data_parser.h"
 #include "kis_meta_data_validator.h"
 
+#include "sdk/tests/kistest.h"
+
 using namespace KisMetaData;
 
 KisMetaData::Value KisMetaDataTest::createRationalValue()
@@ -53,6 +55,33 @@ KisMetaData::Value KisMetaDataTest::createListValue()
     list << createRationalValue() << createIntegerValue() << createStringValue();
     return list;
 }
+
+
+#define TEST_SCHEMA(uriStr) \
+    { \
+        const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::uriStr); \
+        QVERIFY(schema); \
+        QCOMPARE(schema->uri(), KisMetaData::Schema::uriStr); \
+        QCOMPARE(schema, SchemaRegistry::instance()->schemaFromPrefix(schema->prefix()) ); \
+        QVERIFY( !SchemaRegistry::instance()->create("http://tartampion.com", schema->prefix())); \
+        QCOMPARE(schema, SchemaRegistry::instance()->create(KisMetaData::Schema::uriStr, "tartampion")); \
+        QCOMPARE(QString(schema->prefix() + ":hello"), schema->generateQualifiedName("hello")); \
+    }
+
+
+void KisMetaDataTest::testSchemaBasic()
+{
+    TEST_SCHEMA(TIFFSchemaUri);
+    TEST_SCHEMA(EXIFSchemaUri);
+    TEST_SCHEMA(DublinCoreSchemaUri);
+    TEST_SCHEMA(XMPSchemaUri);
+    TEST_SCHEMA(XMPRightsSchemaUri);
+    TEST_SCHEMA(MakerNoteSchemaUri);
+    TEST_SCHEMA(IPTCSchemaUri);
+    TEST_SCHEMA(PhotoshopSchemaUri);
+}
+
+
 
 void KisMetaDataTest::testRationals()
 {
@@ -164,31 +193,6 @@ void KisMetaDataTest::testValueCopy()
     TEST_VALUE_COPY(createStringValue);
     TEST_VALUE_COPY(createListValue);
 }
-
-#define TEST_SCHEMA(uriStr) \
-    { \
-        const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::uriStr); \
-        QVERIFY(schema); \
-        QCOMPARE(schema->uri(), KisMetaData::Schema::uriStr); \
-        QCOMPARE(schema, SchemaRegistry::instance()->schemaFromPrefix(schema->prefix()) ); \
-        QVERIFY( !SchemaRegistry::instance()->create("http://tartampion.com", schema->prefix())); \
-        QCOMPARE(schema, SchemaRegistry::instance()->create(KisMetaData::Schema::uriStr, "tartampion")); \
-        QCOMPARE(QString(schema->prefix() + ":hello"), schema->generateQualifiedName("hello")); \
-    }
-
-
-void KisMetaDataTest::testSchemaBasic()
-{
-    TEST_SCHEMA(TIFFSchemaUri);
-    TEST_SCHEMA(EXIFSchemaUri);
-    TEST_SCHEMA(DublinCoreSchemaUri);
-    TEST_SCHEMA(XMPSchemaUri);
-    TEST_SCHEMA(XMPRightsSchemaUri);
-    TEST_SCHEMA(MakerNoteSchemaUri);
-    TEST_SCHEMA(IPTCSchemaUri);
-    TEST_SCHEMA(PhotoshopSchemaUri);
-}
-
 void KisMetaDataTest::testEntry()
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
@@ -207,6 +211,7 @@ void KisMetaDataTest::testEntry()
 void KisMetaDataTest::testStore()
 {
     const Schema* schema = SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::TIFFSchemaUri);
+    QVERIFY(schema);
     Store s;
     Entry e(schema, "test", createIntegerValue());
     QVERIFY(!s.containsEntry(schema, "test"));
@@ -230,6 +235,7 @@ void KisMetaDataTest::testFilters()
         const KisMetaData::Filter* filter = FilterRegistry::instance()->get("Anonymizer");
         QVERIFY(filter);
         const KisMetaData::Schema* dcSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::DublinCoreSchemaUri);
+        QVERIFY(dcSchema);
         s.addEntry(Entry(dcSchema, "contributor", Value("somevalue")));
         s.addEntry(Entry(dcSchema, "creator", Value("somevalue")));
         s.addEntry(Entry(dcSchema, "publisher", Value("somevalue")));
@@ -583,4 +589,4 @@ void KisMetaDataTest::testValidator()
 
 }
 
-QTEST_MAIN(KisMetaDataTest)
+KISTEST_MAIN(KisMetaDataTest)

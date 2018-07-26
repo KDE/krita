@@ -12,20 +12,8 @@ ecm_add_tests(
     zoomhandler_test.cpp
     zoomcontroller_test.cpp
     squeezedcombobox_test.cpp 
-    NAME_PREFIX "libs-widgets-"
-    LINK_LIBRARIES kritawidgets Qt5::Test)
-
-krita_add_broken_unit_test(
     KoResourceTaggingTest.cpp
-    TEST_NAME libs-widgets-KoResourceTaggingTest
-    LINK_LIBRARIES kritawidgets Qt5::Test)
-
-ecm_add_tests(
     kis_parse_spin_boxes_test.cpp
-    NAME_PREFIX "krita-ui-"
-    LINK_LIBRARIES kritaui Qt5::Test)
-
-ecm_add_tests(
     KoAnchorSelectionWidgetTest.cpp
     NAME_PREFIX "libs-widgets-"
-    LINK_LIBRARIES kritaui Qt5::Test)
+    LINK_LIBRARIES kritawidgets Qt5::Test)

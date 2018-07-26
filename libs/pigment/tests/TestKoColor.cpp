@@ -30,6 +30,8 @@
 #include "KoColorSpaceRegistry.h"
 #include "DebugPigment.h"
 
+#include "sdk/tests/kistest.h"
+
 bool nearEqualValue(int a, int b)
 {
     return qAbs(a - b) <= 1;
@@ -85,4 +87,4 @@ void TestKoColor::testConversion()
     kc.convertTo(csDst);
 }
 
-QTEST_GUILESS_MAIN(TestKoColor)
+KISTEST_MAIN(TestKoColor)

@@ -409,29 +409,6 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
 }
 
 
-QStringList KoResourcePaths::filesInDir(const QString &startdir, const QString & filter, bool recursive)
-{
-    QStringList result;
-
-    // First the entries in this path
-    QStringList nameFilters;
-    nameFilters << filter;
-    const QStringList fileNames = QDir(startdir).entryList(nameFilters, QDir::Files | QDir::CaseSensitive, QDir::Name);
-    Q_FOREACH (const QString &fileName, fileNames) {
-        QString file = startdir + '/' + fileName;
-        result << file;
-    }
-
-    // And then everything underneath, if recursive is specified
-    if (recursive) {
-        const QStringList entries = QDir(startdir).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        Q_FOREACH (const QString &subdir, entries) {
-            result << filesInDir(startdir + '/' + subdir, filter, recursive);
-        }
-    }
-    return result;
-}
-
 QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
                                                       const QString &_filter,
                                                       SearchOptions options) const

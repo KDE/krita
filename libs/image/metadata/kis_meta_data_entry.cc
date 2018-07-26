@@ -80,11 +80,13 @@ const Schema* Entry::schema() const
 
 void Entry::setSchema(const KisMetaData::Schema* schema)
 {
+    Q_ASSERT(schema);
     d->schema = schema;
 }
 
 QString Entry::qualifiedName() const
 {
+    Q_ASSERT(d->schema);
     return d->schema->generateQualifiedName(d->name);
 }
 

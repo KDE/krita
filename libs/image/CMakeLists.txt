@@ -374,15 +374,3 @@ set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install schemas #############
-install( FILES
-    metadata/schemas/dc.schema
-    metadata/schemas/exif.schema
-    metadata/schemas/tiff.schema
-    metadata/schemas/mkn.schema
-    metadata/schemas/xmp.schema
-    metadata/schemas/xmpmm.schema
-    metadata/schemas/xmprights.schema
-
-    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)

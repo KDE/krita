@@ -55,7 +55,7 @@ ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.cpp
-    TEST_NAME krita-ui-BaseNodeTest
+    TEST_NAME krita-ui-KisNodeJugglerCompressedTest
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
 ecm_add_test(

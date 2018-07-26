@@ -193,7 +193,7 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KoResourcePaths::findAllResources("data", "input/*", KoResourcePaths::Recursive);
+    QStringList profiles = KoResourcePaths::findAllResources("data", "input/*.profile", KoResourcePaths::Recursive);
 
     dbgKrita << "profiles" << profiles;
 

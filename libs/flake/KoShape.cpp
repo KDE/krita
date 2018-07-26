@@ -174,7 +174,7 @@ KoShapePrivate::~KoShapePrivate()
         parent->removeShape(q);
     }
 
-    KIS_SAFE_ASSERT_RECOVER (shapeManagers.isEmpty()) {
+    if (!shapeManagers.isEmpty()) {
         Q_FOREACH (KoShapeManager *manager, shapeManagers) {
             manager->shapeInterface()->notifyShapeDestructed(q);
         }

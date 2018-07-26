@@ -25,6 +25,7 @@
 #include "kis_curve_circle_mask_generator_p.h"
 #include "kis_gauss_rect_mask_generator_p.h"
 #include "kis_curve_rect_mask_generator_p.h"
+#include "kis_rect_mask_generator_p.h"
 
 #include "kis_brush_mask_applicators.h"
 #include "kis_brush_mask_applicator_base.h"
@@ -62,6 +63,14 @@ MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator>
 MaskApplicatorFactory<KisCurveCircleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
 {
     return new KisBrushMaskVectorApplicator<KisCurveCircleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
+}
+
+template<>
+template<>
+MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator>::ReturnType
+MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+{
+    return new KisBrushMaskVectorApplicator<KisRectangleMaskGenerator,Vc::CurrentImplementation::current()>(maskGenerator);
 }
 
 template<>
@@ -363,6 +372,108 @@ struct KisGaussRectangleMaskGenerator::FastRowProcessor
 
     KisGaussRectangleMaskGenerator::Private *d;
 };
+
+struct KisRectangleMaskGenerator::FastRowProcessor
+{
+    FastRowProcessor(KisRectangleMaskGenerator *maskGenerator)
+        : d(maskGenerator->d.data()) {}
+
+    template<Vc::Implementation _impl>
+    void process(float* buffer, int width, float y, float cosa, float sina,
+                 float centerX, float centerY);
+
+    KisRectangleMaskGenerator::Private *d;
+};
+
+template<> void KisRectangleMaskGenerator::
+FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,
+                                   float centerX, float centerY)
+{
+    const bool useSmoothing = d->copyOfAntialiasEdges;
+    const bool noFading = d->noFading;
+
+    float y_ = y - centerY;
+    float sinay_ = sina * y_;
+    float cosay_ = cosa * y_;
+
+    float* bufferPointer = buffer;
+
+    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+
+    Vc::float_v increment((float)Vc::float_v::size());
+    Vc::float_v vCenterX(centerX);
+
+    Vc::float_v vCosa(cosa);
+    Vc::float_v vSina(sina);
+    Vc::float_v vCosaY_(cosay_);
+    Vc::float_v vSinaY_(sinay_);
+
+    Vc::float_v vXCoeff(d->xcoeff);
+    Vc::float_v vYCoeff(d->ycoeff);
+
+    Vc::float_v vTransformedFadeX(d->transformedFadeX);
+    Vc::float_v vTransformedFadeY(d->transformedFadeY);
+
+    Vc::float_v vOne(Vc::One);
+    Vc::float_v vZero(Vc::Zero);
+    Vc::float_v vTolerance(10000.f);
+
+    for (int i=0; i < width; i+= Vc::float_v::size()){
+
+        Vc::float_v x_ = currentIndices - vCenterX;
+
+        Vc::float_v xr = Vc::abs(x_ * vCosa - vSinaY_);
+        Vc::float_v yr = Vc::abs(x_ * vSina + vCosaY_);
+
+        Vc::float_v nxr = xr * vXCoeff;
+        Vc::float_v nyr = yr * vYCoeff;
+
+        Vc::float_m outsideMask = (nxr > vOne) || (nyr > vOne);
+
+        if (!outsideMask.isFull()) {
+
+            if (noFading) {
+                Vc::float_v vFade(vZero);
+                vFade(outsideMask) = vOne;
+                vFade.store(bufferPointer, Vc::Aligned);
+            } else {
+                if (useSmoothing) {
+                    xr = Vc::abs(xr) + vOne;
+                    yr = Vc::abs(yr) + vOne;
+                }
+
+                Vc::float_v fxr = xr * vTransformedFadeX;
+                Vc::float_v fyr = yr * vTransformedFadeY;
+
+                Vc::float_v fxrNorm = nxr * (fxr - vOne) / (fxr - nxr);
+                Vc::float_v fyrNorm = nyr * (fyr - vOne) / (fyr - nyr);
+
+                Vc::float_v vFade(vZero);
+
+                Vc::float_v::IndexType fxrInt(fxr * vTolerance);
+                Vc::float_v::IndexType fyrInt(fyr * vTolerance);
+
+                Vc::float_m fadeXMask = (fxr > vOne) && ((fxrInt > fyrInt) || fyr < vOne);
+                Vc::float_m fadeYMask = (fyr > vOne) && (fyrInt >= fxrInt || fxr < vOne);
+
+                vFade(fadeXMask) = fxrNorm;
+                vFade(!fadeXMask && fadeYMask) = fyrNorm;
+
+                // Mask out the outer circe of the mask
+                vFade(outsideMask) = vOne;
+                vFade.store(bufferPointer, Vc::Aligned);
+            }
+        } else {
+            // Mask out everything outside the circle
+            vOne.store(bufferPointer, Vc::Aligned);
+        }
+
+        currentIndices = currentIndices + increment;
+
+        bufferPointer += Vc::float_v::size();
+    }
+}
+
 
 template<> void KisGaussRectangleMaskGenerator::
 FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, int width, float y, float cosa, float sina,

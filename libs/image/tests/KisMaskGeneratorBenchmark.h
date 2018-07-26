@@ -34,6 +34,9 @@ private Q_SLOTS:
     void testCircularSoftScalarMask();
     void testCircularSoftVectorMask();
 
+    void testRectangularScalarMask();
+    void testRectangularVectorMask();
+
     void testRectangularGaussScalarMask();
     void testRectangularGaussVectorMask();
 

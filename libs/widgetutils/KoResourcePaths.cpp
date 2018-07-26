@@ -354,7 +354,6 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         }
     }
 
-
     dbgResources<< "findResource: type" << type << "filename" << fileName << "resource" << resource;
     Q_ASSERT(!resource.isEmpty());
     return resource;
@@ -456,12 +455,16 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
 
 
     QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
-    dbgResources << ">>>>>>>>>>>>>>>> extraResourceDirs" << extraResourceDirs;
+    dbgResources << "extraResourceDirs" << extraResourceDirs;
     if (!extraResourceDirs.isEmpty()) {
         Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
-            appendResources(&resources, filesInDir(extraResourceDir, filter, recursive), true);
-            Q_FOREACH (const QString &alias, aliases) {
-                appendResources(&resources, filesInDir(extraResourceDir + '/' + alias + '/', filter, recursive), true);
+            if (aliases.isEmpty()) {
+                appendResources(&resources, filesInDir(extraResourceDir + '/' + type, filter, recursive), true);
+            }
+            else {
+                Q_FOREACH (const QString &alias, aliases) {
+                    appendResources(&resources, filesInDir(extraResourceDir + '/' + alias + '/', filter, recursive), true);
+                }
             }
         }
 

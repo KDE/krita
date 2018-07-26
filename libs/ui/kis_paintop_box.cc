@@ -482,6 +482,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
+    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
@@ -537,9 +539,8 @@ KisPaintopBox::~KisPaintopBox()
 
 void KisPaintopBox::restoreResource(KoResource* resource)
 {
-
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
-    //qDebug() << "restoreResource" << resource << preset;
+
     if (preset) {
         setCurrentPaintop(preset);
 

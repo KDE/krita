@@ -427,12 +427,12 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
                                                       const QString &_filter,
                                                       SearchOptions options) const
 {
-    dbgResources << "=====================================================";
-    dbgResources << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
+    qDebug() << "=====================================================";
+    qDebug() << type << _filter << QStandardPaths::standardLocations(d->mapTypeToQStandardPaths(type));
 
     bool recursive = options & KoResourcePaths::Recursive;
 
-    dbgResources << "findAllResources: type" << type << "filter" << _filter << "recursive" << recursive;
+    qDebug() << "findAllResources: type" << type << "filter" << _filter << "recursive" << recursive;
 
     QStringList aliases = d->aliases(type);
     QString filter = _filter;
@@ -441,7 +441,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     if (filter.indexOf('*') > 0) {
         aliases << filter.split('*').first();
         filter = '*' + filter.split('*')[1];
-        dbgResources << "Split up alias" << aliases << "filter" << filter;
+        qDebug() << "Split up alias" << aliases << "filter" << filter;
     }
 
     QStringList resources;
@@ -449,25 +449,28 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         QStringList standardResources =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type),
                                       filter, QStandardPaths::LocateFile);
-        dbgResources << "standardResources" << standardResources;
+        qDebug() << "standardResources" << standardResources;
         appendResources(&resources, standardResources, true);
-        dbgResources << "1" << resources;
+        qDebug() << "1" << resources;
     }
 
 
     QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
-    dbgResources << ">>>>>>>>>>>>>>>>" << extraResourceDirs;
+    qDebug() << ">>>>>>>>>>>>>>>> extraResourceDirs" << extraResourceDirs;
     if (!extraResourceDirs.isEmpty()) {
         Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
             appendResources(&resources, filesInDir(extraResourceDir, filter, recursive), true);
+            Q_FOREACH (const QString &alias, aliases) {
+                appendResources(&resources, filesInDir(extraResourceDir + '/' + alias + '/', filter, recursive), true);
+            }
         }
 
     }
 
-    dbgResources << "\tresources from qstandardpaths:" << resources.size();
+    qDebug() << "\tresources from qstandardpaths:" << resources.size();
 
     Q_FOREACH (const QString &alias, aliases) {
-        dbgResources << "\t\talias:" << alias;
+        qDebug() << "\t\talias:" << alias;
         QStringList dirs;
 
         QFileInfo dirInfo(alias);
@@ -486,7 +489,7 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         }
     }
 
-    dbgResources << "\tresources also from aliases:" << resources.size();
+    qDebug() << "\tresources also from aliases:" << resources.size();
 
     // if the original filter is "input/*", we only want share/input/* and share/krita/input/* here, but not
     // share/*. therefore, use _filter here instead of filter which was split into alias and "*".
@@ -497,8 +500,8 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     prefixResources << filesInDir(getInstallationPrefix() + "share/krita/" + fi.path(), fi.fileName(), false);
     appendResources(&resources, prefixResources, true);
 
-    dbgResources << "\tresources from installation:" << resources.size();
-    dbgResources << "=====================================================";
+    qDebug() << "\tresources from installation:" << resources.size();
+    qDebug() << "=====================================================";
 
     return resources;
 }

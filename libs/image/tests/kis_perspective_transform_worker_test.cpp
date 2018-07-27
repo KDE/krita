@@ -19,7 +19,7 @@
 #include "kis_perspective_transform_worker_test.h"
 
 #include <QTest>
-#include <kis_filter_configuration.h>
+
 #include "testutil.h"
 #include "qimage_based_test.h"
 

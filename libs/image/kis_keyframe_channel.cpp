@@ -129,6 +129,10 @@ KisKeyframeSP KisKeyframeChannel::copyKeyframe(const KisKeyframeSP keyframe, int
     return insertKeyframe(newTime, keyframe, parentCommand);
 }
 
+KisKeyframeSP KisKeyframeChannel::linkKeyframe(const KisKeyframeSP, int, KUndo2Command*) {
+    return KisKeyframeSP();
+}
+
 KisKeyframeSP KisKeyframeChannel::insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand)
 {
     KisKeyframeSP keyframe = keyframeAt(time);

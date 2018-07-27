@@ -200,7 +200,7 @@ namespace KisAnimationUtils {
         }
     }
 
-    void moveOneFrameItem(const FrameItem &src, const FrameItem &dst, bool copy, bool moveEmptyFrames, KUndo2Command *parentCommand)
+    void moveOneFrameItem(const FrameItem &src, const FrameItem &dst, KeyframeAction action, bool moveEmptyFrames, KUndo2Command *parentCommand)
     {
         const int srcTime = src.time;
         KisNodeSP srcNode = src.node;
@@ -216,13 +216,15 @@ namespace KisAnimationUtils {
             KisKeyframeSP srcKeyframe = srcChannel->keyframeAt(srcTime);
             KisKeyframeSP dstKeyFrame = srcChannel->keyframeAt(dstTime);
             if (srcKeyframe) {
-                if (copy) {
+                if (action == CopyKeyframes) {
                     srcChannel->copyKeyframe(srcKeyframe, dstTime, parentCommand);
+                } else if (action == LinkKeyframes) {
+                    srcChannel->linkKeyframe(srcKeyframe, dstTime, parentCommand);
                 } else {
                     srcChannel->moveKeyframe(srcKeyframe, dstTime, parentCommand);
                 }
             } else {
-                if (dstKeyFrame && moveEmptyFrames && !copy) {
+                if (dstKeyFrame && moveEmptyFrames && action != CopyKeyframes) {
                     //Destination is effectively replaced by an empty frame.
                     dstChannel->deleteKeyframe(dstKeyFrame, parentCommand);
                 }
@@ -236,7 +238,7 @@ namespace KisAnimationUtils {
 
             dstChannel->copyExternalKeyframe(srcChannel, srcTime, dstTime, parentCommand);
 
-            if (!copy) {
+            if (action == MoveKeyframes) {
                 srcChannel->deleteKeyframe(srcKeyframe, parentCommand);
             }
         }
@@ -252,27 +254,31 @@ namespace KisAnimationUtils {
         for (int i = 0; i < srcFrames.size(); i++) {
             srcDstPairs << std::make_pair(srcFrames[i], dstFrames[i]);
         }
-        return createMoveKeyframesCommand(srcDstPairs, copy, moveEmpty, parentCommand);
+        return createMoveKeyframesCommand(srcDstPairs, copy ? CopyKeyframes : MoveKeyframes, moveEmpty, parentCommand);
     }
 
     KUndo2Command* createMoveKeyframesCommand(const FrameMovePairList &srcDstPairs,
-                                              bool copy,
+                                              KeyframeAction action,
                                               bool moveEmptyFrames,
                                               KUndo2Command *parentCommand)
     {
         KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
 
-            !copy ?
-                kundo2_i18np("Move Keyframe",
-                             "Move %1 Keyframes",
-                             srcDstPairs.size()) :
+                (action == CopyKeyframes) ?
                 kundo2_i18np("Copy Keyframe",
                              "Copy %1 Keyframes",
-                             srcDstPairs.size()),
+                             srcDstPairs.size()) :
+                (action == LinkKeyframes) ?
+                kundo2_i18np("Link Keyframe",
+                             "Link %1 Keyframes",
+                             srcDstPairs.size()) :
+                kundo2_i18np("Move Keyframe",
+                             "Move %1 Keyframes",
+                              srcDstPairs.size()),
 
             parentCommand,
 
-            [srcDstPairs, copy, moveEmptyFrames] () -> KUndo2Command* {
+            [srcDstPairs, action, moveEmptyFrames] () -> KUndo2Command* {
                 bool result = false;
 
                 QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
@@ -319,7 +325,7 @@ namespace KisAnimationUtils {
                         FrameItem srcItem = *frameIt++;
 
                         if (!isCycle) {
-                            moveOneFrameItem(srcItem, dstItem, copy, moveEmptyFrames, cmd.data());
+                            moveOneFrameItem(srcItem, dstItem, action, moveEmptyFrames, cmd.data());
                         } else {
                             swapOneFrameItem(srcItem, dstItem, cmd.data());
                         }

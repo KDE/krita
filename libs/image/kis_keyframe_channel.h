@@ -68,6 +68,7 @@ public:
     bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     bool swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    virtual KisKeyframeSP linkKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
     bool swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);

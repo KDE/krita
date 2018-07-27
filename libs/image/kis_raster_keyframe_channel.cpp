@@ -25,6 +25,7 @@
 #include "kis_time_range.h"
 #include "kundo2command.h"
 #include "kis_onion_skin_compositor.h"
+#include "kis_keyframe_commands.h"
 
 struct KisRasterKeyframe : public KisKeyframe
 {
@@ -62,7 +63,9 @@ struct KisRasterKeyframeChannel::Private
   {}
 
   KisPaintDeviceWSP paintDevice;
+  QMap<QString, int> framesByFilename;
   QMap<int, QString> frameFilenames;
+  QMap<int, QVector<KisKeyframeSP>> frameInstances;
   QString filenameSuffix;
   bool onionSkinsEnabled;
 };
@@ -85,6 +88,16 @@ KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KisRasterKeyframeChanne
 
 KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 {
+}
+
+KisKeyframeSP KisRasterKeyframeChannel::linkKeyframe(const KisKeyframeSP sourceKeyframe, int newTime, KUndo2Command *parentCommand)
+{
+    KisKeyframeSP newKeyframe = toQShared(new KisRasterKeyframe(this, newTime, frameId(sourceKeyframe)));
+
+    KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newTime, newKeyframe, parentCommand);
+    cmd->redo();
+
+    return newKeyframe;
 }
 
 int KisRasterKeyframeChannel::frameId(KisKeyframeSP keyframe) const
@@ -137,8 +150,9 @@ void KisRasterKeyframeChannel::setFilenameSuffix(const QString &suffix)
 
 void KisRasterKeyframeChannel::setFrameFilename(int frameId, const QString &filename)
 {
-    Q_ASSERT(!m_d->frameFilenames.contains(frameId));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->frameFilenames.contains(frameId));
     m_d->frameFilenames.insert(frameId, filename);
+    m_d->framesByFilename.insert(filename, frameId);
 }
 
 QString KisRasterKeyframeChannel::chooseFrameFilename(int frameId, const QString &layerFilename)
@@ -176,12 +190,24 @@ KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfra
         keyframe->frameId = frameId;
     }
 
-    return toQShared(keyframe);
+    KisKeyframeSP key = toQShared(keyframe);
+
+    m_d->frameInstances[keyframe->frameId].append(key);
+
+    return key;
 }
 
 void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
 {
-    m_d->paintDevice->framesInterface()->deleteFrame(frameId(key), parentCommand);
+    int id = frameId(key);
+
+    QVector<KisKeyframeSP> &instances = m_d->frameInstances[id];
+    instances.removeAll(key);
+
+    if (instances.isEmpty()) {
+        m_d->paintDevice->framesInterface()->deleteFrame(id, parentCommand);
+        m_d->frameInstances.remove(id);
+    }
 }
 
 void KisRasterKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame)
@@ -271,22 +297,29 @@ KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframe
     if (m_d->frameFilenames.isEmpty()) {
         // First keyframe loaded: use the existing frame
 
-        Q_ASSERT(keyframeCount() == 1);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
+
         keyframe = constKeys().begin().value();
+        const int id = frameId(keyframe);
+        setFrameFilename(id, frameFilename);
 
         // Remove from keys. It will get reinserted with new time once we return
         keys().remove(keyframe->time());
 
         keyframe->setTime(time);
-        m_d->paintDevice->framesInterface()->setFrameOffset(frameId(keyframe), offset);
+        m_d->paintDevice->framesInterface()->setFrameOffset(id, offset);
     } else {
-        KUndo2Command tempCommand;
-        int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);
+        int frameId = m_d->framesByFilename.value(frameFilename, -1);
+
+        if (frameId == -1) {
+            KUndo2Command tempCommand;
+            frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, offset, &tempCommand);
+            setFrameFilename(frameId, frameFilename);
+        }
 
         keyframe = toQShared(new KisRasterKeyframe(this, time, frameId));
+        m_d->frameInstances[frameId].append(keyframe);
     }
-
-    setFrameFilename(frameId(keyframe), frameFilename);
 
     return keyframe;
 }

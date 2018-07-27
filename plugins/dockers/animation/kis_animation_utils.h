@@ -29,6 +29,12 @@
 
 namespace KisAnimationUtils
 {
+    enum KeyframeAction {
+        CopyKeyframes,
+        MoveKeyframes,
+        LinkKeyframes
+    };
+
     KUndo2Command* createKeyframeCommand(KisImageSP image, KisNodeSP node, const QString &channelId, int time, bool copy, KUndo2Command *parentCommand = 0);
     void createKeyframeLazy(KisImageSP image, KisNodeSP node, const QString &channel, int time, bool copy);
 
@@ -78,7 +84,7 @@ namespace KisAnimationUtils
      */
     KRITAANIMATIONDOCKER_EXPORT
     KUndo2Command* createMoveKeyframesCommand(const FrameMovePairList &movePairs,
-                                              bool copy, bool moveEmptyFrames, KUndo2Command *parentCommand = 0);
+                                              KeyframeAction action, bool moveEmptyFrames, KUndo2Command *parentCommand = 0);
 
     bool supportsContentFrames(KisNodeSP node);
 

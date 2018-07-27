@@ -29,6 +29,8 @@ public:
     KisRasterKeyframeChannel(const KisRasterKeyframeChannel &rhs, KisNode *newParentNode, const KisPaintDeviceWSP newPaintDevice);
     ~KisRasterKeyframeChannel() override;
 
+    KisKeyframeSP linkKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0) override;
+
 public:
     /**
      * Return the ID of the active frame at a given time. The active frame is

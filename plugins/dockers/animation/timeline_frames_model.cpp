@@ -545,12 +545,12 @@ bool TimelineFramesModel::setHeaderData(int section, Qt::Orientation orientation
 
 Qt::DropActions TimelineFramesModel::supportedDragActions() const
 {
-    return Qt::MoveAction | Qt::CopyAction;
+    return Qt::MoveAction | Qt::CopyAction | Qt::LinkAction;
 }
 
 Qt::DropActions TimelineFramesModel::supportedDropActions() const
 {
-    return Qt::MoveAction | Qt::CopyAction;
+    return Qt::MoveAction | Qt::CopyAction | Qt::LinkAction;
 }
 
 QStringList TimelineFramesModel::mimeTypes() const
@@ -633,7 +633,7 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 {
     bool result = false;
 
-    if ((action != Qt::MoveAction && action != Qt::CopyAction) ||
+    if ((action != Qt::MoveAction && action != Qt::CopyAction && action != Qt::LinkAction) ||
         !parent.isValid()) return result;
 
     QByteArray encoded = data->data("application/x-krita-frame");
@@ -703,9 +703,16 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
     KUndo2Command *cmd = 0;
 
+    KisAnimationUtils::KeyframeAction frameAction;
+    if (action == Qt::LinkAction) {
+        frameAction = KisAnimationUtils::LinkKeyframes;
+    } else {
+        frameAction = copyFrames ? KisAnimationUtils::CopyKeyframes : KisAnimationUtils::MoveKeyframes;
+    }
+
     if (!frameMoves.isEmpty()) {
         KisImageBarrierLockerWithFeedback locker(m_d->image);
-        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, copyFrames, false, 0);
+        cmd = KisAnimationUtils::createMoveKeyframesCommand(frameMoves, frameAction, false, 0);
     }
 
     if (cmd) {

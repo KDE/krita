@@ -40,7 +40,7 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
 
-    KisDocument *doc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     doc->loadNativeFormat(fname);
     doc->loadNativeFormat(fname2);

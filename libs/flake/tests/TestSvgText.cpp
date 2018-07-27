@@ -344,6 +344,11 @@ void TestSvgText::testSimpleText()
 
             "</svg>";
 
+    QFont testFont("DejaVu Sans");
+    if (!QFontInfo(testFont).exactMatch()) {
+        QEXPECT_FAIL(0, "DejaVu Sans is *not* found! Text rendering might be broken!", Continue);
+    }
+
     SvgRenderTester t (data);
     t.test_standard("text_simple", QSize(175, 40), 72.0);
 

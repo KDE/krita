@@ -272,7 +272,7 @@ private:
         }
 
         if(ref != image &&
-           !TestUtil::compareQImages(temp, ref, image, fuzzy)) {
+           !TestUtil::compareQImages(temp, ref, image, fuzzy, fuzzy)) {
 
 
             dbgKrita << "--- Wrong image:" << realName;

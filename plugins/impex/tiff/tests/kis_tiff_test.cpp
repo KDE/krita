@@ -68,7 +68,7 @@ void KisTiffTest::testFiles()
 #endif
     excludes << "text.tif" << "ycbcr-cat.tif";
 
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes, QString(), 1);
 }
 
 void KisTiffTest::testRoundTripRGBF16()

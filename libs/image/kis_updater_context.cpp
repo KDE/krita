@@ -148,6 +148,21 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     }
 }
 
+void KisUpdaterContext::addMergeJobs(QVector<KisBaseRectsWalkerSP> &walkers)
+{
+    m_lodCounter.addLod(walkers[0]->levelOfDetail());
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    const bool shouldStartThread = m_jobs[jobIndex]->setWalkers(walkers);
+
+    // it might happen that we call this function from within
+    // the thread itself, right when it finished its work
+    if (shouldStartThread) {
+        m_threadPool.start(m_jobs[jobIndex]);
+    }
+}
+
 /**
  * This variant is for use in a testing suite only
  */

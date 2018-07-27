@@ -109,6 +109,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 
     KisBaseRectsWalkerSP item;
     KisMutableWalkersListIterator iter(m_updatesList);
+    QVector<KisBaseRectsWalkerSP> walkers;
     bool jobAdded = false;
 
     int currentLevelOfDetail = updaterContext.currentLevelOfDetail();
@@ -132,7 +133,8 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
             updaterContext.isJobAllowed(item)) {
-            updaterContext.addMergeJob(item);
+            walkers.append(item);
+//            updaterContext.addMergeJob(item);
 
             m_rwLock.unlock();
             m_rwLock.lockForWrite();
@@ -142,9 +144,14 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
             m_rwLock.unlock();
             m_rwLock.lockForRead();
 
-            jobAdded = true;
-            break;
+//            jobAdded = true;
+//            break;
         }
+    }
+
+    if (!walkers.isEmpty()) {
+        updaterContext.addMergeJobs(walkers);
+        jobAdded = true;
     }
 
     if (jobAdded) return true;

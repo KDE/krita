@@ -88,6 +88,7 @@ public:
      * \see hasSpareThread()
      */
     virtual void addMergeJob(KisBaseRectsWalkerSP walker);
+    void addMergeJobs(QVector<KisBaseRectsWalkerSP> &walkers);
 
     /**
      * Adds a stroke job to the context. The prerequisites are

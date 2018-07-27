@@ -28,6 +28,7 @@
 #include "kis_spontaneous_job.h"
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
+#include "kis_debug.h"
 
 
 class KisUpdateJobItem :  public QObject, public QRunnable
@@ -111,12 +112,16 @@ public:
 
     inline void runMergeJob() {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_atomicType == Type::MERGE);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
+//        KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
         // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
-        m_merger.startMerge(*m_walker);
+        QRect changeRect;
 
-        QRect changeRect = m_walker->changeRect();
+        for (auto walker : m_walkers) {
+            m_merger.startMerge(*walker);
+            changeRect |= walker->changeRect();
+        }
+
         emit sigContinueUpdate(changeRect);
     }
 
@@ -135,6 +140,26 @@ public:
         return oldState == Type::EMPTY;
     }
 
+    inline bool setWalkers(QVector<KisBaseRectsWalkerSP> &walkers) {
+        KIS_ASSERT(m_atomicType <= Type::WAITING);
+
+        m_accessRect = QRect();
+        m_changeRect = QRect();
+
+        m_walkers.swap(walkers);
+
+        m_exclusive = false;
+        m_runnableJob = 0;
+
+        for (auto walker : m_walkers) {
+            m_accessRect |= walker->accessRect();
+            m_changeRect |= walker->changeRect();
+        }
+
+        const Type oldState = m_atomicType.exchange(Type::MERGE);
+        return oldState == Type::EMPTY;
+    }
+
     // return true if the thread should actually be started
     inline bool setStrokeJob(KisStrokeJob *strokeJob) {
         KIS_ASSERT(m_atomicType <= Type::WAITING);
@@ -143,6 +168,7 @@ public:
         m_strokeJobSequentiality = strokeJob->sequentiality();
 
         m_exclusive = strokeJob->isExclusive();
+        m_walkers.clear();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
 
@@ -157,6 +183,7 @@ public:
         m_runnableJob = spontaneousJob;
 
         m_exclusive = spontaneousJob->isExclusive();
+        m_walkers.clear();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
 
@@ -165,6 +192,7 @@ public:
     }
 
     inline void setDone() {
+        m_walkers.clear();
         m_walker = 0;
         delete m_runnableJob;
         m_runnableJob = 0;
@@ -244,6 +272,7 @@ private:
      */
 
     KisBaseRectsWalkerSP m_walker;
+    QVector<KisBaseRectsWalkerSP> m_walkers;
     KisAsyncMerger m_merger;
 
     /**

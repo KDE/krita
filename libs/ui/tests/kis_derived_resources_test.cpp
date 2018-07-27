@@ -63,7 +63,7 @@ void addResourceTypes()
     KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
 
-    KisConfig cfg(false);
+    KisConfig cfg;
     cfg.setUseOpenGL(false);
 
 }

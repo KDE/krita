@@ -66,7 +66,7 @@ ecm_add_test(
 set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)
 qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
 ecm_add_test(${kis_node_view_test_SRCS}
-    TEST_NAME krita-image-kis_node_view_test
+    TEST_NAME krita-ui-kis_node_view_test
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
 

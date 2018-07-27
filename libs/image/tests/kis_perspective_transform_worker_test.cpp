@@ -21,6 +21,8 @@
 #include <QTest>
 
 #include "testutil.h"
+
+#define USE_DOCUMENT 0
 #include "qimage_based_test.h"
 
 #include "kis_perspectivetransform_worker.h"

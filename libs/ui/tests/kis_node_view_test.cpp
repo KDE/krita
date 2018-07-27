@@ -36,6 +36,9 @@
 
 #include <sdk/tests/testutil.h>
 
+//#define ENABLE_GUI_TESTS
+
+
 void KisNodeViewTest::init()
 {
     m_doc = KisPart::instance()->createDocument();
@@ -58,6 +61,10 @@ void KisNodeViewTest::cleanup()
 
 void KisNodeViewTest::testLayers()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
+
     QDialog dlg;
 
     QFont font;
@@ -100,6 +107,11 @@ void KisNodeViewTest::testLayers()
 
 void KisNodeViewTest::testColorLabels()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
+
+
     QDialog dlg;
 
     QFont font;

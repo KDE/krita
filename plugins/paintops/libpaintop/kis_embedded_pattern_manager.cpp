@@ -101,23 +101,30 @@ KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesCon
     KoPattern *pattern = 0;
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
+    qDebug() << 1 << md5.toHex();
+
     pattern = Private::tryFetchPatternByMd5(md5);
     if (pattern) return pattern;
 
     QString name = setting->getString("Texture/Pattern/Name");
+    qDebug() << 2 << name;
+
     pattern = Private::tryFetchPatternByName(name);
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
+    qDebug() << 3 << fileName;
+
     pattern = Private::tryFetchPatternByFileName(fileName);
     if (pattern) return pattern;
 
 
     pattern = Private::tryLoadEmbeddedPattern(setting);
+    qDebug() << 4 << pattern->md5().toHex();
+
     if (pattern) {
         KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
     }
-
 
     return pattern;
 }

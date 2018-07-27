@@ -19,18 +19,19 @@
 #include "kis_embedded_pattern_manager_test.h"
 
 #include <QTest>
-
-#include "kis_embedded_pattern_manager.h"
-
 #include <QPainter>
 
 #include <KoResourceServerProvider.h>
 #include <resources/KoPattern.h>
 
+#include "kis_embedded_pattern_manager.h"
+
 #include <kis_properties_configuration.h>
 #include <KisResourceServerProvider.h>
 
-KoPattern *createPattern()
+#include "sdk/tests/kistest.h"
+
+KoPattern *KisEmbeddedPatternManagerTest::createPattern()
 {
     QImage image(512, 512, QImage::Format_ARGB32);
     image.fill(255);
@@ -38,31 +39,8 @@ KoPattern *createPattern()
     QPainter gc(&image);
     gc.fillRect(100, 100, 312, 312, Qt::red);
 
-    return new KoPattern(image, "__test_pattern", KoResourceServerProvider::instance()->patternServer()->saveLocation());
-}
-
-void KisEmbeddedPatternManagerTest::initTestCase()
-{
-    // touch all the barriers
-    KisResourceServerProvider::instance()->paintOpPresetServer();
-    KoResourceServerProvider::instance()->patternServer();
-    KisResourceServerProvider::instance()->workspaceServer();
-}
-
-void KisEmbeddedPatternManagerTest::init()
-{
-    cleanUp();
-}
-
-void KisEmbeddedPatternManagerTest::cleanUp()
-{
-    Q_FOREACH (KoPattern * p, KoResourceServerProvider::instance()->patternServer()->resources()) {
-        if (p->filename().contains("__test_pattern")) {
-            QFile file(p->filename());
-            file.remove();
-        }
-        QVERIFY(KoResourceServerProvider::instance()->patternServer()->removeResourceFromServer(p));
-    }
+    KoPattern *pattern = new KoPattern(image, "__test_pattern", KoResourceServerProvider::instance()->patternServer()->saveLocation());
+    return pattern;
 }
 
 void KisEmbeddedPatternManagerTest::testRoundTrip()
@@ -85,14 +63,16 @@ void KisEmbeddedPatternManagerTest::testRoundTrip()
     // delete newPattern;
 }
 
-enum NameStatus {
-    VALID,
-    PATH,
-    EMPTY
-};
+void KisEmbeddedPatternManagerTest::init()
+{
+    Q_FOREACH(KoPattern *pa, KoResourceServerProvider::instance()->patternServer()->resources()) {
+        if (pa) {
+            KoResourceServerProvider::instance()->patternServer()->removeResourceFile(pa->filename());
+        }
+    }
+}
 
-KisPropertiesConfigurationSP createXML(NameStatus nameStatus,
-                                     bool hasMd5)
+KisPropertiesConfigurationSP KisEmbeddedPatternManagerTest::createXML(NameStatus nameStatus, bool hasMd5)
 {
     QString fileName("./__test_pattern_path.pat");
 
@@ -138,20 +118,13 @@ KoPattern* findOnServer(QByteArray md5)
     KoPattern *pattern = 0;
 
     if (!md5.isEmpty()) {
-        Q_FOREACH (KoResource * res, KoResourceServerProvider::instance()->patternServer()->resources()) {
-            KoPattern *pat = static_cast<KoPattern *>(res);
-            if (pat->md5() == md5) {
-                pattern = pat;
-                break;
-            }
-        }
+        return KoResourceServerProvider::instance()->patternServer()->resourceByMD5(md5);
     }
 
     return pattern;
 }
 
-void checkOneConfig(NameStatus nameStatus, bool hasMd5,
-                    QString expectedName, bool isOnServer)
+void KisEmbeddedPatternManagerTest::checkOneConfig(NameStatus nameStatus, bool hasMd5, QString expectedName, bool isOnServer)
 {
     QScopedPointer<KoPattern> basePattern(createPattern());
 
@@ -177,18 +150,17 @@ void checkOneConfig(NameStatus nameStatus, bool hasMd5,
     // delete pattern;
 }
 
-
-void KisEmbeddedPatternManagerTest::testLoadingNoOnServerValidName()
+void KisEmbeddedPatternManagerTest::testLoadingNotOnServerValidName()
 {
     checkOneConfig(VALID, false, "__test_pattern_name", false);
 }
 
-void KisEmbeddedPatternManagerTest::testLoadingNoOnServerEmptyName()
+void KisEmbeddedPatternManagerTest::testLoadingNotOnServerEmptyName()
 {
     checkOneConfig(EMPTY, false, "__test_pattern_path", false);
 }
 
-void KisEmbeddedPatternManagerTest::testLoadingNoOnServerPathName()
+void KisEmbeddedPatternManagerTest::testLoadingNotOnServerPathName()
 {
     checkOneConfig(PATH, false, "__test_pattern_path", false);
 }
@@ -196,30 +168,30 @@ void KisEmbeddedPatternManagerTest::testLoadingNoOnServerPathName()
 void KisEmbeddedPatternManagerTest::testLoadingOnServerValidName()
 {
     KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), false);
-    checkOneConfig(VALID, false, "__test_pattern", true);
+    checkOneConfig(VALID, false, "__test_pattern_name", true);
 }
 
 void KisEmbeddedPatternManagerTest::testLoadingOnServerEmptyName()
 {
     KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), false);
-    checkOneConfig(EMPTY, false, "__test_pattern", true);
+    checkOneConfig(EMPTY, false, "__test_pattern_path", true);
 }
 
 void KisEmbeddedPatternManagerTest::testLoadingOnServerPathName()
 {
     KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), false);
-    checkOneConfig(PATH, false, "__test_pattern", true);
+    checkOneConfig(PATH, false, "__test_pattern_path", true);
 }
 
 void KisEmbeddedPatternManagerTest::testLoadingOnServerValidNameMd5()
 {
-    KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), false);
+    KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), true);
     checkOneConfig(VALID, true, "__test_pattern", true);
 }
 
 void KisEmbeddedPatternManagerTest::testLoadingOnServerEmptyNameMd5()
 {
-    KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), false);
+    KoResourceServerProvider::instance()->patternServer()->addResource(createPattern(), true);
     checkOneConfig(EMPTY, true, "__test_pattern", true);
 }
 
@@ -229,4 +201,4 @@ void KisEmbeddedPatternManagerTest::testLoadingOnServerPathNameMd5()
     checkOneConfig(PATH, true, "__test_pattern", true);
 }
 
-QTEST_MAIN(KisEmbeddedPatternManagerTest)
+KISTEST_MAIN(KisEmbeddedPatternManagerTest)

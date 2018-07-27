@@ -21,15 +21,21 @@
 
 #include <QtTest>
 
+#include <kis_properties_configuration.h>
+
+class KoPattern;
+
 class KisEmbeddedPatternManagerTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
     void testRoundTrip();
 
-    void testLoadingNoOnServerValidName();
-    void testLoadingNoOnServerEmptyName();
-    void testLoadingNoOnServerPathName();
+    void init();
+
+    void testLoadingNotOnServerValidName();
+    void testLoadingNotOnServerEmptyName();
+    void testLoadingNotOnServerPathName();
 
     void testLoadingOnServerValidName();
     void testLoadingOnServerEmptyName();
@@ -39,10 +45,16 @@ private Q_SLOTS:
     void testLoadingOnServerEmptyNameMd5();
     void testLoadingOnServerPathNameMd5();
 
-    void init();
-    void cleanUp();
+private:
 
-    void initTestCase();
+    enum NameStatus {
+        VALID,
+        PATH,
+        EMPTY
+    };
+    void checkOneConfig(NameStatus nameStatus, bool hasMd5, QString expectedName, bool isOnServer);
+    KisPropertiesConfigurationSP createXML(NameStatus nameStatus, bool hasMd5);
+    KoPattern *createPattern();
 };
 
 #endif /* __KIS_EMBEDDED_PATTERN_MANAGER_TEST_H */

@@ -49,22 +49,6 @@ struct KisEmbeddedPatternManager::Private {
 
         return pattern;
     }
-
-    static KoPattern* tryFetchPatternByMd5(const QByteArray &md5) {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        return server->resourceByMD5(md5);
-    }
-
-    static KoPattern* tryFetchPatternByName(const QString &name) {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        return server->resourceByName(name);
-    }
-
-    static KoPattern* tryFetchPatternByFileName(const QString &fileName) {
-        KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
-        return server->resourceByFilename(fileName);
-    }
-
 };
 
 void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP setting, const KoPattern *pattern)
@@ -92,36 +76,26 @@ void KisEmbeddedPatternManager::saveEmbeddedPattern(KisPropertiesConfigurationSP
     buffer.open(QIODevice::WriteOnly);
     pattern->pattern().save(&buffer, "PNG");
     setting->setProperty("Texture/Pattern/Pattern", ba.toBase64());
-
-
 }
 
 KoPattern* KisEmbeddedPatternManager::loadEmbeddedPattern(const KisPropertiesConfigurationSP setting)
 {
     KoPattern *pattern = 0;
+    KoResourceServer<KoPattern> *server = KoResourceServerProvider::instance()->patternServer();
 
     QByteArray md5 = QByteArray::fromBase64(setting->getString("Texture/Pattern/PatternMD5").toLatin1());
-    qDebug() << 1 << md5.toHex();
-
-    pattern = Private::tryFetchPatternByMd5(md5);
+    pattern = server->resourceByMD5(md5);
     if (pattern) return pattern;
 
     QString name = setting->getString("Texture/Pattern/Name");
-    qDebug() << 2 << name;
-
-    pattern = Private::tryFetchPatternByName(name);
+    pattern = server->resourceByName(name);
     if (pattern) return pattern;
 
     QString fileName = setting->getString("Texture/Pattern/PatternFileName");
-    qDebug() << 3 << fileName;
-
-    pattern = Private::tryFetchPatternByFileName(fileName);
+    pattern = server->resourceByFilename(fileName);
     if (pattern) return pattern;
 
-
     pattern = Private::tryLoadEmbeddedPattern(setting);
-    qDebug() << 4 << pattern->md5().toHex();
-
     if (pattern) {
         KoResourceServerProvider::instance()->patternServer()->addResource(pattern, false);
     }

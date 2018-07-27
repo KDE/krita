@@ -18,7 +18,7 @@
 
 #include "kis_cs_conversion_test.h"
 #include <QTest>
-
+#include "sdk/tests/kistest.h"
 #include <QTime>
 
 #include <KoColor.h>
@@ -59,7 +59,7 @@ void KisCsConversionTest::testColorSpaceConversion()
     QTime t;
     t.start();
 
-    QList<const KoColorSpace*> colorSpaces = TestUtil::allColorSpaces();
+    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
     int failedColorSpaces = 0;
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
@@ -69,7 +69,7 @@ void KisCsConversionTest::testColorSpaceConversion()
 
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
             dev->convertFromQImage(image, 0);
-            dev->move(10, 10);   // Unalign with tile boundaries
+            dev->moveTo(10, 10);   // Unalign with tile boundaries
             dev->convertTo(dstCs);
 
             if (dev->exactBounds() != QRect(10, 10, image.width(), image.height())) {
@@ -97,6 +97,6 @@ void KisCsConversionTest::testColorSpaceConversion()
     }
 }
 
-QTEST_MAIN(KisCsConversionTest)
+KISTEST_MAIN(KisCsConversionTest)
 
 

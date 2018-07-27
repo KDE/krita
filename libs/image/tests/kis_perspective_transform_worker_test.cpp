@@ -48,7 +48,7 @@ public:
 
     void checkLayer(const QString &testName) {
         KisNodeSP node = findNode(image->root(), "paint1");
-        QVERIFY(checkOneLayer(image, node, testName, 0));
+        QVERIFY(checkOneLayer(image, node, testName, 3));
     }
 
 

@@ -548,11 +548,11 @@ void TestSvgText::testHindiText()
 
     QFont testFont("FreeSans");
     if (!QFontInfo(testFont).exactMatch()) {
-        if (USE_ROUND_TRIP) {
+#ifdef USE_ROUND_TRIP
             return;
-        } else {
+#else
             QEXPECT_FAIL(0, "FreeSans found is *not* found! Hindi rendering might be broken!", Continue);
-        }
+#endif
     }
 
     t.test_standard("text_hindi", QSize(260, 30), 72);

@@ -182,6 +182,10 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
+option(LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode" ON)
+configure_file(config-limit-long-tests.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-limit-long-tests.h)
+add_feature_info("Limit long tests" LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode")
+
 option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
 
 option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)

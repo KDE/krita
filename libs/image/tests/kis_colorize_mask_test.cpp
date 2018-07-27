@@ -182,10 +182,12 @@ void KisColorizeMaskTest::testCrop()
     QList<KisLazyFillTools::KeyStroke> strokes;
     strokes = t.mask->fetchKeyStrokesDirect();
 
+    const QRect expectedFillRect(25,25,145,150);
+
     // Check initial bounding rects
 
     QCOMPARE(t.mask->paintDevice()->exactBounds(), QRect(0,0,160,70));
-    QCOMPARE(t.mask->coloringProjection()->exactBounds(), t.internalFillRect);
+    QCOMPARE(t.mask->coloringProjection()->exactBounds(), expectedFillRect);
     QCOMPARE(t.mask->testingFilteredSource()->exactBounds(), t.refRect);
 
     // KIS_DUMP_DEVICE_2(t.mask->coloringProjection(), t.refRect, "coloring3", "dd");
@@ -205,7 +207,7 @@ void KisColorizeMaskTest::testCrop()
     // KIS_DUMP_DEVICE_2(t.mask->testingFilteredSource(), t.refRect, "filteredSource4", "dd");
 
     QCOMPARE(t.mask->paintDevice()->exactBounds(), QRect(0,0,150,55));
-    QCOMPARE(t.mask->coloringProjection()->exactBounds(), QRect(25,25,125,30));
+    QCOMPARE(t.mask->coloringProjection()->exactBounds(), (expectedFillRect & cropRect).translated(-cropRect.topLeft()));
     QCOMPARE(t.mask->testingFilteredSource()->exactBounds(), t.refRect);
 
     QCOMPARE(strokes[0].dev->exactBounds(), QRect(45,45,10,10));

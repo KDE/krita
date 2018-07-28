@@ -193,8 +193,13 @@ public:
     }
 
     void addInitialUpdate(MoveNodeStructSP moveStruct) {
-        QMutexLocker l(&m_mutex);
-        addToHashLazy(&m_movedNodesInitial, moveStruct);
+        {
+            QMutexLocker l(&m_mutex);
+            addToHashLazy(&m_movedNodesInitial, moveStruct);
+
+            // the juggler might directly forward the signal to processUnhandledUpdates,
+            // which would also like to get a lock, so we should release it beforehand
+        }
         if (m_parentJuggler) {
             emit m_parentJuggler->requestUpdateAsyncFromCommand();
         }

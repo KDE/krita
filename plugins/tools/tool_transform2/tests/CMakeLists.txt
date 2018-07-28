@@ -10,9 +10,9 @@ macro_add_unittest_definitions()
 ########### next target ###############
 
 ecm_add_test(test_save_load_transform_args.cpp
-    TEST_NAME krita-ui-TestSaveLoadTransformArgs
+    TEST_NAME krita-plugin-tooltransform-TestSaveLoadTransformArgs
     LINK_LIBRARIES kritatooltransform kritaui kritaimage Qt5::Test)
 
 ecm_add_test(test_animated_transform_parameters.cpp
-    TEST_NAME krita-ui-TestAnimatedTransformParameters
+    TEST_NAME krita-plugin-tooltransform-TestAnimatedTransformParameters
     LINK_LIBRARIES kritatooltransform kritaui kritaimage Qt5::Test)

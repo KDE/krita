@@ -29,6 +29,17 @@
 #include "kis_cubic_curve.h"
 #include "krita_utils.h"
 
+#include "config-limit-long-tests.h"
+
+#ifdef LIMIT_LONG_TESTS
+#define RATIO_STEP 50
+#define FADE_STEP 25
+#else /* LIMIT_LONG_TESTS */
+#define RATIO_STEP 20
+#define FADE_STEP 5
+#endif /* LIMIT_LONG_TESTS */
+
+
 enum MaskType {
     DEFAULT, CIRC_GAUSS, CIRC_SOFT, RECT, RECT_GAUSS, RECT_SOFT, STAMP
 };
@@ -85,9 +96,9 @@ public:
     static bool exahustiveTest(QRect bounds, MaskType type) {
         // Exahustive test
 
-        for (size_t i = 0; i <= 100; i += 5){
-            for (size_t j = 0; j <= 100; j += 5){
-                for (size_t k = 10; k <= 100; k += 20){
+        for (size_t i = 0; i <= 100; i += FADE_STEP){
+            for (size_t j = 0; j <= 100; j += FADE_STEP){
+                for (size_t k = 0; k <= 100; k += RATIO_STEP){
 
                 switch (type) {
                 case CIRC_GAUSS:

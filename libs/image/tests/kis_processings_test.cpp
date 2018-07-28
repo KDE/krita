@@ -23,9 +23,12 @@
 #include "kis_undo_stores.h"
 #include "kis_processing_applicator.h"
 #include "processing/kis_crop_processing_visitor.h"
-#include <kis_filter_configuration.h>
+
 #include "testutil.h"
+
+#define USE_DOCUMENT 0
 #include "qimage_based_test.h"
+
 #include "kis_filter_strategy.h"
 #include "kis_transform_worker.h"
 #include "processing/kis_transform_processing_visitor.h"

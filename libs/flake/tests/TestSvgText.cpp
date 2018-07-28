@@ -344,6 +344,11 @@ void TestSvgText::testSimpleText()
 
             "</svg>";
 
+    QFont testFont("DejaVu Sans");
+    if (!QFontInfo(testFont).exactMatch()) {
+        QEXPECT_FAIL(0, "DejaVu Sans is *not* found! Text rendering might be broken!", Continue);
+    }
+
     SvgRenderTester t (data);
     t.test_standard("text_simple", QSize(175, 40), 72.0);
 
@@ -543,7 +548,11 @@ void TestSvgText::testHindiText()
 
     QFont testFont("FreeSans");
     if (!QFontInfo(testFont).exactMatch()) {
-        QEXPECT_FAIL(0, "FreeSans found is *not* found! Hindi rendering might be broken!", Continue);
+#ifdef USE_ROUND_TRIP
+            return;
+#else
+            QEXPECT_FAIL(0, "FreeSans found is *not* found! Hindi rendering might be broken!", Continue);
+#endif
     }
 
     t.test_standard("text_hindi", QSize(260, 30), 72);

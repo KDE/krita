@@ -18,7 +18,7 @@
 
 #include "kis_cs_conversion_test.h"
 #include <QTest>
-#include "sdk/tests/kistest.h"
+
 #include <QTime>
 
 #include <KoColor.h>
@@ -35,6 +35,7 @@
 #include "testutil.h"
 #include "kis_transaction.h"
 #include "kis_image.h"
+#include "testing_timed_default_bounds.h"
 
 void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColorSpace * dstCs)
 {
@@ -59,7 +60,7 @@ void KisCsConversionTest::testColorSpaceConversion()
     QTime t;
     t.start();
 
-    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::AllProfiles);
+    QList<const KoColorSpace*> colorSpaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
     int failedColorSpaces = 0;
 
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
@@ -70,7 +71,8 @@ void KisCsConversionTest::testColorSpaceConversion()
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
             dev->convertFromQImage(image, 0);
             dev->moveTo(10, 10);   // Unalign with tile boundaries
-            dev->convertTo(dstCs);
+            dev->setDefaultBounds(new TestUtil::TestingTimedDefaultBounds(dev->exactBounds()));
+            delete dev->convertTo(dstCs);
 
             if (dev->exactBounds() != QRect(10, 10, image.width(), image.height())) {
                 logFailure("bounds", srcCs, dstCs);
@@ -86,7 +88,7 @@ void KisCsConversionTest::testColorSpaceConversion()
             }
         }
     }
-    dbgKrita << colorSpaces.size() * colorSpaces.size()
+    qDebug() << colorSpaces.size() * colorSpaces.size()
     << "conversions"
     << " done in "
     << t.elapsed()

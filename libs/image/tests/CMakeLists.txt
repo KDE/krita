@@ -144,10 +144,31 @@ ecm_add_test(KisWatershedWorkerTest.cpp
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 
+ecm_add_test(kis_dom_utils_test.cpp
+   TEST_NAME krita-image-KisDomUtilsTest
+   LINK_LIBRARIES kritaimage Qt5::Test)
+
+ecm_add_test(kis_transform_worker_test.cpp
+    TEST_NAME krita-image-KisTransformWorkerTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
+
+ecm_add_test(kis_perspective_transform_worker_test.cpp
+    TEST_NAME krita-image-KisPerspectiveTransformWorkerTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
+
+ecm_add_test(kis_cs_conversion_test.cpp
+    TEST_NAME krita-image-KisCsConversionTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
+
+ecm_add_test(kis_processings_test.cpp
+    TEST_NAME krita-image-KisProcessingsTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_projection_leaf_test.cpp
     TEST_NAME KisProjectionLeafTest
     LINK_LIBRARIES kritaimage Qt5::Test)
+
+
 
 if (NOT HAVE_FAILING_CMAKE)
   krita_add_broken_unit_test(kis_paint_device_test.cpp
@@ -177,9 +198,9 @@ krita_add_broken_unit_test(kis_walkers_test.cpp
     TEST_NAME krita-image-KisWalkersTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
-krita_add_broken_unit_test(kis_async_merger_test.cpp
-    TEST_NAME krita-image-KisAsyncMergerTest
-    LINK_LIBRARIES kritaimage Qt5::Test)
+#krita_add_broken_unit_test(kis_async_merger_test.cpp
+#    TEST_NAME krita-image-KisAsyncMergerTest
+#    LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_update_scheduler_test.cpp
     TEST_NAME krita-image-KisUpdateSchedulerTest
@@ -204,6 +225,14 @@ krita_add_broken_unit_test(kis_random_generator_test.cpp
 krita_add_broken_unit_test(kis_keyframing_test.cpp
     TEST_NAME krita-image-Keyframing-Test
     LINK_LIBRARIES kritaimage Qt5::Test)
+
+krita_add_broken_unit_test(kis_image_animation_interface_test.cpp
+    TEST_NAME krita-image-ImageAnimationInterface-Test
+    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
+
+krita_add_broken_unit_test(kis_onion_skin_compositor_test.cpp
+    TEST_NAME krita-image-OnionSkinCompositor-Test
+    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_layer_styles_test.cpp
     TEST_NAME krita-image-LayerStylesTest

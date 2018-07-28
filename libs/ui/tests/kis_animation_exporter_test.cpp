@@ -99,4 +99,4 @@ void KisAnimationExporterTest::testAnimationExport()
     }
 }
 
-QTEST_MAIN(KisAnimationExporterTest)
+KISTEST_MAIN(KisAnimationExporterTest)

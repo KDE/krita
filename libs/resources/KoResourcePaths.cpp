@@ -41,7 +41,7 @@ static QStringList cleanup(const QStringList &pathList)
 {
     QStringList cleanedPathList;
     Q_FOREACH(const QString &path, pathList) {
-      cleanedPathList << cleanup(path);
+        cleanedPathList << cleanup(path);
     }
     return cleanedPathList;
 }
@@ -49,16 +49,16 @@ static QStringList cleanup(const QStringList &pathList)
 
 static QString cleanupDirs(const QString &path)
 {
-  return QDir::cleanPath(path) + QDir::separator();
+    return QDir::cleanPath(path) + QDir::separator();
 }
 
 static QStringList cleanupDirs(const QStringList &pathList)
 {
-  QStringList cleanedPathList;
-  Q_FOREACH(const QString &path, pathList) {
-    cleanedPathList << cleanupDirs(path);
-  }
-  return cleanedPathList;
+    QStringList cleanedPathList;
+    Q_FOREACH(const QString &path, pathList) {
+        cleanedPathList << cleanupDirs(path);
+    }
+    return cleanedPathList;
 }
 
 void appendResources(QStringList *dst, const QStringList &src, bool eliminateDuplicates)
@@ -86,44 +86,45 @@ static const Qt::CaseSensitivity cs = Qt::CaseSensitive;
 
 QString getInstallationPrefix() {
 #ifdef Q_OS_OSX
-     QString appPath = qApp->applicationDirPath();
+    QString appPath = qApp->applicationDirPath();
 
-     appPath.chop(QString("MacOS/").length());
-     dbgResources << "2" << appPath;
+    dbgResources << "1" << appPath;
+    appPath.chop(QString("MacOS/").length());
+    dbgResources << "2" << appPath;
 
-     bool makeInstall = QDir(appPath + "/../../../share/kritaplugins").exists();
-     bool inBundle = QDir(appPath + "/Resources/kritaplugins").exists();
+    bool makeInstall = QDir(appPath + "/../../../share/kritaplugins").exists();
+    bool inBundle = QDir(appPath + "/Resources/kritaplugins").exists();
 
-     QString bundlePath;
+    QString bundlePath;
 
-     if (inBundle) {
+    if (inBundle) {
         bundlePath = appPath + "/";
-     }
-     else if (makeInstall) {
-         appPath.chop(QString("Contents/").length());
-         bundlePath = appPath + "/../../";
-     }
-     else {
-         qFatal("Cannot calculate the bundle path from the app path");
-     }
+    }
+    else if (makeInstall) {
+        appPath.chop(QString("Contents/").length());
+        bundlePath = appPath + "/../../";
+    }
+    else {
+        qFatal("Cannot calculate the bundle path from the app path");
+    }
 
-     return bundlePath;
+    return bundlePath;
 #else
-    #ifdef Q_OS_QWIN
-        QDir appdir(qApp->applicationDirPath());
+#ifdef Q_OS_QWIN
+    QDir appdir(qApp->applicationDirPath());
 
-        // Corrects for mismatched case errors in path (qtdeclarative fails to load)
-        wchar_t buffer[1024];
-        QString absolute = appdir.absolutePath();
-        DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
-        rv = ::GetLongPathName(buffer, buffer, 1024);
-        QString correctedPath((QChar *)buffer);
-        appdir.setPath(correctedPath);
-        appdir.cdUp();
-        return appdir.canonicalPath();
-    #else
-        return qApp->applicationDirPath() + "/../";
-    #endif
+    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
+    wchar_t buffer[1024];
+    QString absolute = appdir.absolutePath();
+    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
+    rv = ::GetLongPathName(buffer, buffer, 1024);
+    QString correctedPath((QChar *)buffer);
+    appdir.setPath(correctedPath);
+    appdir.cdUp();
+    return appdir.canonicalPath();
+#else
+    return qApp->applicationDirPath() + "/../";
+#endif
 #endif
 }
 
@@ -295,7 +296,7 @@ void KoResourcePaths::addResourceDirInternal(const QString &type, const QString 
 QString KoResourcePaths::findResourceInternal(const QString &type, const QString &fileName)
 {
     QStringList aliases = d->aliases(type);
-    aliases << "";
+    dbgResources<< "aliases" << aliases << getApplicationRoot();
     QString resource = QStandardPaths::locate(QStandardPaths::AppDataLocation, fileName, QStandardPaths::LocateFile);
 
     if (resource.isEmpty()) {
@@ -329,11 +330,20 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
         QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
         if (!extraResourceDirs.isEmpty()) {
             Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
-                Q_FOREACH (const QString &alias, aliases) {
-                    resource = extraResourceDir + '/' + alias + '/' + fileName;
+                if (aliases.isEmpty()) {
+                    resource = extraResourceDir + '/' + fileName;
                     dbgResources<< "\t4" << resource;
                     if (QFile::exists(resource)) {
                         continue;
+                    }
+                }
+                else {
+                    Q_FOREACH (const QString &alias, aliases) {
+                        resource = extraResourceDir + '/' + alias + '/' + fileName;
+                        dbgResources<< "\t4" << resource;
+                        if (QFile::exists(resource)) {
+                            continue;
+                        }
                     }
                 }
             }
@@ -384,7 +394,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
 
     Q_FOREACH (const QString &alias, aliases) {
         QStringList aliasDirs =
-           QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/', QStandardPaths::LocateDirectory);
+                QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), alias + '/', QStandardPaths::LocateDirectory);
         appendResources(&dirs, aliasDirs, true);
 
 #ifdef Q_OS_OSX
@@ -394,7 +404,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
         bundlePaths << getApplicationRoot() + "/../share/krita/" + alias;
         dbgResources << "bundlePaths" << bundlePaths;
         appendResources(&dirs, bundlePaths, true);
-       Q_ASSERT(!dirs.isEmpty());
+        Q_ASSERT(!dirs.isEmpty());
 #endif
 
         QStringList fallbackPaths;
@@ -432,8 +442,8 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     QStringList resources;
     if (aliases.isEmpty()) {
         QStringList standardResources =
-            QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type),
-                                      filter, QStandardPaths::LocateFile);
+                QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type),
+                                          filter, QStandardPaths::LocateFile);
         dbgResources << "standardResources" << standardResources;
         appendResources(&resources, standardResources, true);
         dbgResources << "1" << resources;

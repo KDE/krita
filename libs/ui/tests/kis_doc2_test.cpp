@@ -30,6 +30,7 @@
 #include "util.h"
 #include <KisView.h>
 #include "KisPart.h"
+#include "sdk/tests/kistest.h"
 
 void KisDocumentTest::testOpenImageTwiceInSameDoc()
 {
@@ -47,5 +48,5 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
 }
 
 
-QTEST_MAIN(KisDocumentTest)
+KISTEST_MAIN(KisDocumentTest)
 

@@ -152,17 +152,17 @@ ecm_add_test(kis_transform_worker_test.cpp
     TEST_NAME krita-image-KisTransformWorkerTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
-ecm_add_test(kis_perspective_transform_worker_test.cpp
-    TEST_NAME krita-image-KisPerspectiveTransformWorkerTest
-    LINK_LIBRARIES kritaimage Qt5::Test)
+#ecm_add_test(kis_perspective_transform_worker_test.cpp
+#    TEST_NAME krita-image-KisPerspectiveTransformWorkerTest
+#    LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_cs_conversion_test.cpp
     TEST_NAME krita-image-KisCsConversionTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
-ecm_add_test(kis_processings_test.cpp
-    TEST_NAME krita-image-KisProcessingsTest
-    LINK_LIBRARIES kritaimage Qt5::Test)
+#ecm_add_test(kis_processings_test.cpp
+#    TEST_NAME krita-image-KisProcessingsTest
+#    LINK_LIBRARIES kritaimage Qt5::Test)
 
 # image/tests cannot use stuff that needs kisdocument
 #    kis_projection_leaf_test.cpp

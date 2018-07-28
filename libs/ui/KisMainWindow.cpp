@@ -1917,6 +1917,7 @@ void KisMainWindow::slotReloadFile()
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
+    bool lockAllDockers = KisConfig().readEntry<bool>("LockAllDockerPanels", false);
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
@@ -1931,7 +1932,14 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
+        if (lockAllDockers) {
+            if (dockWidget->titleBarWidget()) {
+                dockWidget->titleBarWidget()->setVisible(false);
+            }
+            dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        }
 
+        
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 

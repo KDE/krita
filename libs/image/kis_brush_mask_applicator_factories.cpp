@@ -390,7 +390,6 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
                                    float centerX, float centerY)
 {
     const bool useSmoothing = d->copyOfAntialiasEdges;
-    const bool noFading = d->noFading;
 
     float y_ = y - centerY;
     float sinay_ = sina * y_;
@@ -431,38 +430,31 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_m outsideMask = (nxr > vOne) || (nyr > vOne);
 
         if (!outsideMask.isFull()) {
-
-            if (noFading) {
-                Vc::float_v vFade(vZero);
-                vFade(outsideMask) = vOne;
-                vFade.store(bufferPointer, Vc::Aligned);
-            } else {
-                if (useSmoothing) {
-                    xr = Vc::abs(xr) + vOne;
-                    yr = Vc::abs(yr) + vOne;
-                }
-
-                Vc::float_v fxr = xr * vTransformedFadeX;
-                Vc::float_v fyr = yr * vTransformedFadeY;
-
-                Vc::float_v fxrNorm = nxr * (fxr - vOne) / (fxr - nxr);
-                Vc::float_v fyrNorm = nyr * (fyr - vOne) / (fyr - nyr);
-
-                Vc::float_v vFade(vZero);
-
-                Vc::float_v::IndexType fxrInt(fxr * vTolerance);
-                Vc::float_v::IndexType fyrInt(fyr * vTolerance);
-
-                Vc::float_m fadeXMask = (fxr > vOne) && ((fxrInt > fyrInt) || fyr < vOne);
-                Vc::float_m fadeYMask = (fyr > vOne) && (fyrInt >= fxrInt || fxr < vOne);
-
-                vFade(fadeXMask) = fxrNorm;
-                vFade(!fadeXMask && fadeYMask) = fyrNorm;
-
-                // Mask out the outer circe of the mask
-                vFade(outsideMask) = vOne;
-                vFade.store(bufferPointer, Vc::Aligned);
+            if (useSmoothing) {
+                xr = Vc::abs(xr) + vOne;
+                yr = Vc::abs(yr) + vOne;
             }
+
+            Vc::float_v fxr = xr * vTransformedFadeX;
+            Vc::float_v fyr = yr * vTransformedFadeY;
+
+            Vc::float_v fxrNorm = nxr * (fxr - vOne) / (fxr - nxr);
+            Vc::float_v fyrNorm = nyr * (fyr - vOne) / (fyr - nyr);
+
+            Vc::float_v vFade(vZero);
+
+            Vc::float_v::IndexType fxrInt(fxr * vTolerance);
+            Vc::float_v::IndexType fyrInt(fyr * vTolerance);
+
+            Vc::float_m fadeXMask = (fxr > vOne) && ((fxrInt >= fyrInt) || fyr < vOne);
+            Vc::float_m fadeYMask = (fyr > vOne) && ((fyrInt > fxrInt) || fxr < vOne);
+
+            vFade(fadeXMask) = fxrNorm;
+            vFade(!fadeXMask && fadeYMask) = fyrNorm;
+
+            // Mask out the outer circe of the mask
+            vFade(outsideMask) = vOne;
+            vFade.store(bufferPointer, Vc::Aligned);
         } else {
             // Mask out everything outside the circle
             vOne.store(bufferPointer, Vc::Aligned);

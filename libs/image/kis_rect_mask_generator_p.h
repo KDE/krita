@@ -42,8 +42,6 @@ struct Q_DECL_HIDDEN KisRectangleMaskGenerator::Private {
         copyOfAntialiasEdges(rhs.copyOfAntialiasEdges)
     {
     }
-
-    double m_c;
     qreal xcoeff;
     qreal ycoeff;
     qreal xfadecoeff;

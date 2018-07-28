@@ -55,13 +55,6 @@
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(radius, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, DefaultId), d(new Private)
 {
-    if (fv == 0 && fh == 0) {
-        d->m_c = 0;
-    } else {
-        d->m_c = (fv / fh);
-        Q_ASSERT(!qIsNaN(d->m_c));
-
-    }
     setScale(1.0, 1.0);
 
     // store the variable locally to allow vector implementation read it easily
@@ -95,10 +88,6 @@ void KisRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->yfadecoeff = (verticalFade() == 0)   ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
 
     setSoftness(this->softness());
-
-    d->noFading = !d->copyOfAntialiasEdges &&
-        qFuzzyCompare(d->xcoeff, d->transformedFadeX) &&
-        qFuzzyCompare(d->ycoeff, d->transformedFadeY);
 }
 
 void KisRectangleMaskGenerator::setSoftness(qreal softness)
@@ -153,11 +142,14 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     qreal fxr = xr * d->transformedFadeX;
     qreal fyr = yr * d->transformedFadeY;
 
-    if (fxr > 1.0 && (fxr > fyr || fyr < 1.0)) {
+    int fxrInt = fxr * 1e4;
+    int fyrInt = fyr * 1e4;
+
+    if (fxr > 1.0 && (fxrInt >= fyrInt || fyr < 1.0)) {
         return 255 * nxr * (fxr - 1.0) / (fxr - nxr);
     }
 
-    if (fyr > 1.0 && (fyr >= fxr || fxr < 1.0)) {
+    if (fyr > 1.0 && (fyrInt > fxrInt || fxr < 1.0)) {
         return 255 * nyr * (fyr - 1.0) / (fyr - nyr);
     }
 

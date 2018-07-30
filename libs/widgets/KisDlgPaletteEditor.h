@@ -8,12 +8,13 @@
 
 class KisDlgPaletteEditor : public QDialog
 {
+    Q_OBJECT
 public:
     explicit KisDlgPaletteEditor();
     ~KisDlgPaletteEditor();
 
 private:
-    QScopedPointer<ui_WdgDlgPaletteEditor> m_ui;
+    QScopedPointer<Ui_WdgDlgPaletteEditor> m_ui;
 };
 
 #endif // KISDLGPALETTEEDITOR_H

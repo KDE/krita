@@ -103,8 +103,6 @@ set(kritawidgets_LIB_SRCS
     kis_popup_button.cc
     kis_color_button.cpp
 
-    KisColorsetChooser.cpp
-
     KisDlgPaletteEditor.cpp
 )
 

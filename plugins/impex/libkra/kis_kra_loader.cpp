@@ -516,6 +516,7 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         QByteArray data = store->read(store->size());
         newPalette->fromByteArray(data);
         newPalette->setIsGlobal(false);
+        newPalette->setIsEditable(true);
         delete palette;
         palette = newPalette;
         pServer->addResource(newPalette);

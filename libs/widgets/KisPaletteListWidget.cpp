@@ -1,6 +1,7 @@
 #include <QPointer>
 #include <QScopedPointer>
 #include <QGridLayout>
+#include <QSet>
 
 #include <kis_icon.h>
 
@@ -80,15 +81,20 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 
 void KisPaletteListWidget::slotAdd()
 {
-    QString filename = "new_palette";
-    int i = 1;
-    for (const KoResource *r : m_d->rAdapter->resources()) {
-        filename = r->filename();
+    QString filename = "new_palette_";
+    QSet<QString> nameSet;
+    QList<KoResource*> rlist = m_d->rAdapter->resources();
+    for (const KoResource *r : rlist) {
+        nameSet.insert(r->filename());
+    }
+    int i = 0;
+    while (nameSet.contains(filename + QString::number(i) + ".kpl")) {
         i++;
     }
-    KoColorSet *newColorSet = new KoColorSet(filename + "_" + QString::number(i) + ".kpl");
+    KoColorSet *newColorSet = new KoColorSet(filename + QString::number(i) + ".kpl");
     newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
+    newColorSet->setIsEditable(true);
     newColorSet->setName("New Palette");
     m_d->rAdapter->addResource(newColorSet);
     m_d->itemChooser->setCurrentResource(newColorSet);
@@ -99,8 +105,12 @@ void KisPaletteListWidget::slotAdd()
 void KisPaletteListWidget::slotRemove()
 {
     if (m_d->itemChooser->currentResource()) {
+        if (!static_cast<KoColorSet*>(m_d->itemChooser->currentResource())->isEditable()) {
+            return;
+        }
         m_d->rAdapter->removeResource(m_d->itemChooser->currentResource());
     }
+    m_d->itemChooser->setCurrentItem(0, 0);
 
     emit sigPaletteListChanged();
 }

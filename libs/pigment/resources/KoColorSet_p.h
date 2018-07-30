@@ -58,6 +58,7 @@ public:
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.
     QHash<QString, KisSwatchGroup> groups; //grouped colors.
     bool isGlobal;
+    bool isEditable;
 
 public:
     static QString GLOBAL_GROUP_NAME;

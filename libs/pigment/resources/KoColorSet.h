@@ -99,6 +99,9 @@ public /* methods */:
     bool isGlobal() const;
     void setIsGlobal(bool);
 
+    bool isEditable() const;
+    void setIsEditable(bool isEditable);
+
     QByteArray toByteArray() const;
     bool fromByteArray(QByteArray &data);
 

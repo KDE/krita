@@ -169,6 +169,16 @@ void PaletteDockerDock::unsetCanvas()
 
 void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
 {
+    if (colorSet->isEditable()) {
+        m_ui->bnAdd->setEnabled(true);
+        m_ui->bnRename->setEnabled(true);
+        m_ui->bnRemove->setEnabled(true);
+    } else {
+        m_ui->bnAdd->setEnabled(false);
+        m_ui->bnRename->setEnabled(false);
+        m_ui->bnRemove->setEnabled(false);
+    }
+
     m_currentColorSet = colorSet;
     m_model->setColorSet(colorSet);
     m_ui->bnColorSets->setText(colorSet->name());
@@ -176,18 +186,22 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
 
 void PaletteDockerDock::slotAddColor()
 {
-    if (m_resourceProvider) {
-        m_ui->paletteView->addEntryWithDialog(m_resourceProvider->fgColor());
+    if (m_currentColorSet->isEditable()) {
+        if (m_resourceProvider) {
+            m_ui->paletteView->addEntryWithDialog(m_resourceProvider->fgColor());
+        }
     }
 }
 
 void PaletteDockerDock::slotRemoveColor()
 {
-    QModelIndex index = m_ui->paletteView->currentIndex();
-    if (!index.isValid()) {
-        return;
+    if (m_currentColorSet->isEditable()) {
+        QModelIndex index = m_ui->paletteView->currentIndex();
+        if (!index.isValid()) {
+            return;
+        }
+        m_ui->paletteView->removeEntryWithDialog(index);
     }
-    m_ui->paletteView->removeEntryWithDialog(index);
 }
 
 void PaletteDockerDock::slotSetForegroundColor(const KisSwatch &entry)
@@ -238,11 +252,13 @@ void PaletteDockerDock::slotSetEntryByForeground(const QModelIndex &index)
 
 void PaletteDockerDock::slotEditEntry()
 {
-    QModelIndex index = m_ui->paletteView->currentIndex();
-    if (!index.isValid()) {
-        return;
+    if (m_currentColorSet->isEditable()) {
+        QModelIndex index = m_ui->paletteView->currentIndex();
+        if (!index.isValid()) {
+            return;
+        }
+        m_ui->paletteView->modifyEntry(index);
     }
-    m_ui->paletteView->modifyEntry(index);
 }
 
 void PaletteDockerDock::slotImportPalette()

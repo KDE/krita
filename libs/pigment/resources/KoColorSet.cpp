@@ -64,6 +64,7 @@ KoColorSet::KoColorSet(const QString& filename)
 {
     if (!filename.isEmpty()) {
         setValid(true);
+        setIsEditable(false);
     }
 }
 
@@ -388,6 +389,16 @@ bool KoColorSet::isGlobal() const
 void KoColorSet::setIsGlobal(bool isGlobal)
 {
     d->isGlobal = isGlobal;
+}
+
+bool KoColorSet::isEditable() const
+{
+    return d->isEditable;
+}
+
+void KoColorSet::setIsEditable(bool isEditable)
+{
+    d->isEditable = isEditable;
 }
 
 KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool useGivenColorSpace)

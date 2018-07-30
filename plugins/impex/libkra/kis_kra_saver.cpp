@@ -159,12 +159,8 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     }
     for (const KoColorSet *palette : m_d->doc->paletteList()) {
         if (!palette->isGlobal()) {
-            qDebug() << "KisKraSaver::savePalettes:" << "saving"
-                     << m_d->imageName + PALETTE_PATH + palette->filename();
             if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
                 m_d->errorMessages << i18n("could not save palettes");
-                qDebug() << "KisKraSaver::savePalettes:" << "failed to open"
-                         << m_d->imageName + PALETTE_PATH + palette->filename();
                 return false;
             }
             store->write(palette->toByteArray());
@@ -172,7 +168,6 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
             res = true;
         }
     }
-    qDebug() << "KisKraSaver::savePalettes:" << res << m_d->doc->paletteList().size();
     return res;
 }
 

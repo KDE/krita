@@ -86,6 +86,7 @@ public:
 
 Q_SIGNALS:
     void sigIndexSelected(const QModelIndex &index);
+    void sigColorSelected(const KoColor &);
 
 public Q_SLOTS:
     /**
@@ -93,6 +94,7 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void slotModifyEntry(const QModelIndex &);
+    void slotChosenColorChanged(const KoColor &);
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;

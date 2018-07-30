@@ -171,9 +171,6 @@ private Q_SLOTS:
 
     void slotChangePalette(KoColorSet *set);
 
-    void slotSetColorFromPaletteIndex(const QModelIndex &index);
-
-
 protected:
     void showEvent(QShowEvent *event);
 

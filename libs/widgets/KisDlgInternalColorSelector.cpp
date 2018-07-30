@@ -125,8 +125,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
             }
         }
 
-        connect(m_ui->paletteBox, SIGNAL(sigIndexSelected(QModelIndex)), this,
-                SLOT(slotSetColorFromPaletteIndex(QModelIndex)));
+        connect(m_ui->paletteBox, SIGNAL(sigColorSelected(KoColor)), this,
+                SLOT(slotColorUpdated(KoColor)));
         m_ui->bnPaletteChooser->setPopupWidget(m_d->paletteChooser);
     } else {
         m_ui->paletteBox->setEnabled(false);
@@ -225,7 +225,7 @@ void KisDlgInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendere
         m_ui->visualSelector->setDisplayRenderer(displayRenderer);
         m_ui->currentColor->setDisplayRenderer(displayRenderer);
         m_ui->previousColor->setDisplayRenderer(displayRenderer);
-        //m_ui->paletteBox->setDisplayRenderer(displayRenderer);
+        // m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
@@ -287,6 +287,10 @@ void KisDlgInternalColorSelector::updateAllElements(QObject *source)
         m_d->hexColorInput->update();
     }
 
+    if (source != m_ui->paletteBox) {
+        m_ui->paletteBox->selectClosestColor(m_d->currentColor);
+    }
+
     m_ui->previousColor->setColor(m_d->previousColor);
 
     m_ui->currentColor->setColor(m_d->currentColor);
@@ -334,14 +338,6 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
         return;
     }
     m_d->paletteModel->setColorSet(set);
-}
-
-void KisDlgInternalColorSelector::slotSetColorFromPaletteIndex(const QModelIndex &index)
-{
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    Q_ASSERT(group);
-    KisSwatch entry = group->getEntry(index.column(), index.row());
-    slotColorUpdated(entry.color());
 }
 
 void KisDlgInternalColorSelector::showEvent(QShowEvent *event)

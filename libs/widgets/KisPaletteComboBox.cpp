@@ -17,7 +17,7 @@ KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
     m_completer->setCaseSensitivity(Qt::CaseInsensitive);
     m_completer->setFilterMode(Qt::MatchContains);
     setCompleter(m_completer.data());
-    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotColorSelected(int)));
+    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotIndexSelected(int)));
 }
 
 KisPaletteComboBox::~KisPaletteComboBox()
@@ -100,7 +100,7 @@ void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
     setCurrentIndex(m_posIdxMap[SwatchPosType(index.column(), index.row())]);
 }
 
-void KisPaletteComboBox::slotColorSelected(int idx)
+void KisPaletteComboBox::slotIndexSelected(int idx)
 {
     if (idx >= 0 && idx < m_idxSwatchMap.size()) {
         emit sigColorSelected(m_idxSwatchMap[idx].color());

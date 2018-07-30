@@ -108,7 +108,7 @@ private Q_SLOTS:
      * @brief slotEntrySelected
      * Triggered when a color is choose from the palette view
      */
-    void slotPaletteIndexSelected(const QModelIndex &index);
+    void slotColorSelectedByPalette(const KoColor &color);
     void slotPaletteChoosen(KoColorSet *);
     void slotNameListSelection(const KoColor &);
 

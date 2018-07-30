@@ -145,7 +145,8 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
-    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotFGColorChanged(KoColor)));
+    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
+            m_ui->paletteView, SLOT(slotChosenColorChanged(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
 }
@@ -204,7 +205,7 @@ void PaletteDockerDock::slotRemoveColor()
     }
 }
 
-void PaletteDockerDock::slotSetForegroundColor(const KisSwatch &entry)
+void PaletteDockerDock::slotSetFGColorByPalette(const KisSwatch &entry)
 {
     if (m_resourceProvider) {
         m_resourceProvider->setFGColor(entry.color());
@@ -238,7 +239,7 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
         KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
         Q_ASSERT(group);
         KisSwatch entry = group->getEntry(index.column(), index.row());
-        slotSetForegroundColor(entry);
+        slotSetFGColorByPalette(entry);
     }
 }
 
@@ -269,11 +270,6 @@ void PaletteDockerDock::slotImportPalette()
     QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
-}
-
-void PaletteDockerDock::slotFGColorChanged(const KoColor &color)
-{
-    m_ui->paletteView->selectClosestColor(color);
 }
 
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)

@@ -69,11 +69,10 @@ private Q_SLOTS:
 
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotSetEntryByForeground(const QModelIndex &index);
-    void slotSetForegroundColor(const KisSwatch &entry);
+    void slotSetFGColorByPalette(const KisSwatch &entry);
     void slotNameListSelection(const KoColor &color);
 
     void slotSetColorSet(KoColorSet* colorSet);
-    void slotFGColorChanged(const KoColor &color);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);

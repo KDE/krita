@@ -130,11 +130,14 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     setLayout(d->mainLayout);
 
     connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotPaletteChoosen(KoColorSet*)));
-    connect(d->paletteView, SIGNAL(sigIndexSelected(QModelIndex)), SLOT(slotPaletteIndexSelected(QModelIndex)));
+    connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)),
+            SLOT(slotColorSelectedByPalette(KoColor)));
     connect(d->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
             d->colorNameCmb, SLOT(slotSwatchSelected(QModelIndex)));
     connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)),
             SLOT(slotNameListSelection(KoColor)));
+    connect(this, SIGNAL(colorChanged(KoColor,bool)),
+            d->paletteView, SLOT(slotChosenColorChanged(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
     QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
@@ -181,13 +184,10 @@ void KoColorSetWidget::resizeEvent(QResizeEvent *event)
     QFrame::resizeEvent(event);
 }
 
-void KoColorSetWidget::slotPaletteIndexSelected(const QModelIndex &index)
+void KoColorSetWidget::slotColorSelectedByPalette(const KoColor &color)
 {
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    Q_ASSERT(group);
-    KisSwatch entry = group->getEntry(index.column(), index.row());
-    emit colorChanged(entry.color(), true);
-    d->addRecent(entry.color());
+    emit colorChanged(color, true);
+    d->addRecent(color);
 }
 
 void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)

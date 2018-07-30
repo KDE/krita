@@ -180,22 +180,19 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
     //also don't select if the color is the same as the current selection
     if (selectedIndexes().size() > 0) {
         QModelIndex currentI = currentIndex();
-        if (!currentI.isValid()) {
-            currentI = selectedIndexes().last();
-        }
-        if (!currentI.isValid()) {
-            currentI = selectedIndexes().first();
-        }
-        if (currentI.isValid()) {
-            if (m_d->model->colorSetEntryFromIndex(currentI).color()==color) {
-                return;
-            }
+        if (m_d->model->colorSetEntryFromIndex(currentI).color() == color) {
+            return;
         }
     }
 
     selectionModel()->clearSelection();
     QModelIndex index = m_d->model->indexForClosest(color);
     selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+}
+
+void KisPaletteView::slotChosenColorChanged(const KoColor &color)
+{
+    selectClosestColor(color);
 }
 
 void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
@@ -208,7 +205,12 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
         emit sigIndexSelected(index);
+        KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+        Q_ASSERT(group);
+        KisSwatch entry = group->getEntry(index.column(), index.row());
+        emit sigColorSelected(entry.color());
     }
+    QTableView::mouseReleaseEvent(event);
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)

@@ -202,7 +202,11 @@ int KisPaletteModel::idFromIndex(const QModelIndex &index) const
 
 KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
-    return KisSwatch();
+    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+    if (!group || !group->checkEntry(index.column(), index.row())) {
+        return KisSwatch();
+    }
+    return group->getEntry(index.column(), index.row());
 }
 
 bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)

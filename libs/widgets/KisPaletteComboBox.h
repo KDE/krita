@@ -33,7 +33,7 @@ public /* methods */:
 private Q_SLOTS:
     void slotPaletteChanged();
     void slotSwatchSelected(const QModelIndex &index);
-    void slotColorSelected(int);
+    void slotIndexSelected(int);
 
 private /* methods */:
     QPixmap createColorSquare(const KisSwatch &swatch) const;

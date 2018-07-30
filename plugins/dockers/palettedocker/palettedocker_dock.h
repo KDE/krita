@@ -78,9 +78,6 @@ private Q_SLOTS:
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
 
-private /* methods */:
-    void resetNameList(const KoColorSet *colorSet);
-
 private /* friends */:
     /**
      * @brief PaletteListSaver

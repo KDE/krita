@@ -104,6 +104,8 @@ set(kritawidgets_LIB_SRCS
     kis_color_button.cpp
 
     KisColorsetChooser.cpp
+
+    KisDlgPaletteEditor.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -114,6 +116,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
+    WdgDlgPaletteEditor.ui
     WdgPaletteListWidget.ui
 )
 

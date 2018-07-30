@@ -4,6 +4,7 @@
 
 #include <kis_icon.h>
 
+#include "KisDlgPaletteEditor.h"
 #include <ui_WdgPaletteListWidget.h>
 #include "KisPaletteListWidget.h"
 #include "KisPaletteListWidget_p.h"
@@ -79,7 +80,13 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 
 void KisPaletteListWidget::slotAdd()
 {
-    KoColorSet *newColorSet = new KoColorSet("new_palette.kpl");
+    QString filename = "new_palette";
+    int i = 1;
+    for (const KoResource *r : m_d->rAdapter->resources()) {
+        filename = r->filename();
+        i++;
+    }
+    KoColorSet *newColorSet = new KoColorSet(filename + "_" + QString::number(i) + ".kpl");
     newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
     newColorSet->setName("New Palette");

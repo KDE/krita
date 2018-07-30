@@ -87,6 +87,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_ui->bnAdd->setIconSize(QSize(16, 16));
 
     m_ui->bnAdd->setEnabled(false);
+    m_ui->bnRename->setEnabled(false);
     m_ui->bnRemove->setEnabled(false);
     // m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
 
@@ -171,21 +172,6 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
     m_currentColorSet = colorSet;
     m_model->setColorSet(colorSet);
     m_ui->bnColorSets->setText(colorSet->name());
-}
-
-void PaletteDockerDock::resetNameList(const KoColorSet *colorSet)
-{
-    if (!colorSet || !(colorSet->colorCount()>0)) {
-        return;
-    }
-
-    if (colorSet && colorSet->removable()) {
-        m_ui->bnAdd->setEnabled(true);
-        m_ui->bnRemove->setEnabled(true);
-    } else {
-        m_ui->bnAdd->setEnabled(false);
-        m_ui->bnRemove->setEnabled(false);
-    }
 }
 
 void PaletteDockerDock::slotAddColor()

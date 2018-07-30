@@ -72,6 +72,7 @@ private Q_SLOTS:
     void setForegroundColor(const KisSwatch &entry);
 
     void slotSetColorSet(KoColorSet* colorSet);
+    void slotFGColorChanged(const KoColor &color);
 
     void slotNameListSelection(int index);
 

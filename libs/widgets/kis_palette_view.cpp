@@ -43,22 +43,8 @@ int KisPaletteView::MINROWHEIGHT = 10;
 
 struct KisPaletteView::Private
 {
-    Private()
-    {
-        entryClickedMenu.addAction("Add foreground color");
-        entryClickedMenu.addAction("Choose a color to add");
-        entryClickedMenu.addAction("Rename this spot");
-        entryClickedMenu.addAction("Switch with another spot");
-        entryClickedMenu.addAction("Delete color");
-    }
     QPointer<KisPaletteModel> model;
-    QMenu entryClickedMenu;
     bool allowPaletteModification;
-    QAction actAdd;
-    QAction actAddWithDlg;
-    QAction actModify;
-    QAction actSwitch;
-    QAction actRemove;
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
@@ -95,7 +81,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     verticalHeader()->setDefaultSectionSize(MINROWHEIGHT);
 
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotModifyEntry(QModelIndex)));
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotModifyEntry(QModelIndex)));
 
     KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
     QPalette pal(palette());
@@ -185,12 +171,12 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
     return true;
 }
 
-void KisPaletteView::trySelectClosestColor(KoColor color)
+void KisPaletteView::selectClosestColor(const KoColor &color)
 {
-    /*
     KoColorSet* color_set = m_d->model->colorSet();
-    if (!color_set)
+    if (!color_set) {
         return;
+    }
     //also don't select if the color is the same as the current selection
     if (selectedIndexes().size() > 0) {
         QModelIndex currentI = currentIndex();
@@ -206,20 +192,14 @@ void KisPaletteView::trySelectClosestColor(KoColor color)
             }
         }
     }
-    quint32 i = color_set->getIndexClosestColor(color);
-    QModelIndex index = m_d->model->indexFromId(i);
-    this->selectionModel()->clearSelection();
-    this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
-    */
+
+    selectionModel()->clearSelection();
+    QModelIndex index = m_d->model->indexForClosest(color);
+    selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
 }
 
 void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::RightButton) {
-        m_d->entryClickedMenu.exec(QCursor::pos());
-        return;
-    }
-
     if (selectedIndexes().size() <= 0) {
         return;
     }

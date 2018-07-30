@@ -33,7 +33,7 @@ private Q_SLOTS:
 
 private /* methods */:
     QPixmap createColorSquare(const KisSwatch &swatch) const;
-    static bool swatchLess(const SwatchInfoType &, const SwatchInfoType &);
+    static bool swatchInfoLess(const SwatchInfoType &, const SwatchInfoType &);
 
 private /* member variables */:
     QScopedPointer<QCompleter> m_completer;

@@ -143,7 +143,7 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
     connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResource*)), SLOT(loadFromWorkspace(KisWorkspaceResource*)));
-    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),m_ui->paletteView, SLOT(trySelectClosestColor(KoColor)));
+    connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)), SLOT(slotFGColorChanged(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
 }
@@ -285,4 +285,9 @@ void PaletteDockerDock::slotImportPalette()
     QString fileName = dialog.filename();
     KoColorSet *colorSet = new KoColorSet(fileName);
     colorSet->load();
+}
+
+void PaletteDockerDock::slotFGColorChanged(const KoColor &color)
+{
+    m_ui->paletteView->selectClosestColor(color);
 }

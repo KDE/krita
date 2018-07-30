@@ -532,3 +532,9 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
     beginResetModel();
     endResetModel();
 }
+
+QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
+{
+    KisSwatchGroup::SwatchInfo info = colorSet()->getClosestColorInfo(compare);
+    return createIndex(info.row, info.column, colorSet()->getGroup(info.group));
+}

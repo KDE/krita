@@ -143,7 +143,7 @@ QList<KisSwatchGroup::SwatchInfo> KisSwatchGroup::infoList() const
     for (const Column &c : m_colorMatrix) {
         int row = 0;
         for (const KisSwatch &s : c.values()) {
-            SwatchInfo i = {s, c.keys()[row++], column};
+            SwatchInfo i = {m_name, s, c.keys()[row++], column};
             res.append(i);
         }
         column++;

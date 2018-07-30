@@ -151,6 +151,7 @@ public /* methods */:
      * @return the kocolorsetentry
      */
     KisSwatch colorSetEntryFromIndex(const QModelIndex &index) const;
+    QModelIndex indexForClosest(const KoColor &compare);
 
 public Q_SLOTS:
 

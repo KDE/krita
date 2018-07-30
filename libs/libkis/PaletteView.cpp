@@ -80,5 +80,5 @@ bool PaletteView::removeSelectedEntryWithDialog()
 
 void PaletteView::trySelectClosestColor(ManagedColor *color)
 {
-    d->widget->trySelectClosestColor(color->color());
+    d->widget->selectClosestColor(color->color());
 }

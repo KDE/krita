@@ -179,21 +179,6 @@ public /* methods */:
      */
     QString closestColorName(KoColor color, bool useGivenColorSpace = true);
 
-    /*
-     * No one seems to be using these methods...
-     */
-    // QString findGroupByGlobalIndex(quint32 x, quint32 y);
-    // QString findGroupByColorName(const QString &name, quint32 *x, quint32 *y);
-    // QString findGroupByID(const QString &id,quint32 *index);
-    // void removeAt(quint32 x, quint32 y, QString groupName = QString());
-    /**
-     * @brief getGroupByName
-     * @param groupName
-     * @param if success
-     * @return group found
-     */
-    // const KisSwatchGroup &getGroupByName(const QString &groupName, bool &success) const;
-    // bool changeColorSetEntry(KisSwatch entry, QString groupName);
     /**
      * @brief getIndexClosestColor
      * function that matches the color to all colors in the colorset, and returns the index
@@ -203,15 +188,7 @@ public /* methods */:
      * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
      * @return returns the int of the closest match.
      */
-    // quint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
-    /**
-     * @brief insertBefore insert color before index into group.
-     * @param index
-     * @param groupName name of the group that the color goes into.
-     * @return new index of index after the prepending.
-     */
-    // quint32 insertBefore(const KisSwatch &, qint32 index, const QString &groupName = QString());
-
+    KisSwatchGroup::SwatchInfo getClosestColorInfo(KoColor compare, bool useGivenColorSpace = true);
 
 private:
     class Private;

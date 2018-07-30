@@ -44,7 +44,7 @@ void KisPaletteComboBox::slotPaletteChanged()
             infoList.append(info);
         }
     }
-    std::sort(infoList.begin(), infoList.end(), swatchLess);
+    std::sort(infoList.begin(), infoList.end(), swatchInfoLess);
     for (int i = 0; i != infoList.size(); i++) {
         const SwatchInfoType &info = infoList[i];
         const KisSwatch &swatch = info.swatch;
@@ -58,7 +58,7 @@ void KisPaletteComboBox::slotPaletteChanged()
     }
 }
 
-bool KisPaletteComboBox::swatchLess(const SwatchInfoType &first, const SwatchInfoType &second)
+bool KisPaletteComboBox::swatchInfoLess(const SwatchInfoType &first, const SwatchInfoType &second)
 {
     return first.swatch.name() < second.swatch.name();
 }

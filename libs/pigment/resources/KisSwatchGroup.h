@@ -50,6 +50,7 @@ private /* typedef */:
 
 public /* struct */:
     struct SwatchInfo {
+        QString group;
         KisSwatch swatch;
         int row;
         int column;

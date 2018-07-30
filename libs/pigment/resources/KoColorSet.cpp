@@ -390,166 +390,33 @@ void KoColorSet::setIsGlobal(bool isGlobal)
     d->isGlobal = isGlobal;
 }
 
-/*
-QString KoColorSet::findGroupByGlobalIndex(quint32 x, quint32 y)
+KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool useGivenColorSpace)
 {
-    *index = globalIndex;
-    QString groupName = QString();
-    if ((quint32)d->colors.size()<=*index) {
-        *index -= (quint32)d->colors.size();
-        if (!d->groups.empty() || !d->groupNames.empty()) {
-            QStringList groupNames = getGroupNames();
-            Q_FOREACH (QString name, groupNames) {
-                quint32 size = (quint32)d->groups.value(name).size();
-                if (size<=*index) {
-                    *index -= size;
-                } else {
-                    groupName = name;
-                    return groupName;
-                }
-            }
+    KisSwatchGroup::SwatchInfo res;
 
-        }
-    }
-    return groupName;
-}
-
-QString KoColorSet::findGroupByColorName(const QString &name, quint32 *x, quint32 *y)
-{
-    QString groupName = QString();
-    Q_FOREACH (const KisSwatchGroup::Column & col, d->global.colors()) {
-        Q_FOREACH (const KisSwatch & entry, col.values()) {
-            if (entry.name() == name) {
-                *x = static_cast<quint32>(entry.x());
-                *y = static_cast<quint32>(entry.y());
-                return groupName;
-            }
-        }
-    }
-    QStringList groupNames = getGroupNames();
-    Q_FOREACH (QString name, groupNames) {
-        Q_FOREACH (const KisSwatchGroup::Column & col, d->groups[name].colors()) {
-            Q_FOREACH (const KisSwatch & entry, col.values()) {
-                if (entry.name() == name) {
-                    *x = static_cast<quint32>(entry.x());
-                    *y = static_cast<quint32>(entry.y());
-                    return groupName;
-                }
-            }
-        }
-    }
-    return groupName;
-}
-
-QString KoColorSet::findGroupByID(const QString &id, quint32 *index) {
-    *index = 0;
-    QString groupName = QString();
-    for (int i = 0; i<d->colors.size(); i++) {
-        if(d->colors.at(i).id() == id) {
-            *index = (quint32)i;
-            return groupName;
-        }
-    }
-    QStringList groupNames = getGroupNames();
-    Q_FOREACH (QString name, groupNames) {
-        for (int i=0; i<d->groups[name].size(); i++) {
-            if(d->groups[name].at(i).id() == id) {
-                *index = (quint32)i;
-                groupName = name;
-                return groupName;
-            }
-        }
-    }
-    return groupName;
-    return QString();
-}
-
-const KisSwatchGroup &KoColorSet::getGroupByName(const QString &groupName, bool &success) const
-{
-    if (groupName.isEmpty()) {
-        success = true;
-        return d->global;
-    }
-    if (d->groupNames.contains(groupName)) {
-        success = true;
-        return d->groups[groupName];
-    }
-    success = false;
-    return d->global;
-}
-
-bool KoColorSet::changeColorSetEntry(KisSwatch entry,
-                                     QString groupName)
-{
-    if (!d->groupNames.contains(groupName)) {
-        return false;
-    }
-    if (groupName.isEmpty()) {
-        d->global.setEntry(entry);
-    } else {
-        d->groups[groupName].setEntry(entry);
-    }
-    return true;
-}
-
-quint32 KoColorSet::getIndexClosestColor(const KoColor color, bool useGivenColorSpace)
-{
-    quint32 closestIndex = 0;
     quint8 highestPercentage = 0;
     quint8 testPercentage = 0;
-    KoColor compare = color;
-    for (quint32 i=0; i < colorCount(); i++) {
-        KoColor entry = getColorGlobal(i).color();
-        if (useGivenColorSpace == true && compare.colorSpace() != entry.colorSpace()) {
-            entry.convertTo(compare.colorSpace());
 
-        } else if(compare.colorSpace()!=entry.colorSpace()) {
-            compare.convertTo(entry.colorSpace());
-        }
-        testPercentage = (255 - compare.colorSpace()->difference(compare.data(), entry.data()));
-        if (testPercentage>highestPercentage)
-        {
-            closestIndex = i;
-            highestPercentage = testPercentage;
-        }
-    }
-    return closestIndex;
-}
+    for (const QString &groupName : getGroupNames()) {
+        KisSwatchGroup *group = getGroup(groupName);
+        for (const KisSwatchGroup::SwatchInfo &currInfo : group->infoList()) {
+            KoColor color = currInfo.swatch.color();
+            if (useGivenColorSpace == true && compare.colorSpace() != color.colorSpace()) {
+                color.convertTo(compare.colorSpace());
 
-void KoColorSet::removeAt(quint32 x, quint32 y, QString groupName)
-{
-    if (d->groups.contains(groupName)){
-        if ((quint32)d->groups.value(groupName).size()>x) {
-            d->groups[groupName].remove(x);
+            } else if (compare.colorSpace() != color.colorSpace()) {
+                compare.convertTo(color.colorSpace());
+            }
+            testPercentage = (255 - compare.colorSpace()->difference(compare.data(), color.data()));
+            if (testPercentage > highestPercentage)
+            {
+                highestPercentage = testPercentage;
+                res = currInfo;
+            }
         }
-    } else {
-        if ((quint32)d->colors.size()>x) {
-            d->colors.remove(x);
-        }
     }
-    if (x >= d->columns || x < 0)
-        return;
-    if (d->groups.contains(groupName)){
-            d->groups[groupName].removeEntry(x, y);
-    } else {
-            d->global.removeEntry(x, y);
-    }
+    return res;
 }
-
-quint32 KoColorSet::insertBefore(const KisSwatch &c, qint32 index, const QString &groupName)
-{
-    quint32 newIndex = index;
-    if (d->groups.contains(groupName)) {
-        d->groups[groupName].insert(index, c);
-    } else if (groupName.isEmpty()){
-        d->colors.insert(index, c);
-    } else {
-        warnPigment << "Couldn't find group to insert to";
-    }
-    return newIndex;
-    return 0;
-}
-*/
 
 /********************************KoColorSet::Private**************************/
 

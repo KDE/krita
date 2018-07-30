@@ -77,6 +77,12 @@ public:
      * if modification isn't allow(@see setAllowModification), this does nothing.
      */
     void modifyEntry(QModelIndex index);
+    /**
+     * @brief selectClosestColor
+     * select a color that's closest to parameter color
+     * @param color
+     */
+    void selectClosestColor(const KoColor &color);
 
 Q_SIGNALS:
     void sigIndexSelected(const QModelIndex &index);
@@ -86,7 +92,6 @@ public Q_SLOTS:
      *  This tries to select the closest color in the palette.
      *  This doesn't update the foreground color, just the visual selection.
      */
-    void trySelectClosestColor(KoColor color);
     void slotModifyEntry(const QModelIndex &);
 
 protected:

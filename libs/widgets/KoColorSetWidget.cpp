@@ -188,8 +188,6 @@ void KoColorSetWidget::slotPaletteIndexSelected(const QModelIndex &index)
     KisSwatch entry = group->getEntry(index.column(), index.row());
     emit colorChanged(entry.color(), true);
     d->addRecent(entry.color());
-
-    // d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(entry.name()+"|Fixed")));
 }
 
 void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
@@ -208,8 +206,6 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
     if (i == d->numRecents) { // we didn't find it above
         d->addRecent(patch->color());
     }
-
-    // d->colorNameCmb->setCurrentIndex(d->colornames.indexOf(QRegExp(patch->toolTip()+"|Fixed")));
 }
 
 void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)

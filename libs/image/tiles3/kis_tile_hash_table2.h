@@ -230,9 +230,9 @@ public:
     void moveCurrentToHashTable(KisTileHashTableTraits2<T> *newHashTable)
     {
         TileTypeSP tile = m_iter.getValue();
-        newHashTable->addTile(tile);
-        m_ht->deleteTile(tile);
         next();
+        m_ht->deleteTile(tile);
+        newHashTable->addTile(tile);
     }
 
 private:

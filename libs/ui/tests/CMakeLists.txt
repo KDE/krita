@@ -20,15 +20,10 @@ ecm_add_tests(
     kis_shape_commands_test.cpp
     kis_shape_layer_test.cpp
     kis_stop_gradient_editor_test.cpp
-    NAME_PREFIX "krita-ui-"
-    LINK_LIBRARIES kritaui Qt5::Test
-)
-
-ecm_add_tests(
     kis_file_layer_test.cpp
     kis_multinode_property_test.cpp
     NAME_PREFIX "krita-ui-"
-    LINK_LIBRARIES kritaui kritaimage Qt5::Test
+    LINK_LIBRARIES kritaui Qt5::Test
 )
 
 ecm_add_test( KisFrameSerializerTest.cpp
@@ -60,7 +55,7 @@ ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.cpp
-    TEST_NAME krita-image-BaseNodeTest
+    TEST_NAME krita-ui-KisNodeJugglerCompressedTest
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
 ecm_add_test(
@@ -71,7 +66,7 @@ ecm_add_test(
 set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)
 qt5_add_resources(kis_node_view_test_SRCS ${krita_QRCS})
 ecm_add_test(${kis_node_view_test_SRCS}
-    TEST_NAME krita-image-kis_node_view_test
+    TEST_NAME krita-ui-kis_node_view_test
     LINK_LIBRARIES kritaimage kritaui Qt5::Test)
 
 
@@ -169,21 +164,21 @@ krita_add_broken_unit_test(
 
 krita_add_broken_unit_test(
     kis_animation_importer_test.cpp
-    TEST_NAME kritaui-animation_importer_test
+    TEST_NAME krita-ui-animation_importer_test
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(
     kis_animation_frame_cache_test.cpp
-    TEST_NAME kritaui-animation_frame_cache_test
+    TEST_NAME krita-ui-animation_frame_cache_test
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(
     ResourceBundleTest.cpp
-    TEST_NAME krita-resourcemanager-ResourceBundleTest
+    TEST_NAME krita-ui-ResourceBundleTest
     LINK_LIBRARIES kritaui kritalibbrush kritalibpaintop Qt5::Test)
 
 # FIXME this test doesn't compile
-#ecm_add_test(
-#    kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
-#    TEST_NAME krita-ui-KisInputManagerTest
-#    LINK_LIBRARIES kritaui kritaimage Qt5::Test)
+ecm_add_test(
+    kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
+    TEST_NAME krita-ui-KisInputManagerTest
+    LINK_LIBRARIES kritaui kritaimage Qt5::Test)

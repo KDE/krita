@@ -16,20 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISUPDATESCHEDULERCONFIGNOTIFIER_H
-#define KISUPDATESCHEDULERCONFIGNOTIFIER_H
+#ifndef KISIMAGECONFIGNOTIFIER_H
+#define KISIMAGECONFIGNOTIFIER_H
 
 #include <QObject>
 #include "kritaimage_export.h"
 
-class KRITAIMAGE_EXPORT KisUpdateSchedulerConfigNotifier : public QObject
+class KRITAIMAGE_EXPORT KisImageConfigNotifier : public QObject
 {
     Q_OBJECT
 public:
-    explicit KisUpdateSchedulerConfigNotifier();
-    ~KisUpdateSchedulerConfigNotifier() override;
+    explicit KisImageConfigNotifier();
+    ~KisImageConfigNotifier() override;
 
-    static KisUpdateSchedulerConfigNotifier* instance();
+    static KisImageConfigNotifier* instance();
 
     /**
      * Notify that the configuration has changed. This will cause the
@@ -44,11 +44,11 @@ Q_SIGNALS:
     void configChanged(void);
 
 private:
-    Q_DISABLE_COPY(KisUpdateSchedulerConfigNotifier)
+    Q_DISABLE_COPY(KisImageConfigNotifier)
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
 
-#endif // KISUPDATESCHEDULERCONFIGNOTIFIER_H
+#endif // KISIMAGECONFIGNOTIFIER_H

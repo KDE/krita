@@ -188,7 +188,7 @@ set(kritaimage_LIB_SRCS
    kis_sync_lod_cache_stroke_strategy.cpp
    kis_lod_capable_layer_offset.cpp
    kis_update_time_monitor.cpp
-   KisUpdateSchedulerConfigNotifier.cpp
+   KisImageConfigNotifier.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
@@ -374,15 +374,3 @@ set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install schemas #############
-install( FILES
-    metadata/schemas/dc.schema
-    metadata/schemas/exif.schema
-    metadata/schemas/tiff.schema
-    metadata/schemas/mkn.schema
-    metadata/schemas/xmp.schema
-    metadata/schemas/xmpmm.schema
-    metadata/schemas/xmprights.schema
-
-    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)

@@ -181,7 +181,6 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
             // XXX_NODE: for now, masks cannot be nested.
             layerManager.activateLayer(static_cast<KisLayer*>(node->parent().data()));
         }
-
     }
     return true;
 }

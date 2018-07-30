@@ -28,6 +28,7 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
+#include <sdk/tests/testutil.h>
 
 #include "modeltest.h"
 
@@ -109,6 +110,4 @@ void KisNodeModelTest::testSubstituteRootNode()
     m_image->flatten();
 }
 
-QTEST_MAIN(KisNodeModelTest)
-
-
+KISTEST_MAIN(KisNodeModelTest)

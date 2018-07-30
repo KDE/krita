@@ -144,34 +144,29 @@ ecm_add_test(KisWatershedWorkerTest.cpp
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 
-# ecm_add_test(kis_dom_utils_test.cpp
-#    TEST_NAME krita-image-DomUtils-Test
-#    LINK_LIBRARIES kritaimage Qt5::Test)
+ecm_add_test(kis_dom_utils_test.cpp
+   TEST_NAME krita-image-KisDomUtilsTest
+   LINK_LIBRARIES kritaimage Qt5::Test)
 
-# kisdoc dep
-#    kis_transform_worker_test.cpp
-#    TEST_NAME krita-image-KisTransformWorkerTest
-#LINK_LIBRARIES kritaimage Qt5::Test)
+ecm_add_test(kis_transform_worker_test.cpp
+    TEST_NAME krita-image-KisTransformWorkerTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
+ecm_add_test(kis_perspective_transform_worker_test.cpp
+    TEST_NAME krita-image-KisPerspectiveTransformWorkerTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
-# kisdoc
-#    kis_perspective_transform_worker_test.cpp
-#    TEST_NAME krita-image-KisPerspectiveTransformWorkerTest
-#LINK_LIBRARIES kritaimage Qt5::Test)
+ecm_add_test(kis_cs_conversion_test.cpp
+    TEST_NAME krita-image-KisCsConversionTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
-#    kis_cs_conversion_test.cpp
-#    TEST_NAME krita-image-KisCsConversionTest
-#   LINK_LIBRARIES kritaimage Qt5::Test)
+ecm_add_test(kis_processings_test.cpp
+    TEST_NAME krita-image-KisProcessingsTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
-# kisdoc
-#    kis_processings_test.cpp
-#    TEST_NAME krita-image-KisProcessingsTest
-#LINK_LIBRARIES kritaimage Qt5::Test)
-
-# image/tests cannot use stuff that needs kisdocument
-#    kis_projection_leaf_test.cpp
-#    TEST_NAME kritaimage-projection_leaf_test
-#    LINK_LIBRARIES kritaimage Qt5::Test)
+ecm_add_test(kis_projection_leaf_test.cpp
+    TEST_NAME KisProjectionLeafTest
+    LINK_LIBRARIES kritaimage Qt5::Test)
 
 
 

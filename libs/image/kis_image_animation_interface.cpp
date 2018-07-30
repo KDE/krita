@@ -356,8 +356,9 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    bool recursive)
 {
     if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
-    if (node->inherits("KisSelectionMask")) return;
 
+    // even overlay selection masks are not rendered in the cache
+    if (node->inherits("KisSelectionMask")) return;
 
     const int currentTime = m_d->currentTime();
     KisTimeRange invalidateRange;

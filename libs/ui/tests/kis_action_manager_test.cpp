@@ -32,7 +32,7 @@
 #include <KisViewManager.h>
 
 #include "kis_node_manager.h"
-
+#include <kistest.h>
 
 void KisActionManagerTest::testUpdateGUI()
 {
@@ -133,4 +133,4 @@ void KisActionManagerTest::testTakeAction()
 }
 
 
-QTEST_MAIN(KisActionManagerTest)
+KISTEST_MAIN(KisActionManagerTest)

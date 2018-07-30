@@ -17,6 +17,7 @@ KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
     m_completer->setCaseSensitivity(Qt::CaseInsensitive);
     m_completer->setFilterMode(Qt::MatchContains);
     setCompleter(m_completer.data());
+    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotColorSelected(int)));
 }
 
 KisPaletteComboBox::~KisPaletteComboBox()
@@ -24,7 +25,9 @@ KisPaletteComboBox::~KisPaletteComboBox()
 
 void KisPaletteComboBox::setPaletteModel(const KisPaletteModel *paletteModel)
 {
-    disconnect();
+    if (!m_model.isNull()) {
+        m_model->disconnect(this);
+    }
     m_model = paletteModel;
     if (m_model.isNull()) { return; }
     slotPaletteChanged();
@@ -36,7 +39,11 @@ void KisPaletteComboBox::setPaletteModel(const KisPaletteModel *paletteModel)
 void KisPaletteComboBox::slotPaletteChanged()
 {
     if (QPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
+
     clear();
+    m_posIdxMap.clear();
+    m_idxSwatchMap.clear();
+
     QVector<SwatchInfoType> infoList;
     for (const QString &groupName : m_model->colorSet()->getGroupNames()) {
         const KisSwatchGroup *group = m_model->colorSet()->getGroup(groupName);
@@ -55,6 +62,7 @@ void KisPaletteComboBox::slotPaletteChanged()
         }
         addItem(QIcon(colorSquare), name);
         m_posIdxMap[SwatchPosType(info.column, info.row)] = i;
+        m_idxSwatchMap.push_back(swatch);
     }
 }
 
@@ -90,4 +98,11 @@ QPixmap KisPaletteComboBox::createColorSquare(const KisSwatch &swatch) const
 void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
 {
     setCurrentIndex(m_posIdxMap[SwatchPosType(index.column(), index.row())]);
+}
+
+void KisPaletteComboBox::slotColorSelected(int idx)
+{
+    if (idx >= 0 && idx < m_idxSwatchMap.size()) {
+        emit sigColorSelected(m_idxSwatchMap[idx].color());
+    }
 }

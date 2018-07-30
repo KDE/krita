@@ -109,9 +109,10 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->paletteChooserButton->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     d->paletteChooserButton->setToolTip(i18n("Choose palette"));
 
-    d->colorNameCmb = new QComboBox(this);
+    d->colorNameCmb = new KisPaletteComboBox(this);
     d->colorNameCmb->setEditable(true);
     d->colorNameCmb->setInsertPolicy(QComboBox::NoInsert);
+    d->colorNameCmb->setPaletteModel(paletteModel);
 
     d->bottomLayout = new QHBoxLayout;
     d->bottomLayout->addWidget(d->paletteChooserButton);
@@ -119,26 +120,21 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->bottomLayout->setStretch(0, 0); // minimize chooser button
     d->bottomLayout->setStretch(1, 1); // maximize color name cmb
 
-    /*
-    d->addRemoveButton = new QToolButton(this);
-    d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
-    d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    */
-
     d->mainLayout = new QVBoxLayout(this);
     d->mainLayout->setMargin(4);
     d->mainLayout->setSpacing(2);
     d->mainLayout->addLayout(d->recentsLayout);
     d->mainLayout->addWidget(d->paletteView);
     d->mainLayout->addLayout(d->bottomLayout);
-    // d->mainLayout->addWidget(d->addRemoveButton);
 
     setLayout(d->mainLayout);
 
     connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotPaletteChoosen(KoColorSet*)));
     connect(d->paletteView, SIGNAL(sigIndexSelected(QModelIndex)), SLOT(slotPaletteIndexSelected(QModelIndex)));
-    // connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
-    connect(d->colorNameCmb, SIGNAL(activated(QString)), SLOT(setColorFromString(QString)), Qt::UniqueConnection);
+    connect(d->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
+            d->colorNameCmb, SLOT(slotSwatchSelected(QModelIndex)));
+    connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)),
+            SLOT(slotNameListSelection(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
     QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
@@ -151,15 +147,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 KoColorSetWidget::~KoColorSetWidget()
 {
     delete d;
-}
-
-void KoColorSetWidget::KoColorSetWidgetPrivate::setColorFromString(QString s)
-{
-    /*
-    int i = colornames.indexOf(QRegExp(s+"|Fixed"));
-    i = qMax(i,0);
-    colorTriggered(patchWidgetList.at(i));
-    */
 }
 
 void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
@@ -231,6 +218,10 @@ void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)
     d->paletteView->paletteModel()->setColorSet(colorSet);
 }
 
+void KoColorSetWidget::slotNameListSelection(const KoColor &color)
+{
+    emit colorChanged(color, true);
+}
+
 //have to include this because of Q_PRIVATE_SLOT
 #include "moc_KoColorSetWidget.cpp"
-

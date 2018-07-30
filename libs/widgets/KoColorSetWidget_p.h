@@ -43,6 +43,7 @@
 #include <KoResourceServer.h>
 #include <kis_popup_button.h>
 #include <KisPaletteListWidget.h>
+#include <KisPaletteComboBox.h>
 
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
@@ -66,7 +67,7 @@ public:
 
     KoColorPatch *recentPatches[6];
     QToolButton *addRemoveButton;
-    QComboBox *colorNameCmb;
+    KisPaletteComboBox *colorNameCmb;
     int numRecents;
 
     const KoColorDisplayRendererInterface *displayRenderer;
@@ -75,7 +76,6 @@ public:
     void addRecent(const KoColor &);
     void activateRecent(int i);
     void addRemoveColors();
-    void setColorFromString(QString s);
 };
 
 #endif

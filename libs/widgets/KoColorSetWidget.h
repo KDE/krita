@@ -110,10 +110,9 @@ private Q_SLOTS:
      */
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotPaletteChoosen(KoColorSet *);
+    void slotNameListSelection(const KoColor &);
 
 private:
-    Q_PRIVATE_SLOT(d, void setColorFromString(QString s))
-
     class KoColorSetWidgetPrivate;
     KoColorSetWidgetPrivate * const d;
 };

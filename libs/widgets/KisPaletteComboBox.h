@@ -24,12 +24,16 @@ public:
     explicit KisPaletteComboBox(QWidget *parent = Q_NULLPTR);
     ~KisPaletteComboBox();
 
+Q_SIGNALS:
+    void sigColorSelected(const KoColor &);
+
 public /* methods */:
     void setPaletteModel(const KisPaletteModel *);
 
 private Q_SLOTS:
     void slotPaletteChanged();
     void slotSwatchSelected(const QModelIndex &index);
+    void slotColorSelected(int);
 
 private /* methods */:
     QPixmap createColorSquare(const KisSwatch &swatch) const;
@@ -39,6 +43,7 @@ private /* member variables */:
     QScopedPointer<QCompleter> m_completer;
     QPointer<const KisPaletteModel> m_model;
     QHash<QPair<int, int>, int> m_posIdxMap; // map from pos in table to idx here
+    QVector<KisSwatch> m_idxSwatchMap;
 };
 
 #endif // KISPALETTECOLORNAMELIST_H

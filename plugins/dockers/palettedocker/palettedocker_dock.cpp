@@ -92,6 +92,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
     m_model = new KisPaletteModel(this);
     m_ui->paletteView->setPaletteModel(m_model);
+    m_ui->paletteView->setAllowModification(true);
     m_ui->cmbNameList->setPaletteModel(m_model);
 
     connect(m_actAdd.data(), SIGNAL(triggered()), SLOT(slotAddColor()));

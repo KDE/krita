@@ -51,7 +51,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
     , m_d(new Private)
 {
-    m_d->allowPaletteModification = true;
+    m_d->allowPaletteModification = false;
 
     setItemDelegate(new KisPaletteDelegate(this));
 
@@ -209,7 +209,6 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
         emit sigIndexSelected(index);
     }
-
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)

@@ -119,6 +119,7 @@ void KisPaletteListWidget::slotRemove()
 void KisPaletteListWidget::slotModify()
 {
     KisDlgPaletteEditor dlg;
+    dlg.setPalette(static_cast<KoColorSet*>(m_d->itemChooser->currentResource()));
     dlg.exec();
     emit sigPaletteListChanged();
 }

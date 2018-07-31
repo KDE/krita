@@ -22,7 +22,7 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoPathShape.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 
 #include <klocalizedstring.h>
 
@@ -31,7 +31,7 @@
 class Q_DECL_HIDDEN KoShapeClipCommand::Private
 {
 public:
-    Private(KoShapeBasedDocumentBase *c)
+    Private(KoShapeControllerBase *c)
             : controller(c), executed(false) {
     }
 
@@ -48,11 +48,11 @@ public:
     QList<KoPathShape*> clipPathShapes;
     QList<KoClipPath*> newClipPaths;
     QList<KoShapeContainer*> oldParents;
-    KoShapeBasedDocumentBase *controller;
+    KoShapeControllerBase *controller;
     bool executed;
 };
 
-KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
+KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToClip = shapes;
@@ -70,7 +70,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, con
     setText(kundo2_i18n("Clip Shape"));
 }
 
-KoShapeClipCommand::KoShapeClipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
+KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToClip.append(shape);
@@ -124,7 +124,7 @@ void KoShapeClipCommand::undo()
     for (uint i = 0; i < clipPathCount; ++i) {
         if (d->oldParents.at(i))
             d->oldParents.at(i)->addShape(d->clipPathShapes[i]);
-        // the parent has to be there when it is added to the KoShapeBasedDocumentBase
+        // the parent has to be there when it is added to the KoShapeControllerBase
         d->controller->addShape(d->clipPathShapes[i]);
     }
 

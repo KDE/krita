@@ -22,7 +22,7 @@
 #include "KoSnapStrategy.h"
 #include "KoPathShape.h"
 #include "KoSnapProxy.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "MockShapes.h"
 #include "KoPathPoint.h"
 #include "KoViewConverter.h"

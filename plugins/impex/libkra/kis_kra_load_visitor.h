@@ -31,6 +31,7 @@
 
 class KisFilterConfiguration;
 class KoStore;
+class KoShapeControllerBase;
 
 class KRITALIBKRA_EXPORT KisKraLoadVisitor : public KisNodeVisitor
 {
@@ -39,6 +40,7 @@ public:
 
     KisKraLoadVisitor(KisImageSP image,
                       KoStore *store,
+                      KoShapeControllerBase *shapeController,
                       QMap<KisNode *, QString> &layerFilenames,
                       QMap<KisNode *, QString> &keyframeFilenames,
                       const QString & name,
@@ -100,6 +102,7 @@ private:
     int m_syntaxVersion;
     QStringList m_errorMessages;
     QStringList m_warningMessages;
+    KoShapeControllerBase *m_shapeController;
 };
 
 #endif // KIS_KRA_LOAD_VISITOR_H_

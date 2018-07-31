@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSHAPEBASEDDOCUMENTBASE_H
-#define KOSHAPEBASEDDOCUMENTBASE_H
+#ifndef KOshapeControllerBASE_H
+#define KOshapeControllerBASE_H
 
 #include "kritaflake_export.h"
 
@@ -29,20 +29,20 @@
 
 class QRectF;
 class KoShape;
-class KoShapeBasedDocumentBasePrivate;
+class KoshapeControllerBasePrivate;
 class KoDocumentResourceManager;
 class KUndo2Command;
 
 /**
- * The  KoShapeBasedDocumentBase is an abstract interface that the application's class
+ * The  KoshapeControllerBase is an abstract interface that the application's class
  * that owns the shapes should implement. This tends to be the document.
  * @see KoShapeDeleteCommand, KoShapeCreateCommand
  */
-class KRITAFLAKE_EXPORT KoShapeBasedDocumentBase
+class KRITAFLAKE_EXPORT KoShapeControllerBase
 {
 public:
-    KoShapeBasedDocumentBase();
-    virtual ~KoShapeBasedDocumentBase();
+    KoShapeControllerBase();
+    virtual ~KoShapeControllerBase();
 
     /**
      * Add a shape to the shape controller, allowing it to be seen and saved.
@@ -104,7 +104,7 @@ public:
     virtual qreal pixelsPerInch() const = 0;
 
 private:
-    KoShapeBasedDocumentBasePrivate * const d;
+    KoshapeControllerBasePrivate * const d;
 };
 
 #endif

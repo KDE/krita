@@ -104,7 +104,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include <KoAnnotation.h>
 #include <KoShapeRegistry.h>
 #include <kuser.h>

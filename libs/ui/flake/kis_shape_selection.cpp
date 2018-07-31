@@ -66,15 +66,16 @@
 
 #include <kis_debug.h>
 
-KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selection)
-        : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
-        , m_image(image)
+KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection)
+    : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
+    , m_image(image)
+    , m_shapeControllerBase(shapeControllerBase)
 {
     Q_ASSERT(m_image);
     setShapeId("KisShapeSelection");
     setSelectable(false);
     m_converter = new KisImageViewConverter(image);
-    m_canvas = new KisShapeSelectionCanvas();
+    m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
     m_canvas->shapeManager()->addShape(this);
 
     m_model->setObjectName("KisShapeSelectionModel");
@@ -91,11 +92,12 @@ KisShapeSelection::~KisShapeSelection()
 }
 
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
-        : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
+    : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
     m_image = rhs.m_image;
+    m_shapeControllerBase = rhs.m_shapeControllerBase;
     m_converter = new KisImageViewConverter(m_image);
-    m_canvas = new KisShapeSelectionCanvas();
+    m_canvas = new KisShapeSelectionCanvas(m_shapeControllerBase);
     m_canvas->shapeManager()->addShape(this);
 
     Q_FOREACH (KoShape *shape, rhs.shapes()) {
@@ -159,10 +161,10 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
     KoXmlElement contents = odfStore.contentDoc().documentElement();
 
-//    dbgKrita <<"Start loading OASIS document..." << contents.text();
-//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
-//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
-//    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
+    //    dbgKrita <<"Start loading OASIS document..." << contents.text();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    //    dbgKrita <<"Start loading OASIS contents..." << contents.lastChild().isElement();
 
     KoXmlElement body(KoXml::namedItemNS(contents, KoXmlNS::office, "body"));
 
@@ -196,7 +198,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
 
     if (master) {
         const KoXmlElement *style = odfStore.styles().findStyle(
-                                        master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
+                    master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
         KoPageLayout pageLayout;
         pageLayout.loadOdf(*style);
         setSize(QSizeF(pageLayout.width, pageLayout.height));
@@ -332,7 +334,7 @@ KoShapeManager* KisShapeSelection::shapeManager() const
 }
 
 KisShapeSelectionFactory::KisShapeSelectionFactory()
-        : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
+    : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
 {
     setHidden(true);
 }
@@ -363,7 +365,7 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     if(shapes.isEmpty()) return 0;
 
     QTransform realTransform = m_converter->documentToView() *
-        transform * m_converter->viewToDocument();
+            transform * m_converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;

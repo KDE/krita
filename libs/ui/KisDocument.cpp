@@ -1681,7 +1681,7 @@ void KisDocument::waitForSavingToComplete()
     }
 }
 
-KoShapeBasedDocumentBase *KisDocument::shapeController() const
+KoShapeControllerBase *KisDocument::shapeController() const
 {
     return d->shapeController;
 }

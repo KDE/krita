@@ -5,6 +5,6 @@ include(KritaAddBrokenUnitTest)
 
 macro_add_unittest_definitions()
 
-krita_add_broken_unit_test(kis_ppm_test.cpp
+ecm_add_test(kis_ppm_test.cpp
     TEST_NAME krita-plugin-format-ppm_test
     LINK_LIBRARIES kritaui Qt5::Test)

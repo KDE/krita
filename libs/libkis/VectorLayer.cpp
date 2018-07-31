@@ -22,7 +22,7 @@
 
 #include "GroupShape.h"
 
-VectorLayer::VectorLayer(KoShapeBasedDocumentBase* shapeController, KisImageSP image, QString name, QObject *parent) :
+VectorLayer::VectorLayer(KoShapeControllerBase* shapeController, KisImageSP image, QString name, QObject *parent) :
     Node(image, new KisShapeLayer(shapeController, image, name, OPACITY_OPAQUE_U8), parent)
 {
 

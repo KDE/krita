@@ -22,7 +22,7 @@
 #include <QTransform>
 #include <QPointer>
 
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeFactoryBase.h"
@@ -31,10 +31,10 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
-class KoShapeBasedDocumentBasePrivate
+class KoshapeControllerBasePrivate
 {
 public:
-    KoShapeBasedDocumentBasePrivate()
+    KoshapeControllerBasePrivate()
         : resourceManager(new KoDocumentResourceManager())
     {
         KoShapeRegistry *registry = KoShapeRegistry::instance();
@@ -51,7 +51,7 @@ public:
         resourceManager->setHandleRadius(handleRadius);
     }
 
-    ~KoShapeBasedDocumentBasePrivate()
+    ~KoshapeControllerBasePrivate()
     {
         delete resourceManager;
     }
@@ -59,31 +59,31 @@ public:
     QPointer<KoDocumentResourceManager> resourceManager;
 };
 
-KoShapeBasedDocumentBase::KoShapeBasedDocumentBase()
-    : d(new KoShapeBasedDocumentBasePrivate())
+KoShapeControllerBase::KoShapeControllerBase()
+    : d(new KoshapeControllerBasePrivate())
 {
 }
 
-KoShapeBasedDocumentBase::~KoShapeBasedDocumentBase()
+KoShapeControllerBase::~KoShapeControllerBase()
 {
     delete d;
 }
 
-void KoShapeBasedDocumentBase::addShape(KoShape *shape)
+void KoShapeControllerBase::addShape(KoShape *shape)
 {
     addShapes({shape});
 }
 
-void KoShapeBasedDocumentBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
+void KoShapeControllerBase::shapesRemoved(const QList<KoShape*> & /*shapes*/, KUndo2Command * /*command*/)
 {
 }
 
-KoDocumentResourceManager *KoShapeBasedDocumentBase::resourceManager() const
+KoDocumentResourceManager *KoShapeControllerBase::resourceManager() const
 {
     return d->resourceManager;
 }
 
-QRectF KoShapeBasedDocumentBase::documentRect() const
+QRectF KoShapeControllerBase::documentRect() const
 {
     const qreal pxToPt = 72.0 / pixelsPerInch();
 

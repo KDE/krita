@@ -21,7 +21,7 @@
 #include "KoShapeCreateCommand.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 
 #include <klocalizedstring.h>
 
@@ -35,7 +35,7 @@
 class Q_DECL_HIDDEN KoShapeCreateCommand::Private
 {
 public:
-    Private(KoShapeBasedDocumentBase *_document, const QList<KoShape*> &_shapes, KoShapeContainer *_parentShape)
+    Private(KoShapeControllerBase *_document, const QList<KoShape*> &_shapes, KoShapeContainer *_parentShape)
             : shapesDocument(_document),
             shapes(_shapes),
             explicitParentShape(_parentShape),
@@ -49,7 +49,7 @@ public:
         }
     }
 
-    KoShapeBasedDocumentBase *shapesDocument;
+    KoShapeControllerBase *shapesDocument;
     QList<KoShape*> shapes;
     KoShapeContainer *explicitParentShape;
     bool deleteShapes;
@@ -57,17 +57,17 @@ public:
     std::vector<std::unique_ptr<KUndo2Command>> reorderingCommands;
 };
 
-KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KoShapeContainer *parentShape, KUndo2Command *parent)
+KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, KoShape *shape, KoShapeContainer *parentShape, KUndo2Command *parent)
     : KoShapeCreateCommand(controller, QList<KoShape *>() << shape, parentShape, parent)
 {
 }
 
-KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
+KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, const QList<KoShape *> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
         : KoShapeCreateCommand(controller, shapes, parentShape, parent, kundo2_i18np("Create shape", "Create shapes", shapes.size()))
 {
 }
 
-KoShapeCreateCommand::KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> shapes, KoShapeContainer *parentShape, KUndo2Command *parent, const KUndo2MagicString &undoString)
+KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, const QList<KoShape *> shapes, KoShapeContainer *parentShape, KUndo2Command *parent, const KUndo2MagicString &undoString)
         : KUndo2Command(undoString, parent)
         , d(new Private(controller, shapes, parentShape))
 {

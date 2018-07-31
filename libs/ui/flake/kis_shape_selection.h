@@ -53,7 +53,7 @@ class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectio
     KisShapeSelection(const KisShapeSelection& rhs);
 public:
 
-    KisShapeSelection(KisImageWSP image, KisSelectionWSP selection);
+    KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection);
 
     ~KisShapeSelection() override;
 
@@ -101,10 +101,10 @@ private:
 
     KisImageWSP m_image;
     QPainterPath m_outline;
-    KisImageViewConverter* m_converter;
-    KisShapeSelectionCanvas* m_canvas;
-    KisShapeSelectionModel* m_model;
-
+    KisImageViewConverter *m_converter;
+    KisShapeSelectionCanvas *m_canvas;
+    KisShapeSelectionModel *m_model;
+    KoShapeControllerBase *m_shapeControllerBase;
     friend class KisShapeSelectionModel;
 };
 

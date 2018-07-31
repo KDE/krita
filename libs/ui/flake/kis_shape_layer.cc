@@ -56,7 +56,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStore.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
@@ -142,13 +142,13 @@ public:
 
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvasBase * canvas;
-    KoShapeBasedDocumentBase* controller;
+    KoShapeControllerBase* controller;
     int x;
     int y;
 };
 
 
-KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
+KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
@@ -164,7 +164,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
 {
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller, KisShapeLayerCanvasBase *canvas)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas)
         : KisExternalLayer(_rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
@@ -232,7 +232,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     }
 }
 
-KisShapeLayer::KisShapeLayer(KoShapeBasedDocumentBase* controller,
+KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity,
@@ -260,7 +260,7 @@ KisShapeLayer::~KisShapeLayer()
     delete m_d;
 }
 
-void KisShapeLayer::initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *canvas)
+void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *canvas)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
@@ -716,7 +716,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform) {
     return parentCommand;
 }
 
-KoShapeBasedDocumentBase *KisShapeLayer::shapeController() const
+KoShapeControllerBase *KisShapeLayer::shapeController() const
 {
     return m_d->controller;
 }

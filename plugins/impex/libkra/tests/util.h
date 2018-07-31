@@ -65,7 +65,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
     return pixelSelection;
 }
 
-KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP image)
+KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP image, KoShapeControllerBase *shapeController)
 {
     KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
@@ -76,7 +76,7 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageSP im
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(image, vectorSelection);
+    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
     shapeSelection->addShape(path);
     vectorSelection->setShapeSelection(shapeSelection);
 
@@ -132,7 +132,7 @@ KisDocument* createCompleteDocument()
     KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
     kfc = 0; // kfc cannot be shared!
 
-    KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image);
+    KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController());
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
     KisAdjustmentLayerSP adjustmentLayer2 = new KisAdjustmentLayer(image, "adjustmentLayer2", kfc, vectorSelection);
     kfc = 0; // kfc cannot be shared!
@@ -177,7 +177,7 @@ KisDocument* createCompleteDocument()
     filterMask2->setFilter(kfc);
     kfc = 0; // kfc cannot be shared!
 
-    filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image));
+    filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController()));
     image->addNode(filterMask2, paintLayer2);
 
     KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();

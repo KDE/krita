@@ -34,6 +34,7 @@
 #include <KoFileDialog.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
+#include <KoShapeControllerBase.h>
 
 // kritaimage
 #include <metadata/kis_meta_data_io_backend.h>
@@ -89,18 +90,20 @@ QString expandEncodedDirectory(const QString& _intern)
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP image,
                                      KoStore *store,
+                                     KoShapeControllerBase *shapeController,
                                      QMap<KisNode *, QString> &layerFilenames,
                                      QMap<KisNode *, QString> &keyframeFilenames,
                                      const QString & name,
-                                     int syntaxVersion) :
-        KisNodeVisitor(),
-        m_layerFilenames(layerFilenames),
-        m_keyframeFilenames(keyframeFilenames)
+                                     int syntaxVersion)
+    : KisNodeVisitor()
+    , m_image(image)
+    , m_store(store)
+    , m_external(false)
+    , m_layerFilenames(layerFilenames)
+    , m_keyframeFilenames(keyframeFilenames)
+    , m_name(name)
+    , m_shapeController(shapeController)
 {
-    m_external = false;
-    m_image = image;
-    m_store = store;
-    m_name = name;
     m_store->pushDirectory();
     if (m_name.startsWith("/")) {
         m_name.remove(0, 1);
@@ -643,7 +646,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, dstSelection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
         dstSelection->setShapeSelection(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();

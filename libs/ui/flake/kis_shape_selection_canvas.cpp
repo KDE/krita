@@ -25,11 +25,12 @@
 #include <KoShapeManager.h>
 #include <KoSelectedShapesProxySimple.h>
 #include <KoUnit.h>
+#include <kis_shape_controller.h>
 
-KisShapeSelectionCanvas::KisShapeSelectionCanvas()
-        : KoCanvasBase(0)
-        , m_shapeManager(new KoShapeManager(this))
-        , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
+KisShapeSelectionCanvas::KisShapeSelectionCanvas(KoShapeControllerBase *shapeController)
+    : KoCanvasBase(shapeController)
+    , m_shapeManager(new KoShapeManager(this))
+    , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
 {
 }
 
@@ -72,7 +73,7 @@ void KisShapeSelectionCanvas::updateCanvas(const QRectF& rc)
 
 KoToolProxy * KisShapeSelectionCanvas::toolProxy() const
 {
-//     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
+    //     Q_ASSERT(false); // This should never be called as this canvas should have no tools.
     return 0;
 }
 

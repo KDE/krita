@@ -30,7 +30,7 @@
 #include "KoCanvasResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "KoToolSelection.h"
 
 #include <klocalizedstring.h>

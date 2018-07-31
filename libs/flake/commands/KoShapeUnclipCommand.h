@@ -25,7 +25,7 @@
 #include <QList>
 
 class KoShape;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 
 /// The undo / redo command for removing the shape clip path
 class KRITAFLAKE_EXPORT KoShapeUnclipCommand : public KUndo2Command
@@ -37,7 +37,7 @@ public:
      * @param shapes a set of all the shapes to remove the clip path from.
      * @param parent the parent command used for macro commands
      */
-    KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
+    KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
 
     /**
      * Command to remove clip path from a single shape.
@@ -45,7 +45,7 @@ public:
      * @param shape a single shape to remove the clip path from.
      * @param parent the parent command used for macro commands
      */
-    KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent = 0);
+    KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent = 0);
 
     /// Destroys the command
     ~KoShapeUnclipCommand() override;

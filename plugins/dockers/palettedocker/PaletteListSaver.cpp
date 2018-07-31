@@ -15,13 +15,6 @@ PaletteListSaver::PaletteListSaver(PaletteDockerDock *dockerDock, QObject *paren
             SLOT(slotPaletteModified(const KoColorSet *)));
 }
 
-PaletteListSaver::~PaletteListSaver()
-{
-    m_dockerDock->disconnect(this);
-    m_dockerDock->m_view->document()->disconnect(this);
-}
-
-
 void PaletteListSaver::slotSetPaletteList()
 {
     QList<const KoColorSet *> list;
@@ -35,6 +28,7 @@ void PaletteListSaver::slotSetPaletteList()
     }
     m_dockerDock->m_view->document()->setPaletteList(list);
     resetConnection();
+    m_dockerDock->m_view->document()->setModified(true);
 }
 
 void PaletteListSaver::slotPaletteModified(const KoColorSet *)
@@ -52,5 +46,6 @@ void PaletteListSaver::resetConnection()
 
 void PaletteListSaver::slotSavingFinished()
 {
-    m_dockerDock->m_view->document()->slotUndoStackCleanChanged(false);
+    bool undoStackClean = m_dockerDock->m_view->document()->undoStack()->isClean();
+    m_dockerDock->m_view->document()->setModified(!undoStackClean);
 }

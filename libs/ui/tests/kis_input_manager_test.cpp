@@ -31,40 +31,40 @@
 void KisInputManagerTest::testSingleActionShortcut()
 {
     KisSingleActionShortcut s(0,0);
-    s.setKey(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space);
+    s.setKey(QSet<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space);
 
-    QVERIFY(s.match(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space));
-    QVERIFY(!s.match(QList<Qt::Key>() << Qt::Key_Control, Qt::Key_Space));
-    QVERIFY(!s.match(QList<Qt::Key>(), Qt::Key_Space));
-    QVERIFY(!s.match(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Escape));
-    QVERIFY(!s.match(QList<Qt::Key>() << Qt::Key_Shift, KisSingleActionShortcut::WheelUp));
+    QVERIFY(s.match(QSet<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space));
+    QVERIFY(!s.match(QSet<Qt::Key>() << Qt::Key_Control, Qt::Key_Space));
+    QVERIFY(!s.match(QSet<Qt::Key>(), Qt::Key_Space));
+    QVERIFY(!s.match(QSet<Qt::Key>() << Qt::Key_Shift, Qt::Key_Escape));
+    QVERIFY(!s.match(QSet<Qt::Key>() << Qt::Key_Shift, KisSingleActionShortcut::WheelUp));
 
-    s.setWheel(QList<Qt::Key>() << Qt::Key_Shift, KisSingleActionShortcut::WheelUp);
+    s.setWheel(QSet<Qt::Key>() << Qt::Key_Shift, KisSingleActionShortcut::WheelUp);
 
-    QVERIFY(!s.match(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space));
-    QVERIFY(!s.match(QList<Qt::Key>() << Qt::Key_Control, Qt::Key_Space));
-    QVERIFY(!s.match(QList<Qt::Key>(), Qt::Key_Space));
-    QVERIFY(!s.match(QList<Qt::Key>() << Qt::Key_Shift, Qt::Key_Escape));
-    QVERIFY(s.match(QList<Qt::Key>() << Qt::Key_Shift, KisSingleActionShortcut::WheelUp));
+    QVERIFY(!s.match(QSet<Qt::Key>() << Qt::Key_Shift, Qt::Key_Space));
+    QVERIFY(!s.match(QSet<Qt::Key>() << Qt::Key_Control, Qt::Key_Space));
+    QVERIFY(!s.match(QSet<Qt::Key>(), Qt::Key_Space));
+    QVERIFY(!s.match(QSet<Qt::Key>() << Qt::Key_Shift, Qt::Key_Escape));
+    QVERIFY(s.match(QSet<Qt::Key>() << Qt::Key_Shift, KisSingleActionShortcut::WheelUp));
 }
 
 void KisInputManagerTest::testStrokeShortcut()
 {
     KisStrokeShortcut s(0,0);
-    s.setButtons(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
-                 QList<Qt::MouseButton>() << Qt::LeftButton);
+    s.setButtons(QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                 QSet<Qt::MouseButton>() << Qt::LeftButton);
 
-    QVERIFY(s.matchReady(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
-                         QList<Qt::MouseButton>() << Qt::LeftButton));
+    QVERIFY(s.matchReady(QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                         QSet<Qt::MouseButton>() << Qt::LeftButton));
 
-    QVERIFY(s.matchReady(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
-                         QList<Qt::MouseButton>()));
+    QVERIFY(s.matchReady(QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                         QSet<Qt::MouseButton>()));
 
-    QVERIFY(!s.matchReady(QList<Qt::Key>() << Qt::Key_Control << Qt::Key_Alt,
-                         QList<Qt::MouseButton>()));
+    QVERIFY(!s.matchReady(QSet<Qt::Key>() << Qt::Key_Control << Qt::Key_Alt,
+                         QSet<Qt::MouseButton>()));
 
-    QVERIFY(!s.matchReady(QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
-                         QList<Qt::MouseButton>() << Qt::RightButton));
+    QVERIFY(!s.matchReady(QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                         QSet<Qt::MouseButton>() << Qt::RightButton));
 
     QVERIFY(s.matchBegin(Qt::LeftButton));
     QVERIFY(!s.matchBegin(Qt::RightButton));
@@ -106,7 +106,7 @@ struct TestingAction : public KisAbstractInputAction
 
 KisSingleActionShortcut* createKeyShortcut(KisAbstractInputAction *action,
                                   int shortcutIndex,
-                                  const QList<Qt::Key> &modifiers,
+                                  const QSet<Qt::Key> &modifiers,
                                   Qt::Key key)
 {
     KisSingleActionShortcut *s = new KisSingleActionShortcut(action, shortcutIndex);
@@ -116,11 +116,11 @@ KisSingleActionShortcut* createKeyShortcut(KisAbstractInputAction *action,
 
 KisStrokeShortcut* createStrokeShortcut(KisAbstractInputAction *action,
                                      int shortcutIndex,
-                                     const QList<Qt::Key> &modifiers,
+                                     const QSet<Qt::Key> &modifiers,
                                      Qt::MouseButton button)
 {
     KisStrokeShortcut *s = new KisStrokeShortcut(action, shortcutIndex);
-    s->setButtons(modifiers, QList<Qt::MouseButton>() << button);
+    s->setButtons(modifiers, QSet<Qt::MouseButton>() << button);
     return s;
 }
 
@@ -134,22 +134,22 @@ void KisInputManagerTest::testKeyEvents()
 
     m.addShortcut(
         createKeyShortcut(a, 10,
-                          QList<Qt::Key>() << Qt::Key_Shift,
+                          QSet<Qt::Key>() << Qt::Key_Shift,
                           Qt::Key_Enter));
 
     m.addShortcut(
         createKeyShortcut(a, 11,
-                          QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                          QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
                           Qt::Key_Enter));
 
     m.addShortcut(
         createStrokeShortcut(a, 12,
-                             QList<Qt::Key>() << Qt::Key_Shift,
+                             QSet<Qt::Key>() << Qt::Key_Shift,
                              Qt::RightButton));
 
     m.addShortcut(
         createStrokeShortcut(a, 13,
-                             QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                             QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
                              Qt::LeftButton));
 
     QCOMPARE(a->m_beginIndex, -1);
@@ -280,7 +280,7 @@ void KisInputManagerTest::testReleaseUnnecessaryModifiers()
 
     m.addShortcut(
         createStrokeShortcut(a, 13,
-                             QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                             QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
                              Qt::LeftButton));
 
     // Test event with random values
@@ -328,7 +328,7 @@ void KisInputManagerTest::testMouseMoves()
 
     m.addShortcut(
         createStrokeShortcut(a, 13,
-                             QList<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
+                             QSet<Qt::Key>() << Qt::Key_Shift << Qt::Key_Control,
                              Qt::LeftButton));
 
     // Test event with random values
@@ -343,7 +343,7 @@ void KisInputManagerTest::testMouseMoves()
     QVERIFY(!m.keyPressed(Qt::Key_Control));
     QCOMPARE(a->m_beginIndex, -1);
 
-    QVERIFY(!m.cursorMoved(&mouseEvent));
+    QVERIFY(!m.pointerMoved(&mouseEvent));
     QCOMPARE(a->m_gotInput, false);
 
     // Complete Ctrl+Shift+LB shortcut
@@ -353,7 +353,7 @@ void KisInputManagerTest::testMouseMoves()
     QCOMPARE(a->m_gotInput, false);
     a->reset();
 
-    QVERIFY(m.mouseMoved(&mouseEvent));
+    QVERIFY(m.pointerMoved(&mouseEvent));
     QCOMPARE(a->m_gotInput, true);
     a->reset();
 

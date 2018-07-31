@@ -56,6 +56,7 @@
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
+#include  <sdk/tests/kistest.h>
 
 void KisKraSaverTest::initTestCase()
 {
@@ -89,7 +90,6 @@ void KisKraSaverTest::testRoundTrip()
     doc->image()->rootLayer()->accept(cv1);
 
     KisDocument *doc2 = KisPart::instance()->createDocument();
-
     bool result = doc2->loadNativeFormat("roundtriptest.kra");
     QVERIFY(result);
 
@@ -488,7 +488,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
     TestUtil::MaskParent p(refRect);
-
+    doc->setCurrentImage(p.image);
     const qreal resolution = 144.0 / 72.0;
     p.image->setResolution(resolution, resolution);
 
@@ -499,7 +499,7 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
 
-    KisShapeSelection *shapeSelection = new KisShapeSelection(p.image, selection);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
     selection->setShapeSelection(shapeSelection);
 
     KoPathShape* path = new KoPathShape();
@@ -546,4 +546,4 @@ void KisKraSaverTest::testRoundTripShapeSelection()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_MAIN(KisKraSaverTest)
+KISTEST_MAIN(KisKraSaverTest)

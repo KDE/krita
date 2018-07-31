@@ -50,7 +50,6 @@ KoGradientBackground::KoGradientBackground(QGradient * gradient, const QTransfor
     d->gradient = gradient;
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 }
 
 KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTransform &matrix)
@@ -60,7 +59,6 @@ KoGradientBackground::KoGradientBackground(const QGradient & gradient, const QTr
     d->gradient = KoFlake::cloneGradient(&gradient);
     d->matrix = matrix;
     Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 }
 
 KoGradientBackground::~KoGradientBackground()
@@ -98,7 +96,6 @@ void KoGradientBackground::setGradient(const QGradient &gradient)
 
     d->gradient = KoFlake::cloneGradient(&gradient);
     Q_ASSERT(d->gradient);
-    Q_ASSERT(d->gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 }
 
 const QGradient * KoGradientBackground::gradient() const

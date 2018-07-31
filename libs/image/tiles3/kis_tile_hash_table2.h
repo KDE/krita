@@ -163,6 +163,7 @@ private:
 
         if (result) {
             wasDeleted = true;
+            result->notifyDead();
             m_numTiles.fetchAndSubRelaxed(1);
             m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(result));
         }
@@ -356,17 +357,24 @@ void KisTileHashTableTraits2<T>::clear()
 {
     QWriteLocker l(&m_iteratorLock);
     typename ConcurrentMap<quint32, TileType*>::Iterator iter(m_map);
+    TileType *tile = 0;
 
     while (iter.isValid()) {
-        erase(iter.getKey());
+        tile = m_map.erase(iter.getKey());
+        tile->notifyDead();
+        m_map.getGC().enqueue(&MemoryReclaimer::destroy, new MemoryReclaimer(tile));
         iter.next();
     }
+
+    m_numTiles.store(0);
+    m_map.getGC().update(false);
 }
 
 template <class T>
 inline void KisTileHashTableTraits2<T>::setDefaultTileData(KisTileData *defaultTileData)
 {
     QWriteLocker guard(&m_defaultPixelDataLock);
+
     if (m_defaultTileData) {
         m_defaultTileData->release();
         m_defaultTileData = 0;

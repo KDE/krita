@@ -88,6 +88,11 @@ QRect KisTransparencyMask::needRect(const QRect &rect, PositionToFilthy pos) con
     return KisMask::needRect(rect, pos);
 }
 
+bool KisTransparencyMask::paintsOutsideSelection() const
+{
+    return true;
+}
+
 QIcon KisTransparencyMask::icon() const
 {
     return KisIconUtils::loadIcon("transparencyMask");

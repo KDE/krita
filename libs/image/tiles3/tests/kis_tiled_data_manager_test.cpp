@@ -546,7 +546,11 @@ void KisTiledDataManagerTest::benchmarkReadOnlyTileLazy()
     quint8 defaultPixel = 0;
     KisTiledDataManager dm(1, &defaultPixel);
 
-    const qint32 numTilesToTest = 1000000;
+    /*
+     * See KisTileHashTableTraits2 for more details
+     */
+
+    const qint32 numTilesToTest = 0x7fff;
 
     //CALLGRIND_START_INSTRUMENTATION;
 

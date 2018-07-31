@@ -56,6 +56,8 @@ private Q_SLOTS:
 
     void testMergePaintOverPassThroughLayer();
     void testMergePassThroughOverPaintLayer();
+
+    void testPaintOverlayMask();
 };
 
 #endif

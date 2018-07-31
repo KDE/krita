@@ -25,7 +25,7 @@
 
 class KoShape;
 class KoShapeContainer;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 
 /// The undo / redo command for creating shapes
 class KRITAFLAKE_EXPORT KoShapeCreateCommand : public KUndo2Command
@@ -37,7 +37,7 @@ public:
      * @param shape the shape that's just been created.
      * @param parent the parent command used for macro commands
      */
-    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, KoShape *shape,
+    KoShapeCreateCommand(KoShapeControllerBase *controller, KoShape *shape,
                          KoShapeContainer *parentShape = 0,
                          KUndo2Command *parent = 0);
 
@@ -47,7 +47,7 @@ public:
     * @param shapes the shapes that have just been created.
     * @param parent the parent command used for macro commands
     */
-    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> shape,
+    KoShapeCreateCommand(KoShapeControllerBase *controller, const QList<KoShape*> shape,
                          KoShapeContainer *parentShape = 0,
                          KUndo2Command *parent = 0);
 
@@ -58,7 +58,7 @@ public:
     void undo() override;
 
 protected:
-    KoShapeCreateCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape *> shapes,
+    KoShapeCreateCommand(KoShapeControllerBase *controller, const QList<KoShape *> shapes,
                          KoShapeContainer *parentShape, KUndo2Command *parent,
                          const KUndo2MagicString &undoString);
 

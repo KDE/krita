@@ -123,7 +123,7 @@ private:
     KisReferenceImagesLayer *m_layer;
 };
 
-KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image)
+KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
 {}
 

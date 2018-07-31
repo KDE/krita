@@ -186,7 +186,18 @@ namespace KisLayerUtils
     /**
      * Applies \p func to \p node and all its children recursively
      */
-    void KRITAIMAGE_EXPORT recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func);
+    template <typename NodePointer, typename Functor>
+    void recursiveApplyNodes(NodePointer node, Functor func)
+    {
+        func(node);
+
+        node = node->firstChild();
+        while (node) {
+            recursiveApplyNodes(node, func);
+            node = node->nextSibling();
+        }
+    }
+
 
     /**
      * Walks through \p node and all its children recursively until

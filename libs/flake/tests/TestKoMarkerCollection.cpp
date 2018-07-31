@@ -28,6 +28,7 @@
 
 #include "kis_debug.h"
 #include "../../sdk/tests/qimage_test_util.h"
+#include <sdk/tests/kistest.h>
 
 #include <cmath>
 
@@ -107,4 +108,4 @@ void TestKoMarkerCollection::testMarkerBounds()
     testOneMarkerPosition(marker, KoFlake::EndMarker, "end_marker");
 }
 
-QTEST_MAIN(TestKoMarkerCollection)
+KISTEST_MAIN(TestKoMarkerCollection)

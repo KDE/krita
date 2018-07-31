@@ -27,8 +27,34 @@
 #include <resources/KoResource.h>
 #include "KoResourceServerProvider.h"
 
+#include "sdk/tests/kistest.h"
+
 void KoResourceTaggingTest::testInitialization()
 {
+    // All Krita's resource types
+    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
+    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
+    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
+    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
+    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
+    KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
+    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
+    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/");
+    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/");
+    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
+    KoResourcePaths::addResourceType("tags", "data", "/tags/");
+
     KoResourceTagStore tagStore(KoResourceServerProvider::instance()->patternServer());
     QVERIFY(tagStore.tagNamesList().isEmpty());
     QVERIFY(tagStore.assignedTagsList(0).isEmpty());
@@ -141,4 +167,4 @@ void KoResourceTaggingTest::testReadWriteXML()
     QVERIFY(resources.size() == 0);
 }
 
-QTEST_MAIN(KoResourceTaggingTest)
+KISTEST_MAIN(KoResourceTaggingTest)

@@ -22,11 +22,11 @@
 #include "KoSnapStrategy.h"
 #include "KoPathShape.h"
 #include "KoSnapProxy.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "MockShapes.h"
 #include "KoPathPoint.h"
 #include "KoViewConverter.h"
-
+#include <sdk/tests/kistest.h>
 //#include <PointProperties.h>
 #include <KoSnapData.h>
 
@@ -837,4 +837,4 @@ void TestSnapStrategy::testSquareDistanceToLine()
     QVERIFY(qFuzzyCompare(result4, toCompWithFour));
 
 }
-QTEST_MAIN(TestSnapStrategy)
+KISTEST_MAIN(TestSnapStrategy)

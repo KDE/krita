@@ -209,13 +209,13 @@ void KisTiledExtentManager::Data::migrate(qint32 index)
 
 void KisTiledExtentManager::Data::updateMin()
 {
-    qint32 start = m_min + m_offset + 1;
+    qint32 start = m_min + m_offset;
 
     for (qint32 i = start; i < m_capacity; ++i) {
         qint32 current = m_buffer[i].load();
 
         if (current > 0) {
-            m_min = current;
+            m_min = i - m_offset;
             break;
         }
     }
@@ -223,13 +223,13 @@ void KisTiledExtentManager::Data::updateMin()
 
 void KisTiledExtentManager::Data::updateMax()
 {
-    qint32 start = m_max + m_offset - 1;
+    qint32 start = m_max + m_offset;
 
     for (qint32 i = start; i >= 0; --i) {
         qint32 current = m_buffer[i].load();
 
         if (current > 0) {
-            m_max = current;
+            m_max = i - m_offset;
             break;
         }
     }
@@ -237,6 +237,8 @@ void KisTiledExtentManager::Data::updateMax()
 
 KisTiledExtentManager::KisTiledExtentManager()
 {
+    QWriteLocker l(&m_extentLock);
+    m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
 }
 
 void KisTiledExtentManager::notifyTileAdded(qint32 col, qint32 row)

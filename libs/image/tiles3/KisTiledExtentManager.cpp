@@ -237,6 +237,8 @@ void KisTiledExtentManager::Data::updateMax()
 
 KisTiledExtentManager::KisTiledExtentManager()
 {
+    QWriteLocker l(&m_extentLock);
+    m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
 }
 
 void KisTiledExtentManager::notifyTileAdded(qint32 col, qint32 row)

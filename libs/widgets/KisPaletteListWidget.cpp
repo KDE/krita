@@ -6,6 +6,7 @@
 #include <kis_icon.h>
 
 #include "KisDlgPaletteEditor.h"
+
 #include <ui_WdgPaletteListWidget.h>
 #include "KisPaletteListWidget.h"
 #include "KisPaletteListWidget_p.h"
@@ -117,6 +118,8 @@ void KisPaletteListWidget::slotRemove()
 
 void KisPaletteListWidget::slotModify()
 {
+    KisDlgPaletteEditor dlg;
+    dlg.exec();
     emit sigPaletteListChanged();
 }
 

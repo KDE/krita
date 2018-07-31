@@ -76,10 +76,6 @@ public:
         QImage vectorImage(m_paintDev->convertToQImage(m_colorSpace->profile()));
         vectorImage.invertPixels(); // Make pixel color black
 
-        if (renderImage || QTest::currentTestFailed()) {
-
-        }
-
         // Check for differences, max errors: 0
         QPoint tmpPt;
         if (!TestUtil::compareQImages(tmpPt,scalarImage, vectorImage, 0, 2, 0)) {
@@ -88,7 +84,6 @@ public:
 
             QFAIL(QString("Masks differ! first different pixel: %1,%2 \n").arg(tmpPt.x()).arg(tmpPt.y()).toLatin1());
         }
-
 
     }
 

@@ -68,13 +68,17 @@ KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QBy
 
 KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
+    Q_ASSERT(document);
+    Q_ASSERT(configuration);
+
     KisImageSP image = document->savingImage();
+    Q_ASSERT(image);
 
     EXRConverter exrConverter(document, !batchMode());
 
     KisImageBuilder_Result res;
 
-    if (configuration->getBool("flatten")) {
+    if (configuration && configuration->getBool("flatten")) {
         res = exrConverter.buildFile(filename(), image->rootLayer(), true);
     }
     else {

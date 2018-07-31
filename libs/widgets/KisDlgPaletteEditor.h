@@ -18,6 +18,12 @@ public:
 
 public:
     void setPalette(KoColorSet *);
+    KoColorSet* palette() const { return m_colorSet; }
+
+    QString name() const;
+    QString filename() const;
+    int columnCount() const;
+    int rowCount() const;
 
 private:
     QScopedPointer<Ui_WdgDlgPaletteEditor> m_ui;

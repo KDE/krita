@@ -100,7 +100,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_ui->bnPaletteChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     m_ui->cmbNameList->setPaletteModel(m_d->paletteModel);
-    connect(m_d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
+    connect(m_d->paletteChooser, SIGNAL(sigPaletteModified(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorUpdated(KoColor)));
     connect(m_ui->paletteBox, SIGNAL(sigIndexSelected(QModelIndex)),
             m_ui->cmbNameList, SLOT(slotSwatchSelected(QModelIndex)));

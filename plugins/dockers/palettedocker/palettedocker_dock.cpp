@@ -112,7 +112,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_viewContextMenu.addAction(m_actSwitch.data());
 
     m_paletteChooser = new KisPaletteListWidget(this);
-    connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
+    connect(m_paletteChooser, SIGNAL(sigPaletteModified(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
 
     m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->bnColorSets->setToolTip(i18n("Choose palette"));
@@ -234,6 +234,7 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
 {
     bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
     if (slotEmpty) {
+        if (!m_currentColorSet->isEditable()) { return; }
         slotSetEntryByForeground(index);
     } else {
         KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());

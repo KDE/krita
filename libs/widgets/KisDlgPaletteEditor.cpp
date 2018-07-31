@@ -24,3 +24,23 @@ void KisDlgPaletteEditor::setPalette(KoColorSet *colorSet)
         m_ui->spinBoxRow->setValue(m_colorSet->rowCount());
     }
 }
+
+QString KisDlgPaletteEditor::name() const
+{
+    return m_ui->lineEditName->text();
+}
+
+QString KisDlgPaletteEditor::filename() const
+{
+    return m_ui->lineEditFilename->text();
+}
+
+int KisDlgPaletteEditor::columnCount() const
+{
+    return m_ui->spinBoxCol->value();
+}
+
+int KisDlgPaletteEditor::rowCount() const
+{
+    return m_ui->spinBoxRow->value();
+}

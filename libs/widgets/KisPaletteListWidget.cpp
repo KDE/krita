@@ -77,7 +77,7 @@ KisPaletteListWidget::~KisPaletteListWidget()
 
 void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
-    emit sigPaletteSelected(static_cast<KoColorSet*>(r));
+    emit sigPaletteModified(static_cast<KoColorSet*>(r));
 }
 
 void KisPaletteListWidget::slotAdd()
@@ -119,9 +119,18 @@ void KisPaletteListWidget::slotRemove()
 void KisPaletteListWidget::slotModify()
 {
     KisDlgPaletteEditor dlg;
-    dlg.setPalette(static_cast<KoColorSet*>(m_d->itemChooser->currentResource()));
-    dlg.exec();
-    emit sigPaletteListChanged();
+    KoColorSet *colorSet = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+    dlg.setPalette(colorSet);
+    if (dlg.exec() == QDialog::Accepted){
+        if (!colorSet) { return; }
+        if (colorSet->name() != dlg.name() ||
+                colorSet->columnCount() != dlg.columnCount()) {
+            colorSet->setName(dlg.name());
+            colorSet->setColumnCount(dlg.columnCount());
+            emit sigPaletteModified(colorSet); // to update elements in the docker
+            emit sigPaletteListChanged();
+        }
+    }
 }
 
 void KisPaletteListWidget::slotImport()

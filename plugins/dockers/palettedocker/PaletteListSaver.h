@@ -4,6 +4,7 @@
 #include <QObject>
 
 class PaletteDockerDock;
+class KoColorSet;
 
 class PaletteListSaver : public QObject
 {
@@ -13,6 +14,17 @@ public:
 
 private Q_SLOTS:
     void slotSetPaletteList();
+    void slotSavingFinished();
+    void slotPaletteModified(const KoColorSet *);
+
+private:
+    /**
+     * @brief resetConnection
+     * KisDocument won't reset modified to false after saving, so I need to
+     * use the connection to trigger slotSavingFinished to manually set
+     * modified to false
+     */
+    void resetConnection();
 
 private:
     PaletteDockerDock *m_dockerDock;

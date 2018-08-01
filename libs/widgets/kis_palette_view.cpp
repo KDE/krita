@@ -234,50 +234,51 @@ void KisPaletteView::wheelEvent(QWheelEvent *event)
 
 void KisPaletteView::modifyEntry(QModelIndex index)
 {
-    if (m_d->allowPaletteModification) {
-        KoDialog *dlg = new KoDialog();
-        QFormLayout *editableItems = new QFormLayout(dlg);
-        dlg->mainWidget()->setLayout(editableItems);
-        QLineEdit *lnIDName = new QLineEdit(dlg);
-        QLineEdit *lnGroupName = new QLineEdit(dlg);
-        KisColorButton *bnColor = new KisColorButton(dlg);
-        QCheckBox *chkSpot = new QCheckBox(dlg);
+    if (!m_d->allowPaletteModification) { return; }
+    if (!m_d->model->colorSet()->isEditable()) { return; }
 
-        if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
-            QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
-            editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
-            lnGroupName->setText(groupName);
-            if (dlg->exec() == KoDialog::Accepted) {
-                m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
-                emit m_d->model->dataChanged(index, index);
-            }
-            //rename the group.
-        } else {
-            KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-            Q_ASSERT(group);
-            KisSwatch entry = group->getEntry(index.column(), index.row());
-            chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
-            editableItems->addRow(i18n("ID"), lnIDName);
-            editableItems->addRow(i18n("Name"), lnGroupName);
-            editableItems->addRow(i18n("Color"), bnColor);
-            editableItems->addRow(i18n("Spot"), chkSpot);
-            lnGroupName->setText(entry.name());
-            lnIDName->setText(entry.id());
-            bnColor->setColor(entry.color());
-            chkSpot->setChecked(entry.spotColor());
-            if (dlg->exec() == KoDialog::Accepted) {
-                entry.setName(lnGroupName->text());
-                entry.setId(lnIDName->text());
-                entry.setColor(bnColor->color());
-                entry.setSpotColor(chkSpot->isChecked());
-                m_d->model->colorSet()->setEntry(entry, index.column(), index.row());
-                m_d->model->colorSet()->save();
-                emit m_d->model->dataChanged(index, index);
-            }
+    KoDialog *dlg = new KoDialog();
+    QFormLayout *editableItems = new QFormLayout(dlg);
+    dlg->mainWidget()->setLayout(editableItems);
+    QLineEdit *lnIDName = new QLineEdit(dlg);
+    QLineEdit *lnGroupName = new QLineEdit(dlg);
+    KisColorButton *bnColor = new KisColorButton(dlg);
+    QCheckBox *chkSpot = new QCheckBox(dlg);
+
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
+        QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
+        editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
+        lnGroupName->setText(groupName);
+        if (dlg->exec() == KoDialog::Accepted) {
+            m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
+            emit m_d->model->dataChanged(index, index);
         }
-
-        delete dlg;
+        //rename the group.
+    } else {
+        KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+        Q_ASSERT(group);
+        KisSwatch entry = group->getEntry(index.column(), index.row());
+        chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
+        editableItems->addRow(i18n("ID"), lnIDName);
+        editableItems->addRow(i18n("Name"), lnGroupName);
+        editableItems->addRow(i18n("Color"), bnColor);
+        editableItems->addRow(i18n("Spot"), chkSpot);
+        lnGroupName->setText(entry.name());
+        lnIDName->setText(entry.id());
+        bnColor->setColor(entry.color());
+        chkSpot->setChecked(entry.spotColor());
+        if (dlg->exec() == KoDialog::Accepted) {
+            entry.setName(lnGroupName->text());
+            entry.setId(lnIDName->text());
+            entry.setColor(bnColor->color());
+            entry.setSpotColor(chkSpot->isChecked());
+            m_d->model->colorSet()->setEntry(entry, index.column(), index.row());
+            m_d->model->colorSet()->save();
+            emit m_d->model->dataChanged(index, index);
+        }
     }
+
+    delete dlg;
     update(index);
 }
 

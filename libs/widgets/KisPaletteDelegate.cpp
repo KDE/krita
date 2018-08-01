@@ -16,15 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisPaletteDelegate.h"
-
 #include <QPen>
 #include <QPainter>
 
 #include <kis_global.h>
-#include "kis_debug.h"
 #include <KisPaletteModel.h>
+#include "kis_debug.h"
 
+#include "KisPaletteDelegate.h"
 
 KisPaletteDelegate::KisPaletteDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
@@ -42,7 +41,6 @@ void KisPaletteDelegate::paint(QPainter *painter,
     if (!index.isValid())
         return;
 
-    const int minSize = qMin(option.rect.width(), option.rect.height());
     const bool isSelected = option.state & QStyle::State_Selected;
     const int borderWidth = 3;
 
@@ -58,11 +56,17 @@ void KisPaletteDelegate::paint(QPainter *painter,
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());
             paintRect = kisGrowRect(option.rect, -borderWidth);
-        } else {
-            option.palette.background();
         }
-        QBrush brush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
-        painter->fillRect(paintRect, brush);
+        if (qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole))) {
+            QBrush brush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
+            painter->fillRect(paintRect, brush);
+        } else {
+            QBrush lightBrush(Qt::gray);
+            QBrush darkBrush(Qt::darkGray);
+            painter->fillRect(paintRect, lightBrush);
+            painter->fillRect(QRect(paintRect.topLeft(), paintRect.center()), darkBrush);
+            painter->fillRect(QRect(paintRect.center(), paintRect.bottomRight()), darkBrush);
+        }
     }
 
     painter->restore();

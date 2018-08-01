@@ -190,7 +190,7 @@ krita_add_broken_unit_test(kis_transform_mask_test.cpp
     TEST_NAME krita-image-KisTransformMaskTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
-krita_add_broken_unit_test(kis_histogram_test.cpp
+ecm_add_test(kis_histogram_test.cpp
     TEST_NAME krita-image-KisHistogramTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 

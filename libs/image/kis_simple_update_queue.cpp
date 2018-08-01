@@ -61,8 +61,7 @@ KisSimpleUpdateQueue::KisSimpleUpdateQueue()
 
 KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 {
-//    QMutexLocker locker(&m_lock);
-    QWriteLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
 
     while (!m_spontaneousJobsList.isEmpty()) {
         delete m_spontaneousJobsList.takeLast();
@@ -71,8 +70,7 @@ KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 
 void KisSimpleUpdateQueue::updateSettings()
 {
-//    QMutexLocker locker(&m_lock);
-    QWriteLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
 
     KisImageConfig config(true);
 
@@ -92,21 +90,17 @@ int KisSimpleUpdateQueue::overrideLevelOfDetail() const
 void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
 {
     updaterContext.lock();
-    m_rwLock.lockForRead();
-//    QMutexLocker locker(&m_lock);
+    m_lock.lock();
 
     while(updaterContext.hasSpareThread() &&
           processOneJob(updaterContext));
 
-//    locker.unlock();
-    m_rwLock.unlock();
+    m_lock.unlock();
     updaterContext.unlock();
 }
 
 bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 {
-//    QMutexLocker locker(&m_lock);
-
     KisBaseRectsWalkerSP item;
     KisMutableWalkersListIterator iter(m_updatesList);
     QVector<KisBaseRectsWalkerSP> walkers;
@@ -120,15 +114,9 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
             !item->checksumValid()) {
 
-            m_rwLock.unlock();
-            m_rwLock.lockForWrite();
-
             m_overrideLevelOfDetail = item->levelOfDetail();
             item->recalculate(item->requestedRect());
             m_overrideLevelOfDetail = -1;
-
-            m_rwLock.unlock();
-            m_rwLock.lockForRead();
         }
 
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
@@ -136,13 +124,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
             walkers.append(item);
 //            updaterContext.addMergeJob(item);
 
-            m_rwLock.unlock();
-            m_rwLock.lockForWrite();
-
             iter.remove();
-
-            m_rwLock.unlock();
-            m_rwLock.lockForRead();
 
 //            jobAdded = true;
 //            break;
@@ -233,17 +215,15 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
     }
 
     if (!walkers.isEmpty()) {
-//        m_lock.lock();
-        QWriteLocker l(&m_rwLock);
+        m_lock.lock();
         m_updatesList.append(walkers);
-//        m_lock.unlock();
+        m_lock.unlock();
     }
 }
 
 void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
-//    QMutexLocker locker(&m_lock);
-    QWriteLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
 
     KisSpontaneousJob *item;
     KisMutableSpontaneousJobsListIterator iter(m_spontaneousJobsList);
@@ -264,15 +244,13 @@ void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 
 bool KisSimpleUpdateQueue::isEmpty() const
 {
-//    QMutexLocker locker(&m_lock);
-    QReadLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
     return m_updatesList.isEmpty() && m_spontaneousJobsList.isEmpty();
 }
 
 qint32 KisSimpleUpdateQueue::sizeMetric() const
 {
-//    QMutexLocker locker(&m_lock);
-    QReadLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
     return m_updatesList.size() + m_spontaneousJobsList.size();
 }
 
@@ -314,8 +292,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
                                        int levelOfDetail,
                                        KisBaseRectsWalker::UpdateType type)
 {
-//    QMutexLocker locker(&m_lock);
-    QWriteLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
 
     QRect baseRect = rc;
 
@@ -352,8 +329,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
 
 void KisSimpleUpdateQueue::optimize()
 {
-//    QMutexLocker locker(&m_lock);
-    QWriteLocker l(&m_rwLock);
+    QMutexLocker locker(&m_lock);
 
     if(m_updatesList.size() <= 1) {
         return;

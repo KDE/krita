@@ -95,8 +95,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     bool lodNNeedsSynchronization;
     int desiredLevelOfDetail;
     int nextDesiredLevelOfDetail;
-//    QMutex mutex;
-    QReadWriteLock m_rwLock;
+    QMutex mutex;
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisSuspendResumeStrategyFactory suspendUpdatesStrokeStrategyFactory;
     KisSuspendResumeStrategyFactory resumeUpdatesStrokeStrategyFactory;
@@ -266,8 +265,7 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
 
 KisStrokeId KisStrokesQueue::startLodNUndoStroke(KisStrokeStrategy *strokeStrategy)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->lodNNeedsSynchronization);
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->desiredLevelOfDetail > 0);
@@ -285,8 +283,7 @@ KisStrokeId KisStrokesQueue::startLodNUndoStroke(KisStrokeStrategy *strokeStrate
 
 KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke;
     KisStrokeStrategy* lodBuddyStrategy;
@@ -345,8 +342,7 @@ KisStrokeId KisStrokesQueue::startStroke(KisStrokeStrategy *strokeStrategy)
 
 void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
     KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
@@ -365,8 +361,7 @@ void KisStrokesQueue::addJob(KisStrokeId id, KisStrokeJobData *data)
 
 void KisStrokesQueue::addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobData *> list)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
     KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
@@ -376,8 +371,7 @@ void KisStrokesQueue::addMutatedJobs(KisStrokeId id, const QVector<KisStrokeJobD
 
 void KisStrokesQueue::endStroke(KisStrokeId id)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
     KIS_SAFE_ASSERT_RECOVER_RETURN(stroke);
@@ -392,8 +386,7 @@ void KisStrokesQueue::endStroke(KisStrokeId id)
 
 bool KisStrokesQueue::cancelStroke(KisStrokeId id)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     KisStrokeSP stroke = id.toStrongRef();
     if(stroke) {
@@ -423,8 +416,7 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
 {
     bool anythingCanceled = false;
 
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     /**
      * We cancel only ended strokes. This is done to avoid
@@ -466,8 +458,7 @@ UndoResult KisStrokesQueue::tryUndoLastStrokeAsync()
 {
     UndoResult result = UNDO_FAIL;
 
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     std::reverse_iterator<StrokesQueue::ConstIterator> it(m_d->strokesQueue.constEnd());
     std::reverse_iterator<StrokesQueue::ConstIterator> end(m_d->strokesQueue.constBegin());
@@ -526,12 +517,10 @@ UndoResult KisStrokesQueue::tryUndoLastStrokeAsync()
         lastBuddy->cancelStroke();
     } else {
         // TODO: assert that checks that there is no other lodn strokes
-//        locker.unlock();
-        l.unlock();
+        locker.unlock();
         m_d->lodNUndoStore.undo();
         m_d->lodNUndoStore.purgeRedoState();
-        l.relock();
-//        locker.relock();
+        locker.relock();
     }
 
     result = UNDO_OK;
@@ -564,15 +553,13 @@ void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
                                    bool externalJobsPending)
 {
     updaterContext.lock();
-//    m_d->mutex.lock();
-    m_d->m_rwLock.lockForRead();
+    m_d->mutex.lock();
 
     while(updaterContext.hasSpareThread() &&
           processOneJob(updaterContext,
                         externalJobsPending));
 
-    m_d->m_rwLock.unlock();
-//    m_d->mutex.unlock();
+    m_d->mutex.unlock();
     updaterContext.unlock();
 }
 
@@ -593,15 +580,13 @@ qreal KisStrokesQueue::balancingRatioOverride() const
 
 bool KisStrokesQueue::isEmpty() const
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QReadLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
     return m_d->strokesQueue.isEmpty();
 }
 
 qint32 KisStrokesQueue::sizeMetric() const
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QReadLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
     if(m_d->strokesQueue.isEmpty()) return 0;
 
     // just a rough approximation
@@ -631,15 +616,13 @@ void KisStrokesQueue::Private::switchDesiredLevelOfDetail(bool forced)
 
 void KisStrokesQueue::explicitRegenerateLevelOfDetail()
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
     m_d->switchDesiredLevelOfDetail(true);
 }
 
 void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     if (lod == m_d->nextDesiredLevelOfDetail) return;
 
@@ -649,16 +632,13 @@ void KisStrokesQueue::setDesiredLevelOfDetail(int lod)
 
 void KisStrokesQueue::notifyUFOChangedImage()
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QWriteLocker l(&m_d->m_rwLock);
-
+    QMutexLocker locker(&m_d->mutex);
     m_d->lodNNeedsSynchronization = true;
 }
 
 void KisStrokesQueue::debugDumpAllStrokes()
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QReadLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
 
     dbgImage <<"===";
     Q_FOREACH (KisStrokeSP stroke, m_d->strokesQueue) {
@@ -689,8 +669,7 @@ KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() con
 
 KUndo2MagicString KisStrokesQueue::currentStrokeName() const
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QReadLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
     if(m_d->strokesQueue.isEmpty()) return KUndo2MagicString();
 
     return m_d->strokesQueue.head()->name();
@@ -698,8 +677,7 @@ KUndo2MagicString KisStrokesQueue::currentStrokeName() const
 
 bool KisStrokesQueue::hasOpenedStrokes() const
 {
-//    QMutexLocker locker(&m_d->mutex);
-    QReadLocker l(&m_d->m_rwLock);
+    QMutexLocker locker(&m_d->mutex);
     return m_d->openedStrokesCounter;
 }
 
@@ -717,21 +695,13 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
                                  snapshot == HasMergeJob);
     const bool hasMergeJobs = snapshot & HasMergeJob;
 
-    if (checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
+    if(checkStrokeState(hasStrokeJobs, levelOfDetail) &&
+       checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
        checkSequentialProperty(snapshot, externalJobsPending)) {
 
-        if (checkStrokeState(hasStrokeJobs, levelOfDetail)) {
-            KisStrokeSP stroke = m_d->strokesQueue.head();
-
-            m_d->m_rwLock.unlock();
-            m_d->m_rwLock.lockForWrite();
-            KisStrokeJob *job = stroke->popOneJob();
-            m_d->m_rwLock.unlock();
-            m_d->m_rwLock.lockForRead();
-
-            updaterContext.addStrokeJob(job);
-            result = true;
-        }
+        KisStrokeSP stroke = m_d->strokesQueue.head();
+        updaterContext.addStrokeJob(stroke->popOneJob());
+        result = true;
     }
 
     return result;
@@ -766,16 +736,10 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * stroke might end up in loaded, but uninitialized state.
          */
         if (!m_d->currentStrokeLoaded) {
-            m_d->m_rwLock.unlock();
-            m_d->m_rwLock.lockForWrite();
-
             m_d->needsExclusiveAccess = stroke->isExclusive();
             m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
             m_d->balancingRatioOverride = stroke->balancingRatioOverride();
             m_d->currentStrokeLoaded = true;
-
-            m_d->m_rwLock.unlock();
-            m_d->m_rwLock.lockForRead();
         }
 
         result = true;
@@ -786,24 +750,15 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * arrive here unloaded.
          */
         if (!m_d->currentStrokeLoaded) {
-            m_d->m_rwLock.unlock();
-            m_d->m_rwLock.lockForWrite();
-
             m_d->needsExclusiveAccess = stroke->isExclusive();
             m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
             m_d->balancingRatioOverride = stroke->balancingRatioOverride();
             m_d->currentStrokeLoaded = true;
-
-            m_d->m_rwLock.unlock();
-            m_d->m_rwLock.lockForRead();
         }
 
         result = true;
     }
     else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
-        m_d->m_rwLock.unlock();
-        m_d->m_rwLock.lockForWrite();
-
         m_d->tryClearUndoOnStrokeCompletion(stroke);
 
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
@@ -813,9 +768,6 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
         m_d->currentStrokeLoaded = false;
 
         m_d->switchDesiredLevelOfDetail(false);
-
-        m_d->m_rwLock.unlock();
-        m_d->m_rwLock.lockForRead();
 
         if(!m_d->strokesQueue.isEmpty()) {
             result = checkStrokeState(false, runningLevelOfDetail);

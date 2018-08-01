@@ -764,6 +764,9 @@ bool KoColorSet::Private::loadGpl()
 
             e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
 
+            for (int i = 0; i != 3; i++) {
+                a.pop_front();
+            }
             QString name = a.join(" ");
             e.setName(name.isEmpty() ? i18n("Untitled") : name);
 

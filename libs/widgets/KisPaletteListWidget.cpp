@@ -77,7 +77,7 @@ KisPaletteListWidget::~KisPaletteListWidget()
 
 void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
-    emit sigPaletteModified(static_cast<KoColorSet*>(r));
+    emit sigPaletteSelected(static_cast<KoColorSet*>(r));
 }
 
 void KisPaletteListWidget::slotAdd()
@@ -127,7 +127,7 @@ void KisPaletteListWidget::slotModify()
                 colorSet->columnCount() != dlg.columnCount()) {
             colorSet->setName(dlg.name());
             colorSet->setColumnCount(dlg.columnCount());
-            emit sigPaletteModified(colorSet); // to update elements in the docker
+            emit sigPaletteSelected(colorSet); // to update elements in the docker
             emit sigPaletteListChanged();
         }
     }

@@ -18,7 +18,7 @@ public:
     virtual ~KisPaletteListWidget();
 
 Q_SIGNALS:
-    void sigPaletteModified(KoColorSet*);
+    void sigPaletteSelected(KoColorSet*);
     void sigPaletteListChanged();
 
 public Q_SLOTS:

@@ -5,9 +5,11 @@
 #include <QPointer>
 #include <QScopedPointer>
 
-#include <KoColorSet.h>
+class QAction;
 
-#include <ui_WdgDlgPaletteEditor.h>
+class KoColorSet;
+
+class Ui_WdgDlgPaletteEditor;
 
 class KisDlgPaletteEditor : public QDialog
 {
@@ -25,8 +27,15 @@ public:
     int columnCount() const;
     int rowCount() const;
 
+private Q_SLOTS:
+    void slotDelGroup();
+    void slotAddGroup();
+    void slotToggleGlobal(int);
+
 private:
     QScopedPointer<Ui_WdgDlgPaletteEditor> m_ui;
+    QScopedPointer<QAction> m_actAddGroup;
+    QScopedPointer<QAction> m_actDelGroup;
     QPointer<KoColorSet> m_colorSet;
 };
 

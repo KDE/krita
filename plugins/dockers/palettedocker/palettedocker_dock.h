@@ -62,7 +62,7 @@ public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
 
 Q_SIGNALS:
-    void sigPaletteModified(const KoColorSet *);
+    void sigPaletteSelected(const KoColorSet *);
 
 private Q_SLOTS:
     void slotImportPalette();

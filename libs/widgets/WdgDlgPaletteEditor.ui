@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>469</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,65 +15,112 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QFrame" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayoutLeft">
-        <item>
-         <widget class="QLabel" name="labelName">
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEditName"/>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelFilename">
-          <property name="text">
-           <string>File name</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEditFilename"/>
-        </item>
-       </layout>
+       <widget class="QGroupBox" name="gbxPalette">
+        <property name="title">
+         <string>Palette settings</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="labelName">
+           <property name="text">
+            <string>Palette Name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditName"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelFilename">
+           <property name="text">
+            <string>File name</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditFilename"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QCheckBox" name="ckxGlobal">
+             <property name="text">
+              <string>Global</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="ckxReadOnly">
+             <property name="text">
+              <string>Read only</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnAddGroup">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Add a group</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayoutRight">
-        <item>
-         <widget class="QCheckBox" name="ckxReadOnly">
-          <property name="text">
-           <string>Read only</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="ckxGlobal">
-          <property name="text">
-           <string>Global</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayoutSpinBox">
-          <item>
-           <widget class="QSpinBox" name="spinBoxRow"/>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="spinBoxCol"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
+       <widget class="QGroupBox" name="gbxGroup">
+        <property name="title">
+         <string>Group settings</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QComboBox" name="cbxGroup"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelRowCount">
+           <property name="text">
+            <string>Row count</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBoxRow"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelColCount">
+           <property name="text">
+            <string>Column count</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBoxCol"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnDelGroup">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Delete this group</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>

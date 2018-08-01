@@ -129,7 +129,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     setLayout(d->mainLayout);
 
-    connect(d->paletteChooser, SIGNAL(sigPaletteModified(KoColorSet*)),
+    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)),
             SLOT(slotPaletteChoosen(KoColorSet*)));
     connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)),
             SLOT(slotColorSelectedByPalette(KoColor)));

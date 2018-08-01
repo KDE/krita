@@ -54,12 +54,13 @@ void KisPaletteDelegate::paint(QPainter *painter,
         QRect paintRect = kisGrowRect(option.rect, -borderWidth);
         painter->drawText(paintRect, name);
     } else {
+        QRect paintRect = option.rect;
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());
+            paintRect = kisGrowRect(option.rect, -borderWidth);
         } else {
             option.palette.background();
         }
-        QRect paintRect = kisGrowRect(option.rect, -borderWidth);
         QBrush brush = qvariant_cast<QBrush>(index.data(Qt::BackgroundRole));
         painter->fillRect(paintRect, brush);
     }

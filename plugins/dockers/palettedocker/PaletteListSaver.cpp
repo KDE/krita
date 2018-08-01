@@ -11,7 +11,7 @@ PaletteListSaver::PaletteListSaver(PaletteDockerDock *dockerDock, QObject *paren
     : QObject(parent)
     , m_dockerDock(dockerDock)
 {
-    connect(m_dockerDock, SIGNAL(sigPaletteModified(const KoColorSet*)),
+    connect(m_dockerDock, SIGNAL(sigPaletteSelected(const KoColorSet*)),
             SLOT(slotPaletteModified(const KoColorSet *)));
 }
 

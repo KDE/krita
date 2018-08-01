@@ -13,6 +13,8 @@
 
 #include <KisPaletteModel.h>
 
+class KisPaletteView;
+
 class KRITAWIDGETS_EXPORT KisPaletteComboBox : public QComboBox
 {
     Q_OBJECT
@@ -29,6 +31,7 @@ Q_SIGNALS:
 
 public /* methods */:
     void setPaletteModel(const KisPaletteModel *);
+    void setCompanionView(KisPaletteView *);
 
 private Q_SLOTS:
     void slotPaletteChanged();

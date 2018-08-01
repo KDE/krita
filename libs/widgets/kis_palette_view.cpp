@@ -55,10 +55,10 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     setItemDelegate(new KisPaletteDelegate(this));
 
-
     setShowGrid(true);
     setDropIndicatorShown(true);
     setDragEnabled(true);
+    setAcceptDrops(true);
     setDragDropMode(QAbstractItemView::InternalMove);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
@@ -83,12 +83,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotModifyEntry(QModelIndex)));
 
-    KConfigGroup cfg(KSharedConfig::openConfig()->group(""));
-    QPalette pal(palette());
-    // pal.setColor(QPalette::Base, cfg.getMDIBackgroundColor());
     setAutoFillBackground(true);
-    setPalette(pal);
-
 }
 
 KisPaletteView::~KisPaletteView()
@@ -254,7 +249,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
             lnGroupName->setText(groupName);
             if (dlg->exec() == KoDialog::Accepted) {
                 m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
-                m_d->model->colorSet()->save();
+                emit m_d->model->dataChanged(index, index);
             }
             //rename the group.
         } else {
@@ -277,6 +272,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
                 entry.setSpotColor(chkSpot->isChecked());
                 m_d->model->colorSet()->setEntry(entry, index.column(), index.row());
                 m_d->model->colorSet()->save();
+                emit m_d->model->dataChanged(index, index);
             }
         }
 

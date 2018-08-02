@@ -64,7 +64,6 @@
 class KisSafeProjection {
 public:
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
-//        QMutexLocker locker(&m_lock);
         QReadLocker rl(&m_rwLock);
 
         if (!m_reusablePaintDevice) {
@@ -89,7 +88,6 @@ public:
     }
 
     void tryCopyFrom(const KisSafeProjection &rhs) {
-//        QMutexLocker locker(&m_lock);
         QWriteLocker l(&m_rwLock);
 
         if (!rhs.m_projection) return;
@@ -104,7 +102,6 @@ public:
     }
 
     void freeDevice() {
-//        QMutexLocker locker(&m_lock);
         QWriteLocker l(&m_rwLock);
         m_projection = 0;
         if(m_reusablePaintDevice) {
@@ -113,7 +110,6 @@ public:
     }
 
 private:
-//    QMutex m_lock;
     QReadWriteLock m_rwLock;
     KisPaintDeviceSP m_projection;
     KisPaintDeviceSP m_reusablePaintDevice;

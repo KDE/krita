@@ -78,6 +78,7 @@ public:
         KIS_SAFE_ASSERT_RECOVER_RETURN(item);
 
         const QString id = item->id();
+
         KIS_SAFE_ASSERT_RECOVER_NOOP(!m_aliases.contains(id));
 
         if (m_hash.contains(id)) {

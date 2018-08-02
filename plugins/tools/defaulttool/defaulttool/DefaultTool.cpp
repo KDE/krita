@@ -851,6 +851,7 @@ bool DefaultTool::moveSelection(int direction, Qt::KeyboardModifiers modifiers)
 
 void DefaultTool::keyPressEvent(QKeyEvent *event)
 {
+
     KoInteractionTool::keyPressEvent(event);
     if (currentStrategy() == 0) {
         switch (event->key()) {
@@ -874,6 +875,7 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
             return;
         }
     }
+
 }
 
 void DefaultTool::repaintDecorations()

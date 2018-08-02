@@ -21,6 +21,7 @@
 #include "SvgTextTool.h"
 #include "KoSvgTextShape.h"
 #include "SvgTextChangeCommand.h"
+#include "KoToolManager.h"
 
 #include <QLabel>
 #include <QToolButton>
@@ -217,11 +218,20 @@ void SvgTextTool::showEditor()
         m_editor = new SvgTextEditor();
         m_editor->setWindowModality(Qt::ApplicationModal);
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*, QString, QString)), SLOT(textUpdated(KoSvgTextShape*, QString, QString)));
+        connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
+
     }
 
     m_editor->setShape(shape);
     m_editor->show();
     m_editor->activateWindow();
+}
+
+void SvgTextTool::slotTextEditorClosed()
+{
+    // change tools to the shape selection tool when we close the text editor to allow moving and further editing of the object.
+    // most of the time when we edit text, the shape selection tool is where we left off anyway
+    KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
 void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs)

@@ -534,17 +534,16 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     return r;
 }
 
-Node *Node::mergeDown()
+Node* Node::mergeDown()
 {
     if (!d->node) return 0;
     if (!qobject_cast<KisLayer*>(d->node.data())) return 0;
-    if (!d->node->nextSibling()) return 0;
-    if (!d->node->parent()) return 0;
+    if (!d->node->prevSibling()) return 0;
 
-    int index = d->node->parent()->index(d->node->prevSibling());
     d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     d->image->waitForDone();
-    return new Node(d->image, d->node->parent()->at(index));
+
+    return new Node(d->image, d->node->prevSibling());
 }
 
 void Node::scaleNode(int width, int height, QString strategy)

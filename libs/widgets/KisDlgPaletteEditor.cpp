@@ -38,12 +38,28 @@ void KisDlgPaletteEditor::setPalette(KoColorSet *colorSet)
     if (m_colorSet.isNull()) {
         return;
     }
+    if (!m_original.isNull()) {
+        delete m_original.data();
+    }
+    m_original.reset(new OriginalPaletteInfo);
     m_ui->lineEditName->setText(m_colorSet->name());
+    m_original->name = m_colorSet->name();
     m_ui->lineEditFilename->setText(m_colorSet->filename());
+    m_original->filename = m_colorSet->filename();
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
-    m_ui->spinBoxRow->setValue(m_colorSet->rowCount());
+    m_original->columnCount = m_colorSet->columnCount();
     m_ui->ckxGlobal->setCheckState(m_colorSet->isGlobal() ? Qt::Checked : Qt::Unchecked);
+    m_original->isGlobal = m_colorSet->isGlobal();
     m_ui->ckxReadOnly->setCheckState(!m_colorSet->isEditable() ? Qt::Checked : Qt::Unchecked);
+    m_original->isReadOnly = !m_colorSet->isEditable();
+
+    for (const QString & groupName : m_colorSet->getGroupNames()) {
+        KisSwatchGroup *group = m_colorSet->getGroup(groupName);
+        m_groups[groupName] = GroupInfoType(group->name(), group->rowCount());
+        m_original->groups[groupName] = GroupInfoType(group->name(), group->rowCount());
+    }
+
+    m_ui->spinBoxRow->setValue(m_colorSet->rowCount());
 
     if (!m_colorSet->isEditable()) {
         m_ui->lineEditName->setEnabled(false);
@@ -80,6 +96,22 @@ int KisDlgPaletteEditor::rowCount() const
 bool KisDlgPaletteEditor::isGlobal() const
 {
     return m_ui->ckxGlobal->checkState() == Qt::Checked;
+}
+
+bool KisDlgPaletteEditor::isReadOnly() const
+{
+    return m_ui->ckxReadOnly->checkState() == Qt::Checked;
+}
+
+bool KisDlgPaletteEditor::isModified() const
+{
+    Q_ASSERT(!m_original.isNull());
+    return m_original->isReadOnly != isReadOnly() ||
+            m_original->isGlobal != isGlobal() ||
+            m_original->name != name() ||
+            m_original->filename != filename() ||
+            m_original->columnCount != columnCount() ||
+            m_original->groups != m_groups;
 }
 
 void KisDlgPaletteEditor::slotAddGroup()

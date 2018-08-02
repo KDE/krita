@@ -4,6 +4,7 @@
 #include <QSet>
 #include <QStringList>
 #include <QFile>
+#include <QMessageBox>
 
 #include <kis_icon.h>
 
@@ -113,22 +114,28 @@ void KisPaletteListWidget::slotModify()
     KisDlgPaletteEditor dlg;
     KoColorSet *colorSet = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
     dlg.setPalette(colorSet);
-    if (dlg.exec() == QDialog::Accepted){
-        if (!colorSet) { return; }
-        if (colorSet->name() != dlg.name() ||
-                colorSet->columnCount() != dlg.columnCount() ||
-                colorSet->isGlobal() != dlg.isGlobal()) {
-            colorSet->setName(dlg.name());
-            colorSet->setColumnCount(dlg.columnCount());
-            if (dlg.isGlobal()) {
-                setPaletteGlobal(colorSet);
-            } else {
-                setPaletteNonGlobal(colorSet);
-            }
-            emit sigPaletteSelected(colorSet); // to update elements in the docker
-            emit sigPaletteListChanged();
+    if (dlg.exec() != QDialog::Accepted){ return; }
+    if (!colorSet) { return; }
+    if (!dlg.isModified()) { return; }
+    colorSet->setName(dlg.name());
+    colorSet->setColumnCount(dlg.columnCount());
+    if (dlg.isGlobal()) {
+        setPaletteGlobal(colorSet);
+    } else {
+        setPaletteNonGlobal(colorSet);
+    }
+    for (const KoResource *r : m_d->rAdapter->resources()) {
+        if (r != colorSet && r->filename() == dlg.filename()) {
+            QMessageBox msgFilenameDuplicate;
+            msgFilenameDuplicate.setWindowTitle(i18n("Duplicate filename"));
+            msgFilenameDuplicate.setText(i18n("Duplicate filename! Palette not saved."));
+            msgFilenameDuplicate.exec();
+            return;
         }
     }
+    colorSet->setFilename(dlg.filename());
+    emit sigPaletteSelected(colorSet); // to update elements in the docker
+    emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotImport()

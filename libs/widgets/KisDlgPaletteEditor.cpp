@@ -27,7 +27,6 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
 
     connect(m_actAddGroup.data(), SIGNAL(triggered(bool)), SLOT(slotAddGroup()));
     connect(m_actDelGroup.data(), SIGNAL(triggered(bool)), SLOT(slotDelGroup()));
-    connect(m_ui->ckxGlobal, SIGNAL(stateChanged(int)), SLOT(slotToggleGlobal(int)));
 }
 
 KisDlgPaletteEditor::~KisDlgPaletteEditor()
@@ -78,6 +77,11 @@ int KisDlgPaletteEditor::rowCount() const
     return m_ui->spinBoxRow->value();
 }
 
+bool KisDlgPaletteEditor::isGlobal() const
+{
+    return m_ui->ckxGlobal->checkState() == Qt::Checked;
+}
+
 void KisDlgPaletteEditor::slotAddGroup()
 {
     qDebug() << "Adding a group";
@@ -86,33 +90,4 @@ void KisDlgPaletteEditor::slotAddGroup()
 void KisDlgPaletteEditor::slotDelGroup()
 {
     qDebug() << "Deleting current group";
-}
-
-void KisDlgPaletteEditor::slotToggleGlobal(int state)
-{
-    switch (state) {
-    case Qt::Checked: {
-        KoResourceServer<KoColorSet> * rserver = KoResourceServerProvider::instance()->paletteServer();
-
-        QString saveLocation = rserver->saveLocation();
-        QString name = m_colorSet->filename();
-        qDebug() << saveLocation;
-        qDebug() << name;
-
-        QFileInfo fileInfo(saveLocation + name + m_colorSet->defaultFileExtension());
-
-        int i = 1;
-        while (fileInfo.exists()) {
-            fileInfo.setFile(saveLocation + name + QString::number(i) + m_colorSet->defaultFileExtension());
-            i++;
-        }
-        m_colorSet->setFilename(fileInfo.filePath());
-        m_colorSet->setIsGlobal(false);
-        break;
-    }
-    case Qt::Unchecked:
-        break;
-    default:
-        break;
-    }
 }

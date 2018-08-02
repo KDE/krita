@@ -64,13 +64,15 @@ KoColorSet::KoColorSet(const QString& filename)
 {
     if (!filename.isEmpty()) {
         setValid(true);
-        setIsEditable(false);
+        QFileInfo f(filename);
+        qDebug() << filename << f.isWritable() << "writable";
+        setIsEditable(f.isWritable());
     }
 }
 
 /// Create an copied palette
 KoColorSet::KoColorSet(const KoColorSet& rhs)
-    : QObject(0)
+    : QObject(Q_NULLPTR)
     , KoResource(rhs)
     , d(new Private(this))
 {
@@ -111,17 +113,16 @@ bool KoColorSet::save()
 {
     if (d->isGlobal) {
         // save to resource dir
-        /*
         QFile file(filename());
         if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
             return false;
         }
         saveToDevice(&file);
         file.close();
-        */
         return true;
+    } else {
+        return true; // palette is not global, but still indicate that it's saved
     }
-    return true; // is not global
 }
 
 bool KoColorSet::saveToDevice(QIODevice *dev) const
@@ -433,6 +434,15 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
 
 QString KoColorSet::Private::GLOBAL_GROUP_NAME = QString();
 
+KoColorSet::Private::Private(KoColorSet *a_colorSet)
+    : colorSet(a_colorSet)
+    , isGlobal(true)
+    , isEditable(false)
+{
+    groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
+    groupNames.append(GLOBAL_GROUP_NAME);
+}
+
 KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileName, const QByteArray &ba)
 {
     QFileInfo fi(fileName);
@@ -594,14 +604,6 @@ quint16 KoColorSet::Private::readShort(QIODevice *io) {
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
     return qFromBigEndian(val);
-}
-
-KoColorSet::Private::Private(KoColorSet *a_colorSet)
-    : colorSet(a_colorSet)
-    , isGlobal(true)
-{
-    groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
-    groupNames.append(GLOBAL_GROUP_NAME);
 }
 
 bool KoColorSet::Private::init()

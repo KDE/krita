@@ -26,11 +26,11 @@ public:
     QString filename() const;
     int columnCount() const;
     int rowCount() const;
+    bool isGlobal() const;
 
 private Q_SLOTS:
     void slotDelGroup();
     void slotAddGroup();
-    void slotToggleGlobal(int);
 
 private:
     QScopedPointer<Ui_WdgDlgPaletteEditor> m_ui;

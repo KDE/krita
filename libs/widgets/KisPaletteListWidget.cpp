@@ -2,6 +2,8 @@
 #include <QScopedPointer>
 #include <QGridLayout>
 #include <QSet>
+#include <QStringList>
+#include <QFile>
 
 #include <kis_icon.h>
 
@@ -82,17 +84,7 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 
 void KisPaletteListWidget::slotAdd()
 {
-    QString filename = "new_palette_";
-    QSet<QString> nameSet;
-    QList<KoResource*> rlist = m_d->rAdapter->resources();
-    for (const KoResource *r : rlist) {
-        nameSet.insert(r->filename());
-    }
-    int i = 0;
-    while (nameSet.contains(filename + QString::number(i) + ".kpl")) {
-        i++;
-    }
-    KoColorSet *newColorSet = new KoColorSet(filename + QString::number(i) + ".kpl");
+    KoColorSet *newColorSet = new KoColorSet(newPaletteFileName());
     newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
     newColorSet->setIsEditable(true);
@@ -124,9 +116,15 @@ void KisPaletteListWidget::slotModify()
     if (dlg.exec() == QDialog::Accepted){
         if (!colorSet) { return; }
         if (colorSet->name() != dlg.name() ||
-                colorSet->columnCount() != dlg.columnCount()) {
+                colorSet->columnCount() != dlg.columnCount() ||
+                colorSet->isGlobal() != dlg.isGlobal()) {
             colorSet->setName(dlg.name());
             colorSet->setColumnCount(dlg.columnCount());
+            if (dlg.isGlobal()) {
+                setPaletteGlobal(colorSet);
+            } else {
+                setPaletteNonGlobal(colorSet);
+            }
             emit sigPaletteSelected(colorSet); // to update elements in the docker
             emit sigPaletteListChanged();
         }
@@ -141,6 +139,50 @@ void KisPaletteListWidget::slotImport()
 void KisPaletteListWidget::slotExport()
 {
 
+}
+
+void KisPaletteListWidget::setPaletteGlobal(KoColorSet *colorSet)
+{
+    if (QPointer<KoColorSet>(colorSet).isNull()) { return; }
+    KoResourceServer<KoColorSet> *rserver = KoResourceServerProvider::instance()->paletteServer();
+
+    QString saveLocation = rserver->saveLocation();
+    QString name = colorSet->filename();
+    qDebug() << saveLocation;
+    qDebug() << name;
+
+    QFileInfo fileInfo(saveLocation + name);
+
+    colorSet->setFilename(fileInfo.filePath());
+    qDebug() << fileInfo.filePath();
+    colorSet->setIsGlobal(true);
+    qDebug() << colorSet->save();
+}
+
+void KisPaletteListWidget::setPaletteNonGlobal(KoColorSet *colorSet)
+{
+    if (QPointer<KoColorSet>(colorSet).isNull()) { return; }
+    QString filename = newPaletteFileName();
+    QFile::remove(colorSet->filename());
+    colorSet->setFilename(filename);
+    colorSet->setIsGlobal(false);
+}
+
+QString KisPaletteListWidget::newPaletteFileName()
+{
+    KoColorSet tmpColorSet;
+    QString result = "new_palette_";
+    QSet<QString> nameSet;
+    QList<KoResource*> rlist = m_d->rAdapter->resources();
+    for (const KoResource *r : rlist) {
+        nameSet.insert(r->filename());
+    }
+    int i = 0;
+    while (nameSet.contains(result + QString::number(i) + tmpColorSet.defaultFileExtension())) {
+        i++;
+    }
+    result = result + QString::number(i) + tmpColorSet.defaultFileExtension();
+    return result;
 }
 
 /************************* KisPaletteListWidgetPrivate **********************/

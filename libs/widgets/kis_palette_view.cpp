@@ -44,7 +44,7 @@ int KisPaletteView::MINROWHEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
-    bool allowPaletteModification;
+    bool allowPaletteModification; // if modification is allowed from this widget
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
@@ -68,7 +68,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
      * after the bar is added, the view shrinks to the bar, and this makes it
      * no longer need the bar any more, and the bar is removed again
      */
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     // set the size of swatches
     horizontalHeader()->setVisible(false);

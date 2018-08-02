@@ -1,12 +1,14 @@
 #ifndef KISPALETTECHOOSER_H
 #define KISPALETTECHOOSER_H
 
+#include <QString>
 #include <QWidget>
 #include <ui_WdgPaletteListWidget.h>
 
-#include "KoColorSet.h"
-
 #include "kritawidgets_export.h"
+
+class KoResource;
+class KoColorSet;
 
 class KisPaletteListWidgetPrivate;
 
@@ -19,11 +21,15 @@ public:
 
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSet*);
+    void sigPaletteModified(KoColorSet*);
     void sigPaletteListChanged();
 
 public Q_SLOTS:
 
-private:
+private /* methods */:
+    void setPaletteGlobal(KoColorSet *colorSet);
+    void setPaletteNonGlobal(KoColorSet *colorSet);
+    QString newPaletteFileName();
 
 private Q_SLOTS:
     void slotPaletteResourceSelected(KoResource *);

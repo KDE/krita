@@ -22,7 +22,7 @@
 
 KoMultiPathPointJoinCommand::KoMultiPathPointJoinCommand(const KoPathPointData &pointData1,
                                                          const KoPathPointData &pointData2,
-                                                         KoShapeBasedDocumentBase *controller,
+                                                         KoShapeControllerBase *controller,
                                                          KoSelection *selection,
                                                          KUndo2Command *parent)
     : KoMultiPathPointMergeCommand(pointData1, pointData2, controller, selection, parent)

@@ -51,6 +51,7 @@
 #include "kis_shape_selection.h"
 #include "kis_default_bounds.h"
 #include "kis_transform_mask_params_interface.h"
+#include "kis_shape_controller.h"
 
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
@@ -65,7 +66,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
     return pixelSelection;
 }
 
-KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP image)
+KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP image, KoShapeControllerBase *shapeController)
 {
     KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
     KoPathShape* path = new KoPathShape();
@@ -76,7 +77,7 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(image, vectorSelection);
+    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
     shapeSelection->addShape(path);
     vectorSelection->setShapeSelection(shapeSelection);
 
@@ -92,7 +93,6 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     KisImageWSP image = new KisImage(0, 1024, 1024, KoColorSpaceRegistry::instance()->rgb8(), "test for roundtrip");
 
     KisDocument *doc = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
-
     doc->setCurrentImage(image);
     doc->documentInfo()->setAboutInfo("title", image->objectName());
 
@@ -132,7 +132,7 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     KisAdjustmentLayerSP adjustmentLayer1 = new KisAdjustmentLayer(image, "adjustmentLayer1", kfc, pixelSelection);
     kfc = 0; // kfc cannot be shared!
 
-    KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image);
+    KisSelectionSP vectorSelection = createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController());
     kfc = KisFilterRegistry::instance()->get("pixelize")->defaultConfiguration();
     KisAdjustmentLayerSP adjustmentLayer2 = new KisAdjustmentLayer(image, "adjustmentLayer2", kfc, vectorSelection);
     kfc = 0; // kfc cannot be shared!
@@ -177,7 +177,7 @@ KisDocument* createCompleteDocument(bool shouldMaskToShapeLayer = false)
     filterMask2->setFilter(kfc);
     kfc = 0; // kfc cannot be shared!
 
-    filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image));
+    filterMask2->setSelection(createVectorSelection(paintLayer2->paintDevice(), image, doc->shapeController()));
     image->addNode(filterMask2, paintLayer2);
 
     KisTransparencyMaskSP transparencyMask1 = new KisTransparencyMask();

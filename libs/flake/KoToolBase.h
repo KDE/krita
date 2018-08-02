@@ -34,7 +34,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 
 class QAction;
 class QKeyEvent;

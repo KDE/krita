@@ -190,7 +190,7 @@ krita_add_broken_unit_test(kis_transform_mask_test.cpp
     TEST_NAME krita-image-KisTransformMaskTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
-krita_add_broken_unit_test(kis_histogram_test.cpp
+ecm_add_test(kis_histogram_test.cpp
     TEST_NAME krita-image-KisHistogramTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
@@ -230,7 +230,7 @@ krita_add_broken_unit_test(kis_image_animation_interface_test.cpp
     TEST_NAME krita-image-ImageAnimationInterface-Test
     LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
-krita_add_broken_unit_test(kis_onion_skin_compositor_test.cpp
+ecm_add_test(kis_onion_skin_compositor_test.cpp
     TEST_NAME krita-image-OnionSkinCompositor-Test
     LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 

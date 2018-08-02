@@ -22,7 +22,7 @@
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoPathShape.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include <kis_assert.h>
 
 #include <klocalizedstring.h>
@@ -30,7 +30,7 @@
 class KoShapeUnclipCommand::Private
 {
 public:
-    Private(KoShapeBasedDocumentBase *c)
+    Private(KoShapeControllerBase *c)
             : controller(c), executed(false) {
     }
 
@@ -80,12 +80,12 @@ public:
     QList<KoShapeContainer*> clipPathParents;
 
     // TODO: damn! this is not a controller, this is a document! Needs refactoring!
-    KoShapeBasedDocumentBase *controller;
+    KoShapeControllerBase *controller;
 
     bool executed;
 };
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent)
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip = shapes;
@@ -96,7 +96,7 @@ KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller,
     setText(kundo2_i18n("Unclip Shape"));
 }
 
-KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeBasedDocumentBase *controller, KoShape *shape, KUndo2Command *parent)
+KoShapeUnclipCommand::KoShapeUnclipCommand(KoShapeControllerBase *controller, KoShape *shape, KUndo2Command *parent)
         : KUndo2Command(parent), d(new Private(controller))
 {
     d->shapesToUnclip.append(shape);
@@ -122,7 +122,7 @@ void KoShapeUnclipCommand::redo()
 
     const uint clipPathCount = d->clipPathShapes.count();
     for (uint i = 0; i < clipPathCount; ++i) {
-        // the parent has to be there when it is added to the KoShapeBasedDocumentBase
+        // the parent has to be there when it is added to the KoShapeControllerBase
         if (d->clipPathParents.at(i))
             d->clipPathParents.at(i)->addShape(d->clipPathShapes[i]);
         d->controller->addShape(d->clipPathShapes[i]);

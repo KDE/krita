@@ -26,6 +26,7 @@
 #include "kis_histogram.h"
 #include "kis_paint_layer.h"
 #include "kis_types.h"
+#include "kistest.h"
 
 void KisHistogramTest::testCreation()
 {
@@ -41,9 +42,9 @@ void KisHistogramTest::testCreation()
             KisHistogram test(dev, QRect(0, 0, 100, 100), producer, LINEAR);
             Q_UNUSED(test);
         }
-        delete producer;
+        //delete producer;
     }
 }
 
 
-QTEST_MAIN(KisHistogramTest)
+KISTEST_MAIN(KisHistogramTest)

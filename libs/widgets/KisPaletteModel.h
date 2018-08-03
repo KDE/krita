@@ -31,6 +31,7 @@
 #include <QScopedPointer>
 
 class KoColorSet;
+class KisPaletteView;
 
 /**
  * @brief The KisPaletteModel class
@@ -122,13 +123,6 @@ public /* methods */:
     KoColorSet* colorSet() const;
 
     /**
-     * Installs a display renderer object for a palette that will
-     * convert the KoColor to the displayable QColor. Default is the
-     * dumb renderer.
-     */
-    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
-
-    /**
      * @brief colorSetEntryFromIndex
      * This gives the colorset entry for the given table model index.
      * @param index the QModelIndex
@@ -148,11 +142,20 @@ private /* methods */:
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
     int rowNumberInGroup(int rowInModel) const;
     QString groupNameByIndex(const QModelIndex &index) const;
+    /**
+     * Installs a display renderer object for a palette that will
+     * convert the KoColor to the displayable QColor. Default is the
+     * dumb renderer.
+     */
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+
 
 private /* member variables */:
     QPointer<KoColorSet> m_colorSet;
     QPointer<const KoColorDisplayRendererInterface> m_displayRenderer;
     QMap<int, QString> m_groupNameRows;
+
+friend class KisPaletteView;
 };
 
 #endif

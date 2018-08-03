@@ -26,20 +26,20 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QMenu>
-#include <QtMath> // qFloor
 
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
 #include <kis_icon_utils.h>
 #include <KoDialog.h>
+#include <KoColorDisplayRendererInterface.h>
 
 #include "KisPaletteDelegate.h"
 #include "KisPaletteModel.h"
 #include "kis_color_button.h"
 #include <KisSwatch.h>
 
-int KisPaletteView::MINROWHEIGHT = 10;
+int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 
 struct KisPaletteView::Private
 {
@@ -74,11 +74,9 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     horizontalHeader()->setVisible(false);
     verticalHeader()->setVisible(false);
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    horizontalHeader()->setMinimumSectionSize(MINROWHEIGHT);
-    horizontalHeader()->setMaximumSectionSize(MINROWHEIGHT);
+    horizontalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader()->setMinimumSectionSize(MINROWHEIGHT);
-    verticalHeader()->setDefaultSectionSize(MINROWHEIGHT);
+    verticalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
 
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotModifyEntry(QModelIndex)));
@@ -214,6 +212,9 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     }
     m_d->model = model;
     setModel(model);
+    slotAdditionalGuiUpdate();
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+            SLOT(slotAdditionalGuiUpdate()));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -224,11 +225,6 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 void KisPaletteView::setAllowModification(bool allow)
 {
     m_d->allowPaletteModification = allow;
-}
-
-void KisPaletteView::wheelEvent(QWheelEvent *event)
-{
-    QTableView::wheelEvent(event);
 }
 
 void KisPaletteView::modifyEntry(QModelIndex index)
@@ -289,8 +285,8 @@ void KisPaletteView::slotModifyEntry(const QModelIndex &index)
 void KisPaletteView::slotResizeVerticalHeader(int, int, int newSize)
 {
     verticalHeader()->setDefaultSectionSize(newSize);
-    verticalHeader()->setMaximumSectionSize(newSize);
     verticalHeader()->resizeSections(QHeaderView::Fixed);
+    slotAdditionalGuiUpdate();
 }
 
 void KisPaletteView::removeSelectedEntry()
@@ -299,4 +295,20 @@ void KisPaletteView::removeSelectedEntry()
         return;
     }
     m_d->model->removeEntry(currentIndex());
+}
+
+void KisPaletteView::slotAdditionalGuiUpdate()
+{
+    for (int groupNameRowNumber : m_d->model->m_groupNameRows.keys()) {
+        if (groupNameRowNumber == -1) { continue; }
+        setSpan(groupNameRowNumber, 0, 1, m_d->model->columnCount());
+        setRowHeight(groupNameRowNumber, fontMetrics().lineSpacing() + 20);
+        verticalHeader()->resizeSection(groupNameRowNumber, fontMetrics().lineSpacing() + 20);
+    }
+}
+
+void KisPaletteView::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    Q_ASSERT(m_d->model);
+    m_d->model->setDisplayRenderer(displayRenderer);
 }

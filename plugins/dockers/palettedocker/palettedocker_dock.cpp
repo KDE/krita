@@ -156,7 +156,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
     setEnabled(canvas != 0);
     if (canvas) {
         KisCanvas2 *cv = qobject_cast<KisCanvas2*>(canvas);
-        m_model->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
+        m_ui->paletteView->setDisplayRenderer(cv->displayColorConverter()->displayRendererInterface());
     }
     m_canvas = static_cast<KisCanvas2*>(canvas);
 }
@@ -164,8 +164,8 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
 void PaletteDockerDock::unsetCanvas()
 {
     setEnabled(false);
-    m_model->setDisplayRenderer(0);
-    m_canvas = 0;
+    m_ui->paletteView->setDisplayRenderer(Q_NULLPTR);
+    m_canvas = Q_NULLPTR;
 }
 
 void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)

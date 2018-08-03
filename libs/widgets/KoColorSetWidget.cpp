@@ -101,7 +101,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->paletteView = new KisPaletteView(this);
     KisPaletteModel *paletteModel = new KisPaletteModel(d->paletteView);
     d->paletteView->setPaletteModel(paletteModel);
-    paletteModel->setDisplayRenderer(d->displayRenderer);
+    d->paletteView->setDisplayRenderer(d->displayRenderer);
 
     d->paletteChooser = new KisPaletteListWidget(this);
     d->paletteChooserButton = new KisPopupButton(this);

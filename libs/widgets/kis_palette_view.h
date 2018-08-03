@@ -33,12 +33,13 @@
 
 class KisPaletteModel;
 class QWheelEvent;
+class KoColorDisplayRendererInterface;
 
 class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 {
     Q_OBJECT
 private:
-    static int MINROWHEIGHT;
+    static int MININUM_ROW_HEIGHT;
 public:
     KisPaletteView(QWidget *parent = 0);
     ~KisPaletteView() override;
@@ -54,6 +55,7 @@ public:
      * the palette when the palette is intended to be a list of items.
      */
     void setAllowModification(bool allow);
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
     /**
      * @brief setCrossedKeyword
@@ -98,10 +100,10 @@ public Q_SLOTS:
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
 
 private Q_SLOTS:
     void slotResizeVerticalHeader(int, int, int newSize);
+    void slotAdditionalGuiUpdate();
 
 private:
 

@@ -89,13 +89,7 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
     KisSwatchGroup *group = Q_NULLPTR;
-    int groupNameRow = -1;
-    for (auto it = m_groupNameRows.keys().rbegin(); it != m_groupNameRows.keys().rend(); it++) {
-        if (*it <= row) {
-            groupNameRow = *it;
-            break;
-        }
-    }
+    int groupNameRow = row - rowNumberInGroup(row) - 1;
     group = m_colorSet->getGroup(m_groupNameRows[groupNameRow]);
     Q_ASSERT(group);
     return createIndex(row, column, group);
@@ -150,7 +144,9 @@ bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
         m_colorSet->add(entry, groupName);
         endInsertRows();
     } else {
+        beginResetModel();
         m_colorSet->add(entry, groupName);
+        endResetModel();
     }
     m_colorSet->save();
     return true;
@@ -159,14 +155,15 @@ bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
     if (qvariant_cast<bool>(data(index, IsGroupNameRole))==false) {
-        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(), rowNumberInGroup(index.row()));
+        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(),
+                                                                           rowNumberInGroup(index.row()));
     } else {
-        QString groupName = groupNameByIndex(index);
-        beginRemoveRows(QModelIndex(),
-                        index.row(),
-                        index.row() + m_colorSet->getGroup(groupName)->rowCount() + 1);
+        beginResetModel();
+        int groupNameRow = index.row() - rowNumberInGroup(index.row()) - 1;
+        QString groupName = m_groupNameRows[groupNameRow];
         m_colorSet->removeGroup(groupName, keepColors);
-        endRemoveRows();
+        m_groupNameRows.remove(groupNameRow);
+        endResetModel();
     }
     return true;
 }
@@ -476,9 +473,4 @@ QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 {
     KisSwatchGroup::SwatchInfo info = colorSet()->getClosestColorInfo(compare);
     return createIndex(info.row, info.column, colorSet()->getGroup(info.group));
-}
-
-QString KisPaletteModel::groupNameByIndex(const QModelIndex &index) const
-{
-    return m_groupNameRows[rowNumberInGroup(index.row())];
 }

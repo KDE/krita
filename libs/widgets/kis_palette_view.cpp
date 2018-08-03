@@ -78,7 +78,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
 
-    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotResizeVerticalHeader(int,int,int)));
+    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotHorizontalHeaderResized(int,int,int)));
     connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotModifyEntry(QModelIndex)));
 
     setAutoFillBackground(true);
@@ -215,6 +215,8 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     slotAdditionalGuiUpdate();
     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
             SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(modelReset()),
+            SLOT(slotAdditionalGuiUpdate()));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -282,11 +284,16 @@ void KisPaletteView::slotModifyEntry(const QModelIndex &index)
     modifyEntry(index);
 }
 
-void KisPaletteView::slotResizeVerticalHeader(int, int, int newSize)
+void KisPaletteView::slotHorizontalHeaderResized(int, int, int newSize)
+{
+    resizeRows(newSize);
+    slotAdditionalGuiUpdate();
+}
+
+void KisPaletteView::resizeRows(int newSize)
 {
     verticalHeader()->setDefaultSectionSize(newSize);
     verticalHeader()->resizeSections(QHeaderView::Fixed);
-    slotAdditionalGuiUpdate();
 }
 
 void KisPaletteView::removeSelectedEntry()
@@ -299,6 +306,8 @@ void KisPaletteView::removeSelectedEntry()
 
 void KisPaletteView::slotAdditionalGuiUpdate()
 {
+    clearSpans();
+    resizeRows(verticalHeader()->defaultSectionSize());
     for (int groupNameRowNumber : m_d->model->m_groupNameRows.keys()) {
         if (groupNameRowNumber == -1) { continue; }
         setSpan(groupNameRowNumber, 0, 1, m_d->model->columnCount());

@@ -309,23 +309,14 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
     if (keepColors) {
         // put all colors directly below global
         int startingRow = d->groups[GLOBAL_GROUP_NAME].rowCount();
-        for (int x = 0; x < d->groups[groupName].columnCount(); x++) {
-            for (int y = 0; y < d->groups[groupName].rowCount(); y++) {
-                if (d->groups[groupName].checkEntry(x, y)) {
-                    d->groups[GLOBAL_GROUP_NAME].setEntry(d->groups[groupName].getEntry(x, y),
-                                       x,
-                                       y + startingRow);
-                }
-            }
+        for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
+            d->groups[GLOBAL_GROUP_NAME].setEntry(info.swatch,
+                                                  info.column,
+                                                  info.row + startingRow);
         }
     }
 
-    for (int n = 0; n<d->groupNames.size(); n++) {
-        if (d->groupNames.at(n) == groupName) {
-            d->groupNames.removeAt(n);
-        }
-    }
-
+    d->groupNames.removeAt(d->groupNames.indexOf(groupName));
     d->groups.remove(groupName);
     return true;
 }
@@ -1530,8 +1521,7 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
             int columnNumber = positionEle.attribute("column").toInt();
             if (columnNumber < 0 ||
                     columnNumber >= group->columnCount() ||
-                    rowNumber < 0 ||
-                    rowNumber >= group->rowCount()
+                    rowNumber < 0
                     ) {
                 warnPigment << "Swatch" << entry.name()
                             << "of palette" << colorSet->name()

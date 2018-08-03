@@ -141,7 +141,7 @@ private /* methods */:
     QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
     int rowNumberInGroup(int rowInModel) const;
-    QString groupNameByIndex(const QModelIndex &index) const;
+    int groupNameRowForIndex(const QModelIndex &);
     /**
      * Installs a display renderer object for a palette that will
      * convert the KoColor to the displayable QColor. Default is the

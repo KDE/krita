@@ -26,13 +26,16 @@ quint32 KisSwatchGroup::DEFAULT_ROW_COUNT = 20;
 
 KisSwatchGroup::KisSwatchGroup()
     : m_colorMatrix(DEFAULT_COLUMN_COUNT)
-    , m_rowCount(DEFAULT_ROW_COUNT)
     , m_colorCount(0)
+    , m_rowCount(DEFAULT_ROW_COUNT)
 { }
 
 void KisSwatchGroup::setEntry(const KisSwatch &e, int x, int y)
 {
-    Q_ASSERT(x < m_rowCount && x < m_colorMatrix.size() && x >= 0 && y >= 0);
+    Q_ASSERT(x < m_colorMatrix.size() && x >= 0 && y >= 0);
+    if (y >= m_rowCount) {
+        setRowCount(y);
+    }
     if (!checkEntry(x, y)) {
         m_colorCount++;
     }

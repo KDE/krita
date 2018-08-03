@@ -102,10 +102,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 private Q_SLOTS:
-    void slotResizeVerticalHeader(int, int, int newSize);
+    void slotHorizontalHeaderResized(int, int, int newSize);
     void slotAdditionalGuiUpdate();
 
 private:
+    void resizeRows(int newSize);
 
 private:
     struct Private;

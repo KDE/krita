@@ -24,7 +24,7 @@
 #include "DefaultTool.h"
 #include "DefaultToolGeometryWidget.h"
 #include "DefaultToolTabbedWidget.h"
-#include "SelectionDecorator.h"
+
 #include "ShapeMoveStrategy.h"
 #include "ShapeRotateStrategy.h"
 #include "ShapeShearStrategy.h"
@@ -700,12 +700,12 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
     if (selection) {
-        SelectionDecorator decorator(canvas()->resourceManager());
-        decorator.setSelection(selection);
-        decorator.setHandleRadius(handleRadius());
-        decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-        decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
-        decorator.paint(painter, converter);
+        decorator = new SelectionDecorator(canvas()->resourceManager(), dynamic_cast<KisCanvas2*>(canvas())->coordinatesConverter() );
+        decorator->setSelection(selection);
+        decorator->setHandleRadius(handleRadius());
+        decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
+        decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+        decorator->paint(painter, converter);
     }
 
     KoInteractionTool::paint(painter, converter);
@@ -768,6 +768,8 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
         // there used to be guides... :'''(
     }
 
+    isSelectingTextEditorButton(event->point);
+
     updateCursor();
 }
 
@@ -794,6 +796,9 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     updateCursor();
+
+    // updates the whole canvas. This makes sure the decorations that are shown are refreshed
+    canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -924,6 +929,62 @@ KoSelection *DefaultTool::koSelection() const
     return canvas()->selectedShapesProxy()->selection();
 }
 
+
+bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
+{
+    if (canvas()) {
+    } else {
+         return false;
+    }
+
+
+    // calculate position for textEditorBoxButton
+    KoSelection *selection = koSelection();
+    const KoViewConverter *converter = canvas()->viewConverter();
+
+    if (!selection || !selection->count() || !converter) {
+        return false;
+    }
+
+    QRectF outline    = selection->boundingRect();
+
+    QPointF absoluteTransormPosition(
+        outline.x() + outline.width()*0.5,
+        outline.y() + outline.height() + 10);
+
+    QPointF textEditorAbsPosition =  converter->documentToView(absoluteTransormPosition);
+
+
+
+    // check to see if the text decorator is checked (only for text objects)
+
+    const QPointF viewPoint = converter->documentToView(mousePosition);
+    //const QPointF handlePoint = converter->documentToView(textEditorAbsPosition);
+    const QPointF handlePoint = textEditorAbsPosition;
+
+    const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
+
+
+    //qWarning() << "viewPoint: " <<  QString::number(viewPoint.x()) << "  "
+    //           << QString::number(viewPoint.y());
+
+    //qWarning() << "handlePoint: " << QString::number(textEditorAbsPosition.x()) << "  "
+    //           << QString::number(textEditorAbsPosition.y());
+
+   // qWarning() << "distance from text button: " << QString::number(distanceSq);
+
+
+    if (distanceSq < 18 * 18) { // 22 is "handle" area (previously 16). Probably can refactor this a bit
+        //qWarning() << "over Text area: ";
+        return true;
+    }
+    else {
+       // qWarning() << "NOT over Text area: ";
+        return false;
+    }
+
+}
+
 KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *innerHandleMeaning)
 {
     // check for handles in this order; meaning that when handles overlap the one on top is chosen
@@ -974,6 +1035,7 @@ KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *inner
             return handle;
         }
     }
+
     return KoFlake::NoHandle;
 }
 
@@ -994,6 +1056,8 @@ void DefaultTool::recalcSelectionBox(KoSelection *selection)
     m_selectionBox[KoFlake::BottomLeftHandle] = outline.value(3);
     m_selectionBox[KoFlake::LeftMiddleHandle] = (outline.value(3) + outline.value(0)) / 2;
     m_selectionBox[KoFlake::TopLeftHandle] = outline.value(0);
+
+
     if (selection->count() == 1) {
 #if 0        // TODO detect mirroring
         KoShape *s = koSelection()->firstSelectedShape();
@@ -1415,6 +1479,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     bool insideSelection = false;
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
+    isSelectingTextEditorButton(event->point);
 
     bool editableShape = !selection->selectedEditableShapes().isEmpty();
 

@@ -278,3 +278,16 @@ void KisHandlePainterHelper::drawPath(const QPainterPath &path)
         m_painter->drawPath(realPath);
     }
 }
+
+void KisHandlePainterHelper::drawPixmap(const QPixmap &pixmap, QPointF position, int size, QRectF sourceRect)
+{
+    QPointF handlePolygon = m_painterTransform.map(position);
+
+    handlePolygon -= QPointF(size*0.5,size*0.5);
+
+    m_painter->drawPixmap(QRect(handlePolygon.x(),
+                             handlePolygon.y(),
+                             size,
+                             size),
+                       pixmap, sourceRect);
+}

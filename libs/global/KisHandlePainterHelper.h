@@ -145,6 +145,8 @@ public:
      */
     void drawPath(const QPainterPath &path);
 
+    void drawPixmap(const QPixmap &pixmap, QPointF position, int size, QRectF sourceRect);
+
 private:
 
     /**

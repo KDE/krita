@@ -24,6 +24,8 @@
 #include <KoShape.h>
 #include <KoSelection.h>
 #include <KoResourcePaths.h>
+#include <KoCanvasBase.h>
+#include <KoSvgTextShape.h>
 #include "kis_algebra_2d.h"
 
 #include "kis_debug.h"
@@ -31,18 +33,25 @@
 #include <KoCanvasResourceManager.h>
 #include <KisQPainterStateSaver.h>
 #include "KoShapeGradientHandles.h"
+#include "kis_coordinates_converter.h"
 
 #include "kis_painting_tweaks.h"
+#include "kis_icon_utils.h"
 
 #define HANDLE_DISTANCE 10
 
-SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
+SelectionDecorator::SelectionDecorator(KoCanvasResourceManager* resourceManager, const KisCoordinatesConverter* coordConverter)
     : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
     , m_lineWidth(2)
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
 {
+
+    // this will help size the decorator buttons in the paint function later
+    m_coordConverter = const_cast<KisCoordinatesConverter*>(coordConverter);
+
+
     m_hotPosition =
         KoFlake::AnchorPosition(
             resourceManager->resource(KoFlake::HotPosition).toInt());
@@ -67,6 +76,11 @@ void SelectionDecorator::setShowFillGradientHandles(bool value)
 void SelectionDecorator::setShowStrokeFillGradientHandles(bool value)
 {
     m_showStrokeFillGradientHandles = value;
+}
+
+QPointF SelectionDecorator::textEditorButtonPos()
+{
+    return m_textEditorButtonPosition;
 }
 
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
@@ -132,6 +146,31 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
     if (haveOnlyOneEditableShape) {
         KoShape *shape = selectedShapes.first();
+
+
+        // draw a button with "edit text" on it that activates the text editor
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+        if (textShape) {
+            KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
+
+            QPolygonF outline = handleArea;
+            m_textEditorButtonPosition = QPointF(0.5 * (outline.value(2) + outline.value(3)));
+            m_textEditorButtonPosition += QPointF(0, 10);
+
+            const QPointF finalHandleRect = m_textEditorButtonPosition;
+            helper.drawHandleRect(finalHandleRect, 15);
+
+
+            // T icon inside box
+            QSize buttonSize(20,20);
+            const QPixmap textEditorIcon = KisIconUtils::loadIcon("draw-text").pixmap(buttonSize);
+            const QRectF iconSourceRect(QPointF(0, 0), textEditorIcon.size());
+            helper.drawPixmap(textEditorIcon, m_textEditorButtonPosition, 20, iconSourceRect); // icon, position, size, sourceRect
+
+        } else {
+
+        }
+
 
         if (m_showFillGradientHandles) {
             paintGradientHandles(shape, KoFlake::Fill, painter, converter);

@@ -24,6 +24,7 @@
 
 #include <KoViewConverter.h>
 #include <KoFlake.h>
+#include <kis_coordinates_converter.h>
 
 #include <QPainter>
 #include <QPointer>
@@ -43,7 +44,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(KoCanvasResourceManager *resourceManager);
+    SelectionDecorator(KoCanvasResourceManager *resourceManager, const KisCoordinatesConverter* coordConverter);
     ~SelectionDecorator() {}
 
     /**
@@ -77,6 +78,8 @@ public:
      */
     void setShowStrokeFillGradientHandles(bool value);
 
+    QPointF textEditorButtonPos();
+
 private:
     void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
 
@@ -87,6 +90,9 @@ private:
     int m_lineWidth;
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
+    QPointF m_textEditorButtonPosition;
+
+    KisCoordinatesConverter *m_coordConverter;
 };
 
 #endif

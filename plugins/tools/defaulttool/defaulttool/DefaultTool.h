@@ -26,6 +26,7 @@
 #include <KoFlake.h>
 #include <commands/KoShapeAlignCommand.h>
 #include <commands/KoShapeReorderCommand.h>
+#include "SelectionDecorator.h"
 
 #include <QPolygonF>
 #include <QTime>
@@ -90,6 +91,9 @@ public:
      *   The value of innerHandleMeaning is undefined if the handle location is NoHandle
      */
     KoFlake::SelectionHandle handleAt(const QPointF &point, bool *innerHandleMeaning = 0);
+
+    /// similar to normal bounds handles, but checks to see if user wants to edit text
+    bool isSelectingTextEditorButton(const QPointF &point);
 
 public Q_SLOTS:
     void activate(ToolActivation activation, const QSet<KoShape *> &shapes) override;
@@ -174,6 +178,8 @@ private:
     QPointF m_selectionBox[8];
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
+
+    SelectionDecorator *decorator;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];

@@ -237,7 +237,7 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
         if (!m_currentColorSet->isEditable()) { return; }
         slotSetEntryByForeground(index);
     } else {
-        KisSwatch entry = m_currentColorSet->getColorGlobal(index.column(), index.row());
+        KisSwatch entry = m_model->getEntry(index);
         slotSetFGColorByPalette(entry);
     }
 }

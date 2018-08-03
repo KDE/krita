@@ -59,7 +59,7 @@ bool KisSwatchGroup::removeEntry(int x, int y)
         return false;
     }
 
-    if (x >= m_rowCount || x >= m_colorMatrix.size() || x < 0) {
+    if (y >= m_rowCount || x >= m_colorMatrix.size() || x < 0) {
         return false;
     }
 

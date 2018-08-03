@@ -21,13 +21,12 @@
 #define __KIS_PALETTE_VIEW_H
 
 #include <QScopedPointer>
-
+#include <QTableView>
 #include <QColorDialog>
 #include <QPushButton>
 #include <QPixmap>
 #include <QIcon>
 
-#include <KoTableView.h>
 #include <KoColorSet.h>
 #include "kritawidgets_export.h"
 
@@ -96,7 +95,7 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void slotModifyEntry(const QModelIndex &);
-    void slotChosenColorChanged(const KoColor &);
+    void slotFGColorChanged(const KoColor &);
 
 protected:
     void mouseReleaseEvent(QMouseEvent *event) override;

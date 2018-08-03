@@ -104,7 +104,7 @@ public /* methods */:
      * proper function to handle adding entries.
      * @return whether successful.
      */
-    bool addEntry(KisSwatch entry, QString groupName=QString());
+    bool addEntry(const KisSwatch &entry, const QString &groupName=QString());
 
     void setEntry(const KisSwatch &entry, const QModelIndex &index);
 
@@ -117,7 +117,8 @@ public /* methods */:
      * so hence the default is true.
      * @return if successful
      */
-    bool removeEntry(QModelIndex index, bool keepColors=true);
+    bool removeEntry(const QModelIndex &index, bool keepColors=true);
+    KisSwatch getEntry(const QModelIndex &index);
 
     void setColorSet(KoColorSet* colorSet);
     KoColorSet* colorSet() const;

@@ -160,7 +160,9 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         }
     } else {
         m_d->model->removeEntry(index, keepColors);
-        m_d->model->colorSet()->save();
+        if (m_d->model->colorSet()->isGlobal()) {
+            m_d->model->colorSet()->save();
+        }
     }
     return true;
 }
@@ -171,12 +173,10 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
     if (!color_set) {
         return;
     }
+    qDebug() << "KisPaletteView::selectClosestColor" << "triggered";
     //also don't select if the color is the same as the current selection
-    if (selectedIndexes().size() > 0) {
-        QModelIndex currentI = currentIndex();
-        if (m_d->model->colorSetEntryFromIndex(currentI).color() == color) {
-            return;
-        }
+    if (m_d->model->colorSetEntryFromIndex(currentIndex()).color() == color) {
+        return;
     }
 
     selectionModel()->clearSelection();
@@ -184,7 +184,7 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
     selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
 }
 
-void KisPaletteView::slotChosenColorChanged(const KoColor &color)
+void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
     selectClosestColor(color);
 }
@@ -257,7 +257,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         KisSwatch entry = group->getEntry(index.column(), index.row());
         chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
         editableItems->addRow(i18n("ID"), lnIDName);
-        editableItems->addRow(i18n("Name"), lnGroupName);
+        editableItems->addRow(i18nc("Name for a swatch group", "Name"), lnGroupName);
         editableItems->addRow(i18n("Color"), bnColor);
         editableItems->addRow(i18n("Spot"), chkSpot);
         lnGroupName->setText(entry.name());

@@ -43,9 +43,9 @@
 #error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
 #endif
 
-class Dummy : public KoResource {
+class DummyResource : public KoResource {
 public:
-    Dummy(const QString &f) : KoResource(f) {}
+    DummyResource(const QString &f) : KoResource(f) {}
     bool load() override { return true; }
     bool loadFromDevice(QIODevice *) override { return true; }
     bool save() override { return true; }
@@ -81,7 +81,7 @@ void TestResourceLocator::initTestCase()
             << "symbols";
 
     Q_FOREACH(const QString &folder, resourceTypeFolders) {
-        KisResourceLoaderRegistry::instance()->add(folder, new KisResourceLoader<Dummy>("dummy" + folder, folder, QStringList() << "x-dummy"));
+        KisResourceLoaderRegistry::instance()->add(folder, new KisResourceLoader<DummyResource>("dummy" + folder, folder, QStringList() << "x-dummy"));
     }
 }
 

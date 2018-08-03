@@ -21,8 +21,9 @@
 #define KISBUNDLESTORAGE_H
 
 #include <KisStoragePlugin.h>
+#include "kritaresources_export.h"
 
-class KisBundleStorage : public KisStoragePlugin
+class KRITARESOURCES_EXPORT KisBundleStorage : public KisStoragePlugin
 {
 public:
     KisBundleStorage(const QString &location);
@@ -32,6 +33,7 @@ public:
     KoResourceSP resource(const QString &url) override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;
     QSharedPointer<KisResourceStorage::TagIterator> tags(const QString &resourceType) override;
+    QString metaData(const QString &key) const override;
 };
 
 #endif // KISBUNDLESTORAGE_H

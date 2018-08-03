@@ -85,6 +85,11 @@ QSharedPointer<KisResourceStorage::ResourceIterator> KisBundleStorage::resources
 
 QSharedPointer<KisResourceStorage::TagIterator> KisBundleStorage::tags(const QString &resourceType)
 {
-return QSharedPointer<KisResourceStorage::TagIterator>(new BundleTagIterator(location(), resourceType));
+    return QSharedPointer<KisResourceStorage::TagIterator>(new BundleTagIterator(location(), resourceType));
+}
+
+QString KisBundleStorage::metaData(const QString &key) const
+{
+    return QString();
 }
 

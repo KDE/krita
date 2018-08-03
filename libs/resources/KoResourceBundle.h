@@ -33,8 +33,9 @@
 class KoStore;
 
 /**
- * @brief The ResourceBundle class
- * @details Describe the resource bundles as KoResources
+ * @brief A KoResourceBundle is a zip file that contains resources,
+ * some metadata about the creator of the bundle and a manifest file
+ * that lists the contained resources.
  */
 class KRITARESOURCES_EXPORT KoResourceBundle : public KoResource
 {

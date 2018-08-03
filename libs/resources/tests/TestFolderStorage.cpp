@@ -25,23 +25,17 @@
 #include <KoResource.h>
 #include <KisResourceLoaderRegistry.h>
 
+#include "DummyResource.h"
+
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
-class Dummy : public KoResource {
-public:
-    Dummy(const QString &f) : KoResource(f) {}
-    bool load() override { return true; }
-    bool loadFromDevice(QIODevice *) override { return true; }
-    bool save() override { return true; }
-};
-
 
 void TestFolderStorage ::testStorage()
 {
     KisFolderStorage folderStorage(QString(FILES_DATA_DIR));
 
-    KisResourceLoaderRegistry::instance()->add("brushes", new KisResourceLoader<Dummy>("dummy", "brushes", QStringList() << "image/x-gimp-brush"));
+    KisResourceLoaderRegistry::instance()->add("brushes", new KisResourceLoader<DummyResource>("dummy", "brushes", QStringList() << "image/x-gimp-brush"));
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources("brushes");
     QVERIFY(iter->hasNext());
     int count = 0;

@@ -14,5 +14,6 @@ ecm_add_tests(
     TestResourceStorage
     TestFolderStorage
     TestTagLoader
+    TestBundleStorage
     NAME_PREFIX "libs-kritaresources-"
     LINK_LIBRARIES kritaglobal kritaresources kritaversion KF5::ConfigCore Qt5::Sql Qt5::Test)

@@ -144,13 +144,14 @@ public:
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
 
-    void finishInteraction(Qt::KeyboardModifiers modifiers) override
+    void finishInteraction(Qt::KeyboardModifiers modifiers = 0) override
     {
         Q_UNUSED(modifiers);
         DefaultTool *defaultTool = dynamic_cast<DefaultTool*>(tool());
         KIS_SAFE_ASSERT_RECOVER_RETURN(defaultTool);
 
         KoSelection * selection = defaultTool->koSelection();
+
 
         const bool useContainedMode = currentMode() == CoveringSelection;
 
@@ -743,7 +744,9 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
 
 void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 {
+
     KoInteractionTool::mouseMoveEvent(event);
+
     if (currentStrategy() == 0 && koSelection() && koSelection()->count() > 0) {
         QRectF bound = handlesSize();
 
@@ -796,6 +799,20 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     updateCursor();
+
+    // test to see if we are selecting button before we decide to check for a selection/de-selection
+    const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
+    KoSelection *selection = koSelection();
+
+    canvas()->selectedShapesProxy()->setRequestingToBeEdited(selectingTextEditorButton);
+    if (selectingTextEditorButton) {
+        // activate text tool
+        KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+    }
+
+
+
+
 
     // updates the whole canvas. This makes sure the decorations that are shown are refreshed
     canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
@@ -926,6 +943,7 @@ KoSelection *DefaultTool::koSelection() const
 {
     Q_ASSERT(canvas());
     Q_ASSERT(canvas()->selectedShapesProxy());
+
     return canvas()->selectedShapesProxy()->selection();
 }
 
@@ -1085,6 +1103,8 @@ void DefaultTool::activate(ToolActivation activation, const QSet<KoShape *> &sha
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
     updateActions();
+
+
 
     if (m_tabbedOptionWidget) {
         m_tabbedOptionWidget->activate();
@@ -1479,7 +1499,6 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
     bool insideSelection = false;
     KoFlake::SelectionHandle handle = handleAt(event->point, &insideSelection);
-    isSelectingTextEditorButton(event->point);
 
     bool editableShape = !selection->selectedEditableShapes().isEmpty();
 
@@ -1561,7 +1580,12 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
 
         if (!selectMultiple && !selectNextInStack) {
-            if (insideSelection) {
+
+            // move the selection if we hold and drag with the text editor button
+            // this also helps with how the click events flow to resolve this createStrategy
+            const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
+
+            if (insideSelection || selectingTextEditorButton ) {
                 return new ShapeMoveStrategy(this, selection, event->point);
             }
         }
@@ -1595,6 +1619,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
         return new ShapeMoveStrategy(this, selection, event->point);
     }
+
     return 0;
 }
 

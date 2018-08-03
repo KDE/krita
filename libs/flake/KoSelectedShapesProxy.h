@@ -44,6 +44,10 @@ public:
      */
     virtual KoSelection *selection() = 0;
 
+
+    bool isRequestingToBeEdited();
+    void setRequestingToBeEdited(bool value);
+
 Q_SIGNALS:
 
     // forwards a corresponding signal of KoShapeManager
@@ -54,6 +58,9 @@ Q_SIGNALS:
 
     // forwards a corresponding signal of KoSelection
     void currentLayerChanged(const KoShapeLayer *layer);
+
+private:
+    bool m_isRequestingEditing = false;
 };
 
 #endif // KOSELECTEDSHAPESPROXY_H

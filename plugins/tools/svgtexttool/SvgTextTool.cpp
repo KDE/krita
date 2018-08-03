@@ -80,6 +80,11 @@ void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &sha
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
         if (!textShape) {
             koSelection()->deselectAll();
+        } else {
+            // if we are a text shape...and the proxy tells us we want to edit the shape. open the text editor
+            if (canvas()->selectedShapesProxy()->isRequestingToBeEdited()) {
+                showEditor();
+            }
         }
     } else if (shapes.size() > 1) {
         KoSvgTextShape *foundTextShape = 0;

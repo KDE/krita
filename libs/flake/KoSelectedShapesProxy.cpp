@@ -23,3 +23,13 @@ KoSelectedShapesProxy::KoSelectedShapesProxy(QObject *parent)
 {
 }
 
+bool KoSelectedShapesProxy::isRequestingToBeEdited()
+{
+    return m_isRequestingEditing;
+}
+
+void KoSelectedShapesProxy::setRequestingToBeEdited(bool value)
+{
+    m_isRequestingEditing = value;
+}
+

@@ -103,18 +103,18 @@ void KisPaletteView::setCrossedKeyword(const QString &value)
 
 bool KisPaletteView::addEntryWithDialog(KoColor color)
 {
-    KoDialog *window = new KoDialog(this);
+    QScopedPointer<KoDialog> window(new KoDialog(this));
     window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
-    QFormLayout *editableItems = new QFormLayout(window);
+    QFormLayout *editableItems = new QFormLayout(window.data());
     window->mainWidget()->setLayout(editableItems);
-    QComboBox *cmbGroups = new QComboBox(window);
+    QComboBox *cmbGroups = new QComboBox(window.data());
     QString defaultGroupName = i18nc("Name for default group", "Default");
     cmbGroups->addItem(defaultGroupName);
     cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
-    QLineEdit *lnIDName = new QLineEdit(window);
-    QLineEdit *lnName = new QLineEdit(window);
-    KisColorButton *bnColor = new KisColorButton(window);
-    QCheckBox *chkSpot = new QCheckBox(window);
+    QLineEdit *lnIDName = new QLineEdit(window.data());
+    QLineEdit *lnName = new QLineEdit(window.data());
+    KisColorButton *bnColor = new KisColorButton(window.data());
+    QCheckBox *chkSpot = new QCheckBox(window.data());
     chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
     editableItems->addRow(i18n("Group"), cmbGroups);
     editableItems->addRow(i18n("ID"), lnIDName);
@@ -140,6 +140,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
         m_d->model->addEntry(newEntry, groupName);
         return true;
     }
+
     return false;
 }
 
@@ -200,9 +201,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
         emit sigIndexSelected(index);
-        KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-        Q_ASSERT(group);
-        KisSwatch entry = group->getEntry(index.column(), index.row());
+        KisSwatch entry = m_d->model->colorSet()->getColorGlobal(index.column(), index.row());
         emit sigColorSelected(entry.color());
     }
     QTableView::mouseReleaseEvent(event);

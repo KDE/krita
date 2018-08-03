@@ -39,7 +39,9 @@ class KRITAPIGMENT_EXPORT KoColorSet : public QObject, public KoResource
 {
     Q_OBJECT
 public:
+    static QString GLOBAL_GROUP_NAME;
 
+public:
     enum PaletteType {
         UNKNOWN = 0,
         GPL,                // GIMP
@@ -109,8 +111,8 @@ public /* methods */:
      * @brief add Add a color to the palette.
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
-    void add(const KisSwatch &, const QString &groupName = QString());
-    void setEntry(const KisSwatch &e, int x, int y, const QString &groupName = QString());
+    void add(const KisSwatch &, const QString &groupName = GLOBAL_GROUP_NAME);
+    void setEntry(const KisSwatch &e, int x, int y, const QString &groupName = GLOBAL_GROUP_NAME);
 
     /**
      * @brief getColorGlobal
@@ -127,7 +129,7 @@ public /* methods */:
      * @param index the index within the group.
      * @return the entry
      */
-    KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName = QString());
+    KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName);
 
     /**
      * @brief getGroupNames
@@ -141,7 +143,8 @@ public /* methods */:
      * @return the group with the name given; global group if no parameter is given
      * null pointer if not found.
      */
-    KisSwatchGroup *getGroup(const QString &name = QString());
+    KisSwatchGroup *getGroup(const QString &name);
+    KisSwatchGroup *getGlobalGroup();
 
     bool changeGroupName(QString oldGroupName, QString newGroupName);
 
@@ -161,7 +164,7 @@ public /* methods */:
      * @param groupNameInsertBefore the groupname to insert before. Empty means it will be added to the end.
      * @return
      */
-    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
+    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = GLOBAL_GROUP_NAME);
     /**
      * @brief removeGroup
      * Remove a group from the KoColorSet
@@ -172,15 +175,6 @@ public /* methods */:
     bool removeGroup(const QString &groupName, bool keepColors = true);
 
     void clear();
-
-    /**
-     * @brief closestColorName
-     * convenience function to get the name of the closest match.
-     * @param color
-     * @param useGivenColorSpace
-     * @return
-     */
-    QString closestColorName(KoColor color, bool useGivenColorSpace = true);
 
     /**
      * @brief getIndexClosestColor

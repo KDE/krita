@@ -113,9 +113,9 @@ void KisPaletteListWidget::slotModify()
 {
     KisDlgPaletteEditor dlg;
     KoColorSet *colorSet = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+    if (!colorSet) { return; }
     dlg.setPalette(colorSet);
     if (dlg.exec() != QDialog::Accepted){ return; }
-    if (!colorSet) { return; }
     if (!dlg.isModified()) { return; }
     colorSet->setName(dlg.name());
     colorSet->setColumnCount(dlg.columnCount());

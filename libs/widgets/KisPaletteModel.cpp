@@ -43,8 +43,8 @@ KisPaletteModel::~KisPaletteModel()
 
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
-    // row is set to infinity when it's group name row
-    bool groupNameRow = index.row() == Q_INFINITY;
+    // row is set to -1 when it's group name row
+    bool groupNameRow = rowNumberInGroup(index.row()) == -1;
     if (groupNameRow) {
         return dataForGroupNameRow(index, role);
     } else {
@@ -57,7 +57,7 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
     if (!m_colorSet)
         return 0;
     return m_colorSet->rowCount() // count of color rows
-            + m_colorSet->getGroupNames().size()  // rows for names
+            + m_groupNameRows.size()  // rows for names
             - 1; // global doesn't have a name
 }
 
@@ -88,31 +88,23 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
 {
     Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
-    int yInGroup = row;
     KisSwatchGroup *group = Q_NULLPTR;
-    for (const QString &currGroupName : m_colorSet->getGroupNames()) {
-        if (yInGroup >= m_colorSet->getGroup(currGroupName)->rowCount()) {
-            // minus 1 for group name line
-            yInGroup = yInGroup - m_colorSet->getGroup(currGroupName)->rowCount() - 1;
-        } else {
-            group = m_colorSet->getGroup(currGroupName);
-            break;
-        }
-    }
+    group = m_colorSet->getGroup(m_groupNameRows[rowNumberInGroup(row)]);
     Q_ASSERT(group);
-    // signals that it's a group name row;
-    // wanted to use -1, but indexes with negative row/column are not valid
-    if (yInGroup == -1) {
-        yInGroup = Q_INFINITY;
-        column = Q_INFINITY;
-    }
-    return createIndex(yInGroup, column, group);
+    return createIndex(row, column, group);
 }
 
 void KisPaletteModel::setColorSet(KoColorSet* colorSet)
 {
     beginResetModel();
+    m_groupNameRows.clear();
     m_colorSet = colorSet;
+    int row = 0;
+    for (const QString &groupName : m_colorSet->getGroupNames()) {
+        m_groupNameRows[row] = groupName;
+        row += m_colorSet->getGroup(groupName)->rowCount();
+        row += 1; // row for group name
+    }
     endResetModel();
 }
 
@@ -121,92 +113,26 @@ KoColorSet* KisPaletteModel::colorSet() const
     return m_colorSet;
 }
 
-QModelIndex KisPaletteModel::indexFromId(int i) const
-{
-    return QModelIndex();
-    /*
-    QModelIndex index = QModelIndex();
-    if (!colorSet() || colorSet()->colorCount() == 0) {
-        return index;
-    }
-
-    if (i > (int)colorSet()->nColors()) {
-        qWarning()<<"index is too big"<<i<<"/"<<colorSet()->nColors();
-        index = this->index(0,0);
-    }
-
-    if (i < (int)colorSet()->nColorsGroup(0)) {
-        index = QAbstractTableModel::index(i/columnCount(), i % columnCount());
-        if (!index.isValid()) {
-            index = QAbstractTableModel::index(0, 0, QModelIndex());
-        }
-        return index;
-    } else {
-        int rowstotal = 1 + m_colorSet->nColorsGroup() / columnCount();
-        if (m_colorSet->nColorsGroup() == 0) {
-            rowstotal += 1;
-        }
-        int totalIndexes = colorSet()->nColorsGroup();
-        Q_FOREACH (QString groupName, m_colorSet->getGroupNames()){
-            if (i + 1 <= (int)(totalIndexes + colorSet()->nColorsGroup(groupName)) && i + 1 > (int)totalIndexes) {
-                int col = (i - totalIndexes) % columnCount();
-                int row = rowstotal + 1 + ((i - totalIndexes) / columnCount());
-                index = this->index(row, col);
-                return index;
-            } else {
-                rowstotal += 1 + m_colorSet->nColorsGroup(groupName) / columnCount();
-                totalIndexes += colorSet()->nColorsGroup(groupName);
-                if (m_colorSet->nColorsGroup(groupName)%columnCount() > 0) {
-                    rowstotal += 1;
-                }
-                if (m_colorSet->nColorsGroup(groupName)==0) {
-                    rowstotal += 1; //always add one for the group when considering groups.
-                }
-            }
-        }
-    }
-    return index;
-    */
-}
-
-int KisPaletteModel::idFromIndex(const QModelIndex &index) const
-{
-    /*
-    if (index.isValid()==false) {
-        return -1;
-        qWarning()<<"invalid index";
-    }
-    int i=0;
-    QStringList entryList = qvariant_cast<QStringList>(data(index, RetrieveEntryRole));
-    if (entryList.isEmpty()) {
-        return -1;
-        qWarning()<<"invalid index, there's no data to retrieve here";
-    }
-    if (entryList.at(0)==QString()) {
-        return entryList.at(1).toUInt();
-    }
-
-    i = colorSet()->nColorsGroup("");
-    //find at which position the group is.
-    int groupIndex = colorSet()->getGroupNames().indexOf(entryList.at(0));
-    //add all the groupsizes onto it till we get to our group.
-    for(int g=0; g<groupIndex; g++) {
-        i+=colorSet()->nColorsGroup(colorSet()->getGroupNames().at(g));
-    }
-    //then add the index.
-    i += entryList.at(1).toUInt();
-    return i;
-    */
-    return 0;
-}
-
 KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    if (!group || !group->checkEntry(index.column(), index.row())) {
+    if (!group || !group->checkEntry(index.column(), rowNumberInGroup(index.row()))) {
         return KisSwatch();
     }
-    return group->getEntry(index.column(), index.row());
+    return group->getEntry(index.column(), rowNumberInGroup(index.row()));
+}
+
+int KisPaletteModel::rowNumberInGroup(int rowInModel) const
+{
+    if (rowInModel < m_colorSet->getGlobalGroup()->rowCount()) {
+        return rowInModel;
+    }
+    for (auto it = m_groupNameRows.keys().rbegin(); it != m_groupNameRows.keys().rend(); it--) {
+        if (*it <= rowInModel) {
+            return rowInModel - *it - 1;
+        }
+    }
+    return rowInModel;
 }
 
 bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
@@ -226,7 +152,7 @@ bool KisPaletteModel::addEntry(KisSwatch entry, QString groupName)
 bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
 {
     if (qvariant_cast<bool>(data(index, IsGroupNameRole))==false) {
-        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(), index.row());
+        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(), rowNumberInGroup(index.row()));
     } else {
         QString groupName = static_cast<KisSwatchGroup*>(index.internalPointer())->name();
         beginRemoveRows(QModelIndex(), index.row(), index.row());
@@ -458,7 +384,7 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
-    group->setEntry(entry, index.column(), index.row());
+    group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
     emit dataChanged(index, index);
 }
 

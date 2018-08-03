@@ -22,6 +22,7 @@
 
 #include <QPointer>
 #include <QModelIndex>
+#include <QMap>
 
 #include <KoColorDisplayRendererInterface.h>
 
@@ -128,29 +129,13 @@ public /* methods */:
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
     /**
-     * @brief indexFromId
-     * convenience function to get the tableindex from the global palette color.
-     * used by lazybrush.
-     * @param i
-     * @return index in table.
-     */
-    QModelIndex indexFromId(int i) const;
-    /**
-     * @brief idFromIndex
-     * convenience function to get the global colorset entry id from the table index.
-     * If you just want to use this to get the kocolorsetentry, use colorsetEntryFromIndex instead.
-     * @param index
-     * @return
-     */
-    int idFromIndex(const QModelIndex &index) const;
-
-    /**
      * @brief colorSetEntryFromIndex
      * This gives the colorset entry for the given table model index.
      * @param index the QModelIndex
      * @return the kocolorsetentry
      */
     KisSwatch colorSetEntryFromIndex(const QModelIndex &index) const;
+
     QModelIndex indexForClosest(const KoColor &compare);
 
 public Q_SLOTS:
@@ -161,10 +146,12 @@ private Q_SLOTS:
 private /* methods */:
     QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
+    int rowNumberInGroup(int rowInModel) const;
 
 private /* member variables */:
     QPointer<KoColorSet> m_colorSet;
     QPointer<const KoColorDisplayRendererInterface> m_displayRenderer;
+    QMap<int, QString> m_groupNameRows;
 };
 
 #endif

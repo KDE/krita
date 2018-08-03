@@ -60,9 +60,6 @@ public:
     bool isGlobal;
     bool isEditable;
 
-public:
-    static QString GLOBAL_GROUP_NAME;
-
 private:
     KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
     void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);

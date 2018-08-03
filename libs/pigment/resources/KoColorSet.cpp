@@ -57,6 +57,7 @@
 #include "KoColorSet.h"
 #include "KoColorSet_p.h"
 
+QString KoColorSet::GLOBAL_GROUP_NAME = QString();
 
 KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
@@ -175,34 +176,7 @@ void KoColorSet::setPaletteType(PaletteType paletteType)
 
 quint32 KoColorSet::colorCount() const
 {
-    return d->groups[Private::GLOBAL_GROUP_NAME].colorCount();
-}
-
-QString KoColorSet::closestColorName(const KoColor color, bool useGivenColorSpace)
-{
-    quint8 highestPercentage = 0;
-    quint8 testPercentage = 0;
-    KoColor compare = color;
-    QString res;
-    for (int x = 0; x < d->groups[Private::GLOBAL_GROUP_NAME].columnCount(); x++) {
-        for (int y = 0; y < rowCount(); y++ ) {
-            KisSwatch entry = getColorGlobal(x, y);
-            KoColor color = entry.color();
-            if (useGivenColorSpace == true && compare.colorSpace() != color.colorSpace()) {
-                color.convertTo(compare.colorSpace());
-
-            } else if (compare.colorSpace() != color.colorSpace()) {
-                compare.convertTo(color.colorSpace());
-            }
-            testPercentage = (255 - compare.colorSpace()->difference(compare.data(), color.data()));
-            if (testPercentage > highestPercentage)
-            {
-                res = entry.name();
-                highestPercentage = testPercentage;
-            }
-        }
-    }
-    return res;
+    return d->groups[GLOBAL_GROUP_NAME].colorCount();
 }
 
 void KoColorSet::add(const KisSwatch &c, const QString &groupName)
@@ -280,7 +254,7 @@ bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
 
 void KoColorSet::setColumnCount(int columns)
 {
-    d->groups[Private::GLOBAL_GROUP_NAME].setColumnCount(columns);
+    d->groups[GLOBAL_GROUP_NAME].setColumnCount(columns);
     for (KisSwatchGroup &g : d->groups.values()) { // Q_FOREACH doesn't accept non const refs
         g.setColumnCount(columns);
     }
@@ -288,7 +262,7 @@ void KoColorSet::setColumnCount(int columns)
 
 int KoColorSet::columnCount() const
 {
-    return d->groups[Private::GLOBAL_GROUP_NAME].columnCount();
+    return d->groups[GLOBAL_GROUP_NAME].columnCount();
 }
 
 QString KoColorSet::comment()
@@ -333,11 +307,11 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
 
     if (keepColors) {
         // put all colors directly below global
-        int startingRow = d->groups[Private::GLOBAL_GROUP_NAME].rowCount();
+        int startingRow = d->groups[GLOBAL_GROUP_NAME].rowCount();
         for (int x = 0; x < d->groups[groupName].columnCount(); x++) {
             for (int y = 0; y < d->groups[groupName].rowCount(); y++) {
                 if (d->groups[groupName].checkEntry(x, y)) {
-                    d->groups[Private::GLOBAL_GROUP_NAME].setEntry(d->groups[groupName].getEntry(x, y),
+                    d->groups[GLOBAL_GROUP_NAME].setEntry(d->groups[groupName].getEntry(x, y),
                                        x,
                                        y + startingRow);
                 }
@@ -379,6 +353,11 @@ KisSwatchGroup *KoColorSet::getGroup(const QString &name)
         return Q_NULLPTR;
     }
     return &(d->groups[name]);
+}
+
+KisSwatchGroup *KoColorSet::getGlobalGroup()
+{
+    return getGroup(GLOBAL_GROUP_NAME);
 }
 
 bool KoColorSet::isGlobal() const
@@ -431,15 +410,13 @@ KisSwatchGroup::SwatchInfo KoColorSet::getClosestColorInfo(KoColor compare, bool
 
 /********************************KoColorSet::Private**************************/
 
-QString KoColorSet::Private::GLOBAL_GROUP_NAME = QString();
-
 KoColorSet::Private::Private(KoColorSet *a_colorSet)
     : colorSet(a_colorSet)
     , isGlobal(true)
     , isEditable(false)
 {
-    groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
-    groupNames.append(GLOBAL_GROUP_NAME);
+    groups[KoColorSet::GLOBAL_GROUP_NAME] = KisSwatchGroup();
+    groupNames.append(KoColorSet::GLOBAL_GROUP_NAME);
 }
 
 KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileName, const QByteArray &ba)
@@ -610,8 +587,8 @@ bool KoColorSet::Private::init()
     // just in case this is a reload (eg by KoEditColorSetDialog),
     groupNames.clear();
     groups.clear();
-    groupNames.append(GLOBAL_GROUP_NAME);
-    groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
+    groupNames.append(KoColorSet::GLOBAL_GROUP_NAME);
+    groups[KoColorSet::GLOBAL_GROUP_NAME] = KisSwatchGroup();
 
     if (colorSet->filename().isNull()) {
         warnPigment << "Cannot load palette" << colorSet->name() << "there is no filename set";
@@ -686,15 +663,15 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
     /*
      * Qt doesn't provide an interface to get a const reference to a QHash, that is
      * the underlying data structure of groups. Therefore, directly use
-     * groups[GLOBAL_GROUP_NAME] so that saveGpl can stay const
+     * groups[KoColorSet::GLOBAL_GROUP_NAME] so that saveGpl can stay const
      */
 
-    for (int y = 0; y < groups[GLOBAL_GROUP_NAME].rowCount(); y++) {
+    for (int y = 0; y < groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount(); y++) {
         for (int x = 0; x < colorSet->columnCount(); x++) {
-            if (!groups[GLOBAL_GROUP_NAME].checkEntry(x, y)) {
+            if (!groups[KoColorSet::GLOBAL_GROUP_NAME].checkEntry(x, y)) {
                 continue;
             }
-            const KisSwatch& entry = groups[GLOBAL_GROUP_NAME].getEntry(x, y);
+            const KisSwatch& entry = groups[KoColorSet::GLOBAL_GROUP_NAME].getEntry(x, y);
             QColor c = entry.color().toQColor();
             stream << c.red() << " " << c.green() << " " << c.blue() << "\t";
             if (entry.name().isEmpty())
@@ -810,7 +787,7 @@ bool KoColorSet::Private::loadRiff()
         quint8 g = data[i+1];
         quint8 b = data[i+2];
         e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
-        groups[GLOBAL_GROUP_NAME].addEntry(e);
+        groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
     }
     return true;
 }
@@ -849,7 +826,7 @@ bool KoColorSet::Private::loadPsp()
         QString name = a.join(" ");
         e.setName(name.isEmpty() ? i18n("Untitled") : name);
 
-        groups[GLOBAL_GROUP_NAME].addEntry(e);
+        groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
     }
     return true;
 }
@@ -909,7 +886,7 @@ bool KoColorSet::Private::loadKpl()
         colorSet->setColumnCount(e.attribute("columns").toInt());
         comment = e.attribute("comment");
 
-        loadKplGroup(doc, e, colorSet->getGroup(GLOBAL_GROUP_NAME));
+        loadKplGroup(doc, e, colorSet->getGroup(KoColorSet::GLOBAL_GROUP_NAME));
 
         QDomElement g = e.firstChildElement("Group");
         while (!g.isNull()) {
@@ -1013,7 +990,7 @@ bool KoColorSet::Private::loadAco()
             Q_UNUSED(v2);
         }
         if (!skip) {
-            groups[GLOBAL_GROUP_NAME].addEntry(e);
+            groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
         }
     }
     return true;
@@ -1362,7 +1339,7 @@ bool KoColorSet::Private::loadSbz() {
                     return false;
                 }
                 if (materialsBook.contains(id)) {
-                    groups[GLOBAL_GROUP_NAME].addEntry(materialsBook.value(id));
+                    groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(materialsBook.value(id));
                 }
                 else {
                     warnPigment << "Invalid swatch definition (material not found) (line" << swatch.lineNumber() << ", column" << swatch.columnNumber() << ")";
@@ -1450,13 +1427,13 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute("version", "1.0");
         root.setAttribute("name", colorSet->name());
         root.setAttribute("comment", comment);
-        root.setAttribute("columns", groups[GLOBAL_GROUP_NAME].columnCount());
+        root.setAttribute("columns", groups[KoColorSet::GLOBAL_GROUP_NAME].columnCount());
         root.setAttribute("rows", colorSet->rowCount());
 
-        saveKplGroup(doc, root, colorSet->getGroup(GLOBAL_GROUP_NAME), colorSpaces);
+        saveKplGroup(doc, root, colorSet->getGroup(KoColorSet::GLOBAL_GROUP_NAME), colorSpaces);
 
         for (const QString &groupName : groupNames) {
-            if (groupName == GLOBAL_GROUP_NAME) { continue; }
+            if (groupName == KoColorSet::GLOBAL_GROUP_NAME) { continue; }
             QDomElement gl = doc.createElement("Group");
             gl.setAttribute("name", groupName);
             root.appendChild(gl);

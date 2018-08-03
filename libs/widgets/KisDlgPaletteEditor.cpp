@@ -1,6 +1,12 @@
 #include <QAction>
 #include <QFileInfo>
+#include <QSpinBox>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QMessageBox>
 
+#include <KoDialog.h>
 #include <KoColorSet.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -13,6 +19,7 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     : m_ui(new Ui_WdgDlgPaletteEditor)
     , m_actAddGroup(new QAction(i18n("Add a group")))
     , m_actDelGroup(new QAction(i18n("Delete this group")))
+    , m_group(Q_NULLPTR)
 {
     m_ui->setupUi(this);
     m_ui->gbxPalette->setTitle(i18n("Palette settings"));
@@ -57,9 +64,13 @@ void KisDlgPaletteEditor::setPalette(KoColorSet *colorSet)
         KisSwatchGroup *group = m_colorSet->getGroup(groupName);
         m_groups[groupName] = GroupInfoType(group->name(), group->rowCount());
         m_original->groups[groupName] = GroupInfoType(group->name(), group->rowCount());
+        m_ui->cbxGroup->addItem(groupName);
     }
+    m_group = m_colorSet->getGlobalGroup();
+    m_ui->cbxGroup->setCurrentText(KoColorSet::GLOBAL_GROUP_NAME);
+    connect(m_ui->cbxGroup, SIGNAL(currentTextChanged(QString)), SLOT(slotGroupChosen(QString)));
 
-    m_ui->spinBoxRow->setValue(m_colorSet->rowCount());
+    m_ui->spinBoxRow->setValue(m_group->rowCount());
 
     if (!m_colorSet->isEditable()) {
         m_ui->lineEditName->setEnabled(false);
@@ -116,10 +127,38 @@ bool KisDlgPaletteEditor::isModified() const
 
 void KisDlgPaletteEditor::slotAddGroup()
 {
+    KoDialog dlg;
+    QVBoxLayout layout(&dlg);
+    dlg.mainWidget()->setLayout(&layout);
+    QLabel lblName(i18n("Name"), &dlg);
+    layout.addWidget(&lblName);
+    QLineEdit leName(&dlg);
+    layout.addWidget(&leName);
+    QLabel lblRowCount(i18n("Row count"), &dlg);
+    layout.addWidget(&lblRowCount);
+    QSpinBox spxRow(&dlg);
+    layout.addWidget(&spxRow);
+    if (dlg.exec() != QDialog::Accepted) { return; }
+    if (m_colorSet->getGroup(leName.text())) {
+        QMessageBox msgNameDuplicate;
+        msgNameDuplicate.setText(i18n("Group already exists"));
+        msgNameDuplicate.setWindowTitle(i18n("Group already exists! Group not added."));
+        msgNameDuplicate.exec();
+        return;
+    }
+    m_colorSet->addGroup(leName.text());
+    m_colorSet->getGroup(leName.text())->setRowCount(spxRow.value());
+    m_groups.insert(leName.text(), GroupInfoType(leName.text(), spxRow.value()));
+
     qDebug() << "Adding a group";
 }
 
 void KisDlgPaletteEditor::slotDelGroup()
 {
     qDebug() << "Deleting current group";
+}
+
+void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)
+{
+    m_group = m_colorSet->getGroup(groupName);
 }

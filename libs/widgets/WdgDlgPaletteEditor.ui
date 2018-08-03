@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>389</height>
+    <width>510</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,6 +42,16 @@
          </item>
          <item>
           <widget class="QLineEdit" name="lineEditFilename"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelColCount">
+           <property name="text">
+            <string>Column count</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSpinBox" name="spinBoxCol"/>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -97,14 +107,17 @@
           <widget class="QSpinBox" name="spinBoxRow"/>
          </item>
          <item>
-          <widget class="QLabel" name="labelColCount">
-           <property name="text">
-            <string>Column count</string>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="spinBoxCol"/>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <widget class="QToolButton" name="bnDelGroup">

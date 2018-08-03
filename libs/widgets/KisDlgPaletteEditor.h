@@ -10,6 +10,7 @@
 class QAction;
 
 class KoColorSet;
+class KisSwatchGroup;
 
 class Ui_WdgDlgPaletteEditor;
 
@@ -46,6 +47,7 @@ public:
 private Q_SLOTS:
     void slotDelGroup();
     void slotAddGroup();
+    void slotGroupChosen(const QString &groupName);
 
 private:
 
@@ -56,6 +58,7 @@ private:
     QPointer<KoColorSet> m_colorSet;
     QScopedPointer<OriginalPaletteInfo> m_original;
     QHash<QString, GroupInfoType> m_groups;
+    KisSwatchGroup *m_group;
 };
 
 #endif // KISDLGPALETTEEDITOR_H

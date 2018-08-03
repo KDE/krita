@@ -60,12 +60,30 @@ void TestBundleStorage::testMetaData()
 void TestBundleStorage::testResourceIterator()
 {
     KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
-
+    QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage.resources("brushes");
+    QVERIFY(iter->hasNext());
+    int count = 0;
+    while (iter->hasNext()) {
+        iter->next();
+        KoResourceSP res = iter->resource();
+        QVERIFY(res);
+        count++;
+    }
+    QVERIFY(count > 0);
 }
 
 void TestBundleStorage::testTagIterator()
 {
     KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
+    QSharedPointer<KisResourceStorage::TagIterator> iter = storage.tags("paintoppresets");
+    QVERIFY(iter->hasNext());
+    int count = 0;
+    while (iter->hasNext()) {
+        iter->next();
+        qDebug() << iter->url() << iter->name() << iter->tag();
+        count++;
+    }
+    QVERIFY(count == 1);
 }
 
 

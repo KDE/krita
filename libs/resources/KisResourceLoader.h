@@ -87,7 +87,7 @@ public:
 
     /**
      * Load this resource.
-     * @return true if loading the resource succeeded.
+     * @return a resource if loading the resource succeeded, 0 otherwise
      */
     virtual KoResourceSP load(const QString &name, QIODevice &dev) { Q_UNUSED(name); Q_UNUSED(dev); return 0; };
 

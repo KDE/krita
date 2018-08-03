@@ -104,8 +104,12 @@ public:
     void saveManifest(QScopedPointer<KoStore> &store);
 
     QStringList resourceTypes() const;
-    QList<KoResource*> resources(const QString &resType = QString()) const;
     int resourceCount() const;
+
+    KoResourceBundleManifest &manifest();
+
+    KoResourceSP resource(const QString &resourceType, const QString &filepath);
+
 private:
 
     void writeMeta(const QString &metaTag, KoXmlWriter *writer);
@@ -124,6 +128,8 @@ private:
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
     QString m_bundleVersion;
+
+    QMap<QString, KoResourceSP> m_resourceCache;
 
 };
 

@@ -33,6 +33,8 @@ public:
 
     struct ResourceReference {
 
+        ResourceReference() {}
+
         ResourceReference(const QString &_resourcePath, const QList<QString> &_tagList, const QString &_fileTypeName, const QByteArray &_md5) {
             resourcePath = _resourcePath;
             tagList = _tagList;

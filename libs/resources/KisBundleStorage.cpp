@@ -19,17 +19,19 @@
 
 #include "KisBundleStorage.h"
 
-#include <qdebug.h>
+#include <QDebug>
+#include <QFileInfo>
 
 #include "KisResourceStorage.h"
 #include "KoResourceBundle.h"
+#include "KoResourceBundleManifest.h"
 
 class BundleTagIterator : public KisResourceStorage::TagIterator
 {
 public:
 
-    BundleTagIterator(const QString &location, const QString &resourceType)
-        : m_location(location)
+    BundleTagIterator(KoResourceBundle *bundle, const QString &resourceType)
+        : m_bundle(bundle)
         , m_resourceType(resourceType)
     {}
 
@@ -42,8 +44,7 @@ public:
     KisTagSP tag() const override { return 0; }
 
 private:
-
-    QString m_location;
+    KoResourceBundle *m_bundle {0};
     QString m_resourceType;
 };
 
@@ -51,16 +52,58 @@ private:
 class BundleIterator : public KisResourceStorage::ResourceIterator
 {
 public:
-    bool hasNext() const override {return false; }
-    void next() const override {}
+    BundleIterator(KoResourceBundle *bundle, const QString &resourceType)
+        : m_bundle(bundle)
+        , m_resourceType(resourceType)
+    {
+        m_entriesIterator.reset(new QListIterator<KoResourceBundleManifest::ResourceReference>(m_bundle->manifest().files(resourceType)));
+    }
 
-    QString url() const override { return QString(); }
-    QString type() const override { return QString(); }
-    QDateTime lastModified() const override { return QDateTime(); }
+    bool hasNext() const override
+    {
+        return m_entriesIterator->hasNext();
+    }
+
+    void next() const override
+    {
+        KoResourceBundleManifest::ResourceReference ref = m_entriesIterator->next();
+        const_cast<BundleIterator*>(this)->m_resourceReference = ref;
+    }
+
+    QString url() const override
+    {
+        return m_resourceReference.resourcePath;
+    }
+
+    QString type() const override
+    {
+        return m_resourceType;
+    }
+
+    QDateTime lastModified() const override
+    {
+        return QFileInfo(m_bundle->filename()).lastModified();
+    }
+
     /// This only loads the resource when called
-    QByteArray md5sum() const override { return QByteArray(); }
+    QByteArray md5sum() const override
+    {
+        return m_resourceReference.md5sum;
+    }
+
     /// This only loads the resource when called
-    KoResourceSP resource() const override { return 0; }
+    KoResourceSP resource() const override
+    {
+        return m_bundle->resource(m_resourceType, m_resourceReference.resourcePath);
+    }
+
+private:
+
+    KoResourceBundle *m_bundle {0};
+    QString m_resourceType;
+    QScopedPointer<QListIterator<KoResourceBundleManifest::ResourceReference> > m_entriesIterator;
+    KoResourceBundleManifest::ResourceReference m_resourceReference;
+
 };
 
 
@@ -96,12 +139,17 @@ KoResourceSP KisBundleStorage::resource(const QString &url)
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisBundleStorage::resources(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::ResourceIterator>(new BundleIterator);
+    return QSharedPointer<KisResourceStorage::ResourceIterator>(new BundleIterator(d->bundle.data(), resourceType));
 }
 
 QSharedPointer<KisResourceStorage::TagIterator> KisBundleStorage::tags(const QString &resourceType)
 {
-    return QSharedPointer<KisResourceStorage::TagIterator>(new BundleTagIterator(location(), resourceType));
+    return QSharedPointer<KisResourceStorage::TagIterator>(new BundleTagIterator(d->bundle.data(), resourceType));
+}
+
+QImage KisBundleStorage::thumbnail() const
+{
+    return d->bundle->image();
 }
 
 QString KisBundleStorage::metaData(const QString &key) const

@@ -32,6 +32,7 @@
 
 #include <klocalizedstring.h>
 
+#include <KisMimeDatabase.h>
 #include "KoResourceBundleManifest.h"
 #include <KoHashGenerator.h>
 #include <KoHashGeneratorProvider.h>
@@ -40,6 +41,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include "KisStoragePlugin.h"
+#include "KisResourceLoaderRegistry.h"
 
 #include <KritaVersionWrapper.h>
 
@@ -324,7 +326,6 @@ bool KoResourceBundle::saveToDevice(QIODevice */*dev*/) const
     return false;
 }
 
-
 void KoResourceBundle::setMetaData(const QString &key, const QString &value)
 {
     m_metadata.insert(key, value);
@@ -353,46 +354,6 @@ QList<QString> KoResourceBundle::getTagsList()
 QStringList KoResourceBundle::resourceTypes() const
 {
     return m_manifest.types();
-}
-
-QList<KoResource*> KoResourceBundle::resources(const QString &resType) const
-{
-    QList<KoResourceBundleManifest::ResourceReference> references = m_manifest.files(resType);
-
-    QList<KoResource*> ret;
-    //    Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, references) {
-    //        if (resType == "gradients") {
-    //            KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
-    //            KoResource *res =  gradientServer->resourceByMD5(ref.md5sum);
-    //            if (res) ret << res;
-    //        }
-    //        else if (resType  == "patterns") {
-    //            KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
-    //            KoResource *res =  patternServer->resourceByMD5(ref.md5sum);
-    //            if (res) ret << res;
-    //        }
-    //        else if (resType  == "brushes") {
-    //            KisBrushResourceServer *brushServer = KisBrushServer::instance()->brushServer();
-    //            KoResource *res =  brushServer->resourceByMD5(ref.md5sum).data();
-    //            if (res) ret << res;
-    //        }
-    //        else if (resType  == "palettes") {
-    //            KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
-    //            KoResource *res =  paletteServer->resourceByMD5(ref.md5sum);
-    //            if (res) ret << res;
-    //        }
-    //        else if (resType  == "workspaces") {
-    //            KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
-    //            KoResource *res =  workspaceServer->resourceByMD5(ref.md5sum);
-    //            if (res) ret << res;
-    //        }
-    //        else if (resType  == "paintoppresets") {
-    //            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    //            KisPaintOpPresetSP res =  paintoppresetServer->resourceByMD5(ref.md5sum);
-    //            if (res) ret << res.data();
-    //        }
-    //    }
-    return ret;
 }
 
 void KoResourceBundle::setThumbnail(QString filename)
@@ -533,4 +494,37 @@ void KoResourceBundle::saveManifest(QScopedPointer<KoStore> &store)
 int KoResourceBundle::resourceCount() const
 {
     return m_manifest.files().count();
+}
+
+KoResourceBundleManifest &KoResourceBundle::manifest()
+{
+    return m_manifest;
+}
+
+KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QString &filepath)
+{
+    if (filename().isEmpty()) return 0;
+
+    if (m_resourceCache.contains(filepath)) {
+        return m_resourceCache[filepath];
+    }
+
+    QScopedPointer<KoStore> resourceStore(KoStore::createStore(filename(), KoStore::Read, "application/x-krita-resourcebundle", KoStore::Zip));
+
+    if (!resourceStore || resourceStore->bad()) {
+        qWarning() << "Could not open store on bundle" << filename();
+        return 0;
+    }
+
+    if (!resourceStore->open(filepath)) {
+        qWarning() << "Could not open file in bundle" << filepath;
+    }
+
+    QString mime = KisMimeDatabase::mimeTypeForSuffix(filepath);
+    KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);
+    KoResourceSP res = loader->load(filepath, *resourceStore->device());
+    resourceStore->close();
+    m_resourceCache[filepath] = res;
+
+    return res;
 }

@@ -70,7 +70,6 @@ bool KoResourceBundle::load()
 
     if (!resourceStore || resourceStore->bad()) {
         qWarning() << "Could not open store on bundle" << filename();
-        m_installed = false;
         setValid(false);
         return false;
 
@@ -126,7 +125,6 @@ bool KoResourceBundle::load()
             m_metadata.insert(KisStoragePlugin::s_meta_version, "1");
         }
 
-        m_installed = true;
         setValid(true);
         setImage(m_thumbnail);
     }
@@ -477,11 +475,6 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
         return true;
     }
     return false;
-}
-
-void KoResourceBundle::setInstalled(bool install)
-{
-    m_installed = install;
 }
 
 void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)

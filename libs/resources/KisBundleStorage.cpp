@@ -19,7 +19,10 @@
 
 #include "KisBundleStorage.h"
 
+#include <qdebug.h>
+
 #include "KisResourceStorage.h"
+#include "KoResourceBundle.h"
 
 class BundleTagIterator : public KisResourceStorage::TagIterator
 {
@@ -44,6 +47,7 @@ private:
     QString m_resourceType;
 };
 
+
 class BundleIterator : public KisResourceStorage::ResourceIterator
 {
 public:
@@ -59,9 +63,21 @@ public:
     KoResourceSP resource() const override { return 0; }
 };
 
+
+class KisBundleStorage::Private {
+public:
+    QScopedPointer<KoResourceBundle> bundle;
+};
+
+
 KisBundleStorage::KisBundleStorage(const QString &location)
     : KisStoragePlugin(location)
+    , d(new Private())
 {
+    d->bundle.reset(new KoResourceBundle(location));
+    if (!d->bundle->load()) {
+        qWarning() << "Could not load bundle" << location;
+    }
 }
 
 KisBundleStorage::~KisBundleStorage()
@@ -90,6 +106,6 @@ QSharedPointer<KisResourceStorage::TagIterator> KisBundleStorage::tags(const QSt
 
 QString KisBundleStorage::metaData(const QString &key) const
 {
-    return QString();
+    return d->bundle->metaData(key);
 }
 

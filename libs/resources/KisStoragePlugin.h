@@ -51,7 +51,7 @@ public:
     static const QString s_meta_description;
     static const QString s_meta_initial_creator;
     static const QString s_meta_creator;
-    static const QString s_meta_creation_data;
+    static const QString s_meta_creation_date;
     static const QString s_meta_dc_date;
     static const QString s_meta_user_defined;
     static const QString s_meta_name;

@@ -25,7 +25,7 @@ const QString KisStoragePlugin::s_meta_title("dc:title");
 const QString KisStoragePlugin::s_meta_description("dc:description");
 const QString KisStoragePlugin::s_meta_initial_creator("meta:initial-creator");
 const QString KisStoragePlugin::s_meta_creator("cd:creator");
-const QString KisStoragePlugin::s_meta_creation_data("meta:creation-data");
+const QString KisStoragePlugin::s_meta_creation_date("meta:creation-data");
 const QString KisStoragePlugin::s_meta_dc_date("meta:dc-date");
 const QString KisStoragePlugin::s_meta_user_defined("meta:meta-userdefined");
 const QString KisStoragePlugin::s_meta_name("meta:name");

@@ -87,8 +87,8 @@ public:
      * @param type type of the metadata
      * @param value value of the metadata
      */
-    void addMeta(const QString &type, const QString &value);
-    const QString getMeta(const QString &type, const QString &defaultValue = QString()) const;
+    void setMetaData(const QString &key, const QString &value);
+    const QString metaData(const QString &key, const QString &defaultValue = QString()) const;
 
     /**
      * @brief addFile : Add a file to the bundle
@@ -124,22 +124,14 @@ public:
      */
     void saveManifest(QScopedPointer<KoStore> &store);
 
-    /**
-     * @brief recreateBundle
-     * It recreates the bundle by copying the old bundle information to a new store
-     * and recalculating the md5 of each resource.
-     * @param oldStore the old store to be recreated.
-     */
-    void recreateBundle(QScopedPointer<KoStore> &oldStore);
-
-
     QStringList resourceTypes() const;
     QList<KoResource*> resources(const QString &resType = QString()) const;
     int resourceCount() const;
 private:
 
-    void writeMeta(const char *metaTag, const QString &metaKey, KoXmlWriter *writer);
-    void writeUserDefinedMeta(const QString &metaKey, KoXmlWriter *writer);
+    void writeMeta(const QString &metaTag, KoXmlWriter *writer);
+    void writeUserDefinedMeta(const QString &metaTag, KoXmlWriter *writer);
+    bool readMetaData(KoStore *resourceStore);
 
 private:
     QImage m_thumbnail;

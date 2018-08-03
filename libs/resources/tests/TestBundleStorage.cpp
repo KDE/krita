@@ -51,12 +51,9 @@ void TestBundleStorage::testMetaData()
     qDebug() << storage.metaData(KisStoragePlugin::s_meta_generator);
     QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_generator).isEmpty());
     QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_author).isEmpty());
-    QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_title).isEmpty());
     QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_description).isEmpty());
     QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_initial_creator).isEmpty());
-    QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_creator).isEmpty());
     QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_dc_date).isEmpty());
-    QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_user_defined).isEmpty());
     QVERIFY(!storage.metaData(KisStoragePlugin::s_meta_version).isEmpty());
 }
 

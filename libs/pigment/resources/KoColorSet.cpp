@@ -282,6 +282,7 @@ bool KoColorSet::addGroup(const QString &groupName)
     }
     d->groupNames.append(groupName);
     d->groups[groupName] = KisSwatchGroup();
+    d->groups[groupName].setName(groupName);
     return true;
 }
 
@@ -1510,7 +1511,7 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
         group->setColumnCount(parentEle.attribute("column").toInt());
     }
     if (!parentEle.attribute("row").isNull()) {
-        group->setColumnCount(parentEle.attribute("row").toInt());
+        group->setRowCount(parentEle.attribute("row").toInt());
     }
 
     for (QDomElement swatchEle = parentEle.firstChildElement("ColorSetEntry");
@@ -1533,7 +1534,6 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
                     rowNumber >= group->rowCount()
                     ) {
                 warnPigment << "Swatch" << entry.name()
-                            << "from group" << group->name()
                             << "of palette" << colorSet->name()
                             << "has invalid position.";
                 continue;

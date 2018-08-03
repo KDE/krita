@@ -239,10 +239,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
     KoDialog *dlg = new KoDialog();
     QFormLayout *editableItems = new QFormLayout(dlg);
     dlg->mainWidget()->setLayout(editableItems);
-    QLineEdit *lnIDName = new QLineEdit(dlg);
     QLineEdit *lnGroupName = new QLineEdit(dlg);
-    KisColorButton *bnColor = new KisColorButton(dlg);
-    QCheckBox *chkSpot = new QCheckBox(dlg);
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
         QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
@@ -254,6 +251,9 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         }
         //rename the group.
     } else {
+        QLineEdit *lnIDName = new QLineEdit(dlg);
+        KisColorButton *bnColor = new KisColorButton(dlg);
+        QCheckBox *chkSpot = new QCheckBox(dlg);
         KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
         Q_ASSERT(group);
         KisSwatch entry = group->getEntry(index.column(), index.row());

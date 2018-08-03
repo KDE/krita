@@ -34,6 +34,7 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
 
     connect(m_actAddGroup.data(), SIGNAL(triggered(bool)), SLOT(slotAddGroup()));
     connect(m_actDelGroup.data(), SIGNAL(triggered(bool)), SLOT(slotDelGroup()));
+    connect(m_ui->spinBoxRow, SIGNAL(valueChanged(int)), SLOT(slotRowCountChanged(int)));
 }
 
 KisDlgPaletteEditor::~KisDlgPaletteEditor()
@@ -62,8 +63,8 @@ void KisDlgPaletteEditor::setPalette(KoColorSet *colorSet)
 
     for (const QString & groupName : m_colorSet->getGroupNames()) {
         KisSwatchGroup *group = m_colorSet->getGroup(groupName);
-        m_groups[groupName] = GroupInfoType(group->name(), group->rowCount());
-        m_original->groups[groupName] = GroupInfoType(group->name(), group->rowCount());
+        m_groups[groupName] = GroupInfoType(groupName, group->rowCount());
+        m_original->groups[groupName] = GroupInfoType(groupName, group->rowCount());
         m_ui->cbxGroup->addItem(groupName);
     }
     m_group = m_colorSet->getGlobalGroup();
@@ -97,11 +98,6 @@ QString KisDlgPaletteEditor::filename() const
 int KisDlgPaletteEditor::columnCount() const
 {
     return m_ui->spinBoxCol->value();
-}
-
-int KisDlgPaletteEditor::rowCount() const
-{
-    return m_ui->spinBoxRow->value();
 }
 
 bool KisDlgPaletteEditor::isGlobal() const
@@ -161,4 +157,15 @@ void KisDlgPaletteEditor::slotDelGroup()
 void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)
 {
     m_group = m_colorSet->getGroup(groupName);
+    m_ui->spinBoxRow->setValue(m_group->rowCount());
+}
+
+int KisDlgPaletteEditor::groupRowNumber(const QString &name)
+{
+    return m_groups[name].second;
+}
+
+void KisDlgPaletteEditor::slotRowCountChanged(int newCount)
+{
+    m_groups[m_group->name()].second = newCount;
 }

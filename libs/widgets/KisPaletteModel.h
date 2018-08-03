@@ -147,6 +147,7 @@ private /* methods */:
     QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
     int rowNumberInGroup(int rowInModel) const;
+    QString groupNameByIndex(const QModelIndex &index) const;
 
 private /* member variables */:
     QPointer<KoColorSet> m_colorSet;

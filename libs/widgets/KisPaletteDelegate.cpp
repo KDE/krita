@@ -50,6 +50,7 @@ void KisPaletteDelegate::paint(QPainter *painter,
             painter->fillRect(option.rect, option.palette.highlight());
         }
         QRect paintRect = kisGrowRect(option.rect, -borderWidth);
+        painter->setBrush(QBrush(Qt::lightGray));
         painter->drawText(paintRect, name);
     } else {
         QRect paintRect = option.rect;

@@ -39,15 +39,16 @@ public:
     QString name() const;
     QString filename() const;
     int columnCount() const;
-    int rowCount() const;
     bool isGlobal() const;
     bool isReadOnly() const;
     bool isModified() const;
+    int groupRowNumber(const QString &);
 
 private Q_SLOTS:
     void slotDelGroup();
     void slotAddGroup();
     void slotGroupChosen(const QString &groupName);
+    void slotRowCountChanged(int);
 
 private:
 

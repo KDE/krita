@@ -99,10 +99,14 @@ void KisPaletteListWidget::slotAdd()
 void KisPaletteListWidget::slotRemove()
 {
     if (m_d->itemChooser->currentResource()) {
-        if (!static_cast<KoColorSet*>(m_d->itemChooser->currentResource())->isEditable()) {
+        KoColorSet *group = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+        if (!group || !group->isEditable()) {
             return;
         }
         m_d->rAdapter->removeResource(m_d->itemChooser->currentResource());
+        if (group->isGlobal()) {
+            QFile::remove(m_d->itemChooser->currentResource()->filename());
+        }
     }
     m_d->itemChooser->setCurrentItem(0, 0);
 
@@ -119,6 +123,9 @@ void KisPaletteListWidget::slotModify()
     if (!dlg.isModified()) { return; }
     colorSet->setName(dlg.name());
     colorSet->setColumnCount(dlg.columnCount());
+    for (const QString &groupName : colorSet->getGroupNames()) {
+        colorSet->getGroup(groupName)->setRowCount(dlg.groupRowNumber(groupName));
+    }
     if (dlg.isGlobal()) {
         setPaletteGlobal(colorSet);
     } else {

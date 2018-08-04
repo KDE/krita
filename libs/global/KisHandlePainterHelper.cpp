@@ -82,7 +82,8 @@ void KisHandlePainterHelper::setHandleStyle(const KisHandleStyle &style)
     m_handleStyle = style;
 }
 
-void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius) {
+void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius)
+{
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
 
     QRectF handleRect(-radius, -radius, 2 * radius, 2 * radius);
@@ -94,6 +95,25 @@ void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius)
         m_painter->drawPolygon(handlePolygon);
     }
 }
+
+void KisHandlePainterHelper::fillHandleRect(const QPointF &center, qreal radius, QColor fillColor)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
+
+    QRectF handleRect(-radius, -radius, 2 * radius, 2 * radius);
+    QPolygonF handlePolygon = m_handleTransform.map(QPolygonF(handleRect));
+    handlePolygon.translate(m_painterTransform.map(center));
+
+    QPainterPath painterPath;
+    painterPath.addPolygon(handlePolygon);
+
+    const QPainterPath pathToSend = painterPath;
+    const QBrush brushStyle(fillColor);
+    m_painter->fillPath(pathToSend, brushStyle);
+
+}
+
+
 
 void KisHandlePainterHelper::drawHandleCircle(const QPointF &center, qreal radius) {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);

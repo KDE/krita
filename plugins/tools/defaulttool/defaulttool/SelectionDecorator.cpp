@@ -83,6 +83,16 @@ QPointF SelectionDecorator::textEditorButtonPos()
     return m_textEditorButtonPosition;
 }
 
+void SelectionDecorator::setIsOverTextEditorButton(bool value)
+{
+    m_isHoveringOverTextButton = value;
+}
+
+bool SelectionDecorator::isOverTextEditorButton()
+{
+    return m_isHoveringOverTextButton;
+}
+
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
 {
     QList<KoShape*> selectedShapes = m_selection->selectedVisibleShapes();
@@ -159,6 +169,8 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
             const QPointF finalHandleRect = m_textEditorButtonPosition;
             helper.drawHandleRect(finalHandleRect, 15);
+
+            helper.fillHandleRect(finalHandleRect, 15, Qt::white);
 
 
             // T icon inside box

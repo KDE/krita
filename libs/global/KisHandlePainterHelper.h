@@ -82,6 +82,9 @@ public:
      */
     void drawHandleRect(const QPointF &center, qreal radius);
 
+
+    void fillHandleRect(const QPointF &center, qreal radius, QColor fillColor);
+
     /**
      * Draws a handle circle with a custom \p radius at position \p center
      */

@@ -636,12 +636,20 @@ void DefaultTool::updateCursor()
                 cursor = Qt::ArrowCursor;
                 break;
             }
+
             if (rotateHandle) {
                 statusText = i18n("Left click rotates around center, right click around highlighted position.");
             }
             if (shearHandle) {
                 statusText = i18n("Click and drag to shear selection.");
             }
+
+            if (decorator->isOverTextEditorButton()) {
+                cursor = Qt::PointingHandCursor;
+            } else {
+                cursor = Qt::ArrowCursor;
+            }
+
         } else {
             statusText = i18n("Click and drag to resize selection.");
             m_angle = rotationOfHandle(m_lastHandle, false);
@@ -992,15 +1000,14 @@ bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
    // qWarning() << "distance from text button: " << QString::number(distanceSq);
 
 
-    if (distanceSq < 18 * 18) { // 22 is "handle" area (previously 16). Probably can refactor this a bit
-        //qWarning() << "over Text area: ";
+    if (distanceSq < 18 * 18) { // 18 is "handle" area (previously 16). Probably can refactor this a bit
+        decorator->setIsOverTextEditorButton(true);
         return true;
     }
     else {
-       // qWarning() << "NOT over Text area: ";
+        decorator->setIsOverTextEditorButton(false);
         return false;
     }
-
 }
 
 KoFlake::SelectionHandle DefaultTool::handleAt(const QPointF &point, bool *innerHandleMeaning)

@@ -79,6 +79,8 @@ public:
     void setShowStrokeFillGradientHandles(bool value);
 
     QPointF textEditorButtonPos();
+    void setIsOverTextEditorButton(bool value);
+    bool isOverTextEditorButton();
 
 private:
     void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
@@ -90,7 +92,9 @@ private:
     int m_lineWidth;
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
+
     QPointF m_textEditorButtonPosition;
+    bool m_isHoveringOverTextButton;
 
     KisCoordinatesConverter *m_coordConverter;
 };

@@ -167,12 +167,6 @@ krita_add_broken_unit_test(
     TEST_NAME krita-ui-animation_frame_cache_test
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
-krita_add_broken_unit_test(
-    ResourceBundleTest.cpp
-    TEST_NAME krita-ui-ResourceBundleTest
-    LINK_LIBRARIES kritaui kritalibbrush kritalibpaintop Qt5::Test)
-
-# FIXME this test doesn't compile
 ecm_add_test(
     kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
     TEST_NAME krita-ui-KisInputManagerTest

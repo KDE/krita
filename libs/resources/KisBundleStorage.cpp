@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QFileInfo>
 
+#include <KisTag.h>
 #include "KisResourceStorage.h"
 #include "KoResourceBundle.h"
 #include "KoResourceBundleManifest.h"
@@ -33,19 +34,43 @@ public:
     BundleTagIterator(KoResourceBundle *bundle, const QString &resourceType)
         : m_bundle(bundle)
         , m_resourceType(resourceType)
-    {}
+    {
+        QList<KoResourceBundleManifest::ResourceReference> resources = m_bundle->manifest().files(resourceType);
+        Q_FOREACH(KoResourceBundleManifest::ResourceReference resource, resources) {
+            Q_FOREACH(const QString &tagname, resource.tagList) {
+                if (!m_tags.contains(tagname)){
+                    KisTagSP tag = QSharedPointer<KisTag>(new KisTag());
+                    tag->setName(tagname);
+                    tag->setComment(tagname);
+                    tag->setUrl(bundle->filename() + ':' + tagname);
+                    m_tags[tagname] = tag;
+                }
+                m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource.resourcePath);
+            }
+        }
+        m_tagIterator.reset(new QListIterator<KisTagSP>(m_tags.values()));
+    }
 
-    bool hasNext() const override {return false; }
-    void next() const override {}
+    bool hasNext() const override
+    {
+        return m_tagIterator->hasNext();
+    }
+    void next() const override
+    {
+        const_cast<BundleTagIterator*>(this)->m_tag = m_tagIterator->next();
+    }
 
-    QString url() const override { return QString(); }
-    QString name() const override { return QString(); }
-    QString comment() const override {return QString(); }
-    KisTagSP tag() const override { return 0; }
+    QString url() const override { return m_tag ? m_tag->url() : QString(); }
+    QString name() const override { return m_tag ? m_tag->name() : QString(); }
+    QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
+    KisTagSP tag() const override { return m_tag; }
 
 private:
+    QHash<QString, KisTagSP> m_tags;
     KoResourceBundle *m_bundle {0};
     QString m_resourceType;
+    QScopedPointer<QListIterator<KisTagSP> > m_tagIterator;
+    KisTagSP m_tag;
 };
 
 

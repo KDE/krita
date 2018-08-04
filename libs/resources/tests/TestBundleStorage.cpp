@@ -80,10 +80,9 @@ void TestBundleStorage::testTagIterator()
     int count = 0;
     while (iter->hasNext()) {
         iter->next();
-        qDebug() << iter->url() << iter->name() << iter->tag();
         count++;
     }
-    QVERIFY(count == 1);
+    QVERIFY(count > 0);
 }
 
 

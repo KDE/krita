@@ -227,7 +227,7 @@ void SvgTextTool::showEditor()
 
     }
 
-    m_editor->setShape(shape);
+    m_editor->setShape(shape); // initialize editor with selected text shape
     m_editor->show();
     m_editor->activateWindow();
 }

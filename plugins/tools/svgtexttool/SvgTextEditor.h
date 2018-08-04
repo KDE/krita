@@ -123,7 +123,8 @@ private Q_SLOTS:
     void setBackgroundColor(const KoColor &c);
 
     void setModified(bool modified);
-    void dialogButtonClicked(QAbstractButton *button);
+
+    void slotRevertChangesAndCloseEditor();
     void slotCloseEditor();
 
 Q_SIGNALS:
@@ -157,6 +158,11 @@ private:
     BasicXMLSyntaxHighlighter *m_syntaxHighlighter;
 
     QString m_searchKey;
+
+    // keep reference of original text in case we want to revert changes
+    QString m_originalSvg;
+    QString m_originalHtml;
+
 };
 
 #endif //TEXTNGSHAPECONFIGWIDGET_H

@@ -90,9 +90,15 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_charSelectDialog->hide();
     m_charSelectDialog->setButtons(KoDialog::Close);
 #endif
-    connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
-    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(slotCloseEditor()));
-    connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
+
+    // allows for realtime updates to the canvas
+    connect(m_textEditorWidget.richTextEdit, SIGNAL(textChanged()), this, SLOT(save()));
+    connect(m_textEditorWidget.svgStylesEdit, SIGNAL(textChanged()), this, SLOT(save()));
+    connect(m_textEditorWidget.svgTextEdit, SIGNAL(textChanged()), this, SLOT(save()));
+
+    // keep or revert the text changes we do
+    connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(slotCloseEditor()));
+    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(slotRevertChangesAndCloseEditor()));
 
     KConfigGroup cg(KSharedConfig::openConfig(), "SvgTextTool");
     actionCollection()->setConfigGroup("SvgTextTool");
@@ -145,7 +151,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
 
     applySettings();
-
 }
 
 SvgTextEditor::~SvgTextEditor()
@@ -159,18 +164,16 @@ SvgTextEditor::~SvgTextEditor()
 void SvgTextEditor::setShape(KoSvgTextShape *shape)
 {
     m_shape = shape;
+
     if (m_shape) {
         KoSvgTextShapeMarkupConverter converter(m_shape);
-
-        QString svg;
-        QString styles;
         QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
 
-        if (converter.convertToSvg(&svg, &styles)) {
-            m_textEditorWidget.svgTextEdit->setPlainText(svg);
-            m_textEditorWidget.svgStylesEdit->setPlainText(styles);
-            m_textEditorWidget.svgTextEdit->document()->setModified(false);
-            if (converter.convertSvgToDocument(svg, doc)) {
+        if (converter.convertToSvg(&m_originalSvg, &m_originalHtml)) {
+            m_textEditorWidget.svgTextEdit->setPlainText(m_originalSvg);
+            m_textEditorWidget.svgStylesEdit->setPlainText(m_originalHtml);
+
+            if (converter.convertSvgToDocument(m_originalSvg, doc)) {
                 m_textEditorWidget.richTextEdit->setDocument(doc);
             }
         }
@@ -178,7 +181,6 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
             QMessageBox::warning(this, i18n("Conversion failed"), "Could not get svg text from the shape:\n" + converter.errors().join('\n') + "\n" + converter.warnings().join('\n'));
         }
     }
-
 }
 
 void SvgTextEditor::save()
@@ -193,15 +195,12 @@ void SvgTextEditor::save()
             if (!converter.convertDocumentToSvg(m_textEditorWidget.richTextEdit->document(), &svg)) {
                     qWarning()<<"new converter doesn't work!";
             }
-            m_textEditorWidget.richTextEdit->document()->setModified(false);
             emit textUpdated(m_shape, svg, styles);
         }
         else {
             emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
-            m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
-
 }
 
 void SvgTextEditor::switchTextEditorTab()
@@ -209,17 +208,12 @@ void SvgTextEditor::switchTextEditorTab()
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
 
-    if (m_currentEditor) {
-        disconnect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), this, SLOT(setModified(bool)));
-    }
-
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         //first, make buttons checkable
         enableRichTextActions(true);
 
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
-
 
         if (m_shape) {
             QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
@@ -247,8 +241,6 @@ void SvgTextEditor::switchTextEditorTab()
         }
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }
-
-    connect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), SLOT(setModified(bool)));
 }
 
 void SvgTextEditor::checkFormat()
@@ -792,22 +784,9 @@ void SvgTextEditor::setBackgroundColor(const KoColor &c)
 
 void SvgTextEditor::setModified(bool modified)
 {
-    if (modified) {
-        m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Discard);
-    }
-    else {
-        m_textEditorWidget.buttons->setStandardButtons(QDialogButtonBox::Save | QDialogButtonBox::Close);
-    }
+
 }
 
-void SvgTextEditor::dialogButtonClicked(QAbstractButton *button)
-{
-    if (m_textEditorWidget.buttons->standardButton(button) == QDialogButtonBox::Discard) {
-        if (QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("You have modified the text. Discard changes?"), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-            close();
-        }
-    }
-}
 
 void SvgTextEditor::setFont(const QString &fontName)
 {
@@ -930,8 +909,9 @@ void SvgTextEditor::createActions()
 
 
     // File: new, open, save, save as, close
-    KStandardAction::save(this, SLOT(save()), actionCollection());
-    KStandardAction::close(this, SLOT(slotCloseEditor()), actionCollection());
+    KStandardAction::save(this, SLOT(slotCloseEditor()), actionCollection());
+
+    KStandardAction::close(this, SLOT(slotRevertChangesAndCloseEditor()), actionCollection());
 
     // Edit
     KStandardAction::undo(this, SLOT(undo()), actionCollection());
@@ -1059,6 +1039,26 @@ void SvgTextEditor::enableRichTextActions(bool enable)
     Q_FOREACH(QAction *action, m_richTextActions) {
         action->setEnabled(enable);
     }
+}
+
+void SvgTextEditor::slotRevertChangesAndCloseEditor()
+{
+    // revert changes by first assigning the original values to the text editor
+    // todo: maybe refactor this a bit since it is repeated
+    m_textEditorWidget.svgTextEdit->setPlainText(m_originalSvg);
+    m_textEditorWidget.svgStylesEdit->setPlainText(m_originalHtml);
+
+    QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
+    KoSvgTextShapeMarkupConverter converter(m_shape);
+
+    if (converter.convertSvgToDocument(m_originalSvg, doc)) {
+        m_textEditorWidget.richTextEdit->setDocument(doc);
+    }
+
+
+    save();
+
+    slotCloseEditor();
 }
 
 void SvgTextEditor::slotCloseEditor()

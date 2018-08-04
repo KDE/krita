@@ -57,7 +57,27 @@
 #include "KoColorSet.h"
 #include "KoColorSet_p.h"
 
-QString KoColorSet::GLOBAL_GROUP_NAME = QString();
+const QString KoColorSet::GLOBAL_GROUP_NAME = QString();
+const QString KoColorSet::KPL_VERSION_ATTR = "version";
+const QString KoColorSet::KPL_GROUP_ROW_COUNT_ATTR = "rows";
+const QString KoColorSet::KPL_PALETTE_COLUMN_COUNT_ATTR = "columns";
+const QString KoColorSet::KPL_PALETTE_NAME_ATTR = "name";
+const QString KoColorSet::KPL_PALETTE_COMMENT_ATTR = "comment";
+const QString KoColorSet::KPL_PALETTE_FILENAME_ATTR = "filename";
+const QString KoColorSet::KPL_COLOR_MODEL_ID_ATTR = "colorModelId";
+const QString KoColorSet::KPL_COLOR_DEPTH_ID_ATTR = "colorDepthId";
+const QString KoColorSet::KPL_GROUP_NAME_ATTR = "name";
+const QString KoColorSet::KPL_SWATCH_ROW_ATTR = "row";
+const QString KoColorSet::KPL_SWATCH_COL_ATTR = "column";
+const QString KoColorSet::KPL_SWATCH_NAME_ATTR = "name";
+const QString KoColorSet::KPL_SWATCH_ID_ATTR = "id";
+const QString KoColorSet::KPL_SWATCH_SPOT_ATTR = "spot";
+const QString KoColorSet::KPL_SWATCH_BITDEPTH_ATTR = "bitdepth";
+const QString KoColorSet::KPL_PALETTE_PROFILE_TAG = "Profile";
+const QString KoColorSet::KPL_SWATCH_POS_TAG = "Position";
+const QString KoColorSet::KPL_SWATCH_TAG = "ColorSetEntry";
+const QString KoColorSet::KPL_GROUP_TAG = "Group";
+const QString KoColorSet::KPL_PALETTE_TAG = "ColorSet";
 
 KoColorSet::KoColorSet(const QString& filename)
     : KoResource(filename)
@@ -841,12 +861,12 @@ bool KoColorSet::Private::loadKpl()
         QDomDocument doc;
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
-        QDomElement c = e.firstChildElement("Profiles");
+        QDomElement c = e.firstChildElement(KPL_PALETTE_PROFILE_TAG);
         while (!c.isNull()) {
-            QString name = c.attribute("name");
-            QString filename = c.attribute("filename");
-            QString colorModelId = c.attribute("colorModelId");
-            QString colorDepthId = c.attribute("colorDepthId");
+            QString name = c.attribute(KPL_PALETTE_NAME_ATTR);
+            QString filename = c.attribute(KPL_PALETTE_FILENAME_ATTR);
+            QString colorModelId = c.attribute(KPL_COLOR_MODEL_ID_ATTR);
+            QString colorDepthId = c.attribute(KPL_COLOR_DEPTH_ID_ATTR);
             if (!KoColorSpaceRegistry::instance()->profileByName(name)) {
                 store->open(filename);
                 QByteArray data;
@@ -874,18 +894,18 @@ bool KoColorSet::Private::loadKpl()
         QDomDocument doc;
         doc.setContent(ba);
         QDomElement e = doc.documentElement();
-        colorSet->setName(e.attribute("name"));
-        colorSet->setColumnCount(e.attribute("columns").toInt());
-        comment = e.attribute("comment");
+        colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
+        colorSet->setColumnCount(e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt());
+        comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
 
         loadKplGroup(doc, e, colorSet->getGlobalGroup());
 
-        QDomElement g = e.firstChildElement("Group");
+        QDomElement g = e.firstChildElement(KPL_GROUP_TAG);
         while (!g.isNull()) {
-            QString groupName = g.attribute("name");
+            QString groupName = g.attribute(KPL_GROUP_NAME_ATTR);
             colorSet->addGroup(groupName);
             loadKplGroup(doc, g, colorSet->getGroup(groupName));
-            g = g.nextSiblingElement("Group");
+            g = g.nextSiblingElement(KPL_GROUP_TAG);
         }
     }
 
@@ -1415,19 +1435,19 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 
     {
         QDomDocument doc;
-        QDomElement root = doc.createElement("Colorset");
-        root.setAttribute("version", "1.0");
-        root.setAttribute("name", colorSet->name());
-        root.setAttribute("comment", comment);
-        root.setAttribute("columns", groups[KoColorSet::GLOBAL_GROUP_NAME].columnCount());
-        root.setAttribute("rows", groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
+        QDomElement root = doc.createElement(KPL_PALETTE_TAG);
+        root.setAttribute(KPL_VERSION_ATTR, "1.0");
+        root.setAttribute(KPL_PALETTE_NAME_ATTR, colorSet->name());
+        root.setAttribute(KPL_PALETTE_COMMENT_ATTR, comment);
+        root.setAttribute(KPL_PALETTE_COLUMN_COUNT_ATTR, colorSet->columnCount());
+        root.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
 
         saveKplGroup(doc, root, colorSet->getGroup(KoColorSet::GLOBAL_GROUP_NAME), colorSpaces);
 
         for (const QString &groupName : groupNames) {
             if (groupName == KoColorSet::GLOBAL_GROUP_NAME) { continue; }
-            QDomElement gl = doc.createElement("Group");
-            gl.setAttribute("name", groupName);
+            QDomElement gl = doc.createElement(KPL_GROUP_TAG);
+            gl.setAttribute(KPL_GROUP_NAME_ATTR, groupName);
             root.appendChild(gl);
             saveKplGroup(doc, gl, colorSet->getGroup(groupName), colorSpaces);
         }
@@ -1448,11 +1468,11 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         QByteArray profileRawData = colorSpace->profile()->rawData();
         if (!store->write(profileRawData)) { return false; }
         if (!store->close()) { return false; }
-        QDomElement el = doc.createElement("Profile");
-        el.setAttribute("filename", fn);
-        el.setAttribute("name", colorSpace->profile()->name());
-        el.setAttribute("colorModelId", colorSpace->colorModelId().id());
-        el.setAttribute("colorDepthId", colorSpace->colorDepthId().id());
+        QDomElement el = doc.createElement(KPL_PALETTE_PROFILE_TAG);
+        el.setAttribute(KPL_PALETTE_FILENAME_ATTR, fn);
+        el.setAttribute(KPL_PALETTE_NAME_ATTR, colorSpace->profile()->name());
+        el.setAttribute(KPL_COLOR_MODEL_ID_ATTR, colorSpace->colorModelId().id());
+        el.setAttribute(KPL_COLOR_DEPTH_ID_ATTR, colorSpace->colorDepthId().id());
         profileElement.appendChild(el);
 
     }
@@ -1466,56 +1486,55 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 }
 
 void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
-                                       QDomElement &parentEle,
+                                       QDomElement &groupEle,
                                        const KisSwatchGroup *group,
                                        QSet<const KoColorSpace *> &colorSetSet) const
 {
-    parentEle.setAttribute("rows", QString::number(group->rowCount()));
-    parentEle.setAttribute("columns", QString::number(group->columnCount()));
+    groupEle.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, QString::number(group->rowCount()));
 
-    for (const SwatchInfoType & info : group->infoList()) {
+    for (const SwatchInfoType &info : group->infoList()) {
         const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
         // Only save non-builtin profiles.=
         if (!profile->fileName().isEmpty()) {
             colorSetSet.insert(info.swatch.color().colorSpace());
         }
-        QDomElement swatchEle = doc.createElement("ColorSetEntry");
-        swatchEle.setAttribute("name", info.swatch.name());
-        swatchEle.setAttribute("id", info.swatch.id());
-        swatchEle.setAttribute("spot", info.swatch.spotColor() ? "true" : "false");
-        swatchEle.setAttribute("bitdepth", info.swatch.color().colorSpace()->colorDepthId().id());
+        QDomElement swatchEle = doc.createElement(KPL_SWATCH_TAG);
+        swatchEle.setAttribute(KPL_SWATCH_NAME_ATTR, info.swatch.name());
+        swatchEle.setAttribute(KPL_SWATCH_ID_ATTR, info.swatch.id());
+        swatchEle.setAttribute(KPL_SWATCH_SPOT_ATTR, info.swatch.spotColor() ? "true" : "false");
+        swatchEle.setAttribute(KPL_SWATCH_BITDEPTH_ATTR, info.swatch.color().colorSpace()->colorDepthId().id());
         info.swatch.color().toXML(doc, swatchEle);
 
-        QDomElement positionEle = doc.createElement("Position");
-        positionEle.setAttribute("row", info.row);
-        positionEle.setAttribute("column", info.column);
+        QDomElement positionEle = doc.createElement(KPL_SWATCH_POS_TAG);
+        positionEle.setAttribute(KPL_SWATCH_ROW_ATTR, info.row);
+        positionEle.setAttribute(KPL_SWATCH_COL_ATTR, info.column);
         swatchEle.appendChild(positionEle);
 
-        parentEle.appendChild(swatchEle);
+        groupEle.appendChild(swatchEle);
     }
 }
 
 void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElement &parentEle, KisSwatchGroup *group)
 {
     Q_UNUSED(doc);
-    if (!parentEle.attribute("rows").isNull()) {
-        group->setRowCount(parentEle.attribute("row").toInt());
+    if (!parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull()) {
+        group->setRowCount(parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).toInt());
     }
 
-    for (QDomElement swatchEle = parentEle.firstChildElement("ColorSetEntry");
+    for (QDomElement swatchEle = parentEle.firstChildElement(KPL_SWATCH_TAG);
          !swatchEle.isNull();
-         swatchEle = swatchEle.nextSiblingElement("ColorSetEntry")) {
-        QString colorDepthId = swatchEle.attribute("bitdepth", Integer8BitsColorDepthID.id());
+         swatchEle = swatchEle.nextSiblingElement(KPL_SWATCH_TAG)) {
+        QString colorDepthId = swatchEle.attribute(KPL_SWATCH_BITDEPTH_ATTR, Integer8BitsColorDepthID.id());
         KisSwatch entry;
 
         entry.setColor(KoColor::fromXML(swatchEle.firstChildElement(), colorDepthId));
-        entry.setName(swatchEle.attribute("name"));
-        entry.setId(swatchEle.attribute("id"));
-        entry.setSpotColor(swatchEle.attribute("spot", "false") == "true" ? true : false);
-        QDomElement positionEle = swatchEle.firstChildElement("Position");
+        entry.setName(swatchEle.attribute(KPL_SWATCH_NAME_ATTR));
+        entry.setId(swatchEle.attribute(KPL_SWATCH_ID_ATTR));
+        entry.setSpotColor(swatchEle.attribute(KPL_SWATCH_SPOT_ATTR, "false") == "true" ? true : false);
+        QDomElement positionEle = swatchEle.firstChildElement(KPL_SWATCH_POS_TAG);
         if (!positionEle.isNull()) {
-            int rowNumber = positionEle.attribute("row").toInt();
-            int columnNumber = positionEle.attribute("column").toInt();
+            int rowNumber = positionEle.attribute(KPL_SWATCH_ROW_ATTR).toInt();
+            int columnNumber = positionEle.attribute(KPL_SWATCH_COL_ATTR).toInt();
             if (columnNumber < 0 ||
                     columnNumber >= colorSet->columnCount() ||
                     rowNumber < 0

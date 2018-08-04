@@ -39,7 +39,27 @@ class KRITAPIGMENT_EXPORT KoColorSet : public QObject, public KoResource
 {
     Q_OBJECT
 public:
-    static QString GLOBAL_GROUP_NAME;
+    static const QString GLOBAL_GROUP_NAME;
+    static const QString KPL_VERSION_ATTR;
+    static const QString KPL_GROUP_ROW_COUNT_ATTR;
+    static const QString KPL_PALETTE_COLUMN_COUNT_ATTR;
+    static const QString KPL_PALETTE_NAME_ATTR;
+    static const QString KPL_PALETTE_COMMENT_ATTR;
+    static const QString KPL_PALETTE_FILENAME_ATTR;
+    static const QString KPL_COLOR_MODEL_ID_ATTR;
+    static const QString KPL_COLOR_DEPTH_ID_ATTR;
+    static const QString KPL_GROUP_NAME_ATTR;
+    static const QString KPL_SWATCH_ROW_ATTR;
+    static const QString KPL_SWATCH_COL_ATTR;
+    static const QString KPL_SWATCH_NAME_ATTR;
+    static const QString KPL_SWATCH_SPOT_ATTR;
+    static const QString KPL_SWATCH_ID_ATTR;
+    static const QString KPL_SWATCH_BITDEPTH_ATTR;
+    static const QString KPL_PALETTE_PROFILE_TAG;
+    static const QString KPL_SWATCH_POS_TAG;
+    static const QString KPL_SWATCH_TAG;
+    static const QString KPL_GROUP_TAG;
+    static const QString KPL_PALETTE_TAG;
 
 public:
     enum PaletteType {

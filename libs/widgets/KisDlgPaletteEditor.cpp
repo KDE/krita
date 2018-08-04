@@ -128,14 +128,7 @@ bool KisDlgPaletteEditor::isModified() const
 
 bool KisDlgPaletteEditor::groupRemoved(const QString &groupName) const
 {
-    qDebug() << "KisDlgPaletteEditor checking if" << groupName << "removed";
-    qDebug() << "if final group set contains it:" << m_groups.contains(groupName);
-    for (const QString &n : m_groups.keys()) {
-        qDebug() << n;
-    }
     if (groupName == KoColorSet::GLOBAL_GROUP_NAME) { return false; }
-    qDebug() << "result is" << (m_original->groups.contains(groupName) && !m_groups.contains(groupName));
-    qDebug() << "size when checking" << m_groups.size();
     return m_original->groups.contains(groupName) && !m_groups.contains(groupName);
 }
 

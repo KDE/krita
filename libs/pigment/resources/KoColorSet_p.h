@@ -66,7 +66,7 @@ private:
     bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml);
     quint16 readShort(QIODevice *io);
 
-    void saveKplGroup(QDomDocument &doc, QDomElement &parentEle,
+    void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,
                       const KisSwatchGroup *group, QSet<const KoColorSpace *> &colorSetSet) const;
     void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroup *group);
 };

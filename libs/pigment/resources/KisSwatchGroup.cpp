@@ -63,41 +63,44 @@ KisSwatchGroup &KisSwatchGroup::operator =(const KisSwatchGroup &rhs)
     return *this;
 }
 
-void KisSwatchGroup::setEntry(const KisSwatch &e, int x, int y)
+void KisSwatchGroup::setEntry(const KisSwatch &e, int column, int row)
 {
-    Q_ASSERT(x < d->colorMatrix.size() && x >= 0 && y >= 0);
-    if (y >= d->rowCount) {
-        setRowCount(y);
+    Q_ASSERT(column < d->colorMatrix.size() && column >= 0 && row >= 0);
+    if (row >= d->rowCount) {
+        setRowCount(row);
     }
-    if (!checkEntry(x, y)) {
+    if (!checkEntry(column, row)) {
         d->colorCount++;
     }
-    d->colorMatrix[x][y] = e;
+    // qDebug() << "KisSwatchGroup::setEntry" << "column" << column;
+    // qDebug() << "KisSwatchGroup::setEntry" << "row" << row;
+    d->colorMatrix[column][row] = e;
+    // qDebug() << "KisSwatchGroup::setEntry" << "colors" << colorCount();
 }
 
-bool KisSwatchGroup::checkEntry(int x, int y) const
+bool KisSwatchGroup::checkEntry(int column, int row) const
 {
-    if (y >= d->rowCount || x >= d->colorMatrix.size() || x < 0) {
+    if (row >= d->rowCount || column >= d->colorMatrix.size() || column < 0) {
         return false;
     }
-    if (!d->colorMatrix[x].contains(y)) {
+    if (!d->colorMatrix[column].contains(row)) {
         return false;
     }
     return true;
 }
 
-bool KisSwatchGroup::removeEntry(int x, int y)
+bool KisSwatchGroup::removeEntry(int column, int row)
 {
     if (d->colorCount == 0) {
         return false;
     }
 
-    if (y >= d->rowCount || x >= d->colorMatrix.size() || x < 0) {
+    if (row >= d->rowCount || column >= d->colorMatrix.size() || column < 0) {
         return false;
     }
 
     // QMap::remove returns 1 if key found else 0
-    if (d->colorMatrix[x].remove(y)) {
+    if (d->colorMatrix[column].remove(row)) {
         d->colorCount -= 1;
         return true;
     } else {
@@ -120,10 +123,10 @@ int KisSwatchGroup::columnCount() const {
     return d->colorMatrix.size();
 }
 
-KisSwatch KisSwatchGroup::getEntry(int x, int y) const
+KisSwatch KisSwatchGroup::getEntry(int column, int row) const
 {
-    Q_ASSERT(checkEntry(x, y));
-    return d->colorMatrix[x][y];
+    Q_ASSERT(checkEntry(column, row));
+    return d->colorMatrix[column][row];
 }
 
 void KisSwatchGroup::addEntry(const KisSwatch &e)

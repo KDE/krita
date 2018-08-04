@@ -66,17 +66,16 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_view(0)
     , m_resourceProvider(0)
     , m_canvas(0)
-    , m_saver(new PaletteListSaver(this))
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add foreground color")))
     , m_actAddWithDlg(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Choose a color to add")))
     , m_actSwitch(new QAction(i18n("Switch with another spot")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
     , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
 {
-    QWidget* mainWidget = new QWidget(this);
+    QWidget *mainWidget = new QWidget(this);
     setWidget(mainWidget);
-
     m_ui->setupUi(mainWidget);
+
     m_ui->bnAdd->setDefaultAction(m_actAdd.data());
     m_ui->bnRemove->setDefaultAction(m_actRemove.data());
     m_ui->bnRename->setDefaultAction(m_actModify.data());
@@ -126,6 +125,7 @@ PaletteDockerDock::PaletteDockerDock( )
         slotSetColorSet(defaultPalette);
     }
 
+    m_saver.reset(new PaletteListSaver(this));
     connect(m_paletteChooser, SIGNAL(sigPaletteListChanged()), m_saver.data(), SLOT(slotSetPaletteList()));
 }
 
@@ -202,10 +202,11 @@ void PaletteDockerDock::slotRemoveColor()
             return;
         }
         m_ui->paletteView->removeEntryWithDialog(index);
+        m_ui->bnRemove->setEnabled(false);
     }
 }
 
-void PaletteDockerDock::slotSetFGColorByPalette(const KisSwatch &entry)
+void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
 {
     if (m_resourceProvider) {
         m_resourceProvider->setFGColor(entry.color());
@@ -235,20 +236,20 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
     bool slotEmpty = !(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)));
     if (slotEmpty) {
         if (!m_currentColorSet->isEditable()) { return; }
-        slotSetEntryByForeground(index);
+        setEntryByForeground(index);
     } else {
         KisSwatch entry = m_model->getEntry(index);
-        slotSetFGColorByPalette(entry);
+        setFGColorByPalette(entry);
+        m_ui->bnRemove->setEnabled(true);
     }
 }
 
-void PaletteDockerDock::slotSetEntryByForeground(const QModelIndex &index)
+void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
 {
     qDebug() << "PaletteDockerDock" << index.row() << index.column();
     m_model->setEntry(KisSwatch(m_resourceProvider->fgColor()), index);
     if (m_currentColorSet->isEditable()) {
         m_ui->bnRemove->setEnabled(true);
-        emit sigPaletteSelected(m_currentColorSet);
     }
 }
 
@@ -260,7 +261,6 @@ void PaletteDockerDock::slotEditEntry()
             return;
         }
         m_ui->paletteView->modifyEntry(index);
-        emit sigPaletteSelected(m_currentColorSet);
     }
 }
 

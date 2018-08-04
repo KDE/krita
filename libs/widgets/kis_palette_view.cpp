@@ -274,7 +274,6 @@ void KisPaletteView::modifyEntry(QModelIndex index)
             entry.setColor(bnColor->color());
             entry.setSpotColor(chkSpot->isChecked());
             m_d->model->setEntry(entry, index);
-            emit m_d->model->dataChanged(index, index);
         }
     }
 
@@ -314,8 +313,8 @@ void KisPaletteView::slotAdditionalGuiUpdate()
     for (int groupNameRowNumber : m_d->model->m_groupNameRows.keys()) {
         if (groupNameRowNumber == -1) { continue; }
         setSpan(groupNameRowNumber, 0, 1, m_d->model->columnCount());
-        setRowHeight(groupNameRowNumber, fontMetrics().lineSpacing() + 20);
-        verticalHeader()->resizeSection(groupNameRowNumber, fontMetrics().lineSpacing() + 20);
+        setRowHeight(groupNameRowNumber, fontMetrics().lineSpacing() + 6);
+        verticalHeader()->resizeSection(groupNameRowNumber, fontMetrics().lineSpacing() + 6);
     }
 }
 

@@ -383,7 +383,7 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
-    qDebug() << "KisPaletteModel" << rowNumberInGroup(index.row());
+    // qDebug() << "KisPaletteModel: row number in group" << rowNumberInGroup(index.row());
     emit dataChanged(index, index);
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();
@@ -392,6 +392,8 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
 
 bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newName)
 {
+    // emit this signal to notify stuff out of the Qt MVC frame
+    emit dataChanged(QModelIndex(), QModelIndex());
     beginResetModel();
     bool success = m_colorSet->changeGroupName(groupName, newName);
     for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {

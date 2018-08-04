@@ -61,9 +61,6 @@ public: // QDockWidget
 public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
 
-Q_SIGNALS:
-    void sigPaletteSelected(const KoColorSet *);
-
 private Q_SLOTS:
     void slotImportPalette();
     void slotAddColor();
@@ -71,14 +68,15 @@ private Q_SLOTS:
     void slotEditEntry();
 
     void slotPaletteIndexSelected(const QModelIndex &index);
-    void slotSetEntryByForeground(const QModelIndex &index);
-    void slotSetFGColorByPalette(const KisSwatch &entry);
     void slotNameListSelection(const KoColor &color);
-
     void slotSetColorSet(KoColorSet* colorSet);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
+
+private:
+    void setEntryByForeground(const QModelIndex &index);
+    void setFGColorByPalette(const KisSwatch &entry);
 
 private /* friends */:
     /**

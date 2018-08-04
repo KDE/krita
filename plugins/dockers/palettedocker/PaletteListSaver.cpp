@@ -6,13 +6,14 @@
 #include <KoResourceServerProvider.h>
 #include <KisDocument.h>
 #include <KisViewManager.h>
+#include <KisPaletteModel.h>
 
 PaletteListSaver::PaletteListSaver(PaletteDockerDock *dockerDock, QObject *parent)
     : QObject(parent)
     , m_dockerDock(dockerDock)
 {
-    connect(m_dockerDock, SIGNAL(sigPaletteSelected(const KoColorSet*)),
-            SLOT(slotPaletteModified(const KoColorSet *)));
+    connect(m_dockerDock->m_model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
+            SLOT(slotPaletteModified()));
 }
 
 void PaletteListSaver::slotSetPaletteList()
@@ -27,11 +28,10 @@ void PaletteListSaver::slotSetPaletteList()
         }
     }
     m_dockerDock->m_view->document()->setPaletteList(list);
-    resetConnection();
-    m_dockerDock->m_view->document()->setModified(true);
+    slotPaletteModified();
 }
 
-void PaletteListSaver::slotPaletteModified(const KoColorSet *)
+void PaletteListSaver::slotPaletteModified()
 {
     resetConnection();
     m_dockerDock->m_view->document()->setModified(true);

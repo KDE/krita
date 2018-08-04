@@ -15,7 +15,7 @@ public:
 private Q_SLOTS:
     void slotSetPaletteList();
     void slotSavingFinished();
-    void slotPaletteModified(const KoColorSet *);
+    void slotPaletteModified();
 
 private:
     /**
@@ -25,6 +25,9 @@ private:
      * modified to false
      */
     void resetConnection();
+
+private:
+    friend class PaletteDockerDock;
 
 private:
     PaletteDockerDock *m_dockerDock;

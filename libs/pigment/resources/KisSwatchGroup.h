@@ -78,7 +78,7 @@ public /* methods */:
      * @param y
      * @return true if there is a valid entry at position (x, y)
      */
-    bool checkEntry(int x, int y) const;
+    bool checkEntry(int column, int row) const;
     /**
      * @brief setEntry
      * sets the entry at position (x, y) to be e
@@ -86,7 +86,7 @@ public /* methods */:
      * @param x
      * @param y
      */
-    void setEntry(const KisSwatch &e, int x, int y);
+    void setEntry(const KisSwatch &e, int column, int row);
     /**
      * @brief getEntry
      * used to get the swatch entry at position (x, y)
@@ -97,7 +97,7 @@ public /* methods */:
      * @param y
      * @return the swatch entry at position (x, y)
      */
-    KisSwatch getEntry(int x, int y) const;
+    KisSwatch getEntry(int column, int row) const;
     /**
      * @brief removeEntry
      * removes the entry at position (x, y)
@@ -105,7 +105,7 @@ public /* methods */:
      * @param y
      * @return true if these is an entry at (x, y)
      */
-    bool removeEntry(int x, int y);
+    bool removeEntry(int column, int row);
     /**
      * @brief addEntry
      * adds the entry e to the right of the rightmost entry in the last row

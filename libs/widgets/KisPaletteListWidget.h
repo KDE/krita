@@ -21,7 +21,6 @@ public:
 
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSet*);
-    void sigPaletteModified(KoColorSet*);
     void sigPaletteListChanged();
 
 public Q_SLOTS:

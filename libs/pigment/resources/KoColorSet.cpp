@@ -306,6 +306,10 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
         return false;
     }
 
+    if (groupName == GLOBAL_GROUP_NAME) {
+        return false;
+    }
+
     if (keepColors) {
         // put all colors directly below global
         int startingRow = d->groups[GLOBAL_GROUP_NAME].rowCount();

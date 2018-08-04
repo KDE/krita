@@ -244,6 +244,7 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
 
 void PaletteDockerDock::slotSetEntryByForeground(const QModelIndex &index)
 {
+    qDebug() << "PaletteDockerDock" << index.row() << index.column();
     m_model->setEntry(KisSwatch(m_resourceProvider->fgColor()), index);
     if (m_currentColorSet->isEditable()) {
         m_ui->bnRemove->setEnabled(true);

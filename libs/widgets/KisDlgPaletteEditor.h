@@ -38,6 +38,8 @@ public:
 
     QString name() const;
     QString filename() const;
+    const QSet<QString> &newGroupNames() const;
+
     int columnCount() const;
     bool isGlobal() const;
     bool isReadOnly() const;
@@ -80,7 +82,8 @@ private:
     QScopedPointer<QAction> m_actRenGroup;
     QPointer<KoColorSet> m_colorSet;
     QScopedPointer<OriginalPaletteInfo> m_original;
-    QHash<QString, GroupInfoType> m_groups; // first is original group name
+    QHash<QString, GroupInfoType> m_groups; // key is original group name
+    QSet<QString> m_newGroups;
     QString m_currentGroupOriginalName;
 };
 

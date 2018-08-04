@@ -124,13 +124,14 @@ void KisPaletteListWidget::slotModify()
     if (!dlg.isModified()) { return; }
     colorSet->setName(dlg.name());
     colorSet->setColumnCount(dlg.columnCount());
-    for (const QString &groupName : colorSet->getGroupNames()) {
-        colorSet->getGroup(groupName)->setRowCount(dlg.groupRowNumber(groupName));
-    }
     if (dlg.isGlobal()) {
         setPaletteGlobal(colorSet);
     } else {
         setPaletteNonGlobal(colorSet);
+    }
+    for (const QString &newGroupName : dlg.newGroupNames()) {
+        colorSet->addGroup(newGroupName);
+        colorSet->getGroup(newGroupName)->setRowCount(dlg.groupRowNumber(newGroupName));
     }
     for (const QString &groupName : colorSet->getGroupNames()) {
         if (dlg.groupRemoved(groupName)) {

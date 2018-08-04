@@ -83,8 +83,6 @@ void KisDlgPaletteEditor::setPalette(KoColorSet *colorSet)
     m_ui->ckxGlobal->setEnabled(canWrite);
     m_ui->ckxReadOnly->setEnabled(canWrite);
     m_ui->bnAddGroup->setEnabled(canWrite);
-    m_ui->bnDelGroup->setEnabled(canWrite);
-    m_ui->bnRenGroup->setEnabled(canWrite);
 }
 
 QString KisDlgPaletteEditor::name() const
@@ -95,6 +93,11 @@ QString KisDlgPaletteEditor::name() const
 QString KisDlgPaletteEditor::filename() const
 {
     return m_ui->lineEditFilename->text();
+}
+
+const QSet<QString> &KisDlgPaletteEditor::newGroupNames() const
+{
+    return m_newGroups;
 }
 
 int KisDlgPaletteEditor::columnCount() const
@@ -125,6 +128,10 @@ bool KisDlgPaletteEditor::isModified() const
 
 bool KisDlgPaletteEditor::groupRemoved(const QString &groupName) const
 {
+    qDebug() << "KisDlgPaletteEditor checking if" << groupName << "removed";
+    qDebug() << m_groups.contains(groupName);
+    if (groupName == KoColorSet::GLOBAL_GROUP_NAME) { return false; }
+    qDebug() << "result is" << (m_original->groups.contains(groupName) && !m_groups.contains(groupName));
     return m_original->groups.contains(groupName) && !m_groups.contains(groupName);
 }
 
@@ -157,9 +164,8 @@ void KisDlgPaletteEditor::slotAddGroup()
         msgNameDuplicate.exec();
         return;
     }
-    m_colorSet->addGroup(leName.text());
-    m_colorSet->getGroup(leName.text())->setRowCount(spxRow.value());
     m_groups.insert(leName.text(), GroupInfoType(leName.text(), spxRow.value()));
+    m_newGroups.insert(leName.text());
     m_ui->cbxGroup->addItem(leName.text());
 }
 
@@ -175,6 +181,9 @@ void KisDlgPaletteEditor::slotRenGroup()
     if (leNewName.text().isEmpty()) { return; }
     if (m_groups.contains(leNewName.text())) { return; }
     m_groups[m_currentGroupOriginalName].first = leNewName.text();
+    if (m_newGroups.remove(m_currentGroupOriginalName)) {
+        m_newGroups.insert(leNewName.text());
+    }
     int idx = m_ui->cbxGroup->currentIndex();
     m_ui->cbxGroup->removeItem(idx);
     m_ui->cbxGroup->insertItem(idx, leNewName.text());
@@ -183,6 +192,7 @@ void KisDlgPaletteEditor::slotRenGroup()
 
 void KisDlgPaletteEditor::slotDelGroup()
 {
+    qDebug() << "KisDlgPaletteEditor" << "deleting" << m_currentGroupOriginalName;
     if (m_currentGroupOriginalName == KoColorSet::GLOBAL_GROUP_NAME) {
         QMessageBox msgNameDuplicate;
         msgNameDuplicate.setText(i18n("Can't delete group"));
@@ -190,6 +200,7 @@ void KisDlgPaletteEditor::slotDelGroup()
         msgNameDuplicate.exec();
         return;
     }
+
     KoDialog window(this);
     window.setWindowTitle(i18nc("@title:window","Removing Group"));
     QFormLayout editableItems(&window);
@@ -197,9 +208,13 @@ void KisDlgPaletteEditor::slotDelGroup()
     window.mainWidget()->setLayout(&editableItems);
     editableItems.addRow(i18nc("Shows up when deleting a swatch group", "Keep the Colors"), &chkKeep);
     if (window.exec() != KoDialog::Accepted) { return; }
+
     m_ui->cbxGroup->removeItem(m_ui->cbxGroup->findText(m_groups[m_currentGroupOriginalName].first));
     m_ui->cbxGroup->setCurrentIndex(0);
-    m_groups.remove(m_currentGroupOriginalName);
+    qDebug() << "contains" << m_currentGroupOriginalName << "before" << m_groups.contains(m_currentGroupOriginalName);
+    qDebug() << "remove success" << m_groups.remove(m_currentGroupOriginalName);
+    m_newGroups.remove(m_currentGroupOriginalName);
+    qDebug() << "contains after" << m_groups.contains(m_currentGroupOriginalName);
 }
 
 void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)

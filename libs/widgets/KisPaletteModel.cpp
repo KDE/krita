@@ -383,6 +383,7 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
+    qDebug() << "KisPaletteModel" << rowNumberInGroup(index.row());
     emit dataChanged(index, index);
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();

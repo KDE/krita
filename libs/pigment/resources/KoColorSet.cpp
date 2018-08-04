@@ -338,9 +338,6 @@ int KoColorSet::rowCount() const
 
 KisSwatchGroup *KoColorSet::getGroup(const QString &name)
 {
-    if (name.isEmpty()) {
-        return &(d->global());
-    }
     if (!d->groups.contains(name)) {
         return Q_NULLPTR;
     }
@@ -639,7 +636,6 @@ bool KoColorSet::Private::init()
     colorSet->setImage(img);
     colorSet->setValid(res);
 
-    // save some memory
     data.clear();
     return res;
 }
@@ -878,7 +874,7 @@ bool KoColorSet::Private::loadKpl()
         colorSet->setColumnCount(e.attribute("columns").toInt());
         comment = e.attribute("comment");
 
-        loadKplGroup(doc, e, colorSet->getGroup(KoColorSet::GLOBAL_GROUP_NAME));
+        loadKplGroup(doc, e, colorSet->getGlobalGroup());
 
         QDomElement g = e.firstChildElement("Group");
         while (!g.isNull()) {
@@ -1420,7 +1416,7 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute("name", colorSet->name());
         root.setAttribute("comment", comment);
         root.setAttribute("columns", groups[KoColorSet::GLOBAL_GROUP_NAME].columnCount());
-        root.setAttribute("rows", colorSet->rowCount());
+        root.setAttribute("rows", groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
 
         saveKplGroup(doc, root, colorSet->getGroup(KoColorSet::GLOBAL_GROUP_NAME), colorSpaces);
 
@@ -1498,9 +1494,6 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
 void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElement &parentEle, KisSwatchGroup *group)
 {
     Q_UNUSED(doc);
-    if (!parentEle.attribute("columns").isNull()) {
-        group->setColumnCount(parentEle.attribute("column").toInt());
-    }
     if (!parentEle.attribute("rows").isNull()) {
         group->setRowCount(parentEle.attribute("row").toInt());
     }
@@ -1520,7 +1513,7 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
             int rowNumber = positionEle.attribute("row").toInt();
             int columnNumber = positionEle.attribute("column").toInt();
             if (columnNumber < 0 ||
-                    columnNumber >= group->columnCount() ||
+                    columnNumber >= colorSet->columnCount() ||
                     rowNumber < 0
                     ) {
                 warnPigment << "Swatch" << entry.name()

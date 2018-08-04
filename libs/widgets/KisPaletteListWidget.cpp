@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QFile>
 #include <QMessageBox>
+#include <QInputDialog>
 
 #include <kis_icon.h>
 
@@ -131,6 +132,16 @@ void KisPaletteListWidget::slotModify()
     } else {
         setPaletteNonGlobal(colorSet);
     }
+    for (const QString &groupName : colorSet->getGroupNames()) {
+        if (dlg.groupRemoved(groupName)) {
+            colorSet->removeGroup(groupName);
+            continue;
+        }
+        colorSet->getGroup(groupName)->setRowCount(dlg.groupRowNumber(groupName));
+        if (!dlg.groupRenamedTo(groupName).isEmpty()) {
+            colorSet->changeGroupName(groupName, dlg.groupRenamedTo(groupName));
+        }
+    }
     for (const KoResource *r : m_d->rAdapter->resources()) {
         if (r != colorSet && r->filename() == dlg.filename()) {
             QMessageBox msgFilenameDuplicate;
@@ -162,15 +173,11 @@ void KisPaletteListWidget::setPaletteGlobal(KoColorSet *colorSet)
 
     QString saveLocation = rserver->saveLocation();
     QString name = colorSet->filename();
-    qDebug() << saveLocation;
-    qDebug() << name;
 
     QFileInfo fileInfo(saveLocation + name);
 
     colorSet->setFilename(fileInfo.filePath());
-    qDebug() << fileInfo.filePath();
     colorSet->setIsGlobal(true);
-    qDebug() << colorSet->save();
 }
 
 void KisPaletteListWidget::setPaletteNonGlobal(KoColorSet *colorSet)

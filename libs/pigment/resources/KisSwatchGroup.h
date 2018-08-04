@@ -29,6 +29,7 @@
 #include <QVector>
 #include <QList>
 #include <QMap>
+#include <QScopedPointer>
 
 /**
  * @brief The KisSwatchGroup class stores a matrix of color swatches
@@ -41,13 +42,6 @@
  */
 class KRITAPIGMENT_EXPORT KisSwatchGroup
 {
-private /* static variables */:
-    static quint32 DEFAULT_COLUMN_COUNT;
-    static quint32 DEFAULT_ROW_COUNT;
-
-private /* typedef */:
-    typedef QMap<int, KisSwatch> Column;
-
 public /* struct */:
     struct SwatchInfo {
         QString group;
@@ -58,18 +52,21 @@ public /* struct */:
 
 public:
     KisSwatchGroup();
+    ~KisSwatchGroup();
+    KisSwatchGroup(const KisSwatchGroup &rhs);
+    KisSwatchGroup &operator =(const KisSwatchGroup &rhs);
 
 public /* methods */:
-    void setName(const QString &name) { m_name = name; }
-    QString name() const { return m_name; }
+    void setName(const QString &name);
+    QString name() const;
 
     void setColumnCount(int columnCount);
-    int columnCount() const { return m_colorMatrix.size(); }
+    int columnCount() const;
 
     void setRowCount(int newRowCount);
-    int rowCount() const { return m_rowCount; }
+    int rowCount() const;
 
-    int colorCount() const { return m_colorCount; }
+    int colorCount() const;
 
     QList<SwatchInfo> infoList() const;
 
@@ -120,13 +117,11 @@ public /* methods */:
      */
     void addEntry(const KisSwatch &e);
 
-    void clear() { m_colorMatrix.clear(); }
+    void clear();
 
 private /* member variables */:
-    QString m_name;
-    QVector<Column> m_colorMatrix;
-    int m_colorCount;
-    int m_rowCount;
+    struct Private;
+    QScopedPointer<Private> d;
 };
 
 #endif // KISSWATCHGROUP_H

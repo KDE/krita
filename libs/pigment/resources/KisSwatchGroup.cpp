@@ -21,34 +21,66 @@
 
 #include "KisSwatchGroup.h"
 
-quint32 KisSwatchGroup::DEFAULT_COLUMN_COUNT = 16;
-quint32 KisSwatchGroup::DEFAULT_ROW_COUNT = 20;
+struct KisSwatchGroup::Private {
+    typedef QMap<int, KisSwatch> Column;
+
+    Private()
+        : name(QString())
+        , colorMatrix(DEFAULT_COLUMN_COUNT)
+        , colorCount(0)
+        , rowCount(DEFAULT_ROW_COUNT)
+    { }
+
+    static quint32 DEFAULT_COLUMN_COUNT;
+    static quint32 DEFAULT_ROW_COUNT;
+
+    QString name;
+    QVector<Column> colorMatrix;
+    int colorCount;
+    int rowCount;
+};
+
+quint32 KisSwatchGroup::Private::DEFAULT_COLUMN_COUNT = 16;
+quint32 KisSwatchGroup::Private::DEFAULT_ROW_COUNT = 20;
 
 KisSwatchGroup::KisSwatchGroup()
-    : m_name(QString())
-    , m_colorMatrix(DEFAULT_COLUMN_COUNT)
-    , m_colorCount(0)
-    , m_rowCount(DEFAULT_ROW_COUNT)
+    : d(new Private)
 { }
+
+KisSwatchGroup::~KisSwatchGroup()
+{ }
+
+KisSwatchGroup::KisSwatchGroup(const KisSwatchGroup &rhs)
+    : d(new Private(*rhs.d))
+{ }
+
+KisSwatchGroup &KisSwatchGroup::operator =(const KisSwatchGroup &rhs)
+{
+    if (&rhs == this) {
+        return *this;
+    }
+    d.reset(new Private(*rhs.d));
+    return *this;
+}
 
 void KisSwatchGroup::setEntry(const KisSwatch &e, int x, int y)
 {
-    Q_ASSERT(x < m_colorMatrix.size() && x >= 0 && y >= 0);
-    if (y >= m_rowCount) {
+    Q_ASSERT(x < d->colorMatrix.size() && x >= 0 && y >= 0);
+    if (y >= d->rowCount) {
         setRowCount(y);
     }
     if (!checkEntry(x, y)) {
-        m_colorCount++;
+        d->colorCount++;
     }
-    m_colorMatrix[x][y] = e;
+    d->colorMatrix[x][y] = e;
 }
 
 bool KisSwatchGroup::checkEntry(int x, int y) const
 {
-    if (y >= m_rowCount || x >= m_colorMatrix.size() || x < 0) {
+    if (y >= d->rowCount || x >= d->colorMatrix.size() || x < 0) {
         return false;
     }
-    if (!m_colorMatrix[x].contains(y)) {
+    if (!d->colorMatrix[x].contains(y)) {
         return false;
     }
     return true;
@@ -56,17 +88,17 @@ bool KisSwatchGroup::checkEntry(int x, int y) const
 
 bool KisSwatchGroup::removeEntry(int x, int y)
 {
-    if (m_colorCount == 0) {
+    if (d->colorCount == 0) {
         return false;
     }
 
-    if (y >= m_rowCount || x >= m_colorMatrix.size() || x < 0) {
+    if (y >= d->rowCount || x >= d->colorMatrix.size() || x < 0) {
         return false;
     }
 
     // QMap::remove returns 1 if key found else 0
-    if (m_colorMatrix[x].remove(y)) {
-        m_colorCount -= 1;
+    if (d->colorMatrix[x].remove(y)) {
+        d->colorCount -= 1;
         return true;
     } else {
         return false;
@@ -76,48 +108,52 @@ bool KisSwatchGroup::removeEntry(int x, int y)
 void KisSwatchGroup::setColumnCount(int columnCount)
 {
     Q_ASSERT(columnCount >= 0);
-    if (columnCount < m_colorMatrix.size()) {
-        for (int i = m_colorMatrix.size() - 1; i <= columnCount; i-- ) {
-            m_colorCount -= m_colorMatrix[i].size();
+    if (columnCount < d->colorMatrix.size()) {
+        for (int i = d->colorMatrix.size() - 1; i <= columnCount; i-- ) {
+            d->colorCount -= d->colorMatrix[i].size();
         }
     }
-    m_colorMatrix.resize(columnCount);
+    d->colorMatrix.resize(columnCount);
+}
+
+int KisSwatchGroup::columnCount() const {
+    return d->colorMatrix.size();
 }
 
 KisSwatch KisSwatchGroup::getEntry(int x, int y) const
 {
     Q_ASSERT(checkEntry(x, y));
-    return m_colorMatrix[x][y];
+    return d->colorMatrix[x][y];
 }
 
 void KisSwatchGroup::addEntry(const KisSwatch &e)
 {
     if (columnCount() == 0) {
-        setColumnCount(DEFAULT_COLUMN_COUNT);
+        setColumnCount(Private::DEFAULT_COLUMN_COUNT);
     }
 
-    if (m_colorCount == 0) {
+    if (d->colorCount == 0) {
         setEntry(e, 0, 0);
         return;
     }
 
     int y = 0;
-    for (const Column &c : m_colorMatrix) {
+    for (const Private::Column &c : d->colorMatrix) {
         if (c.isEmpty()) { continue; }
         if (y < c.lastKey()) {
             y = c.lastKey();
         }
     }
-    for (int x = m_colorMatrix.size() - 1; x >= 0; x--) {
+    for (int x = d->colorMatrix.size() - 1; x >= 0; x--) {
         if (checkEntry(x, y)) {
             // if the last entry's at the rightmost column,
             // add e to the leftmost column of the next row
             // and increase row count
-            if (++x == m_colorMatrix.size()) {
+            if (++x == d->colorMatrix.size()) {
                 x = 0;
                 y++;
-                if (y == m_rowCount) {
-                    m_rowCount++;
+                if (y == d->rowCount) {
+                    d->rowCount++;
                 }
             }
             // else just add it to the right
@@ -127,30 +163,55 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
     }
 }
 
+void KisSwatchGroup::clear()
+{
+    d->colorMatrix.clear();
+}
+
 void KisSwatchGroup::setRowCount(int newRowCount)
 {
-    m_rowCount = newRowCount;
-    for (Column &c : m_colorMatrix) {
+    d->rowCount = newRowCount;
+    for (Private::Column &c : d->colorMatrix) {
         for (int k : c.keys()) {
             if (k >= newRowCount) {
                 c.remove(k);
-                m_colorCount--;
+                d->colorCount--;
             }
         }
     }
+}
+
+int KisSwatchGroup::rowCount() const
+{
+    return d->rowCount;
+}
+
+int KisSwatchGroup::colorCount() const
+{
+    return d->colorCount;
 }
 
 QList<KisSwatchGroup::SwatchInfo> KisSwatchGroup::infoList() const
 {
     QList<SwatchInfo> res;
     int column = 0;
-    for (const Column &c : m_colorMatrix) {
+    for (const Private::Column &c : d->colorMatrix) {
         int row = 0;
         for (const KisSwatch &s : c.values()) {
-            SwatchInfo i = {m_name, s, c.keys()[row++], column};
+            SwatchInfo i = {d->name, s, c.keys()[row++], column};
             res.append(i);
         }
         column++;
     }
     return res;
+}
+
+void KisSwatchGroup::setName(const QString &name)
+{
+    d->name = name;
+}
+
+QString KisSwatchGroup::name() const
+{
+    return d->name;
 }

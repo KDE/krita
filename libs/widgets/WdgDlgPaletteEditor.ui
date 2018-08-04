@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>470</height>
+    <width>524</width>
+    <height>479</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -131,6 +131,19 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="bnRenGroup">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Rename this group</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="bnDelGroup">

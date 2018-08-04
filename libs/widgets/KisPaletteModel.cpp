@@ -92,7 +92,6 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     int groupNameRow = groupNameRowForRow(row);
     group = m_colorSet->getGroup(m_groupNameRows[groupNameRow]);
     Q_ASSERT(group);
-    qDebug() << "KisPaletteModel::index" << row << column << group;
     return createIndex(row, column, group);
 }
 
@@ -131,7 +130,7 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
 {
     KisSwatchGroup *group = m_colorSet->getGroup(groupName);
-    if (group->checkEntry(group->columnCount(), group->rowCount())) {
+    if (group->checkEntry(m_colorSet->columnCount(), group->rowCount())) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         m_colorSet->add(entry, groupName);
         endInsertRows();
@@ -408,7 +407,6 @@ QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) 
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
     Q_ASSERT(group);
-    qDebug() << "KisPaletteModel::dataForGroupNameRow" << idx.row() << idx.column() << group;
     QString groupName = group->name();
     switch (role) {
     case Qt::ToolTipRole:

@@ -144,20 +144,18 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
 
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
-    bool keepColors = true;
+    bool keepColors = false;
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
-        KoDialog *window = new KoDialog();
+        QScopedPointer<KoDialog> window(new KoDialog(this));
         window->setWindowTitle(i18nc("@title:window","Removing Group"));
-        QFormLayout *editableItems = new QFormLayout();
-        QCheckBox *chkKeep = new QCheckBox();
+        QFormLayout *editableItems = new QFormLayout(window.data());
+        QCheckBox *chkKeep = new QCheckBox(window.data());
         window->mainWidget()->setLayout(editableItems);
-        editableItems->addRow(i18nc("Shows up when deleting a group","Keep the Colors"), chkKeep);
-        chkKeep->setChecked(keepColors);
-        if (window->exec() == KoDialog::Accepted) {
-            keepColors = chkKeep->isChecked();
-            m_d->model->removeEntry(index, keepColors);
-            m_d->model->colorSet()->save();
-        }
+        editableItems->addRow(i18nc("Shows up when deleting a swatch group", "Keep the Colors"), chkKeep);
+        if (window->exec() != KoDialog::Accepted) { return false; }
+        keepColors = chkKeep->isChecked();
+        m_d->model->removeEntry(index, keepColors);
+        m_d->model->colorSet()->save();
     } else {
         m_d->model->removeEntry(index, keepColors);
         if (m_d->model->colorSet()->isGlobal()) {
@@ -244,6 +242,14 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
         lnGroupName->setText(groupName);
         if (dlg->exec() == KoDialog::Accepted) {
+            if (lnGroupName->text().isEmpty()) {
+                return;
+            }
+            for (const QString &groupName: m_d->model->colorSet()->getGroupNames()) {
+                if (groupName == lnGroupName->text()) {
+                    return;
+                }
+            }
             m_d->model->renameGroup(groupName, lnGroupName->text());
         }
     } else {

@@ -138,7 +138,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)),
             SLOT(slotNameListSelection(KoColor)));
     connect(this, SIGNAL(colorChanged(KoColor,bool)),
-            d->paletteView, SLOT(slotChosenColorChanged(KoColor)));
+            d->paletteView, SLOT(slotFGColorChanged(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
     QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");

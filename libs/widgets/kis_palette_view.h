@@ -54,6 +54,7 @@ public:
      * the palette when the palette is intended to be a list of items.
      */
     void setAllowModification(bool allow);
+
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
 
     /**

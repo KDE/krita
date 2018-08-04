@@ -47,9 +47,9 @@ public:
     ~KisPaletteModel() override;
 
     enum AdditionalRoles {
-        IsGroupNameRole       = Qt::UserRole + 1,
-        RetrieveEntryRole  = Qt::UserRole + 3,
-        CheckSlotRole = Qt::UserRole + 4
+        IsGroupNameRole = Qt::UserRole + 1,
+        RetrieveEntryRole,
+        CheckSlotRole
     };
 
 public /* overriden methods */: // QAbstractTableModel
@@ -104,7 +104,8 @@ public /* methods */:
      * proper function to handle adding entries.
      * @return whether successful.
      */
-    bool addEntry(const KisSwatch &entry, const QString &groupName=QString());
+    bool addEntry(const KisSwatch &entry,
+                  const QString &groupName = KoColorSet::GLOBAL_GROUP_NAME);
 
     void setEntry(const KisSwatch &entry, const QModelIndex &index);
 
@@ -118,18 +119,13 @@ public /* methods */:
      * @return if successful
      */
     bool removeEntry(const QModelIndex &index, bool keepColors=true);
+
     KisSwatch getEntry(const QModelIndex &index);
+
+    bool renameGroup(const QString &groupName, const QString &newName);
 
     void setColorSet(KoColorSet* colorSet);
     KoColorSet* colorSet() const;
-
-    /**
-     * @brief colorSetEntryFromIndex
-     * This gives the colorset entry for the given table model index.
-     * @param index the QModelIndex
-     * @return the kocolorsetentry
-     */
-    KisSwatch colorSetEntryFromIndex(const QModelIndex &index) const;
 
     QModelIndex indexForClosest(const KoColor &compare);
 
@@ -142,7 +138,7 @@ private /* methods */:
     QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
     int rowNumberInGroup(int rowInModel) const;
-    int groupNameRowForIndex(const QModelIndex &);
+    int groupNameRowForRow(int rowInModel) const;
     /**
      * Installs a display renderer object for a palette that will
      * convert the KoColor to the displayable QColor. Default is the

@@ -56,9 +56,10 @@ public /* struct */:
         int column;
     };
 
-public /* methods */:
+public:
     KisSwatchGroup();
 
+public /* methods */:
     void setName(const QString &name) { m_name = name; }
     QString name() const { return m_name; }
 

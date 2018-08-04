@@ -25,7 +25,8 @@ quint32 KisSwatchGroup::DEFAULT_COLUMN_COUNT = 16;
 quint32 KisSwatchGroup::DEFAULT_ROW_COUNT = 20;
 
 KisSwatchGroup::KisSwatchGroup()
-    : m_colorMatrix(DEFAULT_COLUMN_COUNT)
+    : m_name(QString())
+    , m_colorMatrix(DEFAULT_COLUMN_COUNT)
     , m_colorCount(0)
     , m_rowCount(DEFAULT_ROW_COUNT)
 { }

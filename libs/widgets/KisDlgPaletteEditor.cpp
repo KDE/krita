@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QComboBox>
 
 #include <KoDialog.h>
 #include <KoColorSet.h>
@@ -151,6 +152,16 @@ void KisDlgPaletteEditor::slotAddGroup()
 
 void KisDlgPaletteEditor::slotDelGroup()
 {
+    if (m_group->name() == KoColorSet::GLOBAL_GROUP_NAME) {
+        QMessageBox msgNameDuplicate;
+        msgNameDuplicate.setText(i18n("Can't delete group"));
+        msgNameDuplicate.setWindowTitle(i18n("Can't delete main swatch of a palette."));
+        msgNameDuplicate.exec();
+        return;
+    }
+    m_ui->cbxGroup->removeItem(m_ui->cbxGroup->findText(m_group->name()));
+    m_colorSet->removeGroup(m_group->name());
+    m_ui->cbxGroup->setCurrentIndex(0);
     qDebug() << "Deleting current group";
 }
 

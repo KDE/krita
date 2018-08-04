@@ -157,7 +157,7 @@ void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
 {
     if (!index.isValid()) return;
 
-    KisSwatch entry = m_d->colorModel->colorSetEntryFromIndex(index);
+    KisSwatch entry = m_d->colorModel->getEntry(index);
     m_d->provider->setFGColor(entry.color());
 
     const bool transparentChecked = index == m_d->transparentColorIndex;

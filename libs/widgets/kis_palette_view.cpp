@@ -173,9 +173,8 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
     if (!color_set) {
         return;
     }
-    qDebug() << "KisPaletteView::selectClosestColor" << "triggered";
     //also don't select if the color is the same as the current selection
-    if (m_d->model->colorSetEntryFromIndex(currentIndex()).color() == color) {
+    if (m_d->model->getEntry(currentIndex()).color() == color) {
         return;
     }
 
@@ -240,14 +239,13 @@ void KisPaletteView::modifyEntry(QModelIndex index)
     QLineEdit *lnGroupName = new QLineEdit(dlg);
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
+        //rename the group.
         QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
         editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
         lnGroupName->setText(groupName);
         if (dlg->exec() == KoDialog::Accepted) {
-            m_d->model->colorSet()->changeGroupName(groupName, lnGroupName->text());
-            emit m_d->model->dataChanged(index, index);
+            m_d->model->renameGroup(groupName, lnGroupName->text());
         }
-        //rename the group.
     } else {
         QLineEdit *lnIDName = new QLineEdit(dlg);
         KisColorButton *bnColor = new KisColorButton(dlg);
@@ -269,8 +267,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
             entry.setId(lnIDName->text());
             entry.setColor(bnColor->color());
             entry.setSpotColor(chkSpot->isChecked());
-            m_d->model->colorSet()->setEntry(entry, index.column(), index.row());
-            m_d->model->colorSet()->save();
+            m_d->model->setEntry(entry, index);
             emit m_d->model->dataChanged(index, index);
         }
     }

@@ -89,9 +89,10 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
     KisSwatchGroup *group = Q_NULLPTR;
-    int groupNameRow = row - rowNumberInGroup(row) - 1;
+    int groupNameRow = groupNameRowForRow(row);
     group = m_colorSet->getGroup(m_groupNameRows[groupNameRow]);
     Q_ASSERT(group);
+    qDebug() << "KisPaletteModel::index" << row << column << group;
     return createIndex(row, column, group);
 }
 
@@ -112,15 +113,6 @@ void KisPaletteModel::setColorSet(KoColorSet* colorSet)
 KoColorSet* KisPaletteModel::colorSet() const
 {
     return m_colorSet;
-}
-
-KisSwatch KisPaletteModel::colorSetEntryFromIndex(const QModelIndex &index) const
-{
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    if (!group || !group->checkEntry(index.column(), rowNumberInGroup(index.row()))) {
-        return KisSwatch();
-    }
-    return group->getEntry(index.column(), rowNumberInGroup(index.row()));
 }
 
 int KisPaletteModel::rowNumberInGroup(int rowInModel) const
@@ -160,7 +152,7 @@ bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
         emit dataChanged(index, index);
     } else {
         beginResetModel();
-        int groupNameRow = index.row() - rowNumberInGroup(index.row()) - 1;
+        int groupNameRow = groupNameRowForRow(index.row());
         QString groupName = m_groupNameRows[groupNameRow];
         m_colorSet->removeGroup(groupName, keepColors);
         m_groupNameRows.remove(groupNameRow);
@@ -393,12 +385,30 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
     emit dataChanged(index, index);
+    if (m_colorSet->isGlobal()) {
+        m_colorSet->save();
+    }
+}
+
+bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newName)
+{
+    beginResetModel();
+    bool success = m_colorSet->changeGroupName(groupName, newName);
+    for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
+        if (it.value() == groupName) {
+            m_groupNameRows[it.key()] = newName;
+            break;
+        }
+    }
+    endResetModel();
+    return success;
 }
 
 QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) const
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
     Q_ASSERT(group);
+    qDebug() << "KisPaletteModel::dataForGroupNameRow" << idx.row() << idx.column() << group;
     QString groupName = group->name();
     switch (role) {
     case Qt::ToolTipRole:
@@ -479,6 +489,13 @@ QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 KisSwatch KisPaletteModel::getEntry(const QModelIndex &index)
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    Q_ASSERT(group);
+    if (!group || !group->checkEntry(index.column(), rowNumberInGroup(index.row()))) {
+        return KisSwatch();
+    }
     return group->getEntry(index.column(), rowNumberInGroup(index.row()));
+}
+
+int KisPaletteModel::groupNameRowForRow(int rowInModel) const
+{
+    return rowInModel - rowNumberInGroup(rowInModel) - 1;
 }

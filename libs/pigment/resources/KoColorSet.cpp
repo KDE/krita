@@ -240,12 +240,12 @@ QStringList KoColorSet::getGroupNames()
 
 bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
 {
-    if (d->groupNames.contains(oldGroupName)==false) {
+    if (!d->groupNames.contains(oldGroupName)) {
         return false;
     }
-    KisSwatchGroup tmp = d->groups.value(oldGroupName);
+    d->groups[newGroupName] = d->groups[oldGroupName];
     d->groups.remove(oldGroupName);
-    d->groups[newGroupName] = tmp;
+    d->groups[newGroupName].setName(newGroupName);
     //rename the string in the stringlist;
     int index = d->groupNames.indexOf(oldGroupName);
     d->groupNames.replace(index, newGroupName);
@@ -255,7 +255,7 @@ bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
 void KoColorSet::setColumnCount(int columns)
 {
     d->groups[GLOBAL_GROUP_NAME].setColumnCount(columns);
-    for (KisSwatchGroup &g : d->groups.values()) { // Q_FOREACH doesn't accept non const refs
+    for (KisSwatchGroup &g : d->groups.values()) {
         g.setColumnCount(columns);
     }
 }
@@ -1498,10 +1498,10 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
 void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElement &parentEle, KisSwatchGroup *group)
 {
     Q_UNUSED(doc);
-    if (!parentEle.attribute("column").isNull()) {
+    if (!parentEle.attribute("columns").isNull()) {
         group->setColumnCount(parentEle.attribute("column").toInt());
     }
-    if (!parentEle.attribute("row").isNull()) {
+    if (!parentEle.attribute("rows").isNull()) {
         group->setRowCount(parentEle.attribute("row").toInt());
     }
 

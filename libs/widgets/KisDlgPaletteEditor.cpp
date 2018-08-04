@@ -129,9 +129,13 @@ bool KisDlgPaletteEditor::isModified() const
 bool KisDlgPaletteEditor::groupRemoved(const QString &groupName) const
 {
     qDebug() << "KisDlgPaletteEditor checking if" << groupName << "removed";
-    qDebug() << m_groups.contains(groupName);
+    qDebug() << "if final group set contains it:" << m_groups.contains(groupName);
+    for (const QString &n : m_groups.keys()) {
+        qDebug() << n;
+    }
     if (groupName == KoColorSet::GLOBAL_GROUP_NAME) { return false; }
     qDebug() << "result is" << (m_original->groups.contains(groupName) && !m_groups.contains(groupName));
+    qDebug() << "size when checking" << m_groups.size();
     return m_original->groups.contains(groupName) && !m_groups.contains(groupName);
 }
 
@@ -167,6 +171,7 @@ void KisDlgPaletteEditor::slotAddGroup()
     m_groups.insert(leName.text(), GroupInfoType(leName.text(), spxRow.value()));
     m_newGroups.insert(leName.text());
     m_ui->cbxGroup->addItem(leName.text());
+    m_ui->cbxGroup->setCurrentIndex(m_ui->cbxGroup->count() - 1);
 }
 
 void KisDlgPaletteEditor::slotRenGroup()
@@ -209,12 +214,10 @@ void KisDlgPaletteEditor::slotDelGroup()
     editableItems.addRow(i18nc("Shows up when deleting a swatch group", "Keep the Colors"), &chkKeep);
     if (window.exec() != KoDialog::Accepted) { return; }
 
-    m_ui->cbxGroup->removeItem(m_ui->cbxGroup->findText(m_groups[m_currentGroupOriginalName].first));
-    m_ui->cbxGroup->setCurrentIndex(0);
-    qDebug() << "contains" << m_currentGroupOriginalName << "before" << m_groups.contains(m_currentGroupOriginalName);
-    qDebug() << "remove success" << m_groups.remove(m_currentGroupOriginalName);
+    m_groups.remove(m_currentGroupOriginalName);
     m_newGroups.remove(m_currentGroupOriginalName);
-    qDebug() << "contains after" << m_groups.contains(m_currentGroupOriginalName);
+    m_ui->cbxGroup->setCurrentIndex(0);
+    m_ui->cbxGroup->removeItem(m_ui->cbxGroup->findText(m_groups[m_currentGroupOriginalName].first));
 }
 
 void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)

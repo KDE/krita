@@ -38,7 +38,6 @@
 #include "KisViewManager.h"
 #include <QGridLayout>
 #include <QLabel>
-#include <QSpinBox>
 #include <QLineEdit>
 
 #include <kis_config.h>

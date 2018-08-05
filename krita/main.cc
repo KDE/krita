@@ -55,11 +55,9 @@
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
 #include "input/KisQtWidgetsTweaker.h"
-#include <kis_debug.h>
 
 #if defined Q_OS_WIN
 #include <windows.h>
-#include <stdlib.h>
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
 #include <QLibrary>

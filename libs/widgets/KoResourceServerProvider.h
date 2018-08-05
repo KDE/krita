@@ -32,7 +32,6 @@
 #include <resources/KoPattern.h>
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoColorSet.h>
-#include <resources/KoAbstractGradient.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 
 

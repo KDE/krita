@@ -29,7 +29,6 @@
 #include <KoXmlReader.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
-#include <KoPathShapeLoader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>

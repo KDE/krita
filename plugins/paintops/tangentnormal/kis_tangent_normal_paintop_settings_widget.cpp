@@ -29,7 +29,6 @@
 #include <kis_pressure_flow_option.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_curve_option_widget.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
 #include <kis_airbrush_option_widget.h>
@@ -38,7 +37,6 @@
 #include <kis_pressure_rate_option.h>
 #include <kis_compositeop_option.h>
 #include "kis_texture_option.h"
-#include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 

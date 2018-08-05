@@ -656,7 +656,7 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
     data = document.createElement("data")
     root.appendChild(data)
 
-    # Covert pages to base64 strings.
+    # Convert pages to base64 strings.
     for i in range(0, len(pages)):
         image = pages[i].firstChildElement("image")
         href = image.attribute("href")

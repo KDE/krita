@@ -33,7 +33,6 @@
 #include "KisView.h"
 #include "KisPart.h"
 #include <KisDocument.h>
-#include <KisPart.h>
 #include <kis_action_manager.h>
 #include "KisMainWindow.h"
 #include "kis_selection_mask.h"

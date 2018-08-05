@@ -38,7 +38,7 @@
  * to make some end cursors stop moving, so we have:
  *         KoTextLoader -> calling -> KoSection::setKeepEndBound()
  *         KoTextLoader -> calling -> KoSectionModel::allowMovingEndBound()
- *      ^-- this needed to restore defaul behaviour after load
+ *      ^-- this needed to restore default behaviour after load
  *
  * 2) Level. Level means the depth of the section in tree. Root
  * sections has 0 (zero) level. Now if you look at the possible

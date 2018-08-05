@@ -56,7 +56,7 @@ public:
     /// return the word in which the locator is inserted.
     QString word() const;
 
-    /// Add a text reference that is interrested in knowing when this locator is laid-out in a differen position.
+    /// Add a text reference that is interested in knowing when this locator is laid-out in a different position.
     void addListener(KoTextReference *reference);
     /// Remove a reference from the listeners.
     void removeListener(KoTextReference *reference);

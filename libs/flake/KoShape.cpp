@@ -567,7 +567,7 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
      *          zIndex are **merged**, while in Krita the contents of groups
      *          is never merged. One group will always below than the other.
      *          Therefore, when zIndex of two groups inside the same parent
-     *          coinside, the resulting painting order in Krita is
+     *          coincide, the resulting painting order in Krita is
      *          **UNDEFINED**.
      *
      *          To avoid this trouble we use  KoShapeReorderCommand::mergeInShape()

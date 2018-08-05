@@ -291,7 +291,7 @@ Item {
                 }
             }
 
-            // Handles state change depening on transition animation status
+            // Handles state change depending on transition animation status
             function setState(newState)
             {
                 if (transitionAnimationRunning)

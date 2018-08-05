@@ -51,7 +51,7 @@ private:
 
         Q_FOREACH (const QRect &rc, m_rectsInProgress) {
             if (rc != rect && rect.intersects(rc)) {
-                ENTER_FUNCTION() << "FAIL: concurrect access from" << rect << "to" << rc << tag;
+                ENTER_FUNCTION() << "FAIL: concurrent access from" << rect << "to" << rc << tag;
                 return false;
             }
         }

@@ -117,7 +117,7 @@ KisMementoManager::~KisMementoManager()
  * 4) Then we called clear() and getMemento() [==commit()]
  * 5) The tile will be registered as deleted and successfully
  *    committed to a revision. That means the states of the memento
- *    manager at stages 1 and 5 do not coinside.
+ *    manager at stages 1 and 5 do not coincide.
  * This will not lead to any memory leaks or bugs seen, it just
  * not good from a theoretical perspective.
  */

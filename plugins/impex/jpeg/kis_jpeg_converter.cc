@@ -86,7 +86,7 @@ void jpegErrorExit ( j_common_ptr cinfo )
     ( *( cinfo->err->format_message ) ) ( cinfo, jpegLastErrorMsg );
 
     /* Jump to the setjmp point */
-    throw std::runtime_error( jpegLastErrorMsg ); // or your preffered exception ...
+    throw std::runtime_error( jpegLastErrorMsg ); // or your preferred exception ...
 }
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)

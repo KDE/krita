@@ -39,7 +39,6 @@
 #include <KoDockRegistry.h>
 
 #include <kis_icon.h>
-#include <kis_icon.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_config_widget.h>
 #include <kis_canvas_resource_provider.h>

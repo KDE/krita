@@ -36,10 +36,8 @@
 #include <QFile>
 #include <QLocale>
 #include <QMessageBox>
-#include <QMessageBox>
 #include <QProcessEnvironment>
 #include <QSettings>
-#include <QStandardPaths>
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
@@ -91,7 +89,6 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
-#include <KisAutoSaveRecoveryDialog.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>

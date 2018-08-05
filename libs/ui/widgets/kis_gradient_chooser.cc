@@ -34,7 +34,6 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
-#include <KoStopGradient.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 

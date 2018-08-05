@@ -74,7 +74,6 @@
 
 #include "kis_assert.h"
 
-#include <limits>
 #include "KoOdfGradientBackground.h"
 #include <KisHandlePainterHelper.h>
 

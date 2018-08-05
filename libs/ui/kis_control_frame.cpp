@@ -63,7 +63,6 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_display_color_converter.h"
 #include <kis_canvas2.h>
-#include <kis_image.h>
 
 
 KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)

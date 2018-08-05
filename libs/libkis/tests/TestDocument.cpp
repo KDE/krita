@@ -19,12 +19,10 @@
 #include <QTest>
 
 #include <KritaVersionWrapper.h>
-#include <QTest>
 #include <QColor>
 #include <QDataStream>
 #include <QDir>
 
-#include <KritaVersionWrapper.h>
 #include <Node.h>
 #include <Krita.h>
 #include <Document.h>

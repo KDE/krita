@@ -387,8 +387,6 @@ void KisImageTest::testLayerComposition()
     QVERIFY(!newLayer2->visible());
 }
 
-#include "testutil.h"
-#include "kis_group_layer.h"
 #include "kis_transparency_mask.h"
 #include "kis_psd_layer_style.h"
 

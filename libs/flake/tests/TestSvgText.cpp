@@ -897,7 +897,6 @@ void TestSvgText::testMulticolorText()
     t.test_standard("text_multicolor", QSize(30, 30), 72.0);
 }
 
-#include <KoSvgTextShapeMarkupConverter.h>
 #include <KoColorBackground.h>
 
 void TestSvgText::testConvertToStrippedSvg()

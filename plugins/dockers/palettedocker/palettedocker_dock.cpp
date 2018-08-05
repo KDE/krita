@@ -38,9 +38,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
 #include <kis_icon.h>
-#include <kis_layer.h>
-#include <kis_node_manager.h>
 #include <kis_config.h>
+#include <kis_node_manager.h>
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
@@ -50,7 +49,7 @@
 #include <kis_canvas2.h>
 #include <KoDialog.h>
 #include <kis_color_button.h>
-#include <squeezedcombobox.h>
+#include <KisPart.h>
 
 #include "KisPaletteModel.h"
 #include "KisPaletteDelegate.h"
@@ -67,8 +66,6 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_resourceProvider(0)
     , m_canvas(0)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add foreground color")))
-    , m_actAddWithDlg(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Choose a color to add")))
-    , m_actSwitch(new QAction(i18n("Switch with another spot")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
     , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
 {
@@ -84,10 +81,6 @@ PaletteDockerDock::PaletteDockerDock( )
     m_ui->bnRemove->setIconSize(QSize(16, 16));
     m_ui->bnRename->setIconSize(QSize(16, 16));
     m_ui->bnAdd->setIconSize(QSize(16, 16));
-
-    m_ui->bnAdd->setEnabled(false);
-    m_ui->bnRename->setEnabled(false);
-    m_ui->bnRemove->setEnabled(false);
     // m_wdgPaletteDock->bnAddGroup->setIcon(KisIconUtils::loadIcon("groupLayer"));
 
     m_model = new KisPaletteModel(this);
@@ -105,10 +98,8 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)),
             SLOT(slotNameListSelection(KoColor)));
 
-    m_viewContextMenu.addAction(m_actAddWithDlg.data());
     m_viewContextMenu.addAction(m_actRemove.data());
     m_viewContextMenu.addAction(m_actModify.data());
-    m_viewContextMenu.addAction(m_actSwitch.data());
 
     m_paletteChooser = new KisPaletteListWidget(this);
     m_paletteChooser->setAllowModification(true);
@@ -124,10 +115,16 @@ PaletteDockerDock::PaletteDockerDock( )
     KoColorSet* defaultPalette = rServer->resourceByName(defaultPaletteName);
     if (defaultPalette) {
         slotSetColorSet(defaultPalette);
+    } else {
+        m_ui->bnAdd->setEnabled(false);
+        m_ui->bnRename->setEnabled(false);
+        m_ui->bnRemove->setEnabled(false);
+        m_ui->paletteView->setAllowModification(false);
     }
 
     m_saver.reset(new PaletteListSaver(this));
     connect(m_paletteChooser, SIGNAL(sigPaletteListChanged()), m_saver.data(), SLOT(slotSetPaletteList()));
+    connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(slotViewChanged(QString)));
 }
 
 PaletteDockerDock::~PaletteDockerDock()
@@ -175,15 +172,22 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
         m_ui->bnAdd->setEnabled(true);
         m_ui->bnRename->setEnabled(true);
         m_ui->bnRemove->setEnabled(true);
+        m_ui->paletteView->setAllowModification(true);
     } else {
         m_ui->bnAdd->setEnabled(false);
         m_ui->bnRename->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
+        m_ui->paletteView->setAllowModification(false);
     }
 
     m_currentColorSet = colorSet;
     m_model->setColorSet(colorSet);
     m_ui->bnColorSets->setText(colorSet->name());
+}
+
+void PaletteDockerDock::slotViewChanged(QString s)
+{
+    qDebug() << "document opened" << s;
 }
 
 void PaletteDockerDock::slotAddColor()

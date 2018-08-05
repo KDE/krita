@@ -18,14 +18,22 @@ class KisDlgPaletteEditor : public QDialog
 {
     Q_OBJECT
 private:
-    typedef QPair<QString, int> GroupInfoType; // first is name, second is rowCount
+    struct GroupInfo {
+        GroupInfo() { }
+        GroupInfo(const QString &n, int r)
+            : newName(n)
+            , rowNumber(r)
+        { }
+        QString newName;
+        int rowNumber;
+    }; // first is name, second is rowCount
     struct OriginalPaletteInfo {
         QString name;
         QString filename;
         int columnCount;
         bool isGlobal;
         bool isReadOnly;
-        QHash<QString, GroupInfoType> groups;
+        QHash<QString, GroupInfo> groups;
     };
 
 public:
@@ -62,7 +70,8 @@ public:
      * @param groupName ORIGINAL group name
      * @return new group row number of the group
      */
-    int groupRowNumber(const QString &groupName);
+    int groupRowNumber(const QString &groupName) const;
+    bool groupKeelColors(const QString &groupName) const;
 
 private Q_SLOTS:
     void slotDelGroup();
@@ -73,7 +82,7 @@ private Q_SLOTS:
     void slotRowCountChanged(int);
 
 private:
-    QString oldNameFromNewName(const QString &newName);
+    QString oldNameFromNewName(const QString &newName) const;
 
 private:
     QScopedPointer<Ui_WdgDlgPaletteEditor> m_ui;
@@ -82,9 +91,13 @@ private:
     QScopedPointer<QAction> m_actRenGroup;
     QPointer<KoColorSet> m_colorSet;
     QScopedPointer<OriginalPaletteInfo> m_original;
-    QHash<QString, GroupInfoType> m_groups; // key is original group name
+    QHash<QString, GroupInfo> m_groups; // key is original group name
     QSet<QString> m_newGroups;
+    QSet<QString> m_keepColorGroups;
     QString m_currentGroupOriginalName;
+
+private:
+    friend bool operator ==(const GroupInfo &lhs, const GroupInfo &rhs);
 };
 
 #endif // KISDLGPALETTEEDITOR_H

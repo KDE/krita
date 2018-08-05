@@ -70,6 +70,7 @@ private Q_SLOTS:
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSet* colorSet);
+    void slotViewChanged(QString s);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
@@ -102,8 +103,6 @@ private /* member variables */:
     QScopedPointer<PaletteListSaver> m_saver;
 
     QScopedPointer<QAction> m_actAdd;
-    QScopedPointer<QAction> m_actAddWithDlg;
-    QScopedPointer<QAction> m_actSwitch;
     QScopedPointer<QAction> m_actRemove;
     QScopedPointer<QAction> m_actModify;
     QMenu m_viewContextMenu;

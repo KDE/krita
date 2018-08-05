@@ -57,10 +57,10 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     setShowGrid(true);
     setDropIndicatorShown(true);
-    setDragEnabled(false);
-    setAcceptDrops(false);
     setDragDropMode(QAbstractItemView::InternalMove);
     setSelectionMode(QAbstractItemView::SingleSelection);
+    setDragEnabled(false);
+    setAcceptDrops(false);
 
     /*
      * without this, a cycle might be created:
@@ -120,8 +120,8 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     editableItems->addRow(i18n("Color"), bnColor);
     editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
     cmbGroups->setCurrentIndex(0);
-    lnName->setText(i18nc("Part of a default name for a color","Color")+" "+QString::number(m_d->model->colorSet()->colorCount()+1));
-    lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount()+1));
+    lnName->setText(i18nc("Part of a default name for a color","Color")+" " + QString::number(m_d->model->colorSet()->colorCount()+1));
+    lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount() + 1));
     bnColor->setColor(color);
     chkSpot->setChecked(false);
 

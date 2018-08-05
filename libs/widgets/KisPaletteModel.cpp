@@ -150,11 +150,17 @@ bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
                                                                            rowNumberInGroup(index.row()));
         emit dataChanged(index, index);
     } else {
-        beginResetModel();
         int groupNameRow = groupNameRowForRow(index.row());
         QString groupName = m_groupNameRows[groupNameRow];
+        beginResetModel();
         m_colorSet->removeGroup(groupName, keepColors);
-        m_groupNameRows.remove(groupNameRow);
+        m_groupNameRows.clear();
+        int row = -1;
+        for (const QString &groupName : m_colorSet->getGroupNames()) {
+            m_groupNameRows[row] = groupName;
+            row += m_colorSet->getGroup(groupName)->rowCount();
+            row += 1; // row for group name
+        }
         endResetModel();
     }
     return true;
@@ -202,9 +208,6 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
     QModelIndex finalIdx = parent;
     if (!finalIdx.isValid()) { return false; }
-    qDebug() << "KisPaletteModel::dropMimedata" << finalIdx.row();
-    qDebug() << "KisPaletteModel::dropMimedata" << finalIdx.column();
-    qDebug() << "KisPaletteModel::dropMimedata" << qvariant_cast<QString>(finalIdx.data(KisPaletteModel::GroupNameRole));
 
     if (qvariant_cast<bool>(finalIdx.data(KisPaletteModel::IsGroupNameRole))) {
         return true;
@@ -242,14 +245,11 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 
         if (action == Qt::MoveAction){
             KisSwatchGroup *g = m_colorSet->getGroup(oldGroupName);
-            qDebug() << oldGroupName;
-            qDebug() << g;
             if (g) {
                 if (qvariant_cast<bool>(finalIdx.data(KisPaletteModel::CheckSlotRole))) {
                     g->setEntry(getEntry(finalIdx), oriColumn, oriRow);
                 } else {
-                    qDebug() << oriColumn << oriRow;
-                    qDebug() << g->removeEntry(oriColumn, oriRow);
+                    g->removeEntry(oriColumn, oriRow);
                 }
             }
             setEntry(entry, finalIdx);

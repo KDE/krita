@@ -152,8 +152,11 @@ void KisPaletteListWidget::slotModify()
         colorSet->getGroup(newGroupName)->setRowCount(dlg.groupRowNumber(newGroupName));
     }
     for (const QString &groupName : colorSet->getGroupNames()) {
+        if (groupName == KoColorSet::GLOBAL_GROUP_NAME) {
+            continue;
+        }
         if (dlg.groupRemoved(groupName)) {
-            colorSet->removeGroup(groupName);
+            colorSet->removeGroup(groupName, dlg.groupKeelColors(groupName));
             continue;
         }
         colorSet->getGroup(groupName)->setRowCount(dlg.groupRowNumber(groupName));

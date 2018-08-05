@@ -152,6 +152,7 @@ void KisDlgPaletteEditor::slotAddGroup()
     QLabel lblRowCount(i18n("Row count"), &dlg);
     layout.addWidget(&lblRowCount);
     QSpinBox spxRow(&dlg);
+    spxRow.setValue(20);
     layout.addWidget(&spxRow);
     if (dlg.exec() != QDialog::Accepted) { return; }
     if (m_colorSet->getGroup(leName.text())) {
@@ -193,13 +194,13 @@ void KisDlgPaletteEditor::slotDelGroup()
     if (m_currentGroupOriginalName == KoColorSet::GLOBAL_GROUP_NAME) {
         QMessageBox msgNameDuplicate;
         msgNameDuplicate.setText(i18n("Can't delete group"));
-        msgNameDuplicate.setWindowTitle(i18n("Can't delete main swatch of a palette."));
+        msgNameDuplicate.setWindowTitle(i18n("Can't delete the main group of a palette."));
         msgNameDuplicate.exec();
         return;
     }
 
     KoDialog window(this);
-    window.setWindowTitle(i18nc("@title:window","Removing Group"));
+    window.setWindowTitle(i18nc("@title:window", "Removing Group"));
     QFormLayout editableItems(&window);
     QCheckBox chkKeep(&window);
     window.mainWidget()->setLayout(&editableItems);
@@ -209,10 +210,11 @@ void KisDlgPaletteEditor::slotDelGroup()
         m_keepColorGroups.insert(m_currentGroupOriginalName);
     }
 
-    m_groups.remove(m_currentGroupOriginalName);
-    m_newGroups.remove(m_currentGroupOriginalName);
+    QString deletedName = m_currentGroupOriginalName;
     m_ui->cbxGroup->setCurrentIndex(0);
-    m_ui->cbxGroup->removeItem(m_ui->cbxGroup->findText(m_groups[m_currentGroupOriginalName].newName));
+    m_ui->cbxGroup->removeItem(m_ui->cbxGroup->findText(m_groups[deletedName].newName));
+    m_groups.remove(deletedName);
+    m_newGroups.remove(deletedName);
 }
 
 void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)
@@ -224,12 +226,8 @@ void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)
         m_ui->bnDelGroup->setEnabled(true);
         m_ui->bnRenGroup->setEnabled(true);
     }
-    QString oldName = oldNameFromNewName(groupName);
-    if (oldName.isEmpty()) {
-        oldName = KoColorSet::GLOBAL_GROUP_NAME;
-    }
-    m_currentGroupOriginalName = oldName;
-    m_ui->spinBoxRow->setValue(m_groups[oldName].rowNumber);
+    m_currentGroupOriginalName = oldNameFromNewName(groupName);
+    m_ui->spinBoxRow->setValue(m_groups[m_currentGroupOriginalName].rowNumber);
 }
 
 int KisDlgPaletteEditor::groupRowNumber(const QString &groupName) const

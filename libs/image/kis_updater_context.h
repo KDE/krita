@@ -29,6 +29,7 @@
 #include "kis_lock_free_lod_counter.h"
 
 #include "KisUpdaterContextSnapshotEx.h"
+#include "tiles3/kis_lockless_stack.h"
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -87,15 +88,15 @@ public:
      * \see isWalkerAllowed()
      * \see hasSpareThread()
      */
-    virtual void addMergeJob(KisBaseRectsWalkerSP walker);
-    void addMergeJobs(QVector<KisBaseRectsWalkerSP> &walkers);
+    virtual bool addMergeJob(KisBaseRectsWalkerSP walker);
+    bool addMergeJobs(QVector<KisBaseRectsWalkerSP> &walkers);
 
     /**
      * Adds a stroke job to the context. The prerequisites are
      * the same as for addMergeJob()
      * \see addMergeJob()
      */
-    virtual void addStrokeJob(KisStrokeJob *strokeJob);
+    virtual bool addStrokeJob(KisStrokeJob *strokeJob);
 
 
     /**
@@ -103,7 +104,7 @@ public:
      * the same as for addMergeJob()
      * \see addMergeJob()
      */
-    virtual void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
+    virtual bool addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     /**
      * Block execution of the caller until all the jobs are finished
@@ -146,7 +147,7 @@ Q_SIGNALS:
     void sigSpareThreadAppeared();
 
 protected Q_SLOTS:
-    void slotJobFinished();
+    void slotJobFinished(int index);
 
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
@@ -162,10 +163,12 @@ protected:
      */
     QReadWriteLock m_exclusiveJobLock;
 
-    QMutex m_lock;
+//    QMutex m_lock;
+    mutable QReadWriteLock m_rwLock;
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
+    KisLocklessStack<int> m_spareThreadsIndexes;
 };
 
 class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext
@@ -181,9 +184,9 @@ public:
      * The only difference - it doesn't start execution
      * of the job
      */
-    void addMergeJob(KisBaseRectsWalkerSP walker) override;
-    void addStrokeJob(KisStrokeJob *strokeJob) override;
-    void addSpontaneousJob(KisSpontaneousJob *spontaneousJob) override;
+    bool addMergeJob(KisBaseRectsWalkerSP walker) override;
+    bool addStrokeJob(KisStrokeJob *strokeJob) override;
+    bool addSpontaneousJob(KisSpontaneousJob *spontaneousJob) override;
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();

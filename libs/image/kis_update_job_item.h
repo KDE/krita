@@ -44,8 +44,8 @@ public:
     };
 
 public:
-    KisUpdateJobItem(QReadWriteLock *exclusiveJobLock)
-        : m_exclusiveJobLock(exclusiveJobLock),
+    KisUpdateJobItem(QReadWriteLock *exclusiveJobLock, int index)
+        : m_exclusiveJobLock(exclusiveJobLock), m_index(index),
           m_atomicType(Type::EMPTY),
           m_runnableJob(0)
     {
@@ -97,7 +97,7 @@ public:
             emit sigDoSomeUsefulWork();
 
             // may flip the current state from Waiting -> Running again
-            emit sigJobFinished();
+            emit sigJobFinished(m_index);
 
             m_exclusiveJobLock->unlock();
 
@@ -222,7 +222,7 @@ public:
 Q_SIGNALS:
     void sigContinueUpdate(const QRect& rc);
     void sigDoSomeUsefulWork();
-    void sigJobFinished();
+    void sigJobFinished(int index);
 
 private:
     /**
@@ -254,6 +254,7 @@ private:
      * \see KisUpdaterContext::m_exclusiveJobLock
      */
     QReadWriteLock *m_exclusiveJobLock;
+    const int m_index;
 
     bool m_exclusive;
 

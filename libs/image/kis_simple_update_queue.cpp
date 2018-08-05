@@ -122,7 +122,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
             updaterContext.isJobAllowed(item)) {
             walkers.append(item);
-//            updaterContext.addMergeJob(item);
+//            while (!updaterContext.addMergeJob(item));
 
             iter.remove();
 
@@ -132,7 +132,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     }
 
     if (!walkers.isEmpty()) {
-        updaterContext.addMergeJobs(walkers);
+        while (!updaterContext.addMergeJobs(walkers));
         jobAdded = true;
     }
 
@@ -155,7 +155,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 
         if (!numMergeJobs && !numStrokeJobs) {
             KisSpontaneousJob *job = m_spontaneousJobsList.takeFirst();
-            updaterContext.addSpontaneousJob(job);
+            while (!updaterContext.addSpontaneousJob(job));
             jobAdded = true;
         }
     }
@@ -244,13 +244,13 @@ void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 
 bool KisSimpleUpdateQueue::isEmpty() const
 {
-    QReadLocker locker(&m_rwLock);
+//    QReadLocker locker(&m_rwLock);
     return m_updatesList.isEmpty() && m_spontaneousJobsList.isEmpty();
 }
 
 qint32 KisSimpleUpdateQueue::sizeMetric() const
 {
-    QReadLocker locker(&m_rwLock);
+//    QReadLocker locker(&m_rwLock);
     return m_updatesList.size() + m_spontaneousJobsList.size();
 }
 

@@ -117,15 +117,15 @@ int KisUpdateScheduler::threadsLimit() const
 
 void KisUpdateScheduler::connectSignals()
 {
-    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            SLOT(continueUpdate(const QRect&)),
-            Qt::DirectConnection);
+//    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
+//            SLOT(continueUpdate(const QRect&)),
+//            Qt::DirectConnection);
 
-    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
-            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
+//    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
+//            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
 
-    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
-            SLOT(spareThreadAppeared()), Qt::DirectConnection);
+//    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
+//            SLOT(spareThreadAppeared()), Qt::DirectConnection);
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));

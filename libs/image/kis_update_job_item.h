@@ -29,6 +29,7 @@
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 #include "kis_debug.h"
+#include "kis_updater_context.h"
 
 
 class KisUpdateJobItem :  public QObject, public QRunnable
@@ -44,8 +45,8 @@ public:
     };
 
 public:
-    KisUpdateJobItem(QReadWriteLock *exclusiveJobLock, int index)
-        : m_exclusiveJobLock(exclusiveJobLock), m_index(index),
+    KisUpdateJobItem(KisUpdaterContext *updaterContext, QReadWriteLock *exclusiveJobLock, int index)
+        : m_updaterContext(updaterContext), m_exclusiveJobLock(exclusiveJobLock), m_index(index),
           m_atomicType(Type::EMPTY),
           m_runnableJob(0)
     {
@@ -94,10 +95,12 @@ public:
             setDone();
 
 
-            emit sigDoSomeUsefulWork();
+//            emit sigDoSomeUsefulWork();
+            m_updaterContext->doSomeUsefulWork();
 
             // may flip the current state from Waiting -> Running again
-            emit sigJobFinished(m_index);
+//            emit sigJobFinished(m_index);
+            m_updaterContext->jobFinished(m_index);
 
             m_exclusiveJobLock->unlock();
 
@@ -122,7 +125,8 @@ public:
             changeRect |= walker->changeRect();
         }
 
-        emit sigContinueUpdate(changeRect);
+//        emit sigContinueUpdate(changeRect);
+        m_updaterContext->continueUpdate(changeRect);
     }
 
     // return true if the thread should actually be started
@@ -253,6 +257,7 @@ private:
     /**
      * \see KisUpdaterContext::m_exclusiveJobLock
      */
+    KisUpdaterContext *m_updaterContext;
     QReadWriteLock *m_exclusiveJobLock;
     const int m_index;
 

@@ -30,6 +30,7 @@
 
 #include "KisUpdaterContextSnapshotEx.h"
 #include "tiles3/kis_lockless_stack.h"
+#include "kis_update_scheduler.h"
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -140,6 +141,10 @@ public:
      */
     int threadsLimit() const;
 
+    void jobFinished(int index);
+    void continueUpdate(const QRect& rc);
+    void doSomeUsefulWork();
+
 
 Q_SIGNALS:
     void sigContinueUpdate(const QRect& rc);
@@ -169,6 +174,7 @@ protected:
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
     KisLocklessStack<int> m_spareThreadsIndexes;
+    KisUpdateScheduler *m_scheduler;
 };
 
 class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext

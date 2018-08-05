@@ -27,7 +27,7 @@
 const int KisUpdaterContext::useIdealThreadCountTag = -1;
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount, QObject *parent)
-    : QObject(parent)
+    : QObject(parent), m_scheduler(qobject_cast<KisUpdateScheduler*>(parent))
 {
     if (threadCount <= 0) {
         threadCount = QThread::idealThreadCount();
@@ -335,17 +335,17 @@ void KisUpdaterContext::setThreadsLimit(int value)
     m_jobs.resize(value);
 
     for (qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock, i);
+        m_jobs[i] = new KisUpdateJobItem(this, &m_exclusiveJobLock, i);
         m_spareThreadsIndexes.push(i);
-        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
-                SIGNAL(sigContinueUpdate(const QRect&)),
-                Qt::DirectConnection);
+//        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
+//                SIGNAL(sigContinueUpdate(const QRect&)),
+//                Qt::DirectConnection);
 
-        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
-                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
+//        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
+//                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
 
-        connect(m_jobs[i], SIGNAL(sigJobFinished(int)),
-                SLOT(slotJobFinished(int)), Qt::DirectConnection);
+//        connect(m_jobs[i], SIGNAL(sigJobFinished(int)),
+//                SLOT(slotJobFinished(int)), Qt::DirectConnection);
     }
 }
 
@@ -354,6 +354,28 @@ int KisUpdaterContext::threadsLimit() const
     QReadLocker locker(&m_rwLock);
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_jobs.size() == m_threadPool.maxThreadCount());
     return m_jobs.size();
+}
+
+void KisUpdaterContext::jobFinished(int index)
+{
+    m_lodCounter.removeLod();
+    m_spareThreadsIndexes.push(index);
+
+    // Be careful. This slot can be called asynchronously without locks.
+//    emit sigSpareThreadAppeared();
+    m_scheduler->spareThreadAppeared();
+}
+
+void KisUpdaterContext::continueUpdate(const QRect &rc)
+{
+//    emit sigContinueUpdate(rc);
+    m_scheduler->continueUpdate(rc);
+}
+
+void KisUpdaterContext::doSomeUsefulWork()
+{
+//    emit doSomeUsefulWork();
+    m_scheduler->doSomeUsefulWork();
 }
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)

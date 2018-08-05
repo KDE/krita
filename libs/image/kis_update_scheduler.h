@@ -204,6 +204,10 @@ public:
     bool wrapAroundModeSupported() const;
     int currentLevelOfDetail() const;
 
+    void continueUpdate(const QRect &rect);
+    void doSomeUsefulWork();
+    void spareThreadAppeared();
+
 protected:
     // Trivial constructor for testing support
     KisUpdateScheduler();
@@ -216,10 +220,10 @@ protected Q_SLOTS:
      */
     void updateSettings();
 
-private Q_SLOTS:
-    void continueUpdate(const QRect &rect);
-    void doSomeUsefulWork();
-    void spareThreadAppeared();
+//private Q_SLOTS:
+//    void continueUpdate(const QRect &rect);
+//    void doSomeUsefulWork();
+//    void spareThreadAppeared();
 
 private:
     friend class UpdatesBlockTester;

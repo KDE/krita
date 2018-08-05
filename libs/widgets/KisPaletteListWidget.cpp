@@ -41,6 +41,8 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     , m_ui(new Ui_WdgPaletteListWidget)
     , m_d(new KisPaletteListWidgetPrivate(this))
 {
+    m_d->allowModification = false;
+
     m_d->actAdd.reset(new QAction(KisIconUtils::loadIcon("list-add"),
                                   i18n("Add a new palette")));
     m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("list-remove"),
@@ -70,10 +72,12 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_d->itemChooser->setRowHeight(40);
     m_d->itemChooser->setColumnCount(1);
     m_d->itemChooser->showButtons(false);
+    m_d->itemChooser->showTaggingBar(true);
     m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
     m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
 
     connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource *)), SLOT(slotPaletteResourceSelected(KoResource*)));
+    m_d->itemChooser->setCurrentItem(0, 0);
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()
@@ -81,7 +85,21 @@ KisPaletteListWidget::~KisPaletteListWidget()
 
 void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
-    emit sigPaletteSelected(static_cast<KoColorSet*>(r));
+    KoColorSet *g = static_cast<KoColorSet*>(r);
+    if (g->isEditable() && m_d->allowModification) {
+        m_ui->bnAdd->setEnabled(true);
+        m_ui->bnRemove->setEnabled(true);
+        m_ui->bnEdit->setEnabled(true);
+        m_ui->bnImport->setEnabled(true);
+        m_ui->bnExport->setEnabled(true);
+    } else {
+        m_ui->bnAdd->setEnabled(false);
+        m_ui->bnRemove->setEnabled(false);
+        m_ui->bnEdit->setEnabled(false);
+        m_ui->bnImport->setEnabled(false);
+        m_ui->bnExport->setEnabled(false);
+    }
+    emit sigPaletteSelected(g);
 }
 
 void KisPaletteListWidget::slotAdd()
@@ -188,6 +206,11 @@ void KisPaletteListWidget::setPaletteNonGlobal(KoColorSet *colorSet)
     QFile::remove(colorSet->filename());
     colorSet->setFilename(filename);
     colorSet->setIsGlobal(false);
+}
+
+void KisPaletteListWidget::setAllowModification(bool allowModification)
+{
+    m_d->allowModification = allowModification;
 }
 
 QString KisPaletteListWidget::newPaletteFileName()

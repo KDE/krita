@@ -154,13 +154,10 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         editableItems->addRow(i18nc("Shows up when deleting a swatch group", "Keep the Colors"), chkKeep);
         if (window->exec() != KoDialog::Accepted) { return false; }
         keepColors = chkKeep->isChecked();
-        m_d->model->removeEntry(index, keepColors);
+    }
+    m_d->model->removeEntry(index, keepColors);
+    if (m_d->model->colorSet()->isGlobal()) {
         m_d->model->colorSet()->save();
-    } else {
-        m_d->model->removeEntry(index, keepColors);
-        if (m_d->model->colorSet()->isGlobal()) {
-            m_d->model->colorSet()->save();
-        }
     }
     return true;
 }
@@ -196,7 +193,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
         emit sigIndexSelected(index);
-        KisSwatch entry = m_d->model->colorSet()->getColorGlobal(index.column(), index.row());
+        KisSwatch entry = m_d->model->getEntry(index);
         emit sigColorSelected(entry.color());
     }
     QTableView::mouseReleaseEvent(event);
@@ -242,9 +239,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
         lnGroupName->setText(groupName);
         if (dlg->exec() == KoDialog::Accepted) {
-            if (lnGroupName->text().isEmpty()) {
-                return;
-            }
+            if (lnGroupName->text().isEmpty()) { return; }
             for (const QString &groupName: m_d->model->colorSet()->getGroupNames()) {
                 if (groupName == lnGroupName->text()) {
                     return;
@@ -256,9 +251,7 @@ void KisPaletteView::modifyEntry(QModelIndex index)
         QLineEdit *lnIDName = new QLineEdit(dlg);
         KisColorButton *bnColor = new KisColorButton(dlg);
         QCheckBox *chkSpot = new QCheckBox(dlg);
-        KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-        Q_ASSERT(group);
-        KisSwatch entry = group->getEntry(index.column(), index.row());
+        KisSwatch entry = m_d->model->getEntry(index);
         chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
         editableItems->addRow(i18n("ID"), lnIDName);
         editableItems->addRow(i18nc("Name for a swatch group", "Name"), lnGroupName);

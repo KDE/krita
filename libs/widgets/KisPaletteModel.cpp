@@ -130,15 +130,13 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
 {
     KisSwatchGroup *group = m_colorSet->getGroup(groupName);
+    beginResetModel();
     if (group->checkEntry(m_colorSet->columnCount(), group->rowCount())) {
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
         m_colorSet->add(entry, groupName);
-        endInsertRows();
     } else {
-        beginResetModel();
         m_colorSet->add(entry, groupName);
-        endResetModel();
     }
+    endResetModel();
     m_colorSet->save();
     return true;
 }
@@ -383,7 +381,6 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
-    // qDebug() << "KisPaletteModel: row number in group" << rowNumberInGroup(index.row());
     emit dataChanged(index, index);
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();
@@ -392,8 +389,6 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
 
 bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newName)
 {
-    // emit this signal to notify stuff out of the Qt MVC frame
-    emit dataChanged(QModelIndex(), QModelIndex());
     beginResetModel();
     bool success = m_colorSet->changeGroupName(groupName, newName);
     for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
@@ -416,11 +411,17 @@ QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) 
     case Qt::DisplayRole: {
         return groupName;
     }
+    case GroupNameRole: {
+        return groupName;
+    }
     case IsGroupNameRole: {
         return true;
     }
     case CheckSlotRole: {
         return true;
+    }
+    case RowInGroupRole: {
+        return -1;
     }
     default: {
         return QVariant();
@@ -432,10 +433,11 @@ QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
     Q_ASSERT(group);
-    bool entryPresent = group->checkEntry(idx.column(), rowNumberInGroup(idx.row()));
+    int rowInGroup = rowNumberInGroup(idx.row());
+    bool entryPresent = group->checkEntry(idx.column(), rowInGroup);
     KisSwatch entry;
     if (entryPresent) {
-        entry = group->getEntry(idx.column(), rowNumberInGroup(idx.row()));
+        entry = group->getEntry(idx.column(), rowInGroup);
     }
     switch (role) {
     case Qt::ToolTipRole:
@@ -452,8 +454,14 @@ QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
     case IsGroupNameRole: {
         return false;
     }
+    case GroupNameRole: {
+        return group->name();
+    }
     case CheckSlotRole: {
         return entryPresent;
+    }
+    case RowInGroupRole: {
+        return rowInGroup;
     }
     default: {
         return QVariant();
@@ -484,7 +492,17 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 {
     KisSwatchGroup::SwatchInfo info = colorSet()->getClosestColorInfo(compare);
-    return createIndex(info.row, info.column, colorSet()->getGroup(info.group));
+    return createIndex(indexRowForInfo(info), info.column, colorSet()->getGroup(info.group));
+}
+
+int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)
+{
+    for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
+        if (it.value() == info.group) {
+            return it.key() + info.row + 1;
+        }
+    }
+    return info.row;
 }
 
 KisSwatch KisPaletteModel::getEntry(const QModelIndex &index)

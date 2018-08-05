@@ -221,7 +221,6 @@ void KoColorSet::clear()
 
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 {
-    KisSwatch e;
     int yInGroup = y;
     QString nameGroupFoundIn;
     for (const QString &groupName : d->groupNames) {
@@ -232,7 +231,7 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
             yInGroup -= d->groups[groupName].rowCount();
         }
     }
-    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == QString()
+    const KisSwatchGroup &groupFoundIn = nameGroupFoundIn == GLOBAL_GROUP_NAME
             ? d->global() : d->groups[nameGroupFoundIn];
     Q_ASSERT(groupFoundIn.checkEntry(x, yInGroup));
     return groupFoundIn.getEntry(x, yInGroup);
@@ -1492,6 +1491,9 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
 {
     groupEle.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, QString::number(group->rowCount()));
 
+    qDebug() << "KoColorSet:saveKplGroup" << group->name();
+    qDebug() << "color count" << group->colorCount();
+    qDebug() << "info list size" << group->infoList().size();
     for (const SwatchInfoType &info : group->infoList()) {
         const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
         // Only save non-builtin profiles.=

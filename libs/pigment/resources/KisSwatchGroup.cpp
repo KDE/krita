@@ -72,10 +72,7 @@ void KisSwatchGroup::setEntry(const KisSwatch &e, int column, int row)
     if (!checkEntry(column, row)) {
         d->colorCount++;
     }
-    // qDebug() << "KisSwatchGroup::setEntry" << "column" << column;
-    // qDebug() << "KisSwatchGroup::setEntry" << "row" << row;
     d->colorMatrix[column][row] = e;
-    // qDebug() << "KisSwatchGroup::setEntry" << "colors" << colorCount();
 }
 
 bool KisSwatchGroup::checkEntry(int column, int row) const
@@ -155,9 +152,6 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
             if (++x == d->colorMatrix.size()) {
                 x = 0;
                 y++;
-                if (y == d->rowCount) {
-                    d->rowCount++;
-                }
             }
             // else just add it to the right
             setEntry(e, x, y);
@@ -199,10 +193,10 @@ QList<KisSwatchGroup::SwatchInfo> KisSwatchGroup::infoList() const
     QList<SwatchInfo> res;
     int column = 0;
     for (const Private::Column &c : d->colorMatrix) {
-        int row = 0;
+        int i = 0;
         for (const KisSwatch &s : c.values()) {
-            SwatchInfo i = {d->name, s, c.keys()[row++], column};
-            res.append(i);
+            SwatchInfo info = {d->name, s, c.keys()[i++], column};
+            res.append(info);
         }
         column++;
     }

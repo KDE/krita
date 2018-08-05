@@ -49,7 +49,9 @@ public:
     enum AdditionalRoles {
         IsGroupNameRole = Qt::UserRole + 1,
         RetrieveEntryRole,
-        CheckSlotRole
+        CheckSlotRole,
+        GroupNameRole,
+        RowInGroupRole
     };
 
 public /* overriden methods */: // QAbstractTableModel
@@ -128,6 +130,7 @@ public /* methods */:
     KoColorSet* colorSet() const;
 
     QModelIndex indexForClosest(const KoColor &compare);
+    int indexRowForInfo(const KisSwatchGroup::SwatchInfo &info);
 
 public Q_SLOTS:
 

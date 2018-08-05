@@ -65,6 +65,7 @@ int PaletteColorsModel::rowCount(const QModelIndex &parent) const
 QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
+    /*
     QColor color;
     if (index.isValid() && d->colorSet)
     {
@@ -81,6 +82,8 @@ QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
             break;
         }
     }
+    */
+
     return result;
 }
 

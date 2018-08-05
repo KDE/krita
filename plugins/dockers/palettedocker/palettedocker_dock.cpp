@@ -111,6 +111,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_viewContextMenu.addAction(m_actSwitch.data());
 
     m_paletteChooser = new KisPaletteListWidget(this);
+    m_paletteChooser->setAllowModification(true);
     connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
 
     m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
@@ -238,15 +239,14 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
         if (!m_currentColorSet->isEditable()) { return; }
         setEntryByForeground(index);
     } else {
+        m_ui->bnRemove->setEnabled(true);
         KisSwatch entry = m_model->getEntry(index);
         setFGColorByPalette(entry);
-        m_ui->bnRemove->setEnabled(true);
     }
 }
 
 void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
 {
-    qDebug() << "PaletteDockerDock" << index.row() << index.column();
     m_model->setEntry(KisSwatch(m_resourceProvider->fgColor()), index);
     if (m_currentColorSet->isEditable()) {
         m_ui->bnRemove->setEnabled(true);

@@ -14,6 +14,8 @@ PaletteListSaver::PaletteListSaver(PaletteDockerDock *dockerDock, QObject *paren
 {
     connect(m_dockerDock->m_model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
             SLOT(slotPaletteModified()));
+    connect(m_dockerDock->m_model, SIGNAL(modelReset()),
+            SLOT(slotPaletteModified()));
 }
 
 void PaletteListSaver::slotSetPaletteList()

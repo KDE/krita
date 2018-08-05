@@ -21,6 +21,7 @@ class KRITAWIDGETS_EXPORT KisPaletteComboBox : public QComboBox
 private /* typedef */:
     typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
     typedef QPair<int, int> SwatchPosType; // first is column #, second is row #
+    typedef QHash<SwatchPosType, int> PosIdxMapType;
 
 public:
     explicit KisPaletteComboBox(QWidget *parent = Q_NULLPTR);
@@ -45,7 +46,7 @@ private /* methods */:
 private /* member variables */:
     QScopedPointer<QCompleter> m_completer;
     QPointer<const KisPaletteModel> m_model;
-    QHash<QPair<int, int>, int> m_posIdxMap; // map from pos in table to idx here
+    QHash<QString, PosIdxMapType> m_groupMapMap;
     QVector<KisSwatch> m_idxSwatchMap;
 };
 

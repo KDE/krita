@@ -25,6 +25,8 @@ struct KisPaletteListWidgetPrivate
     KisPaletteListWidgetPrivate(KisPaletteListWidget *);
     virtual ~KisPaletteListWidgetPrivate();
 
+    bool allowModification;
+
     QPointer<KisPaletteListWidget> c;
 
     QSharedPointer<KoResourceServerAdapter<KoColorSet> > rAdapter;

@@ -31,7 +31,8 @@ void KisPaletteComboBox::setPaletteModel(const KisPaletteModel *paletteModel)
     m_model = paletteModel;
     if (m_model.isNull()) { return; }
     slotPaletteChanged();
-    connect(m_model, SIGNAL(modelReset()), SLOT(slotPaletteChanged()));
+    connect(m_model, SIGNAL(modelReset()),
+            SLOT(slotPaletteChanged()));
     connect(m_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex&, const QVector<int> &)),
             SLOT(slotPaletteChanged()));
 }
@@ -42,28 +43,28 @@ void KisPaletteComboBox::slotPaletteChanged()
 
     int oldIdx = currentIndex();
     clear();
-    m_posIdxMap.clear();
+    m_groupMapMap.clear();
     m_idxSwatchMap.clear();
 
-    QVector<SwatchInfoType> infoList;
     for (const QString &groupName : m_model->colorSet()->getGroupNames()) {
+        QVector<SwatchInfoType> infoList;
+        PosIdxMapType posIdxMap;
         const KisSwatchGroup *group = m_model->colorSet()->getGroup(groupName);
         for (const SwatchInfoType &info : group->infoList()) {
             infoList.append(info);
         }
-    }
-    std::sort(infoList.begin(), infoList.end(), swatchInfoLess);
-    for (int i = 0; i != infoList.size(); i++) {
-        const SwatchInfoType &info = infoList[i];
-        const KisSwatch &swatch = info.swatch;
-        QPixmap colorSquare = createColorSquare(swatch);
-        QString name = swatch.name();
-        if (!swatch.id().isEmpty()){
-            name = swatch.id() + " - " + swatch.name();
+        std::sort(infoList.begin(), infoList.end(), swatchInfoLess);
+        for (const SwatchInfoType &info : infoList) {
+            const KisSwatch &swatch = info.swatch;
+            QString name = swatch.name();
+            if (!swatch.id().isEmpty()){
+                name = swatch.id() + " - " + swatch.name();
+            }
+            addItem(QIcon(createColorSquare(swatch)), name);
+            posIdxMap[SwatchPosType(info.column, info.row)] = count() - 1;
+            m_idxSwatchMap.push_back(swatch);
         }
-        addItem(QIcon(colorSquare), name);
-        m_posIdxMap[SwatchPosType(info.column, info.row)] = i;
-        m_idxSwatchMap.push_back(swatch);
+        m_groupMapMap[group->name()] = posIdxMap;
     }
 
     setCurrentIndex(oldIdx);
@@ -100,7 +101,9 @@ QPixmap KisPaletteComboBox::createColorSquare(const KisSwatch &swatch) const
 
 void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
 {
-    setCurrentIndex(m_posIdxMap[SwatchPosType(index.column(), index.row())]);
+    QString gName = qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole));
+    int rowInGroup = qvariant_cast<int>(index.data(KisPaletteModel::RowInGroupRole));
+    setCurrentIndex(m_groupMapMap[gName][SwatchPosType(index.column(), rowInGroup)]);
 }
 
 void KisPaletteComboBox::slotIndexSelected(int idx)

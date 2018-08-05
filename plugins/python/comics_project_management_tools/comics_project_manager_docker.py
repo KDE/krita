@@ -189,7 +189,7 @@ and finally export the result.
 
 The logic behind this docker is that it is very easy to get lost in a comics project due to the massive amount of files.
 By having a docker that gives the user quick access to the pages and also allows them to do all of the meta-stuff, like
-meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focussed on actual writing and drawing.
+meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focused on actual writing and drawing.
 """
 
 
@@ -594,7 +594,7 @@ class comics_project_manager_docker(DockWidget):
 
     """
     This function always asks for a template showing the new template window. This allows users to have multiple different
-    templates created for back covers, spreads, other and have them accesible, while still having the convenience of a singular
+    templates created for back covers, spreads, other and have them accessible, while still having the convenience of a singular
     "add page" that adds a default.
     """
 

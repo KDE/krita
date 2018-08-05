@@ -53,7 +53,6 @@
 #include <metadata/kis_meta_data_filter_registry_model.h>
 #include <metadata/kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
-#include <KisImportExportManager.h>
 #include <KisExportCheckRegistry.h>
 #include "kis_jpeg_converter.h"
 

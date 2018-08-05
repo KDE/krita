@@ -35,7 +35,6 @@
 #include <kis_compositeop_option.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include "kis_texture_option.h"
-#include "kis_curve_option_widget.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 #include "kis_pressure_hsv_option.h"

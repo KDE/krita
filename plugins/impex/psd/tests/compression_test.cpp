@@ -21,7 +21,6 @@
 #include <QTest>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
-#include <QTest>
 #include <compression.h>
 #include <QByteArray>
 #include <QBuffer>

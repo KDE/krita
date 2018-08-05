@@ -39,7 +39,6 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_tool_lazy_brush_options_widget.h"
 
-#include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "kis_signal_auto_connection.h"
 

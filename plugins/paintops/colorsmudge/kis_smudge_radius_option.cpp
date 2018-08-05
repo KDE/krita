@@ -36,8 +36,6 @@
 #include <KoMixColorsOp.h>
 #include <kis_cross_device_color_picker.h>
 
-#include <KoColor.h>
-
 
 
 class KisRandomConstAccessorNG;

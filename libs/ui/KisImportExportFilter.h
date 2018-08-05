@@ -137,7 +137,7 @@ public:
 
     /**
      * @brief createConfigurationWidget creates a widget that can be used to define the settings for a given import/export filter
-     * @param parent the ownder of the widget; the caller is responsible for deleting
+     * @param parent the owner of the widget; the caller is responsible for deleting
      * @param from The mimetype of the source file/document
      * @param to The mimetype of the destination file/document
      *

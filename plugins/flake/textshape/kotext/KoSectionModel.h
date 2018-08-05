@@ -22,7 +22,7 @@
  * semantics of operation to handle it right way.
  * 2) Model(Tree) Level: on this level we should update KoSectionModel
  * right way, so it in any moment represents the actual tree
- * of sections. Tree is builded easily:
+ * of sections. Tree is built easily:
  *    One section is son of another, if it is directly nested in it.
  * As text editing commands have access to change Formatting Level,
  * they are declared as friend classes of KoSectionModel to be able

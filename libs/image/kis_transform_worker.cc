@@ -453,7 +453,7 @@ void mirror_impl(KisPaintDeviceSP dev, qreal axis, bool isHorizontal)
     }
 
     /**
-     * If the axis is not aligned, that is crosses some pixel cell, we shoudl just skip this
+     * If the axis is not aligned, that is crosses some pixel cell, we should just skip this
      * column and not process it. Actually, how can we mirror the central single-pixel column?
      */
     const bool axisNonAligned = qFloor(axis) < axis;

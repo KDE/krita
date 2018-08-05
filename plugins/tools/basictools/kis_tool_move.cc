@@ -280,7 +280,7 @@ void KisToolMove::requestStrokeCancellation()
 
 void KisToolMove::requestUndoDuringStroke()
 {
-    // we shouldn't cancel the stroke on Ctrl+Z, becasue it will not only
+    // we shouldn't cancel the stroke on Ctrl+Z, because it will not only
     // cancel the stroke, but also undo the previous command, which we haven't
     // yet pushed to the stack
 }

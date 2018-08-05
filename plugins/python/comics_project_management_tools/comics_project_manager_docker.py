@@ -673,7 +673,7 @@ class comics_project_manager_docker(DockWidget):
         self.pagesModel.appendRow(newPageItem)
 
     """
-    Write to the json configuratin file.
+    Write to the json configuration file.
     This also checks the current state of the pages list.
     """
 
@@ -734,8 +734,9 @@ class comics_project_manager_docker(DockWidget):
             self.slot_write_config()
 
     """
-    An attempt at making the description editable from the comic pages list. It is currently not working because ZipFile
-    has no overwrite mechanism, and I don't have the energy to write one yet.
+    An attempt at making the description editable from the comic pages list.
+    It is currently not working because ZipFile has no overwrite mechanism,
+    and I don't have the energy to write one yet.
     """
 
     def slot_write_description(self, index):
@@ -827,7 +828,8 @@ class comics_project_manager_docker(DockWidget):
 
     """
     Resize all the pages in the pages list.
-    It will show a dialog with the options for resizing. Then, it will try to pop up a progress dialog while resizing.
+    It will show a dialog with the options for resizing.
+    Then, it will try to pop up a progress dialog while resizing.
     The progress dialog shows the remaining time and pages.
     """
 

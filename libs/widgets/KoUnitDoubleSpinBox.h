@@ -32,7 +32,7 @@ class KoUnit;
  * Spin box for double precision numbers with unit display.
  * Use this widget for any value that represents a real measurable value for consistency throughout
  * Krita.
- * This widget shows the value in the user-selected units (inch, milimeters, etc) but keeps the
+ * This widget shows the value in the user-selected units (inch, millimeters, etc) but keeps the
  * Krita-widget default measurement unit internally. This has the advantage that just setting and
  * getting a value will not change the value due to conversions.
  * The KoDocument class has a unit() method for consistent (document wide) configuration of the

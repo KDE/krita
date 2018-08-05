@@ -100,7 +100,7 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
 
     QVariant value;
     /**
-     * NOTE: integer devision by two is done on purpose,
+     * NOTE: integer division by two is done on purpose,
      *       because the kernel size is always odd
      */
     const int halfWidth = _config->getProperty("horizRadius", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;

@@ -19,7 +19,7 @@ The top-level 3rd-party directory is not relevant for packaging: it only contain
 
 There are four forks of 3rd party libraries that are relevant and cannot be replaced by system libraries:
 
-* plugins/impex/raw/3rdparty contains a fork of kdcraw. Upstread removed most functionality from this library and is in general unable to provide a stable API. The library has been renamed to avoid conflicts with upstream kdcraw.
+* plugins/impex/raw/3rdparty contains a fork of kdcraw. Upstream removed most functionality from this library and is in general unable to provide a stable API. The library has been renamed to avoid conflicts with upstream kdcraw.
 
 * plugins/impex/xcf/3rdparty contains the xcftools code. This has never been released as a library
 

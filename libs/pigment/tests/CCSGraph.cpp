@@ -60,7 +60,7 @@ int main(int argc, char** argv)
     parser.process(app); // PORTING SCRIPT: move this to after any parser.addOption
 
     if (parser.isSet("graphs")) {
-        // Don't change those lines to use dbgPigment derivatives, they need to be outputed
+        // Don't change those lines to use dbgPigment derivatives, they need to be outputted
         // to stdout not stderr.
         std::cout << "full : show all the connection on the graph" << std::endl;
         std::cout << "bestpath : show the best path for a given transformation" << std::endl;

@@ -122,7 +122,7 @@ public /* methods */:
      */
     bool removeEntry(const QModelIndex &index, bool keepColors=true);
 
-    KisSwatch getEntry(const QModelIndex &index);
+    KisSwatch getEntry(const QModelIndex &index) const;
 
     bool renameGroup(const QString &groupName, const QString &newName);
 

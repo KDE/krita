@@ -1491,9 +1491,6 @@ void KoColorSet::Private::saveKplGroup(QDomDocument &doc,
 {
     groupEle.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, QString::number(group->rowCount()));
 
-    qDebug() << "KoColorSet:saveKplGroup" << group->name();
-    qDebug() << "color count" << group->colorCount();
-    qDebug() << "info list size" << group->infoList().size();
     for (const SwatchInfoType &info : group->infoList()) {
         const KoColorProfile *profile = info.swatch.color().colorSpace()->profile();
         // Only save non-builtin profiles.=

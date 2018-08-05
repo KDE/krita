@@ -57,8 +57,8 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     setShowGrid(true);
     setDropIndicatorShown(true);
-    setDragEnabled(true);
-    setAcceptDrops(true);
+    setDragEnabled(false);
+    setAcceptDrops(false);
     setDragDropMode(QAbstractItemView::InternalMove);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
@@ -221,6 +221,8 @@ KisPaletteModel* KisPaletteView::paletteModel() const
 void KisPaletteView::setAllowModification(bool allow)
 {
     m_d->allowPaletteModification = allow;
+    setDragEnabled(allow);
+    setAcceptDrops(allow);
 }
 
 void KisPaletteView::modifyEntry(QModelIndex index)

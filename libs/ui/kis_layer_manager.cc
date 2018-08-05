@@ -65,7 +65,6 @@
 #include <kis_psd_layer_style.h>
 #include <KisMimeDatabase.h>
 
-#include "KisImportExportManager.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -74,7 +73,6 @@
 #include "dialogs/kis_dlg_generator_layer.h"
 #include "dialogs/kis_dlg_file_layer.h"
 #include "dialogs/kis_dlg_layer_style.h"
-#include "KisDocument.h"
 #include "kis_filter_manager.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
@@ -94,7 +92,6 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "KisPart.h"
 #include "kis_raster_keyframe_channel.h"
 
 #include "kis_signal_compressor_with_param.h"

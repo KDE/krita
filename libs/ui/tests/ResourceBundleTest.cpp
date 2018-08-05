@@ -31,8 +31,6 @@
 #include "ResourceBundleTest.h"
 #include "KisResourceBundle.h"
 
-#include <QTest>
-
 void ResourceBundleTest::testCreateBundle()
 {
     QString testbundle = QString(FILES_DATA_DIR) + "/" + "testcreatebundle.bundle";

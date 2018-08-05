@@ -38,10 +38,8 @@
 #include <kis_debug.h>
 #include <QPoint>
 
-#include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <QAction>
 
 #include <kis_icon.h>
 #include <KoShape.h>
@@ -76,7 +74,6 @@
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include "strokes/kis_color_picker_stroke_strategy.h"
-#include <kis_canvas_resource_provider.h>
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)

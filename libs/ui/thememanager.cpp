@@ -36,7 +36,6 @@
 #include <QPixmap>
 #include <QDate>
 #include <QDesktopWidget>
-#include <QApplication>
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>

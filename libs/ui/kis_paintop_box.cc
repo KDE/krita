@@ -73,7 +73,6 @@
 #include "widgets/kis_iconwidget.h"
 #include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"
-#include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"

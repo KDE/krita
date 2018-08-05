@@ -96,7 +96,6 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "kis_image_barrier_locker.h"
 
 #include <QtCore>
 

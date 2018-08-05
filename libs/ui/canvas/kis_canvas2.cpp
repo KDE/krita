@@ -50,7 +50,6 @@
 #include "kis_image.h"
 #include "kis_image_barrier_locker.h"
 #include "kis_undo_adapter.h"
-#include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"

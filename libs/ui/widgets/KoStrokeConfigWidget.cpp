@@ -66,7 +66,6 @@
 #include <KoSelectedShapesProxy.h>
 #include "ui_KoStrokeConfigWidget.h"
 #include <KoFlakeUtils.h>
-#include <KoCanvasBase.h>
 #include <KoFillConfigWidget.h>
 #include "kis_canvas_resource_provider.h"
 #include "kis_acyclic_signal_connector.h"

@@ -1111,7 +1111,7 @@ void KisNodeManager::saveVectorLayerAsImage()
 
     SvgWriter writer(shapes);
     if (!writer.save(filename, sizeInPt, true)) {
-        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1").arg(filename));
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1", filename));
     }
 }
 
@@ -1161,10 +1161,10 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
 
     if (writeToLayers && !parentNode->hasEditablePaintDevice()) {
         QMessageBox::information(view->mainWindow(),
-                                 i18nc("@title:window", "Layer %1 is not editable").arg(parentNode->name()),
+                                 i18nc("@title:window", "Layer %1 is not editable", parentNode->name()),
                                  i18n("Cannot write alpha channel of "
                                       "the parent layer \"%1\".\n"
-                                      "The operation will be cancelled.").arg(parentNode->name()));
+                                      "The operation will be cancelled.", parentNode->name()));
         return;
     }
 

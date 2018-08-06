@@ -6,8 +6,10 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QDir>
 
 #include <kis_icon.h>
+#include <KoFileDialog.h>
 
 #include "KisDlgPaletteEditor.h"
 
@@ -86,18 +88,14 @@ KisPaletteListWidget::~KisPaletteListWidget()
 void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
     KoColorSet *g = static_cast<KoColorSet*>(r);
-    if (g->isEditable() && m_d->allowModification) {
+    if (g->isEditable()) {
         m_ui->bnAdd->setEnabled(true);
         m_ui->bnRemove->setEnabled(true);
         m_ui->bnEdit->setEnabled(true);
-        m_ui->bnImport->setEnabled(true);
-        m_ui->bnExport->setEnabled(true);
     } else {
         m_ui->bnAdd->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
         m_ui->bnEdit->setEnabled(false);
-        m_ui->bnImport->setEnabled(false);
-        m_ui->bnExport->setEnabled(false);
     }
     emit sigPaletteSelected(g);
 }
@@ -180,12 +178,34 @@ void KisPaletteListWidget::slotModify()
 
 void KisPaletteListWidget::slotImport()
 {
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "Open Palette");
+    dialog.setDefaultDir(QDir::homePath());
+    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorsetentry" << "application/x-gimp-color-palette");
+    QString fileName = dialog.filename();
+    if (fileName.isEmpty()) { return; }
+    KoColorSet *colorSet = new KoColorSet(fileName);
+    colorSet->load();
+    m_d->rAdapter->addResource(colorSet);
+    m_d->itemChooser->setCurrentResource(colorSet);
     emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotExport()
 {
-
+    KoColorSet *r = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+    KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
+    dialog.setDefaultDir(r->filename());
+    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorsetentry" << "application/x-gimp-color-palette");
+    QString newPath;
+    bool isStandAlone = r->isGlobal();
+    QString oriPath = r->filename();
+    if ((newPath = dialog.filename()).isEmpty()) { return; }
+    qDebug() << newPath;
+    r->setFilename(newPath);
+    r->setIsGlobal(true);
+    r->save();
+    r->setFilename(oriPath);
+    r->setIsGlobal(isStandAlone);
 }
 
 void KisPaletteListWidget::setPaletteGlobal(KoColorSet *colorSet)
@@ -214,6 +234,8 @@ void KisPaletteListWidget::setPaletteNonGlobal(KoColorSet *colorSet)
 void KisPaletteListWidget::setAllowModification(bool allowModification)
 {
     m_d->allowModification = allowModification;
+    m_ui->bnImport->setEnabled(allowModification);
+    m_ui->bnExport->setEnabled(allowModification);
 }
 
 QString KisPaletteListWidget::newPaletteFileName()

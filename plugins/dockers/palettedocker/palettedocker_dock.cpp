@@ -50,6 +50,7 @@
 #include <KoDialog.h>
 #include <kis_color_button.h>
 #include <KisDocument.h>
+#include <KisPart.h>
 
 #include "KisPaletteModel.h"
 #include "KisPaletteDelegate.h"
@@ -175,30 +176,48 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
         KisConfig cfg(true);
         cfg.setDefaultPalette(colorSet->name());
         m_ui->bnColorSets->setText(colorSet->name());
+    } else {
+        m_ui->bnColorSets->setText("");
     }
 }
 
 void PaletteDockerDock::slotViewChanged()
 {
-    if (m_view && m_view->document()) {
-        if (m_activeDocument) {
-            for (KoColorSet * &cs : m_activeDocument->paletteList()) {
-                KoColorSet *tmpAddr = cs;
-                cs = new KoColorSet(*cs);
-                m_rAdapter->removeResource(tmpAddr);
+    // for some reason rAdapter's resources gives only an empty list
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+    if (m_activeDocument) {
+        for (KoColorSet * &cs : m_activeDocument->paletteList()) {
+            KoColorSet *tmpAddr = cs;
+            cs = new KoColorSet(*cs);
+            m_rAdapter->removeResource(tmpAddr);
+        }
+        m_activaDocObjName = QString();
+    } else { // all files was closed
+        for (KoResource *r : rServer->resources()) {
+            KoColorSet *g = static_cast<KoColorSet*>(r);
+            if (!g->isGlobal()) {
+                m_rAdapter->removeResource(r);
             }
         }
-
+    }
+    if (m_view && m_view->document()) {
         m_activeDocument = m_view->document();
+        m_activaDocObjName = m_activeDocument->objectName();
 
         for (KoColorSet *cs : m_activeDocument->paletteList()) {
             m_rAdapter->addResource(cs);
         }
     }
-    if (!m_currentColorSet || !m_currentColorSet->isGlobal()) {
+    if (!m_currentColorSet || (m_currentColorSet && !m_currentColorSet->isGlobal())) {
         slotSetColorSet(Q_NULLPTR);
     }
 }
+
+void PaletteDockerDock::slotDocRemoved(const QString &objName)
+{
+    qDebug() << objName << "is removed";
+}
+
 
 void PaletteDockerDock::slotAddColor()
 {

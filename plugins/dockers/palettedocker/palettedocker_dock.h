@@ -71,6 +71,7 @@ private Q_SLOTS:
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSet* colorSet);
     void slotViewChanged();
+    void slotDocRemoved(const QString &objName);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
@@ -97,10 +98,11 @@ private /* member variables */:
     KisPaletteModel *m_model;
     KisPaletteListWidget *m_paletteChooser;
 
-    KisViewManager *m_view;
+    QPointer<KisViewManager> m_view;
     KisCanvasResourceProvider *m_resourceProvider;
     QScopedPointer<KoResourceServerAdapter<KoColorSet> > m_rAdapter;
-    KisDocument *m_activeDocument;
+    QPointer<KisDocument> m_activeDocument;
+    QString m_activaDocObjName;
     QPointer<KoColorSet> m_currentColorSet;
     QScopedPointer<PaletteListSaver> m_saver;
 

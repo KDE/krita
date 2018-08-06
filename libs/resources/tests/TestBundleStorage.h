@@ -28,6 +28,8 @@ private Q_SLOTS:
     void testMetaData();
     void testResourceIterator();
     void testTagIterator();
+    void testResourceItem();
+    void testResource();
 };
 
 #endif // TESTBUNDLESTORAGE_H

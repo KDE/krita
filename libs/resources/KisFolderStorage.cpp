@@ -23,7 +23,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_debug.h>
 #include <KisTag.h>
-
 #include <KisResourceLoaderRegistry.h>
 
 class FolderTagIterator : public KisResourceStorage::TagIterator

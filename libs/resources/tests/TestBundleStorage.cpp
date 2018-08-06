@@ -85,6 +85,21 @@ void TestBundleStorage::testTagIterator()
     QVERIFY(count > 0);
 }
 
+void TestBundleStorage::testResourceItem()
+{
+    KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
+    KisResourceStorage::ResourceItem item = storage.resourceItem("paintoppresets/g)_Dry_Brushing.kpp");
+    QVERIFY(!item.url.isEmpty());
+}
+
+void TestBundleStorage::testResource()
+{
+    KisBundleStorage storage(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"));
+    KoResourceSP res = storage.resource("paintoppresets/g)_Dry_Brushing.kpp");
+    QVERIFY(res);
+    QVERIFY(res->filename() == "paintoppresets/g)_Dry_Brushing.kpp");
+}
+
 
 QTEST_MAIN(TestBundleStorage)
 

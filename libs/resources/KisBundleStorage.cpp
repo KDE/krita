@@ -154,12 +154,21 @@ KisBundleStorage::~KisBundleStorage()
 
 KisResourceStorage::ResourceItem KisBundleStorage::resourceItem(const QString &url)
 {
-    return KisResourceStorage::ResourceItem();
+    KisResourceStorage::ResourceItem item;
+    item.url = url;
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+    item.folder = parts[0];
+    item.resourceType = parts[0];
+    item.lastModified = QFileInfo(d->bundle->filename()).lastModified();
+    return item;
 }
 
 KoResourceSP KisBundleStorage::resource(const QString &url)
 {
-    return 0;
+    QStringList parts = url.split('/', QString::SkipEmptyParts);
+    Q_ASSERT(parts.size() == 2);
+    return d->bundle->resource(parts[0], url);
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisBundleStorage::resources(const QString &resourceType)

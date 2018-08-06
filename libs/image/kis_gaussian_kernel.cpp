@@ -220,7 +220,7 @@ KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff)
     sideSum *= scale;
     quarterSum *= scale;
 
-    //dbgImage << ppVar(positiveSum) << ppVar(sideSum) << ppVar(quarterSum);
+    //qDebug() << ppVar(positiveSum) << ppVar(sideSum) << ppVar(quarterSum);
 
     return matrix;
 }

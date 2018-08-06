@@ -851,7 +851,7 @@ void KisWatershedWorker::Private::cleanupForeignEdgeGroups(qreal cleanUpAmount)
         const qreal minMetric = min(lengthStats) / qreal(thisLength);
         const qreal meanMetric = mean(lengthStats) / qreal(thisLength);
 
-//        dbgImage << "G" << groupIndex
+//        qDebug() << "G" << groupIndex
 //                 << "L" << levelIndex
 //                 << "con" << level.conflictWithGroup.size()
 //                 << "FRP" << thisForeignPortion
@@ -865,7 +865,7 @@ void KisWatershedWorker::Private::cleanupForeignEdgeGroups(qreal cleanUpAmount)
         if (!(thisForeignPortion > foreignEdgePortionThreshold)) continue;
 
         if (minMetric > 1.0 && meanMetric > 1.2) {
-//            dbgImage << "   * removing...";
+//            qDebug() << "   * removing...";
 
             QVector<TaskPoint> taskPoints =
                 tryRemoveConflictingPlane(groupIndex, levelIndex);
@@ -987,16 +987,16 @@ void KisWatershedWorker::Private::dumpGroupInfo(qint32 groupIndex, quint8 levelI
 {
     FillGroup::LevelData &level = groups[groupIndex].levels[levelIndex];
 
-    dbgImage << "G" << groupIndex << "L" << levelIndex << "CI" << this->groups[groupIndex].colorIndex;
-    dbgImage << "   P" << level.positiveEdgeSize;
-    dbgImage << "   N" << level.negativeEdgeSize;
-    dbgImage << "   F" << level.foreignEdgeSize;
-    dbgImage << "   A" << level.allyEdgeSize;
-    dbgImage << " (S)" << level.numFilledPixels;
+    qDebug() << "G" << groupIndex << "L" << levelIndex << "CI" << this->groups[groupIndex].colorIndex;
+    qDebug() << "   P" << level.positiveEdgeSize;
+    qDebug() << "   N" << level.negativeEdgeSize;
+    qDebug() << "   F" << level.foreignEdgeSize;
+    qDebug() << "   A" << level.allyEdgeSize;
+    qDebug() << " (S)" << level.numFilledPixels;
 
     auto &c = level.conflictWithGroup;
 
     for (auto cIt = c.begin(); cIt != c.end(); ++cIt) {
-        dbgImage << "   C" << cIt.key() << cIt.value().size();
+        qDebug() << "   C" << cIt.key() << cIt.value().size();
     }
 }

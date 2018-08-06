@@ -60,22 +60,15 @@
 #include <KisMimeDatabase.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
-#include "KisView.h"
-#include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
-#include "KisImportExportManager.h"
-#include "KisDocument.h"
-#include "KoToolManager.h"
-#include "KisViewManager.h"
 #include "KisOpenPane.h"
 
 #include "kis_color_manager.h"
-#include "kis_debug.h"
 
 #include "kis_action.h"
 #include "kis_action_registry.h"

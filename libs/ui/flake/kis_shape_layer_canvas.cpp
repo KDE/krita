@@ -42,7 +42,6 @@
 #include <QApplication>
 
 #include <kis_spontaneous_job.h>
-#include "kis_image.h"
 #include "kis_global.h"
 
 //#define DEBUG_REPAINT

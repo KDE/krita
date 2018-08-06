@@ -35,8 +35,6 @@
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_debug.h>
-#include <kis_annotation.h>
-#include <kis_types.h>
 
 #include "psd.h"
 #include "psd_header.h"

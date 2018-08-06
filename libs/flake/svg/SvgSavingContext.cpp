@@ -144,7 +144,7 @@ QString SvgSavingContext::getID(const KoShape *obj)
                 else
                     id = "shape";
             }
-            // create a compeletely new id based on object name
+            // create a completely new id based on object name
             // or a generic name
             id = createUID(id);
         }

@@ -22,7 +22,6 @@
 #include <QQmlContext>
 #include <QAction>
 #include <QUrl>
-#include <QAction>
 #include <QKeyEvent>
 #include <QApplication>
 
@@ -45,7 +44,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
-#include <kis_config.h>
 
 #include <Theme.h>
 #include <Settings.h>

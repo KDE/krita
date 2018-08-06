@@ -54,11 +54,9 @@
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
 #include "input/KisQtWidgetsTweaker.h"
-#include <kis_debug.h>
 
 #if defined Q_OS_WIN
 #include <windows.h>
-#include <stdlib.h>
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
 #include <QLibrary>
@@ -371,7 +369,7 @@ extern "C" int main(int argc, char **argv)
                                          i18nc("@title:window", "Krita: Warning"),
                                          i18n("You are running an unsupported version of Windows: %1.\n"
                                               "This is not recommended. Do not report any bugs.\n"
-                                              "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10.").arg(osVersion.name()));
+                                              "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10.", osVersion.name()));
                 cfg.writeEntry("WarnedAboutUnsupportedWindows", true);
 
             }

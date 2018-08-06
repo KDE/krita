@@ -169,7 +169,7 @@ void KoTextEditor::Private::updateState(KoTextEditor::Private::State newState, c
     }
     if (newState == NoOp && !commandStack.isEmpty()) {
         //Calling updateState to NoOp when the commandStack isn't empty means that the current headCommand on the commandStack is finished. Further UndoTextCommands do not belong to it. So we pop it.
-        //If after poping the headCommand we still have some commands on the commandStack means we have not finished with the highest "macro". In that case we need to stay in the "Custom" state.
+        //If after popping the headCommand we still have some commands on the commandStack means we have not finished with the highest "macro". In that case we need to stay in the "Custom" state.
         //On the contrary, an empty commandStack means we have finished with the "macro". In that case, we set the editor to NoOp state. A signal from the QTextDocument should also generate a new headCommand.
         debugText << "we are in a macro and update the state to NoOp. this means that the command on top of the commandStack is finished. we should pop it";
         debugText << "commandStack count before: " << commandStack.count();

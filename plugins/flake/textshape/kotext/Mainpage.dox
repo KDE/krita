@@ -33,7 +33,7 @@
  * created QTextDocument with KoText. This has the implication that all
  * the extra content is stored inside the document.  We add QTextFormat
  * based properties for that as can be seen in the styles (see
- * KoParagraphStyle::Properities for instance), and we allow managers to
+ * KoParagraphStyle::Properties for instance), and we allow managers to
  * be stored on the document too.  So for example a KoStyleManager will
  * be stored as a property on the QTextDocument and you can access that
  * using the KoTextDocument API.  Note that you can use the

@@ -33,7 +33,6 @@
 #include "kis_processing_visitor.h"
 
 #include "kis_transaction.h"
-#include "krita_utils.h"
 
 #include <KisRunnableStrokeJobData.h>
 #include <KisRunnableStrokeJobUtils.h>

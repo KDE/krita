@@ -20,8 +20,6 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
-
 #include <QSize>
 #include <QImage>
 

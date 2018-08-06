@@ -41,10 +41,8 @@
 #include <kis_config_widget.h>
 #include <KisDocument.h>
 #include <QHBoxLayout>
-#include <KisImportExportFilter.h>
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
-#include <KisDocument.h>
 #include <KoDialog.h>
 #include "kis_slider_spin_box.h"
 #include "kis_acyclic_signal_connector.h"

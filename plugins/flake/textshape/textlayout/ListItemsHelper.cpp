@@ -475,7 +475,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
     qreal counterSpacing = 0;
     if (format.boolProperty(KoListStyle::AlignmentMode)) {
-        // for aligmentmode spacing should be 0
+        // for AlignmentMode spacing should be 0
         counterSpacing = 0;
     } else {
         if (listStyle != KoListStyle::None) {

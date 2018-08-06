@@ -22,7 +22,6 @@
 #include <QAction>
 #include <QInputDialog>
 #include <QDomDocument>
-#include <QFile>
 #include <QMenuBar>
 #include <kactioncollection.h>
 #include <kis_debug.h>

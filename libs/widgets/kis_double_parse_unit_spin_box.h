@@ -124,7 +124,7 @@ private:
     QString makeTextClean(QString const& txt) const;
 
     //those functions are useful to sync the spinbox with its unitmanager.
-    //! \brief change the unit, reset the spin box everytime. From the outside it's always set unit that should be called.
+    //! \brief change the unit, reset the spin box every time. From the outside it's always set unit that should be called.
     void internalUnitChange(QString const& symbol);
     void prepareUnitChange();
 

@@ -24,7 +24,6 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentInfo.h>
-#include "KoDocumentInfo.h"
 #include "KoPageLayout.h"
 #include <KoToolManager.h>
 
@@ -35,7 +34,6 @@
 #include <kis_debug.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
-#include <kactioncollection.h>
 
 #include <QMenu>
 #include <QMessageBox>
@@ -50,10 +48,8 @@
 #include <QList>
 #include <QPrintDialog>
 #include <QToolBar>
-#include <QUrl>
 #include <QStatusBar>
 #include <QMoveEvent>
-#include <QTemporaryFile>
 #include <QMdiSubWindow>
 
 #include <kis_image.h>

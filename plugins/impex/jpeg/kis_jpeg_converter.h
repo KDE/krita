@@ -28,7 +28,6 @@ extern "C" {
 
 #include <QColor>
 #include <QVector>
-#include <QColor>
 
 #include "kis_types.h"
 #include "kis_annotation.h"

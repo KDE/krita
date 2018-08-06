@@ -345,7 +345,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
         }
     }
-    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visiblity//
+    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;

@@ -277,7 +277,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
      QPalette appPalette = QApplication::palette();
      p.fillRect(rect(), appPalette.color(QPalette::Base)); // clear out previous paint call results
 
-     // make the entire widget greyed out if it is disabled
+     // make the entire widget grayed out if it is disabled
      if (!this->isEnabled()) {
         p.setOpacity(0.2);
      }

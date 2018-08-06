@@ -612,7 +612,7 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
         }
         pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
     }
-    /* undo the offsets to the pointers so we can free the malloced memmory */
+    /* undo the offsets to the pointers so we can free the malloced memory */
     circ -= m_xRadius;
     max -= m_xRadius;
 
@@ -762,7 +762,7 @@ void KisShrinkSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
         pixelSelection->writeBytes(out, rect.x(), rect.y() + y, rect.width(), 1);
     }
 
-    // undo the offsets to the pointers so we can free the malloced memmory
+    // undo the offsets to the pointers so we can free the malloced memory
     circ -= m_xRadius;
     max -= m_xRadius;
 

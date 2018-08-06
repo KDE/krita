@@ -60,6 +60,5 @@ void PaletteListSaver::resetConnection()
 void PaletteListSaver::slotSavingFinished()
 {
     bool undoStackClean = m_dockerDock->m_view->document()->undoStack()->isClean();
-    qDebug() << undoStackClean;
     m_dockerDock->m_view->document()->setModified(!undoStackClean);
 }

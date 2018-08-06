@@ -221,6 +221,8 @@ void KoColorSet::clear()
 {
     d->groups.clear();
     d->groupNames.clear();
+    d->groups[GLOBAL_GROUP_NAME] = KisSwatchGroup();
+    d->groupNames.append(GLOBAL_GROUP_NAME);
 }
 
 KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const

@@ -139,6 +139,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotDisplayConfigurationChanged();
+    void slotPaletteModified();
 
 private /* methods */:
     QVariant dataForGroupNameRow(const QModelIndex &idx, int role) const;

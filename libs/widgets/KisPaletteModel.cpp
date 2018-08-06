@@ -35,6 +35,7 @@ KisPaletteModel::KisPaletteModel(QObject* parent)
     , m_colorSet(0)
     , m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
+    connect(this, SIGNAL(sigPaletteModifed()), SLOT(slotPaletteModified()));
 }
 
 KisPaletteModel::~KisPaletteModel()
@@ -90,9 +91,8 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
 {
     Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
-    KisSwatchGroup *group = Q_NULLPTR;
     int groupNameRow = groupNameRowForRow(row);
-    group = m_colorSet->getGroup(m_groupNameRows[groupNameRow]);
+    KisSwatchGroup *group = m_colorSet->getGroup(m_groupNameRows[groupNameRow]);
     Q_ASSERT(group);
     return createIndex(row, column, group);
 }
@@ -133,15 +133,12 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 
 bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
 {
-    KisSwatchGroup *group = m_colorSet->getGroup(groupName);
     beginResetModel();
-    if (group->checkEntry(m_colorSet->columnCount(), group->rowCount())) {
-        m_colorSet->add(entry, groupName);
-    } else {
-        m_colorSet->add(entry, groupName);
-    }
+    m_colorSet->add(entry, groupName);
     endResetModel();
-    m_colorSet->save();
+    if (m_colorSet->isGlobal()) {
+        m_colorSet->save();
+    }
     emit sigPaletteModifed();
     return true;
 }
@@ -422,6 +419,10 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 {
     beginResetModel();
     endResetModel();
+}
+
+void KisPaletteModel::slotPaletteModified() {
+    m_colorSet->setPaletteType(KoColorSet::KPL);
 }
 
 QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)

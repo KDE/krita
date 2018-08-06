@@ -41,7 +41,7 @@ void KisPaletteComboBox::slotPaletteChanged()
 {
     if (QPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
 
-    blockSignals(true);
+    blockSignals(true); // avoid changing fg color
     clear();
     m_groupMapMap.clear();
     m_idxSwatchMap.clear();

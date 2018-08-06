@@ -62,7 +62,6 @@ public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
 
 private Q_SLOTS:
-    void slotImportPalette();
     void slotAddColor();
     void slotRemoveColor();
     void slotEditEntry();

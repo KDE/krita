@@ -297,16 +297,6 @@ void PaletteDockerDock::slotEditEntry()
     }
 }
 
-void PaletteDockerDock::slotImportPalette()
-{
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "OpenColorSet");
-    dialog.setDefaultDir(m_currentColorSet->filename());
-    dialog.setMimeTypeFilters(QStringList() << "application/x-gimp-color-palette");
-    QString fileName = dialog.filename();
-    KoColorSet *colorSet = new KoColorSet(fileName);
-    colorSet->load();
-}
-
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)
 {
     m_resourceProvider->setFGColor(color);

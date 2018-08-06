@@ -17,27 +17,6 @@
 #include "KisPaletteListWidget.h"
 #include "KisPaletteListWidget_p.h"
 
-/*
-bool KisPaletteView::addGroupWithDialog()
-{
-    KoDialog *window = new KoDialog();
-    window->setWindowTitle(i18nc("@title:window","Add a new group"));
-    QFormLayout *editableItems = new QFormLayout();
-    window->mainWidget()->setLayout(editableItems);
-    QLineEdit *lnName = new QLineEdit();
-    editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
-    lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
-    if (window->exec() == KoDialog::Accepted) {
-        QString groupName = lnName->text();
-        m_d->model->addGroup(groupName);
-        m_d->model->colorSet()->save();
-        return true;
-    }
-    return false;
-}
-*/
-
-
 KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     : QWidget(parent)
     , m_ui(new Ui_WdgPaletteListWidget)
@@ -200,7 +179,10 @@ void KisPaletteListWidget::slotExport()
     bool isStandAlone = r->isGlobal();
     QString oriPath = r->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
-    qDebug() << newPath;
+    if (newPath[newPath.length() - 1] == QString('.')) {
+        // remove the dot at end of name when extension not recognized by KoFileDialog
+        newPath.resize(newPath.length() - 1);
+    }
     r->setFilename(newPath);
     r->setIsGlobal(true);
     r->save();

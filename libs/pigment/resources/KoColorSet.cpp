@@ -96,9 +96,13 @@ KoColorSet::KoColorSet(const KoColorSet& rhs)
     , KoResource(rhs)
     , d(new Private(this))
 {
+    d->paletteType = rhs.d->paletteType;
+    d->data = rhs.d->data;
     d->comment = rhs.d->comment;
     d->groupNames = rhs.d->groupNames;
     d->groups = rhs.d->groups;
+    d->isGlobal = rhs.d->isGlobal;
+    d->isEditable = rhs.d->isEditable;
 }
 
 KoColorSet::~KoColorSet()

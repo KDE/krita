@@ -7,23 +7,24 @@
 #include <KisDocument.h>
 #include <KisViewManager.h>
 #include <KisPaletteModel.h>
+#include <KisPaletteListWidget.h>
 
 PaletteListSaver::PaletteListSaver(PaletteDockerDock *dockerDock, QObject *parent)
     : QObject(parent)
     , m_dockerDock(dockerDock)
 {
-    connect(m_dockerDock->m_model, SIGNAL(dataChanged(QModelIndex, QModelIndex)),
+    connect(m_dockerDock->m_model, SIGNAL(sigPaletteModifed()),
             SLOT(slotPaletteModified()));
-    connect(m_dockerDock->m_model, SIGNAL(modelReset()),
-            SLOT(slotPaletteModified()));
+    connect(m_dockerDock->m_paletteChooser, SIGNAL(sigPaletteListChanged()),
+            SLOT(slotSetPaletteList()));
 }
 
 void PaletteListSaver::slotSetPaletteList()
 {
-    QList<const KoColorSet *> list;
-    for (const KoResource * paletteResource :
+    QList<KoColorSet *> list;
+    for (KoResource * paletteResource :
          KoResourceServerProvider::instance()->paletteServer()->resources()) {
-        const KoColorSet *palette = static_cast<const KoColorSet*>(paletteResource);
+        KoColorSet *palette = static_cast<KoColorSet*>(paletteResource);
         Q_ASSERT(palette);
         if (!palette->isGlobal()) {
             list.append(palette);
@@ -36,7 +37,17 @@ void PaletteListSaver::slotSetPaletteList()
 void PaletteListSaver::slotPaletteModified()
 {
     resetConnection();
-    m_dockerDock->m_view->document()->setModified(true);
+    KisDocument *doc = m_dockerDock->m_view->document();
+    QList<KoColorSet> list;
+    for (const KoResource * paletteResource :
+         KoResourceServerProvider::instance()->paletteServer()->resources()) {
+        const KoColorSet *palette = static_cast<const KoColorSet*>(paletteResource);
+        Q_ASSERT(palette);
+        if (!palette->isGlobal()) {
+            list.append(KoColorSet(*palette));
+        }
+    }
+    doc->setModified(true);
 }
 
 void PaletteListSaver::resetConnection()
@@ -49,5 +60,6 @@ void PaletteListSaver::resetConnection()
 void PaletteListSaver::slotSavingFinished()
 {
     bool undoStackClean = m_dockerDock->m_view->document()->undoStack()->isClean();
+    qDebug() << undoStackClean;
     m_dockerDock->m_view->document()->setModified(!undoStackClean);
 }

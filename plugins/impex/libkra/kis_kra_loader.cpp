@@ -366,7 +366,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
     for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
         QDomElement e = child.toElement();
         if (e.tagName() == PALETTES) {
-            QList<const KoColorSet*> paletteList;
+            QList<KoColorSet*> paletteList;
             for (QDomElement paletteElement = e.lastChildElement();
                  !paletteElement.isNull();
                  paletteElement = paletteElement.previousSiblingElement()) {
@@ -508,9 +508,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
 {
-    KoResourceServer<KoColorSet> *pServer = KoResourceServerProvider::instance()->paletteServer();
-    // below is a non-const ref to a non-const pointer to a const KoColorSet
-    for (KoColorSet const * &palette : doc->paletteList()) {
+    for (KoColorSet * &palette : doc->paletteList()) {
         KoColorSet *newPalette = new KoColorSet(palette->filename());
         store->open(m_d->imageName + PALETTE_PATH + palette->filename());
         QByteArray data = store->read(store->size());
@@ -519,7 +517,6 @@ void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
         newPalette->setIsEditable(true);
         delete palette;
         palette = newPalette;
-        pServer->addResource(newPalette);
         store->close();
     }
 }

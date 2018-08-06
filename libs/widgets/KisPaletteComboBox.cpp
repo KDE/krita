@@ -41,7 +41,7 @@ void KisPaletteComboBox::slotPaletteChanged()
 {
     if (QPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
 
-    int oldIdx = currentIndex();
+    blockSignals(true);
     clear();
     m_groupMapMap.clear();
     m_idxSwatchMap.clear();
@@ -66,8 +66,8 @@ void KisPaletteComboBox::slotPaletteChanged()
         }
         m_groupMapMap[group->name()] = posIdxMap;
     }
-
-    setCurrentIndex(oldIdx);
+    setCurrentIndex(0);
+    blockSignals(false);
 }
 
 bool KisPaletteComboBox::swatchInfoLess(const SwatchInfoType &first, const SwatchInfoType &second)

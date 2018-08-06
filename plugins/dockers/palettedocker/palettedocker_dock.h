@@ -70,7 +70,7 @@ private Q_SLOTS:
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSet* colorSet);
-    void slotViewChanged(QString s);
+    void slotViewChanged();
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
@@ -93,13 +93,15 @@ private /* friends */:
     friend class PaletteListSaver;
 
 private /* member variables */:
-    Ui_WdgPaletteDock* m_ui;
+    QScopedPointer<Ui_WdgPaletteDock> m_ui;
     KisPaletteModel *m_model;
-    KoColorSet *m_currentColorSet;
     KisPaletteListWidget *m_paletteChooser;
+
     KisViewManager *m_view;
     KisCanvasResourceProvider *m_resourceProvider;
-    QPointer<KisCanvas2> m_canvas;
+    QScopedPointer<KoResourceServerAdapter<KoColorSet> > m_rAdapter;
+    KisDocument *m_activeDocument;
+    QPointer<KoColorSet> m_currentColorSet;
     QScopedPointer<PaletteListSaver> m_saver;
 
     QScopedPointer<QAction> m_actAdd;

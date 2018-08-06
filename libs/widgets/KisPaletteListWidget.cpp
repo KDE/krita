@@ -118,14 +118,14 @@ void KisPaletteListWidget::slotAdd()
 void KisPaletteListWidget::slotRemove()
 {
     if (m_d->itemChooser->currentResource()) {
-        KoColorSet *group = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
-        if (!group || !group->isEditable()) {
+        KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+        if (!cs || !cs->isEditable()) {
             return;
         }
-        m_d->rAdapter->removeResource(m_d->itemChooser->currentResource());
-        if (group->isGlobal()) {
-            QFile::remove(m_d->itemChooser->currentResource()->filename());
+        if (cs->isGlobal()) {
+            QFile::remove(cs->filename());
         }
+        m_d->rAdapter->removeResource(cs);
     }
     m_d->itemChooser->setCurrentItem(0, 0);
 

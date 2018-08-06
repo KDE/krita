@@ -1340,6 +1340,7 @@ void KisMainWindow::setActiveView(KisView* view)
     d->viewManager->setCurrentView(view);
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
+    emit sigActiveDocumentChanged();
 }
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)

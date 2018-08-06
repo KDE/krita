@@ -100,6 +100,9 @@ public /* overriden methods */: // QAbstractTableModel
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
      */
 
+Q_SIGNALS:
+    void sigPaletteModifed();
+
 public /* methods */:
     /**
      * @brief addEntry

@@ -349,8 +349,8 @@ public:
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
 
-    QList<const KoColorSet *> &paletteList();
-    void setPaletteList(const QList<const KoColorSet*> &paletteList);
+    QList<KoColorSet *> &paletteList();
+    void setPaletteList(const QList<KoColorSet *> &paletteList);
 
     void clearUndoHistory();
 

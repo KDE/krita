@@ -102,11 +102,13 @@ void KisPaletteModel::setColorSet(KoColorSet* colorSet)
     beginResetModel();
     m_groupNameRows.clear();
     m_colorSet = colorSet;
-    int row = -1;
-    for (const QString &groupName : m_colorSet->getGroupNames()) {
-        m_groupNameRows[row] = groupName;
-        row += m_colorSet->getGroup(groupName)->rowCount();
-        row += 1; // row for group name
+    if (colorSet) {
+        int row = -1;
+        for (const QString &groupName : m_colorSet->getGroupNames()) {
+            m_groupNameRows[row] = groupName;
+            row += m_colorSet->getGroup(groupName)->rowCount();
+            row += 1; // row for group name
+        }
     }
     endResetModel();
 }
@@ -140,6 +142,7 @@ bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
     }
     endResetModel();
     m_colorSet->save();
+    emit sigPaletteModifed();
     return true;
 }
 
@@ -163,6 +166,7 @@ bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
         }
         endResetModel();
     }
+    emit sigPaletteModifed();
     return true;
 }
 
@@ -253,7 +257,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
             }
             setEntry(entry, finalIdx);
-            emit dataChanged(finalIdx, finalIdx);
+            emit sigPaletteModifed();
             if (m_colorSet->isGlobal()) {
                 m_colorSet->save();
             }
@@ -316,6 +320,7 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
+    emit sigPaletteModifed();
     emit dataChanged(index, index);
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();
@@ -333,6 +338,7 @@ bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newNa
         }
     }
     endResetModel();
+    emit sigPaletteModifed();
     return success;
 }
 

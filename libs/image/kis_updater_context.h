@@ -29,6 +29,7 @@
 #include "kis_lock_free_lod_counter.h"
 
 #include "KisUpdaterContextSnapshotEx.h"
+#include "kis_update_scheduler.h"
 
 class KisUpdateJobItem;
 class KisSpontaneousJob;
@@ -138,14 +139,11 @@ public:
      */
     int threadsLimit() const;
 
+    void continueUpdate(const QRect& rc);
+    void doSomeUsefulWork();
+    void jobFinished();
 
-Q_SIGNALS:
-    void sigContinueUpdate(const QRect& rc);
-    void sigDoSomeUsefulWork();
-    void sigSpareThreadAppeared();
-
-protected Q_SLOTS:
-    void slotJobFinished();
+    friend class KisUpdateJobItem;
 
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
@@ -165,6 +163,7 @@ protected:
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
+    KisUpdateScheduler *m_scheduler;
 };
 
 class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext
@@ -186,6 +185,8 @@ public:
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();
+
+    friend class KisUpdateJobItem;
 };
 
 

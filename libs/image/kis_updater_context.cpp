@@ -27,7 +27,7 @@
 const int KisUpdaterContext::useIdealThreadCountTag = -1;
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount, QObject *parent)
-    : QObject(parent)
+    : QObject(parent), m_scheduler(qobject_cast<KisUpdateScheduler *>(parent))
 {
     if(threadCount <= 0) {
         threadCount = QThread::idealThreadCount();
@@ -244,14 +244,6 @@ qint32 KisUpdaterContext::findSpareThread()
     return -1;
 }
 
-void KisUpdaterContext::slotJobFinished()
-{
-    m_lodCounter.removeLod();
-
-    // Be careful. This slot can be called asynchronously without locks.
-    emit sigSpareThreadAppeared();
-}
-
 void KisUpdaterContext::lock()
 {
     m_lock.lock();
@@ -278,16 +270,7 @@ void KisUpdaterContext::setThreadsLimit(int value)
     m_jobs.resize(value);
 
     for(qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
-        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
-                SIGNAL(sigContinueUpdate(const QRect&)),
-                Qt::DirectConnection);
-
-        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
-                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
-
-        connect(m_jobs[i], SIGNAL(sigJobFinished()),
-                SLOT(slotJobFinished()), Qt::DirectConnection);
+        m_jobs[i] = new KisUpdateJobItem(this);
     }
 }
 
@@ -295,6 +278,22 @@ int KisUpdaterContext::threadsLimit() const
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_jobs.size() == m_threadPool.maxThreadCount());
     return m_jobs.size();
+}
+
+void KisUpdaterContext::continueUpdate(const QRect& rc)
+{
+    if (m_scheduler) m_scheduler->continueUpdate(rc);
+}
+
+void KisUpdaterContext::doSomeUsefulWork()
+{
+    if (m_scheduler) m_scheduler->doSomeUsefulWork();
+}
+
+void KisUpdaterContext::jobFinished()
+{
+    m_lodCounter.removeLod();
+    if (m_scheduler) m_scheduler->spareThreadAppeared();
 }
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)

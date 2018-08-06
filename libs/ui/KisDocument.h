@@ -52,7 +52,7 @@ class KoUnit;
 
 class KoColor;
 class KoColorSpace;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
@@ -571,7 +571,7 @@ public:
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeBasedDocumentBase * shapeController() const;
+    KoShapeControllerBase * shapeController() const;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 

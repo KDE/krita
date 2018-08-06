@@ -32,6 +32,8 @@
 #include "kis_algebra_2d.h"
 #include "KisHandlePainterHelper.h"
 
+
+
 struct KisWarpTransformStrategy::Private
 {
     Private(KisWarpTransformStrategy *_q,
@@ -96,6 +98,9 @@ struct KisWarpTransformStrategy::Private
     bool pointWasDragged;
 
     QPointF lastMousePos;
+
+    // cage transform also uses this logic. This helps this class know what transform type we are using
+    TransformType transformType = TransformType::WARP_TRANSFORM;
 
     void recalculateTransformations();
     inline QPointF imageToThumb(const QPointF &pt, bool useFlakeOptimization);
@@ -197,6 +202,10 @@ void KisWarpTransformStrategy::setCloseOnStartPointClick(bool value)
 void KisWarpTransformStrategy::setClipOriginalPointsPosition(bool value)
 {
     m_d->clipOriginalPointsPosition = value;
+}
+
+void KisWarpTransformStrategy::setTransformType(TransformType type) {
+    m_d->transformType = type;
 }
 
 void KisWarpTransformStrategy::drawConnectionLines(QPainter &gc,
@@ -316,8 +325,9 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
 
     }
 
-    // draw grid lines only if we are using the GRID mode.
-    if (m_d->currentArgs.warpCalculation() == KisWarpTransformWorker::WarpCalculation::GRID) {
+    // draw grid lines only if we are using the GRID mode. Also only use this logic for warp, not cage transforms
+    if (m_d->currentArgs.warpCalculation() == KisWarpTransformWorker::WarpCalculation::GRID &&
+        m_d->transformType == TransformType::WARP_TRANSFORM ) {
 
     // see how many rows we have. we are only going to do lines up to 6 divisions/
     // it is almost impossible to use with 6 even.

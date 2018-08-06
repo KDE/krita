@@ -19,11 +19,9 @@
 #include <QTest>
 
 #include <KritaVersionWrapper.h>
-#include <QTest>
 #include <QColor>
 #include <QDataStream>
 
-#include <KritaVersionWrapper.h>
 #include <Node.h>
 #include <Krita.h>
 #include <Document.h>
@@ -38,6 +36,8 @@
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
 #include <KisPart.h>
+
+#include  <sdk/tests/kistest.h>
 
 void TestFilter::testApply()
 {
@@ -98,5 +98,5 @@ void TestFilter::testStartFilter()
     }
 }
 
-QTEST_MAIN(TestFilter)
+KISTEST_MAIN(TestFilter)
 

@@ -28,7 +28,7 @@
 
 struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
 {
-    Private(const KoPathPointData &_pointData1, const KoPathPointData &_pointData2, KoShapeBasedDocumentBase *_controller, KoSelection *_selection)
+    Private(const KoPathPointData &_pointData1, const KoPathPointData &_pointData2, KoShapeControllerBase *_controller, KoSelection *_selection)
         : pointData1(_pointData1),
           pointData2(_pointData2),
           controller(_controller),
@@ -38,7 +38,7 @@ struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
 
     KoPathPointData pointData1;
     KoPathPointData pointData2;
-    KoShapeBasedDocumentBase *controller;
+    KoShapeControllerBase *controller;
     KoSelection *selection;
 
 
@@ -46,7 +46,7 @@ struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
     QScopedPointer<KUndo2Command> mergeCommand;
 };
 
-KoMultiPathPointMergeCommand::KoMultiPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KoShapeBasedDocumentBase *controller, KoSelection *selection, KUndo2Command *parent)
+KoMultiPathPointMergeCommand::KoMultiPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KoShapeControllerBase *controller, KoSelection *selection, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Merge points"), parent),
       m_d(new Private(pointData1, pointData2, controller, selection))
 {

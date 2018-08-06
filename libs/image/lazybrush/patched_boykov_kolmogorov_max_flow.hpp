@@ -208,7 +208,7 @@ class bk_max_flow {
           } else if(get(m_res_cap_map, from_source)){
             // there is no sink connect, so we can't augment this path, but to
             // avoid adding m_source to the active nodes, we just activate this
-            // node and set the approciate things
+            // node and set the appropriate things
             set_tree(current_node, tColorTraits::black());
             set_edge_to_parent(current_node, from_source);
             put(m_dist_map, current_node, 1);

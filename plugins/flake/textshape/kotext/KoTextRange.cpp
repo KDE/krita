@@ -23,7 +23,6 @@
 #include "KoTextInlineRdf.h"
 
 #include "TextDebug.h"
-#include "TextDebug.h"
 #include <QTextCursor>
 
 class KoTextRangePrivate

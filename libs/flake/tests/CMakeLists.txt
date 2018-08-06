@@ -27,31 +27,31 @@ ecm_add_tests(
     NAME_PREFIX "libs-kritaflake-"
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestPathShape.cpp
+ecm_add_test(TestPathShape.cpp
     TEST_NAME libs-kritaflake-TestPathShape
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestControlPointMoveCommand.cpp
+ecm_add_test(TestControlPointMoveCommand.cpp
     TEST_NAME libs-kritaflake-TestControlPointMoveCommand
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestPointTypeCommand.cpp
+ecm_add_test(TestPointTypeCommand.cpp
     TEST_NAME libs-kritaflake-TestPointTypeCommand
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestPointRemoveCommand.cpp
+ecm_add_test(TestPointRemoveCommand.cpp
     TEST_NAME libs-kritaflake-TestPointRemoveCommand
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestRemoveSubpathCommand.cpp
+ecm_add_test(TestRemoveSubpathCommand.cpp
     TEST_NAME libs-kritaflake-TestRemoveSubpathCommand
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestPathSegment.cpp
+ecm_add_test(TestPathSegment.cpp
     TEST_NAME libs-kritaflake-TestPathSegment
     LINK_LIBRARIES kritaflake Qt5::Test)
 
-krita_add_broken_unit_test(TestSegmentTypeCommand.cpp
+ecm_add_test(TestSegmentTypeCommand.cpp
     TEST_NAME libs-kritaflake-TestSegmentTypeCommand
     LINK_LIBRARIES kritaflake Qt5::Test)
 

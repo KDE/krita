@@ -127,7 +127,8 @@ public:
         return KisTimeRange(start, std::numeric_limits<int>::min(), true);
     }
 
-    static void calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive);
+    static KisTimeRange calculateIdenticalFramesRecursive(const KisNode *node, int time);
+    static KisTimeRange calculateAffectedFramesRecursive(const KisNode *node, int time);
 
     static KisTimeRange calculateNodeIdenticalFrames(const KisNode *node, int time);
     static KisTimeRange calculateNodeAffectedFrames(const KisNode *node, int time);

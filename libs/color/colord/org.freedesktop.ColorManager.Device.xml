@@ -309,7 +309,7 @@
             </doc:para>
               The default option is <doc:tt>hard</doc:tt>, and this
               means that the user has explicitly mapped a profile to
-              a device, and this should take precidence over any
+              a device, and this should take precedence over any
               <doc:tt>soft</doc:tt> profiles.
             </doc:para>
             <doc:para>

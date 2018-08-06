@@ -61,7 +61,6 @@
 #include <kis_signal_compressor.h>
 #include <kis_acyclic_signal_connector.h>
 #include <kis_assert.h>
-#include <KoCanvasResourceManager.h>
 #include "kis_canvas_resource_provider.h"
 #include <KoStopGradient.h>
 #include <QInputDialog>

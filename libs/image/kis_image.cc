@@ -96,7 +96,6 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "kis_image_barrier_locker.h"
 
 #include <QtCore>
 
@@ -205,6 +204,8 @@ public:
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
+    KisSelectionMaskSP targetOverlaySelectionMask; // the overlay switching stroke will try to switch into this mask
+    KisSelectionMaskSP overlaySelectionMask;
     QList<KisLayerCompositionSP> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted = false;
@@ -338,6 +339,14 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
 
     m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
+
+    /**
+     * The overlay device is not inherited when cloning the image!
+     */
+    if (rhs.m_d->overlaySelectionMask) {
+        const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
+        m_d->rootLayer->setDirty(dirtyRect);
+    }
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
@@ -384,6 +393,63 @@ void KisImage::invalidateAllFrames()
     invalidateFrames(KisTimeRange::infinite(0), QRect());
 }
 
+void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
+{
+    if (m_d->targetOverlaySelectionMask == mask) return;
+
+    m_d->targetOverlaySelectionMask = mask;
+
+    struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {
+        UpdateOverlaySelectionStroke(KisImageSP image)
+            : KisSimpleStrokeStrategy("update-overlay-selection-mask", kundo2_noi18n("update-overlay-selection-mask")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+            setClearsRedoOnStart(false);
+        }
+
+        void initStrokeCallback() {
+            KisSelectionMaskSP oldMask = m_image->m_d->overlaySelectionMask;
+            KisSelectionMaskSP newMask = m_image->m_d->targetOverlaySelectionMask;
+            if (oldMask == newMask) return;
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!newMask || newMask->graphListener() == m_image);
+
+            m_image->m_d->overlaySelectionMask = newMask;
+
+            if (oldMask || newMask) {
+                m_image->m_d->rootLayer->notifyChildMaskChanged();
+            }
+
+            if (oldMask) {
+                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMask->extent());
+            }
+
+            if (newMask) {
+                newMask->setDirty();
+            }
+
+            m_image->undoAdapter()->emitSelectionChanged();
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new UpdateOverlaySelectionStroke(this));
+    endStroke(id);
+}
+
+KisSelectionMaskSP KisImage::overlaySelectionMask() const
+{
+    return m_d->overlaySelectionMask;
+}
+
+bool KisImage::hasOverlaySelectionMask() const
+{
+    return m_d->overlaySelectionMask;
+}
+
 KisSelectionSP KisImage::globalSelection() const
 {
     KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
@@ -417,8 +483,8 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
             selectionMask->setSelection(globalSelection);
         }
 
-        Q_ASSERT(m_d->rootLayer->childCount() > 0);
-        Q_ASSERT(m_d->rootLayer->selectionMask());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->rootLayer->childCount() > 0);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->rootLayer->selectionMask());
     }
 
     m_d->deselectedGlobalSelection = 0;
@@ -1616,6 +1682,11 @@ void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
 void KisImage::requestTimeSwitch(int time)
 {
     m_d->animationInterface->requestTimeSwitchNonGUI(time);
+}
+
+KisNode *KisImage::graphOverlayNode() const
+{
+    return m_d->overlaySelectionMask.data();
 }
 
 QList<KisLayerCompositionSP> KisImage::compositions()

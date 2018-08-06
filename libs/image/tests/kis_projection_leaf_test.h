@@ -28,6 +28,9 @@ private Q_SLOTS:
     void test();
     void testPassThrough();
     void testNestedPassThrough();
+    void testSkippedSelectionMasks();
+
+    void testSelectionMaskOverlay();
 };
 
 #endif /* __KIS_PROJECTION_LEAF_TEST_H */

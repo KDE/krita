@@ -29,7 +29,6 @@
 #include <KoXmlReader.h>
 #include <KoPathShapeLoader.h>
 #include <KoShapeBackground.h>
-#include <KoPathShapeLoader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <SvgSavingContext.h>
 #include <SvgLoadingContext.h>
@@ -1073,8 +1072,8 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 
     // check if we are set on a path
     if (layout() == ArtisticTextShape::Straight) {
-        context.shapeWriter().addAttributePt("x", anchorOffset);
-        context.shapeWriter().addAttributePt("y", baselineOffset());
+        context.shapeWriter().addAttribute("x", anchorOffset);
+        context.shapeWriter().addAttribute("y", baselineOffset());
         SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
         Q_FOREACH (const ArtisticTextRange &range, formattedText) {
             saveSvgTextRange(range, context, !hasSingleRange, baselineOffset());
@@ -1109,7 +1108,7 @@ bool ArtisticTextShape::saveSvg(SvgSavingContext &context)
 void ArtisticTextShape::saveSvgFont(const QFont &font, SvgSavingContext &context)
 {
     context.shapeWriter().addAttribute("font-family", font.family());
-    context.shapeWriter().addAttributePt("font-size", font.pointSizeF());
+    context.shapeWriter().addAttribute("font-size", font.pointSizeF());
 
     if (font.bold()) {
         context.shapeWriter().addAttribute("font-weight", "bold");

@@ -242,9 +242,6 @@ public:
     bool antialiasCurves(bool defaultValue = false) const;
     void setAntialiasCurves(bool v) const;
 
-    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
-    void setSelectionOverlayMaskColor(const QColor &color);
-
     bool antialiasSelectionOutline(bool defaultValue = false) const;
     void setAntialiasSelectionOutline(bool v) const;
 

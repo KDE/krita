@@ -31,11 +31,19 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_image.h"
 #include "testutil.h"
+#include "kistest.h"
+#include <KisPart.h>
+#include <KisDocument.h>
 
 void KisShapeSelectionTest::testAddChild()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageSP image = new KisImage(0, 300, 300, cs, "test");
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+    QColor qc(Qt::white);
+    qc.setAlpha(0);
+    KoColor bgColor(qc, cs);
+    doc->newImage("test", 300, 300, cs, bgColor, true, 1, "test", 100);
+    KisImageSP image = doc->image();
 
     KisSelectionSP selection = new KisSelection();
     QVERIFY(selection->hasPixelSelection() == false);
@@ -61,18 +69,18 @@ void KisShapeSelectionTest::testAddChild()
     shape->close();
     shape->normalize();
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(image, selection);
+    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
-    QTest::qWait(500);
+    selection->updateProjection();
     image->waitForDone();
 
     QCOMPARE(selection->selectedExactRect(), QRect(50, 50, 100, 100));
 
-    selection->updateProjection();
+
 }
 
-QTEST_MAIN(KisShapeSelectionTest)
+KISTEST_MAIN(KisShapeSelectionTest)
 
 

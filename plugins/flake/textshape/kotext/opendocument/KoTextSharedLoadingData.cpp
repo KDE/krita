@@ -246,7 +246,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
             parentStyles.insert(parastyle, styleElem->attributeNS(KoXmlNS::style, "parent-style-name"));
 
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(parastyle);
         } else {
@@ -387,7 +387,7 @@ void KoTextSharedLoadingData::addTableStyles(KoOdfLoadingContext &context, const
             d->tableStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {
@@ -427,7 +427,7 @@ void KoTextSharedLoadingData::addTableColumnStyles(KoOdfLoadingContext &context,
             d->tableColumnStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {
@@ -467,7 +467,7 @@ void KoTextSharedLoadingData::addTableRowStyles(KoOdfLoadingContext &context, co
             d->tableRowStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {
@@ -507,7 +507,7 @@ void KoTextSharedLoadingData::addTableCellStyles(KoShapeLoadingContext &context,
             d->tableCellStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {
@@ -547,7 +547,7 @@ void KoTextSharedLoadingData::addSectionStyles(KoOdfLoadingContext &context, con
             d->sectionStylesDotXmlStyles.insert(it->first, it->second);
         }
         // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {
@@ -687,7 +687,7 @@ void KoTextSharedLoadingData::addTableTemplate(KoShapeLoadingContext &context, K
     for (; it != tableTemplates.end(); ++it) {
         d->tableTemplates.insert(it->first, it->second);
 
-        // in case templates are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        // in case templates are not added to the style manager they have to be deleted after loading to avoid leaking memory
         if (styleManager) {
             styleManager->add(it->second);
         } else {

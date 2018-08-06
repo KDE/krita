@@ -691,7 +691,7 @@
    pxoxy of the node we process (=KisNodeProgressProxy=). Our
    processings framework provides even easier way of doing this. You
    just need to instantiate a =ProgressHelper= object and ask it to
-   greate a =KoUpdater= object for you. And all is done. You can see
+   create a =KoUpdater= object for you. And all is done. You can see
    an example in =KisTransformProcessingVisitor= class.
 
 ** Testing

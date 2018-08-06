@@ -31,7 +31,7 @@
 class KoOdfLoadingContext;
 class KoShapeLayer;
 class KoShape;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoLoadingShapeUpdater;
 class KoImageCollection;
 class KoSharedLoadingData;
@@ -204,7 +204,7 @@ public:
     void setSectionModel(KoSectionModel *sectionModel);
 
 private:
-    // to allow only the KoShapeRegistry access to the KoShapeBasedDocumentBase
+    // to allow only the KoShapeRegistry access to the KoShapeControllerBase
     class Private;
     Private * const d;
 };

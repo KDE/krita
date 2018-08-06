@@ -24,7 +24,6 @@
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
-#include <ktoggleaction.h>
 #include <kis_debug.h>
 
 #include <KisView.h>

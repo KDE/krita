@@ -22,9 +22,9 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
-
 #include "filestest.h"
+
+#include  <sdk/tests/kistest.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -35,5 +35,6 @@ void KisPngTest::testFiles()
 {
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
 }
-QTEST_MAIN(KisPngTest)
+
+KISTEST_MAIN(KisPngTest)
 

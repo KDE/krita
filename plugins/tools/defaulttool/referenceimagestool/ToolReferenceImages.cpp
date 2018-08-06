@@ -186,7 +186,7 @@ void ToolReferenceImages::saveReferenceImages()
     file.close();
 
     if (!ok) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Failed to save reference images.", filename));
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Failed to save reference images."));
     }
 }
 

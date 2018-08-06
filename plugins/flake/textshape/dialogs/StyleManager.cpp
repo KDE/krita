@@ -33,7 +33,6 @@
 #include <QTabWidget>
 #include <QInputDialog>
 #include <QMessageBox>
-#include <QInputDialog>
 
 #include <QDebug>
 

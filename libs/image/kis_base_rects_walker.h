@@ -406,7 +406,7 @@ protected:
         }
 
         KisProjectionLeafSP parentLayer = firstMask->parent();
-        Q_ASSERT(parentLayer);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer);
 
         registerCloneNotification(parentLayer->node(), N_FILTHY_PROJECTION);
     }

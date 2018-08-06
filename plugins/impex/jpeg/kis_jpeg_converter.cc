@@ -65,8 +65,6 @@ extern "C" {
 #include <kis_jpeg_destination.h>
 #include "kis_iterator_ng.h"
 
-#include <KoColorModelStandardIds.h>
-
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
 #define MAX_BYTES_IN_MARKER  65533  /* maximum data len of a JPEG marker */
@@ -88,7 +86,7 @@ void jpegErrorExit ( j_common_ptr cinfo )
     ( *( cinfo->err->format_message ) ) ( cinfo, jpegLastErrorMsg );
 
     /* Jump to the setjmp point */
-    throw std::runtime_error( jpegLastErrorMsg ); // or your preffered exception ...
+    throw std::runtime_error( jpegLastErrorMsg ); // or your preferred exception ...
 }
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)

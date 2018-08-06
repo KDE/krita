@@ -25,6 +25,7 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
+#include <sdk/tests/testutil.h>
 
 KisShapeControllerTest::~KisShapeControllerTest()
 {
@@ -46,4 +47,4 @@ void KisShapeControllerTest::destroyDummiesFacade(KisDummiesFacadeBase *dummiesF
     delete m_doc;
 }
 
-QTEST_MAIN(KisShapeControllerTest)
+KISTEST_MAIN(KisShapeControllerTest)

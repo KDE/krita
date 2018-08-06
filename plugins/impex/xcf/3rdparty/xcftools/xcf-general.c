@@ -60,7 +60,7 @@ xcfNextprop(uint32_t *master,uint32_t *body)
       ncolors = xcfL(ptr+8) ;
       if( ncolors > 256 )
         FatalBadXCF("Colormap has %" PRIu32 " entries",ncolors);
-      /* Surprise! Some older verion of the Gimp computed the wrong length
+      /* Surprise! Some older version of the Gimp computed the wrong length
        * word, and the _reader_ always just reads three bytes per color
        * and ignores the length tag! Duplicate this so we too can read
        * the buggy XCF files.

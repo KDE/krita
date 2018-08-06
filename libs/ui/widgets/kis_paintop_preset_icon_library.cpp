@@ -22,7 +22,6 @@
 #include <QSlider>
 #include <QPainter>
 #include <QLabel>
-#include <QSlider>
 #include <QListView>
 #include <kis_icon.h>
 #include <QDebug>

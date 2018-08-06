@@ -24,6 +24,7 @@
 #include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
 #include "jpeglib.h"
+#include  <sdk/tests/kistest.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -40,14 +41,15 @@ void KisJpegTest::testFiles()
      * Different versions of JPEG library may produce a bit different
      * result, so just compare in a weak way
      */
-    const int fuzziness = 3;
+    const int fuzziness = 30;
+    const int maxNumFailingPixels = 1000;
 
     if (JPEG_LIB_VERSION == 80){
-        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness);
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness, maxNumFailingPixels);
     }else {
-        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness);
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness, maxNumFailingPixels);
     }
 
 }
-QTEST_MAIN(KisJpegTest)
+KISTEST_MAIN(KisJpegTest)
 

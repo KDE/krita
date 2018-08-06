@@ -46,6 +46,8 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
+#include  <sdk/tests/kistest.h>
+
 void TimelineModelTest::init()
 {
     m_doc = KisPart::instance()->createDocument();
@@ -295,4 +297,4 @@ void TimelineModelTest::slotBang()
     ENTER_FUNCTION() << "!!!!";
 }
 
-QTEST_MAIN(TimelineModelTest)
+KISTEST_MAIN(TimelineModelTest)

@@ -169,7 +169,7 @@ void KisShapeController::addShapes(const QList<KoShape*> shapes)
             KisSelectionSP selection = canvas->viewManager()->selection();
             if (selection) {
                 if (!selection->shapeSelection()) {
-                    selection->setShapeSelection(new KisShapeSelection(image(), selection));
+                    selection->setShapeSelection(new KisShapeSelection(this, image(), selection));
                 }
                 KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
 

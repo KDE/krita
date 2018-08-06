@@ -102,8 +102,15 @@ protected:
                 extraUpdateLeaf = startWith->parent();
             }
 
-            NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateLeaf);
-            registerNeedRect(extraUpdateLeaf, pos);
+            /**
+             * Sometimes it may happen that the mask is placed outside layers hierarchy
+             * (e.g. inactive selection mask), then the projection leafs will not point
+             * to anywhere
+             */
+            if (extraUpdateLeaf) {
+                NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateLeaf);
+                registerNeedRect(extraUpdateLeaf, pos);
+            }
         }
 
         KisProjectionLeafSP currentLeaf = startWith->lastChild();

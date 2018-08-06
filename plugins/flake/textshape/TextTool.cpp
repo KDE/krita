@@ -37,7 +37,6 @@
 #include "dialogs/TableDialog.h"
 #include "dialogs/SectionFormatDialog.h"
 #include "dialogs/SectionsSplitDialog.h"
-#include "dialogs/SimpleTableWidget.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
@@ -104,7 +103,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include <KoAnnotation.h>
 #include <KoShapeRegistry.h>
 #include <kuser.h>

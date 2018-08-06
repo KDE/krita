@@ -81,7 +81,7 @@ void TestColorConversionSystem::testAlphaConversions()
         KoColor c(QColor(255,255,255,255), alpha8);
         QCOMPARE(c.opacityU8(), quint8(255));
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(254,255,255));
+        QCOMPARE(c.toQColor(), QColor(255,255,255));
         c.convertTo(alpha8);
         QCOMPARE(c.opacityU8(), quint8(255));
     }
@@ -89,7 +89,7 @@ void TestColorConversionSystem::testAlphaConversions()
     {
         KoColor c(QColor(255,255,255,0), alpha8);
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(0,0,1,255));
+        QCOMPARE(c.toQColor(), QColor(0,0,0,255));
         c.convertTo(alpha8);
         QCOMPARE(c.opacityU8(), quint8(0));
     }
@@ -97,16 +97,16 @@ void TestColorConversionSystem::testAlphaConversions()
     {
         KoColor c(QColor(255,255,255,128), alpha8);
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(118,120,120,255));
+        QCOMPARE(c.toQColor(), QColor(129,129,129,255));
         c.convertTo(alpha8);
-        QCOMPARE(c.opacityU8(), quint8(128));
+        QCOMPARE(c.opacityU8(), quint8(138));
     }
 
     {
         KoColor c(QColor(255,255,255,255), alpha8);
         QCOMPARE(c.opacityU8(), quint8(255));
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(254,255,255));
+        QCOMPARE(c.toQColor(), QColor(255,255,255));
         c.convertTo(alpha8);
         QCOMPARE(c.opacityU8(), quint8(255));
     }
@@ -114,7 +114,7 @@ void TestColorConversionSystem::testAlphaConversions()
     {
         KoColor c(QColor(255,255,255,0), alpha8);
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(0,0,1,255));
+        QCOMPARE(c.toQColor(), QColor(0,0,0,255));
         c.convertTo(alpha8);
         QCOMPARE(c.opacityU8(), quint8(0));
     }
@@ -122,9 +122,9 @@ void TestColorConversionSystem::testAlphaConversions()
     {
         KoColor c(QColor(255,255,255,128), alpha8);
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(118,120,120,255));
+        QCOMPARE(c.toQColor(), QColor(129,129,129,255));
         c.convertTo(alpha8);
-        QCOMPARE(c.opacityU8(), quint8(128));
+        QCOMPARE(c.opacityU8(), quint8(138));
     }
 }
 
@@ -139,7 +139,7 @@ void TestColorConversionSystem::testAlphaU16Conversions()
         KoColor c(QColor(255,255,255,255), alpha16);
         QCOMPARE(c.opacityU8(), quint8(255));
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(254,255,255));
+        QCOMPARE(c.toQColor(), QColor(255,255,255));
         c.convertTo(alpha16);
         QCOMPARE(c.opacityU8(), quint8(255));
     }
@@ -147,7 +147,7 @@ void TestColorConversionSystem::testAlphaU16Conversions()
     {
         KoColor c(QColor(255,255,255,0), alpha16);
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(0,0,1,255));
+        QCOMPARE(c.toQColor(), QColor(0,0,0,255));
         c.convertTo(alpha16);
         QCOMPARE(c.opacityU8(), quint8(0));
     }
@@ -155,9 +155,9 @@ void TestColorConversionSystem::testAlphaU16Conversions()
     {
         KoColor c(QColor(255,255,255,128), alpha16);
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(118,120,120,255));
+        QCOMPARE(c.toQColor(), QColor(129,129,129,255));
         c.convertTo(alpha16);
-        QCOMPARE(c.opacityU8(), quint8(128));
+        QCOMPARE(c.opacityU8(), quint8(138));
     }
 
     {

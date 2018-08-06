@@ -46,7 +46,6 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_command_utils.h"
-#include "kis_processing_applicator.h"
 #include "commands_new/kis_change_projection_color_command.h"
 #include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
@@ -1415,17 +1414,6 @@ namespace KisLayerUtils {
     {
         Q_FOREACH(KisNodeSP node, nodes) {
             node->setDirty(node->extent());
-        }
-    }
-
-    void recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func)
-    {
-        func(node);
-
-        node = node->firstChild();
-        while (node) {
-            recursiveApplyNodes(node, func);
-            node = node->nextSibling();
         }
     }
 

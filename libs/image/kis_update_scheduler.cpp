@@ -28,7 +28,7 @@
 #include "kis_strokes_queue.h"
 
 #include "kis_queues_progress_updater.h"
-#include "KisUpdateSchedulerConfigNotifier.h"
+#include "KisImageConfigNotifier.h"
 
 #include <QReadWriteLock>
 #include "kis_lazy_wait_condition.h"
@@ -127,7 +127,7 @@ void KisUpdateScheduler::connectSignals()
     connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
             SLOT(spareThreadAppeared()), Qt::DirectConnection);
 
-    connect(KisUpdateSchedulerConfigNotifier::instance(), SIGNAL(configChanged()),
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
 }
 

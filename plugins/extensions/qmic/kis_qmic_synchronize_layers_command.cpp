@@ -35,7 +35,7 @@ KisQmicSynchronizeLayersCommand::KisQmicSynchronizeLayersCommand(KisNodeListSP n
         m_selection(selection),
         m_firstRedo(true)
 {
-    qDebug() << "KisQmicSynchronizeLayersCommand";
+    dbgPlugins << "KisQmicSynchronizeLayersCommand";
 }
 
 KisQmicSynchronizeLayersCommand::~KisQmicSynchronizeLayersCommand()
@@ -46,7 +46,7 @@ KisQmicSynchronizeLayersCommand::~KisQmicSynchronizeLayersCommand()
 
 void KisQmicSynchronizeLayersCommand::redo()
 {
-    qDebug() << "KisQmicSynchronizeLayersCommand::Redo" << m_firstRedo;
+    dbgPlugins << "KisQmicSynchronizeLayersCommand::Redo" << m_firstRedo;
 
     if (m_firstRedo) {
         // if gmic produces more layers
@@ -75,8 +75,7 @@ void KisQmicSynchronizeLayersCommand::redo()
             else // small preview
             {
                 Q_ASSERT(m_nodes->size() > 0);
-                for (int i = m_nodes->size(); i < m_images.size(); i++)
-                {
+                for (int i = m_nodes->size(); i < m_images.size(); i++) {
                     KisPaintDevice * device = new KisPaintDevice(m_nodes->at(0)->colorSpace());
                     KisLayerSP paintLayer = new KisPaintLayer(0, "New layer from gmic filter", OPACITY_OPAQUE_U8, device);
                     m_nodes->append(paintLayer);

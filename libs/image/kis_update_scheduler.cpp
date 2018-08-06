@@ -103,30 +103,17 @@ void KisUpdateScheduler::setThreadsLimit(int value)
      * should just ensure there is no more jobs in the updater context.
      */
     lock();
-    m_d->updaterContext.lock();
     m_d->updaterContext.setThreadsLimit(value);
-    m_d->updaterContext.unlock();
     unlock(false);
 }
 
 int KisUpdateScheduler::threadsLimit() const
 {
-    std::lock_guard<KisUpdaterContext> l(m_d->updaterContext);
     return m_d->updaterContext.threadsLimit();
 }
 
 void KisUpdateScheduler::connectSignals()
 {
-//    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-//            SLOT(continueUpdate(const QRect&)),
-//            Qt::DirectConnection);
-
-//    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
-//            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
-
-//    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
-//            SLOT(spareThreadAppeared()), Qt::DirectConnection);
-
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
 }
@@ -199,13 +186,11 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
     }
 
     if(needLock) lock();
-    m_d->updaterContext.lock();
 
     Q_ASSERT(m_d->updaterContext.isJobAllowed(walker));
     m_d->updaterContext.addMergeJob(walker);
     m_d->updaterContext.waitForDone();
 
-    m_d->updaterContext.unlock();
     if(needLock) unlock(true);
 }
 

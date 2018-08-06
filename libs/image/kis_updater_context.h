@@ -90,7 +90,6 @@ public:
      * \see hasSpareThread()
      */
     virtual bool addMergeJob(KisBaseRectsWalkerSP walker);
-    bool addMergeJobs(QVector<KisBaseRectsWalkerSP> &walkers);
 
     /**
      * Adds a stroke job to the context. The prerequisites are
@@ -141,18 +140,10 @@ public:
      */
     int threadsLimit() const;
 
+
     void jobFinished(int index);
     void continueUpdate(const QRect& rc);
     void doSomeUsefulWork();
-
-
-Q_SIGNALS:
-    void sigContinueUpdate(const QRect& rc);
-    void sigDoSomeUsefulWork();
-    void sigSpareThreadAppeared();
-
-protected Q_SLOTS:
-    void slotJobFinished(int index);
 
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
@@ -168,7 +159,6 @@ protected:
      */
     QReadWriteLock m_exclusiveJobLock;
 
-//    QMutex m_lock;
     mutable QReadWriteLock m_rwLock;
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;

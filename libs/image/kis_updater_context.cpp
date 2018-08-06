@@ -99,16 +99,6 @@ int KisUpdaterContext::currentLevelOfDetail() const
 bool KisUpdaterContext::hasSpareThread()
 {
     return !m_spareThreadsIndexes.isEmpty();
-//    QReadLocker locker(&m_rwLock);
-//    bool found = false;
-
-//    Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
-//        if (!item->isRunning()) {
-//            found = true;
-//            break;
-//        }
-//    }
-//    return found;
 }
 
 bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
@@ -146,26 +136,6 @@ bool KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 
     m_rwLock.lockForWrite();
     const bool shouldStartThread = m_jobs[jobIndex]->setWalker(walker);
-    m_rwLock.unlock();
-
-    // it might happen that we call this function from within
-    // the thread itself, right when it finished its work
-    if (shouldStartThread) {
-        m_threadPool.start(m_jobs[jobIndex]);
-    }
-
-    return true;
-}
-
-bool KisUpdaterContext::addMergeJobs(QVector<KisBaseRectsWalkerSP> &walkers)
-{
-    qint32 jobIndex = findSpareThread();
-    if (jobIndex < 0) return false;
-
-    m_lodCounter.addLod(walkers[0]->levelOfDetail());
-
-    m_rwLock.lockForWrite();
-    const bool shouldStartThread = m_jobs[jobIndex]->setWalkers(walkers);
     m_rwLock.unlock();
 
     // it might happen that we call this function from within
@@ -291,30 +261,6 @@ qint32 KisUpdaterContext::findSpareThread()
     int index = -1;
     m_spareThreadsIndexes.pop(index);
     return index;
-//    for (qint32 i = 0; i < m_jobs.size(); i++)
-//        if (!m_jobs[i]->isRunning())
-//            return i;
-
-//    return -1;
-}
-
-void KisUpdaterContext::slotJobFinished(int index)
-{
-    m_lodCounter.removeLod();
-    m_spareThreadsIndexes.push(index);
-
-    // Be careful. This slot can be called asynchronously without locks.
-    emit sigSpareThreadAppeared();
-}
-
-void KisUpdaterContext::lock()
-{
-//    m_lock.lock();
-}
-
-void KisUpdaterContext::unlock()
-{
-//    m_lock.unlock();
 }
 
 void KisUpdaterContext::setThreadsLimit(int value)
@@ -337,15 +283,6 @@ void KisUpdaterContext::setThreadsLimit(int value)
     for (qint32 i = 0; i < m_jobs.size(); i++) {
         m_jobs[i] = new KisUpdateJobItem(this, &m_exclusiveJobLock, i);
         m_spareThreadsIndexes.push(i);
-//        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
-//                SIGNAL(sigContinueUpdate(const QRect&)),
-//                Qt::DirectConnection);
-
-//        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
-//                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
-
-//        connect(m_jobs[i], SIGNAL(sigJobFinished(int)),
-//                SLOT(slotJobFinished(int)), Qt::DirectConnection);
     }
 }
 
@@ -362,20 +299,17 @@ void KisUpdaterContext::jobFinished(int index)
     m_spareThreadsIndexes.push(index);
 
     // Be careful. This slot can be called asynchronously without locks.
-//    emit sigSpareThreadAppeared();
-    m_scheduler->spareThreadAppeared();
+    if (m_scheduler) m_scheduler->spareThreadAppeared();
 }
 
 void KisUpdaterContext::continueUpdate(const QRect &rc)
 {
-//    emit sigContinueUpdate(rc);
-    m_scheduler->continueUpdate(rc);
+    if (m_scheduler) m_scheduler->continueUpdate(rc);
 }
 
 void KisUpdaterContext::doSomeUsefulWork()
 {
-//    emit doSomeUsefulWork();
-    m_scheduler->doSomeUsefulWork();
+    if (m_scheduler) m_scheduler->doSomeUsefulWork();
 }
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
@@ -390,13 +324,17 @@ KisTestableUpdaterContext::~KisTestableUpdaterContext()
 
 const QVector<KisUpdateJobItem*> KisTestableUpdaterContext::getJobs()
 {
+    QReadLocker locker(&m_rwLock);
     return m_jobs;
 }
 
 void KisTestableUpdaterContext::clear()
 {
+    QWriteLocker locker(&m_rwLock);
+
     Q_FOREACH (KisUpdateJobItem *item, m_jobs) {
         item->testingSetDone();
+        m_spareThreadsIndexes.push(item->index());
     }
 
     m_lodCounter.testingClear();

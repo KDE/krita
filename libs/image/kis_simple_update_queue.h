@@ -69,7 +69,7 @@ protected:
 
 protected:
 
-    mutable QReadWriteLock m_rwLock;
+    mutable QMutex m_mutex;
     KisWalkersList m_updatesList;
     KisSpontaneousJobsList m_spontaneousJobsList;
 

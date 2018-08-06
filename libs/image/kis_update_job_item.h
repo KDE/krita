@@ -95,11 +95,9 @@ public:
             setDone();
 
 
-//            emit sigDoSomeUsefulWork();
             m_updaterContext->doSomeUsefulWork();
 
             // may flip the current state from Waiting -> Running again
-//            emit sigJobFinished(m_index);
             m_updaterContext->jobFinished(m_index);
 
             m_exclusiveJobLock->unlock();
@@ -115,17 +113,12 @@ public:
 
     inline void runMergeJob() {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_atomicType == Type::MERGE);
-//        KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_walker);
         // dbgKrita << "Executing merge job" << m_walker->changeRect()
         //          << "on thread" << QThread::currentThreadId();
-        QRect changeRect;
+        m_merger.startMerge(*m_walker);
 
-        for (auto walker : m_walkers) {
-            m_merger.startMerge(*walker);
-            changeRect |= walker->changeRect();
-        }
-
-//        emit sigContinueUpdate(changeRect);
+        QRect changeRect = m_walker->changeRect();
         m_updaterContext->continueUpdate(changeRect);
     }
 
@@ -144,26 +137,6 @@ public:
         return oldState == Type::EMPTY;
     }
 
-    inline bool setWalkers(QVector<KisBaseRectsWalkerSP> &walkers) {
-        KIS_ASSERT(m_atomicType <= Type::WAITING);
-
-        m_accessRect = QRect();
-        m_changeRect = QRect();
-
-        m_walkers.swap(walkers);
-
-        m_exclusive = false;
-        m_runnableJob = 0;
-
-        for (auto walker : m_walkers) {
-            m_accessRect |= walker->accessRect();
-            m_changeRect |= walker->changeRect();
-        }
-
-        const Type oldState = m_atomicType.exchange(Type::MERGE);
-        return oldState == Type::EMPTY;
-    }
-
     // return true if the thread should actually be started
     inline bool setStrokeJob(KisStrokeJob *strokeJob) {
         KIS_ASSERT(m_atomicType <= Type::WAITING);
@@ -172,7 +145,6 @@ public:
         m_strokeJobSequentiality = strokeJob->sequentiality();
 
         m_exclusive = strokeJob->isExclusive();
-        m_walkers.clear();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
 
@@ -187,7 +159,6 @@ public:
         m_runnableJob = spontaneousJob;
 
         m_exclusive = spontaneousJob->isExclusive();
-        m_walkers.clear();
         m_walker = 0;
         m_accessRect = m_changeRect = QRect();
 
@@ -196,7 +167,6 @@ public:
     }
 
     inline void setDone() {
-        m_walkers.clear();
         m_walker = 0;
         delete m_runnableJob;
         m_runnableJob = 0;
@@ -221,6 +191,10 @@ public:
 
     inline KisStrokeJobData::Sequentiality strokeJobSequentiality() const {
         return m_strokeJobSequentiality;
+    }
+
+    inline int index() const {
+        return m_index;
     }
 
 Q_SIGNALS:
@@ -278,7 +252,6 @@ private:
      */
 
     KisBaseRectsWalkerSP m_walker;
-    QVector<KisBaseRectsWalkerSP> m_walkers;
     KisAsyncMerger m_merger;
 
     /**

@@ -220,11 +220,6 @@ protected Q_SLOTS:
      */
     void updateSettings();
 
-//private Q_SLOTS:
-//    void continueUpdate(const QRect &rect);
-//    void doSomeUsefulWork();
-//    void spareThreadAppeared();
-
 private:
     friend class UpdatesBlockTester;
     bool haveUpdatesRunning();

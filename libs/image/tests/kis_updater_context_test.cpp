@@ -53,9 +53,7 @@ void KisUpdaterContextTest::testJobInterference()
     KisBaseRectsWalkerSP walker1 = new KisMergeWalker(imageRect);
     walker1->collectRects(paintLayer, dirtyRect1);
 
-    context.lock();
     context.addMergeJob(walker1);
-    context.unlock();
 
     // overlapping job --- forbidden
     {
@@ -63,9 +61,7 @@ void KisUpdaterContextTest::testJobInterference()
         KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
         walker->collectRects(paintLayer, dirtyRect);
 
-        context.lock();
         QVERIFY(!context.isJobAllowed(walker));
-        context.unlock();
     }
 
     // not overlapping job --- allowed
@@ -74,9 +70,7 @@ void KisUpdaterContextTest::testJobInterference()
         KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
         walker->collectRects(paintLayer, dirtyRect);
 
-        context.lock();
         QVERIFY(context.isJobAllowed(walker));
-        context.unlock();
     }
 
     // not overlapping job, conflicting LOD --- forbidden
@@ -89,9 +83,7 @@ void KisUpdaterContextTest::testJobInterference()
         KisBaseRectsWalkerSP walker = new KisMergeWalker(imageRect);
         walker->collectRects(paintLayer, dirtyRect);
 
-        context.lock();
         QVERIFY(!context.isJobAllowed(walker));
-        context.unlock();
     }
 }
 
@@ -105,8 +97,6 @@ void KisUpdaterContextTest::testSnapshot()
 
     qint32 numMergeJobs = -777;
     qint32 numStrokeJobs = -777;
-
-    context.lock();
 
     context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
     QCOMPARE(numMergeJobs, 0);
@@ -140,10 +130,7 @@ void KisUpdaterContextTest::testSnapshot()
     QCOMPARE(numStrokeJobs, 1);
     QCOMPARE(context.currentLevelOfDetail(), 0);
 
-    context.unlock();
-
     {
-        context.lock();
         context.clear();
 
         context.getJobsSnapshot(numMergeJobs, numStrokeJobs);
@@ -160,8 +147,6 @@ void KisUpdaterContextTest::testSnapshot()
         QCOMPARE(numMergeJobs, 0);
         QCOMPARE(numStrokeJobs, 1);
         QCOMPARE(context.currentLevelOfDetail(), 2);
-
-        context.unlock();
     }
 }
 

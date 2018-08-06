@@ -27,8 +27,6 @@
 #include <kis_size_group.h>
 #include <klocalizedstring.h>
 
-#include <kis_config.h>
-
 #include <kis_document_aware_spin_box_unit_manager.h>
 
 #include <QComboBox>

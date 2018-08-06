@@ -22,7 +22,6 @@
 #include <QIODevice>
 #include <QString>
 
-#include <QtEndian>
 #include "psd.h"
 
 bool psdwrite(QIODevice* io, quint8 v)

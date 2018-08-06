@@ -249,7 +249,6 @@ void TestPointMergeCommand::connectCurveSubpaths()
 #include <MockShapes.h>
 #include <commands/KoPathCombineCommand.h>
 #include "kis_debug.h"
-#include <KoPathPointData.h>
 
 void TestPointMergeCommand::testCombineShapes()
 {

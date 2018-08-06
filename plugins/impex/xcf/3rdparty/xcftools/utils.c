@@ -148,7 +148,7 @@ closeout(FILE *f,const char *name)
        */
       if( fputc('\0', f) != EOF &&
           fflush(f) == 0 )
-        errno = EIO ; /* Argh, everything succeds. Just call it an I/O error */
+        errno = EIO ; /* Argh, everything succedes. Just call it an I/O error */
     }
   }
   FatalUnexpected(_("!Error writing file %s"),name);

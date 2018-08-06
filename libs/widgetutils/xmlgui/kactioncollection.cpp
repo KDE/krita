@@ -29,7 +29,6 @@
 #include "kactioncategory.h"
 #include "kxmlguiclient.h"
 #include "kxmlguifactory.h"
-#include "kactioncategory.h"
 #include "kis_action_registry.h"
 
 #include <kauthorized.h>

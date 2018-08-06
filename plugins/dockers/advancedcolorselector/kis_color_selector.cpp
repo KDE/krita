@@ -261,7 +261,7 @@ void KisColorSelector::resizeEvent(QResizeEvent* e) {
         }
     }
 
-    // reset the currect color after resizing the widget
+    // reset the correct color after resizing the widget
     setColor(m_lastRealColor);
 
     KisColorSelectorBase::resizeEvent(e);

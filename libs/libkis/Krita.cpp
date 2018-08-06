@@ -53,7 +53,6 @@
 #include <KoResourceServerProvider.h>
 #include <kis_action_registry.h>
 #include <kis_icon_utils.h>
-#include <KisPart.h>
 
 #include "View.h"
 #include "Document.h"

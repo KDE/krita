@@ -211,8 +211,6 @@ void KisGradientPainterTest::testFindShapedExtremums()
     QVERIFY(path.contains(center));
 }
 
-#include "krita_utils.h"
-
 void KisGradientPainterTest::testSplitDisjointPaths()
 {
     QPainterPath path;
@@ -269,7 +267,6 @@ void KisGradientPainterTest::testSplitDisjointPaths()
     }
 }
 
-#include "kis_polygonal_gradient_shape_strategy.h"
 #include "kis_cached_gradient_shape_strategy.h"
 
 #include <boost/accumulators/accumulators.hpp>

@@ -26,7 +26,6 @@ class QIODevice;
 #include <QBuffer>
 
 #include <kis_annotation.h>
-#include <kis_debug.h>
 
 #include "psd.h"
 #include "psd_utils.h"

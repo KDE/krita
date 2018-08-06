@@ -22,7 +22,7 @@ class TestFilter(unittest.TestCase):
     def testEmptyNameProperty(self):
         self.assertFalse(self._instance.name())
 
-    # segmentation fault here, I neet to verify that.
+    # segmentation fault here, I need to verify that.
     def testConfigurationProperties(self):
         pass
         # infoObject = InfoObject()

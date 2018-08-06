@@ -32,7 +32,6 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -50,7 +49,6 @@
 
 #include "../kis_kra_savexml_visitor.h"
 
-#include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
 
 void KisKraSaveXmlVisitorTest::initTestCase()

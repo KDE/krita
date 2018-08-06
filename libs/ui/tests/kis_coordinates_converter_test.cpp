@@ -19,8 +19,6 @@
 #include "kis_coordinates_converter_test.h"
 #include <QTest>
 
-#include <QTest>
-
 #include <QTransform>
 
 #include <KoZoomHandler.h>

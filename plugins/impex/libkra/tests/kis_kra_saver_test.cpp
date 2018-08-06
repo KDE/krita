@@ -30,7 +30,6 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "KisDocument.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
@@ -52,7 +51,6 @@
 
 #include "kis_transform_mask_params_interface.h"
 
-#include <filter/kis_filter_registry.h>
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
@@ -135,8 +133,6 @@ void KisKraSaverTest::testSaveEmpty()
     delete doc;
 }
 
-#include <filter/kis_filter_configuration.h>
-#include "generator/kis_generator_registry.h"
 #include <generator/kis_generator.h>
 
 void testRoundTripFillLayerImpl(const QString &testName, KisFilterConfigurationSP config)
@@ -425,8 +421,6 @@ void KisKraSaverTest::testRoundTripColorizeMask()
     QCOMPARE(strokes[2].color.colorSpace(), weirdCS);
 }
 
-#include "kis_shape_layer.h"
-#include <KoPathShape.h>
 #include <KoColorBackground.h>
 
 void KisKraSaverTest::testRoundTripShapeLayer()

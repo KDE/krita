@@ -77,7 +77,6 @@
 // Krita Image
 #include <kis_config.h>
 #include <flake/kis_shape_layer.h>
-#include <kis_debug.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -89,7 +88,6 @@
 #include <kis_document_undo_store.h>
 #include <kis_idle_watcher.h>
 #include <kis_signal_auto_connection.h>
-#include <kis_debug.h>
 #include <kis_canvas_widget_base.h>
 #include "kis_layer_utils.h"
 
@@ -108,7 +106,6 @@
 #include "KisApplication.h"
 #include "KisDocument.h"
 #include "KisImportExportManager.h"
-#include "KisPart.h"
 #include "KisView.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"

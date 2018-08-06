@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QPolygon>
-#include <QRect>
 #include <QtMath>
 
 #include <KSharedConfig>

@@ -31,8 +31,6 @@
 #include <QStylePainter>
 #include <QStyleOption>
 
-#include <kis_icon.h>
-
 #include "kis_config.h"
 
 KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)

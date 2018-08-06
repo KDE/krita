@@ -195,7 +195,9 @@ void PaletteDockerDock::slotViewChanged()
             m_rAdapter->addResource(cs);
         }
     }
-    slotSetColorSet(Q_NULLPTR);
+    if (!m_currentColorSet || !m_currentColorSet->isGlobal()) {
+        slotSetColorSet(Q_NULLPTR);
+    }
 }
 
 void PaletteDockerDock::slotAddColor()

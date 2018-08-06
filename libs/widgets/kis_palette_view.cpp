@@ -90,13 +90,11 @@ KisPaletteView::~KisPaletteView()
 
 void KisPaletteView::setCrossedKeyword(const QString &value)
 {
-    /*
     KisPaletteDelegate *delegate =
         dynamic_cast<KisPaletteDelegate*>(itemDelegate());
     KIS_ASSERT_RECOVER_RETURN(delegate);
 
     delegate->setCrossedKeyword(value);
-    */
 }
 
 bool KisPaletteView::addEntryWithDialog(KoColor color)

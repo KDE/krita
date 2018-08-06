@@ -156,6 +156,7 @@ void KisToolLazyBrushOptionsWidget::hideEvent(QHideEvent *event)
 void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
 {
     if (!index.isValid()) return;
+    if (!qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole))) return;
 
     KisSwatch entry = m_d->colorModel->getEntry(index);
     m_d->provider->setFGColor(entry.color());
@@ -173,14 +174,9 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
 {
     bool found = false;
 
-    for (const QString &groupName : m_d->colorSet.getGroupNames()) {
-        KisSwatchGroup *group = m_d->colorSet.getGroup(groupName);
-        for (const KisSwatchGroup::SwatchInfo &info : group->infoList()) {
-            if (info.swatch.color() == color) {
-                found = true;
-                break;
-            }
-        }
+    QModelIndex candidateIdx = m_d->colorModel->indexForClosest(color);
+    if (m_d->colorModel->getEntry(candidateIdx).color() == color) {
+        found = true;
     }
 
     m_d->ui->btnRemove->setEnabled(found);
@@ -191,14 +187,14 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
         m_d->ui->btnTransparent->setChecked(false);
     }
 
-    QModelIndex newIndex =
-        found ?
-        m_d->colorModel->indexForClosest(color) : QModelIndex();
+    QModelIndex newIndex = found ? candidateIdx : QModelIndex();
 
+    if (!found) {
+        m_d->ui->colorView->selectionModel()->clear();
+    }
     if (newIndex.isValid() && newIndex != m_d->ui->colorView->currentIndex()) {
         m_d->ui->colorView->setCurrentIndex(newIndex);
-    } else {
-        m_d->ui->colorView->selectionModel()->clear();
+        m_d->ui->colorView->update(newIndex);
     }
 }
 
@@ -209,15 +205,11 @@ void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
 
     if (m_d->activeMask) {
         KisColorizeMask::KeyStrokeColors colors = m_d->activeMask->keyStrokesColors();
-        qDebug() << "KisToolLazyBrushOptionsWidget : size" << colors.colors.size();
-        qDebug() << "KisToolLazyBrushOptionsWidget : trIdx" << colors.transparentIndex;
         m_d->transparentColorIndex = colors.transparentIndex;
 
-        if (m_d->transparentColorIndex != -1) {
-            for (int i = 0; i < colors.colors.size(); i++) {
-                const QString name = i == m_d->transparentColorIndex ? "transparent" : "";
-                m_d->colorModel->addEntry(KisSwatch(colors.colors[i], name));
-            }
+        for (int i = 0; i < colors.colors.size(); i++) {
+            const QString name = i == m_d->transparentColorIndex ? "transparent" : "";
+            m_d->colorModel->addEntry(KisSwatch(colors.colors[i], name));
         }
     }
 

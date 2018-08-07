@@ -279,9 +279,27 @@ bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
 
 qint32 KisUpdaterContext::findSpareThread()
 {
+<<<<<<< HEAD
     int index = -1;
     m_spareThreadsIndexes.pop(index);
     return index;
+=======
+    for(qint32 i=0; i < m_jobs.size(); i++)
+        if(!m_jobs[i]->isRunning())
+            return i;
+
+    return -1;
+}
+
+void KisUpdaterContext::lock()
+{
+    m_lock.lock();
+}
+
+void KisUpdaterContext::unlock()
+{
+    m_lock.unlock();
+>>>>>>> master
 }
 
 void KisUpdaterContext::setThreadsLimit(int value)
@@ -330,6 +348,7 @@ void KisUpdaterContext::doSomeUsefulWork()
 {
     if (m_scheduler) m_scheduler->doSomeUsefulWork();
 }
+
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
     : KisUpdaterContext(threadCount)

@@ -29,7 +29,10 @@
 #include "kis_lock_free_lod_counter.h"
 
 #include "KisUpdaterContextSnapshotEx.h"
+<<<<<<< HEAD
 #include "tiles3/kis_lockless_stack.h"
+=======
+>>>>>>> master
 #include "kis_update_scheduler.h"
 
 class KisUpdateJobItem;
@@ -142,7 +145,6 @@ public:
      */
     int threadsLimit() const;
 
-
     void jobFinished(int index);
     void continueUpdate(const QRect& rc);
     void doSomeUsefulWork();
@@ -167,7 +169,10 @@ protected:
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
+<<<<<<< HEAD
     KisLocklessStack<int> m_spareThreadsIndexes;
+=======
+>>>>>>> master
     KisUpdateScheduler *m_scheduler;
 };
 

@@ -603,8 +603,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     else {
         if (csName.first == RGBAColorModelID.id()) {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "sRGB-elle-V2-srgbtrc.icc");
-        }
-        else {
+        } else if (csName.first == GrayAColorModelID.id()) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "Gray-D50-elle-V2-srgbtrc.icc");
+        } else {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
         }
     }

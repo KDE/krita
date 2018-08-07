@@ -50,6 +50,11 @@ DlgBugInfo::DlgBugInfo(QWidget *parent)
     info.append("\n  Version: ").append(KritaVersionWrapper::versionString(true));
     info.append("\n\n");
 
+    info.append("Qt");
+    info.append("\n  Version (compiled): ").append(QT_VERSION_STR);
+    info.append("\n  Version (loaded): ").append(qVersion());
+    info.append("\n\n");
+
     // OS information
     info.append("OS Information");
     info.append("\n  Build ABI: ").append(QSysInfo::buildAbi());

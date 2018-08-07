@@ -29,10 +29,7 @@
 #include "kis_lock_free_lod_counter.h"
 
 #include "KisUpdaterContextSnapshotEx.h"
-<<<<<<< HEAD
 #include "tiles3/kis_lockless_stack.h"
-=======
->>>>>>> master
 #include "kis_update_scheduler.h"
 
 class KisUpdateJobItem;
@@ -117,19 +114,6 @@ public:
     void waitForDone();
 
     /**
-     * Locks the context to guarantee an exclusive access
-     * to the context
-     */
-    void lock();
-
-    /**
-     * Unlocks the context
-     *
-     * \see lock()
-     */
-    void unlock();
-
-    /**
      * Set the number of threads available for this updater context
      * WARNING: one cannot change the number of threads if there is
      *          at least one job running in the context! So before
@@ -169,10 +153,7 @@ protected:
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
-<<<<<<< HEAD
     KisLocklessStack<int> m_spareThreadsIndexes;
-=======
->>>>>>> master
     KisUpdateScheduler *m_scheduler;
 };
 

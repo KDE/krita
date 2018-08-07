@@ -34,7 +34,6 @@
 #include "flake/kis_shape_controller.h"
 #include "kis_undo_adapter.h"
 
-
 #include "timeline_frames_view.h"
 #include "timeline_frames_model.h"
 
@@ -47,6 +46,7 @@
 #include "kis_int_parse_spin_box.h"
 
 #include  <sdk/tests/kistest.h>
+#include <sdk/tests/testutil.h>
 
 void TimelineModelTest::init()
 {
@@ -153,6 +153,10 @@ private:
 
 void TimelineModelTest::testView()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
+
     QDialog dlg;
 
     QFont font;
@@ -272,6 +276,9 @@ void TimelineModelTest::slotGuiChangedNode(KisNodeSP node)
 
 void TimelineModelTest::testOnionSkins()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
     QDialog dlg;
 
     QFont font;

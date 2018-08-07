@@ -35,8 +35,6 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
 
-#include <kis_debug.h>
-
 Q_GLOBAL_STATIC(KisResourceBundleServerProvider, s_instance)
 
 KisResourceBundleServerProvider::KisResourceBundleServerProvider()

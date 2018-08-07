@@ -1054,7 +1054,7 @@ namespace KisLayerUtils {
         while (it != nodes.end()) {
             if ((!allowMasks && !qobject_cast<KisLayer*>(it->data())) ||
                 checkIsChildOf(*it, nodes)) {
-                //dbgImage << "Skipping node" << ppVar((*it)->name());
+                //qDebug() << "Skipping node" << ppVar((*it)->name());
                 it = nodes.erase(it);
             } else {
                 ++it;

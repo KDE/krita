@@ -284,8 +284,8 @@ QList<KoColorConversionTransformationFactory *> KoAlphaColorSpaceFactoryImpl<_CS
 {
     QList<KoColorConversionTransformationFactory*> factories;
 
-    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "gray built-in");
-    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "gray built-in");
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
 
     factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");
     factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");

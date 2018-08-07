@@ -298,8 +298,8 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QR
 
 void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
 {
-    Q_ASSERT(projection);
-    Q_ASSERT(m_image);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(projection);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_image);
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;

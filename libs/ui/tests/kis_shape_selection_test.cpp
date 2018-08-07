@@ -55,7 +55,7 @@ void KisShapeSelectionTest::testAddChild()
     QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 
-    QRect rect(50, 50, 100, 100);
+    QRectF rect(50, 50, 100, 100);
     QTransform matrix;
     matrix.scale(1 / image->xRes(), 1 / image->yRes());
     rect = matrix.mapRect(rect);
@@ -63,22 +63,21 @@ void KisShapeSelectionTest::testAddChild()
     KoPathShape* shape = new KoPathShape();
     shape->setShapeId(KoPathShapeId);
     shape->moveTo(rect.topLeft());
-    shape->lineTo(rect.topLeft() + QPointF(rect.width(), 0));
+    shape->lineTo(rect.topRight());
     shape->lineTo(rect.bottomRight());
-    shape->lineTo(rect.topLeft() + QPointF(0, rect.height()));
+    shape->lineTo(rect.bottomLeft());
     shape->close();
-    shape->normalize();
 
     KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
+    QVERIFY(selection->hasShapeSelection());
+
     selection->updateProjection();
     image->waitForDone();
 
     QCOMPARE(selection->selectedExactRect(), QRect(50, 50, 100, 100));
-
-
 }
 
 KISTEST_MAIN(KisShapeSelectionTest)

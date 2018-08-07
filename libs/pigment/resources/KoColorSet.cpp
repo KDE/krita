@@ -84,7 +84,6 @@ KoColorSet::KoColorSet(const QString& filename)
     , d(new Private(this))
 {
     if (!filename.isEmpty()) {
-        setValid(true);
         QFileInfo f(filename);
         setIsEditable(f.isWritable());
     }

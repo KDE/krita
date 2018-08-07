@@ -20,12 +20,14 @@
 #include <QTest>
 
 #include "kis_debug.h"
+#include <QTemporaryDir>
 
 #include "../swap/kis_memory_window.h"
 
 void KisMemoryWindowTest::testWindow()
 {
-    KisMemoryWindow memory(QString(), 1024);
+    QTemporaryDir swapDir;
+    KisMemoryWindow memory(swapDir.path(), 1024);
 
     quint8 oddValue = 0xee;
     const quint8 chunkLength = 10;

@@ -27,7 +27,7 @@
 const int KisUpdaterContext::useIdealThreadCountTag = -1;
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount, QObject *parent)
-    : QObject(parent), m_scheduler(qobject_cast<KisUpdateScheduler*>(parent))
+    : QObject(parent), m_scheduler(qobject_cast<KisUpdateScheduler *>(parent))
 {
     if (threadCount <= 0) {
         threadCount = QThread::idealThreadCount();
@@ -48,6 +48,11 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
                                         qint32 &numStrokeJobs)
 {
     QReadLocker locker(&m_rwLock);
+    getJobsSnapshotImpl(numMergeJobs, numStrokeJobs);
+}
+
+void KisUpdaterContext::getJobsSnapshotImpl(qint32 &numMergeJobs, qint32 &numStrokeJobs)
+{
     numMergeJobs = 0;
     numStrokeJobs = 0;
 
@@ -107,6 +112,11 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
     if (lod >= 0 && walker->levelOfDetail() != lod) return false;
 
     QReadLocker locker(&m_rwLock);
+    return isJobAllowedImpl(walker);
+}
+
+bool KisUpdaterContext::isJobAllowedImpl(KisBaseRectsWalkerSP walker)
+{
     bool intersects = false;
 
     Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
@@ -132,19 +142,23 @@ bool KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     qint32 jobIndex = findSpareThread();
     if (jobIndex < 0) return false;
 
-    m_lodCounter.addLod(walker->levelOfDetail());
+    bool result = false;
+    QWriteLocker locker(&m_rwLock);
 
-    m_rwLock.lockForWrite();
-    const bool shouldStartThread = m_jobs[jobIndex]->setWalker(walker);
-    m_rwLock.unlock();
+    if (isJobAllowedImpl(walker)) {
+        m_lodCounter.addLod(walker->levelOfDetail());
+        const bool shouldStartThread = m_jobs[jobIndex]->setWalker(walker);
 
-    // it might happen that we call this function from within
-    // the thread itself, right when it finished its work
-    if (shouldStartThread) {
-        m_threadPool.start(m_jobs[jobIndex]);
+        // it might happen that we call this function from within
+        // the thread itself, right when it finished its work
+        if (shouldStartThread) {
+            m_threadPool.start(m_jobs[jobIndex]);
+        }
+
+        result = true;
     }
 
-    return true;
+    return result;
 }
 
 /**
@@ -210,19 +224,26 @@ bool KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     qint32 jobIndex = findSpareThread();
     if (jobIndex < 0) return false;
 
-    m_lodCounter.addLod(spontaneousJob->levelOfDetail());
+    bool result = false;
+    qint32 numMergeJobs, numStrokeJobs;
 
-    m_rwLock.lockForWrite();
-    const bool shouldStartThread = m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
-    m_rwLock.unlock();
+    QWriteLocker locker(&m_rwLock);
+    getJobsSnapshotImpl(numMergeJobs, numStrokeJobs);
 
-    // it might happen that we call this function from within
-    // the thread itself, right when it finished its work
-    if (shouldStartThread) {
-        m_threadPool.start(m_jobs[jobIndex]);
+    if (!numMergeJobs && !numStrokeJobs) {
+        m_lodCounter.addLod(spontaneousJob->levelOfDetail());
+        const bool shouldStartThread = m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
+
+        // it might happen that we call this function from within
+        // the thread itself, right when it finished its work
+        if (shouldStartThread) {
+            m_threadPool.start(m_jobs[jobIndex]);
+        }
+
+        result = true;
     }
 
-    return true;
+    return result;
 }
 
 /**
@@ -281,7 +302,7 @@ void KisUpdaterContext::setThreadsLimit(int value)
     m_jobs.resize(value);
 
     for (qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem(this, &m_exclusiveJobLock, i);
+        m_jobs[i] = new KisUpdateJobItem(this, i);
         m_spareThreadsIndexes.push(i);
     }
 }
@@ -297,8 +318,6 @@ void KisUpdaterContext::jobFinished(int index)
 {
     m_lodCounter.removeLod();
     m_spareThreadsIndexes.push(index);
-
-    // Be careful. This slot can be called asynchronously without locks.
     if (m_scheduler) m_scheduler->spareThreadAppeared();
 }
 

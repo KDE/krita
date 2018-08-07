@@ -124,6 +124,18 @@ KisStrokeJob* KisStroke::popOneJob()
     return job;
 }
 
+KisStrokeJob* KisStroke::peekOneJob()
+{
+    KisStrokeJob *job = m_jobsQueue.first();
+
+    if(job) {
+        m_strokeInitialized = true;
+        m_strokeSuspended = false;
+    }
+
+    return job;
+}
+
 KUndo2MagicString KisStroke::name() const
 {
     return m_strokeStrategy->name();

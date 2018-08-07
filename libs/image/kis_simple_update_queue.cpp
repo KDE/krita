@@ -89,12 +89,8 @@ int KisSimpleUpdateQueue::overrideLevelOfDetail() const
 
 void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
 {
-    m_mutex.lock();
-
-    while(updaterContext.hasSpareThread() &&
-          processOneJob(updaterContext));
-
-    m_mutex.unlock();
+    QMutexLocker locker(&m_mutex);
+    while (updaterContext.hasSpareThread() && processOneJob(updaterContext));
 }
 
 bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
@@ -118,9 +114,11 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 
         if ((currentLevelOfDetail < 0 || currentLevelOfDetail == item->levelOfDetail()) &&
             updaterContext.isJobAllowed(item)) {
-            while (!updaterContext.addMergeJob(item));
+            jobAdded = updaterContext.addMergeJob(item);
+
+            if (!jobAdded) continue;
+
             iter.remove();
-            jobAdded = true;
             break;
         }
     }
@@ -143,9 +141,10 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
         updaterContext.getJobsSnapshot(numMergeJobs, numStrokeJobs);
 
         if (!numMergeJobs && !numStrokeJobs) {
-            KisSpontaneousJob *job = m_spontaneousJobsList.takeFirst();
-            while (!updaterContext.addSpontaneousJob(job));
-            jobAdded = true;
+            KisSpontaneousJob *job = m_spontaneousJobsList.first();
+            jobAdded = updaterContext.addSpontaneousJob(job);
+
+            if (jobAdded) m_spontaneousJobsList.pop_front();
         }
     }
 

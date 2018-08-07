@@ -552,13 +552,9 @@ void KisStrokesQueue::Private::tryClearUndoOnStrokeCompletion(KisStrokeSP finish
 void KisStrokesQueue::processQueue(KisUpdaterContext &updaterContext,
                                    bool externalJobsPending)
 {
-    m_d->mutex.lock();
-
-    while(updaterContext.hasSpareThread() &&
-          processOneJob(updaterContext,
-                        externalJobsPending));
-
-    m_d->mutex.unlock();
+    QMutexLocker locker(&m_d->mutex);
+    while (updaterContext.hasSpareThread() &&
+           processOneJob(updaterContext, externalJobsPending));
 }
 
 bool KisStrokesQueue::needsExclusiveAccess() const
@@ -678,24 +674,25 @@ bool KisStrokesQueue::hasOpenedStrokes() const
 bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
                                     bool externalJobsPending)
 {
-    if(m_d->strokesQueue.isEmpty()) return false;
+    if (m_d->strokesQueue.isEmpty()) return false;
     bool result = false;
 
     const int levelOfDetail = updaterContext.currentLevelOfDetail();
-
     const KisUpdaterContextSnapshotEx snapshot = updaterContext.getContextSnapshotEx();
-
-    const bool hasStrokeJobs = !(snapshot == ContextEmpty ||
-                                 snapshot == HasMergeJob);
+    const bool hasStrokeJobs = !(snapshot == ContextEmpty || snapshot == HasMergeJob);
     const bool hasMergeJobs = snapshot & HasMergeJob;
 
-    if(checkStrokeState(hasStrokeJobs, levelOfDetail) &&
-       checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
-       checkSequentialProperty(snapshot, externalJobsPending)) {
+    if (checkStrokeState(hasStrokeJobs, levelOfDetail) &&
+        checkExclusiveProperty(hasMergeJobs, hasStrokeJobs) &&
+        checkSequentialProperty(snapshot, externalJobsPending)) {
 
-        KisStrokeJob *job = m_d->strokesQueue.head()->popOneJob();
-        while (!updaterContext.addStrokeJob(job)) {}
-        result = true;
+        if (levelOfDetail == updaterContext.currentLevelOfDetail() &&
+                snapshot == updaterContext.getContextSnapshotEx()) {
+            KisStrokeJob *job = m_d->strokesQueue.head()->peekOneJob();
+            result = updaterContext.addStrokeJob(job);
+
+            if (result) m_d->strokesQueue.head()->popOneJob();
+        }
     }
 
     return result;

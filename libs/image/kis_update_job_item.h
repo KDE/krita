@@ -45,8 +45,8 @@ public:
     };
 
 public:
-    KisUpdateJobItem(KisUpdaterContext *updaterContext, QReadWriteLock *exclusiveJobLock, int index)
-        : m_updaterContext(updaterContext), m_exclusiveJobLock(exclusiveJobLock), m_index(index),
+    KisUpdateJobItem(KisUpdaterContext *updaterContext, int index)
+        : m_updaterContext(updaterContext), m_index(index),
           m_atomicType(Type::EMPTY),
           m_runnableJob(0)
     {
@@ -78,9 +78,9 @@ public:
             KIS_SAFE_ASSERT_RECOVER_RETURN(isRunning());
 
             if(m_exclusive) {
-                m_exclusiveJobLock->lockForWrite();
+                m_updaterContext->m_exclusiveJobLock.lockForWrite();
             } else {
-                m_exclusiveJobLock->lockForRead();
+                m_updaterContext->m_exclusiveJobLock.lockForRead();
             }
 
             if(m_atomicType == Type::MERGE) {
@@ -100,7 +100,7 @@ public:
             // may flip the current state from Waiting -> Running again
             m_updaterContext->jobFinished(m_index);
 
-            m_exclusiveJobLock->unlock();
+            m_updaterContext->m_exclusiveJobLock.unlock();
 
             // try to exit the loop. Please note, that no one can flip the state from
             // WAITING to EMPTY except ourselves!
@@ -197,11 +197,6 @@ public:
         return m_index;
     }
 
-Q_SIGNALS:
-    void sigContinueUpdate(const QRect& rc);
-    void sigDoSomeUsefulWork();
-    void sigJobFinished(int index);
-
 private:
     /**
      * Open walker and stroke job for the testing suite.
@@ -228,11 +223,7 @@ private:
     }
 
 private:
-    /**
-     * \see KisUpdaterContext::m_exclusiveJobLock
-     */
     KisUpdaterContext *m_updaterContext;
-    QReadWriteLock *m_exclusiveJobLock;
     const int m_index;
 
     bool m_exclusive;

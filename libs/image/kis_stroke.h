@@ -52,6 +52,7 @@ public:
     bool hasJobs() const;
     qint32 numJobs() const;
     KisStrokeJob* popOneJob();
+    KisStrokeJob* peekOneJob();
 
     void endStroke();
     void cancelStroke();

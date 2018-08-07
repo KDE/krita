@@ -54,6 +54,7 @@ public:
      * \see lock()
      */
     void getJobsSnapshot(qint32 &numMergeJobs, qint32 &numStrokeJobs);
+    void getJobsSnapshotImpl(qint32 &numMergeJobs, qint32 &numStrokeJobs);
 
     KisUpdaterContextSnapshotEx getContextSnapshotEx() const;
 
@@ -78,6 +79,7 @@ public:
      * \see lock()
      */
     bool isJobAllowed(KisBaseRectsWalkerSP walker);
+    bool isJobAllowedImpl(KisBaseRectsWalkerSP walker);
 
     /**
      * Registers the job and starts executing it.
@@ -145,6 +147,8 @@ public:
     void continueUpdate(const QRect& rc);
     void doSomeUsefulWork();
 
+    friend class KisUpdateJobItem;
+
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                     const KisUpdateJobItem* job);
@@ -186,6 +190,8 @@ public:
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();
+
+    friend class KisUpdateJobItem;
 };
 
 

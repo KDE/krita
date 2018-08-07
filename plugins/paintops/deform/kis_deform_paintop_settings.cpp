@@ -94,8 +94,6 @@ QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &i
 #include <brushengine/kis_combo_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_brush_size_option.h"
-#include "kis_deform_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 

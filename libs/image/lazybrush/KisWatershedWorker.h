@@ -50,7 +50,7 @@ public:
      * @brief Adds a key stroke to the worker.
      *
      * The key strokes may intersect, in which case the lastly added stroke will have
-     * a proirity over all the previous ones.
+     * a priority over all the previous ones.
      *
      * @param dev alpha8 paint device of the key stroke, may contain disjoint areas
      * @param color the color of the stroke

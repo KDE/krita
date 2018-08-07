@@ -66,7 +66,7 @@ public:
 
     /**
      * @brief toXML
-     * Covert the gradient to an XML string.
+     * Convert the gradient to an XML string.
      */
     void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
     /**

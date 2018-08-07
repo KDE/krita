@@ -24,7 +24,6 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentInfo.h>
-#include "KoDocumentInfo.h"
 #include "KoPageLayout.h"
 #include <KoToolManager.h>
 
@@ -35,7 +34,6 @@
 #include <kis_debug.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
-#include <kactioncollection.h>
 
 #include <QMenu>
 #include <QMessageBox>
@@ -50,10 +48,8 @@
 #include <QList>
 #include <QPrintDialog>
 #include <QToolBar>
-#include <QUrl>
 #include <QStatusBar>
 #include <QMoveEvent>
-#include <QTemporaryFile>
 #include <QMdiSubWindow>
 
 #include <kis_image.h>
@@ -91,6 +87,7 @@
 #include "krita_utils.h"
 #include "input/kis_input_manager.h"
 #include "KisRemoteFileFetcher.h"
+#include "kis_selection_manager.h"
 
 //static
 QString KisView::newObjectName()
@@ -287,6 +284,17 @@ void KisView::notifyCurrentStateChanged(bool isCurrent)
     } else {
         inputManager->detachPriorityEventFilter(&d->canvasController);
     }
+
+    /**
+     * When current view is changed, currently selected node is also changed,
+     * therefore we should update selection overlay mask
+     */
+    viewManager()->selectionManager()->selectionChanged();
+}
+
+bool KisView::isCurrent() const
+{
+    return d->isCurrent;
 }
 
 void KisView::setShowFloatingMessage(bool show)

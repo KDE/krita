@@ -36,10 +36,8 @@
 #include <QFile>
 #include <QLocale>
 #include <QMessageBox>
-#include <QMessageBox>
 #include <QProcessEnvironment>
 #include <QSettings>
-#include <QStandardPaths>
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
@@ -91,7 +89,6 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
-#include <KisAutoSaveRecoveryDialog.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
@@ -221,7 +218,6 @@ void KisApplication::addResourceTypes()
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
     KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
@@ -241,6 +237,7 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
@@ -277,9 +274,6 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
-
-    // Indicate that it is now safe for users of KoResourcePaths to load resources
-    KoResourcePaths::setReady();
 }
 
 void KisApplication::loadResources()

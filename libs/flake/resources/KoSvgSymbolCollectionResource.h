@@ -24,7 +24,6 @@
 #include <QVector>
 #include <QScopedPointer>
 #include <QImage>
-#include <QImage>
 #include <QPainter>
 
 #include <resources/KoResource.h>

@@ -117,7 +117,7 @@ private:
 
     /// internal reference for internal brush size
     /// used to check if our brush size has changed
-    /// do zooming and other things internall if it has changed
+    /// do zooming and other things internally if it has changed
     float m_currentBrushSize = 1.0;
 
     /// the range of brush sizes that will control zooming in/out

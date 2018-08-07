@@ -32,6 +32,8 @@
 #include "kis_paint_device.h"
 #include <kis_repeat_iterators_pixel.h>
 
+#include "sdk/tests/kistest.h"
+
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
     QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
@@ -474,4 +476,4 @@ void KisIteratorTest::stressTest()
     threadPool.waitForDone();
 }
 
-QTEST_MAIN(KisIteratorTest)
+KISTEST_MAIN(KisIteratorTest)

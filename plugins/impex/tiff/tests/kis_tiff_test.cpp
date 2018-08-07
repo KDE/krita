@@ -22,14 +22,13 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
-
 #include "filestest.h"
 
 #include <KoColorModelStandardIds.h>
 #include <KoColor.h>
 
 #include "kisexiv2/kis_exiv2.h"
+#include  <sdk/tests/kistest.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -67,7 +66,7 @@ void KisTiffTest::testFiles()
 #endif
     excludes << "text.tif" << "ycbcr-cat.tif";
 
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes, QString(), 1);
 }
 
 void KisTiffTest::testRoundTripRGBF16()
@@ -116,5 +115,5 @@ void KisTiffTest::testRoundTripRGBF16()
 #endif
 }
 
-QTEST_MAIN(KisTiffTest)
+KISTEST_MAIN(KisTiffTest)
 

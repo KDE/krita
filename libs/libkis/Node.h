@@ -468,7 +468,6 @@ public Q_SLOTS:
     /**
      * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack.
      * This will drop all per-layer metadata.
-     * @param node the node to merge down; this node will be removed from the layer stack
      */
     Node *mergeDown();
 

@@ -25,7 +25,7 @@
 #include <QList>
 #include "kritaflake_export.h"
 
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoPathShape;
 class KoPathPointData;
 
@@ -39,7 +39,7 @@ public:
      * @param paths the list of paths to combine
      * @param parent the parent command used for macro commands
      */
-    KoPathCombineCommand(KoShapeBasedDocumentBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
+    KoPathCombineCommand(KoShapeControllerBase *controller, const QList<KoPathShape*> &paths, KUndo2Command *parent = 0);
     ~KoPathCombineCommand() override;
     /// redo the command
     void redo() override;

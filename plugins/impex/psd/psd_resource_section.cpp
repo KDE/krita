@@ -21,8 +21,6 @@
 #include <QIODevice>
 #include <QBuffer>
 
-#include <kis_debug.h>
-
 #include "psd_utils.h"
 #include "psd_resource_block.h"
 

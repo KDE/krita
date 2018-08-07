@@ -75,7 +75,7 @@ class KisPresetSaveWidget;
     void slotSaveLockedOptionToPreset(KisPropertiesConfigurationSP p);
     void slotDropLockedOption(KisPropertiesConfigurationSP p);
     void slotDirtyPresetToggled(bool);
-    Everytime a value is changed in a preset, the preset is made dirty through the onChange() function.
+    Every time a value is changed in a preset, the preset is made dirty through the onChange() function.
     For Locked Settings however, a changed Locked Setting will not cause a preset to become dirty. That is
     because it borrows its values from the KisLockedPropertiesServer.
     Hence the dirty state of the Preset is kept consistent before and after a writeConfiguration operation in  most cases.

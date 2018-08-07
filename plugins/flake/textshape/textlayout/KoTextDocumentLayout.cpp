@@ -711,7 +711,7 @@ void KoTextDocumentLayout::layout()
 RootAreaConstraint constraintsForPosition(QTextFrame::iterator it, bool previousIsValid)
 {
     RootAreaConstraint constraints;
-    constraints.masterPageName = QString::null;
+    constraints.masterPageName.clear();
     constraints.visiblePageNumber = -1;
     constraints.newPageForced = false;
     QTextBlock block = it.currentBlock();

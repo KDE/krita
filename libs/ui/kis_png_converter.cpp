@@ -46,7 +46,6 @@
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoUnit.h>
 

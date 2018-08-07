@@ -74,7 +74,7 @@ KisCanvasWidgetBase::KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConv
 KisCanvasWidgetBase::~KisCanvasWidgetBase()
 {
     /**
-     * Clear all the attached decoration. Oherwise they might decide
+     * Clear all the attached decoration. Otherwise they might decide
      * to process some events or signals after the canvas has been
      * destroyed
      */

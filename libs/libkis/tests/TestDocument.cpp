@@ -19,12 +19,10 @@
 #include <QTest>
 
 #include <KritaVersionWrapper.h>
-#include <QTest>
 #include <QColor>
 #include <QDataStream>
 #include <QDir>
 
-#include <KritaVersionWrapper.h>
 #include <Node.h>
 #include <Krita.h>
 #include <Document.h>
@@ -38,6 +36,8 @@
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
 #include <KisPart.h>
+
+#include <sdk/tests/kistest.h>
 
 void TestDocument::testSetColorSpace()
 {
@@ -54,6 +54,8 @@ void TestDocument::testSetColorSpace()
     QVERIFY(layer->colorSpace()->colorModelId().id() == "GRAYA");
     QVERIFY(layer->colorSpace()->colorDepthId().id() == "U16");
     QVERIFY(layer->colorSpace()->profile()->name() == "gray built-in");
+
+    KisPart::instance()->removeDocument(kisdoc);
 }
 
 void TestDocument::testSetColorProfile()
@@ -71,6 +73,7 @@ void TestDocument::testSetColorProfile()
         d.setColorProfile(profile);
         QVERIFY(image->colorSpace()->profile()->name() == profile);
     }
+    KisPart::instance()->removeDocument(kisdoc);
 }
 
 void TestDocument::testPixelData()
@@ -99,6 +102,8 @@ void TestDocument::testPixelData()
         ds >> channelvalue;
         QVERIFY(channelvalue == 255);
     } while (!ds.atEnd());
+
+    KisPart::instance()->removeDocument(kisdoc);
 }
 
 void TestDocument::testThumbnail()
@@ -129,6 +134,7 @@ void TestDocument::testThumbnail()
 #endif
         }
     }
+    KisPart::instance()->removeDocument(kisdoc);
 
 }
 
@@ -157,8 +163,7 @@ void TestDocument::testCreateAndSave()
     Document *d2 = Krita::instance()->openDocument(filename);
     Q_ASSERT(d2->colorDepth() == "U16");
 
-    delete kisdoc;
-    delete d2;
+    KisPart::instance()->removeDocument(kisdoc);
 
 }
 
@@ -204,11 +209,11 @@ void TestDocument::testCreateFillLayer()
 
     QVERIFY(d.createFillLayer("test1", "xxx", info, sel) == 0);
 
-    delete kisdoc;
+    KisPart::instance()->removeDocument(kisdoc);
 
 }
 
 
 
-QTEST_MAIN(TestDocument)
+KISTEST_MAIN(TestDocument)
 

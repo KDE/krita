@@ -33,8 +33,6 @@
 
 #include <KoShapeContainer_p.h>
 #include <KoTextDocumentLayout.h>
-#include <KoXmlNS.h>
-#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoDocumentResourceManager.h>
 

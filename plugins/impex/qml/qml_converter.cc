@@ -20,8 +20,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <QFileInfo>
-
 #include <kis_image.h>
 #include <kis_group_layer.h>
 

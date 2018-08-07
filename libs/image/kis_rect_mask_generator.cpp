@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004,2007,2008,2009.2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2018 Ivan Santa Maria <ghevan@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,43 +20,53 @@
 #include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <cmath>
 
+#include <config-vc.h>
+#ifdef HAVE_VC
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
+#if defined _MSC_VER
+// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
+#pragma warning ( push )
+#pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4800 )
+#endif
+#include <Vc/Vc>
+#include <Vc/IO>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
+#endif
+
+
 #include <QDomDocument>
 
 #include "kis_fast_math.h"
-
 #include "kis_rect_mask_generator.h"
+#include "kis_rect_mask_generator_p.h"
 #include "kis_base_mask_generator.h"
 
-#include <qnumeric.h>
+#include "kis_brush_mask_applicator_factories.h"
+#include "kis_brush_mask_applicator_base.h"
 
-struct Q_DECL_HIDDEN KisRectangleMaskGenerator::Private {
-    double m_c;
-    qreal xcoeff;
-    qreal ycoeff;
-    qreal xfadecoeff;
-    qreal yfadecoeff;
-    qreal transformedFadeX;
-    qreal transformedFadeY;
-};
+#include <qnumeric.h>
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges)
     : KisMaskGenerator(radius, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, DefaultId), d(new Private)
 {
-    if (fv == 0 && fh == 0) {
-        d->m_c = 0;
-    } else {
-        d->m_c = (fv / fh);
-        Q_ASSERT(!qIsNaN(d->m_c));
-
-    }
-
     setScale(1.0, 1.0);
+
+    // store the variable locally to allow vector implementation read it easily
+    d->copyOfAntialiasEdges = antialiasEdges;
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(const KisRectangleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisMaskGenerator* KisRectangleMaskGenerator::clone() const
@@ -75,6 +86,7 @@ void KisRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->ycoeff = 2.0 / effectiveSrcHeight();
     d->xfadecoeff = (horizontalFade() == 0) ? 1 : (2.0 / (horizontalFade() * effectiveSrcWidth()));
     d->yfadecoeff = (verticalFade() == 0)   ? 1 : (2.0 / (verticalFade() * effectiveSrcHeight()));
+
     setSoftness(this->softness());
 }
 
@@ -90,6 +102,21 @@ void KisRectangleMaskGenerator::setSoftness(qreal softness)
 bool KisRectangleMaskGenerator::shouldSupersample() const
 {
     return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
+}
+
+bool KisRectangleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample() && spikes() == 2;
+}
+
+KisBrushMaskApplicatorBase* KisRectangleMaskGenerator::applicator()
+{
+    return d->applicator.data();
+}
+
+void KisRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
 }
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
@@ -115,11 +142,14 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     qreal fxr = xr * d->transformedFadeX;
     qreal fyr = yr * d->transformedFadeY;
 
-    if (fxr > 1.0 && (fxr > fyr || fyr < 1.0)) {
+    int fxrInt = fxr * 1e4;
+    int fyrInt = fyr * 1e4;
+
+    if (fxr > 1.0 && (fxrInt >= fyrInt || fyr < 1.0)) {
         return 255 * nxr * (fxr - 1.0) / (fxr - nxr);
     }
 
-    if (fyr > 1.0 && (fyr > fxr || fxr < 1.0)) {
+    if (fyr > 1.0 && (fyrInt > fxrInt || fxr < 1.0)) {
         return 255 * nyr * (fyr - 1.0) / (fyr - nyr);
     }
 

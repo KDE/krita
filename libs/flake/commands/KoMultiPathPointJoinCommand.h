@@ -26,7 +26,7 @@ class KRITAFLAKE_EXPORT KoMultiPathPointJoinCommand : public KoMultiPathPointMer
 public:
     KoMultiPathPointJoinCommand(const KoPathPointData &pointData1,
                                 const KoPathPointData &pointData2,
-                                KoShapeBasedDocumentBase *controller,
+                                KoShapeControllerBase *controller,
                                 KoSelection *selection,
                                 KUndo2Command *parent = 0);
 

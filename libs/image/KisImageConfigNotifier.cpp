@@ -16,38 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KisUpdateSchedulerConfigNotifier.h"
+#include "KisImageConfigNotifier.h"
 
 #include <QGlobalStatic>
 
 #include <kis_debug.h>
 #include "kis_signal_compressor.h"
 
-Q_GLOBAL_STATIC(KisUpdateSchedulerConfigNotifier, s_instance)
+Q_GLOBAL_STATIC(KisImageConfigNotifier, s_instance)
 
-struct KisUpdateSchedulerConfigNotifier::Private
+struct KisImageConfigNotifier::Private
 {
     Private() : updateCompressor(300, KisSignalCompressor::FIRST_ACTIVE) {}
 
     KisSignalCompressor updateCompressor;
 };
 
-KisUpdateSchedulerConfigNotifier::KisUpdateSchedulerConfigNotifier()
+KisImageConfigNotifier::KisImageConfigNotifier()
     : m_d(new Private)
 {
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SIGNAL(configChanged()));
 }
 
-KisUpdateSchedulerConfigNotifier::~KisUpdateSchedulerConfigNotifier()
+KisImageConfigNotifier::~KisImageConfigNotifier()
 {
 }
 
-KisUpdateSchedulerConfigNotifier *KisUpdateSchedulerConfigNotifier::instance()
+KisImageConfigNotifier *KisImageConfigNotifier::instance()
 {
     return s_instance;
 }
 
-void KisUpdateSchedulerConfigNotifier::notifyConfigChanged()
+void KisImageConfigNotifier::notifyConfigChanged()
 {
     m_d->updateCompressor.start();
 }

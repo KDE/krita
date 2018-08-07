@@ -44,6 +44,7 @@ void KisOnionSkinCompositorTest::testComposite()
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP paintDevice = p.layer->paintDevice();
+    paintDevice->createKeyframeChannel(KoID());
     KisKeyframeChannel *keyframes = paintDevice->keyframeChannel();
 
     keyframes->addKeyframe(0);
@@ -76,7 +77,12 @@ void KisOnionSkinCompositorTest::testComposite()
 
     QImage result = compositeDevice->createThumbnail(64, 64);
     QImage expected = expectedComposite->createThumbnail(64, 64);
-    QVERIFY(result == expected);
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, result, expected)) {
+        result.save("result_1.png");
+        expected.save("expected_1.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 
     // Frame 10
 
@@ -92,7 +98,9 @@ void KisOnionSkinCompositorTest::testComposite()
     result = compositeDevice->createThumbnail(64, 64);
     expected = expectedComposite->createThumbnail(64, 64);
 
-    QVERIFY(result == expected);
+    if (!TestUtil::compareQImages(errpoint, result, expected)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 
     // Frame 20
 
@@ -117,6 +125,7 @@ void KisOnionSkinCompositorTest::testSettings()
     TestUtil::MaskParent p;
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP paintDevice = p.layer->paintDevice();
+    paintDevice->createKeyframeChannel(KoID());
     KisKeyframeChannel *keyframes = paintDevice->keyframeChannel();
 
     keyframes->addKeyframe(0);
@@ -158,7 +167,10 @@ void KisOnionSkinCompositorTest::testSettings()
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
     QImage result = compositeDevice->createThumbnail(64, 64);
 
-    QVERIFY(result == expected);
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, result, expected)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 
     config.setNumberOfOnionSkins(2);
     compositor->configChanged();
@@ -169,7 +181,9 @@ void KisOnionSkinCompositorTest::testSettings()
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
     result = compositeDevice->createThumbnail(64, 64);
 
-    QVERIFY(result == expected);
+    if (!TestUtil::compareQImages(errpoint, result, expected)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 
     // Test tint options
 
@@ -185,7 +199,9 @@ void KisOnionSkinCompositorTest::testSettings()
     expectedComposite->fill(QRect(0,0,512,512), KoColor(QColor(69, 183, 3, 200), paintDevice->colorSpace()));
     expected = expectedComposite->createThumbnail(64, 64);
 
-    QVERIFY(result == expected);
+    if (!TestUtil::compareQImages(errpoint, result, expected)) {
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 }
 
 QTEST_MAIN(KisOnionSkinCompositorTest)

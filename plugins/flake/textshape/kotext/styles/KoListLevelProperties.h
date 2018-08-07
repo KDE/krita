@@ -141,7 +141,7 @@ public:
     qreal minimumDistance() const;
 
     /// sets the margin of the list
-    void setMargin(qreal vlaue);
+    void setMargin(qreal value);
     /// returns the margin of the list
     qreal margin() const;
 

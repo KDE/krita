@@ -19,7 +19,7 @@
  */
 
 #include "KoPathCombineCommand.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "KoShapeContainer.h"
 #include "KoPathShape.h"
 #include <klocalizedstring.h>
@@ -31,7 +31,7 @@
 class Q_DECL_HIDDEN KoPathCombineCommand::Private
 {
 public:
-    Private(KoShapeBasedDocumentBase *c, const QList<KoPathShape*> &p)
+    Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
         : controller(c), paths(p)
         , combinedPath(0)
         , combinedPathParent(0)
@@ -51,7 +51,7 @@ public:
         }
     }
 
-    KoShapeBasedDocumentBase *controller;
+    KoShapeControllerBase *controller;
     QList<KoPathShape*> paths;
     QList<KoShapeContainer*> oldParents;
     KoPathShape *combinedPath;
@@ -62,7 +62,7 @@ public:
     bool isCombined;
 };
 
-KoPathCombineCommand::KoPathCombineCommand(KoShapeBasedDocumentBase *controller,
+KoPathCombineCommand::KoPathCombineCommand(KoShapeControllerBase *controller,
         const QList<KoPathShape*> &paths, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Combine paths"), parent)
     , d(new Private(controller, paths))

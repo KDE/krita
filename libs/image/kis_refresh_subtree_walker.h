@@ -79,13 +79,13 @@ protected:
         if(!changeRectVaries)
             changeRectVaries = tempRect != requestedRect;
 
-        setExplicitChangeRect(startWith, tempRect, changeRectVaries);
+        setExplicitChangeRect(tempRect, changeRectVaries);
 
         return tempRect;
     }
 
     void startTrip(KisProjectionLeafSP startWith) override {
-        setExplicitChangeRect(startWith, requestedRect(), false);
+        setExplicitChangeRect(requestedRect(), false);
 
         if (isStartLeaf(startWith)) {
             KisProjectionLeafSP extraUpdateLeaf = startWith;
@@ -102,14 +102,34 @@ protected:
                 extraUpdateLeaf = startWith->parent();
             }
 
-            NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateLeaf);
-            registerNeedRect(extraUpdateLeaf, pos);
+            /**
+             * Sometimes it may happen that the mask is placed outside layers hierarchy
+             * (e.g. inactive selection mask), then the projection leafs will not point
+             * to anywhere
+             */
+            if (extraUpdateLeaf) {
+                NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateLeaf);
+                registerNeedRect(extraUpdateLeaf, pos);
+
+                /**
+                 * In normal walkers we register notifications
+                 * in the change-rect pass to avoid regeneration
+                 * of the nodes that are below filthy. In the subtree
+                 * walker there is no change-rect pass and all the
+                 * nodes are considered as filthy, so we should do
+                 * that explicitly.
+                 */
+                registerCloneNotification(extraUpdateLeaf->node(), pos);
+            }
         }
 
         KisProjectionLeafSP currentLeaf = startWith->lastChild();
         while(currentLeaf) {
             NodePosition pos = N_FILTHY | calculateNodePosition(currentLeaf);
             registerNeedRect(currentLeaf, pos);
+
+            // see a comment above
+            registerCloneNotification(currentLeaf->node(), pos);
             currentLeaf = currentLeaf->prevSibling();
         }
 

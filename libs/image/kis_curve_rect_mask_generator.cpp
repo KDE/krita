@@ -20,44 +20,38 @@
 
 #include <cmath>
 
+#include <config-vc.h>
+#ifdef HAVE_VC
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Wundef"
+#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
+#endif
+#if defined _MSC_VER
+// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
+#pragma warning ( push )
+#pragma warning ( disable : 4244 )
+#pragma warning ( disable : 4800 )
+#endif
+#include <Vc/Vc>
+#include <Vc/IO>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
+#endif
+
 #include <QDomDocument>
 #include <QVector>
 #include <QPointF>
 
 #include <kis_fast_math.h>
-#include "kis_curve_rect_mask_generator.h"
-#include "kis_cubic_curve.h"
 #include "kis_antialiasing_fade_maker.h"
+#include "kis_brush_mask_applicator_factories.h"
+#include "kis_brush_mask_applicator_base.h"
 
+#include "kis_curve_rect_mask_generator.h"
+#include "kis_curve_rect_mask_generator_p.h"
+#include "kis_cubic_curve.h"
 
-struct Q_DECL_HIDDEN KisCurveRectangleMaskGenerator::Private
-{
-    Private(bool enableAntialiasing)
-        : fadeMaker(*this, enableAntialiasing)
-    {
-    }
-
-    Private(const Private &rhs)
-        : xcoeff(rhs.xcoeff),
-        ycoeff(rhs.ycoeff),
-        curveResolution(rhs.curveResolution),
-        curveData(rhs.curveData),
-        curvePoints(rhs.curvePoints),
-        dirty(rhs.dirty),
-        fadeMaker(rhs.fadeMaker, *this)
-    {
-    }
-
-    qreal xcoeff, ycoeff;
-    qreal curveResolution;
-    QVector<qreal> curveData;
-    QList<QPointF> curvePoints;
-    bool dirty;
-
-    KisAntialiasingFadeMaker2D<Private> fadeMaker;
-
-    quint8 value(qreal xr, qreal yr) const;
-};
 
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve, bool antialiasEdges)
     : KisMaskGenerator(diameter, ratio, fh, fv, spikes, antialiasEdges, RECTANGLE, SoftId), d(new Private(antialiasEdges))
@@ -69,12 +63,15 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
     d->dirty = false;
 
     setScale(1.0, 1.0);
+
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(const KisCurveRectangleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
 }
 
 KisMaskGenerator* KisCurveRectangleMaskGenerator::clone() const
@@ -97,7 +94,6 @@ void KisCurveRectangleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
 
 KisCurveRectangleMaskGenerator::~KisCurveRectangleMaskGenerator()
 {
-    delete d;
 }
 
 quint8 KisCurveRectangleMaskGenerator::Private::value(qreal xr, qreal yr) const
@@ -146,5 +142,20 @@ void KisCurveRectangleMaskGenerator::setSoftness(qreal softness)
     KisMaskGenerator::setSoftness(softness);
     KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution + 1, d->curveData);
     d->dirty = false;
+}
+
+bool KisCurveRectangleMaskGenerator::shouldVectorize() const
+{
+    return !shouldSupersample() && spikes() == 2;
+}
+
+KisBrushMaskApplicatorBase* KisCurveRectangleMaskGenerator::applicator()
+{
+    return d->applicator.data();
+}
+
+void KisCurveRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
 }
 

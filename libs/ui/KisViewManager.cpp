@@ -112,6 +112,7 @@
 #include <KoUpdater.h>
 #include "KisResourceServerProvider.h"
 #include "kis_selection.h"
+#include "kis_selection_mask.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"
 #include "kis_shape_layer.h"
@@ -129,7 +130,6 @@
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
-#include <kis_image.h>
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
 
@@ -303,9 +303,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     connect(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
-
-    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            d->controlFrame.paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
@@ -643,10 +640,9 @@ bool KisViewManager::selectionEditable()
 {
     KisLayerSP layer = activeLayer();
     if (layer) {
-        KoProperties properties;
-        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
-        if (masks.size() == 1) {
-            return masks[0]->isEditable();
+        KisSelectionMaskSP mask = layer->selectionMask();
+        if (mask) {
+            return mask->isEditable();
         }
     }
     // global selection is always editable

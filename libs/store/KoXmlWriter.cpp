@@ -260,20 +260,6 @@ void KoXmlWriter::addAttribute(const char* attrName, float value)
     addAttribute(attrName, KisDomUtils::toString(value));
 }
 
-void KoXmlWriter::addAttributePt(const char* attrName, double value)
-{
-    // WARNING: we don't write 'pt' into SVG anymore! We just use
-    //          viewBox to align coordinates system with 'pt'.
-    addAttribute(attrName, KisDomUtils::toString(value));
-}
-
-void KoXmlWriter::addAttributePt(const char* attrName, float value)
-{
-    // WARNING: we don't write 'pt' into SVG anymore! We just use
-    //          viewBox to align coordinates system with 'pt'.
-    addAttribute(attrName, KisDomUtils::toString(value));
-}
-
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'

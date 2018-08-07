@@ -22,8 +22,6 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
-
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR

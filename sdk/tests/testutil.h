@@ -25,6 +25,7 @@
 #include <QTime>
 #include <QDir>
 
+#include <KoConfig.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -37,6 +38,7 @@
 #include "kis_image.h"
 #include "testing_nodes.h"
 
+#include "kistest.h"
 
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
@@ -373,7 +375,6 @@ public:
 
 #include <QApplication>
 #include <kis_paint_layer.h>
-#include <kis_image.h>
 #include "kis_undo_stores.h"
 #include "kis_layer_utils.h"
 

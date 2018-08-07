@@ -33,7 +33,6 @@
 #include <boost/random/mersenne_twister.hpp>
 #include "kis_random_accessor_ng.h"
 #include "kis_iterator_ng.h"
-#include "kis_pixel_selection.h"
 
 
 struct Q_DECL_HIDDEN KisLayerStyleFilterEnvironment::Private

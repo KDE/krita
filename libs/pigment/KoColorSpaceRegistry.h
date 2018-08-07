@@ -326,6 +326,7 @@ private:
 
     friend class KisCsConversionTest;
     friend class KisIteratorTest;
+    friend class KisIteratorNGTest;
     friend class KisPainterTest;
     friend class KisCrashFilterTest;
     friend class KoColorSpacesBenchmark;

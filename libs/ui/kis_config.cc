@@ -49,7 +49,6 @@
 #include <config-ocio.h>
 
 #include <kis_color_manager.h>
-#include <kis_debug.h>
 
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
@@ -924,17 +923,6 @@ bool KisConfig::antialiasCurves(bool defaultValue) const
 void KisConfig::setAntialiasCurves(bool v) const
 {
     m_cfg.writeEntry("antialiascurves", v);
-}
-
-QColor KisConfig::selectionOverlayMaskColor(bool defaultValue) const
-{
-    QColor def(255, 0, 0, 220);
-    return (defaultValue ? def : m_cfg.readEntry("selectionOverlayMaskColor", def));
-}
-
-void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
-{
-    m_cfg.writeEntry("selectionOverlayMaskColor", color);
 }
 
 bool KisConfig::antialiasSelectionOutline(bool defaultValue) const

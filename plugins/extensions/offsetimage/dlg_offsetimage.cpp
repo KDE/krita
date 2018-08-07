@@ -105,12 +105,12 @@ DlgOffsetImage::~DlgOffsetImage()
 
 void DlgOffsetImage::slotOffsetXChanged(double newOffsetX)
 {
-    m_offsetX = newOffsetX;
+    m_offsetX = qRound(newOffsetX);
 }
 
 void DlgOffsetImage::slotOffsetYChanged(double newOffsetY)
 {
-    m_offsetY = newOffsetY;
+    m_offsetY = qRound(newOffsetY);
 }
 
 void DlgOffsetImage::slotMiddleOffset()

@@ -107,7 +107,7 @@ public:
 
     QString defaultProfile() const override
     {
-        return "gray built-in";
+        return "Gray-D50-elle-V2-g10.icc";
     }
 };
 

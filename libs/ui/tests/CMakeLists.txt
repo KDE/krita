@@ -60,7 +60,7 @@ ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.
 
 ecm_add_test(
     kis_animation_exporter_test.cpp
-    TEST_NAME kritaui-animation_exporter_test
+    TEST_NAME libs-ui-animation_exporter_test
     LINK_LIBRARIES kritaui kritaimage Qt5::Test)
 
 set(kis_node_view_test_SRCS kis_node_view_test.cpp  ../../../sdk/tests/testutil.cpp)

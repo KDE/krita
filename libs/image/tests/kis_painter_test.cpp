@@ -560,7 +560,7 @@ void testMassiveBltFixedImpl(int numRects, bool varyOpacity = false, bool useSel
                                       QString("partial_update_%1%2%3")
                                           .arg(numRects)
                                           .arg(opacityPostfix)
-                                          .arg(selectionPostfix)));
+                                          .arg(selectionPostfix), 1, 1));
 
     }
 }

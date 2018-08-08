@@ -71,6 +71,8 @@ public:
     {
     public:
         DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *distanceInfo);
+        DistanceInformationRegistrar(const DistanceInformationRegistrar &rhs) = delete;
+        DistanceInformationRegistrar(DistanceInformationRegistrar &&rhs);
         ~DistanceInformationRegistrar();
     private:
         KisPaintInformation *p;

@@ -61,7 +61,7 @@ KisSimpleUpdateQueue::KisSimpleUpdateQueue()
 
 KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     while (!m_spontaneousJobsList.isEmpty()) {
         delete m_spontaneousJobsList.takeLast();
@@ -70,7 +70,7 @@ KisSimpleUpdateQueue::~KisSimpleUpdateQueue()
 
 void KisSimpleUpdateQueue::updateSettings()
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     KisImageConfig config(true);
 
@@ -89,14 +89,14 @@ int KisSimpleUpdateQueue::overrideLevelOfDetail() const
 
 void KisSimpleUpdateQueue::processQueue(KisUpdaterContext &updaterContext)
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
     while (updaterContext.hasSpareThread() && processOneJob(updaterContext));
 }
 
 bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 {
     KisBaseRectsWalkerSP item;
-    KisMutableWalkersListIterator iter(m_updatesList);
+    KisMutableWalkersListIterator iter(m_updatesList, true);
     bool jobAdded = false;
 
     int currentLevelOfDetail = updaterContext.currentLevelOfDetail();
@@ -118,10 +118,11 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
 
             if (!jobAdded) continue;
 
-            iter.remove();
+            iter.remove(item);
             break;
         }
     }
+    iter.unlock();
 
     if (jobAdded) return true;
 
@@ -144,7 +145,7 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
             KisSpontaneousJob *job = m_spontaneousJobsList.first();
             jobAdded = updaterContext.addSpontaneousJob(job);
 
-            if (jobAdded) m_spontaneousJobsList.pop_front();
+            if (jobAdded) m_spontaneousJobsList.takeFirst();
         }
     }
 
@@ -203,18 +204,18 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
     }
 
     if (!walkers.isEmpty()) {
-        m_mutex.lock();
+//        m_mutex.lock();
         m_updatesList.append(walkers);
-        m_mutex.unlock();
+//        m_mutex.unlock();
     }
 }
 
 void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     KisSpontaneousJob *item;
-    KisMutableSpontaneousJobsListIterator iter(m_spontaneousJobsList);
+    KisMutableSpontaneousJobsListIterator iter(m_spontaneousJobsList, true);
 
     iter.toBack();
 
@@ -222,11 +223,11 @@ void KisSimpleUpdateQueue::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
         item = iter.previous();
 
         if (spontaneousJob->overrides(item)) {
-            iter.remove();
-            delete item;
+            if (iter.remove(item)) delete item;
         }
     }
 
+    iter.unlock();
     m_spontaneousJobsList.append(spontaneousJob);
 }
 
@@ -278,7 +279,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
                                        int levelOfDetail,
                                        KisBaseRectsWalker::UpdateType type)
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     QRect baseRect = rc;
 
@@ -306,6 +307,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
             break;
         }
     }
+    iter.unlock();
 
     if(goodCandidate)
         collectJobs(goodCandidate, baseRect, m_maxMergeCollectAlpha);
@@ -315,7 +317,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
 
 void KisSimpleUpdateQueue::optimize()
 {
-    QMutexLocker locker(&m_mutex);
+//    QMutexLocker locker(&m_mutex);
 
     if(m_updatesList.size() <= 1) {
         return;
@@ -332,7 +334,7 @@ void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
                                        const qreal maxAlpha)
 {
     KisBaseRectsWalkerSP item;
-    KisMutableWalkersListIterator iter(m_updatesList);
+    KisMutableWalkersListIterator iter(m_updatesList, true);
 
     while(iter.hasNext()) {
         item = iter.next();
@@ -344,9 +346,10 @@ void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
         if(item->levelOfDetail() != baseWalker->levelOfDetail()) continue;
 
         if(joinRects(baseRect, item->requestedRect(), maxAlpha)) {
-            iter.remove();
+            iter.remove(item);
         }
     }
+    iter.unlock();
 
     if(baseWalker->requestedRect() != baseRect) {
         baseWalker->collectRects(baseWalker->startNode(), baseRect);

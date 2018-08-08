@@ -60,7 +60,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
 }
 
 void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
-                                      const QRect& /*applyRect*/,
+                                      const QRect& applyRect,
                                       const KisFilterConfigurationSP config,
                                       KoUpdater* progressUpdater
                                       ) const
@@ -68,15 +68,17 @@ void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
     Q_ASSERT(!device.isNull());
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 numberOfTiles = config->getInt("numberOfTiles", 2);
+    const quint32 numberOfTiles = config->getInt("numberOfTiles", 2);
 
-    QRect srcRect = device->exactBounds();
+    const QRect srcRect = applyRect;
 
-    int w = static_cast<int>(srcRect.width() / numberOfTiles);
-    int h = static_cast<int>(srcRect.height() / numberOfTiles);
+    const int w = static_cast<int>(srcRect.width() / numberOfTiles);
+    const int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
-    KisPaintDeviceSP tile = device->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
+    KisPaintDeviceSP tile = device->createThumbnailDevice(w, h);
     if (tile.isNull()) return;
+
+    device->clear(applyRect);
 
     KisPainter gc(device);
     gc.setCompositeOp(COMPOSITE_COPY);

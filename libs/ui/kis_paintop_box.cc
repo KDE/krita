@@ -73,7 +73,6 @@
 #include "widgets/kis_iconwidget.h"
 #include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"
-#include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
@@ -1035,7 +1034,7 @@ void KisPaintopBox::sliderChanged(int n)
 
     if (m_presetsEnabled) {
         // IMPORTANT: set the PaintOp size before setting the other properties
-        //            it wont work the other way
+        //            it won't work the other way
         // TODO: why?!
 
         m_resourceProvider->setSize(size);

@@ -202,8 +202,8 @@ public:
         , undefined
         , less
         , less_or_equal
-        , greather
-        , greather_or_equal
+        , greater
+        , greater_or_equal
         , not_equal
         , equal
         , last__
@@ -230,7 +230,7 @@ public:
         switch (m_op) {
         case less:
             return left < m_rhs;
-        case greather:
+        case greater:
             return left > m_rhs;
         case equal:
             return left == m_rhs;
@@ -238,7 +238,7 @@ public:
             return left != m_rhs;
         case less_or_equal:
             return left <= m_rhs;
-        case greather_or_equal:
+        case greater_or_equal:
             return left >= m_rhs;
         default:
             Q_ASSERT(!"Sanity check");
@@ -257,7 +257,7 @@ public:
         case less:
             result = " < ";
             break;
-        case greather:
+        case greater:
             result = " > ";
             break;
         case equal:
@@ -269,7 +269,7 @@ public:
         case less_or_equal:
             result = " <= ";
             break;
-        case greather_or_equal:
+        case greater_or_equal:
             result = " >= ";
             break;
         default:
@@ -292,7 +292,7 @@ public:
             lookup_next_char = true;
             break;
         case '>':
-            checker.m_op = greather;
+            checker.m_op = greater;
             lookup_next_char = true;
             break;
         case '=':

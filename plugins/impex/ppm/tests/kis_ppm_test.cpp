@@ -32,7 +32,7 @@
 
 void KisPPMTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
 }
 
 KISTEST_MAIN(KisPPMTest)

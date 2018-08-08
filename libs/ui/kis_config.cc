@@ -49,7 +49,6 @@
 #include <config-ocio.h>
 
 #include <kis_color_manager.h>
-#include <kis_debug.h>
 
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))

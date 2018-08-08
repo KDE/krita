@@ -169,7 +169,7 @@ public:
                        const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
-     * Overwrite this if you are interrested in propertychanges.
+     * Overwrite this if you are interested in propertychanges.
      * @param property the property id that has been changed, one from the Property enum.
      *    You should ignore all properties you don't use as new properties can be added at any time.
      * @param value the new value of the property wrapped in a QVariant.  Properties can be a lot of

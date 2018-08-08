@@ -39,11 +39,6 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-#include "QFile"
-#include <QDomDocument>
-#include <QDomElement>
-
-
 class Q_DECL_HIDDEN KisActionManager::Private {
 
 public:

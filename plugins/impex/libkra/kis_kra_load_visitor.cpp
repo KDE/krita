@@ -490,7 +490,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         for (int i = 0; i < frames.count(); i++) {
             int id = frames[i];
             if (keyframeChannel->frameFilename(id).isEmpty()) {
-                m_warningMessages << i18n("Could not find keyframe pixel data for frame %1 in %2.").arg(id).arg(location);
+                m_warningMessages << i18n("Could not find keyframe pixel data for frame %1 in %2.", id, location);
             }
             else {
                 Q_ASSERT(!keyframeChannel->frameFilename(id).isEmpty());
@@ -498,7 +498,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
                 Q_ASSERT(!frameFilename.isEmpty());
 
                 if (!loadPaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
-                    m_warningMessages << i18n("Could not load keyframe pixel data for frame %1 in %2.").arg(id).arg(location);
+                    m_warningMessages << i18n("Could not load keyframe pixel data for frame %1 in %2.", id, location);
                 }
             }
         }

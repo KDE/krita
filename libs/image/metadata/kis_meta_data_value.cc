@@ -397,7 +397,7 @@ QMap<QString, KisMetaData::Value> Value::asLangArray() const
     Q_ASSERT(d->type == LangArray);
     QMap<QString, KisMetaData::Value> langArray;
     Q_FOREACH (const KisMetaData::Value& val, *d->value.array) {
-        Q_ASSERT(val.d->propertyQualifiers.contains("xml:lang"));  // TODO propably worth to have an assert for this in the constructor as well
+        Q_ASSERT(val.d->propertyQualifiers.contains("xml:lang"));  // TODO probably worth to have an assert for this in the constructor as well
         KisMetaData::Value valKeyVal = val.d->propertyQualifiers.value("xml:lang");
         Q_ASSERT(valKeyVal.type() == Variant);
         QVariant valKeyVar = valKeyVal.asVariant();

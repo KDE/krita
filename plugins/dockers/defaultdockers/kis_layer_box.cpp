@@ -74,7 +74,6 @@
 #include "kis_node_model.h"
 
 #include "canvas/kis_canvas2.h"
-#include "KisDocument.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
 #include "kis_selection_mask.h"
@@ -92,7 +91,6 @@
 #include "ui_wdglayerbox.h"
 
 #include <QProxyStyle>
-#include <QPainter>
 
 class KisLayerBoxStyle : public QProxyStyle
 {

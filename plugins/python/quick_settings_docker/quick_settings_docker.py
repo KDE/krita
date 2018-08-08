@@ -87,7 +87,7 @@ class QuickSettingsDocker(DockWidget):
         # First we empty the old model. We might wanna use this function in the future to fill it with the brushmask of the selected brush, but there's currently no API for recognising changes in the current brush nor is there a way to get its brushmask.
         self.brushSizeModel.clear()
         for s in range(len(self.sizesList)):
-            # we're gonna itterate over our list, and make a new item for each entry.
+            # we're gonna iterate over our list, and make a new item for each entry.
             # We need to disable a bunch of stuff to make sure people won't do funny things to our entries.
             item = QStandardItem()
             item.setCheckable(False)
@@ -118,7 +118,7 @@ class QuickSettingsDocker(DockWidget):
         self.brushOpacityModel.clear()
         self.brushFlowModel.clear()
         for s in range(len(self.opacityList)):
-            # we're gonna itterate over our list, and make a new item for each entry.
+            # we're gonna iterate over our list, and make a new item for each entry.
             item = QStandardItem()
             item.setCheckable(False)
             item.setEditable(False)

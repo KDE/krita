@@ -174,7 +174,6 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 #include <brushengine/kis_uniform_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_duplicateop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 

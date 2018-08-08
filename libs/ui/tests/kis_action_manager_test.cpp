@@ -24,7 +24,6 @@
 #include <KisPart.h>
 #include <KisMainWindow.h>
 #include <KisDocument.h>
-#include <KisPart.h>
 #include <KisView.h>
 #include <util.h>
 #include <kis_action.h>

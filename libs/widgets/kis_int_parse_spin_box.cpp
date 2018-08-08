@@ -112,7 +112,7 @@ int KisIntParseSpinBox::valueFromText(const QString & text) const
             }
 
             boolLastValid = false;
-            //emit errorWhileParsing(text); //if uncommented become red everytime the string is wrong.
+            //emit errorWhileParsing(text); //if uncommented become red every time the string is wrong.
             val = oldVal;
     } else {
 

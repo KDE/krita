@@ -19,7 +19,6 @@
 #define _UTIL_H_
 
 #include <QTest>
-#include <QTest>
 #include <QBitArray>
 
 #include <KisDocument.h>
@@ -34,7 +33,6 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
-#include "KisDocument.h"
 #include "KisPart.h"
 #include "kis_image.h"
 #include "kis_pixel_selection.h"

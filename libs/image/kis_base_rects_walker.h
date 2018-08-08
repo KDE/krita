@@ -284,11 +284,10 @@ protected:
     /**
      * Used by KisFullRefreshWalker as it has a special changeRect strategy
      */
-    inline void setExplicitChangeRect(KisProjectionLeafSP leaf, const QRect &changeRect, bool changeRectVaries) {
+    inline void setExplicitChangeRect(const QRect &changeRect, bool changeRectVaries) {
         m_resultChangeRect = changeRect;
         m_resultUncroppedChangeRect = changeRect;
         m_changeRectVaries = changeRectVaries;
-        registerCloneNotification(leaf->node(), N_FILTHY);
     }
 
     /**
@@ -322,7 +321,7 @@ protected:
          * avobe its own clone
          */
 
-        if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION)) {
+        if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION | N_EXTRA)) {
             m_cloneNotifications.append(
                 CloneNotification(node, m_resultUncroppedChangeRect));
         }

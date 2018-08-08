@@ -37,7 +37,6 @@
 #include "dialogs/TableDialog.h"
 #include "dialogs/SectionFormatDialog.h"
 #include "dialogs/SectionsSplitDialog.h"
-#include "dialogs/SimpleTableWidget.h"
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"

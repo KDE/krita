@@ -6,10 +6,10 @@ macro_add_unittest_definitions()
 
 ecm_add_test(
     kis_kra_loader_test.cpp
-    TEST_NAME KisKraLoaderTest
+    TEST_NAME plugins-impex-KisKraLoaderTest
     LINK_LIBRARIES kritaimage kritaui kritalibkra Qt5::Test)
 
 ecm_add_test(
     kis_kra_saver_test.cpp
-    TEST_NAME KisKraSaverTest
+    TEST_NAME plugins-impex-KisKraSaverTest
     LINK_LIBRARIES kritaimage kritaui kritalibkra Qt5::Test)

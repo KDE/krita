@@ -45,7 +45,7 @@ public:
     /**
      * Command to align a set of shapes in a rect
      * @param shapes a set of all the shapes that should be aligned
-     * @param align the aligment type
+     * @param align the alignment type
      * @param boundingRect the rect the shape will be aligned in
      * @param parent the parent command used for macro commands
      */

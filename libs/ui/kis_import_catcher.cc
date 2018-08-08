@@ -20,7 +20,6 @@
 #include <kis_debug.h>
 
 #include <klocalizedstring.h>
-#include <kis_debug.h>
 #include <QUrl>
 
 #include <KisImportExportManager.h>

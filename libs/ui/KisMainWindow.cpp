@@ -30,7 +30,6 @@
 #include <QCloseEvent>
 #include <QStandardPaths>
 #include <QDesktopServices>
-#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
 #include <QDockWidget>
@@ -106,7 +105,6 @@
 #include <KoUpdater.h>
 #include <KoResourceModel.h>
 
-#include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"

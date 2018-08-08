@@ -24,11 +24,8 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
 endif()
 
 
-ecm_add_tests(TestKoLcmsColorProfile.cpp
-    NAME_PREFIX "libs-pigment-"
+ecm_add_tests(
+    TestKoLcmsColorProfile.cpp
+    TestKoColorSpaceRegistry.cpp
+    NAME_PREFIX "plugins-lcmsengine-"
     LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
-
-
-krita_add_broken_unit_test(TestKoColorSpaceRegistry.cpp
-    TEST_NAME libs-pigment-TestKoColorSpaceRegistry
-    LINK_LIBRARIES kritawidgets kritapigment ${LCMS2_LIBRARIES} KF5::I18n Qt5::Test)

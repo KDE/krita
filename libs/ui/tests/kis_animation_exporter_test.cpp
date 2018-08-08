@@ -31,7 +31,6 @@
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 #include <kistest.h>
-#include <testutil.h>
 
 void KisAnimationExporterTest::testAnimationExport()
 {

@@ -32,7 +32,6 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeStroke.h>
 #include <KoDocumentInfo.h>
@@ -58,7 +57,6 @@
 #include "kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
-#include "KisPart.h"
 #include "kis_shape_layer.h"
 #include <kis_shape_controller.h>
 #include "kis_image_animation_interface.h"
@@ -69,7 +67,6 @@
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
 
-#include "kis_canvas_resource_provider.h"
 #include "kis_figure_painting_tool_helper.h"
 
 namespace ActionHelper {

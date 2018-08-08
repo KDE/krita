@@ -119,7 +119,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
 
     /**
      * HACK ALERT:
-     * QTextLayout should only be accessed from the tread it has been created in.
+     * QTextLayout should only be accessed from the thread it has been created in.
      * If the cached layout has been created in a different thread, we should just
      * recreate the layouts in the current thread to be able to render them.
      */
@@ -196,7 +196,7 @@ QPainterPath KoSvgTextShape::textOutline()
                     QPainterPath path;
                     path.addRect(overlineBlob);
 
-                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
                     result += path;
                 }
 
@@ -209,7 +209,7 @@ QPainterPath KoSvgTextShape::textOutline()
                     QPainterPath path;
                     path.addRect(strikeThroughBlob);
 
-                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
                     result += path;
                 }
 
@@ -221,7 +221,7 @@ QPainterPath KoSvgTextShape::textOutline()
                     QPainterPath path;
                     path.addRect(underlineBlob);
 
-                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
                     result += path;
                 }
             }

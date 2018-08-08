@@ -364,8 +364,6 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 #include <sys/sysctl.h>
 #endif
 
-#include <kis_debug.h>
-
 int KisImageConfig::totalRAM()
 {
     // let's think that default memory size is 1000MiB

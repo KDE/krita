@@ -53,7 +53,6 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 
-#include <KisMimeDatabase.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>

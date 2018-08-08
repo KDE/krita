@@ -48,7 +48,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_config_widget.h>
 #include <kis_debug.h>
-#include <KisMimeDatabase.h>
 #include <KisPreExportChecker.h>
 #include <KisPart.h>
 #include "kis_config.h"

@@ -179,7 +179,7 @@ void TestImageCollection::testPreload3()
     QPixmap pixmap3 = data.pixmap();
     QCOMPARE(pixmap.cacheKey(), pixmap3.cacheKey());
 
-    // now get a differen size;
+    // now get a different size;
     QPixmap pixmap4 = data.pixmap(QSize(10, 12));
     QCOMPARE(pixmap.width(), 40);
     QCOMPARE(pixmap.height(), 41);

@@ -32,7 +32,6 @@
 #include "kis_cursor.h"
 #include "kis_transform_utils.h"
 #include "kis_algebra_2d.h"
-#include "kis_transform_utils.h"
 #include "kis_liquify_paint_helper.h"
 #include "kis_liquify_transform_worker.h"
 #include "KoCanvasResourceManager.h"

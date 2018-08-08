@@ -42,6 +42,7 @@ public:
     static QString categoryColor();
 
     static QString categoryArithmetic();
+    static QString categoryBinary();
     static QString categoryNegative();
     static QString categoryLight();
     static QString categoryDark();

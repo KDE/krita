@@ -42,6 +42,16 @@ const QString COMPOSITE_DESTINATION_IN = "destination-in";
 const QString COMPOSITE_DESTINATION_ATOP = "destination-atop";
 
 const QString COMPOSITE_XOR                   = "xor";
+const QString COMPOSITE_OR                    = "or";
+const QString COMPOSITE_AND                   = "and";
+const QString COMPOSITE_NAND                  = "nand";
+const QString COMPOSITE_NOR                   = "nor";
+const QString COMPOSITE_XNOR                  = "xnor";
+const QString COMPOSITE_IMPLICATION           = "implication";
+const QString COMPOSITE_NOT_IMPLICATION       = "not_implication";
+const QString COMPOSITE_CONVERSE              = "converse";
+const QString COMPOSITE_NOT_CONVERSE          = "not_converse";
+
 const QString COMPOSITE_PLUS                  = "plus";
 const QString COMPOSITE_MINUS                 = "minus";
 const QString COMPOSITE_ADD                   = "add";
@@ -54,8 +64,6 @@ const QString COMPOSITE_ARC_TANGENT           = "arc_tangent";
 const QString COMPOSITE_GEOMETRIC_MEAN        = "geometric_mean";
 const QString COMPOSITE_ADDITIVE_SUBTRACTIVE  = "additive_subtractive";
 const QString COMPOSITE_NEGATION              = "negation";
-const QString COMPOSITE_PHOENIX               = "phoenix";
-const QString COMPOSITE_SIGNED_DIFFERENCE     = "signed_difference";
 
 const QString COMPOSITE_EQUIVALENCE   = "equivalence";
 const QString COMPOSITE_ALLANON       = "allanon";
@@ -69,9 +77,12 @@ const QString COMPOSITE_OVERLAY       = "overlay";
 const QString COMPOSITE_BEHIND        = "behind";
 const QString COMPOSITE_GREATER       = "greater";
 const QString COMPOSITE_HARD_OVERLAY  = "hard overlay";
-const QString COMPOSITE_INTERPOLATE   = "interpolate";
+const QString COMPOSITE_INTERPOLATION = "interpolation";
+const QString COMPOSITE_INTERPOLATIONB = "interpolation 2x";
 const QString COMPOSITE_PENUMBRAA     = "penumbra a";
 const QString COMPOSITE_PENUMBRAB     = "penumbra b";
+const QString COMPOSITE_PENUMBRAC     = "penumbra c";
+const QString COMPOSITE_PENUMBRAD     = "penumbra d";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.
@@ -83,10 +94,12 @@ const QString COMPOSITE_DODGE        = "dodge";
 const QString COMPOSITE_LINEAR_DODGE = "linear_dodge";
 const QString COMPOSITE_SCREEN       = "screen";
 const QString COMPOSITE_HARD_LIGHT   = "hard_light";
+const QString COMPOSITE_SOFT_LIGHT_IFS_ILLUSIONS = "soft_light_ifs_illusions";
 const QString COMPOSITE_SOFT_LIGHT_PEGTOP_DELPHI = "soft_light_pegtop_delphi";
 const QString COMPOSITE_SOFT_LIGHT_PHOTOSHOP = "soft_light";
 const QString COMPOSITE_SOFT_LIGHT_SVG  = "soft_light_svg";
 const QString COMPOSITE_GAMMA_LIGHT  = "gamma_light";
+const QString COMPOSITE_GAMMA_ILLUMINATION  = "gamma_illumination";
 const QString COMPOSITE_VIVID_LIGHT  = "vivid_light";
 const QString COMPOSITE_LINEAR_LIGHT = "linear light";
 const QString COMPOSITE_PIN_LIGHT    = "pin_light";
@@ -153,6 +166,7 @@ const QString COMPOSITE_GLEAT     = "gleat";
 const QString COMPOSITE_HELOW     = "helow";
 const QString COMPOSITE_REEZE     = "reeze";
 const QString COMPOSITE_FRECT     = "frect";
+const QString COMPOSITE_FHYRD     = "frect-helow hybrid";
 
 
 

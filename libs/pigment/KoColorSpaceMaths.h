@@ -248,7 +248,19 @@ public:
     inline static dst_compositetype divide(_T a, _Tdst b) {
         return (dst_compositetype(a) *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
     }
+
+    inline static dst_compositetype xor(_T a, _Tdst b) {
+        return (int (a *  std::numeric_limits<int>::max() - traits::epsilon) ^ int (b *  std::numeric_limits<int>::max() - traits::epsilon));
+    }
+
+    inline static dst_compositetype and(_T a, _Tdst b) {
+        return (int (a *  std::numeric_limits<int>::max()  - traits::epsilon) & int (b *  std::numeric_limits<int>::max()  - traits::epsilon));
+    }
     
+    inline static dst_compositetype or(_T a, _Tdst b) {
+        return (int (a *  std::numeric_limits<int>::max()  - traits::epsilon) | int (b *  std::numeric_limits<int>::max()  - traits::epsilon));
+    }
+
     /**
      * Inversion : unitValue - a
      * @param a
@@ -575,7 +587,19 @@ namespace Arithmetic
     template<class T>
     inline typename KoColorSpaceMathsTraits<T>::compositetype
     div(T a, T b) { return KoColorSpaceMaths<T>::divide(a, b); }
-    
+
+    template<class T>
+    inline typename KoColorSpaceMathsTraits<T>::compositetype
+    xor(T a, T b) { return KoColorSpaceMaths<T>::xor(a, b); }
+
+    template<class T>
+    inline typename KoColorSpaceMathsTraits<T>::compositetype
+    and(T a, T b) { return KoColorSpaceMaths<T>::and(a, b); }
+
+    template<class T>
+    inline typename KoColorSpaceMathsTraits<T>::compositetype
+    or(T a, T b) { return KoColorSpaceMaths<T>::or(a, b); }
+
     template<class T>
     inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
         return KoColorSpaceMaths<T>::clamp(a);

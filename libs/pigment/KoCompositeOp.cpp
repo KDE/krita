@@ -32,6 +32,7 @@ QString KoCompositeOp::categoryColor()
 }
 
 QString KoCompositeOp::categoryArithmetic() { return i18n("Arithmetic"); }
+QString KoCompositeOp::categoryBinary()     { return i18n("Binary"); }
 QString KoCompositeOp::categoryNegative()   { return i18n("Negative");   }
 QString KoCompositeOp::categoryLight()      { return i18n("Lighten");    }
 QString KoCompositeOp::categoryDark()       { return i18n("Darken");     }

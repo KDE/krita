@@ -124,19 +124,24 @@ struct AddGeneralOps<Traits, true>
          add<&cfParallel<Arg>      >(cs, COMPOSITE_PARALLEL      , i18n("Parallel")      , KoCompositeOp::categoryMix());
          add<&cfAllanon<Arg>       >(cs, COMPOSITE_ALLANON       , i18n("Allanon")       , KoCompositeOp::categoryMix());
          add<&cfHardOverlay<Arg>   >(cs, COMPOSITE_HARD_OVERLAY  , i18n("Hard Overlay")  , KoCompositeOp::categoryMix());
-         add<&cfInterpolate<Arg>   >(cs, COMPOSITE_INTERPOLATE   , i18n("Interpolate")   , KoCompositeOp::categoryMix());
+         add<&cfInterpolation<Arg> >(cs, COMPOSITE_INTERPOLATION , i18n("Interpolation") , KoCompositeOp::categoryMix());
+         add<&cfInterpolationB<Arg> >(cs, COMPOSITE_INTERPOLATIONB , i18n("Interpolation - 2X") , KoCompositeOp::categoryMix());
          add<&cfPenumbraA<Arg>     >(cs, COMPOSITE_PENUMBRAA     , i18n("Penumbra A")    , KoCompositeOp::categoryMix());
          add<&cfPenumbraB<Arg>     >(cs, COMPOSITE_PENUMBRAB     , i18n("Penumbra B")    , KoCompositeOp::categoryMix());
+         add<&cfPenumbraC<Arg>     >(cs, COMPOSITE_PENUMBRAC     , i18n("Penumbra C")    , KoCompositeOp::categoryMix());
+         add<&cfPenumbraD<Arg>     >(cs, COMPOSITE_PENUMBRAD     , i18n("Penumbra D")    , KoCompositeOp::categoryMix());
 
          add<&cfScreen<Arg>      >(cs, COMPOSITE_SCREEN      , i18n("Screen")      , KoCompositeOp::categoryLight());
          add<&cfColorDodge<Arg>  >(cs, COMPOSITE_DODGE       , i18n("Color Dodge") , KoCompositeOp::categoryLight());
          add<&cfAddition<Arg>    >(cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight());
          add<&cfLightenOnly<Arg> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten")     , KoCompositeOp::categoryLight());
          add<&cfHardLight<Arg>   >(cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light")  , KoCompositeOp::categoryLight());
+         add<&cfSoftLightIFSIllusions<Arg>>(cs, COMPOSITE_SOFT_LIGHT_IFS_ILLUSIONS, i18n("Soft Light (IFS Illusions)")  , KoCompositeOp::categoryLight());
          add<&cfSoftLightPegtopDelphi<Arg>>(cs, COMPOSITE_SOFT_LIGHT_PEGTOP_DELPHI, i18n("Soft Light (Pegtop-Delphi)")  , KoCompositeOp::categoryLight());
          add<&cfSoftLightSvg<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_SVG, i18n("Soft Light (SVG)")  , KoCompositeOp::categoryLight());
          add<&cfSoftLight<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_PHOTOSHOP, i18n("Soft Light (Photoshop)")  , KoCompositeOp::categoryLight());
          add<&cfGammaLight<Arg>  >(cs, COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light") , KoCompositeOp::categoryLight());
+         add<&cfGammaIllumination<Arg>  >(cs, COMPOSITE_GAMMA_ILLUMINATION , i18n("Gamma Illumination") , KoCompositeOp::categoryLight());
          add<&cfVividLight<Arg>  >(cs, COMPOSITE_VIVID_LIGHT , i18n("Vivid Light") , KoCompositeOp::categoryLight());
          add<&cfPinLight<Arg>    >(cs, COMPOSITE_PIN_LIGHT   , i18n("Pin Light")   , KoCompositeOp::categoryLight());
          add<&cfLinearLight<Arg> >(cs, COMPOSITE_LINEAR_LIGHT, i18n("Linear Light"), KoCompositeOp::categoryLight());
@@ -158,17 +163,27 @@ struct AddGeneralOps<Traits, true>
          add<&cfEquivalence<Arg>          >(cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
          add<&cfAdditiveSubtractive<Arg>  >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE , i18n("Additive-Subtractive") , KoCompositeOp::categoryNegative());
          add<&cfNegation<Arg>             >(cs, COMPOSITE_NEGATION             , i18n("Negation")             , KoCompositeOp::categoryNegative());
-         add<&cfPhoenix<Arg>              >(cs, COMPOSITE_PHOENIX              , i18n("Phoenix")              , KoCompositeOp::categoryNegative());
-         add<&cfSignedDifference<Arg>     >(cs, COMPOSITE_SIGNED_DIFFERENCE    , i18n("Signed Difference")    , KoCompositeOp::categoryNegative());
          
-         add<&cfReflect<Arg>  >(cs, COMPOSITE_REFLECT                       , i18n("Reflect")              , KoCompositeOp::categoryQuadratic());
-         add<&cfGlow<Arg>  >(cs, COMPOSITE_GLOW                             , i18n("Glow")                 , KoCompositeOp::categoryQuadratic());
-         add<&cfFreeze<Arg>  >(cs, COMPOSITE_FREEZE                         , i18n("Freeze")               , KoCompositeOp::categoryQuadratic());
-         add<&cfHeat<Arg>  >(cs, COMPOSITE_HEAT                             , i18n("Heat")                 , KoCompositeOp::categoryQuadratic());
-         add<&cfGleat<Arg>  >(cs, COMPOSITE_GLEAT                           , i18n("Gleat")                , KoCompositeOp::categoryQuadratic());
-         add<&cfHelow<Arg>  >(cs, COMPOSITE_HELOW                           , i18n("Helow")                , KoCompositeOp::categoryQuadratic());
-         add<&cfReeze<Arg>  >(cs, COMPOSITE_REEZE                           , i18n("Reeze")                , KoCompositeOp::categoryQuadratic());
-         add<&cfFrect<Arg>  >(cs, COMPOSITE_FRECT                           , i18n("Frect")                , KoCompositeOp::categoryQuadratic());
+         add<&cfXor<Arg>                  >(cs, COMPOSITE_XOR                  , i18n("XOR")                  , KoCompositeOp::categoryBinary());
+         add<&cfOr<Arg>                   >(cs, COMPOSITE_OR                   , i18n("OR")                   , KoCompositeOp::categoryBinary());
+         add<&cfAnd<Arg>                  >(cs, COMPOSITE_AND                  , i18n("AND")                  , KoCompositeOp::categoryBinary());
+         add<&cfNand<Arg>                 >(cs, COMPOSITE_NAND                 , i18n("NAND")                 , KoCompositeOp::categoryBinary());
+         add<&cfNor<Arg>                  >(cs, COMPOSITE_NOR                  , i18n("NOR")                  , KoCompositeOp::categoryBinary());
+         add<&cfXnor<Arg>                 >(cs, COMPOSITE_XNOR                 , i18n("XNOR")                 , KoCompositeOp::categoryBinary());
+         add<&cfImplies<Arg>              >(cs, COMPOSITE_IMPLICATION          , i18n("IMPLICATION")          , KoCompositeOp::categoryBinary());
+         add<&cfNotImplies<Arg>           >(cs, COMPOSITE_NOT_IMPLICATION      , i18n("NOT IMPLICATION")      , KoCompositeOp::categoryBinary());
+         add<&cfConverse<Arg>             >(cs, COMPOSITE_CONVERSE             , i18n("CONVERSE")             , KoCompositeOp::categoryBinary());
+         add<&cfNotConverse<Arg>          >(cs, COMPOSITE_NOT_CONVERSE         , i18n("NOT CONVERSE")         , KoCompositeOp::categoryBinary());
+
+         add<&cfReflect<Arg> >(cs, COMPOSITE_REFLECT                         , i18n("Reflect")                , KoCompositeOp::categoryQuadratic());
+         add<&cfGlow<Arg>    >(cs, COMPOSITE_GLOW                            , i18n("Glow")                   , KoCompositeOp::categoryQuadratic());
+         add<&cfFreeze<Arg>  >(cs, COMPOSITE_FREEZE                          , i18n("Freeze")                 , KoCompositeOp::categoryQuadratic());
+         add<&cfHeat<Arg>    >(cs, COMPOSITE_HEAT                            , i18n("Heat")                   , KoCompositeOp::categoryQuadratic());
+         add<&cfGleat<Arg>   >(cs, COMPOSITE_GLEAT                           , i18n("Gleat")                  , KoCompositeOp::categoryQuadratic());
+         add<&cfHelow<Arg>   >(cs, COMPOSITE_HELOW                           , i18n("Helow")                  , KoCompositeOp::categoryQuadratic());
+         add<&cfReeze<Arg>   >(cs, COMPOSITE_REEZE                           , i18n("Reeze")                  , KoCompositeOp::categoryQuadratic());
+         add<&cfFrect<Arg>   >(cs, COMPOSITE_FRECT                           , i18n("Frect")                  , KoCompositeOp::categoryQuadratic());
+         add<&cfFhyrd<Arg>   >(cs, COMPOSITE_FHYRD                           , i18n("Frect-Helow Hybrid")     , KoCompositeOp::categoryQuadratic());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
      }

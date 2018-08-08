@@ -176,13 +176,14 @@ inline T cfLinearBurn(T src, T dst) {
 template<class T>
 inline T cfColorDodge(T src, T dst) {
     using namespace Arithmetic;
-    
-    if(dst == zeroValue<T>())
-        return zeroValue<T>();
+    //Fixing Color Dodge to avoid ZX Colors on bright area.
+
+    if(src == unitValue<T>())
+        return unitValue<T>();
     
     T invSrc = inv(src);
     
-    if(invSrc < dst)
+    if(invSrc == zeroValue<T>())
         return unitValue<T>();
     
     return Arithmetic::clamp<T>(div(dst, invSrc));
@@ -347,7 +348,15 @@ inline T cfParallel(T src, T dst) {
     // min(max(2 / (1/dst + 1/src), 0), 1)
     composite_type unit = unitValue<T>();
     composite_type s    = (src != zeroValue<T>()) ? div<T>(unit, src) : unit;
-    composite_type d    = (dst != zeroValue<T>()) ? div<T>(unit, dst) : unit;
+    composite_type d    = (dst != zeroValue<T>()) ? div<T>(unit, dst) : unit;    
+    if (src == zeroValue<T>()) {
+        return zeroValue<T>();    
+    }
+
+    if (dst == zeroValue<T>()) {
+        return zeroValue<T>();    
+    }
+
     return clamp<T>((unit+unit) * unit / (d+s));
 }
 
@@ -414,6 +423,12 @@ inline T cfGammaLight(T src, T dst) {
 }
 
 template<class T>
+inline T cfGammaIllumination(T src, T dst) {
+    using namespace Arithmetic;
+    return inv(cfGammaDark(inv(src),inv(dst)));
+}
+
+template<class T>
 inline T cfGeometricMean(T src, T dst) {
     using namespace Arithmetic;
     return scale<T>(sqrt(scale<qreal>(dst) * scale<qreal>(src)));
@@ -457,11 +472,11 @@ template<class T>
 inline T cfGlow(T src, T dst) {
     using namespace Arithmetic;
         // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
-    
-    if(dst == unitValue<T>()) {
+
+    if (dst == unitValue<T>()) {
         return unitValue<T>();
     }
-    
+
     return clamp<T>(div(mul(src, src), inv(dst)));
 }
 
@@ -480,11 +495,15 @@ inline T cfHeat(T src, T dst) {
     if(src == unitValue<T>()) {
         return unitValue<T>();
     }
-    
+
+    if(src == unitValue<T>()) {
+        return unitValue<T>();
+    }
+
     if(dst == zeroValue<T>()) {
         return zeroValue<T>();
     }
-    
+
     return inv(clamp<T>(div(mul(inv(src), inv(src)),dst)));
 }
 
@@ -498,27 +517,35 @@ inline T cfFreeze(T src, T dst) {
 template<class T>
 inline T cfHelow(T src, T dst) {
     using namespace Arithmetic;
-        // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
+    // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
     
-    if(cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
+    if (cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
         return cfHeat(src,dst);
     }
     
+    if (src == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+
     return (cfGlow(src,dst));
 }
 
 template<class T>
 inline T cfFrect(T src, T dst) {
     using namespace Arithmetic;
-    
-    if(cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
+
+    if (cfHardMixPhotoshop(src,dst) == unitValue<T>()) {
         return cfFreeze(src,dst);
     }
-    
-    if(dst == zeroValue<T>()) {
+
+    if (dst == zeroValue<T>()) {
         return zeroValue<T>();
     }
-    
+
+    if (dst == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+
     return (cfReflect(src,dst));
 }
 
@@ -544,57 +571,94 @@ inline T cfReeze(T src, T dst) {
     
     return (cfGleat(dst,src)); 
 }
+template<class T>
+inline T cfFhyrd(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return (cfAllanon(cfFrect(src,dst),cfHelow(src,dst))); 
+}
 
 template<class T>
-inline T cfInterpolate(T src, T dst) {
+inline T cfInterpolation(T src, T dst) {
     using namespace Arithmetic;
-        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-                    // Interpolate does not work on integer images due to cos (pi*src), and cos (pi*dst). Another issue to be solved.
 
-    composite_type half = cfAllanon(unitValue<T>(),zeroValue<T>());
-    composite_type four = cfAllanon(cfAllanon(unitValue<T>(),zeroValue<T>()),zeroValue<T>());
-    composite_type seta = cos(pi*src);
-    composite_type setb = cos(pi*dst);
+    qreal fsrc = scale<qreal>(src);
+    qreal fdst = scale<qreal>(dst);
     
-    return clamp<T>(half - seta * four - setb * four);
+    if(dst == zeroValue<T>() && src == zeroValue<T>()) {
+        return zeroValue<T>();
+    } 
+
+    return scale<T>(.5f-.25f*cos(pi*(fsrc))-.25f*cos(pi*(fdst)));
+}
+
+template<class T>
+inline T cfInterpolationB(T src, T dst) {
+    using namespace Arithmetic;
+
+    return cfInterpolation(cfInterpolation(src,dst),cfInterpolation(src,dst));
 }
 
 
 template<class T>
 inline T cfPenumbraB(T src, T dst) {
     using namespace Arithmetic;
-    
-        if(dst == unitValue<T>()) {
+
+    if (dst == unitValue<T>()) {
         return unitValue<T>();
     }    
-    if(dst+src < unitValue<T>()) {
+    if (dst + src < unitValue<T>()) {
         return (cfColorDodge(dst,src)/2);
     }
-        if(src == zeroValue<T>()) {
+    if (src == zeroValue<T>()) {
         return zeroValue<T>();
     }
-    
+
     return inv(clamp<T>(div(inv(dst),src)/2));
+}
+
+template<class T>
+inline T cfPenumbraD(T src, T dst) {
+    using namespace Arithmetic;
+
+    return cfArcTangent(src,inv(dst));
+}
+
+template<class T>
+inline T cfPenumbraC(T src, T dst) {
+    using namespace Arithmetic;
+
+    return cfPenumbraD(dst,src);
 }
 
 template<class T>
 inline T cfPenumbraA(T src, T dst) {
     using namespace Arithmetic;
-    
+
     return (cfPenumbraB(dst,src)); 
+}
+
+template<class T>
+inline T cfSoftLightIFSIllusions(T src, T dst) {
+    using namespace Arithmetic;
+    
+    qreal fsrc = scale<qreal>(src);
+    qreal fdst = scale<qreal>(dst);
+    
+    return scale<T>(pow(fdst,pow(2.0,(mul(2.0,.5f-fsrc))))); 
 }
 
 template<class T>
 inline T cfSoftLightPegtopDelphi(T src, T dst) {
     using namespace Arithmetic;
-    
+
     return clamp<T>(cfAddition(mul(dst,cfScreen(src,dst)),mul(mul(src,dst),inv(dst)))); 
 }
 
 template<class T>
 inline T cfNegation(T src, T dst) {
     using namespace Arithmetic;
-        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
         
     composite_type unit = unitValue<T>();
     composite_type a = unit - src - dst;
@@ -605,17 +669,75 @@ inline T cfNegation(T src, T dst) {
 }
 
 template<class T>
-inline T cfPhoenix(T src, T dst) {
+inline T cfNor(T src, T dst) {
     using namespace Arithmetic;
-    
-    return clamp<T>(inv(cfDifference(src,dst))); 
+        
+    return and(src,dst);
 }
 
 template<class T>
-inline T cfSignedDifference(T src, T dst) {
+inline T cfNand(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return or(src,dst);
+}
+
+template<class T>
+inline T cfXor(T src, T dst) {
     using namespace Arithmetic;
     
-    return clamp<T>((src-dst)/2 + halfValue<T>()); 
+    return xor(src,dst);
 }
+
+template<class T>
+inline T cfXnor(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return cfXor(src,inv(dst));
+}
+
+template<class T>
+inline T cfAnd(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return cfNor(inv(src),inv(dst));
+}
+
+template<class T>
+inline T cfOr(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return cfNand(inv(src),inv(dst));
+}
+
+template<class T>
+inline T cfConverse(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return cfOr(inv(src),dst);
+}
+
+template<class T>
+inline T cfNotConverse(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return cfAnd(src,inv(dst));
+}
+
+template<class T>
+inline T cfImplies(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return cfOr(src,inv(dst));
+}
+
+template<class T>
+inline T cfNotImplies(T src, T dst) {
+    using namespace Arithmetic;
+        
+    return cfAnd(inv(src),dst);
+}
+
+
 
 #endif // KOCOMPOSITEOP_FUNCTIONS_H_

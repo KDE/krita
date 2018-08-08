@@ -306,6 +306,7 @@ void TestShapePainting::testGroupUngroup()
 
             new KoShapeUngroupCommand(group, group->shapes(), QList<KoShape*>(), &ungroupingCommand);
             canvas.shapeController()->removeShape(group, &ungroupingCommand);
+            // NOTE: group will be deleted in ungroupingCommand's d-tor
 
             ungroupingCommand.redo();
 
@@ -315,8 +316,6 @@ void TestShapePainting::testGroupUngroup()
             QCOMPARE(shape2->paintedCount, 2 * i + 2);
             QCOMPARE(manager->shapes().size(), 2);
         }
-
-        group->setParent(0);
     }
 }
 

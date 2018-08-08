@@ -195,6 +195,7 @@ void KisAllFilterTest::testAllFilters()
     excludeFilters << "colortransfer";
     excludeFilters << "gradientmap";
     excludeFilters << "phongbumpmap";
+    excludeFilters << "raindrops";
 
     QStringList failures;
     QStringList successes;
@@ -221,6 +222,7 @@ void KisAllFilterTest::testAllFiltersSrcNotIsDev()
     excludeFilters << "colortransfer";
     excludeFilters << "gradientmap";
     excludeFilters << "phongbumpmap";
+    excludeFilters << "raindrops";
 
     QStringList failures;
     QStringList successes;
@@ -248,6 +250,7 @@ void KisAllFilterTest::testAllFiltersWithSelections()
     excludeFilters << "colortransfer";
     excludeFilters << "gradientmap";
     excludeFilters << "phongbumpmap";
+    excludeFilters << "raindrops";
 
     QStringList failures;
     QStringList successes;

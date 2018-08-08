@@ -26,6 +26,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversionSystem.h>
 #include <KoColorModelStandardIds.h>
+#include <sdk/tests/kistest.h>
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
@@ -97,9 +98,9 @@ void TestColorConversionSystem::testAlphaConversions()
     {
         KoColor c(QColor(255,255,255,128), alpha8);
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(129,129,129,255));
+        QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha8);
-        QCOMPARE(c.opacityU8(), quint8(138));
+        QCOMPARE(c.opacityU8(), quint8(137)); // alpha is linear, so the value increases
     }
 
     {
@@ -122,9 +123,9 @@ void TestColorConversionSystem::testAlphaConversions()
     {
         KoColor c(QColor(255,255,255,128), alpha8);
         c.convertTo(rgb16);
-        QCOMPARE(c.toQColor(), QColor(129,129,129,255));
+        QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha8);
-        QCOMPARE(c.opacityU8(), quint8(138));
+        QCOMPARE(c.opacityU8(), quint8(137));  // alpha is linear, so the value increases
     }
 }
 
@@ -155,9 +156,9 @@ void TestColorConversionSystem::testAlphaU16Conversions()
     {
         KoColor c(QColor(255,255,255,128), alpha16);
         c.convertTo(rgb8);
-        QCOMPARE(c.toQColor(), QColor(129,129,129,255));
+        QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha16);
-        QCOMPARE(c.opacityU8(), quint8(138));
+        QCOMPARE(c.opacityU8(), quint8(137)); // alpha is linear, so the value increases
     }
 
     {
@@ -234,4 +235,5 @@ void TestColorConversionSystem::benchmarkRgbToAlphaConversion()
     }
 }
 
-QTEST_GUILESS_MAIN(TestColorConversionSystem)
+
+KISTEST_MAIN(TestColorConversionSystem)

@@ -253,15 +253,12 @@ KisTileHashTableTraits2<T>::KisTileHashTableTraits2(const KisTileHashTableTraits
 {
     setDefaultTileData(ht.m_defaultTileData);
 
-    QWriteLocker otherLocker(&ht.m_iteratorLock);
-    QWriteLocker locker(&m_iteratorLock);
-
+    QWriteLocker locker(&ht.m_iteratorLock);
     typename ConcurrentMap<quint32, TileType*>::Iterator iter(ht.m_map);
 
     while (iter.isValid()) {
         TileTypeSP tile = TileTypeSP(new TileType(*iter.getValue(), m_mementoManager));
-        TileTypeSP::ref(&tile, tile.data());
-        m_map.assign(iter.getKey(), tile.data());
+        insert(iter.getKey(), tile);
         iter.next();
     }
 }

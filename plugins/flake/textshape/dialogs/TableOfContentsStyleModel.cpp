@@ -24,6 +24,7 @@
 #include "KoParagraphStyle.h"
 #include "ToCBibGeneratorInfo.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "kis_assert.h"
 
 #include <QPair>
 
@@ -106,20 +107,18 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
         }
     } else {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(paragStyle, QVariant());
+
         switch (role) {
         case Qt::DisplayRole: {
-            if (paragStyle) {
-                if (QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second).value<int>() == 0) {
-                    return QVariant(i18n("Disabled"));
-                } else {
-                    return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
-                }
+            if (QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second).value<int>() == 0) {
+                return QVariant(i18n("Disabled"));
+            } else {
+                return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
             }
         }
         case Qt::EditRole: {
-            if (paragStyle) {
-                return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
-            }
+            return QVariant(static_cast< QPair<int, int> *>(index.internalPointer())->second);
         }
         default: break;
         }

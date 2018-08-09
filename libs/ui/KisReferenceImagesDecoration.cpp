@@ -124,6 +124,9 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
 
 void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter */*converter*/, KisCanvas2 */*canvas*/)
 {
+    // TODO: can we use partial updates here?
+    Q_UNUSED(updateRect);
+
     KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
 
     if (!layer.isNull()) {

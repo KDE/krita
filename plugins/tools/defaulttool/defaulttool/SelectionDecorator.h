@@ -44,7 +44,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(KoCanvasResourceManager *resourceManager, const KisCoordinatesConverter* coordConverter);
+    SelectionDecorator(KoCanvasResourceManager *resourceManager);
     ~SelectionDecorator() {}
 
     /**

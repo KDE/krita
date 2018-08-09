@@ -40,18 +40,13 @@
 
 #define HANDLE_DISTANCE 10
 
-SelectionDecorator::SelectionDecorator(KoCanvasResourceManager* resourceManager, const KisCoordinatesConverter* coordConverter)
+SelectionDecorator::SelectionDecorator(KoCanvasResourceManager* resourceManager)
     : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
     , m_lineWidth(2)
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
 {
-
-    // this will help size the decorator buttons in the paint function later
-    m_coordConverter = const_cast<KisCoordinatesConverter*>(coordConverter);
-
-
     m_hotPosition =
         KoFlake::AnchorPosition(
             resourceManager->resource(KoFlake::HotPosition).toInt());

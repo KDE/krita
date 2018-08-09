@@ -782,12 +782,6 @@ void SvgTextEditor::setBackgroundColor(const KoColor &c)
     }
 }
 
-void SvgTextEditor::setModified(bool modified)
-{
-
-}
-
-
 void SvgTextEditor::setFont(const QString &fontName)
 {
     QFont font;

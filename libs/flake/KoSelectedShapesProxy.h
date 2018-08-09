@@ -44,7 +44,12 @@ public:
      */
     virtual KoSelection *selection() = 0;
 
-
+    /**
+     * @brief The shape wants to edited. This is used when a shape is passed
+     * between two different tools. This notifies the new tool that it needs
+     * to enter some extra edit mode.
+     *
+     */
     bool isRequestingToBeEdited();
     void setRequestingToBeEdited(bool value);
 

@@ -122,8 +122,6 @@ private Q_SLOTS:
     void setFontColor(const KoColor &c);
     void setBackgroundColor(const KoColor &c);
 
-    void setModified(bool modified);
-
     void slotRevertChangesAndCloseEditor();
     void slotCloseEditor();
 

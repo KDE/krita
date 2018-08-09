@@ -709,7 +709,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
     if (selection) {
-        decorator = new SelectionDecorator(canvas()->resourceManager(), dynamic_cast<KisCanvas2*>(canvas())->coordinatesConverter() );
+        decorator = new SelectionDecorator(canvas()->resourceManager());
         decorator->setSelection(selection);
         decorator->setHandleRadius(handleRadius());
         decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
@@ -810,19 +810,16 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 
     // test to see if we are selecting button before we decide to check for a selection/de-selection
     const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
-    KoSelection *selection = koSelection();
 
+    // this helps tell the next tool that we ned to enter edit mode when it gets activated
     canvas()->selectedShapesProxy()->setRequestingToBeEdited(selectingTextEditorButton);
-    if (selectingTextEditorButton) {
-        // activate text tool
-        KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+
+
+    if (selectingTextEditorButton) { // activate text tool
+        KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(koSelection()->selectedShapes()));
     }
 
-
-
-
-
-    // updates the whole canvas. This makes sure the decorations that are shown are refreshed
+    // This makes sure the decorations that are shown are refreshed. especally the "T" icon
     canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
@@ -958,11 +955,9 @@ KoSelection *DefaultTool::koSelection() const
 
 bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
 {
-    if (canvas()) {
-    } else {
-         return false;
+    if (!canvas()) {
+        return false;
     }
-
 
     // calculate position for textEditorBoxButton
     KoSelection *selection = koSelection();
@@ -972,35 +967,20 @@ bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
         return false;
     }
 
-    QRectF outline    = selection->boundingRect();
+    QRectF outline = selection->boundingRect();
 
     QPointF absoluteTransormPosition(
         outline.x() + outline.width()*0.5,
-        outline.y() + outline.height() + 10);
+        outline.y() + outline.height()+10);
 
     QPointF textEditorAbsPosition =  converter->documentToView(absoluteTransormPosition);
 
-
-
     // check to see if the text decorator is checked (only for text objects)
-
     const QPointF viewPoint = converter->documentToView(mousePosition);
-    //const QPointF handlePoint = converter->documentToView(textEditorAbsPosition);
     const QPointF handlePoint = textEditorAbsPosition;
-
     const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
 
-
-    //qWarning() << "viewPoint: " <<  QString::number(viewPoint.x()) << "  "
-    //           << QString::number(viewPoint.y());
-
-    //qWarning() << "handlePoint: " << QString::number(textEditorAbsPosition.x()) << "  "
-    //           << QString::number(textEditorAbsPosition.y());
-
-   // qWarning() << "distance from text button: " << QString::number(distanceSq);
-
-
-    if (distanceSq < 18 * 18) { // 18 is "handle" area (previously 16). Probably can refactor this a bit
+    if (distanceSq < 18 * 18) { // 18 is "handle" area
         decorator->setIsOverTextEditorButton(true);
         return true;
     }

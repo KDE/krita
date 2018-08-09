@@ -384,7 +384,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
         delete[] buffer;
         return paths;
     }
-    catch(std::bad_alloc) {
+    catch(const std::bad_alloc&) {
         // Allocating so much memory failed, so we fall through to the slow option.
         warnKrita << "KisPixelSelection::outline ran out of memory allocating" << width << "*" << height << "bytes.";
     }

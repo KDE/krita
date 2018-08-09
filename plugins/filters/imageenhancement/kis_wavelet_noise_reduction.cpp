@@ -80,13 +80,13 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
 
     try {
         buff = mathToolbox.initWavelet(device, applyRect);
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         if (buff) delete buff;
         return;
     }
     try {
         wav = mathToolbox.fastWaveletTransformation(device, applyRect, buff);
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         if (wav) delete wav;
         return;
     }

@@ -223,7 +223,7 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
         QImage image(w, h, QImage::Format_ARGB32);
         image.fill(0);
         return image;
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         return QImage();
     }
 

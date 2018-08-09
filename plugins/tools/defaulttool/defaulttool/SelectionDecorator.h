@@ -24,7 +24,6 @@
 
 #include <KoViewConverter.h>
 #include <KoFlake.h>
-#include <kis_coordinates_converter.h>
 
 #include <QPainter>
 #include <QPointer>
@@ -96,7 +95,6 @@ private:
     QPointF m_textEditorButtonPosition;
     bool m_isHoveringOverTextButton;
 
-    KisCoordinatesConverter *m_coordConverter;
 };
 
 #endif

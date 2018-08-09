@@ -1038,7 +1038,6 @@ void SvgTextEditor::enableRichTextActions(bool enable)
 void SvgTextEditor::slotRevertChangesAndCloseEditor()
 {
     // revert changes by first assigning the original values to the text editor
-    // todo: maybe refactor this a bit since it is repeated
     m_textEditorWidget.svgTextEdit->setPlainText(m_originalSvg);
     m_textEditorWidget.svgStylesEdit->setPlainText(m_originalHtml);
 

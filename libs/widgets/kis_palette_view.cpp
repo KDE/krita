@@ -79,7 +79,6 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     verticalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
 
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotHorizontalHeaderResized(int,int,int)));
-    connect(this, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotModifyEntry(QModelIndex)));
 
     setAutoFillBackground(true);
 }
@@ -272,11 +271,6 @@ void KisPaletteView::modifyEntry(QModelIndex index)
 
     delete dlg;
     update(index);
-}
-
-void KisPaletteView::slotModifyEntry(const QModelIndex &index)
-{
-    modifyEntry(index);
 }
 
 void KisPaletteView::slotHorizontalHeaderResized(int, int, int newSize)

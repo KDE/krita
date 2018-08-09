@@ -124,24 +124,26 @@ void KisPaletteListWidget::slotModify()
     } else {
         setPaletteNonGlobal(colorSet);
     }
-    for (const QString &newGroupName : dlg.newGroupNames()) {
+    Q_FOREACH (const QString &newGroupName, dlg.newGroupNames()) {
+        qDebug() << "new group:" << newGroupName;
         colorSet->addGroup(newGroupName);
         colorSet->getGroup(newGroupName)->setRowCount(dlg.groupRowNumber(newGroupName));
     }
-    for (const QString &groupName : colorSet->getGroupNames()) {
-        if (groupName == KoColorSet::GLOBAL_GROUP_NAME) {
-            continue;
-        }
-        if (dlg.groupRemoved(groupName)) {
-            colorSet->removeGroup(groupName, dlg.groupKeelColors(groupName));
-            continue;
-        }
+    Q_FOREACH (const QString &groupName, colorSet->getGroupNames()) {
+        qDebug() << "modifying existing" << groupName;
         colorSet->getGroup(groupName)->setRowCount(dlg.groupRowNumber(groupName));
+        if (groupName != KoColorSet::GLOBAL_GROUP_NAME) { continue; }
+        if (dlg.groupRemoved(groupName)) {
+            colorSet->removeGroup(groupName, dlg.groupKeepColors(groupName));
+            continue;
+        }
         if (!dlg.groupRenamedTo(groupName).isEmpty()) {
+            qDebug() << "group renamed:" << groupName;
+            qDebug() << "to:" << dlg.groupRenamedTo(groupName);
             colorSet->changeGroupName(groupName, dlg.groupRenamedTo(groupName));
         }
     }
-    for (const KoResource *r : m_d->rAdapter->resources()) {
+    Q_FOREACH (const KoResource *r, m_d->rAdapter->resources()) {
         if (r != colorSet && r->filename() == dlg.filename()) {
             QMessageBox msgFilenameDuplicate;
             msgFilenameDuplicate.setWindowTitle(i18n("Duplicate filename"));
@@ -159,7 +161,7 @@ void KisPaletteListWidget::slotImport()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "Open Palette");
     dialog.setDefaultDir(QDir::homePath());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorsetentry" << "application/x-gimp-color-palette");
+    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
     QString fileName = dialog.filename();
     if (fileName.isEmpty()) { return; }
     KoColorSet *colorSet = new KoColorSet(fileName);
@@ -174,15 +176,11 @@ void KisPaletteListWidget::slotExport()
     KoColorSet *r = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
     dialog.setDefaultDir(r->filename());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorsetentry" << "application/x-gimp-color-palette");
+    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
     QString newPath;
     bool isStandAlone = r->isGlobal();
     QString oriPath = r->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
-    if (newPath[newPath.length() - 1] == QString('.')) {
-        // remove the dot at end of name when extension not recognized by KoFileDialog
-        newPath.resize(newPath.length() - 1);
-    }
     r->setFilename(newPath);
     r->setIsGlobal(true);
     r->save();
@@ -226,7 +224,7 @@ QString KisPaletteListWidget::newPaletteFileName()
     QString result = "new_palette_";
     QSet<QString> nameSet;
     QList<KoResource*> rlist = m_d->rAdapter->resources();
-    for (const KoResource *r : rlist) {
+    Q_FOREACH (const KoResource *r, rlist) {
         nameSet.insert(r->filename());
     }
     int i = 0;

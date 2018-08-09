@@ -1,6 +1,8 @@
 set(KRITA_PALETTEDOCKER_SOURCES
     palettedocker.cpp palettedocker_dock.cpp
     PaletteListSaver.cpp
+    KisPaletteManager.cpp
+    KisChangePaletteCommand.cpp
     )
 
 ki18n_wrap_ui(KRITA_PALETTEDOCKER_SOURCES

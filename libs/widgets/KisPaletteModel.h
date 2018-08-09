@@ -43,7 +43,7 @@ class KRITAWIDGETS_EXPORT KisPaletteModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    KisPaletteModel(QObject* parent = 0);
+    explicit KisPaletteModel(QObject* parent = Q_NULLPTR);
     ~KisPaletteModel() override;
 
     enum AdditionalRoles {
@@ -97,8 +97,9 @@ public /* overriden methods */: // QAbstractTableModel
      * @brief setData
      * setData is not used as KoColor is not a QVariant
      * use setEntry, addEntry and removeEntry instead
-    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
      */
+    // TODO Used QVariant::setValue and QVariant.value<KoColor> to implement this
+    // bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
 Q_SIGNALS:
     void sigPaletteModifed();

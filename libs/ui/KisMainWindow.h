@@ -204,7 +204,6 @@ public:
 
 Q_SIGNALS:
 
-    void sigActiveDocumentChanged();
     /**
      * This signal is emitted if the document has been saved successfully.
      */

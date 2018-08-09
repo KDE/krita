@@ -67,6 +67,7 @@ private Q_SLOTS:
     void slotEditEntry();
 
     void slotPaletteIndexSelected(const QModelIndex &index);
+    void slotPaletteIndexDoubleClicked(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSet* colorSet);
     void slotViewChanged();
@@ -99,9 +100,11 @@ private /* member variables */:
 
     QPointer<KisViewManager> m_view;
     KisCanvasResourceProvider *m_resourceProvider;
+
+    KoResourceServer<KoColorSet> * const m_rServer;
     QScopedPointer<KoResourceServerAdapter<KoColorSet> > m_rAdapter;
+
     QPointer<KisDocument> m_activeDocument;
-    QString m_activaDocObjName;
     QPointer<KoColorSet> m_currentColorSet;
     QScopedPointer<PaletteListSaver> m_saver;
 

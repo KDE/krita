@@ -52,17 +52,17 @@ void KisDlgPaletteEditor::setPalette(KoColorSet *colorSet)
     }
     m_original.reset(new OriginalPaletteInfo);
     m_ui->lineEditName->setText(m_colorSet->name());
-    m_original->name = m_colorSet->name();
     m_ui->lineEditFilename->setText(m_colorSet->filename());
-    m_original->filename = m_colorSet->filename();
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
-    m_original->columnCount = m_colorSet->columnCount();
     m_ui->ckxGlobal->setCheckState(m_colorSet->isGlobal() ? Qt::Checked : Qt::Unchecked);
-    m_original->isGlobal = m_colorSet->isGlobal();
     m_ui->ckxReadOnly->setCheckState(!m_colorSet->isEditable() ? Qt::Checked : Qt::Unchecked);
+    m_original->name = m_colorSet->name();
+    m_original->filename = m_colorSet->filename();
+    m_original->columnCount = m_colorSet->columnCount();
+    m_original->isGlobal = m_colorSet->isGlobal();
     m_original->isReadOnly = !m_colorSet->isEditable();
 
-    for (const QString & groupName : m_colorSet->getGroupNames()) {
+    Q_FOREACH (const QString & groupName, m_colorSet->getGroupNames()) {
         KisSwatchGroup *group = m_colorSet->getGroup(groupName);
         m_groups[groupName] = GroupInfo(groupName, group->rowCount());
         m_original->groups[groupName] = GroupInfo(groupName, group->rowCount());
@@ -235,7 +235,7 @@ int KisDlgPaletteEditor::groupRowNumber(const QString &groupName) const
     return m_groups[groupName].rowNumber;
 }
 
-bool KisDlgPaletteEditor::groupKeelColors(const QString &groupName) const
+bool KisDlgPaletteEditor::groupKeepColors(const QString &groupName) const
 {
     return m_keepColorGroups.contains(groupName);
 }
@@ -247,7 +247,7 @@ void KisDlgPaletteEditor::slotRowCountChanged(int newCount)
 
 QString KisDlgPaletteEditor::oldNameFromNewName(const QString &newName) const
 {
-    for (const QString &oldGroupName : m_groups.keys()) {
+    Q_FOREACH (const QString &oldGroupName, m_groups.keys()) {
         if (m_groups[oldGroupName].newName == newName) {
             return oldGroupName;
         }

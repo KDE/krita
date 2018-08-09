@@ -6,6 +6,7 @@
 #include <QPair>
 #include <QScopedPointer>
 #include <QHash>
+#include <QSet>
 
 class QAction;
 
@@ -26,7 +27,7 @@ private:
         { }
         QString newName;
         int rowNumber;
-    }; // first is name, second is rowCount
+    };
     struct OriginalPaletteInfo {
         QString name;
         QString filename;
@@ -71,7 +72,7 @@ public:
      * @return new group row number of the group
      */
     int groupRowNumber(const QString &groupName) const;
-    bool groupKeelColors(const QString &groupName) const;
+    bool groupKeepColors(const QString &groupName) const;
 
 private Q_SLOTS:
     void slotDelGroup();

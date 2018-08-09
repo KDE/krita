@@ -40,7 +40,7 @@ class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 private:
     static int MININUM_ROW_HEIGHT;
 public:
-    KisPaletteView(QWidget *parent = 0);
+    explicit KisPaletteView(QWidget *parent = Q_NULLPTR);
     ~KisPaletteView() override;
 
     void setPaletteModel(KisPaletteModel *model);
@@ -95,7 +95,6 @@ public Q_SLOTS:
      *  This tries to select the closest color in the palette.
      *  This doesn't update the foreground color, just the visual selection.
      */
-    void slotModifyEntry(const QModelIndex &);
     void slotFGColorChanged(const KoColor &);
 
 protected:

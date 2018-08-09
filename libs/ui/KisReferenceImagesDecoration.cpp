@@ -43,6 +43,7 @@ struct KisReferenceImagesDecoration::Private {
     KisWeakSharedPtr<KisReferenceImagesLayer> layer;
     Buffer buffer;
     QTransform previousTransform;
+    QSizeF previousViewSize;
 
     explicit Private(KisReferenceImagesDecoration *q)
         : q(q)
@@ -122,7 +123,7 @@ bool KisReferenceImagesDecoration::documentHasReferenceImages() const
     return view()->document()->referenceImagesLayer() != nullptr;
 }
 
-void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &updateRect, const KisCoordinatesConverter */*converter*/, KisCanvas2 */*canvas*/)
+void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &/*updateRect*/, const KisCoordinatesConverter *converter, KisCanvas2 */*canvas*/)
 {
     // TODO: can we use partial updates here?
     Q_UNUSED(updateRect);
@@ -130,13 +131,19 @@ void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &up
     KisSharedPtr<KisReferenceImagesLayer> layer = d->layer.toStrongRef();
 
     if (!layer.isNull()) {
-        QTransform transform = view()->viewConverter()->imageToWidgetTransform();
-        if (!KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
+        QSizeF viewSize = view()->size();
+
+        QTransform transform = converter->imageToWidgetTransform();
+        if (d->previousViewSize != viewSize || !KisAlgebra2D::fuzzyMatrixCompare(transform, d->previousTransform, 1e-4)) {
+            d->previousViewSize = viewSize;
             d->previousTransform = transform;
-            d->updateBufferByWidgetCoordinates(QRectF(0, 0, view()->width(), view()->height()));
+            d->buffer.image = QImage();
+            d->updateBufferByWidgetCoordinates(QRectF(QPointF(0,0), viewSize));
         }
 
-        gc.drawImage(d->buffer.position, d->buffer.image);
+        if (!d->buffer.image.isNull()) {
+            gc.drawImage(d->buffer.position, d->buffer.image);
+        }
     }
 }
 

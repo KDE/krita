@@ -603,8 +603,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     else {
         if (csName.first == RGBAColorModelID.id()) {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "sRGB-elle-V2-srgbtrc.icc");
-        }
-        else {
+        } else if (csName.first == GrayAColorModelID.id()) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "Gray-D50-elle-V2-srgbtrc.icc");
+        } else {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
         }
     }
@@ -675,7 +676,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         } else {
             reader.reset(new KisPNGReaderLineByLine(png_ptr, info_ptr, width, height));
         }
-    } catch (std::bad_alloc& e) {
+    } catch (const std::bad_alloc& e) {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
         dbgFile << "bad alloc: " << e.what();

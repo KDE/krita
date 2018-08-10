@@ -96,7 +96,7 @@ protected:
         while (it.nextPixel()) {
             if (cs->opacityU8(it.rawDataConst()) > 0) {
                 KIS_DUMP_DEVICE_2(dev, QRect(0,0,1024,1024), "image", "dd");
-                qFatal(QString("failed: %1").arg(name).toLatin1().data());
+                qFatal("%s", QString("failed: %1").arg(name).toLatin1().data());
             }
         }
     }

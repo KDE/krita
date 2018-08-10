@@ -53,7 +53,7 @@ void TestDocument::testSetColorSpace()
 
     QVERIFY(layer->colorSpace()->colorModelId().id() == "GRAYA");
     QVERIFY(layer->colorSpace()->colorDepthId().id() == "U16");
-    QVERIFY(layer->colorSpace()->profile()->name() == "gray built-in");
+    QVERIFY(layer->colorSpace()->profile()->name() == profiles.first());
 
     KisPart::instance()->removeDocument(kisdoc);
 }
@@ -134,35 +134,6 @@ void TestDocument::testThumbnail()
 #endif
         }
     }
-    KisPart::instance()->removeDocument(kisdoc);
-
-}
-
-void TestDocument::testCreateAndSave()
-{
-    KisDocument *kisdoc = KisPart::instance()->createDocument();
-    KisImageSP image = new KisImage(0, 5000, 5000, KoColorSpaceRegistry::instance()->rgb16(), "test");
-    KisNodeSP layer = new KisPaintLayer(image, "test1", 128);
-    KisFillPainter gc(layer->paintDevice());
-    gc.fillRect(100, 100, 4000, 4000, KoColor(Qt::red, layer->colorSpace()));
-    image->addNode(layer);
-    for(int i = 0; i < 10; ++i) {
-        image->addNode(layer->clone());
-    }
-    kisdoc->setCurrentImage(image);
-
-    Document d(kisdoc);
-    d.setBatchmode(true);
-    d.refreshProjection();
-
-    QString filename = QDir::tempPath() + "/TestDocumentTestCreateAndSave.kra";
-
-    d.saveAs(filename);
-    QVERIFY2(QFileInfo(filename).exists(), filename.toUtf8());
-
-    Document *d2 = Krita::instance()->openDocument(filename);
-    Q_ASSERT(d2->colorDepth() == "U16");
-
     KisPart::instance()->removeDocument(kisdoc);
 
 }

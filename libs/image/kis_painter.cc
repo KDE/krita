@@ -513,7 +513,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = 0;
     try {
         dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "dst bytes";
         return;
     }
@@ -524,7 +524,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* srcBytes = 0;
     try {
         srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "src bytes";
         return;
     }
@@ -558,7 +558,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         quint8* mergedSelectionBytes = 0;
         try {
             mergedSelectionBytes = new quint8[ totalBytes ];
-        } catch (std::bad_alloc) {
+        } catch (const std::bad_alloc&) {
             warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
             return;
         }
@@ -915,7 +915,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     quint8* dstBytes = 0;
     try {
          dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bltFixed std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
         return;
     }
@@ -941,7 +941,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
         try {
             selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
         }
-        catch (std::bad_alloc) {
+        catch (const std::bad_alloc&) {
             delete[] dstBytes;
             return;
         }
@@ -1002,7 +1002,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = 0;
     try {
         dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bltFixedWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
         return;
     }
@@ -1033,7 +1033,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         quint8 * mergedSelectionBytes = 0;
         try {
             mergedSelectionBytes = new quint8[ totalBytes ];
-        } catch (std::bad_alloc) {
+        } catch (const std::bad_alloc&) {
             warnKrita << "KisPainter::bltFixedWithFixedSelection std::bad_alloc for " << totalBytes << "total bytes";
             delete[] dstBytes;
             return;

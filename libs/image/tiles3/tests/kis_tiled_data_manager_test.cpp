@@ -22,6 +22,7 @@
 #include "tiles3/kis_tiled_data_manager.h"
 
 #include "tiles_test_utils.h"
+#include "config-limit-long-tests.h"
 
 bool KisTiledDataManagerTest::checkHole(quint8* buffer,
                                         quint8 holeColor, QRect holeRect,
@@ -32,7 +33,7 @@ bool KisTiledDataManagerTest::checkHole(quint8* buffer,
             quint8 expectedColor = holeRect.contains(x,y) ? holeColor : backgroundColor;
 
             if(*buffer != expectedColor) {
-                dbgKrita << "Expected" << expectedColor << "but found" << *buffer;
+                qDebug() << "Expected" << expectedColor << "but found" << *buffer;
                 return false;
             }
 
@@ -56,11 +57,11 @@ bool KisTiledDataManagerTest::checkTilesShared(KisTiledDataManager *srcDM,
                 : dstDM->getTile(col, row, false);
 
             if(srcTile->tileData() != dstTile->tileData()) {
-                dbgKrita << "Expected tile data (" << col << row << ")"
+                qDebug() << "Expected tile data (" << col << row << ")"
                          << srcTile->extent()
                          << srcTile->tileData()
                          << "but found" << dstTile->tileData();
-                dbgKrita << "Expected" << srcTile->data()[0] << "but found" << dstTile->data()[0];
+                qDebug() << "Expected" << srcTile->data()[0] << "but found" << dstTile->data()[0];
                 return false;
             }
         }
@@ -82,7 +83,7 @@ bool KisTiledDataManagerTest::checkTilesNotShared(KisTiledDataManager *srcDM,
                 : dstDM->getTile(col, row, false);
 
             if(srcTile->tileData() == dstTile->tileData()) {
-                dbgKrita << "Expected tiles not be shared:"<< srcTile->extent();
+                qDebug() << "Expected tiles not be shared:"<< srcTile->extent();
                 return false;
             }
         }
@@ -614,11 +615,11 @@ void KisTiledDataManagerTest::benchmarkCOWImpl()
 
     dm.commit();
 
-    QTest::qSleep(500);
+    QTest::qSleep(200);
 
     KisMementoSP memento2 = dm.getMemento();
-    QTest::qSleep(500);
-    QBENCHMARK {
+    QTest::qSleep(200);
+    QBENCHMARK_ONCE {
 
         for (int i = 0; i < 32; i++) {
             for (int j = 0; j < 64; j++) {
@@ -635,12 +636,12 @@ void KisTiledDataManagerTest::benchmarkCOWImpl()
 void KisTiledDataManagerTest::benchmarkCOWNoPooler()
 {
     KisTileDataStore::instance()->testingSuspendPooler();
-    QTest::qSleep(500);
+    QTest::qSleep(200);
 
     benchmarkCOWImpl();
 
     KisTileDataStore::instance()->testingResumePooler();
-    QTest::qSleep(500);
+    QTest::qSleep(200);
 }
 
 void KisTiledDataManagerTest::benchmarkCOWWithPooler()
@@ -650,8 +651,12 @@ void KisTiledDataManagerTest::benchmarkCOWWithPooler()
 
 /******************* Stress job ***********************/
 
-//#define NUM_CYCLES 9000
+#ifdef LIMIT_LONG_TESTS
 #define NUM_CYCLES 10000
+#else
+#define NUM_CYCLES 100000
+#endif
+
 #define NUM_TYPES 12
 
 #define TILE_DIMENSION 64

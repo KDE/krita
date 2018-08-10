@@ -123,56 +123,53 @@ ecm_add_tests(
     kis_mask_similarity_test.cpp
     KisMaskGeneratorBenchmark.cpp
 
-    NAME_PREFIX "krita-image-"
+    NAME_PREFIX "libs-image-"
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 
 ecm_add_test(kis_layer_style_filter_environment_test.cpp
-    TEST_NAME kritaimage-layer_style_filter_environment_test
+    TEST_NAME libs-image-layer_style_filter_environment_test
     LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ecm_add_test(kis_asl_parser_test.cpp
-    TEST_NAME kritalibpsd-asl_parser_test
+    TEST_NAME libs-image-asl_parser_test
     LINK_LIBRARIES kritapsd kritapigment kritawidgetutils kritacommand Qt5::Xml Qt5::Test)
 
 ecm_add_test(KisPerStrokeRandomSourceTest.cpp
-    TEST_NAME KisPerStrokeRandomSourceTest
+    TEST_NAME libs-image-KisPerStrokeRandomSourceTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(KisWatershedWorkerTest.cpp
-    TEST_NAME KisWatershedWorkerTest
+    TEST_NAME libs-image-KisWatershedWorkerTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
-
 ecm_add_test(kis_dom_utils_test.cpp
-   TEST_NAME krita-image-KisDomUtilsTest
+   TEST_NAME libs-image-KisDomUtilsTest
    LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_transform_worker_test.cpp
-    TEST_NAME krita-image-KisTransformWorkerTest
+    TEST_NAME libs-image-KisTransformWorkerTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_perspective_transform_worker_test.cpp
-    TEST_NAME krita-image-KisPerspectiveTransformWorkerTest
+    TEST_NAME libs-image-KisPerspectiveTransformWorkerTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_cs_conversion_test.cpp
-    TEST_NAME krita-image-KisCsConversionTest
+    TEST_NAME libs-image-KisCsConversionTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_processings_test.cpp
-    TEST_NAME krita-image-KisProcessingsTest
+    TEST_NAME libs-image-KisProcessingsTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_projection_leaf_test.cpp
-    TEST_NAME KisProjectionLeafTest
+    TEST_NAME libs-image-KisProjectionLeafTest
     LINK_LIBRARIES kritaimage Qt5::Test)
-
-
 
 if (NOT HAVE_FAILING_CMAKE)
   krita_add_broken_unit_test(kis_paint_device_test.cpp
-      TEST_NAME krita-image-KisPaintDeviceTest
+      TEST_NAME libs-image-KisPaintDeviceTest
       LINK_LIBRARIES kritaimage kritaodf Qt5::Test)
 else()
   message(WARNING "Skipping KisPaintDeviceTest!!!!!!!!!!!!!!")
@@ -180,60 +177,60 @@ endif()
 
 if (NOT HAVE_FAILING_CMAKE)
   krita_add_broken_unit_test(kis_filter_mask_test.cpp
-      TEST_NAME krita-image-KisFilterMaskTest
+      TEST_NAME libs-image-KisFilterMaskTest
       LINK_LIBRARIES kritaimage Qt5::Test)
 else()
   message(WARNING "Skipping KisFilterMaskTest!!!!!!!!!!!!!!")
 endif()
 
 krita_add_broken_unit_test(kis_transform_mask_test.cpp
-    TEST_NAME krita-image-KisTransformMaskTest
+    TEST_NAME libs-image-KisTransformMaskTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 ecm_add_test(kis_histogram_test.cpp
-    TEST_NAME krita-image-KisHistogramTest
+    TEST_NAME libs-image-KisHistogramTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_walkers_test.cpp
-    TEST_NAME krita-image-KisWalkersTest
+    TEST_NAME libs-image-KisWalkersTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 #krita_add_broken_unit_test(kis_async_merger_test.cpp
-#    TEST_NAME krita-image-KisAsyncMergerTest
+#    TEST_NAME libs-image-KisAsyncMergerTest
 #    LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_update_scheduler_test.cpp
-    TEST_NAME krita-image-KisUpdateSchedulerTest
+    TEST_NAME libs-image-KisUpdateSchedulerTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_queues_progress_updater_test.cpp
-    TEST_NAME krita-image-KisQueuesProgressUpdaterTest
+    TEST_NAME libs-image-KisQueuesProgressUpdaterTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_cage_transform_worker_test.cpp
-    TEST_NAME krita-image-KisCageTransformWorkerTest
+    TEST_NAME libs-image-KisCageTransformWorkerTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_meta_data_test.cpp
-    TEST_NAME krita-image-KisMetaDataTest
+    TEST_NAME libs-image-KisMetaDataTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_random_generator_test.cpp
-    TEST_NAME krita-image-KisRandomGeneratorTest
+    TEST_NAME libs-image-KisRandomGeneratorTest
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_keyframing_test.cpp
-    TEST_NAME krita-image-Keyframing-Test
+    TEST_NAME libs-image-Keyframing-Test
     LINK_LIBRARIES kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_image_animation_interface_test.cpp
-    TEST_NAME krita-image-ImageAnimationInterface-Test
+    TEST_NAME libs-image-ImageAnimationInterface-Test
     LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 ecm_add_test(kis_onion_skin_compositor_test.cpp
-    TEST_NAME krita-image-OnionSkinCompositor-Test
+    TEST_NAME libs-image-OnionSkinCompositor-Test
     LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaimage Qt5::Test)
 
 krita_add_broken_unit_test(kis_layer_styles_test.cpp
-    TEST_NAME krita-image-LayerStylesTest
+    TEST_NAME libs-image-LayerStylesTest
     LINK_LIBRARIES kritaimage Qt5::Test)

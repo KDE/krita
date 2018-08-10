@@ -19,6 +19,7 @@
 
 #include <QPointer>
 #include <QVariant>
+#include <QStringList>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -205,7 +206,9 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     Q_FOREACH(const KoColorProfile *profile, profiles) {
         profileNames << profile->name();
     }
-    return profileNames.toList();
+    QStringList r = profileNames.toList();
+    r.sort();
+    return r;
 }
 
 bool Krita::addProfile(const QString &profilePath)

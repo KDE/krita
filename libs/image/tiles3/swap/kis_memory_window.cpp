@@ -33,7 +33,7 @@ KisMemoryWindow::KisMemoryWindow(const QString &swapDir, quint64 writeWindowSize
     // us with a (platform specific) default directory, even if none is explicitly
     // configured by the user; also we do not want any logic that determines the
     // default swap dir here.
-    Q_ASSERT(!swapDir.isEmpty());
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!swapDir.isEmpty());
 
     QDir d(swapDir);
     if (!d.exists()) {

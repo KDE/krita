@@ -38,13 +38,13 @@
 #include <kis_mainwindow_observer.h>
 #include <KisView.h>
 
-#include "PaletteListSaver.h"
-
 class KisViewManager;
 class KisCanvasResourceProvider;
 class KisWorkspaceResource;
 class KisPaletteListWidget;
 class KisPaletteModel;
+
+class PaletteEditor;
 class Ui_WdgPaletteDock;
 
 class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver
@@ -62,16 +62,20 @@ public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
 
 private Q_SLOTS:
+    void slotAddPalette();
+    void slotRemovePalette(KoColorSet *);
+    void slotImportPalette();
+    void slotExportPalette(KoColorSet *);
+
     void slotAddColor();
     void slotRemoveColor();
     void slotEditEntry();
+    void slotEditPalette();
 
     void slotPaletteIndexSelected(const QModelIndex &index);
     void slotPaletteIndexDoubleClicked(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSet* colorSet);
-    void slotViewChanged();
-    void slotDocRemoved(const QString &objName);
 
     void saveToWorkspace(KisWorkspaceResource* workspace);
     void loadFromWorkspace(KisWorkspaceResource* workspace);
@@ -79,19 +83,6 @@ private Q_SLOTS:
 private:
     void setEntryByForeground(const QModelIndex &index);
     void setFGColorByPalette(const KisSwatch &entry);
-
-private /* friends */:
-    /**
-     * @brief PaletteListSaver
-     * saves non-global palette list to KisDocument.
-     * Actually, this should be implemented in
-     * KisPaletteListWidget, but that class is in the
-     * library kritawidgets, while KisDocument is in
-     * kritaui, which depends on kritawidgets...
-     *
-     * Hope one day kritaui can finally be cleaned up...
-     */
-    friend class PaletteListSaver;
 
 private /* member variables */:
     QScopedPointer<Ui_WdgPaletteDock> m_ui;
@@ -106,11 +97,12 @@ private /* member variables */:
 
     QPointer<KisDocument> m_activeDocument;
     QPointer<KoColorSet> m_currentColorSet;
-    QScopedPointer<PaletteListSaver> m_saver;
+    QScopedPointer<PaletteEditor> m_paletteEditor;
 
     QScopedPointer<QAction> m_actAdd;
     QScopedPointer<QAction> m_actRemove;
     QScopedPointer<QAction> m_actModify;
+    QScopedPointer<QAction> m_actEditPalette;
     QMenu m_viewContextMenu;
 };
 

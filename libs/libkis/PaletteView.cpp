@@ -53,6 +53,7 @@ void PaletteView::setPalette(Palette *palette)
     d->widget->setPaletteModel(d->model);
 }
 
+/*
 bool PaletteView::addEntryWithDialog(ManagedColor *color)
 {
     if (d->model->colorSet()) {
@@ -77,6 +78,7 @@ bool PaletteView::removeSelectedEntryWithDialog()
     }
     return false;
 }
+*/
 
 void PaletteView::trySelectClosestColor(ManagedColor *color)
 {

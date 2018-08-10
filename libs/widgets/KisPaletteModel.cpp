@@ -111,6 +111,8 @@ void KisPaletteModel::setColorSet(KoColorSet* colorSet)
         }
     }
     endResetModel();
+
+    emit sigPaletteChanged();
 }
 
 KoColorSet* KisPaletteModel::colorSet() const
@@ -152,19 +154,24 @@ bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
     } else {
         int groupNameRow = groupNameRowForRow(index.row());
         QString groupName = m_groupNameRows[groupNameRow];
-        beginResetModel();
-        m_colorSet->removeGroup(groupName, keepColors);
-        m_groupNameRows.clear();
-        int row = -1;
-        for (const QString &groupName : m_colorSet->getGroupNames()) {
-            m_groupNameRows[row] = groupName;
-            row += m_colorSet->getGroup(groupName)->rowCount();
-            row += 1; // row for group name
-        }
-        endResetModel();
+        removeGroup(groupName, keepColors);
     }
     emit sigPaletteModifed();
     return true;
+}
+
+void KisPaletteModel::removeGroup(const QString &groupName, bool keepColors)
+{
+    beginResetModel();
+    m_colorSet->removeGroup(groupName, keepColors);
+    m_groupNameRows.clear();
+    int row = -1;
+    for (const QString &groupName : m_colorSet->getGroupNames()) {
+        m_groupNameRows[row] = groupName;
+        row += m_colorSet->getGroup(groupName)->rowCount();
+        row += 1; // row for group name
+    }
+    endResetModel();
 }
 
 bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
@@ -337,6 +344,16 @@ bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newNa
     endResetModel();
     emit sigPaletteModifed();
     return success;
+}
+
+void KisPaletteModel::addGroup(const KisSwatchGroup &group)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + group.rowCount());
+    m_colorSet->addGroup(group.name());
+    *m_colorSet->getGroup(group.name()) = group;
+    endInsertColumns();
+
+    emit sigPaletteModifed();
 }
 
 QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) const

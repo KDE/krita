@@ -11,8 +11,6 @@
 #include <kis_icon.h>
 #include <KoFileDialog.h>
 
-#include "KisDlgPaletteEditor.h"
-
 #include <ui_WdgPaletteListWidget.h>
 #include "KisPaletteListWidget.h"
 #include "KisPaletteListWidget_p.h"
@@ -28,8 +26,6 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
                                   i18n("Add a new palette")));
     m_d->actRemove.reset(new QAction(KisIconUtils::loadIcon("list-remove"),
                                      i18n("Remove current palette")));
-    m_d->actModify.reset(new QAction(KisIconUtils::loadIcon("edit-rename"),
-                                     i18n("Rename choosen palette")));
     m_d->actImport.reset(new QAction(KisIconUtils::loadIcon("document-import"),
                                      i18n("Import a new palette from file")));
     m_d->actExport.reset(new QAction(KisIconUtils::loadIcon("document-export"),
@@ -39,13 +35,16 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->setupUi(this);
     m_ui->bnAdd->setDefaultAction(m_d->actAdd.data());
     m_ui->bnRemove->setDefaultAction(m_d->actRemove.data());
-    m_ui->bnEdit->setDefaultAction(m_d->actModify.data());
     m_ui->bnImport->setDefaultAction(m_d->actImport.data());
     m_ui->bnExport->setDefaultAction(m_d->actExport.data());
 
+    m_ui->bnAdd->setEnabled(false);
+    m_ui->bnRemove->setEnabled(false);
+    m_ui->bnImport->setEnabled(false);
+    m_ui->bnExport->setEnabled(false);
+
     connect(m_d->actAdd.data(), SIGNAL(triggered()), SLOT(slotAdd()));
     connect(m_d->actRemove.data(), SIGNAL(triggered()), SLOT(slotRemove()));
-    connect(m_d->actModify.data(), SIGNAL(triggered()), SLOT(slotModify()));
     connect(m_d->actImport.data(), SIGNAL(triggered()), SLOT(slotImport()));
     connect(m_d->actExport.data(), SIGNAL(triggered()), SLOT(slotExport()));
 
@@ -67,172 +66,55 @@ KisPaletteListWidget::~KisPaletteListWidget()
 void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
 {
     KoColorSet *g = static_cast<KoColorSet*>(r);
+    emit sigPaletteSelected(g);
+    if (!m_d->allowModification) { return; }
     if (g->isEditable()) {
         m_ui->bnAdd->setEnabled(true);
         m_ui->bnRemove->setEnabled(true);
-        m_ui->bnEdit->setEnabled(true);
     } else {
         m_ui->bnAdd->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
-        m_ui->bnEdit->setEnabled(false);
     }
-    emit sigPaletteSelected(g);
 }
 
 void KisPaletteListWidget::slotAdd()
 {
-    KoColorSet *newColorSet = new KoColorSet(newPaletteFileName());
-    newColorSet->setPaletteType(KoColorSet::KPL);
-    newColorSet->setIsGlobal(false);
-    newColorSet->setIsEditable(true);
-    newColorSet->setName("New Palette");
-    m_d->rAdapter->addResource(newColorSet);
-    m_d->itemChooser->setCurrentResource(newColorSet);
-
-    emit sigPaletteListChanged();
+    if (!m_d->allowModification) { return; }
+    emit sigAddPalette();
+    m_d->itemChooser->setCurrentItem(m_d->rAdapter->resources().size()-1, 0);
 }
 
 void KisPaletteListWidget::slotRemove()
 {
+    if (!m_d->allowModification) { return; }
     if (m_d->itemChooser->currentResource()) {
         KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
-        if (!cs || !cs->isEditable()) {
-            return;
-        }
-        if (cs->isGlobal()) {
-            QFile::remove(cs->filename());
-        }
-        m_d->rAdapter->removeResource(cs);
+        emit sigRemovePalette(cs);
     }
     m_d->itemChooser->setCurrentItem(0, 0);
-
-    emit sigPaletteListChanged();
-}
-
-void KisPaletteListWidget::slotModify()
-{
-    KisDlgPaletteEditor dlg;
-    KoColorSet *colorSet = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
-    if (!colorSet) { return; }
-    dlg.setPalette(colorSet);
-    if (dlg.exec() != QDialog::Accepted){ return; }
-    if (!dlg.isModified()) { return; }
-    colorSet->setName(dlg.name());
-    colorSet->setColumnCount(dlg.columnCount());
-    if (dlg.isGlobal()) {
-        setPaletteGlobal(colorSet);
-    } else {
-        setPaletteNonGlobal(colorSet);
-    }
-    Q_FOREACH (const QString &newGroupName, dlg.newGroupNames()) {
-        qDebug() << "new group:" << newGroupName;
-        colorSet->addGroup(newGroupName);
-        colorSet->getGroup(newGroupName)->setRowCount(dlg.groupRowNumber(newGroupName));
-    }
-    Q_FOREACH (const QString &groupName, colorSet->getGroupNames()) {
-        qDebug() << "modifying existing" << groupName;
-        colorSet->getGroup(groupName)->setRowCount(dlg.groupRowNumber(groupName));
-        if (groupName != KoColorSet::GLOBAL_GROUP_NAME) { continue; }
-        if (dlg.groupRemoved(groupName)) {
-            colorSet->removeGroup(groupName, dlg.groupKeepColors(groupName));
-            continue;
-        }
-        if (!dlg.groupRenamedTo(groupName).isEmpty()) {
-            qDebug() << "group renamed:" << groupName;
-            qDebug() << "to:" << dlg.groupRenamedTo(groupName);
-            colorSet->changeGroupName(groupName, dlg.groupRenamedTo(groupName));
-        }
-    }
-    Q_FOREACH (const KoResource *r, m_d->rAdapter->resources()) {
-        if (r != colorSet && r->filename() == dlg.filename()) {
-            QMessageBox msgFilenameDuplicate;
-            msgFilenameDuplicate.setWindowTitle(i18n("Duplicate filename"));
-            msgFilenameDuplicate.setText(i18n("Duplicate filename! Palette not saved."));
-            msgFilenameDuplicate.exec();
-            return;
-        }
-    }
-    colorSet->setFilename(dlg.filename());
-    emit sigPaletteSelected(colorSet); // to update elements in the docker
-    emit sigPaletteListChanged();
 }
 
 void KisPaletteListWidget::slotImport()
 {
-    KoFileDialog dialog(this, KoFileDialog::OpenFile, "Open Palette");
-    dialog.setDefaultDir(QDir::homePath());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
-    QString fileName = dialog.filename();
-    if (fileName.isEmpty()) { return; }
-    KoColorSet *colorSet = new KoColorSet(fileName);
-    colorSet->load();
-    m_d->rAdapter->addResource(colorSet);
-    m_d->itemChooser->setCurrentResource(colorSet);
-    emit sigPaletteListChanged();
+    if (!m_d->allowModification) { return; }
+    emit sigImportPalette();
+    m_d->itemChooser->setCurrentItem(m_d->rAdapter->resources().size()-1, 0);
 }
 
 void KisPaletteListWidget::slotExport()
 {
-    KoColorSet *r = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
-    KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
-    dialog.setDefaultDir(r->filename());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
-    QString newPath;
-    bool isStandAlone = r->isGlobal();
-    QString oriPath = r->filename();
-    if ((newPath = dialog.filename()).isEmpty()) { return; }
-    r->setFilename(newPath);
-    r->setIsGlobal(true);
-    r->save();
-    r->setFilename(oriPath);
-    r->setIsGlobal(isStandAlone);
-}
-
-void KisPaletteListWidget::setPaletteGlobal(KoColorSet *colorSet)
-{
-    if (QPointer<KoColorSet>(colorSet).isNull()) { return; }
-    KoResourceServer<KoColorSet> *rserver = KoResourceServerProvider::instance()->paletteServer();
-
-    QString saveLocation = rserver->saveLocation();
-    QString name = colorSet->filename();
-
-    QFileInfo fileInfo(saveLocation + name);
-
-    colorSet->setFilename(fileInfo.filePath());
-    colorSet->setIsGlobal(true);
-}
-
-void KisPaletteListWidget::setPaletteNonGlobal(KoColorSet *colorSet)
-{
-    if (QPointer<KoColorSet>(colorSet).isNull()) { return; }
-    QString filename = newPaletteFileName();
-    QFile::remove(colorSet->filename());
-    colorSet->setFilename(filename);
-    colorSet->setIsGlobal(false);
+    if (!m_d->allowModification) { return; }
+    emit sigExportPalette(static_cast<KoColorSet*>(m_d->itemChooser->currentResource()));
 }
 
 void KisPaletteListWidget::setAllowModification(bool allowModification)
 {
     m_d->allowModification = allowModification;
+    m_ui->bnAdd->setEnabled(allowModification);
     m_ui->bnImport->setEnabled(allowModification);
     m_ui->bnExport->setEnabled(allowModification);
-}
-
-QString KisPaletteListWidget::newPaletteFileName()
-{
-    KoColorSet tmpColorSet;
-    QString result = "new_palette_";
-    QSet<QString> nameSet;
-    QList<KoResource*> rlist = m_d->rAdapter->resources();
-    Q_FOREACH (const KoResource *r, rlist) {
-        nameSet.insert(r->filename());
-    }
-    int i = 0;
-    while (nameSet.contains(result + QString::number(i) + tmpColorSet.defaultFileExtension())) {
-        i++;
-    }
-    result = result + QString::number(i) + tmpColorSet.defaultFileExtension();
-    return result;
+    KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
+    m_ui->bnRemove->setEnabled(allowModification && cs && cs->isEditable());
 }
 
 /************************* KisPaletteListWidgetPrivate **********************/

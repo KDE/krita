@@ -199,7 +199,7 @@ void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {
-        disconnect(m_d->model, 0, this, 0);
+        disconnect(m_d->model, Q_NULLPTR, this, Q_NULLPTR);
     }
     m_d->model = model;
     setModel(model);
@@ -220,57 +220,6 @@ void KisPaletteView::setAllowModification(bool allow)
     m_d->allowPaletteModification = allow;
     setDragEnabled(allow);
     setAcceptDrops(allow);
-}
-
-void KisPaletteView::modifyEntry(QModelIndex index)
-{
-    if (!m_d->allowPaletteModification) { return; }
-    if (!m_d->model->colorSet()->isEditable()) { return; }
-
-    KoDialog *dlg = new KoDialog();
-    QFormLayout *editableItems = new QFormLayout(dlg);
-    dlg->mainWidget()->setLayout(editableItems);
-    QLineEdit *lnGroupName = new QLineEdit(dlg);
-
-    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
-        //rename the group.
-        QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
-        editableItems->addRow(i18nc("Name for a colorgroup","Name"), lnGroupName);
-        lnGroupName->setText(groupName);
-        if (dlg->exec() == KoDialog::Accepted) {
-            if (lnGroupName->text().isEmpty()) { return; }
-            for (const QString &groupName: m_d->model->colorSet()->getGroupNames()) {
-                if (groupName == lnGroupName->text()) {
-                    return;
-                }
-            }
-            m_d->model->renameGroup(groupName, lnGroupName->text());
-        }
-    } else {
-        QLineEdit *lnIDName = new QLineEdit(dlg);
-        KisColorButton *bnColor = new KisColorButton(dlg);
-        QCheckBox *chkSpot = new QCheckBox(dlg);
-        KisSwatch entry = m_d->model->getEntry(index);
-        chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
-        editableItems->addRow(i18n("ID"), lnIDName);
-        editableItems->addRow(i18nc("Name for a swatch group", "Name"), lnGroupName);
-        editableItems->addRow(i18n("Color"), bnColor);
-        editableItems->addRow(i18n("Spot"), chkSpot);
-        lnGroupName->setText(entry.name());
-        lnIDName->setText(entry.id());
-        bnColor->setColor(entry.color());
-        chkSpot->setChecked(entry.spotColor());
-        if (dlg->exec() == KoDialog::Accepted) {
-            entry.setName(lnGroupName->text());
-            entry.setId(lnIDName->text());
-            entry.setColor(bnColor->color());
-            entry.setSpotColor(chkSpot->isChecked());
-            m_d->model->setEntry(entry, index);
-        }
-    }
-
-    delete dlg;
-    update(index);
 }
 
 void KisPaletteView::slotHorizontalHeaderResized(int, int, int newSize)

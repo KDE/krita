@@ -74,12 +74,6 @@ public:
     bool removeEntryWithDialog(QModelIndex index);
     void removeSelectedEntry();
     /**
-     * @brief modifyEntry
-     * function for changing the entry at the given index.
-     * if modification isn't allow(@see setAllowModification), this does nothing.
-     */
-    void modifyEntry(QModelIndex index);
-    /**
      * @brief selectClosestColor
      * select a color that's closest to parameter color
      * @param color

@@ -103,6 +103,7 @@ public /* overriden methods */: // QAbstractTableModel
 
 Q_SIGNALS:
     void sigPaletteModifed();
+    void sigPaletteChanged();
 
 public /* methods */:
     /**
@@ -125,10 +126,11 @@ public /* methods */:
      * @return if successful
      */
     bool removeEntry(const QModelIndex &index, bool keepColors=true);
+    void removeGroup(const QString &groupName, bool keepColors);
+    bool renameGroup(const QString &groupName, const QString &newName);
+    void addGroup(const KisSwatchGroup &group);
 
     KisSwatch getEntry(const QModelIndex &index) const;
-
-    bool renameGroup(const QString &groupName, const QString &newName);
 
     void setColorSet(KoColorSet* colorSet);
     KoColorSet* colorSet() const;

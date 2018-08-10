@@ -55,20 +55,20 @@ public Q_SLOTS:
      * @param color the default color to add
      * @return whether it was successful.
      */
-    bool addEntryWithDialog(ManagedColor *color);
+    // bool addEntryWithDialog(ManagedColor *color);
     /**
      * @brief addGroupWithDialog
      * gives a little dialog to ask for the desired groupname.
      * @return whether this was successful.
      */
-    bool addGroupWithDialog();
+    // bool addGroupWithDialog();
     /**
      * @brief removeSelectedEntryWithDialog
      * removes the selected entry. If it is a group, it pop up a dialog
      * asking whether the colors should also be removed.
      * @return whether this was successful
      */
-    bool removeSelectedEntryWithDialog();
+    // bool removeSelectedEntryWithDialog();
     /**
      * @brief trySelectClosestColor
      * tries to select the closest color to the one given.

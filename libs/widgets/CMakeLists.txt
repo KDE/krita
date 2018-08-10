@@ -93,17 +93,14 @@ set(kritawidgets_LIB_SRCS
     KisScreenColorPickerBase.cpp
     KisDlgInternalColorSelector.cpp
 
-    KisPaletteListWidget.cpp
-
     KisPaletteModel.cpp
     KisPaletteDelegate.cpp
     kis_palette_view.cpp
+    KisPaletteListWidget.cpp
     KisPaletteComboBox.cpp
 
     kis_popup_button.cc
     kis_color_button.cpp
-
-    KisDlgPaletteEditor.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -114,7 +111,6 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     KoPageLayoutWidget.ui
     KoShadowConfigWidget.ui
     WdgDlgInternalColorSelector.ui
-    WdgDlgPaletteEditor.ui
     WdgPaletteListWidget.ui
 )
 

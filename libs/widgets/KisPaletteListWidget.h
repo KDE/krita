@@ -24,20 +24,20 @@ public:
 
 Q_SIGNALS:
     void sigPaletteSelected(KoColorSet*);
-    void sigPaletteListChanged();
+    void sigAddPalette();
+    void sigRemovePalette(KoColorSet *);
+    void sigImportPalette();
+    void sigExportPalette(KoColorSet *);
 
 public Q_SLOTS:
 
 private /* methods */:
-    void setPaletteGlobal(KoColorSet *colorSet);
-    void setPaletteNonGlobal(KoColorSet *colorSet);
     QString newPaletteFileName();
 
 private Q_SLOTS:
     void slotPaletteResourceSelected(KoResource *);
     void slotAdd();
     void slotRemove();
-    void slotModify();
     void slotImport();
     void slotExport();
 

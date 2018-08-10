@@ -262,10 +262,13 @@ QStringList KoColorSet::getGroupNames()
     return d->groupNames;
 }
 
-bool KoColorSet::changeGroupName(QString oldGroupName, QString newGroupName)
+bool KoColorSet::changeGroupName(const QString &oldGroupName, const QString &newGroupName)
 {
-    if (!d->groupNames.contains(oldGroupName)) {
+    if (!d->groups.contains(oldGroupName)) {
         return false;
+    }
+    if (oldGroupName == newGroupName) {
+        return true;
     }
     d->groups[newGroupName] = d->groups[oldGroupName];
     d->groups.remove(oldGroupName);

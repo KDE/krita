@@ -356,6 +356,16 @@ void KisPaletteModel::addGroup(const KisSwatchGroup &group)
     emit sigPaletteModifed();
 }
 
+void KisPaletteModel::setRowNumber(const QString &groupName, int rowCount)
+{
+    beginResetModel();
+    KisSwatchGroup *g = m_colorSet->getGroup(groupName);
+    if (g) {
+        g->setRowCount(rowCount);
+    }
+    endResetModel();
+}
+
 QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) const
 {
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());

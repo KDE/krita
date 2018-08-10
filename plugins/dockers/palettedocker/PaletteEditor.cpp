@@ -47,7 +47,7 @@ struct PaletteEditor::Private
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
     QSet<QString> keepColorGroups;
-    QString groupBeingModified;
+    QString groupBeingRenamed;
     QPointer<KisPaletteModel> model;
     QPointer<KisViewManager> view;
     PaletteInfo modified;
@@ -144,7 +144,11 @@ int PaletteEditor::rowNumberOfGroup(const QString &oriName) const
 
 bool PaletteEditor::duplicateExistsGroupName(const QString &name) const
 {
-    return m_d->modified.groups.contains(name) || m_d->newGroupNames.contains(name);
+    if (name == m_d->groupBeingRenamed) { return false; }
+    Q_FOREACH (const KisSwatchGroup &g, m_d->modified.groups.values()) {
+        if (name == g.name()) { return true; }
+    }
+    return false;
 }
 
 QString PaletteEditor::oldNameFromNewName(const QString &newName) const
@@ -229,7 +233,7 @@ QString PaletteEditor::renameGroup(const QString &oldName)
 
     KoDialog dlg;
     m_d->query = &dlg;
-    m_d->groupBeingModified = oldName;
+    m_d->groupBeingRenamed = oldName;
 
     QFormLayout form(&dlg);
     dlg.mainWidget()->setLayout(&form);
@@ -244,10 +248,11 @@ QString PaletteEditor::renameGroup(const QString &oldName)
     if (leNewName.text().isEmpty()) { return QString(); }
     if (duplicateExistsGroupName(leNewName.text())) { return QString(); }
 
-    m_d->modifiedGroupNames.insert(oldName);
     m_d->modified.groups[oldName].setName(leNewName.text());
     if (m_d->newGroupNames.remove(oldName)) {
         m_d->newGroupNames.insert(leNewName.text());
+    } else {
+        m_d->modifiedGroupNames.insert(oldName);
     }
     return leNewName.text();
 }
@@ -255,8 +260,7 @@ QString PaletteEditor::renameGroup(const QString &oldName)
 void PaletteEditor::slotGroupNameChanged(const QString &newName)
 {
     QLineEdit *leGroupName = qobject_cast<QLineEdit*>(sender());
-    leGroupName->setPalette(m_d->normalPalette);
-    if (duplicateExistsGroupName(newName)) {
+    if (duplicateExistsGroupName(newName) || newName == QString()) {
         leGroupName->setPalette(m_d->warnPalette);
         if (m_d->query->button(KoDialog::Ok)) {
             m_d->query->button(KoDialog::Ok)->setEnabled(false);
@@ -273,6 +277,7 @@ void PaletteEditor::changeGroupRowCount(const QString &name, int newRowCount)
 {
     if (!m_d->modified.groups.contains(name)) { return; }
     m_d->modified.groups[name].setRowCount(newRowCount);
+    m_d->modifiedGroupNames.insert(name);
 }
 
 void PaletteEditor::setGlobal(bool isGlobal)
@@ -442,9 +447,8 @@ void PaletteEditor::updatePalette()
         }
     }
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
-        KisSwatchGroup *g = palette->getGroup(groupName);
         if (m_d->modifiedGroupNames.contains(groupName)) {
-            *g = modified.groups[groupName];
+            m_d->model->setRowNumber(groupName, modified.groups[groupName].rowCount());
             m_d->model->renameGroup(groupName, modified.groups[groupName].name());
         }
     }

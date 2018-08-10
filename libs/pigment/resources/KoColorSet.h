@@ -166,7 +166,7 @@ public /* methods */:
     KisSwatchGroup *getGroup(const QString &name);
     KisSwatchGroup *getGlobalGroup();
 
-    bool changeGroupName(QString oldGroupName, QString newGroupName);
+    bool changeGroupName(const QString &oldGroupName, const QString &newGroupName);
 
 
     /**

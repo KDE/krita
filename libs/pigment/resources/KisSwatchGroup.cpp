@@ -31,8 +31,8 @@ struct KisSwatchGroup::Private {
         , rowCount(DEFAULT_ROW_COUNT)
     { }
 
-    static quint32 DEFAULT_COLUMN_COUNT;
-    static quint32 DEFAULT_ROW_COUNT;
+    static int DEFAULT_COLUMN_COUNT;
+    static int DEFAULT_ROW_COUNT;
 
     QString name;
     QVector<Column> colorMatrix;
@@ -40,8 +40,8 @@ struct KisSwatchGroup::Private {
     int rowCount;
 };
 
-quint32 KisSwatchGroup::Private::DEFAULT_COLUMN_COUNT = 16;
-quint32 KisSwatchGroup::Private::DEFAULT_ROW_COUNT = 20;
+int KisSwatchGroup::Private::DEFAULT_COLUMN_COUNT = 16;
+int KisSwatchGroup::Private::DEFAULT_ROW_COUNT = 20;
 
 KisSwatchGroup::KisSwatchGroup()
     : d(new Private)

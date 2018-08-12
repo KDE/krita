@@ -1,5 +1,5 @@
 SET(PREFIX_ext_jpeg "${EXTPREFIX}" )
-if (MSVC OR MINGW)
+if (MINGW)
 ExternalProject_Add( ext_jpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://files.kde.org/krita/build/dependencies/libjpeg-turbo-1.5.3.tar.gz

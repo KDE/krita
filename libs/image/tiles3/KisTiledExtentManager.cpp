@@ -101,7 +101,7 @@ inline bool KisTiledExtentManager::Data::remove(qint32 index)
             --m_count;
             needsUpdateExtent = true;
         } else {
-            KIS_ASSERT_RECOVER_NOOP(0 && "sanity check failed: the tile has already been removed!");
+            m_buffer[currentIndex].deref();
         }
     } else {
         m_buffer[currentIndex].deref();
@@ -297,26 +297,32 @@ QRect KisTiledExtentManager::extent() const
 
 void KisTiledExtentManager::updateExtent()
 {
-    QReadLocker cl(&m_colsData.m_extentLock);
-    QReadLocker rl(&m_rowsData.m_extentLock);
+    qint32 minX, maxX, minY, maxY;
 
-    bool colsEmpty = m_colsData.isEmpty();
-    bool rowsEmpty = m_rowsData.isEmpty();
-    KIS_ASSERT_RECOVER_RETURN(colsEmpty == rowsEmpty);
+    {
+        QReadLocker cl(&m_colsData.m_extentLock);
 
-    if (colsEmpty && rowsEmpty) {
-        QWriteLocker lock(&m_extentLock);
-        m_currentExtent = QRect(qint32_MAX, qint32_MAX, 0, 0);
-    } else {
-        const qint32 minX = m_colsData.min() * KisTileData::WIDTH;
-        const qint32 maxPlusOneX = (m_colsData.max() + 1) * KisTileData::WIDTH;
-        const qint32 minY = m_rowsData.min() * KisTileData::HEIGHT;
-        const qint32 maxPlusOneY = (m_rowsData.max() + 1) * KisTileData::HEIGHT;
-
-        QWriteLocker lock(&m_extentLock);
-        m_currentExtent =
-            QRect(minX, minY,
-                  maxPlusOneX - minX,
-                  maxPlusOneY - minY);
+        if (m_colsData.isEmpty()) {
+            minX = qint32_MAX;
+            maxX = 0;
+        } else {
+            minX = m_colsData.min() * KisTileData::WIDTH;
+            maxX = (m_colsData.max() + 1) * KisTileData::WIDTH - minX;
+        }
     }
+
+    {
+        QReadLocker rl(&m_rowsData.m_extentLock);
+
+        if (m_rowsData.isEmpty()) {
+            minY = qint32_MAX;
+            maxY = 0;
+        } else {
+            minY = m_rowsData.min() * KisTileData::HEIGHT;
+            maxY = (m_rowsData.max() + 1) * KisTileData::HEIGHT - minY;
+        }
+    }
+
+    QWriteLocker lock(&m_extentLock);
+    m_currentExtent = QRect(minX, minY, maxX, maxY);
 }

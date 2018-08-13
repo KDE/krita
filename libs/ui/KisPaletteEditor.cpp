@@ -258,6 +258,7 @@ bool KisPaletteEditor::removeGroup(const QString &name)
     if (window.exec() != KoDialog::Accepted) { return false; }
 
     m_d->modified.groups.remove(name);
+    m_d->newGroupNames.remove(name);
     if (chkKeep.isChecked()) {
         m_d->keepColorGroups.insert(name);
     }

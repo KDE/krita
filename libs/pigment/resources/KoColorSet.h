@@ -46,6 +46,7 @@ public:
     static const QString KPL_PALETTE_NAME_ATTR;
     static const QString KPL_PALETTE_COMMENT_ATTR;
     static const QString KPL_PALETTE_FILENAME_ATTR;
+    static const QString KPL_PALETTE_READONLY_ATTR;
     static const QString KPL_COLOR_MODEL_ID_ATTR;
     static const QString KPL_COLOR_DEPTH_ID_ATTR;
     static const QString KPL_GROUP_NAME_ATTR;

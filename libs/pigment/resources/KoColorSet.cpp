@@ -64,6 +64,7 @@ const QString KoColorSet::KPL_PALETTE_COLUMN_COUNT_ATTR = "columns";
 const QString KoColorSet::KPL_PALETTE_NAME_ATTR = "name";
 const QString KoColorSet::KPL_PALETTE_COMMENT_ATTR = "comment";
 const QString KoColorSet::KPL_PALETTE_FILENAME_ATTR = "filename";
+const QString KoColorSet::KPL_PALETTE_READONLY_ATTR = "readonly";
 const QString KoColorSet::KPL_COLOR_MODEL_ID_ATTR = "colorModelId";
 const QString KoColorSet::KPL_COLOR_DEPTH_ID_ATTR = "colorDepthId";
 const QString KoColorSet::KPL_GROUP_NAME_ATTR = "name";
@@ -855,7 +856,7 @@ bool KoColorSet::Private::loadKpl()
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);
 
-    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-palette", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "krita/x-colorset", KoStore::Zip));
     if (!store || store->bad()) { return false; }
 
     if (store->hasFile("profiles.xml")) {
@@ -903,6 +904,7 @@ bool KoColorSet::Private::loadKpl()
         QDomElement e = doc.documentElement();
         colorSet->setName(e.attribute(KPL_PALETTE_NAME_ATTR));
         colorSet->setColumnCount(e.attribute(KPL_PALETTE_COLUMN_COUNT_ATTR).toInt());
+        colorSet->setIsEditable(e.attribute(KPL_PALETTE_READONLY_ATTR) != "true");
         comment = e.attribute(KPL_PALETTE_COMMENT_ATTR);
 
         loadKplGroup(doc, e, colorSet->getGlobalGroup());
@@ -1435,7 +1437,7 @@ bool KoColorSet::Private::loadXml() {
 
 bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 {
-    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "application/x-krita-palette", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "krita/x-colorset", KoStore::Zip));
     if (!store || store->bad()) return false;
 
     QSet<const KoColorSpace *> colorSpaces;
@@ -1446,6 +1448,8 @@ bool KoColorSet::Private::saveKpl(QIODevice *dev) const
         root.setAttribute(KPL_VERSION_ATTR, "1.0");
         root.setAttribute(KPL_PALETTE_NAME_ATTR, colorSet->name());
         root.setAttribute(KPL_PALETTE_COMMENT_ATTR, comment);
+        root.setAttribute(KPL_PALETTE_READONLY_ATTR,
+                          (colorSet->isEditable() || !colorSet->isGlobal()) ? "false" : "true");
         root.setAttribute(KPL_PALETTE_COLUMN_COUNT_ATTR, colorSet->columnCount());
         root.setAttribute(KPL_GROUP_ROW_COUNT_ATTR, groups[KoColorSet::GLOBAL_GROUP_NAME].rowCount());
 

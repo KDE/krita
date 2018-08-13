@@ -130,6 +130,7 @@ private:
     void setGlobal();
     bool duplicateExistsGroupName(const QString &name) const;
     void uploadPaletteList() const;
+    QString filenameFromPath(const QString &path);
 
 private:
     struct Private;

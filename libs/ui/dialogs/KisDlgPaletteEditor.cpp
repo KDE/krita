@@ -28,6 +28,7 @@
 #include <QFormLayout>
 #include <QPicture>
 #include <QPushButton>
+#include <QSignalBlocker>
 
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -89,6 +90,15 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     }
     m_paletteEditor->setPaletteModel(model);
 
+    // don't let editor make changes when initializing
+    const QSignalBlocker blocker1(m_ui->lineEditFilename);
+    const QSignalBlocker blocker2(m_ui->lineEditName);
+    const QSignalBlocker blocker3(m_ui->spinBoxCol);
+    const QSignalBlocker blocker4(m_ui->spinBoxRow);
+    const QSignalBlocker blocker5(m_ui->ckxGlobal);
+    const QSignalBlocker blocker6(m_ui->ckxReadOnly);
+    const QSignalBlocker blocker7(m_ui->cbxGroup);
+
     m_ui->lineEditName->setText(m_colorSet->name());
     m_ui->lineEditFilename->setText(m_colorSet->filename());
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
@@ -112,7 +122,7 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_ui->spinBoxCol->setEnabled(canWrite);
     m_ui->spinBoxRow->setEnabled(canWrite);
     m_ui->ckxGlobal->setEnabled(canWrite);
-    m_ui->ckxReadOnly->setEnabled(canWrite);
+    m_ui->ckxReadOnly->setEnabled(canWrite && m_colorSet->isGlobal());
     m_ui->bnAddGroup->setEnabled(canWrite);
 }
 
@@ -171,6 +181,7 @@ void KisDlgPaletteEditor::slotRowCountChanged(int newCount)
 void KisDlgPaletteEditor::slotSetGlobal(int state)
 {
     m_paletteEditor->setGlobal(state == Qt::Checked);
+    m_ui->ckxReadOnly->setEnabled(state == Qt::Checked);
 }
 
 void KisDlgPaletteEditor::slotSetReadOnly(int state)

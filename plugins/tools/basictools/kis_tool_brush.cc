@@ -327,6 +327,9 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+    m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+
+
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
@@ -355,6 +358,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderDelayDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderDelayDistance->setToolTip(i18n("Radius where the brush is blocked"));
     m_sliderDelayDistance->setRange(0, 500);
+    m_sliderDelayDistance->setExponentRatio(3.0); // help pick smaller values
     m_sliderDelayDistance->setSuffix(i18n(" px"));
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 

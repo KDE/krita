@@ -135,9 +135,9 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 
 bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
 {
-    beginResetModel();
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
     m_colorSet->add(entry, groupName);
-    endResetModel();
+    endInsertRows();
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();
     }

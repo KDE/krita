@@ -107,8 +107,9 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
 
-    m_viewContextMenu.addAction(m_actRemove.data());
     m_viewContextMenu.addAction(m_actModify.data());
+    m_viewContextMenu.addAction(m_actRemove.data());
+    connect(m_ui->paletteView, SIGNAL(pressed(QModelIndex)), SLOT(slotContextMenu(QModelIndex)));
 
     m_paletteChooser->setAllowModification(true);
     connect(m_paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), SLOT(slotSetColorSet(KoColorSet*)));
@@ -150,6 +151,13 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
             m_ui->paletteView, SLOT(slotFGColorChanged(KoColor)));
 
     kisview->nodeManager()->disconnect(m_model);
+}
+
+void PaletteDockerDock::slotContextMenu(const QModelIndex &)
+{
+    if (QApplication::mouseButtons() == Qt::RightButton) {
+        m_viewContextMenu.exec(QCursor::pos());
+    }
 }
 
 void PaletteDockerDock::slotAddPalette()

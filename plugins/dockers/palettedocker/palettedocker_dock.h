@@ -61,7 +61,10 @@ public: // QDockWidget
 public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
 
+
 private Q_SLOTS:
+    void slotContextMenu(const QModelIndex &);
+
     void slotAddPalette();
     void slotRemovePalette(KoColorSet *);
     void slotImportPalette();

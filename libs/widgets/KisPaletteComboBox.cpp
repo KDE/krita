@@ -99,19 +99,16 @@ void KisPaletteComboBox::slotPaletteChanged()
         }
         m_groupMapMap[group->name()] = posIdxMap;
     }
-    if (!m_view.isNull()) {
+    if (m_view.isNull()) {
         setCurrentIndex(0);
     }
     QModelIndex idx = m_view->currentIndex();
     if (!idx.isValid()) { return; }
-    if (!qvariant_cast<bool>(idx.data(KisPaletteModel::IsGroupNameRole))) { return; }
+    if (qvariant_cast<bool>(idx.data(KisPaletteModel::IsGroupNameRole))) { return; }
     if (!qvariant_cast<bool>(idx.data(KisPaletteModel::CheckSlotRole))) { return; }
 
-    QString groupName = qvariant_cast<QString>(idx.data(KisPaletteModel::GroupNameRole));
-    int rowInGroup = qvariant_cast<int>(idx.data(KisPaletteModel::RowInGroupRole));
-
     blockSignals(true); // this is a passive selection; this shouldn't make others change
-    setCurrentIndex(m_groupMapMap[groupName][SwatchPosType(idx.column(), rowInGroup)]);
+    slotSwatchSelected(idx);
     blockSignals(false);
 }
 

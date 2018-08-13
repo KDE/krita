@@ -22,7 +22,6 @@
 #include "kritawidgets_export.h"
 
 #include <QComboBox>
-#include <QCompleter>
 #include <QPointer>
 #include <QScopedPointer>
 #include <QPixmap>
@@ -67,7 +66,6 @@ private /* methods */:
     static bool swatchInfoLess(const SwatchInfoType &, const SwatchInfoType &);
 
 private /* member variables */:
-    QScopedPointer<QCompleter> m_completer;
     QPointer<const KisPaletteModel> m_model;
     QPointer<KisPaletteView> m_view;
     QHash<QString, PosIdxMapType> m_groupMapMap;

@@ -20,6 +20,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QVector>
+#include <QCompleter>
 
 // STL
 #include <algorithm>
@@ -29,13 +30,13 @@
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
     : QComboBox(parent)
-    , m_completer(new QCompleter(QComboBox::model(), this))
     , m_model(Q_NULLPTR)
 {
-    m_completer->setCompletionMode(QCompleter::PopupCompletion);
-    m_completer->setCaseSensitivity(Qt::CaseInsensitive);
-    m_completer->setFilterMode(Qt::MatchContains);
-    setCompleter(m_completer.data());
+    setEditable(true);
+    setInsertPolicy(NoInsert);
+    completer()->setCompletionMode(QCompleter::PopupCompletion);
+    completer()->setCaseSensitivity(Qt::CaseInsensitive);
+    completer()->setFilterMode(Qt::MatchContains);
     connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotIndexUpdated(int)));
 }
 

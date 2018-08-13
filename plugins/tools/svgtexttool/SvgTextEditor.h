@@ -27,6 +27,7 @@
 #include <kxmlguiwindow.h>
 #include <KoColor.h>
 #include <KoSvgText.h>//for the enums
+#include <kis_signal_compressor.h>
 
 #include <BasicXMLSyntaxHighlighter.h>
 
@@ -70,6 +71,15 @@ private Q_SLOTS:
      */
     void checkFormat();
 
+    /**
+     * update text editor fields. This uses a compressor
+     */
+    void slotUpdateTextEditor();
+
+    /**
+     * applies the actual updates to the text editor. Call slotUpdateTextEditor()
+     * instead since it has a compressor on it. The compressor will call this
+     */
     void save();
 
     void undo();
@@ -160,6 +170,8 @@ private:
     // keep reference of original text in case we want to revert changes
     QString m_originalSvg;
     QString m_originalHtml;
+
+    KisSignalCompressor *m_textUpdateCompressor;
 
 };
 

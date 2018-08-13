@@ -91,10 +91,14 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_charSelectDialog->setButtons(KoDialog::Close);
 #endif
 
+    // have a compressor on the realtime text updates so it doesn't get too heavy with large text amounts
+    m_textUpdateCompressor = new KisSignalCompressor(300, KisSignalCompressor::FIRST_ACTIVE);
+    connect(m_textUpdateCompressor, SIGNAL(timeout()), SLOT(save()));
+
     // allows for realtime updates to the canvas
-    connect(m_textEditorWidget.richTextEdit, SIGNAL(textChanged()), this, SLOT(save()));
-    connect(m_textEditorWidget.svgStylesEdit, SIGNAL(textChanged()), this, SLOT(save()));
-    connect(m_textEditorWidget.svgTextEdit, SIGNAL(textChanged()), this, SLOT(save()));
+    connect(m_textEditorWidget.richTextEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateTextEditor()));
+    connect(m_textEditorWidget.svgStylesEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateTextEditor()));
+    connect(m_textEditorWidget.svgTextEdit, SIGNAL(textChanged()), this, SLOT(slotUpdateTextEditor()));
 
     // keep or revert the text changes we do
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(slotCloseEditor()));
@@ -1052,6 +1056,11 @@ void SvgTextEditor::slotRevertChangesAndCloseEditor()
     save();
 
     slotCloseEditor();
+}
+
+void SvgTextEditor::slotUpdateTextEditor()
+{
+     m_textUpdateCompressor->start();
 }
 
 void SvgTextEditor::slotCloseEditor()

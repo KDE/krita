@@ -99,12 +99,9 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
     m_ui->bnPaletteChooser->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_ui->paletteBox->setPaletteModel(m_d->paletteModel);
     m_ui->paletteBox->setDisplayRenderer(displayRenderer);
-    m_ui->cmbNameList->setPaletteModel(m_d->paletteModel);
+    m_ui->cmbNameList->setCompanionView(m_ui->paletteBox);
     connect(m_d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotChangePalette(KoColorSet*)));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorUpdated(KoColor)));
-    connect(m_ui->paletteBox, SIGNAL(sigIndexSelected(QModelIndex)),
-            m_ui->cmbNameList, SLOT(slotSwatchSelected(QModelIndex)));
-
 
     // For some bizare reason, the modal dialog doesn't like having the colorset set, so let's not.
     if (config.paletteBox) {
@@ -336,7 +333,7 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSet *set)
     if (!set) {
         return;
     }
-    m_d->paletteModel->setColorSet(set);
+    m_d->paletteModel->setPalette(set);
 }
 
 void KisDlgInternalColorSelector::showEvent(QShowEvent *event)

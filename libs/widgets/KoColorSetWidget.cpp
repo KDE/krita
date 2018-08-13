@@ -109,9 +109,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->paletteChooserButton->setToolTip(i18n("Choose palette"));
 
     d->colorNameCmb = new KisPaletteComboBox(this);
-    d->colorNameCmb->setEditable(true);
-    d->colorNameCmb->setInsertPolicy(QComboBox::NoInsert);
-    d->colorNameCmb->setPaletteModel(paletteModel);
+    d->colorNameCmb->setCompanionView(d->paletteView);
 
     d->bottomLayout = new QHBoxLayout;
     d->bottomLayout->addWidget(d->paletteChooserButton);
@@ -132,12 +130,8 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
             SLOT(slotPaletteChoosen(KoColorSet*)));
     connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)),
             SLOT(slotColorSelectedByPalette(KoColor)));
-    connect(d->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
-            d->colorNameCmb, SLOT(slotSwatchSelected(QModelIndex)));
     connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)),
             SLOT(slotNameListSelection(KoColor)));
-    connect(this, SIGNAL(colorChanged(KoColor,bool)),
-            d->paletteView, SLOT(slotFGColorChanged(KoColor)));
 
     d->rServer = KoResourceServerProvider::instance()->paletteServer();
     QPointer<KoColorSet> defaultColorSet = d->rServer->resourceByName("Default");
@@ -157,7 +151,7 @@ void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
     if (!colorSet) return;
     if (colorSet == d->colorSet) return;
 
-    d->paletteView->paletteModel()->setColorSet(colorSet.data());
+    d->paletteView->paletteModel()->setPalette(colorSet.data());
     d->colorSet = colorSet;
 }
 
@@ -211,7 +205,7 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
 void KoColorSetWidget::slotPaletteChoosen(KoColorSet *colorSet)
 {
     d->colorSet = colorSet;
-    d->paletteView->paletteModel()->setColorSet(colorSet);
+    d->paletteView->paletteModel()->setPalette(colorSet);
 }
 
 void KoColorSetWidget::slotNameListSelection(const KoColor &color)

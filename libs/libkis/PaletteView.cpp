@@ -49,7 +49,7 @@ PaletteView::~PaletteView()
 
 void PaletteView::setPalette(Palette *palette)
 {
-    d->model->setColorSet(palette->colorSet());
+    d->model->setPalette(palette->colorSet());
     d->widget->setPaletteModel(d->model);
 }
 

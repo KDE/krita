@@ -120,7 +120,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->colorSet.setIsGlobal(false);
     m_d->colorSet.setIsEditable(true);
-    m_d->colorModel->setColorSet(&m_d->colorSet);
+    m_d->colorModel->setPalette(&m_d->colorSet);
     m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::red, cs), "color1"));
     m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::green, cs), "color2"));
     m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::blue, cs), "color3"));

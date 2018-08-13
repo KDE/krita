@@ -102,7 +102,15 @@ public /* overriden methods */: // QAbstractTableModel
     // bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
 Q_SIGNALS:
-    void sigPaletteModifed();
+    /**
+     * @brief sigPaletteModified
+     * emitted when palette associated with the model is modified
+     */
+    void sigPaletteModified();
+    /**
+     * @brief sigPaletteChanged
+     * emitted when the palette associated with the model is made another one
+     */
     void sigPaletteChanged();
 
 public /* methods */:
@@ -133,7 +141,7 @@ public /* methods */:
 
     KisSwatch getEntry(const QModelIndex &index) const;
 
-    void setColorSet(KoColorSet* colorSet);
+    void setPalette(KoColorSet* colorSet);
     KoColorSet* colorSet() const;
 
     QModelIndex indexForClosest(const KoColor &compare);

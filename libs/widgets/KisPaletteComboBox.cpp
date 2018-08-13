@@ -1,3 +1,21 @@
+/*
+ *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 // Qt
 #include <QPainter>
 #include <QPen>
@@ -6,6 +24,7 @@
 // STL
 #include <algorithm>
 
+#include "kis_palette_view.h"
 #include "KisPaletteComboBox.h"
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
@@ -17,7 +36,7 @@ KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
     m_completer->setCaseSensitivity(Qt::CaseInsensitive);
     m_completer->setFilterMode(Qt::MatchContains);
     setCompleter(m_completer.data());
-    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotIndexSelected(int)));
+    connect(this, SIGNAL(currentIndexChanged(int)), SLOT(slotIndexUpdated(int)));
 }
 
 KisPaletteComboBox::~KisPaletteComboBox()
@@ -31,17 +50,30 @@ void KisPaletteComboBox::setPaletteModel(const KisPaletteModel *paletteModel)
     m_model = paletteModel;
     if (m_model.isNull()) { return; }
     slotPaletteChanged();
-    connect(m_model, SIGNAL(modelReset()),
+    connect(m_model, SIGNAL(sigPaletteChanged()),
             SLOT(slotPaletteChanged()));
-    connect(m_model, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex&, const QVector<int> &)),
+    connect(m_model, SIGNAL(sigPaletteModified()),
             SLOT(slotPaletteChanged()));
+}
+
+void KisPaletteComboBox::setCompanionView(KisPaletteView *view)
+{
+    if (!m_view.isNull()) {
+        m_view->disconnect(this);
+        disconnect(m_view.data());
+    }
+    m_view = view;
+    setPaletteModel(view->paletteModel());
+    connect(view, SIGNAL(sigIndexSelected(QModelIndex)),
+            SLOT(slotSwatchSelected(QModelIndex)));
+    connect(this, SIGNAL(sigColorSelected(KoColor)),
+            view, SLOT(slotFGColorChanged(KoColor)));
 }
 
 void KisPaletteComboBox::slotPaletteChanged()
 {
     if (QPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
 
-    blockSignals(true); // avoid changing fg color
     clear();
     m_groupMapMap.clear();
     m_idxSwatchMap.clear();
@@ -66,7 +98,19 @@ void KisPaletteComboBox::slotPaletteChanged()
         }
         m_groupMapMap[group->name()] = posIdxMap;
     }
-    setCurrentIndex(0);
+    if (!m_view.isNull()) {
+        setCurrentIndex(0);
+    }
+    QModelIndex idx = m_view->currentIndex();
+    if (!idx.isValid()) { return; }
+    if (!qvariant_cast<bool>(idx.data(KisPaletteModel::IsGroupNameRole))) { return; }
+    if (!qvariant_cast<bool>(idx.data(KisPaletteModel::CheckSlotRole))) { return; }
+
+    QString groupName = qvariant_cast<QString>(idx.data(KisPaletteModel::GroupNameRole));
+    int rowInGroup = qvariant_cast<int>(idx.data(KisPaletteModel::RowInGroupRole));
+
+    blockSignals(true); // this is a passive selection; this shouldn't make others change
+    setCurrentIndex(m_groupMapMap[groupName][SwatchPosType(idx.column(), rowInGroup)]);
     blockSignals(false);
 }
 
@@ -106,7 +150,7 @@ void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
     setCurrentIndex(m_groupMapMap[gName][SwatchPosType(index.column(), rowInGroup)]);
 }
 
-void KisPaletteComboBox::slotIndexSelected(int idx)
+void KisPaletteComboBox::slotIndexUpdated(int idx)
 {
     if (idx >= 0 && idx < m_idxSwatchMap.size()) {
         emit sigColorSelected(m_idxSwatchMap[idx].color());

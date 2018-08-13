@@ -94,7 +94,7 @@ PaletteDockerDock::PaletteDockerDock( )
 
     m_ui->paletteView->setPaletteModel(m_model);
     m_ui->paletteView->setAllowModification(true);
-    m_ui->cmbNameList->setPaletteModel(m_model);
+    m_ui->cmbNameList->setCompanionView(m_ui->paletteView);
 
     m_paletteEditor->setPaletteModel(m_model);
 
@@ -106,10 +106,8 @@ PaletteDockerDock::PaletteDockerDock( )
             SLOT(slotPaletteIndexSelected(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
-    connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
-            m_ui->cmbNameList, SLOT(slotSwatchSelected(QModelIndex)));
-    connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)),
-            SLOT(slotNameListSelection(KoColor)));
+    // connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(KoColor)),
+            // SLOT(slotNameListSelection(KoColor)));
 
     m_viewContextMenu.addAction(m_actRemove.data());
     m_viewContextMenu.addAction(m_actModify.data());
@@ -251,7 +249,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
     }
 
     m_currentColorSet = colorSet;
-    m_model->setColorSet(colorSet);
+    m_model->setPalette(colorSet);
     if (colorSet) {
         KisConfig cfg(true);
         cfg.setDefaultPalette(colorSet->name());

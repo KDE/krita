@@ -36,7 +36,7 @@ KisPaletteModel::KisPaletteModel(QObject* parent)
     , m_colorSet(0)
     , m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
-    connect(this, SIGNAL(sigPaletteModifed()), SLOT(slotPaletteModified()));
+    connect(this, SIGNAL(sigPaletteModified()), SLOT(slotPaletteModified()));
 }
 
 KisPaletteModel::~KisPaletteModel()
@@ -98,12 +98,12 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     return createIndex(row, column, group);
 }
 
-void KisPaletteModel::setColorSet(KoColorSet* colorSet)
+void KisPaletteModel::setPalette(KoColorSet* palette)
 {
     beginResetModel();
     m_groupNameRows.clear();
-    m_colorSet = colorSet;
-    if (colorSet) {
+    m_colorSet = palette;
+    if (palette) {
         int row = -1;
         for (const QString &groupName : m_colorSet->getGroupNames()) {
             m_groupNameRows[row] = groupName;
@@ -112,7 +112,6 @@ void KisPaletteModel::setColorSet(KoColorSet* colorSet)
         }
     }
     endResetModel();
-
     emit sigPaletteChanged();
 }
 
@@ -142,7 +141,7 @@ bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();
     }
-    emit sigPaletteModifed();
+    emit sigPaletteModified();
     return true;
 }
 
@@ -157,7 +156,7 @@ bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
         QString groupName = m_groupNameRows[groupNameRow];
         removeGroup(groupName, keepColors);
     }
-    emit sigPaletteModifed();
+    emit sigPaletteModified();
     return true;
 }
 
@@ -262,7 +261,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
             }
             setEntry(entry, finalIdx);
-            emit sigPaletteModifed();
+            emit sigPaletteModified();
             if (m_colorSet->isGlobal()) {
                 m_colorSet->save();
             }
@@ -325,7 +324,7 @@ void KisPaletteModel::setEntry(const KisSwatch &entry,
     KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
     Q_ASSERT(group);
     group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
-    emit sigPaletteModifed();
+    emit sigPaletteModified();
     emit dataChanged(index, index);
     if (m_colorSet->isGlobal()) {
         m_colorSet->save();
@@ -343,7 +342,7 @@ bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newNa
         }
     }
     endResetModel();
-    emit sigPaletteModifed();
+    emit sigPaletteModified();
     return success;
 }
 
@@ -354,7 +353,7 @@ void KisPaletteModel::addGroup(const KisSwatchGroup &group)
     *m_colorSet->getGroup(group.name()) = group;
     endInsertColumns();
 
-    emit sigPaletteModifed();
+    emit sigPaletteModified();
 }
 
 void KisPaletteModel::setRowNumber(const QString &groupName, int rowCount)

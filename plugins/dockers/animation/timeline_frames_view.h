@@ -161,18 +161,6 @@ private:
 
     QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
 
-    int defaultNumberOfFramesToAdd() const;
-    void setDefaultNumberOfFramesToAdd(int value) const;
-
-    int defaultNumberOfColumnsToAdd() const;
-    void setDefaultNumberOfColumnsToAdd(int value) const;
-
-    int defaultNumberOfFramesToRemove() const;
-    void setDefaultNumberOfFramesToRemove(int value) const;
-
-    int defaultNumberOfColumnsToRemove() const;
-    void setDefaultNumberOfColumnsToRemove(int value) const;
-
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const override;

@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISPALETTECHOOSER_H
-#define KISPALETTECHOOSER_H
+#ifndef KISPALETTELISTWIDGET_H
+#define KISPALETTELISTWIDGET_H
 
 #include <QString>
 #include <QWidget>
@@ -65,4 +65,4 @@ private:
     QScopedPointer<KisPaletteListWidgetPrivate> m_d;
 };
 
-#endif // KISPALETTECHOOSER_H
+#endif // KISPALETTELISTWIDGET_H

@@ -29,6 +29,10 @@
 #include <QFormLayout>
 #include <klocalizedstring.h>
 
+#include "KSharedConfig"
+#include "KConfigGroup"
+
+
 TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
     QDialog(parent)
 {
@@ -75,6 +79,11 @@ TimelineInsertKeyframeDialog::TimelineInsertKeyframeDialog(QWidget *parent) :
 
 bool TimelineInsertKeyframeDialog::promptUserSettings(int &out_count, int &out_timing, TimelineDirection &out_direction)
 {
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    frameCountSpinbox.setValue(cfg.readEntry("defaultNumberOfFramesToAdd", 1));
+    frameTimingSpinbox.setValue(defaultTimingOfAddedFrames());
+    rightAfter->setChecked(cfg.readEntry("addNewFramesToTheRight", true));
+
     if (exec() == QDialog::Accepted) {
         out_count = frameCountSpinbox.value();
         out_timing = frameTimingSpinbox.value();
@@ -84,7 +93,35 @@ bool TimelineInsertKeyframeDialog::promptUserSettings(int &out_count, int &out_t
             out_direction = TimelineDirection::RIGHT;
         }
 
+        cfg.writeEntry("defaultNumberOfFramesToAdd", out_count);
+        setDefaultTimingOfAddedFrames(out_timing);
+        cfg.writeEntry("addNewFramesToTheRight", rightAfter->isChecked());
+
         return true;
     }
     return false;
+}
+
+int TimelineInsertKeyframeDialog::defaultTimingOfAddedFrames() const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    return cfg.readEntry("defaultTimingOfAddedFrames", 1);
+}
+
+void TimelineInsertKeyframeDialog::setDefaultTimingOfAddedFrames(int value)
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    cfg.writeEntry("defaultTimingOfAddedFrames", value);
+}
+
+int TimelineInsertKeyframeDialog::defaultNumberOfHoldFramesToRemove() const
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    return cfg.readEntry("defaultNumberOfHoldFramesToRemove", 1);
+}
+
+void TimelineInsertKeyframeDialog::setDefaultNumberOfHoldFramesToRemove(int value)
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
+    cfg.writeEntry("defaultNumberOfHoldFramesToRemove", value);
 }

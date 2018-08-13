@@ -147,6 +147,7 @@ protected:
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
+    void workaroundBrokenFrameTimeBug(int *time);
 
 private:
     KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);

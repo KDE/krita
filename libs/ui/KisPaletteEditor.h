@@ -134,6 +134,7 @@ private:
 private:
     struct Private;
     QScopedPointer<Private> m_d;
+    void submitNonGlobalModificationToDoc();
 };
 
 #endif // KISPALETTEMANAGER_H

@@ -278,9 +278,9 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
     QByteArray encodedData;
 
     QDataStream stream(&encodedData, QIODevice::WriteOnly);
-    QString mimeTypeName = "krita/x-colorsetentry";
     QModelIndex index = indexes.last();
-    if (index.isValid()) {
+    if (index.isValid() && qvariant_cast<bool>(index.data(CheckSlotRole))) {
+        QString mimeTypeName = "krita/x-colorsetentry";
         if (qvariant_cast<bool>(index.data(IsGroupNameRole))==false) {
             KisSwatch entry = getEntry(index);
 
@@ -292,7 +292,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
 
             stream << entry.name() << entry.id() << entry.spotColor()
                    << rowNumberInGroup(index.row()) << index.column()
-                   << qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole))
+                   << qvariant_cast<QString>(index.data(GroupNameRole))
                    << doc.toString();
         } else {
             mimeTypeName = "krita/x-colorsetgroup";
@@ -303,9 +303,9 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
             }
             stream << groupName;
         }
+        mimeData->setData(mimeTypeName, encodedData);
     }
 
-    mimeData->setData(mimeTypeName, encodedData);
     return mimeData;
 }
 

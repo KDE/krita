@@ -268,6 +268,7 @@ QString KisPaletteEditor::renameGroup(const QString &oldName)
 
     m_d->modified.groups[oldName].setName(leNewName.text());
     m_d->modifiedGroupNames.insert(oldName);
+
     return leNewName.text();
 }
 
@@ -313,7 +314,14 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     m_d->model->setEntry(KisSwatch(color), index);
-    m_d->view->document()->addCommand(new KisChangePaletteCommand());
+    submitNonGlobalModificationToDoc();
+}
+
+void KisPaletteEditor::submitNonGlobalModificationToDoc()
+{
+    if (!m_d->model->colorSet()->isGlobal()) {
+        m_d->view->document()->addCommand(new KisChangePaletteCommand());
+    }
 }
 
 void KisPaletteEditor::removeEntry(const QModelIndex &index)
@@ -322,15 +330,12 @@ void KisPaletteEditor::removeEntry(const QModelIndex &index)
     if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    bool keepColors = false;
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
         removeGroup(qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole)));
         updatePalette();
     } else {
-        m_d->model->removeEntry(index, keepColors);
-        if (!m_d->model->colorSet()->isGlobal()) {
-            m_d->view->document()->addCommand(new KisChangePaletteCommand());
-        }
+        m_d->model->removeEntry(index, false);
+        submitNonGlobalModificationToDoc();
     }
     if (m_d->model->colorSet()->isGlobal()) {
         m_d->model->colorSet()->save();
@@ -373,7 +378,7 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
             entry.setColor(bnColor->color());
             entry.setSpotColor(chkSpot->isChecked());
             m_d->model->setEntry(entry, index);
-            m_d->view->document()->addCommand(new KisChangePaletteCommand());
+            submitNonGlobalModificationToDoc();
         }
     }
 }
@@ -425,7 +430,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     }
     m_d->modifiedGroupNames.insert(groupName);
     m_d->modified.groups[groupName].addEntry(newEntry);
-    m_d->view->document()->addCommand(new KisChangePaletteCommand());
+    submitNonGlobalModificationToDoc();
 }
 
 void KisPaletteEditor::updatePalette()
@@ -471,9 +476,7 @@ void KisPaletteEditor::updatePalette()
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
 
-    if (!palette->isGlobal()) {
-        m_d->view->document()->addCommand(new KisChangePaletteCommand);
-    }
+    submitNonGlobalModificationToDoc();
 }
 
 void KisPaletteEditor::slotPaletteChanged()

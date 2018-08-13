@@ -4,7 +4,7 @@
 # ocio on Windows.
 #
 SET(EXTPREFIX_ocio "${EXTPREFIX}" )
-if (MSVC OR MINGW)
+if (MINGW)
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

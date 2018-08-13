@@ -1,5 +1,5 @@
 SET(EXTPREFIX_openexr "${EXTPREFIX}" )
-if (MSVC OR MINGW)
+if (MINGW)
 ExternalProject_Add( ext_openexr
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://files.kde.org/krita/build/dependencies/openexr-2.2.1.tar.gz

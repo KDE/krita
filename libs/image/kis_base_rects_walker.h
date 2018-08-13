@@ -137,7 +137,7 @@ public:
     }
 
     inline void recalculate(const QRect& requestedRect) {
-        Q_ASSERT(m_startNode);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_startNode);
 
         KisProjectionLeafSP startLeaf = m_startNode->projectionLeaf();
 
@@ -166,7 +166,7 @@ public:
     }
 
     bool checksumValid() {
-        Q_ASSERT(m_startNode);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_startNode, false);
         return
             m_nodeChecksum == calculateChecksum(m_startNode->projectionLeaf(), m_requestedRect) &&
             m_graphChecksum == m_startNode->graphSequenceNumber();

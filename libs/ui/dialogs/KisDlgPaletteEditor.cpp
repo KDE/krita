@@ -180,8 +180,12 @@ void KisDlgPaletteEditor::slotRowCountChanged(int newCount)
 
 void KisDlgPaletteEditor::slotSetGlobal(int state)
 {
-    m_paletteEditor->setGlobal(state == Qt::Checked);
-    m_ui->ckxReadOnly->setEnabled(state == Qt::Checked);
+    bool toGlobal = (state == Qt::Checked);
+    m_paletteEditor->setGlobal(toGlobal);
+    if (!toGlobal) {
+        m_ui->ckxReadOnly->setCheckState(Qt::Unchecked);
+    }
+    m_ui->ckxReadOnly->setEnabled(toGlobal);
 }
 
 void KisDlgPaletteEditor::slotSetReadOnly(int state)

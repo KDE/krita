@@ -178,6 +178,11 @@ bool KisPaletteEditor::duplicateExistsGroupName(const QString &name) const
     return false;
 }
 
+bool KisPaletteEditor::duplicateExistsOriginalGroupName(const QString &name) const
+{
+    return m_d->modified.groups.contains(name);
+}
+
 QString KisPaletteEditor::oldNameFromNewName(const QString &newName) const
 {
     Q_FOREACH (const QString &oldGroupName, m_d->modified.groups.keys()) {
@@ -229,13 +234,17 @@ QString KisPaletteEditor::addGroup()
     if (dlg.exec() != QDialog::Accepted) { return QString(); }
     if (duplicateExistsGroupName(leName.text())) { return QString(); }
 
-    QString name = leName.text();
-    m_d->newGroupNames.insert(name);
+    QString realName = leName.text();
+    QString name = realName;
+    if (duplicateExistsOriginalGroupName(name)) {
+        name = newGroupName();
+    }
     m_d->modified.groups[name] = KisSwatchGroup();
     KisSwatchGroup &newGroup = m_d->modified.groups[name];
-    newGroup.setName(name);
+    newGroup.setName(realName);
+    m_d->newGroupNames.insert(name);
     newGroup.setRowCount(spxRow.value());
-    return name;
+    return realName;
 }
 
 bool KisPaletteEditor::removeGroup(const QString &name)
@@ -601,6 +610,16 @@ QString KisPaletteEditor::newPaletteFileName()
     }
     result = result + QString::number(i) + tmpColorSet.defaultFileExtension();
     return result;
+}
+
+QString KisPaletteEditor::newGroupName() const
+{
+    QString prefix = "New Group ";
+    int i = 0;
+    while (m_d->modified.groups.contains(prefix + QString::number(i))) {
+        i++;
+    }
+    return prefix + QString::number(i);
 }
 
 void KisPaletteEditor::uploadPaletteList() const

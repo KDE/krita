@@ -134,6 +134,13 @@ void KisPaletteEditor::importPalette()
     }
     KoColorSet *colorSet = new KoColorSet(filename);
     colorSet->load();
+    QString name = filenameFromPath(colorSet->filename());
+    if (duplicateExistsFilename(name)) {
+        colorSet->setFilename(newPaletteFileName());
+    } else {
+        colorSet->setFilename(name);
+    }
+    colorSet->setIsGlobal(false);
     rAdapter.addResource(colorSet);
 
     uploadPaletteList();

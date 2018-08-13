@@ -20,6 +20,8 @@
 #define LIBKIS_PALETTE_H
 
 #include <QObject>
+#include <QList>
+
 #include "kritalibkis_export.h"
 #include "libkis.h"
 #include "Resource.h"
@@ -88,7 +90,7 @@ public:
      * @brief groupNames
      * @return the list of group names. This is list is in the order these groups are in the file.
      */
-    QStringList groupNames();
+    QStringList groupNames() const;
     /**
      * @brief addGroup
      * @param name of the new group
@@ -143,21 +145,7 @@ public:
      * remove the entry at @param index from the group @param groupName.
      */
     void removeEntry(int index, const QString &groupName);
-    /**
-     * @brief insertEntry
-     * like addentry, but allows you to pick the index to insertBefore.
-     * @param index
-     * @param entry
-     * @param groupName
-     */
-    // void insertEntry(int index, KoColorSetEntry entry, QString groupName = QString());
-    /**
-     * @brief editEntry
-     * Changes the entry at @param index by replacing it with @param entry.
-     * @param groupName the group at which the index is.
-     * @return whether it was successful.
-     */
-    bool editEntry (int index, KisSwatch entry, QString groupName = QString());
+
     /**
      * @brief changeGroupName
      * change the group name.

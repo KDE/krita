@@ -56,8 +56,8 @@
 #include <kis_palette_view.h>
 #include <KisPaletteListWidget.h>
 
-#include "PaletteEditor.h"
-#include "DlgPaletteEditor.h"
+#include <KisPaletteEditor.h>
+#include <dialogs/KisDlgPaletteEditor.h>
 
 #include "ui_wdgpalettedock.h"
 
@@ -71,7 +71,7 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_rServer(KoResourceServerProvider::instance()->paletteServer())
     , m_rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
     , m_activeDocument(Q_NULLPTR)
-    , m_paletteEditor(new PaletteEditor)
+    , m_paletteEditor(new KisPaletteEditor)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add foreground color")))
     , m_actRemove(new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete color")))
     , m_actModify(new QAction(KisIconUtils::loadIcon("edit-rename"), i18n("Modify this spot")))
@@ -263,14 +263,13 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
 
 void PaletteDockerDock::slotEditPalette()
 {
-    DlgPaletteEditor dlg;
+    KisDlgPaletteEditor dlg;
     if (!m_currentColorSet) { return; }
     dlg.setPaletteModel(m_model);
     dlg.setView(m_view);
     if (dlg.exec() != QDialog::Accepted){ return; }
-    dlg.uploadChange();
 
-    slotSetColorSet(m_currentColorSet);
+    slotSetColorSet(m_currentColorSet); // update GUI
 }
 
 

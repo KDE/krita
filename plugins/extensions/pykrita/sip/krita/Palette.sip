@@ -1,19 +1,3 @@
-/*
-struct KoColorSetEntry {
-    %TypeHeaderCode
-    #include "KoColorSet.h"
-    %End
-public:
-    KoColorSetEntry();
-
-    QString name;
-    QString id;
-    bool spotColor;
-
-    bool operator==(const KoColorSetEntry& rhs) const;
-
-};
-*/
 class KisSwatch;
 
 class Palette : QObject
@@ -38,7 +22,6 @@ public:
     ManagedColor *colorForEntry(KisSwatch entry) /Factory/;
     void addEntry(KisSwatch entry, QString groupName);
     void removeEntry(int index, const QString &groupName);
-    bool editEntry(int index, KisSwatch entry, QString groupName);
     bool changeGroupName(QString oldGroupName, QString newGroupName);
     bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore);
     bool save();

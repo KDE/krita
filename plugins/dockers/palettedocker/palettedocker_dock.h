@@ -44,7 +44,7 @@ class KisWorkspaceResource;
 class KisPaletteListWidget;
 class KisPaletteModel;
 
-class PaletteEditor;
+class KisPaletteEditor;
 class Ui_WdgPaletteDock;
 
 class PaletteDockerDock : public QDockWidget, public KisMainwindowObserver
@@ -97,7 +97,7 @@ private /* member variables */:
 
     QPointer<KisDocument> m_activeDocument;
     QPointer<KoColorSet> m_currentColorSet;
-    QScopedPointer<PaletteEditor> m_paletteEditor;
+    QScopedPointer<KisPaletteEditor> m_paletteEditor;
 
     QScopedPointer<QAction> m_actAdd;
     QScopedPointer<QAction> m_actRemove;

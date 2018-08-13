@@ -152,6 +152,7 @@ set(kritaui_LIB_SRCS
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
     KisWelcomePageWidget.cpp
+    KisChangePaletteCommand.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
@@ -256,6 +257,8 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     
+    KisPaletteEditor.cpp
+    dialogs/KisDlgPaletteEditor.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -485,6 +488,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+    forms/WdgDlgPaletteEditor.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

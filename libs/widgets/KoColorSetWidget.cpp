@@ -40,7 +40,6 @@
 #include <ksharedconfig.h>
 
 #include <resources/KoColorSet.h>
-#include <resources/KoColorSetEntry.h>
 #include <KoColorPatch.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoResourceServer.h>

@@ -139,6 +139,25 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     return false;
 }
 
+bool KisPaletteView::addGroupWithDialog()
+{
+    KoDialog *window = new KoDialog();
+    window->setWindowTitle(i18nc("@title:window","Add a new group"));
+    QFormLayout *editableItems = new QFormLayout();
+    window->mainWidget()->setLayout(editableItems);
+    QLineEdit *lnName = new QLineEdit();
+    editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
+    lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
+    if (window->exec() == KoDialog::Accepted) {
+        KisSwatchGroup group;
+        group.setName(lnName->text());
+        m_d->model->addGroup(group);
+        m_d->model->colorSet()->save();
+        return true;
+    }
+    return false;
+}
+
 bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 {
     bool keepColors = false;

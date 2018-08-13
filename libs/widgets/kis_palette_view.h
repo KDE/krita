@@ -64,14 +64,6 @@ public:
      * @param value
      */
     void setCrossedKeyword(const QString &value);
-    /**
-     * add an entry with a dialog window.
-     */
-    bool addEntryWithDialog(KoColor color);
-    /**
-     * remove entry with a dialog window.(Necessary for groups.
-     */
-    bool removeEntryWithDialog(QModelIndex index);
     void removeSelectedEntry();
     /**
      * @brief selectClosestColor
@@ -79,6 +71,25 @@ public:
      * @param color
      */
     void selectClosestColor(const KoColor &color);
+
+    /**
+     * add an entry with a dialog window.
+     * @warning deprecated.
+     * kept for compatibility with @ref PaletteView in @ref libkis
+     */
+    bool addEntryWithDialog(KoColor color);
+    /**
+     * remove entry with a dialog window.(Necessary for groups.
+     * @warning deprecated.
+     * kept for compatibility with @ref PaletteView in @ref libkis
+     */
+    bool removeEntryWithDialog(QModelIndex index);
+    /**
+     * add entry with a dialog window.
+     * @warning deprecated.
+     * kept for compatibility with @ref PaletteView in @ref libkis
+     */
+    bool addGroupWithDialog();
 
 Q_SIGNALS:
     void sigIndexSelected(const QModelIndex &index);

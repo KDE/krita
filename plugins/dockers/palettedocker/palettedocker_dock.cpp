@@ -289,7 +289,7 @@ void PaletteDockerDock::slotRemoveColor()
         if (!index.isValid()) {
             return;
         }
-        m_ui->paletteView->removeEntryWithDialog(index);
+        m_paletteEditor->removeEntry(index);
         m_ui->bnRemove->setEnabled(false);
     }
 }

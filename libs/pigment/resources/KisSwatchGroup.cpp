@@ -67,7 +67,7 @@ void KisSwatchGroup::setEntry(const KisSwatch &e, int column, int row)
 {
     Q_ASSERT(column < d->colorMatrix.size() && column >= 0 && row >= 0);
     if (row >= d->rowCount) {
-        setRowCount(row);
+        setRowCount(row + 1);
     }
     if (!checkEntry(column, row)) {
         d->colorCount++;

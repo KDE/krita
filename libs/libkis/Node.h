@@ -440,7 +440,9 @@ public Q_SLOTS:
     void move(int x, int y);
 
     /**
-     * @brief position returns the position of the paint device of this node
+     * @brief position returns the position of the paint device of this node. The position is
+     * always 0,0 unless the layer has been moved. If you want to know the topleft position of
+     * the rectangle around the actual non-transparent pixels in the node, use bounds().
      * @return the top-left position of the node
      */
     QPoint position() const;

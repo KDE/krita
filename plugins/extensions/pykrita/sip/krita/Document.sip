@@ -82,6 +82,7 @@ public Q_SLOTS:
     void setVerticalGuides(const QList<qreal> &lines);
     void setGuidesVisible(bool visible);
     void setGuidesLocked(bool locked);
+    bool modified() const;
 private:
 
 };

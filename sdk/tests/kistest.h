@@ -50,6 +50,15 @@
 #define KISTEST_MAIN(TestObject) \
 int main(int argc, char *argv[]) \
 { \
+\
+    if (qEnvironmentVariableIsSet("QT_LOGGING_RULES")) { \
+        qWarning() << "Disable extra debugging output!!!"; \
+        qputenv("QT_LOGGING_RULES", \
+                qgetenv("QT_LOGGING_RULES") + \
+                QByteArrayLiteral(";krita.lib.plugin.debug=false;krita.lib.resources.debug=false;krita.lib.pigment.debug=false")); \
+    } \
+    qputenv("QT_LOGGING_RULES", ""); \
+\
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \

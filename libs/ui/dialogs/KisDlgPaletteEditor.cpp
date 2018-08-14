@@ -102,7 +102,7 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     const QSignalBlocker blocker7(m_ui->cbxGroup);
 
     m_ui->lineEditName->setText(m_colorSet->name());
-    m_ui->lineEditFilename->setText(m_colorSet->filename());
+    m_ui->lineEditFilename->setText(m_paletteEditor->relativePathFromSaveLocation());
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
     m_ui->ckxGlobal->setCheckState(m_colorSet->isGlobal() ? Qt::Checked : Qt::Unchecked);
     m_ui->ckxReadOnly->setCheckState(!m_colorSet->isEditable() ? Qt::Checked : Qt::Unchecked);

@@ -104,7 +104,7 @@ void KisPaletteEditor::addPalette()
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    KoColorSet *newColorSet = new KoColorSet(newPaletteFileName());
+    KoColorSet *newColorSet = new KoColorSet(newPaletteFileName(false));
     newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
     newColorSet->setIsEditable(true);
@@ -134,7 +134,7 @@ void KisPaletteEditor::importPalette()
     colorSet->load();
     QString name = filenameFromPath(colorSet->filename());
     if (duplicateExistsFilename(name)) {
-        colorSet->setFilename(newPaletteFileName());
+        colorSet->setFilename(newPaletteFileName(false));
     } else {
         colorSet->setFilename(name);
     }
@@ -202,7 +202,7 @@ void KisPaletteEditor::changeFilename(const QString &newName)
 {
     m_d->isFilenameModified = true;
     m_d->pathsToRemove.insert(m_d->modified.filename);
-    m_d->modified.filename = newName;
+    m_d->modified.filename = m_d->rServer->saveLocation() + newName;
 }
 
 void KisPaletteEditor::changeColCount(int newCount)
@@ -475,12 +475,14 @@ void KisPaletteEditor::updatePalette()
         palette->setName(modified.name);
     }
     if (m_d->isFilenameModified) {
+        QString originalPath = palette->filename();
         palette->setFilename(modified.filename);
         if (palette->isGlobal()) {
             if (!palette->save()) {
-                palette->setFilename(m_d->rServer->saveLocation() + newPaletteFileName());
+                palette->setFilename(newPaletteFileName(true));
                 palette->save();
             }
+            QFile::remove(originalPath);
         }
     }
     if (m_d->isGlobalModified) {
@@ -567,14 +569,27 @@ void KisPaletteEditor::setGlobal()
     uploadPaletteList();
 }
 
-bool KisPaletteEditor::duplicateExistsFilename(const QString &name) const
+bool KisPaletteEditor::duplicateExistsFilename(const QString &filename) const
 {
-    Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
-        if (r->filename() == name && r != m_d->model->colorSet()) {
-            return true;
+    if (m_d->model->colorSet()->isGlobal()) {
+        Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
+            if (r->filename() == m_d->rServer->saveLocation() + filename && r != m_d->model->colorSet()) {
+                return true;
+            }
+        }
+    } else {
+        Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
+            if (r->filename() == filename && r != m_d->model->colorSet()) {
+                return true;
+            }
         }
     }
     return false;
+}
+
+QString KisPaletteEditor::relativePathFromSaveLocation() const
+{
+    return filenameFromPath(m_d->modified.filename);
 }
 
 void KisPaletteEditor::setNonGlobal()
@@ -587,7 +602,7 @@ void KisPaletteEditor::setNonGlobal()
     QString name = filenameFromPath(colorSet->filename());
     QFile::remove(colorSet->filename());
     if (duplicateExistsFilename(name)) {
-        colorSet->setFilename(newPaletteFileName());
+        colorSet->setFilename(newPaletteFileName(false));
     } else {
         colorSet->setFilename(name);
     }
@@ -596,7 +611,7 @@ void KisPaletteEditor::setNonGlobal()
     uploadPaletteList();
 }
 
-QString KisPaletteEditor::newPaletteFileName()
+QString KisPaletteEditor::newPaletteFileName(bool isGlobal)
 {
     QSet<QString> nameSet;
 
@@ -606,6 +621,10 @@ QString KisPaletteEditor::newPaletteFileName()
 
     KoColorSet tmpColorSet;
     QString result = "new_palette_";
+
+    if (isGlobal) {
+        result = m_d->rServer->saveLocation() + result;
+    }
 
     int i = 0;
     while (nameSet.contains(result + QString::number(i) + tmpColorSet.defaultFileExtension())) {
@@ -639,7 +658,7 @@ void KisPaletteEditor::uploadPaletteList() const
     m_d->view->document()->addCommand(new KisChangePaletteCommand());
 }
 
-QString KisPaletteEditor::filenameFromPath(const QString &path)
+QString KisPaletteEditor::filenameFromPath(const QString &path) const
 {
     return QDir::fromNativeSeparators(path).section('/', -1, -1);
 }

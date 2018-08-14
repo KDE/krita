@@ -74,7 +74,8 @@ public:
      * @return true if the a palette in the resource system that has filename
      * name already exists else false
      */
-    bool duplicateExistsFilename(const QString &name) const;
+    bool duplicateExistsFilename(const QString &filename) const;
+    QString relativePathFromSaveLocation() const;
 
     void rename(const QString &newName);
     void changeFilename(const QString &newName);
@@ -128,14 +129,14 @@ private Q_SLOTS:
     void slotPaletteChanged();
 
 private:
-    QString newPaletteFileName();
+    QString newPaletteFileName(bool isGlobal);
     QString newGroupName() const;
     void setNonGlobal();
     void setGlobal();
     bool duplicateExistsGroupName(const QString &name) const;
     bool duplicateExistsOriginalGroupName(const QString &name) const;
     void uploadPaletteList() const;
-    QString filenameFromPath(const QString &path);
+    QString filenameFromPath(const QString &path) const;
 
 private:
     struct Private;

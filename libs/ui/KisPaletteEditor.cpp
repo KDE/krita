@@ -462,6 +462,8 @@ void KisPaletteEditor::addEntry(const KoColor &color)
 void KisPaletteEditor::updatePalette()
 {
     Q_ASSERT(m_d->model);
+    Q_ASSERT(m_d->model->colorSet());
+    if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     KoColorSet *palette = m_d->model->colorSet();

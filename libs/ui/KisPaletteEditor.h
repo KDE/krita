@@ -35,6 +35,9 @@ class KisViewManager;
  * @brief The PaletteEditor class
  * this class manipulates a KisPaletteModel using GUI elements and communicate
  * with KisDocument
+ *
+ * Changes made in this class won't be done to the palette if the palette is
+ * read only (not editable, isEditable() == false)
  */
 class KRITAUI_EXPORT KisPaletteEditor : public QObject
 {

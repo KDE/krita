@@ -88,10 +88,8 @@ void KisPaletteListWidget::slotPaletteResourceSelected(KoResource *r)
     emit sigPaletteSelected(g);
     if (!m_d->allowModification) { return; }
     if (g->isEditable()) {
-        m_ui->bnAdd->setEnabled(true);
         m_ui->bnRemove->setEnabled(true);
     } else {
-        m_ui->bnAdd->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
     }
 }

@@ -566,6 +566,16 @@ void KisPaletteEditor::setGlobal()
 
 bool KisPaletteEditor::duplicateExistsFilename(const QString &filename) const
 {
+    if (!m_d->model->colorSet()) {
+        Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
+            if (r->filename() == m_d->rServer->saveLocation() + filename) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     if (m_d->model->colorSet()->isGlobal()) {
         Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
             if (r->filename() == m_d->rServer->saveLocation() + filename && r != m_d->model->colorSet()) {

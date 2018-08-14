@@ -116,11 +116,12 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->provider = provider;
 
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-
     m_d->colorSet.setIsGlobal(false);
     m_d->colorSet.setIsEditable(true);
     m_d->colorModel->setPalette(&m_d->colorSet);
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+
     m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::red, cs), "color1"));
     m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::green, cs), "color2"));
     m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::blue, cs), "color3"));
@@ -200,7 +201,8 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
 
 void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
 {
-    m_d->colorSet.clear();
+    m_d->colorModel->clear();
+
     m_d->transparentColorIndex = -1;
 
     if (m_d->activeMask) {
@@ -295,9 +297,9 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool value)
     KisColorizeMask::KeyStrokeColors colors;
 
     int i = 0;
-    for (const QString &groupName : m_d->colorSet.getGroupNames()) {
+    Q_FOREACH (const QString &groupName, m_d->colorSet.getGroupNames()) {
         KisSwatchGroup *group = m_d->colorSet.getGroup(groupName);
-        for (const KisSwatchGroup::SwatchInfo &info : group->infoList()) {
+        Q_FOREACH (const KisSwatchGroup::SwatchInfo &info, group->infoList()) {
             colors.colors << info.swatch.color();
             if (activeSwatch == info.swatch) { activeIndex = i; }
             i++;

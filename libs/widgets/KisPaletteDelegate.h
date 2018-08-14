@@ -42,7 +42,7 @@ public:
 
 private:
     QString m_crossedKeyword;
-    void paintCrossed(const QStyleOptionViewItem &option, QPainter *painter) const;
+    void paintCrossedLine(const QStyleOptionViewItem &option, QPainter *painter) const;
     void paintNonCrossed(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, const bool isSelected) const;
     void paintGroupName(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, const bool isSelected) const;
 };

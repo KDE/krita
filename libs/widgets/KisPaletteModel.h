@@ -138,6 +138,7 @@ public /* methods */:
     bool renameGroup(const QString &groupName, const QString &newName);
     void addGroup(const KisSwatchGroup &group);
     void setRowNumber(const QString &groupName, int rowCount);
+    void clear();
 
     KisSwatch getEntry(const QModelIndex &index) const;
 

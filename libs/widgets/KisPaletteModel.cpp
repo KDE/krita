@@ -33,7 +33,7 @@
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
-    , m_colorSet(0)
+    , m_colorSet(Q_NULLPTR)
     , m_displayRenderer(KoDumbColorDisplayRenderer::instance())
 {
     connect(this, SIGNAL(sigPaletteModified()), SLOT(slotPaletteModified()));
@@ -45,6 +45,7 @@ KisPaletteModel::~KisPaletteModel()
 
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
+    if (!index.isValid()) { return QVariant(); }
     bool groupNameRow = m_groupNameRows.contains(index.row());
     if (role == IsGroupNameRole) {
         return groupNameRow;
@@ -363,6 +364,13 @@ void KisPaletteModel::setRowNumber(const QString &groupName, int rowCount)
     if (g) {
         g->setRowCount(rowCount);
     }
+    endResetModel();
+}
+
+void KisPaletteModel::clear()
+{
+    beginResetModel();
+    m_colorSet->clear();
     endResetModel();
 }
 

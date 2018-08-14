@@ -194,7 +194,7 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             dbgMetaData << type << " " << value;
             //Q_ASSERT(false);
         }
-        /* Falls through */
+        break;
     }
     default:
         dbgMetaData << type << " " << value;

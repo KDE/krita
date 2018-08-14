@@ -76,7 +76,6 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
 
     connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource *)), SLOT(slotPaletteResourceSelected(KoResource*)));
-    m_d->itemChooser->setCurrentItem(0, 0);
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()

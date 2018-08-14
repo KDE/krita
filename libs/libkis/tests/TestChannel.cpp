@@ -32,6 +32,8 @@
 #include <kis_image.h>
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
+#include "sdk/tests/kistest.h"
+
 
 void TestChannel::testPixelDataU8()
 {
@@ -99,5 +101,5 @@ void TestChannel::testPixelDataF32()
 }
 
 
-QTEST_MAIN(TestChannel)
+KISTEST_MAIN(TestChannel)
 

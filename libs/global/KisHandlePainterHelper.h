@@ -80,10 +80,10 @@ public:
     /**
      * Draws a handle rect with a custom \p radius at position \p center
      */
-    void drawHandleRect(const QPointF &center, qreal radius);
+    void drawHandleRect(const QPointF &center, qreal radius, QPoint offset);
 
 
-    void fillHandleRect(const QPointF &center, qreal radius, QColor fillColor);
+    void fillHandleRect(const QPointF &center, qreal radius, QColor fillColor, QPoint offset);
 
     /**
      * Draws a handle circle with a custom \p radius at position \p center

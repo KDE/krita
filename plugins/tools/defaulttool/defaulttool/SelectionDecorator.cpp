@@ -160,12 +160,10 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
 
             QPolygonF outline = handleArea;
             m_textEditorButtonPosition = QPointF(0.5 * (outline.value(2) + outline.value(3)));
-            m_textEditorButtonPosition += QPointF(0, 10);
 
             const QPointF finalHandleRect = m_textEditorButtonPosition;
-            helper.drawHandleRect(finalHandleRect, 15);
-
-            helper.fillHandleRect(finalHandleRect, 15, Qt::white);
+            helper.drawHandleRect(finalHandleRect, 15, decoratorIconPositions.uiOffset );
+            helper.fillHandleRect(finalHandleRect, 15, Qt::white, decoratorIconPositions.uiOffset);
 
 
             // T icon inside box

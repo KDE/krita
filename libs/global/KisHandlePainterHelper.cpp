@@ -21,6 +21,7 @@
 #include <QPainter>
 #include "kis_algebra_2d.h"
 #include "kis_painting_tweaks.h"
+#include <QDebug>
 
 using KisPaintingTweaks::PenBrushSaver;
 
@@ -82,7 +83,7 @@ void KisHandlePainterHelper::setHandleStyle(const KisHandleStyle &style)
     m_handleStyle = style;
 }
 
-void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius)
+void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius, QPoint offset = QPoint(0,0))
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
 
@@ -90,13 +91,16 @@ void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius)
     QPolygonF handlePolygon = m_handleTransform.map(QPolygonF(handleRect));
     handlePolygon.translate(m_painterTransform.map(center));
 
+    handlePolygon.translate(offset);
+
+
     Q_FOREACH (KisHandleStyle::IterationStyle it, m_handleStyle.handleIterations) {
         PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
         m_painter->drawPolygon(handlePolygon);
     }
 }
 
-void KisHandlePainterHelper::fillHandleRect(const QPointF &center, qreal radius, QColor fillColor)
+void KisHandlePainterHelper::fillHandleRect(const QPointF &center, qreal radius, QColor fillColor, QPoint offset = QPoint(0,0))
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_painter);
 
@@ -106,6 +110,11 @@ void KisHandlePainterHelper::fillHandleRect(const QPointF &center, qreal radius,
 
     QPainterPath painterPath;
     painterPath.addPolygon(handlePolygon);
+
+    // offset that happens after zoom transform. This means the offset will be the same, no matter the zoom level
+    // this is good for UI elements that need to be below the bounding box
+    painterPath.translate(offset);
+
 
     const QPainterPath pathToSend = painterPath;
     const QBrush brushStyle(fillColor);
@@ -302,6 +311,9 @@ void KisHandlePainterHelper::drawPath(const QPainterPath &path)
 void KisHandlePainterHelper::drawPixmap(const QPixmap &pixmap, QPointF position, int size, QRectF sourceRect)
 {
     QPointF handlePolygon = m_painterTransform.map(position);
+
+    QPoint offsetPosition(0, 40);
+    handlePolygon += offsetPosition;
 
     handlePolygon -= QPointF(size*0.5,size*0.5);
 

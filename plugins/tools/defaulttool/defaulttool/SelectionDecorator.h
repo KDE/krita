@@ -31,12 +31,18 @@
 class KoSelection;
 class KoCanvasResourceManager;
 
+static const struct DecoratorIconPositions {
+    QPoint uiOffset = QPoint(0, 40);
+} decoratorIconPositions;
+
+
 /**
  * The SelectionDecorator is used to paint extra user-interface items on top of a selection.
  */
 class SelectionDecorator
 {
 public:
+
     /**
      * Constructor.
      * @param arrows the direction that needs highlighting. (currently unused)

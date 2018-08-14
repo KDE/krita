@@ -971,9 +971,11 @@ bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
 
     QPointF absoluteTransormPosition(
         outline.x() + outline.width()*0.5,
-        outline.y() + outline.height()+10);
+        outline.y() + outline.height());
+
 
     QPointF textEditorAbsPosition =  converter->documentToView(absoluteTransormPosition);
+    textEditorAbsPosition += decoratorIconPositions.uiOffset;
 
     // check to see if the text decorator is checked (only for text objects)
     const QPointF viewPoint = converter->documentToView(mousePosition);

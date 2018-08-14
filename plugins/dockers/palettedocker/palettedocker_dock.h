@@ -76,6 +76,7 @@ private Q_SLOTS:
     void slotEditPalette();
 
     void slotPaletteIndexSelected(const QModelIndex &index);
+    void slotPaletteIndexClicked(const QModelIndex &index);
     void slotPaletteIndexDoubleClicked(const QModelIndex &index);
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSet* colorSet);

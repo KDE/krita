@@ -78,8 +78,8 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
 
-    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(slotHorizontalHeaderResized(int,int,int)));
-
+    connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)),
+            SLOT(slotHorizontalHeaderResized(int,int,int)));
     setAutoFillBackground(true);
 }
 
@@ -199,22 +199,6 @@ void KisPaletteView::slotFGColorChanged(const KoColor &color)
     selectClosestColor(color);
 }
 
-void KisPaletteView::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (selectedIndexes().size() <= 0) {
-        return;
-    }
-
-    QModelIndex index = currentIndex();
-
-    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole)) == false) {
-        emit sigIndexSelected(index);
-        KisSwatch entry = m_d->model->getEntry(index);
-        emit sigColorSelected(entry.color());
-    }
-    QTableView::mouseReleaseEvent(event);
-}
-
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
     if (m_d->model) {
@@ -227,6 +211,9 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
             SLOT(slotAdditionalGuiUpdate()));
     connect(model, SIGNAL(modelReset()),
             SLOT(slotAdditionalGuiUpdate()));
+
+    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
+            SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -270,6 +257,17 @@ void KisPaletteView::slotAdditionalGuiUpdate()
         setSpan(groupNameRowNumber, 0, 1, m_d->model->columnCount());
         setRowHeight(groupNameRowNumber, fontMetrics().lineSpacing() + 6);
         verticalHeader()->resizeSection(groupNameRowNumber, fontMetrics().lineSpacing() + 6);
+    }
+}
+
+void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
+{
+    if (!newCurrent.isValid()) { return; }
+
+    if (qvariant_cast<bool>(newCurrent.data(KisPaletteModel::IsGroupNameRole)) == false) {
+        emit sigIndexSelected(newCurrent);
+        KisSwatch entry = m_d->model->getEntry(newCurrent);
+        emit sigColorSelected(entry.color());
     }
 }
 

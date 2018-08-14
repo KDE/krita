@@ -102,12 +102,10 @@ public Q_SLOTS:
      */
     void slotFGColorChanged(const KoColor &);
 
-protected:
-    void mouseReleaseEvent(QMouseEvent *event) override;
-
 private Q_SLOTS:
     void slotHorizontalHeaderResized(int, int, int newSize);
     void slotAdditionalGuiUpdate();
+    void slotCurrentSelectionChanged(const QModelIndex &newCurrent);
 
 private:
     void resizeRows(int newSize);

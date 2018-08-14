@@ -322,12 +322,11 @@ bool KoColorSet::moveGroup(const QString &groupName, const QString &groupNameIns
     if (d->groupNames.contains(groupName)==false || d->groupNames.contains(groupNameInsertBefore)==false) {
         return false;
     }
-    d->groupNames.removeAt(d->groupNames.indexOf(groupName));
-    int index = d->groupNames.size();
-    if (groupNameInsertBefore!=QString()) {
-        index = d->groupNames.indexOf(groupNameInsertBefore);
+    if (groupNameInsertBefore != QString()) {
+        d->groupNames.removeAt(d->groupNames.indexOf(groupName));
+        int index = d->groupNames.indexOf(groupNameInsertBefore);
+        d->groupNames.insert(index, groupName);
     }
-    d->groupNames.insert(index, groupName);
     return true;
 }
 

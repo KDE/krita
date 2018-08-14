@@ -93,6 +93,7 @@ void KisPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     slotPaletteChanged();
     connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotPaletteChanged()));
+    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotPolluteDoc()));
 }
 
 void KisPaletteEditor::setView(KisViewManager *view)
@@ -339,10 +340,9 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     m_d->model->setEntry(KisSwatch(color), index);
-    submitNonGlobalModificationToDoc();
 }
 
-void KisPaletteEditor::submitNonGlobalModificationToDoc()
+void KisPaletteEditor::slotPolluteDoc()
 {
     if ((!m_d->isGlobalModified && m_d->modified.isGlobal) == false) {
         m_d->view->document()->addCommand(new KisChangePaletteCommand());
@@ -360,7 +360,6 @@ void KisPaletteEditor::removeEntry(const QModelIndex &index)
         updatePalette();
     } else {
         m_d->model->removeEntry(index, false);
-        submitNonGlobalModificationToDoc();
     }
     if (m_d->model->colorSet()->isGlobal()) {
         m_d->model->colorSet()->save();
@@ -403,7 +402,6 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
             entry.setColor(bnColor->color());
             entry.setSpotColor(chkSpot->isChecked());
             m_d->model->setEntry(entry, index);
-            submitNonGlobalModificationToDoc();
         }
     }
 }
@@ -455,7 +453,6 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     }
     m_d->modifiedGroupNames.insert(groupName);
     m_d->modified.groups[groupName].addEntry(newEntry);
-    submitNonGlobalModificationToDoc();
 }
 
 void KisPaletteEditor::updatePalette()
@@ -517,8 +514,6 @@ void KisPaletteEditor::updatePalette()
     if (m_d->model->colorSet()->isGlobal()) {
         m_d->model->colorSet()->save();
     }
-
-    submitNonGlobalModificationToDoc();
 }
 
 void KisPaletteEditor::slotPaletteChanged()

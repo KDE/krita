@@ -134,6 +134,16 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
     return rowInModel;
 }
 
+int KisPaletteModel::groupNameRowForName(const QString &groupName)
+{
+    for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
+        if (it.value() == groupName) {
+            return it.key();
+        }
+    }
+    return -1;
+}
+
 bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
@@ -187,40 +197,33 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         return false;
     }
 
+    QModelIndex finalIndex = parent;
+    if (!finalIndex.isValid()) { return false; }
+
     if (data->hasFormat("krita/x-colorsetgroup")) {
         // dragging group not supported for now
-        /*
         QByteArray encodedData = data->data("krita/x-colorsetgroup");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
         while (!stream.atEnd()) {
-            QString groupName;
-            stream >> groupName;
-            QModelIndex index = this->index(endRow, 0);
-            if (index.isValid()) {
-                QStringList entryList = qvariant_cast<QStringList>(index.data(RetrieveEntryRole));
-                QString groupDroppedOn = QString();
-                if (!entryList.isEmpty()) {
-                    groupDroppedOn = entryList.at(0);
-                }
-                int groupIndex = colorSet()->getGroupNames().indexOf(groupName);
-                beginMoveRows(  QModelIndex(), groupIndex, groupIndex, QModelIndex(), endRow);
-                m_colorSet->moveGroup(groupName, groupDroppedOn);
-                m_colorSet->save();
-                endMoveRows();
-
-                ++endRow;
-            }
-        */
+            QString groupNameDragged;
+            stream >> groupNameDragged;
+            QString groupNameDroppedOn = qvariant_cast<QString>(finalIndex.data(GroupNameRole));
+            KisSwatchGroup *groupDragged = m_colorSet->getGroup(groupNameDragged);
+            int start = groupNameRowForName(groupNameDragged);
+            int end = start + groupDragged->rowCount();
+            beginMoveRows(QModelIndex(), start, end, QModelIndex(), groupNameRowForName(groupNameDroppedOn));
+            m_colorSet->moveGroup(groupNameDragged, groupNameDroppedOn);
+            m_colorSet->save();
+            endMoveRows();
+        }
         return true;
     }
 
-    QModelIndex finalIdx = parent;
-    if (!finalIdx.isValid()) { return false; }
-
-    if (qvariant_cast<bool>(finalIdx.data(KisPaletteModel::IsGroupNameRole))) {
+    if (qvariant_cast<bool>(finalIndex.data(KisPaletteModel::IsGroupNameRole))) {
         return true;
     }
+
     QByteArray encodedData = data->data("krita/x-colorsetentry");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
@@ -255,13 +258,13 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         if (action == Qt::MoveAction){
             KisSwatchGroup *g = m_colorSet->getGroup(oldGroupName);
             if (g) {
-                if (qvariant_cast<bool>(finalIdx.data(KisPaletteModel::CheckSlotRole))) {
-                    g->setEntry(getEntry(finalIdx), oriColumn, oriRow);
+                if (qvariant_cast<bool>(finalIndex.data(KisPaletteModel::CheckSlotRole))) {
+                    g->setEntry(getEntry(finalIndex), oriColumn, oriRow);
                 } else {
                     g->removeEntry(oriColumn, oriRow);
                 }
             }
-            setEntry(entry, finalIdx);
+            setEntry(entry, finalIndex);
             emit sigPaletteModified();
             if (m_colorSet->isGlobal()) {
                 m_colorSet->save();
@@ -296,11 +299,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
                    << doc.toString();
         } else {
             mimeTypeName = "krita/x-colorsetgroup";
-            QStringList entryList = qvariant_cast<QStringList>(index.data(RetrieveEntryRole));
-            QString groupName = QString();
-            if (!entryList.isEmpty()) {
-                groupName = entryList.at(0);
-            }
+            QString groupName = qvariant_cast<QString>(index.data(GroupNameRole));
             stream << groupName;
         }
         mimeData->setData(mimeTypeName, encodedData);

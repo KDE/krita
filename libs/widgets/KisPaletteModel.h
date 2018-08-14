@@ -48,7 +48,6 @@ public:
 
     enum AdditionalRoles {
         IsGroupNameRole = Qt::UserRole + 1,
-        RetrieveEntryRole,
         CheckSlotRole,
         GroupNameRole,
         RowInGroupRole
@@ -159,6 +158,7 @@ private /* methods */:
     QVariant dataForSwatch(const QModelIndex &idx, int role) const;
     int rowNumberInGroup(int rowInModel) const;
     int groupNameRowForRow(int rowInModel) const;
+    int groupNameRowForName(const QString &groupName);
     /**
      * Installs a display renderer object for a palette that will
      * convert the KoColor to the displayable QColor. Default is the

@@ -127,6 +127,7 @@ public:
 private Q_SLOTS:
     void slotGroupNameChanged(const QString &newName);
     void slotPaletteChanged();
+    void slotPolluteDoc();
 
 private:
     QString newPaletteFileName(bool isGlobal);
@@ -141,7 +142,6 @@ private:
 private:
     struct Private;
     QScopedPointer<Private> m_d;
-    void submitNonGlobalModificationToDoc();
 };
 
 #endif // KISPALETTEMANAGER_H

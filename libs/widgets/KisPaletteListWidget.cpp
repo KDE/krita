@@ -107,6 +107,7 @@ void KisPaletteListWidget::slotRemove()
         KoColorSet *cs = static_cast<KoColorSet*>(m_d->itemChooser->currentResource());
         emit sigRemovePalette(cs);
     }
+    m_d->itemChooser->setCurrentItem(0, 0);
 }
 
 void KisPaletteListWidget::slotImport()

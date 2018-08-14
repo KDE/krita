@@ -346,7 +346,7 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
         for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
             d->groups[GLOBAL_GROUP_NAME].setEntry(info.swatch,
                                                   info.column,
-                                                  info.row + startingRow - 1);
+                                                  info.row + startingRow);
         }
     }
 

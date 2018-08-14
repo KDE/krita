@@ -322,7 +322,7 @@ bool KoColorSet::moveGroup(const QString &groupName, const QString &groupNameIns
     if (d->groupNames.contains(groupName)==false || d->groupNames.contains(groupNameInsertBefore)==false) {
         return false;
     }
-    if (groupNameInsertBefore != QString()) {
+    if (groupNameInsertBefore != GLOBAL_GROUP_NAME && groupName != GLOBAL_GROUP_NAME) {
         d->groupNames.removeAt(d->groupNames.indexOf(groupName));
         int index = d->groupNames.indexOf(groupNameInsertBefore);
         d->groupNames.insert(index, groupName);
@@ -346,7 +346,7 @@ bool KoColorSet::removeGroup(const QString &groupName, bool keepColors)
         for (const KisSwatchGroup::SwatchInfo &info : d->groups[groupName].infoList()) {
             d->groups[GLOBAL_GROUP_NAME].setEntry(info.swatch,
                                                   info.column,
-                                                  info.row + startingRow);
+                                                  info.row + startingRow - 1);
         }
     }
 

@@ -159,6 +159,7 @@ private /* methods */:
     int rowNumberInGroup(int rowInModel) const;
     int groupNameRowForRow(int rowInModel) const;
     int groupNameRowForName(const QString &groupName);
+    void resetGroupNameRows();
     /**
      * Installs a display renderer object for a palette that will
      * convert the KoColor to the displayable QColor. Default is the

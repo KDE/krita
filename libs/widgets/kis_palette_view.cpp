@@ -207,9 +207,9 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     setModel(model);
     slotAdditionalGuiUpdate();
-    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex,QVector<int>)),
+    connect(model, SIGNAL(sigPaletteModified()),
             SLOT(slotAdditionalGuiUpdate()));
-    connect(model, SIGNAL(modelReset()),
+    connect(model, SIGNAL(sigPaletteChanged()),
             SLOT(slotAdditionalGuiUpdate()));
 
     connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),

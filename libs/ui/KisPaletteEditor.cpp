@@ -140,6 +140,7 @@ void KisPaletteEditor::importPalette()
     }
     colorSet->setIsGlobal(false);
     m_d->rServer->addResource(colorSet);
+    m_d->rServer->removeFromBlacklist(colorSet);
 
     uploadPaletteList();
 }

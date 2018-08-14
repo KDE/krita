@@ -221,7 +221,7 @@ void KisDlgInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendere
         m_ui->visualSelector->setDisplayRenderer(displayRenderer);
         m_ui->currentColor->setDisplayRenderer(displayRenderer);
         m_ui->previousColor->setDisplayRenderer(displayRenderer);
-        // m_ui->paletteBox->setDisplayRenderer(displayRenderer);
+        m_ui->paletteBox->setDisplayRenderer(displayRenderer);
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }

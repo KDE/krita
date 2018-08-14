@@ -40,6 +40,8 @@ public:
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 
+    void paintSwatch() const;
+    
 private:
     QString m_crossedKeyword;
     void paintCrossedLine(const QStyleOptionViewItem &option, QPainter *painter) const;

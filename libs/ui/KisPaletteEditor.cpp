@@ -124,7 +124,7 @@ void KisPaletteEditor::importPalette()
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
     QString filename = dialog.filename();
     if (filename.isEmpty()) { return; }
-    if (duplicateExistsFilename(filename)) {
+    if (duplicateExistsFilename(filename, false)) {
         QMessageBox message;
         message.setWindowTitle(i18n("Can't Import Palette"));
         message.setText(i18n("Can't import palette: there's already imported with the same filename"));
@@ -134,7 +134,7 @@ void KisPaletteEditor::importPalette()
     KoColorSet *colorSet = new KoColorSet(filename);
     colorSet->load();
     QString name = filenameFromPath(colorSet->filename());
-    if (duplicateExistsFilename(name)) {
+    if (duplicateExistsFilename(name, false)) {
         colorSet->setFilename(newPaletteFileName(false));
     } else {
         colorSet->setFilename(name);
@@ -195,15 +195,21 @@ QString KisPaletteEditor::oldNameFromNewName(const QString &newName) const
 
 void KisPaletteEditor::rename(const QString &newName)
 {
+    if (newName.isEmpty()) { return; }
     m_d->isNameModified = true;
     m_d->modified.name = newName;
 }
 
 void KisPaletteEditor::changeFilename(const QString &newName)
 {
+    if (newName.isEmpty()) { return; }
     m_d->isFilenameModified = true;
     m_d->pathsToRemove.insert(m_d->modified.filename);
-    m_d->modified.filename = m_d->rServer->saveLocation() + newName;
+    if (m_d->modified.isGlobal) {
+        m_d->modified.filename = m_d->rServer->saveLocation() + newName;
+    } else {
+        m_d->modified.filename = newName;
+    }
 }
 
 void KisPaletteEditor::changeColCount(int newCount)
@@ -571,31 +577,19 @@ void KisPaletteEditor::setGlobal()
     uploadPaletteList();
 }
 
-bool KisPaletteEditor::duplicateExistsFilename(const QString &filename) const
+bool KisPaletteEditor::duplicateExistsFilename(const QString &filename, bool global) const
 {
-    if (!m_d->model->colorSet()) {
-        Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
-            if (r->filename() == m_d->rServer->saveLocation() + filename) {
-                return true;
-            }
-        }
-        return false;
-
+    QString prefix;
+    if (global) {
+        prefix = m_d->rServer->saveLocation();
     }
 
-    if (m_d->model->colorSet()->isGlobal()) {
-        Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
-            if (r->filename() == m_d->rServer->saveLocation() + filename && r != m_d->model->colorSet()) {
-                return true;
-            }
-        }
-    } else {
-        Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
-            if (r->filename() == filename && r != m_d->model->colorSet()) {
-                return true;
-            }
+    Q_FOREACH (const KoResource *r, KoResourceServerProvider::instance()->paletteServer()->resources()) {
+        if (r->filename() == prefix + filename && r != m_d->model->colorSet()) {
+            return true;
         }
     }
+
     return false;
 }
 
@@ -613,7 +607,7 @@ void KisPaletteEditor::setNonGlobal()
     KoColorSet *colorSet = m_d->model->colorSet();
     QString name = filenameFromPath(colorSet->filename());
     QFile::remove(colorSet->filename());
-    if (duplicateExistsFilename(name)) {
+    if (duplicateExistsFilename(name, false)) {
         colorSet->setFilename(newPaletteFileName(false));
     } else {
         colorSet->setFilename(name);

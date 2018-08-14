@@ -71,10 +71,11 @@ public:
     /**
      * @brief duplicateExistsFilename
      * @param name
+     * @param global if this filename is going to be used for a global palette
      * @return true if the a palette in the resource system that has filename
      * name already exists else false
      */
-    bool duplicateExistsFilename(const QString &filename) const;
+    bool duplicateExistsFilename(const QString &filename, bool global) const;
     QString relativePathFromSaveLocation() const;
 
     void rename(const QString &newName);

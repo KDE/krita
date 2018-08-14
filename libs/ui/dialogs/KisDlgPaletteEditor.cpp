@@ -202,7 +202,8 @@ void KisDlgPaletteEditor::slotNameChanged()
 
 void KisDlgPaletteEditor::slotFilenameChanged(const QString &newFilename)
 {
-    if (m_paletteEditor->duplicateExistsFilename(newFilename)) {
+    bool global = m_colorSet->isGlobal();
+    if (m_paletteEditor->duplicateExistsFilename(newFilename, global)) {
         m_ui->lineEditFilename->setPalette(m_warnPalette);
         m_ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         return;
@@ -215,7 +216,8 @@ void KisDlgPaletteEditor::slotFilenameChanged(const QString &newFilename)
 void KisDlgPaletteEditor::slotFilenameInputFinished()
 {
     QString newName = m_ui->lineEditFilename->text();
-    if (m_paletteEditor->duplicateExistsFilename(newName)) {
+    bool global = m_colorSet->isGlobal();
+    if (m_paletteEditor->duplicateExistsFilename(newName, global)) {
         return;
     }
     m_paletteEditor->changeFilename(newName);

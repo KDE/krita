@@ -118,7 +118,9 @@ bool KoColorSet::load()
     }
     bool res = loadFromDevice(&file);
     file.close();
-    setIsEditable(file.isWritable());
+    if (!QFileInfo(filename()).isWritable()) {
+        setIsEditable(false);
+    }
     return res;
 }
 

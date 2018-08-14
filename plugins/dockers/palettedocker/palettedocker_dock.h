@@ -30,8 +30,8 @@
 #include <QMenu>
 
 #include <KoCanvasObserverBase.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerObserver.h>
+#include <KoResourceServer.h>
 #include <resources/KoColorSet.h>
 
 #include <kis_canvas2.h>
@@ -97,7 +97,6 @@ private /* member variables */:
     KisCanvasResourceProvider *m_resourceProvider;
 
     KoResourceServer<KoColorSet> * const m_rServer;
-    QScopedPointer<KoResourceServerAdapter<KoColorSet> > m_rAdapter;
 
     QPointer<KisDocument> m_activeDocument;
     QPointer<KoColorSet> m_currentColorSet;

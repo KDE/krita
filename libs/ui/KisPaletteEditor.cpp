@@ -37,7 +37,6 @@
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
 #include <KoResourceServerProvider.h>
 #include <KoDialog.h>
 #include <KisPaletteModel.h>
@@ -105,21 +104,20 @@ void KisPaletteEditor::addPalette()
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    KoResourceServerAdapter<KoColorSet> rAdapter(m_d->rServer);
     KoColorSet *newColorSet = new KoColorSet(newPaletteFileName());
     newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
     newColorSet->setIsEditable(true);
     newColorSet->setValid(true);
     newColorSet->setName("New Palette");
-    rAdapter.addResource(newColorSet);
+    m_d->rServer->addResource(newColorSet);
+    m_d->rServer->removeFromBlacklist(newColorSet);
 
     uploadPaletteList();
 }
 
 void KisPaletteEditor::importPalette()
 {
-    KoResourceServerAdapter<KoColorSet> rAdapter(m_d->rServer);
     KoFileDialog dialog(Q_NULLPTR, KoFileDialog::OpenFile, "Open Palette");
     dialog.setDefaultDir(QDir::homePath());
     dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
@@ -141,7 +139,7 @@ void KisPaletteEditor::importPalette()
         colorSet->setFilename(name);
     }
     colorSet->setIsGlobal(false);
-    rAdapter.addResource(colorSet);
+    m_d->rServer->addResource(colorSet);
 
     uploadPaletteList();
 }
@@ -153,13 +151,13 @@ void KisPaletteEditor::removePalette(KoColorSet *cs)
     if (!cs || !cs->isEditable()) {
         return;
     }
-    KoResourceServerAdapter<KoColorSet> rAdapter(m_d->rServer);
-    rAdapter.removeResource(cs);
 
     if (cs->isGlobal()) {
+        m_d->rServer->removeResourceAndBlacklist(cs);
         QFile::remove(cs->filename());
         return;
     }
+    m_d->rServer->removeResourceFromServer(cs);
     uploadPaletteList();
 }
 
@@ -557,6 +555,7 @@ void KisPaletteEditor::setGlobal()
 
     colorSet->setFilename(fileInfo.filePath());
     colorSet->setIsGlobal(true);
+    m_d->rServer->removeFromBlacklist(colorSet);
     if (!colorSet->save()) {
         QMessageBox message;
         message.setWindowTitle(i18n("Saving palette failed"));

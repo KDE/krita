@@ -69,7 +69,6 @@ PaletteDockerDock::PaletteDockerDock( )
     , m_view(Q_NULLPTR)
     , m_resourceProvider(Q_NULLPTR)
     , m_rServer(KoResourceServerProvider::instance()->paletteServer())
-    , m_rAdapter(new KoResourceServerAdapter<KoColorSet>(KoResourceServerProvider::instance()->paletteServer()))
     , m_activeDocument(Q_NULLPTR)
     , m_paletteEditor(new KisPaletteEditor)
     , m_actAdd(new QAction(KisIconUtils::loadIcon("list-add"), i18n("Add foreground color")))
@@ -205,7 +204,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         for (KoColorSet * &cs : m_activeDocument->paletteList()) {
             KoColorSet *tmpAddr = cs;
             cs = new KoColorSet(*cs);
-            m_rAdapter->removeResource(tmpAddr);
+            m_rServer->removeResourceFromServer(tmpAddr);
         }
     }
 
@@ -214,7 +213,7 @@ void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
         m_paletteEditor->setView(m_view);
 
         for (KoColorSet *cs : m_activeDocument->paletteList()) {
-            m_rAdapter->addResource(cs);
+            m_rServer->addResource(cs);
         }
     }
 
@@ -230,9 +229,9 @@ void PaletteDockerDock::unsetCanvas()
     m_paletteEditor->setView(Q_NULLPTR);
 
     for (KoResource *r : m_rServer->resources()) {
-        KoColorSet *g = static_cast<KoColorSet*>(r);
-        if (!g->isGlobal()) {
-            m_rAdapter->removeResource(r);
+        KoColorSet *c = static_cast<KoColorSet*>(r);
+        if (!c->isGlobal()) {
+            m_rServer->removeResourceFromServer(c);
         }
     }
     if (!m_currentColorSet) {

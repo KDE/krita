@@ -475,4 +475,35 @@ namespace KritaUtils
             rc->moveTop(mirrorY);
         }
     }
+
+    qreal colorDifference(const QColor &c1, const QColor &c2)
+    {
+        const qreal dr = c1.redF() - c2.redF();
+        const qreal dg = c1.greenF() - c2.greenF();
+        const qreal db = c1.blueF() - c2.blueF();
+
+        return std::sqrt(2 * pow2(dr) + 4 * pow2(dg) + 3 * pow2(db));
+    }
+
+    void dragColor(QColor *color, const QColor &baseColor, qreal threshold)
+    {
+        while (colorDifference(*color, baseColor) < threshold) {
+
+            QColor newColor = *color;
+
+            if (newColor.lightnessF() > baseColor.lightnessF()) {
+                newColor = newColor.lighter(120);
+            } else {
+                newColor = newColor.darker(120);
+            }
+
+            if (newColor == *color) {
+                break;
+            }
+
+            *color = newColor;
+        }
+    }
+
+
 }

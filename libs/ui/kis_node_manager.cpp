@@ -587,16 +587,23 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
         m_d->commandsAdapter.beginMacro(kundo2_i18n("Convert to a Selection Mask"));
 
+        bool result = false;
+
         if (nodeType == "KisSelectionMask") {
-            m_d->maskManager.createSelectionMask(activeNode, copyFrom, true);
+            result = m_d->maskManager.createSelectionMask(activeNode, copyFrom, true);
         } else if (nodeType == "KisFilterMask") {
-            m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true);
+            result = m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true);
         } else if (nodeType == "KisTransparencyMask") {
-            m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true);
+            result = m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true);
         }
 
-        m_d->commandsAdapter.removeNode(activeNode);
         m_d->commandsAdapter.endMacro();
+
+        if (!result) {
+            m_d->view->blockUntilOperationsFinishedForced(m_d->imageView->image());
+            m_d->commandsAdapter.undoLastCommand();
+        }
+
     } else if (nodeType == "KisFileLayer") {
             m_d->layerManager.convertLayerToFileLayer(activeNode);
     } else {

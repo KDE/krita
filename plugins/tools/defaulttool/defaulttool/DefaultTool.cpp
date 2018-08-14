@@ -1574,7 +1574,12 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
             // this also helps with how the click events flow to resolve this createStrategy
             const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
 
-            if (insideSelection || selectingTextEditorButton ) {
+            if (selectingTextEditorButton) { // ignore the event if we are selecting the text editor button
+                return new SelectionInteractionStrategy(this, event->point, false);
+            }
+
+
+            if (insideSelection  ) {
                 return new ShapeMoveStrategy(this, selection, event->point);
             }
         }

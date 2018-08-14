@@ -322,11 +322,16 @@ void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResource* workspace)
 
 void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
 {
-    if ((qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)))) {
-        m_ui->bnRemove->setEnabled(true);
-        KisSwatch entry = m_model->getEntry(index);
-        setFGColorByPalette(entry);
+    bool occupied = qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole));
+    if (occupied) {
+        if (!qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
+            m_ui->bnRemove->setEnabled(true);
+            KisSwatch entry = m_model->getEntry(index);
+            setFGColorByPalette(entry);
+        }
     }
+    if (!m_currentColorSet->isEditable()) { return; }
+    m_ui->bnRemove->setEnabled(occupied);
 }
 
 void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)

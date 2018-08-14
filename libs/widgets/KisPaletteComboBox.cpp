@@ -146,6 +146,9 @@ void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
     if (!qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole))) {
         return;
     }
+    if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
+        return;
+    }
     QString gName = qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole));
     int rowInGroup = qvariant_cast<int>(index.data(KisPaletteModel::RowInGroupRole));
     setCurrentIndex(m_groupMapMap[gName][SwatchPosType(index.column(), rowInGroup)]);

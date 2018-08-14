@@ -264,10 +264,10 @@ void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
 {
     if (!newCurrent.isValid()) { return; }
 
+    emit sigIndexSelected(newCurrent);
     if (qvariant_cast<bool>(newCurrent.data(KisPaletteModel::IsGroupNameRole))) {
         return;
     }
-    emit sigIndexSelected(newCurrent);
     if (qvariant_cast<bool>(newCurrent.data(KisPaletteModel::CheckSlotRole))) {
         KisSwatch entry = m_d->model->getEntry(newCurrent);
         emit sigColorSelected(entry.color());

@@ -501,15 +501,22 @@ void KisPaletteEditor::updatePalette()
             m_d->model->removeGroup(groupName, m_d->keepColorGroups.contains(groupName));
         }
     }
+    m_d->keepColorGroups.clear();
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
         if (m_d->modifiedGroupNames.contains(groupName)) {
             m_d->model->setRowNumber(groupName, modified.groups[groupName].rowCount());
-            m_d->model->renameGroup(groupName, modified.groups[groupName].name());
+            if (groupName != modified.groups[groupName].name()) {
+                m_d->model->renameGroup(groupName, modified.groups[groupName].name());
+                modified.groups[modified.groups[groupName].name()] = modified.groups[groupName];
+                modified.groups.remove(groupName);
+            }
         }
     }
+    m_d->modifiedGroupNames.clear();
     Q_FOREACH (const QString &newGroupName, m_d->newGroupNames) {
         m_d->model->addGroup(modified.groups[newGroupName]);
     }
+    m_d->newGroupNames.clear();
 
     if (m_d->model->colorSet()->isGlobal()) {
         m_d->model->colorSet()->save();

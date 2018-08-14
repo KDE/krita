@@ -1082,7 +1082,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     if (!sRGB || options.saveSRGBProfile) {
 
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)"icc", PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
         // older version of libpng has a problem with constness on the parameters
         char typeString[] = "icc";

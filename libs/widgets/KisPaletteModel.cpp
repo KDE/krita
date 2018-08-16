@@ -180,14 +180,15 @@ void KisPaletteModel::removeGroup(const QString &groupName, bool keepColors)
 {
     int removeStart = groupNameRowForName(groupName);
     int removedRowCount = m_colorSet->getGroup(groupName)->rowCount();
+    int insertStart = m_colorSet->getGlobalGroup()->rowCount();
     beginRemoveRows(QModelIndex(),
                     removeStart,
                     removeStart + removedRowCount);
     m_colorSet->removeGroup(groupName, keepColors);
     resetGroupNameRows();
     endRemoveRows();
-    int insertStart = m_colorSet->getGlobalGroup()->rowCount();
-    beginInsertRows(QModelIndex(), insertStart, insertStart + removedRowCount);
+    beginInsertRows(QModelIndex(),
+		    insertStart, m_colorSet->getGlobalGroup()->rowCount());
     endInsertRows();
     emit sigPaletteModified();
 }

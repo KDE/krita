@@ -342,7 +342,12 @@ bool KisProjectionLeaf::isStillInGraph() const
 bool KisProjectionLeaf::isDroppedMask() const
 {
     return qobject_cast<KisMask*>(m_d->node) &&
-        m_d->checkParentPassThrough();
+            m_d->checkParentPassThrough();
+}
+
+bool KisProjectionLeaf::isOverlayProjectionLeaf() const
+{
+    return this == m_d->overlayProjectionLeaf();
 }
 
 

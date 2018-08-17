@@ -198,6 +198,13 @@ public:
 
     void notifySelectionChanged();
 
+    /**
+     * Request rerendering of the shape selection component in a
+     * compressed way. Usually, you don't need to call it manually,
+     * because all the work is done by KisShapeSelectionModel.
+     */
+    void requestCompressedProjectionUpdate(const QRect &rc);
+
     /// XXX: This method was marked KDE_DEPRECATED but without information on what to
     /// replace it with. Undeprecate, therefore.
     quint8 selected(qint32 x, qint32 y) const;
@@ -206,6 +213,8 @@ private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
+    friend class KisUpdateSelectionJob;
+    friend class KisSelectionUpdateCompressor;
     KisNodeWSP parentNode() const;
 
     void copyFrom(const KisSelection &rhs);

@@ -120,6 +120,13 @@ public: // KoCanvasBase implementation
      */
     KoShapeManager *globalShapeManager() const;
 
+    /**
+     * Return shape manager associated with the currently active node.
+     * If current node has no internal shape manager, return null.
+     */
+    KoShapeManager *localShapeManager() const;
+
+
     void updateCanvas(const QRectF& rc) override;
 
     void updateInputMethodInfo() override;

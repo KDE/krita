@@ -282,6 +282,12 @@ void KisSelectionMask::notifySelectionChangedCompressed()
     m_d->updatesCompressor->start();
 }
 
+void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
+{
+    Q_UNUSED(selection);
+    Q_UNUSED(dirtyRect);
+}
+
 void KisSelectionMask::Private::slotSelectionChangedCompressed()
 {
     KisSelectionSP currentSelection = q->selection();

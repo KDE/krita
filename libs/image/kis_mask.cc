@@ -255,7 +255,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
 {
     if (selection()) {
 
-        m_d->selection->updateProjection(applyRect);
+        flattenSelectionProjection(m_d->selection, applyRect);
 
         KisSelectionSP effectiveSelection = m_d->selection;
         QRect effectiveExtent;
@@ -325,6 +325,11 @@ void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
     }
 
     m_d->paintDeviceCache.putDevice(cacheDevice);
+}
+
+void KisMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
+{
+    selection->updateProjection(dirtyRect);
 }
 
 QRect KisMask::needRect(const QRect &rect,  PositionToFilthy pos) const

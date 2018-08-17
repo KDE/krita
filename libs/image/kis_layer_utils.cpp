@@ -1455,4 +1455,18 @@ namespace KisLayerUtils {
         });
     }
 
+    KisImageSP findImageByHierarchy(KisNodeSP node)
+    {
+        while (node) {
+            const KisLayer *layer = dynamic_cast<const KisLayer*>(node.data());
+            if (layer) {
+                return layer->image();
+            }
+
+            node = node->parent();
+        }
+
+        return 0;
+    }
+
 }

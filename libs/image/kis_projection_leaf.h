@@ -59,6 +59,7 @@ public:
     bool isStillInGraph() const;
 
     bool isDroppedMask() const;
+    bool isOverlayProjectionLeaf() const;
 
     /**
      * Regenerate projection of the current group layer iff it is

@@ -68,6 +68,7 @@
 #include <kis_selection_tool_helper.h>
 
 #include "kis_figure_painting_tool_helper.h"
+#include "kis_update_outline_job.h"
 
 namespace ActionHelper {
 
@@ -428,10 +429,18 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
 {
     KisSelectionSP selection = view->selection();
 
-    if (selection->hasShapeSelection() ||
-        !selection->outlineCacheValid()) {
-
+    if (selection->hasShapeSelection()) {
+        view->showFloatingMessage(i18nc("floating message",
+                                        "Selection is already in a vector format "),
+                                  QIcon(), 2000, KisFloatingMessage::Low);
         return;
+    }
+
+    if (!selection->outlineCacheValid()) {
+        view->image()->addSpontaneousJob(new KisUpdateOutlineJob(selection, false, Qt::transparent));
+        if (!view->blockUntilOperationsFinished(view->image())) {
+            return;
+        }
     }
 
     QPainterPath selectionOutline = selection->outlineCache();

@@ -203,6 +203,12 @@ protected:
                                      const QRect &applyRect, const QRect &preparedNeedRect,
                                      PositionToFilthy maskPos) const;
 
+    /**
+     * A special callback for calling selection->updateProjection() during
+     * the projection calculation process. Some masks (e.g. selection masks)
+     * don't need it, because they do it separately.
+     */
+    virtual void flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const;
 
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,

@@ -260,7 +260,8 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
 
 KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
-    int time = keyframeNode.attribute("time").toUInt();
+    int time = keyframeNode.attribute("time").toInt();
+    workaroundBrokenFrameTimeBug(&time);
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
@@ -271,7 +272,7 @@ KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframe
     if (m_d->frameFilenames.isEmpty()) {
         // First keyframe loaded: use the existing frame
 
-        Q_ASSERT(keyframeCount() == 1);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
         keyframe = constKeys().begin().value();
 
         // Remove from keys. It will get reinserted with new time once we return

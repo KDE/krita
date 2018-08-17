@@ -159,6 +159,7 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
     }
 
     image->endStroke(currentStrokeId);
+    image->waitForDone();
 
     return true;
 }

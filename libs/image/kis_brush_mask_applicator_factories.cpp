@@ -503,7 +503,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_v x_ = currentIndices - vCenterX;
 
         Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = abs(x_ * vSina + vCosaY_);
+        Vc::float_v yr = Vc::abs(x_ * vSina + vCosaY_);
 
         Vc::float_v vValue;
 
@@ -591,7 +591,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         Vc::float_v x_ = currentIndices - vCenterX;
 
         Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = abs(x_ * vSina + vCosaY_);
+        Vc::float_v yr = Vc::abs(x_ * vSina + vCosaY_);
 
         Vc::float_v vValue;
 
@@ -602,8 +602,8 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
         if (!excludeMask.isFull()) {
             // We need to mask the extra area given for aliniation
             // the next operation should never give values above 1
-            Vc::float_v preSIndex = abs(xr) * vXCoeff;
-            Vc::float_v preTIndex = abs(yr) * vYCoeff;
+            Vc::float_v preSIndex = Vc::abs(xr) * vXCoeff;
+            Vc::float_v preTIndex = Vc::abs(yr) * vYCoeff;
 
             preSIndex(preSIndex > vOne) = vOne;
             preTIndex(preTIndex > vOne) = vOne;

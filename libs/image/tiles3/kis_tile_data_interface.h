@@ -97,7 +97,7 @@ private:
 /**
  * Stores actual tile's data
  */
-class KisTileData
+class KRITAIMAGE_EXPORT KisTileData
 {
 public:
     KisTileData(qint32 pixelSize, const quint8 *defPixel, KisTileDataStore *store, bool checkFreeMemory = true);

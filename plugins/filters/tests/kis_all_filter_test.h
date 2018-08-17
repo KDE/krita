@@ -28,7 +28,6 @@ class KisAllFilterTest : public QObject
 private Q_SLOTS:
 
     void testAllFilters();
-    void testAllFiltersNoTransaction();
     void testAllFiltersSrcNotIsDev();
     void testAllFiltersWithSelections();
 };

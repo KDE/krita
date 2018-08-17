@@ -1,5 +1,5 @@
 SET (PREFIX_ext_drmingw "${EXTPREFIX}")
-if (MSVC OR MINGW)
+if (MINGW)
     ExternalProject_Add(ext_drmingw
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://files.kde.org/krita/build/dependencies/drmingw-25e5211.zip
@@ -43,4 +43,4 @@ if (MSVC OR MINGW)
     endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
     add_dependencies(ext_drmingw ext_drmingw_deps)
-endif (MSVC OR MINGW)
+endif (MINGW)

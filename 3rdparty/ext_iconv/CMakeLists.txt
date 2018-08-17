@@ -1,5 +1,5 @@
 SET(PREFIX_ext_iconv "${EXTPREFIX}" )
-if (MSVC OR MINGW)
+if (MINGW)
 ExternalProject_Add( ext_iconv
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 	URL http://files.kde.org/krita/build/dependencies/win-iconv-0.0.6.tar.bz2

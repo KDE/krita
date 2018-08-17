@@ -676,7 +676,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         } else {
             reader.reset(new KisPNGReaderLineByLine(png_ptr, info_ptr, width, height));
         }
-    } catch (std::bad_alloc& e) {
+    } catch (const std::bad_alloc& e) {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
         dbgFile << "bad alloc: " << e.what();
@@ -1080,10 +1080,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
+
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)"icc", PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
+        // older version of libpng has a problem with constness on the parameters
+        char typeString[] = "icc";
+        png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
     }
 

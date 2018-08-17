@@ -4,13 +4,15 @@ include(ECMAddTests)
 
 ecm_add_test(
     ../KoLZF.cpp TestKoLZF.cpp
-    TEST_NAME libs-odf-TestKoLZF
-    LINK_LIBRARIES kritastore Qt5::Test)
+    TEST_NAME TestKoLZF
+    LINK_LIBRARIES kritastore Qt5::Test
+    NAME_PREFIX "libs-odf")
 
 ecm_add_test(
     ../KoLZF.cpp TestKoXmlVector.cpp
-    TEST_NAME libs-odf-TestKoXmlVector
-    LINK_LIBRARIES kritastore Qt5::Test)
+    TEST_NAME TestKoXmlVector
+    LINK_LIBRARIES kritastore Qt5::Test
+    NAME_PREFIX "libs-odf")
 
 ########### manual test for file contents ###############
 

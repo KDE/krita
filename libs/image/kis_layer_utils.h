@@ -125,6 +125,14 @@ namespace KisLayerUtils
         KisImageWSP m_image;
     };
 
+    struct KRITAIMAGE_EXPORT SelectGlobalSelectionMask : public KUndo2Command
+    {
+        SelectGlobalSelectionMask(KisImageSP image);
+        void redo() override;
+
+        KisImageSP m_image;
+    };
+
     KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
 
     class KRITAIMAGE_EXPORT RemoveNodeHelper {

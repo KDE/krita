@@ -86,6 +86,10 @@
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
 
+#include "kis_selection.h"
+#include "kis_processing_applicator.h"
+#include "commands/kis_set_global_selection_command.h"
+
 #include "kis_layer_utils.h"
 
 #include "ui_wdglayerbox.h"
@@ -778,6 +782,7 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 {
     KisNodeSP lastActiveNode = m_nodeManager->activeNode();
     KisNodeSP activateNode = lastActiveNode;
+    KisSelectionMaskSP globalSelectionMask;
 
     if (!showSelections) {
         activateNode = findNonHidableNode(activateNode);
@@ -785,20 +790,50 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 
     m_nodeModel->setShowGlobalSelection(showSelections);
 
-    if (showSelections) {
-        KisNodeSP newMask = m_image->rootLayer()->selectionMask();
-        if (newMask) {
-            activateNode = newMask;
+    globalSelectionMask = m_image->rootLayer()->selectionMask();
+    if (globalSelectionMask) {
+        if (showSelections) {
+            activateNode = globalSelectionMask;
         }
     }
 
-    if (activateNode) {
-        if (lastActiveNode != activateNode) {
-            m_nodeManager->slotNonUiActivatedNode(activateNode);
-        } else {
-            setCurrentNode(lastActiveNode);
-        }
+    if (activateNode != lastActiveNode) {
+        m_nodeManager->slotNonUiActivatedNode(activateNode);
+    } else if (lastActiveNode) {
+        setCurrentNode(lastActiveNode);
     }
+
+    if (showSelections && !globalSelectionMask) {
+        KisProcessingApplicator applicator(m_image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           kundo2_i18n("Quick Selection Mask"));
+
+        applicator.applyCommand(
+            new KisLayerUtils::KeepNodesSelectedCommand(
+                m_nodeManager->selectedNodes(), KisNodeList(),
+                lastActiveNode, 0, m_image, false),
+            KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(m_image),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisLayerUtils::SelectGlobalSelectionMask(m_image),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+        applicator.end();
+    } else if (!showSelections &&
+               globalSelectionMask &&
+               globalSelectionMask->selection()->selectedRect().isEmpty()) {
+
+        KisProcessingApplicator applicator(m_image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           kundo2_i18n("Cancel Quick Selection Mask"));
+        applicator.applyCommand(new KisSetGlobalSelectionCommand(m_image, 0), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.end();
+    }
+
 }
 
 void KisLayerBox::selectionChanged(const QModelIndexList selection)

@@ -574,6 +574,19 @@ namespace KisLayerUtils {
         m_image->signalRouter()->emitNotification(type);
     }
 
+    SelectGlobalSelectionMask::SelectGlobalSelectionMask(KisImageSP image)
+        : m_image(image)
+    {
+    }
+
+    void SelectGlobalSelectionMask::redo() {
+
+        KisImageSignalType type =
+                ComplexNodeReselectionSignal(m_image->rootLayer()->selectionMask(), KisNodeList());
+        m_image->signalRouter()->emitNotification(type);
+
+    }
+
     KisLayerSP constructDefaultLayer(KisImageSP image) {
         return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
     }

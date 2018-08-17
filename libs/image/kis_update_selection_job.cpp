@@ -24,6 +24,15 @@ KisUpdateSelectionJob::KisUpdateSelectionJob(KisSelectionSP selection, const QRe
     : m_selection(selection),
       m_updateRect(updateRect)
 {
+    /**
+     * TODO: we should implement correct KisShapeSelectionCanvas for
+     * projection. See a comment in KisUpdateSelectionJob::run().
+     *
+     * Right now, since this job accesses some projections for write, we
+     * shoudl declare it as exclusive
+     */
+
+    setExclusive(true);
 }
 
 bool KisUpdateSelectionJob::overrides(const KisSpontaneousJob *_otherJob)

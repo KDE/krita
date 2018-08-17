@@ -24,13 +24,13 @@ void TestKisSwatchGroup::testAddingMultipleEntries()
     QVERIFY(!g.checkEntry(1, 2));
     QVERIFY(!g.checkEntry(10, 5));
     QVERIFY(g.checkEntry(0, 0));
-    QCOMPARE(g.getEntry(0, 0).name(), "first");
+    QCOMPARE(g.getEntry(0, 0).name(), QString("first"));
     KisSwatch e3;
     e3.setName("third");
     g.setEntry(e3, 4, 12);
     QCOMPARE(g.colorCount(), 3);
     QVERIFY(g.checkEntry(9, 3));
-    QCOMPARE(g.getEntry(9, 3).name(), "second");
+    QCOMPARE(g.getEntry(9, 3).name(), QString("second"));
     testSwatches[QPair<int, int>(9, 3)] = e2;
     testSwatches[QPair<int, int>(4, 12)] = e3;
 }
@@ -42,7 +42,7 @@ void TestKisSwatchGroup::testReplaceEntries()
     g.setEntry(e4, 0, 0);
     QCOMPARE(g.colorCount(), 3);
     QVERIFY(g.checkEntry(0, 0));
-    QCOMPARE(g.getEntry(0, 0).name(), "fourth");
+    QCOMPARE(g.getEntry(0, 0).name(), QString("fourth"));
     testSwatches[QPair<int, int>(0, 0)] = e4;
 }
 

@@ -469,9 +469,24 @@ void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
     const QList<KoShape*> originalShapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
 
+    bool hasSelectionShapes = false;
     QList<KoShape*> clonedShapes;
+
     Q_FOREACH (KoShape *shape, originalShapes) {
+        if (dynamic_cast<KisShapeSelectionMarker*>(shape->userData())) {
+            hasSelectionShapes = true;
+            continue;
+        }
         clonedShapes << shape->cloneShape();
+    }
+
+    if (clonedShapes.isEmpty()) {
+        if (hasSelectionShapes) {
+            view->showFloatingMessage(i18nc("floating message",
+                                            "The shape already belongs to a selection"),
+                                      QIcon(), 2000, KisFloatingMessage::Low);
+        }
+        return;
     }
 
     KisSelectionToolHelper helper(view->canvasBase(), kundo2_i18n("Convert shapes to vector selection"));

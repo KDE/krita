@@ -56,7 +56,10 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 {
     if (!blockUntilOperationsFinished()) return;
 
-    if (!currentNode()->inherits("KisShapeLayer")) {
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
+
+    if (!info.shouldAddShape || info.shouldAddSelectionShape) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polyline"),
                                            image(),
                                            currentNode(),

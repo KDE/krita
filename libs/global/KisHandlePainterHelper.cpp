@@ -94,10 +94,20 @@ void KisHandlePainterHelper::drawHandleRect(const QPointF &center, qreal radius,
     handlePolygon.translate(offset);
 
 
+    const QPen originalPen = m_painter->pen();
+
+    // temporarily set the pen width to 2 to avoid pixel shifting dropping pixels the border
+    QPen *tempPen = new QPen(m_painter->pen());
+    tempPen->setWidth(2);
+    const QPen customPen = *tempPen;
+    m_painter->setPen(customPen);
+
     Q_FOREACH (KisHandleStyle::IterationStyle it, m_handleStyle.handleIterations) {
         PenBrushSaver saver(it.isValid ? m_painter : 0, it.stylePair, PenBrushSaver::allow_noop);
         m_painter->drawPolygon(handlePolygon);
     }
+
+    m_painter->setPen(originalPen);
 }
 
 void KisHandlePainterHelper::fillHandleRect(const QPointF &center, qreal radius, QColor fillColor, QPoint offset = QPoint(0,0))

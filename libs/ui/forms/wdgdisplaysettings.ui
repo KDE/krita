@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>556</width>
+    <width>598</width>
     <height>546</height>
    </rect>
   </property>
@@ -239,7 +239,7 @@
           <string>%</string>
          </property>
          <property name="maximum">
-          <double>6400.000000000000000</double>
+          <double>9999.000000000000000</double>
          </property>
         </widget>
        </item>
@@ -450,15 +450,13 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>5</width>
-       <height>5</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
-  <zorder>grpOpenGL</zorder>
-  <zorder>verticalSpacer</zorder>
  </widget>
  <customwidgets>
   <customwidget>

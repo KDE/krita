@@ -91,12 +91,12 @@ void testCage(bool clockwise, bool unityTransform, bool benchmarkPrepareOnly = f
 
             }
         } else {
-            QImage srcImage(image);
-            image = QImage(image.size(), QImage::Format_ARGB32);
-            QPainter gc(&image);
+            QImage srcImage = image;
+            QImage image2 = QImage(image.size(), QImage::Format_ARGB32);
+            QPainter gc(&image2);
             gc.drawImage(QPoint(), srcImage);
-
-            image = image.convertToFormat(QImage::Format_ARGB32);
+            gc.end();
+            image = image2;
 
             KisCageTransformWorker qimageWorker(image,
                                                 srcQImageOffset,

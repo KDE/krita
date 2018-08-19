@@ -122,12 +122,8 @@ private:
 KisBrushServer::KisBrushServer()
 {
     m_brushServer = new BrushResourceServer();
-    if (!QFileInfo(m_brushServer->saveLocation()).exists()) {
-        QDir().mkpath(m_brushServer->saveLocation());
-    }
-    m_brushThread = new KoResourceLoaderThread(m_brushServer);
-    m_brushThread->loadSynchronously();
-//    m_brushThread->barrier();
+    m_brushServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_brushServer->fileNames(), m_brushServer->blackListedFiles()));
+
     Q_FOREACH (KisBrushSP brush, m_brushServer->resources()) {
         if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
             brush->setBrushTipImage(QImage());
@@ -137,8 +133,6 @@ KisBrushServer::KisBrushServer()
 
 KisBrushServer::~KisBrushServer()
 {
-    dbgRegistry << "deleting KisBrushServer";
-    delete m_brushThread;
     delete m_brushServer;
 }
 
@@ -147,10 +141,8 @@ KisBrushServer* KisBrushServer::instance()
     return s_instance;
 }
 
-
-KisBrushResourceServer* KisBrushServer::brushServer(bool block)
+KisBrushResourceServer* KisBrushServer::brushServer()
 {
-    if (block) m_brushThread->barrier();
     return m_brushServer;
 }
 

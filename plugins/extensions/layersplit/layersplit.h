@@ -22,9 +22,9 @@
 #include <QVariant>
 
 #include <QUrl>
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class LayerSplit : public KisViewPlugin
+class LayerSplit : public KisActionPlugin
 {
     Q_OBJECT
 public:

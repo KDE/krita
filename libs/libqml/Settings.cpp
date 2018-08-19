@@ -24,7 +24,7 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kis_paintop_preset.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 
 #include "Theme.h"
 #include "PropertyContainer.h"
@@ -132,7 +132,7 @@ void Settings::setThemeID(const QString& /*id*/)
 QObject* Settings::customImageSettings() const
 {
     QObject* settings = new PropertyContainer("customImageSettings", qApp);
-    KisConfig cfg;
+    KisConfig cfg(false);
     settings->setProperty("Width", cfg.defImageWidth());
     settings->setProperty("Height", cfg.defImageHeight());
     settings->setProperty("Resolution", qRound(cfg.defImageResolution() * 72)); // otherwise we end up with silly floating point numbers
@@ -144,7 +144,7 @@ QObject* Settings::customImageSettings() const
 
 QString Settings::lastPreset() const
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString defaultPresetName = "basic_tip_default";
     bool foundTip = false;

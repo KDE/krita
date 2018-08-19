@@ -50,7 +50,7 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
     connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_page->intFuzziness->setValue(cfg.readEntry<int>("layersplit/fuzziness", 20));
     m_page->chkCreateGroupLayer->setChecked(cfg.readEntry<bool>("layerspit/createmastergroup", true));
     m_page->chkSeparateGroupLayers->setChecked(cfg.readEntry<bool>("layerspit/separategrouplayers", false));
@@ -60,7 +60,7 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->chkDisregardOpacity->setChecked(cfg.readEntry<bool>("layerspit/disregardopacity", true));
 
     QString paletteName = cfg.readEntry<QString>("layersplit/paletteName", i18n("Default"));
-    KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServer<KoColorSet> *pserver = KoResourceServerProvider::instance()->paletteServer();
     KoColorSet *pal = pserver->resourceByName(paletteName);
     if (pal) {
         m_palette = pal;
@@ -81,7 +81,7 @@ DlgLayerSplit::~DlgLayerSplit()
 
 void DlgLayerSplit::applyClicked()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry("layersplit/fuzziness", m_page->intFuzziness->value());
     cfg.writeEntry("layerspit/createmastergroup", m_page->chkCreateGroupLayer->isChecked());
     cfg.writeEntry("layerspit/separategrouplayers", m_page->chkSeparateGroupLayers->isChecked());

@@ -74,7 +74,6 @@
 #include "kis_node_model.h"
 
 #include "canvas/kis_canvas2.h"
-#include "KisDocument.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_shape_controller.h"
 #include "kis_selection_mask.h"
@@ -87,12 +86,15 @@
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
 
+#include "kis_selection.h"
+#include "kis_processing_applicator.h"
+#include "commands/kis_set_global_selection_command.h"
+
 #include "kis_layer_utils.h"
 
 #include "ui_wdglayerbox.h"
 
 #include <QProxyStyle>
-#include <QPainter>
 
 class KisLayerBoxStyle : public QProxyStyle
 {
@@ -154,7 +156,7 @@ KisLayerBox::KisLayerBox()
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -284,7 +286,22 @@ void expandNodesRecursively(KisNodeSP root, QPointer<KisNodeFilterProxyModel> fi
     nodeView->blockSignals(false);
 }
 
-void KisLayerBox::setMainWindow(KisViewManager* kisview)
+void KisLayerBox::slotAddLayerBnClicked()
+{
+    if (m_canvas) {
+        KisNodeList nodes = m_nodeManager->selectedNodes();
+
+        if (nodes.size() == 1) {
+            KisAction *action = m_canvas->viewManager()->actionManager()->actionByName("add_new_paint_layer");
+            action->trigger();
+        } else {
+            KisAction *action = m_canvas->viewManager()->actionManager()->actionByName("create_quick_group");
+            action->trigger();
+        }
+    }
+}
+
+void KisLayerBox::setViewManager(KisViewManager* kisview)
 {
     m_nodeManager = kisview->nodeManager();
 
@@ -294,7 +311,7 @@ void KisLayerBox::setMainWindow(KisViewManager* kisview)
                           action);
     }
 
-    connectActionToButton(kisview, m_wdgLayerBox->bnAdd, "add_new_paint_layer");
+    connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), this, SLOT(slotAddLayerBnClicked()));
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
 
     KisActionManager *actionManager = kisview->actionManager();
@@ -730,26 +747,26 @@ inline bool isSelectionMask(KisNodeSP node)
 
 KisNodeSP KisLayerBox::findNonHidableNode(KisNodeSP startNode)
 {
-    if (isSelectionMask(startNode) &&
+    if (KisNodeManager::isNodeHidden(startNode, true) &&
             startNode->parent() &&
             !startNode->parent()->parent()) {
 
 
         KisNodeSP node = startNode->prevSibling();
-        while (node && isSelectionMask(node)) {
+        while (node && KisNodeManager::isNodeHidden(node, true)) {
             node = node->prevSibling();
         }
 
         if (!node) {
             node = startNode->nextSibling();
-            while (node && isSelectionMask(node)) {
+            while (node && KisNodeManager::isNodeHidden(node, true)) {
                 node = node->nextSibling();
             }
         }
 
         if (!node) {
             node = m_image->root()->lastChild();
-            while (node && isSelectionMask(node)) {
+            while (node && KisNodeManager::isNodeHidden(node, true)) {
                 node = node->prevSibling();
             }
         }
@@ -765,6 +782,7 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 {
     KisNodeSP lastActiveNode = m_nodeManager->activeNode();
     KisNodeSP activateNode = lastActiveNode;
+    KisSelectionMaskSP globalSelectionMask;
 
     if (!showSelections) {
         activateNode = findNonHidableNode(activateNode);
@@ -772,20 +790,50 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 
     m_nodeModel->setShowGlobalSelection(showSelections);
 
-    if (showSelections) {
-        KisNodeSP newMask = m_image->rootLayer()->selectionMask();
-        if (newMask) {
-            activateNode = newMask;
+    globalSelectionMask = m_image->rootLayer()->selectionMask();
+    if (globalSelectionMask) {
+        if (showSelections) {
+            activateNode = globalSelectionMask;
         }
     }
 
-    if (activateNode) {
-        if (lastActiveNode != activateNode) {
-            m_nodeManager->slotNonUiActivatedNode(activateNode);
-        } else {
-            setCurrentNode(lastActiveNode);
-        }
+    if (activateNode != lastActiveNode) {
+        m_nodeManager->slotNonUiActivatedNode(activateNode);
+    } else if (lastActiveNode) {
+        setCurrentNode(lastActiveNode);
     }
+
+    if (showSelections && !globalSelectionMask) {
+        KisProcessingApplicator applicator(m_image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           kundo2_i18n("Quick Selection Mask"));
+
+        applicator.applyCommand(
+            new KisLayerUtils::KeepNodesSelectedCommand(
+                m_nodeManager->selectedNodes(), KisNodeList(),
+                lastActiveNode, 0, m_image, false),
+            KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(m_image),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisLayerUtils::SelectGlobalSelectionMask(m_image),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+        applicator.end();
+    } else if (!showSelections &&
+               globalSelectionMask &&
+               globalSelectionMask->selection()->selectedRect().isEmpty()) {
+
+        KisProcessingApplicator applicator(m_image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           kundo2_i18n("Cancel Quick Selection Mask"));
+        applicator.applyCommand(new KisSetGlobalSelectionCommand(m_image, 0), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.end();
+    }
+
 }
 
 void KisLayerBox::selectionChanged(const QModelIndexList selection)

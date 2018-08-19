@@ -101,6 +101,8 @@ public:
 
     virtual void requestTimeSwitch(int time);
 
+    virtual KisNode* graphOverlayNode() const;
+
     /**
      * Returns the sequence of the graph.
      *

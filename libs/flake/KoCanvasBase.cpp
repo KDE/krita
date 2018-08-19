@@ -59,14 +59,14 @@ public:
     KoSnapGuide *snapGuide;
 };
 
-KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument, KoCanvasResourceManager *sharedResourceManager)
+KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeController, KoCanvasResourceManager *sharedResourceManager)
         : d(new Private())
 {
     d->resourceManager = sharedResourceManager ?
         sharedResourceManager : new KoCanvasResourceManager();
     d->isResourceManagerShared = sharedResourceManager;
 
-    d->shapeController = new KoShapeController(this, shapeBasedDocument);
+    d->shapeController = new KoShapeController(this, shapeController);
     d->snapGuide = new KoSnapGuide(this);
 }
 

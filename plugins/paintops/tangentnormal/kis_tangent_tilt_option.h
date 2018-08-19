@@ -38,7 +38,7 @@ const QString TANGENT_MIX_VAL = "Tangent/mixValue";
 class KisPropertiesConfiguration;
 class KisTangentTiltOptionWidget;
 
-class KisTangentTiltOption: public KisPaintOpOption//not really//
+class KisTangentTiltOption: public KisPaintOpOption //not really//
 {
 public:
     KisTangentTiltOption();

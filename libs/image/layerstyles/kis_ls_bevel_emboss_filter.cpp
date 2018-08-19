@@ -57,6 +57,16 @@ KisLsBevelEmbossFilter::KisLsBevelEmbossFilter()
 {
 }
 
+KisLayerStyleFilter *KisLsBevelEmbossFilter::clone() const
+{
+    return new KisLsBevelEmbossFilter(*this);
+}
+
+KisLsBevelEmbossFilter::KisLsBevelEmbossFilter(const KisLsBevelEmbossFilter &rhs)
+    : KisLayerStyleFilter(rhs)
+{
+}
+
 void paintBevelSelection(KisPixelSelectionSP srcSelection,
                          KisPixelSelectionSP dstSelection,
                          const QRect &applyRect,
@@ -399,7 +409,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     }
 
     if (config->soften()) {
-        KisLsUtils::applyGaussian(bumpmapSelection, d.applyGaussianRect, config->soften());
+        KisLsUtils::applyGaussianWithTransaction(bumpmapSelection, d.applyGaussianRect, config->soften());
     }
 
 
@@ -416,19 +426,18 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("4_shadows_sel.png");
 
     {
-        KisPaintDeviceSP dstDevice = dst->getProjection("00_bevel_shadow", config->shadowBlendMode(), srcDevice);
+        KisPaintDeviceSP dstDevice = dst->getProjection("00_bevel_shadow",
+                                                        config->shadowBlendMode(),
+                                                        config->shadowOpacity(),
+                                                        QBitArray(),
+                                                        srcDevice);
 
         const KoColor fillColor(config->shadowColor(), dstDevice->colorSpace());
         const QRect &fillRect = d.shadowHighlightsFinalRect;
         KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
         fillDevice->setDefaultPixel(fillColor);
-        KisPainter gc(dstDevice);
 
-        gc.setSelection(baseSelection);
-        gc.setCompositeOp(COMPOSITE_OVER);
-        env->setupFinalPainter(&gc, config->shadowOpacity(), QBitArray());
-        gc.bitBlt(fillRect.topLeft(), fillDevice, fillRect);
-        gc.end();
+        KisPainter::copyAreaOptimized(fillRect.topLeft(), fillDevice, dstDevice, fillRect, baseSelection);
     }
 
     selection->clear();
@@ -439,18 +448,18 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_highlights_sel.png");
 
     {
-        KisPaintDeviceSP dstDevice = dst->getProjection("01_bevel_highlight", config->highlightBlendMode(), srcDevice);
+        KisPaintDeviceSP dstDevice = dst->getProjection("01_bevel_highlight",
+                                                        config->highlightBlendMode(),
+                                                        config->highlightOpacity(),
+                                                        QBitArray(),
+                                                        srcDevice);
 
         const KoColor fillColor(config->highlightColor(), dstDevice->colorSpace());
         const QRect &fillRect = d.shadowHighlightsFinalRect;
         KisPaintDeviceSP fillDevice = new KisPaintDevice(dstDevice->colorSpace());
         fillDevice->setDefaultPixel(fillColor);
-        KisPainter gc(dstDevice);
-        gc.setSelection(baseSelection);
-        gc.setCompositeOp(COMPOSITE_OVER);
-        env->setupFinalPainter(&gc, config->highlightOpacity(), QBitArray());
-        gc.bitBlt(fillRect.topLeft(), fillDevice, fillRect);
-        gc.end();
+
+        KisPainter::copyAreaOptimized(fillRect.topLeft(), fillDevice, dstDevice, fillRect, baseSelection);
     }
 }
 

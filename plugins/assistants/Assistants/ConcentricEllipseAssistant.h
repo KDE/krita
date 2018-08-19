@@ -40,8 +40,8 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin) const;
-    mutable Ellipse e;
-    mutable Ellipse extraE;
+    mutable Ellipse m_ellipse;
+    mutable Ellipse m_extraEllipse;
 };
 
 class ConcentricEllipseAssistantFactory : public KisPaintingAssistantFactory

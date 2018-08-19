@@ -22,7 +22,7 @@
 #include <QProcess>
 #include <QVariant>
 #include <QVector>
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 #include <kis_types.h>
 
 #include "gmic.h"
@@ -33,7 +33,7 @@ class QSharedMemory;
 
 class KisQmicApplicator;
 
-class QMic : public KisViewPlugin
+class QMic : public KisActionPlugin
 {
     Q_OBJECT
 public:

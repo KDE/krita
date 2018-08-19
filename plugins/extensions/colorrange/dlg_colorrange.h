@@ -67,7 +67,7 @@ class DlgColorRange: public KoDialog
 
 public:
 
-    DlgColorRange(KisViewManager *view, QWidget *parent = 0);
+    DlgColorRange(KisViewManager *viewManager, QWidget *parent = 0);
     ~DlgColorRange() override;
 
 private Q_SLOTS:
@@ -87,13 +87,13 @@ private:
 
 private:
 
-    WdgColorRange * m_page;
-    KisViewManager * m_view;
+    WdgColorRange *m_page;
+    int m_selectionCommandsAdded;
+    KisViewManager *m_viewManager;
     SelectionAction m_mode;
     QCursor m_oldCursor;
     enumAction m_currentAction;
     bool m_invert;
-    int m_selectionCommandsAdded;
 };
 
 

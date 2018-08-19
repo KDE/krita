@@ -13,7 +13,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
                              QLineEdit, QScrollArea, QGridLayout, QFileDialog,
                              QLabel, QDialogButtonBox)
-from tenscripts import tenscriptsdialog
+from . import tenscriptsdialog
 import krita
 
 
@@ -27,7 +27,7 @@ class UITenScripts(object):
         self.layout = QVBoxLayout(self.mainDialog)
         self.baseWidget = QWidget()
         self.baseArea = QWidget()
-        self.scrollArea =  QScrollArea()
+        self.scrollArea = QScrollArea()
         self.scriptsLayout = QGridLayout()
 
         self.buttonBox.accepted.connect(self.mainDialog.accept)
@@ -58,12 +58,12 @@ class UITenScripts(object):
         rowLayout = QHBoxLayout()
         label = QLabel()
         directoryTextField = QLineEdit()
-        directoryDialogButton = QPushButton("...")
+        directoryDialogButton = QPushButton(i18n("..."))
 
         directoryTextField.setReadOnly(True)
-        label.setText(self.tenscripts.actions[key].shortcut())
-        directoryTextField.setToolTip("Selected Path")
-        directoryDialogButton.setToolTip("Select the script")
+        label.setText(self.tenscripts.actions[key].shortcut().toString())
+        directoryTextField.setToolTip(i18n("Selected path"))
+        directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)
 
         self.scriptsLayout.addWidget(label, rowPosition, 0, Qt.AlignLeft|Qt.AlignTop)
@@ -84,9 +84,9 @@ class UITenScripts(object):
 
     def _selectScript(self):
         dialog = QFileDialog(self.mainDialog)
-        dialog.setNameFilter('Python files (*.py)')
+        dialog.setNameFilter(i18n("Python files (*.py)"))
 
-        if dialog.exec():
+        if dialog.exec_():
             selectedFile = dialog.selectedFiles()[0]
             obj = self.mainDialog.sender()
             textField = self.scriptsLayout.itemAt(self.scriptsLayout.indexOf(obj)-1).widget()

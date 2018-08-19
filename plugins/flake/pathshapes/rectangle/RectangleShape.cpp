@@ -94,8 +94,8 @@ void RectangleShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes(context, OdfAllAttributes);
         if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
-            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
-            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
+            context.xmlWriter().addAttribute("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
+            context.xmlWriter().addAttribute("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
         saveText(context);
@@ -266,6 +266,8 @@ void RectangleShape::updatePath(const QSizeF &size)
     // last point stops and closes path
     points.last()->setProperty(KoPathPoint::StopSubpath);
     points.last()->setProperty(KoPathPoint::CloseSubpath);
+
+    notifyPointsChanged();
 }
 
 void RectangleShape::createPoints(int requiredPointCount)
@@ -287,6 +289,8 @@ void RectangleShape::createPoints(int requiredPointCount)
             d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 qreal RectangleShape::cornerRadiusX() const
@@ -334,16 +338,16 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(this, context);
 
     const QSizeF size = this->size();
-    context.shapeWriter().addAttributePt("width", size.width());
-    context.shapeWriter().addAttributePt("height", size.height());
+    context.shapeWriter().addAttribute("width", size.width());
+    context.shapeWriter().addAttribute("height", size.height());
 
     double rx = cornerRadiusX();
     if (rx > 0.0) {
-        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
+        context.shapeWriter().addAttribute("rx", 0.01 * rx * 0.5 * size.width());
     }
     double ry = cornerRadiusY();
     if (ry > 0.0) {
-        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
+        context.shapeWriter().addAttribute("ry", 0.01 * ry * 0.5 * size.height());
     }
 
     context.shapeWriter().endElement();

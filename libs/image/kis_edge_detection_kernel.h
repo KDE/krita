@@ -34,7 +34,7 @@ public:
     enum FilterType {
         Simple, //A weird simple method used in our old sobel filter
         Prewit, //The simpler prewitt detection, which doesn't smooth.
-        SobolVector //Sobol does smooth. The creation of bigger kernels is based on an approach regarding vectors.
+        SobelVector //Sobel does smooth. The creation of bigger kernels is based on an approach regarding vectors.
     };
 
     enum FilterOutput {
@@ -86,7 +86,7 @@ public:
      * @param rect the affected rect.
      * @param xRadius the radius of the horizontal sampling, radius of 0 is effectively disabling it.
      * @param yRadius the radius of the vertical sampling, refius of 0 is effectively disabling it.
-     * @param type the type can be prewitt, sobol or simple, each of which
+     * @param type the type can be prewitt, sobel or simple, each of which
      * have a different sampling for the eventual edge detection.
      * @param channelFlags the affected channels.
      * @param progressUpdater the progress updater if it exists.
@@ -103,7 +103,7 @@ public:
                               bool writeToAlpha = false);
     /**
      * @brief converToNormalMap
-     * Conver a channel of the device to a normal map. The channel will be interpretted as a heightmap.
+     * Convert a channel of the device to a normal map. The channel will be interpretted as a heightmap.
      * @param device the device
      * @param rect the rectangle to apply this to.
      * @param xRadius the xradius

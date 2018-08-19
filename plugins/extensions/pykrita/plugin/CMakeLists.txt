@@ -3,8 +3,8 @@
 add_definitions(-DQT_NO_KEYWORDS)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-set(SOURCES 
-    plugin.cpp 
+set(SOURCES
+    plugin.cpp
     pyqtpluginsettings.cpp
     utilities.cpp
     PykritaModule.cpp
@@ -12,8 +12,8 @@ set(SOURCES
     PythonPluginsModel.cpp
 )
 
-ki18n_wrap_ui(SOURCES 
-    info.ui 
+ki18n_wrap_ui(SOURCES
+    info.ui
     manager.ui
 )
 

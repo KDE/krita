@@ -197,10 +197,25 @@ protected:
      * Made public in KisEffectMask
      */
     void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy maskPos) const;
+
+    virtual void mergeInMaskInternal(KisPaintDeviceSP projection,
+                                     KisSelectionSP effectiveSelection,
+                                     const QRect &applyRect, const QRect &preparedNeedRect,
+                                     PositionToFilthy maskPos) const;
+
+    /**
+     * A special callback for calling selection->updateProjection() during
+     * the projection calculation process. Some masks (e.g. selection masks)
+     * don't need it, because they do it separately.
+     */
+    virtual void flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const;
+
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,
                                const QRect & rc,
                                PositionToFilthy maskPos) const;
+
+    virtual bool paintsOutsideSelection() const;
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 

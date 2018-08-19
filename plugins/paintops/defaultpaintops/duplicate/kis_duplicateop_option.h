@@ -58,7 +58,7 @@ private:
 
 };
 
-struct DuplicateOption : public KisBaseOption
+struct KisDuplicateOptionProperties : public KisPaintopPropertiesBase
 {
     bool duplicate_healing;
     bool duplicate_correct_perspective;

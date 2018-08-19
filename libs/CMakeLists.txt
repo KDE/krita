@@ -17,7 +17,7 @@ add_subdirectory( ui )
 add_subdirectory( vectorimage )
 add_subdirectory( impex )
 add_subdirectory( libkis )
-if (HAVE_QT_QUICK)
+if (NOT APPLE AND HAVE_QT_QUICK)
     add_subdirectory( libqml )
 endif()
 

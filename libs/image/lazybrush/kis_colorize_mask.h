@@ -62,6 +62,8 @@ public:
     KisPaintDeviceSP paintDevice() const override;
     KisPaintDeviceSP coloringProjection() const;
 
+    KisPaintDeviceSP colorPickSourceDevice() const override;
+
     KisNodeSP clone() const override {
         return KisNodeSP(new KisColorizeMask(*this));
     }

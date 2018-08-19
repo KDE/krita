@@ -37,7 +37,7 @@
 #include "kis_config.h"
 #include "kis_cmb_contour.h"
 #include "kis_cmb_gradient.h"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_psd_layer_style_resource.h"
 #include "kis_psd_layer_style.h"
 
@@ -76,6 +76,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     QWidget *page = new QWidget(this);
     wdgLayerStyles.setupUi(page);
     setMainWidget(page);
+    wdgLayerStyles.chkPreview->setVisible(false);
 
     connect(wdgLayerStyles.lstStyleSelector, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(notifyGuiConfigChanged()));
 
@@ -132,7 +133,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     wdgLayerStyles.stylesStack->addWidget(m_stroke);
     connect(m_stroke, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));
     wdgLayerStyles.lstStyleSelector->setCurrentRow(cfg.readEntry("KisDlgLayerStyle::current", 1));
 
@@ -630,7 +631,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbShadowMode, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.bnShadowColor, SIGNAL(changed(KoColor)), SIGNAL(configChanged()));
-    connect(ui.intOpacity2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));;
+    connect(ui.intOpacity2, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
 
     // Contour
     m_contour->ui.intRange->setRange(1, 100);

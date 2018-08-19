@@ -28,7 +28,7 @@
 
 struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
 {
-    Private(const KoPathPointData &_pointData1, const KoPathPointData &_pointData2, KoShapeBasedDocumentBase *_controller, KoSelection *_selection)
+    Private(const KoPathPointData &_pointData1, const KoPathPointData &_pointData2, KoShapeControllerBase *_controller, KoSelection *_selection)
         : pointData1(_pointData1),
           pointData2(_pointData2),
           controller(_controller),
@@ -38,7 +38,7 @@ struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
 
     KoPathPointData pointData1;
     KoPathPointData pointData2;
-    KoShapeBasedDocumentBase *controller;
+    KoShapeControllerBase *controller;
     KoSelection *selection;
 
 
@@ -46,7 +46,7 @@ struct Q_DECL_HIDDEN KoMultiPathPointMergeCommand::Private
     QScopedPointer<KUndo2Command> mergeCommand;
 };
 
-KoMultiPathPointMergeCommand::KoMultiPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KoShapeBasedDocumentBase *controller, KoSelection *selection, KUndo2Command *parent)
+KoMultiPathPointMergeCommand::KoMultiPathPointMergeCommand(const KoPathPointData &pointData1, const KoPathPointData &pointData2, KoShapeControllerBase *controller, KoSelection *selection, KUndo2Command *parent)
     : KUndo2Command(kundo2_i18n("Merge points"), parent),
       m_d(new Private(pointData1, pointData2, controller, selection))
 {
@@ -63,10 +63,6 @@ KUndo2Command *KoMultiPathPointMergeCommand::createMergeCommand(const KoPathPoin
 
 void KoMultiPathPointMergeCommand::redo()
 {
-    if (m_d->selection) {
-        m_d->selection->deselectAll();
-    }
-
     KoShape *mergedShape = 0;
 
     if (m_d->pointData1.pathShape != m_d->pointData2.pathShape) {
@@ -107,13 +103,9 @@ void KoMultiPathPointMergeCommand::undo()
 {
     KUndo2Command::undo();
 
-    if (m_d->selection) {
-        m_d->selection->deselectAll();
-    }
-
     if (m_d->mergeCommand) {
-        m_d->mergeCommand->undo();
-        m_d->mergeCommand.reset();
+            m_d->mergeCommand->undo();
+            m_d->mergeCommand.reset();
     }
 
     if (m_d->combineCommand) {
@@ -123,7 +115,9 @@ void KoMultiPathPointMergeCommand::undo()
 
     if (m_d->selection) {
         m_d->selection->select(m_d->pointData1.pathShape);
-        m_d->selection->select(m_d->pointData2.pathShape);
+        if (m_d->pointData1.pathShape != m_d->pointData2.pathShape) {
+            m_d->selection->select(m_d->pointData2.pathShape);
+        }
     }
 }
 

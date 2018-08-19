@@ -46,7 +46,8 @@ struct AssistantEditorData {
 };
 
 /**
- * This class hold a list of painting assistants.
+ * KisPaintingAssistantsDecoration draws the assistants stored in the document on
+ * the canvas.
  * In the application flow, each canvas holds one of these classes to manage the assistants
  * There is an assistants manager, but that is higher up in the flow and makes sure each view gets one of these
  * Since this is off the canvas level, the decoration can be seen across all tools. The contents from here will be in
@@ -66,7 +67,15 @@ public:
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
-    QList<KisPaintingAssistantSP> assistants();
+    QList<KisPaintingAssistantSP> assistants() const;
+
+
+    /// getter and setter functions for what assistant is currently selected
+    /// this is used to control some tool options that are specific to a assistant
+    KisPaintingAssistantSP selectedAssistant();
+    void setSelectedAssistant(KisPaintingAssistantSP assistant);
+    void deselectAssistant();
+
 
     /// called when assistant editor is activated
     /// right now this happens when the assistants tool is selected
@@ -100,16 +109,16 @@ public:
     /// uncache all assistants
     void uncache();
 
-    /// retrieves the assistants color specified in the tool options
-    /// all assistants will share the same color
-    QColor assistantsColor();
-
     int handleSize();
     void setHandleSize(int handleSize);
 
+    QColor globalAssistantsColor();
+    void setGlobalAssistantsColor(QColor color);
 
 Q_SIGNALS:
     void assistantChanged();
+    void selectedAssistantChanged();
+
 public Q_SLOTS:
 
     /// toggles whether the assistant is active or not
@@ -117,13 +126,12 @@ public Q_SLOTS:
 
     /// toggles whether there will be a preview of the assistant result when painting
     void toggleOutlineVisible();
-    void setAssistantsColor(QColor color);
     QPointF snapToGuide(KoPointerEvent *e, const QPointF &offset, bool useModifiers);
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
-    void drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);    
+    void drawHandles(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& gc, const KisCoordinatesConverter *converter);
 
 private:

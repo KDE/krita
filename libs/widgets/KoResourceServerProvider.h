@@ -32,42 +32,7 @@
 #include <resources/KoPattern.h>
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoColorSet.h>
-#include <resources/KoAbstractGradient.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
-
-/**
- * KoResourceLoaderThread allows threaded loading of the resources of a resource server
- */
-class KRITAWIDGETS_EXPORT KoResourceLoaderThread : public QThread {
-
-    Q_OBJECT
-public:
-
-    /**
-     * Constructs a KoResourceLoaderThread for a server
-     * @param server the server the resources will be loaded for
-     */
-    explicit KoResourceLoaderThread(KoResourceServerBase *server);
-    ~KoResourceLoaderThread() override;
-    void loadSynchronously();
-public Q_SLOTS:
-    /**
-     * Checks whether the thread has finished loading and waits
-     * until it is finished if necessary
-     */
-    void barrier();
-
-protected:
-    /**
-     * Overridden from QThread
-     */
-    void run() override;
-
-private:
-
-    KoResourceServerBase * m_server;
-    QStringList m_fileNames;
-};
 
 
 /**
@@ -83,10 +48,19 @@ public:
 
     static KoResourceServerProvider* instance();
 
-    KoResourceServer<KoPattern>* patternServer(bool block = true);
-    KoResourceServer<KoAbstractGradient>* gradientServer(bool block = true);
-    KoResourceServer<KoColorSet>* paletteServer(bool block = true);
-    KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer(bool block = true);
+    /**
+     * @brief blacklistFileNames filters the filenames with the list of blacklisted file names
+     * @param fileNames all files
+     * @param blacklistedFileNames the files we don't want
+     * @return the result
+     */
+    static QStringList blacklistFileNames(QStringList fileNames, const QStringList &blacklistedFileNames);
+
+
+    KoResourceServer<KoPattern>* patternServer();
+    KoResourceServer<KoAbstractGradient>* gradientServer();
+    KoResourceServer<KoColorSet>* paletteServer();
+    KoResourceServer<KoSvgSymbolCollectionResource>* svgSymbolCollectionServer();
 
 private:
     KoResourceServerProvider(const KoResourceServerProvider&);

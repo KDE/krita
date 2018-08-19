@@ -39,6 +39,7 @@
 #include "kis_canvas_decoration.h"
 #include "kis_painting_assistants_decoration.h"
 #include "input/KisInputActionGroup.h"
+#include "KisReferenceImagesDecoration.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -55,6 +56,7 @@ class KisAnimationPlayer;
 class KisShapeController;
 class KisCoordinatesConverter;
 class KoViewConverter;
+class KisAbstractCanvasWidget;
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -75,7 +77,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc);
+    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc);
 
     ~KisCanvas2() override;
 
@@ -117,6 +119,13 @@ public: // KoCanvasBase implementation
      * Return the shape manager associated with this canvas
      */
     KoShapeManager *globalShapeManager() const;
+
+    /**
+     * Return shape manager associated with the currently active node.
+     * If current node has no internal shape manager, return null.
+     */
+    KoShapeManager *localShapeManager() const;
+
 
     void updateCanvas(const QRectF& rc) override;
 
@@ -162,7 +171,7 @@ public: // KoCanvasBase implementation
     void setInputActionGroupsMask(KisInputActionGroupsMask mask) override;
 
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration() const;
-
+    KisReferenceImagesDecorationSP referenceImagesDecoration() const;
 
 public: // KisCanvas2 methods
 
@@ -206,8 +215,25 @@ public: // KisCanvas2 methods
     KisAnimationPlayer *animationPlayer() const;
     void refetchDataFromImage();
 
+    /**
+     * @return area of the image (in image coordinates) that is visible on the canvas
+     * with a small margin selected by the user
+     */
+    QRect regionOfInterest() const;
+
+    /**
+     * Set aftificial limit outside which the image will not be rendered
+     * \p rc is measured in image pixels
+     */
+    void setRenderingLimit(const QRect &rc);
+
+    /**
+     * @return aftificial limit outside which the image will not be rendered
+     */
+    QRect renderingLimit() const;
+
 Q_SIGNALS:
-    void imageChanged(KisImageWSP image);
+    void sigCanvasEngineChanged();
 
     void sigCanvasCacheUpdated();
     void sigContinueResizeImage(qint32 w, qint32 h);
@@ -216,6 +242,8 @@ Q_SIGNALS:
 
     // emitted whenever the canvas widget thinks sketch should update
     void updateCanvasRequested(const QRect &rc);
+
+    void sigRegionOfInterestChanged(const QRect &roi);
 
 public Q_SLOTS:
 
@@ -233,7 +261,7 @@ public Q_SLOTS:
     void slotSoftProofing(bool softProofing);
     void slotGamutCheck(bool gamutCheck);
     void slotChangeProofingConfig();
-    void slotZoomChanged(int zoom);
+    void slotPopupPaletteRequestedZoomChange(int zoom);
 
     void channelSelectionChanged();
 
@@ -273,6 +301,10 @@ private Q_SLOTS:
 
     void bootstrapFinished();
 
+    void slotUpdateRegionOfInterest();
+
+    void slotReferenceImagesChanged();
+
 public:
 
     bool isPopupPaletteVisible() const;
@@ -297,7 +329,7 @@ private:
     void createQPainterCanvas();
     void createOpenGLCanvas();
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
-    void setCanvasWidget(QWidget *widget);
+    void setCanvasWidget(KisAbstractCanvasWidget *widget);
     void resetCanvas(bool useOpenGL);
 
     void notifyLevelOfDetailChange();

@@ -28,7 +28,7 @@
 #include "kis_strokes_queue.h"
 
 #include "kis_queues_progress_updater.h"
-#include "KisUpdateSchedulerConfigNotifier.h"
+#include "KisImageConfigNotifier.h"
 
 #include <QReadWriteLock>
 #include "kis_lazy_wait_condition.h"
@@ -50,7 +50,7 @@
 struct Q_DECL_HIDDEN KisUpdateScheduler::Private {
     Private(KisUpdateScheduler *_q, KisProjectionUpdateListener *p)
         : q(_q)
-        , updaterContext(KisImageConfig().maxNumberOfThreads(), q)
+        , updaterContext(KisImageConfig(true).maxNumberOfThreads(), q)
         , projectionUpdateListener(p)
     {}
 
@@ -97,7 +97,12 @@ void KisUpdateScheduler::setThreadsLimit(int value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->processingBlocked);
 
-    barrierLock();
+    /**
+     * Thread limit can be changed without the full-featured barrier
+     * lock, we can avoid waiting for all the jobs to complete. We
+     * should just ensure there is no more jobs in the updater context.
+     */
+    lock();
     m_d->updaterContext.lock();
     m_d->updaterContext.setThreadsLimit(value);
     m_d->updaterContext.unlock();
@@ -112,17 +117,7 @@ int KisUpdateScheduler::threadsLimit() const
 
 void KisUpdateScheduler::connectSignals()
 {
-    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            SLOT(continueUpdate(const QRect&)),
-            Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
-            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
-            SLOT(spareThreadAppeared()), Qt::DirectConnection);
-
-    connect(KisUpdateSchedulerConfigNotifier::instance(), SIGNAL(configChanged()),
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
 }
 
@@ -273,11 +268,7 @@ void KisUpdateScheduler::explicitRegenerateLevelOfDetail()
 
 int KisUpdateScheduler::currentLevelOfDetail() const
 {
-    int levelOfDetail = -1;
-
-    if (levelOfDetail < 0) {
-        levelOfDetail = m_d->updaterContext.currentLevelOfDetail();
-    }
+    int levelOfDetail = m_d->updaterContext.currentLevelOfDetail();
 
     if (levelOfDetail < 0) {
         levelOfDetail = m_d->updatesQueue.overrideLevelOfDetail();
@@ -313,10 +304,8 @@ KisPostExecutionUndoAdapter *KisUpdateScheduler::lodNPostExecutionUndoAdapter() 
 void KisUpdateScheduler::updateSettings()
 {
     m_d->updatesQueue.updateSettings();
-
-    KisImageConfig config;
+    KisImageConfig config(true);
     m_d->defaultBalancingRatio = config.schedulerBalancingRatio();
-
     setThreadsLimit(config.maxNumberOfThreads());
 }
 

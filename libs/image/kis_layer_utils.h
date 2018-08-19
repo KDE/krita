@@ -125,6 +125,14 @@ namespace KisLayerUtils
         KisImageWSP m_image;
     };
 
+    struct KRITAIMAGE_EXPORT SelectGlobalSelectionMask : public KUndo2Command
+    {
+        SelectGlobalSelectionMask(KisImageSP image);
+        void redo() override;
+
+        KisImageSP m_image;
+    };
+
     KRITAIMAGE_EXPORT KisLayerSP constructDefaultLayer(KisImageSP image);
 
     class KRITAIMAGE_EXPORT RemoveNodeHelper {
@@ -186,7 +194,18 @@ namespace KisLayerUtils
     /**
      * Applies \p func to \p node and all its children recursively
      */
-    void KRITAIMAGE_EXPORT recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func);
+    template <typename NodePointer, typename Functor>
+    void recursiveApplyNodes(NodePointer node, Functor func)
+    {
+        func(node);
+
+        node = node->firstChild();
+        while (node) {
+            recursiveApplyNodes(node, func);
+            node = node->nextSibling();
+        }
+    }
+
 
     /**
      * Walks through \p node and all its children recursively until
@@ -200,6 +219,8 @@ namespace KisLayerUtils
      * Recursively searches for a node with specified Uuid
      */
     KisNodeSP KRITAIMAGE_EXPORT findNodeByUuid(KisNodeSP root, const QUuid &uuid);
+
+    KisImageSP KRITAIMAGE_EXPORT findImageByHierarchy(KisNodeSP node);
 };
 
 #endif /* __KIS_LAYER_UTILS_H */

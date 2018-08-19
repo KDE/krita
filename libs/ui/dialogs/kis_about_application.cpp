@@ -23,16 +23,19 @@
 #include <QTabWidget>
 #include <QLabel>
 #include <QTextEdit>
+#include <QTextBrowser>
 #include <QString>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QApplication>
 #include <QFile>
+#include <QDesktopServices>
 
 #include <klocalizedstring.h>
 
 #include "../../krita/data/splash/splash_screen.xpm"
+#include "../../krita/data/splash/splash_screen_x2.xpm"
 #include "kis_splash_screen.h"
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
@@ -42,16 +45,16 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->setMargin(0);
-    QTabWidget *wdg = new QTabWidget;
-    vlayout->addWidget(wdg);
+    QTabWidget *wdgTab = new QTabWidget;
+    vlayout->addWidget(wdgTab);
 
-    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), true);
+    KisSplashScreen *splash = new KisSplashScreen(qApp->applicationVersion(), QPixmap(splash_screen_xpm), QPixmap(splash_screen_x2_xpm), true);
     splash->setWindowFlags(Qt::Widget);
     splash->displayLinks(true);
     splash->setFixedSize(splash->sizeHint());
 
-    wdg->addTab(splash, i18n("About"));
-    setMinimumSize(wdg->sizeHint());
+    wdgTab->addTab(splash, i18n("About"));
+    setMinimumSize(wdgTab->sizeHint());
 
 
     QTextEdit *lblAuthors = new QTextEdit();
@@ -74,7 +77,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     authors.chop(2);
     authors.append(".</p></body></html>");
     lblAuthors->setText(authors);
-    wdg->addTab(lblAuthors, i18n("Authors"));
+    wdgTab->addTab(lblAuthors, i18n("Authors"));
 
     QTextEdit *lblKickstarter = new QTextEdit();
     lblKickstarter->setReadOnly(true);
@@ -95,7 +98,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     backers.chop(2);
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
     lblKickstarter->setText(backers);
-    wdg->addTab(lblKickstarter, i18n("Backers"));
+    wdgTab->addTab(lblKickstarter, i18n("Backers"));
 
 
 
@@ -123,15 +126,15 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));
 
     lblCredits->setText(credits);
-    wdg->addTab(lblCredits, i18n("Also Thanks To"));
+    wdgTab->addTab(lblCredits, i18n("Also Thanks To"));
 
     QTextEdit *lblLicense = new QTextEdit();
     lblLicense->setReadOnly(true);
     QString license = i18n("<html>"
                            "<head/>"
                            "<body>"
-                           "<h1 align=\"center\"><b>Your Rights</h1>"
-                           "<p>Krita is released under the GNU General Public License (version 2 or any later version).</p>"
+                           "<h1 align=\"center\"><b>Your Rights</b></h1>"
+                           "<p>Krita is released under the GNU General Public License (version 3 or any later version).</p>"
                            "<p>This license grants people a number of freedoms:</p>"
                            "<ul>"
                            "<li>You are free to use Krita, for any purpose</li>"
@@ -155,7 +158,34 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     license.append("</pre></body></html>");
     lblLicense->setText(license);
 
-    wdg->addTab(lblLicense, i18n("License"));
+    wdgTab->addTab(lblLicense, i18n("License"));
+
+    QTextBrowser *lblThirdParty = new QTextBrowser();
+    lblThirdParty->setOpenExternalLinks(true);
+    QFile thirdPartyFile(":/libraries.txt");
+    if (thirdPartyFile.open(QIODevice::ReadOnly)) {
+        ba = thirdPartyFile.readAll();
+
+        QString thirdPartyHtml = i18n("<html>"
+                                      "<head/>"
+                                      "<body>"
+                                      "<h1 align=\"center\"><b>Third-party Libraries used by Krita</b></h1>"
+                                      "<p>Krita is built on the following free software libraries:</p><p><ul>");
+
+
+        Q_FOREACH(const QString &lib, QString::fromUtf8(ba).split('\n')) {
+            if (!lib.startsWith("#")) {
+                QStringList parts = lib.split(',');
+                if (parts.size() >= 3) {
+                    thirdPartyHtml.append(QString("<li><a href=\"%2\">%1</a>: %3</li>").arg(parts[0], parts[1], parts[2]));
+                }
+            }
+        }
+        thirdPartyHtml.append("<ul></p></body></html>");
+        lblThirdParty->setText(thirdPartyHtml);
+    }
+    wdgTab->addTab(lblThirdParty, i18n("Third-party libraries"));
+
 
     QPushButton *bnClose = new QPushButton(i18n("Close"));
     connect(bnClose, SIGNAL(clicked()), SLOT(close()));

@@ -30,9 +30,10 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
-#include "kis_gradient_slider.h"
+#include "KisGradientSlider.h"
 #include "kis_histogram.h"
 #include <kis_layer.h>
 #include "kis_paint_device.h"
@@ -61,7 +62,7 @@ KritaThreshold::~KritaThreshold()
 }
 
 KisFilterThreshold::KisFilterThreshold()
-    : KisFilter(id(), categoryAdjust(), i18n("&Threshold..."))
+    : KisFilter(id(), FiltersCategoryAdjustId, i18n("&Threshold..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 
@@ -89,9 +90,11 @@ void KisFilterThreshold::processImpl(KisPaintDeviceSP device,
 
     while (it.nextPixel()) {
         if (device->colorSpace()->intensity8(it.oldRawData()) > threshold) {
+            white.setOpacity(device->colorSpace()->opacityU8(it.oldRawData()));
             memcpy(it.rawData(), white.data(), pixelSize);
         }
         else {
+            black.setOpacity(device->colorSpace()->opacityU8(it.oldRawData()));
             memcpy(it.rawData(), black.data(), pixelSize);
         }
     }

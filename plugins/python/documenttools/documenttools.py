@@ -10,7 +10,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 import krita
-from documenttools import uidocumenttools
+from . import uidocumenttools
 
 
 class DocumentToolsExtension(krita.Extension):
@@ -19,8 +19,11 @@ class DocumentToolsExtension(krita.Extension):
         super(DocumentToolsExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("document_tools", "Document Tools")
-        action.setToolTip("Plugin to manipulate properties of selected documents")
+        pass
+
+    def createActions(self, window):
+        action = window.createAction("document_tools", i18n("Document Tools"))
+        action.setToolTip(i18n("Plugin to manipulate properties of selected documents."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

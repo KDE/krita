@@ -40,7 +40,6 @@
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
-#include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
 #include <kis_display_color_converter.h>
 #include <kis_canvas2.h>
@@ -52,10 +51,10 @@
 #include <squeezedcombobox.h>
 
 #include "KisPaletteModel.h"
-#include "KisColorsetChooser.h"
 #include "ui_wdgpalettedock.h"
 #include "kis_palette_delegate.h"
 #include "kis_palette_view.h"
+#include <KisColorsetChooser.h>
 
 PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
@@ -88,20 +87,20 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelected(KoColorSetEntry)), this, SLOT(entrySelected(KoColorSetEntry)));
     connect(m_wdgPaletteDock->paletteView, SIGNAL(entrySelectedBackGround(KoColorSetEntry)), this, SLOT(entrySelectedBack(KoColorSetEntry)));
 
-    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer(false);
+    KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
     m_serverAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoColorSet>(rServer));
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
 
-    m_colorSetChooser = new KisColorsetChooser(this);
-    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
+    m_paletteChooser = new KisColorsetChooser(this);
+    connect(m_paletteChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
     m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
-    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
+    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_paletteChooser);
 
     connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList(int)));
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString defaultPalette = cfg.defaultPalette();
     KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
     if (defaultColorSet) {
@@ -115,7 +114,7 @@ PaletteDockerDock::~PaletteDockerDock()
     rServer->removeObserver(this);
 
     if (m_currentColorSet) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         cfg.setDefaultPalette(m_currentColorSet->name());
     }
 
@@ -123,7 +122,7 @@ PaletteDockerDock::~PaletteDockerDock()
     delete m_wdgPaletteDock;
 }
 
-void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
+void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));
@@ -178,17 +177,20 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
     m_wdgPaletteDock->paletteView->updateView();
     m_wdgPaletteDock->paletteView->updateRows();
     m_wdgPaletteDock->cmbNameList->clear();
-    if (colorSet->nColors()>0) {
+
+
+
+    if (colorSet && colorSet->nColors()>0) {
         for (quint32 i = 0; i< colorSet->nColors(); i++) {
             KoColorSetEntry entry = colorSet->getColorGlobal(i);
             QPixmap colorSquare = QPixmap(32, 32);
-            if (entry.spotColor) {
+            if (entry.spotColor()) {
                 QImage img = QImage(32, 32, QImage::Format_ARGB32);
                 QPainter circlePainter;
                 img.fill(Qt::transparent);
                 circlePainter.begin(&img);
                 QBrush brush = QBrush(Qt::SolidPattern);
-                brush.setColor(entry.color.toQColor());
+                brush.setColor(entry.color().toQColor());
                 circlePainter.setBrush(brush);
                 QPen pen = circlePainter.pen();
                 pen.setColor(Qt::transparent);
@@ -198,15 +200,19 @@ void PaletteDockerDock::setColorSet(KoColorSet* colorSet)
                 circlePainter.end();
                 colorSquare = QPixmap::fromImage(img);
             } else {
-                colorSquare.fill(entry.color.toQColor());
+                colorSquare.fill(entry.color().toQColor());
             }
-            QString name = entry.name;
-            if (!entry.id.isEmpty()){
-                name = entry.id + " - " + entry.name;
+            QString name = entry.name();
+            if (!entry.id().isEmpty()){
+                name = entry.id() + " - " + entry.name();
             }
             m_wdgPaletteDock->cmbNameList->addSqueezedItem(QIcon(colorSquare), name);
         }
     }
+
+
+
+
     QCompleter *completer = new QCompleter(m_wdgPaletteDock->cmbNameList->model());
     completer->setCompletionMode(QCompleter::PopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -260,7 +266,7 @@ void PaletteDockerDock::entrySelected(KoColorSetEntry entry)
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
     }
     if (m_resourceProvider) {
-        m_resourceProvider->setFGColor(entry.color);
+        m_resourceProvider->setFGColor(entry.color());
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);
@@ -274,7 +280,7 @@ void PaletteDockerDock::entrySelectedBack(KoColorSetEntry entry)
         m_wdgPaletteDock->cmbNameList->setCurrentIndex(index);
     }
     if (m_resourceProvider) {
-        m_resourceProvider->setBGColor(entry.color);
+        m_resourceProvider->setBGColor(entry.color());
     }
     if (m_currentColorSet->removable()) {
         m_wdgPaletteDock->bnRemove->setEnabled(true);

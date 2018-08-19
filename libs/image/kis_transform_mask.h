@@ -76,11 +76,18 @@ public:
 
     void forceUpdateTimedNode() override;
 
+    void threadSafeForceStaticImageUpdate();
+
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
 
+Q_SIGNALS:
+    void sigInternalForceStaticImageUpdate();
+
 private Q_SLOTS:
     void slotDelayedStaticUpdate();
+
+    void slotInternalForceStaticImageUpdate();
 
 private:
     struct Private;

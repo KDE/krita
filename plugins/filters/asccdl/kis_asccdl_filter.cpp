@@ -20,6 +20,7 @@
 #include "kis_wdg_asccdl.h"
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <qmath.h>
@@ -39,7 +40,7 @@ KritaASCCDL::~KritaASCCDL()
 
 }
 
-KisFilterASCCDL::KisFilterASCCDL(): KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Slope, Offset, Power.."))
+KisFilterASCCDL::KisFilterASCCDL(): KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Slope, Offset, Power..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -115,7 +116,7 @@ void KisASCCDLTransformation::transform(const quint8 *src, quint8 *dst, qint32 n
     while (nPixels--) {
         m_cs->normalisedChannelsValue(src, normalised);
 
-        for (int c=0; c<m_cs->channelCount(); c++){
+        for (uint c=0; c<m_cs->channelCount(); c++){
             if (m_cs->channels().at(c)->channelType()!=KoChannelInfo::ALPHA) {
                 normalised[c] = qPow( (normalised.at(c)*m_slope.at(c))+m_offset.at(c), m_power.at(c));
             }

@@ -133,13 +133,10 @@ qreal EnhancedPathFormula::evaluate()
     // lazy evaluation
     if (!m_compiled) {
         TokenList tokens = scan(m_text);
-        if (m_error != ErrorNone) {
-            debugTokens(tokens);
-        }
         if (!compile(tokens)) {
             debugOpcodes();
             m_error = ErrorCompile;
-            return false;
+            return 0.0;
         }
         m_compiled = true;
     }

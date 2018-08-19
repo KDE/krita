@@ -20,6 +20,7 @@
 
 #include <QTest>
 #include <kis_filter_configuration.h>
+#include <sdk/tests/testutil.h>
 #include "ui_manager_test.h"
 
 class NodeManagerTester : public TestUtil::UiManagerTest
@@ -288,4 +289,4 @@ void KisNodeManagerTest::testConvertBlurToSelectionMask()
     testConvertToSelectionMask(false);
 }
 
-QTEST_MAIN(KisNodeManagerTest)
+KISTEST_MAIN(KisNodeManagerTest)

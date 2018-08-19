@@ -95,6 +95,8 @@ public:
     KisAction *createStandardAction(KStandardAction::StandardAction,
                                     const QObject *receiver, const char *member);
 
+    static void safePopulateMenu(QMenu *menu, const QString &actionId, KisActionManager *actionManager);
+
 private Q_SLOTS:
     void slotActionAddedToCollection(QAction *action);
 

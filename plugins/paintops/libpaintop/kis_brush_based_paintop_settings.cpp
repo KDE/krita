@@ -19,7 +19,7 @@
 #include "kis_brush_based_paintop_settings.h"
 
 #include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option.h>
+#include <kis_airbrush_option_widget.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
 #include "kis_brush_server.h"
@@ -40,7 +40,7 @@ struct BrushReader {
     }
 
     const KisBrushBasedPaintOpSettings *m_parent;
-    KisBrushOption m_option;
+    KisBrushOptionProperties m_option;
 };
 
 struct BrushWriter {
@@ -59,7 +59,7 @@ struct BrushWriter {
     }
 
     KisBrushBasedPaintOpSettings *m_parent;
-    KisBrushOption m_option;
+    KisBrushOptionProperties m_option;
 };
 
 
@@ -100,42 +100,40 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
 }
 
 QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
-                                                            OutlineMode mode,
-                                                            qreal additionalScale,
-                                                            bool forceOutline)
+                                                            const OutlineMode &mode,
+                                                            qreal additionalScale)
 {
     QPainterPath path;
 
-    if (forceOutline || mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         KisBrushSP brush = this->brush();
         if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
         QPainterPath realOutline = brush->outline();
 
-        if (mode == CursorIsCircleOutline || mode == CursorTiltOutline ||
-            (forceOutline && mode == CursorNoOutline)) {
+        if (mode.forceCircle) {
 
             QPainterPath ellipse;
             ellipse.addEllipse(realOutline.boundingRect());
             realOutline = ellipse;
         }
 
-        path = outlineFetcher()->fetchOutline(info, this, realOutline, finalScale, brush->angle());
+        path = outlineFetcher()->fetchOutline(info, this, realOutline, mode, finalScale, brush->angle());
 
-        if (mode == CursorTiltOutline) {
-            QPainterPath tiltLine = makeTiltIndicator(info,
+        if (mode.showTiltDecoration) {
+            const QPainterPath tiltLine = makeTiltIndicator(info,
                 realOutline.boundingRect().center(),
                 realOutline.boundingRect().width() * 0.5,
                 3.0);
-            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
+            path.addPath(outlineFetcher()->fetchOutline(info, this, tiltLine, mode, finalScale, 0.0, true, realOutline.boundingRect().center().x(), realOutline.boundingRect().center().y()));
         }
     }
 
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     return brushOutlineImpl(info, mode, 1.0);
 }

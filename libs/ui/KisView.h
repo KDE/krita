@@ -51,6 +51,7 @@ class KoCanvasResourceManager;
 // KDE classes
 class QAction;
 class KActionCollection;
+class KConfigGroup;
 
 // Qt classes
 class QDragEnterEvent;
@@ -58,6 +59,7 @@ class QDropEvent;
 class QPrintDialog;
 class QCloseEvent;
 class QStatusBar;
+class QMdiSubWindow;
 
 /**
  * This class is used to display a @ref KisDocument.
@@ -74,9 +76,6 @@ public:
      */
     KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
     ~KisView() override;
-
-    QAction *undoAction() const;
-    QAction *redoAction() const;
 
     // Temporary while teasing apart view and mainwindow
     void setViewManager(KisViewManager *view);
@@ -117,6 +116,11 @@ public:
     KisMainWindow *mainWindow() const;
 
     /**
+     * Tells this view which subwindow it is part of.
+     */
+    void setSubWindow(QMdiSubWindow *subWindow);
+
+    /**
      * @return the statusbar of the KisMainWindow in which this view is currently.
      */
     QStatusBar *statusBar() const;
@@ -142,6 +146,8 @@ public:
 
     /// create a list of actions that when activated will change the unit on the document.
     QList<QAction*> createChangeUnitActions(bool addPixelUnit = false);
+
+    void closeView();
 
 public:
 
@@ -202,6 +208,7 @@ public:
     KisSelectionSP selection();
 
     void notifyCurrentStateChanged(bool isCurrent);
+    bool isCurrent() const;
 
     void setShowFloatingMessage(bool show);
     void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
@@ -209,6 +216,9 @@ public:
     bool canvasIsMirrored() const;
 
     void syncLastActiveNodeToDocument();
+
+    void saveViewState(KisPropertiesConfiguration &config) const;
+    void restoreViewState(const KisPropertiesConfiguration &config);
 
 public Q_SLOTS:
 

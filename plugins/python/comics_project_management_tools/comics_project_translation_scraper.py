@@ -41,7 +41,7 @@ class translation_scraper():
     translation_folder = str()
     textLayerNameList = []
     translationDict = {}
-    translationKeys = []  # seperate so that the keys will be somewhat according to the order of appearance.
+    translationKeys = []  # separate so that the keys will be somewhat according to the order of appearance.
     pageTitleKeys= []
     projectName = str()
     languageKey = "AA_language"
@@ -158,27 +158,30 @@ class translation_scraper():
         
         # Get page title if the keywords contain acbf_title
         xmlroot = minidom.parseString(page.read("documentinfo.xml"))
-        title = ""
-        keywords = []
-        def parseThroughDocumentInfo(node, title):
+        dict = {}
+        def parseThroughDocumentInfo(node, dict):
             for childNode in node.childNodes:
                 if childNode.nodeType != minidom.Node.TEXT_NODE and childNode.nodeType != minidom.Node.CDATA_SECTION_NODE:
                     if childNode.tagName == "title":
+                        title = ""
                         for text in childNode.childNodes:
                             title += text.data
+                        dict["title"] = title
                     elif childNode.tagName == "keyword":
                         k = ""
                         for text in childNode.childNodes:
-                            key += text.data
+                            k += text.data
                         keywords = k.split(",")
                         for i in range(len(keywords)):
                             keywords[i] = str(keywords[i]).strip()
-                    else:
-                        parseThroughDocumentInfo(childNode, title)
+                        dict["key"] = keywords
+                    if childNode.childNodes:
+                        parseThroughDocumentInfo(childNode, dict)
                         
-        parseThroughDocumentInfo(xmlroot.documentElement, title)
+        parseThroughDocumentInfo(xmlroot.documentElement, dict)
+        keywords = dict["key"]
         if "acbf_title" in keywords:
-            self.pageTitleKeys.append(title)
+            self.pageTitleKeys.append(dict["title"])
                     
         page.close()
 
@@ -212,7 +215,7 @@ class translation_scraper():
 
         file.write("msgid " + quote + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
-        date = QDateTime.currentDateTime().toString()
+        date = QDateTime.currentDateTimeUtc().toString(Qt.ISODate)
         file.write(quote + "POT-Creation-Date:" + date + "\\n" + quote + newLine)
         file.write(quote + "Content-Type: text/plain; charset=UTF-8\\n" + quote + newLine)
         file.write(quote + "Content-Transfer-Encoding: 8bit\\n" + quote + newLine)
@@ -231,7 +234,7 @@ class translation_scraper():
         file.write("msgstr " + quote + quote + newLine)
         file.write(newLine)
 
-        file.write("#. The keywords, these need to be comma seperated." + newLine)
+        file.write("#. The keywords, these need to be comma separated." + newLine)
         file.write("msgctxt \"@meta-keywords\"" + newLine)
         file.write("msgid " + quote + metaData.get("keywords", "") + quote + newLine)
         file.write("msgstr " + quote + quote + newLine)
@@ -245,7 +248,7 @@ class translation_scraper():
         for i in range(len(self.pageTitleKeys)):
             title = self.pageTitleKeys[i]
             file.write(newLine)
-            file.write("msgctxt " + quote + "@page-title-" + str(i) + quote + newLine)
+            file.write("msgctxt " + quote + "@page-title" + quote + newLine)
             file.write("msgid " + quote + title + quote + newLine)
             file.write("msgstr " + quote + quote + newLine)
 
@@ -268,3 +271,4 @@ class translation_scraper():
                 file.write("msgid " + quote + string + quote + newLine)
                 file.write("msgstr " + quote + quote + newLine)
         file.close()
+        print("CPMT: Translations have been written to:", location)

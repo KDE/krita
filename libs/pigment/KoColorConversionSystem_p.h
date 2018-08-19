@@ -163,24 +163,32 @@ struct KoColorConversionSystem::Path {
         , cost(0) {}
 
     Node* startNode() {
-        return (vertexes.first())->srcNode;
+        return vertexes.size() > 0 ?
+                    (vertexes.first())->srcNode
+                  : 0;
     }
 
     bool operator==(const Path &other) const {
-      return other.vertexes == vertexes;
+        return other.vertexes == vertexes;
     }
 
 
     const Node* startNode() const {
-        return (vertexes.first())->srcNode;
+        return vertexes.size() > 0 ?
+                    (vertexes.first())->srcNode
+                  : 0;
     }
 
     Node* endNode() {
-        return (vertexes.last())->dstNode;
+        return vertexes.size() > 0 ?
+                    (vertexes.last())->dstNode
+                  : 0;
     }
 
     const Node* endNode() const {
-        return (vertexes.last())->dstNode;
+        return vertexes.size() > 0 ?
+                    (vertexes.last())->dstNode
+                  : 0;
     }
 
     bool isEmpty() const {

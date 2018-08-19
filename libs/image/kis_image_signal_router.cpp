@@ -89,6 +89,7 @@ void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
 {
     KisNodeSP newNode = parent->at(index);
 
+    // overlay selection masks reset frames themselves
     if (!newNode->inherits("KisSelectionMask")) {
         KisImageSP image = m_image.toStrongRef();
         if (image) {
@@ -103,6 +104,7 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
 {
     KisNodeSP removedNode = parent->at(index);
 
+    // overlay selection masks reset frames themselves
     if (!removedNode->inherits("KisSelectionMask")) {
         KisImageSP image = m_image.toStrongRef();
         if (image) {

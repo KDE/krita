@@ -54,7 +54,15 @@ public:
     int addPoint(const QPointF& point);
     void removePoint(int idx);
 
-    bool isNull() const;
+    /*
+     * Check whether the curve maps all values to themselves.
+     */
+    bool isIdentity() const;
+
+    /*
+     * Check whether the curve maps all values to given constant.
+     */
+    bool isConstant(qreal c) const;
 
     /**
      * This allows us to carry around a display name for the curve internally. It is used
@@ -63,6 +71,9 @@ public:
      */
     void setName(const QString& name);
     const QString& name() const;
+
+    static qreal interpolateLinear(qreal normalizedValue, const QVector<qreal> &transfer);
+
 public:
     const QVector<quint16> uint16Transfer(int size = 256) const;
     const QVector<qreal> floatTransfer(int size = 256) const;

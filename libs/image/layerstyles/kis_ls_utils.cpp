@@ -109,13 +109,13 @@ namespace KisLsUtils
         return rc.adjusted(-halfSize, -halfSize, halfSize, halfSize);
     }
 
-    void applyGaussian(KisPixelSelectionSP selection,
-                       const QRect &applyRect,
-                       qreal radius)
+    void applyGaussianWithTransaction(KisPixelSelectionSP selection,
+                                      const QRect &applyRect,
+                                      qreal radius)
     {
         KisGaussianKernel::applyGaussian(selection, applyRect,
                                          radius, radius,
-                                         QBitArray(), 0);
+                                         QBitArray(), 0, true);
     }
 
     namespace Private {
@@ -405,11 +405,8 @@ namespace KisLsUtils
 
         KisFillPainter gc(fillDevice);
         gc.fillRect(fillRect.x(), fillRect.y(),
-                    fillRect.width(), fillRect.height(), pattern);
+                    fillRect.width(), fillRect.height(), pattern, -patternOffset);
         gc.end();
-
-        fillDevice->setX(-patternOffset.x());
-        fillDevice->setY(-patternOffset.y());
     }
 
     void fillOverlayDevice(KisPaintDeviceSP fillDevice,
@@ -550,12 +547,11 @@ namespace KisLsUtils
         const QRect effectRect(dstRect);
         const QString compositeOp = config->blendMode();
         const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
-        KisPaintDeviceSP dstDevice = dst->getProjection(projectionId, compositeOp, srcDevice);
+        KisPaintDeviceSP dstDevice = dst->getProjection(projectionId, compositeOp, opacityU8, QBitArray(), srcDevice);
 
         if (config->fillType() == psd_fill_solid_color) {
             KisFillPainter gc(dstDevice);
-            gc.setCompositeOp(COMPOSITE_OVER);
-            env->setupFinalPainter(&gc, opacityU8, QBitArray());
+            gc.setCompositeOp(COMPOSITE_COPY);
             gc.setSelection(baseSelection);
             gc.fillSelection(effectRect, effectColor);
             gc.end();
@@ -566,21 +562,12 @@ namespace KisLsUtils
                 return;
             }
 
-            KisPaintDeviceSP overlayDevice =
-                new KisPaintDevice(dstDevice->colorSpace());
-
             QVector<KoColor> table(256);
             Private::getGradientTable(config->gradient().data(), &table, dstDevice->colorSpace());
 
-            Private::applyGradient(overlayDevice, baseSelection->pixelSelection(),
+            Private::applyGradient(dstDevice, baseSelection->pixelSelection(),
                                    effectRect, table,
                                    true, config->jitter(), env);
-
-            KisPainter gc(dstDevice);
-            gc.setCompositeOp(COMPOSITE_OVER);
-            env->setupFinalPainter(&gc, opacityU8, QBitArray());
-            gc.bitBlt(effectRect.topLeft(), overlayDevice, effectRect);
-            gc.end();
         }
 
         //dstDevice->convertToQImage(0, QRect(0,0,300,300)).save("6_device_shadow.png");

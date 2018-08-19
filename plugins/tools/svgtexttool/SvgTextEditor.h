@@ -113,7 +113,7 @@ private Q_SLOTS:
     void alignJustified();
 
     void setFont(const QString &fontName);
-    void setFontSize(const QString &size);
+    void setFontSize(qreal size);
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
 
     void setSettings();
@@ -127,7 +127,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-    void textUpdated(const QString &svg, const QString &defs);
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
 
 protected:
 

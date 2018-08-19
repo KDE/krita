@@ -285,7 +285,9 @@ bool KraConverter::loadXML(const KoXmlDocument &doc, KoStore *store)
 
     m_kraLoader = new KisKraLoader(m_doc, syntaxVersion);
 
-    // Legacy from the multi-image .kra file period.
+    // reset the old image before loading the next one
+    m_doc->setCurrentImage(0, false);
+
     for (node = root.firstChild(); !node.isNull(); node = node.nextSibling()) {
         if (node.isElement()) {
             if (node.nodeName() == "IMAGE") {
@@ -334,18 +336,15 @@ bool KraConverter::completeLoading(KoStore* store)
 
     m_image->unblockUpdates();
 
-    bool retval = true;
-
     if (!m_kraLoader->warningMessages().isEmpty()) {
-       m_doc->setWarningMessage(m_kraLoader->warningMessages().join("\n"));
-        retval = true;
-    }
-    if (retval) {
-        m_activeNodes = m_kraLoader->selectedNodes();
-        m_assistants = m_kraLoader->assistants();
+        // warnings do not interrupt loading process, so we do not return here
+        m_doc->setWarningMessage(m_kraLoader->warningMessages().join("\n"));
     }
 
-    return retval;
+    m_activeNodes = m_kraLoader->selectedNodes();
+    m_assistants = m_kraLoader->assistants();
+
+    return true;
 }
 
 void KraConverter::cancel()

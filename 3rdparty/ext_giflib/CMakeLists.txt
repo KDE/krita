@@ -1,5 +1,5 @@
 SET(PREFIX_ext_giflib "${EXTPREFIX}" )
-if (MINGW OR MSVC)
+if (MINGW )
 ExternalProject_Add(
     ext_giflib
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

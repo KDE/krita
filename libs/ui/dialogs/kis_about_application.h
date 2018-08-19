@@ -26,10 +26,6 @@ class KisAboutApplication : public QDialog
 public:
     explicit KisAboutApplication(QWidget *parent = 0);
 
-Q_SIGNALS:
-
-public Q_SLOTS:
-
 };
 
 #endif // KIS_ABOUT_APPLICATION_H

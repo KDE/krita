@@ -85,7 +85,7 @@ public:
     // from KoParameterShape
     QPointF normalize() override;
 
-    /// Add formula with given name and textual represenation
+    /// Add formula with given name and textual representation
     void addFormula(const QString &name, const QString &formula);
 
     /// Add a single handle with format: x y minX maxX minY maxY

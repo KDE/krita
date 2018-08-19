@@ -96,6 +96,7 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
             dev->convertFromQImage(_painter->pattern()->pattern(), 0);
             return new KoPatternColorSource(dev, _painter->pattern()->width(), _painter->pattern()->height(), false);
         }
+        break;
     }
     case PATTERN_LOCKED: {
         if (_painter->pattern()) {

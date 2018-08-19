@@ -90,6 +90,7 @@ install_pykrita_plugin(quick_settings_docker)
 install_pykrita_plugin(lastdocumentsdocker)
 # install_pykrita_plugin(scriptdocker)
 install_pykrita_plugin(comics_project_management_tools)
+install_pykrita_plugin(krita_script_starter)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

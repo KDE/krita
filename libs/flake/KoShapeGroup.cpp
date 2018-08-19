@@ -204,7 +204,7 @@ void KoShapeGroup::saveOdf(KoShapeSavingContext & context) const
 {
     context.xmlWriter().startElement("draw:g");
     saveOdfAttributes(context, (OdfMandatories ^ (OdfLayer | OdfZIndex)) | OdfAdditionalAttributes);
-    context.xmlWriter().addAttributePt("svg:y", position().y());
+    context.xmlWriter().addAttribute("svg:y", position().y());
 
     QList<KoShape*> shapes = this->shapes();
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);

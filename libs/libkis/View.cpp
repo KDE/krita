@@ -132,7 +132,7 @@ void View::activateResource(Resource *resource)
 
 }
 
-ManagedColor *View::foreGroundColor() const
+ManagedColor *View::foregroundColor() const
 {
     if (!d->view) return 0;
     return new ManagedColor(d->view->resourceProvider()->fgColor());
@@ -144,7 +144,7 @@ void View::setForeGroundColor(ManagedColor *color)
     d->view->resourceProvider()->setFGColor(color->color());
 }
 
-ManagedColor *View::backGroundColor() const
+ManagedColor *View::backgroundColor() const
 {
     if (!d->view) return 0;
     return new ManagedColor(d->view->resourceProvider()->bgColor());

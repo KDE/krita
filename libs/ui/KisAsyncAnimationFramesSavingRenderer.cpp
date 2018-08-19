@@ -36,7 +36,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
           exportConfiguration(_exportConfiguration)
     {
 
-        savingDoc->setAutoSaveDelay(0);
+        savingDoc->setInfiniteAutoSaveInterval();
         savingDoc->setFileBatchMode(true);
 
         KisImageSP savingImage = new KisImage(savingDoc->createUndoStore(),
@@ -92,10 +92,15 @@ KisAsyncAnimationFramesSavingRenderer::~KisAsyncAnimationFramesSavingRenderer()
 {
 }
 
-void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame)
+void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, const QRegion &requestedRegion)
 {
     KisImageSP image = requestedImage();
     if (!image) return;
+
+    KIS_SAFE_ASSERT_RECOVER (requestedRegion == image->bounds()) {
+        emit sigCancelRegenerationInternal(frame);
+        return;
+    }
 
     m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
 
@@ -104,7 +109,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame)
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 
     for (int i = range.start(); i <= range.end(); i++) {
-        QString frameNumber = QString("%1").arg(i - m_d->range.start() + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
+        QString frameNumber = QString("%1").arg(i + m_d->sequenceNumberingOffset, 4, 10, QChar('0'));
         QString filename = m_d->filenamePrefix + frameNumber + m_d->filenameSuffix;
 
         if (!m_d->savingDoc->exportDocumentSync(QUrl::fromLocalFile(filename), m_d->outputMimeType, m_d->exportConfiguration)) {

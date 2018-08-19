@@ -50,6 +50,16 @@ KisLsDropShadowFilter::KisLsDropShadowFilter(Mode mode)
 {
 }
 
+KisLsDropShadowFilter::KisLsDropShadowFilter(const KisLsDropShadowFilter &rhs)
+    : KisLayerStyleFilter(rhs),
+      m_mode(rhs.m_mode)
+{
+}
+
+KisLayerStyleFilter *KisLsDropShadowFilter::clone() const
+{
+    return new KisLsDropShadowFilter(*this);
+}
 
 struct ShadowRectsData
 {
@@ -147,7 +157,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
      * Spread and blur the selection
      */
     if (d.spread_size) {
-        KisLsUtils::applyGaussian(selection, d.blurNeedRect, d.spread_size);
+        KisLsUtils::applyGaussianWithTransaction(selection, d.blurNeedRect, d.spread_size);
 
         // TODO: find out why in libpsd we pass false here. If we do so,
         //       the result is fully black, which is not expected
@@ -157,7 +167,7 @@ void applyDropShadow(KisPaintDeviceSP srcDevice,
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_spread.png");
 
     if (d.blur_size) {
-        KisLsUtils::applyGaussian(selection, d.noiseNeedRect, d.blur_size);
+        KisLsUtils::applyGaussianWithTransaction(selection, d.noiseNeedRect, d.blur_size);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("2_selection_blur.png");
 

@@ -156,6 +156,13 @@ public:
      */
     virtual KisPaintDeviceSP projection() const = 0;
 
+    /**
+     * @return a special device from where the color picker tool should pick
+     * color when in layer-only mode. For most of the nodes just shortcuts
+     * to projection() device. TODO: can it be null?
+     */
+    virtual KisPaintDeviceSP colorPickSourceDevice() const;
+
     virtual const KoColorSpace *colorSpace() const = 0;
 
     /**
@@ -492,7 +499,7 @@ public:
     void setUseInTimeline(bool value);
 
     bool isAnimated() const;
-    virtual void enableAnimation();
+    void enableAnimation();
 
     virtual void setImage(KisImageWSP image);
 

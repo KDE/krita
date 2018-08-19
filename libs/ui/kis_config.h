@@ -26,8 +26,8 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-#include "kis_global.h"
-#include "kis_properties_configuration.h"
+#include <kis_global.h>
+#include <kis_properties_configuration.h>
 #include "kritaui_export.h"
 
 class KoColorProfile;
@@ -37,7 +37,13 @@ class KisSnapConfig;
 class KRITAUI_EXPORT KisConfig
 {
 public:
-    KisConfig();
+    /**
+     * @brief KisConfig create a kisconfig object
+     * @param readOnly if true, there will be no call to sync when the object is deleted.
+     *  Any KisConfig object created in a thread must be read-only.
+     */
+    KisConfig(bool readOnly);
+
     ~KisConfig();
 
     bool disableTouchOnCanvas(bool defaultValue = false) const;
@@ -72,6 +78,9 @@ public:
 
     qreal defImageResolution(bool defaultValue = false) const;
     void defImageResolution(qreal res) const;
+
+    int preferredVectorImportResolutionPPI(bool defaultValue = false) const;
+    void setPreferredVectorImportResolutionPPI(int value) const;
 
     /**
      * @return the id of the default color model used for creating new images.
@@ -233,9 +242,6 @@ public:
     bool antialiasCurves(bool defaultValue = false) const;
     void setAntialiasCurves(bool v) const;
 
-    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
-    void setSelectionOverlayMaskColor(const QColor &color);
-
     bool antialiasSelectionOutline(bool defaultValue = false) const;
     void setAntialiasSelectionOutline(bool v) const;
 
@@ -248,8 +254,19 @@ public:
     bool showOutlineWhilePainting(bool defaultValue = false) const;
     void setShowOutlineWhilePainting(bool showOutlineWhilePainting) const;
 
-    bool hideSplashScreen(bool defaultValue = false) const;
-    void setHideSplashScreen(bool hideSplashScreen) const;
+    bool forceAlwaysFullSizedOutline(bool defaultValue = false) const;
+    void setForceAlwaysFullSizedOutline(bool value) const;
+
+    enum SessionOnStartup {
+        SOS_BlankSession,
+        SOS_PreviousSession,
+        SOS_ShowSessionManager
+    };
+    SessionOnStartup sessionOnStartup(bool defaultValue = false) const;
+    void setSessionOnStartup(SessionOnStartup value);
+
+    bool saveSessionOnQuit(bool defaultValue) const;
+    void setSaveSessionOnQuit(bool value);
 
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
@@ -309,9 +326,6 @@ public:
 
     bool hideDockersFullscreen(bool defaultValue = false) const;
     void setHideDockersFullscreen(const bool value) const;
-
-    bool showDockerTitleBars(bool defaultValue = false) const;
-    void setShowDockerTitleBars(const bool value) const;
 
     bool showDockers(bool defaultValue = false) const;
     void setShowDockers(const bool value) const;
@@ -447,9 +461,6 @@ public:
     bool lineSmoothingStabilizeSensors(bool defaultValue = false) const;
     void setLineSmoothingStabilizeSensors(bool value);
 
-    int paletteDockerPaletteViewSectionSize(bool defaultValue = false) const;
-    void setPaletteDockerPaletteViewSectionSize(int value) const;
-
     int tabletEventsDelay(bool defaultValue = false) const;
     void setTabletEventsDelay(int value);
 
@@ -547,6 +558,9 @@ public:
     bool calculateAnimationCacheInBackground(bool defaultValue = false) const;
     void setCalculateAnimationCacheInBackground(bool value);
 
+    QColor defaultAssistantsColor(bool defaultValue = false) const;
+    void setDefaultAssistantsColor(const QColor &color) const;
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);
@@ -578,6 +592,7 @@ private:
 
 private:
     mutable KConfigGroup m_cfg;
+    bool m_readOnly;
 };
 
 #endif // KIS_CONFIG_H_

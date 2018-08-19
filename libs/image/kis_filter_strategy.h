@@ -93,7 +93,7 @@ public:
 class KRITAIMAGE_EXPORT KisBoxFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisBoxFilterStrategy() : KisFilterStrategy(KoID("Box", i18n("Box"))) {
+    KisBoxFilterStrategy() : KisFilterStrategy(KoID("NearestNeighbor", i18n("Nearest Neighbor"))) {
         supportVal = 0.5; intSupportVal = 128;
     }
     ~KisBoxFilterStrategy() override {}

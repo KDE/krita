@@ -22,7 +22,6 @@
  */
 
 #include "kis_tool_crop.h"
-#include "kistoolcropconfigwidget.h"
 
 
 #include <QCheckBox>
@@ -33,6 +32,7 @@
 #include <QPushButton>
 #include <QRect>
 #include <QVector>
+#include <QMenu>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -121,6 +121,14 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     connect(&m_finalRect, SIGNAL(sigValuesChanged()), SLOT(slotRectChanged()));
     connect(&m_finalRect, SIGNAL(sigLockValuesChanged()), SLOT(slotRectChanged()));
 
+    // context menu options (mirrors tool options)
+    m_contextMenu.reset(new QMenu());
+    applyCrop = new KisAction(i18n("Crop"));
+    growToggleOption = new KisAction(i18n("Grow"));
+    growToggleOption->setCheckable(true);
+
+    centerToggleOption = new KisAction(i18n("Center"));
+    centerToggleOption->setCheckable(true);
 }
 
 KisToolCrop::~KisToolCrop()
@@ -207,6 +215,28 @@ void KisToolCrop::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
     paintOutlineWithHandles(painter);
+}
+
+QMenu *KisToolCrop::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+
+        // keeps in sync with tool options
+        growToggleOption->setChecked(allowGrow());
+        centerToggleOption->setChecked(growCenter());
+
+
+        if (m_haveCropSelection) {         // can't crop if there is no selection
+            m_contextMenu->addAction(applyCrop);
+            m_contextMenu->addSeparator();
+        }
+
+        m_contextMenu->addAction(growToggleOption);
+        m_contextMenu->addAction(centerToggleOption);
+    }
+
+    return m_contextMenu.data();
 }
 
 void KisToolCrop::beginPrimaryAction(KoPointerEvent *event)
@@ -596,6 +626,8 @@ void KisToolCrop::setAllowGrow(bool g)
     m_finalRect.setCanGrow(g);
     m_finalRect.setCropRect(image()->bounds());
     configGroup.writeEntry("allowGrow", g);
+
+    emit canGrowChanged(g);
 }
 
 bool KisToolCrop::allowGrow() const
@@ -606,7 +638,11 @@ bool KisToolCrop::allowGrow() const
 void KisToolCrop::setGrowCenter(bool value)
 {
     m_finalRect.setCentered(value);
+
+
     configGroup.writeEntry("growCenter", value);
+
+    emit isCenteredChanged(value);
 }
 
 bool KisToolCrop::growCenter() const
@@ -644,7 +680,7 @@ bool KisToolCrop::forceRatio() const
 
 QWidget* KisToolCrop::createOptionWidget()
 {
-    KisToolCropConfigWidget* optionsWidget = new KisToolCropConfigWidget(0, this);
+    optionsWidget = new KisToolCropConfigWidget(0, this);
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(optionsWidget);
     specialSpacer->setObjectName("SpecialSpacer");
@@ -670,6 +706,12 @@ QWidget* KisToolCrop::createOptionWidget()
     connect(optionsWidget, SIGNAL(growCenterChanged(bool)), this, SLOT(setGrowCenter(bool)));
 
     optionsWidget->setFixedHeight(optionsWidget->sizeHint().height());
+
+
+    connect(applyCrop, SIGNAL(triggered(bool)), this, SLOT(crop()));
+    connect(growToggleOption, SIGNAL(triggered(bool)), this, SLOT(setAllowGrow(bool)));
+    connect(centerToggleOption, SIGNAL(triggered(bool)), this, SLOT(setGrowCenter(bool)));
+
 
     return optionsWidget;
 }

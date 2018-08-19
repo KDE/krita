@@ -9,8 +9,8 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-from filtermanager import filtermanagerdialog
-from filtermanager.components import (filtercombobox, filtermanagertreemodel)
+from . import filtermanagerdialog
+from .components import (filtercombobox, filtermanagertreemodel)
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
                              QVBoxLayout, QFrame, QAbstractScrollArea, QWidget,
@@ -42,12 +42,12 @@ class UIFilterManager(object):
 
     def initialize(self):
         self.documentsTreeView.setModel(self.treeModel)
-        self.documentsTreeView.setWindowTitle("Document Tree Model")
+        self.documentsTreeView.setWindowTitle(i18n("Document Tree Model"))
         self.documentsTreeView.resizeColumnToContents(0)
         self.documentsTreeView.resizeColumnToContents(1)
         self.documentsTreeView.resizeColumnToContents(2)
 
-        self.formLayout.addRow("Filters", self.filterComboBox)
+        self.formLayout.addRow(i18n("Filters:"), self.filterComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)
@@ -59,7 +59,7 @@ class UIFilterManager(object):
         self.mainLayout.addWidget(self.buttonBox)
 
         self.mainDialog.resize(500, 300)
-        self.mainDialog.setWindowTitle("Filter Manager")
+        self.mainDialog.setWindowTitle(i18n("Filter Manager"))
         self.mainDialog.setSizeGripEnabled(True)
         self.mainDialog.show()
         self.mainDialog.activateWindow()

@@ -27,7 +27,7 @@ from xml.dom import minidom
 from xml.etree import ElementTree as ET
 import types
 import re
-from PyQt5.QtWidgets import QLabel, QProgressDialog, qApp  # For the progress dialog.
+from PyQt5.QtWidgets import QLabel, QProgressDialog, QMessageBox, qApp  # For the progress dialog.
 from PyQt5.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
 from PyQt5.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
 from krita import *
@@ -99,7 +99,7 @@ class comicsExporter():
         pass
 
     """
-    The the configuration of the exporter.
+    The configuration of the exporter.
 
     @param config: A dictionary containing all the config.
 
@@ -131,17 +131,28 @@ class comicsExporter():
                 Path(exportPath / "metadata").mkdir()
 
             # Get to which formats to export, and set the sizeslist.
+            lengthProcess = len(self.configDictionary["pages"])
             sizesList = {}
             if "CBZ" in self.configDictionary.keys():
                 if self.configDictionary["CBZactive"]:
+                    lengthProcess += 5
                     sizesList["CBZ"] = self.configDictionary["CBZ"]
             if "EPUB" in self.configDictionary.keys():
                 if self.configDictionary["EPUBactive"]:
+                    lengthProcess += 1
                     sizesList["EPUB"] = self.configDictionary["EPUB"]
             if "TIFF" in self.configDictionary.keys():
                 if self.configDictionary["TIFFactive"]:
                     sizesList["TIFF"] = self.configDictionary["TIFF"]
             # Export the pngs according to the sizeslist.
+            # Create a progress dialog.
+            self.progress = QProgressDialog(i18n("Preparing export."), str(), 0, lengthProcess)
+            self.progress.setWindowTitle(i18n("Exporting Comic..."))
+            self.progress.setCancelButton(None)
+            self.timer = QElapsedTimer()
+            self.timer.start()
+            self.progress.show()
+            qApp.processEvents()
             export_success = self.save_out_pngs(sizesList)
 
             # Export acbf metadata.
@@ -149,12 +160,13 @@ class comicsExporter():
                 if "CBZ" in sizesList.keys():
                     title = self.configDictionary["projectName"]
                     if "title" in self.configDictionary.keys():
-                        title = self.configDictionary["title"]
+                        title = str(self.configDictionary["title"]).replace(" ", "_")
 
                     self.acbfLocation = str(exportPath / "metadata" / str(title + ".acbf"))
 
                     locationStandAlone = str(exportPath / str(title + ".acbf"))
-
+                    self.progress.setLabelText(i18n("Saving out ACBF and\nACBF standalone"))
+                    self.progress.setValue(self.progress.value()+2)
                     export_success = exporters.ACBF.write_xml(self.configDictionary, self.acbfPageData, self.pagesLocationList["CBZ"], self.acbfLocation, locationStandAlone, self.projectURL)
                     print("CPMT: Exported to ACBF", export_success)
 
@@ -164,9 +176,12 @@ class comicsExporter():
                     export_success = self.export_to_cbz(exportPath)
                     print("CPMT: Exported to CBZ", export_success)
                 if "EPUB" in sizesList.keys():
+                    self.progress.setLabelText(i18n("Saving out EPUB"))
+                    self.progress.setValue(self.progress.value()+1)
                     export_success = exporters.EPUB.export(self.configDictionary, self.projectURL, self.pagesLocationList["EPUB"])
                     print("CPMT: Exported to EPUB", export_success)
         else:
+            QMessageBox.warning(self, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.Ok)
             print("CPMT: Nothing to export, url not set.")
 
         return export_success
@@ -178,10 +193,14 @@ class comicsExporter():
     def export_to_cbz(self, exportPath):
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
-            title = self.configDictionary["title"]
+            title = str(self.configDictionary["title"]).replace(" ", "_")
+        self.progress.setLabelText(i18n("Saving out CoMet\nmetadata file"))
+        self.progress.setValue(self.progress.value()+1)
         self.cometLocation = str(exportPath / "metadata" / str(title + " CoMet.xml"))
         export_success = exporters.CoMet.write_xml(self.configDictionary, self.pagesLocationList["CBZ"], self.cometLocation)
         self.comicRackInfo = str(exportPath / "metadata" / "ComicInfo.xml")
+        self.progress.setLabelText(i18n("Saving out Comicrack\nmetadata file"))
+        self.progress.setValue(self.progress.value()+1)
         export_success = exporters.comic_rack_xml.write_xml(self.configDictionary, self.pagesLocationList["CBZ"], self.comicRackInfo)
         self.package_cbz(exportPath)
         return export_success
@@ -208,30 +227,33 @@ class comicsExporter():
             pagesList = self.configDictionary["pages"]
             fileName = str(exportPath)
 
-            # Create a progress dialog.
-            progress = QProgressDialog("Preparing export.", str(), 0, len(pagesList))
-            progress.setWindowTitle("Exporting comic...")
-            progress.setCancelButton(None)
-            timer = QElapsedTimer()
-            timer.start()
-            progress.show()
-            qApp.processEvents()
+            """
+            Mini function to handle the setup of this string.
+            """
+            def timeString(timePassed, timeEstimated):
+                return str(i18n("Time passed: {passedString}\n Estimated: {estimated}")).format(passedString=timePassed, estimated=timeEstimated)
 
             for p in range(0, len(pagesList)):
+                pagesDone = str(i18n("{pages} of {pagesTotal} done.")).format(pages=p, pagesTotal=len(pagesList))
 
                 # Update the label in the progress dialog.
-                progress.setValue(p)
-                timePassed = timer.elapsed()
-                if (p > 0):
+                self.progress.setValue(p)
+                timePassed = self.timer.elapsed()
+                if p > 0:
                     timeEstimated = (len(pagesList) - p) * (timePassed / p)
-                    passedString = str(int(timePassed / 60000)) + ":" + format(int(timePassed / 1000), "02d") + ":" + format(timePassed % 1000, "03d")
-                    estimatedString = str(int(timeEstimated / 60000)) + ":" + format(int(timeEstimated / 1000), "02d") + ":" + format(int(timeEstimated % 1000), "03d")
-                    progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(pagesList), passedString=passedString, estimated=estimatedString))
+                    estimatedString = self.parseTime(timeEstimated)
+                else:
+                    estimatedString = str(u"\u221E")
+                passedString = self.parseTime(timePassed)
+                self.progress.setLabelText("\n".join([pagesDone, timeString(passedString, estimatedString), i18n("Opening next page")]))
                 qApp.processEvents()
                 # Get the appropriate url and open the page.
                 url = str(Path(self.projectURL) / pagesList[p])
                 page = Application.openDocument(url)
                 page.waitForDone()
+                
+                # Update the progress bar a little
+                self.progress.setLabelText("\n".join([pagesDone, timeString(self.parseTime(self.timer.elapsed()), estimatedString), i18n("Cleaning up page")]))
 
                 # remove layers and flatten.
                 labelList = self.configDictionary["labelsToRemove"]
@@ -243,7 +265,7 @@ class comicsExporter():
                 self.removeLayers(labelList, root)
                 page.refreshProjection()
                 # We'll need the offset and scale for aligning the panels and text correctly. We're getting this from the CBZ
-
+                
                 pageData = {}
                 pageData["vector"] = panelsAndText
                 tree = ET.fromstring(page.documentInfo())
@@ -263,6 +285,10 @@ class comicsExporter():
                 Application.setBatchmode(True)
                 # Start making the format specific copy.
                 for key in sizesList.keys():
+                    
+                    # Update the progress bar a little
+                    self.progress.setLabelText("\n".join([pagesDone, timeString(self.parseTime(self.timer.elapsed()), estimatedString), str(i18n("Exporting for {key}")).format(key=key)]))
+                    
                     w = sizesList[key]
                     # copy over data
                     projection = page.clone()
@@ -342,12 +368,13 @@ class comicsExporter():
                     projection.close()
                 self.acbfPageData.append(pageData)
                 page.close()
-            progress.setValue(len(pagesList))
+            self.progress.setValue(len(pagesList))
             Application.setBatchmode(batchsave)
             # TODO: Check what or whether memory leaks are still caused and otherwise remove the entry below.
             print("CPMT: Export has finished. If there are memory leaks, they are caused by file layers.")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
+        QMessageBox.warning(self, i18n("Export not Possible"), i18n("Export not happening because there are no pages."), QMessageBox.Ok)
         return False
 
     """
@@ -380,6 +407,13 @@ class comicsExporter():
             if node.childNodes():
                 for child in node.childNodes():
                     self.getPanelsAndText(node=child, list=list)
+                    
+    def parseTime(self, time = 0):
+        timeList = []
+        timeList.append(str(int(time / 60000)))
+        timeList.append(format(int((time%60000) / 1000), "02d"))
+        timeList.append(format(int(time % 1000), "03d"))
+        return ":".join(timeList)
     """
     Function to get the panel and text data from a group shape
     """
@@ -392,7 +426,6 @@ class comicsExporter():
                 self.handleShapeDescription(shape, list, textOnly)
     """
     Function to get text and panels in a format that acbf will accept
-    TODO: move this to a new file.
     """
 
     def handleShapeDescription(self, shape, list, textOnly=False):
@@ -486,7 +519,7 @@ class comicsExporter():
                 listOfPoints.append(point)
         elif docElem.localName == "text":
             # NOTE: This only works for horizontal preformated text. Vertical text needs a different
-            # ordering of the rects, and wraparound should try to take the shape it is wraped in.
+            # ordering of the rects, and wraparound should try to take the shape it is wrapped in.
             family = "sans-serif"
             if docElem.hasAttribute("font-family"):
                 family = docElem.getAttribute("font-family")
@@ -585,7 +618,7 @@ class comicsExporter():
         # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
         title = self.configDictionary["projectName"]
         if "title" in self.configDictionary.keys():
-            title = self.configDictionary["title"]
+            title = str(self.configDictionary["title"]).replace(" ", "_")
 
         # Get the appropriate path.
         url = str(exportPath / str(title + ".cbz"))
@@ -598,6 +631,8 @@ class comicsExporter():
         cbzArchive.write(self.cometLocation, Path(self.cometLocation).name)
         cbzArchive.write(self.comicRackInfo, Path(self.comicRackInfo).name)
         comic_book_info_json_dump = str()
+        self.progress.setLabelText(i18n("Saving out Comicbook\ninfo metadata file"))
+        self.progress.setValue(self.progress.value()+1)
         comic_book_info_json_dump = exporters.comic_book_info.writeJson(self.configDictionary)
         cbzArchive.comment = comic_book_info_json_dump.encode("utf-8")
 
@@ -606,6 +641,7 @@ class comicsExporter():
             for page in self.pagesLocationList["CBZ"]:
                 if (Path(page).exists()):
                     cbzArchive.write(page, Path(page).name)
-
+        self.progress.setLabelText(i18n("Packaging CBZ"))
+        self.progress.setValue(self.progress.value()+1)
         # Close the zip file when done.
         cbzArchive.close()

@@ -37,6 +37,7 @@
 #include <kis_generator_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_shape_layer.h>
+#include <KisReferenceImagesLayer.h>
 #include <kis_transparency_mask.h>
 #include <kis_filter_mask.h>
 #include <kis_transform_mask.h>
@@ -307,6 +308,10 @@ void Node::setLocked(bool value)
     d->node->setUserLocked(value);
 }
 
+bool Node::hasExtents()
+{
+    return !d->node->extent().isEmpty();
+}
 
 QString Node::name() const
 {
@@ -363,6 +368,9 @@ QString Node::type() const
     if (qobject_cast<const KisCloneLayer*>(d->node)) {
         return "clonelayer";
     }
+    if (qobject_cast<const KisReferenceImagesLayer*>(d->node)) {
+        return "referenceimageslayer";
+    }
     if (qobject_cast<const KisShapeLayer*>(d->node)) {
         return "vectorlayer";
     }
@@ -396,7 +404,7 @@ QIcon Node::icon() const
 bool Node::visible() const
 {
     if (!d->node) return false;
-    return d->node->visible();;
+    return d->node->visible();
 }
 
 void Node::setVisible(bool visible)
@@ -526,17 +534,16 @@ bool Node::save(const QString &filename, double xRes, double yRes)
     return r;
 }
 
-Node *Node::mergeDown()
+Node* Node::mergeDown()
 {
     if (!d->node) return 0;
     if (!qobject_cast<KisLayer*>(d->node.data())) return 0;
-    if (!d->node->nextSibling()) return 0;
-    if (!d->node->parent()) return 0;
+    if (!d->node->prevSibling()) return 0;
 
-    int index = d->node->parent()->index(d->node->prevSibling());
     d->image->mergeDown(qobject_cast<KisLayer*>(d->node.data()), KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     d->image->waitForDone();
-    return new Node(d->image, d->node->parent()->at(index));
+
+    return new Node(d->image, d->node->prevSibling());
 }
 
 void Node::scaleNode(int width, int height, QString strategy)

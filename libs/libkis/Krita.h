@@ -19,6 +19,7 @@
 #define LIBKIS_KRITA_H
 
 #include <QObject>
+#include <QAction>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -27,10 +28,8 @@
 #include "Document.h"
 #include "Window.h"
 #include "View.h"
-#include "Action.h"
 #include "Notifier.h"
 
-class QAction;
 
 /**
  * Krita is a singleton class that offers the root access to the Krita object hierarchy.
@@ -79,12 +78,12 @@ public Q_SLOTS:
     /**
      * @return return a list of all actions for the currently active mainWindow.
      */
-    QList<Action*> actions() const;
+    QList<QAction*> actions() const;
 
     /**
      * @return the action that has been registered under the given name, or 0 if no such action exists.
      */
-    Action *action(const QString &name) const;
+    QAction *action(const QString &name) const;
 
     /**
      * @return a list of all open Documents
@@ -217,7 +216,7 @@ public Q_SLOTS:
      * @brief createDocument creates a new document and image and registers
      * the document with the Krita application.
      *
-     * Unless you explicitly call Document::close() the document wil remain
+     * Unless you explicitly call Document::close() the document will remain
      * known to the Krita document registry. The document and its image will
      * only be deleted when Krita exits.
      *
@@ -274,16 +273,6 @@ add_document_to_window()
     Window *openWindow();
 
     /**
-     * @brief createAction creates an action with the given text and passes it to Krita. Every newly created
-     *     mainwindow will create an instance of this action. This means that actions need to be created in the
-     *     setup phase of the plugin, not on the fly.
-     * @param id the unique id for this action
-     * @param text the user-visible text
-     * @return the Action you can connect a slot to.
-     */
-    Action *createAction(const QString &name, const QString &text, bool addToScriptMenu = true);
-
-    /**
      * @brief addExtension add the given plugin to Krita. There will be a single instance of each Extension in the Krita process.
      * @param extension the extension to add.
      */
@@ -337,6 +326,12 @@ add_document_to_window()
 
     // Internal only: for use with mikro.py
     static QObject *fromVariant(const QVariant& v);
+
+    static QString krita_i18n(const QString &text);
+
+private Q_SLOTS:
+
+    void mainWindowAdded(KisMainWindow *window);
 
 private:
     struct Private;

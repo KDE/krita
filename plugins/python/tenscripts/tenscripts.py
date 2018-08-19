@@ -9,27 +9,34 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
+import sys
+
 from PyQt5.QtWidgets import QMessageBox
 import krita
-from tenscripts import uitenscripts
-import importlib
+from . import uitenscripts
+
+if sys.version_info[0] > 2:
+    import importlib
+else:
+    import imp
 
 
 class TenScriptsExtension(krita.Extension):
 
     def __init__(self, parent):
-       super(TenScriptsExtension, self).__init__(parent)
+        super(TenScriptsExtension, self).__init__(parent)
 
-       self.actions = []
-       self.scripts = []
+        self.actions = []
+        self.scripts = []
 
     def setup(self):
-        action = Application.createAction("ten_scripts", "Ten Scripts")
-        action.setToolTip("Assign ten scripts to ten shortcuts.")
-        action.triggered.connect(self.initialize)
-
         self.readSettings()
-        self.loadActions()
+
+    def createActions(self, window):
+        action = window.createAction("ten_scripts", i18n("Ten Scripts"))
+        action.setToolTip(i18n("Assign ten scripts to ten shortcuts."))
+        action.triggered.connect(self.initialize)
+        self.loadActions(window)
 
     def initialize(self):
         self.uitenscripts = uitenscripts.UITenScripts()
@@ -46,11 +53,10 @@ class TenScriptsExtension(krita.Extension):
 
         Application.writeSetting("tenscripts", "scripts", ','.join(map(str, saved_scripts)))
 
-    def loadActions(self):
+    def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']):
-            action = Application.createAction("execute_script_" + item, "Execute Script " + item)
+            action = window.createAction("execute_script_" + item, str(i18n("Execute Script {num}")).format(num=item), "")
             action.script = None
-            action.setMenu("None")
             action.triggered.connect(self._executeScript)
 
             if index < len(self.scripts):
@@ -62,18 +68,21 @@ class TenScriptsExtension(krita.Extension):
         script = self.sender().script
         if script:
             try:
-                spec = importlib.util.spec_from_file_location("users_script", script)
-                users_module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(users_module)
-                
+                if sys.version_info[0] > 2:
+                    spec = importlib.util.spec_from_file_location("users_script", script)
+                    users_module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(users_module)
+                else:
+                    users_module = imp.load_source("users_script", script)
+
                 if hasattr(users_module, 'main') and callable(users_module.main):
                     users_module.main()
 
-                self.showMessage('script {0} executed'.format(self.sender().script))
+                self.showMessage(str(i18n("Script {0} executed")).format(self.sender().script))
             except Exception as e:
                 self.showMessage(str(e))
         else:
-            self.showMessage("You didn't assign a script to that action")
+            self.showMessage(i18n("You did not assign a script to that action"))
 
     def showMessage(self, message):
         self.msgBox  = QMessageBox(Application.activeWindow().qwindow())

@@ -22,6 +22,7 @@
 #include "kis_command_utils.h"
 #include <kritaflake_export.h>
 
+class KoSelectedShapesProxy;
 class KoSelection;
 class KoShape;
 
@@ -30,7 +31,7 @@ class KRITAFLAKE_EXPORT KoKeepShapesSelectedCommand : public KisCommandUtils::Fl
 public:
     KoKeepShapesSelectedCommand(const QList<KoShape*> &selectedBefore,
                                 const QList<KoShape*> &selectedAfter,
-                                KoSelection *selection,
+                                KoSelectedShapesProxy *selectionProxy,
                                 bool isFinalizing,
                                 KUndo2Command *parent);
 
@@ -40,7 +41,7 @@ protected:
 private:
     QList<KoShape*> m_selectedBefore;
     QList<KoShape*> m_selectedAfter;
-    KoSelection *m_selection;
+    KoSelectedShapesProxy *m_selectionProxy;
 };
 
 #endif // KOKEEPSHAPESSELECTEDCOMMAND_H

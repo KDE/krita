@@ -46,7 +46,7 @@ KisImportExportFilter::ConversionStatus exrImport::convert(KisDocument *document
     switch (ib.buildImage(filename())) {
     case KisImageBuilder_RESULT_UNSUPPORTED:
     case KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE:
-        document->setErrorMessage(i18n("Krita does support this type of EXR file."));
+        document->setErrorMessage(i18n("Krita does not support this type of EXR file."));
         return KisImportExportFilter::NotImplemented;
 
     case KisImageBuilder_RESULT_INVALID_ARG:

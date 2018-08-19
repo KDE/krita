@@ -94,7 +94,7 @@ KisSprayOpOption::~KisSprayOpOption()
 
 void KisSprayOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisSprayProperties op;
+    KisSprayOptionProperties op;
 
     op.diameter = m_options->diameterSpinBox->value();
     op.particleCount = m_options->particlesSpinBox->value();
@@ -113,7 +113,7 @@ void KisSprayOpOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 
 void KisSprayOpOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    KisSprayProperties op;
+    KisSprayOptionProperties op;
     op.readOptionSetting(setting);
 
     m_options->diameterSpinBox->setValue(op.diameter);

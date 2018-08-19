@@ -62,7 +62,6 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
-#include <recorder/kis_recorded_paint_action.h>
 #include <kis_selection_mask.h>
 #include "kis_resources_snapshot.h"
 #include <KisView.h>
@@ -546,12 +545,6 @@ void KisTool::deleteSelection()
     if (!KisToolUtils::clearImage(image(), resources->currentNode(), resources->activeSelection())) {
         KoToolBase::deleteSelection();
     }
-}
-
-void KisTool::setupPaintAction(KisRecordedPaintAction* action)
-{
-    action->setPaintColor(currentFgColor());
-    action->setBackgroundColor(currentBgColor());
 }
 
 QWidget* KisTool::createOptionWidget()

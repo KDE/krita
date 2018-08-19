@@ -28,7 +28,7 @@ KisWdgEdgeDetection::KisWdgEdgeDetection(QWidget *parent) :
     ui->setupUi(this);
 
     m_types << "prewitt"<< "sobol"<< "simple";
-    m_types_translatable << i18n("Prewitt") << i18n("Sobol") << i18n("Simple");
+    m_types_translatable << i18n("Prewitt") << i18n("Sobel") << i18n("Simple");
     m_output << "pythagorean" << "xGrowth" << "xFall" << "yGrowth" << "yFall" << "radian";
     m_output_translatable << i18n("All sides")
                           << i18n("Top Edge")

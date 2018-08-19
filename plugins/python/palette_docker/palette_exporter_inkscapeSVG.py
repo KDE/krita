@@ -35,8 +35,8 @@ class inkscapeSVGExporter:
         self.currentPalette = Palette(allPalettes[self.paletteName])
         self.export()
         done = QMessageBox()
-        done.setWindowTitle("Export successful")
-        done.setText(self.paletteName + " has been exported to " + self.fileName + "!")
+        done.setWindowTitle(i18n("Export Successful"))
+        done.setText(str(i18n("{input} has been exported to {output}.")).format(input=self.paletteName, output=self.fileName))
         done.exec_()
         pass
 
@@ -89,7 +89,7 @@ class inkscapeSVGExporter:
             green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
             blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
             hexcode = "#" + str(format(red, '02x')) + str(format(green, '02x')) + str(format(blue, '02x'))
-            swatchName = str(i) + "-" + entry.name
+            swatchName = str(i) + "-" + entry.name()
             swatchName = swatchName.replace(" ", "-")
             swatchName = swatchName.replace("(", "-")
             swatchName = swatchName.replace(")", "-")
@@ -107,7 +107,7 @@ class inkscapeSVGExporter:
             svgSingleSwatch.setAttribute("height", str(int(20)))
             svgSingleSwatch.setAttribute("fill", "url(#" + swatchName + ")")
             svgSingleSwatch.setAttribute("id", "swatch" + swatchName)
-            if entry.spotColor is True:
+            if entry.spotColor() is True:
                 svgSingleSwatch.setAttribute("rx", str(10))
                 svgSingleSwatch.setAttribute("ry", str(10))
             svgSwatches.appendChild(svgSingleSwatch)
@@ -143,7 +143,7 @@ class inkscapeSVGExporter:
                 blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
                 hexcode = "#" + str(format(red, '02x')) + str(format(green, '02x')) + str(format(blue, '02x'))
 
-                swatchName = groupName + str(i) + "-" + entry.name
+                swatchName = groupName + str(i) + "-" + entry.name()
                 swatchName = swatchName.replace(" ", "-")
                 swatchName = swatchName.replace("(", "-")
                 swatchName = swatchName.replace(")", "-")
@@ -161,7 +161,7 @@ class inkscapeSVGExporter:
                 svgSingleSwatch.setAttribute("height", str(int(20)))
                 svgSingleSwatch.setAttribute("fill", "url(#" + swatchName + ")")
                 svgSingleSwatch.setAttribute("id", "swatch " + swatchName)
-                if entry.spotColor is True:
+                if entry.spotColor() is True:
                     svgSingleSwatch.setAttribute("rx", str(10))
                     svgSingleSwatch.setAttribute("ry", str(10))
                 svgSwatches.appendChild(svgSingleSwatch)

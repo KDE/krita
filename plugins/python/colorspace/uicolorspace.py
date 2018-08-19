@@ -9,8 +9,8 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-from colorspace import colorspacedialog
-from colorspace.components import colormodelcombobox, colordepthcombobox, colorprofilecombobox
+from . import colorspacedialog
+from .components import colormodelcombobox, colordepthcombobox, colorprofilecombobox
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
                              QAbstractItemView, QComboBox, QDialogButtonBox,
@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (QFormLayout, QListWidget, QListWidgetItem,
                              QHBoxLayout, QAbstractScrollArea)
 from PyQt5.QtGui import QIcon
 import krita
-from colorspace import resources_rc
+from . import resources_rc
 
 
 class UIColorSpace(object):
@@ -28,7 +28,7 @@ class UIColorSpace(object):
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.documentLayout = QVBoxLayout()
-        self.refreshButton = QPushButton(QIcon(':/icons/refresh.svg'), "Refresh")
+        self.refreshButton = QPushButton(QIcon(':/icons/refresh.svg'), i18n("Refresh"))
         self.widgetDocuments = QListWidget()
         self.colorModelComboBox = colormodelcombobox.ColorModelComboBox(self)
         self.colorDepthComboBox = colordepthcombobox.ColorDepthComboBox(self)
@@ -58,10 +58,10 @@ class UIColorSpace(object):
         self.documentLayout.addWidget(self.widgetDocuments)
         self.documentLayout.addWidget(self.refreshButton)
 
-        self.formLayout.addRow('Documents', self.documentLayout)
-        self.formLayout.addRow('Color Model', self.colorModelComboBox)
-        self.formLayout.addRow('Color Depth', self.colorDepthComboBox)
-        self.formLayout.addRow('Color Profile', self.colorProfileComboBox)
+        self.formLayout.addRow(i18n("Documents:"), self.documentLayout)
+        self.formLayout.addRow(i18n("Color model:"), self.colorModelComboBox)
+        self.formLayout.addRow(i18n("Color depth:"), self.colorDepthComboBox)
+        self.formLayout.addRow(i18n("Color profile:"), self.colorProfileComboBox)
 
         self.line = QFrame()
         self.line.setFrameShape(QFrame.HLine)
@@ -72,7 +72,7 @@ class UIColorSpace(object):
         self.mainLayout.addWidget(self.buttonBox)
 
         self.mainDialog.resize(500, 300)
-        self.mainDialog.setWindowTitle("Color Space")
+        self.mainDialog.setWindowTitle(i18n("Color Space"))
         self.mainDialog.setSizeGripEnabled(True)
         self.mainDialog.show()
         self.mainDialog.activateWindow()
@@ -117,9 +117,9 @@ class UIColorSpace(object):
         self.msgBox = QMessageBox(self.mainDialog)
         if selectedDocuments:
             self.convertColorSpace(selectedDocuments)
-            self.msgBox.setText("The selected documents has been converted.")
+            self.msgBox.setText(i18n("The selected documents has been converted."))
         else:
-            self.msgBox.setText("Select at least one document.")
+            self.msgBox.setText(i18n("Select at least one document."))
         self.msgBox.exec_()
 
     def convertColorSpace(self, documents):

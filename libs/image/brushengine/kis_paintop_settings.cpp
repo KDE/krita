@@ -181,7 +181,7 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     if (paintopID.isEmpty())
         return 0;
 
-    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID, ""));
+    KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(KoID(paintopID));
     QMapIterator<QString, QVariant> i(getProperties());
     while (i.hasNext()) {
         i.next();
@@ -191,11 +191,23 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     return settings;
 }
 
-void KisPaintOpSettings::resetSettings()
+void KisPaintOpSettings::resetSettings(const QStringList &preserveProperties)
 {
-    const QString paintopID = getString("paintop");
+    QStringList allKeys = preserveProperties;
+    allKeys << "paintop";
+
+    QHash<QString, QVariant> preserved;
+    Q_FOREACH (const QString &key, allKeys) {
+        if (hasProperty(key)) {
+            preserved[key] = getProperty(key);
+        }
+    }
+
     clearProperties();
-    setProperty("paintop", paintopID);
+
+    for (auto it = preserved.constBegin(); it != preserved.constEnd(); ++it) {
+        setProperty(it.key(), it.value());
+    }
 }
 
 void KisPaintOpSettings::activate()
@@ -373,13 +385,13 @@ bool KisPaintOpSettings::needsAsynchronousUpdates() const
     return false;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
-    if (mode == CursorIsOutline || mode == CursorIsCircleOutline || mode == CursorTiltOutline) {
+    if (mode.isVisible) {
         path = ellipseOutline(10, 10, 1.0, 0);
 
-        if (mode == CursorTiltOutline) {
+        if (mode.showTiltDecoration) {
             path.addPath(makeTiltIndicator(info, QPointF(0.0, 0.0), 0.0, 2.0));
         }
 

@@ -7,7 +7,7 @@ from PyKrita.krita import *
 class DockWidgetFactory(DockWidgetFactoryBase):
 
     def __init__(self, _id, _dockPosition, _klass):
-        super().__init__(_id, _dockPosition)
+        super(DockWidgetFactory, self).__init__(_id, _dockPosition)
         self.klass = _klass
 
     def createDockWidget(self):

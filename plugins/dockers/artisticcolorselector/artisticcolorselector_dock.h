@@ -36,7 +36,7 @@ public:
     ArtisticColorSelectorDock();
     ~ArtisticColorSelectorDock() override;
     QString observerName() override { return "ArtisticColorSelectorDock"; }
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 

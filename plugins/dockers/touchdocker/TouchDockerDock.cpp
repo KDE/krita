@@ -22,7 +22,6 @@
 #include <QQmlContext>
 #include <QAction>
 #include <QUrl>
-#include <QAction>
 #include <QKeyEvent>
 #include <QApplication>
 
@@ -45,12 +44,26 @@
 #include <KisMimeDatabase.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
-#include <kis_config.h>
 
 #include <Theme.h>
 #include <Settings.h>
 #include <DocumentManager.h>
 #include <KisSketchView.h>
+
+#include <QVersionNumber>
+
+namespace
+{
+
+bool shouldSetAcceptTouchEvents()
+{
+    // See https://bugreports.qt.io/browse/QTBUG-66718
+    static QVersionNumber qtVersion = QVersionNumber::fromString(qVersion());
+    static bool retval = qtVersion > QVersionNumber(5, 9, 3) && qtVersion.normalized() != QVersionNumber(5, 10);
+    return retval;
+}
+
+} // namespace
 
 class TouchDockerDock::Private
 {
@@ -88,7 +101,7 @@ TouchDockerDock::TouchDockerDock()
                                                << "previous_preset"
                                                << "clear";
 
-    QStringList mapping = KisConfig().readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
+    QStringList mapping = KisConfig(true).readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
     for (int i = 0; i < 8; ++i) {
         if (i < mapping.size()) {
             d->buttonMapping[QString("button%1").arg(i + 1)] = mapping[i];
@@ -99,6 +112,9 @@ TouchDockerDock::TouchDockerDock()
     }
 
     m_quickWidget = new QQuickWidget(this);
+    if (shouldSetAcceptTouchEvents()) {
+        m_quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     setWidget(m_quickWidget);
     setEnabled(true);
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
@@ -309,6 +325,9 @@ KoDialog *TouchDockerDock::createDialog(const QString qml)
     dlg->setButtons(KoDialog::None);
 
     QQuickWidget *quickWidget = new QQuickWidget(this);
+    if (shouldSetAcceptTouchEvents()) {
+        quickWidget->setAttribute(Qt::WA_AcceptTouchEvents);
+    }
     dlg->setMainWidget(quickWidget);
 
     setEnabled(true);

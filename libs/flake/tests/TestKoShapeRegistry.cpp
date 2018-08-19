@@ -38,7 +38,7 @@
 
 #include <FlakeDebug.h>
 #include "kis_debug.h"
-
+#include <sdk/tests/kistest.h>
 
 void TestKoShapeRegistry::testGetKoShapeRegistryInstance()
 {
@@ -210,4 +210,4 @@ void TestKoShapeRegistry::testFramedSvgShapes()
     QCOMPARE(shape->absoluteOutlineRect(0), QRectF(83, 41, 226,141));
 }
 
-QTEST_MAIN(TestKoShapeRegistry)
+KISTEST_MAIN(TestKoShapeRegistry)

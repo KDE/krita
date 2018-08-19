@@ -34,7 +34,7 @@
 #include "kis_cached_paint_device.h"
 #include "kis_paint_device_debug_utils.h"
 #include "kis_layer_properties_icons.h"
-#include "kis_signal_compressor.h"
+#include "kis_thread_safe_signal_compressor.h"
 
 #include "kis_colorize_stroke_strategy.h"
 #include "kis_multiway_cut.h"
@@ -61,9 +61,9 @@ struct KisColorizeMask::Private
           showColoring(true),
           needsUpdate(true),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
+          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE),
           updateIsRunning(false),
           filteringOptions(false, 4.0, 15, 0.7),
           limitToDeviceBounds(false)
@@ -81,9 +81,9 @@ struct KisColorizeMask::Private
           showColoring(rhs.showColoring),
           needsUpdate(false),
           originalSequenceNumber(-1),
-          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT, _q),
-          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE, _q),
+          updateCompressor(1000, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          dirtyParentUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT),
+          prefilterRecalculationCompressor(1000, KisSignalCompressor::POSTPONE),
           offset(rhs.offset),
           updateIsRunning(false),
           filteringOptions(rhs.filteringOptions),
@@ -115,9 +115,9 @@ struct KisColorizeMask::Private
     bool needsUpdate;
     int originalSequenceNumber;
 
-    KisSignalCompressor updateCompressor;
-    KisSignalCompressor dirtyParentUpdateCompressor;
-    KisSignalCompressor prefilterRecalculationCompressor;
+    KisThreadSafeSignalCompressor updateCompressor;
+    KisThreadSafeSignalCompressor dirtyParentUpdateCompressor;
+    KisThreadSafeSignalCompressor prefilterRecalculationCompressor;
     QPoint offset;
 
     bool updateIsRunning;
@@ -377,6 +377,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
 
 void KisColorizeMask::slotUpdateOnDirtyParent()
 {
+    KIS_ASSERT_RECOVER_RETURN(parent());
     KisPaintDeviceSP src = parent()->original();
     KIS_ASSERT_RECOVER_RETURN(src);
 
@@ -460,6 +461,13 @@ KisPaintDeviceSP KisColorizeMask::paintDevice() const
 KisPaintDeviceSP KisColorizeMask::coloringProjection() const
 {
     return m_d->coloringProjection;
+}
+
+KisPaintDeviceSP KisColorizeMask::colorPickSourceDevice() const
+{
+    return
+        m_d->shouldShowColoring() && !m_d->coloringProjection->extent().isEmpty() ?
+            m_d->coloringProjection : projection();
 }
 
 QIcon KisColorizeMask::icon() const
@@ -1071,6 +1079,7 @@ void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &c
 void KisColorizeMask::testingRegenerateMask()
 {
     slotUpdateRegenerateFilling();
+    m_d->updateIsRunning = false;
 }
 
 KisPaintDeviceSP KisColorizeMask::testingFilteredSource() const

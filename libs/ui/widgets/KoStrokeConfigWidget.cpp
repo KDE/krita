@@ -66,7 +66,6 @@
 #include <KoSelectedShapesProxy.h>
 #include "ui_KoStrokeConfigWidget.h"
 #include <KoFlakeUtils.h>
-#include <KoCanvasBase.h>
 #include <KoFillConfigWidget.h>
 #include "kis_canvas_resource_provider.h"
 #include "kis_acyclic_signal_connector.h"
@@ -662,10 +661,12 @@ struct CheckShapeMarkerPolicy
 
 void KoStrokeConfigWidget::selectionChanged()
 {
+    if (d->noSelectionTrackingMode) return;
+
     KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) return;
 
-    // we need to linearize update orider, so force the child widget to update
+    // we need to linearize update order, and force the child widget to update
     // before we start doing it
     d->fillConfigWidget->forceUpdateOnSelectionChanged();
 

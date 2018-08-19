@@ -67,7 +67,7 @@ typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 class KisOpenGLUpdateInfo : public KisUpdateInfo
 {
 public:
-    KisOpenGLUpdateInfo(ConversionOptions options);
+    KisOpenGLUpdateInfo();
 
     KisTextureTileUpdateInfoSPList tileList;
 
@@ -77,14 +77,12 @@ public:
     void assignDirtyImageRect(const QRect &rect);
     void assignLevelOfDetail(int lod);
 
-    bool needsConversion() const;
-    void convertColorSpace();
-
     int levelOfDetail() const override;
+
+    bool tryMergeWith(const KisOpenGLUpdateInfo& rhs);
 
 private:
     QRect m_dirtyImageRect;
-    ConversionOptions m_options;
     int m_levelOfDetail;
 };
 

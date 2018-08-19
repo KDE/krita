@@ -31,11 +31,6 @@
 #include "kis_figure_painting_tool_helper.h"
 #include <brushengine/kis_paintop_preset.h>
 
-#include <recorder/kis_action_recorder.h>
-#include <recorder/kis_recorded_shape_paint_action.h>
-#include <recorder/kis_node_query_path.h>
-
-
 KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
         : KisToolEllipseBase(canvas, KisToolEllipseBase::PAINT, KisCursor::load("tool_ellipse_cursor.png", 6, 6))
 {
@@ -59,13 +54,10 @@ void KisToolEllipse::finishRect(const QRectF& rect)
     if (rect.isEmpty() || !blockUntilOperationsFinished())
         return;
 
-    if (image()) {
-        KisRecordedShapePaintAction linePaintAction(KisNodeQueryPath::absolutePath(currentNode()), currentPaintOpPreset(), KisRecordedShapePaintAction::Ellipse, rect);
-        setupPaintAction(&linePaintAction);
-        image()->actionRecorder()->addAction(linePaintAction);
-    }
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
 
-    if (!currentNode()->inherits("KisShapeLayer")) {
+    if (!info.shouldAddShape) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Ellipse"),
                                            image(),
                                            currentNode(),
@@ -78,6 +70,9 @@ void KisToolEllipse::finishRect(const QRectF& rect)
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
         KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         shape->setStroke(border);
+
+        info.markAsSelectionShapeIfNeeded(shape);
+
         addShape(shape);
     }
     notifyModified();

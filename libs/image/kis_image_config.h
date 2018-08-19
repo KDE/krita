@@ -27,7 +27,7 @@
 class KRITAIMAGE_EXPORT KisImageConfig
 {
 public:
-    KisImageConfig(bool readOnly = false);
+    KisImageConfig(bool readOnly);
     ~KisImageConfig();
 
     bool enableProgressReporting(bool requestDefault = false) const;
@@ -120,8 +120,31 @@ public:
     int fpsLimit(bool defaultValue = false) const;
     void setFpsLimit(int value);
 
+    bool useOnDiskAnimationCacheSwapping(bool defaultValue = false) const;
+    void setUseOnDiskAnimationCacheSwapping(bool value);
+
+    QString animationCacheDir(bool defaultValue = false) const;
+    void setAnimationCacheDir(const QString &value);
+
+    bool useAnimationCacheFrameSizeLimit(bool defaultValue = false) const;
+    void setUseAnimationCacheFrameSizeLimit(bool value);
+
+    int animationCacheFrameSizeLimit(bool defaultValue = false) const;
+    void setAnimationCacheFrameSizeLimit(int value);
+
+    bool useAnimationCacheRegionOfInterest(bool defaultValue = false) const;
+    void setUseAnimationCacheRegionOfInterest(bool value);
+
+    qreal animationCacheRegionOfInterestMargin(bool defaultValue = false) const;
+    void setAnimationCacheRegionOfInterestMargin(qreal value);
+
+    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
+    void setSelectionOverlayMaskColor(const QColor &color);
+
 private:
     Q_DISABLE_COPY(KisImageConfig)
+
+    QString safelyGetWritableTempLocation(const QString &suffix, const QString &configKey, bool requestDefault) const;
 
 private:
     KConfigGroup m_config;

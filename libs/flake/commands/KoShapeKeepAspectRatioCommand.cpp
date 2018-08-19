@@ -23,15 +23,14 @@
 
 #include <KoShape.h>
 
-KoShapeKeepAspectRatioCommand::KoShapeKeepAspectRatioCommand(const QList<KoShape*>& shapes,
-        const QList<bool>& oldKeepAspectRatio,
-        const QList<bool>& newKeepAspectRatio,
-        KUndo2Command* parent)
-        : KUndo2Command(kundo2_i18n("Keep Aspect Ratio"), parent)
+KoShapeKeepAspectRatioCommand::KoShapeKeepAspectRatioCommand(const QList<KoShape *> &shapes, bool newKeepAspectRatio, KUndo2Command *parent)
+    : KUndo2Command(kundo2_i18n("Keep Aspect Ratio"), parent)
+    , m_shapes(shapes)
 {
-    m_shapes = shapes;
-    m_oldKeepAspectRatio = oldKeepAspectRatio;
-    m_newKeepAspectRatio = newKeepAspectRatio;
+    Q_FOREACH (KoShape *shape, shapes) {
+            m_oldKeepAspectRatio << shape->keepAspectRatio();
+            m_newKeepAspectRatio << newKeepAspectRatio;
+    }
 }
 
 KoShapeKeepAspectRatioCommand::~KoShapeKeepAspectRatioCommand()

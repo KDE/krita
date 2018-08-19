@@ -10,7 +10,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 import krita
-from exportlayers import uiexportlayers
+from . import uiexportlayers
 
 
 class ExportLayersExtension(krita.Extension):
@@ -19,8 +19,11 @@ class ExportLayersExtension(krita.Extension):
         super(ExportLayersExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("export_layers", "Export Layers")
-        action.setToolTip("Plugin to export layers from a document")
+        pass
+
+    def createActions(self, window):
+        action = window.createAction("export_layers", i18n("Export Layers"))
+        action.setToolTip(i18n("Plugin to export layers from a document."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

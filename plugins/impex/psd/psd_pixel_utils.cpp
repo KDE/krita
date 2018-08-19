@@ -179,7 +179,7 @@ void readGrayPixel(const QMap<quint16, QByteArray> &channelBytes,
     const channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
     Pixel *pixelPtr = reinterpret_cast<Pixel*>(dstPtr);
 
-    pixelPtr->gray  = readChannelValue<Traits>(channelBytes, 0, col, unitValue);;
+    pixelPtr->gray  = readChannelValue<Traits>(channelBytes, 0, col, unitValue);
     pixelPtr->alpha = readChannelValue<Traits>(channelBytes, -1, col, unitValue);
 }
 
@@ -332,7 +332,7 @@ psd_status psd_unzip_without_prediction(psd_uchar *src_buf, psd_int src_len,
         state = inflate(&stream, Z_PARTIAL_FLUSH);
         if(state == Z_STREAM_END)
             break;
-        if(state == Z_DATA_ERROR || state != Z_OK)
+        if(state != Z_OK)
             break;
     }  while (stream.avail_out > 0);
 

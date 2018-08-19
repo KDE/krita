@@ -67,7 +67,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     Private(const Private &rhs)
         : worker(rhs.worker),
           params(rhs.params),
-          staticCacheValid(false),
+          staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)
@@ -107,9 +107,8 @@ KisTransformMask::KisTransformMask()
             new KisDumbTransformMaskParams()));
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
-
-    KisImageConfig cfg;
-    m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
+    connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
+    m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
 }
 
 KisTransformMask::~KisTransformMask()
@@ -432,6 +431,17 @@ void KisTransformMask::forceUpdateTimedNode()
         m_d->updateSignalCompressor.stop();
         slotDelayedStaticUpdate();
     }
+}
+
+void KisTransformMask::threadSafeForceStaticImageUpdate()
+{
+    emit sigInternalForceStaticImageUpdate();
+}
+
+void KisTransformMask::slotInternalForceStaticImageUpdate()
+{
+    m_d->updateSignalCompressor.stop();
+    slotDelayedStaticUpdate();
 }
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)

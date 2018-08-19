@@ -19,13 +19,11 @@
 #ifndef KIS_TOOL_PAINT_H_
 #define KIS_TOOL_PAINT_H_
 
-#include <vector>
+#include "kis_tool.h"
 
-#include <QCursor>
-#include <QLayout>
 #include <QGridLayout>
-#include <QVariant>
 #include <QTimer>
+#include <QCheckBox>
 
 #include <KoCanvasResourceManager.h>
 #include <KoToolBase.h>
@@ -37,21 +35,11 @@
 #include <kis_image.h>
 #include "kis_signal_compressor_with_param.h"
 #include <brushengine/kis_paintop_settings.h>
-
 #include <resources/KoPattern.h>
-
-#include "kis_tool.h"
-#include <QCheckBox>
 
 class QGridLayout;
 class KoCompositeOp;
-
-
 class KoCanvasBase;
-
-
-// wacom
-const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
 class KRITAUI_EXPORT KisToolPaint : public KisTool
 {
@@ -59,7 +47,7 @@ class KRITAUI_EXPORT KisToolPaint : public KisTool
     Q_OBJECT
 
 public:
-    KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
+    KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor);
     ~KisToolPaint() override;
     int flags() const override;
 
@@ -71,9 +59,9 @@ protected:
 
     void setMode(ToolMode mode) override;
 
-    void canvasResourceChanged(int key, const QVariant & v) override;
+    void canvasResourceChanged(int key, const QVariant &v) override;
 
-    void paint(QPainter& gc, const KoViewConverter &converter) override;
+    void paint(QPainter &gc, const KoViewConverter &converter) override;
 
     void activatePrimaryAction() override;
     void deactivatePrimaryAction() override;
@@ -122,19 +110,6 @@ protected:
         return QString();
     }
 
-    void setupPaintAction(KisRecordedPaintAction* action) override;
-
-    qreal pressureToCurve(qreal pressure){
-        qreal p =  qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION);
-        if (p < 0) {
-            return m_pressureSamples.first();
-        }
-        else if (p < m_pressureSamples.size()) {
-            return m_pressureSamples.at(p);
-        }
-        return m_pressureSamples.last();
-    }
-
     enum NodePaintAbility {
         NONE,
         PAINT,
@@ -162,13 +137,9 @@ private Q_SLOTS:
 
     void slotColorPickingFinished(const KoColor &color);
 
-protected Q_SLOTS:
-    void updateTabletPressureSamples();
-
 protected:
     quint8 m_opacity;
     bool m_paintOutline;
-    QVector<qreal> m_pressureSamples;
     QPointF m_outlineDocPoint;
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
@@ -192,7 +163,6 @@ private:
     QRectF colorPreviewDocRect(const QPointF &outlineDocPoint);
 
     bool isPickingAction(AlternateAction action);
-
 
     struct PickingJob {
         PickingJob() {}

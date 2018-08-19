@@ -102,7 +102,7 @@ public:
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
      * entire rectangle.
      */
-    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern);
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern, const QPoint &offset = QPoint());
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
@@ -113,7 +113,7 @@ public:
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoPattern * pattern);
+    void fillRect(const QRect& rc, const KoPattern * pattern, const QPoint &offset = QPoint());
 
     /**
      * Fill the specified area with the output of the generator plugin that is configured
@@ -269,11 +269,7 @@ void KisFillPainter::fillRect(const QRect& rc, const KoColor& c, quint8 opacity)
     fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
 }
 
-inline
-void KisFillPainter::fillRect(const QRect& rc, const KoPattern* pattern)
-{
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern);
-}
+
 
 inline
 void KisFillPainter::setFillThreshold(int threshold)

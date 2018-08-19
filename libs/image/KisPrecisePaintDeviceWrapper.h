@@ -89,6 +89,20 @@ public:
     const KoColorSpace* preciseColorSpace() const;
 
     /**
+     * Create a composite source device for being used over preciseDevice().
+     *
+     * Please note thate one cannot use
+     * preciseDevice()->createCompositeSourceDevice() for this purpose because
+     * preciseDevice() is just a copy of sourceDevice() and doesn't have overloaded
+     * methods for this color space.
+     *
+     * TODO: make KisPaintDevice::compositeSourceColorSpace() not a virtual method,
+     *       but let is be assigned during the lifetime of the paint device. It'll
+     *       let us remove this extra function.
+     */
+    KisPaintDeviceSP createPreciseCompositionSourceDevice() const;
+
+    /**
      * \return the source device attached to the wrapper
      */
     KisPaintDeviceSP sourceDevice() const;

@@ -10,7 +10,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 import krita
-from colorspace import uicolorspace
+from . import uicolorspace
 
 
 class ColorSpaceExtension(krita.Extension):
@@ -19,8 +19,11 @@ class ColorSpaceExtension(krita.Extension):
         super(ColorSpaceExtension, self).__init__(parent)
 
     def setup(self):
-        action = krita.Krita.instance().createAction("color_space", "Color Space")
-        action.setToolTip("Plugin to change color space to selected documents")
+        pass
+
+    def createActions(self, window):
+        action = window.createAction("color_space", i18n("Color Space"))
+        action.setToolTip(i18n("Plugin to change color space of selected documents."))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

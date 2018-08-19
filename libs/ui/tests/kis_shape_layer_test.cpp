@@ -37,6 +37,7 @@
 
 #include "kis_layer_utils.h"
 
+#include <sdk/tests/testutil.h>
 
 void testMergeDownImpl(bool useImageTransformations)
 {
@@ -306,4 +307,4 @@ void KisShapeLayerTest::testCloneScaledLayer()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_MAIN(KisShapeLayerTest)
+KISTEST_MAIN(KisShapeLayerTest)

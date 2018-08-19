@@ -21,9 +21,10 @@
 
 #include "testutil.h"
 #include "qimage_based_test.h"
+#include "ksharedconfig.h"
 #include <kis_filter_configuration.h>
 #include <resources/KoPattern.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_filter_strategy.h"
 #include "kis_selection_manager.h"
@@ -32,7 +33,6 @@
 #include "KisView.h"
 #include "KisPart.h"
 #include <KisDocument.h>
-#include <KisPart.h>
 #include <kis_action_manager.h>
 #include "KisMainWindow.h"
 #include "kis_selection_mask.h"
@@ -56,7 +56,6 @@ public:
         if(useSelection) addGlobalSelection(image);
         if(useShapeLayer) addShapeLayer(doc, image);
         image->initialRefreshGraph();
-
 
         mainWindow = new KisMainWindow();
         imageView = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);

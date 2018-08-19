@@ -241,7 +241,7 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
               spec->layers[i].mode == GIMP_NORMAL_NOPARTIAL_MODE ||
               spec->layers[i].mode == GIMP_DISSOLVE_MODE) ) {
       /* This layer fills out the entire image.
-       * Turn off anly lower layers, and note that we cannot have
+       * Turn off only lower layers, and note that we cannot have
        * transparency at all.
        */
       while(i) spec->layers[--i].isVisible = 0 ;

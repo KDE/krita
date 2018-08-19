@@ -28,7 +28,7 @@ if(HAVE_VC)
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
 
     message("Following objects are generated from the per-arch lib")
-    message(${__per_arch_factory_objs})
+    message("${__per_arch_factory_objs}")
 endif()
 
 add_subdirectory(tests)
@@ -76,6 +76,7 @@ set(kritapigment_SRCS
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
+    resources/KoColorSetEntry.cpp
     resources/KoPattern.cpp
     resources/KoResource.cpp
     resources/KoMD5Generator.cpp

@@ -29,10 +29,14 @@
 
 #include <ksqueezedtextlabel.h>
 #include <klocalizedstring.h>
+#include <kformat.h>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
-#include "kis_icon_utils.h"
+#include <KoToolManager.h>
+#include <KoViewConverter.h>
+
+#include <kis_icon_utils.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -41,46 +45,47 @@
 #include <kis_selection_manager.h>
 #include "kis_memory_statistics_server.h"
 
-#include <KisView.h>
+#include "KisView.h"
 #include "KisViewManager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_progress_widget.h"
 #include "kis_zoom_manager.h"
 
-#include <KoToolManager.h>
-#include <KoViewConverter.h>
-#include <KisMainWindow.h>
+#include "KisMainWindow.h"
+#include "kis_config.h"
 
 enum {
     IMAGE_SIZE_ID,
     POINTER_POSITION_ID
 };
 
-KisStatusBar::KisStatusBar(KisViewManager *view)
-        : m_view(view),
-          m_imageView(0),
-          m_statusBar(0)
+KisStatusBar::KisStatusBar(KisViewManager *viewManager)
+    : m_viewManager(viewManager)
+    , m_imageView(0)
+    , m_statusBar(0)
 {
 }
 
 void KisStatusBar::setup()
 {
     m_selectionStatus = new QToolButton();
+    m_selectionStatus->setObjectName("selection status");
     m_selectionStatus->setIconSize(QSize(16,16));
     m_selectionStatus->setAutoRaise(true);
-    m_selectionStatus->setEnabled(false);   
+    m_selectionStatus->setEnabled(false);
     updateSelectionIcon();
 
-    m_statusBar = m_view->mainWindow()->statusBar();
+    m_statusBar = m_viewManager->mainWindow()->statusBar();
 
-    connect(m_selectionStatus, SIGNAL(clicked()), m_view->selectionManager(), SLOT(slotToggleSelectionDecoration()));
-    connect(m_view->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
-    connect(m_view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateSelectionIcon()));
+    connect(m_selectionStatus, SIGNAL(clicked()), m_viewManager->selectionManager(), SLOT(slotToggleSelectionDecoration()));
+    connect(m_viewManager->selectionManager(), SIGNAL(displaySelectionChanged()), SLOT(updateSelectionToolTip()));
+    connect(m_viewManager->mainWindow(), SIGNAL(themeChanged()), this, SLOT(updateSelectionIcon()));
 
     addStatusBarItem(m_selectionStatus);
     m_selectionStatus->setVisible(false);
 
     m_statusBarStatusLabel = new KSqueezedTextLabel();
+    m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
@@ -89,12 +94,14 @@ void KisStatusBar::setup()
     m_statusBarStatusLabel->setVisible(false);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel();
+    m_statusBarProfileLabel->setObjectName("statsBarProfileLabel");
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarProfileLabel->setContentsMargins(5, 5, 5, 5);
     addStatusBarItem(m_statusBarProfileLabel, 3);
     m_statusBarProfileLabel->setVisible(false);
 
     m_progress = new KisProgressWidget();
+    m_progress->setObjectName("ProgressBar");
     addStatusBarItem(m_progress);
     m_progress->setVisible(false);
     connect(m_progress, SIGNAL(sigCancellationRequested()), this, SIGNAL(sigCancellationRequested()));
@@ -103,6 +110,7 @@ void KisStatusBar::setup()
     m_progressUpdater->setAutoNestNames(true);
 
     m_memoryReportBox = new QPushButton();
+    m_memoryReportBox->setObjectName("memoryReportBox");
     m_memoryReportBox->setFlat(true);
     m_memoryReportBox->setContentsMargins(5, 5, 5, 5);
     m_memoryReportBox->setMinimumWidth(120);
@@ -112,6 +120,7 @@ void KisStatusBar::setup()
     connect(m_memoryReportBox, SIGNAL(clicked()), SLOT(showMemoryInfoToolTip()));
 
     m_pointerPositionLabel = new QLabel(QString());
+    m_pointerPositionLabel->setObjectName("pointerPositionLabel");
     m_pointerPositionLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_pointerPositionLabel->setMinimumWidth(100);
     m_pointerPositionLabel->setContentsMargins(5,5, 5, 5);
@@ -164,9 +173,6 @@ void KisStatusBar::addStatusBarItem(QWidget *widget, int stretch, bool permanent
     else {
         m_statusBar->addWidget(widget, stretch);
     }
-
-    sbItem.show();
-
     m_statusBarItems.append(sbItem);
 }
 
@@ -206,8 +212,8 @@ void KisStatusBar::documentMousePositionChanged(const QPointF &pos)
 
     QPoint pixelPos = m_imageView->image()->documentToImagePixelFloored(pos);
 
-    pixelPos.setX(qBound(0, pixelPos.x(), m_view->image()->width() - 1));
-    pixelPos.setY(qBound(0, pixelPos.y(), m_view->image()->height() - 1));
+    pixelPos.setX(qBound(0, pixelPos.x(), m_viewManager->image()->width() - 1));
+    pixelPos.setY(qBound(0, pixelPos.y(), m_viewManager->image()->height() - 1));
     m_pointerPositionLabel->setText(QString("%1, %2").arg(pixelPos.x()).arg(pixelPos.y()));
 }
 
@@ -233,9 +239,9 @@ void KisStatusBar::imageSizeChanged()
 void KisStatusBar::updateSelectionIcon()
 {
     QIcon icon;
-    if (!m_view->selectionManager()->displaySelection()) {
+    if (!m_viewManager->selectionManager()->displaySelection()) {
         icon = KisIconUtils::loadIcon("selection-mode_invisible");
-    } else if (m_view->selectionManager()->showSelectionAsMask()) {
+    } else if (m_viewManager->selectionManager()->showSelectionAsMask()) {
         icon = KisIconUtils::loadIcon("selection-mode_mask");
     } else /* if (!m_view->selectionManager()->showSelectionAsMask()) */ {
         icon = KisIconUtils::loadIcon("selection-mode_ants");
@@ -243,40 +249,12 @@ void KisStatusBar::updateSelectionIcon()
     m_selectionStatus->setIcon(icon);
 }
 
-QString KisStatusBar::formatSize(qint64 size)
-{
-    qint64 K = 1024;
-    QString suffix = i18nc("very shortened \'byte\' suffix (for statusbar)", "b");
-    qreal realSize = size;
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened KiB suffix (for statusbar)", "K");
-    }
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened MiB suffix (for statusbar)", "M");
-    }
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened GiB suffix (for statusbar)", "G");
-    }
-
-    if (realSize > K) {
-        realSize /= K;
-        suffix = i18nc("very shortened TiB suffix (for statusbar)", "T");
-    }
-
-    return QString("%2%3").arg(QString::number(realSize, 'f', 1)).arg(suffix);
-}
-
 void KisStatusBar::updateMemoryStatus()
 {
     KisMemoryStatisticsServer::Statistics stats =
-        KisMemoryStatisticsServer::instance()
-        ->fetchMemoryStatistics(m_imageView ? m_imageView->image() : 0);
+            KisMemoryStatisticsServer::instance()
+            ->fetchMemoryStatistics(m_imageView ? m_imageView->image() : 0);
+    const KFormat format;
 
     const QString imageStatsMsg =
             i18nc("tooltip on statusbar memory reporting button (image stats)",
@@ -284,10 +262,10 @@ void KisStatusBar::updateMemoryStatus()
                   "  - layers:\t\t %2\n"
                   "  - projections:\t %3\n"
                   "  - instant preview:\t %4\n",
-                  formatSize(stats.imageSize),
-                  formatSize(stats.layersSize),
-                  formatSize(stats.projectionsSize),
-                  formatSize(stats.lodSize));
+                  format.formatByteSize(stats.imageSize),
+                  format.formatByteSize(stats.layersSize),
+                  format.formatByteSize(stats.projectionsSize),
+                  format.formatByteSize(stats.lodSize));
 
     const QString memoryStatsMsg =
             i18nc("tooltip on statusbar memory reporting button (total stats)",
@@ -297,32 +275,32 @@ void KisStatusBar::updateMemoryStatus()
                   "  undo data:\t %7\n"
                   "\n"
                   "Swap used:\t %8",
-                  formatSize(stats.totalMemorySize),
-                  formatSize(stats.totalMemoryLimit),
+                  format.formatByteSize(stats.totalMemorySize),
+                  format.formatByteSize(stats.totalMemoryLimit),
 
-                  formatSize(stats.realMemorySize),
-                  formatSize(stats.tilesHardLimit),
+                  format.formatByteSize(stats.realMemorySize),
+                  format.formatByteSize(stats.tilesHardLimit),
 
-                  formatSize(stats.poolSize),
-                  formatSize(stats.tilesPoolLimit),
+                  format.formatByteSize(stats.poolSize),
+                  format.formatByteSize(stats.tilesPoolLimit),
 
-                  formatSize(stats.historicalMemorySize),
-                  formatSize(stats.swapSize));
+                  format.formatByteSize(stats.historicalMemorySize),
+                  format.formatByteSize(stats.swapSize));
 
     QString longStats = imageStatsMsg + "\n" + memoryStatsMsg;
 
-    QString shortStats = formatSize(stats.imageSize);
+    QString shortStats = format.formatByteSize(stats.imageSize);
     QIcon icon;
     const qint64 warnLevel = stats.tilesHardLimit - stats.tilesHardLimit / 8;
 
     if (stats.imageSize > warnLevel ||
-        stats.realMemorySize > warnLevel) {
+            stats.realMemorySize > warnLevel) {
 
         icon = KisIconUtils::loadIcon("dialog-warning");
         QString suffix =
-            i18nc("tooltip on statusbar memory reporting button",
-                  "\n\nWARNING:\tOut of memory! Swapping has been started.\n"
-                  "\t\tPlease configure more RAM for Krita in Settings dialog");
+                i18nc("tooltip on statusbar memory reporting button",
+                      "\n\nWARNING:\tOut of memory! Swapping has been started.\n"
+                      "\t\tPlease configure more RAM for Krita in Settings dialog");
         longStats += suffix;
     }
 
@@ -342,22 +320,22 @@ void KisStatusBar::updateSelectionToolTip()
 {
     updateSelectionIcon();
 
-    KisSelectionSP selection = m_view->selection();
+    KisSelectionSP selection = m_viewManager->selection();
     if (selection) {
         m_selectionStatus->setEnabled(true);
 
         QRect r = selection->selectedExactRect();
 
         QString displayMode =
-            !m_view->selectionManager()->displaySelection() ?
-            i18n("Hidden") :
-            (m_view->selectionManager()->showSelectionAsMask() ?
-             i18n("Mask") : i18n("Ants"));
+                !m_viewManager->selectionManager()->displaySelection() ?
+                    i18n("Hidden") :
+                    (m_viewManager->selectionManager()->showSelectionAsMask() ?
+                         i18n("Mask") : i18n("Ants"));
 
         m_selectionStatus->setToolTip(
-            i18n("Selection: x = %1 y = %2 width = %3 height = %4\n"
-                 "Display Mode: %5",
-                 r.x(), r.y(), r.width(), r.height(), displayMode));
+                    i18n("Selection: x = %1 y = %2 width = %3 height = %4\n"
+                         "Display Mode: %5",
+                         r.x(), r.y(), r.width(), r.height(), displayMode));
     } else {
         m_selectionStatus->setEnabled(false);
         m_selectionStatus->setToolTip(i18n("No Selection"));
@@ -377,7 +355,6 @@ void KisStatusBar::setProfile(KisImageWSP image)
     }
 
     if (!image) return;
-
     if (image->profile() == 0) {
         m_statusBarProfileLabel->setText(i18n("No profile"));
     } else {

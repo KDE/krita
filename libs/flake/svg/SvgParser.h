@@ -64,7 +64,7 @@ public:
 
     void setResolution(const QRectF boundsInPixels, qreal pixelsPerInch);
 
-    /// A special workaround coeff for usign when loading old ODF-embedded SVG files,
+    /// A special workaround coeff for using when loading old ODF-embedded SVG files,
     /// which used hard-coded 96 ppi for font size
     void setForcedFontSizeResolution(qreal value);
 
@@ -198,7 +198,7 @@ protected:
     void applyId(const QString &id, KoShape *shape);
 
     /// Applies viewBox transformation to the current graphical context
-    /// NOTE: after applying the function currectBoundingBox can become null!
+    /// NOTE: after applying the function currentBoundingBox can become null!
     void applyViewBoxTransform(const KoXmlElement &element);
 
 private:

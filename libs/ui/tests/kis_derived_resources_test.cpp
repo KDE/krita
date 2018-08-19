@@ -34,44 +34,50 @@
 #include <KisViewManager.h>
 #include <kis_paintop_settings.h>
 #include <KoResourcePaths.h>
-
+#include <kis_config.h>
 #include "testutil.h"
+#include "opengl/kis_opengl.h"
+
 
 void addResourceTypes()
 {
     // All Krita's resource types
-    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
-    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
-    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
-    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
-    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
-    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
-    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
-    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/", true);
-    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
+    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
+    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
+    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
+    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
+    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
+    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
+    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
+    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/");
+    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/");
+    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
 
+    KisOpenGL::setDefaultFormat(false, false);
+
+    KisConfig cfg(false);
+    cfg.setUseOpenGL(false);
 }
-
-
 
 void KisDerivedResourcesTest::test()
 {
+    addResourceTypes();
+
     KisDocument* doc = createEmptyDocument();
 
-    addResourceTypes();
+
 
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
@@ -101,26 +107,36 @@ void KisDerivedResourcesTest::test()
 
     manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
 
-    QCOMPARE(spy[0][0].toInt(), (int)KisCanvasResourceProvider::CurrentPaintOpPreset);
-    QCOMPARE(spy[0][1].value<KisPaintOpPresetSP>(), preset);
+    QMap<int, QVariant> expectedSignals;
+    expectedSignals[KisCanvasResourceProvider::CurrentPaintOpPreset] = QVariant::fromValue(preset);
+    expectedSignals[KisCanvasResourceProvider::EraserMode] = false;
+    expectedSignals[KisCanvasResourceProvider::LodSizeThresholdSupported] = true;
+    expectedSignals[KisCanvasResourceProvider::EffectiveLodAvailablility] = true;
+    expectedSignals[KisCanvasResourceProvider::LodSizeThreshold] = 100;
+    expectedSignals[KisCanvasResourceProvider::LodAvailability] = true;
+    expectedSignals[KisCanvasResourceProvider::Opacity] = 1.0;
+    expectedSignals[KisCanvasResourceProvider::Size] = 300.0;
+    expectedSignals[KisCanvasResourceProvider::Flow] = 1.0;
+    expectedSignals[KisCanvasResourceProvider::CurrentEffectiveCompositeOp] = COMPOSITE_OVER;
+    expectedSignals[KisCanvasResourceProvider::CurrentCompositeOp] = COMPOSITE_OVER;
 
-    QCOMPARE(spy[1][0].toInt(), (int)KisCanvasResourceProvider::EraserMode);
-    QCOMPARE(spy[1][1].toBool(), false);
+    auto it = spy.begin();
+    for (; it != spy.end(); ++it) {
+        const int id = (*it)[0].toInt();
+        const QVariant value = (*it)[1];
 
-    QCOMPARE(spy[2][0].toInt(), (int)KisCanvasResourceProvider::LodAvailability);
-    QCOMPARE(spy[2][1].toBool(), true);
+        if (!expectedSignals.contains(id)) {
+            qDebug() << ppVar(id) << ppVar(value);
+            QFAIL("Unexpected signal!");
+        } else {
+            if (expectedSignals[id] != value) {
+                qDebug() << ppVar(id) << ppVar(value) << ppVar(expectedSignals[id]);
+                QFAIL("Unexpected value!");
+            }
+        }
+    }
 
-    QCOMPARE(spy[3][0].toInt(), (int)KisCanvasResourceProvider::Size);
-    QCOMPARE(spy[3][1].toDouble(), 1.0);
-
-    QCOMPARE(spy[4][0].toInt(), (int)KisCanvasResourceProvider::Flow);
-    QCOMPARE(spy[4][1].toDouble(), 1.0);
-
-    QCOMPARE(spy[5][0].toInt(), (int)KisCanvasResourceProvider::Opacity);
-    QCOMPARE(spy[5][1].toDouble(), 1.0);
-
-    QCOMPARE(spy[6][0].toInt(), (int)KisCanvasResourceProvider::CurrentEffectiveCompositeOp);
-    QCOMPARE(spy[6][1].toString(), COMPOSITE_OVER);
+    QCOMPARE(spy.size(), expectedSignals.size());
 
     spy.clear();
 
@@ -140,4 +156,4 @@ void KisDerivedResourcesTest::test()
     delete mainWindow;
 }
 
-QTEST_MAIN(KisDerivedResourcesTest)
+KISTEST_MAIN(KisDerivedResourcesTest)

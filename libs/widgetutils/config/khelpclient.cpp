@@ -54,6 +54,8 @@ void KHelpClient::invokeHelp(const QString &anchor, const QString &_appname)
             const QString desktopPath(it.next());
             KDesktopFile desktopFile(desktopPath);
             docPath = desktopFile.readDocPath();
+
+            // TODO: why explicit break in a loop?
             break;
         }
     }

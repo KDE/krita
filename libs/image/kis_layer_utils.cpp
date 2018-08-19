@@ -22,6 +22,7 @@
 
 #include <QUuid>
 #include <KoColorSpaceConstants.h>
+#include <KoProperties.h>
 
 #include "kis_painter.h"
 #include "kis_image.h"
@@ -45,11 +46,11 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_command_utils.h"
-#include "kis_processing_applicator.h"
 #include "commands_new/kis_change_projection_color_command.h"
 #include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
 #include "commands/kis_node_property_list_command.h"
+#include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
 #include "krita_utils.h"
 
@@ -85,6 +86,8 @@ namespace KisLayerUtils {
 
         SwitchFrameCommand::SharedStorageSP storage;
         QSet<int> frames;
+        bool useInTimeline = false;
+        bool enableOnionSkins = false;
 
         virtual KisNodeList allSrcNodes() = 0;
 
@@ -104,6 +107,14 @@ namespace KisLayerUtils {
             frames =
                 fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
+
+            useInTimeline = prevLayer->useInTimeline() || currLayer->useInTimeline();
+
+            const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(currLayer.data());
+            if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
+
+            paintLayer = qobject_cast<KisPaintLayer*>(prevLayer.data());
+            if (paintLayer) enableOnionSkins |= paintLayer->onionSkinEnabled();
         }
 
         KisLayerSP prevLayer;
@@ -125,10 +136,17 @@ namespace KisLayerUtils {
         {
             foreach (KisNodeSP node, mergedNodes) {
                 frames |= fetchLayerFramesRecursive(node);
+                useInTimeline |= node->useInTimeline();
+
+                const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+                if (paintLayer) {
+                    enableOnionSkins |= paintLayer->onionSkinEnabled();
+                }
             }
         }
 
         KisNodeList mergedNodes;
+        bool nodesCompositingVaries = false;
 
         KisNodeList allSrcNodes() override {
             return mergedNodes;
@@ -197,6 +215,44 @@ namespace KisLayerUtils {
 
     private:
         MergeDownInfoBaseSP m_info;
+    };
+
+    struct DisableExtraCompositing : public KisCommandUtils::AggregateCommand {
+        DisableExtraCompositing(MergeMultipleInfoSP info) : m_info(info) {}
+
+        void populateChildCommands() override {
+            /**
+             * We disable extra compositing only in case all the layers have
+             * the same compositing properties, therefore, we can just sum them using
+             * Normal blend mode
+             */
+            if (m_info->nodesCompositingVaries) return;
+
+            // we should disable dirty requests on **redo only**, otherwise
+            // the state of the layers will not be recovered on undo
+            m_info->image->disableDirtyRequests();
+
+            Q_FOREACH (KisNodeSP node, m_info->allSrcNodes()) {
+                if (node->compositeOpId() != COMPOSITE_OVER) {
+                    addCommand(new KisNodeCompositeOpCommand(node, node->compositeOpId(), COMPOSITE_OVER));
+                }
+
+                if (KisLayerPropertiesIcons::nodeProperty(node, KisLayerPropertiesIcons::inheritAlpha, false).toBool()) {
+
+                    KisBaseNode::PropertyList props = node->sectionModelProperties();
+                    KisLayerPropertiesIcons::setNodeProperty(&props,
+                                                             KisLayerPropertiesIcons::inheritAlpha,
+                                                             false);
+
+                    addCommand(new KisNodePropertyListCommand(node, props));
+                }
+            }
+
+            m_info->image->enableDirtyRequests();
+        }
+
+    private:
+        MergeMultipleInfoSP m_info;
     };
 
     struct DisablePassThroughForHeadsOnly : public KisCommandUtils::AggregateCommand {
@@ -348,6 +404,13 @@ namespace KisLayerUtils {
                 m_info->dstNode->enableAnimation();
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
+
+            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+
+            KisPaintLayer *dstPaintLayer = qobject_cast<KisPaintLayer*>(m_info->dstNode.data());
+            if (dstPaintLayer) {
+                dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
+            }
         }
 
     private:
@@ -374,21 +437,32 @@ namespace KisLayerUtils {
                 mergedLayerName = m_name;
             }
 
-            m_info->dstNode = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
+            KisPaintLayer *dstPaintLayer = new KisPaintLayer(m_info->image, mergedLayerName, OPACITY_OPAQUE_U8);
+            m_info->dstNode = dstPaintLayer;
 
             if (m_info->frames.size() > 0) {
                 m_info->dstNode->enableAnimation();
                 m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             }
 
+
+            auto channelFlagsLazy = [](KisNodeSP node) {
+                KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+                return layer ? layer->channelFlags() : QBitArray();
+            };
+
             QString compositeOpId;
             QBitArray channelFlags;
             bool compositionVaries = false;
+            bool isFirstCycle = true;
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                if (compositeOpId.isEmpty()) {
+                if (isFirstCycle) {
                     compositeOpId = node->compositeOpId();
-                } else if (compositeOpId != node->compositeOpId()) {
+                    channelFlags = channelFlagsLazy(node);
+                    isFirstCycle = false;
+                } else if (compositeOpId != node->compositeOpId() ||
+                           channelFlags != channelFlagsLazy(node)) {
                     compositionVaries = true;
                     break;
                 }
@@ -408,6 +482,11 @@ namespace KisLayerUtils {
                     m_info->dstLayer()->setChannelFlags(channelFlags);
                 }
             }
+
+            m_info->nodesCompositingVaries = compositionVaries;
+
+            m_info->dstNode->setUseInTimeline(m_info->useInTimeline);
+            dstPaintLayer->setOnionSkinEnabled(m_info->enableOnionSkins);
         }
 
     private:
@@ -493,6 +572,19 @@ namespace KisLayerUtils {
             type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
         }
         m_image->signalRouter()->emitNotification(type);
+    }
+
+    SelectGlobalSelectionMask::SelectGlobalSelectionMask(KisImageSP image)
+        : m_image(image)
+    {
+    }
+
+    void SelectGlobalSelectionMask::redo() {
+
+        KisImageSignalType type =
+                ComplexNodeReselectionSignal(m_image->rootLayer()->selectionMask(), KisNodeList());
+        m_image->signalRouter()->emitNotification(type);
+
     }
 
     KisLayerSP constructDefaultLayer(KisImageSP image) {
@@ -755,9 +847,25 @@ namespace KisLayerUtils {
         void populateChildCommands() override {
             KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
             KisKeyframeChannel *channel = m_info->dstNode->getKeyframeChannel(KisKeyframeChannel::Content.id());
-            channel->addKeyframe(m_frame, cmd);
+            KisKeyframeSP keyframe = channel->addKeyframe(m_frame, cmd);
+
+            applyKeyframeColorLabel(keyframe);
 
             addCommand(cmd);
+        }
+
+        void applyKeyframeColorLabel(KisKeyframeSP dstKeyframe) {
+            Q_FOREACH(KisNodeSP srcNode, m_info->allSrcNodes()) {
+                Q_FOREACH(KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
+                    KisKeyframeSP keyframe = channel->keyframeAt(m_frame);
+                    if (!keyframe.isNull() && keyframe->colorLabel() != 0) {
+                        dstKeyframe->setColorLabel(keyframe->colorLabel());
+                        return;
+                    }
+                }
+            }
+
+            dstKeyframe->setColorLabel(0);
         }
 
     private:
@@ -959,8 +1067,7 @@ namespace KisLayerUtils {
         while (it != nodes.end()) {
             if ((!allowMasks && !qobject_cast<KisLayer*>(it->data())) ||
                 checkIsChildOf(*it, nodes)) {
-
-                qDebug() << "Skipping node" << ppVar((*it)->name());
+                //qDebug() << "Skipping node" << ppVar((*it)->name());
                 it = nodes.erase(it);
             } else {
                 ++it;
@@ -1147,6 +1254,8 @@ namespace KisLayerUtils {
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
             applicator.applyCommand(new FillSelectionMasks(info));
             applicator.applyCommand(new CreateMergedLayerMultiple(info, layerName), KisStrokeJobData::BARRIER);
+            applicator.applyCommand(new DisableExtraCompositing(info));
+            applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
                 foreach (int frame, info->frames) {
@@ -1321,17 +1430,6 @@ namespace KisLayerUtils {
         }
     }
 
-    void recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func)
-    {
-        func(node);
-
-        node = node->firstChild();
-        while (node) {
-            recursiveApplyNodes(node, func);
-            node = node->nextSibling();
-        }
-    }
-
     KisNodeSP recursiveFindNode(KisNodeSP node, std::function<bool(KisNodeSP)> func)
     {
         if (func(node)) {
@@ -1368,6 +1466,20 @@ namespace KisLayerUtils {
                 delayedUpdate->forceUpdateTimedNode();
             }
         });
+    }
+
+    KisImageSP findImageByHierarchy(KisNodeSP node)
+    {
+        while (node) {
+            const KisLayer *layer = dynamic_cast<const KisLayer*>(node.data());
+            if (layer) {
+                return layer->image();
+            }
+
+            node = node->parent();
+        }
+
+        return 0;
     }
 
 }

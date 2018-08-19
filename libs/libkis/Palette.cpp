@@ -109,7 +109,7 @@ KoColorSetEntry Palette::colorSetEntryFromGroup(int index, const QString &groupN
 ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
 {
     if (!d->palette) return 0;
-    ManagedColor *color = new ManagedColor(entry.color);
+    ManagedColor *color = new ManagedColor(entry.color());
     return color;
 }
 

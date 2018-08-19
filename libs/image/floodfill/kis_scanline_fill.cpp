@@ -144,7 +144,10 @@ public:
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
         if (m_threshold == 1) {
-            return memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize());
+            if (memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize()) == 0) {
+                return 0;
+            }
+            return quint8_MAX;
         }
         else {
             return m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
@@ -183,7 +186,12 @@ public:
             result = *it;
         } else {
             if (m_threshold == 1) {
-                result = memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize());
+                if (memcmp(m_srcPixelPtr, pixelPtr, m_colorSpace->pixelSize()) == 0) {
+                    result = 0;
+                }
+                else {
+                    result = quint8_MAX;
+                }
             }
             else {
                 result = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
@@ -253,7 +261,10 @@ public:
     }
 
     ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
-        return memcmp(m_testPixel.data(), pixelPtr, m_pixelSize);
+        if (memcmp(m_testPixel.data(), pixelPtr, m_pixelSize) == 0) {
+            return 0;
+        }
+        return quint8_MAX;
     }
 
 private:
@@ -317,7 +328,7 @@ public:
         qint32 *groupMapPtr = reinterpret_cast<qint32*>(m_groupMapIt->rawData());
 
         if (*groupMapPtr != 0) {
-            qDebug() << ppVar(*groupMapPtr) << ppVar(m_groupIndex);
+            dbgImage << ppVar(*groupMapPtr) << ppVar(m_groupIndex);
         }
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(*groupMapPtr == 0);

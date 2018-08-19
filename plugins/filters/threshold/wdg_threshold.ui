@@ -174,12 +174,12 @@
   <customwidget>
    <class>KisGradientSlider</class>
    <extends>QWidget</extends>
-   <header>kis_gradient_slider.h</header>
+   <header>KisGradientSlider.h</header>
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local">kis_gradient_slider.h</include>
-  <include location="local">kis_gradient_slider.h</include>
+  <include location="local">KisGradientSlider.h</include>
+  <include location="local">KisGradientSlider.h</include>
  </includes>
  <resources/>
  <connections/>

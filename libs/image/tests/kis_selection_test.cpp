@@ -335,6 +335,6 @@ void KisSelectionTest::testOutlineGeneration()
     QVERIFY(isClosed);
 }
 
-QTEST_MAIN(KisSelectionTest)
+KISTEST_MAIN(KisSelectionTest)
 
 

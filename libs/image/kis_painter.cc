@@ -138,20 +138,42 @@ void copyAreaOptimizedImpl(const QPoint &dstPt,
 {
     const QRect dstRect(dstPt, srcRect.size());
 
-    const bool srcEmpty = (src->extent() & srcRect).isEmpty();
-    const bool dstEmpty = (dst->extent() & dstRect).isEmpty();
+    const QRect srcExtent = src->extent();
+    const QRect dstExtent = dst->extent();
+
+    const QRect srcSampleRect = srcExtent & srcRect;
+    const QRect dstSampleRect = dstExtent & dstRect;
+
+    const bool srcEmpty = srcSampleRect.isEmpty();
+    const bool dstEmpty = dstSampleRect.isEmpty();
 
     if (!srcEmpty || !dstEmpty) {
         if (srcEmpty) {
             dst->clear(dstRect);
         } else {
+            QRect srcCopyRect = srcRect;
+            QRect dstCopyRect = dstRect;
+
+            if (!srcExtent.contains(srcRect)) {
+                if (src->defaultPixel() == dst->defaultPixel()) {
+                    const QRect dstSampleInSrcCoords = dstSampleRect.translated(srcRect.topLeft() - dstPt);
+
+                    if (dstSampleInSrcCoords.isEmpty() || srcSampleRect.contains(dstSampleInSrcCoords)) {
+                        srcCopyRect = srcSampleRect;
+                    } else {
+                        srcCopyRect = srcSampleRect | dstSampleInSrcCoords;
+                    }
+                    dstCopyRect = QRect(dstPt + srcCopyRect.topLeft() - srcRect.topLeft(), srcCopyRect.size());
+                }
+            }
+
             KisPainter gc(dst);
             gc.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
 
             if (useOldData) {
-                gc.bitBltOldData(dstRect.topLeft(), src, srcRect);
+                gc.bitBltOldData(dstCopyRect.topLeft(), src, srcCopyRect);
             } else {
-                gc.bitBlt(dstRect.topLeft(), src, srcRect);
+                gc.bitBlt(dstCopyRect.topLeft(), src, srcCopyRect);
             }
         }
     }
@@ -491,7 +513,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = 0;
     try {
         dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "dst bytes";
         return;
     }
@@ -502,7 +524,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* srcBytes = 0;
     try {
         srcBytes = new quint8[srcWidth * srcHeight * srcDev->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "src bytes";
         return;
     }
@@ -536,7 +558,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         quint8* mergedSelectionBytes = 0;
         try {
             mergedSelectionBytes = new quint8[ totalBytes ];
-        } catch (std::bad_alloc) {
+        } catch (const std::bad_alloc&) {
             warnKrita << "KisPainter::bitBltWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
             return;
         }
@@ -893,7 +915,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     quint8* dstBytes = 0;
     try {
          dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bltFixed std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
         return;
     }
@@ -919,7 +941,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
         try {
             selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
         }
-        catch (std::bad_alloc) {
+        catch (const std::bad_alloc&) {
             delete[] dstBytes;
             return;
         }
@@ -980,7 +1002,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
     quint8* dstBytes = 0;
     try {
         dstBytes = new quint8[srcWidth * srcHeight * d->device->pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPainter::bltFixedWithFixedSelection std::bad_alloc for " << srcWidth << " * " << srcHeight << " * " << d->device->pixelSize() << "total bytes";
         return;
     }
@@ -1011,7 +1033,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         quint8 * mergedSelectionBytes = 0;
         try {
             mergedSelectionBytes = new quint8[ totalBytes ];
-        } catch (std::bad_alloc) {
+        } catch (const std::bad_alloc&) {
             warnKrita << "KisPainter::bltFixedWithFixedSelection std::bad_alloc for " << totalBytes << "total bytes";
             delete[] dstBytes;
             return;
@@ -1370,12 +1392,14 @@ void KisPainter::Private::fillPainterPathImpl(const QPainterPath& path, const QR
 
     switch (fillStyle) {
     default:
-        // Fall through
+        /* Falls through. */
     case FillStyleGradient:
-        // Currently unsupported, fall through
+        // Currently unsupported
+        /* Falls through. */
     case FillStyleStrokes:
-        // Currently unsupported, fall through
+        // Currently unsupported
         warnImage << "Unknown or unsupported fill style in fillPolygon\n";
+        /* Falls through. */
     case FillStyleForegroundColor:
         fillPainter->fillRect(fillRect, q->paintColor(), OPACITY_OPAQUE_U8);
         break;

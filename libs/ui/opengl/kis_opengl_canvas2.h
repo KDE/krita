@@ -89,6 +89,7 @@ public: // Implement kis_abstract_canvas_widget interface
     void finishResizingImage(qint32 w, qint32 h) override;
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;
+    QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) override;
 
     QWidget *widget() override {
         return this;

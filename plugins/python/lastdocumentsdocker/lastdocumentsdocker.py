@@ -11,7 +11,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
 import krita
-from lastdocumentsdocker import lastdocumentslistmodel
+from . import lastdocumentslistmodel
 
 
 class LastDocumentsDocker(krita.DockWidget):
@@ -22,7 +22,7 @@ class LastDocumentsDocker(krita.DockWidget):
         self.baseWidget = QWidget()
         self.layout = QVBoxLayout()
         self.listView = QListView()
-        self.loadButton = QPushButton("Refresh")
+        self.loadButton = QPushButton(i18n("Refresh"))
         self.listModel = lastdocumentslistmodel.LastDocumentsListModel()
 
         self.listView.setModel(self.listModel)
@@ -35,7 +35,7 @@ class LastDocumentsDocker(krita.DockWidget):
         self.setWidget(self.baseWidget)
 
         self.loadButton.clicked.connect(self.refreshRecentDocuments)
-        self.setWindowTitle("Last Documents Docker")
+        self.setWindowTitle(i18n("Last Documents Docker"))
 
     def canvasChanged(self, canvas):
         pass

@@ -20,8 +20,8 @@
 #define TIMELINE_RULER_HEADER_H
 
 #include <QHeaderView>
-
 #include <QScopedPointer>
+#include "kis_action_manager.h"
 
 class QPaintEvent;
 
@@ -36,6 +36,8 @@ public:
     bool setZoom(qreal zoomLevel);
 
     void setModel(QAbstractItemModel *model) override;
+
+    void setActionManager(KisActionManager *actionManager);
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -58,11 +60,24 @@ private:
                    const QPalette &palette,
                    const QPen &gridPen) const;
 
-private Q_SLOTS:
-    void slotInsertColumnLeft();
-    void slotInsertColumnRight();
-    void slotClearColumns(bool removeColumns = false);
-    void slotRemoveColumns();
+Q_SIGNALS:
+    void sigInsertColumnLeft();
+    void sigInsertColumnRight();
+    void sigInsertMultipleColumns();
+
+    void sigRemoveColumns();
+    void sigRemoveColumnsAndShift();
+
+    void sigInsertHoldColumns();
+    void sigRemoveHoldColumns();
+    void sigInsertHoldColumnsCustom();
+    void sigRemoveHoldColumnsCustom();
+
+    void sigMirrorColumns();
+
+    void sigCutColumns();
+    void sigCopyColumns();
+    void sigPasteColumns();
 
 private:
     struct Private;

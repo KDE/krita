@@ -40,7 +40,7 @@
 #include "kis_painter.h"
 
 #include <kis_debug.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisViewManager* view)
@@ -53,7 +53,7 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     preview->setScaledContents(true);
 
-    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer(false);
+    KoResourceServer<KoPattern>* rServer = KoResourceServerProvider::instance()->patternServer();
     m_rServerAdapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KoResourceServerAdapter<KoPattern>(rServer));
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));

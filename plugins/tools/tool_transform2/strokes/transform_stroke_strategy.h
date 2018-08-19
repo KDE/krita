@@ -67,7 +67,7 @@ public:
     };
 
 public:
-    TransformStrokeStrategy(KisNodeSP rootNode,
+    TransformStrokeStrategy(KisNodeSP rootNode, KisNodeList processedNodes,
                             KisSelectionSP selection,
                             KisStrokeUndoFacade *undoFacade);
 
@@ -82,7 +82,7 @@ public:
     void cancelStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
 
-    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode);
+    static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -121,6 +121,8 @@ private:
 
     ToolTransformArgs m_savedTransformArgs;
     KisNodeSP m_savedRootNode;
+    KisNodeList m_savedProcessedNodes;
+    QList<KisSelectionSP> m_deactivatedSelections;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

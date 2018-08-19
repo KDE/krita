@@ -76,27 +76,32 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     connect(positionXSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
     connect(positionYSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotRepositionShapes()));
 
-    // TODO: use valueChanged() instead!
-    connect(widthSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
-    connect(heightSpinBox, SIGNAL(valueChangedPt(qreal)), this, SLOT(slotResizeShapes()));
-
     KoSelectedShapesProxy *selectedShapesProxy = m_tool->canvas()->selectedShapesProxy();
 
     connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateCheckboxes()));
     connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdatePositionBoxes()));
-    connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
     connect(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdatePositionBoxes()));
-    connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxes()));
     connect(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateOpacitySlider()));
 
     connect(chkGlobalCoordinates, SIGNAL(toggled(bool)), SLOT(slotUpdateSizeBoxes()));
 
+
+    /**
+     * A huge block of self-blocking acycled connections
+     */
     KisAcyclicSignalConnector *acyclicConnector = new KisAcyclicSignalConnector(this);
     acyclicConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(aspectButtonChanged()), this, SLOT(slotAspectButtonToggled()));
     acyclicConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateAspectButton()));
     acyclicConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateAspectButton()));
+
+    KisAcyclicSignalConnector *sizeConnector = acyclicConnector->createCoordinatedConnector();
+    sizeConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(sliderValueChanged()), this, SLOT(slotResizeShapes()));
+    sizeConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionChanged()), this, SLOT(slotUpdateSizeBoxes()));
+
+    KisAcyclicSignalConnector *contentSizeConnector = acyclicConnector->createCoordinatedConnector();
+    contentSizeConnector->connectBackwardVoid(selectedShapesProxy, SIGNAL(selectionContentChanged()), this, SLOT(slotUpdateSizeBoxesNoAspectChange()));
 
 
     // Connect and initialize anchor point resource
@@ -114,16 +119,16 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     dblOpacity->setRange(0.0, 1.0, 2);
     dblOpacity->setSingleStep(0.01);
     dblOpacity->setFastSliderStep(0.1);
+    dblOpacity->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
 
-    {
-        KisSignalCompressor *opacityCompressor =
-            new KisSignalCompressor(100, KisSignalCompressor::FIRST_ACTIVE, this);
-        connect(dblOpacity, SIGNAL(valueChanged(qreal)), opacityCompressor, SLOT(start()));
-        connect(opacityCompressor, SIGNAL(timeout()), SLOT(slotOpacitySliderChanged()));
+    dblOpacity->setValueGetter(
+        [](KoShape *s) { return 1.0 - s->transparency(); }
+    );
 
-        // cold init
-        slotUpdateOpacitySlider();
-    }
+    connect(dblOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderChanged(qreal)));
+
+    // cold init
+    slotUpdateOpacitySlider();
 }
 
 DefaultToolGeometryWidget::~DefaultToolGeometryWidget()
@@ -224,16 +229,8 @@ void DefaultToolGeometryWidget::slotAspectButtonToggled()
     KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
-    QList<bool> oldKeepAspectRatio;
-    QList<bool> newKeepAspectRatio;
-
-    Q_FOREACH (KoShape *shape, shapes) {
-        oldKeepAspectRatio << shape->keepAspectRatio();
-        newKeepAspectRatio << aspectButton->keepAspectRatio();
-    }
-
     KUndo2Command *cmd =
-        new KoShapeKeepAspectRatioCommand(shapes, oldKeepAspectRatio, newKeepAspectRatio);
+        new KoShapeKeepAspectRatioCommand(shapes, aspectButton->keepAspectRatio());
 
     m_tool->canvas()->addCommand(cmd);
 }
@@ -263,40 +260,32 @@ void DefaultToolGeometryWidget::slotUpdateAspectButton()
     aspectButton->setKeepAspectRatio(hasKeepAspectRatio);
 }
 
-namespace {
-qreal calculateCommonShapeTransparency(const QList<KoShape*> &shapes)
+//namespace {
+//qreal calculateCommonShapeTransparency(const QList<KoShape*> &shapes)
+//{
+//    qreal commonTransparency = -1.0;
+
+//    Q_FOREACH (KoShape *shape, shapes) {
+//        if (commonTransparency < 0) {
+//            commonTransparency = shape->transparency();
+//        } else if (!qFuzzyCompare(commonTransparency, shape->transparency())) {
+//            commonTransparency = -1.0;
+//            break;
+//        }
+//    }
+
+//    return commonTransparency;
+//}
+//}
+
+void DefaultToolGeometryWidget::slotOpacitySliderChanged(qreal newOpacity)
 {
-    qreal commonTransparency = -1.0;
-
-    Q_FOREACH (KoShape *shape, shapes) {
-        if (commonTransparency < 0) {
-            commonTransparency = shape->transparency();
-        } else if (!qFuzzyCompare(commonTransparency, shape->transparency())) {
-            commonTransparency = -1.0;
-            break;
-        }
-    }
-
-    return commonTransparency;
-}
-}
-
-void DefaultToolGeometryWidget::slotOpacitySliderChanged()
-{
-    static const qreal eps = 1e-3;
-
     KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
     if (shapes.isEmpty()) return;
 
-    const qreal newTransparency = 1.0 - dblOpacity->value();
-    const qreal commonTransparency = calculateCommonShapeTransparency(shapes);
-    if (qAbs(commonTransparency - newTransparency) < eps) {
-        return;
-    }
-
     KUndo2Command *cmd =
-        new KoShapeTransparencyCommand(shapes, newTransparency);
+        new KoShapeTransparencyCommand(shapes, 1.0 - newOpacity);
 
     m_tool->canvas()->addCommand(cmd);
 }
@@ -305,35 +294,13 @@ void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
 {
     if (!isVisible()) return;
 
-    const QString opacityNormalPrefix = i18n("Opacity: ");
-    const QString opacityVariesPrefix = i18n("Opacity [*varies*]: ");
-
     KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
     QList<KoShape*> shapes = selection->selectedEditableShapes();
 
-    if (shapes.isEmpty()) {
-        KisSignalsBlocker b(dblOpacity);
-        dblOpacity->setEnabled(false);
-        dblOpacity->setValue(1.0);
-        dblOpacity->setPrefix(opacityNormalPrefix);
-    } else {
-        const qreal commonTransparency = calculateCommonShapeTransparency(shapes);
-
-        dblOpacity->setEnabled(true);
-
-        if (commonTransparency >= 0.0) {
-            KisSignalsBlocker b(dblOpacity);
-            dblOpacity->setValue(1.0 - commonTransparency);
-            dblOpacity->setPrefix(opacityNormalPrefix);
-        } else {
-            KisSignalsBlocker b(dblOpacity);
-            dblOpacity->setValue(1.0);
-            dblOpacity->setPrefix(opacityVariesPrefix);
-        }
-    }
+    dblOpacity->setSelection(shapes);
 }
 
-void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
+void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
 {
     if (!isVisible()) return;
 
@@ -352,8 +319,15 @@ void DefaultToolGeometryWidget::slotUpdateSizeBoxes()
         KisSignalsBlocker b(widthSpinBox, heightSpinBox);
         widthSpinBox->changeValue(bounds.width());
         heightSpinBox->changeValue(bounds.height());
-        m_sizeAspectLocker->updateAspect();
+        if (updateAspect) {
+            m_sizeAspectLocker->updateAspect();
+        }
     }
+}
+
+void DefaultToolGeometryWidget::slotUpdateSizeBoxesNoAspectChange()
+{
+    slotUpdateSizeBoxes(false);
 }
 
 void DefaultToolGeometryWidget::slotUpdatePositionBoxes()

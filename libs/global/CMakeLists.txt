@@ -28,7 +28,7 @@ set(kritaglobal_LIB_SRCS
     KisSharedThreadPoolAdapter.cpp
     KisSharedRunnable.cpp
     KisRollingMeanAccumulatorWrapper.cpp
-    KisLoggingManager.cpp
+    kis_config_notifier.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

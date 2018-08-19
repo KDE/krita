@@ -53,7 +53,7 @@ void ChangeConnectionPointCommand::undo()
     updateRoi(m_oldPoint.position);
 }
 
-void ChangeConnectionPointCommand::updateRoi(const QPointF &position)
+void ChangeConnectionPointCommand::updateRoi(const QPointF &/*position*/)
 {
     // TODO: is there a way we can get at the correct update size?
     //QRectF roi(0, 0, 10, 10);

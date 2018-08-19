@@ -28,12 +28,13 @@
 
 #include "kis_debug.h"
 
-#include "widgets/kis_gradient_slider_widget.h"
+#include "KisGradientSliderWidget.h"
 
 /****************************** KisAutogradient ******************************/
 
 KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, const char* name, const QString& caption)
-    : QWidget(parent), m_autogradientResource(gradient)
+    : QWidget(parent)
+    , m_autogradientResource(gradient)
 {
     setObjectName(name);
     setupUi(this);
@@ -72,11 +73,11 @@ void KisAutogradient::slotSelectedSegment(KoGradientSegment* segment)
     comboBoxInterpolationType->setCurrentIndex(segment->interpolation());
 
     int leftOpacity = segment->startColor().opacityF();
-    intNumInputLeftOpacity->setValue(leftOpacity);
+    intNumInputLeftOpacity->setValue(leftOpacity * 100);
     intNumInputLeftOpacity->setSuffix(i18n(" %"));
 
     int rightOpacity = segment->endColor().opacityF();
-    intNumInputRightOpacity->setValue(rightOpacity);
+    intNumInputRightOpacity->setValue(rightOpacity * 100);
     intNumInputRightOpacity->setSuffix(i18n(" %"));
 
     paramChanged();

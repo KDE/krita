@@ -263,7 +263,7 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             break;
         case KoCharacterStyle::HasHyphenation:
             key = "hyphenation";
-            value = properties[id].toBool();
+            value = QString::number(properties[id].toBool());
             break;
         case KoCharacterStyle::StrikeOutText:
             key = "strikeout-text";
@@ -556,7 +556,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::IsOutline:
             key = "is-outline";
-            value = properties[id].toBool();
+            value = QString::number(properties[id].toBool());
             break;
         case KoListStyle::Indent:
             key = "indent";
@@ -864,7 +864,7 @@ void KoTextDebug::dumpFrame(const QTextFrame *frame, QTextStream &out)
 
     QTextFrame::iterator iterator = frame->begin();
 
-    for (; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
+    for (; !iterator.atEnd(); ++iterator) {
         QTextFrame *childFrame = iterator.currentFrame();
         QTextBlock textBlock = iterator.currentBlock();
 
@@ -906,7 +906,7 @@ void KoTextDebug::dumpBlock(const QTextBlock &block, QTextStream &out)
     out << "<block" << attrs << '>' << endl;
 
     QTextBlock::Iterator iterator = block.begin();
-    for (; !iterator.atEnd() && !iterator.atEnd(); ++iterator) {
+    for (; !iterator.atEnd(); ++iterator) {
         QTextFragment fragment = iterator.fragment();
         if (fragment.isValid()) {
             dumpFragment(fragment, out);

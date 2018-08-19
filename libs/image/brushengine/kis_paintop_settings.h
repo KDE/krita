@@ -61,7 +61,7 @@ const QString SPACING_USE_UPDATES = "PaintOpSettings/updateSpacingBetweenDabs";
  * between two creations. There is one KisPaintOpSettings per input device (mouse, tablet,
  * etc...).
  *
- * The settings may be stored in a preset or a recorded brush stroke. Note that if your
+ * The settings may be stored in a preset. Note that if your
  * paintop's settings subclass has data that is not stored as a property, that data is not
  * saved and restored.
  *
@@ -101,7 +101,7 @@ public:
      * Removes all the settings from the object while keeping the paintop id,
      * which is loaded to the object by the factory
      */
-    void resetSettings();
+    void resetSettings(const QStringList &preserveProperties = QStringList());
 
     /**
      * @return the node the paintop is working on.
@@ -164,14 +164,13 @@ public:
     virtual bool needsAsynchronousUpdates() const;
 
     /**
-     * This enum defines the current mode for painting an outline.
+     * This structure defines the current mode for painting an outline.
      */
-    enum OutlineMode {
-        CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
-        CursorIsCircleOutline,
-        CursorNoOutline,
-        CursorTiltOutline,
-        CursorColorOutline
+    struct OutlineMode {
+        bool isVisible = false;
+        bool forceCircle = false;
+        bool showTiltDecoration = false;
+        bool forceFullSize = false;
     };
 
     /**
@@ -179,7 +178,7 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode);
+    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode);
 
     /**
     * Helpers for drawing the brush outline

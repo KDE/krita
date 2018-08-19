@@ -12,6 +12,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 from PyQt5.QtWidgets import (QWidget, QSpinBox, QHBoxLayout,
                              QVBoxLayout, QFormLayout)
 import math
+import krita
 
 
 class RotateTool(QWidget):
@@ -30,9 +31,9 @@ class RotateTool(QWidget):
 
     def initialize(self):
         self.degreesSpinBox.setRange(-180, 180)
-        self.degreesSpinBox.setToolTip("Negative degrees will rotate the image to the left")
+        self.degreesSpinBox.setToolTip(i18n("Negative degrees will rotate the image to the left"))
 
-        self.layout.addRow('Degrees', self.degreesSpinBox)
+        self.layout.addRow(i18n("Degrees:"), self.degreesSpinBox)
 
     def adjust(self, documents):
         for document in documents:

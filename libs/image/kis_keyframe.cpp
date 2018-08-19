@@ -50,8 +50,7 @@ struct KisKeyframe::Private
 KisKeyframe::KisKeyframe(KisKeyframeChannel *channel, int time)
     : m_d(new Private(channel, time))
 {
-    KisImageConfig config;
-    m_d->colorLabel = config.defaultFrameColorLabel();
+    m_d->colorLabel = KisImageConfig(true).defaultFrameColorLabel();
 }
 
 KisKeyframe::KisKeyframe(const KisKeyframe *rhs, KisKeyframeChannel *channel)
@@ -121,6 +120,10 @@ int KisKeyframe::colorLabel() const
 void KisKeyframe::setColorLabel(int label)
 {
     m_d->colorLabel = label;
+}
+
+bool KisKeyframe::hasContent() const {
+    return true;
 }
 
 KisKeyframeChannel *KisKeyframe::channel() const

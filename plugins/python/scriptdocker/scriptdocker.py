@@ -23,7 +23,7 @@ class ScriptDocker(krita.DockWidget):
         self.baseWidget = QWidget()
         self.layout = QVBoxLayout()
         self.scriptsLayout = QFormLayout()
-        self.addButton = QPushButton("Add Script")
+        self.addButton = QPushButton(i18n("Add Script"))
         self.actions = []
 
         self.layout.addLayout(self.scriptsLayout)
@@ -31,7 +31,7 @@ class ScriptDocker(krita.DockWidget):
         self.baseWidget.setLayout(self.layout)
         self.setWidget(self.baseWidget)
 
-        self.setWindowTitle("Script Docker")
+        self.setWindowTitle(i18n("Script Docker"))
         self.addButton.clicked.connect(self.addNewRow)
 
     def canvasChanged(self, canvas):
@@ -40,14 +40,14 @@ class ScriptDocker(krita.DockWidget):
     def addNewRow(self):
         directorySelectorLayout = QHBoxLayout()
         directoryTextField = QLineEdit()
-        directoryDialogButton = QPushButton("...")
+        directoryDialogButton = QPushButton(i18n("..."))
 
         directoryDialogButton.clicked.connect(self.test)
 
         directorySelectorLayout.addWidget(directoryTextField)
         directorySelectorLayout.addWidget(directoryDialogButton)
 
-        self.scriptsLayout.addRow("Script {0}".format(self.scriptsLayout.rowCount() + 1), directorySelectorLayout)
+        self.scriptsLayout.addRow(str(i18n("Script {0}")).format(self.scriptsLayout.rowCount() + 1), directorySelectorLayout)
 
     def test(self):
         obj = self.sender()

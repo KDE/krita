@@ -18,6 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
 from PyQt5.QtGui import QKeySequence, QIcon
 from PyQt5.QtCore import Qt
+import krita
+
+import os
 
 
 class OpenAction(QAction):
@@ -28,7 +31,7 @@ class OpenAction(QAction):
 
         self.triggered.connect(self.open)
 
-        self.setText('Open')
+        self.setText(i18n("Open"))
         self.setObjectName('open')
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
         self.setIcon(Krita.instance().icon("document-open"))
@@ -39,19 +42,18 @@ class OpenAction(QAction):
 
     def open(self):
         dialog = QFileDialog(self.scripter.uicontroller.mainWidget)
-        dialog.setNameFilter('Python files (*.py)')
+        dialog.setNameFilter(i18n("Python Files (*.py)"))
 
-        if dialog.exec():
+        if dialog.exec_():
             try:
                 selectedFile = dialog.selectedFiles()[0]
-                fileExtension = selectedFile.rsplit('.', maxsplit=1)[1]
+                _, fileExtension = os.path.splitext(selectedFile)
 
-                if fileExtension == 'py':
+                if fileExtension == '.py':
                     document = self.scripter.documentcontroller.openDocument(selectedFile)
                     self.scripter.uicontroller.setDocumentEditor(document)
                     self.scripter.uicontroller.setStatusBar(document.filePath)
-                    print("open is run")
             except Exception:
                 QMessageBox.information(self.scripter.uicontroller.mainWidget,
-                                        'Invalid File',
-                                        'Open files with .py extension')
+                                        i18n("Invalid File"),
+                                        i18n("Open files with .py extension"))

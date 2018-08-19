@@ -20,7 +20,7 @@
 #ifndef KIS_ICONWIDGET_H_
 #define KIS_ICONWIDGET_H_
 
-#include <widgets/kis_popup_button.h>
+#include <kis_popup_button.h>
 
 class KoResource;
 class KoAbstractResourceServerAdapter;

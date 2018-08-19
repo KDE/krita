@@ -142,10 +142,10 @@ void KisCubicCurveTest::testValue()
 void KisCubicCurveTest::testNull()
 {
     KisCubicCurve cc;
-    QVERIFY(cc.isNull());
+    QVERIFY(cc.isIdentity());
 
     cc.addPoint(QPointF(0.2, 0.3));
-    QVERIFY(!cc.isNull());
+    QVERIFY(!cc.isIdentity());
 
     QList<QPointF> points;
     points << QPointF();
@@ -153,7 +153,7 @@ void KisCubicCurveTest::testNull()
     points << QPointF(1.0,1.0);
 
     cc.setPoints(points);
-    QVERIFY(cc.isNull());
+    QVERIFY(cc.isIdentity());
 }
 
 

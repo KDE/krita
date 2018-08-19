@@ -54,4 +54,18 @@ private:
     int m_newTime;
 };
 
+class KRITAIMAGE_EXPORT KisSwapFramesCommand : public KUndo2Command
+{
+public:
+    KisSwapFramesCommand(KisKeyframeChannel *channel, KisKeyframeSP lhsFrame, KisKeyframeSP rhsFrame, KUndo2Command *parentCommand);
+
+    void redo() override;
+    void undo() override;
+
+private:
+    KisKeyframeChannel *m_channel;
+    KisKeyframeSP m_lhsFrame;
+    KisKeyframeSP m_rhsFrame;
+};
+
 #endif

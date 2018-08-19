@@ -18,7 +18,7 @@
 #ifndef THROTTLEPLUGIN_H
 #define THROTTLEPLUGIN_H
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
 #include <QVariant>
 #include <QDockWidget>

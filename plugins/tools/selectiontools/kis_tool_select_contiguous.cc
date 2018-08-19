@@ -48,8 +48,6 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
-#include "kis_paint_device.h"
-#include "kis_pixel_selection.h"
 #include "tiles3/kis_hline_iterator.h"
 
 

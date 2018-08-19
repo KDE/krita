@@ -211,7 +211,7 @@ void KisToolBrush::setUseScalableDistance(bool value)
 
 void KisToolBrush::resetCursorStyle()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     CursorStyle cursorStyle = cfg.newCursorStyle();
 
     // When the stabilizer is in use, we avoid using the brush outline cursor,
@@ -327,6 +327,9 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+    m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+
+
     m_sliderSmoothnessDistance->setEnabled(true);
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
@@ -355,6 +358,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderDelayDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderDelayDistance->setToolTip(i18n("Radius where the brush is blocked"));
     m_sliderDelayDistance->setRange(0, 500);
+    m_sliderDelayDistance->setExponentRatio(3.0); // help pick smaller values
     m_sliderDelayDistance->setSuffix(i18n(" px"));
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
@@ -420,7 +424,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_chkAssistant = new QCheckBox(optionsWidget);
     m_chkAssistant->setText(i18n("Snap to Assistants"));
 
-    assistantWidget->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
+    assistantWidget->setToolTip(i18n("You need to add Assistants before this tool will work."));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
     addOptionWidgetOption(assistantWidget, m_chkAssistant);
 
@@ -460,7 +464,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkAssistant, SIGNAL(toggled(bool)), magnetismLabel, SLOT(setVisible(bool)));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     slotSetSmoothingType(cfg.lineSmoothingType());
 
     return optionsWidget;

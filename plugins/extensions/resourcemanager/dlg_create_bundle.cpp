@@ -36,7 +36,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
@@ -132,7 +132,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
 
         setCaption(i18n("Create Resource Bundle"));
 
-        KisConfig cfg;
+        KisConfig cfg(true);
 
         m_ui->editAuthor->setText(cfg.readEntry<QString>("BundleAuthorName", info.authorInfo("creator")));
         m_ui->editEmail->setText(cfg.readEntry<QString>("BundleAuthorEmail", info.authorInfo("email")));
@@ -230,7 +230,7 @@ void DlgCreateBundle::accept()
         }
         else {
             if (!m_bundle) {
-                KisConfig cfg;
+                KisConfig cfg(false);
                 cfg.writeEntry<QString>("BunleExportLocation", m_ui->lblSaveLocation->text());
                 cfg.writeEntry<QString>("BundleAuthorName", m_ui->editAuthor->text());
                 cfg.writeEntry<QString>("BundleAuthorEmail", m_ui->editEmail->text());
@@ -427,7 +427,7 @@ void DlgCreateBundle::getPreviewImage()
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BundlePreviewImage");
     dialog.setCaption(i18n("Select file to use as bundle icon"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     m_previewImage = dialog.filename();
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);

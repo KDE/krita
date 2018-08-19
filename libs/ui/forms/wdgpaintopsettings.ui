@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
+    <width>1203</width>
     <height>431</height>
    </rect>
   </property>
@@ -672,22 +672,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="dirtyPresetCheckBox">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Temporarily Save Tweaks To Presets</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QCheckBox" name="eraserBrushOpacityCheckBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -703,6 +687,22 @@
           </property>
           <property name="checked">
            <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="dirtyPresetCheckBox">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Temporarily Save Tweaks To Presets</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -863,6 +863,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
         <item>
          <widget class="QPushButton" name="paintPresetIcon">
+          <property name="toolTip">
+           <string>Fill area with brush preset icon</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -870,6 +873,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="fillLayer">
+          <property name="toolTip">
+           <string>Fill area with current image</string>
+          </property>
           <property name="text">
            <string/>
           </property>

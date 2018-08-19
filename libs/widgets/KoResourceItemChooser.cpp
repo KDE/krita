@@ -52,6 +52,8 @@
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
 #include "KoResourceItemChooserSync.h"
+#include "kis_assert.h"
+
 
 class Q_DECL_HIDDEN KoResourceItemChooser::Private
 {
@@ -357,9 +359,20 @@ void KoResourceItemChooser::setProxyModel(QAbstractProxyModel *proxyModel)
     d->view->setModel(proxyModel);
 }
 
-void KoResourceItemChooser::activated(const QModelIndex &/*index*/)
+void KoResourceItemChooser::activated(const QModelIndex &index)
 {
-    KoResource *resource = currentResource();
+    if (!index.isValid()) return;
+
+    KoResource *resource = 0;
+
+    if (index.isValid()) {
+        resource = resourceFromModelIndex(index);
+    }
+
+    KIS_SAFE_ASSERT_RECOVER (resource) {
+        resource = currentResource();
+    }
+
     if (resource) {
         d->updatesBlocked = true;
         emit resourceSelected(resource);
@@ -404,8 +417,8 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
 
-    if (image.format() != QImage::Format_RGB32 ||
-        image.format() != QImage::Format_ARGB32 ||
+    if (image.format() != QImage::Format_RGB32 &&
+        image.format() != QImage::Format_ARGB32 &&
         image.format() != QImage::Format_ARGB32_Premultiplied) {
 
         image = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);

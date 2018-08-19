@@ -11,6 +11,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtWidgets import (QWidget, QSpinBox, QHBoxLayout,
                              QVBoxLayout, QFormLayout, QComboBox)
+import krita
 
 
 class ScaleTool(QWidget):
@@ -46,10 +47,10 @@ class ScaleTool(QWidget):
         self.resolutionLayout.addWidget(self.xResSpinBox)
         self.resolutionLayout.addWidget(self.yResSpinBox)
 
-        self.layout.addRow('Width', self.widthSpinBox)
-        self.layout.addRow('Height', self.heightSpinBox)
-        self.layout.addRow('Resolution', self.resolutionLayout)
-        self.layout.addRow('Filter', self.strategyComboBox)
+        self.layout.addRow(i18n("Width:"), self.widthSpinBox)
+        self.layout.addRow(i18n("Height:"), self.heightSpinBox)
+        self.layout.addRow(i18n("Resolution:"), self.resolutionLayout)
+        self.layout.addRow(i18n("Filter:"), self.strategyComboBox)
 
     def adjust(self, documents):
         for document in documents:

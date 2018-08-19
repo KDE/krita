@@ -84,7 +84,7 @@ qreal KisOpenglCanvasDebugger::accumulatedFps()
 
 void KisOpenglCanvasDebugger::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->isEnabled = cfg.enableOpenGLFramerateLogging();
 
     if (m_d->isEnabled) {

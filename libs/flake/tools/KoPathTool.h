@@ -73,6 +73,9 @@ public:
 
     QMenu* popupActionsMenu() override;
 
+    // for KoPathToolSelection
+    void notifyPathPointsChanged(KoPathShape *shape);
+
 public Q_SLOTS:
     void documentResourceChanged(int key, const QVariant & res) override;
 

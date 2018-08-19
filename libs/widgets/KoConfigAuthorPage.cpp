@@ -24,7 +24,6 @@
 
 #include "ui_KoConfigAuthorPage.h"
 
-#include <KoGlobal.h>
 #include <KoIcon.h>
 #include <QDebug>
 
@@ -181,8 +180,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     }
 
     // Add all the user defined profiles (old type)
-    KConfig *config = KoGlobal::calligraConfig();
-    KConfigGroup authorGroup(config, "Author");
+    KConfigGroup authorGroup(KSharedConfig::openConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
 
 

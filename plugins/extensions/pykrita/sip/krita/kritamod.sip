@@ -15,7 +15,6 @@
 %Include Shape.sip
 %Include GroupShape.sip
 
-%Include Action.sip
 %Include Canvas.sip
 %Include Channel.sip
 %Include DockWidgetFactoryBase.sip

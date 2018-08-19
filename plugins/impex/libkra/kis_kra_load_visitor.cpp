@@ -20,15 +20,21 @@
 #include "kis_kra_load_visitor.h"
 #include "kis_kra_tags.h"
 #include "flake/kis_shape_layer.h"
+#include "flake/KisReferenceImagesLayer.h"
+#include "KisReferenceImage.h"
+#include <KisImportExportManager.h>
 
 #include <QRect>
 #include <QBuffer>
 #include <QByteArray>
+#include <QMessageBox>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoFileDialog.h>
 #include <KoStore.h>
 #include <KoColorSpace.h>
+#include <KoShapeControllerBase.h>
 
 // kritaimage
 #include <metadata/kis_meta_data_io_backend.h>
@@ -84,18 +90,20 @@ QString expandEncodedDirectory(const QString& _intern)
 
 KisKraLoadVisitor::KisKraLoadVisitor(KisImageSP image,
                                      KoStore *store,
+                                     KoShapeControllerBase *shapeController,
                                      QMap<KisNode *, QString> &layerFilenames,
                                      QMap<KisNode *, QString> &keyframeFilenames,
                                      const QString & name,
-                                     int syntaxVersion) :
-        KisNodeVisitor(),
-        m_layerFilenames(layerFilenames),
-        m_keyframeFilenames(keyframeFilenames)
+                                     int syntaxVersion)
+    : KisNodeVisitor()
+    , m_image(image)
+    , m_store(store)
+    , m_external(false)
+    , m_layerFilenames(layerFilenames)
+    , m_keyframeFilenames(keyframeFilenames)
+    , m_name(name)
+    , m_shapeController(shapeController)
 {
-    m_external = false;
-    m_image = image;
-    m_store = store;
-    m_name = name;
     m_store->pushDirectory();
     if (m_name.startsWith("/")) {
         m_name.remove(0, 1);
@@ -128,7 +136,40 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
 
-    if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+    if (auto *referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
+        Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+            auto *reference = dynamic_cast<KisReferenceImage*>(shape);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
+
+            while (!reference->loadImage(m_store)) {
+                if (reference->embed()) {
+                    m_errorMessages << i18n("Could not load embedded reference image %1 ", reference->internalFile());
+                    break;
+                } else {
+                    QString msg = i18nc(
+                        "@info",
+                        "A reference image linked to an external file could not be loaded.\n\n"
+                        "Path: %1\n\n"
+                        "Do you want to select another location?", reference->filename());
+
+                    int locateManually = QMessageBox::warning(0, i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+                    QString url;
+                    if (locateManually == QMessageBox::Yes) {
+                        KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
+                        dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
+                        url = dialog.filename();
+                    }
+
+                    if (url.isEmpty()) {
+                        break;
+                    } else {
+                        reference->setFilename(url);
+                    }
+                }
+            }
+        }
+    } else if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
 
         if (!loadMetaData(layer)) {
             return false;
@@ -449,7 +490,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
         for (int i = 0; i < frames.count(); i++) {
             int id = frames[i];
             if (keyframeChannel->frameFilename(id).isEmpty()) {
-                m_warningMessages << i18n("Could not find keyframe pixel data for frame %1 in %2.").arg(id).arg(location);
+                m_warningMessages << i18n("Could not find keyframe pixel data for frame %1 in %2.", id, location);
             }
             else {
                 Q_ASSERT(!keyframeChannel->frameFilename(id).isEmpty());
@@ -457,7 +498,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
                 Q_ASSERT(!frameFilename.isEmpty());
 
                 if (!loadPaintDeviceFrame(device, frameFilename, FramedDevicePolicy(id))) {
-                    m_warningMessages << i18n("Could not load keyframe pixel data for frame %1 in %2.").arg(id).arg(location);
+                    m_warningMessages << i18n("Could not load keyframe pixel data for frame %1 in %2.", id, location);
                 }
             }
         }
@@ -469,6 +510,21 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
 template<class DevicePolicy>
 bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QString &location, DevicePolicy policy)
 {
+    {
+        const int pixelSize = device->colorSpace()->pixelSize();
+        KoColor color(Qt::transparent, device->colorSpace());
+
+        if (m_store->open(location + ".defaultpixel")) {
+            if (m_store->size() == pixelSize) {
+                m_store->read((char*)color.data(), pixelSize);
+            }
+
+            m_store->close();
+        }
+
+        policy.setDefaultPixel(device, color);
+    }
+
     if (m_store->open(location)) {
         if (!policy.read(device, m_store->device())) {
             m_warningMessages << i18n("Could not read pixel data: %1.", location);
@@ -480,15 +536,6 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
     } else {
         m_warningMessages << i18n("Could not load pixel data: %1.", location);
         return true;
-    }
-    if (m_store->open(location + ".defaultpixel")) {
-        int pixelSize = device->colorSpace()->pixelSize();
-        if (m_store->size() == pixelSize) {
-            KoColor color(Qt::transparent, device->colorSpace());
-            m_store->read((char*)color.data(), pixelSize);
-            policy.setDefaultPixel(device, color);
-        }
-        m_store->close();
     }
 
     return true;
@@ -531,7 +578,7 @@ bool KisKraLoadVisitor::loadFilterConfiguration(KisFilterConfigurationSP kfc, co
             } else {
                 kfc->fromXML(e);
             }
-            kfc = loadDeprecatedFilter(kfc);
+            loadDeprecatedFilter(kfc);
             return true;
         }
     }
@@ -572,6 +619,13 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
 
 bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP dstSelection)
 {
+    // by default the selection is expected to be fully transparent
+    {
+        KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
+        KoColor transparent(Qt::transparent, pixelSelection->colorSpace());
+        pixelSelection->setDefaultPixel(transparent);
+    }
+
     // Pixel selection
     bool result = true;
     QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
@@ -592,7 +646,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, dstSelection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
         dstSelection->setShapeSelection(shapeSelection);
         result = shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
@@ -660,7 +714,7 @@ void KisKraLoadVisitor::loadNodeKeyframes(KisNode *node)
     }
 }
 
-KisFilterConfigurationSP KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfigurationSP cfg)
+void KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfigurationSP cfg)
 {
     if (cfg->getString("legacy") == "left edge detections") {
         cfg->setProperty("horizRadius", 1);
@@ -691,5 +745,4 @@ KisFilterConfigurationSP KisKraLoadVisitor::loadDeprecatedFilter(KisFilterConfig
         cfg->setProperty("lockAspect", true);
         cfg->setProperty("transparency", false);
     }
-    return cfg;
 }

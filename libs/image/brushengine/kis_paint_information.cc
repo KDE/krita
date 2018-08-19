@@ -105,8 +105,8 @@ struct KisPaintInformation::Private {
     bool isHoveringMode;
     KisRandomSourceSP randomSource;
     KisPerStrokeRandomSourceSP perStrokeRandomSource;
-    int canvasRotation;
-    bool canvasMirroredH;
+    int canvasRotation {0};
+    bool canvasMirroredH {false};
 
     boost::optional<qreal> drawingAngleOverride;
     bool sanityIsRegistered = false;
@@ -160,10 +160,18 @@ DistanceInformationRegistrar(KisPaintInformation *_p, KisDistanceInformation *di
     p->d->registerDistanceInfo(distanceInfo);
 }
 
+KisPaintInformation::DistanceInformationRegistrar::DistanceInformationRegistrar(KisPaintInformation::DistanceInformationRegistrar &&rhs)
+    : p(0)
+{
+    std::swap(p, rhs.p);
+}
+
 KisPaintInformation::DistanceInformationRegistrar::
 ~DistanceInformationRegistrar()
 {
-    p->d->unregisterDistanceInfo();
+    if (p) {
+        p->d->unregisterDistanceInfo();
+    }
 }
 
 KisPaintInformation::KisPaintInformation(const QPointF & pos,

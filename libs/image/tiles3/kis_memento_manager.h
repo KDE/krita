@@ -22,7 +22,7 @@
 #include <QList>
 
 #include "kis_memento_item.h"
-#include "kis_tile_hash_table.h"
+#include "config-hash-table-implementaion.h"
 
 typedef QList<KisMementoItemSP> KisMementoItemList;
 typedef QListIterator<KisMementoItemSP> KisMementoItemListIterator;
@@ -38,9 +38,19 @@ typedef QList<KisHistoryItem> KisHistoryList;
 class KisMemento;
 typedef KisSharedPtr<KisMemento> KisMementoSP;
 
+#ifdef USE_LOCK_FREE_HASH_TABLE
+#include "kis_tile_hash_table2.h"
+
+typedef KisTileHashTableTraits2<KisMementoItem> KisMementoItemHashTable;
+typedef KisTileHashTableIteratorTraits2<KisMementoItem> KisMementoItemHashTableIterator;
+typedef KisTileHashTableIteratorTraits2<KisMementoItem> KisMementoItemHashTableIteratorConst;
+#else
+#include "kis_tile_hash_table.h"
+
 typedef KisTileHashTableTraits<KisMementoItem> KisMementoItemHashTable;
 typedef KisTileHashTableIteratorTraits<KisMementoItem, QWriteLocker> KisMementoItemHashTableIterator;
 typedef KisTileHashTableIteratorTraits<KisMementoItem, QReadLocker> KisMementoItemHashTableIteratorConst;
+#endif // USE_LOCK_FREE_HASH_TABLE
 
 
 class KRITAIMAGE_EXPORT KisMementoManager
@@ -87,9 +97,12 @@ public:
     void rollforward(KisTileHashTable *ht);
 
     /**
-     * Get old tile, whose memento is in the HEAD revision
+     * Get old tile, whose memento is in the HEAD revision.
+     * \p existingTile returns if the tile is actually an existing
+     *                 non-default tile or it was created on the fly
+     *                 from the default tile data
      */
-    KisTileSP getCommitedTile(qint32 col, qint32 row);
+    KisTileSP getCommitedTile(qint32 col, qint32 row, bool &existingTile);
 
     KisMementoSP getMemento();
 

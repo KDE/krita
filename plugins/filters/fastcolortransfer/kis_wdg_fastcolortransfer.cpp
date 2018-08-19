@@ -33,7 +33,6 @@
 #include <kis_paint_device.h>
 #include <kundo2command.h>
 #include <KoColorSpaceRegistry.h>
-#include <KisImportExportManager.h>
 #include <kis_file_name_requester.h>
 #include "ui_wdgfastcolortransfer.h"
 
@@ -41,7 +40,7 @@ KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWi
 {
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
-    m_widget->fileNameURLRequester->setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    m_widget->fileNameURLRequester->setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigurationItemChanged()));
 }
 

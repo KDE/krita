@@ -31,14 +31,18 @@
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
 
+#include <kis_image.h>
 #include <KisImportExportFilter.h>
 #include <kis_properties_configuration.h>
 #include <kis_types.h>
 #include <kis_painting_assistant.h>
+#include <KisReferenceImage.h>
 #include <kis_debug.h>
 #include <KisImportExportUtils.h>
 
 #include "kritaui_export.h"
+
+#include <memory>
 
 class QString;
 
@@ -47,7 +51,7 @@ class KoUnit;
 
 class KoColor;
 class KoColorSpace;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
@@ -55,13 +59,11 @@ class KoDocumentInfo;
 class KoDocumentInfoDlg;
 class KisImportExportManager;
 class KisUndoStore;
-class KisPaintingAssistant;
 class KisPart;
 class KisGridConfig;
 class KisGuidesConfig;
 class QDomDocument;
-
-class KisPart;
+class KisReferenceImagesLayer;
 
 #define KIS_MIME_TYPE "application/x-krita"
 
@@ -275,10 +277,20 @@ public:
     bool loadNativeFormat(const QString & file);
 
     /**
-     * Activate/deactivate/configure the autosave feature.
-     * @param delay in seconds, 0 to disable
+     * Set standard autosave interval that is set by a config file
      */
-    void setAutoSaveDelay(int delay);
+    void setNormalAutoSaveInterval();
+
+    /**
+     * Set emergency interval that autosave uses when the image is busy,
+     * by default it is 10 sec
+     */
+    void setEmergencyAutoSaveInterval();
+
+    /**
+     * Disable autosave
+     */
+    void setInfiniteAutoSaveInterval();
 
     /**
      * @return the information concerning this document.
@@ -433,16 +445,27 @@ Q_SIGNALS:
 
     void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
+    void sigReferenceImagesChanged();
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
     void slotCompleteAutoSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
     void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
+
+    void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
+
 private:
 
     friend class KisPart;
     friend class SafeSavingLocker;
+
+    bool initiateSavingInBackground(const QString actionName,
+                                    const QObject *receiverObject, const char *receiverMethod,
+                                    const KritaUtils::ExportFileJob &job,
+                                    KisPropertiesConfigurationSP exportConfiguration,
+                                    std::unique_ptr<KisDocument> &&optionalClonedDocument);
 
     bool initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
@@ -454,6 +477,12 @@ private:
                                  const QByteArray &mimeType,
                                  bool showWarnings,
                                  KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Activate/deactivate/configure the autosave feature.
+     * @param delay in seconds, 0 to disable
+     */
+    void setAutoSaveDelay(int delay);
 
     /**
      * Generate a name for the document.
@@ -473,9 +502,6 @@ private:
      * This method is called from the KReadOnlyPart::openUrl method.
      */
     bool openFile();
-
-    /** @internal */
-    void setModified();
 
 public:
 
@@ -522,7 +548,7 @@ public:
     /**
      * Set the current image to the specified image and turn undo on.
      */
-    void setCurrentImage(KisImageSP image);
+    void setCurrentImage(KisImageSP image, bool forceInitialUpdate = true);
 
     /**
      * Set the image of the document preliminary, before the document
@@ -541,7 +567,7 @@ public:
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeBasedDocumentBase * shapeController() const;
+    KoShapeControllerBase * shapeController() const;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
@@ -557,10 +583,31 @@ public:
      */
     KisNodeSP preActivatedNode() const;
 
+    /// @return the list of assistants associated with this document
     QList<KisPaintingAssistantSP> assistants() const;
-    void setAssistants(const QList<KisPaintingAssistantSP> value);
+
+    /// @replace the current list of assistants with @param value
+    void setAssistants(const QList<KisPaintingAssistantSP> &value);
+
+
+    void setAssistantsGlobalColor(QColor color);
+    QColor assistantsGlobalColor();
+
+
+
+    /**
+     * Get existing reference images layer or null if none exists.
+     */
+    KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer() const;
+
+    void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage);
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Return the bounding box of the image and associated elements (e.g. reference images)
+     */
+    QRectF documentBounds() const;
 
 Q_SIGNALS:
 
@@ -591,6 +638,8 @@ private:
     QString prettyPathOrUrl() const;
 
     bool openUrlInternal(const QUrl &url);
+
+    void slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalClonedDocument);
 
     class Private;
     Private *const d;

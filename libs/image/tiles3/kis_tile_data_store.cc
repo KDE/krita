@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Andrey Kamakin <a.kamakin@icloud.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,9 +71,10 @@ KisTileDataStore::KisTileDataStore()
     : m_pooler(this),
       m_swapper(this),
       m_numTiles(0),
-      m_memoryMetric(0)
+      m_memoryMetric(0),
+      m_counter(1),
+      m_clockIndex(1)
 {
-    m_clockIterator = m_tileDataList.end();
     m_pooler.start();
     m_swapper.start();
 }
@@ -82,10 +84,10 @@ KisTileDataStore::~KisTileDataStore()
     m_pooler.terminatePooler();
     m_swapper.terminateSwapper();
 
-    if(numTiles() > 0) {
-         errKrita << "Warning: some tiles have leaked:";
-         errKrita << "\tTiles in memory:" << numTilesInMemory() << "\n"
-                    << "\tTotal tiles:" << numTiles();
+    if (numTiles() > 0) {
+        errKrita << "Warning: some tiles have leaked:";
+        errKrita << "\tTiles in memory:" << numTilesInMemory() << "\n"
+                 << "\tTotal tiles:" << numTiles();
     }
 }
 
@@ -102,7 +104,7 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
         m_pooler.forceUpdateMemoryStats();
     }
 
-    QMutexLocker lock(&m_listLock);
+    QReadLocker lock(&m_iteratorLock);
 
     MemoryStatistics stats;
 
@@ -121,34 +123,37 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 
 inline void KisTileDataStore::registerTileDataImp(KisTileData *td)
 {
-    td->m_listIterator = m_tileDataList.insert(m_tileDataList.end(), td);
-    m_numTiles++;
+    int index = m_counter.fetchAndAddOrdered(1);
+    td->m_tileNumber = index;
+    m_tileDataMap.assign(index, td);
+    m_numTiles.ref();
     m_memoryMetric += td->pixelSize();
 }
 
 void KisTileDataStore::registerTileData(KisTileData *td)
 {
-    QMutexLocker lock(&m_listLock);
+    QReadLocker lock(&m_iteratorLock);
     registerTileDataImp(td);
 }
 
 inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
 {
-    KisTileDataListIterator tempIterator = td->m_listIterator;
-
-    if(m_clockIterator == tempIterator) {
-        m_clockIterator = tempIterator + 1;
+    if (m_clockIndex == td->m_tileNumber) {
+        do {
+            m_clockIndex.ref();
+        } while (!m_tileDataMap.get(m_clockIndex.loadAcquire()) && m_clockIndex < m_counter);
     }
 
-    td->m_listIterator = m_tileDataList.end();
-    m_tileDataList.erase(tempIterator);
-    m_numTiles--;
+    int index = td->m_tileNumber;
+    td->m_tileNumber = -1;
+    m_tileDataMap.erase(index);
+    m_numTiles.deref();
     m_memoryMetric -= td->pixelSize();
 }
 
 void KisTileDataStore::unregisterTileData(KisTileData *td)
 {
-    QMutexLocker lock(&m_listLock);
+    QReadLocker lock(&m_iteratorLock);
     unregisterTileDataImp(td);
 }
 
@@ -184,18 +189,17 @@ void KisTileDataStore::freeTileData(KisTileData *td)
 
     DEBUG_FREE_ACTION(td);
 
-    m_listLock.lock();
+    m_iteratorLock.lockForRead();
     td->m_swapLock.lockForWrite();
 
-    if(!td->data()) {
+    if (!td->data()) {
         m_swappedStore.forgetTileData(td);
-    }
-    else {
+    } else {
         unregisterTileDataImp(td);
     }
 
     td->m_swapLock.unlock();
-    m_listLock.unlock();
+    m_iteratorLock.unlock();
 
     delete td;
 }
@@ -207,14 +211,14 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
 
     td->m_swapLock.lockForRead();
 
-    while(!td->data()) {
+    while (!td->data()) {
         td->m_swapLock.unlock();
 
         /**
          * The order of this heavy locking is very important.
          * Change it only in case, you really know what you are doing.
          */
-        m_listLock.lock();
+        m_iteratorLock.lockForWrite();
 
         /**
          * If someone has managed to load the td from swap, then, most
@@ -229,7 +233,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
          * m_listLock.
          */
 
-        if(!td->data()) {
+        if (!td->data()) {
             td->m_swapLock.lockForWrite();
 
             m_swappedStore.swapInTileData(td);
@@ -238,7 +242,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
             td->m_swapLock.unlock();
         }
 
-        m_listLock.unlock();
+        m_iteratorLock.unlock();
 
         /**
          * <-- In theory, livelock is possible here...
@@ -255,9 +259,9 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
      */
 
     bool result = false;
-    if(!td->m_swapLock.tryLockForWrite()) return result;
+    if (!td->m_swapLock.tryLockForWrite()) return result;
 
-    if(td->data()) {
+    if (td->data()) {
         unregisterTileDataImp(td);
         if (m_swappedStore.trySwapOutTileData(td)) {
             result = true;
@@ -273,57 +277,65 @@ bool KisTileDataStore::trySwapTileData(KisTileData *td)
 
 KisTileDataStoreIterator* KisTileDataStore::beginIteration()
 {
-    m_listLock.lock();
-    return new KisTileDataStoreIterator(m_tileDataList, this);
+    m_iteratorLock.lockForWrite();
+    return new KisTileDataStoreIterator(m_tileDataMap, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreIterator* iterator)
 {
     delete iterator;
-    m_listLock.unlock();
+    m_iteratorLock.unlock();
 }
 
 KisTileDataStoreReverseIterator* KisTileDataStore::beginReverseIteration()
 {
-    m_listLock.lock();
-    return new KisTileDataStoreReverseIterator(m_tileDataList, this);
+    m_iteratorLock.lockForWrite();
+    return new KisTileDataStoreReverseIterator(m_tileDataMap, this);
 }
 void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
 {
     delete iterator;
-    m_listLock.unlock();
+    m_iteratorLock.unlock();
     DEBUG_REPORT_PRECLONE_EFFICIENCY();
 }
 
 KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
 {
-    m_listLock.lock();
-    return new KisTileDataStoreClockIterator(m_clockIterator, m_tileDataList, this);
+    m_iteratorLock.lockForWrite();
+    return new KisTileDataStoreClockIterator(m_tileDataMap, m_clockIndex.loadAcquire(), this);
 }
+
 void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 {
-    m_clockIterator = iterator->getFinalPosition();
+    m_clockIndex = iterator->getFinalPosition();
     delete iterator;
-    m_listLock.unlock();
+    m_iteratorLock.unlock();
 }
 
 void KisTileDataStore::debugPrintList()
 {
-    KisTileData *item;
-    Q_FOREACH (item, m_tileDataList) {
+    KisTileDataStoreIterator* iter = beginIteration();
+    KisTileData *item = 0;
+
+    while (iter->hasNext()) {
+        item = iter->next();
         dbgTiles << "-------------------------\n"
                  << "TileData:\t\t\t" << item
                  << "\n  refCount:\t" << item->m_refCount;
     }
+
+    endIteration(iter);
 }
 
 void KisTileDataStore::debugSwapAll()
 {
     KisTileDataStoreIterator* iter = beginIteration();
-    KisTileData *item;
-    while(iter->hasNext()) {
+    KisTileData *item = 0;
+
+    while (iter->hasNext()) {
         item = iter->next();
         iter->trySwapOut(item);
     }
+
     endIteration(iter);
 
 //    dbgKrita << "Number of tiles:" << numTiles();
@@ -333,20 +345,22 @@ void KisTileDataStore::debugSwapAll()
 
 void KisTileDataStore::debugClear()
 {
-    QMutexLocker lock(&m_listLock);
+    QWriteLocker l(&m_iteratorLock);
+    ConcurrentMap<int, KisTileData*>::Iterator iter(m_tileDataMap);
 
-    Q_FOREACH (KisTileData *item, m_tileDataList) {
-        delete item;
+    while (iter.isValid()) {
+        delete iter.getValue();
+        iter.next();
     }
 
-    m_tileDataList.clear();
-    m_clockIterator = m_tileDataList.end();
-
+    m_counter = 1;
+    m_clockIndex = 1;
     m_numTiles = 0;
     m_memoryMetric = 0;
 }
 
-void KisTileDataStore::testingRereadConfig() {
+void KisTileDataStore::testingRereadConfig()
+{
     m_pooler.testingRereadConfig();
     m_swapper.testingRereadConfig();
     kickPooler();

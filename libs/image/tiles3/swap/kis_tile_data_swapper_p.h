@@ -60,7 +60,7 @@ class KisStoreLimits
 {
 public:
     KisStoreLimits() {
-        KisImageConfig config;
+        KisImageConfig config(true);
 
         m_emergencyThreshold = MiB_TO_METRIC(config.tilesHardLimit());
 

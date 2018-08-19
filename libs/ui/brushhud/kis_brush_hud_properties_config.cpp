@@ -77,7 +77,7 @@ QList<QString> KisBrushHudPropertiesConfig::selectedProperties(const QString &pa
 
 void KisBrushHudPropertiesConfig::Private::readConfig()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     doc = QDomDocument();
 
     QString docContent = cfg.brushHudSetting();
@@ -105,7 +105,7 @@ void KisBrushHudPropertiesConfig::Private::readConfig()
 
 void KisBrushHudPropertiesConfig::Private::writeConfig()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setBrushHudSetting(doc.toString());
 }
 

@@ -20,12 +20,9 @@
 #define __KIS_COLOR_PICKER_STROKE_STRATEGY_H
 
 #include <QObject>
-#include <QScopedPointer>
 #include "kis_simple_stroke_strategy.h"
 #include "kis_lod_transform.h"
-
-class KoColor;
-
+#include "KoColor.h"
 
 class KisColorPickerStrokeStrategy : public QObject, public KisSimpleStrokeStrategy
 {
@@ -33,19 +30,20 @@ class KisColorPickerStrokeStrategy : public QObject, public KisSimpleStrokeStrat
 public:
     class Data : public KisStrokeJobData {
     public:
-        Data(KisPaintDeviceSP _dev, const QPoint _pt)
-            : dev(_dev), pt(_pt)
+        Data(KisPaintDeviceSP _dev, const QPoint _pt, KoColor _currentColor)
+            : dev(_dev), pt(_pt), currentColor(_currentColor)
         {}
 
         KisStrokeJobData* createLodClone(int levelOfDetail) override {
             KisLodTransform t(levelOfDetail);
             const QPoint realPoint = t.map(pt);
 
-            return new Data(dev, realPoint);
+            return new Data(dev, realPoint, currentColor);
         }
 
         KisPaintDeviceSP dev;
         QPoint pt;
+        KoColor currentColor; // Used for color picker blending.
     };
 public:
     KisColorPickerStrokeStrategy(int lod = 0);

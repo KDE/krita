@@ -21,7 +21,6 @@
 
 #include <kis_canvas_resource_provider.h>
 #include <kis_filter.h>
-#include <kis_filter.h>
 #include <kis_properties_configuration.h>
 #include <kis_filter_configuration.h>
 #include <kis_filter_manager.h>
@@ -160,6 +159,7 @@ bool Filter::startFilter(Node *node, int x, int y, int w, int h)
     }
 
     image->endStroke(currentStrokeId);
+    image->waitForDone();
 
     return true;
 }

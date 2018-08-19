@@ -36,7 +36,7 @@
 #include <kconfiggroup.h>
 #include <QIcon>
 
-KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, bool themed, QWidget *parent, Qt::WindowFlags f)
+KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, const QPixmap &pixmap_x2, bool themed, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, Qt::SplashScreen | Qt::FramelessWindowHint
 #ifdef Q_OS_LINUX
               | Qt::WindowStaysOnTopHint
@@ -49,6 +49,11 @@ KisSplashScreen::KisSplashScreen(const QString &version, const QPixmap &pixmap, 
     setWindowIcon(KisIconUtils::loadIcon("calligrakrita"));
 
     QImage img = pixmap.toImage();
+    if (devicePixelRatio() > 1) {
+        img = pixmap_x2.toImage();
+        img.setDevicePixelRatio(devicePixelRatioF());
+    }
+
     QFont font = this->font();
     font.setPointSize(11);
     font.setBold(true);
@@ -161,7 +166,7 @@ void KisSplashScreen::displayLinks(bool show) {
 
                                "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</span></a></p>"
 
-                               "<p><a href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
+                               "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>"
                                "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></a></p>"
                                "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; color:%1;\">Krita Website</span></a></p>"
                                "<p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"

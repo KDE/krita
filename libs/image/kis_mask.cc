@@ -88,6 +88,12 @@ KisMask::KisMask(const KisMask& rhs)
     if (rhs.m_d->selection) {
         m_d->selection = new KisSelection(*rhs.m_d->selection.data());
         m_d->selection->setParentNode(this);
+
+        KisPixelSelectionSP pixelSelection = m_d->selection->pixelSelection();
+        if (pixelSelection->framesInterface()) {
+            addKeyframeChannel(pixelSelection->keyframeChannel());
+            enableAnimation();
+        }
     }
 }
 
@@ -240,25 +246,36 @@ QRect KisMask::decorateRect(KisPaintDeviceSP &src,
     return rc;
 }
 
+bool KisMask::paintsOutsideSelection() const
+{
+    return false;
+}
+
 void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy maskPos) const
 {
     if (selection()) {
 
-        m_d->selection->updateProjection(applyRect);
+        flattenSelectionProjection(m_d->selection, applyRect);
 
         KisSelectionSP effectiveSelection = m_d->selection;
-        QRect effectiveExtent = effectiveSelection->selectedRect();
+        QRect effectiveExtent;
 
         {
             // Access temporary target under the lock held
             KisIndirectPaintingSupport::ReadLocker l(this);
 
-            if (hasTemporaryTarget()) {
-                effectiveExtent |= temporaryTarget()->extent();
-            }
+            if (!paintsOutsideSelection()) {
+                // extent of m_d->selection should also be accessed under a lock,
+                // because it might be being merged in by the temporary target atm
+                effectiveExtent = effectiveSelection->selectedRect();
 
-            if(!effectiveExtent.intersects(applyRect)) {
-                return;
+                if (hasTemporaryTarget()) {
+                    effectiveExtent |= temporaryTarget()->extent();
+                }
+
+                if(!effectiveExtent.intersects(applyRect)) {
+                    return;
+                }
             }
 
             if (hasTemporaryTarget()) {
@@ -275,60 +292,109 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
             }
         }
 
-        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
-
-        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
-
-        // masks don't have any compositioning
-        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
-        m_d->paintDeviceCache.putDevice(cacheDevice);
+        mergeInMaskInternal(projection, effectiveSelection, applyRect, needRect, maskPos);
 
         if (effectiveSelection != m_d->selection) {
             m_d->cachedSelection.putSelection(effectiveSelection);
         }
 
     } else {
-        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
+        mergeInMaskInternal(projection, 0, applyRect, needRect, maskPos);
+    }
+}
 
-        cacheDevice->makeCloneFromRough(projection, needRect);
-        projection->clear(needRect);
+void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
+                                  KisSelectionSP effectiveSelection,
+                                  const QRect &applyRect,
+                                  const QRect &preparedNeedRect,
+                                  KisNode::PositionToFilthy maskPos) const
+{
+    KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
+
+    if (effectiveSelection) {
+        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
+
+        // masks don't have any compositioning
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
+
+    } else {
+        cacheDevice->makeCloneFromRough(projection, preparedNeedRect);
+        projection->clear(preparedNeedRect);
 
         decorateRect(cacheDevice, projection, applyRect, maskPos);
-
-        m_d->paintDeviceCache.putDevice(cacheDevice);
     }
+
+    m_d->paintDeviceCache.putDevice(cacheDevice);
+}
+
+void KisMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
+{
+    selection->updateProjection(dirtyRect);
 }
 
 QRect KisMask::needRect(const QRect &rect,  PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
     QRect resultRect = rect;
-    if (m_d->selection)
-        resultRect &= m_d->selection->selectedRect();
+    if (m_d->selection) {
+        QRect selectionExtent = m_d->selection->selectedRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            selectionExtent |= temporaryTarget->extent();
+        }
+
+        resultRect &= selectionExtent;
+    }
 
     return resultRect;
 }
 
 QRect KisMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
-    Q_UNUSED(pos);
-    QRect resultRect = rect;
-    if (m_d->selection)
-        resultRect &= m_d->selection->selectedRect();
-
-    return resultRect;
+    return KisMask::needRect(rect, pos);
 }
 
 QRect KisMask::extent() const
 {
-    return m_d->selection ? m_d->selection->selectedRect() :
-           parent() ? parent()->extent() : QRect();
+    QRect resultRect;
+
+    if (m_d->selection) {
+        resultRect = m_d->selection->selectedRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            resultRect |= temporaryTarget->extent();
+        }
+    } else if (KisNodeSP parent = this->parent()) {
+        resultRect = parent->extent();
+    }
+
+    return resultRect;
 }
 
 QRect KisMask::exactBounds() const
 {
-    return m_d->selection ? m_d->selection->selectedExactRect() :
-           parent() ? parent()->exactBounds() : QRect();
+    QRect resultRect;
+
+    if (m_d->selection) {
+        resultRect = m_d->selection->selectedExactRect();
+
+        // copy for thread safety!
+        KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
+
+        if (temporaryTarget) {
+            resultRect |= temporaryTarget->exactBounds();
+        }
+    } else if (KisNodeSP parent = this->parent()) {
+        resultRect = parent->exactBounds();
+    }
+
+    return resultRect;
 }
 
 qint32 KisMask::x() const
@@ -415,7 +481,7 @@ void KisMask::baseNodeChangedCallback()
     KisNodeSP up = parent();
     KisLayer *layer = dynamic_cast<KisLayer*>(up.data());
     if (layer) {
-        layer->notifyChildMaskChanged(this);
+        layer->notifyChildMaskChanged();
     }
     KisNode::baseNodeChangedCallback();
 }

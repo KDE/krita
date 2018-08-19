@@ -20,7 +20,6 @@
 #include <kis_debug.h>
 
 #include <klocalizedstring.h>
-#include <kis_debug.h>
 #include <QUrl>
 
 #include <KisImportExportManager.h>
@@ -35,7 +34,6 @@
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
-#include "kis_statusbar.h"
 #include "kis_progress_widget.h"
 #include "kis_config.h"
 #include "KisPart.h"
@@ -129,7 +127,7 @@ KisImportCatcher::~KisImportCatcher()
 
 void KisImportCatcher::adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImageSP image)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     qDebug() << "dev" << dev->colorSpace() << "image" << image->colorSpace() << "cfg" << cfg.convertToImageColorspaceOnImport();
     if (cfg.convertToImageColorspaceOnImport() && *dev->colorSpace() != *image->colorSpace()) {
         /// XXX: do we need intent here?

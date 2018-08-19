@@ -34,7 +34,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 
 class QAction;
 class QKeyEvent;
@@ -309,7 +309,7 @@ public:
     virtual void dropEvent(QDropEvent *event, const QPointF &point);
 
     /**
-     * @return a menu with context-aware actions for the currect selection. If
+     * @return a menu with context-aware actions for the current selection. If
      *         the returned value is null, no context menu is shown.
      */
     virtual QMenu* popupActionsMenu();

@@ -20,16 +20,18 @@
 #ifndef _KIS_GAUSS_MASK_GENERATOR_H_
 #define _KIS_GAUSS_MASK_GENERATOR_H_
 
-#include <QScopedPointer>
 #include "kritaimage_export.h"
 
+#include "kis_mask_generator.h"
+#include <QScopedPointer>
 
 /**
  * This mask generator uses a Gaussian-blurred circle
  */
 class KRITAIMAGE_EXPORT KisGaussCircleMaskGenerator : public KisMaskGenerator
 {
-
+public:
+    struct FastRowProcessor;
 public:
 
     KisGaussCircleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
@@ -40,6 +42,11 @@ public:
     quint8 valueAt(qreal x, qreal y) const override;
 
     void setScale(qreal scaleX, qreal scaleY) override;
+
+    bool shouldVectorize() const override;
+    KisBrushMaskApplicatorBase* applicator() override;
+
+    void resetMaskApplicator(bool forceScalar);
 
 private:
 

@@ -47,6 +47,8 @@
 #include <lazybrush/kis_colorize_mask.h>
 #include <kis_file_layer.h>
 #include <kis_psd_layer_style.h>
+#include <KisReferenceImage.h>
+#include <KisReferenceImagesLayer.h>
 #include "kis_keyframe_channel.h"
 #include "kis_dom_utils.h"
 
@@ -75,7 +77,9 @@ QStringList KisSaveXmlVisitor::errorMessages() const
 
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
-    if (layer->inherits("KisShapeLayer")) {
+    if (layer->inherits("KisReferenceImagesLayer")) {
+        return saveReferenceImagesLayer(layer);
+    } else if (layer->inherits("KisShapeLayer")) {
         QDomElement layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, SHAPE_LAYER, layer);
         m_elem.appendChild(layerElement);
@@ -114,7 +118,6 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
 {
     QDomElement element = doc.createElement(LAYER);
     saveLayer(element, PAINT_LAYER, layer);
-    element.setAttribute(CHANNEL_LOCK_FLAGS, flagsToString(layer->channelLockFlags()));
     element.setAttribute(COLORSPACE_NAME, layer->paintDevice()->colorSpace()->id());
 
     element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
@@ -126,10 +129,6 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
 void KisSaveXmlVisitor::loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer)
 {
     loadLayerAttributes(el, layer);
-
-    if (el.hasAttribute(CHANNEL_LOCK_FLAGS)) {
-        layer->setChannelLockFlags(stringToFlags(el.attribute(CHANNEL_LOCK_FLAGS)));
-    }
 }
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
@@ -466,6 +465,27 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
 
         return success;
     }
+    return true;
+}
+
+bool KisSaveXmlVisitor::saveReferenceImagesLayer(KisExternalLayer *layer)
+{
+    auto *referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(referencesLayer, false)
+
+    QDomElement layerElement = m_doc.createElement(LAYER);
+    layerElement.setAttribute(NODE_TYPE, REFERENCE_IMAGES_LAYER);
+
+    int nextId = 0;
+    Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+        auto *reference = dynamic_cast<KisReferenceImage*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(reference, false);
+        reference->saveXml(m_doc, layerElement, nextId);
+        nextId++;
+    }
+
+    m_elem.appendChild(layerElement);
+    m_count++;
     return true;
 }
 

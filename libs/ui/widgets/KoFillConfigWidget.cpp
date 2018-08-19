@@ -61,7 +61,6 @@
 #include <kis_signal_compressor.h>
 #include <kis_acyclic_signal_connector.h>
 #include <kis_assert.h>
-#include <KoCanvasResourceManager.h>
 #include "kis_canvas_resource_provider.h"
 #include <KoStopGradient.h>
 #include <QInputDialog>
@@ -263,6 +262,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     // TODO: for now the color picking button is disabled!
     d->ui->btnSolidColorPick->setEnabled(false);
+    d->ui->btnSolidColorPick->setVisible(false);
 
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), &d->colorChangedCompressor, SLOT(start()));
     connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));
@@ -333,6 +333,8 @@ void KoFillConfigWidget::activate()
     } else {
         loadCurrentFillFromResourceServer();
     }
+
+    updateWidgetComponentVisbility();
 }
 
 void KoFillConfigWidget::deactivate()
@@ -429,6 +431,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
 
     if (buttonId >= None && buttonId <= Pattern) {
         d->selectedFillIndex = static_cast<KoFillConfigWidget::StyleButton>(buttonId);
+        updateWidgetComponentVisbility();
     }
 }
 
@@ -716,6 +719,8 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 
 void KoFillConfigWidget::shapeChanged()
 {
+    if (d->noSelectionTrackingMode) return;
+
     QList<KoShape*> shapes = currentShapes();
 
     if (shapes.isEmpty() ||
@@ -738,12 +743,40 @@ void KoFillConfigWidget::shapeChanged()
     }
 }
 
+bool KoFillConfigWidget::checkNewFillModeIsSame(const KoShapeFillWrapper &w) const
+{
+    bool retval = false;
+
+    switch (w.type()) {
+    case KoFlake::None:
+        retval = d->selectedFillIndex == None;
+        break;
+    case KoFlake::Solid:
+        retval = d->selectedFillIndex == Solid && w.color() == d->colorAction->currentColor();
+        break;
+    case KoFlake::Gradient: {
+        QScopedPointer<KoStopGradient> newGradient(KoStopGradient::fromQGradient(w.gradient()));
+
+        retval = d->selectedFillIndex == Gradient && *newGradient == *d->activeGradient;
+        break;
+    }
+    case KoFlake::Pattern:
+        // TODO: not implemented
+        retval = d->selectedFillIndex == Pattern && false;
+        break;
+    }
+
+    return retval;
+}
+
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
 
     StyleButton newActiveButton = None;
     KoShapeFillWrapper wrapper(shape, d->fillVariant);
+
+    if (checkNewFillModeIsSame(wrapper)) return;
 
     switch (wrapper.type()) {
     case KoFlake::None:

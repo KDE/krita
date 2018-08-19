@@ -206,7 +206,7 @@ public:
                                     qreal scale, qreal rotation, QPointF pos,
                                     qreal subPixelX, qreal subPixelY, int dabX, int dabY);
 
-    void setSizeProperties(BrushSizeOption * properties) {
+    void setSizeProperties(KisBrushSizeOptionProperties * properties) {
         m_sizeProperties = properties;
     }
     void setProperties(DeformOption * properties) {
@@ -245,7 +245,7 @@ private:
     DeformBase * m_deformAction;
 
     DeformOption * m_properties;
-    BrushSizeOption * m_sizeProperties;
+    KisBrushSizeOptionProperties * m_sizeProperties;
 };
 
 

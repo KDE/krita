@@ -203,6 +203,9 @@ struct KisAnimationCachePopulator::Private
         enterState(WaitingForFrame);
 
         regenerator.setFrameCache(cache);
+
+        // if we ever decide to add ROI to background cache
+        // regeneration, it should be added here :)
         regenerator.startFrameRegeneration(cache->image(), frame);
 
         return true;
@@ -308,6 +311,7 @@ void KisAnimationCachePopulator::slotRegeneratorFrameReady()
 
 void KisAnimationCachePopulator::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->calculateAnimationCacheInBackground = cfg.calculateAnimationCacheInBackground();
+    QTimer::singleShot(1000, this, SLOT(slotRequestRegeneration()));
 }

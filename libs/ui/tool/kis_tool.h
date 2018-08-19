@@ -43,7 +43,6 @@ class KisFilterConfiguration;
 class QPainter;
 class QPainterPath;
 class QPolygonF;
-class KisRecordedPaintAction;
 
 /// Definitions of the toolgroups of Krita
 static const QString TOOL_TYPE_SHAPE = "0 Krita/Shape";         // Geometric shapes like ellipses and lines
@@ -270,8 +269,6 @@ protected:
     KoColor currentBgColor();
     KisPaintOpPresetSP currentPaintOpPreset();
     KisFilterConfigurationSP currentGenerator();
-
-    virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.

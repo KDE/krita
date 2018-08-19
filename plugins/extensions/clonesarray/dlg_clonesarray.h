@@ -21,6 +21,7 @@
 
 #include <KoDialog.h>
 #include <kis_global.h>
+#include <QPointer>
 
 #include "kis_types.h"
 #include "ui_wdg_clonesarray.h"
@@ -45,7 +46,7 @@ class DlgClonesArray: public KoDialog
     Q_OBJECT
 
 public:
-    DlgClonesArray(KisViewManager *view, QWidget * parent = 0);
+    DlgClonesArray(KisViewManager *viewManager, QWidget * parent = 0);
     ~DlgClonesArray() override;
 
 private Q_SLOTS:
@@ -70,7 +71,7 @@ private:
 
 private:
     WdgClonesArray *m_page;
-    KisViewManager *m_view;
+    QPointer<KisViewManager> m_viewManager;
     KisProcessingApplicator *m_applicator;
     KisLayerSP m_baseLayer;
     bool m_isDirty;

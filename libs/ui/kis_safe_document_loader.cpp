@@ -136,7 +136,10 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 
 KisSafeDocumentLoader::~KisSafeDocumentLoader()
 {
-    s_fileSystemWatcher->removePath(m_d->path);
+    if (!m_d->path.isEmpty()) {
+        s_fileSystemWatcher->removePath(m_d->path);
+    }
+
     delete m_d;
 }
 

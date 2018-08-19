@@ -46,7 +46,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     , m_firstRun(true)
     , m_image(image)
     , m_preciseWrapper(painter->device())
-    , m_tempDev(m_preciseWrapper.preciseDevice()->createCompositionSourceDevice())
+    , m_tempDev(m_preciseWrapper.createPreciseCompositionSourceDevice())
     , m_backgroundPainter(new KisPainter(m_tempDev))
     , m_smudgePainter(new KisPainter(m_tempDev))
     , m_colorRatePainter(new KisPainter(m_tempDev))
@@ -59,7 +59,6 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
 
     Q_ASSERT(settings);
     Q_ASSERT(painter);
-
     m_sizeOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
@@ -92,9 +91,9 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     m_finalPainter->setChannelFlags(painter->channelFlags());
     m_finalPainter->copyMirrorInformationFrom(painter);
 
-    m_paintColor = painter->paintColor().convertedTo(m_preciseWrapper.preciseColorSpace());
+    m_paintColor = painter->paintColor().convertedTo(m_tempDev->colorSpace());
     m_preciseColorRateCompositeOp =
-        m_preciseWrapper.preciseColorSpace()->compositeOp(m_colorRatePainter->compositeOp()->id());
+        m_tempDev->colorSpace()->compositeOp(m_colorRatePainter->compositeOp()->id());
 
     m_hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
@@ -252,7 +251,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             m_preciseWrapper.readRect(sampleRect);
 
             m_smudgeRadiusOption.apply(&dullingFillColor, info, effectiveSize, pt.x(), pt.y(), m_preciseWrapper.preciseDevice());
-            KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_preciseWrapper.preciseColorSpace());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
 
         } else {
             // get the pixel on the canvas that lies beneath the hot spot
@@ -261,7 +260,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             m_preciseWrapper.readRect(QRect(pt, QSize(1,1)));
             KisCrossDeviceColorPickerInt colorPicker(m_preciseWrapper.preciseDevice(), dullingFillColor);
             colorPicker.pickColor(pt.x(), pt.y(), dullingFillColor.data());
-            KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_preciseWrapper.preciseColorSpace());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
         }
     }
 
@@ -296,7 +295,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
             KIS_SAFE_ASSERT_RECOVER(*dullingFillColor.colorSpace() == *color.colorSpace()) {
                 color.convertTo(dullingFillColor.colorSpace());
             }
-            KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_preciseWrapper.preciseColorSpace());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
 
             m_preciseColorRateCompositeOp->composite(dullingFillColor.data(), 0,
                                                      color.data(), 0,
@@ -307,7 +306,7 @@ KisSpacingInformation KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     }
 
     if (useDullingMode) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_preciseWrapper.preciseColorSpace());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(*dullingFillColor.colorSpace() == *m_tempDev->colorSpace());
         m_tempDev->fill(QRect(0, 0, m_dstDabRect.width(), m_dstDabRect.height()), dullingFillColor);
     }
 

@@ -73,7 +73,7 @@ void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfigurationSP 
     KoID    compositeOp = KoCompositeOpRegistry::instance().getKoID(ompositeOpID);
     changeCompositeOp(compositeOp);
 
-    const bool eraserMode = setting->getBool("EraserMode", false);;
+    const bool eraserMode = setting->getBool("EraserMode", false);
     slotEraserToggled(eraserMode);
 }
 

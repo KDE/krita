@@ -29,6 +29,8 @@
 #include "kis_input_editor_delegate.h"
 #include "ui_kis_input_configuration_page_item.h"
 
+#include <QAction>
+
 KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f)
 {

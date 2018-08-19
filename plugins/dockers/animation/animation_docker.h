@@ -39,7 +39,7 @@ public:
     QString observerName() override { return "AnimationDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager *kisview) override;
+    void setViewManager(KisViewManager *kisview) override;    
 
 private Q_SLOTS:
     void slotPreviousFrame();
@@ -52,10 +52,6 @@ private Q_SLOTS:
     void slotLastFrame();
 
     void slotPlayPause();
-
-    void slotAddBlankFrame();
-    void slotAddDuplicateFrame();
-    void slotDeleteKeyframe();
 
     void slotAddOpacityKeyframe();
     void slotDeleteOpacityKeyframe();
@@ -82,9 +78,12 @@ private Q_SLOTS:
 
     void slotCurrentNodeChanged(KisNodeSP node);
 
+    void updateClipRange();
+
 private:
 
     QPointer<KisCanvas2> m_canvas;
+    QPointer<KisActionManager> m_actionManager;
     Ui_WdgAnimation *m_animationWidget;
 
     KisAction *m_previousFrameAction;
@@ -98,9 +97,6 @@ private:
 
     KisAction *m_playPauseAction;
 
-    KisAction *m_addBlankFrameAction;
-    KisAction *m_addDuplicateFrameAction;
-    KisAction *m_deleteKeyframeAction;
     KisAction *m_lazyFrameAction;
     KisAction *m_dropFramesAction;
 
@@ -115,6 +111,8 @@ private:
 
     void addKeyframe(const QString &channel, bool copy);
     void deleteKeyframe(const QString &channel);
+
+    void setActions(KisActionManager* actionManager);
 };
 
 

@@ -26,7 +26,7 @@
 #include "kis_properties_configuration.h"
 #include <KisPaintopSettingsIds.h>
 
-void KisBrushOption::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
+void KisBrushOptionProperties::writeOptionSettingImpl(KisPropertiesConfiguration *setting) const
 {
     if (!m_brush)
         return;
@@ -68,7 +68,7 @@ QDomElement getBrushXMLElement(const KisPropertiesConfiguration *setting)
     return element;
 }
 
-void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
+void KisBrushOptionProperties::readOptionSettingImpl(const KisPropertiesConfiguration *setting)
 {
     QDomElement element = getBrushXMLElement(setting);
 
@@ -81,7 +81,7 @@ void KisBrushOption::readOptionSettingImpl(const KisPropertiesConfiguration *set
 
 #include "kis_text_brush_factory.h"
 
-bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration *setting)
+bool KisBrushOptionProperties::isTextBrush(const KisPropertiesConfiguration *setting)
 {
     static QString textBrushId = KisTextBrushFactory().id();
 
@@ -93,12 +93,12 @@ bool KisBrushOption::isTextBrush(const KisPropertiesConfiguration *setting)
 
 #endif /* HAVE_THREADED_TEXT_RENDERING_WORKAROUND */
 
-KisBrushSP KisBrushOption::brush() const
+KisBrushSP KisBrushOptionProperties::brush() const
 {
     return m_brush;
 }
 
-void KisBrushOption::setBrush(KisBrushSP brush)
+void KisBrushOptionProperties::setBrush(KisBrushSP brush)
 {
     m_brush = brush;
 }

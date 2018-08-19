@@ -40,9 +40,12 @@
 #endif
 
 KisImageConfig::KisImageConfig(bool readOnly)
-    : m_config( KSharedConfig::openConfig()->group(QString())),
-      m_readOnly(readOnly)
+    : m_config(KSharedConfig::openConfig()->group(QString()))
+    , m_readOnly(readOnly)
 {
+    if (!readOnly) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+    }
 #ifdef Q_OS_OSX
     // clear /var/folders/ swap path set by old broken Krita swap implementation in order to use new default swap dir.
     QString swap = m_config.readEntry("swaplocation", "");
@@ -226,7 +229,7 @@ void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
     m_config.writeEntry("memoryPoolLimitPercent", value);
 }
 
-QString KisImageConfig::swapDir(bool requestDefault)
+QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, const QString &configKey, bool requestDefault) const
 {
 #ifdef Q_OS_OSX
     // On OSX, QDir::tempPath() gives us a folder we cannot reply upon (usually
@@ -243,18 +246,25 @@ QString KisImageConfig::swapDir(bool requestDefault)
     // furthermore, this is just a default and swapDir can always be configured
     // to another location.
 
-    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/swap";
+    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + QDir::separator() + suffix;
 #else
+    Q_UNUSED(suffix);
     QString swap = QDir::tempPath();
 #endif
     if (requestDefault) {
        return swap;
     }
-    QString configuredSwap = m_config.readEntry("swaplocation", swap);
+    const QString configuredSwap = m_config.readEntry(configKey, swap);
     if (!configuredSwap.isEmpty()) {
         swap = configuredSwap;
     }
     return swap;
+}
+
+
+QString KisImageConfig::swapDir(bool requestDefault)
+{
+    return safelyGetWritableTempLocation("swap", "swaplocation", requestDefault);
 }
 
 void KisImageConfig::setSwapDir(const QString &swapDir)
@@ -353,8 +363,6 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 #include <sys/types.h>
 #include <sys/sysctl.h>
 #endif
-
-#include <kis_debug.h>
 
 int KisImageConfig::totalRAM()
 {
@@ -518,4 +526,75 @@ int KisImageConfig::fpsLimit(bool defaultValue) const
 void KisImageConfig::setFpsLimit(int value)
 {
     m_config.writeEntry("fpsLimit", value);
+}
+
+bool KisImageConfig::useOnDiskAnimationCacheSwapping(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("useOnDiskAnimationCacheSwapping", true);
+}
+
+void KisImageConfig::setUseOnDiskAnimationCacheSwapping(bool value)
+{
+    m_config.writeEntry("useOnDiskAnimationCacheSwapping", value);
+}
+
+QString KisImageConfig::animationCacheDir(bool defaultValue) const
+{
+    return safelyGetWritableTempLocation("animation_cache", "animationCacheDir", defaultValue);
+}
+
+void KisImageConfig::setAnimationCacheDir(const QString &value)
+{
+    m_config.writeEntry("animationCacheDir", value);
+}
+
+bool KisImageConfig::useAnimationCacheFrameSizeLimit(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("useAnimationCacheFrameSizeLimit", true);
+}
+
+void KisImageConfig::setUseAnimationCacheFrameSizeLimit(bool value)
+{
+    m_config.writeEntry("useAnimationCacheFrameSizeLimit", value);
+}
+
+int KisImageConfig::animationCacheFrameSizeLimit(bool defaultValue) const
+{
+    return defaultValue ? 2500 : m_config.readEntry("animationCacheFrameSizeLimit", 2500);
+}
+
+void KisImageConfig::setAnimationCacheFrameSizeLimit(int value)
+{
+    m_config.writeEntry("animationCacheFrameSizeLimit", value);
+}
+
+bool KisImageConfig::useAnimationCacheRegionOfInterest(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("useAnimationCacheRegionOfInterest", true);
+}
+
+void KisImageConfig::setUseAnimationCacheRegionOfInterest(bool value)
+{
+    m_config.writeEntry("useAnimationCacheRegionOfInterest", value);
+}
+
+qreal KisImageConfig::animationCacheRegionOfInterestMargin(bool defaultValue) const
+{
+    return defaultValue ? 0.25 : m_config.readEntry("animationCacheRegionOfInterestMargin", 0.25);
+}
+
+void KisImageConfig::setAnimationCacheRegionOfInterestMargin(qreal value)
+{
+    m_config.writeEntry("animationCacheRegionOfInterestMargin", value);
+}
+
+QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
+{
+    QColor def(255, 0, 0, 220);
+    return (defaultValue ? def : m_config.readEntry("selectionOverlayMaskColor", def));
+}
+
+void KisImageConfig::setSelectionOverlayMaskColor(const QColor &color)
+{
+    m_config.writeEntry("selectionOverlayMaskColor", color);
 }

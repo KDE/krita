@@ -66,10 +66,13 @@ private Q_SLOTS:
     void slotAudioVolumeChanged();
     void slotOnAudioError(const QString &fileName, const QString &message);
 
+
 Q_SIGNALS:
     void sigFrameChanged();
+    void sigPlaybackStarted();
     void sigPlaybackStopped();
     void sigPlaybackStatisticsUpdated();
+    void sigFullClipRangeChanged();
 
 private:
     void connectCancelSignals();

@@ -126,7 +126,7 @@ void OcioDisplayFilter::updateProcessor()
         inputColorSpaceName = config->getColorSpaceNameByIndex(0);
     }
     if (!look) {
-	look = config->getLookNameByIndex(0);
+    look = config->getLookNameByIndex(0);
     }
 
     if (!displayDevice || !view || !inputColorSpaceName) {
@@ -234,9 +234,9 @@ void OcioDisplayFilter::updateProcessor()
         float m44[16];
         float offset[4];
         OCIO::MatrixTransform::View(m44, offset, channelHot, lumacoef);
-        OCIO::MatrixTransformRcPtr swizzle = OCIO::MatrixTransform::Create();
-        swizzle->setValue(m44, offset);
-        transform->setChannelView(swizzle);
+        OCIO::MatrixTransformRcPtr swizzleTransform = OCIO::MatrixTransform::Create();
+        swizzleTransform->setValue(m44, offset);
+        transform->setChannelView(swizzleTransform);
     }
 
     // Post-display transform gamma
@@ -293,7 +293,7 @@ template <class F>
 bool OcioDisplayFilter::updateShaderImpl(F *f) {
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (!cfg.useOpenGL()) return false;
 
     if (!m_shaderDirty) return false;

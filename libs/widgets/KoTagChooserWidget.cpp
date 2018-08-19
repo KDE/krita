@@ -43,8 +43,8 @@ class Q_DECL_HIDDEN KoTagChooserWidget::Private
 public:
     SqueezedComboBox* comboBox;
     KoTagToolButton* tagToolButton;
-    QList<QString> readOnlyTags;
-    QList<QString> tags;
+    QStringList readOnlyTags;
+    QStringList tags;
 };
 
 KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
@@ -160,15 +160,14 @@ bool KoTagChooserWidget::selectedTagIsReadOnly()
 
 void KoTagChooserWidget::addItems(QStringList tagNames)
 {
-    tagNames.sort();
-    QStringList items;
-
-    Q_FOREACH (const QString & readOnlyTag, d->readOnlyTags) {
-        items.append(readOnlyTag);
-    }
-
-    items.append(tagNames);
     d->tags.append(tagNames);
+    d->tags.removeDuplicates();
+    d->tags.sort();
+    d->readOnlyTags.sort();
+
+    QStringList items = d->readOnlyTags + d->tags;
+
+    items.removeDuplicates();
 
     d->comboBox->resetOriginalTexts(items);
 }

@@ -30,7 +30,9 @@
 
 void KisOnionSkinCompositorTest::testComposite()
 {
-    KisImageConfig config;
+    TestUtil::ReferenceImageChecker chk("composite", "onion_skins", TestUtil::ReferenceImageChecker::InternalStorage);
+
+    KisImageConfig config(false);
     config.setOnionSkinTintFactor(64);
     config.setOnionSkinTintColorBackward(Qt::blue);
     config.setOnionSkinTintColorForward(Qt::red);
@@ -44,6 +46,7 @@ void KisOnionSkinCompositorTest::testComposite()
 
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP paintDevice = p.layer->paintDevice();
+    paintDevice->createKeyframeChannel(KoID());
     KisKeyframeChannel *keyframes = paintDevice->keyframeChannel();
 
     keyframes->addKeyframe(0);
@@ -63,7 +66,6 @@ void KisOnionSkinCompositorTest::testComposite()
     paintDevice->fill(QRect(0,256,512,256), KoColor(Qt::blue, paintDevice->colorSpace()));
 
     KisPaintDeviceSP compositeDevice = new KisPaintDevice(p.image->colorSpace());
-    KisPaintDeviceSP expectedComposite = new KisPaintDevice(p.image->colorSpace());
 
     // Frame 0
 
@@ -71,52 +73,37 @@ void KisOnionSkinCompositorTest::testComposite()
     p.image->waitForDone();
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
 
-    expectedComposite->fill(QRect(256,0,256,256), KoColor(QColor(64, 191, 0, 128), paintDevice->colorSpace()));
-    expectedComposite->fill(QRect(0,0,256,512), KoColor(Qt::red, paintDevice->colorSpace()));
-
-    QImage result = compositeDevice->createThumbnail(64, 64);
-    QImage expected = expectedComposite->createThumbnail(64, 64);
-    QVERIFY(result == expected);
+    QVERIFY(chk.checkDevice(compositeDevice, p.image, "frame00"));
 
     // Frame 10
 
     i->switchCurrentTimeAsync(10);
     p.image->waitForDone();
+    compositeDevice->clear();
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
 
-    expectedComposite->clear();
-    expectedComposite->fill(QRect(0,256,256,256), KoColor(QColor(106, 0, 149, 192), paintDevice->colorSpace()));
-    expectedComposite->fill(QRect(256,256,256,256), KoColor(QColor(64, 0, 191, 128), paintDevice->colorSpace()));
-    expectedComposite->fill(QRect(0,0,512,256), KoColor(Qt::green, paintDevice->colorSpace()));
-
-    result = compositeDevice->createThumbnail(64, 64);
-    expected = expectedComposite->createThumbnail(64, 64);
-
-    QVERIFY(result == expected);
+    QVERIFY(chk.checkDevice(compositeDevice, p.image, "frame10"));
 
     // Frame 20
 
     i->switchCurrentTimeAsync(20);
     p.image->waitForDone();
+    compositeDevice->clear();
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
 
-    expectedComposite->clear();
-    expectedComposite->fill(QRect(0,0,512,256), KoColor(QColor(0, 191, 64, 128), paintDevice->colorSpace()));
-    expectedComposite->fill(QRect(0,256,512,256), KoColor(Qt::blue, paintDevice->colorSpace()));
-
-    result = compositeDevice->createThumbnail(64, 64);
-    expected = expectedComposite->createThumbnail(64, 64);
-    QVERIFY(result == expected);
-
+    QVERIFY(chk.checkDevice(compositeDevice, p.image, "frame20"));
 }
 
 void KisOnionSkinCompositorTest::testSettings()
 {
+    TestUtil::ReferenceImageChecker chk("settings", "onion_skins", TestUtil::ReferenceImageChecker::InternalStorage);
+
     KisOnionSkinCompositor *compositor = KisOnionSkinCompositor::instance();
 
     TestUtil::MaskParent p;
     KisImageAnimationInterface *i = p.image->animationInterface();
     KisPaintDeviceSP paintDevice = p.layer->paintDevice();
+    paintDevice->createKeyframeChannel(KoID());
     KisKeyframeChannel *keyframes = paintDevice->keyframeChannel();
 
     keyframes->addKeyframe(0);
@@ -139,37 +126,25 @@ void KisOnionSkinCompositorTest::testSettings()
     i->switchCurrentTimeAsync(1);
     p.image->waitForDone();
 
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setOnionSkinOpacity(-1, 32);
     config.setOnionSkinOpacity(1, 192);
     config.setOnionSkinOpacity(2, 64);
     config.setOnionSkinTintFactor(0);
 
     KisPaintDeviceSP compositeDevice = new KisPaintDevice(p.image->colorSpace());
-    KisPaintDeviceSP expectedComposite = new KisPaintDevice(p.image->colorSpace());
 
     config.setNumberOfOnionSkins(1);
     compositor->configChanged();
-
-    expectedComposite->clear();
-    expectedComposite->fill(QRect(0,0,512,512), KoColor(QColor(10, 245, 0, 200), paintDevice->colorSpace()));
-    QImage expected = expectedComposite->createThumbnail(64, 64);
-
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
-    QImage result = compositeDevice->createThumbnail(64, 64);
 
-    QVERIFY(result == expected);
+    QVERIFY(chk.checkDevice(compositeDevice, p.image, "00_single_skin"));
 
     config.setNumberOfOnionSkins(2);
     compositor->configChanged();
 
-    expectedComposite->fill(QRect(0,0,512,512), KoColor(QColor(9, 229, 16, 214), paintDevice->colorSpace()));
-    expected = expectedComposite->createThumbnail(64, 64);
-
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
-    result = compositeDevice->createThumbnail(64, 64);
-
-    QVERIFY(result == expected);
+    QVERIFY(chk.checkDevice(compositeDevice, p.image, "01_double_skin"));
 
     // Test tint options
 
@@ -180,12 +155,7 @@ void KisOnionSkinCompositorTest::testSettings()
     compositor->configChanged();
 
     compositor->composite(paintDevice, compositeDevice, QRect(0,0,512,512));
-    result = compositeDevice->createThumbnail(64, 64);
-
-    expectedComposite->fill(QRect(0,0,512,512), KoColor(QColor(69, 183, 3, 200), paintDevice->colorSpace()));
-    expected = expectedComposite->createThumbnail(64, 64);
-
-    QVERIFY(result == expected);
+    QVERIFY(chk.checkDevice(compositeDevice, p.image, "02_single_skin_tinted"));
 }
 
 QTEST_MAIN(KisOnionSkinCompositorTest)

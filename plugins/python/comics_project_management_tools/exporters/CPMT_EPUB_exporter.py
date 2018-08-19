@@ -313,7 +313,7 @@ def package_epub(configDictionary = {}, projectURL = str()):
     # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
     title = configDictionary["projectName"]
     if "title" in configDictionary.keys():
-        title = configDictionary["title"]
+        title = str(configDictionary["title"]).replace(" ", "_")
 
     # Get the appropriate paths.
     url = os.path.join(projectURL, configDictionary["exportLocation"], title)

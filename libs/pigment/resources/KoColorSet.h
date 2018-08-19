@@ -27,21 +27,7 @@
 
 #include <resources/KoResource.h>
 #include "KoColor.h"
-
-struct KoColorSetEntry {
-    KoColorSetEntry() {}
-    KoColorSetEntry(const KoColor &_color, const QString &_name)
-        : color(_color), name(_name) {}
-
-    KoColor color;
-    QString name;
-    QString id;
-    bool spotColor {false};
-
-    bool operator==(const KoColorSetEntry& rhs) const {
-        return color == rhs.color && name == rhs.name;
-    }
-};
+#include "KoColorSetEntry.h"
 
 /**
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
@@ -68,6 +54,7 @@ public:
     /**
      * Load a color set from a file. This can be a Gimp
      * palette, a RIFF palette, a Photoshop palette,
+     * a Krita palette,
      * a Scribus palette or a SwatchBooker palette.
      */
     explicit KoColorSet(const QString &filename);

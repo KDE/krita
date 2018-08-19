@@ -35,11 +35,10 @@
 class Q_DECL_HIDDEN KoZoomController::Private
 {
 public:
-    Private(KoZoomController *p, KoZoomAction::SpecialButtons specialButtons)
+    Private(KoZoomController *p)
         : canvasController(0), zoomHandler(0), action(0), textMinX(1), textMaxX(600), fitMargin(0), parent(p)
     {
         action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), p);
-        action->setSpecialButtons(specialButtons);
     }
     ~Private()
     {
@@ -52,8 +51,6 @@ public:
             setZoom(KoZoomMode::ZOOM_WIDTH, -1);
         if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
             setZoom(KoZoomMode::ZOOM_PAGE, -1);
-        if(zoomHandler->zoomMode() == KoZoomMode::ZOOM_TEXT)
-            setZoom(KoZoomMode::ZOOM_TEXT, -1);
     }
 
     /// when the canvas controller wants us to change zoom

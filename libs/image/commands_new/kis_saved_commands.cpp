@@ -187,7 +187,7 @@ bool KisSavedMacroCommand::mergeWith(const KUndo2Command* command)
     const KisSavedMacroCommand *other =
         dynamic_cast<const KisSavedMacroCommand*>(command);
 
-    if (other && other->id() != id()) return false;
+    if (!other || other->id() != id()) return false;
 
     QVector<Private::SavedCommand> &otherCommands = other->m_d->commands;
 

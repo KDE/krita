@@ -9,14 +9,14 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-"""
-This is a simple example of a Python script for Krita.
-It demonstrates how to set up a custom extension and a custom docker!
-"""
+#
+# This is a simple example of a Python script for Krita.
+# It demonstrates how to set up a custom extension and a custom docker!
+#
 
-from PyQt5.QtCore import qDebug
 from PyQt5.QtWidgets import QWidget, QLabel, QMessageBox
-from krita import Krita, Extension, DockWidget, DockWidgetFactory, DockWidgetFactoryBase
+from krita import (Krita, Extension, DockWidget,
+                   DockWidgetFactory, DockWidgetFactoryBase)
 
 
 def hello():
@@ -39,14 +39,16 @@ class HelloExtension(Extension):
         :param parent: Parent widget
         :type parent: :class:`QWidget` or None
         """
-        super().__init__(parent)
+        super(HelloExtension, self).__init__(parent)
 
     def setup(self):
+        pass
+
+    def createActions(self, window):
         """
         This is where most of the setup takes place!
         """
-        #qDebug("Hello Setup")
-        action = Krita.instance().createAction("hello_python", "hello", False)
+        action = window.createAction("hello_python", i18n("Hello"))
         action.triggered.connect(hello)
 
 
@@ -63,7 +65,7 @@ class HelloDocker(DockWidget):
         """
         Constructs an instance of HelloDocker and the widget it contains
         """
-        super().__init__()
+        super(HelloDocker, self).__init__()
 
         # The window title is also used in the Docker menu,
         # so it should be set to something sensible!

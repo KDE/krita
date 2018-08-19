@@ -1,8 +1,8 @@
 diff --git a/autotests/kconfigtest.cpp b/autotests/kconfigtest.cpp
-index 2b905b5..8c72d58 100644
+index 3e0578f..6c4408d 100644
 --- a/autotests/kconfigtest.cpp
 +++ b/autotests/kconfigtest.cpp
-@@ -570,7 +570,7 @@ void KConfigTest::testPathQtHome()
+@@ -587,7 +587,7 @@ void KConfigTest::testPathQtHome()
      qunsetenv("QT_CACHE_HOME");
      qunsetenv("QT_CONFIG_HOME");
      QVERIFY(group.hasKey("dataDir"));
@@ -12,10 +12,10 @@ index 2b905b5..8c72d58 100644
      QCOMPARE(group.readEntry("cacheDir", QString()), QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation).append(QStringLiteral("/kconfigtest")));
      QVERIFY(group.hasKey("configDir"));
 diff --git a/autotests/kdesktopfiletest.cpp b/autotests/kdesktopfiletest.cpp
-index 393a6a0..083626d 100644
+index fd4a5c9..db08f22 100644
 --- a/autotests/kdesktopfiletest.cpp
 +++ b/autotests/kdesktopfiletest.cpp
-@@ -201,7 +201,7 @@ void KDesktopFileTest::testIsAuthorizedDesktopFile()
+@@ -222,7 +222,7 @@ void KDesktopFileTest::testIsAuthorizedDesktopFile()
      QVERIFY(QFile::exists(fileName));
      QVERIFY(!KDesktopFile::isAuthorizedDesktopFile(fileName));
  
@@ -24,8 +24,19 @@ index 393a6a0..083626d 100644
      if (!installedFile.isEmpty()) {
          QVERIFY(KDesktopFile::isAuthorizedDesktopFile(installedFile));
      } else {
+@@ -281,8 +281,8 @@ void KDesktopFileTest::testLocateLocal_data()
+ {
+     QString systemConfigLocation = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation).last();
+     QString writableConfigLocation = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+-    QString systemDataLocation = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).last();
+-    QString writableDataLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
++    QString systemDataLocation = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).last();
++    QString writableDataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+ 
+     QTest::addColumn<QString>("path");
+     QTest::addColumn<QString>("result");
 diff --git a/autotests/test_kconf_update.cpp b/autotests/test_kconf_update.cpp
-index 4180619..32cd88a 100644
+index 3353061..a80ae1e 100644
 --- a/autotests/test_kconf_update.cpp
 +++ b/autotests/test_kconf_update.cpp
 @@ -625,7 +625,7 @@ void TestKConfUpdate::testScript()
@@ -38,20 +49,20 @@ index 4180619..32cd88a 100644
      QString scriptPath = scriptDir + "/test.sh";
      writeFile(scriptPath, updScript);
 diff --git a/docs/options.md b/docs/options.md
-index ba7e2d8..a960a7d 100644
+index fab22e1..8823818 100644
 --- a/docs/options.md
 +++ b/docs/options.md
 @@ -96,4 +96,4 @@ They are:
  
-     `$QT_CACHE_HOME` - QStandardPaths::GenericConfigLocation
-     `$QT_CONFIG_HOME` - QStandardPaths::GenericConfigLocation
--    `$QT_DATA_HOME` - QStandardPaths::GenericDataLocation
-+    `$QT_DATA_HOME` - QStandardPaths::AppDataLocation
+ * `$QT_CACHE_HOME` - QStandardPaths::GenericCacheLocation
+ * `$QT_CONFIG_HOME` - QStandardPaths::GenericConfigLocation
+-* `$QT_DATA_HOME` - QStandardPaths::GenericDataLocation
++* `$QT_DATA_HOME` - QStandardPaths::AppDataLocation
 diff --git a/src/core/kconfig.cpp b/src/core/kconfig.cpp
-index ad52da9..0401ced 100644
+index c8eb90a..18d1b69 100644
 --- a/src/core/kconfig.cpp
 +++ b/src/core/kconfig.cpp
-@@ -228,7 +228,7 @@ QString KConfigPrivate::expandString(const QString &value)
+@@ -229,7 +229,7 @@ QString KConfigPrivate::expandString(const QString &value)
                          env = QString::fromLocal8Bit(pEnv.constData());
                      } else {
                          if (aVarName == QStringLiteral("QT_DATA_HOME")) {
@@ -61,7 +72,7 @@ index ad52da9..0401ced 100644
                              env = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
                          } else if (aVarName == QStringLiteral("QT_CACHE_HOME")) {
 diff --git a/src/core/kdesktopfile.cpp b/src/core/kdesktopfile.cpp
-index 4a55030..e28e5df 100644
+index b0b6a87..daddd54 100644
 --- a/src/core/kdesktopfile.cpp
 +++ b/src/core/kdesktopfile.cpp
 @@ -88,7 +88,7 @@ QString KDesktopFile::locateLocal(const QString &path)
@@ -71,7 +82,7 @@ index 4a55030..e28e5df 100644
 -    Q_FOREACH (const QString &dir, QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation)) {
 +    Q_FOREACH (const QString &dir, QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)) {
          if (path.startsWith(dir + plus)) {
-             relativePath = dir.mid(path.length() + 1);
+             relativePath = path.mid(dir.length() + 1);
          }
 @@ -97,7 +97,7 @@ QString KDesktopFile::locateLocal(const QString &path)
          // What now? The desktop file doesn't come from XDG_DATA_DIRS. Use filename only and hope for the best.
@@ -92,7 +103,7 @@ index 4a55030..e28e5df 100644
              const QString prefix = QFileInfo(xdgDataPrefix).canonicalFilePath();
              if (realPath.startsWith(prefix + QLatin1Char('/') + servicesDir, sensitivity)) {
 diff --git a/src/kconf_update/kconf_update.cpp b/src/kconf_update/kconf_update.cpp
-index 2acd720..d89ae3d 100644
+index ab7d946..eeaf6ca 100644
 --- a/src/kconf_update/kconf_update.cpp
 +++ b/src/kconf_update/kconf_update.cpp
 @@ -125,7 +125,7 @@ KonfUpdate::KonfUpdate(QCommandLineParser *parser)

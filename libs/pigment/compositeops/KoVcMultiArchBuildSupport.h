@@ -109,4 +109,14 @@ createOptimizedClass(typename FactoryType::ParamType param)
 
 }
 
+template<class FactoryType>
+typename FactoryType::ReturnType
+createOptimizedClass(typename FactoryType::ParamType param, bool forceScalarImplemetation)
+{
+    if(forceScalarImplemetation){
+        return FactoryType::template create<Vc::ScalarImpl>(param);
+    }
+    return createOptimizedClass<FactoryType>(param);
+}
+
 #endif /* __KOVCMULTIARCHBUILDSUPPORT_H */

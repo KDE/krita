@@ -44,7 +44,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(AnimaterionRendererFactory, "kritaanimationrenderer.json", registerPlugin<AnimaterionRenderer>();)
 
 AnimaterionRenderer::AnimaterionRenderer(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     // Shows the big dialog
     KisAction *action = createAction("render_animation");
@@ -63,18 +63,18 @@ AnimaterionRenderer::~AnimaterionRenderer()
 
 void AnimaterionRenderer::slotRenderAnimation()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (!image) return;
     if (!image->animationInterface()->hasAnimation()) return;
 
-    KisDocument *doc = m_view->document();
+    KisDocument *doc = viewManager()->document();
 
-    DlgAnimationRenderer dlgAnimationRenderer(doc, m_view->mainWindow());
+    DlgAnimationRenderer dlgAnimationRenderer(doc, viewManager()->mainWindow());
 
     dlgAnimationRenderer.setCaption(i18n("Render Animation"));
 
-    KisConfig kisConfig;
+    KisConfig kisConfig(true);
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
     dlgAnimationRenderer.setSequenceConfiguration(cfg);
@@ -111,7 +111,7 @@ void AnimaterionRenderer::slotRenderAnimation()
 
 
         KisAsyncAnimationFramesSaveDialog::Result result =
-            exporter.regenerateRange(m_view->mainWindow()->viewManager());
+            exporter.regenerateRange(viewManager()->mainWindow()->viewManager());
 
         // the folder could have been read-only or something else could happen
         if (result == KisAsyncAnimationFramesSaveDialog::RenderComplete) {
@@ -167,21 +167,21 @@ void AnimaterionRenderer::slotRenderAnimation()
                 }
             }
         } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
-            m_view->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
+            viewManager()->mainWindow()->viewManager()->showFloatingMessage(i18n("Failed to render animation frames!"), QIcon());
         }
     }
 }
 
 void AnimaterionRenderer::slotRenderSequenceAgain()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (!image) return;
     if (!image->animationInterface()->hasAnimation()) return;
 
-    KisDocument *doc = m_view->document();
+    KisDocument *doc = viewManager()->document();
 
-    KisConfig kisConfig;
+    KisConfig kisConfig(false);
     KisPropertiesConfigurationSP sequenceConfig = new KisPropertiesConfiguration();
     sequenceConfig->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
     QString mimetype = sequenceConfig->getString("mimetype");

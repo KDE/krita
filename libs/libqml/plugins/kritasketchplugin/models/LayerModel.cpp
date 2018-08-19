@@ -38,7 +38,7 @@
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_registry.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoProperties.h>
 #include <QQmlEngine>
 #include <kis_base_node.h>
@@ -231,7 +231,6 @@ QHash<int, QByteArray> LayerModel::roleNames() const
     roles[OpacityRole] = "opacity";
     roles[PercentOpacityRole] = "percentOpacity";
     roles[VisibleRole] = "visible";
-    roles[LockedRole] = "locked";
     roles[CompositeDetailsRole] = "compositeDetails";
     roles[FilterRole] = "filter";
     roles[ChildCountRole] = "childCount";
@@ -375,9 +374,6 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             break;
         case VisibleRole:
             data = node->visible();
-            break;
-        case LockedRole:
-            data = node->userLocked();
             break;
         case CompositeDetailsRole:
             // composite op goes here...
@@ -719,10 +715,6 @@ void LayerModel::emitActiveChanges()
     emit activeGChannelActiveChanged();
     emit activeBChannelActiveChanged();
     emit activeAChannelActiveChanged();
-    emit activeRChannelLockedChanged();
-    emit activeGChannelLockedChanged();
-    emit activeBChannelLockedChanged();
-    emit activeAChannelLockedChanged();
 }
 
 QString LayerModel::activeName() const
@@ -832,24 +824,6 @@ void LayerModel::setActiveAChannelActive(bool newActive)
     }
 }
 
-bool LayerModel::activeAChannelLocked() const
-{
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(d->activeNode.data());
-    bool state = false;
-    if (layer)
-        state = layer->alphaLocked();
-    return state;
-}
-
-void LayerModel::setActiveAChannelLocked(bool newLocked)
-{
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(d->activeNode.data());
-    if (layer)
-    {
-        layer->setAlphaLocked(newLocked);
-        emit activeAChannelLockedChanged();
-    }
-}
 
 bool getActiveChannel(KisNodeSP node, int channelIndex)
 {
@@ -865,18 +839,6 @@ bool getActiveChannel(KisNodeSP node, int channelIndex)
     return flag;
 }
 
-bool getLockedChannel(KisNodeSP node, int channelIndex)
-{
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
-    bool flag = false;
-    if (layer) {
-        QBitArray flags = layer->channelLockFlags();
-        flags = flags.isEmpty() ? layer->colorSpace()->channelFlags(true, true) : flags;
-        flag = flags[channelIndex];
-    }
-    return flag;
-}
-
 void setChannelActive(KisNodeSP node, int channelIndex, bool newActive)
 {
     KisLayer* layer = qobject_cast<KisLayer*>(node.data());
@@ -885,17 +847,6 @@ void setChannelActive(KisNodeSP node, int channelIndex, bool newActive)
         flags.setBit(channelIndex, newActive);
         layer->setChannelFlags(flags);
         layer->setDirty();
-    }
-}
-
-void setChannelLocked(KisNodeSP node, int channelIndex, bool newLocked)
-{
-    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
-    if (layer) {
-        QBitArray flags = layer->channelLockFlags();
-        flags = flags.isEmpty() ? layer->colorSpace()->channelFlags(true, true) : flags;
-        flags.setBit(channelIndex, newLocked);
-        layer->setChannelLockFlags(flags);
     }
 }
 
@@ -910,17 +861,6 @@ void LayerModel::setActiveBChannelActive(bool newActive)
     emit activeBChannelActiveChanged();
 }
 
-bool LayerModel::activeBChannelLocked() const
-{
-    return getLockedChannel(d->activeNode, 2);
-}
-
-void LayerModel::setActiveBChannelLocked(bool newLocked)
-{
-    setChannelLocked(d->activeNode, 2, newLocked);
-    emit activeBChannelLockedChanged();
-}
-
 bool LayerModel::activeGChannelActive() const
 {
     return getActiveChannel(d->activeNode, 1);
@@ -932,17 +872,6 @@ void LayerModel::setActiveGChannelActive(bool newActive)
     emit activeGChannelActiveChanged();
 }
 
-bool LayerModel::activeGChannelLocked() const
-{
-    return getLockedChannel(d->activeNode, 1);
-}
-
-void LayerModel::setActiveGChannelLocked(bool newLocked)
-{
-    setChannelLocked(d->activeNode, 1, newLocked);
-    emit activeGChannelLockedChanged();
-}
-
 bool LayerModel::activeRChannelActive() const
 {
     return getActiveChannel(d->activeNode, 0);
@@ -952,17 +881,6 @@ void LayerModel::setActiveRChannelActive(bool newActive)
 {
     setChannelActive(d->activeNode, 0, newActive);
     emit activeRChannelActiveChanged();
-}
-
-bool LayerModel::activeRChannelLocked() const
-{
-    return getLockedChannel(d->activeNode, 0);
-}
-
-void LayerModel::setActiveRChannelLocked(bool newLocked)
-{
-    setChannelLocked(d->activeNode, 0, newLocked);
-    emit activeRChannelLockedChanged();
 }
 
 QObject* LayerModel::activeFilterConfig() const

@@ -42,7 +42,7 @@
 #include <kis_painter.h>
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
-#include <kis_gradient_slider.h>
+#include <KisGradientSlider.h>
 #include "kis_embedded_pattern_manager.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include "kis_texture_chooser.h"

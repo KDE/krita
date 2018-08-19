@@ -13,8 +13,8 @@ public Q_SLOTS:
     void setActiveDocument(Document*  value);
     bool batchmode() const;
     void setBatchmode(bool value);
-    QList<Action *> actions() const /Factory/;
-    Action * action(const QString & name) const;
+    QList<QAction *> actions() const;
+    QAction *action(const QString & name) const;
     QList<Document *> documents() const /Factory/;
     QStringList filters() const;
     Filter * filter(const QString &name) const /Factory/;
@@ -34,7 +34,6 @@ public Q_SLOTS:
     QList<Extension*> extensions() /Factory/;
     Document * openDocument(const QString &filename)  /Factory/;
     Window * openWindow();
-    Action * createAction(const QString &id, const QString & text, bool addToScriptMenu = true);
     QIcon icon(QString &iconName) const;
 
     void addExtension(Extension* _extension /GetWrapper/);
@@ -59,6 +58,7 @@ public Q_SLOTS:
 
     static Krita * instance();
     static QObject * fromVariant(const QVariant & v);
+    static QString krita_i18n(const QString &text);
 private:
     Krita(const Krita &); // Generated
 };

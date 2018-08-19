@@ -305,7 +305,7 @@ void KisColorLabelSelectorWidget::keyPressEvent(QKeyEvent *e)
 void KisColorLabelSelectorWidget::mousePressEvent(QMouseEvent *e)
 {
     const int newItem = m_d->indexFromPos(e->pos());
-    if (newItem >= 0) {
+    if (newItem >= 0 && e->buttons() & Qt::LeftButton) {
         setCurrentIndex(newItem);
     }
     QWidget::mousePressEvent(e);
@@ -319,7 +319,7 @@ void KisColorLabelSelectorWidget::mouseReleaseEvent(QMouseEvent *e)
 void KisColorLabelSelectorWidget::mouseMoveEvent(QMouseEvent *e)
 {
     const int newItem = m_d->indexFromPos(e->pos());
-    if (newItem >= 0 && e->buttons()) {
+    if (newItem >= 0 && e->buttons() & Qt::LeftButton) {
         setCurrentIndex(newItem);
     }
 

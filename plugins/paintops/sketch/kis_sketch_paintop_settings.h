@@ -34,7 +34,7 @@ public:
     KisSketchPaintOpSettings();
     ~KisSketchPaintOpSettings() override {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, OutlineMode mode) override;
+    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode) override;
 
     bool paintIncremental() override;
 };

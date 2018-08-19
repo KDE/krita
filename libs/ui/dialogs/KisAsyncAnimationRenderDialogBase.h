@@ -55,7 +55,7 @@ class KisViewManager;
  *   - one should implement two methods to make the rendering work:
  *     - calcDirtyFrames()
  *     - createRenderer(KisImageSP image)
- *   - these methids will be called on the start of the rendering
+ *   - these methods will be called on the start of the rendering
  */
 class KRITAUI_EXPORT KisAsyncAnimationRenderDialogBase : public QObject
 {
@@ -85,6 +85,17 @@ public:
      * end of the operation
      */
     virtual Result regenerateRange(KisViewManager *viewManager);
+
+    /**
+     * Set area of image that will be regenerated. If \p roi is empty,
+     * full area of the image is regenerated.
+     */
+    void setRegionOfInterest(const QRegion &roi);
+
+    /**
+     * @see setRegionOfInterest()
+     */
+    QRegion regionOfInterest() const;
 
     /**
      * @brief setting batch mode to true will prevent any dialogs or message boxes from
@@ -128,6 +139,9 @@ protected:
      * @see KisAsyncAnimationRendererBase
      */
     virtual KisAsyncAnimationRendererBase* createRenderer(KisImageSP image) = 0;
+
+    virtual void initializeRendererForFrame(KisAsyncAnimationRendererBase *renderer,
+                                            KisImageSP image, int frame) = 0;
 
 private:
     struct Private;

@@ -79,10 +79,14 @@ protected:
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
 
+    friend class KisRasterKeyframe;
+    bool keyframeHasContent(const KisKeyframe *keyframe) const;
+
 private:
     void setFrameFilename(int frameId, const QString &filename);
     QString chooseFrameFilename(int frameId, const QString &layerFilename);
     int frameId(KisKeyframeSP keyframe) const;
+    int frameId(const KisKeyframe *keyframe) const;
 
     struct Private;
     QScopedPointer<Private> m_d;

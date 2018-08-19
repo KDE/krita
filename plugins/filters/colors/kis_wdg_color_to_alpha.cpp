@@ -112,7 +112,6 @@ void KisWdgColorToAlpha::hideEvent(QHideEvent *)
 {
     if (m_view) {
         disconnect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
-        KoToolManager::instance()->switchBackRequested();
     }
 }
 
@@ -120,7 +119,6 @@ void KisWdgColorToAlpha::showEvent(QShowEvent *)
 {
     if (m_view) {
         connect(m_view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), this, SLOT(slotFgColorChanged(const KoColor&)));
-        KoToolManager::instance()->switchToolTemporaryRequested("KritaSelected/KisToolColorPicker");
     }
 }
 

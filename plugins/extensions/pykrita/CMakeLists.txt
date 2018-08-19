@@ -6,6 +6,4 @@ if (HAVE_PYQT5 AND HAVE_SIP AND HAVE_PYTHONLIBS)
     add_subdirectory(plugin)
     add_subdirectory(kritarunner)
 
-    add_test(pythonUnitTests ${PYTHON_EXECUTABLE} -m unittest discover "${CMAKE_INSTALL_PREFIX}" "${CMAKE_SOURCE_DIR}" -s ${CMAKE_SOURCE_DIR}/plugins/extensions/pykrita/tests -p "*_test.py")
-
 endif ()

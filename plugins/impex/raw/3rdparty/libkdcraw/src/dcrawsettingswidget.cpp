@@ -705,7 +705,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->outputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::SRGB);
     d->outputColorSpaceComboBox->setToolTip(i18nc("@info:whatsthis", "<title>Workspace</title>"
                                 "<p>Select here the output color space used to decode RAW data.</p>"
-                                "<p><ul><li><emphasis strong='true'>Raw (linear)</emphasis>: "
+                                "<p><ul><li><emphasis strong='true'>Raw (no profile)</emphasis>: "
                                 "in this mode, no output color space is used during RAW decoding.</li>"
                                 "<li><emphasis strong='true'>sRGB</emphasis>: this is an RGB "
                                 "color space, created cooperatively by Hewlett-Packard and "

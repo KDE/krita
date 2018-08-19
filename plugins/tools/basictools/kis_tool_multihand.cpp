@@ -60,8 +60,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
 
     m_helper =
         new KisToolMultihandHelper(paintingInformationBuilder(),
-                                   kundo2_i18n("Multibrush Stroke"),
-                                   recordingAdapter());
+                                   kundo2_i18n("Multibrush Stroke"));
     resetHelper(m_helper);
     if (image()) {
         m_axesPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
@@ -281,9 +280,10 @@ QWidget* KisToolMultihand::createOptionWidget()
 
 
     customUI->axisRotationSpinbox->setSuffix(QChar(Qt::Key_degree));   // origin rotation
-    customUI->axisRotationSpinbox->setRange(0.0, 90.0);
+    customUI->axisRotationSpinbox->setSingleStep(0.5);
+    customUI->axisRotationSpinbox->setRange(0.0, 90.0, 1);
     customUI->axisRotationSpinbox->setValue(m_configGroup.readEntry("axesAngle", 0.0));
-    connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(int)),this, SLOT(slotSetAxesAngle(int)));
+    connect( customUI->axisRotationSpinbox, SIGNAL(valueChanged(qreal)),this, SLOT(slotSetAxesAngle(qreal)));
 
 
 
@@ -353,7 +353,7 @@ void KisToolMultihand::slotSetHandsCount(int count)
     m_configGroup.writeEntry("handsCount", count);
 }
 
-void KisToolMultihand::slotSetAxesAngle(int angle)
+void KisToolMultihand::slotSetAxesAngle(qreal angle)
 {
     //negative so axes rotates counter clockwise
     m_angle = -angle*M_PI/180;

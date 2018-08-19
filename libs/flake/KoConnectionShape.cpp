@@ -224,8 +224,9 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
 
     if (handleConnected(KoConnectionShape::StartHandle) && handleConnected(KoConnectionShape::EndHandle)) {
         QPointF intersection;
-        bool connected = false;
-        do {
+
+        // TODO: check if this loop actually ever exits? (DK)
+        while (true) {
             // first check if directions from current edge points intersect
             if (intersects(edgePoint1, direction1, edgePoint2, direction2, intersection)) {
                 // directions intersect, we have another edge point and be done
@@ -249,7 +250,7 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
                 // we are not going into the same direction, so switch direction
                 direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
             }
-        } while (! connected);
+        }
     }
 
     path.append(edges1);
@@ -373,16 +374,16 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
         context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointId1);
     } else {
         QPointF p(shapeToDocument(d->handles[StartHandle]) * context.shapeOffset(this));
-        context.xmlWriter().addAttributePt("svg:x1", p.x());
-        context.xmlWriter().addAttributePt("svg:y1", p.y());
+        context.xmlWriter().addAttribute("svg:x1", p.x());
+        context.xmlWriter().addAttribute("svg:y1", p.y());
     }
     if (d->shape2) {
         context.xmlWriter().addAttribute("draw:end-shape", context.xmlid(d->shape2, "shape", KoElementReference::Counter).toString());
         context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointId2);
     } else {
         QPointF p(shapeToDocument(d->handles[EndHandle]) * context.shapeOffset(this));
-        context.xmlWriter().addAttributePt("svg:x2", p.x());
-        context.xmlWriter().addAttributePt("svg:y2", p.y());
+        context.xmlWriter().addAttribute("svg:x2", p.x());
+        context.xmlWriter().addAttribute("svg:y2", p.y());
     }
 
     // write the path data

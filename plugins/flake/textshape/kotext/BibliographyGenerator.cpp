@@ -87,7 +87,8 @@ void BibliographyGenerator::generate()
     cursor.setPosition(m_bibDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
 
-    KoStyleManager *styleManager = KoTextDocument(m_block.document()).styleManager();
+    KoTextDocument koDocument(m_block.document());
+    KoStyleManager *styleManager = koDocument.styleManager();
 
     if (!m_bibInfo->m_indexTitleTemplate.text.isNull()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_bibInfo->m_indexTitleTemplate.styleId);
@@ -106,13 +107,13 @@ void BibliographyGenerator::generate()
     QTextCharFormat savedCharFormat = cursor.charFormat();
 
     QList<KoInlineCite*> citeList;
-    if ( KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition() ) {
-        citeList = KoTextDocument(m_block.document())
-                .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
+    if (styleManager->bibliographyConfiguration()->sortByPosition()) {
+        citeList = koDocument.inlineTextObjectManager()->
+            citationsSortedByPosition(false, m_block.document()->firstBlock());
     } else {
-        KoTextDocument *doc = new KoTextDocument(m_block.document());
-        citeList = sort(doc->inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock()),
-                        KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortKeys());
+        citeList = sort(koDocument.inlineTextObjectManager()->
+                        citationsSortedByPosition(false, m_block.document()->firstBlock()),
+                        koDocument.styleManager()->bibliographyConfiguration()->sortKeys());
     }
 
     foreach (KoInlineCite *cite, citeList)

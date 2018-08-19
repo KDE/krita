@@ -37,7 +37,6 @@
 #include "kis_snap_line_strategy.h"
 #include "kis_change_guides_command.h"
 #include "kis_snap_config.h"
-#include "kis_coordinates_converter.h"
 #include  "kis_canvas2.h"
 #include "kis_signal_compressor.h"
 
@@ -69,7 +68,7 @@ struct KisGuidesManager::Private
     void deleteGuide(const GuideHandle &h);
     const GuideHandle invalidGuide;
 
-    bool updateCursor(const QPointF &docPos);
+    bool updateCursor(const QPointF &docPos, bool forceDisableCursor = false);
 
     void initDragStart(const GuideHandle &guide,
                        const QPointF &dragStart,
@@ -456,12 +455,12 @@ void KisGuidesManager::Private::deleteGuide(const GuideHandle &h)
     }
 }
 
-bool KisGuidesManager::Private::updateCursor(const QPointF &docPos)
+bool KisGuidesManager::Private::updateCursor(const QPointF &docPos, bool forceDisableCursor)
 {
     KisCanvas2 *canvas = view->canvasBase();
 
     const GuideHandle guide = findGuide(docPos);
-    const bool guideValid = isGuideValid(guide);
+    const bool guideValid = isGuideValid(guide) && !forceDisableCursor;
 
     if (guideValid && !cursorSwitched) {
         oldCursor = canvas->canvasWidget()->cursor();
@@ -576,7 +575,10 @@ QPointF KisGuidesManager::Private::getDocPointFromEvent(QEvent *event)
     KisCanvas2 *canvas = view->canvasBase();
     const KisCoordinatesConverter *converter = canvas->coordinatesConverter();
 
-    if (event->type() == QEvent::MouseMove ||
+    if (event->type() == QEvent::Enter) {
+        QEnterEvent *enterEvent = static_cast<QEnterEvent*>(event);
+        result = alignToPixels(converter->widgetToDocument(enterEvent->pos()));
+    } else if (event->type() == QEvent::MouseMove ||
         event->type() == QEvent::MouseButtonPress ||
         event->type() == QEvent::MouseButtonRelease) {
 
@@ -589,6 +591,10 @@ QPointF KisGuidesManager::Private::getDocPointFromEvent(QEvent *event)
 
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
         result = alignToPixels(converter->widgetToDocument(tabletEvent->pos()));
+    } else {
+        // we shouldn't silently return QPointF(0,0), higher level code may
+        // snap to some unexpected guide
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "event type is not supported!");
     }
 
     return result;
@@ -623,13 +629,17 @@ bool KisGuidesManager::eventFilter(QObject *obj, QEvent *event)
     bool retval = false;
 
     switch (event->type()) {
-    case QEvent::Enter:
     case QEvent::Leave:
+        m_d->updateCursor(QPointF(), true);
+        break;
+    case QEvent::Enter:
     case QEvent::TabletMove:
     case QEvent::MouseMove: {
         const QPointF docPos = m_d->getDocPointFromEvent(event);
         const Qt::KeyboardModifiers modifiers = qApp->keyboardModifiers();
-        retval = m_d->mouseMoveHandler(docPos, modifiers);
+
+        // we should never eat Enter events, input manager may get crazy about it
+        retval = m_d->mouseMoveHandler(docPos, modifiers) && event->type() != QEvent::Enter;
 
         break;
     }

@@ -32,6 +32,8 @@
 #include <kis_image.h>
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
+#include "sdk/tests/kistest.h"
+
 
 void TestChannel::testPixelDataU8()
 {
@@ -40,11 +42,8 @@ void TestChannel::testPixelDataU8()
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
     Node node(image, layer);
-    qDebug() << node.colorModel() << node.colorDepth() << node.colorProfile();
     QList<Channel*> channels = node.channels();
     Q_FOREACH(Channel *channel, channels) {
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>" << channel->name() << channel->bounds();
-        //QVERIFY(channel->bounds() == QRect(0, 0, 100, 100));
         QVERIFY(channel->channelSize() == 1);
     }
 
@@ -57,11 +56,8 @@ void TestChannel::testPixelDataU16()
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
     Node node(image, layer);
-    qDebug() << node.colorModel() << node.colorDepth() << node.colorProfile();
     QList<Channel*> channels = node.channels();
     Q_FOREACH(Channel *channel, channels) {
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>" << channel->name() << channel->bounds();
-        //QVERIFY(channel->bounds() == QRect(0, 0, 100, 100));
         QVERIFY(channel->channelSize() == 2);
     }
 }
@@ -73,11 +69,8 @@ void TestChannel::testPixelDataF16()
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
     Node node(image, layer);
-    qDebug() << node.colorModel() << node.colorDepth() << node.colorProfile();
     QList<Channel*> channels = node.channels();
     Q_FOREACH(Channel *channel, channels) {
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>" << channel->name() << channel->bounds();
-        //QVERIFY(channel->bounds() == QRect(0, 0, 100, 100));
         QVERIFY(channel->channelSize() == 2);
     }
 }
@@ -89,15 +82,12 @@ void TestChannel::testPixelDataF32()
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
     Node node(image, layer);
-    qDebug() << node.colorModel() << node.colorDepth() << node.colorProfile();
     QList<Channel*> channels = node.channels();
     Q_FOREACH(Channel *channel, channels) {
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>" << channel->name() << channel->bounds();
-        //QVERIFY(channel->bounds() == QRect(0, 0, 100, 100));
         QVERIFY(channel->channelSize() == 4);
     }
 }
 
 
-QTEST_MAIN(TestChannel)
+KISTEST_MAIN(TestChannel)
 

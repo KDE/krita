@@ -15,19 +15,21 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
-from PyQt5.QtWidgets import QDialog
 from PyQt5.QtCore import QSettings, QStandardPaths
-from krita import *
-from scripter import uicontroller, documentcontroller, debugcontroller
+from krita import Krita, Extension
+from . import uicontroller, documentcontroller, debugcontroller
 
 
 class ScripterExtension(Extension):
 
     def __init__(self, parent):
-        super().__init__(parent)
+        super(ScripterExtension, self).__init__(parent)
 
     def setup(self):
-        action = Krita.instance().createAction("python_scripter", "Scripter")
+        pass
+
+    def createActions(self, window):
+        action = window.createAction("python_scripter", i18n("Scripter"))
         action.triggered.connect(self.initialize)
 
     def initialize(self):

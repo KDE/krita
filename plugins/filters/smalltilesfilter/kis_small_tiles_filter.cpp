@@ -46,13 +46,14 @@
 #include <kis_filter_strategy.h>
 #include <kis_painter.h>
 #include <kis_selection.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <KoCompositeOpRegistry.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
-KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Small Tiles..."))
+KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), FiltersCategoryMapId, i18n("&Small Tiles..."))
 {
     setSupportsPainting(true);
     setSupportsThreading(false);
@@ -60,7 +61,7 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
 }
 
 void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
-                                      const QRect& /*applyRect*/,
+                                      const QRect& applyRect,
                                       const KisFilterConfigurationSP config,
                                       KoUpdater* progressUpdater
                                       ) const
@@ -68,15 +69,17 @@ void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
     Q_ASSERT(!device.isNull());
 
     //read the filter configuration values from the KisFilterConfiguration object
-    quint32 numberOfTiles = config->getInt("numberOfTiles", 2);
+    const quint32 numberOfTiles = config->getInt("numberOfTiles", 2);
 
-    QRect srcRect = device->exactBounds();
+    const QRect srcRect = applyRect;
 
-    int w = static_cast<int>(srcRect.width() / numberOfTiles);
-    int h = static_cast<int>(srcRect.height() / numberOfTiles);
+    const int w = static_cast<int>(srcRect.width() / numberOfTiles);
+    const int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
-    KisPaintDeviceSP tile = device->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
+    KisPaintDeviceSP tile = device->createThumbnailDevice(w, h);
     if (tile.isNull()) return;
+
+    device->clear(applyRect);
 
     KisPainter gc(device);
     gc.setCompositeOp(COMPOSITE_COPY);

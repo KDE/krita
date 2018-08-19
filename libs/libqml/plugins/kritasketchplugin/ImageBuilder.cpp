@@ -73,7 +73,7 @@ QString ImageBuilder::createImageFromClipboard()
 void ImageBuilder::createImageFromClipboardDelayed()
 {
     DocumentManager::instance()->disconnect(this, SLOT(createImageFromClipboardDelayed()));
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
 
     QSize sz = KisClipboard::instance()->clipSize();

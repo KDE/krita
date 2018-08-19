@@ -76,6 +76,19 @@
       <statusTip></statusTip>
     </Action>
 -->
+    <Action name="file_sessions">
+      <icon></icon>
+      <text>Sessions...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Open session manager</toolTip>
+      <iconText>Sessions</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="file_import_file">
       <icon>document-import</icon>
       <text>Open ex&amp;isting Document as Untitled Document...</text>
@@ -147,7 +160,7 @@
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
-    </Action>    
+    </Action>
     <Action name="save_incremental_version">
       <icon></icon>
       <text>Save Incremental &amp;Version</text>
@@ -503,6 +516,8 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+
     <Action name="delete_keyframe">
       <icon></icon>
       <text>Delete keyframe</text>
@@ -516,6 +531,7 @@
       <statusTip></statusTip>
     </Action>
   </Actions>
+
 
   <Actions category="Window">
     <text>Window</text>
@@ -933,6 +949,20 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+
+    <Action name="view_toggle_reference_images">
+      <icon></icon>
+      <text>S&amp;how Reference Images</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show Reference Images</toolTip>
+      <iconText>Show Reference Images</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
   </Actions>
 
   <Actions category="Image">
@@ -1193,12 +1223,12 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="krita_filter_invert">
+    <Action name="invert_selection">
       <icon></icon>
-      <text>&amp;Invert</text>
+      <text>&amp;Invert Selection</text>
       <whatsThis></whatsThis>
-      <toolTip>Invert</toolTip>
-      <iconText>Invert</iconText>
+      <toolTip>Invert Selection</toolTip>
+      <iconText>Invert Selection</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+I</shortcut>
@@ -1465,58 +1495,6 @@
     </Action>
   </Actions>
 
-  <Actions category="Tools">
-    <text>Tools</text>
-    <Action name="Recording_Start_Recording_Macro">
-      <icon>media-record</icon>
-      <text>&amp;Start recording macro</text>
-      <whatsThis></whatsThis>
-      <toolTip>Start recording macro</toolTip>
-      <iconText>Start recording macro</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Recording_Stop_Recording_Macro">
-      <icon>media-playback-stop</icon>
-      <text>Stop &amp;recording actions</text>
-      <whatsThis></whatsThis>
-      <toolTip>Stop recording actions</toolTip>
-      <iconText>Stop recording actions</iconText>
-      <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Macro_Open_Play">
-      <icon>media-playback-start</icon>
-      <text>&amp;Open and play...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Open and play</toolTip>
-      <iconText>Open and play</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="Macro_Open_Edit">
-      <icon>document-edit</icon>
-      <text>Open &amp;and edit...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Open and edit</toolTip>
-      <iconText>Open and edit</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-  </Actions>
-
   <Actions category="Settings">
     <text>Settings</text>
     <Action name="options_configure">
@@ -1559,18 +1537,6 @@
       <whatsThis></whatsThis>
       <toolTip>Show Dockers</toolTip>
       <iconText>Show Dockers</iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>true</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="view_toggledockertitlebars">
-      <icon></icon>
-      <text>Sho&amp;w Docker Titlebars</text>
-      <whatsThis></whatsThis>
-      <toolTip>Show Docker Titlebars</toolTip>
-      <iconText>Show Docker Titlebars</iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
@@ -1775,6 +1741,15 @@
       <whatsThis></whatsThis>
       <toolTip>Mirror</toolTip>
       <iconText>Mirror</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="select_layout">
+      <icon></icon>
+      <text>Layouts</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select layout</toolTip>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

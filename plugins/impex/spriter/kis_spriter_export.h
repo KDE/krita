@@ -70,13 +70,13 @@ struct Bone {
 
     ~Bone() {
         qDeleteAll(bones);
-        bones.clear();;
+        bones.clear();
     }
 };
 
 struct SpriterSlot {
     QString name;
-    bool defaultAttachmentFlag;
+    bool defaultAttachmentFlag = false;
 };
 
 struct SpriterObject {

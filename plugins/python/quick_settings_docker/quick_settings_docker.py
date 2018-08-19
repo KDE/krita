@@ -28,12 +28,12 @@ class QuickSettingsDocker(DockWidget):
     # Init the docker
 
     def __init__(self):
-        super().__init__()
+        super(QuickSettingsDocker, self).__init__()
         # make base-widget and layout
         widget = QWidget()
         layout = QVBoxLayout()
         widget.setLayout(layout)
-        self.setWindowTitle("Quick Settings Docker")
+        self.setWindowTitle(i18n("Quick Settings Docker"))
         tabWidget = QTabWidget()
 
         self.brushSizeTableView = QListView()
@@ -57,9 +57,9 @@ class QuickSettingsDocker(DockWidget):
         self.brushFlowTableView.setUniformItemSizes(True)
         self.brushFlowTableView.setSelectionMode(QListView.SingleSelection)
 
-        tabWidget.addTab(self.brushSizeTableView, "Size")
-        tabWidget.addTab(self.brushOpacityTableView, "Opacity")
-        tabWidget.addTab(self.brushFlowTableView, "Flow")
+        tabWidget.addTab(self.brushSizeTableView, i18n("Size"))
+        tabWidget.addTab(self.brushOpacityTableView, i18n("Opacity"))
+        tabWidget.addTab(self.brushFlowTableView, i18n("Flow"))
         layout.addWidget(tabWidget)
         self.setWidget(widget)  # Add the widget to the docker.
 
@@ -87,7 +87,7 @@ class QuickSettingsDocker(DockWidget):
         # First we empty the old model. We might wanna use this function in the future to fill it with the brushmask of the selected brush, but there's currently no API for recognising changes in the current brush nor is there a way to get its brushmask.
         self.brushSizeModel.clear()
         for s in range(len(self.sizesList)):
-            # we're gonna itterate over our list, and make a new item for each entry.
+            # we're gonna iterate over our list, and make a new item for each entry.
             # We need to disable a bunch of stuff to make sure people won't do funny things to our entries.
             item = QStandardItem()
             item.setCheckable(False)
@@ -118,7 +118,7 @@ class QuickSettingsDocker(DockWidget):
         self.brushOpacityModel.clear()
         self.brushFlowModel.clear()
         for s in range(len(self.opacityList)):
-            # we're gonna itterate over our list, and make a new item for each entry.
+            # we're gonna iterate over our list, and make a new item for each entry.
             item = QStandardItem()
             item.setCheckable(False)
             item.setEditable(False)
@@ -133,7 +133,7 @@ class QuickSettingsDocker(DockWidget):
             brush.setColor(self.brushSizeTableView.palette().color(QPalette.Text))
             circlePainter.setBrush(brush)
             circlePainter.setPen(QPen(QBrush(Qt.transparent), 0))
-            circlePainter.setOpacity(self.opacityList[s] / 100)
+            circlePainter.setOpacity(float(self.opacityList[s]) / 100.0)
             circlePainter.drawEllipse(QPointF(32, 32), 32, 32)
             circlePainter.end()
             brushImage = QPixmap.fromImage(img)
@@ -159,14 +159,14 @@ class QuickSettingsDocker(DockWidget):
     @pyqtSlot('QModelIndex')
     def setBrushOpacity(self, index):
         i = index.row()
-        brushOpacity = self.opacityList[i] / 100
+        brushOpacity = float(self.opacityList[i]) / 100.0
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0:
             Application.activeWindow().views()[0].setPaintingOpacity(brushOpacity)
 
     @pyqtSlot('QModelIndex')
     def setBrushFlow(self, index):
         i = index.row()
-        brushOpacity = self.opacityList[i] / 100
+        brushOpacity = float(self.opacityList[i]) / 100.0
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0:
             Application.activeWindow().views()[0].setPaintingFlow(brushOpacity)
 

@@ -46,7 +46,7 @@ public:
     PaletteDockerDock();
     ~PaletteDockerDock() override;
     QString observerName() override { return "PaletteDockerDock"; }
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
@@ -77,7 +77,7 @@ private:
     KisPaletteModel *m_model;
     QSharedPointer<KoAbstractResourceServerAdapter> m_serverAdapter;
     KoColorSet *m_currentColorSet;
-    KisColorsetChooser *m_colorSetChooser;
+    KisColorsetChooser *m_paletteChooser;
     KisCanvasResourceProvider *m_resourceProvider;
     QPointer<KisCanvas2> m_canvas;
 };

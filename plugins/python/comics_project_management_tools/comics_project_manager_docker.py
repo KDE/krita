@@ -25,10 +25,12 @@ import json
 import os
 import zipfile  # quick reading of documents
 import shutil
+import enum
+from math import floor
 import xml.etree.ElementTree as ET
-from PyQt5.QtCore import QElapsedTimer, QSize, Qt
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QTableView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel
+from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect
+from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
+from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
@@ -58,6 +60,126 @@ class Elided_Text_Label(QLabel):
     def resizeEvent(self, event):
         self.elideText()
 
+class CPE(enum.IntEnum):
+    TITLE = Qt.DisplayRole
+    URL = Qt.UserRole + 1
+    KEYWORDS = Qt.UserRole+2
+    DESCRIPTION = Qt.UserRole+3
+    LASTEDIT = Qt.UserRole+4
+    EDITOR = Qt.UserRole+5
+    IMAGE = Qt.DecorationRole
+
+class comic_page_delegate(QStyledItemDelegate):
+
+    def __init__(self, parent=None):
+        super(QStyledItemDelegate, self).__init__(parent)
+
+    def paint(self, painter, option, index):
+        
+        if (index.isValid() == False):
+            return
+        painter.save()
+        painter.setOpacity(0.6)
+        if(option.state & QStyle.State_Selected):
+            painter.fillRect(option.rect, option.palette.highlight())
+        if (option.state & QStyle.State_MouseOver):
+            painter.setOpacity(0.25)
+            painter.fillRect(option.rect, option.palette.highlight())
+        painter.setOpacity(1.0)
+        painter.setFont(option.font)
+        metrics = QFontMetrics(option.font)
+        regular = QFont(option.font)
+        italics = QFont(option.font)
+        italics.setItalic(True)
+        icon = QIcon(index.data(CPE.IMAGE))
+        rect = option.rect
+        margin = 4
+        decoratonSize = QSize(option.decorationSize)
+        imageSize = icon.actualSize(option.decorationSize)
+        leftSideThumbnail = (decoratonSize.width()-imageSize.width())/2
+        if (rect.width() < decoratonSize.width()):
+            leftSideThumbnail = max(0, (rect.width()-imageSize.width())/2)
+        topSizeThumbnail = ((rect.height()-imageSize.height())/2)+rect.top()
+        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), icon.pixmap(imageSize).toImage())
+        
+        labelWidth = rect.width()-decoratonSize.width()-(margin*3)
+        
+        if (decoratonSize.width()+(margin*2)< rect.width()):
+        
+            textRect = QRect(decoratonSize.width()+margin, margin+rect.top(), labelWidth, metrics.height())
+            textTitle = metrics.elidedText(str(index.row()+1)+". "+index.data(CPE.TITLE), Qt.ElideRight, labelWidth)
+            painter.drawText(textRect, Qt.TextWordWrap, textTitle)
+            
+            if rect.height()/(metrics.lineSpacing()+margin) > 5 or index.data(CPE.KEYWORDS) is not None:
+                painter.setOpacity(0.6)
+                textRect = QRect(textRect.left(), textRect.bottom()+margin, labelWidth, metrics.height())
+                if textRect.bottom() < rect.bottom():
+                    textKeyWords = index.data(CPE.KEYWORDS)
+                    if textKeyWords == None:
+                        textKeyWords = i18n("No keywords")
+                        painter.setOpacity(0.3)
+                        painter.setFont(italics)
+                    textKeyWords = metrics.elidedText(textKeyWords, Qt.ElideRight, labelWidth)
+                    painter.drawText(textRect, Qt.TextWordWrap, textKeyWords)
+            
+            painter.setFont(regular)
+            
+            if rect.height()/(metrics.lineSpacing()+margin) > 3:
+                painter.setOpacity(0.6)
+                textRect = QRect(textRect.left(), textRect.bottom()+margin, labelWidth, metrics.height())
+                if textRect.bottom()+metrics.height() < rect.bottom():
+                    textLastEdit = index.data(CPE.LASTEDIT)
+                    if textLastEdit is None:
+                        textLastEdit = i18n("No last edit timestamp")
+                    if index.data(CPE.EDITOR) is not None:
+                        textLastEdit += " - " + index.data(CPE.EDITOR)
+                    if (index.data(CPE.LASTEDIT) is None) and (index.data(CPE.EDITOR) is None):
+                        painter.setOpacity(0.3)
+                        painter.setFont(italics)
+                    textLastEdit = metrics.elidedText(textLastEdit, Qt.ElideRight, labelWidth)
+                    painter.drawText(textRect, Qt.TextWordWrap, textLastEdit)
+            
+            painter.setFont(regular)
+            
+            descRect = QRect(textRect.left(), textRect.bottom()+margin, labelWidth, (rect.bottom()-margin) - (textRect.bottom()+margin))
+            if textRect.bottom()+metrics.height() < rect.bottom():
+                textRect.setBottom(textRect.bottom()+(margin/2))
+                textRect.setLeft(textRect.left()-(margin/2))
+                painter.setOpacity(0.4)
+                painter.drawLine(textRect.bottomLeft(), textRect.bottomRight())
+                painter.setOpacity(1.0)
+                textDescription = index.data(CPE.DESCRIPTION)
+                if textDescription is None:
+                    textDescription = i18n("No description")
+                    painter.setOpacity(0.3)
+                    painter.setFont(italics)
+                linesTotal = floor(descRect.height()/metrics.lineSpacing())
+                if linesTotal == 1:
+                    textDescription = metrics.elidedText(textDescription, Qt.ElideRight, labelWidth)
+                    painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                else:
+                    descRect.setHeight(linesTotal*metrics.lineSpacing())
+                    totalDescHeight = metrics.boundingRect(descRect, Qt.TextWordWrap, textDescription).height()
+                    if totalDescHeight>descRect.height():
+                        if totalDescHeight-metrics.lineSpacing()>descRect.height():
+                            painter.setOpacity(0.5)
+                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            descRect.setHeight((linesTotal-1)*metrics.lineSpacing())
+                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            descRect.setHeight((linesTotal-2)*metrics.lineSpacing())
+                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                        else:
+                            painter.setOpacity(0.75)
+                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            descRect.setHeight((linesTotal-1)*metrics.lineSpacing())
+                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                    else:
+                        painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+            
+            painter.setFont(regular)
+        
+        painter.restore()
+
 
 """
 This is a Krita docker called 'Comics Manager'.
@@ -67,7 +189,7 @@ and finally export the result.
 
 The logic behind this docker is that it is very easy to get lost in a comics project due to the massive amount of files.
 By having a docker that gives the user quick access to the pages and also allows them to do all of the meta-stuff, like
-meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focussed on actual writing and drawing.
+meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focused on actual writing and drawing.
 """
 
 
@@ -93,12 +215,13 @@ class comics_project_manager_docker(DockWidget):
         baseLayout.addWidget(buttonBox)
 
         # Comic page list and pages model
-        self.comicPageList = QTableView()
-        self.comicPageList.verticalHeader().setSectionsMovable(True)
-        self.comicPageList.verticalHeader().setDragEnabled(True)
-        self.comicPageList.verticalHeader().setDragDropMode(QAbstractItemView.InternalMove)
+        self.comicPageList = QListView()
+        self.comicPageList.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.comicPageList.setDragEnabled(True)
+        self.comicPageList.setDragDropMode(QAbstractItemView.InternalMove)
+        self.comicPageList.setDefaultDropAction(Qt.MoveAction)
         self.comicPageList.setAcceptDrops(True)
-        self.comicPageList.horizontalHeader().setStretchLastSection(True)
+        self.comicPageList.setItemDelegate(comic_page_delegate())
         self.pagesModel = QStandardItemModel()
         self.comicPageList.doubleClicked.connect(self.slot_open_page)
         self.comicPageList.setIconSize(QSize(128, 128))
@@ -106,7 +229,7 @@ class comics_project_manager_docker(DockWidget):
         self.pagesModel.layoutChanged.connect(self.slot_write_config)
         self.pagesModel.rowsInserted.connect(self.slot_write_config)
         self.pagesModel.rowsRemoved.connect(self.slot_write_config)
-        self.comicPageList.verticalHeader().sectionMoved.connect(self.slot_write_config)
+        self.pagesModel.rowsMoved.connect(self.slot_write_config)
         self.comicPageList.setModel(self.pagesModel)
         pageBox = QWidget()
         pageBox.setLayout(QVBoxLayout())
@@ -162,7 +285,7 @@ class comics_project_manager_docker(DockWidget):
 
         self.action_add_page = QAction(i18n("Add Page"), self)
         self.action_add_page.triggered.connect(self.slot_add_new_page_single)
-        self.action_add_template = QAction(i18n("Add Page From Template"), self)
+        self.action_add_template = QAction(i18n("Add Page from Template"), self)
         self.action_add_template.triggered.connect(self.slot_add_new_page_from_template)
         self.action_add_existing = QAction(i18n("Add Existing Pages"), self)
         self.action_add_existing.triggered.connect(self.slot_add_page_from_url)
@@ -174,7 +297,7 @@ class comics_project_manager_docker(DockWidget):
         self.action_show_page_viewer = QAction(i18n("View Page In Window"), self)
         self.action_show_page_viewer.triggered.connect(self.slot_show_page_viewer)
         self.action_scrape_authors = QAction(i18n("Scrape Author Info"), self)
-        self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This doesn't check for duplicates."))
+        self.action_scrape_authors.setToolTip(i18n("Search for author information in documents and add it to the author list. This does not check for duplicates."))
         self.action_scrape_authors.triggered.connect(self.slot_scrape_author_list)
         self.action_scrape_translations = QAction(i18n("Scrape Text for Translation"), self)
         self.action_scrape_translations.triggered.connect(self.slot_scrape_translations)
@@ -219,7 +342,7 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_open_config(self):
-        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the json comic config file."), filter=str(i18n("json files") + "(*.json)"))[0]
+        self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))[0]
         if os.path.exists(self.path_to_config) is True:
             configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
             self.setupDictionary = json.load(configFile)
@@ -245,14 +368,13 @@ class comics_project_manager_docker(DockWidget):
     def fill_pages(self):
         self.loadingPages = True
         self.pagesModel.clear()
-        self.pagesModel.setHorizontalHeaderLabels([i18n("Page"), i18n("Description")])
         pagesList = []
         if "pages" in self.setupDictionary.keys():
             pagesList = self.setupDictionary["pages"]
         progress = QProgressDialog()
         progress.setMinimum(0)
         progress.setMaximum(len(pagesList))
-        progress.setWindowTitle(i18n("Loading pages..."))
+        progress.setWindowTitle(i18n("Loading Pages..."))
         for url in pagesList:
             absurl = os.path.join(self.projecturl, url)
             if (os.path.exists(absurl)):
@@ -268,18 +390,14 @@ class comics_project_manager_docker(DockWidget):
                 pageItem.setDropEnabled(False)
                 pageItem.setEditable(False)
                 pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
+                pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
+                pageItem.setData(url, role = CPE.URL)
+                pageItem.setData(dataList[2], role = CPE.KEYWORDS)
+                pageItem.setData(dataList[3], role = CPE.LASTEDIT)
+                pageItem.setData(dataList[4], role = CPE.EDITOR)
                 pageItem.setToolTip(url)
                 page.close()
-                description = QStandardItem()
-                description.setText(dataList[1])
-                description.setEditable(False)
-                listItem = []
-                listItem.append(pageItem)
-                listItem.append(description)
-                self.pagesModel.appendRow(listItem)
-                self.comicPageList.resizeRowsToContents()
-                self.comicPageList.setColumnWidth(0, 200)
-                self.comicPageList.setColumnWidth(1, 256)
+                self.pagesModel.appendRow(pageItem)
                 progress.setValue(progress.value() + 1)
         progress.setValue(len(pagesList))
         self.loadingPages = False
@@ -290,7 +408,6 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_scale_thumbnails(self, multiplier=4):
         self.comicPageList.setIconSize(QSize(multiplier * 32, multiplier * 32))
-        self.comicPageList.resizeRowsToContents()
 
     """
     Function that takes the documentinfo.xml and parses it for the title, subject and abstract tags,
@@ -312,12 +429,33 @@ class comics_project_manager_docker(DockWidget):
             desc = xmlDoc[0].find(calligra + 'subject').text
         if desc is None or desc.isspace() or len(desc) < 1:
             if ET.iselement(xmlDoc[0].find(calligra + 'abstract')):
-                desc = str(xmlDoc[0].find(calligra + 'abstract').text)
-                if desc.startswith("<![CDATA["):
-                    desc = desc[len("<![CDATA["):]
-                if desc.startswith("]]>"):
-                    desc = desc[:-len("]]>")]
-        return [name, desc]
+                desc = xmlDoc[0].find(calligra + 'abstract').text
+                if desc is not None:
+                    if desc.startswith("<![CDATA["):
+                        desc = desc[len("<![CDATA["):]
+                    if desc.startswith("]]>"):
+                        desc = desc[:-len("]]>")]
+        keywords = ""
+        if ET.iselement(xmlDoc[0].find(calligra + 'keyword')):
+            keywords = xmlDoc[0].find(calligra + 'keyword').text
+        date = ""
+        if ET.iselement(xmlDoc[0].find(calligra + 'date')):
+            date = xmlDoc[0].find(calligra + 'date').text
+        author = []
+        if ET.iselement(xmlDoc[1].find(calligra + 'creator-first-name')):
+            string = xmlDoc[1].find(calligra + 'creator-first-name').text
+            if string is not None:
+                author.append(string)
+        if ET.iselement(xmlDoc[1].find(calligra + 'creator-last-name')):
+            string = xmlDoc[1].find(calligra + 'creator-last-name').text
+            if string is not None:
+                author.append(string)
+        if ET.iselement(xmlDoc[1].find(calligra + 'full-name')):
+            string = xmlDoc[1].find(calligra + 'full-name').text
+            if string is not None:
+                author.append(string)
+            
+        return [name, desc, keywords, date, " ".join(author)]
 
     """
     Scrapes authors from the author data in the document info and puts them into the author list.
@@ -376,7 +514,7 @@ class comics_project_manager_docker(DockWidget):
         if dialog.exec_() == QDialog.Accepted:
             self.setupDictionary = dialog.getConfig(self.setupDictionary)
             self.slot_write_config()
-            self.setWindowTitle(self.stringName + ": " + str(self.setupDictionary["projectName"]))
+            self.projectName.setMainText(str(self.setupDictionary["projectName"]))
 
     """
     This allows users to select existing pages and add them to the pages list. The pages are currently not copied to the pages folder. Useful for existing projects.
@@ -410,16 +548,14 @@ class comics_project_manager_docker(DockWidget):
                 newPageItem.setDropEnabled(False)
                 newPageItem.setEditable(False)
                 newPageItem.setText(dataList[0].replace("_", " "))
+                newPageItem.setData(dataList[1], role = CPE.DESCRIPTION)
+                newPageItem.setData(relative, role = CPE.URL)
+                newPageItem.setData(dataList[2], role = CPE.KEYWORDS)
+                newPageItem.setData(dataList[3], role = CPE.LASTEDIT)
+                newPageItem.setData(dataList[4], role = CPE.EDITOR)
                 newPageItem.setToolTip(relative)
                 page.close()
-                description = QStandardItem()
-                description.setText(dataList[1])
-                description.setEditable(False)
-                listItem = []
-                listItem.append(newPageItem)
-                listItem.append(description)
-                self.pagesModel.appendRow(listItem)
-                self.comicPageList.resizeRowsToContents()
+                self.pagesModel.appendRow(newPageItem)
 
     """
     Remove the selected page from the list of pages. This does not remove it from disk(far too dangerous).
@@ -458,7 +594,7 @@ class comics_project_manager_docker(DockWidget):
 
     """
     This function always asks for a template showing the new template window. This allows users to have multiple different
-    templates created for back covers, spreads, other and have them accesible, while still having the convenience of a singular
+    templates created for back covers, spreads, other and have them accessible, while still having the convenience of a singular
     "add page" that adds a default.
     """
 
@@ -520,6 +656,11 @@ class comics_project_manager_docker(DockWidget):
         newPageItem.setDropEnabled(False)
         newPageItem.setEditable(False)
         newPageItem.setText(pageName.replace("_", " "))
+        newPageItem.setData("", role = CPE.DESCRIPTION)
+        newPageItem.setData(url, role = CPE.URL)
+        newPageItem.setData("", role = CPE.KEYWORDS)
+        newPageItem.setData("", role = CPE.LASTEDIT)
+        newPageItem.setData("", role = CPE.EDITOR)
         newPageItem.setToolTip(url)
 
         # close page document.
@@ -529,18 +670,10 @@ class comics_project_manager_docker(DockWidget):
         newPage.close()
 
         # add item to page.
-        description = QStandardItem()
-        description.setText(str(""))
-        description.setEditable(False)
-        listItem = []
-        listItem.append(newPageItem)
-        listItem.append(description)
-        self.pagesModel.appendRow(listItem)
-        self.comicPageList.resizeRowsToContents()
-        self.comicPageList.resizeColumnToContents(0)
+        self.pagesModel.appendRow(newPageItem)
 
     """
-    Write to the json configuratin file.
+    Write to the json configuration file.
     This also checks the current state of the pages list.
     """
 
@@ -551,26 +684,12 @@ class comics_project_manager_docker(DockWidget):
             print("CPMT: writing comic configuration...")
 
             # Generate a pages list from the pagesmodel.
-            # Because we made the drag-and-drop use the tableview header, we need to first request the logicalIndex
-            # for the visualIndex, and then request the items for the logical index in the pagesmodel.
-            # After that, we rename the verticalheader to have the appropriate numbers it will have when reloading.
             pagesList = []
-            listOfHeaderLabels = []
             for i in range(self.pagesModel.rowCount()):
-                listOfHeaderLabels.append(str(i+1))
-            for i in range(self.pagesModel.rowCount()):
-                iLogical = max(0, self.comicPageList.verticalHeader().logicalIndex(i))
-                if i >= self.comicPageList.verticalHeader().count():
-                    iLogical = i
-                index = self.pagesModel.index(iLogical, 0)
-                if index.isValid() is False:
-                    index = self.pagesModel.index(i, 0)
-                url = str(self.pagesModel.data(index, role=Qt.ToolTipRole))
+                index = self.pagesModel.index(i, 0)
+                url = str(self.pagesModel.data(index, role=CPE.URL))
                 if url not in pagesList:
                     pagesList.append(url)
-                listOfHeaderLabels[iLogical] = str(i+1)
-            self.pagesModel.setVerticalHeaderLabels(listOfHeaderLabels)
-            self.comicPageList.verticalHeader().update()
             self.setupDictionary["pages"] = pagesList
 
             # Save to our json file.
@@ -586,7 +705,7 @@ class comics_project_manager_docker(DockWidget):
     def slot_open_page(self, index):
         if index.column() is 0:
             # Get the absolute url from the relative one in the pages model.
-            absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(index, role=Qt.ToolTipRole)))
+            absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(index, role=CPE.URL)))
 
             # Make sure the page exists.
             if os.path.exists(absoluteUrl):
@@ -615,8 +734,9 @@ class comics_project_manager_docker(DockWidget):
             self.slot_write_config()
 
     """
-    An attempt at making the description editable from the comic pages list. It is currently not working because ZipFile
-    has no overwrite mechanism, and I don't have the energy to write one yet.
+    An attempt at making the description editable from the comic pages list.
+    It is currently not working because ZipFile has no overwrite mechanism,
+    and I don't have the energy to write one yet.
     """
 
     def slot_write_description(self, index):
@@ -624,7 +744,7 @@ class comics_project_manager_docker(DockWidget):
         for row in range(self.pagesModel.rowCount()):
             index = self.pagesModel.index(row, 1)
             indexUrl = self.pagesModel.index(row, 0)
-            absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(indexUrl, role=Qt.ToolTipRole)))
+            absoluteUrl = os.path.join(self.projecturl, str(self.pagesModel.data(indexUrl, role=CPE.URL)))
             page = zipfile.ZipFile(absoluteUrl, "a")
             xmlDoc = ET.ElementTree()
             ET.register_namespace("", "http://www.calligra.org/DTD/document-info")
@@ -665,6 +785,7 @@ class comics_project_manager_docker(DockWidget):
         exportSuccess = exporter.export()
         if exportSuccess:
             print("CPMT: Export success! The files have been written to the export folder!")
+            QMessageBox.information(self, i18n("Export success"), i18n("The files have been written to the export folder."), QMessageBox.Ok)
 
     """
     Calls up the comics project setup wizard so users can create a new json file with the basic information.
@@ -689,7 +810,6 @@ class comics_project_manager_docker(DockWidget):
             relUrl = os.path.relpath(url, self.projecturl)
             if relUrl in self.setupDictionary["pages"]:
                 index = self.pagesModel.index(self.setupDictionary["pages"].index(relUrl), 0)
-                index2 = self.pagesModel.index(index.row(), 1)
                 if index.isValid():
                     pageItem = self.pagesModel.itemFromIndex(index)
                     page = zipfile.ZipFile(url, "r")
@@ -699,18 +819,23 @@ class comics_project_manager_docker(DockWidget):
                     thumbnail = QImage.fromData(page.read("preview.png"))
                     pageItem.setIcon(QIcon(QPixmap.fromImage(thumbnail)))
                     pageItem.setText(dataList[0])
+                    pageItem.setData(dataList[1], role = CPE.DESCRIPTION)
+                    pageItem.setData(url, role = CPE.URL)
+                    pageItem.setData(dataList[2], role = CPE.KEYWORDS)
+                    pageItem.setData(dataList[3], role = CPE.LASTEDIT)
+                    pageItem.setData(dataList[4], role = CPE.EDITOR)
                     self.pagesModel.setItem(index.row(), index.column(), pageItem)
-                    self.pagesModel.setData(index2, str(dataList[1]), Qt.DisplayRole)
 
     """
     Resize all the pages in the pages list.
-    It will show a dialog with the options for resizing. Then, it will try to pop up a progress dialog while resizing.
+    It will show a dialog with the options for resizing.
+    Then, it will try to pop up a progress dialog while resizing.
     The progress dialog shows the remaining time and pages.
     """
 
     def slot_batch_resize(self):
         dialog = QDialog()
-        dialog.setWindowTitle(i18n("Risize all pages."))
+        dialog.setWindowTitle(i18n("Resize all Pages"))
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
@@ -722,7 +847,7 @@ class comics_project_manager_docker(DockWidget):
 
         if dialog.exec_() == QDialog.Accepted:
             progress = QProgressDialog(i18n("Resizing pages..."), str(), 0, len(self.setupDictionary["pages"]))
-            progress.setWindowTitle(i18n("Resizing pages."))
+            progress.setWindowTitle(i18n("Resizing Pages"))
             progress.setCancelButton(None)
             timer = QElapsedTimer()
             timer.start()
@@ -784,6 +909,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
         metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
+        QMessageBox.information(self, i18n("Scraping success"), str(i18n("POT file has been written to: {file}")).format(file=fullTranslationPath), QMessageBox.Ok)
     """
     This is required by the dockwidget class, otherwise unused.
     """

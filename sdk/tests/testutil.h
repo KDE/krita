@@ -25,6 +25,7 @@
 #include <QTime>
 #include <QDir>
 
+#include <KoConfig.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -37,6 +38,7 @@
 #include "kis_image.h"
 #include "testing_nodes.h"
 
+#include "kistest.h"
 
 #ifndef FILES_DATA_DIR
 #define FILES_DATA_DIR "."
@@ -47,6 +49,14 @@
 #endif
 
 #include "qimage_test_util.h"
+
+#define KIS_COMPARE_RF(expr, ref) \
+    if ((expr) != (ref)) { \
+        qDebug() << "Compared values are not the same at line" << __LINE__; \
+        qDebug() << "    Actual  : " << #expr << "=" << (expr); \
+        qDebug() << "    Expected: " << #ref << "=" << (ref); \
+        return false; \
+    }
 
 /**
  * Routines that are useful for writing efficient tests
@@ -365,7 +375,6 @@ public:
 
 #include <QApplication>
 #include <kis_paint_layer.h>
-#include <kis_image.h>
 #include "kis_undo_stores.h"
 #include "kis_layer_utils.h"
 

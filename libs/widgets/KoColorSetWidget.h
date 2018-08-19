@@ -59,8 +59,8 @@ public:
      * Sets the color set that this widget shows.
      * @param colorSet pointer to the color set
      */
-    void setColorSet(KoColorSet *colorSet);
-    
+    void setColorSet(QPointer<KoColorSet> colorSet);
+
     /**
      * @brief setDisplayRenderer
      * Set the display renderer of this object.

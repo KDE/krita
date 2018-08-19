@@ -20,6 +20,7 @@
 
 #include <QRegion>
 #include "kis_paint_device.h"
+#include "kis_wrapped_rect.h"
 #include "KisFastDeviceProcessingUtils.h"
 
 #include <KoColor.h>
@@ -74,6 +75,30 @@ KisPrecisePaintDeviceWrapper::~KisPrecisePaintDeviceWrapper()
 const KoColorSpace *KisPrecisePaintDeviceWrapper::preciseColorSpace() const
 {
     return m_d->precColorSpace;
+}
+
+KisPaintDeviceSP KisPrecisePaintDeviceWrapper::createPreciseCompositionSourceDevice() const
+{
+    KisPaintDeviceSP result;
+
+    if (m_d->precDevice == m_d->srcDevice) {
+        result = m_d->srcDevice->createCompositionSourceDevice();
+    } else {
+        const KoColorSpace *compositionColorSpace =
+            m_d->srcDevice->compositionSourceColorSpace();
+
+        const KoColorSpace *preciseCompositionColorSpace =
+                KoColorSpaceRegistry::instance()->colorSpace(
+                    compositionColorSpace->colorModelId().id(),
+                    Integer16BitsColorDepthID.id(),
+                    compositionColorSpace->profile());
+
+        KisPaintDeviceSP device = new KisPaintDevice(preciseCompositionColorSpace);
+        device->setDefaultBounds(m_d->srcDevice->defaultBounds());
+        result = device;
+    }
+
+    return result;
 }
 
 KisPaintDeviceSP KisPrecisePaintDeviceWrapper::sourceDevice() const
@@ -150,9 +175,19 @@ void KisPrecisePaintDeviceWrapper::readRects(const QVector<QRect> &rects)
 
     QRegion requestedRects;
     Q_FOREACH (const QRect &rc, rects) {
-        const QRect croppedRect = rc & srcExtent;
+        if (m_d->srcDevice->defaultBounds()->wrapAroundMode()) {
+            const QRect wrapRect = m_d->srcDevice->defaultBounds()->bounds();
+            KisWrappedRect wrappedRect(rc, wrapRect);
+            Q_FOREACH (const QRect &wrc, wrappedRect) {
+                const QRect croppedRect = wrc & srcExtent;
 
-        requestedRects += croppedRect;
+                requestedRects += croppedRect;
+            }
+        } else {
+            const QRect croppedRect = rc & srcExtent;
+
+            requestedRects += croppedRect;
+        }
     }
 
     QRegion diff(requestedRects);
@@ -203,4 +238,3 @@ void KisPrecisePaintDeviceWrapper::writeRects(const QVector<QRect> &rects)
                                       WriteProcessor(channelCount));
     }
 }
-

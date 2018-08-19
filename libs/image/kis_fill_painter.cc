@@ -110,7 +110,12 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     }
 }
 
-void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern)
+void KisFillPainter::fillRect(const QRect &rc, const KoPattern *pattern, const QPoint &offset)
+{
+    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), pattern, offset);
+}
+
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KoPattern * pattern, const QPoint &offset)
 {
     if (!pattern) return;
     if (!pattern->valid()) return;
@@ -121,42 +126,44 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ko
     KisPaintDeviceSP patternLayer = new KisPaintDevice(device()->compositionSourceColorSpace(), pattern->name());
     patternLayer->convertFromQImage(pattern->pattern(), 0);
 
-    fillRect(x1, y1, w, h, patternLayer, QRect(0, 0, pattern->width(), pattern->height()));
+    if (!offset.isNull()) {
+        patternLayer->moveTo(offset);
+    }
+
+    fillRect(x1, y1, w, h, patternLayer, QRect(offset.x(), offset.y(), pattern->width(), pattern->height()));
 }
 
 void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect)
 {
-    Q_ASSERT(deviceRect.x() == 0); // the case x,y != 0,0 is not yet implemented
-    Q_ASSERT(deviceRect.y() == 0);
-    int sx, sy, sw, sh;
+    const QRect &patternRect = deviceRect;
+    const QRect fillRect(x1, y1, w, h);
 
-    int y = y1;
+    auto toPatternLocal = [](int value, int offset, int width) {
+        const int normalizedValue = value - offset;
+        return offset + (normalizedValue >= 0 ?
+                         normalizedValue % width :
+                         width - (-normalizedValue - 1) % width - 1);
+    };
 
-    if (y >= 0) {
-        sy = y % deviceRect.height();
-    } else {
-        sy = deviceRect.height() - (((-y - 1) % deviceRect.height()) + 1);
-    }
+    int dstY = fillRect.y();
+    while (dstY <= fillRect.bottom()) {
+        const int dstRowsRemaining = fillRect.bottom() - dstY + 1;
 
-    while (y < y1 + h) {
-        sh = qMin((y1 + h) - y, deviceRect.height() - sy);
+        const int srcY = toPatternLocal(dstY, patternRect.y(), patternRect.height());
+        const int height = qMin(patternRect.height() - srcY + patternRect.y(), dstRowsRemaining);
 
-        int x = x1;
+        int dstX = fillRect.x();
+        while (dstX <= fillRect.right()) {
+            const int dstColumnsRemaining = fillRect.right() - dstX + 1;
 
-        if (x >= 0) {
-            sx = x % deviceRect.width();
-        } else {
-            sx = deviceRect.width() - (((-x - 1) % deviceRect.width()) + 1);
+            const int srcX = toPatternLocal(dstX, patternRect.x(), patternRect.width());
+            const int width = qMin(patternRect.width() - srcX  + patternRect.x(), dstColumnsRemaining);
+
+            bitBlt(dstX, dstY, device, srcX, srcY, width, height);
+
+            dstX += width;
         }
-
-        while (x < x1 + w) {
-            sw = qMin((x1 + w) - x, deviceRect.width() - sx);
-
-            bitBlt(x, y, device, sx, sy, sw, sh);
-            x += sw; sx = 0;
-        }
-
-        y += sh; sy = 0;
+        dstY += height;
     }
 
     addDirtyRect(QRect(x1, y1, w, h));

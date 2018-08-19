@@ -195,41 +195,62 @@ QImage KoAlphaColorSpaceImpl<_CSTrait>::convertToQImage(const quint8 *data, qint
 
 template <class _CSTrait>
 void KoAlphaColorSpaceImpl<_CSTrait>::toLabA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
-    quint16* lab = reinterpret_cast<quint16*>(dst);
+    const channels_type* srcPtr = _CSTrait::nativeArray(src);
+    quint16* dstPtr = reinterpret_cast<quint16*>(dst);
+
     while (nPixels--) {
-        lab[3] = _CSTrait::nativeArray(src)[0];
-        src++;
-        lab += 4;
+        dstPtr[0] = KoColorSpaceMaths<channels_type, quint16>::scaleToA(srcPtr[0]);
+        dstPtr[1] = UINT16_MAX / 2;
+        dstPtr[2] = UINT16_MAX / 2;
+        dstPtr[3] = UINT16_MAX;
+
+        srcPtr++;
+        dstPtr += 4;
     }
 }
 
 template <class _CSTrait>
 void KoAlphaColorSpaceImpl<_CSTrait>::fromLabA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
-    const quint16* lab = reinterpret_cast<const quint16*>(src);
+    const quint16* srcPtr = reinterpret_cast<const quint16*>(src);
+    channels_type* dstPtr = _CSTrait::nativeArray(dst);
+
     while (nPixels--) {
-        _CSTrait::nativeArray(dst)[0] = lab[3];
-        dst++;
-        lab += 4;
+        dstPtr[0] = KoColorSpaceMaths<quint16, channels_type>::scaleToA(UINT16_MULT(srcPtr[0], srcPtr[3]));
+
+        dstPtr++;
+        srcPtr += 4;
     }
 }
 
 template <class _CSTrait>
 void KoAlphaColorSpaceImpl<_CSTrait>::toRgbA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
-    quint16* rgb = reinterpret_cast<quint16*>(dst);
+    const channels_type* srcPtr = _CSTrait::nativeArray(src);
+    quint16* dstPtr = reinterpret_cast<quint16*>(dst);
+
     while (nPixels--) {
-        rgb[3] = _CSTrait::nativeArray(src)[0];
-        src++;
-        rgb += 4;
+        const quint16 gray = KoColorSpaceMaths<channels_type, quint16>::scaleToA(srcPtr[0]);
+
+        dstPtr[0] = gray;
+        dstPtr[1] = gray;
+        dstPtr[2] = gray;
+        dstPtr[3] = UINT16_MAX;
+
+        srcPtr++;
+        dstPtr += 4;
     }
 }
 
 template <class _CSTrait>
 void KoAlphaColorSpaceImpl<_CSTrait>::fromRgbA16(const quint8 *src, quint8 *dst, quint32 nPixels) const {
-    const quint16* rgb = reinterpret_cast<const quint16*>(src);
+    const quint16* srcPtr = reinterpret_cast<const quint16*>(src);
+    channels_type* dstPtr = _CSTrait::nativeArray(dst);
+
     while (nPixels--) {
-        _CSTrait::nativeArray(dst)[0] = rgb[3];
-        dst++;
-        rgb += 4;
+        // WARNING: we consider red channel only!
+        dstPtr[0] = KoColorSpaceMaths<quint16, channels_type>::scaleToA(UINT16_MULT(srcPtr[0], srcPtr[3]));
+
+        dstPtr++;
+        srcPtr += 4;
     }
 }
 
@@ -262,6 +283,9 @@ template <class _CSTrait>
 QList<KoColorConversionTransformationFactory *> KoAlphaColorSpaceFactoryImpl<_CSTrait>::colorConversionLinks() const
 {
     QList<KoColorConversionTransformationFactory*> factories;
+
+    factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
+    factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc");
 
     factories << new KoColorConversionFromAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");
     factories << new KoColorConversionToAlphaTransformationFactoryImpl<channels_type>(LABAColorModelID.id(), Integer16BitsColorDepthID.id(), "default");

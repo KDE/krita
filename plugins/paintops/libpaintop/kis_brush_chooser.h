@@ -68,7 +68,7 @@ private Q_SLOTS:
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResource *);
-    void update(KoResource *);
+    void updateBrushTip(KoResource *, bool isChangingBrushPresets = false);
 
 Q_SIGNALS:
 

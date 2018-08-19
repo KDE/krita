@@ -23,6 +23,7 @@
 
 #include "kis_layer_style_filter.h"
 #include <kritaimage_export.h>
+#include "kis_cached_paint_device.h"
 
 struct psd_layer_effects_overlay_base;
 
@@ -39,6 +40,8 @@ public:
 public:
     KisLsOverlayFilter(Mode mode);
 
+    KisLayerStyleFilter* clone() const override;
+
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
                          const QRect &applyRect,
@@ -49,6 +52,8 @@ public:
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
 
 private:
+    KisLsOverlayFilter(const KisLsOverlayFilter &rhs);
+
     const psd_layer_effects_overlay_base* getOverlayStruct(KisPSDLayerStyleSP style) const;
 
     void applyOverlay(KisPaintDeviceSP srcDevice,
@@ -59,6 +64,7 @@ private:
 
 private:
     Mode m_mode;
+    mutable KisCachedPaintDevice m_cachedDevices;
 };
 
 #endif

@@ -162,11 +162,11 @@ static QPoint mousePosition()
 
 QWindowsWinTab32DLL QWindowsTabletSupport::m_winTab32DLL;
 
-void KisTabletSupportWin::init()
+bool KisTabletSupportWin::init()
 {
     if (!QWindowsTabletSupport::m_winTab32DLL.init()) {
         qWarning() << "Failed to initialize Wintab";
-        return;
+        return false;
     }
 
     QTAB = QWindowsTabletSupport::create();
@@ -177,6 +177,7 @@ void KisTabletSupportWin::init()
                          delete QTAB;
                          QTAB = QWindowsTabletSupport::create();
                      });
+    return true;
 }
 
 

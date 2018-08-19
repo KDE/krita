@@ -132,12 +132,19 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     QPainterPath path;
 
+    OutlineMode forcedMode = mode;
+
+    if (!forcedMode.isVisible) {
+        forcedMode.isVisible = true;
+        forcedMode.forceCircle = true;
+    }
+
     // clone tool should always show an outline
-    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, mode, 1.0, true);
+    path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, 1.0);
 
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
@@ -167,7 +174,6 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 #include <brushengine/kis_uniform_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings_update_proxy.h"
-#include "kis_duplicateop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
 
 
@@ -187,14 +193,14 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.duplicate_healing);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.duplicate_healing = prop->value().toBool();
                     option.writeOptionSetting(prop->settings().data());
@@ -214,14 +220,14 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.duplicate_move_source_point);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    DuplicateOption option;
+                    KisDuplicateOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.duplicate_move_source_point = prop->value().toBool();
                     option.writeOptionSetting(prop->settings().data());

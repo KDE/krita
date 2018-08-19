@@ -103,7 +103,10 @@ bool Store::containsEntry(const QString & uri, const QString & entryName) const
 
 bool Store::containsEntry(const KisMetaData::Schema* schema, const QString & entryName) const
 {
-    return containsEntry(schema->generateQualifiedName(entryName));
+    if (schema) {
+        return containsEntry(schema->generateQualifiedName(entryName));
+    }
+    return false;
 }
 
 Entry& Store::getEntry(const QString & entryKey)

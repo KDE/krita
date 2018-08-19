@@ -25,6 +25,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QToolButton>
+#include <QButtonGroup>
 
 #include <klocalizedstring.h>
 

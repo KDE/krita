@@ -31,7 +31,7 @@
 void zoomhandler_test::testConstruction()
 {
 
-    KoZoomHandler * zoomHandler = new KoZoomHandler();
+    QScopedPointer<KoZoomHandler> zoomHandler(new KoZoomHandler());
 
     QCOMPARE( zoomHandler->zoomFactorX(), 1. );
     QCOMPARE( zoomHandler->zoomFactorY(), 1. );
@@ -41,7 +41,6 @@ void zoomhandler_test::testConstruction()
     QCOMPARE( ( int )INCH_TO_POINT( zoomHandler->zoomedResolutionY() ), ( int )KoDpi::dpiY() );
     QCOMPARE( zoomHandler->zoomMode(), KoZoomMode::ZOOM_CONSTANT );
     QCOMPARE( zoomHandler->zoomInPercent(), 100 );
-    delete zoomHandler;
 }
 
 void zoomhandler_test::testApi()
@@ -78,8 +77,6 @@ void zoomhandler_test::testApi()
 
     zoomHandler.setZoomMode( KoZoomMode::ZOOM_CONSTANT );
     QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_CONSTANT );
-    zoomHandler.setZoomMode( KoZoomMode::ZOOM_WIDTH );
-    QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_WIDTH );
     zoomHandler.setZoomMode( KoZoomMode::ZOOM_PAGE );
     QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_PAGE );
 

@@ -28,7 +28,7 @@
 #include <KoFileDialog.h>
 #include "KisImportExportManager.h"
 #include "QDesktopServices"
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include <kis_paintop_preset_icon_library.h>
 
 
@@ -105,7 +105,7 @@ void KisPresetSaveWidget::loadImageFromFile()
 {
     // create a dialog to retrieve an image file.
     KoFileDialog dialog(0, KoFileDialog::OpenFile, "OpenDocument");
-    dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Import));
+    dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     QString filename = dialog.filename(); // the filename() returns the entire path & file name, not just the file name
 
@@ -237,8 +237,10 @@ void KisPresetSaveWidget::savePreset()
         if (curPreset->image().isNull()) {
             curPreset->setImage(brushPresetThumbnailWidget->cutoutOverlay());
         }
+
+        // we should not load() the brush right after saving because it will reset all our saved
+        // eraser size and opacity values
         curPreset->save();
-        curPreset->load();
     }
 
 

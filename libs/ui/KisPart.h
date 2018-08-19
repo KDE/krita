@@ -27,8 +27,10 @@
 #include <QList>
 #include <QPointer>
 #include <QUrl>
+#include <QUuid>
 
 #include "kritaui_export.h"
+#include <KConfigCore/kconfiggroup.h>
 #include <KoConfig.h>
 #include <KisMainWindow.h>
 
@@ -41,6 +43,7 @@ class KisView;
 class KisDocument;
 class KisIdleWatcher;
 class KisAnimationCachePopulator;
+class KisSessionResource;
 
 /**
  * KisPart is the Great Deku Tree of Krita.
@@ -105,10 +108,11 @@ public:
 
     // ----------------- MainWindow management -----------------
 
+
     /**
      * Create a new main window.
      */
-    KisMainWindow *createMainWindow();
+    KisMainWindow *createMainWindow(QUuid id = QUuid());
 
     /**
      * Removes a main window from the list of managed windows.
@@ -134,16 +138,7 @@ public:
      */
     KisMainWindow *currentMainwindow() const;
 
-    /**
-     * Add a given action to the list of dynamically defined actions. On creating
-     * a mainwindow, all these actions will be added to the script manager.
-     */
-    void addScriptAction(KisAction *);
-
-    /**
-     * Load actions for currently active main window into KisActionRegistry.
-     */
-    void loadActions();
+    KisMainWindow *windowById(QUuid id) const;
 
     /**
      * @return the application-wide KisIdleWatcher.
@@ -154,7 +149,6 @@ public:
      * @return the application-wide AnimationCachePopulator.
      */
     KisAnimationCachePopulator *cachePopulator() const;
-
 
 public Q_SLOTS:
 
@@ -241,6 +235,30 @@ public:
      */
     int viewCount(KisDocument *doc) const;
 
+    //------------------ Session management ------------------
+
+    void showSessionManager();
+
+    void startBlankSession();
+
+    /**
+     * Restores a saved session by name
+     */
+    bool restoreSession(const QString &sessionName);
+
+    void setCurrentSession(KisSessionResource *session);
+
+    /**
+     * Attempts to save the session and close all windows.
+     * This may involve asking the user to save open files.
+     * @return false, if closing was cancelled by the user
+     */
+    bool closeSession(bool keepWindows = false);
+
+    /**
+     * Are we in the process of closing the application through closeSession().
+     */
+    bool closingSession() const;
 
 private Q_SLOTS:
 
@@ -252,7 +270,6 @@ private:
 
     class Private;
     Private *const d;
-
 
 };
 

@@ -29,7 +29,10 @@ public:
     ~TimelineFramesItemDelegate() override;
 
     static void paintActiveFrameSelector(QPainter *painter, const QRect &rc, bool isCurrentFrame);
-    static void paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc);
+
+    /// the opacity keyframe
+    void paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
+
     void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
     void drawFocus(QPainter *painter,
                    const QStyleOptionViewItem &option,

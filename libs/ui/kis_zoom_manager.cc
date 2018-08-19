@@ -24,7 +24,6 @@
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
-#include <ktoggleaction.h>
 #include <kis_debug.h>
 
 #include <KisView.h>
@@ -33,7 +32,6 @@
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoRulerController.h>
 #include <KoUnit.h>
 #include <KoDpi.h>
 
@@ -55,8 +53,8 @@
 class KisZoomController : public KoZoomController
 {
 public:
-    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)
-        : KoZoomController(co, zh, actionCollection, specialButtons, parent),
+    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, QObject *parent)
+        : KoZoomController(co, zh, actionCollection, parent),
           m_converter(zh)
     {
     }
@@ -102,7 +100,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
 
-    m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode, this);
+    m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
 

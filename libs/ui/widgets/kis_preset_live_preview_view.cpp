@@ -76,8 +76,8 @@ void KisPresetLivePreviewView::updateStroke()
 
     // do not paint a stroke if we are any of these engines (they have some issue currently)
     if (m_currentPreset->paintOp().id() == "roundmarker" ||
-        m_currentPreset->paintOp().id() == "experimentbrush" ||
-        m_currentPreset->paintOp().id() == "duplicate") {
+            m_currentPreset->paintOp().id() == "experimentbrush" ||
+            m_currentPreset->paintOp().id() == "duplicate") {
 
         return;
     }
@@ -113,8 +113,8 @@ void KisPresetLivePreviewView::paintBackground()
 
 
     if (m_currentPreset->paintOp().id() == "colorsmudge" ||
-        m_currentPreset->paintOp().id() == "deformbrush" ||
-        m_currentPreset->paintOp().id() == "filter") {
+            m_currentPreset->paintOp().id() == "deformbrush" ||
+            m_currentPreset->paintOp().id() == "filter") {
 
         // easier to see deformations and smudging with alternating stripes in the background
         // paint the whole background with alternating stripes
@@ -198,7 +198,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     double textureScale = settings->getDouble("Texture/Pattern/Scale");
     if ( textureOffsetX*textureScale> maxTextureSize || textureOffsetY*textureScale > maxTextureSize) {
         int maxSize = qMax(textureOffsetX, textureOffsetY);
-        double result = maxTextureSize/maxSize;
+        double result = qreal(maxTextureSize) / maxSize;
         settings->setProperty("Texture/Pattern/Scale", result);
     }
     if (m_currentPreset->paintOp().id() == "spraybrush") {
@@ -209,44 +209,46 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         if (!brushDefinition.isEmpty()) {
             d.setContent(brushDefinition, false);
             element = d.firstChildElement("Brush");
-        }
-        KisBrushSP brush = KisBrush::fromXML(element);
-        qreal width = brush->image().width();
-        qreal scale = brush->scale();
-        qreal diameterToBrushRatio = 1.0;
-        qreal diameter = settings->getInt("Spray/diameter");
-        //hack, 1000 being the maximum possible brushsize.
-        if (brush->filename().endsWith(".svg")) {
-            diameterToBrushRatio = diameter/(1000.0*scale);
-            scale = 25.0/1000.0;
-        } else {
-            if (width*scale>25.0) {
-                diameterToBrushRatio = diameter/(width*scale);
-                scale = 25.0/width;
-            }
-        }
-        settings->setProperty("Spray/diameter", int(25.0*diameterToBrushRatio));
 
-        brush->setScale(scale);
-        d.clear();
-        element = d.createElement("Brush");
-        brush->toXML(d, element);
-        d.appendChild(element);
-        settings->setProperty("brush_definition", d.toString());
+            KisBrushSP brush = KisBrush::fromXML(element);
+
+            qreal width = brush->image().width();
+            qreal scale = brush->scale();
+            qreal diameterToBrushRatio = 1.0;
+            qreal diameter = settings->getInt("Spray/diameter");
+            //hack, 1000 being the maximum possible brushsize.
+            if (brush->filename().endsWith(".svg")) {
+                diameterToBrushRatio = diameter/(1000.0*scale);
+                scale = 25.0 / 1000.0;
+            } else {
+                if (width * scale > 25.0) {
+                    diameterToBrushRatio = diameter / (width * scale);
+                    scale = 25.0 / width;
+                }
+            }
+            settings->setProperty("Spray/diameter", int(25.0 * diameterToBrushRatio));
+
+            brush->setScale(scale);
+            d.clear();
+            element = d.createElement("Brush");
+            brush->toXML(d, element);
+            d.appendChild(element);
+            settings->setProperty("brush_definition", d.toString());
+        }
     }
     proxy_preset->setSettings(settings);
 
 
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(m_image,
-                                 m_layer);
+            new KisResourcesSnapshot(m_image,
+                                     m_layer);
 
     resources->setBrush(proxy_preset);
     resources->setFGColorOverride(m_paintColor);
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 
     KisStrokeStrategy *stroke =
-        new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("temp_stroke"));
+            new FreehandStrokeStrategy(resources, strokeInfo, kundo2_noi18n("temp_stroke"));
 
     KisStrokeId strokeId = m_image->startStroke(stroke);
 
@@ -258,8 +260,8 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
     // paint the stroke. The sketchbrush gets a different shape than the others to show how it works
     if (m_currentPreset->paintOp().id() == "sketchbrush"
-         || m_currentPreset->paintOp().id() == "curvebrush"
-         || m_currentPreset->paintOp().id() == "particlebrush") {
+            || m_currentPreset->paintOp().id() == "curvebrush"
+            || m_currentPreset->paintOp().id() == "particlebrush") {
         qreal startX = m_canvasCenterPoint.x() - (this->width()*0.4);
         qreal endX   = m_canvasCenterPoint.x() + (this->width()*0.4);
         qreal middle = m_canvasCenterPoint.y();
@@ -287,12 +289,12 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
             m_image->addJob(strokeId,
                             new FreehandStrokeStrategy::Data(0,
-                                        pointOne,
-                                QPointF(pointOne.pos().x(),
-                                        handleY),
-                                QPointF(pointTwo.pos().x(),
-                                        handleY),
-                                        pointTwo));
+                                                             pointOne,
+                                                             QPointF(pointOne.pos().x(),
+                                                                     handleY),
+                                                             QPointF(pointTwo.pos().x(),
+                                                                     handleY),
+                                                             pointTwo));
             m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
         }
 
@@ -310,13 +312,13 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
         m_curvePointPI2.setPressure(1.0);
 
         m_image->addJob(strokeId,
-            new FreehandStrokeStrategy::Data(0,
-                                             m_curvePointPI1,
-                                             QPointF(m_canvasCenterPoint.x(),
-                                                     m_canvasCenterPoint.y()-this->height()),
-                                             QPointF(m_canvasCenterPoint.x(),
-                                                     m_canvasCenterPoint.y()+this->height()),
-                                             m_curvePointPI2));
+                        new FreehandStrokeStrategy::Data(0,
+                                                         m_curvePointPI1,
+                                                         QPointF(m_canvasCenterPoint.x(),
+                                                                 m_canvasCenterPoint.y()-this->height()),
+                                                         QPointF(m_canvasCenterPoint.x(),
+                                                                 m_canvasCenterPoint.y()+this->height()),
+                                                         m_curvePointPI2));
         m_image->addJob(strokeId, new FreehandStrokeStrategy::UpdateData(true));
     }
     m_image->endStroke(strokeId);

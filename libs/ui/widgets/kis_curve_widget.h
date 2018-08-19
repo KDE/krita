@@ -137,9 +137,10 @@ public:
 
     /**
      * Connect/disconnect external spinboxes to the curve
-     * @min/@max - is the range for their values
+     * @inMin/@inMax - is the range for input values
+     * @outMin/@outMax - is the range for output values
      */
-    void setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max);
+    void setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, int inMax, int outMin, int outMax);
     void dropInOutControls();
 
     /**

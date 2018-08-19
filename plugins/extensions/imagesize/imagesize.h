@@ -22,9 +22,9 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class ImageSize : public KisViewPlugin
+class ImageSize : public KisActionPlugin
 {
     Q_OBJECT
 public:

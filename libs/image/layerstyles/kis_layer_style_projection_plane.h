@@ -32,6 +32,8 @@ class KRITAIMAGE_EXPORT KisLayerStyleProjectionPlane : public KisAbstractProject
 {
 public:
     KisLayerStyleProjectionPlane(KisLayer *sourceLayer);
+    KisLayerStyleProjectionPlane(const KisLayerStyleProjectionPlane &rhs, KisLayer *sourceLayer, KisPSDLayerStyleSP clonedStyle);
+
     ~KisLayerStyleProjectionPlane() override;
 
     QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
@@ -57,5 +59,8 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };
+
+typedef QSharedPointer<KisLayerStyleProjectionPlane> KisLayerStyleProjectionPlaneSP;
+typedef QWeakPointer<KisLayerStyleProjectionPlane> KisLayerStyleProjectionPlaneWSP;
 
 #endif /* __KIS_LAYER_STYLE_PROJECTION_PLANE_H */

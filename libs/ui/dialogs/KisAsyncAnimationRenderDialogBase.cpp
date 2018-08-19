@@ -66,7 +66,7 @@ int calculateNumberMemoryAllowedClones(KisImageSP image)
     const qint64 allowedMemory = 0.8 * stats.tilesHardLimit - stats.realMemorySize;
     const qint64 cloneSize = stats.projectionsSize;
 
-    return allowedMemory > 0 ? allowedMemory / cloneSize : 0;
+    return cloneSize > 0 ? allowedMemory / cloneSize : 0;
 }
 
 }
@@ -97,6 +97,7 @@ struct KisAsyncAnimationRenderDialogBase::Private
     QList<int> framesInProgress;
     int dirtyFramesCount = 0;
     Result result = RenderComplete;
+    QRegion regionOfInterest;
 
     int numDirtyFramesLeft() const {
         return stillDirtyFrames.size() + framesInProgress.size();
@@ -116,6 +117,30 @@ KisAsyncAnimationRenderDialogBase::~KisAsyncAnimationRenderDialogBase()
 KisAsyncAnimationRenderDialogBase::Result
 KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 {
+    {
+        /**
+         * Since this method can be called from the places where no
+         * view manager is available, we need this manually crafted
+         * ugly construction to "try-lock-cance" the image.
+         */
+
+        bool imageIsIdle = true;
+
+        if (viewManager) {
+            imageIsIdle = viewManager->blockUntilOperationsFinished(m_d->image);
+        } else {
+            imageIsIdle = false;
+            if (m_d->image->tryBarrierLock(true)) {
+                m_d->image->unlock();
+                imageIsIdle = true;
+            }
+        }
+
+        if (!imageIsIdle) {
+            return RenderCancelled;
+        }
+    }
+
     m_d->stillDirtyFrames = calcDirtyFrames();
     m_d->framesInProgress.clear();
     m_d->result = RenderComplete;
@@ -135,7 +160,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     m_d->processingTime.start();
 
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     const int maxThreads = cfg.maxNumberOfThreads();
     const int numAllowedWorker = 1 + calculateNumberMemoryAllowedClones(m_d->image);
@@ -199,6 +224,16 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
     return m_d->result;
 }
 
+void KisAsyncAnimationRenderDialogBase::setRegionOfInterest(const QRegion &roi)
+{
+    m_d->regionOfInterest = roi;
+}
+
+QRegion KisAsyncAnimationRenderDialogBase::regionOfInterest() const
+{
+    return m_d->regionOfInterest;
+}
+
 void KisAsyncAnimationRenderDialogBase::slotFrameCompleted(int frame)
 {
     Q_UNUSED(frame);
@@ -245,7 +280,9 @@ void KisAsyncAnimationRenderDialogBase::tryInitiateFrameRegeneration()
         for (auto &pair : m_d->asyncRenderers) {
             if (!pair.renderer->isActive()) {
                 const int currentDirtyFrame = m_d->stillDirtyFrames.takeFirst();
-                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame);
+
+                initializeRendererForFrame(pair.renderer.get(), pair.image, currentDirtyFrame);
+                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame, m_d->regionOfInterest);
                 hadWorkOnPreviousCycle = true;
                 m_d->framesInProgress.append(currentDirtyFrame);
                 break;

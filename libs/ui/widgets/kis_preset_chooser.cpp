@@ -42,10 +42,9 @@
 
 #include <brushengine/kis_paintop_settings.h>
 #include <brushengine/kis_paintop_preset.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"
-#include "kis_config.h"
 #include "kis_config_notifier.h"
 #include <kis_icon.h>
 
@@ -204,7 +203,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
     layout->setMargin(0);
-    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer(false);
+    KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
 
     m_adapter = QSharedPointer<KoAbstractResourceServerAdapter>(new KisPresetProxyAdapter(rserver));
 
@@ -217,7 +216,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_chooser->setSynced(true);
     layout->addWidget(m_chooser);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_chooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
                                          cfg.kineticScrollingSensitivity(),
                                          cfg.kineticScrollingScrollbar());
@@ -259,7 +258,7 @@ void KisPresetChooser::resizeEvent(QResizeEvent* event)
 
 void KisPresetChooser::notifyConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_delegate->setUseDirtyPresets(cfg.useDirtyPresets());
     setIconSize(cfg.presetIconSize());
 
@@ -357,6 +356,6 @@ int KisPresetChooser::iconSize()
 void KisPresetChooser::saveIconSize()
 {
     // save icon size
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setPresetIconSize(iconSize());
 }

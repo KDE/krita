@@ -18,15 +18,8 @@
 
 #include "kis_color_picker_stroke_strategy.h"
 
-#include <KoColor.h>
-
-
-#include "kis_debug.h"
 #include "kis_tool_utils.h"
-#include <kis_wrapped_rect.h>
-#include "kis_default_bounds.h"
 #include "kis_paint_device.h"
-
 
 struct KisColorPickerStrokeStrategy::Private
 {
@@ -34,6 +27,7 @@ struct KisColorPickerStrokeStrategy::Private
 
     bool shouldSkipWork;
     int radius = 1;
+    int blend = 100;
 };
 
 KisColorPickerStrokeStrategy::KisColorPickerStrokeStrategy(int lod)
@@ -46,6 +40,7 @@ KisColorPickerStrokeStrategy::KisColorPickerStrokeStrategy(int lod)
     config.load();
 
     m_d->radius = qMax(1, qRound(config.radius * KisLodTransform::lodToScale(lod)));
+    m_d->blend = config.blend;
 }
 
 KisColorPickerStrokeStrategy::~KisColorPickerStrokeStrategy()
@@ -60,7 +55,8 @@ void KisColorPickerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     KIS_ASSERT_RECOVER_RETURN(d);
 
     KoColor color;
-    bool result = KisToolUtils::pick(d->dev, d->pt, &color, m_d->radius);
+    KoColor previous = d->currentColor;
+    bool result = KisToolUtils::pickColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend);
     Q_UNUSED(result);
 
     emit sigColorUpdated(color);
@@ -76,4 +72,3 @@ KisStrokeStrategy* KisColorPickerStrokeStrategy::createLodClone(int levelOfDetai
             Qt::DirectConnection);
     return lodStrategy;
 }
-

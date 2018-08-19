@@ -30,7 +30,7 @@ KisHairyPaintOpSettings::KisHairyPaintOpSettings()
 {
 }
 
-QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, OutlineMode mode)
+QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode)
 {
     return brushOutlineImpl(info, mode, getDouble(HAIRY_BRISTLE_SCALE));
 }

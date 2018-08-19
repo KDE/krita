@@ -32,13 +32,13 @@ class Palette_Docker(DockWidget):
     # Init the docker
 
     def __init__(self):
-        super().__init__()
+        super(Palette_Docker, self).__init__()
         # make base-widget and layout
         widget = QWidget()
         layout = QVBoxLayout()
         buttonLayout = QHBoxLayout()
         widget.setLayout(layout)
-        self.setWindowTitle("Python Palette Docker")
+        self.setWindowTitle(i18n("Python Palette Docker"))
 
         # Make a combobox and add palettes
         self.cmb_palettes = QComboBox()
@@ -47,7 +47,11 @@ class Palette_Docker(DockWidget):
             self.cmb_palettes.addItem(palette_name)
             self.cmb_palettes.model().sort(0)
 
-        self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
+        if len(allPalettes.keys()) > 0:
+            self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
+        else:
+            self.currentPalette = None
+
         self.cmb_palettes.currentTextChanged.connect(self.slot_paletteChanged)
         layout.addWidget(self.cmb_palettes)  # add combobox to the layout
         self.paletteView = PaletteView()
@@ -58,15 +62,20 @@ class Palette_Docker(DockWidget):
         self.colorComboBox = QComboBox()
         self.colorList = list()
         buttonLayout.addWidget(self.colorComboBox)
+        self.bnSetColor = QToolButton()
+        self.bnSetColor.setText(i18n("Set"))
+        self.bnSetColor.clicked.connect(self.slot_get_color_from_combobox)
+        buttonLayout.addWidget(self.bnSetColor)
+        
         self.addEntry = QAction(self)
-        self.addEntry.setIconText("+")
+        self.addEntry.setIconText(i18n("+"))
         self.addEntry.triggered.connect(self.slot_add_entry)
         self.addGroup = QAction(self)
         self.addGroup.triggered.connect(self.slot_add_group)
-        self.addGroup.setText("Add Group")
+        self.addGroup.setText(i18n("Add Group"))
         self.addGroup.setIconText(str("\U0001F4C2"))
         self.removeEntry = QAction(self)
-        self.removeEntry.setText("Remove Entry")
+        self.removeEntry.setText(i18n("Remove Entry"))
         self.removeEntry.setIconText("-")
         self.removeEntry.triggered.connect(self.slot_remove_entry)
         addEntryButton = QToolButton()
@@ -82,19 +91,19 @@ class Palette_Docker(DockWidget):
         # QActions
         self.extra = QToolButton()
         self.editPaletteData = QAction(self)
-        self.editPaletteData.setText("Edit Palette Settings")
+        self.editPaletteData.setText(i18n("Edit Palette Settings"))
         self.editPaletteData.triggered.connect(self.slot_edit_palette_data)
         self.extra.setDefaultAction(self.editPaletteData)
         buttonLayout.addWidget(self.extra)
         self.actionMenu = QMenu()
         self.exportToGimp = QAction(self)
-        self.exportToGimp.setText("Export as GIMP palette file.")
+        self.exportToGimp.setText(i18n("Export as GIMP Palette File"))
         self.exportToGimp.triggered.connect(self.slot_export_to_gimp_palette)
         self.exportToInkscape = QAction(self)
-        self.exportToInkscape.setText("Export as Inkscape SVG with swatches.")
+        self.exportToInkscape.setText(i18n("Export as Inkscape SVG with Swatches"))
         self.exportToInkscape.triggered.connect(self.slot_export_to_inkscape_svg)
         self.sortColors = QAction(self)
-        self.sortColors.setText("Sort colors")
+        self.sortColors.setText(i18n("Sort Colors"))
         self.sortColors.triggered.connect(self.slot_sort_colors)
         self.actionMenu.addAction(self.editPaletteData)
         self.actionMenu.addAction(self.exportToGimp)
@@ -108,18 +117,19 @@ class Palette_Docker(DockWidget):
         self.setWidget(widget)        # add widget to the docker
 
     def slot_paletteChanged(self, name):
-        self.currentPalette = Palette(Application.resources("palette")[name])
-        self.paletteView.setPalette(self.currentPalette)
-        self.slot_fill_combobox()
+        allPalettes = Application.resources("palette")
+        if len(allPalettes) > 0 and name in allPalettes:
+            self.currentPalette = Palette(Application.resources("palette")[name])
+            self.paletteView.setPalette(self.currentPalette)
+            self.slot_fill_combobox()
 
-    @pyqtSlot('KoColorSetEntry')
+    @pyqtSlot('PaletteEntry')
     def slot_swatchSelected(self, entry):
-        print("entry " + entry.name)
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
-                name = entry.name
+                name = entry.name()
                 if len(entry.id) > 0:
-                    name = entry.id + " - " + entry.name
+                    name = entry.id() + " - " + entry.name()
                 if len(name) > 0:
                     if name in self.colorList:
                         self.colorComboBox.setCurrentIndex(self.colorList.index(name))
@@ -136,12 +146,12 @@ class Palette_Docker(DockWidget):
             pass
         palette = self.currentPalette
         self.colorComboBox.clear()
-        self.colorList.clear()
+        self.colorList = list()
         for i in range(palette.colorsCountTotal()):
             entry = palette.colorSetEntryByIndex(i)
             color = palette.colorForEntry(entry).colorForCanvas(self.canvas())
             colorSquare = QPixmap(12, 12)
-            if entry.spotColor is True:
+            if entry.spotColor() is True:
                 img = colorSquare.toImage()
                 circlePainter = QPainter()
                 img.fill(self.colorComboBox.palette().color(QPalette.Base))
@@ -155,9 +165,9 @@ class Palette_Docker(DockWidget):
                 colorSquare = QPixmap.fromImage(img)
             else:
                 colorSquare.fill(color)
-            name = entry.name
-            if len(entry.id) > 0:
-                name = entry.id + " - " + entry.name
+            name = entry.name()
+            if len(entry.id()) > 0:
+                name = entry.id() + " - " + entry.name()
             self.colorList.append(name)
             self.colorComboBox.addItem(QIcon(colorSquare), name)
         self.colorComboBox.setEditable(True)
@@ -165,7 +175,7 @@ class Palette_Docker(DockWidget):
         self.colorComboBox.completer().setCompletionMode(QCompleter.PopupCompletion)
         self.colorComboBox.completer().setCaseSensitivity(False)
         self.colorComboBox.completer().setFilterMode(Qt.MatchContains)
-        self.colorComboBox.currentIndexChanged.connect(self.slot_get_color_from_combobox)
+        
 
     def slot_get_color_from_combobox(self):
         if self.currentPalette is not None:
@@ -175,7 +185,7 @@ class Palette_Docker(DockWidget):
     def slot_add_entry(self):
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
-                color = self.canvas().view().foreGroundColor()
+                color = self.canvas().view().foregroundColor()
                 success = self.paletteView.addEntryWithDialog(color)
                 if success is True:
                     self.slot_fill_combobox()
@@ -198,12 +208,12 @@ class Palette_Docker(DockWidget):
     def slot_edit_palette_data(self):
         dialog = QDialog(self)
         tabWidget = QTabWidget()
-        dialog.setWindowTitle("Edit Palette Data")
+        dialog.setWindowTitle(i18n("Edit Palette Data"))
         dialog.setLayout(QVBoxLayout())
         dialog.layout().addWidget(tabWidget)
         paletteWidget = QWidget()
         paletteWidget.setLayout(QVBoxLayout())
-        tabWidget.addTab(paletteWidget, "Palette Data")
+        tabWidget.addTab(paletteWidget, i18n("Palette Data"))
         paletteName = QLineEdit()
         paletteName.setText(self.cmb_palettes.currentText())
         paletteWidget.layout().addWidget(paletteName)
@@ -222,7 +232,6 @@ class Palette_Docker(DockWidget):
             Resource = Application.resources("palette")[self.cmb_palettes.currentText()]
             Resource.setName(paletteName.text())
             self.currentPalette = Palette(Resource)
-            print(paletteColumns.value())
             self.currentPalette.setColumnCount(paletteColumns.value())
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()
@@ -240,7 +249,14 @@ class Palette_Docker(DockWidget):
         self.paletteView.setPalette(colorSorter.palette())
 
     def canvasChanged(self, canvas):
-        pass
+        self.cmb_palettes.clear()
+        allPalettes = Application.resources("palette")
+        for palette_name in allPalettes:
+            self.cmb_palettes.addItem(palette_name)
+            self.cmb_palettes.model().sort(0)
+
+        if self.currentPalette == None and len(allPalettes.keys()) > 0:
+            self.currentPalette = Palette(allPalettes[list(allPalettes.keys())[0]])
 
 # Add docker to the application :)
 Application.addDockWidgetFactory(DockWidgetFactory("palette_docker", DockWidgetFactoryBase.DockRight, Palette_Docker))

@@ -47,7 +47,7 @@ void KisFileNameRequester::setStartDir(const QString &path)
     m_basePath = path;
 }
 
-void KisFileNameRequester::setConfiguratioName(const QString &name)
+void KisFileNameRequester::setConfigurationName(const QString &name)
 {
     m_name = name;
 }

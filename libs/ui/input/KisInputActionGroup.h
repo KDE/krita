@@ -38,7 +38,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KisInputActionGroupsMask)
  */
 struct KisInputActionGroupsMaskInterface
 {
-    virtual ~KisInputActionGroupsMaskInterface();;
+    virtual ~KisInputActionGroupsMaskInterface();
 
     /**
      * Return the mask of currently available input action groups

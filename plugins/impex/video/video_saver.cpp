@@ -154,11 +154,15 @@ private:
         QEventLoop loop;
         loop.connect(&watcher, SIGNAL(sigProcessingFinished()), SLOT(quit()));
         loop.connect(&ffmpegProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(quit()));
+        loop.connect(&ffmpegProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(quit()));
         loop.connect(&watcher, SIGNAL(sigProgressChanged(int)), &progress, SLOT(setValue(int)));
-        loop.exec();
 
-        // wait for some erroneous case
-        ffmpegProcess.waitForFinished(5000);
+        if (ffmpegProcess.state() != QProcess::NotRunning) {
+            loop.exec();
+
+            // wait for some erroneous case
+            ffmpegProcess.waitForFinished(5000);
+        }
 
         KisImageBuilder_Result retval = KisImageBuilder_RESULT_OK;
 
@@ -231,7 +235,11 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     const KisTimeRange fullRange = animation->fullClipRange();
     const int frameRate = configuration->getInt("framerate", animation->framerate());
 
-    const KisTimeRange clipRange(configuration->getInt("first_frame", fullRange.start()), configuration->getInt("last_frame", fullRange.end()));
+    const int sequenceNumberingOffset = configuration->getInt("sequence_start", 0);
+    const KisTimeRange clipRange(sequenceNumberingOffset + configuration->getInt("first_frame", fullRange.start()),
+                                 sequenceNumberingOffset + configuration->getInt("last_frame", fullRange.end())
+    );
+
     const bool includeAudio = configuration->getBool("include_audio", true);
 
     const int exportHeight = configuration->getInt("height", int(m_image->height()));
@@ -312,10 +320,6 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
              << "-start_number" << QString::number(clipRange.start())
              << "-i" << savedFilesMask;
 
-        // if we are exporting out at a different image size, we apply scaling filter
-        if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
-            args << "-vf" << exportDimensions;
-        }
 
 
         QFileInfo audioFileInfo = animation->audioChannelFileName();
@@ -333,8 +337,17 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
             args << "-i" << audioFileInfo.absoluteFilePath();
         }
 
+
+        // if we are exporting out at a different image size, we apply scaling filter
+        // export options HAVE to go after input options, so make sure this is after the audio import
+        if (m_image->height() != exportHeight || m_image->width() != exportWidth) {
+            args << "-vf" << exportDimensions;
+        }
+
+
         args << additionalOptionsList
              << "-y" << resultFile;
+
 
         result = m_runner->runFFMpeg(args, i18n("Encoding frames..."),
                                      framesDir.filePath("log_encode.log"),

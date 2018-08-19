@@ -48,7 +48,8 @@ void KisFastMathBenchmark::benchmarkLibCAtan2()
 
                 double y = j;
 
-                atan2(y, x);
+                double result = atan2(y, x);
+                Q_UNUSED(result);
             }
         }
     }

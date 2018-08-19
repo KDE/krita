@@ -526,7 +526,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.touchEndEvent(tevent);
         } else {
 #endif
-            d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
+            d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
             KisAbstractInputAction::setInputManager(this);
             retval = d->matcher.touchUpdateEvent(tevent);
 #ifdef Q_OS_OSX
@@ -584,9 +584,9 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
 bool KisInputManager::startTouch(bool &retval)
 {
-    d->touchHasBlockedPressEvents = KisConfig().disableTouchOnCanvas();
+    d->touchHasBlockedPressEvents = KisConfig(true).disableTouchOnCanvas();
     // Touch rejection: if touch is disabled on canvas, no need to block mouse press events
-    if (KisConfig().disableTouchOnCanvas()) {
+    if (KisConfig(true).disableTouchOnCanvas()) {
         d->eatOneMousePress();
     }
     if (d->tryHidePopupPalette()) {
@@ -609,9 +609,9 @@ void KisInputManager::slotCompressedMoveEvent()
 
         (void) d->handleCompressedTabletEvent(d->compressedMoveEvent.data());
         d->compressedMoveEvent.reset();
-        dbgKrita << "Compressed move event received.";
+        //dbgInput << "Compressed move event received.";
     } else {
-        dbgKrita << "Unexpected empty move event";
+        //dbgInput << "Unexpected empty move event";
     }
 }
 
@@ -636,6 +636,7 @@ void KisInputManager::slotAboutToChangeTool()
 
 void KisInputManager::slotToolChanged()
 {
+    if (!d->canvas) return;
     KoToolManager *toolManager = KoToolManager::instance();
     KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
     if (tool) {
@@ -682,6 +683,6 @@ void KisInputManager::profileChanged()
         }
     }
     else {
-        dbgKrita << "No Input Profile Found: canvas interaction will be impossible";
+        dbgInput << "No Input Profile Found: canvas interaction will be impossible";
     }
 }

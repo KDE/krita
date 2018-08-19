@@ -103,14 +103,14 @@ struct SvgParser::DeferredUseStore {
         if (id.isEmpty())
             return;
 
-        // qDebug() << "Checking id: " << id;
+        // debugFlake << "Checking id: " << id;
         auto i = std::partition(m_uses.begin(), m_uses.end(),
                                 [&](const El& e) -> bool {return e.m_key != id;});
 
         while (i != m_uses.end()) {
             const El& el = m_uses.back();
             if (m_parse->m_context.hasDefinition(el.m_key)) {
-                // qDebug() << "Found pending use for id: " << el.m_key;
+                // debugFlake << "Found pending use for id: " << el.m_key;
                 shape = m_parse->resolveUse(*(el.m_useElement), el.m_key);
                 if (shape) {
                     shapes.append(shape);
@@ -377,7 +377,7 @@ SvgGradientHelper* SvgParser::parseGradient(const KoXmlElement &e)
         }
         gradHelper.setGradient(g);
     } else {
-        qDebug() << "WARNING: Failed to parse gradient with tag" << e.tagName();
+        debugFlake << "WARNING: Failed to parse gradient with tag" << e.tagName();
     }
 
     // handle spread method
@@ -665,7 +665,7 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
 
     if (id.isEmpty()) return false;
 
-    KoSvgSymbol *svgSymbol = new KoSvgSymbol();
+    QScopedPointer<KoSvgSymbol> svgSymbol(new KoSvgSymbol());
 
     // ensure that the clip path is loaded in local coordinates system
     m_context.pushGraphicsContext(e, false);
@@ -674,24 +674,23 @@ bool SvgParser::parseSymbol(const KoXmlElement &e)
 
     QString title = e.firstChildElement("title").toElement().text();
 
-    KoShape *symbolShape = parseGroup(e);
+    QScopedPointer<KoShape> symbolShape(parseGroup(e));
 
     m_context.popGraphicsContext();
 
     if (!symbolShape) return false;
 
-    svgSymbol->shape = symbolShape;
+    svgSymbol->shape = symbolShape.take();
     svgSymbol->title = title;
     svgSymbol->id = id;
     if (title.isEmpty()) svgSymbol->title = id;
 
     if (svgSymbol->shape->boundingRect() == QRectF(0.0, 0.0, 0.0, 0.0)) {
         debugFlake << "Symbol" << id << "seems to be empty, discarding";
-        delete svgSymbol;
         return false;
     }
 
-    m_symbols << svgSymbol;
+    m_symbols << svgSymbol.take();
 
     return true;
 }
@@ -1259,12 +1258,11 @@ KoShape* SvgParser::parseUse(const KoXmlElement &e, DeferredUseStore* deferredUs
     const bool gotDef = m_context.hasDefinition(key);
     if (gotDef) {
         return resolveUse(e, key);
-    }
-    if (!gotDef && deferredUseStore) {
+    } else if (deferredUseStore) {
         deferredUseStore->add(&e, key);
         return 0;
     }
-    qDebug() << "WARNING: Did not find reference for svg 'use' element. Skipping. Id: "
+    debugFlake << "WARNING: Did not find reference for svg 'use' element. Skipping. Id: "
              << key;
     return 0;
 }

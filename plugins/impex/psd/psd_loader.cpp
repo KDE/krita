@@ -41,7 +41,7 @@
 
 #include <kis_asl_layer_style_serializer.h>
 #include <kis_psd_layer_style_resource.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 
 #include "psd.h"
 #include "psd_header.h"
@@ -131,7 +131,8 @@ KisImageBuilder_Result PSDLoader::decode(QIODevice *io)
     }
 
     // Creating the KisImage
-    QString name = dynamic_cast<QFile*>(io) ? dynamic_cast<QFile*>(io)->fileName() : "Imported";
+    QFile *file = dynamic_cast<QFile*>(io);
+    QString name = file ? file->fileName() : "Imported";
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, name);
     Q_CHECK_PTR(m_image);
     m_image->lock();

@@ -106,7 +106,9 @@ KisKeyframeSP KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &k
     ToolTransformArgs args;
     args.fromXML(keyframeNode);
 
-    int time = keyframeNode.attribute("time").toUInt();
+    int time = keyframeNode.attribute("time").toInt();
+    workaroundBrokenFrameTimeBug(&time);
+
     KisTransformArgsKeyframe *keyframe = new KisTransformArgsKeyframe(this, time, args);
 
     return toQShared(keyframe);

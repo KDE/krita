@@ -50,15 +50,21 @@
 
 #include <kis_color_manager.h>
 
-KisConfig::KisConfig()
+KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
+    , m_readOnly(readOnly)
 {
+    if (!readOnly) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+    }
 }
 
 KisConfig::~KisConfig()
 {
+    if (m_readOnly) return;
+
     if (qApp->thread() != QThread::currentThread()) {
-        //dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Called from:" << kisBacktrace();
         return;
     }
 
@@ -208,6 +214,16 @@ void KisConfig::defImageHeight(qint32 height) const
 void KisConfig::defImageResolution(qreal res) const
 {
     m_cfg.writeEntry("imageResolutionDef", res*72.0);
+}
+
+int KisConfig::preferredVectorImportResolutionPPI(bool defaultValue) const
+{
+    return defaultValue ? 100.0 : m_cfg.readEntry("preferredVectorImportResolution", 100.0);
+}
+
+void KisConfig::setPreferredVectorImportResolutionPPI(int value) const
+{
+    m_cfg.writeEntry("preferredVectorImportResolution", value);
 }
 
 void cleanOldCursorStyleKeys(KConfigGroup &cfg)
@@ -433,7 +449,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
     if (screen < 0) return 0;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString monitorId;
     if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
@@ -764,7 +780,7 @@ void KisConfig::setPixelGridColor(const QColor & v) const
 
 qreal KisConfig::getPixelGridDrawingThreshold(bool defaultValue) const
 {
-    qreal border = 8.0f;
+    qreal border = 24.0f;
     return (defaultValue ? border : m_cfg.readEntry("pixelGridDrawingThreshold", border));
 }
 
@@ -909,17 +925,6 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
-QColor KisConfig::selectionOverlayMaskColor(bool defaultValue) const
-{
-    QColor def(255, 0, 0, 220);
-    return (defaultValue ? def : m_cfg.readEntry("selectionOverlayMaskColor", def));
-}
-
-void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
-{
-    m_cfg.writeEntry("selectionOverlayMaskColor", color);
-}
-
 bool KisConfig::antialiasSelectionOutline(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("AntialiasSelectionOutline", false));
@@ -960,16 +965,33 @@ void KisConfig::setShowOutlineWhilePainting(bool showOutlineWhilePainting) const
     m_cfg.writeEntry("ShowOutlineWhilePainting", showOutlineWhilePainting);
 }
 
-bool KisConfig::hideSplashScreen(bool defaultValue) const
+bool KisConfig::forceAlwaysFullSizedOutline(bool defaultValue) const
 {
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    return (defaultValue ? true : cfg.readEntry("HideSplashAfterStartup", true));
+    return (defaultValue ? false : m_cfg.readEntry("forceAlwaysFullSizedOutline", false));
 }
 
-void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
+void KisConfig::setForceAlwaysFullSizedOutline(bool value) const
 {
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
+    m_cfg.writeEntry("forceAlwaysFullSizedOutline", value);
+}
+
+KisConfig::SessionOnStartup KisConfig::sessionOnStartup(bool defaultValue) const
+{
+    int value = defaultValue ? SOS_BlankSession : m_cfg.readEntry("sessionOnStartup", (int)SOS_BlankSession);
+    return (KisConfig::SessionOnStartup)value;
+}
+void KisConfig::setSessionOnStartup(SessionOnStartup value)
+{
+    m_cfg.writeEntry("sessionOnStartup", (int)value);
+}
+
+bool KisConfig::saveSessionOnQuit(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("saveSessionOnQuit", false);
+}
+void KisConfig::setSaveSessionOnQuit(bool value)
+{
+    m_cfg.writeEntry("saveSessionOnQuit", value);
 }
 
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
@@ -1184,16 +1206,6 @@ bool KisConfig::hideDockersFullscreen(bool defaultValue) const
 void KisConfig::setHideDockersFullscreen(const bool value) const
 {
     m_cfg.writeEntry("hideDockersFullScreen", value);
-}
-
-bool KisConfig::showDockerTitleBars(bool defaultValue) const
-{
-    return (defaultValue ? true : m_cfg.readEntry("showDockerTitleBars", true));
-}
-
-void KisConfig::setShowDockerTitleBars(const bool value) const
-{
-    m_cfg.writeEntry("showDockerTitleBars", value);
 }
 
 bool KisConfig::showDockers(bool defaultValue) const
@@ -1622,16 +1634,6 @@ void KisConfig::setLineSmoothingStabilizeSensors(bool value)
     m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
 }
 
-int KisConfig::paletteDockerPaletteViewSectionSize(bool defaultValue) const
-{
-    return (defaultValue ? 12 : m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12));
-}
-
-void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
-{
-    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
-}
-
 int KisConfig::tabletEventsDelay(bool defaultValue) const
 {
     return (defaultValue ? 10 : m_cfg.readEntry("tabletEventsDelay", 10));
@@ -1940,6 +1942,17 @@ bool KisConfig::calculateAnimationCacheInBackground(bool defaultValue) const
 void KisConfig::setCalculateAnimationCacheInBackground(bool value)
 {
     m_cfg.writeEntry("calculateAnimationCacheInBackground", value);
+}
+
+QColor KisConfig::defaultAssistantsColor(bool defaultValue) const
+{
+    static const QColor defaultColor = QColor(176, 176, 176, 255);
+    return defaultValue ? defaultColor : m_cfg.readEntry("defaultAssistantsColor", defaultColor);
+}
+
+void KisConfig::setDefaultAssistantsColor(const QColor &color) const
+{
+    m_cfg.writeEntry("defaultAssistantsColor", color);
 }
 
 #include <QDomDocument>

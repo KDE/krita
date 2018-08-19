@@ -34,14 +34,10 @@
 #include "kis_clipboard.h"
 #include <kis_image_animation_interface.h>
 
+#include <QMenu>
 #include "QFile"
 #include <QDomDocument>
 #include <QDomElement>
-
-#include "QFile"
-#include <QDomDocument>
-#include <QDomElement>
-
 
 class Q_DECL_HIDDEN KisActionManager::Private {
 
@@ -103,7 +99,7 @@ KisActionManager::~KisActionManager()
            addElement("toolTip" , action->toolTip());
            addElement("iconText" , action->iconText());
            addElement("shortcut" , action->shortcut().toString());
-           addElement("activationFlags" , QString::number(action->activationFlags(),2));;
+           addElement("activationFlags" , QString::number(action->activationFlags(),2));
            addElement("activationConditions" , QString::number(action->activationConditions(),2));
            addElement("defaultShortcut" , action->defaultShortcut().toString());
            addElement("isCheckable" , QString((action->isChecked() ? "true" : "false")));
@@ -368,6 +364,16 @@ KisAction *KisActionManager::createStandardAction(KStandardAction::StandardActio
     addAction(standardAction->objectName(), action);
     delete standardAction;
     return action;
+}
+
+void KisActionManager::safePopulateMenu(QMenu *menu, const QString &actionId, KisActionManager *actionManager)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(actionManager);
+
+    KisAction *action = actionManager->actionByName(actionId);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(action);
+
+    menu->addAction(action);
 }
 
 void KisActionManager::registerOperationUIFactory(KisOperationUIFactory* factory)

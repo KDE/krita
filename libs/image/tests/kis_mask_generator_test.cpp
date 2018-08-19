@@ -78,13 +78,6 @@ void KisMaskGeneratorTest::testSquareSerialisation()
     doc.appendChild(root);
     cmg.toXML(doc, root);
 
-    // check consistency with itself
-    for (int i = 0; i < 10; ++i) {
-        for (int j = 0; j < 10; ++j) {
-            QVERIFY(cmg.valueAt(i, j) == cmg.valueAt(i, j));
-        }
-    }
-
     KisMaskGenerator* cmg2 = KisMaskGenerator::fromXML(root);
     QDomDocument doc2 = QDomDocument("cmg");
     QDomElement root2 = doc2.createElement("cmg");

@@ -19,12 +19,14 @@
 #define LIBKIS_WINDOW_H
 
 #include <QObject>
+#include <QAction>
 #include <QMainWindow>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
 #include <KisMainWindow.h>
+
 /**
  * Window represents one Krita mainwindow. A window can have any number
  * of views open on any number of documents.
@@ -81,6 +83,19 @@ public Q_SLOTS:
      * also be closed.
      */
     void close();
+
+    /**
+     * @brief createAction creates a QAction object and adds it to the action
+     * manager for this Window.
+     * @param id The unique id for the action. This will be used to
+     *     propertize the action if any .action file is present
+     * @param text The user-visible text of the action. If empty, the text from the
+     *    .action file is used.
+     * @param menu a /-separated string that describes which menu the action should
+     *     be places in. Default is "tools/scripts"
+     * @return the new action.
+     */
+    QAction *createAction(const QString &id, const QString &text = QString(), const QString &menuLocation = QString("tools/scripts"));
 
 Q_SIGNALS:
     /// Emitted when the window is closed.

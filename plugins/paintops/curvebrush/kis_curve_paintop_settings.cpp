@@ -35,7 +35,7 @@ KisCurvePaintOpSettings::~KisCurvePaintOpSettings()
 
 void KisCurvePaintOpSettings::setPaintOpSize(qreal value)
 {
-    CurveOption option;
+    KisCurveOptionProperties option;
     option.readOptionSetting(this);
     option.curve_line_width = value;
     option.writeOptionSetting(this);
@@ -43,7 +43,7 @@ void KisCurvePaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisCurvePaintOpSettings::paintOpSize() const
 {
-    CurveOption option;
+    KisCurveOptionProperties option;
     option.readOptionSetting(this);
     return option.curve_line_width;
 }
@@ -80,14 +80,14 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.curve_line_width);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.curve_line_width = prop->value().toInt();
                     option.writeOptionSetting(prop->settings().data());
@@ -110,14 +110,14 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.curve_stroke_history_size);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.curve_stroke_history_size = prop->value().toInt();
                     option.writeOptionSetting(prop->settings().data());
@@ -143,13 +143,13 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     prop->setValue(option.curve_curves_opacity * 100.0);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.curve_curves_opacity = prop->value().toReal() / 100.0;
                     option.writeOptionSetting(prop->settings().data());
@@ -170,14 +170,14 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
                     prop->setValue(option.curve_paint_connection_line);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    CurveOption option;
+                    KisCurveOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
                     option.curve_paint_connection_line = prop->value().toBool();
                     option.writeOptionSetting(prop->settings().data());

@@ -1,0 +1,32 @@
+Boost,https://www.boost.org,Boost Software License - Version 1.0
+DrMingw,https://github.com/jrfonseca/drmingw,LGPLv2.1
+Eigen3,http://eigen.tuxfamily.org,MPL2
+Exiv2,http://www.exiv2.org,GPLv2
+Expat,https://github.com/libexpat/libexpat,MIT
+#ffmpeg,https://www.ffmpeg.org,LGPL2.1+
+fftw3,http://www.fftw.org/,GPLv2+
+fontconfig,https://www.freedesktop.org/wiki/Software/fontconfig/,BSD
+freetype,https://www.freetype.org/,FTL or GPLv2
+gettext,https://www.gnu.org/software/gettext/,GPLv3
+giflib,http://giflib.sourceforge.net/,BSD
+gmic,http://gmic.eu/,CeCILLv2.1
+gmic-qt,http://gmic.eu/,GPLv3
+GNU Scientific Library,http://www.gnu.org/software/gsl,GPLv3
+libheif,https://github.com/strukturag/libheif,LGPLv3
+iconv,https://www.gnu.org/software/libiconv/,LGPLv2 or GPLv3
+ilmbase,http://www.openexr.com,Modified BSD
+libjpeg-turbo,http://www.libjpeg-turbo.org,BSD
+littlecms2,http://www.littlecms.com,MIT
+libraw,http://www.libraw.org,LGPLv2.1 or CDDL 1.0
+OpenColorIO,http://www.opencolorio.org,BSD
+OpenEXR,http://www.openexr.com,Modified BSD
+libpng,http://www.libpng.org,libpng license
+poppler,http://poppler.freedesktop.org,GPLv2 and GPLv3
+PyQt,https://www.riverbankcomputing.com/software/pyqt/download5,GPLv3
+Python,http://www.python.org,Python Software Foundation License v2
+Qt,https://www.qt.io,GPLv2 + GPLv3 + LGPLv2.1 + LGPLv3
+SIP,https://www.riverbankcomputing.com/software/sip/download,GPLv3
+libtiff,http://libtiff.org/,BSD
+Vc,https://github.com/VcDevel/Vc,BSD
+zlib,http://www.zlib.net/,BSD
+KDE Frameworks 5,https://www.kde.org,LGPLv+

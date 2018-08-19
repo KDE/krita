@@ -85,14 +85,17 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
             case KisMetaData::Value::Rational:
                 return i18n("Rational");
             }
+            break;
         }
         case 2:
             return m_store->entries()[index.row()].value().toString();
         }
+        break;
     }
     default:
         return QVariant();
     }
+    return QVariant();
 }
 
 QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -105,7 +108,7 @@ QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, 
         case 1:
             return i18n("Type");
         case 2:
-            return i18n("Value");
+            return i18nc("Metadata item value", "Value");
         }
     }
     return QVariant();

@@ -419,9 +419,8 @@ qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
     if (m_customCurve) {
         qreal scaledVal = isAdditive() ? additiveToScaling(val) : val;
 
-        int offset = qRound(256.0 * qAbs(scaledVal));
-        qreal newValue =  m_curve.floatTransfer(257)[qBound(0, offset, 256)];
-        scaledVal = KisAlgebra2D::copysign(newValue, scaledVal);
+        const QVector<qreal> transfer = m_curve.floatTransfer(256);
+        scaledVal = KisCubicCurve::interpolateLinear(scaledVal, transfer);
 
         return isAdditive() ? scalingToAdditive(scaledVal) : scaledVal;
     }

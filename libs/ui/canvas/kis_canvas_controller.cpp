@@ -19,15 +19,17 @@
 #include "kis_canvas_controller.h"
 
 #include <QMouseEvent>
+#include <QScrollBar>
 #include <QTabletEvent>
 
 #include <klocalizedstring.h>
-
+#include <kactioncollection.h>
 #include "kis_canvas_decoration.h"
 #include "kis_paintop_transformation_connector.h"
 #include "kis_coordinates_converter.h"
 #include "kis_canvas2.h"
 #include "opengl/kis_opengl_canvas2.h"
+#include "KisDocument.h"
 #include "kis_image.h"
 #include "KisViewManager.h"
 #include "KisView.h"
@@ -121,11 +123,6 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
     }
 
     KoCanvasControllerWidget::setCanvas(canvas);
-}
-
-void KisCanvasController::changeCanvasWidget(QWidget *widget)
-{
-    KoCanvasControllerWidget::changeCanvasWidget(widget);
 }
 
 void KisCanvasController::activate()
@@ -264,6 +261,11 @@ void KisCanvasController::slotToggleWrapAroundMode(bool value)
         m_d->view->viewManager()->showFloatingMessage(i18n("You are activating wrap-around mode, but have not enabled OpenGL.\n"
                                                           "To visualize wrap-around mode, enable OpenGL."), QIcon());
     }
+    else if (value) {
+        QAction *action = m_d->view->viewManager()->actionCollection()->action("wrap_around_mode");
+        QString shortcut = action ? action->shortcut().toString() : "W";
+        m_d->view->viewManager()->showFloatingMessage(i18n("Entering Wraparound mode. Press '%1' to leave Wraparound mode.", shortcut), QIcon());
+    }
 
     kritaCanvas->setWrapAroundViewingMode(value);
     kritaCanvas->image()->setWrapAroundModePermitted(value);
@@ -279,7 +281,7 @@ bool KisCanvasController::wrapAroundMode() const
 
 void KisCanvasController::slotTogglePixelGrid(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.enablePixelGrid(value);
 
     KisConfigNotifier::instance()->notifyPixelGridModeChanged();
@@ -327,4 +329,76 @@ bool KisCanvasController::levelOfDetailMode() const
     Q_ASSERT(kritaCanvas);
 
     return kritaCanvas->lodAllowedInCanvas();
+}
+
+void KisCanvasController::saveCanvasState(KisPropertiesConfiguration &config) const
+{
+    const QPointF &center = preferredCenter();
+    config.setProperty("panX", center.x());
+    config.setProperty("panY", center.y());
+
+    config.setProperty("rotation", rotation());
+    config.setProperty("mirror", m_d->coordinatesConverter->xAxisMirrored());
+    config.setProperty("wrapAround", wrapAroundMode());
+    config.setProperty("enableInstantPreview", levelOfDetailMode());
+}
+
+void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &config)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    mirrorCanvas(config.getBool("mirror", false));
+    rotateCanvas(config.getFloat("rotation", 0.0f));
+
+    const QPointF &center = preferredCenter();
+    float panX = config.getFloat("panX", center.x());
+    float panY = config.getFloat("panY", center.y());
+    setPreferredCenter(QPointF(panX, panY));
+
+    slotToggleWrapAroundMode(config.getBool("wrapAround", false));
+    kritaCanvas->setLodAllowedInCanvas(config.getBool("enableInstantPreview", false));
+}
+
+void KisCanvasController::resetScrollBars()
+{
+    // The scrollbar value always points at the top-left corner of the
+    // bit of image we paint.
+
+    KisDocument *doc = m_d->view->document();
+    if (!doc) return;
+
+    QRectF documentBounds = doc->documentBounds();
+    QRectF viewRect = m_d->coordinatesConverter->imageToWidget(documentBounds);
+
+    // Cancel out any existing pan
+    const QRectF imageBounds = m_d->view->image()->bounds();
+    const QRectF imageBB = m_d->coordinatesConverter->imageToWidget(imageBounds);
+    QPointF pan = imageBB.topLeft();
+    viewRect.translate(-pan);
+
+    int drawH = viewport()->height();
+    int drawW = viewport()->width();
+
+    qreal horizontalReserve = vastScrollingFactor() * drawW;
+    qreal verticalReserve = vastScrollingFactor() * drawH;
+
+    qreal xMin = viewRect.left() - horizontalReserve;
+    qreal yMin = viewRect.top() - verticalReserve;
+
+    qreal xMax = viewRect.right() - drawW + horizontalReserve;
+    qreal yMax = viewRect.bottom() - drawH + verticalReserve;
+
+    QScrollBar *hScroll = horizontalScrollBar();
+    QScrollBar *vScroll = verticalScrollBar();
+
+    hScroll->setRange(static_cast<int>(xMin), static_cast<int>(xMax));
+    vScroll->setRange(static_cast<int>(yMin), static_cast<int>(yMax));
+
+    int fontHeight = QFontMetrics(font()).height();
+
+    vScroll->setPageStep(drawH);
+    vScroll->setSingleStep(fontHeight);
+    hScroll->setPageStep(drawW);
+    hScroll->setSingleStep(fontHeight);
 }

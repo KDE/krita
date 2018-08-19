@@ -26,7 +26,7 @@
 
 void KisStoreLimitsTest::testLimits()
 {
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMemoryHardLimitPercent(50);
     config.setMemorySoftLimitPercent(25);
     config.setMemoryPoolLimitPercent(10);

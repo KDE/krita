@@ -65,12 +65,6 @@ public:
 
     void setCaption(const QString &caption);
 
-
-    /**
-     * Use the given filename as a proposal.
-     */
-    void setProposedFileName(const QString &filename);
-
     /**
      * @brief setDefaultDir set the default directory to defaultDir.
      *

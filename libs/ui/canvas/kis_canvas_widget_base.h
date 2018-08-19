@@ -79,6 +79,9 @@ public: // KisAbstractCanvasWidget
 
     KisCoordinatesConverter* coordinatesConverter() const;
 
+    QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) override;
+    using KisAbstractCanvasWidget::updateCanvasProjection;
+
 protected:
     KisCanvas2 *canvas() const;
 

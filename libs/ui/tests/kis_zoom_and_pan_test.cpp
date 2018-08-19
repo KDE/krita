@@ -631,7 +631,7 @@ bool KisZoomAndPanTest::checkRotation(ZoomAndPanTester &t, qreal angle)
 
 void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setVastScrolling(vastScrolling);
 
     ZoomAndPanTester t;

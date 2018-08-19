@@ -85,8 +85,11 @@ public Q_SLOTS:
     void fillDefault();
     void fillGradient();
     void fillBackground();
-    void fillLayer();
     void fillTransparent();
+
+    /// Fill the area with what is on your current canvas
+    void fillLayer();
+
 
     /**
      * Set the icon of the current preset

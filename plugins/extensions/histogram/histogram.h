@@ -23,9 +23,9 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class Histogram : public KisViewPlugin
+class Histogram : public KisActionPlugin
 {
     Q_OBJECT
 public:

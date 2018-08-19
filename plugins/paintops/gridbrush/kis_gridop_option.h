@@ -62,7 +62,7 @@ private:
 
 };
 
-struct GridOption : public KisBaseOption
+struct KisGridOpProperties : public KisPaintopPropertiesBase
 {
     int grid_width;
     int grid_height;

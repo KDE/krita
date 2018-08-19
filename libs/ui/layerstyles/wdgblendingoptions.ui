@@ -382,7 +382,7 @@
   <customwidget>
    <class>KisGradientSlider</class>
    <extends>QWidget</extends>
-   <header>kis_gradient_slider.h</header>
+   <header>KisGradientSlider.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

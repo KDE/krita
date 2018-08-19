@@ -19,9 +19,11 @@
 
 #include <QPointer>
 #include <QVariant>
+#include <QStringList>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <klocalizedstring.h>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -38,7 +40,6 @@
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <kis_action.h>
-#include <kis_script_manager.h>
 #include <KisViewManager.h>
 #include <KritaVersionWrapper.h>
 #include <kis_filter_registry.h>
@@ -46,7 +47,7 @@
 #include <kis_filter_configuration.h>
 #include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_brush_server.h>
@@ -77,6 +78,7 @@ Krita::Krita(QObject *parent)
     , d(new Private)
 {
     qRegisterMetaType<Notifier*>();
+    connect(KisPart::instance(), SIGNAL(sigWindowAdded(KisMainWindow*)), SLOT(mainWindowAdded(KisMainWindow*)));
 }
 
 Krita::~Krita()
@@ -86,21 +88,17 @@ Krita::~Krita()
     delete d;
 }
 
-QList<Action *> Krita::actions() const
+QList<QAction *> Krita::actions() const
 {
-    QList<Action*> actionList;
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
     if (!mainWindow) {
-        return actionList;
+        return QList<QAction*>();
     }
     KActionCollection *actionCollection = mainWindow->actionCollection();
-    Q_FOREACH(QAction *action, actionCollection->actions()) {
-        actionList << new Action(action->objectName(), action);
-    }
-    return actionList;
+    return actionCollection->actions();
 }
 
-Action *Krita::action(const QString &name) const
+QAction *Krita::action(const QString &name) const
 {
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
     if (!mainWindow) {
@@ -108,10 +106,7 @@ Action *Krita::action(const QString &name) const
     }
     KActionCollection *actionCollection = mainWindow->actionCollection();
     QAction *action = actionCollection->action(name);
-    if (action) {
-        return new Action(name, action);
-    }
-    return 0;
+    return action;
 }
 
 Document* Krita::activeDocument() const
@@ -185,7 +180,7 @@ QStringList Krita::colorModels() const
     Q_FOREACH(KoID id, ids) {
         colorModelsIds << id.id();
     }
-    return colorModelsIds.toList();;
+    return colorModelsIds.toList();
 }
 
 QStringList Krita::colorDepths(const QString &colorModel) const
@@ -195,7 +190,7 @@ QStringList Krita::colorDepths(const QString &colorModel) const
     Q_FOREACH(KoID id, ids) {
         colorDepthsIds << id.id();
     }
-    return colorDepthsIds.toList();;
+    return colorDepthsIds.toList();
 }
 
 QStringList Krita::filterStrategies() const
@@ -211,7 +206,9 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
     Q_FOREACH(const KoColorProfile *profile, profiles) {
         profileNames << profile->name();
     }
-    return profileNames.toList();
+    QStringList r = profileNames.toList();
+    r.sort();
+    return r;
 }
 
 bool Krita::addProfile(const QString &profilePath)
@@ -337,8 +334,10 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
 Document* Krita::openDocument(const QString &filename)
 {
     KisDocument *document = KisPart::instance()->createDocument();
+    document->setFileBatchMode(this->batchmode());
     KisPart::instance()->addDocument(document);
     document->openUrl(QUrl::fromLocalFile(filename), KisDocument::DontAddToRecent);
+    document->setFileBatchMode(false);
     return new Document(document);
 }
 
@@ -346,25 +345,6 @@ Window* Krita::openWindow()
 {
     KisMainWindow *mw = KisPart::instance()->createMainWindow();
     return new Window(mw);
-}
-
-Action *Krita::createAction(const QString &id, const QString &text, bool addToScriptMenu)
-{
-    KisAction *action = new KisAction(text, this);
-    action->setObjectName(id);
-
-    KisActionRegistry *actionRegistry = KisActionRegistry::instance();
-    actionRegistry->propertizeAction(action->objectName(), action);
-    bool ok; // We will skip this check
-    int activationFlags = actionRegistry->getActionProperty(id, "activationFlags").toInt(&ok, 2);
-    int activationConditions = actionRegistry->getActionProperty(id, "activationConditions").toInt(&ok, 2);
-    action->setActivationFlags((KisAction::ActivationFlags) activationFlags);
-    action->setActivationConditions((KisAction::ActivationConditions) activationConditions);
-
-    if (addToScriptMenu) {
-        KisPart::instance()->addScriptAction(action);
-    }
-    return new Action(action->objectName(), action);
 }
 
 void Krita::addExtension(Extension* extension)
@@ -430,4 +410,17 @@ QObject *Krita::fromVariant(const QVariant& v)
     }
     else
         return 0;
+}
+
+QString Krita::krita_i18n(const QString &text)
+{
+    return i18n(text.toUtf8().constData());
+}
+
+void Krita::mainWindowAdded(KisMainWindow *kisWindow)
+{
+    Q_FOREACH(Extension *extension, d->extensions) {
+        Window window(kisWindow);
+        extension->createActions(&window);
+    }
 }

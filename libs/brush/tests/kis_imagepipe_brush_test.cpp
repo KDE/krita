@@ -95,18 +95,16 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrush *brush)
 
 void KisImagePipeBrushTest::testLoading()
 {
-    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih");
+    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
     brush->load();
     QVERIFY(brush->valid());
 
-    checkConsistency(brush);
-
-    delete brush;
+    checkConsistency(brush.data());
 }
 
 void KisImagePipeBrushTest::testChangingBrushes()
 {
-    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih");
+    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
     brush->load();
     QVERIFY(brush->valid());
 
@@ -114,11 +112,9 @@ void KisImagePipeBrushTest::testChangingBrushes()
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5, 0, 0, rotation);
 
     for (int i = 0; i < 100; i++) {
-        checkConsistency(brush);
+        checkConsistency(brush.data());
         brush->testingSelectNextBrush(info);
     }
-
-    delete brush;
 }
 
 void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
@@ -154,23 +150,21 @@ void checkIncrementalPainting(KisBrush *brush, const QString &prefix)
 
 void KisImagePipeBrushTest::testSimpleDabApplication()
 {
-    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih");
+    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "C_Dirty_Spot.gih"));
     brush->load();
     QVERIFY(brush->valid());
 
-    checkConsistency(brush);
-    checkIncrementalPainting(brush, "simple");
-
-    delete brush;
+    checkConsistency(brush.data());
+    checkIncrementalPainting(brush.data(), "simple");
 }
 
 void KisImagePipeBrushTest::testColoredDab()
 {
-    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih");
+    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
     brush->load();
     QVERIFY(brush->valid());
 
-    checkConsistency(brush);
+    checkConsistency(brush.data());
 
     QCOMPARE(brush->useColorAsMask(), false);
     QCOMPARE(brush->hasColor(), true);
@@ -197,13 +191,12 @@ void KisImagePipeBrushTest::testColoredDab()
     QCOMPARE(brush->hasColor(), false);
     QCOMPARE(brush->brushType(), PIPE_MASK);
 
-    checkConsistency(brush);
-    delete brush;
+    checkConsistency(brush.data());
 }
 
 void KisImagePipeBrushTest::testColoredDabWash()
 {
-    KisImagePipeBrush *brush = new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih");
+    QScopedPointer<KisImagePipeBrush> brush(new KisImagePipeBrush(QString(FILES_DATA_DIR) + QDir::separator() + "G_Sparks.gih"));
     brush->load();
     QVERIFY(brush->valid());
 
@@ -238,8 +231,6 @@ void KisImagePipeBrushTest::testColoredDabWash()
     result = bg;
 #endif
     result.save("z_spark_alpha_darken.png");
-
-    delete brush;
 }
 
 
@@ -248,30 +239,26 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
 void KisImagePipeBrushTest::testTextBrushNoPipes()
 {
-    KisTextBrush *brush = new KisTextBrush();
+    QScopedPointer<KisTextBrush> brush(new KisTextBrush());
 
     brush->setPipeMode(false);
     brush->setFont(QApplication::font());
     brush->setText("The_Quick_Brown_Fox_Jumps_Over_The_Lazy_Dog");
     brush->updateBrush();
 
-    checkIncrementalPainting(brush, "text_no_incremental");
-
-    delete brush;
+    checkIncrementalPainting(brush.data(), "text_no_incremental");
 }
 
 void KisImagePipeBrushTest::testTextBrushPiped()
 {
-    KisTextBrush *brush = new KisTextBrush();
+    QScopedPointer<KisTextBrush> brush(new KisTextBrush());
 
     brush->setPipeMode(true);
     brush->setFont(QApplication::font());
     brush->setText("The_Quick_Brown_Fox_Jumps_Over_The_Lazy_Dog");
     brush->updateBrush();
 
-    checkIncrementalPainting(brush, "text_incremental");
-
-    delete brush;
+    checkIncrementalPainting(brush.data(), "text_incremental");
 }
 
 QTEST_MAIN(KisImagePipeBrushTest)

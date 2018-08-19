@@ -24,6 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -47,7 +48,7 @@ KritaEdgeDetectionFilter::~KritaEdgeDetectionFilter()
 {
 }
 
-KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), categoryEdgeDetection(), i18n("&Edge Detection..."))
+KisEdgeDetectionFilter::KisEdgeDetectionFilter(): KisFilter(id(), FiltersCategoryEdgeDetectionId, i18n("&Edge Detection..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -78,7 +79,7 @@ void KisEdgeDetectionFilter::processImpl(KisPaintDeviceSP device, const QRect &r
         channelFlags = device->colorSpace()->channelFlags();
     }
 
-    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobolVector;
+    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
     if (config->getString("type") == "prewitt") {
         type = KisEdgeDetectionKernel::Prewit;
     } else if (config->getString("type") == "simple") {
@@ -134,7 +135,7 @@ QRect KisEdgeDetectionFilter::neededRect(const QRect &rect, const KisFilterConfi
 
     QVariant value;
     /**
-     * NOTE: integer devision by two is done on purpose,
+     * NOTE: integer division by two is done on purpose,
      *       because the kernel size is always odd
      */
     const int halfWidth = _config->getProperty("horizRadius", value) ? KisEdgeDetectionKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;

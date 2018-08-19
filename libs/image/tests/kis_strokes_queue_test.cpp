@@ -802,7 +802,6 @@ void KisStrokesQueueTest::testUniquelyConcurrentJobs()
     KisStrokeId id1 = queue.startStroke(new KisTestingStrokeStrategy("str1_", false, true));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
     queue.addJob(id1, new KisTestingStrokeJobData(KisStrokeJobData::CONCURRENT));
-    queue.endStroke(id1);
 
     { // manual test
         t.processQueue();
@@ -832,6 +831,8 @@ void KisStrokesQueueTest::testUniquelyConcurrentJobs()
     checkJobsOverlapping(t, id1, KisStrokeJobData::UNIQUELY_CONCURRENT, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
     checkJobsOverlapping(t, id1, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
     checkJobsOverlapping(t, id1, KisStrokeJobData::BARRIER, KisStrokeJobData::UNIQUELY_CONCURRENT, false);
+
+    queue.endStroke(id1);
 }
 
 

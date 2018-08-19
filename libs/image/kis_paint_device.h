@@ -54,6 +54,13 @@ class KisPaintDeviceFramesInterface;
 
 typedef KisSharedPtr<KisDataManager> KisDataManagerSP;
 
+namespace KritaUtils {
+enum DeviceCopyMode {
+    CopySnapshot = 0,
+    CopyAllFrames
+};
+}
+
 
 /**
  * A paint device contains the actual pixel data and offers methods
@@ -93,12 +100,12 @@ public:
     /**
      * Creates a copy of this device.
      *
-     * If \p copyFrames is false, the newly created device clones the
+     * If \p copyMode is CopySnapshot, the newly created device clones the
      * current frame of \p rhs only (default and efficient
-     * behavior). If \p copyFrames is true, the new device is a deep
+     * behavior). If \p copyFrames is CopyAllFrames, the new device is a deep
      * copy of the source with all the frames included.
      */
-    KisPaintDevice(const KisPaintDevice& rhs, bool copyFrames = false, KisNode *newParentNode = 0);
+    KisPaintDevice(const KisPaintDevice& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot, KisNode *newParentNode = 0);
     ~KisPaintDevice() override;
 
 protected:
@@ -355,7 +362,7 @@ protected:
     /**
      * Checks whether a src paint device can be used as source
      * of fast bitBlt operation. The result of the check may
-     * depend on whether color spaces coinside, whether there is
+     * depend on whether color spaces coincide, whether there is
      * any shift of tiles between the devices and etc.
      *
      * WARNING: This check must be done <i>before</i> performing any
@@ -786,7 +793,7 @@ public:
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
-     * @param rc indicates the rectangle that trully contains data
+     * @param rc indicates the rectangle that truly contains data
      */
     KisRepeatVLineConstIteratorSP createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const;
 
@@ -834,6 +841,8 @@ public:
     LodDataStruct* createLodDataStruct(int lod);
     void updateLodDataStruct(LodDataStruct *dst, const QRect &srcRect);
     void uploadLodDataStruct(LodDataStruct *dst);
+
+    void generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod);
 
     void setProjectionDevice(bool value);
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);

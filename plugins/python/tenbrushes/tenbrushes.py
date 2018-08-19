@@ -10,7 +10,7 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 import krita
-from tenbrushes import uitenbrushes
+from . import uitenbrushes
 
 
 class TenBrushesExtension(krita.Extension):
@@ -21,14 +21,19 @@ class TenBrushesExtension(krita.Extension):
         self.actions = []
         self.buttons = []
         self.selectedPresets = []
+        # Indicates whether we want to activate the previous-selected brush
+        # on the second press of the shortcut
+        self.activatePrev = True
+        self.oldPreset = None
 
     def setup(self):
-        action = Application.createAction("ten_brushes", "Ten Brushes")
-        action.setToolTip("Assign ten brush presets to ten shortcuts.")
-        action.triggered.connect(self.initialize)
-
         self.readSettings()
-        self.loadActions()
+
+    def createActions(self, window):
+        action = window.createAction("ten_brushes", i18n("Ten Brushes"))
+        action.setToolTip(i18n("Assign ten brush presets to ten shortcuts."))
+        action.triggered.connect(self.initialize)
+        self.loadActions(window)
 
     def initialize(self):
         self.uitenbrushes = uitenbrushes.UITenBrushes()
@@ -36,6 +41,9 @@ class TenBrushesExtension(krita.Extension):
 
     def readSettings(self):
         self.selectedPresets = Application.readSetting("", "tenbrushes", "").split(',')
+        setting = Application.readSetting("", "tenbrushesActivatePrev2ndPress", "True")
+        # we should not get anything other than 'True' and 'False'
+        self.activatePrev = setting == 'True'
 
     def writeSettings(self):
         presets = []
@@ -44,16 +52,15 @@ class TenBrushesExtension(krita.Extension):
             self.actions[index].preset = button.preset
             presets.append(button.preset)
         Application.writeSetting("", "tenbrushes", ','.join(map(str, presets)))
+        Application.writeSetting("", "tenbrushesActivatePrev2ndPress",
+                                 str(self.activatePrev))
 
-    def loadActions(self):
+    def loadActions(self, window):
         allPresets = Application.resources("preset")
 
         for index, item in enumerate(['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']):
-            action = Application.createAction("activate_preset_" + item, "Activate Brush Preset " + item)
-            action.setMenu("None")
+            action = window.createAction("activate_preset_" + item, str(i18n("Activate Brush Preset {num}")).format(num=item), "")
             action.triggered.connect(self.activatePreset)
-            
-            
 
             if index < len(self.selectedPresets) and self.selectedPresets[index] in allPresets:
                 action.preset = self.selectedPresets[index]
@@ -65,7 +72,12 @@ class TenBrushesExtension(krita.Extension):
     def activatePreset(self):
         allPresets = Application.resources("preset")
         if Application.activeWindow() and len(Application.activeWindow().views()) > 0 and self.sender().preset in allPresets:
-            Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
+            currentPreset = Application.activeWindow().views()[0].currentBrushPreset()
+            if self.activatePrev and self.sender().preset == currentPreset.name():
+                Application.activeWindow().views()[0].activateResource(self.oldPreset)
+            else:
+                self.oldPreset = Application.activeWindow().views()[0].currentBrushPreset()
+                Application.activeWindow().views()[0].activateResource(allPresets[self.sender().preset])
 
 
 Scripter.addExtension(TenBrushesExtension(Application))

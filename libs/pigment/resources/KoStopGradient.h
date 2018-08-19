@@ -25,18 +25,21 @@
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoResource.h>
 #include <kritapigment_export.h>
+#include <boost/operators.hpp>
 
 typedef QPair<qreal, KoColor> KoGradientStop;
 
 /**
  * Resource for colorstop based gradients like Karbon gradients and SVG gradients
  */
-class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient
+class KRITAPIGMENT_EXPORT KoStopGradient : public KoAbstractGradient, public boost::equality_comparable<KoStopGradient>
 {
 
 public:
     explicit KoStopGradient(const QString &filename = QString());
     ~KoStopGradient() override;
+
+    bool operator==(const KoStopGradient &rhs) const;
 
     KoAbstractGradient* clone() const override;
 
@@ -63,7 +66,7 @@ public:
 
     /**
      * @brief toXML
-     * Covert the gradient to an XML string.
+     * Convert the gradient to an XML string.
      */
     void toXML(QDomDocument& doc, QDomElement& gradientElt) const;
     /**

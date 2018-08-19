@@ -192,8 +192,6 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
         image->setModified();
     }
     else {
-        cmd->redo();
-
         /**
          * HACK ALERT!
          *
@@ -204,7 +202,24 @@ void KisNodePropertyListCommand::setNodePropertiesNoUndo(KisNodeSP node, KisImag
          * themselves), and two LoD-specific update commands: one for lodN and
          * another one for lod0.
          */
-        KisStrokeId strokeId = image->startStroke(new KisSimpleStrokeStrategy());
+
+        struct SimpleLodResettingStroke : public KisSimpleStrokeStrategy {
+            SimpleLodResettingStroke(KUndo2Command *cmd)
+                : m_cmd(cmd)
+            {
+                setClearsRedoOnStart(false);
+                this->enableJob(JOB_INIT, true);
+            }
+
+            void initStrokeCallback() {
+                m_cmd->redo();
+            }
+
+        private:
+            QScopedPointer<KUndo2Command> m_cmd;
+        };
+
+        KisStrokeId strokeId = image->startStroke(new SimpleLodResettingStroke(cmd.take()));
         image->endStroke(strokeId);
     }
 

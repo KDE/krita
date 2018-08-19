@@ -493,7 +493,8 @@ void KisStrokeBenchmark::benchmarkRand48()
 QBENCHMARK
     {
         for (int i = 0 ; i < COUNT; i++){
-            drand48();
+            double result = drand48();
+            Q_UNUSED(result);
         }
     }
 }

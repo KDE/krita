@@ -129,11 +129,11 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
         } else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
-            QDomDocument doc = QDomDocument("color");
-            QDomElement root = doc.createElement("color");
-            doc.appendChild(root);
-            v.value<KoColor>().toXML(doc, root);
-            text = doc.createCDATASection(doc.toString());
+            QDomDocument cdataDoc = QDomDocument("color");
+            QDomElement cdataRoot = cdataDoc.createElement("color");
+            cdataDoc.appendChild(cdataRoot);
+            v.value<KoColor>().toXML(cdataDoc, cdataRoot);
+            text = cdataDoc.createCDATASection(cdataDoc.toString());
             type = "color";
         } else if(v.type() == QVariant::String ) {
             text = doc.createCDATASection(v.toString());  // XXX: Unittest this!

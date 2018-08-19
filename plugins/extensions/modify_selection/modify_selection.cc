@@ -36,7 +36,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(ModifySelectionFactory, "kritamodifyselection.json", registerPlugin<ModifySelection>();)
 
 ModifySelection::ModifySelection(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction* action = createAction("growselection");
     action->setOperationID("growselection");

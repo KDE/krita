@@ -24,6 +24,12 @@
 #include <QApplication>
 
 
+/**
+ * @brief The KisCursorOverrideHijacker class stores all
+ * override cursors in a stack, and resets them back after
+ * the object is deleted. This is useful when you need to
+ * show a dialog when a busy cursor is shown.
+ */
 class KisCursorOverrideHijacker
 {
 public:

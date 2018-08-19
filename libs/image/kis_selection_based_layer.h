@@ -73,7 +73,7 @@ public:
      * resets cached projection of lower layer to a new device
      * @return void
      */
-    void resetCache();
+    virtual void resetCache();
 
     /**
      * for KisLayer::setDirty(const QRegion&)

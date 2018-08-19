@@ -52,7 +52,6 @@
 #include <QAction>
 #include <QDebug>
 
-#include <QAction>
 #include <QGridLayout>
 #include <QToolButton>
 #include <QCheckBox>
@@ -313,7 +312,7 @@ void ArtisticTextTool::mouseMoveEvent(KoPointerEvent *event)
         }
     }
 
-    const bool hoverOnBaseline = textOnPath && m_currentShape->baselineShape() == m_hoverPath;
+    const bool hoverOnBaseline = textOnPath && m_currentShape && m_currentShape->baselineShape() == m_hoverPath;
     // update cursor and status text
     if (m_hoverText) {
         useCursor(QCursor(Qt::IBeamCursor));
@@ -758,7 +757,7 @@ void ArtisticTextTool::addToTextCursor(const QString &str)
             if (m_textCursor <= textLength) {
                 KUndo2Command *cmd = new AddTextRangeCommand(this, m_currentShape, printable, m_textCursor);
                 canvas()->addCommand(cmd);
-            } else if (m_textCursor > textLength && m_textCursor <= textLength + m_linefeedPositions.size()) {
+            } else if (m_textCursor <= textLength + m_linefeedPositions.size()) {
                 const QPointF pos = m_linefeedPositions.value(m_textCursor - textLength - 1);
                 ArtisticTextRange newLine(printable, m_currentShape->fontAt(textLength - 1));
                 newLine.setXOffsets(QList<qreal>() << pos.x(), ArtisticTextRange::AbsoluteOffset);

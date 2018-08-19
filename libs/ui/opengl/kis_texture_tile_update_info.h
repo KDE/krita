@@ -64,6 +64,19 @@ public:
         allocate(pixelSize);
     }
 
+    DataBuffer(DataBuffer &&rhs)
+        : m_data(rhs.m_data),
+          m_pixelSize(rhs.m_pixelSize),
+          m_pool(rhs.m_pool)
+    {
+        rhs.m_data = 0;
+    }
+
+    DataBuffer& operator=(DataBuffer &&rhs) {
+        swap(rhs);
+        return *this;
+    }
+
     ~DataBuffer() {
         if (m_data) {
             m_pool->free(m_data, m_pixelSize);
@@ -84,13 +97,24 @@ public:
     void swap(DataBuffer &other) {
         std::swap(other.m_pixelSize, m_pixelSize);
         std::swap(other.m_data, m_data);
+        std::swap(other.m_pool, m_pool);
     }
 
     int size() const {
         return m_data ? m_pool->chunkSize(m_pixelSize) : 0;
     }
 
+    KisTextureTileInfoPoolSP pool() const {
+        return m_pool;
+    }
+
+    int pixelSize() const {
+        return m_pixelSize;
+    }
+
 private:
+    Q_DISABLE_COPY(DataBuffer)
+
     quint8 *m_data;
     int m_pixelSize;
     KisTextureTileInfoPoolSP m_pool;
@@ -123,6 +147,8 @@ public:
         m_patchLevelOfDetail = levelOfDetail;
 
         if (m_patchLevelOfDetail) {
+            // TODO: check if isBottommost() works correctly when m_originalPatchRect gets aligned
+            //       and m_currentImageRect has non-aligned size
             m_originalPatchRect = KisLodTransform::alignedRect(m_originalPatchRect, m_patchLevelOfDetail);
             m_patchRect = KisLodTransform::scaledRect(m_originalPatchRect, m_patchLevelOfDetail);
             m_tileRect = KisLodTransform::scaledRect(m_originalTileRect, m_patchLevelOfDetail);
@@ -143,7 +169,7 @@ public:
 
         // XXX: if the paint colorspace is rgb, we should do the channel swizzling in
         //      the display shader
-        if (!channelFlags.isEmpty()) {
+        if (!channelFlags.isEmpty() && selectedChannelIndex >= 0 && selectedChannelIndex < m_patchColorSpace->channels().size()) {
             DataBuffer conversionCache(m_patchColorSpace->pixelSize(), m_pool);
 
             QList<KoChannelInfo*> channelInfo = m_patchColorSpace->channels();
@@ -151,7 +177,7 @@ public:
             int pixelSize = m_patchColorSpace->pixelSize();
             quint32 numPixels = m_patchRect.width() * m_patchRect.height();
 
-            KisConfig cfg;
+            KisConfig cfg(true);
 
             if (onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
                 int selectedChannelPos = channelInfo[selectedChannelIndex]->pos();
@@ -232,14 +258,15 @@ public:
         }
     }
 
-    KoColorConversionTransformation *generateProofingTransform(const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
-                                                       KoColorConversionTransformation::Intent renderingIntent,
-                                                       KoColorConversionTransformation::Intent proofingIntent,
-                                                       KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                       KoColor gamutWarning,
-                                                       double adaptationState)
+    static KoColorConversionTransformation *generateProofingTransform(const KoColorSpace* srcCS,
+                                                                      const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
+                                                                      KoColorConversionTransformation::Intent renderingIntent,
+                                                                      KoColorConversionTransformation::Intent proofingIntent,
+                                                                      KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                      KoColor gamutWarning,
+                                                                      double adaptationState)
     {
-        return m_patchColorSpace->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
+        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
     }
 
     inline quint8* data() const {
@@ -257,6 +284,10 @@ public:
 
     inline QSize realPatchSize() const {
         return m_patchRect.size();
+    }
+
+    inline QRect realPatchRect() const {
+        return m_patchRect;
     }
 
     inline QSize realTileSize() const {
@@ -291,8 +322,12 @@ public:
         return m_tileRow;
     }
 
-    inline quint32 pixelSize() const {
+    inline int pixelSize() const {
         return m_patchColorSpace->pixelSize();
+    }
+
+    inline const KoColorSpace* patchColorSpace() const {
+        return m_patchColorSpace;
     }
 
     inline quint32 patchPixelsLength() const {
@@ -301,6 +336,15 @@ public:
 
     inline bool valid() const {
         return m_patchRect.isValid();
+    }
+
+    inline DataBuffer&& takePixelData() {
+        return std::move(m_patchPixels);
+    }
+
+    inline void putPixelData(DataBuffer &&buffer, const KoColorSpace *colorSpace) {
+        m_patchPixels = std::move(buffer);
+        m_patchColorSpace = colorSpace;
     }
 
 private:

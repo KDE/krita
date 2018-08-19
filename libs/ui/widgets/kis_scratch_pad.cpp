@@ -110,7 +110,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
@@ -257,7 +257,7 @@ void KisScratchPad::endPan(KoPointerEvent *event)
 void KisScratchPad::pick(KoPointerEvent *event)
 {
     KoColor color;
-    if (KisToolUtils::pick(m_paintLayer->projection(), event->point.toPoint(), &color)) {
+    if (KisToolUtils::pickColor(color, m_paintLayer->projection(), event->point.toPoint())) {
         emit colorSelected(color);
     }
 }
@@ -349,7 +349,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {
     m_resourceProvider = resourceProvider;
-    KisConfig cfg;
+    KisConfig cfg(true);
     setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
@@ -510,6 +510,7 @@ void KisScratchPad::fillLayer()
 {
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
+
     KisPainter painter(paintDevice);
     QRect sourceRect(0, 0, paintDevice->exactBounds().width(), paintDevice->exactBounds().height());
     painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentImage()->projection(), sourceRect);

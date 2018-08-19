@@ -129,6 +129,8 @@ void KoPathBreakAtPointCommand::undo()
     KUndo2Command::undo();
     KoPathShape * lastPathShape = 0;
 
+    QMap<KoPathShape *, QList<KoPathPointIndex>> pointsMap;
+
     for (int i = 0; i < m_pointDataList.size(); ++i) {
         const KoPathPointData & pd = m_pointDataList.at(i);
         KoPathShape * pathShape = pd.pathShape;
@@ -140,7 +142,10 @@ void KoPathBreakAtPointCommand::undo()
             pointIndex.second = pointIndex.second + m_closedIndex.at(i).second;
             pathShape->join(pd.pointIndex.first);
         }
+
         m_points[i] = pathShape->removePoint(pointIndex);
+
+        pointsMap[pathShape].append(pd.pointIndex);
 
         if (lastPathShape != pathShape) {
             if (lastPathShape) {
@@ -151,6 +156,10 @@ void KoPathBreakAtPointCommand::undo()
     }
     if (lastPathShape) {
         lastPathShape->update();
+    }
+
+    for (auto it = pointsMap.constBegin(); it != pointsMap.constEnd(); ++it) {
+        it.key()->recommendPointSelectionChange(it.value());
     }
 
     m_deletePoints = true;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>387</height>
+    <height>413</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,7 +58,7 @@
          <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>10000.000000000000000</double>
+         <double>100000000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -74,7 +74,7 @@
          <double>0.000100000000000</double>
         </property>
         <property name="maximum">
-         <double>10000.000000000000000</double>
+         <double>100000000.000000000000000</double>
         </property>
         <property name="singleStep">
          <double>0.100000000000000</double>
@@ -607,15 +607,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>KisDoubleParseUnitSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_unit_spin_box.h</header>
+  </customwidget>
+  <customwidget>
    <class>KCanvasPreview</class>
    <extends>QWidget</extends>
    <header>kcanvaspreview.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleParseUnitSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_unit_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

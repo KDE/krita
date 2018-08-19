@@ -19,6 +19,7 @@
 #include "kis_wdg_convert_height_to_normal_map.h"
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter_configuration.h>
 #include "kis_lod_transform.h"
@@ -37,7 +38,7 @@ KritaConvertHeightToNormalMapFilter::~KritaConvertHeightToNormalMapFilter()
 {
 }
 
-KisConvertHeightToNormalMapFilter::KisConvertHeightToNormalMapFilter(): KisFilter(id(), categoryEdgeDetection(), i18n("&Height to Normal Map..."))
+KisConvertHeightToNormalMapFilter::KisConvertHeightToNormalMapFilter(): KisFilter(id(), FiltersCategoryEdgeDetectionId, i18n("&Height to Normal Map..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -68,7 +69,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlags = device->colorSpace()->channelFlags();
     }
 
-    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobolVector;
+    KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
     if (configuration->getString("type") == "prewitt") {
         type = KisEdgeDetectionKernel::Prewit;
     } else if (configuration->getString("type") == "simple") {
@@ -145,7 +146,7 @@ QRect KisConvertHeightToNormalMapFilter::neededRect(const QRect &rect, const Kis
 
     QVariant value;
     /**
-     * NOTE: integer devision by two is done on purpose,
+     * NOTE: integer division by two is done on purpose,
      *       because the kernel size is always odd
      */
     const int halfWidth = _config->getProperty("horizRadius", value) ? KisEdgeDetectionKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;

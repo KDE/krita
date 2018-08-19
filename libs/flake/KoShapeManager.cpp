@@ -119,7 +119,7 @@ void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter,
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes)
-        : d(new Private(this, canvas))
+    : d(new Private(this, canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
@@ -127,7 +127,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
-        : d(new Private(this, canvas))
+    : d(new Private(this, canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
@@ -497,6 +497,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
         case KoFlake::ShapeOnTop:
             if (shape->isSelectable())
                 return shape;
+            break;
         case KoFlake::Selected:
             if (d->selection->isSelected(shape))
                 return shape;
@@ -530,14 +531,14 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 }
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes, bool containedMode)
-{ 
+{
     d->updateTree();
     QList<KoShape*> shapes(containedMode ? d->tree.contained(rect) : d->tree.intersects(rect));
 
     for (int count = shapes.count() - 1; count >= 0; count--) {
-     
+
         KoShape *shape = shapes.at(count);
-       
+
         if (omitHiddenShapes && !shape->isVisible()) {
             shapes.removeAt(count);
         } else {

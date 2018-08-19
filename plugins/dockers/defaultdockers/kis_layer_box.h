@@ -75,7 +75,7 @@ public:
     ~KisLayerBox() override;
     QString observerName() override { return "KisLayerBox"; }
     /// reimplemented from KisMainwindowObserver
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 private Q_SLOTS:
@@ -120,6 +120,8 @@ private Q_SLOTS:
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);
     void slotUpdateIcons();
+
+    void slotAddLayerBnClicked();
 
     void updateThumbnail();
     void updateAvailableLabels();

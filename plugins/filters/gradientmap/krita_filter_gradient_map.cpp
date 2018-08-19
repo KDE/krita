@@ -25,6 +25,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 
+#include <filter/kis_filter_category_ids.h>
 #include "kis_config_widget.h"
 #include <KoResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -36,7 +37,7 @@
 #include <KisSequentialIteratorProgress.h>
 
 
-KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), categoryMap(), i18n("&Gradient Map..."))
+KritaFilterGradientMap::KritaFilterGradientMap() : KisFilter(id(), FiltersCategoryMapId, i18n("&Gradient Map..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setShowConfigurationWidget(true);
@@ -56,11 +57,11 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
     QDomDocument doc;
     if (config->version()==1) {
         QDomElement elt = doc.createElement("gradient");
-        KoAbstractGradient *gradientAb = KoResourceServerProvider::instance()->gradientServer(false)->resourceByName(config->getString("gradientName"));
+        KoAbstractGradient *gradientAb = KoResourceServerProvider::instance()->gradientServer()->resourceByName(config->getString("gradientName"));
             if (!gradientAb) {
                 qDebug() << "Could not find gradient" << config->getString("gradientName");
             }
-        gradientAb = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();
+        gradientAb = KoResourceServerProvider::instance()->gradientServer()->resources().first();
         KoStopGradient::fromQGradient(gradientAb->toQGradient())->toXML(doc, elt);
         doc.appendChild(elt);
     } else {
@@ -87,7 +88,7 @@ void KritaFilterGradientMap::processImpl(KisPaintDeviceSP device,
 KisFilterConfigurationSP KritaFilterGradientMap::factoryConfiguration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("gradientmap", 2);
-    KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer(false)->resources().first();
+    KoAbstractGradient *gradient = KoResourceServerProvider::instance()->gradientServer()->resources().first();
     KoStopGradient stopGradient;
     stopGradient.fromQGradient(gradient->toQGradient());
     QDomDocument doc;

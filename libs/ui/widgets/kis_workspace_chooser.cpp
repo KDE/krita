@@ -24,22 +24,24 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QAction>
+#include <QGridLayout>
+#include <QLineEdit>
+#include <QLabel>
 
 #include <klocalizedstring.h>
 
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerAdapter.h>
-#include <KoDockWidgetTitleBar.h>
-#include <KisMainWindow.h>
 #include <resources/KoResource.h>
 
-#include <resources/KoPattern.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_workspace_resource.h"
 #include "KisViewManager.h"
-#include <QGridLayout>
-#include <QLineEdit>
 #include <kis_canvas_resource_provider.h>
+#include <KisMainWindow.h>
+#include <KisPart.h>
+#include <KisWindowLayoutManager.h>
+#include <dialogs/KisNewWindowLayoutDialog.h>
 #include <kis_config.h>
 
 class KisWorkspaceDelegate : public QAbstractItemDelegate
@@ -60,7 +62,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     if (!index.isValid())
         return;
 
-    KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(index.internalPointer());
+    KoResource* workspace = static_cast<KoResource*>(index.internalPointer());
 
     QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Active : QPalette::Disabled;
     QPalette::ColorRole cr = (option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
@@ -80,33 +82,60 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 
 KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
 {
-    KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer(false);
-    QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
-    m_itemChooser = new KoResourceItemChooser(adapter, this);
-    m_itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
-    m_itemChooser->setFixedSize(250, 250);
-    m_itemChooser->setRowHeight(30);
-    m_itemChooser->setColumnCount(1);
-    m_itemChooser->showTaggingBar(false);
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(resourceSelected(KoResource*)));
+    KoResourceServer<KisWorkspaceResource> * workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+    QSharedPointer<KoAbstractResourceServerAdapter> workspaceAdapter(new KoResourceServerAdapter<KisWorkspaceResource>(workspaceServer));
 
-    KisConfig cfg;
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
+    KoResourceServer<KisWindowLayoutResource> * windowLayoutServer = KisResourceServerProvider::instance()->windowLayoutServer();
+    QSharedPointer<KoAbstractResourceServerAdapter> windowLayoutAdapter(new KoResourceServerAdapter<KisWindowLayoutResource>(windowLayoutServer));
+
+    m_layout = new QGridLayout(this);
+
+    m_workspaceWidgets = createChooserWidgets(workspaceAdapter, i18n("Workspaces"));
+    m_windowLayoutWidgets = createChooserWidgets(windowLayoutAdapter, i18n("Window layouts"));
+
+    connect(m_workspaceWidgets.itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(workspaceSelected(KoResource*)));
+    connect(m_workspaceWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWorkspace()));
+
+    connect(m_windowLayoutWidgets.itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(windowLayoutSelected(KoResource*)));
+    connect(m_windowLayoutWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWindowLayout()));
+}
+
+KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(QSharedPointer<KoAbstractResourceServerAdapter> adapter, const QString &title)
+{
+    ChooserWidgets widgets;
+
+    QLabel *titleLabel = new QLabel(this);
+    QFont titleFont;
+    titleFont.setBold(true);
+    titleLabel->setFont(titleFont);
+    titleLabel->setText(title);
+
+    widgets.itemChooser = new KoResourceItemChooser(adapter, this);
+    widgets.itemChooser->setItemDelegate(new KisWorkspaceDelegate(this));
+    widgets.itemChooser->setFixedSize(250, 250);
+    widgets.itemChooser->setRowHeight(30);
+    widgets.itemChooser->setColumnCount(1);
+    widgets.itemChooser->showTaggingBar(false);
+    widgets.saveButton = new QPushButton(i18n("Save"));
+
+    KisConfig cfg(true);
+    widgets.itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
                                          cfg.kineticScrollingSensitivity(),
                                          cfg.kineticScrollingScrollbar());
 
-    QPushButton* saveButton = new QPushButton(i18n("Save"));
-    connect(saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSave()));
+    widgets.nameEdit = new QLineEdit(this);
+    widgets.nameEdit->setPlaceholderText(i18n("Insert name"));
+    widgets.nameEdit->setClearButtonEnabled(true);
 
-    m_nameEdit = new QLineEdit(this);
-    m_nameEdit->setPlaceholderText(i18n("Insert name"));
-    m_nameEdit->setClearButtonEnabled(true);
+    int firstRow = m_layout->rowCount();
+    m_layout->addWidget(titleLabel, firstRow, 0, 1, 2);
+    m_layout->addWidget(widgets.itemChooser, firstRow + 1, 0, 1, 2);
+    m_layout->addWidget(widgets.nameEdit, firstRow + 2, 0, 1, 1);
+    m_layout->addWidget(widgets.saveButton, firstRow + 2, 1, 1, 1);
 
-    QGridLayout* layout = new QGridLayout(this);
-    layout->addWidget(m_itemChooser, 0, 0, 1, 2);
-    layout->addWidget(m_nameEdit, 1, 0, 1, 1);
-    layout->addWidget(saveButton, 1, 1, 1, 1);
+    return widgets;
 }
 
 KisWorkspaceChooser::~KisWorkspaceChooser()
@@ -114,11 +143,12 @@ KisWorkspaceChooser::~KisWorkspaceChooser()
 
 }
 
-void KisWorkspaceChooser::slotSave()
+void KisWorkspaceChooser::slotSaveWorkspace()
 {
     if (!m_view->qtMainWindow()) {
         return;
     }
+
     KoResourceServer<KisWorkspaceResource> * rserver = KisResourceServerProvider::instance()->workspaceServer();
 
     KisWorkspaceResource* workspace = new KisWorkspaceResource(QString());
@@ -126,7 +156,7 @@ void KisWorkspaceChooser::slotSave()
     m_view->resourceProvider()->notifySavingWorkspace(workspace);
     workspace->setValid(true);
     QString saveLocation = rserver->saveLocation();
-    QString name = m_nameEdit->text();
+    QString name = m_workspaceWidgets.nameEdit->text();
 
     bool newName = false;
     if(name.isEmpty()) {
@@ -148,32 +178,64 @@ void KisWorkspaceChooser::slotSave()
     rserver->addResource(workspace);
 }
 
-void KisWorkspaceChooser::resourceSelected(KoResource* resource)
+void KisWorkspaceChooser::workspaceSelected(KoResource *resource)
 {
     if (!m_view->qtMainWindow()) {
         return;
     }
     KisWorkspaceResource* workspace = static_cast<KisWorkspaceResource*>(resource);
-
-    QMap<QDockWidget *, bool> dockWidgetMap;
-    Q_FOREACH (QDockWidget *docker, m_view->mainWindow()->dockWidgets()) {
-        dockWidgetMap[docker] = docker->property("Locked").toBool();
-    }
-
     KisMainWindow *mainWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
-    mainWindow->restoreWorkspace(workspace->dockerState());
-    m_view->resourceProvider()->notifyLoadingWorkspace(workspace);
+    mainWindow->restoreWorkspace(workspace);
 
-    Q_FOREACH (QDockWidget *docker, dockWidgetMap.keys()) {
-        if (docker->isVisible()) {
-            docker->setProperty("Locked", dockWidgetMap[docker]);
-            docker->updateGeometry();
-        }
-        else {
-            docker->setProperty("Locked", false); // Unlock invisible dockers
-            docker->toggleViewAction()->setEnabled(true);
-        }
+}
 
+void KisWorkspaceChooser::slotSaveWindowLayout()
+{
+    KisMainWindow *thisWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
+    if (!thisWindow) return;
+
+    KisNewWindowLayoutDialog dlg;
+    dlg.setName(m_windowLayoutWidgets.nameEdit->text());
+    dlg.exec();
+
+    if (dlg.result() != QDialog::Accepted) return;
+
+    QString name = dlg.name();
+    bool showImageInAllWindows = dlg.showImageInAllWindows();
+    bool primaryWorkspaceFollowsFocus = dlg.primaryWorkspaceFollowsFocus();
+
+    auto *layout = KisWindowLayoutResource::fromCurrentWindows(name, KisPart::instance()->mainWindows(), showImageInAllWindows, primaryWorkspaceFollowsFocus, thisWindow);
+    layout->setValid(true);
+
+    KisWindowLayoutManager::instance()->setShowImageInAllWindowsEnabled(showImageInAllWindows);
+    KisWindowLayoutManager::instance()->setPrimaryWorkspaceFollowsFocus(primaryWorkspaceFollowsFocus, thisWindow->id());
+
+    KoResourceServer<KisWindowLayoutResource> * rserver = KisResourceServerProvider::instance()->windowLayoutServer();
+    QString saveLocation = rserver->saveLocation();
+
+    bool newName = false;
+    if (name.isEmpty()) {
+        newName = true;
+        name = i18n("Window Layout");
     }
+    QFileInfo fileInfo(saveLocation + name + layout->defaultFileExtension());
 
+    int i = 1;
+    while (fileInfo.exists()) {
+        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + layout->defaultFileExtension());
+        i++;
+    }
+    layout->setFilename(fileInfo.filePath());
+
+    if (newName) {
+        name = i18n("Window Layout %1", i);
+    }
+    layout->setName(name);
+    rserver->addResource(layout);
+}
+
+void KisWorkspaceChooser::windowLayoutSelected(KoResource * resource)
+{
+    auto *layout = static_cast<KisWindowLayoutResource*>(resource);
+    layout->applyLayout();
 }

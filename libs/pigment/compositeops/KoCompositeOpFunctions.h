@@ -453,4 +453,51 @@ inline T cfDarkenOnly(T src, T dst) { return qMin(src, dst); }
 template<class T>
 inline T cfLightenOnly(T src, T dst) { return qMax(src, dst); }
 
+template<class T>
+inline T cfGlow(T src, T dst) {
+    using namespace Arithmetic;
+        // see http://www.pegtop.net/delphi/articles/blendmodes/quadratic.htm for formulas of Quadratic Blending Modes like Glow, Reflect, Freeze, and Heat
+    
+    if(dst == unitValue<T>()) {
+        return unitValue<T>();
+    }
+
+    if(src == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+    
+    return clamp<T>(div(mul(src, src), inv(dst)));
+}
+    
+template<class T>
+inline T cfReflect(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return (cfGlow(dst,src)); 
+}
+
+template<class T>
+inline T cfHeat(T src, T dst) {
+    using namespace Arithmetic;
+            // Heat, and Freeze only works properly on 8-bit images. It does not work properly on any other color depth. For now, if Heat and Freeze are proven useful for 8-bit painting, then there should be some way of solving this issue.
+    
+    if(dst == zeroValue<T>()) {
+        return zeroValue<T>();
+    }
+    
+    if(src == unitValue<T>()) {
+        return unitValue<T>();
+    }
+    
+    return inv(clamp<T>(div(mul(inv(src), inv(src)),dst)));
+}
+
+template<class T>
+inline T cfFreeze(T src, T dst) {
+    using namespace Arithmetic;
+    
+    return clamp<T>(cfHeat(dst,src)); 
+}
+
+
 #endif // KOCOMPOSITEOP_FUNCTIONS_H_

@@ -3,7 +3,7 @@
 If you need to build Krita's dependencies for the following reasons:
 
 * you develop on Windows and aren't using Craft
-* you develop on OSX and aren't using Homebrew
+* you develop on OSX and aren't using Homebrew, or are on OSX and want to make distributable app bundles
 * you want to build a generic, distro-agnostic version of Krita for Linux
 * you develop on Linux, but some dependencies aren't available for your distribution
 
@@ -104,9 +104,8 @@ On Windows:
 
     cmake --build . --config RelWithDebInfo --target ext_patch
     cmake --build . --config RelWithDebInfo --target ext_png2ico
-    cmake --build . --config RelWithDebInfo --target ext_gettext
 
-On OSX:
+On OSX and Windows:
 
     cmake --build . --config RelWithDebInfo --target ext_gettext
 
@@ -121,23 +120,20 @@ On all operating systems:
     cmake --build . --config RelWithDebInfo --target ext_eigen3
     cmake --build . --config RelWithDebInfo --target ext_exiv2
     cmake --build . --config RelWithDebInfo --target ext_fftw3
-
-On all operating systems
-
     cmake --build . --config RelWithDebInfo --target ext_ilmbase
     cmake --build . --config RelWithDebInfo --target ext_jpeg
     cmake --build . --config RelWithDebInfo --target ext_lcms2
     cmake --build . --config RelWithDebInfo --target ext_ocio
     cmake --build . --config RelWithDebInfo --target ext_openexr
 
-Note for OSX:
-
-On OSX, you need to first build openexr; that will fail; then you need to set the rpath for the two utilities correctly, then try to build openexr again.
+OSX Note: You need to first build openexr; that will fail; then you need to set the rpath for the two utilities correctly, then try to build openexr again.
 
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./b44ExpLogTable
     install_name_tool -add_rpath $BUILD_ROOT/i/lib $BUILD_ROOT/b/ext_openexr/ext_openexr-prefix/src/ext_openexr-build/IlmImf/./dwaLookups
 
-On All operating systems:
+
+
+On All operating systems
 
     cmake --build . --config RelWithDebInfo --target ext_png
     cmake --build . --config RelWithDebInfo --target ext_tiff
@@ -146,7 +142,7 @@ On All operating systems:
     cmake --build . --config RelWithDebInfo --target ext_libraw
     cmake --build . --config RelWithDebInfo --target ext_giflib
 
-On Linux, if you want to build your own SIP and PyQt instead of the system one:
+On Linux (if you want to build your own SIP and PyQt instead of the system one)
 
     cmake --build . --config RelWithDebInfo --target ext_sip
     cmake --build . --config RelWithDebInfo --target ext_pyqt
@@ -160,36 +156,39 @@ On Linux
 
     cmake --build . --config RelWithDebInfo --target ext_kcrash
 
-Everywhere else:
-
-    cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
-
-On Windows, if you want to include DrMingw for dumping backtrace on crash:
+On Windows (if you want to include DrMingw for dumping backtrace on crash)
 
     cmake --build . --config RelWithDebInfo --target ext_drmingw
 
-On Windows, if you want to include Python scripting:
+On Windows (if you want to include Python scripting)
 
     cmake --build . --config RelWithDebInfo --target ext_python
     cmake --build . --config RelWithDebInfo --target ext_sip
     cmake --build . --config RelWithDebInfo --target ext_pyqt
 
-On Windows and Linux, if you want to build gmic-qt:
+On Windows and Linux (if you want to include gmic-qt)
 
     cmake --build . --config RelWithDebInfo --target ext_gmic
 
-Note: poppler should be buildable on Linux as well with a home-built freetype
+Linux Note: poppler should be buildable on Linux as well with a home-built freetype
 and fontconfig, but I don't know how to make fontconfig find freetype, and on
 Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.
 
-Note 2: if you want to build a release, you need to get the binary gettext
+OSX Note: In order to build fontconfig on macOS, you need to have pkg-config installed.
+You probably need homebrew for that... See http://macappstore.org/pkg-config/ .
+archives from: files.kde.org/krita/build/dependencies:
 
-archives from files.kde.org/krita/build/dependencies:
+On Windows, download the approporiate zip file and put in in your i folder
 
-  http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
-  http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
+   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-32.zip
+   http://files.kde.org/krita/build/dependencies/gettext0.19.8.1-iconv1.14-shared-64.zip
 
-Take care, these zips contain a libstdc++-6.dll that you don't want in your path when building.
+- Take care, these zips contain a libstdc++-6.dll that you don't want in your path when building.
+
+On Windows and OSX
+    cmake --build . --config RelWithDebInfo --target ext_kwindowsystem
+
+
 
 == Build Krita ==
 

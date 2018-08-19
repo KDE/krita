@@ -245,6 +245,8 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
         }
     }
 
+    nodeColorSpace = 0;
+
     if (node) {
         KisPaintDeviceSP device = findValidDevice(node);
 
@@ -252,7 +254,7 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
             device->compositionSourceColorSpace() :
             node->colorSpace();
 
-        KIS_ASSERT_RECOVER_NOOP(nodeColorSpace);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(nodeColorSpace);
 
         if (device) {
             q->connect(device, SIGNAL(profileChanged(const KoColorProfile*)),
@@ -261,7 +263,9 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
                        SLOT(slotUpdateCurrentNodeColorSpace()), Qt::UniqueConnection);
         }
 
-    } else {
+    }
+
+    if (!nodeColorSpace) {
         nodeColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     }
 
@@ -271,7 +275,7 @@ void KisDisplayColorConverter::Private::setCurrentNode(KisNodeSP node)
 
 void KisDisplayColorConverter::Private::selectPaintingColorSpace()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     paintingColorSpace = cfg.customColorSelectorColorSpace();
 
     if (!paintingColorSpace || displayFilter) {
@@ -332,8 +336,8 @@ void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter>
 
 
     { // sanity check
-        KisConfig cfg;
-        //KIS_ASSERT_RECOVER_NOOP(cfg.useOcio() == (bool) m_d->displayFilter);
+        // KisConfig cfg;
+        // KIS_ASSERT_RECOVER_NOOP(cfg.useOcio() == (bool) m_d->displayFilter);
     }
 
     m_d->selectPaintingColorSpace();
@@ -343,7 +347,7 @@ void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter>
 KoColorConversionTransformation::Intent
 KisDisplayColorConverter::renderingIntent()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     return (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
 }
 
@@ -353,7 +357,7 @@ KisDisplayColorConverter::conversionFlags()
     KoColorConversionTransformation::ConversionFlags conversionFlags =
         KoColorConversionTransformation::HighQuality;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     if (cfg.useBlackPointCompensation()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
     if (!cfg.allowLCMSOptimization()) conversionFlags |= KoColorConversionTransformation::NoOptimization;

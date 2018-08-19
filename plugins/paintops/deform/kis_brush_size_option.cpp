@@ -112,7 +112,7 @@ qreal KisBrushSizeOption::brushAspect() const
 
 void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    BrushSizeOption op;
+    KisBrushSizeOptionProperties op;
 
     op.brush_diameter = m_options->diameter->value();
     op.brush_aspect = m_options->aspectBox->value();
@@ -128,7 +128,7 @@ void KisBrushSizeOption::writeOptionSetting(KisPropertiesConfigurationSP setting
 
 void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    BrushSizeOption op;
+    KisBrushSizeOptionProperties op;
     op.readOptionSetting(setting);
 
     m_options->diameter->setValue(op.brush_diameter);

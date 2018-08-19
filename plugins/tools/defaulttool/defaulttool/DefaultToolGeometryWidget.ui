@@ -198,7 +198,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When &amp;quot;Uniform Scaling&amp;quot; is &lt;span style=&quot; font-weight:600;&quot;&gt;enabled&lt;/span&gt;, the shape's stroke is scaled with the shape itself. &lt;/p&gt;&lt;p&gt;In &lt;span style=&quot; font-weight:600;&quot;&gt;disabled&lt;/span&gt; state, the shape is only resized, keeping the stroke width and style intact.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>Uniform Scaling</string>
+          <string>Scale Styles</string>
          </property>
         </widget>
        </item>
@@ -230,7 +230,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisDoubleSliderSpinBox" name="dblOpacity" native="true"/>
+    <widget class="KisShapePropertySlider" name="dblOpacity" native="true"/>
    </item>
    <item>
     <spacer name="verticalSpacer">
@@ -266,9 +266,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisShapePropertySlider</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header location="global">KisSelectionPropertySlider.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -136,7 +136,6 @@ QPointF KoFlake::toAbsolute(const QPointF &relative, const QSizeF &size)
     return QPointF(relative.x() * size.width(), relative.y() * size.height());
 }
 
-#include <KoShape.h>
 #include <QTransform>
 #include "kis_debug.h"
 #include "kis_algebra_2d.h"

@@ -45,7 +45,7 @@ public:
  * This filter will allow the user to input an image and have it be approximated with
  * a halftone pattern. https://en.wikipedia.org/wiki/Halftone
  *
- * The primary usecase of such a filter is for specialised printing techniques, but for
+ * The primary usecase of such a filter is for specialized printing techniques, but for
  * many people the half-tone pattern also serves as a neutral pattern that is more pleasant
  * than plain flat look. The half tone in this case also becomes a stylistic technique.
  *

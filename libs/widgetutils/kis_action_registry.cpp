@@ -134,6 +134,9 @@ Q_GLOBAL_STATIC(KisActionRegistry, s_instance)
 
 KisActionRegistry *KisActionRegistry::instance()
 {
+    if (!s_instance.exists()) {
+        dbgRegistry << "initializing KoActionRegistry";
+    }
     return s_instance;
 }
 

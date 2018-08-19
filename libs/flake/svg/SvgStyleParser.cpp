@@ -78,8 +78,7 @@ SvgStyleParser::~SvgStyleParser()
 void SvgStyleParser::parseStyle(const SvgStyles &styles)
 {
     SvgGraphicsContext *gc = d->context.currentGC();
-    if (!gc)
-        return;
+    if (!gc) return;
 
     // make sure we parse the style attributes in the right order
     Q_FOREACH (const QString & command, d->styleAttributes) {

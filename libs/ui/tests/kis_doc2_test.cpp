@@ -29,7 +29,7 @@
 #include <KisViewManager.h>
 #include "util.h"
 #include <KisView.h>
-#include "KisPart.h"
+#include "sdk/tests/kistest.h"
 
 void KisDocumentTest::testOpenImageTwiceInSameDoc()
 {
@@ -40,12 +40,12 @@ void KisDocumentTest::testOpenImageTwiceInSameDoc()
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
 
-    KisDocument *doc = KisPart::instance()->createDocument();
+    QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
     doc->loadNativeFormat(fname);
     doc->loadNativeFormat(fname2);
 }
 
 
-QTEST_MAIN(KisDocumentTest)
+KISTEST_MAIN(KisDocumentTest)
 

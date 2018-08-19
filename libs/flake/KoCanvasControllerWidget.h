@@ -62,8 +62,6 @@ public:
      */
     virtual void activate();
 
-    void setDrawShadow(bool drawShadow) override;
-
     void setCanvas(KoCanvasBase *canvas) override;
 
     KoCanvasBase *canvas() const override;
@@ -146,6 +144,8 @@ public:
 
     QPointF currentCursorPosition() const override;
 
+    void resetScrollBars() override;
+
     /**
      * \internal
      */
@@ -162,6 +162,8 @@ private Q_SLOTS:
 
 protected:
     friend class KisZoomAndPanTest;
+
+    qreal vastScrollingFactor() const;
 
     /// reimplemented from QWidget
     void paintEvent(QPaintEvent *event) override;

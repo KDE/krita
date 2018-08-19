@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,16 +16,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
 #ifndef KIS_TOOL_UTILS_H
 #define KIS_TOOL_UTILS_H
 
-#include <QPoint>
-
-#include <KoColor.h>
 #include <kis_types.h>
 #include <kritaui_export.h>
-#include <kis_selection.h>
 
+class QPoint;
+class KoColor;
 
 namespace KisToolUtils {
 
@@ -37,6 +37,7 @@ struct KRITAUI_EXPORT ColorPickerConfig {
     bool normaliseValues;
     bool sampleMerged;
     int radius;
+    int blend;
 
     void save(bool defaultActivation = true) const;
     void load(bool defaultActivation = true);
@@ -45,9 +46,21 @@ private:
 };
 
 /**
- * return the color at the given position on the given paint device.
+ * Pick a color based on the given position on the given paint device.
+ *
+ * out_color   - Output parameter returning newly picked color.
+ * dev         - Paint device to pick from.
+ * pos         - Position to pick from.
+ * blendColor  - Optional color to be blended with.
+ * radius      - Picking area radius in pixels.
+ * blend       - Blend percentage. 100% all picked, 0% all blendColor.
+ * pure        - Whether to bypass radius, blending, and active layer settings for pure picking.
+ *
+ * RETURN      - Returns true if a valid color was picked.
  */
-bool KRITAUI_EXPORT pick(KisPaintDeviceSP dev, const QPoint& pos, KoColor *color, int radius = 1);
+bool KRITAUI_EXPORT pickColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
+                              KoColor const *const blendColor = nullptr, int radius = 1,
+                              int blend = 100, bool pure = false);
 
 /**
  * Recursively search a node with a non-transparent pixel

@@ -82,7 +82,7 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
     const GLvoid *fd = fillData.constData();
 
     m_textureRectInImagePixels =
-            stretchRect(m_tileRectInImagePixels, texturesInfo->border);
+            kisGrowRect(m_tileRectInImagePixels, texturesInfo->border);
 
     m_tileRectInTexturePixels = relativeRect(m_textureRectInImagePixels,
                                              m_tileRectInImagePixels,
@@ -107,7 +107,7 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
                  m_texturesInfo->type, fd);
 
 #ifdef USE_PIXEL_BUFFERS
-    if (m_useBuffer) {
+    if (m_useBuffer && m_glBuffer) {
         m_glBuffer->release();
     }
 #endif
@@ -238,7 +238,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 #ifdef USE_PIXEL_BUFFERS
         if (m_useBuffer) {
             m_glBuffer->bind();
-            quint32 size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
+            int size = patchSize.width() * patchSize.height() * updateInfo.pixelSize();
             m_glBuffer->allocate(size);
 
             void *vid = m_glBuffer->map(QOpenGLBuffer::WriteOnly);
@@ -372,6 +372,14 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
     } else {
         setCurrentLodPlane(patchLevelOfDetail);
     }
+}
+
+QRectF KisTextureTile::imageRectInTexturePixels(const QRect &imageRect) const
+{
+    return relativeRect(m_textureRectInImagePixels,
+                        imageRect,
+                        m_texturesInfo);
+
 }
 
 #ifdef USE_PIXEL_BUFFERS

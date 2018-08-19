@@ -1,8 +1,8 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
-Exec=krita %u
+Exec=krita %f
 Icon=calligrakrita
-MimeType=image/x-psd;image/photoshop;image/x-photoshop;image/x-vnd.adobe.photoshop;image/vnd.adobe.photoshop;
+MimeType=image/x-psd;image/photoshop;image/x-photoshop;image/vnd.adobe.photoshop;
 Name=Krita
 Name[af]=Krita
 Name[ar]=كريتا

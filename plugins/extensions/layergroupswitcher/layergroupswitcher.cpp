@@ -38,7 +38,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(LayerGroupSwitcherFactory, "kritalayergroupswitcher.json", registerPlugin<LayerGroupSwitcher>();)
 
 LayerGroupSwitcher::LayerGroupSwitcher(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = new KisAction(i18n("Move into previous group"), this);
     addAction("LayerGroupSwitcher/previous", action);
@@ -55,11 +55,11 @@ LayerGroupSwitcher::~LayerGroupSwitcher()
 
 void LayerGroupSwitcher::moveIntoNextGroup()
 {
-    KisImageSP image = m_view->image().toStrongRef();
+    KisImageSP image = viewManager()->image().toStrongRef();
     if (!image) {
         return;
     }
-    KisNodeManager *nodeManager = m_view->nodeManager();
+    KisNodeManager *nodeManager = viewManager()->nodeManager();
     KisLayerSP active = nodeManager->activeLayer();
     if (!active) {
         return;
@@ -96,11 +96,11 @@ void LayerGroupSwitcher::moveIntoNextGroup()
 
 void LayerGroupSwitcher::moveIntoPreviousGroup()
 {
-    KisImageSP image = m_view->image().toStrongRef();
+    KisImageSP image = viewManager()->image().toStrongRef();
     if (!image) {
         return;
     }
-    KisNodeManager *nodeManager = m_view->nodeManager();
+    KisNodeManager *nodeManager = viewManager()->nodeManager();
     KisLayerSP active = nodeManager->activeLayer();
     if (!active) {
         return;

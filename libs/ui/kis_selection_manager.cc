@@ -56,7 +56,6 @@
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
-#include "KisDocument.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_layer.h"
@@ -91,7 +90,6 @@
 #include "kis_action_manager.h"
 #include "operations/kis_operation_configuration.h"
 //new
-#include "kis_recorded_path_paint_action.h"
 #include "kis_node_query_path.h"
 #include "kis_tool_shape.h"
 
@@ -158,7 +156,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_reselect = actionManager->createAction("reselect");
     connect(m_reselect, SIGNAL(triggered()), this, SLOT(reselect()));
 
-    m_invert = actionManager->createAction("invert");
+    m_invert = actionManager->createAction("invert_selection");
     m_invert->setOperationID("invertselection");
 
     actionManager->registerOperation(new KisInvertSelectionOperation);

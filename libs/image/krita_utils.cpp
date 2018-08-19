@@ -45,7 +45,7 @@ namespace KritaUtils
 
     QSize optimalPatchSize()
     {
-        KisImageConfig cfg;
+        KisImageConfig cfg(true);
         return QSize(cfg.updatePatchWidth(),
                      cfg.updatePatchHeight());
     }
@@ -383,11 +383,11 @@ namespace KritaUtils
 
         // TODO: if someone feel bored, a more optimized version of this would be welcome
         const QSize size = image.size();
-        for(int i = 0; i < size.height(); ++i) {
-            for(int j = 0; j < size.width(); ++j) {
-                const QRgb pixel = image.pixel(i,j);
+        for(int y = 0; y < size.height(); ++y) {
+            for(int x = 0; x < size.width(); ++x) {
+                const QRgb pixel = image.pixel(x,y);
                 const int gray = qGray(pixel);
-                dstImage.setPixel(i, j, qRgba(gray, gray, gray, qAlpha(pixel)));
+                dstImage.setPixel(x, y, qRgba(gray, gray, gray, qAlpha(pixel)));
             }
         }
 
@@ -475,4 +475,35 @@ namespace KritaUtils
             rc->moveTop(mirrorY);
         }
     }
+
+    qreal colorDifference(const QColor &c1, const QColor &c2)
+    {
+        const qreal dr = c1.redF() - c2.redF();
+        const qreal dg = c1.greenF() - c2.greenF();
+        const qreal db = c1.blueF() - c2.blueF();
+
+        return std::sqrt(2 * pow2(dr) + 4 * pow2(dg) + 3 * pow2(db));
+    }
+
+    void dragColor(QColor *color, const QColor &baseColor, qreal threshold)
+    {
+        while (colorDifference(*color, baseColor) < threshold) {
+
+            QColor newColor = *color;
+
+            if (newColor.lightnessF() > baseColor.lightnessF()) {
+                newColor = newColor.lighter(120);
+            } else {
+                newColor = newColor.darker(120);
+            }
+
+            if (newColor == *color) {
+                break;
+            }
+
+            *color = newColor;
+        }
+    }
+
+
 }

@@ -25,7 +25,7 @@ class SelectionsBagDocker(DockWidget):
         widget = QWidget(self)
         uic.loadUi(os.path.dirname(os.path.realpath(__file__)) + '/selectionsbagdocker.ui', widget)
         self.setWidget(widget)
-        self.setWindowTitle("Selections bag")
+        self.setWindowTitle(i18n("Selections Bag"))
 
     def canvasChanged(self, canvas):
         print("Canvas", canvas)

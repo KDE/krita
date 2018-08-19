@@ -27,15 +27,15 @@
 #include <FlakeDebug.h>
 
 KoParameterShapePrivate::KoParameterShapePrivate(KoParameterShape *shape)
-    : KoPathShapePrivate(shape),
-    parametric(true)
+    : KoPathShapePrivate(shape)
+    , parametric(true)
 {
 }
 
 KoParameterShapePrivate::KoParameterShapePrivate(const KoParameterShapePrivate &rhs, KoParameterShape *q)
-    : KoPathShapePrivate(rhs, q),
-      handles(rhs.handles),
-      parametric(rhs.parametric)
+    : KoPathShapePrivate(rhs, q)
+    , parametric(rhs.parametric)
+    , handles(rhs.handles)
 {
 }
 

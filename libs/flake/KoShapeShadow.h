@@ -91,7 +91,7 @@ public:
     /// Returns if shadow is visible
     bool isVisible() const;
 
-    /// Fills the insets oject with the space the shadow takes around a shape
+    /// Fills the insets object with the space the shadow takes around a shape
     void insets(KoInsets &insets) const;
 
     /**

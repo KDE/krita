@@ -20,9 +20,9 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class AnimaterionRenderer : public KisViewPlugin
+class AnimaterionRenderer : public KisActionPlugin
 {
     Q_OBJECT
 public:

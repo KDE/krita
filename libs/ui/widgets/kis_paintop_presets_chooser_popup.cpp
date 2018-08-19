@@ -24,13 +24,14 @@
 #include <QCompleter>
 #include <QMenu>
 #include <QWidgetAction>
+#include <QSlider>
 
 #include <resources/KoResource.h>
 #include <KoResourceItemChooser.h>
 
 #include <ui_wdgpaintoppresets.h>
 #include <kis_config.h>
-#include <kis_resource_server_provider.h>
+#include <KisResourceServerProvider.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_icon.h>
 #include <brushengine/kis_paintop_settings.h>
@@ -48,14 +49,14 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     , m_d(new Private())
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
-    QMenu* menu = new QMenu(this);  
+    QMenu* menu = new QMenu(this);
     menu->setStyleSheet("margin: 6px");
 
     menu->addSection(i18n("Display"));
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
-    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig(true).presetChooserViewMode();
 
     QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
@@ -118,13 +119,13 @@ KisPaintOpPresetsChooserPopup::~KisPaintOpPresetsChooserPopup()
 
 void KisPaintOpPresetsChooserPopup::slotThumbnailMode()
 {
-    KisConfig().setPresetChooserViewMode(KisPresetChooser::THUMBNAIL);
+    KisConfig(false).setPresetChooserViewMode(KisPresetChooser::THUMBNAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::THUMBNAIL);
 }
 
 void KisPaintOpPresetsChooserPopup::slotDetailMode()
 {
-    KisConfig().setPresetChooserViewMode(KisPresetChooser::DETAIL);
+    KisConfig(false).setPresetChooserViewMode(KisPresetChooser::DETAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
 }
 

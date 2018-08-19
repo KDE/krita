@@ -51,6 +51,7 @@ KisGeneratorRegistry* KisGeneratorRegistry::instance()
 {
     KisGeneratorRegistry *reg = qApp->findChild<KisGeneratorRegistry *>(QString());
     if (!reg) {
+        dbgRegistry << "initializing KisGeneratorRegistry";
         reg = new KisGeneratorRegistry(qApp);
         KoPluginLoader::instance()->load("Krita/Generator", "Type == 'Service' and ([X-Krita-Version] == 28)");
     }

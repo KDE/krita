@@ -26,7 +26,6 @@
 
 #include "kis_paintop_option.h"
 #include "kis_global.h"
-#include "kis_paintop_option.h"
 #include <brushengine/kis_paint_information.h>
 #include "kritapaintop_export.h"
 #include "kis_dynamic_sensor.h"
@@ -38,6 +37,11 @@ class KisDynamicSensor;
  * defined through one or more curves.
  *
  * Note: it is NOT a KisPaintOpOption, even though the API is pretty similar!
+ *
+ * KisCurveOption classes have a generic GUI widget, KisCurveOptionWidget. So,
+ * in contrast to KisPaintOpOption classes, KisCurveOption instances can and
+ * will be created in the constructor of KisPaintOp paintops. This class can
+ * manage to read and write its settings directly.
  *
  */
 class PAINTOP_EXPORT KisCurveOption

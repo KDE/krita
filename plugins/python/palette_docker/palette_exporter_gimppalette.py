@@ -34,8 +34,8 @@ class gimpPaletteExporter:
         self.currentPalette = Palette(allPalettes[self.paletteName])
         self.export()
         done = QMessageBox()
-        done.setWindowTitle("Export successful")
-        done.setText(self.paletteName + " has been exported to " + self.fileName + "!")
+        done.setWindowTitle(i18n("Export Successful"))
+        done.setText(str(i18n("{input} has been exported to {output}.")).format(input=self.paletteName, output=self.fileName))
         done.exec_()
         pass
 
@@ -57,7 +57,7 @@ class gimpPaletteExporter:
             red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
             green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
             blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
-            gplFile.write(str(red) + " " + str(green) + " " + str(blue) + "    " + entry.id + "-" + entry.name + "\n")
+            gplFile.write(str(red) + " " + str(green) + " " + str(blue) + "    " + entry.id() + "-" + entry.name() + "\n")
             groupNames = self.currentPalette.groupNames()
             for groupName in groupNames:
                 colorCount = self.currentPalette.colorsCountGroup(groupName)
@@ -69,5 +69,5 @@ class gimpPaletteExporter:
                     red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
                     green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
                     blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
-                    gplFile.write(str(red) + " " + str(green) + " " + str(blue) + "    " + entry.id + "-" + entry.name + "\n")
+                    gplFile.write(str(red) + " " + str(green) + " " + str(blue) + "    " + entry.id() + "-" + entry.name() + "\n")
         gplFile.close()

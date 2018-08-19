@@ -51,6 +51,8 @@ public:
     QImage getFrame(int time);
     bool uploadFrame(int time);
 
+    bool shouldUploadNewFrame(int newTime, int oldTime) const;
+
     enum CacheStatus {
         Cached,
         Uncached,
@@ -60,8 +62,16 @@ public:
 
     KisImageWSP image();
 
-    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image) const;
+    KisOpenGLUpdateInfoSP fetchFrameData(int time, KisImageSP image, const QRegion &requestedRegion) const;
     void addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time);
+
+    /**
+     * Drops all the frames with worse level of detail values than the current
+     * desired level of detail.
+     */
+    void dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest, const QRect &minimalRect);
+
+    bool framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest);
 
 Q_SIGNALS:
     void changed();
@@ -73,6 +83,7 @@ private:
 
 private Q_SLOTS:
     void framesChanged(const KisTimeRange &range, const QRect &rect);
+    void slotConfigChanged();
 };
 
 #endif

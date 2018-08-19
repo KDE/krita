@@ -138,6 +138,12 @@ const QString COMPOSITE_DARKER_COLOR = "darker color";
 const QString COMPOSITE_LIGHTER_COLOR = "lighter color";
 const QString COMPOSITE_UNDEF        = "undefined";
 
+const QString COMPOSITE_REFLECT   = "reflect";
+const QString COMPOSITE_GLOW      = "glow";
+const QString COMPOSITE_FREEZE    = "freeze";
+const QString COMPOSITE_HEAT      = "heat";
+
+
 
 class KRITAPIGMENT_EXPORT KoCompositeOpRegistry
 {

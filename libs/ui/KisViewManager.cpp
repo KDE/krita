@@ -60,7 +60,6 @@
 #include <KoCanvasController.h>
 #include <KoCompositeOp.h>
 #include <KoDockRegistry.h>
-#include <KoDockWidgetTitleBar.h>
 #include <KoProperties.h>
 #include <KoResourceItemChooserSync.h>
 #include <KoSelection.h>
@@ -71,7 +70,6 @@
 #include <KoZoomHandler.h>
 #include <KoPluginLoader.h>
 #include <KoDocumentInfo.h>
-#include <KoGlobal.h>
 #include <KoColorSpaceRegistry.h>
 
 #include "input/kis_input_manager.h"
@@ -105,15 +103,16 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
-#include "kis_painting_assistants_manager.h"
+#include "KisDecorationsManager.h"
 #include <kis_paint_layer.h>
 #include "kis_paintop_box.h"
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include "KisPrintJob.h"
 #include <KoUpdater.h>
-#include "kis_resource_server_provider.h"
+#include "KisResourceServerProvider.h"
 #include "kis_selection.h"
+#include "kis_selection_mask.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"
 #include "kis_shape_layer.h"
@@ -127,12 +126,10 @@
 #include "kis_zoom_manager.h"
 #include "widgets/kis_floating_message.h"
 #include "kis_signal_auto_connection.h"
-#include "kis_script_manager.h"
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
-#include <kis_image.h>
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
 
@@ -192,7 +189,6 @@ public:
         , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
-        , scriptManager(_q)
         , actionAuthor(0)
         , showPixelGrid(0)
     {
@@ -232,7 +228,7 @@ public:
     KisImageManager imageManager;
     KisGridManager gridManager;
     KisCanvasControlsManager canvasControlsManager;
-    KisPaintingAssistantsManager paintingAssistantsManager;
+    KisDecorationsManager paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisActionManager actionManager;
     QMainWindow* mainWindow;
@@ -247,7 +243,6 @@ public:
     KisInputManager inputManager;
 
     KisSignalAutoConnectionsStore viewConnections;
-    KisScriptManager scriptManager;
     KSelectAction *actionAuthor; // Select action for author profile.
     KisAction *showPixelGrid;
 
@@ -273,23 +268,24 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     // These initialization functions must wait until KisViewManager ctor is complete.
     d->statusBar.setup();
     d->persistentImageProgressUpdater =
-        d->statusBar.progressUpdater()->startSubtask(1, "", true);
+            d->statusBar.progressUpdater()->startSubtask(1, "", true);
     // reset state to "completed"
     d->persistentImageProgressUpdater->setRange(0,100);
     d->persistentImageProgressUpdater->setValue(100);
 
     d->persistentUnthreadedProgressUpdater =
-        d->statusBar.progressUpdater()->startSubtask(1, "", true);
-        // reset state to "completed"
+            d->statusBar.progressUpdater()->startSubtask(1, "", true);
+    // reset state to "completed"
     d->persistentUnthreadedProgressUpdater->setRange(0,100);
     d->persistentUnthreadedProgressUpdater->setValue(100);
 
     d->persistentUnthreadedProgressUpdaterRouter.reset(
-        new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
-                              KoProgressUpdater::Unthreaded));
+                new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
+                                      KoProgressUpdater::Unthreaded));
     d->persistentUnthreadedProgressUpdaterRouter->setAutoNestNames(true);
 
     d->controlFrame.setup(parent);
+
 
     //Check to draw scrollbars after "Canvas only mode" toggle is created.
     this->showHideScrollbars();
@@ -308,9 +304,6 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     connect(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             resourceProvider(), SLOT(slotNodeActivated(KisNodeSP)));
 
-    connect(resourceProvider()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            d->controlFrame.paintopBox(), SLOT(slotCanvasResourceChanged(int,QVariant)));
-
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
 
@@ -319,15 +312,22 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
 
     KisInputProfileManager::instance()->loadProfiles();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->showFloatingMessage = cfg.showCanvasMessages();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KoColor foreground(Qt::black, cs);
+    d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
+    KoColor background(Qt::white, cs);
+    d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
+
+
 
 }
 
 
 KisViewManager::~KisViewManager()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     if (resourceProvider() && resourceProvider()->currentPreset()) {
         cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
         cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
@@ -408,11 +408,16 @@ void KisViewManager::setCurrentView(KisView *view)
 
         // Wait for the async image to have loaded
         KisDocument* doc = view->document();
-        //        connect(canvasController()->proxyObject, SIGNAL(documentMousePositionChanged(QPointF)), d->statusBar, SLOT(documentMousePositionChanged(QPointF)));
+
+        if (KisConfig(true).readEntry<bool>("EnablePositionLabel", false)) {
+            connect(d->currentImageView->canvasController()->proxyObject,
+                    SIGNAL(documentMousePositionChanged(QPointF)),
+                    &d->statusBar,
+                    SLOT(documentMousePositionChanged(QPointF)));
+        }
 
         // Restore the last used brush preset, color and background color.
         if (first) {
-            KisConfig cfg;
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
             QString defaultPresetName = "basic_tip_default";
             bool foundTip = false;
@@ -427,25 +432,19 @@ void KisViewManager::setCurrentView(KisView *view)
                     foundTip = true;
                 }
             }
+            KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
             KisPaintOpPresetSP preset = rserver->resourceByName(lastPreset);
             if (!preset) {
                 preset = rserver->resourceByName(defaultPresetName);
             }
 
-            if (!preset) {
+            if (!preset && !rserver->resources().isEmpty()) {
                 preset = rserver->resources().first();
             }
             if (preset) {
                 paintOpBox()->restoreResource(preset.data());
             }
-
-            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-            KoColor foreground(Qt::black, cs);
-            d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
-            KoColor background(Qt::white, cs);
-            d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
-
         }
 
         KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
@@ -501,21 +500,21 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->canvasController()->setFocus();
 
         d->viewConnections.addUniqueConnection(
-            image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
-            resourceProvider(), SLOT(slotImageSizeChanged()));
+                    image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+                    resourceProvider(), SLOT(slotImageSizeChanged()));
 
         d->viewConnections.addUniqueConnection(
-            image(), SIGNAL(sigResolutionChanged(double,double)),
-            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    image(), SIGNAL(sigResolutionChanged(double,double)),
+                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
         d->viewConnections.addUniqueConnection(
-            image(), SIGNAL(sigNodeChanged(KisNodeSP)),
-            this, SLOT(updateGUI()));
+                    image(), SIGNAL(sigNodeChanged(KisNodeSP)),
+                    this, SLOT(updateGUI()));
 
         d->viewConnections.addUniqueConnection(
-            d->currentImageView->zoomManager()->zoomController(),
-            SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-            resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
+                    d->currentImageView->zoomManager()->zoomController(),
+                    SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+                    resourceProvider(), SLOT(slotOnScreenResolutionChanged()));
 
     }
 
@@ -568,16 +567,6 @@ QWidget* KisViewManager::canvas() const
 KisStatusBar * KisViewManager::statusBar() const
 {
     return &d->statusBar;
-}
-
-void KisViewManager::addStatusBarItem(QWidget *widget, int stretch, bool permanent)
-{
-    d->statusBar.addStatusBarItem(widget, stretch, permanent);
-}
-
-void KisViewManager::removeStatusBarItem(QWidget *widget)
-{
-    d->statusBar.removeStatusBarItem(widget);
 }
 
 KisPaintopBox* KisViewManager::paintOpBox() const
@@ -651,10 +640,9 @@ bool KisViewManager::selectionEditable()
 {
     KisLayerSP layer = activeLayer();
     if (layer) {
-        KoProperties properties;
-        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
-        if (masks.size() == 1) {
-            return masks[0]->isEditable();
+        KisSelectionMaskSP mask = layer->selectionMask();
+        if (mask) {
+            return mask->isEditable();
         }
     }
     // global selection is always editable
@@ -673,7 +661,7 @@ KisUndoAdapter * KisViewManager::undoAdapter()
 
 void KisViewManager::createActions()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->saveIncremental = actionManager()->createAction("save_incremental_version");
     connect(d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
@@ -769,8 +757,6 @@ void KisViewManager::setupManagers()
     d->canvasControlsManager.setup(actionManager());
 
     d->mirrorManager.setup(actionCollection());
-
-    d->scriptManager.setup(actionCollection(), actionManager());
 }
 
 void KisViewManager::updateGUI()
@@ -810,11 +796,6 @@ KisDocument *KisViewManager::document() const
         return d->currentImageView->document();
     }
     return 0;
-}
-
-KisScriptManager *KisViewManager::scriptManager() const
-{
-  return &d->scriptManager;
 }
 
 int KisViewManager::viewCount() const
@@ -1143,14 +1124,14 @@ void KisViewManager::showStatusBar(bool toggled)
     KisMainWindow *mw = mainWindow();
     if(mw && mw->statusBar()) {
         mw->statusBar()->setVisible(toggled);
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setShowStatusBar(toggled);
     }
 }
 
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     KisMainWindow* main = mainWindow();
 
     if(!main) {
@@ -1275,12 +1256,6 @@ void KisViewManager::updateIcons()
     if (mainWindow()) {
         QList<QDockWidget*> dockers = mainWindow()->dockWidgets();
         Q_FOREACH (QDockWidget* dock, dockers) {
-            dbgKrita << "name " << dock->objectName();
-            KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
-            if (titlebar) {
-                titlebar->updateIcons();
-            }
-
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {
@@ -1293,7 +1268,7 @@ void KisViewManager::updateIcons()
 }
 void KisViewManager::initializeStatusBarVisibility()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->mainWindow->statusBar()->setVisible(cfg.showStatusBar());
 }
 
@@ -1328,7 +1303,7 @@ void KisViewManager::showHideScrollbars()
     if (!d->currentImageView) return;
     if (!d->currentImageView->canvasController()) return;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     bool toggled = actionCollection()->action("view_show_canvas_only")->isChecked();
 
     if ( (toggled && cfg.hideScrollbarsFullscreen()) || (!toggled && cfg.hideScrollbars()) ) {
@@ -1342,13 +1317,13 @@ void KisViewManager::showHideScrollbars()
 
 void KisViewManager::slotSaveShowRulersState(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setShowRulers(value);
 }
 
 void KisViewManager::slotSaveRulersTrackMouseState(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setRulersTrackMouse(value);
 }
 
@@ -1359,7 +1334,7 @@ void KisViewManager::setShowFloatingMessage(bool show)
 
 void KisViewManager::changeAuthorProfile(const QString &profileName)
 {
-    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     if (profileName.isEmpty() || profileName == i18nc("choice for author profile", "Anonymous")) {
         appAuthorGroup.writeEntry("active-profile", "");
     } else {
@@ -1380,7 +1355,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
     d->actionAuthor->clear();
     d->actionAuthor->addAction(i18nc("choice for author profile", "Anonymous"));
 
-    KConfigGroup authorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup authorGroup(KSharedConfig::openConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
     QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
     QStringList filters = QStringList() << "*.authorinfo";
@@ -1396,7 +1371,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
         d->actionAuthor->addAction(profile);
     }
 
-    KConfigGroup appAuthorGroup(KoGlobal::calligraConfig(), "Author");
+    KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
     QString profileName = appAuthorGroup.readEntry("active-profile", "");
 
     if (profileName == "anonymous" || profileName.isEmpty()) {
@@ -1412,6 +1387,6 @@ void KisViewManager::slotUpdatePixelGridAction()
 
     KisSignalsBlocker b(d->showPixelGrid);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
 }

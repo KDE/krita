@@ -36,7 +36,7 @@ public:
     QString observerName() override { return "AnimationCurveDocker"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    void setMainWindow(KisViewManager *kisview) override;
+    void setViewManager(KisViewManager *kisview) override;
 
 private Q_SLOTS:
     void slotUpdateIcons();

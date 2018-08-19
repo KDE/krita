@@ -145,15 +145,13 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
             }
 
             // save the whole list if all list-items are selected
-            if (currentList) {
-                int fromindex = currentList->itemNumber(fromblock);
-                int toindex = currentList->itemNumber(toblock);
-                if ((fromcursor.isNull() || fromcursor.currentList() != currentList) &&
-                    (toCursor.isNull() || toCursor.currentList() != currentList) &&
-                    fromindex <= 0 && (toindex < 0 || toindex == currentList->count()-1)
+            int fromindex = currentList->itemNumber(fromblock);
+            int toindex = currentList->itemNumber(toblock);
+            if ((fromcursor.isNull() || fromcursor.currentList() != currentList) &&
+                (toCursor.isNull() || toCursor.currentList() != currentList) &&
+                fromindex <= 0 && (toindex < 0 || toindex == currentList->count()-1)
                 ) {
-                    currentList = 0;
-                }
+                currentList = 0;
             }
         }
     }

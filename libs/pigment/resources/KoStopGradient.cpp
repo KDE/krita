@@ -46,6 +46,18 @@ KoStopGradient::~KoStopGradient()
 {
 }
 
+bool KoStopGradient::operator==(const KoStopGradient &rhs) const
+{
+    return
+        *colorSpace() == *rhs.colorSpace() &&
+        spread() == rhs.spread() &&
+        type() == rhs.type() &&
+        m_start == rhs.m_start &&
+        m_stop == rhs.m_stop &&
+        m_focalPoint == rhs.m_focalPoint &&
+        m_stops == rhs.m_stops;
+}
+
 KoAbstractGradient* KoStopGradient::clone() const
 {
     return new KoStopGradient(*this);

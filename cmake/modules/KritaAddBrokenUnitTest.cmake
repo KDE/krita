@@ -51,3 +51,34 @@ function(KRITA_ADD_BROKEN_UNIT_TEST)
     set(${ARG_TEST_NAME_VAR} "${_testname}" PARENT_SCOPE)
   endif()
 endfunction()
+
+function(KRITA_ADD_BROKEN_UNIT_TESTS)
+  set(options GUI)
+  set(oneValueArgs NAME_PREFIX TARGET_NAMES_VAR TEST_NAMES_VAR)
+  set(multiValueArgs LINK_LIBRARIES)
+  cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  if(ARG_GUI)
+    set(_exe_type GUI)
+  else()
+    set(_exe_type "")
+  endif()
+  set(test_names)
+  set(target_names)
+  foreach(_test_source ${ARG_UNPARSED_ARGUMENTS})
+    KRITA_ADD_BROKEN_UNIT_TEST(${_test_source}
+      NAME_PREFIX ${ARG_NAME_PREFIX}
+      LINK_LIBRARIES ${ARG_LINK_LIBRARIES}
+      TARGET_NAME_VAR target_name
+      TEST_NAME_VAR test_name
+      ${_exe_type}
+    )
+    list(APPEND _test_names "${test_name}")
+    list(APPEND _target_names "${target_name}")
+  endforeach()
+  if (ARG_TARGET_NAMES_VAR)
+    set(${ARG_TARGET_NAMES_VAR} "${_target_names}" PARENT_SCOPE)
+  endif()
+  if (ARG_TEST_NAMES_VAR)
+    set(${ARG_TEST_NAMES_VAR} "${_test_names}" PARENT_SCOPE)
+  endif()
+endfunction()

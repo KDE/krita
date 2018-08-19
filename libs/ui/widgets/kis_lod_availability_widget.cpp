@@ -37,8 +37,8 @@ namespace {
  * These strings are added intentionally so we could relayout the threshold slider after
  * the string freeze for 4.0. Please translate them :)
  */
-static const QString stringForInstantPreviewThreshold1 = i18nc("@label:slider", "Threshold:");
-static const QString stringForInstantPreviewThreshold2 = i18nc("@label:slider", "Instant preview threshold:");
+static const KLocalizedString stringForInstantPreviewThreshold1 = ki18nc("@label:slider", "Threshold:");
+static const KLocalizedString stringForInstantPreviewThreshold2 = ki18nc("@label:slider", "Instant preview threshold:");
 }
 
 
@@ -77,7 +77,7 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         connect(m_d->btnLod, SIGNAL(customContextMenuRequested(QPoint)),
                 this, SLOT(showLodThresholdWidget(QPoint)));
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         m_d->thresholdSlider = new KisDoubleSliderSpinBox(m_d->thresholdMenu.data());
 
         m_d->thresholdSlider->setRange(0, cfg.readEntry("maximumBrushSize", 1000), 2);
@@ -191,9 +191,28 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
         m_d->btnLod->setFont(font);
         m_d->btnLod->setText(text);
         m_d->btnLod->setToolTip(toolTip);
+
+        if (isBlocked) {
+            /**
+             * If LoD is really blocked by some limitation we sneakly reset
+             * the checkbox to let the user know it is fully disabled.
+             */
+
+            KisSignalsBlocker b(m_d->chkLod);
+            m_d->chkLod->setChecked(false);
+        }
     }
 
     m_d->limitations = l;
+
+    if (m_d->resourceManager) {
+        const bool lodAvailableForUse =
+            !isBlocked && !isBlockedByThreshold &&
+            m_d->resourceManager->resource(KisCanvasResourceProvider::LodAvailability).toBool();
+
+        m_d->resourceManager->setResource(KisCanvasResourceProvider::EffectiveLodAvailablility, lodAvailableForUse);
+    }
+
 }
 
 void KisLodAvailabilityWidget::slotUserChangedLodAvailability(bool value)

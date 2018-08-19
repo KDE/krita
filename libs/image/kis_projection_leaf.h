@@ -41,8 +41,6 @@ public:
     KisProjectionLeafSP prevSibling() const;
     KisProjectionLeafSP nextSibling() const;
 
-    bool hasChildren() const;
-
     KisNodeSP node() const;
     KisAbstractProjectionPlaneSP projectionPlane() const;
     bool accept(KisNodeVisitor &visitor);
@@ -61,6 +59,7 @@ public:
     bool isStillInGraph() const;
 
     bool isDroppedMask() const;
+    bool isOverlayProjectionLeaf() const;
 
     /**
      * Regenerate projection of the current group layer iff it is

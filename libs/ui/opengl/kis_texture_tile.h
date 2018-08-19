@@ -59,11 +59,6 @@ struct KisGLTexturesInfo {
     GLint type;
 };
 
-inline QRect stretchRect(const QRect &rc, int delta)
-{
-    return rc.adjusted(-delta, -delta, delta, delta);
-}
-
 class KisTextureTile
 {
 public:
@@ -93,6 +88,8 @@ public:
     inline QRectF tileRectInTexturePixels() {
         return m_tileRectInTexturePixels;
     }
+
+    QRectF imageRectInTexturePixels(const QRect &imageRect) const;
 
     void bindToActiveTexture();
     int currentLodPlane() const;

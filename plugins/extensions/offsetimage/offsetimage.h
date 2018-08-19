@@ -21,14 +21,14 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 #include <kis_types.h>
 #include <kis_node.h>
 
 class KUndo2MagicString;
 
 
-class OffsetImage : public KisViewPlugin
+class OffsetImage : public KisActionPlugin
 {
     Q_OBJECT
 public:

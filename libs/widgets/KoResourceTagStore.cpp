@@ -28,9 +28,11 @@
 #include <KoResourcePaths.h>
 #include <KoResourceServer.h>
 
+#include <kis_debug.h>
+
 #define BLACKLISTED "blacklisted" ///< xml tag for blacklisted tags
 
-static const QStringList krita3PresetSystemTags = {"ink", "Ink", "paint", "sketch", "demo", "Block", "Wet", "FX", "Erasers", "Circle", "Smudge", "Mix", "PixelArt"};
+static const QStringList krita3PresetSystemTags = {"Ink", "Block", "Wet", "FX", "Erasers", "Circle", "Smudge", "Mix", "PixelArt", "ink", "sketch", "demo", "paint"};
 
 class Q_DECL_HIDDEN KoResourceTagStore::Private
 {
@@ -94,13 +96,19 @@ QStringList KoResourceTagStore::tagNamesList() const
 
 void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 {
+//    if (d->resourceServer->type() == "kis_paintoppresets" && resource) {
+//        qDebug() << "\t\t\taddTag" << tag << resource->filename() << d->tagList[tag] << d->md5ToTag.value(resource->md5()) << d->identifierToTag.values(resource->filename());
+//    }
+
     if (d->blacklistedTags.contains(tag)) {
         d->blacklistedTags.removeAll(tag);
     }
-    if (!resource) {
+
+    if (!d->tagList.contains(tag)) {
         d->tagList.insert(tag, 0);
     }
-    else {
+
+    if (resource) {
         bool added = false;
 
         if (!d->md5ToTag.contains(resource->md5(), tag)) {
@@ -114,14 +122,13 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
         }
 
         if (added) {
-            if (d->tagList.contains(tag)) {
-                d->tagList[tag]++;
-            }
-            else {
-                d->tagList.insert(tag, 1);
-            }
+            d->tagList[tag]++;
         }
     }
+//    if (d->resourceServer->type() == "kis_paintoppresets" && resource) {
+//        qDebug() << "\t\t\t\tafter addTag" << tag << resource->filename() << d->tagList[tag] << d->md5ToTag.value(resource->md5()) << d->identifierToTag.values(resource->filename());
+//    }
+
 }
 
 void KoResourceTagStore::delTag(KoResource* resource, const QString& tag)
@@ -179,25 +186,29 @@ QStringList KoResourceTagStore::searchTag(const QString& query) const
     QStringList filenames;
     Q_FOREACH (const KoResource *res, resources) {
         if (res) {
-            filenames << adjustedFileName(res->shortFilename());
+            filenames << res->shortFilename();
         }
     }
-
-    return removeAdjustedFileNames(filenames);
+    return filenames;
 }
 
 void KoResourceTagStore::loadTags()
 {
     QStringList tagFiles = KoResourcePaths::findDirs("tags");
     Q_FOREACH (const QString &tagFile, tagFiles) {
-        readXMLFile(tagFile + d->resourceServer->type() + "_tags.xml");
+        QString fileName = tagFile + d->resourceServer->type() + "_tags.xml";
+        if (QFileInfo(fileName).exists()) {
+            readXMLFile(fileName);
+        }
     }
 }
 
 void KoResourceTagStore::clearOldSystemTags()
 {
     if (d->resourceServer->type() == "kis_paintoppresets") {
+//        qDebug() << "clearOldSystemTags" << d->tagList;
         Q_FOREACH(const QString &systemTag, krita3PresetSystemTags) {
+//            qDebug() << "\t" << systemTag << d->tagList[systemTag];
             if (d->tagList[systemTag] == 0) {
                 d->tagList.remove(systemTag);
             }
@@ -291,12 +302,21 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
     QString inputFile;
     if (QFile::exists(tagstore)) {
         inputFile = tagstore;
-    } else {
+    }
+    else {
         return;
+    }
+
+//    qDebug() << "\treadXMLFile()." << tagstore  << d->resourceServer->type() << "Server has" << d->resourceServer->resourceCount() << "resources";
+    if (d->resourceServer->type() == "kis_paintoppresets") {
+//        Q_FOREACH(const QString &line, kisBacktrace().split("\n")) {
+//            qDebug() << line;
+//        }
     }
 
     QFile f(inputFile);
     if (!f.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open tag file" << tagstore;
         return;
     }
 
@@ -336,12 +356,11 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                 resByFileName = d->resourceServer->byFileName(fi.fileName());
             }
 
-            if (identifier == "dummy" || isServerResource(identifier)) {
+//            qDebug() << "\t\tmd5" << QString::fromLatin1(resourceMD5.toHex()) << "resByMd5" << resByMd5 << "identifier" << identifier << "resByFileName" << resByFileName;
 
+            if (identifier == "dummy") {
                 QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
-
                 for (int j = 0; j < tagNodesList.count() ; j++) {
-
                     QDomElement tagEl = tagNodesList.at(j).toElement();
                     bool blacklisted = (tagEl.attribute(BLACKLISTED, "false") == "true");
                     if (blacklisted || d->blacklistedTags.contains(tagEl.text())) {
@@ -350,16 +369,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
                         }
                     }
                     else {
-                        if (identifier != "dummy") {
-                            QFileInfo fi(identifier);
-                            KoResource *res = d->resourceServer->byFileName(fi.fileName());
-                            addTag(res, tagEl.text());
-                        }
-                        else {
-                            addTag(0, tagEl.text());
-                        }
-                        d->md5ToTag.insert(resourceMD5, tagEl.text());
-                        d->identifierToTag.insert(identifier, tagEl.text());
+                        addTag(0, tagEl.text());
                     }
                 }
             }
@@ -398,38 +408,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
             }
         }
     }
-}
-
-bool KoResourceTagStore::isServerResource(const QString &resourceName) const
-{
-    bool removeChild = false;
-    QStringList extensionsList = d->resourceServer->extensions().split(':');
-    Q_FOREACH (QString extension, extensionsList) {
-        if (resourceName.contains(extension.remove('*'))) {
-            removeChild = true;
-            break;
-        }
-    }
-    return removeChild;
-}
-
-QString KoResourceTagStore::adjustedFileName(const QString &fileName) const
-{
-    if (!isServerResource(fileName)) {
-        return fileName + "-krita" + d->resourceServer->extensions().split(':').takeFirst().remove('*');
-    }
-    return fileName;
-}
-
-QStringList KoResourceTagStore::removeAdjustedFileNames(QStringList fileNamesList) const
-{
-    Q_FOREACH (const QString & fileName, fileNamesList) {
-        if (fileName.contains("-krita")) {
-            fileNamesList.append(fileName.split("-krita").takeFirst());
-            fileNamesList.removeAll(fileName);
-        }
-    }
-    return fileNamesList;
+//    qDebug() << "Done reading XML file from" << tagstore << d->tagList;
 }
 
 void KoResourceTagStore::serializeTags()

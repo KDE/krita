@@ -634,7 +634,7 @@ void KisTransformWorkerTest::testMatrices()
 }
 
 
-void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = false, const QString &filterId = "Box")
+void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = false, const QString &filterId = "NearestNeighbor")
 {
     TestUtil::TestProgressBar bar;
     KoProgressUpdater pu(&bar);

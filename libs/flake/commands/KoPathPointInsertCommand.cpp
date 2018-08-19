@@ -29,8 +29,9 @@ class KoPathPointInsertCommandPrivate
 public:
     KoPathPointInsertCommandPrivate() : deletePoints(true) { }
     ~KoPathPointInsertCommandPrivate() {
-        if (deletePoints)
+        if (deletePoints) {
             qDeleteAll(points);
+        }
     }
     QList<KoPathPointData> pointDataList;
     QList<KoPathPoint*> points;
@@ -108,6 +109,7 @@ void KoPathPointInsertCommand::redo()
         }
 
         pathShape->insertPoint(d->points.at(i), pointData.pointIndex);
+        pathShape->recommendPointSelectionChange({pointData.pointIndex});
         pathShape->update();
     }
     d->deletePoints = false;
@@ -143,6 +145,16 @@ void KoPathPointInsertCommand::undo()
             std::swap(controlPoint1, d->controlPoints[i].second);
             after->setControlPoint1(controlPoint1);
         }
+
+        QList<KoPathPointIndex> segmentPoints;
+        segmentPoints << pdBefore.pointIndex;
+
+        KoPathPointIndex nextPoint(pdBefore.pointIndex.first, pdBefore.pointIndex.second + 1);
+        if (pathShape->pointByIndex(nextPoint)) {
+            segmentPoints << nextPoint;
+        }
+
+        pathShape->recommendPointSelectionChange(segmentPoints);
         pathShape->update();
     }
     d->deletePoints = true;

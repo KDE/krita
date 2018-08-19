@@ -1618,8 +1618,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
                 || !d->documentLayout->changeTracker()->containsInlineChanges(fragment.charFormat())
                 || !d->documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())
                 || !d->documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                || (d->documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
-                || d->documentLayout->changeTracker()->displayChanges()) {
+                || (d->documentLayout->changeTracker()->elementById(fragment.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)) {
                 qreal fontStretch = 1;
                 if (useFontProperties) {
                     //stretch line height to powerpoint size

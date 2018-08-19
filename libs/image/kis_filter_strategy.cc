@@ -193,15 +193,16 @@ KisFilterStrategyRegistry::~KisFilterStrategyRegistry()
 KisFilterStrategyRegistry* KisFilterStrategyRegistry::instance()
 {
     if (!s_instance.exists()) {
+        s_instance->add(new KisBoxFilterStrategy);
+        s_instance->addAlias("Box", "NearestNeighbor");
+
         s_instance->add(new KisHermiteFilterStrategy);
         s_instance->add(new KisBicubicFilterStrategy);
-        s_instance->add(new KisBoxFilterStrategy);
         s_instance->add(new KisBilinearFilterStrategy);
         s_instance->add(new KisBellFilterStrategy);
         s_instance->add(new KisBSplineFilterStrategy);
         s_instance->add(new KisLanczos3FilterStrategy);
         s_instance->add(new KisMitchellFilterStrategy);
-
     }
     return s_instance;
 }

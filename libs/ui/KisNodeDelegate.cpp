@@ -728,7 +728,7 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
         }
     }
     else if (event->type() == QEvent::ToolTip) {
-        if (!KisConfig().hidePopups()) {
+        if (!KisConfig(true).hidePopups()) {
             QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
             d->tip.showTip(d->view, helpEvent->pos(), option, index);
         }
@@ -904,7 +904,7 @@ void KisNodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &o
 
 void KisNodeDelegate::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->checkersColor1 = cfg.checkersColor1();
     d->checkersColor2 = cfg.checkersColor2();

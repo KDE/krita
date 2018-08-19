@@ -16,12 +16,13 @@
  */
 
 #include "DodgeBurn.h"
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <kis_paint_device.h>
 
 #include "ui_DodgeBurnConfigurationBaseWidget.h"
 
-KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name ) : KisColorTransformationFilter(KoID(id, name), categoryAdjust(), name), m_prefix(prefix)
+KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix, const QString& name ) : KisColorTransformationFilter(KoID(id, name), FiltersCategoryAdjustId, name), m_prefix(prefix)
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);

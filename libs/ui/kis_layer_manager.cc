@@ -65,7 +65,6 @@
 #include <kis_psd_layer_style.h>
 #include <KisMimeDatabase.h>
 
-#include "KisImportExportManager.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -74,7 +73,6 @@
 #include "dialogs/kis_dlg_generator_layer.h"
 #include "dialogs/kis_dlg_file_layer.h"
 #include "dialogs/kis_dlg_layer_style.h"
-#include "KisDocument.h"
 #include "kis_filter_manager.h"
 #include "kis_node_visitor.h"
 #include "kis_paint_layer.h"
@@ -94,7 +92,6 @@
 #include "kis_node_manager.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "KisPart.h"
 #include "kis_raster_keyframe_channel.h"
 
 #include "kis_signal_compressor_with_param.h"
@@ -423,10 +420,10 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     layer->setCompositeOpId(newCompositeOp);
 
     KisNodeSP parent = source->parent();
-    KisNodeSP above = source;
+    KisNodeSP above = source->prevSibling();
 
     while (parent && !parent->allowAsChild(layer)) {
-        above = above->parent();
+        above = above ? above->parent() : source->parent();
         parent = above ? above->parent() : 0;
     }
 
@@ -435,8 +432,8 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
     }
 
     m_commandsAdapter->beginMacro(kundo2_i18n("Convert to a Paint Layer"));
-    m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->removeNode(source);
+    m_commandsAdapter->addNode(layer, parent, above);
     m_commandsAdapter->endMacro();
 
 }
@@ -472,7 +469,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     KisImageSP image = m_view->image();
     if (!image) return;
 
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);
@@ -833,7 +830,7 @@ void KisLayerManager::layersUpdated()
 
 void KisLayerManager::saveGroupLayers()
 {
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
+    QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
 
     KoDialog dlg;
     QWidget *page = new QWidget(&dlg);

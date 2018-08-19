@@ -278,54 +278,6 @@ Item {
         height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
-        Button {
-            id: redLockedChannel
-            height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
-            width: height;
-            text: "R";
-            textColor: d.buttonTextColor;
-            bold: true;
-            border { width: 1; color: d.buttonBorderColor; }
-            radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeRChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
-            onClicked: if (layersModel) layersModel.activeRChannelLocked = !layersModel.activeRChannelLocked;
-        }
-        Button {
-            id: greenLockedChannel
-            height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
-            width: height;
-            text: "G";
-            textColor: d.buttonTextColor;
-            bold: true;
-            border { width: 1; color: d.buttonBorderColor; }
-            radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeGChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
-            onClicked: if (layersModel) layersModel.activeGChannelLocked = !layersModel.activeGChannelLocked;
-        }
-        Button {
-            id: blueLockedChannel
-            height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
-            width: height;
-            text: "B";
-            textColor: d.buttonTextColor;
-            bold: true;
-            border { width: 1; color: d.buttonBorderColor; }
-            radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeBChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
-            onClicked: if (layersModel) layersModel.activeBChannelLocked = !layersModel.activeBChannelLocked;
-        }
-        Button {
-            id: alphaLockedChannel
-            height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
-            width: height;
-            text: "A";
-            textColor: d.buttonTextColor;
-            bold: true;
-            border { width: 1; color: d.buttonBorderColor; }
-            radius: Constants.DefaultMargin;
-            color: (layersModel && layersModel.activeAChannelLocked) ? d.buttonActiveColor : d.buttonInactiveColor;
-            onClicked: if (layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
-        }
     }
     Flickable {
         id: configNeeded;

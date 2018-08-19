@@ -53,7 +53,7 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 
-#include <KisMimeDatabase.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -197,6 +197,28 @@ bool Document::setColorSpace(const QString &colorModel, const QString &colorDept
     return true;
 }
 
+QColor Document::backgroundColor()
+{
+    if (!d->document) return QColor();
+    if (!d->document->image()) return QColor();
+
+    const KoColor color = d->document->image()->defaultProjectionColor();
+    return color.toQColor();
+}
+
+bool Document::setBackgroundColor(const QColor &color)
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    KoColor background = KoColor(color, d->document->image()->colorSpace());
+    d->document->image()->setDefaultProjectionColor(background);
+
+    d->document->image()->setModified();
+    d->document->image()->initialRefreshGraph();
+
+    return true;
+}
 
 QString Document::documentInfo() const
 {
@@ -417,6 +439,7 @@ bool Document::close()
     Q_FOREACH(KisView *view, KisPart::instance()->views()) {
         if (view->document() == d->document) {
             view->close();
+            view->closeView();
             view->deleteLater();
         }
     }
@@ -795,6 +818,12 @@ void Document::setGuidesLocked(bool locked)
     KisGuidesConfig config = d->document->guidesConfig();
     config.setLockGuides(locked);
     d->document->setGuidesConfig(config);
+}
+
+bool Document::modified() const
+{
+    if (!d->document) return false;
+    return d->document->isModified();
 }
 
 QPointer<KisDocument> Document::document() const

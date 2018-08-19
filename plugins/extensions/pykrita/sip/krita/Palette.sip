@@ -1,3 +1,4 @@
+/*
 struct KoColorSetEntry {
     %TypeHeaderCode
     #include "KoColorSet.h"
@@ -12,6 +13,8 @@ public:
     bool operator==(const KoColorSetEntry& rhs) const;
 
 };
+*/
+class KoColorSetEntry;
 
 class Palette : QObject
 {

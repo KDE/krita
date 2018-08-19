@@ -40,7 +40,6 @@
 #include <KoCompositeOpRegistry.h>
 #include "KisProofingConfiguration.h"
 
-#include "recorder/kis_action_recorder.h"
 #include "kis_adjustment_layer.h"
 #include "kis_annotation.h"
 #include "kis_change_profile_visitor.h"
@@ -53,6 +52,7 @@
 #include "kis_meta_data_merge_strategy_registry.h"
 #include "kis_name_server.h"
 #include "kis_paint_layer.h"
+#include "kis_projection_leaf.h"
 #include "kis_painter.h"
 #include "kis_selection.h"
 #include "kis_transaction.h"
@@ -64,6 +64,7 @@
 #include "kis_image_signal_router.h"
 #include "kis_image_animation_interface.h"
 #include "kis_stroke_strategy.h"
+#include "kis_simple_stroke_strategy.h"
 #include "kis_image_barrier_locker.h"
 
 
@@ -95,7 +96,6 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
-#include "kis_image_barrier_locker.h"
 
 #include <QtCore>
 
@@ -138,14 +138,13 @@ public:
         , undoStore(undo ? undo : new KisDumbUndoStore())
         , legacyUndoAdapter(undoStore.data(), _q)
         , postExecutionUndoAdapter(undoStore.data(), _q)
-        , recorder(_q)
         , signalRouter(_q)
         , animationInterface(_animationInterface)
         , scheduler(_q, _q)
         , axesCenter(QPointF(0.5, 0.5))
     {
         {
-            KisImageConfig cfg;
+            KisImageConfig cfg(true);
             if (cfg.enableProgressReporting()) {
                 scheduler.setProgressProxy(&compositeProgressProxy);
             }
@@ -205,6 +204,8 @@ public:
 
     KisSelectionSP deselectedGlobalSelection;
     KisGroupLayerSP rootLayer; // The layers are contained in here
+    KisSelectionMaskSP targetOverlaySelectionMask; // the overlay switching stroke will try to switch into this mask
+    KisSelectionMaskSP overlaySelectionMask;
     QList<KisLayerCompositionSP> compositions;
     KisNodeSP isolatedRootNode;
     bool wrapAroundModePermitted = false;
@@ -214,8 +215,6 @@ public:
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
     KisPostExecutionUndoAdapter postExecutionUndoAdapter;
-
-    KisActionRecorder recorder;
 
     vKisAnnotationSP annotations;
 
@@ -247,6 +246,7 @@ KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const K
 {
     // make sure KisImage belongs to the GUI thread
     moveToThread(qApp->thread());
+    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
 
     setObjectName(name);
     setRootLayer(new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8));
@@ -282,6 +282,7 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
 {
     // make sure KisImage belongs to the GUI thread
     moveToThread(qApp->thread());
+    connect(this, SIGNAL(sigInternalStopIsolatedModeRequested()), SLOT(stopIsolatedMode()));
 
     setObjectName(rhs.objectName());
 
@@ -299,16 +300,25 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
     setRoot(newRoot);
 
-    if (exactCopy) {
+    if (exactCopy || rhs.m_d->isolatedRootNode) {
         QQueue<KisNodeSP> linearizedNodes;
         KisLayerUtils::recursiveApplyNodes(rhs.root(),
             [&linearizedNodes](KisNodeSP node) {
                 linearizedNodes.enqueue(node);
             });
         KisLayerUtils::recursiveApplyNodes(newRoot,
-            [&linearizedNodes](KisNodeSP node) {
+            [&linearizedNodes, exactCopy, &rhs, this](KisNodeSP node) {
                 KisNodeSP refNode = linearizedNodes.dequeue();
-                node->setUuid(refNode->uuid());
+
+                if (exactCopy) {
+                    node->setUuid(refNode->uuid());
+                }
+
+                if (rhs.m_d->isolatedRootNode &&
+                    rhs.m_d->isolatedRootNode == refNode) {
+
+                    m_d->isolatedRootNode = node;
+                }
             });
     }
 
@@ -329,6 +339,14 @@ KisImage::KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy)
     KIS_ASSERT_RECOVER_NOOP(!rhs.m_d->disableDirtyRequests);
 
     m_d->blockLevelOfDetail = rhs.m_d->blockLevelOfDetail;
+
+    /**
+     * The overlay device is not inherited when cloning the image!
+     */
+    if (rhs.m_d->overlaySelectionMask) {
+        const QRect dirtyRect = rhs.m_d->overlaySelectionMask->extent();
+        m_d->rootLayer->setDirty(dirtyRect);
+    }
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
@@ -346,7 +364,7 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 
     KisNodeSP newNode = parent->at(index);
     if (!dynamic_cast<KisSelectionMask*>(newNode.data())) {
-        stopIsolatedMode();
+        emit sigInternalStopIsolatedModeRequested();
     }
 }
 
@@ -354,7 +372,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
     KisNodeSP deletedNode = parent->at(index);
     if (!dynamic_cast<KisSelectionMask*>(deletedNode.data())) {
-        stopIsolatedMode();
+        emit sigInternalStopIsolatedModeRequested();
     }
 
     KisNodeGraphListener::aboutToRemoveANode(parent, index);
@@ -373,6 +391,63 @@ void KisImage::nodeChanged(KisNode* node)
 void KisImage::invalidateAllFrames()
 {
     invalidateFrames(KisTimeRange::infinite(0), QRect());
+}
+
+void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
+{
+    if (m_d->targetOverlaySelectionMask == mask) return;
+
+    m_d->targetOverlaySelectionMask = mask;
+
+    struct UpdateOverlaySelectionStroke : public KisSimpleStrokeStrategy {
+        UpdateOverlaySelectionStroke(KisImageSP image)
+            : KisSimpleStrokeStrategy("update-overlay-selection-mask", kundo2_noi18n("update-overlay-selection-mask")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+            setClearsRedoOnStart(false);
+        }
+
+        void initStrokeCallback() {
+            KisSelectionMaskSP oldMask = m_image->m_d->overlaySelectionMask;
+            KisSelectionMaskSP newMask = m_image->m_d->targetOverlaySelectionMask;
+            if (oldMask == newMask) return;
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!newMask || newMask->graphListener() == m_image);
+
+            m_image->m_d->overlaySelectionMask = newMask;
+
+            if (oldMask || newMask) {
+                m_image->m_d->rootLayer->notifyChildMaskChanged();
+            }
+
+            if (oldMask) {
+                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMask->extent());
+            }
+
+            if (newMask) {
+                newMask->setDirty();
+            }
+
+            m_image->undoAdapter()->emitSelectionChanged();
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new UpdateOverlaySelectionStroke(this));
+    endStroke(id);
+}
+
+KisSelectionMaskSP KisImage::overlaySelectionMask() const
+{
+    return m_d->overlaySelectionMask;
+}
+
+bool KisImage::hasOverlaySelectionMask() const
+{
+    return m_d->overlaySelectionMask;
 }
 
 KisSelectionSP KisImage::globalSelection() const
@@ -408,8 +483,8 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
             selectionMask->setSelection(globalSelection);
         }
 
-        Q_ASSERT(m_d->rootLayer->childCount() > 0);
-        Q_ASSERT(m_d->rootLayer->selectionMask());
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->rootLayer->childCount() > 0);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->rootLayer->selectionMask());
     }
 
     m_d->deselectedGlobalSelection = 0;
@@ -1142,11 +1217,6 @@ KisUndoAdapter* KisImage::undoAdapter() const
     return &m_d->legacyUndoAdapter;
 }
 
-KisActionRecorder* KisImage::actionRecorder() const
-{
-    return &m_d->recorder;
-}
-
 void KisImage::setDefaultProjectionColor(const KoColor &color)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->rootLayer);
@@ -1164,7 +1234,7 @@ KoColor KisImage::defaultProjectionColor() const
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
-    stopIsolatedMode();
+    emit sigInternalStopIsolatedModeRequested();
 
     KoColor defaultProjectionColor(Qt::transparent, m_d->colorSpace);
 
@@ -1279,7 +1349,7 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 
 void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc)
 {
-    KisImageConfig imageConfig;
+    KisImageConfig imageConfig(true);
     int patchWidth = imageConfig.updatePatchWidth();
     int patchHeight = imageConfig.updatePatchHeight();
 
@@ -1295,18 +1365,39 @@ void KisImage::KisImagePrivate::notifyProjectionUpdatedInPatches(const QRect &rc
 
 bool KisImage::startIsolatedMode(KisNodeSP node)
 {
-    if (!tryBarrierLock()) return false;
+    struct StartIsolatedModeStroke : public KisSimpleStrokeStrategy {
+        StartIsolatedModeStroke(KisNodeSP node, KisImageSP image)
+            : KisSimpleStrokeStrategy("start-isolated-mode", kundo2_noi18n("start-isolated-mode")),
+              m_node(node),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+            setClearsRedoOnStart(false);
+        }
 
-    unlock();
+        void initStrokeCallback() {
+            // pass-though node don't have any projection prepared, so we should
+            // explicitly regenerate it before activating isolated mode.
+            m_node->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
 
-    m_d->isolatedRootNode = node;
-    emit sigIsolatedModeChanged();
+            m_image->m_d->isolatedRootNode = m_node;
+            emit m_image->sigIsolatedModeChanged();
 
-    // the GUI uses our thread to do the color space conversion so we
-    // need to emit this signal in multiple threads
-    m_d->notifyProjectionUpdatedInPatches(bounds());
+            // the GUI uses our thread to do the color space conversion so we
+            // need to emit this signal in multiple threads
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
 
-    invalidateAllFrames();
+            m_image->invalidateAllFrames();
+        }
+
+    private:
+        KisNodeSP m_node;
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new StartIsolatedModeStroke(node, this));
+    endStroke(id);
+
     return true;
 }
 
@@ -1314,21 +1405,41 @@ void KisImage::stopIsolatedMode()
 {
     if (!m_d->isolatedRootNode)  return;
 
-    KisNodeSP oldRootNode = m_d->isolatedRootNode;
-    m_d->isolatedRootNode = 0;
+    struct StopIsolatedModeStroke : public KisSimpleStrokeStrategy {
+        StopIsolatedModeStroke(KisImageSP image)
+            : KisSimpleStrokeStrategy("stop-isolated-mode", kundo2_noi18n("stop-isolated-mode")),
+              m_image(image)
+        {
+            this->enableJob(JOB_INIT);
+            setClearsRedoOnStart(false);
+        }
 
-    emit sigIsolatedModeChanged();
+        void initStrokeCallback() {
+            if (!m_image->m_d->isolatedRootNode)  return;
 
-    // the GUI uses our thread to do the color space conversion so we
-    // need to emit this signal in multiple threads
-    m_d->notifyProjectionUpdatedInPatches(bounds());
-    invalidateAllFrames();
+            //KisNodeSP oldRootNode = m_image->m_d->isolatedRootNode;
+            m_image->m_d->isolatedRootNode = 0;
 
-    // TODO: Substitute notifyProjectionUpdated() with this code
-    // when update optimization is implemented
-    //
-    // QRect updateRect = bounds() | oldRootNode->extent();
-    // oldRootNode->setDirty(updateRect);
+            emit m_image->sigIsolatedModeChanged();
+
+            // the GUI uses our thread to do the color space conversion so we
+            // need to emit this signal in multiple threads
+            m_image->m_d->notifyProjectionUpdatedInPatches(m_image->bounds());
+            m_image->invalidateAllFrames();
+
+            // TODO: Substitute notifyProjectionUpdated() with this code
+            // when update optimization is implemented
+            //
+            // QRect updateRect = bounds() | oldRootNode->extent();
+            // oldRootNode->setDirty(updateRect);
+        }
+
+    private:
+        KisImageSP m_image;
+    };
+
+    KisStrokeId id = startStroke(new StopIsolatedModeStroke(this));
+    endStroke(id);
 }
 
 KisNodeSP KisImage::isolatedModeRoot() const
@@ -1571,6 +1682,11 @@ void KisImage::invalidateFrames(const KisTimeRange &range, const QRect &rect)
 void KisImage::requestTimeSwitch(int time)
 {
     m_d->animationInterface->requestTimeSwitchNonGUI(time);
+}
+
+KisNode *KisImage::graphOverlayNode() const
+{
+    return m_d->overlaySelectionMask.data();
 }
 
 QList<KisLayerCompositionSP> KisImage::compositions()

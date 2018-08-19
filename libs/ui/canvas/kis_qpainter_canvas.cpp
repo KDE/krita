@@ -48,7 +48,6 @@
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_prescaled_projection.h"
-#include "kis_config.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisDocument.h"
 #include "kis_selection_manager.h"
@@ -240,7 +239,7 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
 
 void KisQPainterCanvas::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_d->checkBrush = QBrush(createCheckersImage());
     m_d->scrollCheckers = cfg.scrollCheckers();

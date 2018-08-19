@@ -118,7 +118,7 @@ quint8 KisCircleMaskGenerator::valueAt(qreal x, qreal y) const
     qreal n = norme(xr * d->xcoef, yr * d->ycoef);
     if (n > 1.0) return 255;
 
-    // we add +1.0 to ensure correct antialising on the border
+    // we add +1.0 to ensure correct antialiasing on the border
     if (antialiasEdges()) {
         xr = qAbs(xr) + 1.0;
         yr = qAbs(yr) + 1.0;
@@ -138,4 +138,9 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
 
     d->transformedFadeX = d->xfadecoef * safeSoftnessCoeff;
     d->transformedFadeY = d->yfadecoef * safeSoftnessCoeff;
+}
+
+void KisCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+{
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
 }

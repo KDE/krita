@@ -29,7 +29,6 @@
 #include "kis_algebra_2d.h"
 #include "kis_distance_information.h"
 #include "kis_painting_information_builder.h"
-#include "kis_recording_adapter.h"
 #include "kis_image.h"
 #include "kis_painter.h"
 #include <brushengine/kis_paintop_preset.h>
@@ -66,7 +65,6 @@ const qreal TIMING_UPDATE_INTERVAL = 50.0;
 struct KisToolFreehandHelper::Private
 {
     KisPaintingInformationBuilder *infoBuilder;
-    KisRecordingAdapter *recordingAdapter;
     KisStrokesFacade *strokesFacade;
 
     KUndo2MagicString transactionText;
@@ -122,12 +120,10 @@ struct KisToolFreehandHelper::Private
 
 KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *infoBuilder,
                                              const KUndo2MagicString &transactionText,
-                                             KisRecordingAdapter *recordingAdapter,
                                              KisSmoothingOptions *smoothingOptions)
     : m_d(new Private())
 {
     m_d->infoBuilder = infoBuilder;
-    m_d->recordingAdapter = recordingAdapter;
     m_d->transactionText = transactionText;
     m_d->smoothingOptions = KisSmoothingOptionsSP(
                 smoothingOptions ? smoothingOptions : new KisSmoothingOptions());
@@ -310,10 +306,6 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     createPainters(m_d->strokeInfos,
                    startDist);
-
-    if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->startStroke(image, m_d->resources, startDistInfo);
-    }
 
     KisStrokeStrategy *stroke =
         new FreehandStrokeStrategy(m_d->resources, m_d->strokeInfos, m_d->transactionText);
@@ -653,10 +645,6 @@ void KisToolFreehandHelper::endPaint()
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
-
-    if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->endStroke();
-    }
 }
 
 void KisToolFreehandHelper::cancelPaint()
@@ -687,10 +675,6 @@ void KisToolFreehandHelper::cancelPaint()
     m_d->strokesFacade->cancelStroke(m_d->strokeId);
     m_d->strokeId.clear();
 
-    if(m_d->recordingAdapter) {
-        //FIXME: not implemented
-        //m_d->recordingAdapter->cancelStroke();
-    }
 }
 
 int KisToolFreehandHelper::elapsedStrokeTime() const
@@ -712,7 +696,7 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     }
 
     // Poll and draw regularly
-    KisConfig cfg;
+    KisConfig cfg(true);
     int stabilizerSampleSize = cfg.stabilizerSampleSize();
     m_d->stabilizerPollTimer.setInterval(stabilizerSampleSize);
     m_d->stabilizerPollTimer.start();
@@ -925,9 +909,6 @@ void KisToolFreehandHelper::paintAt(int strokeInfoId,
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(strokeInfoId, pi));
 
-    if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->addPoint(pi);
-    }
 }
 
 void KisToolFreehandHelper::paintLine(int strokeInfoId,
@@ -938,9 +919,6 @@ void KisToolFreehandHelper::paintLine(int strokeInfoId,
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(strokeInfoId, pi1, pi2));
 
-    if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->addLine(pi1, pi2);
-    }
 }
 
 void KisToolFreehandHelper::paintBezierCurve(int strokeInfoId,
@@ -978,9 +956,6 @@ void KisToolFreehandHelper::paintBezierCurve(int strokeInfoId,
                                new FreehandStrokeStrategy::Data(strokeInfoId,
                                                                 pi1, control1, control2, pi2));
 
-    if(m_d->recordingAdapter) {
-        m_d->recordingAdapter->addCurve(pi1, control1, control2, pi2);
-    }
 }
 
 void KisToolFreehandHelper::createPainters(QVector<KisFreehandStrokeInfo*> &strokeInfos,

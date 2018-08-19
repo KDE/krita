@@ -89,7 +89,7 @@ OverviewWidget::OverviewWidget(QWidget * parent)
     , m_imageIdleWatcher(250)
 {
     setMouseTracking(true);
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_outlineColor = qApp->palette().color(QPalette::Highlight);
 }
 
@@ -167,9 +167,9 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     if (m_canvas) {
-        if (!m_pixmap.isNull()) {
+        if (!m_oldPixmap.isNull()) {
             QSize newSize = calculatePreviewSize();
-            m_pixmap = m_pixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            m_pixmap = m_oldPixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_imageIdleWatcher.startCountdown();
     }
@@ -180,10 +180,21 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
     if (m_canvas) {
         QPointF previewPos = event->pos() - previewOrigin();
 
-        if (previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
-            m_lastPos = previewPos;
-            m_dragging = true;
+        if (!previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
+            // Move view to be centered on where the mouse clicked in the preview.
+            QTransform previewToImage = imageToPreviewTransform().inverted();
+            const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
+
+            QPointF newImagePos = previewToImage.map(previewPos);
+            QPointF newWidgetPos = converter->imageToWidget<QPointF>(newImagePos);
+
+            const QRect& canvasRect = m_canvas->canvasWidget()->rect();
+            newWidgetPos -= QPointF(canvasRect.width() / 2.0f, canvasRect.height() / 2.0f);
+
+            m_canvas->canvasController()->pan(newWidgetPos.toPoint());
         }
+        m_lastPos = previewPos;
+        m_dragging = true;
     }
     event->accept();
     update();
@@ -266,6 +277,7 @@ void OverviewWidget::generateThumbnail()
 void OverviewWidget::updateThumbnail(QImage pixmap)
 {
     m_pixmap = QPixmap::fromImage(pixmap);
+    m_oldPixmap = m_pixmap.copy();
     update();
 }
 

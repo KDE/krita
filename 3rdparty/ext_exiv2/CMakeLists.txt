@@ -2,7 +2,7 @@ SET(PREFIX_ext_exiv2  "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_exiv2
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL http://www.exiv2.org/builds/exiv2-0.26-trunk.tar.gz
+	URL http://files.kde.org/krita/build/dependencies/exiv2-0.26-trunk.tar.gz
 	URL_MD5 5399e3b570d7f9205f0e76d47582da4c
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/tzname.patch

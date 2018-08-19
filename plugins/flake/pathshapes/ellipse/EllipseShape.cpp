@@ -306,6 +306,8 @@ void EllipseShape::updatePath(const QSizeF &size)
         d->subpaths[0]->last()->setProperty(KoPathPoint::CloseSubpath);
     }
 
+    notifyPointsChanged();
+
     normalize();
 }
 
@@ -328,6 +330,8 @@ void EllipseShape::createPoints(int requiredPointCount)
             d->subpaths[0]->append(new KoPathPoint(this, QPointF()));
         }
     }
+
+    notifyPointsChanged();
 }
 
 void EllipseShape::updateKindHandle()
@@ -438,13 +442,13 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
         SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
 
         if (isCircle) {
-            context.shapeWriter().addAttributePt("r", 0.5 * size.width());
+            context.shapeWriter().addAttribute("r", 0.5 * size.width());
         } else {
-            context.shapeWriter().addAttributePt("rx", 0.5 * size.width());
-            context.shapeWriter().addAttributePt("ry", 0.5 * size.height());
+            context.shapeWriter().addAttribute("rx", 0.5 * size.width());
+            context.shapeWriter().addAttribute("ry", 0.5 * size.height());
         }
-        context.shapeWriter().addAttributePt("cx", 0.5 * size.width());
-        context.shapeWriter().addAttributePt("cy", 0.5 * size.height());
+        context.shapeWriter().addAttribute("cx", 0.5 * size.width());
+        context.shapeWriter().addAttribute("cy", 0.5 * size.height());
 
         SvgStyleWriter::saveSvgStyle(this, context);
 
@@ -456,11 +460,11 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
 
         context.shapeWriter().addAttribute("sodipodi:type", "arc");
 
-        context.shapeWriter().addAttributePt("sodipodi:rx", m_radii.x());
-        context.shapeWriter().addAttributePt("sodipodi:ry", m_radii.y());
+        context.shapeWriter().addAttribute("sodipodi:rx", m_radii.x());
+        context.shapeWriter().addAttribute("sodipodi:ry", m_radii.y());
 
-        context.shapeWriter().addAttributePt("sodipodi:cx", m_center.x());
-        context.shapeWriter().addAttributePt("sodipodi:cy", m_center.y());
+        context.shapeWriter().addAttribute("sodipodi:cx", m_center.x());
+        context.shapeWriter().addAttribute("sodipodi:cy", m_center.y());
 
         context.shapeWriter().addAttribute("sodipodi:start", 2 * M_PI - kisDegreesToRadians(endAngle()));
         context.shapeWriter().addAttribute("sodipodi:end", 2 * M_PI - kisDegreesToRadians(startAngle()));
@@ -471,6 +475,7 @@ bool EllipseShape::saveSvg(SvgSavingContext &context)
             break;
         case Chord:
             context.shapeWriter().addAttribute("sodipodi:arc-type", "chord");
+            break;
         case Arc:
             context.shapeWriter().addAttribute("sodipodi:open", "true");
             break;

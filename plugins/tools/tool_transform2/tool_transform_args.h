@@ -131,6 +131,13 @@ public:
     inline void setWarpType(KisWarpTransformWorker::WarpType warpType) {
         m_warpType = warpType;
     }
+    inline void setWarpCalculation(KisWarpTransformWorker::WarpCalculation warpCalc) {
+        m_warpCalculation = warpCalc;
+    }
+    inline KisWarpTransformWorker::WarpCalculation warpCalculation() {
+        return m_warpCalculation;
+    }
+
     inline void setAlpha(double alpha) {
         m_alpha = alpha;
     }
@@ -284,6 +291,7 @@ private:
     QVector<QPointF> m_origPoints;
     QVector<QPointF> m_transfPoints;
     KisWarpTransformWorker::WarpType m_warpType;
+    KisWarpTransformWorker::WarpCalculation m_warpCalculation; // DRAW or GRID
     double m_alpha;
 
     //'free transform'-related

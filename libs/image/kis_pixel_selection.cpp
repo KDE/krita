@@ -72,8 +72,8 @@ KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds, KisSe
     m_d->parentSelection = parentSelection;
 }
 
-KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs)
-        : KisPaintDevice(rhs)
+KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::DeviceCopyMode copyMode)
+        : KisPaintDevice(rhs, copyMode)
         , KisSelectionComponent(rhs)
         , m_d(new Private)
 {
@@ -384,7 +384,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
         delete[] buffer;
         return paths;
     }
-    catch(std::bad_alloc) {
+    catch(const std::bad_alloc&) {
         // Allocating so much memory failed, so we fall through to the slow option.
         warnKrita << "KisPixelSelection::outline ran out of memory allocating" << width << "*" << height << "bytes.";
     }

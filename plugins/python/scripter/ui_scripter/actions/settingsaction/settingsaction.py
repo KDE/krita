@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtCore import Qt
 from . import settingsdialog
+import krita
 
 
 class SettingsAction(QAction):
@@ -32,7 +33,7 @@ class SettingsAction(QAction):
         self.settingsDialog.setWindowModality(Qt.WindowModal)
         self.settingsDialog.setFixedSize(400, 250)
 
-        self.setText('Settings')
+        self.setText(i18n("Settings"))
 
     @property
     def parents(self):
@@ -40,7 +41,7 @@ class SettingsAction(QAction):
 
     def openSettings(self):
         self.settingsDialog.show()
-        self.settingsDialog.exec()
+        self.settingsDialog.exec_()
 
     def readSettings(self):
         self.settingsDialog.readSettings(self.scripter.settings)

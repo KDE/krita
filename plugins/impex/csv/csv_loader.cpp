@@ -97,7 +97,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
 
     CSVReadLine readLine;
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
-    importDoc->setAutoSaveDelay(0);
+    importDoc->setInfiniteAutoSaveInterval();
     importDoc->setFileBatchMode(true);
 
     KisView *setView(0);
@@ -223,7 +223,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             readLine.rewind();
             field = readLine.nextField();
             step = 4;
-            //no break!
+            /* Falls through */
 
         case 4 :    //level header
 
@@ -266,7 +266,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
 
             step = 5;
 
-            //no break!
+            /* Falls through */
 
         case 5 :    //frames
 

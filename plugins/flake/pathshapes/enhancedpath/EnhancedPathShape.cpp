@@ -422,7 +422,7 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
     if (m_pathStretchPointX != -1 && m_pathStretchPointY != -1) {
         qreal scaleX = size.width();
         qreal scaleY = size.height();
-        if (m_viewBox.width() / m_viewBox.height() < scaleX / scaleY) {
+        if (qreal(m_viewBox.width()) / m_viewBox.height() < qreal(scaleX) / scaleY) {
             qreal deltaX = (scaleX * m_viewBox.height()) / scaleY - m_viewBox.width();
             foreach (KoSubpath *subpath, d->subpaths) {
                 foreach (KoPathPoint *currPoint, *subpath) {
@@ -439,7 +439,7 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
                 }
             }
             scale = scaleY / m_viewBox.height();
-        } else if (m_viewBox.width() / m_viewBox.height() > scaleX / scaleY) {
+        } else if (qreal(m_viewBox.width()) / m_viewBox.height() > qreal(scaleX) / scaleY) {
             qreal deltaY = (m_viewBox.width() * scaleY) / scaleX - m_viewBox.height();
             foreach (KoSubpath *subpath, d->subpaths) {
                 foreach (KoPathPoint *currPoint, *subpath) {
@@ -457,6 +457,8 @@ bool EnhancedPathShape::useStretchPoints(const QSizeF &size, qreal &scale)
             }
             scale = scaleX / m_viewBox.width();
         }
+
+        notifyPointsChanged();
     }
     return retval;
 }
@@ -500,8 +502,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         // save the right size so that when loading we fit the viewbox
         // to the right size without getting any wrong scaling
         // -> calculate the right size from the current size/viewbound ratio
-        context.xmlWriter().addAttributePt("svg:width", currentSize.width() == 0 ? 0 : m_viewBox.width()*currentSize.width() / m_viewBound.width());
-        context.xmlWriter().addAttributePt("svg:height", currentSize.height() == 0 ? 0 : m_viewBox.height()*currentSize.height() / m_viewBound.height());
+        context.xmlWriter().addAttribute("svg:width", currentSize.width() == 0 ? 0 : m_viewBox.width()*currentSize.width() / m_viewBound.width());
+        context.xmlWriter().addAttribute("svg:height", currentSize.height() == 0 ? 0 : m_viewBox.height()*currentSize.height() / m_viewBound.height());
 
         saveText(context);
 

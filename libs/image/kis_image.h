@@ -43,7 +43,6 @@ class KoColorSpace;
 class KoColor;
 
 class KisCompositeProgressProxy;
-class KisActionRecorder;
 class KisUndoStore;
 class KisUndoAdapter;
 class KisImageSignalRouter;
@@ -95,6 +94,7 @@ public: // KisNodeGraphListener implementation
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
     void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
+    KisNode* graphOverlayNode() const override;
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc) override;
@@ -180,6 +180,23 @@ public:
      *         image jobs.
      */
     bool locked() const;
+
+    /**
+     * Sets the mask (it must be a part of the node hierarchy already) to be paited on
+     * the top of all layers. This method does all the locking and syncing for you. It
+     * is executed asynchronously.
+     */
+    void setOverlaySelectionMask(KisSelectionMaskSP mask);
+
+    /**
+     * \see setOverlaySelectionMask
+     */
+    KisSelectionMaskSP overlaySelectionMask() const;
+
+    /**
+     * \see setOverlaySelectionMask
+     */
+    bool hasOverlaySelectionMask() const;
 
     /**
      * @return the global selection object or 0 if there is none. The
@@ -387,11 +404,6 @@ public:
      * Return current undo store of the image
      */
     KisUndoStore* undoStore();
-
-    /**
-     * @return the action recorder associated with this image
-     */
-    KisActionRecorder* actionRecorder() const;
 
     /**
      * Tell the image it's modified; this emits the sigImageModified
@@ -699,9 +711,11 @@ public:
      */
     KisProofingConfigurationSP proofingConfiguration() const;
 
-public:
+public Q_SLOTS:
     bool startIsolatedMode(KisNodeSP node);
     void stopIsolatedMode();
+
+public:
     KisNodeSP isolatedModeRoot() const;
 
 Q_SIGNALS:
@@ -850,6 +864,12 @@ Q_SIGNALS:
      *
      */
     void sigProofingConfigChanged();
+
+    /**
+     * Internal signal for asynchronously requesting isolated mode to stop. Don't use it
+     * outside KisImage, use sigIsolatedModeChanged() instead.
+     */
+    void sigInternalStopIsolatedModeRequested();
 
 public Q_SLOTS:
     KisCompositeProgressProxy* compositeProgressProxy();

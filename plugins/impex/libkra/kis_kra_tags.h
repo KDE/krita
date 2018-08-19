@@ -43,7 +43,6 @@ const QString LAYER_PATH = "/layers/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";
-const QString CHANNEL_LOCK_FLAGS = "channellockflags";
 const QString CLONE_FROM = "clonefrom";
 const QString CLONE_FROM_UUID = "clonefromuuid";
 const QString CLONE_LAYER = "clonelayer";
@@ -90,6 +89,7 @@ const QString PROFILE = "profile";
 const QString ROTATION = "rotation";
 const QString SELECTION_MASK = "selectionmask";
 const QString SHAPE_LAYER = "shapelayer";
+const QString REFERENCE_IMAGES_LAYER = "referenceimages";
 const QString FILE_LAYER = "filelayer";
 const QString TRANSPARENCY_MASK = "transparencymask";
 const QString COLORIZE_MASK = "colorizemask";
@@ -132,6 +132,8 @@ const QString PROOFINGADAPTATIONSTATE = "proofing-adaptation-state";
 const QString ICCPROOFINGPROFILE ="icc-proofing-profile";
 const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
 const QString COLORBYTEDATA = "ColorData";
+const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
+const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
 }
 
 

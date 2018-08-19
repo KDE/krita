@@ -159,5 +159,4 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
         QMouseEvent targetEvent(QEvent::MouseMove, eventPosF(event), Qt::LeftButton, Qt::LeftButton, modifiers);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, m_d->savedAction, &targetEvent, event);
     }
-
 }

@@ -120,9 +120,7 @@ void KisOpenGL::initialize()
     }
 
     QOpenGLFunctions  *funcs = context.functions();
-
     openGLCheckResult = OpenGLCheckResult(context);
-
     debugText.clear();
     QDebug debugOut(&debugText);
     debugOut << "OpenGL Info";
@@ -139,13 +137,13 @@ void KisOpenGL::initialize()
     debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
     appendPlatformOpenGLDebugText(debugOut);
 
-    qDebug().noquote() << debugText;
+    dbgOpenGL.noquote() << debugText;
 
 }
 
 void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     initialize();
 
     dbgUI << "OpenGL: Opening new context";

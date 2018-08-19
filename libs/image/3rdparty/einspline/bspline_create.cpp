@@ -1868,6 +1868,6 @@ destroy_Bspline (void *spline)
   else if (sp->sp_code <= MULTI_U3D)
     destroy_multi_UBspline (sp);
   else
-    fprintf (stderr, "Error in destroy_Bspline:  invalide spline code %d.\n",
+    fprintf (stderr, "Error in destroy_Bspline:  invalid spline code %d.\n",
 	     sp->sp_code);
 }

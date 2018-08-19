@@ -23,8 +23,10 @@
 #define _KIS_DLG_PREFERENCES_H_
 
 #include <QWidget>
+#include <QButtonGroup>
 
 #include <kpagedialog.h>
+#include <kis_config.h>
 
 #include "kis_global.h"
 #include <squeezedcombobox.h>
@@ -68,12 +70,15 @@ public:
     CursorStyle cursorStyle();
     OutlineStyle outlineStyle();
 
+    KisConfig::SessionOnStartup sessionOnStartup() const;
+    bool saveSessionOnQuit() const;
+
     bool showRootLayer();
     int autoSaveInterval();
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
-    bool hideSplashScreen();
+
     int mdiMode();
     int favoritePresets();
     bool showCanvasMessages();
@@ -84,8 +89,6 @@ public:
     bool kineticScrollingScrollbar();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
-
-    bool calculateAnimationCacheInBackground();
 
 private Q_SLOTS:
     void getBackgroundImage();
@@ -188,6 +191,9 @@ class TabletSettingsTab : public QWidget {
     Q_OBJECT
 public:
     TabletSettingsTab(QWidget *parent = 0, const char  *name = 0);
+
+private Q_SLOTS:
+    void slotTabletTest();
 
 public:
     void setDefault();

@@ -359,9 +359,9 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     horizPainterLR.setChannelFlags(channelFlags);
     horizPainterLR.setProgress(progressUpdater);
     horizPainterLR.applyMatrix(kernelHorizLeftRight, device,
-                               srcTopLeft - QPoint(0, ceil(horizontalCenter)),
-                               srcTopLeft - QPoint(0, ceil(horizontalCenter)),
-                               rect.size() + QSize(0, 2 * ceil(horizontalCenter)), BORDER_REPEAT);
+                               srcTopLeft - QPoint(ceil(horizontalCenter), 0),
+                               srcTopLeft - QPoint(ceil(horizontalCenter), 0),
+                               rect.size() + QSize(2 * ceil(horizontalCenter), 0), BORDER_REPEAT);
 
 
     KisConvolutionPainter verticalPainterTB(x_denormalised);

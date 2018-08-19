@@ -38,11 +38,11 @@
 #include <resources/KoPattern.h>
 
 KisPatternChooser::KisPatternChooser(QWidget *parent)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     m_lbName = new QLabel(this);
 
-    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+    KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
     m_itemChooser = new KoResourceItemChooser(adapter, this, true);
     m_itemChooser->setPreviewTiled(true);
@@ -62,10 +62,10 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     mainLayout->addWidget(m_lbName);
     mainLayout->addWidget(m_itemChooser, 10);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
+                                             cfg.kineticScrollingSensitivity(),
+                                             cfg.kineticScrollingScrollbar());
 
     setLayout(mainLayout);
 }
@@ -77,7 +77,7 @@ KisPatternChooser::~KisPatternChooser()
 KoResource *  KisPatternChooser::currentResource()
 {
     if (!m_itemChooser->currentResource()) {
-        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer(false);
+        KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
         if (rserver->resources().size() > 0) {
             KisSignalsBlocker blocker(m_itemChooser);
             m_itemChooser->setCurrentResource(rserver->resources().first());

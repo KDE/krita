@@ -30,7 +30,7 @@
 /**
  * @brief The FillLayer class
  * A fill layer is much like a filter layer in that it takes a name
- * and filter. It however specialises in filters that fill the whole canvas,
+ * and filter. It however specializes in filters that fill the whole canvas,
  * such as a pattern or full color fill.
  */
 class KRITALIBKIS_EXPORT FillLayer : public Node

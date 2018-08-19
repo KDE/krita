@@ -66,8 +66,11 @@ public:
     KisKeyframeSP addKeyframe(int time, KUndo2Command *parentCommand = 0);
     bool deleteKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand = 0);
     bool moveKeyframe(KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
+    bool swapFrames(int lhsTime, int rhsTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
+
+    bool swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
@@ -144,6 +147,7 @@ protected:
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 
+    void workaroundBrokenFrameTimeBug(int *time);
 
 private:
     KisKeyframeSP replaceKeyframeAt(int time, KisKeyframeSP newKeyframe);
@@ -151,9 +155,11 @@ private:
     void removeKeyframeLogical(KisKeyframeSP keyframe);
     bool deleteKeyframeImpl(KisKeyframeSP keyframe, KUndo2Command *parentCommand, bool recreate);
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
+    void swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe);
 
     friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;
+    friend class KisSwapFramesCommand;
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);

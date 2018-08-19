@@ -52,12 +52,8 @@ KisQImageIOImport::~KisQImageIOImport()
 KisImportExportFilter::ConversionStatus KisQImageIOImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     QFileInfo fi(filename());
-    if (!QImageReader::supportedImageFormats().contains(fi.suffix().toLatin1())) {
-        return KisImportExportFilter::InvalidFormat;
-    }
-
     QImage img;
-    if (!img.loadFromData(io->readAll(), fi.suffix().toLatin1())) {
+    if (!img.loadFromData(io->readAll(), fi.suffix().toLower().toLatin1())) {
         return KisImportExportFilter::InvalidFormat;
     }
 

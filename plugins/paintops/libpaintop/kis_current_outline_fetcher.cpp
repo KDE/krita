@@ -74,6 +74,7 @@ void KisCurrentOutlineFetcher::setDirty()
 QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info,
                                                     const KisPaintOpSettingsSP settings,
                                                     const QPainterPath &originalOutline,
+                                                    const KisPaintOpSettings::OutlineMode &mode,
                                                     qreal additionalScale,
                                                     qreal additionalRotation,
                                                     bool tilt, qreal tiltcenterx, qreal tiltcentery) const
@@ -99,7 +100,6 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
 
     qreal scale = additionalScale;
     qreal rotation = additionalRotation;
-    MirrorProperties mirrorProperties;
     bool needsUpdate = false;
 
     // Randomized rotation at full speed looks noisy, so slow it down
@@ -108,19 +108,19 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         d->lastUpdateTime.restart();
     }
 
-    if (d->sizeOption && tilt == false) {
+    if (d->sizeOption && !tilt && !mode.forceFullSize) {
         if (!d->sizeOption->isRandom() || needsUpdate) {
             d->lastSizeApplied = d->sizeOption->apply(info);
         }
         scale *= d->lastSizeApplied;
     }
 
-    if (d->rotationOption && tilt == false) {
+    if (d->rotationOption && !tilt) {
         if (!d->rotationOption->isRandom() || needsUpdate) {
             d->lastRotationApplied = d->rotationOption->apply(info);
         }
         rotation += d->lastRotationApplied;
-    } else if (d->rotationOption && tilt == true) {
+    } else if (d->rotationOption && tilt) {
         rotation += settings->getDouble("runtimeCanvasRotation", 0.0) * M_PI / 180.0;
     }
 
@@ -150,8 +150,9 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
     rot.rotateRadians(-rotation);
 
     QPointF hotSpot = originalOutline.boundingRect().center();
-    if (tilt==true) {
-        hotSpot.setX(tiltcenterx);hotSpot.setY(tiltcentery);
+    if (tilt) {
+        hotSpot.setX(tiltcenterx);
+        hotSpot.setY(tiltcentery);
     }
     QTransform T1 = QTransform::fromTranslate(-hotSpot.x(), -hotSpot.y());
     QTransform T2 = QTransform::fromTranslate(info.pos().x(), info.pos().y());

@@ -57,7 +57,7 @@ private Q_SLOTS:
     void activateAxesPointModeSetup();
     void resetAxes();
     void slotSetHandsCount(int count);
-    void slotSetAxesAngle(int angle);
+    void slotSetAxesAngle(qreal angle);
     void slotSetTransformMode(int qcomboboxIndex);
     void slotSetAxesVisible(bool vis);
     void slotSetMirrorVertically(bool mirror);

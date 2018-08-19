@@ -35,6 +35,10 @@
 #include <kis_icon.h>
 #include "kis_thread_safe_signal_compressor.h"
 #include "kis_layer_properties_icons.h"
+#include "kis_cached_paint_device.h"
+
+#include "kis_image_config.h"
+#include "KisImageConfigNotifier.h"
 
 
 struct Q_DECL_HIDDEN KisSelectionMask::Private
@@ -43,18 +47,24 @@ public:
     Private(KisSelectionMask *_q)
         : q(_q)
         , updatesCompressor(0)
+        , maskColor(Qt::green, KoColorSpaceRegistry::instance()->rgb8())
     {}
     KisSelectionMask *q;
     KisImageWSP image;
+    KisCachedPaintDevice paintDeviceCache;
+    KisCachedSelection cachedSelection;
     KisThreadSafeSignalCompressor *updatesCompressor;
+    KoColor maskColor;
 
     void slotSelectionChangedCompressed();
+    void slotConfigChanged();
 };
 
 KisSelectionMask::KisSelectionMask(KisImageWSP image)
-    : KisMask("selection")
+    : KisEffectMask()
     , m_d(new Private(this))
 {
+    setName("selection");
     setActive(false);
 
     m_d->image = image;
@@ -64,19 +74,24 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->moveToThread(image->thread());
+
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    m_d->slotConfigChanged();
 }
 
 KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
-    : KisMask(rhs)
+    : KisEffectMask(rhs)
     , m_d(new Private(this))
 {
-    setActive(false);
     m_d->image = rhs.image();
     m_d->updatesCompressor =
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->moveToThread(m_d->image->thread());
+
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    m_d->slotConfigChanged();
 }
 
 KisSelectionMask::~KisSelectionMask()
@@ -89,12 +104,62 @@ QIcon KisSelectionMask::icon() const {
     return KisIconUtils::loadIcon("selectionMask");
 }
 
+void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
+                                           KisSelectionSP effectiveSelection,
+                                           const QRect &applyRect,
+                                           const QRect &preparedNeedRect,
+                                           KisNode::PositionToFilthy maskPos) const
+{
+    Q_UNUSED(maskPos);
+    Q_UNUSED(preparedNeedRect);
+    if (!effectiveSelection) return;
+
+    {
+        KisSelectionSP mainMaskSelection = this->selection();
+        if (mainMaskSelection &&
+            (!mainMaskSelection->isVisible() ||
+             mainMaskSelection->pixelSelection()->defaultBounds()->externalFrameActive())) {
+
+            return;
+        }
+    }
+
+    KisPaintDeviceSP fillDevice = m_d->paintDeviceCache.getDevice(projection);
+    fillDevice->setDefaultPixel(m_d->maskColor);
+
+    const QRect selectionExtent = effectiveSelection->selectedRect();
+
+    if (selectionExtent.contains(applyRect) || selectionExtent.intersects(applyRect)) {
+        KisSelectionSP invertedSelection = m_d->cachedSelection.getSelection();
+
+        invertedSelection->pixelSelection()->makeCloneFromRough(effectiveSelection->pixelSelection(), applyRect);
+        invertedSelection->pixelSelection()->invert();
+
+        KisPainter gc(projection);
+        gc.setSelection(invertedSelection);
+        gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
+
+        m_d->cachedSelection.putSelection(invertedSelection);
+
+    } else {
+        KisPainter gc(projection);
+        gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
+    }
+
+    m_d->paintDeviceCache.putDevice(fillDevice);
+}
+
+bool KisSelectionMask::paintsOutsideSelection() const
+{
+    return true;
+}
+
 void KisSelectionMask::setSelection(KisSelectionSP selection)
 {
     if (selection) {
-        KisMask::setSelection(selection);
+        KisEffectMask::setSelection(selection);
     } else {
-        KisMask::setSelection(new KisSelection());
+        KisEffectMask::setSelection(new KisSelection());
 
         const KoColorSpace * cs = KoColorSpaceRegistry::instance()->alpha8();
         KisFillPainter gc(KisPaintDeviceSP(this->selection()->pixelSelection().data()));
@@ -128,15 +193,16 @@ KisBaseNode::PropertyList KisSelectionMask::sectionModelProperties() const
 
 void KisSelectionMask::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
-    KisMask::setSectionModelProperties(properties);
+    KisEffectMask::setSectionModelProperties(properties);
     setActive(properties.at(2).state.toBool());
 }
 
 void KisSelectionMask::setVisible(bool visible, bool isLoading)
 {
+    const bool oldVisible = this->visible(false);
     setNodeProperty("visible", visible);
 
-    if (!isLoading) {
+    if (!isLoading && visible != oldVisible) {
         if (selection())
             selection()->setVisible(visible);
         emit(visibilityChanged(visible));
@@ -155,22 +221,71 @@ void KisSelectionMask::setActive(bool active)
 
     if (active && parentLayer) {
         KisSelectionMaskSP activeMask = parentLayer->selectionMask();
-        if (activeMask) {
+        if (activeMask && activeMask != this) {
             activeMask->setActive(false);
         }
     }
 
+    const bool oldActive = this->active();
     setNodeProperty("active", active);
 
-    if (image) {
+    if (image && oldActive != active) {
         image->nodeChanged(this);
         image->undoAdapter()->emitSelectionChanged();
     }
 }
 
+QRect KisSelectionMask::needRect(const QRect &rect, KisNode::PositionToFilthy pos) const
+{
+    Q_UNUSED(pos);
+
+    // selection masks just add an overlay, so the needed rect is simply passed through
+    return rect;
+}
+
+QRect KisSelectionMask::changeRect(const QRect &rect, KisNode::PositionToFilthy pos) const
+{
+    Q_UNUSED(pos);
+
+    // selection masks just add an overlay, so the changed rect is simply passed through
+    return rect;
+}
+
+QRect KisSelectionMask::extent() const
+{
+    // since mask overlay is inverted, the mask paints over
+    // the entire image bounds
+
+    QRect resultRect;
+
+    KisSelectionSP selection = this->selection();
+
+    if (selection) {
+        resultRect = selection->pixelSelection()->defaultBounds()->bounds();
+    } else if (KisNodeSP parent = this->parent()) {
+        KisPaintDeviceSP dev = parent->projection();
+        if (dev) {
+            resultRect = dev->defaultBounds()->bounds();
+        }
+    }
+
+    return resultRect;
+}
+
+QRect KisSelectionMask::exactBounds() const
+{
+    return extent();
+}
+
 void KisSelectionMask::notifySelectionChangedCompressed()
 {
     m_d->updatesCompressor->start();
+}
+
+void KisSelectionMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
+{
+    Q_UNUSED(selection);
+    Q_UNUSED(dirtyRect);
 }
 
 void KisSelectionMask::Private::slotSelectionChangedCompressed()
@@ -179,6 +294,21 @@ void KisSelectionMask::Private::slotSelectionChangedCompressed()
     if (!currentSelection) return;
 
     currentSelection->notifySelectionChanged();
+}
+
+void KisSelectionMask::Private::slotConfigChanged()
+{
+    const KoColorSpace *cs = image ?
+        image->colorSpace() :
+        KoColorSpaceRegistry::instance()->rgb8();
+
+    KisImageConfig cfg(true);
+
+    maskColor = KoColor(cfg.selectionOverlayMaskColor(), cs);
+
+    if (image && image->overlaySelectionMask() == q) {
+        q->setDirty();
+    }
 }
 
 #include "moc_kis_selection_mask.cpp"

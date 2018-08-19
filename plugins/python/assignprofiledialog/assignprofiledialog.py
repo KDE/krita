@@ -9,21 +9,21 @@ You can copy, modify, distribute and perform the work, even for commercial purpo
 
 https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
-import sys
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from krita import *
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (QDialogButtonBox, QDialog,
+                             QMessageBox, QComboBox, QVBoxLayout)
+from krita import Extension
 
 
 class AssignProfileDialog(Extension):
 
     def __init__(self, parent):
-        super().__init__(parent)
+        super(AssignProfileDialog, self).__init__(parent)
 
     def assignProfile(self):
         doc = Application.activeDocument()
-        if doc == None:
-            QMessageBox.information(Application.activeWindow().qwindow(), "Assign Profile", "There is no active document.")
+        if doc is None:
+            QMessageBox.information(Application.activeWindow().qwindow(), i18n("Assign Profile"), i18n("There is no active document."))
             return
 
         self.dialog = QDialog(Application.activeWindow().qwindow())
@@ -35,7 +35,7 @@ class AssignProfileDialog(Extension):
         vbox = QVBoxLayout(self.dialog)
         vbox.addWidget(self.cmbProfile)
         self.buttonBox = QDialogButtonBox(self.dialog)
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setOrientation(Qt.Horizontal)
         self.buttonBox.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         self.buttonBox.accepted.connect(self.dialog.accept)
         self.buttonBox.accepted.connect(self.accept)
@@ -50,7 +50,11 @@ class AssignProfileDialog(Extension):
         doc.setColorProfile(self.cmbProfile.currentText())
 
     def setup(self):
-        action = Application.createAction("assing_profile_to_image", "Assign Profile to Image")
+        pass
+
+    def createActions(self, window):
+        action = window.createAction("assing_profile_to_image", i18n("Assign Profile to Image"))
         action.triggered.connect(self.assignProfile)
+
 
 Scripter.addExtension(AssignProfileDialog(Application))

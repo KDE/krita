@@ -23,9 +23,9 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class ColorRange : public KisViewPlugin
+class ColorRange : public KisActionPlugin
 {
     Q_OBJECT
 public:

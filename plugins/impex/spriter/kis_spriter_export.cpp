@@ -24,10 +24,7 @@
 #include <QDomDocument>
 #include <QFileInfo>
 #include <QSlider>
-#include <QFileInfo>
 #include <QDir>
-#include <QFileInfo>
-#include <QApplication>
 
 #include <kpluginfactory.h>
 
@@ -565,6 +562,7 @@ KisImportExportFilter::ConversionStatus KisSpriterExport::convert(KisDocument *d
             if (file.layerName.contains("slot(")) {
                 int start = file.layerName.indexOf("slot(") + 5;
                 int end = file.layerName.indexOf(')', start);
+                slot = new SpriterSlot();
                 slot->name = file.layerName.mid(start, end - start);
                 slot->defaultAttachmentFlag = file.layerName.contains("*");
             }

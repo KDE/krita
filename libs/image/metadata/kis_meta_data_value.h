@@ -22,13 +22,15 @@
 #include <QMap>
 
 #include <kritaimage_export.h>
+#include <boost/operators.hpp>
 
 class QVariant;
 
 namespace KisMetaData
 {
 
-struct Rational {
+struct Rational : public boost::equality_comparable<Rational>
+{
     explicit Rational(qint32 n = 0, qint32 d = 1) : numerator(n), denominator(d) {}
     qint32 numerator;
     qint32 denominator;

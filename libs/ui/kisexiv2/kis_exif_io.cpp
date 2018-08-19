@@ -125,12 +125,13 @@ inline T fixEndianess(T v, Exiv2::ByteOrder order)
 Exiv2::ByteOrder invertByteOrder(Exiv2::ByteOrder order)
 {
     switch (order) {
-    case Exiv2::invalidByteOrder:
-        warnKrita << "KisExifIO: Can't invert Exiv2::invalidByteOrder";
     case Exiv2::littleEndian:
         return Exiv2::bigEndian;
     case Exiv2::bigEndian:
         return Exiv2::littleEndian;
+    case Exiv2::invalidByteOrder:
+        warnKrita << "KisExifIO: Can't invert Exiv2::invalidByteOrder";
+        return Exiv2::invalidByteOrder;
     }
     return Exiv2::invalidByteOrder;
 }
@@ -142,6 +143,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
     Q_ASSERT(dvalue);
     QByteArray array(dvalue->count(), 0);
+
     dvalue->copy((Exiv2::byte*)array.data());
     int columns = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[0], order);
     int rows = fixEndianess<quint16>((reinterpret_cast<quint16*>(array.data()))[1], order);
@@ -167,13 +169,14 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
             names.append(KisMetaData::Value(""));
         }
     }
+
     oecfStructure["Names"] = KisMetaData::Value(names, KisMetaData::Value::OrderedArray);
     QList<KisMetaData::Value> values;
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint32* dataIt = reinterpret_cast<qint32*>(array.data() + index);
     for (int i = 0; i < columns; i++) {
         for (int j = 0; j < rows; j++) {
             values.append(KisMetaData::Value(KisMetaData::Rational(fixEndianess<qint32>(dataIt[0], order), fixEndianess<qint32>(dataIt[1], order))));
-            dataIt += 8;
+            dataIt += 2;
         }
     }
     oecfStructure["Values"] = KisMetaData::Value(values, KisMetaData::Value::OrderedArray);
@@ -209,7 +212,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
             index += name.size();
         }
     }
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint32* dataIt = reinterpret_cast<qint32*>(array.data() + index);
     for (QList<KisMetaData::Value>::iterator it = values.begin();
             it != values.end(); ++it) {
         dataIt[0] = it->asRational().numerator;
@@ -243,8 +246,10 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
 
     for (int index = 4; index < array.size(); )
     {
-        int lastIndex = array.indexOf(null, index);
-        QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), lastIndex - index + 2);
+        const int lastIndex = array.indexOf(null, index);
+        const int numChars = (lastIndex - index) / 2; // including trailing zero
+
+        QString setting = QString::fromUtf16((ushort*)(void*)( array.data() + index), numChars);
         index = lastIndex + 2;
         dbgMetaData << "Setting << " << setting;
         settings.append(KisMetaData::Value(setting));
@@ -313,7 +318,7 @@ Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
     (reinterpret_cast<quint16*>(array.data()))[0] = columns;
     (reinterpret_cast<quint16*>(array.data()))[1] = rows;
     for (int i = 0; i < columns * rows; i++) {
-        int val = values[i].asVariant().toInt();
+        quint8 val = values[i].asVariant().toUInt();
         *(array.data() + 4 + i) = val;
     }
     dbgMetaData << "Cfa Array " << ppVar(columns) << ppVar(rows) << ppVar(array.size());

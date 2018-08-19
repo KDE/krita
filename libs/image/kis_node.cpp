@@ -192,7 +192,7 @@ KisNode::KisNode(const KisNode & rhs)
 
     // HACK ALERT: we create opacity channel in KisBaseNode, but we cannot
     //             initialize its node from there! So workaround it here!
-    QMap<QString, KisKeyframeChannel*> channels = rhs.keyframeChannels();
+    QMap<QString, KisKeyframeChannel*> channels = keyframeChannels();
     for (auto it = channels.begin(); it != channels.end(); ++it) {
         it.value()->setNode(this);
     }
@@ -475,13 +475,11 @@ KisNodeSP KisNode::findChildByName(const QString &name)
 
 bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 {
-    Q_ASSERT(newNode);
-
-    if (!newNode) return false;
-    if (aboveThis && aboveThis->parent().data() != this) return false;
-    if (!allowAsChild(newNode)) return false;
-    if (newNode->parent()) return false;
-    if (index(newNode) >= 0) return false;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(newNode, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!aboveThis || aboveThis->parent().data() == this, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(allowAsChild(newNode), false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!newNode->parent(), false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index(newNode) < 0, false);
 
     int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 
@@ -505,11 +503,11 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
         newNode->setGraphListener(m_d->graphListener);
     }
 
-    childNodeChanged(newNode);
-
     if (m_d->graphListener) {
         m_d->graphListener->nodeHasBeenAdded(this, idx);
     }
+
+    childNodeChanged(newNode);
 
     return true;
 }
@@ -533,11 +531,11 @@ bool KisNode::remove(quint32 index)
             m_d->nodes.removeAt(index);
         }
 
-        childNodeChanged(removedNode);
-
         if (m_d->graphListener) {
             m_d->graphListener->nodeHasBeenRemoved(this, index);
         }
+
+        childNodeChanged(removedNode);
 
         return true;
     }

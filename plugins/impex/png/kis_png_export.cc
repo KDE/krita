@@ -40,7 +40,6 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_config.h>
-#include <kis_properties_configuration.h>
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_filter_registry_model.h>
 #include <metadata/kis_exif_info_visitor.h>
@@ -55,18 +54,6 @@ KisPNGExport::KisPNGExport(QObject *parent, const QVariantList &) : KisImportExp
 
 KisPNGExport::~KisPNGExport()
 {
-}
-
-bool hasVisibleWidgets()
-{
-    QWidgetList wl = QApplication::allWidgets();
-    Q_FOREACH (QWidget* w, wl) {
-        if (w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget")) {
-            dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
-            return true;
-        }
-    }
-    return false;
 }
 
 KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
@@ -93,7 +80,7 @@ KisImportExportFilter::ConversionStatus KisPNGExport::convert(KisDocument *docum
     KisExifInfoVisitor eIV;
     eIV.visit(image->rootLayer().data());
     KisMetaData::Store *eI = 0;
-    if (eIV.countPaintLayer() == 1) {
+    if (eIV.metaDataCount() == 1) {
         eI = eIV.exifInfo();
     }
     if (eI) {
@@ -186,12 +173,12 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
 
     tryToSaveAsIndexed->setVisible(!isThereAlpha);
 
-    const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
+    //const bool sRGB = cfg->getBool(KisImportExportFilter::sRGBTag, false);
 
-    chkSRGB->setEnabled(sRGB);
+    //chkSRGB->setEnabled(sRGB);
     chkSRGB->setChecked(cfg->getBool("saveSRGBProfile", true));
 
-    chkForceSRGB->setEnabled(!sRGB);
+    //chkForceSRGB->setEnabled(!sRGB);
     chkForceSRGB->setChecked(cfg->getBool("forceSRGB", false));
 
     chkAuthor->setChecked(cfg->getBool("storeAuthor", false));

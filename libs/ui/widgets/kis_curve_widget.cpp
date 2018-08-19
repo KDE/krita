@@ -90,7 +90,7 @@ KisCurveWidget::~KisCurveWidget()
     delete d;
 }
 
-void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, int max)
+void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int inMin, int inMax, int outMin, int outMax)
 {
     d->m_intIn = in;
     d->m_intOut = out;
@@ -98,12 +98,13 @@ void KisCurveWidget::setupInOutControls(QSpinBox *in, QSpinBox *out, int min, in
     if (!d->m_intIn || !d->m_intOut)
         return;
 
-    d->m_inOutMin = min;
-    d->m_inOutMax = max;
+    d->m_inMin = inMin;
+    d->m_inMax = inMax;
+    d->m_outMin = outMin;
+    d->m_outMax = outMax;
 
-    d->m_intIn->setRange(d->m_inOutMin, d->m_inOutMax);
-    d->m_intOut->setRange(d->m_inOutMin, d->m_inOutMax);
-
+    d->m_intIn->setRange(d->m_inMin, d->m_inMax);
+    d->m_intOut->setRange(d->m_outMin, d->m_outMax);
 
     connect(d->m_intIn, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
     connect(d->m_intOut, SIGNAL(valueChanged(int)), this, SLOT(inOutChanged(int)));
@@ -128,8 +129,8 @@ void KisCurveWidget::inOutChanged(int)
 
     Q_ASSERT(d->m_grab_point_index >= 0);
 
-    pt.setX(d->io2sp(d->m_intIn->value()));
-    pt.setY(d->io2sp(d->m_intOut->value()));
+    pt.setX(d->io2sp(d->m_intIn->value(), d->m_inMin, d->m_inMax));
+    pt.setY(d->io2sp(d->m_intOut->value(), d->m_outMin, d->m_outMax));
 
     if (d->jumpOverExistingPoints(pt, d->m_grab_point_index)) {
         d->m_curve.setPoint(d->m_grab_point_index, pt);
@@ -142,8 +143,8 @@ void KisCurveWidget::inOutChanged(int)
     d->m_intIn->blockSignals(true);
     d->m_intOut->blockSignals(true);
 
-    d->m_intIn->setValue(d->sp2io(pt.x()));
-    d->m_intOut->setValue(d->sp2io(pt.y()));
+    d->m_intIn->setValue(d->sp2io(pt.x(), d->m_inMin, d->m_inMax));
+    d->m_intOut->setValue(d->sp2io(pt.y(), d->m_outMin, d->m_outMax));
 
     d->m_intIn->blockSignals(false);
     d->m_intOut->blockSignals(false);
@@ -276,7 +277,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
      QPalette appPalette = QApplication::palette();
      p.fillRect(rect(), appPalette.color(QPalette::Base)); // clear out previous paint call results
 
-     // make the entire widget greyed out if it is disabled
+     // make the entire widget grayed out if it is disabled
      if (!this->isEnabled()) {
         p.setOpacity(0.2);
      }
@@ -299,9 +300,10 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
     d->drawGrid(p, wWidth, wHeight);
 
-    KisConfig cfg;
-    if (cfg.antialiasCurves())
+    KisConfig cfg(true);
+    if (cfg.antialiasCurves()) {
         p.setRenderHint(QPainter::Antialiasing);
+    }
 
     // Draw curve.
     double curY;

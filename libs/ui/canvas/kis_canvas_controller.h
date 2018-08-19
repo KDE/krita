@@ -24,6 +24,7 @@
 #include "kritaui_export.h"
 #include "kis_types.h"
 
+class KConfigGroup;
 class KisView;
 
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
@@ -35,7 +36,6 @@ public:
     ~KisCanvasController() override;
 
     void setCanvas(KoCanvasBase *canvas) override;
-    void changeCanvasWidget(QWidget *widget) override;
     void keyPressEvent(QKeyEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -48,6 +48,11 @@ public:
     using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
     bool levelOfDetailMode() const;
+
+    void saveCanvasState(KisPropertiesConfiguration &config) const;
+    void restoreCanvasState(const KisPropertiesConfiguration &config);
+
+    void resetScrollBars() override;
 
 public Q_SLOTS:
     void mirrorCanvas(bool enable);

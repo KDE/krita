@@ -44,22 +44,43 @@
 #include "kis_ls_utils.h"
 #include "kis_multiple_projection.h"
 
+namespace {
+
+int borderSize(psd_stroke_position position, int size)
+{
+    int border = 0;
+
+    switch (position) {
+    case psd_stroke_outside:
+        border = 2 * size + 1;
+        break;
+    case psd_stroke_center:
+        border = size + 1;
+        break;
+    case psd_stroke_inside:
+        border = 1;
+        break;
+    }
+
+    return border;
+}
+
+}
+
 
 KisLsStrokeFilter::KisLsStrokeFilter()
     : KisLayerStyleFilter(KoID("lsstroke", i18n("Stroke (style)")))
 {
 }
 
-void paintPathOnSelection(KisPixelSelectionSP selection,
-                          const QPainterPath &path,
-                          const QRect &applyRect,
-                          int size)
+KisLsStrokeFilter::KisLsStrokeFilter(const KisLsStrokeFilter &rhs)
+    : KisLayerStyleFilter(rhs)
 {
-    QPen pen(Qt::white, size);
-    KisPainter gc(selection);
-    gc.setPaintColor(KoColor(Qt::white, selection->colorSpace()));
-    gc.drawPainterPath(path, pen, applyRect);
-    gc.end();
+}
+
+KisLayerStyleFilter *KisLsStrokeFilter::clone() const
+{
+    return new KisLsStrokeFilter(*this);
 }
 
 void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
@@ -70,40 +91,29 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 {
     if (applyRect.isEmpty()) return;
 
-    KisSelectionSP baseSelection = new KisSelection(new KisSelectionEmptyBounds(0));
+    const QRect needRect = kisGrowRect(applyRect, borderSize(config->position(), config->size()));
+
+    KisSelectionSP baseSelection = KisLsUtils::selectionFromAlphaChannel(srcDevice, needRect);
     KisPixelSelectionSP selection = baseSelection->pixelSelection();
 
-    //selection->convertToQImage(0, QRect(0,0,300,300)).save("0_selection_initial.png");
+    {
+        KisPixelSelectionSP knockOutSelection = new KisPixelSelection(new KisSelectionEmptyBounds(0));
+        knockOutSelection->makeCloneFromRough(selection, needRect);
 
-    QPainterPath strokePath = env->layerOutlineCache();
-    if (strokePath.isEmpty()) return;
-
-    if (config->position() == psd_stroke_center) {
-        paintPathOnSelection(selection, strokePath,
-                             applyRect, config->size());
-    } else if (config->position() == psd_stroke_outside ||
-               config->position() == psd_stroke_inside) {
-
-        paintPathOnSelection(selection, strokePath,
-                                         applyRect, 2 * config->size());
-
-        KisSelectionSP knockOutSelection =
-            KisLsUtils::selectionFromAlphaChannel(srcDevice, applyRect);
-
-        // disabled intentionally, because it creates artifacts on smooth lines
-        // KisLsUtils::findEdge(knockOutSelection->pixelSelection(), applyRect, true);
-
-        if (config->position() == psd_stroke_inside) {
-            knockOutSelection->pixelSelection()->invert();
+        if (config->position() == psd_stroke_outside) {
+            KisGaussianKernel::applyDilate(selection, needRect, 2 * config->size(), QBitArray(), 0, true);
+        } else if (config->position() == psd_stroke_inside) {
+            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, 2 * config->size(), QBitArray(), 0, true);
+        } else if (config->position() == psd_stroke_center) {
+            KisGaussianKernel::applyDilate(selection, needRect, config->size(), QBitArray(), 0, true);
+            KisGaussianKernel::applyErodeU8(knockOutSelection, needRect, config->size(), QBitArray(), 0, true);
         }
 
         KisPainter gc(selection);
         gc.setCompositeOp(COMPOSITE_ERASE);
-        gc.bitBlt(applyRect.topLeft(), knockOutSelection->pixelSelection(), applyRect);
+        gc.bitBlt(needRect.topLeft(), knockOutSelection, needRect);
         gc.end();
     }
-
-    //selection->convertToQImage(0, QRect(0,0,300,300)).save("1_selection_stroke.png");
 
     KisPaintDeviceSP fillDevice = new KisPaintDevice(srcDevice->colorSpace());
     KisLsUtils::fillOverlayDevice(fillDevice, applyRect, config, env);
@@ -111,15 +121,13 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
     const QString compositeOp = config->blendMode();
     const quint8 opacityU8 = 255.0 / 100.0 * config->opacity();
-    KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(), compositeOp, srcDevice);
-    dstDevice->clear(applyRect);
+    KisPaintDeviceSP dstDevice = dst->getProjection(KisMultipleProjection::defaultProjectionId(),
+                                                    compositeOp,
+                                                    opacityU8,
+                                                    QBitArray(),
+                                                    srcDevice);
 
-    KisPainter gc(dstDevice);
-    gc.setCompositeOp(COMPOSITE_OVER);
-    env->setupFinalPainter(&gc, opacityU8, QBitArray());
-    gc.setSelection(baseSelection);
-
-    gc.bitBlt(applyRect.topLeft(), fillDevice, applyRect);
+    KisPainter::copyAreaOptimized(applyRect.topLeft(), fillDevice, dstDevice, applyRect, baseSelection);
 }
 
 void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
@@ -138,19 +146,16 @@ void KisLsStrokeFilter::processDirectly(KisPaintDeviceSP src,
     applyStroke(src, dst, applyRect, w.config, env);
 }
 
-QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment */*env*/) const
-{
-    Q_UNUSED(style);
-    return rect;
-}
-
-QRect KisLsStrokeFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
+QRect KisLsStrokeFilter::neededRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
 {
     const psd_layer_effects_stroke *config = style->stroke();
     if (!config->effectEnabled()) return rect;
 
     KisLsUtils::LodWrapper<psd_layer_effects_stroke> w(env->currentLevelOfDetail(), config);
+    return kisGrowRect(rect, borderSize(w.config->position(), w.config->size()));
+}
 
-    const int borderSize = w.config->size() + 1;
-    return kisGrowRect(rect, borderSize);
+QRect KisLsStrokeFilter::changedRect(const QRect &rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const
+{
+    return neededRect(rect, style, env);
 }

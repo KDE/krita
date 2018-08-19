@@ -144,7 +144,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
     d->openGLImageTextures =
@@ -243,7 +243,7 @@ void KisOpenGLCanvas2::initializeGL()
     }
 #endif
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
@@ -336,11 +336,11 @@ void KisOpenGLCanvas2::initializeDisplayShader()
  */
 void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
-                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
+                          i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.", context),
                           QMessageBox::Close);
 
     cfg.setUseOpenGL(false);
@@ -356,7 +356,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 void KisOpenGLCanvas2::paintGL()
 {
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
@@ -374,7 +374,7 @@ void KisOpenGLCanvas2::paintGL()
     gc.end();
 
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
@@ -484,6 +484,11 @@ void KisOpenGLCanvas2::drawCheckers()
     QRectF viewportRect = !d->wrapAroundMode ?
                 converter->imageRectInViewportPixels() :
                 converter->widgetToViewport(this->rect());
+
+    if (!canvas()->renderingLimit().isEmpty()) {
+        const QRect vrect = converter->imageToViewport(canvas()->renderingLimit()).toAlignedRect();
+        viewportRect &= vrect;
+    }
 
     converter->getOpenGLCheckersInfo(viewportRect,
                                      &textureTransform, &modelTransform, &textureRect, &modelRect, d->scrollCheckers);
@@ -638,6 +643,12 @@ void KisOpenGLCanvas2::drawImage()
     QRectF widgetRect(0,0, width(), height());
     QRectF widgetRectInImagePixels = converter->documentToImage(converter->widgetToDocument(widgetRect));
 
+    const QRect renderingLimit = canvas()->renderingLimit();
+
+    if (!renderingLimit.isEmpty()) {
+        widgetRectInImagePixels &= renderingLimit;
+    }
+
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
@@ -699,8 +710,18 @@ void KisOpenGLCanvas2::drawImage()
              * "history reasons" in calculation of right()
              * and bottom() coordinates of integer rects.
              */
-            QRectF textureRect(tile->tileRectInTexturePixels());
-            QRectF modelRect(tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y()));
+
+            QRectF textureRect;
+            QRectF modelRect;
+
+            if (renderingLimit.isEmpty()) {
+                textureRect = tile->tileRectInTexturePixels();
+                modelRect = tile->tileRectInImagePixels().translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            } else {
+                const QRect limitedTileRect = tile->tileRectInImagePixels() & renderingLimit;
+                textureRect = tile->imageRectInTexturePixels(limitedTileRect);
+                modelRect = limitedTileRect.translated(tileWrappingTranslation.x(), tileWrappingTranslation.y());
+            }
 
             //Setup the geometry for rendering
             if (KisOpenGL::hasOpenGL3()) {
@@ -778,7 +799,7 @@ void KisOpenGLCanvas2::drawImage()
 
 void KisOpenGLCanvas2::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
     d->scrollCheckers = cfg.scrollCheckers();
 
@@ -793,7 +814,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 
 void KisOpenGLCanvas2::slotPixelGridModeChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
     d->pixelGridEnabled = cfg.pixelGridEnabled();
@@ -888,19 +909,36 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     if (isOpenGLUpdateInfo) {
         d->openGLImageTextures->recalculateCache(info);
     }
+    return QRect(); // FIXME: Implement dirty rect for OpenGL
+}
 
+QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+{
 #ifdef Q_OS_OSX
     /**
-     * There is a bug on OSX: if we issue frame redraw before the tiles finished
-     * uploading, the tiles will become corrupted. Depending on the GPU/driver
-     * version either the tile itself, or its mipmaps will become totally
-     * transparent.
+     * On OSX openGL defferent (shared) contexts have different execution queues.
+     * It means that the textures uploading and their painting can be easily reordered.
+     * To overcome the issue, we should ensure that the textures are uploaded in the
+     * same openGL context as the painting is done.
      */
 
-    glFinish();
+    QOpenGLContext *oldContext = QOpenGLContext::currentContext();
+    QSurface *oldSurface = oldContext ? oldContext->surface() : 0;
+
+    this->makeCurrent();
 #endif
 
-    return QRect(); // FIXME: Implement dirty rect for OpenGL
+    QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
+
+#ifdef Q_OS_OSX
+    if (oldContext) {
+        oldContext->makeCurrent(oldSurface);
+    } else {
+        this->doneCurrent();
+    }
+#endif
+
+    return result;
 }
 
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)

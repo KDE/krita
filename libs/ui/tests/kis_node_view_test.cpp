@@ -34,6 +34,10 @@
 #include "kis_node_model.h"
 #include "kis_color_filter_combo.h"
 
+#include <sdk/tests/testutil.h>
+
+//#define ENABLE_GUI_TESTS
+
 
 void KisNodeViewTest::init()
 {
@@ -57,6 +61,10 @@ void KisNodeViewTest::cleanup()
 
 void KisNodeViewTest::testLayers()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
+
     QDialog dlg;
 
     QFont font;
@@ -99,6 +107,11 @@ void KisNodeViewTest::testLayers()
 
 void KisNodeViewTest::testColorLabels()
 {
+#ifndef ENABLE_GUI_TESTS
+    return;
+#endif
+
+
     QDialog dlg;
 
     QFont font;
@@ -117,4 +130,4 @@ void KisNodeViewTest::testColorLabels()
     dlg.exec();
 }
 
-QTEST_MAIN(KisNodeViewTest)
+KISTEST_MAIN(KisNodeViewTest)

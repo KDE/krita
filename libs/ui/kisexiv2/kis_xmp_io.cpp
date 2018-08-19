@@ -161,18 +161,18 @@ bool parseTagName(const QString &tagString,
                   QString &structName,
                   int &arrayIndex,
                   QString &tagName,
-                  const KisMetaData::TypeInfo* typeInfo,
+                  const KisMetaData::TypeInfo** typeInfo,
                   const KisMetaData::Schema *schema)
 {
     arrayIndex = -1;
-    typeInfo = 0;
+    *typeInfo = 0;
 
     int numSubNames = tagString.count('/') + 1;
 
     if (numSubNames == 1) {
         structName.clear();
         tagName = tagString;
-        typeInfo = schema->propertyType(tagName);
+        *typeInfo = schema->propertyType(tagName);
         return true;
     }
 
@@ -182,10 +182,10 @@ bool parseTagName(const QString &tagString,
         if (regexp.indexIn(tagString) != -1) {
             structName = regexp.capturedTexts()[1];
             tagName =  regexp.capturedTexts()[3];
-            typeInfo = schema->propertyType(structName);
+            *typeInfo = schema->propertyType(structName);
 
-            if (typeInfo && typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType) {
-                typeInfo = typeInfo->structureSchema()->propertyType(tagName);
+            if (*typeInfo && (*typeInfo)->propertyType() == KisMetaData::TypeInfo::StructureType) {
+                *typeInfo = (*typeInfo)->structureSchema()->propertyType(tagName);
             }
 
             return true;
@@ -198,11 +198,11 @@ bool parseTagName(const QString &tagString,
             tagName = regexp2.capturedTexts()[4];
 
             if (schema->propertyType(structName)) {
-                typeInfo = schema->propertyType(structName)->embeddedPropertyType();
-                Q_ASSERT(typeInfo);
+                *typeInfo = schema->propertyType(structName)->embeddedPropertyType();
+                Q_ASSERT(*typeInfo);
 
-                if (typeInfo->propertyType() == KisMetaData::TypeInfo::StructureType) {
-                    typeInfo = typeInfo->structureSchema()->propertyType(tagName);
+                if ((*typeInfo)->propertyType() == KisMetaData::TypeInfo::StructureType) {
+                    *typeInfo = (*typeInfo)->structureSchema()->propertyType(tagName);
                 }
             }
 
@@ -253,7 +253,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 
             if (!parseTagName(key.tagName().c_str(),
                               structName, arrayIndex, tagName,
-                              typeInfo, schema)) continue;
+                              &typeInfo, schema)) continue;
 
             bool isStructureEntry = !structName.isEmpty() && arrayIndex == -1;
             bool isStructureInArrayEntry = !structName.isEmpty() && arrayIndex != -1;

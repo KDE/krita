@@ -27,7 +27,7 @@ http://acbf.wikia.com/wiki/ACBF_Specifications
 import os
 import re
 from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
-from PyQt5.QtGui import QImage, QColor
+from PyQt5.QtGui import QImage, QColor, QFont, QRawFont
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from . import CPMT_po_parser as po_parser
 
@@ -36,7 +36,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     acbfAuthorRolesList = ["Writer", "Adapter", "Artist", "Penciller", "Inker", "Colorist", "Letterer", "Cover Artist", "Photographer", "Editor", "Assistant Editor", "Translator", "Other", "Designer"]
     document = QDomDocument()
     root = document.createElement("ACBF")
-    root.setAttribute("xmlns", "http://www.fictionbook-lib.org/xml/acbf/1.0")
+    root.setAttribute("xmlns", "http://www.acbf.info/xml/acbf/1.1")
     document.appendChild(root)
     
     emphasisStyle = {}
@@ -56,15 +56,19 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             elif key == "general":
                 styleClass = "* {\n"
             elif key == "inverted":
-                styleClass = "text-area[inverted=\"True\"] {\n"
+                styleClass = "text-area[inverted=\"true\"] {\n"
             else:
                 styleClass = "text-area[type=\""+key+"\"] {\n"
             styleString += tabs+styleClass
             if "color" in style.keys():
                 styleString += tabs+tabs+"color:"+style["color"]+";\n"
             if "font" in style.keys():
+                fonts = style["font"]
                 genericfont = style.get("genericfont", "sans-serif")
-                styleString += tabs+tabs+"font-family:\""+style["font"]+"\", "+genericfont+";\n"
+                if isinstance(fonts, list):
+                    styleString += tabs+tabs+"font-family:\""+str("\", \"").join(fonts)+"\", "+genericfont+";\n"
+                else:
+                    styleString += tabs+tabs+"font-family:\""+fonts+"\", "+genericfont+";\n"
             if "bold" in style.keys():
                 if style["bold"]:
                     styleString += tabs+tabs+"font-weight: bold;\n"
@@ -119,7 +123,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 if str(authorDict["role"]).title() in acbfAuthorRolesList:
                     author.setAttribute("activity", str(authorDict["role"]))
             if "language" in authorDict.keys():
-                author.setAttribute("lang", str(authorDict["language"]))
+                author.setAttribute("lang", str(authorDict["language"]).replace("_", "-"))
             bookInfo.appendChild(author)
     bookTitle = document.createElement("book-title")
     if "title" in configDictionary.keys():
@@ -146,6 +150,15 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 bookInfo.appendChild(bookGenre)
             else:
                 extraGenres.append(genre)
+
+    if "characters" in configDictionary.keys():
+        character = document.createElement("characters")
+        for name in configDictionary["characters"]:
+            char = document.createElement("name")
+            char.appendChild(document.createTextNode(str(name)))
+            character.appendChild(char)
+        bookInfo.appendChild(character)
+
     annotation = document.createElement("annotation")
     if "summary" in configDictionary.keys():
         paragraphList = str(configDictionary["summary"]).split("\n")
@@ -158,14 +171,6 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         p.appendChild(document.createTextNode(str("There was no summary upon generation of this file.")))
         annotation.appendChild(p)
     bookInfo.appendChild(annotation)
-
-    if "characters" in configDictionary.keys():
-        character = document.createElement("characters")
-        for name in configDictionary["characters"]:
-            char = document.createElement("name")
-            char.appendChild(document.createTextNode(str(name)))
-            character.appendChild(char)
-        bookInfo.appendChild(character)
 
     keywords = document.createElement("keywords")
     stringKeywordsList = []
@@ -197,43 +202,45 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     if "language" in configDictionary.keys():
         language = document.createElement("languages")
         textlayer = document.createElement("text-layer")
-        textlayer.setAttribute("lang", configDictionary["language"])
-        textlayer.setAttribute("show", "False")
+        textlayer.setAttribute("lang", str(configDictionary["language"]).replace("_", "-"))
+        textlayer.setAttribute("show", "false")
         textlayerNative = document.createElement("text-layer")
-        textlayerNative.setAttribute("lang", configDictionary["language"])
-        textlayerNative.setAttribute("show", "True")
+        textlayerNative.setAttribute("lang", str(configDictionary["language"]).replace("_", "-"))
+        textlayerNative.setAttribute("show", "true")
         language.appendChild(textlayer)
         language.appendChild(textlayerNative)
         translationComments = {}
         for lang in poParser.get_translation_list():
             textlayer = document.createElement("text-layer")
             textlayer.setAttribute("lang", lang)
-            textlayer.setAttribute("show", "True")
+            textlayer.setAttribute("show", "true")
             language.appendChild(textlayer)
             translationComments[lang] = []
-            translation = poParser.get_entry_for_key("@meta-title", lang).get("trans", None)
+            translation = poParser.get_entry_for_key("@meta-title "+configDictionary["title"], lang).get("trans", None)
             if translation is not None:
                 bookTitleTr = document.createElement("book-title")
                 bookTitleTr.setAttribute("lang", lang)
                 bookTitleTr.appendChild(document.createTextNode(translation))
-                bookInfo.appendChild(bookTitleTr)
-            translation = poParser.get_entry_for_key("@meta-summary", lang).get("trans", None)
+                bookInfo.insertAfter(bookTitleTr, bookTitle)
+            translation = poParser.get_entry_for_key("@meta-summary "+configDictionary["summary"], lang).get("trans", None)
             if translation is not None:
                 annotationTr = document.createElement("annotation")
                 annotationTr.setAttribute("lang", lang)
-                annotationTr.appendChild(document.createTextNode(translation))
-                bookInfo.appendChild(annotationTr)
-            translation = poParser.get_entry_for_key("@meta-keywords", lang).get("trans", None)
+                paragraph = document.createElement("p")
+                paragraph.appendChild(document.createTextNode(translation))
+                annotationTr.appendChild(paragraph)
+                bookInfo.insertAfter(annotationTr, annotation)
+            translation = poParser.get_entry_for_key("@meta-keywords "+", ".join(configDictionary["otherKeywords"]), lang).get("trans", None)
             if translation is not None:
                 keywordsTr = document.createElement("keywords")
                 keywordsTr.setAttribute("lang", lang)
                 keywordsTr.appendChild(document.createTextNode(translation))
-                bookInfo.appendChild(keywordsTr)
+                bookInfo.insertAfter(keywordsTr, keywords)
         bookInfo.appendChild(language)
 
-        bookTitle.setAttribute("lang", configDictionary["language"])
-        annotation.setAttribute("lang", configDictionary["language"])
-        keywords.setAttribute("lang", configDictionary["language"])
+        bookTitle.setAttribute("lang", str(configDictionary["language"]).replace("_", "-"))
+        annotation.setAttribute("lang", str(configDictionary["language"]).replace("_", "-"))
+        keywords.setAttribute("lang", str(configDictionary["language"]).replace("_", "-"))
         
     if "databaseReference" in configDictionary.keys():
         database = document.createElement("databaseref")
@@ -300,9 +307,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     meta.appendChild(publisherInfo)
 
     documentInfo = document.createElement("document-info")
-    # TODO: ACBF apparantly uses first/middle/last/nick/email/homepage for the document auhtor too...
-    #      The following code compensates for me not understanding this initially. This still needs
-    #      adjustments in the gui.
+    # TODO: ACBF apparently uses first/middle/last/nick/email/homepage for the document author too...
+    #      The following code compensates for me not understanding this initially.
     if "acbfAuthor" in configDictionary.keys():
         if isinstance(configDictionary["acbfAuthor"], list):
             for e in configDictionary["acbfAuthor"]:
@@ -333,7 +339,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     authorN.appendChild(document.createTextNode(str(authorDict["email"])))
                     acbfAuthor.appendChild(authorN)
                 if "language" in authorDict.keys():
-                    acbfAuthor.setAttribute("lang", str(authorDict["language"]))
+                    acbfAuthor.setAttribute("lang", str(authorDict["language"]).replace("_", "-"))
                 documentInfo.appendChild(acbfAuthor)
         else:
             acbfAuthor = document.createElement("author")
@@ -372,12 +378,13 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         documentInfo.appendChild(acbfVersion)
 
     if "acbfHistory" in configDictionary.keys():
-        acbfHistory = document.createElement("history")
-        for h in configDictionary["acbfHistory"]:
-            p = document.createElement("p")
-            p.appendChild(document.createTextNode(str(h)))
-            acbfHistory.appendChild(p)
-        documentInfo.appendChild(acbfHistory)
+        if len(configDictionary["acbfHistory"])>0:
+            acbfHistory = document.createElement("history")
+            for h in configDictionary["acbfHistory"]:
+                p = document.createElement("p")
+                p.appendChild(document.createTextNode(str(h)))
+                acbfHistory.appendChild(p)
+            documentInfo.appendChild(acbfHistory)
     meta.appendChild(documentInfo)
 
     root.appendChild(meta)
@@ -396,7 +403,10 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     if key not in skipList:
                         style = stylesDictionary.get(key, {})
                         font = style.get("font", "")
-                        if svg.attribute("family") == font:
+                        if isinstance(fonts, list):
+                            if svg.attribute("family") in font:
+                                type = key
+                        elif svg.attribute("family") == font:
                             type = key
             else:
                 type = None
@@ -419,13 +429,11 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
             lightnessT = (0.21 * textColor.redF()) + (0.72 * textColor.greenF()) + (0.07 * textColor.blueF())
             if lightnessI > lightnessR:
                 if lightnessT > (lightnessI+lightnessR)*0.5:
-                    inverted = "True"
+                    inverted = "true"
             else:
                 if lightnessT < (lightnessI+lightnessR)*0.5:
-                    inverted = "True"
+                    inverted = "true"
         return [type, inverted]
-    
-    countedPageTitles = 0
     
     listOfPageColors = []
     
@@ -438,7 +446,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
         listOfPageColors.append(pageColor)
         language = "en"
         if "language" in configDictionary.keys():
-            language = configDictionary["language"]
+            language = str(configDictionary["language"]).replace("_", "-")
         textLayer = document.createElement("text-layer")
         textLayer.setAttribute("lang", language)
         data = pageData[p]
@@ -541,8 +549,9 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     if inverted is not None:
                         textArea.setAttribute("inverted", inverted)
                     textArea.setAttribute("bgcolor", listOfTextColors[i].name())
-                textLayerTr.setAttribute("bgcolor", findDominantColor(listOfTextColors).name())
-                textLayerList.appendChild(textLayerTr)
+                if textLayerTr.hasChildNodes():
+                    textLayerTr.setAttribute("bgcolor", findDominantColor(listOfTextColors).name())
+                    textLayerList.appendChild(textLayerTr)
                     
         
 
@@ -558,15 +567,14 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 pg.appendChild(title)
                 for lang in poParser.get_translation_list():
                     titleTrans = " "
-                    titlekey = "@page-title-"+str(countedPageTitles)
+                    titlekey = "@page-title "+str(data["title"])
                     translationEntry = poParser.get_entry_for_key(titlekey, lang)
                     titleTrans = translationEntry.get("trans", titleTrans)
                     if titleTrans.isspace() is False:
                         titleT = document.createElement("title")
                         titleT.setAttribute("lang", lang)
-                        title.appendChild(document.createTextNode(titleTrans))
+                        titleT.appendChild(document.createTextNode(titleTrans))
                         pg.appendChild(titleT)
-                countedPageTitles += 1
             if "acbf_none" in data["keys"]:
                 pg.setAttribute("transition", "none")
             if "acbf_blend" in data["keys"]:
@@ -577,15 +585,16 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 pg.setAttribute("transition", "scroll_right")
             if "acbf_vertical" in data["keys"]:
                 pg.setAttribute("transition", "scroll_down")
-            for f in frameList:
-                frame = document.createElement("frame")
-                frame.setAttribute("points", f["points"])
-                pg.appendChild(frame)
-            pg.appendChild(textLayer)
+            if textLayer.hasChildNodes():
+                pg.appendChild(textLayer)
             pg.setAttribute("bgcolor", pageColor.name())
             for n in range(0, textLayerList.childNodes().size()):
                 node = textLayerList.childNodes().at(n)
                 pg.appendChild(node)
+            for f in frameList:
+                frame = document.createElement("frame")
+                frame.setAttribute("points", f["points"])
+                pg.appendChild(frame)
             body.appendChild(pg)
         else:
             for f in frameList:
@@ -593,7 +602,6 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 frame.setAttribute("points", f["points"])
                 coverpage.appendChild(frame)
             coverpage.appendChild(textLayer)
-            coverpage.setAttribute("bgcolor", pageColor.name())
             for n in range(0, textLayerList.childNodes().size()):
                 node = textLayerList.childNodes().at(n)
                 coverpage.appendChild(node)
@@ -609,7 +617,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                 ref.setAttribute("lang", lang)
                 ref.setAttribute("id", refID)
                 transHeaderStr = configDictionary.get("translatorHeader", "Translator's Notes")
-                transHeaderStr = poParser.get_entry_for_key("@meta-translator", lang).get("trans", transHeaderStr)
+                transHeaderStr = poParser.get_entry_for_key("@meta-translator "+transHeaderStr, lang).get("trans", transHeaderStr)
                 translatorHeader = document.createElement("p")
                 translatorHeader.appendChild(document.createTextNode(transHeaderStr+":"))
                 ref.appendChild(translatorHeader)
@@ -646,8 +654,9 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
         pages.append(cover)
 
     data = document.createElement("data")
+    root.appendChild(data)
 
-    # Covert pages to base64 strings.
+    # Convert pages to base64 strings.
     for i in range(0, len(pages)):
         image = pages[i].firstChildElement("image")
         href = image.attribute("href")
@@ -667,8 +676,6 @@ def createStandAloneACBF(configDictionary, document = QDomDocument(), location =
 
                 image.setAttribute("href", "#" + href)
                 data.appendChild(binary)
-
-    root.appendChild(data)
 
     f = open(location, 'w', newline="", encoding="utf-8")
     f.write(document.toString(indent=2))
@@ -743,7 +750,11 @@ def parseTextChildren(document = QDomDocument(), elRead = QDomElement(), elWrite
 def compare_styles(style = {}, fontFamily = str(), fontWeight = str(), fontStyle = str()):
     compare = []
     if "font" in style.keys():
-        compare.append((fontFamily == style.get("font")))
+        font = style.get("font")
+        if isinstance(font, list):
+            compare.append(fontFamily in font)
+        else:
+            compare.append((fontFamily == font))
     if "bold" in style.keys():
         compare.append(fontWeight == "bold" or int(fontWeight) > 400)
     if "ital" in style.keys():

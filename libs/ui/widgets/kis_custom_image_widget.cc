@@ -28,12 +28,14 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
+#include <QDialogButtonBox>
 #include <QFile>
 #include <QSpacerItem>
 
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 
+#include <KFormat>
 
 #include <kis_debug.h>
 
@@ -105,12 +107,17 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
             this, SLOT(heightUnitChanged(int)));
     connect(doubleHeight, SIGNAL(valueChanged(double)),
             this, SLOT(heightChanged(double)));
-    connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
-    createButton->setDefault(true);
 
-    // parent widget contains the window
-    connect(cancelNewDocumentButton, SIGNAL(clicked(bool)), this->parentWidget(), SLOT(close()));
-    connect(cancelNewDocumentButton, SIGNAL(clicked(bool)), this->parentWidget(), SLOT(deleteLater()));
+
+    // Create image
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setText(i18n("&Create"));
+    connect(newDialogConfirmationButtonBox, SIGNAL(accepted()), this, SLOT(createImage()));
+
+
+    // Cancel Create image button
+    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), this->parentWidget(), SLOT(close()));
+    connect(newDialogConfirmationButtonBox, SIGNAL(rejected()), this->parentWidget(), SLOT(deleteLater()));
+
 
 
     bnPortrait->setIcon(KisIconUtils::loadIcon("portrait"));
@@ -131,9 +138,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
     connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
-    connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), createButton, SLOT(setEnabled(bool)));
 
-    KisConfig cfg;
+    connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SLOT(setEnabled(bool)));
+
+
+    KisConfig cfg(true);
     intNumLayers->setValue(cfg.numDefaultLayers());
     KoColor bcol(KoColorSpaceRegistry::instance()->rgb8());
     bcol.fromQColor(cfg.defaultBackgroundColor());
@@ -165,8 +174,8 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
 void KisCustomImageWidget::showEvent(QShowEvent *)
 {
     fillPredefined();
-    this->createButton->setFocus();
-    this->createButton->setEnabled(true);
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setFocus();
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 KisCustomImageWidget::~KisCustomImageWidget()
@@ -239,7 +248,7 @@ void KisCustomImageWidget::heightChanged(double value)
 
 void KisCustomImageWidget::createImage()
 {
-    createButton->setEnabled(false);
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
@@ -268,7 +277,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
                                      i18n("Linear gamma RGB color spaces are not supposed to be used "
                                           "in 8-bit integer modes. It is suggested to use 16-bit integer "
                                           "or any floating point colorspace for linear profiles.\n\n"
-                                          "Press \"Continue\" to create a 8-bit integer linear RGB color space "
+                                          "Press \"Ok\" to create a 8-bit integer linear RGB color space "
                                           "or \"Cancel\" to return to the settings dialog."),
                                      QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
 
@@ -298,7 +307,7 @@ KisDocument* KisCustomImageWidget::createNewImage()
 
     doc->newImage(txtName->text(), width, height, cs, bgColor, backgroundAsLayer, intNumLayers->value(), txtDescription->toPlainText(), resolution);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     cfg.setNumDefaultLayers(intNumLayers->value());
     cfg.setDefaultBackgroundOpacity(backgroundOpacity());
     cfg.setDefaultBackgroundColor(cmbColor->color().toQColor());
@@ -491,27 +500,13 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     const KoColorSpace *cs = colorSpaceSelector->currentColorSpace();
     int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize * cs->pixelSize();
-    QString byte = i18n("bytes");
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for kilobyte", "KB");
-    }
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for megabyte", "MB");
-    }
-    if (layerSize>1024) {
-        layerSize/=1024;
-        byte = i18nc("Abbreviation for gigabyte", "GB");
-    }
-    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: size in unites of arg6. Arg6: KB, MB or GB",
-                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 %6 of RAM.",
+    QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: image size",
+                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 of RAM.",
                          width,
                          height,
                          cs->name(),
                          bitSize,
-                         layerSize,
-                         byte);
+                         KFormat().formatByteSize(layerSize));
     lblDocumentInfo->setText(text);
 }
 

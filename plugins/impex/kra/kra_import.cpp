@@ -56,7 +56,7 @@ KisImportExportFilter::ConversionStatus KraImport::convert(KisDocument *document
         return KisImportExportFilter::ParsingError;
         break;
     case KisImageBuilder_RESULT_FAILURE:
-        return KisImportExportFilter::InternalError;
+        return KisImportExportFilter::InvalidFormat;
         break;
     case KisImageBuilder_RESULT_OK:
         document->setCurrentImage(kraConverter.image());

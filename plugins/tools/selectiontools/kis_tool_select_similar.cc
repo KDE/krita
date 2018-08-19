@@ -40,7 +40,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_image.h"
 
-void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 * c, int fuzziness, const QRect & rc)
+void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int fuzziness, const QRect & rc)
 {
     if (rc.isEmpty()) {
         return;

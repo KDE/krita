@@ -64,7 +64,7 @@ public Q_SLOTS:
     void setProperty(const QString &key, QVariant value);
 
     /**
-     * return the value for the property identified by key, or None if there is no suck key.
+     * return the value for the property identified by key, or None if there is no such key.
      */
     QVariant property(const QString &key);
 

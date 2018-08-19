@@ -28,7 +28,7 @@
 #include <QList>
 
 class KoCanvasController;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;

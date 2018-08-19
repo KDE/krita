@@ -38,6 +38,8 @@
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_shape_layer.h>
+#include <KisReferenceImagesLayer.h>
+#include <KisReferenceImage.h>
 #include <kis_file_layer.h>
 #include <kis_clone_layer.h>
 #include <kis_mask.h>
@@ -91,7 +93,19 @@ void KisKraSaveVisitor::setExternalUri(const QString &uri)
 bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 {
     bool result = false;
-    if (KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+    if (auto* referencesLayer = dynamic_cast<KisReferenceImagesLayer*>(layer)) {
+        result = true;
+        Q_FOREACH(KoShape *shape, referencesLayer->shapes()) {
+            auto *reference = dynamic_cast<KisReferenceImage*>(shape);
+            KIS_ASSERT_RECOVER_RETURN_VALUE(reference, false);
+            bool saved = reference->saveImage(m_store);
+            if (!saved) {
+                m_errorMessages << i18n("Failed to save reference image %1.", reference->internalFile());
+                result = false;
+            }
+        }
+    }
+    else if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
         if (!saveMetaData(layer)) {
             m_errorMessages << i18n("Failed to save the metadata for layer %1.", layer->name());
             return false;
@@ -224,8 +238,8 @@ bool KisKraSaveVisitor::visit(KisTransformMask *mask)
     QString location = getLocation(mask, DOT_TRANSFORMCONFIG);
     if (m_store->open(location)) {
         QByteArray a = doc.toByteArray();
-        bool retval = true;
-        retval = (m_store->write(a) == a.size());
+        bool retval = m_store->write(a) == a.size();
+
         if (!retval) {
             warnFile << "Could not write transform mask configuration";
         }
@@ -332,7 +346,7 @@ bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
                                         QString location)
 {
     // Layer data
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_store->setCompressionEnabled(cfg.compressKra());
 
     KisPaintDeviceFramesInterface *frameInterface = device->framesInterface();

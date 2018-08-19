@@ -48,7 +48,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_config_widget.h>
 #include <kis_debug.h>
-#include <KisMimeDatabase.h>
 #include <KisPreExportChecker.h>
 #include <KisPart.h>
 #include "kis_config.h"
@@ -62,6 +61,7 @@
 #include "kis_popup_button.h"
 #include <kis_iterator_ng.h>
 #include "kis_async_action_feedback.h"
+#include "KisReferenceImagesLayer.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -158,7 +158,7 @@ QFuture<KisImportExportFilter::ConversionStatus> KisImportExportManager::exportD
 
 // The static method to figure out to which parts of the
 // graph this mimetype has a connection to.
-QStringList KisImportExportManager::mimeFilter(Direction direction)
+QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
 {
     // Find the right mimetype by the extension
     QSet<QString> mimeTypes;
@@ -366,12 +366,18 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
                                                        from, to,
                                                        batchMode(), showWarnings,
                                                        &alsoAsKra);
+
+
         if (!batchMode() && !askUser) {
             return KisImportExportFilter::UserCancelled;
         }
 
         if (isAsync) {
             result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+
+            // we should explicitly report that the exporting has been initiated
+            result.setStatus(KisImportExportFilter::OK);
+
         } else if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Saving document..."), 0);
             result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
@@ -380,11 +386,9 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         }
 
         if (exportConfiguration) {
-            KisConfig().setExportConfiguration(typeName, exportConfiguration);
+            KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }
-
-    result.setStatus(KisImportExportFilter::OK);
     return result;
 }
 
@@ -407,8 +411,7 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
 }
 
-bool
-KisImportExportManager::askUserAboutExportConfiguration(
+bool KisImportExportManager::askUserAboutExportConfiguration(
         QSharedPointer<KisImportExportFilter> filter,
         KisPropertiesConfigurationSP exportConfiguration,
         const QByteArray &from,
@@ -417,6 +420,9 @@ KisImportExportManager::askUserAboutExportConfiguration(
         const bool showWarnings,
         bool *alsoAsKra)
 {
+
+    // prevents the animation renderer from running this code
+
 
     const QString mimeUserDescription = KisMimeDatabase::descriptionForMimeType(to);
 
@@ -431,11 +437,18 @@ KisImportExportManager::askUserAboutExportConfiguration(
         errors = checker.errors();
     }
 
-    KisConfigWidget *wdg = filter->createConfigurationWidget(0, from, to);
+    KisConfigWidget *wdg = 0;
+
+    if (QThread::currentThread() == qApp->thread()) {
+        wdg = filter->createConfigurationWidget(0, from, to);
+    }
 
     // Extra checks that cannot be done by the checker, because the checker only has access to the image.
     if (!m_document->assistants().isEmpty() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>assistants</b>. The assistants will not be saved."));
+    }
+    if (m_document->referenceImagesLayer() && m_document->referenceImagesLayer()->shapeCount() > 0 && to != m_document->nativeFormatMimeType()) {
+        warnings.append(i18nc("image conversion warning", "The image contains <b>reference images</b>. The reference images will not be saved."));
     }
     if (m_document->guidesConfig().hasGuides() && to != m_document->nativeFormatMimeType()) {
         warnings.append(i18nc("image conversion warning", "The image contains <b>guides</b>. The guides will not be saved."));
@@ -518,7 +531,7 @@ KisImportExportManager::askUserAboutExportConfiguration(
         QCheckBox *chkAlsoAsKra = 0;
         if (showWarnings && !warnings.isEmpty()) {
             chkAlsoAsKra = new QCheckBox(i18n("Also save your image as a Krita file."));
-            chkAlsoAsKra->setChecked(KisConfig().readEntry<bool>("AlsoSaveAsKra", false));
+            chkAlsoAsKra->setChecked(KisConfig(true).readEntry<bool>("AlsoSaveAsKra", false));
             layout->addWidget(chkAlsoAsKra);
         }
 
@@ -533,7 +546,7 @@ KisImportExportManager::askUserAboutExportConfiguration(
 
         *alsoAsKra = false;
         if (chkAlsoAsKra) {
-            KisConfig().writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
+            KisConfig(false).writeEntry<bool>("AlsoSaveAsKra", chkAlsoAsKra->isChecked());
             *alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
@@ -600,6 +613,7 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     file.setDirectWriteFallback(true);
 
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
+        m_document->setErrorMessage(file.errorString());
         file.cancelWriting();
         return KisImportExportFilter::CreationError;
     }
@@ -607,13 +621,18 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(con
     KisImportExportFilter::ConversionStatus status =
             filter->convert(m_document, &file, exportConfiguration);
 
-    if (status != KisImportExportFilter::OK) {
-        file.cancelWriting();
-    } else {
-        file.commit();
+    if (filter->supportsIO()) {
+        if (status != KisImportExportFilter::OK) {
+            file.cancelWriting();
+        } else {
+            if (!file.commit()) {
+                m_document->setErrorMessage(file.errorString());
+                status = KisImportExportFilter::CreationError;
+            }
+        }
     }
-
     return status;
+
 }
 
 #include <KisMimeDatabase.h>

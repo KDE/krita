@@ -42,7 +42,6 @@ enum OutlineStyle {
     OUTLINE_CIRCLE,
     OUTLINE_FULL,
     OUTLINE_TILT,
-    OUTLINE_COLOR,
 
     N_OUTLINE_STYLE_SIZE
 };
@@ -99,7 +98,6 @@ const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 #define INTENT_ABSOLUTE_COLORIMETRIC      3
 
 #include <cmath>
-#include <QPointF>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846

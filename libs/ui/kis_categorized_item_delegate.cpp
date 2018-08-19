@@ -141,9 +141,9 @@ QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, c
 void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const
 {
     QPolygonF triangle;
-    triangle.push_back(QPointF(-0.1,-0.1));
-    triangle.push_back(QPointF( 0.1,-0.1));
-    triangle.push_back(QPointF( 0.0, 0.1));
+    triangle.push_back(QPointF(-0.2,-0.2));
+    triangle.push_back(QPointF( 0.2,-0.2));
+    triangle.push_back(QPointF( 0.0, 0.2));
 
     QTransform transform;
     transform.translate(x + size/2, y + size/2);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>486</height>
+    <height>462</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -603,44 +603,11 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>480</width>
-         <height>10</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelNewDocumentButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="createButton">
-       <property name="text">
-        <string>&amp;Create</string>
-       </property>
-       <property name="autoDefault">
-        <bool>true</bool>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="newDialogConfirmationButtonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -685,7 +652,6 @@
   <tabstop>cmbHeightUnit</tabstop>
   <tabstop>bnLandscape</tabstop>
   <tabstop>bnPortrait</tabstop>
-  <tabstop>createButton</tabstop>
   <tabstop>intNumLayers</tabstop>
   <tabstop>cmbColor</tabstop>
   <tabstop>radioBackgroundAsLayer</tabstop>

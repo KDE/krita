@@ -153,6 +153,11 @@ struct AddGeneralOps<Traits, true>
          add<&cfExclusion<Arg>            >(cs, COMPOSITE_EXCLUSION            , i18n("Exclusion")            , KoCompositeOp::categoryNegative());
          add<&cfEquivalence<Arg>          >(cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
          add<&cfAdditiveSubtractive<Arg>  >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE , i18n("Additive-Subtractive") , KoCompositeOp::categoryNegative());
+         
+         add<&cfReflect<Arg>  >(cs, COMPOSITE_REFLECT                       , i18n("Reflect")              , KoCompositeOp::categoryQuadratic());
+         add<&cfGlow<Arg>  >(cs, COMPOSITE_GLOW                             , i18n("Glow")                 , KoCompositeOp::categoryQuadratic());
+         add<&cfFreeze<Arg>  >(cs, COMPOSITE_FREEZE                         , i18n("Freeze")               , KoCompositeOp::categoryQuadratic());
+         add<&cfHeat<Arg>  >(cs, COMPOSITE_HEAT                             , i18n("Heat")                 , KoCompositeOp::categoryQuadratic());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
      }
@@ -168,17 +173,17 @@ template<class Traits>
 struct AddRGBOps<Traits, true>
 {
     typedef float Arg;
-    
+
     static const qint32 red_pos   = Traits::red_pos;
     static const qint32 green_pos = Traits::green_pos;
     static const qint32 blue_pos  = Traits::blue_pos;
-    
+
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
 
     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
         cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category));
     }
-    
+
     static void add(KoColorSpace* cs) {
 
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,red_pos  >(cs, COMPOSITE_COPY_RED  , i18n("Copy Red")  , KoCompositeOp::categoryMisc()));
@@ -186,7 +191,7 @@ struct AddRGBOps<Traits, true>
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,blue_pos >(cs, COMPOSITE_COPY_BLUE , i18n("Copy Blue") , KoCompositeOp::categoryMisc()));
         add<&cfTangentNormalmap  <HSYType,Arg> >(cs, COMPOSITE_TANGENT_NORMALMAP  , i18n("Tangent Normalmap")  , KoCompositeOp::categoryMisc());
         add<&cfReorientedNormalMapCombine <HSYType, Arg> >(cs, COMPOSITE_COMBINE_NORMAL, i18n("Combine Normal Maps"), KoCompositeOp::categoryMisc());
-        
+
         add<&cfColor             <HSYType,Arg> >(cs, COMPOSITE_COLOR         , i18n("Color")              , KoCompositeOp::categoryHSY());
         add<&cfHue               <HSYType,Arg> >(cs, COMPOSITE_HUE           , i18n("Hue")                , KoCompositeOp::categoryHSY());
         add<&cfSaturation        <HSYType,Arg> >(cs, COMPOSITE_SATURATION    , i18n("Saturation")         , KoCompositeOp::categoryHSY());
@@ -197,7 +202,7 @@ struct AddRGBOps<Traits, true>
         add<&cfDecreaseLightness <HSYType,Arg> >(cs, COMPOSITE_DEC_LUMINOSITY, i18n("Decrease Luminosity"), KoCompositeOp::categoryHSY());
         add<&cfDarkerColor <HSYType,Arg> >(cs, COMPOSITE_DARKER_COLOR, i18n("Darker Color"), KoCompositeOp::categoryDark());//darker color as PSD does it//
         add<&cfLighterColor <HSYType,Arg> >(cs, COMPOSITE_LIGHTER_COLOR, i18n("Lighter Color"), KoCompositeOp::categoryLight());//lighter color as PSD does it//
-        
+
         add<&cfColor             <HSIType,Arg> >(cs, COMPOSITE_COLOR_HSI         , i18n("Color HSI")              , KoCompositeOp::categoryHSI());
         add<&cfHue               <HSIType,Arg> >(cs, COMPOSITE_HUE_HSI           , i18n("Hue HSI")                , KoCompositeOp::categoryHSI());
         add<&cfSaturation        <HSIType,Arg> >(cs, COMPOSITE_SATURATION_HSI    , i18n("Saturation HSI")         , KoCompositeOp::categoryHSI());
@@ -206,7 +211,7 @@ struct AddRGBOps<Traits, true>
         add<&cfLightness         <HSIType,Arg> >(cs, COMPOSITE_INTENSITY         , i18n("Intensity")              , KoCompositeOp::categoryHSI());
         add<&cfIncreaseLightness <HSIType,Arg> >(cs, COMPOSITE_INC_INTENSITY     , i18n("Increase Intensity")     , KoCompositeOp::categoryHSI());
         add<&cfDecreaseLightness <HSIType,Arg> >(cs, COMPOSITE_DEC_INTENSITY     , i18n("Decrease Intensity")     , KoCompositeOp::categoryHSI());
-        
+
         add<&cfColor             <HSLType,Arg> >(cs, COMPOSITE_COLOR_HSL         , i18n("Color HSL")              , KoCompositeOp::categoryHSL());
         add<&cfHue               <HSLType,Arg> >(cs, COMPOSITE_HUE_HSL           , i18n("Hue HSL")                , KoCompositeOp::categoryHSL());
         add<&cfSaturation        <HSLType,Arg> >(cs, COMPOSITE_SATURATION_HSL    , i18n("Saturation HSL")         , KoCompositeOp::categoryHSL());
@@ -215,13 +220,13 @@ struct AddRGBOps<Traits, true>
         add<&cfLightness         <HSLType,Arg> >(cs, COMPOSITE_LIGHTNESS         , i18n("Lightness")              , KoCompositeOp::categoryHSL());
         add<&cfIncreaseLightness <HSLType,Arg> >(cs, COMPOSITE_INC_LIGHTNESS     , i18n("Increase Lightness")     , KoCompositeOp::categoryHSL());
         add<&cfDecreaseLightness <HSLType,Arg> >(cs, COMPOSITE_DEC_LIGHTNESS     , i18n("Decrease Lightness")     , KoCompositeOp::categoryHSL());
-        
+
         add<&cfColor             <HSVType,Arg> >(cs, COMPOSITE_COLOR_HSV         , i18n("Color HSV")              , KoCompositeOp::categoryHSV());
         add<&cfHue               <HSVType,Arg> >(cs, COMPOSITE_HUE_HSV           , i18n("Hue HSV")                , KoCompositeOp::categoryHSV());
         add<&cfSaturation        <HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV    , i18n("Saturation HSV")         , KoCompositeOp::categoryHSV());
         add<&cfIncreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV"), KoCompositeOp::categoryHSV());
         add<&cfDecreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSV, i18n("Decrease Saturation HSV"), KoCompositeOp::categoryHSV());
-        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18n("Value")                  , KoCompositeOp::categoryHSV());
+        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , i18nc("HSV Value","Value")                  , KoCompositeOp::categoryHSV());
         add<&cfIncreaseLightness <HSVType,Arg> >(cs, COMPOSITE_INC_VALUE         , i18n("Increase Value")         , KoCompositeOp::categoryHSV());
         add<&cfDecreaseLightness <HSVType,Arg> >(cs, COMPOSITE_DEC_VALUE         , i18n("Decrease Value")         , KoCompositeOp::categoryHSV());
     }
@@ -237,11 +242,11 @@ template<class _Traits_>
 void addStandardCompositeOps(KoColorSpace* cs)
 {
     typedef typename _Traits_::channels_type channels_type;
-    
+
     static const bool useGeneralOps = true;
     static const bool useRGBOps = (boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value
                                 || boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value);
-    
+
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);
 }

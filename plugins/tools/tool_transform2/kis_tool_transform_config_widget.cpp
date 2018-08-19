@@ -268,10 +268,12 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(notifyEditingFinished()));
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(notifyEditingFinished()));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(notifyEditingFinished()));
-    connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
-    connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
+
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
     connect(resetPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));
+
+    connect(defaultRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
+    connect(customRadioButton, SIGNAL(clicked(bool)), this, SLOT(notifyEditingFinished()));
 
     // Liquify
     //
@@ -786,6 +788,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
     ToolTransformArgs *config = m_transaction->currentConfig();
     config->setMode(ToolTransformArgs::WARP);
+    config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
     emit sigResetTransform();
 }
 
@@ -875,7 +878,10 @@ void KisToolTransformConfigWidget::slotSetScaleX(int value)
 
         scaleYBox->blockSignals(true);
         scaleYBox->setValue(calculatedValue);
-        config->setScaleY(calculatedValue / 100.);
+        {
+            KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
+            config->setScaleY(calculatedValue / 100.);
+        }
         scaleYBox->blockSignals(false);
 
         unblockNotifications();
@@ -901,7 +907,10 @@ void KisToolTransformConfigWidget::slotSetScaleY(int value)
         int calculatedValue = int(m_scaleRatio * value);
         scaleXBox->blockSignals(true);
         scaleXBox->setValue(calculatedValue);
-        config->setScaleX(calculatedValue / 100.);
+        {
+            KisTransformUtils::AnchorHolder keeper(config->transformAroundRotationCenter(), config);
+            config->setScaleX(calculatedValue / 100.);
+        }
         scaleXBox->blockSignals(false);
         unblockNotifications();
     }
@@ -1188,10 +1197,15 @@ void KisToolTransformConfigWidget::activateCustomWarpPoints(bool enabled)
     if (!enabled) {
         config->setEditingTransformPoints(false);
         setDefaultWarpPoints(densityBox->value());
+        config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::GRID);
     } else {
         config->setEditingTransformPoints(true);
+        config->setWarpCalculation(KisWarpTransformWorker::WarpCalculation::DRAW);
         setDefaultWarpPoints(0);
     }
+
+
+
 
     updateLockPointsButtonCaption();
 }

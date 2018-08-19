@@ -25,7 +25,6 @@
 
 #include "KoDocumentInfo.h"
 #include "KoDocumentBase.h"
-#include "KoGlobal.h"
 #include "KoPageWidgetItem.h"
 #include <KoIcon.h>
 
@@ -91,8 +90,6 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo)
     d->aboutUi = new Ui::KoDocumentInfoAboutWidget();
     QWidget *infodlg = new QWidget();
     d->aboutUi->setupUi(infodlg);
-    d->aboutUi->cbLanguage->addItems(KoGlobal::listOfLanguages());
-    d->aboutUi->cbLanguage->setCurrentIndex(-1);
     QStringList licenseExamples;
     licenseExamples << "CC-BY 4.0" << "CC-BY-SA 4.0" << "CC-BY-SA-NC 4.0" << "CC-0";
     QCompleter *examples = new QCompleter(licenseExamples);
@@ -178,8 +175,6 @@ void KoDocumentInfoDlg::initAboutTab()
 
     d->aboutUi->leTitle->setText(d->info->aboutInfo("title"));
     d->aboutUi->leSubject->setText(d->info->aboutInfo("subject"));
-    QString language = KoGlobal::languageFromTag(d->info->aboutInfo("language"));
-    d->aboutUi->cbLanguage->setCurrentIndex(d->aboutUi->cbLanguage->findText(language));
 
     d->aboutUi->leKeywords->setToolTip(i18n("Use ';' (Example: Office;KDE;Calligra)"));
     if (!d->info->aboutInfo("keyword").isEmpty())
@@ -238,7 +233,6 @@ void KoDocumentInfoDlg::saveAboutData()
     d->info->setAboutInfo("subject", d->aboutUi->leSubject->text());
     d->info->setAboutInfo("abstract", d->aboutUi->meDescription->toPlainText());
     d->info->setAboutInfo("license", d->aboutUi->leLicense->text());
-    d->info->setAboutInfo("language", KoGlobal::tagOfLanguage(d->aboutUi->cbLanguage->currentText()));
 }
 
 void KoDocumentInfoDlg::hideEvent( QHideEvent *event )

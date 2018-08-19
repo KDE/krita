@@ -7,114 +7,45 @@
     <x>0</x>
     <y>0</y>
     <width>263</width>
-    <height>307</height>
+    <height>323</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Color Picker</string>
   </property>
   <layout class="QGridLayout">
-   <item row="5" column="0">
-    <widget class="QTreeWidget" name="listViewChannels">
-     <property name="columnCount">
-      <number>2</number>
-     </property>
-     <column>
-      <property name="text">
-       <string>Channel</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Value</string>
-      </property>
-     </column>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <layout class="QHBoxLayout">
+   <item row="6" column="0">
+    <layout class="QHBoxLayout" name="blendLayout">
      <property name="spacing">
       <number>1</number>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
      <item>
-      <widget class="QLabel" name="textLabel1">
+      <widget class="QLabel" name="blendLabel">
        <property name="text">
-        <string>Sample radius:</string>
+        <string>Blend: </string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisIntParseSpinBox" name="radius">
-       <property name="suffix">
-        <string> px</string>
-       </property>
-       <property name="minimum">
+       <property name="margin">
         <number>1</number>
        </property>
-       <property name="maximum">
-        <number>900</number>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisSliderSpinBox" name="blend" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>&lt;nobr&gt;Blending controls the percentage of color that is picked&lt;/nobr&gt; and mixed with your current brush color. A full blending value picks colors completely, ignoring brush color.</string>
        </property>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="cbNormaliseValues">
-     <property name="text">
-      <string>Show colors as percentages</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>1</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QCheckBox" name="cbPalette">
-       <property name="text">
-        <string>Add to palette:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="SqueezedComboBox" name="cmbPalette"/>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="cbUpdateCurrentColor">
-     <property name="text">
-      <string>Update current color</string>
-     </property>
-    </widget>
    </item>
    <item row="0" column="0">
     <widget class="QComboBox" name="cmbSources">
@@ -136,6 +67,12 @@
        <height>32767</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string>&lt;nobr&gt;Determines whether the color picker will sample&lt;/nobr&gt; colors from all visible layers or only the currently selected layer.</string>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
      <item>
       <property name="text">
        <string>Sample All Visible Layers</string>
@@ -143,14 +80,178 @@
      </item>
      <item>
       <property name="text">
-       <string>Current Layer</string>
+       <string>Sample Current Layer</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="cbNormaliseValues">
+     <property name="toolTip">
+      <string>Displays per-channel color information below as percentages instead of bytes.</string>
+     </property>
+     <property name="text">
+      <string>Show colors as percentages</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QTreeWidget" name="listViewChannels">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="columnCount">
+      <number>2</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Channel</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Value</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="Line" name="line2">
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <layout class="QHBoxLayout" name="radiusLayout">
+     <property name="spacing">
+      <number>1</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="radiusLabel">
+       <property name="text">
+        <string>Radius: </string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+       <property name="margin">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisIntParseSpinBox" name="radius">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>&lt;nobr&gt;Radius controls the color picker's sampling area.&lt;/nobr&gt; Pixel colors within this radius are mixed together.</string>
+       </property>
+       <property name="suffix">
+        <string> px</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>900</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="paletteLayout">
+     <property name="spacing">
+      <number>1</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QCheckBox" name="cbPalette">
+       <property name="toolTip">
+        <string>&lt;nobr&gt;Checking this box will add a new color swatch&lt;/nobr&gt; to a palette each time you pick a color.</string>
+       </property>
+       <property name="text">
+        <string>Add to palette:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="SqueezedComboBox" name="cmbPalette"/>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QCheckBox" name="cbUpdateCurrentColor">
+       <property name="toolTip">
+        <string>&lt;nobr&gt;Controls whether the color picker updates the&lt;/nobr&gt; current foreground or not.</string>
+       </property>
+       <property name="text">
+        <string>Update color</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="0">
+    <widget class="Line" name="line1">
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+  </customwidget>
   <customwidget>
    <class>SqueezedComboBox</class>
    <extends>QComboBox</extends>

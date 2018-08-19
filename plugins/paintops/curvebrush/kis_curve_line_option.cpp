@@ -60,7 +60,7 @@ KisCurveOpOption::~KisCurveOpOption()
 
 void KisCurveOpOption::writeOptionSetting(KisPropertiesConfigurationSP config) const
 {
-    CurveOption op;
+    KisCurveOptionProperties op;
 
     op.curve_paint_connection_line = m_options->connectionCHBox->isChecked();
     op.curve_smoothing = m_options->smoothingCHBox->isChecked();
@@ -73,7 +73,7 @@ void KisCurveOpOption::writeOptionSetting(KisPropertiesConfigurationSP config) c
 
 void KisCurveOpOption::readOptionSetting(const KisPropertiesConfigurationSP config)
 {
-    CurveOption op;
+    KisCurveOptionProperties op;
     op.readOptionSetting(config);
 
     m_options->connectionCHBox->setChecked(op.curve_paint_connection_line);

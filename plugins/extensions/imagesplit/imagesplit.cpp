@@ -39,7 +39,6 @@
 #include <KisViewManager.h>
 #include <kis_image.h>
 #include <kis_action.h>
-#include <KisDocument.h>
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_paint_device.h>
@@ -50,7 +49,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(ImagesplitFactory, "kritaimagesplit.json", registerPlugin<Imagesplit>();)
 
 Imagesplit::Imagesplit(QObject *parent, const QVariantList &)
-    : KisViewPlugin(parent)
+    : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("imagesplit");
     connect(action, SIGNAL(triggered()), this, SLOT(slotImagesplit()));
@@ -62,7 +61,7 @@ Imagesplit::~Imagesplit()
 
 bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, const QString &url)
 {
-    KisImageSP image = m_view->image();
+    KisImageSP image = viewManager()->image();
 
     KisDocument *document = KisPart::instance()->createDocument();
 
@@ -94,12 +93,12 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
 void Imagesplit::slotImagesplit()
 {
     // Taking the title - url from caption function and removing file extension
-    QStringList strList = ((m_view->document())->caption()).split('.');
+    QStringList strList = ((viewManager()->document())->caption()).split('.');
     QString suffix = strList.at(0);
 
     // Getting all mime types and converting them into names which are displayed at combo box
-    QStringList listMimeFilter = KisImportExportManager::mimeFilter(KisImportExportManager::Export);
-    QString defaultMime = QString::fromLatin1(m_view->document()->mimeType());
+    QStringList listMimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
+    QString defaultMime = QString::fromLatin1(viewManager()->document()->mimeType());
     int defaultMimeIndex = 0;
 
     listMimeFilter.sort();
@@ -119,11 +118,11 @@ void Imagesplit::slotImagesplit()
 
     Q_ASSERT(listMimeFilter.size() == listFileType.size());
 
-    DlgImagesplit *dlgImagesplit = new DlgImagesplit(m_view, suffix, listFileType, defaultMimeIndex);
+    DlgImagesplit *dlgImagesplit = new DlgImagesplit(viewManager(), suffix, listFileType, defaultMimeIndex);
     dlgImagesplit->setObjectName("Imagesplit");
     Q_CHECK_PTR(dlgImagesplit);
 
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
 
     if (dlgImagesplit->exec() == QDialog::Accepted) {
 
@@ -136,11 +135,11 @@ void Imagesplit::slotImagesplit()
 
         bool stop = false;
         if (dlgImagesplit->autoSave()) {
-            KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
+            KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
             dialog.setCaption(i18n("Save Image on Split"));
             dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-            QStringList mimeFilter = m_view->document()->importExportManager()->mimeFilter(KisImportExportManager::Export);
-            QString defaultMime = QString::fromLatin1(m_view->document()->mimeType());
+            QStringList mimeFilter = viewManager()->document()->importExportManager()->supportedMimeTypes(KisImportExportManager::Export);
+            QString defaultMime = QString::fromLatin1(viewManager()->document()->mimeType());
             dialog.setMimeTypeFilters(mimeFilter, defaultMime);
 
             QUrl directory = QUrl::fromUserInput(dialog.filename());
@@ -177,7 +176,7 @@ void Imagesplit::slotImagesplit()
 
             for (int i = 0; i < (numVerticalLines + 1); i++) {
                 for (int j = 0; j < (numHorizontalLines + 1); j++) {
-                    KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
+                    KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter, defaultMime);

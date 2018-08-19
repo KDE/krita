@@ -24,6 +24,11 @@
 #include "kis_aspect_ratio_locker.h"
 #include "kis_int_parse_spin_box.h"
 
+#include <kis_config.h>
+#include <kis_config_notifier.h>
+
+#include <QStandardItem>
+#include <QStandardItemModel>
 
 struct GridConfigWidget::Private
 {
@@ -53,6 +58,7 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
 
     ui->gridTypeCombobox->addItem(i18n("Rectangle"));
     ui->gridTypeCombobox->addItem(i18n("Isometric"));
+
     ui->gridTypeCombobox->setCurrentIndex(0); // set to rectangle by default
     slotGridTypeChanged(); // update the UI to hide any elements we don't need
 
@@ -113,6 +119,8 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(spacingLocker, SIGNAL(aspectButtonChanged()), SLOT(slotGridGuiChanged()));
 
     connect(ui->chkShowRulers,SIGNAL(toggled(bool)),SIGNAL(showRulersChanged(bool)));
+
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotPreferencesUpdated()));
 }
 
 GridConfigWidget::~GridConfigWidget()
@@ -259,6 +267,12 @@ void GridConfigWidget::slotGridGuiChanged()
     setGridConfigImpl(currentConfig);
 }
 
+void GridConfigWidget::slotPreferencesUpdated()
+{
+    KisConfig cfg(true);
+    enableIsometricGrid(cfg.useOpenGL()); // Isometric view needs OpenGL
+}
+
 void GridConfigWidget::slotGuidesGuiChanged()
 {
     if (m_d->guiSignalsBlocked) return;
@@ -312,19 +326,36 @@ void GridConfigWidget::slotGridTypeChanged() {
 
 
 
-
-
-
-
-
-
-
     slotGridGuiChanged();
 }
 
 bool GridConfigWidget::showRulers() const
 {
     return ui->chkShowRulers->isChecked();
+}
+
+void GridConfigWidget::enableIsometricGrid(bool value)
+{
+    m_isIsometricGridEnabled = value;
+
+    // Isometric grids disabled if OpenGL is disabled
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(ui->gridTypeCombobox->model());
+    QStandardItem *item = model->item(1); // isometric option
+
+   // item->setFlags(m_isIsometricGridEnabled ? item->flags() & ~Qt::ItemIsEnabled:
+     //                                         item->flags() | Qt::ItemIsEnabled);
+
+
+     item->setEnabled(m_isIsometricGridEnabled);
+
+    if (m_isIsometricGridEnabled) {
+        item->setText(i18n("Isometric"));
+    } else {
+        item->setText(i18n("Isometric (requires OpenGL)"));
+
+        // change drop down index to Rectangular in case it was previously set to isometric
+        ui->gridTypeCombobox->setCurrentIndex(0);
+    }
 }
 
 void GridConfigWidget::setShowRulers(bool value)

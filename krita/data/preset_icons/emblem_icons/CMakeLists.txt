@@ -1,8 +1,12 @@
 ########### install files ###############
 
 install(FILES
+addition.png
 color.png
+comic.png
 emblem_tilt.png
+edit-pen.png
+emblem_rotation.png
 emblem_angle_10.png
 emblem_angle_15.png
 emblem_angle_30.png
@@ -14,7 +18,9 @@ experimental.png
 favorite.png
 love.png
 mechanical.png
+mouse.png
 multidirection.png
+question.png
 sketch.png
 wet.png
 whirlpool.png

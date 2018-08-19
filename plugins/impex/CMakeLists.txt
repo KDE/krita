@@ -48,3 +48,7 @@ add_subdirectory(kra)
 if (GIF_FOUND)
     add_subdirectory(gif)
 endif()
+
+if (HEIF_FOUND)
+    add_subdirectory(heif)
+endif()

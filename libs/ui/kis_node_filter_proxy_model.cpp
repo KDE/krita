@@ -100,6 +100,8 @@ bool KisNodeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex
     KIS_ASSERT_RECOVER(m_d->nodeModel) { return true; }
 
     const QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+    if (!index.isValid()) return false;
+
     KisNodeSP node = m_d->nodeModel->nodeFromIndex(index);
 
     return !node ||

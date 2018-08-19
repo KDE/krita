@@ -30,7 +30,6 @@
 #include "taskset_resource.h"
 #include "ui_wdgtasksetdocker.h"
 
-class KoResourceLoaderThread;
 class TasksetModel;
 
 class TasksetDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgTasksetDocker {
@@ -41,7 +40,7 @@ public:
     QString observerName() override { return "TasksetDockerDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-    
+
 private Q_SLOTS:
     void actionTriggered(QAction* action);
     void activated (const QModelIndex& index);
@@ -55,7 +54,6 @@ private:
     TasksetModel *m_model;
     bool m_blocked;
     KoResourceServer<TasksetResource>* m_rserver;
-    KoResourceLoaderThread *m_taskThread;
 };
 
 

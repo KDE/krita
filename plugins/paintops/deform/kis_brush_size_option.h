@@ -56,7 +56,7 @@ private:
     KisBrushSizeOptionsWidget * m_options;
 };
 
-class BrushSizeOption : public KisBaseOption
+class KisBrushSizeOptionProperties : public KisPaintopPropertiesBase
 {
 
 public:

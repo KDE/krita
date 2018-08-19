@@ -43,8 +43,6 @@ public:
     QBrush headerCachedFrame() const;
     QBrush headerActive() const;
 
-    QColor frameColor(bool present, bool active)const ;
-
     QColor onionSkinsSliderEnabledColor() const;
     QColor onionSkinsSliderDisabledColor() const;
     QColor onionSkinsButtonColor() const;

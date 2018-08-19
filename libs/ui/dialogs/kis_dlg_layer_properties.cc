@@ -136,6 +136,13 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
             d->page->lblProfile->setText(profile->name());
         }
 
+        QRect bounds = d->nodes.first()->exactBounds();
+        d->page->lblDimensions->setText(i18nc("layer dimensions", "(%1, %2), (%3, %4)",
+                                        bounds.x(),
+                                        bounds.y(),
+                                        bounds.width(),
+                                        bounds.height()));
+
         ChannelFlagAdapter::PropertyList props = ChannelFlagAdapter::adaptersList(nodes);
         if (!props.isEmpty()) {
             QVBoxLayout *vbox = new QVBoxLayout;
@@ -166,7 +173,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
         d->page->lineActiveChannels->setVisible(false);
         d->page->cmbComposite->setEnabled(false);
         d->page->chkCompositeOp->setEnabled(false);
-
+        d->page->lblDimensions->setText(i18n("*varies*"));
         d->page->lblColorSpace->setText(i18n("*varies*"));
         d->page->lblProfile->setText(i18n("*varies*"));
     }

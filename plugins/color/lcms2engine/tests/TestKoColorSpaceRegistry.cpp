@@ -9,6 +9,8 @@
 #include "RgbU16ColorSpace.h"
 #include "LabColorSpace.h"
 
+#include "sdk/tests/kistest.h"
+
 void TestKoColorSpaceRegistry::testConstruction()
 {
     KoColorSpaceRegistry *instance = KoColorSpaceRegistry::instance();
@@ -86,4 +88,4 @@ void TestKoColorSpaceRegistry::testLab()
 
 }
 
-QTEST_GUILESS_MAIN(TestKoColorSpaceRegistry)
+KISTEST_MAIN(TestKoColorSpaceRegistry)

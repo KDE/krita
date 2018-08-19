@@ -134,7 +134,7 @@ void KisSketchPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintI
     else {
         doPaintLine(pi1, pi2);
     }
-} 
+}
 void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2)
 {
     if (!m_brush || !painter()) return;

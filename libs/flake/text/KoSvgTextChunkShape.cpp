@@ -41,6 +41,7 @@
 
 #include <html/HtmlSavingContext.h>
 
+#include <FlakeDebug.h>
 
 namespace {
 
@@ -232,8 +233,10 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
                     int subChunkLength = 1;
 
                     for (int j = i + 1; j < transforms.size(); j++) {
-                        if (transforms[j] == baseTransform) {
+                        if (transforms[j].isNull()) {
                             subChunkLength++;
+                        } else {
+                            break;
                         }
                     }
 
@@ -461,7 +464,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         context.shapeWriter().addAttribute("style", styleString);
     }
     if (layoutInterface()->isTextNode()) {
-        qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
+        debugFlake << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
         // After adding all the styling to the <p> element, add the text
         context.shapeWriter().addTextNode(d->text);
     }

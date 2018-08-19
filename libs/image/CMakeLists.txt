@@ -14,7 +14,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/generator
     ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
     ${CMAKE_CURRENT_SOURCE_DIR}/processing
-    ${CMAKE_CURRENT_SOURCE_DIR}/recorder
 
     ${CMAKE_SOURCE_DIR}/sdk/tests
 )
@@ -40,6 +39,7 @@ set(kritaimage_LIB_SRCS
     tiles3/kis_tile_data_store.cc
     tiles3/kis_tile_data_pooler.cc
     tiles3/kis_tiled_data_manager.cc
+    tiles3/KisTiledExtentManager.cpp
     tiles3/kis_memento_manager.cc
     tiles3/kis_hline_iterator.cpp
     tiles3/kis_vline_iterator.cpp
@@ -115,6 +115,7 @@ set(kritaimage_LIB_SRCS
    processing/kis_transform_processing_visitor.cpp
    processing/kis_mirror_processing_visitor.cpp
    filter/kis_filter.cc
+   filter/kis_filter_category_ids.cpp
    filter/kis_filter_configuration.cc
    filter/kis_color_transformation_configuration.cc
    filter/kis_filter_registry.cc
@@ -138,7 +139,7 @@ set(kritaimage_LIB_SRCS
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_bookmarked_configuration_manager.cc
-   kis_clone_info.cpp
+   kis_node_uuid_info.cpp
    kis_clone_layer.cpp
    kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
@@ -187,7 +188,7 @@ set(kritaimage_LIB_SRCS
    kis_sync_lod_cache_stroke_strategy.cpp
    kis_lod_capable_layer_offset.cpp
    kis_update_time_monitor.cpp
-   KisUpdateSchedulerConfigNotifier.cpp
+   KisImageConfigNotifier.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
@@ -242,6 +243,7 @@ set(kritaimage_LIB_SRCS
    kis_random_sub_accessor.cpp
    kis_wrapped_random_accessor.cpp
    kis_selection.cc
+   KisSelectionUpdateCompressor.cpp
    kis_selection_mask.cpp
    kis_update_outline_job.cpp
    kis_update_selection_job.cpp
@@ -285,21 +287,6 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_type_info.cc
    metadata/kis_meta_data_validator.cc
    metadata/kis_meta_data_value.cc
-   recorder/kis_action_recorder.cc
-   recorder/kis_macro.cc
-   recorder/kis_macro_player.cc
-   recorder/kis_node_query_path.cc
-   recorder/kis_play_info.cc
-   recorder/kis_recorded_action.cc
-   recorder/kis_recorded_action_factory_registry.cc
-   recorder/kis_recorded_action_load_context.cpp
-   recorder/kis_recorded_action_save_context.cpp
-   recorder/kis_recorded_filter_action.cpp
-   recorder/kis_recorded_fill_paint_action.cpp
-   recorder/kis_recorded_node_action.cc
-   recorder/kis_recorded_paint_action.cpp
-   recorder/kis_recorded_path_paint_action.cpp
-   recorder/kis_recorded_shape_paint_action.cpp
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp
@@ -327,6 +314,8 @@ set(kritaimage_LIB_SRCS
    layerstyles/gimp_bump_map.cpp
 
    KisProofingConfiguration.cpp
+
+   kis_node_query_path.cc
 )
 
 set(einspline_SRCS
@@ -380,22 +369,9 @@ target_include_directories(kritaimage
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/recorder>
 )
 
 set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install schemas #############
-install( FILES
-    metadata/schemas/dc.schema
-    metadata/schemas/exif.schema
-    metadata/schemas/tiff.schema
-    metadata/schemas/mkn.schema
-    metadata/schemas/xmp.schema
-    metadata/schemas/xmpmm.schema
-    metadata/schemas/xmprights.schema
-
-    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)

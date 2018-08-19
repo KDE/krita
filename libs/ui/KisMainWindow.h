@@ -25,9 +25,10 @@
 
 #include <QPointer>
 #include <QPrinter>
+#include <QUuid>
+#include <QUrl>
 
 #include <xmlgui/kxmlguiwindow.h>
-#include <QUrl>
 #include <KoCanvasObserverBase.h>
 #include <KoCanvasSupervisor.h>
 #include "KisView.h"
@@ -45,7 +46,7 @@ class QDockWidget;
 class KisView;
 class KisViewManager;
 class KoCanvasController;
-
+class KisWorkspaceResource;
 
 /**
  * @brief Main window for Krita
@@ -75,17 +76,14 @@ public:
      *
      *  Initializes a Calligra main window (with its basic GUI etc.).
      */
-    explicit KisMainWindow();
+    explicit KisMainWindow(QUuid id = QUuid());
 
     /**
      *  Destructor.
      */
     ~KisMainWindow() override;
 
-
-    // If noCleanup is set, KisMainWindow will not delete the root document
-    // or part manager on destruction.
-    void setNoCleanup(bool noCleanup);
+    QUuid id() const;
 
     /**
      * @brief showView shows the given view. Override this if you want to show
@@ -110,12 +108,40 @@ public:
     void addRecentURL(const QUrl &url);
 
     /**
+     * get list of URL strings for recent files
+     */
+    QList<QUrl> recentFilesUrls();
+
+    /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
+
+    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *
      * @return TRUE on success.
      */
     bool openDocument(const QUrl &url, OpenFlags flags);
+
+    /**
+     * Activate a view containing the document in this window, creating one if needed.
+     */
+    void showDocument(KisDocument *document);
+
+
+    /**
+     * Toggles between showing the welcome screen and the MDI area
+     *
+     *  hack: There seems to be a bug that prevents events happening to the MDI area if it
+     *  isn't actively displayed (set in the widgetStack). This can cause things like the title bar
+     *  not to update correctly Before doing any actions related to opening or creating documents,
+     *  make sure to switch this first to make sure everything can communicate to the MDI area correctly
+     */
+    void showWelcomeScreen(bool show);
+
 
     /**
      * Saves the document, asking for a filename if necessary.
@@ -142,12 +168,19 @@ public:
 
     int viewCount() const;
 
+    void saveWindowState(bool restoreNormalState =false);
+
+    const KConfigGroup &windowStateConfig() const;
+
     /**
      * A wrapper around restoreState
      * @param state the saved state
      * @return TRUE on success
      */
-    bool restoreWorkspace(const QByteArray &state);
+    bool restoreWorkspace(KisWorkspaceResource *workspace);
+    bool restoreWorkspaceState(const QByteArray &state);
+
+    static void swapWorkspaces(KisMainWindow *a, KisMainWindow *b);
 
     KisViewManager *viewManager() const;
 
@@ -165,6 +198,9 @@ public:
      * Don't use it unless you have no option.
      */
     bool hackIsSaving() const;
+
+    /// Copy the given file into the bundle directory.
+    bool installBundle(const QString &fileName) const;
 
 Q_SIGNALS:
 
@@ -232,6 +268,9 @@ public Q_SLOTS:
      */
     void slotFileSave();
 
+
+    void slotShowSessionManager();
+
     // XXX: disabled
     KisPrintJob* exportToPdf(QString pdfFileName = QString());
 
@@ -243,6 +282,20 @@ public Q_SLOTS:
     KisView *newView(QObject *document);
 
     void notifyChildViewDestroyed(KisView *view);
+
+    /// Set the active view, this will update the undo/redo actions
+    void setActiveView(KisView *view);
+
+    void subWindowActivated();
+
+    void windowFocused();
+
+    /**
+     * Reloads the recent documents list.
+     */
+    void reloadRecentFileList();
+
+
 
 private Q_SLOTS:
     /**
@@ -317,14 +370,10 @@ private Q_SLOTS:
     void viewFullscreen(bool fullScreen);
 
     /**
-     * Toggle docker titlebars on/off.
-     */
-    void showDockerTitleBars(bool show);
-
-    /**
      * Reload file
      */
     void slotReloadFile();
+
 
     /**
      * File --> Import
@@ -359,8 +408,14 @@ private Q_SLOTS:
     void newWindow();
     void closeCurrentWindow();
     void checkSanity();
+
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
+
+    void initializeGeometry();
+    void showManual();
+    void switchTab(int index);
+
 
 protected:
 
@@ -373,7 +428,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void moveEvent(QMoveEvent *e) override;
 
 
 private:
@@ -385,17 +440,7 @@ private:
      */
     void addView(KisView *view);
 
-public Q_SLOTS:
-
-    /// Set the active view, this will update the undo/redo actions
-    void setActiveView(KisView *view);
-
-    void subWindowActivated();
-
-
-private:
-
-    friend class KisApplication;
+    friend class KisPart;
 
 
     /**
@@ -408,10 +453,6 @@ private:
 
     bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
 
-    /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
 
     /**
      * Updates the window caption based on the document info and path.
@@ -421,7 +462,7 @@ private:
 
     void saveWindowSettings();
 
-    QPointer<KisView>activeKisView();
+    QPointer<KisView> activeKisView();
 
     void applyDefaultSettings(QPrinter &printer);
 
@@ -429,17 +470,10 @@ private:
 
     void applyToolBarLayout();
 
-protected:
+    QByteArray borrowWorkspace(KisMainWindow *borrower);
 
-    void moveEvent(QMoveEvent *e) override;
-
-private Q_SLOTS:
-    void initializeGeometry();
-    void showManual();
-    void switchTab(int index);
 
 private:
-
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

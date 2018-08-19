@@ -46,6 +46,8 @@ public:
 
     bool showRulers() const;
 
+    void enableIsometricGrid(bool value);
+
 public Q_SLOTS:
     void setShowRulers(bool value);
 
@@ -53,6 +55,7 @@ private Q_SLOTS:
     void slotGridGuiChanged();
     void slotGuidesGuiChanged();
     void slotGridTypeChanged();
+    void slotPreferencesUpdated();
 
 Q_SIGNALS:
     void gridValueChanged();
@@ -73,6 +76,8 @@ private:
     struct Private;
     const QScopedPointer<Private> m_d;
     bool m_isGridEnabled;
+
+    bool m_isIsometricGridEnabled = true;
 };
 
 #endif // GRID_CONFIG_WIDGET_H

@@ -182,7 +182,7 @@ void KisImagePyramid::setImage(KisImageWSP newImage)
         // Get the full image size
         QRect rc = m_originalImage->projection()->exactBounds();
 
-        KisImageConfig config;
+        KisImageConfig config(true);
 
         int patchWidth = config.updatePatchWidth();
         int patchHeight = config.updatePatchHeight();
@@ -286,7 +286,7 @@ void KisImagePyramid::retrieveImageData(const QRect &rect)
             int channelSize = channelInfo[m_selectedChannelIndex]->size();
             int pixelSize = projectionCs->pixelSize();
 
-            KisConfig cfg;
+            KisConfig cfg(true);
 
             if (m_onlyOneChannelSelected && !cfg.showSingleChannelAsColor()) {
                 int selectedChannelPos = channelInfo[m_selectedChannelIndex]->pos();
@@ -531,7 +531,7 @@ QImage KisImagePyramid::convertToQImageFast(KisPaintDeviceSP paintDevice,
 
 void KisImagePyramid::configChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_useOcio = cfg.useOcio();
 }
 

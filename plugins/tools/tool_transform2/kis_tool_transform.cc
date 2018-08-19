@@ -35,6 +35,7 @@
 #include <QComboBox>
 #include <QApplication>
 #include <QMatrix4x4>
+#include <QMenu>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -81,6 +82,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
 
+#include "krita_container_utils.h"
 #include "kis_layer_utils.h"
 #include <KisDelayedUpdateNodeInterface.h>
 
@@ -119,6 +121,23 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     setObjectName("tool_transform");
     useCursor(KisCursor::selectCursor());
     m_optionsWidget = 0;
+
+    warpAction = new KisAction(i18n("Warp"));
+    liquifyAction = new KisAction(i18n("Liquify"));
+    cageAction = new KisAction(i18n("Cage"));
+    freeTransformAction = new KisAction(i18n("Free"));
+    perspectiveAction = new KisAction(i18n("Perspective"));
+
+    // extra actions for free transform that are in the tool options
+    mirrorHorizontalAction = new KisAction(i18n("Mirror Horizontal"));
+    mirrorVericalAction = new KisAction(i18n("Mirror Vertical"));
+    rotateNinteyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
+    rotateNinteyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
+
+    applyTransformation = new KisAction(i18n("Apply"));
+    resetTransformation = new KisAction(i18n("Reset"));
+
+    m_contextMenu.reset(new QMenu());
 
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
@@ -321,6 +340,35 @@ void KisToolTransform::endActionImpl(KoPointerEvent *event, bool usePrimaryActio
 
     updateOptionWidget();
     updateApplyResetAvailability();
+}
+
+QMenu*  KisToolTransform::popupActionsMenu()
+{
+    if (m_contextMenu) {
+        m_contextMenu->clear();
+
+        // add a quick switch to different transform types
+        m_contextMenu->addAction(freeTransformAction);
+        m_contextMenu->addAction(perspectiveAction);
+        m_contextMenu->addAction(warpAction);
+        m_contextMenu->addAction(cageAction);
+        m_contextMenu->addAction(liquifyAction);
+
+        // extra options if free transform is selected
+        if (transformMode() == FreeTransformMode) {
+            m_contextMenu->addSeparator();
+            m_contextMenu->addAction(mirrorHorizontalAction);
+            m_contextMenu->addAction(mirrorVericalAction);
+            m_contextMenu->addAction(rotateNinteyCWAction);
+            m_contextMenu->addAction(rotateNinteyCCWAction);
+        }
+
+        m_contextMenu->addSeparator();
+        m_contextMenu->addAction(applyTransformation);
+        m_contextMenu->addAction(resetTransformation);
+    }
+
+    return m_contextMenu.data();
 }
 
 void KisToolTransform::beginPrimaryAction(KoPointerEvent *event)
@@ -612,21 +660,25 @@ bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, T
 
     const KUndo2Command *lastCommand = image()->undoAdapter()->presentCommand();
     KisNodeSP oldRootNode;
+    KisNodeList oldTransformedNodes;
 
     if (lastCommand &&
-        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode) &&
+        TransformStrokeStrategy::fetchArgsFromCommand(lastCommand, args, &oldRootNode, &oldTransformedNodes) &&
         args->mode() == mode &&
         oldRootNode == currentNode) {
 
-        args->saveContinuedState();
+        KisNodeList perspectiveTransformedNodes = fetchNodesList(mode, currentNode, m_workRecursively);
 
-        image()->undoAdapter()->undoLastCommand();
+        if (KritaUtils::compareListsUnordered(oldTransformedNodes, perspectiveTransformedNodes)) {
+            args->saveContinuedState();
+            image()->undoAdapter()->undoLastCommand();
 
-        // FIXME: can we make it async?
-        image()->waitForDone();
-        forceRepaintDelayedLayers(oldRootNode);
+            // FIXME: can we make it async?
+            image()->waitForDone();
+            forceRepaintDelayedLayers(oldRootNode);
 
-        result = true;
+            result = true;
+        }
     }
 
     return result;
@@ -770,7 +822,11 @@ void KisToolTransform::requestStrokeEnd()
 
 void KisToolTransform::requestStrokeCancellation()
 {
-    cancelStroke();
+    if (m_currentArgs.isIdentity()) {
+        cancelStroke();
+    } else {
+        slotResetTransform();
+    }
 }
 
 void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool forceReset)
@@ -828,15 +884,19 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
                 i18nc("floating message in transformation tool",
                       "Selected layer cannot be transformed with active transformation mode "),
                  koIcon("object-locked"), 4000, KisFloatingMessage::High);
+
+        // force-reset transform mode to default
+        initTransformMode(mode);
+
         return;
     }
 
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, resources->activeSelection(), image().data());
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, nodesList, resources->activeSelection(), image().data());
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = strategy->realSelection();
-    QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
+    const QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
 
     if (!selection && resources->activeSelection()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -856,6 +916,9 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
                 i18nc("floating message in transformation tool",
                       "Cannot transform empty layer "),
                 QIcon(), 1000, KisFloatingMessage::Medium);
+
+        // force-reset transform mode to default
+        initTransformMode(mode);
 
         return;
     }
@@ -948,7 +1011,7 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
-            if (node->isEditable() &&
+            if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
                 (!node->inherits("KisTransformMask") || node == root)) {
@@ -1026,6 +1089,23 @@ QWidget* KisToolTransform::createOptionWidget() {
 
     connect(m_optionsWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
+
+
+    connect(mirrorHorizontalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipX()));
+    connect(mirrorVericalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
+    connect(rotateNinteyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
+    connect(rotateNinteyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
+
+
+    connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));
+    connect(perspectiveAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToPerspectiveType()));
+    connect(freeTransformAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToFreeTransformType()));
+    connect(liquifyAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToLiquifyType()));
+    connect(cageAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToCageType()));
+
+    connect(applyTransformation, SIGNAL(triggered(bool)), this, SLOT(slotApplyTransform()));
+    connect(resetTransformation, SIGNAL(triggered(bool)), this, SLOT(slotResetTransform()));
+
 
     updateOptionWidget();
 
@@ -1127,27 +1207,43 @@ void KisToolTransform::slotRestartTransform()
     startStroke(savedArgs.mode(), true);
 }
 
+
 void KisToolTransform::forceRepaintDelayedLayers(KisNodeSP root)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(root);
 
-    KisLayerUtils::recursiveApplyNodes(root,
-        [] (KisNodeSP node) {
-            KisDelayedUpdateNodeInterface *delayedUpdate =
-                dynamic_cast<KisDelayedUpdateNodeInterface*>(node.data());
-
-            if (delayedUpdate) {
-                delayedUpdate->forceUpdateTimedNode();
-            }
-        });
-
+    KisLayerUtils::forceAllDelayedNodesUpdate(root);
     image()->waitForDone();
 }
-
 
 void KisToolTransform::slotEditingFinished()
 {
     commitChanges();
+}
+
+void KisToolTransform::slotUpdateToWarpType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::WarpTransformMode);
+}
+
+void KisToolTransform::slotUpdateToPerspectiveType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::PerspectiveTransformMode);
+}
+
+void KisToolTransform::slotUpdateToFreeTransformType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::FreeTransformMode);
+}
+
+void KisToolTransform::slotUpdateToLiquifyType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::LiquifyTransformMode);
+}
+
+void KisToolTransform::slotUpdateToCageType()
+{
+    setTransformMode(KisToolTransform::TransformToolMode::CageTransformMode);
 }
 
 void KisToolTransform::setShearY(double shear)

@@ -19,12 +19,18 @@ from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import Qt
 import sys
-from . import docwrapper
-import importlib
-from importlib.machinery import SourceFileLoader
 import traceback
+import inspect
+from . import docwrapper
+import krita
 
+if sys.version_info[0] > 2:
+    import importlib
+    from importlib.machinery import SourceFileLoader
+else:
+    import imp
 
+PYTHON27 = sys.version_info.major == 2 and sys.version_info.minor == 7
 PYTHON33 = sys.version_info.major == 3 and sys.version_info.minor == 3
 PYTHON34 = sys.version_info.major == 3 and sys.version_info.minor == 4
 EXEC_NAMESPACE = "__main__"  # namespace that user scripts will run in
@@ -41,7 +47,7 @@ class RunAction(QAction):
 
         self.triggered.connect(self.run)
 
-        self.setText('Run')
+        self.setText(i18n("Run"))
         self.setToolTip('Run Ctrl+R')
         self.setIcon(QIcon(':/icons/run.svg'))
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
@@ -75,37 +81,26 @@ class RunAction(QAction):
 
         try:
             if document and self.editor._documentModified is False:
-                spec = importlib.util.spec_from_file_location(EXEC_NAMESPACE, document.filePath)
-                try:
-                    users_module = importlib.util.module_from_spec(spec)
-                    spec.loader.exec_module(users_module)
+                if PYTHON27:
+                    users_module = self.run_py2_document(document)
+                else:
+                    users_module = self.run_py3_document(document)
 
-                except AttributeError as e:  # no module from spec
-                    if PYTHON34 or PYTHON33:
-                        loader = SourceFileLoader(EXEC_NAMESPACE, document.filePath)
-                        users_module = loader.load_module()
-                    else:
-                        raise e
-
-                try:
-                    # maybe script is to be execed, maybe main needs to be invoked
-                    # if there is a main() then execute it, otherwise don't worry...
+                # maybe script is to be execed, maybe main needs to be invoked
+                # if there is a main() then execute it, otherwise don't worry...
+                if hasattr(users_module, "main") and inspect.isfunction(users_module.main):
                     users_module.main()
-                except AttributeError:
-                    pass
-
             else:
                 code = compile(script, '<string>', 'exec')
                 globals_dict = {"__name__": EXEC_NAMESPACE}
                 exec(code, globals_dict)
 
-        except Exception as e:
-            """Provide context (line number and text) for an error that is caught.
-            Ordinarily, syntax and Indent errors are caught during initial
-            compilation in exec(), and the traceback traces back to this file.
-            So these need to be treated separately.
-            Other errors trace back to the file/script being run.
-            """
+        except Exception:
+            # Provide context (line number and text) for an error that is caught.
+            # Ordinarily, syntax and Indent errors are caught during initial
+            # compilation in exec(), and the traceback traces back to this file.
+            # So these need to be treated separately.
+            # Other errors trace back to the file/script being run.
             type_, value_, traceback_ = sys.exc_info()
             if type_ == SyntaxError:
                 errorMessage = "%s\n%s" % (value_.text.rstrip(), " " * (value_.offset - 1) + "^")
@@ -130,3 +125,32 @@ class RunAction(QAction):
         # scroll to bottom of output
         bottom = self.output.verticalScrollBar().maximum()
         self.output.verticalScrollBar().setValue(bottom)
+
+    def run_py2_document(self, document):
+        """ Loads and executes an external script using Python 2 specific operations
+        and returns the loaded module for further execution if needed.
+        """
+        try:
+            user_module = imp.load_source(EXEC_NAMESPACE, document.filePath)
+        except Exception as e:
+            raise e
+
+        return user_module
+
+    def run_py3_document(self, document):
+        """ Loads and executes an external script using Python 3 specific operations
+        and returns the loaded module for further execution if needed.
+        """
+        spec = importlib.util.spec_from_file_location(EXEC_NAMESPACE, document.filePath)
+        try:
+            users_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(users_module)
+
+        except AttributeError as e:  # no module from spec
+            if PYTHON34 or PYTHON33:
+                loader = SourceFileLoader(EXEC_NAMESPACE, document.filePath)
+                users_module = loader.load_module()
+            else:
+                raise e
+
+        return users_module

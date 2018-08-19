@@ -31,11 +31,11 @@ class KisMetaDataTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
 
+    void testSchemaBasic();
     void testRationals();
     void testValueCreation();
     void testValueEquality();
     void testValueCopy();
-    void testSchemaBasic();
     void testEntry();
     void testStore();
     void testFilters();

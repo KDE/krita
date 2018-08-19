@@ -60,13 +60,13 @@
 #include <KisMimeDatabase.h>
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
-        : m_view(view)
+        : m_viewManager(view)
 {
 }
 
 void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOptions alphaOps, enumSepSource sourceOps, enumSepOutput outputOps, bool downscale, bool toColor)
 {
-    KisImageSP image = m_view->image();
+    KisImageSP image = m_viewManager->image();
     if (!image) return;
 
     KisPaintDeviceSP src;
@@ -78,7 +78,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         src = image->projection();
         break;
     case CURRENT_LAYER:
-        src = m_view->activeDevice();
+        src = m_viewManager->activeDevice();
         break;
     default:
         break;
@@ -218,7 +218,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         default:
             break;
         }
-        KisNodeCommandsAdapter adapter(m_view);
+        KisNodeCommandsAdapter adapter(m_viewManager);
 
         for (QList<KoChannelInfo *>::const_iterator it = begin; it != end; ++it) {
 
@@ -234,10 +234,10 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
                 adapter.addNode(l.data(), image->rootLayer(), 0);
             }
             else {
-                KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
+                KoFileDialog dialog(m_viewManager->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
                 dialog.setCaption(i18n("Export Layer") + '(' + ch->name() + ')');
                 dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
-                dialog.setMimeTypeFilters(KisImportExportManager::mimeFilter(KisImportExportManager::Export));
+                dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export));
                 QUrl url = QUrl::fromUserInput(dialog.filename());
 
                 if (url.isEmpty())

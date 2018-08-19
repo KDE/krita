@@ -212,35 +212,53 @@ KisImportExportFilter::ConversionStatus KisPPMImport::convert(KisDocument *docum
     // Select the colorspace depending on the maximum value
     int pixelsize = -1;
     const KoColorSpace* colorSpace = 0;
+
+    const KoColorProfile *profile = 0;
+    QString colorSpaceId;
+    QString bitDepthId;
+
+
     if (maxval <= 255) {
+        bitDepthId = Integer8BitsColorDepthID.id();
+
         if (channels == 1 || channels == 0) {
             pixelsize = 1;
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), 0);
+            colorSpaceId = GrayAColorModelID.id();
         } else {
             pixelsize = 3;
-            colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+            colorSpaceId = RGBAColorModelID.id();
         }
     } else if (maxval <= 65535) {
+        bitDepthId = Integer16BitsColorDepthID.id();
+
         if (channels == 1 || channels == 0) {
             pixelsize = 2;
-            colorSpace = KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), 0);
+            colorSpaceId = GrayAColorModelID.id();
         } else {
             pixelsize = 6;
-            colorSpace = KoColorSpaceRegistry::instance()->rgb16();
+            colorSpaceId = RGBAColorModelID.id();
         }
     } else {
         dbgFile << "Unknown colorspace";
         return KisImportExportFilter::CreationError;
     }
 
+    if (colorSpaceId == RGBAColorModelID.id()) {
+        profile = KoColorSpaceRegistry::instance()->profileByName("sRGB-elle-V2-srgbtrc.icc");
+    } else if (colorSpaceId == GrayAColorModelID.id()) {
+        profile = KoColorSpaceRegistry::instance()->profileByName("Gray-D50-elle-V2-srgbtrc.icc");
+    }
+
+    colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId, bitDepthId, profile);
+
     KisImageSP image = new KisImage(document->createUndoStore(), width, height, colorSpace, "built image");
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), 255);
 
-    KisPpmFlow* ppmFlow = 0;
+    QScopedPointer<KisPpmFlow> ppmFlow;
     if (isAscii) {
-        ppmFlow = new KisAsciiPpmFlow(io);
+        ppmFlow.reset(new KisAsciiPpmFlow(io));
     } else {
-        ppmFlow = new KisBinaryPpmFlow(io, pixelsize * width);
+        ppmFlow.reset(new KisBinaryPpmFlow(io, pixelsize * width));
     }
 
     for (int v = 0; v < height; ++v) {

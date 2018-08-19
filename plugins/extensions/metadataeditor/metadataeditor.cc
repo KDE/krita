@@ -47,7 +47,7 @@
 K_PLUGIN_FACTORY_WITH_JSON(metadataeditorPluginFactory, "kritametadataeditor.json", registerPlugin<metadataeditorPlugin>();)
 
 metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &)
-        : KisViewPlugin(parent)
+        : KisActionPlugin(parent)
 {
     KisAction *action  = createAction("EditLayerMetaData");
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditLayerMetaData()));
@@ -59,10 +59,10 @@ metadataeditorPlugin::~metadataeditorPlugin()
 
 void metadataeditorPlugin::slotEditLayerMetaData()
 {
-    KisImageWSP image = m_view->image();
+    KisImageWSP image = viewManager()->image();
     if (!image) return;
 
-    KisMetaDataEditor editor(m_view->mainWindow(), m_view->nodeManager()->activeLayer()->metaData());
+    KisMetaDataEditor editor(viewManager()->mainWindow(), viewManager()->nodeManager()->activeLayer()->metaData());
     editor.exec();
 }
 

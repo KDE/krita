@@ -22,11 +22,13 @@
 #include <QThread>
 #include <QSemaphore>
 
+#include "kritaimage_export.h"
+
 class KisTileDataStore;
 class KisTileData;
 
 
-class KisTileDataPooler : public QThread
+class KRITAIMAGE_EXPORT KisTileDataPooler : public QThread
 {
     Q_OBJECT
 

@@ -33,6 +33,7 @@
 #include <kis_types.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
 
@@ -53,8 +54,8 @@ KritaNormalizeFilter::~KritaNormalizeFilter()
 
 
 KisFilterNormalize::KisFilterNormalize()
-    : KisColorTransformationFilter(KoID("normalize"     , i18n("Normalize"))
-                                   , KisFilter::categoryMap(), i18n("&Normalize..."))
+    : KisColorTransformationFilter(KoID("normalize", i18n("Normalize")),
+                                   FiltersCategoryMapId, i18n("&Normalize..."))
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
@@ -74,6 +75,13 @@ KisNormalizeTransformation::KisNormalizeTransformation(const KoColorSpace* cs) :
 
 void KisNormalizeTransformation::transform(const quint8* src, quint8* dst, qint32 nPixels) const
 {
+    // if the color space is not RGBA o something like that, just
+    // pass the values through
+    if (m_colorSpace->channelCount() != 4) {
+        memcpy(dst, src, nPixels * m_colorSpace->pixelSize());
+        return;
+    }
+
     QVector3D normal_vector;
     QVector<float> channelValues(4);
     //if (m_colorSpace->colorDepthId().id()!="F16" && m_colorSpace->colorDepthId().id()!="F32" && m_colorSpace->colorDepthId().id()!="F64") {

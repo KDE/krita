@@ -71,7 +71,14 @@ protected:
 
     qreal currentStrokeWidth() const;
 
-    void setupPaintAction(KisRecordedPaintAction* action) override;
+    struct ShapeAddInfo {
+        bool shouldAddShape = false;
+        bool shouldAddSelectionShape = false;
+
+        void markAsSelectionShapeIfNeeded(KoShape *shape) const;
+    };
+
+    ShapeAddInfo shouldAddShape(KisNodeSP currentNode) const;
 
     void addShape(KoShape* shape);
 

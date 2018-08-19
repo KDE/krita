@@ -25,6 +25,7 @@
 #include <QStack>
 #include <QPair>
 #include <QString>
+#include <QScopedPointer>
 
 #include <KoTextWriter.h>
 #include <KoXmlReaderForward.h>
@@ -101,7 +102,7 @@ public:
 
     explicit Private(KoShapeSavingContext &context);
 
-    ~Private() {}
+    ~Private();
 
     void writeBlocks(QTextDocument *document, int from, int to,
                      QHash<QTextList *, QString> &listStyles,
@@ -145,7 +146,7 @@ private:
 
     // Common methods
     void writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element);
-    void writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren = false);
+    void writeNode(QTextStream &outputXmlStream, const KoXmlNode &node, bool writeOnlyChildren = false);
 
     QString createXmlId();
 
@@ -170,7 +171,7 @@ private:
     // when their end markeris not included in the selection. However, when recursing into
     // e.g. the QTextDocument of a table, we need have a clean slate. Hence, a stack of stacks.
     QStack< QStack<KoInlineObject*> *> pairedInlineObjectsStackStack;
-    QStack<KoInlineObject*> *currentPairedInlineObjectsStack;
+    QScopedPointer<QStack<KoInlineObject*>> currentPairedInlineObjectsStack;
 
     QMap<KoList *, QString> listXmlIds;
 

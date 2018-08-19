@@ -41,8 +41,8 @@ QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeRang
 
         // TODO: optimize check for fully-cached case
         for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
-            KisTimeRange stillFrameRange = KisTimeRange::infinite(0);
-            KisTimeRange::calculateTimeRangeRecursive(image->root(), frame, stillFrameRange, true);
+            const KisTimeRange stillFrameRange =
+                KisTimeRange::calculateIdenticalFramesRecursive(image->root(), frame);
 
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(stillFrameRange.isValid(), result);
 
@@ -129,9 +129,19 @@ QList<int> KisAsyncAnimationCacheRenderDialog::calcDirtyFrames() const
 KisAsyncAnimationRendererBase *KisAsyncAnimationCacheRenderDialog::createRenderer(KisImageSP image)
 {
     Q_UNUSED(image);
+    return new KisAsyncAnimationCacheRenderer();
+}
 
-    KisAsyncAnimationCacheRenderer *renderer = new KisAsyncAnimationCacheRenderer();
-    renderer->setFrameCache(m_d->cache);
-    return renderer;
+void KisAsyncAnimationCacheRenderDialog::initializeRendererForFrame(KisAsyncAnimationRendererBase *renderer, KisImageSP image, int frame)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(frame);
+
+    KisAsyncAnimationCacheRenderer *cacheRenderer =
+        dynamic_cast<KisAsyncAnimationCacheRenderer*>(renderer);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(cacheRenderer);
+
+    cacheRenderer->setFrameCache(m_d->cache);
 }
 

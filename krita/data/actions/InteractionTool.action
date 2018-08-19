@@ -4,7 +4,7 @@
     <text>Interaction Tool</text>
     <Action name="object_order_raise">
       <iconText>Raise</iconText>
-      <shortcut>Ctrl+]</shortcut>
+      <shortcut>Ctrl+Alt+]</shortcut>
       <toolTip>Raise</toolTip>
       <icon>object-order-raise-calligra</icon>
       <whatsThis></whatsThis>
@@ -104,7 +104,7 @@
     </Action>
     <Action name="object_order_lower">
       <iconText>Lower</iconText>
-      <shortcut>Ctrl+[</shortcut>
+      <shortcut>Ctrl+Alt+[</shortcut>
       <toolTip>Lower</toolTip>
       <icon>object-order-lower-calligra</icon>
       <whatsThis></whatsThis>

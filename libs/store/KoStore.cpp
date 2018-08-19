@@ -88,7 +88,7 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
     switch (backend) {
     case Directory:
         errorStore << "Can't create a Directory store for a memory buffer!" << endl;
-        // fallback
+        return 0;
     case Zip:
         return new KoZipStore(device, mode, appIdentification, writeMimetype);
     default:

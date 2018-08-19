@@ -36,7 +36,7 @@ public:
      * constructor
      * @param tool the parent tool this strategy is for
      * @param controller the canvas controller that wraps the canvas the tool is acting on.
-     * @param clicked the location (in documnet points) where the interaction starts.
+     * @param clicked the location (in document points) where the interaction starts.
      */
     KoZoomStrategy(KoZoomTool *tool, KoCanvasController *controller, const QPointF &clicked);
 

@@ -1,9 +1,9 @@
 ########### next target ###############
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-include_directories(    
-    ${CMAKE_SOURCE_DIR}/libs/image/metadata 
-    ${CMAKE_SOURCE_DIR}/sdk/tests 
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/image/metadata
+    ${CMAKE_SOURCE_DIR}/sdk/tests
 )
 include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
@@ -25,7 +25,6 @@ ecm_add_tests(
     kis_gbr_brush_test.cpp
     kis_boundary_test.cpp
     kis_imagepipe_brush_test.cpp
-    NAME_PREFIX "krita-libbrush-"
+    NAME_PREFIX "libs-brush-"
     LINK_LIBRARIES kritaimage kritalibbrush Qt5::Test
 )
-

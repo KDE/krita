@@ -495,7 +495,8 @@ void KisColorSelectorBase::updateSettings()
 
     if(m_isPopup) {
         m_hideOnMouseClick = cfg.readEntry("hidePopupOnClickCheck", false);
-        resize(cfg.readEntry("zoomSize", 280), cfg.readEntry("zoomSize", 280));
+        const int zoomSize = cfg.readEntry("zoomSize", 280);
+        resize(zoomSize, zoomSize);
     }
 
     reset();

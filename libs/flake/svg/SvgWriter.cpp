@@ -54,6 +54,8 @@
 #include <QPainter>
 #include <QSvgGenerator>
 
+#include <kis_debug.h>
+
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers)
     : m_writeInlineImages(true)
 {
@@ -238,6 +240,8 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+
     const QRectF bbox = shape->boundingRect();
 
     // paint shape to the image
@@ -282,10 +286,10 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 
         context.shapeWriter().startElement("image");
         context.shapeWriter().addAttribute("id", context.getID(shape));
-        context.shapeWriter().addAttributePt("x", bbox.x());
-        context.shapeWriter().addAttributePt("y", bbox.y());
-        context.shapeWriter().addAttributePt("width", bbox.width());
-        context.shapeWriter().addAttributePt("height", bbox.height());
+        context.shapeWriter().addAttribute("x", bbox.x());
+        context.shapeWriter().addAttribute("y", bbox.y());
+        context.shapeWriter().addAttribute("width", bbox.width());
+        context.shapeWriter().addAttribute("height", bbox.height());
         context.shapeWriter().addAttribute("xlink:href", context.saveImage(image));
         context.shapeWriter().endElement(); // image
 

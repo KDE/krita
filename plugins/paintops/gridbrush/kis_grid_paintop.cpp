@@ -86,7 +86,6 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
     KisRandomSourceSP randomSource = info.randomSource();
     const qreal additionalScale = KisLodTransform::lodToScale(painter()->device());
 
-    if (!painter()) return KisSpacingInformation(m_spacing * additionalScale);
     m_dab->clear();
 
     qreal gridWidth = m_properties.gridWidth * m_properties.scale * additionalScale;

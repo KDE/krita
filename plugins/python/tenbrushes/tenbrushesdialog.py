@@ -20,7 +20,7 @@ class TenBrushesDialog(QDialog):
         self.uitenbrushes = uitenbrushes
 
     def accept(self):
-        self.uitenbrushes.tentbrushes.writeSettings()
+        self.uitenbrushes.tenbrushes.writeSettings()
 
         super(TenBrushesDialog, self).accept()
 

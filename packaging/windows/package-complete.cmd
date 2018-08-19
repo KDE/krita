@@ -642,6 +642,11 @@ if errorlevel 1 (
 	exit /B 1
 )
 
+:: ffmpeg
+copy %DEPS_INSTALL_DIR%\bin\ffmpeg.exe %pkg_root%\bin
+copy %DEPS_INSTALL_DIR%\bin\ffmpeg_LICENSE.txt %pkg_root%\bin
+copy %DEPS_INSTALL_DIR%\bin\ffmpeg_README.txt %pkg_root%\bin
+
 
 :: Copy embedded Python
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\python %pkg_root%\python

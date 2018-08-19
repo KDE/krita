@@ -336,13 +336,18 @@ void TestSvgText::testSimpleText()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"7\" y=\"27\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        Hello, out there!"
             "    </text>"
 
             "</g>"
 
             "</svg>";
+
+    QFont testFont("DejaVu Sans");
+    if (!QFontInfo(testFont).exactMatch()) {
+        QEXPECT_FAIL(0, "DejaVu Sans is *not* found! Text rendering might be broken!", Continue);
+    }
 
     SvgRenderTester t (data);
     t.test_standard("text_simple", QSize(175, 40), 72.0);
@@ -400,7 +405,7 @@ void TestSvgText::testComplexText()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"7\" y=\"27\" dx=\"0,1,2,3,4,5,6,7,8\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        Hello, <tspan fill=\"red\" x=\"20\" y=\"46\" text-anchor=\"start\">ou"
             "t</tspan> there <![CDATA[cool cdata --> nice work]]>"
             "    </text>"
@@ -531,7 +536,7 @@ void TestSvgText::testHindiText()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"4\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"FreeSans\" font-size=\"15\" fill=\"blue\" >"
             "मौखिक रूप से हिंदी के काफी सामान"
             "    </text>"
 
@@ -540,6 +545,16 @@ void TestSvgText::testHindiText()
             "</svg>";
 
     SvgRenderTester t (data);
+
+    QFont testFont("FreeSans");
+    if (!QFontInfo(testFont).exactMatch()) {
+#ifdef USE_ROUND_TRIP
+            return;
+#else
+            QEXPECT_FAIL(0, "FreeSans found is *not* found! Hindi rendering might be broken!", Continue);
+#endif
+    }
+
     t.test_standard("text_hindi", QSize(260, 30), 72);
 }
 
@@ -555,7 +570,7 @@ void TestSvgText::testTextBaselineShift()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"4\" y=\"29\" "
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
 
             "        <tspan>text<tspan baseline-shift=\"super\">super </tspan>normal<tspan baseline-shift=\"sub\">sub</tspan></tspan>"
 
@@ -589,7 +604,7 @@ void TestSvgText::testTextSpacing()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"5\" y=\"24\" "
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
 
             "        <tspan x=\"5\" dy=\"0.0em\">Lorem ipsum</tspan>"
             "        <tspan x=\"5\" dy=\"1.5em\" letter-spacing=\"4.0\">Lorem ipsum (ls=4)</tspan>"
@@ -611,6 +626,7 @@ void TestSvgText::testTextSpacing()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_letter_word_spacing", QSize(340, 250), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -633,7 +649,7 @@ void TestSvgText::testTextDecorations()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"4\" y=\"24\" "
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
 
             "        <tspan x=\"20\" dy=\"0.0em\" text-decoration=\"underline\">Lorem ipsum</tspan>"
             "        <tspan x=\"20\" dy=\"2.5em\" text-decoration=\"overline\">Lorem ipsum</tspan>"
@@ -647,6 +663,7 @@ void TestSvgText::testTextDecorations()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_decorations", QSize(290, 135), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -669,7 +686,7 @@ void TestSvgText::testRightToLeft()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"20\" y=\"34\" "
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" text-anchor=\"end\">"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" text-anchor=\"end\">"
 
             "        <tspan x=\"250\" dy=\"0.0em\" text-anchor=\"middle\" direction=\"rtl\">aa bb cc dd</tspan>"
             "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\" direction=\"rtl\">حادثتا السفينتين «بسين Bassein» و«فايبر Viper»</tspan>"
@@ -819,7 +836,7 @@ void TestSvgText::testTextOutlineSolid()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
             "        SA"
             "    </text>"
 
@@ -843,7 +860,7 @@ void TestSvgText::testNbspHandling()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
             "        S\u00A0A"
             "    </text>"
 
@@ -867,7 +884,7 @@ void TestSvgText::testMulticolorText()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        S<tspan fill=\"red\">A</tspan>"
             "    </text>"
 
@@ -876,10 +893,10 @@ void TestSvgText::testMulticolorText()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.test_standard("text_multicolor", QSize(30, 30), 72.0);
 }
 
-#include <KoSvgTextShapeMarkupConverter.h>
 #include <KoColorBackground.h>
 
 void TestSvgText::testConvertToStrippedSvg()
@@ -894,7 +911,7 @@ void TestSvgText::testConvertToStrippedSvg()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text transform=\"translate(2)\" id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        S<tspan fill=\"red\">A</tspan><![CDATA[some stuff<><><<<>]]>"
             "    </text>"
 
@@ -922,11 +939,11 @@ void TestSvgText::testConvertToStrippedSvg()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"Verdana\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 
     // test loading
 
-    svgText = "<text fill=\"#00ff00\" font-family=\"Verdana\" font-size=\"19\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>";
+    svgText = "<text fill=\"#00ff00\" font-family=\"DejaVu Sans\" font-size=\"19\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>";
 
     QVERIFY(converter.convertFromSvg(svgText, stylesText, QRectF(0,0,30,30), 72.0));
 
@@ -959,7 +976,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text transform=\"translate(2)\" id=\"testRect\" x=\"0\" y=\"0\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        S<tspan fill=\"red\">A</tspan><![CDATA[some stuff<><><<<>]]>"
             "    </text>"
 
@@ -981,7 +998,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"Verdana\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 }
 
 void TestSvgText::testConvertFromIncorrectStrippedSvg()
@@ -1025,7 +1042,7 @@ void TestSvgText::testEmptyTextChunk()
             "        fill=\"none\" stroke=\"red\"/>"
 
             "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"Verdana\" font-size=\"15\" fill=\"blue\" >"
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
             "        " // no actual text! should not crash!
             "    </text>"
 
@@ -1076,6 +1093,136 @@ void TestSvgText::testConvertHtmlToSvg()
     qDebug() << r << svg << defs;
 
 }
+
+void TestSvgText::testTextWithMultipleRelativeOffsets()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+            "    <text id=\"testRect\" x=\"10\" y=\"40\""
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" "
+            "        dy=\"0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0\">"
+            "        Lorem ipsum dolor sit amet"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("text_multiple_relative_offsets", QSize(300, 80), 72.0);
+}
+
+void TestSvgText::testTextWithMultipleAbsoluteOffsetsArabic()
+{
+    /**
+     * According to the standard, each **absolute** offset defines a
+     * new text chunk, therefore, the arabic text must become
+     * ltr reordered
+     */
+
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+            "    <text id=\"testRect\" x=\"10\" y=\"40\""
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" "
+            "        y=\"40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 \">"
+            "        Lo rem اللغة العربية المعيارية الحديثة ip sum"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+    t.test_standard("text_multiple_absolute_offsets_arabic", QSize(530, 70), 72.0);
+}
+
+void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
+{
+    /**
+     * According to the standard, **relative** offsets must not define a new
+     * text chunk, therefore, the arabic text must be written in native rtl order,
+     * even though the individual letters are split.
+     */
+
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+            "    <text id=\"testRect\" x=\"10\" y=\"40\""
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" "
+            "        dy=\"0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0\">"
+            "        Lo rem اللغة العربية المعيارية الحديثة ip sum"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    SvgRenderTester t (data);
+
+    // we cannot expect more than one failure
+#ifndef USE_ROUND_TRIP
+    QEXPECT_FAIL("", "WARNING: in Krita relative offsets also define a new text chunk, that doesn't comply with SVG standard and must be fixed", Continue);
+    t.test_standard("text_multiple_relative_offsets_arabic", QSize(530, 70), 72.0);
+#endif
+}
+
+void TestSvgText::testTextOutline()
+{
+    const QString data =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testRect\" x=\"7\" y=\"27\""
+            " "
+            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
+            "        normal "
+            "        <tspan text-decoration=\"line-through\">strikethrough</tspan>"
+            "        <tspan text-decoration=\"overline\">overline</tspan>"
+            "        <tspan text-decoration=\"underline\">underline</tspan>"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    QRect renderRect(0, 0, 450, 40);
+
+    SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
+    t.test_standard("text_outline", renderRect.size(), 72.0);
+
+    KoShape *shape = t.findShape("testRect");
+    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+    QVERIFY(chunkShape);
+
+    KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+
+    QImage canvas(renderRect.size(), QImage::Format_ARGB32);
+    canvas.fill(0);
+    QPainter gc(&canvas);
+    gc.setPen(Qt::NoPen);
+    gc.setBrush(Qt::black);
+    gc.setRenderHint(QPainter::Antialiasing, true);
+    gc.drawPath(textShape->textOutline());
+
+    QVERIFY(TestUtil::checkQImage(canvas, "svg_render", "load_text_outline", "converted_to_path", 3, 5));
+}
+
+
 
 
 QTEST_MAIN(TestSvgText)

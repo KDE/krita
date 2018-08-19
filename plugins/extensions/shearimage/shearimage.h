@@ -22,9 +22,9 @@
 
 #include <QVariant>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 
-class ShearImage : public KisViewPlugin
+class ShearImage : public KisActionPlugin
 {
     Q_OBJECT
 public:

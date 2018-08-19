@@ -11,8 +11,8 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import (QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout)
-from tenbrushes import tenbrushesdialog, dropbutton
+from PyQt5.QtWidgets import (QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QCheckBox)
+from . import tenbrushesdialog, dropbutton
 import krita
 
 
@@ -25,6 +25,7 @@ class UITenBrushes(object):
         self.buttonBox = QDialogButtonBox(self.mainDialog)
         self.vbox = QVBoxLayout(self.mainDialog)
         self.hbox = QHBoxLayout(self.mainDialog)
+        self.checkBox = QCheckBox(i18n("&Activate previous brush when pressing the shortcut for the second time"), self.mainDialog)
 
         self.buttonBox.accepted.connect(self.mainDialog.accept)
         self.buttonBox.rejected.connect(self.mainDialog.reject)
@@ -34,23 +35,30 @@ class UITenBrushes(object):
 
         self.presetChooser = krita.PresetChooser(self.mainDialog)
 
-    def initialize(self, tentbrushes):
-        self.tentbrushes = tentbrushes
+    def initialize(self, tenbrushes):
+        self.tenbrushes = tenbrushes
 
         self.loadButtons()
 
         self.vbox.addLayout(self.hbox)
-        self.vbox.addWidget(QLabel("Select the brush preset, then click on the button you want to use to select the preset"))
+        self.vbox.addWidget(QLabel(i18n("Select the brush preset, then click on the button you want to use to select the preset")))
         self.vbox.addWidget(self.presetChooser)
+
+        self.checkBox.setChecked(self.tenbrushes.activatePrev)
+        self.checkBox.toggled.connect(self.setActivatePrev)
+        self.vbox.addWidget(self.checkBox)
+
         self.vbox.addWidget(self.buttonBox)
-        
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()
         self.mainDialog.exec_()
 
+    def setActivatePrev(self, checked):
+        self.tenbrushes.activatePrev = checked
+
     def loadButtons(self):
-        self.tentbrushes.buttons = []
+        self.tenbrushes.buttons = []
 
         allPresets = Application.resources("preset")
 
@@ -61,16 +69,16 @@ class UITenBrushes(object):
             button.clicked.connect(button.selectPreset)
             button.presetChooser = self.presetChooser
 
-            if self.tentbrushes.actions[index] and self.tentbrushes.actions[index].preset and self.tentbrushes.actions[index].preset in allPresets:
-                p = allPresets[self.tentbrushes.actions[index].preset]
+            if self.tenbrushes.actions[index] and self.tenbrushes.actions[index].preset and self.tenbrushes.actions[index].preset in allPresets:
+                p = allPresets[self.tenbrushes.actions[index].preset]
                 button.preset = p.name()
                 button.setIcon(QIcon(QPixmap.fromImage(p.image())))
 
             buttonLayout.addWidget(button)
-            
-            label = QLabel(self.tentbrushes.actions[index].shortcut())
+
+            label = QLabel(self.tenbrushes.actions[index].shortcut().toString())
             label.setAlignment(Qt.AlignHCenter)
             buttonLayout.addWidget(label)
 
             self.hbox.addLayout(buttonLayout)
-            self.tentbrushes.buttons.append(button)
+            self.tenbrushes.buttons.append(button)

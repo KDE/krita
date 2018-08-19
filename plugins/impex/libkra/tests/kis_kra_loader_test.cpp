@@ -26,7 +26,6 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-#include "KisDocument.h"
 #include "kis_image.h"
 #include "testutil.h"
 #include "KisPart.h"
@@ -37,6 +36,8 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_time_range.h"
+
+#include  <sdk/tests/kistest.h>
 
 void KisKraLoaderTest::initTestCase()
 {
@@ -169,4 +170,4 @@ void KisKraLoaderTest::testLoadAnimated()
 }
 
 
-QTEST_MAIN(KisKraLoaderTest)
+KISTEST_MAIN(KisKraLoaderTest)

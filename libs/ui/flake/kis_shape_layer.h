@@ -34,8 +34,9 @@ class QString;
 class KoShapeManager;
 class KoStore;
 class KoViewConverter;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoDocumentResourceManager;
+class KisShapeLayerCanvasBase;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -55,9 +56,9 @@ class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLaye
 
 public:
 
-    KisShapeLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
+    KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
-    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeBasedDocumentBase* controller);
+    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas = 0);
     /**
      * Merge constructor.
      *
@@ -67,8 +68,10 @@ public:
      */
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     ~KisShapeLayer() override;
+protected:
+    KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, KisShapeLayerCanvasBase *canvas);
 private:
-    void initShapeLayer(KoShapeBasedDocumentBase* controller, KisPaintDeviceSP copyFromProjection = 0);
+    void initShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection = 0, KisShapeLayerCanvasBase *canvas = 0);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);
@@ -150,6 +153,8 @@ protected:
 
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
+
+    KoShapeControllerBase *shapeController() const;
 
 Q_SIGNALS:
     /**

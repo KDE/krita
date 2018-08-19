@@ -68,23 +68,24 @@ KisConfigWidget *EXRExport::createConfigurationWidget(QWidget *parent, const QBy
 
 KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
+    Q_ASSERT(document);
+    Q_ASSERT(configuration);
+
     KisImageSP image = document->savingImage();
+    Q_ASSERT(image);
 
     EXRConverter exrConverter(document, !batchMode());
 
     KisImageBuilder_Result res;
 
-    if (configuration->getBool("flatten")) {
-        KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
-        KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);
-
-        res = exrConverter.buildFile(filename(), l);
+    if (configuration && configuration->getBool("flatten")) {
+        res = exrConverter.buildFile(filename(), image->rootLayer(), true);
     }
     else {
         res = exrConverter.buildFile(filename(), image->rootLayer());
     }
 
-    dbgFile << " Result =" << res;
+    dbgFile  << " Result =" << res;
     switch (res) {
     case KisImageBuilder_RESULT_INVALID_ARG:
         document->setErrorMessage(i18n("This layer cannot be saved to EXR."));
@@ -107,7 +108,9 @@ KisImportExportFilter::ConversionStatus EXRExport::convert(KisDocument *document
         return KisImportExportFilter::WrongFormat;
 
     case KisImageBuilder_RESULT_OK:
-        document->setErrorMessage(exrConverter.errorMessage());
+        if (!exrConverter.errorMessage().isNull()) {
+            document->setErrorMessage(exrConverter.errorMessage());
+        }
         return KisImportExportFilter::OK;
     default:
         break;
@@ -134,7 +137,7 @@ void EXRExport::initializeCapabilities()
             << QPair<KoID, KoID>(GrayColorModelID, Float32BitsColorDepthID)
             << QPair<KoID, KoID>(XYZAColorModelID, Float16BitsColorDepthID)
             << QPair<KoID, KoID>(XYZAColorModelID, Float32BitsColorDepthID);
-    addSupportedColorModels(supportedColorModels, "TIFF");
+    addSupportedColorModels(supportedColorModels, "EXR");
 }
 
 

@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QObject>
 #include <QColor>
+#include <QXmlStreamWriter>
 
 #include <kritaui_export.h>
 #include <kis_shared.h>
@@ -99,6 +100,7 @@ public:
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
 
+
     /**
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference
@@ -108,12 +110,22 @@ public:
     virtual void endStroke() { }
     virtual QPointF buttonPosition() const = 0;
     virtual int numHandles() const = 0;
+
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 
-    /// grabs the assistant color/opacity specified from the tool options
-    /// each assistant might have to use this differently, so just save a reference
-    void setAssistantColor(QColor color);
+    QColor effectiveAssistantColor() const;
+
+    /// should this assistant use a custom color for the display? global color will be used if this is false
+    bool useCustomColor();
+    void setUseCustomColor(bool useCustomColor);
+
+    /// getter and setter for assistant's custom color
+    void setAssistantCustomColor(QColor color);
+    QColor assistantCustomColor();
+
+    void setAssistantGlobalColorCache(const QColor &color);
+
 
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
@@ -121,8 +133,13 @@ public:
     QList<KisPaintingAssistantHandleSP> handles();
     const QList<KisPaintingAssistantHandleSP>& sideHandles() const;
     QList<KisPaintingAssistantHandleSP> sideHandles();
+
     QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
+    virtual void saveCustomXml(QXmlStreamWriter* xml); //in case specific assistants have custom properties (like vanishing point)
+
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
+    virtual bool loadCustomXml(QXmlStreamReader* xml);
+
     void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
     void findPerspectiveAssistantHandleLocation();
     KisPaintingAssistantHandleSP oppHandleOne();

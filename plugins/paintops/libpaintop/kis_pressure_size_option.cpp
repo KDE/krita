@@ -40,7 +40,8 @@ double KisPressureSizeOption::apply(const KisPaintInformation & info) const
 
 void KisPressureSizeOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
-    if (sensor(FUZZY_PER_DAB, true) || sensor(FUZZY_PER_DAB, true)) {
+    // HINT: FUZZY_PER_STROKE doesn't affect instant preview
+    if (sensor(FUZZY_PER_DAB, true)) {
         l->limitations << KoID("size-fade", i18nc("PaintOp instant preview limitation", "Size -> Fuzzy (sensor)"));
     }
 

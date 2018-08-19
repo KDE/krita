@@ -54,12 +54,13 @@ class po_file_parser():
             def addEntryToTranslationDict(key, entry, lang):
                 if len(entry.keys())>0:
                     if key is None:
-                        if self.key_xml:
-                            text = entry.get("text", "")
-                            text = re.sub("\<.*?\>", " ", text)
-                            key = str(re.sub("\s+", " ", text)).strip()
-                        else:
-                            key = entry.get("text", None)
+                        key = ""
+                    if self.key_xml:
+                        text = entry.get("text", "")
+                        text = re.sub("\<.*?\>", " ", text)
+                        key += str(re.sub("\s+", " ", text)).strip()
+                    else:
+                        key += entry.get("text", None)
                     if key is not None:
                         if len(key)>0:
                             dummyDict = {}
@@ -100,6 +101,7 @@ class po_file_parser():
                 if line.startswith("msgctxt "):
                     key = line[len("msgctxt \""):]
                     key = key[:-len("\"\n")]
+                    key += " "
                 if line.startswith("\"") and len(multiLine)>0:
                     string = line[len("\""):]
                     string = string[:-len("\"\n")]

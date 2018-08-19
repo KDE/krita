@@ -5,7 +5,7 @@ project (krita-and-all-its-deps)
 # Parameters: EXTERNALS_DOWNLOAD_DIR place to download all packages
 #             INSTALL_ROOT place to install everything to
 #             MXE_TOOLCHAIN: the toolchain file to cross-compile using MXE
-# 
+#
 # Example usage: cmake ..\kritadeposx -DEXTERNALS_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i -DWIN64_BUILD=TRUE  -DBOOST_LIBRARYDIR=/dev2/i/lib   -G "Visual Studio 11 Win64"
 
 
@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 2.8.6)
 
 if(NOT SUBMAKE_JOBS)
 	set(SUBMAKE_JOBS 1)
-endif(NOT SUBMAKE_JOBS)
+endif()
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 	message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
@@ -37,11 +37,11 @@ set(EXTPREFIX "${TOP_INST_DIR}")
 set(CMAKE_PREFIX_PATH "${EXTPREFIX}")
 
 if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
-    SET(GLOBAL_PROFILE 
-        -DCMAKE_MODULE_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_EXE_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_SHARED_LINKER_FLAGS=/machine:x64 
-        -DCMAKE_STATIC_LINKER_FLAGS=/machine:x64 
+    SET(GLOBAL_PROFILE
+        -DCMAKE_MODULE_LINKER_FLAGS=/machine:x64
+        -DCMAKE_EXE_LINKER_FLAGS=/machine:x64
+        -DCMAKE_SHARED_LINKER_FLAGS=/machine:x64
+        -DCMAKE_STATIC_LINKER_FLAGS=/machine:x64
     )
 endif ()
 
@@ -59,8 +59,8 @@ if (MINGW)
 			message(STATUS "WindowsSdkDir is set to '$ENV{WindowsSdkDir}'")
 		else (DEFINED ENV{WindowsSdkDir})
 			message(FATAL_ERROR "Environment variable 'WindowsSdkDir' not set! Please set it to path of Windows 10 SDK or disable QT_ENABLE_DYNAMIC_OPENGL")
-		endif (DEFINED ENV{WindowsSdkDir})
-	endif (QT_ENABLE_DYNAMIC_OPENGL)
+		endif ()
+	endif ()
 endif (MINGW)
 
 set(SECURITY_EXE_LINKER_FLAGS "")
@@ -84,19 +84,18 @@ if (MINGW)
 				-DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
 				-DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
 			)
-		endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-	else (USE_MINGW_HARDENING_LINKER)
+		endif ()
+	else ()
 		message(WARNING "Linker Security Flags not enabled!")
-	endif (USE_MINGW_HARDENING_LINKER)
-endif (MINGW)
+	endif ()
+endif ()
 
 if (DEFINED EP_PREFIX)
 	set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX})
-endif (DEFINED EP_PREFIX)
+endif ()
 
 if (MSVC)
-        set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_EXE_LINKER_FLAGS=/PROFILE -DCMAKE_SHARED_LINKER_FLAGS=/PROFILE)
-	set(PATCH_COMMAND myptch)
+    message(FATAL_ERROR "Krita cannot be built with MSVC. See the README.md file!")
 endif()
 
 if (MINGW)
@@ -105,16 +104,16 @@ endif()
 
 if (MSYS)
 	set(PATCH_COMMAND patch)
-    set(GLOBAL_PROFILE ${GLOBAL_PROFILE} 
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
                            -DCMAKE_TOOLCHAIN_FILE=${MXE_TOOLCHAIN}
                            -DCMAKE_FIND_PREFIX_PATH=${CMAKE_PREFIX_PATH}
                            -DCMAKE_SYSTEM_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
-                           -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include 
+                           -DCMAKE_INCLUDE_PATH=${CMAKE_PREFIX_PATH}/include
                            -DCMAKE_LIBRARY_PATH=${CMAKE_PREFIX_PATH}/lib
                            -DZLIB_ROOT=${CMAKE_PREFIX_PATH}
     )
     set(GLOBAL_AUTOMAKE_PROFILE  --host=i686-pc-mingw32 )
-endif() 
+endif()
 
 if (APPLE)
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DCMAKE_MACOSX_RPATH=ON -DKDE_SKIP_RPATH_SETTINGS=ON -DBUILD_WITH_INSTALL_RPATH=ON -DAPPLE_SUPPRESS_X11_WARNING=ON)
@@ -132,7 +131,7 @@ function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
 	set(CMAKE_REQUIRED_LIBRARIES ${PYTHON_LIBRARIES})
 	if (MINGW)
 		set(CMAKE_REQUIRED_DEFINITIONS -D_hypot=hypot)
-	endif (MINGW)
+	endif ()
 	unset(${OUTPUT_VARNAME} CACHE)
 	CHECK_CXX_SOURCE_COMPILES("
 #include <Python.h>
@@ -144,32 +143,32 @@ endfunction()
 if (MINGW)
 	option(ENABLE_PYTHON_DEPS "Enable Python deps (sip, pyqt)" ON)
 	if (ENABLE_PYTHON_DEPS)
-		find_package(PythonInterp 3.6 EXACT)
-		find_package(PythonLibs 3.6 EXACT)
+        if (ENABLE_PYTHON_2)
+            message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
+        else(ENABLE_PYTHON_2)
+            find_package(PythonInterp 3.6 EXACT)
+            find_package(PythonLibs 3.6 EXACT)
+        endif()
 		if (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 			message(STATUS "Python requirements met.")
 			TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
 			if (NOT CAN_USE_PYTHON_LIBS)
 				message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct!")
-			endif (NOT CAN_USE_PYTHON_LIBS)
+			endif ()
 		else (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 			message(FATAL_ERROR "Python requirements not met. To disable Python deps, set ENABLE_PYTHON_DEPS to OFF.")
-		endif (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
-	endif (ENABLE_PYTHON_DEPS)
-endif (MINGW)
+		endif ()
+	endif ()
+endif ()
 
 # this list must be dependency-ordered
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
 	add_subdirectory( ext_python )
-endif (ENABLE_PYTHON_DEPS OR NOT MINGW)
-if (MSVC)
-    add_subdirectory( ext_patch )
-    add_subdirectory( ext_png2ico )
-endif (MSVC)
+endif ()
 if (MINGW)
     add_subdirectory( ext_patch )
     add_subdirectory( ext_png2ico )
-endif (MINGW)
+endif ()
 add_subdirectory( ext_iconv )
 add_subdirectory( ext_gettext )
 add_subdirectory( ext_zlib )
@@ -187,9 +186,6 @@ add_subdirectory( ext_vc )
 add_subdirectory( ext_gsl )
 add_subdirectory( ext_fftw3 )
 add_subdirectory( ext_ocio )
-if (MSVC)
-    add_subdirectory( ext_pthreads )
-endif (MSVC)
 add_subdirectory( ext_fontconfig)
 add_subdirectory( ext_freetype)
 add_subdirectory( ext_qt )
@@ -199,14 +195,15 @@ add_subdirectory( ext_frameworks )
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)
 	add_subdirectory( ext_sip )
 	add_subdirectory( ext_pyqt )
-endif (ENABLE_PYTHON_DEPS OR NOT MINGW)
+endif ()
 
-if (MSVC OR MINGW)
+if (MINGW)
     add_subdirectory( ext_drmingw )
-endif (MSVC OR MINGW)
+#    add_subdirectory( ext_ffmpeg )
+endif ()
 
 if (NOT APPLE)
 	add_subdirectory( ext_gmic )
-endif (NOT APPLE)
+endif ()
 
 add_subdirectory(ext_giflib)

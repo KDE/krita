@@ -24,10 +24,10 @@
 
 #include <QObject>
 
-#include <kis_view_plugin.h>
+#include <KisActionPlugin.h>
 #include "PythonPluginManager.h"
 
-class KritaPyQtPlugin : public KisViewPlugin
+class KritaPyQtPlugin : public QObject
 {
     Q_OBJECT
 public:

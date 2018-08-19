@@ -2,6 +2,7 @@
  *  Copyright (c) 1999 Matthias Elter <me@kde.org>
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2018 Emmet & Eoin O'Neill <emmetoneill.pdx@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,52 +20,27 @@
  */
 
 #include "kis_tool_colorpicker.h"
-#include <string.h>
 
 #include <boost/thread/locks.hpp>
-
-#include <QPoint>
-#include <QLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QListWidget>
-#include <QList>
-#include <QWidget>
-#include <QVector>
-
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-#include <klocalizedstring.h>
-
 #include <QMessageBox>
-
-#include "kis_layer.h"
 #include "kis_cursor.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
-#include "kis_properties_configuration.h"
-
-#include "KoPointerEvent.h"
+#include "KisDocument.h"
+#include "kis_canvas2.h"
+#include "KisReferenceImagesLayer.h"
 #include "KoCanvasBase.h"
 #include "kis_random_accessor_ng.h"
-#include "KoColor.h"
 #include "KoResourceServerProvider.h"
-#include <resources/KoColorSet.h>
-#include <KoChannelInfo.h>
 #include <KoMixColorsOp.h>
-
 #include "kis_wrapped_rect.h"
 #include "kis_tool_utils.h"
 
-
 namespace
 {
-// The location of the sample all visible layers in the combobox
+// GUI ComboBox index constants
 const int SAMPLE_MERGED = 0;
 }
 
-KisToolColorPicker::KisToolColorPicker(KoCanvasBase* canvas)
+KisToolColorPicker::KisToolColorPicker(KoCanvasBase *canvas)
     : KisTool(canvas, KisCursor::pickerCursor()),
       m_config(new KisToolUtils::ColorPickerConfig)
 {
@@ -81,7 +57,7 @@ KisToolColorPicker::~KisToolColorPicker()
     }
 }
 
-void KisToolColorPicker::paint(QPainter& gc, const KoViewConverter &converter)
+void KisToolColorPicker::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(gc);
     Q_UNUSED(converter);
@@ -96,6 +72,7 @@ void KisToolColorPicker::activate(ToolActivation activation, const QSet<KoShape*
 
     KisTool::activate(activation, shapes);
 }
+
 void KisToolColorPicker::deactivate()
 {
     m_config->save(m_toolActivationSource == KisTool::DefaultActivation);
@@ -103,74 +80,57 @@ void KisToolColorPicker::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolColorPicker::pickColor(const QPointF& pos)
+bool KisToolColorPicker::pickColor(const QPointF &pos)
 {
+    // Timer check.
     if (m_colorPickerDelayTimer.isActive()) {
-        return;
+        return false;
     }
     else {
         m_colorPickerDelayTimer.setSingleShot(true);
         m_colorPickerDelayTimer.start(100);
     }
 
+    QScopedPointer<boost::lock_guard<KisImage>> imageLocker;
 
-    QScopedPointer<boost::lock_guard<KisImage> > imageLocker;
+    m_pickedColor.setOpacity(0.0);
 
-    KisPaintDeviceSP dev;
+    // Pick from reference images.
+    if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
+        auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, false);
+        KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer =
+            kisCanvas->imageView()->document()->referenceImagesLayer();
 
-    if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
-            currentNode() && currentNode()->projection()) {
-        dev = currentNode()->projection();
-    }
-    else {
-        imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
-        dev = currentImage()->projection();
-    }
-
-    if (m_config->radius == 1) {
-        QPoint realPos = pos.toPoint();
-        if (currentImage()->wrapAroundModePermitted()) {
-            realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-        }
-
-        dev->pixel(realPos.x(), realPos.y(), &m_pickedColor);
-    }
-    else {
-
-        const KoColorSpace* cs = dev->colorSpace();
-        int pixelSize = cs->pixelSize();
-
-        quint8* dstColor = new quint8[pixelSize];
-        QVector<const quint8*> pixels;
-
-        KisRandomConstAccessorSP accessor = dev->createRandomConstAccessorNG(0, 0);
-
-        for (int y = -m_config->radius; y <= m_config->radius; y++) {
-            for (int x = -m_config->radius; x <= m_config->radius; x++) {
-                if (((x * x) + (y * y)) < m_config->radius * m_config->radius) {
-
-                    QPoint realPos(pos.x() + x, pos.y() + y);
-
-                    if (currentImage()->wrapAroundModePermitted()) {
-                        realPos = KisWrappedRect::ptToWrappedPt(realPos, currentImage()->bounds());
-                    }
-
-                    accessor->moveTo(realPos.x(), realPos.y());
-                    pixels << accessor->oldRawData();
-                }
+        if (referenceImageLayer && kisCanvas->referenceImagesDecoration()->visible()) {
+            QColor color = referenceImageLayer->getPixel(pos);
+            if (color.isValid()) {
+                m_pickedColor.fromQColor(color);
             }
         }
-
-
-        const quint8** cpixels = const_cast<const quint8**>(pixels.constData());
-        cs->mixColorsOp()->mixColors(cpixels, pixels.size(), dstColor);
-
-        m_pickedColor = KoColor(dstColor, cs);
-
-        delete[] dstColor;
     }
 
-    m_pickedColor.convertTo(dev->compositionSourceColorSpace());
+    if (m_pickedColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
+        if (!currentImage()->bounds().contains(pos.toPoint()) &&
+            !currentImage()->wrapAroundModePermitted()) {
+            return false;
+        }
+
+        KisPaintDeviceSP dev;
+
+        if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
+            currentNode() && currentNode()->colorPickSourceDevice()) {
+            dev = currentNode()->colorPickSourceDevice();
+        }
+        else {
+            imageLocker.reset(new boost::lock_guard<KisImage>(*currentImage()));
+            dev = currentImage()->projection();
+        }
+
+        KoColor previousColor = canvas()->resourceManager()->foregroundColor();
+
+        KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend); /*!*/
+    }
 
     if (m_config->updateColor &&
         m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
@@ -185,6 +145,8 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
             canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
         }
     }
+
+    return true;
 }
 
 void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
@@ -204,15 +166,16 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     }
 
     QPoint pos = convertToImagePixelCoordFloored(event);
-    // the color picking has to start in the visible part of the layer
-    if (!currentImage()->bounds().contains(pos) &&
-        !currentImage()->wrapAroundModePermitted()) {
+
+    setMode(KisTool::PAINT_MODE);
+
+    bool picked = pickColor(pos);
+    if (!picked) {
+        // Color picking has to start in the visible part of the layer
         event->ignore();
         return;
     }
 
-    setMode(KisTool::PAINT_MODE);
-    pickColor(pos);
     displayPickedColor();
 }
 
@@ -232,10 +195,10 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
 
     if (m_config->addPalette) {
         KoColorSetEntry ent;
-        ent.color = m_pickedColor;
+        ent.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 
-        KoColorSet* palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
+        KoColorSet *palette = m_palettes.at(m_optionsWidget->cmbPalette->currentIndex());
         palette->add(ent);
 
         if (!palette->save()) {
@@ -243,7 +206,6 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
         }
     }
 }
-
 
 struct PickedChannel {
     QString name;
@@ -297,6 +259,10 @@ QWidget* KisToolColorPicker::createOptionWidget()
     specialSpacer->setFixedSize(0, 0);
     m_optionsWidget->layout()->addWidget(specialSpacer);
 
+    // Initialize blend KisSliderSpinBox
+    m_optionsWidget->blend->setRange(0,100);
+    m_optionsWidget->blend->setSuffix("%");
+
     updateOptionWidget();
 
     connect(m_optionsWidget->cbUpdateCurrentColor, SIGNAL(toggled(bool)), SLOT(slotSetUpdateColor(bool)));
@@ -305,10 +271,12 @@ QWidget* KisToolColorPicker::createOptionWidget()
             SLOT(slotSetAddPalette(bool)));
     connect(m_optionsWidget->radius, SIGNAL(valueChanged(int)),
             SLOT(slotChangeRadius(int)));
+    connect(m_optionsWidget->blend, SIGNAL(valueChanged(int)),
+            SLOT(slotChangeBlend(int)));
     connect(m_optionsWidget->cmbSources, SIGNAL(currentIndexChanged(int)),
             SLOT(slotSetColorSource(int)));
 
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
 
     if (!srv) {
         return m_optionsWidget;
@@ -335,6 +303,7 @@ void KisToolColorPicker::updateOptionWidget()
     m_optionsWidget->cmbSources->setCurrentIndex(SAMPLE_MERGED + !m_config->sampleMerged);
     m_optionsWidget->cbPalette->setChecked(m_config->addPalette);
     m_optionsWidget->radius->setValue(m_config->radius);
+    m_optionsWidget->blend->setValue(m_config->blend);
 }
 
 void KisToolColorPicker::setToForeground(bool newValue)
@@ -353,7 +322,6 @@ void KisToolColorPicker::slotSetUpdateColor(bool state)
     m_config->updateColor = state;
 }
 
-
 void KisToolColorPicker::slotSetNormaliseValues(bool state)
 {
     m_config->normaliseValues = state;
@@ -370,17 +338,21 @@ void KisToolColorPicker::slotChangeRadius(int value)
     m_config->radius = value;
 }
 
+void KisToolColorPicker::slotChangeBlend(int value)
+{
+    m_config->blend = value;
+}
+
 void KisToolColorPicker::slotSetColorSource(int value)
 {
     m_config->sampleMerged = value == SAMPLE_MERGED;
 }
 
-void KisToolColorPicker::slotAddPalette(KoResource* resource)
+void KisToolColorPicker::slotAddPalette(KoResource *resource)
 {
-    KoColorSet* palette = dynamic_cast<KoColorSet*>(resource);
+    KoColorSet *palette = dynamic_cast<KoColorSet*>(resource);
     if (palette) {
         m_optionsWidget->cmbPalette->addSqueezedItem(palette->name());
         m_palettes.append(palette);
     }
 }
-

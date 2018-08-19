@@ -31,7 +31,6 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
-#include "recorder/kis_recorded_paint_action.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_algebra_2d.h"
@@ -93,7 +92,10 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      * can be expensive, but according to measurements, it takes
      * something like 0.1 ms for an average preset.
      */
-    m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+    KisPaintOpPresetSP p = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    if (p) {
+        m_d->currentPaintOpPreset = resourceManager->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>()->clone();
+    }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);
@@ -131,15 +133,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->globalAlphaLock = resourceManager->resource(KisCanvasResourceProvider::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KisCanvasResourceProvider::EffectiveZoom).toDouble();
 
-
-    m_d->presetAllowsLod = true;
-
-    if (m_d->currentPaintOpPreset) {
-        m_d->presetAllowsLod =
-            KisPaintOpSettings::isLodUserAllowed(m_d->currentPaintOpPreset->settings()) &&
-            (!m_d->currentPaintOpPreset->settings()->lodSizeThresholdSupported() ||
-             m_d->currentPaintOpPreset->settings()->lodSizeThreshold() <= m_d->currentPaintOpPreset->settings()->paintOpSize());
-    }
+    m_d->presetAllowsLod = resourceManager->resource(KisCanvasResourceProvider::EffectiveLodAvailablility).toBool();
 }
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds)
@@ -231,24 +225,6 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
                               m_d->currentNode, m_d->image);
 }
 
-void KisResourcesSnapshot::setupPaintAction(KisRecordedPaintAction *action)
-{
-    action->setPaintOpPreset(m_d->currentPaintOpPreset);
-    action->setPaintIncremental(!needsIndirectPainting());
-
-    action->setPaintColor(m_d->currentFgColor);
-    action->setBackgroundColor(m_d->currentBgColor);
-    action->setGenerator(m_d->currentGenerator);
-    action->setGradient(m_d->currentGradient);
-    action->setPattern(m_d->currentPattern);
-
-    action->setOpacity(m_d->opacity / qreal(OPACITY_OPAQUE_U8));
-    action->setCompositeOp(m_d->compositeOp->id());
-
-    action->setStrokeStyle(m_d->strokeStyle);
-    action->setFillStyle(m_d->fillStyle);
-}
-
 KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() const
 {
     return m_d->image ? m_d->image->postExecutionUndoAdapter() : 0;
@@ -294,7 +270,9 @@ bool KisResourcesSnapshot::needsIndirectPainting() const
 
 QString KisResourcesSnapshot::indirectPaintingCompositeOp() const
 {
-    return m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp();
+    return m_d->currentPaintOpPreset ?
+            m_d->currentPaintOpPreset->settings()->indirectPaintingCompositeOp()
+              : COMPOSITE_ALPHA_DARKEN;
 }
 
 bool KisResourcesSnapshot::needsMaskingBrushRendering() const

@@ -43,6 +43,7 @@
 #include <SvgGraphicContext.h>
 #include <SvgUtil.h>
 
+#include <QApplication>
 #include <QThread>
 #include <vector>
 #include <memory>
@@ -51,6 +52,7 @@
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
 
+#include <FlakeDebug.h>
 
 struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 {
@@ -66,7 +68,7 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 
     std::vector<std::unique_ptr<QTextLayout>> cachedLayouts;
     std::vector<QPointF> cachedLayoutsOffsets;
-    Qt::HANDLE cachedLayoutsWorkingThread = 0;
+    QThread *cachedLayoutsWorkingThread = 0;
 
 
     void clearAssociatedOutlines(KoShape *rootShape);
@@ -117,18 +119,31 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
 
     /**
      * HACK ALERT:
-     * QTextLayout should only be accessed from the tread it has been created in.
+     * QTextLayout should only be accessed from the thread it has been created in.
      * If the cached layout has been created in a different thread, we should just
      * recreate the layouts in the current thread to be able to render them.
      */
 
-    if (QThread::currentThreadId() != d->cachedLayoutsWorkingThread) {
+    if (QThread::currentThread() != d->cachedLayoutsWorkingThread) {
         relayout();
     }
 
     applyConversion(painter, converter);
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
         d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
+    }
+
+    /**
+     * HACK ALERT:
+     * The layouts of non-gui threads must be destroyed in the same thread
+     * they have been created. Because the thread might be restarted in the
+     * meantime or just destroyed, meaning that the per-thread freetype data
+     * will not be available.
+     */
+    if (QThread::currentThread() != qApp->thread()) {
+        d->cachedLayouts.clear();
+        d->cachedLayoutsOffsets.clear();
+        d->cachedLayoutsWorkingThread = 0;
     }
 }
 
@@ -139,6 +154,81 @@ void KoSvgTextShape::paintStroke(QPainter &painter, const KoViewConverter &conve
     Q_UNUSED(paintContext);
 
     // do nothing! everything is painted in paintComponent()
+}
+
+QPainterPath KoSvgTextShape::textOutline()
+{
+    Q_D(KoSvgTextShape);
+
+    QPainterPath result;
+    result.setFillRule(Qt::WindingFill);
+
+
+    for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
+        const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
+        const QTextLayout *layout = d->cachedLayouts[i].get();
+
+        for (int j = 0; j < layout->lineCount(); j++) {
+            QTextLine line = layout->lineAt(j);
+
+            Q_FOREACH (const QGlyphRun &run, line.glyphRuns()) {
+                const QVector<quint32> indexes = run.glyphIndexes();
+                const QVector<QPointF> positions = run.positions();
+                const QRawFont font = run.rawFont();
+
+                KIS_SAFE_ASSERT_RECOVER(indexes.size() == positions.size()) { continue; }
+
+                for (int k = 0; k < indexes.size(); k++) {
+                    QPainterPath glyph = font.pathForGlyph(indexes[k]);
+                    glyph.translate(positions[k] + layoutOffset);
+                    result += glyph;
+                }
+
+                const qreal thickness = font.lineThickness();
+                const QRectF runBounds = run.boundingRect();
+
+                if (run.overline()) {
+                    // the offset is calculated to be consistent with the way how Qt renders the text
+                    const qreal y = line.y();
+                    QRectF overlineBlob(runBounds.x(), y, runBounds.width(), thickness);
+                    overlineBlob.translate(layoutOffset);
+
+                    QPainterPath path;
+                    path.addRect(overlineBlob);
+
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
+                    result += path;
+                }
+
+                if (run.strikeOut()) {
+                    // the offset is calculated to be consistent with the way how Qt renders the text
+                    const qreal y = line.y() + 0.5 * line.height();
+                    QRectF strikeThroughBlob(runBounds.x(), y, runBounds.width(), thickness);
+                    strikeThroughBlob.translate(layoutOffset);
+
+                    QPainterPath path;
+                    path.addRect(strikeThroughBlob);
+
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
+                    result += path;
+                }
+
+                if (run.underline()) {
+                    const qreal y = line.y() + line.ascent() + font.underlinePosition();
+                    QRectF underlineBlob(runBounds.x(), y, runBounds.width(), thickness);
+                    underlineBlob.translate(layoutOffset);
+
+                    QPainterPath path;
+                    path.addRect(underlineBlob);
+
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
+                    result += path;
+                }
+            }
+        }
+    }
+
+    return result;
 }
 
 void KoSvgTextShape::resetTextShape()
@@ -216,6 +306,96 @@ QVector<TextChunk> mergeIntoChunks(const QVector<KoSvgTextChunkShapeLayoutInterf
     return chunks;
 }
 
+/**
+ * Qt's QTextLayout has a weird trait, it doesn't count space characters as
+ * distinct characters in QTextLayout::setNumColumns(), that is, if we want to
+ * position a block of text that starts with a space character in a specific
+ * position, QTextLayout will drop this space and will move the text to the left.
+ *
+ * That is why we have a special wrapper object that ensures that no spaces are
+ * dropped and their horizontal advance parameter is taken into account.
+ */
+struct LayoutChunkWrapper
+{
+    LayoutChunkWrapper(QTextLayout *layout)
+        : m_layout(layout)
+    {
+    }
+
+    QPointF addTextChunk(int startPos, int length, const QPointF &textChunkStartPos)
+    {
+        QPointF currentTextPos = textChunkStartPos;
+
+        const int lastPos = startPos + length - 1;
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
+
+        QTextLine line;
+        std::swap(line, m_danglingLine);
+
+        if (!line.isValid()) {
+            line = m_layout->createLine();
+        }
+
+        // skip all the space characters that were not included into the Qt's text line
+        const int currentLineStart = line.isValid() ? line.textStart() : startPos + length;
+        while (startPos < currentLineStart && startPos <= lastPos) {
+            currentTextPos.rx() += skipSpaceCharacter(startPos);
+            startPos++;
+        }
+
+        if (startPos <= lastPos) {
+            const int numChars = lastPos - startPos + 1;
+
+            line.setNumColumns(numChars);
+            line.setPosition(currentTextPos - QPointF(0, line.ascent()));
+            currentTextPos.rx() += line.horizontalAdvance();
+
+            // skip all the space characters that were not included into the Qt's text line
+            for (int i = line.textStart() + line.textLength(); i < lastPos; i++) {
+                currentTextPos.rx() += skipSpaceCharacter(i);
+            }
+
+        } else {
+            // keep the created but unused line for future use
+            std::swap(line, m_danglingLine);
+        }
+        m_addedChars += length;
+
+        return currentTextPos;
+    }
+
+private:
+    qreal skipSpaceCharacter(int pos) {
+        const QTextCharFormat format =
+            formatForPos(pos, m_layout->formats());
+
+        const QChar skippedChar = m_layout->text()[pos];
+        KIS_SAFE_ASSERT_RECOVER_NOOP(skippedChar.isSpace() || !skippedChar.isPrint());
+
+        QFontMetrics metrics(format.font());
+        return metrics.width(skippedChar);
+    }
+
+    static QTextCharFormat formatForPos(int pos, const QVector<QTextLayout::FormatRange> &formats)
+    {
+        Q_FOREACH (const QTextLayout::FormatRange &range, formats) {
+            if (pos >= range.start && pos < range.start + range.length) {
+                return range.format;
+            }
+        }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "pos should be within the bounds of the layouted text");
+
+        return QTextCharFormat();
+    }
+
+private:
+    int m_addedChars = 0;
+    QTextLayout *m_layout;
+    QTextLine m_danglingLine;
+};
 
 void KoSvgTextShape::relayout()
 {
@@ -223,7 +403,7 @@ void KoSvgTextShape::relayout()
 
     d->cachedLayouts.clear();
     d->cachedLayoutsOffsets.clear();
-    d->cachedLayoutsWorkingThread = QThread::currentThreadId();
+    d->cachedLayoutsWorkingThread = QThread::currentThread();
 
     QPointF currentTextPos;
 
@@ -254,43 +434,26 @@ void KoSvgTextShape::relayout()
         int lastSubChunkStart = 0;
         QPointF lastSubChunkOffset;
 
+        LayoutChunkWrapper wrapper(layout.get());
+
         for (int i = 0; i <= chunk.offsets.size(); i++) {
-            if (i == chunk.offsets.size()) {
-                const int numChars = chunk.text.size() - lastSubChunkStart;
-                if (!numChars) break;
+            const bool isFinalPass = i == chunk.offsets.size();
 
-                // fix trailing whitespace problem
-                if (numChars == 1 && chunk.text[i] == ' ') {
-                    QFontMetrics metrics(chunk.formats.last().format.font());
-                    currentTextPos.rx() += metrics.width(' ');
-                    break;
-                }
+            const int length =
+                !isFinalPass ?
+                chunk.offsets[i].start - lastSubChunkStart :
+                chunk.text.size() - lastSubChunkStart;
 
-                QTextLine line = layout->createLine();
-                KIS_SAFE_ASSERT_RECOVER(line.isValid()) { break; }
-
+            if (length > 0) {
                 currentTextPos += lastSubChunkOffset;
+                currentTextPos = wrapper.addTextChunk(lastSubChunkStart,
+                                                      length,
+                                                      currentTextPos);
+            }
 
-                line.setNumColumns(numChars);
-                line.setPosition(currentTextPos - QPointF(0, line.ascent()));
-                currentTextPos.rx() += line.horizontalAdvance();
-
-
-            } else {
-                const int numChars = chunk.offsets[i].start - lastSubChunkStart;
-
-                if (numChars > 0) {
-                    QTextLine line = layout->createLine();
-                    KIS_SAFE_ASSERT_RECOVER(line.isValid()) { break; }
-                    line.setNumColumns(numChars);
-
-                    currentTextPos += lastSubChunkOffset;
-                    line.setPosition(currentTextPos - QPointF(0, line.ascent()));
-                    currentTextPos.rx() += line.horizontalAdvance();
-                }
-
-                lastSubChunkStart = chunk.offsets[i].start;
+            if (!isFinalPass) {
                 lastSubChunkOffset = chunk.offsets[i].offset;
+                lastSubChunkStart = chunk.offsets[i].start;
             }
         }
 
@@ -340,28 +503,41 @@ void KoSvgTextShape::relayout()
             for (int i = firstLineIndex; i <= lastLineIndex; i++) {
                 const QTextLine line = layout.lineAt(i);
 
+                // It might happen that the range contains only one (or two)
+                // symbol that is a whitespace symbol. In such a case we should
+                // just skip this (invalid) line.
+                if (!line.isValid()) continue;
+
                 const int posStart = qMax(line.textStart(), rangeStart);
                 const int posEnd = qMin(line.textStart() + line.textLength() - 1, rangeEnd);
 
                 const QList<QGlyphRun> glyphRuns = line.glyphRuns(posStart, posEnd - posStart + 1);
                 Q_FOREACH (const QGlyphRun &run, glyphRuns) {
+                    const QPointF firstPosition = run.positions().first();
+                    const quint32 firstGlyphIndex = run.glyphIndexes().first();
+
                     const QPointF lastPosition = run.positions().last();
                     const quint32 lastGlyphIndex = run.glyphIndexes().last();
+
                     const QRawFont rawFont = run.rawFont();
+
+                    const QRectF firstGlyphRect = rawFont.boundingRect(firstGlyphIndex).translated(firstPosition);
                     const QRectF lastGlyphRect = rawFont.boundingRect(lastGlyphIndex).translated(lastPosition);
 
                     QRectF rect = run.boundingRect();
 
                     /**
                      * HACK ALERT: there is a bug in a way how Qt calculates boundingRect()
-                     *             of the glyph run. It doesn't care about right bearings of
-                     *             the last char in the run, therefore it becomes cropped.
+                     *             of the glyph run. It doesn't care about left and right bearings
+                     *             of the border chars in the run, therefore it becomes cropped.
                      *
-                     *             Here we just add a half-char width margin to the right
-                     *             of the glyph run to make sure the glyph is fully painted.
+                     *             Here we just add a half-char width margin to both sides
+                     *             of the glyph run to make sure the glyphs are fully painted.
                      *
                      * BUG: 389528
+                     * BUG: 392068
                      */
+                    rect.setLeft(qMin(rect.left(), lastGlyphRect.left()) - 0.5 * firstGlyphRect.width());
                     rect.setRight(qMax(rect.right(), lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
 
                     wrapper.addCharacterRect(rect.translated(layoutOffset));
@@ -405,7 +581,7 @@ KoSvgTextShapeFactory::KoSvgTextShapeFactory()
 
 KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    qDebug() << "Create default svg text shape";
+    debugFlake << "Create default svg text shape";
 
     KoSvgTextShape *shape = new KoSvgTextShape();
     shape->setShapeId(KoSvgTextShape_SHAPEID);
@@ -416,7 +592,7 @@ KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *do
                              QRectF(0, 0, 200, 60),
                              documentResources->shapeController()->pixelsPerInch());
 
-    qDebug() << converter.errors() << converter.warnings();
+    debugFlake << converter.errors() << converter.warnings();
 
     return shape;
 }

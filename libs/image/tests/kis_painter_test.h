@@ -51,8 +51,6 @@ private Q_SLOTS:
     void testSelectionBitBltEraseCompositeOp();
 
     void testBitBltOldData();
-    void benchmarkBitBlt();
-    void benchmarkBitBltOldData();
 
     void testMassiveBltFixedSingleTile();
     void testMassiveBltFixedMultiTile();
@@ -63,7 +61,8 @@ private Q_SLOTS:
 
     void testMassiveBltFixedCornerCases();
 
-    void benchmarkMassiveBltFixed();
+
+    void testOptimizedCopying();
 };
 
 #endif

@@ -62,7 +62,7 @@ struct KisCoordinatesConverter::Private {
 
 QPointF KisCoordinatesConverter::centeringCorrection() const
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     QSize documentSize = imageRectInWidgetPixels().toAlignedRect().size();
     QPointF dPoint(documentSize.width(), documentSize.height());
@@ -405,6 +405,11 @@ QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
 {
     return widgetToFlake(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
+}
+
+QRectF KisCoordinatesConverter::widgetRectInImagePixels() const
+{
+    return widgetToImage(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
 QPointF KisCoordinatesConverter::flakeCenterPoint() const

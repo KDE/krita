@@ -16,12 +16,16 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
 from .document_scripter import document
+from PyQt5.QtCore import QFileSystemWatcher, QFileInfo
 
 
 class DocumentController(object):
 
     def __init__(self):
         self._activeDocument = None
+        self._fileWatcher = QFileSystemWatcher()
+
+        self._fileWatcher.fileChanged.connect(self._changedFile)
 
     @property
     def activeDocument(self):
@@ -29,9 +33,16 @@ class DocumentController(object):
 
     def openDocument(self, filePath):
         if filePath:
+            if self._activeDocument:
+                old_path = self._activeDocument.path
+                self._fileWatcher.removePath(old_path)
+
             newDocument = document.Document(filePath)
             newDocument.open()
             self._activeDocument = newDocument
+
+            self._fileWatcher.addPath(filePath)
+
             return newDocument
 
     def saveDocument(self, data, filePath, save_as=False):
@@ -55,3 +66,13 @@ class DocumentController(object):
 
     def clearActiveDocument(self):
         self._activeDocument = None
+
+    def _changedFile(self, path):
+        fileSystemDocument = document.Document(path)
+        fileSystemDocument.open()
+
+        if not self._activeDocument.compare(fileSystemDocument.data):
+            print('file {0} changed'.format(path))
+
+        if QFileInfo(path).exists():
+            self._fileWatcher.addPath(path)

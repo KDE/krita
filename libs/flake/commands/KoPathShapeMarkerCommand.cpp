@@ -27,9 +27,8 @@
 
 #include <klocalizedstring.h>
 
-class Q_DECL_HIDDEN KoPathShapeMarkerCommand::Private
+struct Q_DECL_HIDDEN KoPathShapeMarkerCommand::Private
 {
-public:
     QList<KoPathShape*> shapes;  ///< the shapes to set marker for
     QList<QExplicitlySharedDataPointer<KoMarker>> oldMarkers; ///< the old markers, one for each shape
     QExplicitlySharedDataPointer<KoMarker> marker; ///< the new marker to set

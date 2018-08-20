@@ -68,7 +68,7 @@ class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel
 public:
     explicit MultiFeedRssModel(QObject *parent = 0);
     ~MultiFeedRssModel() override;
-    QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const override;
     void addFeed(const QString& feed);
     void removeFeed(const QString& feed);
 

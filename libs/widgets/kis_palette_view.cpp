@@ -252,7 +252,7 @@ void KisPaletteView::slotAdditionalGuiUpdate()
 {
     clearSpans();
     resizeRows(verticalHeader()->defaultSectionSize());
-    for (int groupNameRowNumber : m_d->model->m_groupNameRows.keys()) {
+    for (int groupNameRowNumber : m_d->model->m_rowGroupNameMap.keys()) {
         if (groupNameRowNumber == -1) { continue; }
         setSpan(groupNameRowNumber, 0, 1, m_d->model->columnCount());
         setRowHeight(groupNameRowNumber, fontMetrics().lineSpacing() + 6);

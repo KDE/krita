@@ -46,7 +46,7 @@ KisPaletteModel::~KisPaletteModel()
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) { return QVariant(); }
-    bool groupNameRow = m_groupNameRows.contains(index.row());
+    bool groupNameRow = m_rowGroupNameMap.contains(index.row());
     if (role == IsGroupNameRole) {
         return groupNameRow;
     }
@@ -62,7 +62,7 @@ int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
     if (!m_colorSet)
         return 0;
     return m_colorSet->rowCount() // count of color rows
-            + m_groupNameRows.size()  // rows for names
+            + m_rowGroupNameMap.size()  // rows for names
             - 1; // global doesn't have a name
 }
 
@@ -94,17 +94,17 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
     Q_UNUSED(parent);
     Q_ASSERT(m_colorSet);
     int groupNameRow = groupNameRowForRow(row);
-    KisSwatchGroup *group = m_colorSet->getGroup(m_groupNameRows[groupNameRow]);
+    KisSwatchGroup *group = m_colorSet->getGroup(m_rowGroupNameMap[groupNameRow]);
     Q_ASSERT(group);
     return createIndex(row, column, group);
 }
 
 void KisPaletteModel::resetGroupNameRows()
 {
-    m_groupNameRows.clear();
+    m_rowGroupNameMap.clear();
     int row = -1;
     for (const QString &groupName : m_colorSet->getGroupNames()) {
-        m_groupNameRows[row] = groupName;
+        m_rowGroupNameMap[row] = groupName;
         row += m_colorSet->getGroup(groupName)->rowCount();
         row += 1; // row for group name
     }
@@ -128,10 +128,11 @@ KoColorSet* KisPaletteModel::colorSet() const
 
 int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 {
-    if (m_groupNameRows.contains(rowInModel)) {
+    if (m_rowGroupNameMap.contains(rowInModel)) {
         return -1;
     }
-    for (auto it = m_groupNameRows.keys().rbegin(); it != m_groupNameRows.keys().rend(); it++) {
+    QList<int> rowNumberList = m_rowGroupNameMap.keys();
+    for (auto it = rowNumberList.rbegin(); it != rowNumberList.rend(); it++) {
         if (*it < rowInModel) {
             return rowInModel - *it - 1;
         }
@@ -141,7 +142,7 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 
 int KisPaletteModel::groupNameRowForName(const QString &groupName)
 {
-    for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
+    for (auto it = m_rowGroupNameMap.begin(); it != m_rowGroupNameMap.end(); it++) {
         if (it.value() == groupName) {
             return it.key();
         }
@@ -169,7 +170,7 @@ bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
         emit dataChanged(index, index);
     } else {
         int groupNameRow = groupNameRowForRow(index.row());
-        QString groupName = m_groupNameRows[groupNameRow];
+        QString groupName = m_rowGroupNameMap[groupNameRow];
         removeGroup(groupName, keepColors);
     }
     emit sigPaletteModified();
@@ -352,9 +353,9 @@ bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newNa
 {
     beginResetModel();
     bool success = m_colorSet->changeGroupName(groupName, newName);
-    for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
+    for (auto it = m_rowGroupNameMap.begin(); it != m_rowGroupNameMap.end(); it++) {
         if (it.value() == groupName) {
-            m_groupNameRows[it.key()] = newName;
+            m_rowGroupNameMap[it.key()] = newName;
             break;
         }
     }
@@ -484,7 +485,7 @@ QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 
 int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)
 {
-    for (auto it = m_groupNameRows.begin(); it != m_groupNameRows.end(); it++) {
+    for (auto it = m_rowGroupNameMap.begin(); it != m_rowGroupNameMap.end(); it++) {
         if (it.value() == info.group) {
             return it.key() + info.row + 1;
         }

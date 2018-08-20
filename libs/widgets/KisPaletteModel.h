@@ -171,7 +171,7 @@ private /* methods */:
 private /* member variables */:
     QPointer<KoColorSet> m_colorSet;
     QPointer<const KoColorDisplayRendererInterface> m_displayRenderer;
-    QMap<int, QString> m_groupNameRows;
+    QMap<int, QString> m_rowGroupNameMap;
 
 friend class KisPaletteView;
 };

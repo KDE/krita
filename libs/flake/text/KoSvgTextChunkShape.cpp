@@ -732,8 +732,6 @@ void KoSvgTextChunkShape::normalizeCharTransformations()
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()
 {
-    Q_D(KoSvgTextChunkShape);
-
     if (!isRootTextNode()) {
         KoShape *parentShape = parent();
         KIS_SAFE_ASSERT_RECOVER_RETURN(parentShape);

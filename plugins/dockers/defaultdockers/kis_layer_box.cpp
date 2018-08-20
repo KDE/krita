@@ -156,8 +156,9 @@ KisLayerBox::KisLayerBox()
     , m_wdgLayerBox(new Ui_WdgLayerBox)
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+    , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
-    KisConfig cfg(true);
+    KisConfig cfg(false);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -257,6 +258,40 @@ KisLayerBox::KisLayerBox()
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
+
+
+
+    // set up the configure menu for changing thumbnail size
+    QMenu* configureMenu = new QMenu(this);
+    configureMenu->setStyleSheet("margin: 6px");
+    configureMenu->addSection(i18n("Thumbnail Size"));
+
+    m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
+    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("configure"));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(13, 13));
+
+    m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
+
+
+    // add horizontal slider
+    thumbnailSizeSlider = new QSlider(this);
+    thumbnailSizeSlider->setOrientation(Qt::Horizontal);
+    thumbnailSizeSlider->setRange(20, 80);
+
+    thumbnailSizeSlider->setValue(cfg.layerThumbnailSize(false)); // grab this from the kritarc
+
+    thumbnailSizeSlider->setMinimumHeight(20);
+    thumbnailSizeSlider->setMinimumWidth(40);
+    thumbnailSizeSlider->setTickInterval(5);
+
+
+    QWidgetAction *sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(thumbnailSizeSlider);
+    configureMenu->addAction(sliderAction);
+
+
+    connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
+    connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -1027,6 +1062,17 @@ void KisLayerBox::slotUpdateIcons() {
 
     // call child function about needing to update icons
     m_wdgLayerBox->listLayers->slotUpdateIcons();
+}
+
+void KisLayerBox::slotUpdateThumbnailIconSize()
+{
+    KisConfig cfg(false);
+    cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
+
+    // this is a hack to force the layers list to update its display and
+    // re-layout all the layers with the new thumbnail size
+    resize(this->width()+1, this->height()+1);
+    resize(this->width()-1, this->height()-1);
 }
 
 

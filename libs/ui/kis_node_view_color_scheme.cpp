@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <QGlobalStatic>
+#include <kis_config.h>
 Q_GLOBAL_STATIC(KisNodeViewColorScheme, s_instance)
 
 struct KisNodeViewColorScheme::Private
@@ -88,7 +89,8 @@ int KisNodeViewColorScheme::visibilityMargin() const
 
 int KisNodeViewColorScheme::thumbnailSize() const
 {
-    return 20;
+    KisConfig cfg(true);
+    return cfg.layerThumbnailSize(false);
 }
 
 int KisNodeViewColorScheme::thumbnailMargin() const

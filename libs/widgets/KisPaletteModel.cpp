@@ -131,7 +131,9 @@ int KisPaletteModel::rowNumberInGroup(int rowInModel) const
     if (m_groupNameRows.contains(rowInModel)) {
         return -1;
     }
-    for (auto it = m_groupNameRows.keys().rbegin(); it != m_groupNameRows.keys().rend(); it++) {
+
+    auto keys = m_groupNameRows.keys();
+    for (auto it = keys.rbegin(); it != keys.rend(); it++) {
         if (*it < rowInModel) {
             return rowInModel - *it - 1;
         }

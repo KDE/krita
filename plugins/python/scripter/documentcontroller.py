@@ -25,11 +25,13 @@ class DocumentController(object):
         self._activeDocument = None
         self._fileWatcher = QFileSystemWatcher()
 
-        self._fileWatcher.fileChanged.connect(self._changedFile)
-
     @property
     def activeDocument(self):
         return self._activeDocument
+
+    @property
+    def fileWatcher(self):
+        return self._fileWatcher
 
     def openDocument(self, filePath):
         if filePath:
@@ -66,13 +68,3 @@ class DocumentController(object):
 
     def clearActiveDocument(self):
         self._activeDocument = None
-
-    def _changedFile(self, path):
-        fileSystemDocument = document.Document(path)
-        fileSystemDocument.open()
-
-        if not self._activeDocument.compare(fileSystemDocument.data):
-            print('file {0} changed'.format(path))
-
-        if QFileInfo(path).exists():
-            self._fileWatcher.addPath(path)

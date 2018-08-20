@@ -6,4 +6,5 @@ action_classes = ['newaction.newaction.NewAction',
                   'runaction.runaction.RunAction',
                   'settingsaction.settingsaction.SettingsAction',
                   'debugaction.debugaction.DebugAction',
-                  'closeaction.closeaction.CloseAction']
+                  'closeaction.closeaction.CloseAction',
+                  'filechangedaction.filechangedaction.FileChangedAction']

@@ -53,7 +53,7 @@ public:
     float referenceLineDensity();
     void setReferenceLineDensity(float value);
 
-    bool isAssistantComplete() const;    
+    bool isAssistantComplete() const override;
 
     void saveCustomXml(QXmlStreamWriter* xml) override;
     bool loadCustomXml(QXmlStreamReader* xml) override;

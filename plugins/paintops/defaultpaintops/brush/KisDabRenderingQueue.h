@@ -25,7 +25,7 @@
 
 #include <QList>
 class KisDabRenderingJob;
-class KisRenderedDab;
+struct KisRenderedDab;
 
 #include "KisDabCacheUtils.h"
 

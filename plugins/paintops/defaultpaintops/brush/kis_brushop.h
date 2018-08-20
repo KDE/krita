@@ -44,7 +44,7 @@
 class KisPainter;
 class KisColorSource;
 class KisDabRenderingExecutor;
-class KisRenderedDab;
+struct KisRenderedDab;
 class KisRunnableStrokeJobData;
 
 class KisBrushOp : public KisBrushBasedPaintOp

@@ -27,7 +27,7 @@
 
 #include "kritaimage_export.h"
 
-class KisRenderedDab;
+struct KisRenderedDab;
 
 namespace KisPaintOpUtils {
 

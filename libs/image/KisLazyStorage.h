@@ -39,7 +39,7 @@ public:
 
 
     ~KisLazyStorage() {
-        delete m_data.load();
+    d    delete m_data.load();
     }
 
     T* operator->() {

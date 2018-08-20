@@ -258,7 +258,7 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-    
+    widgets/KisNewsWidget.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -378,6 +378,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
+
 )
 
 if(WIN32)
@@ -488,6 +489,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+    forms/KisNewsPage.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
@@ -515,6 +517,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
+
 )
 
 

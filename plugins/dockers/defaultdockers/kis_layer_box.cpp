@@ -64,6 +64,7 @@
 #include <kis_composite_ops_model.h>
 #include <kis_keyframe_channel.h>
 #include <kis_image_animation_interface.h>
+#include <KoProperties.h>
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -791,6 +792,26 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
     m_nodeModel->setShowGlobalSelection(showSelections);
 
     globalSelectionMask = m_image->rootLayer()->selectionMask();
+
+    // try to find deactivated, but visible masks
+    if (!globalSelectionMask) {
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> masks = m_image->rootLayer()->childNodes(QStringList("KisSelectionMask"), properties);
+        if (!masks.isEmpty()) {
+            globalSelectionMask = dynamic_cast<KisSelectionMask*>(masks.first().data());
+        }
+    }
+
+    // try to find at least any selection mask
+    if (!globalSelectionMask) {
+        KoProperties properties;
+        QList<KisNodeSP> masks = m_image->rootLayer()->childNodes(QStringList("KisSelectionMask"), properties);
+        if (!masks.isEmpty()) {
+            globalSelectionMask = dynamic_cast<KisSelectionMask*>(masks.first().data());
+        }
+    }
+
     if (globalSelectionMask) {
         if (showSelections) {
             activateNode = globalSelectionMask;

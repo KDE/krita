@@ -42,7 +42,7 @@ public:
     QString observerName() override { return "KoToolBoxDocker"; }
 
 protected:
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 protected Q_SLOTS:
     void updateToolBoxOrientation(Qt::DockWidgetArea area);

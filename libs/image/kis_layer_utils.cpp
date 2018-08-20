@@ -777,7 +777,7 @@ namespace KisLayerUtils {
                     }
                 }
 
-                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [this](KisNodeSP node) {
+                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [](KisNodeSP node) {
                   return !node->userLocked();
                 });
                 safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);

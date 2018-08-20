@@ -71,7 +71,7 @@ protected:
 
     qreal currentStrokeWidth() const;
 
-    struct ShapeAddInfo {
+    struct KRITAUI_EXPORT ShapeAddInfo {
         bool shouldAddShape = false;
         bool shouldAddSelectionShape = false;
 

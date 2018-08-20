@@ -35,8 +35,8 @@
 
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
+    : QWidget(parent)
 {
-   Q_UNUSED(parent);
    setupUi(this);
 
    recentDocumentsListView->viewport()->setAutoFillBackground(false);

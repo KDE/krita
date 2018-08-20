@@ -420,7 +420,7 @@ void KisTileHashTableTraits2<T>::debugPrintInfo()
 }
 
 template <class T>
-void KisTileHashTableTraits2<T>::debugMaxListLength(qint32 &min, qint32 &max)
+void KisTileHashTableTraits2<T>::debugMaxListLength(qint32 &/*min*/, qint32 &/*max*/)
 {
 }
 

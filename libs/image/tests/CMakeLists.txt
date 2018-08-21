@@ -122,6 +122,7 @@ ecm_add_tests(
     kis_colorize_mask_test.cpp
     kis_mask_similarity_test.cpp
     KisMaskGeneratorBenchmark.cpp
+    kis_time_range_test.cpp
 
     NAME_PREFIX "krita-image-"
     LINK_LIBRARIES kritaimage Qt5::Test)

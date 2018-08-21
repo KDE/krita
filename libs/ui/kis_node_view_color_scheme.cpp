@@ -43,7 +43,7 @@ struct KisNodeViewColorScheme::Private
 
             const QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight);
             for (auto it = colorLabels.begin(); it != colorLabels.end(); ++it) {
-                KritaUtils::dragColor(&(*it), noLabelSetColor, 0.3);
+                KritaUtils::dragColor(&(*it), noLabelSetColor, 0.35);
             }
         }
     }

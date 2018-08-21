@@ -25,6 +25,7 @@ ecm_add_tests(
     KisFrameSerializerTest.cpp
     KisFrameCacheStoreTest.cpp
     kis_animation_exporter_test.cpp
+    kis_prescaled_projection_test.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -87,12 +88,6 @@ krita_add_broken_unit_test(
 krita_add_broken_unit_test(
     kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
     TEST_NAME kis_shape_controller_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
-krita_add_broken_unit_test(
-    kis_prescaled_projection_test.cpp
-    TEST_NAME kis_prescaled_projection_test
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 

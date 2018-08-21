@@ -1,6 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-#add_subdirectory(scratchpad)
 include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata 
                     ${CMAKE_SOURCE_DIR}/sdk/tests )
 

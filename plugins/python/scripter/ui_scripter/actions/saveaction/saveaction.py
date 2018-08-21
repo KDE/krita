@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 """
-from PyQt5.QtWidgets import QAction, QFileDialog
+from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt
 import krita
@@ -53,6 +53,21 @@ class SaveAction(QAction):
             # don't validate file name - trust user to specify the extension they want
             # getSaveFileName will add ".py" if there is no extension.
             # It will strip a trailing period and, in each case,  test for file collisions
+
+        elif self.scripter.documentcontroller.fileModifiedOtherProgram:
+            msgBox = QMessageBox(self.scripter.uicontroller.mainWidget)
+
+            msgBox.setText(i18n("The file {0} was modified by another program.".format(self.scripter.documentcontroller.activeDocument.filePath)))
+            msgBox.setInformativeText(i18n("Do you really want to save this file? Both your open file and the file on disk were changed. There could be some data lost."))
+            msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
+            msgBox.setDefaultButton(QMessageBox.Save)
+
+            ret = msgBox.exec_()
+
+            if ret == QMessageBox.Cancel:
+                return
+            elif ret == QMessageBox.Save:
+                self.scripter.documentcontroller.fileModifiedOtherProgram = False
 
         document = self.scripter.documentcontroller.saveDocument(text, fileName)
         if document:

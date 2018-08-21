@@ -24,6 +24,7 @@ class DocumentController(object):
     def __init__(self):
         self._activeDocument = None
         self._fileWatcher = QFileSystemWatcher()
+        self._fileModifiedOtherProgram = False
 
     @property
     def activeDocument(self):
@@ -32,6 +33,14 @@ class DocumentController(object):
     @property
     def fileWatcher(self):
         return self._fileWatcher
+
+    @property
+    def fileModifiedOtherProgram(self):
+        return self._fileModifiedOtherProgram
+
+    @fileModifiedOtherProgram.setter
+    def fileModifiedOtherProgram(self, fileModifiedOtherProgram):
+        self._fileModifiedOtherProgram = fileModifiedOtherProgram
 
     def openDocument(self, filePath):
         if filePath:

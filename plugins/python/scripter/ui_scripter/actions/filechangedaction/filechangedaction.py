@@ -42,6 +42,7 @@ class FileChangedAction(QAction):
                 self.scripter.documentcontroller.saveDocument(self.editor.document().toPlainText(), path)
             elif (msgBox.clickedButton() == ignoreChangesButton):
                 self.scripter.documentcontroller.fileWatcher.removePath(path)
+                self.scripter.documentcontroller.fileModifiedOtherProgram = True
 
             """ some programs delete the original file and create a new one with
                 the current content, for that reason it's necessary adding the

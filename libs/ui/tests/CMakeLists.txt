@@ -26,6 +26,7 @@ ecm_add_tests(
     KisFrameCacheStoreTest.cpp
     kis_animation_exporter_test.cpp
     kis_prescaled_projection_test.cpp
+    kis_asl_layer_style_serializer_test.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -172,11 +173,6 @@ krita_add_broken_unit_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test(
-    kis_asl_layer_style_serializer_test.cpp
-    TEST_NAME KisAslLayerStyleSerializerTest
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
 
 krita_add_broken_unit_test(
     kis_animation_importer_test.cpp

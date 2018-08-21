@@ -137,21 +137,6 @@ ecm_add_tests(
     kis_paint_device_test.cpp
     kis_queues_progress_updater_test.cpp
     kis_image_animation_interface_test.cpp
-
-    LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-")
-
-
-if (NOT HAVE_FAILING_CMAKE)
-  krita_add_broken_unit_test(kis_filter_mask_test.cpp
-      LINK_LIBRARIES kritaimage Qt5::Test
-      NAME_PREFIX "libs-image-")
-else()
-  message(WARNING "Skipping KisFilterMaskTest!!!!!!!!!!!!!!")
-endif()
-
-krita_add_broken_unit_tests(
-    kis_transform_mask_test.cpp
     kis_walkers_test.cpp
     kis_update_scheduler_test.cpp
     kis_async_merger_test.cpp
@@ -159,7 +144,16 @@ krita_add_broken_unit_tests(
     kis_meta_data_test.cpp
     kis_random_generator_test.cpp
     kis_keyframing_test.cpp
+    kis_filter_mask_test.cpp
+
+    LINK_LIBRARIES kritaimage Qt5::Test
+    NAME_PREFIX "libs-image-"
+)
+
+krita_add_broken_unit_tests(
+    kis_transform_mask_test.cpp
     kis_layer_styles_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-")
+    NAME_PREFIX "libs-image-"
+)

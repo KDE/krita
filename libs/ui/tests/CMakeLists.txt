@@ -121,9 +121,10 @@ krita_add_broken_unit_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test(
+ecm_add_test(
     fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
-    TEST_NAME FillProcessingVisitorTest
+    TEST_NAME 
+    FillProcessingVisitorTest
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 

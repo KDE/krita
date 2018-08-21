@@ -39,6 +39,9 @@
 #include "kis_transaction.h"
 #include "kis_image.h"
 #include "config-limit-long-tests.h"
+#include "kistest.h"
+
+
 class KisFakePaintDeviceWriter : public KisPaintDeviceWriter {
 public:
     KisFakePaintDeviceWriter(KoStore *store)
@@ -2273,4 +2276,4 @@ void KisPaintDeviceTest::testCompositionAssociativity()
     }
 }
 
-QTEST_MAIN(KisPaintDeviceTest)
+KISTEST_MAIN(KisPaintDeviceTest)

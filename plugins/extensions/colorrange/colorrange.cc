@@ -39,6 +39,7 @@
 
 #include "dlg_colorrange.h"
 #include <KoColorSpace.h>
+#include <QSignalMapper>
 
 K_PLUGIN_FACTORY_WITH_JSON(ColorRangeFactory, "kritacolorrange.json", registerPlugin<ColorRange>();)
 
@@ -49,8 +50,25 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
     KisAction* action = createAction("colorrange");
     connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
 
+
+    QSignalMapper *mapper = new QSignalMapper(this);
+    connect(mapper, SIGNAL(mapped(int)), SLOT(selectOpaque(int)));
+
     action  = createAction("selectopaque");
-    connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
+    mapper->setMapping(action, int(SELECTION_REPLACE));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+
+    action  = createAction("selectopaque_add");
+    mapper->setMapping(action, int(SELECTION_ADD));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+
+    action  = createAction("selectopaque_subtract");
+    mapper->setMapping(action, int(SELECTION_SUBTRACT));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+
+    action  = createAction("selectopaque_intersect");
+    mapper->setMapping(action, int(SELECTION_INTERSECT));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
 }
 
 ColorRange::~ColorRange()
@@ -65,7 +83,12 @@ void ColorRange::slotActivated()
     dlgColorRange->exec();
 }
 
-void ColorRange::selectOpaque()
+void ColorRange::selectOpaque(int id)
+{
+    selectOpaqueImpl(SelectionAction(id));
+}
+
+void ColorRange::selectOpaqueImpl(SelectionAction action)
 {
     KisCanvas2 *canvas = viewManager()->canvasBase();
     KisPaintDeviceSP device = viewManager()->activeNode()->projection();
@@ -76,7 +99,31 @@ void ColorRange::selectOpaque()
     QRect rc = device->exactBounds();
     if (rc.isEmpty()) return;
 
-    KisSelectionToolHelper helper(canvas, kundo2_i18n("Select Opaque"));
+    /**
+     * If there is nothing selected, just create a new selection
+     */
+    if (!canvas->imageView()->selection()) {
+        action = SELECTION_REPLACE;
+    }
+
+    KUndo2MagicString actionName;
+
+    switch (action) {
+    case SELECTION_ADD:
+        actionName = kundo2_i18n("Select Opaque (Add)");
+        break;
+    case SELECTION_SUBTRACT:
+        actionName = kundo2_i18n("Select Opaque (Subtract)");
+        break;
+    case SELECTION_INTERSECT:
+        actionName = kundo2_i18n("Select Opaque (Intersect)");
+        break;
+    default:
+        actionName = kundo2_i18n("Select Opaque");
+        break;
+    }
+
+    KisSelectionToolHelper helper(canvas, actionName);
 
     qint32 x, y, w, h;
     rc.getRect(&x, &y, &w, &h);
@@ -96,7 +143,7 @@ void ColorRange::selectOpaque()
     }
 
     tmpSel->invalidateOutlineCache();
-    helper.selectPixelSelection(tmpSel, SELECTION_ADD);
+    helper.selectPixelSelection(tmpSel, action);
 }
 
 #include "colorrange.moc"

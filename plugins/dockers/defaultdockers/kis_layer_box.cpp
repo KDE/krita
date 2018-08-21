@@ -201,13 +201,6 @@ KisLayerBox::KisLayerBox()
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
-    m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
-    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_selectOpaque->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    m_selectOpaque->setObjectName("select_opaque");
-    connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
-    m_actions.append(m_selectOpaque);
-
     m_newLayerMenu = new QMenu(this);
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
     m_wdgLayerBox->bnAdd->setPopupMode(QToolButton::MenuButtonPopup);
@@ -675,7 +668,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                     addActionToMenu(&menu, "isolate_layer");
                 }
 
-                menu.addAction(m_selectOpaque);
+                addActionToMenu(&menu, "selectopaque");
             }
         }
         menu.exec(pos);

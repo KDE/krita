@@ -29,6 +29,7 @@
 class KisImage;
 class KisImageAnimationInterface;
 class KisTimeRange;
+class KisTimeSpan;
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -69,7 +70,7 @@ public:
      * Drops all the frames with worse level of detail values than the current
      * desired level of detail.
      */
-    void dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest, const QRect &minimalRect);
+    void dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect);
 
     bool framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest);
 

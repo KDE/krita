@@ -232,11 +232,11 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     KIS_SAFE_ASSERT_RECOVER_NOOP(configuration->hasProperty("framerate"));
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
-    const KisTimeRange fullRange = animation->fullClipRange();
+    const KisTimeSpan fullRange = animation->fullClipRange();
     const int frameRate = configuration->getInt("framerate", animation->framerate());
 
     const int sequenceNumberingOffset = configuration->getInt("sequence_start", 0);
-    const KisTimeRange clipRange(sequenceNumberingOffset + configuration->getInt("first_frame", fullRange.start()),
+    const KisTimeSpan clipRange(sequenceNumberingOffset + configuration->getInt("first_frame", fullRange.start()),
                                  sequenceNumberingOffset + configuration->getInt("last_frame", fullRange.end())
     );
 

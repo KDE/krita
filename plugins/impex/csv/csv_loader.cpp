@@ -299,7 +299,7 @@ KisImageBuilder_Result CSVLoader::decode(QIODevice *io, const QString &filename)
             if (frame > frameCount)
                 frameCount = frame;
 
-            animation->setFullClipRange(KisTimeRange::fromTime(0,frameCount - 1));
+            animation->setFullClipRange(KisTimeSpan(0,frameCount - 1));
             animation->setFramerate((int)framerate);
         }
 

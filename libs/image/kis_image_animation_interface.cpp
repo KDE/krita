@@ -66,8 +66,8 @@ struct KisImageAnimationInterface::Private
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
-    KisTimeRange fullClipRange;
-    KisTimeRange playbackRange;
+    KisTimeSpan fullClipRange;
+    KisTimeSpan playbackRange;
     int framerate;
     int cachedLastFrameValue;
     QString audioChannelFileName;
@@ -103,7 +103,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->fullClipRange = KisTimeRange::fromTime(0, 100);
+    m_d->fullClipRange = KisTimeSpan(0, 100);
 
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int, bool)), SLOT(switchCurrentTimeAsync(int, bool)));
 }
@@ -141,38 +141,36 @@ int KisImageAnimationInterface::currentUITime() const
     return m_d->currentUITime();
 }
 
-const KisTimeRange& KisImageAnimationInterface::fullClipRange() const
+const KisTimeSpan& KisImageAnimationInterface::fullClipRange() const
 {
     return m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setFullClipRange(const KisTimeRange range)
+void KisImageAnimationInterface::setFullClipRange(const KisTimeSpan range)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->fullClipRange = range;
     emit sigFullClipRangeChanged();
 }
 
 void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
 {
-    KisTimeRange newRange(column,  m_d->fullClipRange.end(), false);
+    KisTimeSpan newRange(column,  m_d->fullClipRange.end());
     setFullClipRange(newRange);
 }
 
 void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
 {
-    KisTimeRange newRange(m_d->fullClipRange.start(), column, false);
+    KisTimeSpan newRange(m_d->fullClipRange.start(), column);
     setFullClipRange(newRange);
 }
 
-const KisTimeRange& KisImageAnimationInterface::playbackRange() const
+const KisTimeSpan& KisImageAnimationInterface::playbackRange() const
 {
-    return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->fullClipRange;
+    return !m_d->playbackRange.isEmpty() ? m_d->playbackRange : m_d->fullClipRange;
 }
 
-void KisImageAnimationInterface::setPlaybackRange(const KisTimeRange range)
+void KisImageAnimationInterface::setPlaybackRange(const KisTimeSpan range)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->playbackRange = range;
     emit sigPlaybackRangeChanged();
 }

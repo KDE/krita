@@ -147,7 +147,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString p
 
             factor = 1/fps;
         } else if (symbol == "%") {
-            const KisTimeRange & time_range = img->animationInterface()->fullClipRange();
+            const KisTimeSpan & time_range = img->animationInterface()->fullClipRange();
             qreal n_frame = time_range.end() - time_range.start();
 
             factor = 100/n_frame;
@@ -167,7 +167,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionConstant(int dim, QString
 {
     if (dim == TIME && symbol == "%") {
         KisImage* img = KisPart::instance()->currentMainwindow()->activeView()->document()->image().data();
-        const KisTimeRange & time_range = img->animationInterface()->fullClipRange();
+        const KisTimeSpan & time_range = img->animationInterface()->fullClipRange();
         qreal n_frame = time_range.end() - time_range.start();
 
         return -time_range.start()*100.0/n_frame;

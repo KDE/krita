@@ -344,9 +344,8 @@ void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, i
     emit changed();
 }
 
-void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeRange &range, const QRect &regionOfInterest, const QRect &minimalRect)
+void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     if (m_d->newFrames.isEmpty()) return;
 
     auto it = m_d->newFrames.upperBound(range.start());

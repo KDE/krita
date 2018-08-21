@@ -485,7 +485,7 @@ void KisTimeBasedItemModel::slotPlaybackStopped()
     setData(index(0, m_d->image->animationInterface()->currentUITime()), true, ActiveFrameRole);
 }
 
-void KisTimeBasedItemModel::setPlaybackRange(const KisTimeRange &range)
+void KisTimeBasedItemModel::setPlaybackRange(const KisTimeSpan &range)
 {
     if (m_d->image.isNull()) return;
 

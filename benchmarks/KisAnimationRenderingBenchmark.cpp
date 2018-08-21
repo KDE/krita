@@ -52,7 +52,7 @@ void runRenderingTest(KisImageSP image, int numCores, int numClones)
         cfg.setFrameRenderingClones(numClones);
     }
 
-    const KisTimeRange range = image->animationInterface()->fullClipRange();
+    const KisTimeSpan range = image->animationInterface()->fullClipRange();
 
     KisAsyncAnimationFramesSaveDialog dlg(image, range, "temp_frames.png", 0, 0);
     dlg.setBatchMode(true);

@@ -23,7 +23,6 @@
 #include "kis_types.h"
 #include "kritaui_export.h"
 
-class KisTimeRange;
 class KisAsyncAnimationRendererBase;
 class KisViewManager;
 

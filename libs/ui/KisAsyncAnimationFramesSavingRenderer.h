@@ -22,7 +22,7 @@
 #include <KisAsyncAnimationRendererBase.h>
 
 class KisDocument;
-class KisTimeRange;
+class KisTimeSpan;
 
 class KisAsyncAnimationFramesSavingRenderer : public KisAsyncAnimationRendererBase
 {
@@ -32,7 +32,7 @@ public:
                                           const QString &fileNamePrefix,
                                           const QString &fileNameSuffix,
                                           const QByteArray &outputMimeType,
-                                          const KisTimeRange &range,
+                                          const KisTimeSpan &range,
                                           int sequenceNumberingOffset,
                                           KisPropertiesConfigurationSP exportConfiguration);
     ~KisAsyncAnimationFramesSavingRenderer();

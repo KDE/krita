@@ -26,7 +26,7 @@
 
 #include "kis_types.h"
 
-class KisTimeRange;
+class KisTimeSpan;
 class KisAnimationPlayer;
 class KisKeyframeChannel;
 
@@ -60,7 +60,7 @@ public:
     void setScrubState(bool active);
     void scrubTo(int time, bool preview);
 
-    void setPlaybackRange(const KisTimeRange &range);
+    void setPlaybackRange(const KisTimeSpan &range);
     bool isPlaybackActive() const;
     int currentTime() const;
 

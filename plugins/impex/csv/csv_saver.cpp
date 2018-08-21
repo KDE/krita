@@ -140,14 +140,12 @@ KisImageBuilder_Result CSVSaver::encode(QIODevice *io)
         node = node->nextSibling();
     }
 
-    KisTimeRange range = animation->fullClipRange();
+    KisTimeSpan range = animation->fullClipRange();
 
-    start = (range.isValid()) ? range.start() : 0;
+    start = (!range.isEmpty()) ? range.start() : 0;
 
-    if (!range.isInfinite()) {
+    if (!range.isEmpty()) {
         end = range.end();
-
-        if (end < start) end = start;
     } else {
         //undefined length, searching for the last keyframe
         end = start;

@@ -32,7 +32,7 @@
 
 struct KisAsyncAnimationFramesSaveDialog::Private {
     Private(KisImageSP _image,
-            const KisTimeRange &_range,
+            const KisTimeSpan &_range,
             const QString &baseFilename,
             int _sequenceNumberingOffset,
             KisPropertiesConfigurationSP _exportConfiguration)
@@ -53,7 +53,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
     }
 
     KisImageSP originalImage;
-    KisTimeRange range;
+    KisTimeSpan range;
 
     QString filenamePrefix;
     QString filenameSuffix;
@@ -64,7 +64,7 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
 };
 
 KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP originalImage,
-                                                                     const KisTimeRange &range,
+                                                                     const KisTimeSpan &range,
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
                                                                      KisPropertiesConfigurationSP exportConfiguration)

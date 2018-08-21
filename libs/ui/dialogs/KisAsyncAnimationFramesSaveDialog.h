@@ -22,12 +22,13 @@
 #include "KisAsyncAnimationRenderDialogBase.h"
 #include "kis_types.h"
 
+class KisTimeSpan;
 
 class KRITAUI_EXPORT KisAsyncAnimationFramesSaveDialog : public KisAsyncAnimationRenderDialogBase
 {
 public:
     KisAsyncAnimationFramesSaveDialog(KisImageSP image,
-                                      const KisTimeRange &range,
+                                      const KisTimeSpan &range,
                                       const QString &baseFilename,
                                       int sequenceNumberingOffset,
                                       KisPropertiesConfigurationSP exportConfiguration);

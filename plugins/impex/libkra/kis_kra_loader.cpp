@@ -542,7 +542,7 @@ void KisKraLoader::loadAnimationMetadata(const KoXmlElement &element, KisImageSP
     QDomElement qElement = qDom.firstChildElement();
 
     float framerate;
-    KisTimeRange range;
+    KisTimeSpan range;
     int currentTime;
 
     KisImageAnimationInterface *animation = image->animationInterface();

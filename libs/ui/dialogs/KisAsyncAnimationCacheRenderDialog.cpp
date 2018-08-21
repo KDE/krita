@@ -26,7 +26,7 @@
 
 namespace {
 
-QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange)
+QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange)
 {
     QList<int> result;
 
@@ -36,9 +36,7 @@ QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeRang
     KisImageAnimationInterface *animation = image->animationInterface();
     if (!animation->hasAnimation()) return result;
 
-    if (playbackRange.isValid()) {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(!playbackRange.isInfinite(), result);
-
+    if (!playbackRange.isEmpty()) {
         // TODO: optimize check for fully-cached case
         for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
             KisTimeRange stillFrameRange = KisTimeRange::infinite(0);
@@ -63,7 +61,7 @@ QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeRang
 
 }
 
-int KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeRange &playbackRange, const KisTimeRange &skipRange)
+int KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeRange &skipRange)
 {
     int result = -1;
 
@@ -74,8 +72,6 @@ int KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(KisAnimationFrameCac
     if (!animation->hasAnimation()) return result;
 
     if (playbackRange.isValid()) {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(!playbackRange.isInfinite(), result);
-
         // TODO: optimize check for fully-cached case
         for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
             if (skipRange.contains(frame)) {
@@ -100,17 +96,17 @@ int KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(KisAnimationFrameCac
 
 struct KisAsyncAnimationCacheRenderDialog::Private
 {
-    Private(KisAnimationFrameCacheSP _cache, const KisTimeRange &_range)
+    Private(KisAnimationFrameCacheSP _cache, const KisTimeSpan &_range)
         : cache(_cache),
           range(_range)
     {
     }
 
     KisAnimationFrameCacheSP cache;
-    KisTimeRange range;
+    KisTimeSpan range;
 };
 
-KisAsyncAnimationCacheRenderDialog::KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeRange &range, int busyWait)
+KisAsyncAnimationCacheRenderDialog::KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeSpan &range, int busyWait)
     : KisAsyncAnimationRenderDialogBase(i18n("Regenerating cache..."), cache->image(), busyWait),
       m_d(new Private(cache, range))
 {

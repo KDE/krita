@@ -159,9 +159,8 @@ void KisDomUtilsTest::testG2R()
 
 void KisDomUtilsTest::testIntegralType()
 {
-    KisTimeRange r1(1, 10);
-    KisTimeRange r2(5, 15);
-
+    KisTimeSpan r1(1, 10);
+    KisTimeSpan r2(5, 15);
 
     QDomDocument doc("testdoc");
 

@@ -103,7 +103,7 @@ void AnimaterionRenderer::slotRenderAnimation()
 
         const bool batchMode = false; // TODO: fetch correctly!
         KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                                   KisTimeRange::fromTime(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
+                                                   KisTimeSpan(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
                                                    baseFileName,
                                                    sequenceConfig->getInt("sequence_start"),
                                                    dlgAnimationRenderer.getFrameExportConfiguration());
@@ -192,7 +192,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
 
     const bool batchMode = false; // TODO: fetch correctly!
     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                               KisTimeRange::fromTime(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
+                                               KisTimeSpan(sequenceConfig->getInt("first_frame"), sequenceConfig->getInt("last_frame")),
                                                baseFileName,
                                                sequenceConfig->getInt("sequence_start"),
                                                0);

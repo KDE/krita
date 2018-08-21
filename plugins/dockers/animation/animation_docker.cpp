@@ -182,7 +182,7 @@ void AnimationDocker::slotUIRangeChanged()
     int fromTime = m_animationWidget->spinFromFrame->value();
     int toTime = m_animationWidget->spinToFrame->value();
 
-    m_canvas->image()->animationInterface()->setFullClipRange(KisTimeRange::fromTime(fromTime, toTime));
+    m_canvas->image()->animationInterface()->setFullClipRange(KisTimeSpan(fromTime, toTime));
 }
 
 void AnimationDocker::slotUIFramerateChanged()

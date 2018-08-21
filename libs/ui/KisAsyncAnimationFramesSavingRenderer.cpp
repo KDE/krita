@@ -29,7 +29,7 @@
 
 struct KisAsyncAnimationFramesSavingRenderer::Private
 {
-    Private(KisImageSP image, const KisTimeRange &_range, int _sequenceNumberingOffset, KisPropertiesConfigurationSP _exportConfiguration)
+    Private(KisImageSP image, const KisTimeSpan &_range, int _sequenceNumberingOffset, KisPropertiesConfigurationSP _exportConfiguration)
         : savingDoc(KisPart::instance()->createDocument()),
           range(_range),
           sequenceNumberingOffset(_sequenceNumberingOffset),
@@ -57,7 +57,7 @@ struct KisAsyncAnimationFramesSavingRenderer::Private
     QScopedPointer<KisDocument> savingDoc;
     KisPaintDeviceSP savingDevice;
 
-    KisTimeRange range;
+    KisTimeSpan range;
     int sequenceNumberingOffset = 0;
 
 
@@ -72,7 +72,7 @@ KisAsyncAnimationFramesSavingRenderer::KisAsyncAnimationFramesSavingRenderer(Kis
                                                                              const QString &fileNamePrefix,
                                                                              const QString &fileNameSuffix,
                                                                              const QByteArray &outputMimeType,
-                                                                             const KisTimeRange &range,
+                                                                             const KisTimeSpan &range,
                                                                              const int sequenceNumberingOffset,
                                                                              KisPropertiesConfigurationSP exportConfiguration)
     : m_d(new Private(image, range, sequenceNumberingOffset, exportConfiguration))
@@ -104,7 +104,7 @@ void KisAsyncAnimationFramesSavingRenderer::frameCompletedCallback(int frame, co
 
     m_d->savingDevice->makeCloneFromRough(image->projection(), image->bounds());
 
-    KisTimeRange range(frame, 1);
+    KisTimeSpan range(frame, 1);
 
     KisImportExportFilter::ConversionStatus status = KisImportExportFilter::OK;
 

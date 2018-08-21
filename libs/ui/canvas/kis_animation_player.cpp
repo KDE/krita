@@ -296,8 +296,8 @@ void KisAnimationPlayer::slotUpdatePlaybackTimer()
     m_d->timer->stop();
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    const KisTimeRange &playBackRange = animation->playbackRange();
-    if (!playBackRange.isValid()) return;
+    const KisTimeSpan &playBackRange = animation->playbackRange();
+    if (playBackRange.isEmpty()) return;
 
     const int fps = animation->framerate();
 
@@ -329,8 +329,8 @@ void KisAnimationPlayer::play()
 {
     {
         const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-        const KisTimeRange &range = animation->playbackRange();
-        if (!range.isValid()) return;
+        const KisTimeSpan &range = animation->playbackRange();
+        if (range.isEmpty()) return;
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {

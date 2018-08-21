@@ -622,9 +622,9 @@ void TimelineFramesView::slotSelectionChanged()
         }
     }
 
-    KisTimeRange range;
+    KisTimeSpan range;
     if (maxColumn > minColumn) {
-        range = KisTimeRange(minColumn, maxColumn - minColumn + 1);
+        range = KisTimeSpan(minColumn, maxColumn - minColumn + 1);
     }
     m_d->model->setPlaybackRange(range);
 }

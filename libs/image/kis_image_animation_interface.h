@@ -27,6 +27,7 @@
 
 class KisUpdatesFacade;
 class KisTimeRange;
+class KisTimeSpan;
 class KoColor;
 
 namespace KisLayerUtils {
@@ -116,15 +117,15 @@ public:
      * The current time range selected by user.
      * @return current time range
      */
-    const KisTimeRange& fullClipRange() const;
-    void setFullClipRange(const KisTimeRange range);
+    const KisTimeSpan& fullClipRange() const;
+    void setFullClipRange(const KisTimeSpan range);
 
     void setFullClipRangeStartTime(int column);
     void setFullClipRangeEndTime(int column);
 
 
-    const KisTimeRange &playbackRange() const;
-    void setPlaybackRange(const KisTimeRange range);
+    const KisTimeSpan &playbackRange() const;
+    void setPlaybackRange(const KisTimeSpan range);
 
     int framerate() const;
 

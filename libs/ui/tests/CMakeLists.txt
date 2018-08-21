@@ -53,6 +53,7 @@ ecm_add_test( kis_model_index_converter_test.cpp ../../../sdk/tests/testutil.cpp
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
+
 ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
     TEST_NAME KisCategorizedListModelTest
     LINK_LIBRARIES kritaui Qt5::Test
@@ -173,7 +174,6 @@ krita_add_broken_unit_test(
     TEST_NAME KisCategoriesMapperTest
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
-
 
 
 krita_add_broken_unit_test(

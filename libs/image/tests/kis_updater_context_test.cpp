@@ -32,7 +32,7 @@
 #include "scheduler_utils.h"
 
 #include "lod_override.h"
-
+#include "config-limit-long-tests.h"
 
 void KisUpdaterContextTest::testJobInterference()
 {
@@ -166,7 +166,11 @@ void KisUpdaterContextTest::testSnapshot()
 }
 
 #define NUM_THREADS 10
-#define NUM_JOBS 6000
+#ifdef LIMIT_LONG_TESTS
+#   define NUM_JOBS 60
+#else
+#   define NUM_JOBS 6000
+#endif
 #define EXCLUSIVE_NTH 3
 #define NUM_CHECKS 10
 #define CHECK_DELAY 3 // ms

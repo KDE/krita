@@ -217,11 +217,12 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         KisProjectionLeafSP currentLeaf = item.m_leaf;
 
         // All the masks should be filtered by the walkers
+        Q_ASSERT(currentLeaf);
         KIS_SAFE_ASSERT_RECOVER_RETURN(currentLeaf->isLayer());
 
         QRect applyRect = item.m_applyRect;
 
-        if(currentLeaf->isRoot()) {
+        if (currentLeaf->isRoot()) {
             currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
             continue;
         }
@@ -240,8 +241,9 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         }
 
 
-        if(!m_currentProjection)
+        if (!m_currentProjection) {
             setupProjection(currentLeaf, applyRect, useTempProjections);
+        }
 
         KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                  m_currentProjection,

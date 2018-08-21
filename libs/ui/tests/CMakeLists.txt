@@ -75,16 +75,16 @@ ecm_add_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
+ecm_add_test(
+    kis_node_model_test.cpp modeltest.cpp
+    TEST_NAME kis_node_model_test
+    LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "libs-ui-")
 
 ##### Tests that currently fail and should be fixed #####
 
 include(KritaAddBrokenUnitTest)
 
-krita_add_broken_unit_test(
-    kis_node_model_test.cpp modeltest.cpp
-    TEST_NAME kis_node_model_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
 
 krita_add_broken_unit_test(
     kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp

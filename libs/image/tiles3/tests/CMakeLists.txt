@@ -19,15 +19,9 @@ ecm_add_tests(
     kis_store_limits_test.cpp
     kis_swapped_data_store_test.cpp
     kis_tile_data_store_test.cpp
+    kis_tile_data_pooler_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-tiles3-")
 
 set_tests_properties(libs-image-tiles3-kis_low_memory_tests PROPERTIES TIMEOUT 180)
-
-########### broken tests ###############
-krita_add_broken_unit_tests(
-    kis_tile_data_pooler_test.cpp
-
-    LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-tiles3-")

@@ -135,6 +135,7 @@ ecm_add_tests(
     kis_histogram_test.cpp
     kis_onion_skin_compositor_test.cpp
     kis_paint_device_test.cpp
+    kis_queues_progress_updater_test.cpp
 
     LINK_LIBRARIES kritaimage Qt5::Test
     NAME_PREFIX "libs-image-")
@@ -153,7 +154,6 @@ krita_add_broken_unit_tests(
     kis_walkers_test.cpp
     kis_update_scheduler_test.cpp
     kis_async_merger_test.cpp
-    kis_queues_progress_updater_test.cpp
     kis_cage_transform_worker_test.cpp
     kis_meta_data_test.cpp
     kis_random_generator_test.cpp

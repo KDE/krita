@@ -90,6 +90,7 @@
 #include "kis_selection.h"
 #include "kis_processing_applicator.h"
 #include "commands/kis_set_global_selection_command.h"
+#include "KisSelectionActionsAdapter.h"
 
 #include "kis_layer_utils.h"
 
@@ -379,7 +380,8 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
+        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
+        m_selectionActionsAdapter.reset();
 
         if (m_image) {
             KisImageAnimationInterface *animation = m_image->animationInterface();
@@ -403,7 +405,15 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                 dynamic_cast<KisShapeController*>(doc->shapeController());
         KisDummiesFacadeBase *kritaDummiesFacade =
                 static_cast<KisDummiesFacadeBase*>(kritaShapeController);
-        m_nodeModel->setDummiesFacade(kritaDummiesFacade, m_image, kritaShapeController, m_nodeManager->nodeSelectionAdapter(), m_nodeManager->nodeInsertionAdapter());
+
+
+        m_selectionActionsAdapter.reset(new KisSelectionActionsAdapter(m_canvas->viewManager()->selectionManager()));
+        m_nodeModel->setDummiesFacade(kritaDummiesFacade,
+                                      m_image,
+                                      kritaShapeController,
+                                      m_nodeManager->nodeSelectionAdapter(),
+                                      m_nodeManager->nodeInsertionAdapter(),
+                                      m_selectionActionsAdapter.data());
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));

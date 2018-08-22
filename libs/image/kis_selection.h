@@ -25,18 +25,7 @@
 #include "kis_default_bounds.h"
 #include "kis_image.h"
 
-enum SelectionMode {
-    PIXEL_SELECTION,
-    SHAPE_PROTECTION
-};
-
-enum SelectionAction {
-    SELECTION_REPLACE,
-    SELECTION_ADD,
-    SELECTION_SUBTRACT,
-    SELECTION_INTERSECT,
-    SELECTION_DEFAULT
-};
+#include "KisSelectionTags.h"
 
 #include "kis_pixel_selection.h"
 

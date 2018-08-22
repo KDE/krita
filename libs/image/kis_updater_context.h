@@ -143,8 +143,6 @@ public:
     void doSomeUsefulWork();
     void jobFinished();
 
-    friend class KisUpdateJobItem;
-
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                     const KisUpdateJobItem* job);

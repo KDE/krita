@@ -27,10 +27,6 @@
 
 #include <sdk/tests/testutil.h>
 
-KisShapeControllerTest::~KisShapeControllerTest()
-{
-}
-
 KisDummiesFacadeBase* KisShapeControllerTest::dummiesFacadeFactory()
 {
 

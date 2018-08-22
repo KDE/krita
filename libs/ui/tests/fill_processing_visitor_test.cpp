@@ -85,7 +85,7 @@ public:
         applicator.end();
         image->waitForDone();
 
-        QVERIFY(checkOneLayer(image, fillNode, testname));
+        QVERIFY(checkOneLayer(image, fillNode, testname, 500));
 
         undoStore->undo();
         image->waitForDone();

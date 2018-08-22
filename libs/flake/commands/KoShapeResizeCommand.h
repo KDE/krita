@@ -49,7 +49,7 @@ public:
     bool mergeWith(const KUndo2Command *command) override;
 
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> const m_d;
 
 };

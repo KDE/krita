@@ -80,14 +80,12 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 KoSvgTextShape::KoSvgTextShape()
     : KoSvgTextChunkShape(new KoSvgTextShapePrivate(this))
 {
-    Q_D(KoSvgTextShape);
     setShapeId(KoSvgTextShape_SHAPEID);
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     : KoSvgTextChunkShape(new KoSvgTextShapePrivate(*rhs.d_func(), this))
 {
-    Q_D(KoSvgTextShape);
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
     relayout();

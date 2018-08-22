@@ -25,8 +25,10 @@
 
 class SvgGraphicsContext;
 
-struct KoSvgTextChunkShapePrivate : public KoShapeContainerPrivate
+class KoSvgTextChunkShapePrivate : public KoShapeContainerPrivate
 {
+public:
+
     KoSvgTextChunkShapePrivate(KoSvgTextChunkShape *_q);
     KoSvgTextChunkShapePrivate(const KoSvgTextChunkShapePrivate &rhs, KoSvgTextChunkShape *q);
     ~KoSvgTextChunkShapePrivate();

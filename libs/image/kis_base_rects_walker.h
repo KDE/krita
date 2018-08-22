@@ -338,8 +338,6 @@ protected:
             m_resultAccessRect = m_resultNeedRect = m_childNeedRect =
                 m_lastNeedRect = m_resultChangeRect;
 
-        QRect currentNeedRect;
-
         if(position & N_TOPMOST)
             m_lastNeedRect = m_childNeedRect;
 

@@ -131,7 +131,6 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     // Shape container paints only its internal component part. All the children are rendered
     // by the shape manager itself
 
-    Q_D(KoShapeContainer);
     painter.save();
     paintComponent(painter, converter, paintcontext);
     painter.restore();

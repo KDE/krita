@@ -280,7 +280,14 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="selectionscale"/>
       <Separator/>
       <Action name="colorrange"/>
-      <Action name="selectopaque"/>
+      <Menu name="selectopaquemenu">
+        <text>Select &amp;Opaque</text>
+        <Action name="selectopaque"/>
+        <Separator/>
+        <Action name="selectopaque_add"/>
+        <Action name="selectopaque_subtract"/>
+        <Action name="selectopaque_intersect"/>
+      </Menu>
       <Separator/>
       <Action name="featherselection"/>
       <Action name="growselection"/>

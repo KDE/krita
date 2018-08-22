@@ -168,15 +168,14 @@ void KisUpdateSchedulerTest::testLocking()
     QCOMPARE(imageRect, QRect(0,0,640,441));
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
+    KisUpdaterContext *context = scheduler.updaterContext();
+    QVERIFY(context);
+    QVector<KisUpdateJobItem*> jobs;
 
     QRect dirtyRect1(0,0,50,100);
     QRect dirtyRect2(0,0,100,100);
     QRect dirtyRect3(50,0,50,100);
     QRect dirtyRect4(150,150,50,50);
-
-
-    KisTestableUpdaterContext *context = scheduler.updaterContext();
-    QVector<KisUpdateJobItem*> jobs;
 
     scheduler.updateProjection(paintLayer1, imageRect, imageRect);
 
@@ -220,7 +219,7 @@ void KisUpdateSchedulerTest::testExclusiveStrokes()
     QRect dirtyRect1(0,0,50,100);
 
     KisTestableUpdateScheduler scheduler(image.data(), 2);
-    KisTestableUpdaterContext *context = scheduler.updaterContext();
+    KisUpdaterContext *context = scheduler.updaterContext();
     QVector<KisUpdateJobItem*> jobs;
 
     scheduler.updateProjection(paintLayer1, dirtyRect1, imageRect);

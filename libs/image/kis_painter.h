@@ -53,7 +53,7 @@ class KoPattern;
 class KisPaintInformation;
 class KisPaintOp;
 class KisDistanceInformation;
-class KisRenderedDab;
+struct KisRenderedDab;
 class KisRunnableStrokeJobsInterface;
 
 /**

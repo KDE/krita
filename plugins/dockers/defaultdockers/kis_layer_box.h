@@ -40,6 +40,7 @@
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_signal_compressor.h"
+#include <QSlider>
 
 class QModelIndex;
 
@@ -127,6 +128,8 @@ private Q_SLOTS:
     void updateAvailableLabels();
     void updateLayerFiltering();
 
+    void slotUpdateThumbnailIconSize();
+
 
     // Opacity keyframing
     void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
@@ -157,9 +160,11 @@ private:
     QVector<KisAction*> m_actions;
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
-    KisAction* m_selectOpaque;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
+    KisSignalCompressor m_thumbnailSizeCompressor;
+
+    QSlider* thumbnailSizeSlider;
 
     KisNodeSP m_activeNode;
     QPointer<KisKeyframeChannel> m_opacityChannel;

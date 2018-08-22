@@ -234,8 +234,8 @@ protected:
 };
 
 
-class KisTestableUpdaterContext;
 class KisTestableSimpleUpdateQueue;
+class KisUpdaterContext;
 
 class KRITAIMAGE_EXPORT KisTestableUpdateScheduler : public KisUpdateScheduler
 {
@@ -243,7 +243,7 @@ public:
     KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
                                qint32 threadCount);
 
-    KisTestableUpdaterContext* updaterContext();
+    KisUpdaterContext* updaterContext();
     KisTestableSimpleUpdateQueue* updateQueue();
     using KisUpdateScheduler::processQueues;
 };

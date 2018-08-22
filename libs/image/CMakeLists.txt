@@ -243,6 +243,7 @@ set(kritaimage_LIB_SRCS
    kis_random_sub_accessor.cpp
    kis_wrapped_random_accessor.cpp
    kis_selection.cc
+   KisSelectionUpdateCompressor.cpp
    kis_selection_mask.cpp
    kis_update_outline_job.cpp
    kis_update_selection_job.cpp

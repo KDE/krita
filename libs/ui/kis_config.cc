@@ -1434,6 +1434,16 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+int KisConfig::layerThumbnailSize(bool defaultValue) const
+{
+    return (defaultValue ? 20 : m_cfg.readEntry("layerThumbnailSize", 20));
+}
+
+void KisConfig::setLayerThumbnailSize(int size)
+{
+    m_cfg.writeEntry("layerThumbnailSize", size);
+}
+
 bool KisConfig::sliderLabels(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("sliderLabels", true));

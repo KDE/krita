@@ -64,8 +64,8 @@ public:
 
         m_emergencyThreshold = MiB_TO_METRIC(config.tilesHardLimit());
 
-        m_hardLimitThreshold = m_emergencyThreshold - m_emergencyThreshold / 8;
-        m_hardLimit = m_hardLimitThreshold - m_hardLimitThreshold / 8;
+        m_hardLimitThreshold = m_emergencyThreshold - (m_emergencyThreshold / 8);
+        m_hardLimit = m_hardLimitThreshold - (m_hardLimitThreshold / 8);
 
         m_softLimitThreshold = qBound(0, MiB_TO_METRIC(config.tilesSoftLimit()), m_hardLimitThreshold);
         m_softLimit = m_softLimitThreshold - m_softLimitThreshold / 8;

@@ -50,13 +50,6 @@ public:
         return KisNodeSP(new KisSelectionMask(*this));
     }
 
-    void mergeInMaskInternal(KisPaintDeviceSP projection,
-                             KisSelectionSP effectiveSelection,
-                             const QRect &applyRect, const QRect &preparedNeedRect,
-                             KisNode::PositionToFilthy maskPos) const override;
-
-    bool paintsOutsideSelection() const override;
-
     /// Set the selection of this adjustment layer to a copy of selection.
     void setSelection(KisSelectionSP selection);
 
@@ -82,6 +75,17 @@ public:
      * them separately.
      */
     void notifySelectionChangedCompressed();
+
+protected:
+    void flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const override;
+
+    void mergeInMaskInternal(KisPaintDeviceSP projection,
+                             KisSelectionSP effectiveSelection,
+                             const QRect &applyRect, const QRect &preparedNeedRect,
+                             KisNode::PositionToFilthy maskPos) const override;
+
+    bool paintsOutsideSelection() const override;
+
 
 private:
     Q_PRIVATE_SLOT(m_d, void slotSelectionChangedCompressed());

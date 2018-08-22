@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,22 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_CATEGORIES_MAPPER_TEST_H
-#define __KIS_CATEGORIES_MAPPER_TEST_H
+#ifndef KISSELECTIONUPDATECOMPRESSOR_H
+#define KISSELECTIONUPDATECOMPRESSOR_H
 
-#include <QtTest>
+#include "kritaimage_export.h"
+#include "kis_thread_safe_signal_compressor.h"
 
-#include "kis_categories_mapper.h"
-#include <QTest>
+#include "kis_types.h"
+#include <QRect>
 
-class KisCategoriesMapperTest : public QObject
+
+class KisSelectionUpdateCompressor : public QObject
 {
     Q_OBJECT
+public:
+    KisSelectionUpdateCompressor(KisSelection *selection);
+    ~KisSelectionUpdateCompressor();
+
+public Q_SLOTS:
+    void requestUpdate(const QRect &updateRect);
+
 private Q_SLOTS:
-    void testAddRemoveCategories();
-    void testAddRemoveEntries();
-    void testRemoveNonEmptyCategories();
-    void testChangingItem();
+    void startUpdateJob();
+
+private:
+    KisSelection *m_parentSelection;
+    KisThreadSafeSignalCompressor *m_updateSignalCompressor;
+    QRect m_updateRect;
+    bool m_fullUpdateRequested;
 };
 
-#endif /* __KIS_CATEGORIES_MAPPER_TEST_H */
+#endif // KISSELECTIONUPDATECOMPRESSOR_H

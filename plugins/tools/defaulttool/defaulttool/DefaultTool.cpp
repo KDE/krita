@@ -718,8 +718,11 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 bool DefaultTool::isValidForCurrentLayer() const
 {
-    KisNodeSP currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    return !currentNode.isNull() && currentNode->inherits("KisShapeLayer");
+    // if the currently active node has a shape manager, then it is
+    // probably our client :)
+
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    return bool(kisCanvas->localShapeManager());
 }
 
 KoShapeManager *DefaultTool::shapeManager() const {

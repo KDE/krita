@@ -64,6 +64,7 @@
 #include <kis_composite_ops_model.h>
 #include <kis_keyframe_channel.h>
 #include <kis_image_animation_interface.h>
+#include <KoProperties.h>
 
 #include "kis_action.h"
 #include "kis_action_manager.h"
@@ -85,6 +86,10 @@
 #include "kis_signals_blocker.h"
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
+
+#include "kis_selection.h"
+#include "kis_processing_applicator.h"
+#include "commands/kis_set_global_selection_command.h"
 
 #include "kis_layer_utils.h"
 
@@ -151,8 +156,9 @@ KisLayerBox::KisLayerBox()
     , m_wdgLayerBox(new Ui_WdgLayerBox)
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+    , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
-    KisConfig cfg(true);
+    KisConfig cfg(false);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
@@ -194,13 +200,6 @@ KisLayerBox::KisLayerBox()
     connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
-
-    m_selectOpaque = new KisAction(i18n("&Select Opaque"), this);
-    m_selectOpaque->setActivationFlags(KisAction::ACTIVE_LAYER);
-    m_selectOpaque->setActivationConditions(KisAction::SELECTION_EDITABLE);
-    m_selectOpaque->setObjectName("select_opaque");
-    connect(m_selectOpaque, SIGNAL(triggered(bool)), this, SLOT(slotSelectOpaque()));
-    m_actions.append(m_selectOpaque);
 
     m_newLayerMenu = new QMenu(this);
     m_wdgLayerBox->bnAdd->setMenu(m_newLayerMenu);
@@ -252,6 +251,40 @@ KisLayerBox::KisLayerBox()
 
     connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
+
+
+
+    // set up the configure menu for changing thumbnail size
+    QMenu* configureMenu = new QMenu(this);
+    configureMenu->setStyleSheet("margin: 6px");
+    configureMenu->addSection(i18n("Thumbnail Size"));
+
+    m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
+    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("configure"));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(13, 13));
+
+    m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
+
+
+    // add horizontal slider
+    thumbnailSizeSlider = new QSlider(this);
+    thumbnailSizeSlider->setOrientation(Qt::Horizontal);
+    thumbnailSizeSlider->setRange(20, 80);
+
+    thumbnailSizeSlider->setValue(cfg.layerThumbnailSize(false)); // grab this from the kritarc
+
+    thumbnailSizeSlider->setMinimumHeight(20);
+    thumbnailSizeSlider->setMinimumWidth(40);
+    thumbnailSizeSlider->setTickInterval(5);
+
+
+    QWidgetAction *sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(thumbnailSizeSlider);
+    configureMenu->addAction(sliderAction);
+
+
+    connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
+    connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
 }
 
 KisLayerBox::~KisLayerBox()
@@ -635,7 +668,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                     addActionToMenu(&menu, "isolate_layer");
                 }
 
-                menu.addAction(m_selectOpaque);
+                addActionToMenu(&menu, "selectopaque");
             }
         }
         menu.exec(pos);
@@ -778,6 +811,7 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 {
     KisNodeSP lastActiveNode = m_nodeManager->activeNode();
     KisNodeSP activateNode = lastActiveNode;
+    KisSelectionMaskSP globalSelectionMask;
 
     if (!showSelections) {
         activateNode = findNonHidableNode(activateNode);
@@ -785,20 +819,70 @@ void KisLayerBox::slotEditGlobalSelection(bool showSelections)
 
     m_nodeModel->setShowGlobalSelection(showSelections);
 
-    if (showSelections) {
-        KisNodeSP newMask = m_image->rootLayer()->selectionMask();
-        if (newMask) {
-            activateNode = newMask;
+    globalSelectionMask = m_image->rootLayer()->selectionMask();
+
+    // try to find deactivated, but visible masks
+    if (!globalSelectionMask) {
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> masks = m_image->rootLayer()->childNodes(QStringList("KisSelectionMask"), properties);
+        if (!masks.isEmpty()) {
+            globalSelectionMask = dynamic_cast<KisSelectionMask*>(masks.first().data());
         }
     }
 
-    if (activateNode) {
-        if (lastActiveNode != activateNode) {
-            m_nodeManager->slotNonUiActivatedNode(activateNode);
-        } else {
-            setCurrentNode(lastActiveNode);
+    // try to find at least any selection mask
+    if (!globalSelectionMask) {
+        KoProperties properties;
+        QList<KisNodeSP> masks = m_image->rootLayer()->childNodes(QStringList("KisSelectionMask"), properties);
+        if (!masks.isEmpty()) {
+            globalSelectionMask = dynamic_cast<KisSelectionMask*>(masks.first().data());
         }
     }
+
+    if (globalSelectionMask) {
+        if (showSelections) {
+            activateNode = globalSelectionMask;
+        }
+    }
+
+    if (activateNode != lastActiveNode) {
+        m_nodeManager->slotNonUiActivatedNode(activateNode);
+    } else if (lastActiveNode) {
+        setCurrentNode(lastActiveNode);
+    }
+
+    if (showSelections && !globalSelectionMask) {
+        KisProcessingApplicator applicator(m_image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           kundo2_i18n("Quick Selection Mask"));
+
+        applicator.applyCommand(
+            new KisLayerUtils::KeepNodesSelectedCommand(
+                m_nodeManager->selectedNodes(), KisNodeList(),
+                lastActiveNode, 0, m_image, false),
+            KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(m_image),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisLayerUtils::SelectGlobalSelectionMask(m_image),
+                                KisStrokeJobData::SEQUENTIAL,
+                                KisStrokeJobData::EXCLUSIVE);
+
+        applicator.end();
+    } else if (!showSelections &&
+               globalSelectionMask &&
+               globalSelectionMask->selection()->selectedRect().isEmpty()) {
+
+        KisProcessingApplicator applicator(m_image, 0,
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector() << ModifiedSignal,
+                                           kundo2_i18n("Cancel Quick Selection Mask"));
+        applicator.applyCommand(new KisSetGlobalSelectionCommand(m_image, 0), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.end();
+    }
+
 }
 
 void KisLayerBox::selectionChanged(const QModelIndexList selection)
@@ -971,6 +1055,17 @@ void KisLayerBox::slotUpdateIcons() {
 
     // call child function about needing to update icons
     m_wdgLayerBox->listLayers->slotUpdateIcons();
+}
+
+void KisLayerBox::slotUpdateThumbnailIconSize()
+{
+    KisConfig cfg(false);
+    cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
+
+    // this is a hack to force the layers list to update its display and
+    // re-layout all the layers with the new thumbnail size
+    resize(this->width()+1, this->height()+1);
+    resize(this->width()-1, this->height()-1);
 }
 
 

@@ -268,6 +268,8 @@ void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &opt
 {
     KisNodeViewColorScheme scm;
 
+
+
     const int thumbSize = scm.thumbnailSize();
     const qreal oldOpacity = p->opacity(); // remember previous opacity
 

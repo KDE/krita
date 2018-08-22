@@ -19,6 +19,7 @@
 #include <QTest>
 #include <QColor>
 #include <QDataStream>
+#include <QLoggingCategory>
 
 #include <KritaVersionWrapper.h>
 #include <Node.h>
@@ -64,15 +65,20 @@ void TestChannel::testPixelDataU16()
 
 void TestChannel::testPixelDataF16()
 {
-    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", ""), "test");
+#ifdef HAVE_OPENEXR
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", "");
+    qDebug() << ">>>>>>>>>>>" << cs;
+    KisImageSP image = new KisImage(0, 100, 100, cs, "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
     gc.fillRect(0, 0, 100, 100, KoColor(Qt::red, layer->colorSpace()));
     Node node(image, layer);
     QList<Channel*> channels = node.channels();
     Q_FOREACH(Channel *channel, channels) {
+        qDebug() << "channelsize" << channel->channelSize();
         QVERIFY(channel->channelSize() == 2);
     }
+#endif
 }
 
 void TestChannel::testPixelDataF32()

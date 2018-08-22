@@ -1309,7 +1309,7 @@
     </Action>
     <Action name="selectopaque">
       <icon></icon>
-      <text>Select &amp;Opaque</text>
+      <text>Select &amp;Opaque (Replace)</text>
       <whatsThis></whatsThis>
       <toolTip>Select Opaque</toolTip>
       <iconText>Select Opaque</iconText>

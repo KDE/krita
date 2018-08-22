@@ -204,6 +204,7 @@ private:
     friend class KisAdjustmentLayerTest;
     friend class KisUpdateSelectionJob;
     friend class KisSelectionUpdateCompressor;
+    friend class KisDeselectActiveSelectionCommand;
     KisNodeWSP parentNode() const;
 
     void copyFrom(const KisSelection &rhs);

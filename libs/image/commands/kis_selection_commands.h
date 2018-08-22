@@ -20,7 +20,9 @@
 #define KIS_SELECTION_COMMANDS_H
 
 #include "kis_deselect_global_selection_command.h"
+#include "KisDeselectActiveSelectionCommand.h"
 #include "kis_reselect_global_selection_command.h"
+#include "KisReselectActiveSelectionCommand.h"
 #include "kis_set_global_selection_command.h"
 
 #endif

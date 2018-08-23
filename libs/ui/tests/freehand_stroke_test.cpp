@@ -39,6 +39,7 @@ public:
           m_useLod(useLod),
           m_flipLineDirection(false)
     {
+        Q_UNUSED(m_strokeInfo);
         setBaseFuzziness(3);
     }
 

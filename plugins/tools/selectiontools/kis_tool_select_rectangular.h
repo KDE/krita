@@ -43,7 +43,7 @@ protected:
     virtual SelectionAction selectionAction() const = 0;
 
 private:
-    void finishRect(const QRectF& rect) override;
+    void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 };
 
 

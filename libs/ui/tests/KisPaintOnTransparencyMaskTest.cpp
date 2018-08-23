@@ -39,7 +39,7 @@ protected:
 
     using utils::StrokeTester::modifyResourceManager;
     void modifyResourceManager(KoCanvasResourceManager *manager,
-                               KisImageWSP image) {
+                               KisImageWSP image) override {
 
         KoColor color(Qt::red, image->colorSpace());
         color.setOpacity(0.5);
@@ -101,7 +101,7 @@ protected:
         }
     }
 
-    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) {
+    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
         ENTER_FUNCTION() << ppVar(image) << ppVar(activeNode);
 
         KisToolUtils::clearImage(image, activeNode, 0);

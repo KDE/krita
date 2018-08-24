@@ -927,7 +927,9 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
                 indexes << index(row, column);
             }
 
-            createOffsetFramesCommand(indexes, QPoint(plannedFrameMove, 0), false, false, parentCommand.data());
+            createOffsetFramesCommand(indexes,
+                                      QPoint(plannedFrameMove, 0),
+                                      false, true, parentCommand.data());
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();

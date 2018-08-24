@@ -208,6 +208,7 @@ public:
     KisSelectionSP selection();
 
     void notifyCurrentStateChanged(bool isCurrent);
+    bool isCurrent() const;
 
     void setShowFloatingMessage(bool show);
     void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);

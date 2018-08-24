@@ -62,7 +62,7 @@ public:
 protected:
 
     //! \reimp \see KisSpinBoxUnitManager
-    virtual bool hasPercent(int unitDim) const;
+    virtual bool hasPercent(int unitDim) const override;
 
     PixDir pixDir;
 };

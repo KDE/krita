@@ -189,7 +189,7 @@ and finally export the result.
 
 The logic behind this docker is that it is very easy to get lost in a comics project due to the massive amount of files.
 By having a docker that gives the user quick access to the pages and also allows them to do all of the meta-stuff, like
-meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focussed on actual writing and drawing.
+meta data, but also reordering the pages, the chaos of managing the project should take up less time, and more time can be focused on actual writing and drawing.
 """
 
 
@@ -594,7 +594,7 @@ class comics_project_manager_docker(DockWidget):
 
     """
     This function always asks for a template showing the new template window. This allows users to have multiple different
-    templates created for back covers, spreads, other and have them accesible, while still having the convenience of a singular
+    templates created for back covers, spreads, other and have them accessible, while still having the convenience of a singular
     "add page" that adds a default.
     """
 
@@ -673,7 +673,7 @@ class comics_project_manager_docker(DockWidget):
         self.pagesModel.appendRow(newPageItem)
 
     """
-    Write to the json configuratin file.
+    Write to the json configuration file.
     This also checks the current state of the pages list.
     """
 
@@ -734,8 +734,9 @@ class comics_project_manager_docker(DockWidget):
             self.slot_write_config()
 
     """
-    An attempt at making the description editable from the comic pages list. It is currently not working because ZipFile
-    has no overwrite mechanism, and I don't have the energy to write one yet.
+    An attempt at making the description editable from the comic pages list.
+    It is currently not working because ZipFile has no overwrite mechanism,
+    and I don't have the energy to write one yet.
     """
 
     def slot_write_description(self, index):
@@ -827,7 +828,8 @@ class comics_project_manager_docker(DockWidget):
 
     """
     Resize all the pages in the pages list.
-    It will show a dialog with the options for resizing. Then, it will try to pop up a progress dialog while resizing.
+    It will show a dialog with the options for resizing.
+    Then, it will try to pop up a progress dialog while resizing.
     The progress dialog shows the remaining time and pages.
     """
 

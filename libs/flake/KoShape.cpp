@@ -74,7 +74,6 @@
 
 #include "kis_assert.h"
 
-#include <limits>
 #include "KoOdfGradientBackground.h"
 #include <KisHandlePainterHelper.h>
 
@@ -568,7 +567,7 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
      *          zIndex are **merged**, while in Krita the contents of groups
      *          is never merged. One group will always below than the other.
      *          Therefore, when zIndex of two groups inside the same parent
-     *          coinside, the resulting painting order in Krita is
+     *          coincide, the resulting painting order in Krita is
      *          **UNDEFINED**.
      *
      *          To avoid this trouble we use  KoShapeReorderCommand::mergeInShape()
@@ -778,7 +777,6 @@ QRectF KoShape::outlineRect() const
 
 QPainterPath KoShape::shadowOutline() const
 {
-    Q_D(const KoShape);
     if (background()) {
         return outline();
     }
@@ -2157,16 +2155,16 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
             // TODO do this properly by subtracting rects
             s = parent()->size();
         }
-        context.xmlWriter().addAttributePt("svg:width", s.width());
-        context.xmlWriter().addAttributePt("svg:height", s.height());
+        context.xmlWriter().addAttribute("svg:width", s.width());
+        context.xmlWriter().addAttribute("svg:height", s.height());
     }
 
     // The position is implicitly stored in the transformation matrix
     // if the transformation is saved as well
     if ((attributes & OdfPosition) && !(attributes & OdfTransformation)) {
         const QPointF p(position() * context.shapeOffset(this));
-        context.xmlWriter().addAttributePt("svg:x", p.x());
-        context.xmlWriter().addAttributePt("svg:y", p.y());
+        context.xmlWriter().addAttribute("svg:x", p.x());
+        context.xmlWriter().addAttribute("svg:y", p.y());
     }
 
     if (attributes & OdfTransformation) {
@@ -2176,8 +2174,8 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
                     && qAbs(matrix.m12()) < 1E-5        // 0
                     && qAbs(matrix.m21()) < 1E-5        // 0
                     && qAbs(matrix.m22() - 1) < 1E-5) { // 1
-                context.xmlWriter().addAttributePt("svg:x", matrix.dx());
-                context.xmlWriter().addAttributePt("svg:y", matrix.dy());
+                context.xmlWriter().addAttribute("svg:x", matrix.dx());
+                context.xmlWriter().addAttribute("svg:y", matrix.dy());
             } else {
                 QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
                         .arg(matrix.m11(), 0, 'f', 11)
@@ -2225,8 +2223,8 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 context.xmlWriter().addAttribute("svg:x", QString("%1%").arg(x));
                 context.xmlWriter().addAttribute("svg:y", QString("%1%").arg(y));
             } else {
-                context.xmlWriter().addAttributePt("svg:x", cp.value().position.x());
-                context.xmlWriter().addAttributePt("svg:y", cp.value().position.y());
+                context.xmlWriter().addAttribute("svg:x", cp.value().position.x());
+                context.xmlWriter().addAttribute("svg:y", cp.value().position.y());
             }
             QString escapeDirection;
             switch(cp.value().escapeDirection) {

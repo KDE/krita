@@ -30,6 +30,7 @@ struct KoDerivedResourceConverter::Private
     int sourceKey;
 
     QVariant lastKnownValue;
+    bool invisibleChangeHappened = false;
 };
 
 
@@ -56,8 +57,9 @@ bool KoDerivedResourceConverter::notifySourceChanged(const QVariant &sourceValue
 {
     const QVariant newValue = fromSource(sourceValue);
 
-    const bool valueChanged = m_d->lastKnownValue != newValue;
+    const bool valueChanged = m_d->lastKnownValue != newValue || m_d->invisibleChangeHappened;
     m_d->lastKnownValue = newValue;
+    m_d->invisibleChangeHappened = false;
 
     return valueChanged;
 }
@@ -65,6 +67,7 @@ bool KoDerivedResourceConverter::notifySourceChanged(const QVariant &sourceValue
 QVariant KoDerivedResourceConverter::readFromSource(const QVariant &sourceValue)
 {
     const QVariant result = fromSource(sourceValue);
+    m_d->invisibleChangeHappened |= result != m_d->lastKnownValue;
     m_d->lastKnownValue = result;
     return m_d->lastKnownValue;
 }
@@ -74,7 +77,9 @@ QVariant KoDerivedResourceConverter::writeToSource(const QVariant &value,
                                                    bool *changed)
 {
     QVariant newSourceValue = sourceValue;
-    bool hasChanged = m_d->lastKnownValue != value;
+    const bool hasChanged = m_d->lastKnownValue != value || m_d->invisibleChangeHappened;
+    m_d->invisibleChangeHappened = false;
+
     if (hasChanged || value != fromSource(sourceValue)) {
         newSourceValue = toSource(value, sourceValue);
         /**

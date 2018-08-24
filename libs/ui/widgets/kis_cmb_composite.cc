@@ -315,7 +315,7 @@ void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool 
     //      popup widget to the view
     //      don't know if this is expected behaviour
     //      on all supported platforms.
-    //      Thre is nothing written about this in the docs.
+    //      There is nothing written about this in the docs.
     showPopup();
 }
 

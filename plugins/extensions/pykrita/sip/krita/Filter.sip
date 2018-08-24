@@ -15,7 +15,7 @@ public Q_SLOTS:
     QString name() const;
     void setName(const QString &);
     InfoObject * configuration() const;
-    void setConfiguration(InfoObject*  value);
+    void setConfiguration(InfoObject*  value /TransferThis/ );
     void apply(Node *node, int x, int y, int w, int h);
     bool startFilter(Node *node, int x, int y, int w, int h);
 private:

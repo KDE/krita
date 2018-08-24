@@ -23,7 +23,6 @@
 #include <QEvent>
 #include <QTouchEvent>
 #include <QScopedPointer>
-#include <QPointer>
 #include <QQueue>
 #include <QElapsedTimer>
 

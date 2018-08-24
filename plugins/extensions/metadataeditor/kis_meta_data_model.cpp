@@ -90,10 +90,12 @@ QVariant KisMetaDataModel::data(const QModelIndex &index, int role) const
         case 2:
             return m_store->entries()[index.row()].value().toString();
         }
+        break;
     }
     default:
         return QVariant();
     }
+    return QVariant();
 }
 
 QVariant KisMetaDataModel::headerData(int section, Qt::Orientation orientation, int role) const

@@ -82,6 +82,7 @@ set(kritaimage_LIB_SRCS
    brushengine/KisStrokeSpeedMeasurer.cpp
    brushengine/KisPaintopSettingsIds.cpp
    commands/kis_deselect_global_selection_command.cpp
+   commands/KisDeselectActiveSelectionCommand.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
@@ -96,6 +97,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_node_opacity_command.cpp
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
+   commands/KisReselectActiveSelectionCommand.cpp
    commands/kis_set_global_selection_command.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
@@ -188,7 +190,7 @@ set(kritaimage_LIB_SRCS
    kis_sync_lod_cache_stroke_strategy.cpp
    kis_lod_capable_layer_offset.cpp
    kis_update_time_monitor.cpp
-   KisUpdateSchedulerConfigNotifier.cpp
+   KisImageConfigNotifier.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
@@ -243,6 +245,7 @@ set(kritaimage_LIB_SRCS
    kis_random_sub_accessor.cpp
    kis_wrapped_random_accessor.cpp
    kis_selection.cc
+   KisSelectionUpdateCompressor.cpp
    kis_selection_mask.cpp
    kis_update_outline_job.cpp
    kis_update_selection_job.cpp
@@ -374,15 +377,3 @@ set_target_properties(kritaimage PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-########### install schemas #############
-install( FILES
-    metadata/schemas/dc.schema
-    metadata/schemas/exif.schema
-    metadata/schemas/tiff.schema
-    metadata/schemas/mkn.schema
-    metadata/schemas/xmp.schema
-    metadata/schemas/xmpmm.schema
-    metadata/schemas/xmprights.schema
-
-    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)

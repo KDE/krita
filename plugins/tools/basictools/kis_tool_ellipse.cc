@@ -49,12 +49,18 @@ void KisToolEllipse::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolEllipse::finishRect(const QRectF& rect)
+void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
 {
+    Q_UNUSED(roundCornersX);
+    Q_UNUSED(roundCornersY);
+
     if (rect.isEmpty() || !blockUntilOperationsFinished())
         return;
 
-    if (!currentNode()->inherits("KisShapeLayer")) {
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
+
+    if (!info.shouldAddShape) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Ellipse"),
                                            image(),
                                            currentNode(),
@@ -67,6 +73,9 @@ void KisToolEllipse::finishRect(const QRectF& rect)
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
         KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         shape->setStroke(border);
+
+        info.markAsSelectionShapeIfNeeded(shape);
+
         addShape(shape);
     }
     notifyModified();

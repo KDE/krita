@@ -39,6 +39,7 @@
 
 #include "dlg_colorrange.h"
 #include <KoColorSpace.h>
+#include <QSignalMapper>
 
 K_PLUGIN_FACTORY_WITH_JSON(ColorRangeFactory, "kritacolorrange.json", registerPlugin<ColorRange>();)
 
@@ -49,8 +50,25 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
     KisAction* action = createAction("colorrange");
     connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
 
+
+    QSignalMapper *mapper = new QSignalMapper(this);
+    connect(mapper, SIGNAL(mapped(int)), SLOT(selectOpaque(int)));
+
     action  = createAction("selectopaque");
-    connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
+    mapper->setMapping(action, int(SELECTION_REPLACE));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+
+    action  = createAction("selectopaque_add");
+    mapper->setMapping(action, int(SELECTION_ADD));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+
+    action  = createAction("selectopaque_subtract");
+    mapper->setMapping(action, int(SELECTION_SUBTRACT));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
+
+    action  = createAction("selectopaque_intersect");
+    mapper->setMapping(action, int(SELECTION_INTERSECT));
+    connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
 }
 
 ColorRange::~ColorRange()
@@ -65,38 +83,13 @@ void ColorRange::slotActivated()
     dlgColorRange->exec();
 }
 
-void ColorRange::selectOpaque()
+void ColorRange::selectOpaque(int id)
 {
-    KisCanvas2 *canvas = viewManager()->canvasBase();
-    KisPaintDeviceSP device = viewManager()->activeNode()->projection();
-    if (!device) device = viewManager()->activeNode()->paintDevice();
-    if (!device) device = viewManager()->activeNode()->original();
-    KIS_ASSERT_RECOVER_RETURN(canvas && device);
+    KisNodeSP node = viewManager()->activeNode();
+    if (!node) return;
 
-    QRect rc = device->exactBounds();
-    if (rc.isEmpty()) return;
-
-    KisSelectionToolHelper helper(canvas, kundo2_i18n("Select Opaque"));
-
-    qint32 x, y, w, h;
-    rc.getRect(&x, &y, &w, &h);
-
-    const KoColorSpace * cs = device->colorSpace();
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-
-    KisHLineConstIteratorSP deviter = device->createHLineConstIteratorNG(x, y, w);
-    KisHLineIteratorSP selIter = tmpSel ->createHLineIteratorNG(x, y, w);
-
-    for (int row = y; row < h + y; ++row) {
-        do {
-            *selIter->rawData() = cs->opacityU8(deviter->oldRawData());
-        } while (deviter->nextPixel() && selIter->nextPixel());
-        deviter->nextRow();
-        selIter->nextRow();
-    }
-
-    tmpSel->invalidateOutlineCache();
-    helper.selectPixelSelection(tmpSel, SELECTION_ADD);
+    viewManager()->selectionManager()->
+        selectOpaqueOnNode(node, SelectionAction(id));
 }
 
 #include "colorrange.moc"

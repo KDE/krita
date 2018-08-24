@@ -35,7 +35,7 @@ public:
 
     ~KisAsyncAnimationFramesSaveDialog();
 
-    Result regenerateRange(KisViewManager *viewManager);
+    Result regenerateRange(KisViewManager *viewManager) override;
 
     QString savedFilesMask() const;
     QString savedFilesMaskWildcard() const;

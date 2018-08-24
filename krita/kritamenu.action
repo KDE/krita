@@ -1309,10 +1309,46 @@
     </Action>
     <Action name="selectopaque">
       <icon></icon>
-      <text>Select &amp;Opaque</text>
+      <text>Select &amp;Opaque (Replace)</text>
       <whatsThis></whatsThis>
       <toolTip>Select Opaque</toolTip>
       <iconText>Select Opaque</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selectopaque_add">
+      <icon></icon>
+      <text>Select Opaque (&amp;Add)</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque (Add)</toolTip>
+      <iconText>Select Opaque (Add)</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selectopaque_subtract">
+      <icon></icon>
+      <text>Select Opaque (&amp;Subtract)</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque (Subtract)</toolTip>
+      <iconText>Select Opaque (Subtract)</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selectopaque_intersect">
+      <icon></icon>
+      <text>Select Opaque (&amp;Intersect)</text>
+      <whatsThis></whatsThis>
+      <toolTip>Select Opaque (Intersect)</toolTip>
+      <iconText>Select Opaque (Intersect)</iconText>
       <activationFlags>10000</activationFlags>
       <activationConditions>100</activationConditions>
       <shortcut></shortcut>

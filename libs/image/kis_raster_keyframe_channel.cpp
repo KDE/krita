@@ -27,8 +27,9 @@
 #include "kis_onion_skin_compositor.h"
 #include "kis_keyframe_commands.h"
 
-struct KisRasterKeyframe : public KisKeyframe
+class KisRasterKeyframe : public KisKeyframe
 {
+public:
     KisRasterKeyframe(KisRasterKeyframeChannel *channel, int time, int frameId)
         : KisKeyframe(channel, time)
         , frameId(frameId)
@@ -286,7 +287,8 @@ void KisRasterKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
 
 KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
-    int time = keyframeNode.attribute("time").toUInt();
+    int time = keyframeNode.attribute("time").toInt();
+    workaroundBrokenFrameTimeBug(&time);
 
     QPoint offset;
     KisDomUtils::loadValue(keyframeNode, "offset", &offset);
@@ -298,7 +300,6 @@ KisKeyframeSP KisRasterKeyframeChannel::loadKeyframe(const QDomElement &keyframe
         // First keyframe loaded: use the existing frame
 
         KIS_SAFE_ASSERT_RECOVER_NOOP(keyframeCount() == 1);
-
         keyframe = constKeys().begin().value();
         const int id = frameId(keyframe);
         setFrameFilename(id, frameFilename);

@@ -20,6 +20,7 @@
 #define __KIS_CHUNK_LIST_H
 
 #include <QLinkedList>
+#include "kritaimage_export.h"
 
 #define MiB (1ULL << 20)
 
@@ -57,7 +58,7 @@ class KisChunkData;
 typedef QLinkedList<KisChunkData> KisChunkDataList;
 typedef KisChunkDataList::iterator KisChunkDataListIterator;
 
-class KisChunkData
+class KRITAIMAGE_EXPORT KisChunkData
 {
 public:
     KisChunkData(quint64 begin, quint64 size)
@@ -89,7 +90,7 @@ public:
     quint64 m_end;
 };
 
-class KisChunk
+class KRITAIMAGE_EXPORT KisChunk
 {
 public:
     KisChunk() {}
@@ -124,7 +125,7 @@ private:
 };
 
 
-class KisChunkAllocator
+class KRITAIMAGE_EXPORT KisChunkAllocator
 {
 public:
     KisChunkAllocator(quint64 slabSize = DEFAULT_SLAB_SIZE,

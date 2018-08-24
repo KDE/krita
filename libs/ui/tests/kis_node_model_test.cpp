@@ -28,6 +28,7 @@
 #include "kis_name_server.h"
 #include "flake/kis_shape_controller.h"
 
+#include <sdk/tests/testutil.h>
 
 #include "modeltest.h"
 
@@ -56,14 +57,14 @@ void KisNodeModelTest::testSetImage()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0, 0);
     new ModelTest(m_nodeModel, this);
 }
 
 void KisNodeModelTest::testAddNode()
 {
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0, 0);
     new ModelTest(m_nodeModel, this);
 
     constructImage();
@@ -74,7 +75,7 @@ void KisNodeModelTest::testRemoveAllNodes()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0, 0);
     new ModelTest(m_nodeModel, this);
 
     m_image->removeNode(m_layer4);
@@ -87,7 +88,7 @@ void KisNodeModelTest::testRemoveIncludingRoot()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0, 0);
     new ModelTest(m_nodeModel, this);
 
     m_image->removeNode(m_layer4);
@@ -103,12 +104,10 @@ void KisNodeModelTest::testSubstituteRootNode()
 {
     constructImage();
     m_shapeController->setImage(m_image);
-    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0);
+    m_nodeModel->setDummiesFacade(m_shapeController, m_image, 0, 0, 0, 0);
     new ModelTest(m_nodeModel, this);
 
     m_image->flatten();
 }
 
-QTEST_MAIN(KisNodeModelTest)
-
-
+KISTEST_MAIN(KisNodeModelTest)

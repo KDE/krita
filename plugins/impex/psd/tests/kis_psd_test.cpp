@@ -22,7 +22,7 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
+#include  <sdk/tests/kistest.h>
 
 #include "filestest.h"
 
@@ -347,5 +347,5 @@ void KisPSDTest::testSavingAllFormats()
 }
 
 
-QTEST_MAIN(KisPSDTest)
+KISTEST_MAIN(KisPSDTest)
 

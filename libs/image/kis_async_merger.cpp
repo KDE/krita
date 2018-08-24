@@ -52,7 +52,7 @@
 
 #ifdef DEBUG_MERGER
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)            \
-    dbgImage << message << type << ":" << leaf->node()->name() << rect
+    qDebug() << message << type << ":" << leaf->node()->name() << rect
 #else
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)
 #endif
@@ -216,12 +216,16 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         KisMergeWalker::JobItem item = leafStack.pop();
         KisProjectionLeafSP currentLeaf = item.m_leaf;
 
-        if(currentLeaf->isRoot()) continue;
-
         // All the masks should be filtered by the walkers
-        Q_ASSERT(currentLeaf->isLayer());
+        Q_ASSERT(currentLeaf);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(currentLeaf->isLayer());
 
         QRect applyRect = item.m_applyRect;
+
+        if (currentLeaf->isRoot()) {
+            currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode());
+            continue;
+        }
 
         if(item.m_position & KisMergeWalker::N_EXTRA) {
             // The type of layers that will not go to projection.
@@ -237,8 +241,9 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         }
 
 
-        if(!m_currentProjection)
+        if (!m_currentProjection) {
             setupProjection(currentLeaf, applyRect, useTempProjections);
+        }
 
         KisUpdateOriginalVisitor originalVisitor(applyRect,
                                                  m_currentProjection,

@@ -215,23 +215,32 @@ KisFrameSet& KisFrameSet::operator-=(const KisFrameSet &rhs)
     return *this;
 }
 
-void KisTimeRange::calculateTimeRangeRecursive(const KisNode *node, int time, KisTimeRange &range, bool exclusive)
+KisTimeRange KisTimeRange::calculateIdenticalFramesRecursive(const KisNode *node, int time)
 {
-    if (!node->visible()) return;
+    KisTimeRange range = KisTimeRange::infinite(0);
 
-    if (exclusive) {
-        // Intersection
-        range &= calculateNodeIdenticalFrames(node, time);
-    } else {
-        // Union
-        range |= calculateNodeAffectedFrames(node, time);
-    }
+    KisLayerUtils::recursiveApplyNodes(node,
+        [&range, time] (const KisNode *node) {
+            if (node->visible()) {
+                range &= calculateNodeIdenticalFrames(node, time);
+            }
+    });
 
-    KisNodeSP child = node->firstChild();
-    while (child) {
-        calculateTimeRangeRecursive(child, time, range, exclusive);
-        child = child->nextSibling();
-    }
+    return range;
+}
+
+KisTimeRange KisTimeRange::calculateAffectedFramesRecursive(const KisNode *node, int time)
+{
+    KisTimeRange range;
+
+    KisLayerUtils::recursiveApplyNodes(node,
+        [&range, time] (const KisNode *node) {
+            if (node->visible()) {
+                range |= calculateNodeIdenticalFrames(node, time);
+            }
+    });
+
+    return range;
 }
 
 KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int time)
@@ -240,12 +249,6 @@ KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int
 
     const QMap<QString, KisKeyframeChannel*> channels =
         node->keyframeChannels();
-
-    if (channels.isEmpty() ||
-        !channels.contains(KisKeyframeChannel::Content.id())) {
-
-        return range;
-    }
 
     Q_FOREACH (const KisKeyframeChannel *channel, channels) {
         // Intersection
@@ -263,6 +266,9 @@ KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int 
 
     const QMap<QString, KisKeyframeChannel*> channels =
         node->keyframeChannels();
+
+    // TODO: channels should report to the image which channel exactly has changed
+    //       to avoid the dirty range to be stretched into infinity!
 
     if (channels.isEmpty() ||
         !channels.contains(KisKeyframeChannel::Content.id())) {

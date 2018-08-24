@@ -124,11 +124,11 @@ void KoOdfGraphicStyles::saveOdfStrokeStyle(KoGenStyle &styleStroke, KoGenStyles
         dashStyle.addAttribute("draw:style", "rect");
         QVector<qreal> dashes = pen.dashPattern();
         dashStyle.addAttribute("draw:dots1", static_cast<int>(1));
-        dashStyle.addAttributePt("draw:dots1-length", dashes[0]*pen.widthF());
-        dashStyle.addAttributePt("draw:distance", dashes[1]*pen.widthF());
+        dashStyle.addAttribute("draw:dots1-length", dashes[0]*pen.widthF());
+        dashStyle.addAttribute("draw:distance", dashes[1]*pen.widthF());
         if (dashes.size() > 2) {
             dashStyle.addAttribute("draw:dots2", static_cast<int>(1));
-            dashStyle.addAttributePt("draw:dots2-length", dashes[2]*pen.widthF());
+            dashStyle.addAttribute("draw:dots2-length", dashes[2]*pen.widthF());
         }
         QString dashStyleName = mainStyles.insert(dashStyle, "dash");
         styleStroke.addProperty("draw:stroke-dash", dashStyleName, KoGenStyle::GraphicType);

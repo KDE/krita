@@ -25,7 +25,6 @@
 #include <kis_selection_filters.h>
 #include <kis_painter.h>
 #include <kis_clipboard.h>
-#include <kis_painter.h>
 #include <QByteArray>
 
 #include <Node.h>

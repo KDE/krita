@@ -99,7 +99,7 @@ class comicsExporter():
         pass
 
     """
-    The the configuration of the exporter.
+    The configuration of the exporter.
 
     @param config: A dictionary containing all the config.
 

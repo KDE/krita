@@ -362,7 +362,7 @@ protected:
     /**
      * Checks whether a src paint device can be used as source
      * of fast bitBlt operation. The result of the check may
-     * depend on whether color spaces coinside, whether there is
+     * depend on whether color spaces coincide, whether there is
      * any shift of tiles between the devices and etc.
      *
      * WARNING: This check must be done <i>before</i> performing any
@@ -793,7 +793,7 @@ public:
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
-     * @param rc indicates the rectangle that trully contains data
+     * @param rc indicates the rectangle that truly contains data
      */
     KisRepeatVLineConstIteratorSP createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const;
 

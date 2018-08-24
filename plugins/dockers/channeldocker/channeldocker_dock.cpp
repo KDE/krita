@@ -30,7 +30,6 @@
 #include <kis_node_manager.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
-#include <kis_layer.h>
 #include <kis_paint_device.h>
 #include "kis_signal_compressor.h"
 #include <KisView.h>

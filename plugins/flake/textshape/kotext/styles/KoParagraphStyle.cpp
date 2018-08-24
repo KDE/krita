@@ -2286,7 +2286,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         elementWriter.addAttribute("style:lines", QString::number(dropCapsLines()));
         elementWriter.addAttribute("style:length", dropCapsLength() == 0 ? "word" : QString::number(dropCapsLength()));
         if (dropCapsDistance())
-            elementWriter.addAttributePt("style:distance", dropCapsDistance());
+            elementWriter.addAttribute("style:distance", dropCapsDistance());
         elementWriter.endElement();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         style.addChildElement("style:drop-cap", elementContents, KoGenStyle::ParagraphType);
@@ -2322,7 +2322,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
         elementWriter.startElement("style:tab-stops");
         Q_FOREACH (const KoText::Tab &tab, tabPositions()) {
             elementWriter.startElement("style:tab-stop");
-            elementWriter.addAttributePt("style:position", tab.position);
+            elementWriter.addAttribute("style:position", tab.position);
             if (!tabTypeMap[tab.type].isEmpty())
                 elementWriter.addAttribute("style:type", tabTypeMap[tab.type]);
             if (tab.type == QTextOption::DelimiterTab && !tab.delimiter.isNull())
@@ -2336,7 +2336,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
             else if (tab.leaderWeight == KoCharacterStyle::PercentLineWeight)
                 elementWriter.addAttribute("style:leader-width", QString("%1%").arg(QString::number(tab.leaderWidth)));
             else if (tab.leaderWeight == KoCharacterStyle::LengthLineWeight)
-                elementWriter.addAttributePt("style:leader-width", tab.leaderWidth);
+                elementWriter.addAttribute("style:leader-width", tab.leaderWidth);
             if (tab.leaderColor.isValid())
                 elementWriter.addAttribute("style:leader-color", tab.leaderColor.name());
             else

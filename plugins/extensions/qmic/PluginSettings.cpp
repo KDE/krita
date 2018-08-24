@@ -79,25 +79,25 @@ QString PluginSettings::gmicQtPath()
 
     // Check for gmic-qt next to krita
     if (fi.exists() && fi.isFile()) {
-//        qDebug() << 1 << fi.canonicalFilePath();
+//        dbgPlugins << 1 << fi.canonicalFilePath();
         return fi.canonicalFilePath();
     }
 
     // Check whether we've got a gmic subfolder
     QDir d(qApp->applicationDirPath());
     QStringList gmicdirs = d.entryList(QStringList() << "gmic*", QDir::Dirs);
-    qDebug() << gmicdirs;
+    dbgPlugins << gmicdirs;
     if (gmicdirs.isEmpty()) {
-//        qDebug() << 2;
+//        dbgPlugins << 2;
         return "";
     }
     fi = QFileInfo(qApp->applicationDirPath() + "/" + gmicdirs.first() + "/" + gmicqt);
     if (fi.exists() && fi.isFile()) {
-//        qDebug() << "3" << fi.canonicalFilePath();
+//        dbgPlugins << "3" << fi.canonicalFilePath();
         return fi.canonicalFilePath();
     }
 
-//    qDebug() << 4 << gmicqt;
+//    dbgPlugins << 4 << gmicqt;
     return gmicqt;
 }
 

@@ -218,7 +218,7 @@ void KisTileDataStore::ensureTileDataLoaded(KisTileData *td)
          * The order of this heavy locking is very important.
          * Change it only in case, you really know what you are doing.
          */
-        m_iteratorLock.lockForRead();
+        m_iteratorLock.lockForWrite();
 
         /**
          * If someone has managed to load the td from swap, then, most
@@ -313,26 +313,29 @@ void KisTileDataStore::endIteration(KisTileDataStoreClockIterator* iterator)
 
 void KisTileDataStore::debugPrintList()
 {
-    QWriteLocker l(&m_iteratorLock);
-    ConcurrentMap<int, KisTileData*>::Iterator iter(m_tileDataMap);
+    KisTileDataStoreIterator* iter = beginIteration();
     KisTileData *item = 0;
 
-    while (iter.isValid()) {
-        item = iter.getValue();
+    while (iter->hasNext()) {
+        item = iter->next();
         dbgTiles << "-------------------------\n"
                  << "TileData:\t\t\t" << item
                  << "\n  refCount:\t" << item->m_refCount;
     }
+
+    endIteration(iter);
 }
 
 void KisTileDataStore::debugSwapAll()
 {
     KisTileDataStoreIterator* iter = beginIteration();
-    KisTileData *item;
+    KisTileData *item = 0;
+
     while (iter->hasNext()) {
         item = iter->next();
         iter->trySwapOut(item);
     }
+
     endIteration(iter);
 
 //    dbgKrita << "Number of tiles:" << numTiles();

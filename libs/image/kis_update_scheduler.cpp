@@ -28,7 +28,7 @@
 #include "kis_strokes_queue.h"
 
 #include "kis_queues_progress_updater.h"
-#include "KisUpdateSchedulerConfigNotifier.h"
+#include "KisImageConfigNotifier.h"
 
 #include <QReadWriteLock>
 #include "kis_lazy_wait_condition.h"
@@ -117,17 +117,7 @@ int KisUpdateScheduler::threadsLimit() const
 
 void KisUpdateScheduler::connectSignals()
 {
-    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            SLOT(continueUpdate(const QRect&)),
-            Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
-            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
-            SLOT(spareThreadAppeared()), Qt::DirectConnection);
-
-    connect(KisUpdateSchedulerConfigNotifier::instance(), SIGNAL(configChanged()),
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
 }
 
@@ -487,14 +477,13 @@ KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListen
     // The queue will update settings in a constructor itself
     // m_d->updatesQueue = new KisTestableSimpleUpdateQueue();
     // m_d->strokesQueue = new KisStrokesQueue();
-    // m_d->updaterContext = new KisTestableUpdaterContext(threadCount);
 
     connectSignals();
 }
 
-KisTestableUpdaterContext* KisTestableUpdateScheduler::updaterContext()
+KisUpdaterContext *KisTestableUpdateScheduler::updaterContext()
 {
-    return dynamic_cast<KisTestableUpdaterContext*>(&m_d->updaterContext);
+    return &m_d->updaterContext;
 }
 
 KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()

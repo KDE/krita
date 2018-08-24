@@ -698,18 +698,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="select_opaque">
-      <icon></icon>
-      <text>&amp;Select Opaque</text>
-      <whatsThis></whatsThis>
-      <toolTip>Select Opaque</toolTip>
-      <iconText>Select Opaque</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>100</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="show-global-selection-mask">
       <icon></icon>
       <text>&amp;Show Global Selection Mask</text>

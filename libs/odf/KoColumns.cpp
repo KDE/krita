@@ -252,13 +252,13 @@ void KoColumns::saveOdf(KoGenStyle &style) const
         writer.startElement("style:columns");
         writer.addAttribute("fo:column-count", count);
         if (columnData.isEmpty()) {
-            writer.addAttributePt("fo:column-gap", gapWidth);
+            writer.addAttribute("fo:column-gap", gapWidth);
         }
 
         if (separatorStyle != KoColumns::None) {
             writer.startElement("style:column-sep");
             writer.addAttribute("style:style", separatorStyleString(separatorStyle));
-            writer.addAttributePt("style:width", separatorWidth);
+            writer.addAttribute("style:width", separatorWidth);
             writer.addAttribute("style:height", QString::number(separatorHeight)+QLatin1Char('%'));
             writer.addAttribute("style:color", separatorColor.name());
             writer.addAttribute("style:vertical-align", separatorVerticalAlignmentString(separatorVerticalAlignment));
@@ -267,10 +267,10 @@ void KoColumns::saveOdf(KoGenStyle &style) const
 
         Q_FOREACH (const ColumnDatum &cd, columnData) {
             writer.startElement("style:column");
-            writer.addAttributePt("fo:start-indent", cd.leftMargin);
-            writer.addAttributePt("fo:end-indent", cd.rightMargin);
-            writer.addAttributePt("fo:space-before", cd.topMargin);
-            writer.addAttributePt("fo:space-after", cd.bottomMargin);
+            writer.addAttribute("fo:start-indent", cd.leftMargin);
+            writer.addAttribute("fo:end-indent", cd.rightMargin);
+            writer.addAttribute("fo:space-before", cd.topMargin);
+            writer.addAttribute("fo:space-after", cd.bottomMargin);
             writer.addAttribute("style:rel-width", QString::number(cd.relativeWidth)+QLatin1Char('*'));
             writer.endElement(); // style:column
         }

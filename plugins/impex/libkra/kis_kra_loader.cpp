@@ -413,7 +413,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
-    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->keyframeFilenames, m_d->imageName, m_d->syntaxVersion);
+    KisKraLoadVisitor visitor(image, store, m_d->document->shapeController(), m_d->layerFilenames, m_d->keyframeFilenames, m_d->imageName, m_d->syntaxVersion);
 
     if (external) {
         visitor.setExternalUri(uri);
@@ -914,7 +914,7 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP i
     Q_UNUSED(cs);
 
     QString attr;
-    KoShapeBasedDocumentBase * shapeController = 0;
+    KoShapeControllerBase * shapeController = 0;
     if (m_d->document) {
         shapeController = m_d->document->shapeController();
     }

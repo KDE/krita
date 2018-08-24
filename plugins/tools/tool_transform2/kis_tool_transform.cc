@@ -896,7 +896,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
     KisPaintDeviceSP previewDevice = strategy->previewDevice();
 
     KisSelectionSP selection = strategy->realSelection();
-    QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
+    const QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
 
     if (!selection && resources->activeSelection()) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

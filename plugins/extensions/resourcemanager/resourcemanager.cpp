@@ -273,11 +273,11 @@ void ResourceManager::slotImportBundles()
         bundle->load();
         if (bundle->valid()) {
             if (!bundle->install()) {
-                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.").arg(res));
+                QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not install the resources for bundle %1.", res));
             }
         }
         else {
-            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.").arg(res));
+            QMessageBox::warning(0, i18nc("@title:window", "Krita"), i18n("Could not load bundle %1.", res));
         }
 
         QFileInfo fi(res);

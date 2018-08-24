@@ -122,6 +122,7 @@ private:
     ToolTransformArgs m_savedTransformArgs;
     KisNodeSP m_savedRootNode;
     KisNodeList m_savedProcessedNodes;
+    QList<KisSelectionSP> m_deactivatedSelections;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

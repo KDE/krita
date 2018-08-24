@@ -39,7 +39,7 @@ protected:
 
     using utils::StrokeTester::modifyResourceManager;
     void modifyResourceManager(KoCanvasResourceManager *manager,
-                               KisImageWSP image) {
+                               KisImageWSP image) override {
 
         KoColor color(Qt::red, image->colorSpace());
         color.setOpacity(0.5);
@@ -96,12 +96,12 @@ protected:
         while (it.nextPixel()) {
             if (cs->opacityU8(it.rawDataConst()) > 0) {
                 KIS_DUMP_DEVICE_2(dev, QRect(0,0,1024,1024), "image", "dd");
-                qFatal(QString("failed: %1").arg(name).toLatin1().data());
+                qFatal("%s", QString("failed: %1").arg(name).toLatin1().data());
             }
         }
     }
 
-    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) {
+    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
         ENTER_FUNCTION() << ppVar(image) << ppVar(activeNode);
 
         KisToolUtils::clearImage(image, activeNode, 0);

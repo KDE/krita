@@ -30,7 +30,6 @@
 #include <QCloseEvent>
 #include <QStandardPaths>
 #include <QDesktopServices>
-#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
 #include <QDockWidget>
@@ -71,6 +70,7 @@
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
+#include "kis_selection_manager.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -105,7 +105,6 @@
 #include <KoUpdater.h>
 #include <KoResourceModel.h>
 
-#include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -142,7 +141,7 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include <KisUpdateSchedulerConfigNotifier.h>
+#include <KisImageConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
@@ -647,7 +646,7 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
-        KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
+        KisImageConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -1946,6 +1945,8 @@ void KisMainWindow::slotReloadFile()
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
+    bool lockAllDockers = KisConfig(true).readEntry<bool>("LockAllDockerPanels", false);
+
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
@@ -1960,7 +1961,12 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-
+        if (lockAllDockers) {
+            if (dockWidget->titleBarWidget()) {
+                dockWidget->titleBarWidget()->setVisible(false);
+            }
+            dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        }
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 
@@ -2097,6 +2103,12 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::windowFocused()
 {
+    /**
+     * Notify selection manager so that it could update selection mask overlay
+     */
+    viewManager()->selectionManager()->selectionChanged();
+
+
     auto *kisPart = KisPart::instance();
     auto *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;

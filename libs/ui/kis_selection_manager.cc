@@ -56,7 +56,6 @@
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
 #include "kis_debug.h"
-#include "KisDocument.h"
 #include "kis_fill_painter.h"
 #include "kis_group_layer.h"
 #include "kis_layer.h"
@@ -605,4 +604,75 @@ void KisSelectionManager::slotStrokeSelection()
     delete dlg;
 
 
+}
+
+#include "kis_image_barrier_locker.h"
+#include "kis_selection_tool_helper.h"
+
+void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction action)
+{
+    KisImageSP image = m_view->image();
+
+    if (!m_view->blockUntilOperationsFinished(image)) {
+        return;
+    }
+
+    KUndo2MagicString actionName;
+    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    KisCanvas2 *canvas = m_view->canvasBase();
+
+
+    {
+        KisImageBarrierLocker locker(image);
+
+        KisPaintDeviceSP device = node->projection();
+        if (!device) device = node->paintDevice();
+        if (!device) device = node->original();
+        KIS_ASSERT_RECOVER_RETURN(canvas && device);
+
+        QRect rc = device->exactBounds();
+        if (rc.isEmpty()) return;
+
+        /**
+         * If there is nothing selected, just create a new selection
+         */
+        if (!canvas->imageView()->selection()) {
+            action = SELECTION_REPLACE;
+        }
+
+        switch (action) {
+        case SELECTION_ADD:
+            actionName = kundo2_i18n("Select Opaque (Add)");
+            break;
+        case SELECTION_SUBTRACT:
+            actionName = kundo2_i18n("Select Opaque (Subtract)");
+            break;
+        case SELECTION_INTERSECT:
+            actionName = kundo2_i18n("Select Opaque (Intersect)");
+            break;
+        default:
+            actionName = kundo2_i18n("Select Opaque");
+            break;
+        }
+
+        qint32 x, y, w, h;
+        rc.getRect(&x, &y, &w, &h);
+
+        const KoColorSpace * cs = device->colorSpace();
+
+        KisHLineConstIteratorSP deviter = device->createHLineConstIteratorNG(x, y, w);
+        KisHLineIteratorSP selIter = tmpSel ->createHLineIteratorNG(x, y, w);
+
+        for (int row = y; row < h + y; ++row) {
+            do {
+                *selIter->rawData() = cs->opacityU8(deviter->oldRawData());
+            } while (deviter->nextPixel() && selIter->nextPixel());
+            deviter->nextRow();
+            selIter->nextRow();
+        }
+    }
+
+    KisSelectionToolHelper helper(canvas, actionName);
+    tmpSel->invalidateOutlineCache();
+    helper.selectPixelSelection(tmpSel, action);
 }

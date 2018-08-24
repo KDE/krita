@@ -30,7 +30,7 @@
 #include <KoUpdater.h>
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
-
+#include <kistest.h>
 
 void KisAnimationExporterTest::testAnimationExport()
 {
@@ -80,14 +80,22 @@ void KisAnimationExporterTest::testAnimationExport()
 
     QImage exported;
 
+    QPoint errpoint;
     exported.load("export-test0000.png");
-    QCOMPARE(exported, frame0);
+    qDebug() << exported.size() << frame0.size();
+    if (!TestUtil::compareQImages(errpoint, exported, frame0)) {
+        QFAIL(QString("Failed to export identical frame0, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 
     exported.load("export-test0001.png");
-    QCOMPARE(exported, frame1);
+    if (!TestUtil::compareQImages(errpoint, exported, frame1)) {
+        QFAIL(QString("Failed to export identical frame1, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 
-    exported.load("export-test0003.png");
-    QCOMPARE(exported, frame2);
+    exported.load("export-test0002.png");
+    if (!TestUtil::compareQImages(errpoint, exported, frame2)) {
+        QFAIL(QString("Failed to export identical frame2, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 }
 
-QTEST_MAIN(KisAnimationExporterTest)
+KISTEST_MAIN(KisAnimationExporterTest)

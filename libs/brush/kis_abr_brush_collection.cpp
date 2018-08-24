@@ -27,7 +27,6 @@
 #include <QImage>
 #include <QPoint>
 #include <QColor>
-#include <QtEndian>
 #include <QByteArray>
 #include <kis_debug.h>
 #include <QString>

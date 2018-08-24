@@ -299,7 +299,6 @@ KisImportExportFilter::ConversionStatus KisXCFImport::convert(KisDocument *docum
             }
             mask->paintDevice()->setX(left);
             mask->paintDevice()->setY(top);
-            image->addNode(mask, kisLayer);
         }
 
         dbgFile << xcflayer.pixels.tileptrs;

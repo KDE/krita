@@ -40,6 +40,8 @@ public:
 public:
     KisLsOverlayFilter(Mode mode);
 
+    KisLayerStyleFilter* clone() const override;
+
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
                          const QRect &applyRect,
@@ -50,6 +52,8 @@ public:
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
 
 private:
+    KisLsOverlayFilter(const KisLsOverlayFilter &rhs);
+
     const psd_layer_effects_overlay_base* getOverlayStruct(KisPSDLayerStyleSP style) const;
 
     void applyOverlay(KisPaintDeviceSP srcDevice,

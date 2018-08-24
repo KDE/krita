@@ -49,7 +49,6 @@
 #include <config-ocio.h>
 
 #include <kis_color_manager.h>
-#include <kis_debug.h>
 
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
@@ -926,17 +925,6 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
-QColor KisConfig::selectionOverlayMaskColor(bool defaultValue) const
-{
-    QColor def(255, 0, 0, 220);
-    return (defaultValue ? def : m_cfg.readEntry("selectionOverlayMaskColor", def));
-}
-
-void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
-{
-    m_cfg.writeEntry("selectionOverlayMaskColor", color);
-}
-
 bool KisConfig::antialiasSelectionOutline(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("AntialiasSelectionOutline", false));
@@ -1444,6 +1432,16 @@ QString KisConfig::toolbarSlider(int sliderNumber, bool defaultValue) const
 void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
 {
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
+}
+
+int KisConfig::layerThumbnailSize(bool defaultValue) const
+{
+    return (defaultValue ? 20 : m_cfg.readEntry("layerThumbnailSize", 20));
+}
+
+void KisConfig::setLayerThumbnailSize(int size)
+{
+    m_cfg.writeEntry("layerThumbnailSize", size);
 }
 
 bool KisConfig::sliderLabels(bool defaultValue) const
@@ -1965,6 +1963,16 @@ QColor KisConfig::defaultAssistantsColor(bool defaultValue) const
 void KisConfig::setDefaultAssistantsColor(const QColor &color) const
 {
     m_cfg.writeEntry("defaultAssistantsColor", color);
+}
+
+bool KisConfig::autoSmoothBezierCurves(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("autoSmoothBezierCurves", false);
+}
+
+void KisConfig::setAutoSmoothBezierCurves(bool value)
+{
+    m_cfg.writeEntry("autoSmoothBezierCurves", value);
 }
 
 #include <QDomDocument>

@@ -103,7 +103,7 @@ public:
                               bool writeToAlpha = false);
     /**
      * @brief converToNormalMap
-     * Conver a channel of the device to a normal map. The channel will be interpretted as a heightmap.
+     * Convert a channel of the device to a normal map. The channel will be interpretted as a heightmap.
      * @param device the device
      * @param rect the rectangle to apply this to.
      * @param xRadius the xradius

@@ -138,6 +138,9 @@ public:
     qreal animationCacheRegionOfInterestMargin(bool defaultValue = false) const;
     void setAnimationCacheRegionOfInterestMargin(qreal value);
 
+    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
+    void setSelectionOverlayMaskColor(const QColor &color);
+
 private:
     Q_DISABLE_COPY(KisImageConfig)
 

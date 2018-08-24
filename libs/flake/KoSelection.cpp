@@ -65,8 +65,6 @@ QSizeF KoSelection::size() const
 
 QRectF KoSelection::outlineRect() const
 {
-    Q_D(const KoSelection);
-
     QPolygonF globalPolygon;
     Q_FOREACH (KoShape *shape, selectedVisibleShapes()) {
         globalPolygon = globalPolygon.united(
@@ -79,7 +77,6 @@ QRectF KoSelection::outlineRect() const
 
 QRectF KoSelection::boundingRect() const
 {
-    Q_D(const KoSelection);
     return KoShape::boundingRect(selectedVisibleShapes());
 }
 
@@ -175,8 +172,6 @@ const QList<KoShape*> KoSelection::selectedShapes() const
 
 const QList<KoShape *> KoSelection::selectedVisibleShapes() const
 {
-    Q_D(const KoSelection);
-
     QList<KoShape*> shapes = selectedShapes();
 
     KritaUtils::filterContainer (shapes, [](KoShape *shape) {
@@ -188,8 +183,6 @@ const QList<KoShape *> KoSelection::selectedVisibleShapes() const
 
 const QList<KoShape *> KoSelection::selectedEditableShapes() const
 {
-    Q_D(const KoSelection);
-
     QList<KoShape*> shapes = selectedShapes();
 
     KritaUtils::filterContainer (shapes, [](KoShape *shape) {
@@ -251,8 +244,6 @@ KoShapeLayer* KoSelection::activeLayer() const
 void KoSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
-    Q_D(KoSelection);
-
     if (type == KoShape::Deleted) {
         deselect(shape);
 

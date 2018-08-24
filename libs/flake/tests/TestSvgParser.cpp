@@ -2406,6 +2406,7 @@ void TestSvgParser::testRenderImage_AspectNone()
             "</svg>";
 
     SvgRenderTester t (data);
+    t.setFuzzyThreshold(5);
     t.parser.setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_none", false);

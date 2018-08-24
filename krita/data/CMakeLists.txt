@@ -14,6 +14,7 @@ add_subdirectory( paintoppresets )
 add_subdirectory( palettes )
 add_subdirectory( symbols )
 add_subdirectory( preset_icons )
+add_subdirectory( metadata/schemas )
 
 ########### install files ###############
 

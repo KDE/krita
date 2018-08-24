@@ -44,7 +44,6 @@
 #include <KoText.h>
 #include <KoTextDocument.h>
 #include <KoTextDocumentLayout.h>
-#include <KoTextEditor.h>
 #include <KoTextPage.h>
 #include <KoTextShapeContainerModel.h>
 #include <KoPageProvider.h>

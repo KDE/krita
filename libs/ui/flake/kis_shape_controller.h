@@ -21,7 +21,7 @@
 #include <QMap>
 
 #include "kis_dummies_facade_base.h"
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 
 
 class KisNodeDummy;
@@ -36,7 +36,7 @@ class KisNameServer;
  * selections -- everything that needs to be wrapped as a shape for
  * the tools to work on.
  */
-class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public KoShapeBasedDocumentBase
+class KRITAUI_EXPORT KisShapeController : public KisDummiesFacadeBase, public KoShapeControllerBase
 {
 
     Q_OBJECT

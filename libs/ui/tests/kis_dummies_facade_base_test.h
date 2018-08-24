@@ -30,9 +30,6 @@ class KisDummiesFacadeBaseTest : public QObject, public TestUtil::EmptyNodesTest
 {
     Q_OBJECT
 
-public:
-    ~KisDummiesFacadeBaseTest() override;
-
 protected:
     virtual KisDummiesFacadeBase* dummiesFacadeFactory() = 0;
     virtual void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade) = 0;
@@ -55,6 +52,7 @@ private Q_SLOTS:
     void testAddSelectionMasksNoActivation();
 
 private:
+
     void verifyActivatedNodes(const QString &nodes);
     void verifyMovedDummies(const QString &nodes);
 

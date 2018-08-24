@@ -73,7 +73,6 @@
 #include "widgets/kis_iconwidget.h"
 #include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"
-#include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
@@ -482,6 +481,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
+    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
@@ -537,9 +538,8 @@ KisPaintopBox::~KisPaintopBox()
 
 void KisPaintopBox::restoreResource(KoResource* resource)
 {
-
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
-    //qDebug() << "restoreResource" << resource << preset;
+
     if (preset) {
         setCurrentPaintop(preset);
 
@@ -1034,7 +1034,7 @@ void KisPaintopBox::sliderChanged(int n)
 
     if (m_presetsEnabled) {
         // IMPORTANT: set the PaintOp size before setting the other properties
-        //            it wont work the other way
+        //            it won't work the other way
         // TODO: why?!
 
         m_resourceProvider->setSize(size);

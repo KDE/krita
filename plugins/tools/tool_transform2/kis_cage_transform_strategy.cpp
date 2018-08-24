@@ -47,6 +47,8 @@ KisCageTransformStrategy::KisCageTransformStrategy(const KisCoordinatesConverter
     overrideDrawingItems(true, false, true);
     setCloseOnStartPointClick(true);
     setClipOriginalPointsPosition(false);
+    setTransformType(TransformType::CAGE_TRANSFORM);
+
 }
 
 KisCageTransformStrategy::~KisCageTransformStrategy()

@@ -57,7 +57,7 @@ namespace KisDomUtils {
         QString str;
         QTextStream stream;
         stream.setString(&str, QIODevice::WriteOnly);
-        stream.setRealNumberPrecision(11);
+        stream.setRealNumberPrecision(15);
         stream << value;
         return str;
     }

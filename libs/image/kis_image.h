@@ -94,6 +94,7 @@ public: // KisNodeGraphListener implementation
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
     void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
+    KisNode* graphOverlayNode() const override;
 
 public: // KisProjectionUpdateListener implementation
     void notifyProjectionUpdated(const QRect &rc) override;
@@ -179,6 +180,23 @@ public:
      *         image jobs.
      */
     bool locked() const;
+
+    /**
+     * Sets the mask (it must be a part of the node hierarchy already) to be paited on
+     * the top of all layers. This method does all the locking and syncing for you. It
+     * is executed asynchronously.
+     */
+    void setOverlaySelectionMask(KisSelectionMaskSP mask);
+
+    /**
+     * \see setOverlaySelectionMask
+     */
+    KisSelectionMaskSP overlaySelectionMask() const;
+
+    /**
+     * \see setOverlaySelectionMask
+     */
+    bool hasOverlaySelectionMask() const;
 
     /**
      * @return the global selection object or 0 if there is none. The

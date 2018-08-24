@@ -50,7 +50,6 @@
 #include "kis_image.h"
 #include "kis_image_barrier_locker.h"
 #include "kis_undo_adapter.h"
-#include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"
@@ -64,6 +63,7 @@
 #include "kis_selection.h"
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
+#include "kis_selection_mask.h"
 #include "kis_image_config.h"
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
@@ -161,30 +161,32 @@ namespace {
 KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 {
     KoShapeManager *shapeManager = 0;
+    KisSelectionSP selection;
 
-    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-
-    if (layer) {
+    if (KisLayer *layer = dynamic_cast<KisLayer*>(node.data())) {
         KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer);
         if (shapeLayer) {
             shapeManager = shapeLayer->shapeManager();
 
         } else {
-            KisSelectionSP selection = layer->selection();
-            if (selection && selection->hasShapeSelection()) {
-                KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
-                KIS_ASSERT_RECOVER_RETURN_VALUE(shapeSelection, 0);
-
-                shapeManager = shapeSelection->shapeManager();
-            }
+            selection = layer->selection();
         }
+    } else if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
+        selection = mask->selection();
+    }
+
+    if (!shapeManager && selection && selection->hasShapeSelection()) {
+        KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+        KIS_ASSERT_RECOVER_RETURN_VALUE(shapeSelection, 0);
+
+        shapeManager = shapeSelection->shapeManager();
     }
 
     return shapeManager;
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -395,12 +397,7 @@ void KisCanvas2::KisCanvas2Private::setActiveShapeManager(KoShapeManager *shapeM
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    KisNodeSP node = m_d->view->currentNode();
-    KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
-
-    if (localShapeManager != m_d->currentlyActiveShapeManager) {
-        m_d->setActiveShapeManager(localShapeManager);
-    }
+    KoShapeManager *localShapeManager = this->localShapeManager();
 
     // sanity check for consistency of the local shape manager
     KIS_SAFE_ASSERT_RECOVER (localShapeManager == m_d->currentlyActiveShapeManager) {
@@ -418,6 +415,18 @@ KoSelectedShapesProxy* KisCanvas2::selectedShapesProxy() const
 KoShapeManager* KisCanvas2::globalShapeManager() const
 {
     return &m_d->shapeManager;
+}
+
+KoShapeManager *KisCanvas2::localShapeManager() const
+{
+    KisNodeSP node = m_d->view->currentNode();
+    KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
+
+    if (localShapeManager != m_d->currentlyActiveShapeManager) {
+        m_d->setActiveShapeManager(localShapeManager);
+    }
+
+    return localShapeManager;
 }
 
 void KisCanvas2::updateInputMethodInfo()

@@ -263,9 +263,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    KisTimeRange range = KisTimeRange::infinite(0);
-    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), currentUITime(), range, true);
-
+    const KisTimeRange range = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
     const bool needsRegeneration = !range.contains(frameId);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token =
@@ -356,14 +354,15 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
                                                    bool recursive)
 {
     if (externalFrameActive() || m_d->frameInvalidationBlocked) return;
-    if (node->inherits("KisSelectionMask")) return;
 
+    // even overlay selection masks are not rendered in the cache
+    if (node->inherits("KisSelectionMask")) return;
 
     const int currentTime = m_d->currentTime();
     KisTimeRange invalidateRange;
 
     if (recursive) {
-        KisTimeRange::calculateTimeRangeRecursive(node, currentTime, invalidateRange, false);
+        invalidateRange = KisTimeRange::calculateAffectedFramesRecursive(node, currentTime);
     } else {
         invalidateRange = KisTimeRange::calculateNodeAffectedFrames(node, currentTime);
     }

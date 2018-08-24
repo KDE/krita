@@ -83,7 +83,7 @@ template <template <class> class Container, class T>
 }
 
 /**
- * Coverts a list of objects with type T into a list of objects of type R.
+ * Converts a list of objects with type T into a list of objects of type R.
  * The conversion is done implicitly, therefore the c-tor of type R should
  * support it. The main usage case is conversion of pointers in "descendant-
  * to-parent" way.

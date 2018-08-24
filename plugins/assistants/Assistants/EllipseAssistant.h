@@ -31,7 +31,7 @@ public:
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) override;
     QPointF buttonPosition() const override;
     int numHandles() const override { return 3; }
-    bool isAssistantComplete() const;
+    bool isAssistantComplete() const override;
 
 protected:
     QRect boundingRect() const override;

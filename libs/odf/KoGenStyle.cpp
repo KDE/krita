@@ -339,7 +339,7 @@ void KoGenStyle::addPropertyLength(const QString& propName, const QTextLength &p
     }
 }
 
-void KoGenStyle::addAttributePt(const QString& attrName, qreal attrValue)
+void KoGenStyle::addAttribute(const QString& attrName, qreal attrValue)
 {
     QString str;
     str.setNum(attrValue, 'f', DBL_DIG);

@@ -25,7 +25,7 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 
 #include "Node.h"
 #include "Shape.h"
@@ -46,7 +46,7 @@ class KRITALIBKIS_EXPORT VectorLayer : public Node
     Q_DISABLE_COPY(VectorLayer)
 
 public:
-    explicit VectorLayer(KoShapeBasedDocumentBase* shapeController, KisImageSP image, QString name, QObject *parent = 0);
+    explicit VectorLayer(KoShapeControllerBase* shapeController, KisImageSP image, QString name, QObject *parent = 0);
     explicit VectorLayer(KisShapeLayerSP layer, QObject *parent = 0);
     ~VectorLayer() override;
 public Q_SLOTS:

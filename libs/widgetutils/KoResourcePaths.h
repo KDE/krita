@@ -219,18 +219,6 @@ public:
      **/
     static QString locateLocal(const char *type, const QString &filename, bool createDir = false);
 
-    /**
-     * Indicate that resource paths have been initialized and users
-     * of this class may expect to load resources from the proper paths.
-     */
-    static void setReady();
-
-    /**
-     * Return if resource paths have been initialized and users
-     * of this class may expect to load resources from the proper paths.
-     */
-    static bool isReady();
-
 private:
 
     void addResourceTypeInternal(const QString &type, const QString &basetype,

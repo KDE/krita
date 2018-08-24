@@ -35,7 +35,6 @@
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
 
-#include <kis_debug.h>
 #include <resources/KoPattern.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_workspace_resource.h>

@@ -21,6 +21,8 @@
 #include <QTest>
 #include <QCoreApplication>
 
+#include  <sdk/tests/kistest.h>
+
 #include "filestest.h"
 
 #ifndef FILES_DATA_DIR
@@ -30,7 +32,7 @@
 
 void KisHeightmapTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 1);
 }
-QTEST_MAIN(KisHeightmapTest)
+KISTEST_MAIN(KisHeightmapTest)
 

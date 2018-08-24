@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2018 Ivan Santa Maria <ghevan@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +23,6 @@
 #include <QScopedPointer>
 #include "kritaimage_export.h"
 
-
 #include "kis_mask_generator.h"
 
 /**
@@ -30,7 +30,8 @@
  */
 class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 {
-
+public:
+    struct FastRowProcessor;
 public:
 
     KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
@@ -43,6 +44,10 @@ public:
     quint8 valueAt(qreal x, qreal y) const override;
     void setScale(qreal scaleX, qreal scaleY) override;
     void setSoftness(qreal softness) override;
+
+    bool shouldVectorize() const override;
+    KisBrushMaskApplicatorBase* applicator() override;
+    void resetMaskApplicator(bool forceScalar);
 
 private:
     struct Private;

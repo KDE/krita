@@ -53,7 +53,6 @@
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
 
-#include <KisMimeDatabase.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
@@ -819,6 +818,12 @@ void Document::setGuidesLocked(bool locked)
     KisGuidesConfig config = d->document->guidesConfig();
     config.setLockGuides(locked);
     d->document->setGuidesConfig(config);
+}
+
+bool Document::modified() const
+{
+    if (!d->document) return false;
+    return d->document->isModified();
 }
 
 QPointer<KisDocument> Document::document() const

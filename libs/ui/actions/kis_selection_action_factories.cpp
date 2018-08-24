@@ -75,7 +75,7 @@ namespace ActionHelper {
     void copyFromDevice(KisViewManager *view,
                         KisPaintDeviceSP device,
                         bool makeSharpClip = false,
-                        const KisTimeRange &range = KisTimeRange())
+                        int firstFrame = -1, int lastFrame = -1)
     {
         KisImageWSP image = view->image();
         if (!image) return;
@@ -130,7 +130,7 @@ namespace ActionHelper {
             }
         }
 
-        KisClipboard::instance()->setClip(clip, rc.topLeft(), range);
+        KisClipboard::instance()->setClip(clip, rc.topLeft(), firstFrame, lastFrame);
     }
 
 }
@@ -307,15 +307,14 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                 return;
             }
 
-            KisTimeRange range;
-
+            int firstFrame = -1, lastFrame = -1;
             KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Content.id());
             if (channel) {
                 const int currentTime = image->animationInterface()->currentTime();
-                range = channel->affectedFrames(currentTime);
+                channel->activeKeyframeRange(currentTime, &firstFrame, &lastFrame);
             }
 
-            ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
+            ActionHelper::copyFromDevice(view, dev, makeSharpClip, firstFrame, lastFrame);
         }
 
         KUndo2Command *command = 0;

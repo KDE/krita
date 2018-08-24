@@ -83,6 +83,13 @@ public:
     KisKeyframeSP lastKeyframe() const;
 
     /**
+     * Finds the span of time of the keyframe active at given time.
+     * If there is no active keyframe, first will be -1.
+     * If the keyframe continues indefinitely, last will be -1.
+     */
+    void activeKeyframeRange(int time, int *first, int *last) const;
+
+    /**
      * Calculates a pseudo-unique keyframes hash. The hash changes
      * every time any frame is added/removed/moved
      */

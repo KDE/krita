@@ -77,7 +77,7 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeRange &range)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, int firstFrame, int lastFrame)
 {
     if (!dev)
         return;
@@ -104,8 +104,8 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
     }
 
     // copied frame time limits
-    if (range.isValid() && store->open("timeRange")) {
-        store->write(QString("%1 %2").arg(range.start()).arg(range.end()).toLatin1());
+    if (firstFrame >= 0 && store->open("timeRange")) {
+        store->write(QString("%1 %2").arg(firstFrame).arg(lastFrame).toLatin1());
         store->close();
     }
 
@@ -169,17 +169,13 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
 
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
-{
-    setClip(dev, topLeft, KisTimeRange());
-}
-
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeRange *clipRange)
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, int *firstFrame, int *lastFrame)
 {
     QByteArray mimeType("application/x-krita-selection");
 
-    if (clipRange) {
-        *clipRange = KisTimeRange();
+    if (firstFrame && lastFrame) {
+        *firstFrame = -1;
+        *lastFrame = -1;
     }
 
     QClipboard *cb = QApplication::clipboard();
@@ -255,15 +251,15 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
                     clip->setY(clip->y() + diff.y());
                 }
 
-                if (store->hasFile("timeRange") && clipRange) {
+                if (store->hasFile("timeRange") && firstFrame && lastFrame) {
                     store->open("timeRange");
                     QString str = store->read(store->size());
                     store->close();
                     QStringList list = str.split(' ');
                     if (list.size() == 2) {
-                        KisTimeRange range(list[0].toInt(), list[1].toInt(), true);
-                        *clipRange = range;
-                        qDebug() << "Pasted time range" << range;
+                        *firstFrame = list[0].toInt();
+                        *lastFrame = list[1].toInt();
+                        qDebug() << "Pasted time range:" << firstFrame << "to" << lastFrame;
                     }
                 }
             }

@@ -198,9 +198,9 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         return;
     }
 
-    KisTimeRange range;
+    int firstFrame, lastFrame;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &range);
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, &firstFrame, &lastFrame);
 
     if (clip) {
         if (pasteAtCursorPosition) {
@@ -220,14 +220,14 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
 
-        if (range.isValid()) {
+        if (firstFrame >= 0) {
             newLayer->enableAnimation();
             KisKeyframeChannel *channel = newLayer->getKeyframeChannel(KisKeyframeChannel::Content.id(), true);
             KisRasterKeyframeChannel *rasterChannel = dynamic_cast<KisRasterKeyframeChannel*>(channel);
-            rasterChannel->importFrame(range.start(), clip, 0);
+            rasterChannel->importFrame(firstFrame, clip, 0);
 
-            if (!range.isInfinite()) {
-                rasterChannel->addKeyframe(range.end() + 1, 0);
+            if (lastFrame >= 0) {
+                rasterChannel->addKeyframe(lastFrame + 1, 0);
             }
         } else {
             const QRect rc = clip->extent();

@@ -27,7 +27,6 @@
 
 class QRect;
 class QMimeData;
-class KisTimeRange;
 class KisBlockUntilOperationsFinishedMediator;
 
 enum enumPasteBehaviour {
@@ -60,14 +59,12 @@ public:
      * @param dev The paint device that will be stored on the clipboard
      * @param topLeft a hint about the place where the clip should be pasted by default
      */
-    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft);
-
-    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeRange &range);
+    void setClip(KisPaintDeviceSP dev, const QPoint& topLeft, int firstFrame = -1, int lastFrame = -1);
 
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeRange *clipRange = 0);
+    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, int *firstFrame = 0, int *lastFrame = 0);
 
     bool hasClip() const;
 

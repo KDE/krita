@@ -378,6 +378,21 @@ KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
     return (m_d->keys.end()-1).value();
 }
 
+void KisKeyframeChannel::activeKeyframeRange(int time, int *first, int *last) const
+{
+    *first = *last = -1;
+
+    const KisKeyframeSP currentKeyframe = activeKeyframeAt(time);
+    if (currentKeyframe.isNull()) return;
+
+    *first = currentKeyframe->time();
+
+    const KisKeyframeSP next = nextKeyframe(currentKeyframe);
+    if (!next.isNull()) {
+        *last = next->time() - 1;
+    }
+}
+
 int KisKeyframeChannel::framesHash() const
 {
     KeyframesMap::const_iterator it = m_d->keys.constBegin();

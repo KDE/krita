@@ -1965,6 +1965,16 @@ void KisConfig::setDefaultAssistantsColor(const QColor &color) const
     m_cfg.writeEntry("defaultAssistantsColor", color);
 }
 
+bool KisConfig::autoSmoothBezierCurves(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("autoSmoothBezierCurves", false);
+}
+
+void KisConfig::setAutoSmoothBezierCurves(bool value)
+{
+    m_cfg.writeEntry("autoSmoothBezierCurves", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

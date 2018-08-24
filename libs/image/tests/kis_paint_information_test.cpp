@@ -27,8 +27,6 @@
 #include <QDomDocument>
 #include <Eigen/Core>
 
-#include <kis_debug.h>
-
 void KisPaintInformationTest::testCreation()
 {
     KisPaintInformation test;

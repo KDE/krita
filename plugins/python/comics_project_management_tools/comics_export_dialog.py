@@ -761,7 +761,7 @@ class comic_export_setting_dialog(QDialog):
         config["translatorHeader"] = self.lnTranslatorHeader.text()
         config["includeTranslComment"] = self.chkIncludeTranslatorComments.isChecked()
 
-        # Turn this into something that retreives from a line-edit when string freeze is over.
+        # Turn this into something that retrieves from a line-edit when string freeze is over.
         config["textLayerNames"] = self.ln_text_layer_name.text().split(",")
         config["panelLayerNames"] = self.ln_panel_layer_name.text().split(",")
         return config

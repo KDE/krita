@@ -442,7 +442,9 @@ void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement 
 
 KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)
 {
-    int time = keyframeNode.toElement().attribute("time").toUInt();
+    int time = keyframeNode.toElement().attribute("time").toInt();
+    workaroundBrokenFrameTimeBug(&time);
+
     qreal value = KisDomUtils::toDouble(keyframeNode.toElement().attribute("value"));
 
     KUndo2Command tempParentCommand;

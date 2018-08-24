@@ -29,9 +29,6 @@ class KisShapeControllerTest : public KisDummiesFacadeBaseTest
 {
     Q_OBJECT
 
-public:
-    ~KisShapeControllerTest() override;
-
 protected:
     KisDummiesFacadeBase* dummiesFacadeFactory() override;
     void destroyDummiesFacade(KisDummiesFacadeBase *dummiesFacade) override;

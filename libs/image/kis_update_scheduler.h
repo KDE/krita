@@ -204,6 +204,10 @@ public:
     bool wrapAroundModeSupported() const;
     int currentLevelOfDetail() const;
 
+    void continueUpdate(const QRect &rect);
+    void doSomeUsefulWork();
+    void spareThreadAppeared();
+
 protected:
     // Trivial constructor for testing support
     KisUpdateScheduler();
@@ -215,11 +219,6 @@ protected Q_SLOTS:
      * Called when it is necessary to reread configuration
      */
     void updateSettings();
-
-private Q_SLOTS:
-    void continueUpdate(const QRect &rect);
-    void doSomeUsefulWork();
-    void spareThreadAppeared();
 
 private:
     friend class UpdatesBlockTester;
@@ -235,8 +234,8 @@ protected:
 };
 
 
-class KisTestableUpdaterContext;
 class KisTestableSimpleUpdateQueue;
+class KisUpdaterContext;
 
 class KRITAIMAGE_EXPORT KisTestableUpdateScheduler : public KisUpdateScheduler
 {
@@ -244,7 +243,7 @@ public:
     KisTestableUpdateScheduler(KisProjectionUpdateListener *projectionUpdateListener,
                                qint32 threadCount);
 
-    KisTestableUpdaterContext* updaterContext();
+    KisUpdaterContext* updaterContext();
     KisTestableSimpleUpdateQueue* updateQueue();
     using KisUpdateScheduler::processQueues;
 };

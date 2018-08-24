@@ -5,6 +5,7 @@ macro_add_unittest_definitions()
 
 ecm_add_test(
     kis_svg_test.cpp
-    TEST_NAME plugins-impex-KisSvgTest
+    TEST_NAME KisSvgTest
     LINK_LIBRARIES kritaui Qt5::Test
+    NAME_PREFIX "plugins-impex-"
 )

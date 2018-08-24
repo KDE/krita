@@ -173,6 +173,11 @@ bool Value::setVariant(const QVariant& variant)
     case Rational: {
         QRegExp rx("([^\\/]*)\\/([^\\/]*)");
         rx.indexIn(variant.toString());
+        // TODO: erm... did someone forgot to write actual code here?
+
+        // for now just safe assert and return a failure
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Rational metadata values are not implemented!");
+        return false;
     }
     case KisMetaData::Value::Variant: {
         if (d->value.variant->type() == variant.type()) {
@@ -397,7 +402,7 @@ QMap<QString, KisMetaData::Value> Value::asLangArray() const
     Q_ASSERT(d->type == LangArray);
     QMap<QString, KisMetaData::Value> langArray;
     Q_FOREACH (const KisMetaData::Value& val, *d->value.array) {
-        Q_ASSERT(val.d->propertyQualifiers.contains("xml:lang"));  // TODO propably worth to have an assert for this in the constructor as well
+        Q_ASSERT(val.d->propertyQualifiers.contains("xml:lang"));  // TODO probably worth to have an assert for this in the constructor as well
         KisMetaData::Value valKeyVal = val.d->propertyQualifiers.value("xml:lang");
         Q_ASSERT(valKeyVal.type() == Variant);
         QVariant valKeyVar = valKeyVal.asVariant();

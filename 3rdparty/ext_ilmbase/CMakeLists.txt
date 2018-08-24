@@ -8,20 +8,6 @@ ExternalProject_Add( ext_ilmbase
 
         UPDATE_COMMAND ""
 )
-
-if (MSVC)
-	ExternalProject_Add_Step(
-			ext_ilmbase
-			post_install
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_ilmbase}/lib/Half.dll ${PREFIX_ext_ilmbase}/bin/Half.dll
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_ilmbase}/lib/Iex.dll ${PREFIX_ext_ilmbase}/bin/Iex.dll
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_ilmbase}/lib/Imath.dll ${PREFIX_ext_ilmbase}/bin/Imath.dll
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_ilmbase}/lib/IlmThread.dll ${PREFIX_ext_ilmbase}/bin/IlmThread.dll
-			COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_ilmbase}/lib/IexMath.dll ${PREFIX_ext_ilmbase}/bin/IexMath.dll
-			DEPENDEES install
-	)
-endif()
-
 if (MINGW)
    ExternalProject_Add_Step(
            ext_ilmbase

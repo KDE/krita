@@ -37,7 +37,6 @@
 #include "kis_snap_line_strategy.h"
 #include "kis_change_guides_command.h"
 #include "kis_snap_config.h"
-#include "kis_coordinates_converter.h"
 #include  "kis_canvas2.h"
 #include "kis_signal_compressor.h"
 

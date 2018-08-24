@@ -130,7 +130,6 @@
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
-#include <kis_image.h>
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
 

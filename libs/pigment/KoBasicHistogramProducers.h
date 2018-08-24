@@ -105,6 +105,7 @@ class KRITAPIGMENT_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramPr
 {
 public:
     KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
+    ~KoBasicU8HistogramProducer() override {}
     void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override {
@@ -116,6 +117,7 @@ class KRITAPIGMENT_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramP
 {
 public:
     KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
+    ~KoBasicU16HistogramProducer() override {}
     void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
@@ -125,6 +127,7 @@ class KRITAPIGMENT_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramP
 {
 public:
     KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
+    ~KoBasicF32HistogramProducer() override {}
     void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
@@ -136,6 +139,7 @@ class KRITAPIGMENT_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistog
 {
 public:
     KoBasicF16HalfHistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
+    ~KoBasicF16HalfHistogramProducer() override {}
     void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;
@@ -188,6 +192,7 @@ class KRITAPIGMENT_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogra
 {
 public:
     KoGenericRGBHistogramProducer();
+    ~KoGenericRGBHistogramProducer() override {}
     void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
     QString positionToString(qreal pos) const override;
     qreal maximalZoom() const override;

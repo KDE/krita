@@ -34,7 +34,7 @@ set(kritaflake_SRCS
     KoSelectedShapesProxySimple.cpp
     KoShape.cpp
     KoShapeAnchor.cpp
-    KoShapeBasedDocumentBase.cpp
+    KoShapeControllerBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp

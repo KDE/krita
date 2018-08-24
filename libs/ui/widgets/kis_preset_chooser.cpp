@@ -45,7 +45,6 @@
 #include "KisResourceServerProvider.h"
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"
-#include "kis_config.h"
 #include "kis_config_notifier.h"
 #include <kis_icon.h>
 

@@ -364,8 +364,6 @@ void KisImageConfig::setLazyFrameCreationEnabled(bool value)
 #include <sys/sysctl.h>
 #endif
 
-#include <kis_debug.h>
-
 int KisImageConfig::totalRAM()
 {
     // let's think that default memory size is 1000MiB
@@ -592,7 +590,7 @@ void KisImageConfig::setAnimationCacheRegionOfInterestMargin(qreal value)
 
 QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
 {
-    QColor def(255, 0, 0, 220);
+    QColor def(255, 0, 0, 128);
     return (defaultValue ? def : m_config.readEntry("selectionOverlayMaskColor", def));
 }
 

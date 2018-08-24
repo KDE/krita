@@ -39,14 +39,15 @@ void KisJpegTest::testFiles()
     KisExiv2::initialize();
     /**
      * Different versions of JPEG library may produce a bit different
-     * result, so just compare in a weak way
+     * result, so just compare in a weak way, i.e, only the size for real
      */
-    const int fuzziness = 3;
+    const int fuzziness = 1;
+    const int maxNumFailingPixels = 2592 * 1952; // All pixels can be different...
 
     if (JPEG_LIB_VERSION == 80){
-        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness);
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80", fuzziness, maxNumFailingPixels);
     }else {
-        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness);
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), fuzziness, maxNumFailingPixels);
     }
 
 }

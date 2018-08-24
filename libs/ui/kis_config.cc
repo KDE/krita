@@ -49,7 +49,6 @@
 #include <config-ocio.h>
 
 #include <kis_color_manager.h>
-#include <kis_debug.h>
 
 KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
@@ -1433,6 +1432,16 @@ QString KisConfig::toolbarSlider(int sliderNumber, bool defaultValue) const
 void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
 {
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
+}
+
+int KisConfig::layerThumbnailSize(bool defaultValue) const
+{
+    return (defaultValue ? 20 : m_cfg.readEntry("layerThumbnailSize", 20));
+}
+
+void KisConfig::setLayerThumbnailSize(int size)
+{
+    m_cfg.writeEntry("layerThumbnailSize", size);
 }
 
 bool KisConfig::sliderLabels(bool defaultValue) const

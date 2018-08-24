@@ -29,7 +29,6 @@
 #include <KisViewManager.h>
 #include "util.h"
 #include <KisView.h>
-#include "KisPart.h"
 #include "sdk/tests/kistest.h"
 
 void KisDocumentTest::testOpenImageTwiceInSameDoc()

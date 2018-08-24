@@ -248,6 +248,7 @@ bool TypeInfo::hasCorrectType(const Value& value) const
                     return false;
                 }
             }
+            return true;
         } else {
             return false;
         }

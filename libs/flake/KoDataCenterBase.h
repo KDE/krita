@@ -35,7 +35,7 @@ class KoXmlWriter;
  * The data center is for now just a sort of void pointer.
  * The data centers can be stuff like image collection, or stylemanager.
  * This abstraction is done so that shapes can get access to any possible type of data center.
- * The KoShapeBasedDocumentBase has a method that returns a map of data centers
+ * The KoShapeControllerBase has a method that returns a map of data centers
  */
 class KRITAFLAKE_EXPORT KoDataCenterBase
 {

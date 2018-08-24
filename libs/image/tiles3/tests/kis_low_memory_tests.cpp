@@ -27,6 +27,7 @@
 #include "tiles3/kis_tiled_data_manager.h"
 #include "tiles3/kis_tile_data_store.h"
 #include <kis_debug.h>
+#include "config-limit-long-tests.h"
 
 void KisLowMemoryTests::initTestCase()
 {
@@ -129,7 +130,12 @@ void KisLowMemoryTests::readWriteOnSharedTiles()
     KisTiledDataManager dstDM(1, &defaultPixel);
 
     const int NUM_TILES = 10;
+
+#ifdef LIMIT_LONG_TESTS
+    const int NUM_CYCLES = 800;
+#else
     const int NUM_CYCLES = 10000;
+#endif
 
     QThreadPool pool;
     pool.setMaxThreadCount(10);

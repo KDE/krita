@@ -88,7 +88,7 @@ void KoShapeReorderCommand::redo()
 {
     KUndo2Command::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
-        // z-index cannot chage the bounding rect of the shape, so
+        // z-index cannot change the bounding rect of the shape, so
         // no united updates needed
         d->shapes.at(i)->setZIndex(d->newIndexes.at(i));
         d->shapes.at(i)->update();
@@ -99,7 +99,7 @@ void KoShapeReorderCommand::undo()
 {
     KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
-        // z-index cannot chage the bounding rect of the shape, so
+        // z-index cannot change the bounding rect of the shape, so
         // no united updates needed
         d->shapes.at(i)->setZIndex(d->previousIndexes.at(i));
         d->shapes.at(i)->update();

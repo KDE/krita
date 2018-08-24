@@ -399,6 +399,11 @@ public:
     QString toolbarSlider(int sliderNumber, bool defaultValue = false) const;
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+
+    int layerThumbnailSize(bool defaultValue = false) const;
+    void setLayerThumbnailSize(int size);
+
+
     bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);
 

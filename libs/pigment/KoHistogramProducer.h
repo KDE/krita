@@ -51,7 +51,7 @@ class KRITAPIGMENT_EXPORT KoHistogramProducer
 {
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
-    virtual ~KoHistogramProducer() {}
+    virtual ~KoHistogramProducer() { qDebug() << "removing KoHistogramProducer"; }
 
     // Methods to change the bins
 

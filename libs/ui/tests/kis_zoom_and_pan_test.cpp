@@ -40,6 +40,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_filter_strategy.h"
 
+#include "kistest.h"
 
 class ZoomAndPanTester : public TestUtil::QImageBasedTest
 {
@@ -762,4 +763,4 @@ void KisZoomAndPanTest::testImageCropped()
     QVERIFY(compareWithRounding(oldStillPoint, newStillPoint, 1.0));
 }
 
-QTEST_MAIN(KisZoomAndPanTest)
+KISTEST_MAIN(KisZoomAndPanTest)

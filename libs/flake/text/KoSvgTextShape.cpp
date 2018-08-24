@@ -54,7 +54,7 @@
 
 #include <FlakeDebug.h>
 
-struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
+class KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 {
     KoSvgTextShapePrivate(KoSvgTextShape *_q)
         : KoSvgTextChunkShapePrivate(_q)
@@ -80,14 +80,12 @@ struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 KoSvgTextShape::KoSvgTextShape()
     : KoSvgTextChunkShape(new KoSvgTextShapePrivate(this))
 {
-    Q_D(KoSvgTextShape);
     setShapeId(KoSvgTextShape_SHAPEID);
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     : KoSvgTextChunkShape(new KoSvgTextShapePrivate(*rhs.d_func(), this))
 {
-    Q_D(KoSvgTextShape);
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
     relayout();
@@ -119,7 +117,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter, const KoViewConverter &co
 
     /**
      * HACK ALERT:
-     * QTextLayout should only be accessed from the tread it has been created in.
+     * QTextLayout should only be accessed from the thread it has been created in.
      * If the cached layout has been created in a different thread, we should just
      * recreate the layouts in the current thread to be able to render them.
      */
@@ -196,7 +194,7 @@ QPainterPath KoSvgTextShape::textOutline()
                     QPainterPath path;
                     path.addRect(overlineBlob);
 
-                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
                     result += path;
                 }
 
@@ -209,7 +207,7 @@ QPainterPath KoSvgTextShape::textOutline()
                     QPainterPath path;
                     path.addRect(strikeThroughBlob);
 
-                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
                     result += path;
                 }
 
@@ -221,7 +219,7 @@ QPainterPath KoSvgTextShape::textOutline()
                     QPainterPath path;
                     path.addRect(underlineBlob);
 
-                    // don't use direct addRect, because it does't care about Qt::WindingFill
+                    // don't use direct addRect, because it doesn't care about Qt::WindingFill
                     result += path;
                 }
             }

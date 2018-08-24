@@ -25,7 +25,6 @@
 #include <kis_config.h>
 
 #include <QGlobalStatic>
-#include <QMessageBox>
 
 #include <klocalizedstring.h>
 

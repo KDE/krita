@@ -586,16 +586,23 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
         m_d->commandsAdapter.beginMacro(kundo2_i18n("Convert to a Selection Mask"));
 
+        bool result = false;
+
         if (nodeType == "KisSelectionMask") {
-            m_d->maskManager.createSelectionMask(activeNode, copyFrom, true);
+            result = m_d->maskManager.createSelectionMask(activeNode, copyFrom, true);
         } else if (nodeType == "KisFilterMask") {
-            m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true);
+            result = m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true);
         } else if (nodeType == "KisTransparencyMask") {
-            m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true);
+            result = m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true);
         }
 
-        m_d->commandsAdapter.removeNode(activeNode);
         m_d->commandsAdapter.endMacro();
+
+        if (!result) {
+            m_d->view->blockUntilOperationsFinishedForced(m_d->imageView->image());
+            m_d->commandsAdapter.undoLastCommand();
+        }
+
     } else if (nodeType == "KisFileLayer") {
             m_d->layerManager.convertLayerToFileLayer(activeNode);
     } else {
@@ -1110,7 +1117,7 @@ void KisNodeManager::saveVectorLayerAsImage()
 
     SvgWriter writer(shapes);
     if (!writer.save(filename, sizeInPt, true)) {
-        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1").arg(filename));
+        QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1", filename));
     }
 }
 
@@ -1160,10 +1167,10 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
 
     if (writeToLayers && !parentNode->hasEditablePaintDevice()) {
         QMessageBox::information(view->mainWindow(),
-                                 i18nc("@title:window", "Layer %1 is not editable").arg(parentNode->name()),
+                                 i18nc("@title:window", "Layer %1 is not editable", parentNode->name()),
                                  i18n("Cannot write alpha channel of "
                                       "the parent layer \"%1\".\n"
-                                      "The operation will be cancelled.").arg(parentNode->name()));
+                                      "The operation will be cancelled.", parentNode->name()));
         return;
     }
 

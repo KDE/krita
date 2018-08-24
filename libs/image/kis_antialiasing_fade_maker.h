@@ -205,9 +205,8 @@ public:
         Vc::float_v vXLimit(m_xLimit);
         Vc::float_v vYLimit(m_yLimit);
 
-
-        Vc::float_m outXMask = xr > vXLimit;
-        Vc::float_m outYMask = yr > vYLimit;
+        Vc::float_m outXMask = Vc::abs(xr) > vXLimit;
+        Vc::float_m outYMask = Vc::abs(yr) > vYLimit;
 
         return (outXMask | outYMask);
     }

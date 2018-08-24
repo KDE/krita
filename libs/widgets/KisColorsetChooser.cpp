@@ -36,7 +36,6 @@
 #include <resources/KoPattern.h>
 #include <QGridLayout>
 #include <QLabel>
-#include <QSpinBox>
 #include <QLineEdit>
 
 #include "kis_int_parse_spin_box.h"

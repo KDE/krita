@@ -117,16 +117,6 @@ int KisUpdateScheduler::threadsLimit() const
 
 void KisUpdateScheduler::connectSignals()
 {
-    connect(&m_d->updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            SLOT(continueUpdate(const QRect&)),
-            Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigDoSomeUsefulWork()),
-            SLOT(doSomeUsefulWork()), Qt::DirectConnection);
-
-    connect(&m_d->updaterContext, SIGNAL(sigSpareThreadAppeared()),
-            SLOT(spareThreadAppeared()), Qt::DirectConnection);
-
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(updateSettings()));
 }
@@ -487,14 +477,13 @@ KisTestableUpdateScheduler::KisTestableUpdateScheduler(KisProjectionUpdateListen
     // The queue will update settings in a constructor itself
     // m_d->updatesQueue = new KisTestableSimpleUpdateQueue();
     // m_d->strokesQueue = new KisStrokesQueue();
-    // m_d->updaterContext = new KisTestableUpdaterContext(threadCount);
 
     connectSignals();
 }
 
-KisTestableUpdaterContext* KisTestableUpdateScheduler::updaterContext()
+KisUpdaterContext *KisTestableUpdateScheduler::updaterContext()
 {
-    return dynamic_cast<KisTestableUpdaterContext*>(&m_d->updaterContext);
+    return &m_d->updaterContext;
 }
 
 KisTestableSimpleUpdateQueue* KisTestableUpdateScheduler::updateQueue()

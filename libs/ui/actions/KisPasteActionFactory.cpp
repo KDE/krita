@@ -188,7 +188,7 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
 }
 
 }
-#include "kis_painter.h"
+
 void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view)
 {
     KisImageSP image = view->image();

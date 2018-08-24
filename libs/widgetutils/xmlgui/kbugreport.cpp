@@ -34,7 +34,6 @@
 #include <QStandardPaths>
 #include <QComboBox>
 #include <QLineEdit>
-#include <QStandardPaths>
 #include <QDebug>
 #include <QTextEdit>
 #include <QDesktopServices>

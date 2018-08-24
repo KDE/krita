@@ -352,7 +352,7 @@ void QMic::slotStartApplicator(QStringList gmicImages)
         }
         if (m.isAttached()) {
             if (!m.lock()) {
-                dbgPlugins << "Could not lock memeory segment"  << m.error() << m.errorString();
+                dbgPlugins << "Could not lock memory segment"  << m.error() << m.errorString();
             }
             dbgPlugins << "Memory segment" << key << m.size() << m.constData() << m.data();
             gmic_image<float> *gimg = new gmic_image<float>();
@@ -366,10 +366,10 @@ void QMic::slotStartApplicator(QStringList gmicImages)
             dbgPlugins << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
 
             if (!m.unlock()) {
-                dbgPlugins << "Could not unlock memeory segment"  << m.error() << m.errorString();
+                dbgPlugins << "Could not unlock memory segment"  << m.error() << m.errorString();
             }
             if (!m.detach()) {
-                dbgPlugins << "Could not detach from memeory segment"  << m.error() << m.errorString();
+                dbgPlugins << "Could not detach from memory segment"  << m.error() << m.errorString();
             }
             images.append(gimg);
         }

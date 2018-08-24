@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>238</width>
-    <height>83</height>
+    <width>220</width>
+    <height>384</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -62,7 +62,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="opacityLayout" stretch="0,0">
+    <layout class="QHBoxLayout" name="opacityLayout" stretch="0,0,0">
      <property name="topMargin">
       <number>0</number>
      </property>
@@ -89,6 +89,13 @@
        </property>
        <property name="whatsThis">
         <string>Adjust the transparency of the layer</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="configureLayerDockerToolbar">
+       <property name="text">
+        <string>...</string>
        </property>
       </widget>
      </item>

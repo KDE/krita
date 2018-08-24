@@ -29,6 +29,7 @@
 #include "kis_painter.h"
 #include <brushengine/kis_paint_information.h>
 
+#include "kistest.h"
 
 class FreehandStrokeTester : public utils::StrokeTester
 {
@@ -186,4 +187,4 @@ void FreehandStrokeTest::testPredefinedBrushStrokeLod()
     tester.testSimpleStroke();
 }
 
-QTEST_MAIN(FreehandStrokeTest)
+KISTEST_MAIN(FreehandStrokeTest)

@@ -28,8 +28,6 @@
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
-#include <boost/graph/properties.hpp>
-
 // we use a forked version of the algorithm
 //#include <boost/graph/boykov_kolmogorov_max_flow.hpp>
 #include "patched_boykov_kolmogorov_max_flow.hpp"

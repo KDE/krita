@@ -375,7 +375,6 @@ public:
 
 #include <QApplication>
 #include <kis_paint_layer.h>
-#include <kis_image.h>
 #include "kis_undo_stores.h"
 #include "kis_layer_utils.h"
 

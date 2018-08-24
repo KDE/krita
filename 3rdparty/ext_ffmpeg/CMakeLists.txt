@@ -1,6 +1,6 @@
 SET(PREFIX_ext_ffmpeg "${EXTPREFIX}" )
 
-if(MSVC OR MINGW)
+if(MINGW)
     if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add( ext_ffmpeg
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

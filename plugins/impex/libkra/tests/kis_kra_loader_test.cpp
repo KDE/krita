@@ -26,7 +26,6 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
-#include "KisDocument.h"
 #include "kis_image.h"
 #include "testutil.h"
 #include "KisPart.h"

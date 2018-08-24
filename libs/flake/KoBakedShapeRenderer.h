@@ -38,7 +38,6 @@ struct KoBakedShapeRenderer {
         : m_dstShapeOutline(dstShapeOutline),
           m_dstShapeTransform(dstShapeTransform),
           m_contentIsObb(contentIsObb),
-          m_referenceIsObb(referenceIsObb),
           m_patternTransform(patternTransform)
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(!contentIsObb || !bakedShapeBoundingRect.isEmpty());
@@ -120,7 +119,6 @@ private:
     QTransform m_dstShapeTransform;
 
     bool m_contentIsObb;
-    bool m_referenceIsObb;
     const QTransform &m_patternTransform;
 
     QImage m_patch;

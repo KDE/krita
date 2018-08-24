@@ -77,7 +77,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc);
+    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc);
 
     ~KisCanvas2() override;
 
@@ -119,6 +119,13 @@ public: // KoCanvasBase implementation
      * Return the shape manager associated with this canvas
      */
     KoShapeManager *globalShapeManager() const;
+
+    /**
+     * Return shape manager associated with the currently active node.
+     * If current node has no internal shape manager, return null.
+     */
+    KoShapeManager *localShapeManager() const;
+
 
     void updateCanvas(const QRectF& rc) override;
 

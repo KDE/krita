@@ -42,7 +42,7 @@ public:
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     QStringList mimeTypes() const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-    Qt::DropActions supportedDragActions() const;
+    Qt::DropActions supportedDragActions() const override;
 public:
     void setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource);
 private:

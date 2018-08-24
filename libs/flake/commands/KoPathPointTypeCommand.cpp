@@ -193,6 +193,8 @@ void KoPathPointTypeCommand::makeCubicPointSmooth(KoPathPoint *point)
     // the new distance of the control points is the average distance to the node point
     point->setControlPoint1(point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2));
     point->setControlPoint2(point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1));
+
+    point->setProperties(properties);
 }
 
 void KoPathPointTypeCommand::undoChanges(const QList<PointData> &data)

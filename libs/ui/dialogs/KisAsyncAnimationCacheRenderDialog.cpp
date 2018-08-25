@@ -28,71 +28,29 @@ namespace {
 
 QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange)
 {
-    QList<int> result;
+    QList<int> framesToRegenerate;
 
     KisImageSP image = cache->image();
-    if (!image) return result;
+    if (!image) return framesToRegenerate;
 
     KisImageAnimationInterface *animation = image->animationInterface();
-    if (!animation->hasAnimation()) return result;
+    if (!animation->hasAnimation()) return framesToRegenerate;
 
-    if (!playbackRange.isEmpty()) {
-        // TODO: optimize check for fully-cached case
-        for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
-            const KisTimeRange stillFrameRange =
-                KisTimeRange::calculateIdenticalFramesRecursive(image->root(), frame);
+    KisFrameSet dirtyFrames = cache->dirtyFramesWithin(playbackRange);
 
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(stillFrameRange.isValid(), result);
+    while (!dirtyFrames.isEmpty()) {
+        int first = dirtyFrames.start();
 
-            if (cache->frameStatus(stillFrameRange.start()) == KisAnimationFrameCache::Uncached) {
-                result.append(stillFrameRange.start());
-            }
+        framesToRegenerate.append(first);
 
-            if (stillFrameRange.isInfinite()) {
-                break;
-            } else {
-                frame = stillFrameRange.end();
-            }
-        }
+        KisFrameSet duplicates = KisTimeRange::calculateIdenticalFramesRecursive(image->root(), first).asFrameSet();
+        dirtyFrames -= duplicates;
     }
 
-    return result;
+    return framesToRegenerate;
 }
 
 }
-
-int KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeRange &skipRange)
-{
-    int result = -1;
-
-    KisImageSP image = cache->image();
-    if (!image) return result;
-
-    KisImageAnimationInterface *animation = image->animationInterface();
-    if (!animation->hasAnimation()) return result;
-
-    if (playbackRange.isValid()) {
-        // TODO: optimize check for fully-cached case
-        for (int frame = playbackRange.start(); frame <= playbackRange.end(); frame++) {
-            if (skipRange.contains(frame)) {
-                if (skipRange.isInfinite()) {
-                    break;
-                } else {
-                    frame = skipRange.end();
-                    continue;
-                }
-            }
-
-            if (cache->frameStatus(frame) != KisAnimationFrameCache::Cached) {
-                result = frame;
-                break;
-            }
-        }
-    }
-
-    return result;
-}
-
 
 struct KisAsyncAnimationCacheRenderDialog::Private
 {

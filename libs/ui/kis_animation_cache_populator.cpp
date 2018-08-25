@@ -138,16 +138,16 @@ struct KisAnimationCachePopulator::Private
                 // Let's skip frames affected by changes to the active node (on the active document)
                 // This avoids constant invalidation and regeneration while drawing
                 KisNodeSP activeNode = activeCanvas->viewManager()->nodeManager()->activeNode();
-                KisTimeRange skipRange;
+                KisFrameSet skipRange;
                 if (activeNode) {
                     int currentTime = activeCanvas->currentImage()->animationInterface()->currentUITime();
 
                     if (!activeNode->keyframeChannels().isEmpty()) {
                         Q_FOREACH (const KisKeyframeChannel *channel, activeNode->keyframeChannels()) {
-                            skipRange |= channel->affectedFrames(currentTime);
+                            skipRange |= channel->affectedFrames(currentTime).asFrameSet();
                         }
                     } else {
-                        skipRange = KisTimeRange::infinite(0);
+                        skipRange = KisFrameSet::infiniteFrom(0);
                     }
                 }
 
@@ -164,14 +164,14 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
-            bool requested = tryRequestGeneration(cache, KisTimeRange());
+            bool requested = tryRequestGeneration(cache, KisFrameSet());
             if (requested) return true;
         }
 
         return false;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeRange skipRange)
+    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisFrameSet skipRange)
     {
         KisImageSP image = cache->image();
         if (!image) return false;
@@ -179,7 +179,7 @@ struct KisAnimationCachePopulator::Private
         KisImageAnimationInterface *animation = image->animationInterface();
         KisTimeSpan currentRange = animation->fullClipRange();
 
-        const int frame = KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
+        const int frame = cache->firstDirtyFrameWithin(currentRange, &skipRange);
 
         if (frame >= 0) {
             return regenerate(cache, frame);

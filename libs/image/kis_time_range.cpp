@@ -243,6 +243,22 @@ KisTimeRange KisTimeRange::calculateAffectedFramesRecursive(const KisNode *node,
     return range;
 }
 
+int KisFrameSet::firstExcludedSince(int time) const
+{
+    if (isEmpty()) return time;
+    if (0 <= m_firstFrameOfInfinity && m_firstFrameOfInfinity <= time) return -1;
+    if (time < start()) return time;
+    if (time > m_spans.last().end()) return time;
+
+    Q_FOREACH(const KisTimeSpan &span, m_spans) {
+            if (span.start() > time) return time;
+            if (span.end() >= time) return span.end() + 1;
+        }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(false);
+    return -1;
+}
+
 KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int time)
 {
     KisTimeRange range = KisTimeRange::infinite(0);

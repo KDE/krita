@@ -28,8 +28,8 @@
 
 class KisImage;
 class KisImageAnimationInterface;
-class KisTimeRange;
 class KisTimeSpan;
+class KisFrameSet;
 
 class KisOpenGLImageTextures;
 typedef KisSharedPtr<KisOpenGLImageTextures> KisOpenGLImageTexturesSP;
@@ -60,6 +60,8 @@ public:
     };
 
     CacheStatus frameStatus(int time) const;
+    KisFrameSet dirtyFramesWithin(KisTimeSpan range);
+    int firstDirtyFrameWithin(KisTimeSpan range, const KisFrameSet *ignoredFrames = 0);
 
     KisImageWSP image();
 
@@ -72,8 +74,6 @@ public:
      */
     void dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect);
 
-    bool framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest);
-
 Q_SIGNALS:
     void changed();
 
@@ -83,7 +83,7 @@ private:
     QScopedPointer<Private> m_d;
 
 private Q_SLOTS:
-    void framesChanged(const KisTimeRange &range, const QRect &rect);
+    void framesChanged(const KisFrameSet &range, const QRect &rect);
     void slotConfigChanged();
 };
 

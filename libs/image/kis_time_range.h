@@ -175,6 +175,8 @@ public:
         return false;
     }
 
+    int firstExcludedSince(int time) const;
+
     bool operator==(const KisFrameSet &rhs) const {
         return rhs.m_firstFrameOfInfinity == m_firstFrameOfInfinity && rhs.m_spans == m_spans;
     }
@@ -301,6 +303,12 @@ public:
         }
 
         return m_start <= time && time <= m_end;
+    }
+
+    // Temporary adapter
+    inline KisFrameSet asFrameSet() const {
+        if (isInfinite()) return KisFrameSet::infiniteFrom(m_start);
+        return KisFrameSet::between(m_start, m_end);
     }
 
     static inline KisTimeRange fromTime(int start, int end) {

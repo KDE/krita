@@ -19,6 +19,7 @@
 #include "kis_animation_frame_cache.h"
 
 #include <QMap>
+#include <QVector>
 
 #include "kis_debug.h"
 
@@ -61,44 +62,80 @@ struct KisAnimationFrameCache::Private
 
     KisOpenGLUpdateInfoSP fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod);
 
-    struct Frame
+    struct CacheEntry
     {
-        KisOpenGLUpdateInfoSP openGlFrame;
+        int frameId;
         int length;
 
-        Frame(KisOpenGLUpdateInfoSP info, int length)
-            : openGlFrame(info), length(length)
+        CacheEntry(int id, int length)
+            : frameId(id), length(length)
         {}
+
+        bool isInfinite() const {
+            return length < 0;
+        }
     };
 
-    QMap<int, int> newFrames;
+    int nextFreeId = 0;
+    /// Map of cache entries by beginning time of the entry
+    QMap<int, CacheEntry> cachedFrames;
+    /// Maps a frame ID to a list of times, where entries with said frame ID begin
+    QMap<int, QVector<int>> entriesById;
+
+    void addFrame(int start, int length, int id) {
+        cachedFrames.insert(start, CacheEntry(id, length));
+        entriesById[id].append(start);
+    }
+
+    QMap<int, CacheEntry>::iterator iteratorFrom(int time) {
+        if (cachedFrames.isEmpty()) return cachedFrames.end();
+
+        auto it = cachedFrames.upperBound(time);
+        if (it != cachedFrames.begin()) {
+            auto previous = it - 1;
+            if (previous.value().isInfinite() || time <= previous.key() + previous.value().length) {
+                return previous;
+            }
+
+        }
+        return it;
+    }
+
+    QMap<int, CacheEntry>::const_iterator constIteratorFrom(int time) const {
+        if (cachedFrames.isEmpty()) return cachedFrames.constEnd();
+
+        auto it = cachedFrames.upperBound(time);
+        if (it != cachedFrames.constBegin()) {
+            auto previous = it - 1;
+            if (previous.value().isInfinite() || time <= previous.key() + previous.value().length) {
+                return previous;
+            }
+
+        }
+        return it;
+    }
 
     int getFrameIdAtTime(int time) const
     {
-        if (newFrames.isEmpty()) return -1;
+        auto it = constIteratorFrom(time);
+        if (it == cachedFrames.constEnd()) return -1;
 
-        auto it = newFrames.upperBound(time);
-
-        if (it != newFrames.constBegin()) it--;
-
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(it != newFrames.constEnd(), 0);
         const int start = it.key();
-        const int length = it.value();
+        const CacheEntry &frame = it.value();
 
         bool foundFrameValid = false;
-
-        if (length == -1) {
+        if (frame.isInfinite()) {
             if (start <= time) {
                 foundFrameValid = true;
             }
         } else {
-            int end = start + length - 1;
+            int end = start + frame.length - 1;
             if (start <= time && time <= end) {
                 foundFrameValid = true;
             }
         }
 
-        return foundFrameValid ? start : -1;
+        return foundFrameValid ? frame.frameId : -1;
     }
 
     bool hasFrame(int time) const {
@@ -111,13 +148,20 @@ struct KisAnimationFrameCache::Private
         return frameId >= 0 ? swapper->loadFrame(frameId) : 0;
     }
 
-    void addFrame(KisOpenGLUpdateInfoSP info, const KisTimeRange& range)
+    void addFrame(KisOpenGLUpdateInfoSP info, const KisFrameSet& targetFrames)
     {
-        invalidate(range);
+        invalidate(targetFrames);
 
-        const int length = range.isInfinite() ? -1 : range.end() - range.start() + 1;
-        newFrames.insert(range.start(), length);
-        swapper->saveFrame(range.start(), info, image->bounds());
+        const int id = nextFreeId++;
+        swapper->saveFrame(id, info, image->bounds());
+
+        for (const KisTimeSpan span : targetFrames.finiteSpans()) {
+            addFrame(span.start(), span.duration(), id);
+        }
+
+        if (targetFrames.isInfinite()) {
+            addFrame(targetFrames.firstFrameOfInfinity(), -1, id);
+        }
     }
 
     /**
@@ -125,45 +169,62 @@ struct KisAnimationFrameCache::Private
      * @param range
      * @return true if frames were invalidated, false if nothing was changed
      */
-    bool invalidate(const KisTimeRange& range)
+    bool invalidate(const KisFrameSet& range)
     {
-        if (newFrames.isEmpty()) return false;
+        if (cachedFrames.isEmpty()) return false;
 
         bool cacheChanged = false;
 
-        auto it = newFrames.lowerBound(range.start());
-        if (it.key() != range.start() && it != newFrames.begin()) it--;
+        for (const KisTimeSpan span : range.finiteSpans()) {
+            cacheChanged |= invalidate(span.start(), span.end());
+        }
+        if (range.isInfinite()) {
+            cacheChanged |= invalidate(range.firstFrameOfInfinity(), -1);
+        }
 
-        while (it != newFrames.end()) {
+        return cacheChanged;
+    }
+
+    bool invalidate(int invalidateFrom, int invalidateTo) {
+        const bool infinite = invalidateTo < 0;
+
+        bool cacheChanged = false;
+
+        auto it = iteratorFrom(invalidateFrom);
+        while (it != cachedFrames.end()) {
             const int start = it.key();
-            const int length = it.value();
-            const bool frameIsInfinite = (length == -1);
-            const int end = start + length - 1;
+            const CacheEntry frame = it.value();
+            const bool frameIsInfinite = (frame.length == -1);
+            const int end = start + frame.length - 1;
 
-            if (start >= range.start()) {
-                if (!range.isInfinite() && start > range.end()) {
-                    break;
+            if (start >= invalidateFrom) {
+                if (!infinite) {
+                    if (start > invalidateTo) {
+                        break;
+                    }
+
+                    if (frameIsInfinite || end > invalidateTo) {
+                        // Shorten the entry from the beginning
+                        int newStart = invalidateTo + 1;
+                        int newLength = frameIsInfinite ? -1 : (end - newStart + 1);
+
+                        cachedFrames.insert(newStart, CacheEntry(frame.frameId, newLength));
+                        addFrame(newStart, newLength, frame.frameId);
+                    }
                 }
 
-                if (!range.isInfinite() && (frameIsInfinite || end > range.end())) {
-                    // Reinsert with a later start
-                    int newStart = range.end() + 1;
-                    int newLength = frameIsInfinite ? -1 : (end - newStart + 1);
-
-                    newFrames.insert(newStart, newLength);
-                    swapper->moveFrame(start, newStart);
-                } else {
-                    swapper->forgetFrame(start);
-                }
-
-                it = newFrames.erase(it);
+                QVector<int> &instances = entriesById[frame.frameId];
+                instances.removeAll(it.key());
+                if (instances.isEmpty()) swapper->forgetFrame(frame.frameId);
+                it = cachedFrames.erase(it);
 
                 cacheChanged = true;
                 continue;
 
-            } else if (frameIsInfinite || end >= range.start()) {
-                const int newEnd = range.start() - 1;
-                *it = newEnd - start + 1;
+            } else if (frameIsInfinite || end >= invalidateFrom) {
+                const int newEnd = invalidateFrom - 1;
+                const int newLength = newEnd - start + 1;
+                *it = CacheEntry(frame.frameId, newLength);
 
                 cacheChanged = true;
             }
@@ -218,7 +279,7 @@ KisAnimationFrameCache::KisAnimationFrameCache(KisOpenGLImageTexturesSP textures
     // create swapping backend
     slotConfigChanged();
 
-    connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisTimeRange,QRect)), this, SLOT(framesChanged(KisTimeRange,QRect)));
+    connect(m_d->image->animationInterface(), SIGNAL(sigFramesChanged(KisFrameSet, QRect)), this, SLOT(framesChanged(KisFrameSet, QRect)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 }
 
@@ -247,11 +308,9 @@ bool KisAnimationFrameCache::shouldUploadNewFrame(int newTime, int oldTime) cons
 {
     if (oldTime < 0) return true;
 
-    const int oldKeyframeStart = m_d->getFrameIdAtTime(oldTime);
-    if (oldKeyframeStart < 0) return true;
-
-    const int oldKeyFrameLength = m_d->newFrames[oldKeyframeStart];
-    return !(newTime >= oldKeyframeStart && (newTime < oldKeyframeStart + oldKeyFrameLength || oldKeyFrameLength == -1));
+    const int oldFrameId = m_d->getFrameIdAtTime(oldTime);
+    const int newFrameId = m_d->getFrameIdAtTime(newTime);
+    return (oldFrameId < 0) || oldFrameId != newFrameId;
 }
 
 KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time) const
@@ -264,11 +323,11 @@ KisImageWSP KisAnimationFrameCache::image()
     return m_d->image;
 }
 
-void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRect &rect)
+void KisAnimationFrameCache::framesChanged(const KisFrameSet &range, const QRect &rect)
 {
     Q_UNUSED(rect);
 
-    if (!range.isValid()) return;
+    if (range.isEmpty()) return;
 
     bool cacheChanged = m_d->invalidate(range);
 
@@ -279,7 +338,7 @@ void KisAnimationFrameCache::framesChanged(const KisTimeRange &range, const QRec
 
 void KisAnimationFrameCache::slotConfigChanged()
 {
-    m_d->newFrames.clear();
+    m_d->cachedFrames.clear();
 
     KisImageConfig cfg(true);
 
@@ -336,78 +395,81 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageS
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
 {
-    const KisTimeRange identicalRange =
-        KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), time);
+    const KisFrameSet identicalFrames = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), time).asFrameSet();
 
-    m_d->addFrame(info, identicalRange);
+    m_d->addFrame(info, identicalFrames);
 
     emit changed();
 }
 
 void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect)
 {
-    if (m_d->newFrames.isEmpty()) return;
+    if (m_d->cachedFrames.isEmpty()) return;
 
-    auto it = m_d->newFrames.upperBound(range.start());
+    QVector<int> framesToDrop;
 
-    // the vector is guaranteed to be non-empty,
-    // so decrementing iterator is safe
-    if (it != m_d->newFrames.begin()) it--;
+    for (auto it = m_d->constIteratorFrom(range.start()); it != m_d->cachedFrames.constEnd() && it.key() <= range.end(); it++) {
+        const Private::CacheEntry &frame = it.value();
 
-    while (it != m_d->newFrames.end() && it.key() <= range.end()) {
-        const int frameId = it.key();
-        const int frameLength = it.value();
-
-        if (frameId + frameLength - 1 < range.start()) {
-            ++it;
-            continue;
-        }
-
-        const QRect frameRect = m_d->swapper->frameDirtyRect(frameId);
-        const int frameLod = m_d->swapper->frameLevelOfDetail(frameId);
+        const QRect frameRect = m_d->swapper->frameDirtyRect(frame.frameId);
+        const int frameLod = m_d->swapper->frameLevelOfDetail(frame.frameId);
 
         if (frameLod > m_d->effectiveLevelOfDetail(regionOfInterest) || !frameRect.contains(minimalRect)) {
-            m_d->swapper->forgetFrame(frameId);
-            it = m_d->newFrames.erase(it);
-        } else {
-            ++it;
+            if (!framesToDrop.contains(frame.frameId)) framesToDrop.append(frame.frameId);
         }
+    }
+
+    Q_FOREACH(int frameId, framesToDrop) {
+        Q_FOREACH(int time, m_d->entriesById[frameId]) {
+            m_d->cachedFrames.remove(time);
+        }
+
+        m_d->entriesById.remove(frameId);
+        m_d->swapper->forgetFrame(frameId);
     }
 }
 
-bool KisAnimationFrameCache::framesHaveValidRoi(const KisTimeRange &range, const QRect &regionOfInterest)
+KisFrameSet KisAnimationFrameCache::dirtyFramesWithin(const KisTimeSpan range)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!range.isInfinite(), false);
-    if (m_d->newFrames.isEmpty()) return false;
+    auto it = m_d->constIteratorFrom(range.start());
+    if (it == m_d->cachedFrames.constEnd()) return KisFrameSet(range);
 
-    auto it = m_d->newFrames.upperBound(range.start());
+    QVector<KisTimeSpan> cachedSpans;
+    int firstOfInfinite = -1;
 
-    if (it != m_d->newFrames.begin()) it--;
+    for (; it != m_d->cachedFrames.constEnd() && it.key() <= range.end(); it++) {
+        const int start = it.key();
+        Private::CacheEntry entry = it.value();
 
-    int expectedNextFrameStart = it.key();
-
-    while (it.key() <= range.end()) {
-        const int frameId = it.key();
-        const int frameLength = it.value();
-
-        if (frameId + frameLength - 1 < range.start()) {
-            expectedNextFrameStart = frameId + frameLength;
-            ++it;
-            continue;
+        if (entry.isInfinite()) {
+            firstOfInfinite = start;
+        } else {
+            cachedSpans.append(KisTimeSpan(start, start + entry.length - 1));
         }
 
-        if (expectedNextFrameStart != frameId) {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(expectedNextFrameStart < frameId);
-            return false;
-        }
-
-        if (!m_d->swapper->frameDirtyRect(frameId).contains(regionOfInterest)) {
-            return false;
-        }
-
-        expectedNextFrameStart = frameId + frameLength;
-        ++it;
     }
 
-    return true;
+    return KisFrameSet(range) - KisFrameSet(cachedSpans, firstOfInfinite);
+}
+
+int KisAnimationFrameCache::firstDirtyFrameWithin(const KisTimeSpan range, const KisFrameSet *ignoredFrames)
+{
+    int candidate = range.start();
+
+    for (auto it = m_d->constIteratorFrom(range.start()); it != m_d->cachedFrames.constEnd(); it++) {
+        const int start = it.key();
+        const int end = start + it.value().length - 1;
+
+        if (ignoredFrames) {
+            candidate = ignoredFrames->firstExcludedSince(candidate);
+        }
+
+        if (candidate < start) {
+            return candidate;
+        } else if (candidate <= end) {
+            candidate = end + 1;
+        }
+    }
+
+    return -1;
 }

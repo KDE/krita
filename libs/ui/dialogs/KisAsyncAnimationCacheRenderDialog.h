@@ -23,7 +23,6 @@
 #include "kis_types.h"
 
 class KisTimeSpan;
-class KisTimeRange;
 
 class KisAsyncAnimationCacheRenderDialog : public KisAsyncAnimationRenderDialogBase
 {
@@ -31,7 +30,7 @@ public:
     KisAsyncAnimationCacheRenderDialog(KisAnimationFrameCacheSP cache, const KisTimeSpan &range, int busyWait = 200);
     ~KisAsyncAnimationCacheRenderDialog();
 
-    static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeRange &skipRange);
+    static int calcFirstDirtyFrame(KisAnimationFrameCacheSP cache, const KisTimeSpan &playbackRange, const KisTimeSpan &skipRange);
 
 protected:
     QList<int> calcDirtyFrames() const override;

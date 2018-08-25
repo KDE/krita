@@ -48,6 +48,7 @@
 #include "kis_model_index_converter_show_all.h"
 #include "kis_node_selection_adapter.h"
 #include "kis_node_insertion_adapter.h"
+#include <KisSelectionActionsAdapter.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -60,6 +61,7 @@ struct KisNodeModel::Private
     KisShapeController *shapeController = 0;
     KisNodeSelectionAdapter *nodeSelectionAdapter = 0;
     KisNodeInsertionAdapter *nodeInsertionAdapter = 0;
+    KisSelectionActionsAdapter *selectionActionsAdapter = 0;
     QList<KisNodeDummy*> updateQueue;
     QTimer updateTimer;
 
@@ -252,7 +254,12 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter, KisNodeInsertionAdapter *nodeInsertionAdapter)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
+                                    KisImageWSP image,
+                                    KisShapeController *shapeController,
+                                    KisNodeSelectionAdapter *nodeSelectionAdapter,
+                                    KisNodeInsertionAdapter *nodeInsertionAdapter,
+                                    KisSelectionActionsAdapter *selectionActionsAdapter)
 {
     QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
     KisShapeController  *oldShapeController = m_d->shapeController;
@@ -260,6 +267,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     m_d->shapeController = shapeController;
     m_d->nodeSelectionAdapter = nodeSelectionAdapter;
     m_d->nodeInsertionAdapter = nodeInsertionAdapter;
+    m_d->selectionActionsAdapter = selectionActionsAdapter;
 
     if (oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
@@ -558,6 +566,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     if(!m_d->dummiesFacade || !index.isValid()) return false;
 
     bool result = true;
+    bool shouldUpdate = true;
     bool shouldUpdateRecursively = false;
     KisNodeSP node = nodeFromIndex(index);
 
@@ -575,11 +584,18 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
             break;
         }
+    case KisNodeModel::SelectOpaqueRole:
+        if (node && m_d->selectionActionsAdapter) {
+            SelectionAction action = SelectionAction(value.toInt());
+            m_d->selectionActionsAdapter->selectOpaqueOnNode(node, action);
+        }
+        shouldUpdate = false;
+        break;
     default:
         result = false;
     }
 
-    if(result) {
+    if (result && shouldUpdate) {
         if (shouldUpdateRecursively) {
             QSet<QModelIndex> indexes;
             addChangedIndex(index, &indexes);

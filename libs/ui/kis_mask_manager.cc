@@ -49,7 +49,7 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
-#include "commands/kis_selection_commands.h"
+#include "commands/kis_deselect_global_selection_command.h"
 #include "kis_iterator_ng.h"
 
 KisMaskManager::KisMaskManager(KisViewManager * view)
@@ -146,7 +146,15 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode, bool updateImage)
+void KisMaskManager::createMaskCommon(KisMaskSP mask,
+                                      KisNodeSP activeNode,
+                                      KisPaintDeviceSP copyFrom,
+                                      const KUndo2MagicString& macroName,
+                                      const QString &nodeType,
+                                      const QString &nodeName,
+                                      bool suppressSelection,
+                                      bool avoidActiveNode,
+                                      bool updateImage)
 {
     m_commandsAdapter->beginMacro(macroName);
 
@@ -157,11 +165,14 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent.data());
     Q_ASSERT(parentLayer);
 
+    bool shouldDeselectGlobalSelection = false;
+
     if (!suppressSelection) {
         if (copyFrom) {
             mask->initSelection(copyFrom, parentLayer);
         } else {
             mask->initSelection(m_view->selection(), parentLayer);
+            shouldDeselectGlobalSelection = m_view->selection();
         }
     }
 
@@ -171,6 +182,11 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     mask->setName(nodeName + QString(" ") + QString::number(number));
 
     m_commandsAdapter->addNode(mask, parentLayer, above, updateImage, updateImage);
+
+    if (shouldDeselectGlobalSelection) {
+        m_commandsAdapter->addExtraCommand(new KisDeselectGlobalSelectionCommand(m_imageView->image()));
+    }
+
     m_commandsAdapter->endMacro();
 
     masksUpdated();

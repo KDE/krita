@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,33 +15,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_RESELECT_GLOBAL_SELECTION_COMMAND_H
-#define KIS_RESELECT_GLOBAL_SELECTION_COMMAND_H
 
-#include <kritaimage_export.h>
-#include <kundo2command.h>
-#include "kis_types.h"
+#ifndef KISRESELECTACTIVESELECTIONCOMMAND_H
+#define KISRESELECTACTIVESELECTIONCOMMAND_H
 
-/// The command for deselection the global selection of KisImage
-class KRITAIMAGE_EXPORT KisReselectGlobalSelectionCommand : public KUndo2Command
+#include "kis_reselect_global_selection_command.h"
+
+
+class KRITAIMAGE_EXPORT KisReselectActiveSelectionCommand : public KisReselectGlobalSelectionCommand
 {
-
 public:
-    /**
-     * Constructor
-     * @param image the image
-     * @param parent the parent command
-     */
-    KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0);
-    ~KisReselectGlobalSelectionCommand() override;
+    KisReselectActiveSelectionCommand(KisNodeSP activeNode, KisImageWSP image, KUndo2Command * parent = 0);
 
     void redo() override;
     void undo() override;
 
-protected:
-    KisImageWSP m_image;
-    bool m_canReselect;
+private:
+    KisNodeSP m_activeNode;
+    KisSelectionMaskSP m_reselectedMask;
 };
 
-
-#endif
+#endif // KISRESELECTACTIVESELECTIONCOMMAND_H

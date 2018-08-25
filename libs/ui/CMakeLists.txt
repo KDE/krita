@@ -140,6 +140,7 @@ set(kritaui_LIB_SRCS
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
+    KisSelectionActionsAdapter.cpp
     kis_statusbar.cc
     kis_zoom_manager.cc
     kis_favorite_resource_manager.cpp

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,27 +15,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_SHAPE_TOOL_HELPER_H
-#define KIS_SHAPE_TOOL_HELPER_H
 
-#include <kritaui_export.h>
-
-#include <QRectF>
-
-class KoShape;
-
-/**
- * KisShapeToolHelper provides shapes and fallback shapes for shape based tools
- */
-class KRITAUI_EXPORT KisShapeToolHelper
-{
-public:
-    static KoShape* createRectangleShape(const QRectF& rect, qreal roundCornersX, qreal roundCornersY);
-
-    static KoShape* createEllipseShape(const QRectF& rect);
+#ifndef KISSELECTIONTAGS_H
+#define KISSELECTIONTAGS_H
 
 
+enum SelectionMode {
+    PIXEL_SELECTION,
+    SHAPE_PROTECTION
 };
 
+enum SelectionAction {
+    SELECTION_REPLACE,
+    SELECTION_ADD,
+    SELECTION_SUBTRACT,
+    SELECTION_INTERSECT,
+    SELECTION_DEFAULT
+};
 
-#endif
+#endif // KISSELECTIONTAGS_H

@@ -80,7 +80,7 @@ void KisNodeViewTest::testLayers()
     addSelectionMasks();
     m_shapeController->setImage(m_image);
 
-    model->setDummiesFacade(m_shapeController, m_image, m_shapeController, 0, 0);
+    model->setDummiesFacade(m_shapeController, m_image, m_shapeController, 0, 0, 0);
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
     KisColorFilterCombo *cb = new KisColorFilterCombo(&dlg);

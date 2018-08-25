@@ -172,7 +172,7 @@ void KisDeselectActionFactory::run(KisViewManager *view)
     KisImageWSP image = view->image();
     if (!image) return;
 
-    KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(image);
+    KUndo2Command *cmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -184,7 +184,7 @@ void KisReselectActionFactory::run(KisViewManager *view)
     KisImageWSP image = view->image();
     if (!image) return;
 
-    KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
+    KUndo2Command *cmd = new KisReselectActiveSelectionCommand(view->activeNode(), image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);

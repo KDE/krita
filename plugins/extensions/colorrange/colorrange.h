@@ -25,9 +25,6 @@
 
 #include <KisActionPlugin.h>
 
-#include "kis_selection.h"
-
-
 class ColorRange : public KisActionPlugin
 {
     Q_OBJECT
@@ -38,9 +35,6 @@ public:
 private Q_SLOTS:
     void slotActivated();
     void selectOpaque(int id);
-
-private:
-    void selectOpaqueImpl(SelectionAction action);
 };
 
 #endif // COLORRANGE_H

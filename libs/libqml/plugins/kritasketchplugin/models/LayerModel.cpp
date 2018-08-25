@@ -42,6 +42,7 @@
 #include <KoProperties.h>
 #include <QQmlEngine>
 #include <kis_base_node.h>
+#include "KisSelectionActionsAdapter.h"
 
 struct LayerModelMetaInfo {
     LayerModelMetaInfo()
@@ -94,6 +95,7 @@ public:
     bool aboutToRemoveRoots;
     KisViewManager* view;
     KisCanvas2* canvas;
+    QScopedPointer<KisSelectionActionsAdapter> selectionActionsAdapter;
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
     KisNodeSP activeNode;
@@ -266,7 +268,8 @@ void LayerModel::setView(QObject *newView)
         d->layers.clear();
         d->activeNode.clear();
         d->canvas = 0;
-        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
+        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
+        d->selectionActionsAdapter.reset();
 
     }
 
@@ -288,7 +291,14 @@ void LayerModel::setView(QObject *newView)
 
         KisDummiesFacadeBase *kritaDummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(d->canvas->imageView()->document()->shapeController());
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(d->canvas->imageView()->document()->shapeController());
-        d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image, shapeController, d->nodeManager->nodeSelectionAdapter(), d->nodeManager->nodeInsertionAdapter());
+
+        d->selectionActionsAdapter.reset(new KisSelectionActionsAdapter(d->canvas->viewManager()->selectionManager()));
+        d->nodeModel->setDummiesFacade(kritaDummiesFacade,
+                                       d->image,
+                                       shapeController,
+                                       d->nodeManager->nodeSelectionAdapter(),
+                                       d->nodeManager->nodeInsertionAdapter(),
+                                       d->selectionActionsAdapter.data());
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));

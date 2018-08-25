@@ -25,6 +25,8 @@
 #include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
+#include <KoProperties.h>
+#include "kis_assert.h"
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
@@ -60,6 +62,28 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) 
     rect->setBackground(QSharedPointer<KoGradientBackground>(new KoGradientBackground(gradient)));
 
     return rect;
+}
+
+KoShape *RectangleShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
+{
+    KoShape *shape = createDefaultShape(documentResources);
+    RectangleShape *rectShape = dynamic_cast<RectangleShape*>(shape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(rectShape, shape);
+
+    rectShape->setSize(
+        QSizeF(params->doubleProperty("width", rectShape->size().width()),
+               params->doubleProperty("height", rectShape->size().height())));
+
+    rectShape->setAbsolutePosition(
+        QPointF(params->doubleProperty("x", rectShape->absolutePosition(KoFlake::TopLeft).x()),
+                params->doubleProperty("y", rectShape->absolutePosition(KoFlake::TopLeft).y())),
+        KoFlake::TopLeft);
+
+
+    rectShape->setCornerRadiusX(params->doubleProperty("rx", 0.0));
+    rectShape->setCornerRadiusY(params->doubleProperty("ry", 0.0));
+
+    return shape;
 }
 
 bool RectangleShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &/*context*/) const

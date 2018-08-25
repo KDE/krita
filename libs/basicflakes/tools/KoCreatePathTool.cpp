@@ -34,6 +34,7 @@
 #include <KoColor.h>
 #include "kis_canvas_resource_provider.h"
 #include <KisHandlePainterHelper.h>
+#include "KoPathPointTypeCommand.h"
 
 #include <klocalizedstring.h>
 
@@ -290,6 +291,38 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
         }
     } else {
         d->activePoint->setPoint(snappedPosition);
+
+        if (!d->prevPointWasDragged && d->autoSmoothCurves) {
+            KoPathPointIndex index = d->shape->pathPointIndex(d->activePoint);
+            if (index.second > 0) {
+
+                KoPathPointIndex prevIndex(index.first, index.second - 1);
+                KoPathPoint *prevPoint = d->shape->pointByIndex(prevIndex);
+
+                if (prevPoint) {
+                    KoPathPoint *prevPrevPoint = 0;
+
+                    if (index.second > 1) {
+                        KoPathPointIndex prevPrevIndex(index.first, index.second - 2);
+                        prevPrevPoint = d->shape->pointByIndex(prevPrevIndex);
+                    }
+
+                    if (prevPrevPoint) {
+                        const QPointF control1 = prevPoint->point() + 0.3 * (prevPrevPoint->point() - prevPoint->point());
+                        prevPoint->setControlPoint1(control1);
+                    }
+
+                    const QPointF control2 = prevPoint->point() + 0.3 * (d->activePoint->point() - prevPoint->point());
+                    prevPoint->setControlPoint2(control2);
+
+                    const QPointF activeControl = d->activePoint->point() + 0.3 * (prevPoint->point() - d->activePoint->point());
+                    d->activePoint->setControlPoint1(activeControl);
+
+                    KoPathPointTypeCommand::makeCubicPointSmooth(prevPoint);
+                }
+            }
+        }
+
     }
 
     canvas()->updateCanvas(d->shape->boundingRect());
@@ -304,6 +337,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     d->listeningToModifiers = true; // After the first press-and-release
     d->repaintActivePoint();
+    d->prevPointWasDragged  = d->pointIsDragged;
     d->pointIsDragged = false;
     KoPathPoint *lastActivePoint = d->activePoint;
 
@@ -325,6 +359,11 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
         d->firstPoint->setControlPoint1(d->activePoint->controlPoint1());
         delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
         d->activePoint = d->firstPoint;
+
+        if (!d->prevPointWasDragged && d->autoSmoothCurves) {
+            KoPathPointTypeCommand::makeCubicPointSmooth(d->activePoint);
+        }
+
         d->shape->closeMerge();
 
         // we are closing the path, so reset the existing start path point
@@ -408,6 +447,7 @@ void KoCreatePathTool::activate(ToolActivation activation, const QSet<KoShape*> 
 
     // retrieve the actual global handle radius
     d->handleRadius = handleRadius();
+    d->loadAutoSmoothValueFromConfig();
 
     // reset snap guide
     canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
@@ -501,6 +541,14 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     Q_D(KoCreatePathTool);
 
     QList<QPointer<QWidget> > list;
+
+    QCheckBox *smoothCurves = new QCheckBox(i18n("Autosmooth curve"));
+    smoothCurves->setObjectName("smooth-curves-widget");
+    smoothCurves->setChecked(d->autoSmoothCurves);
+    connect(smoothCurves, SIGNAL(toggled(bool)), this, SLOT(autoSmoothCurvesChanged(bool)));
+    connect(this, SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)), smoothCurves, SLOT(setChecked(bool)));
+
+    list.append(smoothCurves);
 
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");

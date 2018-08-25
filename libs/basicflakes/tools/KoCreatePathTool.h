@@ -81,6 +81,9 @@ public Q_SLOTS:
     /// reimplemented
     void documentResourceChanged(int key, const QVariant & res) override;
 
+Q_SIGNALS:
+    void sigUpdateAutoSmoothCurvesGUI(bool value);
+
 protected:
     /**
      * Add path shape to document.
@@ -109,5 +112,6 @@ private:
     Q_DECLARE_PRIVATE(KoCreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
     Q_PRIVATE_SLOT(d_func(), void angleSnapChanged(int))
+    Q_PRIVATE_SLOT(d_func(), void autoSmoothCurvesChanged(bool))
 };
 #endif

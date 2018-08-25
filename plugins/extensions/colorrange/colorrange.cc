@@ -85,65 +85,11 @@ void ColorRange::slotActivated()
 
 void ColorRange::selectOpaque(int id)
 {
-    selectOpaqueImpl(SelectionAction(id));
-}
+    KisNodeSP node = viewManager()->activeNode();
+    if (!node) return;
 
-void ColorRange::selectOpaqueImpl(SelectionAction action)
-{
-    KisCanvas2 *canvas = viewManager()->canvasBase();
-    KisPaintDeviceSP device = viewManager()->activeNode()->projection();
-    if (!device) device = viewManager()->activeNode()->paintDevice();
-    if (!device) device = viewManager()->activeNode()->original();
-    KIS_ASSERT_RECOVER_RETURN(canvas && device);
-
-    QRect rc = device->exactBounds();
-    if (rc.isEmpty()) return;
-
-    /**
-     * If there is nothing selected, just create a new selection
-     */
-    if (!canvas->imageView()->selection()) {
-        action = SELECTION_REPLACE;
-    }
-
-    KUndo2MagicString actionName;
-
-    switch (action) {
-    case SELECTION_ADD:
-        actionName = kundo2_i18n("Select Opaque (Add)");
-        break;
-    case SELECTION_SUBTRACT:
-        actionName = kundo2_i18n("Select Opaque (Subtract)");
-        break;
-    case SELECTION_INTERSECT:
-        actionName = kundo2_i18n("Select Opaque (Intersect)");
-        break;
-    default:
-        actionName = kundo2_i18n("Select Opaque");
-        break;
-    }
-
-    KisSelectionToolHelper helper(canvas, actionName);
-
-    qint32 x, y, w, h;
-    rc.getRect(&x, &y, &w, &h);
-
-    const KoColorSpace * cs = device->colorSpace();
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-
-    KisHLineConstIteratorSP deviter = device->createHLineConstIteratorNG(x, y, w);
-    KisHLineIteratorSP selIter = tmpSel ->createHLineIteratorNG(x, y, w);
-
-    for (int row = y; row < h + y; ++row) {
-        do {
-            *selIter->rawData() = cs->opacityU8(deviter->oldRawData());
-        } while (deviter->nextPixel() && selIter->nextPixel());
-        deviter->nextRow();
-        selIter->nextRow();
-    }
-
-    tmpSel->invalidateOutlineCache();
-    helper.selectPixelSelection(tmpSel, action);
+    viewManager()->selectionManager()->
+        selectOpaqueOnNode(node, SelectionAction(id));
 }
 
 #include "colorrange.moc"

@@ -54,7 +54,7 @@
 
 #include <FlakeDebug.h>
 
-struct KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
+class KoSvgTextShapePrivate : public KoSvgTextChunkShapePrivate
 {
     KoSvgTextShapePrivate(KoSvgTextShape *_q)
         : KoSvgTextChunkShapePrivate(_q)

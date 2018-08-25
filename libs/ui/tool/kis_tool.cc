@@ -297,6 +297,12 @@ QRectF KisTool::convertToPt(const QRectF &rect)
     return r;
 }
 
+qreal KisTool::convertToPt(qreal value)
+{
+    const qreal avgResolution = 0.5 * (image()->xRes() + image()->yRes());
+    return value / avgResolution;
+}
+
 QPointF KisTool::pixelToView(const QPoint &pixelCoord) const
 {
     if (!image())

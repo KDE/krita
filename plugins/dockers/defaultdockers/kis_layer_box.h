@@ -57,6 +57,7 @@ class KisNodeJugglerCompressed;
 class KisColorLabelSelectorWidget;
 class QWidgetAction;
 class KisKeyframeChannel;
+class KisSelectionActionsAdapter;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -146,6 +147,7 @@ private:
 private:
 
     QPointer<KisCanvas2> m_canvas;
+    QScopedPointer<KisSelectionActionsAdapter> m_selectionActionsAdapter;
     QMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;

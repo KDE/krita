@@ -20,6 +20,29 @@ along with the CPMT.  If not, see <http://www.gnu.org/licenses/>.
 """
 The comicrack information is sorta... incomplete, so no idea if the following is right...
 I can't check in any case: It is a windows application.
+
+Based off:
+
+https://github.com/dickloraine/EmbedComicMetadata/blob/master/comicinfoxml.py
+
+ComicRack is also a dead application.
+
+Missing:
+
+Count (issues)
+AlternateSeries
+AlternateNumber
+StoryArc
+SeriesGroup
+AlternateCount
+Notes
+Imprint
+Locations
+ScanInformation
+AgeRating - Not sure if this should be added or not...
+Teams
+Web
+
 """
 
 from xml.dom import minidom
@@ -43,10 +66,15 @@ def write_xml(configDictionary = {}, pagesLocationList = [],  location = str()):
     else:
         description.appendChild(document.createTextNode(str("There was no summary upon generation of this file.")))
     root.appendChild(description)
+    
     if "seriesNumber" in configDictionary.keys():
         number = document.createElement("Number")
         number.appendChild(document.createTextNode(str(configDictionary["seriesNumber"])))
         root.appendChild(number)
+    if "seriesName" in configDictionary.keys():
+        seriesname = document.createElement("Series")
+        seriesname.appendChild(document.createTextNode(str(configDictionary["seriesName"])))
+        root.appendChild(seriesname)
 
     if "publishingDate" in configDictionary.keys():
         date = QDate.fromString(configDictionary["publishingDate"], Qt.ISODate)
@@ -54,8 +82,11 @@ def write_xml(configDictionary = {}, pagesLocationList = [],  location = str()):
         publishYear.appendChild(document.createTextNode(str(date.year())))
         publishMonth = document.createElement("Month")
         publishMonth.appendChild(document.createTextNode(str(date.month())))
+        publishDay = document.createElement("Day")
+        publishDay.appendChild(document.createTextNode(str(date.day())))
         root.appendChild(publishYear)
         root.appendChild(publishMonth)
+        root.appendChild(publishDay)
 
     if "format" in configDictionary.keys():
         for form in configDictionary["format"]:
@@ -108,7 +139,7 @@ def write_xml(configDictionary = {}, pagesLocationList = [],  location = str()):
     readingDirection.appendChild(document.createTextNode(str("No")))
     if "readingDirection" in configDictionary.keys():
         if configDictionary["readingDirection"] is "rightToLeft":
-            readingDirection.appendChild(document.createTextNode(str("Yes")))
+            readingDirection.appendChild(document.createTextNode(str("YesAndRightToLeft")))
     root.appendChild(readingDirection)
 
     if "characters" in configDictionary.keys():

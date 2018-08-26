@@ -224,7 +224,7 @@ void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeSP keyframe, int newTime)
     KIS_ASSERT_RECOVER_RETURN(keyframe);
     KIS_ASSERT_RECOVER_RETURN(!keyframeAt(newTime));
 
-    KisTimeRange rangeSrc = affectedFrames(keyframe->time());
+    KisFrameSet rangeSrc = affectedFrames(keyframe->time());
     QRect rectSrc = affectedRect(keyframe);
 
     emit sigKeyframeAboutToBeMoved(keyframe, newTime);
@@ -236,7 +236,7 @@ void KisKeyframeChannel::moveKeyframeImpl(KisKeyframeSP keyframe, int newTime)
 
     emit sigKeyframeMoved(keyframe, oldTime);
 
-    KisTimeRange rangeDst = affectedFrames(keyframe->time());
+    KisFrameSet rangeDst = affectedFrames(keyframe->time());
     QRect rectDst = affectedRect(keyframe);
 
     requestUpdate(rangeSrc, rectSrc);
@@ -248,8 +248,8 @@ void KisKeyframeChannel::swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyfram
     KIS_ASSERT_RECOVER_RETURN(lhsKeyframe);
     KIS_ASSERT_RECOVER_RETURN(rhsKeyframe);
 
-    KisTimeRange rangeLhs = affectedFrames(lhsKeyframe->time());
-    KisTimeRange rangeRhs = affectedFrames(rhsKeyframe->time());
+    KisFrameSet rangeLhs = affectedFrames(lhsKeyframe->time());
+    KisFrameSet rangeRhs = affectedFrames(rhsKeyframe->time());
 
     const QRect rectLhsSrc = affectedRect(lhsKeyframe);
     const QRect rectRhsSrc = affectedRect(rhsKeyframe);
@@ -304,14 +304,14 @@ void KisKeyframeChannel::insertKeyframeLogical(KisKeyframeSP keyframe)
     emit sigKeyframeAdded(keyframe);
 
     QRect rect = affectedRect(keyframe);
-    KisTimeRange range = affectedFrames(time);
+    KisFrameSet range = affectedFrames(time);
     requestUpdate(range, rect);
 }
 
 void KisKeyframeChannel::removeKeyframeLogical(KisKeyframeSP keyframe)
 {
     QRect rect = affectedRect(keyframe);
-    KisTimeRange range = affectedFrames(keyframe->time());
+    KisFrameSet range = affectedFrames(keyframe->time());
 
     emit sigKeyframeAboutToBeRemoved(keyframe);
     m_d->keys.remove(keyframe->time());
@@ -423,9 +423,9 @@ QSet<int> KisKeyframeChannel::allKeyframeIds() const
     return frames;
 }
 
-KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
+KisFrameSet KisKeyframeChannel::affectedFrames(int time) const
 {
-    if (m_d->keys.isEmpty()) return KisTimeRange::infinite(0);
+    if (m_d->keys.isEmpty()) return KisFrameSet::infiniteFrom(0);
 
     KeyframesMap::const_iterator active = activeKeyIterator(time);
     KeyframesMap::const_iterator next;
@@ -442,19 +442,19 @@ KisTimeRange KisKeyframeChannel::affectedFrames(int time) const
     }
 
     if (next == m_d->keys.constEnd()) {
-        return KisTimeRange::infinite(from);
+        return KisFrameSet::infiniteFrom(from);
     } else {
-        return KisTimeRange::fromTime(from, next.key() - 1);
+        return KisFrameSet::between(from, next.key() - 1);
     }
 }
 
-KisTimeRange KisKeyframeChannel::identicalFrames(int time) const
+KisFrameSet KisKeyframeChannel::identicalFrames(int time) const
 {
     KeyframesMap::const_iterator active = activeKeyIterator(time);
 
     if (active != m_d->keys.constEnd() && (active+1) != m_d->keys.constEnd()) {
         if (active->data()->interpolationMode() != KisKeyframe::Constant) {
-            return KisTimeRange::fromTime(time, time);
+            return KisFrameSet::between(time, time);
         }
     }
 
@@ -618,7 +618,7 @@ KisKeyframeChannel::activeKeyIterator(int time) const
     return --i;
 }
 
-void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &rect)
+void KisKeyframeChannel::requestUpdate(const KisFrameSet &range, const QRect &rect)
 {
     if (m_d->node) {
         m_d->node->invalidateFrames(range, rect);

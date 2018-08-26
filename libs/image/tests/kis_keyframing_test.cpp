@@ -445,35 +445,42 @@ void KisKeyframingTest::testDeleteFirstRasterChannel()
 void KisKeyframingTest::testAffectedFrames()
 {
     KisScalarKeyframeChannel *channel = new KisScalarKeyframeChannel(KoID(""), -17, 31, 0);
-    KisTimeRange range;
+    KisFrameSet frames;
 
     channel->addKeyframe(10);
     channel->addKeyframe(20);
     channel->addKeyframe(30);
 
     // At a keyframe
-    range = channel->affectedFrames(20);
-    QCOMPARE(range.start(), 20);
-    QCOMPARE(range.end(), 29);
-    QCOMPARE(range.isInfinite(), false);
+    frames = channel->affectedFrames(20);
+    QCOMPARE(frames, KisFrameSet::between(20, 29));
 
     // Between frames
-    range = channel->affectedFrames(25);
-    QCOMPARE(range.start(), 20);
-    QCOMPARE(range.end(), 29);
-    QCOMPARE(range.isInfinite(), false);
+    frames = channel->affectedFrames(25);
+    QCOMPARE(frames, KisFrameSet::between(20, 29));
 
     // Before first frame
-    range = channel->affectedFrames(5);
-    QCOMPARE(range.start(), 0);
-    QCOMPARE(range.end(), 9);
-    QCOMPARE(range.isInfinite(), false);
+    frames = channel->affectedFrames(5);
+    QCOMPARE(frames, KisFrameSet::between(0, 9));
 
     // After last frame
-    range = channel->affectedFrames(35);
-    QCOMPARE(range.start(), 30);
-    QCOMPARE(range.isInfinite(), true);
+    frames = channel->affectedFrames(35);
+    QCOMPARE(frames, KisFrameSet::infiniteFrom(30));
 
+    // Linked keyframes
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    KisRasterKeyframeChannel * rasterChannel = dev->createKeyframeChannel(KoID());
+
+    auto key0 = rasterChannel->addKeyframe(0);
+    auto key5 = rasterChannel->addKeyframe(5);
+    auto key10 = rasterChannel->linkKeyframe(key0, 10, nullptr);
+
+    QCOMPARE(rasterChannel->affectedFrames(5), KisFrameSet::between(5,9));
+    KisFrameSet result = rasterChannel->affectedFrames(1);
+    QCOMPARE(result, KisFrameSet::between(0, 4) | KisFrameSet::infiniteFrom(10));
+    result = rasterChannel->affectedFrames(15);
+    QCOMPARE(result, KisFrameSet::between(0, 4) | KisFrameSet::infiniteFrom(10));
 }
 
 void KisKeyframingTest::testMovingFrames()

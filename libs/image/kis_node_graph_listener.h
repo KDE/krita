@@ -22,7 +22,7 @@
 
 #include <QScopedPointer>
 
-class KisTimeRange;
+class KisFrameSet;
 class KisNode;
 class QRect;
 
@@ -97,7 +97,7 @@ public:
      */
     virtual void requestProjectionUpdate(KisNode * node, const QVector<QRect> &rects, bool resetAnimationCache);
 
-    virtual void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    virtual void invalidateFrames(const KisFrameSet &range, const QRect &rect);
 
     virtual void requestTimeSwitch(int time);
 

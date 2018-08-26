@@ -93,7 +93,9 @@ KisRasterKeyframeChannel::~KisRasterKeyframeChannel()
 
 KisKeyframeSP KisRasterKeyframeChannel::linkKeyframe(const KisKeyframeSP sourceKeyframe, int newTime, KUndo2Command *parentCommand)
 {
-    KisKeyframeSP newKeyframe = toQShared(new KisRasterKeyframe(this, newTime, frameId(sourceKeyframe)));
+    const int frame = frameId(sourceKeyframe);
+    KisKeyframeSP newKeyframe = toQShared(new KisRasterKeyframe(this, newTime, frame));
+    m_d->frameInstances[frame].append(newKeyframe);
 
     KUndo2Command *cmd = new KisReplaceKeyframeCommand(this, newTime, newKeyframe, parentCommand);
     cmd->redo();
@@ -176,38 +178,38 @@ KisKeyframeSP KisRasterKeyframeChannel::createKeyframe(int time, const KisKeyfra
 {
     KisRasterKeyframe *keyframe;
 
-    if (!copySrc) {
-        int frameId = m_d->paintDevice->framesInterface()->createFrame(false, 0, QPoint(), parentCommand);
+    const bool copy = !copySrc.isNull();
+    const int srcFrameId = copy ? frameId(copySrc) : 0;
+    const int frameId = m_d->paintDevice->framesInterface()->createFrame(copy, srcFrameId, QPoint(), parentCommand);
+
+    if (!copy) {
         keyframe = new KisRasterKeyframe(this, time, frameId);
     } else {
-        int srcFrame = frameId(copySrc);
-        int frameId = m_d->paintDevice->framesInterface()->createFrame(true, srcFrame, QPoint(), parentCommand);
+        const KisRasterKeyframe *srcKeyframe = dynamic_cast<KisRasterKeyframe*>(copySrc.data());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(srcKeyframe, KisKeyframeSP());
 
-        KisRasterKeyframe *srcKeyframe = dynamic_cast<KisRasterKeyframe*>(copySrc.data());
-        Q_ASSERT(srcKeyframe);
         keyframe = new KisRasterKeyframe(srcKeyframe, this);
-
         keyframe->setTime(time);
         keyframe->frameId = frameId;
     }
 
-    KisKeyframeSP key = toQShared(keyframe);
+    KisKeyframeSP keyframeSP = toQShared(keyframe);
 
-    m_d->frameInstances[keyframe->frameId].append(key);
+    m_d->frameInstances[keyframe->frameId].append(keyframeSP);
 
-    return key;
+    return keyframeSP;
 }
 
-void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand)
+void KisRasterKeyframeChannel::destroyKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand)
 {
-    int id = frameId(key);
+    int id = frameId(keyframe);
 
     QVector<KisKeyframeSP> &instances = m_d->frameInstances[id];
-    instances.removeAll(key);
+    instances.removeAll(keyframe);
 
     if (instances.isEmpty()) {
-        m_d->paintDevice->framesInterface()->deleteFrame(id, parentCommand);
         m_d->frameInstances.remove(id);
+        m_d->paintDevice->framesInterface()->deleteFrame(id, parentCommand);
     }
 }
 
@@ -333,6 +335,23 @@ bool KisRasterKeyframeChannel::keyframeHasContent(const KisKeyframe *keyframe) c
 bool KisRasterKeyframeChannel::hasScalarValue() const
 {
     return false;
+}
+
+KisFrameSet KisRasterKeyframeChannel::affectedFrames(int time) const
+{
+    const int frameId = frameIdAt(time);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(frameId >= 0, KisFrameSet());
+    
+    KisFrameSet frames;
+    Q_FOREACH(KisKeyframeSP keyframe, m_d->frameInstances[frameId]) {
+        const KisKeyframeSP next = nextKeyframe(keyframe);
+        if (next.isNull()) {
+            frames |= KisFrameSet::infiniteFrom(keyframe->time());
+        } else {
+            frames |= KisFrameSet::between(keyframe->time(), next->time() - 1);
+        }
+    }
+    return frames;
 }
 
 void KisRasterKeyframeChannel::setOnionSkinsEnabled(bool value)

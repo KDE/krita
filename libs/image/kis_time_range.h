@@ -26,7 +26,8 @@
 #include <QMetaType>
 #include <boost/operators.hpp>
 #include "kis_types.h"
-#include <kis_dom_utils.h>
+
+class QDomElement;
 
 /**
  * Represents a finite, continuous span of time between two frames.
@@ -319,16 +320,16 @@ public:
         return KisTimeRange(start, std::numeric_limits<int>::min(), true);
     }
 
-    static KisTimeRange calculateIdenticalFramesRecursive(const KisNode *node, int time);
-    static KisTimeRange calculateAffectedFramesRecursive(const KisNode *node, int time);
-
-    static KisTimeRange calculateNodeIdenticalFrames(const KisNode *node, int time);
-    static KisTimeRange calculateNodeAffectedFrames(const KisNode *node, int time);
-
 private:
     int m_start;
     int m_end;
 };
+
+KRITAIMAGE_EXPORT KisFrameSet calculateIdenticalFramesRecursive(const KisNode *node, int time);
+KRITAIMAGE_EXPORT KisFrameSet calculateAffectedFramesRecursive(const KisNode *node, int time);
+
+KRITAIMAGE_EXPORT KisFrameSet calculateNodeIdenticalFrames(const KisNode *node, int time);
+KRITAIMAGE_EXPORT KisFrameSet calculateNodeAffectedFrames(const KisNode *node, int time);
 
 namespace KisDomUtils {
     void KRITAIMAGE_EXPORT saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range);

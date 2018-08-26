@@ -22,6 +22,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_layer_utils.h"
+#include "kis_dom_utils.h"
 
 struct KisTimeRangeStaticRegistrar {
     KisTimeRangeStaticRegistrar() {
@@ -215,32 +216,32 @@ KisFrameSet& KisFrameSet::operator-=(const KisFrameSet &rhs)
     return *this;
 }
 
-KisTimeRange KisTimeRange::calculateIdenticalFramesRecursive(const KisNode *node, int time)
+KisFrameSet calculateIdenticalFramesRecursive(const KisNode *node, int time)
 {
-    KisTimeRange range = KisTimeRange::infinite(0);
+    KisFrameSet frames = KisFrameSet::infiniteFrom(0);
 
     KisLayerUtils::recursiveApplyNodes(node,
-        [&range, time] (const KisNode *node) {
+        [&frames, time] (const KisNode *node) {
             if (node->visible()) {
-                range &= calculateNodeIdenticalFrames(node, time);
+                frames &= calculateNodeIdenticalFrames(node, time);
             }
     });
 
-    return range;
+    return frames;
 }
 
-KisTimeRange KisTimeRange::calculateAffectedFramesRecursive(const KisNode *node, int time)
+KisFrameSet calculateAffectedFramesRecursive(const KisNode *node, int time)
 {
-    KisTimeRange range;
+    KisFrameSet frames;
 
     KisLayerUtils::recursiveApplyNodes(node,
-        [&range, time] (const KisNode *node) {
+        [&frames, time] (const KisNode *node) {
             if (node->visible()) {
-                range |= calculateNodeIdenticalFrames(node, time);
+                frames |= calculateNodeAffectedFrames(node, time);
             }
     });
 
-    return range;
+    return frames;
 }
 
 int KisFrameSet::firstExcludedSince(int time) const
@@ -259,9 +260,9 @@ int KisFrameSet::firstExcludedSince(int time) const
     return -1;
 }
 
-KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int time)
+KisFrameSet calculateNodeIdenticalFrames(const KisNode *node, int time)
 {
-    KisTimeRange range = KisTimeRange::infinite(0);
+    KisFrameSet range = KisFrameSet::infiniteFrom(0);
 
     const QMap<QString, KisKeyframeChannel*> channels =
         node->keyframeChannels();
@@ -274,9 +275,9 @@ KisTimeRange KisTimeRange::calculateNodeIdenticalFrames(const KisNode *node, int
     return range;
 }
 
-KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int time)
+KisFrameSet calculateNodeAffectedFrames(const KisNode *node, int time)
 {
-    KisTimeRange range;
+    KisFrameSet range;
 
     if (!node->visible()) return range;
 
@@ -289,7 +290,7 @@ KisTimeRange KisTimeRange::calculateNodeAffectedFrames(const KisNode *node, int 
     if (channels.isEmpty() ||
         !channels.contains(KisKeyframeChannel::Content.id())) {
 
-        range = KisTimeRange::infinite(0);
+        range = KisFrameSet::infiniteFrom(0);
         return range;
     }
 
@@ -319,7 +320,6 @@ void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &rang
         }
     }
 }
-
 
 bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *range)
 {

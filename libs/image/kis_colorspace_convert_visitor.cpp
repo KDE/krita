@@ -140,7 +140,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
         paintLayer->setAlphaLocked(alphaLock);
     }
     layer->setDirty();
-    layer->invalidateFrames(KisTimeRange::infinite(0), layer->extent());
+    layer->invalidateFrames(KisFrameSet::infiniteFrom(0), layer->extent());
 
     return true;
 

@@ -38,7 +38,7 @@ class KisBusyProgressIndicator;
 class KisAbstractProjectionPlane;
 class KisProjectionLeaf;
 class KisKeyframeChannel;
-class KisTimeRange;
+class KisFrameSet;
 class KisUndoAdapter;
 
 
@@ -156,7 +156,7 @@ public:
      * and need to be recached.
      * @param range frames to invalidate
      */
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void invalidateFrames(const KisFrameSet &range, const QRect &rect);
 
     /**
      * Informs that the current world time should be changed.

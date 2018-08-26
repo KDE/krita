@@ -479,7 +479,7 @@ KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframe
 void KisScalarKeyframeChannel::notifyKeyframeChanged(KisKeyframeSP keyframe)
 {
     QRect rect = affectedRect(keyframe);
-    KisTimeRange range = affectedFrames(keyframe->time());
+    KisFrameSet range = affectedFrames(keyframe->time());
 
     requestUpdate(range, rect);
 

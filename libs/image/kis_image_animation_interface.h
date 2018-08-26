@@ -26,7 +26,7 @@
 #include "kritaimage_export.h"
 
 class KisUpdatesFacade;
-class KisTimeRange;
+class KisFrameSet;
 class KisTimeSpan;
 class KoColor;
 
@@ -104,7 +104,7 @@ public:
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect);
+    void invalidateFrames(const KisFrameSet &range, const QRect &rect);
 
     /**
      * Changes the default color of the "external frame" projection of
@@ -188,7 +188,7 @@ Q_SIGNALS:
     void sigFrameReady(int time);
     void sigFrameCancelled();
     void sigUiTimeChanged(int newTime);
-    void sigFramesChanged(const KisTimeRange &range, const QRect &rect);
+    void sigFramesChanged(const KisFrameSet &range, const QRect &rect);
 
     void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 

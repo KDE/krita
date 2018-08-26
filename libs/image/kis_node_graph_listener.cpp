@@ -90,7 +90,7 @@ void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QVe
 {
 }
 
-void KisNodeGraphListener::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisNodeGraphListener::invalidateFrames(const KisFrameSet &range, const QRect &rect)
 {
     Q_UNUSED(range);
     Q_UNUSED(rect);

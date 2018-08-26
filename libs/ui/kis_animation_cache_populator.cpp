@@ -144,7 +144,7 @@ struct KisAnimationCachePopulator::Private
 
                     if (!activeNode->keyframeChannels().isEmpty()) {
                         Q_FOREACH (const KisKeyframeChannel *channel, activeNode->keyframeChannels()) {
-                            skipRange |= channel->affectedFrames(currentTime).asFrameSet();
+                            skipRange |= channel->affectedFrames(currentTime);
                         }
                     } else {
                         skipRange = KisFrameSet::infiniteFrom(0);

@@ -54,6 +54,7 @@ class KisSpontaneousJob;
 class KisImageAnimationInterface;
 class KUndo2MagicString;
 class KisProofingConfiguration;
+class KisFrameSet;
 
 namespace KisMetaData
 {
@@ -92,7 +93,7 @@ public: // KisNodeGraphListener implementation
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
     void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
-    void invalidateFrames(const KisTimeRange &range, const QRect &rect) override;
+    void invalidateFrames(const KisFrameSet &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
 

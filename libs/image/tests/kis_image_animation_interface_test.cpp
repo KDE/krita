@@ -155,7 +155,7 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
     channel->addKeyframe(20);
 
     // check switching a frame doesn't invalidate cache
-    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisTimeRange,QRect)));
+    QSignalSpy spy(i, SIGNAL(sigFramesChanged(KisFrameSet,QRect)));
 
     p.image->animationInterface()->switchCurrentTimeAsync(15);
     p.image->waitForDone();
@@ -166,13 +166,13 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
 
     QCOMPARE(spy.count(), 1);
     QList<QVariant> arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange::infinite(0));
+    QCOMPARE(arguments.at(0).value<KisFrameSet>(), KisFrameSet::infiniteFrom(0));
 
     i->notifyNodeChanged(layer2.data(), QRect(), false);
 
     QCOMPARE(spy.count(), 1);
     arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange(10, 10));
+    QCOMPARE(arguments.at(0).value<KisFrameSet>(), KisFrameSet::between(10, 19));
 
     // Recursive
 
@@ -184,8 +184,8 @@ void KisImageAnimationInterfaceTest::testFramesChangedSignal()
 
     QCOMPARE(spy.count(), 1);
     arguments = spy.takeFirst();
-    QEXPECT_FAIL("", "Infinite time range is expected to be (0, -2147483648), but is (1, -2147483648)", Continue);
-    QCOMPARE(arguments.at(0).value<KisTimeRange>(), KisTimeRange::infinite(10));
+    const KisFrameSet &value = arguments.at(0).value<KisFrameSet>();
+    QCOMPARE(value, KisFrameSet::infiniteFrom(0));
 
 }
 

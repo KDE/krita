@@ -395,7 +395,7 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageS
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
 {
-    const KisFrameSet identicalFrames = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), time).asFrameSet();
+    const KisFrameSet identicalFrames = calculateIdenticalFramesRecursive(m_d->image->root(), time);
 
     m_d->addFrame(info, identicalFrames);
 

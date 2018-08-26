@@ -29,7 +29,7 @@
 #include "kis_keyframe.h"
 #include "kis_default_bounds.h"
 
-class KisTimeRange;
+class KisFrameSet;
 
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
@@ -100,7 +100,7 @@ public:
      * Get the set of frames affected by any changes to the value
      * of the active keyframe at the given time.
      */
-    KisTimeRange affectedFrames(int time) const;
+    virtual KisFrameSet affectedFrames(int time) const;
 
     /**
      * Get a set of frames for which the channel gives identical
@@ -109,7 +109,7 @@ public:
      * Note: this set may be different than the set of affected frames
      * due to interpolation.
      */
-    KisTimeRange identicalFrames(int time) const;
+    virtual KisFrameSet identicalFrames(int time) const;
 
     int keyframeCount() const;
 
@@ -150,7 +150,7 @@ protected:
     virtual void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) = 0;
 
     virtual QRect affectedRect(KisKeyframeSP key) = 0;
-    virtual void requestUpdate(const KisTimeRange &range, const QRect &rect);
+    virtual void requestUpdate(const KisFrameSet &range, const QRect &rect);
 
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;

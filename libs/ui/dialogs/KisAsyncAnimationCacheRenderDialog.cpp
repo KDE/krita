@@ -43,7 +43,7 @@ QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeSpan
 
         framesToRegenerate.append(first);
 
-        KisFrameSet duplicates = KisTimeRange::calculateIdenticalFramesRecursive(image->root(), first).asFrameSet();
+        KisFrameSet duplicates = calculateIdenticalFramesRecursive(image->root(), first);
         dirtyFrames -= duplicates;
     }
 

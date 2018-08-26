@@ -64,6 +64,7 @@ public:
     void setFilenameSuffix(const QString &suffix);
 
     bool hasScalarValue() const override;
+    KisFrameSet affectedFrames(int time) const override;
 
     QDomElement toXML(QDomDocument doc, const QString &layerFilename) override;
     void loadXML(const QDomElement &channelNode) override;
@@ -73,7 +74,7 @@ public:
 
 protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
-    void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
+    void destroyKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand) override;
     void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
 
     QRect affectedRect(KisKeyframeSP key) override;

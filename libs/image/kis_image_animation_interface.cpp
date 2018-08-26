@@ -263,7 +263,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    const KisTimeRange range = KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
+    const KisFrameSet range = calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
     const bool needsRegeneration = !range.contains(frameId);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token =
@@ -359,12 +359,12 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     if (node->inherits("KisSelectionMask")) return;
 
     const int currentTime = m_d->currentTime();
-    KisTimeRange invalidateRange;
+    KisFrameSet invalidateRange;
 
     if (recursive) {
-        invalidateRange = KisTimeRange::calculateAffectedFramesRecursive(node, currentTime);
+        invalidateRange = calculateAffectedFramesRecursive(node, currentTime);
     } else {
-        invalidateRange = KisTimeRange::calculateNodeAffectedFrames(node, currentTime);
+        invalidateRange = calculateNodeAffectedFrames(node, currentTime);
     }
 
     // we compress the updated rect (atm, no one uses it anyway)
@@ -376,7 +376,7 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
     invalidateFrames(invalidateRange, unitedRect);
 }
 
-void KisImageAnimationInterface::invalidateFrames(const KisTimeRange &range, const QRect &rect)
+void KisImageAnimationInterface::invalidateFrames(const KisFrameSet &range, const QRect &rect)
 {
     m_d->cachedLastFrameValue = -1;
     emit sigFramesChanged(range, rect);

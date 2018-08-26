@@ -24,22 +24,14 @@
 #include "kis_layer_utils.h"
 #include "kis_dom_utils.h"
 
-struct KisTimeRangeStaticRegistrar {
-    KisTimeRangeStaticRegistrar() {
-        qRegisterMetaType<KisTimeSpan>("KisTimeRange");
+struct KisTimeTypesStaticRegistrar {
+    KisTimeTypesStaticRegistrar() {
         qRegisterMetaType<KisTimeSpan>("KisTimeSpan");
         qRegisterMetaType<KisFrameSet>("KisFrameSet");
     }
 };
 
-static KisTimeRangeStaticRegistrar __registrar;
-
-QDebug operator<<(QDebug dbg, const KisTimeRange &r)
-{
-    dbg.nospace() << "KisTimeRange(" << r.start() << ", " << r.end() << ")";
-
-    return dbg.space();
-}
+static KisTimeTypesStaticRegistrar __registrar;
 
 QDebug operator<<(QDebug dbg, const KisTimeSpan &r)
 {
@@ -303,43 +295,6 @@ KisFrameSet calculateNodeAffectedFrames(const KisNode *node, int time)
 }
 
 namespace KisDomUtils {
-
-void saveValue(QDomElement *parent, const QString &tag, const KisTimeRange &range)
-{
-    QDomDocument doc = parent->ownerDocument();
-    QDomElement e = doc.createElement(tag);
-    parent->appendChild(e);
-
-    e.setAttribute("type", "timerange");
-
-    if (range.isValid()) {
-        e.setAttribute("from", toString(range.start()));
-
-        if (!range.isInfinite()) {
-            e.setAttribute("to", toString(range.end()));
-        }
-    }
-}
-
-bool loadValue(const QDomElement &parent, const QString &tag, KisTimeRange *range)
-{
-    QDomElement e;
-    if (!findOnlyElement(parent, tag, &e)) return false;
-
-    if (!Private::checkType(e, "timerange")) return false;
-
-    int start = toInt(e.attribute("from", "-1"));
-    int end = toInt(e.attribute("to", "-1"));
-
-    if (start == -1) {
-        range = new KisTimeRange();
-    } else if (end == -1) {
-        *range = KisTimeRange::infinite(start);
-    } else {
-        *range = KisTimeRange::fromTime(start, end);
-    }
-    return true;
-}
 
     void saveValue(QDomElement *parent, const QString &tag, const KisTimeSpan &range)
     {

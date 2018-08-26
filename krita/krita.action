@@ -906,6 +906,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="krita_filter_invert">
+      <icon></icon>
+      <text>&amp;Invert</text>
+      <whatsThis></whatsThis>
+      <toolTip>Invert</toolTip>
+      <iconText>Invert</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+I</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="krita_filter_perchannel">
       <icon></icon>
       <text>&amp;Color Adjustment curves...</text>

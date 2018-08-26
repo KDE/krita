@@ -4,7 +4,6 @@ ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=selectionsbagdocker
 X-Python-2-Compatible=false
 Name=Selections Bag Docker
-Name[ar]=رصيف سلّة التّحديدات
 Name[ca]=Acoblador de bossa de seleccions
 Name[ca@valencia]=Acoblador de bossa de seleccions
 Name[el]=Προσάρτηση σάκου επιλογών

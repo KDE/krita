@@ -63,7 +63,6 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
     if (selectionMode() == PIXEL_SELECTION) {
         if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-            tmpSel->select(rc);
 
             QPainterPath cache;
 
@@ -72,6 +71,17 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
             } else {
                 cache.addRect(rc);
             }
+
+            {
+                KisPainter painter(tmpSel);
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                painter.setAntiAliasPolygonFill(true);
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                painter.paintPainterPath(cache);
+            }
+
 
             tmpSel->setOutlineCache(cache);
 

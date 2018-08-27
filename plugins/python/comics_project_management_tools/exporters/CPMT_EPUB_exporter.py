@@ -148,7 +148,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
 
     langString = "en-US"
     if "language" in configDictionary.keys():
-        langString = configDictionary["language"]
+        langString = str(configDictionary["language"]).replace("_", "-")
     
     bookLang = opfFile.createElement("dc:language")
     bookLang.appendChild(opfFile.createTextNode(langString))

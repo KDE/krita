@@ -91,9 +91,12 @@ class ComicsProjectSetupWizard():
         self.cmbLanguage.setEntryToCode(str(QLocale.system().name()).split("_")[0])
         self.cmbCountry = comics_metadata_dialog.country_combo_box()
         if QLocale.system() != QLocale.c():
+            self.slot_update_countries()
             self.cmbCountry.setEntryToCode(str(QLocale.system().name()).split("_")[-1])
         else:
+            self.cmbLanguage.setEntryToCode("en")
             self.slot_update_countries()
+            self.cmbCountry.setEntryToCode("US")
         self.cmbLanguage.currentIndexChanged.connect(self.slot_update_countries)
         self.lnProjectDirectory = QLabel(self.projectDirectory)
         self.chkMakeProjectDirectory = QCheckBox()

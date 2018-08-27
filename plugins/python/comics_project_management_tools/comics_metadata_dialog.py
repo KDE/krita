@@ -123,7 +123,7 @@ class country_combo_box(QComboBox):
             self.codesList.sort()
             
         for country in self.codesList:
-            locale = QLocale(languageCode+"_"+country)
+            locale = QLocale(languageCode+"-"+country)
             if locale:
                 countryName = locale.nativeCountryName()
                 self.countryList.append(countryName.title())
@@ -608,6 +608,9 @@ class comic_meta_data_editor(QDialog):
             if "_" in code:
                 self.cmbLanguage.setEntryToCode(code.split("_")[0])
                 self.cmbCountry.setEntryToCode(code.split("_")[-1])
+            elif "-" in code:
+                self.cmbLanguage.setEntryToCode(code.split("-")[0])
+                self.cmbCountry.setEntryToCode(code.split("-")[-1])
             else:
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
@@ -741,7 +744,7 @@ class comic_meta_data_editor(QDialog):
             config["seriesNumber"] = self.spnSeriesNumber.value()
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
-        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"_"+self.cmbCountry.codeForCurrentEntry())
+        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"-"+self.cmbCountry.codeForCurrentEntry())
         if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:

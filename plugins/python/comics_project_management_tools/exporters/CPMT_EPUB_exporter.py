@@ -26,6 +26,7 @@ import os
 from pathlib import Path
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from PyQt5.QtCore import Qt, QDateTime
+from PyQt5.QtGui import QImage
 
 def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     path = Path(os.path.join(projectURL, configDictionary["exportLocation"]))
@@ -92,6 +93,18 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
         html.setAttribute("xmlns:epub", "http://www.idpf.org/2007/ops")
 
         head = doc.createElement("head")
+        viewport = doc.createElement("meta")
+        viewport.setAttribute("name", "viewport")
+
+        img = QImage()
+        img.load(pagesLocationList[i])
+        w = img.width()
+        h = img.height()
+        
+        widthHeight = "width="+str(w)+", height="+str(h)
+        
+        viewport.setAttribute("content", widthHeight)
+        head.appendChild(viewport)
         html.appendChild(head)
 
         body = doc.createElement("body")
@@ -139,10 +152,12 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     opfRoot.setAttribute("version", "3.0")
     opfRoot.setAttribute("unique-identifier", "BookId")
     opfRoot.setAttribute("xmlns", "http://www.idpf.org/2007/opf")
+    opfRoot.setAttribute("prefix", "rendition: http://www.idpf.org/vocab/rendition/#")
     opfFile.appendChild(opfRoot)
     
     opfMeta = opfFile.createElement("metadata")
     opfMeta.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/")
+    opfMeta.setAttribute("xmlns:dcterms", "http://purl.org/dc/terms/")
 
     # EPUB metadata requires a title, language and uuid
 
@@ -163,7 +178,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     
     # Generate series title and the like here too.
     if "seriesName" in configDictionary.keys():
-        bookTitle.setAttribute("id", "#main")
+        bookTitle.setAttribute("id", "main")
 
         refine = opfFile.createElement("meta")
         refine.setAttribute("refines", "#main")
@@ -179,7 +194,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
 
         seriesTitle = opfFile.createElement("dc:title")
         seriesTitle.appendChild(opfFile.createTextNode(str(configDictionary["seriesName"])))
-        seriesTitle.setAttribute("id", "#series")
+        seriesTitle.setAttribute("id", "series")
         opfMeta.appendChild(seriesTitle)
 
         refineS = opfFile.createElement("meta")
@@ -208,7 +223,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     # Append the id, and assign it as the bookID.
     uniqueID = opfFile.createElement("dc:identifier")
     uniqueID.appendChild(opfFile.createTextNode("urn:uuid:"+uuid))
-    uniqueID.setAttribute("id", "BookID")
+    uniqueID.setAttribute("id", "BookId")
     opfMeta.appendChild(uniqueID)
 
     if "authorList" in configDictionary.keys():
@@ -257,9 +272,10 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     opfMeta.appendChild(modified)
     
     if "source" in configDictionary.keys():
-        source = opfFile.createElement("dc:source")
-        date.appendChild(opfFile.createTextNode(configDictionary["source"]))
-        opfMeta.appendChild(source)
+        if len(configDictionary["source"])>0:
+            source = opfFile.createElement("dc:source")
+            source.appendChild(opfFile.createTextNode(configDictionary["source"]))
+            opfMeta.appendChild(source)
     
     description = opfFile.createElement("dc:description")
     if "summary" in configDictionary.keys():
@@ -282,9 +298,10 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
         publishISBN.appendChild(opfFile.createTextNode(str("urn:isbn:") + configDictionary["isbn-number"]))
         opfMeta.appendChild(publishISBN)
     if "license" in configDictionary.keys():
-        rights = opfFile.createElement("dc:rights")
-        rights.appendChild(opfFile.createTextNode(configDictionary["license"]))
-        opfMeta.appendChild(rights)
+        if len(configDictionary["license"])>0:
+            rights = opfFile.createElement("dc:rights")
+            rights.appendChild(opfFile.createTextNode(configDictionary["license"]))
+            opfMeta.appendChild(rights)
 
     if "genre" in configDictionary.keys():
         genreListConf = configDictionary["genre"]
@@ -310,46 +327,119 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
             word.appendChild(opfFile.createTextNode(key))
             opfMeta.appendChild(word)
 
+    # Pre-pagination and layout
+    # Comic are always prepaginated.
+    
+    elLayout = opfFile.createElement("meta")
+    elLayout.setAttribute("property", "rendition:layout")
+    elLayout.appendChild(opfFile.createTextNode("pre-paginated"))
+    opfMeta.appendChild(elLayout)
+    
+    # We should figure out if the pages are portrait or not...
+    elOrientation = opfFile.createElement("meta")
+    elOrientation.setAttribute("property", "rendition:orientation")
+    elOrientation.appendChild(opfFile.createTextNode("portrait"))
+    opfMeta.appendChild(elOrientation)
+    
+    elSpread = opfFile.createElement("meta")
+    elSpread.setAttribute("property", "rendition:spread")
+    elSpread.appendChild(opfFile.createTextNode("landscape"))
+    opfMeta.appendChild(elSpread)
+    
     opfRoot.appendChild(opfMeta)
+    
+    # Manifest
 
     opfManifest = opfFile.createElement("manifest")
     toc = opfFile.createElement("item")
     toc.setAttribute("id", "ncx")
     toc.setAttribute("href", "toc.ncx")
     toc.setAttribute("media-type", "application/x-dtbncx+xml")
+    toc.setAttribute("properties", "nav") # Set the propernavmap to use this later)
     opfManifest.appendChild(toc)
-    for p in htmlFiles:
-        item = opfFile.createElement("item")
-        item.setAttribute("id", os.path.basename(p))
-        item.setAttribute("href", os.path.relpath(p, str(path)))
-        item.setAttribute("media-type", "application/xhtml+xml")
-        opfManifest.appendChild(item)
+    
+    ids = 0
     for p in pagesList:
         item = opfFile.createElement("item")
-        item.setAttribute("id", os.path.basename(p))
+        item.setAttribute("id", "img"+str(ids))
+        ids +=1
         item.setAttribute("href", os.path.relpath(p, str(path)))
         item.setAttribute("media-type", "image/png")
         if os.path.basename(p) == os.path.basename(coverpageurl):
             item.setAttribute("properties", "cover-image")
         opfManifest.appendChild(item)
 
+
+    ids = 0
+    for p in htmlFiles:
+        item = opfFile.createElement("item")
+        item.setAttribute("id", "p"+str(ids))
+        ids +=1
+        item.setAttribute("href", os.path.relpath(p, str(path)))
+        item.setAttribute("media-type", "application/xhtml+xml")
+        opfManifest.appendChild(item)
+    
+
     opfRoot.appendChild(opfManifest)
+    
+    # Spine
 
     opfSpine = opfFile.createElement("spine")
     # this sets the table of contents to use the ncx file
     opfSpine.setAttribute("toc", "ncx")
+    # Reading Direction:
+
+    spreadRight = True
+    direction = 0
+    if "readingDirection" in configDictionary.keys():
+        if configDictionary["readingDirection"] is "rightToLeft":
+            opfSpine.setAttribute("page-progression-direction", "rtl")
+            spreadRight = False
+            direction = 1
+        else:
+            opfSpine.setAttribute("page-progression-direction", "ltr")
+
+    # Here we'd need to switch between the two and if spread keywrod use neither but combine with spread-none
+    # TODO implement spread keyword.
+    spread = False
+    
+    ids = 0
     for p in htmlFiles:
         item = opfFile.createElement("itemref")
-        item.setAttribute("idref", os.path.basename(p))
+        item.setAttribute("idref", "p"+str(ids))
+        ids +=1
+        props = []
+        if spread:
+            # Don't do a spread for this one.
+            props.append("spread-none")
+            
+            # Reset the spread boolean.
+            # It needs to point at the first side after the spread.
+            # So ltr -> spread-left, rtl->spread-right
+            if direction == 0:
+                spreadRight = False
+            else:
+                spreadRight = True
+        else:
+            if spreadRight:
+                props.append("page-spread-right")
+                spreadRight = False
+            else:
+                props.append("page-spread-left")
+                spreadRight = True
+        item.setAttribute("properties", " ".join(props))
         opfSpine.appendChild(item)
     opfRoot.appendChild(opfSpine)
 
+    # Guide
+    
     opfGuide = opfFile.createElement("guide")
     if coverpagehtml is not None and coverpagehtml.isspace() is False and len(coverpagehtml) > 0:
         item = opfFile.createElement("reference")
         item.setAttribute("type", "cover")
         item.setAttribute("title", "Cover")
         item.setAttribute("href", coverpagehtml)
+        opfGuide.appendChild(item)
     opfRoot.appendChild(opfGuide)
 
     docFile = open(str(Path(path / "content.opf")), 'w', newline="", encoding="utf-8")

@@ -25,10 +25,10 @@ import shutil
 import os
 from pathlib import Path
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
-from PyQt5.QtCore import Qt, QDateTime
-from PyQt5.QtGui import QImage
+from PyQt5.QtCore import Qt, QDateTime, QPointF
+from PyQt5.QtGui import QImage, QPolygonF
 
-def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
+def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pageData = []):
     path = Path(os.path.join(projectURL, configDictionary["exportLocation"]))
     exportPath = path / "EPUB-files"
     metaInf = exportPath / "META-INF"
@@ -84,6 +84,8 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
 
     # for each image, make an xml file
     htmlFiles = []
+    listOfNavItems = {}
+    regions = []
     for i in range(len(pagesList)):
         pageName = "Page" + str(i) + ".xhtml"
         doc = QDomDocument()
@@ -106,6 +108,29 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
         viewport.setAttribute("content", widthHeight)
         head.appendChild(viewport)
         html.appendChild(head)
+        
+        data = pageData[i]
+        transform = data["transform"]
+        for v in data["vector"]:
+            pointsList = []
+            for point in v["boundingBox"]:
+                offset = QPointF(transform["offsetX"], transform["offsetY"])
+                pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
+                newPoint = pixelPoint - offset
+                x = max(0, min(w, int(newPoint.x() * transform["scaleWidth"])))
+                y = max(0, min(h, int(newPoint.y() * transform["scaleHeight"])))
+                pointsList.append(QPointF((x/w)*100, (y/h)*100))
+            regionType = "panel"
+            if "text" in v.keys():
+                regionType = "balloon"
+            region = {}
+            bounds = QPolygonF(pointsList).boundingRect()
+            region["points"] = bounds
+            region["type"] = regionType
+            region["page"] = str(Path(textPath / pageName))
+            regions.append(region)
+        if "acbf_title" in data["keys"]:
+            listOfNavItems[str(Path(textPath / pageName))] = data["title"]
 
         body = doc.createElement("body")
 
@@ -128,8 +153,11 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     
     write_opf_file(oebps, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml)
     
+    write_region_nav_file(oebps, configDictionary, htmlFiles, regions)
+    
     # toc
-    write_ncx_file(oebps, configDictionary, htmlFiles)
+    write_nav_file(oebps, configDictionary, htmlFiles, listOfNavItems)
+    write_ncx_file(oebps, configDictionary, htmlFiles, listOfNavItems)
     
 
     package_epub(configDictionary, projectURL)
@@ -355,8 +383,21 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     toc.setAttribute("id", "ncx")
     toc.setAttribute("href", "toc.ncx")
     toc.setAttribute("media-type", "application/x-dtbncx+xml")
-    toc.setAttribute("properties", "nav") # Set the propernavmap to use this later)
     opfManifest.appendChild(toc)
+    
+    region = opfFile.createElement("item")
+    region.setAttribute("id", "regions")
+    region.setAttribute("href", "region-nav.xhtml")
+    region.setAttribute("media-type", "application/xhtml+xml")
+    region.setAttribute("properties", "data-nav") # Set the propernavmap to use this later)
+    opfManifest.appendChild(region)
+    
+    nav = opfFile.createElement("item")
+    nav.setAttribute("id", "nav")
+    nav.setAttribute("href", "nav.xhtml")
+    nav.setAttribute("media-type", "application/xhtml+xml")
+    nav.setAttribute("properties", "nav") # Set the propernavmap to use this later)
+    opfManifest.appendChild(nav)
     
     ids = 0
     for p in pagesList:
@@ -448,10 +489,127 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     return True
 
 """
+Write a region navmap file.
+"""
+
+def write_region_nav_file(path, configDictionary, htmlFiles, regions = []):
+    navDoc = QDomDocument()
+    navRoot = navDoc.createElement("html")
+    navRoot.setAttribute("xmlns", "http://www.w3.org/1999/xhtml")
+    navRoot.setAttribute("xmlns:epub", "http://www.idpf.org/2007/ops")
+    navDoc.appendChild(navRoot)
+    
+    head = navDoc.createElement("head")
+    title = navDoc.createElement("title")
+    title.appendChild(navDoc.createTextNode("Region Navigation"))
+    head.appendChild(title)
+    navRoot.appendChild(head)
+    
+    body = navDoc.createElement("body")
+    navRoot.appendChild(body)
+    
+    nav = navDoc.createElement("nav")
+    nav.setAttribute("epub:type", "region-based")
+    body.appendChild(nav)
+    
+    olPanels = navDoc.createElement("ol")
+    for region in regions:
+        if region["type"] == "panel":
+            pageName = os.path.relpath(region["page"], str(path))
+            print("accessing panel")
+            li = navDoc.createElement("li")
+            li.setAttribute("epub:type", "panel")
+            anchor = navDoc.createElement("a")
+            bounds = region["points"]
+            anchor.setAttribute("href", pageName+"#xywh=percent:"+str(bounds.x())+","+str(bounds.y())+","+str(bounds.width())+","+str(bounds.height()))
+            li.appendChild(anchor)
+            olBalloons = navDoc.createElement("ol")
+            for balloon in regions:
+                if balloon["type"] == "balloon" and balloon["page"] == region["page"] and bounds.contains(balloon["points"]):
+                    liBalloon = navDoc.createElement("li")
+                    liBalloon.setAttribute("epub:type", "balloon")
+                    anchorBalloon = navDoc.createElement("a")
+                    BBounds = balloon["points"]
+                    anchorBalloon.setAttribute("href", pageName+"#xywh=percent:"+str(BBounds.x())+","+str(BBounds.y())+","+str(BBounds.width())+","+str(BBounds.height()))
+                    liBalloon.appendChild(anchorBalloon)
+                    olBalloons.appendChild(liBalloon)
+            if olBalloons.hasChildNodes():
+                li.appendChild(olBalloons)
+            olPanels.appendChild(li)
+    nav.appendChild(olPanels)
+
+    navFile = open(str(Path(path / "region-nav.xhtml")), 'w', newline="", encoding="utf-8")
+    navFile.write(navDoc.toString(indent=2))
+    navFile.close()
+    return True
+
+"""
+Write XHTML nav file.
+"""
+
+def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
+    navDoc = QDomDocument()
+    navRoot = navDoc.createElement("html")
+    navRoot.setAttribute("xmlns", "http://www.w3.org/1999/xhtml")
+    navRoot.setAttribute("xmlns:epub", "http://www.idpf.org/2007/ops")
+    navDoc.appendChild(navRoot)
+    
+    head = navDoc.createElement("head")
+    title = navDoc.createElement("title")
+    title.appendChild(navDoc.createTextNode("Table of Contents"))
+    head.appendChild(title)
+    
+    body = navDoc.createElement("body")
+    navRoot.appendChild(body)
+    
+    toc = navDoc.createElement("nav")
+    toc.setAttribute("epub:type", "toc")
+    oltoc = navDoc.createElement("ol")
+    li = navDoc.createElement("li")
+    anchor = navDoc.createElement("a")
+    anchor.setAttribute("href", os.path.relpath(htmlFiles[0], str(path)))
+    anchor.appendChild(navDoc.createTextNode("Start"))
+    li.appendChild(anchor)
+    oltoc.appendChild(li)
+    for fileName in listOfNavItems.keys():
+        li = navDoc.createElement("li")
+        anchor = navDoc.createElement("a")
+        anchor.setAttribute("href", os.path.relpath(fileName, str(path)))
+        anchor.appendChild(navDoc.createTextNode(listOfNavItems[fileName]))
+        li.appendChild(anchor)
+        oltoc.appendChild(li)
+    
+    toc.appendChild(oltoc)
+    body.appendChild(toc)
+    
+    pageslist = navDoc.createElement("nav")
+    pageslist.setAttribute("epub:type", "page-list")
+    olpages = navDoc.createElement("ol")
+    
+    entry = 1
+    for i in range(len(htmlFiles)):
+        li = navDoc.createElement("li")
+        anchor = navDoc.createElement("a")
+        anchor.setAttribute("href", os.path.relpath(htmlFiles[1], str(path)))
+        anchor.appendChild(navDoc.createTextNode(str(i)))
+        li.appendChild(anchor)
+        olpages.appendChild(li)
+    pageslist.appendChild(olpages)
+    
+    body.appendChild(pageslist)
+    
+    
+
+    navFile = open(str(Path(path / "nav.xhtml")), 'w', newline="", encoding="utf-8")
+    navFile.write(navDoc.toString(indent=2))
+    navFile.close()
+    return True
+
+"""
 Write a NCX file.
 """
 
-def write_ncx_file(path, configDictionary, htmlFiles):
+def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
     tocDoc = QDomDocument()
     ncx = tocDoc.createElement("ncx")
     ncx.setAttribute("version", "2005-1")
@@ -459,20 +617,24 @@ def write_ncx_file(path, configDictionary, htmlFiles):
     tocDoc.appendChild(ncx)
 
     tocHead = tocDoc.createElement("head")
+    
+    uuid = str(configDictionary["uuid"])
+    uuid = uuid.strip("{")
+    uuid = uuid.strip("}")
     metaID = tocDoc.createElement("meta")
-    metaID.setAttribute("content", "ID_UNKNOWN")
+    metaID.setAttribute("content", uuid)
     metaID.setAttribute("name", "dtb:uid")
     tocHead.appendChild(metaID)
     metaDepth = tocDoc.createElement("meta")
-    metaDepth.setAttribute("content", str(0))
+    metaDepth.setAttribute("content", str(1))
     metaDepth.setAttribute("name", "dtb:depth")
     tocHead.appendChild(metaDepth)
     metaTotal = tocDoc.createElement("meta")
-    metaTotal.setAttribute("content", str(0))
+    metaTotal.setAttribute("content", str(len(htmlFiles)))
     metaTotal.setAttribute("name", "dtb:totalPageCount")
     tocHead.appendChild(metaTotal)
     metaMax = tocDoc.createElement("meta")
-    metaMax.setAttribute("content", str(0))
+    metaMax.setAttribute("content", str(len(htmlFiles)))
     metaMax.setAttribute("name", "dtb:maxPageNumber")
     tocHead.appendChild(metaDepth)
     ncx.appendChild(tocHead)
@@ -499,7 +661,43 @@ def write_ncx_file(path, configDictionary, htmlFiles):
     navPoint.appendChild(navLabel)
     navPoint.appendChild(navContent)
     navmap.appendChild(navPoint)
+    entry = 1
+    for fileName in listOfNavItems.keys():
+        entry +=1
+        navPointT = tocDoc.createElement("navPoint")
+        navPointT.setAttribute("id", "navPoint-"+str(entry))
+        navPointT.setAttribute("playOrder", str(entry))
+        navLabelT = tocDoc.createElement("navLabel")
+        navLabelTText = tocDoc.createElement("text")
+        navLabelTText.appendChild(tocDoc.createTextNode(listOfNavItems[fileName]))
+        navLabelT.appendChild(navLabelTText)
+        navContentT = tocDoc.createElement("content")
+        navContentT.setAttribute("src", os.path.relpath(fileName, str(path)))
+        navPointT.appendChild(navLabelT)
+        navPointT.appendChild(navContentT)
+        navmap.appendChild(navPointT)
     ncx.appendChild(navmap)
+    
+    pagesList = tocDoc.createElement("pageList")
+    navLabelPages = tocDoc.createElement("navLabel")
+    navLabelPagesText = tocDoc.createElement("navLabel")
+    navLabelPagesText.appendChild(tocDoc.createTextNode("Pages"))
+    pagesList.appendChild(navLabelPages)
+    for i in range(len(htmlFiles)):
+        pageTarget = tocDoc.createElement("pageTarget")
+        pageTarget.setAttribute("type", "normal")
+        pageTarget.setAttribute("id", "page-"+str(i))
+        pageTarget.setAttribute("value", str(i))
+        navLabelPagesTarget = tocDoc.createElement("navLabel")
+        navLabelPagesTargetText = tocDoc.createElement("navLabel")
+        navLabelPagesTargetText.appendChild(tocDoc.createTextNode(str(i)))
+        navLabelPagesTarget.appendChild(navLabelPagesTargetText)
+        pageTarget.appendChild(navLabelPagesTarget)
+        pageTargetContent = tocDoc.createElement("content")
+        pageTargetContent.setAttribute("src", os.path.relpath(htmlFiles[i], str(path)))
+        pageTarget.appendChild(pageTargetContent)
+        pagesList.appendChild(pageTarget)
+    ncx.appendChild(pagesList)
 
     docFile = open(str(Path(path / "toc.ncx")), 'w', newline="", encoding="utf-8")
     docFile.write(tocDoc.toString(indent=2))

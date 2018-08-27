@@ -25,6 +25,7 @@ import shutil
 import os
 from pathlib import Path
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+from PyQt5.QtCore import Qt, QDateTime
 
 def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     path = Path(os.path.join(projectURL, configDictionary["exportLocation"]))
@@ -128,6 +129,10 @@ Write OPF metadata file
 
 def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml):
     
+    # marc relators
+    # This has several entries removed to reduce it to the most relevant entries.
+    marcRelators = {"abr":i18n("Abridger"), "acp":i18n("Art copyist"), "act":i18n("Actor"), "adi":i18n("Art director"), "adp":i18n("Adapter"), "ann":i18n("Annotator"), "ant":i18n("Bibliographic antecedent"), "arc":i18n("Architect"), "ard":i18n("Artistic director"), "art":i18n("Artist"), "asn":i18n("Associated name"), "ato":i18n("Autographer"), "att":i18n("Attributed name"), "aud":i18n("Author of dialog"), "aut":i18n("Author"), "bdd":i18n("Binding designer"), "bjd":i18n("Bookjacket designer"), "bkd":i18n("Book designer"), "bkp":i18n("Book producer"), "blw":i18n("Blurb writer"), "bnd":i18n("Binder"), "bpd":i18n("Bookplate designer"), "bsl":i18n("Bookseller"), "cll":i18n("Calligrapher"), "clr":i18n("Colorist"), "cns":i18n("Censor"), "cov":i18n("Cover designer"), "cph":i18n("Copyright holder"), "cre":i18n("Creator"), "ctb":i18n("Contributor"), "cur":i18n("Curator"), "cwt":i18n("Commentator for written text"), "drm":i18n("Draftsman"), "dsr":i18n("Designer"), "dub":i18n("Dubious author"), "edt":i18n("Editor"), "etr":i18n("Etcher"), "exp":i18n("Expert"), "fnd":i18n("Funder"), "ill":i18n("Illustrator"), "ilu":i18n("Illuminator"), "ins":i18n("Inscriber"), "lse":i18n("Licensee"), "lso":i18n("Licensor"), "ltg":i18n("Lithographer"), "mdc":i18n("Metadata contact"), "oth":i18n("Other"), "own":i18n("Owner"), "pat":i18n("Patron"), "pbd":i18n("Publishing director"), "pbl":i18n("Publisher"), "prt":i18n("Printer"), "sce":i18n("Scenarist"), "scr":i18n("Scribe"), "spn":i18n("Sponsor"), "stl":i18n("Storyteller"), "trc":i18n("Transcriber"), "trl":i18n("Translator"), "tyd":i18n("Type designer"), "tyg":i18n("Typographer"), "wac":i18n("Writer of added commentary"), "wal":i18n("Writer of added lyrics"), "wam":i18n("Writer of accompanying material"), "wat":i18n("Writer of added text"), "win":i18n("Writer of introduction"), "wpr":i18n("Writer of preface"), "wst":i18n("Writer of supplementary textual content")}
+    
     # opf file
     opfFile = QDomDocument()
     opfRoot = opfFile.createElement("package")
@@ -139,17 +144,72 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     opfMeta = opfFile.createElement("metadata")
     opfMeta.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/")
 
+    # EPUB metadata requires a title, language and uuid
+
+    langString = "en-US"
     if "language" in configDictionary.keys():
-        bookLang = opfFile.createElement("dc:language")
-        bookLang.appendChild(opfFile.createTextNode(configDictionary["language"]))
-        opfMeta.appendChild(bookLang)
+        langString = configDictionary["language"]
+    
+    bookLang = opfFile.createElement("dc:language")
+    bookLang.appendChild(opfFile.createTextNode(langString))
+    opfMeta.appendChild(bookLang)
+
     bookTitle = opfFile.createElement("dc:title")
     if "title" in configDictionary.keys():
         bookTitle.appendChild(opfFile.createTextNode(str(configDictionary["title"])))
     else:
         bookTitle.appendChild(opfFile.createTextNode("Comic with no Name"))
     opfMeta.appendChild(bookTitle)
+    
+    # Generate series title and the like here too.
+    if "seriesName" in configDictionary.keys():
+        bookTitle.setAttribute("id", "#main")
 
+        refine = opfFile.createElement("meta")
+        refine.setAttribute("refines", "#main")
+        refine.setAttribute("property", "title-type")
+        refine.appendChild(opfFile.createTextNode("main"))
+        opfMeta.appendChild(refine)
+
+        refine2 = opfFile.createElement("meta")
+        refine2.setAttribute("refines", "#main")
+        refine2.setAttribute("property", "display-seq")
+        refine2.appendChild(opfFile.createTextNode("1"))
+        opfMeta.appendChild(refine2)
+
+        seriesTitle = opfFile.createElement("dc:title")
+        seriesTitle.appendChild(opfFile.createTextNode(str(configDictionary["seriesName"])))
+        seriesTitle.setAttribute("id", "#series")
+        opfMeta.appendChild(seriesTitle)
+
+        refineS = opfFile.createElement("meta")
+        refineS.setAttribute("refines", "#series")
+        refineS.setAttribute("property", "title-type")
+        refineS.appendChild(opfFile.createTextNode("collection"))
+        opfMeta.appendChild(refineS)
+
+        refineS2 = opfFile.createElement("meta")
+        refineS2.setAttribute("refines", "#series")
+        refineS2.setAttribute("property", "display-seq")
+        refineS2.appendChild(opfFile.createTextNode("2"))
+        opfMeta.appendChild(refineS2)
+
+        if "seriesNumber" in configDictionary.keys():
+            refineS3 = opfFile.createElement("meta")
+            refineS3.setAttribute("refines", "#series")
+            refineS3.setAttribute("property", "group-position")
+            refineS3.appendChild(opfFile.createTextNode(str(configDictionary["seriesNumber"])))
+            opfMeta.appendChild(refineS3)
+
+    uuid = str(configDictionary["uuid"])
+    uuid = uuid.strip("{")
+    uuid = uuid.strip("}")
+
+    # Append the id, and assign it as the bookID.
+    uniqueID = opfFile.createElement("dc:identifier")
+    uniqueID.appendChild(opfFile.createTextNode("urn:uuid:"+uuid))
+    uniqueID.setAttribute("id", "BookID")
+    opfMeta.appendChild(uniqueID)
 
     if "authorList" in configDictionary.keys():
         for authorE in range(len(configDictionary["authorList"])):
@@ -176,13 +236,31 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
                 role.setAttribute("refines", "cre" + str(authorE))
                 role.setAttribute("scheme", "marc:relators")
                 role.setAttribute("property", "role")
-                role.appendChild(opfFile.createTextNode(str(authorDict["role"])))
+                roleString = str(authorDict["role"])
+                if roleString in marcRelators.values():
+                    i = list(marcRelators.values()).index(roleString)
+                    roleString = list(marcRelators.keys())[i]
+                else:
+                    roleString = "oth"
+                role.appendChild(opfFile.createTextNode(roleString))
                 opfMeta.appendChild(role)
 
     if "publishingDate" in configDictionary.keys():
         date = opfFile.createElement("dc:date")
         date.appendChild(opfFile.createTextNode(configDictionary["publishingDate"]))
         opfMeta.appendChild(date)
+    
+    #Creation date
+    modified = opfFile.createElement("meta")
+    modified.setAttribute("property", "dcterms:modified")
+    modified.appendChild(opfFile.createTextNode(QDateTime.currentDateTimeUtc().toString(Qt.ISODate)))
+    opfMeta.appendChild(modified)
+    
+    if "source" in configDictionary.keys():
+        source = opfFile.createElement("dc:source")
+        date.appendChild(opfFile.createTextNode(configDictionary["source"]))
+        opfMeta.appendChild(source)
+    
     description = opfFile.createElement("dc:description")
     if "summary" in configDictionary.keys():
         description.appendChild(opfFile.createTextNode(configDictionary["summary"]))
@@ -190,13 +268,15 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
         description.appendChild(opfFile.createTextNode("There was no summary upon generation of this file."))
     opfMeta.appendChild(description)
 
-    typeE = opfFile.createElement("dc:type")
-    typeE.appendChild(opfFile.createTextNode("Comic"))
-    opfMeta.appendChild(typeE)
+    # Type can be dictionary or index, or one of those edupub thingies. Not necessary for comics.
+    # typeE = opfFile.createElement("dc:type")
+    # opfMeta.appendChild(typeE)
     if "publisherName" in configDictionary.keys():
         publisher = opfFile.createElement("dc:publisher")
         publisher.appendChild(opfFile.createTextNode(configDictionary["publisherName"]))
         opfMeta.appendChild(publisher)
+    
+    
     if "isbn-number" in configDictionary.keys():
         publishISBN = opfFile.createElement("dc:identifier")
         publishISBN.appendChild(opfFile.createTextNode(str("urn:isbn:") + configDictionary["isbn-number"]))

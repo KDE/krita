@@ -24,7 +24,7 @@ Create an epub folder, finally, package to a epubzip.
 import shutil
 import os
 from pathlib import Path
-import xml.etree.ElementTree as ET
+from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 
 def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     path = Path(os.path.join(projectURL, configDictionary["exportLocation"]))
@@ -34,6 +34,7 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     imagePath = oebps / "Images"
     stylesPath = oebps / "Styles"
     textPath = oebps / "Text"
+
     if exportPath.exists() is False:
         exportPath.mkdir()
         metaInf.mkdir()
@@ -46,18 +47,21 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
     mimetype.write("application/epub+zip")
     mimetype.close()
 
-    container = ET.ElementTree()
-    cRoot = ET.Element("container")
-    cRoot.set("version", "1.0")
-    cRoot.set("xmlns", "urn:oasis:names:tc:opendocument:xmlns:container")
-    container._setroot(cRoot)
-    rootFiles = ET.Element("rootfiles")
-    rootfile = ET.Element("rootfile")
-    rootfile.set("full-path", "OEBPS/content.opf")
-    rootfile.set("media-type", "application/oebps-package+xml")
-    rootFiles.append(rootfile)
-    cRoot.append(rootFiles)
-    container.write(str(Path(metaInf / "container.xml")), encoding="utf-8", xml_declaration=True)
+    container = QDomDocument()
+    cRoot = container.createElement("container")
+    cRoot.setAttribute("version", "1.0")
+    cRoot.setAttribute("xmlns", "urn:oasis:names:tc:opendocument:xmlns:container")
+    container.appendChild(cRoot)
+    rootFiles = container.createElement("rootfiles")
+    rootfile = container.createElement("rootfile")
+    rootfile.setAttribute("full-path", "OEBPS/content.opf")
+    rootfile.setAttribute("media-type", "application/oebps-package+xml")
+    rootFiles.appendChild(rootfile)
+    cRoot.appendChild(rootFiles)
+
+    containerFile = open(str(Path(metaInf / "container.xml")), 'w', newline="", encoding="utf-8")
+    containerFile.write(container.toString(indent=2))
+    containerFile.close()
 
     # copyimages to images
     pagesList = []
@@ -73,62 +77,80 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
         if len(pagesLocationList) >= coverNumber:
             coverpageurl = pagesList[coverNumber]
     else:
-        print("CPMT: Couldn't find the location for the epub files.")
+        print("CPMT: Couldn't find the location for the epub images.")
         return False
 
     # for each image, make an xml file
     htmlFiles = []
     for i in range(len(pagesList)):
         pageName = "Page" + str(i) + ".xhtml"
-        doc = ET.ElementTree()
-        html = ET.Element("html")
-        doc._setroot(html)
-        html.set("xmlns", "http://www.w3.org/1999/xhtml")
-        html.set("xmlns:epub", "http://www.idpf.org/2007/ops")
+        doc = QDomDocument()
+        html = doc.createElement("html")
+        doc.appendChild(html)
+        html.setAttribute("xmlns", "http://www.w3.org/1999/xhtml")
+        html.setAttribute("xmlns:epub", "http://www.idpf.org/2007/ops")
 
-        head = ET.Element("head")
-        html.append(head)
+        head = doc.createElement("head")
+        html.appendChild(head)
 
-        body = ET.Element("body")
+        body = doc.createElement("body")
 
-        img = ET.Element("img")
-        img.set("src", os.path.relpath(pagesList[i], str(textPath)))
-        body.append(img)
+        img = doc.createElement("img")
+        img.setAttribute("src", os.path.relpath(pagesList[i], str(textPath)))
+        body.appendChild(img)
 
-        if pagesList[i] != coverpageurl:
-            pagenumber = ET.Element("p")
-            pagenumber.text = "Page " + str(i)
-            body.append(pagenumber)
-        html.append(body)
+        html.appendChild(body)
 
         filename = str(Path(textPath / pageName))
-        doc.write(filename, encoding="utf-8", xml_declaration=True)
+        docFile = open(filename, 'w', newline="", encoding="utf-8")
+        docFile.write(doc.toString(indent=2))
+        docFile.close()
+
         if pagesList[i] == coverpageurl:
             coverpagehtml = os.path.relpath(filename, str(oebps))
         htmlFiles.append(filename)
 
-    # opf file
-    opfFile = ET.ElementTree()
-    opfRoot = ET.Element("package")
-    opfRoot.set("version", "3.0")
-    opfRoot.set("unique-identifier", "BookId")
-    opfRoot.set("xmlns", "http://www.idpf.org/2007/opf")
-    opfFile._setroot(opfRoot)
-
     # metadata
-    opfMeta = ET.Element("metadata")
-    opfMeta.set("xmlns:dc", "http://purl.org/dc/elements/1.1/")
+    
+    write_opf_file(oebps, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml)
+    
+    # toc
+    write_ncx_file(oebps, configDictionary, htmlFiles)
+    
+
+    package_epub(configDictionary, projectURL)
+    return True
+
+"""
+Write OPF metadata file
+"""
+
+
+def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml):
+    
+    # opf file
+    opfFile = QDomDocument()
+    opfRoot = opfFile.createElement("package")
+    opfRoot.setAttribute("version", "3.0")
+    opfRoot.setAttribute("unique-identifier", "BookId")
+    opfRoot.setAttribute("xmlns", "http://www.idpf.org/2007/opf")
+    opfFile.appendChild(opfRoot)
+    
+    opfMeta = opfFile.createElement("metadata")
+    opfMeta.setAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/")
 
     if "language" in configDictionary.keys():
-        bookLang = ET.Element("dc:language")
-        bookLang.text = configDictionary["language"]
-        opfMeta.append(bookLang)
-    bookTitle = ET.Element("dc:title")
+        bookLang = opfFile.createElement("dc:language")
+        bookLang.appendChild(opfFile.createTextNode(configDictionary["language"]))
+        opfMeta.appendChild(bookLang)
+    bookTitle = opfFile.createElement("dc:title")
     if "title" in configDictionary.keys():
-        bookTitle.text = str(configDictionary["title"])
+        bookTitle.appendChild(opfFile.createTextNode(str(configDictionary["title"])))
     else:
-        bookTitle.text = "Comic with no Name"
-    opfMeta.append(bookTitle)
+        bookTitle.appendChild(opfFile.createTextNode("Comic with no Name"))
+    opfMeta.appendChild(bookTitle)
+
+
     if "authorList" in configDictionary.keys():
         for authorE in range(len(configDictionary["authorList"])):
             authorDict = configDictionary["authorList"][authorE]
@@ -136,7 +158,7 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
             if "role" in authorDict.keys():
                 if str(authorDict["role"]).lower() in ["editor", "assistant editor", "proofreader", "beta"]:
                     authorType = "dc:contributor"
-            author = ET.Element(authorType)
+            author = opfFile.createElement(authorType)
             authorName = []
             if "last-name" in authorDict.keys():
                 authorName.append(authorDict["last-name"])
@@ -146,164 +168,175 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = []):
                 authorName.append(authorDict["initials"])
             if "nickname" in authorDict.keys():
                 authorName.append("(" + authorDict["nickname"] + ")")
-            author.text = ", ".join(authorName)
-            opfMeta.append(author)
+            author.appendChild(opfFile.createTextNode(", ".join(authorName)))
+            opfMeta.appendChild(author)
             if "role" in authorDict.keys():
-                author.set("id", "cre" + str(authorE))
-                role = ET.Element("meta")
-                role.set("refines", "cre" + str(authorE))
-                role.set("scheme", "marc:relators")
-                role.set("property", "role")
-                role.text = str(authorDict["role"])
-                opfMeta.append(role)
+                author.setAttribute("id", "cre" + str(authorE))
+                role = opfFile.createElement("meta")
+                role.setAttribute("refines", "cre" + str(authorE))
+                role.setAttribute("scheme", "marc:relators")
+                role.setAttribute("property", "role")
+                role.appendChild(opfFile.createTextNode(str(authorDict["role"])))
+                opfMeta.appendChild(role)
 
     if "publishingDate" in configDictionary.keys():
-        date = ET.Element("dc:date")
-        date.text = configDictionary["publishingDate"]
-        opfMeta.append(date)
-    description = ET.Element("dc:description")
+        date = opfFile.createElement("dc:date")
+        date.appendChild(opfFile.createTextNode(configDictionary["publishingDate"]))
+        opfMeta.appendChild(date)
+    description = opfFile.createElement("dc:description")
     if "summary" in configDictionary.keys():
-        description.text = configDictionary["summary"]
+        description.appendChild(opfFile.createTextNode(configDictionary["summary"]))
     else:
-        description.text = "There was no summary upon generation of this file."
-    opfMeta.append(description)
+        description.appendChild(opfFile.createTextNode("There was no summary upon generation of this file."))
+    opfMeta.appendChild(description)
 
-    type = ET.Element("dc:type")
-    type.text = "Comic"
-    opfMeta.append(type)
+    typeE = opfFile.createElement("dc:type")
+    typeE.appendChild(opfFile.createTextNode("Comic"))
+    opfMeta.appendChild(typeE)
     if "publisherName" in configDictionary.keys():
-        publisher = ET.Element("dc:publisher")
-        publisher.text = configDictionary["publisherName"]
-        opfMeta.append(publisher)
+        publisher = opfFile.createElement("dc:publisher")
+        publisher.appendChild(opfFile.createTextNode(configDictionary["publisherName"]))
+        opfMeta.appendChild(publisher)
     if "isbn-number" in configDictionary.keys():
-        publishISBN = ET.Element("dc:identifier")
-        publishISBN.text = str("urn:isbn:") + configDictionary["isbn-number"]
-        opfMeta.append(publishISBN)
+        publishISBN = opfFile.createElement("dc:identifier")
+        publishISBN.appendChild(opfFile.createTextNode(str("urn:isbn:") + configDictionary["isbn-number"]))
+        opfMeta.appendChild(publishISBN)
     if "license" in configDictionary.keys():
-        rights = ET.Element("dc:rights")
-        rights.text = configDictionary["license"]
-        opfMeta.append(rights)
+        rights = opfFile.createElement("dc:rights")
+        rights.appendChild(opfFile.createTextNode(configDictionary["license"]))
+        opfMeta.appendChild(rights)
 
     if "genre" in configDictionary.keys():
         genreListConf = configDictionary["genre"]
         if isinstance(configDictionary["genre"], dict):
             genreListConf = configDictionary["genre"].keys()
         for g in genreListConf:
-            subject = ET.Element("dc:subject")
-            subject.text = g
-            opfMeta.append(subject)
+            subject = opfFile.createElement("dc:subject")
+            subject.appendChild(opfFile.createTextNode(g))
+            opfMeta.appendChild(subject)
     if "characters" in configDictionary.keys():
         for name in configDictionary["characters"]:
-            char = ET.Element("dc:subject")
-            char.text = name
-            opfMeta.append(char)
+            char = opfFile.createElement("dc:subject")
+            char.appendChild(opfFile.createTextNode(name))
+            opfMeta.appendChild(char)
     if "format" in configDictionary.keys():
-        for format in configDictionary["format"]:
-            f = ET.Element("dc:subject")
-            f.text = format
-            opfMeta.append(f)
+        for formatF in configDictionary["format"]:
+            f = opfFile.createElement("dc:subject")
+            f.appendChild(opfFile.createTextNode(formatF))
+            opfMeta.appendChild(f)
     if "otherKeywords" in configDictionary.keys():
         for key in configDictionary["otherKeywords"]:
-            word = ET.Element("dc:subject")
-            word.text = key
-            opfMeta.append(word)
+            word = opfFile.createElement("dc:subject")
+            word.appendChild(opfFile.createTextNode(key))
+            opfMeta.appendChild(word)
 
-    opfRoot.append(opfMeta)
+    opfRoot.appendChild(opfMeta)
 
-    opfManifest = ET.Element("manifest")
-    toc = ET.Element("item")
-    toc.set("id", "ncx")
-    toc.set("href", "toc.ncx")
-    toc.set("media-type", "application/x-dtbncx+xml")
-    opfManifest.append(toc)
+    opfManifest = opfFile.createElement("manifest")
+    toc = opfFile.createElement("item")
+    toc.setAttribute("id", "ncx")
+    toc.setAttribute("href", "toc.ncx")
+    toc.setAttribute("media-type", "application/x-dtbncx+xml")
+    opfManifest.appendChild(toc)
     for p in htmlFiles:
-        item = ET.Element("item")
-        item.set("id", os.path.basename(p))
-        item.set("href", os.path.relpath(p, str(oebps)))
-        item.set("media-type", "application/xhtml+xml")
-        opfManifest.append(item)
+        item = opfFile.createElement("item")
+        item.setAttribute("id", os.path.basename(p))
+        item.setAttribute("href", os.path.relpath(p, str(path)))
+        item.setAttribute("media-type", "application/xhtml+xml")
+        opfManifest.appendChild(item)
     for p in pagesList:
-        item = ET.Element("item")
-        item.set("id", os.path.basename(p))
-        item.set("href", os.path.relpath(p, str(oebps)))
-        item.set("media-type", "image/png")
+        item = opfFile.createElement("item")
+        item.setAttribute("id", os.path.basename(p))
+        item.setAttribute("href", os.path.relpath(p, str(path)))
+        item.setAttribute("media-type", "image/png")
         if os.path.basename(p) == os.path.basename(coverpageurl):
-            item.set("properties", "cover-image")
-        opfManifest.append(item)
+            item.setAttribute("properties", "cover-image")
+        opfManifest.appendChild(item)
 
-    opfRoot.append(opfManifest)
+    opfRoot.appendChild(opfManifest)
 
-    opfSpine = ET.Element("spine")
-    opfSpine.set("toc", "ncx")
+    opfSpine = opfFile.createElement("spine")
+    # this sets the table of contents to use the ncx file
+    opfSpine.setAttribute("toc", "ncx")
     for p in htmlFiles:
-        item = ET.Element("itemref")
-        item.set("idref", os.path.basename(p))
-        opfSpine.append(item)
-    opfRoot.append(opfSpine)
+        item = opfFile.createElement("itemref")
+        item.setAttribute("idref", os.path.basename(p))
+        opfSpine.appendChild(item)
+    opfRoot.appendChild(opfSpine)
 
-    opfGuide = ET.Element("guide")
+    opfGuide = opfFile.createElement("guide")
     if coverpagehtml is not None and coverpagehtml.isspace() is False and len(coverpagehtml) > 0:
-        item = ET.Element("reference")
-        item.set("type", "cover")
-        item.set("title", "Cover")
-        item.set("href", coverpagehtml)
-    opfRoot.append(opfGuide)
+        item = opfFile.createElement("reference")
+        item.setAttribute("type", "cover")
+        item.setAttribute("title", "Cover")
+        item.setAttribute("href", coverpagehtml)
+    opfRoot.appendChild(opfGuide)
 
-    opfFile.write(str(Path(oebps / "content.opf")), encoding="utf-8", xml_declaration=True)
-    # toc
-    tocDoc = ET.ElementTree()
-    ncx = ET.Element("ncx")
-    ncx.set("version", "2005-1")
-    ncx.set("xmlns", "http://www.daisy.org/z3986/2005/ncx/")
-    tocDoc._setroot(ncx)
-
-    tocHead = ET.Element("head")
-    metaID = ET.Element("meta")
-    metaID.set("content", "ID_UNKNOWN")
-    metaID.set("name", "dtb:uid")
-    tocHead.append(metaID)
-    metaDepth = ET.Element("meta")
-    metaDepth.set("content", str(0))
-    metaDepth.set("name", "dtb:depth")
-    tocHead.append(metaDepth)
-    metaTotal = ET.Element("meta")
-    metaTotal.set("content", str(0))
-    metaTotal.set("name", "dtb:totalPageCount")
-    tocHead.append(metaTotal)
-    metaMax = ET.Element("meta")
-    metaMax.set("content", str(0))
-    metaMax.set("name", "dtb:maxPageNumber")
-    tocHead.append(metaDepth)
-    ncx.append(tocHead)
-
-    docTitle = ET.Element("docTitle")
-    text = ET.Element("text")
-    if "title" in configDictionary.keys():
-        text.text = str(configDictionary["title"])
-    else:
-        text.text = "Comic with no Name"
-    docTitle.append(text)
-    ncx.append(docTitle)
-
-    navmap = ET.Element("navMap")
-    navPoint = ET.Element("navPoint")
-    navPoint.set("id", "navPoint-1")
-    navPoint.set("playOrder", "1")
-    navLabel = ET.Element("navLabel")
-    navLabelText = ET.Element("text")
-    navLabelText.text = "Start"
-    navLabel.append(navLabelText)
-    navContent = ET.Element("content")
-    navContent.set("src", os.path.relpath(htmlFiles[0], str(oebps)))
-    navPoint.append(navLabel)
-    navPoint.append(navContent)
-    navmap.append(navPoint)
-    ncx.append(navmap)
-
-    tocDoc.write(str(Path(oebps / "toc.ncx")), encoding="utf-8", xml_declaration=True)
-
-    package_epub(configDictionary, projectURL)
+    docFile = open(str(Path(path / "content.opf")), 'w', newline="", encoding="utf-8")
+    docFile.write(opfFile.toString(indent=2))
+    docFile.close()
     return True
+
+"""
+Write a NCX file.
+"""
+
+def write_ncx_file(path, configDictionary, htmlFiles):
+    tocDoc = QDomDocument()
+    ncx = tocDoc.createElement("ncx")
+    ncx.setAttribute("version", "2005-1")
+    ncx.setAttribute("xmlns", "http://www.daisy.org/z3986/2005/ncx/")
+    tocDoc.appendChild(ncx)
+
+    tocHead = tocDoc.createElement("head")
+    metaID = tocDoc.createElement("meta")
+    metaID.setAttribute("content", "ID_UNKNOWN")
+    metaID.setAttribute("name", "dtb:uid")
+    tocHead.appendChild(metaID)
+    metaDepth = tocDoc.createElement("meta")
+    metaDepth.setAttribute("content", str(0))
+    metaDepth.setAttribute("name", "dtb:depth")
+    tocHead.appendChild(metaDepth)
+    metaTotal = tocDoc.createElement("meta")
+    metaTotal.setAttribute("content", str(0))
+    metaTotal.setAttribute("name", "dtb:totalPageCount")
+    tocHead.appendChild(metaTotal)
+    metaMax = tocDoc.createElement("meta")
+    metaMax.setAttribute("content", str(0))
+    metaMax.setAttribute("name", "dtb:maxPageNumber")
+    tocHead.appendChild(metaDepth)
+    ncx.appendChild(tocHead)
+
+    docTitle = tocDoc.createElement("docTitle")
+    text = tocDoc.createElement("text")
+    if "title" in configDictionary.keys():
+        text.appendChild(tocDoc.createTextNode(str(configDictionary["title"])))
+    else:
+        text.appendChild(tocDoc.createTextNode("Comic with no Name"))
+    docTitle.appendChild(text)
+    ncx.appendChild(docTitle)
+
+    navmap = tocDoc.createElement("navMap")
+    navPoint = tocDoc.createElement("navPoint")
+    navPoint.setAttribute("id", "navPoint-1")
+    navPoint.setAttribute("playOrder", "1")
+    navLabel = tocDoc.createElement("navLabel")
+    navLabelText = tocDoc.createElement("text")
+    navLabelText.appendChild(tocDoc.createTextNode("Start"))
+    navLabel.appendChild(navLabelText)
+    navContent = tocDoc.createElement("content")
+    navContent.setAttribute("src", os.path.relpath(htmlFiles[0], str(path)))
+    navPoint.appendChild(navLabel)
+    navPoint.appendChild(navContent)
+    navmap.appendChild(navPoint)
+    ncx.appendChild(navmap)
+
+    docFile = open(str(Path(path / "toc.ncx")), 'w', newline="", encoding="utf-8")
+    docFile.write(tocDoc.toString(indent=2))
+    docFile.close()
+    return True
+
+
 """
 package epub packages the whole epub folder and renames the zip file to .epub.
 """

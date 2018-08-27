@@ -132,17 +132,7 @@
      <item>
       <widget class="QPushButton" name="bnDefault">
        <property name="text">
-        <string>Reset Steps</string>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bnResetPosition">
-       <property name="text">
-        <string>Reset Rings</string>
+        <string>Reset to default</string>
        </property>
        <property name="flat">
         <bool>false</bool>

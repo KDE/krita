@@ -295,6 +295,10 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 else if (resType  == "paintoppresets") {
                     toplevel->setText(0, i18n("Brush Presets"));
                 }
+                else if (resType  == "gamutmasks") {
+                    toplevel->setText(0, i18n("Gamut Masks"));
+                }
+
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 

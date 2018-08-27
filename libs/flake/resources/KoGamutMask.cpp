@@ -1,4 +1,21 @@
-﻿#include "KoGamutMask.h"
+/*
+ *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *
+ *  This library is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2.1 of the License.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "KoGamutMask.h"
 
 #include <cstring>
 
@@ -54,6 +71,14 @@ void KoGamutMaskShape::paint(QPainter &painter, const KoViewConverter& viewConve
     painter.restore();
 }
 
+void KoGamutMaskShape::paintStroke(QPainter &painter, const KoViewConverter &viewConverter)
+{
+    painter.save();
+    painter.setTransform(m_maskShape->absoluteTransformation(&viewConverter) * painter.transform());
+    m_maskShape->paintStroke(painter, viewConverter, m_shapePaintingContext);
+    painter.restore();
+
+}
 
 struct Q_DECL_HIDDEN KoGamutMask::Private {
     QString name;
@@ -62,20 +87,21 @@ struct Q_DECL_HIDDEN KoGamutMask::Private {
     QByteArray data;
     QVector<KoGamutMaskShape*> maskShapes;
     QVector<KoGamutMaskShape*> previewShapes;
-    QSizeF maskSize; // at 100DPI
+    QSizeF maskSize;
 };
 
 KoGamutMask::KoGamutMask(const QString& filename)
     : KoResource(filename)
     , d(new Private())
 {
-
+    d->maskSize = QSizeF(144.0,144.0);
 }
 
 KoGamutMask::KoGamutMask()
     : KoResource(QString())
     , d(new Private())
 {
+    d->maskSize = QSizeF(144.0,144.0);
 }
 
 KoGamutMask::KoGamutMask(KoGamutMask* rhs)
@@ -89,9 +115,8 @@ KoGamutMask::KoGamutMask(KoGamutMask* rhs)
     d->maskSize = rhs->d->maskSize;
 
     QList<KoShape*> newShapes;
-    for(KoGamutMaskShape* sh: d->maskShapes) {
-        KoShape* shape = sh->koShape();
-        newShapes.append(shape);
+    for(KoShape* sh: rhs->koShapes()) {
+        newShapes.append(sh->cloneShape());
     }
 
     setMaskShapes(newShapes);
@@ -134,6 +159,21 @@ void KoGamutMask::paint(QPainter &painter, KoViewConverter& viewConverter, bool 
     }
 }
 
+void KoGamutMask::paintStroke(QPainter &painter, KoViewConverter &viewConverter, bool preview)
+{
+    QVector<KoGamutMaskShape*>* shapeVector;
+
+    if (preview && !d->previewShapes.isEmpty()) {
+        shapeVector = &d->previewShapes;
+    } else {
+        shapeVector = &d->maskShapes;
+    }
+
+    for(KoGamutMaskShape* shape: *shapeVector) {
+        shape->paintStroke(painter, viewConverter);
+    }
+}
+
 bool KoGamutMask::load()
 {
     QFile file(filename());
@@ -143,7 +183,6 @@ bool KoGamutMask::load()
         return false;
     }
     bool res = loadFromDevice(&file);
-    setValid(res);
     file.close();
     return res;
 }
@@ -154,7 +193,8 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
 
     d->data = dev->readAll();
 
-    Q_ASSERT(d->data.size() != 0);
+    // TODO: test
+    KIS_ASSERT_RECOVER_RETURN_VALUE(d->data.size() != 0, false);
 
     if (filename().isNull()) {
         warnFlake << "Cannot load gamut mask" << name() << "there is no filename set";
@@ -190,7 +230,7 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     KoXmlDocument xmlDocument;
     QString errorMsg;
     int errorLine = 0;
-    int errorColumn;
+    int errorColumn = 0;
 
     bool ok = xmlDocument.setContent(ba, false, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
@@ -232,6 +272,8 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     }
 
     buf.close();
+
+    setValid(true);
 
     return true;
 }
@@ -327,7 +369,6 @@ QSizeF KoGamutMask::maskSize()
     return d->maskSize;
 }
 
-// TODO: rethink preview
 void KoGamutMask::setPreviewMaskShapes(QList<KoShape*> shapes)
 {
     setMaskShapesToVector(shapes, d->previewShapes);

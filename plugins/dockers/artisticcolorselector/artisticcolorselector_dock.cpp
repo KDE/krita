@@ -91,26 +91,19 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     QPixmap valueScaleStepsPixmap = KisIconUtils::loadIcon("wheel-light").pixmap(16,16);
     QIcon infinityIcon = KisIconUtils::loadIcon("infinity");
     m_infinityPixmap = infinityIcon.pixmap(16,16);
+    m_iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");
+    m_iconMaskOn = KisIconUtils::loadIcon("gamut-mask-on");
 
     m_selectorUI->colorSelector->loadSettings();
 
+    m_selectorUI->bnWheelPrefs->setIcon(KisIconUtils::loadIcon("wheel-sectors"));
     m_selectorUI->bnWheelPrefs->setPopupWidget(m_wheelPrefsUI);
 
-    // TODO: make it into separate window
     m_selectorUI->bnDockerPrefs->setPopupWidget(m_preferencesUI);
     m_selectorUI->bnDockerPrefs->setIcon(KisIconUtils::loadIcon("configure"));
 
     m_selectorUI->bnToggleMask->setChecked(false);
-    m_selectorUI->bnToggleMask->setIcon(KisIconUtils::loadIcon("novisible"));
-    m_selectorUI->labelMaskToolbar->setPixmap(KisIconUtils::loadIcon("media-playback-stop").pixmap(16,16));
-
-    m_selectorUI->labelHueStepsIcon->setPixmap(hueStepsPixmap);
-    m_selectorUI->labelSaturationStepsIcon->setPixmap(saturationStepsPixmap);
-    m_selectorUI->labelValueScaleStepsIcon->setPixmap(valueScaleStepsPixmap);
-
-    m_selectorUI->labelHueSteps->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-    m_selectorUI->labelSaturationSteps->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-    m_selectorUI->labelValueScaleSteps->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+    m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
 
     //preferences
     m_hsxButtons->addButton(m_preferencesUI->bnHsy, KisColor::HSY);
@@ -167,11 +160,12 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     m_preferencesUI->showColorBlip->setChecked(m_selectorUI->colorSelector->getShowColorBlip());
     m_preferencesUI->showBgColor->setChecked(m_selectorUI->colorSelector->getShowBgColor());
     m_preferencesUI->showValueScaleNumbers->setChecked(m_selectorUI->colorSelector->getShowValueScaleNumbers());
-    m_preferencesUI->bnAbsLight->setChecked(m_selectorUI->colorSelector->islightRelative());
 
     m_preferencesUI->enforceGamutMask->setChecked(m_selectorUI->colorSelector->enforceGamutMask());
     m_preferencesUI->permissiveGamutMask->setChecked(!m_selectorUI->colorSelector->enforceGamutMask());
     m_preferencesUI->showMaskPreview->setChecked(m_selectorUI->colorSelector->maskPreviewActive());
+
+    m_preferencesUI->valueScaleGamma->setValue(m_selectorUI->colorSelector->gamma());
 
     switch(m_selectorUI->colorSelector->getColorSpace())
     {
@@ -181,6 +175,12 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
         case KisColor::HSY: { m_preferencesUI->bnHsy->setChecked(true); } break;
     }
 
+    if (m_selectorUI->colorSelector->getColorSpace() == KisColor::HSY) {
+        m_preferencesUI->valueScaleGammaBox->show();
+    } else {
+        m_preferencesUI->valueScaleGammaBox->hide();
+    }
+
     connect(m_wheelPrefsUI->numValueScaleSteps  , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
     connect(m_wheelPrefsUI->numHueSteps         , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
     connect(m_wheelPrefsUI->numSaturationSteps  , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
@@ -188,7 +188,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_wheelPrefsUI->bnInfHueSteps       , SIGNAL(clicked(bool))                           , SLOT(slotPreferenceChanged()));
     connect(m_wheelPrefsUI->bnInfValueScaleSteps, SIGNAL(clicked(bool))                           , SLOT(slotPreferenceChanged()));
     connect(m_wheelPrefsUI->bnDefault           , SIGNAL(clicked(bool))                          , SLOT(slotResetDefaultSettings()));
-    connect(m_wheelPrefsUI->bnResetPosition     , SIGNAL(clicked(bool))                    , SLOT(slotResetRingPositions()));
 
     connect(m_preferencesUI->defaultHueSteps    , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->defaultSaturationSteps, SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
@@ -200,8 +199,8 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_preferencesUI->showBgColor        , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->showValueScaleNumbers, SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->enforceGamutMask   , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
-    connect(m_preferencesUI->bnAbsLight         , SIGNAL(toggled(bool))                          , SLOT(slotLightModeChanged(bool)));
     connect(m_preferencesUI->showMaskPreview   , SIGNAL(toggled(bool)), SLOT(slotGamutMaskActivatePreview(bool)));
+    connect(m_preferencesUI->valueScaleGamma   , SIGNAL(valueChanged(qreal)), SLOT(slotSetGamma(qreal)));
 
     connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(const KisColor&))     , SLOT(slotFgColorChanged(const KisColor&)));
     connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(const KisColor&))     , SLOT(slotBgColorChanged(const KisColor&)));
@@ -210,8 +209,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_selectorUI->bnToggleMask          , SIGNAL(toggled(bool))                          , SLOT(slotGamutMaskToggle(bool)));
 
     connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected(int)));
-
-    updateWheelInfoStrip();
 
     setWidget(m_selectorUI);
 }
@@ -267,12 +264,23 @@ void ArtisticColorSelectorDock::slotBgColorChanged(const KisColor& color)
 
 void ArtisticColorSelectorDock::slotColorSpaceSelected(int type)
 {
-    m_selectorUI->colorSelector->setColorSpace(static_cast<KisColor::Type>(type));
+    m_selectorUI->colorSelector->setColorSpace(static_cast<KisColor::Type>(type), m_preferencesUI->valueScaleGamma->value());
+
+    if (m_selectorUI->colorSelector->getColorSpace() == KisColor::HSY) {
+        m_preferencesUI->valueScaleGammaBox->show();
+    } else {
+        m_preferencesUI->valueScaleGammaBox->hide();
+    }
+}
+
+void ArtisticColorSelectorDock::slotSetGamma(qreal gamma)
+{
+    m_selectorUI->colorSelector->setGamma(gamma);
 }
 
 void ArtisticColorSelectorDock::slotPreferenceChanged()
 {
-    int hueSteps;
+    int hueSteps = DEFAULT_HUE_STEPS;
     if (m_wheelPrefsUI->bnInfHueSteps->isChecked()) {
         m_wheelPrefsUI->numHueSteps->setEnabled(false);
         hueSteps = 1;
@@ -332,12 +340,6 @@ void ArtisticColorSelectorDock::slotPreferenceChanged()
         m_selectorUI->colorSelector->setInverseSaturation(false);
     }
 
-    updateWheelInfoStrip();
-}
-
-void ArtisticColorSelectorDock::slotResetRingPositions()
-{
-        m_selectorUI->colorSelector->resetRings();
 }
 
 void ArtisticColorSelectorDock::slotResetDefaultSettings()
@@ -376,32 +378,6 @@ void ArtisticColorSelectorDock::slotResetDefaultSettings()
         m_wheelPrefsUI->numValueScaleSteps->setEnabled(true);
         m_wheelPrefsUI->bnInfValueScaleSteps->setChecked(false);
     }
-
-    updateWheelInfoStrip();
-}
-
-void ArtisticColorSelectorDock::slotLightModeChanged(bool setToAbsolute)
-{
-    m_selectorUI->colorSelector->setLight(m_selectorUI->colorSelector->getLight(), setToAbsolute);
-}
-
-void ArtisticColorSelectorDock::updateWheelInfoStrip()
-{
-    int hueSteps = m_selectorUI->colorSelector->getNumPieces();
-    if (hueSteps == 1) {
-        m_selectorUI->labelHueSteps->setPixmap(m_infinityPixmap);
-    } else {
-        m_selectorUI->labelHueSteps->setNum(hueSteps);
-    }
-
-    m_selectorUI->labelSaturationSteps->setNum(m_wheelPrefsUI->numSaturationSteps->value());
-
-    int valueScaleSteps = m_selectorUI->colorSelector->getNumLightPieces();
-    if (valueScaleSteps == 1) {
-        m_selectorUI->labelValueScaleSteps->setPixmap(m_infinityPixmap);
-    } else {
-        m_selectorUI->labelValueScaleSteps->setNum(valueScaleSteps);
-    }
 }
 
 void ArtisticColorSelectorDock::slotGamutMaskActivatePreview(bool value)
@@ -427,9 +403,9 @@ void ArtisticColorSelectorDock::slotGamutMaskToggle(bool checked)
 
     if (b == true) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->bnToggleMask->setIcon(KisIconUtils::loadIcon("visible"));
+        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOn);
     } else {
-        m_selectorUI->bnToggleMask->setIcon(KisIconUtils::loadIcon("novisible"));
+        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
     }
 
     m_selectorUI->colorSelector->setGamutMaskOn(b);
@@ -460,6 +436,10 @@ void ArtisticColorSelectorDock::unsetCanvas()
 
 void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
 {
+    if (!mask) {
+        return;
+    }
+
     m_selectedMask = mask;
 
     if (m_selectedMask) {

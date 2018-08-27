@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>358</width>
-    <height>520</height>
+    <height>472</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -34,7 +34,7 @@
       <item>
        <widget class="QCheckBox" name="showValueScaleNumbers">
         <property name="text">
-         <string>Show lightness numbers on the value scale</string>
+         <string>Show numbered value scale</string>
         </property>
        </widget>
       </item>
@@ -95,10 +95,51 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="bnAbsLight">
-        <property name="text">
-         <string>Use HSV saturation component</string>
+       <widget class="QFrame" name="valueScaleGammaBox">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
         </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="labelValueScaleGamma">
+           <property name="text">
+            <string>Value Scale Gamma</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="valueScaleGamma">
+           <property name="decimals">
+            <number>1</number>
+           </property>
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>50.000000000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="value">
+            <double>1.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

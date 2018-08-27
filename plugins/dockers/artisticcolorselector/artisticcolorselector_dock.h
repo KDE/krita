@@ -28,7 +28,6 @@
 #include <KoResourceServerObserver.h>
 #include <resources/KoGamutMask.h>
 #include <KisDocument.h>
-//#include <KisView.h>
 #include <kis_types.h>
 #include <KoResourceItemChooser.h>
 
@@ -55,18 +54,14 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-//Q_SIGNALS:
-//    void sigGamutMaskChanged();
-
 private Q_SLOTS:
     void slotCanvasResourceChanged(int key, const QVariant& value);
     void slotFgColorChanged(const KisColor& color);
     void slotBgColorChanged(const KisColor& color);
     void slotColorSpaceSelected(int type);
+    void slotSetGamma(qreal gamma);
     void slotPreferenceChanged();
-    void slotResetRingPositions();
     void slotResetDefaultSettings();
-    void slotLightModeChanged(bool setToAbsolute);
     void slotGamutMaskToggle(bool value);
     void slotGamutMaskActivatePreview(bool value);
     void slotGamutMaskSet(KoGamutMask* mask);
@@ -81,9 +76,10 @@ private:
     WheelPreferencesPopupUI* m_wheelPrefsUI;
     KoGamutMask* m_selectedMask;
 
-    QPixmap m_infinityPixmap;
+    QIcon m_iconMaskOff;
+    QIcon m_iconMaskOn;
 
-    void updateWheelInfoStrip();
+    QPixmap m_infinityPixmap;
 };
 
 

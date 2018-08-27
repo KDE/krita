@@ -383,6 +383,21 @@ bool KisResourceBundle::save()
                 }
             }
         }
+        else if (resType  == "ko_gamutmasks") {
+            KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+            Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                KoResource *res = gamutMaskServer->resourceByMD5(ref.md5sum);
+                if (!res) res = gamutMaskServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "gamutmasks")) {
+                    if (res) {
+                        warnKrita << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
+            }
+        }
     }
 
     if (!m_thumbnail.isNull()) {
@@ -700,6 +715,51 @@ bool KisResourceBundle::install()
 
             }
         }
+        else if (resType  == "gamutmasks") {
+            KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+            Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
+                KoGamutMask *res = gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+
+                if (!res) {
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
+                if (!resourceStore->open(ref.resourcePath)) {
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
+                }
+                if (!res->loadFromDevice(resourceStore->device())) {
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
+                }
+                dbgResources << "\t\tresource:" << res->name();
+
+                //find the resource on the server
+                KoGamutMask *res2 = gamutMaskServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    gamutMaskServer->addResource(res, false);//add it!
+
+                    if (!m_gamutMasksMd5Installed.contains(res->md5())) {
+                        m_gamutMasksMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+
+                    Q_FOREACH (const QString &tag, ref.tagList) {
+                        gamutMaskServer->addTag(res, tag);
+                    }
+                    //gamutMaskServer->addTag(res, name());
+                }
+                else {
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
+                }
+            }
+        }
     }
     m_installed = true;
     if(!md5Mismatch.isEmpty()){
@@ -777,6 +837,15 @@ bool KisResourceBundle::uninstall()
         }
     }
 
+    KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+    //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gamutmasks")) {
+    Q_FOREACH (const QByteArray md5, m_gamutMasksMd5Installed) {
+        KoGamutMask *res = gamutMaskServer->resourceByMD5(md5);
+        if (res) {
+            gamutMaskServer->removeResourceFromServer(res);
+        }
+    }
+
     Q_FOREACH(const QString &tag, tags) {
         paintoppresetServer->tagCategoryRemoved(tag);
         workspaceServer->tagCategoryRemoved(tag);
@@ -784,6 +853,7 @@ bool KisResourceBundle::uninstall()
         brushServer->tagCategoryRemoved(tag);
         patternServer->tagCategoryRemoved(tag);
         gradientServer->tagCategoryRemoved(tag);
+        gamutMaskServer->tagCategoryRemoved(tag);
     }
 
 
@@ -862,6 +932,11 @@ QList<KoResource*> KisResourceBundle::resources(const QString &resType) const
             KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             KisPaintOpPresetSP res =  paintoppresetServer->resourceByMD5(ref.md5sum);
             if (res) ret << res.data();
+        }
+        else if (resType  == "gamutmasks") {
+            KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+            KoResource *res =  gamutMaskServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
     }
     return ret;

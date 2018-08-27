@@ -1,3 +1,20 @@
+/*
+ *  Copyright (c) 2018 Anna Medonosova <anna.medonosova@gmail.com>
+ *
+ *  This library is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; version 2.1 of the License.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
 #ifndef KOGAMUTMASK_H
 #define KOGAMUTMASK_H
 
@@ -24,6 +41,7 @@ public:
     bool coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter) const;
     QPainterPath outline();
     void paint(QPainter &painter, const KoViewConverter& viewConverter);
+    void paintStroke(QPainter &painter, const KoViewConverter& viewConverter);
     KoShape* koShape();
 
 private:
@@ -40,19 +58,8 @@ class KRITAFLAKE_EXPORT KoGamutMask : public QObject, public KoResource
     Q_OBJECT
 
 public:
-    /**
-     * @brief load a gamut mask from given file
-     * @param filename
-     */
     KoGamutMask(const QString &filename);
-
-    /**
-     * @brief create KoGamutMask from polygons
-     * @param polygons
-     */
     KoGamutMask();
-
-    // TODO: copy constructor, for duplicating masks
     KoGamutMask(KoGamutMask *rhs);
 
     bool coordIsClear(const QPointF& coord, KoViewConverter& viewConverter, bool preview);
@@ -63,6 +70,7 @@ public:
     bool saveToDevice(QIODevice* dev) const override;
 
     void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
+    void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);
 
     QString title();
     void setTitle(QString title);
@@ -74,13 +82,14 @@ public:
 
     void setMaskShapes(QList<KoShape*> shapes);   
     void setPreviewMaskShapes(QList<KoShape*> shapes);
-    void setMaskShapesToVector(QList<KoShape*> shapes, QVector<KoGamutMaskShape*>& targetVector);
 
     QList<KoShape*> koShapes() const;
 
-    // switch back to loaded shapes when ending mask preview
     void clearPreview();
+
 private:
+    void setMaskShapesToVector(QList<KoShape*> shapes, QVector<KoGamutMaskShape*>& targetVector);
+
     struct Private;
     Private* const d;
 };

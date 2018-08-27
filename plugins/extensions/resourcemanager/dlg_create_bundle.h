@@ -51,6 +51,7 @@ public:
     QStringList selectedPatterns() const { return m_selectedPatterns; }
     QStringList selectedPalettes() const { return m_selectedPalettes; }
     QStringList selectedWorkspaces() const { return m_selectedWorkspaces; }
+    QStringList selectedGamutMasks() const { return m_selectedGamutMasks; }
 
 private Q_SLOTS:
 
@@ -72,6 +73,7 @@ private:
     QStringList m_selectedPatterns;
     QStringList m_selectedPalettes;
     QStringList m_selectedWorkspaces;
+    QStringList m_selectedGamutMasks;
 
     QString m_previewImage;
 

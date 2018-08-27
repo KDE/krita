@@ -147,5 +147,9 @@
         <file>dark_wheel-sectors.svg</file>
         <file>dark_infinity.svg</file>
         <file>light_infinity.svg</file>
+        <file>dark_gamut-mask-on.svg</file>
+        <file>dark_gamut-mask-off.svg</file>
+        <file>light_gamut-mask-off.svg</file>
+        <file>light_gamut-mask-on.svg</file>
     </qresource>
 </RCC>

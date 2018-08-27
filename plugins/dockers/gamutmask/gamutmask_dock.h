@@ -21,6 +21,7 @@
 #include <QDockWidget>
 #include <QPointer>
 #include <QRegExpValidator>
+#include <QMessageBox>
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerProvider.h>
@@ -35,7 +36,6 @@
 #include <kis_mainwindow_observer.h>
 
 class KisCanvasResourceProvider;
-class KisColor;
 class QButtonGroup;
 class QMenu;
 
@@ -55,7 +55,7 @@ public:
 
 public: // KoResourceServerObserver
     void unsetResourceServer() override;
-    void resourceAdded(KoGamutMask* resource) override {}
+    void resourceAdded(KoGamutMask* /*resource*/) override {};
     void removingResource(KoGamutMask* resource) override;
     void resourceChanged(KoGamutMask* resource) override;
     void syncTaggedResourceView() override {}
@@ -74,28 +74,41 @@ private Q_SLOTS:
     void slotGamutMaskCancelEdit();
     void slotGamutMaskSelected(KoGamutMask* mask);
     void slotGamutMaskPreview();
-    void slotGamutMaskSaveNew();
+    void slotGamutMaskCreateNew();
+    void slotGamutMaskDuplicate();
     void slotGamutMaskDelete();
-    void slotGamutMaskSet();
 
     void slotDocumentRemoved(QString filename);
+    void slotViewChanged();
+    void slotDocumentSaved();
 
 private:
-    KisCanvasResourceProvider* m_resourceProvider;
-
     void closeMaskDocument();
     void openMaskEditor();
     void cancelMaskEdit();
-    void saveSelectedMaskResource();
-    void finalizeMaskSave();
+    void selectMask(KoGamutMask* mask, bool notifyItemChooser = true);
+    bool saveSelectedMaskResource();
+    void deleteMask();
+    int getUserFeedback(QString message
+                        , QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::No
+                        , QMessageBox::StandardButton defaultButton = QMessageBox::Yes);
 
-    bool m_selfClosingMaskFile;
+    int saveOrCancel(QMessageBox::StandardButton defaultAction = QMessageBox::Save);
 
-    KoGamutMask *addDuplicateResource(QString newTitle);
+    KoGamutMask* createMaskResource(KoGamutMask* sourceMask, QString newTitle);
+
     QPair<QString, QFileInfo> resolveMaskTitle(QString suggestedTitle);
 
     QList<KoShape*> getShapesFromLayer();
     KisShapeLayerSP getShapeLayer();
+
+    KisCanvasResourceProvider* m_resourceProvider;
+
+    bool m_selfClosingTemplate;
+    bool m_externalTemplateClose;
+    bool m_creatingNewMask;
+    bool m_templatePrevSaved;
+    bool m_selfSelectingMask;
 
     GamutMaskChooserUI* m_dockerUI;
     KoResourceItemChooser* m_maskChooser;

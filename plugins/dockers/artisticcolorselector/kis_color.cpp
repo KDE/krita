@@ -76,7 +76,7 @@ struct CoreImpl: public KisColor::Core
 
 KisColor::KisColor(Type type)
 {
-    initRGB(type, 0.0f, 0.0f, 0.0f, 0.0f);
+    initRGB(type, 0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 KisColor::KisColor(float hue, float a, Type type)
@@ -158,15 +158,6 @@ void KisColor::initHSX(Type type, float h, float s, float x, float a)
     
     core()->type = type;
     core()->setHSX(h, s, x, a);
-}
-
-void KisColor::setRGBfromHue(float hue, float alpha)
-{
-    float r = 0;
-    float g = 0;
-    float b = 0;
-    ::getRGB(r, g, b, hue);
-    core()->setRGB(r, g, b, alpha);
 }
 
 KisColor& KisColor::operator=(const KisColor& color)

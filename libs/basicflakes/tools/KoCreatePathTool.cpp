@@ -130,7 +130,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
 
     const bool isOverFirstPoint = d->shape &&
                                   handleGrabRect(d->firstPoint->point()).contains(event->point);
-    bool haveCloseModifier = (listeningToModifiers() && (event->modifiers() & Qt::ShiftModifier));
+
+    const bool haveCloseModifier = d->enableClosePathShortcut &&
+        d->shape && d->shape->pointCount() > 2 &&
+        (event->modifiers() & Qt::ShiftModifier);
 
     if ((event->button() == Qt::LeftButton) && haveCloseModifier && !isOverFirstPoint) {
         endPathWithoutLastPoint();
@@ -213,12 +216,6 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->angleSnapStrategy->setStartPoint(d->activePoint->point());
 }
 
-bool KoCreatePathTool::listeningToModifiers()
-{
-    Q_D(KoCreatePathTool);
-    return d->listeningToModifiers;
-}
-
 bool KoCreatePathTool::pathStarted()
 {
     Q_D(KoCreatePathTool);
@@ -228,6 +225,12 @@ bool KoCreatePathTool::pathStarted()
 bool KoCreatePathTool::tryMergeInPathShape(KoPathShape *pathShape)
 {
     return addPathShapeImpl(pathShape, true);
+}
+
+void KoCreatePathTool::setEnableClosePathShortcut(bool value)
+{
+    Q_D(KoCreatePathTool);
+    d->enableClosePathShortcut = value;
 }
 
 void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -335,7 +338,6 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 
     if (! d->shape || (event->buttons() & Qt::RightButton)) return;
 
-    d->listeningToModifiers = true; // After the first press-and-release
     d->repaintActivePoint();
     d->prevPointWasDragged  = d->pointIsDragged;
     d->pointIsDragged = false;

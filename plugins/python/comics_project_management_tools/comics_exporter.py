@@ -93,7 +93,7 @@ class comicsExporter():
     pagesLocationList = {}
 
     # set of keys used to define specific export behaviour for this page.
-    pageKeys = ["acbf_title", "acbf_none", "acbf_fade", "acbf_blend", "acbf_horizontal", "acbf_vertical"]
+    pageKeys = ["acbf_title", "acbf_none", "acbf_fade", "acbf_blend", "acbf_horizontal", "acbf_vertical", "epub_spread"]
 
     def __init__(self):
         pass

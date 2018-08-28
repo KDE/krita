@@ -26,7 +26,7 @@ import os
 from pathlib import Path
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from PyQt5.QtCore import Qt, QDateTime, QPointF
-from PyQt5.QtGui import QImage, QPolygonF
+from PyQt5.QtGui import QImage, QPolygonF, QColor
 
 def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pageData = []):
     path = Path(os.path.join(projectURL, configDictionary["exportLocation"]))
@@ -34,7 +34,8 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
     metaInf = exportPath / "META-INF"
     oebps = exportPath / "OEBPS"
     imagePath = oebps / "Images"
-    stylesPath = oebps / "Styles"
+    # Don't write empty folders. Epubcheck doesn't like that.
+    # stylesPath = oebps / "Styles"
     textPath = oebps / "Text"
 
     if exportPath.exists() is False:
@@ -42,7 +43,7 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         metaInf.mkdir()
         oebps.mkdir()
         imagePath.mkdir()
-        stylesPath.mkdir()
+        # stylesPath.mkdir()
         textPath.mkdir()
 
     mimetype = open(str(Path(exportPath / "mimetype")), mode="w")
@@ -82,9 +83,11 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         print("CPMT: Couldn't find the location for the epub images.")
         return False
 
-    # for each image, make an xml file
+    # for each image, make an xhtml file
+    
     htmlFiles = []
     listOfNavItems = {}
+    listofSpreads = []
     regions = []
     for i in range(len(pagesList)):
         pageName = "Page" + str(i) + ".xhtml"
@@ -94,6 +97,10 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         html.setAttribute("xmlns", "http://www.w3.org/1999/xhtml")
         html.setAttribute("xmlns:epub", "http://www.idpf.org/2007/ops")
 
+        # The viewport is a prerequisite to get pre-paginated
+        # layouts working. We'll make the layout the same size
+        # as the image.
+        
         head = doc.createElement("head")
         viewport = doc.createElement("meta")
         viewport.setAttribute("name", "viewport")
@@ -109,28 +116,50 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         head.appendChild(viewport)
         html.appendChild(head)
         
+        # Here, we process the region navigation data to percentages
+        # because we have access here to the width and height of the viewport.
+        
         data = pageData[i]
         transform = data["transform"]
         for v in data["vector"]:
             pointsList = []
+            dominantColor = QColor(Qt.white)
+            listOfColors = []
             for point in v["boundingBox"]:
                 offset = QPointF(transform["offsetX"], transform["offsetY"])
                 pixelPoint = QPointF(point.x() * transform["resDiff"], point.y() * transform["resDiff"])
                 newPoint = pixelPoint - offset
                 x = max(0, min(w, int(newPoint.x() * transform["scaleWidth"])))
                 y = max(0, min(h, int(newPoint.y() * transform["scaleHeight"])))
+                listOfColors.append(img.pixelColor(QPointF(x, y).toPoint()))
                 pointsList.append(QPointF((x/w)*100, (y/h)*100))
             regionType = "panel"
             if "text" in v.keys():
-                regionType = "balloon"
+                regionType = "text"
+            if len(listOfColors)>0:
+                dominantColor = listOfColors[-1]
+                listOfColors = listOfColors[:-1]
+                for color in listOfColors:
+                    dominantColor.setRedF(0.5*(dominantColor.redF()+color.redF()))
+                    dominantColor.setGreenF(0.5*(dominantColor.greenF()+color.greenF()))
+                    dominantColor.setBlueF(0.5*(dominantColor.blueF()+color.blueF()))
             region = {}
             bounds = QPolygonF(pointsList).boundingRect()
             region["points"] = bounds
             region["type"] = regionType
             region["page"] = str(Path(textPath / pageName))
+            region["primaryColor"] = dominantColor.name()
             regions.append(region)
+
+        # We can also figureout here whether the page can be seen as a table of contents entry.
+        
         if "acbf_title" in data["keys"]:
             listOfNavItems[str(Path(textPath / pageName))] = data["title"]
+            
+        # Or spreads...
+        
+        if "epub_spread" in data["keys"]:
+            listofSpreads.append(str(Path(textPath / pageName)))
 
         body = doc.createElement("body")
 
@@ -151,7 +180,7 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
 
     # metadata
     
-    write_opf_file(oebps, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml)
+    write_opf_file(oebps, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml, listofSpreads)
     
     write_region_nav_file(oebps, configDictionary, htmlFiles, regions)
     
@@ -168,7 +197,7 @@ Write OPF metadata file
 """
 
 
-def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml):
+def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml, listofSpreads):
     
     # marc relators
     # This has several entries removed to reduce it to the most relevant entries.
@@ -255,11 +284,13 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     opfMeta.appendChild(uniqueID)
 
     if "authorList" in configDictionary.keys():
+        authorEntry = 0
         for authorE in range(len(configDictionary["authorList"])):
             authorDict = configDictionary["authorList"][authorE]
             authorType = "dc:creator"
             if "role" in authorDict.keys():
-                if str(authorDict["role"]).lower() in ["editor", "assistant editor", "proofreader", "beta"]:
+                # This determines if someone was just a contributor, but might need a more thorough version.
+                if str(authorDict["role"]).lower() in ["editor", "assistant editor", "proofreader", "beta", "patron", "funder"]:
                     authorType = "dc:contributor"
             author = opfFile.createElement(authorType)
             authorName = []
@@ -272,6 +303,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
             if "nickname" in authorDict.keys():
                 authorName.append("(" + authorDict["nickname"] + ")")
             author.appendChild(opfFile.createTextNode(", ".join(authorName)))
+            author.setAttribute("id", "author"+str(authorE))
             opfMeta.appendChild(author)
             if "role" in authorDict.keys():
                 author.setAttribute("id", "cre" + str(authorE))
@@ -280,13 +312,18 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
                 role.setAttribute("scheme", "marc:relators")
                 role.setAttribute("property", "role")
                 roleString = str(authorDict["role"])
-                if roleString in marcRelators.values():
+                if roleString in marcRelators.values() or roleString in marcRelators.keys():
                     i = list(marcRelators.values()).index(roleString)
                     roleString = list(marcRelators.keys())[i]
                 else:
                     roleString = "oth"
                 role.appendChild(opfFile.createTextNode(roleString))
                 opfMeta.appendChild(role)
+            refine = opfFile.createElement("meta")
+            refine.setAttribute("refines", "#author"+str(authorE))
+            refine.setAttribute("property", "display-seq")
+            refine.appendChild(opfFile.createTextNode(str(authorE+1)))
+            opfMeta.appendChild(refine)
 
     if "publishingDate" in configDictionary.keys():
         date = opfFile.createElement("dc:date")
@@ -315,6 +352,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     # Type can be dictionary or index, or one of those edupub thingies. Not necessary for comics.
     # typeE = opfFile.createElement("dc:type")
     # opfMeta.appendChild(typeE)
+    
     if "publisherName" in configDictionary.keys():
         publisher = opfFile.createElement("dc:publisher")
         publisher.appendChild(opfFile.createTextNode(configDictionary["publisherName"]))
@@ -322,14 +360,33 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     
     
     if "isbn-number" in configDictionary.keys():
-        publishISBN = opfFile.createElement("dc:identifier")
-        publishISBN.appendChild(opfFile.createTextNode(str("urn:isbn:") + configDictionary["isbn-number"]))
-        opfMeta.appendChild(publishISBN)
+        isbnnumber = configDictionary["isbn-number"]
+
+        if len(isbnnumber)>0:
+            publishISBN = opfFile.createElement("dc:identifier")
+            publishISBN.appendChild(opfFile.createTextNode(str("urn:isbn:") + isbnnumber))
+            opfMeta.appendChild(publishISBN)
+
     if "license" in configDictionary.keys():
+
         if len(configDictionary["license"])>0:
             rights = opfFile.createElement("dc:rights")
             rights.appendChild(opfFile.createTextNode(configDictionary["license"]))
             opfMeta.appendChild(rights)
+    
+    """
+    Not handled
+    Relation -  This is for whether the work has a relationship with another work.
+                It could be fanart, but also adaptation, an academic work, etc.
+    Coverage -  This is for the time/place that the work covers. Typically to determine
+                whether an academic work deals with a certain time period or place.
+                For comics you could use this to mark historical comics, but other than
+                that we'd need a much better ui to define this.
+    """
+
+    # These are all dublin core subjects.
+    # 3.1 defines the ability to use an authority, but that
+    # might be a bit too complicated right now.
 
     if "genre" in configDictionary.keys():
         genreListConf = configDictionary["genre"]
@@ -441,8 +498,6 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
             opfSpine.setAttribute("page-progression-direction", "ltr")
 
     # Here we'd need to switch between the two and if spread keywrod use neither but combine with spread-none
-    # TODO implement spread keyword.
-    spread = False
     
     ids = 0
     for p in htmlFiles:
@@ -450,9 +505,9 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
         item.setAttribute("idref", "p"+str(ids))
         ids +=1
         props = []
-        if spread:
-            # Don't do a spread for this one.
-            props.append("spread-none")
+        if p in listofSpreads:
+            # Put this one in the center.
+            props.append("rendition:page-spread-center")
             
             # Reset the spread boolean.
             # It needs to point at the first side after the spread.
@@ -510,7 +565,10 @@ def write_region_nav_file(path, configDictionary, htmlFiles, regions = []):
     
     nav = navDoc.createElement("nav")
     nav.setAttribute("epub:type", "region-based")
+    nav.setAttribute("prefix", "ahl: http://idpf.org/epub/vocab/ahl")
     body.appendChild(nav)
+    
+    # Let's write the panels and balloons down now.
     
     olPanels = navDoc.createElement("ol")
     for region in regions:
@@ -519,20 +577,39 @@ def write_region_nav_file(path, configDictionary, htmlFiles, regions = []):
             print("accessing panel")
             li = navDoc.createElement("li")
             li.setAttribute("epub:type", "panel")
+            
             anchor = navDoc.createElement("a")
             bounds = region["points"]
             anchor.setAttribute("href", pageName+"#xywh=percent:"+str(bounds.x())+","+str(bounds.y())+","+str(bounds.width())+","+str(bounds.height()))
+            
+            if len(region["primaryColor"])>0:
+                primaryC = navDoc.createElement("meta")
+                primaryC.setAttribute("property","ahl:primary-color")
+                primaryC.setAttribute("content", region["primaryColor"])
+                anchor.appendChild(primaryC)
+            
             li.appendChild(anchor)
             olBalloons = navDoc.createElement("ol")
+            
+            """
+            The region nav spec specifies that we should have text-areas/balloons as a refinement on
+            the panel.
+            For each panel, we'll check if there's balloons/text-areas inside, and we'll do that by
+            checking whether the center point is inside the panel because some comics have balloons
+            that overlap the gutters.
+            """
             for balloon in regions:
-                if balloon["type"] == "balloon" and balloon["page"] == region["page"] and bounds.contains(balloon["points"]):
+                if balloon["type"] == "text" and balloon["page"] == region["page"] and bounds.contains(balloon["points"].center()):
                     liBalloon = navDoc.createElement("li")
-                    liBalloon.setAttribute("epub:type", "balloon")
+                    liBalloon.setAttribute("epub:type", "text-area")
+
                     anchorBalloon = navDoc.createElement("a")
                     BBounds = balloon["points"]
                     anchorBalloon.setAttribute("href", pageName+"#xywh=percent:"+str(BBounds.x())+","+str(BBounds.y())+","+str(BBounds.width())+","+str(BBounds.height()))
+
                     liBalloon.appendChild(anchorBalloon)
                     olBalloons.appendChild(liBalloon)
+
             if olBalloons.hasChildNodes():
                 li.appendChild(olBalloons)
             olPanels.appendChild(li)
@@ -545,6 +622,13 @@ def write_region_nav_file(path, configDictionary, htmlFiles, regions = []):
 
 """
 Write XHTML nav file.
+
+This is virtually the same as the NCX file, except that
+the navigation document can be styled, and is what 3.1 and
+3.2 expect as a primary navigation document.
+
+This function will both create a table of contents, using the
+"acbf_title" feature, as well as a regular pageslist.
 """
 
 def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
@@ -561,6 +645,8 @@ def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
     
     body = navDoc.createElement("body")
     navRoot.appendChild(body)
+    
+    # The Table of Contents
     
     toc = navDoc.createElement("nav")
     toc.setAttribute("epub:type", "toc")
@@ -581,6 +667,8 @@ def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
     
     toc.appendChild(oltoc)
     body.appendChild(toc)
+    
+    # The Pages List.
     
     pageslist = navDoc.createElement("nav")
     pageslist.setAttribute("epub:type", "page-list")
@@ -607,6 +695,9 @@ def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
 
 """
 Write a NCX file.
+
+This is the same as the navigation document above, but then
+for 2.0 backward compatibility.
 """
 
 def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
@@ -617,6 +708,9 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
     tocDoc.appendChild(ncx)
 
     tocHead = tocDoc.createElement("head")
+    
+    # NCX also has some meta values that are in the head.
+    # They are shared with the opf metadata document.
     
     uuid = str(configDictionary["uuid"])
     uuid = uuid.strip("{")
@@ -647,6 +741,8 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
         text.appendChild(tocDoc.createTextNode("Comic with no Name"))
     docTitle.appendChild(text)
     ncx.appendChild(docTitle)
+    
+    # The navmap is a table of contents.
 
     navmap = tocDoc.createElement("navMap")
     navPoint = tocDoc.createElement("navPoint")
@@ -678,6 +774,8 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
         navmap.appendChild(navPointT)
     ncx.appendChild(navmap)
     
+    # The pages list on the other hand just lists all pages.
+    
     pagesList = tocDoc.createElement("pageList")
     navLabelPages = tocDoc.createElement("navLabel")
     navLabelPagesText = tocDoc.createElement("navLabel")
@@ -698,6 +796,8 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
         pageTarget.appendChild(pageTargetContent)
         pagesList.appendChild(pageTarget)
     ncx.appendChild(pagesList)
+
+    # Save the document.
 
     docFile = open(str(Path(path / "toc.ncx")), 'w', newline="", encoding="utf-8")
     docFile.write(tocDoc.toString(indent=2))

@@ -1,0 +1,9 @@
+{
+    "Id": "Gamut masks",
+    "Type": "Service",
+    "X-KDE-Library": "kritagamutmask",
+    "X-KDE-ServiceTypes": [
+        "Krita/Dock"
+    ],
+    "X-Krita-Version": "28"
+}

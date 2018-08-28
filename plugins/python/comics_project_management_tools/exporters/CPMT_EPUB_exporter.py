@@ -24,6 +24,7 @@ Create an epub folder, finally, package to a epubzip.
 import shutil
 import os
 from pathlib import Path
+import zipfile
 from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from PyQt5.QtCore import Qt, QDateTime, QPointF
 from PyQt5.QtGui import QImage, QPolygonF, QColor
@@ -46,9 +47,27 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         # stylesPath.mkdir()
         textPath.mkdir()
 
+    # Due the way EPUB verifies, the mimetype needs to be packaged in first.
+    # Due the way zips are constructed, the only way to ensure that is to
+    # Fill the zip as we go along...
+    
+    # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
+    title = configDictionary["projectName"]
+    if "title" in configDictionary.keys():
+        title = str(configDictionary["title"]).replace(" ", "_")
+
+    # Get the appropriate path.
+    url = str(path / str(title + ".epub"))
+
+    # Create a zip file.
+    epubArchive = zipfile.ZipFile(url, mode="w", compression=zipfile.ZIP_STORED)
+
     mimetype = open(str(Path(exportPath / "mimetype")), mode="w")
     mimetype.write("application/epub+zip")
     mimetype.close()
+    
+    # Write to zip.
+    epubArchive.write(Path(exportPath / "mimetype"), Path("mimetype"))
 
     container = QDomDocument()
     cRoot = container.createElement("container")
@@ -61,10 +80,15 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
     rootfile.setAttribute("media-type", "application/oebps-package+xml")
     rootFiles.appendChild(rootfile)
     cRoot.appendChild(rootFiles)
+    
+    containerFileName = str(Path(metaInf / "container.xml"))
 
-    containerFile = open(str(Path(metaInf / "container.xml")), 'w', newline="", encoding="utf-8")
+    containerFile = open(containerFileName, 'w', newline="", encoding="utf-8")
     containerFile.write(container.toString(indent=2))
     containerFile.close()
+    
+    # Write to zip.
+    epubArchive.write(containerFileName, os.path.relpath(containerFileName, str(exportPath)))
 
     # copyimages to images
     pagesList = []
@@ -76,7 +100,9 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         for p in pagesLocationList:
             if os.path.exists(p):
                 shutil.copy2(p, str(imagePath))
-                pagesList.append(str(Path(imagePath / os.path.basename(p))))
+                filename = str(Path(imagePath / os.path.basename(p)))
+                pagesList.append(filename)
+                epubArchive.write(filename, os.path.relpath(filename, str(exportPath)))
         if len(pagesLocationList) >= coverNumber:
             coverpageurl = pagesList[coverNumber]
     else:
@@ -177,19 +203,27 @@ def export(configDictionary = {}, projectURL = str(), pagesLocationList = [], pa
         if pagesList[i] == coverpageurl:
             coverpagehtml = os.path.relpath(filename, str(oebps))
         htmlFiles.append(filename)
+        
+        # Write to zip.
+        epubArchive.write(filename, os.path.relpath(filename, str(exportPath)))
 
     # metadata
     
-    write_opf_file(oebps, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml, listofSpreads)
+    filename = write_opf_file(oebps, configDictionary, htmlFiles, pagesList, coverpageurl, coverpagehtml, listofSpreads)
+    epubArchive.write(filename, os.path.relpath(filename, str(exportPath)))
     
-    write_region_nav_file(oebps, configDictionary, htmlFiles, regions)
+    filename = write_region_nav_file(oebps, configDictionary, htmlFiles, regions)
+    epubArchive.write(filename, os.path.relpath(filename, str(exportPath)))
     
     # toc
-    write_nav_file(oebps, configDictionary, htmlFiles, listOfNavItems)
-    write_ncx_file(oebps, configDictionary, htmlFiles, listOfNavItems)
+    filename = write_nav_file(oebps, configDictionary, htmlFiles, listOfNavItems)
+    epubArchive.write(filename, os.path.relpath(filename, str(exportPath)))
     
+    filename = write_ncx_file(oebps, configDictionary, htmlFiles, listOfNavItems)
+    epubArchive.write(filename, os.path.relpath(filename, str(exportPath)))
+    
+    epubArchive.close()
 
-    package_epub(configDictionary, projectURL)
     return True
 
 """
@@ -303,12 +337,11 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
             if "nickname" in authorDict.keys():
                 authorName.append("(" + authorDict["nickname"] + ")")
             author.appendChild(opfFile.createTextNode(", ".join(authorName)))
-            author.setAttribute("id", "author"+str(authorE))
+            author.setAttribute("id", "cre" + str(authorE))
             opfMeta.appendChild(author)
             if "role" in authorDict.keys():
-                author.setAttribute("id", "cre" + str(authorE))
                 role = opfFile.createElement("meta")
-                role.setAttribute("refines", "cre" + str(authorE))
+                role.setAttribute("refines", "#cre" + str(authorE))
                 role.setAttribute("scheme", "marc:relators")
                 role.setAttribute("property", "role")
                 roleString = str(authorDict["role"])
@@ -320,7 +353,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
                 role.appendChild(opfFile.createTextNode(roleString))
                 opfMeta.appendChild(role)
             refine = opfFile.createElement("meta")
-            refine.setAttribute("refines", "#author"+str(authorE))
+            refine.setAttribute("refines", "#cre"+str(authorE))
             refine.setAttribute("property", "display-seq")
             refine.appendChild(opfFile.createTextNode(str(authorE+1)))
             opfMeta.appendChild(refine)
@@ -541,7 +574,7 @@ def write_opf_file(path, configDictionary, htmlFiles, pagesList, coverpageurl, c
     docFile = open(str(Path(path / "content.opf")), 'w', newline="", encoding="utf-8")
     docFile.write(opfFile.toString(indent=2))
     docFile.close()
-    return True
+    return str(Path(path / "content.opf"))
 
 """
 Write a region navmap file.
@@ -618,7 +651,7 @@ def write_region_nav_file(path, configDictionary, htmlFiles, regions = []):
     navFile = open(str(Path(path / "region-nav.xhtml")), 'w', newline="", encoding="utf-8")
     navFile.write(navDoc.toString(indent=2))
     navFile.close()
-    return True
+    return str(Path(path / "region-nav.xhtml"))
 
 """
 Write XHTML nav file.
@@ -642,6 +675,7 @@ def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
     title = navDoc.createElement("title")
     title.appendChild(navDoc.createTextNode("Table of Contents"))
     head.appendChild(title)
+    navRoot.appendChild(head)
     
     body = navDoc.createElement("body")
     navRoot.appendChild(body)
@@ -691,7 +725,7 @@ def write_nav_file(path, configDictionary, htmlFiles, listOfNavItems):
     navFile = open(str(Path(path / "nav.xhtml")), 'w', newline="", encoding="utf-8")
     navFile.write(navDoc.toString(indent=2))
     navFile.close()
-    return True
+    return str(Path(path / "nav.xhtml"))
 
 """
 Write a NCX file.
@@ -778,8 +812,9 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
     
     pagesList = tocDoc.createElement("pageList")
     navLabelPages = tocDoc.createElement("navLabel")
-    navLabelPagesText = tocDoc.createElement("navLabel")
+    navLabelPagesText = tocDoc.createElement("text")
     navLabelPagesText.appendChild(tocDoc.createTextNode("Pages"))
+    navLabelPages.appendChild(navLabelPagesText)
     pagesList.appendChild(navLabelPages)
     for i in range(len(htmlFiles)):
         pageTarget = tocDoc.createElement("pageTarget")
@@ -787,8 +822,8 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
         pageTarget.setAttribute("id", "page-"+str(i))
         pageTarget.setAttribute("value", str(i))
         navLabelPagesTarget = tocDoc.createElement("navLabel")
-        navLabelPagesTargetText = tocDoc.createElement("navLabel")
-        navLabelPagesTargetText.appendChild(tocDoc.createTextNode(str(i)))
+        navLabelPagesTargetText = tocDoc.createElement("text")
+        navLabelPagesTargetText.appendChild(tocDoc.createTextNode(str(i+1)))
         navLabelPagesTarget.appendChild(navLabelPagesTargetText)
         pageTarget.appendChild(navLabelPagesTarget)
         pageTargetContent = tocDoc.createElement("content")
@@ -802,26 +837,4 @@ def write_ncx_file(path, configDictionary, htmlFiles, listOfNavItems):
     docFile = open(str(Path(path / "toc.ncx")), 'w', newline="", encoding="utf-8")
     docFile.write(tocDoc.toString(indent=2))
     docFile.close()
-    return True
-
-
-"""
-package epub packages the whole epub folder and renames the zip file to .epub.
-"""
-
-def package_epub(configDictionary = {}, projectURL = str()):
-
-    # Use the project name if there's no title to avoid sillyness with unnamed zipfiles.
-    title = configDictionary["projectName"]
-    if "title" in configDictionary.keys():
-        title = str(configDictionary["title"]).replace(" ", "_")
-
-    # Get the appropriate paths.
-    url = os.path.join(projectURL, configDictionary["exportLocation"], title)
-    epub = os.path.join(projectURL, configDictionary["exportLocation"], "EPUB-files")
-
-    # Make the archive.
-    shutil.make_archive(base_name=url, format="zip", root_dir=epub)
-
-    # Rename the archive to epub.
-    shutil.move(src=str(url + ".zip"), dst=str(url + ".epub"))
+    return str(Path(path / "toc.ncx"))

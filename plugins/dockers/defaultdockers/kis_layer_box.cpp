@@ -380,7 +380,7 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
-        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
+        m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0, 0);
         m_selectionActionsAdapter.reset();
 
         if (m_image) {
@@ -413,7 +413,8 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                                       kritaShapeController,
                                       m_nodeManager->nodeSelectionAdapter(),
                                       m_nodeManager->nodeInsertionAdapter(),
-                                      m_selectionActionsAdapter.data());
+                                      m_selectionActionsAdapter.data(),
+                                      m_nodeManager->nodeDisplayModeAdapter());
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));

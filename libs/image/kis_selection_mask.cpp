@@ -229,8 +229,17 @@ void KisSelectionMask::setActive(bool active)
     const bool oldActive = this->active();
     setNodeProperty("active", active);
 
-    if (image && oldActive != active) {
-        image->nodeChanged(this);
+
+    /**
+     * WARNING: we have a direct link to the image here, but we
+     * must not use it for notification until we are a part of
+     * the nore graph! Notifications should be emitted iff we
+     * have graph listener link set up.
+     */
+    if (graphListener() &&
+        image && oldActive != active) {
+
+        baseNodeChangedCallback();
         image->undoAdapter()->emitSelectionChanged();
     }
 }

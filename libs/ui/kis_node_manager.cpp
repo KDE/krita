@@ -685,7 +685,10 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 << "KritaFill/KisToolFill"
                 << "KritaFill/KisToolGradient";
 
-        if (node->inherits("KisShapeLayer")) {
+        const bool nodeHasVectorAbilities =
+            m_d->view->canvasBase()->localShapeManager();
+
+        if (nodeHasVectorAbilities) {
             if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
                 KoToolManager::instance()->switchToolRequested("InteractionTool");
             }

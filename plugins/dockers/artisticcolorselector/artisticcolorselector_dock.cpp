@@ -124,6 +124,9 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     m_wheelPrefsUI->bnInfHueSteps->setIcon(infinityIcon);
     m_wheelPrefsUI->bnInfValueScaleSteps->setIcon(infinityIcon);
 
+    m_wheelPrefsUI->bnInfHueSteps->setToolTip(i18n("Continuous Mode"));
+    m_wheelPrefsUI->bnInfValueScaleSteps->setToolTip(i18n("Continuous Mode"));
+
     int selectorHueSteps = m_selectorUI->colorSelector->getNumPieces();
     if (selectorHueSteps == 1) {
         m_wheelPrefsUI->bnInfHueSteps->setChecked(true);

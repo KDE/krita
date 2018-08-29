@@ -24,7 +24,7 @@
 KisNodeDisplayModeAdapter::KisNodeDisplayModeAdapter(QObject *parent)
     : QObject(parent)
 {
-    connect(KisConfigNotifier::instance(), SIGNAL(notifyConfigChanged()),
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(slotSettingsChanged()));
 
     slotSettingsChangedImpl(true);

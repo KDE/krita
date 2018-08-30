@@ -323,6 +323,8 @@ bool KisApplication::loadResources()
     Q_FOREACH(const QByteArray ba, src) {
         allImageMimes << QString::fromUtf8(ba);
     }
+    allImageMimes << KisMimeDatabase::mimeTypeForSuffix("pat");
+
     reg->add(new KisResourceLoader<KoPattern>("patterns", "patterns", allImageMimes));
     reg->add(new KisResourceLoader<KisWorkspaceResource>("workspaces", "workspaces", QStringList() << "application/x-krita-workspace"));
     reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", QStringList() << "image/svg+xml"));
@@ -335,6 +337,7 @@ bool KisApplication::loadResources()
     }
 
     KisResourceLocator::LocatorError r = KisResourceLocator::instance()->initialize(KoResourcePaths::getApplicationRoot() + "/share/krita");
+    connect(KisResourceLocator::instance(), SIGNAL(progressMessage(const QString&)), this, SLOT(setSplashScreenLoadingText(const QString&)));
     if (r != KisResourceLocator::LocatorError::Ok ) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         return false;
@@ -648,10 +651,9 @@ void KisApplication::setSplashScreen(QWidget *splashScreen)
     d->splashScreen = qobject_cast<KisSplashScreen*>(splashScreen);
 }
 
-void KisApplication::setSplashScreenLoadingText(QString textToLoad)
+void KisApplication::setSplashScreenLoadingText(const QString &textToLoad)
 {
     if (d->splashScreen) {
-        //d->splashScreen->loadingLabel->setText(textToLoad);
         d->splashScreen->setLoadingText(textToLoad);
         d->splashScreen->repaint();
     }

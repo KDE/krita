@@ -43,6 +43,7 @@ public:
 KisResourceStorage::KisResourceStorage(const QString &location)
     : d(new Private())
 {
+    qDebug() << "KisResourceStorage" << location;
     d->location = location;
     QFileInfo fi(d->location);
     if (fi.isDir()) {

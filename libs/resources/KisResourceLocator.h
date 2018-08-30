@@ -62,6 +62,10 @@ public:
 
     QStringList errorMessages() const;
 
+Q_SIGNALS:
+
+    void progressMessage(const QString&);
+
 private:
 
     friend class TestResourceLocator;

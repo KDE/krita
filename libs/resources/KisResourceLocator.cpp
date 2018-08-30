@@ -131,7 +131,7 @@ QStringList KisResourceLocator::errorMessages() const
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
 {
-    qDebug() << "firstTimeInstallation" << installationResourcesLocation;
+    emit progressMessage(i18n("Krita is running for the first time. Intialization will take some time."));
     Q_UNUSED(initalizationStatus);
 
     Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
@@ -158,6 +158,19 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
         }
     }
 
+    // And add bundles and adobe libraries
+    QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
+    QDirIterator iter(installationResourcesLocation, filters, QDir::Files, QDirIterator::Subdirectories);
+    while (iter.hasNext()) {
+        iter.next();
+        emit progressMessage(i18n("Installing the resources from bundle %1.", iter.filePath()));
+        QFile f(iter.filePath());
+        Q_ASSERT(f.exists());
+        if (!f.copy(d->resourceLocation + '/' + iter.fileName())) {
+            d->errorMessages << i18n("Could not copy resource %1 to %2").arg(f.fileName()).arg(d->resourceLocation);
+        }
+    }
+
     QFile f(d->resourceLocation + '/' + "KRITA_RESOURCE_VERSION");
     f.open(QFile::WriteOnly);
     f.write(KritaVersionWrapper::versionString().toUtf8());
@@ -172,7 +185,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Inita
 
 bool KisResourceLocator::initializeDb()
 {
-    qDebug() << "initalizeDb";
+    emit progressMessage(i18n("Initalizing the resources."));
     d->errorMessages.clear();
     findStorages();
 
@@ -183,7 +196,7 @@ bool KisResourceLocator::initializeDb()
         }
 
         Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
-            qDebug() << "Adding storage" << storage->location() << "folder" << resourceType;
+            emit progressMessage(i18n("Adding %1 resources to folder %2", resourceType, storage->location()));
             if (!KisResourceCacheDb::addResources(storage, resourceType)) {
                 d->errorMessages.append(i18n("Could not add resource type %1 to the cache database").arg(resourceType));
             }
@@ -193,9 +206,7 @@ bool KisResourceLocator::initializeDb()
         }
     }
 
-    qDebug() << d->errorMessages;
-
-    return true;
+    return (d->errorMessages.isEmpty());
 }
 
 void KisResourceLocator::findStorages()

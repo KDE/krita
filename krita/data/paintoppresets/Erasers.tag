@@ -3,4 +3,4 @@ Type=Tag
 Name=Erasers
 Comment=Eraser Brush Presets
 URL=Erasers
-Default Resources=a)_Eraser_Circle.kpp
+Default Resources=a)_Eraser_Circle

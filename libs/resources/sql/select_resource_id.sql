@@ -1,6 +1,9 @@
 SELECT resources.id
 FROM   resources
 ,      resource_types
-WHERE  resource_type_id = resource_types.id
+,      storages
+WHERE  resources.resource_type_id = resource_types.id
+AND    storages.id = resources.storage_id
+AND    storages.location = :storage_location
 AND    resource_types.name = :resource_type
-AND    filename = :filename;
+AND    resources.name = :name

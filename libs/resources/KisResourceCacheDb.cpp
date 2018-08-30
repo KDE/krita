@@ -246,7 +246,7 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
-int KisResourceCacheDb::resourceIdForResource(const QString &resourceFileName, const QString &resourceType)
+int KisResourceCacheDb::resourceIdForResource(const QString &resourceName, const QString &resourceType, const QString &storageLocation)
 {
     QFile f(":/select_resource_id.sql");
     f.open(QFile::ReadOnly);
@@ -256,9 +256,9 @@ int KisResourceCacheDb::resourceIdForResource(const QString &resourceFileName, c
         return -1;
     }
 
-    q.bindValue(":filename", resourceFileName);
+    q.bindValue(":name", resourceName);
     q.bindValue(":resource_type", resourceType);
-
+    q.bindValue(":storage_location", storageLocation);
     if (!q.exec()) {
         qWarning() << "Could not query resourceIdForResource" << q.boundValues() << q.lastError();
         return -1;
@@ -348,7 +348,7 @@ bool KisResourceCacheDb::addResourceVersion(int resourceId, QDateTime timestamp,
                       ", filename = :filename\n"
                       ", tooltip = :tooltip\n"
                       ", thumbnail = :thumbnail)\n"
-                      "WHERE resourceId = :resourceId");
+                      "WHERE resource_id = :resource_id");
         if (!r) {
             qWarning() << "Could not prepare updateResource statement" << q.lastError();
             return r;
@@ -390,7 +390,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     // Check whether it already exists
-    int resourceId = resourceIdForResource(resource->filename(), resourceType);
+    int resourceId = resourceIdForResource(resource->name(), resourceType, storage->location());
     if (resourceId > -1) {
         if (resourceNeedsUpdating(resourceId, timestamp)) {
             r = addResourceVersion(resourceId, timestamp, storage, resource);
@@ -399,15 +399,16 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     else {
         QSqlQuery q;
         r = q.prepare("INSERT INTO resources "
-                      "(resource_type_id, name, filename, tooltip, thumbnail, status)"
+                      "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status)"
                       "VALUES"
-                      "((SELECT id FROM resource_types WHERE name = :resource_type), :name, :filename, :tooltip, :thumbnail, :status);");
+                      "((SELECT id FROM storages WHERE location = :storage_location), (SELECT id FROM resource_types WHERE name = :resource_type), :name, :filename, :tooltip, :thumbnail, :status);");
 
         if (!r) {
             qWarning() << "Could not prepare addResource statement" << q.lastError();
             return r;
         }
 
+        q.bindValue(":storage_location", storage->location());
         q.bindValue(":resource_type", resourceType);
         q.bindValue(":name", resource->name());
         q.bindValue(":filename", resource->filename());
@@ -428,7 +429,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
             return r;
         }
 
-        resourceId = resourceIdForResource(resource->filename(), resourceType);
+        resourceId = resourceIdForResource(resource->name(), resourceType, storage->location());
     }
     // Then add a new version
     QSqlQuery q;
@@ -483,10 +484,10 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
 bool KisResourceCacheDb::tagResource(KisResourceStorageSP storage, const QString resourceName, KisTagSP tag, const QString &resourceType)
 {
     // Get resource id
-    int resourceId = resourceIdForResource(storage->location() + "/" + resourceType + "/" + resourceName, resourceType);
+    int resourceId = resourceIdForResource(resourceName, resourceType, storage->location());
 
     if (resourceId < 0) {
-        qWarning() << "Could not find resource to tag" << storage->location() + "/" + resourceName << resourceType;
+        qWarning() << "Could not find resource to tag" << storage->location()  << resourceName << resourceType;
         return false;
     }
 

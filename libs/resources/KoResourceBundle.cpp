@@ -522,6 +522,10 @@ KoResourceSP KoResourceBundle::resource(const QString &resourceType, const QStri
 
     QString mime = KisMimeDatabase::mimeTypeForSuffix(filepath);
     KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(resourceType, mime);
+    if (!loader) {
+        qWarning() << "Could not create loader for" << resourceType << filepath << mime;
+        return 0;
+    }
     KoResourceSP res = loader->load(filepath, *resourceStore->device());
     resourceStore->close();
     m_resourceCache[filepath] = res;

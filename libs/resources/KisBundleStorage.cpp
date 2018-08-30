@@ -36,8 +36,8 @@ public:
         , m_resourceType(resourceType)
     {
         QList<KoResourceBundleManifest::ResourceReference> resources = m_bundle->manifest().files(resourceType);
-        Q_FOREACH(KoResourceBundleManifest::ResourceReference resource, resources) {
-            Q_FOREACH(const QString &tagname, resource.tagList) {
+        Q_FOREACH(const KoResourceBundleManifest::ResourceReference &resourceReference, resources) {
+            Q_FOREACH(const QString &tagname, resourceReference.tagList) {
                 if (!m_tags.contains(tagname)){
                     KisTagSP tag = QSharedPointer<KisTag>(new KisTag());
                     tag->setName(tagname);
@@ -45,7 +45,8 @@ public:
                     tag->setUrl(bundle->filename() + ':' + tagname);
                     m_tags[tagname] = tag;
                 }
-                m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource.resourcePath);
+                KoResourceSP resource = m_bundle->resource(resourceType, resourceReference.resourcePath);
+                m_tags[tagname]->setDefaultResources(m_tags[tagname]->defaultResources() << resource->name());
             }
         }
         m_tagIterator.reset(new QListIterator<KisTagSP>(m_tags.values()));
@@ -55,6 +56,7 @@ public:
     {
         return m_tagIterator->hasNext();
     }
+
     void next() const override
     {
         const_cast<BundleTagIterator*>(this)->m_tag = m_tagIterator->next();

@@ -82,5 +82,6 @@ QStringList KisResourceLoaderRegistry::resourceTypes() const
     }
     r.removeDuplicates();
     r.sort();
+
     return r;
 }

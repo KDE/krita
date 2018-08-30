@@ -34,7 +34,7 @@ public:
         , m_resourceType(resourceType)
     {
         m_dirIterator.reset(new QDirIterator(location + '/' + resourceType,
-                                             QStringList() << "*.desktop",
+                                             QStringList() << "*.tag",
                                              QDir::Files | QDir::Readable,
                                              QDirIterator::Subdirectories));
     }

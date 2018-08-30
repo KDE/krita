@@ -88,9 +88,6 @@ public:
      * to have the splash show correctly on Xinerama displays.
      */
     void setSplashScreen(QWidget *splash);
-
-    void setSplashScreenLoadingText(QString);
-
     void hideSplashScreen();
 
     /// Overridden to handle exceptions from event handlers.
@@ -107,6 +104,7 @@ public Q_SLOTS:
 
     void remoteArguments(QByteArray message, QObject*socket);
     void fileOpenRequested(const QString & url);
+    void setSplashScreenLoadingText(const QString&);
 
 private:
     /// @return the number of autosavefiles opened

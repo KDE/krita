@@ -23,6 +23,7 @@
 #include "kis_node_dummies_graph.h"
 #include "kis_node.h"
 #include "kis_scalar_keyframe_channel.h"
+#include "kis_signal_auto_connection.h"
 
 const quintptr ID_NODE = 0xffffffff;
 
@@ -39,7 +40,8 @@ struct NodeListItem
 struct KisAnimationCurveChannelListModel::Private
 {
     KisAnimationCurvesModel *curvesModel;
-    KisDummiesFacadeBase *dummiesFacade;
+    KisDummiesFacadeBase *dummiesFacade = 0;
+    KisSignalAutoConnectionsStore dummiesFacadeConnections;
 
     QList<NodeListItem*> items;
 
@@ -84,7 +86,10 @@ KisAnimationCurveChannelListModel::~KisAnimationCurveChannelListModel()
 
 void KisAnimationCurveChannelListModel::setDummiesFacade(KisDummiesFacadeBase *facade)
 {
+    m_d->dummiesFacadeConnections.clear();
     m_d->dummiesFacade = facade;
+    m_d->dummiesFacadeConnections.addConnection(m_d->dummiesFacade, SIGNAL(sigBeginRemoveDummy(KisNodeDummy*)),
+                                                this, SLOT(slotNotifyDummyRemoved(KisNodeDummy*)));
 }
 
 void KisAnimationCurveChannelListModel::selectedNodesChanged(const KisNodeList &nodes)
@@ -145,6 +150,25 @@ void KisAnimationCurveChannelListModel::keyframeChannelAddedToNode(KisKeyframeCh
     m_d->addCurveForChannel(item, channel);
 
     endInsertRows();
+}
+
+void KisAnimationCurveChannelListModel::slotNotifyDummyRemoved(KisNodeDummy *dummy)
+{
+    bool shouldChangeSelection = false;
+    KisNodeList newSelectedNodes;
+
+    Q_FOREACH (NodeListItem *item, m_d->items) {
+        if (item->dummy == dummy) {
+            shouldChangeSelection = true;
+            break;
+        }
+
+        newSelectedNodes << item->dummy->node();
+    }
+
+    if (shouldChangeSelection) {
+        selectedNodesChanged(newSelectedNodes);
+    }
 }
 
 QModelIndex KisAnimationCurveChannelListModel::index(int row, int column, const QModelIndex &parent) const

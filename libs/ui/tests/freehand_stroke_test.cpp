@@ -39,7 +39,6 @@ public:
           m_useLod(useLod),
           m_flipLineDirection(false)
     {
-        Q_UNUSED(m_strokeInfo);
         setBaseFuzziness(3);
     }
 
@@ -129,7 +128,6 @@ protected:
     }
 
 private:
-    KisFreehandStrokeInfo *m_strokeInfo;
     bool m_useLod;
     bool m_flipLineDirection;
     QScopedPointer<QColor> m_paintColor;

@@ -126,6 +126,13 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
                     }
                 }
             }
+            else if (resType  == "gamutmasks") {
+                Q_FOREACH (const KoResource *res, bundle->resources(resType)) {
+                    if (res) {
+                        m_selectedGamutMasks << res->shortFilename();
+                    }
+                }
+            }
         }
     }
     else {
@@ -150,6 +157,7 @@ DlgCreateBundle::DlgCreateBundle(KisResourceBundle *bundle, QWidget *parent)
     m_ui->cmbResourceTypes->addItem(i18n("Brushes"), QString("brushes"));
     m_ui->cmbResourceTypes->addItem(i18n("Brush Presets"), QString("presets"));
     m_ui->cmbResourceTypes->addItem(i18n("Gradients"), QString("gradients"));
+    m_ui->cmbResourceTypes->addItem(i18n("Gamut Masks"), QString("gamutmasks"));
     m_ui->cmbResourceTypes->addItem(i18n("Patterns"), QString("patterns"));
     m_ui->cmbResourceTypes->addItem(i18n("Palettes"), QString("palettes"));
     m_ui->cmbResourceTypes->addItem(i18n("Workspaces"), QString("workspaces"));
@@ -277,6 +285,9 @@ void DlgCreateBundle::addSelected()
         else if (resourceType == "workspaces") {
             m_selectedWorkspaces.append(item->data(Qt::UserRole).toString());
         }
+        else if (resourceType == "gamutmasks") {
+            m_selectedGamutMasks.append(item->data(Qt::UserRole).toString());
+        }
     }
 
     m_ui->tableAvailable->setCurrentRow(row);
@@ -307,6 +318,9 @@ void DlgCreateBundle::removeSelected()
         }
         else if (resourceType == "workspaces") {
             m_selectedWorkspaces.removeAll(item->data(Qt::UserRole).toString());
+        }
+        else if (resourceType == "gamutmasks") {
+            m_selectedGamutMasks.removeAll(item->data(Qt::UserRole).toString());
         }
     }
 
@@ -420,6 +434,21 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
             }
         }
     }
+    else if (resourceType == "gamutmasks") {
+        KoResourceServer<KoGamutMask>* server = KoResourceServerProvider::instance()->gamutMaskServer();
+        Q_FOREACH (KoResource *res, server->resources()) {
+            QListWidgetItem *item = new QListWidgetItem(imageToIcon(res->image()), res->name());
+            item->setData(Qt::UserRole, res->shortFilename());
+
+            if (m_selectedGamutMasks.contains(res->shortFilename())) {
+                m_ui->tableSelected->addItem(item);
+            }
+            else {
+                m_ui->tableAvailable->addItem(item);
+            }
+        }
+    }
+
 }
 
 void DlgCreateBundle::getPreviewImage()

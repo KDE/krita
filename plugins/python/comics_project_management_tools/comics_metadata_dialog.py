@@ -28,7 +28,7 @@ import types
 from pathlib import Path  # For reading all the files in a directory.
 from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
 from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize
+from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -123,7 +123,7 @@ class country_combo_box(QComboBox):
             self.codesList.sort()
             
         for country in self.codesList:
-            locale = QLocale(languageCode+"_"+country)
+            locale = QLocale(languageCode+"-"+country)
             if locale:
                 countryName = locale.nativeCountryName()
                 self.countryList.append(countryName.title())
@@ -397,6 +397,10 @@ class comic_meta_data_editor(QDialog):
         self.cmb_entry_type = QComboBox()
         self.cmb_entry_type.addItems(["IssueID", "SeriesID", "URL"])
         self.cmb_entry_type.setEditable(True)
+        self.ln_source = QLineEdit()
+        self.ln_source.setToolTip(i18n("Whether the comic is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
+        self.label_uuid = QLabel()
+        self.label_uuid.setToolTip(i18n("By default this will be filled with a generated universal unique identifier. The ID by itself is merely so that comic book library management programs can figure out if this particular comic is already in their database and whether it has been rated. Of course, the UUID can be changed into something else by manually changing the JSON, but this is advanced usage."))
         self.ln_database_entry = QLineEdit()
         dbHorizontal = QHBoxLayout()
         dbHorizontal.addWidget(self.ln_database_name)
@@ -407,6 +411,8 @@ class comic_meta_data_editor(QDialog):
         publisherLayout.addRow(i18n("City:"), self.publishCity)
         publisherLayout.addRow(i18n("Date:"), publishDateLayout)
         publisherLayout.addRow(i18n("ISBN:"), self.isbn)
+        publisherLayout.addRow(i18n("Source:"), self.ln_source)
+        publisherLayout.addRow(i18n("UUID:"), self.label_uuid)
         publisherLayout.addRow(i18n("License:"), self.license)
         publisherLayout.addRow(i18n("Database:"), dataBaseReference)
 
@@ -602,6 +608,9 @@ class comic_meta_data_editor(QDialog):
             if "_" in code:
                 self.cmbLanguage.setEntryToCode(code.split("_")[0])
                 self.cmbCountry.setEntryToCode(code.split("_")[-1])
+            elif "-" in code:
+                self.cmbLanguage.setEntryToCode(code.split("-")[0])
+                self.cmbCountry.setEntryToCode(code.split("-")[-1])
             else:
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
@@ -619,6 +628,23 @@ class comic_meta_data_editor(QDialog):
             self.publishDate.setDate(QDate.fromString(config["publishingDate"], Qt.ISODate))
         if "isbn-number" in config.keys():
             self.isbn.setText(config["isbn-number"])
+        if "source" in config.keys():
+            self.ln_source.setText(config["source"])
+        elif "acbfSource" in config.keys():
+            self.ln_source.setText(config["acbfSource"])
+        if "uuid" in config.keys():
+            self.label_uuid.setText(config["uuid"])
+        else:
+            uuid = str()
+            if "acbfID" in config.keys():
+                uuid = config["acbfID"]
+                uuid = uuid.strip("{")
+                uuid = uuid.strip("}")
+                uuidVerify = uuid.split("-")
+                if len(uuidVerify[0])!=8 or len(uuidVerify[1])!=4 or len(uuidVerify[2])!=4 or len(uuidVerify[3])!=4 or len(uuidVerify[4])!=12:
+                    uuid = QUuid.createUuid().toString()
+            self.label_uuid.setText(uuid)
+            config["uuid"] = uuid
         if "license" in config.keys():
             self.license.setCurrentText(config["license"])
         else:
@@ -718,7 +744,7 @@ class comic_meta_data_editor(QDialog):
             config["seriesNumber"] = self.spnSeriesNumber.value()
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
-        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"_"+self.cmbCountry.codeForCurrentEntry())
+        config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"-"+self.cmbCountry.codeForCurrentEntry())
         if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:
@@ -746,6 +772,7 @@ class comic_meta_data_editor(QDialog):
         config["publisherCity"] = self.publishCity.text()
         config["publishingDate"] = self.publishDate.date().toString(Qt.ISODate)
         config["isbn-number"] = self.isbn.text()
+        config["source"] = self.ln_source.text()
         config["license"] = self.license.currentText()
         if self.ln_database_name.text().isalnum() and self.ln_database_entry.text().isalnum():
             dbRef = {}

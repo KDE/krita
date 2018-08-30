@@ -152,6 +152,7 @@ private:
     QList<QByteArray> m_palettesMd5Installed;
     QList<QByteArray> m_workspacesMd5Installed;
     QList<QByteArray> m_presetsMd5Installed;
+    QList<QByteArray> m_gamutMasksMd5Installed;
     QString m_bundleVersion;
 
 };

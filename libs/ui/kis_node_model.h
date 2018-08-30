@@ -35,6 +35,7 @@ class KisModelIndexConverterBase;
 class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
 class KisSelectionActionsAdapter;
+class KisNodeDisplayModeAdapter;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view of the node
@@ -114,7 +115,8 @@ public: // from QAbstractItemModel
                           KisShapeController *shapeController,
                           KisNodeSelectionAdapter *nodeSelectionAdapter,
                           KisNodeInsertionAdapter *nodeInsertionAdapter,
-                          KisSelectionActionsAdapter *selectionActionsAdapter);
+                          KisSelectionActionsAdapter *selectionActionsAdapter,
+                          KisNodeDisplayModeAdapter *nodeDisplayModeAdapter);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
@@ -155,7 +157,8 @@ protected Q_SLOTS:
 
     void slotIsolatedModeChanged();
 
-    void updateSettings();
+    void slotNodeDisplayModeChanged(bool showRootNode, bool showGlobalSelectionMask);
+
     void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
 

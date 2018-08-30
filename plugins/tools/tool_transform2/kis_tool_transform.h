@@ -135,7 +135,7 @@ public:
      * the tool. See bug 362659
      * @return false
      */
-    bool wantsAutoScroll() const {
+    bool wantsAutoScroll() const override {
         return false;
     }
 

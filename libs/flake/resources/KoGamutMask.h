@@ -24,7 +24,7 @@
 #include <cmath>
 
 #include <FlakeDebug.h>
-#include <resources/KoResource.h>
+#include <KoResource.h>
 #include <KoShape.h>
 #include <KisGamutMaskViewConverter.h>
 #include <KoShapePaintingContext.h>

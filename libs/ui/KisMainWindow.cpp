@@ -58,6 +58,7 @@
 #include <KisMimeDatabase.h>
 #include <QMimeData>
 #include <QStackedWidget>
+#include <QProxyStyle>
 
 
 #include <kactioncollection.h>
@@ -71,6 +72,7 @@
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
 #include "kis_selection_manager.h"
+#include "kis_icon_utils.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -151,6 +153,42 @@
 #ifdef Q_OS_WIN
   #include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
+
+
+
+class DockerTitleStyle : public QProxyStyle
+{
+    public:
+       DockerTitleStyle(QStyle *baseStyle = nullptr) : QProxyStyle(baseStyle) {}
+       QPixmap standardPixmap(QStyle::StandardPixmap sp, const QStyleOption *option = nullptr,
+                      const QWidget *widget = nullptr) const override
+       {
+           QIcon closeIcon = KisIconUtils::loadIcon("document-edit");
+           QPixmap closePixmap = closeIcon.pixmap(QSize(20, 20));
+
+           QIcon floatIcon = KisIconUtils::loadIcon("configure");
+           QPixmap floatPixmap = floatIcon.pixmap(QSize(20, 20));
+
+
+           switch (sp) {
+           case SP_TitleBarNormalButton:
+           case SP_TitleBarMinButton:
+           case SP_TitleBarMenuButton:
+                return floatPixmap;
+           case SP_DockWidgetCloseButton:
+           case SP_TitleBarCloseButton:
+               return closePixmap;
+
+           default:
+               break;
+           }
+
+           return QCommonStyle::standardPixmap(sp, option, widget);
+       }
+};
+
+
+
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -679,6 +717,11 @@ void KisMainWindow::slotThemeChanged()
     }
 
     emit themeChanged();
+
+    // go through each docker and set style
+    for (int i = 0; i < dockWidgets().length(); i++) {
+        dockWidgets().at(i)->setStyle(new DockerTitleStyle);
+    }
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
@@ -1961,6 +2004,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
+        dockWidget->setStyle(new DockerTitleStyle);
         if (lockAllDockers) {
             if (dockWidget->titleBarWidget()) {
                 dockWidget->titleBarWidget()->setVisible(false);

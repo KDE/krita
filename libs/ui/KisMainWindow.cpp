@@ -163,10 +163,10 @@ class DockerTitleStyle : public QProxyStyle
        QPixmap standardPixmap(QStyle::StandardPixmap sp, const QStyleOption *option = nullptr,
                       const QWidget *widget = nullptr) const override
        {
-           QIcon closeIcon = KisIconUtils::loadIcon("document-edit");
+           QIcon closeIcon = KisIconUtils::loadIcon("docker_close");
            QPixmap closePixmap = closeIcon.pixmap(QSize(20, 20));
 
-           QIcon floatIcon = KisIconUtils::loadIcon("configure");
+           QIcon floatIcon = KisIconUtils::loadIcon("docker_float");
            QPixmap floatPixmap = floatIcon.pixmap(QSize(20, 20));
 
 

@@ -56,19 +56,6 @@ void TimelineFramesItemDelegate::paintActiveFrameSelector(QPainter *painter, con
     painter->setPen(QPen(lineColor, lineWidth));
     painter->drawLines(linesDark);
     painter->setPen(oldPen);
-
-    if (isCurrentFrame) {
-        QPen oldPen = painter->pen();
-        QBrush oldBrush(painter->brush());
-
-        painter->setPen(QPen(lineColor, 0));
-        painter->setBrush(lineColor);
-
-        painter->drawEllipse(rc.center(), 2,2);
-
-        painter->setBrush(oldBrush);
-        painter->setPen(oldPen);
-    }
 }
 
 void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc) const
@@ -116,11 +103,23 @@ void TimelineFramesItemDelegate::paintSpecialKeyframeIndicator(QPainter *painter
     painter->setPen(oldPen);
 }
 
-void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const
+void TimelineFramesItemDelegate::paintActiveInstanceIndicator(QPainter *painter, const QModelIndex &index,
+                                                              const QRect &rc) const
+{
+    painter->save();
+
+    QColor lineColor = TimelineColorScheme::instance()->selectorColor();
+    painter->setPen(QPen(lineColor, 0));
+    painter->setBrush(lineColor);
+    painter->drawEllipse(rc.center(), 2,2);
+
+    painter->restore();
+}
+
+void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc, bool hasContentFrame) const
 {
     /// is the current layer actively selected (this is not the same as visibility)
     bool hasActiveLayerRole = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
-    bool doesFrameExist = index.data(TimelineFramesModel::FrameExistsRole).toBool();   /// does keyframe exist
     bool isEditable = index.data(TimelineFramesModel::FrameEditableRole).toBool(); /// is layer editable
     bool hasContent = index.data(TimelineFramesModel::FrameHasContent).toBool();     /// find out if frame is empty
 
@@ -154,14 +153,14 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
 
     // how do we fill in a frame that has content
     // a keyframe will be totally filled in. A hold frame will have a line running through it
-    if (hasContent && doesFrameExist) {
+    if (hasContent && hasContentFrame) {
         painter->fillRect(rc, color);
     }
 
 
 
     // pass of outline for empty keyframes
-    if (doesFrameExist && !hasContent) {
+    if (hasContentFrame && !hasContent) {
 
         QPen oldPen = painter->pen();
         QBrush oldBrush(painter->brush());
@@ -176,7 +175,7 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
 
 
     // pass of hold frame line
-    if (!doesFrameExist && hasContent) {
+    if (!hasContentFrame && hasContent) {
 
         // pretty much the same check as "isValid" above, but that isn't working with hold frames
          if (colorLabel.toInt() == 0) {
@@ -227,9 +226,11 @@ void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
 void TimelineFramesItemDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
-{    
+{
+    bool hasContentFrame = index.data(TimelineFramesModel::FrameExistsRole).toBool();
+
     // draws background as well as fills normal keyframes
-    drawBackground(painter, index, option.rect);
+    drawBackground(painter, index, option.rect, hasContentFrame);
 
     // creates a semi transparent orange rectangle in the frame that is actively selected on the active row
     if (option.showDecorationSelected &&
@@ -261,5 +262,10 @@ void TimelineFramesItemDelegate::paint(QPainter *painter,
     bool layerIsCurrent = index.data(TimelineFramesModel::ActiveLayerRole).toBool();
     if (active) {
         paintActiveFrameSelector(painter, option.rect, layerIsCurrent);
+    }
+
+    const bool isIdenticalWithActive = index.data(TimelineFramesModel::IdenticalWithActive).toBool();
+    if (isIdenticalWithActive && hasContentFrame) {
+        paintActiveInstanceIndicator(painter, index, option.rect);
     }
 }

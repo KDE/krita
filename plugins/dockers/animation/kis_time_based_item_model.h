@@ -69,6 +69,7 @@ public:
         ActiveFrameRole = Qt::UserRole + 101,
         FrameExistsRole,
         SpecialKeyframeExists,
+        IdenticalWithActive,
         FrameCachedRole,
         FrameEditableRole,
         FramesPerSecondRole,
@@ -85,6 +86,7 @@ protected:
                                              bool copyFrames, bool moveEmptyFrames,
                                              KUndo2Command *parentCommand = 0);
 
+    int activeFrameIndex() const;
 
 private Q_SLOTS:
     void slotFramerateChanged();

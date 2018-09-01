@@ -129,6 +129,17 @@ struct TimelineFramesModel::Private
         return false;
     }
 
+    bool isIdenticalWith(int row, int column, int frame) {
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return false;
+        Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
+            if (channel->identicalFrames(frame).contains(column)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     int frameColorLabel(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return -1;
@@ -372,6 +383,9 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     }
     case SpecialKeyframeExists: {
         return m_d->specialKeyframeExists(index.row(), index.column());
+    }
+    case IdenticalWithActive: {
+        return m_d->isIdenticalWith(index.row(), index.column(), activeFrameIndex());
     }
     case FrameColorLabelIndexRole: {
         int label = m_d->frameColorLabel(index.row(), index.column());

@@ -32,8 +32,9 @@ public:
 
     /// the opacity keyframe
     void paintSpecialKeyframeIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
+    void paintActiveInstanceIndicator(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
 
-    void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc) const;
+    void drawBackground(QPainter *painter, const QModelIndex &index, const QRect &rc, bool hasContentFrame) const;
     void drawFocus(QPainter *painter,
                    const QStyleOptionViewItem &option,
                    const QRect &rect) const override;

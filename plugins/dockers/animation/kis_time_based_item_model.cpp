@@ -511,3 +511,8 @@ KisImageWSP KisTimeBasedItemModel::image() const
 {
     return m_d->image;
 }
+
+int KisTimeBasedItemModel::activeFrameIndex() const
+{
+    return m_d->activeFrameIndex;
+}

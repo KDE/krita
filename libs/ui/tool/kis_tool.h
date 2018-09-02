@@ -191,7 +191,7 @@ public Q_SLOTS:
     virtual void updateSettingsViews();
 
 Q_SIGNALS:
-    void isActiveChanged();
+    void isActiveChanged(bool isActivated);
 
 protected:
     // conversion methods are also needed by the paint information builder

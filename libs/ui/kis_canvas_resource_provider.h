@@ -80,9 +80,7 @@ public:
         GlobalAlphaLock,
         DisablePressure,
         PreviousPaintOpPreset,
-        EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
-        SelectionAction,
-        SelectionMode
+        EffectiveZoom ///<-Used only by painting tools for non-displaying purposes
     };
 
 
@@ -175,12 +173,6 @@ public:
     ///Notify that the workspace is loaded and settings can be read
     void notifyLoadingWorkspace(KisWorkspaceResource* workspace);
 
-    int selectionAction();
-    void setSelectionAction(int action);
-    int selectionMode();
-    void setSelectionMode(int mode);
-
-
 public Q_SLOTS:
 
     void slotSetFGColor(const KoColor& c);
@@ -226,8 +218,6 @@ Q_SIGNALS:
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResource* workspace);
     void sigLoadingWorkspace(KisWorkspaceResource* workspace);
-    void sigSelectionActionChanged(const int);
-    void sigSelectionModeChanged(const int);
 
     void mirrorModeChanged();
     void moveMirrorVerticalCenter();

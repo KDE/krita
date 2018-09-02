@@ -26,7 +26,8 @@
 
 KisSelectionUpdateCompressor::KisSelectionUpdateCompressor(KisSelection *selection)
     : m_parentSelection(selection),
-      m_updateSignalCompressor(new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE))
+      m_updateSignalCompressor(new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE)),
+      m_hasStalledUpdate(false)
 {
     connect(m_updateSignalCompressor, SIGNAL(timeout()), this, SLOT(startUpdateJob()));
 
@@ -45,17 +46,31 @@ void KisSelectionUpdateCompressor::requestUpdate(const QRect &updateRect)
     m_updateSignalCompressor->start();
 }
 
+void KisSelectionUpdateCompressor::tryProcessStalledUpdate()
+{
+    if (m_hasStalledUpdate) {
+        m_updateSignalCompressor->start();
+    }
+}
+
 void KisSelectionUpdateCompressor::startUpdateJob()
 {
     KisNodeSP parentNode = m_parentSelection->parentNode();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(parentNode);
+    if (!parentNode) {
+        m_hasStalledUpdate = true;
+        return;
+    }
 
     KisImageSP image = KisLayerUtils::findImageByHierarchy(parentNode);
-    KIS_SAFE_ASSERT_RECOVER_NOOP(image);
+    if (!image) {
+        m_hasStalledUpdate = true;
+        return;
+    }
 
     if (image) {
         image->addSpontaneousJob(new KisUpdateSelectionJob(m_parentSelection, m_updateRect));
     }
     m_updateRect = QRect();
     m_fullUpdateRequested = false;
+    m_hasStalledUpdate = false;
 }

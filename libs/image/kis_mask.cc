@@ -99,6 +99,10 @@ KisMask::KisMask(const KisMask& rhs)
 
 KisMask::~KisMask()
 {
+    if (m_d->selection) {
+        m_d->selection->setParentNode(0);
+    }
+
     delete m_d;
 }
 

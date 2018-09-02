@@ -420,6 +420,14 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
+
+    // Tab close button override
+    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
+    // just switch this icon out for all OSs so it is easier to see
+    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+
+
+
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 

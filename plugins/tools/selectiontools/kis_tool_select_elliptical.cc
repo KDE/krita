@@ -75,7 +75,7 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundC
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
 
-        helper.addSelectionShape(shape);
+        helper.addSelectionShape(shape, selectionAction());
     }
 }
 

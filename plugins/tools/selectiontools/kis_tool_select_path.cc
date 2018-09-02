@@ -157,7 +157,7 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
         delete pathShape;
     } else {
-        helper.addSelectionShape(pathShape);
+        helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
     }
 }
 

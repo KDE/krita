@@ -40,8 +40,8 @@ public:
     virtual ~KisSelectionToolHelper();
 
     void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
-    void addSelectionShape(KoShape* shape);
-    void addSelectionShapes(QList<KoShape*> shapes);
+    void addSelectionShape(KoShape* shape, SelectionAction action = SELECTION_DEFAULT);
+    void addSelectionShapes(QList<KoShape*> shapes, SelectionAction action = SELECTION_DEFAULT);
 
     bool canShortcutToDeselect(const QRect &rect, SelectionAction action);
     bool canShortcutToNoop(const QRect &rect, SelectionAction action);

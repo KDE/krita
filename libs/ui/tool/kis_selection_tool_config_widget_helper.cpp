@@ -100,7 +100,7 @@ void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivat
 
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     m_selectionAction = (SelectionAction)cfg.readEntry("selectionAction", (int)SELECTION_REPLACE);
-    m_selectionMode = (SelectionMode)cfg.readEntry("selectionMode", (int)PIXEL_SELECTION);
+    m_selectionMode = (SelectionMode)cfg.readEntry("selectionMode", (int)SHAPE_PROTECTION);
 
 
     KisSignalsBlocker b(m_optionsWidget);

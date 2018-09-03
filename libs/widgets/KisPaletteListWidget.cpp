@@ -180,9 +180,11 @@ void KisPaletteListWidgetPrivate::Delegate::paint(QPainter * painter,
     } else {
         painter->setBrush(option.palette.text().color());
     }
+    QString drawnText = colorSet->name()
+            + (colorSet->isEditable() ? "" : i18n(" [READONLY]"));
     painter->drawText(option.rect.x() + previewRect.width() + 10,
                       option.rect.y() + painter->fontMetrics().ascent() + 5,
-                      colorSet->name());
+                      drawnText);
 
     painter->restore();
 }

@@ -66,7 +66,6 @@ private Q_SLOTS:
 
     void slotRowCountChanged(int);
     void slotSetGlobal(int);
-    void slotSetReadOnly(int);
 
     void slotNameChanged();
     void slotFilenameChanged(const QString &newFilename);

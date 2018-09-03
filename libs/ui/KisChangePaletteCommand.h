@@ -39,6 +39,11 @@ public:
     {
         // palette modification shouldn't be undone;
     }
+    bool mergeWith(const KUndo2Command *) override
+    {
+        // palette modifications' merging doesn't need any action
+        return true;
+    }
     int id() const override;
 };
 

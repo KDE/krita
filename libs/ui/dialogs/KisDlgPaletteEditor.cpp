@@ -74,7 +74,6 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     connect(m_ui->lineEditFilename, SIGNAL(textEdited(QString)), SLOT(slotFilenameChanged(QString)));
     connect(m_ui->lineEditFilename, SIGNAL(editingFinished()), SLOT(slotFilenameInputFinished()));
     connect(m_ui->ckxGlobal, SIGNAL(stateChanged(int)), SLOT(slotSetGlobal(int)));
-    connect(m_ui->ckxReadOnly, SIGNAL(stateChanged(int)), SLOT(slotSetReadOnly(int)));
 
     connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
 
@@ -98,14 +97,12 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     const QSignalBlocker blocker3(m_ui->spinBoxCol);
     const QSignalBlocker blocker4(m_ui->spinBoxRow);
     const QSignalBlocker blocker5(m_ui->ckxGlobal);
-    const QSignalBlocker blocker6(m_ui->ckxReadOnly);
     const QSignalBlocker blocker7(m_ui->cbxGroup);
 
     m_ui->lineEditName->setText(m_colorSet->name());
     m_ui->lineEditFilename->setText(m_paletteEditor->relativePathFromSaveLocation());
     m_ui->spinBoxCol->setValue(m_colorSet->columnCount());
     m_ui->ckxGlobal->setCheckState(m_colorSet->isGlobal() ? Qt::Checked : Qt::Unchecked);
-    m_ui->ckxReadOnly->setCheckState(!m_colorSet->isEditable() ? Qt::Checked : Qt::Unchecked);
 
     Q_FOREACH (const QString & groupName, m_colorSet->getGroupNames()) {
         m_ui->cbxGroup->addItem(groupName);
@@ -124,7 +121,6 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_ui->spinBoxCol->setEnabled(canWrite);
     m_ui->spinBoxRow->setEnabled(canWrite);
     m_ui->ckxGlobal->setEnabled(canWrite);
-    m_ui->ckxReadOnly->setEnabled(canWrite && m_colorSet->isGlobal());
     m_ui->bnAddGroup->setEnabled(canWrite);
 }
 
@@ -184,15 +180,6 @@ void KisDlgPaletteEditor::slotSetGlobal(int state)
 {
     bool toGlobal = (state == Qt::Checked);
     m_paletteEditor->setGlobal(toGlobal);
-    if (!toGlobal) {
-        m_ui->ckxReadOnly->setCheckState(Qt::Unchecked);
-    }
-    m_ui->ckxReadOnly->setEnabled(toGlobal);
-}
-
-void KisDlgPaletteEditor::slotSetReadOnly(int state)
-{
-    m_paletteEditor->setReadOnly(state == Qt::Checked);
 }
 
 void KisDlgPaletteEditor::slotNameChanged()

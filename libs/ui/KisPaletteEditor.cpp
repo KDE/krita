@@ -57,7 +57,6 @@ struct KisPaletteEditor::PaletteInfo {
 struct KisPaletteEditor::Private
 {
     bool isGlobalModified {false};
-    bool isReadOnlyModified {false};
     bool isNameModified {false};
     bool isFilenameModified {false};
     bool isColumnCountModified {false};
@@ -327,18 +326,6 @@ void KisPaletteEditor::setGlobal(bool isGlobal)
     m_d->modified.isGlobal = isGlobal;
 }
 
-void KisPaletteEditor::setReadOnly(bool isReadOnly)
-{
-    if (!m_d->modified.isGlobal) {
-        QMessageBox message;
-        message.setWindowTitle(i18n("Can't set palette read only"));
-        message.setText(i18n("Only global palettes can be set read only."));
-        message.exec();
-    }
-    m_d->isReadOnlyModified = true;
-    m_d->modified.isReadOnly = isReadOnly;
-}
-
 void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
 {
     Q_ASSERT(m_d->model);
@@ -418,39 +405,39 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     if (!m_d->model->colorSet()->isEditable()) { return; }
-    QScopedPointer<KoDialog> window(new KoDialog);
-    window->setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
-    QFormLayout *editableItems = new QFormLayout(window.data());
-    window->mainWidget()->setLayout(editableItems);
-    QComboBox *cmbGroups = new QComboBox(window.data());
-    cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
-    QLineEdit *lnIDName = new QLineEdit(window.data());
-    QLineEdit *lnName = new QLineEdit(window.data());
-    KisColorButton *bnColor = new KisColorButton(window.data());
-    QCheckBox *chkSpot = new QCheckBox(window.data());
-    chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
-    editableItems->addRow(i18n("Group"), cmbGroups);
-    editableItems->addRow(i18n("ID"), lnIDName);
-    editableItems->addRow(i18n("Name"), lnName);
-    editableItems->addRow(i18n("Color"), bnColor);
-    editableItems->addRow(i18nc("Spot color", "Spot"), chkSpot);
-    cmbGroups->setCurrentIndex(0);
-    lnName->setText(i18nc("Part of a default name for a color","Color")
+    KoDialog window;
+    window.setWindowTitle(i18nc("@title:window", "Add a new Colorset Entry"));
+    QFormLayout editableItems(&window);
+    window.mainWidget()->setLayout(&editableItems);
+    QComboBox cmbGroups(&window);
+    cmbGroups.addItems(m_d->model->colorSet()->getGroupNames());
+    QLineEdit lnIDName(&window);
+    QLineEdit lnName(&window);
+    KisColorButton bnColor(&window);
+    QCheckBox chkSpot(&window);
+    chkSpot.setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
+    editableItems.addRow(i18n("Group"), &cmbGroups);
+    editableItems.addRow(i18n("ID"), &lnIDName);
+    editableItems.addRow(i18n("Name"), &lnName);
+    editableItems.addRow(i18n("Color"), &bnColor);
+    editableItems.addRow(i18nc("Spot color", "Spot"), &chkSpot);
+    cmbGroups.setCurrentIndex(0);
+    lnName.setText(i18nc("Part of a default name for a color","Color")
                     + " "
                     + QString::number(m_d->model->colorSet()->colorCount()+1));
-    lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount() + 1));
-    bnColor->setColor(color);
-    chkSpot->setChecked(false);
+    lnIDName.setText(QString::number(m_d->model->colorSet()->colorCount() + 1));
+    bnColor.setColor(color);
+    chkSpot.setChecked(false);
 
-    if (window->exec() != KoDialog::Accepted) { return; }
+    if (window.exec() != KoDialog::Accepted) { return; }
 
-    QString groupName = cmbGroups->currentText();
+    QString groupName = cmbGroups.currentText();
 
     KisSwatch newEntry;
-    newEntry.setColor(bnColor->color());
-    newEntry.setName(lnName->text());
-    newEntry.setId(lnIDName->text());
-    newEntry.setSpotColor(chkSpot->isChecked());
+    newEntry.setColor(bnColor.color());
+    newEntry.setName(lnName.text());
+    newEntry.setId(lnIDName.text());
+    newEntry.setSpotColor(chkSpot.isChecked());
     m_d->model->addEntry(newEntry, groupName);
 
     if (m_d->model->colorSet()->isGlobal()) {
@@ -494,12 +481,6 @@ void KisPaletteEditor::updatePalette()
             setGlobal();
         } else {
             setNonGlobal();
-        }
-    }
-    if (m_d->isReadOnlyModified) {
-        if (palette->isGlobal()) {
-            palette->setIsEditable(!m_d->modified.isReadOnly);
-            palette->save();
         }
     }
     Q_FOREACH (const QString &groupName, palette->getGroupNames()) {

@@ -41,8 +41,7 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
 
     m_optionsWidget->setObjectName(toolId + "option widget");
     m_optionsWidget->setWindowTitle(m_windowTitle);
-    m_optionsWidget->setAction(selectionAction());
-    m_optionsWidget->setMode(selectionMode());
+    slotToolActivatedChanged(true);
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
@@ -58,7 +57,6 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
 
     m_optionsWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_optionsWidget->adjustSize();
-    slotToolActivatedChanged(true);
 }
 
 KisSelectionOptions* KisSelectionToolConfigWidgetHelper::optionWidget() const

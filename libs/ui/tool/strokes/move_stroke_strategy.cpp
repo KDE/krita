@@ -145,6 +145,9 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     }
 }
 
+#include "kis_selection_mask.h"
+#include "kis_selection.h"
+
 void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
 {
     Q_FOREACH (KisNodeSP node, m_nodes) {
@@ -153,6 +156,10 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
 
         if (m_updatesEnabled) {
             m_updatesFacade->refreshGraphAsync(node, dirtyRect);
+        }
+
+        if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
+            //mask->selection()->notifySelectionChanged();
         }
     }
 }

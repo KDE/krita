@@ -85,14 +85,16 @@ int KisSelectionOptions::action()
 
 void KisSelectionOptions::setAction(int action) {
     QAbstractButton* button = m_action->button(action);
-    Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
 }
 
 void KisSelectionOptions::setMode(int mode) {
     QAbstractButton* button = m_mode->button(mode);
-    Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
     hideActionsForSelectionMode(mode);
 }
 

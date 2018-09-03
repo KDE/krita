@@ -198,6 +198,8 @@ public:
     /// replace it with. Undeprecate, therefore.
     quint8 selected(qint32 x, qint32 y) const;
 
+    KisNodeWSP parentNode() const;
+
 private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
@@ -205,7 +207,7 @@ private:
     friend class KisUpdateSelectionJob;
     friend class KisSelectionUpdateCompressor;
     friend class KisDeselectActiveSelectionCommand;
-    KisNodeWSP parentNode() const;
+
 
     void copyFrom(const KisSelection &rhs);
 

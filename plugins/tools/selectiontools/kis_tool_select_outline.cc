@@ -196,7 +196,7 @@ void KisToolSelectOutline::finishSelectionAction()
             path->close();
             path->normalize();
 
-            helper.addSelectionShape(path);
+            helper.addSelectionShape(path, selectionAction());
         }
         QApplication::restoreOverrideCursor();
     }

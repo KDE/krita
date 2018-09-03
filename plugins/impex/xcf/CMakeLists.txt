@@ -8,6 +8,12 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
     list(APPEND COMPILE_FLAGS -Wno-undef -Wno-missing-format-attribute -Wno-sign-compare)
 endif ()
 
+if (CMAKE_CXX_COMPILER_ID MATCHES "[cC][lL][aA][nN][gG]")
+    add_compile_options("-Wno-undef")
+    add_compile_options("-Wno-cast-align")
+    add_compile_options("-Wno-sign-compare")
+endif ()
+
 if (CMAKE_COMPILER_IS_GNUCC)
     add_compile_options("-Wno-suggest-attribute=format")
     add_compile_options("-Wno-sign-compare")
@@ -25,6 +31,7 @@ set(kritaxcfimport_SOURCES
     ${XCFTOOLS_SOURCE_DIR}/flatspec.c
     ${XCFTOOLS_SOURCE_DIR}/flatten.c  
     )
+
 
 add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
 

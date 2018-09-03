@@ -86,8 +86,13 @@ void KoShapeFillResourceConnector::slotCanvasResourceChanged(int key, const QVar
 
 void KoShapeFillResourceConnector::Private::applyShapeColoring(KoFlake::FillVariant fillVariant, const KoColor &color)
 {
+    QList<KoShape *> selectedEditableShapes = canvas->selectedShapesProxy()->selection()->selectedEditableShapes();
 
-    KoShapeFillWrapper wrapper(canvas->selectedShapesProxy()->selection()->selectedEditableShapes(), fillVariant);
+    if (selectedEditableShapes.isEmpty()) {
+        return;
+    }
+
+    KoShapeFillWrapper wrapper(selectedEditableShapes, fillVariant);
     KUndo2Command *command = wrapper.setColor(color.toQColor()); // TODO: do the conversion in a better way!
 
     if (command) {

@@ -42,7 +42,7 @@ __KisToolSelectRectangularLocal::__KisToolSelectRectangularLocal(KoCanvasBase * 
         setObjectName("tool_select_rectangular");
 }
 
-void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect)
+void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
@@ -63,17 +63,37 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect)
     if (selectionMode() == PIXEL_SELECTION) {
         if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-            tmpSel->select(rc);
 
             QPainterPath cache;
-            cache.addRect(rc);
+
+            if (roundCornersX > 0 || roundCornersY > 0) {
+                cache.addRoundedRect(rc, roundCornersX, roundCornersY);
+            } else {
+                cache.addRect(rc);
+            }
+
+            {
+                KisPainter painter(tmpSel);
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                painter.setAntiAliasPolygonFill(true);
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                painter.paintPainterPath(cache);
+            }
+
+
             tmpSel->setOutlineCache(cache);
 
             helper.selectPixelSelection(tmpSel, selectionAction());
         }
     } else {
         QRectF documentRect = convertToPt(rc);
-        helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect));
+        const qreal docRoundCornersX = convertToPt(roundCornersX);
+        const qreal docRoundCornersY = convertToPt(roundCornersY);
+
+        helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect, docRoundCornersX, docRoundCornersY),
+                                 selectionAction());
     }
 }
 

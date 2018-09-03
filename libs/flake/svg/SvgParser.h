@@ -50,7 +50,7 @@ class KoSvgTextShape;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
-    class DeferredUseStore;
+    struct DeferredUseStore;
 
 public:
     explicit SvgParser(KoDocumentResourceManager *documentResourceManager);

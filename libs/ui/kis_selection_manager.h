@@ -24,6 +24,7 @@
 
 #include <kis_image.h>
 #include "KisView.h"
+#include <KisSelectionTags.h>
 
 #include <kritaui_export.h>
 
@@ -110,6 +111,8 @@ public Q_SLOTS:
     void slotToggleSelectionDecoration();
 
     void slotStrokeSelection();
+
+    void selectOpaqueOnNode(KisNodeSP node, SelectionAction action);
 
 Q_SIGNALS:
     void currentSelectionChanged();

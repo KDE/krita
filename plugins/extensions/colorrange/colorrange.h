@@ -34,7 +34,7 @@ public:
 
 private Q_SLOTS:
     void slotActivated();
-    void selectOpaque();
+    void selectOpaque(int id);
 };
 
 #endif // COLORRANGE_H

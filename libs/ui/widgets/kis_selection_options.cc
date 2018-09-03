@@ -98,13 +98,8 @@ void KisSelectionOptions::setMode(int mode) {
 
 //hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
 void KisSelectionOptions::hideActionsForSelectionMode(int mode) {
-    bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
+    const bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
 
-    m_page->lblAction->setVisible(isPixelSelection);
-    m_page->add->setVisible(isPixelSelection);
-    m_page->subtract->setVisible(isPixelSelection);
-    m_page->replace->setVisible(isPixelSelection);
-    m_page->intersect->setVisible(isPixelSelection);
     m_page->chkAntiAliasing->setVisible(isPixelSelection);
 }
 

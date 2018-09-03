@@ -117,7 +117,6 @@ public:
      */
     QPolygonF estimatedTRCXYY() const;
 
-    QVector <qreal> colorants() const;
     QVector <qreal> lumaCoefficients() const;
 
     //========== Channels =====================================================//

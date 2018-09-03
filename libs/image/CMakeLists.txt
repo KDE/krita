@@ -82,6 +82,7 @@ set(kritaimage_LIB_SRCS
    brushengine/KisStrokeSpeedMeasurer.cpp
    brushengine/KisPaintopSettingsIds.cpp
    commands/kis_deselect_global_selection_command.cpp
+   commands/KisDeselectActiveSelectionCommand.cpp
    commands/kis_image_change_layers_command.cpp
    commands/kis_image_change_visibility_command.cpp
    commands/kis_image_command.cpp
@@ -96,6 +97,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_node_opacity_command.cpp
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
+   commands/KisReselectActiveSelectionCommand.cpp
    commands/kis_set_global_selection_command.cpp
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
@@ -243,6 +245,7 @@ set(kritaimage_LIB_SRCS
    kis_random_sub_accessor.cpp
    kis_wrapped_random_accessor.cpp
    kis_selection.cc
+   KisSelectionUpdateCompressor.cpp
    kis_selection_mask.cpp
    kis_update_outline_job.cpp
    kis_update_selection_job.cpp

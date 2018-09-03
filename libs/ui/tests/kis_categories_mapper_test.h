@@ -21,6 +21,9 @@
 
 #include <QtTest>
 
+#include "kis_categories_mapper.h"
+#include <QTest>
+
 class KisCategoriesMapperTest : public QObject
 {
     Q_OBJECT

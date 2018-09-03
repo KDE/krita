@@ -574,6 +574,19 @@ namespace KisLayerUtils {
         m_image->signalRouter()->emitNotification(type);
     }
 
+    SelectGlobalSelectionMask::SelectGlobalSelectionMask(KisImageSP image)
+        : m_image(image)
+    {
+    }
+
+    void SelectGlobalSelectionMask::redo() {
+
+        KisImageSignalType type =
+                ComplexNodeReselectionSignal(m_image->rootLayer()->selectionMask(), KisNodeList());
+        m_image->signalRouter()->emitNotification(type);
+
+    }
+
     KisLayerSP constructDefaultLayer(KisImageSP image) {
         return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
     }
@@ -764,7 +777,7 @@ namespace KisLayerUtils {
                     }
                 }
 
-                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [this](KisNodeSP node) {
+                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [](KisNodeSP node) {
                   return !node->userLocked();
                 });
                 safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
@@ -1453,6 +1466,20 @@ namespace KisLayerUtils {
                 delayedUpdate->forceUpdateTimedNode();
             }
         });
+    }
+
+    KisImageSP findImageByHierarchy(KisNodeSP node)
+    {
+        while (node) {
+            const KisLayer *layer = dynamic_cast<const KisLayer*>(node.data());
+            if (layer) {
+                return layer->image();
+            }
+
+            node = node->parent();
+        }
+
+        return 0;
     }
 
 }

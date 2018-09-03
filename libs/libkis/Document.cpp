@@ -820,6 +820,12 @@ void Document::setGuidesLocked(bool locked)
     d->document->setGuidesConfig(config);
 }
 
+bool Document::modified() const
+{
+    if (!d->document) return false;
+    return d->document->isModified();
+}
+
 QPointer<KisDocument> Document::document() const
 {
     return d->document;

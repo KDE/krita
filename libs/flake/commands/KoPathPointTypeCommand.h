@@ -54,6 +54,8 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
+    static void makeCubicPointSmooth(KoPathPoint *point);
+
 private:
     // used for storing the data for undo
     struct PointData {

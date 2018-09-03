@@ -29,10 +29,11 @@ Q_OBJECT
 
 Q_SIGNALS:
     void rectangleChanged(const QRectF &newRect);
+    void sigRequestReloadConfig();
 
 public Q_SLOTS:
     void constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height);
-
+    void roundCornersChanged(int rx, int ry);
 public:
     enum ToolType {
         PAINT,
@@ -46,6 +47,7 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
     void listenToModifiers(bool listen) override;
     bool listeningToModifiers() override;
@@ -53,7 +55,7 @@ public:
     QList<QPointer<QWidget> > createOptionWidgets() override;
 
 protected:
-    virtual void finishRect(const QRectF&)=0;
+    virtual void finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY) = 0;
 
     QPointF m_dragCenter;
     QPointF m_dragStart;
@@ -67,6 +69,8 @@ protected:
     float m_forcedRatio;
     float m_forcedWidth;
     float m_forcedHeight;
+    int m_roundCornersX;
+    int m_roundCornersY;
 
     bool isFixedSize();
     void applyConstraints(QSizeF& area, bool overrideRatio);
@@ -74,6 +78,7 @@ protected:
     void updateArea();
     virtual void paintRectangle(QPainter &gc, const QRectF &imageRect);
     virtual QRectF createRect(const QPointF &start, const QPointF &end);
+    virtual bool showRoundCornersGUI() const;
 };
 
 #endif // KIS_TOOL_RECTANGLE_BASE_H

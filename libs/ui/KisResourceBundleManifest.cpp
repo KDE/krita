@@ -47,7 +47,7 @@ QString resourceTypeToManifestType(const QString &type) {
 }
 
 QString manifestTypeToResourceType(const QString &type) {
-    if (type == "patterns" || type == "gradients" || type == "palettes") {
+    if (type == "patterns" || type == "gradients" || type == "palettes" || type == "gamutmasks") {
         return "ko_" + type;
     }
     else {

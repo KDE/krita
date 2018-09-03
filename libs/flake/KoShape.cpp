@@ -777,7 +777,6 @@ QRectF KoShape::outlineRect() const
 
 QPainterPath KoShape::shadowOutline() const
 {
-    Q_D(const KoShape);
     if (background()) {
         return outline();
     }

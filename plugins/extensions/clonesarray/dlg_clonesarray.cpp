@@ -223,14 +223,14 @@ void DlgClonesArray::reapplyClones()
     int endColumn = m_page->numPositiveColumns->value() - 1;
     int endRow = m_page->numPositiveRows->value() - 1;
 
-    QString positiveGroupName = QString(i18n("+ Array of %1")).arg(m_baseLayer->name());
+    QString positiveGroupName = i18n("+ Array of %1", m_baseLayer->name());
     KisGroupLayerSP positiveGroupLayer = new KisGroupLayer(image, positiveGroupName, OPACITY_OPAQUE_U8);
     m_applicator->applyCommand(new KisImageLayerAddCommand(image, positiveGroupLayer, m_baseLayer->parent(), m_baseLayer, false, true), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
     KisGroupLayerSP negativeGroupLayer;
 
     if (startRow < 0 || startColumn < 0) {
-        QString negativeGroupName = QString(i18n("- Array of %1")).arg(m_baseLayer->name());
+        QString negativeGroupName = i18n("- Array of %1", m_baseLayer->name());
         negativeGroupLayer = new KisGroupLayer(image, negativeGroupName, OPACITY_OPAQUE_U8);
         m_applicator->applyCommand(new KisImageLayerAddCommand(image, negativeGroupLayer, m_baseLayer->parent(), m_baseLayer->prevSibling(), false, true), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
     }
@@ -243,7 +243,7 @@ void DlgClonesArray::reapplyClones()
             KisNodeSP parent = choosePositiveGroup ? positiveGroupLayer : negativeGroupLayer;
 
 
-            QString cloneName = QString("Clone %1, %2").arg(col).arg(row);
+            QString cloneName = i18n("Clone %1, %2", col, row);
             KisCloneLayerSP clone = new KisCloneLayer(m_baseLayer, image, cloneName, OPACITY_OPAQUE_U8);
             clone->setX(-row * rowXOffset + col * columnXOffset);
             clone->setY(-row * rowYOffset + col * columnYOffset);

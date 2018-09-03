@@ -172,7 +172,7 @@ private Q_SLOTS:
     void slotChangePalette(KoColorSet *set);
 
 protected:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private:
     void focusInEvent(QFocusEvent *) override;

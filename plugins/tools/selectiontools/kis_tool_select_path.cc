@@ -90,18 +90,6 @@ QList<QPointer<QWidget> > KisToolSelectPath::createOptionWidgets()
     return filteredWidgets;
 }
 
-void KisToolSelectPath::setAlternateSelectionAction(SelectionAction action)
-{
-    // We will turn off the ability to change the selection in the middle of drawing a path.
-    if (!m_localTool->listeningToModifiers()) {
-        KisToolSelectBase<KisDelegatedSelectPathWrapper>::setAlternateSelectionAction(action);
-    }
-}
-
-bool KisDelegatedSelectPathWrapper::listeningToModifiers() {
-    return m_localTool->listeningToModifiers();
-}
-
 void KisDelegatedSelectPathWrapper::beginPrimaryAction(KoPointerEvent *event) {
     mousePressEvent(event);
 }
@@ -118,6 +106,7 @@ void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
 __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
 {
+    setEnableClosePathShortcut(false);
 }
 
 void __KisToolSelectPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
@@ -168,7 +157,7 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
         delete pathShape;
     } else {
-        helper.addSelectionShape(pathShape);
+        helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
     }
 }
 

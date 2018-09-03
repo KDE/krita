@@ -45,7 +45,7 @@ public:
     ~KisToolRectangle() override;
 
 protected:
-    void finishRect(const QRectF& rect) override;
+    void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 
 protected Q_SLOTS:
     void resetCursorStyle() override;

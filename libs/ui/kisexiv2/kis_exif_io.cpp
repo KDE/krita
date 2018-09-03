@@ -212,7 +212,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
             index += name.size();
         }
     }
-    qint16* dataIt = reinterpret_cast<qint16*>(array.data() + index);
+    qint32* dataIt = reinterpret_cast<qint32*>(array.data() + index);
     for (QList<KisMetaData::Value>::iterator it = values.begin();
             it != values.end(); ++it) {
         dataIt[0] = it->asRational().numerator;
@@ -318,7 +318,7 @@ Exiv2::Value* cfaPatternKMDToExif(const KisMetaData::Value& value)
     (reinterpret_cast<quint16*>(array.data()))[0] = columns;
     (reinterpret_cast<quint16*>(array.data()))[1] = rows;
     for (int i = 0; i < columns * rows; i++) {
-        int val = values[i].asVariant().toInt();
+        quint8 val = values[i].asVariant().toUInt();
         *(array.data() + 4 + i) = val;
     }
     dbgMetaData << "Cfa Array " << ppVar(columns) << ppVar(rows) << ppVar(array.size());

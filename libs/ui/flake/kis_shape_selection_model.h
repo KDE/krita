@@ -57,7 +57,6 @@ public:
 
 private Q_SLOTS:
     void requestUpdate(const QRect &updateRect);
-    void startUpdateJob();
 
 private:
     QMap<KoShape*, QRectF> m_shapeMap;
@@ -65,10 +64,7 @@ private:
     KisSelectionWSP m_parentSelection;
     KisShapeSelection* m_shapeSelection;
 
-    KisSignalCompressor *m_updateSignalCompressor;
-    QRect m_updateRect;
     bool m_updatesEnabled;
-    bool m_fullUpdateRequested;
 };
 
 #endif

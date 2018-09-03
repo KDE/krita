@@ -264,6 +264,26 @@ void KisNodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option,
     p->setPen(oldPen);
 }
 
+QRect KisNodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+
+    int steps = 0;
+    QModelIndex tmp = index.parent();
+    while (tmp.isValid()) {
+        steps++;
+        tmp = tmp.parent();
+    }
+
+    KisNodeViewColorScheme scm;
+    return QRect(scm.border() +
+                 2 * scm.visibilityMargin() + scm.visibilitySize() +
+                 scm.border() + steps * scm.indentation(),
+                 scm.border() + option.rect.top(),
+                 2 * scm.thumbnailMargin() + scm.thumbnailSize(),
+                 scm.rowHeight() - scm.border());
+}
+
 void KisNodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     KisNodeViewColorScheme scm;
@@ -684,6 +704,9 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
 
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
+        const QRect thumbnailRect = thumbnailClickRect(option, index);
+        const bool thumbnailClicked = thumbnailRect.contains(mouseEvent->pos());
+
         if (leftButton && iconsClicked) {
             KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
             QList<OptionalProperty> realProps = d->rightmostProperties(props);
@@ -715,6 +738,28 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
             if (isExpandable) {
                 bool isExpanded = d->view->isExpanded(index);
                 d->view->setExpanded(index, !isExpanded);
+            }
+            return true;
+        } else if (leftButton && thumbnailClicked) {
+            bool hasCorrectModifier = false;
+            SelectionAction action = SELECTION_REPLACE;
+
+            if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                action = SELECTION_REPLACE;
+                hasCorrectModifier = true;
+            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+                action = SELECTION_ADD;
+                hasCorrectModifier = true;
+            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) {
+                action = SELECTION_SUBTRACT;
+                hasCorrectModifier = true;
+            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier)) {
+                action = SELECTION_INTERSECT;
+                hasCorrectModifier = true;
+            }
+
+            if (hasCorrectModifier) {
+                model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
                 return true;
             }
         }

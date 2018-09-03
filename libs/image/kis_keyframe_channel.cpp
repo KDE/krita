@@ -46,12 +46,14 @@ struct KisKeyframeChannel::Private
         node = newParentNode;
         id = rhs.id;
         defaultBounds = rhs.defaultBounds;
+        haveBrokenFrameTimeBug = rhs.haveBrokenFrameTimeBug;
     }
 
     KeyframesMap keys;
     KisNodeWSP node;
     KoID id;
     KisDefaultBoundsBaseSP defaultBounds;
+    bool haveBrokenFrameTimeBug = false;
 };
 
 KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP defaultBounds)
@@ -516,6 +518,7 @@ void KisKeyframeChannel::loadXML(const QDomElement &channelNode)
         if (keyframeNode.nodeName().toUpper() != "KEYFRAME") continue;
 
         KisKeyframeSP keyframe = loadKeyframe(keyframeNode);
+        KIS_SAFE_ASSERT_RECOVER(keyframe) { continue; }
 
         if (keyframeNode.hasAttribute("color-label")) {
             keyframe->setColorLabel(keyframeNode.attribute("color-label").toUInt());
@@ -604,6 +607,33 @@ void KisKeyframeChannel::requestUpdate(const KisTimeRange &range, const QRect &r
         int currentTime = m_d->defaultBounds->currentTime();
         if (range.contains(currentTime)) {
             m_d->node->setDirty(rect);
+        }
+    }
+}
+
+void KisKeyframeChannel::workaroundBrokenFrameTimeBug(int *time)
+{
+    /**
+     * Between Krita 4.1 and 4.4 Krita had a bug which resulted in creating frames
+     * with negative time stamp. The bug has been fixed, but there might be some files
+     * still in the wild.
+     *
+     * TODO: remove this workaround in Krita 5.0, when no such file are left :)
+     */
+
+    if (*time < 0) {
+        qWarning() << "WARNING: Loading a file with negative animation frames!";
+        qWarning() << "         The file has been saved with a buggy version of Krita.";
+        qWarning() << "         All the frames with negative ids will be dropped!";
+        qWarning() << "         " << ppVar(this->id()) << ppVar(*time);
+
+        m_d->haveBrokenFrameTimeBug = true;
+        *time = 0;
+    }
+
+    if (m_d->haveBrokenFrameTimeBug) {
+        while (keyframeAt(*time)) {
+            (*time)++;
         }
     }
 }

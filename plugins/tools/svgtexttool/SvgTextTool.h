@@ -57,7 +57,7 @@ public:
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QWidget *createOptionWidget();
+    virtual QWidget *createOptionWidget() override;
 
     KoSelection *koSelection() const;
     KoSvgTextShape *selectedShape() const;

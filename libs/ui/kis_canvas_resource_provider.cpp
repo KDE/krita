@@ -153,6 +153,16 @@ KisNodeSP KisCanvasResourceProvider::currentNode() const
     return m_view->activeNode();
 }
 
+KoGamutMask *KisCanvasResourceProvider::currentGamutMask() const
+{
+    if (m_resourceManager->hasResource(CurrentGamutMask)) {
+        return m_resourceManager->resource(CurrentGamutMask).value<KoGamutMask*>();
+    }
+    else {
+        return nullptr;
+    }
+}
+
 KisPaintOpPresetSP KisCanvasResourceProvider::currentPreset() const
 {
     KisPaintOpPresetSP preset = m_resourceManager->resource(CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
@@ -354,6 +364,25 @@ void KisCanvasResourceProvider::slotPainting()
     }
 }
 
+void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMask *mask)
+{
+    QVariant v;
+    v.setValue<KoGamutMask*>(mask);
+    m_resourceManager->setResource(CurrentGamutMask, v);
+    emit sigGamutMaskChanged(mask);
+}
+
+void KisCanvasResourceProvider::slotGamutMaskUnset()
+{
+    m_resourceManager->clearResource(CurrentGamutMask);
+    emit sigGamutMaskUnset();
+}
+
+void KisCanvasResourceProvider::slotGamutMaskPreviewUpdate()
+{
+    emit sigGamutMaskPreviewUpdate();
+}
+
 void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
 {
     m_enablefGChange = b;
@@ -484,29 +513,6 @@ qreal KisCanvasResourceProvider::size() const
 {
     return m_resourceManager->resource(Size).toReal();
 }
-
-void KisCanvasResourceProvider::setSelectionAction(int action)
-{
-    m_resourceManager->setResource(SelectionAction, action);
-    emit sigSelectionActionChanged(action);
-}
-
-int KisCanvasResourceProvider::selectionAction()
-{
-    return m_resourceManager->resource(SelectionAction).toInt();
-}
-
-void KisCanvasResourceProvider::setSelectionMode(int mode)
-{
-    m_resourceManager->setResource(SelectionMode, mode);
-    emit sigSelectionModeChanged(mode);
-}
-
-int KisCanvasResourceProvider::selectionMode()
-{
-    return m_resourceManager->resource(SelectionMode).toInt();
-}
-
 
 void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
 {

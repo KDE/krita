@@ -1411,17 +1411,20 @@ void TimelineFramesView::insertOrRemoveMultipleHoldFrames(bool insertion, bool e
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert or Remove Hold Frames"),
                                            i18nc("@label:spinbox", "Enter number of frames"),
-                                           defaultNumberOfFramesToAdd(),
+                                           insertion ?
+                                               m_d->insertKeyframeDialog->defaultTimingOfAddedFrames() :
+                                               m_d->insertKeyframeDialog->defaultNumberOfHoldFramesToRemove(),
                                            1, 10000, 1, &ok);
 
     if (ok) {
         if (insertion) {
-            setDefaultNumberOfFramesToAdd(count);
+            m_d->insertKeyframeDialog->setDefaultTimingOfAddedFrames(count);
             insertOrRemoveHoldFrames(count, entireColumn);
         } else {
-            setDefaultNumberOfFramesToRemove(count);
+            m_d->insertKeyframeDialog->setDefaultNumberOfHoldFramesToRemove(count);
             insertOrRemoveHoldFrames(-count, entireColumn);
         }
+
     }
 }
 
@@ -1480,54 +1483,6 @@ void TimelineFramesView::slotPasteFrames(bool entireColumn)
             cb->clear();
         }
     }
-}
-
-int TimelineFramesView::defaultNumberOfFramesToAdd() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfFramesToAdd", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfFramesToAdd(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfFramesToAdd", value);
-}
-
-int TimelineFramesView::defaultNumberOfColumnsToAdd() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfColumnsToAdd", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfColumnsToAdd(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfColumnsToAdd", value);
-}
-
-int TimelineFramesView::defaultNumberOfFramesToRemove() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfFramesToRemove", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfFramesToRemove(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfFramesToRemove", value);
-}
-
-int TimelineFramesView::defaultNumberOfColumnsToRemove() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfColumnsToRemove", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfColumnsToRemove(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfColumnsToRemove", value);
 }
 
 bool TimelineFramesView::viewportEvent(QEvent *event)

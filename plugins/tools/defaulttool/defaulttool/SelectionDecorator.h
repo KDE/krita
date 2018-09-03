@@ -77,6 +77,8 @@ public:
      */
     void setShowStrokeFillGradientHandles(bool value);
 
+    void setForceShapeOutlines(bool value);
+
 private:
     void paintGradientHandles(KoShape *shape, KoFlake::FillVariant fillVariant, QPainter &painter, const KoViewConverter &converter);
 
@@ -87,6 +89,7 @@ private:
     int m_lineWidth;
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
+    bool m_forceShapeOutlines;
 };
 
 #endif

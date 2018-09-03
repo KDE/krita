@@ -98,6 +98,7 @@ public:
         Q_ASSERT(canvas);
 
         m_widgetHelper.createOptionWidget(canvas, this->toolId());
+        this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
         return m_widgetHelper.optionWidget();
     }
 

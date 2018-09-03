@@ -197,10 +197,11 @@ private:
      * Open walker and stroke job for the testing suite.
      * Please, do not use it in production code.
      */
+    friend class KisTestableUpdaterContext;
     friend class KisSimpleUpdateQueueTest;
     friend class KisStrokesQueueTest;
     friend class KisUpdateSchedulerTest;
-    friend class KisTestableUpdaterContext;
+    friend class KisUpdaterContext;
 
     inline KisBaseRectsWalkerSP walker() const {
         return m_walker;

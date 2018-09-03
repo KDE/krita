@@ -120,6 +120,7 @@ set(kritaui_LIB_SRCS
     kis_node_juggler_compressed.cpp
     kis_node_selection_adapter.cpp
     kis_node_insertion_adapter.cpp
+    KisNodeDisplayModeAdapter.cpp
     kis_node_model.cpp
     kis_node_filter_proxy_model.cpp
     kis_model_index_converter_base.cpp
@@ -140,6 +141,7 @@ set(kritaui_LIB_SRCS
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
+    KisSelectionActionsAdapter.cpp
     kis_statusbar.cc
     kis_zoom_manager.cc
     kis_favorite_resource_manager.cpp

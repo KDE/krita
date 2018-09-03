@@ -135,14 +135,14 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     applicator.end();
 }
 
-void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
+void KisSelectionToolHelper::addSelectionShape(KoShape* shape, SelectionAction action)
 {
     QList<KoShape*> shapes;
     shapes.append(shape);
-    addSelectionShapes(shapes);
+    addSelectionShapes(shapes, action);
 }
 
-void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
+void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, SelectionAction action)
 {
     KisViewManager* view = m_canvas->viewManager();
 
@@ -177,29 +177,89 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         }
     };
 
-    applicator.applyCommand(new ClearPixelSelection(view));
+    if (action == SELECTION_REPLACE || action == SELECTION_DEFAULT) {
+        applicator.applyCommand(new ClearPixelSelection(view));
+    }
 
     struct AddSelectionShape : public KisTransactionBasedCommand {
-        AddSelectionShape(KisViewManager *view, KoShape* shape) : m_view(view),
-                                                            m_shape(shape) {}
+        AddSelectionShape(KisViewManager *view, KoShape* shape, SelectionAction action)
+            : m_view(view),
+              m_shape(shape),
+              m_action(action) {}
+
         KisViewManager *m_view;
         KoShape* m_shape;
+        SelectionAction m_action;
 
         KUndo2Command* paint() override {
-            /**
-             * Mark a shape that it belongs to a shape selection
-             */
-            if(!m_shape->userData()) {
-                m_shape->setUserData(new KisShapeSelectionMarker);
+            KUndo2Command *resultCommand = 0;
+
+
+            KisSelectionSP selection = m_view->selection();
+            if (selection) {
+                KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+
+                if (shapeSelection) {
+                    QList<KoShape*> existingShapes = shapeSelection->shapes();
+
+                    if (existingShapes.size() == 1) {
+                        KoShape *currentShape = existingShapes.first();
+                        QPainterPath path1 = currentShape->absoluteTransformation(0).map(currentShape->outline());
+                        QPainterPath path2 = m_shape->absoluteTransformation(0).map(m_shape->outline());
+
+                        QPainterPath path = path2;
+
+                        switch (m_action) {
+                        case SELECTION_DEFAULT:
+                        case SELECTION_REPLACE:
+                            path = path2;
+                            break;
+
+                        case SELECTION_INTERSECT:
+                            path = path1 & path2;
+                            break;
+
+                        case SELECTION_ADD:
+                            path = path1 | path2;
+                            break;
+
+                        case SELECTION_SUBTRACT:
+                            path = path1 - path2;
+                            break;
+                        }
+
+                        KoShape *newShape = KoPathShape::createShapeFromPainterPath(path);
+                        newShape->setUserData(new KisShapeSelectionMarker);
+
+                        KUndo2Command *parentCommand = new KUndo2Command();
+
+                        m_view->canvasBase()->shapeController()->removeShape(currentShape, parentCommand);
+                        m_view->canvasBase()->shapeController()->addShape(newShape, 0, parentCommand);
+
+                        resultCommand = parentCommand;
+                    }
+                }
             }
 
-            return m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
+
+            if (!resultCommand) {
+                /**
+                 * Mark a shape that it belongs to a shape selection
+                 */
+                if(!m_shape->userData()) {
+                    m_shape->setUserData(new KisShapeSelectionMarker);
+                }
+
+                resultCommand = m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
+            }
+
+            return resultCommand;
         }
     };
 
     Q_FOREACH (KoShape* shape, shapes) {
         applicator.applyCommand(
-            new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
+            new KisGuiContextCommand(new AddSelectionShape(view, shape, action), view));
     }
     applicator.end();
 }

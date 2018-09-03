@@ -195,7 +195,7 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown alternative array type", 0);
             break;
         }
-        /* Falls through */
+        break;
     }
     default:
         dbgMetaData << type << " " << value;

@@ -1,6 +1,5 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource>
+<RCC>
+    <qresource prefix="/">
         <file>broken-preset.svgz</file>
         <file>dark_addblankframe.svg</file>
         <file>dark_addcolor.svg</file>
@@ -92,34 +91,28 @@
         <file>dark_color-to-alpha.svg</file>
         <file>light_preset-switcher.svg</file>
         <file>dark_preset-switcher.svg</file>
-        
         <file>dark_animation_play.svg</file>
         <file>dark_animation_stop.svg</file>
         <file>dark_dropframe.svg</file>
         <file>dark_droppedframes.svg</file>
-        
         <file>light_animation_play.svg</file>
         <file>light_animation_stop.svg</file>
         <file>light_dropframe.svg</file>
         <file>light_droppedframes.svg</file>
-        
         <file>dark_landscape.svg</file>
         <file>dark_portrait.svg</file>
         <file>light_landscape.svg</file>
         <file>light_portrait.svg</file>
-        
         <file>dark_interpolation_constant.svg</file>
         <file>dark_interpolation_linear.svg</file>
         <file>dark_interpolation_bezier.svg</file>
         <file>dark_interpolation_sharp.svg</file>
         <file>dark_interpolation_smooth.svg</file>
-
         <file>light_interpolation_bezier.svg</file>
         <file>light_interpolation_constant.svg</file>
         <file>light_interpolation_linear.svg</file>
         <file>light_interpolation_sharp.svg</file>
         <file>light_interpolation_smooth.svg</file>
-        
         <file>dark_audio-none.svg</file>
         <file>dark_audio-volume-high.svg</file>
         <file>dark_audio-volume-mute.svg</file>
@@ -136,7 +129,6 @@
         <file>light_zoom-fit.svg</file>
         <file>light_zoom-horizontal.svg</file>
         <file>light_zoom-vertical.svg</file>
-
         <file>dark_showColoring.svg</file>
         <file>dark_showMarks.svg</file>
         <file>dark_showColoringOff.svg</file>
@@ -147,6 +139,17 @@
         <file>light_showColoringOff.svg</file>
         <file>light_showMarksOff.svg</file>
         <file>light_updateColorize.svg</file>
-
+        <file>light_wheel-light.svg</file>
+        <file>light_wheel-rings.svg</file>
+        <file>light_wheel-sectors.svg</file>
+        <file>dark_wheel-light.svg</file>
+        <file>dark_wheel-rings.svg</file>
+        <file>dark_wheel-sectors.svg</file>
+        <file>dark_infinity.svg</file>
+        <file>light_infinity.svg</file>
+        <file>dark_gamut-mask-on.svg</file>
+        <file>dark_gamut-mask-off.svg</file>
+        <file>light_gamut-mask-off.svg</file>
+        <file>light_gamut-mask-on.svg</file>
     </qresource>
 </RCC>

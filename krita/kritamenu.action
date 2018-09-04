@@ -1259,6 +1259,18 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="edit_selection">
+      <icon></icon>
+      <text>Edit Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Edit Selection</toolTip>
+      <iconText>Edit Selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>100</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="convert_shapes_to_vector_selection">
       <icon></icon>
       <text>Convert Shapes to &amp;Vector Selection</text>

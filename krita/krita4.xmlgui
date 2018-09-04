@@ -268,6 +268,8 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="deselect"/>
       <Action name="reselect"/>
       <Action name="invert_selection"/>
+      <Separator/>
+      <Action name="edit_selection"/>
       <Action name="convert_to_vector_selection"/>
       <Action name="convert_to_raster_selection"/>
       <Action name="convert_shapes_to_vector_selection"/>

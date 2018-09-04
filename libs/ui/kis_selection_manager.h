@@ -97,6 +97,7 @@ public Q_SLOTS:
     void fillBackgroundColorOpacity();
     void fillPatternOpacity();
     void reselect();
+    void editSelection();
     void convertToVectorSelection();
     void convertToRasterSelection();
     void convertShapesToVectorSelection();

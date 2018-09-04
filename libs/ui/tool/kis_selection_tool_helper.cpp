@@ -309,6 +309,8 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     KisSelectionSP selection = canvas->viewManager()->selection();
     if (selection && canvas->viewManager()->selectionEditable()) {
+        m_contextMenu->addAction(actionMan->actionByName("edit_selection"));
+
         if (!selection->hasShapeSelection()) {
             m_contextMenu->addAction(actionMan->actionByName("convert_to_vector_selection"));
         } else {

@@ -195,6 +195,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_imageResizeToSelection  = actionManager->createAction("resizeimagetoselection");
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
+    action = actionManager->createAction("edit_selection");
+    connect(action, SIGNAL(triggered()), SLOT(editSelection()));
+
     action = actionManager->createAction("convert_to_vector_selection");
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
@@ -419,6 +422,50 @@ void KisSelectionManager::reselect()
 {
     KisReselectActionFactory factory;
     factory.run(m_view);
+}
+
+
+#include <KoToolManager.h>
+#include <KoInteractionTool.h>
+
+void KisSelectionManager::editSelection()
+{
+    KisSelectionSP selection = m_view->selection();
+    if (!selection) return;
+
+    KisAction *action = m_view->actionManager()->actionByName("show-global-selection-mask");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(action);
+
+    if (!action->isChecked()) {
+        action->setChecked(true);
+        emit action->toggled(true);
+        emit action->triggered(true);
+    }
+
+    KisNodeSP node = selection->parentNode();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+    m_view->nodeManager()->slotNonUiActivatedNode(node);
+
+    if (selection->hasShapeSelection()) {
+        KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(shapeSelection);
+
+        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+
+        QList<KoShape*> shapes = shapeSelection->shapes();
+
+        if (shapes.isEmpty()) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "no shapes");
+            return;
+        }
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            m_view->canvasBase()->selectedShapesProxy()->selection()->select(shape);
+        }
+    } else {
+        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+    }
 }
 
 void KisSelectionManager::convertToVectorSelection()

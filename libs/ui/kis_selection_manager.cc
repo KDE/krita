@@ -198,6 +198,9 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     action = actionManager->createAction("convert_to_vector_selection");
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
 
+    action = actionManager->createAction("convert_to_raster_selection");
+    connect(action, SIGNAL(triggered()), SLOT(convertToRasterSelection()));
+
     action = actionManager->createAction("convert_shapes_to_vector_selection");
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
 
@@ -279,13 +282,22 @@ bool KisSelectionManager::haveShapesInClipboard()
     return paste.hasShapes();
 }
 
-bool KisSelectionManager::havePixelSelectionWithPixels()
+bool KisSelectionManager::haveAnySelectionWithPixels()
 {
     KisSelectionSP selection = m_view->selection();
-    if (selection && selection->hasPixelSelection()) {
-        return !selection->pixelSelection()->selectedRect().isEmpty();
-    }
-    return false;
+    return selection && selection->hasPixelSelection();
+}
+
+bool KisSelectionManager::haveShapeSelectionWithShapes()
+{
+    KisSelectionSP selection = m_view->selection();
+    return selection && selection->hasShapeSelection();
+}
+
+bool KisSelectionManager::haveRasterSelectionWithPixels()
+{
+    KisSelectionSP selection = m_view->selection();
+    return selection && selection->hasPixelSelection() && !selection->hasShapeSelection();
 }
 
 void KisSelectionManager::updateGUI()
@@ -412,6 +424,12 @@ void KisSelectionManager::reselect()
 void KisSelectionManager::convertToVectorSelection()
 {
     KisSelectionToVectorActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::convertToRasterSelection()
+{
+    KisSelectionToRasterActionFactory factory;
     factory.run(m_view);
 }
 

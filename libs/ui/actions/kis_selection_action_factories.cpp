@@ -465,6 +465,40 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
+void KisSelectionToRasterActionFactory::run(KisViewManager *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (!selection->hasShapeSelection()) {
+        view->showFloatingMessage(i18nc("floating message",
+                                        "Selection is already in a raster format "),
+                                  QIcon(), 2000, KisFloatingMessage::Low);
+        return;
+    }
+
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
+
+    struct RasterizeSelection : public KisTransactionBasedCommand {
+        RasterizeSelection(KisSelectionSP sel)
+            : m_sel(sel) {}
+        KisSelectionSP m_sel;
+
+        KUndo2Command* paint() override {
+            // just create an empty transaction: it will rasterize the
+            // selection and emit the necessary signals
+
+            KisTransaction transaction(m_sel->pixelSelection());
+            return transaction.endAndTake();
+        }
+    };
+
+    ap->applyCommand(new RasterizeSelection(selection),
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::EXCLUSIVE);
+
+    endAction(ap, KisOperationConfiguration(id()).toXML());
+}
+
 void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
     const QList<KoShape*> originalShapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();

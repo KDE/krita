@@ -275,7 +275,15 @@ void KisActionManager::updateGUI()
                 flags |= KisAction::SHAPES_SELECTED;
             }
 
-            if (selectionManager->havePixelSelectionWithPixels()) {
+            if (selectionManager->haveAnySelectionWithPixels()) {
+                flags |= KisAction::ANY_SELECTION_WITH_PIXELS;
+            }
+
+            if (selectionManager->haveShapeSelectionWithShapes()) {
+                flags |= KisAction::SHAPE_SELECTION_WITH_SHAPES;
+            }
+
+            if (selectionManager->haveRasterSelectionWithPixels()) {
                 flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
             }
 
@@ -449,8 +457,8 @@ void KisActionManager::dumpActionFlags()
             if (flags & KisAction::SHAPES_SELECTED) {
                 out << "    Shapes selected\n";
             }
-            if (flags & KisAction::PIXEL_SELECTION_WITH_PIXELS) {
-                out << "    Pixel selection with pixels\n";
+            if (flags & KisAction::ANY_SELECTION_WITH_PIXELS) {
+                out << "    Any selection with pixels\n";
             }
             if (flags & KisAction::PIXELS_IN_CLIPBOARD) {
                 out << "    Pixels in clipboard\n";

@@ -296,7 +296,6 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     KisActionManager * actionMan = canvas->viewManager()->actionManager();
 
-
     m_contextMenu->addAction(actionMan->actionByName("deselect"));
     m_contextMenu->addAction(actionMan->actionByName("invert"));
     m_contextMenu->addAction(actionMan->actionByName("select_all"));
@@ -308,16 +307,25 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     m_contextMenu->addSeparator();
 
-    QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));
-    transformMenu->addAction(actionMan->actionByName("selectionscale"));
-    transformMenu->addAction(actionMan->actionByName("growselection"));
-    transformMenu->addAction(actionMan->actionByName("shrinkselection"));
-    transformMenu->addAction(actionMan->actionByName("borderselection"));
-    transformMenu->addAction(actionMan->actionByName("smoothselection"));
-    transformMenu->addAction(actionMan->actionByName("featherselection"));
-    transformMenu->addAction(actionMan->actionByName("stroke_selection"));
+    KisSelectionSP selection = canvas->viewManager()->selection();
+    if (selection && canvas->viewManager()->selectionEditable()) {
+        if (!selection->hasShapeSelection()) {
+            m_contextMenu->addAction(actionMan->actionByName("convert_to_vector_selection"));
+        } else {
+            m_contextMenu->addAction(actionMan->actionByName("convert_to_raster_selection"));
+        }
 
-    m_contextMenu->addSeparator();
+        QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));
+        transformMenu->addAction(actionMan->actionByName("selectionscale"));
+        transformMenu->addAction(actionMan->actionByName("growselection"));
+        transformMenu->addAction(actionMan->actionByName("shrinkselection"));
+        transformMenu->addAction(actionMan->actionByName("borderselection"));
+        transformMenu->addAction(actionMan->actionByName("smoothselection"));
+        transformMenu->addAction(actionMan->actionByName("featherselection"));
+        transformMenu->addAction(actionMan->actionByName("stroke_selection"));
+
+        m_contextMenu->addSeparator();
+    }
 
     m_contextMenu->addAction(actionMan->actionByName("resizeimagetoselection"));
 

@@ -63,6 +63,8 @@ struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
+
+    bool hasUserInteractionRunning() const;
 };
 
 

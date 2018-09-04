@@ -41,6 +41,7 @@ class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 
 public:
     __KisToolSelectEllipticalLocal(KoCanvasBase *canvas);
+    bool hasUserInteractionRunning() const;
 protected:
     virtual SelectionMode selectionMode() const = 0;
     virtual SelectionAction selectionAction() const = 0;

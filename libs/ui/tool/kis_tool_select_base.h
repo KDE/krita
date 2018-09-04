@@ -192,12 +192,14 @@ public:
     }
 
     void mouseMoveEvent(KoPointerEvent *event) {
-        const QPointF pos = this->convertToPixelCoord(event->point);
-        KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos);
-        if (selectionMask) {
-            this->useCursor(KisCursor::moveCursor());
-        } else {
-            this->resetCursorStyle();
+        if (!this->hasUserInteractionRunning()) {
+            const QPointF pos = this->convertToPixelCoord(event->point);
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos);
+            if (selectionMask) {
+                this->useCursor(KisCursor::moveCursor());
+            } else {
+                this->resetCursorStyle();
+            }
         }
 
         BaseClass::mouseMoveEvent(event);
@@ -206,19 +208,20 @@ public:
 
     virtual void beginPrimaryAction(KoPointerEvent *event)
     {
-        const QPointF pos = this->convertToPixelCoord(event->point);
-        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+        if (!this->hasUserInteractionRunning()) {
+            const QPointF pos = this->convertToPixelCoord(event->point);
+            KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
 
-        KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos);
-        if (selectionMask) {
-            KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
-            m_moveStrokeId = this->image()->startStroke(strategy);
-            m_dragStartPos = pos;
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos);
+            if (selectionMask) {
+                KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
+                m_moveStrokeId = this->image()->startStroke(strategy);
+                m_dragStartPos = pos;
 
-            return;
+                return;
+            }
         }
-
 
         keysAtStart = event->modifiers();
 
@@ -278,6 +281,10 @@ public:
         }
     }
 
+    bool selectionDragInProgress() const {
+        return m_moveStrokeId;
+    }
+
 protected:
     using BaseClass::canvas;
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
@@ -291,8 +298,32 @@ private:
     KisStrokeId m_moveStrokeId;
 };
 
+struct FakeBaseTool : KisTool
+{
+    FakeBaseTool(KoCanvasBase* canvas)
+        : KisTool(canvas, QCursor())
+    {
+    }
 
-typedef KisToolSelectBase<KisTool> KisToolSelect;
+    FakeBaseTool(KoCanvasBase* canvas, const QString &toolName)
+        : KisTool(canvas, QCursor())
+    {
+        Q_UNUSED(toolName);
+    }
+
+    FakeBaseTool(KoCanvasBase* canvas, const QCursor &cursor)
+        : KisTool(canvas, cursor)
+    {
+    }
+
+    bool hasUserInteractionRunning() const {
+        return false;
+    }
+
+};
+
+
+typedef KisToolSelectBase<FakeBaseTool> KisToolSelect;
 
 
 #endif // KISTOOLSELECTBASE_H

@@ -42,6 +42,11 @@ __KisToolSelectRectangularLocal::__KisToolSelectRectangularLocal(KoCanvasBase * 
         setObjectName("tool_select_rectangular");
 }
 
+bool __KisToolSelectRectangularLocal::hasUserInteractionRunning() const
+{
+    return false;
+}
+
 void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

@@ -173,7 +173,9 @@ public:
         endPrimaryAction(event);
     }
 
-    KisNodeSP locateSelectionMaskUnderCursor(const QPointF &pos) {
+    KisNodeSP locateSelectionMaskUnderCursor(const QPointF &pos, Qt::KeyboardModifiers modifiers) {
+        if (modifiers != Qt::NoModifier) return 0;
+
         KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, 0);
 
@@ -194,7 +196,7 @@ public:
     void mouseMoveEvent(KoPointerEvent *event) {
         if (!this->hasUserInteractionRunning()) {
             const QPointF pos = this->convertToPixelCoord(event->point);
-            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos);
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
             if (selectionMask) {
                 this->useCursor(KisCursor::moveCursor());
             } else {
@@ -213,7 +215,7 @@ public:
             KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
             KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
 
-            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos);
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
             if (selectionMask) {
                 KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
                 m_moveStrokeId = this->image()->startStroke(strategy);

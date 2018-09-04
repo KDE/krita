@@ -159,6 +159,7 @@ void MoveStrokeStrategy::moveAndUpdate(QPoint offset)
         }
 
         if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
+            Q_UNUSED(mask);
             //mask->selection()->notifySelectionChanged();
         }
     }

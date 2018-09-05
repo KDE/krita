@@ -38,6 +38,10 @@ class __KisToolSelectRectangularLocal : public KisToolRectangleBase
 public:
     __KisToolSelectRectangularLocal(KoCanvasBase * canvas);
 
+    bool hasUserInteractionRunning() const
+;
+
+
 protected:
     virtual SelectionMode selectionMode() const = 0;
     virtual SelectionAction selectionAction() const = 0;

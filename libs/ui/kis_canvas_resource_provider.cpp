@@ -514,29 +514,6 @@ qreal KisCanvasResourceProvider::size() const
     return m_resourceManager->resource(Size).toReal();
 }
 
-void KisCanvasResourceProvider::setSelectionAction(int action)
-{
-    m_resourceManager->setResource(SelectionAction, action);
-    emit sigSelectionActionChanged(action);
-}
-
-int KisCanvasResourceProvider::selectionAction()
-{
-    return m_resourceManager->resource(SelectionAction).toInt();
-}
-
-void KisCanvasResourceProvider::setSelectionMode(int mode)
-{
-    m_resourceManager->setResource(SelectionMode, mode);
-    emit sigSelectionModeChanged(mode);
-}
-
-int KisCanvasResourceProvider::selectionMode()
-{
-    return m_resourceManager->resource(SelectionMode).toInt();
-}
-
-
 void KisCanvasResourceProvider::setGlobalAlphaLock(bool lock)
 {
     m_resourceManager->setResource(GlobalAlphaLock, lock);

@@ -102,6 +102,18 @@ void KisDelegatedSelectPathWrapper::endPrimaryAction(KoPointerEvent *event) {
     mouseReleaseEvent(event);
 }
 
+bool KisDelegatedSelectPathWrapper::hasUserInteractionRunning() const
+{
+    /**
+     * KoCreatePathTool doesn't support moving interventions from KisToolselectBase,
+     * because it doesn't use begin/continue/endPrimaryAction and uses direct event
+     * handling instead.
+     *
+     * TODO: refactor KoCreatePathTool and port it to action infrastructure
+     */
+    return true;
+}
+
 
 __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
@@ -157,7 +169,7 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
         delete pathShape;
     } else {
-        helper.addSelectionShape(pathShape);
+        helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
     }
 }
 

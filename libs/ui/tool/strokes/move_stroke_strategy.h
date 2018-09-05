@@ -21,6 +21,7 @@
 
 #include <QHash>
 
+#include "kritaui_export.h"
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_types.h"
 #include "kis_lod_transform.h"
@@ -30,7 +31,7 @@ class KisUpdatesFacade;
 class KisPostExecutionUndoAdapter;
 
 
-class MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class KRITAUI_EXPORT MoveStrokeStrategy : public KisStrokeStrategyUndoCommandBased
 {
 public:
     class Data : public KisStrokeJobData {

@@ -33,7 +33,7 @@
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
  */
-class KisToolSelectContiguous : public KisToolSelectBase<KisTool>
+class KisToolSelectContiguous : public KisToolSelect
 {
 
     Q_OBJECT

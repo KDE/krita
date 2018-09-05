@@ -665,10 +665,6 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
         node = 0;
     }
 
-    if (node == activeNode()) return;
-
-    slotSomethingActivatedNodeImpl(node);
-
     if (node) {
         QStringList vectorTools = QStringList()
                 << "InteractionTool"
@@ -685,8 +681,10 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 << "KritaFill/KisToolFill"
                 << "KritaFill/KisToolGradient";
 
-        const bool nodeHasVectorAbilities =
-            m_d->view->canvasBase()->localShapeManager();
+
+        KisSelectionMask *selectionMask = dynamic_cast<KisSelectionMask*>(node.data());
+        const bool nodeHasVectorAbilities = node->inherits("KisShapeLayer") ||
+            (selectionMask && selectionMask->selection()->hasShapeSelection());
 
         if (nodeHasVectorAbilities) {
             if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
@@ -699,6 +697,10 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
             }
         }
     }
+
+    if (node == activeNode()) return;
+
+    slotSomethingActivatedNodeImpl(node);
 }
 
 void KisNodeManager::nodesUpdated()

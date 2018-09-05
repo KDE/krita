@@ -51,17 +51,18 @@ Q_SIGNALS:
     void selectionModeChanged(int newMode);
 
 public Q_SLOTS:
+    void slotToolActivatedChanged(bool isActivated);
+
     void slotWidgetActionChanged(int action);
     void slotWidgetModeChanged(int mode);
 
-    void slotGlobalActionChanged(int action);
-    void slotGlobalModeChanged(int mode);
-
 private:
     KisSelectionOptions* m_optionsWidget;
-    KisCanvasResourceProvider *m_resourceProvider;
 
     QString m_windowTitle;
+
+    SelectionMode m_selectionMode;
+    SelectionAction m_selectionAction;
 };
 
 #endif /* __KIS_SELECTION_TOOL_CONFIG_WIDGET_HELPER_H */

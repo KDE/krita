@@ -91,7 +91,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     d->cursor = cursor;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
-    connect(this, SIGNAL(isActiveChanged()), SLOT(resetCursorStyle()));
+    connect(this, SIGNAL(isActiveChanged(bool)), SLOT(resetCursorStyle()));
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
@@ -153,7 +153,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 
     d->m_isActive = true;
-    emit isActiveChanged();
+    emit isActiveChanged(true);
 }
 
 void KisTool::deactivate()
@@ -169,7 +169,7 @@ void KisTool::deactivate()
     }
 
     d->m_isActive = false;
-    emit isActiveChanged();
+    emit isActiveChanged(false);
 
     KoToolBase::deactivate();
 }

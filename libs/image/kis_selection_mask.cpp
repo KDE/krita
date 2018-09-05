@@ -70,7 +70,7 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
     m_d->image = image;
 
     m_d->updatesCompressor =
-            new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
+            new KisThreadSafeSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->moveToThread(image->thread());

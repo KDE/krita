@@ -561,7 +561,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
     painter.scale(rect.width()/2, rect.height()/2);
 
     QPen normalPen = QPen(QBrush(COLOR_NORMAL_OUTLINE), 0.005);
-    QPen selectedPen = QPen(QBrush(COLOR_SELECTED), 0.01);
+    QPen selectedPen = QPen(QBrush(COLOR_LIGHT), 0.01);
 
     painter.setPen(normalPen);
 
@@ -672,7 +672,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
         int y = rect.y() + int(rectSize * fgColorValue);
         painter.setPen(QPen(QBrush(COLOR_LIGHT), penSize));
         painter.drawLine(rect.left(), y, rect.right(), y);
-        painter.setPen(QPen(QBrush(COLOR_DARK), penSize));
+        painter.setPen(QPen(QBrush(COLOR_MIDDLE_GRAY), penSize));
         painter.drawLine(rect.left(), y+1.5*penSize, rect.right(), y+1.5*penSize);
     }
 
@@ -727,10 +727,10 @@ void KisColorSelector::drawBlip(QPainter& painter, const QRect& rect)
                << "-> coord X:" << fgColorPos.x() << " Y:" << fgColorPos.y();
 #endif
 
-    painter.setPen(QPen(QBrush(COLOR_LIGHT), 0.01));
+    painter.setPen(QPen(QBrush(COLOR_DARK), 0.01));
     painter.drawEllipse(fgColorPos, 0.05, 0.05);
 
-    painter.setPen(QPen(QBrush(COLOR_DARK), 0.01));
+    painter.setPen(QPen(QBrush(COLOR_LIGHT), 0.01));
     painter.setBrush(m_fgColor.getQColor());
     painter.drawEllipse(fgColorPos, 0.04, 0.04);
 }

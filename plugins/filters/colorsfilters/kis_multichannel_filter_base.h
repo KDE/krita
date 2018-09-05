@@ -40,7 +40,12 @@ class KisMultiChannelFilter : public KisColorTransformationFilter
 public:
     bool needsTransparentPixels(const KisFilterConfigurationSP config, const KoColorSpace *cs) const override;
 
-    static QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs);
+    /**
+     * Get a list of adjustable channels for the color space.
+     * If maxChannels is non-negative, the number of channels is capped to the number. This is useful configurations
+     * from older documents (created in versions which supported fewer channels).
+     */
+    static QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs, int maxChannels = -1);
     static int findChannel(const QVector<VirtualChannelInfo> &virtualChannels, const VirtualChannelInfo::Type &channelType);
 
 protected:

@@ -36,6 +36,7 @@ class KisActionManager;
 class KisView;
 class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
+class KisNodeDisplayModeAdapter;
 class KisNodeJugglerCompressed;
 class KoProperties;
 
@@ -105,6 +106,7 @@ public:
 
     KisNodeSelectionAdapter* nodeSelectionAdapter() const;
     KisNodeInsertionAdapter* nodeInsertionAdapter() const;
+    KisNodeDisplayModeAdapter* nodeDisplayModeAdapter() const;
 
     static bool isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden);
 

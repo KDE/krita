@@ -176,7 +176,7 @@ public:
         }
     }
 
-    virtual QString name(KisStrokeJobData *data) const {
+    virtual QString name(KisStrokeJobData *data) const override {
         const QString baseName = KisNoopDabStrategy::name(data);
 
         KisTestingStrokeJobData *td = dynamic_cast<KisTestingStrokeJobData*>(data);

@@ -566,6 +566,9 @@ public:
     QColor defaultAssistantsColor(bool defaultValue = false) const;
     void setDefaultAssistantsColor(const QColor &color) const;
 
+    bool autoSmoothBezierCurves(bool defaultValue = false) const;
+    void setAutoSmoothBezierCurves(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

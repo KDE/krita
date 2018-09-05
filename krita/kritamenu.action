@@ -1241,8 +1241,32 @@
       <whatsThis></whatsThis>
       <toolTip>Convert to Vector Selection</toolTip>
       <iconText>Convert to Vector Selection</iconText>
-      <activationFlags>10000000000</activationFlags>
+      <activationFlags>100000000000000000</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_to_raster_selection">
+      <icon></icon>
+      <text>&amp;Convert to Raster Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert to Raster Selection</toolTip>
+      <iconText>Convert to Raster Selection</iconText>
+      <activationFlags>10000000000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="edit_selection">
+      <icon></icon>
+      <text>Edit Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Edit Selection</toolTip>
+      <iconText>Edit Selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

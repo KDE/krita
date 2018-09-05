@@ -195,8 +195,14 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
     m_imageResizeToSelection  = actionManager->createAction("resizeimagetoselection");
     connect(m_imageResizeToSelection, SIGNAL(triggered()), this, SLOT(imageResizeToSelection()));
 
+    action = actionManager->createAction("edit_selection");
+    connect(action, SIGNAL(triggered()), SLOT(editSelection()));
+
     action = actionManager->createAction("convert_to_vector_selection");
     connect(action, SIGNAL(triggered()), SLOT(convertToVectorSelection()));
+
+    action = actionManager->createAction("convert_to_raster_selection");
+    connect(action, SIGNAL(triggered()), SLOT(convertToRasterSelection()));
 
     action = actionManager->createAction("convert_shapes_to_vector_selection");
     connect(action, SIGNAL(triggered()), SLOT(convertShapesToVectorSelection()));
@@ -279,13 +285,22 @@ bool KisSelectionManager::haveShapesInClipboard()
     return paste.hasShapes();
 }
 
-bool KisSelectionManager::havePixelSelectionWithPixels()
+bool KisSelectionManager::haveAnySelectionWithPixels()
 {
     KisSelectionSP selection = m_view->selection();
-    if (selection && selection->hasPixelSelection()) {
-        return !selection->pixelSelection()->selectedRect().isEmpty();
-    }
-    return false;
+    return selection && selection->hasPixelSelection();
+}
+
+bool KisSelectionManager::haveShapeSelectionWithShapes()
+{
+    KisSelectionSP selection = m_view->selection();
+    return selection && selection->hasShapeSelection();
+}
+
+bool KisSelectionManager::haveRasterSelectionWithPixels()
+{
+    KisSelectionSP selection = m_view->selection();
+    return selection && selection->hasPixelSelection() && !selection->hasShapeSelection();
 }
 
 void KisSelectionManager::updateGUI()
@@ -409,9 +424,59 @@ void KisSelectionManager::reselect()
     factory.run(m_view);
 }
 
+
+#include <KoToolManager.h>
+#include <KoInteractionTool.h>
+
+void KisSelectionManager::editSelection()
+{
+    KisSelectionSP selection = m_view->selection();
+    if (!selection) return;
+
+    KisAction *action = m_view->actionManager()->actionByName("show-global-selection-mask");
+    KIS_SAFE_ASSERT_RECOVER_RETURN(action);
+
+    if (!action->isChecked()) {
+        action->setChecked(true);
+        emit action->toggled(true);
+        emit action->triggered(true);
+    }
+
+    KisNodeSP node = selection->parentNode();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+    m_view->nodeManager()->slotNonUiActivatedNode(node);
+
+    if (selection->hasShapeSelection()) {
+        KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(shapeSelection);
+
+        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+
+        QList<KoShape*> shapes = shapeSelection->shapes();
+
+        if (shapes.isEmpty()) {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "no shapes");
+            return;
+        }
+
+        Q_FOREACH (KoShape *shape, shapes) {
+            m_view->canvasBase()->selectedShapesProxy()->selection()->select(shape);
+        }
+    } else {
+        KoToolManager::instance()->switchToolRequested("KisToolTransform");
+    }
+}
+
 void KisSelectionManager::convertToVectorSelection()
 {
     KisSelectionToVectorActionFactory factory;
+    factory.run(m_view);
+}
+
+void KisSelectionManager::convertToRasterSelection()
+{
+    KisSelectionToRasterActionFactory factory;
     factory.run(m_view);
 }
 

@@ -72,6 +72,7 @@
 #include "kis_node_selection_adapter.h"
 #include "kis_node_insertion_adapter.h"
 #include "kis_node_juggler_compressed.h"
+#include "KisNodeDisplayModeAdapter.h"
 #include "kis_clipboard.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_mimedata.h"
@@ -95,6 +96,7 @@ struct KisNodeManager::Private {
         , commandsAdapter(v)
         , nodeSelectionAdapter(new KisNodeSelectionAdapter(q))
         , nodeInsertionAdapter(new KisNodeInsertionAdapter(q))
+        , nodeDisplayModeAdapter(new KisNodeDisplayModeAdapter())
     {
     }
 
@@ -106,6 +108,7 @@ struct KisNodeManager::Private {
     KisNodeCommandsAdapter commandsAdapter;
     QScopedPointer<KisNodeSelectionAdapter> nodeSelectionAdapter;
     QScopedPointer<KisNodeInsertionAdapter> nodeInsertionAdapter;
+    QScopedPointer<KisNodeDisplayModeAdapter> nodeDisplayModeAdapter;
 
     KisAction *showInTimeline;
 
@@ -612,6 +615,14 @@ void KisNodeManager::convertNode(const QString &nodeType)
 
 void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)
 {
+    KisDummiesFacadeBase *dummiesFacade = dynamic_cast<KisDummiesFacadeBase*>(m_d->imageView->document()->shapeController());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(dummiesFacade);
+
+    const bool nodeVisible = !isNodeHidden(node, !m_d->nodeDisplayModeAdapter->showGlobalSelectionMask());
+    if (!nodeVisible) {
+        return;
+    }
+
     KIS_ASSERT_RECOVER_RETURN(node != activeNode());
     if (m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
@@ -654,10 +665,6 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
         node = 0;
     }
 
-    if (node == activeNode()) return;
-
-    slotSomethingActivatedNodeImpl(node);
-
     if (node) {
         QStringList vectorTools = QStringList()
                 << "InteractionTool"
@@ -674,7 +681,12 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 << "KritaFill/KisToolFill"
                 << "KritaFill/KisToolGradient";
 
-        if (node->inherits("KisShapeLayer")) {
+
+        KisSelectionMask *selectionMask = dynamic_cast<KisSelectionMask*>(node.data());
+        const bool nodeHasVectorAbilities = node->inherits("KisShapeLayer") ||
+            (selectionMask && selectionMask->selection()->hasShapeSelection());
+
+        if (nodeHasVectorAbilities) {
             if (pixelTools.contains(KoToolManager::instance()->activeToolId())) {
                 KoToolManager::instance()->switchToolRequested("InteractionTool");
             }
@@ -685,6 +697,10 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
             }
         }
     }
+
+    if (node == activeNode()) return;
+
+    slotSomethingActivatedNodeImpl(node);
 }
 
 void KisNodeManager::nodesUpdated()
@@ -783,6 +799,11 @@ KisNodeSelectionAdapter* KisNodeManager::nodeSelectionAdapter() const
 KisNodeInsertionAdapter* KisNodeManager::nodeInsertionAdapter() const
 {
     return m_d->nodeInsertionAdapter.data();
+}
+
+KisNodeDisplayModeAdapter *KisNodeManager::nodeDisplayModeAdapter() const
+{
+    return m_d->nodeDisplayModeAdapter.data();
 }
 
 bool KisNodeManager::isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden)

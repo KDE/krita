@@ -30,7 +30,7 @@ class KoShape;
 class KRITAUI_EXPORT KisShapeToolHelper
 {
 public:
-    static KoShape* createRectangleShape(const QRectF& rect);
+    static KoShape* createRectangleShape(const QRectF& rect, qreal roundCornersX, qreal roundCornersY);
 
     static KoShape* createEllipseShape(const QRectF& rect);
 

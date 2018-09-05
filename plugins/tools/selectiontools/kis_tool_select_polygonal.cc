@@ -83,7 +83,7 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
         path->close();
         path->normalize();
 
-        helper.addSelectionShape(path);
+        helper.addSelectionShape(path, selectionAction());
     }
 }
 

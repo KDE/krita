@@ -41,12 +41,13 @@ class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 
 public:
     __KisToolSelectEllipticalLocal(KoCanvasBase *canvas);
+    bool hasUserInteractionRunning() const;
 protected:
     virtual SelectionMode selectionMode() const = 0;
     virtual SelectionAction selectionAction() const = 0;
     virtual bool antiAliasSelection() const = 0;
 private:
-    void finishRect(const QRectF &rect) override;
+    void finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY) override;
 
 
 

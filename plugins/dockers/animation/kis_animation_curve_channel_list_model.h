@@ -26,6 +26,7 @@
 class KisAnimationCurvesModel;
 class KisDummiesFacadeBase;
 class KisKeyframeChannel;
+class KisNodeDummy;
 
 class KisAnimationCurveChannelListModel : public QAbstractItemModel
 {
@@ -53,6 +54,9 @@ public Q_SLOTS:
     void selectedNodesChanged(const KisNodeList &nodes);
     void clear();
     void keyframeChannelAddedToNode(KisKeyframeChannel *channel);
+
+private Q_SLOTS:
+    void slotNotifyDummyRemoved(KisNodeDummy *dummy);
 
 private:
     struct Private;

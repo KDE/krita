@@ -30,6 +30,9 @@
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
 #include "kis_selection_modifier_mapper.h"
+#include "strokes/move_stroke_strategy.h"
+#include "kis_image.h"
+#include "kis_cursor.h"
 
 /**
  * This is a basic template to create selection tools from basic path based drawing tools.
@@ -98,6 +101,7 @@ public:
         Q_ASSERT(canvas);
 
         m_widgetHelper.createOptionWidget(canvas, this->toolId());
+        this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
         return m_widgetHelper.optionWidget();
     }
 
@@ -169,8 +173,58 @@ public:
         endPrimaryAction(event);
     }
 
+    KisNodeSP locateSelectionMaskUnderCursor(const QPointF &pos, Qt::KeyboardModifiers modifiers) {
+        if (modifiers != Qt::NoModifier) return 0;
+
+        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas, 0);
+
+        KisSelectionSP selection = canvas->viewManager()->selection();
+        if (selection &&
+            selection->outlineCacheValid() &&
+            selection->outlineCache().contains(pos)) {
+
+            KisNodeSP parent = selection->parentNode();
+            if (parent && parent->isEditable()) {
+                return parent;
+            }
+        }
+
+        return 0;
+    }
+
+    void mouseMoveEvent(KoPointerEvent *event) {
+        if (!this->hasUserInteractionRunning()) {
+            const QPointF pos = this->convertToPixelCoord(event->point);
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
+            if (selectionMask) {
+                this->useCursor(KisCursor::moveCursor());
+            } else {
+                this->resetCursorStyle();
+            }
+        }
+
+        BaseClass::mouseMoveEvent(event);
+    }
+
+
     virtual void beginPrimaryAction(KoPointerEvent *event)
     {
+        if (!this->hasUserInteractionRunning()) {
+            const QPointF pos = this->convertToPixelCoord(event->point);
+            KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
+            if (selectionMask) {
+                KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
+                m_moveStrokeId = this->image()->startStroke(strategy);
+                m_dragStartPos = pos;
+
+                return;
+            }
+        }
+
         keysAtStart = event->modifiers();
 
         setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
@@ -182,6 +236,15 @@ public:
 
     virtual void continuePrimaryAction(KoPointerEvent *event)
     {
+        if (m_moveStrokeId) {
+            const QPointF pos = this->convertToPixelCoord(event->point);
+            const QPoint offset((pos - m_dragStartPos).toPoint());
+
+            this->image()->addJob(m_moveStrokeId, new MoveStrokeStrategy::Data(offset));
+            return;
+        }
+
+
         //If modifier keys have changed, tell the base tool it can start capturing modifiers
         if ((keysAtStart != event->modifiers()) && !BaseClass::listeningToModifiers()) {
             BaseClass::listenToModifiers(true);
@@ -197,6 +260,14 @@ public:
 
     void endPrimaryAction(KoPointerEvent *event)
     {
+        if (m_moveStrokeId) {
+            this->image()->endStroke(m_moveStrokeId);
+
+            m_moveStrokeId.clear();
+            return;
+        }
+
+
         keysAtStart = Qt::NoModifier; //reset this with each action
         BaseClass::endPrimaryAction(event);
     }
@@ -212,6 +283,10 @@ public:
         }
     }
 
+    bool selectionDragInProgress() const {
+        return m_moveStrokeId;
+    }
+
 protected:
     using BaseClass::canvas;
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
@@ -221,10 +296,36 @@ protected:
 private:
     Qt::KeyboardModifiers keysAtStart;
 
+    QPointF m_dragStartPos;
+    KisStrokeId m_moveStrokeId;
+};
+
+struct FakeBaseTool : KisTool
+{
+    FakeBaseTool(KoCanvasBase* canvas)
+        : KisTool(canvas, QCursor())
+    {
+    }
+
+    FakeBaseTool(KoCanvasBase* canvas, const QString &toolName)
+        : KisTool(canvas, QCursor())
+    {
+        Q_UNUSED(toolName);
+    }
+
+    FakeBaseTool(KoCanvasBase* canvas, const QCursor &cursor)
+        : KisTool(canvas, cursor)
+    {
+    }
+
+    bool hasUserInteractionRunning() const {
+        return false;
+    }
+
 };
 
 
-typedef KisToolSelectBase<KisTool> KisToolSelect;
+typedef KisToolSelectBase<FakeBaseTool> KisToolSelect;
 
 
 #endif // KISTOOLSELECTBASE_H

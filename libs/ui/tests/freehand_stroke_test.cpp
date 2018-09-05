@@ -128,7 +128,6 @@ protected:
     }
 
 private:
-    KisFreehandStrokeInfo *m_strokeInfo;
     bool m_useLod;
     bool m_flipLineDirection;
     QScopedPointer<QColor> m_paintColor;

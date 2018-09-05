@@ -54,8 +54,6 @@ public:
 
     /** RAW decoding Interpolation methods
      *
-     * NOTE: from original dcraw demosaic
-     * 
      *  Bilinear: use high-speed but low-quality bilinear
      *            interpolation (default - for slow computer). In this method,
      *            the red value of a non-red pixel is computed as the average of
@@ -71,37 +69,38 @@ public:
      *  AHD:      use Adaptive Homogeneity-Directed interpolation.
      *            This method selects the direction of interpolation so as to
      *            maximize a homogeneity metric, thus typically minimizing color artifacts.
-     * 
-     * NOTE: from GPL2 demosaic pack.
-     * 
      *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
+     * 
+     * NOTE: from GPL2/GPL3 demosaic packs - will not work with libraw>=0.19
+     * 
      *  PL_AHD:   modified AHD interpolation (see http://sites.google.com/site/demosaicalgorithms/modified-dcraw
      *            for details).
      *  AFD:      demosaicing through 5 pass median filter from PerfectRaw project.
      *  VCD:      VCD interpolation.
      *  VCD_AHD:  mixed demosaicing between VCD and AHD.
      *  LMMSE:    LMMSE interpolation from PerfectRaw.
-     * 
-     * NOTE: from GPL3 demosaic pack.
-     * 
      *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee project.
+     *
+     * NOTE: for libraw>=0.19 only
+     * 
+     *  DHT:      DHT interpolation.
+     *  AAHD:     Enhanced Adaptative AHD interpolation.
      */
     enum DecodingQuality
     {
-        // from original dcraw demosaic
         BILINEAR = 0,
         VNG      = 1,
         PPG      = 2,
         AHD      = 3,
-        // Extended demosaicing method from GPL2 demosaic pack
         DCB      = 4,
         PL_AHD   = 5,
         AFD      = 6,
         VCD      = 7,
         VCD_AHD  = 8,
         LMMSE    = 9,
-        // Extended demosaicing methods from GPL3 demosaic pack
-        AMAZE    = 10
+        AMAZE    = 10,
+        DHT      = 11,
+        AAHD     = 12
     };
 
     /** White balances alternatives
@@ -261,6 +260,7 @@ public:
     int NRThreshold;
 
     /** Turn on chromatic aberrations correction
+     *  @deprecated does not work with libraw>=0.19
      */
     bool enableCACorrection;
 
@@ -268,6 +268,7 @@ public:
      *  - caMultiplier[0] = amount of correction on red-green axis.
      *  - caMultiplier[1] = amount of correction on blue-yellow axis.
      *  - Both values set to 0.0 = automatic CA correction.
+     *  @deprecated does not work with libraw>=0.19
      */
     double caMultiplier[2];
 
@@ -334,17 +335,20 @@ public:
     /// For VCD_AHD interpolation.
 
     /** Turn on the EECI refine for VCD Demosaicing.
+     *  @deprecated does not work with libraw>=0.19
      */
     bool eeciRefine;
 
     /** Use edge-sensitive median filtering for artifact supression after VCD demosaicing.
      * 0   : disable (default)
      * 1-10 : median filter passes.
+     * @deprecated does not work with libraw>=0.19
      */
     int esMedPasses;
 
     /** For IMPULSENR Noise reduction. Set the amount of Chrominance impulse denoise.
-        Null value disable NR. Range is between 100 and 1000.
+     *  Null value disable NR. Range is between 100 and 1000.
+     *  @deprecated does not work with libraw>=0.19
      */
     int NRChroThreshold;
 

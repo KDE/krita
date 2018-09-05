@@ -52,9 +52,9 @@
 
 
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-    : KisToolSelectBase<KisTool>(canvas,
-                                 KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                                 i18n("Contiguous Area Selection")),
+    : KisToolSelect(canvas,
+                    KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+                    i18n("Contiguous Area Selection")),
     m_fuzziness(20),
     m_sizemod(0),
     m_feather(0),

@@ -41,8 +41,16 @@ __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *can
     setObjectName("tool_select_elliptical");
 }
 
-void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
+bool __KisToolSelectEllipticalLocal::hasUserInteractionRunning() const
 {
+    return false;
+}
+
+void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY)
+{
+    Q_UNUSED(roundCornersX);
+    Q_UNUSED(roundCornersY);
+
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
 
@@ -72,7 +80,7 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
 
-        helper.addSelectionShape(shape);
+        helper.addSelectionShape(shape, selectionAction());
     }
 }
 

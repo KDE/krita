@@ -26,7 +26,7 @@ import os  # For finding the script location.
 from pathlib import Path  # For reading all the files in a directory.
 import random  # For selecting two random words from a list.
 from PyQt5.QtWidgets import QWidget, QWizard, QWizardPage, QHBoxLayout, QFormLayout, QFileDialog, QLineEdit, QPushButton, QCheckBox, QLabel, QDialog
-from PyQt5.QtCore import QDate, QLocale
+from PyQt5.QtCore import QDate, QLocale, QUuid
 from krita import *
 from . import comics_metadata_dialog
 
@@ -91,9 +91,12 @@ class ComicsProjectSetupWizard():
         self.cmbLanguage.setEntryToCode(str(QLocale.system().name()).split("_")[0])
         self.cmbCountry = comics_metadata_dialog.country_combo_box()
         if QLocale.system() != QLocale.c():
+            self.slot_update_countries()
             self.cmbCountry.setEntryToCode(str(QLocale.system().name()).split("_")[-1])
         else:
+            self.cmbLanguage.setEntryToCode("en")
             self.slot_update_countries()
+            self.cmbCountry.setEntryToCode("US")
         self.cmbLanguage.currentIndexChanged.connect(self.slot_update_countries)
         self.lnProjectDirectory = QLabel(self.projectDirectory)
         self.chkMakeProjectDirectory = QCheckBox()
@@ -171,6 +174,7 @@ class ComicsProjectSetupWizard():
             self.setupDictionary["exportLocation"] = self.exportDirectory
             self.setupDictionary["templateLocation"] = self.templateLocation
             self.setupDictionary["translationLocation"] = self.translationLocation
+            self.setupDictionary["uuid"] = QUuid.createUuid().toString()
 
             # Finally, write the dictionary into the json file.
             self.writeConfig()

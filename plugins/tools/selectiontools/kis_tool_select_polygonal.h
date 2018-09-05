@@ -49,7 +49,6 @@ class KisToolSelectPolygonal : public KisToolSelectBase<__KisToolSelectPolygonal
     Q_OBJECT
 public:
     KisToolSelectPolygonal(KoCanvasBase* canvas);
-    QMenu* popupActionsMenu() override;
     void resetCursorStyle();
 };
 

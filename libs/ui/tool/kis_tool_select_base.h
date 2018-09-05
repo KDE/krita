@@ -36,6 +36,7 @@
 #include "kis_action_manager.h"
 #include "kis_action.h"
 #include "kis_signal_auto_connection.h"
+#include "kis_selection_tool_helper.h"
 
 /**
  * This is a basic template to create selection tools from basic path based drawing tools.
@@ -347,6 +348,14 @@ public:
     bool selectionDragInProgress() const {
         return m_moveStrokeId;
     }
+
+    QMenu* popupActionsMenu() {
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
+
+        return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    }
+
 
 protected:
     using BaseClass::canvas;

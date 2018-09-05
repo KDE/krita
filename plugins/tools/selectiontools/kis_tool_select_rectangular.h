@@ -54,7 +54,6 @@ class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectang
     Q_OBJECT
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
-    QMenu* popupActionsMenu() override;
 
     void resetCursorStyle();
 };

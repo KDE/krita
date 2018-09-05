@@ -90,15 +90,6 @@ KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
 {
 }
 
-QMenu* KisToolSelectElliptical::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}
-
 void KisToolSelectElliptical::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {

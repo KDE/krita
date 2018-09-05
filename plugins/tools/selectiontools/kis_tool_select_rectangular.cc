@@ -107,15 +107,6 @@ KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas):
 {
 }
 
-QMenu* KisToolSelectRectangular::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}
-
 void KisToolSelectRectangular::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {

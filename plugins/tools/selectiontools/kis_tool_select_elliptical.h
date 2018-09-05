@@ -62,7 +62,6 @@ class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
     Q_OBJECT
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
-    QMenu* popupActionsMenu() override;
     void resetCursorStyle();
 };
 

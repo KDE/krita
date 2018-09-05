@@ -48,7 +48,6 @@ public:
 
     void mouseMoveEvent(KoPointerEvent *event) override;
 
-    QMenu* popupActionsMenu() override;
     void resetCursorStyle();
 
 public Q_SLOTS:

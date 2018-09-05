@@ -37,7 +37,6 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter&, const KoViewConverter &) override {}
     QWidget* createOptionWidget() override;
-    QMenu* popupActionsMenu() override;
     void resetCursorStyle();
 
 public Q_SLOTS:

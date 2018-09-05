@@ -235,15 +235,6 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
 
-QMenu* KisToolSelectContiguous::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}
-
 void KisToolSelectContiguous::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {

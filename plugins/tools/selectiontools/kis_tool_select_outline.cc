@@ -263,15 +263,6 @@ void KisToolSelectOutline::deactivate()
     KisTool::deactivate();
 }
 
-QMenu* KisToolSelectOutline::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}
-
 void KisToolSelectOutline::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {

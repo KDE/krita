@@ -172,15 +172,6 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     return selectionWidget;
 }
 
-QMenu* KisToolSelectSimilar::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}
-
 void KisToolSelectSimilar::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {

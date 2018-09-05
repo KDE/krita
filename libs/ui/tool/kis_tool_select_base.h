@@ -33,6 +33,9 @@
 #include "strokes/move_stroke_strategy.h"
 #include "kis_image.h"
 #include "kis_cursor.h"
+#include "kis_action_manager.h"
+#include "kis_action.h"
+#include "kis_signal_auto_connection.h"
 
 /**
  * This is a basic template to create selection tools from basic path based drawing tools.
@@ -77,6 +80,7 @@ public:
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
+        initShortcuts();
     }
 
     KisToolSelectBase(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
@@ -85,6 +89,8 @@ public:
          m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
+        KisSelectionModifierMapper::instance();
+        initShortcuts();
     }
 
     KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
@@ -93,6 +99,57 @@ public:
          m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
+        KisSelectionModifierMapper::instance();
+        initShortcuts();
+    }
+
+    void initShortcuts()
+    {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        KisViewManager* viewManager = kiscanvas->viewManager();
+        KisActionManager *manager = viewManager->actionManager();
+
+        KisAction *action = 0;
+
+        action = manager->createAction("selection_tool_mode_add");
+        this->addAction(action->objectName(), action);
+
+        action = manager->createAction("selection_tool_mode_replace");
+        this->addAction(action->objectName(), action);
+
+        action = manager->createAction("selection_tool_mode_subtract");
+        this->addAction(action->objectName(), action);
+
+        action = manager->createAction("selection_tool_mode_intersect");
+        this->addAction(action->objectName(), action);
+    }
+
+    void activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes)
+    {
+        BaseClass::activate(activation, shapes);
+
+        m_modeConnections.addUniqueConnection(
+            this->action("selection_tool_mode_replace"), SIGNAL(triggered()),
+            &m_widgetHelper, SLOT(slotReplaceModeRequested()));
+
+        m_modeConnections.addUniqueConnection(
+            this->action("selection_tool_mode_add"), SIGNAL(triggered()),
+            &m_widgetHelper, SLOT(slotAddModeRequested()));
+
+        m_modeConnections.addUniqueConnection(
+            this->action("selection_tool_mode_subtract"), SIGNAL(triggered()),
+            &m_widgetHelper, SLOT(slotSubtractModeRequested()));
+
+        m_modeConnections.addUniqueConnection(
+            this->action("selection_tool_mode_intersect"), SIGNAL(triggered()),
+            &m_widgetHelper, SLOT(slotIntersectModeRequested()));
+
+    }
+
+    void deactivate()
+    {
+        BaseClass::deactivate();
+        m_modeConnections.clear();
     }
 
     QWidget* createOptionWidget()
@@ -103,13 +160,6 @@ public:
         m_widgetHelper.createOptionWidget(canvas, this->toolId());
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
         return m_widgetHelper.optionWidget();
-    }
-
-    void keyPressEvent(QKeyEvent *event)
-    {
-        if (!m_widgetHelper.processKeyPressEvent(event)) {
-            BaseClass::keyPressEvent(event);
-        }
     }
 
     SelectionMode selectionMode() const
@@ -298,6 +348,8 @@ private:
 
     QPointF m_dragStartPos;
     KisStrokeId m_moveStrokeId;
+
+    KisSignalAutoConnectionsStore m_modeConnections;
 };
 
 struct FakeBaseTool : KisTool

@@ -92,6 +92,30 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(int mode)
     cfg.writeEntry("selectionMode", mode);
 }
 
+void KisSelectionToolConfigWidgetHelper::slotReplaceModeRequested()
+{
+    m_optionsWidget->setAction(SELECTION_REPLACE);
+    slotWidgetActionChanged(m_optionsWidget->action());
+}
+
+void KisSelectionToolConfigWidgetHelper::slotAddModeRequested()
+{
+    m_optionsWidget->setAction(SELECTION_ADD);
+    slotWidgetActionChanged(m_optionsWidget->action());
+}
+
+void KisSelectionToolConfigWidgetHelper::slotSubtractModeRequested()
+{
+    m_optionsWidget->setAction(SELECTION_SUBTRACT);
+    slotWidgetActionChanged(m_optionsWidget->action());
+}
+
+void KisSelectionToolConfigWidgetHelper::slotIntersectModeRequested()
+{
+    m_optionsWidget->setAction(SELECTION_INTERSECT);
+    slotWidgetActionChanged(m_optionsWidget->action());
+}
+
 void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivated)
 {
     if (!isActivated) return;
@@ -104,33 +128,4 @@ void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivat
     KisSignalsBlocker b(m_optionsWidget);
     m_optionsWidget->setAction(m_selectionAction);
     m_optionsWidget->setMode(m_selectionMode);
-}
-
-
-bool KisSelectionToolConfigWidgetHelper::processKeyPressEvent(QKeyEvent *event)
-{
-    event->accept();
-
-    switch(event->key()) {
-    case Qt::Key_A:
-        slotWidgetActionChanged(SELECTION_ADD);
-        break;
-    case Qt::Key_S:
-        slotWidgetActionChanged(SELECTION_SUBTRACT);
-        break;
-    case Qt::Key_R:
-        slotWidgetActionChanged(SELECTION_REPLACE);
-        break;
-    case Qt::Key_T:
-        slotWidgetActionChanged(SELECTION_INTERSECT);
-        break;
-    default:
-        event->ignore();
-    }
-
-    if (event->isAccepted()) {
-        slotToolActivatedChanged(true);
-    }
-
-    return event->isAccepted();
 }

@@ -566,6 +566,46 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="selection_tool_mode_add">
+      <icon></icon>
+      <text>Selection Mode: Add</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Add</toolTip>
+      <iconText>Selection Mode: Add</iconText>
+      <shortcut>A</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_subtract">
+      <icon></icon>
+      <text>Selection Mode: Subtract</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Subtract</toolTip>
+      <iconText>Selection Mode: Subtract</iconText>
+      <shortcut>S</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_intersect">
+      <icon></icon>
+      <text>Selection Mode: Intersect</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Intersect</toolTip>
+      <iconText>Selection Mode: Intersect</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_replace">
+      <icon></icon>
+      <text>Selection Mode: Replace</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Replace</toolTip>
+      <iconText>Selection Mode: Replace</iconText>
+      <shortcut>R</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="set_weighted_brush_smoothing">
       <icon>smoothing-weighted</icon>
       <text>Brush Smoothing: Weighted</text>

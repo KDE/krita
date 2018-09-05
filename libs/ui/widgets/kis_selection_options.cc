@@ -71,7 +71,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
-
+    connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -96,6 +96,11 @@ void KisSelectionOptions::setMode(int mode) {
 
     button->setChecked(true);
     hideActionsForSelectionMode(mode);
+}
+
+void KisSelectionOptions::setAntiAliasSelection(bool value)
+{
+    m_page->chkAntiAliasing->setChecked(value);
 }
 
 void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)

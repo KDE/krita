@@ -55,6 +55,10 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, 
     connect(m_optionsWidget, &KisSelectionOptions::modeChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged);
 
+    connect(m_optionsWidget, &KisSelectionOptions::antiAliasSelectionChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged);
+
+
     m_optionsWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_optionsWidget->adjustSize();
 }
@@ -72,6 +76,11 @@ SelectionMode KisSelectionToolConfigWidgetHelper::selectionMode() const
 SelectionAction KisSelectionToolConfigWidgetHelper::selectionAction() const
 {
     return m_selectionAction;
+}
+
+bool KisSelectionToolConfigWidgetHelper::antiAliasSelection() const
+{
+    return m_antiAliasSelection;
 }
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(int action)
@@ -92,6 +101,14 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(int mode)
 
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     cfg.writeEntry("selectionMode", mode);
+}
+
+void KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged(bool value)
+{
+    m_antiAliasSelection = value;
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
+    cfg.writeEntry("antiAliasSelection", value);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotReplaceModeRequested()
@@ -125,9 +142,11 @@ void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivat
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     m_selectionAction = (SelectionAction)cfg.readEntry("selectionAction", (int)SELECTION_REPLACE);
     m_selectionMode = (SelectionMode)cfg.readEntry("selectionMode", (int)SHAPE_PROTECTION);
+    m_antiAliasSelection = cfg.readEntry("antiAliasSelection", true);
 
 
     KisSignalsBlocker b(m_optionsWidget);
     m_optionsWidget->setAction(m_selectionAction);
     m_optionsWidget->setMode(m_selectionMode);
+    m_optionsWidget->setAntiAliasSelection(m_antiAliasSelection);
 }

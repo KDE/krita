@@ -198,7 +198,7 @@ public:
 
     bool antiAliasSelection() const
     {
-        return m_widgetHelper.optionWidget()->antiAliasSelection();
+        return m_widgetHelper.antiAliasSelection();
     }
 
     SelectionAction alternateSelectionAction() const

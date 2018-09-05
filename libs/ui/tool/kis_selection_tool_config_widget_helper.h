@@ -42,6 +42,7 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
+    bool antiAliasSelection() const;
     int action() const { return selectionAction(); }
 
     bool processKeyPressEvent(QKeyEvent *event);
@@ -54,6 +55,7 @@ public Q_SLOTS:
 
     void slotWidgetActionChanged(int action);
     void slotWidgetModeChanged(int mode);
+    void slotWidgetAntiAliasChanged(bool value);
 
     void slotReplaceModeRequested();
     void slotAddModeRequested();
@@ -67,6 +69,7 @@ private:
 
     SelectionMode m_selectionMode;
     SelectionAction m_selectionAction;
+    bool m_antiAliasSelection = true;
 };
 
 #endif /* __KIS_SELECTION_TOOL_CONFIG_WIDGET_HELPER_H */

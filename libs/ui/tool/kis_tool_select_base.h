@@ -266,7 +266,9 @@ public:
     }
 
     void mouseMoveEvent(KoPointerEvent *event) {
-        if (!this->hasUserInteractionRunning()) {
+        if (!this->hasUserInteractionRunning() &&
+           (m_moveStrokeId || this->mode() != KisTool::PAINT_MODE)) {
+
             const QPointF pos = this->convertToPixelCoord(event->point);
             KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
             if (selectionMask) {

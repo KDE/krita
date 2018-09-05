@@ -87,8 +87,6 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
                     i18n("Similar Color Selection")),
       m_fuzziness(20)
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectSimilar::setSelectionAction);
 }
 
 void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -172,11 +170,6 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     // load setting from config
     input->setValue(m_configGroup.readEntry("fuzziness", 20));
     return selectionWidget;
-}
-
-void KisToolSelectSimilar::setSelectionAction(int action)
-{
-    changeSelectionAction(action);
 }
 
 QMenu* KisToolSelectSimilar::popupActionsMenu()

@@ -64,8 +64,6 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
                     i18n("Outline Selection")),
       m_continuedMode(false)
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectOutline::setSelectionAction);
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -263,11 +261,6 @@ void KisToolSelectOutline::deactivate()
     m_continuedMode = false;
 
     KisTool::deactivate();
-}
-
-void KisToolSelectOutline::setSelectionAction(int action)
-{
-    changeSelectionAction(action);
 }
 
 QMenu* KisToolSelectOutline::popupActionsMenu()

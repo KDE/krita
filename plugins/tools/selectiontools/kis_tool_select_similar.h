@@ -43,7 +43,6 @@ public:
 public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void slotSetFuzziness(int);
-    void setSelectionAction(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;

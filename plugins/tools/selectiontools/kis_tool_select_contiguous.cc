@@ -61,8 +61,6 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     m_limitToCurrentLayer(false)
 {
     setObjectName("tool_select_contiguous");
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectContiguous::setSelectionAction);
 }
 
 KisToolSelectContiguous::~KisToolSelectContiguous()
@@ -236,13 +234,6 @@ void KisToolSelectContiguous::slotLimitToCurrentLayer(int state)
     m_limitToCurrentLayer = (state == Qt::Checked);
     m_configGroup.writeEntry("limitToCurrentLayer", state);
 }
-
-
-void KisToolSelectContiguous::setSelectionAction(int action)
-{
-    changeSelectionAction(action);
-}
-
 
 QMenu* KisToolSelectContiguous::popupActionsMenu()
 {

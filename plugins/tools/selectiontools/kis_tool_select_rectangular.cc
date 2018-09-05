@@ -105,13 +105,6 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas):
     KisToolSelectBase<__KisToolSelectRectangularLocal>(canvas, i18n("Rectangular Selection"))
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectRectangular::setSelectionAction);
-}
-
-void KisToolSelectRectangular::setSelectionAction(int action)
-{
-    changeSelectionAction(action);
 }
 
 QMenu* KisToolSelectRectangular::popupActionsMenu()

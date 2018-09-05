@@ -48,7 +48,6 @@ public:
 
 Q_SIGNALS:
     void selectionActionChanged(int newAction);
-    void selectionModeChanged(int newMode);
 
 public Q_SLOTS:
     void slotToolActivatedChanged(bool isActivated);

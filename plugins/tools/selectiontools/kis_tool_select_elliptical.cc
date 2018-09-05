@@ -88,14 +88,6 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundC
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
     KisToolSelectEllipticalTemplate(canvas, i18n("Elliptical Selection"))
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectElliptical::setSelectionAction);
-}
-
-
-void KisToolSelectElliptical::setSelectionAction(int action)
-{
-    changeSelectionAction(action);
 }
 
 QMenu* KisToolSelectElliptical::popupActionsMenu()

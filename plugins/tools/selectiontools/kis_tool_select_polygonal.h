@@ -51,9 +51,6 @@ public:
     KisToolSelectPolygonal(KoCanvasBase* canvas);
     QMenu* popupActionsMenu() override;
     void resetCursorStyle();
-
-public Q_SLOTS:
-    void setSelectionAction(int);
 };
 
 

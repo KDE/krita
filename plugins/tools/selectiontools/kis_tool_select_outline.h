@@ -53,7 +53,6 @@ public:
 
 public Q_SLOTS:
     void deactivate() override;
-    void setSelectionAction(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;

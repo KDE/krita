@@ -91,15 +91,7 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
 KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
     KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectPolygonal::setSelectionAction);
 }
-
-void KisToolSelectPolygonal::setSelectionAction(int action)
-{
-    changeSelectionAction(action);
-}
-
 
 QMenu* KisToolSelectPolygonal::popupActionsMenu()
 {

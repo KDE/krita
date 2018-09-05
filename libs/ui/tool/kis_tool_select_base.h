@@ -76,7 +76,6 @@ public:
     KisToolSelectBase(KoCanvasBase* canvas, const QString toolName)
         :BaseClass(canvas),
          m_widgetHelper(toolName),
-         m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
@@ -86,7 +85,6 @@ public:
     KisToolSelectBase(KoCanvasBase* canvas, const QCursor cursor, const QString toolName)
         :BaseClass(canvas, cursor),
          m_widgetHelper(toolName),
-         m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
@@ -96,7 +94,6 @@ public:
     KisToolSelectBase(KoCanvasBase* canvas, QCursor cursor, QString toolName, KisTool *delegateTool)
         :BaseClass(canvas, cursor, delegateTool),
          m_widgetHelper(toolName),
-         m_selectionAction(SELECTION_DEFAULT),
          m_selectionActionAlternate(SELECTION_DEFAULT)
     {
         KisSelectionModifierMapper::instance();
@@ -347,17 +344,6 @@ public:
         BaseClass::endPrimaryAction(event);
     }
 
-    void changeSelectionAction(int newSelectionAction)
-    {
-        // Simple sanity check
-        if(newSelectionAction >= SELECTION_REPLACE &&
-           newSelectionAction <= SELECTION_INTERSECT &&
-           m_selectionAction != newSelectionAction)
-        {
-            m_selectionAction = (SelectionAction)newSelectionAction;
-        }
-    }
-
     bool selectionDragInProgress() const {
         return m_moveStrokeId;
     }
@@ -365,7 +351,6 @@ public:
 protected:
     using BaseClass::canvas;
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
-    SelectionAction m_selectionAction;
     SelectionAction m_selectionActionAlternate;
 
 private:

@@ -60,7 +60,6 @@ public Q_SLOTS:
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
     virtual void slotLimitToCurrentLayer(int);
-    void setSelectionAction(int);
     //virtual bool antiAliasSelection();
 
 protected:

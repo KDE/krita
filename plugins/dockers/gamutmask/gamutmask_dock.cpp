@@ -135,10 +135,20 @@ void GamutMaskDock::slotGamutMaskEdit()
     openMaskEditor();
 }
 
-void GamutMaskDock::openMaskEditor()
+bool GamutMaskDock::openMaskEditor()
 {
     if (!m_selectedMask) {
-        return;
+        return false;
+    }
+
+    // find the template resource first, so we can abort the action early on
+    QString maskTemplateFile = KoResourcePaths::findResource("ko_gamutmasks", "GamutMaskTemplate.kra");
+    if (maskTemplateFile.isEmpty() || maskTemplateFile.isNull() || !QFile::exists(maskTemplateFile)) {
+        dbgPlugins << "GamutMaskDock::openMaskEditor(): maskTemplateFile (" << maskTemplateFile << ") was not found on the system";
+        getUserFeedback(i18n("Could not open gamut mask for editing."),
+                        i18n("The editor template was not found."),
+                        QMessageBox::Ok, QMessageBox::Ok, QMessageBox::Critical);
+        return false;
     }
 
     m_dockerUI->maskPropertiesBox->setVisible(true);
@@ -148,9 +158,6 @@ void GamutMaskDock::openMaskEditor()
 
     m_dockerUI->maskTitleEdit->setText(m_selectedMask->title());
     m_dockerUI->maskDescriptionEdit->setPlainText(m_selectedMask->description());
-
-    // open gamut mask template in the application
-    QString maskTemplateFile = KoResourcePaths::findResource("data", "gamutmasks/GamutMaskTemplate.kra");
 
     m_maskDocument = KisPart::instance()->createDocument();
     KisPart::instance()->addDocument(m_maskDocument);
@@ -198,6 +205,8 @@ void GamutMaskDock::openMaskEditor()
 
     connect(m_view->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
     connect(m_maskDocument, SIGNAL(completed()), this, SLOT(slotDocumentSaved()));
+
+    return true;
 }
 
 void GamutMaskDock::cancelMaskEdit()
@@ -260,14 +269,14 @@ bool GamutMaskDock::saveSelectedMaskResource()
             m_selectedMask->save();
             maskSaved = true;
         } else {
-            getUserFeedback(i18n("<p><b>Saving of gamut mask '%1' was aborted.</b></p>"
-                                 "<p>The mask template is invalid.</p>"
+            getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->title()),
+                            i18n("<p>The mask template is invalid.</p>"
                                  "<p>Please check that:"
                                  "<ul>"
                                  "<li>your template contains a vector layer named 'maskShapesLayer'</li>"
                                  "<li>there are one or more vector shapes on the 'maskShapesLayer'</li>"
                                  "</ul></p>"
-                                 , m_selectedMask->title()),
+                                 ),
                             QMessageBox::Ok, QMessageBox::Ok);
         }
     }
@@ -282,12 +291,18 @@ void GamutMaskDock::deleteMask()
     m_selectedMask = nullptr;
 }
 
-int GamutMaskDock::getUserFeedback(QString message, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton)
+int GamutMaskDock::getUserFeedback(QString text, QString informativeText,
+                                   QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton,
+                                   QMessageBox::Icon severity)
 {
-    int res = QMessageBox::warning(this,
-                                   i18nc("@title:window", "Krita"),
-                                   message,
-                                   buttons, defaultButton);
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
+    msgBox.setText(QString("<p><b>%1</b></p>").arg(text));
+    msgBox.setInformativeText(informativeText);
+    msgBox.setStandardButtons(buttons);
+    msgBox.setDefaultButton(defaultButton);
+    msgBox.setIcon(severity);
+    int res = msgBox.exec();
 
     return res;
 }
@@ -297,9 +312,9 @@ int GamutMaskDock::saveOrCancel(QMessageBox::StandardButton defaultAction)
     int response = 0;
 
     if (m_maskDocument->isModified()) {
-        response = getUserFeedback(i18n("<p>Gamut mask <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>"
-                                       , m_selectedMask->title()),
-                                  QMessageBox::Cancel | QMessageBox::Close | QMessageBox::Save, defaultAction);
+        response = getUserFeedback(i18n("Gamut mask <b>'%1'</b> has been modified.", m_selectedMask->title()),
+                                   i18n("Do you want to save it?"),
+                                   QMessageBox::Cancel | QMessageBox::Close | QMessageBox::Save, defaultAction);
 
     } else if (m_templatePrevSaved && defaultAction != QMessageBox::Close) {
         response = QMessageBox::Save;
@@ -335,7 +350,10 @@ KoGamutMask *GamutMaskDock::createMaskResource(KoGamutMask* sourceMask, QString 
         newMask->setImage(sourceMask->image());
     } else {
         newMask = new KoGamutMask();
-        QString defaultPreviewPath = KoResourcePaths::findResource("data", "gamutmasks/empty_mask_preview.png");
+
+        QString defaultPreviewPath = KoResourcePaths::findResource("ko_gamutmasks", "empty_mask_preview.png");
+        KIS_SAFE_ASSERT_RECOVER(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
+
         newMask->setImage(QImage(defaultPreviewPath, "PNG"));
     }
 
@@ -535,7 +553,11 @@ void GamutMaskDock::slotGamutMaskCreateNew()
 {
     KoGamutMask* newMask = createMaskResource(nullptr, "new mask");
     selectMask(newMask);
-    openMaskEditor();
+
+    bool editorOpened = openMaskEditor();
+    if (!editorOpened) {
+        deleteMask();
+    }
 }
 
 void GamutMaskDock::slotGamutMaskDuplicate()
@@ -546,7 +568,11 @@ void GamutMaskDock::slotGamutMaskDuplicate()
 
     KoGamutMask* newMask = createMaskResource(m_selectedMask, m_selectedMask->title());
     selectMask(newMask);
-    openMaskEditor();
+
+    bool editorOpened = openMaskEditor();
+    if (!editorOpened) {
+        deleteMask();
+    }
 }
 
 void GamutMaskDock::slotGamutMaskDelete()

@@ -71,7 +71,7 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 
 void KisToolSelectContiguous::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(toolActivation, shapes);
+    KisToolSelect::activate(toolActivation, shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 

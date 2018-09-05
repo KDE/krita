@@ -128,5 +128,9 @@ bool KisSelectionToolConfigWidgetHelper::processKeyPressEvent(QKeyEvent *event)
         event->ignore();
     }
 
+    if (event->isAccepted()) {
+        slotToolActivatedChanged(true);
+    }
+
     return event->isAccepted();
 }

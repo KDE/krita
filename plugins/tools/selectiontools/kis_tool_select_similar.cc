@@ -187,3 +187,14 @@ QMenu* KisToolSelectSimilar::popupActionsMenu()
 
     return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
 }
+
+void KisToolSelectSimilar::resetCursorStyle()
+{
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_similar_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_similar_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelect::resetCursorStyle();
+    }
+}

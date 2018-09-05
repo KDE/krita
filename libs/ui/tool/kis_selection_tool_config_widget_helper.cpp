@@ -81,6 +81,8 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(int action)
 
         KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
         cfg.writeEntry("selectionAction", action);
+
+        emit selectionActionChanged(action);
     }
 }
 

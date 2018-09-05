@@ -178,6 +178,7 @@ public:
 
         m_widgetHelper.createOptionWidget(canvas, this->toolId());
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
+        this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
 

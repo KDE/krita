@@ -38,8 +38,9 @@ public:
     void paint(QPainter&, const KoViewConverter &) override {}
     QWidget* createOptionWidget() override;
     QMenu* popupActionsMenu() override;
+    void resetCursorStyle();
 
-    public Q_SLOTS:
+public Q_SLOTS:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void slotSetFuzziness(int);
     void setSelectionAction(int);

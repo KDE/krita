@@ -48,6 +48,7 @@ public:
     void beginPrimaryAction(KoPointerEvent *event) override;
 
     QMenu* popupActionsMenu() override;
+    void resetCursorStyle();
 
 protected:
 

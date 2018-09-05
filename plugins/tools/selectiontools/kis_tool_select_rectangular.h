@@ -38,9 +38,7 @@ class __KisToolSelectRectangularLocal : public KisToolRectangleBase
 public:
     __KisToolSelectRectangularLocal(KoCanvasBase * canvas);
 
-    bool hasUserInteractionRunning() const
-;
-
+    bool hasUserInteractionRunning() const;
 
 protected:
     virtual SelectionMode selectionMode() const = 0;
@@ -57,6 +55,8 @@ class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectang
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
     QMenu* popupActionsMenu() override;
+
+    void resetCursorStyle();
 
 public Q_SLOTS:
     void setSelectionAction(int);

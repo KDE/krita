@@ -173,4 +173,15 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
     }
 }
 
+void KisToolSelectPath::resetCursorStyle()
+{
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelectBase<KisDelegatedSelectPathWrapper>::resetCursorStyle();
+    }
+}
+
 

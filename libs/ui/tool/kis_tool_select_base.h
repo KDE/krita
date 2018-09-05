@@ -124,6 +124,24 @@ public:
         this->addAction(action->objectName(), action);
     }
 
+    void updateActionShortcutToolTips() {
+        KisSelectionOptions *widget = m_widgetHelper.optionWidget();
+        if (widget) {
+            widget->updateActionButtonToolTip(
+                SELECTION_REPLACE,
+                this->action("selection_tool_mode_replace")->shortcut());
+            widget->updateActionButtonToolTip(
+                SELECTION_ADD,
+                this->action("selection_tool_mode_add")->shortcut());
+            widget->updateActionButtonToolTip(
+                SELECTION_SUBTRACT,
+                this->action("selection_tool_mode_subtract")->shortcut());
+            widget->updateActionButtonToolTip(
+                SELECTION_INTERSECT,
+                this->action("selection_tool_mode_intersect")->shortcut());
+        }
+    }
+
     void activate(KoToolBase::ToolActivation activation, const QSet<KoShape*> &shapes)
     {
         BaseClass::activate(activation, shapes);
@@ -144,6 +162,7 @@ public:
             this->action("selection_tool_mode_intersect"), SIGNAL(triggered()),
             &m_widgetHelper, SLOT(slotIntersectModeRequested()));
 
+        updateActionShortcutToolTips();
     }
 
     void deactivate()
@@ -159,6 +178,9 @@ public:
 
         m_widgetHelper.createOptionWidget(canvas, this->toolId());
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
+
+        updateActionShortcutToolTips();
+
         return m_widgetHelper.optionWidget();
     }
 

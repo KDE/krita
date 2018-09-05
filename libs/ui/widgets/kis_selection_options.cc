@@ -98,6 +98,45 @@ void KisSelectionOptions::setMode(int mode) {
     hideActionsForSelectionMode(mode);
 }
 
+void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)
+{
+    const QString shortcutString = shortcut.toString(QKeySequence::NativeText);
+    QString toolTipText;
+    switch ((SelectionAction)action) {
+    case SELECTION_DEFAULT:
+    case SELECTION_REPLACE:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Replace") :
+            i18nc("@info:tooltip", "Replace (%1)", shortcutString);
+
+        m_action->button(SELECTION_REPLACE)->setToolTip(toolTipText);
+        break;
+    case SELECTION_ADD:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Add") :
+            i18nc("@info:tooltip", "Add (%1)", shortcutString);
+
+        m_action->button(SELECTION_ADD)->setToolTip(toolTipText);
+        break;
+    case SELECTION_SUBTRACT:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Subtract") :
+            i18nc("@info:tooltip", "Subtract (%1)", shortcutString);
+
+        m_action->button(SELECTION_SUBTRACT)->setToolTip(toolTipText);
+
+        break;
+    case SELECTION_INTERSECT:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Intersect") :
+            i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
+
+        m_action->button(SELECTION_INTERSECT)->setToolTip(toolTipText);
+
+        break;
+    }
+}
+
 //hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
 void KisSelectionOptions::hideActionsForSelectionMode(int mode) {
     const bool isPixelSelection = (mode == (int)PIXEL_SELECTION);

@@ -33,6 +33,7 @@
 #include "KisDocument.h"
 #include "kis_clipboard.h"
 #include <kis_image_animation_interface.h>
+#include "kis_config.h"
 
 #include <QMenu>
 #include "QFile"
@@ -297,6 +298,10 @@ void KisActionManager::updateGUI()
         }
     }
 
+    KisConfig cfg;
+    if (cfg.useOpenGL()) {
+        conditions |= KisAction::OPENGL_ENABLED;
+    }
 
     // loop through all actions in action manager and determine what should be enabled
     Q_FOREACH (QPointer<KisAction> action, d->actions) {
@@ -476,6 +481,9 @@ void KisActionManager::dumpActionFlags()
             }
             if (conditions & KisAction::SELECTION_EDITABLE) {
                 out << "    Selection is editable\n";
+            }
+            if (conditions & KisAction::OPENGL_ENABLED) {
+                out << "    OpenGL is enabled\n";
             }
             out << "\n\n";
         }

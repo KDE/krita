@@ -75,7 +75,8 @@ public:
         NO_CONDITION = 0,
         ACTIVE_NODE_EDITABLE = 0x1,
         ACTIVE_NODE_EDITABLE_PAINT_DEVICE = 0x2,
-        SELECTION_EDITABLE = 0x4
+        SELECTION_EDITABLE = 0x4,
+        OPENGL_ENABLED = 0x8,
     };
     Q_DECLARE_FLAGS(ActivationConditions, ActivationCondition)
 

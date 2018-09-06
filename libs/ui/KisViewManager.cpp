@@ -1394,5 +1394,5 @@ void KisViewManager::slotUpdatePixelGridAction()
     KisSignalsBlocker b(d->showPixelGrid);
 
     KisConfig cfg;
-    d->showPixelGrid->setChecked(cfg.pixelGridEnabled());
+    d->showPixelGrid->setChecked(cfg.pixelGridEnabled() && cfg.useOpenGL());
 }

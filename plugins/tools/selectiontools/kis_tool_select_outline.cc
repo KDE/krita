@@ -64,8 +64,6 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
                     i18n("Outline Selection")),
       m_continuedMode(false)
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectOutline::setSelectionAction);
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -97,6 +95,9 @@ void KisToolSelectOutline::keyReleaseEvent(QKeyEvent *event)
 
 void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 {
+    KisToolSelect::mouseMoveEvent(event);
+    if (selectionDragInProgress()) return;
+
     m_lastCursorPos = convertToPixelCoord(event);
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
@@ -105,8 +106,9 @@ void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 {
-
     KisToolSelectBase::beginPrimaryAction(event);
+    if (selectionDragInProgress()) return;
+
     if (!selectionEditable()) {
         event->ignore();
         return;
@@ -125,8 +127,10 @@ void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 {
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     KisToolSelectBase::continuePrimaryAction(event);
+    if (selectionDragInProgress()) return;
+
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF point = convertToPixelCoord(event);
     m_paintPath.lineTo(pixelToView(point));
@@ -138,9 +142,11 @@ void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
 
 void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
 {
-    Q_UNUSED(event);
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    const bool hadMoveInProgress = selectionDragInProgress();
     KisToolSelectBase::endPrimaryAction(event);
+    if (hadMoveInProgress) return;
+
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
     setMode(KisTool::HOVER_MODE);
 
     if (!m_continuedMode) {
@@ -196,7 +202,7 @@ void KisToolSelectOutline::finishSelectionAction()
             path->close();
             path->normalize();
 
-            helper.addSelectionShape(path);
+            helper.addSelectionShape(path, selectionAction());
         }
         QApplication::restoreOverrideCursor();
     }
@@ -257,16 +263,14 @@ void KisToolSelectOutline::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolSelectOutline::setSelectionAction(int action)
+void KisToolSelectOutline::resetCursorStyle()
 {
-    changeSelectionAction(action);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_outline_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelect::resetCursorStyle();
+    }
 }
 
-QMenu* KisToolSelectOutline::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}

@@ -518,10 +518,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         uint16 position;
         TIFFGetFieldDefaulted(image, TIFFTAG_YCBCRPOSITIONING, &position);
         if (dstDepth == 8) {
-            tiffReader = new KisTIFFYCbCrReaderTarget8Bit(layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, hsubsampling, vsubsampling, (KisTIFFYCbCr::Position)position);
+            tiffReader = new KisTIFFYCbCrReaderTarget8Bit(layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, hsubsampling, vsubsampling);
         }
         else if (dstDepth == 16) {
-            tiffReader = new KisTIFFYCbCrReaderTarget16Bit(layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, hsubsampling, vsubsampling, (KisTIFFYCbCr::Position)position);
+            tiffReader = new KisTIFFYCbCrReaderTarget16Bit(layer->paintDevice(), layer->image()->width(), layer->image()->height(), poses, alphapos, depth, sampletype, nbcolorsamples, extrasamplescount, transform, postprocessor, hsubsampling, vsubsampling);
         }
     }
     else if (dstDepth == 8) {

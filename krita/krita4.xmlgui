@@ -268,7 +268,10 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="deselect"/>
       <Action name="reselect"/>
       <Action name="invert_selection"/>
+      <Separator/>
+      <Action name="edit_selection"/>
       <Action name="convert_to_vector_selection"/>
+      <Action name="convert_to_raster_selection"/>
       <Action name="convert_shapes_to_vector_selection"/>
       <Action name="convert_selection_to_shape"/>
       <Separator/>
@@ -280,7 +283,14 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="selectionscale"/>
       <Separator/>
       <Action name="colorrange"/>
-      <Action name="selectopaque"/>
+      <Menu name="selectopaquemenu">
+        <text>Select &amp;Opaque</text>
+        <Action name="selectopaque"/>
+        <Separator/>
+        <Action name="selectopaque_add"/>
+        <Action name="selectopaque_subtract"/>
+        <Action name="selectopaque_intersect"/>
+      </Menu>
       <Separator/>
       <Action name="featherselection"/>
       <Action name="growselection"/>

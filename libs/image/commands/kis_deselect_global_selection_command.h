@@ -39,7 +39,7 @@ public:
     void redo() override;
     void undo() override;
 
-private:
+protected:
     KisImageWSP m_image;
     KisSelectionSP m_oldSelection;
 };

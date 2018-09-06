@@ -168,8 +168,6 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
         if (shapeLayer) {
             shapeManager = shapeLayer->shapeManager();
 
-        } else {
-            selection = layer->selection();
         }
     } else if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
         selection = mask->selection();

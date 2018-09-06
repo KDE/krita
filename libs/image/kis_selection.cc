@@ -110,6 +110,12 @@ void KisSelection::setParentNode(KisNodeWSP node)
 {
     m_d->parentNode = node;
     m_d->pixelSelection->setParentNode(node);
+
+    // the updates come through the parent image, so all the updates
+    // that happened in the meantime are considered "stalled"
+    if (node) {
+        m_d->updateCompressor->tryProcessStalledUpdate();
+    }
 }
 
 // for testing purposes only

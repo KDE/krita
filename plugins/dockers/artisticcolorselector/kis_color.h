@@ -62,7 +62,7 @@ public:
     inline float getB() const { return core()->rgb(2); }
     inline float getH() const { return core()->hsx(0); }
     inline float getS() const { return core()->hsx(1); }
-    inline float getX() const { return core()->hsx(2); }
+    inline float getX(float gamma=1.0f) const { return pow(core()->hsx(2), 1/gamma); }
     inline float getA() const { return core()->hsx(3); }
     
     inline void setR(float v) { setRGB(v, core()->rgb(1), core()->rgb(2), core()->hsx(3)); }
@@ -70,28 +70,18 @@ public:
     inline void setB(float v) { setRGB(core()->rgb(0), core()->rgb(1), v, core()->hsx(3)); }
     inline void setH(float v) { setHSX(v, core()->hsx(1), core()->hsx(2), core()->hsx(3)); }
     inline void setS(float v) { setHSX(core()->hsx(0), v, core()->hsx(2), core()->hsx(3)); }
-    inline void setX(float v) { setHSX(core()->hsx(0), core()->hsx(1), v, core()->hsx(3)); }
+    inline void setX(float v, float gamma=1.0f) {
+        setHSX(core()->hsx(0), core()->hsx(1), v, core()->hsx(3), gamma);
+    }
     inline void setA(float v) { core()->hsx(3) = qBound(0.0f, v, 1.0f);                    }
     
     inline QColor         getQColor() const { return QColor(getR()*255, getG()*255, getB()*255, getA()*255); }
-    inline const VecHSXA& getHSX   () const { return core()->hsx; }
-    inline const VecRGB&  getRGB   () const { return core()->rgb; }
     
     inline void setRGB(float r, float g, float b, float a=1.0f) { core()->setRGB(r, g, b, a); }
-    inline void setHSX(float h, float s, float x, float a=1.0f) { core()->setHSX(h, s, x, a); }
-    
-    inline void setRGB(const VecRGB& rgb) {
-        core()->rgb = rgb;
-        core()->updateHSX();
+    inline void setHSX(float h, float s, float x, float a=1.0f, float gamma=1.0f) {
+        core()->setHSX(h, s, pow(x, gamma), a);
     }
-    
-    inline void setHSX(const VecHSXA& hsx) {
-        core()->hsx = hsx;
-        core()->updateRGB();
-    }
-    
-    void setRGBfromHue(float hue, float alpha=1.0f);
-    
+
     KisColor& operator = (const KisColor& color);
     
     friend KisColor operator - (const KisColor& a, const KisColor& b) {
@@ -116,7 +106,6 @@ public:
         KisColor result;
         result.core()->hsx = a.core()->hsx * b;
         result.core()->updateRGB();
-//         result.setH(a.getH());
         return result;
     }
     

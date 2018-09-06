@@ -73,6 +73,11 @@ void KisToolPolylineBase::requestStrokeCancellation()
     cancelStroke();
 }
 
+bool KisToolPolylineBase::hasUserInteractionRunning() const
+{
+    return !m_points.isEmpty();
+}
+
 void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
 {
     Q_UNUSED(event);

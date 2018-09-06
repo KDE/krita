@@ -172,7 +172,7 @@ void KisDeselectActionFactory::run(KisViewManager *view)
     KisImageWSP image = view->image();
     if (!image) return;
 
-    KUndo2Command *cmd = new KisDeselectGlobalSelectionCommand(image);
+    KUndo2Command *cmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -184,7 +184,7 @@ void KisReselectActionFactory::run(KisViewManager *view)
     KisImageWSP image = view->image();
     if (!image) return;
 
-    KUndo2Command *cmd = new KisReselectGlobalSelectionCommand(image);
+    KUndo2Command *cmd = new KisReselectActiveSelectionCommand(view->activeNode(), image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
     ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -465,6 +465,40 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
+void KisSelectionToRasterActionFactory::run(KisViewManager *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (!selection->hasShapeSelection()) {
+        view->showFloatingMessage(i18nc("floating message",
+                                        "Selection is already in a raster format "),
+                                  QIcon(), 2000, KisFloatingMessage::Low);
+        return;
+    }
+
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
+
+    struct RasterizeSelection : public KisTransactionBasedCommand {
+        RasterizeSelection(KisSelectionSP sel)
+            : m_sel(sel) {}
+        KisSelectionSP m_sel;
+
+        KUndo2Command* paint() override {
+            // just create an empty transaction: it will rasterize the
+            // selection and emit the necessary signals
+
+            KisTransaction transaction(m_sel->pixelSelection());
+            return transaction.endAndTake();
+        }
+    };
+
+    ap->applyCommand(new RasterizeSelection(selection),
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::EXCLUSIVE);
+
+    endAction(ap, KisOperationConfiguration(id()).toXML());
+}
+
 void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
     const QList<KoShape*> originalShapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
@@ -536,7 +570,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     QColor color = params.color.toQColor();
 
     KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0) {
+    if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
         KoCanvasResourceManager * rManager = view->resourceProvider()->resourceManager();
         KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
         KisPainter::FillStyle fillStyle =  params.fillStyle();
@@ -593,7 +627,7 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
     }
 
     KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0)
+    if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice())
     {
         KoCanvasResourceManager * rManager = view->resourceProvider()->resourceManager();
         QPainterPath outline = pixelSelection->outlineCache();

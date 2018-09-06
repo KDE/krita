@@ -1,8 +1,12 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <qresource>
+  <qresource>
         <file>pics/zoom-draw.png</file>
         <file>pics/zoom-pixels.png</file>
         <file>pics/zoom-select.png</file>
+        <file>pics/dark_docker_close.png</file>
+        <file>pics/dark_docker_float.png</file>
+        <file>pics/light_docker_close.png</file>
+        <file>pics/light_docker_float.png</file>
     </qresource>
 </RCC>

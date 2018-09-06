@@ -49,8 +49,11 @@ void KisToolEllipse::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolEllipse::finishRect(const QRectF& rect)
+void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
 {
+    Q_UNUSED(roundCornersX);
+    Q_UNUSED(roundCornersY);
+
     if (rect.isEmpty() || !blockUntilOperationsFinished())
         return;
 

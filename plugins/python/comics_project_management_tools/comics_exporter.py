@@ -93,7 +93,7 @@ class comicsExporter():
     pagesLocationList = {}
 
     # set of keys used to define specific export behaviour for this page.
-    pageKeys = ["acbf_title", "acbf_none", "acbf_fade", "acbf_blend", "acbf_horizontal", "acbf_vertical"]
+    pageKeys = ["acbf_title", "acbf_none", "acbf_fade", "acbf_blend", "acbf_horizontal", "acbf_vertical", "epub_spread"]
 
     def __init__(self):
         pass
@@ -178,7 +178,7 @@ class comicsExporter():
                 if "EPUB" in sizesList.keys():
                     self.progress.setLabelText(i18n("Saving out EPUB"))
                     self.progress.setValue(self.progress.value()+1)
-                    export_success = exporters.EPUB.export(self.configDictionary, self.projectURL, self.pagesLocationList["EPUB"])
+                    export_success = exporters.EPUB.export(self.configDictionary, self.projectURL, self.pagesLocationList["EPUB"], self.acbfPageData)
                     print("CPMT: Exported to EPUB", export_success)
         else:
             QMessageBox.warning(self, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.Ok)
@@ -356,7 +356,7 @@ class comicsExporter():
                     projection.exportImage(fn, InfoObject())
                     projection.waitForDone()
                     qApp.processEvents()
-                    if key == "CBZ":
+                    if key == "CBZ" or key == "EPUB":
                         transform = {}
                         transform["offsetX"] = cropx
                         transform["offsetY"] = cropy

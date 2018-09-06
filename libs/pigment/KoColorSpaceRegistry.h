@@ -332,7 +332,7 @@ private:
     friend class KoColorSpacesBenchmark;
     friend class TestKoColorSpaceSanity;
     friend class TestColorConversionSystem;
-    friend class FriendOfColorSpaceRegistry;
+    friend struct FriendOfColorSpaceRegistry;
 
     /**
      * @return a list with an instance of all color space with their default profile.

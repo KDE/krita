@@ -33,6 +33,7 @@
 #include "KisDocument.h"
 #include "kis_clipboard.h"
 #include <kis_image_animation_interface.h>
+#include "kis_config.h"
 
 #include <QMenu>
 #include "QFile"
@@ -275,7 +276,15 @@ void KisActionManager::updateGUI()
                 flags |= KisAction::SHAPES_SELECTED;
             }
 
-            if (selectionManager->havePixelSelectionWithPixels()) {
+            if (selectionManager->haveAnySelectionWithPixels()) {
+                flags |= KisAction::ANY_SELECTION_WITH_PIXELS;
+            }
+
+            if (selectionManager->haveShapeSelectionWithShapes()) {
+                flags |= KisAction::SHAPE_SELECTION_WITH_SHAPES;
+            }
+
+            if (selectionManager->haveRasterSelectionWithPixels()) {
                 flags |= KisAction::PIXEL_SELECTION_WITH_PIXELS;
             }
 
@@ -297,6 +306,10 @@ void KisActionManager::updateGUI()
         }
     }
 
+    KisConfig cfg(true);
+    if (cfg.useOpenGL()) {
+        conditions |= KisAction::OPENGL_ENABLED;
+    }
 
     // loop through all actions in action manager and determine what should be enabled
     Q_FOREACH (QPointer<KisAction> action, d->actions) {
@@ -449,8 +462,8 @@ void KisActionManager::dumpActionFlags()
             if (flags & KisAction::SHAPES_SELECTED) {
                 out << "    Shapes selected\n";
             }
-            if (flags & KisAction::PIXEL_SELECTION_WITH_PIXELS) {
-                out << "    Pixel selection with pixels\n";
+            if (flags & KisAction::ANY_SELECTION_WITH_PIXELS) {
+                out << "    Any selection with pixels\n";
             }
             if (flags & KisAction::PIXELS_IN_CLIPBOARD) {
                 out << "    Pixels in clipboard\n";
@@ -476,6 +489,9 @@ void KisActionManager::dumpActionFlags()
             }
             if (conditions & KisAction::SELECTION_EDITABLE) {
                 out << "    Selection is editable\n";
+            }
+            if (conditions & KisAction::OPENGL_ENABLED) {
+                out << "    OpenGL is enabled\n";
             }
             out << "\n\n";
         }

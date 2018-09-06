@@ -25,18 +25,7 @@
 #include "kis_default_bounds.h"
 #include "kis_image.h"
 
-enum SelectionMode {
-    PIXEL_SELECTION,
-    SHAPE_PROTECTION
-};
-
-enum SelectionAction {
-    SELECTION_REPLACE,
-    SELECTION_ADD,
-    SELECTION_SUBTRACT,
-    SELECTION_INTERSECT,
-    SELECTION_DEFAULT
-};
+#include "KisSelectionTags.h"
 
 #include "kis_pixel_selection.h"
 
@@ -209,13 +198,16 @@ public:
     /// replace it with. Undeprecate, therefore.
     quint8 selected(qint32 x, qint32 y) const;
 
+    KisNodeWSP parentNode() const;
+
 private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
     friend class KisAdjustmentLayerTest;
     friend class KisUpdateSelectionJob;
     friend class KisSelectionUpdateCompressor;
-    KisNodeWSP parentNode() const;
+    friend class KisDeselectActiveSelectionCommand;
+
 
     void copyFrom(const KisSelection &rhs);
 

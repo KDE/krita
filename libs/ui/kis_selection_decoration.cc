@@ -61,6 +61,9 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
     connect(m_antsTimer, SIGNAL(timeout()), SLOT(antsAttackEvent()));
 
     connect(&m_signalCompressor, SIGNAL(timeout()), SLOT(slotStartUpdateSelection()));
+
+    // selections should be at the top of the stack
+    setPriority(100);
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()

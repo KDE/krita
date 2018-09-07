@@ -1,4 +1,4 @@
-/*
+//*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -80,7 +80,7 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
 {
     if (!device->framesInterface()) return;
 
-    KisImageConfig cfg(true);
+    KisImageConfig cfg;
     if (!cfg.lazyFrameCreationEnabled()) return;
 
     KisRasterKeyframeChannel *channel = device->keyframeChannel();

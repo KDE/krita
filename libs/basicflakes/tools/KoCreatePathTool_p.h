@@ -420,12 +420,12 @@ public:
     void autoSmoothCurvesChanged(bool value) {
         autoSmoothCurves = value;
 
-        KisConfig cfg(false);
+        KisConfig cfg;
         cfg.setAutoSmoothBezierCurves(value);
     }
 
     void loadAutoSmoothValueFromConfig() {
-        KisConfig cfg(true);
+        KisConfig cfg;
         autoSmoothCurves = cfg.autoSmoothBezierCurves();
 
         emit q->sigUpdateAutoSmoothCurvesGUI(autoSmoothCurves);

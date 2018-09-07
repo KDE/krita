@@ -57,6 +57,7 @@
 #include <QMenuBar>
 #include <KisMimeDatabase.h>
 #include <QMimeData>
+#include <QStackedWidget>
 
 #include <kactioncollection.h>
 #include <QAction>
@@ -140,6 +141,7 @@
 #include <KisUpdateSchedulerConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
+#include "KisWelcomePageWidget.h"
 
 #include <mutex>
 
@@ -176,11 +178,17 @@ public:
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
         , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
+        , welcomePage(new KisWelcomePageWidget(parent))
+        , widgetStack(new QStackedWidget(parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
         if (id.isNull()) this->id = QUuid::createUuid();
+
+        widgetStack->addWidget(welcomePage);
+        widgetStack->addWidget(mdiArea);
+
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
@@ -249,6 +257,9 @@ public:
     QCloseEvent *deferredClosingEvent {0};
 
     Digikam::ThemeManager *themeManager {0};
+
+    KisWelcomePageWidget *welcomePage {0};
+    QStackedWidget *widgetStack {0};
 
     QMdiArea *mdiArea;
     QMdiSubWindow *activeSubWindow  {0};
@@ -367,7 +378,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-    setCentralWidget(d->mdiArea);
+    setCentralWidget(d->widgetStack);
+    d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
@@ -726,6 +738,16 @@ void KisMainWindow::saveRecentFiles()
     }
 }
 
+QList<QUrl> KisMainWindow::recentFilesUrls()
+{
+    return d->recentFiles->urls();
+}
+
+void KisMainWindow::clearRecentFiles()
+{
+    d->recentFiles->clear();
+}
+
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
@@ -879,6 +901,8 @@ void KisMainWindow::showDocument(KisDocument *document) {
 
 KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
+    showWelcomeScreen(false); // see workaround in function header
+
     KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
     addView(view);
 
@@ -1385,6 +1409,12 @@ void KisMainWindow::switchTab(int index)
 
     tabBar->setCurrentIndex(index);
 }
+
+void KisMainWindow::showWelcomeScreen(bool show)
+{
+     d->widgetStack->setCurrentIndex(!show);
+}
+
 
 void KisMainWindow::slotFileNew()
 {
@@ -2221,6 +2251,28 @@ void KisMainWindow::updateWindowMenu()
             d->windowMapper->setMapping(action, windows.at(i));
         }
     }
+
+    bool showMdiArea = windows.count( ) > 0;
+    if (!showMdiArea) {
+        showWelcomeScreen(true); // see workaround in function in header
+
+        // keep the recent file list updated when going back to welcome screen
+        reloadRecentFileList();
+        d->welcomePage->populateRecentDocuments();
+    }
+
+    // enable/disable the toolbox docker if there are no documents open
+    Q_FOREACH (QObject* widget, children()) {
+        if (widget->inherits("QDockWidget")) {
+            QDockWidget* dw = static_cast<QDockWidget*>(widget);
+
+            if ( dw->objectName() == "ToolBox") {
+                dw->setEnabled(showMdiArea);
+            }
+        }
+    }
+
+
 
     updateCaption();
 }

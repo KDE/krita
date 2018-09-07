@@ -119,27 +119,7 @@ public:
 
     ~ResetStarting()  {
         if (m_splash) {
-
-            KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-            bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
-            if (m_fileCount > 0 || hideSplash) {
-                m_splash->hide();
-            }
-            else {
-                m_splash->setWindowFlags(Qt::Dialog);
-                QRect r(QPoint(), m_splash->size());
-                m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
-                m_splash->setWindowTitle(qAppName());
-                m_splash->setParent(0);
-                Q_FOREACH (QObject *o, m_splash->children()) {
-                    QWidget *w = qobject_cast<QWidget*>(o);
-                    if (w && w->isHidden()) {
-                        w->setVisible(true);
-                    }
-                }
-                m_splash->show();
-                m_splash->activateWindow();
-            }
+            m_splash->hide();
         }
     }
 

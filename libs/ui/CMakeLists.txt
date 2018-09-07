@@ -152,10 +152,13 @@ set(kritaui_LIB_SRCS
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
+    widgets/KisWelcomePageWidget.cpp
+    
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
+    
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp
@@ -262,7 +265,7 @@ set(kritaui_LIB_SRCS
     widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-
+    widgets/KisNewsWidget.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -495,6 +498,10 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgstopgradienteditor.ui
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
+    forms/KisWelcomePage.ui
+    forms/KisNewsPage.ui
+
+    
     brushhud/kis_dlg_brush_hud_config.ui
     forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui

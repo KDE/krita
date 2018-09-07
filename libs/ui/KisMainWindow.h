@@ -108,6 +108,17 @@ public:
     void addRecentURL(const QUrl &url);
 
     /**
+     * get list of URL strings for recent files
+     */
+    QList<QUrl> recentFilesUrls();
+
+    /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
+    
+    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *
@@ -119,6 +130,16 @@ public:
      * Activate a view containing the document in this window, creating one if needed.
      */
     void showDocument(KisDocument *document);
+
+    /**
+     * Toggles between showing the welcome screen and the MDI area
+     *
+     *  hack: There seems to be a bug that prevents events happening to the MDI area if it
+     *  isn't actively displayed (set in the widgetStack). This can cause things like the title bar
+     *  not to update correctly Before doing any actions related to opening or creating documents,
+     *  make sure to switch this first to make sure everything can communicate to the MDI area correctly
+     */
+    void showWelcomeScreen(bool show);
 
     /**
      * Saves the document, asking for a filename if necessary.
@@ -405,6 +426,11 @@ public Q_SLOTS:
 
     void windowFocused();
 
+    /**
+     * Reloads the recent documents list.
+     */
+    void reloadRecentFileList();
+    
 private:
 
     friend class KisApplication;
@@ -420,11 +446,6 @@ private:
     QDockWidget* createDockWidget(KoDockFactoryBase* factory);
 
     bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
-
-    /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
 
     /**
      * Updates the window caption based on the document info and path.

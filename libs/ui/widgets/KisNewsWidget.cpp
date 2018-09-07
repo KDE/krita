@@ -19,9 +19,62 @@
 
 #include <QDesktopServices>
 #include <QUrl>
+#include <QPainter>
+#include <QStyleOptionViewItem>
+#include <QModelIndex>
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 
 #include "kis_config.h"
 #include "KisMultiFeedRSSModel.h"
+
+
+KisNewsDelegate::KisNewsDelegate(QObject *parent)
+    : QStyledItemDelegate(parent)
+{
+    qDebug() << "Delegate created";
+}
+
+void KisNewsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    painter->save();
+
+    QStyleOptionViewItem optionCopy = option;
+    initStyleOption(&optionCopy, index);
+
+    QStyle *style = optionCopy.widget? optionCopy.widget->style() : QApplication::style();
+
+    QTextDocument doc;
+    doc.setHtml(optionCopy.text);
+
+    /// Painting item without text
+    optionCopy.text = QString();
+    style->drawControl(QStyle::CE_ItemViewItem, &optionCopy, painter);
+
+    QAbstractTextDocumentLayout::PaintContext ctx;
+
+    // Highlighting text if item is selected
+    if (optionCopy.state & QStyle::State_Selected) {
+        ctx.palette.setColor(QPalette::Text, optionCopy.palette.color(QPalette::Active, QPalette::HighlightedText));
+    }
+
+    painter->translate(optionCopy.rect.left(), optionCopy.rect.top());
+    QRect clip(0, 0, optionCopy.rect.width(), optionCopy.rect.height());
+    doc.setPageSize(clip.size());
+    doc.drawContents(painter, clip);
+    painter->restore();
+}
+
+QSize KisNewsDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QStyleOptionViewItem optionCopy = option;
+    initStyleOption(&optionCopy, index);
+
+    QTextDocument doc;
+    doc.setHtml(optionCopy.text);
+    doc.setTextWidth(optionCopy.rect.width());
+    return QSize(doc.idealWidth(), doc.size().height());
+}
 
 KisNewsWidget::KisNewsWidget(QWidget *parent)
     : QWidget(parent)
@@ -39,7 +92,9 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     else {
         m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
     }
+
     listNews->setModel(m_rssModel);
+    listNews->setItemDelegate(new KisNewsDelegate(listNews));
     connect(listNews, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemSelected(const QModelIndex&)));
 }
 

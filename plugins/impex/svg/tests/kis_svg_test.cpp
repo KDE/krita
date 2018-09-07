@@ -33,7 +33,7 @@
 
 void KisSvgTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 30, 50);
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), QString(), 5);
 }
 
 KISTEST_MAIN(KisSvgTest)

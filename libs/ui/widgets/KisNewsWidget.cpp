@@ -46,6 +46,7 @@ void KisNewsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 
     QTextDocument doc;
     doc.setHtml(optionCopy.text);
+    doc.setDocumentMargin(10);
 
     /// Painting item without text
     optionCopy.text = QString();
@@ -80,18 +81,9 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-    KisConfig cfg(true);
-    m_getNews = cfg.readEntry<bool>("FetchNews", false);
-    chkShowNews->setChecked(m_getNews);
-    connect(chkShowNews, SIGNAL(toggled(bool)), this, SLOT(toggleNews(bool)));
     m_rssModel = new MultiFeedRssModel(this);
 
-    if (m_getNews) {
-        m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
-    }
-    else {
-        m_rssModel->removeFeed(QLatin1String("https://krita.org/en/feed/"));
-    }
+    setCursor(Qt::PointingHandCursor);
 
     listNews->setModel(m_rssModel);
     listNews->setItemDelegate(new KisNewsDelegate(listNews));
@@ -102,9 +94,8 @@ void KisNewsWidget::toggleNews(bool toggle)
 {
     KisConfig cfg(false);
     cfg.writeEntry<bool>("FetchNews", toggle);
-    m_getNews = toggle;
 
-    if (m_getNews) {
+    if (toggle) {
         m_rssModel->addFeed(QLatin1String("https://krita.org/en/feed/"));
     }
     else {

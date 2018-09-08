@@ -11,16 +11,12 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QCheckBox" name="chkShowNews">
-     <property name="toolTip">
-      <string>Show news about Krita: this needs internet to retrieve information from the krita.org website</string>
-     </property>
-     <property name="text">
-      <string>Show News about Krita</string>
-     </property>
-    </widget>
-   </item>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QListView" name="listNews"/>
    </item>

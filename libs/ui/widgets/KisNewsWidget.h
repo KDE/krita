@@ -43,6 +43,9 @@ class KisNewsWidget : public QWidget, public Ui::KisNewsPage
     Q_OBJECT
 public:
     explicit KisNewsWidget(QWidget *parent = nullptr);
+
+
+
 private Q_SLOTS:
     void toggleNews(bool toggle);
     void itemSelected(const QModelIndex &idx);

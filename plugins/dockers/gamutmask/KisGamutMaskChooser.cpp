@@ -65,6 +65,18 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     QRect paintRect = option.rect.adjusted(1, 1, -1, -1);
     painter->drawImage(paintRect.x(), paintRect.y(),
                        preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+    if (option.state & QStyle::State_Selected) {
+        painter->setCompositionMode(QPainter::CompositionMode_Overlay);
+        painter->setOpacity(0.5);
+        painter->fillRect(paintRect, Qt::white);
+        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        painter->setOpacity(1.0);
+        painter->setPen(QPen(option.palette.highlight(), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+        QRect selectedBorder = option.rect.adjusted(1, 1, -1, -1);
+        painter->drawRect(selectedBorder);
+    }
+
     painter->restore();
 }
 

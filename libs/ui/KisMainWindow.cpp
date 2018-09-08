@@ -58,6 +58,8 @@
 #include <KisMimeDatabase.h>
 #include <QMimeData>
 #include <QStackedWidget>
+#include <QProxyStyle>
+
 
 #include <kactioncollection.h>
 #include <QAction>
@@ -69,6 +71,8 @@
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
+#include "kis_selection_manager.h"
+#include "kis_icon_utils.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -95,6 +99,7 @@
 #include <KoToolManager.h>
 #include <KoZoomController.h>
 #include "KoToolDocker.h"
+#include "KoToolBoxDocker_p.h"
 #include <KoToolBoxFactory.h>
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
@@ -138,7 +143,6 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include <KisUpdateSchedulerConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
@@ -148,6 +152,42 @@
 #ifdef Q_OS_WIN
   #include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
+
+
+
+class DockerTitleStyle : public QProxyStyle
+{
+    public:
+       DockerTitleStyle(QStyle *baseStyle = nullptr) : QProxyStyle(baseStyle) {}
+       QPixmap standardPixmap(QStyle::StandardPixmap sp, const QStyleOption *option = nullptr,
+                      const QWidget *widget = nullptr) const override
+       {
+           QIcon closeIcon = KisIconUtils::loadIcon("docker_close");
+           QPixmap closePixmap = closeIcon.pixmap(QSize(20, 20));
+
+           QIcon floatIcon = KisIconUtils::loadIcon("docker_float");
+           QPixmap floatPixmap = floatIcon.pixmap(QSize(20, 20));
+
+
+           switch (sp) {
+           case SP_TitleBarNormalButton:
+           case SP_TitleBarMinButton:
+           case SP_TitleBarMenuButton:
+                return floatPixmap;
+           case SP_DockWidgetCloseButton:
+           case SP_TitleBarCloseButton:
+               return closePixmap;
+
+           default:
+               break;
+           }
+
+           return QCommonStyle::standardPixmap(sp, option, widget);
+       }
+};
+
+
+
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -188,7 +228,6 @@ public:
 
         widgetStack->addWidget(welcomePage);
         widgetStack->addWidget(mdiArea);
-
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
@@ -299,7 +338,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->workspacemodel = new KoResourceModel(adapter, this);
     connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
 
-    KisConfig cfg;
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -322,7 +360,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
 
     actionCollection()->addAssociatedWidget(this);
 
@@ -335,6 +372,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
+    KisConfig cfg;
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
@@ -378,14 +416,24 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
+
+    // Tab close button override
+    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
+    // just switch this icon out for all OSs so it is easier to see
+    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+
+
+
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
-    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
-    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
     createActions();
+
+    // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
+    d->welcomePage->setMainWindow(this);
 
     setAutoSaveSettings(d->windowStateConfig, false);
 
@@ -640,7 +688,6 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
-        KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -673,6 +720,11 @@ void KisMainWindow::slotThemeChanged()
     }
 
     emit themeChanged();
+
+    // go through each docker and set style
+    for (int i = 0; i < dockWidgets().length(); i++) {
+        dockWidgets().at(i)->setStyle(new DockerTitleStyle);
+    }
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
@@ -748,10 +800,13 @@ void KisMainWindow::clearRecentFiles()
     d->recentFiles->clear();
 }
 
+
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
+
+
 
 void KisMainWindow::updateCaption()
 {
@@ -1334,6 +1389,9 @@ void KisMainWindow::setActiveView(KisView* view)
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
+    d->welcomePage->showDropAreaIndicator(true);
+
+
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
@@ -1344,6 +1402,8 @@ void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 
 void KisMainWindow::dropEvent(QDropEvent *event)
 {
+    d->welcomePage->showDropAreaIndicator(false);
+
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
@@ -1381,26 +1441,13 @@ void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
 
 void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
 {
+        d->welcomePage->showDropAreaIndicator(false);
+
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();
     }
 }
 
-void KisMainWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-    /**
-     * This ensures people who do not understand that you
-     * need to make a canvas first, will find the new image
-     * dialog on click.
-     */
-    if (centralWidget()->geometry().contains(event->pos())
-            && KisPart::instance()->documents().size()==0 && event->button() == Qt::LeftButton) {
-        this->slotFileNew();
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
 
 void KisMainWindow::switchTab(int index)
 {
@@ -1414,7 +1461,6 @@ void KisMainWindow::showWelcomeScreen(bool show)
 {
      d->widgetStack->setCurrentIndex(!show);
 }
-
 
 void KisMainWindow::slotFileNew()
 {
@@ -1947,6 +1993,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
     QDockWidget* dockWidget = 0;
     bool lockAllDockers = KisConfig().readEntry<bool>("LockAllDockerPanels", false);
 
+
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 
@@ -1960,14 +2007,13 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
+        dockWidget->setStyle(new DockerTitleStyle);
         if (lockAllDockers) {
             if (dockWidget->titleBarWidget()) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
             dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
         }
-
-        
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 
@@ -2104,6 +2150,12 @@ void KisMainWindow::subWindowActivated()
 
 void KisMainWindow::windowFocused()
 {
+    /**
+     * Notify selection manager so that it could update selection mask overlay
+     */
+    viewManager()->selectionManager()->selectionChanged();
+
+
     auto *kisPart = KisPart::instance();
     auto *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;
@@ -2125,6 +2177,7 @@ void KisMainWindow::windowFocused()
         swapWorkspaces(this, primaryWindow);
     }
 }
+
 
 void KisMainWindow::updateWindowMenu()
 {
@@ -2252,6 +2305,8 @@ void KisMainWindow::updateWindowMenu()
         }
     }
 
+
+
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
@@ -2271,8 +2326,6 @@ void KisMainWindow::updateWindowMenu()
             }
         }
     }
-
-
 
     updateCaption();
 }
@@ -2458,7 +2511,8 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
-    KisConfig cfg;
+
+
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
@@ -2521,8 +2575,11 @@ void KisMainWindow::createActions()
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
+
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
+
     d->toggleDockers = actionManager->createAction("view_toggledockers");
-    cfg.showDockers(true);
+    KisConfig().showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 

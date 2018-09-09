@@ -39,6 +39,7 @@ class KisTransparencyMask;
 class KisSelectionMask;
 class KisGeneratorLayer;
 class KisColorizeMask;
+class KUndo2Command;
 
 /**
  * A visitor that processes a single layer; it does not recurse into the
@@ -62,6 +63,13 @@ public:
     virtual void visit(KisTransparencyMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) = 0;
     virtual void visit(KisSelectionMask *mask, KisUndoAdapter *undoAdapter) = 0;
+
+    /**
+     * Create a command that initializes the processing visitor before running
+     * on all the layers. The command is executed sequentially, non-exclusively
+     * on the image by applicator.
+     */
+    virtual KUndo2Command* createInitCommand();
 
 public:
     class KRITAIMAGE_EXPORT ProgressHelper {

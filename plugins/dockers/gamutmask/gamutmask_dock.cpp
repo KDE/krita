@@ -352,7 +352,7 @@ KoGamutMask *GamutMaskDock::createMaskResource(KoGamutMask* sourceMask, QString 
         newMask = new KoGamutMask();
 
         QString defaultPreviewPath = KoResourcePaths::findResource("ko_gamutmasks", "empty_mask_preview.png");
-        KIS_SAFE_ASSERT_RECOVER(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
 
         newMask->setImage(QImage(defaultPreviewPath, "PNG"));
     }

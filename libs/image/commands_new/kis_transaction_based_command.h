@@ -19,10 +19,10 @@
 #ifndef KIS_TRANSACTION_BASED_COMMAND_H
 #define KIS_TRANSACTION_BASED_COMMAND_H
 
-#include <kritaui_export.h>
+#include <kritaimage_export.h>
 #include <kundo2command.h>
 
-class KRITAUI_EXPORT KisTransactionBasedCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisTransactionBasedCommand : public KUndo2Command
 {
 public:
     KisTransactionBasedCommand(const KUndo2MagicString &text = KUndo2MagicString(), KUndo2Command *parent = 0);

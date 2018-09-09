@@ -294,7 +294,6 @@ set(kritaui_LIB_SRCS
     actions/KisPasteActionFactory.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
-    kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
     input/kis_tablet_debugger.cpp

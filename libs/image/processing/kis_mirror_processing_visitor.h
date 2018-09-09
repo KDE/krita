@@ -23,11 +23,14 @@
 #include <QRect>
 #include "kis_types.h"
 
+#include "KisSelectionBasedProcessingHelper.h"
+
 
 class KRITAIMAGE_EXPORT KisMirrorProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
     KisMirrorProcessingVisitor(const QRect &bounds, Qt::Orientation orientation);
+    KisMirrorProcessingVisitor(KisSelectionSP selection, Qt::Orientation orientation);
 
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
@@ -35,11 +38,18 @@ private:
 
     void visitColorizeMask(KisColorizeMask *node, KisUndoAdapter *undoAdapter) override;
 
+    KUndo2Command* createInitCommand() override;
+
+    void mirrorDevice(KisPaintDeviceSP device);
+
 private:
     void transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);
 
     QRect m_bounds;
     Qt::Orientation m_orientation;
+    qreal m_axis = 0.0;
+
+    KisSelectionBasedProcessingHelper m_selectionHelper;
 };
 
 #endif /* __KIS_MIRROR_PROCESSING_VISITOR_H */

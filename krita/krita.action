@@ -3303,6 +3303,102 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="mirrorAllNodesX">
+      <icon>symmetry-horizontal</icon>
+      <text>Mirror All Layers Hori&amp;zontally</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror All Layers Horizontally</toolTip>
+      <iconText>Mirror All Layers Horizontally</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorAllNodesY">
+      <icon>symmetry-vertical</icon>
+      <text>Mirror All Layers &amp;Vertically</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror All Layers Vertically</toolTip>
+      <iconText>Mirror All Layers Vertically</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayers">
+      <icon></icon>
+      <text>&amp;Rotate All Layers...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers</toolTip>
+      <iconText>Rotate All Layers</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayersCW90">
+      <icon>object-rotate-right</icon>
+      <text>Rotate All &amp;Layers 90° to the Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 90° to the Right</toolTip>
+      <iconText>Rotate All Layers 90° to the Right</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayersCCW90">
+      <icon>object-rotate-left</icon>
+      <text>Rotate All Layers &amp;90° to the Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 90° to the Left</toolTip>
+      <iconText>Rotate All Layers 90° to the Left</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayers180">
+      <icon></icon>
+      <text>Rotate All Layers &amp;180°</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 180°</toolTip>
+      <iconText>Rotate All Layers 180°</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="scaleAllLayers">
+      <icon></icon>
+      <text>Scale All &amp;Layers to new Size...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Scale All Layers to new Size</toolTip>
+      <iconText>Scale All Layers to new Size</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="shearAllLayers">
+      <icon></icon>
+      <text>&amp;Shear All Layers...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shear All Layers</toolTip>
+      <iconText>Shear All Layers</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="offsetlayer">
       <icon></icon>
       <text>&amp;Offset Layer...</text>

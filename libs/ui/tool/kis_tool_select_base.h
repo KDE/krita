@@ -264,6 +264,22 @@ public:
         return 0;
     }
 
+    void keyPressEvent(QKeyEvent *event) {
+        if (this->mode() != KisTool::PAINT_MODE) {
+            setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
+            this->resetCursorStyle();
+        }
+        BaseClass::keyPressEvent(event);
+    }
+
+    void keyReleaseEvent(QKeyEvent *event) {
+        if (this->mode() != KisTool::PAINT_MODE) {
+            setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
+            this->resetCursorStyle();
+        }
+        BaseClass::keyPressEvent(event);
+    }
+
     void mouseMoveEvent(KoPointerEvent *event) {
         if (!this->hasUserInteractionRunning() &&
            (m_moveStrokeId || this->mode() != KisTool::PAINT_MODE)) {
@@ -273,6 +289,7 @@ public:
             if (selectionMask) {
                 this->useCursor(KisCursor::moveCursor());
             } else {
+                setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
                 this->resetCursorStyle();
             }
         }

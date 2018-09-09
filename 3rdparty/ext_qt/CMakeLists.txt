@@ -5,7 +5,7 @@ if (WIN32)
         -skip qtlocation -skip qtsensors -skip qtserialport -skip qtwayland
         -skip qtwebchannel -skip qtwebsockets
         -skip qtxmlpatterns -no-sql-sqlite -nomake examples -nomake tools
-        -no-compile-examples -no-dbus -no-iconv -no-qml-debug -no-ssl
+        -no-compile-examples -no-dbus -no-iconv -no-qml-debug
         -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus

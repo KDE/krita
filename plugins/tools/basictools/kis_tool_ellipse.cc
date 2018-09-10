@@ -57,10 +57,7 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
     if (rect.isEmpty() || !blockUntilOperationsFinished())
         return;
 
-    const KisToolShape::ShapeAddInfo info =
-        shouldAddShape(currentNode());
-
-    if (!info.shouldAddShape) {
+    if (!currentNode()->inherits("KisShapeLayer")) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Ellipse"),
                                            image(),
                                            currentNode(),
@@ -73,9 +70,6 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
         KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         shape->setStroke(border);
-
-        info.markAsSelectionShapeIfNeeded(shape);
-
         addShape(shape);
     }
     notifyModified();

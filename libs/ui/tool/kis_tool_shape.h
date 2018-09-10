@@ -71,15 +71,6 @@ protected:
 
     qreal currentStrokeWidth() const;
 
-    struct ShapeAddInfo {
-        bool shouldAddShape = false;
-        bool shouldAddSelectionShape = false;
-
-        void markAsSelectionShapeIfNeeded(KoShape *shape) const;
-    };
-
-    ShapeAddInfo shouldAddShape(KisNodeSP currentNode) const;
-
     void addShape(KoShape* shape);
 
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);

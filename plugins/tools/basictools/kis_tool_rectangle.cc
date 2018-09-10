@@ -58,10 +58,7 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
     if (rect.isNull() || !blockUntilOperationsFinished())
         return;
 
-    const KisToolShape::ShapeAddInfo info =
-        shouldAddShape(currentNode());
-
-    if (!info.shouldAddShape) {
+    if (!currentNode()->inherits("KisShapeLayer")) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Rectangle"),
                                            image(),
                                            currentNode(),
@@ -89,9 +86,6 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
             border = toQShared(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
         }
         shape->setStroke(border);
-
-        info.markAsSelectionShapeIfNeeded(shape);
-
         addShape(shape);
     }
 

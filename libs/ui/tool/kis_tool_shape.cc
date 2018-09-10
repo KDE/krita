@@ -49,8 +49,6 @@
 #include <KoSelectedShapesProxy.h>
 #include <KoSelection.h>
 #include <commands/KoKeepShapesSelectedCommand.h>
-#include "kis_selection_mask.h"
-#include "kis_shape_selection.h"
 
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
@@ -137,29 +135,6 @@ qreal KisToolShape::currentStrokeWidth() const
         canvas()->resourceManager()->resource(KisCanvasResourceProvider::Size).toReal();
 
     return canvas()->unit().fromUserValue(sizeInPx);
-}
-
-KisToolShape::ShapeAddInfo KisToolShape::shouldAddShape(KisNodeSP currentNode) const
-{
-    ShapeAddInfo info;
-
-    if (currentNode->inherits("KisShapeLayer")) {
-        info.shouldAddShape = true;
-    } else if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(currentNode.data())) {
-        if (mask->selection()->hasShapeSelection()) {
-            info.shouldAddShape = true;
-            info.shouldAddSelectionShape = true;
-        }
-    }
-
-    return info;
-}
-
-void KisToolShape::ShapeAddInfo::markAsSelectionShapeIfNeeded(KoShape *shape) const
-{
-    if (this->shouldAddSelectionShape) {
-        shape->setUserData(new KisShapeSelectionMarker());
-    }
 }
 
 void KisToolShape::addShape(KoShape* shape)
@@ -256,3 +231,4 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
 
     notifyModified();
 }
+

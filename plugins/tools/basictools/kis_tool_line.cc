@@ -179,13 +179,10 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    const KisToolShape::ShapeAddInfo info =
-        shouldAddShape(currentNode());
-
     // Always show guideline on vector layers
     m_showGuideline = m_chkShowGuideline->isChecked() || nodeAbility != PAINT;
     updatePreviewTimer(m_showGuideline);
-    m_helper->setEnabled((nodeAbility == PAINT && !info.shouldAddShape) || info.shouldAddSelectionShape);
+    m_helper->setEnabled(nodeAbility == PAINT);
     m_helper->setUseSensors(m_chkUseSensors->isChecked());
     m_helper->start(event, canvas()->resourceManager());
 
@@ -267,10 +264,7 @@ void KisToolLine::endStroke()
         return;
     }
 
-    const KisToolShape::ShapeAddInfo info =
-        shouldAddShape(currentNode());
-
-    if ((nodeAbility == PAINT && !info.shouldAddShape) || info.shouldAddSelectionShape) {
+    if (nodeAbility == PAINT) {
         updateStroke();
         m_helper->end();
     }

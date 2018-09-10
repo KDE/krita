@@ -10,7 +10,7 @@
 class KisUndoAdapter;
 
 
-class KisSelectionBasedProcessingHelper
+class KRITAIMAGE_EXPORT KisSelectionBasedProcessingHelper
 {
 public:
     using Functor = std::function<void(KisPaintDeviceSP)>;

@@ -199,9 +199,9 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
     {
-        return QString("<u>" + item.title + "</u>"
-               "<p><small>" + item.pubDate.toString("MMMM d, yyyy hh:mm") + "</small></p>"
-               "<p><small>" + item.description.left(70).append("...") + "</small></p><hr>");
+        return QString("<b><a>" + item.title + "</a></b>"
+               "<br><small>(" + item.pubDate.toString("MMMM d, yyyy") + ") "
+               + item.description.left(90).append("...") + "</small><hr>");
     }
     case TitleRole:
         return item.title;

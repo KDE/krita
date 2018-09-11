@@ -19,7 +19,7 @@
 #ifndef _KIS_META_DATA_FILTER_H_
 #define _KIS_META_DATA_FILTER_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 class QString;
 
 namespace KisMetaData

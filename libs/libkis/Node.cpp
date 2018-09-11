@@ -45,7 +45,7 @@
 #include <lazybrush/kis_colorize_mask.h>
 #include <kis_layer.h>
 #include <kis_meta_data_merge_strategy.h>
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_filter_strategy.h>
 
 #include <kis_raster_keyframe_channel.h>

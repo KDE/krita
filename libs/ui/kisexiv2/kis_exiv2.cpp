@@ -24,7 +24,7 @@
 #include "kis_exif_io.h"
 #include "kis_xmp_io.h"
 
-#include <metadata/kis_meta_data_value.h>
+#include <kis_meta_data_value.h>
 #include <kis_debug.h>
 
 // ---- Generic conversion functions ---- //

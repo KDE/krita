@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -16,29 +16,27 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_META_DATA_MERGE_STRATEGY_REGISTRY_H_
-#define _KIS_META_DATA_MERGE_STRATEGY_REGISTRY_H_
+#ifndef _KIS_META_DATA_PARSER_H_
+#define _KIS_META_DATA_PARSER_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
-#include "KoGenericRegistry.h"
-#include "kis_meta_data_merge_strategy.h"
+#include <QString>
 
 namespace KisMetaData
 {
-
-class KRITAIMAGE_EXPORT MergeStrategyRegistry : public KoGenericRegistry<const KisMetaData::MergeStrategy*>
+class TypeInfo;
+class Value;
+/**
+ * This class allow to parse from a string and return a value.
+ */
+class KRITAMETADATA_EXPORT Parser
 {
+    friend class TypeInfo;
 public:
-    MergeStrategyRegistry();
-    ~MergeStrategyRegistry() override;
-    static MergeStrategyRegistry* instance();
-private:
-
-    MergeStrategyRegistry(const MergeStrategyRegistry&);
-    MergeStrategyRegistry& operator=(const MergeStrategyRegistry&);
+    virtual ~Parser();
+    virtual Value parse(const QString&) const = 0;
 };
-
 }
 
 #endif

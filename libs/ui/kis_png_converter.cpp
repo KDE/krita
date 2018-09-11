@@ -59,8 +59,8 @@
 #include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_io_backend.h>
-#include <metadata/kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
 #include "dialogs/kis_dlg_png_import.h"
 #include "kis_clipboard.h"

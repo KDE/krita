@@ -21,14 +21,14 @@
 
 #include <QList>
 #include <QString>
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
 namespace KisMetaData
 {
 class Parser;
 class Schema;
 class Value;
-class KRITAIMAGE_EXPORT TypeInfo
+class KRITAMETADATA_EXPORT TypeInfo
 {
 public:
     enum PropertyType {
@@ -46,7 +46,7 @@ public:
         OpenedChoice,
         ClosedChoice
     };
-    class KRITAIMAGE_EXPORT Choice
+    class KRITAMETADATA_EXPORT Choice
     {
     public:
         Choice(const Value&, const QString& hint);

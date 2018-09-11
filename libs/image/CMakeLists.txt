@@ -4,7 +4,6 @@ add_subdirectory( tiles3 )
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/metadata
     ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty
     ${CMAKE_CURRENT_SOURCE_DIR}/brushengine
     ${CMAKE_CURRENT_SOURCE_DIR}/commands
@@ -275,22 +274,6 @@ set(kritaimage_LIB_SRCS
    kis_layer_composition.cpp
    kis_selection_filters.cpp
    KisProofingConfiguration.h
-   metadata/kis_meta_data_entry.cc
-   metadata/kis_meta_data_filter.cc
-   metadata/kis_meta_data_filter_p.cc
-   metadata/kis_meta_data_filter_registry.cc
-   metadata/kis_meta_data_filter_registry_model.cc
-   metadata/kis_meta_data_io_backend.cc
-   metadata/kis_meta_data_merge_strategy.cc
-   metadata/kis_meta_data_merge_strategy_p.cc
-   metadata/kis_meta_data_merge_strategy_registry.cc
-   metadata/kis_meta_data_parser.cc
-   metadata/kis_meta_data_schema.cc
-   metadata/kis_meta_data_schema_registry.cc
-   metadata/kis_meta_data_store.cc
-   metadata/kis_meta_data_type_info.cc
-   metadata/kis_meta_data_validator.cc
-   metadata/kis_meta_data_value.cc
 
    kis_keyframe.cpp
    kis_keyframe_channel.cpp
@@ -338,10 +321,13 @@ target_link_libraries(kritaimage
     PUBLIC
         kritaversion 
         kritawidgets 
-        kritaglobal kritapsd 
-        kritaodf kritapigment 
+        kritaglobal 
+        kritapsd 
+        kritaodf 
+        kritapigment 
         kritacommand
         kritawidgetutils 
+        kritametadata
         Qt5::Concurrent
 )
 
@@ -371,7 +357,6 @@ target_include_directories(kritaimage
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/filter>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/generator>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/layerstyles>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/metadata>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/processing>
 )
 

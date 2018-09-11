@@ -51,8 +51,8 @@
 #include "lazybrush/kis_colorize_mask.h"
 #include <kis_selection_component.h>
 #include <kis_pixel_selection.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
 
 #include "kis_config.h"
 #include "kis_store_paintdevice_writer.h"

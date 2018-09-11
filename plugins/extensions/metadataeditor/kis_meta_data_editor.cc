@@ -27,11 +27,11 @@
 
 #include <kis_debug.h>
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_schema.h>
-#include <metadata/kis_meta_data_schema_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
 #include <kis_icon.h>
 #include "kis_entry_editor.h"
 #include <QTableView>

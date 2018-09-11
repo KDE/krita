@@ -19,7 +19,7 @@
 #ifndef _KIS_META_DATA_IO_BACKEND_H_
 #define _KIS_META_DATA_IO_BACKEND_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
 #include <KoGenericRegistry.h>
 
@@ -33,7 +33,7 @@ class Store;
  * For instance, to add support to exif or xmp or iptc or dublin core
  * or anything else, it is needed to extend this interface.
  */
-class KRITAIMAGE_EXPORT IOBackend
+class KRITAMETADATA_EXPORT IOBackend
 {
 public:
 
@@ -98,7 +98,7 @@ public:
     virtual bool loadFrom(Store* store, QIODevice* ioDevice) const = 0;
 };
 
-class KRITAIMAGE_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*>
+class KRITAMETADATA_EXPORT IOBackendRegistry : public KoGenericRegistry<IOBackend*>
 {
 
 public:

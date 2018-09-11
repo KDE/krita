@@ -27,18 +27,21 @@
 #include <kis_meta_data_entry.h>
 
 struct KisEntryEditor::Private {
-    QObject* object;
+    QWidget* object;
     QString propertyName;
     KisMetaData::Store* store;
     QString key;
     QString structField;
     int arrayIndex;
+
     KisMetaData::Value value() {
         KisMetaData::Value value = store->getEntry(key).value();
+
         if (value.type() == KisMetaData::Value::Structure && !structField.isEmpty()) {
             QMap<QString, KisMetaData::Value> structure = value.asStructure();
             return structure[ structField ];
-        } else if (value.isArray() && arrayIndex > -1) {
+        }
+        else if (value.isArray() && arrayIndex > -1) {
             QList<KisMetaData::Value> array = value.asArray();
             if (arrayIndex < array.size()) {
                 return array[arrayIndex];
@@ -63,7 +66,8 @@ struct KisEntryEditor::Private {
     }
 };
 
-KisEntryEditor::KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex) : d(new Private)
+KisEntryEditor::KisEntryEditor(QWidget* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex)
+    : d(new Private)
 {
     Q_ASSERT(obj);
     Q_ASSERT(store);
@@ -85,7 +89,8 @@ void KisEntryEditor::valueChanged()
 {
     if (d->store->containsEntry(d->key)) {
         bool blocked = d->object->blockSignals(true);
-        d->object->setProperty(d->propertyName.toLatin1(), d->value().asVariant());
+        KisMetaData::Value val = d->value();
+        d->object->setProperty(d->propertyName.toLatin1(), val.asVariant());
         d->object->blockSignals(blocked);
     }
 }

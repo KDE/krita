@@ -45,8 +45,6 @@ public:
     bool antiAliasSelection() const;
     int action() const { return selectionAction(); }
 
-    bool processKeyPressEvent(QKeyEvent *event);
-
 Q_SIGNALS:
     void selectionActionChanged(int newAction);
 

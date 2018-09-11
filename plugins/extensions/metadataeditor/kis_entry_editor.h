@@ -19,7 +19,7 @@
 #ifndef _KIS_ENTRY_EDITOR_H_
 #define _KIS_ENTRY_EDITOR_H_
 
-#include <QObject>
+#include <QWidget>
 
 class QString;
 
@@ -33,7 +33,7 @@ class KisEntryEditor : public QObject
     Q_OBJECT
     struct Private;
 public:
-    KisEntryEditor(QObject* obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex);
+    KisEntryEditor(QWidget *obj, KisMetaData::Store* store, QString key, QString propertyName, QString structField, int arrayIndex);
     ~KisEntryEditor() override;
 public Q_SLOTS:
     void valueEdited();

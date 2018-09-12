@@ -104,12 +104,19 @@ void KisPaletteEditor::addPalette()
 {
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
+    KoDialog dlg;
+    QFormLayout layout;
+    dlg.mainWidget()->setLayout(&layout);
+    QLabel lbl("Name");
+    QLineEdit le("New Palette");
+    layout.addRow(&lbl, &le);
+    if (dlg.exec() != QDialog::Accepted) { return; }
     KoColorSet *newColorSet = new KoColorSet(newPaletteFileName(false));
     newColorSet->setPaletteType(KoColorSet::KPL);
     newColorSet->setIsGlobal(false);
     newColorSet->setIsEditable(true);
     newColorSet->setValid(true);
-    newColorSet->setName("New Palette");
+    newColorSet->setName(le.text());
     m_d->rServer->addResource(newColorSet);
     m_d->rServer->removeFromBlacklist(newColorSet);
 

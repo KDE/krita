@@ -29,7 +29,6 @@
 #include <QAction>
 #include <QMenu>
 
-#include <KoCanvasObserverBase.h>
 #include <KoResourceServerObserver.h>
 #include <KoResourceServer.h>
 #include <resources/KoColorSet.h>
@@ -60,7 +59,6 @@ public: // QDockWidget
 
 public: // KisMainWindowObserver
     void setViewManager(KisViewManager* kisview) override;
-
 
 private Q_SLOTS:
     void slotContextMenu(const QModelIndex &);

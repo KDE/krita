@@ -1,0 +1,152 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7034bb6..be9216e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -42,11 +42,11 @@ OPTION( EXIV2_ENABLE_SHARED        "Build exiv2 as a shared library (dll)"
+ OPTION( EXIV2_ENABLE_XMP           "Build with XMP metadata support"                       ON  )
+ OPTION( EXIV2_ENABLE_LIBXMP        "Build a static convenience Library for XMP"            ON  )
+ OPTION( EXIV2_ENABLE_PNG           "Build with png support (requires libz)"                ON  )
+-OPTION( EXIV2_ENABLE_NLS           "Build native language support (requires gettext)"      ON  )
++OPTION( EXIV2_ENABLE_NLS           "Build native language support (requires gettext)"      OFF  )
+ OPTION( EXIV2_ENABLE_PRINTUCS2     "Build with Printucs2"                                  ON  )
+-OPTION( EXIV2_ENABLE_LENSDATA      "Build including lens data"                             ON  )
++OPTION( EXIV2_ENABLE_LENSDATA      "Build including lens data"                             OFF  )
+ OPTION( EXIV2_ENABLE_COMMERCIAL    "Build with the EXV_COMMERCIAL_VERSION symbol set"      OFF )
+-OPTION( EXIV2_ENABLE_BUILD_SAMPLES "Build the unit tests"                                  ON  )
++OPTION( EXIV2_ENABLE_BUILD_SAMPLES "Build the unit tests"                                  OFF  )
+ OPTION( EXIV2_ENABLE_BUILD_PO      "Build translations files"                              OFF )
+ OPTION( EXIV2_ENABLE_VIDEO         "Build video support into library"                      OFF )
+ OPTION( EXIV2_ENABLE_WEBREADY      "Build webready support into library"                   OFF )
+diff --git a/include/exiv2/error.hpp b/include/exiv2/error.hpp
+index 01d23fc..442ef7b 100644
+--- a/include/exiv2/error.hpp
++++ b/include/exiv2/error.hpp
+@@ -235,11 +235,6 @@ namespace Exiv2 {
+         //@}
+ 
+     private:
+-        //! @name Manipulators
+-        //@{
+-        //! Assemble the error message from the arguments
+-        EXIV2API void setMsg();
+-        //@}
+ 
+         // DATA
+         int code_;                              //!< Error code
+@@ -271,7 +266,7 @@ namespace Exiv2 {
+     BasicError<charT>::BasicError(int code)
+         : code_(code), count_(0)
+     {
+-        setMsg();
++
+     }
+ 
+     template<typename charT> template<typename A>
+@@ -279,7 +274,6 @@ namespace Exiv2 {
+     BasicError<charT>::BasicError(int code, const A& arg1)
+         : code_(code), count_(1), arg1_(toBasicString<charT>(arg1))
+     {
+-        setMsg();
+     }
+ 
+     template<typename charT> template<typename A, typename B>
+@@ -289,7 +283,6 @@ namespace Exiv2 {
+           arg1_(toBasicString<charT>(arg1)),
+           arg2_(toBasicString<charT>(arg2))
+     {
+-        setMsg();
+     }
+ 
+     template<typename charT> template<typename A, typename B, typename C>
+@@ -300,7 +293,6 @@ namespace Exiv2 {
+           arg2_(toBasicString<charT>(arg2)),
+           arg3_(toBasicString<charT>(arg3))
+     {
+-        setMsg();
+     }
+ 
+     template<typename charT>
+diff --git a/src/error.cpp b/src/error.cpp
+index 6ce0fb6..925b6af 100644
+--- a/src/error.cpp
++++ b/src/error.cpp
+@@ -133,79 +133,6 @@ namespace Exiv2 {
+     {
+     }
+ 
+-    //! @cond IGNORE
+-    template<>
+-    void BasicError<char>::setMsg()
+-    {
+-        std::string msg = _(errMsg(code_));
+-        std::string::size_type pos;
+-        pos = msg.find("%0");
+-        if (pos != std::string::npos) {
+-            msg.replace(pos, 2, toString(code_));
+-        }
+-        if (count_ > 0) {
+-            pos = msg.find("%1");
+-            if (pos != std::string::npos) {
+-                msg.replace(pos, 2, arg1_);
+-            }
+-        }
+-        if (count_ > 1) {
+-            pos = msg.find("%2");
+-            if (pos != std::string::npos) {
+-                msg.replace(pos, 2, arg2_);
+-            }
+-        }
+-        if (count_ > 2) {
+-            pos = msg.find("%3");
+-            if (pos != std::string::npos) {
+-                msg.replace(pos, 2, arg3_);
+-            }
+-        }
+-        msg_ = msg;
+-#ifdef EXV_UNICODE_PATH
+-        wmsg_ = s2ws(msg);
+-#endif
+-    }
+-    //! @endcond
+ 
+-#ifdef EXV_UNICODE_PATH
+-    template<>
+-    void BasicError<wchar_t>::setMsg()
+-    {
+-        std::string s = _(errMsg(code_));
+-        std::wstring wmsg(s.begin(), s.end());
+-        std::wstring::size_type pos;
+-        pos = wmsg.find(L"%0");
+-        if (pos != std::wstring::npos) {
+-            wmsg.replace(pos, 2, toBasicString<wchar_t>(code_));
+-        }
+-        if (count_ > 0) {
+-            pos = wmsg.find(L"%1");
+-            if (pos != std::wstring::npos) {
+-                wmsg.replace(pos, 2, arg1_);
+-            }
+-        }
+-        if (count_ > 1) {
+-            pos = wmsg.find(L"%2");
+-            if (pos != std::wstring::npos) {
+-                wmsg.replace(pos, 2, arg2_);
+-            }
+-        }
+-        if (count_ > 2) {
+-            pos = wmsg.find(L"%3");
+-            if (pos != std::wstring::npos) {
+-                wmsg.replace(pos, 2, arg3_);
+-            }
+-        }
+-        wmsg_ = wmsg;
+-        msg_ = ws2s(wmsg);
+-    }
+-#endif
+-
+-    const char* errMsg(int code)
+-    {
+-        const ErrMsg* em = find(errList, code);
+-        return em ? em->message_ : "";
+-    }
+ 
+ }                                       // namespace Exiv2

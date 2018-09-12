@@ -23,6 +23,7 @@
 class KoResourceItemChooser;
 class KoResource;
 class KoGamutMask;
+class KisGamutMaskDelegate;
 
 class KisGamutMaskChooser : public QWidget
 {
@@ -31,16 +32,30 @@ public:
     explicit KisGamutMaskChooser(QWidget *parent = nullptr);
     ~KisGamutMaskChooser() override;
 
+    enum ViewMode {
+        THUMBNAIL, // Shows thumbnails
+        DETAIL  // Shows thumbsnails with text next to it
+    };
+
     void setCurrentResource(KoResource* resource);
+
+protected:
+    void resizeEvent(QResizeEvent* event) override;
 
 Q_SIGNALS:
     void sigGamutMaskSelected(KoGamutMask* mask);
 
 private Q_SLOTS:
     void resourceSelected(KoResource* resource);
+    void slotSetModeThumbnail();
+    void slotSetModeDetail();
 
 private:
+    void setViewMode(ViewMode mode);
+    void updateViewSettings();
     KoResourceItemChooser* m_itemChooser;
+    KisGamutMaskDelegate* m_delegate;
+    ViewMode m_mode;
 };
 
 #endif // KISGAMUTMASKCHOOSER_H

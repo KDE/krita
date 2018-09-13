@@ -38,7 +38,6 @@ struct KisTIFFOptions {
     bool flatten = true;
     quint16 jpegQuality = 80;
     quint16 deflateCompress = 6;
-    quint16 faxMode = 1;
     quint16 pixarLogCompress = 6;
     bool saveProfile = true;
 

@@ -9,7 +9,7 @@ if (WIN32)
         -no-libproxy -no-system-proxies -no-icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
-        -skip qtspeech -skip qtvirtualkeyboard -skip qtwinextras
+        -skip qtspeech -skip qtvirtualkeyboard
         #
         -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg
         #

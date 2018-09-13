@@ -46,7 +46,7 @@
 
 
 #include "tool_transform_args.h"
-#include "tool_transform_changes_tracker.h"
+#include "KisToolChangesTracker.h"
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
 
@@ -295,7 +295,7 @@ private:
     QPointer<KisCanvas2> m_canvas;
 
     TransformTransactionProperties m_transaction;
-    TransformChangesTracker m_changesTracker;
+    KisToolChangesTracker m_changesTracker;
 
 
     /// actions for the context click menu
@@ -333,7 +333,7 @@ private:
     QPainterPath m_cursorOutline;
 
 private Q_SLOTS:
-    void slotTrackerChangedConfig();
+    void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
     void slotUiChangedConfig();
     void slotApplyTransform();
     void slotResetTransform();

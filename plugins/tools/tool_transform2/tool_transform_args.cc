@@ -121,6 +121,11 @@ ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
     init(args);
 }
 
+KisToolChangesTrackerData *ToolTransformArgs::clone() const
+{
+    return new ToolTransformArgs(*this);
+}
+
 ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
 {
     clear();

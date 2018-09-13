@@ -168,6 +168,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
+    tool/KisToolChangesTracker.cpp
+    tool/KisToolChangesTrackerData.cpp
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_rectangle_constraint_widget.cpp

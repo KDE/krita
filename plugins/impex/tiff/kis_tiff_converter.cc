@@ -172,10 +172,6 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
     compToIndex[COMPRESSION_JPEG] = 1;
     compToIndex[COMPRESSION_DEFLATE] = 2;
     compToIndex[COMPRESSION_LZW] = 3;
-    compToIndex[COMPRESSION_JP2000] = 4;
-    compToIndex[COMPRESSION_CCITTRLE] = 5;
-    compToIndex[COMPRESSION_CCITTFAX3] = 6;
-    compToIndex[COMPRESSION_CCITTFAX4] = 7;
     compToIndex[COMPRESSION_PIXARLOG] = 8;
 
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
@@ -186,7 +182,6 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
     cfg->setProperty("flatten", flatten);
     cfg->setProperty("quality", jpegQuality);
     cfg->setProperty("deflate", deflateCompress);
-    cfg->setProperty("faxmode", faxMode - 1);
     cfg->setProperty("pixarlog", pixarLogCompress);
     cfg->setProperty("saveProfile", saveProfile);
 
@@ -200,10 +195,9 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
     indexToComp[1] = COMPRESSION_JPEG;
     indexToComp[2] = COMPRESSION_DEFLATE;
     indexToComp[3] = COMPRESSION_LZW;
-    indexToComp[4] = COMPRESSION_JP2000;
-    indexToComp[5] = COMPRESSION_CCITTRLE;
-    indexToComp[6] = COMPRESSION_CCITTFAX3;
-    indexToComp[7] = COMPRESSION_CCITTFAX4;
+    indexToComp[4] = COMPRESSION_PIXARLOG;
+
+    // old value that might be still stored in a config (remove after Krita 5.0 :) )
     indexToComp[8] = COMPRESSION_PIXARLOG;
 
     compressionType =
@@ -216,7 +210,6 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
     flatten = cfg->getBool("flatten", true);
     jpegQuality = cfg->getInt("quality", 80);
     deflateCompress = cfg->getInt("deflate", 6);
-    faxMode = cfg->getInt("faxmode", 0) + 1;
     pixarLogCompress = cfg->getInt("pixarlog", 6);
     saveProfile = cfg->getBool("saveProfile", true);
 }
@@ -731,6 +724,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const QString &filename, KisI
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
+
     KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
     if (!visitor->visit(root)) {
         TIFFClose(image);

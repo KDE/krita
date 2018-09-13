@@ -1196,8 +1196,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
-                        document->setUrl(oldURL);
-                        document->setLocalFilePath(oldFile);
                     }
                 }
                 else { // Export
@@ -1227,17 +1225,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         if (!ret) {
             dbgUI << "Failed Save!";
-            document->setUrl(oldURL);
-            document->setLocalFilePath(oldFile);
         }
     }
-
-    if (ret && !isExporting) {
-        document->setRecovered(false);
-    }
-
-    if (!ret && reset_url)
-        document->resetURL(); //clean the suggested filename as the save dialog was rejected
 
     updateReloadFileAction(document);
     updateCaption();

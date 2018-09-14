@@ -36,6 +36,7 @@
 
 #include "kis_cursor.h"
 
+#include <QButtonGroup>
 
 KisToolText::KisToolText(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))

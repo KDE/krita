@@ -386,7 +386,7 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
 
-        if (exportConfiguration) {
+        if (exportConfiguration && !batchMode() && showWarnings) {
             KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }

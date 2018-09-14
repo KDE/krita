@@ -316,7 +316,7 @@ void KisToolMove::initHandles(const KisNodeList &nodes)
         m_handlesRect |= node->exactBounds();
     }
     if (image()->globalSelection()) {
-        m_handlesRect &= image()->globalSelection()->selectedRect();
+        m_handlesRect &= image()->globalSelection()->selectedExactRect();
     }
 }
 

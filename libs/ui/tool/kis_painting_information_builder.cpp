@@ -142,7 +142,7 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
 
 qreal KisPaintingInformationBuilder::pressureToCurve(qreal pressure)
 {
-    return KisCubicCurve::interpolateLinear(pressure, m_pressureSamples);
+    return m_pressureSamples.at(qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION));
 }
 
 /***********************************************************************/

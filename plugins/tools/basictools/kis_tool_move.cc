@@ -431,7 +431,7 @@ void KisToolMove::endAction(KoPointerEvent *event)
     pos = applyModifiers(event->modifiers(), pos);
     drag(pos);
 
-    m_accumulatedOffset += m_dragPos - m_dragStart;
+    m_accumulatedOffset += pos - m_dragStart;
     m_dragStart = QPoint();
     m_dragPos = QPoint();
     m_dragInProgress = false;

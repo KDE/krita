@@ -811,7 +811,11 @@ void KisToolTransform::requestUndoDuringStroke()
 {
     if (!m_strokeData.strokeId()) return;
 
-    m_changesTracker.requestUndo();
+    if (m_changesTracker.isEmpty()) {
+        cancelStroke();
+    } else {
+        m_changesTracker.requestUndo();
+    }
 }
 
 void KisToolTransform::requestStrokeEnd()

@@ -42,8 +42,10 @@ void KisToolChangesTracker::commitConfig(KisToolChangesTrackerDataSP state)
 
 void KisToolChangesTracker::requestUndo()
 {
-    if (m_d->undoStack.size() > 1) {
-        m_d->undoStack.removeLast();
+    if (m_d->undoStack.isEmpty()) return;
+
+    m_d->undoStack.removeLast();
+    if (!m_d->undoStack.isEmpty()) {
         emit sigConfigChanged(m_d->undoStack.last());
     }
 }

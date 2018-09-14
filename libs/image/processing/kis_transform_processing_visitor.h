@@ -20,7 +20,7 @@
 #define __KIS_TRANSFORM_PROCESSING_VISITOR_H
 
 #include "kis_processing_visitor.h"
-
+#include "KisSelectionBasedProcessingHelper.h"
 
 #include <kis_types.h>
 
@@ -38,6 +38,10 @@ public:
                                   qint32  tx, qint32  ty,
                                   KisFilterStrategy *filter,
                                   const QTransform &shapesCorrection = QTransform());
+
+    void setSelection(KisSelectionSP selection);
+    KUndo2Command *createInitCommand();
+
 
     void visit(KisNode *node, KisUndoAdapter *undoAdapter) override;
     void visit(KisPaintLayer *layer, KisUndoAdapter *undoAdapter) override;
@@ -57,6 +61,8 @@ private:
     void transformPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *adapter, const ProgressHelper &helper);
     void transformSelection(KisSelectionSP selection, KisUndoAdapter *adapter, const ProgressHelper &helper);
 
+    void transformOneDevice(KisPaintDeviceSP device, KoUpdater *updater);
+
 private:
     qreal m_sx, m_sy;
     qint32 m_tx, m_ty;
@@ -65,6 +71,7 @@ private:
     KisFilterStrategy *m_filter;
     qreal m_angle;
     QTransform m_shapesCorrection;
+    KisSelectionBasedProcessingHelper m_selectionHelper;
 };
 
 #endif /* __KIS_TRANSFORM_PROCESSING_VISITOR_H */

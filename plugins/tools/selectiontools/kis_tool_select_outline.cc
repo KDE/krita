@@ -64,8 +64,6 @@ KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
                     i18n("Outline Selection")),
       m_continuedMode(false)
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectOutline::setSelectionAction);
 }
 
 KisToolSelectOutline::~KisToolSelectOutline()
@@ -265,16 +263,14 @@ void KisToolSelectOutline::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolSelectOutline::setSelectionAction(int action)
+void KisToolSelectOutline::resetCursorStyle()
 {
-    changeSelectionAction(action);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_outline_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelect::resetCursorStyle();
+    }
 }
 
-QMenu* KisToolSelectOutline::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}

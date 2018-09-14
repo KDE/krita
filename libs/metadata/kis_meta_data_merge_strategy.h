@@ -21,7 +21,7 @@
 
 #include <QList>
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
 class QString;
 
@@ -34,7 +34,7 @@ class Store;
  * This is used to decide which entries of a metadata store is kept, or how they
  * are modified when a list of meta data stores are merged together.
  */
-class KRITAIMAGE_EXPORT MergeStrategy
+class KRITAMETADATA_EXPORT MergeStrategy
 {
 public:
     virtual ~MergeStrategy();

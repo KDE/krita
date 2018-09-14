@@ -169,6 +169,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
+    tool/KisToolChangesTracker.cpp
+    tool/KisToolChangesTrackerData.cpp
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_rectangle_constraint_widget.cpp
@@ -258,7 +260,7 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-    
+    widgets/KisNewsWidget.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -294,7 +296,6 @@ set(kritaui_LIB_SRCS
     actions/KisPasteActionFactory.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
-    kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
     input/kis_tablet_debugger.cpp
@@ -378,6 +379,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
+
 )
 
 if(WIN32)
@@ -488,6 +490,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+    forms/KisNewsPage.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
@@ -515,6 +518,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
+
 )
 
 

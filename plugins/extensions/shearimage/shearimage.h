@@ -23,6 +23,8 @@
 #include <QVariant>
 
 #include <KisActionPlugin.h>
+#include "kis_types.h"
+
 
 class ShearImage : public KisActionPlugin
 {
@@ -31,10 +33,14 @@ public:
     ShearImage(QObject *parent, const QVariantList &);
     ~ShearImage() override;
 
+private:
+    void shearLayerImpl(KisNodeSP rootNode);
+
 private Q_SLOTS:
 
     void slotShearImage();
     void slotShearLayer();
+    void slotShearAllLayers();
 };
 
 #endif // SHEARIMAGE_H

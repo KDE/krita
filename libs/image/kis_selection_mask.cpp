@@ -66,6 +66,7 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
 {
     setName("selection");
     setActive(false);
+    setSupportsLodMoves(false);
 
     m_d->image = image;
 

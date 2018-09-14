@@ -60,8 +60,8 @@
 #include <flake/kis_shape_layer.h>
 #include <kis_undo_adapter.h>
 #include <kis_painter.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_psd_layer_style.h>
 #include <KisMimeDatabase.h>
 

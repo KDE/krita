@@ -22,7 +22,7 @@
 #include <QMap>
 #include <QString>
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
 namespace KisMetaData
 {
@@ -30,10 +30,10 @@ class Store;
 /**
  * This class contains information on the validation results of a \ref KisMetaData::Store .
  */
-class KRITAIMAGE_EXPORT Validator
+class KRITAMETADATA_EXPORT Validator
 {
 public:
-    class KRITAIMAGE_EXPORT Reason
+    class KRITAMETADATA_EXPORT Reason
     {
         friend class Validator;
         friend class QMap<QString, Reason>;

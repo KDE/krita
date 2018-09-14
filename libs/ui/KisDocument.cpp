@@ -623,16 +623,29 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
         }
     } else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
+            const QString existingAutoSaveBaseName = localFilePath();
+            const bool wasRecovered = isRecovered();
+
             setUrl(QUrl::fromLocalFile(job.filePath));
             setLocalFilePath(job.filePath);
             setMimeType(job.mimeType);
             updateEditingTime(true);
 
             if (!d->modifiedWhileSaving) {
-                d->undoStack->setClean();
+                /**
+                 * If undo stack is alreado clean/empty, it doesn't emit any
+                 * signals, so we might forget update document modified state
+                 * (which was set, e.g. while recovering an autosave file)
+                 */
+
+                if (d->undoStack->isClean()) {
+                    setModified(false);
+                } else {
+                    d->undoStack->setClean();
+                }
             }
             setRecovered(false);
-            removeAutoSaveFiles();
+            removeAutoSaveFiles(existingAutoSaveBaseName, wasRecovered);
         }
 
         emit completed();
@@ -1389,21 +1402,33 @@ QString KisDocument::warningMessage() const
 }
 
 
-void KisDocument::removeAutoSaveFiles()
+void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasRecovered)
 {
     //qDebug() << "removeAutoSaveFiles";
     // Eliminate any auto-save file
-    QString asf = generateAutoSaveFileName(localFilePath());   // the one in the current dir
+    QString asf = generateAutoSaveFileName(autosaveBaseName);   // the one in the current dir
+
     //qDebug() << "\tfilename:" << asf << "exists:" << QFile::exists(asf);
     if (QFile::exists(asf)) {
         //qDebug() << "\tremoving autosavefile" << asf;
         QFile::remove(asf);
     }
     asf = generateAutoSaveFileName(QString());   // and the one in $HOME
+
     //qDebug() << "Autsavefile in $home" << asf;
     if (QFile::exists(asf)) {
         //qDebug() << "\tremoving autsavefile 2" << asf;
         QFile::remove(asf);
+    }
+
+    QRegularExpression autosavePattern("^\\..+-autosave.kra$");
+
+    if (wasRecovered &&
+        !autosaveBaseName.isEmpty() &&
+        autosavePattern.match(QFileInfo(autosaveBaseName).fileName()).hasMatch() &&
+        QFile::exists(autosaveBaseName)) {
+
+        QFile::remove(autosaveBaseName);
     }
 }
 

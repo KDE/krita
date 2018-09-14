@@ -745,7 +745,7 @@ bool KisView::queryClose()
             image->requestStrokeCancellation();
             viewManager()->blockUntilOperationsFinishedForced(image);
 
-            document()->removeAutoSaveFiles();
+            document()->removeAutoSaveFiles(document()->localFilePath(), document()->isRecovered());
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
         }

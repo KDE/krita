@@ -54,7 +54,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_selection_manager.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
 #include "kis_shape_layer.h"

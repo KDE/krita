@@ -105,21 +105,16 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
 KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas):
     KisToolSelectBase<__KisToolSelectRectangularLocal>(canvas, i18n("Rectangular Selection"))
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectRectangular::setSelectionAction);
 }
 
-void KisToolSelectRectangular::setSelectionAction(int action)
+void KisToolSelectRectangular::resetCursorStyle()
 {
-    changeSelectionAction(action);
-}
-
-QMenu* KisToolSelectRectangular::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_rectangular_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_rectangular_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelectBase<__KisToolSelectRectangularLocal>::resetCursorStyle();
+    }
 }
 

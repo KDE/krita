@@ -27,6 +27,7 @@
 
 class KisCanvas2;
 class QButtonGroup;
+class QKeySequence;
 
 class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
 {
@@ -56,10 +57,14 @@ public:
     void disableSelectionModeOption();
     void setAction(int);
     void setMode(int);
+    void setAntiAliasSelection(bool value);
+
+    void updateActionButtonToolTip(int action, const QKeySequence &shortcut);
 
 Q_SIGNALS:
     void actionChanged(int);
     void modeChanged(int);
+    void antiAliasSelectionChanged(bool);
 
 private Q_SLOTS:
     void hideActionsForSelectionMode(int mode);

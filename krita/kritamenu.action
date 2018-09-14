@@ -802,7 +802,7 @@
       <toolTip>Show Pixel Grid</toolTip>
       <iconText>Show Pixel Grid</iconText>
       <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationConditions>1000</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>

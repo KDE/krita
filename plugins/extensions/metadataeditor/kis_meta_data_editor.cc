@@ -27,11 +27,11 @@
 
 #include <kis_debug.h>
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_schema.h>
-#include <metadata/kis_meta_data_schema_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_schema.h>
+#include <kis_meta_data_schema_registry.h>
 #include <kis_icon.h>
 #include "kis_entry_editor.h"
 #include <QTableView>
@@ -91,21 +91,24 @@ KisMetaDataEditor::KisMetaDataEditor(QWidget* parent, KisMetaData::Store* origin
             const QString editorSignal = '2' + elem.attribute("editorSignal");
             const QString propertyName = elem.attribute("propertyName");
             const QString structureField = elem.attribute("structureField");
-            bool ok;
-            int arrayIndex = elem.attribute("arrayIndex", "-1").toInt(&ok);
-            if (!ok) arrayIndex = -1;
+            int arrayIndex = 0;
+            if (elem.hasAttribute("arrayIndex")) {
+                bool ok;
+                arrayIndex = elem.attribute("arrayIndex", "0").toInt(&ok);
+                if (!ok) arrayIndex = 0;
+            }
             dbgMetaData << ppVar(editorName) << ppVar(arrayIndex);
 
-            QWidget* obj = widget->findChild<QWidget*>(editorName);
-            if (obj) {
+            QWidget* metaDataEditorPage = widget->findChild<QWidget*>(editorName);
+            if (metaDataEditorPage) {
                 const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(schemaUri);
                 if (schema) {
                     if (!d->store->containsEntry(schema, entryName)) {
                         dbgMetaData << " Store does not have yet entry :" << entryName << " in" << schemaUri  << " ==" << schema->generateQualifiedName(entryName);
                     }
                     QString key = schema->generateQualifiedName(entryName);
-                    KisEntryEditor* ee = new KisEntryEditor(obj, d->store, key, propertyName, structureField, arrayIndex);
-                    connect(obj, editorSignal.toLatin1(), ee, SLOT(valueEdited()));
+                    KisEntryEditor* ee = new KisEntryEditor(metaDataEditorPage, d->store, key, propertyName, structureField, arrayIndex);
+                    connect(metaDataEditorPage, editorSignal.toLatin1(), ee, SLOT(valueEdited()));
                     QList<KisEntryEditor*> otherEditors = d->entryEditors.values(key);
                     Q_FOREACH (KisEntryEditor* oe, otherEditors) {
                         connect(ee, SIGNAL(valueHasBeenEdited()), oe, SLOT(valueChanged()));

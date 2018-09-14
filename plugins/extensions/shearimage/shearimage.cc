@@ -28,6 +28,7 @@
 #include <kis_node_manager.h>
 #include <kis_image_manager.h>
 #include <kis_action.h>
+#include "kis_selection.h"
 
 #include "dlg_shearimage.h"
 
@@ -41,6 +42,9 @@ ShearImage::ShearImage(QObject *parent, const QVariantList &)
 
     action = createAction("shearlayer");
     connect(action,  SIGNAL(triggered()), this, SLOT(slotShearLayer()));
+
+    action = createAction("shearAllLayers");
+    connect(action,  SIGNAL(triggered()), this, SLOT(slotShearAllLayers()));
 }
 
 ShearImage::~ShearImage()
@@ -50,8 +54,9 @@ ShearImage::~ShearImage()
 void ShearImage::slotShearImage()
 {
     KisImageWSP image = viewManager()->image();
-
     if (!image) return;
+
+    if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
     DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindow(), "ShearImage");
     Q_CHECK_PTR(dlgShearImage);
@@ -66,11 +71,12 @@ void ShearImage::slotShearImage()
     delete dlgShearImage;
 }
 
-void ShearImage::slotShearLayer()
+void ShearImage::shearLayerImpl(KisNodeSP rootNode)
 {
     KisImageWSP image = viewManager()->image();
-
     if (!image) return;
+
+    if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
     DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindow(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
@@ -80,10 +86,25 @@ void ShearImage::slotShearLayer()
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
         qint32 angleY = dlgShearImage->angleY();
-        viewManager()->nodeManager()->shear(angleX, angleY);
 
+        image->shearNode(rootNode,
+                         angleX, angleY,
+                         viewManager()->selection());
     }
     delete dlgShearImage;
+}
+
+void ShearImage::slotShearLayer()
+{
+    shearLayerImpl(viewManager()->activeNode());
+}
+
+void ShearImage::slotShearAllLayers()
+{
+    KisImageWSP image = viewManager()->image();
+    if (!image) return;
+
+    shearLayerImpl(image->root());
 }
 
 #include "shearimage.moc"

@@ -12,7 +12,6 @@ else()
 endif()
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/libs/image/metadata
     ${CMAKE_BINARY_DIR}/libs/image/
     ${CMAKE_SOURCE_DIR}/libs/image/
     ${CMAKE_SOURCE_DIR}/libs/image/brushengine
@@ -141,7 +140,6 @@ ecm_add_tests(
     kis_update_scheduler_test.cpp
     kis_async_merger_test.cpp
     kis_cage_transform_worker_test.cpp
-    kis_meta_data_test.cpp
     kis_random_generator_test.cpp
     kis_keyframing_test.cpp
     kis_filter_mask_test.cpp

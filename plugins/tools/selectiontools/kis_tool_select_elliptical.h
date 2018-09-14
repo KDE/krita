@@ -62,10 +62,7 @@ class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
     Q_OBJECT
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
-    QMenu* popupActionsMenu() override;
-
-public Q_SLOTS:
-    void setSelectionAction(int);
+    void resetCursorStyle();
 };
 
 class KisToolSelectEllipticalFactory : public KoToolFactoryBase

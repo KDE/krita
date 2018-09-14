@@ -21,7 +21,7 @@
 #include <QList>
 #include <QMap>
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 #include <boost/operators.hpp>
 
 class QVariant;
@@ -43,7 +43,7 @@ struct Rational : public boost::equality_comparable<Rational>
  * Value is build on top of QVariant to extend it to support the various types
  * and extensions through property qualifiers.
  */
-class KRITAIMAGE_EXPORT Value
+class KRITAMETADATA_EXPORT Value
 {
     struct Private;
 public:
@@ -129,6 +129,6 @@ private:
 }
 
 
-KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Value &v);
+KRITAMETADATA_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Value &v);
 
 #endif

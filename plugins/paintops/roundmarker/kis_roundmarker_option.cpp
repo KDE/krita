@@ -19,7 +19,12 @@
 
 #include "kis_signals_blocker.h"
 
+#include <kconfig.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
 #include "ui_kis_roundmarker_option.h"
+
 
 class KisRoundMarkerOptionWidget: public QWidget, public Ui::WdgKisRoundMarkerOption
 {
@@ -27,7 +32,9 @@ public:
     KisRoundMarkerOptionWidget(QWidget *parent = 0) : QWidget(parent) {
         setupUi(this);
 
-        dblDiameter->setRange(0.01, 1000, 2);
+        const int maxBrushSize = KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000);
+
+        dblDiameter->setRange(0.01, maxBrushSize, 2);
         dblDiameter->setSuffix(i18n(" px"));
     }
 };

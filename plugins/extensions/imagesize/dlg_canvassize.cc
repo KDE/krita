@@ -28,6 +28,8 @@
 
 #include <kis_config.h>
 
+#include <QButtonGroup>
+
 // used to extend KoUnit in comboboxes
 static const QString percentStr(i18n("Percent (%)"));
 

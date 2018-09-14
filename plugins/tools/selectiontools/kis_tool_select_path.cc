@@ -147,7 +147,12 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Bezier Curve"));
 
-    if (m_selectionTool->selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        m_selectionTool->selectionMode(),
+                                        m_selectionTool->selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
 
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 

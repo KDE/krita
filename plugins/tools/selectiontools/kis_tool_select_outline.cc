@@ -169,9 +169,12 @@ void KisToolSelectOutline::finishSelectionAction()
         !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
+        const SelectionMode mode =
+            helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                            selectionMode(),
+                                            selectionAction());
 
-
-        if (selectionMode() == PIXEL_SELECTION) {
+        if (mode == PIXEL_SELECTION) {
 
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 

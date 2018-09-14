@@ -338,3 +338,14 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     return m_contextMenu;
 }
+
+SelectionMode KisSelectionToolHelper::tryOverrideSelectionMode(KisSelectionSP activeSelection, SelectionMode currentMode, SelectionAction currentAction) const
+{
+    if (currentAction != SELECTION_DEFAULT && currentAction != SELECTION_REPLACE) {
+        if (activeSelection) {
+            currentMode = activeSelection->hasShapeSelection() ? SHAPE_PROTECTION : PIXEL_SELECTION;
+        }
+    }
+
+    return currentMode;
+}

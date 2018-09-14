@@ -49,6 +49,8 @@ public:
     bool tryDeselectCurrentSelection(const QRectF selectionViewRect, SelectionAction action);
     static QMenu* getSelectionContextMenu(KisCanvas2* canvas);
 
+    SelectionMode tryOverrideSelectionMode(KisSelectionSP activeSelection, SelectionMode currentMode, SelectionAction currentAction) const;
+
 
 private:
     QPointer<KisCanvas2> m_canvas;

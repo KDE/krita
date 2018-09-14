@@ -54,7 +54,12 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Polygon"));
 
-    if (selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        selectionMode(),
+                                        selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);

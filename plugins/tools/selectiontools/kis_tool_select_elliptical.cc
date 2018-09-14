@@ -60,7 +60,12 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundC
         return;
     }
 
-    if (selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        selectionMode(),
+                                        selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);

@@ -65,7 +65,12 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
         return;
     }
 
-    if (selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        selectionMode(),
+                                        selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
         if (rc.isValid()) {
             KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
@@ -97,7 +102,9 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
         const qreal docRoundCornersX = convertToPt(roundCornersX);
         const qreal docRoundCornersY = convertToPt(roundCornersY);
 
-        helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect, docRoundCornersX, docRoundCornersY),
+        helper.addSelectionShape(KisShapeToolHelper::createRectangleShape(documentRect,
+                                                                          docRoundCornersX,
+                                                                          docRoundCornersY),
                                  selectionAction());
     }
 }

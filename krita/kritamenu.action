@@ -605,7 +605,7 @@
       <iconText>Wrap Around Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>W</shortcut>
+      <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>

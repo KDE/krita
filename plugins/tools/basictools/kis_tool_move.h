@@ -154,7 +154,6 @@ private:
 
     QPoint m_dragPos;
     QRect m_handlesRect;
-    bool m_dragInProgress = false;
 
     KisToolChangesTracker m_changesTracker;
 };

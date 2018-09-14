@@ -293,7 +293,7 @@ void KisToolMove::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (m_dragInProgress) {
+    if (m_strokeId) {
         QPainterPath handles;
         handles.addRect(m_handlesRect.translated(currentOffset()));
 
@@ -339,7 +339,12 @@ void KisToolMove::requestStrokeCancellation()
 void KisToolMove::requestUndoDuringStroke()
 {
     if (!m_strokeId) return;
-    m_changesTracker.requestUndo();
+
+    if (m_changesTracker.isEmpty()) {
+        cancelStroke();
+    } else {
+        m_changesTracker.requestUndo();
+    }
 }
 
 void KisToolMove::beginPrimaryAction(KoPointerEvent *event)
@@ -392,7 +397,6 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
     QPoint pos = convertToPixelCoordAndSnap(event).toPoint();
     m_dragStart = pos;
     m_dragPos = pos;
-    m_dragInProgress = true;
 
     if (startStrokeImpl(mode, &pos)) {
         setMode(KisTool::PAINT_MODE);
@@ -400,7 +404,6 @@ void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)
         event->ignore();
         m_dragPos = QPoint();
         m_dragStart = QPoint();
-        m_dragInProgress = false;
     }
     m_canvas->updateCanvas();
 }
@@ -434,7 +437,6 @@ void KisToolMove::endAction(KoPointerEvent *event)
     m_accumulatedOffset += pos - m_dragStart;
     m_dragStart = QPoint();
     m_dragPos = QPoint();
-    m_dragInProgress = false;
     commitChanges();
 
     notifyGuiAfterMove();
@@ -462,6 +464,7 @@ void KisToolMove::endStroke()
     m_changesTracker.reset();
     m_currentlyProcessingNodes.clear();
     m_accumulatedOffset = QPoint();
+    m_canvas->updateCanvas();
 }
 
 void KisToolMove::slotTrackerChangedConfig(KisToolChangesTrackerDataSP state)
@@ -488,6 +491,7 @@ void KisToolMove::cancelStroke()
     m_currentlyProcessingNodes.clear();
     m_accumulatedOffset = QPoint();
     notifyGuiAfterMove();
+    m_canvas->updateCanvas();
 }
 
 QWidget* KisToolMove::createOptionWidget()

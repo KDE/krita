@@ -393,10 +393,8 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     return result;
 }
 
-void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration)
+void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration, KisImageSP image)
 {
-    // Fill with some meta information about the image
-    KisImageSP image = m_document->image();
     KisPaintDeviceSP dev = image->projection();
     const KoColorSpace* cs = dev->colorSpace();
     const bool isThereAlpha =
@@ -410,6 +408,12 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
             (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
              !cs->profile()->name().contains(QLatin1String("g10")));
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
+}
+
+
+void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration)
+{
+    return fillStaticExportConfigurationProperties(exportConfiguration, m_document->image());
 }
 
 bool KisImportExportManager::askUserAboutExportConfiguration(

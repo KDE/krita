@@ -424,11 +424,21 @@ void DlgAnimationRenderer::sequenceMimeTypeSelected()
     if (filter) {
         m_frameExportConfigWidget = filter->createConfigurationWidget(0, KisDocument::nativeFormatMimeType(), mimetype.toLatin1());
         if (m_frameExportConfigWidget) {
-            m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration("", mimetype.toLatin1()));
+            KisPropertiesConfigurationSP config = filter->lastSavedConfiguration("", mimetype.toLatin1());
+            if (config) {
+                KisImportExportManager::fillStaticExportConfigurationProperties(config, m_image);
+            }
+
+            m_frameExportConfigWidget->setConfiguration(config);
             KoDialog dlg(this);
             dlg.setMainWidget(m_frameExportConfigWidget);
             dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
             if (!dlg.exec()) {
+                config = filter->lastSavedConfiguration();
+                if (config) {
+                    KisImportExportManager::fillStaticExportConfigurationProperties(config, m_image);
+                }
+
                 m_frameExportConfigWidget->setConfiguration(filter->lastSavedConfiguration());
             }
             m_frameExportConfigWidget->hide();

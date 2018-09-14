@@ -23,6 +23,7 @@
 
 #include "ui_wdgtextoptions.h"
 #include <kis_painter.h>
+#include <QButtonGroup>
 
 class KisTextToolOptionWidget : public QWidget, public Ui_WdgTextOptions
 {

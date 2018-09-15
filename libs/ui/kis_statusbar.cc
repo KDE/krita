@@ -141,12 +141,13 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
     if (m_imageView == imageView) {
         return;
     }
+
     if (m_imageView) {
         m_imageView->disconnect(this);
         removeStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());
-
         m_imageView = 0;
     }
+
     if (imageView) {
         m_imageView = imageView;
 
@@ -166,13 +167,13 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
 void KisStatusBar::addStatusBarItem(QWidget *widget, int stretch, bool permanent)
 {
     StatusBarItem sbItem(widget);
-
     if (permanent) {
         m_statusBar->addPermanentWidget(widget, stretch);
     }
     else {
         m_statusBar->addWidget(widget, stretch);
     }
+    widget->setVisible(true);
     m_statusBarItems.append(sbItem);
 }
 

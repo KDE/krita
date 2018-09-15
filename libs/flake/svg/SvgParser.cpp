@@ -152,7 +152,9 @@ void SvgParser::setXmlBaseDir(const QString &baseDir)
         [this](const QString &name) {
             const QString fileName = m_context.xmlBaseDir() + QDir::separator() + name;
             QFile file(fileName);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(file.exists(), QByteArray());
+            if (!file.exists()) {
+                return QByteArray();
+            }
             file.open(QIODevice::ReadOnly);
             return file.readAll();
         });

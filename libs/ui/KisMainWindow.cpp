@@ -2096,6 +2096,25 @@ void KisMainWindow::subWindowActivated()
         }
     }
 
+    /**
+     * Qt has a weridness, it has a hardcoded shortcut added to an action
+     * in the window menu. We cannot change or remove it, so we should
+     * just disable our own shortcut in case it conflicts with the hardcoded
+     * shortcut.
+     */
+    d->close->setShortcutContext(Qt::WindowShortcut);
+    QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
+    if (subWindow) {
+        QMenu *menu = subWindow->systemMenu();
+        if (menu) {
+            Q_FOREACH (QAction *action, menu->actions()) {
+                if (action->shortcut() == d->close->shortcut()) {
+                    d->close->setShortcutContext(Qt::WidgetShortcut);
+                }
+            }
+        }
+    }
+
     updateCaption();
     d->actionManager()->updateGUI();
 }
@@ -2367,8 +2386,10 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::closeCurrentWindow()
 {
-    d->mdiArea->currentSubWindow()->close();
-    d->actionManager()->updateGUI();
+    if (d->mdiArea->currentSubWindow()) {
+        d->mdiArea->currentSubWindow()->close();
+        d->actionManager()->updateGUI();
+    }
 }
 
 void KisMainWindow::checkSanity()
@@ -2553,8 +2574,7 @@ void KisMainWindow::createActions()
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    d->close = actionManager->createAction("file_close");
-    connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+    d->close = actionManager->createStandardAction(KStandardAction::Close, this, SLOT(closeCurrentWindow()));
 
     d->showSessionManager = actionManager->createAction("file_sessions");
     connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));

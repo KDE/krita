@@ -495,11 +495,8 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
-<<<<<<< HEAD
     forms/WdgDlgPaletteEditor.ui
-=======
     forms/KisNewsPage.ui
->>>>>>> origin
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

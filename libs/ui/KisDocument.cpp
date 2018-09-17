@@ -1750,6 +1750,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 {
     if (d->image) {
         // Disconnect existing sig/slot connections
+        d->image->setUndoStore(new KisDumbUndoStore());
         d->image->disconnect(this);
         d->shapeController->setImage(0);
         d->image = 0;
@@ -1758,6 +1759,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     if (!image) return;
 
     d->setImageAndInitIdleWatcher(image);
+    d->image->setUndoStore(new KisDocumentUndoStore(this));
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);

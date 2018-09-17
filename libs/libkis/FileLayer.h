@@ -93,7 +93,7 @@ private:
      * @param absolutePath the absolute location of the file referenced.
      * @return the appropriate relative path.
      */
-    QString getFileNameFromAbsolute(QString baseName, QString absolutePath);
+    QString getFileNameFromAbsolute(const QString &basePath, QString filePath);
     QString m_baseName;
 };
 

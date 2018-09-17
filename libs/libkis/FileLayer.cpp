@@ -32,7 +32,10 @@ FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseNam
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
-    file->setFileName(baseName, getFileNameFromAbsolute(baseName, fileName));
+
+    const QString &basePath = QFileInfo(baseName).absolutePath();
+    const QString &absoluteFilePath = QFileInfo(fileName).absoluteFilePath();
+    file->setFileName(basePath, getFileNameFromAbsolute(basePath, absoluteFilePath));
 }
 
 FileLayer::FileLayer(KisFileLayerSP layer, QObject *parent)
@@ -61,7 +64,10 @@ void FileLayer::setProperties(QString fileName, QString scalingMethod)
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
-    file->setFileName(QFileInfo(file->path()).baseName(), getFileNameFromAbsolute(QFileInfo(file->path()).baseName(), fileName));
+
+    const QString basePath = QFileInfo(file->path()).absolutePath();
+    const QString absoluteFilePath = QFileInfo(fileName).absoluteFilePath();
+    file->setFileName(basePath, getFileNameFromAbsolute(basePath, absoluteFilePath));
 }
 
 QString FileLayer::path() const
@@ -84,18 +90,24 @@ QString FileLayer::scalingMethod() const
     return method;
 }
 
-QString FileLayer::getFileNameFromAbsolute(QString baseName, QString absolutePath)
+QString FileLayer::getFileNameFromAbsolute(const QString &basePath, QString filePath)
 {
-    QFileInfo fi(absolutePath);
-    if (fi.isSymLink()) {
-        absolutePath = fi.symLinkTarget();
-        fi = QFileInfo(absolutePath);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(QFileInfo(filePath).isAbsolute(), filePath);
+
+    // try to resolve symlink
+    {
+        const QFileInfo fi(filePath);
+        if (fi.isSymLink()) {
+            filePath = fi.symLinkTarget();
+        }
     }
-    if (!baseName.isEmpty() && fi.isAbsolute()) {
-        QDir directory(baseName);
-        absolutePath = directory.relativeFilePath(absolutePath);
+
+    if (!basePath.isEmpty()) {
+        QDir directory(basePath);
+        filePath = directory.relativeFilePath(filePath);
     }
-    return absolutePath;
+
+    return filePath;
 }
 
 

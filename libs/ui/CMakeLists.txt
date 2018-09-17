@@ -154,7 +154,6 @@ set(kritaui_LIB_SRCS
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
     KisWelcomePageWidget.cpp
-    KisChangePaletteCommand.cpp
 
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp

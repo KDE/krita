@@ -294,8 +294,6 @@ class comic_export_setting_dialog(QDialog):
         ACBFdocInfo = QGroupBox()
         ACBFdocInfo.setTitle(i18n("ACBF Document Info"))
         ACBFdocInfo.setLayout(ACBFform)
-        self.lnACBFSource = QLineEdit()
-        self.lnACBFSource.setToolTip(i18n("Whether the acbf file is an adaption of an existing source, and if so, how to find information about that source. So for example, for an adapted webcomic, the official website url should go here."))
         self.lnACBFID = QLabel()
         self.lnACBFID.setToolTip(i18n("By default this will be filled with a generated universal unique identifier. The ID by itself is merely so that comic book library management programs can figure out if this particular comic is already in their database and whether it has been rated. Of course, the UUID can be changed into something else by manually changing the JSON, but this is advanced usage."))
         self.spnACBFVersion = QSpinBox()
@@ -309,7 +307,6 @@ class comic_export_setting_dialog(QDialog):
         self.chkIncludeTranslatorComments.setToolTip(i18n("A PO file can contain translator's comments. If this is checked, the translations comments will be added as references into the ACBF file."))
         self.lnTranslatorHeader = QLineEdit()
 
-        ACBFform.addRow(i18n("Source:"), self.lnACBFSource)
         ACBFform.addRow(i18n("ACBF UID:"), self.lnACBFID)
         ACBFform.addRow(i18n("Version:"), self.spnACBFVersion)
         ACBFform.addRow(i18n("Version history:"), acbfHistoryList)
@@ -627,12 +624,13 @@ class comic_export_setting_dialog(QDialog):
                     listItems.append(QStandardItem())  # First name
                 self.ACBFauthorModel.appendRow(listItems)
 
-        if "acbfSource" in config.keys():
-            self.lnACBFSource.setText(config["acbfSource"])
-        if "acbfID" in config.keys():
+        if "uuid" in config.keys():
+            self.lnACBFID.setText(config["uuid"])
+        elif "acbfID" in config.keys():
             self.lnACBFID.setText(config["acbfID"])
         else:
-            self.lnACBFID.setText(QUuid.createUuid().toString())
+            config["uuid"] = QUuid.createUuid().toString()
+            self.lnACBFID.setText(config["uuid"])
         if "acbfVersion" in config.keys():
             self.spnACBFVersion.setValue(config["acbfVersion"])
         if "acbfHistory" in config.keys():
@@ -726,8 +724,6 @@ class comic_export_setting_dialog(QDialog):
                     author.pop(listEntries[i])
             authorList.append(author)
         config["acbfAuthor"] = authorList
-        config["acbfSource"] = self.lnACBFSource.text()
-        config["acbfID"] = self.lnACBFID.text()
         config["acbfVersion"] = self.spnACBFVersion.value()
         versionList = []
         for r in range(self.ACBFhistoryModel.rowCount()):

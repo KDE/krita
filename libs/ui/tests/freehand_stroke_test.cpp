@@ -29,6 +29,7 @@
 #include "kis_painter.h"
 #include <brushengine/kis_paint_information.h>
 
+#include "kistest.h"
 
 class FreehandStrokeTester : public utils::StrokeTester
 {
@@ -127,7 +128,6 @@ protected:
     }
 
 private:
-    KisFreehandStrokeInfo *m_strokeInfo;
     bool m_useLod;
     bool m_flipLineDirection;
     QScopedPointer<QColor> m_paintColor;
@@ -186,4 +186,4 @@ void FreehandStrokeTest::testPredefinedBrushStrokeLod()
     tester.testSimpleStroke();
 }
 
-QTEST_MAIN(FreehandStrokeTest)
+KISTEST_MAIN(FreehandStrokeTest)

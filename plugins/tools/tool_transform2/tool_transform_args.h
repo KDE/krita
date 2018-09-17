@@ -28,7 +28,7 @@
 #include "kis_liquify_properties.h"
 #include "kritatooltransform_export.h"
 #include "kis_global.h"
-
+#include "KisToolChangesTrackerData.h"
 
 #include <QScopedPointer>
 class KisLiquifyTransformWorker;
@@ -41,7 +41,7 @@ class QDomElement;
  * memory.
  */
 
-class KRITATOOLTRANSFORM_EXPORT ToolTransformArgs
+class KRITATOOLTRANSFORM_EXPORT ToolTransformArgs : public KisToolChangesTrackerData
 {
 public:
     enum TransformMode {FREE_TRANSFORM = 0,
@@ -61,6 +61,8 @@ public:
      * The object return will be a copy of args.
      */
     ToolTransformArgs(const ToolTransformArgs& args);
+
+    KisToolChangesTrackerData *clone() const;
 
     /**
      * If mode is warp, original and transformed vector points will be of size 0.

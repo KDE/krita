@@ -59,8 +59,8 @@
 #include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_io_backend.h>
-#include <metadata/kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
 #include "dialogs/kis_dlg_png_import.h"
 #include "kis_clipboard.h"
@@ -910,8 +910,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         gc.end();
         device = tmp;
     }
-
-    if (options.forceSRGB) {
+    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
+    if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
         KUndo2Command *cmd = device->convertTo(cs);
@@ -1080,10 +1080,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
+
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)"icc", PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
+        // older version of libpng has a problem with constness on the parameters
+        char typeString[] = "icc";
+        png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
     }
 

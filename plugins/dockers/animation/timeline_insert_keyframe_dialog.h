@@ -40,6 +40,13 @@ public:
     TimelineInsertKeyframeDialog(QWidget *parent = 0);
 
     bool promptUserSettings(int &count, int &timing, TimelineDirection &out_direction);
+
+    int defaultTimingOfAddedFrames() const;
+    void setDefaultTimingOfAddedFrames(int value);
+
+    int defaultNumberOfHoldFramesToRemove() const;
+    void setDefaultNumberOfHoldFramesToRemove(int value);
+
 };
 
 #endif // __TIMELINE_INSERT_KEYFRAME_DIALOG_H

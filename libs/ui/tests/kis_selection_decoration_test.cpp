@@ -37,8 +37,8 @@ void KisSelectionDecorationTest::testConcurrentSelectionFetches()
                                            kundo2_noi18n("test stroke"));
 
 
-        applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(image));
-        applicator.applyCommand(new KisDeselectGlobalSelectionCommand(image));
+        applicator.applyCommand(new KisSetEmptyGlobalSelectionCommand(image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(new KisDeselectGlobalSelectionCommand(image), KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
         applicator.end();
 

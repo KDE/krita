@@ -30,7 +30,7 @@
 #include "kis_meta_data_schema_registry.h"
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_validator.h"
-#include <metadata/kis_meta_data_value.h>
+#include <kis_meta_data_value.h>
 #include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
 #include "sdk/tests/kistest.h"

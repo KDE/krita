@@ -24,6 +24,7 @@
 
 #include <kis_image.h>
 #include "KisView.h"
+#include <KisSelectionTags.h>
 
 #include <kritaui_export.h>
 
@@ -96,7 +97,9 @@ public Q_SLOTS:
     void fillBackgroundColorOpacity();
     void fillPatternOpacity();
     void reselect();
+    void editSelection();
     void convertToVectorSelection();
+    void convertToRasterSelection();
     void convertShapesToVectorSelection();
     void convertToShape();
     
@@ -111,6 +114,8 @@ public Q_SLOTS:
 
     void slotStrokeSelection();
 
+    void selectOpaqueOnNode(KisNodeSP node, SelectionAction action);
+
 Q_SIGNALS:
     void currentSelectionChanged();
     void signalUpdateGUI();
@@ -124,7 +129,9 @@ public:
     bool haveShapesInClipboard();
 
     /// Checks if the current selection is editable and has some pixels selected in the pixel selection
-    bool havePixelSelectionWithPixels();
+    bool haveAnySelectionWithPixels();
+    bool haveShapeSelectionWithShapes();
+    bool haveRasterSelectionWithPixels();
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);

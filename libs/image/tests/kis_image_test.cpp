@@ -586,7 +586,7 @@ void KisImageTest::testFlattenLayer()
     }
 }
 
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 
 template<class ContainerTest>
 KisLayerSP mergeHelper(ContainerTest &p, KisLayerSP layer)

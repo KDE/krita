@@ -55,10 +55,10 @@ extern "C" {
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_io_backend.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
 #include <kis_paint_device.h>
 #include <kis_transform_worker.h>
 #include <kis_jpeg_source.h>

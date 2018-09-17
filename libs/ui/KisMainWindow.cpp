@@ -58,6 +58,7 @@
 #include <KisMimeDatabase.h>
 #include <QMimeData>
 #include <QStackedWidget>
+#include <QProxyStyle>
 
 
 #include <kactioncollection.h>
@@ -71,6 +72,7 @@
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
 #include "kis_selection_manager.h"
+#include "kis_icon_utils.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -381,6 +383,14 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
+
+
+    // Tab close button override
+    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
+    // just switch this icon out for all OSs so it is easier to see
+    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+
+
 
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
@@ -1186,8 +1196,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
-                        document->setUrl(oldURL);
-                        document->setLocalFilePath(oldFile);
                     }
                 }
                 else { // Export
@@ -1217,17 +1225,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         if (!ret) {
             dbgUI << "Failed Save!";
-            document->setUrl(oldURL);
-            document->setLocalFilePath(oldFile);
         }
     }
-
-    if (ret && !isExporting) {
-        document->setRecovered(false);
-    }
-
-    if (!ret && reset_url)
-        document->resetURL(); //clean the suggested filename as the save dialog was rejected
 
     updateReloadFileAction(document);
     updateCaption();

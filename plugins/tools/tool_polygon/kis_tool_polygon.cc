@@ -52,7 +52,10 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
 {
     if (!blockUntilOperationsFinished()) return;
 
-    if (!currentNode()->inherits("KisShapeLayer")) {
+    const KisToolShape::ShapeAddInfo info =
+        shouldAddShape(currentNode());
+
+    if (!info.shouldAddShape) {
         KisFigurePaintingToolHelper helper(kundo2_i18n("Draw Polygon"),
                                            image(),
                                            currentNode(),
@@ -71,6 +74,8 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
             path->lineTo(resolutionMatrix.map(points[i]));
         path->close();
         path->normalize();
+
+        info.markAsSelectionShapeIfNeeded(path);
 
         addShape(path);
     }

@@ -90,7 +90,6 @@ protected:
     }
 
 private:
-    KisFreehandStrokeInfo *m_strokeInfo;
     int m_cpuCoresLimit = -1;
 };
 

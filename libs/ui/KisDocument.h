@@ -302,7 +302,7 @@ public:
     /**
      * Performs a cleanup of unneeded backup files
      */
-    void removeAutoSaveFiles();
+    void removeAutoSaveFiles(const QString &autosaveBaseName, bool wasRecovered);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.

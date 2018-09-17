@@ -399,6 +399,11 @@ public:
     QString toolbarSlider(int sliderNumber, bool defaultValue = false) const;
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+
+    int layerThumbnailSize(bool defaultValue = false) const;
+    void setLayerThumbnailSize(int size);
+
+
     bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);
 
@@ -560,6 +565,9 @@ public:
 
     QColor defaultAssistantsColor(bool defaultValue = false) const;
     void setDefaultAssistantsColor(const QColor &color) const;
+
+    bool autoSmoothBezierCurves(bool defaultValue = false) const;
+    void setAutoSmoothBezierCurves(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

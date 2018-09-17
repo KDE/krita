@@ -566,6 +566,46 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="selection_tool_mode_add">
+      <icon></icon>
+      <text>Selection Mode: Add</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Add</toolTip>
+      <iconText>Selection Mode: Add</iconText>
+      <shortcut>A</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_subtract">
+      <icon></icon>
+      <text>Selection Mode: Subtract</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Subtract</toolTip>
+      <iconText>Selection Mode: Subtract</iconText>
+      <shortcut>S</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_intersect">
+      <icon></icon>
+      <text>Selection Mode: Intersect</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Intersect</toolTip>
+      <iconText>Selection Mode: Intersect</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="selection_tool_mode_replace">
+      <icon></icon>
+      <text>Selection Mode: Replace</text>
+      <whatsThis></whatsThis>
+      <toolTip>Selection Mode: Replace</toolTip>
+      <iconText>Selection Mode: Replace</iconText>
+      <shortcut>R</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="set_weighted_brush_smoothing">
       <icon>smoothing-weighted</icon>
       <text>Brush Smoothing: Weighted</text>
@@ -694,18 +734,6 @@
       <iconText>Convert to Shape</iconText>
       <activationFlags>10000000000</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
-    <Action name="select_opaque">
-      <icon></icon>
-      <text>&amp;Select Opaque</text>
-      <whatsThis></whatsThis>
-      <toolTip>Select Opaque</toolTip>
-      <iconText>Select Opaque</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
@@ -906,6 +934,19 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="krita_filter_invert">
+      <icon></icon>
+      <text>&amp;Invert</text>
+      <whatsThis></whatsThis>
+      <toolTip>Invert</toolTip>
+      <iconText>Invert</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut>Ctrl+I</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
     <Action name="krita_filter_perchannel">
       <icon></icon>
       <text>&amp;Color Adjustment curves...</text>
@@ -3256,6 +3297,102 @@
       <whatsThis></whatsThis>
       <toolTip>Shear Layer</toolTip>
       <iconText>Shear Layer</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorAllNodesX">
+      <icon>symmetry-horizontal</icon>
+      <text>Mirror All Layers Hori&amp;zontally</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror All Layers Horizontally</toolTip>
+      <iconText>Mirror All Layers Horizontally</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="mirrorAllNodesY">
+      <icon>symmetry-vertical</icon>
+      <text>Mirror All Layers &amp;Vertically</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror All Layers Vertically</toolTip>
+      <iconText>Mirror All Layers Vertically</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayers">
+      <icon></icon>
+      <text>&amp;Rotate All Layers...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers</toolTip>
+      <iconText>Rotate All Layers</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayersCW90">
+      <icon>object-rotate-right</icon>
+      <text>Rotate All &amp;Layers 90° to the Right</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 90° to the Right</toolTip>
+      <iconText>Rotate All Layers 90° to the Right</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayersCCW90">
+      <icon>object-rotate-left</icon>
+      <text>Rotate All Layers &amp;90° to the Left</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 90° to the Left</toolTip>
+      <iconText>Rotate All Layers 90° to the Left</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="rotateAllLayers180">
+      <icon></icon>
+      <text>Rotate All Layers &amp;180°</text>
+      <whatsThis></whatsThis>
+      <toolTip>Rotate All Layers 180°</toolTip>
+      <iconText>Rotate All Layers 180°</iconText>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="scaleAllLayers">
+      <icon></icon>
+      <text>Scale All &amp;Layers to new Size...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Scale All Layers to new Size</toolTip>
+      <iconText>Scale All Layers to new Size</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="shearAllLayers">
+      <icon></icon>
+      <text>&amp;Shear All Layers...</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shear All Layers</toolTip>
+      <iconText>Shear All Layers</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut></shortcut>

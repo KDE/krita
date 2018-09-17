@@ -40,7 +40,7 @@ KisGridDecoration::KisGridDecoration(KisView* parent)
     : KisCanvasDecoration("grid", parent),
       m_d(new Private)
 {
-
+    setPriority(0);
 }
 
 KisGridDecoration::~KisGridDecoration()

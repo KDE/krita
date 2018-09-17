@@ -91,7 +91,6 @@
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::rotateCursor())
     , m_workRecursively(true)
-    , m_changesTracker(&m_transaction)
     , m_warpStrategy(
         new KisWarpTransformStrategy(
             dynamic_cast<KisCanvas2*>(canvas)->coordinatesConverter(),
@@ -150,8 +149,8 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_perspectiveStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_perspectiveStrategy.data(), SIGNAL(requestShowImageTooBig(bool)), SLOT(imageTooBigRequested(bool)));
 
-    connect(&m_changesTracker, SIGNAL(sigConfigChanged()),
-            this, SLOT(slotTrackerChangedConfig()));
+    connect(&m_changesTracker, SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
+            this, SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
 }
 
 KisToolTransform::~KisToolTransform()
@@ -812,7 +811,11 @@ void KisToolTransform::requestUndoDuringStroke()
 {
     if (!m_strokeData.strokeId()) return;
 
-    m_changesTracker.requestUndo();
+    if (m_changesTracker.isEmpty()) {
+        cancelStroke();
+    } else {
+        m_changesTracker.requestUndo();
+    }
 }
 
 void KisToolTransform::requestStrokeEnd()
@@ -996,11 +999,16 @@ void KisToolTransform::commitChanges()
 {
     if (!m_strokeData.strokeId()) return;
 
-    m_changesTracker.commitConfig(m_currentArgs);
+    m_changesTracker.commitConfig(toQShared(m_currentArgs.clone()));
 }
 
-void KisToolTransform::slotTrackerChangedConfig()
+void KisToolTransform::slotTrackerChangedConfig(KisToolChangesTrackerDataSP status)
 {
+    const ToolTransformArgs *newArgs = dynamic_cast<const ToolTransformArgs*>(status.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(newArgs);
+
+    *m_transaction.currentConfig() = *newArgs;
+
     slotUiChangedConfig();
     updateOptionWidget();
 }

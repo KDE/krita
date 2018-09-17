@@ -87,13 +87,11 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
                     i18n("Similar Color Selection")),
       m_fuzziness(20)
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectSimilar::setSelectionAction);
 }
 
 void KisToolSelectSimilar::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KisTool::activate(toolActivation, shapes);
+    KisToolSelect::activate(toolActivation, shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -174,16 +172,13 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
     return selectionWidget;
 }
 
-void KisToolSelectSimilar::setSelectionAction(int action)
+void KisToolSelectSimilar::resetCursorStyle()
 {
-    changeSelectionAction(action);
-}
-
-QMenu* KisToolSelectSimilar::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_similar_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_similar_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelect::resetCursorStyle();
+    }
 }

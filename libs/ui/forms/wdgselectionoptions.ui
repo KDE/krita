@@ -66,7 +66,7 @@
      <item row="1" column="1">
       <widget class="KoGroupButton" name="replace">
        <property name="toolTip">
-        <string>Replace (Shortcut R)</string>
+        <string>Replace</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -85,7 +85,7 @@
      <item row="1" column="6">
       <widget class="KoGroupButton" name="add">
        <property name="toolTip">
-        <string>Add (Shortcut A)</string>
+        <string>Add</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -143,7 +143,7 @@
      <item row="1" column="7">
       <widget class="KoGroupButton" name="subtract">
        <property name="toolTip">
-        <string>Subtract (Shortcut S)</string>
+        <string>Subtract</string>
        </property>
        <property name="text">
         <string>...</string>

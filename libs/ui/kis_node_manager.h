@@ -36,6 +36,7 @@ class KisActionManager;
 class KisView;
 class KisNodeSelectionAdapter;
 class KisNodeInsertionAdapter;
+class KisNodeDisplayModeAdapter;
 class KisNodeJugglerCompressed;
 class KoProperties;
 
@@ -105,6 +106,7 @@ public:
 
     KisNodeSelectionAdapter* nodeSelectionAdapter() const;
     KisNodeInsertionAdapter* nodeInsertionAdapter() const;
+    KisNodeDisplayModeAdapter* nodeDisplayModeAdapter() const;
 
     static bool isNodeHidden(KisNodeSP node, bool isGlobalSelectionHidden);
 
@@ -178,7 +180,13 @@ public Q_SLOTS:
     void removeNode();
     void mirrorNodeX();
     void mirrorNodeY();
-    void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation);
+    void mirrorAllNodesX();
+    void mirrorAllNodesY();
+
+
+    void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
+
+
     void activateNextNode();
     void activatePreviousNode();
     void switchToPreviouslyActiveNode();
@@ -192,11 +200,6 @@ public Q_SLOTS:
      * move the active node down the nodestack
      */
     void lowerNode();
-
-    void rotate(double radians);
-    void rotate180();
-    void rotateLeft90();
-    void rotateRight90();
 
     void saveNodeAsImage();
     void saveVectorLayerAsImage();
@@ -233,12 +236,6 @@ public Q_SLOTS:
     void selectUnlockedNodes();
 
 public:
-
-
-    void shear(double angleX, double angleY);
-
-    void scale(double sx, double sy, KisFilterStrategy *filterStrategy);
-
     void removeSingleNode(KisNodeSP node);
     KisLayerSP createPaintLayer();
 

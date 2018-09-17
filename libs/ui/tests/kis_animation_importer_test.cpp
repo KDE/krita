@@ -27,6 +27,8 @@
 #include "kis_group_layer.h"
 #include <KoUpdater.h>
 
+#include "kistest.h"
+
 void KisAnimationImporterTest::testImport()
 {
     KisDocument *document = KisPart::instance()->createDocument();
@@ -77,4 +79,4 @@ void KisAnimationImporterTest::testImport()
     delete document;
 }
 
-QTEST_MAIN(KisAnimationImporterTest)
+KISTEST_MAIN(KisAnimationImporterTest)

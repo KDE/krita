@@ -233,8 +233,6 @@ void KRecentFilesAction::removeUrl(const QUrl &url)
 
 QList<QUrl> KRecentFilesAction::urls() const
 {
-    Q_D(const KRecentFilesAction);
-
     // switch order so last opened file is first
     QList<QUrl> sortedList;
     for (int i=(d_urls.length()-1); i >= 0; i--) {

@@ -197,7 +197,12 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     RssItem item = m_aggregatedFeed.at(index.row());
 
     switch (role) {
-    case Qt::DisplayRole: // fall through
+    case Qt::DisplayRole:
+    {
+        return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
+               "<br><small>(" + item.pubDate.toString("MMMM d, yyyy") + ") "
+               + item.description.left(90).append("...") + "</small><hr>");
+    }
     case TitleRole:
         return item.title;
     case DescriptionRole:

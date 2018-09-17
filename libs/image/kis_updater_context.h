@@ -143,8 +143,6 @@ public:
     void doSomeUsefulWork();
     void jobFinished();
 
-    friend class KisUpdateJobItem;
-
 protected:
     static bool walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                     const KisUpdateJobItem* job);
@@ -164,6 +162,22 @@ protected:
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
     KisUpdateScheduler *m_scheduler;
+
+private:
+
+    friend class KisUpdaterContextTest;
+    friend class KisUpdateSchedulerTest;
+    friend class KisStrokesQueueTest;
+    friend class KisSimpleUpdateQueueTest;
+    friend class KisUpdateJobItem;
+
+    void addMergeJobTest(KisBaseRectsWalkerSP walker);
+    void addStrokeJobTest(KisStrokeJob *strokeJob);
+    void addSpontaneousJobTest(KisSpontaneousJob *spontaneousJob);
+
+    const QVector<KisUpdateJobItem*> getJobs();
+    void clear();
+
 };
 
 class KRITAIMAGE_EXPORT KisTestableUpdaterContext : public KisUpdaterContext
@@ -183,14 +197,14 @@ public:
     void addStrokeJob(KisStrokeJob *strokeJob) override;
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob) override;
 
-    const QVector<KisUpdateJobItem*> getJobs();
-    void clear();
+     const QVector<KisUpdateJobItem*> getJobs();
+     void clear();
 
     friend class KisUpdateJobItem;
 };
 
 
-
-
 #endif /* __KIS_UPDATER_CONTEXT_H */
+
+
 

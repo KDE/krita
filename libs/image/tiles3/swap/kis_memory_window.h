@@ -26,7 +26,7 @@
 
 #define DEFAULT_WINDOW_SIZE (16*MiB)
 
-class KisMemoryWindow
+class KRITAIMAGE_EXPORT KisMemoryWindow
 {
 public:
     /**

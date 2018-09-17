@@ -21,8 +21,11 @@
 #include <QTreeView>
 #include <QStyle>
 
+#include "krita_utils.h"
+#include <QApplication>
 
 #include <QGlobalStatic>
+#include <kis_config.h>
 Q_GLOBAL_STATIC(KisNodeViewColorScheme, s_instance)
 
 struct KisNodeViewColorScheme::Private
@@ -38,6 +41,11 @@ struct KisNodeViewColorScheme::Private
             colorLabels << QColor(238,50,51);
             colorLabels << QColor(191,106,209);
             colorLabels << QColor(118,119,114);
+
+            const QColor noLabelSetColor = qApp->palette().color(QPalette::Highlight);
+            for (auto it = colorLabels.begin(); it != colorLabels.end(); ++it) {
+                KritaUtils::dragColor(&(*it), noLabelSetColor, 0.35);
+            }
         }
     }
 
@@ -81,7 +89,8 @@ int KisNodeViewColorScheme::visibilityMargin() const
 
 int KisNodeViewColorScheme::thumbnailSize() const
 {
-    return 20;
+    KisConfig cfg(true);
+    return cfg.layerThumbnailSize(false);
 }
 
 int KisNodeViewColorScheme::thumbnailMargin() const

@@ -49,7 +49,7 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
-#include "commands/kis_selection_commands.h"
+#include "commands/kis_deselect_global_selection_command.h"
 #include "kis_iterator_ng.h"
 
 KisMaskManager::KisMaskManager(KisViewManager * view)
@@ -146,7 +146,15 @@ void KisMaskManager::adjustMaskPosition(KisNodeSP node, KisNodeSP activeNode, bo
     }
 }
 
-void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisPaintDeviceSP copyFrom, const KUndo2MagicString& macroName, const QString &nodeType, const QString &nodeName, bool suppressSelection, bool avoidActiveNode, bool updateImage)
+void KisMaskManager::createMaskCommon(KisMaskSP mask,
+                                      KisNodeSP activeNode,
+                                      KisPaintDeviceSP copyFrom,
+                                      const KUndo2MagicString& macroName,
+                                      const QString &nodeType,
+                                      const QString &nodeName,
+                                      bool suppressSelection,
+                                      bool avoidActiveNode,
+                                      bool updateImage)
 {
     m_commandsAdapter->beginMacro(macroName);
 
@@ -157,11 +165,14 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     KisLayerSP parentLayer = qobject_cast<KisLayer*>(parent.data());
     Q_ASSERT(parentLayer);
 
+    bool shouldDeselectGlobalSelection = false;
+
     if (!suppressSelection) {
         if (copyFrom) {
             mask->initSelection(copyFrom, parentLayer);
         } else {
             mask->initSelection(m_view->selection(), parentLayer);
+            shouldDeselectGlobalSelection = m_view->selection();
         }
     }
 
@@ -171,29 +182,46 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask, KisNodeSP activeNode, KisP
     mask->setName(nodeName + QString(" ") + QString::number(number));
 
     m_commandsAdapter->addNode(mask, parentLayer, above, updateImage, updateImage);
+
+    if (shouldDeselectGlobalSelection) {
+        m_commandsAdapter->addExtraCommand(new KisDeselectGlobalSelectionCommand(m_imageView->image()));
+    }
+
     m_commandsAdapter->endMacro();
 
     masksUpdated();
 }
 
-void KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
+bool KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
 {
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, avoidActiveNode, false);
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, convertActiveNode, false);
     mask->setActive(true);
+    if (convertActiveNode) {
+        m_commandsAdapter->removeNode(activeNode);
+    }
+    return true;
 }
 
-void KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool avoidActiveNode)
+bool KisMaskManager::createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode)
 {
     KisMaskSP mask = new KisTransparencyMask();
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, avoidActiveNode);
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Transparency Mask"), "KisTransparencyMask", i18n("Transparency Mask"), false, convertActiveNode);
+    if (convertActiveNode) {
+        m_commandsAdapter->removeNode(activeNode);
+    }
+    return true;
 }
 
 
-void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool avoidActiveNode)
+bool KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool quiet, bool convertActiveNode)
 {
     KisFilterMaskSP mask = new KisFilterMask();
-    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"), false, avoidActiveNode);
+    createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Filter Mask"), "KisFilterMask", i18n("Filter Mask"), false, convertActiveNode);
+
+    if (convertActiveNode) {
+        m_commandsAdapter->removeNode(activeNode);
+    }
 
     /**
      * FIXME: We'll use layer's original for creation of a thumbnail.
@@ -214,8 +242,10 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
             mask->setFilter(filter);
             mask->setName(mask->name());
         }
-        return;
+        return true;
     }
+
+    bool result = false;
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfigurationSP filter = dialog.filterConfiguration();
@@ -225,9 +255,13 @@ void KisMaskManager::createFilterMask(KisNodeSP activeNode, KisPaintDeviceSP cop
             mask->setName(name);
         }
 
+        result = true;
+
     } else {
         m_commandsAdapter->undoLastCommand();
     }
+
+    return result;
 }
 
 

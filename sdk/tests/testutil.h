@@ -113,7 +113,7 @@ public:
         m_format = format;
     }
 
-    void setAutoNestedName(const QString &name) {
+    void setAutoNestedName(const QString &name) override {
         m_autoNestedName = name;
         KoProgressProxy::setAutoNestedName(name);
     }

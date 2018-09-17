@@ -120,6 +120,7 @@ set(kritaui_LIB_SRCS
     kis_node_juggler_compressed.cpp
     kis_node_selection_adapter.cpp
     kis_node_insertion_adapter.cpp
+    KisNodeDisplayModeAdapter.cpp
     kis_node_model.cpp
     kis_node_filter_proxy_model.cpp
     kis_model_index_converter_base.cpp
@@ -140,6 +141,7 @@ set(kritaui_LIB_SRCS
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
+    KisSelectionActionsAdapter.cpp
     kis_statusbar.cc
     kis_zoom_manager.cc
     kis_favorite_resource_manager.cpp
@@ -168,6 +170,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
+    tool/KisToolChangesTracker.cpp
+    tool/KisToolChangesTrackerData.cpp
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_rectangle_constraint_widget.cpp
@@ -200,6 +204,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskedFreehandStrokePainter.cpp
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
+    tool/strokes/move_stroke_strategy.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
@@ -260,6 +265,8 @@ set(kritaui_LIB_SRCS
     KisPaletteEditor.cpp
     dialogs/KisDlgPaletteEditor.cpp
 
+    widgets/KisNewsWidget.cpp
+
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
     input/kis_input_manager.cpp
@@ -294,7 +301,6 @@ set(kritaui_LIB_SRCS
     actions/KisPasteActionFactory.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
-    kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
     input/kis_tablet_debugger.cpp
@@ -378,6 +384,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
+
 )
 
 if(WIN32)
@@ -488,7 +495,11 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+<<<<<<< HEAD
     forms/WdgDlgPaletteEditor.ui
+=======
+    forms/KisNewsPage.ui
+>>>>>>> origin
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
@@ -516,6 +527,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
+
 )
 
 

@@ -194,7 +194,6 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
 
     return QAbstractItemView::selectionCommand(index, event);
 }
-
 QRect KisNodeView::visualRect(const QModelIndex &index) const
 {
     QRect rc = QTreeView::visualRect(index);

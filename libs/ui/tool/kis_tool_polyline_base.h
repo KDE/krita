@@ -50,6 +50,8 @@ public:
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
 
+    bool hasUserInteractionRunning() const;
+
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points) = 0;
 

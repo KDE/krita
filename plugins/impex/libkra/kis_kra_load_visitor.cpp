@@ -37,8 +37,8 @@
 #include <KoShapeControllerBase.h>
 
 // kritaimage
-#include <metadata/kis_meta_data_io_backend.h>
-#include <metadata/kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
 #include <kis_types.h>
 #include <kis_node_visitor.h>
 #include <kis_image.h>

@@ -22,19 +22,9 @@
 #include <KoConfig.h>
 #include <QApplication>
 #include <QTest>
+#include <QLoggingCategory>
 #include <QtTest/qtestsystem.h>
 #include <set>
-
-#ifndef QT_NO_OPENGL
-#  define QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS \
-    extern Q_TESTLIB_EXPORT std::set<QByteArray> *(*qgpu_features_ptr)(const QString &); \
-    extern Q_GUI_EXPORT std::set<QByteArray> *qgpu_features(const QString &);
-#  define QTEST_ADD_GPU_BLACKLIST_SUPPORT \
-    qgpu_features_ptr = qgpu_features;
-#else
-#  define QTEST_ADD_GPU_BLACKLIST_SUPPORT_DEFS
-#  define QTEST_ADD_GPU_BLACKLIST_SUPPORT
-#endif
 
 #if defined(QT_NETWORK_LIB)
 #  include <QtTest/qtest_network.h>
@@ -50,6 +40,8 @@
 #define KISTEST_MAIN(TestObject) \
 int main(int argc, char *argv[]) \
 { \
+    qputenv("QT_LOGGING_RULES", ""); \
+    QLoggingCategory::setFilterRules(QStringLiteral("krita.*.debug=false"));\
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \

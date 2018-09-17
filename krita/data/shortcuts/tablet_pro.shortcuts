@@ -464,5 +464,4 @@ windows_next=Ctrl+Tab
 windows_previous=none
 windows_tile=none
 workspaces=none
-wrap_around_mode=W
 zoom_to_100pct=Ctrl+0

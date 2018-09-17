@@ -70,6 +70,12 @@ void FileLayer::setProperties(QString fileName, QString scalingMethod)
     file->setFileName(basePath, getFileNameFromAbsolute(basePath, absoluteFilePath));
 }
 
+void FileLayer::resetCache()
+{
+    KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
+    file->resetCache();
+}
+
 QString FileLayer::path() const
 {
     const KisFileLayer *file = qobject_cast<const KisFileLayer*>(this->node());

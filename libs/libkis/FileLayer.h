@@ -69,6 +69,11 @@ public Q_SLOTS:
     void setProperties(QString fileName, QString scalingMethod = QString("None"));
 
     /**
+     * @brief makes the file layer to reload the connected image from disk
+     */
+    void resetCache();
+
+    /**
      * @brief path
      * @return A QString with the full path of the referenced image.
      */

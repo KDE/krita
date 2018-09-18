@@ -2103,7 +2103,7 @@ void KisMainWindow::subWindowActivated()
     }
 
     /**
-     * Qt has a weridness, it has a hardcoded shortcut added to an action
+     * Qt has a weirdness, it has a hardcoded shortcut added to an action
      * in the window menu. We cannot change or remove it, so we should
      * just disable our own shortcut in case it conflicts with the hardcoded
      * shortcut.

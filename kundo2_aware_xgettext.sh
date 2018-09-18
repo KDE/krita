@@ -36,7 +36,7 @@ function add_ctxt_qtundo() {
     # lastLine != "#, fuzzy" is the check for the .pot header.
     # If lastLine starts with '"' the msgctxt has been split on several lines and is treated by sed above, so skip it
     mv "${POT_PART_QUNDOFORMAT}" "${POT_PART_QUNDOFORMAT2}"
-    cat "${POT_PART_QUNDOFORMAT2}" | awk '
+    < file "${POT_PART_QUNDOFORMAT2}" | awk '
         /^msgid "/ {
             if (lastLine !~ /^\"/ && lastLine !~ /^msgctxt/ && lastLine != "#, fuzzy") {
                 print "msgctxt \"(qtundo-format)\""
@@ -80,9 +80,9 @@ function kundo2_aware_xgettext_internal() {
         echo "" >>${POT_PART_NORMAL}
         
         ${MSGCAT} -F "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" > ${POT_MERGED}
-        MERGED_HEADER_LINE_COUNT=$(cat ${POT_MERGED} | grep "^$" -B 100000 --max-count=1 | wc -l)
-        KDE_HEADER="$(cat ${POT_PART_NORMAL} | grep "^$" -B 100000 --max-count=1)"
-        MERGED_TAIL="$(cat ${POT_MERGED} | tail -n +$MERGED_HEADER_LINE_COUNT)"
+        MERGED_HEADER_LINE_COUNT=$(< file ${POT_MERGED} grep "^$" -B 100000 --max-count=1 | wc -l)
+        KDE_HEADER="$(< file ${POT_PART_NORMAL} grep "^$" -B 100000 --max-count=1)"
+        MERGED_TAIL="$(< file ${POT_MERGED} tail -n +$MERGED_HEADER_LINE_COUNT)"
 
         # Print out the resulting .pot
         echo "$KDE_HEADER"

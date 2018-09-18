@@ -2103,20 +2103,20 @@ void KisMainWindow::subWindowActivated()
     }
 
     /**
-     * Qt has a weirdness, it has a hardcoded shortcut added to an action
-     * in the window menu. We cannot change or remove it, so we should
-     * just disable our own shortcut in case it conflicts with the hardcoded
-     * shortcut.
+     * Qt has a weirdness, it has hardcoded shortcuts added to an action
+     * in the window menu. We need to reset the shortcuts for that menu
+     * to nothing, otherwise the shortcuts cannot be made configurable.
+     *
+     * See: https://bugs.kde.org/show_bug.cgi?id=352205
+     *      https://bugs.kde.org/show_bug.cgi?id=375524
+     *      https://bugs.kde.org/show_bug.cgi?id=398729
      */
-    d->close->setShortcutContext(Qt::WindowShortcut);
     QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
     if (subWindow) {
         QMenu *menu = subWindow->systemMenu();
         if (menu) {
             Q_FOREACH (QAction *action, menu->actions()) {
-                if (action->shortcut() == d->close->shortcut()) {
-                    d->close->setShortcutContext(Qt::WidgetShortcut);
-                }
+                action->setShortcut(QKeySequence());
             }
         }
     }

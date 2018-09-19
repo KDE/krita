@@ -149,6 +149,9 @@ public:
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
 
+    void emitBeginLodResetUpdatesBatch();
+    void emitEndLodResetUpdatesBatch();
+
 private Q_SLOTS:
     void slotNotification(KisImageSignalType type);
 

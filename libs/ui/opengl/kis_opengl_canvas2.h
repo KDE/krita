@@ -96,6 +96,7 @@ public: // Implement kis_abstract_canvas_widget interface
     }
 
     bool isBusy() const override;
+    void setLodResetInProgress(bool value) override;
 
     void setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing);
 

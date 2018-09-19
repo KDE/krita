@@ -142,4 +142,25 @@ public:
     KisImagePatch patch;
 };
 
+class KisBatchControlUpdateInfo : public KisUpdateInfo
+{
+public:
+    enum Type {
+        StartBatch,
+        EndBatch
+    };
+
+public:
+    KisBatchControlUpdateInfo(Type type, const QRect &dirtyImageRect);
+
+    Type type() const;
+
+    QRect dirtyImageRect() const override;
+    int levelOfDetail() const override;
+
+private:
+    Type m_type;
+    QRect m_dirtyImageRect;
+};
+
 #endif /* KIS_UPDATE_INFO_H_ */

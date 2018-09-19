@@ -115,6 +115,22 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
     emit sigRemoveNodeAsync(removedNode);
 }
 
+void KisImageSignalRouter::emitBeginLodResetUpdatesBatch()
+{
+    KisImageSP image = m_image.toStrongRef();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+    emit image->sigBeginLodResetUpdatesBatch();
+}
+
+void KisImageSignalRouter::emitEndLodResetUpdatesBatch()
+{
+    KisImageSP image = m_image.toStrongRef();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+    emit image->sigEndLodResetUpdatesBatch();
+}
+
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {

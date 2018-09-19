@@ -729,6 +729,26 @@ Q_SIGNALS:
     void sigImageUpdated(const QRect &);
 
     /**
+     * Emitted whenever the image is going to reset load planes from lodN to
+     * lod0. All the signals emitted with sigImageUpdated() between the calls
+     * to sigBeginLodResetUpdatesBatch() and sigEndLodResetUpdatesBatch() will be
+     * considered as belonging to the same "batch". During processing a "batch"
+     * GUI is not permitted to change lod level of the tile textures. It should
+     * just update internal caches. The call to sigEndLodResetUpdatesBatch()
+     * will start rerendering of the canvas.
+     *
+     * NOTE: this feature is used to avoid flickering when switching
+     * back from lodN plane back to lod0. All the texture tiles should
+     * be loaded with new information before mipmaps can be regenerated.
+     */
+    void sigBeginLodResetUpdatesBatch();
+
+    /**
+     * @see sigBeginLodResetUpdatesBatch()
+     */
+    void sigEndLodResetUpdatesBatch();
+
+    /**
        Emitted whenever the image has been modified, so that it
        doesn't match with the version saved on disk.
      */

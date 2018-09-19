@@ -78,6 +78,10 @@ public: // Implement kis_abstract_canvas_widget interface
         return false;
     }
 
+    void setLodResetInProgress(bool value) override {
+        Q_UNUSED(value);
+    }
+
 protected: // KisCanvasWidgetBase
 
     bool callFocusNextPrevChild(bool next) override;

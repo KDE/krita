@@ -1393,12 +1393,17 @@ namespace KisLayerUtils {
         mergeMultipleLayersImpl(image, mergedNodes, layer, true, kundo2_i18n("Flatten Layer"));
     }
 
-    void flattenImage(KisImageSP image)
+    void flattenImage(KisImageSP image, KisNodeSP activeNode)
     {
+        if (!activeNode) {
+            activeNode = image->root()->lastChild();
+        }
+
+
         KisNodeList mergedNodes;
         mergedNodes << image->root();
 
-        mergeMultipleLayersImpl(image, mergedNodes, 0, true, kundo2_i18n("Flatten Image"));
+        mergeMultipleLayersImpl(image, mergedNodes, activeNode, true, kundo2_i18n("Flatten Image"));
     }
 
     KisSimpleUpdateCommand::KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent)

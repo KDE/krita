@@ -1023,9 +1023,9 @@ qint32 KisImage::nHiddenLayers() const
     return visitor.count();
 }
 
-void KisImage::flatten()
+void KisImage::flatten(KisNodeSP activeNode)
 {
-    KisLayerUtils::flattenImage(this);
+    KisLayerUtils::flattenImage(this, activeNode);
 }
 
 void KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)

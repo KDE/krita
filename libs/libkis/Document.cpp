@@ -472,7 +472,7 @@ void Document::flatten()
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->flatten();
+    d->document->image()->flatten(0);
 }
 
 void Document::resizeImage(int x, int y, int w, int h)

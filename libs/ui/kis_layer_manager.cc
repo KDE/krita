@@ -690,7 +690,7 @@ void KisLayerManager::flattenImage()
         }
 
         if (doIt) {
-            image->flatten();
+            image->flatten(m_view->activeNode());
         }
     }
 }

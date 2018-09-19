@@ -518,7 +518,7 @@ public:
     /**
      * Merge all visible layers and discard hidden ones.
      */
-    void flatten();
+    void flatten(KisNodeSP activeNode);
 
     /**
      * Merge the specified layer with the layer

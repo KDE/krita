@@ -21,6 +21,7 @@
 #include <kis_image.h>
 #include <krita_utils.h>
 #include <kis_projection_updates_filter.h>
+#include "kis_image_signal_router.h"
 
 
 inline uint qHash(const QRect &rc) {
@@ -129,9 +130,16 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             {}
     };
 
-    class UpdatesBarrierData : public KisStrokeJobData {
+    class StartBatchUpdate : public KisStrokeJobData {
     public:
-        UpdatesBarrierData()
+        StartBatchUpdate()
+            : KisStrokeJobData(BARRIER)
+            {}
+    };
+
+    class EndBatchUpdate : public KisStrokeJobData {
+    public:
+        EndBatchUpdate()
             : KisStrokeJobData(BARRIER)
             {}
     };
@@ -215,7 +223,8 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
 {
     Private::SuspendData *suspendData = dynamic_cast<Private::SuspendData*>(data);
     Private::ResumeAndIssueGraphUpdatesData *resumeData = dynamic_cast<Private::ResumeAndIssueGraphUpdatesData*>(data);
-    Private::UpdatesBarrierData *barrierData = dynamic_cast<Private::UpdatesBarrierData*>(data);
+    Private::StartBatchUpdate *startBatchData = dynamic_cast<Private::StartBatchUpdate*>(data);
+    Private::EndBatchUpdate *endBatchData = dynamic_cast<Private::EndBatchUpdate*>(data);
     Private::IssueCanvasUpdatesData *canvasUpdates = dynamic_cast<Private::IssueCanvasUpdatesData*>(data);
 
     KisImageSP image = m_d->image.toStrongRef();
@@ -229,10 +238,13 @@ void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobDat
     } else if (resumeData) {
         image->disableUIUpdates();
         resumeAndIssueUpdates(false);
-    } else if (barrierData) {
+    } else if (startBatchData) {
         image->enableUIUpdates();
+        image->signalRouter()->emitBeginLodResetUpdatesBatch();
     } else if (canvasUpdates) {
         image->notifyProjectionUpdated(canvasUpdates->updateRect);
+    } else if (endBatchData) {
+        image->signalRouter()->emitEndLodResetUpdatesBatch();
     }
 }
 
@@ -248,7 +260,7 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
     QList<KisStrokeJobData*> jobsData;
 
     jobsData << new Private::ResumeAndIssueGraphUpdatesData();
-    jobsData << new Private::UpdatesBarrierData();
+    jobsData << new Private::StartBatchUpdate();
 
     using KritaUtils::splitRectIntoPatches;
     using KritaUtils::optimalPatchSize;
@@ -258,6 +270,8 @@ QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResume
     Q_FOREACH (const QRect &rc, rects) {
         jobsData << new Private::IssueCanvasUpdatesData(rc);
     }
+
+    jobsData << new Private::EndBatchUpdate();
 
     return jobsData;
 }

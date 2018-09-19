@@ -74,7 +74,7 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
     , m_filter(filter)
     , m_texturesInfo(texturesInfo)
     , m_needsMipmapRegeneration(false)
-    , m_currentLodPlane(0)
+    , m_preparedLodPlane(0)
     , m_useBuffer(useBuffer)
     , m_numMipmapLevels(numMipmapLevels)
     , f(fcn)
@@ -123,14 +123,16 @@ KisTextureTile::~KisTextureTile()
     f->glDeleteTextures(1, &m_textureId);
 }
 
-void KisTextureTile::bindToActiveTexture()
+int KisTextureTile::bindToActiveTexture(bool blockMipmapRegeneration)
 {
     f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
-    if (m_needsMipmapRegeneration) {
+    if (m_needsMipmapRegeneration && !blockMipmapRegeneration) {
         f->glGenerateMipmap(GL_TEXTURE_2D);
-        m_needsMipmapRegeneration = false;
+        setPreparedLodPlane(0);
     }
+
+    return m_preparedLodPlane;
 }
 
 void KisTextureTile::setNeedsMipmapRegeneration()
@@ -140,18 +142,11 @@ void KisTextureTile::setNeedsMipmapRegeneration()
 
         m_needsMipmapRegeneration = true;
     }
-
-    m_currentLodPlane = 0;
 }
 
-int KisTextureTile::currentLodPlane() const
+void KisTextureTile::setPreparedLodPlane(int lod)
 {
-    return m_currentLodPlane;
-}
-
-void KisTextureTile::setCurrentLodPlane(int lod)
-{
-    m_currentLodPlane = lod;
+    m_preparedLodPlane = lod;
     m_needsMipmapRegeneration = false;
 }
 
@@ -182,7 +177,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
      *
      * 2) [here, ideally, the canvas should be re-rendered, so that
      *     the mipmap would be regenerated in bindToActiveTexture()
-     *     call, by in some cases (if you cancel and paint to quickly,
+     *     call, by in some cases (if you cancel and paint to quickly),
      *     that doesn't have time to happen]
      *
      * 3) The new LodN stroke issues a *partial* update of a LodN
@@ -360,17 +355,17 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
 
     //// Uncomment this warning if you see any weird flickering when
     //// Instant Preview updates
-    //
-    // if (!patchLevelOfDetail &&
-    //     m_currentLodPlane &&
-    //     !updateInfo.isEntireTileUpdated()) {
-    //     qDebug() << "WARNING: LodN -> Lod0 switch is requested for the partial tile update! Flickering is possible..." << ppVar(patchSize);
+    // if (!updateInfo.isEntireTileUpdated() &&
+    //     !(!patchLevelOfDetail || !m_preparedLodPlane || patchLevelOfDetail == m_preparedLodPlane)) {
+    //     qDebug() << "WARNING: LodN switch is requested for the partial tile update!. Flickering is possible..." << ppVar(patchSize);
+    //     qDebug() << "    " << ppVar(m_preparedLodPlane);
+    //     qDebug() << "    " << ppVar(patchLevelOfDetail);
     // }
 
     if (!patchLevelOfDetail) {
         setNeedsMipmapRegeneration();
     } else {
-        setCurrentLodPlane(patchLevelOfDetail);
+        setPreparedLodPlane(patchLevelOfDetail);
     }
 }
 

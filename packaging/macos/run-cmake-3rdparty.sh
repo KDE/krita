@@ -1,7 +1,7 @@
 export MACOSX_DEPLOYMENT_TARGET=10.11
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 export MACOSX_DEPLOYMENT_TARGET=10.11
-export SDKROOT=/Applications/Xcode.app/Contents/developer/Platforms/MacOSX.platform/developer/SDKs/MacOSX10.11.sdk
+export SDKROOT=/Applications/Xcode.app/Contents/developer/Platforms/MacOSX.platform/developer/SDKs/MacOSX10.13.sdk
 
 /Applications/CMake.app/Contents/bin/cmake ../krita/3rdparty/  \
     -DCMAKE_INSTALL_PREFIX=/Users/boud/dev/deps \

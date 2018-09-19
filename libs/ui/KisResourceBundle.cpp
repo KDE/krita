@@ -154,7 +154,7 @@ bool KisResourceBundle::load()
                         m_metadata.insert("author", e.firstChild().toText().data());
                     }
                     else if (e.tagName() == "meta:creation-date") {
-                         m_metadata.insert("created", e.firstChild().toText().data());
+                        m_metadata.insert("created", e.firstChild().toText().data());
                     }
                     else if (e.tagName() == "meta:dc-date") {
                         m_metadata.insert("updated", e.firstChild().toText().data());
@@ -800,7 +800,7 @@ const QString KisResourceBundle::getMeta(const QString &type, const QString &def
         return m_metadata[type];
     }
     else {
-       return defaultValue;
+        return defaultValue;
     }
 }
 
@@ -966,48 +966,54 @@ void KisResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
     file.copy(filename() + ".old");
 
     QString newStoreName = filename() + ".tmp";
-    QScopedPointer<KoStore> store(KoStore::createStore(newStoreName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
-    KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-    KisResourceBundleManifest newManifest;
+    {
+        QScopedPointer<KoStore> store(KoStore::createStore(newStoreName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
+        KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+        KisResourceBundleManifest newManifest;
 
-    addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+        addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    Q_FOREACH (KisResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
-        // Wrong manifest entry found, skip it
-        if(!oldStore->open(ref.resourcePath))
-            continue;
+        Q_FOREACH (KisResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+            // Wrong manifest entry found, skip it
+            if(!oldStore->open(ref.resourcePath))
+                continue;
 
-        store->open(ref.resourcePath);
+            store->open(ref.resourcePath);
 
-        QByteArray data = oldStore->device()->readAll();
-        oldStore->close();
-        store->write(data);
-        store->close();
-        QByteArray result = generator->generateHash(data);
-        newManifest.addResource(ref.fileTypeName, ref.resourcePath, ref.tagList, result);
+            QByteArray data = oldStore->device()->readAll();
+            oldStore->close();
+            store->write(data);
+            store->close();
+            QByteArray result = generator->generateHash(data);
+            newManifest.addResource(ref.fileTypeName, ref.resourcePath, ref.tagList, result);
+        }
+
+        m_manifest = newManifest;
+
+        if (!m_thumbnail.isNull()) {
+            QByteArray byteArray;
+            QBuffer buffer(&byteArray);
+            m_thumbnail.save(&buffer, "PNG");
+            if (!store->open("preview.png")) warnKrita << "Could not open preview.png";
+            if (store->write(byteArray) != buffer.size()) warnKrita << "Could not write preview.png";
+            store->close();
+        }
+
+        saveManifest(store);
+        saveMetadata(store);
+
+        store->finalize();
     }
-
-    m_manifest = newManifest;
-
-    if (!m_thumbnail.isNull()) {
-        QByteArray byteArray;
-        QBuffer buffer(&byteArray);
-        m_thumbnail.save(&buffer, "PNG");
-        if (!store->open("preview.png")) warnKrita << "Could not open preview.png";
-        if (store->write(byteArray) != buffer.size()) warnKrita << "Could not write preview.png";
-        store->close();
-    }
-
-    saveManifest(store);
-    saveMetadata(store);
-
-    store->finalize();
-
     // Remove the current bundle and then move the tmp one to be the correct one
     file.setFileName(filename());
-    file.remove();
-    file.setFileName(newStoreName);
-    file.rename(filename());
+    if (!file.remove()) {
+        qWarning() << "Could not remove" << filename() << file.errorString();
+    }
+    QFile f(newStoreName);
+    Q_ASSERT(f.exists());
+    if (!f.copy(filename())) {
+        qWarning() << "Could not copy the tmp file to the store" << filename() << newStoreName << QFile(newStoreName).exists() << f.errorString();
+    }
 }
 
 

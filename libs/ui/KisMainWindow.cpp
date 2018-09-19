@@ -1046,21 +1046,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         saveas = true;
     }
 
-    bool reset_url;
-
     if (document->url().isEmpty()) {
-        reset_url = true;
         saveas = true;
-    }
-    else {
-        reset_url = false;
     }
 
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
-
-    QUrl oldURL = document->url();
-    QString oldFile = document->localFilePath();
 
     QByteArray nativeFormat = document->nativeFormatMimeType();
     QByteArray oldMimeFormat = document->mimeType();

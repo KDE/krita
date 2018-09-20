@@ -176,6 +176,7 @@ set(kritaimage_LIB_SRCS
    kis_stroke_strategy_undo_command_based.cpp
    kis_simple_stroke_strategy.cpp
    KisRunnableBasedStrokeStrategy.cpp
+   KisRunnableStrokeJobDataBase.cpp
    KisRunnableStrokeJobData.cpp
    KisRunnableStrokeJobsInterface.cpp
    KisFakeRunnableStrokeJobsExecutor.cpp

@@ -47,7 +47,7 @@ public:
     virtual void unblockUpdates() = 0;
 
     virtual void disableUIUpdates() = 0;
-    virtual void enableUIUpdates() = 0;
+    virtual QVector<QRect> enableUIUpdates() = 0;
 
     virtual void disableDirtyRequests() = 0;
     virtual void enableDirtyRequests() = 0;

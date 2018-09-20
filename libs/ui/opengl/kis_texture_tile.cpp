@@ -150,7 +150,7 @@ void KisTextureTile::setPreparedLodPlane(int lod)
     m_needsMipmapRegeneration = false;
 }
 
-void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
+void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blockMipmapRegeneration)
 {
     f->initializeOpenGLFunctions();
     f->glBindTexture(GL_TEXTURE_2D, m_textureId);
@@ -188,7 +188,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo)
      * To avoid this issue, we should regenerate the dirty mipmap
      * *before* doing anything with the low-resolution plane.
      */
-    if (patchLevelOfDetail > 0 &&
+    if (!blockMipmapRegeneration &&
+        patchLevelOfDetail > 0 &&
         m_needsMipmapRegeneration &&
         !updateInfo.isEntireTileUpdated()) {
 

@@ -149,8 +149,9 @@ public:
     void emitNodeHasBeenAdded(KisNode *parent, int index);
     void emitAboutToRemoveANode(KisNode *parent, int index);
 
-    void emitBeginLodResetUpdatesBatch();
-    void emitEndLodResetUpdatesBatch();
+    void emitRequestLodPlanesSyncBlocked(bool value);
+    void emitNotifyBatchUpdateStarted();
+    void emitNotifyBatchUpdateEnded();
 
 private Q_SLOTS:
     void slotNotification(KisImageSignalType type);
@@ -158,6 +159,37 @@ private Q_SLOTS:
 Q_SIGNALS:
 
     void sigNotification(KisImageSignalType type);
+
+    /**
+     * Emitted whenever the image wants to update Lod0 plane of the canvas. Blocking
+     * synching effectively means that the canvas will not try to read from these planes
+     * until the **all** the data is loaded. Otherwise the user will see weird flickering
+     * because of partially loaded lod0 tiles.
+     *
+     * NOTE: while the sync is blockes, the canvas is considered to use LodN planes
+     *       that are expected to contain valid data.
+     */
+    void sigRequestLodPlanesSyncBlocked(bool value);
+
+    /**
+     * Emitted whenever the image is going to issue a lot of canvas update signals and
+     * it it a good idea to group then and rerender the canvas in one go. The canvas
+     * should initiate new rerenders while the batch is in progress.
+     *
+     * NOTE: even though the batched updates will not initiate a rerender, it does
+     *       **not** guarantee that there will be processed during the batch. The
+     *       updates may come from other sources, e.g. from mouse moves.
+     *
+     * NOTE: this feature is used to avoid flickering when switching
+     *       back from lodN plane back to lod0. All the texture tiles should
+     *       be loaded with new information before mipmaps can be regenerated.
+     */
+    void sigNotifyBatchUpdateStarted();
+
+    /**
+     * \see sigNotifyBatchUpdateStarted()
+     */
+    void sigNotifyBatchUpdateEnded();
 
     // Notifications
     void sigImageModified();

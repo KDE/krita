@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2017 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,16 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KISFAKERUNNABLESTROKEJOBSEXECUTOR_H
-#define KISFAKERUNNABLESTROKEJOBSEXECUTOR_H
+#include "KisRunnableStrokeJobDataBase.h"
 
-#include "KisRunnableStrokeJobsInterface.h"
-
-
-class KRITAIMAGE_EXPORT KisFakeRunnableStrokeJobsExecutor : public KisRunnableStrokeJobsInterface
+KisRunnableStrokeJobDataBase::KisRunnableStrokeJobDataBase(KisStrokeJobData::Sequentiality sequentiality, KisStrokeJobData::Exclusivity exclusivity)
+    : KisStrokeJobData(sequentiality, exclusivity)
 {
-public:
-    void addRunnableJobs(const QVector<KisRunnableStrokeJobDataBase*> &list);
-};
-
-#endif // KISFAKERUNNABLESTROKEJOBSEXECUTOR_H
+}

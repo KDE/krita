@@ -95,6 +95,8 @@
 #include "opengl/kis_opengl_canvas_debugger.h"
 
 #include "kis_algebra_2d.h"
+#include "kis_image_signal_router.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -149,7 +151,7 @@ public:
     QRect regionOfInterest;
 
     QRect renderingLimit;
-    int lodResetBatchActive = 0;
+    int isBatchUpdateActive = 0;
 
     bool effectiveLodAllowedInImage() {
         return lodAllowedInImage && !bootstrapLodBlocked;
@@ -562,8 +564,9 @@ void KisCanvas2::initializeImage()
     m_d->toolProxy.initializeImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
-    connect(image, SIGNAL(sigBeginLodResetUpdatesBatch()), SLOT(slotBeginLodResetUpdatesBatch()), Qt::DirectConnection);
-    connect(image, SIGNAL(sigEndLodResetUpdatesBatch()), SLOT(slotEndLodResetUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigNotifyBatchUpdateStarted()), SLOT(slotBeginUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigNotifyBatchUpdateEnded()), SLOT(slotEndUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigRequestLodPlanesSyncBlocked(bool)), SLOT(slotSetLodUpdatesBlocked(bool)), Qt::DirectConnection);
 
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
@@ -758,7 +761,7 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 void KisCanvas2::updateCanvasProjection()
 {
     auto tryIssueCanvasUpdates = [this](const QRect &vRect) {
-        if (!m_d->lodResetBatchActive) {
+        if (!m_d->isBatchUpdateActive) {
             // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
             if (m_d->currentCanvasIsOpenGL) {
                 m_d->savedUpdateRect = QRect();
@@ -782,26 +785,30 @@ void KisCanvas2::updateCanvasProjection()
         tryIssueCanvasUpdates(vRect);
     };
 
+    bool shouldExplicitlyIssueUpdates = false;
 
     QVector<KisUpdateInfoSP> infoObjects;
     while (KisUpdateInfoSP info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
-        const KisBatchControlUpdateInfo *batchInfo = dynamic_cast<const KisBatchControlUpdateInfo*>(info.data());
+        const KisMarkerUpdateInfo *batchInfo = dynamic_cast<const KisMarkerUpdateInfo*>(info.data());
         if (batchInfo) {
             if (!infoObjects.isEmpty()) {
                 uploadData(infoObjects);
                 infoObjects.clear();
             }
 
-            if (batchInfo->type() == KisBatchControlUpdateInfo::StartBatch) {
-                m_d->lodResetBatchActive++;
-                m_d->canvasWidget->setLodResetInProgress(true);
-            } else if (batchInfo->type() == KisBatchControlUpdateInfo::EndBatch) {
-                m_d->canvasWidget->setLodResetInProgress(false);
-                m_d->lodResetBatchActive--;
-                KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->lodResetBatchActive >= 0);
-                if (m_d->lodResetBatchActive == 0) {
-                    tryIssueCanvasUpdates(m_d->coordinatesConverter->imageRectInImagePixels());
+            if (batchInfo->type() == KisMarkerUpdateInfo::StartBatch) {
+                m_d->isBatchUpdateActive++;
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::EndBatch) {
+                m_d->isBatchUpdateActive--;
+                KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->isBatchUpdateActive >= 0);
+                if (m_d->isBatchUpdateActive == 0) {
+                    shouldExplicitlyIssueUpdates = true;
                 }
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::BlockLodUpdates) {
+                m_d->canvasWidget->setLodResetInProgress(true);
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::UnblockLodUpdates) {
+                m_d->canvasWidget->setLodResetInProgress(false);
+                shouldExplicitlyIssueUpdates = true;
             }
         } else {
             infoObjects << info;
@@ -810,23 +817,36 @@ void KisCanvas2::updateCanvasProjection()
 
     if (!infoObjects.isEmpty()) {
         uploadData(infoObjects);
+    } else if (shouldExplicitlyIssueUpdates) {
+        tryIssueCanvasUpdates(m_d->coordinatesConverter->imageRectInImagePixels());
     }
 }
 
-void KisCanvas2::slotBeginLodResetUpdatesBatch()
+void KisCanvas2::slotBeginUpdatesBatch()
 {
     KisUpdateInfoSP info =
-        new KisBatchControlUpdateInfo(KisBatchControlUpdateInfo::StartBatch,
+        new KisMarkerUpdateInfo(KisMarkerUpdateInfo::StartBatch,
                                       m_d->coordinatesConverter->imageRectInImagePixels());
     m_d->projectionUpdatesCompressor.putUpdateInfo(info);
     emit sigCanvasCacheUpdated();
 }
 
-void KisCanvas2::slotEndLodResetUpdatesBatch()
+void KisCanvas2::slotEndUpdatesBatch()
 {
     KisUpdateInfoSP info =
-        new KisBatchControlUpdateInfo(KisBatchControlUpdateInfo::EndBatch,
+        new KisMarkerUpdateInfo(KisMarkerUpdateInfo::EndBatch,
                                       m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
+}
+
+void KisCanvas2::slotSetLodUpdatesBlocked(bool value)
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(value ?
+                                KisMarkerUpdateInfo::BlockLodUpdates :
+                                KisMarkerUpdateInfo::UnblockLodUpdates,
+                                m_d->coordinatesConverter->imageRectInImagePixels());
     m_d->projectionUpdatesCompressor.putUpdateInfo(info);
     emit sigCanvasCacheUpdated();
 }

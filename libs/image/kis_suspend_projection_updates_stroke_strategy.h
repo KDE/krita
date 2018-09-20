@@ -19,11 +19,11 @@
 #ifndef __KIS_SUSPEND_PROJECTION_UPDATES_STROKE_STRATEGY_H
 #define __KIS_SUSPEND_PROJECTION_UPDATES_STROKE_STRATEGY_H
 
-#include <kis_simple_stroke_strategy.h>
+#include <KisRunnableBasedStrokeStrategy.h>
 
 #include <QScopedPointer>
 
-class KisSuspendProjectionUpdatesStrokeStrategy : public KisSimpleStrokeStrategy
+class KisSuspendProjectionUpdatesStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
     KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend);
@@ -33,8 +33,13 @@ public:
     static QList<KisStrokeJobData*> createResumeJobsData(KisImageWSP image);
 
 private:
+    void initStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
     void cancelStrokeCallback() override;
+
+    void suspendStrokeCallback() override;
+    void resumeStrokeCallback() override;
+
 
     void resumeAndIssueUpdates(bool dropUpdates);
 

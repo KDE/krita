@@ -97,25 +97,25 @@ bool KisOpenGLUpdateInfo::tryMergeWith(const KisOpenGLUpdateInfo &rhs)
     return true;
 }
 
-KisBatchControlUpdateInfo::KisBatchControlUpdateInfo(KisBatchControlUpdateInfo::Type type, const QRect &dirtyImageRect)
+KisMarkerUpdateInfo::KisMarkerUpdateInfo(KisMarkerUpdateInfo::Type type, const QRect &dirtyImageRect)
     : m_type(type),
       m_dirtyImageRect(dirtyImageRect)
 {
 }
 
-KisBatchControlUpdateInfo::Type KisBatchControlUpdateInfo::type() const
+KisMarkerUpdateInfo::Type KisMarkerUpdateInfo::type() const
 {
     return m_type;
 }
 
-QRect KisBatchControlUpdateInfo::dirtyImageRect() const
+QRect KisMarkerUpdateInfo::dirtyImageRect() const
 {
     return m_dirtyImageRect;
 }
 
-int KisBatchControlUpdateInfo::levelOfDetail() const
+int KisMarkerUpdateInfo::levelOfDetail() const
 {
     // return invalid level of detail to avoid merging the update info
     // with other updates
-    return m_type == StartBatch ? -1 : -2;
+    return -1 - (int)m_type;
 }

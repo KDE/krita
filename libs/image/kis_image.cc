@@ -96,6 +96,7 @@
 #include "kis_layer_projection_plane.h"
 
 #include "kis_update_time_monitor.h"
+#include "tiles3/kis_lockless_stack.h"
 
 #include <QtCore>
 
@@ -217,6 +218,8 @@ public:
     vKisAnnotationSP annotations;
 
     QAtomicInt disableUIUpdateSignals;
+    KisLocklessStack<QRect> savedDisabledUIUpdates;
+
     KisProjectionUpdatesFilterSP projectionUpdatesFilter;
     KisImageSignalRouter signalRouter;
     KisImageAnimationInterface *animationInterface;
@@ -1512,9 +1515,18 @@ void KisImage::disableUIUpdates()
     m_d->disableUIUpdateSignals.ref();
 }
 
-void KisImage::enableUIUpdates()
+QVector<QRect> KisImage::enableUIUpdates()
 {
     m_d->disableUIUpdateSignals.deref();
+
+    QRect rect;
+    QVector<QRect> postponedUpdates;
+
+    while (m_d->savedDisabledUIUpdates.pop(rect)) {
+        postponedUpdates.append(rect);
+    }
+
+    return postponedUpdates;
 }
 
 void KisImage::notifyProjectionUpdated(const QRect &rc)
@@ -1528,6 +1540,8 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
         if (dirtyRect.isEmpty()) return;
 
         emit sigImageUpdated(dirtyRect);
+    } else {
+        m_d->savedDisabledUIUpdates.push(rc);
     }
 }
 

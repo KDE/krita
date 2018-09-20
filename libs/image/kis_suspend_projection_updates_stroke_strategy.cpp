@@ -23,6 +23,11 @@
 #include <kis_projection_updates_filter.h>
 #include "kis_image_signal_router.h"
 
+#include "kundo2command.h"
+#include "KisRunnableStrokeJobDataBase.h"
+#include "KisRunnableStrokeJobsInterface.h"
+#include "kis_paintop_utils.h"
+
 
 inline uint qHash(const QRect &rc) {
     return rc.x() +
@@ -35,6 +40,13 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 {
     KisImageWSP image;
     bool suspend;
+    QVector<QRect> accumulatedDirtyRects;
+    bool sanityResumingFinished = false;
+    int updatesEpoch = 0;
+    bool haveDisabledGUILodSync = false;
+
+    void tryFetchUsedUpdatesFilter(KisImageSP image);
+    void tryIssueRecordedDirtyRequests(KisImageSP image);
 
     class SuspendLod0Updates : public KisProjectionUpdatesFilter
     {
@@ -112,50 +124,227 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         QMutex m_mutex;
     };
 
+    QVector<QSharedPointer<SuspendLod0Updates>> usedFilters;
+
+
+    struct StrokeJobCommand : public KUndo2Command
+    {
+        StrokeJobCommand(KisStrokeJobData::Sequentiality sequentiality = KisStrokeJobData::SEQUENTIAL,
+                         KisStrokeJobData::Exclusivity exclusivity = KisStrokeJobData::NORMAL)
+            : m_sequentiality(sequentiality),
+              m_exclusivity(exclusivity)
+        {}
+
+        KisStrokeJobData::Sequentiality m_sequentiality;
+        KisStrokeJobData::Exclusivity m_exclusivity;
+    };
+
+    struct UndoableData : public KisRunnableStrokeJobDataBase
+    {
+        UndoableData(StrokeJobCommand *command)
+            : KisRunnableStrokeJobDataBase(command->m_sequentiality, command->m_exclusivity),
+              m_command(command)
+        {
+        }
+
+        void run() override {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_command);
+            m_command->redo();
+        }
+
+        QScopedPointer<StrokeJobCommand> m_command;
+    };
+
     // Suspend job should be a barrier to ensure all
     // previous lodN strokes reach the GUI. Otherwise,
     // they will be blocked in
     // KisImage::notifyProjectionUpdated()
-    class SuspendData : public KisStrokeJobData {
-    public:
-        SuspendData()
-            : KisStrokeJobData(BARRIER)
-            {}
+    struct SuspendUpdatesCommand : public StrokeJobCommand
+    {
+        SuspendUpdatesCommand(Private *d)
+            : StrokeJobCommand(KisStrokeJobData::BARRIER),
+              m_d(d) {}
+
+        void redo() override {
+            KisImageSP image = m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->projectionUpdatesFilter());
+
+            image->setProjectionUpdatesFilter(
+                KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
+        }
+
+
+        void undo() override {
+            KisImageSP image = m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->projectionUpdatesFilter());
+
+            m_d->tryFetchUsedUpdatesFilter(image);
+        }
+
+        Private *m_d;
     };
 
-    class ResumeAndIssueGraphUpdatesData : public KisStrokeJobData {
-    public:
-        ResumeAndIssueGraphUpdatesData()
-            : KisStrokeJobData(SEQUENTIAL)
-            {}
+
+    struct ResumeAndIssueGraphUpdatesCommand : public StrokeJobCommand
+    {
+        ResumeAndIssueGraphUpdatesCommand(Private *d)
+            : StrokeJobCommand(KisStrokeJobData::BARRIER),
+              m_d(d) {}
+
+        void redo() override {
+            KisImageSP image = m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image->projectionUpdatesFilter());
+
+            image->disableUIUpdates();
+            m_d->tryFetchUsedUpdatesFilter(image);
+            m_d->tryIssueRecordedDirtyRequests(image);
+        }
+
+        void undo() override {
+            KisImageSP image = m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!image->projectionUpdatesFilter());
+
+            image->setProjectionUpdatesFilter(
+                KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
+            image->enableUIUpdates();
+        }
+
+        Private *m_d;
     };
 
-    class StartBatchUpdate : public KisStrokeJobData {
-    public:
-        StartBatchUpdate()
-            : KisStrokeJobData(BARRIER)
-            {}
+    struct UploadDataToUIData : public KisRunnableStrokeJobDataBase
+    {
+        UploadDataToUIData(const QRect &rc, int updateEpoch, KisSuspendProjectionUpdatesStrokeStrategy *strategy)
+            : KisRunnableStrokeJobDataBase(KisStrokeJobData::CONCURRENT),
+              m_strategy(strategy),
+              m_rc(rc),
+              m_updateEpoch(updateEpoch)
+        {
+        }
+
+        void run() override {
+            // check if we've already started stinking...
+            if (m_strategy->m_d->updatesEpoch > m_updateEpoch) {
+                return;
+            }
+
+            KisImageSP image = m_strategy->m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+            image->notifyProjectionUpdated(m_rc);
+        }
+
+        KisSuspendProjectionUpdatesStrokeStrategy *m_strategy;
+        QRect m_rc;
+        int m_updateEpoch;
     };
 
-    class EndBatchUpdate : public KisStrokeJobData {
-    public:
-        EndBatchUpdate()
-            : KisStrokeJobData(BARRIER)
-            {}
+    struct BlockUILodSync : public KisRunnableStrokeJobDataBase
+    {
+        BlockUILodSync(bool block, KisSuspendProjectionUpdatesStrokeStrategy *strategy)
+            : KisRunnableStrokeJobDataBase(KisStrokeJobData::BARRIER),
+              m_strategy(strategy),
+              m_block(block)
+        {}
+
+        void run() override {
+            KisImageSP image = m_strategy->m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+            image->signalRouter()->emitRequestLodPlanesSyncBlocked(m_block);
+            m_strategy->m_d->haveDisabledGUILodSync = m_block;
+        }
+
+        KisSuspendProjectionUpdatesStrokeStrategy *m_strategy;
+        bool m_block;
     };
 
-    class IssueCanvasUpdatesData : public KisStrokeJobData {
-    public:
-        IssueCanvasUpdatesData(QRect _updateRect)
-            : KisStrokeJobData(CONCURRENT),
-              updateRect(_updateRect)
-            {}
-        QRect updateRect;
+    struct StartBatchUIUpdatesCommand : public StrokeJobCommand
+    {
+        StartBatchUIUpdatesCommand(KisSuspendProjectionUpdatesStrokeStrategy *strategy)
+            : StrokeJobCommand(KisStrokeJobData::BARRIER),
+              m_strategy(strategy) {}
+
+        void redo() override {
+            KisImageSP image = m_strategy->m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+            /**
+             * We accumulate dirty rects from all(!) epochs, because some updates of the
+             * previous epochs might have been cancelled without doing any real work.
+             */
+            const QVector<QRect> totalDirtyRects =
+                image->enableUIUpdates() + m_strategy->m_d->accumulatedDirtyRects;
+
+            const QRect totalRect =
+                image->bounds() &
+                std::accumulate(totalDirtyRects.begin(), totalDirtyRects.end(), QRect(), std::bit_or<QRect>());
+
+            m_strategy->m_d->accumulatedDirtyRects =
+                KisPaintOpUtils::splitAndFilterDabRect(totalRect,
+                                                       totalDirtyRects,
+                                                       KritaUtils::optimalPatchSize().width());
+
+            image->signalRouter()->emitNotifyBatchUpdateStarted();
+
+            QVector<KisRunnableStrokeJobDataBase*> jobsData;
+            Q_FOREACH (const QRect &rc, m_strategy->m_d->accumulatedDirtyRects) {
+                jobsData << new Private::UploadDataToUIData(rc, m_strategy->m_d->updatesEpoch, m_strategy);
+            }
+
+            m_strategy->runnableJobsInterface()->addRunnableJobs(jobsData);
+
+        }
+
+        void undo() override {
+            KisImageSP image = m_strategy->m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+            image->signalRouter()->emitNotifyBatchUpdateEnded();
+            image->disableUIUpdates();
+        }
+
+        KisSuspendProjectionUpdatesStrokeStrategy *m_strategy;
     };
+
+    struct EndBatchUIUpdatesCommand : public StrokeJobCommand
+    {
+        EndBatchUIUpdatesCommand(KisSuspendProjectionUpdatesStrokeStrategy *strategy)
+            : StrokeJobCommand(KisStrokeJobData::BARRIER),
+              m_strategy(strategy) {}
+
+        void redo() override {
+            KisImageSP image = m_strategy->m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+            image->signalRouter()->emitNotifyBatchUpdateEnded();
+            m_strategy->m_d->sanityResumingFinished = true;
+        }
+
+        void undo() override {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "why the heck we are undoing the last job of the stroke?!");
+
+            m_strategy->m_d->sanityResumingFinished = false;
+
+            KisImageSP image = m_strategy->m_d->image.toStrongRef();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+            image->signalRouter()->emitNotifyBatchUpdateStarted();
+        }
+
+        KisSuspendProjectionUpdatesStrokeStrategy *m_strategy;
+    };
+
+
+    QVector<StrokeJobCommand*> executedCommands;
 };
 
 KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend)
-    : KisSimpleStrokeStrategy(suspend ? "suspend_stroke_strategy" : "resume_stroke_strategy"),
+    : KisRunnableBasedStrokeStrategy(suspend ? "suspend_stroke_strategy" : "resume_stroke_strategy"),
       m_d(new Private)
 {
     m_d->image = image;
@@ -174,11 +363,32 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
     enableJob(JOB_DOSTROKE, true);
     enableJob(JOB_CANCEL, true);
 
+    enableJob(JOB_SUSPEND, true, KisStrokeJobData::BARRIER);
+    enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
+
     setNeedsExplicitCancel(true);
 }
 
 KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStrategy()
 {
+    qDeleteAll(m_d->executedCommands);
+}
+
+void KisSuspendProjectionUpdatesStrokeStrategy::initStrokeCallback()
+{
+    QVector<KisRunnableStrokeJobDataBase*> jobs;
+
+    if (m_d->suspend) {
+        jobs << new Private::UndoableData(new Private::SuspendUpdatesCommand(m_d.data()));
+    } else {
+        jobs << new Private::UndoableData(new Private::ResumeAndIssueGraphUpdatesCommand(m_d.data()));
+        jobs << new Private::BlockUILodSync(true, this);
+        jobs << new Private::UndoableData(new Private::StartBatchUIUpdatesCommand(this));
+        jobs << new Private::UndoableData(new Private::EndBatchUIUpdatesCommand(this));
+        jobs << new Private::BlockUILodSync(false, this);
+    }
+
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
 
 /**
@@ -218,85 +428,49 @@ KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStr
  *          entire image. Multithreaded way is used to conform the
  *          double-stage update principle of KisCanvas2.
  */
-
 void KisSuspendProjectionUpdatesStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    Private::SuspendData *suspendData = dynamic_cast<Private::SuspendData*>(data);
-    Private::ResumeAndIssueGraphUpdatesData *resumeData = dynamic_cast<Private::ResumeAndIssueGraphUpdatesData*>(data);
-    Private::StartBatchUpdate *startBatchData = dynamic_cast<Private::StartBatchUpdate*>(data);
-    Private::EndBatchUpdate *endBatchData = dynamic_cast<Private::EndBatchUpdate*>(data);
-    Private::IssueCanvasUpdatesData *canvasUpdates = dynamic_cast<Private::IssueCanvasUpdatesData*>(data);
+    KisRunnableStrokeJobDataBase *runnable = dynamic_cast<KisRunnableStrokeJobDataBase*>(data);
+    if (runnable) {
+        runnable->run();
 
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return;
-    }
-
-    if (suspendData) {
-        image->setProjectionUpdatesFilter(
-            KisProjectionUpdatesFilterSP(new Private::SuspendLod0Updates()));
-    } else if (resumeData) {
-        image->disableUIUpdates();
-        resumeAndIssueUpdates(false);
-    } else if (startBatchData) {
-        image->enableUIUpdates();
-        image->signalRouter()->emitBeginLodResetUpdatesBatch();
-    } else if (canvasUpdates) {
-        image->notifyProjectionUpdated(canvasUpdates->updateRect);
-    } else if (endBatchData) {
-        image->signalRouter()->emitEndLodResetUpdatesBatch();
+        if (Private::UndoableData *undoable = dynamic_cast<Private::UndoableData*>(data)) {
+            Private::StrokeJobCommand *command =  undoable->m_command.take();
+            m_d->executedCommands.append(command);
+        }
     }
 }
 
 QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createSuspendJobsData(KisImageWSP /*image*/)
 {
-    QList<KisStrokeJobData*> jobsData;
-    jobsData << new Private::SuspendData();
-    return jobsData;
+    return QList<KisStrokeJobData*>();
 }
 
-QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP _image)
+QList<KisStrokeJobData*> KisSuspendProjectionUpdatesStrokeStrategy::createResumeJobsData(KisImageWSP /*_image*/)
 {
-    QList<KisStrokeJobData*> jobsData;
-
-    jobsData << new Private::ResumeAndIssueGraphUpdatesData();
-    jobsData << new Private::StartBatchUpdate();
-
-    using KritaUtils::splitRectIntoPatches;
-    using KritaUtils::optimalPatchSize;
-    KisImageSP image = _image;
-
-    QVector<QRect> rects = splitRectIntoPatches(image->bounds(), optimalPatchSize());
-    Q_FOREACH (const QRect &rc, rects) {
-        jobsData << new Private::IssueCanvasUpdatesData(rc);
-    }
-
-    jobsData << new Private::EndBatchUpdate();
-
-    return jobsData;
+    return QList<KisStrokeJobData*>();
 }
 
-void KisSuspendProjectionUpdatesStrokeStrategy::resumeAndIssueUpdates(bool dropUpdates)
+void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryFetchUsedUpdatesFilter(KisImageSP image)
 {
-    KisImageSP image = m_d->image.toStrongRef();
-    if (!image) {
-        return;
-    }
-
     KisProjectionUpdatesFilterSP filter =
         image->projectionUpdatesFilter();
 
     if (!filter) return;
 
-    Private::SuspendLod0Updates *localFilter =
-        dynamic_cast<Private::SuspendLod0Updates*>(filter.data());
+    QSharedPointer<Private::SuspendLod0Updates> localFilter =
+        filter.dynamicCast<Private::SuspendLod0Updates>();
 
     if (localFilter) {
         image->setProjectionUpdatesFilter(KisProjectionUpdatesFilterSP());
+        this->usedFilters.append(localFilter);
+    }
+}
 
-        if (!dropUpdates) {
-            localFilter->notifyUpdates(image.data());
-        }
+void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryIssueRecordedDirtyRequests(KisImageSP image)
+{
+    Q_FOREACH (QSharedPointer<Private::SuspendLod0Updates> filter, usedFilters) {
+        filter->notifyUpdates(image.data());
     }
 }
 
@@ -307,6 +481,16 @@ void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
         return;
     }
 
+    for (auto it = m_d->executedCommands.rbegin(); it != m_d->executedCommands.rend(); ++it) {
+        (*it)->undo();
+    }
+
+    m_d->tryFetchUsedUpdatesFilter(image);
+
+    if (m_d->haveDisabledGUILodSync) {
+        image->signalRouter()->emitRequestLodPlanesSyncBlocked(false);
+    }
+
     /**
      * We shouldn't emit any ad-hoc updates when cancelling the
      * stroke.  It generates weird temporary holes on the canvas,
@@ -314,10 +498,32 @@ void KisSuspendProjectionUpdatesStrokeStrategy::cancelStrokeCallback()
      * corrupted. We will just emit a common refreshGraphAsync() that
      * will do all the work in a beautiful way
      */
-    resumeAndIssueUpdates(true);
-
     if (!m_d->suspend) {
         // FIXME: optimize
         image->refreshGraphAsync();
     }
+}
+
+void KisSuspendProjectionUpdatesStrokeStrategy::suspendStrokeCallback()
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->suspend || !m_d->sanityResumingFinished);
+
+    for (auto it = m_d->executedCommands.rbegin(); it != m_d->executedCommands.rend(); ++it) {
+        (*it)->undo();
+    }
+
+    // reset all the issued updates
+    m_d->updatesEpoch++;
+}
+
+void KisSuspendProjectionUpdatesStrokeStrategy::resumeStrokeCallback()
+{
+    QVector<KisRunnableStrokeJobDataBase*> jobs;
+
+    Q_FOREACH (Private::StrokeJobCommand *command, m_d->executedCommands) {
+        jobs << new Private::UndoableData(command);
+    }
+    m_d->executedCommands.clear();
+
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }

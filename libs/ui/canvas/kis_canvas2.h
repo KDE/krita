@@ -279,8 +279,9 @@ private Q_SLOTS:
     void startUpdateCanvasProjection(const QRect & rc);
     void updateCanvasProjection();
 
-    void slotBeginLodResetUpdatesBatch();
-    void slotEndLodResetUpdatesBatch();
+    void slotBeginUpdatesBatch();
+    void slotEndUpdatesBatch();
+    void slotSetLodUpdatesBlocked(bool value);
 
     /**
      * Called whenever the view widget needs to show a different part of

@@ -112,7 +112,7 @@ void KisOpenGLImageTextures::initGL(QOpenGLFunctions *f)
     createImageTextureTiles();
 
     KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds(), m_image);
-    recalculateCache(info);
+    recalculateCache(info, false);
 }
 
 KisOpenGLImageTextures::~KisOpenGLImageTextures()
@@ -256,7 +256,7 @@ KisOpenGLUpdateInfoSP KisOpenGLImageTextures::updateCacheImpl(const QRect& rect,
     return m_updateInfoBuilder.buildUpdateInfo(rect, srcImage, convertColorSpace);
 }
 
-void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
+void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMipmapRegeneration)
 {
     if (!m_initialized) {
         dbgUI << "OpenGL: Tried to edit image texture cache before it was initialized.";
@@ -271,7 +271,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         KisTextureTile *tile = getTextureTileCR(tileInfo->tileCol(), tileInfo->tileRow());
         KIS_ASSERT_RECOVER_RETURN(tile);
 
-        tile->update(*tileInfo);
+        tile->update(*tileInfo, blockMipmapRegeneration);
     }
 }
 

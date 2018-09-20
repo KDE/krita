@@ -914,7 +914,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     // See KisQPainterCanvas::updateCanvasProjection for more info
     bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if (isOpenGLUpdateInfo) {
-        d->openGLImageTextures->recalculateCache(info);
+        d->openGLImageTextures->recalculateCache(info, d->lodSwitchInProgress);
     }
     return QRect(); // FIXME: Implement dirty rect for OpenGL
 }

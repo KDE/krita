@@ -142,16 +142,18 @@ public:
     KisImagePatch patch;
 };
 
-class KisBatchControlUpdateInfo : public KisUpdateInfo
+class KisMarkerUpdateInfo : public KisUpdateInfo
 {
 public:
     enum Type {
-        StartBatch,
-        EndBatch
+        StartBatch = 0,
+        EndBatch,
+        BlockLodUpdates,
+        UnblockLodUpdates,
     };
 
 public:
-    KisBatchControlUpdateInfo(Type type, const QRect &dirtyImageRect);
+    KisMarkerUpdateInfo(Type type, const QRect &dirtyImageRect);
 
     Type type() const;
 

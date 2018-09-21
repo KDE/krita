@@ -220,6 +220,7 @@ void KisLodAvailabilityWidget::slotUserChangedLodAvailability(bool value)
     KisSignalsBlocker b(m_d->chkLod);
 
     m_d->chkLod->setChecked(value);
+    setLimitations(m_d->limitations);
 }
 
 void KisLodAvailabilityWidget::slotUserChangedLodThreshold(qreal value)

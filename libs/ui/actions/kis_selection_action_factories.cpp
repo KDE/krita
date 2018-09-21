@@ -550,7 +550,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
             helper.paintPainterPathQPen(outline, pen, params.fillColor);
         }
     }
-    else  {
+    else if (currentNode->inherits("KisShapeLayer")) {
 
         QTransform transform = view->canvasBase()->coordinatesConverter()->imageToDocumentTransform();
 

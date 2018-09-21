@@ -198,6 +198,7 @@ set(kritaimage_LIB_SRCS
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
+   KisImageSignals.cpp
    kis_image_config.cpp
    kis_projection_updates_filter.cpp
    kis_suspend_projection_updates_stroke_strategy.cpp

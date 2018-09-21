@@ -26,6 +26,7 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_layer_utils.h"
 #include "kis_command_utils.h"
+#include "kis_image_signal_router.h"
 
 class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand
 {

@@ -53,6 +53,7 @@
 #include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
 #include "krita_utils.h"
+#include "kis_image_signal_router.h"
 
 
 namespace KisLayerUtils {

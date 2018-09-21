@@ -39,7 +39,7 @@ enum KisImageSignalTypeEnum {
  *
  * \see KisImage::sigSizeChanged()
  */
-struct ComplexSizeChangedSignal {
+struct KRITAIMAGE_EXPORT ComplexSizeChangedSignal {
     ComplexSizeChangedSignal();
     ComplexSizeChangedSignal(QPointF _oldStillPoint, QPointF _newStillPoint);
 
@@ -64,7 +64,7 @@ struct ComplexSizeChangedSignal {
  *
  * \see KisImage::sigRequestNodeReselection()
  */
-struct ComplexNodeReselectionSignal {
+struct KRITAIMAGE_EXPORT ComplexNodeReselectionSignal {
     ComplexNodeReselectionSignal();
     ComplexNodeReselectionSignal(KisNodeSP _newActiveNode, KisNodeList _newSelectedNodes,
                                  KisNodeSP _oldActiveNode = KisNodeSP(), KisNodeList _oldSelectedNodes = KisNodeList());
@@ -77,7 +77,7 @@ struct ComplexNodeReselectionSignal {
     KisNodeList oldSelectedNodes;
 };
 
-struct KisImageSignalType {
+struct KRITAIMAGE_EXPORT KisImageSignalType {
     KisImageSignalType();
     KisImageSignalType(KisImageSignalTypeEnum _id);
     KisImageSignalType(ComplexSizeChangedSignal signal);

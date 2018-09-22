@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>429</width>
-    <height>279</height>
+    <width>317</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -16,24 +16,9 @@
     <height>0</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,1">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <item row="0" column="0">
-    <layout class="QVBoxLayout">
-     <property name="spacing">
-      <number>8</number>
-     </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="brushPreview">
        <property name="sizePolicy">
@@ -54,99 +39,71 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblMaskType">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Mask Type:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBoxMaskType"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblMaskShape">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Shape:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="comboBoxShape">
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <item>
-        <property name="text">
-         <string>Circle</string>
-        </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblMaskType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Mask Type:</string>
+         </property>
+        </widget>
        </item>
-       <item>
-        <property name="text">
-         <string>Square</string>
-        </property>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBoxShape">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
+         <item>
+          <property name="text">
+           <string>Circle</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Square</string>
+          </property>
+         </item>
+        </widget>
        </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="btnAntialiasing">
-       <property name="toolTip">
-        <string>The border of the brush will be smoothed to avoid aliasing</string>
-       </property>
-       <property name="text">
-        <string>Anti-alias</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="spacer4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>13</height>
-        </size>
-       </property>
-      </spacer>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblMaskShape">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Shape:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxMaskType"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="btnAntialiasing">
+         <property name="toolTip">
+          <string>The border of the brush will be smoothed to avoid aliasing</string>
+         </property>
+         <property name="text">
+          <string>Anti-alias</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
-   <item row="1" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>17</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1">
+   <item>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
      <item row="0" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRadius" >
+      <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
        <property name="minimumSize">
         <size>
          <width>200</width>
@@ -186,7 +143,7 @@
       </widget>
      </item>
      <item row="1" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRatio" />
+      <widget class="KisDoubleSliderSpinBox" name="inputRatio" native="true"/>
      </item>
      <item row="2" column="0" colspan="3">
       <widget class="QStackedWidget" name="stackedWidget">
@@ -241,10 +198,10 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputHFade" />
+               <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
               </item>
               <item row="0" column="2" rowspan="2">
-               <widget class="KoAspectButton" name="aspectButton" />
+               <widget class="KoAspectButton" name="aspectButton" native="true"/>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="lblVerticalFade">
@@ -257,7 +214,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputVFade" />
+               <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
               </item>
              </layout>
             </item>
@@ -291,7 +248,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="KisCurveWidget" name="softnessCurve" >
+          <widget class="KisCurveWidget" name="softnessCurve" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -350,8 +307,8 @@
       </widget>
      </item>
      <item row="3" column="1" colspan="2">
-      <widget class="KisSliderSpinBox" name="inputAngle" >
-        <property name="minimumSize">
+      <widget class="KisSliderSpinBox" name="inputAngle" native="true">
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>0</height>
@@ -360,13 +317,13 @@
       </widget>
      </item>
      <item row="4" column="1" colspan="2">
-      <widget class="KisSliderSpinBox" name="inputSpikes" />
+      <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
      </item>
      <item row="6" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="density" />
+      <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
      </item>
      <item row="5" column="1" colspan="2">
-      <widget class="KisDoubleSliderSpinBox" name="inputRandomness" />
+      <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="lblDensity">
@@ -379,7 +336,7 @@
       </widget>
      </item>
      <item row="7" column="1" colspan="2">
-      <widget class="KisSpacingSelectionWidget" name="spacingWidget" />
+      <widget class="KisSpacingSelectionWidget" name="spacingWidget" native="true"/>
      </item>
      <item row="7" column="0">
       <widget class="QLabel" name="lblSpacing">
@@ -393,21 +350,22 @@
      </item>
     </layout>
    </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
@@ -417,13 +375,25 @@
   <customwidget>
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/kis_curve_widget.h</header>
+   <header location="global">widgets/kis_curve_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisSpacingSelectionWidget</class>
    <extends>QWidget</extends>
    <header>kis_spacing_selection_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

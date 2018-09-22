@@ -42,6 +42,7 @@ public:
 private Q_SLOTS:
 
     void sensorActivated(const QModelIndex& index);
+    void slotSensorEnableChange(bool enabled);
 
 Q_SIGNALS:
 

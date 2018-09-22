@@ -22,6 +22,11 @@
 #include "kis_multi_sensors_model_p.h"
 #include "kis_dynamic_sensor.h"
 #include "kis_curve_option.h"
+#include "kis_icon_utils.h"
+#include <QComboBox>
+#include <QListView>
+#include <QCheckBox>
+
 
 struct KisMultiSensorsSelector::Private {
     Ui_WdgMultiSensorsSelector form;
@@ -39,9 +44,19 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     d->model = new KisMultiSensorsModel(this);
     connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP )), SIGNAL(sensorChanged(KisDynamicSensorSP )));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
+
+
     connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
-    connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    connect(d->form.sensorsList, SIGNAL(entered(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+
     d->form.sensorsList->setModel(d->model);
+    d->form.penSensorCombobox->setModel(d->model);
+    d->form.penSensorCombobox->setView(d->form.sensorsList);
+
+
+    connect(d->form.currentSensorEnabledCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotSensorEnableChange(bool)));
+
+
     d->layout = new QHBoxLayout(d->form.widgetConfiguration);
 }
 
@@ -88,6 +103,31 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
         if (d->currentConfigWidget) {
             d->layout->addWidget(d->currentConfigWidget);
         }
+
+        d->form.penSensorCombobox->setCurrentIndex(index.row());
+
+        d->form.currentSensorEnabledCheckbox->setChecked(sensor->isActive());
+
+
+        // how many sensors are active?
+        int sensorsActive = 0;
+        for( int i =0; i <= d->model->rowCount()-1 ; i++) {
+            QModelIndex row = d->model->index(i, 0);
+            KisDynamicSensorSP loopSensor = d->model->getSensor(row);
+            if ( loopSensor->isActive()) {
+                sensorsActive++;
+            }
+        }
+
+        // if the sensor selected is the only one, don't allow the person
+        // to disable it. You need at least one sensor active for it to be valid
+        if (d->form.currentSensorEnabledCheckbox->isChecked() && sensorsActive == 1 ) {
+            d->form.currentSensorEnabledCheckbox->setEnabled(false);
+        } else {
+            d->form.currentSensorEnabledCheckbox->setEnabled(true);
+        }
+
+
         emit(highlightedSensorChanged(sensor));
     }
 }
@@ -100,4 +140,12 @@ void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool u
 void KisMultiSensorsSelector::reload()
 {
     d->model->resetCurveOption();
+}
+
+void KisMultiSensorsSelector::slotSensorEnableChange(bool enabled) {
+    // get current index
+    KisDynamicSensorSP sensor = currentHighlighted();
+
+    // change the data model index so the enabled state is changed
+    sensor->setActive(enabled);
 }

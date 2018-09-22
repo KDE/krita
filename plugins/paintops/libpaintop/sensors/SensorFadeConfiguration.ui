@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>148</width>
-    <height>55</height>
+    <width>251</width>
+    <height>41</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,64 +16,32 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QCheckBox" name="checkBoxRepeat">
-     <property name="text">
-      <string>repeat</string>
+    <widget class="KisSliderSpinBox" name="spinBoxLength" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimum" stdset="0">
+      <number>1</number>
+     </property>
+     <property name="maximum" stdset="0">
+      <number>5000</number>
+     </property>
+     <property name="value" stdset="0">
+      <number>200</number>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="hl" stretch="0,0">
-     <item>
-      <widget class="QLabel" name="Factor">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Length:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisSliderSpinBox" name="spinBoxLength" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimum" stdset="0">
-        <number>1</number>
-       </property>
-       <property name="maximum" stdset="0">
-        <number>5000</number>
-       </property>
-       <property name="value" stdset="0">
-        <number>200</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="checkBoxRepeat">
+     <property name="text">
+      <string>Repeat</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

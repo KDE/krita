@@ -73,21 +73,21 @@ void KisDynamicSensorDrawingAngle::updateGUI()
 
 QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent, QWidget *ss)
 {
-    QWidget *w = new QWidget(parent);
-
-    m_chkLockedMode = new QCheckBox(i18n("Lock"), w);
+    QWidget *mainWidget = new QWidget(parent);
+    m_chkLockedMode = new QCheckBox(i18n("Locked Angle"), mainWidget);
     m_chkLockedMode->setChecked(m_lockedAngleMode);
 
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(setLockedAngleMode(int)));
     connect(m_chkLockedMode, SIGNAL(stateChanged(int)), SLOT(updateGUI()));
 
-    m_chkFanCorners = new QCheckBox(i18n("Fan Corners"), w);
+    m_chkFanCorners = new QCheckBox(i18n("Fan Corners"), mainWidget);
 
     connect(m_chkFanCorners, SIGNAL(stateChanged(int)), SLOT(setFanCornersEnabled(int)));
 
     m_chkFanCorners->setChecked(m_fanCornersEnabled);
 
-    m_intFanCornersStep = new KisSliderSpinBox(w);
+    m_intFanCornersStep = new KisSliderSpinBox(mainWidget);
+     m_intFanCornersStep->setPrefix(i18n("Fan Corners Angle:"));
     m_intFanCornersStep->setRange(5, 90);
     m_intFanCornersStep->setSingleStep(1);
     m_intFanCornersStep->setSuffix(i18n("°"));
@@ -96,21 +96,26 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
 
     m_intFanCornersStep->setValue(m_fanCornersStep);
 
-    KisSliderSpinBox *angleOffset = new KisSliderSpinBox(w);
+    KisSliderSpinBox *angleOffset = new KisSliderSpinBox(mainWidget);
     angleOffset->setRange(0, 359);
     angleOffset->setSingleStep(1);
+    angleOffset->setPrefix(i18n("Angle Offset:"));
     angleOffset->setSuffix(i18n("°"));
 
     connect(angleOffset, SIGNAL(valueChanged(int)), SLOT(setAngleOffset(int)));
 
     angleOffset->setValue(m_angleOffset);
 
-    QVBoxLayout* l = new QVBoxLayout(w);
-    l->addWidget(m_chkLockedMode);
-    l->addWidget(m_chkFanCorners);
-    l->addWidget(m_intFanCornersStep);
-    l->addWidget(new QLabel(i18n("Angle Offset")));
-    l->addWidget(angleOffset);
+    QVBoxLayout* optionsLayout = new QVBoxLayout(mainWidget);
+    optionsLayout->setContentsMargins(0,0,0,0);
+
+    QHBoxLayout* angleModeLayout = new QHBoxLayout(mainWidget);
+    angleModeLayout->addWidget(m_chkLockedMode);
+    angleModeLayout->addWidget(m_chkFanCorners);
+
+    optionsLayout->addLayout(angleModeLayout);
+    optionsLayout->addWidget(m_intFanCornersStep);
+    optionsLayout->addWidget(angleOffset);
 
     updateGUI();
 
@@ -119,8 +124,8 @@ QWidget* KisDynamicSensorDrawingAngle::createConfigurationWidget(QWidget* parent
     connect(m_chkFanCorners, SIGNAL(stateChanged(int)), ss, SIGNAL(parametersChanged()));
     connect(m_intFanCornersStep, SIGNAL(valueChanged(int)), ss, SIGNAL(parametersChanged()));
 
-    w->setLayout(l);
-    return w;
+    mainWidget->setLayout(optionsLayout);
+    return mainWidget;
 }
 
 bool KisDynamicSensorDrawingAngle::fanCornersEnabled() const

@@ -62,6 +62,7 @@ QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, QWidge
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
 
+    stc.spinBoxLength->setPrefix(i18n("Length: "));
     stc.spinBoxLength->setSuffix(i18n(" px"));
     stc.spinBoxLength->setExponentRatio(3.0);
 

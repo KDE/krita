@@ -33,6 +33,7 @@ struct KisMultiSensorsSelector::Private {
     KisMultiSensorsModel* model;
     QWidget* currentConfigWidget;
     QHBoxLayout* layout;
+    QListView *sensorsList;
 };
 
 KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
@@ -46,12 +47,16 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
 
 
-    connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
-    connect(d->form.sensorsList, SIGNAL(entered(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    d->sensorsList = new QListView(this);
+    d->sensorsList->setSpacing(2);
 
-    d->form.sensorsList->setModel(d->model);
+
+    connect(d->sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    connect(d->sensorsList, SIGNAL(entered(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+
+    d->sensorsList->setModel(d->model);
     d->form.penSensorCombobox->setModel(d->model);
-    d->form.penSensorCombobox->setView(d->form.sensorsList);
+    d->form.penSensorCombobox->setView(d->sensorsList);
 
 
     connect(d->form.currentSensorEnabledCheckbox, SIGNAL(clicked(bool)), this, SLOT(slotSensorEnableChange(bool)));
@@ -77,7 +82,7 @@ void KisMultiSensorsSelector::setCurveOption(KisCurveOption *curveOption)
 
 void KisMultiSensorsSelector::setCurrent(KisDynamicSensorSP _sensor)
 {
-    d->form.sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
+   d->sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
 
     // HACK ALERT: make sure the signal is delivered to us. Without this line it isn't.
     sensorActivated(d->model->sensorIndex(_sensor));
@@ -91,7 +96,7 @@ void KisMultiSensorsSelector::setCurrent(KisDynamicSensorSP _sensor)
 
 KisDynamicSensorSP KisMultiSensorsSelector::currentHighlighted()
 {
-    return d->model->getSensor(d->form.sensorsList->currentIndex());
+    return d->model->getSensor(d->sensorsList->currentIndex());
 }
 
 void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
@@ -134,7 +139,7 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
 
 void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve)
 {
-    d->model->setCurrentCurve(d->form.sensorsList->currentIndex(), curve, useSameCurve);
+    d->model->setCurrentCurve(d->sensorsList->currentIndex(), curve, useSameCurve);
 }
 
 void KisMultiSensorsSelector::reload()

@@ -60,6 +60,12 @@ QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, QW
     Ui_SensorDistanceConfiguration stc;
     stc.setupUi(wdg);
     stc.checkBoxRepeat->setChecked(m_periodic);
+
+    stc.spinBoxLength->setPrefix("Length: ");
+    stc.spinBoxLength->setSuffix(" px");
+
+
+
     connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), SLOT(setPeriodic(bool)));
     connect(stc.checkBoxRepeat, SIGNAL(toggled(bool)), ss, SIGNAL(parametersChanged()));
     stc.spinBoxLength->setValue(m_length);

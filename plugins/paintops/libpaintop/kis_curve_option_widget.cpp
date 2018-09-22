@@ -52,14 +52,6 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
 
     m_curveOptionWidget->sensorSelector->setCurveOption(curveOption);
 
-    // TODO: Populate the widget with the different sensors
-    // add the checked state to each one
-    // add an "enabled" option to the right for the sensor
-    // hook up the "enabled" option for the selected sensor to track clicks
-    //m_curveOptionWidget->penSensorComboBox
-
-
-
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
     updateCurve(m_curveOptionWidget->sensorSelector->currentHighlighted());
 

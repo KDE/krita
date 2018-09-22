@@ -113,6 +113,8 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     brushSizeSpinBox->setRange(0, KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000), 2);
     brushSizeSpinBox->setValue(5);
     brushSizeSpinBox->setExponentRatio(3.0);
+
+    brushSizeSpinBox->setPrefix(i18n("Size: "));
     brushSizeSpinBox->setSuffix(i18n(" px"));
     brushSizeSpinBox->setExponentRatio(3.0);
 
@@ -121,8 +123,10 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     brushRotationSpinBox->setRange(0, 360, 0);
     brushRotationSpinBox->setValue(0);
+    brushRotationSpinBox->setPrefix(i18n("Rotation: "));
     brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
     QObject::connect(brushRotationSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemRotation(qreal)));
+
 
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
@@ -180,6 +184,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     QGridLayout *spacingLayout = new QGridLayout();
     spacingLayout->setObjectName("spacing grid layout");
 
+    resetBrushButton->setIcon(KisIconUtils::loadIcon("view-refresh"));
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 

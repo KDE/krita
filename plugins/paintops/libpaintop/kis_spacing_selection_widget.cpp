@@ -52,6 +52,7 @@ KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
       m_d(new Private(this))
 {
     m_d->slider = new KisDoubleSliderSpinBox(this);
+    m_d->slider->setPrefix(i18n("Spacing: "));
     m_d->slider->setRange(0.02, 10.0, 2);
     m_d->slider->setExponentRatio(3);
     m_d->slider->setSingleStep(0.01);
@@ -66,8 +67,8 @@ KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
     m_d->autoButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addWidget(m_d->autoButton);
     layout->addWidget(m_d->slider);
+    layout->addWidget(m_d->autoButton);
     layout->setMargin(0);
 
     connect(m_d->slider, SIGNAL(valueChanged(qreal)), SLOT(slotSpacingChanged(qreal)));

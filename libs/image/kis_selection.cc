@@ -71,6 +71,17 @@ KisSelection::KisSelection(const KisSelection& rhs)
     copyFrom(rhs);
 }
 
+KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds)
+    : m_d(new Private(this))
+{
+    if (!defaultBounds) {
+        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+    }
+
+    m_d->defaultBounds = defaultBounds;
+    m_d->pixelSelection = new KisPixelSelection(source, copyMode);
+}
+
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
 {
     if (&rhs != this) {

@@ -174,12 +174,17 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
             delete selection->flatten();
         }
     } else if (copyFromDevice) {
-        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        KritaUtils::DeviceCopyMode copyMode =
+            q->inherits("KisFilterMask") || q->inherits("KisTransparencyMask") ?
+            KritaUtils::CopyAllFrames : KritaUtils::CopySnapshot;
 
-        QRect rc(copyFromDevice->extent());
-        KisPainter::copyAreaOptimized(rc.topLeft(), copyFromDevice, selection->pixelSelection(), rc);
-        selection->pixelSelection()->invalidateOutlineCache();
+        selection = new KisSelection(copyFromDevice, copyMode, new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
+        KisPixelSelectionSP pixelSelection = selection->pixelSelection();
+        if (pixelSelection->framesInterface()) {
+            q->addKeyframeChannel(pixelSelection->keyframeChannel());
+            q->enableAnimation();
+        }
     } else {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
         selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));

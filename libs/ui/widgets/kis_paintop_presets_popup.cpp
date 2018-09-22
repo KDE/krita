@@ -477,10 +477,18 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
 
         widget->setFont(m_d->smallFont);
 
+
+        /*
         QSize hint = widget->sizeHint();
         m_d->minimumSettingsWidgetSize = QSize(qMax(hint.width(), m_d->minimumSettingsWidgetSize.width()),
                                                qMax(hint.height(), m_d->minimumSettingsWidgetSize.height()));
         widget->setMinimumSize(m_d->minimumSettingsWidgetSize);
+        */
+        // manually control the brush settings size for now to help see what is taking up the most space
+        widget->setMaximumHeight(640);
+        widget->setMaximumWidth(600);
+
+
         m_d->layout->addWidget(widget);
 
         // hook up connections that will monitor if our preset is dirty or not. Show a notification if it is

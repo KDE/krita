@@ -37,10 +37,13 @@
 #include <kis_config.h>
 #include <resources/KoPattern.h>
 
+#include <ksqueezedtextlabel.h>
+
 KisPatternChooser::KisPatternChooser(QWidget *parent)
         : QFrame(parent)
 {
-    m_lbName = new QLabel(this);
+    m_lblName = new KSqueezedTextLabel(this);
+    m_lblName->setTextElideMode(Qt::ElideLeft);
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter (new KoResourceServerAdapter<KoPattern>(rserver));
@@ -57,9 +60,9 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
             this, SIGNAL(resourceSelected(KoResource *)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setObjectName("main layout");
+    mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     mainLayout->setMargin(0);
-    mainLayout->addWidget(m_lbName);
+    mainLayout->addWidget(m_lblName);
     mainLayout->addWidget(m_itemChooser, 10);
 
     KisConfig cfg;
@@ -106,10 +109,9 @@ void KisPatternChooser::setPreviewOrientation(Qt::Orientation orientation)
 
 void KisPatternChooser::update(KoResource * resource)
 {
+    m_lblName->setFixedWidth(m_itemChooser->width());
     KoPattern *pattern = static_cast<KoPattern *>(resource);
-
-    QString text = QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height());
-    m_lbName->setText(text);
+    m_lblName->setText(QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height()));
 }
 
 void KisPatternChooser::setGrayscalePreview(bool grayscale)

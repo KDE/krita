@@ -36,19 +36,18 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
 {
     setObjectName("KisPressureSharpnessOptionWidget");
 
-    QLabel* thresholdLbl = new QLabel(i18n("Threshold:"));
-
     m_threshold = new KisSliderSpinBox();
     m_threshold->setRange(1, 100);
     m_threshold->setValue(40);
     m_threshold->setSingleStep(1);
+    m_threshold->setPrefix(i18n("Threshold:"));
+    m_threshold->setSuffix(i18n(" px"));
 
     QHBoxLayout* hl = new QHBoxLayout;
-    hl->addWidget(thresholdLbl);
-    hl->addWidget(m_threshold, 1);
+    hl->setContentsMargins(9,9,9,0); // no bottom spacing
+    hl->addWidget(m_threshold);
 
     QVBoxLayout* vl = new QVBoxLayout;
-    vl->setMargin(0);
     vl->addLayout(hl);
     vl->addWidget(KisCurveOptionWidget::curveWidget());
 

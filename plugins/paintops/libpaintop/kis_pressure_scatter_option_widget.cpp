@@ -33,17 +33,20 @@ KisPressureScatterOptionWidget::KisPressureScatterOptionWidget()
     : KisCurveOptionWidget(new KisPressureScatterOption(), i18n("0.0"), i18n("1.0"))
 {
     QWidget* w = new QWidget;
-    m_axisX = new QCheckBox(i18n("Axis X"));
+    m_axisX = new QCheckBox(i18n("X"));
     m_axisX->setChecked(true);
-    m_axisY = new QCheckBox(i18n("Axis Y"));
+    m_axisY = new QCheckBox(i18n("Y"));
     m_axisY->setChecked(true);
 
-    QLabel* scatterLbl = new QLabel(i18n("Scatter amount"));
+    QLabel* scatterLbl = new QLabel(i18n("Axis:"));
 
     QHBoxLayout* hl = new QHBoxLayout;
+    hl->setContentsMargins(9,9,9,0); // no bottom spacing
+    hl->setSpacing(6);
     hl->addWidget(scatterLbl);
     hl->addWidget(m_axisX);
     hl->addWidget(m_axisY);
+    hl->addStretch(1); // moves everything to the left
 
     QVBoxLayout* vl = new QVBoxLayout;
     vl->setMargin(0);

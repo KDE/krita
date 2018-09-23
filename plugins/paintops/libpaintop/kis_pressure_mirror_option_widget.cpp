@@ -23,6 +23,7 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QLabel>
 
 #include <klocalizedstring.h>
 
@@ -34,17 +35,25 @@ KisPressureMirrorOptionWidget::KisPressureMirrorOptionWidget()
     setObjectName("KisPressureMirrorOptionWidget");
 
     QWidget* w = new QWidget;
-    m_horizontalMirror = new QCheckBox(i18n("Horizontally"));
+    m_horizontalMirror = new QCheckBox(i18n("Horizontal"));
     m_horizontalMirror->setChecked(false);
-    m_verticalMirror = new QCheckBox(i18n("Vertically"));
+    m_verticalMirror = new QCheckBox(i18n("Vertical"));
     m_verticalMirror->setChecked(false);
 
     connect(m_horizontalMirror, SIGNAL(toggled(bool)), SLOT(horizontalMirrorChanged(bool)));
     connect(m_verticalMirror, SIGNAL(toggled(bool)), SLOT(verticalMirrorChanged(bool)));
 
+    QLabel* directionLabel = new QLabel(i18n("Direction: "));
+
     QHBoxLayout* hl = new QHBoxLayout;
+    hl->setContentsMargins(9,9,9,0); // no bottom spacing
+
+    hl->addWidget(directionLabel);
     hl->addWidget(m_horizontalMirror);
     hl->addWidget(m_verticalMirror);
+    hl->addStretch(1);
+
+
 
     QVBoxLayout* vl = new QVBoxLayout;
     vl->setMargin(0);

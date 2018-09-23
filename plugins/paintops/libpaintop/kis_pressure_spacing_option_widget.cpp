@@ -38,6 +38,7 @@ KisPressureSpacingOptionWidget::KisPressureSpacingOptionWidget():
     m_useSpacingUpdates = new QCheckBox(i18n("Update Between Dabs"));
 
     QHBoxLayout *hl = new QHBoxLayout;
+    hl->setContentsMargins(9,9,9,0); // no bottom spacing
     hl->addWidget(m_isotropicSpacing);
     hl->addWidget(m_useSpacingUpdates);
 

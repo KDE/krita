@@ -713,7 +713,7 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
 }
 
 void KisPaintOpPresetsPopup::slotSwitchShowEditor(bool visible) {
-    m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
+   // m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
 }
 
 void KisPaintOpPresetsPopup::slotSwitchShowPresets(bool visible) {

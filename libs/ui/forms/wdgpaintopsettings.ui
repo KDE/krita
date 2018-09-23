@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>985</width>
-    <height>404</height>
+    <width>1168</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -245,8 +245,8 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>55</width>
-         <height>55</height>
+         <width>120</width>
+         <height>100</height>
         </size>
        </property>
        <property name="frameShape">
@@ -273,14 +273,14 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>320</width>
-         <height>60</height>
+         <width>550</width>
+         <height>100</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>320</width>
-         <height>60</height>
+         <width>550</width>
+         <height>100</height>
         </size>
        </property>
        <property name="font">
@@ -321,49 +321,17 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <property name="spacing">
-        <number>0</number>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <item>
-        <widget class="QPushButton" name="saveNewBrushPresetButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>28</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Save New Brush Preset...</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="saveBrushPresetButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>28</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Overwrite Brush</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
@@ -626,7 +594,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0">
         <property name="spacing">
          <number>5</number>
         </property>
@@ -722,6 +690,51 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="saveNewBrushPresetButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Save New Brush Preset...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveBrushPresetButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Overwrite Brush</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>

@@ -181,7 +181,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
     qreal originalPresetSize = m_currentPreset->settings()->paintOpSize();
-    qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
+    qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 70.0 ); // constrain live preview brush size
     //Except for the sketchbrush where it determine sthe history.
     if (m_currentPreset->paintOp().id() == "sketchbrush" ||
             m_currentPreset->paintOp().id() == "spraybrush") {

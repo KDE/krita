@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QShowEvent>
+#include <QScrollArea>
 
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_cmb_composite.h>
@@ -48,6 +49,7 @@ struct KisPaintOpSettingsWidget::Private
     KisCategorizedListView*     optionsList;
     KisPaintOpOptionListModel*  model;
     QStackedWidget*             optionsStack;
+    QScrollArea* optionsStackScrollableArea;
 
 };
 
@@ -73,9 +75,17 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_d->optionsStack->setSizePolicy(policy);
 
+
+    // put settings in a scrollable area in case they get too long
+    m_d->optionsStackScrollableArea = new QScrollArea(this);
+    m_d->optionsStackScrollableArea->setWidgetResizable(true);
+    m_d->optionsStackScrollableArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_d->optionsStackScrollableArea->setWidget(m_d->optionsStack);
+
+
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_d->optionsList);
-    layout->addWidget(m_d->optionsStack);
+    layout->addWidget(m_d->optionsStackScrollableArea);
 
     layout->setStretch(0, 0);
     layout->setStretch(1, 1);

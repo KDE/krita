@@ -6,23 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>504</width>
-    <height>270</height>
+    <width>381</width>
+    <height>341</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -81,51 +69,21 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QCheckBox" name="autoPrecisionCheckBox">
-       <property name="text">
-        <string>Auto</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="label_3">
        <property name="toolTip">
         <string>Use to set the size from which the Automatic Precision Setting should begin. The Precision will remain 5 before this value.</string>
        </property>
        <property name="text">
-        <string>Starting Brush Size:</string>
+        <string>Precision:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleParseSpinBox" name="sizeToStartFromSpinBox">
-       <property name="suffix">
-        <string> px</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>This determines every interval after which the precision should change. For example: if the delta value is set to be 15.00, after every 15 pts change in the size of brush, the precision will change.</string>
-       </property>
+      <widget class="QCheckBox" name="autoPrecisionCheckBox">
        <property name="text">
-        <string>Delta :</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleParseSpinBox" name="deltaValueSpinBox">
-       <property name="suffix">
-        <string> px</string>
+        <string>Auto</string>
        </property>
       </widget>
      </item>
@@ -137,25 +95,32 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lblPrecision">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="text">
-        <string>Precision:</string>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="KisSliderSpinBox" name="sizeToStartFromSpinBox" native="true"/>
+     </item>
+     <item>
+      <widget class="KisSliderSpinBox" name="deltaValueSpinBox" native="true"/>
      </item>
      <item>
       <widget class="KisSliderSpinBox" name="sliderPrecision" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -167,11 +132,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>

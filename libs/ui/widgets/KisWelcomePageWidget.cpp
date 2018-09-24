@@ -41,6 +41,9 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
    recentDocumentsListView->setSpacing(2);
+
+   newsWidget->setVisible(false);    
+   lblNews->setVisible(false);
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()

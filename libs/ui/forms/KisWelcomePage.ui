@@ -712,7 +712,7 @@
       <item row="1" column="3">
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QLabel" name="helpTitleLabel_2">
+         <widget class="QLabel" name="lblNews">
           <property name="font">
            <font>
             <pointsize>18</pointsize>

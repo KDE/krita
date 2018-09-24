@@ -630,7 +630,7 @@ void KisToolTransform::setWarpPointDensity( int density )
     m_optionsWidget->slotSetWarpDensity(density);
 }
 
-bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
+bool KisToolTransform::tryInitArgsFromNode(KisNodeSP node)
 {
     bool result = false;
 
@@ -645,7 +645,6 @@ bool KisToolTransform::tryInitTransformModeFromNode(KisNodeSP node)
 
         if (adapter) {
             m_currentArgs = adapter->transformArgs();
-            initGuiAfterTransformMode();
             result = true;
         }
     }
@@ -683,7 +682,7 @@ bool KisToolTransform::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, T
     return result;
 }
 
-void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
+void KisToolTransform::resetArgsForMode(ToolTransformArgs::TransformMode mode)
 {
     // NOTE: we are requesting an old value of m_currentArgs variable
     //       here, which is global, don't forget about this on higher
@@ -712,7 +711,11 @@ void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
     } else if (mode == ToolTransformArgs::PERSPECTIVE_4POINT) {
         m_currentArgs.setMode(ToolTransformArgs::PERSPECTIVE_4POINT);
     }
+}
 
+void KisToolTransform::initTransformMode(ToolTransformArgs::TransformMode mode)
+{
+    resetArgsForMode(mode);
     initGuiAfterTransformMode();
 }
 
@@ -736,7 +739,7 @@ void KisToolTransform::updateSelectionPath()
 
     if (selection && selection->outlineCacheValid()) {
         selectionOutline = selection->outlineCache();
-    } else {
+    } else if (m_selectedPortionCache) {
         selectionOutline.addRect(m_selectedPortionCache->exactBounds());
     }
 
@@ -759,25 +762,27 @@ void KisToolTransform::initThumbnailImage(KisPaintDeviceSP previewDevice)
     int x, y, w, h;
     srcRect.getRect(&x, &y, &w, &h);
 
-    if (w > maxSize || h > maxSize) {
-        qreal scale = qreal(maxSize) / (w > h ? w : h);
-        QTransform scaleTransform = QTransform::fromScale(scale, scale);
+    if (m_selectedPortionCache) {
+        if (w > maxSize || h > maxSize) {
+            qreal scale = qreal(maxSize) / (w > h ? w : h);
+            QTransform scaleTransform = QTransform::fromScale(scale, scale);
 
-        QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
+            QRect thumbRect = scaleTransform.mapRect(m_transaction.originalRect()).toAlignedRect();
 
-        origImg = m_selectedPortionCache->
-            createThumbnail(thumbRect.width(),
-                            thumbRect.height(),
-                            srcRect, 1,
-                            KoColorConversionTransformation::internalRenderingIntent(),
-                            KoColorConversionTransformation::internalConversionFlags());
-        thumbToImageTransform = scaleTransform.inverted();
+            origImg = m_selectedPortionCache->
+                    createThumbnail(thumbRect.width(),
+                                    thumbRect.height(),
+                                    srcRect, 1,
+                                    KoColorConversionTransformation::internalRenderingIntent(),
+                                    KoColorConversionTransformation::internalConversionFlags());
+            thumbToImageTransform = scaleTransform.inverted();
 
-    } else {
-        origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
-                                                            KoColorConversionTransformation::internalRenderingIntent(),
-                                                            KoColorConversionTransformation::internalConversionFlags());
-        thumbToImageTransform = QTransform();
+        } else {
+            origImg = m_selectedPortionCache->convertToQImage(0, x, y, w, h,
+                                                              KoColorConversionTransformation::internalRenderingIntent(),
+                                                              KoColorConversionTransformation::internalConversionFlags());
+            thumbToImageTransform = QTransform();
+        }
     }
 
     // init both strokes since the thumbnail is initialized only once
@@ -894,51 +899,52 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         return;
     }
 
+    KisSelectionSP selection = resources->activeSelection();
 
-    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, nodesList, resources->activeSelection(), image().data());
-    KisPaintDeviceSP previewDevice = strategy->previewDevice();
-
-    KisSelectionSP selection = strategy->realSelection();
-    const QRect srcRect = selection ? selection->selectedExactRect() : previewDevice->exactBounds();
-
-    if (!selection && resources->activeSelection()) {
+    /**
+     * When working with transform mask, selections are not
+     * taken into account.
+     */
+    if (selection && dynamic_cast<KisTransformMask*>(currentNode.data())) {
         KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         kisCanvas->viewManager()->
             showFloatingMessage(
                 i18nc("floating message in transformation tool",
                       "Selections are not used when editing transform masks "),
                 QIcon(), 4000, KisFloatingMessage::Low);
+
+        selection = 0;
     }
 
-    if (srcRect.isEmpty()) {
-        delete strategy;
+    TransformStrokeStrategy *strategy = new TransformStrokeStrategy(currentNode, nodesList, selection, image().data());
+    connect(strategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
 
-        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        kisCanvas->viewManager()->
-            showFloatingMessage(
-                i18nc("floating message in transformation tool",
-                      "Cannot transform empty layer "),
-                QIcon(), 1000, KisFloatingMessage::Medium);
 
-        // force-reset transform mode to default
-        initTransformMode(mode);
+    QRect srcRect;
 
-        return;
+    if (selection) {
+        srcRect = selection->selectedExactRect();
+    } else {
+        srcRect = QRect();
+        Q_FOREACH (KisNodeSP node, nodesList) {
+            // group layers may have a projection of layers
+            // that are locked and will not be transformed
+            if (node->inherits("KisGroupLayer")) continue;
+
+            srcRect |= node->exactBounds();
+        }
     }
 
     m_transaction = TransformTransactionProperties(srcRect, &m_currentArgs, currentNode, nodesList);
 
-    initThumbnailImage(previewDevice);
-    updateSelectionPath();
-
     if (!forceReset && fetchedFromCommand) {
         m_currentArgs = fetchedArgs;
-        initGuiAfterTransformMode();
-    } else if (forceReset || !tryInitTransformModeFromNode(currentNode)) {
-        initTransformMode(mode);
+    } else if (forceReset || !tryInitArgsFromNode(currentNode)) {
+        resetArgsForMode(mode);
     }
 
     m_strokeData = StrokeData(image()->startStroke(strategy));
+    image()->addJob(m_strokeData.strokeId(), new TransformStrokeStrategy::PreparePreviewData());
 
     bool haveInvisibleNodes = clearDevices(nodesList);
     if (haveInvisibleNodes) {
@@ -953,6 +959,8 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
 
     Q_ASSERT(m_changesTracker.isEmpty());
     commitChanges();
+
+    slotPreviewDeviceGenerated(0);
 }
 
 void KisToolTransform::endStroke()
@@ -977,6 +985,24 @@ void KisToolTransform::endStroke()
     m_changesTracker.reset();
     m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeSP(), {});
     outlineChanged();
+}
+
+void KisToolTransform::slotPreviewDeviceGenerated(KisPaintDeviceSP device)
+{
+    if (device && device->exactBounds().isEmpty()) {
+        KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        kisCanvas->viewManager()->
+            showFloatingMessage(
+                i18nc("floating message in transformation tool",
+                      "Cannot transform empty layer "),
+                QIcon(), 1000, KisFloatingMessage::Medium);
+
+        cancelStroke();
+    } else {
+        initThumbnailImage(device);
+        updateSelectionPath();
+        initGuiAfterTransformMode();
+    }
 }
 
 void KisToolTransform::cancelStroke()
@@ -1019,7 +1045,7 @@ QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMo
 
     auto fetchFunc =
         [&result, mode, root] (KisNodeSP node) {
-            if (node->isEditable(node == root) &&
+        if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
                 (!node->inherits("KisTransformMask") || node == root)) {

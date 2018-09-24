@@ -19,6 +19,7 @@
 #ifndef __TRANSFORM_STROKE_STRATEGY_H
 #define __TRANSFORM_STROKE_STRATEGY_H
 
+#include <QObject>
 #include <QMutex>
 #include <KoUpdater.h>
 #include <kis_stroke_strategy_undo_command_based.h>
@@ -32,8 +33,9 @@
 class KisPostExecutionUndoAdapter;
 
 
-class TransformStrokeStrategy : public KisStrokeStrategyUndoCommandBased
+class TransformStrokeStrategy : public QObject, public KisStrokeStrategyUndoCommandBased
 {
+    Q_OBJECT
 public:
     class TransformData : public KisStrokeJobData {
     public:
@@ -66,6 +68,14 @@ public:
         KisNodeSP node;
     };
 
+    class PreparePreviewData : public KisStrokeJobData {
+    public:
+        PreparePreviewData()
+            : KisStrokeJobData(BARRIER, NORMAL)
+        {
+        }
+    };
+
 public:
     TransformStrokeStrategy(KisNodeSP rootNode, KisNodeList processedNodes,
                             KisSelectionSP selection,
@@ -73,16 +83,15 @@ public:
 
     ~TransformStrokeStrategy() override;
 
-    KisPaintDeviceSP previewDevice() const;
-    KisSelectionSP realSelection() const;
-
-
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
     void cancelStrokeCallback() override;
     void doStrokeCallback(KisStrokeJobData *data) override;
 
     static bool fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes);
+
+Q_SIGNALS:
+    void sigPreviewDeviceReady(KisPaintDeviceSP device);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -115,9 +124,7 @@ private:
     QMutex m_devicesCacheMutex;
     QHash<KisPaintDevice*, KisPaintDeviceSP> m_devicesCacheHash;
 
-    KisPaintDeviceSP m_previewDevice;
     KisTransformMaskSP writeToTransformMask;
-
 
     ToolTransformArgs m_savedTransformArgs;
     KisNodeSP m_savedRootNode;

@@ -62,6 +62,23 @@ public:
     bool isOverlayProjectionLeaf() const;
 
     /**
+     * Temporarily exclude the projection leaf from rendering by making
+     * it invisible (KisProjectionLeaf::visible() == false).
+     *
+     * This method is used by the tools that want to hide the
+     * original layer's content temporarily.
+     *
+     * NOTE: the method is not thread-safe! The caller must guarantee
+     * exclusive access to the projection leaf himself.
+     */
+    void setTemporaryHiddenFromRendering(bool value);
+
+    /**
+     * \see setTemporaryHiddenFromRendering
+     */
+    bool isTemporaryHiddenFromRendering() const;
+
+    /**
      * Regenerate projection of the current group layer iff it is
      * pass-through mode.
      *

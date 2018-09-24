@@ -285,6 +285,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
     } else if (csd) {
         KisPaintDeviceSP device = csd->node->paintDevice();
+
         if (device && !checkBelongsToSelection(device)) {
             if (!haveDeviceInCache(device)) {
                 putDeviceCache(device, createDeviceCache(device));
@@ -302,7 +303,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     mask->setDirty();
                 }
             }
-
+        } else if (KisExternalLayer *externalLayer = dynamic_cast<KisExternalLayer*>(csd->node.data())) {
+            externalLayer->projectionLeaf()->setTemporaryHiddenFromRendering(true);
+            externalLayer->setDirty();
+            m_hiddenProjectionLeaves.append(csd->node);
         } else if (KisTransformMask *transformMask =
                    dynamic_cast<KisTransformMask*>(csd->node.data())) {
 
@@ -396,6 +400,10 @@ void TransformStrokeStrategy::finishStrokeCallback()
         selection->setVisible(true);
     }
 
+    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+    }
+
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 
@@ -405,5 +413,9 @@ void TransformStrokeStrategy::cancelStrokeCallback()
 
     Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
         selection->setVisible(true);
+    }
+
+    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
     }
 }

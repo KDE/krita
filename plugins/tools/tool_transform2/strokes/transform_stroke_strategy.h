@@ -130,6 +130,7 @@ private:
     KisNodeSP m_savedRootNode;
     KisNodeList m_savedProcessedNodes;
     QList<KisSelectionSP> m_deactivatedSelections;
+    QList<KisNodeSP> m_hiddenProjectionLeaves;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

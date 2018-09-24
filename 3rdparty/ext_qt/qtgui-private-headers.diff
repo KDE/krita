@@ -1,31 +1,12 @@
-From 74271b0ebb277d51ed4baa70cfb1572acd7dae8d Mon Sep 17 00:00:00 2001
-From: Boudewijn Rempt <boud@valdyas.org>
-Date: Mon, 23 Jul 2018 11:43:18 +0200
-Subject: [PATCH 2/8] qtgui-private-headers.diff
-
----
- qtbase/mkspecs/features/create_cmake.prf | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
 diff --git a/qtbase/mkspecs/features/create_cmake.prf b/qtbase/mkspecs/features/create_cmake.prf
-index 2ed708e08..b82393854 100644
+index 11fb52a..aec9ea9 100644
 --- a/qtbase/mkspecs/features/create_cmake.prf
 +++ b/qtbase/mkspecs/features/create_cmake.prf
-@@ -28,10 +28,10 @@ CMAKE_OUT_DIR = $$MODULE_BASE_OUTDIR/lib/cmake
- 
- CMAKE_MODULE_NAME = $$cmakeModuleName($${MODULE})
- 
--!generated_privates {
--    isEmpty(SYNCQT.INJECTED_PRIVATE_HEADER_FILES):isEmpty(SYNCQT.PRIVATE_HEADER_FILES): \
--        CMAKE_NO_PRIVATE_INCLUDES = true
--}
-+#!generated_privates {
-+#    isEmpty(SYNCQT.INJECTED_PRIVATE_HEADER_FILES):isEmpty(SYNCQT.PRIVATE_HEADER_FILES): \
-+#        CMAKE_NO_PRIVATE_INCLUDES = true
-+#}
+@@ -30,7 +30,6 @@ CMAKE_MODULE_NAME = $$cmakeModuleName($${MODULE})
  
  split_incpath {
      CMAKE_ADD_SOURCE_INCLUDE_DIRS = true
--- 
-2.17.1
-
+-    CMAKE_NO_PRIVATE_INCLUDES = true # Don't add private includes in the build dir which don't exist
+     CMAKE_SOURCE_INCLUDES = \
+         $$cmakeTargetPaths($$QT_MODULE_INCLUDE_BASE $$QT_MODULE_INCLUDE_BASE/Qt$${CMAKE_MODULE_NAME})
+     CMAKE_SOURCE_PRIVATE_INCLUDES = \

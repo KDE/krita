@@ -1,14 +1,5 @@
-From 6f5a3165c03e285690e37fbcbeabe5fc16c5b932 Mon Sep 17 00:00:00 2001
-From: Boudewijn Rempt <boud@valdyas.org>
-Date: Mon, 23 Jul 2018 11:51:38 +0200
-Subject: [PATCH 6/8] qopengldebug-gles.patch
-
----
- qtbase/src/gui/opengl/qopengldebug.cpp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/qtbase/src/gui/opengl/qopengldebug.cpp b/qtbase/src/gui/opengl/qopengldebug.cpp
-index f6c3af37d..70bf7530e 100644
+index f6c3af37dd..70bf7530e1 100644
 --- a/qtbase/src/gui/opengl/qopengldebug.cpp
 +++ b/qtbase/src/gui/opengl/qopengldebug.cpp
 @@ -1413,7 +1413,7 @@ bool QOpenGLDebugLogger::initialize()
@@ -20,6 +11,3 @@ index f6c3af37d..70bf7530e 100644
      );
  
      GET_DEBUG_PROC_ADDRESS(glDebugMessageControl);
--- 
-2.17.1
-

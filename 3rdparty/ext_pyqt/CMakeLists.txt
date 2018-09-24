@@ -7,10 +7,10 @@ if (UNIX)
     endif()
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.11.3.dev1809141810.tar.gz
-        URL_MD5 cfea580f9a84efa6fa7b37d0c6043141
+        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.11.2.tar.gz
+        URL_MD5 78837d77c42a2f177da771df6584ee91
         
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py --confirm-license  --sip ${PREFIX_ext_pyqt}/bin/sip --sip-incdir ${PREFIX_ext_pyqt}/include --sipdir ${PREFIX_ext_pyqt}/share/sip
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py --confirm-license --qmake ${PREFIX_ext_pyqt}/bin/qmake --sip ${PREFIX_ext_pyqt}/bin/sip --sip-incdir ${PREFIX_ext_pyqt}/include --sipdir ${PREFIX_ext_pyqt}/share/sip
         BUILD_COMMAND make
         INSTALL_COMMAND make install
         
@@ -36,8 +36,8 @@ elseif(MINGW)
     )
     ExternalProject_Add( ext_pyqt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.11.3.dev1809141810.zip
-        URL_MD5 a81e032dc9e9f502b363edd2f4f54bb3
+        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.11.2.zip
+        URL_MD5 f588cd6eda3bc2233074a739b36552b6
         PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/pyqt-configure-fix.patch
 
         CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}

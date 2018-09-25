@@ -24,6 +24,8 @@
 
 #include <QWidget>
 #include <QButtonGroup>
+#include <QMap>
+#include <QString>
 
 #include <kpagedialog.h>
 #include <kis_config.h>
@@ -338,6 +340,8 @@ protected:
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
     KoConfigAuthorPage *m_authorPage;
+
+    QList<KPageWidgetItem*> m_pages;
 
 protected Q_SLOTS:
 

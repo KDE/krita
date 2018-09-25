@@ -63,7 +63,7 @@ KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, Ko
 }
 
 KoShapeCreateCommand::KoShapeCreateCommand(KoShapeControllerBase *controller, const QList<KoShape *> shapes, KoShapeContainer *parentShape, KUndo2Command *parent)
-        : KoShapeCreateCommand(controller, shapes, parentShape, parent, kundo2_i18np("Create shape", "Create shapes", shapes.size()))
+        : KoShapeCreateCommand(controller, shapes, parentShape, parent, kundo2_i18np("Create shape", "Create %1 shapes", shapes.size()))
 {
 }
 

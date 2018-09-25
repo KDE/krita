@@ -71,7 +71,6 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
 
     {
         m_d->thresholdMenu.reset(new QMenu());
-        m_d->thresholdMenu->addSection(i18n("Enable after:"));
 
         m_d->btnLod->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(m_d->btnLod, SIGNAL(customContextMenuRequested(QPoint)),
@@ -84,6 +83,7 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
         m_d->thresholdSlider->setValue(100);
         m_d->thresholdSlider->setSingleStep(1);
         m_d->thresholdSlider->setExponentRatio(3.0);
+        m_d->thresholdSlider->setPrefix(i18n("Enable after:"));
         m_d->thresholdSlider->setSuffix(i18n(" px"));
         m_d->thresholdSlider->setBlockUpdateSignalOnDrag(true);
 
@@ -94,10 +94,11 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
     }
 
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(9, 9, 9, 9);
     layout->addWidget(m_d->chkLod);
     layout->addWidget(m_d->btnLod);
 
-    layout->setSpacing(0);
+    layout->addStretch(1);
 
     setLayout(layout);
 

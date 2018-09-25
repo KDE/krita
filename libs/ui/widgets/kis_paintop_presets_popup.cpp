@@ -112,10 +112,6 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setToolTip(i18n("Reload the brush preset"));
-    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setToolTip(i18n("Rename the brush preset"));
-
-
-
 
 
     // brush configuration option menu.
@@ -159,9 +155,14 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     brushConfigAction->setChecked(cfg.useDirtyPresets());
     dirtyPresetToggled(cfg.useDirtyPresets());
 
+    brushConfigAction = brushConfigurationMenu->addAction(i18n("Rename Brush Preset"));
+    brushConfigAction->setCheckable(false);
+    connect (brushConfigAction, SIGNAL(triggered(bool)), this, SLOT(slotRenameBrushActivated()));
+
 
 
     m_d->uiWdgPaintOpPresetSettings.configureBrushesToolButton->setMenu(brushConfigurationMenu);
+    m_d->uiWdgPaintOpPresetSettings.configureBrushesToolButton->setIcon(KisIconUtils::loadIcon("configure"));
     m_d->uiWdgPaintOpPresetSettings.configureBrushesToolButton->setPopupMode(QToolButton::InstantPopup);
 
 
@@ -220,7 +221,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // configure the button and assign menu
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
-
+    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-list-details"));
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
 
 
@@ -237,8 +238,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(saveDialog, SIGNAL(resourceSelected(KoResource*)), this, SLOT(resourceSelected(KoResource*)));
 
-    connect (m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton, SIGNAL(clicked(bool)),
-             this, SLOT(slotRenameBrushActivated()));
+
 
     connect (m_d->uiWdgPaintOpPresetSettings.cancelBrushNameUpdateButton, SIGNAL(clicked(bool)),
              this, SLOT(slotRenameBrushDeactivated()));
@@ -363,7 +363,6 @@ void KisPaintOpPresetsPopup::toggleBrushRenameUIActive(bool isRenaming)
 
     // hide these below areas while renaming
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setVisible(!isRenaming);
-    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setVisible(!isRenaming);
     m_d->uiWdgPaintOpPresetSettings.saveNewBrushPresetButton->setEnabled(!isRenaming);
@@ -805,12 +804,12 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("updateColorize")); // refresh icon
-    m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("dirty-preset")); // edit icon
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setIcon(KisIconUtils::loadIcon("warning"));
 
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("addlayer"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("configure"));
+    m_d->uiWdgPaintOpPresetSettings.configureBrushesToolButton->setIcon(KisIconUtils::loadIcon("configure"));
 }
 
 void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
@@ -828,7 +827,6 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
         m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(false);
         m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(false);
         m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setVisible(false);
-        m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(false);
     } else {
         bool isPresetDirty = m_d->resourceProvider->currentPreset()->isPresetDirty();
 
@@ -836,7 +834,6 @@ void KisPaintOpPresetsPopup::slotUpdatePresetSettings()
         m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
         m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
         m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
-        m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(true);
     }
 
     // update live preview area in here...

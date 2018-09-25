@@ -140,6 +140,10 @@ private:
     QMenu * newPresetBrushEnginesMenu;
     QList<KisAction*> newBrushEngineOptions;
 
+    QMenu * brushConfigurationMenu;
+
+    QAction* brushConfigAction;
+
 
     void toggleBrushRenameUIActive(bool isRenaming);
 };

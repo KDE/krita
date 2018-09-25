@@ -82,8 +82,8 @@ private Q_SLOTS:
     void buttonClicked(int id);
     void precisionChanged(int value);
     void setAutoPrecisionEnabled(int value);
-    void setSizeToStartFrom(double value);
-    void setDeltaValue(double value);
+    void setSizeToStartFrom(int value);
+    void setDeltaValue(int value);
 
 private:
     void setCurrentWidget(QWidget * widget);

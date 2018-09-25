@@ -82,8 +82,8 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     uiWdgBrushChooser.sliderPrecision->setPageStep(1);
     connect(uiWdgBrushChooser.sliderPrecision, SIGNAL(valueChanged(int)), SLOT(precisionChanged(int)));
     connect(uiWdgBrushChooser.autoPrecisionCheckBox, SIGNAL(stateChanged(int)), SLOT(setAutoPrecisionEnabled(int)));
-    connect(uiWdgBrushChooser.deltaValueSpinBox, SIGNAL(valueChanged(double)), SLOT(setDeltaValue(double)));
-    connect(uiWdgBrushChooser.sizeToStartFromSpinBox, SIGNAL(valueChanged(double)), SLOT(setSizeToStartFrom(double)));
+    connect(uiWdgBrushChooser.deltaValueSpinBox, SIGNAL(valueChanged(int)), SLOT(setDeltaValue(int)));
+    connect(uiWdgBrushChooser.sizeToStartFromSpinBox, SIGNAL(valueChanged(int)), SLOT(setSizeToStartFrom(int)));
     uiWdgBrushChooser.sliderPrecision->setValue(4);
 
     setPrecisionEnabled(false);
@@ -346,15 +346,15 @@ void KisBrushSelectionWidget::setAutoPrecisionEnabled(int value)
     }
     emit sigPrecisionChanged();
 }
-void KisBrushSelectionWidget::setSizeToStartFrom(double value)
+void KisBrushSelectionWidget::setSizeToStartFrom(int value)
 {
-    m_precisionOption.setSizeToStartFrom(value);
+    m_precisionOption.setSizeToStartFrom((double)value);
     emit sigPrecisionChanged();
 }
 
-void KisBrushSelectionWidget::setDeltaValue(double value)
+void KisBrushSelectionWidget::setDeltaValue(int value)
 {
-    m_precisionOption.setDeltaValue(value);
+    m_precisionOption.setDeltaValue((double)value);
     emit sigPrecisionChanged();
 
 }

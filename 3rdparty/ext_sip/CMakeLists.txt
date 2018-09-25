@@ -8,10 +8,10 @@ if (UNIX)
 
   ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/sip-4.19.13.dev1809181320.tar.gz
-        URL_MD5 71792a1900a57977a1e5aed315be10ea
+        URL https://files.kde.org/krita/build/dependencies/sip-4.19.6.tar.gz
+        URL_MD5 6be5cb2c43915ed450a9f74ec110dada
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py --sip-module PyQt5.sip  -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5  
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE_PATH} <SOURCE_DIR>/configure.py -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/sip -e ${PREFIX_ext_sip}/include  --sipdir ${PREFIX_ext_sip}/sip --target-py-version 3.5
         BUILD_COMMAND make
         INSTALL_COMMAND make install
 
@@ -27,14 +27,13 @@ elseif (MINGW)
         -e ${PREFIX_ext_sip}/include
         --sipdir ${PREFIX_ext_sip}/share/sip
         --target-py-version 3.6
-        --sip-module PyQt5.sip 
     )
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/sip-4.19.13.dev1809181320.zip
-        URL_MD5 45ab63b9d7ff35d4f57d26d242643e48
+        URL https://files.kde.org/krita/build/dependencies/sip-4.19.6.zip
+        URL_MD5 6a4080268c2aa9225965415fe8706967
 
-        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf} 
+        CONFIGURE_COMMAND ${PYTHON_EXECUTABLE} <SOURCE_DIR>/configure.py ${_SIP_conf}
         BUILD_COMMAND mingw32-make -j${SUBMAKE_JOBS} LDFLAGS=${SECURITY_SHARED_LINKER_FLAGS}
         INSTALL_COMMAND mingw32-make -j${SUBMAKE_JOBS} install
         

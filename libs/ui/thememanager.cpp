@@ -184,6 +184,8 @@ void ThemeManager::slotChangePalette()
     }
 
     //qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
+    // hint for the style to synchronize the color scheme with the window manager/compositor
+    qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
     qApp->setPalette(palette);
 
 #ifdef Q_OS_OSX

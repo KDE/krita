@@ -34,12 +34,19 @@ struct Q_DECL_HIDDEN KisLayerStyleProjectionPlane::Private
 {
     KisAbstractProjectionPlaneWSP sourceProjectionPlane;
 
-    QVector<KisAbstractProjectionPlaneSP> stylesBefore;
-    QVector<KisAbstractProjectionPlaneSP> stylesAfter;
+    QVector<KisLayerStyleFilterProjectionPlaneSP> stylesBefore;
+    QVector<KisLayerStyleFilterProjectionPlaneSP> stylesAfter;
 
     KisPSDLayerStyleSP style;
     bool canHaveChildNodes = false;
     bool dependsOnLowerNodes = false;
+
+    void initSourcePlane(KisLayer *sourceLayer) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(sourceLayer);
+        sourceProjectionPlane = sourceLayer->internalProjectionPlane();
+        canHaveChildNodes = sourceLayer->projectionLeaf()->canHaveChildLayers();
+        dependsOnLowerNodes = sourceLayer->projectionLeaf()->dependsOnLowerNodes();
+    }
 };
 
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer)
@@ -54,6 +61,25 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
     init(sourceLayer, style);
 }
 
+KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(const KisLayerStyleProjectionPlane &rhs, KisLayer *sourceLayer, KisPSDLayerStyleSP clonedStyle)
+    : m_d(new Private)
+{
+    m_d->initSourcePlane(sourceLayer);
+    m_d->style = clonedStyle;
+
+    KIS_SAFE_ASSERT_RECOVER(m_d->style) {
+        m_d->style = toQShared(new KisPSDLayerStyle());
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesBefore) {
+        m_d->stylesBefore << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+
+    Q_FOREACH (KisLayerStyleFilterProjectionPlaneSP plane, rhs.m_d->stylesAfter) {
+        m_d->stylesAfter << toQShared(new KisLayerStyleFilterProjectionPlane(*plane, sourceLayer, m_d->style));
+    }
+}
+
 // for testing purposes only!
 KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer, KisPSDLayerStyleSP layerStyle)
     : m_d(new Private)
@@ -63,11 +89,9 @@ KisLayerStyleProjectionPlane::KisLayerStyleProjectionPlane(KisLayer *sourceLayer
 
 void KisLayerStyleProjectionPlane::init(KisLayer *sourceLayer, KisPSDLayerStyleSP style)
 {
-    Q_ASSERT(sourceLayer);
-    m_d->sourceProjectionPlane = sourceLayer->internalProjectionPlane();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(sourceLayer);
+    m_d->initSourcePlane(sourceLayer);
     m_d->style = style;
-    m_d->canHaveChildNodes = sourceLayer->projectionLeaf()->canHaveChildLayers();
-    m_d->dependsOnLowerNodes = sourceLayer->projectionLeaf()->dependsOnLowerNodes();
 
     {
         KisLayerStyleFilterProjectionPlane *dropShadow =

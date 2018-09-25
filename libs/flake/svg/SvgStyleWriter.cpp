@@ -249,10 +249,10 @@ void SvgStyleWriter::saveSvgMasking(KoShape *shape, SvgSavingContext &context)
         context.styleWriter().addAttribute("width", rect.width());
         context.styleWriter().addAttribute("height", rect.height());
     } else {
-        context.styleWriter().addAttributePt("x", rect.x());
-        context.styleWriter().addAttributePt("y", rect.y());
-        context.styleWriter().addAttributePt("width", rect.width());
-        context.styleWriter().addAttributePt("height", rect.height());
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
     }
 
     embedShapes(clipMask->shapes(), context.styleWriter());
@@ -346,8 +346,6 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
 {
     if (! gradient)
         return QString();
-
-    Q_ASSERT(gradient->coordinateMode() == QGradient::ObjectBoundingMode);
 
     const QString spreadMethod[3] = {
         QString("pad"),
@@ -516,10 +514,10 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
         context.styleWriter().addAttribute("width", rect.width());
         context.styleWriter().addAttribute("height", rect.height());
     } else {
-        context.styleWriter().addAttributePt("x", rect.x());
-        context.styleWriter().addAttributePt("y", rect.y());
-        context.styleWriter().addAttributePt("width", rect.width());
-        context.styleWriter().addAttributePt("height", rect.height());
+        context.styleWriter().addAttribute("x", rect.x());
+        context.styleWriter().addAttribute("y", rect.y());
+        context.styleWriter().addAttribute("width", rect.width());
+        context.styleWriter().addAttribute("height", rect.height());
     }
 
     SvgUtil::writeTransformAttributeLazy("patternTransform", pattern->patternTransform(), context.styleWriter());

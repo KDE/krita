@@ -24,7 +24,7 @@
 #include "kis_exif_io.h"
 #include "kis_xmp_io.h"
 
-#include <metadata/kis_meta_data_value.h>
+#include <kis_meta_data_value.h>
 #include <kis_debug.h>
 
 // ---- Generic conversion functions ---- //
@@ -192,13 +192,15 @@ Exiv2::Value* kmdValueToExivValue(const KisMetaData::Value& value, Exiv2::TypeId
             break;
         default:
             dbgMetaData << type << " " << value;
-            //Q_ASSERT(false);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown alternative array type", 0);
+            break;
         }
-        /* Falls through */
+        break;
     }
     default:
         dbgMetaData << type << " " << value;
-        //Q_ASSERT(false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(0 && "Unknown array type", 0);
+        break;
     }
     return 0;
 }

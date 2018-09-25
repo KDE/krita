@@ -27,7 +27,7 @@ public:
     KisQmicData();
     ~KisQmicData();
 
-    float progress() const { qDebug() << "KisQmicData::progress" << m_progress; return m_progress; }
+    float progress() const { return m_progress; }
     bool isCancelled() const { return m_cancel; }
     void setCancel(bool cancel) { m_cancel = cancel; }
 

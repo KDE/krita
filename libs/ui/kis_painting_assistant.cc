@@ -22,8 +22,10 @@
 #include "kis_painting_assistant.h"
 #include "kis_coordinates_converter.h"
 #include "kis_debug.h"
+#include "kis_dom_utils.h"
 #include <kis_canvas2.h>
 #include "kis_tool.h"
+#include "kis_config.h"
 
 #include <KoStore.h>
 
@@ -117,7 +119,6 @@ void KisPaintingAssistantHandle::uncache()
     }
 }
 
-
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
@@ -129,7 +130,6 @@ struct KisPaintingAssistant::Private {
     KisPaintingAssistantHandleSP topLeft, bottomLeft, topRight, bottomRight, topMiddle, bottomMiddle, rightMiddle, leftMiddle;
     KisCanvas2* m_canvas = 0;
 
-
     struct TranslationInvariantTransform {
         qreal m11, m12, m21, m22;
         TranslationInvariantTransform() { }
@@ -140,16 +140,11 @@ struct KisPaintingAssistant::Private {
     } cachedTransform;
 
 
-    QColor assistantGlobalColor;     // color to paint with if a custom color is not set
+    QColor assistantGlobalColorCache = QColor(Qt::red);     // color to paint with if a custom color is not set
 
     bool useCustomColor = false;
-    QColor assistantCustomColor;
+    QColor assistantCustomColor = KisConfig(true).defaultAssistantsColor();
 };
-
-void KisPaintingAssistant::setAssistantGlobalColor(QColor color)
-{
-    d->assistantGlobalColor = color;
-}
 
 bool KisPaintingAssistant::useCustomColor()
 {
@@ -166,14 +161,19 @@ void KisPaintingAssistant::setAssistantCustomColor(QColor color)
     d->assistantCustomColor = color;
 }
 
-QColor KisPaintingAssistant::assistantsGlobalColor()
-{
-    return d->assistantGlobalColor;
-}
-
 QColor KisPaintingAssistant::assistantCustomColor()
 {
     return d->assistantCustomColor;
+}
+
+void KisPaintingAssistant::setAssistantGlobalColorCache(const QColor &color)
+{
+    d->assistantGlobalColorCache = color;
+}
+
+QColor KisPaintingAssistant::effectiveAssistantColor() const
+{
+    return d->useCustomColor ? d->assistantCustomColor : d->assistantGlobalColorCache;
 }
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
@@ -198,15 +198,14 @@ void KisPaintingAssistant::setSnappingActive(bool set)
 void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
 
-    QColor paintingColor = useCustomColor() ? assistantCustomColor() : d->assistantGlobalColor;
-    int alpha = paintingColor.alpha();
+    QColor paintingColor = effectiveAssistantColor();
 
     if (!isSnappingOn) {
-        alpha = alpha *0.2;
+        paintingColor.setAlpha(0.2 * paintingColor.alpha());
     }
 
     painter.save();
-    QPen pen_a(QColor(paintingColor.red(), paintingColor.green(), paintingColor.blue(), alpha), 2);
+    QPen pen_a(paintingColor, 2);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
@@ -215,10 +214,8 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
 
 void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
 {
-    QColor paintingColor = useCustomColor() ? assistantCustomColor() : d->assistantGlobalColor;
-
     painter.save();
-    QPen pen_a(paintingColor, 1);
+    QPen pen_a(effectiveAssistantColor(), 1);
     pen_a.setStyle(Qt::SolidLine);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
@@ -284,6 +281,7 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle, Handle
 void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     Q_UNUSED(updateRect);
+
     Q_UNUSED(previewVisible);
 
     findPerspectiveAssistantHandleLocation();
@@ -309,7 +307,9 @@ void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     QPixmap cached;
     bool found = QPixmapCache::find(d->cached, &cached);
 
-    if (!(found && d->cachedTransform == transform && d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
+    if (!(found &&
+          d->cachedTransform == transform &&
+          d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
 
         const QRect cacheRect = gc.viewport().adjusted(-100, -100, 100, 100).intersected(widgetBound);
         Q_ASSERT(!cacheRect.isEmpty());
@@ -365,7 +365,7 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeAttribute("type",d->id);
     xml.writeAttribute("active", QString::number(d->isSnappingActive));
     xml.writeAttribute("useCustomColor", QString::number(d->useCustomColor));
-    xml.writeAttribute("customColor",  KisPaintingAssistantsDecoration::qColorToQString(d->assistantCustomColor));
+    xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(d->assistantCustomColor));
 
 
 
@@ -420,13 +420,13 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                         usingColor = true;
                     }
 
+
                     setUseCustomColor(usingColor);
                 }
 
                 if ( xml.attributes().hasAttribute("customColor")) {
                     QStringRef customColor = xml.attributes().value("customColor");
-
-                    setAssistantCustomColor( KisPaintingAssistantsDecoration::qStringToQColor(customColor.toString()) );
+                    setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
                 }
 

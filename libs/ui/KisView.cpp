@@ -24,7 +24,6 @@
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 #include <KoDocumentInfo.h>
-#include "KoDocumentInfo.h"
 #include "KoPageLayout.h"
 #include <KoToolManager.h>
 
@@ -35,7 +34,6 @@
 #include <kis_debug.h>
 #include <kselectaction.h>
 #include <kconfiggroup.h>
-#include <kactioncollection.h>
 
 #include <QMenu>
 #include <QMessageBox>
@@ -50,10 +48,8 @@
 #include <QList>
 #include <QPrintDialog>
 #include <QToolBar>
-#include <QUrl>
 #include <QStatusBar>
 #include <QMoveEvent>
-#include <QTemporaryFile>
 #include <QMdiSubWindow>
 
 #include <kis_image.h>
@@ -91,6 +87,7 @@
 #include "krita_utils.h"
 #include "input/kis_input_manager.h"
 #include "KisRemoteFileFetcher.h"
+#include "kis_selection_manager.h"
 
 //static
 QString KisView::newObjectName()
@@ -231,7 +228,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
     d->canvas.setup();
 
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     d->canvasController.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->canvasController.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -247,11 +244,11 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
     connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
 
-    d->canvas.addDecoration(d->paintingAssistantsDecoration);
-    d->paintingAssistantsDecoration->setVisible(true);
-
     d->canvas.addDecoration(d->referenceImagesDecoration);
     d->referenceImagesDecoration->setVisible(true);
+
+    d->canvas.addDecoration(d->paintingAssistantsDecoration);
+    d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
 }
@@ -287,6 +284,17 @@ void KisView::notifyCurrentStateChanged(bool isCurrent)
     } else {
         inputManager->detachPriorityEventFilter(&d->canvasController);
     }
+
+    /**
+     * When current view is changed, currently selected node is also changed,
+     * therefore we should update selection overlay mask
+     */
+    viewManager()->selectionManager()->selectionChanged();
+}
+
+bool KisView::isCurrent() const
+{
+    return d->isCurrent;
 }
 
 void KisView::setShowFloatingMessage(bool show)
@@ -582,11 +590,14 @@ void KisView::dropEvent(QDropEvent *event)
                             }
                         }
                         else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
-                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter);
-                            reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
-                            d->referenceImagesDecoration->addReferenceImage(reference);
+                            auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), d->viewConverter, this);
 
-                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            if (reference) {
+                                reference->setPosition(d->viewConverter.imageToDocument(cursorPos));
+                                d->referenceImagesDecoration->addReferenceImage(reference);
+
+                                KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            }
                         }
 
                     }
@@ -655,7 +666,7 @@ void KisView::slotSavingStatusMessage(const QString &text, int timeout, bool isA
         sb->showMessage(text, timeout);
     }
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     if (!sb || sb->isHidden() ||
         (!isAutoSaving && cfg.forceShowSaveMessages()) ||
@@ -734,7 +745,7 @@ bool KisView::queryClose()
             image->requestStrokeCancellation();
             viewManager()->blockUntilOperationsFinishedForced(image);
 
-            document()->removeAutoSaveFiles();
+            document()->removeAutoSaveFiles(document()->localFilePath(), document()->isRecovered());
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
         }

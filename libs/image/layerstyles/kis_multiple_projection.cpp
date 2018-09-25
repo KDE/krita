@@ -50,6 +50,23 @@ KisMultipleProjection::KisMultipleProjection()
 {
 }
 
+KisMultipleProjection::KisMultipleProjection(const KisMultipleProjection &rhs)
+    : m_d(new Private)
+{
+    QReadLocker readLocker(&rhs.m_d->lock);
+
+    auto it = rhs.m_d->planes.constBegin();
+    for (; it != rhs.m_d->planes.constEnd(); ++it) {
+        ProjectionStruct proj;
+        proj.device = new KisPaintDevice(*it->device);
+        proj.compositeOpId = it->compositeOpId;
+        proj.opacity = it->opacity;
+        proj.channelFlags = it->channelFlags;
+
+        m_d->planes.insert(it.key(), proj);
+    }
+}
+
 KisMultipleProjection::~KisMultipleProjection()
 {
 }

@@ -99,11 +99,6 @@ void KisCurveCircleMaskGenerator::setScale(qreal scaleX, qreal scaleY)
     d->fadeMaker.setSquareNormCoeffs(d->xcoef, d->ycoef);
 }
 
-bool KisCurveCircleMaskGenerator::shouldSupersample() const
-{
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
-}
-
 bool KisCurveCircleMaskGenerator::shouldVectorize() const
 {
     return !shouldSupersample() && spikes() == 2;

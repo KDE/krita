@@ -69,11 +69,10 @@
 #include "kis_favorite_resource_manager.h"
 #include "kis_config.h"
 
-#include "widgets/kis_popup_button.h"
+#include "kis_popup_button.h"
 #include "widgets/kis_iconwidget.h"
 #include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_popup.h"
-#include "widgets/kis_tool_options_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
@@ -109,7 +108,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
 
     setObjectName(name);
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_dirtyPresetsEnabled = cfg.useDirtyPresets();
     m_eraserBrushSizeEnabled = cfg.useEraserBrushSize();
     m_eraserBrushOpacityEnabled = cfg.useEraserBrushOpacity();
@@ -482,6 +481,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
     connect(m_favoriteResourceManager, SIGNAL(sigEnableChangeColor(bool)), m_resourceProvider, SLOT(slotResetEnableFGChange(bool)));
 
     connect(view->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateSelectionIcon()));
+    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     slotInputDeviceChanged(KoToolManager::instance()->currentInputDevice());
 
@@ -513,7 +514,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *view, QWidget *parent, const char *
 
 KisPaintopBox::~KisPaintopBox()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
     while (iter.hasNext()) {
         iter.next();
@@ -537,9 +538,8 @@ KisPaintopBox::~KisPaintopBox()
 
 void KisPaintopBox::restoreResource(KoResource* resource)
 {
-
     KisPaintOpPreset* preset = dynamic_cast<KisPaintOpPreset*>(resource);
-    //qDebug() << "restoreResource" << resource << preset;
+
     if (preset) {
         setCurrentPaintop(preset);
 
@@ -782,7 +782,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
     m_currTabletToolID = TabletToolID(inputDevice);
 
     if (toolData == m_tabletToolMap.end()) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         KisPaintOpPresetResourceServer *rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
         KisPaintOpPresetSP preset;
         if (inputDevice.pointer() == QTabletEvent::Eraser) {
@@ -1034,7 +1034,7 @@ void KisPaintopBox::sliderChanged(int n)
 
     if (m_presetsEnabled) {
         // IMPORTANT: set the PaintOp size before setting the other properties
-        //            it wont work the other way
+        //            it won't work the other way
         // TODO: why?!
 
         m_resourceProvider->setSize(size);
@@ -1280,21 +1280,21 @@ void KisPaintopBox::slotDirtyPresetToggled(bool value)
         m_presetsPopup->updateViewSettings();
     }
     m_dirtyPresetsEnabled = value;
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setUseDirtyPresets(m_dirtyPresetsEnabled);
 
 }
 void KisPaintopBox::slotEraserBrushSizeToggled(bool value)
 {
     m_eraserBrushSizeEnabled = value;
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setUseEraserBrushSize(m_eraserBrushSizeEnabled);
 }
 
 void KisPaintopBox::slotEraserBrushOpacityToggled(bool value)
 {
     m_eraserBrushOpacityEnabled = value;
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setUseEraserBrushOpacity(m_eraserBrushOpacityEnabled);
 }
 
@@ -1303,7 +1303,7 @@ void KisPaintopBox::slotUpdateSelectionIcon()
     m_hMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-horizontal"));
     m_vMirrorAction->setIcon(KisIconUtils::loadIcon("symmetry-vertical"));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (!cfg.toolOptionsInDocker() && m_toolOptionsPopupButton) {
         m_toolOptionsPopupButton->setIcon(KisIconUtils::loadIcon("configure"));
     }

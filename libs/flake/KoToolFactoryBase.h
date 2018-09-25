@@ -37,18 +37,18 @@ class QKeySequence;
  * a toolTip and icon in the constructor of that extending class.
  *
  * An example usage would be:<pre>
-class MyToolFactory : public KoToolFactoryBase {
-public:
-    MyToolFactory(const QStringList&)
-        : KoToolFactoryBase("MyTool") {
-        setToolTip(i18n("Create object"));
-        setToolType("dynamic");
-        setPriority(5);
-    }
-    ~MyToolFactory() {}
-    KoToolBase *createTool(KoCanvasBase *canvas);
-};
-K_PLUGIN_FACTORY_WITH_JSON((MyToolFactoryFactory, "mytool.json", registerPlugin<MyToolFactory>();)
+ * class MyToolFactory : public KoToolFactoryBase {
+ * public:
+ *   MyToolFactory(const QStringList&)
+ *       : KoToolFactoryBase("MyTool") {
+ *       setToolTip(i18n("Create object"));
+ *       setToolType("dynamic");
+ *       setPriority(5);
+ *   }
+ *   ~MyToolFactory() {}
+ *   KoToolBase *createTool(KoCanvasBase *canvas);
+ * };
+ * K_PLUGIN_FACTORY_WITH_JSON((MyToolFactoryFactory, "mytool.json", registerPlugin<MyToolFactory>();)
 </pre>
 
  */

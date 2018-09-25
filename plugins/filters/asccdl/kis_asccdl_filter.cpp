@@ -20,6 +20,7 @@
 #include "kis_wdg_asccdl.h"
 #include <kpluginfactory.h>
 #include <klocalizedstring.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <qmath.h>
@@ -39,7 +40,7 @@ KritaASCCDL::~KritaASCCDL()
 
 }
 
-KisFilterASCCDL::KisFilterASCCDL(): KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Slope, Offset, Power..."))
+KisFilterASCCDL::KisFilterASCCDL(): KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Slope, Offset, Power..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

@@ -38,10 +38,8 @@
 #include <kis_debug.h>
 #include <QPoint>
 
-#include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <QAction>
 
 #include <kis_icon.h>
 #include <KoShape.h>
@@ -76,7 +74,6 @@
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include "strokes/kis_color_picker_stroke_strategy.h"
-#include <kis_canvas_resource_provider.h>
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
@@ -94,7 +91,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     m_supportOutline = false;
 
     {
-        int maxSize = KisConfig().readEntry("maximumBrushSize", 1000);
+        int maxSize = KisConfig(true).readEntry("maximumBrushSize", 1000);
 
         int brushSize = 1;
         do {
@@ -198,7 +195,7 @@ void KisToolPaint::deactivate()
 
 QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (cfg.newOutlineStyle() == OUTLINE_NONE) return originalOutline;
 
     const qreal minThresholdSize = cfg.outlineSizeMinimum();
@@ -383,7 +380,7 @@ void KisToolPaint::addPickerJob(const PickingJob &pickingJob)
         auto *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
         KisSharedPtr<KisReferenceImagesLayer> referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
-        if (referencesLayer) {
+        if (referencesLayer && kisCanvas->referenceImagesDecoration()->visible()) {
             QColor color = referencesLayer->getPixel(imagePoint);
             if (color.isValid() && color.alpha() != 0) {
                 slotColorPickingFinished(KoColor(color, image()->colorSpace()));
@@ -696,7 +693,7 @@ QRectF KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
 {
     if (!m_showColorPreview) return QRect();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
     const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
@@ -708,7 +705,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 {
     if (!m_supportOutline) return;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     KisPaintOpSettings::OutlineMode outlineMode;
 
     if (isOutlineEnabled() &&
@@ -740,7 +737,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
-    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
+    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordinates
     // See BUG 275829
     qreal zoomX;
     qreal zoomY;

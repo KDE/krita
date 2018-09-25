@@ -211,7 +211,7 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
             QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile, intent, conversionFlags);
             return image;
         }
-        catch(std::bad_alloc) {
+        catch(const std::bad_alloc&) {
             return QImage();
         }
     }

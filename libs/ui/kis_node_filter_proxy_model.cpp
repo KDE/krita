@@ -100,6 +100,8 @@ bool KisNodeFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex
     KIS_ASSERT_RECOVER(m_d->nodeModel) { return true; }
 
     const QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+    if (!index.isValid()) return false;
+
     KisNodeSP node = m_d->nodeModel->nodeFromIndex(index);
 
     return !node ||
@@ -161,7 +163,7 @@ void KisNodeFilterProxyModel::slotUpdateCurrentNodeFilter()
 
 void KisNodeFilterProxyModel::unsetDummiesFacade()
 {
-    m_d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
+    m_d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0, 0);
     m_d->pendingActiveNode = 0;
     m_d->activeNode = 0;
 }

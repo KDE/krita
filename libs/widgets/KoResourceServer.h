@@ -215,7 +215,7 @@ public:
                         notifyResourceAdded(resource);
                     }
                     else {
-                        warnWidgets << "Loading resource " << front << "failed";
+                        warnWidgets << "Loading resource " << front << "failed." << type();
                         Policy::deleteResource(resource);
                     }
                 }
@@ -404,7 +404,7 @@ public:
     }
 
     /// Removes the resource file from the resource server
-    virtual void removeResourceFile(const QString & filename)
+    void removeResourceFile(const QString & filename)
     {
         QFileInfo fi(filename);
 
@@ -413,9 +413,7 @@ public:
             warnWidgets << "Resource file do not exist ";
             return;
         }
-
-        if (!removeResourceFromServer(resource))
-            return;
+        removeResourceFromServer(resource);
     }
 
 

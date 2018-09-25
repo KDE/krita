@@ -132,6 +132,8 @@ const QString PROOFINGADAPTATIONSTATE = "proofing-adaptation-state";
 const QString ICCPROOFINGPROFILE ="icc-proofing-profile";
 const QString CANVASPROJECTIONCOLOR = "ProjectionBackgroundColor";
 const QString COLORBYTEDATA = "ColorData";
+const QString SIMPLECOLORDATA = "SimpleColorData"; // easier 8-bit color data that works well with XML
+const QString GLOBALASSISTANTSCOLOR = "GlobalAssistantsColor";
 }
 
 

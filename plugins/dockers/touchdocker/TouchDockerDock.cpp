@@ -22,7 +22,6 @@
 #include <QQmlContext>
 #include <QAction>
 #include <QUrl>
-#include <QAction>
 #include <QKeyEvent>
 #include <QApplication>
 
@@ -45,7 +44,6 @@
 #include <KisMimeDatabase.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
-#include <kis_config.h>
 
 #include <Theme.h>
 #include <Settings.h>
@@ -103,7 +101,7 @@ TouchDockerDock::TouchDockerDock()
                                                << "previous_preset"
                                                << "clear";
 
-    QStringList mapping = KisConfig().readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
+    QStringList mapping = KisConfig(true).readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
     for (int i = 0; i < 8; ++i) {
         if (i < mapping.size()) {
             d->buttonMapping[QString("button%1").arg(i + 1)] = mapping[i];

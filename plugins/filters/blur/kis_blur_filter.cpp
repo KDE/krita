@@ -28,6 +28,7 @@
 
 #include "kis_wdg_blur.h"
 #include "ui_wdgblur.h"
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -36,7 +37,7 @@
 #include "kis_lod_transform.h"
 
 
-KisBlurFilter::KisBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Blur..."))
+KisBlurFilter::KisBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

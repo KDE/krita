@@ -153,13 +153,13 @@ void DlgBundleManager::accept()
                     //this removes the bundle from the blacklist and add it to the server without saving or putting it in front//
                     if (!bundleServer->addResource(bundle, false, false)){
 
-                        feedback = QString(i18n("Couldn't add bundle \"%1\" to resource server")).arg(name);
+                        feedback = i18n("Couldn't add bundle \"%1\" to resource server", name);
                         bundleFeedback.setText(feedback);
                         bundleFeedback.exec();
                     }
                     if (!isKrita3Bundle) {
                         if (!bundleServer->removeFromBlacklist(bundle)) {
-                            feedback = QString(i18n("Couldn't remove bundle \"%1\" from blacklist")).arg(name);
+                            feedback = i18n("Couldn't remove bundle \"%1\" from blacklist", name);
                             bundleFeedback.setText(feedback);
                             bundleFeedback.exec();
                         }
@@ -174,7 +174,7 @@ void DlgBundleManager::accept()
             }
         }
         else{
-            QString feedback = QString(i18n("Bundle \"%1\" doesn't exist!")).arg(name);
+            QString feedback = i18n("Bundle \"%1\" doesn't exist!", name);
             bundleFeedback.setText(feedback);
             bundleFeedback.exec();
 
@@ -295,6 +295,10 @@ void DlgBundleManager::itemSelected(QListWidgetItem *current, QListWidgetItem *)
                 else if (resType  == "paintoppresets") {
                     toplevel->setText(0, i18n("Brush Presets"));
                 }
+                else if (resType  == "gamutmasks") {
+                    toplevel->setText(0, i18n("Gamut Masks"));
+                }
+
 
                 m_ui->listBundleContents->addTopLevelItem(toplevel);
 

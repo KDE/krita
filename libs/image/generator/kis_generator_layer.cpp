@@ -116,7 +116,7 @@ void KisGeneratorLayer::update()
 
     QVector<QRect> dirtyRegion;
 
-    Q_FOREACH (const QRect &rc, processRegion) {
+    Q_FOREACH (const QRect &rc, processRegion.rects()) {
         KisProcessingInformation dstCfg(originalDevice,
                                         rc.topLeft(),
                                         KisSelectionSP());

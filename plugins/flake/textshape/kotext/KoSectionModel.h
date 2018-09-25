@@ -22,7 +22,7 @@
  * semantics of operation to handle it right way.
  * 2) Model(Tree) Level: on this level we should update KoSectionModel
  * right way, so it in any moment represents the actual tree
- * of sections. Tree is builded easily:
+ * of sections. Tree is built easily:
  *    One section is son of another, if it is directly nested in it.
  * As text editing commands have access to change Formatting Level,
  * they are declared as friend classes of KoSectionModel to be able
@@ -38,7 +38,7 @@
  * to make some end cursors stop moving, so we have:
  *         KoTextLoader -> calling -> KoSection::setKeepEndBound()
  *         KoTextLoader -> calling -> KoSectionModel::allowMovingEndBound()
- *      ^-- this needed to restore defaul behaviour after load
+ *      ^-- this needed to restore default behaviour after load
  *
  * 2) Level. Level means the depth of the section in tree. Root
  * sections has 0 (zero) level. Now if you look at the possible

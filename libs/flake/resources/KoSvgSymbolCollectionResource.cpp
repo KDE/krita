@@ -41,6 +41,7 @@
 #include <KoShapePaintingContext.h>
 #include <SvgParser.h>
 
+#include <FlakeDebug.h>
 
 void paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
@@ -76,7 +77,7 @@ QImage KoSvgSymbol::icon()
     KoViewConverter vc;
     KoShapePaintingContext ctx;
 
-//        qDebug() << "Going to render. Original bounding rect:" << group->boundingRect()
+//        debugFlake << "Going to render. Original bounding rect:" << group->boundingRect()
 //                 << "Normalized: " << rc
 //                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
 
@@ -163,7 +164,7 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
     // We're not interested in the shapes themselves
     qDeleteAll(parser.parseSvg(doc.documentElement(), &fragmentSize));
     d->symbols = parser.takeSymbols();
-//    qDebug() << "Loaded" << filename() << "\n\t"
+//    debugFlake << "Loaded" << filename() << "\n\t"
 //             << "Title" << parser.documentTitle() << "\n\t"
 //             << "Description" << parser.documentDescription()
 //             << "\n\tgot" << d->symbols.size() << "symbols"

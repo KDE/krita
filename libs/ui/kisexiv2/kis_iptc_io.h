@@ -19,7 +19,7 @@
 #ifndef _KIS_IPTC_IO_H_
 #define _KIS_IPTC_IO_H_
 
-#include <metadata/kis_meta_data_io_backend.h>
+#include <kis_meta_data_io_backend.h>
 
 #include <klocalizedstring.h>
 

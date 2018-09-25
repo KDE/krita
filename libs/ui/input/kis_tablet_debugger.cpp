@@ -25,7 +25,6 @@
 #include <kis_config.h>
 
 #include <QGlobalStatic>
-#include <QMessageBox>
 
 #include <klocalizedstring.h>
 
@@ -89,7 +88,7 @@ QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
 KisTabletDebugger::KisTabletDebugger()
     : m_debugEnabled(false)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_shouldEatDriverShortcuts = cfg.shouldEatDriverShortcuts();
 }
 

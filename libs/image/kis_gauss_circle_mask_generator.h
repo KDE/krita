@@ -43,8 +43,6 @@ public:
 
     void setScale(qreal scaleX, qreal scaleY) override;
 
-    bool shouldSupersample() const override;
-
     bool shouldVectorize() const override;
     KisBrushMaskApplicatorBase* applicator() override;
 

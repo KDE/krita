@@ -52,6 +52,8 @@ public:
     void saveCanvasState(KisPropertiesConfiguration &config) const;
     void restoreCanvasState(const KisPropertiesConfiguration &config);
 
+    void resetScrollBars() override;
+
 public Q_SLOTS:
     void mirrorCanvas(bool enable);
     void rotateCanvas(qreal angle, const QPointF &center);

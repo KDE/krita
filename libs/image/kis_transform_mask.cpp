@@ -108,9 +108,7 @@ KisTransformMask::KisTransformMask()
 
     connect(&m_d->updateSignalCompressor, SIGNAL(timeout()), SLOT(slotDelayedStaticUpdate()));
     connect(this, SIGNAL(sigInternalForceStaticImageUpdate()), SLOT(slotInternalForceStaticImageUpdate()));
-
-    KisImageConfig cfg;
-    m_d->offBoundsReadArea = cfg.transformMaskOffBoundsReadArea();
+    m_d->offBoundsReadArea = KisImageConfig(true).transformMaskOffBoundsReadArea();
 }
 
 KisTransformMask::~KisTransformMask()

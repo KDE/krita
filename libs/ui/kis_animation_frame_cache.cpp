@@ -237,7 +237,7 @@ bool KisAnimationFrameCache::uploadFrame(int time)
         // Previously we were trying to start cache regeneration in this point,
         // but it caused even bigger slowdowns when scrubbing
     } else {
-        m_d->textures->recalculateCache(info);
+        m_d->textures->recalculateCache(info, false);
     }
 
     return bool(info);
@@ -281,7 +281,7 @@ void KisAnimationFrameCache::slotConfigChanged()
 {
     m_d->newFrames.clear();
 
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     if (cfg.useOnDiskAnimationCacheSwapping()) {
         m_d->swapper.reset(new KisFrameCacheSwapper(m_d->textures->updateInfoBuilder(), cfg.swapDir()));
@@ -336,8 +336,8 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageS
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
 {
-    KisTimeRange identicalRange = KisTimeRange::infinite(0);
-    KisTimeRange::calculateTimeRangeRecursive(m_d->image->root(), time, identicalRange, true);
+    const KisTimeRange identicalRange =
+        KisTimeRange::calculateIdenticalFramesRecursive(m_d->image->root(), time);
 
     m_d->addFrame(info, identicalRange);
 

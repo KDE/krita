@@ -22,8 +22,6 @@
 #define KOXMLREADERFORWARD_H
 
 // use standard QDom, useful to test KoXml classes against Qt's QDom
-#define KOXML_USE_QDOM
-
 #include <QDomDocument>
 
 typedef QDomNode KoXmlNode;

@@ -24,10 +24,7 @@
 #include <QDomDocument>
 #include <QFileInfo>
 #include <QSlider>
-#include <QFileInfo>
 #include <QDir>
-#include <QFileInfo>
-#include <QApplication>
 
 #include <kpluginfactory.h>
 

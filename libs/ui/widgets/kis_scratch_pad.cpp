@@ -110,7 +110,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_cursor = KisCursor::load("tool_freehand_cursor.png", 5, 5);
     setCursor(m_cursor);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QImage checkImage = KisCanvasWidgetBase::createCheckersImage(cfg.checkSize());
     m_checkBrush = QBrush(checkImage);
 
@@ -349,7 +349,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {
     m_resourceProvider = resourceProvider;
-    KisConfig cfg;
+    KisConfig cfg(true);
     setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));

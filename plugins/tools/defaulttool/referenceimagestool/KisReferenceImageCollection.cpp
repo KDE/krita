@@ -18,6 +18,7 @@
 #include "KisReferenceImageCollection.h"
 
 #include <QIODevice>
+#include <QMessageBox>
 
 #include <libs/store/KoStore.h>
 #include <KisReferenceImage.h>
@@ -83,13 +84,29 @@ bool KisReferenceImageCollection::load(QIODevice *io)
     doc.setContent(xml);
     QDomElement root = doc.documentElement();
 
+    QStringList failures;
+
     QDomElement element = root.firstChildElement("referenceimage");
     while (!element.isNull()) {
         KisReferenceImage *reference = KisReferenceImage::fromXml(element);
-        reference->loadImage(store.data());
-        references.append(reference);
 
+        if (reference->loadImage(store.data())) {
+            references.append(reference);
+        } else {
+            failures << (reference->embed() ? reference->internalFile() : reference->filename());
+            delete reference;
+        }
         element = element.nextSiblingElement("referenceimage");
+    }
+
+    if (!failures.isEmpty()) {
+        QMessageBox::warning(
+                0,
+                i18nc("@title:window", "Krita"),
+                i18n("The following reference images could not be loaded:\n%1", failures.join('\n')),
+                QMessageBox::Ok, QMessageBox::Ok
+        );
+
     }
 
     return true;

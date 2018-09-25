@@ -25,6 +25,6 @@ ecm_add_tests(
     kis_gbr_brush_test.cpp
     kis_boundary_test.cpp
     kis_imagepipe_brush_test.cpp
-    NAME_PREFIX "krita-libbrush-"
+    NAME_PREFIX "libs-brush-"
     LINK_LIBRARIES kritaimage kritalibbrush Qt5::Test
 )

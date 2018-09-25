@@ -108,6 +108,17 @@ public:
     void addRecentURL(const QUrl &url);
 
     /**
+     * get list of URL strings for recent files
+     */
+    QList<QUrl> recentFilesUrls();
+
+    /**
+     * clears the list of the recent files
+     */
+    void clearRecentFiles();
+
+
+    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *
@@ -119,6 +130,18 @@ public:
      * Activate a view containing the document in this window, creating one if needed.
      */
     void showDocument(KisDocument *document);
+
+
+    /**
+     * Toggles between showing the welcome screen and the MDI area
+     *
+     *  hack: There seems to be a bug that prevents events happening to the MDI area if it
+     *  isn't actively displayed (set in the widgetStack). This can cause things like the title bar
+     *  not to update correctly Before doing any actions related to opening or creating documents,
+     *  make sure to switch this first to make sure everything can communicate to the MDI area correctly
+     */
+    void showWelcomeScreen(bool show);
+
 
     /**
      * Saves the document, asking for a filename if necessary.
@@ -260,6 +283,20 @@ public Q_SLOTS:
 
     void notifyChildViewDestroyed(KisView *view);
 
+    /// Set the active view, this will update the undo/redo actions
+    void setActiveView(KisView *view);
+
+    void subWindowActivated();
+
+    void windowFocused();
+
+    /**
+     * Reloads the recent documents list.
+     */
+    void reloadRecentFileList();
+
+
+
 private Q_SLOTS:
     /**
      * Save the list of recent files.
@@ -337,6 +374,7 @@ private Q_SLOTS:
      */
     void slotReloadFile();
 
+
     /**
      * File --> Import
      *
@@ -370,8 +408,14 @@ private Q_SLOTS:
     void newWindow();
     void closeCurrentWindow();
     void checkSanity();
+
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
+
+    void initializeGeometry();
+    void showManual();
+    void switchTab(int index);
+
 
 protected:
 
@@ -384,7 +428,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent * event) override;
     void dragLeaveEvent(QDragLeaveEvent * event) override;
 
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void moveEvent(QMoveEvent *e) override;
 
 
 private:
@@ -396,18 +440,6 @@ private:
      */
     void addView(KisView *view);
 
-public Q_SLOTS:
-
-    /// Set the active view, this will update the undo/redo actions
-    void setActiveView(KisView *view);
-
-    void subWindowActivated();
-
-    void windowFocused();
-
-private:
-
-    friend class KisApplication;
     friend class KisPart;
 
 
@@ -421,10 +453,6 @@ private:
 
     bool openDocumentInternal(const QUrl &url, KisMainWindow::OpenFlags flags = 0);
 
-    /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
 
     /**
      * Updates the window caption based on the document info and path.
@@ -444,17 +472,8 @@ private:
 
     QByteArray borrowWorkspace(KisMainWindow *borrower);
 
-protected:
-
-    void moveEvent(QMoveEvent *e) override;
-
-private Q_SLOTS:
-    void initializeGeometry();
-    void showManual();
-    void switchTab(int index);
 
 private:
-
 
     /**
      * Struct used in the list created by createCustomDocumentWidgets()

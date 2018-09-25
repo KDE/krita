@@ -25,11 +25,17 @@
 
 #include <kis_shared.h>
 #include <kis_shared_ptr.h>
+#include "config-hash-table-implementaion.h"
 
 //#include "kis_debug.h"
 #include "kritaimage_export.h"
 
+#ifdef USE_LOCK_FREE_HASH_TABLE
+#include "kis_tile_hash_table2.h"
+#else
 #include "kis_tile_hash_table.h"
+#endif // USE_LOCK_FREE_HASH_TABLE
+
 #include "kis_memento_manager.h"
 #include "kis_memento.h"
 #include "KisTiledExtentManager.h"

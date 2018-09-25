@@ -81,20 +81,13 @@ void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number Erro
     qCritical() << "Lcms2 error: " << ErrorCode << Text;
 }
 
-K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json",
-                           registerPlugin<LcmsEnginePlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json", registerPlugin<LcmsEnginePlugin>();)
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    // We need all resource paths to be properly initialized via KisApplication, otherwise we will
-    // initialize this instance with lacking color profiles which will cause lookup errors later on.
-
-    KIS_ASSERT_X(KoResourcePaths::isReady() ||
-                 (QApplication::instance()->applicationName() != "krita" &&
-                  QApplication::instance()->applicationName() != "krita.exe"),
-                 "LcmsEnginePlugin::LcmsEnginePlugin", "Resource paths are not ready yet.");
-
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
 
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);

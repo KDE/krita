@@ -29,6 +29,10 @@ private Q_SLOTS:
     void testCircleMask();
     void testGaussCircleMask();
     void testSoftCircleMask();
+
+    void testRectMask();
+    void testGaussRectMask();
+    void testSoftRectMask();
 };
 
 #endif

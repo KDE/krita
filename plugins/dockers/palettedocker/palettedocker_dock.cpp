@@ -40,7 +40,6 @@
 #include <kis_workspace_resource.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisMainWindow.h>
-#include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
 #include <kis_display_color_converter.h>
 #include <kis_canvas2.h>
@@ -52,10 +51,10 @@
 #include <squeezedcombobox.h>
 
 #include "KisPaletteModel.h"
-#include "KisColorsetChooser.h"
 #include "ui_wdgpalettedock.h"
 #include "kis_palette_delegate.h"
 #include "kis_palette_view.h"
+#include <KisColorsetChooser.h>
 
 PaletteDockerDock::PaletteDockerDock( )
     : QDockWidget(i18n("Palette"))
@@ -93,15 +92,15 @@ PaletteDockerDock::PaletteDockerDock( )
     m_serverAdapter->connectToResourceServer();
     rServer->addObserver(this);
 
-    m_colorSetChooser = new KisColorsetChooser(this);
-    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
+    m_paletteChooser = new KisColorsetChooser(this);
+    connect(m_paletteChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(setColorSet(KoColorSet*)));
 
     m_wdgPaletteDock->bnColorSets->setIcon(KisIconUtils::loadIcon("hi16-palette_library"));
     m_wdgPaletteDock->bnColorSets->setToolTip(i18n("Choose palette"));
-    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_colorSetChooser);
+    m_wdgPaletteDock->bnColorSets->setPopupWidget(m_paletteChooser);
 
     connect(m_wdgPaletteDock->cmbNameList, SIGNAL(currentIndexChanged(int)), this, SLOT(setColorFromNameList(int)));
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString defaultPalette = cfg.defaultPalette();
     KoColorSet* defaultColorSet = rServer->resourceByName(defaultPalette);
     if (defaultColorSet) {
@@ -115,7 +114,7 @@ PaletteDockerDock::~PaletteDockerDock()
     rServer->removeObserver(this);
 
     if (m_currentColorSet) {
-        KisConfig cfg;
+        KisConfig cfg(true);
         cfg.setDefaultPalette(m_currentColorSet->name());
     }
 
@@ -123,7 +122,7 @@ PaletteDockerDock::~PaletteDockerDock()
     delete m_wdgPaletteDock;
 }
 
-void PaletteDockerDock::setMainWindow(KisViewManager* kisview)
+void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
     connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResource*)), SLOT(saveToWorkspace(KisWorkspaceResource*)));

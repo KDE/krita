@@ -40,10 +40,9 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_config.h>
-#include <kis_properties_configuration.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_filter_registry_model.h>
-#include <metadata/kis_exif_info_visitor.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_filter_registry_model.h>
+#include <kis_exif_info_visitor.h>
 #include "kis_png_converter.h"
 #include <kis_iterator_ng.h>
 

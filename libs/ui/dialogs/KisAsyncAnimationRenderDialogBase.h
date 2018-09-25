@@ -55,7 +55,7 @@ class KisViewManager;
  *   - one should implement two methods to make the rendering work:
  *     - calcDirtyFrames()
  *     - createRenderer(KisImageSP image)
- *   - these methids will be called on the start of the rendering
+ *   - these methods will be called on the start of the rendering
  */
 class KRITAUI_EXPORT KisAsyncAnimationRenderDialogBase : public QObject
 {

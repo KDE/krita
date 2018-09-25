@@ -165,7 +165,7 @@ void KoFileDialog::createFileDialog()
 
 #ifdef Q_OS_OSX
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
-    QUrl volumes = QUrl::fromLocalFile("\/Volumes");
+    QUrl volumes = QUrl::fromLocalFile("/Volumes");
     if (!urls.contains(volumes)) {
         urls.append(volumes);
     }

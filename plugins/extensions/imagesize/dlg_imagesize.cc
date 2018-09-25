@@ -76,7 +76,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);
     m_heightUnitManager = new KisDocumentAwareSpinBoxUnitManager(this, KisDocumentAwareSpinBoxUnitManager::PIX_DIR_Y);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     /// configure the unit to image length, default unit is pixel and printing units are forbidden.
     m_widthUnitManager->setUnitDimension(KisSpinBoxUnitManager::IMLENGTH);
@@ -264,7 +264,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
 DlgImageSize::~DlgImageSize()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry<bool>(PARAM_PRINT_SIZE_SEPARATE, m_page->adjustPrintSizeSeparatelyCkb->isChecked());
     cfg.writeEntry<bool>(PARAM_RATIO_LOCK, m_page->constrainProportionsCkb->isChecked());
 

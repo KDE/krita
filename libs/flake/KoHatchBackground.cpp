@@ -150,7 +150,7 @@ QString KoHatchBackground::saveHatchStyle(KoShapeSavingContext &context) const
     hatchStyle.addAttribute("draw:display-name", d->name);
     hatchStyle.addAttribute("draw:color", d->lineColor.name());
 
-    hatchStyle.addAttributePt("draw:distance", d->distance);
+    hatchStyle.addAttribute("draw:distance", d->distance);
 
     hatchStyle.addAttribute("draw:rotation", QString("%1").arg(d->angle * 10));
 

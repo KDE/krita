@@ -29,7 +29,7 @@ class KRITAUI_EXPORT KisReferenceImagesLayer : public KisShapeLayer
     Q_OBJECT
 
 public:
-    KisReferenceImagesLayer(KoShapeBasedDocumentBase* shapeController, KisImageWSP image);
+    KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image);
     KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs);
 
     static KUndo2Command * addReferenceImages(KisDocument *document, QList<KoShape*> referenceImages);

@@ -21,7 +21,6 @@
 #include <QTest>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
-#include <QTest>
 #include <psd.h>
 #include <psd_header.h>
 #include <psd_colormode_block.h>

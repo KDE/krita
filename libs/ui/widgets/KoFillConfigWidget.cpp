@@ -61,7 +61,6 @@
 #include <kis_signal_compressor.h>
 #include <kis_acyclic_signal_connector.h>
 #include <kis_assert.h>
-#include <KoCanvasResourceManager.h>
 #include "kis_canvas_resource_provider.h"
 #include <KoStopGradient.h>
 #include <QInputDialog>
@@ -263,6 +262,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
 
     // TODO: for now the color picking button is disabled!
     d->ui->btnSolidColorPick->setEnabled(false);
+    d->ui->btnSolidColorPick->setVisible(false);
 
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), &d->colorChangedCompressor, SLOT(start()));
     connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));

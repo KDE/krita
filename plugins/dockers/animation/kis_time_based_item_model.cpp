@@ -84,7 +84,7 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
     : QAbstractTableModel(parent)
     , m_d(new Private())
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     using namespace std::placeholders;
     std::function<void (int)> callback(
@@ -281,7 +281,11 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
     return true;
 }
 
-KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes, const QPoint &offset, bool copyFrames, bool moveEmptyFrames, KUndo2Command *parentCommand)
+KUndo2Command* KisTimeBasedItemModel::createOffsetFramesCommand(QModelIndexList srcIndexes,
+                                                                const QPoint &offset,
+                                                                bool copyFrames,
+                                                                bool moveEmptyFrames,
+                                                                KUndo2Command *parentCommand)
 {
     if (srcIndexes.isEmpty()) return 0;
     if (offset.isNull()) return 0;

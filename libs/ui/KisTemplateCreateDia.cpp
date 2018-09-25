@@ -48,7 +48,6 @@
 #include <QMessageBox>
 #include <KoResourcePaths.h>
 #include <kis_debug.h>
-#include <kis_icon.h>
 #include <kconfiggroup.h>
 #include <QUrl>
 #include <KoFileDialog.h>

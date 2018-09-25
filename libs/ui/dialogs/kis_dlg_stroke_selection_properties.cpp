@@ -66,7 +66,7 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
     setMainWidget(m_page);
     resize(m_page->sizeHint());
 
-    QString filterConfig = KisConfig().exportConfiguration("StrokeSelection");
+    QString filterConfig = KisConfig(true).exportConfiguration("StrokeSelection");
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
     cfg->fromXML(filterConfig);
 
@@ -146,7 +146,7 @@ KisDlgStrokeSelection::~KisDlgStrokeSelection()
     _cVariant.setValue(m_options.fillColor);
     cfg->setProperty("fillColor", _cVariant);
 
-    KisConfig().setExportConfiguration("StrokeSelection", cfg);
+    KisConfig(false).setExportConfiguration("StrokeSelection", cfg);
 
     delete m_page;
 }

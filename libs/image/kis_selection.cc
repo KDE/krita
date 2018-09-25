@@ -30,11 +30,15 @@
 
 #include "kis_default_bounds.h"
 #include "kis_iterator_ng.h"
+#include "KisLazyStorage.h"
+#include "KisSelectionUpdateCompressor.h"
 
 struct Q_DECL_HIDDEN KisSelection::Private {
-    Private()
+    Private(KisSelection *q)
         : isVisible(true),
-          shapeSelection(0)
+          shapeSelection(0),
+          updateCompressor(q)
+
     {
     }
 
@@ -45,10 +49,11 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent *shapeSelection;
+    KisLazyStorage<KisSelectionUpdateCompressor> updateCompressor;
 };
 
 KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
     if (!defaultBounds) {
         defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
@@ -61,9 +66,20 @@ KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
 
 KisSelection::KisSelection(const KisSelection& rhs)
     : KisShared(),
-      m_d(new Private)
+      m_d(new Private(this))
 {
     copyFrom(rhs);
+}
+
+KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds)
+    : m_d(new Private(this))
+{
+    if (!defaultBounds) {
+        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+    }
+
+    m_d->defaultBounds = defaultBounds;
+    m_d->pixelSelection = new KisPixelSelection(source, copyMode);
 }
 
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
@@ -105,6 +121,12 @@ void KisSelection::setParentNode(KisNodeWSP node)
 {
     m_d->parentNode = node;
     m_d->pixelSelection->setParentNode(node);
+
+    // the updates come through the parent image, so all the updates
+    // that happened in the meantime are considered "stalled"
+    if (node) {
+        m_d->updateCompressor->tryProcessStalledUpdate();
+    }
 }
 
 // for testing purposes only
@@ -185,7 +207,13 @@ KisSelectionComponent* KisSelection::shapeSelection() const
 
 void KisSelection::setShapeSelection(KisSelectionComponent* shapeSelection)
 {
+    const bool needsNotification = shapeSelection != m_d->shapeSelection;
+
     m_d->shapeSelection = shapeSelection;
+
+    if (needsNotification) {
+        requestCompressedProjectionUpdate(QRect());
+    }
 }
 
 KisPixelSelectionSP KisSelection::projection() const
@@ -308,6 +336,11 @@ void KisSelection::notifySelectionChanged()
     if (!(listener = parentNode->graphListener())) return;
 
     listener->notifySelectionChanged();
+}
+
+void KisSelection::requestCompressedProjectionUpdate(const QRect &rc)
+{
+    m_d->updateCompressor->requestUpdate(rc);
 }
 
 quint8 KisSelection::selected(qint32 x, qint32 y) const

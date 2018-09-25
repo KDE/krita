@@ -52,8 +52,6 @@ public:
 
     void setScale(qreal scaleX, qreal scaleY) override;
 
-    bool shouldSupersample() const override;
-
     void toXML(QDomDocument& , QDomElement&) const override;
     void setSoftness(qreal softness) override;
 

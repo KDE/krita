@@ -41,6 +41,7 @@
 
 #include <html/HtmlSavingContext.h>
 
+#include <FlakeDebug.h>
 
 namespace {
 
@@ -121,15 +122,15 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
 {
     LayoutInterface(KoSvgTextChunkShape *_q) : q(_q) {}
 
-    KoSvgText::AutoValue textLength() const {
+    KoSvgText::AutoValue textLength() const override {
         return q->d_func()->textLength;
     }
 
-    KoSvgText::LengthAdjust lengthAdjust() const {
+    KoSvgText::LengthAdjust lengthAdjust() const override {
         return q->d_func()->lengthAdjust;
     }
 
-    int numChars() const {
+    int numChars() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->d_func()->text.isEmpty(), 0);
 
         int result = 0;
@@ -147,7 +148,7 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
-    int relativeCharPos(KoSvgTextChunkShape *child, int pos) const {
+    int relativeCharPos(KoSvgTextChunkShape *child, int pos) const override {
         QList<KoShape*> childShapes = q->shapes();
 
         int result = -1;
@@ -169,17 +170,17 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
-    bool isTextNode() const {
+    bool isTextNode() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->d_func()->text.isEmpty(), false);
         return !q->shapeCount();
     }
 
-    QString nodeText() const {
+    QString nodeText() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->d_func()->text.isEmpty(), 0);
         return !q->shapeCount() ? q->d_func()->text : QString();
     }
 
-    QVector<KoSvgText::CharTransformation> localCharTransformations() const {
+    QVector<KoSvgText::CharTransformation> localCharTransformations() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isTextNode(), QVector<KoSvgText::CharTransformation>());
 
         const QVector<KoSvgText::CharTransformation> t = q->d_func()->localTransformations;
@@ -200,7 +201,7 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
-    QVector<SubChunk> collectSubChunks() const {
+    QVector<SubChunk> collectSubChunks() const override {
         QVector<SubChunk> result;
 
         if (isTextNode()) {
@@ -463,7 +464,7 @@ bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)
         context.shapeWriter().addAttribute("style", styleString);
     }
     if (layoutInterface()->isTextNode()) {
-        qDebug() << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
+        debugFlake << "saveHTML" << this << d->text << xPos << yPos << dxPos << dyPos;
         // After adding all the styling to the <p> element, add the text
         context.shapeWriter().addTextNode(d->text);
     }
@@ -731,8 +732,6 @@ void KoSvgTextChunkShape::normalizeCharTransformations()
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()
 {
-    Q_D(KoSvgTextChunkShape);
-
     if (!isRootTextNode()) {
         KoShape *parentShape = parent();
         KIS_SAFE_ASSERT_RECOVER_RETURN(parentShape);

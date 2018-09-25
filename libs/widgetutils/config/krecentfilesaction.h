@@ -186,6 +186,7 @@ private:
     using KSelectAction::addAction;
 
     KRecentFilesActionPrivate *d_ptr;
+    QList<QUrl> d_urls;
 
     Q_PRIVATE_SLOT(d_func(), void _k_urlSelected(QAction *))
 };

@@ -91,7 +91,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     d->cursor = cursor;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
-    connect(this, SIGNAL(isActiveChanged()), SLOT(resetCursorStyle()));
+    connect(this, SIGNAL(isActiveChanged(bool)), SLOT(resetCursorStyle()));
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
@@ -153,7 +153,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 
     d->m_isActive = true;
-    emit isActiveChanged();
+    emit isActiveChanged(true);
 }
 
 void KisTool::deactivate()
@@ -169,7 +169,7 @@ void KisTool::deactivate()
     }
 
     d->m_isActive = false;
-    emit isActiveChanged();
+    emit isActiveChanged(false);
 
     KoToolBase::deactivate();
 }
@@ -295,6 +295,12 @@ QRectF KisTool::convertToPt(const QRectF &rect)
     r.setCoords(int(rect.left()) / image()->xRes(), int(rect.top()) / image()->yRes(),
                 int(rect.right()) / image()->xRes(), int( rect.bottom()) / image()->yRes());
     return r;
+}
+
+qreal KisTool::convertToPt(qreal value)
+{
+    const qreal avgResolution = 0.5 * (image()->xRes() + image()->yRes());
+    return value / avgResolution;
 }
 
 QPointF KisTool::pixelToView(const QPoint &pixelCoord) const

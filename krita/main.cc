@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 1999 Matthias Elter <me@kde.org>
- * Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- * Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+* Copyright (c) 1999 Matthias Elter <me@kde.org>
+* Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+* Copyright (c) 2015 Boudewijn Rempt <boud@valdyas.org>
+*
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU General Public License as published by
+*  the Free Software Foundation; either version 2 of the License, or
+*  (at your option) any later version.
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU General Public License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
 
 #include <stdlib.h>
 
@@ -31,13 +31,18 @@
 #include <QLocale>
 #include <QSettings>
 #include <QByteArray>
+#include <QMessageBox>
+
+#if QT_VERSION >= 0x050900
+#include <QOperatingSystemVersion>
+#endif
 
 #include <time.h>
 
 #include <KisApplication.h>
-#include <KisLoggingManager.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
+#include <kis_config.h>
 
 #include "data/splash/splash_screen.xpm"
 #include "data/splash/splash_holidays.xpm"
@@ -49,16 +54,12 @@
 #include "KisApplicationArguments.h"
 #include <opengl/kis_opengl.h>
 #include "input/KisQtWidgetsTweaker.h"
-#include <kis_debug.h>
 
 #if defined Q_OS_WIN
 #include <windows.h>
-#include <stdlib.h>
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
-#include <kis_config.h>
 #include <QLibrary>
-#include <QMessageBox>
 
 #elif defined HAVE_X11
 #include <kis_xi2_event_filter.h>
@@ -130,8 +131,6 @@ extern "C" int main(int argc, char **argv)
 #if defined HAVE_X11
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
-
-    KisLoggingManager::initialize();
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita3" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
@@ -230,48 +229,67 @@ extern "C" int main(int argc, char **argv)
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
     }
-#ifndef Q_OS_LINUX
     else {
+        dbgKrita << "Qt UI languages:" << QLocale::system().uiLanguages() << qgetenv("LANG");
+
         // And if there isn't one, check the one set by the system.
         QLocale locale = QLocale::system();
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();
             for (QString &uiLanguage : uiLanguages) {
-                uiLanguage.replace(QChar('-'), QChar('_'));
+
+                // This list of language codes that can have a specifier should
+                // be extended whenever we have translations that need it; right
+                // now, only en, pt, zh are in this situation.
+
+                if (uiLanguage.startsWith("en") || uiLanguage.startsWith("pt")) {
+                    uiLanguage.replace(QChar('-'), QChar('_'));
+                }
+                else if (uiLanguage.startsWith("zh-Hant") || uiLanguage.startsWith("zh-TW")) {
+                    uiLanguage = "zh_TW";
+                }
+                else if (uiLanguage.startsWith("zh-Hans") || uiLanguage.startsWith("zh-CN")) {
+                    uiLanguage = "zh_CN";
+                }
             }
+
             for (int i = 0; i < uiLanguages.size(); i++) {
                 QString uiLanguage = uiLanguages[i];
                 // Strip the country code
-                int idx = uiLanguage.indexOf(QChar('_'));
+                int idx = uiLanguage.indexOf(QChar('-'));
+
                 if (idx != -1) {
                     uiLanguage = uiLanguage.left(idx);
-                    uiLanguages.insert(i + 1, uiLanguage);
-                    i++;
+                    uiLanguages.replace(i, uiLanguage);
                 }
             }
-            dbgKrita << "Setting Krita's language to:" << uiLanguages;
+            dbgKrita << "Converted ui languages:" << uiLanguages;
             qputenv("LANG", uiLanguages.first().toLocal8Bit());
-            KLocalizedString::setLanguages(uiLanguages);
+#ifdef Q_OS_MAC
+            // See https://bugs.kde.org/show_bug.cgi?id=396370
+            KLocalizedString::setLanguages(QStringList() << uiLanguages.first());
+#else
+            KLocalizedString::setLanguages(QStringList() << uiLanguages);
+#endif
         }
     }
-#endif
+
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
     KLocalizedString::setApplicationDomain("krita");
 
     dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();
     dbgKrita << "Available domain translations" << KLocalizedString::availableDomainTranslations("krita");
-    dbgKrita << "Qt UI languages" << QLocale::system().uiLanguages() << qgetenv("LANG");
 
 
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());
     QString path = qgetenv("PATH");
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
-                                      + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/Frameworks" + ";"
-                                      + appdir.absolutePath() + ";"
-                                      + path));
+                                    + appdir.absolutePath() + "/lib" + ";"
+                                    + appdir.absolutePath() + "/Frameworks" + ";"
+                                    + appdir.absolutePath() + ";"
+                                    + path));
 
     dbgKrita << "PATH" << qgetenv("PATH");
 #endif
@@ -335,30 +353,51 @@ extern "C" int main(int argc, char **argv)
         app.setSplashScreen(splash);
     }
 
-
 #if defined Q_OS_WIN
+    KisConfig cfg(false);
+    bool supportedWindowsVersion = true;
+#if QT_VERSION >= 0x050900
+    QOperatingSystemVersion osVersion = QOperatingSystemVersion::current();
+    if (osVersion.type() == QOperatingSystemVersion::Windows) {
+        if (osVersion.majorVersion() >= QOperatingSystemVersion::Windows7.majorVersion()) {
+            supportedWindowsVersion  = true;
+        }
+        else {
+            supportedWindowsVersion  = false;
+            if (cfg.readEntry("WarnedAboutUnsupportedWindows", false)) {
+                QMessageBox::information(0,
+                                         i18nc("@title:window", "Krita: Warning"),
+                                         i18n("You are running an unsupported version of Windows: %1.\n"
+                                              "This is not recommended. Do not report any bugs.\n"
+                                              "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10.", osVersion.name()));
+                cfg.writeEntry("WarnedAboutUnsupportedWindows", true);
+
+            }
+        }
+    }
+#endif
+
     {
-        KisConfig cfg;
         if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
             cfg.setUseWin8PointerInput(false);
         }
         if (!cfg.useWin8PointerInput()) {
             bool hasWinTab = KisTabletSupportWin::init();
-            if (!hasWinTab) {
+            if (!hasWinTab && supportedWindowsVersion) {
                 if (KisTabletSupportWin8::isPenDeviceAvailable()) {
                     // Use WinInk automatically
                     cfg.setUseWin8PointerInput(true);
                 } else if (!cfg.readEntry("WarnedAboutMissingWinTab", false)) {
                     if (KisTabletSupportWin8::isAvailable()) {
                         QMessageBox::information(nullptr,
-                                i18n("Krita Tablet Support"),
-                                i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
-                                QMessageBox::Ok, QMessageBox::Ok);
+                                                 i18n("Krita Tablet Support"),
+                                                 i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
+                                                 QMessageBox::Ok, QMessageBox::Ok);
                     } else {
                         QMessageBox::information(nullptr,
-                                i18n("Krita Tablet Support"),
-                                i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
-                                QMessageBox::Ok, QMessageBox::Ok);
+                                                 i18n("Krita Tablet Support"),
+                                                 i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
+                                                 QMessageBox::Ok, QMessageBox::Ok);
                     }
                     cfg.writeEntry("WarnedAboutMissingWinTab", true);
                 }
@@ -388,10 +427,10 @@ extern "C" int main(int argc, char **argv)
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
-                     &app, SLOT(remoteArguments(QByteArray,QObject*)));
+                    &app, SLOT(remoteArguments(QByteArray,QObject*)));
 
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
-                     &app, SLOT(fileOpenRequested(QString)));
+                    &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
 

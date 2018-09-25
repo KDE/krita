@@ -24,7 +24,7 @@
 
 #include <KoAnnotation.h>
 #include <KoShapeController.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoTextDocument.h>
 
 AddAnnotationCommand::AddAnnotationCommand(KoAnnotation *annotation, KUndo2Command *parent)

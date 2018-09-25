@@ -51,7 +51,7 @@ class KoUnit;
 
 class KoColor;
 class KoColorSpace;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 class KoShapeLayer;
 class KoStore;
 class KoOdfReadStore;
@@ -301,7 +301,7 @@ public:
     /**
      * Performs a cleanup of unneeded backup files
      */
-    void removeAutoSaveFiles();
+    void removeAutoSaveFiles(const QString &autosaveBaseName, bool wasRecovered);
 
     /**
      * Returns true if this document or any of its internal child documents are modified.
@@ -445,6 +445,8 @@ Q_SIGNALS:
 
     void sigCompleteBackgroundSaving(const KritaUtils::ExportFileJob &job, KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
 
+    void sigReferenceImagesChanged();
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus status, const QString &errorMessage);
@@ -500,9 +502,6 @@ private:
      * This method is called from the KReadOnlyPart::openUrl method.
      */
     bool openFile();
-
-    /** @internal */
-    void setModified();
 
 public:
 
@@ -568,7 +567,7 @@ public:
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeBasedDocumentBase * shapeController() const;
+    KoShapeControllerBase * shapeController() const;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
 
@@ -590,6 +589,12 @@ public:
     /// @replace the current list of assistants with @param value
     void setAssistants(const QList<KisPaintingAssistantSP> &value);
 
+
+    void setAssistantsGlobalColor(QColor color);
+    QColor assistantsGlobalColor();
+
+
+
     /**
      * Get existing reference images layer or null if none exists.
      */
@@ -598,6 +603,11 @@ public:
     void setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateImage);
 
     bool save(bool showWarnings, KisPropertiesConfigurationSP exportConfiguration);
+
+    /**
+     * Return the bounding box of the image and associated elements (e.g. reference images)
+     */
+    QRectF documentBounds() const;
 
 Q_SIGNALS:
 

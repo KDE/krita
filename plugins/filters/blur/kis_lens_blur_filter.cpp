@@ -29,6 +29,7 @@
 
 #include "ui_wdg_lens_blur.h"
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -41,7 +42,7 @@
 #include <math.h>
 
 
-KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Lens Blur..."))
+KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&Lens Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);

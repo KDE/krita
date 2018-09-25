@@ -33,7 +33,6 @@
 #include <kis_paint_device.h>
 #include <kundo2command.h>
 #include <KoColorSpaceRegistry.h>
-#include <KisImportExportManager.h>
 #include <kis_file_name_requester.h>
 #include "ui_wdgfastcolortransfer.h"
 

@@ -50,7 +50,6 @@
 #include "kis_image.h"
 #include "kis_image_barrier_locker.h"
 #include "kis_undo_adapter.h"
-#include "KisDocument.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisViewManager.h"
@@ -64,6 +63,7 @@
 #include "kis_selection.h"
 #include "kis_selection_component.h"
 #include "flake/kis_shape_selection.h"
+#include "kis_selection_mask.h"
 #include "kis_image_config.h"
 #include "kis_infinity_manager.h"
 #include "kis_signal_compressor.h"
@@ -95,6 +95,8 @@
 #include "opengl/kis_opengl_canvas_debugger.h"
 
 #include "kis_algebra_2d.h"
+#include "kis_image_signal_router.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
@@ -149,6 +151,7 @@ public:
     QRect regionOfInterest;
 
     QRect renderingLimit;
+    int isBatchUpdateActive = 0;
 
     bool effectiveLodAllowedInImage() {
         return lodAllowedInImage && !bootstrapLodBlocked;
@@ -161,30 +164,30 @@ namespace {
 KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 {
     KoShapeManager *shapeManager = 0;
+    KisSelectionSP selection;
 
-    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-
-    if (layer) {
+    if (KisLayer *layer = dynamic_cast<KisLayer*>(node.data())) {
         KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer);
         if (shapeLayer) {
             shapeManager = shapeLayer->shapeManager();
 
-        } else {
-            KisSelectionSP selection = layer->selection();
-            if (selection && selection->hasShapeSelection()) {
-                KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
-                KIS_ASSERT_RECOVER_RETURN_VALUE(shapeSelection, 0);
-
-                shapeManager = shapeSelection->shapeManager();
-            }
         }
+    } else if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
+        selection = mask->selection();
+    }
+
+    if (!shapeManager && selection && selection->hasShapeSelection()) {
+        KisShapeSelection *shapeSelection = dynamic_cast<KisShapeSelection*>(selection->shapeSelection());
+        KIS_ASSERT_RECOVER_RETURN_VALUE(shapeSelection, 0);
+
+        shapeManager = shapeSelection->shapeManager();
     }
 
     return shapeManager;
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeBasedDocumentBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -196,7 +199,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
     m_d->bootstrapLodBlocked = true;
     connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
 
-    KisImageConfig config;
+    KisImageConfig config(false);
 
     m_d->canvasUpdateCompressor.setDelay(1000 / config.fpsLimit());
     m_d->canvasUpdateCompressor.setMode(KisSignalCompressor::FIRST_ACTIVE);
@@ -208,7 +211,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
 void KisCanvas2::setup()
 {
     // a bit of duplication from slotConfigChanged()
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->lodAllowedInImage = cfg.levelOfDetailEnabled();
 
@@ -251,12 +254,14 @@ void KisCanvas2::setup()
 
     connect(&m_d->regionOfInterestUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateRegionOfInterest()));
 
+    connect(m_d->view->document(), SIGNAL(sigReferenceImagesChanged()), this, SLOT(slotReferenceImagesChanged()));
+
     initializeFpsDecoration();
 }
 
 void KisCanvas2::initializeFpsDecoration()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     const bool shouldShowDebugOverlay =
         (canvasIsOpenGL() && cfg.enableOpenGLFramerateLogging()) ||
@@ -393,12 +398,7 @@ void KisCanvas2::KisCanvas2Private::setActiveShapeManager(KoShapeManager *shapeM
 
 KoShapeManager* KisCanvas2::shapeManager() const
 {
-    KisNodeSP node = m_d->view->currentNode();
-    KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
-
-    if (localShapeManager != m_d->currentlyActiveShapeManager) {
-        m_d->setActiveShapeManager(localShapeManager);
-    }
+    KoShapeManager *localShapeManager = this->localShapeManager();
 
     // sanity check for consistency of the local shape manager
     KIS_SAFE_ASSERT_RECOVER (localShapeManager == m_d->currentlyActiveShapeManager) {
@@ -416,6 +416,18 @@ KoSelectedShapesProxy* KisCanvas2::selectedShapesProxy() const
 KoShapeManager* KisCanvas2::globalShapeManager() const
 {
     return &m_d->shapeManager;
+}
+
+KoShapeManager *KisCanvas2::localShapeManager() const
+{
+    KisNodeSP node = m_d->view->currentNode();
+    KoShapeManager *localShapeManager = fetchShapeManagerFromNode(node);
+
+    if (localShapeManager != m_d->currentlyActiveShapeManager) {
+        m_d->setActiveShapeManager(localShapeManager);
+    }
+
+    return localShapeManager;
 }
 
 void KisCanvas2::updateInputMethodInfo()
@@ -500,7 +512,7 @@ void KisCanvas2::createQPainterCanvas()
 
 void KisCanvas2::createOpenGLCanvas()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->openGLFilterMode = cfg.openGLFilteringMode();
     m_d->currentCanvasIsOpenGL = true;
 
@@ -516,7 +528,7 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->prescaledProjection = 0;
     m_d->frameCache = 0;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QDesktopWidget dw;
     const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
     m_d->displayColorConverter.setMonitorProfile(profile);
@@ -552,6 +564,10 @@ void KisCanvas2::initializeImage()
     m_d->toolProxy.initializeImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigNotifyBatchUpdateStarted()), SLOT(slotBeginUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigNotifyBatchUpdateEnded()), SLOT(slotEndUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigRequestLodPlanesSyncBlocked(bool)), SLOT(slotSetLodUpdatesBlocked(bool)), Qt::DirectConnection);
+
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
     connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
@@ -581,7 +597,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
     if (!m_d->canvasWidget) {
         return;
     }
-    KisConfig cfg;
+    KisConfig cfg(true);
     bool needReset = (m_d->currentCanvasIsOpenGL != useOpenGL) ||
         (m_d->currentCanvasIsOpenGL &&
          m_d->openGLFilterMode != cfg.openGLFilteringMode());
@@ -599,7 +615,7 @@ void KisCanvas2::startUpdateInPatches(const QRect &imageRect)
     if (m_d->currentCanvasIsOpenGL) {
         startUpdateCanvasProjection(imageRect);
     } else {
-        KisImageConfig imageConfig;
+        KisImageConfig imageConfig(true);
         int patchWidth = imageConfig.updatePatchWidth();
         int patchHeight = imageConfig.updatePatchHeight();
 
@@ -648,7 +664,7 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
     m_d->proofingConfig = this->image()->proofingConfiguration();
     if (!m_d->proofingConfig) {
         qDebug()<<"Canvas: No proofing config found, generating one.";
-        KisImageConfig cfg;
+        KisImageConfig cfg(false);
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }
     KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
@@ -711,7 +727,7 @@ KisProofingConfigurationSP KisCanvas2::proofingConfiguration() const
     if (!m_d->proofingConfig) {
         m_d->proofingConfig = this->image()->proofingConfiguration();
         if (!m_d->proofingConfig) {
-            m_d->proofingConfig = KisImageConfig().defaultProofingconfiguration();
+            m_d->proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
         }
     }
     return m_d->proofingConfig;
@@ -744,28 +760,95 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
 void KisCanvas2::updateCanvasProjection()
 {
+    auto tryIssueCanvasUpdates = [this](const QRect &vRect) {
+        if (!m_d->isBatchUpdateActive) {
+            // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
+            if (m_d->currentCanvasIsOpenGL) {
+                m_d->savedUpdateRect = QRect();
+
+                // we already had a compression in frameRenderStartCompressor, so force the update directly
+                slotDoCanvasUpdate();
+            } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
+                m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
+
+                // we already had a compression in frameRenderStartCompressor, so force the update directly
+                slotDoCanvasUpdate();
+            }
+        }
+    };
+
+    auto uploadData = [this, tryIssueCanvasUpdates](const QVector<KisUpdateInfoSP> &infoObjects) {
+        QVector<QRect> viewportRects = m_d->canvasWidget->updateCanvasProjection(infoObjects);
+        const QRect vRect = std::accumulate(viewportRects.constBegin(), viewportRects.constEnd(),
+                                            QRect(), std::bit_or<QRect>());
+
+        tryIssueCanvasUpdates(vRect);
+    };
+
+    bool shouldExplicitlyIssueUpdates = false;
+
     QVector<KisUpdateInfoSP> infoObjects;
     while (KisUpdateInfoSP info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
-        infoObjects << info;
+        const KisMarkerUpdateInfo *batchInfo = dynamic_cast<const KisMarkerUpdateInfo*>(info.data());
+        if (batchInfo) {
+            if (!infoObjects.isEmpty()) {
+                uploadData(infoObjects);
+                infoObjects.clear();
+            }
+
+            if (batchInfo->type() == KisMarkerUpdateInfo::StartBatch) {
+                m_d->isBatchUpdateActive++;
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::EndBatch) {
+                m_d->isBatchUpdateActive--;
+                KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->isBatchUpdateActive >= 0);
+                if (m_d->isBatchUpdateActive == 0) {
+                    shouldExplicitlyIssueUpdates = true;
+                }
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::BlockLodUpdates) {
+                m_d->canvasWidget->setLodResetInProgress(true);
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::UnblockLodUpdates) {
+                m_d->canvasWidget->setLodResetInProgress(false);
+                shouldExplicitlyIssueUpdates = true;
+            }
+        } else {
+            infoObjects << info;
+        }
     }
 
-    QVector<QRect> viewportRects = m_d->canvasWidget->updateCanvasProjection(infoObjects);
-
-    const QRect vRect = std::accumulate(viewportRects.constBegin(), viewportRects.constEnd(),
-                                        QRect(), std::bit_or<QRect>());
-
-    // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
-    if (m_d->currentCanvasIsOpenGL) {
-        m_d->savedUpdateRect = QRect();
-
-        // we already had a compression in frameRenderStartCompressor, so force the update directly
-        slotDoCanvasUpdate();
-    } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
-        m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
-
-        // we already had a compression in frameRenderStartCompressor, so force the update directly
-        slotDoCanvasUpdate();
+    if (!infoObjects.isEmpty()) {
+        uploadData(infoObjects);
+    } else if (shouldExplicitlyIssueUpdates) {
+        tryIssueCanvasUpdates(m_d->coordinatesConverter->imageRectInImagePixels());
     }
+}
+
+void KisCanvas2::slotBeginUpdatesBatch()
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(KisMarkerUpdateInfo::StartBatch,
+                                      m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
+}
+
+void KisCanvas2::slotEndUpdatesBatch()
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(KisMarkerUpdateInfo::EndBatch,
+                                      m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
+}
+
+void KisCanvas2::slotSetLodUpdatesBlocked(bool value)
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(value ?
+                                KisMarkerUpdateInfo::BlockLodUpdates :
+                                KisMarkerUpdateInfo::UnblockLodUpdates,
+                                m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
 }
 
 void KisCanvas2::slotDoCanvasUpdate()
@@ -862,6 +945,11 @@ void KisCanvas2::slotUpdateRegionOfInterest()
     }
 }
 
+void KisCanvas2::slotReferenceImagesChanged()
+{
+    canvasController()->resetScrollBars();
+}
+
 void KisCanvas2::setRenderingLimit(const QRect &rc)
 {
     m_d->renderingLimit = rc;
@@ -888,7 +976,7 @@ void KisCanvas2::notifyLevelOfDetailChange()
 
     const qreal effectiveZoom = m_d->coordinatesConverter->effectiveZoom();
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     const int maxLod = cfg.numMipmapLevels();
 
     const int lod = KisLodTransform::scaleToLod(effectiveZoom, maxLod);
@@ -948,7 +1036,7 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 
 void KisCanvas2::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->vastScrolling = cfg.vastScrolling();
 
     resetCanvas(cfg.useOpenGL());
@@ -1110,7 +1198,7 @@ void KisCanvas2::setLodAllowedInCanvas(bool value)
 
     notifyLevelOfDetailChange();
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setLevelOfDetailEnabled(m_d->lodAllowedInImage);
 }
 

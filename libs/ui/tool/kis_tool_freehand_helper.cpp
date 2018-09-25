@@ -696,7 +696,7 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
     }
 
     // Poll and draw regularly
-    KisConfig cfg;
+    KisConfig cfg(true);
     int stabilizerSampleSize = cfg.stabilizerSampleSize();
     m_d->stabilizerPollTimer.setInterval(stabilizerSampleSize);
     m_d->stabilizerPollTimer.start();

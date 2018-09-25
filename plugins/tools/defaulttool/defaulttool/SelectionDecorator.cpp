@@ -42,6 +42,7 @@ SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
     , m_lineWidth(2)
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
+    , m_forceShapeOutlines(false)
 {
     m_hotPosition =
         KoFlake::AnchorPosition(
@@ -79,6 +80,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         selectedShapes.size() == 1;
 
     bool editable = false;
+    bool forceBoundngRubberLine = false;
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
@@ -86,7 +88,24 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
                 KoShape::createHandlePainterHelper(&painter, shape, converter, m_handleRadius);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
-            helper.drawRubberLine(shape->outlineRect());
+
+            if (!m_forceShapeOutlines) {
+                helper.drawRubberLine(shape->outlineRect());
+            } else {
+                QList<QPolygonF> polys = shape->outline().toSubpathPolygons();
+
+                if (polys.size() == 1) {
+                    const QPolygonF poly1 = polys[0];
+                    const QPolygonF poly2 = QPolygonF(polys[0].boundingRect());
+                    const QPolygonF nonoverlap = poly2.subtracted(poly1);
+
+                    forceBoundngRubberLine |= !nonoverlap.isEmpty();
+                }
+
+                Q_FOREACH (const QPolygonF &poly, polys) {
+                    helper.drawRubberLine(poly);
+                }
+            }
         }
 
         if (shape->isShapeEditable()) {
@@ -97,7 +116,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     const QRectF handleArea = m_selection->outlineRect();
 
     // draw extra rubber line around all the shapes
-    if (selectedShapes.size() > 1) {
+    if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
         KisHandlePainterHelper helper =
             KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
 
@@ -169,4 +188,9 @@ void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVaria
             helper.drawGradientHandle(t.map(h.pos), 1.2 * m_handleRadius);
         }
     }
+}
+
+void SelectionDecorator::setForceShapeOutlines(bool value)
+{
+    m_forceShapeOutlines = value;
 }

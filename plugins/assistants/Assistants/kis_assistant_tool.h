@@ -103,7 +103,7 @@ private Q_SLOTS:
     void slotGlobalAssistantOpacityChanged();
 
     void slotUpdateCustomColor();
-    void slotcustomOpacityChanged();
+    void slotCustomOpacityChanged();
 
 protected:
     /// Draws the editor widget controls with move, activate, and delete
@@ -146,14 +146,6 @@ private:
     PerspectiveAssistantEditionMode m_internalMode;
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     int m_assistantHelperYOffset; // used by the assistant editor icons for placement on the canvas.
-
-    // what color and opacity will the assistants have
-    // all assistant types will share this setting
-    QColor m_assistantGlobalColor;
-    float m_assistantsGlobalOpacity;
-
-    float m_assistantCustomOpacity;
-
 };
 
 

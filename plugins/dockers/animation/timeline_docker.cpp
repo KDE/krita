@@ -150,7 +150,7 @@ void TimelineDocker::unsetCanvas()
     setCanvas(0);
 }
 
-void TimelineDocker::setMainWindow(KisViewManager *view)
+void TimelineDocker::setViewManager(KisViewManager *view)
 {
     KisActionManager *actionManager = view->actionManager();
 

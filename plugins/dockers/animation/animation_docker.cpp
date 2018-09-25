@@ -66,7 +66,7 @@ AnimationDocker::AnimationDocker()
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
 
-    m_animationWidget->setupUi(mainWidget);  
+    m_animationWidget->setupUi(mainWidget);
 }
 
 AnimationDocker::~AnimationDocker()
@@ -135,7 +135,7 @@ void AnimationDocker::unsetCanvas()
     setCanvas(0);
 }
 
-void AnimationDocker::setMainWindow(KisViewManager *view)
+void AnimationDocker::setViewManager(KisViewManager *view)
 {
     setActions(view->actionManager());
 
@@ -354,7 +354,7 @@ void AnimationDocker::updatePlayPauseIcon()
 
 void AnimationDocker::updateLazyFrameIcon()
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     const bool value = cfg.lazyFrameCreationEnabled();
 
@@ -385,7 +385,7 @@ void AnimationDocker::updateDropFramesIcon()
         isPlaying = player->isPlaying();
     }
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     const bool value = cfg.animationDropFrames();
 
     m_dropFramesAction->setIcon(value ?
@@ -450,7 +450,7 @@ void AnimationDocker::slotUpdateIcons()
 
 void AnimationDocker::slotLazyFrameChanged(bool value)
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(false);
 
     if (value != cfg.lazyFrameCreationEnabled()) {
         cfg.setLazyFrameCreationEnabled(value);
@@ -460,7 +460,7 @@ void AnimationDocker::slotLazyFrameChanged(bool value)
 
 void AnimationDocker::slotDropFramesChanged(bool value)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     if (value != cfg.animationDropFrames()) {
         cfg.setAnimationDropFrames(value);
@@ -601,7 +601,7 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
     m_actionManager->addAction("last_frame", m_lastFrameAction);
 
     {
-        KisImageConfig cfg;
+        KisImageConfig cfg(true);
         setupActionButton(KisAnimationUtils::lazyFrameCreationActionName,
                           KisAction::ACTIVE_IMAGE,
                           cfg.lazyFrameCreationEnabled(),
@@ -610,7 +610,7 @@ void AnimationDocker::setActions(KisActionManager *actionMan)
     }
 
     {
-        KisConfig cfg;
+        KisConfig cfg(true);
         setupActionButton(KisAnimationUtils::dropFramesActionName,
                           KisAction::ACTIVE_IMAGE,
                           cfg.animationDropFrames(),

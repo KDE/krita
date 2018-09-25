@@ -32,7 +32,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
-
+#include "kis_assert.h"
 
 #include <QGlobalStatic>
 
@@ -389,12 +389,16 @@ QDebug operator<<(QDebug dbg, const KoColor &color)
             const quint32 *ptr = reinterpret_cast<const quint32*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;
             break;
-#ifdef HAVE_OPENEXR
         } case KoChannelInfo::FLOAT16: {
+
+#ifdef HAVE_OPENEXR
             const half *ptr = reinterpret_cast<const half*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;
-            break;
+#else
+            const quint16 *ptr = reinterpret_cast<const quint16*>(color.data() + ch->pos());
+            dbg.nospace() << "UNSUPPORTED_F16(" << *ptr << ")";
 #endif
+            break;
         } case KoChannelInfo::FLOAT32: {
             const float *ptr = reinterpret_cast<const float*>(color.data() + ch->pos());
             dbg.nospace() << *ptr;

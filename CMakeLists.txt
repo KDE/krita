@@ -48,6 +48,9 @@ if (POLICY CMP0064)
     cmake_policy(SET CMP0064 OLD)
 endif()
 
+if (POLICY CMP0071)
+    cmake_policy(SET CMP0071 OLD)
+endif()
 
 if (APPLE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
@@ -58,7 +61,7 @@ if (APPLE)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCXX AND NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9 AND NOT WIN32)
-    add_definitions(-Werror=delete-incomplete)
+
 endif()
 
  ######################
@@ -167,7 +170,11 @@ endif ()
 
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
-add_feature_info("Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
+
+option(USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking." ON)
+configure_file(config-hash-table-implementaion.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hash-table-implementaion.h)
+add_feature_info("Lock free hash table" USE_LOCK_FREE_HASH_TABLE "Use lock free hash table instead of blocking.")
 
 option(FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true." OFF)
 add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a binary release build that can package some extra things like color themes. Linux distributions that build and install Krita into a default system location should not define this option to true.")
@@ -175,7 +182,14 @@ add_feature_info("Foundation Build" FOUNDATION_BUILD "A Foundation build is a bi
 option(KRITA_ENABLE_BROKEN_TESTS "Enable tests that are marked as broken" OFF)
 add_feature_info("Enable Broken Tests" KRITA_ENABLE_BROKEN_TESTS "Runs broken test when \"make test\" is invoked (use -DKRITA_ENABLE_BROKEN_TESTS=ON to enable).")
 
+option(LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode" ON)
+configure_file(config-limit-long-tests.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-limit-long-tests.h)
+add_feature_info("Limit long tests" LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode")
+
 option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
+
+option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
+add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
 include(MacroJPEG)
 
@@ -295,7 +309,6 @@ include (MacroEnsureOutOfSourceBuild)
 macro_ensure_out_of_source_build("Compiling Krita inside the source directory is not possible. Please refer to the build instruction https://community.kde.org/Krita#Build_Instructions")
 
 
-
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 
@@ -372,8 +385,6 @@ add_definitions(
   -DQT_USE_QSTRINGBUILDER
   -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-  -DQT_USE_FAST_OPERATOR_PLUS
-  -DQT_USE_FAST_CONCATENATION
   -DQT_NO_URL_CAST_FROM_STRING
 )
 
@@ -393,8 +404,12 @@ add_definitions(-DTRANSLATION_DOMAIN=\"krita\")
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fext-numeric-literals")
+endif()
+
+option(KRITA_DEVS "For Krita developers. This modifies the DEBUG build type to use -O3 -g, while still enabling Q_ASSERT. This is necessary because the Qt5 cmake modules normally append QT_NO_DEBUG to any build type that is not labeled Debug")
+if (KRITA_DEVS)
+    set(CMAKE_CXX_FLAGS_DEBUG "-O3 -g" CACHE STRING "" FORCE)
 endif()
 
 if(UNIX)

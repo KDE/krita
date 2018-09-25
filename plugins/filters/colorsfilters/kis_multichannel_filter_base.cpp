@@ -42,6 +42,7 @@
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_config_widget.h"
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -52,7 +53,7 @@
 #include "widgets/kis_curve_widget.h"
 
 KisMultiChannelFilter::KisMultiChannelFilter(const KoID& id, const QString &entry)
-        : KisColorTransformationFilter(id, categoryAdjust(), entry)
+        : KisColorTransformationFilter(id, FiltersCategoryAdjustId, entry)
 {
     setSupportsPainting(true);
     setColorSpaceIndependence(TO_LAB16);
@@ -64,7 +65,7 @@ bool KisMultiChannelFilter::needsTransparentPixels(const KisFilterConfigurationS
     return cs->colorModelId() == AlphaColorModelID;
 }
 
-QVector<VirtualChannelInfo> KisMultiChannelFilter::getVirtualChannels(const KoColorSpace *cs)
+QVector<VirtualChannelInfo> KisMultiChannelFilter::getVirtualChannels(const KoColorSpace *cs, int maxChannels)
 {
     const bool supportsLightness =
         cs->colorModelId() != LABAColorModelID &&
@@ -99,6 +100,10 @@ QVector<VirtualChannelInfo> KisMultiChannelFilter::getVirtualChannels(const KoCo
 
     if (supportsLightness) {
         vchannels << VirtualChannelInfo(VirtualChannelInfo::LIGHTNESS, -1, 0, cs);
+    }
+
+    if (maxChannels >= 0 && vchannels.size() > maxChannels) {
+        vchannels.resize(maxChannels);
     }
 
     return vchannels;
@@ -374,12 +379,19 @@ void KisMultiChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
             setConfiguration(defaultConfiguration);
             return;
         }
-    } else if (cfg->curves().size() != int(m_virtualChannels.size())) {
-        warnKrita << "WARNING: trying to load a curve with incorrect  number of channels!";
+    } else if (cfg->curves().size() > m_virtualChannels.size()) {
+        warnKrita << "WARNING: trying to load a curve with invalid number of channels!";
         warnKrita << "WARNING:   expected:" << m_virtualChannels.size();
         warnKrita << "WARNING:        got:" << cfg->curves().size();
         return;
     } else {
+        if (cfg->curves().size() < m_virtualChannels.size()) {
+            // The configuration does not cover all our channels.
+            // This happens when loading a document from an older version, which supported fewer channels.
+            // Reset to make sure the unspecified channels have their default values.
+            resetCurves();
+        }
+
         for (int ch = 0; ch < cfg->curves().size(); ch++) {
             m_curves[ch] = cfg->curves()[ch];
         }

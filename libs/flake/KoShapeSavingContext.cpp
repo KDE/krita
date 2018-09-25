@@ -247,7 +247,7 @@ QString KoShapeSavingContext::imageHref(const KoImageData *image)
 QString KoShapeSavingContext::imageHref(const QImage &image)
 {
     // TODO this can be optimized to recognize images which have the same content
-    // Also this can use quite a lot of memeory as the qimage are all kept until
+    // Also this can use quite a lot of memory as the qimage are all kept until
     // they are saved to the store in memory
     QString href = QString("Pictures/image%1.png").arg(++d->imageId);
     d->images.insert(href, image);

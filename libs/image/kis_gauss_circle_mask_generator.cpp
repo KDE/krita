@@ -112,11 +112,6 @@ inline quint8 KisGaussCircleMaskGenerator::Private::value(qreal dist) const
     return (quint8) 255 - ret;
 }
 
-bool KisGaussCircleMaskGenerator::shouldSupersample() const
-{
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
-}
-
 bool KisGaussCircleMaskGenerator::shouldVectorize() const
 {
     return !shouldSupersample() && spikes() == 2;

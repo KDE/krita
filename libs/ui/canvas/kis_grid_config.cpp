@@ -41,7 +41,7 @@ const KisGridConfig& KisGridConfig::defaultGrid()
 
 void KisGridConfig::loadStaticData()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_lineTypeMain = LineTypeInternal(cfg.getGridMainStyle());
     m_lineTypeSubdivision = LineTypeInternal(cfg.getGridSubdivisionStyle());
@@ -52,7 +52,7 @@ void KisGridConfig::loadStaticData()
 
 void KisGridConfig::saveStaticData() const
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setGridMainStyle(m_lineTypeMain);
     cfg.setGridSubdivisionStyle(m_lineTypeSubdivision);
     cfg.setGridMainColor(m_colorMain);

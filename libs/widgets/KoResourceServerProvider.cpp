@@ -121,6 +121,7 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
     KoResourceServer<KoAbstractGradient>* gradientServer;
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KoSvgSymbolCollectionResource> *svgSymbolCollectionServer;
+    KoResourceServer<KoGamutMask>* gamutMaskServer;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -136,6 +137,9 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>("symbols", "*.svg");
     d->svgSymbolCollectionServer->loadResources(blacklistFileNames(d->svgSymbolCollectionServer->fileNames(), d->svgSymbolCollectionServer->blackListedFiles()));
+
+    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("ko_gamutmasks", "*.kgm");
+    d->gamutMaskServer->loadResources(blacklistFileNames(d->gamutMaskServer->fileNames(), d->gamutMaskServer->blackListedFiles()));
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
@@ -144,6 +148,7 @@ KoResourceServerProvider::~KoResourceServerProvider()
     delete d->gradientServer;
     delete d->paletteServer;
     delete d->svgSymbolCollectionServer;
+    delete d->gamutMaskServer;
 
     delete d;
 }
@@ -184,4 +189,10 @@ KoResourceServer<KoSvgSymbolCollectionResource> *KoResourceServerProvider::svgSy
 {
     return d->svgSymbolCollectionServer;
 }
+
+KoResourceServer<KoGamutMask>* KoResourceServerProvider::gamutMaskServer()
+{
+    return d->gamutMaskServer;
+}
+
 

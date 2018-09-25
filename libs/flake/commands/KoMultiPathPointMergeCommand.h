@@ -27,7 +27,7 @@
 class KoSelection;
 class KoPathShape;
 class KoPathPointData;
-class KoShapeBasedDocumentBase;
+class KoShapeControllerBase;
 
 
 class KRITAFLAKE_EXPORT KoMultiPathPointMergeCommand : public KUndo2Command
@@ -35,7 +35,7 @@ class KRITAFLAKE_EXPORT KoMultiPathPointMergeCommand : public KUndo2Command
 public:
     KoMultiPathPointMergeCommand(const KoPathPointData &pointData1,
                                  const KoPathPointData &pointData2,
-                                 KoShapeBasedDocumentBase *controller,
+                                 KoShapeControllerBase *controller,
                                  KoSelection *selection,
                                  KUndo2Command *parent = 0);
     ~KoMultiPathPointMergeCommand() override;

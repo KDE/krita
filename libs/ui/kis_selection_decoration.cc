@@ -36,8 +36,12 @@
 #include "kis_coordinates_converter.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
+#include "kis_image_config.h"
+#include "KisImageConfigNotifier.h"
 #include "kis_painting_tweaks.h"
 #include "KisView.h"
+#include "kis_selection_mask.h"
+#include <KisPart.h>
 
 static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
@@ -53,6 +57,7 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
                                    ANT_LENGTH, ANT_SPACE);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
+    connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
     m_antsTimer = new QTimer(this);
@@ -61,6 +66,9 @@ KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
     connect(m_antsTimer, SIGNAL(timeout()), SLOT(antsAttackEvent()));
 
     connect(&m_signalCompressor, SIGNAL(timeout()), SLOT(slotStartUpdateSelection()));
+
+    // selections should be at the top of the stack
+    setPriority(100);
 }
 
 KisSelectionDecoration::~KisSelectionDecoration()
@@ -91,9 +99,20 @@ bool KisSelectionDecoration::selectionIsActive()
 
 void KisSelectionDecoration::selectionChanged()
 {
+    KisSelectionMaskSP mask = qobject_cast<KisSelectionMask*>(view()->currentNode().data());
+    if (!mask || !mask->active() || !mask->visible(true)) {
+        mask = 0;
+    }
+
+    if (!view()->isCurrent() ||
+        view()->viewManager()->mainWindow() == KisPart::instance()->currentMainwindow()) {
+
+        view()->image()->setOverlaySelectionMask(mask);
+    }
+
     KisSelectionSP selection = view()->selection();
 
-    if (selection && selectionIsActive()) {
+    if (!mask && selection && selectionIsActive()) {
         if ((m_mode == Ants && selection->outlineCacheValid()) ||
             (m_mode == Mask && selection->thumbnailImageValid())) {
 
@@ -133,9 +152,10 @@ void KisSelectionDecoration::slotStartUpdateSelection()
 
 void KisSelectionDecoration::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisImageConfig imageConfig(true);
+    KisConfig cfg(true);
 
-    m_maskColor = cfg.selectionOverlayMaskColor();
+    m_maskColor = imageConfig.selectionOverlayMaskColor();
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
 }
 

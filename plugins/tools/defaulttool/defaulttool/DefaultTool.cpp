@@ -701,6 +701,19 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
     KoSelection *selection = koSelection();
     if (selection) {
         SelectionDecorator decorator(canvas()->resourceManager());
+
+        {
+            /**
+             * Selection masks don't render the outline of the shapes, so we should
+             * do that explicitly when rendering them via selection
+             */
+
+            KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+            KisNodeSP node = kisCanvas->viewManager()->nodeManager()->activeNode();
+            const bool isSelectionMask = node && node->inherits("KisSelectionMask");
+            decorator.setForceShapeOutlines(isSelectionMask);
+        }
+
         decorator.setSelection(selection);
         decorator.setHandleRadius(handleRadius());
         decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
@@ -718,8 +731,11 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 bool DefaultTool::isValidForCurrentLayer() const
 {
-    KisNodeSP currentNode = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    return !currentNode.isNull() && currentNode->inherits("KisShapeLayer");
+    // if the currently active node has a shape manager, then it is
+    // probably our client :)
+
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
+    return bool(kisCanvas->localShapeManager());
 }
 
 KoShapeManager *DefaultTool::shapeManager() const {

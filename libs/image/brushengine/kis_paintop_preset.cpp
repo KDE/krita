@@ -107,7 +107,7 @@ void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
 KoID KisPaintOpPreset::paintOp() const
 {
     Q_ASSERT(m_d->settings);
-    return KoID(m_d->settings->getString("paintop"), name());
+    return KoID(m_d->settings->getString("paintop"));
 }
 
 void KisPaintOpPreset::setOptionsWidget(KisPaintOpConfigWidget* widget)

@@ -36,10 +36,8 @@
 #include <QFile>
 #include <QLocale>
 #include <QMessageBox>
-#include <QMessageBox>
 #include <QProcessEnvironment>
 #include <QSettings>
-#include <QStandardPaths>
 #include <QStringList>
 #include <QStyle>
 #include <QStyleFactory>
@@ -77,7 +75,7 @@
 #include <generator/kis_generator_registry.h>
 #include <generator/kis_generator.h>
 #include <brushengine/kis_paintop_registry.h>
-#include <metadata/kis_meta_data_io_backend.h>
+#include <kis_meta_data_io_backend.h>
 #include "kisexiv2/kis_exiv2.h"
 #include "KisApplicationArguments.h"
 #include <kis_debug.h>
@@ -91,10 +89,12 @@
 #include "kis_document_aware_spin_box_unit_manager.h"
 #include "KisViewManager.h"
 #include "kis_workspace_resource.h"
-#include <KisAutoSaveRecoveryDialog.h>
 
 #include <KritaVersionWrapper.h>
 #include <dialogs/KisSessionManagerDialog.h>
+
+#include "widgets/KisScreenColorPicker.h"
+#include "KisDlgInternalColorSelector.h"
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -121,28 +121,9 @@ public:
     }
 
     ~ResetStarting()  {
-        if (m_splash) {
 
-            KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-            bool hideSplash = cfg.readEntry("HideSplashAfterStartup", false);
-            if (m_fileCount > 0 || hideSplash) {
-                m_splash->hide();
-            }
-            else {
-                m_splash->setWindowFlags(Qt::Dialog);
-                QRect r(QPoint(), m_splash->size());
-                m_splash->move(QApplication::desktop()->availableGeometry().center() - r.center());
-                m_splash->setWindowTitle(qAppName());
-                m_splash->setParent(0);
-                Q_FOREACH (QObject *o, m_splash->children()) {
-                    QWidget *w = qobject_cast<QWidget*>(o);
-                    if (w && w->isHidden()) {
-                        w->setVisible(true);
-                    }
-                }
-                m_splash->show();
-                m_splash->activateWindow();
-            }
+        if (m_splash) {
+            m_splash->hide();
         }
     }
 
@@ -158,6 +139,9 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 #ifdef Q_OS_OSX
     setMouseCoalescingEnabled(false);
 #endif
+
+    KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
+
 
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
@@ -234,7 +218,6 @@ void KisApplication::addResourceTypes()
     // All Krita's resource types
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
     KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
@@ -254,12 +237,14 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
     KoResourcePaths::addResourceType("ko_effects", "data", "/effects/");
     KoResourcePaths::addResourceType("tags", "data", "/tags/");
     KoResourcePaths::addResourceType("templates", "data", "/templates");
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
     KoResourcePaths::addResourceType("symbols", "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
+    KoResourcePaths::addResourceType("ko_gamutmasks", "data", "/gamutmasks/", true);
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
     //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
@@ -290,9 +275,7 @@ void KisApplication::addResourceTypes()
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/tool_icons/");
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/preset_icons/emblem_icons/");
-
-    // Indicate that it is now safe for users of KoResourcePaths to load resources
-    KoResourcePaths::setReady();
+    d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/gamutmasks/");
 }
 
 void KisApplication::loadResources()
@@ -374,7 +357,7 @@ void KisApplication::loadGuiPlugins()
 
 bool KisApplication::start(const KisApplicationArguments &args)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
 #if defined(Q_OS_WIN)
 #ifdef ENV32BIT
@@ -619,6 +602,7 @@ void KisApplication::hideSplashScreen()
         d->splashScreen->hide();
     }
 }
+
 
 bool KisApplication::notify(QObject *receiver, QEvent *event)
 {

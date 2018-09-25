@@ -36,11 +36,21 @@
 #include <QImage>
 #include <qmath.h>
 
+#include "FlakeDebug.h"
+
 class KoOdfGradientBackgroundPrivate : public KoShapeBackgroundPrivate
 {
 public:
     KoOdfGradientBackgroundPrivate()
-        : style(), cx(0), cy(0), startColor(), endColor(), angle(0), border(0), opacity(1.0) {};
+        : style()
+        , cx(0)
+        , cy(0)
+        , startColor()
+        , endColor()
+        , angle(0)
+        , border(0)
+        , opacity(1.0)
+    {}
     ~KoOdfGradientBackgroundPrivate() override{};
     //data
     QString style;
@@ -368,9 +378,9 @@ void KoOdfGradientBackground::renderRectangleGradient(QImage& buffer) const
 void KoOdfGradientBackground::debug() const
 {
     Q_D(const KoOdfGradientBackground);
-    qDebug() << "cx,cy: "<< d->cx << d->cy;
-    qDebug() << "style" << d->style;
-    qDebug() << "colors" << d->startColor << d->endColor;
-    qDebug() << "angle:" << d->angle;
-    qDebug() << "border" << d->border;
+    debugFlake << "cx,cy: "<< d->cx << d->cy;
+    debugFlake << "style" << d->style;
+    debugFlake << "colors" << d->startColor << d->endColor;
+    debugFlake << "angle:" << d->angle;
+    debugFlake << "border" << d->border;
 }

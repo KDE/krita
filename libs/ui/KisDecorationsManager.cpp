@@ -68,13 +68,13 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
 
     m_imageView = imageView;
 
-    if (m_imageView && !assistantsDecoration()) {
-        KisPaintingAssistantsDecoration *deco = new KisPaintingAssistantsDecoration(m_imageView);
+    if (m_imageView && !referenceImagesDecoration()) {
+        KisReferenceImagesDecoration *deco = new KisReferenceImagesDecoration(m_imageView, imageView->document());
         m_imageView->canvasBase()->addDecoration(deco);
     }
 
-    if (m_imageView && !referenceImagesDecoration()) {
-        KisReferenceImagesDecoration *deco = new KisReferenceImagesDecoration(m_imageView, imageView->document());
+    if (m_imageView && !assistantsDecoration()) {
+        KisPaintingAssistantsDecoration *deco = new KisPaintingAssistantsDecoration(m_imageView);
         m_imageView->canvasBase()->addDecoration(deco);
     }
 

@@ -99,6 +99,10 @@ KisMask::KisMask(const KisMask& rhs)
 
 KisMask::~KisMask()
 {
+    if (m_d->selection) {
+        m_d->selection->setParentNode(0);
+    }
+
     delete m_d;
 }
 
@@ -170,12 +174,17 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
             delete selection->flatten();
         }
     } else if (copyFromDevice) {
-        selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        KritaUtils::DeviceCopyMode copyMode =
+            q->inherits("KisFilterMask") || q->inherits("KisTransparencyMask") ?
+            KritaUtils::CopyAllFrames : KritaUtils::CopySnapshot;
 
-        QRect rc(copyFromDevice->extent());
-        KisPainter::copyAreaOptimized(rc.topLeft(), copyFromDevice, selection->pixelSelection(), rc);
-        selection->pixelSelection()->invalidateOutlineCache();
+        selection = new KisSelection(copyFromDevice, copyMode, new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
+        KisPixelSelectionSP pixelSelection = selection->pixelSelection();
+        if (pixelSelection->framesInterface()) {
+            q->addKeyframeChannel(pixelSelection->keyframeChannel());
+            q->enableAnimation();
+        }
     } else {
         selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
         selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, selection->pixelSelection()->colorSpace()));
@@ -246,11 +255,16 @@ QRect KisMask::decorateRect(KisPaintDeviceSP &src,
     return rc;
 }
 
+bool KisMask::paintsOutsideSelection() const
+{
+    return false;
+}
+
 void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy maskPos) const
 {
     if (selection()) {
 
-        m_d->selection->updateProjection(applyRect);
+        flattenSelectionProjection(m_d->selection, applyRect);
 
         KisSelectionSP effectiveSelection = m_d->selection;
         QRect effectiveExtent;
@@ -259,16 +273,18 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
             // Access temporary target under the lock held
             KisIndirectPaintingSupport::ReadLocker l(this);
 
-            // extent of m_d->selection should also be accessed under a lock,
-            // because it might be being merged in by the temporary target atm
-            effectiveExtent = effectiveSelection->selectedRect();
+            if (!paintsOutsideSelection()) {
+                // extent of m_d->selection should also be accessed under a lock,
+                // because it might be being merged in by the temporary target atm
+                effectiveExtent = effectiveSelection->selectedRect();
 
-            if (hasTemporaryTarget()) {
-                effectiveExtent |= temporaryTarget()->extent();
-            }
+                if (hasTemporaryTarget()) {
+                    effectiveExtent |= temporaryTarget()->extent();
+                }
 
-            if(!effectiveExtent.intersects(applyRect)) {
-                return;
+                if(!effectiveExtent.intersects(applyRect)) {
+                    return;
+                }
             }
 
             if (hasTemporaryTarget()) {
@@ -285,28 +301,44 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
             }
         }
 
-        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
-
-        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
-
-        // masks don't have any compositioning
-        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
-        m_d->paintDeviceCache.putDevice(cacheDevice);
+        mergeInMaskInternal(projection, effectiveSelection, applyRect, needRect, maskPos);
 
         if (effectiveSelection != m_d->selection) {
             m_d->cachedSelection.putSelection(effectiveSelection);
         }
 
     } else {
-        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
+        mergeInMaskInternal(projection, 0, applyRect, needRect, maskPos);
+    }
+}
 
-        cacheDevice->makeCloneFromRough(projection, needRect);
-        projection->clear(needRect);
+void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
+                                  KisSelectionSP effectiveSelection,
+                                  const QRect &applyRect,
+                                  const QRect &preparedNeedRect,
+                                  KisNode::PositionToFilthy maskPos) const
+{
+    KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
+
+    if (effectiveSelection) {
+        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
+
+        // masks don't have any compositioning
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
+
+    } else {
+        cacheDevice->makeCloneFromRough(projection, preparedNeedRect);
+        projection->clear(preparedNeedRect);
 
         decorateRect(cacheDevice, projection, applyRect, maskPos);
-
-        m_d->paintDeviceCache.putDevice(cacheDevice);
     }
+
+    m_d->paintDeviceCache.putDevice(cacheDevice);
+}
+
+void KisMask::flattenSelectionProjection(KisSelectionSP selection, const QRect &dirtyRect) const
+{
+    selection->updateProjection(dirtyRect);
 }
 
 QRect KisMask::needRect(const QRect &rect,  PositionToFilthy pos) const
@@ -458,7 +490,7 @@ void KisMask::baseNodeChangedCallback()
     KisNodeSP up = parent();
     KisLayer *layer = dynamic_cast<KisLayer*>(up.data());
     if (layer) {
-        layer->notifyChildMaskChanged(this);
+        layer->notifyChildMaskChanged();
     }
     KisNode::baseNodeChangedCallback();
 }

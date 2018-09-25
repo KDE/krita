@@ -21,7 +21,6 @@
 #include <QTest>
 #include <QCoreApplication>
 
-#include <QTest>
 #include <QBuffer>
 
 #include "kis_debug.h"
@@ -31,9 +30,10 @@
 #include "kis_meta_data_schema_registry.h"
 #include "kis_meta_data_store.h"
 #include "kis_meta_data_validator.h"
-#include <metadata/kis_meta_data_value.h>
+#include <kis_meta_data_value.h>
 #include "kisexiv2/kis_exiv2.h"
 #include "filestest.h"
+#include "sdk/tests/kistest.h"
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the metadata parser in krita"
@@ -106,5 +106,5 @@ void KisExiv2Test::testExifLoader()
     QCOMPARE(store->getEntry(mknSchema, "RawData").value(), Value("SFBNZXQ="));
 }
 
-QTEST_MAIN(KisExiv2Test)
+KISTEST_MAIN(KisExiv2Test)
 

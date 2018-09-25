@@ -32,13 +32,13 @@
 #include <QShowEvent>
 #include <QFontDatabase>
 #include <QWidgetAction>
+#include <QDesktopWidget>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
 
 #include <KoDockRegistry.h>
 
-#include <kis_icon.h>
 #include <kis_icon.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_config_widget.h>
@@ -56,11 +56,9 @@
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings_update_proxy.h>
 
-
 // ones from brush engine selector
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
-
 
 struct KisPaintOpPresetsPopup::Private
 {
@@ -142,7 +140,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     QActionGroup *actionGroup = new QActionGroup(this);
 
-    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
+    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig(true).presetChooserViewMode();
 
     QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
@@ -184,7 +182,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     // show/hide buttons
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
     m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
@@ -467,7 +465,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         m_d->settingsWidget = dynamic_cast<KisPaintOpConfigWidget*>(widget);
         KIS_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         if (m_d->settingsWidget->supportScratchBox() && cfg.scratchpadVisible()) {
             slotSwitchScratchpad(true);
         } else {
@@ -534,11 +532,10 @@ void KisPaintOpPresetsPopup::switchDetached(bool show)
 
         }
         else {
-            KisConfig cfg;
             parentWidget()->hide();
         }
 
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.setPaintopPopupDetached(m_d->detached);
     }
 }
@@ -673,7 +670,12 @@ void KisPaintOpPresetsPopup::showEvent(QShowEvent *)
 void KisPaintOpPresetsPopup::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
-    emit sizeChanged();
+    if (parentWidget()) {
+        // Make sure resizing doesn't push this widget out of the screen
+        QRect screenRect = QApplication::desktop()->availableGeometry(this);
+        QRect newPositionRect = kisEnsureInRect(parentWidget()->geometry(), screenRect);
+        parentWidget()->setGeometry(newPositionRect);
+    }
 }
 
 bool KisPaintOpPresetsPopup::detached() const
@@ -698,7 +700,7 @@ void KisPaintOpPresetsPopup::slotSwitchScratchpad(bool visible)
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     }
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setScratchpadVisible(visible);
 }
 
@@ -805,7 +807,7 @@ void KisPaintOpPresetsPopup::updateThemedIcons()
     }
 
     // we store whether the scratchpad if visible in the config.
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (cfg.scratchpadVisible()) {
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     } else {

@@ -91,7 +91,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
     KisStorePaintDeviceWriter writer(store);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
-    
+
     // Layer data
     if (store->open("layerdata")) {
         if (!dev->write(writer)) {
@@ -154,7 +154,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
 
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
-    KisConfig cfg;
+    KisConfig cfg(true);
     const KoColorProfile *monitorProfile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
     qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
     if (!qimage.isNull() && mimeData) {
@@ -191,7 +191,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
-        
+
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;
@@ -278,7 +278,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
         if (qimage.isNull())
             return KisPaintDeviceSP(0);
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         quint32 behaviour = cfg.pasteBehaviour();
         bool saveColorSetting = false;
 

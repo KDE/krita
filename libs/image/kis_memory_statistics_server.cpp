@@ -157,7 +157,7 @@ KisMemoryStatisticsServer::fetchMemoryStatistics(KisImageSP image) const
 
     stats.swapSize = tileStats.swapSize;
 
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     stats.tilesHardLimit = cfg.tilesHardLimit() * MiB;
     stats.tilesSoftLimit = cfg.tilesSoftLimit() * MiB;

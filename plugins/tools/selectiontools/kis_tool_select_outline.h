@@ -48,11 +48,10 @@ public:
 
     void mouseMoveEvent(KoPointerEvent *event) override;
 
-    QMenu* popupActionsMenu() override;
+    void resetCursorStyle();
 
 public Q_SLOTS:
     void deactivate() override;
-    void setSelectionAction(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;

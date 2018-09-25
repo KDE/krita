@@ -752,11 +752,11 @@ void KisWalkersTest::testRefreshSubtreeVisiting()
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
         QStringList orderList = order.split(',');
-        QRect accessRect(-10,-10,50,50);
+        QRect accessRect(-4,-4,38,38);
 
         reportStartWith("root");
         walker.collectRects(image->rootLayer(), testRect);
-        verifyResult(walker, orderList, accessRect, true, true);
+        verifyResult(walker, orderList, accessRect, false, true);
     }
 }
 
@@ -813,7 +813,7 @@ void KisWalkersTest::testFullRefreshVisiting()
 
         reportStartWith("root");
         walker.collectRects(groupLayer, testRect);
-        verifyResult(walker, orderList, accessRect, true, true);
+        verifyResult(walker, orderList, accessRect, false, true);
     }
 }
 

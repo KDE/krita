@@ -30,6 +30,7 @@
 
 #include "ui_wdg_gaussian_blur.h"
 
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -40,7 +41,7 @@
 #include <math.h>
 
 
-KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Gaussian Blur..."))
+KisGaussianBlurFilter::KisGaussianBlurFilter() : KisFilter(id(), FiltersCategoryBlurId, i18n("&Gaussian Blur..."))
 {
     setSupportsPainting(true);
     setSupportsAdjustmentLayers(true);
@@ -100,7 +101,7 @@ QRect KisGaussianBlurFilter::neededRect(const QRect & rect, const KisFilterConfi
 
     QVariant value;
     /**
-     * NOTE: integer devision by two is done on purpose,
+     * NOTE: integer division by two is done on purpose,
      *       because the kernel size is always odd
      */
     const int halfWidth = _config->getProperty("horizRadius", value) ? KisGaussianKernel::kernelSizeFromRadius(t.scale(value.toFloat())) / 2 : 5;

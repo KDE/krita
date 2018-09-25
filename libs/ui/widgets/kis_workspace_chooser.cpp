@@ -120,7 +120,7 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(QS
     widgets.itemChooser->showTaggingBar(false);
     widgets.saveButton = new QPushButton(i18n("Save"));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     widgets.itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
                                          cfg.kineticScrollingSensitivity(),
                                          cfg.kineticScrollingScrollbar());

@@ -11,7 +11,7 @@ https://creativecommons.org/publicdomain/zero/1.0/legalcode
 '''
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import (QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout)
+from PyQt5.QtWidgets import (QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QCheckBox)
 from . import tenbrushesdialog, dropbutton
 import krita
 
@@ -25,6 +25,7 @@ class UITenBrushes(object):
         self.buttonBox = QDialogButtonBox(self.mainDialog)
         self.vbox = QVBoxLayout(self.mainDialog)
         self.hbox = QHBoxLayout(self.mainDialog)
+        self.checkBox = QCheckBox(i18n("&Activate previous brush when pressing the shortcut for the second time"), self.mainDialog)
 
         self.buttonBox.accepted.connect(self.mainDialog.accept)
         self.buttonBox.rejected.connect(self.mainDialog.reject)
@@ -42,11 +43,19 @@ class UITenBrushes(object):
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(QLabel(i18n("Select the brush preset, then click on the button you want to use to select the preset")))
         self.vbox.addWidget(self.presetChooser)
+
+        self.checkBox.setChecked(self.tenbrushes.activatePrev)
+        self.checkBox.toggled.connect(self.setActivatePrev)
+        self.vbox.addWidget(self.checkBox)
+
         self.vbox.addWidget(self.buttonBox)
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()
         self.mainDialog.exec_()
+
+    def setActivatePrev(self, checked):
+        self.tenbrushes.activatePrev = checked
 
     def loadButtons(self):
         self.tenbrushes.buttons = []

@@ -227,7 +227,7 @@ public:
     /**
      * Informs this layers that its masks might have changed.
      */
-    void notifyChildMaskChanged(KisNodeSP changedChildMask);
+    void notifyChildMaskChanged();
 
 public:
     qint32 x() const override;
@@ -261,7 +261,7 @@ public:
     /**
      * @return the list of effect masks
      */
-    const QList<KisEffectMaskSP> &effectMasks() const;
+    QList<KisEffectMaskSP> effectMasks() const;
 
     /**
      * @return the list of effect masks up to a certain node
@@ -384,13 +384,10 @@ protected:
 
     bool canMergeAndKeepBlendOptions(KisLayerSP otherLayer);
 
-    void updateSelectionMask();
-
-    void updateEffectMasks();
-
     QList<KisEffectMaskSP> searchEffectMasks(KisNodeSP lastNode) const;
 
 private:
+    friend class KisLayerMasksCache;
     friend class KisLayerProjectionPlane;
     friend class KisTransformMask;
     friend class KisLayerTest;

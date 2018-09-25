@@ -26,24 +26,26 @@
 
 void KisStoreLimitsTest::testLimits()
 {
-    KisImageConfig config;
+    KisImageConfig config(false);
     config.setMemoryHardLimitPercent(50);
     config.setMemorySoftLimitPercent(25);
     config.setMemoryPoolLimitPercent(10);
 
-    const int totalRAM = KisImageConfig::totalRAM();
+    int emergencyThreshold = MiB_TO_METRIC(config.tilesHardLimit());
 
-    // values are shifted because of the pooler part
-    const int halfRAMMetric = MiB_TO_METRIC(int(totalRAM * 0.4));
-    const int quarterRAMMetric = MiB_TO_METRIC(int(totalRAM * 0.15));
+    int hardLimitThreshold = emergencyThreshold - (emergencyThreshold / 8);
+    int hardLimit = hardLimitThreshold - (hardLimitThreshold / 8);
+
+    int softLimitThreshold = qBound(0, MiB_TO_METRIC(config.tilesSoftLimit()), hardLimitThreshold);
+    int softLimit = softLimitThreshold - softLimitThreshold / 8;
 
     KisStoreLimits limits;
 
-    QCOMPARE(limits.emergencyThreshold(), halfRAMMetric);
-    QCOMPARE(limits.hardLimitThreshold(), halfRAMMetric * 7 / 8);
-    QCOMPARE(limits.hardLimit(), (halfRAMMetric * 7 / 8) * 7 / 8);
-    QCOMPARE(limits.softLimitThreshold(), quarterRAMMetric);
-    QCOMPARE(limits.softLimit(), quarterRAMMetric * 7 / 8);
+    QCOMPARE(limits.emergencyThreshold(), emergencyThreshold);
+    QCOMPARE(limits.hardLimitThreshold(), hardLimitThreshold);
+    QCOMPARE(limits.hardLimit(), hardLimit);
+    QCOMPARE(limits.softLimitThreshold(), softLimitThreshold);
+    QCOMPARE(limits.softLimit(), softLimit);
 }
 
 QTEST_MAIN(KisStoreLimitsTest)

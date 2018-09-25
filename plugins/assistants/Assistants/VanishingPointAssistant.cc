@@ -157,17 +157,17 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
         pathCenter.addEllipse(ellipse);
         drawPath(gc, pathCenter, isSnappingActive());
 
-        QColor paintingColor = useCustomColor() ? assistantCustomColor() : assistantsGlobalColor();
+        QColor paintingColor = effectiveAssistantColor();
 
 
         // draw the lines connecting the different nodes
         QPen penStyle(paintingColor, 2.0, Qt::SolidLine);
 
         if (!isSnappingActive()) {
-            penStyle.setColor(QColor(m_canvas->paintingAssistantsDecoration()->globalAssistantsColor().red(),
-                                     m_canvas->paintingAssistantsDecoration()->globalAssistantsColor().green(),
-                                     m_canvas->paintingAssistantsDecoration()->globalAssistantsColor().blue(),
-                                     m_canvas->paintingAssistantsDecoration()->globalAssistantsColor().alpha()*.2));
+            QColor snappingColor = paintingColor;
+            snappingColor.setAlpha(snappingColor.alpha() * 0.2);
+
+            penStyle.setColor(snappingColor);
         }
 
         gc.save();

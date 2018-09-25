@@ -46,7 +46,6 @@
 #include "kis_image_animation_interface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_command_utils.h"
-#include "kis_processing_applicator.h"
 #include "commands_new/kis_change_projection_color_command.h"
 #include "kis_layer_properties_icons.h"
 #include "lazybrush/kis_colorize_mask.h"
@@ -54,6 +53,7 @@
 #include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
 #include "krita_utils.h"
+#include "kis_image_signal_router.h"
 
 
 namespace KisLayerUtils {
@@ -575,6 +575,19 @@ namespace KisLayerUtils {
         m_image->signalRouter()->emitNotification(type);
     }
 
+    SelectGlobalSelectionMask::SelectGlobalSelectionMask(KisImageSP image)
+        : m_image(image)
+    {
+    }
+
+    void SelectGlobalSelectionMask::redo() {
+
+        KisImageSignalType type =
+                ComplexNodeReselectionSignal(m_image->rootLayer()->selectionMask(), KisNodeList());
+        m_image->signalRouter()->emitNotification(type);
+
+    }
+
     KisLayerSP constructDefaultLayer(KisImageSP image) {
         return new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
     }
@@ -765,7 +778,7 @@ namespace KisLayerUtils {
                     }
                 }
 
-                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [this](KisNodeSP node) {
+                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [](KisNodeSP node) {
                   return !node->userLocked();
                 });
                 safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
@@ -1394,12 +1407,17 @@ namespace KisLayerUtils {
         mergeMultipleLayersImpl(image, mergedNodes, layer, true, kundo2_i18n("Flatten Layer"));
     }
 
-    void flattenImage(KisImageSP image)
+    void flattenImage(KisImageSP image, KisNodeSP activeNode)
     {
+        if (!activeNode) {
+            activeNode = image->root()->lastChild();
+        }
+
+
         KisNodeList mergedNodes;
         mergedNodes << image->root();
 
-        mergeMultipleLayersImpl(image, mergedNodes, 0, true, kundo2_i18n("Flatten Image"));
+        mergeMultipleLayersImpl(image, mergedNodes, activeNode, true, kundo2_i18n("Flatten Image"));
     }
 
     KisSimpleUpdateCommand::KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent)
@@ -1415,17 +1433,6 @@ namespace KisLayerUtils {
     {
         Q_FOREACH(KisNodeSP node, nodes) {
             node->setDirty(node->extent());
-        }
-    }
-
-    void recursiveApplyNodes(KisNodeSP node, std::function<void(KisNodeSP)> func)
-    {
-        func(node);
-
-        node = node->firstChild();
-        while (node) {
-            recursiveApplyNodes(node, func);
-            node = node->nextSibling();
         }
     }
 
@@ -1465,6 +1472,20 @@ namespace KisLayerUtils {
                 delayedUpdate->forceUpdateTimedNode();
             }
         });
+    }
+
+    KisImageSP findImageByHierarchy(KisNodeSP node)
+    {
+        while (node) {
+            const KisLayer *layer = dynamic_cast<const KisLayer*>(node.data());
+            if (layer) {
+                return layer->image();
+            }
+
+            node = node->parent();
+        }
+
+        return 0;
     }
 
 }

@@ -27,6 +27,9 @@
 #include <QStack>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 
 #include <KoIcon.h>
 #include <kis_icon.h>
@@ -55,6 +58,7 @@
 #include "krita_utils.h"
 #include "kis_layer_properties_icons.h"
 #include "kis_layer_utils.h"
+#include "kis_projection_leaf.h"
 
 
 class KisSafeProjection {
@@ -133,8 +137,88 @@ private:
     QList<KisCloneLayerWSP> m_clonesList;
 };
 
+class KisLayerMasksCache {
+public:
+    KisLayerMasksCache(KisLayer *parent)
+        : m_parent(parent)
+    {
+    }
+
+    KisSelectionMaskSP selectionMask() {
+        QReadLocker readLock(&m_lock);
+
+        if (!m_isSelectionMaskValid) {
+            readLock.unlock();
+
+            QWriteLocker writeLock(&m_lock);
+            if (!m_isSelectionMaskValid) {
+                KoProperties properties;
+                properties.setProperty("active", true);
+                properties.setProperty("visible", true);
+                QList<KisNodeSP> masks = m_parent->childNodes(QStringList("KisSelectionMask"), properties);
+
+                // return the first visible mask
+                Q_FOREACH (KisNodeSP mask, masks) {
+                    if (mask) {
+                        m_selectionMask = dynamic_cast<KisSelectionMask*>(mask.data());
+                        break;
+                    }
+                }
+                m_isSelectionMaskValid = true;
+            }
+
+            // return under write lock
+            return m_selectionMask;
+        }
+
+        // return under read lock
+        return m_selectionMask;
+    }
+
+    QList<KisEffectMaskSP> effectMasks() {
+        QReadLocker readLock(&m_lock);
+
+        if (!m_isEffectMasksValid) {
+            readLock.unlock();
+
+            QWriteLocker writeLock(&m_lock);
+            if (!m_isEffectMasksValid) {
+                m_effectMasks = m_parent->searchEffectMasks(0);
+                m_isEffectMasksValid = true;
+            }
+
+            // return under write lock
+            return m_effectMasks;
+        }
+
+        // return under read lock
+        return m_effectMasks;
+    }
+
+    void setDirty()
+    {
+        QWriteLocker l(&m_lock);
+        m_isSelectionMaskValid = false;
+        m_isEffectMasksValid = false;
+        m_selectionMask = 0;
+        m_effectMasks.clear();
+    }
+
+private:
+    KisLayer *m_parent;
+
+    QReadWriteLock m_lock;
+
+    bool m_isSelectionMaskValid = false;
+    bool m_isEffectMasksValid = false;
+    KisSelectionMaskSP m_selectionMask;
+    QList<KisEffectMaskSP> m_effectMasks;
+};
+
 struct Q_DECL_HIDDEN KisLayer::Private
 {
+    Private(KisLayer *q) : masksCache(q) {}
+
     KisImageWSP image;
     QBitArray channelFlags;
     KisMetaData::Store* metaDataStore;
@@ -142,30 +226,28 @@ struct Q_DECL_HIDDEN KisLayer::Private
     KisCloneLayersList clonesList;
 
     KisPSDLayerStyleSP layerStyle;
-    KisAbstractProjectionPlaneSP layerStyleProjectionPlane;
+    KisLayerStyleProjectionPlaneSP layerStyleProjectionPlane;
 
     KisAbstractProjectionPlaneSP projectionPlane;
 
-    KisSelectionMaskSP selectionMask;
-    QList<KisEffectMaskSP> effectMasks;
+    KisLayerMasksCache masksCache;
 };
 
 
 KisLayer::KisLayer(KisImageWSP image, const QString &name, quint8 opacity)
         : KisNode()
-        , m_d(new Private)
+        , m_d(new Private(this))
 {
     setName(name);
     setOpacity(opacity);
     m_d->image = image;
     m_d->metaDataStore = new KisMetaData::Store();
     m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
-    notifyChildMaskChanged(KisNodeSP());
 }
 
 KisLayer::KisLayer(const KisLayer& rhs)
         : KisNode(rhs)
-        , m_d(new Private())
+        , m_d(new Private(this))
 {
     if (this != &rhs) {
         m_d->image = rhs.m_d->image;
@@ -178,9 +260,15 @@ KisLayer::KisLayer(const KisLayer& rhs)
         m_d->projectionPlane = toQShared(new KisLayerProjectionPlane(this));
 
         if (rhs.m_d->layerStyle) {
-            setLayerStyle(rhs.m_d->layerStyle->clone());
+            m_d->layerStyle = rhs.m_d->layerStyle->clone();
+
+            if (rhs.m_d->layerStyleProjectionPlane) {
+                m_d->layerStyleProjectionPlane = toQShared(
+                    new KisLayerStyleProjectionPlane(*rhs.m_d->layerStyleProjectionPlane,
+                                                     this,
+                                                     m_d->layerStyle));
+            }
         }
-        notifyChildMaskChanged(KisNodeSP());
     }
 }
 
@@ -226,9 +314,9 @@ void KisLayer::setLayerStyle(KisPSDLayerStyleSP layerStyle)
     if (layerStyle) {
         m_d->layerStyle = layerStyle;
 
-        KisAbstractProjectionPlaneSP plane = !layerStyle->isEmpty() ?
-            KisAbstractProjectionPlaneSP(new KisLayerStyleProjectionPlane(this)) :
-            KisAbstractProjectionPlaneSP(0);
+        KisLayerStyleProjectionPlaneSP plane = !layerStyle->isEmpty() ?
+            KisLayerStyleProjectionPlaneSP(new KisLayerStyleProjectionPlane(this)) :
+            KisLayerStyleProjectionPlaneSP(0);
 
         m_d->layerStyleProjectionPlane = plane;
     } else {
@@ -462,34 +550,14 @@ void KisLayer::updateClones(const QRect &rect)
     m_d->clonesList.setDirty(rect);
 }
 
-void KisLayer::notifyChildMaskChanged(KisNodeSP changedChildMask)
+void KisLayer::notifyChildMaskChanged()
 {
-    Q_UNUSED(changedChildMask);
-
-    updateSelectionMask();
-    updateEffectMasks();
+    m_d->masksCache.setDirty();
 }
 
 KisSelectionMaskSP KisLayer::selectionMask() const
 {
-    return m_d->selectionMask;
-}
-
-void KisLayer::updateSelectionMask()
-{
-    KoProperties properties;
-    properties.setProperty("active", true);
-    properties.setProperty("visible", true);
-    QList<KisNodeSP> masks = childNodes(QStringList("KisSelectionMask"), properties);
-
-    // return the first visible mask
-    Q_FOREACH (KisNodeSP mask, masks) {
-        if (mask) {
-            m_d->selectionMask = dynamic_cast<KisSelectionMask*>(mask.data());
-            return;
-        }
-    }
-    m_d->selectionMask = KisSelectionMaskSP();
+    return m_d->masksCache.selectionMask();
 }
 
 KisSelectionSP KisLayer::selection() const
@@ -510,9 +578,9 @@ KisSelectionSP KisLayer::selection() const
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-const QList<KisEffectMaskSP> &KisLayer::effectMasks() const
+QList<KisEffectMaskSP> KisLayer::effectMasks() const
 {
-    return m_d->effectMasks;
+    return m_d->masksCache.effectMasks();
 }
 
 QList<KisEffectMaskSP> KisLayer::effectMasks(KisNodeSP lastNode) const
@@ -525,27 +593,27 @@ QList<KisEffectMaskSP> KisLayer::effectMasks(KisNodeSP lastNode) const
     }
 }
 
-void KisLayer::updateEffectMasks()
-{
-    m_d->effectMasks = searchEffectMasks(KisNodeSP());
-}
-
 QList<KisEffectMaskSP> KisLayer::searchEffectMasks(KisNodeSP lastNode) const
 {
     QList<KisEffectMaskSP> masks;
 
-    if (childCount() > 0) {
-        KoProperties properties;
-        properties.setProperty("visible", true);
-        QList<KisNodeSP> nodes = childNodes(QStringList("KisEffectMask"), properties);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(projectionLeaf());
 
-        Q_FOREACH (const KisNodeSP& node, nodes) {
-            if (node == lastNode) break;
+    KisProjectionLeafSP child = projectionLeaf()->firstChild();
+    while (child) {
+        if (child->node() == lastNode) break;
 
-            KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(node.data()));
-            if (mask)
+        KIS_SAFE_ASSERT_RECOVER_NOOP(child);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(child->node());
+
+        if (child->visible()) {
+            KisEffectMaskSP mask = dynamic_cast<KisEffectMask*>(const_cast<KisNode*>(child->node().data()));
+            if (mask) {
                 masks.append(mask);
+            }
         }
+
+        child = child->nextSibling();
     }
 
     return masks;
@@ -553,7 +621,7 @@ QList<KisEffectMaskSP> KisLayer::searchEffectMasks(KisNodeSP lastNode) const
 
 bool KisLayer::hasEffectMasks() const
 {
-    return  !m_d->effectMasks.empty();
+    return  !m_d->masksCache.effectMasks().isEmpty();
 }
 
 QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,
@@ -784,7 +852,7 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 KisAbstractProjectionPlaneSP KisLayer::projectionPlane() const
 {
     return m_d->layerStyleProjectionPlane ?
-        m_d->layerStyleProjectionPlane : m_d->projectionPlane;
+        KisAbstractProjectionPlaneSP(m_d->layerStyleProjectionPlane) : m_d->projectionPlane;
 }
 
 KisAbstractProjectionPlaneSP KisLayer::internalProjectionPlane() const
@@ -840,7 +908,7 @@ QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
 void KisLayer::childNodeChanged(KisNodeSP changedChildNode)
 {
     if (dynamic_cast<KisMask*>(changedChildNode.data())) {
-        notifyChildMaskChanged(changedChildNode);
+        notifyChildMaskChanged();
     }
 }
 

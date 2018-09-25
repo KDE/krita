@@ -27,14 +27,15 @@
 #include "kis_math_toolbox.h"
 #include "KoColorSpaceRegistry.h"
 #include <KoChannelInfo.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include "kis_iterator_ng.h"
 #include "kundo2command.h"
 #include "kis_painter.h"
 
 KisFilterPhongBumpmap::KisFilterPhongBumpmap()
-                      : KisFilter(KoID("phongbumpmap"     , i18n("Phong Bumpmap")),
-                                  KisFilter::categoryMap(), i18n("&Phong Bumpmap..."))
+                      : KisFilter(KoID("phongbumpmap", i18n("Phong Bumpmap")),
+                                  FiltersCategoryMapId, i18n("&Phong Bumpmap..."))
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);

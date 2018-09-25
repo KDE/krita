@@ -21,6 +21,7 @@
 #include "kis_minmax_filters.h"
 #include <KoUpdater.h>
 #include <KoChannelInfo.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -66,7 +67,7 @@ void minimize(const quint8* s, quint8* d, uint nbpixels)
     }
 }
 
-KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize Channel"))
+KisFilterMax::KisFilterMax() : KisFilter(id(), FiltersCategoryColorId, i18n("M&aximize Channel"))
 {
     setSupportsPainting(true);
     setSupportsLevelOfDetail(true);
@@ -104,7 +105,7 @@ void KisFilterMax::processImpl(KisPaintDeviceSP device,
     }
 }
 
-KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize Channel"))
+KisFilterMin::KisFilterMin() : KisFilter(id(), FiltersCategoryColorId, i18n("M&inimize Channel"))
 {
     setSupportsPainting(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);

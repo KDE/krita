@@ -175,7 +175,7 @@ KisAnimationPlayer::~KisAnimationPlayer()
 
 void KisAnimationPlayer::slotUpdateDropFramesMode()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->dropFramesMode = cfg.animationDropFrames();
 }
 
@@ -270,7 +270,7 @@ void KisAnimationPlayer::slotUpdateAudioChunkLength()
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     const int animationFramePeriod = qMax(1, 1000 / animation->framerate());
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     int scrubbingAudioUdpatesDelay = cfg.scrubbingAudioUpdatesDelay();
 
     if (scrubbingAudioUdpatesDelay < 0) {
@@ -334,7 +334,7 @@ void KisAnimationPlayer::play()
 
         // when openGL is disabled, there is no animation cache
         if (m_d->canvas->frameCache()) {
-            KisImageConfig cfg;
+            KisImageConfig cfg(true);
 
             const int dimensionLimit =
                 cfg.useAnimationCacheFrameSizeLimit() ?

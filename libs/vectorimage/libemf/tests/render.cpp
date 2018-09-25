@@ -18,7 +18,6 @@
 
 #include <EnhMetaFile.h>
 #include <QApplication>
-#include <QDebug>
 
 using namespace EnhancedMetafile;
 

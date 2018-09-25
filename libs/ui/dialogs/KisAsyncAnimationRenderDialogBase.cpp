@@ -160,7 +160,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     m_d->processingTime.start();
 
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
 
     const int maxThreads = cfg.maxNumberOfThreads();
     const int numAllowedWorker = 1 + calculateNumberMemoryAllowedClones(m_d->image);

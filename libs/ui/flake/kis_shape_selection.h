@@ -48,12 +48,14 @@ class KisShapeSelectionMarker : public KoShapeUserData
 };
 
 
-class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectionComponent
+class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeLayer, public KisSelectionComponent
 {
+    Q_OBJECT
+
     KisShapeSelection(const KisShapeSelection& rhs);
 public:
 
-    KisShapeSelection(KisImageWSP image, KisSelectionWSP selection);
+    KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection);
 
     ~KisShapeSelection() override;
 
@@ -86,6 +88,13 @@ public:
     void moveY(qint32 y) override;
 
     KUndo2Command* transform(const QTransform &transform) override;
+
+Q_SIGNALS:
+    void sigMoveShapes(const QPointF &diff);
+
+private Q_SLOTS:
+    void slotMoveShapes(const QPointF &diff);
+
 protected:
 
     void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
@@ -101,10 +110,10 @@ private:
 
     KisImageWSP m_image;
     QPainterPath m_outline;
-    KisImageViewConverter* m_converter;
-    KisShapeSelectionCanvas* m_canvas;
-    KisShapeSelectionModel* m_model;
-
+    KisImageViewConverter *m_converter;
+    KisShapeSelectionCanvas *m_canvas;
+    KisShapeSelectionModel *m_model;
+    KoShapeControllerBase *m_shapeControllerBase;
     friend class KisShapeSelectionModel;
 };
 

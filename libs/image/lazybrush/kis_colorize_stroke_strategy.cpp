@@ -33,7 +33,6 @@
 #include "kis_processing_visitor.h"
 
 #include "kis_transaction.h"
-#include "krita_utils.h"
 
 #include <KisRunnableStrokeJobData.h>
 #include <KisRunnableStrokeJobUtils.h>
@@ -275,7 +274,7 @@ void KisColorizeStrokeStrategy::cancelStrokeCallback()
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)
 {
-    KisImageConfig cfg;
+    KisImageConfig cfg(true);
     if (!cfg.useLodForColorizeMask()) return 0;
 
     KisColorizeStrokeStrategy *clone = new KisColorizeStrokeStrategy(*this, levelOfDetail);

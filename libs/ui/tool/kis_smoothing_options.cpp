@@ -38,7 +38,7 @@ struct KisSmoothingOptions::Private {
 KisSmoothingOptions::KisSmoothingOptions(bool useSavedSmoothing)
     : m_d(new Private)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_d->smoothingType = (SmoothingType)cfg.lineSmoothingType(!useSavedSmoothing);
     m_d->smoothnessDistance = cfg.lineSmoothingDistance(!useSavedSmoothing);
     m_d->tailAggressiveness = cfg.lineSmoothingTailAggressiveness(!useSavedSmoothing);
@@ -158,7 +158,7 @@ bool KisSmoothingOptions::stabilizeSensors() const
 
 void KisSmoothingOptions::slotWriteConfig()
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setLineSmoothingType(m_d->smoothingType);
     cfg.setLineSmoothingDistance(m_d->smoothnessDistance);
     cfg.setLineSmoothingTailAggressiveness(m_d->tailAggressiveness);

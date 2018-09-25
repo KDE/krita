@@ -43,6 +43,7 @@
 #include <kis_global.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -51,7 +52,7 @@
 #include <KisSequentialIteratorProgress.h>
 
 
-KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
+KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), FiltersCategoryEmbossId, i18n("&Emboss with Variable Depth..."))
 {
     setSupportsPainting(false);
     setColorSpaceIndependence(TO_RGBA8);

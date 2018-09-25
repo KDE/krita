@@ -29,6 +29,7 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <KColorButton>
+#include "kis_dom_utils.h"
 #include <QMessageBox>
 
 #include <KoIcon.h>
@@ -74,12 +75,13 @@ void KisAssistantTool::activate(ToolActivation toolActivation, const QSet<KoShap
     m_internalMode = MODE_CREATION;
     m_assistantHelperYOffset = 10;
 
-    m_canvas->paintingAssistantsDecoration()->setHandleSize(17);
+
     m_handleSize = 17;
+    m_canvas->paintingAssistantsDecoration()->setHandleSize(m_handleSize);
+
 
     if (m_optionsWidget) {
         m_canvas->paintingAssistantsDecoration()->deselectAssistant();
-
         updateToolOptionsUI();
     }
 
@@ -343,7 +345,7 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
             assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
         }
     }
-    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visiblity//
+    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toogling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         m_internalMode = MODE_CREATION;
@@ -353,6 +355,10 @@ void KisAssistantTool::beginPrimaryAction(KoPointerEvent *event)
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(canvasDecoration->snapToGuide(event, QPointF(), false)), HandleType::NORMAL);
         }
+    }
+
+    if (m_newAssistant) {
+        m_newAssistant->setAssistantGlobalColorCache(m_canvas->paintingAssistantsDecoration()->globalAssistantsColor());
     }
 
     m_canvas->updateCanvas();
@@ -535,8 +541,6 @@ void KisAssistantTool::addAssistant()
         m_canvas->viewManager()->resourceProvider()->addPerspectiveGrid(grid);
     }
     m_newAssistant.clear();
-
-
 }
 
 void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
@@ -639,12 +643,12 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 {
     QRectF canvasSize = QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size()));
 
-    QColor assistantColor = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor();
-
     // show special display while a new assistant is in the process of being created
     if (m_newAssistant) {
 
-        m_newAssistant->setAssistantGlobalColor(assistantColor);
+        QColor assistantColor = m_newAssistant->effectiveAssistantColor();
+        assistantColor.setAlpha(80);
+
         m_newAssistant->drawAssistant(_gc, canvasSize, m_canvas->coordinatesConverter(), false, m_canvas, true, false);
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
@@ -661,7 +665,8 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
-        assistantColor = assistant->useCustomColor() ? assistant->assistantCustomColor() : assistant->assistantsGlobalColor();
+        QColor assistantColor = assistant->effectiveAssistantColor();
+        assistantColor.setAlpha(80);
 
         Q_FOREACH (const KisPaintingAssistantHandleSP handle, m_handles) {
             QRectF ellipse(_converter.documentToView(*handle) -  QPointF(m_handleSize * 0.5, m_handleSize * 0.5),
@@ -669,7 +674,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
 
             // render handles differently if it is the one being dragged.
             if (handle == m_handleDrag || handle == m_handleCombine) {
-                QPen stroke(QColor(assistantColor.red(), assistantColor.green(), assistantColor.blue(), 80), 4);
+                QPen stroke(assistantColor, 4);
                 _gc.save();
                 _gc.setPen(stroke);
                 _gc.setBrush(Qt::NoBrush);
@@ -768,7 +773,8 @@ void KisAssistantTool::loadAssistants()
 
                if ( xml.attributes().hasAttribute("useCustomColor")) {
                    QStringRef customColor = xml.attributes().value("customColor");
-                   assistant->setAssistantCustomColor( KisPaintingAssistantsDecoration::qStringToQColor(customColor.toString()) );
+                   assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
+
                }
            }
 
@@ -832,7 +838,9 @@ void KisAssistantTool::saveAssistants()
     QXmlStreamWriter xml(&data);
     xml.writeStartDocument();
     xml.writeStartElement("paintingassistant");
-    xml.writeAttribute("color", KisPaintingAssistantsDecoration::qColorToQString(m_canvas->paintingAssistantsDecoration()->globalAssistantsColor()) ); // global color if no custom color used
+    xml.writeAttribute("color",
+                       KisDomUtils::qColorToQString(
+                           m_canvas->paintingAssistantsDecoration()->globalAssistantsColor())); // global color if no custom color used
 
 
     xml.writeStartElement("handles");
@@ -855,7 +863,8 @@ void KisAssistantTool::saveAssistants()
         xml.writeStartElement("assistant");
         xml.writeAttribute("type", assistant->id());
         xml.writeAttribute("useCustomColor", QString::number(assistant->useCustomColor()));
-        xml.writeAttribute("customColor",  KisPaintingAssistantsDecoration::qColorToQString(assistant->assistantCustomColor()));
+        xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(assistant->assistantCustomColor()));
+
 
 
         // custom assistant properties like angle density on vanishing point
@@ -923,28 +932,38 @@ QWidget *KisAssistantTool::createOptionWidget()
 
         connect(m_options.vanishingPointAngleSpinbox, SIGNAL(valueChanged(double)), this, SLOT(slotChangeVanishingPointAngle(double)));
 
+        ENTER_FUNCTION() << ppVar(m_canvas) << ppVar(m_canvas && m_canvas->paintingAssistantsDecoration());
 
-        m_options.assistantsColor->setColor(QColor(176, 176, 176, 255)); // grey default for all assistants
-        m_options.assistantsGlobalOpacitySlider->setValue(100); // 100%
+        // initialize UI elements with existing data if possible
+        if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
+            const QColor color = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor();
+
+            QColor opaqueColor = color;
+            opaqueColor.setAlpha(255);
+
+            ENTER_FUNCTION() << ppVar(opaqueColor);
+
+            m_options.assistantsColor->setColor(opaqueColor);
+            m_options.customAssistantColorButton->setColor(opaqueColor);
+            m_options.assistantsGlobalOpacitySlider->setValue(color.alphaF() * 100.0);
+
+        } else {
+            m_options.assistantsColor->setColor(QColor(176, 176, 176, 255)); // grey default for all assistants
+            m_options.assistantsGlobalOpacitySlider->setValue(100); // 100%
+        }
+
         m_options.assistantsGlobalOpacitySlider->setPrefix(i18n("Opacity: "));
         m_options.assistantsGlobalOpacitySlider->setSuffix(" %");
-        m_assistantsGlobalOpacity = m_options.assistantsGlobalOpacitySlider->value()*0.01;
 
 
         // custom color of selected assistant
         m_options.customColorOpacitySlider->setValue(100); // 100%
         m_options.customColorOpacitySlider->setPrefix(i18n("Opacity: "));
         m_options.customColorOpacitySlider->setSuffix(" %");
-        m_assistantCustomOpacity = m_options.customColorOpacitySlider->value()*0.01;
 
         connect(m_options.useCustomAssistantColor, SIGNAL(clicked(bool)), this, SLOT(slotUpdateCustomColor()));
         connect(m_options.customAssistantColorButton, SIGNAL(changed(QColor)), this, SLOT(slotUpdateCustomColor()));
-        connect(m_options.customColorOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotcustomOpacityChanged()));
-
-
-        QColor newColor = m_options.assistantsColor->color();
-        newColor.setAlpha(m_assistantsGlobalOpacity*255);
-        m_canvas->paintingAssistantsDecoration()->setGlobalAssistantsColor(newColor);
+        connect(m_options.customColorOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotCustomOpacityChanged()));
 
         m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
         m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));
@@ -964,18 +983,25 @@ QWidget *KisAssistantTool::createOptionWidget()
 void KisAssistantTool::slotGlobalAssistantsColorChanged(const QColor& setColor)
 {
     // color and alpha are stored separately, so we need to merge the values before sending it on
+    int oldAlpha = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor().alpha();
+
     QColor newColor = setColor;
-    newColor.setAlpha(m_assistantsGlobalOpacity * 255);
+    newColor.setAlpha(oldAlpha);
+
     m_canvas->paintingAssistantsDecoration()->setGlobalAssistantsColor(newColor);
+
+    m_canvas->paintingAssistantsDecoration()->uncache();
     m_canvas->canvasWidget()->update();
 }
 
 void KisAssistantTool::slotGlobalAssistantOpacityChanged()
 {
     QColor newColor = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor();
-    m_assistantsGlobalOpacity = m_options.assistantsGlobalOpacitySlider->value()*0.01;
-    newColor.setAlpha(m_assistantsGlobalOpacity*255);
+    qreal newOpacity = m_options.assistantsGlobalOpacitySlider->value() * 0.01 * 255.0;
+    newColor.setAlpha(int(newOpacity));
     m_canvas->paintingAssistantsDecoration()->setGlobalAssistantsColor(newColor);
+
+    m_canvas->paintingAssistantsDecoration()->uncache();
     m_canvas->canvasWidget()->update();
 }
 
@@ -991,21 +1017,20 @@ void KisAssistantTool::slotUpdateCustomColor()
         newColor.setAlpha(m_selectedAssistant->assistantCustomColor().alpha());
 
         m_selectedAssistant->setAssistantCustomColor(newColor);
+        m_selectedAssistant->uncache();
     }
 
     updateToolOptionsUI();
-
-
     m_canvas->canvasWidget()->update();
 }
 
-void KisAssistantTool::slotcustomOpacityChanged()
+void KisAssistantTool::slotCustomOpacityChanged()
 {
     KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
     if (m_selectedAssistant) {
         QColor newColor = m_selectedAssistant->assistantCustomColor();
-        m_assistantCustomOpacity = m_options.customColorOpacitySlider->value()*0.01;
-        newColor.setAlpha(m_assistantCustomOpacity*255);
+        qreal newOpacity = m_options.customColorOpacitySlider->value() * 0.01 * 255.0;
+        newColor.setAlpha(int(newOpacity));
         m_selectedAssistant->setAssistantCustomColor(newColor);
         m_selectedAssistant->uncache();
     }

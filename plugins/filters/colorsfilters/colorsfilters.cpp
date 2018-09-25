@@ -38,6 +38,7 @@
 #include "KoBasicHistogramProducers.h"
 #include <KoColorSpace.h>
 #include <KoColorTransformation.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
@@ -85,7 +86,7 @@ ColorsFilters::~ColorsFilters()
 //==================================================================
 
 
-KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Auto Contrast"))
+KisAutoContrast::KisAutoContrast() : KisFilter(id(), FiltersCategoryAdjustId, i18n("&Auto Contrast"))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
@@ -136,7 +137,7 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
     // build the transferfunction
     int diff = maxvalue - minvalue;
 
-    quint16* transfer = new quint16[256];
+    QScopedArrayPointer<quint16> transfer(new quint16[256]);
     for (int i = 0; i < 255; i++)
         transfer[i] = 0xFFFF;
 
@@ -156,7 +157,8 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
             transfer[i] = 0xFFFF;
     }
     // apply
-    KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
+    QScopedPointer<KoColorTransformation> adj(device->colorSpace()->createBrightnessContrastAdjustment(transfer.data()));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(adj);
 
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
 
@@ -167,9 +169,6 @@ void KisAutoContrast::processImpl(KisPaintDeviceSP device,
         npix = it.nConseqPixels();
         adj->transform(it.oldRawData(), it.rawData(), npix);
     }
-
-    delete[] transfer;
-    delete adj;
 }
 
 #include "colorsfilters.moc"

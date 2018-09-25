@@ -37,19 +37,6 @@
  */
 class KRITAIMAGE_EXPORT KisFilter : public KisBaseProcessor
 {
-
-public:
-    static KoID categoryAdjust();
-    static KoID categoryArtistic();
-    static KoID categoryBlur();
-    static KoID categoryColors();
-    static KoID categoryEdgeDetection();
-    static KoID categoryEmboss();
-    static KoID categoryEnhance();
-    static KoID categoryMap();
-    static KoID categoryNonPhotorealistic();
-    static KoID categoryOther();
-
 public:
 
     /**
@@ -57,8 +44,6 @@ public:
      */
     KisFilter(const KoID& id, const KoID & category, const QString & entry);
     ~KisFilter() override;
-
-public:
 
     /**
      * Override this function with the implementation of your filter.

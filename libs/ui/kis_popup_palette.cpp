@@ -98,7 +98,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     const int borderWidth = 3;
 
-    if (KisConfig().readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
+    if (KisConfig(true).readEntry<bool>("popuppalette/usevisualcolorselector", false)) {
         m_triangleColorSelector = new KisVisualColorSelector(this);
     }
     else {
@@ -169,7 +169,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     connect(m_settingsButton, SIGNAL(clicked()), SLOT(slotShowTagsPopup()));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_brushHudButton = new KisRoundHudButton(this);
     m_brushHudButton->setCheckable(true);
 
@@ -349,7 +349,7 @@ void KisPopupPalette::showHudWidget(bool visible)
     m_brushHud->setVisible(reallyVisible);
     adjustLayout(m_lastCenterPoint);
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
 }
 
@@ -908,6 +908,6 @@ int KisPopupPalette::calculatePresetIndex(QPointF point, int /*n*/)
 
 int KisPopupPalette::numSlots()
 {
-    KisConfig config;
+    KisConfig config(true);
     return qMax(config.favoritePresets(), 10);
 }

@@ -40,6 +40,8 @@ public:
 
     KisLsDropShadowFilter(Mode mode = DropShadow);
 
+    KisLayerStyleFilter* clone() const override;
+
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
                          const QRect &applyRect,
@@ -50,6 +52,7 @@ public:
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
 
 private:
+    KisLsDropShadowFilter(const KisLsDropShadowFilter &rhs);
     const psd_layer_effects_shadow_base* getShadowStruct(KisPSDLayerStyleSP style) const;
 
 private:

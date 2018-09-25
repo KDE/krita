@@ -40,6 +40,7 @@
 #include "KisViewManager.h"
 #include "kis_mainwindow_observer.h"
 #include "kis_signal_compressor.h"
+#include <QSlider>
 
 class QModelIndex;
 
@@ -56,6 +57,7 @@ class KisNodeJugglerCompressed;
 class KisColorLabelSelectorWidget;
 class QWidgetAction;
 class KisKeyframeChannel;
+class KisSelectionActionsAdapter;
 
 /**
  * A widget that shows a visualization of the layer structure.
@@ -75,7 +77,7 @@ public:
     ~KisLayerBox() override;
     QString observerName() override { return "KisLayerBox"; }
     /// reimplemented from KisMainwindowObserver
-    void setMainWindow(KisViewManager* kisview) override;
+    void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 private Q_SLOTS:
@@ -127,6 +129,8 @@ private Q_SLOTS:
     void updateAvailableLabels();
     void updateLayerFiltering();
 
+    void slotUpdateThumbnailIconSize();
+
 
     // Opacity keyframing
     void slotKeyframeChannelAdded(KisKeyframeChannel *channel);
@@ -143,6 +147,7 @@ private:
 private:
 
     QPointer<KisCanvas2> m_canvas;
+    QScopedPointer<KisSelectionActionsAdapter> m_selectionActionsAdapter;
     QMenu *m_newLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
@@ -157,9 +162,11 @@ private:
     QVector<KisAction*> m_actions;
     KisAction* m_removeAction;
     KisAction* m_propertiesAction;
-    KisAction* m_selectOpaque;
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
+    KisSignalCompressor m_thumbnailSizeCompressor;
+
+    QSlider* thumbnailSizeSlider;
 
     KisNodeSP m_activeNode;
     QPointer<KisKeyframeChannel> m_opacityChannel;

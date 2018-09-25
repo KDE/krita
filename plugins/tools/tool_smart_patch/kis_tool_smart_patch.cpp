@@ -31,7 +31,7 @@
 
 #include "kundo2magicstring.h"
 #include "kundo2stack.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_transaction.h"
 
 #include "kis_processing_applicator.h"
@@ -217,7 +217,7 @@ void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, con
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
     // This adjusted call is needed as we paint with a 3 pixel wide brush and the pen is outside the bounds of the path
-    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordiates
+    // Pen uses view coordinates so we have to zoom the document value to match 2 pixel in view coordinates
     // See BUG 275829
     qreal zoomX;
     qreal zoomY;

@@ -86,6 +86,18 @@ KisPixelSelection::KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::D
     m_d->thumbnailImageTransform = rhs.m_d->thumbnailImageTransform;
 }
 
+KisPixelSelection::KisPixelSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode, KisSelectionWSP parentSelection)
+    : KisPaintDevice(*copySource.data(), copyMode)
+    , m_d(new Private)
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
+    convertTo(cs);
+
+    m_d->parentSelection = parentSelection;
+    m_d->outlineCacheValid = true;
+    m_d->invalidateThumbnailImage();
+}
+
 KisSelectionComponent* KisPixelSelection::clone(KisSelection*)
 {
     return new KisPixelSelection(*this);
@@ -384,7 +396,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
         delete[] buffer;
         return paths;
     }
-    catch(std::bad_alloc) {
+    catch(const std::bad_alloc&) {
         // Allocating so much memory failed, so we fall through to the slow option.
         warnKrita << "KisPixelSelection::outline ran out of memory allocating" << width << "*" << height << "bytes.";
     }

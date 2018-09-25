@@ -27,7 +27,7 @@
 const int KisUpdaterContext::useIdealThreadCountTag = -1;
 
 KisUpdaterContext::KisUpdaterContext(qint32 threadCount, QObject *parent)
-    : QObject(parent)
+    : QObject(parent), m_scheduler(qobject_cast<KisUpdateScheduler *>(parent))
 {
     if(threadCount <= 0) {
         threadCount = QThread::idealThreadCount();
@@ -151,7 +151,7 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
 /**
  * This variant is for use in a testing suite only
  */
-void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
+void KisUpdaterContext::addMergeJobTest(KisBaseRectsWalkerSP walker)
 {
     m_lodCounter.addLod(walker->levelOfDetail());
     qint32 jobIndex = findSpareThread();
@@ -181,7 +181,7 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
 /**
  * This variant is for use in a testing suite only
  */
-void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
+void KisUpdaterContext::addStrokeJobTest(KisStrokeJob *strokeJob)
 {
     m_lodCounter.addLod(strokeJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
@@ -211,7 +211,7 @@ void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
 /**
  * This variant is for use in a testing suite only
  */
-void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+void KisUpdaterContext::addSpontaneousJobTest(KisSpontaneousJob *spontaneousJob)
 {
     m_lodCounter.addLod(spontaneousJob->levelOfDetail());
     qint32 jobIndex = findSpareThread();
@@ -244,14 +244,6 @@ qint32 KisUpdaterContext::findSpareThread()
     return -1;
 }
 
-void KisUpdaterContext::slotJobFinished()
-{
-    m_lodCounter.removeLod();
-
-    // Be careful. This slot can be called asynchronously without locks.
-    emit sigSpareThreadAppeared();
-}
-
 void KisUpdaterContext::lock()
 {
     m_lock.lock();
@@ -278,16 +270,7 @@ void KisUpdaterContext::setThreadsLimit(int value)
     m_jobs.resize(value);
 
     for(qint32 i = 0; i < m_jobs.size(); i++) {
-        m_jobs[i] = new KisUpdateJobItem(&m_exclusiveJobLock);
-        connect(m_jobs[i], SIGNAL(sigContinueUpdate(const QRect&)),
-                SIGNAL(sigContinueUpdate(const QRect&)),
-                Qt::DirectConnection);
-
-        connect(m_jobs[i], SIGNAL(sigDoSomeUsefulWork()),
-                SIGNAL(sigDoSomeUsefulWork()), Qt::DirectConnection);
-
-        connect(m_jobs[i], SIGNAL(sigJobFinished()),
-                SLOT(slotJobFinished()), Qt::DirectConnection);
+        m_jobs[i] = new KisUpdateJobItem(this);
     }
 }
 
@@ -296,6 +279,37 @@ int KisUpdaterContext::threadsLimit() const
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_jobs.size() == m_threadPool.maxThreadCount());
     return m_jobs.size();
 }
+
+void KisUpdaterContext::continueUpdate(const QRect& rc)
+{
+    if (m_scheduler) m_scheduler->continueUpdate(rc);
+}
+
+void KisUpdaterContext::doSomeUsefulWork()
+{
+    if (m_scheduler) m_scheduler->doSomeUsefulWork();
+}
+
+void KisUpdaterContext::jobFinished()
+{
+    m_lodCounter.removeLod();
+    if (m_scheduler) m_scheduler->spareThreadAppeared();
+}
+
+const QVector<KisUpdateJobItem*> KisUpdaterContext::getJobs()
+{
+    return m_jobs;
+}
+
+void KisUpdaterContext::clear()
+{
+    Q_FOREACH (KisUpdateJobItem *item, m_jobs) {
+        item->testingSetDone();
+    }
+
+    m_lodCounter.testingClear();
+}
+
 
 KisTestableUpdaterContext::KisTestableUpdaterContext(qint32 threadCount)
     : KisUpdaterContext(threadCount)
@@ -320,3 +334,47 @@ void KisTestableUpdaterContext::clear()
     m_lodCounter.testingClear();
 }
 
+/**
+ * This variant is for use in a testing suite only
+ */
+void KisTestableUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
+{
+    m_lodCounter.addLod(spontaneousJob->levelOfDetail());
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    const bool shouldStartThread = m_jobs[jobIndex]->setSpontaneousJob(spontaneousJob);
+
+    // HINT: Not calling start() here
+    Q_UNUSED(shouldStartThread);
+}
+
+/**
+ * This variant is for use in a testing suite only
+ */
+void KisTestableUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
+{
+    m_lodCounter.addLod(strokeJob->levelOfDetail());
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    const bool shouldStartThread = m_jobs[jobIndex]->setStrokeJob(strokeJob);
+
+    // HINT: Not calling start() here
+    Q_UNUSED(shouldStartThread);
+}
+
+/**
+ * This variant is for use in a testing suite only
+ */
+void KisTestableUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
+{
+    m_lodCounter.addLod(walker->levelOfDetail());
+    qint32 jobIndex = findSpareThread();
+    Q_ASSERT(jobIndex >= 0);
+
+    const bool shouldStartThread = m_jobs[jobIndex]->setWalker(walker);
+
+    // HINT: Not calling start() here
+    Q_UNUSED(shouldStartThread);
+}

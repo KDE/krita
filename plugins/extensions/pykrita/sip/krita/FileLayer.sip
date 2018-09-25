@@ -20,6 +20,7 @@ public:
     virtual ~FileLayer();
     virtual QString type() const;
     void setProperties(QString FileName, QString ScalingMethod);
+    void resetCache();
     QString scalingMethod() const;
     QString path() const;
 Q_SIGNALS:

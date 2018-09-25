@@ -30,13 +30,14 @@
 #include <KisPart.h>
 #include <KisDocument.h>
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 
 #include "kis_filter_strategy.h"
 
 #include "kis_layer_utils.h"
 
+#include <sdk/tests/testutil.h>
 
 void testMergeDownImpl(bool useImageTransformations)
 {
@@ -306,4 +307,4 @@ void KisShapeLayerTest::testCloneScaledLayer()
     QVERIFY(chk.testPassed());
 }
 
-QTEST_MAIN(KisShapeLayerTest)
+KISTEST_MAIN(KisShapeLayerTest)

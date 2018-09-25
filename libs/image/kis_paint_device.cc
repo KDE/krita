@@ -1549,7 +1549,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
 
             writeBytes(dstData, offsetX, offsetY, image.width(), image.height());
             delete[] dstData;
-        } catch (std::bad_alloc) {
+        } catch (const std::bad_alloc&) {
             warnKrita << "KisPaintDevice::convertFromQImage: Could not allocate" << image.width() * image.height() * pixelSize() << "bytes";
             return;
         }
@@ -1595,7 +1595,7 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *dstProfile, qint32 
     quint8 *data = 0;
     try {
         data = new quint8 [w * h * pixelSize()];
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         warnKrita << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << pixelSize();
         //delete[] data; // data is not allocated, so don't free it
         return QImage();

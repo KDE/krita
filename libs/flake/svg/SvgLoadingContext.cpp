@@ -247,11 +247,11 @@ void SvgLoadingContext::parseProfile(const KoXmlElement &element)
 
     if (element.attribute("rendering-intent", "auto") != "auto") {
         // WARNING: Krita does *not* treat rendering intents attributes of the profile!
-        qDebug() << "WARNING: we do *not* treat rendering intents attributes of the profile!";
+        debugFlake << "WARNING: we do *not* treat rendering intents attributes of the profile!";
     }
 
     if (d->profiles.contains(name)) {
-        qDebug() << "Profile already in the map!" << ppVar(name);
+        debugFlake << "Profile already in the map!" << ppVar(name);
         return;
     }
 
@@ -268,12 +268,12 @@ void SvgLoadingContext::parseProfile(const KoXmlElement &element)
                 profile = engine->addProfile(profileData);
 
                 if (profile->uniqueId() != uniqueId) {
-                    qDebug() << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
-                    qDebug() << "       " << ppVar(profile->uniqueId().toHex());
-                    qDebug() << "       " << ppVar(uniqueId.toHex());
+                    debugFlake << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
+                    debugFlake << "       " << ppVar(profile->uniqueId().toHex());
+                    debugFlake << "       " << ppVar(uniqueId.toHex());
                 }
             } else {
-                qDebug() << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
+                debugFlake << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
             }
         }
     }
@@ -281,7 +281,7 @@ void SvgLoadingContext::parseProfile(const KoXmlElement &element)
     if (profile) {
         d->profiles.insert(name, profile);
     } else {
-        qDebug() << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
+        debugFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
     }
 }
 

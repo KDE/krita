@@ -61,7 +61,6 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_png_import.cpp
     dialogs/kis_dlg_import_image_sequence.cpp
     dialogs/kis_delayed_save_dialog.cpp
-    dialogs/kis_dlg_internal_color_selector.cpp
     dialogs/KisSessionManagerDialog.cpp
     dialogs/KisNewWindowLayoutDialog.cpp
     flake/kis_node_dummies_graph.cpp
@@ -82,6 +81,7 @@ set(kritaui_LIB_SRCS
     brushhud/kis_dlg_brush_hud_config.cpp
     brushhud/kis_brush_hud_properties_list.cpp
     brushhud/kis_brush_hud_properties_config.cpp
+
     kis_aspect_ratio_locker.cpp
     kis_autogradient.cc
     kis_bookmarked_configurations_editor.cc
@@ -95,7 +95,6 @@ set(kritaui_LIB_SRCS
     kis_categorized_item_delegate.cpp
     kis_clipboard.cc
     kis_config.cc
-    kis_config_notifier.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
     kis_paint_ops_model.cpp
@@ -121,6 +120,7 @@ set(kritaui_LIB_SRCS
     kis_node_juggler_compressed.cpp
     kis_node_selection_adapter.cpp
     kis_node_insertion_adapter.cpp
+    KisNodeDisplayModeAdapter.cpp
     kis_node_model.cpp
     kis_node_filter_proxy_model.cpp
     kis_model_index_converter_base.cpp
@@ -141,6 +141,7 @@ set(kritaui_LIB_SRCS
     KisSelectedShapesProxy.cpp
     kis_selection_decoration.cc
     kis_selection_manager.cc
+    KisSelectionActionsAdapter.cpp
     kis_statusbar.cc
     kis_zoom_manager.cc
     kis_favorite_resource_manager.cpp
@@ -152,10 +153,13 @@ set(kritaui_LIB_SRCS
     kis_tooltip_manager.cpp
     kis_multinode_property.cpp
     kis_stopgradient_editor.cpp
+    KisWelcomePageWidget.cpp
+
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
+
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_canvas_debugger.cpp
@@ -165,6 +169,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
+    tool/KisToolChangesTracker.cpp
+    tool/KisToolChangesTrackerData.cpp
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_rectangle_constraint_widget.cpp
@@ -197,6 +203,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskedFreehandStrokePainter.cpp
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
+    tool/strokes/move_stroke_strategy.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
@@ -227,7 +234,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_paintop_preset_icon_library.cpp
     widgets/kis_pattern_chooser.cc
 
-    widgets/kis_popup_button.cc
     widgets/kis_preset_chooser.cpp
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc
@@ -249,20 +255,12 @@ set(kritaui_LIB_SRCS
     widgets/kis_color_filter_combo.cpp
     widgets/kis_elided_label.cpp
     widgets/kis_stopgradient_slider_widget.cpp
-    widgets/kis_spinbox_color_selector.cpp
-    widgets/kis_screen_color_picker.cpp
     widgets/kis_preset_live_preview_view.cpp
+    widgets/KisScreenColorPicker.cpp
     widgets/KoDualColorButton.cpp
-    widgets/kis_color_input.cpp
-    widgets/kis_color_button.cpp
-    widgets/KisVisualColorSelector.cpp
-    widgets/KisVisualColorSelectorShape.cpp
-    widgets/KisVisualEllipticalSelectorShape.cpp
-    widgets/KisVisualRectangleSelectorShape.cpp
-    widgets/KisVisualTriangleSelectorShape.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
-
+    widgets/KisNewsWidget.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -298,7 +296,6 @@ set(kritaui_LIB_SRCS
     actions/KisPasteActionFactory.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
-    kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
     input/kis_tablet_debugger.cpp
@@ -373,10 +370,6 @@ set(kritaui_LIB_SRCS
     KisMultiFeedRSSModel.cpp
     KisRemoteFileFetcher.cpp
 
-    KisPaletteModel.cpp
-    kis_palette_delegate.cpp
-    kis_palette_view.cpp
-    KisColorsetChooser.cpp
     KisSaveGroupVisitor.cpp
     KisWindowLayoutResource.cpp
     KisWindowLayoutManager.cpp
@@ -386,6 +379,7 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
+
 )
 
 if(WIN32)
@@ -495,8 +489,10 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgstopgradienteditor.ui
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
+    forms/KisWelcomePage.ui
+    forms/KisNewsPage.ui
+
     brushhud/kis_dlg_brush_hud_config.ui
-    forms/wdgdlginternalcolorselector.ui
     dialogs/kis_delayed_save_dialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui

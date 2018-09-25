@@ -63,7 +63,7 @@ void KoCanvasControllerWidget::Private::setDocumentOffset()
         // If it isn't an OpenGL canvas
         if (qobject_cast<QOpenGLWidget*>(canvasWidget) == 0) {
             QPoint diff = q->documentOffset() - pt;
-            canvasWidget->scroll(diff.x(), diff.y());
+            canvasWidget->scroll(diff.x(), diff.y(), canvasWidget->rect());
         }
     }
 
@@ -233,7 +233,7 @@ void KoCanvasControllerWidget::resizeEvent(QResizeEvent *resizeEvent)
 
     // XXX: When resizing, keep the area we're looking at now in the
     // center of the resized view.
-    d->resetScrollBars();
+    resetScrollBars();
     d->setDocumentOffset();
 }
 
@@ -458,7 +458,7 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
     d->ignoreScrollSignals = true;
     KoCanvasController::setDocumentSize(sz);
     d->viewportWidget->setDocumentSize(sz);
-    d->resetScrollBars();
+    resetScrollBars();
 
     // Always emit the new offset.
     updateCanvasOffsetX();
@@ -601,6 +601,16 @@ void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
 
     hBar->setValue(value.x());
     vBar->setValue(value.y());
+}
+
+void KoCanvasControllerWidget::resetScrollBars()
+{
+    d->resetScrollBars();
+}
+
+qreal KoCanvasControllerWidget::vastScrollingFactor() const
+{
+    return d->vastScrollingFactor;
 }
 
 KoCanvasControllerWidget::Private *KoCanvasControllerWidget::priv()

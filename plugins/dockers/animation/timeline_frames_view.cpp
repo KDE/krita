@@ -201,7 +201,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->audioOptionsButton = new QToolButton(this);
     m_d->audioOptionsButton->setAutoRaise(true);
     m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
-    m_d->audioOptionsButton->setIconSize(QSize(20, 20)); // very small on windows if not explicity set
+    m_d->audioOptionsButton->setIconSize(QSize(20, 20)); // very small on windows if not explicitly set
     m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
 
     m_d->audioOptionsMenu = new QMenu(this);
@@ -260,7 +260,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     m_d->zoomDragButton = new KisZoomButton(this);
     m_d->zoomDragButton->setAutoRaise(true);
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
-    m_d->zoomDragButton->setIconSize(QSize(20, 20)); // this icon is very small on windows if no explicity set
+    m_d->zoomDragButton->setIconSize(QSize(20, 20)); // this icon is very small on windows if no explicitly set
 
     m_d->zoomDragButton->setToolTip(i18nc("@info:tooltip", "Zoom Timeline. Hold down and drag left or right."));
     m_d->zoomDragButton->setPopupMode(QToolButton::InstantPopup);
@@ -456,9 +456,7 @@ void TimelineFramesView::slotColorLabelChanged(int label)
     Q_FOREACH(QModelIndex index, selectedIndexes()) {
         m_d->model->setData(index, label, TimelineFramesModel::FrameColorLabelIndexRole);
     }
-
-    KisImageConfig config;
-    config.setDefaultFrameColorLabel(label);
+    KisImageConfig(false).setDefaultFrameColorLabel(label);
 }
 
 void TimelineFramesView::slotSelectAudioChannelFile()
@@ -1019,8 +1017,7 @@ void TimelineFramesView::mousePressEvent(QMouseEvent *event)
             } else {
                 {
                     KisSignalsBlocker b(m_d->colorSelector);
-                    KisImageConfig cfg;
-                    const int labelIndex = cfg.defaultFrameColorLabel();
+                    const int labelIndex = KisImageConfig(true).defaultFrameColorLabel();
                     m_d->colorSelector->setCurrentIndex(labelIndex);
                 }
 
@@ -1414,17 +1411,20 @@ void TimelineFramesView::insertOrRemoveMultipleHoldFrames(bool insertion, bool e
     const int count = QInputDialog::getInt(this,
                                            i18nc("@title:window", "Insert or Remove Hold Frames"),
                                            i18nc("@label:spinbox", "Enter number of frames"),
-                                           defaultNumberOfFramesToAdd(),
+                                           insertion ?
+                                               m_d->insertKeyframeDialog->defaultTimingOfAddedFrames() :
+                                               m_d->insertKeyframeDialog->defaultNumberOfHoldFramesToRemove(),
                                            1, 10000, 1, &ok);
 
     if (ok) {
         if (insertion) {
-            setDefaultNumberOfFramesToAdd(count);
+            m_d->insertKeyframeDialog->setDefaultTimingOfAddedFrames(count);
             insertOrRemoveHoldFrames(count, entireColumn);
         } else {
-            setDefaultNumberOfFramesToRemove(count);
+            m_d->insertKeyframeDialog->setDefaultNumberOfHoldFramesToRemove(count);
             insertOrRemoveHoldFrames(-count, entireColumn);
         }
+
     }
 }
 
@@ -1483,54 +1483,6 @@ void TimelineFramesView::slotPasteFrames(bool entireColumn)
             cb->clear();
         }
     }
-}
-
-int TimelineFramesView::defaultNumberOfFramesToAdd() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfFramesToAdd", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfFramesToAdd(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfFramesToAdd", value);
-}
-
-int TimelineFramesView::defaultNumberOfColumnsToAdd() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfColumnsToAdd", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfColumnsToAdd(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfColumnsToAdd", value);
-}
-
-int TimelineFramesView::defaultNumberOfFramesToRemove() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfFramesToRemove", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfFramesToRemove(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfFramesToRemove", value);
-}
-
-int TimelineFramesView::defaultNumberOfColumnsToRemove() const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    return cfg.readEntry("defaultNumberOfColumnsToRemove", 1);
-}
-
-void TimelineFramesView::setDefaultNumberOfColumnsToRemove(int value) const
-{
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("FrameActionsDefaultValues");
-    cfg.writeEntry("defaultNumberOfColumnsToRemove", value);
 }
 
 bool TimelineFramesView::viewportEvent(QEvent *event)

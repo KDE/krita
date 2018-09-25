@@ -30,7 +30,7 @@
 #include <SvgParser.h>
 #include <KoColorSpaceRegistry.h>
 #include "kis_shape_layer.h"
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(SVGImportFactory, "krita_svg_import.json", registerPlugin<KisSVGImport>();)
 
@@ -50,7 +50,7 @@ KisImportExportFilter::ConversionStatus KisSVGImport::convert(KisDocument *docum
 
     const QString baseXmlDir = QFileInfo(filename()).canonicalPath();
 
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     qreal resolutionPPI = cfg.preferredVectorImportResolutionPPI(true);
 

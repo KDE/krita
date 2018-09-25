@@ -32,6 +32,8 @@ class KRITAIMAGE_EXPORT KisLsStrokeFilter : public KisLayerStyleFilter
 public:
     KisLsStrokeFilter();
 
+    KisLayerStyleFilter* clone() const override;
+
     void processDirectly(KisPaintDeviceSP src,
                          KisMultipleProjection *dst,
                          const QRect &applyRect,
@@ -42,6 +44,8 @@ public:
     QRect changedRect(const QRect & rect, KisPSDLayerStyleSP style, KisLayerStyleFilterEnvironment *env) const override;
 
 private:
+    KisLsStrokeFilter(const KisLsStrokeFilter &rhs);
+
     void applyStroke(KisPaintDeviceSP srcDevice,
                      KisMultipleProjection *dst,
                      const QRect &applyRect,

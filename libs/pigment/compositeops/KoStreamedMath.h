@@ -357,7 +357,7 @@ template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     }
 
 #if BLOCKDEBUG
-    qDebug() << "I" << "rows:" << params.rows
+    dbgPigment << "I" << "rows:" << params.rows
              << "\tpad(S):" << totalBlockAlign
              << "\tbav(V):" << totalBlockAlignedVector
              << "\tbuv(V):" << totalBlockUnalignedVector

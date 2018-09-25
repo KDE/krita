@@ -31,6 +31,7 @@
 #include "KoSnapStrategy.h"
 #include "KoToolBase_p.h"
 #include <KoViewConverter.h>
+#include "kis_config.h"
 
 #include "math.h"
 
@@ -187,10 +188,10 @@ public:
           pointIsDragged(false),
           finishAfterThisPoint(false),
           hoveredPoint(0),
-          listeningToModifiers(false),
           angleSnapStrategy(0),
           angleSnappingDelta(15),
-          angleSnapStatus(false)
+          angleSnapStatus(false),
+          enableClosePathShortcut(true)
     {
     }
 
@@ -204,13 +205,15 @@ public:
     PathConnectionPoint existingStartPoint; ///< an existing path point we started a new path at
     PathConnectionPoint existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
-    bool listeningToModifiers; //  Fine tune when to begin processing modifiers at the beginning of a stroke.
+    bool prevPointWasDragged = false;
+    bool autoSmoothCurves = false;
 
     QPointF dragStartPoint;
 
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;
+    bool enableClosePathShortcut;
 
     void repaintActivePoint() const {
         const bool isFirstPoint = (activePoint == firstPoint);
@@ -406,13 +409,26 @@ public:
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
-        listeningToModifiers = false;
     }
 
     void angleDeltaChanged(int value) {
         angleSnappingDelta = value;
         if (angleSnapStrategy)
             angleSnapStrategy->setAngleStep(angleSnappingDelta);
+    }
+
+    void autoSmoothCurvesChanged(bool value) {
+        autoSmoothCurves = value;
+
+        KisConfig cfg(false);
+        cfg.setAutoSmoothBezierCurves(value);
+    }
+
+    void loadAutoSmoothValueFromConfig() {
+        KisConfig cfg(true);
+        autoSmoothCurves = cfg.autoSmoothBezierCurves();
+
+        emit q->sigUpdateAutoSmoothCurvesGUI(autoSmoothCurves);
     }
 
     void angleSnapChanged(int angleSnap) {

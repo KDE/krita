@@ -57,7 +57,6 @@
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
-static const qreal DefaultMarkerWidth = 3.0;
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
@@ -164,8 +163,8 @@ void KoPathShape::saveContourOdf(KoShapeSavingContext &context, const QSizeF &sc
 
         if (currPoint && !(currPoint->activeControlPoint1() || currPoint->activeControlPoint2())) {
             context.xmlWriter().startElement("draw:contour-polygon");
-            context.xmlWriter().addAttributePt("svg:width", size().width());
-            context.xmlWriter().addAttributePt("svg:height", size().height());
+            context.xmlWriter().addAttribute("svg:width", size().width());
+            context.xmlWriter().addAttribute("svg:height", size().height());
 
             const QSizeF s(size());
             QString viewBox = QString("0 0 %1 %2").arg(qRound(1000*s.width())).arg(qRound(1000*s.height()));
@@ -808,7 +807,6 @@ QPointF KoPathShape::normalize()
 
 void KoPathShapePrivate::map(const QTransform &matrix)
 {
-    Q_Q(KoPathShape);
     KoSubpathList::const_iterator pathIt(subpaths.constBegin());
     for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
@@ -1386,7 +1384,6 @@ void KoPathShapePrivate::closeMergeSubpath(KoSubpath *subpath)
 
 KoSubpath *KoPathShapePrivate::subPath(int subpathIndex) const
 {
-    Q_Q(const KoPathShape);
     if (subpathIndex < 0 || subpathIndex >= subpaths.size())
         return 0;
 
@@ -1418,6 +1415,10 @@ QString KoPathShape::toString(const QTransform &matrix) const
         // iterate over all points of the current subpath
         for (; pointIt != (*pathIt)->constEnd(); ++pointIt) {
             KoPathPoint *currPoint(*pointIt);
+            if (!currPoint) {
+                qWarning() << "Found a zero point in the shape's path!";
+                continue;
+            }
             // first point of subpath ?
             if (currPoint == firstPoint) {
                 // are we starting a subpath ?
@@ -1488,7 +1489,6 @@ char nodeType(const KoPathPoint * point)
 
 QString KoPathShapePrivate::nodeTypes() const
 {
-    Q_Q(const KoPathShape);
     QString types;
     KoSubpathList::const_iterator pathIt(subpaths.constBegin());
     for (; pathIt != subpaths.constEnd(); ++pathIt) {
@@ -1523,7 +1523,6 @@ void updateNodeType(KoPathPoint * point, const QChar & nodeType)
 
 void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
 {
-    Q_Q(KoPathShape);
     if (element.hasAttributeNS(KoXmlNS::calligra, "nodeTypes")) {
         QString nodeTypes = element.attributeNS(KoXmlNS::calligra, "nodeTypes");
         QString::const_iterator nIt(nodeTypes.constBegin());

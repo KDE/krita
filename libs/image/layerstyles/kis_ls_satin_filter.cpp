@@ -47,6 +47,16 @@ KisLsSatinFilter::KisLsSatinFilter()
 {
 }
 
+KisLsSatinFilter::KisLsSatinFilter(const KisLsSatinFilter &rhs)
+    : KisLayerStyleFilter(rhs)
+{
+}
+
+KisLayerStyleFilter *KisLsSatinFilter::clone() const
+{
+    return new KisLsSatinFilter(*this);
+}
+
 struct SatinRectsData
 {
     enum Direction {

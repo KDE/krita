@@ -34,7 +34,7 @@ set(kritaflake_SRCS
     KoSelectedShapesProxySimple.cpp
     KoShape.cpp
     KoShapeAnchor.cpp
-    KoShapeBasedDocumentBase.cpp
+    KoShapeControllerBase.cpp
     KoShapeApplicationData.cpp
     KoShapeContainer.cpp
     KoShapeContainerModel.cpp
@@ -119,6 +119,7 @@ set(kritaflake_SRCS
     KoClipMask.cpp
     KoClipMaskPainter.cpp
     KoCurveFit.cpp
+    KisGamutMaskViewConverter.cpp
 
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
@@ -217,6 +218,7 @@ set(kritaflake_SRCS
     text/KoSvgTextShapeMarkupConverter.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
+    resources/KoGamutMask.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp

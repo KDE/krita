@@ -23,12 +23,14 @@
 #include "kis_layer.h"
 #include "kis_mask.h"
 #include "kis_group_layer.h"
+#include "kis_selection_mask.h"
 #include "kis_adjustment_layer.h"
 
 #include "krita_utils.h"
 
 #include "kis_refresh_subtree_walker.h"
 #include "kis_async_merger.h"
+#include "kis_node_graph_listener.h"
 
 
 struct Q_DECL_HIDDEN KisProjectionLeaf::Private
@@ -36,10 +38,29 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
     Private(KisNode *_node) : node(_node) {}
 
     KisNode* node;
+    bool isTemporaryHidden = false;
 
     static bool checkPassThrough(const KisNode *node) {
         const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(node);
         return group && group->passThroughMode();
+    }
+
+    static bool isSelectionMask(const KisNode *node) {
+        return qobject_cast<const KisSelectionMask*>(node);
+    }
+
+    static KisNodeSP skipSelectionMasksForward(KisNodeSP node) {
+        while (node && isSelectionMask(node)) {
+            node = node->nextSibling();
+        }
+        return node;
+    }
+
+    static KisNodeSP skipSelectionMasksBackward(KisNodeSP node) {
+        while (node && isSelectionMask(node)) {
+            node = node->prevSibling();
+        }
+        return node;
     }
 
     bool checkParentPassThrough() {
@@ -48,6 +69,27 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
 
     bool checkThisPassThrough() {
         return checkPassThrough(node);
+    }
+
+    KisProjectionLeafSP overlayProjectionLeaf() const {
+        return node && node->graphListener() && node->graphListener()->graphOverlayNode() ?
+            node->graphListener()->graphOverlayNode()->projectionLeaf() : 0;
+    }
+
+    bool isTopmostNode() const {
+        return !skipSelectionMasksForward(node->nextSibling()) &&
+            node->parent() &&
+            !node->parent()->parent();
+    }
+
+    KisNodeSP findRoot() const {
+        KisNodeSP root = node;
+
+        while (root->parent()) {
+            root = root->parent();
+        }
+
+        return root;
     }
 
     void temporarySetPassThrough(bool value) {
@@ -69,7 +111,15 @@ KisProjectionLeaf::~KisProjectionLeaf()
 
 KisProjectionLeafSP KisProjectionLeaf::parent() const
 {
-    KisNodeSP node = m_d->node->parent();
+    KisNodeSP node;
+
+    if (Private::isSelectionMask(m_d->node)) {
+        if (m_d->overlayProjectionLeaf() == this) {
+            node = m_d->findRoot();
+        }
+    } else {
+        node = m_d->node->parent();
+    }
 
     while (node && Private::checkPassThrough(node)) {
         node = node->parent();
@@ -85,6 +135,14 @@ KisProjectionLeafSP KisProjectionLeaf::firstChild() const
 
     if (!m_d->checkThisPassThrough()) {
         node = m_d->node->firstChild();
+        node = Private::skipSelectionMasksForward(node);
+    }
+
+    if (!node && isRoot()) {
+        KisProjectionLeafSP overlayLeaf = m_d->overlayProjectionLeaf();
+        if (overlayLeaf) {
+            return overlayLeaf;
+        }
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -94,8 +152,16 @@ KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 {
     KisNodeSP node;
 
+    if (isRoot()) {
+        KisProjectionLeafSP overlayLeaf = m_d->overlayProjectionLeaf();
+        if (overlayLeaf) {
+            return overlayLeaf;
+        }
+    }
+
     if (!m_d->checkThisPassThrough()) {
         node = m_d->node->lastChild();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -103,20 +169,35 @@ KisProjectionLeafSP KisProjectionLeaf::lastChild() const
 
 KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
 {
+    if (Private::isSelectionMask(m_d->node)) {
+        KisProjectionLeafSP leaf;
+
+        if (m_d->overlayProjectionLeaf() == this) {
+            KisNodeSP node = m_d->findRoot()->lastChild();
+            node = Private::skipSelectionMasksBackward(node);
+            leaf = node->projectionLeaf();
+        }
+
+        return leaf;
+    }
+
     KisNodeSP node;
 
     if (m_d->checkThisPassThrough()) {
         node = m_d->node->lastChild();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     if (!node) {
         node = m_d->node->prevSibling();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     const KisProjectionLeaf *leaf = this;
     while (!node && leaf->m_d->checkParentPassThrough()) {
         leaf = leaf->node()->parent()->projectionLeaf().data();
         node = leaf->node()->prevSibling();
+        node = Private::skipSelectionMasksBackward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
@@ -124,22 +205,29 @@ KisProjectionLeafSP KisProjectionLeaf::prevSibling() const
 
 KisProjectionLeafSP KisProjectionLeaf::nextSibling() const
 {
+    if (Private::isSelectionMask(m_d->node)) {
+        return KisProjectionLeafSP();
+    }
+
+    KisProjectionLeafSP overlayLeaf = m_d->overlayProjectionLeaf();
+    if (overlayLeaf && m_d->isTopmostNode()) {
+        return overlayLeaf;
+    }
+
     KisNodeSP node = m_d->node->nextSibling();
+    node = Private::skipSelectionMasksForward(node);
 
     while (node && Private::checkPassThrough(node) && node->firstChild()) {
         node = node->firstChild();
+        node = Private::skipSelectionMasksForward(node);
     }
 
     if (!node && m_d->checkParentPassThrough()) {
         node = m_d->node->parent();
+        node = Private::skipSelectionMasksForward(node);
     }
 
     return node ? node->projectionLeaf() : KisProjectionLeafSP();
-}
-
-bool KisProjectionLeaf::hasChildren() const
-{
-    return m_d->node->firstChild();
 }
 
 KisNodeSP KisProjectionLeaf::node() const
@@ -194,6 +282,8 @@ bool KisProjectionLeaf::dependsOnLowerNodes() const
 
 bool KisProjectionLeaf::visible() const
 {
+    if (m_d->isTemporaryHidden) return false;
+
     // TODO: check opacity as well!
 
     bool hiddenByParentPassThrough = false;
@@ -255,9 +345,23 @@ bool KisProjectionLeaf::isStillInGraph() const
 bool KisProjectionLeaf::isDroppedMask() const
 {
     return qobject_cast<KisMask*>(m_d->node) &&
-        m_d->checkParentPassThrough();
+            m_d->checkParentPassThrough();
 }
 
+bool KisProjectionLeaf::isOverlayProjectionLeaf() const
+{
+    return this == m_d->overlayProjectionLeaf();
+}
+
+void KisProjectionLeaf::setTemporaryHiddenFromRendering(bool value)
+{
+    m_d->isTemporaryHidden = value;
+}
+
+bool KisProjectionLeaf::isTemporaryHiddenFromRendering() const
+{
+    return m_d->isTemporaryHidden;
+}
 
 /**
  * This method is rather slow and dangerous. It should be executes in

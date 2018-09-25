@@ -32,7 +32,7 @@
 #include <QOpenGLFunctions_3_2_Core>
 #include <QOpenGLFunctions_3_0>
 #include <QOpenGLFunctions_2_0>
-
+#include <QOpenGLExtraFunctions>
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
@@ -126,7 +126,7 @@ void OcioDisplayFilter::updateProcessor()
         inputColorSpaceName = config->getColorSpaceNameByIndex(0);
     }
     if (!look) {
-	look = config->getLookNameByIndex(0);
+    look = config->getLookNameByIndex(0);
     }
 
     if (!displayDevice || !view || !inputColorSpaceName) {
@@ -267,33 +267,41 @@ void OcioDisplayFilter::updateProcessor()
 
 bool OcioDisplayFilter::updateShader()
 {
-    bool result = false;
-
     if (KisOpenGL::hasOpenGL3()) {
+        qDebug() << 1;
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
-        result = updateShaderImpl(f);
+        if (f) {
+            return updateShaderImpl(f);
+        }
     }
+
     // XXX This option can be removed once we move to Qt 5.7+
-    else if (KisOpenGL::supportsLoD()) {
+    if (KisOpenGL::supportsLoD()) {
+        qDebug() << 2;
 #ifdef Q_OS_MAC
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
 #else
         QOpenGLFunctions_3_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
 #endif
-        result = updateShaderImpl(f);
-    } else {
-        QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
-        result = updateShaderImpl(f);
+        if (f) {
+            return updateShaderImpl(f);
+        }
     }
+    qDebug() << 3;
+    QOpenGLExtraFunctions *f = QOpenGLContext::currentContext()->extraFunctions();
+    if (f) {
+        return updateShaderImpl(f);
+    }
+    qDebug() << 4;
 
-    return result;
+    return false;
 }
 
 template <class F>
 bool OcioDisplayFilter::updateShaderImpl(F *f) {
     // check whether we are allowed to use shaders -- though that should
     // work for everyone these days
-    KisConfig cfg;
+    KisConfig cfg(true);
     if (!cfg.useOpenGL()) return false;
 
     if (!m_shaderDirty) return false;

@@ -18,8 +18,6 @@
 
 #include "EmfOutput.h"
 
-#include <QDebug>
-
 #include <math.h>
 
 namespace Libemf

@@ -1079,6 +1079,7 @@ void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &c
 void KisColorizeMask::testingRegenerateMask()
 {
     slotUpdateRegenerateFilling();
+    m_d->updateIsRunning = false;
 }
 
 KisPaintDeviceSP KisColorizeMask::testingFilteredSource() const

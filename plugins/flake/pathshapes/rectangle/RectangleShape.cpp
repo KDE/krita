@@ -94,8 +94,8 @@ void RectangleShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().startElement("draw:rect");
         saveOdfAttributes(context, OdfAllAttributes);
         if (m_cornerRadiusX > 0 && m_cornerRadiusY > 0) {
-            context.xmlWriter().addAttributePt("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
-            context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
+            context.xmlWriter().addAttribute("svg:rx", m_cornerRadiusX * (0.5 * size().width()) / 100.0);
+            context.xmlWriter().addAttribute("svg:ry", m_cornerRadiusY * (0.5 * size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
         saveText(context);
@@ -300,11 +300,10 @@ qreal RectangleShape::cornerRadiusX() const
 
 void RectangleShape::setCornerRadiusX(qreal radius)
 {
-    if (radius >= 0.0 && radius <= 100.0) {
-        m_cornerRadiusX = radius;
-        updatePath(size());
-        updateHandles();
-    }
+    radius = qBound(0.0, radius, 100.0);
+    m_cornerRadiusX = radius;
+    updatePath(size());
+    updateHandles();
 }
 
 qreal RectangleShape::cornerRadiusY() const
@@ -314,11 +313,10 @@ qreal RectangleShape::cornerRadiusY() const
 
 void RectangleShape::setCornerRadiusY(qreal radius)
 {
-    if (radius >= 0.0 && radius <= 100.0) {
-        m_cornerRadiusY = radius;
-        updatePath(size());
-        updateHandles();
-    }
+    radius = qBound(0.0, radius, 100.0);
+    m_cornerRadiusY = radius;
+    updatePath(size());
+    updateHandles();
 }
 
 QString RectangleShape::pathShapeId() const
@@ -338,16 +336,16 @@ bool RectangleShape::saveSvg(SvgSavingContext &context)
     SvgStyleWriter::saveSvgStyle(this, context);
 
     const QSizeF size = this->size();
-    context.shapeWriter().addAttributePt("width", size.width());
-    context.shapeWriter().addAttributePt("height", size.height());
+    context.shapeWriter().addAttribute("width", size.width());
+    context.shapeWriter().addAttribute("height", size.height());
 
     double rx = cornerRadiusX();
     if (rx > 0.0) {
-        context.shapeWriter().addAttributePt("rx", 0.01 * rx * 0.5 * size.width());
+        context.shapeWriter().addAttribute("rx", 0.01 * rx * 0.5 * size.width());
     }
     double ry = cornerRadiusY();
     if (ry > 0.0) {
-        context.shapeWriter().addAttributePt("ry", 0.01 * ry * 0.5 * size.height());
+        context.shapeWriter().addAttribute("ry", 0.01 * ry * 0.5 * size.height());
     }
 
     context.shapeWriter().endElement();

@@ -34,7 +34,6 @@
 #include <KoResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
-#include <KoStopGradient.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 
@@ -45,7 +44,7 @@
 #include "kis_stopgradient_editor.h"
 
 KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, QWidget * parent, const char *name)
-        : KoDialog(parent)
+    : KoDialog(parent)
 {
     setCaption(i18n("Custom Gradient"));
     setButtons(Close);
@@ -65,7 +64,7 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradient* gradient, Q
 }
 
 KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
-        : QFrame(parent)
+    : QFrame(parent)
 {
     setObjectName(name);
     m_lbName = new QLabel();
@@ -120,10 +119,10 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     mainLayout->addWidget(m_itemChooser, 10);
     mainLayout->addWidget(buttonWidget);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
+                                             cfg.kineticScrollingSensitivity(),
+                                             cfg.kineticScrollingScrollbar());
 
     slotUpdateIcons();
     setLayout(mainLayout);
@@ -200,8 +199,8 @@ void KisGradientChooser::addGradient(KoAbstractGradient* gradient)
 
 void KisGradientChooser::editGradient()
 {
-     KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "autogradient");
-     dialog.exec();
+    KisCustomGradientDialog dialog(static_cast<KoAbstractGradient*>(currentResource()), this, "autogradient");
+    dialog.exec();
 }
 
 

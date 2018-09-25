@@ -50,12 +50,6 @@ void KisQmicTests::initTestCase()
 {
     m_qimage = QImage(QString(FILES_DATA_DIR) + "/" + "poster_rodents_bunnysize.jpg");
     m_qimage = m_qimage.convertToFormat(QImage::Format_ARGB32);
-
-    qDebug() << m_qimage.size();
-
-    m_qmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 4); // rgba
-    m_qmicImage._data = new float[m_qimage.width() * m_qimage.height() * 4];
-    KisQmicSimpleConvertor::convertFromQImage(m_qimage, &m_qmicImage);
 }
 
 void KisQmicTests::cleanupTestCase()
@@ -68,19 +62,18 @@ void KisQmicTests::testConvertGrayScaleQmic()
     KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
 
     gmic_image<float> qmicImage;
-    qmicImage.assign(m_qimage.width(),m_qimage.height(), 1, 1);
+    qmicImage.assign(m_qimage.width(), m_qimage.height(), 1, 1);
     qmicImage._data = new float[m_qimage.width() * m_qimage.height()];
 
     KisQmicSimpleConvertor::convertFromQImage(m_qimage, &qmicImage, 1.0);
     KisQmicSimpleConvertor::convertFromGmicImage(qmicImage, resultDev, 1.0);
     KisQmicSimpleConvertor::convertFromGmicFast(qmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, slowQImage, fastQImage))
-    {
+    if (!TestUtil::compareQImages(errpoint, slowQImage, fastQImage)) {
         QFAIL(QString("Slow method produces different result then fast to convert qmic grayscale pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("grayscale.bmp");
         fastQImage.save("grayscale_fast.bmp");
@@ -100,12 +93,11 @@ void KisQmicTests::testConvertGrayScaleAlphaQmic()
     KisQmicSimpleConvertor::convertFromGmicImage(qmicImage, resultDev, 1.0);
     KisQmicSimpleConvertor::convertFromGmicFast(qmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0, 0,0,qmicImage._width, qmicImage._height);
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
 
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint,slowQImage,fastQImage))
-    {
+    if (!TestUtil::compareQImages(errpoint, slowQImage, fastQImage)) {
         QFAIL(QString("Slow method produces different result then fast to convert qmic grayscale pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("grayscale.bmp");
         fastQImage.save("grayscale_fast.bmp");
@@ -125,17 +117,16 @@ void KisQmicTests::testConvertRGBqmic()
     KisQmicSimpleConvertor::convertFromGmicImage(qmicImage, resultDev, 1.0);
     KisQmicSimpleConvertor::convertFromGmicFast(qmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, slowQImage, m_qimage))
-    {
+
+    if (!TestUtil::compareQImages(errpoint, slowQImage, m_qimage)) {
         QFAIL(QString("Slow method failed to convert qmic RGB pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("RGB.bmp");
     }
 
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
-    if (!TestUtil::compareQImages(errpoint,fastQImage,m_qimage))
-    {
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
+    if (!TestUtil::compareQImages(errpoint,fastQImage,m_qimage)) {
         QFAIL(QString("Fast method failed to convert qmic RGB pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         fastQImage.save("RGB_fast.bmp");
     }
@@ -155,17 +146,15 @@ void KisQmicTests::testConvertRGBAqmic()
     KisQmicSimpleConvertor::convertFromGmicImage(qmicImage, resultDev, 1.0);
     KisQmicSimpleConvertor::convertFromGmicFast(qmicImage, resultDevFast, 1.0);
 
-    QImage slowQImage = resultDev->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint,slowQImage,m_qimage))
-    {
+    if (!TestUtil::compareQImages(errpoint,slowQImage,m_qimage)) {
         QFAIL(QString("Slow method failed to convert qmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         slowQImage.save("RGBA.bmp");
     }
 
-    QImage fastQImage = resultDevFast->convertToQImage(0,0,0,qmicImage._width, qmicImage._height);
-    if (!TestUtil::compareQImages(errpoint,fastQImage,m_qimage))
-    {
+    QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
+    if (!TestUtil::compareQImages(errpoint,fastQImage,m_qimage)) {
         QFAIL(QString("Fast method failed to convert qmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
         fastQImage.save("RGBA_fast.bmp");
     }
@@ -182,27 +171,28 @@ void KisQmicTests::testConvertToGmic()
 
     KisQmicSimpleConvertor::convertToGmicImageFast(srcDev, &qmicImage, srcDev->exactBounds());
 
-    KisPaintDeviceSP resultDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-
-    KisQmicSimpleConvertor::convertFromGmicImage(qmicImage, resultDev, 1.0);
-    KisQmicSimpleConvertor::convertFromGmicFast(qmicImage, resultDevFast, 1.0);
-
-    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
-    slowQImage.save("a.png");
     QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, slowQImage, m_qimage))
-    {
-        QFAIL(QString("Slow method failed to convert qmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-        slowQImage.save("RGBA.bmp");
+    QImage resultQImage = KisQmicSimpleConvertor::convertToQImage(qmicImage);
+    if (!TestUtil::compareQImages(errpoint, resultQImage, m_qimage)) {
+        QFAIL(QString("Failed to convert qmic RGBA pixel format to QImage, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+        resultQImage.save("testConvertToGmic_qimage.bmp");
     }
 
+    KisPaintDeviceSP resultDevFast = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisQmicSimpleConvertor::convertFromGmicFast(qmicImage, resultDevFast, 255.0f);
     QImage fastQImage = resultDevFast->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
-    fastQImage.save("b.png");
-    if (!TestUtil::compareQImages(errpoint, fastQImage, m_qimage))
-    {
+
+    if (!TestUtil::compareQImages(errpoint, fastQImage, m_qimage)) {
         QFAIL(QString("Fast method failed to convert qmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
-        fastQImage.save("RGBA_fast.bmp");
+        fastQImage.save("testConvertToGmic_fast.bmp");
+    }
+
+    KisPaintDeviceSP resultDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    KisQmicSimpleConvertor::convertFromGmicImage(qmicImage, resultDev, 255.0f);
+    QImage slowQImage = resultDev->convertToQImage(0, 0, 0, qmicImage._width, qmicImage._height);
+    if (!TestUtil::compareQImages(errpoint, slowQImage, m_qimage)) {
+        QFAIL(QString("Slow method failed to convert qmic RGBA pixel format, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+        slowQImage.save("testConvertToGmic_slow.bmp");
     }
 
 

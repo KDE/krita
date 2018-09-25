@@ -24,93 +24,66 @@ ecm_add_tests(
     TestShapeShadowCommand.cpp
     TestInputDevice.cpp
     TestSnapStrategy.cpp
-    NAME_PREFIX "libs-kritaflake-"
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestPathShape.cpp
-    TEST_NAME libs-kritaflake-TestPathShape
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestControlPointMoveCommand.cpp
-    TEST_NAME libs-kritaflake-TestControlPointMoveCommand
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestPointTypeCommand.cpp
-    TEST_NAME libs-kritaflake-TestPointTypeCommand
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestPointRemoveCommand.cpp
-    TEST_NAME libs-kritaflake-TestPointRemoveCommand
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestRemoveSubpathCommand.cpp
-    TEST_NAME libs-kritaflake-TestRemoveSubpathCommand
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestPathSegment.cpp
-    TEST_NAME libs-kritaflake-TestPathSegment
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestSegmentTypeCommand.cpp
-    TEST_NAME libs-kritaflake-TestSegmentTypeCommand
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-krita_add_broken_unit_test(TestPointMergeCommand.cpp
-    TEST_NAME libs-kritaflake-TestPointMergeCommand
-    LINK_LIBRARIES kritaflake Qt5::Test)
-
-ecm_add_test(
+    TestPathShape.cpp
+    TestControlPointMoveCommand.cpp
+    TestPointTypeCommand.cpp
+    TestPointRemoveCommand.cpp
+    TestRemoveSubpathCommand.cpp
+    TestPathSegment.cpp
+    TestSegmentTypeCommand.cpp
     TestKoDrag.cpp
-    TEST_NAME libs-kritaflake-TestKoDrag
-    LINK_LIBRARIES kritaflake Qt5::Test
-)
-
-ecm_add_test(
     TestKoMarkerCollection.cpp
-    TEST_NAME libs-kritaflake-TestKoMarkerCollection
+
     LINK_LIBRARIES kritaflake Qt5::Test
-)
+    NAME_PREFIX "libs-flake-")
 
 ecm_add_test(
     TestSvgParser.cpp
-    TEST_NAME libs-kritaflake-TestSvgParser
+    TEST_NAME TestSvgParser
     LINK_LIBRARIES kritaflake Qt5::Test
-)
+    NAME_PREFIX "libs-flake-")
 
 ecm_add_test(
     TestSvgParser.cpp
-    TEST_NAME libs-kritaflake-TestSvgParserCloned
+    TEST_NAME TestSvgParserCloned
     LINK_LIBRARIES kritaflake Qt5::Test
-)
-set_property(TARGET libs-kritaflake-TestSvgParserCloned
+    NAME_PREFIX "libs-flake-")
+set_property(TARGET TestSvgParserCloned
              PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
 
 ecm_add_test(
     TestSvgParser.cpp
-    TEST_NAME libs-kritaflake-TestSvgParserRoundTrip
+    TEST_NAME TestSvgParserRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test
-)
-set_property(TARGET libs-kritaflake-TestSvgParserRoundTrip
+    NAME_PREFIX "libs-flake-")
+set_property(TARGET TestSvgParserRoundTrip
              PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)
 
-ecm_add_test(
-    TestSvgText.cpp
-    TEST_NAME libs-kritaflake-TestSvgText
-    LINK_LIBRARIES kritaflake Qt5::Test
-)
+############## broken tests ###############
 
-ecm_add_test(
-    TestSvgText.cpp
-    TEST_NAME libs-kritaflake-TestSvgTextCloned
+krita_add_broken_unit_test(TestPointMergeCommand.cpp
+    TEST_NAME TestPointMergeCommand
     LINK_LIBRARIES kritaflake Qt5::Test
-)
-set_property(TARGET libs-kritaflake-TestSvgTextCloned
+    NAME_PREFIX "libs-flake-")
+
+krita_add_broken_unit_test(
+    TestSvgText.cpp
+    TEST_NAME TestSvgText
+    LINK_LIBRARIES kritaflake Qt5::Test
+    NAME_PREFIX "libs-flake-")
+
+krita_add_broken_unit_test(
+    TestSvgText.cpp
+    TEST_NAME TestSvgTextCloned
+    LINK_LIBRARIES kritaflake Qt5::Test
+    NAME_PREFIX "libs-flake-")
+set_property(TARGET TestSvgTextCloned
              PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
 
-ecm_add_test(
+krita_add_broken_unit_test(
     TestSvgText.cpp
-    TEST_NAME libs-kritaflake-TestSvgTextRoundTrip
+    TEST_NAME TestSvgTextRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test
-)
-set_property(TARGET libs-kritaflake-TestSvgTextRoundTrip
+    NAME_PREFIX "libs-flake-")
+set_property(TARGET TestSvgTextRoundTrip
              PROPERTY COMPILE_DEFINITIONS USE_ROUND_TRIP)

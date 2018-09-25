@@ -98,21 +98,6 @@ public:  // Krita specific interfaces
     /// Return the wrapper class around the statusbar
     KisStatusBar *statusBar() const;
 
-    /**
-      * This adds a widget to the statusbar for this view.
-      * If you use this method instead of using statusBar() directly,
-      * KisView will take care of removing the items when the view GUI is deactivated
-      * and readding them when it is reactivated.
-      * The parameters are the same as QStatusBar::addWidget().
-    */
-    void addStatusBarItem(QWidget * widget, int stretch = 0, bool permanent = false);
-
-
-    /**
-      * Remove a widget from the statusbar for this view.
-      */
-    void removeStatusBarItem(QWidget * widget);
-
     KisPaintopBox* paintOpBox() const;
 
     /// create a new progress updater

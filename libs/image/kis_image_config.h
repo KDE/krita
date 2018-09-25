@@ -27,7 +27,7 @@
 class KRITAIMAGE_EXPORT KisImageConfig
 {
 public:
-    KisImageConfig(bool readOnly = false);
+    KisImageConfig(bool readOnly);
     ~KisImageConfig();
 
     bool enableProgressReporting(bool requestDefault = false) const;
@@ -137,6 +137,9 @@ public:
 
     qreal animationCacheRegionOfInterestMargin(bool defaultValue = false) const;
     void setAnimationCacheRegionOfInterestMargin(qreal value);
+
+    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
+    void setSelectionOverlayMaskColor(const QColor &color);
 
 private:
     Q_DISABLE_COPY(KisImageConfig)

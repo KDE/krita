@@ -26,6 +26,7 @@
 #include <QVector>
 #include <QDomElement>
 #include <QLocale>
+#include <QColor>
 
 #include <klocalizedstring.h>
 
@@ -56,7 +57,7 @@ namespace KisDomUtils {
         QString str;
         QTextStream stream;
         stream.setString(&str, QIODevice::WriteOnly);
-        stream.setRealNumberPrecision(11);
+        stream.setRealNumberPrecision(15);
         stream << value;
         return str;
     }
@@ -108,6 +109,26 @@ namespace KisDomUtils {
 
         return value;
     }
+
+
+    inline QString qColorToQString(QColor color)
+    {
+        // color channels will usually have 0-255
+        QString customColor = QString::number(color.red()).append(",")
+                             .append(QString::number(color.green())).append(",")
+                             .append(QString::number(color.blue())).append(",")
+                             .append(QString::number(color.alpha()));
+
+        return customColor;
+    }
+
+    inline QColor qStringToQColor(QString colorString)
+    {
+        QStringList colorComponents = colorString.split(',');
+        return QColor(colorComponents[0].toInt(), colorComponents[1].toInt(), colorComponents[2].toInt(), colorComponents[3].toInt());
+    }
+
+
 
 
 /**

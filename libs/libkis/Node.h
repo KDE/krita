@@ -440,7 +440,9 @@ public Q_SLOTS:
     void move(int x, int y);
 
     /**
-     * @brief position returns the position of the paint device of this node
+     * @brief position returns the position of the paint device of this node. The position is
+     * always 0,0 unless the layer has been moved. If you want to know the topleft position of
+     * the rectangle around the actual non-transparent pixels in the node, use bounds().
      * @return the top-left position of the node
      */
     QPoint position() const;
@@ -468,7 +470,6 @@ public Q_SLOTS:
     /**
      * @brief mergeDown merges the given node with the first visible node underneath this node in the layerstack.
      * This will drop all per-layer metadata.
-     * @param node the node to merge down; this node will be removed from the layer stack
      */
     Node *mergeDown();
 
@@ -488,7 +489,7 @@ public Q_SLOTS:
      * <li>Mitchell</li>
      * </ul>
      */
-    void scaleNode(int width, int height, QString strategy);
+    void scaleNode(const QPointF &origin, int width, int height, QString strategy);
 
     /**
      * @brief rotateNode rotate this layer by the given radians.

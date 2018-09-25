@@ -30,7 +30,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoCanvasBase.h>
 #include <KoToolManager.h>
-#include <KoShapeBasedDocumentBase.h>
+#include <KoShapeControllerBase.h>
 #include <KoResourceServerProvider.h>
 #include <kis_icon.h>
 
@@ -60,22 +60,15 @@
 #include <KisMimeDatabase.h>
 #include <dialogs/KisSessionManagerDialog.h>
 
-#include "KisView.h"
-#include "KisDocument.h"
 #include "kis_config.h"
 #include "kis_shape_controller.h"
 #include "KisResourceServerProvider.h"
 #include "kis_animation_cache_populator.h"
 #include "kis_idle_watcher.h"
 #include "kis_image.h"
-#include "KisImportExportManager.h"
-#include "KisDocument.h"
-#include "KoToolManager.h"
-#include "KisViewManager.h"
 #include "KisOpenPane.h"
 
 #include "kis_color_manager.h"
-#include "kis_debug.h"
 
 #include "kis_action.h"
 #include "kis_action_registry.h"
@@ -234,7 +227,7 @@ KisView *KisPart::createView(KisDocument *document,
                              QWidget *parent)
 {
     // If creating the canvas fails, record this and disable OpenGL next time
-    KisConfig cfg;
+    KisConfig cfg(false);
     KConfigGroup grp( KSharedConfig::openConfig(), "crashprevention");
     if (grp.readEntry("CreatingCanvas", false)) {
         cfg.setUseOpenGL(false);
@@ -339,7 +332,7 @@ bool KisPart::closeSession(bool keepWindows)
     }
 
     if (d->currentSession) {
-        KisConfig kisCfg;
+        KisConfig kisCfg(false);
         if (kisCfg.saveSessionOnQuit(false)) {
 
             d->currentSession->storeCurrentWindows();

@@ -91,7 +91,7 @@ KisKraSaver::~KisKraSaver()
 
 QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
 {
-    QDomElement imageElement = doc.createElement("IMAGE"); // Legacy!
+    QDomElement imageElement = doc.createElement("IMAGE");
 
     Q_ASSERT(image);
     imageElement.setAttribute(NAME, m_d->imageName);
@@ -126,6 +126,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     m_d->keyframeFilenames = visitor.keyframeFileNames();
 
     saveBackgroundColor(doc, imageElement, image);
+    saveAssistantsGlobalColor(doc, imageElement);
     saveWarningColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc, imageElement);
@@ -302,6 +303,14 @@ void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, K
     element.appendChild(e);
 }
 
+void KisKraSaver::saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& element)
+{
+    QDomElement e = doc.createElement(GLOBALASSISTANTSCOLOR);
+    QString colorString = KisDomUtils::qColorToQString(m_d->doc->assistantsGlobalColor());
+    e.setAttribute(SIMPLECOLORDATA, QString(colorString));
+    element.appendChild(e);
+}
+
 void KisKraSaver::saveWarningColor(QDomDocument& doc, QDomElement& element, KisImageSP image)
 {
     if (image->proofingConfiguration()) {
@@ -328,9 +337,11 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
     QString location;
     QMap<QString, int> assistantcounters;
     QByteArray data;
+
     QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     QMap<KisPaintingAssistantHandleSP, int> handlemap;
     if (!assistants.isEmpty()) {
+
         Q_FOREACH (KisPaintingAssistantSP assist, assistants){
             if (!assistantcounters.contains(assist->id())){
                 assistantcounters.insert(assist->id(),0);
@@ -338,6 +349,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
             location = external ? QString() : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             location += QString(assist->id()+"%1.assistant").arg(assistantcounters[assist->id()]);
+
             data = assist->saveXml(handlemap);
             store->open(location);
             store->write(data);

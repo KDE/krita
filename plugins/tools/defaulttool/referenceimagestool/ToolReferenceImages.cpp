@@ -100,10 +100,12 @@ void ToolReferenceImages::addReferenceImage()
     if (filename.isEmpty()) return;
     if (!QFileInfo(filename).exists()) return;
 
-    auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter());
+    auto *reference = KisReferenceImage::fromFile(filename, *kisCanvas->coordinatesConverter(), canvas()->canvasWidget());
 
-    KisDocument *doc = document();
-    doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+    if (reference) {
+        KisDocument *doc = document();
+        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+    }
 }
 
 void ToolReferenceImages::removeAllReferenceImages()
@@ -184,7 +186,7 @@ void ToolReferenceImages::saveReferenceImages()
     file.close();
 
     if (!ok) {
-        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Failed to save reference images.", filename));
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Krita"), i18n("Failed to save reference images."));
     }
 }
 

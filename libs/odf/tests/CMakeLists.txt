@@ -13,7 +13,6 @@ ecm_add_tests(
 
 ecm_add_tests(
     TestXmlWriter.cpp
-    TestXmlReader.cpp
     kodomtest.cpp
     TestKoUnit.cpp
     TestNumberStyle.cpp

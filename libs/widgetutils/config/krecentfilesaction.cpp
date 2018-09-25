@@ -233,8 +233,13 @@ void KRecentFilesAction::removeUrl(const QUrl &url)
 
 QList<QUrl> KRecentFilesAction::urls() const
 {
-    Q_D(const KRecentFilesAction);
-    return d->m_urls.values();
+    // switch order so last opened file is first
+    QList<QUrl> sortedList;
+    for (int i=(d_urls.length()-1); i >= 0; i--) {
+            sortedList.append(d_urls[i]);
+    }
+
+    return sortedList;
 }
 
 void KRecentFilesAction::clear()
@@ -253,6 +258,8 @@ void KRecentFilesAction::clearEntries()
     d->clearSeparator->setVisible(false);
     d->clearAction->setVisible(false);
     setEnabled(false);
+
+    d_urls.clear();
 }
 
 void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
@@ -281,6 +288,7 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
             continue;
         }
         url = QUrl::fromUserInput(value);
+        d_urls.append(QUrl(url)); // will be used to retrieve on the welcome screen
 
         // Don't restore if file doesn't exist anymore
         if (url.isLocalFile() && !QFile::exists(url.toLocalFile())) {

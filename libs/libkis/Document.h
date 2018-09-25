@@ -735,6 +735,11 @@ print(root.childNodes())
      */
     void setGuidesLocked(bool locked);
 
+    /**
+     * @brief modified returns true if the document has unsaved modifications.
+     */
+    bool modified() const;
+
 private:
 
     friend class Krita;

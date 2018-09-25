@@ -31,8 +31,6 @@
 #include <QStylePainter>
 #include <QStyleOption>
 
-#include <kis_icon.h>
-
 #include "kis_config.h"
 
 KisWidgetChooser::KisWidgetChooser(int id, QWidget* parent)
@@ -215,7 +213,7 @@ QWidget* KisWidgetChooser::chooseWidget(const QString& id)
     delete QWidget::layout();
     QWidget::setLayout(createLayout());
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setToolbarSlider(m_chooserid, id);
 
     return choosenWidget;

@@ -26,8 +26,8 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-#include "kis_global.h"
-#include "kis_properties_configuration.h"
+#include <kis_global.h>
+#include <kis_properties_configuration.h>
 #include "kritaui_export.h"
 
 class KoColorProfile;
@@ -37,7 +37,13 @@ class KisSnapConfig;
 class KRITAUI_EXPORT KisConfig
 {
 public:
-    KisConfig();
+    /**
+     * @brief KisConfig create a kisconfig object
+     * @param readOnly if true, there will be no call to sync when the object is deleted.
+     *  Any KisConfig object created in a thread must be read-only.
+     */
+    KisConfig(bool readOnly);
+
     ~KisConfig();
 
     bool disableTouchOnCanvas(bool defaultValue = false) const;
@@ -236,9 +242,6 @@ public:
     bool antialiasCurves(bool defaultValue = false) const;
     void setAntialiasCurves(bool v) const;
 
-    QColor selectionOverlayMaskColor(bool defaultValue = false) const;
-    void setSelectionOverlayMaskColor(const QColor &color);
-
     bool antialiasSelectionOutline(bool defaultValue = false) const;
     void setAntialiasSelectionOutline(bool v) const;
 
@@ -253,9 +256,6 @@ public:
 
     bool forceAlwaysFullSizedOutline(bool defaultValue = false) const;
     void setForceAlwaysFullSizedOutline(bool value) const;
-
-    bool hideSplashScreen(bool defaultValue = false) const;
-    void setHideSplashScreen(bool hideSplashScreen) const;
 
     enum SessionOnStartup {
         SOS_BlankSession,
@@ -399,6 +399,11 @@ public:
     QString toolbarSlider(int sliderNumber, bool defaultValue = false) const;
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+
+    int layerThumbnailSize(bool defaultValue = false) const;
+    void setLayerThumbnailSize(int size);
+
+
     bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);
 
@@ -460,9 +465,6 @@ public:
 
     bool lineSmoothingStabilizeSensors(bool defaultValue = false) const;
     void setLineSmoothingStabilizeSensors(bool value);
-
-    int paletteDockerPaletteViewSectionSize(bool defaultValue = false) const;
-    void setPaletteDockerPaletteViewSectionSize(int value) const;
 
     int tabletEventsDelay(bool defaultValue = false) const;
     void setTabletEventsDelay(int value);
@@ -561,6 +563,12 @@ public:
     bool calculateAnimationCacheInBackground(bool defaultValue = false) const;
     void setCalculateAnimationCacheInBackground(bool value);
 
+    QColor defaultAssistantsColor(bool defaultValue = false) const;
+    void setDefaultAssistantsColor(const QColor &color) const;
+
+    bool autoSmoothBezierCurves(bool defaultValue = false) const;
+    void setAutoSmoothBezierCurves(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);
@@ -592,6 +600,7 @@ private:
 
 private:
     mutable KConfigGroup m_cfg;
+    bool m_readOnly;
 };
 
 #endif // KIS_CONFIG_H_

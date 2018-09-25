@@ -206,6 +206,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
     QString colorspacename;
     const KoColorSpace * cs;
 
+
     if ((attr = element.attribute(MIME)) == NATIVE_MIMETYPE) {
 
         if ((m_d->imageName = element.attribute(NAME)).isNull()) {
@@ -274,8 +275,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
                 return KisImageSP(0);
             }
         }
-        KisImageConfig cfgImage;
-        KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
+        KisProofingConfigurationSP proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
         if (!(attr = element.attribute(PROOFINGPROFILENAME)).isNull()) {
             proofingConfig->proofingProfile = attr;
         }
@@ -306,6 +306,7 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         KoXmlNode child;
         for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
             KoXmlElement e = child.toElement();
+
             if(e.tagName() == CANVASPROJECTIONCOLOR) {
                 if (e.hasAttribute(COLORBYTEDATA)) {
                     QByteArray colorData = QByteArray::fromBase64(e.attribute(COLORBYTEDATA).toLatin1());
@@ -313,6 +314,15 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
                     image->setDefaultProjectionColor(color);
                 }
             }
+
+
+            if(e.tagName() == GLOBALASSISTANTSCOLOR) {
+                if (e.hasAttribute(SIMPLECOLORDATA)) {
+                    QString colorData = e.attribute(SIMPLECOLORDATA);
+                    m_d->document->setAssistantsGlobalColor(KisDomUtils::qStringToQColor(colorData));
+                }
+            }
+
 
             if(e.tagName()== PROOFINGWARNINGCOLOR) {
                 QDomDocument dom;
@@ -389,7 +399,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
             KisProofingConfigurationSP proofingConfig = image->proofingConfiguration();
             if (!proofingConfig) {
-                proofingConfig = KisImageConfig().defaultProofingconfiguration();
+                proofingConfig = KisImageConfig(true).defaultProofingconfiguration();
             }
 
             if (proofingProfileRes) {
@@ -403,7 +413,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
 
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
-    KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->keyframeFilenames, m_d->imageName, m_d->syntaxVersion);
+    KisKraLoadVisitor visitor(image, store, m_d->document->shapeController(), m_d->layerFilenames, m_d->keyframeFilenames, m_d->imageName, m_d->syntaxVersion);
 
     if (external) {
         visitor.setExternalUri(uri);
@@ -503,6 +513,8 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
     QString location;
     QMap<int ,KisPaintingAssistantHandleSP> handleMap;
     KisPaintingAssistant* assistant = 0;
+    const QColor globalColor = m_d->document->assistantsGlobalColor();
+
     QMap<QString,QString>::const_iterator loadedAssistant = m_d->assistantsFilenames.constBegin();
     while (loadedAssistant != m_d->assistantsFilenames.constEnd()){
         const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(loadedAssistant.value());
@@ -512,6 +524,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);
+            assistant->setAssistantGlobalColorCache(globalColor);
 
             //If an assistant has too few handles than it should according to it's own setup, just don't load it//
             if (assistant->handles().size()==assistant->numHandles()){
@@ -901,7 +914,7 @@ KisNodeSP KisKraLoader::loadShapeLayer(const KoXmlElement& element, KisImageSP i
     Q_UNUSED(cs);
 
     QString attr;
-    KoShapeBasedDocumentBase * shapeController = 0;
+    KoShapeControllerBase * shapeController = 0;
     if (m_d->document) {
         shapeController = m_d->document->shapeController();
     }

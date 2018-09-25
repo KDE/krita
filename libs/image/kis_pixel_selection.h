@@ -49,6 +49,11 @@ public:
      */
     KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot);
 
+    /**
+     * Create a new selection using the content of copySource as the mask.
+     */
+    KisPixelSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot, KisSelectionWSP parentSelection = KisSelectionWSP());
+
     ~KisPixelSelection() override;
 
     KisSelectionComponent* clone(KisSelection*) override;

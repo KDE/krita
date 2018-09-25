@@ -62,17 +62,17 @@ private:
 
 
 struct KisFilterSelectorWidget::Private {
-    QWidget* currentCentralWidget;
-    KisConfigWidget* currentFilterConfigurationWidget;
+    QWidget *currentCentralWidget {0};
+    KisConfigWidget *currentFilterConfigurationWidget {0};
     KisFilterSP currentFilter;
     KisPaintDeviceSP paintDevice;
     Ui_FilterSelector uiFilterSelector;
     KisPaintDeviceSP thumb;
-    KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
-    KisFiltersModel* filtersModel;
-    QGridLayout *widgetLayout;
-    KisViewManager *view;
-    bool showFilterGallery;
+    KisBookmarkedFilterConfigurationsModel *currentBookmarkedFilterConfigurationsModel {0};
+    KisFiltersModel *filtersModel {};
+    QGridLayout *widgetLayout {};
+    KisViewManager *view{};
+    bool showFilterGallery {true};
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
@@ -80,13 +80,6 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
 {
     Q_UNUSED(parent);
     setObjectName("KisFilterSelectorWidget");
-    d->currentCentralWidget = 0;
-    d->currentFilterConfigurationWidget = 0;
-    d->currentBookmarkedFilterConfigurationsModel = 0;
-    d->currentFilter = 0;
-    d->filtersModel = 0;
-    d->view = 0;
-    d->showFilterGallery = true;
     d->uiFilterSelector.setupUi(this);
 
     d->widgetLayout = new QGridLayout(d->uiFilterSelector.centralWidgetHolder);
@@ -98,10 +91,10 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
 
-    connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),
-            SLOT(slotBookmarkedFilterConfigurationSelected(int)));
+    connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),SLOT(slotBookmarkedFilterConfigurationSelected(int)));
     connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
     connect(d->uiFilterSelector.btnXML, SIGNAL(clicked()), this, SLOT(showXMLdialog()));
+
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -132,7 +125,7 @@ void KisFilterSelectorWidget::setPaintDevice(bool showAll, KisPaintDeviceSP _pai
     d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QModelIndex idx = d->filtersModel->indexForFilter(cfg.readEntry<QString>("FilterSelector/LastUsedFilter", "levels"));
 
     if (!idx.isValid()) {
@@ -247,6 +240,12 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
 
+    int lastBookmarkedFilterConfiguration = KisConfig(true).readEntry<int>("lastBookmarkedFilterConfiguration/" + f->id(), 0);
+    if (d->uiFilterSelector.comboBoxPresets->count() > lastBookmarkedFilterConfiguration) {
+        d->uiFilterSelector.comboBoxPresets->setCurrentIndex(lastBookmarkedFilterConfiguration);
+        slotBookmarkedFilterConfigurationSelected(lastBookmarkedFilterConfiguration);
+    }
+
     update();
 }
 
@@ -269,7 +268,7 @@ void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)
         }
     }
 
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.writeEntry<QString>("FilterSelector/LastUsedFilter", d->currentFilter->id());
     emit(configurationChanged());
 }
@@ -280,6 +279,9 @@ void KisFilterSelectorWidget::slotBookmarkedFilterConfigurationSelected(int inde
         QModelIndex modelIndex = d->currentBookmarkedFilterConfigurationsModel->index(index, 0);
         KisFilterConfigurationSP config  = d->currentBookmarkedFilterConfigurationsModel->configuration(modelIndex);
         d->currentFilterConfigurationWidget->setConfiguration(config);
+        if (d->currentFilter && index != KisConfig(true).readEntry<int>("lastBookmarkedFilterConfiguration/" + d->currentFilter->id(), 0)) {
+            KisConfig(false).writeEntry<int>("lastBookmarkedFilterConfiguration/" + d->currentFilter->id(), index);
+        }
     }
 }
 

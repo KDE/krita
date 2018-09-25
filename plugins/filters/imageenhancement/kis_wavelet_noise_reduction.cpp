@@ -29,12 +29,13 @@
 #include <widgets/kis_multi_double_filter_widget.h>
 #include <widgets/kis_multi_integer_filter_widget.h>
 #include <kis_paint_device.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include "kis_global.h"
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-    : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
+    : KisFilter(id(), FiltersCategoryEnhanceId, i18n("&Wavelet Noise Reducer..."))
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
@@ -80,13 +81,13 @@ void KisWaveletNoiseReduction::processImpl(KisPaintDeviceSP device,
 
     try {
         buff = mathToolbox.initWavelet(device, applyRect);
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         if (buff) delete buff;
         return;
     }
     try {
         wav = mathToolbox.fastWaveletTransformation(device, applyRect, buff);
-    } catch (std::bad_alloc) {
+    } catch (const std::bad_alloc&) {
         if (wav) delete wav;
         return;
     }

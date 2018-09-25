@@ -100,7 +100,7 @@ public Q_SLOTS:
 
 private:
     void displayPickedColor();
-    void pickColor(const QPointF& pos);
+    bool pickColor(const QPointF& pos);
     void updateOptionWidget();
 
     // Configuration

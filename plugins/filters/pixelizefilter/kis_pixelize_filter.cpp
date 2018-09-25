@@ -44,6 +44,7 @@
 #include <kis_layer.h>
 #include <kis_selection.h>
 #include <kis_types.h>
+#include <filter/kis_filter_category_ids.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 
@@ -54,7 +55,7 @@
 #include "kis_lod_transform.h"
 
 
-KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Pixelize..."))
+KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Pixelize..."))
 {
     setSupportsPainting(true);
     setSupportsThreading(true);

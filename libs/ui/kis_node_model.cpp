@@ -48,10 +48,13 @@
 #include "kis_model_index_converter_show_all.h"
 #include "kis_node_selection_adapter.h"
 #include "kis_node_insertion_adapter.h"
+#include <KisSelectionActionsAdapter.h>
+#include <KisNodeDisplayModeAdapter.h>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include <QTimer>
+#include "kis_signal_auto_connection.h"
 
 
 struct KisNodeModel::Private
@@ -60,6 +63,11 @@ struct KisNodeModel::Private
     KisShapeController *shapeController = 0;
     KisNodeSelectionAdapter *nodeSelectionAdapter = 0;
     KisNodeInsertionAdapter *nodeInsertionAdapter = 0;
+    KisSelectionActionsAdapter *selectionActionsAdapter = 0;
+    KisNodeDisplayModeAdapter *nodeDisplayModeAdapter = 0;
+
+    KisSignalAutoConnectionsStore nodeDisplayModeAdapterConnections;
+
     QList<KisNodeDummy*> updateQueue;
     QTimer updateTimer;
 
@@ -80,9 +88,6 @@ KisNodeModel::KisNodeModel(QObject * parent)
         : QAbstractItemModel(parent)
         , m_d(new Private)
 {
-    updateSettings();
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateSettings()));
-
     m_d->updateTimer.setSingleShot(true);
     connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(processUpdateQueue()));
 }
@@ -175,24 +180,25 @@ void KisNodeModel::slotIsolatedModeChanged()
 
 bool KisNodeModel::showGlobalSelection() const
 {
-    KisConfig cfg;
-    return cfg.showGlobalSelection();
+    return m_d->nodeDisplayModeAdapter ?
+        m_d->nodeDisplayModeAdapter->showGlobalSelectionMask() :
+        false;
 }
 
 void KisNodeModel::setShowGlobalSelection(bool value)
 {
-    KisConfig cfg;
-    cfg.setShowGlobalSelection(value);
-    updateSettings();
+    if (m_d->nodeDisplayModeAdapter) {
+        m_d->nodeDisplayModeAdapter->setShowGlobalSelectionMask(value);
+    }
 }
 
-void KisNodeModel::updateSettings()
+void KisNodeModel::slotNodeDisplayModeChanged(bool showRootNode, bool showGlobalSelectionMask)
 {
-    KisConfig cfg;
-    bool oldShowRootLayer = m_d->showRootLayer;
-    bool oldShowGlobalSelection = m_d->showGlobalSelection;
-    m_d->showRootLayer = cfg.showRootLayer();
-    m_d->showGlobalSelection = cfg.showGlobalSelection();
+    const bool oldShowRootLayer = m_d->showRootLayer;
+    const bool oldShowGlobalSelection = m_d->showGlobalSelection;
+    m_d->showRootLayer = showRootNode;
+    m_d->showGlobalSelection = showGlobalSelectionMask;
+
     if (m_d->showRootLayer != oldShowRootLayer || m_d->showGlobalSelection != oldShowGlobalSelection) {
         resetIndexConverter();
         beginResetModel();
@@ -252,7 +258,13 @@ void KisNodeModel::connectDummies(KisNodeDummy *dummy, bool needConnect)
     }
 }
 
-void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImageWSP image, KisShapeController *shapeController, KisNodeSelectionAdapter *nodeSelectionAdapter, KisNodeInsertionAdapter *nodeInsertionAdapter)
+void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
+                                    KisImageWSP image,
+                                    KisShapeController *shapeController,
+                                    KisNodeSelectionAdapter *nodeSelectionAdapter,
+                                    KisNodeInsertionAdapter *nodeInsertionAdapter,
+                                    KisSelectionActionsAdapter *selectionActionsAdapter,
+                                    KisNodeDisplayModeAdapter *nodeDisplayModeAdapter)
 {
     QPointer<KisDummiesFacadeBase> oldDummiesFacade(m_d->dummiesFacade);
     KisShapeController  *oldShapeController = m_d->shapeController;
@@ -260,6 +272,19 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade, KisImag
     m_d->shapeController = shapeController;
     m_d->nodeSelectionAdapter = nodeSelectionAdapter;
     m_d->nodeInsertionAdapter = nodeInsertionAdapter;
+    m_d->selectionActionsAdapter = selectionActionsAdapter;
+
+    m_d->nodeDisplayModeAdapterConnections.clear();
+    m_d->nodeDisplayModeAdapter = nodeDisplayModeAdapter;
+    if (m_d->nodeDisplayModeAdapter) {
+        m_d->nodeDisplayModeAdapterConnections.addConnection(
+            m_d->nodeDisplayModeAdapter, SIGNAL(sigNodeDisplayModeChanged(bool,bool)),
+            this, SLOT(slotNodeDisplayModeChanged(bool,bool)));
+
+        // cold initialization
+        m_d->showGlobalSelection = m_d->nodeDisplayModeAdapter->showGlobalSelectionMask();
+        m_d->showRootLayer = m_d->showRootLayer;
+    }
 
     if (oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
@@ -558,6 +583,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
     if(!m_d->dummiesFacade || !index.isValid()) return false;
 
     bool result = true;
+    bool shouldUpdate = true;
     bool shouldUpdateRecursively = false;
     KisNodeSP node = nodeFromIndex(index);
 
@@ -575,11 +601,18 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
 
             break;
         }
+    case KisNodeModel::SelectOpaqueRole:
+        if (node && m_d->selectionActionsAdapter) {
+            SelectionAction action = SelectionAction(value.toInt());
+            m_d->selectionActionsAdapter->selectOpaqueOnNode(node, action);
+        }
+        shouldUpdate = false;
+        break;
     default:
         result = false;
     }
 
-    if(result) {
+    if (result && shouldUpdate) {
         if (shouldUpdateRecursively) {
             QSet<QModelIndex> indexes;
             addChangedIndex(index, &indexes);

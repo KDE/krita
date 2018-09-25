@@ -80,11 +80,11 @@ void KisToolColorPicker::deactivate()
     KisTool::deactivate();
 }
 
-void KisToolColorPicker::pickColor(const QPointF &pos)
+bool KisToolColorPicker::pickColor(const QPointF &pos)
 {
     // Timer check.
     if (m_colorPickerDelayTimer.isActive()) {
-        return;
+        return false;
     }
     else {
         m_colorPickerDelayTimer.setSingleShot(true);
@@ -98,11 +98,11 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
     // Pick from reference images.
     if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
         auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, false);
         KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer =
             kisCanvas->imageView()->document()->referenceImagesLayer();
 
-        if (referenceImageLayer) {
+        if (referenceImageLayer && kisCanvas->referenceImagesDecoration()->visible()) {
             QColor color = referenceImageLayer->getPixel(pos);
             if (color.isValid()) {
                 m_pickedColor.fromQColor(color);
@@ -111,6 +111,11 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
     }
 
     if (m_pickedColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
+        if (!currentImage()->bounds().contains(pos.toPoint()) &&
+            !currentImage()->wrapAroundModePermitted()) {
+            return false;
+        }
+
         KisPaintDeviceSP dev;
 
         if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
@@ -125,21 +130,23 @@ void KisToolColorPicker::pickColor(const QPointF &pos)
         KoColor previousColor = canvas()->resourceManager()->foregroundColor();
 
         KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend); /*!*/
+    }
 
-        if (m_config->updateColor &&
-                m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
+    if (m_config->updateColor &&
+        m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
 
-            KoColor publicColor = m_pickedColor;
-            publicColor.setOpacity(OPACITY_OPAQUE_U8);
+        KoColor publicColor = m_pickedColor;
+        publicColor.setOpacity(OPACITY_OPAQUE_U8);
 
-            if (m_config->toForegroundColor) {
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
-            }
-            else {
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
-            }
+        if (m_config->toForegroundColor) {
+            canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
+        }
+        else {
+            canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
         }
     }
+
+    return true;
 }
 
 void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
@@ -159,15 +166,16 @@ void KisToolColorPicker::beginPrimaryAction(KoPointerEvent *event)
     }
 
     QPoint pos = convertToImagePixelCoordFloored(event);
-    // Color picking has to start in the visible part of the layer
-    if (!currentImage()->bounds().contains(pos) &&
-        !currentImage()->wrapAroundModePermitted()) {
+
+    setMode(KisTool::PAINT_MODE);
+
+    bool picked = pickColor(pos);
+    if (!picked) {
+        // Color picking has to start in the visible part of the layer
         event->ignore();
         return;
     }
 
-    setMode(KisTool::PAINT_MODE);
-    pickColor(pos);
     displayPickedColor();
 }
 

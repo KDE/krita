@@ -25,6 +25,8 @@
 #include <QString>
 #include <QHash>
 
+#include "kis_assert.h"
+
 /**
  * Base class for registry objects.
  *
@@ -73,8 +75,11 @@ public:
      */
     void add(T item)
     {
-        Q_ASSERT(item);
-        QString id = item->id();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(item);
+
+        const QString id = item->id();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_aliases.contains(id));
+
         if (m_hash.contains(id)) {
             m_doubleEntries << value(id);
             remove(id);
@@ -89,7 +94,9 @@ public:
      */
     void add(const QString &id, T item)
     {
-        Q_ASSERT(item);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(item);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_aliases.contains(id));
+
         if (m_hash.contains(id)) {
             m_doubleEntries << value(id);
             remove(id);
@@ -103,6 +110,17 @@ public:
     void remove(const QString &id)
     {
         m_hash.remove(id);
+    }
+
+    void addAlias(const QString &alias, const QString &id)
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_hash.contains(alias));
+        m_aliases[alias] = id;
+    }
+
+    void removeAlias(const QString &alias)
+    {
+        m_aliases.remove(alias);
     }
 
     /**
@@ -123,7 +141,13 @@ public:
      */
     bool contains(const QString &id) const
     {
-        return m_hash.contains(id);
+        bool result = m_hash.contains(id);
+
+        if (!result && m_aliases.contains(id)) {
+            result = m_hash.contains(m_aliases.value(id));
+        }
+
+        return result;
     }
 
     /**
@@ -132,7 +156,13 @@ public:
      */
     const T value(const QString &id) const
     {
-        return m_hash.value(id);
+        T result = m_hash.value(id);
+
+        if (!result && m_aliases.contains(id)) {
+            result = m_hash.value(m_aliases.value(id));
+        }
+
+        return result;
     }
 
     /**
@@ -165,6 +195,7 @@ private:
 private:
 
     QHash<QString, T> m_hash;
+    QHash<QString, QString> m_aliases;
 };
 
 #endif

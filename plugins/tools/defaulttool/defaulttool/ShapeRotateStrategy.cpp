@@ -84,13 +84,20 @@ void ShapeRotateStrategy::rotateBy(qreal angle)
     matrix.rotate(angle);
     matrix.translate(-m_rotationCenter.x(), -m_rotationCenter.y());
 
+    QRectF totalDirtyRect;
     QTransform applyMatrix = matrix * m_rotationMatrix.inverted();
     m_rotationMatrix = matrix;
     Q_FOREACH (KoShape *shape, m_transformedShapesAndSelection) {
-        const QRectF oldDirtyRect = shape->boundingRect();
+        QRectF dirtyRect = shape->boundingRect();
         shape->applyAbsoluteTransformation(applyMatrix);
-        shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
+
+        dirtyRect |= shape->boundingRect();
+        totalDirtyRect |= dirtyRect;
+
+        shape->updateAbsolute(dirtyRect);
     }
+
+    tool()->canvas()->updateCanvas(totalDirtyRect);
 }
 
 void ShapeRotateStrategy::paint(QPainter &painter, const KoViewConverter &converter)

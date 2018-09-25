@@ -74,7 +74,7 @@ void AnimaterionRenderer::slotRenderAnimation()
 
     dlgAnimationRenderer.setCaption(i18n("Render Animation"));
 
-    KisConfig kisConfig;
+    KisConfig kisConfig(true);
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
     cfg->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
     dlgAnimationRenderer.setSequenceConfiguration(cfg);
@@ -181,7 +181,7 @@ void AnimaterionRenderer::slotRenderSequenceAgain()
 
     KisDocument *doc = viewManager()->document();
 
-    KisConfig kisConfig;
+    KisConfig kisConfig(false);
     KisPropertiesConfigurationSP sequenceConfig = new KisPropertiesConfiguration();
     sequenceConfig->fromXML(kisConfig.exportConfiguration("IMAGESEQUENCE"));
     QString mimetype = sequenceConfig->getString("mimetype");

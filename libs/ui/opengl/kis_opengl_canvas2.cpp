@@ -111,6 +111,8 @@ public:
     QColor gridColor;
     QColor cursorColor;
 
+    bool lodSwitchInProgress = false;
+
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
         int lastImageColumn = openGLImageTextures->xToCol(imageRect.right());
@@ -144,7 +146,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setCanvasState("OPENGL_STARTED");
 
     d->openGLImageTextures =
@@ -243,7 +245,7 @@ void KisOpenGLCanvas2::initializeGL()
     }
 #endif
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
     d->openGLImageTextures->initGL(context()->functions());
     d->openGLImageTextures->generateCheckerTexture(createCheckersImage(cfg.checkSize()));
@@ -336,11 +338,11 @@ void KisOpenGLCanvas2::initializeDisplayShader()
  */
 void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
 
     qDebug() << "Shader Compilation Failure: " << context;
     QMessageBox::critical(this, i18nc("@title:window", "Krita"),
-                          QString(i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.")).arg(context),
+                          i18n("Krita could not initialize the OpenGL canvas:\n\n%1\n\n Krita will disable OpenGL and close now.", context),
                           QMessageBox::Close);
 
     cfg.setUseOpenGL(false);
@@ -356,7 +358,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
 void KisOpenGLCanvas2::paintGL()
 {
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
@@ -374,7 +376,7 @@ void KisOpenGLCanvas2::paintGL()
     gc.end();
 
     if (!OPENGL_SUCCESS) {
-        KisConfig cfg;
+        KisConfig cfg(false);
         cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
         OPENGL_SUCCESS = true;
     }
@@ -467,6 +469,11 @@ bool KisOpenGLCanvas2::isBusy() const
     KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
 
     return isBusyStatus;
+}
+
+void KisOpenGLCanvas2::setLodResetInProgress(bool value)
+{
+    d->lodSwitchInProgress = value;
 }
 
 void KisOpenGLCanvas2::drawCheckers()
@@ -749,14 +756,14 @@ void KisOpenGLCanvas2::drawImage()
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::Texture1), 1);
             }
 
-            int currentLodPlane = tile->currentLodPlane();
+            glActiveTexture(GL_TEXTURE0);
+
+            const int currentLodPlane = tile->bindToActiveTexture(d->lodSwitchInProgress);
+
             if (d->displayShader->location(Uniform::FixedLodLevel) >= 0) {
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::FixedLodLevel),
                                                   (GLfloat) currentLodPlane);
             }
-
-            glActiveTexture(GL_TEXTURE0);
-            tile->bindToActiveTexture();
 
             if (currentLodPlane > 0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
@@ -799,7 +806,7 @@ void KisOpenGLCanvas2::drawImage()
 
 void KisOpenGLCanvas2::slotConfigChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     d->checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
     d->scrollCheckers = cfg.scrollCheckers();
 
@@ -814,7 +821,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
 
 void KisOpenGLCanvas2::slotPixelGridModeChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     d->pixelGridDrawingThreshold = cfg.getPixelGridDrawingThreshold();
     d->pixelGridEnabled = cfg.pixelGridEnabled();
@@ -907,7 +914,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     // See KisQPainterCanvas::updateCanvasProjection for more info
     bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if (isOpenGLUpdateInfo) {
-        d->openGLImageTextures->recalculateCache(info);
+        d->openGLImageTextures->recalculateCache(info, d->lodSwitchInProgress);
     }
     return QRect(); // FIXME: Implement dirty rect for OpenGL
 }

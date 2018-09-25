@@ -120,32 +120,30 @@ void KisOpenGL::initialize()
     }
 
     QOpenGLFunctions  *funcs = context.functions();
-
     openGLCheckResult = OpenGLCheckResult(context);
+    debugText.clear();
+    QDebug debugOut(&debugText);
+    debugOut << "OpenGL Info";
+    debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
+    debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
+    debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
+    debugOut << "\n  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
+    debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
+    debugOut << "\n  Current format:   " << context.format();
+    debugOut.nospace();
+    debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion() << "." << openGLCheckResult->glMinorVersion();
+    debugOut.resetFormat();
+    debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
+    debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
+    appendPlatformOpenGLDebugText(debugOut);
 
-//    debugText.clear();
-//    QDebug debugOut(&debugText);
-//    debugOut << "OpenGL Info";
-//    debugOut << "\n  Vendor: " << reinterpret_cast<const char *>(funcs->glGetString(GL_VENDOR));
-//    debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
-//    debugOut << "\n  Version: " << openGLCheckResult->driverVersionString();
-//    debugOut << "\n  Shading language: " << reinterpret_cast<const char *>(funcs->glGetString(GL_SHADING_LANGUAGE_VERSION));
-//    debugOut << "\n  Requested format: " << QSurfaceFormat::defaultFormat();
-//    debugOut << "\n  Current format:   " << context.format();
-//    debugOut.nospace();
-//    debugOut << "\n     Version: " << openGLCheckResult->glMajorVersion() << "." << openGLCheckResult->glMinorVersion();
-//    debugOut.resetFormat();
-//    debugOut << "\n     Supports deprecated functions" << openGLCheckResult->supportsDeprecatedFunctions();
-//    debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
-//    appendPlatformOpenGLDebugText(debugOut);
-
-//    qDebug().noquote() << debugText;
+    dbgOpenGL.noquote() << debugText;
 
 }
 
 void KisOpenGL::initializeContext(QOpenGLContext *ctx)
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     initialize();
 
     dbgUI << "OpenGL: Opening new context";

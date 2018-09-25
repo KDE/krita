@@ -30,7 +30,7 @@
 #include "KoCanvasResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
-#include "KoShapeBasedDocumentBase.h"
+#include "KoShapeControllerBase.h"
 #include "KoToolSelection.h"
 
 #include <klocalizedstring.h>
@@ -96,7 +96,7 @@ KoToolBase::~KoToolBase()
    // }
 
 //    else {
-//        qDebug() << "Tool" << toolId() << "has no actions";
+//        debugFlake << "Tool" << toolId() << "has no actions";
 //    }
     qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;

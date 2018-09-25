@@ -52,7 +52,7 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
-    ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
+    //ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
     ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
@@ -171,13 +171,10 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("zoomSelectorOptions", ui->zoomSelectorOptionComboBox->currentIndex() );
     cfg.writeEntry("zoomSize", ui->popupSize->value());
 
-
-
     bool useCustomColorSpace =  ui->useDifferentColorSpaceCheckbox->isChecked();
     const KoColorSpace* colorSpace = useCustomColorSpace ? ui->colorSpace->currentColorSpace() : 0;
 
-
-    KisConfig kisconfig;
+    KisConfig kisconfig(false);
     kisconfig.setCustomColorSelectorColorSpace(colorSpace);
 
     //color patches
@@ -301,11 +298,12 @@ void KisColorSelectorSettings::changedColorDocker(int index)
         ui->colorSliderOptions->hide();
         ui->hotKeyOptions->hide();
     }
-    else if (index == 1) {  // color slider options selected
-        ui->advancedColorSelectorOptions->hide();
-        ui->hotKeyOptions->hide();
-        ui->colorSliderOptions->show();
-    } else {
+//    else if (index == 1) {  // color slider options selected
+//        ui->advancedColorSelectorOptions->hide();
+//        ui->hotKeyOptions->hide();
+//        ui->colorSliderOptions->show();
+//    }
+    else {
        ui->colorSliderOptions->hide();
        ui->advancedColorSelectorOptions->hide();
        ui->hotKeyOptions->show();
@@ -404,7 +402,7 @@ void KisColorSelectorSettings::loadPreferences()
 
 
     {
-        KisConfig kisconfig;
+        KisConfig kisconfig(true);
         const KoColorSpace *cs = kisconfig.customColorSelectorColorSpace();
 
         if (cs) {

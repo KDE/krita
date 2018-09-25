@@ -46,7 +46,7 @@
 
 
 #include "tool_transform_args.h"
-#include "tool_transform_changes_tracker.h"
+#include "KisToolChangesTracker.h"
 #include "kis_tool_transform_config_widget.h"
 #include "transform_transaction_properties.h"
 
@@ -135,7 +135,7 @@ public:
      * the tool. See bug 362659
      * @return false
      */
-    bool wantsAutoScroll() const {
+    bool wantsAutoScroll() const override {
         return false;
     }
 
@@ -250,8 +250,10 @@ private:
     void commitChanges();
 
 
-    bool tryInitTransformModeFromNode(KisNodeSP node);
+    bool tryInitArgsFromNode(KisNodeSP node);
     bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode);
+
+    void resetArgsForMode(ToolTransformArgs::TransformMode mode);
     void initTransformMode(ToolTransformArgs::TransformMode mode);
     void initGuiAfterTransformMode();
 
@@ -295,7 +297,7 @@ private:
     QPointer<KisCanvas2> m_canvas;
 
     TransformTransactionProperties m_transaction;
-    TransformChangesTracker m_changesTracker;
+    KisToolChangesTracker m_changesTracker;
 
 
     /// actions for the context click menu
@@ -333,13 +335,14 @@ private:
     QPainterPath m_cursorOutline;
 
 private Q_SLOTS:
-    void slotTrackerChangedConfig();
+    void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
     void slotUiChangedConfig();
     void slotApplyTransform();
     void slotResetTransform();
     void slotRestartTransform();
     void slotEditingFinished();
 
+    void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
 
     // context menu options for updating the transform type
     // this is to help with discoverability since come people can't find the tool options

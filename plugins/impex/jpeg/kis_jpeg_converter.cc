@@ -55,17 +55,15 @@ extern "C" {
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_io_backend.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
 #include <kis_paint_device.h>
 #include <kis_transform_worker.h>
 #include <kis_jpeg_source.h>
 #include <kis_jpeg_destination.h>
 #include "kis_iterator_ng.h"
-
-#include <KoColorModelStandardIds.h>
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
@@ -88,7 +86,7 @@ void jpegErrorExit ( j_common_ptr cinfo )
     ( *( cinfo->err->format_message ) ) ( cinfo, jpegLastErrorMsg );
 
     /* Jump to the setjmp point */
-    throw std::runtime_error( jpegLastErrorMsg ); // or your preffered exception ...
+    throw std::runtime_error( jpegLastErrorMsg ); // or your preferred exception ...
 }
 
 J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)

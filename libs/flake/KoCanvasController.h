@@ -262,6 +262,11 @@ public:
     virtual void setScrollBarValue(const QPoint &value) = 0;
 
     /**
+     * Update the range of scroll bars
+     */
+    virtual void resetScrollBars() = 0;
+
+    /**
      * Called when the size of your document in view coordinates (pixels) changes, for instance when zooming.
      *
      * @param newSize the new size, in view coordinates (pixels), of the document.
@@ -467,11 +472,11 @@ public:
     void panRight() override {}
     QPoint scrollBarValue() const override {return QPoint();}
     void setScrollBarValue(const QPoint &/*value*/) override {}
+    void resetScrollBars() override {}
     void updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/) override {}
     void setZoomWithWheel(bool /*zoom*/) override {}
     void setVastScrolling(qreal /*factor*/) override {}
     QPointF currentCursorPosition() const override { return QPointF(); }
-
 };
 
 #endif

@@ -57,6 +57,16 @@ KisLsBevelEmbossFilter::KisLsBevelEmbossFilter()
 {
 }
 
+KisLayerStyleFilter *KisLsBevelEmbossFilter::clone() const
+{
+    return new KisLsBevelEmbossFilter(*this);
+}
+
+KisLsBevelEmbossFilter::KisLsBevelEmbossFilter(const KisLsBevelEmbossFilter &rhs)
+    : KisLayerStyleFilter(rhs)
+{
+}
+
 void paintBevelSelection(KisPixelSelectionSP srcSelection,
                          KisPixelSelectionSP dstSelection,
                          const QRect &applyRect,

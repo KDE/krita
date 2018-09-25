@@ -382,7 +382,7 @@ QVector<QPointF> intersectTwoCircles(const QPointF &center1, qreal r1,
     if (centerDistance < qAbs(r1 - r2)) return points;
 
     if (centerDistance < qAbs(r1 - r2) + 0.001) {
-        qDebug() << "Skipping intersection" << ppVar(center1) << ppVar(center2) << ppVar(r1) << ppVar(r2) << ppVar(centerDistance) << ppVar(qAbs(r1-r2));
+        dbgKrita << "Skipping intersection" << ppVar(center1) << ppVar(center2) << ppVar(r1) << ppVar(r2) << ppVar(centerDistance) << ppVar(qAbs(r1-r2));
         return points;
     }
 

@@ -30,7 +30,6 @@
 #include <QCloseEvent>
 #include <QStandardPaths>
 #include <QDesktopServices>
-#include <QDesktopServices>
 #include <QDesktopWidget>
 #include <QDialog>
 #include <QDockWidget>
@@ -58,6 +57,9 @@
 #include <QMenuBar>
 #include <KisMimeDatabase.h>
 #include <QMimeData>
+#include <QStackedWidget>
+#include <QProxyStyle>
+
 
 #include <kactioncollection.h>
 #include <QAction>
@@ -69,6 +71,8 @@
 #include <kaboutdata.h>
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
+#include "kis_selection_manager.h"
+#include "kis_icon_utils.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -95,6 +99,7 @@
 #include <KoToolManager.h>
 #include <KoZoomController.h>
 #include "KoToolDocker.h"
+#include "KoToolBoxDocker_p.h"
 #include <KoToolBoxFactory.h>
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
@@ -102,7 +107,6 @@
 #include <KoUpdater.h>
 #include <KoResourceModel.h>
 
-#include <KisMimeDatabase.h>
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
 #include "dialogs/kis_delayed_save_dialog.h"
@@ -139,9 +143,10 @@
 #include "thememanager.h"
 #include "kis_animation_importer.h"
 #include "dialogs/kis_dlg_import_image_sequence.h"
-#include <KisUpdateSchedulerConfigNotifier.h>
+#include <KisImageConfigNotifier.h>
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
+#include "KisWelcomePageWidget.h"
 
 #include <mutex>
 
@@ -178,11 +183,16 @@ public:
         , windowMenu(new KActionMenu(i18nc("@action:inmenu", "&Window"), parent))
         , documentMenu(new KActionMenu(i18nc("@action:inmenu", "New &View"), parent))
         , workspaceMenu(new KActionMenu(i18nc("@action:inmenu", "Wor&kspace"), parent))
+        , welcomePage(new KisWelcomePageWidget(parent))
+        , widgetStack(new QStackedWidget(parent))
         , mdiArea(new QMdiArea(parent))
         , windowMapper(new QSignalMapper(parent))
         , documentMapper(new QSignalMapper(parent))
     {
         if (id.isNull()) this->id = QUuid::createUuid();
+
+        widgetStack->addWidget(welcomePage);
+        widgetStack->addWidget(mdiArea);
         mdiArea->setTabsMovable(true);
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     }
@@ -252,6 +262,11 @@ public:
 
     Digikam::ThemeManager *themeManager {0};
 
+    KisWelcomePageWidget *welcomePage {0};
+
+
+    QStackedWidget *widgetStack {0};
+
     QMdiArea *mdiArea;
     QMdiSubWindow *activeSubWindow  {0};
     QSignalMapper *windowMapper;
@@ -290,7 +305,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->workspacemodel = new KoResourceModel(adapter, this);
     connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
 
-    KisConfig cfg;
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
@@ -326,6 +340,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QDockWidget *toolbox = createDockWidget(&toolBoxFactory);
     toolbox->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
+    KisConfig cfg(true);
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
@@ -360,7 +375,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         observer->setObservedCanvas(0);
         KisMainwindowObserver* mainwindowObserver = dynamic_cast<KisMainwindowObserver*>(observer);
         if (mainwindowObserver) {
-            mainwindowObserver->setMainWindow(d->viewManager);
+            mainwindowObserver->setViewManager(d->viewManager);
         }
     }
 
@@ -369,13 +384,24 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-    setCentralWidget(d->mdiArea);
+
+    // Tab close button override
+    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
+    // just switch this icon out for all OSs so it is easier to see
+    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+
+
+
+    setCentralWidget(d->widgetStack);
+    d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
-    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
-    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
     createActions();
+
+    // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
+    d->welcomePage->setMainWindow(this);
 
     setAutoSaveSettings(d->windowStateConfig, false);
 
@@ -579,7 +605,7 @@ void KisMainWindow::showView(KisView *imageView)
         subwin->setAttribute(Qt::WA_DeleteOnClose, true);
         connect(subwin, SIGNAL(destroyed()), SLOT(updateWindowMenu()));
 
-        KisConfig cfg;
+        KisConfig cfg(true);
         subwin->setOption(QMdiSubWindow::RubberBandMove, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setOption(QMdiSubWindow::RubberBandResize, cfg.readEntry<int>("mdi_rubberband", cfg.useOpenGL()));
         subwin->setWindowIcon(qApp->windowIcon());
@@ -630,7 +656,7 @@ void KisMainWindow::slotPreferences()
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
         KisConfigNotifier::instance()->notifyPixelGridModeChanged();
-        KisUpdateSchedulerConfigNotifier::instance()->notifyConfigChanged();
+        KisImageConfigNotifier::instance()->notifyConfigChanged();
 
         // XXX: should this be changed for the views in other windows as well?
         Q_FOREACH (QPointer<KisView> koview, KisPart::instance()->views()) {
@@ -728,10 +754,23 @@ void KisMainWindow::saveRecentFiles()
     }
 }
 
+QList<QUrl> KisMainWindow::recentFilesUrls()
+{
+    return d->recentFiles->urls();
+}
+
+void KisMainWindow::clearRecentFiles()
+{
+    d->recentFiles->clear();
+}
+
+
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
+
+
 
 void KisMainWindow::updateCaption()
 {
@@ -881,6 +920,8 @@ void KisMainWindow::showDocument(KisDocument *document) {
 
 KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document)
 {
+    showWelcomeScreen(false); // see workaround in function header
+
     KisView *view = KisPart::instance()->createView(document, resourceManager(), actionCollection(), this);
     addView(view);
 
@@ -1005,21 +1046,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         saveas = true;
     }
 
-    bool reset_url;
-
     if (document->url().isEmpty()) {
-        reset_url = true;
         saveas = true;
-    }
-    else {
-        reset_url = false;
     }
 
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
     connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
-
-    QUrl oldURL = document->url();
-    QString oldFile = document->localFilePath();
 
     QByteArray nativeFormat = document->nativeFormatMimeType();
     QByteArray oldMimeFormat = document->mimeType();
@@ -1155,8 +1187,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
-                        document->setUrl(oldURL);
-                        document->setLocalFilePath(oldFile);
                     }
                 }
                 else { // Export
@@ -1186,17 +1216,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         if (!ret) {
             dbgUI << "Failed Save!";
-            document->setUrl(oldURL);
-            document->setLocalFilePath(oldFile);
         }
     }
-
-    if (ret && !isExporting) {
-        document->setRecovered(false);
-    }
-
-    if (!ret && reset_url)
-        document->resetURL(); //clean the suggested filename as the save dialog was rejected
 
     updateReloadFileAction(document);
     updateCaption();
@@ -1312,6 +1333,9 @@ void KisMainWindow::setActiveView(KisView* view)
 
 void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
+    d->welcomePage->showDropAreaIndicator(true);
+
+
     if (event->mimeData()->hasUrls() ||
         event->mimeData()->hasFormat("application/x-krita-node") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
@@ -1322,6 +1346,8 @@ void KisMainWindow::dragEnterEvent(QDragEnterEvent *event)
 
 void KisMainWindow::dropEvent(QDropEvent *event)
 {
+    d->welcomePage->showDropAreaIndicator(false);
+
     if (event->mimeData()->hasUrls() && event->mimeData()->urls().size() > 0) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
@@ -1359,26 +1385,13 @@ void KisMainWindow::dragMoveEvent(QDragMoveEvent * event)
 
 void KisMainWindow::dragLeaveEvent(QDragLeaveEvent * /*event*/)
 {
+        d->welcomePage->showDropAreaIndicator(false);
+
     if (d->tabSwitchCompressor->isActive()) {
         d->tabSwitchCompressor->stop();
     }
 }
 
-void KisMainWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-    /**
-     * This ensures people who do not understand that you
-     * need to make a canvas first, will find the new image
-     * dialog on click.
-     */
-    if (centralWidget()->geometry().contains(event->pos())
-            && KisPart::instance()->documents().size()==0 && event->button() == Qt::LeftButton) {
-        this->slotFileNew();
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
 
 void KisMainWindow::switchTab(int index)
 {
@@ -1386,6 +1399,11 @@ void KisMainWindow::switchTab(int index)
     if (!tabBar) return;
 
     tabBar->setCurrentIndex(index);
+}
+
+void KisMainWindow::showWelcomeScreen(bool show)
+{
+     d->widgetStack->setCurrentIndex(!show);
 }
 
 void KisMainWindow::slotFileNew()
@@ -1397,7 +1415,7 @@ void KisMainWindow::slotFileNew()
     startupWidget->setWindowTitle(i18n("Create new document"));
 
 
-    KisConfig cfg;
+    KisConfig cfg(true);
 
     int w = cfg.defImageWidth();
     int h = cfg.defImageHeight();
@@ -1872,7 +1890,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 
 void KisMainWindow::viewFullscreen(bool fullScreen)
 {
-    KisConfig cfg;
+    KisConfig cfg(false);
     cfg.setFullscreenMode(fullScreen);
 
     if (fullScreen) {
@@ -1917,6 +1935,8 @@ void KisMainWindow::slotReloadFile()
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
+    bool lockAllDockers = KisConfig(true).readEntry<bool>("LockAllDockerPanels", false);
+
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
@@ -1931,7 +1951,12 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-
+        if (lockAllDockers) {
+            if (dockWidget->titleBarWidget()) {
+                dockWidget->titleBarWidget()->setVisible(false);
+            }
+            dockWidget->setFeatures(QDockWidget::NoDockWidgetFeatures);
+        }
         if (dockWidget->widget() && dockWidget->widget()->layout())
             dockWidget->widget()->layout()->setContentsMargins(1, 1, 1, 1);
 
@@ -2062,12 +2087,37 @@ void KisMainWindow::subWindowActivated()
         }
     }
 
+    /**
+     * Qt has a weirdness, it has hardcoded shortcuts added to an action
+     * in the window menu. We need to reset the shortcuts for that menu
+     * to nothing, otherwise the shortcuts cannot be made configurable.
+     *
+     * See: https://bugs.kde.org/show_bug.cgi?id=352205
+     *      https://bugs.kde.org/show_bug.cgi?id=375524
+     *      https://bugs.kde.org/show_bug.cgi?id=398729
+     */
+    QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
+    if (subWindow) {
+        QMenu *menu = subWindow->systemMenu();
+        if (menu) {
+            Q_FOREACH (QAction *action, menu->actions()) {
+                action->setShortcut(QKeySequence());
+            }
+        }
+    }
+
     updateCaption();
     d->actionManager()->updateGUI();
 }
 
 void KisMainWindow::windowFocused()
 {
+    /**
+     * Notify selection manager so that it could update selection mask overlay
+     */
+    viewManager()->selectionManager()->selectionChanged();
+
+
     auto *kisPart = KisPart::instance();
     auto *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;
@@ -2089,6 +2139,7 @@ void KisMainWindow::windowFocused()
         swapWorkspaces(this, primaryWindow);
     }
 }
+
 
 void KisMainWindow::updateWindowMenu()
 {
@@ -2216,6 +2267,28 @@ void KisMainWindow::updateWindowMenu()
         }
     }
 
+
+
+    bool showMdiArea = windows.count( ) > 0;
+    if (!showMdiArea) {
+        showWelcomeScreen(true); // see workaround in function in header
+
+        // keep the recent file list updated when going back to welcome screen
+        reloadRecentFileList();
+        d->welcomePage->populateRecentDocuments();
+    }
+
+    // enable/disable the toolbox docker if there are no documents open
+    Q_FOREACH (QObject* widget, children()) {
+        if (widget->inherits("QDockWidget")) {
+            QDockWidget* dw = static_cast<QDockWidget*>(widget);
+
+            if ( dw->objectName() == "ToolBox") {
+                dw->setEnabled(showMdiArea);
+            }
+        }
+    }
+
     updateCaption();
 }
 
@@ -2240,7 +2313,7 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
 
 void KisMainWindow::configChanged()
 {
-    KisConfig cfg;
+    KisConfig cfg(true);
     QMdiArea::ViewMode viewMode = (QMdiArea::ViewMode)cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView);
     d->mdiArea->setViewMode(viewMode);
     Q_FOREACH (QMdiSubWindow *subwin, d->mdiArea->subWindowList()) {
@@ -2304,8 +2377,10 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::closeCurrentWindow()
 {
-    d->mdiArea->currentSubWindow()->close();
-    d->actionManager()->updateGUI();
+    if (d->mdiArea->currentSubWindow()) {
+        d->mdiArea->currentSubWindow()->close();
+        d->actionManager()->updateGUI();
+    }
 }
 
 void KisMainWindow::checkSanity()
@@ -2400,7 +2475,8 @@ void KisMainWindow::applyDefaultSettings(QPrinter &printer) {
 void KisMainWindow::createActions()
 {
     KisActionManager *actionManager = d->actionManager();
-    KisConfig cfg;
+
+
 
     actionManager->createStandardAction(KStandardAction::New, this, SLOT(slotFileNew()));
     actionManager->createStandardAction(KStandardAction::Open, this, SLOT(slotFileOpen()));
@@ -2463,8 +2539,11 @@ void KisMainWindow::createActions()
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()));
 
+
+    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()));
+
     d->toggleDockers = actionManager->createAction("view_toggledockers");
-    cfg.showDockers(true);
+    KisConfig(true).showDockers(true);
     d->toggleDockers->setChecked(true);
     connect(d->toggleDockers, SIGNAL(toggled(bool)), SLOT(toggleDockersVisibility(bool)));
 
@@ -2486,8 +2565,7 @@ void KisMainWindow::createActions()
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    d->close = actionManager->createAction("file_close");
-    connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+    d->close = actionManager->createStandardAction(KStandardAction::Close, this, SLOT(closeCurrentWindow()));
 
     d->showSessionManager = actionManager->createAction("file_sessions");
     connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));

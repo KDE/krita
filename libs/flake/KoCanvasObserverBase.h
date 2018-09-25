@@ -25,6 +25,7 @@ class KoCanvasObserverBasePrivate;
 
 #include "kritaflake_export.h"
 #include <QString>
+#include <QMainWindow>
 
 /**
  * An abstract canvas observer interface class.
@@ -56,6 +57,7 @@ public:
      * @return observed canvas, can be 0
      */
     KoCanvasBase* observedCanvas() const;
+
 protected:
     /**
      * re-implement this method in your canvas observer. It will be called

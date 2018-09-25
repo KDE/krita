@@ -159,7 +159,7 @@ QVector<QPolygon> KisOutlineGenerator::outlineImpl(typename StorageStrategy::Sto
             }
         }
     }
-    catch(std::bad_alloc) {
+    catch(const std::bad_alloc&) {
         warnKrita << "KisOutlineGenerator::outline ran out of memory allocating " <<  width << "*" << height << "marks";
     }
 

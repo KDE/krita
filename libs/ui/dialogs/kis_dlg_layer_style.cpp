@@ -133,7 +133,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     wdgLayerStyles.stylesStack->addWidget(m_stroke);
     connect(m_stroke, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));
     wdgLayerStyles.lstStyleSelector->setCurrentRow(cfg.readEntry("KisDlgLayerStyle::current", 1));
 

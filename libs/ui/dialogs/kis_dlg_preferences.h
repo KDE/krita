@@ -24,6 +24,8 @@
 
 #include <QWidget>
 #include <QButtonGroup>
+#include <QMap>
+#include <QString>
 
 #include <kpagedialog.h>
 #include <kis_config.h>
@@ -78,7 +80,6 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
-    bool hideSplashScreen();
 
     int mdiMode();
     int favoritePresets();
@@ -338,6 +339,8 @@ protected:
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
     KoConfigAuthorPage *m_authorPage;
+
+    QList<KPageWidgetItem*> m_pages;
 
 protected Q_SLOTS:
 

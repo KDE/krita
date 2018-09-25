@@ -32,6 +32,13 @@ KisLayerStyleFilter::KisLayerStyleFilter(const KoID &id)
     m_d->id = id;
 }
 
+KisLayerStyleFilter::KisLayerStyleFilter(const KisLayerStyleFilter &rhs)
+    : KisShared(),
+      m_d(new Private)
+{
+    m_d->id = rhs.m_d->id;
+}
+
 KisLayerStyleFilter::~KisLayerStyleFilter()
 {
 }

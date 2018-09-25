@@ -24,6 +24,8 @@
 #include <KisPart.h>
 #include <Document.h>
 
+#include  <sdk/tests/kistest.h>
+
 void TestNotifier::testNotifier()
 {
     KisPart *part = KisPart::instance();
@@ -47,5 +49,5 @@ void TestNotifier::documentAdded(Document *image)
     m_document = image;
 }
 
-QTEST_MAIN(TestNotifier)
+KISTEST_MAIN(TestNotifier)
 

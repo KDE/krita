@@ -189,7 +189,7 @@ int KisColorLabelSelectorWidget::Private::indexFromPos(const QPoint &pos)
 {
     const int x = pos.x() - border - xMenuOffset;
     const int y = pos.y() - border - yCenteringOffset;
-    if (y < 0 || y >= realItemSize) return -1;
+    if (y < 0 || y >= realItemSize || x < 0) return -1;
     int idx = (x + realItemSpacing) / (realItemSize + realItemSpacing);
 
     if (idx < 0 || idx >= colors.size()) {
@@ -304,15 +304,19 @@ void KisColorLabelSelectorWidget::keyPressEvent(QKeyEvent *e)
 
 void KisColorLabelSelectorWidget::mousePressEvent(QMouseEvent *e)
 {
-    const int newItem = m_d->indexFromPos(e->pos());
-    if (newItem >= 0 && e->buttons() & Qt::LeftButton) {
-        setCurrentIndex(newItem);
-    }
     QWidget::mousePressEvent(e);
 }
 
 void KisColorLabelSelectorWidget::mouseReleaseEvent(QMouseEvent *e)
 {
+    const int newItem = m_d->indexFromPos(e->pos());
+
+    if (newItem >= 0 &&
+        (e->button() == Qt::LeftButton ||
+         e->button() == Qt::RightButton)) {
+
+        setCurrentIndex(newItem);
+    }
     QWidget::mouseReleaseEvent(e);
 }
 

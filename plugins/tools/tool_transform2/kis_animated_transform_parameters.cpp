@@ -294,8 +294,6 @@ void KisAnimatedTransformMaskParameters::addKeyframes(KisTransformMaskSP mask, i
 
 #include "kis_transform_mask_params_factory_registry.h"
 
-#include <kis_transform_mask.h>
-
 struct AnimatedTransformParamsRegistrar {
     AnimatedTransformParamsRegistrar() {
         KisTransformMaskParamsFactory f(KisAnimatedTransformMaskParameters::fromXML);

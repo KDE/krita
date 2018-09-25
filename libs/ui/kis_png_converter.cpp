@@ -46,7 +46,6 @@
 #include <KoID.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
-#include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoUnit.h>
 
@@ -60,8 +59,8 @@
 #include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_io_backend.h>
-#include <metadata/kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
 #include "dialogs/kis_dlg_png_import.h"
 #include "kis_clipboard.h"
@@ -519,21 +518,21 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     double greenX, greenY;
     double blueX, blueY;
     png_get_cHRM(png_ptr,info_ptr, &whitePointX, &whitePointY, &redX, &redY, &greenX, &greenY, &blueX, &blueY);
-    qDebug() << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
+    dbgFile << "cHRM:" << whitePointX << whitePointY << redX << redY << greenX << greenY << blueX << blueY;
 #endif
 
     // https://www.w3.org/TR/PNG/#11gAMA
 #if defined(PNG_GAMMA_SUPPORTED)
     double gamma;
     png_get_gAMA(png_ptr, info_ptr, &gamma);
-    qDebug() << "gAMA" << gamma;
+    dbgFile << "gAMA" << gamma;
 #endif
 
     // https://www.w3.org/TR/PNG/#11sRGB
 #if defined(PNG_sRGB_SUPPORTED)
     int sRGBIntent;
     png_get_sRGB(png_ptr, info_ptr, &sRGBIntent);
-    qDebug() << "sRGB" << sRGBIntent;
+    dbgFile << "sRGB" << sRGBIntent;
 #endif
 
     bool fromBlender = false;
@@ -570,7 +569,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     else {
         dbgFile << "no embedded profile, will use the default profile";
         if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
-            KisConfig cfg;
+            KisConfig cfg(true);
             quint32 behaviour = cfg.pasteBehaviour();
             if (behaviour == PASTE_ASK) {
                 KisDlgPngImport dlg(m_path, csName.first, csName.second);
@@ -604,8 +603,9 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     else {
         if (csName.first == RGBAColorModelID.id()) {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "sRGB-elle-V2-srgbtrc.icc");
-        }
-        else {
+        } else if (csName.first == GrayAColorModelID.id()) {
+            cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, "Gray-D50-elle-V2-srgbtrc.icc");
+        } else {
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName.first, csName.second, 0);
         }
     }
@@ -676,7 +676,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         } else {
             reader.reset(new KisPNGReaderLineByLine(png_ptr, info_ptr, width, height));
         }
-    } catch (std::bad_alloc& e) {
+    } catch (const std::bad_alloc& e) {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
         dbgFile << "bad alloc: " << e.what();
@@ -910,8 +910,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         gc.end();
         device = tmp;
     }
-
-    if (options.forceSRGB) {
+    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
+    if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
         KUndo2Command *cmd = device->convertTo(cs);
@@ -1080,10 +1080,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
     const KoColorProfile* colorProfile = device->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
     if (!sRGB || options.saveSRGBProfile) {
+
 #if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.constData(), colorProfileData . size());
+        png_set_iCCP(png_ptr, info_ptr, (png_const_charp)"icc", PNG_COMPRESSION_TYPE_BASE, (png_const_bytep)colorProfileData.constData(), colorProfileData . size());
 #else
-        png_set_iCCP(png_ptr, info_ptr, (char*)"icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.constData(), colorProfileData . size());
+        // older version of libpng has a problem with constness on the parameters
+        char typeString[] = "icc";
+        png_set_iCCP(png_ptr, info_ptr, typeString, PNG_COMPRESSION_TYPE_BASE, colorProfileData.data(), colorProfileData . size());
 #endif
     }
 

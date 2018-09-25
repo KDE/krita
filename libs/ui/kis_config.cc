@@ -50,15 +50,21 @@
 
 #include <kis_color_manager.h>
 
-KisConfig::KisConfig()
+KisConfig::KisConfig(bool readOnly)
     : m_cfg( KSharedConfig::openConfig()->group(""))
+    , m_readOnly(readOnly)
 {
+    if (!readOnly) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(qApp->thread() == QThread::currentThread());
+    }
 }
 
 KisConfig::~KisConfig()
 {
+    if (m_readOnly) return;
+
     if (qApp->thread() != QThread::currentThread()) {
-        //dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Skipping...";
+        dbgKrita << "WARNING: KisConfig: requested config synchronization from nonGUI thread! Called from:" << kisBacktrace();
         return;
     }
 
@@ -443,7 +449,7 @@ const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
     if (screen < 0) return 0;
 
-    KisConfig cfg;
+    KisConfig cfg(true);
     QString monitorId;
     if (KisColorManager::instance()->devices().size() > screen) {
         monitorId = cfg.monitorForScreen(screen, KisColorManager::instance()->devices()[screen]);
@@ -919,17 +925,6 @@ void KisConfig::setAntialiasCurves(bool v) const
     m_cfg.writeEntry("antialiascurves", v);
 }
 
-QColor KisConfig::selectionOverlayMaskColor(bool defaultValue) const
-{
-    QColor def(255, 0, 0, 220);
-    return (defaultValue ? def : m_cfg.readEntry("selectionOverlayMaskColor", def));
-}
-
-void KisConfig::setSelectionOverlayMaskColor(const QColor &color)
-{
-    m_cfg.writeEntry("selectionOverlayMaskColor", color);
-}
-
 bool KisConfig::antialiasSelectionOutline(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("AntialiasSelectionOutline", false));
@@ -978,18 +973,6 @@ bool KisConfig::forceAlwaysFullSizedOutline(bool defaultValue) const
 void KisConfig::setForceAlwaysFullSizedOutline(bool value) const
 {
     m_cfg.writeEntry("forceAlwaysFullSizedOutline", value);
-}
-
-bool KisConfig::hideSplashScreen(bool defaultValue) const
-{
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    return (defaultValue ? true : cfg.readEntry("HideSplashAfterStartup", true));
-}
-
-void KisConfig::setHideSplashScreen(bool hideSplashScreen) const
-{
-    KConfigGroup cfg( KSharedConfig::openConfig(), "SplashScreen");
-    cfg.writeEntry("HideSplashAfterStartup", hideSplashScreen);
 }
 
 KisConfig::SessionOnStartup KisConfig::sessionOnStartup(bool defaultValue) const
@@ -1451,6 +1434,16 @@ void KisConfig::setToolbarSlider(int sliderNumber, const QString &slider)
     m_cfg.writeEntry(QString("toolbarslider_%1").arg(sliderNumber), slider);
 }
 
+int KisConfig::layerThumbnailSize(bool defaultValue) const
+{
+    return (defaultValue ? 20 : m_cfg.readEntry("layerThumbnailSize", 20));
+}
+
+void KisConfig::setLayerThumbnailSize(int size)
+{
+    m_cfg.writeEntry("layerThumbnailSize", size);
+}
+
 bool KisConfig::sliderLabels(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("sliderLabels", true));
@@ -1649,16 +1642,6 @@ bool KisConfig::lineSmoothingStabilizeSensors(bool defaultValue) const
 void KisConfig::setLineSmoothingStabilizeSensors(bool value)
 {
     m_cfg.writeEntry("LineSmoothingStabilizeSensors", value);
-}
-
-int KisConfig::paletteDockerPaletteViewSectionSize(bool defaultValue) const
-{
-    return (defaultValue ? 12 : m_cfg.readEntry("paletteDockerPaletteViewSectionSize", 12));
-}
-
-void KisConfig::setPaletteDockerPaletteViewSectionSize(int value) const
-{
-    m_cfg.writeEntry("paletteDockerPaletteViewSectionSize", value);
 }
 
 int KisConfig::tabletEventsDelay(bool defaultValue) const
@@ -1969,6 +1952,27 @@ bool KisConfig::calculateAnimationCacheInBackground(bool defaultValue) const
 void KisConfig::setCalculateAnimationCacheInBackground(bool value)
 {
     m_cfg.writeEntry("calculateAnimationCacheInBackground", value);
+}
+
+QColor KisConfig::defaultAssistantsColor(bool defaultValue) const
+{
+    static const QColor defaultColor = QColor(176, 176, 176, 255);
+    return defaultValue ? defaultColor : m_cfg.readEntry("defaultAssistantsColor", defaultColor);
+}
+
+void KisConfig::setDefaultAssistantsColor(const QColor &color) const
+{
+    m_cfg.writeEntry("defaultAssistantsColor", color);
+}
+
+bool KisConfig::autoSmoothBezierCurves(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("autoSmoothBezierCurves", false);
+}
+
+void KisConfig::setAutoSmoothBezierCurves(bool value)
+{
+    m_cfg.writeEntry("autoSmoothBezierCurves", value);
 }
 
 #include <QDomDocument>

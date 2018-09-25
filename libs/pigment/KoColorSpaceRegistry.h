@@ -326,12 +326,13 @@ private:
 
     friend class KisCsConversionTest;
     friend class KisIteratorTest;
+    friend class KisIteratorNGTest;
     friend class KisPainterTest;
     friend class KisCrashFilterTest;
     friend class KoColorSpacesBenchmark;
     friend class TestKoColorSpaceSanity;
     friend class TestColorConversionSystem;
-    friend class FriendOfColorSpaceRegistry;
+    friend struct FriendOfColorSpaceRegistry;
 
     /**
      * @return a list with an instance of all color space with their default profile.

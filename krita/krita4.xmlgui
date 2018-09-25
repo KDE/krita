@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="401"
+version="420"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -236,6 +236,21 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
          <Action name="shearlayer"/>
          <Action name="offsetlayer"/>
       </Menu>
+      <Menu name="LayerTransformAll">
+         <text>Transform &amp;All Layers</text>
+         <Action name="mirrorAllNodesX"/>
+         <Action name="mirrorAllNodesY"/>
+         <Action name="scaleAllLayers"/>
+         <Menu name="Rotate">
+             <text>&amp;Rotate</text>
+             <Action name="rotateAllLayers"/>
+             <Separator/>
+             <Action name="rotateAllLayersCW90"/>
+             <Action name="rotateAllLayersCCW90"/>
+             <Action name="rotateAllLayers180"/>
+         </Menu>
+         <Action name="shearAllLayers"/>
+      </Menu>
       <Menu name="LayerSplitAlpha">
          <text>S&amp;plit</text>
          <Menu name="LayerSplitAlpha">
@@ -267,8 +282,11 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="select_all"/>
       <Action name="deselect"/>
       <Action name="reselect"/>
-      <Action name="invert"/>
+      <Action name="invert_selection"/>
+      <Separator/>
+      <Action name="edit_selection"/>
       <Action name="convert_to_vector_selection"/>
+      <Action name="convert_to_raster_selection"/>
       <Action name="convert_shapes_to_vector_selection"/>
       <Action name="convert_selection_to_shape"/>
       <Separator/>
@@ -280,7 +298,14 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="selectionscale"/>
       <Separator/>
       <Action name="colorrange"/>
-      <Action name="selectopaque"/>
+      <Menu name="selectopaquemenu">
+        <text>Select &amp;Opaque</text>
+        <Action name="selectopaque"/>
+        <Separator/>
+        <Action name="selectopaque_add"/>
+        <Action name="selectopaque_subtract"/>
+        <Action name="selectopaque_intersect"/>
+      </Menu>
       <Separator/>
       <Action name="featherselection"/>
       <Action name="growselection"/>

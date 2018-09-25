@@ -918,7 +918,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-
     <Action name="krita_filter_perchannel">
       <icon></icon>
       <text>&amp;Color Adjustment curves...</text>

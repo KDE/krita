@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Krita">
+  <Actions category="Filters">
+    <text>Filters</text>
+    <Action name="krita_filter_threshold">
+      <icon></icon>
+      <text>Threshold Filter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Threshold Filter</toolTip>
+      <iconText>Threshold Filter</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

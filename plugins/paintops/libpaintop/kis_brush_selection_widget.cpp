@@ -65,10 +65,6 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
 
-    Q_FOREACH (QWidget * widget, m_chooserMap.values()) {
-        m_mininmumSize = m_mininmumSize.expandedTo(widget->sizeHint());
-    }
-
     setCurrentWidget(m_autoBrushWidget);
 
     uiWdgBrushChooser.sizeToStartFromSpinBox->setPrefix(i18n("Starting Brush Size: "));
@@ -298,7 +294,6 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
         m_currentBrushWidget->setParent(this);
         m_currentBrushWidget->hide();
     }
-    widget->setMinimumSize(m_mininmumSize);
 
     m_currentBrushWidget = widget;
     m_layout->addWidget(widget);

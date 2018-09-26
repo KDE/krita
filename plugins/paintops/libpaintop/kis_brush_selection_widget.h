@@ -105,7 +105,6 @@ private:
     QWidget * m_currentBrushWidget;
     QHash<int, QWidget*> m_chooserMap;
     QButtonGroup * m_buttonGroup;
-    QSize m_mininmumSize;
 
     KisAutoBrushWidget * m_autoBrushWidget;
     KisPredefinedBrushChooser * m_predefinedBrushWidget;

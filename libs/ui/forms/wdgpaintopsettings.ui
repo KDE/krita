@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1313</width>
+    <width>1250</width>
     <height>436</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Brush Editor</string>
@@ -125,7 +131,7 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>5</width>
-            <height>10</height>
+            <height>5</height>
            </size>
           </property>
          </spacer>
@@ -275,7 +281,7 @@
          <property name="maximumSize">
           <size>
            <width>26</width>
-           <height>26</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="text">
@@ -285,9 +291,15 @@
        </item>
        <item>
         <widget class="QLineEdit" name="renameBrushNameTextField">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>180</width>
+           <width>10</width>
            <height>0</height>
           </size>
          </property>
@@ -304,7 +316,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>28</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="text">
@@ -323,7 +335,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>28</height>
+           <height>16777215</height>
           </size>
          </property>
          <property name="text">
@@ -338,8 +350,8 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>148</width>
-           <height>56</height>
+           <width>5</width>
+           <height>5</height>
           </size>
          </property>
         </spacer>
@@ -372,7 +384,7 @@
        <item>
         <widget class="QLabel" name="currentBrushEngineLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -406,8 +418,8 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>600</width>
-           <height>80</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -502,7 +514,7 @@
          <item row="0" column="0">
           <widget class="KisLodAvailabilityWidget" name="wdgLodAvailability" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -522,10 +534,13 @@
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
-           <height>20</height>
+           <width>5</width>
+           <height>5</height>
           </size>
          </property>
         </spacer>
@@ -538,7 +553,7 @@
          <item>
           <widget class="QPushButton" name="saveBrushPresetButton">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -557,7 +572,7 @@
          <item>
           <widget class="QPushButton" name="saveNewBrushPresetButton">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>

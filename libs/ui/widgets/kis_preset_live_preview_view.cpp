@@ -67,6 +67,7 @@ void KisPresetLivePreviewView::setup()
 
 void KisPresetLivePreviewView::setCurrentPreset(KisPaintOpPresetSP preset)
 {
+    setup();
     m_currentPreset = preset;
 }
 
@@ -100,8 +101,6 @@ void KisPresetLivePreviewView::updateStroke()
     }
 
 }
-
-
 
 void KisPresetLivePreviewView::paintBackground()
 {

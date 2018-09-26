@@ -66,21 +66,28 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     m_d->optionsList->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     m_d->optionsList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    QSizePolicy policy =  QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    QSizePolicy policy =  QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->optionsList->setSizePolicy(policy);
 
     m_d->optionsList->setMinimumWidth(140); // this should be just big enough to show all of the setting names
 
     m_d->optionsStack = new QStackedWidget(this);
-    policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    policy = QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_d->optionsStack->setSizePolicy(policy);
-
 
     // put settings in a scrollable area in case they get too long
     m_d->optionsStackScrollableArea = new QScrollArea(this);
     m_d->optionsStackScrollableArea->setWidgetResizable(true);
     m_d->optionsStackScrollableArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     m_d->optionsStackScrollableArea->setWidget(m_d->optionsStack);
+
+    policy = QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_d->optionsStackScrollableArea->setSizePolicy(policy);
+
+
+    // TODO: This area seems to not be collapsing right, so manually set width for now
+    m_d->optionsStack->setMaximumWidth(330);
+    m_d->optionsStackScrollableArea->setMaximumWidth(350);
 
 
     QHBoxLayout* layout = new QHBoxLayout(this);

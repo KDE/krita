@@ -468,6 +468,7 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         m_d->layout->removeWidget(m_d->settingsWidget);
         m_d->uiWdgPaintOpPresetSettings.frmOptionWidgetContainer->updateGeometry();
     }
+
     m_d->layout->update();
     updateGeometry();
 
@@ -492,7 +493,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->setFont(m_d->smallFont);
 
 
-
         QSize hint = widget->sizeHint();
         m_d->minimumSettingsWidgetSize = QSize(qMax(hint.width(), m_d->minimumSettingsWidgetSize.width()),
                                                qMax(hint.height(), m_d->minimumSettingsWidgetSize.height()));
@@ -501,7 +501,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         // manually control the brush settings size for now to help see what is taking up the most space
         //widget->setMaximumHeight(640);
         //widget->setMaximumWidth(600);
-
 
         m_d->layout->addWidget(widget);
 

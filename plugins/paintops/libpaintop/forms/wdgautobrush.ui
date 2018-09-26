@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>317</width>
-    <height>447</height>
+    <width>269</width>
+    <height>393</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -23,14 +23,14 @@
       <widget class="QToolButton" name="brushPreview">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-         <horstretch>110</horstretch>
-         <verstretch>110</verstretch>
+         <horstretch>70</horstretch>
+         <verstretch>70</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>110</width>
-         <height>110</height>
+         <width>70</width>
+         <height>70</height>
         </size>
        </property>
        <property name="text">
@@ -106,7 +106,7 @@
       <widget class="KisDoubleSliderSpinBox" name="inputRadius" native="true">
        <property name="minimumSize">
         <size>
-         <width>200</width>
+         <width>0</width>
          <height>0</height>
         </size>
        </property>
@@ -276,8 +276,8 @@
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
-             <height>20</height>
+             <width>5</width>
+             <height>5</height>
             </size>
            </property>
           </spacer>
@@ -310,7 +310,7 @@
       <widget class="KisSliderSpinBox" name="inputAngle" native="true">
        <property name="minimumSize">
         <size>
-         <width>200</width>
+         <width>0</width>
          <height>0</height>
         </size>
        </property>
@@ -357,8 +357,8 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>5</width>
+       <height>5</height>
       </size>
      </property>
     </spacer>
@@ -373,6 +373,12 @@
    <container>1</container>
   </customwidget>
   <customwidget>
+   <class>KisSpacingSelectionWidget</class>
+   <extends>QWidget</extends>
+   <header>kis_spacing_selection_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
    <header location="global">widgets/kis_curve_widget.h</header>
@@ -382,12 +388,6 @@
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisSpacingSelectionWidget</class>
-   <extends>QWidget</extends>
-   <header>kis_spacing_selection_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>327</width>
+    <width>348</width>
     <height>267</height>
    </rect>
   </property>
@@ -17,8 +17,10 @@
       <widget class="QLabel" name="brushTipNameLabel">
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
+         <weight>50</weight>
          <italic>false</italic>
+         <bold>false</bold>
          <kerning>false</kerning>
         </font>
        </property>
@@ -64,7 +66,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="presetsLayout" stretch="">
+    <layout class="QHBoxLayout" name="presetsLayout">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -152,7 +154,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>5</width>
          <height>20</height>
         </size>
        </property>
@@ -214,8 +216,8 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>5</width>
+       <height>5</height>
       </size>
      </property>
     </spacer>

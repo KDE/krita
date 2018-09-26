@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>381</width>
+    <width>265</width>
     <height>182</height>
    </rect>
   </property>
@@ -45,7 +45,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>180</width>
+         <width>50</width>
          <height>30</height>
         </size>
        </property>
@@ -183,17 +183,14 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>30</width>
-       <height>21</height>
+       <width>5</width>
+       <height>5</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
-  <zorder>horizontalLayoutWidget</zorder>
-  <zorder>horizontalLayoutWidget</zorder>
   <zorder>spacer2</zorder>
-  <zorder>gridLayoutWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

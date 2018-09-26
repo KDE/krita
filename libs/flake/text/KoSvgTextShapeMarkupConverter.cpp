@@ -768,7 +768,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     };
 
     QStack<BlockFormatRecord> formatStack;
-    formatStack.push(BlockFormatRecord(cursor.blockFormat(), cursor.charFormat()));
+    formatStack.push(BlockFormatRecord(QTextBlockFormat(), QTextCharFormat()));
 
     qreal currBlockAbsoluteLineOffset = 0.0;
     int prevBlockCursorPosition = -1;
@@ -1194,11 +1194,9 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "fill") {
-                QBrush brush = currentCharFormat.foreground();
                 QColor color;
                 color.setNamedColor(value);
-                brush.setColor(color);
-                charFormat.setForeground(brush);
+                charFormat.setForeground(color);
             }
 
             if (property == "text-anchor") {

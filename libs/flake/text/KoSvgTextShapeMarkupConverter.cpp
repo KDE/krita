@@ -911,7 +911,9 @@ QStringList KoSvgTextShapeMarkupConverter::warnings() const
     return d->warnings;
 }
 
-QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockFormat blockFormat, QTextCharFormat mostCommon)
+QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
+                                             QTextBlockFormat blockFormat,
+                                             QTextCharFormat mostCommon)
 {
     QStringList style;
     for(int i=0; i<format.properties().size(); i++) {
@@ -1017,15 +1019,16 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
             c.append("baseline-shift").append(":").append(val);
         }
 
-        if (!c.isEmpty()) {
-            style.append(c);
+        //we might need a better check than 'isn't black'
+        if (propertyId == QTextCharFormat::ForegroundBrush) {
+            QString c;
+            c.append("fill").append(":")
+                    .append(format.foreground().color().name());
+            if (!c.isEmpty()) {
+                style.append(c);
+            }
         }
-    }
-    //we might need a better check than 'isn't black'
-    if (format.foreground().color()!= mostCommon.foreground().color()) {
-        QString c;
-        c.append("fill").append(":")
-                .append(format.foreground().color().name());
+
         if (!c.isEmpty()) {
             style.append(c);
         }

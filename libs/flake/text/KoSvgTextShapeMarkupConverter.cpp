@@ -773,6 +773,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     int prevBlockCursorPosition = -1;
     qreal prevLineDescent = 0.0;
     qreal prevLineAscent = 0.0;
+    boost::optional<qreal> previousBlockAbsoluteXOffset = boost::none;
 
     while (!svgReader.atEnd()) {
         QXmlStreamReader::TokenType token = svgReader.readNext();
@@ -796,28 +797,35 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                 // mnemonic for a newline is (dy != 0 && x == 0)
 
-                if (svgReader.name() != "text" &&
-                        elementAttributes.hasAttribute("dy") &&
-                        elementAttributes.hasAttribute("x")) {
+                boost::optional<qreal> blockAbsoluteXOffset = boost::none;
 
+                if (elementAttributes.hasAttribute("x")) {
                     QString xString = elementAttributes.value("x").toString();
                     if (xString.contains("pt")) {
                         xString = xString.remove("pt").trimmed();
                     }
-
-                    if (KisDomUtils::toDouble(xString) == 0.0) {
-
-                        QString dyString = elementAttributes.value("dy").toString();
-                        if (dyString.contains("pt")) {
-                            dyString = dyString.remove("pt").trimmed();
-                        }
-
-                        KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
-
-                        absoluteLineOffset = KisDomUtils::toDouble(dyString);
-                        newBlock = absoluteLineOffset > 0;
-                    }
+                    blockAbsoluteXOffset = KisDomUtils::toDouble(xString);
                 }
+
+
+                if (previousBlockAbsoluteXOffset &&
+                    blockAbsoluteXOffset &&
+                    qFuzzyCompare(*previousBlockAbsoluteXOffset, *blockAbsoluteXOffset) &&
+                    svgReader.name() != "text" &&
+                    elementAttributes.hasAttribute("dy")) {
+
+                    QString dyString = elementAttributes.value("dy").toString();
+                    if (dyString.contains("pt")) {
+                        dyString = dyString.remove("pt").trimmed();
+                    }
+
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
+
+                    absoluteLineOffset = KisDomUtils::toDouble(dyString);
+                    newBlock = absoluteLineOffset > 0;
+                }
+
+                previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
             }
 
             //hack

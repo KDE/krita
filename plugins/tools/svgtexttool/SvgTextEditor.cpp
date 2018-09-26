@@ -270,6 +270,10 @@ void SvgTextEditor::checkFormat()
 {
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+
+    // checkboxes do not emit signals on manual switching, so we
+    // can avoid blocking them
+
     if (format.fontWeight() > QFont::Normal) {
         actionCollection()->action("svg_weight_bold")->setChecked(true);
     } else {
@@ -279,27 +283,42 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
     actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
 
-    FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
-    fontSizeAction->setFontSize(format.font().pointSize());
-
-    KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
-    qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"))->setCurrentColor(fg);
-
-    KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
-    qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"))->setCurrentColor(bg);
+    {
+        FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
+        KisSignalsBlocker b(fontSizeAction);
+        fontSizeAction->setFontSize(format.font().pointSize());
+    }
 
 
+    {
+        KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
+        KoColorPopupAction *fgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"));
+        KisSignalsBlocker b(fgColorPopup);
+        fgColorPopup->setCurrentColor(fg);
+    }
 
-    KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+    {
+        KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
+        KoColorPopupAction *bgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"));
+        KisSignalsBlocker b(bgColorPopup);
+        bgColorPopup->setCurrentColor(bg);
+    }
 
-    KisSignalsBlocker b(fontComboBox); // this prevents setting the entire selection to one font
-    fontComboBox->setCurrentFont(format.font());
+    {
+        KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+        KisSignalsBlocker b(fontComboBox);
+        fontComboBox->setCurrentFont(format.font());
+    }
 
-    QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
-    if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
-        spnLineHeight->setValue(100.0);
-    } else if(blockFormat.lineHeightType()==QTextBlockFormat::ProportionalHeight) {
-        spnLineHeight->setValue(double(blockFormat.lineHeight()));
+    {
+        QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
+        KisSignalsBlocker b(spnLineHeight);
+
+        if (blockFormat.lineHeightType() == QTextBlockFormat::SingleHeight) {
+            spnLineHeight->setValue(100.0);
+        } else if(blockFormat.lineHeightType() == QTextBlockFormat::ProportionalHeight) {
+            spnLineHeight->setValue(double(blockFormat.lineHeight()));
+        }
     }
 }
 

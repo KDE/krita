@@ -133,7 +133,7 @@ KoColorTransformation* KisBurnShadowsAdjustmentFactory::createTransformation(con
     }
 #endif
     else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-        adj = new KisBurnShadowsAdjustment< quint16, KoBgrTraits < quint8 > >();
+        adj = new KisBurnShadowsAdjustment< quint16, KoBgrTraits < quint16 > >();
     } else if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
         adj = new KisBurnShadowsAdjustment< float, KoRgbTraits < float > >();
     } else {

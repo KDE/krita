@@ -57,7 +57,6 @@ private Q_SLOTS:
 private:
     struct Private;
     KisAdvancedColorSpaceSelector *m_advancedSelector;
-    static bool sortBitDepthsComparer(KoID depthOne, KoID depthTwo);
     Private * const d;
 
 };

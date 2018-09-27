@@ -164,8 +164,8 @@ KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceManager *reso
       m_d(new Private(this, resourceManager))
 {
 
-    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotCanvasResourceChanged(int,QVariant)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(selectPaintingColorSpace()));
 

@@ -220,8 +220,8 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
 
     QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(const QString&, int)),
-                this, SLOT(slotSavingStatusMessage(const QString&, int)));
+        connect(d->document, SIGNAL(statusBarMessage(QString,int)),
+                this, SLOT(slotSavingStatusMessage(QString,int)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -341,7 +341,7 @@ void KisView::setViewManager(KisViewManager *view)
         d->viewManager->nodeManager()->nodesUpdated();
     }
 
-    connect(image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), this, SLOT(slotImageSizeChanged(const QPointF&, const QPointF&)));
+    connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged(QPointF,QPointF)));
     connect(image(), SIGNAL(sigResolutionChanged(double,double)), this, SLOT(slotImageResolutionChanged()));
 
     // executed in a context of an image thread
@@ -621,8 +621,8 @@ void KisView::setDocument(KisDocument *document)
     d->document = document;
     QStatusBar *sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(const QString&, int)),
-                this, SLOT(slotSavingStatusMessage(const QString&, int)));
+        connect(d->document, SIGNAL(statusBarMessage(QString,int)),
+                this, SLOT(slotSavingStatusMessage(QString,int)));
         connect(d->document, SIGNAL(clearStatusBarMessage()),
                 this, SLOT(slotClearStatusText()));
     }
@@ -745,7 +745,7 @@ bool KisView::queryClose()
             image->requestStrokeCancellation();
             viewManager()->blockUntilOperationsFinishedForced(image);
 
-            document()->removeAutoSaveFiles();
+            document()->removeAutoSaveFiles(document()->localFilePath(), document()->isRecovered());
             document()->setModified(false);   // Now when queryClose() is called by closeEvent it won't do anything.
             break;
         }

@@ -39,7 +39,7 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
 
     connect(gradientSlider, SIGNAL(sigSelectedStop(int)), this, SLOT(stopChanged(int)));
     connect(nameedit, SIGNAL(editingFinished()), this, SLOT(nameChanged()));
-    connect(colorButton, SIGNAL(changed(const KoColor&)), SLOT(colorChanged(const KoColor&)));
+    connect(colorButton, SIGNAL(changed(KoColor)), SLOT(colorChanged(KoColor)));
 
     opacitySlider->setPrefix(i18n("Opacity: "));
     opacitySlider->setRange(0.0, 1.0, 2);

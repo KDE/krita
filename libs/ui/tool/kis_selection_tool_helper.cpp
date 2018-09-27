@@ -36,7 +36,7 @@
 
 #include <kis_icon.h>
 #include "kis_processing_applicator.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_gui_context_command.h"
 #include "kis_command_utils.h"
 #include "commands/kis_deselect_global_selection_command.h"
@@ -337,4 +337,15 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
     m_contextMenu->addAction(actionMan->actionByName("show-global-selection-mask"));
 
     return m_contextMenu;
+}
+
+SelectionMode KisSelectionToolHelper::tryOverrideSelectionMode(KisSelectionSP activeSelection, SelectionMode currentMode, SelectionAction currentAction) const
+{
+    if (currentAction != SELECTION_DEFAULT && currentAction != SELECTION_REPLACE) {
+        if (activeSelection) {
+            currentMode = activeSelection->hasShapeSelection() ? SHAPE_PROTECTION : PIXEL_SELECTION;
+        }
+    }
+
+    return currentMode;
 }

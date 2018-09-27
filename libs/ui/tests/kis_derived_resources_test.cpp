@@ -103,7 +103,7 @@ void KisDerivedResourcesTest::test()
 
     QVERIFY(i.isValid());
 
-    QSignalSpy spy(manager, SIGNAL(canvasResourceChanged(int, const QVariant &)));
+    QSignalSpy spy(manager, SIGNAL(canvasResourceChanged(int,QVariant)));
 
     manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
 

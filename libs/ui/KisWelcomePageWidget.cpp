@@ -32,15 +32,23 @@
 #include "kis_icon_utils.h"
 #include "krita_utils.h"
 #include "KoStore.h"
-
+#include "kis_config.h"
 
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
+    : QWidget(parent)
 {
-   Q_UNUSED(parent);
    setupUi(this);
 
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
    recentDocumentsListView->setSpacing(2);
+
+   connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+
+   // configure the News area
+   KisConfig cfg(true);
+   bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
+   chkShowNews->setChecked(m_getNews);
+
 }
 
 KisWelcomePageWidget::~KisWelcomePageWidget()
@@ -51,7 +59,6 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 {
     if (mainWin) {
         mainWindow = mainWin;
-
 
         // set the shortcut links from actions (only if a shortcut exists)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {

@@ -768,12 +768,13 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     };
 
     QStack<BlockFormatRecord> formatStack;
-    formatStack.push(BlockFormatRecord(cursor.blockFormat(), cursor.charFormat()));
+    formatStack.push(BlockFormatRecord(QTextBlockFormat(), QTextCharFormat()));
 
     qreal currBlockAbsoluteLineOffset = 0.0;
     int prevBlockCursorPosition = -1;
     qreal prevLineDescent = 0.0;
     qreal prevLineAscent = 0.0;
+    boost::optional<qreal> previousBlockAbsoluteXOffset = boost::none;
 
     while (!svgReader.atEnd()) {
         QXmlStreamReader::TokenType token = svgReader.readNext();
@@ -797,28 +798,35 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                 // mnemonic for a newline is (dy != 0 && x == 0)
 
-                if (svgReader.name() != "text" &&
-                        elementAttributes.hasAttribute("dy") &&
-                        elementAttributes.hasAttribute("x")) {
+                boost::optional<qreal> blockAbsoluteXOffset = boost::none;
 
+                if (elementAttributes.hasAttribute("x")) {
                     QString xString = elementAttributes.value("x").toString();
                     if (xString.contains("pt")) {
                         xString = xString.remove("pt").trimmed();
                     }
-
-                    if (KisDomUtils::toDouble(xString) == 0.0) {
-
-                        QString dyString = elementAttributes.value("dy").toString();
-                        if (dyString.contains("pt")) {
-                            dyString = dyString.remove("pt").trimmed();
-                        }
-
-                        KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
-
-                        absoluteLineOffset = KisDomUtils::toDouble(dyString);
-                        newBlock = absoluteLineOffset > 0;
-                    }
+                    blockAbsoluteXOffset = KisDomUtils::toDouble(xString);
                 }
+
+
+                if (previousBlockAbsoluteXOffset &&
+                    blockAbsoluteXOffset &&
+                    qFuzzyCompare(*previousBlockAbsoluteXOffset, *blockAbsoluteXOffset) &&
+                    svgReader.name() != "text" &&
+                    elementAttributes.hasAttribute("dy")) {
+
+                    QString dyString = elementAttributes.value("dy").toString();
+                    if (dyString.contains("pt")) {
+                        dyString = dyString.remove("pt").trimmed();
+                    }
+
+                    KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
+
+                    absoluteLineOffset = KisDomUtils::toDouble(dyString);
+                    newBlock = absoluteLineOffset > 0;
+                }
+
+                previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
             }
 
             //hack
@@ -903,7 +911,9 @@ QStringList KoSvgTextShapeMarkupConverter::warnings() const
     return d->warnings;
 }
 
-QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockFormat blockFormat, QTextCharFormat mostCommon)
+QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
+                                             QTextBlockFormat blockFormat,
+                                             QTextCharFormat mostCommon)
 {
     QStringList style;
     for(int i=0; i<format.properties().size(); i++) {
@@ -1009,15 +1019,16 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format, QTextBlockF
             c.append("baseline-shift").append(":").append(val);
         }
 
-        if (!c.isEmpty()) {
-            style.append(c);
+        //we might need a better check than 'isn't black'
+        if (propertyId == QTextCharFormat::ForegroundBrush) {
+            QString c;
+            c.append("fill").append(":")
+                    .append(format.foreground().color().name());
+            if (!c.isEmpty()) {
+                style.append(c);
+            }
         }
-    }
-    //we might need a better check than 'isn't black'
-    if (format.foreground().color()!= mostCommon.foreground().color()) {
-        QString c;
-        c.append("fill").append(":")
-                .append(format.foreground().color().name());
+
         if (!c.isEmpty()) {
             style.append(c);
         }
@@ -1183,11 +1194,9 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "fill") {
-                QBrush brush = currentCharFormat.foreground();
                 QColor color;
                 color.setNamedColor(value);
-                brush.setColor(color);
-                charFormat.setForeground(brush);
+                charFormat.setForeground(color);
             }
 
             if (property == "text-anchor") {

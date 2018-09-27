@@ -82,12 +82,12 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
 
     m_saveLockedOption = false;
 
-    connect(m_d->optionsList, SIGNAL(activated(const QModelIndex&)), this, SLOT(changePage(const QModelIndex&)));
-    connect(m_d->optionsList, SIGNAL(clicked(QModelIndex)), this, SLOT(changePage(const QModelIndex&)));
+    connect(m_d->optionsList, SIGNAL(activated(QModelIndex)), this, SLOT(changePage(QModelIndex)));
+    connect(m_d->optionsList, SIGNAL(clicked(QModelIndex)), this, SLOT(changePage(QModelIndex)));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuDropSettingsTriggered()), this, SLOT(slotLockPropertiesDrop()));
     connect(m_d->optionsList, SIGNAL(rightClickedMenuSaveSettingsTriggered()), this, SLOT(slotLockPropertiesSave()));
     connect(m_d->optionsList, SIGNAL(sigEntryChecked(QModelIndex)), this, SLOT(slotEntryChecked(QModelIndex)));
-    connect (m_d->optionsList, SIGNAL(lockAreaTriggered(QModelIndex)), this, SLOT(lockProperties(const QModelIndex&)));
+    connect (m_d->optionsList, SIGNAL(lockAreaTriggered(QModelIndex)), this, SLOT(lockProperties(QModelIndex)));
 
 }
 

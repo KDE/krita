@@ -502,6 +502,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 
         if (!context.strippedTextMode()) {
             context.shapeWriter().addAttribute("id", context.getID(this));
+            context.shapeWriter().addAttribute("krita:useRichText", d->isRichTextPreferred ? "true" : "false");
             SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
             SvgStyleWriter::saveSvgStyle(this, context);
         } else {
@@ -792,6 +793,20 @@ KoSvgTextChunkShapeLayoutInterface *KoSvgTextChunkShape::layoutInterface()
     return d->layoutInterface.data();
 }
 
+bool KoSvgTextChunkShape::isRichTextPreferred() const
+{
+    Q_D(const KoSvgTextChunkShape);
+    return isRootTextNode() && d->isRichTextPreferred;
+}
+
+void KoSvgTextChunkShape::setRichTextPreferred(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(isRootTextNode());
+
+    Q_D(KoSvgTextChunkShape);
+    d->isRichTextPreferred = value;
+}
+
 bool KoSvgTextChunkShape::isRootTextNode() const
 {
     return false;
@@ -816,7 +831,8 @@ KoSvgTextChunkShapePrivate::KoSvgTextChunkShapePrivate(const KoSvgTextChunkShape
       localTransformations(rhs.localTransformations),
       textLength(rhs.textLength),
       lengthAdjust(rhs.lengthAdjust),
-      text(rhs.text)
+      text(rhs.text),
+      isRichTextPreferred(rhs.isRichTextPreferred)
 {
     if (rhs.model) {
         SimpleShapeContainerModel *otherModel = dynamic_cast<SimpleShapeContainerModel*>(rhs.model);

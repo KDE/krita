@@ -154,42 +154,6 @@
   #include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
 
-
-
-class DockerTitleStyle : public QProxyStyle
-{
-    public:
-       DockerTitleStyle(QStyle *baseStyle = nullptr) : QProxyStyle(baseStyle) {}
-       QPixmap standardPixmap(QStyle::StandardPixmap sp, const QStyleOption *option = nullptr,
-                      const QWidget *widget = nullptr) const override
-       {
-           QIcon closeIcon = KisIconUtils::loadIcon("docker_close");
-           QPixmap closePixmap = closeIcon.pixmap(QSize(20, 20));
-
-           QIcon floatIcon = KisIconUtils::loadIcon("docker_float");
-           QPixmap floatPixmap = floatIcon.pixmap(QSize(20, 20));
-
-
-           switch (sp) {
-           case SP_TitleBarNormalButton:
-           case SP_TitleBarMinButton:
-           case SP_TitleBarMenuButton:
-                return floatPixmap;
-           case SP_DockWidgetCloseButton:
-           case SP_TitleBarCloseButton:
-               return closePixmap;
-
-           default:
-               break;
-           }
-
-           return QCommonStyle::standardPixmap(sp, option, widget);
-       }
-};
-
-
-
-
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
@@ -394,7 +358,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
-    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*, QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*, QList<QPointer<QWidget> >)));
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*,QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -725,11 +689,6 @@ void KisMainWindow::slotThemeChanged()
     }
 
     emit themeChanged();
-
-    // go through each docker and set style
-    for (int i = 0; i < dockWidgets().length(); i++) {
-        dockWidgets().at(i)->setStyle(new DockerTitleStyle);
-    }
 }
 
 void KisMainWindow::updateReloadFileAction(KisDocument *doc)
@@ -919,7 +878,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
     if (flags & RecoveryFile) {
@@ -989,7 +948,7 @@ void KisMainWindow::slotLoadCompleted()
         addViewAndNotifyLoadingCompleted(newdoc);
 
         disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-        disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+        disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
         emit loadCompleted();
     }
@@ -1005,7 +964,7 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 }
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
@@ -1022,7 +981,7 @@ void KisMainWindow::slotSaveCompleted()
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 
     if (d->deferredClosingEvent) {
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
@@ -1087,21 +1046,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         saveas = true;
     }
 
-    bool reset_url;
-
     if (document->url().isEmpty()) {
-        reset_url = true;
         saveas = true;
-    }
-    else {
-        reset_url = false;
     }
 
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
-
-    QUrl oldURL = document->url();
-    QString oldFile = document->localFilePath();
+    connect(document, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 
     QByteArray nativeFormat = document->nativeFormatMimeType();
     QByteArray oldMimeFormat = document->mimeType();
@@ -1237,8 +1187,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
-                        document->setUrl(oldURL);
-                        document->setLocalFilePath(oldFile);
                     }
                 }
                 else { // Export
@@ -1268,17 +1216,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         if (!ret) {
             dbgUI << "Failed Save!";
-            document->setUrl(oldURL);
-            document->setLocalFilePath(oldFile);
         }
     }
-
-    if (ret && !isExporting) {
-        document->setRecovered(false);
-    }
-
-    if (!ret && reset_url)
-        document->resetURL(); //clean the suggested filename as the save dialog was rejected
 
     updateReloadFileAction(document);
     updateCaption();
@@ -1523,7 +1462,7 @@ void KisMainWindow::slotFileNew()
     // calls deleteLater
     connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
     // calls deleteLater
-    connect(startupWidget, SIGNAL(openTemplate(const QUrl&)), KisPart::instance(), SLOT(openTemplate(const QUrl&)));
+    connect(startupWidget, SIGNAL(openTemplate(QUrl)), KisPart::instance(), SLOT(openTemplate(QUrl)));
 
     startupWidget->exec();
 
@@ -2012,7 +1951,6 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         dockWidget->setFont(KoDockRegistry::dockFont());
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        dockWidget->setStyle(new DockerTitleStyle);
         if (lockAllDockers) {
             if (dockWidget->titleBarWidget()) {
                 dockWidget->titleBarWidget()->setVisible(false);
@@ -2146,6 +2084,25 @@ void KisMainWindow::subWindowActivated()
     Q_FOREACH (QToolBar *tb, toolBars()) {
         if (tb->objectName() == "BrushesAndStuff") {
             tb->setEnabled(enabled);
+        }
+    }
+
+    /**
+     * Qt has a weirdness, it has hardcoded shortcuts added to an action
+     * in the window menu. We need to reset the shortcuts for that menu
+     * to nothing, otherwise the shortcuts cannot be made configurable.
+     *
+     * See: https://bugs.kde.org/show_bug.cgi?id=352205
+     *      https://bugs.kde.org/show_bug.cgi?id=375524
+     *      https://bugs.kde.org/show_bug.cgi?id=398729
+     */
+    QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
+    if (subWindow) {
+        QMenu *menu = subWindow->systemMenu();
+        if (menu) {
+            Q_FOREACH (QAction *action, menu->actions()) {
+                action->setShortcut(QKeySequence());
+            }
         }
     }
 
@@ -2420,8 +2377,10 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::closeCurrentWindow()
 {
-    d->mdiArea->currentSubWindow()->close();
-    d->actionManager()->updateGUI();
+    if (d->mdiArea->currentSubWindow()) {
+        d->mdiArea->currentSubWindow()->close();
+        d->actionManager()->updateGUI();
+    }
 }
 
 void KisMainWindow::checkSanity()
@@ -2606,8 +2565,7 @@ void KisMainWindow::createActions()
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    d->close = actionManager->createAction("file_close");
-    connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+    d->close = actionManager->createStandardAction(KStandardAction::Close, this, SLOT(closeCurrentWindow()));
 
     d->showSessionManager = actionManager->createAction("file_sessions");
     connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));

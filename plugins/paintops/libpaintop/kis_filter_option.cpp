@@ -71,7 +71,7 @@ KisFilterOption::KisFilterOption()
         }
     }
     m_filterOptionWidget->filtersList->setIDList(l2);
-    connect(m_filterOptionWidget->filtersList, SIGNAL(activated(const KoID &)), SLOT(setCurrentFilter(const KoID &)));
+    connect(m_filterOptionWidget->filtersList, SIGNAL(activated(KoID)), SLOT(setCurrentFilter(KoID)));
     if (!l2.empty()) {
         setCurrentFilter(l2.first());
     }

@@ -140,8 +140,8 @@ void KisToolLazyBrushOptionsWidget::showEvent(QShowEvent *event)
         this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
     m_d->providerSignals.addConnection(
-        m_d->provider, SIGNAL(sigFGColorChanged(const KoColor&)),
-        this, SLOT(slotCurrentFgColorChanged(const KoColor&)));
+        m_d->provider, SIGNAL(sigFGColorChanged(KoColor)),
+        this, SLOT(slotCurrentFgColorChanged(KoColor)));
 
     slotCurrentNodeChanged(m_d->provider->currentNode());
     slotCurrentFgColorChanged(m_d->provider->fgColor());

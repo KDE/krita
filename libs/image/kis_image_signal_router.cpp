@@ -115,6 +115,20 @@ void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)
     emit sigRemoveNodeAsync(removedNode);
 }
 
+void KisImageSignalRouter::emitRequestLodPlanesSyncBlocked(bool value)
+{
+    emit sigRequestLodPlanesSyncBlocked(value);
+}
+
+void KisImageSignalRouter::emitNotifyBatchUpdateStarted()
+{
+    emit sigNotifyBatchUpdateStarted();
+}
+
+void KisImageSignalRouter::emitNotifyBatchUpdateEnded()
+{
+    emit sigNotifyBatchUpdateEnded();
+}
 
 void KisImageSignalRouter::slotNotification(KisImageSignalType type)
 {

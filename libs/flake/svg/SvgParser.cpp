@@ -152,7 +152,9 @@ void SvgParser::setXmlBaseDir(const QString &baseDir)
         [this](const QString &name) {
             const QString fileName = m_context.xmlBaseDir() + QDir::separator() + name;
             QFile file(fileName);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(file.exists(), QByteArray());
+            if (!file.exists()) {
+                return QByteArray();
+            }
             file.open(QIODevice::ReadOnly);
             return file.readAll();
         });
@@ -1472,7 +1474,13 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
 
     if (e.tagName() == "text") {
         // XXX: Shapes need to be created by their factories
-        rootTextShape = mergeIntoShape ? mergeIntoShape : new KoSvgTextShape();
+        if (mergeIntoShape) {
+            rootTextShape = mergeIntoShape;
+        } else {
+            rootTextShape = new KoSvgTextShape();
+            const QString useRichText = e.attribute("krita:useRichText", "true");
+            rootTextShape->setRichTextPreferred(useRichText != "false");
+        }
     }
 
     if (rootTextShape) {

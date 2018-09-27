@@ -21,8 +21,9 @@
 
 #include "kritaimage_export.h"
 #include <QtGlobal>
+#include "kis_pointer_utils.h"
 
-class KisRunnableStrokeJobData;
+class KisRunnableStrokeJobDataBase;
 
 
 class KRITAIMAGE_EXPORT KisRunnableStrokeJobsInterface
@@ -30,8 +31,13 @@ class KRITAIMAGE_EXPORT KisRunnableStrokeJobsInterface
 public:
     virtual ~KisRunnableStrokeJobsInterface();
 
-    void addRunnableJob(KisRunnableStrokeJobData *data);
-    virtual void addRunnableJobs(const QVector<KisRunnableStrokeJobData*> &list) = 0;
+    void addRunnableJob(KisRunnableStrokeJobDataBase *data);
+    virtual void addRunnableJobs(const QVector<KisRunnableStrokeJobDataBase*> &list) = 0;
+
+    template <typename T>
+    void addRunnableJobs(const QVector<T*> &list) {
+        this->addRunnableJobs(implicitCastList<KisRunnableStrokeJobDataBase*>(list));
+    }
 };
 
 #endif // KISRUNNABLESTROKEJOBSINTERFACE_H

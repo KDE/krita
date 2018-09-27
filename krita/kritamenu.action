@@ -265,7 +265,7 @@
       <iconText>Close</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+W</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -605,7 +605,7 @@
       <iconText>Wrap Around Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>W</shortcut>
+      <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -802,7 +802,7 @@
       <toolTip>Show Pixel Grid</toolTip>
       <iconText>Show Pixel Grid</iconText>
       <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationConditions>1000</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>

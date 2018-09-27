@@ -115,49 +115,12 @@ void KisColorSpaceSelector::fillCmbDepths(const KoID& id)
     KoID activeDepth = d->colorSpaceSelector->cmbColorDepth->currentItem();
     d->colorSpaceSelector->cmbColorDepth->clear();
     QList<KoID> depths = KoColorSpaceRegistry::instance()->colorDepthList(id, KoColorSpaceRegistry::OnlyUserVisible);
-
-    // order the depth by name
-    std::sort(depths.begin(), depths.end(), sortBitDepthsComparer);
-
-    d->colorSpaceSelector->cmbColorDepth->setIDList(depths);
+    d->colorSpaceSelector->cmbColorDepth->setIDList(depths, false);
     if (depths.contains(activeDepth)) {
         d->colorSpaceSelector->cmbColorDepth->setCurrent(activeDepth);
     }
 }
 
-
-bool KisColorSpaceSelector::sortBitDepthsComparer(KoID depthOne, KoID depthTwo) {
-
-    // to order these right, we need to first order by bit depth, then by if it is floating or not
-    QString bitDepthOne = depthOne.name().split(" ")[0];
-    QString bitDepthTwo = depthTwo.name().split(" ")[0];
-
-
-    if (bitDepthOne.toInt() > bitDepthTwo.toInt()) {
-        return false;
-    }
-
-    if (bitDepthOne.toInt() == bitDepthTwo.toInt()) {
-        // bit depth number is the same, so now we need to compare if it is a floating type or not
-        // the second value [1], just says 'bits', so that is why we look for [2] which has the float word
-        QString bitDepthOneType = "";
-        QString bitDepthTwoType = "";
-
-        if (depthOne.name().split(" ").length() > 2) {
-            bitDepthOneType = depthOne.name().split(" ")[2];
-        }
-        if (depthTwo.name().split(" ").length() > 2) {
-            bitDepthTwoType = depthTwo.name().split(" ")[2];
-        }
-
-        if (bitDepthOneType.length() > bitDepthTwoType.length()) {
-            return false;
-        }
-    }
-
-
-    return true;
-}
 
 
 const KoColorSpace* KisColorSpaceSelector::currentColorSpace()

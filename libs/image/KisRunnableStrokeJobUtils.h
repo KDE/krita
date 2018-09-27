@@ -27,23 +27,23 @@
 namespace KritaUtils
 {
 
-template <typename Func>
-void addJobSequential(QVector<KisRunnableStrokeJobData*> &jobs, Func func) {
+template <typename Func, typename Job>
+void addJobSequential(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::SEQUENTIAL));
 }
 
-template <typename Func>
-void addJobConcurrent(QVector<KisRunnableStrokeJobData*> &jobs, Func func) {
+template <typename Func, typename Job>
+void addJobConcurrent(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::CONCURRENT));
 }
 
-template <typename Func>
-void addJobBarrier(QVector<KisRunnableStrokeJobData*> &jobs, Func func) {
+template <typename Func, typename Job>
+void addJobBarrier(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::BARRIER));
 }
 
-template <typename Func>
-void addJobUniquelyCuncurrent(QVector<KisRunnableStrokeJobData*> &jobs, Func func) {
+template <typename Func, typename Job>
+void addJobUniquelyCuncurrent(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::UNIQUELY_CONCURRENT));
 }
 

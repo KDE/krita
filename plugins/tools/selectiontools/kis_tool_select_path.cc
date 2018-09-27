@@ -147,7 +147,12 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select by Bezier Curve"));
 
-    if (m_selectionTool->selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        m_selectionTool->selectionMode(),
+                                        m_selectionTool->selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
 
         KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
@@ -170,6 +175,17 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
         delete pathShape;
     } else {
         helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
+    }
+}
+
+void KisToolSelectPath::resetCursorStyle()
+{
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelectBase<KisDelegatedSelectPathWrapper>::resetCursorStyle();
     }
 }
 

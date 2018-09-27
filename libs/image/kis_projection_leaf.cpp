@@ -38,6 +38,7 @@ struct Q_DECL_HIDDEN KisProjectionLeaf::Private
     Private(KisNode *_node) : node(_node) {}
 
     KisNode* node;
+    bool isTemporaryHidden = false;
 
     static bool checkPassThrough(const KisNode *node) {
         const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(node);
@@ -281,6 +282,8 @@ bool KisProjectionLeaf::dependsOnLowerNodes() const
 
 bool KisProjectionLeaf::visible() const
 {
+    if (m_d->isTemporaryHidden) return false;
+
     // TODO: check opacity as well!
 
     bool hiddenByParentPassThrough = false;
@@ -350,6 +353,15 @@ bool KisProjectionLeaf::isOverlayProjectionLeaf() const
     return this == m_d->overlayProjectionLeaf();
 }
 
+void KisProjectionLeaf::setTemporaryHiddenFromRendering(bool value)
+{
+    m_d->isTemporaryHidden = value;
+}
+
+bool KisProjectionLeaf::isTemporaryHiddenFromRendering() const
+{
+    return m_d->isTemporaryHidden;
+}
 
 /**
  * This method is rather slow and dangerous. It should be executes in

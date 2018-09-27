@@ -44,7 +44,7 @@ void KisRoundMarkerOpSettings::setPaintOpSize(qreal value)
 {
     RoundMarkerOption op;
     op.readOptionSetting(*this);
-    op.diameter = qBound(0.01, value, 1000.0);
+    op.diameter = value;
     op.writeOptionSetting(this);
 }
 

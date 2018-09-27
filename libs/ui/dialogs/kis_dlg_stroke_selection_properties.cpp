@@ -111,8 +111,8 @@ KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *
 
     connect(m_page, SIGNAL(colorSelectorChanged()), SLOT(setColorButton()));
     connect(m_page, SIGNAL(colorFillSelectorChanged()), SLOT(setColorFillButton()));
-    connect(m_page->colorFillSelector, SIGNAL(changed(const QColor&)), SLOT(colorFillChanged(const QColor&)));
-    connect(m_page->colorSelector, SIGNAL(changed(const QColor&)), SLOT(colorChanged(const QColor&)));
+    connect(m_page->colorFillSelector, SIGNAL(changed(QColor)), SLOT(colorFillChanged(QColor)));
+    connect(m_page->colorSelector, SIGNAL(changed(QColor)), SLOT(colorChanged(QColor)));
 
     if (isVectorLayer) {
         lockVectorLayerFunctions();

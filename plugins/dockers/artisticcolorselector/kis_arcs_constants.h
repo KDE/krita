@@ -34,6 +34,11 @@ static const int DEFAULT_HUE_STEPS = 12;
 static const int DEFAULT_SATURATION_STEPS = 7;
 static const int DEFAULT_VALUE_SCALE_STEPS = 11;
 
+static const qreal DEFAULT_LUMA_R = 0.2126;
+static const qreal DEFAULT_LUMA_G = 0.7152;
+static const qreal DEFAULT_LUMA_B = 0.0722;
+static const qreal DEFAULT_LUMA_GAMMA = 2.2;
+
 // color scheme for the selector
 static const QColor COLOR_MIDDLE_GRAY = QColor(128,128,128,255);
 static const QColor COLOR_DARK = QColor(20,20,20,255);

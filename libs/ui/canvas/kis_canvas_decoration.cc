@@ -24,6 +24,7 @@ struct KisCanvasDecoration::Private {
     bool visible;
     QPointer<KisView> view;
     QString id;
+    int priority = 0;
 };
 
 KisCanvasDecoration::KisCanvasDecoration(const QString& id, QPointer<KisView>parent)
@@ -79,6 +80,21 @@ void KisCanvasDecoration::paint(QPainter& gc, const QRectF& updateArea, const Ki
     if (visible()) {
         drawDecoration(gc, updateArea, converter,canvas);
     }
+}
+
+int KisCanvasDecoration::priority() const
+{
+    return d->priority;
+}
+
+void KisCanvasDecoration::setPriority(int value)
+{
+    d->priority = value;
+}
+
+bool KisCanvasDecoration::comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2)
+{
+    return decoration1->priority() < decoration2->priority();
 }
 
 

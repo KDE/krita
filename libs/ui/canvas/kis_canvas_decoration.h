@@ -63,6 +63,14 @@ public:
      */
     void paint(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas);
 
+    /**
+     * Return z-order priority of the decoration. The higher the priority, the higher
+     * the decoration is painted.
+     */
+    int priority() const;
+
+    static bool comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2);
+
 public Q_SLOTS:
     /**
      * Set if the decoration is visible or not.
@@ -82,6 +90,13 @@ protected:
      * @return the parent KisView
      */
     QPointer<KisView> view() const;
+
+    /**
+     * Set the priority of the decoration. The higher the priority, the higher
+     * the decoration is painted.
+     */
+    void setPriority(int value);
+
 private:
     struct Private;
     Private* const d;

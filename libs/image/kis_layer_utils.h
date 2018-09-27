@@ -65,7 +65,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
-    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image);
+    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image, KisNodeSP activeNode);
 
     KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);

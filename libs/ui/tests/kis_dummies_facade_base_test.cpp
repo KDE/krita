@@ -261,7 +261,7 @@ void KisDummiesFacadeBaseTest::testSubstituteRootNode()
     QCOMPARE(actualGraph, expectedGraph);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
-    m_image->flatten();
+    m_image->flatten(0);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root Layer 1";

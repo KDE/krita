@@ -71,9 +71,9 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document()) {
         m_canvasConnections.addConnection(
             m_canvas->viewManager()->gridManager(),
-            SIGNAL(sigRequestUpdateGridConfig(const KisGridConfig&)),
+            SIGNAL(sigRequestUpdateGridConfig(KisGridConfig)),
             this,
-            SLOT(slotGridConfigUpdateRequested(const KisGridConfig&)));
+            SLOT(slotGridConfigUpdateRequested(KisGridConfig)));
 
         slotGridConfigUpdateRequested(m_canvas->viewManager()->document()->gridConfig());
 
@@ -85,9 +85,9 @@ void GridDockerDock::setCanvas(KoCanvasBase * canvas)
 
         m_canvasConnections.addConnection(
             m_canvas->viewManager()->guidesManager(),
-            SIGNAL(sigRequestUpdateGuidesConfig(const KisGuidesConfig&)),
+            SIGNAL(sigRequestUpdateGuidesConfig(KisGuidesConfig)),
             this,
-            SLOT(slotGuidesConfigUpdateRequested(const KisGuidesConfig&)));
+            SLOT(slotGuidesConfigUpdateRequested(KisGuidesConfig)));
         slotGuidesConfigUpdateRequested(m_canvas->viewManager()->document()->guidesConfig());
         QRect rc = m_canvas->image()->bounds();
         m_configWidget->setGridDivision(rc.width() / 2, rc.height() / 2);

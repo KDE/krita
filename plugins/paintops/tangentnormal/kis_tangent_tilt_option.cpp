@@ -61,9 +61,9 @@ KisTangentTiltOption::KisTangentTiltOption()
     connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_options->comboBlue, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setRedChannel(int) ));
-    connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setGreenChannel(int) ));
-    connect(m_options->comboBlue, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setBlueChannel(int) ));
+    connect(m_options->comboRed, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setRedChannel(int)));
+    connect(m_options->comboGreen, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setGreenChannel(int)));
+    connect(m_options->comboBlue, SIGNAL(currentIndexChanged(int)), m_options->TangentTiltPreview, SLOT(setBlueChannel(int)));
 
     connect(m_options->optionTilt, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->optionDirection, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));

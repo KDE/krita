@@ -25,7 +25,7 @@
 class KRITAIMAGE_EXPORT KisFakeRunnableStrokeJobsExecutor : public KisRunnableStrokeJobsInterface
 {
 public:
-    void addRunnableJobs(const QVector<KisRunnableStrokeJobData*> &list);
+    void addRunnableJobs(const QVector<KisRunnableStrokeJobDataBase*> &list);
 };
 
 #endif // KISFAKERUNNABLESTROKEJOBSEXECUTOR_H

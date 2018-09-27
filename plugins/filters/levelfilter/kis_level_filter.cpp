@@ -134,8 +134,8 @@ KisLevelConfigWidget::KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP de
     connect(m_page.outgradient, SIGNAL(sigModifiedBlack(int)), m_page.outblackspin, SLOT(setValue(int)));
     connect(m_page.outgradient, SIGNAL(sigModifiedWhite(int)), m_page.outwhitespin, SLOT(setValue(int)));
 
-    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel(void)));
-    connect(m_page.butinvert, SIGNAL(clicked(bool)), this, SLOT(slotInvert(void)));
+    connect(m_page.butauto, SIGNAL(clicked(bool)), this, SLOT(slotAutoLevel()));
+    connect(m_page.butinvert, SIGNAL(clicked(bool)), this, SLOT(slotInvert()));
 
     connect((QObject*)(m_page.chkLogarithmic), SIGNAL(toggled(bool)), this, SLOT(slotDrawHistogram(bool)));
 

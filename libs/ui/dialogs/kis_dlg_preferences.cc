@@ -1153,6 +1153,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("general");
     page->setHeader(i18n("General"));
     page->setIcon(KisIconUtils::loadIcon("go-home"));
+    m_pages << page;
     addPage(page);
     m_general = new GeneralTab(vbox);
 
@@ -1162,6 +1163,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("shortcuts");
     page->setHeader(i18n("Shortcuts"));
     page->setIcon(KisIconUtils::loadIcon("document-export"));
+    m_pages << page;
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
     connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
@@ -1173,6 +1175,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setHeader(i18n("Canvas Input"));
     page->setObjectName("canvasinput");
     page->setIcon(KisIconUtils::loadIcon("configure"));
+    m_pages << page;
 
     // Display
     vbox = new KoVBox();
@@ -1180,6 +1183,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("display");
     page->setHeader(i18n("Display"));
     page->setIcon(KisIconUtils::loadIcon("preferences-desktop-display"));
+    m_pages << page;
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
 
@@ -1189,6 +1193,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
     page->setIcon(KisIconUtils::loadIcon("preferences-desktop-color"));
+    m_pages << page;
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
@@ -1198,6 +1203,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
     page->setIcon(KisIconUtils::loadIcon("applications-system"));
+    m_pages << page;
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 
@@ -1207,6 +1213,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
     page->setIcon(KisIconUtils::loadIcon("document-edit"));
+    m_pages << page;
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
@@ -1216,6 +1223,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
     page->setIcon(KisIconUtils::loadIcon("folder-pictures"));
+    m_pages << page;
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
@@ -1225,6 +1233,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("author");
     page->setHeader(i18n("Author"));
     page->setIcon(KisIconUtils::loadIcon("im-user"));
+    m_pages << page;
 
 
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
@@ -1248,13 +1257,22 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         connect(this, SIGNAL(accepted()), preferenceSet, SLOT(savePreferences()), Qt::UniqueConnection);
     }
 
-
     connect(restoreDefaultsButton, SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
 
+    KisConfig cfg(true);
+    QString currentPageName = cfg.readEntry<QString>("KisDlgPreferences/CurrentPage");
+    Q_FOREACH(KPageWidgetItem *page, m_pages) {
+        if (page->objectName() == currentPageName) {
+            setCurrentPage(page);
+            break;
+        }
+    }
 }
 
 KisDlgPreferences::~KisDlgPreferences()
 {
+    KisConfig cfg(true);
+    cfg.writeEntry<QString>("KisDlgPreferences/CurrentPage", currentPage()->objectName());
 }
 
 void KisDlgPreferences::slotDefault()

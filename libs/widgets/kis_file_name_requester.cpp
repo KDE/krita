@@ -35,7 +35,7 @@ KisFileNameRequester::KisFileNameRequester(QWidget *parent)
     m_ui->btnSelectFile->setIcon(kisIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
-    connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
+    connect(m_ui->txtFileName, SIGNAL(textChanged(QString)), SIGNAL(textChanged(QString)));
 }
 
 KisFileNameRequester::~KisFileNameRequester()

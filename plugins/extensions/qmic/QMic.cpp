@@ -88,7 +88,7 @@ QMic::QMic(QObject *parent, const QVariantList &)
     connect(m_againAction,  SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
 
     m_gmicApplicator = new KisQmicApplicator();
-    connect(m_gmicApplicator, SIGNAL(gmicFinished(bool, int, QString)), this, SLOT(slotGmicFinished(bool, int, QString)));
+    connect(m_gmicApplicator, SIGNAL(gmicFinished(bool,int,QString)), this, SLOT(slotGmicFinished(bool,int,QString)));
 #endif
 }
 
@@ -131,9 +131,9 @@ void QMic::slotQMic(bool again)
     m_localServer->listen(m_key);
     connect(m_localServer, SIGNAL(newConnection()), SLOT(connected()));
     m_pluginProcess = new QProcess(this);
-    connect(viewManager(), SIGNAL(destroyed(QObject *o)), m_pluginProcess, SLOT(terminate()));
+    connect(viewManager(), SIGNAL(destroyed(QObject*o)), m_pluginProcess, SLOT(terminate()));
     m_pluginProcess->setProcessChannelMode(QProcess::ForwardedChannels);
-    connect(m_pluginProcess, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
+    connect(m_pluginProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(pluginFinished(int,QProcess::ExitStatus)));
     connect(m_pluginProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(pluginStateChanged(QProcess::ProcessState)));
     m_pluginProcess->start(pluginPath, QStringList() << m_key << (again ? QString(" reapply") : QString()));
 

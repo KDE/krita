@@ -285,7 +285,7 @@ public:
      * a background, so you cannot expect the image having new size
      * right after ths call.
      */
-    void scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on rotating the image
@@ -312,7 +312,7 @@ public:
      * a background, so you cannot expect the operation being completed
      * right after the call
      */
-    void rotateNode(KisNodeSP node, double radians);
+    void rotateNode(KisNodeSP node, double radians, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on shearing the image
@@ -339,7 +339,7 @@ public:
      * a background, so you cannot expect the operation being completed
      * right after the call
      */
-    void shearNode(KisNodeSP node, double angleX, double angleY);
+    void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -518,7 +518,7 @@ public:
     /**
      * Merge all visible layers and discard hidden ones.
      */
-    void flatten();
+    void flatten(KisNodeSP activeNode);
 
     /**
      * Merge the specified layer with the layer
@@ -935,13 +935,16 @@ public Q_SLOTS:
      * when we change the size of the image. In this case, the whole
      * image will be reloaded into UI by sigSizeChanged(), so there is
      * no need to inform the UI about individual dirty rects.
+     *
+     * The last call to enableUIUpdates() will return the list of udpates
+     * that were requested while they were blocked.
      */
     void disableUIUpdates() override;
 
     /**
      * \see disableUIUpdates
      */
-    void enableUIUpdates() override;
+    QVector<QRect> enableUIUpdates() override;
 
     /**
      * Disables the processing of all the setDirty() requests that
@@ -1066,11 +1069,10 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
-    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
-                    bool resizeImage, double radians);
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode, double radians,
+                    bool resizeImage, KisSelectionSP selection);
     void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
-                   bool resizeImage, double angleX, double angleY,
-                   const QPointF &origin);
+                   bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
 
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 

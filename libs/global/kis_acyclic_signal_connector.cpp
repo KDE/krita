@@ -99,15 +99,15 @@ void KisAcyclicSignalConnector::connectForwardVariant(QObject *sender, const cha
                                                   QObject *receiver, const char *method)
 {
 
-    connect(sender, signal, this, SLOT(forwardSlotVariant(const QVariant&)));
-    connect(this, SIGNAL(forwardSignalVariant(const QVariant&)), receiver, method);
+    connect(sender, signal, this, SLOT(forwardSlotVariant(QVariant)));
+    connect(this, SIGNAL(forwardSignalVariant(QVariant)), receiver, method);
 }
 
 void KisAcyclicSignalConnector::connectBackwardVariant(QObject *sender, const char *signal,
                                                        QObject *receiver, const char *method)
 {
-    connect(sender, signal, this, SLOT(backwardSlotVariant(const QVariant&)));
-    connect(this, SIGNAL(backwardSignalVariant(const QVariant&)), receiver, method);
+    connect(sender, signal, this, SLOT(backwardSlotVariant(QVariant)));
+    connect(this, SIGNAL(backwardSignalVariant(QVariant)), receiver, method);
 }
 
 void KisAcyclicSignalConnector::connectForwardResourcePair(QObject *sender, const char *signal, QObject *receiver, const char *method)

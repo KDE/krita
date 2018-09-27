@@ -31,6 +31,7 @@
 #include "kis_cursor.h"
 #include "kis_transform_utils.h"
 #include "kis_free_transform_strategy_gsl_helpers.h"
+#include "kis_algebra_2d.h"
 
 
 enum StrokeFunction {
@@ -417,17 +418,17 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
     }
     case ROTATE:
     {
-        KisTransformUtils::MatricesPack clickM(m_d->clickArgs);
-        QTransform clickT = clickM.finalTransform();
+        const KisTransformUtils::MatricesPack clickM(m_d->clickArgs);
+        const QTransform clickT = clickM.finalTransform();
 
-        QPointF rotationCenter = m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset();
-        QPointF clickMouseImagePos = clickT.inverted().map(m_d->clickPos) - rotationCenter;
-        QPointF mouseImagePos = clickT.inverted().map(mousePos) - rotationCenter;
+        const QPointF rotationCenter = m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset();
+        const QPointF clickMouseImagePos = clickT.inverted().map(m_d->clickPos) - rotationCenter;
+        const QPointF mouseImagePos = clickT.inverted().map(mousePos) - rotationCenter;
 
-        qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
-        qreal a2 = atan2(mouseImagePos.y(), mouseImagePos.x());
+        const qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
+        const qreal a2 = atan2(mouseImagePos.y(), mouseImagePos.x());
 
-        qreal theta = a2 - a1;
+        const qreal theta = KisAlgebra2D::signZZ(clickT.determinant()) * (a2 - a1);
 
         // Snap with shift key
         if (shiftModifierActive) {

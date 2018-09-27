@@ -193,15 +193,6 @@ bool KisStrokesQueue::Private::shouldWrapInSuspendUpdatesStroke() const
         if (stroke->isCancelled()) continue;
 
         if (stroke->type() == KisStroke::RESUME) {
-
-            /**
-             * Resuming process is long-running and consists of
-             * multiple actions, therefore, if it has already started,
-             * we cannot use it to guard our new stroke, so just skip it.
-             * see https://phabricator.kde.org/T2542
-             */
-            if (stroke->isInitialized()) continue;
-
             return false;
         }
     }
@@ -218,9 +209,6 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLod0Pos()
         if ((*it)->isCancelled()) continue;
 
         if ((*it)->type() == KisStroke::RESUME) {
-            // \see a comment in shouldWrapInSuspendUpdatesStroke()
-            if ((*it)->isInitialized()) continue;
-
             return it;
         }
     }
@@ -235,14 +223,6 @@ StrokesQueueIterator KisStrokesQueue::Private::findNewLodNPos(KisStrokeSP lodN)
 
     for (; it != end; ++it) {
         if ((*it)->isCancelled()) continue;
-
-        if (((*it)->type() == KisStroke::SUSPEND ||
-             (*it)->type() == KisStroke::RESUME) &&
-            (*it)->isInitialized()) {
-
-            // \see a comment in shouldWrapInSuspendUpdatesStroke()
-            continue;
-        }
 
         if ((*it)->type() == KisStroke::LOD0 ||
             (*it)->type() == KisStroke::SUSPEND ||

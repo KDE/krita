@@ -121,8 +121,8 @@ TasksetDockerDock::TasksetDockerDock( ) : QDockWidget(i18n("Task Sets")), m_canv
 
     setWidget(widget);
 
-    connect( tasksetView, SIGNAL(clicked( const QModelIndex & ) ),
-            this, SLOT(activated ( const QModelIndex & ) ) );
+    connect( tasksetView, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(activated(QModelIndex)) );
 
     connect( recordButton, SIGNAL(toggled(bool)), this, SLOT(recordClicked()));
     connect( clearButton, SIGNAL(clicked(bool)), this, SLOT(clearClicked()));

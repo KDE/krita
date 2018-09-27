@@ -48,10 +48,10 @@ KisDetailsPane::KisDetailsPane(QWidget* parent, const QString& header)
 
     changePalette();
 
-    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(selectionChanged(const QModelIndex&)));
-    connect(m_documentList, SIGNAL(doubleClicked(const QModelIndex&)),
-            this, SLOT(openFile(const QModelIndex&)));
+    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(selectionChanged(QModelIndex)));
+    connect(m_documentList, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(openFile(QModelIndex)));
     connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 }
 

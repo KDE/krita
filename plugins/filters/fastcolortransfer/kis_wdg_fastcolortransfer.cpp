@@ -41,7 +41,7 @@ KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWi
     m_widget = new Ui_WdgFastColorTransfer();
     m_widget->setupUi(this);
     m_widget->fileNameURLRequester->setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
-    connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(const QString&)), this, SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->fileNameURLRequester, SIGNAL(textChanged(QString)), this, SIGNAL(sigConfigurationItemChanged()));
 }
 
 

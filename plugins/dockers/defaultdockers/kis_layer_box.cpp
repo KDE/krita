@@ -170,14 +170,14 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->listLayers->setStyle(new KisLayerBoxStyle(m_wdgLayerBox->listLayers->style()));
 
     connect(m_wdgLayerBox->listLayers,
-            SIGNAL(contextMenuRequested(const QPoint&, const QModelIndex&)),
-            this, SLOT(slotContextMenuRequested(const QPoint&, const QModelIndex&)));
+            SIGNAL(contextMenuRequested(QPoint,QModelIndex)),
+            this, SLOT(slotContextMenuRequested(QPoint,QModelIndex)));
     connect(m_wdgLayerBox->listLayers,
-            SIGNAL(collapsed(const QModelIndex&)), SLOT(slotCollapsed(const QModelIndex &)));
+            SIGNAL(collapsed(QModelIndex)), SLOT(slotCollapsed(QModelIndex)));
     connect(m_wdgLayerBox->listLayers,
-            SIGNAL(expanded(const QModelIndex&)), SLOT(slotExpanded(const QModelIndex &)));
+            SIGNAL(expanded(QModelIndex)), SLOT(slotExpanded(QModelIndex)));
     connect(m_wdgLayerBox->listLayers,
-            SIGNAL(selectionChanged(const QModelIndexList&)), SLOT(selectionChanged(const QModelIndexList&)));
+            SIGNAL(selectionChanged(QModelIndexList)), SLOT(selectionChanged(QModelIndexList)));
 
     slotUpdateIcons();
 
@@ -216,10 +216,10 @@ KisLayerBox::KisLayerBox()
      *       it needs particular order of calls: first the connection to the
      *       node manager should be called, then updateUI()
      */
-    connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(updateUI()));
-    connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
-    connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
-    connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(modelReset()), SLOT(slotModelReset()));
 
     KisAction *showGlobalSelectionMask = new KisAction(i18n("&Show Global Selection Mask"), this);
@@ -237,7 +237,7 @@ KisLayerBox::KisLayerBox()
     m_colorSelectorAction = new QWidgetAction(this);
     m_colorSelectorAction->setDefaultWidget(m_colorSelector);
 
-    connect(m_nodeModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+    connect(m_nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             &m_colorLabelCompressor, SLOT(start()));
 
     m_wdgLayerBox->listLayers->setModel(m_filteringModel);
@@ -427,8 +427,8 @@ void KisLayerBox::setCanvas(KoCanvasBase *canvas)
                     this, SLOT(setCurrentNode(KisNodeSP)));
 
             connect(m_nodeManager,
-                    SIGNAL(sigUiNeedChangeSelectedNodes(const QList<KisNodeSP> &)),
-                    SLOT(slotNodeManagerChangedSelection(const QList<KisNodeSP> &)));
+                    SIGNAL(sigUiNeedChangeSelectedNodes(QList<KisNodeSP>)),
+                    SLOT(slotNodeManagerChangedSelection(QList<KisNodeSP>)));
         }
         else {
             setCurrentNode(m_canvas->imageView()->currentNode());

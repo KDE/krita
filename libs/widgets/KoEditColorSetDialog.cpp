@@ -140,7 +140,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
             KoColorSetEntry c = m_activeColorSet->getColorGlobal(i);
             patch->setColor(c.color());
             patch->setToolTip(c.name());
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
             m_gridLayout->addWidget(patch, i/columns, i%columns);
         }
     }
@@ -175,7 +175,7 @@ void KoEditColorSetWidget::addColor()
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color());
         patch->setToolTip(newEntry.name());
-        connect(patch, SIGNAL(triggered(KoColorPatch *)), this, SLOT(setTextLabel(KoColorPatch *)));
+        connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
         m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/m_activeColorSet->columnCount(), m_activeColorSet->nColors()%m_activeColorSet->columnCount());

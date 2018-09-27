@@ -215,8 +215,8 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_preferencesUI->spLumaB   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
     connect(m_preferencesUI->spLumaGamma   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
 
-    connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(const KisColor&))     , SLOT(slotFgColorChanged(const KisColor&)));
-    connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(const KisColor&))     , SLOT(slotBgColorChanged(const KisColor&)));
+    connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(KisColor))     , SLOT(slotFgColorChanged(KisColor)));
+    connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(KisColor))     , SLOT(slotBgColorChanged(KisColor)));
 
     // gamut mask connections
     connect(m_selectorUI->bnToggleMask          , SIGNAL(toggled(bool))                          , SLOT(slotGamutMaskToggle(bool)));
@@ -452,8 +452,8 @@ void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     }
 
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                SLOT(slotCanvasResourceChanged(int,QVariant)));
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(slotSelectorSettingsChanged()));

@@ -68,7 +68,7 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     setWidget(widget);
 
     connect( compositionView, SIGNAL(doubleClicked(QModelIndex)),
-             this, SLOT(activated ( const QModelIndex & ) ) );
+             this, SLOT(activated(QModelIndex)) );
 
     compositionView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect( compositionView, SIGNAL(customContextMenuRequested(QPoint)),

@@ -112,8 +112,8 @@ KisTemplateCreateDia::KisTemplateCreateDia(const QString &templatesResourcePath,
     namefield->addWidget(label);
     d->m_name=new QLineEdit(mainwidget);
     d->m_name->setFocus();
-    connect(d->m_name, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotNameChanged(const QString &)));
+    connect(d->m_name, SIGNAL(textChanged(QString)),
+            this, SLOT(slotNameChanged(QString)));
     namefield->addWidget(d->m_name);
 
     label=new QLabel(i18n("Group:"), mainwidget);

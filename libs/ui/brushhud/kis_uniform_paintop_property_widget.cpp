@@ -46,11 +46,11 @@ KisUniformPaintOpPropertyWidget::KisUniformPaintOpPropertyWidget(KisUniformPaint
       m_d(new Private(property))
 {
     KisAcyclicSignalConnector *conn = new KisAcyclicSignalConnector(this);
-    conn->connectForwardVariant(property.data(), SIGNAL(valueChanged(const QVariant&)),
-                                this, SLOT(setValue(const QVariant&)));
+    conn->connectForwardVariant(property.data(), SIGNAL(valueChanged(QVariant)),
+                                this, SLOT(setValue(QVariant)));
 
-    conn->connectBackwardVariant(this, SIGNAL(valueChanged(const QVariant&)),
-                                 property.data(), SLOT(setValue(const QVariant&)));
+    conn->connectBackwardVariant(this, SIGNAL(valueChanged(QVariant)),
+                                 property.data(), SLOT(setValue(QVariant)));
 }
 
 KisUniformPaintOpPropertyWidget::~KisUniformPaintOpPropertyWidget()

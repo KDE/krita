@@ -118,9 +118,9 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
 
     connect(d->m_sectionList, SIGNAL(itemSelectionChanged()),
             this, SLOT(updateSelectedWidget()));
-    connect(d->m_sectionList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+    connect(d->m_sectionList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
-    connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*, int)),
+    connect(d->m_sectionList, SIGNAL(itemActivated(QTreeWidgetItem*,int)),
             this, SLOT(itemClicked(QTreeWidgetItem*)));
 
     initTemplates(templatesResourcePath);
@@ -144,8 +144,8 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
     if (!sizes.isEmpty())
         emit splitterResized(0, sizes);
 
-    connect(this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-            this, SLOT(saveSplitterSizes(KisDetailsPane*, const QList<int>&)));
+    connect(this, SIGNAL(splitterResized(KisDetailsPane*,QList<int>)),
+            this, SLOT(saveSplitterSizes(KisDetailsPane*,QList<int>)));
 
     setAcceptDrops(true);
 }
@@ -200,15 +200,15 @@ void KisOpenPane::initTemplates(const QString& templatesResourcePath)
 
             KisTemplatesPane* pane = new KisTemplatesPane(this, group->name(),
                                                           group, templateTree.defaultTemplate());
-            connect(pane, SIGNAL(openUrl(const QUrl&)), this, SIGNAL(openTemplate(const QUrl&)));
-            connect(pane, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)),
-                    this, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)));
-            connect(this, SIGNAL(alwaysUseChanged(KisTemplatesPane*, const QString&)),
-                    pane, SLOT(changeAlwaysUseTemplate(KisTemplatesPane*, const QString&)));
-            connect(pane, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-                    this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)));
-            connect(this, SIGNAL(splitterResized(KisDetailsPane*, const QList<int>&)),
-                    pane, SLOT(resizeSplitter(KisDetailsPane*, const QList<int>&)));
+            connect(pane, SIGNAL(openUrl(QUrl)), this, SIGNAL(openTemplate(QUrl)));
+            connect(pane, SIGNAL(alwaysUseChanged(KisTemplatesPane*,QString)),
+                    this, SIGNAL(alwaysUseChanged(KisTemplatesPane*,QString)));
+            connect(this, SIGNAL(alwaysUseChanged(KisTemplatesPane*,QString)),
+                    pane, SLOT(changeAlwaysUseTemplate(KisTemplatesPane*,QString)));
+            connect(pane, SIGNAL(splitterResized(KisDetailsPane*,QList<int>)),
+                    this, SIGNAL(splitterResized(KisDetailsPane*,QList<int>)));
+            connect(this, SIGNAL(splitterResized(KisDetailsPane*,QList<int>)),
+                    pane, SLOT(resizeSplitter(KisDetailsPane*,QList<int>)));
             QTreeWidgetItem* item = addPane(group->name(), group->templates().first()->loadPicture(),
                                             pane, group->sortingWeight() + templateOffset);
 

@@ -129,8 +129,8 @@ KisWindowLayoutManager::KisWindowLayoutManager()
     d->loadDisplayLayouts();
 
     connect(qobject_cast<KisApplication*>(KisApplication::instance()),
-            SIGNAL(focusChanged(QWidget*, QWidget*)),
-            this, SLOT(slotFocusChanged(QWidget*, QWidget*)));
+            SIGNAL(focusChanged(QWidget*,QWidget*)),
+            this, SLOT(slotFocusChanged(QWidget*,QWidget*)));
 
     connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(slotScreensChanged()));
     connect(QApplication::desktop(), SIGNAL(screenCountChanged(int)), this, SLOT(slotScreensChanged()));

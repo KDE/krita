@@ -216,7 +216,7 @@ void SvgTextTool::showEditor()
     if (!m_editor) {
         m_editor = new SvgTextEditor();
         m_editor->setWindowModality(Qt::ApplicationModal);
-        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*, QString, QString, bool)), SLOT(textUpdated(KoSvgTextShape*, QString, QString, bool)));
+        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
     }
 
     m_editor->setShape(shape);

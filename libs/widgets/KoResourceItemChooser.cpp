@@ -103,7 +103,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->splitter = new QSplitter(this);
 
     d->model = new KoResourceModel(resourceAdapter, this);
-    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource *)), SLOT(slotBeforeResourcesLayoutReset(KoResource *)));
+    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource*)), SLOT(slotBeforeResourcesLayoutReset(KoResource*)));
     connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 
     d->view = new KoResourceItemView(this);
@@ -139,7 +139,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     }
 
     d->splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    connect(d->splitter, SIGNAL(splitterMoved(int, int)), SIGNAL(splitterMoved()));
+    connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
 
     d->buttonGroup = new QButtonGroup(this);
     d->buttonGroup->setExclusive(false);

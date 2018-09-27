@@ -220,8 +220,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
             this, SLOT(selectionChanged()));
 
         d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
-            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant &)));
+            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
 
         d->canvas = canvas;
     }

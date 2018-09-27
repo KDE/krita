@@ -54,8 +54,8 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
 
     dlgWidget.txtLayerName->setText(name);
 
-    connect(dlgWidget.wdgUrlRequester, SIGNAL(textChanged(const QString &)),
-            SLOT(slotNameChanged(const QString &)));
+    connect(dlgWidget.wdgUrlRequester, SIGNAL(textChanged(QString)),
+            SLOT(slotNameChanged(QString)));
 
     enableButtonOk(false);
 }

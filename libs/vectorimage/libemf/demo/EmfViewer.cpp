@@ -37,14 +37,14 @@ EmfViewer::EmfViewer( QSize &size )
     // The "Open" action
     m_fileOpenAction->setShortcut( Qt::CTRL + Qt::Key_O );
     m_fileOpenAction = fileMenu->addAction( "&Open", this,
-                                            SLOT( slotOpenFile() ) );
+                                            SLOT(slotOpenFile()) );
 
     fileMenu->addSeparator();
 
     // The "Quit" action
     m_fileQuitAction->setShortcut( Qt::CTRL + Qt::Key_Q );
     m_fileQuitAction = fileMenu->addAction( "&Quit", qApp,
-                                            SLOT( closeAllWindows() ) );
+                                            SLOT(closeAllWindows()) );
 
     // Set a suitably large size.
     resize( m_size + QSize( 50, 50 ) );

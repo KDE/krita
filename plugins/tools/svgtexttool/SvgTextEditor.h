@@ -64,7 +64,7 @@ private Q_SLOTS:
     /**
      * switch the text editor tab.
      */
-    void switchTextEditorTab();
+    void switchTextEditorTab(bool convertData = true);
     /**
      * in rich text, check the current format, and toggle the given buttons.
      */
@@ -127,7 +127,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextPreferred);
 
 protected:
 

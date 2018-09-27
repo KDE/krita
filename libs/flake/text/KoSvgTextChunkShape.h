@@ -143,6 +143,20 @@ public:
      */
     KoSvgTextChunkShapeLayoutInterface* layoutInterface();
 
+    /**
+     * WARNING: this propperty is available only if isRootTextNode() is true
+     *
+     * @return true if the shape should be edited in a rich-text editor
+     */
+    bool isRichTextPreferred() const;
+
+    /**
+     * WARNING: this propperty is available only if isRootTextNode() is true
+     *
+     * Sets whether the shape should be edited in rich-text editor
+     */
+    void setRichTextPreferred(bool value);
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

@@ -216,7 +216,7 @@ void SvgTextTool::showEditor()
     if (!m_editor) {
         m_editor = new SvgTextEditor();
         m_editor->setWindowModality(Qt::ApplicationModal);
-        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*, QString, QString)), SLOT(textUpdated(KoSvgTextShape*, QString, QString)));
+        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*, QString, QString, bool)), SLOT(textUpdated(KoSvgTextShape*, QString, QString, bool)));
     }
 
     m_editor->setShape(shape);
@@ -224,9 +224,9 @@ void SvgTextTool::showEditor()
     m_editor->activateWindow();
 }
 
-void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs)
+void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)
 {
-    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs);
+    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs, richTextUpdated);
     canvas()->addCommand(cmd);
 }
 

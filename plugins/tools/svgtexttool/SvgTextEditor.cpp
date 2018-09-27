@@ -170,8 +170,18 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
-            if (converter.convertSvgToDocument(svg, doc)) {
+
+            if (shape->isRichTextPreferred() &&
+                converter.convertSvgToDocument(svg, doc)) {
+
                 m_textEditorWidget.richTextEdit->setDocument(doc);
+                KisSignalsBlocker b(m_textEditorWidget.textTab);
+                m_textEditorWidget.textTab->setCurrentIndex(Richtext);
+                switchTextEditorTab(false);
+            } else {
+                KisSignalsBlocker b(m_textEditorWidget.textTab);
+                m_textEditorWidget.textTab->setCurrentIndex(SvgSource);
+                switchTextEditorTab(false);
             }
         }
         else {
@@ -194,17 +204,17 @@ void SvgTextEditor::save()
                     qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
-            emit textUpdated(m_shape, svg, styles);
+            emit textUpdated(m_shape, svg, styles, true);
         }
         else {
-            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
+            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(), false);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
 
 }
 
-void SvgTextEditor::switchTextEditorTab()
+void SvgTextEditor::switchTextEditorTab(bool convertData)
 {
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
@@ -221,7 +231,7 @@ void SvgTextEditor::switchTextEditorTab()
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
 
-        if (m_shape) {
+        if (m_shape && convertData) {
             QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
             if (!converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
                 qWarning()<<"new converter svgToDoc doesn't work!";
@@ -236,7 +246,7 @@ void SvgTextEditor::switchTextEditorTab()
         disconnect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
         // Convert the rich text to svg and styles strings
-        if (m_shape) {
+        if (m_shape && convertData) {
             QString svg;
             QString styles;
 

@@ -53,6 +53,7 @@ public:
 
     void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);
     void loadContextBasedProperties(SvgGraphicsContext *gc);
+    bool isRichTextPreferred = true;
 
     Q_DECLARE_PUBLIC(KoSvgTextChunkShape)
 };

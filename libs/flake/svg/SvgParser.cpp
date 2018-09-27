@@ -1474,7 +1474,13 @@ KoShape *SvgParser::parseTextElement(const KoXmlElement &e, KoSvgTextShape *merg
 
     if (e.tagName() == "text") {
         // XXX: Shapes need to be created by their factories
-        rootTextShape = mergeIntoShape ? mergeIntoShape : new KoSvgTextShape();
+        if (mergeIntoShape) {
+            rootTextShape = mergeIntoShape;
+        } else {
+            rootTextShape = new KoSvgTextShape();
+            const QString useRichText = e.attribute("krita:useRichText", "true");
+            rootTextShape->setRichTextPreferred(useRichText != "false");
+        }
     }
 
     if (rootTextShape) {

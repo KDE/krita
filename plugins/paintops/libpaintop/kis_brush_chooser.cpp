@@ -148,7 +148,9 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setCurrentItem(0, 0);
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);
-    m_itemChooser->setMinimumHeight(50);
+    m_itemChooser->setMinimumHeight(120);
+    m_itemChooser->setMaximumHeight(150);
+
     m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
 
     KisConfig cfg(true);

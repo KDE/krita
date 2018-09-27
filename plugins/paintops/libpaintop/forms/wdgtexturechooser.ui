@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>548</width>
+    <width>381</width>
     <height>391</height>
    </rect>
   </property>
@@ -26,7 +26,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="textureTab">
       <attribute name="title">
@@ -86,7 +86,7 @@
             <widget class="KisMultipliersDoubleSliderSpinBox" name="scaleSlider" native="true">
              <property name="minimumSize">
               <size>
-               <width>200</width>
+               <width>0</width>
                <height>0</height>
               </size>
              </property>
@@ -128,7 +128,7 @@
             <widget class="KisDoubleSliderSpinBox" name="contrastSlider" native="true">
              <property name="minimumSize">
               <size>
-               <width>200</width>
+               <width>0</width>
                <height>0</height>
               </size>
              </property>
@@ -248,7 +248,7 @@
            <item row="1" column="2">
             <widget class="QCheckBox" name="randomOffsetY">
              <property name="text">
-              <string>Random Offset</string>
+              <string>Random</string>
              </property>
             </widget>
            </item>
@@ -277,7 +277,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Random Offset</string>
+              <string>Random</string>
              </property>
             </widget>
            </item>
@@ -314,7 +314,7 @@
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header location="global">kis_slider_spin_box.h</header>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

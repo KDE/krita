@@ -55,7 +55,8 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     cmbCutoffPolicy->addItems(cutOffPolicies);
 
 
-    cutoffSlider->setMinimumSize(256, 30);
+    cutoffSlider->setMinimumSize(20, 30);
+
     cutoffSlider->enableGamma(false);
     cutoffSlider->setToolTip(i18n("When pattern texture values are outside the range specified"
                                   " by the slider, the cut-off policy will be applied."));

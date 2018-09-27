@@ -32,6 +32,7 @@
 #include <QAction>
 #include <QShowEvent>
 #include <QScrollArea>
+#include <QScrollBar>
 
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_cmb_composite.h>
@@ -208,6 +209,10 @@ void KisPaintOpSettingsWidget::changePage(const QModelIndex& index)
 
 
     }
+
+    // scroll scroll area to the top
+    m_d->optionsStackScrollableArea->verticalScrollBar()->setValue(0);
+
 
     notifyPageChanged();
 }

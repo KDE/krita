@@ -4,11 +4,14 @@ import org.krita.sketch.components 1.0
 
 Rectangle {
     id: base
-    color: "#545454"
+    property var palette: SystemPalette {colorGroup: SystemPalette.active }
+
+    color: palette.dark
     
     Button {
         id: fileOpenButton
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -22,7 +25,8 @@ Rectangle {
 
     Button {
         id: fileSaveButton
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -36,7 +40,8 @@ Rectangle {
 
     Button {
         id: fileSaveAsButton
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -50,7 +55,8 @@ Rectangle {
     
     Button {
         id: undoButton
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 2
         height: base.height / 13
@@ -64,7 +70,8 @@ Rectangle {
 
     Button {
         id: redoButton
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 2
         height: base.height / 13
@@ -78,7 +85,8 @@ Rectangle {
     
     Button {
         id: button1
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -94,7 +102,8 @@ Rectangle {
 
     Button {
         id: button2
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -110,7 +119,8 @@ Rectangle {
 
     Button {
         id: button3
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -126,7 +136,8 @@ Rectangle {
 
     Button {
         id: button4
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -142,7 +153,8 @@ Rectangle {
 
     Button {
         id: rockerSwitchTop
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -159,7 +171,8 @@ Rectangle {
 
     Button {
         id: rockerSwitchLeft
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -174,7 +187,8 @@ Rectangle {
 
     Button {
         id: rockerSwitchCenter
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -190,7 +204,8 @@ Rectangle {
 
     Button {
         id: rockerSwitchRight
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -205,7 +220,8 @@ Rectangle {
 
     Button {
         id: rockerSwitchBottom
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         radius: 8
         width: base.width / 3
         height: base.height / 13
@@ -221,7 +237,8 @@ Rectangle {
 
     Button {
         id: button5
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -237,7 +254,8 @@ Rectangle {
 
     Button {
         id: button6
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -253,7 +271,8 @@ Rectangle {
 
     Button {
         id: button7
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left
@@ -269,7 +288,8 @@ Rectangle {
 
     Button {
         id: button8
-        color: "grey"
+        color: palette.button
+        textColor: palette.buttonText
         width: base.width
         height: base.height / 13
         anchors.left: base.left

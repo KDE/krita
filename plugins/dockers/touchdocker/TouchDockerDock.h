@@ -74,6 +74,7 @@ private:
 
     void showFileOpenDialog();
     void showFileSaveAsDialog();
+    void changeEvent(QEvent* event) override;
 
     KoDialog *createDialog(const QString qml);
 

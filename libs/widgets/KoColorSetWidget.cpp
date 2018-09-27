@@ -290,15 +290,17 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::setColorFromString(QString s)
 void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
 {
     if (!colorSet) return;
-    if (colorSet == d->colorSet) return;
 
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-    QList<KoColorSet*> palettes = srv->resources();
-    if (!palettes.contains(d->colorSet)) {
-        delete d->colorSet;
+    if (colorSet != d->colorSet) {
+        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+        QList<KoColorSet*> palettes = srv->resources();
+        if (!palettes.contains(d->colorSet)) {
+            delete d->colorSet;
+        }
+
+        d->colorSet = colorSet;
     }
 
-    d->colorSet = colorSet;
     d->fillColors();
 }
 

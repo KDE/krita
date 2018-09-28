@@ -152,6 +152,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
 
+    gc.save();
     gc.setPen(QPen(QColor(0, 0, 0, 128), 1));
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
@@ -230,6 +231,8 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
         ctx->functions()->glDisable(GL_MULTISAMPLE);
         gc.endNativePainting();
     }
+
+    gc.restore();
 
 }
 

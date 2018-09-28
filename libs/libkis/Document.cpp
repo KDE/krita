@@ -826,6 +826,12 @@ bool Document::modified() const
     return d->document->isModified();
 }
 
+QRect Document::bounds() const
+{
+    if (!d->document) return QRect();
+    return d->document->image()->bounds();
+}
+
 QPointer<KisDocument> Document::document() const
 {
     return d->document;

@@ -22,6 +22,7 @@
 #include "KoColorSpace.h"
 #include <QPainter>
 #include <QMouseEvent>
+#include <resources/KoGamutMask.h>
 
 
 KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
@@ -36,14 +37,17 @@ KisColorSelectorComponent::KisColorSelectorComponent(KisColorSelector* parent) :
     m_hsySaturation(1),
     m_luma(0.299),
     m_parent(parent),
-    m_width(0),
-    m_height(0),
+    m_gamutMaskOn(false),
+    m_currentGamutMask(nullptr),
+    m_maskPreviewActive(true),
+    m_lastX(0),
+    m_lastY(0),
     m_x(0),
     m_y(0),
+    m_width(0),
+    m_height(0),
     m_dirty(true),
-    m_lastColorSpace(0),
-    m_lastX(0),
-    m_lastY(0)
+    m_lastColorSpace(0)
 {
     Q_ASSERT(parent);
 }
@@ -89,6 +93,32 @@ void KisColorSelectorComponent::setDirty()
 {
     m_dirty = true;
 }
+
+void KisColorSelectorComponent::setGamutMask(KoGamutMask *gamutMask)
+{
+    m_currentGamutMask = gamutMask;
+    m_gamutMaskOn = true;
+}
+
+void KisColorSelectorComponent::unsetGamutMask()
+{
+    m_gamutMaskOn = false;
+    m_currentGamutMask = nullptr;
+}
+
+void KisColorSelectorComponent::updateGamutMaskPreview()
+{
+    setDirty();
+    update();
+}
+
+void KisColorSelectorComponent::toggleGamutMask(bool state)
+{
+    m_gamutMaskOn = state;
+    setDirty();
+    update();
+}
+
 
 bool KisColorSelectorComponent::isDirty() const
 {

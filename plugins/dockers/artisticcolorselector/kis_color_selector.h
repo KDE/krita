@@ -80,7 +80,6 @@ public:
     void setDefaultHueSteps(int num);
     void setDefaultSaturationSteps(int num);
     void setDefaultValueScaleSteps(int num);
-    void setShowColorBlip(bool value);
     void setShowBgColor(bool value);
     void setShowValueScaleNumbers(bool value);
     void setGamutMask(KoGamutMask* gamutMask);
@@ -88,9 +87,6 @@ public:
     void setGamutMaskOn(bool gamutMaskOn);
     void setEnforceGamutMask(bool enforce);
     KoGamutMask* gamutMask();
-
-    bool maskPreviewActive();
-    void setMaskPreviewActive(bool value);
 
     bool saturationIsInvertible();
 
@@ -106,7 +102,6 @@ public:
     quint32        getDefaultHueSteps  () const { return m_defaultHueSteps;        }
     quint32        getDefaultSaturationSteps () const { return m_defaultSaturationSteps;        }
     quint32        getDefaultValueScaleSteps () const { return m_defaultValueScaleSteps;        }
-    bool           getShowColorBlip () const { return m_showColorBlip;        }
     bool           getShowBgColor () const { return m_showBgColor;        }
     bool           getShowValueScaleNumbers () const { return m_showValueScaleNumbers;        }
     bool           enforceGamutMask () const { return m_enforceGamutMask;        }
@@ -183,7 +178,6 @@ private:
     quint8 m_defaultHueSteps;
     quint8 m_defaultSaturationSteps;
     quint8 m_defaultValueScaleSteps;
-    bool m_showColorBlip;
     bool m_showValueScaleNumbers;
     bool m_showBgColor;
 

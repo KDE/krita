@@ -261,6 +261,7 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     widgets/KisNewsWidget.cpp
+	widgets/KisGamutMaskToolbar.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -491,6 +492,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
     forms/KisNewsPage.ui
+	forms/wdgGamutMaskToolbar.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

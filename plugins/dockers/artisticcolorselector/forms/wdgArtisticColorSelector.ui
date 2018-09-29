@@ -20,31 +20,12 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="bnToggleMask">
-       <property name="toolTip">
-        <string>Toggle gamut mask</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelMaskName">
+      <widget class="KisGamutMaskToolbar" name="gamutMaskToolbar" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Select a mask in &quot;Gamut Masks&quot; docker</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -65,6 +46,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
        </property>
        <property name="maximumSize">
         <size>
@@ -96,7 +83,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>30</width>
+         <width>0</width>
          <height>0</height>
         </size>
        </property>
@@ -135,6 +122,12 @@
    <class>KisColorSelector</class>
    <extends>QWidget</extends>
    <header>kis_color_selector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisGamutMaskToolbar</class>
+   <extends>QWidget</extends>
+   <header>KisGamutMaskToolbar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

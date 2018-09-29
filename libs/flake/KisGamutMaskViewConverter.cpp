@@ -37,6 +37,11 @@ KisGamutMaskViewConverter::~KisGamutMaskViewConverter()
 {
 }
 
+QSize KisGamutMaskViewConverter::viewSize() const
+{
+    return QSize(m_viewSize, m_viewSize);
+}
+
 QPointF KisGamutMaskViewConverter::documentToView(const QPointF &documentPoint) const
 {
     return QPointF(documentToViewX(documentPoint.x()), documentToViewY(documentPoint.y()));

@@ -20,6 +20,9 @@
 
 #include <QObject>
 #include <QColor>
+
+#include <resources/KoGamutMask.h>
+
 #include "kis_color_selector.h"
 
 class KoColorSpace;
@@ -39,7 +42,7 @@ public:
     void paintEvent(QPainter*);
 
     /// saves the mouse position, so that a blip can be created.
-    void mouseEvent(int x, int y);
+    virtual void mouseEvent(int x, int y);
 
     /// return the color, that was selected by calling mouseEvent
     KoColor currentColor();
@@ -58,6 +61,11 @@ public:
 
     /// returns true, if this component wants to grab the mouse (normally true, if containsPoint returns true)
     bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
+
+    void setGamutMask(KoGamutMask* gamutMask);
+    void unsetGamutMask();
+    void updateGamutMaskPreview();
+    void toggleGamutMask(bool state);
 
 public Q_SLOTS:
     /// set hue, saturation, value or/and lightness
@@ -100,15 +108,18 @@ protected:
     Parameter m_parameter;
     Type m_type;
     KisColorSelector* m_parent;
+    bool m_gamutMaskOn;
+    KoGamutMask* m_currentGamutMask;
+    bool m_maskPreviewActive;
+    qreal m_lastX;
+    qreal m_lastY;
+    int m_x;
+    int m_y;
 private:
     int m_width;
     int m_height;
-    int m_x;
-    int m_y;
     bool m_dirty;
     const KoColorSpace* m_lastColorSpace;
-    qreal m_lastX;
-    qreal m_lastY;
 };
 
 #endif // KIS_COLOR_SELECTOR_COMPONENT_H

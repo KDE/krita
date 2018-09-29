@@ -47,6 +47,8 @@
 #include "artisticcolorselector_dock.h"
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_arcs_constants.h>
+#include <KisGamutMaskToolbar.h>
 
 #include "ui_wdgArtisticColorSelector.h"
 #include "ui_wdgARCSSettings.h"
@@ -94,8 +96,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     QPixmap valueScaleStepsPixmap = KisIconUtils::loadIcon("wheel-light").pixmap(16,16);
     QIcon infinityIcon = KisIconUtils::loadIcon("infinity");
     m_infinityPixmap = infinityIcon.pixmap(16,16);
-    m_iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");
-    m_iconMaskOn = KisIconUtils::loadIcon("gamut-mask-on");
 
     m_selectorUI->colorSelector->loadSettings();
 
@@ -104,9 +104,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
 
     m_selectorUI->bnDockerPrefs->setPopupWidget(m_preferencesUI);
     m_selectorUI->bnDockerPrefs->setIcon(KisIconUtils::loadIcon("configure"));
-
-    m_selectorUI->bnToggleMask->setChecked(false);
-    m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
 
     //preferences
     m_hsxButtons->addButton(m_preferencesUI->bnHsy, KisColor::HSY);
@@ -163,13 +160,11 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     m_preferencesUI->defaultSaturationSteps->setValue(m_selectorUI->colorSelector->getDefaultSaturationSteps());
     m_preferencesUI->defaultValueScaleSteps->setValue(m_selectorUI->colorSelector->getDefaultValueScaleSteps());
 
-    m_preferencesUI->showColorBlip->setChecked(m_selectorUI->colorSelector->getShowColorBlip());
     m_preferencesUI->showBgColor->setChecked(m_selectorUI->colorSelector->getShowBgColor());
     m_preferencesUI->showValueScaleNumbers->setChecked(m_selectorUI->colorSelector->getShowValueScaleNumbers());
 
     m_preferencesUI->enforceGamutMask->setChecked(m_selectorUI->colorSelector->enforceGamutMask());
     m_preferencesUI->permissiveGamutMask->setChecked(!m_selectorUI->colorSelector->enforceGamutMask());
-    m_preferencesUI->showMaskPreview->setChecked(m_selectorUI->colorSelector->maskPreviewActive());
 
     m_preferencesUI->spLumaR->setValue(m_selectorUI->colorSelector->lumaR());
     m_preferencesUI->spLumaG->setValue(m_selectorUI->colorSelector->lumaG());
@@ -204,11 +199,9 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_preferencesUI->bnDefInfHueSteps       , SIGNAL(clicked(bool))                           , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->bnDefInfValueScaleSteps, SIGNAL(clicked(bool))                           , SLOT(slotPreferenceChanged()));
 
-    connect(m_preferencesUI->showColorBlip      , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->showBgColor        , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->showValueScaleNumbers, SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->enforceGamutMask   , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
-    connect(m_preferencesUI->showMaskPreview   , SIGNAL(toggled(bool)), SLOT(slotGamutMaskActivatePreview(bool)));
 
     connect(m_preferencesUI->spLumaR   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
     connect(m_preferencesUI->spLumaG   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
@@ -219,7 +212,7 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(KisColor))     , SLOT(slotBgColorChanged(KisColor)));
 
     // gamut mask connections
-    connect(m_selectorUI->bnToggleMask          , SIGNAL(toggled(bool))                          , SLOT(slotGamutMaskToggle(bool)));
+    connect(m_selectorUI->gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), SLOT(slotGamutMaskToggle(bool)));
 
     connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected()));
 
@@ -244,10 +237,10 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
     connect(m_resourceProvider, SIGNAL(sigGamutMaskUnset()),
             this, SLOT(slotGamutMaskUnset()));
 
-    if (m_selectorUI->colorSelector->maskPreviewActive()) {
-        connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-                this, SLOT(slotGamutMaskPreviewUpdate()));
-    }
+    connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
+            this, SLOT(slotGamutMaskPreviewUpdate()));
+
+    m_selectorUI->gamutMaskToolbar->connectMaskSignals(m_resourceProvider);
 }
 
 void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
@@ -340,21 +333,11 @@ void ArtisticColorSelectorDock::slotPreferenceChanged()
     }
     m_selectorUI->colorSelector->setDefaultValueScaleSteps(defValueScaleSteps);
 
-    m_selectorUI->colorSelector->setShowColorBlip(m_preferencesUI->showColorBlip->isChecked());
     m_selectorUI->colorSelector->setShowBgColor(m_preferencesUI->showBgColor->isChecked());
     m_selectorUI->colorSelector->setShowValueScaleNumbers(m_preferencesUI->showValueScaleNumbers->isChecked());
     m_selectorUI->colorSelector->setEnforceGamutMask(m_preferencesUI->enforceGamutMask->isChecked());
 
-    // the selector wheel forbids saturation inversion in some cases,
-    // reflecting that in the ui
-    if (m_selectorUI->colorSelector->saturationIsInvertible()) {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(true);
-        m_selectorUI->colorSelector->setInverseSaturation(m_wheelPrefsUI->bnInverseSat->isChecked());
-    } else {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(false);
-        m_wheelPrefsUI->bnInverseSat->setChecked(false);
-        m_selectorUI->colorSelector->setInverseSaturation(false);
-    }
+    m_selectorUI->colorSelector->setInverseSaturation(m_wheelPrefsUI->bnInverseSat->isChecked());
 }
 
 void ArtisticColorSelectorDock::slotResetDefaultSettings()
@@ -395,48 +378,15 @@ void ArtisticColorSelectorDock::slotResetDefaultSettings()
     }
 }
 
-void ArtisticColorSelectorDock::slotGamutMaskActivatePreview(bool value)
-{
-    m_selectorUI->colorSelector->setMaskPreviewActive(value);
-
-    if (value) {
-        connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-                this, SLOT(slotGamutMaskPreviewUpdate()));
-    } else {
-        disconnect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-                this, SLOT(slotGamutMaskPreviewUpdate()));
-    }
-
-    m_selectorUI->colorSelector->update();
-}
-
 void ArtisticColorSelectorDock::slotGamutMaskToggle(bool checked)
 {
     bool b = (!m_selectedMask) ? false : checked;
 
-    m_selectorUI->bnToggleMask->setChecked(b);
-
     if (b == true) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOn);
-    } else {
-        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
     }
 
     m_selectorUI->colorSelector->setGamutMaskOn(b);
-
-    // TODO: HACK
-    // the selector wheel forbids saturation inversion in some cases,
-    // reflecting that in the ui
-    if (m_selectorUI->colorSelector->saturationIsInvertible()) {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(true);
-        m_selectorUI->colorSelector->setInverseSaturation(m_wheelPrefsUI->bnInverseSat->isChecked());
-    } else {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(false);
-        m_wheelPrefsUI->bnInverseSat->setChecked(false);
-        m_selectorUI->colorSelector->setInverseSaturation(false);
-    }
-
 }
 
 void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
@@ -480,11 +430,9 @@ void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
 
     if (m_selectedMask) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->labelMaskName->setText(m_selectedMask->title());
         slotGamutMaskToggle(true);
     } else {
         slotGamutMaskToggle(false);
-        m_selectorUI->labelMaskName->setText(i18n("Select a mask in \"Gamut Masks\" docker"));
     }
 }
 
@@ -497,7 +445,6 @@ void ArtisticColorSelectorDock::slotGamutMaskUnset()
     m_selectedMask = nullptr;
 
     slotGamutMaskToggle(false);
-    m_selectorUI->labelMaskName->setText(i18n("Select a mask in \"Gamut Masks\" docker"));
     m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>446</width>
-    <height>769</height>
+    <height>633</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,13 +17,6 @@
       <string>Selector Appearance</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QCheckBox" name="showColorBlip">
-        <property name="text">
-         <string>Show color blip</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QCheckBox" name="showBgColor">
         <property name="text">
@@ -277,16 +270,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QCheckBox" name="showMaskPreview">
-        <property name="text">
-         <string>Show preview while editing a mask</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -401,15 +384,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

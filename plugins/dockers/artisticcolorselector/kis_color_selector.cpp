@@ -219,16 +219,6 @@ KoGamutMask* KisColorSelector::gamutMask()
     return m_currentGamutMask;
 }
 
-bool KisColorSelector::maskPreviewActive()
-{
-    return m_maskPreviewActive;
-}
-
-void KisColorSelector::setMaskPreviewActive(bool value)
-{
-    m_maskPreviewActive = value;
-}
-
 bool KisColorSelector::gamutMaskOn()
 {
     return m_gamutMaskOn;
@@ -579,7 +569,7 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
     painter.scale(rect.width()/2, rect.height()/2);
 
     QPen normalPen = QPen(QBrush(COLOR_NORMAL_OUTLINE), 0.005);
-    QPen selectedPen = QPen(QBrush(COLOR_LIGHT), 0.01);
+    QPen selectedPen;
 
     painter.setPen(normalPen);
 
@@ -591,6 +581,12 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
             mirror.rotate(180, Qt::YAxis);
             painter.setTransform(mirror, true);
             painter.scale(rect.width()/2, rect.height()/2);
+
+            if (m_selectedColor.getX() < 0.55) {
+                selectedPen = QPen(QBrush(COLOR_SELECTED_LIGHT), 0.007);
+            } else {
+                selectedPen = QPen(QBrush(COLOR_SELECTED_DARK), 0.007);
+            }
 
             painter.setPen(selectedPen);
             painter.drawPath(m_colorRings[m_selectedRing].pieced[m_selectedPiece]);
@@ -606,6 +602,12 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
             qreal iRad = m_colorRings[m_selectedRing].innerRadius;
             qreal oRad = m_colorRings[m_selectedRing].outerRadius;
 
+            if (m_selectedColor.getX() < 0.55) {
+                selectedPen = QPen(QBrush(COLOR_SELECTED_LIGHT), 0.005);
+            } else {
+                selectedPen = QPen(QBrush(COLOR_SELECTED_DARK), 0.005);
+            }
+
             painter.setPen(selectedPen);
             painter.drawEllipse(QRectF(-iRad, -iRad, iRad*2.0, iRad*2.0));
             painter.drawEllipse(QRectF(-oRad, -oRad, oRad*2.0, oRad*2.0));
@@ -619,6 +621,9 @@ void KisColorSelector::drawOutline(QPainter& painter, const QRect& rect)
 void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 {
     qreal    penSize    = qreal(qMin(QWidget::width(), QWidget::height())) / 200.0;
+    qreal    penSizeSmall = penSize / 1.2;
+    QPen selectedPen;
+
     KisColor valueScaleColor(m_selectedColor, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
     KisColor grayScaleColor(Qt::gray, m_colorConverter, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
     int rectSize = rect.height();
@@ -653,16 +658,20 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
             rectColor = matrix.mapRect(rectColor);
 
             valueScaleColor.setX(light);
-
             painter.fillRect(rectColor, valueScaleColor.toQColor());
 
             if (i == m_selectedLightPiece) {
-                painter.setPen(QPen(QBrush(COLOR_SELECTED), penSize));
+                if (light < 0.55) {
+                    selectedPen = QPen(QBrush(COLOR_SELECTED_LIGHT), penSize);
+                } else {
+                    selectedPen = QPen(QBrush(COLOR_SELECTED_DARK), penSize);
+                }
+
+                painter.setPen(selectedPen);
                 painter.drawRect(rectColor);
             }
         }
-    }
-    else {
+    } else {
         painter.setRenderHint(QPainter::Antialiasing, false);
 
         for(int i=0; i<rectSize; ++i) {
@@ -672,27 +681,19 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
             painter.setPen(QPen(QBrush(valueScaleColor.toQColor()), penSize));
             painter.drawLine(rect.left(), y, rect.right(), y);
         }
-
-        painter.setRenderHint(QPainter::Antialiasing, true);
-
-        painter.setPen(QPen(QBrush(COLOR_SELECTED), penSize));
-        qreal t = 1.0 - m_selectedColor.getX();
-
-        int y = rect.y() + int(rectSize * t);
-        painter.drawLine(rect.left(), y, rect.right(), y);
     }
 
-    if (m_showColorBlip) {
-        painter.setRenderHint(QPainter::Antialiasing, false);
-        // draw position of fg color value on the strip
-        qreal fgColorValue = 1.0 - m_fgColor.getX();
+    // draw color blip
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    // draw position of fg color value on the strip
+    qreal fgColorValue = 1.0 - m_fgColor.getX();
 
-        int y = rect.y() + int(rectSize * fgColorValue);
-        painter.setPen(QPen(QBrush(COLOR_LIGHT), penSize));
-        painter.drawLine(rect.left(), y, rect.right(), y);
-        painter.setPen(QPen(QBrush(COLOR_MIDDLE_GRAY), penSize));
-        painter.drawLine(rect.left(), y+1.5*penSize, rect.right(), y+1.5*penSize);
-    }
+    int y = rect.y() + int(rectSize * fgColorValue);
+    painter.setPen(QPen(QBrush(COLOR_SELECTED_LIGHT), penSizeSmall));
+    painter.drawLine(rect.left(), y, rect.right(), y);
+    painter.setPen(QPen(QBrush(COLOR_SELECTED_DARK), penSizeSmall));
+    painter.drawLine(rect.left(), y+2*penSizeSmall, rect.right(), y+2*penSizeSmall);
+    // draw color blip
 
     if (m_showValueScaleNumbers) {
         painter.setRenderHint(QPainter::Antialiasing, true);
@@ -703,8 +704,12 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
         }
 
         QFont font = painter.font();
-        font.setPointSize(font.pointSize()-2);
-        painter.setFont(font);
+        QFontMetrics fm = painter.fontMetrics();
+        while (fm.boundingRect("100%").width() > rect.width()*rectColorLeftX) {
+            font.setPointSize(font.pointSize() - 1);
+            painter.setFont(font);
+            fm = painter.fontMetrics();
+        }
 
         for(int i=0; i<valueScalePieces; ++i) {
             qreal  t1    = qreal(i)   / qreal(valueScalePieces);
@@ -741,7 +746,7 @@ void KisColorSelector::drawLightStrip(QPainter& painter, const QRect& rect)
 
 void KisColorSelector::drawBlip(QPainter& painter, const QRect& rect)
 {
-    painter.setRenderHint(QPainter::Antialiasing, false);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.resetTransform();
     painter.translate(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
     painter.scale(rect.width()/2, rect.height()/2);
@@ -754,10 +759,10 @@ void KisColorSelector::drawBlip(QPainter& painter, const QRect& rect)
                << "-> coord X:" << fgColorPos.x() << " Y:" << fgColorPos.y();
 #endif
 
-    painter.setPen(QPen(QBrush(COLOR_DARK), 0.01));
+    painter.setPen(QPen(QBrush(COLOR_SELECTED_DARK), 0.01));
     painter.drawEllipse(fgColorPos, 0.05, 0.05);
 
-    painter.setPen(QPen(QBrush(COLOR_LIGHT), 0.01));
+    painter.setPen(QPen(QBrush(COLOR_SELECTED_LIGHT), 0.01));
     painter.setBrush(m_fgColor.toQColor());
     painter.drawEllipse(fgColorPos, 0.04, 0.04);
 }
@@ -845,12 +850,8 @@ void KisColorSelector::paintEvent(QPaintEvent* /*event*/)
     }
 
     drawOutline   (wdgPainter, m_renderArea);
-
     drawLightStrip(wdgPainter, m_lightStripArea);
-
-    if (m_showColorBlip) {
-        drawBlip (wdgPainter, m_renderArea);
-    }
+    drawBlip (wdgPainter, m_renderArea);
 }
 
 void KisColorSelector::mousePressEvent(QMouseEvent* event)
@@ -1012,11 +1013,8 @@ void KisColorSelector::saveSettings()
     cfg.writeEntry("ArtColorSel.defaultValueScaleSteps", quint32(m_defaultValueScaleSteps));
 
     cfg.writeEntry("ArtColorSel.showBgColor", m_showBgColor);
-    cfg.writeEntry("ArtColorSel.showColorBlip", m_showColorBlip);
     cfg.writeEntry("ArtColorSel.showValueScale", m_showValueScaleNumbers);
     cfg.writeEntry("ArtColorSel.enforceGamutMask", m_enforceGamutMask);
-
-    cfg.writeEntry("ArtColorSel.maskPreviewActive", m_maskPreviewActive);
 }
 
 void KisColorSelector::loadSettings()
@@ -1049,11 +1047,8 @@ void KisColorSelector::loadSettings()
     setNumPieces(cfg.readEntry("ArtColorSel.RingPieces", DEFAULT_HUE_STEPS));
 
     m_showBgColor = cfg.readEntry("ArtColorSel.showBgColor", true);
-    m_showColorBlip = cfg.readEntry("ArtColorSel.showColorBlip", true);
     m_showValueScaleNumbers = cfg.readEntry("ArtColorSel.showValueScale", false);
     m_enforceGamutMask = cfg.readEntry("ArtColorSel.enforceGamutMask", false);
-
-    m_maskPreviewActive = cfg.readEntry("ArtColorSel.maskPreviewActive", true);
 
     selectColor(m_selectedColor);
     update();
@@ -1075,11 +1070,6 @@ void KisColorSelector::setDefaultValueScaleSteps(int num)
 {
     num = qBound(MIN_NUM_LIGHT_PIECES, num, MAX_NUM_LIGHT_PIECES);
     m_defaultValueScaleSteps = num;
-}
-
-void KisColorSelector::setShowColorBlip(bool value) {
-    m_showColorBlip = value;
-    update();
 }
 
 void KisColorSelector::setShowBgColor(bool value)

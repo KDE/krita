@@ -60,20 +60,24 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
     inputRadius->setExponentRatio(3.0);
     inputRadius->setSingleStep(1);
     inputRadius->setValue(5);
+    inputRadius->setPrefix(i18n("Diameter: "));
     inputRadius->setSuffix(i18n(" px"));
     inputRadius->setBlockUpdateSignalOnDrag(true);
     connect(inputRadius, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputRatio->setRange(0.0, 1.0, 2);
     inputRatio->setSingleStep(0.1);
+    inputRatio->setPrefix(i18n("Ratio: "));
     inputRatio->setValue(1.0);
     inputRatio->setBlockUpdateSignalOnDrag(true);
     connect(inputRatio, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
+    inputHFade->setPrefix(i18n("Horizontal: "));
     inputHFade->setRange(0.0, 1.0, 2);
     inputHFade->setSingleStep(0.1);
     inputHFade->setValue(0.5);
 
+    inputVFade->setPrefix(i18n("Vertical: "));
     inputVFade->setRange(0.0, 1.0, 2);
     inputVFade->setSingleStep(0.1);
     inputVFade->setValue(0.5);
@@ -87,15 +91,18 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     inputSpikes->setRange(2, 20);
     inputSpikes->setValue(2);
+    inputSpikes->setPrefix(i18n("Spikes: "));
     inputSpikes->setBlockUpdateSignalOnDrag(true);
     connect(inputSpikes, SIGNAL(valueChanged(int)), m_updateCompressor.data(), SLOT(start()));
 
     inputRandomness->setRange(0, 100);
     inputRandomness->setValue(0);
+    inputRandomness->setPrefix(i18n("Randomness: "));
     inputRandomness->setBlockUpdateSignalOnDrag(true);
     connect(inputRandomness, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputAngle->setRange(0, 360);
+    inputAngle->setPrefix(i18n("Angle: "));
     inputAngle->setSuffix(QChar(Qt::Key_degree));
     inputAngle->setValue(0);
     inputAngle->setBlockUpdateSignalOnDrag(true);
@@ -103,6 +110,7 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect(spacingWidget, SIGNAL(sigSpacingChanged()), m_updateCompressor.data(), SLOT(start()));
 
+    density->setPrefix(i18n("Density: "));
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
     density->setValue(100);

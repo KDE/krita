@@ -33,15 +33,19 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     scaleSlider->addMultiplier(2);
     scaleSlider->addMultiplier(10);
 
+    brightnessSlider->setPrefix(i18n("Brightness: "));
     brightnessSlider->setRange(-1.0, 1.0, 2);
     brightnessSlider->setValue(0.0);
     brightnessSlider->setToolTip(i18n("Makes texture lighter or darker"));
 
+    contrastSlider->setPrefix(i18n("Contrast: "));
     contrastSlider->setRange(0.0, 2.0, 2);
     contrastSlider->setValue(1.0);
 
+    offsetSliderX->setPrefix(i18n("Horizontal: "));
     offsetSliderX->setSuffix(i18n(" px"));
 
+    offsetSliderY->setPrefix(i18n("Vertical: "));
     offsetSliderY->setSuffix(i18n(" px"));
 
 

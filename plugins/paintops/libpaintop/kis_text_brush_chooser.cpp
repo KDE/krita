@@ -41,6 +41,8 @@ KisTextBrushChooser::KisTextBrushChooser(QWidget *parent, const char* name, cons
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
     connect(pipeModeChbox, SIGNAL(toggled(bool)), this, SLOT(rebuildTextBrush()));
     m_font = font();
+
+    inputSpacing->setPrefix(i18n("Spacing: "));
     inputSpacing->setRange(0.0, 10, 2);
     inputSpacing->setValue(0.1);
     rebuildTextBrush();

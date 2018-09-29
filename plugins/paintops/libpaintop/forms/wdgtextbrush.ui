@@ -6,35 +6,56 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
-    <height>182</height>
+    <width>197</width>
+    <height>267</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Font:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <property name="indent">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Font:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="margin">
-        <number>10</number>
-       </property>
-       <property name="indent">
-        <number>5</number>
-       </property>
-      </widget>
-     </item>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>20</number>
+     </property>
      <item>
       <widget class="QLabel" name="lblFont">
        <property name="sizePolicy">
@@ -45,7 +66,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>50</width>
+         <width>30</width>
          <height>30</height>
         </size>
        </property>
@@ -59,7 +80,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
+        <enum>QFrame::Raised</enum>
        </property>
        <property name="lineWidth">
         <number>1</number>
@@ -71,7 +92,7 @@
         <bool>true</bool>
        </property>
        <property name="indent">
-        <number>10</number>
+        <number>3</number>
        </property>
       </widget>
      </item>
@@ -94,84 +115,71 @@
     </layout>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>10</number>
+    <widget class="QLabel" name="labelText">
+     <property name="text">
+      <string>Text:</string>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelText">
-       <property name="text">
-        <string>Text:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEdit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="text">
-        <string>The Quick Brown Fox Jumps Over The Lazy Dog</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Spacing:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QCheckBox" name="pipeModeChbox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="toolTip">
-        <string>use only one letter at a time</string>
-       </property>
-       <property name="text">
-        <string>Pipe mode</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text">
+      <string>Sample Text</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="pipeModeChbox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>use only one letter at a time</string>
+     </property>
+     <property name="text">
+      <string>Pipe mode</string>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer name="spacer2">
@@ -191,6 +199,11 @@
    </item>
   </layout>
   <zorder>spacer2</zorder>
+  <zorder>label</zorder>
+  <zorder>pipeModeChbox</zorder>
+  <zorder>lineEdit</zorder>
+  <zorder>labelText</zorder>
+  <zorder>inputSpacing</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -29,15 +29,19 @@ public:
         : QWidget(parent) {
         setupUi(this);
 
+        scaleBox->setPrefix(i18n("Random Offset: "));
         rndBox->setRange(-10.0, 10.0, 2);
         rndBox->setValue(2.0);
 
+        scaleBox->setPrefix(i18n("Scale: "));
         scaleBox->setRange(-10.0, 10.0, 2);
         scaleBox->setValue(2.0);
 
+        shearBox->setPrefix(i18n("Shear: "));
         shearBox->setRange(-2.0, 2.0, 2);
         shearBox->setValue(0.0);
 
+        densityBox->setPrefix(i18n("Density: "));
         densityBox->setRange(0.0, 100.0, 0);
         densityBox->setValue(100.0);
         densityBox->setSuffix(QChar(Qt::Key_Percent));

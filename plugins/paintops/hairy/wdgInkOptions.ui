@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>405</width>
-    <height>436</height>
+    <width>306</width>
+    <height>488</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,226 +18,209 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>405</width>
-    <height>400</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>300</x>
-     <y>0</y>
-     <width>113</width>
-     <height>391</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="leftMargin">
-     <number>10</number>
-    </property>
-    <item>
-     <widget class="QLabel" name="inkLabel">
-      <property name="text">
-       <string>Ink Amount</string>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>150</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Ink Depletion Curve</string>
+     </property>
+     <widget class="KisCurveWidget" name="inkCurve" native="true">
+      <property name="geometry">
+       <rect>
+        <x>9</x>
+        <y>33</y>
+        <width>111</width>
+        <height>91</height>
+       </rect>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="KisIntParseSpinBox" name="inkAmountSpinBox">
-      <property name="maximum">
-       <number>10000</number>
-      </property>
-      <property name="value">
-       <number>1024</number>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="opacityCBox">
-      <property name="text">
-       <string>Opacity</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="saturationCBox">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="text">
-       <string>Saturation</string>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="soakInkCBox">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="toolTip">
-       <string>Soak ink from the initial position of the stroke</string>
-      </property>
-      <property name="text">
-       <string>Soak ink</string>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+      <property name="minimumSize">
        <size>
-        <width>20</width>
-        <height>288</height>
+        <width>50</width>
+        <height>50</height>
        </size>
       </property>
-     </spacer>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>301</width>
-     <height>270</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>0</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="title">
-    <string>Ink Depletion Curve</string>
-   </property>
-   <widget class="KisCurveWidget" name="inkCurve" native="true">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>33</y>
-      <width>271</width>
-      <height>228</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="weightGroup">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>270</y>
-     <width>281</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Saturation Weights</string>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QCheckBox" name="useWeightCHBox">
-      <property name="text">
-       <string>weighted saturation</string>
-      </property>
      </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Bristle Ink Weight:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Pressure Weight:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Bristle Length Weight:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="pressureSlider" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Ink Depletion Curve Weight:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="2">
-     <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="leftMargin">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="inkLabel">
+       <property name="text">
+        <string>Ink Amount</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KisIntParseSpinBox" name="inkAmountSpinBox">
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+       <property name="value">
+        <number>1024</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="opacityCBox">
+       <property name="text">
+        <string>Opacity</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="saturationCBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Saturation</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="soakInkCBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Soak ink from the initial position of the stroke</string>
+       </property>
+       <property name="text">
+        <string>Soak ink</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="weightGroup">
+     <property name="title">
+      <string>Saturation Weights</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="useWeightCHBox">
+        <property name="text">
+         <string>weighted saturation</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Bristle Ink Weight:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Pressure Weight:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="KisDoubleSliderSpinBox" name="bristleInkAmountSlider" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Bristle Length Weight:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="KisDoubleSliderSpinBox" name="bristleLengthSlider" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="KisDoubleSliderSpinBox" name="pressureSlider" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Ink Depletion Curve Weight:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="KisDoubleSliderSpinBox" name="inkDepletionSlider" native="true">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>5</width>
+       <height>5</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
@@ -247,8 +230,13 @@
   <customwidget>
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
-   <header>widgets/kis_curve_widget.h</header>
+   <header location="global">widgets/kis_curve_widget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

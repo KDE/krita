@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>328</height>
+    <width>262</width>
+    <height>253</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>425</width>
-    <height>290</height>
+    <width>100</width>
+    <height>100</height>
    </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -55,7 +55,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="speed">
+      <widget class="KisDoubleSliderSpinBox" name="speed" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -72,7 +72,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold">
+      <widget class="KisDoubleSliderSpinBox" name="smoothThreshold" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -100,7 +100,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="displaceStrength"/>
+      <widget class="KisDoubleSliderSpinBox" name="displaceStrength" native="true"/>
      </item>
     </layout>
    </item>
@@ -129,8 +129,8 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>5</width>
+       <height>5</height>
       </size>
      </property>
     </spacer>

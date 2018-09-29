@@ -19,6 +19,7 @@ Rectangle {
 
                 Button {
                     color: palette.button
+                    highlightColor: palette.highlight
                     textColor: palette.buttonText
                     radius: 8;
                     width: root.width / 3
@@ -35,6 +36,7 @@ Rectangle {
             height: root.rowHeight;
             Button {
                 color: palette.button
+                highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
                 id: undoButton
@@ -48,6 +50,7 @@ Rectangle {
 
             Button {
                 color: palette.button
+                highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
                 width: root.width / 2
@@ -65,6 +68,7 @@ Rectangle {
             model: [1, 2, 3, 4]
             Button {
                 color: palette.button
+                highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
                 width: parent.width;
@@ -90,6 +94,7 @@ Rectangle {
                     Button {
                         id: rockerSwitch
                         color: palette.button
+                        highlightColor: palette.highlight
                         textColor: palette.buttonText
                         radius: 8;
                         anchors.fill: parent;
@@ -114,6 +119,7 @@ Rectangle {
             model: [5, 6, 7, 8]
             Button {
                 color: palette.button
+                highlightColor: palette.highlight
                 textColor: palette.buttonText
                 radius: 8;
                 width: parent.width;

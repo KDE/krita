@@ -39,16 +39,18 @@ KisSketchOpOption::KisSketchOpOption()
     m_options = new KisSketchOpOptionsWidget();
 
     // initialize slider values
+    m_options->lineWidthSPBox->setPrefix(i18n("Line Width: "));
     m_options->lineWidthSPBox->setRange(1.0, 100.0, 0);
     m_options->lineWidthSPBox->setValue(1.0);
     m_options->lineWidthSPBox->setSuffix(i18n(" px"));
     m_options->lineWidthSPBox->setExponentRatio(1.5);
 
-
+    m_options->offsetSPBox->setPrefix(i18n("Offset: "));
     m_options->offsetSPBox->setRange(0.0, 200.0, 0);
     m_options->offsetSPBox->setValue(30.0);
     m_options->offsetSPBox->setSuffix("%");
 
+    m_options->densitySPBox->setPrefix(i18n("Density: "));
     m_options->densitySPBox->setRange(0.0, 100.0, 0);
     m_options->densitySPBox->setValue(50.0);
     m_options->densitySPBox->setSuffix("%");

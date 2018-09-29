@@ -38,6 +38,7 @@ public:
         : QWidget(parent) {
         setupUi(this);
 
+        sliderRate->setPrefix(i18n("Rate: "));
         sliderRate->setRange(MINIMUM_RATE, MAXIMUM_RATE, RATE_NUM_DECIMALS);
         sliderRate->setExponentRatio(RATE_EXPONENT_RATIO);
         sliderRate->setSingleStep(RATE_SINGLE_STEP);

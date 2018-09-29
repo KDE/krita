@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>290</height>
+    <width>277</width>
+    <height>316</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,158 +18,173 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>330</width>
-    <height>60</height>
+    <width>50</width>
+    <height>0</height>
    </size>
   </property>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>9</y>
-     <width>421</width>
-     <height>271</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Line width:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Offset scale:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="offsetSPBox" />
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>Density:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="KisDoubleSliderSpinBox" name="densitySPBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>406</width>
-        <height>18</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="distanceDensityCHBox">
-        <property name="text">
-         <string>Use distance density</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="simpleModeCHBox">
-        <property name="text">
-         <string>Simple mode</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="magnetifyCHBox">
-        <property name="text">
-         <string>Magnetify</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="connectionCHBox">
-        <property name="text">
-         <string>Paint connection line</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="randomRGBCHbox">
-        <property name="text">
-         <string>Random RGB</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="randomOpacityCHbox">
-        <property name="text">
-         <string>Random opacity</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="distanceOpacityCHbox">
-        <property name="text">
-         <string>Distance opacity</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="offsetSPBox" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="densitySPBox" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="distanceDensityCHBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Use distance density</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="simpleModeCHBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Simple mode</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="connectionCHBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Paint connection line</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="magnetifyCHBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Magnetify</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="randomRGBCHbox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Random RGB</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="randomOpacityCHbox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Random opacity</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="distanceOpacityCHbox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Distance opacity</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>28</width>
+       <height>14</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>

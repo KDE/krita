@@ -35,6 +35,7 @@ public:
         const int maxBrushSize = KSharedConfig::openConfig()->group("").readEntry("maximumBrushSize", 1000);
 
         dblDiameter->setRange(0.01, maxBrushSize, 2);
+        dblDiameter->setPrefix(i18n("Diameter: "));
         dblDiameter->setSuffix(i18n(" px"));
     }
 };

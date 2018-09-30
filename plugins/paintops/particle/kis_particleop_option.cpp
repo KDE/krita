@@ -42,22 +42,28 @@ KisParticleOpOption::KisParticleOpOption()
     m_checkable = false;
     m_options = new KisParticleOpOptionsWidget();
 
+    m_options->gravSPBox->setPrefix(i18n("Gravity: "));
     m_options->gravSPBox->setRange(-1.0, 1.0, 3);
     m_options->gravSPBox->setValue(0.989);
 
+    m_options->dySPBox->setPrefix(i18n("dy Scale: "));
     m_options->dySPBox->setRange(-10.0, 10.0, 2);
     m_options->dySPBox->setValue(0.3);
 
+    m_options->dxSPBox->setPrefix(i18n("dx Scale: "));
     m_options->dxSPBox->setRange(-10.0, 10.0, 2);
     m_options->dxSPBox->setValue(0.3);
 
+    m_options->weightSPBox->setPrefix(i18n("Opacity Weight: "));
     m_options->weightSPBox->setRange(0.01, 1.0, 2);
     m_options->weightSPBox->setValue(0.2);
 
+    m_options->particleSpinBox->setPrefix(i18n("Particles: "));
     m_options->particleSpinBox->setRange(1.0, 500.0, 0);
     m_options->particleSpinBox->setValue(50);
     m_options->particleSpinBox->setExponentRatio(3.0);
 
+    m_options->itersSPBox->setPrefix(i18n("Iterations: "));
     m_options->itersSPBox->setRange(1, 200, 0);
     m_options->itersSPBox->setValue(10);
 

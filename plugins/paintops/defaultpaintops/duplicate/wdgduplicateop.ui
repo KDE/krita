@@ -6,95 +6,77 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>193</height>
+    <width>270</width>
+    <height>272</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QCheckBox" name="cbHealing">
-         <property name="text">
-          <string>Healing</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cbPerspective">
-         <property name="toolTip">
-          <string>To correct perspective, first create a perspective grid.</string>
-         </property>
-         <property name="text">
-          <string>Correct the perspective</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cbSourcePoint">
-         <property name="toolTip">
-          <string>Move the clone origin with the brush. Uncheck to keep cloning from the selected point.</string>
-         </property>
-         <property name="text">
-          <string>Source point move</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chkCloneProjection">
-         <property name="toolTip">
-          <string>When checked, clone from all visible layers. Otherwise, clone from the active layer.</string>
-         </property>
-         <property name="text">
-          <string>Clone From All Visible Layers</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Clone Brush:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select the source point from the current layer with Ctrl-click. Use Ctrl+Alt-click to select a source from the previously picked layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-       <property name="margin">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Clone Brush:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Select the source point from the current layer with Ctrl-click. Use Ctrl+Alt-click to select a source from the previously picked layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <property name="indent">
+      <number>0</number>
+     </property>
+    </widget>
    </item>
-   <item row="1" column="0">
+   <item>
+    <widget class="QCheckBox" name="cbHealing">
+     <property name="text">
+      <string>Healing</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cbPerspective">
+     <property name="toolTip">
+      <string>To correct perspective, first create a perspective grid.</string>
+     </property>
+     <property name="text">
+      <string>Correct the perspective</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cbSourcePoint">
+     <property name="toolTip">
+      <string>Move the clone origin with the brush. Uncheck to keep cloning from the selected point.</string>
+     </property>
+     <property name="text">
+      <string>Source point move</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkCloneProjection">
+     <property name="toolTip">
+      <string>When checked, clone from all visible layers. Otherwise, clone from the active layer.</string>
+     </property>
+     <property name="text">
+      <string>Clone From All Visible Layers</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

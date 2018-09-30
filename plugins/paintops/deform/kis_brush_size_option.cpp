@@ -44,33 +44,36 @@ KisBrushSizeOption::KisBrushSizeOption()
 
 
     // init slider values
+    m_options->diameter->setPrefix(i18n("Diameter: "));
     m_options->diameter->setRange(1.0, 1000, 0);
     m_options->diameter->setValue(20);
     m_options->diameter->setExponentRatio(3.0);
     m_options->diameter->setSuffix(i18n(" px"));
 
+    m_options->aspectBox->setPrefix(i18n("Aspect Ratio: "));
     m_options->aspectBox->setRange(0.01, 2.0, 2);
     m_options->aspectBox->setValue(1.0);
     m_options->aspectBox->setExponentRatio(1.0);
 
-
+    m_options->scale->setPrefix(i18n("Scale: "));
     m_options->scale->setRange(0.01, 10.0, 2);
     m_options->scale->setValue(1.0);
 
+    m_options->spacing->setPrefix(i18n("Spacing: "));
     m_options->spacing->setRange(0.01, 5.0, 2);
     m_options->spacing->setValue(0.3);
 
-
+    m_options->rotationBox->setPrefix(i18n("Rotation: "));
     m_options->rotationBox->setRange(0.0, 360.0, 0);
     m_options->rotationBox->setValue(0.0);
     m_options->rotationBox->setSuffix(QChar(Qt::Key_degree));
 
-
+    m_options->densityBox->setPrefix(i18n("Density: "));
     m_options->densityBox->setRange(0.0, 100.0, 0);
     m_options->densityBox->setValue(100);
     m_options->densityBox->setSuffix("%");
 
-
+    m_options->jitterMove->setPrefix(i18n("Jitter Move: "));
     m_options->jitterMove->setRange(0.0, 5.0, 2);
     m_options->jitterMove->setValue(0.0);
 

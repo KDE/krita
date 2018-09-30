@@ -37,21 +37,26 @@ KisSprayOpOption::KisSprayOpOption()
     m_checkable = false;
     m_options = new KisSprayOpOptionsWidget();
 
+    m_options->diameterSpinBox->setPrefix(i18n("Diameter: "));
     m_options->diameterSpinBox->setRange(1, 1000, 0);
     m_options->diameterSpinBox->setValue(100);
     m_options->diameterSpinBox->setExponentRatio(1.5);
     m_options->diameterSpinBox->setSuffix(i18n(" px"));
 
+    m_options->aspectSPBox->setPrefix(i18n("Aspect Ratio: "));
     m_options->aspectSPBox->setRange(0.0, 2.0, 2);
     m_options->aspectSPBox->setValue(1.0);
 
+    m_options->rotationSPBox->setPrefix(i18n("Rotation: "));
     m_options->rotationSPBox->setRange(0.0, 360.0, 0);
     m_options->rotationSPBox->setValue(0.0);
     m_options->rotationSPBox->setSuffix(QChar(Qt::Key_degree));
 
+    m_options->scaleSpin->setPrefix(i18n("Scale: "));
     m_options->scaleSpin->setRange(0.0, 10.0, 2);
     m_options->scaleSpin->setValue(1.0);
 
+    m_options->spacingSpin->setPrefix(i18n("Spacing: "));
     m_options->spacingSpin->setRange(0.0, 5.0, 2);
     m_options->spacingSpin->setValue(0.5);
 

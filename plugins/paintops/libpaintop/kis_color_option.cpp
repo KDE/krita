@@ -28,12 +28,15 @@ public:
         : QWidget(parent) {
         setupUi(this);
 
+        hueSlider->setPrefix(i18n("Hue: "));
         hueSlider->setRange(-180, 180);
         hueSlider->setValue(0);
 
+        saturationSlider->setPrefix(i18n("Saturation: "));
         saturationSlider->setRange(-100, 100);
         saturationSlider->setValue(0);
 
+        valueSlider->setPrefix(i18n("Value: "));
         valueSlider->setRange(-100, 100);
         valueSlider->setValue(0);
 

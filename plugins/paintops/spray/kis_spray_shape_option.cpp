@@ -54,10 +54,12 @@ KisSprayShapeOption::KisSprayShapeOption()
     //initializer slider values
     m_options->widthSpin->setRange(1, 1000, 0);
     m_options->widthSpin->setValue(6);
+    m_options->widthSpin->setPrefix(i18n("Width: "));
     m_options->widthSpin->setSuffix(i18n(" px"));
 
     m_options->heightSpin->setRange(1, 1000, 0);
     m_options->heightSpin->setValue(6);
+    m_options->heightSpin->setPrefix(i18n("Height: "));
     m_options->heightSpin->setSuffix(i18n(" px"));
 
     // UI signals

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>365</height>
+    <width>297</width>
+    <height>207</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,85 +21,108 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>425</width>
-    <height>365</height>
+    <width>50</width>
+    <height>50</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QCheckBox" name="randomSizeCHBox">
-     <property name="text">
-      <string>Random size</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="fixedRotation">
+       <property name="text">
+        <string>Fixed rotation:</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="fixedAngleBox" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="randomRotation">
+       <property name="text">
+        <string>Randomize rotation:</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="followCursor">
+       <property name="text">
+        <string>Follow cursor weight:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="followCursorWeight" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="drawingAngle">
+       <property name="text">
+        <string>Angle weight:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="randomSizeCHBox">
+       <property name="text">
+        <string>Random size</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Settings</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="fixedRotation">
-        <property name="text">
-         <string>Fixed rotation:</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="randomRotation">
-        <property name="text">
-         <string>Randomize rotation:</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="followCursor">
-        <property name="text">
-         <string>Follow cursor weight:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="fixedAngleBox" />
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="randomAngleWeight" />
-      </item>
-      <item row="2" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="followCursorWeight" />
-      </item>
-      <item row="3" column="0">
-       <widget class="QCheckBox" name="drawingAngle">
-        <property name="text">
-         <string>Angle weight:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1" colspan="2">
-       <widget class="KisDoubleSliderSpinBox" name="drawingAngleWeight" />
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0">
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>37</height>
+       <width>5</width>
+       <height>5</height>
       </size>
      </property>
     </spacer>
@@ -107,7 +130,7 @@
   </layout>
  </widget>
  <customwidgets>
- <customwidget>
+  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>

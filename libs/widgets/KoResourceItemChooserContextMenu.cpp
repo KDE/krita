@@ -26,7 +26,6 @@
 
 #include <KoIcon.h>
 #include <klocalizedstring.h>
-#include <qlineedit.h>
 
 #include <resources/KoResource.h>
 
@@ -38,13 +37,17 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     QHBoxLayout* pLayout = new QHBoxLayout();
     m_label = new QLabel(0);
     m_editBox = new QLineEdit(0);
+    m_editBox->setClearButtonEnabled(true);
+    m_AddButton = new QPushButton();
+    m_AddButton->setIcon(koIcon("list-add"));
     pLayout->addWidget(m_label);
     pLayout->addWidget(m_editBox);
+    pLayout->addWidget(m_AddButton);
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-    connect (m_editBox, SIGNAL(returnPressed()),
-             this, SLOT(onTriggered()));
+    connect (m_editBox, &QLineEdit::returnPressed, this, &KoLineEditAction::onTriggered);
+    connect (m_AddButton, &QPushButton::clicked, this, &KoLineEditAction::onTriggered);
 }
 
 KoLineEditAction::~KoLineEditAction()

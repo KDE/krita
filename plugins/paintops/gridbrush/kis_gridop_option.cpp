@@ -38,30 +38,36 @@ KisGridOpOption::KisGridOpOption()
     m_options = new KisGridOpOptionsWidget();
 
     // initialize slider values
+    m_options->gridWidthSPBox->setPrefix(i18n("Grid Width: "));
     m_options->gridWidthSPBox->setRange(1, 999, 0);
     m_options->gridWidthSPBox->setValue(25);
     m_options->gridWidthSPBox->setSuffix(i18n(" px"));
     m_options->gridWidthSPBox->setExponentRatio(3.0);
 
-
+    m_options->gridHeightSPBox->setPrefix(i18n("Grid Height: "));
     m_options->gridHeightSPBox->setRange(1, 999, 0);
     m_options->gridHeightSPBox->setValue(25);
     m_options->gridHeightSPBox->setSuffix(i18n(" px"));
     m_options->gridHeightSPBox->setExponentRatio(3.0);
 
+    m_options->divisionLevelSPBox->setPrefix(i18n("Division Level: "));
     m_options->divisionLevelSPBox->setRange(0, 25, 0);
     m_options->divisionLevelSPBox->setValue(2);
 
+    m_options->scaleDSPBox->setPrefix(i18n("Scale: "));
     m_options->scaleDSPBox->setRange(0.1, 10.0, 2);
     m_options->scaleDSPBox->setValue(1.0);
     m_options->scaleDSPBox->setExponentRatio(3.0);
 
+    m_options->vertBorderDSPBox->setPrefix(i18n("Vertical: "));
+    m_options->vertBorderDSPBox->setSuffix(i18n(" px"));
     m_options->vertBorderDSPBox->setRange(0, 100, 2);
     m_options->vertBorderDSPBox->setValue(0.0);
 
-
+    m_options->horizBorderDSPBox->setPrefix(i18n("Horizontal: "));
+    m_options->vertBorderDSPBox->setSuffix(i18n(" px"));
     m_options->horizBorderDSPBox->setRange(0, 100, 2);
-    m_options->vertBorderDSPBox->setValue(0.0);
+    m_options->horizBorderDSPBox->setValue(0.0);
 
 
     connect(m_options->gridWidthSPBox, SIGNAL(valueChanged(qreal)), SLOT(emitSettingChanged()));

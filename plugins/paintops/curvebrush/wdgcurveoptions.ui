@@ -2,69 +2,68 @@
 <ui version="4.0">
  <class>WdgCurveOptions</class>
  <widget class="QWidget" name="WdgCurveOptions">
-  <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lineWidthLbl">
-     <property name="text">
-      <string>Line width:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="KisDoubleSliderSpinBox" name="lineWidthSlider" native="true"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>History size:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>193</width>
+    <height>215</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="lineWidthSlider" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="KisDoubleSliderSpinBox" name="historySizeSlider" native="true"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Curves opacity:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="historySizeSlider" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="KisDoubleSliderSpinBox" name="curvesOpacitySlider" native="true"/>
+   <item>
+    <widget class="KisDoubleSliderSpinBox" name="curvesOpacitySlider" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
    </item>
-   <item row="3" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="connectionCHBox">
      <property name="text">
       <string>Paint connection line</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="smoothingCHBox">
      <property name="text">
       <string>Smoothing</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>0</width>
-       <height>0</height>
+       <width>5</width>
+       <height>5</height>
       </size>
      </property>
     </spacer>

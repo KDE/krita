@@ -51,6 +51,12 @@ public:
         thicknessKisDoubleSliderSpinBox -> setSuffix(px);
         originXKisDoubleSliderSpinBox   -> setSuffix(px);
         originYKisDoubleSliderSpinBox   -> setSuffix(px);
+
+        angleKisDoubleSliderSpinBox     -> setPrefix(i18n("Angle: "));
+        separationKisDoubleSliderSpinBox-> setPrefix(i18n("Separation: "));
+        thicknessKisDoubleSliderSpinBox -> setPrefix(i18n("Thickness: "));
+        originXKisDoubleSliderSpinBox   -> setPrefix(i18n("Origin X: "));
+        originYKisDoubleSliderSpinBox   -> setPrefix(i18n("Origin Y: "));
     }
 };
 

@@ -25,13 +25,16 @@ class KisCurveOpOptionsWidget: public QWidget, public Ui::WdgCurveOptions
 public:
     KisCurveOpOptionsWidget(QWidget *parent = 0) : QWidget(parent) {
         setupUi(this);
+        historySizeSlider->setPrefix(i18n("History Size: "));
         historySizeSlider->setRange(2, 300);
         historySizeSlider->setValue(30);
 
+        lineWidthSlider->setPrefix(i18n("Line Width: "));
         lineWidthSlider->setRange(1, 100);
         lineWidthSlider->setValue(1);
         lineWidthSlider->setSuffix(i18n(" px"));
 
+        curvesOpacitySlider->setPrefix(i18n("Curves Opacity: "));
         curvesOpacitySlider->setRange(0.0, 1.0, 2);
         curvesOpacitySlider->setValue(1.0);
     }

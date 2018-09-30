@@ -52,6 +52,7 @@ private:
     int m_greenChannel;
     int m_blueChannel;
     QString m_fileName;
+    int m_previewSize;
 };
 
 #endif // KISNORMALPREVIEWWIDGET_H

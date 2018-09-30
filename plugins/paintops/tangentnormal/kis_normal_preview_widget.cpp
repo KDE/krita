@@ -35,7 +35,10 @@ KisNormalPreviewWidget::KisNormalPreviewWidget(QWidget *parent)
     //TODO: this can be changed in frameworks to  KoResourcePaths::findResource("kis_images", "krita-tangentnormal.png");
     m_fileName = KoResourcePaths::findResource("kis_images", "krita-tangentnormal-preview.png");
     QImage preview = QImage(m_fileName);
-    setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+
+    m_previewSize = 130;
+
+    setPixmap(QPixmap::fromImage(preview.scaled(m_previewSize, m_previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 }
 
 KisNormalPreviewWidget::~KisNormalPreviewWidget()
@@ -70,7 +73,7 @@ void KisNormalPreviewWidget::updateImage()
 {
     QImage preview = QImage(m_fileName);
     preview = swizzleTransformPreview (preview);
-    setPixmap(QPixmap::fromImage(preview.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    setPixmap(QPixmap::fromImage(preview.scaled(m_previewSize, m_previewSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
     repaint();
 }
 

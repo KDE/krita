@@ -34,7 +34,6 @@
 #include "ui_WdgSvgTextSettings.h"
 
 class KoSvgTextShape;
-class KisFileNameRequester;
 class KoDialog;
 
 class SvgTextEditor : public KXmlGuiWindow

@@ -319,6 +319,16 @@ void TouchDockerDock::showFileSaveAsDialog()
     d->openDialog->exec();
 }
 
+void TouchDockerDock::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::PaletteChange) {
+        m_quickWidget->setSource(QUrl("qrc:/touchstrip.qml"));
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 KoDialog *TouchDockerDock::createDialog(const QString qml)
 {
     KoDialog *dlg = new KoDialog(this);

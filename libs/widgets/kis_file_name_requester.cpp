@@ -74,8 +74,7 @@ KoFileDialog::DialogType KisFileNameRequester::mode() const
     return m_mode;
 }
 
-void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList,
-                                              QString defaultFilter)
+void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList, QString defaultFilter)
 {
     m_mime_filter_list = filterList;
     m_mime_default_filter = defaultFilter;
@@ -99,7 +98,6 @@ void KisFileNameRequester::slotSelectFile()
         dialog.setDefaultDir(m_basePath);
     }
 
-    Q_ASSERT(!m_mime_filter_list.isEmpty());
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
 
     QString newFileName = dialog.filename();

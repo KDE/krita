@@ -67,12 +67,13 @@ KisTextureOption::KisTextureOption()
     connect(m_textureOptions->randomOffsetY, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->offsetSliderY, SIGNAL(valueChanged(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->cmbTexturingMode, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
-    connect(m_textureOptions->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->cutoffSlider, SIGNAL(sigModifiedBlack(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->cutoffSlider, SIGNAL(sigModifiedWhite(int)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->chkInvert, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
-    resetGUI(m_textureOptions->textureSelectorWidget->currentResource());
 
+    connect(m_textureOptions->cmbCutoffPolicy, SIGNAL(currentIndexChanged(int)), SLOT(setCutoffPolicy(int)));
+
+    resetGUI(m_textureOptions->textureSelectorWidget->currentResource());
 }
 
 KisTextureOption::~KisTextureOption()
@@ -173,6 +174,9 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
     m_textureOptions->cutoffSlider->slotModifyWhite(setting->getInt("Texture/Pattern/CutoffRight", 255));
     m_textureOptions->chkInvert->setChecked(setting->getBool("Texture/Pattern/Invert"));
 
+    setCutoffPolicy(setting->getInt("Texture/Pattern/CutoffPolicy"));
+
+
 }
 
 void KisTextureOption::lodLimitations(KisPaintopLodLimitations *l) const
@@ -188,6 +192,18 @@ void KisTextureOption::resetGUI(KoResource* res)
 
     m_textureOptions->offsetSliderX->setRange(0, pattern->pattern().width() / 2);
     m_textureOptions->offsetSliderY->setRange(0, pattern->pattern().height() / 2);
+}
+
+void KisTextureOption::setCutoffPolicy(int index)
+{
+    qDebug() << "changing cutoff slider";
+    if (index == 0) {
+        m_textureOptions->cutoffSlider->setVisible(false);
+    } else {
+        m_textureOptions->cutoffSlider->setVisible(true);
+    }
+
+    emitSettingChanged();
 }
 
 /**********************************************************************/

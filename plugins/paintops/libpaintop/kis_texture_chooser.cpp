@@ -27,6 +27,7 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     textureSelectorWidget->setGrayscalePreview(true);
     textureSelectorWidget->setCurrentItem(0, 0);
 
+    scaleSlider->setPrefix(i18n("Scale: "));
     scaleSlider->setRange(0.0, 2.0, 2);
     scaleSlider->setValue(1.0);
     scaleSlider->addMultiplier(0.1);
@@ -55,7 +56,7 @@ KisTextureChooser::KisTextureChooser(QWidget *parent)
     cmbTexturingMode->setCurrentIndex(KisTextureProperties::SUBTRACT);
 
     QStringList cutOffPolicies;
-    cutOffPolicies << i18n("Cut Off Disabled") << i18n("Cut Off Brush") << i18n("Cut Off Pattern");
+    cutOffPolicies << i18n("Disabled") << i18n("Brush") << i18n("Pattern");
     cmbCutoffPolicy->addItems(cutOffPolicies);
 
 

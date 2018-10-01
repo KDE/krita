@@ -41,6 +41,9 @@ public:
      */
     void setRange(qreal minimum, qreal maximum, int decimals = 0);
     
+    /// Set Prefix that goes inside of slider
+    void setPrefix(QString prefixText);
+
     ///Get the value, don't use value()
     qreal value();
 

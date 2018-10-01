@@ -63,6 +63,11 @@ void KisMultipliersDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, i
     d->updateRange();
 }
 
+void KisMultipliersDoubleSliderSpinBox::setPrefix(QString prefixText)
+{
+   d->form.sliderSpinBox->setPrefix(prefixText);
+}
+
 qreal KisMultipliersDoubleSliderSpinBox::value()
 {
     return d->form.sliderSpinBox->value();

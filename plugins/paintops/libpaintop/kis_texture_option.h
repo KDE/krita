@@ -54,6 +54,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void resetGUI(KoResource*); /// called when a new pattern is selected
+    void setCutoffPolicy(int index);
 
 private:
     /// UI Widget that stores all the texture options

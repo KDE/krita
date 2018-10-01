@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2013 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,34 +16,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "tool_transform_changes_tracker.h"
+#ifndef KISTOOLCHANGESTRACKER_H
+#define KISTOOLCHANGESTRACKER_H
 
+#include "kritaui_export.h"
+#include <QScopedPointer>
+#include "KisToolChangesTrackerData.h"
 
-TransformChangesTracker::TransformChangesTracker(TransformTransactionProperties *transaction)
-    : m_transaction(transaction)
+class KRITAUI_EXPORT KisToolChangesTracker :public QObject
 {
-}
+    Q_OBJECT
 
-void TransformChangesTracker::commitConfig(const ToolTransformArgs &config)
-{
-    m_config.append(config);
-}
+public:
+    KisToolChangesTracker();
+    ~KisToolChangesTracker();
 
-void TransformChangesTracker::requestUndo()
-{
-    if (m_config.size() > 1) {
-        m_config.removeLast();
-        *m_transaction->currentConfig() = m_config.last();
-        emit sigConfigChanged();
-    }
-}
+    void commitConfig(KisToolChangesTrackerDataSP state);
+    void requestUndo();
+    KisToolChangesTrackerDataSP lastState() const;
+    void reset();
 
-void TransformChangesTracker::reset()
-{
-    m_config.clear();
-}
+    bool isEmpty() const;
 
-bool TransformChangesTracker::isEmpty() const
-{
-    return m_config.isEmpty();
-}
+Q_SIGNALS:
+    void sigConfigChanged(KisToolChangesTrackerDataSP state);
+
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+};
+
+#endif // KISTOOLCHANGESTRACKER_H

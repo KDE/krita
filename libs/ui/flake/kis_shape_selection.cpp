@@ -82,6 +82,8 @@ KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase,
     m_model->moveToThread(image->thread());
     m_canvas->setObjectName("KisShapeSelectionCanvas");
     m_canvas->moveToThread(image->thread());
+
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
 }
 
 KisShapeSelection::~KisShapeSelection()
@@ -341,20 +343,22 @@ KisShapeSelectionFactory::KisShapeSelectionFactory()
 
 void KisShapeSelection::moveX(qint32 x)
 {
-    Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
-        if (shape != this) {
-            QPointF pos = shape->position();
-            shape->setPosition(QPointF(pos.x() + x/m_image->xRes(), pos.y()));
-        }
-    }
+    const QPointF diff(x / m_image->xRes(), 0);
+    emit sigMoveShapes(diff);
 }
 
 void KisShapeSelection::moveY(qint32 y)
 {
+    const QPointF diff(0, y / m_image->yRes());
+    emit sigMoveShapes(diff);
+}
+
+void KisShapeSelection::slotMoveShapes(const QPointF &diff)
+{
     Q_FOREACH (KoShape* shape, shapeManager()->shapes()) {
         if (shape != this) {
             QPointF pos = shape->position();
-            shape->setPosition(QPointF(pos.x(), pos.y() + y/m_image->yRes()));
+            shape->setPosition(pos + diff);
         }
     }
 }

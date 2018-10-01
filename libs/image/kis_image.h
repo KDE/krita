@@ -285,7 +285,7 @@ public:
      * a background, so you cannot expect the image having new size
      * right after ths call.
      */
-    void scaleNode(KisNodeSP node, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy);
+    void scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on rotating the image
@@ -312,7 +312,7 @@ public:
      * a background, so you cannot expect the operation being completed
      * right after the call
      */
-    void rotateNode(KisNodeSP node, double radians);
+    void rotateNode(KisNodeSP node, double radians, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on shearing the image
@@ -339,7 +339,7 @@ public:
      * a background, so you cannot expect the operation being completed
      * right after the call
      */
-    void shearNode(KisNodeSP node, double angleX, double angleY);
+    void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
 
     /**
      * Convert the image and all its layers to the dstColorSpace
@@ -1066,11 +1066,10 @@ private:
     void emitSizeChanged();
 
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
-    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
-                    bool resizeImage, double radians);
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode, double radians,
+                    bool resizeImage, KisSelectionSP selection);
     void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
-                   bool resizeImage, double angleX, double angleY,
-                   const QPointF &origin);
+                   bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
 
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 

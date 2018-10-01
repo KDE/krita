@@ -20,7 +20,7 @@
 
 #include <QHash>
 
-struct KRITAIMAGE_EXPORT KisMetaData::TypeInfo::Private {
+struct KRITAMETADATA_EXPORT KisMetaData::TypeInfo::Private {
     Private() : embeddedTypeInfo(0), structureSchema(0), parser(0) {}
     PropertyType propertyType;
     const TypeInfo* embeddedTypeInfo;

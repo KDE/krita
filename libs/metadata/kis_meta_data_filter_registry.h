@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -16,27 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_META_DATA_PARSER_H_
-#define _KIS_META_DATA_PARSER_H_
+#ifndef _KIS_META_DATA_FILTER_REGISTRY_H_
+#define _KIS_META_DATA_FILTER_REGISTRY_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
-#include <QString>
+#include "KoGenericRegistry.h"
+#include "kis_meta_data_filter.h"
 
 namespace KisMetaData
 {
-class TypeInfo;
-class Value;
-/**
- * This class allow to parse from a string and return a value.
- */
-class KRITAIMAGE_EXPORT Parser
+
+class KRITAMETADATA_EXPORT FilterRegistry : public KoGenericRegistry<const KisMetaData::Filter*>
 {
-    friend class TypeInfo;
 public:
-    virtual ~Parser();
-    virtual Value parse(const QString&) const = 0;
+    FilterRegistry();
+    ~FilterRegistry() override;
+    static FilterRegistry* instance();
+private:
+    FilterRegistry(const FilterRegistry&);
+    FilterRegistry& operator=(const FilterRegistry&);
 };
+
 }
 
 #endif

@@ -54,7 +54,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_selection_manager.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
 #include "kis_shape_layer.h"
@@ -459,6 +459,40 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
 
     ap->applyCommand(view->canvasBase()->shapeController()->addShape(shape, 0),
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::EXCLUSIVE);
+
+    endAction(ap, KisOperationConfiguration(id()).toXML());
+}
+
+void KisSelectionToRasterActionFactory::run(KisViewManager *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (!selection->hasShapeSelection()) {
+        view->showFloatingMessage(i18nc("floating message",
+                                        "Selection is already in a raster format "),
+                                  QIcon(), 2000, KisFloatingMessage::Low);
+        return;
+    }
+
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
+
+    struct RasterizeSelection : public KisTransactionBasedCommand {
+        RasterizeSelection(KisSelectionSP sel)
+            : m_sel(sel) {}
+        KisSelectionSP m_sel;
+
+        KUndo2Command* paint() override {
+            // just create an empty transaction: it will rasterize the
+            // selection and emit the necessary signals
+
+            KisTransaction transaction(m_sel->pixelSelection());
+            return transaction.endAndTake();
+        }
+    };
+
+    ap->applyCommand(new RasterizeSelection(selection),
                      KisStrokeJobData::SEQUENTIAL,
                      KisStrokeJobData::EXCLUSIVE);
 

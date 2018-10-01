@@ -42,19 +42,23 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
+    bool antiAliasSelection() const;
     int action() const { return selectionAction(); }
-
-    bool processKeyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
     void selectionActionChanged(int newAction);
-    void selectionModeChanged(int newMode);
 
 public Q_SLOTS:
     void slotToolActivatedChanged(bool isActivated);
 
     void slotWidgetActionChanged(int action);
     void slotWidgetModeChanged(int mode);
+    void slotWidgetAntiAliasChanged(bool value);
+
+    void slotReplaceModeRequested();
+    void slotAddModeRequested();
+    void slotSubtractModeRequested();
+    void slotIntersectModeRequested();
 
 private:
     KisSelectionOptions* m_optionsWidget;
@@ -63,6 +67,7 @@ private:
 
     SelectionMode m_selectionMode;
     SelectionAction m_selectionAction;
+    bool m_antiAliasSelection = true;
 };
 
 #endif /* __KIS_SELECTION_TOOL_CONFIG_WIDGET_HELPER_H */

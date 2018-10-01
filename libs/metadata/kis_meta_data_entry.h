@@ -20,7 +20,7 @@
 #ifndef _KIS_META_DATA_ENTRY_H_
 #define _KIS_META_DATA_ENTRY_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 #include <kis_debug.h>
 
 class QString;
@@ -33,7 +33,7 @@ class Schema;
 /**
  * Represent a metadata entry, a name and a value (\ref KisMetaData::Value).
  */
-class KRITAIMAGE_EXPORT Entry
+class KRITAMETADATA_EXPORT Entry
 {
     struct Private;
     friend class Store;
@@ -92,6 +92,6 @@ private:
 };
 }
 
-KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Entry &c);
+KRITAMETADATA_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Entry &c);
 
 #endif

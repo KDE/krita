@@ -84,14 +84,15 @@ private Q_SLOTS:
 
 private:
     void closeMaskDocument();
-    void openMaskEditor();
+    bool openMaskEditor();
     void cancelMaskEdit();
     void selectMask(KoGamutMask* mask, bool notifyItemChooser = true);
     bool saveSelectedMaskResource();
     void deleteMask();
-    int getUserFeedback(QString message
-                        , QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::No
-                        , QMessageBox::StandardButton defaultButton = QMessageBox::Yes);
+    int getUserFeedback(QString text, QString informativeText = "",
+                        QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::No,
+                        QMessageBox::StandardButton defaultButton = QMessageBox::Yes,
+                        QMessageBox::Icon severity = QMessageBox::Warning);
 
     int saveOrCancel(QMessageBox::StandardButton defaultAction = QMessageBox::Save);
 

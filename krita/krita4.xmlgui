@@ -236,6 +236,21 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
          <Action name="shearlayer"/>
          <Action name="offsetlayer"/>
       </Menu>
+      <Menu name="LayerTransformAll">
+         <text>Transform &amp;All Layers</text>
+         <Action name="mirrorAllNodesX"/>
+         <Action name="mirrorAllNodesY"/>
+         <Action name="scaleAllLayers"/>
+         <Menu name="Rotate">
+             <text>&amp;Rotate</text>
+             <Action name="rotateAllLayers"/>
+             <Separator/>
+             <Action name="rotateAllLayersCW90"/>
+             <Action name="rotateAllLayersCCW90"/>
+             <Action name="rotateAllLayers180"/>
+         </Menu>
+         <Action name="shearAllLayers"/>
+      </Menu>
       <Menu name="LayerSplitAlpha">
          <text>S&amp;plit</text>
          <Menu name="LayerSplitAlpha">
@@ -268,7 +283,10 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="deselect"/>
       <Action name="reselect"/>
       <Action name="invert_selection"/>
+      <Separator/>
+      <Action name="edit_selection"/>
       <Action name="convert_to_vector_selection"/>
+      <Action name="convert_to_raster_selection"/>
       <Action name="convert_shapes_to_vector_selection"/>
       <Action name="convert_selection_to_shape"/>
       <Separator/>

@@ -40,7 +40,7 @@ public:
     void addFinishingEvent(int numSamples);
 
 public:
-    class iterator :
+    class KRITAUI_EXPORT iterator :
         public boost::iterator_facade <iterator,
                                        KisPaintInformation const,
                                        boost::forward_traversal_tag >

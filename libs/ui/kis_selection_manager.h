@@ -97,7 +97,9 @@ public Q_SLOTS:
     void fillBackgroundColorOpacity();
     void fillPatternOpacity();
     void reselect();
+    void editSelection();
     void convertToVectorSelection();
+    void convertToRasterSelection();
     void convertShapesToVectorSelection();
     void convertToShape();
     
@@ -127,7 +129,9 @@ public:
     bool haveShapesInClipboard();
 
     /// Checks if the current selection is editable and has some pixels selected in the pixel selection
-    bool havePixelSelectionWithPixels();
+    bool haveAnySelectionWithPixels();
+    bool haveShapeSelectionWithShapes();
+    bool haveRasterSelectionWithPixels();
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);

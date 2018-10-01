@@ -26,7 +26,7 @@
 
 KisSelectionUpdateCompressor::KisSelectionUpdateCompressor(KisSelection *selection)
     : m_parentSelection(selection),
-      m_updateSignalCompressor(new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE)),
+      m_updateSignalCompressor(new KisThreadSafeSignalCompressor(100, KisSignalCompressor::POSTPONE)),
       m_hasStalledUpdate(false)
 {
     connect(m_updateSignalCompressor, SIGNAL(timeout()), this, SLOT(startUpdateJob()));

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2018 Michael Zhou <simeirxh@gmail.com>
+ *  Copyright (c) 2018 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,23 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kundo2command.h>
-#include <kundo2magicstring.h>
+#ifndef KISTOOLCHANGESTRACKERDATA_H
+#define KISTOOLCHANGESTRACKERDATA_H
 
-#include "KisChangePaletteCommand.h"
+#include <QObject>
+#include "kritaui_export.h"
+#include <QSharedPointer>
 
-const char KisChangePaletteCommand::MagicString[] = "Edit palette";
-
-KisChangePaletteCommand::KisChangePaletteCommand()
-    : KUndo2Command(kundo2_i18n(MagicString))
+class KRITAUI_EXPORT KisToolChangesTrackerData
 {
+public:
+    virtual ~KisToolChangesTrackerData();
+    virtual KisToolChangesTrackerData* clone() const;
+};
 
-}
+typedef QSharedPointer<KisToolChangesTrackerData> KisToolChangesTrackerDataSP;
 
-KisChangePaletteCommand::~KisChangePaletteCommand()
-{ }
+Q_DECLARE_METATYPE(KisToolChangesTrackerDataSP)
 
-int KisChangePaletteCommand::id() const
-{
-    return KisCommandUtils::ChangePaletteId;
-}
+#endif // KISTOOLCHANGESTRACKERDATA_H

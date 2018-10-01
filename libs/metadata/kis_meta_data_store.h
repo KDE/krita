@@ -20,7 +20,7 @@
 #ifndef _KIS_META_DATA_STORE_H_
 #define _KIS_META_DATA_STORE_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 
 #include <QHash>
 
@@ -35,7 +35,7 @@ class Value;
  * This class holds the list of metadata entries and schemas (for instance the
  * author of the image, copyright holder, license, aperture, speed...)
  */
-class KRITAIMAGE_EXPORT Store
+class KRITAMETADATA_EXPORT Store
 {
     struct Private;
 public:

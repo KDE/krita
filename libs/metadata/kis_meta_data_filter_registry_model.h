@@ -32,7 +32,7 @@ namespace KisMetaData
  * Use this model to display a list of filters (KisMetaData::Filter) that can be
  * enabled or disabled.
  */
-class KRITAIMAGE_EXPORT FilterRegistryModel : public KoGenericRegistryModel<const Filter*>
+class KRITAMETADATA_EXPORT FilterRegistryModel : public KoGenericRegistryModel<const Filter*>
 {
 public:
     FilterRegistryModel();

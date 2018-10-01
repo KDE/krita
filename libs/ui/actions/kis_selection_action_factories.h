@@ -100,12 +100,17 @@ struct KisInvertSelectionOperation : public KisFilterSelectionOperation {
 };
 
 struct KRITAUI_EXPORT KisSelectionToVectorActionFactory : public KisNoParameterActionFactory {
-    KisSelectionToVectorActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
+    KisSelectionToVectorActionFactory() : KisNoParameterActionFactory("selection-to-vector") {}
+    void run(KisViewManager *view) override;
+};
+
+struct KRITAUI_EXPORT KisSelectionToRasterActionFactory : public KisNoParameterActionFactory {
+    KisSelectionToRasterActionFactory() : KisNoParameterActionFactory("selection-to-raster") {}
     void run(KisViewManager *view) override;
 };
 
 struct KRITAUI_EXPORT KisShapesToVectorSelectionActionFactory : public KisNoParameterActionFactory {
-    KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("paste-new-ui-action") {}
+    KisShapesToVectorSelectionActionFactory() : KisNoParameterActionFactory("shapes-to-vector-selection") {}
     void run(KisViewManager *view) override;
 };
 

@@ -19,7 +19,7 @@
 #ifndef _KIS_META_DATA_SCHEMA_H_
 #define _KIS_META_DATA_SCHEMA_H_
 
-#include <kritaimage_export.h>
+#include <kritametadata_export.h>
 #include <kis_debug.h>
 
 class QString;
@@ -30,7 +30,7 @@ namespace KisMetaData
 class SchemaRegistry;
 class TypeInfo;
 
-class KRITAIMAGE_EXPORT Schema
+class KRITAMETADATA_EXPORT Schema
 {
     friend class SchemaRegistry;
 
@@ -70,6 +70,6 @@ private:
 
 }
 
-KRITAIMAGE_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Schema &c);
+KRITAMETADATA_EXPORT QDebug operator<<(QDebug debug, const KisMetaData::Schema &c);
 
 #endif

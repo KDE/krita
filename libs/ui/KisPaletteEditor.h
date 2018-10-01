@@ -128,7 +128,7 @@ public:
 private Q_SLOTS:
     void slotGroupNameChanged(const QString &newName);
     void slotPaletteChanged();
-    void slotPolluteDoc();
+    void slotSetDocumentModified();
 
 private:
     QString newPaletteFileName(bool isGlobal);

@@ -25,15 +25,9 @@ class KisNodeManagerTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testRotatePaintNode();
-    void testShearPaintNode();
-    void testScalePaintNode();
     void testMirrorXPaintNode();
     void testMirrorYPaintNode();
 
-    void testRotateShapeNode();
-    void testShearShapeNode();
-    void testScaleShapeNode();
     void testMirrorShapeNode();
 
     void testConvertCloneToPaintLayer();

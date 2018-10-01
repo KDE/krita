@@ -45,11 +45,12 @@
 #include <lazybrush/kis_colorize_mask.h>
 #include <kis_layer.h>
 #include <kis_meta_data_merge_strategy.h>
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 #include <kis_filter_strategy.h>
 
 #include <kis_raster_keyframe_channel.h>
 #include <kis_keyframe.h>
+#include "kis_selection.h"
 
 #include "Krita.h"
 #include "Node.h"
@@ -546,7 +547,7 @@ Node* Node::mergeDown()
     return new Node(d->image, d->node->prevSibling());
 }
 
-void Node::scaleNode(int width, int height, QString strategy)
+void Node::scaleNode(const QPointF &origin, int width, int height, QString strategy)
 {
     if (!d->node) return;
     if (!qobject_cast<KisLayer*>(d->node.data())) return;
@@ -555,7 +556,13 @@ void Node::scaleNode(int width, int height, QString strategy)
     KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    d->image->scaleNode(d->node, width, height, actualStrategy);
+    const QRect bounds(d->node->exactBounds());
+
+    d->image->scaleNode(d->node,
+                        origin,
+                        qreal(width) / bounds.width(),
+                        qreal(height) / bounds.height(),
+                        actualStrategy, 0);
 }
 
 void Node::rotateNode(double radians)
@@ -564,7 +571,7 @@ void Node::rotateNode(double radians)
     if (!qobject_cast<KisLayer*>(d->node.data())) return;
     if (!d->node->parent()) return;
 
-    d->image->rotateNode(d->node, radians);
+    d->image->rotateNode(d->node, radians, 0);
 }
 
 void Node::cropNode(int x, int y, int w, int h)
@@ -583,7 +590,7 @@ void Node::shearNode(double angleX, double angleY)
     if (!qobject_cast<KisLayer*>(d->node.data())) return;
     if (!d->node->parent()) return;
 
-    d->image->shearNode(d->node, angleX, angleY);
+    d->image->shearNode(d->node, angleX, angleY, 0);
 }
 
 QImage Node::thumbnail(int w, int h)

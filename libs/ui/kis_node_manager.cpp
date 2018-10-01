@@ -251,11 +251,19 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
     m_d->layerManager.setup(actionManager);
     m_d->maskManager.setup(actionCollection, actionManager);
 
-    KisAction * action  = actionManager->createAction("mirrorNodeX");
+    KisAction * action = 0;
+
+    action = actionManager->createAction("mirrorNodeX");
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
     action  = actionManager->createAction("mirrorNodeY");
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
+
+    action = actionManager->createAction("mirrorAllNodesX");
+    connect(action, SIGNAL(triggered()), this, SLOT(mirrorAllNodesX()));
+
+    action  = actionManager->createAction("mirrorAllNodesY");
+    connect(action, SIGNAL(triggered()), this, SLOT(mirrorAllNodesY()));
 
     action = actionManager->createAction("activateNextLayer");
     connect(action, SIGNAL(triggered()), this, SLOT(activateNextNode()));
@@ -904,7 +912,7 @@ void KisNodeManager::mirrorNodeX()
     } else if (node->inherits("KisMask")) {
         commandName = kundo2_i18n("Mirror Mask X");
     }
-    mirrorNode(node, commandName, Qt::Horizontal);
+    mirrorNode(node, commandName, Qt::Horizontal, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorNodeY()
@@ -917,7 +925,21 @@ void KisNodeManager::mirrorNodeY()
     } else if (node->inherits("KisMask")) {
         commandName = kundo2_i18n("Mirror Mask Y");
     }
-    mirrorNode(node, commandName, Qt::Vertical);
+    mirrorNode(node, commandName, Qt::Vertical, m_d->view->selection());
+}
+
+void KisNodeManager::mirrorAllNodesX()
+{
+    KisNodeSP node = m_d->view->image()->root();
+    mirrorNode(node, kundo2_i18n("Mirror All Layers X"),
+               Qt::Vertical, m_d->view->selection());
+}
+
+void KisNodeManager::mirrorAllNodesY()
+{
+    KisNodeSP node = m_d->view->image()->root();
+    mirrorNode(node, kundo2_i18n("Mirror All Layers Y"),
+               Qt::Vertical, m_d->view->selection());
 }
 
 void KisNodeManager::activateNextNode()
@@ -979,56 +1001,10 @@ void KisNodeManager::switchToPreviouslyActiveNode()
     }
 }
 
-void KisNodeManager::rotate(double radians)
-{
-    if(!m_d->view->image()) return;
-
-    KisNodeSP node = activeNode();
-    if (!node) return;
-
-    if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) return;
-
-    m_d->view->image()->rotateNode(node, radians);
-}
-
-void KisNodeManager::rotate180()
-{
-    rotate(M_PI);
-}
-
-void KisNodeManager::rotateLeft90()
-{
-   rotate(-M_PI / 2);
-}
-
-void KisNodeManager::rotateRight90()
-{
-    rotate(M_PI / 2);
-}
-
-void KisNodeManager::shear(double angleX, double angleY)
-{
-    if (!m_d->view->image()) return;
-
-    KisNodeSP node = activeNode();
-    if (!node) return;
-
-    if(!m_d->view->blockUntilOperationsFinished(m_d->view->image())) return;
-
-    m_d->view->image()->shearNode(node, angleX, angleY);
-}
-
-void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrategy)
-{
-    KisNodeSP node = activeNode();
-    KIS_ASSERT_RECOVER_RETURN(node);
-
-    m_d->view->image()->scaleNode(node, sx, sy, filterStrategy);
-
-    nodesUpdated();
-}
-
-void KisNodeManager::mirrorNode(KisNodeSP node, const KUndo2MagicString& actionName, Qt::Orientation orientation)
+void KisNodeManager::mirrorNode(KisNodeSP node,
+                                const KUndo2MagicString& actionName,
+                                Qt::Orientation orientation,
+                                KisSelectionSP selection)
 {
     KisImageSignalVector emitSignals;
     emitSignals << ModifiedSignal;
@@ -1037,10 +1013,20 @@ void KisNodeManager::mirrorNode(KisNodeSP node, const KUndo2MagicString& actionN
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
-    KisProcessingVisitorSP visitor =
-        new KisMirrorProcessingVisitor(m_d->view->image()->bounds(), orientation);
+    KisProcessingVisitorSP visitor;
 
-    applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    if (selection) {
+        visitor = new KisMirrorProcessingVisitor(selection, orientation);
+    } else {
+        visitor = new KisMirrorProcessingVisitor(m_d->view->image()->bounds(), orientation);
+    }
+
+    if (!selection) {
+        applicator.applyVisitorAllFrames(visitor, KisStrokeJobData::CONCURRENT);
+    } else {
+        applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
+    }
+
     applicator.end();
 
     nodesUpdated();

@@ -42,7 +42,6 @@
 #include <KisPaletteModel.h>
 #include <kis_color_button.h>
 
-#include <KisChangePaletteCommand.h>
 #include "KisPaletteEditor.h"
 
 struct KisPaletteEditor::PaletteInfo {
@@ -92,7 +91,7 @@ void KisPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     slotPaletteChanged();
     connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotPaletteChanged()));
-    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotPolluteDoc()));
+    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotSetDocumentModified()));
 }
 
 void KisPaletteEditor::setView(KisViewManager *view)
@@ -342,11 +341,9 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
     m_d->model->setEntry(KisSwatch(color), index);
 }
 
-void KisPaletteEditor::slotPolluteDoc()
+void KisPaletteEditor::slotSetDocumentModified()
 {
-    if ((!m_d->isGlobalModified && m_d->modified.isGlobal) == false) {
-        m_d->view->document()->addCommand(new KisChangePaletteCommand());
-    }
+    m_d->view->document()->setModified(true);
 }
 
 void KisPaletteEditor::removeEntry(const QModelIndex &index)
@@ -374,28 +371,35 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
     if (!m_d->view->document()) { return; }
 
     KoDialog dlg;
+    dlg.setCaption(i18nc("@title:window", "Add a Color"));
     QFormLayout *editableItems = new QFormLayout(&dlg);
     dlg.mainWidget()->setLayout(editableItems);
-    QLineEdit *lnGroupName = new QLineEdit(&dlg);
 
     QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
         renameGroup(groupName);
         updatePalette();
-    } else {
+    }
+    else {
+
         QLineEdit *lnIDName = new QLineEdit(&dlg);
+        QLineEdit *lnGroupName = new QLineEdit(&dlg);
         KisColorButton *bnColor = new KisColorButton(&dlg);
         QCheckBox *chkSpot = new QCheckBox(&dlg);
-        KisSwatch entry = m_d->model->getEntry(index);
         chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
+
+        KisSwatch entry = m_d->model->getEntry(index);
+
         editableItems->addRow(i18n("ID"), lnIDName);
-        editableItems->addRow(i18nc("Name for a swatch group", "Name"), lnGroupName);
+        editableItems->addRow(i18nc("Name for a swatch group", "Swatch group name"), lnGroupName);
         editableItems->addRow(i18n("Color"), bnColor);
         editableItems->addRow(i18n("Spot"), chkSpot);
+
         lnGroupName->setText(entry.name());
         lnIDName->setText(entry.id());
         bnColor->setColor(entry.color());
         chkSpot->setChecked(entry.spotColor());
+
         if (dlg.exec() == KoDialog::Accepted) {
             entry.setName(lnGroupName->text());
             entry.setId(lnIDName->text());
@@ -649,7 +653,6 @@ void KisPaletteEditor::uploadPaletteList() const
         }
     }
     m_d->view->document()->setPaletteList(list);
-    m_d->view->document()->addCommand(new KisChangePaletteCommand());
 }
 
 QString KisPaletteEditor::filenameFromPath(const QString &path) const

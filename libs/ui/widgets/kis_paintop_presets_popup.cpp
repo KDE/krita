@@ -159,6 +159,44 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     brushConfigAction->setCheckable(false);
     connect (brushConfigAction, SIGNAL(triggered(bool)), this, SLOT(slotRenameBrushActivated()));
 
+    brushConfigurationMenu->addSeparator(); // we are going from showing to confi. so add a separator
+
+    // section for customizing/showing live brush preview
+    brushConfigAction = brushConfigurationMenu->addAction(i18n("Show Brush Preview Area"));
+    brushConfigAction->setCheckable(true);
+    brushConfigAction->setChecked(true);
+    connect(brushConfigAction, SIGNAL(toggled(bool)),this, SLOT(slotShowBrushPreviewArea(bool)));
+
+
+
+    // Change live preview size
+    QSlider* livePreviewSizeSlider = new QSlider(this);
+    livePreviewSizeSlider->setOrientation(Qt::Horizontal);
+    livePreviewSizeSlider->setRange(30, 90);
+    livePreviewSizeSlider->setValue(50);
+    livePreviewSizeSlider->setMinimumHeight(30);
+    livePreviewSizeSlider->setMinimumWidth(90);
+    livePreviewSizeSlider->setTickInterval(5);
+
+
+    QWidgetAction *livePreviewSliderAction= new QWidgetAction(this);
+    livePreviewSliderAction->setDefaultWidget(livePreviewSizeSlider);
+    connect(livePreviewSizeSlider, SIGNAL(valueChanged(int)), this, SLOT(slotLivePreviewSizeChanged(int)));
+
+    brushConfigurationMenu->addSection(i18n("Brush Preview Size:"));
+    brushConfigurationMenu->addAction(livePreviewSliderAction);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     m_d->uiWdgPaintOpPresetSettings.configureBrushesToolButton->setMenu(brushConfigurationMenu);
@@ -332,6 +370,16 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
 }
 
+void KisPaintOpPresetsPopup::slotLivePreviewSizeChanged(int previewSize)
+{
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setMinimumHeight(previewSize);
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setMaximumHeight(previewSize);
+
+    // re-generates canvas and config
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup();
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->updateStroke();
+}
+
 void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
 {
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
@@ -342,6 +390,10 @@ void KisPaintOpPresetsPopup::slotBlackListCurrentPreset()
     }
 }
 
+void KisPaintOpPresetsPopup::slotShowBrushPreviewArea(bool showLiveBrushPreview)
+{
+    m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setVisible(showLiveBrushPreview);
+}
 
 void KisPaintOpPresetsPopup::slotRenameBrushActivated()
 {

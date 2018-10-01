@@ -101,6 +101,8 @@ public Q_SLOTS:
     void slotRenameBrushDeactivated();
     void slotSaveRenameCurrentBrush();
     void slotCreateNewBrushPresetEngine();
+    void slotShowBrushPreviewArea(bool showLiveBrushPreview);
+    void slotLivePreviewSizeChanged(int previewSize);
 
 Q_SIGNALS:
     void savePresetClicked();

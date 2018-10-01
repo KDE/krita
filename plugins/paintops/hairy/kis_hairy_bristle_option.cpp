@@ -29,7 +29,7 @@ public:
         : QWidget(parent) {
         setupUi(this);
 
-        scaleBox->setPrefix(i18n("Random Offset: "));
+        rndBox->setPrefix(i18n("Random Offset: "));
         rndBox->setRange(-10.0, 10.0, 2);
         rndBox->setValue(2.0);
 

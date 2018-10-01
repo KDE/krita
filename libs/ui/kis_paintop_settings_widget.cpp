@@ -81,15 +81,14 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     m_d->optionsStackScrollableArea->setWidgetResizable(true);
     m_d->optionsStackScrollableArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     m_d->optionsStackScrollableArea->setWidget(m_d->optionsStack);
-
-    policy = QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_d->optionsStackScrollableArea->setSizePolicy(policy);
 
 
     // TODO: This area seems to not be collapsing right, so manually set width for now
     m_d->optionsStack->setMaximumWidth(330);
-    m_d->optionsStackScrollableArea->setMaximumWidth(350);
 
+    m_d->optionsStackScrollableArea->setMaximumWidth(350);
+    m_d->optionsStackScrollableArea->setMinimumHeight(530); // change this to change height for setting area
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_d->optionsList);

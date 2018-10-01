@@ -33,7 +33,7 @@
 void TestTagLoader ::testLoadTag()
 {
     KisTag tagLoader;
-    QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
+    QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
 
     QVERIFY(f.exists());
 
@@ -67,7 +67,7 @@ void TestTagLoader ::testLoadTag()
 void TestTagLoader::testSaveTag()
 {
     KisTag tag1;
-    QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.desktop");
+    QFile f(QString(FILES_DATA_DIR) + "paintoppresets/test.tag");
 
     QVERIFY(f.exists());
 

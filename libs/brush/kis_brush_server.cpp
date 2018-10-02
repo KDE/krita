@@ -44,7 +44,7 @@ class BrushResourceServer : public KisBrushResourceServer
 public:
 
     BrushResourceServer()
-        : KisBrushResourceServer("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg")
+        : KisBrushResourceServer("brushes", "*.gbr:*.gih:*.abr:*.png:*.svg")
     {
     }
 

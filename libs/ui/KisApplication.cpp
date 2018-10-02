@@ -236,21 +236,21 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("kis_brushes", "data", "/brushes/");
+    KoResourcePaths::addResourceType("brushes", "data", "/brushes/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("kis_taskset", "data", "/taskset/");
     KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
     KoResourcePaths::addResourceType("kis_resourcebundles", "data", "/bundles/");
     KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
-    KoResourcePaths::addResourceType("kis_paintoppresets", "data", "/paintoppresets/");
-    KoResourcePaths::addResourceType("kis_workspaces", "data", "/workspaces/");
-    KoResourcePaths::addResourceType("kis_windowlayouts", "data", "/windowlayouts/");
-    KoResourcePaths::addResourceType("kis_sessions", "data", "/sessions/");
+    KoResourcePaths::addResourceType("paintoppresets", "data", "/paintoppresets/");
+    KoResourcePaths::addResourceType("workspaces", "data", "/workspaces/");
+    KoResourcePaths::addResourceType("windowlayouts", "data", "/windowlayouts/");
+    KoResourcePaths::addResourceType("sessions", "data", "/sessions/");
     KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
-    KoResourcePaths::addResourceType("ko_patterns", "data", "/patterns/", true);
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/");
-    KoResourcePaths::addResourceType("ko_gradients", "data", "/gradients/", true);
-    KoResourcePaths::addResourceType("ko_palettes", "data", "/palettes/", true);
+    KoResourcePaths::addResourceType("patterns", "data", "/patterns/", true);
+    KoResourcePaths::addResourceType("gradients", "data", "/gradients/");
+    KoResourcePaths::addResourceType("gradients", "data", "/gradients/", true);
+    KoResourcePaths::addResourceType("palettes", "data", "/palettes/", true);
     KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
     KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
     KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
@@ -261,17 +261,17 @@ void KisApplication::addResourceTypes()
     KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
     KoResourcePaths::addResourceType("symbols", "data", "/symbols");
     KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
-    KoResourcePaths::addResourceType("ko_gamutmasks", "data", "/gamutmasks/", true);
+    KoResourcePaths::addResourceType("gamutmasks", "data", "/gamutmasks/", true);
 
     //    // Extra directories to look for create resources. (Does anyone actually use that anymore?)
-    //    KoResourcePaths::addResourceDir("ko_gradients", "/usr/share/create/gradients/gimp");
-    //    KoResourcePaths::addResourceDir("ko_gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
-    //    KoResourcePaths::addResourceDir("ko_patterns", "/usr/share/create/patterns/gimp");
-    //    KoResourcePaths::addResourceDir("ko_patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
-    //    KoResourcePaths::addResourceDir("kis_brushes", "/usr/share/create/brushes/gimp");
-    //    KoResourcePaths::addResourceDir("kis_brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
-    //    KoResourcePaths::addResourceDir("ko_palettes", "/usr/share/create/swatches");
-    //    KoResourcePaths::addResourceDir("ko_palettes", QDir::homePath() + QString("/.create/swatches"));
+    //    KoResourcePaths::addResourceDir("gradients", "/usr/share/create/gradients/gimp");
+    //    KoResourcePaths::addResourceDir("gradients", QDir::homePath() + QString("/.create/gradients/gimp"));
+    //    KoResourcePaths::addResourceDir("patterns", "/usr/share/create/patterns/gimp");
+    //    KoResourcePaths::addResourceDir("patterns", QDir::homePath() + QString("/.create/patterns/gimp"));
+    //    KoResourcePaths::addResourceDir("brushes", "/usr/share/create/brushes/gimp");
+    //    KoResourcePaths::addResourceDir("brushes", QDir::homePath() + QString("/.create/brushes/gimp"));
+    //    KoResourcePaths::addResourceDir("palettes", "/usr/share/create/swatches");
+    //    KoResourcePaths::addResourceDir("palettes", QDir::homePath() + QString("/.create/swatches"));
 
     // Make directories for all resources we can save, and tags
     QDir d;
@@ -332,6 +332,7 @@ bool KisApplication::loadResources()
     reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", QStringList() << "image/svg+xml"));
     reg->add(new KisResourceLoader<KisSessionResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
     reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", QStringList() << "application/x-krita-session"));
+    reg->add(new KisResourceLoader<KoGamutMask>("gamutmasks", "gamutmasks", QStringList() << "application/x-krita-gamutmask"));
 
     if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), i18n("Could not create the resources cache database. Krita will quit now."));
@@ -344,6 +345,7 @@ bool KisApplication::loadResources()
         QMessageBox::critical(0, i18nc("@title:window", "Krita: Fatal error"), KisResourceLocator::instance()->errorMessages().join('\n') + i18n("\n\nKrita will quit now."));
         return false;
     }
+
 
     setSplashScreenLoadingText(i18n("Loading Resources..."));
     processEvents();

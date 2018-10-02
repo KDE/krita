@@ -272,6 +272,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "krf";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "application/x-krita-gamutmasks";
+        mimeType.description = i18nc("description of a file type", "Krita Gamut Mask");
+        mimeType.suffixes = QStringList() << "kgm";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");
         mimeType.suffixes = QStringList() << "bay" << "bmq" << "cr2" << "crw" << "cs1" << "dc2" << "dcr" << "dng" << "erf" << "fff" << "hdr" << "k25" << "kdc" << "mdc" << "mos" << "mrw" << "nef" << "orf" << "pef" << "pxn" << "raf" << "raw" << "rdc" << "sr2" << "srf" << "x3f" << "arw" << "3fr" << "cine" << "ia" << "kc2" << "mef" << "nrw" << "qtk" << "rw2" << "sti" << "rwl" << "srw";

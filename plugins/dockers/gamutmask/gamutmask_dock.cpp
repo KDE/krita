@@ -142,7 +142,7 @@ bool GamutMaskDock::openMaskEditor()
     }
 
     // find the template resource first, so we can abort the action early on
-    QString maskTemplateFile = KoResourcePaths::findResource("ko_gamutmasks", "GamutMaskTemplate.kra");
+    QString maskTemplateFile = KoResourcePaths::findResource("gamutmasks", "GamutMaskTemplate.kra");
     if (maskTemplateFile.isEmpty() || maskTemplateFile.isNull() || !QFile::exists(maskTemplateFile)) {
         dbgPlugins << "GamutMaskDock::openMaskEditor(): maskTemplateFile (" << maskTemplateFile << ") was not found on the system";
         getUserFeedback(i18n("Could not open gamut mask for editing."),
@@ -351,7 +351,7 @@ KoGamutMask *GamutMaskDock::createMaskResource(KoGamutMask* sourceMask, QString 
     } else {
         newMask = new KoGamutMask();
 
-        QString defaultPreviewPath = KoResourcePaths::findResource("ko_gamutmasks", "empty_mask_preview.png");
+        QString defaultPreviewPath = KoResourcePaths::findResource("gamutmasks", "empty_mask_preview.png");
         KIS_SAFE_ASSERT_RECOVER_NOOP(!(defaultPreviewPath.isEmpty() || defaultPreviewPath.isNull() || !QFile::exists(defaultPreviewPath)));
 
         newMask->setImage(QImage(defaultPreviewPath, "PNG"));

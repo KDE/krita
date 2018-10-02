@@ -126,19 +126,19 @@ struct Q_DECL_HIDDEN KoResourceServerProvider::Private
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 {
-    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
+    d->patternServer = new KoResourceServerSimpleConstruction<KoPattern>("patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternServer->loadResources(blacklistFileNames(d->patternServer->fileNames(), d->patternServer->blackListedFiles()));
 
-    d->gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
+    d->gradientServer = new GradientResourceServer("gradients", "*.kgr:*.svg:*.ggr");
     d->gradientServer->loadResources(blacklistFileNames(d->gradientServer->fileNames(), d->gradientServer->blackListedFiles()));
 
-    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("ko_palettes", "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
+    d->paletteServer = new KoResourceServerSimpleConstruction<KoColorSet>("palettes", "*.kpl:*.gpl:*.pal:*.act:*.aco:*.css:*.colors:*.xml:*.sbz");
     d->paletteServer->loadResources(blacklistFileNames(d->paletteServer->fileNames(), d->paletteServer->blackListedFiles()));
 
     d->svgSymbolCollectionServer = new KoResourceServerSimpleConstruction<KoSvgSymbolCollectionResource>("symbols", "*.svg");
     d->svgSymbolCollectionServer->loadResources(blacklistFileNames(d->svgSymbolCollectionServer->fileNames(), d->svgSymbolCollectionServer->blackListedFiles()));
 
-    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("ko_gamutmasks", "*.kgm");
+    d->gamutMaskServer = new KoResourceServerSimpleConstruction<KoGamutMask>("gamutmasks", "*.kgm");
     d->gamutMaskServer->loadResources(blacklistFileNames(d->gamutMaskServer->fileNames(), d->gamutMaskServer->blackListedFiles()));
 }
 

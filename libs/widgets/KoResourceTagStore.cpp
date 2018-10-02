@@ -96,7 +96,7 @@ QStringList KoResourceTagStore::tagNamesList() const
 
 void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
 {
-//    if (d->resourceServer->type() == "kis_paintoppresets" && resource) {
+//    if (d->resourceServer->type() == "paintoppresets" && resource) {
 //        qDebug() << "\t\t\taddTag" << tag << resource->filename() << d->tagList[tag] << d->md5ToTag.value(resource->md5()) << d->identifierToTag.values(resource->filename());
 //    }
 
@@ -125,7 +125,7 @@ void KoResourceTagStore::addTag(KoResource* resource, const QString& tag)
             d->tagList[tag]++;
         }
     }
-//    if (d->resourceServer->type() == "kis_paintoppresets" && resource) {
+//    if (d->resourceServer->type() == "paintoppresets" && resource) {
 //        qDebug() << "\t\t\t\tafter addTag" << tag << resource->filename() << d->tagList[tag] << d->md5ToTag.value(resource->md5()) << d->identifierToTag.values(resource->filename());
 //    }
 
@@ -205,7 +205,7 @@ void KoResourceTagStore::loadTags()
 
 void KoResourceTagStore::clearOldSystemTags()
 {
-    if (d->resourceServer->type() == "kis_paintoppresets") {
+    if (d->resourceServer->type() == "paintoppresets") {
 //        qDebug() << "clearOldSystemTags" << d->tagList;
         Q_FOREACH(const QString &systemTag, krita3PresetSystemTags) {
 //            qDebug() << "\t" << systemTag << d->tagList[systemTag];
@@ -308,7 +308,7 @@ void KoResourceTagStore::readXMLFile(const QString &tagstore)
     }
 
 //    qDebug() << "\treadXMLFile()." << tagstore  << d->resourceServer->type() << "Server has" << d->resourceServer->resourceCount() << "resources";
-    if (d->resourceServer->type() == "kis_paintoppresets") {
+    if (d->resourceServer->type() == "paintoppresets") {
 //        Q_FOREACH(const QString &line, kisBacktrace().split("\n")) {
 //            qDebug() << line;
 //        }

@@ -64,6 +64,7 @@ public:
         : m_type(type)
         , m_extensions(extensions)
     {
+        qDebug() << "Creating KoResourceServerBase" << m_type << m_extensions;
     }
 
     virtual ~KoResourceServerBase() {}

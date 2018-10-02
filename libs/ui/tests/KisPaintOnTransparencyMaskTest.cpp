@@ -120,7 +120,7 @@ private:
 
 void KisPaintOnTransparencyMaskTest::initTestCase()
 {
-    KoResourcePaths::addResourceType("kis_brushes", "data", FILES_DATA_DIR);
+    KoResourcePaths::addResourceType("brushes", "data", FILES_DATA_DIR);
 }
 
 void KisPaintOnTransparencyMaskTest::test()

@@ -210,7 +210,7 @@ bool KoResourceBundle::save()
 
     //    Q_FOREACH (const QString &resType, m_manifest.types()) {
 
-    //        if (resType == "ko_gradients") {
+    //        if (resType == "gradients") {
     //            KoResourceServer<KoAbstractGradient>* gradientServer = KoResourceServerProvider::instance()->gradientServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KoResource *res = gradientServer->resourceByMD5(ref.md5sum);
@@ -225,7 +225,7 @@ bool KoResourceBundle::save()
     //                }
     //            }
     //        }
-    //        else if (resType  == "ko_patterns") {
+    //        else if (resType  == "patterns") {
     //            KoResourceServer<KoPattern>* patternServer = KoResourceServerProvider::instance()->patternServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KoResource *res = patternServer->resourceByMD5(ref.md5sum);
@@ -240,7 +240,7 @@ bool KoResourceBundle::save()
     //                }
     //            }
     //        }
-    //        else if (resType  == "kis_brushes") {
+    //        else if (resType  == "brushes") {
     //            KisBrushResourceServer* brushServer = KisBrushServer::instance()->brushServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KisBrushSP brush = brushServer->resourceByMD5(ref.md5sum);
@@ -256,7 +256,7 @@ bool KoResourceBundle::save()
     //                }
     //            }
     //        }
-    //        else if (resType  == "ko_palettes") {
+    //        else if (resType  == "palettes") {
     //            KoResourceServer<KoColorSet>* paletteServer = KoResourceServerProvider::instance()->paletteServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KoResource *res = paletteServer->resourceByMD5(ref.md5sum);
@@ -271,7 +271,7 @@ bool KoResourceBundle::save()
     //                }
     //            }
     //        }
-    //        else if (resType  == "kis_workspaces") {
+    //        else if (resType  == "workspaces") {
     //            KoResourceServer< KisWorkspaceResource >* workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KoResource *res = workspaceServer->resourceByMD5(ref.md5sum);
@@ -286,7 +286,7 @@ bool KoResourceBundle::save()
     //                }
     //            }
     //        }
-    //        else if (resType  == "kis_paintoppresets") {
+    //        else if (resType  == "paintoppresets") {
     //            KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     //            Q_FOREACH (const KoResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
     //                KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);

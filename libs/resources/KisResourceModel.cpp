@@ -19,12 +19,90 @@
 
 #include "KisResourceModel.h"
 
-KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent, QSqlDatabase db)
-    : QSqlRelationalTableModel(parent, db)
+#include <QBuffer>
+#include <QImage>
+
+KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
+    : QAbstractTableModel(parent)
+    , m_resourceType(resourceType)
 {
-    setTable("resources");
-    setRelation(1, QSqlRelation("resource_types", "id", "name"));
-//    setRelation(1, QSqlRelation("storages", "id", "location"));
-    setFilter(QString("relTblAl_1 = %1").arg(resourceType));
-    select();
+    bool r = m_query.prepare("SELECT resources.id\n"
+                             ",      resources.storage_id\n"
+                             ",      resources.name\n"
+                             ",      resources.filename\n"
+                             ",      resources.tooltip\n"
+                             ",      resources.thumbnail\n"
+                             ",      resources.status\n"
+                             "FROM   resources\n"
+                             ",      resource_types\n"
+                             "WHERE  resources.resource_type_id = resource_types.id\n"
+                             "AND    resource_types.name = :resource_type");
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceModel query" << m_query.lastError();
+    }
+    m_query.bindValue(":resource_type", resourceType);
+    r = m_query.exec();
+    if (!r) {
+        qWarning() << "Could not select" << resourceType << "resources" << m_query.lastError();
+    }
+    Q_ASSERT(m_query.isSelect());
+}
+
+int KisResourceModel::columnCount(const QModelIndex &/*parent*/) const
+{
+    return 1;
+}
+
+QVariant KisResourceModel::data(const QModelIndex &index, int role) const
+{
+    QVariant v;
+    if (!index.isValid()) return v;
+
+    if (index.row() > rowCount()) return v;
+
+    bool pos = const_cast<KisResourceModel*>(this)->m_query.seek(index.row());
+
+    if (pos) {
+        switch(role) {
+        case Qt::DisplayRole:
+            return m_query.value("name");
+        case Qt::DecorationRole:
+        {
+            QByteArray ba = m_query.value("thumbnail").toByteArray();
+            QBuffer buf(&ba);
+            buf.open(QBuffer::ReadOnly);
+            QImage img;
+            img.load(&buf, "PNG");
+            return QVariant::fromValue<QImage>(img);
+        }
+        case Qt::ToolTipRole:
+            /* Falls through. */
+        case Qt::StatusTipRole:
+            /* Falls through. */
+        case Qt::WhatsThisRole:
+            return m_query.value("tooltip");
+        default:
+            ;
+        }
+    }
+
+    return v;
+}
+
+int KisResourceModel::rowCount(const QModelIndex &) const
+{
+    if (m_cachedRowCount < 0) {
+        QSqlQuery q;
+        q.prepare("SELECT count(*)\n"
+                  "FROM   resources\n"
+                  ",      resource_types\n"
+                  "WHERE  resources.resource_type_id = resource_types.id\n"
+                  "AND    resource_types.name = :resource_type");
+        q.bindValue(":resource_type", m_resourceType);
+        q.exec();
+        q.first();
+
+        const_cast<KisResourceModel*>(this)->m_cachedRowCount = q.value(0).toInt();
+    }
+    return m_cachedRowCount;
 }

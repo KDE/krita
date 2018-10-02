@@ -33,6 +33,8 @@ private Q_SLOTS:
     void testLocatorInitalization();
     void testStorageInitialization();
     void testLocatorSynchronization();
+    void testResources();
+    void testTags();
     void cleanupTestCase();
 private:
 

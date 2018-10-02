@@ -20,14 +20,33 @@
 #ifndef KISRESOURCEMODEL_H
 #define KISRESOURCEMODEL_H
 
-#include <QSqlRelationalTableModel>
+#include <QAbstractTableModel>
+#include <QtSql>
+
 #include <kritaresources_export.h>
 
-class KRITARESOURCES_EXPORT  KisResourceModel : public QSqlRelationalTableModel
+/**
+ * @brief The KisResourceModel class provides access to the cache database
+ * for a particular resource type.
+ */
+class KRITARESOURCES_EXPORT  KisResourceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    KisResourceModel(const QString &resourceType, QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
+    KisResourceModel(const QString &resourceType, QObject *parent = 0);
+
+// QAbstractItemModel API
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+
+// Resources API
+
+private:
+    QSqlQuery m_query;
+    QString m_resourceType;
+    int m_cachedRowCount {-1};
 };
 
 #endif // KISRESOURCEMODEL_H

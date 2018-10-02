@@ -66,6 +66,8 @@ QSqlError initDb(const QString &location)
     QSqlDatabase db = QSqlDatabase::addDatabase(dbDriver);
     db.setDatabaseName(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
+    qDebug() << "QuerySize supported" << db.driver()->hasFeature(QSqlDriver::QuerySize);
+
     if (!db.open()) {
         infoResources << "Could not connect to resource cache database";
         return db.lastError();

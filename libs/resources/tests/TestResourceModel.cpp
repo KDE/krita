@@ -62,17 +62,45 @@ void TestResourceModel::initTestCase()
 
     m_locator = KisResourceLocator::instance();
 
-    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (!KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))) {
+        qDebug() << "Could not initialize KisResourceCacheDb on" << QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
+    QVERIFY(KisResourceCacheDb::isValid());
+
     KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
     if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
+
     QVERIFY(r == KisResourceLocator::LocatorError::Ok);
     QVERIFY(QDir(m_dstLocation).exists());
 }
 
+
 void TestResourceModel::testRowCount()
 {
-    KisResourceModel resourceModel("paintoppresets");
-    qDebug() << resourceModel.rowCount();
+    QSqlQuery q;
+    QVERIFY(q.prepare("SELECT count(*)\n"
+                      "FROM   resources\n"
+                      ",      resource_types\n"
+                      "WHERE  resources.resource_type_id = resource_types.id\n"
+                      "AND    resource_types.name = :resource_type"));
+    q.bindValue(":resource_type", resourceType);
+    QVERIFY(q.exec());
+    q.first();
+    int rowCount = q.value(0).toInt();
+    QVERIFY(rowCount == 1);
+
+    KisResourceModel resourceModel(resourceType);
+    QCOMPARE(resourceModel.rowCount(), rowCount);
+}
+
+void TestResourceModel::testData()
+{
+    KisResourceModel resourceModel(resourceType);
+
+    for (int i = 0; i < resourceModel.rowCount(); ++i)  {
+        QVariant v = resourceModel.data(resourceModel.index(i, 0), Qt::DisplayRole);
+        QCOMPARE(v.toString(), "test.kpp");
+    }
 }
 
 void TestResourceModel::cleanupTestCase()

@@ -28,6 +28,7 @@ class TestResourceModel : public QObject
 private Q_SLOTS:
     void initTestCase();
     void testRowCount();
+    void testData();
     void cleanupTestCase();
 private:
 
@@ -35,6 +36,8 @@ private:
     QString m_dstLocation;
 
     KisResourceLocator *m_locator;
+    const QString resourceType = "paintoppresets";
+
 };
 
 #endif

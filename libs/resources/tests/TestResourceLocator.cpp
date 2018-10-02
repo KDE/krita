@@ -105,6 +105,26 @@ void TestResourceLocator::testLocatorSynchronization()
     QVERIFY(m_locator->synchronizeDb());
 }
 
+void TestResourceLocator::testResources()
+{
+    QSqlQuery query;
+    bool r = query.exec("SELECT COUNT(*) FROM resources");
+    QVERIFY(r);
+    QVERIFY(query.lastError() == QSqlError());
+    query.first();
+    QCOMPARE(query.value(0).toInt(), 5);
+}
+
+void TestResourceLocator::testTags()
+{
+    QSqlQuery query;
+    bool r = query.exec("SELECT COUNT(*) FROM tags");
+    QVERIFY(r);
+    QVERIFY(query.lastError() == QSqlError());
+    query.first();
+    QCOMPARE(query.value(0).toInt(), 1);
+}
+
 void TestResourceLocator::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();

@@ -54,6 +54,7 @@
 #include <KoClipPath.h>
 #include <KoClipMask.h>
 #include <KoXmlNS.h>
+#include <QXmlSimpleReader>
 
 #include "SvgUtil.h"
 #include "SvgShape.h"
@@ -142,6 +143,42 @@ SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)
 SvgParser::~SvgParser()
 {
     qDeleteAll(m_symbols);
+}
+
+KoXmlDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
+{
+    QXmlInputSource source(device);
+    return createDocumentFromSvg(&source, errorMsg, errorLine, errorColumn);
+}
+
+KoXmlDocument SvgParser::createDocumentFromSvg(const QByteArray &data, QString *errorMsg, int *errorLine, int *errorColumn)
+{
+    QXmlInputSource source;
+    source.setData(data);
+
+    return createDocumentFromSvg(&source, errorMsg, errorLine, errorColumn);
+}
+
+KoXmlDocument SvgParser::createDocumentFromSvg(const QString &data, QString *errorMsg, int *errorLine, int *errorColumn)
+{
+    QXmlInputSource source;
+    source.setData(data);
+
+    return createDocumentFromSvg(&source, errorMsg, errorLine, errorColumn);
+}
+
+KoXmlDocument SvgParser::createDocumentFromSvg(QXmlInputSource *source, QString *errorMsg, int *errorLine, int *errorColumn)
+{
+    // we should read all spaces to parse text node correctly
+    QXmlSimpleReader reader;
+    reader.setFeature("http://qt-project.org/xml/features/report-whitespace-only-CharData", true);
+
+    QDomDocument doc;
+    if (!doc.setContent(source, &reader, errorMsg, errorLine, errorColumn)) {
+        return QDomDocument();
+    }
+
+    return doc;
 }
 
 void SvgParser::setXmlBaseDir(const QString &baseDir)

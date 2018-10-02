@@ -53,6 +53,7 @@ private Q_SLOTS:
     void testConvertFromIncorrectStrippedSvg();
 
     void testEmptyTextChunk();
+    void testTrailingWhitespace();
 
     void testConvertHtmlToSvg();
     void testTextWithMultipleRelativeOffsets();

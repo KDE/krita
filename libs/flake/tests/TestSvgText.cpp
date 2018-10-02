@@ -1057,6 +1057,70 @@ void TestSvgText::testEmptyTextChunk()
     t.run();
 }
 
+void TestSvgText::testTrailingWhitespace()
+{
+    QStringList chunkA;
+    chunkA << "aaa";
+    chunkA << " aaa";
+    chunkA << "aaa ";
+    chunkA << " aaa ";
+
+    QStringList chunkB;
+    chunkB << "bbb";
+    chunkB << " bbb";
+    chunkB << "bbb ";
+    chunkB << " bbb ";
+
+    QStringList linkChunk;
+    linkChunk << "";
+    linkChunk << " ";
+    linkChunk << "<tspan></tspan>";
+    linkChunk << "<tspan> </tspan>";
+
+
+    const QString dataTemplate =
+            "<svg width=\"100px\" height=\"30px\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<g id=\"test\">"
+
+            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
+            "        fill=\"none\" stroke=\"red\"/>"
+
+            "    <text id=\"testRect\" x=\"2\" y=\"24\""
+            "        font-family=\"DejaVu Sans\" font-size=\"10\" fill=\"blue\" >"
+            "        <tspan>%1</tspan>%2<tspan>%3</tspan>"
+            "    </text>"
+
+            "</g>"
+
+            "</svg>";
+
+    for (auto itL = linkChunk.constBegin(); itL != linkChunk.constEnd(); ++itL) {
+        for (auto itA = chunkA.constBegin(); itA != chunkA.constEnd(); ++itA) {
+            for (auto itB = chunkB.constBegin(); itB != chunkB.constEnd(); ++itB) {
+                if (itA->rightRef(1) != " " &&
+                    itB->leftRef(1) != " " &&
+                    *itL != " " &&
+                    *itL != linkChunk.last()) continue;
+
+                QString cleanLink = *itL;
+                cleanLink.replace('/', '_');
+
+                qDebug() << "Testcase:" << *itA << cleanLink << *itB;
+
+                const QString data = dataTemplate.arg(*itA, *itL, *itB);
+                SvgRenderTester t (data);
+                t.setFuzzyThreshold(5);
+                //t.test_standard(QString("text_trailing_%1_%2_%3").arg(*itA).arg(cleanLink).arg(*itB), QSize(70, 30), 72.0);
+
+                // all files should look exactly the same!
+                t.test_standard(QString("text_whitespace"), QSize(70, 30), 72.0);
+            }
+        }
+    }
+}
+
 void TestSvgText::testConvertHtmlToSvg()
 {
     const QString html =

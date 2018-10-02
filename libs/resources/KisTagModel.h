@@ -15,17 +15,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KOTAGMODEL_H
-#define KOTAGMODEL_H
+#ifndef KISTAGMODEL_H
+#define KISTAGMODEL_H
 
 #include <QObject>
 #include <QAbstractItemModel>
 
 
-class KoTagModel : public QAbstractItemModel
+class KisTagModel : public QAbstractItemModel
 {
 public:
-    KoTagModel();
+    KisTagModel();
 };
 
 #endif // KOTAGMODEL_H

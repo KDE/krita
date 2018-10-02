@@ -15,20 +15,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef TESTKISRESOURCEMODEL_H
-#define TESTKISRESOURCEMODEL_H
+#ifndef TESTRESOURCEMODEL_H
+#define TESTRESOURCEMODEL_H
 
 #include <QObject>
+#include <QtSql>
 
-class TestKisResourceModel : public QObject
+class TestResourceModel : public QObject
 {
     Q_OBJECT
-public:
-    explicit TestKisResourceModel(QObject *parent = nullptr);
-
-signals:
-
-public slots:
+private Q_SLOTS:
+    void initTestCase();
+    void testRowCount();
+    void cleanupTestCase();
+private:
+    QSqlDatabase m_sqlDb;
 };
 
-#endif // TESTKISRESOURCEMODEL_H
+#endif

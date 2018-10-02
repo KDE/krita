@@ -21,12 +21,13 @@
 #define KISRESOURCEMODEL_H
 
 #include <QSqlRelationalTableModel>
+#include <kritaresources_export.h>
 
-class KisResourceModel : public QSqlRelationalTableModel
+class KRITARESOURCES_EXPORT  KisResourceModel : public QSqlRelationalTableModel
 {
     Q_OBJECT
 public:
-    KisResourceModel();
+    KisResourceModel(const QString &resourceType, QObject *parent = 0, QSqlDatabase db = QSqlDatabase());
 };
 
 #endif // KISRESOURCEMODEL_H

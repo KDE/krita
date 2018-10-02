@@ -86,21 +86,6 @@ class FolderItem : public KisResourceStorage::ResourceItem
 {
 public:
     ~FolderItem() override {}
-
-    QByteArray md5sum() const override
-    {
-        KisResourceLoaderBase *loader = KisResourceLoaderRegistry::instance()->loader(folder, KisMimeDatabase::mimeTypeForFile(url));
-        if (loader) {
-            QFile f(url);
-            f.open(QFile::ReadOnly);
-            KoResourceSP res = loader->load(url, f);
-            f.close();
-            if (res) {
-                return res->md5();
-            }
-        }
-        return QByteArray();
-    }
 };
 
 class FolderIterator : public KisResourceStorage::ResourceIterator

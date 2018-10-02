@@ -52,7 +52,6 @@ public:
         QString folder;
         QString resourceType;
         QDateTime lastModified;
-        virtual QByteArray md5sum() const {return QByteArray();}
     };
 
     class TagIterator

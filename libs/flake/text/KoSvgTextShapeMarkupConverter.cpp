@@ -826,7 +826,9 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                     newBlock = absoluteLineOffset > 0;
                 }
 
-                previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
+                if (elementAttributes.hasAttribute("x")) {
+                    previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
+                }
             }
 
             //hack

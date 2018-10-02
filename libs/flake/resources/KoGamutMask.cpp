@@ -253,13 +253,12 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     QByteArray ba = store->read(store->size());
     store->close();
 
-    KoXmlDocument xmlDocument;
     QString errorMsg;
     int errorLine = 0;
     int errorColumn = 0;
 
-    bool ok = xmlDocument.setContent(ba, false, &errorMsg, &errorLine, &errorColumn);
-    if (!ok) {
+    KoXmlDocument xmlDocument = SvgParser::createDocumentFromSvg(ba, &errorMsg, &errorLine, &errorColumn);
+    if (xmlDocument.isNull()) {
 
         errorFlake << "Parsing error in " << filename() << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

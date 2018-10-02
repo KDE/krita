@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KORESOURCEMODEL_H
-#define KORESOURCEMODEL_H
+#ifndef KOLEGACYRESOURCEMODEL_H
+#define KOLEGACYRESOURCEMODEL_H
 
 #include <QSharedPointer>
 
@@ -31,12 +31,12 @@ class KoAbstractResourceServerAdapter;
 class KoResource;
 
 /// The resource model managing the resource data
-class KRITAWIDGETS_EXPORT KoResourceModel : public QAbstractTableModel
+class KRITAWIDGETS_EXPORT KoLegacyResourceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
-    ~KoResourceModel() override;
+    explicit KoLegacyResourceModel(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QObject * parent = 0);
+    ~KoLegacyResourceModel() override;
 
     /// reimplemented
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

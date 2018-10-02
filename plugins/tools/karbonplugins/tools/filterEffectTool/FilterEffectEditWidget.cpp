@@ -32,7 +32,7 @@
 #include "KoFilterEffectFactoryBase.h"
 #include "KoShape.h"
 #include "KoCanvasBase.h"
-#include "KoResourceModel.h"
+#include "KoLegacyResourceModel.h"
 #include "KoResourceServerAdapter.h"
 
 #include <KoIcon.h>

@@ -22,7 +22,7 @@
 #include <QColor>
 #include <QMimeData>
 #include <QPointer>
-#include <KoResourceModel.h>
+#include <KoLegacyResourceModel.h>
 
 #include "kis_layer.h"
 #include "kis_config.h"
@@ -383,7 +383,7 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case Qt::TextAlignmentRole: {
         return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
     }
-    case KoResourceModel::LargeThumbnailRole: {
+    case KoLegacyResourceModel::LargeThumbnailRole: {
         KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
         if (!dummy) {
             return  QVariant();

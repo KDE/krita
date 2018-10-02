@@ -37,7 +37,7 @@
 
 #include "KoTagFilterWidget.h"
 #include "KoTagChooserWidget.h"
-#include "KoResourceModel.h"
+#include "KoLegacyResourceModel.h"
 #include <KoResource.h>
 #include "KoResourceItemChooserContextMenu.h"
 
@@ -71,11 +71,11 @@ public:
 
     QCompleter* tagCompleter;
 
-    QPointer<KoResourceModel> model;
+    QPointer<KoLegacyResourceModel> model;
 };
 
 
-KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidget* parent)
+KoResourceTaggingManager::KoResourceTaggingManager(KoLegacyResourceModel *model, QWidget* parent)
     : QObject(parent)
     , d(new Private())
 {

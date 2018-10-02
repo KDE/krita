@@ -35,7 +35,7 @@ class QPoint;
 
 class KoTagFilterWidget;
 class KoTagChooserWidget;
-class KoResourceModel;
+class KoLegacyResourceModel;
 class KoResource;
 
 /**
@@ -49,7 +49,7 @@ class KoResourceTaggingManager : public QObject
 
 public:
 
-    explicit KoResourceTaggingManager(KoResourceModel* model, QWidget* parent);
+    explicit KoResourceTaggingManager(KoLegacyResourceModel* model, QWidget* parent);
     ~KoResourceTaggingManager() override;
     void showTaggingBar(bool show);
     QStringList availableTags() const;

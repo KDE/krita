@@ -51,7 +51,7 @@ protected:
      * @code
      *    QTextDocument *doc = new QTextDocument(this);
      *
-     *     QImage thumb = index.data(KoResourceModel::LargeThumbnailRole).value<QImage>();
+     *     QImage thumb = index.data(KoLegacyResourceModel::LargeThumbnailRole).value<QImage>();
      *     doc->addResource(QTextDocument::ImageResource, QUrl("data:thumbnail"), thumb);
      *
      *     QString name = index.data(Qt::DisplayRole).toString();

@@ -105,7 +105,7 @@
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>
 #include <KoUpdater.h>
-#include <KoResourceModel.h>
+#include <KoLegacyResourceModel.h>
 
 #include <brushengine/kis_paintop_settings.h>
 #include "dialogs/kis_about_application.h"
@@ -248,7 +248,7 @@ public:
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
-    KoResourceModel *workspacemodel {0};
+    KoLegacyResourceModel *workspacemodel {0};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
 
@@ -302,8 +302,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 {
     auto rserver = KisResourceServerProvider::instance()->workspaceServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KisWorkspaceResource>(rserver));
-    d->workspacemodel = new KoResourceModel(adapter, this);
-    connect(d->workspacemodel, &KoResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
+    d->workspacemodel = new KoLegacyResourceModel(adapter, this);
+    connect(d->workspacemodel, &KoLegacyResourceModel::afterResourcesLayoutReset, this, [&]() { updateWindowMenu(); });
 
 
     d->viewManager = new KisViewManager(this, actionCollection());

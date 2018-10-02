@@ -35,7 +35,7 @@ set(kritawidgets_LIB_SRCS
     KoResourceItemChooser.cpp
     KoResourceItemChooserSync.cpp
     KoResourceSelector.cpp
-    KoResourceModel.cpp
+    KoLegacyResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
     KoResourceTagStore.cpp

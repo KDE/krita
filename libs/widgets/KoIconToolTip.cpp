@@ -24,7 +24,7 @@
 #include <QTextDocument>
 #include <QUrl>
 
-#include <KoResourceModel.h>
+#include <KoLegacyResourceModel.h>
 #include <klocalizedstring.h>
 
 // #include <WidgetsDebug.h>
@@ -41,13 +41,13 @@ QTextDocument *KoIconToolTip::createDocument( const QModelIndex &index )
 {
     QTextDocument *doc = new QTextDocument( this );
 
-    QImage thumb = index.data( KoResourceModel::LargeThumbnailRole ).value<QImage>();
+    QImage thumb = index.data( KoLegacyResourceModel::LargeThumbnailRole ).value<QImage>();
     doc->addResource( QTextDocument::ImageResource, QUrl( "data:thumbnail" ), thumb );
 
     QString name = index.data( Qt::DisplayRole ).toString();
 
     QString tags;
-    QString tagsData = index.data( KoResourceModel::TagsRole ).toString();
+    QString tagsData = index.data( KoLegacyResourceModel::TagsRole ).toString();
     if (tagsData.length() > 0) {
         const QString list = QString( "<ul style=\"list-style-type: none; margin: 0px;\">%1</ul> ").arg(tagsData);
         tags = QString("<p><table><tr><td>%1:</td><td>%2</td></tr></table></p>").arg(i18n("Tags"), list);

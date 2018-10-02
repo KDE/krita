@@ -46,7 +46,7 @@
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
 #include "KoResourceItemDelegate.h"
-#include "KoResourceModel.h"
+#include "KoLegacyResourceModel.h"
 #include <KoResource.h>
 #include "KoResourceTaggingManager.h"
 #include "KoTagFilterWidget.h"
@@ -73,7 +73,7 @@ public:
         , updatesBlocked(false)
         , savedResourceWhileReset(0)
     {}
-    KoResourceModel *model;
+    KoLegacyResourceModel *model;
     KoResourceTaggingManager *tagManager;
     KoResourceItemView *view;
     QButtonGroup *buttonGroup;
@@ -102,7 +102,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
 
     d->splitter = new QSplitter(this);
 
-    d->model = new KoResourceModel(resourceAdapter, this);
+    d->model = new KoLegacyResourceModel(resourceAdapter, this);
     connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource*)), SLOT(slotBeforeResourcesLayoutReset(KoResource*)));
     connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
 

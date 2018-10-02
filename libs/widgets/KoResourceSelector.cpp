@@ -19,7 +19,7 @@
 
 #include "KoResourceSelector.h"
 #include <KoResourceServerAdapter.h>
-#include <KoResourceModel.h>
+#include <KoLegacyResourceModel.h>
 #include <KoResourceItemView.h>
 #include <KoResourceItemDelegate.h>
 #include <QPainter>
@@ -39,7 +39,7 @@ public:
 
     void updateIndex( KoResourceSelector * me )
     {
-        KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(me->model());
+        KoLegacyResourceModel * resourceModel = qobject_cast<KoLegacyResourceModel*>(me->model());
         if (!resourceModel)
             return;
         if (!resourceModel->rowCount())
@@ -73,7 +73,7 @@ KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerA
     Q_ASSERT(resourceAdapter);
 
     setView( new KoResourceItemView(this) );
-    setModel( new KoResourceModel(resourceAdapter, this) );
+    setModel( new KoLegacyResourceModel(resourceAdapter, this) );
     setItemDelegate( new KoResourceItemDelegate( this ) );
     setMouseTracking(true);
     d->updateIndex(this);
@@ -148,7 +148,7 @@ void KoResourceSelector::mouseMoveEvent( QMouseEvent * event )
 void KoResourceSelector::setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter)
 {
     Q_ASSERT(resourceAdapter);
-    setModel(new KoResourceModel(resourceAdapter, this));
+    setModel(new KoLegacyResourceModel(resourceAdapter, this));
     d->updateIndex(this);
 
     connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
@@ -179,7 +179,7 @@ void KoResourceSelector::setDisplayMode(DisplayMode mode)
 
 void KoResourceSelector::setColumnCount( int columnCount )
 {
-    KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(model());
+    KoLegacyResourceModel * resourceModel = qobject_cast<KoLegacyResourceModel*>(model());
     if (resourceModel)
         resourceModel->setColumnCount( columnCount );
 }

@@ -172,6 +172,8 @@ KoXmlDocument SvgParser::createDocumentFromSvg(QXmlInputSource *source, QString 
     // we should read all spaces to parse text node correctly
     QXmlSimpleReader reader;
     reader.setFeature("http://qt-project.org/xml/features/report-whitespace-only-CharData", true);
+    reader.setFeature("http://xml.org/sax/features/namespaces", false);
+    reader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
 
     QDomDocument doc;
     if (!doc.setContent(source, &reader, errorMsg, errorLine, errorColumn)) {

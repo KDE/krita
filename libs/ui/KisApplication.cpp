@@ -330,7 +330,7 @@ bool KisApplication::loadResources()
     reg->add(new KisResourceLoader<KoPattern>("patterns", "patterns", allImageMimes));
     reg->add(new KisResourceLoader<KisWorkspaceResource>("workspaces", "workspaces", QStringList() << "application/x-krita-workspace"));
     reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>("symbols", "symbols", QStringList() << "image/svg+xml"));
-    reg->add(new KisResourceLoader<KisSessionResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
+    reg->add(new KisResourceLoader<KisWindowLayoutResource>("windowlayouts", "sessions", QStringList() << "application/x-krita-windowlayout"));
     reg->add(new KisResourceLoader<KisSessionResource>("sessions", "sessions", QStringList() << "application/x-krita-session"));
     reg->add(new KisResourceLoader<KoGamutMask>("gamutmasks", "gamutmasks", QStringList() << "application/x-krita-gamutmask"));
 

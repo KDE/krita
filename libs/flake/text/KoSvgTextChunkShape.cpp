@@ -660,7 +660,7 @@ namespace {
 
 QString cleanUpString(QString text) {
     text.replace(QRegExp("[\\r\\n]"), "");
-    text.replace(QRegExp("\\s{2,}"), " ");
+    text.replace(QRegExp(" {2,}"), " ");
     return text;
 }
 
@@ -699,7 +699,7 @@ Result hasPreviousSibling(KoXmlNode node)
                         return hasPreviousSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
                     }
 
-                    return !text[text.size() - 1].isSpace() ? FoundText : FoundSpace;
+                    return text[text.size() - 1] != " " ? FoundText : FoundSpace;
                 }
             }
         }
@@ -730,7 +730,7 @@ Result hasNextSibling(KoXmlNode node)
                 }
 
                 if (!text.isEmpty()) {
-                    return !text[0].isSpace() ? FoundText : FoundSpace;
+                    return text[0] != " " ? FoundText : FoundSpace;
                 }
             }
         }

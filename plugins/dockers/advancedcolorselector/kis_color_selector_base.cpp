@@ -40,6 +40,7 @@
 #include "kis_image.h"
 #include "kis_display_color_converter.h"
 
+#include <resources/KoGamutMask.h>
 
 class KisColorPreviewPopup : public QWidget {
 public:

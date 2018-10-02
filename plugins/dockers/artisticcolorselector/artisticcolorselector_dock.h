@@ -62,7 +62,6 @@ private Q_SLOTS:
     void slotPreferenceChanged();
     void slotResetDefaultSettings();
     void slotGamutMaskToggle(bool value);
-    void slotGamutMaskActivatePreview(bool value);
     void slotGamutMaskSet(KoGamutMask* mask);
     void slotGamutMaskUnset();
     void slotGamutMaskPreviewUpdate();

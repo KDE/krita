@@ -149,7 +149,36 @@ void KisColorSelector::updateSettings()
 {
     KisColorSelectorBase::updateSettings();
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+
     setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString())));
+}
+
+void KisColorSelector::slotGamutMaskSet(KoGamutMask *gamutMask)
+{
+    m_mainComponent->setGamutMask(gamutMask);
+    m_subComponent->setGamutMask(gamutMask);
+
+    slotGamutMaskToggle(true);
+}
+
+void KisColorSelector::slotGamutMaskUnset()
+{
+    m_mainComponent->unsetGamutMask();
+    m_subComponent->unsetGamutMask();
+
+    slotGamutMaskToggle(false);
+}
+
+void KisColorSelector::slotGamutMaskPreviewUpdate()
+{
+    m_mainComponent->updateGamutMaskPreview();
+    m_subComponent->updateGamutMaskPreview();
+}
+
+void KisColorSelector::slotGamutMaskToggle(bool state)
+{
+    m_mainComponent->toggleGamutMask(state);
+    m_subComponent->toggleGamutMask(state);
 }
 
 void KisColorSelector::updateIcons() {

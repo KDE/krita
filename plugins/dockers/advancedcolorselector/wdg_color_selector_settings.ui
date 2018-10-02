@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>612</width>
-    <height>973</height>
+    <width>721</width>
+    <height>1108</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -499,7 +499,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>228</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -1509,6 +1509,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KisDoubleParseSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_double_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisColorSpaceSelector</class>
    <extends>QWidget</extends>
    <header>widgets/kis_color_space_selector.h</header>
@@ -1528,11 +1533,6 @@
    <class>KisShadeSelectorLinesSettings</class>
    <extends>QComboBox</extends>
    <header>kis_shade_selector_lines_settings.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

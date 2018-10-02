@@ -38,10 +38,10 @@ public:
     KoGamutMaskShape();
     ~KoGamutMaskShape();
 
-    bool coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter) const;
+    bool coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter, int maskRotation) const;
     QPainterPath outline();
-    void paint(QPainter &painter, const KoViewConverter& viewConverter);
-    void paintStroke(QPainter &painter, const KoViewConverter& viewConverter);
+    void paint(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation);
+    void paintStroke(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation);
     KoShape* koShape();
 
 private:
@@ -77,6 +77,9 @@ public:
 
     QString description();
     void setDescription(QString description);
+
+    int rotation();
+    void setRotation(int rotation);
 
     QSizeF maskSize();
 

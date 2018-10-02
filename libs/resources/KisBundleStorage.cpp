@@ -113,12 +113,6 @@ public:
     }
 
     /// This only loads the resource when called
-    QByteArray md5sum() const override
-    {
-        return m_resourceReference.md5sum;
-    }
-
-    /// This only loads the resource when called
     KoResourceSP resource() const override
     {
         return m_bundle->resource(m_resourceType, m_resourceReference.resourcePath);

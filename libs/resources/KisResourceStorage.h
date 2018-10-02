@@ -85,8 +85,6 @@ public:
         virtual QString type() const = 0;
         virtual QDateTime lastModified() const = 0;
         /// This only loads the resource when called
-        virtual QByteArray md5sum() const = 0;
-        /// This only loads the resource when called
         virtual KoResourceSP resource() const = 0;
     };
 

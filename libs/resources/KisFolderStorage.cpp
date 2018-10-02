@@ -128,16 +128,6 @@ public:
         return m_dirIterator->fileInfo().lastModified();
     }
 
-    QByteArray md5sum() const override
-    {
-        if (!loadResourceInternal()) {
-            qWarning() << "Could not load resource" << m_dirIterator->filePath();
-            return QByteArray();
-        }
-        return m_resource->md5();
-
-    }
-
     KoResourceSP resource() const override
     {
         if (!loadResourceInternal()) {
@@ -152,18 +142,18 @@ protected:
         if (!m_resource || (m_resource && m_resource->filename() != m_dirIterator->filePath())) {
             QFile f(m_dirIterator->filePath());
             f.open(QFile::ReadOnly);
-            if (!m_tag) {
-                const_cast<FolderIterator*>(this)->m_tag = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
+            if (!m_resourceLoader) {
+                const_cast<FolderIterator*>(this)->m_resourceLoader = KisResourceLoaderRegistry::instance()->loader(m_resourceType, KisMimeDatabase::mimeTypeForFile(m_dirIterator->filePath()));
             }
-            if (m_tag) {
-                const_cast<FolderIterator*>(this)->m_resource = m_tag->load(m_dirIterator->filePath(), f);
+            if (m_resourceLoader) {
+                const_cast<FolderIterator*>(this)->m_resource = m_resourceLoader->load(m_dirIterator->filePath(), f);
             }
             f.close();
         }
         return !m_resource.isNull();
     }
 
-    KisResourceLoaderBase *m_tag {0};
+    KisResourceLoaderBase *m_resourceLoader {0};
     KoResourceSP m_resource;
     QScopedPointer<QDirIterator> m_dirIterator;
     const QString m_location;

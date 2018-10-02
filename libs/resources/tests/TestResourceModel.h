@@ -21,6 +21,7 @@
 #include <QObject>
 #include <QtSql>
 
+class KisResourceLocator;
 class TestResourceModel : public QObject
 {
     Q_OBJECT
@@ -29,7 +30,11 @@ private Q_SLOTS:
     void testRowCount();
     void cleanupTestCase();
 private:
-    QSqlDatabase m_sqlDb;
+
+    QString m_srcLocation;
+    QString m_dstLocation;
+
+    KisResourceLocator *m_locator;
 };
 
 #endif

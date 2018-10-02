@@ -20,40 +20,69 @@
 #include <QTest>
 #include <QStandardPaths>
 #include <QDir>
+#include <QVersionNumber>
+#include <QDirIterator>
+#include <QSqlError>
+#include <QSqlQuery>
+
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include <KisResourceCacheDb.h>
+#include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceModel.h>
 
+#include <DummyResource.h>
+#include <ResourceTestHelper.h>
+
+#ifndef FILES_DATA_DIR
+#error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
+#endif
+
+#ifndef FILES_DEST_DIR
+#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
+#endif
+
+
 void TestResourceModel::initTestCase()
 {
-    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    if (dbLocation.exists()) {
-        QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
-        dbLocation.rmpath(dbLocation.path());
-    }
-    bool res = KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    QVERIFY(res);
-    QVERIFY(KisResourceCacheDb::isValid());
+    ResourceTestHelper::initTestDb();
+    ResourceTestHelper::createDummyLoaderRegistry();
 
-    m_sqlDb = QSqlDatabase::database();
+    m_srcLocation = QString(FILES_DATA_DIR);
+    QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());
 
+    m_dstLocation = QString(FILES_DEST_DIR);
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_dstLocation);
+
+    m_locator = KisResourceLocator::instance();
+
+    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
+    if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
+    QVERIFY(r == KisResourceLocator::LocatorError::Ok);
+    QVERIFY(QDir(m_dstLocation).exists());
 }
 
 void TestResourceModel::testRowCount()
 {
-    KisResourceModel rm("paintoppresets");
-    qDebug() << rm.rowCount();
+    KisResourceModel resourceModel("paintoppresets");
+    qDebug() << resourceModel.rowCount();
 }
 
 void TestResourceModel::cleanupTestCase()
 {
-    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
-    Q_ASSERT(res);
-    res = dbLocation.rmpath(dbLocation.path());
-    Q_ASSERT(res);
+    ResourceTestHelper::rmTestDb();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
+
+
+
 
 QTEST_MAIN(TestResourceModel)
 

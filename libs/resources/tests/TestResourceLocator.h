@@ -36,14 +36,10 @@ private Q_SLOTS:
     void cleanupTestCase();
 private:
 
-    bool cleanDstLocation();
-
     QString m_srcLocation;
     QString m_dstLocation;
 
     KisResourceLocator *m_locator;
-
-
 };
 
 #endif

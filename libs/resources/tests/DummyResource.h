@@ -19,13 +19,16 @@
 #define DUMMYRESOURCE_H
 
 #include "KoResource.h"
+#include <QDebug>
 
 class DummyResource : public KoResource {
 public:
     DummyResource(const QString &f) : KoResource(f) {}
-    bool load() override { return true; }
-    bool loadFromDevice(QIODevice *) override { return true; }
+    bool load() override { setValid(true); return true; }
+    bool loadFromDevice(QIODevice *) override { setValid(true); return true; }
     bool save() override { return true; }
+
+
 };
 
 #endif // DUMMYRESOURCE_H

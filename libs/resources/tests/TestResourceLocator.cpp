@@ -35,6 +35,9 @@
 #include <KisResourceLocator.h>
 #include <KisResourceLoaderRegistry.h>
 
+#include <DummyResource.h>
+#include <ResourceTestHelper.h>
+
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
@@ -43,46 +46,22 @@
 #error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
 #endif
 
-class DummyResource : public KoResource {
-public:
-    DummyResource(const QString &f) : KoResource(f) {}
-    bool load() override { return true; }
-    bool loadFromDevice(QIODevice *) override { return true; }
-    bool save() override { return true; }
-};
-
 void TestResourceLocator::initTestCase()
 {
-    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    if (dbLocation.exists()) {
-        QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
-        dbLocation.rmpath(dbLocation.path());
-    }
+    ResourceTestHelper::initTestDb();
 
-    m_locator = KisResourceLocator::instance();
     m_srcLocation = QString(FILES_DATA_DIR);
     QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());
+
     m_dstLocation = QString(FILES_DEST_DIR);
-    cleanDstLocation();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_dstLocation);
 
-    const QStringList resourceTypeFolders = QStringList()
-            << "tags"
-            << "asl"
-            << "bundles"
-            << "brushes"
-            << "gradients"
-            << "paintoppresets"
-            << "palettes"
-            << "patterns"
-            << "taskset"
-            << "workspaces"
-            << "symbols";
+    m_locator = KisResourceLocator::instance();
 
-    Q_FOREACH(const QString &folder, resourceTypeFolders) {
-        KisResourceLoaderRegistry::instance()->add(folder, new KisResourceLoader<DummyResource>("dummy" + folder, folder, QStringList() << "x-dummy"));
-    }
+    ResourceTestHelper::createDummyLoaderRegistry();
 }
 
 void TestResourceLocator::testLocatorInitalization()
@@ -128,40 +107,10 @@ void TestResourceLocator::testLocatorSynchronization()
 
 void TestResourceLocator::cleanupTestCase()
 {
-    QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    bool res = QFile(dbLocation.path() + "/" + KisResourceCacheDb::resourceCacheDbFilename).remove();
-    Q_ASSERT(res);
-    res = dbLocation.rmpath(dbLocation.path());
-    Q_ASSERT(res);
-
-    cleanDstLocation();
+    ResourceTestHelper::rmTestDb();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-bool TestResourceLocator::cleanDstLocation()
-{
-    if (QDir(m_dstLocation).exists()) {
-        {
-            QDirIterator iter(m_dstLocation, QStringList() << "*", QDir::Files, QDirIterator::Subdirectories);
-            while (iter.hasNext()) {
-                iter.next();
-                QFile f(iter.filePath());
-                f.remove();
-                //qDebug() << (r ? "Removed" : "Failed to remove") << iter.filePath();
-            }
-        }
-        {
-            QDirIterator iter(m_dstLocation, QStringList() << "*", QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
-            while (iter.hasNext()) {
-                iter.next();
-                QDir(iter.filePath()).rmpath(iter.filePath());
-                //qDebug() << (r ? "Removed" : "Failed to remove") << iter.filePath();
-            }
-        }
-
-        return QDir().rmpath(m_dstLocation);
-    }
-    return true;
-}
 
 QTEST_MAIN(TestResourceLocator)
 

@@ -54,8 +54,6 @@ public:
     QString type() const override { return QString(); }
     QDateTime lastModified() const override { return QDateTime(); }
     /// This only loads the resource when called
-    QByteArray md5sum() const override { return QByteArray(); }
-    /// This only loads the resource when called
     KoResourceSP resource() const override { return 0; }
 };
 

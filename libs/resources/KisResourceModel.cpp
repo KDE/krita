@@ -23,7 +23,8 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent,
     : QSqlRelationalTableModel(parent, db)
 {
     setTable("resources");
-    setRelation(0, QSqlRelation("resource_types", "id", "name"));
-    setRelation(1, QSqlRelation("storages", "id", "location"));
-    setFilter(QString("where resource_type_id = (select id from resource_types where name = %1").arg(resourceType));
+    setRelation(1, QSqlRelation("resource_types", "id", "name"));
+//    setRelation(1, QSqlRelation("storages", "id", "location"));
+    setFilter(QString("relTblAl_1 = %1").arg(resourceType));
+    select();
 }

@@ -74,16 +74,16 @@ private:
     double origin_y;
 
     /** Intercept of the base line */
-    double baseLineIntercept;
+    double baseLineIntercept {0};
 
     /** Intercept of the first line _found to_ pass or be neighbour of a line
      *  that passes through the hatching area, this line is used as a base
      *  to start iterating with HatchingBrush::iterateLines()
      */
-    double hotIntercept;
+    double hotIntercept {0};
 
     /** Intercept of each line as it is scanned, this value changes constantly */
-    double scanIntercept;
+    double scanIntercept {0};
 
     /** X position of the first vertical line _found to_ pass or be neighbour
     *   of a line that passes through the hatching area, this line is used as
@@ -95,18 +95,18 @@ private:
     double verticalScanX;
 
     /** Angle of the lines expressed algebraically, as in slope*x + intercept = y */
-    double slope;
+    double slope {0};
 
     /** Unused variable, distance separating non-vertical lines in the X axis*/
-    double dx;
+    double dx {0};
 
     /** Distance separating non-vertical lines in the Y axis*/
-    double dy;
+    double dy {0};
 
     /** Intercept of the line that extends from the mouse cursor position, calculated from
      *  the point (x, y) of the cursor and 'slope'
      */
-    double cursorLineIntercept;
+    double cursorLineIntercept {0};
 
     /** Function that begins exploring the field from hotIntercept and
      *  moves in the direction of dy (forward==true) or -dy (forward==false)

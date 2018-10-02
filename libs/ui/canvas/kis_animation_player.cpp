@@ -213,7 +213,7 @@ void KisAnimationPlayer::slotAudioChannelChanged()
         m_d->syncedAudio->setVolume(interface->audioVolume());
         m_d->syncedAudio->setSoundOffsetTolerance(m_d->audioOffsetTolerance);
 
-        connect(m_d->syncedAudio.data(), SIGNAL(error(const QString &, const QString &)), SLOT(slotOnAudioError(const QString &, const QString &)));
+        connect(m_d->syncedAudio.data(), SIGNAL(error(QString,QString)), SLOT(slotOnAudioError(QString,QString)));
     } else {
         m_d->syncedAudio.reset();
     }

@@ -170,7 +170,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     presetsLayout->addWidget(m_itemChooser);
 
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)), this, SLOT(updateBrushTip(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)), this, SLOT(updateBrushTip(KoResource*)));
 
     stampButton->setIcon(KisIconUtils::loadIcon("list-add"));
     stampButton->setToolTip(i18n("Creates a brush tip from the current image selection."
@@ -298,8 +298,8 @@ void KisPredefinedBrushChooser::slotOpenStampBrush()
     if(!m_stampBrushWidget) {
         m_stampBrushWidget = new KisCustomBrushWidget(this, i18n("Stamp"), m_image);
         m_stampBrushWidget->setModal(false);
-        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource *)),
-                                    SLOT(slotNewPredefinedBrush(KoResource *)));
+        connect(m_stampBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
+                                    SLOT(slotNewPredefinedBrush(KoResource*)));
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_stampBrushWidget->exec();
@@ -313,8 +313,8 @@ void KisPredefinedBrushChooser::slotOpenClipboardBrush()
     if(!m_clipboardBrushWidget) {
         m_clipboardBrushWidget = new KisClipboardBrushWidget(this, i18n("Clipboard"), m_image);
         m_clipboardBrushWidget->setModal(true);
-        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource *)),
-                                        SLOT(slotNewPredefinedBrush(KoResource *)));
+        connect(m_clipboardBrushWidget, SIGNAL(sigNewPredefinedBrush(KoResource*)),
+                                        SLOT(slotNewPredefinedBrush(KoResource*)));
     }
 
     QDialog::DialogCode result = (QDialog::DialogCode)m_clipboardBrushWidget->exec();

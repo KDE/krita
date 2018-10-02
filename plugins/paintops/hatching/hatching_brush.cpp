@@ -36,20 +36,11 @@ void inline myround(double *x)
 }
 
 HatchingBrush::HatchingBrush(KisHatchingPaintOpSettingsSP settings)
+  : m_settings(settings)
+  , separation(m_settings->separation)
+  , origin_x(m_settings->origin_x)
+  , origin_y(m_settings->origin_y)
 {
-    m_settings = settings;
-
-    // Initializing
-    separation = m_settings->separation;
-    origin_x = m_settings->origin_x;
-    origin_y = m_settings->origin_y;
-    cursorLineIntercept = 0;
-    baseLineIntercept = 0;
-    scanIntercept = 0;
-    hotIntercept = 0;
-    slope = 0;
-    dx = 0;
-    dy = 0;
 }
 
 

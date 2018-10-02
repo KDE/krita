@@ -340,7 +340,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     connect(resourceProvider->resourceManager(),
             SIGNAL(canvasResourceChanged(int,QVariant)),
-            SLOT(slotResourceChanged(int, QVariant)));
+            SLOT(slotResourceChanged(int,QVariant)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
             SIGNAL(sigUserChangedLodAvailability(bool)),

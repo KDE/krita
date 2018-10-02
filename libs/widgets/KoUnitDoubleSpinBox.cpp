@@ -57,7 +57,7 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent)
     setUnit( KoUnit(KoUnit::Point) );
     setAlignment( Qt::AlignRight );
 
-    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
+    connect(this, SIGNAL(valueChanged(double)), SLOT(privateValueChanged()));
 }
 
 KoUnitDoubleSpinBox::~KoUnitDoubleSpinBox()

@@ -35,7 +35,7 @@ KisFileNameRequester::KisFileNameRequester(QWidget *parent)
     m_ui->btnSelectFile->setIcon(kisIcon("folder"));
 
     connect(m_ui->btnSelectFile, SIGNAL(clicked()), SLOT(slotSelectFile()));
-    connect(m_ui->txtFileName, SIGNAL(textChanged(const QString&)), SIGNAL(textChanged(const QString&)));
+    connect(m_ui->txtFileName, SIGNAL(textChanged(QString)), SIGNAL(textChanged(QString)));
 }
 
 KisFileNameRequester::~KisFileNameRequester()
@@ -74,8 +74,7 @@ KoFileDialog::DialogType KisFileNameRequester::mode() const
     return m_mode;
 }
 
-void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList,
-                                              QString defaultFilter)
+void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList, QString defaultFilter)
 {
     m_mime_filter_list = filterList;
     m_mime_default_filter = defaultFilter;
@@ -99,7 +98,6 @@ void KisFileNameRequester::slotSelectFile()
         dialog.setDefaultDir(m_basePath);
     }
 
-    Q_ASSERT(!m_mime_filter_list.isEmpty());
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);
 
     QString newFileName = dialog.filename();

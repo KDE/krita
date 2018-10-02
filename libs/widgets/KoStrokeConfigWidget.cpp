@@ -263,7 +263,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
     connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
+    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
@@ -545,8 +545,8 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
                 this, SLOT(selectionChanged()));
         connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 this, SLOT(selectionChanged()));
-        connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(canvasResourceChanged(int, const QVariant &)));
+        connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(canvasResourceChanged(int,QVariant)));
         setUnit(canvas->unit());
 
         KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();

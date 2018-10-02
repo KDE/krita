@@ -33,13 +33,13 @@
 #include <KisGamutMaskViewConverter.h>
 
 class QPainter;
-class QPainter;
+class KisDisplayColorConverter;
 
 class KisColorSelector: public QWidget
 {
     Q_OBJECT
 
-    typedef KisRadian<float> Radian;
+    typedef KisRadian<qreal> Radian;
 
     struct ColorRing
     {
@@ -49,34 +49,37 @@ class KisColorSelector: public QWidget
             , innerRadius(0)
         { }
 
-        float                 saturation;
-        float                 outerRadius;
-        float                 innerRadius;
+        qreal                 saturation;
+        qreal                 outerRadius;
+        qreal                 innerRadius;
         QVector<QPainterPath> pieced;
     };
 
 public:
     KisColorSelector(QWidget* parent, KisColor::Type type=KisColor::HSL);
 
-    void setColorSpace(KisColor::Type type, float valueScaleGamma);
+    void setColorSpace(KisColor::Type type);
+    void setColorConverter(KisDisplayColorConverter* colorConverter);
     void setNumPieces(int num);
     void setNumLightPieces(int num) __attribute__((optimize(0)));
     void setNumRings(int num);
 
-    void setLight(float light=0.0f);
+    void setLight(qreal light=0.0f);
 
-    float gamma() const { return m_gamma; }
-    void setGamma(float gamma);
+    void setLumaCoefficients(qreal lR, qreal lG, qreal lB, qreal lGamma);
+    inline qreal lumaR() const { return m_lumaR; }
+    inline qreal lumaG() const { return m_lumaG; }
+    inline qreal lumaB() const { return m_lumaB; }
+    inline qreal lumaGamma() const { return m_lumaGamma; }
 
     void setInverseSaturation(bool inverse);
     void selectColor(const KisColor& color);
-    void setFgColor(const KisColor& fgColor);
-    void setBgColor(const KisColor& bgColor);
+    void setFgColor(const KoColor& fgColor);
+    void setBgColor(const KoColor& bgColor);
 
     void setDefaultHueSteps(int num);
     void setDefaultSaturationSteps(int num);
     void setDefaultValueScaleSteps(int num);
-    void setShowColorBlip(bool value);
     void setShowBgColor(bool value);
     void setShowValueScaleNumbers(bool value);
     void setGamutMask(KoGamutMask* gamutMask);
@@ -84,9 +87,6 @@ public:
     void setGamutMaskOn(bool gamutMaskOn);
     void setEnforceGamutMask(bool enforce);
     KoGamutMask* gamutMask();
-
-    bool maskPreviewActive();
-    void setMaskPreviewActive(bool value);
 
     bool saturationIsInvertible();
 
@@ -102,7 +102,6 @@ public:
     quint32        getDefaultHueSteps  () const { return m_defaultHueSteps;        }
     quint32        getDefaultSaturationSteps () const { return m_defaultSaturationSteps;        }
     quint32        getDefaultValueScaleSteps () const { return m_defaultValueScaleSteps;        }
-    bool           getShowColorBlip () const { return m_showColorBlip;        }
     bool           getShowBgColor () const { return m_showBgColor;        }
     bool           getShowValueScaleNumbers () const { return m_showValueScaleNumbers;        }
     bool           enforceGamutMask () const { return m_enforceGamutMask;        }
@@ -146,7 +145,7 @@ private:
     QPointF mapCoordToUnit(const QPointF& pt, const QRectF& viewRect) const;
     QPointF mapColorToUnit(const KisColor& color, bool invertSaturation = true) const;
     Radian mapCoordToAngle(qreal x, qreal y) const;
-    QPointF mapHueToAngle(float hue) const;
+    QPointF mapHueToAngle(qreal hue) const;
 
 public:
     // This is a private interface for signal compressor, don't use it.
@@ -154,11 +153,11 @@ public:
     void slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole> color);
 
 private:
+    KisDisplayColorConverter* m_colorConverter;
     KisColor::Type     m_colorSpace;
     quint8             m_numPieces;
     quint8             m_numLightPieces;
     bool               m_inverseSaturation;
-    float              m_gamma;
     qint8              m_selectedRing;
     qint8              m_selectedPiece;
     qint8              m_selectedLightPiece;
@@ -179,7 +178,6 @@ private:
     quint8 m_defaultHueSteps;
     quint8 m_defaultSaturationSteps;
     quint8 m_defaultValueScaleSteps;
-    bool m_showColorBlip;
     bool m_showValueScaleNumbers;
     bool m_showBgColor;
 
@@ -191,6 +189,11 @@ private:
     KisGamutMaskViewConverter* m_viewConverter;
 
     bool m_widgetUpdatesSelf;
+
+    qreal m_lumaR;
+    qreal m_lumaG;
+    qreal m_lumaB;
+    qreal m_lumaGamma;
 
     typedef KisSignalCompressorWithParam<QPair<KisColor, Acs::ColorRole>> ColorCompressorType;
     QScopedPointer<ColorCompressorType> m_updateColorCompressor;

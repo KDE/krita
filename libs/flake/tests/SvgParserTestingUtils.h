@@ -31,13 +31,14 @@
 
 #include "kis_algebra_2d.h"
 
+#include <QXmlSimpleReader>
 
 struct SvgTester
 {
     SvgTester (const QString &data)
-        :  parser(&resourceManager)
+        : parser(&resourceManager),
+          doc(SvgParser::createDocumentFromSvg(data))
     {
-        QVERIFY(doc.setContent(data.toUtf8()));
         root = doc.documentElement();
 
         parser.setXmlBaseDir("./");

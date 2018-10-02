@@ -740,6 +740,12 @@ print(root.childNodes())
      */
     bool modified() const;
 
+    /**
+     * @brief bounds return the bounds of the image
+     * @return the bounds
+     */
+    QRect bounds() const;
+
 private:
 
     friend class Krita;

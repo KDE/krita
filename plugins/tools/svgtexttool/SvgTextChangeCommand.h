@@ -30,7 +30,7 @@ class SvgTextChangeCommand : public KUndo2Command
 public:
     SvgTextChangeCommand(KoSvgTextShape *shape,
                          const QString &svg,
-                         const QString &defs,
+                         const QString &defs, bool richTextPreferred,
                          KUndo2Command *parent = 0);
     virtual ~SvgTextChangeCommand();
 
@@ -45,6 +45,8 @@ private:
     QString m_defs;
     QString m_oldSvg;
     QString m_oldDefs;
+    bool m_oldRichTextPreferred = true;
+    bool m_richTextPreferred = true;
 };
 
 #endif /* CHANGETEXTNGDATACOMMAND_H */

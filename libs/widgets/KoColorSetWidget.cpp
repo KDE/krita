@@ -87,7 +87,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
             KoColorSetEntry c = colorSet->getColorGlobal(i);
             patch->setColor(c.color());
             patch->setToolTip(c.name());
-            connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+            connect(patch, SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
             colorGroupLayout->addWidget(patch, p/columns, p%columns);
             patch->setDisplayRenderer(displayRenderer);
             patchWidgetList.append(patch);
@@ -118,7 +118,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::fillColors()
                 KoColorSetEntry c = colorSet->getColorGroup(i, groupName);
                 patch->setColor(c.color());
                 patch->setToolTip(c.name());
-                connect(patch, SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+                connect(patch, SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
                 groupLayout->addWidget(patch, p/columns, p%columns);
                 patch->setDisplayRenderer(displayRenderer);
                 patchWidgetList.append(patch);
@@ -180,7 +180,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
         recentPatches[numRecents]->setFrameShape(QFrame::StyledPanel);
         recentPatches[numRecents]->setDisplayRenderer(displayRenderer);
         recentsLayout->insertWidget(numRecents+1, recentPatches[numRecents]);
-        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(colorTriggered(KoColorPatch *)));
+        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(colorTriggered(KoColorPatch*)));
         numRecents++;
     }
     // shift colors to the right
@@ -290,15 +290,17 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::setColorFromString(QString s)
 void KoColorSetWidget::setColorSet(QPointer<KoColorSet> colorSet)
 {
     if (!colorSet) return;
-    if (colorSet == d->colorSet) return;
 
-    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
-    QList<KoColorSet*> palettes = srv->resources();
-    if (!palettes.contains(d->colorSet)) {
-        delete d->colorSet;
+    if (colorSet != d->colorSet) {
+        KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+        QList<KoColorSet*> palettes = srv->resources();
+        if (!palettes.contains(d->colorSet)) {
+            delete d->colorSet;
+        }
+
+        d->colorSet = colorSet;
     }
 
-    d->colorSet = colorSet;
     d->fillColors();
 }
 

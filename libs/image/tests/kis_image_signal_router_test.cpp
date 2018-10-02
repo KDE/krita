@@ -54,11 +54,11 @@ void KisImageSignalRouterTest::testSignalForwarding()
 {
     checkNotification(LayersChangedSignal, SIGNAL(sigLayersChangedAsync()));
     checkNotification(ModifiedSignal, SIGNAL(sigImageModified()));
-    checkNotification(SizeChangedSignal, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)));
-    checkNotification(ComplexSizeChangedSignal(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)));
+    checkNotification(SizeChangedSignal, SIGNAL(sigSizeChanged(QPointF,QPointF)));
+    checkNotification(ComplexSizeChangedSignal(), SIGNAL(sigSizeChanged(QPointF,QPointF)));
     checkNotification(ProfileChangedSignal, SIGNAL(sigProfileChanged(const KoColorProfile*)));
     checkNotification(ColorSpaceChangedSignal, SIGNAL(sigColorSpaceChanged(const KoColorSpace*)));
-    checkNotification(ResolutionChangedSignal, SIGNAL(sigResolutionChanged(double, double)));
+    checkNotification(ResolutionChangedSignal, SIGNAL(sigResolutionChanged(double,double)));
 
     checkComplexSignal(emitNodeChanged(m_layer1.data()), SIGNAL(sigNodeChanged(KisNodeSP)));
     checkComplexSignal(emitNodeHasBeenAdded(m_layer3.data(),0), SIGNAL(sigNodeAddedAsync(KisNodeSP)));

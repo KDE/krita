@@ -43,7 +43,7 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     d->currentConfigWidget = 0;
     d->form.setupUi(this);
     d->model = new KisMultiSensorsModel(this);
-    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP )), SIGNAL(sensorChanged(KisDynamicSensorSP )));
+    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensorSP)), SIGNAL(sensorChanged(KisDynamicSensorSP)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
 
 

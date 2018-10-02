@@ -23,6 +23,7 @@
 #include <KoResourceServerObserver.h>
 #include <KoResourceServerAdapter.h>
 #include <KoCanvasBase.h>
+#include <kis_canvas2.h>
 #include <KoColor.h>
 #include <resources/KoGamutMask.h>
 #include <kis_icon_utils.h>
@@ -33,8 +34,8 @@
 #include <kis_node_selection_adapter.h>
 #include <kis_group_layer.h>
 #include <KisView.h>
-//#include <kis_node_manager.h>
 #include <KoResourceItemChooser.h>
+#include <kis_display_color_converter.h>
 
 #include <QWidget>
 #include <QMenu>
@@ -47,6 +48,7 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_arcs_constants.h>
+#include <KisGamutMaskToolbar.h>
 
 #include "ui_wdgArtisticColorSelector.h"
 #include "ui_wdgARCSSettings.h"
@@ -78,9 +80,12 @@ struct WheelPreferencesPopupUI: public QWidget, public Ui_wdgWheelPreferencesPop
 
 ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     : QDockWidget(i18n("Artistic Color Selector"))
+    , m_canvas(nullptr)
     , m_resourceProvider(0)
     , m_selectedMask(nullptr)
 {
+    setEnabled(false);
+
     m_hsxButtons    = new QButtonGroup();
     m_preferencesUI = new ARCSSettingsUI();
     m_wheelPrefsUI  = new WheelPreferencesPopupUI();
@@ -91,8 +96,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     QPixmap valueScaleStepsPixmap = KisIconUtils::loadIcon("wheel-light").pixmap(16,16);
     QIcon infinityIcon = KisIconUtils::loadIcon("infinity");
     m_infinityPixmap = infinityIcon.pixmap(16,16);
-    m_iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");
-    m_iconMaskOn = KisIconUtils::loadIcon("gamut-mask-on");
 
     m_selectorUI->colorSelector->loadSettings();
 
@@ -101,9 +104,6 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
 
     m_selectorUI->bnDockerPrefs->setPopupWidget(m_preferencesUI);
     m_selectorUI->bnDockerPrefs->setIcon(KisIconUtils::loadIcon("configure"));
-
-    m_selectorUI->bnToggleMask->setChecked(false);
-    m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
 
     //preferences
     m_hsxButtons->addButton(m_preferencesUI->bnHsy, KisColor::HSY);
@@ -160,15 +160,16 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     m_preferencesUI->defaultSaturationSteps->setValue(m_selectorUI->colorSelector->getDefaultSaturationSteps());
     m_preferencesUI->defaultValueScaleSteps->setValue(m_selectorUI->colorSelector->getDefaultValueScaleSteps());
 
-    m_preferencesUI->showColorBlip->setChecked(m_selectorUI->colorSelector->getShowColorBlip());
     m_preferencesUI->showBgColor->setChecked(m_selectorUI->colorSelector->getShowBgColor());
     m_preferencesUI->showValueScaleNumbers->setChecked(m_selectorUI->colorSelector->getShowValueScaleNumbers());
 
     m_preferencesUI->enforceGamutMask->setChecked(m_selectorUI->colorSelector->enforceGamutMask());
     m_preferencesUI->permissiveGamutMask->setChecked(!m_selectorUI->colorSelector->enforceGamutMask());
-    m_preferencesUI->showMaskPreview->setChecked(m_selectorUI->colorSelector->maskPreviewActive());
 
-    m_preferencesUI->valueScaleGamma->setValue(m_selectorUI->colorSelector->gamma());
+    m_preferencesUI->spLumaR->setValue(m_selectorUI->colorSelector->lumaR());
+    m_preferencesUI->spLumaG->setValue(m_selectorUI->colorSelector->lumaG());
+    m_preferencesUI->spLumaB->setValue(m_selectorUI->colorSelector->lumaB());
+    m_preferencesUI->spLumaGamma->setValue(m_selectorUI->colorSelector->lumaGamma());
 
     switch(m_selectorUI->colorSelector->getColorSpace())
     {
@@ -179,9 +180,9 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     }
 
     if (m_selectorUI->colorSelector->getColorSpace() == KisColor::HSY) {
-        m_preferencesUI->valueScaleGammaBox->show();
+        m_preferencesUI->lumaCoefficientBox->show();
     } else {
-        m_preferencesUI->valueScaleGammaBox->hide();
+        m_preferencesUI->lumaCoefficientBox->hide();
     }
 
     connect(m_wheelPrefsUI->numValueScaleSteps  , SIGNAL(valueChanged(int))                      , SLOT(slotPreferenceChanged()));
@@ -198,20 +199,22 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_preferencesUI->bnDefInfHueSteps       , SIGNAL(clicked(bool))                           , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->bnDefInfValueScaleSteps, SIGNAL(clicked(bool))                           , SLOT(slotPreferenceChanged()));
 
-    connect(m_preferencesUI->showColorBlip      , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->showBgColor        , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->showValueScaleNumbers, SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
     connect(m_preferencesUI->enforceGamutMask   , SIGNAL(toggled(bool))                      , SLOT(slotPreferenceChanged()));
-    connect(m_preferencesUI->showMaskPreview   , SIGNAL(toggled(bool)), SLOT(slotGamutMaskActivatePreview(bool)));
-    connect(m_preferencesUI->valueScaleGamma   , SIGNAL(valueChanged(qreal)), SLOT(slotSetGamma(qreal)));
 
-    connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(const KisColor&))     , SLOT(slotFgColorChanged(const KisColor&)));
-    connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(const KisColor&))     , SLOT(slotBgColorChanged(const KisColor&)));
+    connect(m_preferencesUI->spLumaR   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
+    connect(m_preferencesUI->spLumaG   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
+    connect(m_preferencesUI->spLumaB   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
+    connect(m_preferencesUI->spLumaGamma   , SIGNAL(valueChanged(qreal)), SLOT(slotColorSpaceSelected()));
+
+    connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(KisColor))     , SLOT(slotFgColorChanged(KisColor)));
+    connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(KisColor))     , SLOT(slotBgColorChanged(KisColor)));
 
     // gamut mask connections
-    connect(m_selectorUI->bnToggleMask          , SIGNAL(toggled(bool))                          , SLOT(slotGamutMaskToggle(bool)));
+    connect(m_selectorUI->gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), SLOT(slotGamutMaskToggle(bool)));
 
-    connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected(int)));
+    connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected()));
 
     setWidget(m_selectorUI);
 }
@@ -225,10 +228,8 @@ ArtisticColorSelectorDock::~ArtisticColorSelectorDock()
 void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 {
     m_resourceProvider = kisview->resourceProvider();
-    m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor().toQColor());
-    m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor().toQColor());
-    connect(m_resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    m_selectorUI->colorSelector->setFgColor(m_resourceProvider->resourceManager()->foregroundColor());
+    m_selectorUI->colorSelector->setBgColor(m_resourceProvider->resourceManager()->backgroundColor());
 
     connect(m_resourceProvider, SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
             this, SLOT(slotGamutMaskSet(KoGamutMask*)));
@@ -236,49 +237,54 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
     connect(m_resourceProvider, SIGNAL(sigGamutMaskUnset()),
             this, SLOT(slotGamutMaskUnset()));
 
-    if (m_selectorUI->colorSelector->maskPreviewActive()) {
-        connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-                this, SLOT(slotGamutMaskPreviewUpdate()));
-    }
+    connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
+            this, SLOT(slotGamutMaskPreviewUpdate()));
+
+    m_selectorUI->gamutMaskToolbar->connectMaskSignals(m_resourceProvider);
 }
 
 void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
 {
     if(key == KoCanvasResourceManager::ForegroundColor)
-        m_selectorUI->colorSelector->setFgColor(value.value<KoColor>().toQColor());
+        m_selectorUI->colorSelector->setFgColor(value.value<KoColor>());
 
     if(key == KoCanvasResourceManager::BackgroundColor)
-        m_selectorUI->colorSelector->setBgColor(value.value<KoColor>().toQColor());
+        m_selectorUI->colorSelector->setBgColor(value.value<KoColor>());
 }
 
 void ArtisticColorSelectorDock::slotFgColorChanged(const KisColor& color)
 {
     m_resourceProvider->resourceManager()->setForegroundColor(
-        KoColor(color.getQColor(), m_resourceProvider->resourceManager()->foregroundColor().colorSpace())
+        KoColor(color.toKoColor(), m_resourceProvider->resourceManager()->foregroundColor().colorSpace())
     );
 }
 
 void ArtisticColorSelectorDock::slotBgColorChanged(const KisColor& color)
 {
     m_resourceProvider->resourceManager()->setBackgroundColor(
-        KoColor(color.getQColor(), m_resourceProvider->resourceManager()->backgroundColor().colorSpace())
+        KoColor(color.toKoColor(), m_resourceProvider->resourceManager()->backgroundColor().colorSpace())
     );
 }
 
-void ArtisticColorSelectorDock::slotColorSpaceSelected(int type)
+void ArtisticColorSelectorDock::slotColorSpaceSelected()
 {
-    m_selectorUI->colorSelector->setColorSpace(static_cast<KisColor::Type>(type), m_preferencesUI->valueScaleGamma->value());
+    KisColor::Type type = static_cast<KisColor::Type>(
+                m_hsxButtons->id(m_hsxButtons->checkedButton()));
 
-    if (m_selectorUI->colorSelector->getColorSpace() == KisColor::HSY) {
-        m_preferencesUI->valueScaleGammaBox->show();
+    m_selectorUI->colorSelector->setColorSpace(type);
+
+    if (type == KisColor::HSY) {
+        m_preferencesUI->lumaCoefficientBox->show();
     } else {
-        m_preferencesUI->valueScaleGammaBox->hide();
+        m_preferencesUI->lumaCoefficientBox->hide();
     }
-}
 
-void ArtisticColorSelectorDock::slotSetGamma(qreal gamma)
-{
-    m_selectorUI->colorSelector->setGamma(gamma);
+    m_selectorUI->colorSelector->setLumaCoefficients(
+                m_preferencesUI->spLumaR->value(),
+                m_preferencesUI->spLumaG->value(),
+                m_preferencesUI->spLumaB->value(),
+                m_preferencesUI->spLumaGamma->value()
+                );
 }
 
 void ArtisticColorSelectorDock::slotPreferenceChanged()
@@ -327,22 +333,11 @@ void ArtisticColorSelectorDock::slotPreferenceChanged()
     }
     m_selectorUI->colorSelector->setDefaultValueScaleSteps(defValueScaleSteps);
 
-    m_selectorUI->colorSelector->setShowColorBlip(m_preferencesUI->showColorBlip->isChecked());
     m_selectorUI->colorSelector->setShowBgColor(m_preferencesUI->showBgColor->isChecked());
     m_selectorUI->colorSelector->setShowValueScaleNumbers(m_preferencesUI->showValueScaleNumbers->isChecked());
     m_selectorUI->colorSelector->setEnforceGamutMask(m_preferencesUI->enforceGamutMask->isChecked());
 
-    // the selector wheel forbids saturation inversion in some cases,
-    // reflecting that in the ui
-    if (m_selectorUI->colorSelector->saturationIsInvertible()) {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(true);
-        m_selectorUI->colorSelector->setInverseSaturation(m_wheelPrefsUI->bnInverseSat->isChecked());
-    } else {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(false);
-        m_wheelPrefsUI->bnInverseSat->setChecked(false);
-        m_selectorUI->colorSelector->setInverseSaturation(false);
-    }
-
+    m_selectorUI->colorSelector->setInverseSaturation(m_wheelPrefsUI->bnInverseSat->isChecked());
 }
 
 void ArtisticColorSelectorDock::slotResetDefaultSettings()
@@ -383,58 +378,46 @@ void ArtisticColorSelectorDock::slotResetDefaultSettings()
     }
 }
 
-void ArtisticColorSelectorDock::slotGamutMaskActivatePreview(bool value)
-{
-    m_selectorUI->colorSelector->setMaskPreviewActive(value);
-
-    if (value) {
-        connect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-                this, SLOT(slotGamutMaskPreviewUpdate()));
-    } else {
-        disconnect(m_resourceProvider, SIGNAL(sigGamutMaskPreviewUpdate()),
-                this, SLOT(slotGamutMaskPreviewUpdate()));
-    }
-
-    m_selectorUI->colorSelector->update();
-}
-
 void ArtisticColorSelectorDock::slotGamutMaskToggle(bool checked)
 {
     bool b = (!m_selectedMask) ? false : checked;
 
-    m_selectorUI->bnToggleMask->setChecked(b);
-
     if (b == true) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOn);
-    } else {
-        m_selectorUI->bnToggleMask->setIcon(m_iconMaskOff);
     }
 
     m_selectorUI->colorSelector->setGamutMaskOn(b);
-
-    // TODO: HACK
-    // the selector wheel forbids saturation inversion in some cases,
-    // reflecting that in the ui
-    if (m_selectorUI->colorSelector->saturationIsInvertible()) {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(true);
-        m_selectorUI->colorSelector->setInverseSaturation(m_wheelPrefsUI->bnInverseSat->isChecked());
-    } else {
-        m_wheelPrefsUI->bnInverseSat->setEnabled(false);
-        m_wheelPrefsUI->bnInverseSat->setChecked(false);
-        m_selectorUI->colorSelector->setInverseSaturation(false);
-    }
-
 }
 
 void ArtisticColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 {
-    setEnabled(canvas != 0);
+    if (!canvas) {
+        return;
+    }
+
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
+
+    if (m_canvas) {
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                SLOT(slotCanvasResourceChanged(int,QVariant)));
+
+        connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
+                SLOT(slotSelectorSettingsChanged()));
+
+        m_selectorUI->colorSelector->setColorConverter(m_canvas->displayColorConverter());
+        setEnabled(true);
+    }
 }
 
 void ArtisticColorSelectorDock::unsetCanvas()
 {
     setEnabled(false);
+    m_canvas = nullptr;
+    m_selectorUI->colorSelector->setColorConverter(KisDisplayColorConverter::dumbConverterInstance());
 }
 
 void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
@@ -447,11 +430,9 @@ void ArtisticColorSelectorDock::slotGamutMaskSet(KoGamutMask *mask)
 
     if (m_selectedMask) {
         m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
-        m_selectorUI->labelMaskName->setText(m_selectedMask->title());
         slotGamutMaskToggle(true);
     } else {
         slotGamutMaskToggle(false);
-        m_selectorUI->labelMaskName->setText(i18n("Select a mask in \"Gamut Masks\" docker"));
     }
 }
 
@@ -464,11 +445,15 @@ void ArtisticColorSelectorDock::slotGamutMaskUnset()
     m_selectedMask = nullptr;
 
     slotGamutMaskToggle(false);
-    m_selectorUI->labelMaskName->setText(i18n("Select a mask in \"Gamut Masks\" docker"));
     m_selectorUI->colorSelector->setGamutMask(m_selectedMask);
 }
 
 void ArtisticColorSelectorDock::slotGamutMaskPreviewUpdate()
+{
+    m_selectorUI->colorSelector->update();
+}
+
+void ArtisticColorSelectorDock::slotSelectorSettingsChanged()
 {
     m_selectorUI->colorSelector->update();
 }

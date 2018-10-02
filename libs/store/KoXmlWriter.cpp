@@ -96,7 +96,7 @@ void KoXmlWriter::endDocument()
 }
 
 // returns the value of indentInside of the parent
-bool KoXmlWriter::prepareForChild()
+bool KoXmlWriter::prepareForChild(bool indentInside)
 {
     if (!d->tags.isEmpty()) {
         Tag& parent = d->tags.top();
@@ -105,12 +105,12 @@ bool KoXmlWriter::prepareForChild()
             parent.hasChildren = true;
             parent.lastChildIsText = false;
         }
-        if (parent.indentInside) {
+        if (parent.indentInside && indentInside) {
             writeIndent();
         }
-        return parent.indentInside;
+        return parent.indentInside && indentInside;
     }
-    return true;
+    return indentInside;
 }
 
 void KoXmlWriter::prepareForTextNode()
@@ -130,9 +130,9 @@ void KoXmlWriter::startElement(const char* tagName, bool indentInside)
     Q_ASSERT(tagName != 0);
 
     // Tell parent that it has children
-    bool parentIndent = prepareForChild();
+    indentInside = prepareForChild(indentInside);
 
-    d->tags.push(Tag(tagName, parentIndent && indentInside));
+    d->tags.push(Tag(tagName, indentInside));
     writeChar('<');
     writeCString(tagName);
     //kDebug(s_area) << tagName;

@@ -156,7 +156,7 @@ void KisShapeLayerCanvas::setImage(KisImageWSP image)
     m_image = image;
 
     if (image) {
-        connect(m_image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), SLOT(slotImageSizeChanged()));
+        connect(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
         m_cachedImageRect = m_image->bounds();
     }
 }

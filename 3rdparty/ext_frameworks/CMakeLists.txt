@@ -36,6 +36,7 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://download.kde.org/stable/frameworks/5.44/karchive-5.44.0.zip
     URL_MD5 c60a8e22b88cc7328610041638459689
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/karchive.diff
     INSTALL_DIR ${EXTPREFIX_frameworks}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks}
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} 

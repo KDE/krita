@@ -33,13 +33,13 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
     lockWidthButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
     lockHeightButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
     lockRatioButton->setIcon(KisIconUtils::loadIcon("layer-locked"));
-    connect(lockWidthButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
-    connect(lockHeightButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
-    connect(lockRatioButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged(void)));
+    connect(lockWidthButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged()));
+    connect(lockHeightButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged()));
+    connect(lockRatioButton, SIGNAL(toggled(bool)), this, SLOT(inputsChanged()));
 
-    connect(intWidth,  SIGNAL(valueChanged(int)), this, SLOT(inputsChanged(void)));
-    connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(inputsChanged(void)));
-    connect(doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(inputsChanged(void)));
+    connect(intWidth,  SIGNAL(valueChanged(int)), this, SLOT(inputsChanged()));
+    connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(inputsChanged()));
+    connect(doubleRatio, SIGNAL(valueChanged(double)), this, SLOT(inputsChanged()));
   
     connect(this, SIGNAL(constraintsChanged(bool,bool,bool,float,float,float)), m_tool, SLOT(constraintsChanged(bool,bool,bool,float,float,float)));
     connect(m_tool, SIGNAL(rectangleChanged(QRectF)), this, SLOT(rectangleChanged(QRectF)));

@@ -32,6 +32,7 @@ class KoColorSpace;
 class KisCanvas2;
 class KisColorPreviewPopup;
 class KisDisplayColorConverter;
+class KoGamutMask;
 
 
 /// Base class for all color selectors, that should support color management and zooming.

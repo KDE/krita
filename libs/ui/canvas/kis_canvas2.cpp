@@ -569,7 +569,7 @@ void KisCanvas2::initializeImage()
     connect(image->signalRouter(), SIGNAL(sigRequestLodPlanesSyncBlocked(bool)), SLOT(slotSetLodUpdatesBlocked(bool)), Qt::DirectConnection);
 
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
-    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
+    connect(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
 
     connectCurrentCanvas();

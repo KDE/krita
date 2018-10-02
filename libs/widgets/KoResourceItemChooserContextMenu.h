@@ -24,9 +24,9 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QLabel>
-#include <qlineedit.h>
+#include <QLineEdit>
+#include <QPushButton>
 
-class QLineEdit;
 class KoResource;
 
 
@@ -75,6 +75,7 @@ private:
     bool m_closeParentOnTrigger;
     QLabel * m_label;
     QLineEdit * m_editBox;
+    QPushButton * m_AddButton;
 };
 
 class NewTagAction : public KoLineEditAction

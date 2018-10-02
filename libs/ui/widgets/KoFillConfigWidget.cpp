@@ -264,7 +264,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->ui->btnSolidColorPick->setEnabled(false);
     d->ui->btnSolidColorPick->setVisible(false);
 
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), &d->colorChangedCompressor, SLOT(start()));
+    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), &d->colorChangedCompressor, SLOT(start()));
     connect(&d->colorChangedCompressor, SIGNAL(timeout()), SLOT(colorChanged()));
 
     connect(d->ui->btnChooseSolidColor, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
@@ -293,7 +293,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->ui->btnChoosePredefinedGradient->setDefaultAction(d->gradientAction);
     d->ui->btnChoosePredefinedGradient->setPopupMode(QToolButton::InstantPopup);
 
-    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )),
+    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)),
             SLOT(gradientResourceChanged()));
     connect(d->ui->btnChoosePredefinedGradient, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
 
@@ -311,7 +311,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
-    connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground> )), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground> )));
+    connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground>)));
     connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
 
 #endif

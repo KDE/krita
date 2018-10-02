@@ -54,26 +54,49 @@ KoShape* KoGamutMaskShape::koShape()
     return m_maskShape;
 }
 
-bool KoGamutMaskShape::coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter) const
+bool KoGamutMaskShape::coordIsClear(const QPointF& coord, const KoViewConverter& viewConverter, int maskRotation) const
 {
-    QPointF translatedPoint = viewConverter.viewToDocument(coord);
+    // apply mask rotation to coord
+    const KisGamutMaskViewConverter& converter = dynamic_cast<const KisGamutMaskViewConverter&>(viewConverter);
+    QPointF centerPoint(converter.viewSize().width()*0.5, converter.viewSize().height()*0.5);
+
+    QTransform rotationTransform;
+    rotationTransform.translate(centerPoint.x(), centerPoint.y());
+    rotationTransform.rotate(-maskRotation);
+    rotationTransform.translate(-centerPoint.x(), -centerPoint.y());
+
+    QPointF rotatedCoord = rotationTransform.map(coord);
+    QPointF translatedPoint = viewConverter.viewToDocument(rotatedCoord);
 
     bool isClear = m_maskShape->hitTest(translatedPoint);
 
     return isClear;
 }
 
-void KoGamutMaskShape::paint(QPainter &painter, const KoViewConverter& viewConverter)
+void KoGamutMaskShape::paint(QPainter &painter, const KoViewConverter& viewConverter, int maskRotation)
 {
     painter.save();
+
+    // apply mask rotation before drawing
+    QPointF centerPoint(painter.viewport().width()*0.5, painter.viewport().height()*0.5);
+    painter.translate(centerPoint);
+    painter.rotate(maskRotation);
+    painter.translate(-centerPoint);
     painter.setTransform(m_maskShape->absoluteTransformation(&viewConverter) * painter.transform());
     m_maskShape->paint(painter, viewConverter, m_shapePaintingContext);
     painter.restore();
 }
 
-void KoGamutMaskShape::paintStroke(QPainter &painter, const KoViewConverter &viewConverter)
+void KoGamutMaskShape::paintStroke(QPainter &painter, const KoViewConverter &viewConverter, int maskRotation)
 {
     painter.save();
+
+    // apply mask rotation before drawing
+    QPointF centerPoint(painter.viewport().width()*0.5, painter.viewport().height()*0.5);
+    painter.translate(centerPoint);
+    painter.rotate(maskRotation);
+    painter.translate(-centerPoint);
+
     painter.setTransform(m_maskShape->absoluteTransformation(&viewConverter) * painter.transform());
     m_maskShape->paintStroke(painter, viewConverter, m_shapePaintingContext);
     painter.restore();
@@ -88,6 +111,7 @@ struct Q_DECL_HIDDEN KoGamutMask::Private {
     QVector<KoGamutMaskShape*> maskShapes;
     QVector<KoGamutMaskShape*> previewShapes;
     QSizeF maskSize;
+    int rotation;
 };
 
 KoGamutMask::KoGamutMask(const QString& filename)
@@ -95,6 +119,7 @@ KoGamutMask::KoGamutMask(const QString& filename)
     , d(new Private())
 {
     d->maskSize = QSizeF(144.0,144.0);
+    setRotation(0);
 }
 
 KoGamutMask::KoGamutMask()
@@ -102,6 +127,7 @@ KoGamutMask::KoGamutMask()
     , d(new Private())
 {
     d->maskSize = QSizeF(144.0,144.0);
+    setRotation(0);
 }
 
 KoGamutMask::KoGamutMask(KoGamutMask* rhs)
@@ -136,7 +162,7 @@ bool KoGamutMask::coordIsClear(const QPointF& coord, KoViewConverter &viewConver
     }
 
     for(KoGamutMaskShape* shape: *shapeVector) {
-        if (shape->coordIsClear(coord, viewConverter) == true) {
+        if (shape->coordIsClear(coord, viewConverter, rotation()) == true) {
             return true;
         }
     }
@@ -155,7 +181,7 @@ void KoGamutMask::paint(QPainter &painter, KoViewConverter& viewConverter, bool 
     }
 
     for(KoGamutMaskShape* shape: *shapeVector) {
-        shape->paint(painter, viewConverter);
+        shape->paint(painter, viewConverter, rotation());
     }
 }
 
@@ -170,7 +196,7 @@ void KoGamutMask::paintStroke(QPainter &painter, KoViewConverter &viewConverter,
     }
 
     for(KoGamutMaskShape* shape: *shapeVector) {
-        shape->paintStroke(painter, viewConverter);
+        shape->paintStroke(painter, viewConverter, rotation());
     }
 }
 
@@ -227,13 +253,12 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev)
     QByteArray ba = store->read(store->size());
     store->close();
 
-    KoXmlDocument xmlDocument;
     QString errorMsg;
     int errorLine = 0;
     int errorColumn = 0;
 
-    bool ok = xmlDocument.setContent(ba, false, &errorMsg, &errorLine, &errorColumn);
-    if (!ok) {
+    KoXmlDocument xmlDocument = SvgParser::createDocumentFromSvg(ba, &errorMsg, &errorLine, &errorColumn);
+    if (xmlDocument.isNull()) {
 
         errorFlake << "Parsing error in " << filename() << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
@@ -362,6 +387,16 @@ QString KoGamutMask::description()
 void KoGamutMask::setDescription(QString description)
 {
     d->description = description;
+}
+
+int KoGamutMask::rotation()
+{
+    return d->rotation;
+}
+
+void KoGamutMask::setRotation(int rotation)
+{
+    d->rotation = rotation;
 }
 
 QSizeF KoGamutMask::maskSize()

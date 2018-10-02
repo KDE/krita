@@ -31,7 +31,6 @@
 KisPressureSharpnessOption::KisPressureSharpnessOption()
     : KisCurveOption("Sharpness", KisPaintOpOption::GENERAL, false)
 {
-    m_threshold = 40;
 }
 
 void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const

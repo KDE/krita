@@ -30,8 +30,8 @@ KisGuiContextCommand::KisGuiContextCommand(KUndo2Command *command, QObject *guiO
      */
     m_delegate->moveToThread(guiObject->thread());
 
-    connect(this, SIGNAL(sigExecuteCommand(KUndo2Command*, bool)),
-            m_delegate.data(), SLOT(executeCommand(KUndo2Command*, bool)),
+    connect(this, SIGNAL(sigExecuteCommand(KUndo2Command*,bool)),
+            m_delegate.data(), SLOT(executeCommand(KUndo2Command*,bool)),
             Qt::BlockingQueuedConnection);
 }
 

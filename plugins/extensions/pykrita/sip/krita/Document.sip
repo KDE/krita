@@ -83,6 +83,7 @@ public Q_SLOTS:
     void setGuidesVisible(bool visible);
     void setGuidesLocked(bool locked);
     bool modified() const;
+    QRect bounds() const;
 private:
 
 };

@@ -98,11 +98,11 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     connect(ui->cellSpacingSpinbox, SIGNAL(valueChanged(int)), SLOT(slotGridGuiChanged()));
 
     connect(ui->selectMainStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->colorMain, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
+    connect(ui->colorMain, SIGNAL(changed(QColor)), SLOT(slotGridGuiChanged()));
     connect(ui->selectSubdivisionStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGridGuiChanged()));
-    connect(ui->colorSubdivision, SIGNAL(changed(const QColor&)), SLOT(slotGridGuiChanged()));
+    connect(ui->colorSubdivision, SIGNAL(changed(QColor)), SLOT(slotGridGuiChanged()));
     connect(ui->selectGuidesStyle, SIGNAL(currentIndexChanged(int)), SLOT(slotGuidesGuiChanged()));
-    connect(ui->colorGuides, SIGNAL(changed(const QColor&)), SLOT(slotGuidesGuiChanged()));
+    connect(ui->colorGuides, SIGNAL(changed(QColor)), SLOT(slotGuidesGuiChanged()));
 
     ui->chkOffset->setChecked(false);
 

@@ -33,6 +33,7 @@
 #include <kactioncollection.h>
 
 #include <KisDocument.h>
+#include <KisGamutMaskToolbar.h>
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
@@ -48,16 +49,25 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     m_myPaintShadeSelector(new KisMyPaintShadeSelector(this)),
     m_minimalShadeSelector(new KisMinimalShadeSelector(this)),
     m_shadeSelector(m_myPaintShadeSelector),
+    m_gamutMaskToolbar(new KisGamutMaskToolbar(this)),
     m_canvas(0)
 {
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
     m_widgetLayout->setSpacing(0);
     m_widgetLayout->setMargin(0);
 
+    m_gamutMaskToolbar->setContentsMargins(0, 0, 0, 5);
+    m_gamutMaskToolbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_colorSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_myPaintShadeSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_minimalShadeSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    m_widgetLayout->addWidget(m_gamutMaskToolbar);
     m_widgetLayout->addWidget(m_colorSelector);
     m_widgetLayout->addWidget(m_myPaintShadeSelector);
     m_widgetLayout->addWidget(m_minimalShadeSelector);
 
+    m_gamutMaskToolbar->hide();
     m_myPaintShadeSelector->hide();
     m_minimalShadeSelector->hide();
 
@@ -77,8 +87,6 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 
     m_minimalAction = KisActionRegistry::instance()->makeQAction("show_minimal_shade_selector", this);
     connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
-
-
 
 }
 
@@ -136,12 +144,25 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
             connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
         }
 
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskChanged(KoGamutMask*)),
+                m_colorSelector, SLOT(slotGamutMaskSet(KoGamutMask*)));
+
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskUnset()),
+                m_colorSelector, SLOT(slotGamutMaskUnset()));
+
+        connect(m_canvas->viewManager()->resourceProvider(), SIGNAL(sigGamutMaskPreviewUpdate()),
+                m_colorSelector, SLOT(slotGamutMaskPreviewUpdate()));
+
+        m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->resourceProvider());
+
+        // gamut mask connections
+        connect(m_gamutMaskToolbar, SIGNAL(sigGamutMaskToggle(bool)), m_colorSelector, SLOT(slotGamutMaskToggle(bool)));
+
         KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
         actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
         actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
     }
-
 }
 
 void KisColorSelectorContainer::updateSettings()
@@ -168,6 +189,13 @@ void KisColorSelectorContainer::updateSettings()
 
     if(m_shadeSelector!=0)
         m_shadeSelector->show();
+
+
+    if (m_colorSelector->configuration().mainType == KisColorSelectorConfiguration::Wheel) {
+        m_gamutMaskToolbar->show();
+    } else {
+        m_gamutMaskToolbar->hide();
+    }
 
 }
 

@@ -218,8 +218,8 @@ void KisBrushHud::showEvent(QShowEvent *event)
 {
     m_d->connections.clear();
     m_d->connections.addUniqueConnection(
-        m_d->provider->resourceManager(), SIGNAL(canvasResourceChanged(int, QVariant)),
-        this, SLOT(slotCanvasResourceChanged(int, QVariant)));
+        m_d->provider->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+        this, SLOT(slotCanvasResourceChanged(int,QVariant)));
 
     updateProperties();
 

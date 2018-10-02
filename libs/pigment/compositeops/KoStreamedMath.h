@@ -116,7 +116,7 @@ static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
  */
 static inline Vc::float_v fetch_mask_8(const quint8 *data) {
     uint_v data_i(data);
-    return Vc::float_v(int_v(data_i));
+    return Vc::simd_cast<Vc::float_v>(int_v(data_i));
 }
 
 /**
@@ -140,7 +140,7 @@ static inline Vc::float_v fetch_alpha_32(const quint8 *data) {
         data_i.load((const quint32*)data, Vc::Unaligned);
     }
 
-    return Vc::float_v(int_v(data_i >> 24));
+    return Vc::simd_cast<Vc::float_v>(int_v(data_i >> 24));
 }
 
 /**
@@ -170,9 +170,9 @@ static inline void fetch_colors_32(const quint8 *data,
     const quint32 lowByteMask = 0xFF;
     uint_v mask(lowByteMask);
 
-    c1 = Vc::float_v(int_v((data_i >> 16) & mask));
-    c2 = Vc::float_v(int_v((data_i >> 8)  & mask));
-    c3 = Vc::float_v(int_v( data_i        & mask));
+    c1 = Vc::simd_cast<Vc::float_v>(int_v((data_i >> 16) & mask));
+    c2 = Vc::simd_cast<Vc::float_v>(int_v((data_i >> 8)  & mask));
+    c3 = Vc::simd_cast<Vc::float_v>(int_v( data_i        & mask));
 }
 
 /**

@@ -141,6 +141,7 @@ private:
                           const char *member);
     void createActions();
     void enableRichTextActions(bool enable);
+    void enableSvgTextActions(bool enable);
 
 
 
@@ -148,6 +149,8 @@ private:
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;
+    QList<QAction*> m_svgTextActions;
+
     KoSvgTextShape *m_shape {0};
 #ifndef Q_OS_WIN
     KoDialog *m_charSelectDialog {0};

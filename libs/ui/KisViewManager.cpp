@@ -1390,3 +1390,17 @@ void KisViewManager::slotUpdatePixelGridAction()
     KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled() && cfg.useOpenGL());
 }
+
+void KisViewManager::slotActivateTransformTool()
+{
+    if(KoToolManager::instance()->activeToolId() == "KisToolTransform") {
+        KoToolBase* tool = KoToolManager::instance()->toolById(canvasBase(), "KisToolTransform");
+
+        QSet<KoShape*> dummy;
+        // Start a new stroke
+        tool->deactivate();
+        tool->activate(KoToolBase::DefaultActivation, dummy);
+    }
+
+    KoToolManager::instance()->switchToolRequested("KisToolTransform");
+}

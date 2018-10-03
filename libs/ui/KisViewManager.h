@@ -212,6 +212,8 @@ public Q_SLOTS:
 
     void slotViewAdded(KisView *view);
     void slotViewRemoved(KisView *view);
+    
+    void slotActivateTransformTool();
 
 Q_SIGNALS:
 

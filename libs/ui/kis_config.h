@@ -568,6 +568,10 @@ public:
 
     bool autoSmoothBezierCurves(bool defaultValue = false) const;
     void setAutoSmoothBezierCurves(bool value);
+    
+    bool activateTransformToolAfterPaste(bool defaultValue = false) const;
+    void setActivateTransformToolAfterPaste(bool value);
+    
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

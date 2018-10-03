@@ -226,6 +226,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         //first, make buttons checkable
         enableRichTextActions(true);
+        enableSvgTextActions(false);
 
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
@@ -243,6 +244,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
     else {
         //first, make buttons uncheckable
         enableRichTextActions(false);
+        enableSvgTextActions(true);
         disconnect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
         // Convert the rich text to svg and styles strings
@@ -976,8 +978,9 @@ void SvgTextEditor::createActions()
     KStandardAction::replace(this, SLOT(replace()), actionCollection());
 
     // View
-    KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
-    KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
+    // WISH: we cannot zoom-in/out in rech-text mode
+    m_svgTextActions << KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
+    m_svgTextActions << KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 #ifndef Q_OS_WIN
     // Insert:
     QAction * insertAction = createAction("svg_insert_special_character",
@@ -1086,6 +1089,13 @@ void SvgTextEditor::createActions()
 void SvgTextEditor::enableRichTextActions(bool enable)
 {
     Q_FOREACH(QAction *action, m_richTextActions) {
+        action->setEnabled(enable);
+    }
+}
+
+void SvgTextEditor::enableSvgTextActions(bool enable)
+{
+    Q_FOREACH(QAction *action, m_svgTextActions) {
         action->setEnabled(enable);
     }
 }

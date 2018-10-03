@@ -31,8 +31,14 @@
 #include <KoCanvasResourceManager.h>
 #include <KisQPainterStateSaver.h>
 #include "KoShapeGradientHandles.h"
+#include <KoCanvasBase.h>
+#include <KoSvgTextShape.h>
 
 #include "kis_painting_tweaks.h"
+#include "kis_coordinates_converter.h"
+#include "kis_icon_utils.h"
+
+
 
 #define HANDLE_DISTANCE 10
 
@@ -152,6 +158,27 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     if (haveOnlyOneEditableShape) {
         KoShape *shape = selectedShapes.first();
 
+        // draw a button with "edit text" on it that activates the text editor
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
+        if (textShape) {
+            KisHandlePainterHelper helper = KoShape::createHandlePainterHelper(&painter, m_selection, converter, m_handleRadius);
+
+            QPolygonF outline = handleArea;
+            m_textEditorButtonPosition = QPointF(0.5 * (outline.value(2) + outline.value(3)));
+
+            const QPointF finalHandleRect = m_textEditorButtonPosition;
+            helper.drawHandleRect(finalHandleRect, 15, decoratorIconPositions.uiOffset );
+            helper.fillHandleRect(finalHandleRect, 15, Qt::white, decoratorIconPositions.uiOffset);
+
+            // T icon inside box
+            QSize buttonSize(20,20);
+            const QPixmap textEditorIcon = KisIconUtils::loadIcon("draw-text").pixmap(buttonSize);
+            const QRectF iconSourceRect(QPointF(0, 0), textEditorIcon.size());
+            helper.drawPixmap(textEditorIcon, m_textEditorButtonPosition, 20, iconSourceRect); // icon, position, size, sourceRect
+
+        }
+
+
         if (m_showFillGradientHandles) {
             paintGradientHandles(shape, KoFlake::Fill, painter, converter);
         } else if (m_showStrokeFillGradientHandles) {
@@ -193,4 +220,25 @@ void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVaria
 void SelectionDecorator::setForceShapeOutlines(bool value)
 {
     m_forceShapeOutlines = value;
+}
+
+QPointF SelectionDecorator::textEditorButtonPos()
+{
+    return m_textEditorButtonPosition;
+}
+
+void SelectionDecorator::setIsOverTextEditorButton(bool value)
+{
+    if (value) { // null check
+        m_isHoveringOverTextButton = value;
+    } else {
+        m_isHoveringOverTextButton = false;
+    }
+
+
+}
+
+bool SelectionDecorator::isOverTextEditorButton()
+{
+    return m_isHoveringOverTextButton;
 }

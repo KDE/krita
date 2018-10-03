@@ -81,6 +81,8 @@ public:
      * Draws a handle rect with a custom \p radius at position \p center
      */
     void drawHandleRect(const QPointF &center, qreal radius);
+    void drawHandleRect(const QPointF &center, qreal radius, QPoint offset);
+    void fillHandleRect(const QPointF &center, qreal radius, QColor fillColor, QPoint offset);
 
     /**
      * Draws a handle circle with a custom \p radius at position \p center
@@ -144,6 +146,11 @@ public:
      * Draw an arbitrary path
      */
     void drawPath(const QPainterPath &path);
+
+    /**
+     * Draw an a given pixmap on the UI
+     */
+    void drawPixmap(const QPixmap &pixmap, QPointF position, int size, QRectF sourceRect);
 
 private:
 

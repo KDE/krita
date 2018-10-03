@@ -91,7 +91,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_charSelectDialog->setButtons(KoDialog::Close);
 #endif
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
-    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(close()));
+    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(slotCloseEditor()));
     connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
 
     KConfigGroup cg(KSharedConfig::openConfig(), "SvgTextTool");
@@ -962,7 +962,7 @@ void SvgTextEditor::createActions()
 
     // File: new, open, save, save as, close
     KStandardAction::save(this, SLOT(save()), actionCollection());
-    KStandardAction::close(this, SLOT(close()), actionCollection());
+    KStandardAction::close(this, SLOT(slotCloseEditor()), actionCollection());
 
     // Edit
     KStandardAction::undo(this, SLOT(undo()), actionCollection());
@@ -1098,4 +1098,10 @@ void SvgTextEditor::enableSvgTextActions(bool enable)
     Q_FOREACH(QAction *action, m_svgTextActions) {
         action->setEnabled(enable);
     }
+}
+
+void SvgTextEditor::slotCloseEditor()
+{
+    close();
+    emit textEditorClosed();
 }

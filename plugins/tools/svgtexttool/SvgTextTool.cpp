@@ -51,6 +51,7 @@
 #include <KoPointerEvent.h>
 #include <KoProperties.h>
 #include <KoSelectedShapesProxy.h>
+#include "KoToolManager.h"
 
 #include "SvgTextEditor.h"
 #include "KisHandlePainterHelper.h"
@@ -79,6 +80,11 @@ void SvgTextTool::activate(ToolActivation activation, const QSet<KoShape *> &sha
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
         if (!textShape) {
             koSelection()->deselectAll();
+        } else {
+            // if we are a text shape...and the proxy tells us we want to edit the shape. open the text editor
+            if (canvas()->selectedShapesProxy()->isRequestingToBeEdited()) {
+                showEditor();
+            }
         }
     } else if (shapes.size() > 1) {
         KoSvgTextShape *foundTextShape = 0;
@@ -217,6 +223,7 @@ void SvgTextTool::showEditor()
         m_editor = new SvgTextEditor();
         m_editor->setWindowModality(Qt::ApplicationModal);
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
+        connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
     }
 
     m_editor->setShape(shape);
@@ -228,6 +235,13 @@ void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const Q
 {
     SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs, richTextUpdated);
     canvas()->addCommand(cmd);
+}
+
+void SvgTextTool::slotTextEditorClosed()
+{
+    // change tools to the shape selection tool when we close the text editor to allow moving and further editing of the object.
+    // most of the time when we edit text, the shape selection tool is where we left off anyway
+    KoToolManager::instance()->switchToolRequested("InteractionTool");
 }
 
 QString SvgTextTool::generateDefs()

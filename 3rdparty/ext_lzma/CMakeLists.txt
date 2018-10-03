@@ -1,12 +1,12 @@
-SET(PREFIX_ext_lmza "${EXTPREFIX}" )
+SET(PREFIX_ext_lzma "${EXTPREFIX}" )
 if (MINGW)
     if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8") # 64 bits
-    
-        ExternalProject_Add( ext_lmza
+        ExternalProject_Add( ext_lzma
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://tukaani.org/xz/xz-5.2.4-windows.zip
             URL_MD5 3a4467e74e1eafb89b517aae7044e46c
 
+            INSTALL_DIR ${PREFIX_ext_lzma}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying 64-bit liblzma.dll
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_x86-64/liblzma.dll ${PREFIX_ext_lzma}/bin/
@@ -27,19 +27,17 @@ if (MINGW)
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/container.h ${PREFIX_ext_lzma}/include
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/vli.h ${PREFIX_ext_lzma}/include
             
-            INSTALL_DIR ${PREFIX_ext_lmza}
             UPDATE_COMMAND ""
         )
     
     else() # 32 bits
 
-            ExternalProject_Add( ext_lmza
+            ExternalProject_Add( ext_lzma
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://tukaani.org/xz/xz-5.2.4-windows.zip
             URL_MD5 3a4467e74e1eafb89b517aae7044e46c
             
-            INSTALL_DIR ${PREFIX_ext_lmza}
-
+            INSTALL_DIR ${PREFIX_ext_lzma}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying 32-bit liblzma.dll
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_i686-sse2/liblzma.dll ${PREFIX_ext_lzma}/bin/
@@ -66,14 +64,13 @@ if (MINGW)
     
     endif()
 else ()
-    ExternalProject_Add( ext_lmza
+    ExternalProject_Add( ext_lzma
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL http://tukaani.org/xz/xz-5.2.3.tar.xz
         URL_MD5 60fb79cab777e3f71ca43d298adacbd5
         
-        INSTALL_DIR ${PREFIX_ext_lmza}
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/iconv.diff
-        CONFIGURE_COMMAND ./configure --prefix=${PREFIX_ext_lmza} --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo --disable-lzma-links --disable-scripts --disable-doc --disable-static --enable-shared ${GLOBAL_AUTOMAKE_PROFILE}  
+        INSTALL_DIR ${PREFIX_ext_lzma}
+        CONFIGURE_COMMAND ./configure --prefix=${PREFIX_ext_lzma} --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo --disable-lzma-links --disable-scripts --disable-doc --disable-static --enable-shared ${GLOBAL_AUTOMAKE_PROFILE}  
         BUILD_COMMAND make
         INSTALL_COMMAND make install
         

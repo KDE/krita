@@ -12,21 +12,7 @@ if (MINGW)
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_x86-64/liblzma.dll ${PREFIX_ext_lzma}/bin/
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_x86-64/liblzma.a ${PREFIX_ext_lzma}/bin/
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma.h ${PREFIX_ext_lzma}/include
-                    COMMAND ${CMAKE_COMMAND} -E make_directory ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/filter.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/hardware.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/index_hash.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/version.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/delta.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/index.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/check.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/stream_flags.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/bcj.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/lzma12.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/block.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/base.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/container.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/vli.h ${PREFIX_ext_lzma}/include/lzma
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include/lzma ${PREFIX_ext_lzma}/include/lzma
             
             UPDATE_COMMAND ""
         )
@@ -44,21 +30,8 @@ if (MINGW)
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_i686-sse2/liblzma.dll ${PREFIX_ext_lzma}/bin/
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_i686-sse2/liblzma.a ${PREFIX_ext_lzma}/bin/
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma.h ${PREFIX_ext_lzma}/include
-                    COMMAND ${CMAKE_COMMAND} -E make_directory ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/filter.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/hardware.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/index_hash.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/version.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/delta.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/index.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/check.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/stream_flags.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/bcj.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/lzma12.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/block.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/base.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/container.h ${PREFIX_ext_lzma}/include/lzma
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma/vli.h ${PREFIX_ext_lzma}/include/lzma
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include/lzma ${PREFIX_ext_lzma}/include/lzma
+
 
 
             UPDATE_COMMAND ""

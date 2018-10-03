@@ -53,7 +53,6 @@ public:
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) override;
 
 private Q_SLOTS:
-    void setNodeVisible(bool);
     void editabilityChanged();
 
 private:

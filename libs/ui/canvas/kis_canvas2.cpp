@@ -240,9 +240,9 @@ void KisCanvas2::setup()
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(selectionContentChanged()),
-            globalShapeManager(), SIGNAL(selectionContentChanged()));
+            selectedShapesProxy(), SIGNAL(selectionContentChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
-            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+            selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(&m_d->canvasUpdateCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 

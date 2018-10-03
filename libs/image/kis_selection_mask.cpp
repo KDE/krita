@@ -138,7 +138,6 @@ void KisSelectionMask::setVisible(bool visible, bool isLoading)
     if (!isLoading) {
         if (selection())
             selection()->setVisible(visible);
-        emit(visibilityChanged(visible));
     }
 }
 

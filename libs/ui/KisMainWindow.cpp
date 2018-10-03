@@ -2117,6 +2117,7 @@ void KisMainWindow::subWindowActivated()
         if (menu) {
             Q_FOREACH (QAction *action, menu->actions()) {
                 action->setShortcut(QKeySequence());
+                action->deleteLater();
             }
         }
     }

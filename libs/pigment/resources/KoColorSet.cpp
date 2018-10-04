@@ -198,6 +198,36 @@ KoColorSet::PaletteType KoColorSet::paletteType() const
 void KoColorSet::setPaletteType(PaletteType paletteType)
 {
     d->paletteType = paletteType;
+    QString suffix;
+    switch(d->paletteType) {
+    case GPL:
+        suffix = ".gpl";
+        break;
+    case ACT:
+        suffix = ".act";
+        break;
+    case RIFF_PAL:
+    case PSP_PAL:
+        suffix = ".pal";
+        break;
+    case ACO:
+        suffix = ".aco";
+        break;
+    case XML:
+        suffix = ".xml";
+        break;
+    case KPL:
+        suffix = ".kpl";
+        break;
+    case SBZ:
+        suffix = ".sbz";
+        break;
+    default:
+        suffix = defaultFileExtension();
+    }
+    QStringList fileName = filename().split(".");
+    fileName.last() = suffix.replace(".", "");
+    setFilename(fileName.join("."));
 }
 
 

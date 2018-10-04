@@ -11,7 +11,7 @@ if (MINGW)
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying 64-bit liblzma.dll
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_x86-64/liblzma.dll ${PREFIX_ext_lzma}/bin/
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_x86-64/liblzma.a ${PREFIX_ext_lzma}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma.h ${PREFIX_ext_lzma}/include
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma.h ${PREFIX_ext_lzma}/include/
                     COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include/lzma ${PREFIX_ext_lzma}/include/lzma/
             
             UPDATE_COMMAND ""
@@ -29,8 +29,8 @@ if (MINGW)
             BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying 32-bit liblzma.dll
             INSTALL_COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_i686-sse2/liblzma.dll ${PREFIX_ext_lzma}/bin/
                     COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/bin_i686-sse2/liblzma.a ${PREFIX_ext_lzma}/bin/
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma.h ${PREFIX_ext_lzma}/include
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include/lzma ${PREFIX_ext_lzma}/include/lzma
+                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/include/lzma.h ${PREFIX_ext_lzma}/include/
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/include/lzma ${PREFIX_ext_lzma}/include/lzma/
 
 
 

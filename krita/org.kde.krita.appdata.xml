@@ -253,6 +253,6 @@
     <binary>krita</binary>
   </provides>
   <releases>
-    <release date="2018-01-11" version="4.0.0.51 (beta 1)"/>
+    <release date="2018-10-18" version="4.2.0-preview"/>
   </releases>
 </component>

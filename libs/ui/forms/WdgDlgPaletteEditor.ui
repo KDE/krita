@@ -54,11 +54,21 @@
           <widget class="QSpinBox" name="spinBoxCol"/>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QCheckBox" name="ckxGlobal">
+            <widget class="QRadioButton" name="rb_global">
              <property name="text">
-              <string>Global</string>
+              <string>Resource Folder</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="rb_document">
+             <property name="text">
+              <string>Document</string>
              </property>
             </widget>
            </item>

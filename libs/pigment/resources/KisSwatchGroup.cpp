@@ -108,10 +108,13 @@ bool KisSwatchGroup::removeEntry(int column, int row)
 void KisSwatchGroup::setColumnCount(int columnCount)
 {
     Q_ASSERT(columnCount >= 0);
+
     if (columnCount < d->colorMatrix.size()) {
-        for (int i = d->colorMatrix.size() - 1; i < columnCount; i-- ) {
-            d->colorCount -= d->colorMatrix[i].size();
+        int newColorCount = 0;
+        for (int i = 0; i < columnCount; i++ ) {
+            newColorCount += d->colorMatrix[i].size();
         }
+        d->colorCount = newColorCount;
     }
     d->colorMatrix.resize(columnCount);
 }

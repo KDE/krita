@@ -22,13 +22,13 @@
 #include <kis_assert.h>
 
 KisRunnableStrokeJobData::KisRunnableStrokeJobData(QRunnable *runnable, KisStrokeJobData::Sequentiality sequentiality, KisStrokeJobData::Exclusivity exclusivity)
-    : KisStrokeJobData(sequentiality, exclusivity),
+    : KisRunnableStrokeJobDataBase(sequentiality, exclusivity),
       m_runnable(runnable)
 {
 }
 
 KisRunnableStrokeJobData::KisRunnableStrokeJobData(std::function<void ()> func, KisStrokeJobData::Sequentiality sequentiality, KisStrokeJobData::Exclusivity exclusivity)
-    : KisStrokeJobData(sequentiality, exclusivity),
+    : KisRunnableStrokeJobDataBase(sequentiality, exclusivity),
       m_func(func)
 {
 }

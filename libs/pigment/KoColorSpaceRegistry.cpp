@@ -47,6 +47,7 @@
 #include "KoColorProfileStorage.h"
 #include <KisReadWriteLockPolicy.h>
 
+#include <KoColorModelStandardIds.h>
 
 Q_GLOBAL_STATIC(KoColorSpaceRegistry, s_instance)
 
@@ -669,7 +670,15 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
             ids << factory->colorDepthId();
         }
     }
-    return ids;
+    QList<KoID> r;
+
+    if (ids.contains(Integer8BitsColorDepthID)) r << Integer8BitsColorDepthID;
+    if (ids.contains(Integer16BitsColorDepthID)) r << Integer16BitsColorDepthID;
+    if (ids.contains(Float16BitsColorDepthID)) r << Float16BitsColorDepthID;
+    if (ids.contains(Float32BitsColorDepthID)) r << Float32BitsColorDepthID;
+    if (ids.contains(Float64BitsColorDepthID)) r << Float64BitsColorDepthID;
+
+    return r;
 }
 
 QString KoColorSpaceRegistry::Private::colorSpaceIdImpl(const QString & colorModelId, const QString & colorDepthId) const

@@ -1002,7 +1002,7 @@ void KisImageTest::testFlattenImage()
     TestUtil::ReferenceImageChecker img("flatten", "imagetest");
 
     {
-        KisLayerUtils::flattenImage(p.image);
+        KisLayerUtils::flattenImage(p.image, 0);
         QVERIFY(img.checkDevice(p.image->projection(), p.image, "00_initial"));
 
         p.undoStore->undo();

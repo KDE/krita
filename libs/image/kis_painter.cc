@@ -1095,6 +1095,10 @@ void KisPainter::paintLine(const KisPaintInformation &pi1,
 void KisPainter::paintPolyline(const vQPointF &points,
                                int index, int numPoints)
 {
+    if (d->fillStyle != FillStyleNone) {
+        fillPolygon(points, d->fillStyle);
+    }
+
     if (index >= points.count())
         return;
 

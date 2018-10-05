@@ -73,6 +73,11 @@ public:
     virtual ~KisSelection();
 
     /**
+     * Create a new selection using the content of copySource as the mask.
+     */
+    KisSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds);
+
+    /**
      * The paint device of the pixel selection should report
      * about it's setDirty events to its parent. The creator
      * should set the parent manually if it wants to get the

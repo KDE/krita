@@ -135,7 +135,7 @@ public:
     KisOpenGLUpdateInfoSP updateCache(const QRect& rect, KisImageSP srcImage);
     KisOpenGLUpdateInfoSP updateCacheNoConversion(const QRect& rect);
 
-    void recalculateCache(KisUpdateInfoSP info);
+    void recalculateCache(KisUpdateInfoSP info, bool blockMipmapRegeneration);
 
     void slotImageSizeChanged(qint32 w, qint32 h);
 

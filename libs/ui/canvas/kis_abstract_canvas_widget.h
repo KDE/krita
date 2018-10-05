@@ -88,6 +88,8 @@ public:
      * compress update events.
      */
     virtual bool isBusy() const = 0;
+
+    virtual void setLodResetInProgress(bool value) = 0;
 };
 
 #endif // _KIS_ABSTRACT_CANVAS_WIDGET_

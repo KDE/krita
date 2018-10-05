@@ -88,10 +88,10 @@ template <template <class> class Container, class T>
  * support it. The main usage case is conversion of pointers in "descendant-
  * to-parent" way.
  */
-template <typename R, typename T>
-inline QList<R> implicitCastList(const QList<T> &list)
+template <typename R, typename T, template <typename U> class Container>
+inline Container<R> implicitCastList(const Container<T> &list)
 {
-    QList<R> result;
+    Container<R> result;
 
     Q_FOREACH(const T &item, list) {
         result.append(item);

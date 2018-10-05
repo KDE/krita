@@ -113,18 +113,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="file_export_pdf">
-      <icon>application-pdf</icon>
-      <text>&amp;Export as PDF...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Export as PDF</toolTip>
-      <iconText>Export as PDF</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="file_import_animation">
       <icon></icon>
       <text>Import animation frames...</text>
@@ -265,7 +253,7 @@
       <iconText>Close</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+W</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

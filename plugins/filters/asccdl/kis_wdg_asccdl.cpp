@@ -36,12 +36,12 @@ KisASCCDLConfigWidget::KisASCCDLConfigWidget(QWidget *parent, const KoColorSpace
     m_page->btnOffset->setColor(black);
     m_page->btnPower->setColor(black);
 
-    connect(m_page->btnSlope , SIGNAL(changed(const KoColor)), this,  SLOT(slopeColorChanged(const KoColor)));
-    connect(m_page->btnOffset, SIGNAL(changed(const KoColor)), this,  SLOT(offsetColorChanged(const KoColor)));
-    connect(m_page->btnPower , SIGNAL(changed(const KoColor)), this,  SLOT(powerColorChanged(const KoColor)));
-    connect(m_page->slopeSelector, SIGNAL(sigNewColor(const KoColor)), this, SLOT(slopeColorChanged(const KoColor)));
-    connect(m_page->offsetSelector, SIGNAL(sigNewColor(const KoColor)), this, SLOT(offsetColorChanged(const KoColor)));
-    connect(m_page->powerSelector, SIGNAL(sigNewColor(const KoColor)), this, SLOT(powerColorChanged(const KoColor)));
+    connect(m_page->btnSlope , SIGNAL(changed(KoColor)), this,  SLOT(slopeColorChanged(KoColor)));
+    connect(m_page->btnOffset, SIGNAL(changed(KoColor)), this,  SLOT(offsetColorChanged(KoColor)));
+    connect(m_page->btnPower , SIGNAL(changed(KoColor)), this,  SLOT(powerColorChanged(KoColor)));
+    connect(m_page->slopeSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(slopeColorChanged(KoColor)));
+    connect(m_page->offsetSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(offsetColorChanged(KoColor)));
+    connect(m_page->powerSelector, SIGNAL(sigNewColor(KoColor)), this, SLOT(powerColorChanged(KoColor)));
 }
 
 KisASCCDLConfigWidget::~KisASCCDLConfigWidget()

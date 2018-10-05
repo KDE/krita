@@ -27,6 +27,7 @@
 #include <KisDocument.h>
 #include <KisViewManager.h>
 #include <kis_action_manager.h>
+#include <kis_debug.h>
 
 #include <Document.h>
 #include <View.h>
@@ -131,7 +132,7 @@ QAction *Window::createAction(const QString &id, const QString &text, const QStr
         QList<QAction *> candidates = d->window->menuBar()->actions();
         Q_FOREACH(const QString &name, menuLocation.split("/")) {
             Q_FOREACH(QAction *candidate, candidates) {
-                if (candidate->objectName() == name) {
+                if (candidate->objectName().toLower() == name.toLower()) {
                     found = candidate;
                     candidates = candidate->menu()->actions();
                     break;

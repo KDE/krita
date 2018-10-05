@@ -52,7 +52,7 @@ void KisToolChangesTracker::requestUndo()
 
 KisToolChangesTrackerDataSP KisToolChangesTracker::lastState() const
 {
-    return !m_d->undoStack.isEmpty() ? m_d->undoStack.last() : 0;
+    return !m_d->undoStack.isEmpty() ? m_d->undoStack.last() : static_cast<QSharedPointer<KisToolChangesTrackerData>>(0);
 }
 
 void KisToolChangesTracker::reset()

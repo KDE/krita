@@ -25,6 +25,7 @@
 
 #include <klocalizedstring.h>
 #include <kis_node.h>
+#include <kis_group_layer.h>
 #include <kis_external_layer_iface.h>
 #include <kis_transaction.h>
 #include <kis_painter.h>
@@ -41,6 +42,9 @@
 #include "kis_sequential_iterator.h"
 #include "kis_selection_mask.h"
 #include "kis_image_config.h"
+#include "kis_layer_utils.h"
+#include <QQueue>
+#include <KisDeleteLaterWrapper.h>
 
 TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
                                                  KisNodeList processedNodes,
@@ -49,83 +53,14 @@ TransformStrokeStrategy::TransformStrokeStrategy(KisNodeSP rootNode,
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Transform"), false, undoFacade),
       m_selection(selection)
 {
-    if (rootNode->childCount() || !rootNode->paintDevice()) {
-        KisPaintDeviceSP device;
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!selection || !dynamic_cast<KisTransformMask*>(rootNode.data()));
 
-        if (KisTransformMask* tmask =
-            dynamic_cast<KisTransformMask*>(rootNode.data())) {
-
-            device = tmask->buildPreviewDevice();
-
-            /**
-             * When working with transform mask, selections are not
-             * taken into account.
-             */
-            m_selection = 0;
-        } else {
-            rootNode->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
-            device = rootNode->projection();
-        }
-
-        m_previewDevice = createDeviceCache(device);
-
-    } else {
-        KisPaintDeviceSP cacheDevice = createDeviceCache(rootNode->paintDevice());
-
-        if (dynamic_cast<KisSelectionMask*>(rootNode.data())) {
-            KIS_SAFE_ASSERT_RECOVER (cacheDevice->colorSpace()->colorModelId() == GrayAColorModelID &&
-                                     cacheDevice->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
-
-                cacheDevice->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id()));
-            }
-
-            m_previewDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-            const QRect srcRect = cacheDevice->exactBounds();
-
-            KisSequentialConstIterator srcIt(cacheDevice, srcRect);
-            KisSequentialIterator dstIt(m_previewDevice, srcRect);
-
-            const int pixelSize = m_previewDevice->colorSpace()->pixelSize();
-
-
-            KisImageConfig cfg(true);
-            KoColor pixel(cfg.selectionOverlayMaskColor(), m_previewDevice->colorSpace());
-
-            const qreal coeff = 1.0 / 255.0;
-            const qreal baseOpacity = 0.5;
-
-            while (srcIt.nextPixel() && dstIt.nextPixel()) {
-                qreal gray = srcIt.rawDataConst()[0];
-                qreal alpha = srcIt.rawDataConst()[1];
-
-                pixel.setOpacity(quint8(gray * alpha * baseOpacity * coeff));
-                memcpy(dstIt.rawData(), pixel.data(), pixelSize);
-            }
-
-        } else {
-            m_previewDevice = cacheDevice;
-        }
-
-        putDeviceCache(rootNode->paintDevice(), cacheDevice);
-    }
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_previewDevice);
     m_savedRootNode = rootNode;
     m_savedProcessedNodes = processedNodes;
 }
 
 TransformStrokeStrategy::~TransformStrokeStrategy()
 {
-}
-
-KisPaintDeviceSP TransformStrokeStrategy::previewDevice() const
-{
-    return m_previewDevice;
-}
-
-KisSelectionSP TransformStrokeStrategy::realSelection() const
-{
-    return m_selection;
 }
 
 KisPaintDeviceSP TransformStrokeStrategy::createDeviceCache(KisPaintDeviceSP dev)
@@ -180,8 +115,110 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
     TransformData *td = dynamic_cast<TransformData*>(data);
     ClearSelectionData *csd = dynamic_cast<ClearSelectionData*>(data);
+    PreparePreviewData *ppd = dynamic_cast<PreparePreviewData*>(data);
 
-    if(td) {
+    if (ppd) {
+        KisNodeSP rootNode = m_savedRootNode;
+        KisNodeList processedNodes = m_savedProcessedNodes;
+        KisPaintDeviceSP previewDevice;
+
+
+        if (rootNode->childCount() || !rootNode->paintDevice()) {
+            if (KisTransformMask* tmask =
+                dynamic_cast<KisTransformMask*>(rootNode.data())) {
+                previewDevice = createDeviceCache(tmask->buildPreviewDevice());
+
+                KIS_SAFE_ASSERT_RECOVER(!m_selection) {
+                    m_selection = 0;
+                }
+
+            } else if (KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(rootNode.data())) {
+                const QRect bounds = group->image()->bounds();
+
+                KisImageSP clonedImage = new KisImage(0,
+                                                      bounds.width(),
+                                                      bounds.height(),
+                                                      group->colorSpace(),
+                                                      "transformed_image");
+
+                KisGroupLayerSP clonedGroup = dynamic_cast<KisGroupLayer*>(group->clone().data());
+                clonedImage->setRootLayer(clonedGroup);
+
+                QQueue<KisNodeSP> linearizedSrcNodes;
+                KisLayerUtils::recursiveApplyNodes(rootNode, [&linearizedSrcNodes] (KisNodeSP node) {
+                    linearizedSrcNodes.enqueue(node);
+                });
+
+                KisLayerUtils::recursiveApplyNodes(KisNodeSP(clonedGroup), [&linearizedSrcNodes, processedNodes] (KisNodeSP node) {
+                    KisNodeSP srcNode = linearizedSrcNodes.dequeue();
+
+                    if (!processedNodes.contains(srcNode)) {
+                        node->setVisible(false);
+                    }
+                });
+
+                clonedImage->refreshGraph();
+
+                KisLayerUtils::forceAllDelayedNodesUpdate(clonedGroup);
+                clonedImage->waitForDone();
+
+                previewDevice = createDeviceCache(clonedImage->projection());
+                previewDevice->setDefaultBounds(group->projection()->defaultBounds());
+
+                // we delete the cloned image in GUI thread to ensure
+                // no signals are still pending
+                makeKisDeleteLaterWrapper(clonedImage)->deleteLater();
+
+            } else {
+                rootNode->projectionLeaf()->explicitlyRegeneratePassThroughProjection();
+                previewDevice = createDeviceCache(rootNode->projection());
+            }
+
+
+
+        } else {
+            KisPaintDeviceSP cacheDevice = createDeviceCache(rootNode->paintDevice());
+
+            if (dynamic_cast<KisSelectionMask*>(rootNode.data())) {
+                KIS_SAFE_ASSERT_RECOVER (cacheDevice->colorSpace()->colorModelId() == GrayAColorModelID &&
+                                         cacheDevice->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
+
+                    cacheDevice->convertTo(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id()));
+                }
+
+                previewDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+                const QRect srcRect = cacheDevice->exactBounds();
+
+                KisSequentialConstIterator srcIt(cacheDevice, srcRect);
+                KisSequentialIterator dstIt(previewDevice, srcRect);
+
+                const int pixelSize = previewDevice->colorSpace()->pixelSize();
+
+
+                KisImageConfig cfg(true);
+                KoColor pixel(cfg.selectionOverlayMaskColor(), previewDevice->colorSpace());
+
+                const qreal coeff = 1.0 / 255.0;
+                const qreal baseOpacity = 0.5;
+
+                while (srcIt.nextPixel() && dstIt.nextPixel()) {
+                    qreal gray = srcIt.rawDataConst()[0];
+                    qreal alpha = srcIt.rawDataConst()[1];
+
+                    pixel.setOpacity(quint8(gray * alpha * baseOpacity * coeff));
+                    memcpy(dstIt.rawData(), pixel.data(), pixelSize);
+                }
+
+            } else {
+                previewDevice = cacheDevice;
+            }
+
+            putDeviceCache(rootNode->paintDevice(), cacheDevice);
+        }
+
+
+        emit sigPreviewDeviceReady(previewDevice);
+    } else if(td) {
         m_savedTransformArgs = td->config;
 
         if (td->destination == TransformData::PAINT_DEVICE) {
@@ -248,6 +285,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         }
     } else if (csd) {
         KisPaintDeviceSP device = csd->node->paintDevice();
+
         if (device && !checkBelongsToSelection(device)) {
             if (!haveDeviceInCache(device)) {
                 putDeviceCache(device, createDeviceCache(device));
@@ -265,7 +303,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                     mask->setDirty();
                 }
             }
-
+        } else if (KisExternalLayer *externalLayer = dynamic_cast<KisExternalLayer*>(csd->node.data())) {
+            externalLayer->projectionLeaf()->setTemporaryHiddenFromRendering(true);
+            externalLayer->setDirty();
+            m_hiddenProjectionLeaves.append(csd->node);
         } else if (KisTransformMask *transformMask =
                    dynamic_cast<KisTransformMask*>(csd->node.data())) {
 
@@ -359,6 +400,10 @@ void TransformStrokeStrategy::finishStrokeCallback()
         selection->setVisible(true);
     }
 
+    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
+    }
+
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 
@@ -368,5 +413,9 @@ void TransformStrokeStrategy::cancelStrokeCallback()
 
     Q_FOREACH (KisSelectionSP selection, m_deactivatedSelections) {
         selection->setVisible(true);
+    }
+
+    Q_FOREACH (KisNodeSP node, m_hiddenProjectionLeaves) {
+        node->projectionLeaf()->setTemporaryHiddenFromRendering(false);
     }
 }

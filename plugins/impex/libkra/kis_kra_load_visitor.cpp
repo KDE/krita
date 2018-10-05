@@ -277,8 +277,13 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer *layer)
 
     loadNodeKeyframes(layer);
     result = loadSelection(getLocation(layer), layer->internalSelection());
-    result = loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
-    layer->update();
+
+    // HACK ALERT: we set the same filter again to ensure the layer
+    // is correctly updated
+    KisFilterConfigurationSP filter = layer->filter();
+    result = loadFilterConfiguration(filter.data(), getLocation(layer, DOT_FILTERCONFIG));
+    layer->setFilter(filter);
+
     result = visitAll(layer);
     return result;
 }

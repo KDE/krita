@@ -250,8 +250,10 @@ private:
     void commitChanges();
 
 
-    bool tryInitTransformModeFromNode(KisNodeSP node);
+    bool tryInitArgsFromNode(KisNodeSP node);
     bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *args, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode);
+
+    void resetArgsForMode(ToolTransformArgs::TransformMode mode);
     void initTransformMode(ToolTransformArgs::TransformMode mode);
     void initGuiAfterTransformMode();
 
@@ -340,6 +342,7 @@ private Q_SLOTS:
     void slotRestartTransform();
     void slotEditingFinished();
 
+    void slotPreviewDeviceGenerated(KisPaintDeviceSP device);
 
     // context menu options for updating the transform type
     // this is to help with discoverability since come people can't find the tool options

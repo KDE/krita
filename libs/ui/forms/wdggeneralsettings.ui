@@ -26,7 +26,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -424,6 +424,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="chkEnableTranformToolAfterPaste">
+           <property name="text">
+            <string>Activate transform tool after pasting</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QGroupBox" name="groupBoxKineticScrollingSettings">
            <property name="title">
             <string>Kinetic Scrolling (needs restart)</string>
@@ -804,6 +811,16 @@
    <signal>toggled(bool)</signal>
    <receiver>m_autosaveSpinBox</receiver>
    <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
  </connections>
 </ui>

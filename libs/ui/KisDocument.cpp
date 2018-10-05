@@ -1,4 +1,4 @@
-﻿/* This file is part of the Krita project
+/* This file is part of the Krita project
  *
  * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -543,7 +543,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
 
     bool started =
         initiateSavingInBackground(actionName,
-                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus,QString)),
+                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
                                    job, exportConfiguration);
 
     if (!started) {
@@ -762,9 +762,9 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     }
 
     connect(d->backgroundSaveDocument.data(),
-            SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus, const QString&)),
+            SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus,QString)),
             this,
-            SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus, const QString&)));
+            SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus,QString)));
 
 
     connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
@@ -827,7 +827,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
 
     if (d->image->isIdle() || hadClonedDocument) {
         started = initiateSavingInBackground(i18n("Autosaving..."),
-                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
+                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
                                              KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
                                              0,
                                              std::move(optionalClonedDocument));
@@ -1757,7 +1757,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     d->referenceImagesLayer = layer;
 
     if (d->referenceImagesLayer) {
-        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(const QRectF&)),
+        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SIGNAL(sigReferenceImagesChanged()));
     }
 }

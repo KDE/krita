@@ -349,6 +349,12 @@ public: // Graph methods
      */
     KisNodeSP findChildByName(const QString &name);
 
+Q_SIGNALS:
+    /**
+     * Don't use this signal anywhere other than KisNodeShape. It's a hack.
+     */
+    void sigNodeChangedInternal();
+
 public:
 
     /**

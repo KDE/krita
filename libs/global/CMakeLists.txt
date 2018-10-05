@@ -29,6 +29,7 @@ set(kritaglobal_LIB_SRCS
     KisSharedRunnable.cpp
     KisRollingMeanAccumulatorWrapper.cpp
     kis_config_notifier.cpp
+    KisDeleteLaterWrapper.cpp
 )
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )

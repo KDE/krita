@@ -1,5 +1,5 @@
-#export MACOSX_DEPLOYMENT_TARGET=10.9
-#export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
+export MACOSX_DEPLOYMENT_TARGET=10.11
+export SDKROOT=/Applications/Xcode.app/Contents/developer/Platforms/MacOSX.platform/developer/SDKs/MacOSX10.13.sdk
 
 ./configure  \
     -skip qt3d \
@@ -21,14 +21,11 @@
     -skip qtxmlpatterns \
     -opensource -confirm-license -release \
     -no-qml-debug -no-mtdev -no-journald \
-    -no-openssl -no-libproxy \
+    -openssl-linked -no-libproxy \
     -no-pulseaudio -no-alsa -no-nis \
     -no-cups -no-tslib -no-pch \
     -no-dbus  -no-gstreamer -no-system-proxies \
     -no-openssl -no-libproxy -no-pulseaudio \
     -nomake examples \
-    -prefix /Users/boud/dev/i
-
-#    -sdk macosx10.9 \
-#    -platform macx-clang-64 \
-
+    -prefix /Users/boud/dev/deps
+    -sdk macosx10.13

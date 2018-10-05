@@ -265,6 +265,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisDlgPaletteEditor.cpp
 
     widgets/KisNewsWidget.cpp
+	widgets/KisGamutMaskToolbar.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -298,6 +299,7 @@ set(kritaui_LIB_SRCS
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactory.cpp
+    actions/KisTransformToolActivationCommand.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -496,6 +498,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisWelcomePage.ui
     forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
+	forms/wdgGamutMaskToolbar.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui

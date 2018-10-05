@@ -200,15 +200,15 @@ LayerModel::LayerModel(QObject* parent)
     , d(new Private(this))
 {
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
-            this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-            this, SLOT(source_rowsInserted(QModelIndex, int, int)));
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+            this, SLOT(source_rowsAboutToBeInserted(QModelIndex,int,int)));
+    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(source_rowsInserted(QModelIndex,int,int)));
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(source_rowsAboutToBeRemoved(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-            this, SLOT(source_rowsRemoved(QModelIndex, int, int)));
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(source_rowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(source_rowsRemoved(QModelIndex,int,int)));
 
     connect(d->nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(source_dataChanged(QModelIndex,QModelIndex)));

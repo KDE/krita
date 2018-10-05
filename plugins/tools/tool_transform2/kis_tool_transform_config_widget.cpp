@@ -64,8 +64,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
                                 "<li><b>Bicubic</b> for smoother results</li>"
                                 "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
                                 "</ul></p>"));
-    connect(cmbFilter, SIGNAL(activated(const KoID &)),
-            this, SLOT(slotFilterChanged(const KoID &)));
+    connect(cmbFilter, SIGNAL(activated(KoID)),
+            this, SLOT(slotFilterChanged(KoID)));
 
     // Init Warp Type combo
     cmbWarpType->insertItem(KisWarpTransformWorker::AFFINE_TRANSFORM,i18n("Default (Affine)"));
@@ -264,7 +264,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Connect other widget (not having editingFinished signal) to
     // the same slot. From Qt 4.6 onwards the sequence of the signal
     // delivery is definite.
-    connect(cmbFilter, SIGNAL(activated(const KoID &)), this, SLOT(notifyEditingFinished()));
+    connect(cmbFilter, SIGNAL(activated(KoID)), this, SLOT(notifyEditingFinished()));
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(notifyEditingFinished()));
     connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(notifyEditingFinished()));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(notifyEditingFinished()));
@@ -281,7 +281,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // saved to undo, so we don't emit notifyEditingFinished() for them
 
     // Connect Apply/Reset buttons
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(slotButtonBoxClicked(QAbstractButton *)));
+    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonBoxClicked(QAbstractButton*)));
 
     // Mode switch buttons
     connect(freeTransformButton, SIGNAL(clicked(bool)), this, SLOT(slotSetFreeTransformModeButtonClicked(bool)));

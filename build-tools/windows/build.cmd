@@ -704,7 +704,7 @@ if errorlevel 1 (
 )
 echo.
 
-set EXT_TARGETS=patch png2ico gettext qt zlib boost eigen3 exiv2 fftw3 ilmbase
+set EXT_TARGETS=patch png2ico zlib lzma gettext qt boost eigen3 exiv2 fftw3 ilmbase
 set EXT_TARGETS=%EXT_TARGETS% jpeg lcms2 ocio openexr png tiff gsl vc libraw
 set EXT_TARGETS=%EXT_TARGETS% giflib freetype poppler kwindowsystem drmingw gmic
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
@@ -742,6 +742,7 @@ echo Running CMake for Krita...
     -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
     -DBUILD_TESTING=OFF ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
+    -DFOUNDATION_BUILD=ON ^
     -Wno-dev ^
     -G "MinGW Makefiles" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%

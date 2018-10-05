@@ -67,6 +67,7 @@ Q_SIGNALS:
 
 private:
     void createBrush();
+    void updatePreviewImage();
 
     KisImageWSP m_image;
     KisBrushSP m_brush;

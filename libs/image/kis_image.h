@@ -518,7 +518,7 @@ public:
     /**
      * Merge all visible layers and discard hidden ones.
      */
-    void flatten();
+    void flatten(KisNodeSP activeNode);
 
     /**
      * Merge the specified layer with the layer
@@ -935,13 +935,16 @@ public Q_SLOTS:
      * when we change the size of the image. In this case, the whole
      * image will be reloaded into UI by sigSizeChanged(), so there is
      * no need to inform the UI about individual dirty rects.
+     *
+     * The last call to enableUIUpdates() will return the list of udpates
+     * that were requested while they were blocked.
      */
     void disableUIUpdates() override;
 
     /**
      * \see disableUIUpdates
      */
-    void enableUIUpdates() override;
+    QVector<QRect> enableUIUpdates() override;
 
     /**
      * Disables the processing of all the setDirty() requests that

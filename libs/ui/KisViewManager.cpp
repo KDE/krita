@@ -500,7 +500,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->currentImageView->canvasController()->setFocus();
 
         d->viewConnections.addUniqueConnection(
-                    image(), SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+                    image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),
                     resourceProvider(), SLOT(slotImageSizeChanged()));
 
         d->viewConnections.addUniqueConnection(
@@ -726,7 +726,7 @@ void KisViewManager::createActions()
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
-    connect(d->actionAuthor, SIGNAL(triggered(const QString &)), this, SLOT(changeAuthorProfile(const QString &)));
+    connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
 
@@ -1389,4 +1389,18 @@ void KisViewManager::slotUpdatePixelGridAction()
 
     KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled() && cfg.useOpenGL());
+}
+
+void KisViewManager::slotActivateTransformTool()
+{
+    if(KoToolManager::instance()->activeToolId() == "KisToolTransform") {
+        KoToolBase* tool = KoToolManager::instance()->toolById(canvasBase(), "KisToolTransform");
+
+        QSet<KoShape*> dummy;
+        // Start a new stroke
+        tool->deactivate();
+        tool->activate(KoToolBase::DefaultActivation, dummy);
+    }
+
+    KoToolManager::instance()->switchToolRequested("KisToolTransform");
 }

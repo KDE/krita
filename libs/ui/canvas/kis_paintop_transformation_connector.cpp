@@ -30,8 +30,8 @@ KisPaintopTransformationConnector::KisPaintopTransformationConnector(KisCanvas2 
       m_canvas(canvas)
 {
     connect(m_canvas->resourceManager(),
-            SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+            SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotCanvasResourceChanged(int,QVariant)));
 }
 
 void KisPaintopTransformationConnector::notifyTransformationChanged()

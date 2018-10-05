@@ -57,7 +57,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
     layout->setSpacing(0);
 
     d->input = new KoZoomInput(this);
-    connect(d->input, SIGNAL(zoomLevelChanged(const QString&)), this, SIGNAL(zoomLevelChanged(const QString&)));
+    connect(d->input, SIGNAL(zoomLevelChanged(QString)), this, SIGNAL(zoomLevelChanged(QString)));
     layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);

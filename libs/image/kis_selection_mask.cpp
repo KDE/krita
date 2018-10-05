@@ -206,7 +206,6 @@ void KisSelectionMask::setVisible(bool visible, bool isLoading)
     if (!isLoading && visible != oldVisible) {
         if (selection())
             selection()->setVisible(visible);
-        emit(visibilityChanged(visible));
     }
 }
 

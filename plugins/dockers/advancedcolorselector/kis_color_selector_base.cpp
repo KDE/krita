@@ -40,6 +40,7 @@
 #include "kis_image.h"
 #include "kis_display_color_converter.h"
 
+#include <resources/KoGamutMask.h>
 
 class KisColorPreviewPopup : public QWidget {
 public:
@@ -172,8 +173,8 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
     }
     m_canvas = canvas;
     if (m_canvas) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                SLOT(canvasResourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                SLOT(canvasResourceChanged(int,QVariant)), Qt::UniqueConnection);
 
         connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()),
                 SLOT(reset()));

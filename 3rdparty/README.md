@@ -26,10 +26,8 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: mingw-w64 7.1 (by mingw-builds)
-               - 32-bit (x86) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/7.1.0/threads-posix/dwarf/
-               - 64-bit (x64) target: https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.1.0/threads-posix/seh/
-
+    * Windows: mingw-w64 7.3 (by mingw-builds): https://sourceforge.net/projects/mingw-w64/
+            For threading, select posix, for exceptions seh.
                Make sure mingw's bin folder is in your path. It might be a good
                idea to create a batch file which sets the path and start cmd.
                MSVC is *not* supported at the moment.

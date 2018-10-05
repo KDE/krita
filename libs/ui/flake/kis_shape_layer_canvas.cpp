@@ -127,7 +127,6 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         , m_projection(0)
         , m_parentLayer(parent)
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
-        , m_image(image)
 {
     /**
      * The layour should also add itself to its own shape manager, so that the canvas
@@ -139,8 +138,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
 
-    connect(m_image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), SLOT(slotImageSizeChanged()));
-    m_cachedImageRect = m_image->bounds();
+    setImage(image);
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
@@ -150,7 +148,17 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
 
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
 {
+    if (m_image) {
+        disconnect(m_image, 0, this, 0);
+    }
+
     m_viewConverter->setImage(image);
+    m_image = image;
+
+    if (image) {
+        connect(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
+        m_cachedImageRect = m_image->bounds();
+    }
 }
 
 

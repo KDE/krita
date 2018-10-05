@@ -704,13 +704,17 @@ void writePixelDataCommon(QIODevice *io,
         }
 
     } catch (KisAslWriterUtils::ASLWriteException &e) {
-        qDeleteAll(planes);
+        Q_FOREACH (quint8 *plane, planes) {
+            delete[] plane;
+        }
         planes.clear();
 
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));
     }
 
-    qDeleteAll(planes);
+    Q_FOREACH (quint8 *plane, planes) {
+        delete[] plane;
+    }
     planes.clear();
 }
 

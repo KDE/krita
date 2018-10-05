@@ -176,6 +176,7 @@ set(kritaimage_LIB_SRCS
    kis_stroke_strategy_undo_command_based.cpp
    kis_simple_stroke_strategy.cpp
    KisRunnableBasedStrokeStrategy.cpp
+   KisRunnableStrokeJobDataBase.cpp
    KisRunnableStrokeJobData.cpp
    KisRunnableStrokeJobsInterface.cpp
    KisFakeRunnableStrokeJobsExecutor.cpp
@@ -201,6 +202,7 @@ set(kritaimage_LIB_SRCS
    kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
+   KisImageSignals.cpp
    kis_image_config.cpp
    kis_projection_updates_filter.cpp
    kis_suspend_projection_updates_stroke_strategy.cpp

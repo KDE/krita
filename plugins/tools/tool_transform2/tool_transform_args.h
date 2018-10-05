@@ -309,18 +309,18 @@ private:
     double m_aX;
     double m_aY;
     double m_aZ;
-    QVector3D m_cameraPos;
+    QVector3D m_cameraPos {QVector3D(0,0,1024)};
     double m_scaleX;
     double m_scaleY;
     double m_shearX;
     double m_shearY;
-    bool m_keepAspectRatio;
+    bool m_keepAspectRatio {false};
 
     // perspective trasform related
     QTransform m_flattenedPerspectiveTransform;
 
     KisFilterStrategy *m_filter;
-    bool m_editTransformPoints;
+    bool m_editTransformPoints {false};
     QSharedPointer<KisLiquifyProperties> m_liquifyProperties;
     QScopedPointer<KisLiquifyTransformWorker> m_liquifyWorker;
 

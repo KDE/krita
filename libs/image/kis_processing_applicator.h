@@ -23,7 +23,7 @@
 #include "kis_types.h"
 
 #include "kis_stroke_job_strategy.h"
-#include "kis_image_signal_router.h"
+#include "KisImageSignals.h"
 #include "kundo2magicstring.h"
 #include "kundo2commandextradata.h"
 

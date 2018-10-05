@@ -219,7 +219,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()),this, SLOT(slotUpdateIsolateModeAction()));
-        connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP, const KisNodeList&)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP, const KisNodeList&)));
+        connect(m_d->imageView->image(), SIGNAL(sigRequestNodeReselection(KisNodeSP,KisNodeList)),this, SLOT(slotImageRequestNodeReselection(KisNodeSP,KisNodeList)));
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
     }
 
@@ -349,8 +349,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     NEW_LAYER_ACTION("add_new_selection_mask", "KisSelectionMask");
 
-    connect(&m_d->nodeCreationSignalMapper, SIGNAL(mapped(const QString &)),
-            this, SLOT(createNode(const QString &)));
+    connect(&m_d->nodeCreationSignalMapper, SIGNAL(mapped(QString)),
+            this, SLOT(createNode(QString)));
 
     CONVERT_NODE_ACTION("convert_to_paint_layer", "KisPaintLayer");
 
@@ -364,8 +364,8 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION_2("convert_layer_to_file_layer", "KisFileLayer", QStringList()<< "KisFileLayer" << "KisCloneLayer");
 
-    connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(const QString &)),
-            this, SLOT(convertNode(const QString &)));
+    connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(QString)),
+            this, SLOT(convertNode(QString)));
 
     action = actionManager->createAction("isolate_layer");
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleIsolateMode(bool)));

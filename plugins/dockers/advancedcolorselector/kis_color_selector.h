@@ -50,7 +50,10 @@ public:
 public Q_SLOTS:
     void reset() override;
     void updateSettings() override;
-
+    void slotGamutMaskSet(KoGamutMask* gamutMask);
+    void slotGamutMaskUnset();
+    void slotGamutMaskPreviewUpdate();
+    void slotGamutMaskToggle(bool state);
 
 Q_SIGNALS:
     void settingsButtonClicked();

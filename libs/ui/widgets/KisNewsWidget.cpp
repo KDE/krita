@@ -87,7 +87,7 @@ KisNewsWidget::KisNewsWidget(QWidget *parent)
 
     listNews->setModel(m_rssModel);
     listNews->setItemDelegate(new KisNewsDelegate(listNews));
-    connect(listNews, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemSelected(const QModelIndex&)));
+    connect(listNews, SIGNAL(clicked(QModelIndex)), this, SLOT(itemSelected(QModelIndex)));
 }
 
 void KisNewsWidget::toggleNews(bool toggle)

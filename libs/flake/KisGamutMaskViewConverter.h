@@ -36,7 +36,9 @@ public:
     KisGamutMaskViewConverter();
     ~KisGamutMaskViewConverter();
 
+    QSize viewSize() const;
     void setViewSize(QSize viewSize);
+
     void setMaskSize(QSizeF maskSize);
 
     QPointF documentToView(const QPointF &documentPoint) const override;

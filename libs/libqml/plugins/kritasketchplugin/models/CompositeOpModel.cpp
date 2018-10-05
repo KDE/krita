@@ -195,8 +195,8 @@ void CompositeOpModel::setView(QObject* newView)
     if (d->view)
     {
         if (d->view->canvasBase() && d->view->canvasBase()->resourceManager()) {
-            connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                    this, SLOT(resourceChanged(int, const QVariant&)));
+            connect(d->view->canvasBase()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                    this, SLOT(resourceChanged(int,QVariant)));
         }
         if (d->view->nodeManager()) {
             connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),

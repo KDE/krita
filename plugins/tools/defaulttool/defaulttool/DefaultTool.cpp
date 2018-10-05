@@ -292,6 +292,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     : KoInteractionTool(canvas)
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
+    , m_decorator(0)
     , m_mouseWasInsideHandles(false)
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
@@ -642,7 +643,7 @@ void DefaultTool::updateCursor()
                 statusText = i18n("Click and drag to shear selection.");
             }
 
-            if (decorator->isOverTextEditorButton()) {
+            if (m_decorator->isOverTextEditorButton()) {
                 cursor = Qt::PointingHandCursor;
             } else {
                 cursor = Qt::ArrowCursor;
@@ -707,7 +708,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
     if (selection) {
-        this->decorator = new SelectionDecorator(canvas()->resourceManager());
+        this->m_decorator = new SelectionDecorator(canvas()->resourceManager());
 
         {
             /**
@@ -718,14 +719,14 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
             KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
             KisNodeSP node = kisCanvas->viewManager()->nodeManager()->activeNode();
             const bool isSelectionMask = node && node->inherits("KisSelectionMask");
-            decorator->setForceShapeOutlines(isSelectionMask);
+            m_decorator->setForceShapeOutlines(isSelectionMask);
         }
 
-        decorator->setSelection(selection);
-        decorator->setHandleRadius(handleRadius());
-        decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-        decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
-        decorator->paint(painter, converter);
+        m_decorator->setSelection(selection);
+        m_decorator->setHandleRadius(handleRadius());
+        m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
+        m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+        m_decorator->paint(painter, converter);
     }
 
     KoInteractionTool::paint(painter, converter);
@@ -1740,7 +1741,7 @@ void DefaultTool::explicitUserStrokeEndRequest()
 bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
 {
 
-    if (!canvas() || !decorator) {
+    if (!canvas() || !m_decorator) {
         return false;
     }
 
@@ -1768,11 +1769,11 @@ bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
     const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
 
     if (distanceSq < 18 * 18) { // 18 is "handle" area
-        decorator->setIsOverTextEditorButton(true);
+        m_decorator->setIsOverTextEditorButton(true);
         return true;
     }
     else {
-        decorator->setIsOverTextEditorButton(false);
+        m_decorator->setIsOverTextEditorButton(false);
         return false;
     }
 }

@@ -179,7 +179,7 @@ private:
     QPolygonF m_selectionOutline;
     QPointF m_lastPoint;
 
-    SelectionDecorator *decorator;
+    SelectionDecorator *m_decorator;
 
     // TODO alter these 3 arrays to be static const instead
     QCursor m_sizeCursors[8];

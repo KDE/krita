@@ -19,11 +19,11 @@
 #ifndef TABLETTESTDIALOG_H
 #define TABLETTESTDIALOG_H
 
-#include <QDialog>
+#include <KoDialog.h>
 
 class Ui_TabletTest;
 
-class TabletTestDialog : public QDialog
+class TabletTestDialog : public KoDialog
 {
     Q_OBJECT
 public:

@@ -113,11 +113,6 @@ public:
 
     int keyframeCount() const;
 
-    int keyframeRowIndexOf(KisKeyframeSP keyframe) const;
-    KisKeyframeSP keyframeAtRow(int row) const;
-
-    int keyframeInsertionRow(int time) const;
-
     virtual bool hasScalarValue() const = 0;
     virtual qreal minScalarValue() const;
     virtual qreal maxScalarValue() const;

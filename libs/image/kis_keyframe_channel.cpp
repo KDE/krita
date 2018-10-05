@@ -461,57 +461,6 @@ KisFrameSet KisKeyframeChannel::identicalFrames(int time) const
     return affectedFrames(time);
 }
 
-int KisKeyframeChannel::keyframeRowIndexOf(KisKeyframeSP keyframe) const
-{
-    KeyframesMap::const_iterator it = m_d->keys.constBegin();
-    KeyframesMap::const_iterator end = m_d->keys.constEnd();
-
-    int row = 0;
-
-    for (; it != end; ++it) {
-        if (it.value().data() == keyframe) {
-            return row;
-        }
-
-        row++;
-    }
-
-    return -1;
-}
-
-KisKeyframeSP KisKeyframeChannel::keyframeAtRow(int row) const
-{
-    KeyframesMap::const_iterator it = m_d->keys.constBegin();
-    KeyframesMap::const_iterator end = m_d->keys.constEnd();
-
-    for (; it != end; ++it) {
-        if (row <= 0) {
-            return it.value();
-        }
-
-        row--;
-    }
-
-    return KisKeyframeSP();
-}
-
-int KisKeyframeChannel::keyframeInsertionRow(int time) const
-{
-    KeyframesMap::const_iterator it = m_d->keys.constBegin();
-    KeyframesMap::const_iterator end = m_d->keys.constEnd();
-
-    int row = 0;
-
-    for (; it != end; ++it) {
-        if (it.value()->time() > time) {
-            break;
-        }
-        row++;
-    }
-
-    return row;
-}
-
 QDomElement KisKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
 {
     QDomElement channelElement = doc.createElement("channel");

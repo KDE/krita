@@ -945,12 +945,12 @@ QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
     }
 
     KisPaintDeviceSP originalDevice = original();
-    if (originalDevice) {
+    if (originalDevice && originalDevice->framesInterface()) {
         KisRasterKeyframeChannel *channel = originalDevice->keyframeChannel();
 
         if (channel) {
             KisPaintDeviceSP targetDevice = new KisPaintDevice(colorSpace());
-            KisKeyframeSP keyframe = channel->activeKeyframeAt(time);
+            KisKeyframeSP keyframe = channel->visibleKeyframeAt(time);
             channel->fetchFrame(keyframe, targetDevice);
             return targetDevice->createThumbnail(w, h, 1,
                                                  KoColorConversionTransformation::internalRenderingIntent(),

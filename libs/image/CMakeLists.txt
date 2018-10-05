@@ -298,6 +298,7 @@ set(kritaimage_LIB_SRCS
    kis_onion_skin_compositor.cpp
    kis_onion_skin_cache.cpp
    kis_idle_watcher.cpp
+   kis_animation_cycle.cpp
 
    kis_psd_layer_style.cpp
    kis_layer_properties_icons.cpp

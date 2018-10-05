@@ -31,6 +31,7 @@
 
 class KisFrameSet;
 class KisTimeSpan;
+class KisAnimationCycle;
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
@@ -70,6 +71,9 @@ public:
     KisKeyframeSP copyKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     virtual KisKeyframeSP linkKeyframe(const KisKeyframeSP keyframe, int newTime, KUndo2Command *parentCommand = 0);
     KisKeyframeSP copyExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
+    KUndo2Command * createCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe, KUndo2Command *parentCommand = 0);
+    KUndo2Command * deleteCycle(QSharedPointer<KisAnimationCycle> cycle, KUndo2Command *parentCommand = 0);
+    KisKeyframeSP addRepeat(int time, KisKeyframeSP source, KUndo2Command *parentCommand = 0);
 
     bool swapExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, int dstTime, KUndo2Command *parentCommand = 0);
 
@@ -84,6 +88,13 @@ public:
     KisKeyframeSP nextKeyframe(const KisKeyframe &keyframe) const;
     KisKeyframeSP previousKeyframe(const KisKeyframe &keyframe) const;
     KisKeyframeSP lastKeyframe() const;
+
+    /**
+     * Finds the original range of the cycle defined or repeated at the given time.
+     * @arg time a time at any frame within the original cycle or any repeat of it.
+     */
+    KisTimeSpan cycledRangeAt(int time) const;
+    QSharedPointer<KisAnimationCycle> cycleAt(int time) const;
 
     /**
      * Finds the span of time of the keyframe active at given time.
@@ -164,9 +175,13 @@ private:
     void moveKeyframeImpl(KisKeyframeSP keyframe, int newTime);
     void swapKeyframesImpl(KisKeyframeSP lhsKeyframe, KisKeyframeSP rhsKeyframe);
 
+    void addCycle(QSharedPointer<KisAnimationCycle> cycle);
+    void removeCycle(QSharedPointer<KisAnimationCycle> cycle);
+
     friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;
     friend class KisSwapFramesCommand;
+    friend class KisDefineCycleCommand;
 
 private:
     KisKeyframeSP insertKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand);

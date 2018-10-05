@@ -43,6 +43,8 @@ private Q_SLOTS:
 
     void testMovingFrames();
 
+    void testCycles();
+
 private:
 
     const KoColorSpace *cs;

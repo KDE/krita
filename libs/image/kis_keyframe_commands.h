@@ -68,4 +68,18 @@ private:
     KisKeyframeSP m_rhsFrame;
 };
 
+class KRITAIMAGE_EXPORT KisDefineCycleCommand : public KUndo2Command
+{
+public:
+    KisDefineCycleCommand(KisKeyframeChannel *channel, QSharedPointer<KisAnimationCycle> cycle, bool undefine, KUndo2Command *parentCommand);
+
+    void redo() override;
+    void undo() override;
+
+private:
+    KisKeyframeChannel *m_channel;
+    QSharedPointer<KisAnimationCycle> m_cycle;
+    bool m_undefine;
+};
+
 #endif

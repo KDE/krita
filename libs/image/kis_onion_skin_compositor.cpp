@@ -156,7 +156,7 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisKeyframeSP keyframeFwd;
 
     int time = sourceDevice->defaultBounds()->currentTime();
-    keyframeBck = keyframeFwd = keyframes->activeKeyframeAt(time);
+    keyframeBck = keyframeFwd = keyframes->visibleKeyframeAt(time);
 
     for (int offset = 1; offset <= m_d->numberOfSkins; offset++) {
         keyframeBck = m_d->getNextFrameToComposite(keyframes, keyframeBck, true);

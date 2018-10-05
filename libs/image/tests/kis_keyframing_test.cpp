@@ -532,4 +532,50 @@ void KisKeyframingTest::testMovingFrames()
     }
 }
 
+void KisKeyframingTest::testCycles()
+{
+    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    dev->setDefaultBounds(bounds);
+    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KoID());
+
+    KisKeyframeSP frame10 = channel->addKeyframe(10);
+    channel->addKeyframe(12);
+    KisKeyframeSP frame16 = channel->addKeyframe(16);
+    channel->addKeyframe(20);
+
+    auto cmd = channel->createCycle(frame10, frame16);
+    cmd->redo();
+
+    // Cycled range can be queried from by any frame within it
+    QCOMPARE(channel->cycledRangeAt(9), KisTimeSpan());
+    QCOMPARE(channel->cycledRangeAt(20), KisTimeSpan());
+    QCOMPARE(channel->cycledRangeAt(10), KisTimeSpan(10, 19));
+    QCOMPARE(channel->cycledRangeAt(19), KisTimeSpan(10, 19));
+
+    channel->addRepeat(30, frame10);
+
+    // Repeats also resolve to the original cycled range
+    QCOMPARE(channel->cycledRangeAt(29), KisTimeSpan());
+    QCOMPARE(channel->cycledRangeAt(30), KisTimeSpan(10, 19));
+    QCOMPARE(channel->cycledRangeAt(50), KisTimeSpan(10, 19));
+    QCOMPARE(channel->cycledRangeAt(100), KisTimeSpan(10, 19));
+
+    // Affected frames contain original frames and repeats
+    QCOMPARE(channel->affectedFrames(15), KisFrameSet::between(12, 15) | KisFrameSet::infiniteFrom(32));
+    QCOMPARE(channel->affectedFrames(50), KisFrameSet::between(10, 11) | KisFrameSet::infiniteFrom(30));
+
+    // All repeats within the queried range are reported as identical. Original is always included.
+    QCOMPARE(channel->identicalFrames(50, KisTimeSpan(40, 60)), KisFrameSet({{10, 11}, {40, 41}, {50, 51}, {60, 60}}));
+
+    // Repeat ends at the next keyframe
+    channel->addKeyframe(42);
+    QCOMPARE(channel->cycledRangeAt(41), KisTimeSpan(10, 19));
+    QCOMPARE(channel->cycledRangeAt(42), KisTimeSpan());
+
+    // Finitely many repeats are all included separately as affected
+    QCOMPARE(channel->affectedFrames(40), KisFrameSet({{10, 11}, {30, 31}, {40, 41}}));
+}
+
 QTEST_MAIN(KisKeyframingTest)

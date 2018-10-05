@@ -263,8 +263,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
 {
     if (currentUITime() == frameId) return;
 
-    const KisFrameSet range = calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
-    const bool needsRegeneration = !range.contains(frameId);
+    const bool needsRegeneration = !areFramesIdentical(m_d->image->root(), currentUITime(), frameId);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token =
         m_d->switchToken.toStrongRef();

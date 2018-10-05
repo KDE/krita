@@ -30,7 +30,7 @@
 #include "kis_default_bounds.h"
 
 class KisFrameSet;
-
+class KisTimeSpan;
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
@@ -75,11 +75,14 @@ public:
 
     KisKeyframeSP keyframeAt(int time) const;
     KisKeyframeSP activeKeyframeAt(int time) const;
+    KisKeyframeSP visibleKeyframeAt(int time) const;
     KisKeyframeSP currentlyActiveKeyframe() const;
 
     KisKeyframeSP firstKeyframe() const;
     KisKeyframeSP nextKeyframe(KisKeyframeSP keyframe) const;
     KisKeyframeSP previousKeyframe(KisKeyframeSP keyframe) const;
+    KisKeyframeSP nextKeyframe(const KisKeyframe &keyframe) const;
+    KisKeyframeSP previousKeyframe(const KisKeyframe &keyframe) const;
     KisKeyframeSP lastKeyframe() const;
 
     /**
@@ -109,7 +112,9 @@ public:
      * Note: this set may be different than the set of affected frames
      * due to interpolation.
      */
-    virtual KisFrameSet identicalFrames(int time) const;
+    virtual KisFrameSet identicalFrames(int time, const KisTimeSpan range) const;
+    virtual bool areFramesIdentical(int time1, int time2) const;
+    virtual bool isFrameAffectedBy(int targetFrame, int changedFrame) const;
 
     int keyframeCount() const;
 
@@ -144,7 +149,6 @@ protected:
     virtual void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) = 0;
     virtual void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) = 0;
 
-    virtual QRect affectedRect(KisKeyframeSP key) = 0;
     virtual void requestUpdate(const KisFrameSet &range, const QRect &rect);
 
     virtual KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) = 0;

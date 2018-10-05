@@ -395,7 +395,8 @@ KisOpenGLUpdateInfoSP KisAnimationFrameCache::fetchFrameData(int time, KisImageS
 
 void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, int time)
 {
-    const KisFrameSet identicalFrames = calculateIdenticalFramesRecursive(m_d->image->root(), time);
+    KisTimeSpan range = m_d->image->animationInterface()->fullClipRange();
+    const KisFrameSet identicalFrames = calculateIdenticalFramesRecursive(m_d->image->root(), time, range);
 
     m_d->addFrame(info, identicalFrames);
 
@@ -429,7 +430,7 @@ void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeSpan &range, cons
     }
 }
 
-KisFrameSet KisAnimationFrameCache::dirtyFramesWithin(const KisTimeSpan range)
+KisFrameSet KisAnimationFrameCache::cachedFramesWithin(const KisTimeSpan range)
 {
     auto it = m_d->constIteratorFrom(range.start());
     if (it == m_d->cachedFrames.constEnd()) return KisFrameSet(range);
@@ -449,7 +450,7 @@ KisFrameSet KisAnimationFrameCache::dirtyFramesWithin(const KisTimeSpan range)
 
     }
 
-    return KisFrameSet(range) - KisFrameSet(cachedSpans, firstOfInfinite);
+    return KisFrameSet(cachedSpans, firstOfInfinite);
 }
 
 int KisAnimationFrameCache::firstDirtyFrameWithin(const KisTimeSpan range, const KisFrameSet *ignoredFrames)

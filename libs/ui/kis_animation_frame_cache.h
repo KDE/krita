@@ -60,7 +60,7 @@ public:
     };
 
     CacheStatus frameStatus(int time) const;
-    KisFrameSet dirtyFramesWithin(KisTimeSpan range);
+    KisFrameSet cachedFramesWithin(KisTimeSpan range);
     int firstDirtyFrameWithin(KisTimeSpan range, const KisFrameSet *ignoredFrames = 0);
 
     KisImageWSP image();

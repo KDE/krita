@@ -65,6 +65,7 @@ public:
     int colorLabel() const;
     void setColorLabel(int label);
     virtual bool hasContent() const; // does any content exist in keyframe, or is it empty?
+    virtual QRect affectedRect() const = 0;
 
     KisKeyframeChannel *channel() const;
 

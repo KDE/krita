@@ -208,14 +208,33 @@ KisFrameSet& KisFrameSet::operator-=(const KisFrameSet &rhs)
     return *this;
 }
 
-KisFrameSet calculateIdenticalFramesRecursive(const KisNode *node, int time)
+bool areFramesIdentical(const KisNode *root, int time1, int time2)
+{
+    bool identical = true;
+
+    KisLayerUtils::recursiveApplyNodes(root,
+       [&identical, time1, time2] (const KisNode *node) {
+           if (node->visible()) {
+               const QMap<QString, KisKeyframeChannel*> channels = node->keyframeChannels();
+
+               Q_FOREACH (const KisKeyframeChannel *channel, channels) {
+                   identical &= channel->areFramesIdentical(time1, time2);
+               }
+           }
+       }
+    );
+
+    return identical;
+}
+
+KisFrameSet calculateIdenticalFramesRecursive(const KisNode *node, int time, const KisTimeSpan range)
 {
     KisFrameSet frames = KisFrameSet::infiniteFrom(0);
 
     KisLayerUtils::recursiveApplyNodes(node,
-        [&frames, time] (const KisNode *node) {
+        [&frames, time, range] (const KisNode *node) {
             if (node->visible()) {
-                frames &= calculateNodeIdenticalFrames(node, time);
+                frames &= calculateNodeIdenticalFrames(node, time, range);
             }
     });
 
@@ -252,19 +271,19 @@ int KisFrameSet::firstExcludedSince(int time) const
     return -1;
 }
 
-KisFrameSet calculateNodeIdenticalFrames(const KisNode *node, int time)
+KisFrameSet calculateNodeIdenticalFrames(const KisNode *node, int time, const KisTimeSpan range)
 {
-    KisFrameSet range = KisFrameSet::infiniteFrom(0);
+    KisFrameSet frames = KisFrameSet::infiniteFrom(0);
 
     const QMap<QString, KisKeyframeChannel*> channels =
         node->keyframeChannels();
 
     Q_FOREACH (const KisKeyframeChannel *channel, channels) {
         // Intersection
-        range &= channel->identicalFrames(time);
+        frames &= channel->identicalFrames(time, range);
     }
 
-    return range;
+    return frames;
 }
 
 KisFrameSet calculateNodeAffectedFrames(const KisNode *node, int time)

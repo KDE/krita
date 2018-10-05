@@ -36,15 +36,16 @@ QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeSpan
     KisImageAnimationInterface *animation = image->animationInterface();
     if (!animation->hasAnimation()) return framesToRegenerate;
 
-    KisFrameSet dirtyFrames = cache->dirtyFramesWithin(playbackRange);
+    KisFrameSet validFrames = cache->cachedFramesWithin(playbackRange);
 
-    while (!dirtyFrames.isEmpty()) {
-        int first = dirtyFrames.start();
+    int firstDirty = validFrames.firstExcludedSince(playbackRange.start());
+    while (playbackRange.contains(firstDirty)) {
+        framesToRegenerate.append(firstDirty);
 
-        framesToRegenerate.append(first);
+        KisFrameSet duplicates = calculateIdenticalFramesRecursive(image->root(), firstDirty, playbackRange);
+        validFrames |= duplicates;
 
-        KisFrameSet duplicates = calculateIdenticalFramesRecursive(image->root(), first);
-        dirtyFrames -= duplicates;
+        firstDirty = validFrames.firstExcludedSince(firstDirty);
     }
 
     return framesToRegenerate;

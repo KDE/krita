@@ -228,9 +228,11 @@ void KisAnimatedTransformMaskParameters::clearChangedFlag()
 
     KisFrameSet validRange = KisFrameSet::infiniteFrom(0);
 
+    /* To be fixed when the feature development is continued
     if (m_d->rawArgsChannel) validRange &= m_d->rawArgsChannel->identicalFrames(currentTime);
     if (m_d->positionXchannel) validRange &= m_d->positionXchannel->identicalFrames(currentTime);
     if (m_d->positionYchannel) validRange &= m_d->positionYchannel->identicalFrames(currentTime);
+    */
 
     m_d->validRange = validRange;
 }

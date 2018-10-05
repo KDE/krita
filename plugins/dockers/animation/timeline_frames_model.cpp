@@ -133,7 +133,7 @@ struct TimelineFramesModel::Private
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
         Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
-            if (channel->identicalFrames(frame).contains(column)) {
+            if (channel->areFramesIdentical(column, frame)) {
                 return true;
             }
         }

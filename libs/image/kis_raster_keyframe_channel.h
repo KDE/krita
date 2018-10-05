@@ -20,6 +20,8 @@
 
 #include "kis_keyframe_channel.h"
 
+class KisTimeSpan;
+
 class KRITAIMAGE_EXPORT KisRasterKeyframeChannel : public KisKeyframeChannel
 {
     Q_OBJECT
@@ -65,6 +67,7 @@ public:
 
     bool hasScalarValue() const override;
     KisFrameSet affectedFrames(int time) const override;
+    KisFrameSet identicalFrames(int time, KisTimeSpan range) const override;
 
     QDomElement toXML(QDomDocument doc, const QString &layerFilename) override;
     void loadXML(const QDomElement &channelNode) override;
@@ -76,8 +79,6 @@ protected:
     KisKeyframeSP createKeyframe(int time, const KisKeyframeSP copySrc, KUndo2Command *parentCommand) override;
     void destroyKeyframe(KisKeyframeSP keyframe, KUndo2Command *parentCommand) override;
     void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
-
-    QRect affectedRect(KisKeyframeSP key) override;
 
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;

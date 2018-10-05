@@ -215,10 +215,15 @@ private:
     int m_firstFrameOfInfinity = -1;
 };
 
-KRITAIMAGE_EXPORT KisFrameSet calculateIdenticalFramesRecursive(const KisNode *node, int time);
+/**
+ * Recursively checks whether the two frames are identical in all layers
+ */
+KRITAIMAGE_EXPORT bool areFramesIdentical(const KisNode *root, int time1, int time2);
+
+KRITAIMAGE_EXPORT KisFrameSet calculateIdenticalFramesRecursive(const KisNode *node, int time, const KisTimeSpan range);
 KRITAIMAGE_EXPORT KisFrameSet calculateAffectedFramesRecursive(const KisNode *node, int time);
 
-KRITAIMAGE_EXPORT KisFrameSet calculateNodeIdenticalFrames(const KisNode *node, int time);
+KRITAIMAGE_EXPORT KisFrameSet calculateNodeIdenticalFrames(const KisNode *node, int time, const KisTimeSpan range);
 KRITAIMAGE_EXPORT KisFrameSet calculateNodeAffectedFrames(const KisNode *node, int time);
 
 namespace KisDomUtils {

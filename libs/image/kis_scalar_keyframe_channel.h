@@ -55,8 +55,6 @@ protected:
     void destroyKeyframe(KisKeyframeSP key, KUndo2Command *parentCommand) override;
     void uploadExternalKeyframe(KisKeyframeChannel *srcChannel, int srcTime, KisKeyframeSP dstFrame) override;
 
-    QRect affectedRect(KisKeyframeSP key) override;
-
     void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) override;
     KisKeyframeSP loadKeyframe(const QDomElement &keyframeNode) override;
 

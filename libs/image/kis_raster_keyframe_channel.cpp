@@ -27,6 +27,22 @@
 #include "kis_onion_skin_compositor.h"
 #include "kis_keyframe_commands.h"
 
+struct KisRasterKeyframeChannel::Private
+{
+    Private(KisPaintDeviceWSP paintDevice, const QString filenameSuffix)
+            : paintDevice(paintDevice),
+            filenameSuffix(filenameSuffix),
+            onionSkinsEnabled(false)
+    {}
+
+    KisPaintDeviceWSP paintDevice;
+    QMap<QString, int> framesByFilename;
+    QMap<int, QString> frameFilenames;
+    QMap<int, QVector<KisKeyframeSP>> frameInstances;
+    QString filenameSuffix;
+    bool onionSkinsEnabled;
+};
+
 class KisRasterKeyframe : public KisKeyframe
 {
 public:
@@ -53,22 +69,38 @@ public:
 
         return channel->keyframeHasContent(this);
     }
-};
 
-struct KisRasterKeyframeChannel::Private
-{
-  Private(KisPaintDeviceWSP paintDevice, const QString filenameSuffix)
-      : paintDevice(paintDevice),
-        filenameSuffix(filenameSuffix),
-        onionSkinsEnabled(false)
-  {}
+    QRect affectedRect() const override
+    {
+        KisRasterKeyframeChannel *ch = dynamic_cast<KisRasterKeyframeChannel *>(channel());
+        KisRasterKeyframeChannel::Private *ch_d = ch->m_d.data();
 
-  KisPaintDeviceWSP paintDevice;
-  QMap<QString, int> framesByFilename;
-  QMap<int, QString> frameFilenames;
-  QMap<int, QVector<KisKeyframeSP>> frameInstances;
-  QString filenameSuffix;
-  bool onionSkinsEnabled;
+        // Calculate changed area as the union of the current and previous keyframe.
+        // This makes sure there are no artifacts left over from the previous frame
+        // where the new one doesn't cover the area.
+        KisKeyframeSP neighbor = ch->previousKeyframe(*this);
+
+        // Using the *next* keyframe at the start of the timeline avoids artifacts
+        // when deleting or moving the first key
+        if (neighbor.isNull()) neighbor = ch->nextKeyframe(*this);
+
+        QRect rect = ch_d->paintDevice->framesInterface()->frameBounds(frameId);
+
+        if (!neighbor.isNull()) {
+            // Note: querying through frameIdAt makes sure cycle repeats resolve to their original frames
+            const int neighborFrameId = ch->frameIdAt(neighbor->time());
+            rect |= ch_d->paintDevice->framesInterface()->frameBounds(neighborFrameId);
+        }
+
+        if (ch_d->onionSkinsEnabled) {
+            const QRect dirtyOnionSkinsRect =
+                    KisOnionSkinCompositor::instance()->calculateFullExtent(ch_d->paintDevice);
+            rect |= dirtyOnionSkinsRect;
+        }
+
+        return rect;
+    }
+
 };
 
 KisRasterKeyframeChannel::KisRasterKeyframeChannel(const KoID &id, const KisPaintDeviceWSP paintDevice, KisDefaultBoundsBaseSP defaultBounds)
@@ -117,7 +149,7 @@ int KisRasterKeyframeChannel::frameId(const KisKeyframe *keyframe) const
 
 int KisRasterKeyframeChannel::frameIdAt(int time) const
 {
-    KisKeyframeSP activeKey = activeKeyframeAt(time);
+    KisKeyframeSP activeKey = visibleKeyframeAt(time);
     if (activeKey.isNull()) return -1;
     return frameId(activeKey);
 }
@@ -227,38 +259,6 @@ void KisRasterKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcCha
                     srcRasterChannel->m_d->paintDevice);
 }
 
-QRect KisRasterKeyframeChannel::affectedRect(KisKeyframeSP key)
-{
-    KeyframesMap::iterator it = keys().find(key->time());
-    QRect rect;
-
-    // Calculate changed area as the union of the current and previous keyframe.
-    // This makes sure there are no artifacts left over from the previous frame
-    // where the new one doesn't cover the area.
-
-    if (it == keys().begin()) {
-        // Using the *next* keyframe at the start of the timeline avoids artifacts
-        // when deleting or moving the first key
-        it++;
-    } else {
-        it--;
-    }
-
-    if (it != keys().end()) {
-        rect = m_d->paintDevice->framesInterface()->frameBounds(frameId(it.value()));
-    }
-
-    rect |= m_d->paintDevice->framesInterface()->frameBounds(frameId(key));
-
-    if (m_d->onionSkinsEnabled) {
-        const QRect dirtyOnionSkinsRect =
-            KisOnionSkinCompositor::instance()->calculateFullExtent(m_d->paintDevice);
-        rect |= dirtyOnionSkinsRect;
-    }
-
-    return rect;
-}
-
 QDomElement KisRasterKeyframeChannel::toXML(QDomDocument doc, const QString &layerFilename)
 {
     m_d->frameFilenames.clear();
@@ -340,16 +340,31 @@ bool KisRasterKeyframeChannel::hasScalarValue() const
 KisFrameSet KisRasterKeyframeChannel::affectedFrames(int time) const
 {
     const int frameId = frameIdAt(time);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(frameId >= 0, KisFrameSet());
-    
+
+    if (frameId < 0) {
+        // Not a raster frame (e.g. repeat of a cycle)
+        return KisKeyframeChannel::affectedFrames(time);
+    }
+
     KisFrameSet frames;
     Q_FOREACH(KisKeyframeSP keyframe, m_d->frameInstances[frameId]) {
-        const KisKeyframeSP next = nextKeyframe(keyframe);
-        if (next.isNull()) {
-            frames |= KisFrameSet::infiniteFrom(keyframe->time());
-        } else {
-            frames |= KisFrameSet::between(keyframe->time(), next->time() - 1);
-        }
+        frames |= KisKeyframeChannel::affectedFrames(keyframe->time());
+    }
+    return frames;
+}
+
+KisFrameSet KisRasterKeyframeChannel::identicalFrames(int time, KisTimeSpan range) const
+{
+    const int frameId = frameIdAt(time);
+
+    if (frameId < 0) {
+        // Not a raster frame (e.g. repeat of a cycle)
+        return KisKeyframeChannel::affectedFrames(time);
+    }
+
+    KisFrameSet frames;
+    Q_FOREACH(KisKeyframeSP keyframe, m_d->frameInstances[frameId]) {
+        frames |= KisKeyframeChannel::identicalFrames(keyframe->time(), range);
     }
     return frames;
 }

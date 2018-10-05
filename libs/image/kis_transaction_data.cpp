@@ -89,7 +89,7 @@ void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int
     KisKeyframeSP keyframe = channel->keyframeAt(time);
 
     if (!keyframe) {
-        keyframe = channel->activeKeyframeAt(time);
+        keyframe = channel->visibleKeyframeAt(time);
         channel->copyKeyframe(keyframe, time, &newFrameCommand);
     }
 }

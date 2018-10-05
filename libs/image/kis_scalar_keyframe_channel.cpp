@@ -38,6 +38,16 @@ struct KisScalarKeyframe : public KisKeyframe
 
     qreal value;
 
+    QRect affectedRect() const override {
+        const KisNodeSP node = channel()->node().toStrongRef();
+
+        if (node) {
+            return node->extent();
+        } else {
+            return QRect();
+        }   
+    }
+    
     KisKeyframeSP cloneFor(KisKeyframeChannel *channel) const override
     {
         return toQShared(new KisScalarKeyframe(this, channel));
@@ -409,17 +419,6 @@ void KisScalarKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel *srcCha
     notifyKeyframeChanged(dstFrame);
 }
 
-QRect KisScalarKeyframeChannel::affectedRect(KisKeyframeSP key)
-{
-    Q_UNUSED(key);
-
-    if (node()) {
-        return node()->extent();
-    } else {
-        return QRect();
-    }
-}
-
 void KisScalarKeyframeChannel::saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename)
 {
     Q_UNUSED(layerFilename);
@@ -478,7 +477,7 @@ KisKeyframeSP KisScalarKeyframeChannel::loadKeyframe(const QDomElement &keyframe
 
 void KisScalarKeyframeChannel::notifyKeyframeChanged(KisKeyframeSP keyframe)
 {
-    QRect rect = affectedRect(keyframe);
+    QRect rect = keyframe->affectedRect();
     KisFrameSet range = affectedFrames(keyframe->time());
 
     requestUpdate(range, rect);

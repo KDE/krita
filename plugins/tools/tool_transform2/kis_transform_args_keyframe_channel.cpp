@@ -42,6 +42,12 @@ struct KisTransformArgsKeyframe : public KisKeyframe
         Q_ASSERT(argsChannel);
         return toQShared(new KisTransformArgsKeyframe(this, channel));
     }
+
+    QRect affectedRect() const override
+    {
+        // TODO
+        return QRect();
+    }
 };
 
 KisTransformArgsKeyframeChannel::AddKeyframeCommand::AddKeyframeCommand(KisTransformArgsKeyframeChannel *channel, int time, const ToolTransformArgs &args, KUndo2Command *parentCommand)
@@ -92,13 +98,6 @@ void KisTransformArgsKeyframeChannel::uploadExternalKeyframe(KisKeyframeChannel 
     Q_UNUSED(srcChannel);
     Q_UNUSED(srcTime);
     Q_UNUSED(dstFrame);
-}
-
-QRect KisTransformArgsKeyframeChannel::affectedRect(KisKeyframeSP key)
-{
-    Q_UNUSED(key);
-    // TODO
-    return QRect();
 }
 
 KisKeyframeSP KisTransformArgsKeyframeChannel::loadKeyframe(const QDomElement &keyframeNode)

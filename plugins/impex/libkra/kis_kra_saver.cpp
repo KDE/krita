@@ -163,7 +163,12 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
                 m_d->errorMessages << i18n("could not save palettes");
                 return false;
             }
-            store->write(palette->toByteArray());
+            QByteArray ba = palette->toByteArray();
+            if (!ba.isEmpty()) {
+                store->write(ba);
+            } else {
+                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+            }
             store->close();
             res = true;
         }

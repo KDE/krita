@@ -423,13 +423,18 @@ endif()
         input/wintab/drawpile_tablettester/tablettest.cpp
     )
 
-if(UNIX)
+if (UNIX)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        qtlockedfile/qtlockedfile_unix.cpp
+        )
+    if(NOT USE_QT_XCB)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         input/wintab/kis_tablet_support.cpp
-        qtlockedfile/qtlockedfile_unix.cpp
-        )
-    if(NOT APPLE)
+    )
+    endif()
+    if(NOT APPLE AND NOT USE_QT_XCB)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             input/wintab/qxcbconnection_xi2.cpp

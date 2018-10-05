@@ -106,8 +106,8 @@ void KisPaletteEditor::addPalette()
     KoDialog dlg;
     QFormLayout layout;
     dlg.mainWidget()->setLayout(&layout);
-    QLabel lbl("Name");
-    QLineEdit le("New Palette");
+    QLabel lbl(i18nc("Label for line edit to set a palette name.","Name"));
+    QLineEdit le(i18nc("Default name for a new palette","New Palette"));
     layout.addRow(&lbl, &le);
     if (dlg.exec() != QDialog::Accepted) { return; }
     KoColorSet *newColorSet = new KoColorSet(newPaletteFileName(false));
@@ -234,6 +234,7 @@ QString KisPaletteEditor::addGroup()
     QLabel lblName(i18n("Name"), &dlg);
     layout.addWidget(&lblName);
     QLineEdit leName(&dlg);
+    leName.setText(newGroupName());
     connect(&leName, SIGNAL(textChanged(QString)), SLOT(slotGroupNameChanged(QString)));
     layout.addWidget(&leName);
     QLabel lblRowCount(i18n("Row count"), &dlg);
@@ -635,12 +636,13 @@ QString KisPaletteEditor::newPaletteFileName(bool isGlobal)
 
 QString KisPaletteEditor::newGroupName() const
 {
-    QString prefix = "New Group ";
-    int i = 0;
-    while (m_d->modified.groups.contains(prefix + QString::number(i))) {
+    int i = 1;
+    QString groupname = i18nc("Default new group name", "New Group %1", QString::number(i));
+    while (m_d->modified.groups.contains(groupname)) {
         i++;
+        groupname = i18nc("Default new group name", "New Group %1", QString::number(i));
     }
-    return prefix + QString::number(i);
+    return groupname;
 }
 
 void KisPaletteEditor::uploadPaletteList() const

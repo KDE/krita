@@ -338,7 +338,10 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
     if (!m_d->model->colorSet()->isEditable()) { return; }
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
-    m_d->model->setEntry(KisSwatch(color), index);
+    KisSwatch c = KisSwatch(color);
+    c.setId(QString::number(m_d->model->colorSet()->colorCount() + 1));
+    c.setName(i18nc("Default name for a color swatch","Color %1", QString::number(m_d->model->colorSet()->colorCount()+1)));
+    m_d->model->setEntry(c, index);
 }
 
 void KisPaletteEditor::slotSetDocumentModified()
@@ -433,9 +436,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     editableItems.addRow(i18n("Color"), &bnColor);
     editableItems.addRow(i18nc("Spot color", "Spot"), &chkSpot);
     cmbGroups.setCurrentIndex(0);
-    lnName.setText(i18nc("Part of a default name for a color","Color")
-                    + " "
-                    + QString::number(m_d->model->colorSet()->colorCount()+1));
+    lnName.setText(i18nc("Default name for a color swatch","Color %1", QString::number(m_d->model->colorSet()->colorCount()+1)));
     lnIDName.setText(QString::number(m_d->model->colorSet()->colorCount() + 1));
     bnColor.setColor(color);
     chkSpot.setChecked(false);

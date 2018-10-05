@@ -803,6 +803,11 @@ bool KoColorSet::Private::loadGpl()
             global().addEntry(e);
         }
     }
+    int rowCount = global().colorCount()/ global().columnCount();
+    if (global().colorCount() % global().columnCount()>0) {
+        rowCount ++;
+    }
+    global().setRowCount(rowCount);
     return true;
 }
 
@@ -1563,6 +1568,7 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
     if (!parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull()) {
         group->setRowCount(parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).toInt());
     }
+    group->setColumnCount(colorSet->columnCount());
 
     for (QDomElement swatchEle = parentEle.firstChildElement(KPL_SWATCH_TAG);
          !swatchEle.isNull();
@@ -1592,4 +1598,9 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
             group->addEntry(entry);
         }
     }
+
+    if (parentEle.attribute(KPL_GROUP_ROW_COUNT_ATTR).isNull() && group->colorCount()/group->columnCount()+1 < 20) {
+        group->setRowCount(group->colorCount()/group->columnCount()+1);
+    }
+
 }

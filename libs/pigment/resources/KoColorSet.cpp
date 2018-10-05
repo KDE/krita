@@ -233,7 +233,11 @@ void KoColorSet::setPaletteType(PaletteType paletteType)
 
 quint32 KoColorSet::colorCount() const
 {
-    return d->groups[GLOBAL_GROUP_NAME].colorCount();
+    int colorCount = d->groups[GLOBAL_GROUP_NAME].colorCount();
+    for (KisSwatchGroup &g : d->groups.values()) {
+        colorCount += g.colorCount();
+    }
+    return colorCount;
 }
 
 void KoColorSet::add(const KisSwatch &c, const QString &groupName)

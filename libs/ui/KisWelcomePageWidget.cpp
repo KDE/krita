@@ -39,6 +39,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 {
    setupUi(this);
 
+   recentDocumentsListView->setDragEnabled(false);
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
    recentDocumentsListView->setSpacing(2);
 

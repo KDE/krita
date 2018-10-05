@@ -175,7 +175,14 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
 
 
     // pass of hold frame line
-    if (!hasContentFrame && hasContent) {
+    int cycleMode = index.data(TimelineFramesModel::FrameCycleMode).toInt();
+
+    if (cycleMode != TimelineFramesModel::NoCycle) {
+        const QColor bgColor = hasContentFrame && hasContent ? color : baseColor;
+        const QColor fgColor = hasContentFrame && hasContent ? baseColor : color;
+        drawCycleMarker(painter, rc, fgColor, bgColor, cycleMode);
+
+    } else if (!hasContentFrame && hasContent) {
 
         // pretty much the same check as "isValid" above, but that isn't working with hold frames
          if (colorLabel.toInt() == 0) {
@@ -196,9 +203,56 @@ void TimelineFramesItemDelegate::drawBackground(QPainter *painter, const QModelI
         painter->setPen(holdFramePen);
         painter->drawLine(QLine(lineStart, lineEnd));
     }
+}
 
+void drawSemiOctagon(QPainter *painter, int closedEndX, int openEndX, int top, int bottom, int chamfer) {
+    // The "semi-circles" at the ends of cycles are actually drawn as semi-octagons
+    // due to Qt's inability to draw clean circles at small sizes.
 
+    const QPoint points[4] = {
+        QPoint(openEndX, top),
+        QPoint(closedEndX, top + chamfer),
+        QPoint(closedEndX, bottom - chamfer),
+        QPoint(openEndX, bottom)
+    };
+    painter->drawPolyline(points, 4);
+}
 
+void TimelineFramesItemDelegate::drawCycleMarker(QPainter *painter, const QRect &rc, const QColor &fgColor, const QColor &bgColor, int cycleMode) const
+{
+    const bool isRepeat = (
+        cycleMode == TimelineFramesModel::BeginsRepeat ||
+        cycleMode == TimelineFramesModel::ContinuesRepeat ||
+        cycleMode == TimelineFramesModel::EndsRepeat
+    );
+
+    const QColor repeatColor = isRepeat ? KritaUtils::blendColors(bgColor, fgColor, 0.7) : fgColor;
+
+    QPen cyclePen(repeatColor);
+    cyclePen.setWidth(1);
+    painter->setPen(cyclePen);
+
+    const int verticalMargin = rc.height() / 3;
+    const int horizontalMargin = 2;
+    const int upper = rc.y() + verticalMargin;
+    const int lower = rc.y() + rc.height() - verticalMargin;
+    const int chamfer = qMin((lower - upper) / 3, rc.width() - horizontalMargin);
+
+    int left = rc.x();
+    int right = rc.x() + rc.width();
+
+    if (cycleMode == TimelineFramesModel::BeginsCycle || cycleMode == TimelineFramesModel::BeginsRepeat) {
+        left += horizontalMargin;
+        drawSemiOctagon(painter, left, left + chamfer, upper, lower, chamfer);
+        left += chamfer;
+    } else if (cycleMode == TimelineFramesModel::EndsCycle || cycleMode == TimelineFramesModel::EndsRepeat) {
+        right -= horizontalMargin;
+        drawSemiOctagon(painter, right, right - chamfer, upper, lower, chamfer);
+        right -= horizontalMargin + chamfer;
+    }
+
+    painter->drawLine(QLine(QPoint(left, upper), QPoint(right, upper)));
+    painter->drawLine(QLine(QPoint(left, lower), QPoint(right, lower)));
 }
 
 void TimelineFramesItemDelegate::drawFocus(QPainter *painter,

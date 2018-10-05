@@ -47,6 +47,7 @@
 #include "kis_node_model.h"
 #include "kis_projection_leaf.h"
 #include "kis_time_range.h"
+#include "kis_animation_cycle.h"
 
 #include "kis_node_view_color_scheme.h"
 #include "krita_utils.h"
@@ -171,6 +172,31 @@ struct TimelineFramesModel::Private
         if (!dummy) return -1;
         return dummy->node()->colorLabelIndex();
     }
+
+    CycleMode frameCycleMode(int row, int time) const{
+        KisNodeDummy *dummy = converter->dummyFromRow(row);
+        if (!dummy) return NoCycle;
+
+        KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!primaryChannel) return NoCycle;
+
+        KisTimeSpan cycle = primaryChannel->cycledRangeAt(time);
+        KisKeyframeSP keyframe = primaryChannel->activeKeyframeAt(time);
+        KisRepeatFrame *repeatFrame = dynamic_cast<KisRepeatFrame*>(keyframe.data());
+
+        if (repeatFrame){
+            const int originalTime = repeatFrame->getOriginalTimeFor(time);
+            if (cycle.start() == originalTime) return BeginsRepeat;
+            if (cycle.end() == originalTime) return EndsRepeat;
+            return ContinuesRepeat;
+        } else if (cycle.contains(time)) {
+            if (cycle.start() == time) return BeginsCycle;
+            if (cycle.end() == time) return EndsCycle;
+            return ContinuesCycle;
+        }
+
+        return NoCycle;
+    };
 
     QVariant layerProperties(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
@@ -390,6 +416,9 @@ QVariant TimelineFramesModel::data(const QModelIndex &index, int role) const
     case FrameColorLabelIndexRole: {
         int label = m_d->frameColorLabel(index.row(), index.column());
         return label > 0 ? label : QVariant();
+    }
+    case FrameCycleMode: {
+        return m_d->frameCycleMode(index.row(), index.column());
     }
     case Qt::DisplayRole: {
         return m_d->layerName(index.row());
@@ -957,6 +986,94 @@ bool TimelineFramesModel::insertHoldFrames(QModelIndexList selectedIndexes, int 
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(), KisStrokeJobData::BARRIER);
     return true;
+}
+
+bool TimelineFramesModel::defineCycles(int timeFrom, int timeTo, QSet<int> rows)
+{
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Create animation cycle", "Create animation cycles", rows.size()));
+
+    Q_FOREACH(const int row, rows) {
+        KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
+        if (dummy) {
+            KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+            if (contentChannel) {
+                KisKeyframeSP firstKeyframe = contentChannel->activeKeyframeAt(timeFrom);
+                KisKeyframeSP lastKeyframe = contentChannel->activeKeyframeAt(timeTo);
+
+                if (!firstKeyframe.isNull() && !lastKeyframe.isNull()) {
+                    contentChannel->createCycle(firstKeyframe, lastKeyframe, parentCommand);
+
+                    if (contentChannel->keyframeAt(timeTo + 1).isNull()) {
+                        contentChannel->addRepeat(timeTo + 1, firstKeyframe, parentCommand);
+                    }
+                }
+            }
+        }
+    }
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+
+    return true;
+}
+
+bool TimelineFramesModel::deleteCycles(int timeFrom, int timeTo, QSet<int> rows)
+{
+    QVector<QSharedPointer<KisAnimationCycle>> cycles;
+
+    Q_FOREACH(const int row, rows) {
+        KisNodeDummy *dummy = m_d->converter->dummyFromRow(row);
+        if (!dummy) continue;
+
+        KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (!contentChannel) continue;
+
+        for (int time = timeFrom; time <= timeTo; time++) {
+            auto cycle = contentChannel->cycleAt(time);
+            if (!cycle.isNull()) {
+                KisTimeSpan cycleRange = cycle->originalRange();
+
+                if (cycleRange.contains(time)) {
+                    cycles.append(cycle);
+                    time = cycleRange.end();
+                }
+            }
+        }
+    }
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Delete animation cycle", "Delete animation cycles", cycles.size()));
+
+    Q_FOREACH(QSharedPointer<KisAnimationCycle> cycle, cycles) {
+        KisKeyframeChannel *channel = cycle->firstSourceKeyframe()->channel();
+        channel->deleteCycle(cycle, parentCommand);
+    }
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+
+    return true;
+}
+
+void TimelineFramesModel::addRepeatAt(QModelIndex location)
+{
+    const int time = location.row();
+
+    KisNodeDummy *dummy = m_d->converter->dummyFromRow(time);
+    if (dummy) {
+        KisKeyframeChannel *contentChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Content.id());
+        if (contentChannel) {
+            for (int t = location.column(); t >= 0; t--) {
+                const KisTimeSpan cycled = contentChannel->cycledRangeAt(t);
+                if (!cycled.isEmpty()) {
+                    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Add animation repeat"));
+
+                    KisKeyframeSP sourceKeyframe = contentChannel->activeKeyframeAt(cycled.start());
+                    contentChannel->addRepeat(location.column(), sourceKeyframe, parentCommand);
+                    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand, KisStrokeJobData::BARRIER);
+
+                    return;
+                }
+            }
+        }
+    }
 }
 
 QString TimelineFramesModel::audioChannelFileName() const

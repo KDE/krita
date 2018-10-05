@@ -2500,6 +2500,44 @@
       <statusTip></statusTip>
     </Action>
 
+    <Action name="define_animation_cycle">
+      <icon></icon>
+      <text>Create cycle</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="delete_animation_cycle">
+      <icon></icon>
+      <text>Remove cycle</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+
+    <Action name="add_animation_repeat">
+      <icon></icon>
+      <text>Add repeat</text>
+      <whatsThis></whatsThis>
+      <toolTip></toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
 
   </Actions>
 

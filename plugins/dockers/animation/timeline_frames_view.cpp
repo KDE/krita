@@ -353,6 +353,15 @@ void TimelineFramesView::setActionManager(KisActionManager *actionManager)
 
         action = m_d->actionMan->createAction("update_playback_range");
         connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
+
+        action = m_d->actionMan->createAction("define_animation_cycle");
+        connect(action, SIGNAL(triggered()), SLOT(slotDefineCycle()));
+
+        action = m_d->actionMan->createAction("delete_animation_cycle");
+        connect(action, SIGNAL(triggered()), SLOT(slotDeleteCycle()));
+
+        action = m_d->actionMan->createAction("add_animation_repeat");
+        connect(action, SIGNAL(triggered()), SLOT(slotAddRepeat()));
     }
 }
 
@@ -923,10 +932,14 @@ void TimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool addFram
 
     if (selectionExists) {
         KisActionManager::safePopulateMenu(menu, "update_playback_range", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "define_animation_cycle", m_d->actionMan);
+        KisActionManager::safePopulateMenu(menu, "delete_animation_cycle", m_d->actionMan);
     } else {
         KisActionManager::safePopulateMenu(menu, "set_start_time", m_d->actionMan);
         KisActionManager::safePopulateMenu(menu, "set_end_time", m_d->actionMan);
     }
+
+    KisActionManager::safePopulateMenu(menu, "add_animation_repeat", m_d->actionMan);
 
     menu->addSeparator();
 
@@ -1435,6 +1448,33 @@ void TimelineFramesView::slotMirrorFrames(bool entireColumn)
     if (!indexes.isEmpty()) {
         m_d->model->mirrorFrames(indexes);
     }
+}
+
+void TimelineFramesView::slotDefineCycle()
+{
+    QSet<int> rows;
+    int minColumn = 0, maxColumn = 0;
+
+    calculateSelectionMetrics(minColumn, maxColumn, rows);
+
+    m_d->model->defineCycles(minColumn, maxColumn, rows);
+}
+
+void TimelineFramesView::slotDeleteCycle()
+{
+    QSet<int> rows;
+    int minColumn = 0, maxColumn = 0;
+
+    calculateSelectionMetrics(minColumn, maxColumn, rows);
+    m_d->model->deleteCycles(minColumn, maxColumn, rows);
+}
+
+void TimelineFramesView::slotAddRepeat()
+{
+    const QModelIndex current = currentIndex();
+    if (!current.isValid()) return;
+
+    m_d->model->addRepeatAt(currentIndex());
 }
 
 void TimelineFramesView::cutCopyImpl(bool entireColumn, bool copy)

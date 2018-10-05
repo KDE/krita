@@ -43,6 +43,8 @@ public:
 
 private:
     QVector<QColor> labelColors;
+
+    void drawCycleMarker(QPainter *painter, const QRect &rc, const QColor &fgColor, const QColor &bgColor, int cycleMode) const;
 };
 
 #endif /* __TIMELINE_FRAMES_ITEM_DELEGATE_H */

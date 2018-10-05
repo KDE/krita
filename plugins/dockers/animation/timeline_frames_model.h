@@ -45,6 +45,16 @@ public:
         CopyFramesPolicy
     };
 
+    enum CycleMode {
+        NoCycle = 0,
+        BeginsCycle,
+        ContinuesCycle,
+        EndsCycle,
+        BeginsRepeat,
+        ContinuesRepeat,
+        EndsRepeat
+    };
+
 public:
     TimelineFramesModel(QObject *parent);
     ~TimelineFramesModel() override;
@@ -63,6 +73,10 @@ public:
     bool insertFrames(int dstColumn, const QList<int> &dstRows, int count, int timing = 1);
 
     bool insertHoldFrames(QModelIndexList selectedIndexes, int count);
+
+    bool defineCycles(int timeFrom, int timeTo, QSet<int> rows);
+    bool deleteCycles(int timeFrom, int timeTo, QSet<int> rows);
+    void addRepeatAt(QModelIndex location);
 
     QString audioChannelFileName() const;
     void setAudioChannelFileName(const QString &fileName);
@@ -104,7 +118,8 @@ public:
         TimelinePropertiesRole,
         OtherLayersRole,
         LayerUsedInTimelineRole,
-        FrameColorLabelIndexRole
+        FrameColorLabelIndexRole,
+        FrameCycleMode
     };
 
     // metatype is added by the original implementation

@@ -107,6 +107,10 @@ private Q_SLOTS:
     void slotMirrorFrames(bool entireColumn = false);
     void slotMirrorColumns() {slotMirrorFrames(true);}
 
+    void slotDefineCycle();
+    void slotDeleteCycle();
+    void slotAddRepeat();
+
     // Copy-paste
     void slotCopyFrames() {cutCopyImpl(false, true);}
     void slotCutFrames() {cutCopyImpl(false, false);}

@@ -109,7 +109,7 @@ void KisSwatchGroup::setColumnCount(int columnCount)
 {
     Q_ASSERT(columnCount >= 0);
     if (columnCount < d->colorMatrix.size()) {
-        for (int i = d->colorMatrix.size() - 1; i <= columnCount; i-- ) {
+        for (int i = d->colorMatrix.size() - 1; i < columnCount; i-- ) {
             d->colorCount -= d->colorMatrix[i].size();
         }
     }

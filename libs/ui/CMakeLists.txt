@@ -260,6 +260,10 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
+    
+    KisPaletteEditor.cpp
+    dialogs/KisDlgPaletteEditor.cpp
+
     widgets/KisNewsWidget.cpp
 	widgets/KisGamutMaskToolbar.cpp
 
@@ -495,6 +499,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+    forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
 	forms/wdgGamutMaskToolbar.ui
 

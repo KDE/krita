@@ -18,7 +18,10 @@
 
 #include "Palette.h"
 #include <KoColorSet.h>
+#include <KisSwatch.h>
+#include <KisSwatchGroup.h>
 #include <ManagedColor.h>
+#include <KisPaletteModel.h>
 
 struct Palette::Private {
     KoColorSet *palette {0};
@@ -36,7 +39,7 @@ Palette::~Palette()
 int Palette::numberOfEntries() const
 {
     if (!d->palette) return 0;
-    return d->palette->nColors();
+    return d->palette->colorCount();
 }
 
 int Palette::columnCount()
@@ -63,7 +66,7 @@ void Palette::setComment(QString comment)
     return d->palette->setComment(comment);
 }
 
-QStringList Palette::groupNames()
+QStringList Palette::groupNames() const
 {
     if (!d->palette) return QStringList();
     return d->palette->getGroupNames();
@@ -84,53 +87,55 @@ bool Palette::removeGroup(QString name, bool keepColors)
 int Palette::colorsCountTotal()
 {
     if (!d->palette) return 0;
-    return d->palette->nColors();
+    return d->palette->colorCount();
 }
 
-int Palette::colorsCountGroup(QString name)
+KisSwatch Palette::colorSetEntryByIndex(int index)
 {
-    if (!d->palette) return 0;
-    return d->palette->nColorsGroup(name);
+    if (!d->palette) return KisSwatch();
+    int col = index % columnCount();
+    int row = (index - col) / columnCount();
+    return d->palette->getColorGlobal(col, row);
+    return KisSwatch();
 }
 
-KoColorSetEntry Palette::colorSetEntryByIndex(int index)
+KisSwatch Palette::colorSetEntryFromGroup(int index, const QString &groupName)
 {
-    if (!d->palette) return KoColorSetEntry();
-    return d->palette->getColorGlobal(index);
+    if (!d->palette) return KisSwatch();
+    int row = index % columnCount();
+    return d->palette->getColorGroup((index - row) / columnCount(), row, groupName);
 }
 
-KoColorSetEntry Palette::colorSetEntryFromGroup(int index, const QString &groupName)
+ManagedColor *Palette::colorForEntry(KisSwatch entry)
 {
-    if (!d->palette) return KoColorSetEntry();
-
-    return d->palette->getColorGroup(index, groupName);
-}
-
-ManagedColor *Palette::colorForEntry(KoColorSetEntry entry)
-{
-    if (!d->palette) return 0;
+    if (!d->palette) return Q_NULLPTR;
     ManagedColor *color = new ManagedColor(entry.color());
     return color;
 }
 
-void Palette::addEntry(KoColorSetEntry entry, QString groupName)
+void Palette::addEntry(KisSwatch entry, QString groupName)
 {
     d->palette->add(entry, groupName);
 }
 
 void Palette::removeEntry(int index, const QString &groupName)
 {
-    d->palette->removeAt(index, groupName);
-}
+    int col = index % columnCount();
+    int tmp = index;
+    int row = (index - col) / columnCount();
+    KisSwatchGroup *groupFoundIn = Q_NULLPTR;
+    Q_FOREACH(const QString &name, groupNames()) {
+        KisSwatchGroup *g = d->palette->getGroup(name);
+        tmp -= g->rowCount() * columnCount();
+        if (tmp < 0) {
+            groupFoundIn = g;
+            break;
+        }
+        row -= g->rowCount();
 
-void Palette::insertEntry(int index, KoColorSetEntry entry, QString groupName)
-{
-    d->palette->insertBefore(entry, index, groupName);
-}
-
-bool Palette::editEntry(int index, KoColorSetEntry entry, QString groupName)
-{
-    return d->palette->changeColorSetEntry(entry, groupName, index);
+    }
+    if (!groupFoundIn) { return; }
+    groupFoundIn->removeEntry(col, row);
 }
 
 bool Palette::changeGroupName(QString oldGroupName, QString newGroupName)

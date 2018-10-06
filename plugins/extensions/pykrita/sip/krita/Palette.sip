@@ -1,20 +1,4 @@
-/*
-struct KoColorSetEntry {
-    %TypeHeaderCode
-    #include "KoColorSet.h"
-    %End
-public:
-    KoColorSetEntry();
-
-    QString name;
-    QString id;
-    bool spotColor;
-
-    bool operator==(const KoColorSetEntry& rhs) const;
-
-};
-*/
-class KoColorSetEntry;
+class KisSwatch;
 
 class Palette : QObject
 {
@@ -33,14 +17,11 @@ public:
     bool addGroup(QString name);
     bool removeGroup(QString name, bool keepColors);
     int colorsCountTotal();
-    int colorsCountGroup(QString name);
-    KoColorSetEntry colorSetEntryByIndex(int index);
-    KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);
-    ManagedColor *colorForEntry(KoColorSetEntry entry) /Factory/;
-    void addEntry(KoColorSetEntry entry, QString groupName);
+    KisSwatch colorSetEntryByIndex(int index);
+    KisSwatch colorSetEntryFromGroup(int index, const QString &groupName);
+    ManagedColor *colorForEntry(KisSwatch entry) /Factory/;
+    void addEntry(KisSwatch entry, QString groupName);
     void removeEntry(int index, const QString &groupName);
-    void insertEntry(int index, KoColorSetEntry entry, QString groupName);
-    bool editEntry(int index, KoColorSetEntry entry, QString groupName);
     bool changeGroupName(QString oldGroupName, QString newGroupName);
     bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore);
     bool save();

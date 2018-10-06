@@ -30,6 +30,7 @@
 #include <KoPageLayout.h>
 #include <KoDocumentBase.h>
 #include <kundo2stack.h>
+#include <KoColorSet.h>
 
 #include <kis_image.h>
 #include <KisImportExportFilter.h>
@@ -347,6 +348,9 @@ public:
     /// returns the guides data for this document.
     const KisGuidesConfig& guidesConfig() const;
     void setGuidesConfig(const KisGuidesConfig &data);
+
+    QList<KoColorSet *> &paletteList();
+    void setPaletteList(const QList<KoColorSet *> &paletteList);
 
     void clearUndoHistory();
 

@@ -26,6 +26,7 @@
 #include <QDomElement>
 #include <QString>
 #include <QStringList>
+#include <QScopedPointer>
 
 #include <QUrl>
 #include <QBuffer>
@@ -35,6 +36,9 @@
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 #include <KoColor.h>
+#include <KoColorSet.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
@@ -130,9 +134,10 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveWarningColor(doc, imageElement, image);
     saveCompositions(doc, imageElement, image);
     saveAssistantsList(doc, imageElement);
-    saveGrid(doc,imageElement);
-    saveGuides(doc,imageElement);
-    saveAudio(doc,imageElement);
+    saveGrid(doc, imageElement);
+    saveGuides(doc, imageElement);
+    saveAudio(doc, imageElement);
+    savePalettesToXML(doc, imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -141,6 +146,47 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     imageElement.appendChild(animationElement);
 
     return imageElement;
+}
+
+bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &uri)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(uri);
+
+    bool res = false;
+    if (m_d->doc->paletteList().size() == 0) {
+        return true;
+    }
+    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+        if (!palette->isGlobal()) {
+            if (!store->open(m_d->imageName + PALETTE_PATH + palette->filename())) {
+                m_d->errorMessages << i18n("could not save palettes");
+                return false;
+            }
+            QByteArray ba = palette->toByteArray();
+            if (!ba.isEmpty()) {
+                store->write(ba);
+            } else {
+                qWarning() << "Cannot save the palette to a byte array:" << palette->name();
+            }
+            store->close();
+            res = true;
+        }
+    }
+    return res;
+}
+
+void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
+{
+    QDomElement ePalette = doc.createElement(PALETTES);
+    for (const KoColorSet *palette : m_d->doc->paletteList()) {
+        if (!palette->isGlobal()) {
+            QDomElement eFile =  doc.createElement("palette");
+            eFile.setAttribute("filename", palette->filename());
+            ePalette.appendChild(eFile);
+        }
+    }
+    element.appendChild(ePalette);
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)

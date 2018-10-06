@@ -147,8 +147,8 @@ class Palette_Docker(DockWidget):
         palette = self.currentPalette
         self.colorComboBox.clear()
         self.colorList = list()
-        for i in range(palette.colorsCountTotal()):
-            entry = palette.colorSetEntryByIndex(i)
+        for info in palette.infoList():
+            entry = info.swatch
             color = palette.colorForEntry(entry).colorForCanvas(self.canvas())
             colorSquare = QPixmap(12, 12)
             if entry.spotColor() is True:

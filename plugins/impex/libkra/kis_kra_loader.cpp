@@ -36,6 +36,7 @@
 #include <KisImportExportManager.h>
 #include <KoXmlReader.h>
 #include <KoStoreDevice.h>
+#include <KoResourceServerProvider.h>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -70,6 +71,7 @@
 #include <kis_filter_configuration.h>
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
+#include <KoColorSet.h>
 
 #include "KisDocument.h"
 #include "kis_config.h"
@@ -136,6 +138,7 @@ public:
     QMap<QString, QString> assistantsFilenames;
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
+    QVector<QString> paletteFilenames;
     QStringList errorMessages;
     QStringList warningMessages;
 };
@@ -360,6 +363,21 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
     }
 
+    // reading palettes from XML
+    for (child = element.lastChild(); !child.isNull(); child = child.previousSibling()) {
+        QDomElement e = child.toElement();
+        if (e.tagName() == PALETTES) {
+            for (QDomElement paletteElement = e.lastChildElement();
+                 !paletteElement.isNull();
+                 paletteElement = paletteElement.previousSiblingElement()) {
+                QString paletteName = paletteElement.attribute("filename");
+                m_d->paletteFilenames.append(paletteName);
+            }
+            break;
+        }
+    }
+
+
     return image;
 }
 
@@ -484,6 +502,22 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
     loadAssistants(store, uri, external);
+}
+
+void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
+{
+    QList<KoColorSet*> list;
+    Q_FOREACH (const QString &filename, m_d->paletteFilenames) {
+        KoColorSet *newPalette = new KoColorSet(filename);
+        store->open(m_d->imageName + PALETTE_PATH + filename);
+        QByteArray data = store->read(store->size());
+        newPalette->fromByteArray(data);
+        newPalette->setIsGlobal(false);
+        newPalette->setIsEditable(true);
+        store->close();
+        list.append(newPalette);
+    }
+    doc->setPaletteList(list);
 }
 
 vKisNodeSP KisKraLoader::selectedNodes() const

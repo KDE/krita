@@ -43,6 +43,48 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
    recentDocumentsListView->viewport()->setAutoFillBackground(false);
    recentDocumentsListView->setSpacing(2);
 
+
+
+
+    // set up URLs that go to web browser
+    manualLink->setText(QString("<a href=\"https://docs.krita.org/\">").append(i18n("User Manual")).append("</a>"));
+    manualLink->setTextFormat(Qt::RichText);
+    manualLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    manualLink->setOpenExternalLinks(true);
+
+    gettingStartedLink->setText(QString("<a href=\"https://docs.krita.org/en/user_manual/getting_started.html\">").append(i18n("Getting Started")).append("</a>"));
+    gettingStartedLink->setTextFormat(Qt::RichText);
+    gettingStartedLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    gettingStartedLink->setOpenExternalLinks(true);
+
+    supportKritaLink->setText(QString("<a href=\"https://krita.org/en/support-us/donations/\">").append(i18n("Support Krita")).append("</a>"));
+    supportKritaLink->setTextFormat(Qt::RichText);
+    supportKritaLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    supportKritaLink->setOpenExternalLinks(true);
+
+    userCommunityLink->setText(QString("<a href=\"https://forum.kde.org/viewforum.php?f=136\">").append(i18n("User Community")).append("</a>"));
+    userCommunityLink->setTextFormat(Qt::RichText);
+    userCommunityLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    userCommunityLink->setOpenExternalLinks(true);
+
+    kritaWebsiteLink->setText(QString("<a href=\"https://www.krita.org\">").append(i18n("Krita Website")).append("</a>"));
+    kritaWebsiteLink->setTextFormat(Qt::RichText);
+    kritaWebsiteLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    kritaWebsiteLink->setOpenExternalLinks(true);
+
+    sourceCodeLink->setText(QString("<a href=\"https://phabricator.kde.org/source/krita/\">").append(i18n("Source Code")).append("</a>"));
+    sourceCodeLink->setTextFormat(Qt::RichText);
+    sourceCodeLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    sourceCodeLink->setOpenExternalLinks(true);
+
+    poweredByKDELink->setText(QString("<a href=\"https://userbase.kde.org/What_is_KDE\">").append(i18n("Powered by KDE")).append("</a>"));
+    poweredByKDELink->setTextFormat(Qt::RichText);
+    poweredByKDELink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    poweredByKDELink->setOpenExternalLinks(true);
+    kdeIcon->setIconSize(QSize(20, 20));
+    kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
+
+
    connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
    // configure the News area
@@ -79,18 +121,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         // until after the view manager is set
         connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
         connect(openFileLink, SIGNAL(clicked(bool)), this, SLOT(slotOpenFileClicked()));
-
-        // URL link connections
-        connect(manualLink, SIGNAL(clicked(bool)), this, SLOT(slotGoToManual()));
-
-        connect(gettingStartedLink, SIGNAL(clicked(bool)), this, SLOT(slotGettingStarted()));
-        connect(supportKritaLink, SIGNAL(clicked(bool)), this, SLOT(slotSupportKrita()));
-        connect(userCommunityLink, SIGNAL(clicked(bool)), this, SLOT(slotUserCommunity()));
-        connect(kritaWebsiteLink, SIGNAL(clicked(bool)), this, SLOT(slotKritaWebsite()));
-        connect(sourceCodeLink, SIGNAL(clicked(bool)), this, SLOT(slotSourceCode()));
         connect(clearRecentFilesLink, SIGNAL(clicked(bool)), this, SLOT(slotClearRecentFiles()));
-        connect(poweredByKDELink, SIGNAL(clicked(bool)), this, SLOT(slotKDESiteLink()));
-
 
         slotUpdateThemeColors();
     }
@@ -248,39 +279,4 @@ void KisWelcomePageWidget::slotClearRecentFiles()
     mainWindow->clearRecentFiles();
     mainWindow->reloadRecentFileList();
     populateRecentDocuments();
-}
-
-void KisWelcomePageWidget::slotGoToManual()
-{
-    QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
-}
-
-void KisWelcomePageWidget::slotGettingStarted()
-{
-    QDesktopServices::openUrl(QUrl("https://docs.krita.org/en/user_manual/getting_started.html"));
-}
-
-void KisWelcomePageWidget::slotSupportKrita()
-{
-    QDesktopServices::openUrl(QUrl("https://krita.org/en/support-us/donations/"));
-}
-
-void KisWelcomePageWidget::slotUserCommunity()
-{
-    QDesktopServices::openUrl(QUrl("https://forum.kde.org/viewforum.php?f=136"));
-}
-
-void KisWelcomePageWidget::slotKritaWebsite()
-{
-    QDesktopServices::openUrl(QUrl("https://www.krita.org"));
-}
-
-void KisWelcomePageWidget::slotSourceCode()
-{
-    QDesktopServices::openUrl(QUrl("https://phabricator.kde.org/source/krita/"));
-}
-
-void KisWelcomePageWidget::slotKDESiteLink()
-{
-    QDesktopServices::openUrl(QUrl("https://userbase.kde.org/What_is_KDE"));
 }

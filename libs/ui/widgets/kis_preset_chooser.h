@@ -21,6 +21,7 @@
 #define KIS_ITEM_CHOOSER_H_
 
 #include <QWidget>
+#include <QScroller>
 #include <kritaui_export.h>
 #include <KoID.h>
 
@@ -75,6 +76,8 @@ public Q_SLOTS:
 
     /// saves the icon size for the presets. called by the horizontal slider release event.
     void saveIconSize();
+
+    void slotScrollerStateChanged(QScroller::State state);
 
 private Q_SLOTS:
     void notifyConfigChanged();

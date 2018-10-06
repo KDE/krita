@@ -27,7 +27,7 @@
 #define KO_RESOURCE_ITEM_CHOOSER
 
 #include <QWidget>
-#include <QScroller>
+#include <KisKineticScroller.h>
 
 #include "kritawidgets_export.h"
 #include <QPushButton>
@@ -112,9 +112,6 @@ public:
 
     bool eventFilter(QObject *object, QEvent *event) override;
 
-    /// sets up this chooser for kinetic (drag triggered) scrolling
-    void configureKineticScrolling(int gesture, int sensitivity, bool scrollbar);
-
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResource *resource);
@@ -124,6 +121,7 @@ Q_SIGNALS:
     void splitterMoved();
 public Q_SLOTS:
     void slotButtonClicked(int button);
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 private Q_SLOTS:
     void activated(const QModelIndex &index);

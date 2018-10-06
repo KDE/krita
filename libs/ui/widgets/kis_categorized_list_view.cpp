@@ -26,11 +26,19 @@
 #include <klocalizedstring.h>
 #include <kis_icon.h>
 #include "kis_debug.h"
+#include <KisKineticScroller.h>
 
 KisCategorizedListView::KisCategorizedListView(QWidget* parent):
     QListView(parent)
 {
     connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(slotIndexChanged(QModelIndex)));
+
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+        }
+    }
 }
 
 KisCategorizedListView::~KisCategorizedListView()
@@ -165,6 +173,11 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 void KisCategorizedListView::mouseReleaseEvent(QMouseEvent* event)
 {
     QListView::mouseReleaseEvent(event);
+}
+
+void KisCategorizedListView::slotScrollerStateChange(QScroller::State state)
+{
+    KisKineticScroller::updateCursor(this, state);
 }
 
 

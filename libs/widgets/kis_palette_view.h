@@ -30,6 +30,8 @@
 #include <KoColorSet.h>
 #include "kritawidgets_export.h"
 
+#include <KisKineticScroller.h>
+
 class KisPaletteModel;
 class QWheelEvent;
 class KoColorDisplayRendererInterface;
@@ -101,6 +103,8 @@ public Q_SLOTS:
      *  This doesn't update the foreground color, just the visual selection.
      */
     void slotFGColorChanged(const KoColor &);
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:
     void slotHorizontalHeaderResized(int, int, int newSize);

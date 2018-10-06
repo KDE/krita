@@ -23,6 +23,8 @@
 
 #include <QDockWidget>
 #include <QPointer>
+#include <QScroller>
+#include <KisKineticScroller.h>
 
 class QWidget;
 
@@ -50,6 +52,7 @@ public Q_SLOTS:
      * Update the option widgets to the argument one, removing the currently set widget.
      */
     void setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList);
+    void slotScrollerStateChange(QScroller::State state);
 
     /**
      * Returns whether the docker has an optionwidget attached

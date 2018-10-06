@@ -49,6 +49,12 @@ ChannelDockerDock::ChannelDockerDock( ) :
     m_channelTable->horizontalHeader()->setVisible(false);
     m_channelTable->setSelectionBehavior( QAbstractItemView::SelectRows );
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_channelTable);
+    if (scroller){
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
+
     setWidget(m_channelTable);
 
     connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);

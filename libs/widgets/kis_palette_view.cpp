@@ -30,7 +30,11 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
+
 #include <kis_icon_utils.h>
+
+#include <KisKineticScroller.h>
+
 #include <KoDialog.h>
 #include <KoColorDisplayRendererInterface.h>
 
@@ -81,6 +85,12 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)),
             SLOT(slotHorizontalHeaderResized(int,int,int)));
     setAutoFillBackground(true);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 KisPaletteView::~KisPaletteView()

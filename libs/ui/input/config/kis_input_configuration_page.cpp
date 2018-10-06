@@ -54,6 +54,12 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
         ui->configurationItemsArea->setSpacing(0);
         ui->configurationItemsArea->addWidget(item);
     }
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(ui->scrollArea);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 void KisInputConfigurationPage::saveChanges()

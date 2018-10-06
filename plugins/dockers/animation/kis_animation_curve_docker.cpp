@@ -19,6 +19,7 @@
 #include <QTreeView>
 #include <QSplitter>
 #include <QToolBar>
+#include <QScroller>
 
 #include "kis_animation_curve_docker.h"
 #include "kis_animation_curves_model.h"
@@ -76,6 +77,12 @@ KisAnimationCurveDocker::KisAnimationCurveDocker()
 
     m_d->curvesWidget.splitter->setStretchFactor(0, 1);
     m_d->curvesWidget.splitter->setStretchFactor(1, 4);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(channelListView);
+    if (scroller){
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
     connect(m_d->channelListModel, &KisAnimationCurveChannelListModel::rowsInserted,
             this, &KisAnimationCurveDocker::slotListRowsInserted);
@@ -142,6 +149,11 @@ void KisAnimationCurveDocker::setViewManager(KisViewManager *kisview)
 {
     connect(kisview->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
     slotUpdateIcons();
+}
+
+void KisAnimationCurveDocker::slotScrollerStateChanged(QScroller::State state)
+{
+    KisKineticScroller::updateCursor(m_d->curvesWidget.channelListView, state);
 }
 
 void KisAnimationCurveDocker::slotUpdateIcons()

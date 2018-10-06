@@ -29,12 +29,14 @@
 #include <QDropEvent>
 #include <QMenu>
 #include <QScrollBar>
+#include <QScroller>
 #include <QDrag>
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
 
 #include "KSharedConfig"
+#include "KisKineticScroller.h"
 
 #include "kis_zoom_button.h"
 #include "kis_icon_utils.h"
@@ -269,6 +271,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if( scroller ) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 
     connect(&m_d->selectionChangedCompressor, SIGNAL(timeout()),
             SLOT(slotSelectionChanged()));
@@ -550,6 +560,10 @@ void TimelineFramesView::slotUpdateInfiniteFramesCount()
              m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
+}
+
+void TimelineFramesView::slotScrollerStateChanged( QScroller::State state ) {
+    KisKineticScroller::updateCursor(this, state);
 }
 
 void TimelineFramesView::currentChanged(const QModelIndex &current, const QModelIndex &previous)

@@ -384,18 +384,25 @@ bool KisPaletteModel::removeEntry(QModelIndex index, bool keepColors)
     QString groupName = entryList.at(0);
     quint32 indexInGroup = entryList.at(1).toUInt();
 
-    if (qvariant_cast<bool>(index.data(IsHeaderRole))==false) {
+    if (qvariant_cast<bool>(index.data(IsHeaderRole)) == false) {
+
+        bool allowRemoveRow = false;
+
         if (index.column()-1<0
-                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
-                && index.row()-1>0
-                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+            && m_colorSet->nColorsGroup(groupName)%columnCount() <1
+            && index.row()-1>0
+            && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+
+            allowRemoveRow = true;
+        }
+
+        if (allowRemoveRow) {
             beginRemoveRows(QModelIndex(), index.row(), index.row()-1);
         }
+
         m_colorSet->removeAt(indexInGroup, groupName);
-        if (index.column()-1<0
-                && m_colorSet->nColorsGroup(groupName)%columnCount() <1
-                && index.row()-1>0
-                && m_colorSet->nColorsGroup(groupName)/columnCount()>0) {
+
+        if (allowRemoveRow) {
             endRemoveRows();
         }
     } else {

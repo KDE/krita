@@ -52,6 +52,7 @@
 #include <KoProperties.h>
 #include <KoSelectedShapesProxy.h>
 #include "KoToolManager.h"
+#include "KoCanvasResourceProvider.h"
 
 #include "SvgTextEditor.h"
 #include "KisHandlePainterHelper.h"
@@ -222,6 +223,7 @@ void SvgTextTool::showEditor()
     if (!m_editor) {
         m_editor = new SvgTextEditor();
         m_editor->setWindowModality(Qt::ApplicationModal);
+
         connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
         connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
     }
@@ -256,7 +258,9 @@ QString SvgTextTool::generateDefs()
         textAnchor = "end";
     }
 
-    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ;   text-anchor:%3;\n  }\n </style>\n</defs>").arg(font, size, textAnchor);
+    QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
+
+    return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4;\n  }\n </style>\n</defs>").arg(font, size, fontColor, textAnchor);
 }
 
 void SvgTextTool::storeDefaults()

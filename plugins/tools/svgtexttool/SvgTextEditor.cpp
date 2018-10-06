@@ -289,6 +289,7 @@ void SvgTextEditor::checkFormat()
 
     {
         KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
+        qDebug() << "fg" << fg.toQString(fg);
         KoColorPopupAction *fgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"));
         KisSignalsBlocker b(fgColorPopup);
         fgColorPopup->setCurrentColor(fg);

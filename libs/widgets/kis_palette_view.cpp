@@ -163,6 +163,9 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         m_d->model->removeEntry(index, keepColors);
         m_d->model->colorSet()->save();
     }
+
+    this->paletteModelChanged(); // refresh the UI with new model data
+
     return true;
 }
 

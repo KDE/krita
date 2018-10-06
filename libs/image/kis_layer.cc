@@ -882,7 +882,7 @@ QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time)
     }
 
     KisPaintDeviceSP originalDevice = original();
-    if (originalDevice) {
+    if (originalDevice ) {
         KisRasterKeyframeChannel *channel = originalDevice->keyframeChannel();
 
         if (channel) {

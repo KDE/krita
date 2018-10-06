@@ -721,7 +721,7 @@ public:
      * Create a keyframe channel for the content on this device.
      * @param id identifier for the channel
      * @param node the parent node for the channel
-     * @return keyframe channel
+     * @return keyframe channel or 0 if there is not one
      */
     KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id);
 

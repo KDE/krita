@@ -37,7 +37,7 @@ class QCloseEvent;
 class QMoveEvent;
 
 struct KoPageLayout;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 class KisDocument;
 class KisPrintJob;
@@ -164,7 +164,7 @@ public:
 
     QList<KoCanvasObserverBase*> canvasObservers() const override;
 
-    KoCanvasResourceManager *resourceManager() const;
+    KoCanvasResourceProvider *resourceManager() const;
 
     int viewCount() const;
 

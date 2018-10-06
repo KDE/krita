@@ -19,7 +19,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
  */
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 
 #include <QVariant>
 #include <FlakeDebug.h>
@@ -29,13 +29,13 @@
 #include "KoResourceManager_p.h"
 #include <KoColorSpaceRegistry.h>
 
-class Q_DECL_HIDDEN KoCanvasResourceManager::Private
+class Q_DECL_HIDDEN KoCanvasResourceProvider::Private
 {
 public:
     KoResourceManager manager;
 };
 
-KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
+KoCanvasResourceProvider::KoCanvasResourceProvider(QObject *parent)
     : QObject(parent)
     , d(new Private())
 {
@@ -45,136 +45,136 @@ KoCanvasResourceManager::KoCanvasResourceManager(QObject *parent)
     setResource(ApplicationSpeciality, NoSpecial);
 
     connect(&d->manager, &KoResourceManager::resourceChanged,
-            this, &KoCanvasResourceManager::canvasResourceChanged);
+            this, &KoCanvasResourceProvider::canvasResourceChanged);
 }
 
-KoCanvasResourceManager::~KoCanvasResourceManager()
+KoCanvasResourceProvider::~KoCanvasResourceProvider()
 {
     delete d;
 }
 
-void KoCanvasResourceManager::setResource(int key, const QVariant &value)
+void KoCanvasResourceProvider::setResource(int key, const QVariant &value)
 {
     d->manager.setResource(key, value);
 }
 
-QVariant KoCanvasResourceManager::resource(int key) const
+QVariant KoCanvasResourceProvider::resource(int key) const
 {
     return d->manager.resource(key);
 }
 
-void KoCanvasResourceManager::setResource(int key, const KoColor &color)
+void KoCanvasResourceProvider::setResource(int key, const KoColor &color)
 {
     QVariant v;
     v.setValue(color);
     setResource(key, v);
 }
 
-void KoCanvasResourceManager::setResource(int key, KoShape *shape)
+void KoCanvasResourceProvider::setResource(int key, KoShape *shape)
 {
     QVariant v;
     v.setValue(shape);
     setResource(key, v);
 }
 
-void KoCanvasResourceManager::setResource(int key, const KoUnit &unit)
+void KoCanvasResourceProvider::setResource(int key, const KoUnit &unit)
 {
     QVariant v;
     v.setValue(unit);
     setResource(key, v);
 }
 
-KoColor KoCanvasResourceManager::koColorResource(int key) const
+KoColor KoCanvasResourceProvider::koColorResource(int key) const
 {
     return d->manager.koColorResource(key);
 }
 
-void KoCanvasResourceManager::setForegroundColor(const KoColor &color)
+void KoCanvasResourceProvider::setForegroundColor(const KoColor &color)
 {
     setResource(ForegroundColor, color);
 }
 
-KoColor KoCanvasResourceManager::foregroundColor() const
+KoColor KoCanvasResourceProvider::foregroundColor() const
 {
     return koColorResource(ForegroundColor);
 }
 
-void KoCanvasResourceManager::setBackgroundColor(const KoColor &color)
+void KoCanvasResourceProvider::setBackgroundColor(const KoColor &color)
 {
     setResource(BackgroundColor, color);
 }
 
-KoColor KoCanvasResourceManager::backgroundColor() const
+KoColor KoCanvasResourceProvider::backgroundColor() const
 {
     return koColorResource(BackgroundColor);
 }
 
-KoShape *KoCanvasResourceManager::koShapeResource(int key) const
+KoShape *KoCanvasResourceProvider::koShapeResource(int key) const
 {
     return d->manager.koShapeResource(key);
 }
 
-KoUnit KoCanvasResourceManager::unitResource(int key) const
+KoUnit KoCanvasResourceProvider::unitResource(int key) const
 {
     return resource(key).value<KoUnit>();
 }
 
-bool KoCanvasResourceManager::boolResource(int key) const
+bool KoCanvasResourceProvider::boolResource(int key) const
 {
     return d->manager.boolResource(key);
 }
 
-int KoCanvasResourceManager::intResource(int key) const
+int KoCanvasResourceProvider::intResource(int key) const
 {
     return d->manager.intResource(key);
 }
 
-QString KoCanvasResourceManager::stringResource(int key) const
+QString KoCanvasResourceProvider::stringResource(int key) const
 {
     return d->manager.stringResource(key);
 }
 
-QSizeF KoCanvasResourceManager::sizeResource(int key) const
+QSizeF KoCanvasResourceProvider::sizeResource(int key) const
 {
     return d->manager.sizeResource(key);
 }
 
-bool KoCanvasResourceManager::hasResource(int key) const
+bool KoCanvasResourceProvider::hasResource(int key) const
 {
     return d->manager.hasResource(key);
 }
 
-void KoCanvasResourceManager::clearResource(int key)
+void KoCanvasResourceProvider::clearResource(int key)
 {
     d->manager.clearResource(key);
 }
 
-void KoCanvasResourceManager::addDerivedResourceConverter(KoDerivedResourceConverterSP converter)
+void KoCanvasResourceProvider::addDerivedResourceConverter(KoDerivedResourceConverterSP converter)
 {
     d->manager.addDerivedResourceConverter(converter);
 }
 
-bool KoCanvasResourceManager::hasDerivedResourceConverter(int key)
+bool KoCanvasResourceProvider::hasDerivedResourceConverter(int key)
 {
     return d->manager.hasDerivedResourceConverter(key);
 }
 
-void KoCanvasResourceManager::removeDerivedResourceConverter(int key)
+void KoCanvasResourceProvider::removeDerivedResourceConverter(int key)
 {
     d->manager.removeDerivedResourceConverter(key);
 }
 
-void KoCanvasResourceManager::addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator)
+void KoCanvasResourceProvider::addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator)
 {
     d->manager.addResourceUpdateMediator(mediator);
 }
 
-bool KoCanvasResourceManager::hasResourceUpdateMediator(int key)
+bool KoCanvasResourceProvider::hasResourceUpdateMediator(int key)
 {
     return d->manager.hasResourceUpdateMediator(key);
 }
 
-void KoCanvasResourceManager::removeResourceUpdateMediator(int key)
+void KoCanvasResourceProvider::removeResourceUpdateMediator(int key)
 {
     d->manager.removeResourceUpdateMediator(key);
 }

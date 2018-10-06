@@ -68,7 +68,7 @@ void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
 
 void SmallColorSelectorDock::canvasResourceChanged(int key, const QVariant& v)
 {
-    if (key == KoCanvasResourceManager::ForegroundColor) {
+    if (key == KoCanvasResourceProvider::ForegroundColor) {
         m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());
     }
 }

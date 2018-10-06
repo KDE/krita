@@ -46,7 +46,7 @@ class KisInputManager;
 class KoZoomController;
 class KoZoomController;
 struct KoPageLayout;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 // KDE classes
 class QAction;
@@ -74,7 +74,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
     ~KisView() override;
 
     // Temporary while teasing apart view and mainwindow

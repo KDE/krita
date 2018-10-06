@@ -28,7 +28,7 @@
 class QKeyEvent;
 class KisCanvas2;
 class KisSelectionOptions;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject

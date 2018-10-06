@@ -1526,7 +1526,7 @@ void KisMainWindow::slotShowSessionManager() {
     KisPart::instance()->showSessionManager();
 }
 
-KoCanvasResourceManager *KisMainWindow::resourceManager() const
+KoCanvasResourceProvider *KisMainWindow::resourceManager() const
 {
     return d->viewManager->resourceProvider()->resourceManager();
 }

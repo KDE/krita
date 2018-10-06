@@ -104,7 +104,7 @@ class Q_DECL_HIDDEN KisView::Private
 public:
     Private(KisView *_q,
             KisDocument *document,
-            KoCanvasResourceManager *resourceManager,
+            KoCanvasResourceProvider *resourceManager,
             KActionCollection *actionCollection)
         : actionCollection(actionCollection)
         , viewConverter()
@@ -206,7 +206,7 @@ public:
 
 };
 
-KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private(this, document, resourceManager, actionCollection))
 {
@@ -1007,7 +1007,7 @@ void KisView::slotImageResolutionChanged()
     // update KoUnit value for the document
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
-                setResource(KoCanvasResourceManager::Unit, d->canvas.unit());
+                setResource(KoCanvasResourceProvider::Unit, d->canvas.unit());
     }
 }
 

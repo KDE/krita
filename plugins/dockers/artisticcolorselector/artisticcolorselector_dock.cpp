@@ -18,7 +18,7 @@
 #include <kis_debug.h>
 
 #include <klocalizedstring.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
 #include <KoResourceServerAdapter.h>
@@ -245,10 +245,10 @@ void ArtisticColorSelectorDock::setViewManager(KisViewManager* kisview)
 
 void ArtisticColorSelectorDock::slotCanvasResourceChanged(int key, const QVariant& value)
 {
-    if(key == KoCanvasResourceManager::ForegroundColor)
+    if(key == KoCanvasResourceProvider::ForegroundColor)
         m_selectorUI->colorSelector->setFgColor(value.value<KoColor>());
 
-    if(key == KoCanvasResourceManager::BackgroundColor)
+    if(key == KoCanvasResourceProvider::BackgroundColor)
         m_selectorUI->colorSelector->setBgColor(value.value<KoColor>());
 }
 

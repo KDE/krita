@@ -43,7 +43,7 @@
 
 #include <kis_icon.h>
 #include <KoShape.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoColorSpace.h>
 #include <KoPointerEvent.h>
 #include <KoColor.h>
@@ -448,7 +448,7 @@ int KisToolPaint::colorPreviewResourceId(AlternateAction action)
 {
     bool toForegroundColor = action == PickFgNode || action == PickFgImage;
     int resource = toForegroundColor ?
-        KoCanvasResourceManager::ForegroundColor : KoCanvasResourceManager::BackgroundColor;
+        KoCanvasResourceProvider::ForegroundColor : KoCanvasResourceProvider::BackgroundColor;
 
     return resource;
 }

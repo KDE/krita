@@ -29,7 +29,7 @@
 #include <ksharedconfig.h>
 
 #include "kis_canvas2.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 #include "kis_display_color_converter.h"
 
 

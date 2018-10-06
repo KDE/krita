@@ -36,7 +36,7 @@ class QVariant;
 class QSizeF;
 
 /**
- * The KoCanvasResourceManager contains a set of per-canvas
+ * The KoCanvasResourceProvider contains a set of per-canvas
  * properties, like current foreground color, current background
  * color and more. All tools belonging to the current canvas are
  * notified when a Resource changes (is set).
@@ -56,7 +56,7 @@ class QSizeF;
  *  document = static_cast<QTextDocument*>(var.value<void*>());
  * @endcode
  */
-class KRITAFLAKE_EXPORT KoCanvasResourceManager : public QObject
+class KRITAFLAKE_EXPORT KoCanvasResourceProvider : public QObject
 {
     Q_OBJECT
 
@@ -99,15 +99,15 @@ public:
      * Constructor.
      * @param parent the parent QObject, used for memory management.
      */
-    explicit KoCanvasResourceManager(QObject *parent = 0);
-    ~KoCanvasResourceManager() override;
+    explicit KoCanvasResourceProvider(QObject *parent = 0);
+    ~KoCanvasResourceProvider() override;
 
 public Q_SLOTS:
     /**
      * Set a resource of any type.
      * @param key the integer key
      * @param value the new value for the key.
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     void setResource(int key, const QVariant &value);
 
@@ -115,7 +115,7 @@ public Q_SLOTS:
      * Set a resource of type KoColor.
      * @param key the integer key
      * @param color the new value for the key.
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     void setResource(int key, const KoColor &color);
 
@@ -123,7 +123,7 @@ public Q_SLOTS:
      * Set a resource of type KoShape*.
      * @param key the integer key
      * @param id the new value for the key.
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     void setResource(int key, KoShape *shape);
 
@@ -131,7 +131,7 @@ public Q_SLOTS:
      * Set a resource of type KoUnit
      * @param key the integer key
      * @param id the new value for the key.
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     void setResource(int key, const KoUnit &unit);
 
@@ -140,7 +140,7 @@ public:
      * Returns a qvariant containing the specified resource or a standard one if the
      * specified resource does not exist.
      * @param key the key
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     QVariant resource(int key) const;
 
@@ -168,56 +168,56 @@ public:
     /**
      * Return the resource determined by param key as a boolean.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     bool boolResource(int key) const;
 
     /**
      * Return the resource determined by param key as an integer.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     int intResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoColor.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     KoColor koColorResource(int key) const;
 
     /**
      * Return the resource determined by param key as a pointer to a KoShape.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     KoShape *koShapeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QString .
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     QString stringResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QSizeF.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     QSizeF sizeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoUnit.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     KoUnit unitResource(int key) const;
 
     /**
      * Returns true if there is a resource set with the requested key.
      * @param key the identifying key for the resource
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     bool hasResource(int key) const;
 
@@ -225,7 +225,7 @@ public:
      * Remove the resource with @p key from the provider.
      * @param key the key that will be used to remove the resource
      * There will be a signal emitted with a variable that will return true on QVariable::isNull();
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     void clearResource(int key);
 
@@ -266,13 +266,13 @@ Q_SIGNALS:
      * new or different from the previous set value.
      * @param key the identifying key for the resource
      * @param value the variants new value.
-     * @see KoCanvasResourceManager::CanvasResource
+     * @see KoCanvasResourceProvider::CanvasResource
      */
     void canvasResourceChanged(int key, const QVariant &value);
 
 private:
-    KoCanvasResourceManager(const KoCanvasResourceManager&);
-    KoCanvasResourceManager& operator=(const KoCanvasResourceManager&);
+    KoCanvasResourceProvider(const KoCanvasResourceProvider&);
+    KoCanvasResourceProvider& operator=(const KoCanvasResourceProvider&);
 
     class Private;
     Private *const d;

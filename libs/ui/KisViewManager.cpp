@@ -236,7 +236,7 @@ public:
     bool showFloatingMessage;
     QPointer<KisView> currentImageView;
     KisCanvasResourceProvider canvasResourceProvider;
-    KoCanvasResourceManager canvasResourceManager;
+    KoCanvasResourceProvider canvasResourceManager;
     KisSignalCompressor guiUpdateCompressor;
     KActionCollection *actionCollection;
     KisMirrorManager mirrorManager;
@@ -340,7 +340,7 @@ KisViewManager::~KisViewManager()
     delete d;
 }
 
-void KisViewManager::initializeResourceManager(KoCanvasResourceManager *resourceManager)
+void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourceManager)
 {
     resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));

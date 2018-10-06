@@ -22,7 +22,7 @@
 
 #include <klocalizedstring.h>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCanvasBase.h>
 
 #include "kis_canvas2.h"

@@ -25,7 +25,7 @@
 #include <KoUnit.h>
 #include <KoColorPopupAction.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoSelection.h>
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
@@ -235,7 +235,7 @@ void KoShadowConfigWidget::setUnit(const KoUnit &unit)
 
 void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
 {
-    if( key == KoCanvasResourceManager::Unit ) {
+    if( key == KoCanvasResourceProvider::Unit ) {
         setUnit(res.value<KoUnit>());
     }
 }

@@ -70,21 +70,21 @@ protected:
         }
     }
 
-    void modifyResourceManager(KoCanvasResourceManager *manager,
+    void modifyResourceManager(KoCanvasResourceProvider *manager,
                                KisImageWSP image) override
     {
         modifyResourceManager(manager, image, 0);
     }
 
 
-    void modifyResourceManager(KoCanvasResourceManager *manager,
+    void modifyResourceManager(KoCanvasResourceProvider *manager,
                                KisImageWSP image,
                                int iteration) override {
 
         if (m_paintColor && iteration > 0) {
             QVariant i;
             i.setValue(KoColor(*m_paintColor, image->colorSpace()));
-            manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
+            manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
         }
     }
 

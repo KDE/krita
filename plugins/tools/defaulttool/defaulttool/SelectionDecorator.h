@@ -29,7 +29,7 @@
 #include <QPointer>
 
 class KoSelection;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 static const struct DecoratorIconPositions {
     QPoint uiOffset = QPoint(0, 40);
@@ -47,7 +47,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(KoCanvasResourceManager *resourceManager);
+    SelectionDecorator(KoCanvasResourceProvider *resourceManager);
     ~SelectionDecorator() {}
 
     /**

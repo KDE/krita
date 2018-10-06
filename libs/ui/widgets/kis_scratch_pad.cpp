@@ -211,7 +211,7 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
 
 void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
-    KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
+    KoCanvasResourceProvider *resourceManager = m_resourceProvider->resourceManager();
     m_helper->initPaint(event,
                         documentToWidget().map(event->point),
                         resourceManager,

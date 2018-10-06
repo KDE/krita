@@ -59,20 +59,20 @@ KisImageSP utils::createImage(KisUndoStore *undoStore, const QSize &imageSize) {
     return image;
 }
 
-KoCanvasResourceManager* utils::createResourceManager(KisImageWSP image,
+KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
                                                 KisNodeSP node,
                                                 const QString &presetFileName)
 {
-    KoCanvasResourceManager *manager = new KoCanvasResourceManager();
+    KoCanvasResourceProvider *manager = new KoCanvasResourceProvider();
     KisViewManager::initializeResourceManager(manager);
 
     QVariant i;
 
     i.setValue(KoColor(Qt::black, image->colorSpace()));
-    manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
+    manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
 
     i.setValue(KoColor(Qt::white, image->colorSpace()));
-    manager->setResource(KoCanvasResourceManager::BackgroundColor, i);
+    manager->setResource(KoCanvasResourceProvider::BackgroundColor, i);
 
     i.setValue(static_cast<void*>(0));
     manager->setResource(KisCanvasResourceProvider::CurrentPattern, i);
@@ -266,7 +266,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
                                      bool needQImage)
 {
     KisImageSP image = utils::createImage(0, m_imageSize);
-    KoCanvasResourceManager *manager = utils::createResourceManager(image, 0, m_presetFilename);
+    KoCanvasResourceProvider *manager = utils::createResourceManager(image, 0, m_presetFilename);
     KisNodeSP currentNode;
 
     for (int i = 0; i < m_numIterations; i++) {
@@ -321,14 +321,14 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
     return resultImage;
 }
 
-void utils::StrokeTester::modifyResourceManager(KoCanvasResourceManager *manager,
+void utils::StrokeTester::modifyResourceManager(KoCanvasResourceProvider *manager,
                                                 KisImageWSP image, int iteration)
 {
     Q_UNUSED(iteration);
     modifyResourceManager(manager, image);
 }
 
-void utils::StrokeTester::modifyResourceManager(KoCanvasResourceManager *manager,
+void utils::StrokeTester::modifyResourceManager(KoCanvasResourceProvider *manager,
                                                 KisImageWSP image)
 {
     Q_UNUSED(manager);

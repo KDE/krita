@@ -27,7 +27,7 @@
 class KoShape;
 class KUndo2Command;
 class KoUnit;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 /**
  * Base widget for shape-configuration panels.
@@ -74,7 +74,7 @@ public:
     virtual void setUnit(const KoUnit &unit);
 
     /// called to set the canvas resource manager of the canvas the user used to insert the new shape.
-    void setResourceManager(KoCanvasResourceManager *rm);
+    void setResourceManager(KoCanvasResourceProvider *rm);
 
     /// Return true if the shape config panel should be shown after the shape is created
     virtual bool showOnShapeCreate();
@@ -93,7 +93,7 @@ Q_SIGNALS:
     void accept();
 
 protected:
-    KoCanvasResourceManager *m_resourceManager; ///< the resource provider with data for this canvas
+    KoCanvasResourceProvider *m_resourceManager; ///< the resource provider with data for this canvas
 };
 
 #endif

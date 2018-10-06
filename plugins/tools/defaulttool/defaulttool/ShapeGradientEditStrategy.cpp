@@ -20,7 +20,7 @@
 
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include "kis_assert.h"

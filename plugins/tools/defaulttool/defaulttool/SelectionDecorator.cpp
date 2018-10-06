@@ -28,7 +28,7 @@
 
 #include "kis_debug.h"
 #include <KisHandlePainterHelper.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KisQPainterStateSaver.h>
 #include "KoShapeGradientHandles.h"
 #include <KoCanvasBase.h>
@@ -42,7 +42,7 @@
 
 #define HANDLE_DISTANCE 10
 
-SelectionDecorator::SelectionDecorator(KoCanvasResourceManager *resourceManager)
+SelectionDecorator::SelectionDecorator(KoCanvasResourceProvider *resourceManager)
     : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
     , m_lineWidth(2)

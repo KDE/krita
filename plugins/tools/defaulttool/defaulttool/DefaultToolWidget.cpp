@@ -25,7 +25,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoUnit.h>
@@ -260,7 +260,7 @@ void DefaultToolWidget::setUnit(const KoUnit &unit)
 
 void DefaultToolWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceManager::Unit) {
+    if (key == KoCanvasResourceProvider::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
         if (res.toInt() != positionSelector->position()) {

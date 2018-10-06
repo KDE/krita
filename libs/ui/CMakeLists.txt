@@ -391,7 +391,6 @@ set(kritaui_LIB_SRCS
 if(WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
@@ -423,14 +422,18 @@ endif()
         input/wintab/drawpile_tablettester/tablettest.cpp
     )
 
-if(UNIX)
+if (UNIX)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/kis_tablet_event.cpp
-        input/wintab/kis_tablet_support.cpp
         qtlockedfile/qtlockedfile_unix.cpp
         )
-    if(NOT APPLE)
+    if(NOT USE_QT_XCB)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/wintab/kis_tablet_support.cpp
+    )
+    endif()
+    if(NOT APPLE AND NOT USE_QT_XCB)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             input/wintab/qxcbconnection_xi2.cpp

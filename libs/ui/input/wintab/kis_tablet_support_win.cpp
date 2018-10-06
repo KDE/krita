@@ -23,9 +23,7 @@
 
 #include "kis_tablet_support_win_p.h"
 
-#include <input/kis_tablet_event.h>
 #include "kis_tablet_support_win.h"
-// #include "kis_tablet_support.h"
 
 #include <kis_debug.h>
 #include <QApplication>

@@ -175,6 +175,9 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
     if (m_d->model->colorSet()->isGlobal()) {
         m_d->model->colorSet()->save();
     }
+
+    this->paletteModelChanged(); // refresh the UI with new model data
+
     return true;
 }
 

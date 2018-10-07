@@ -39,11 +39,14 @@ class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 
-public:
-
 
     static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
 
+public:
+
+    static void setScreenColorPickerFactory(std::function<KisScreenColorPickerBase *(QWidget *)> f) {
+        s_screenColorPickerFactory = f;
+    }
 
     struct Config
     {

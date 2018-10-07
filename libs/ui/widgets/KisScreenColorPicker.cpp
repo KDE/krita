@@ -272,4 +272,13 @@ bool KisScreenColorPickingEventFilter::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-std::function<KisScreenColorPickerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
+// Register the color picker factory with the internal color selector
+struct ColorPickerRegistrar {
+    ColorPickerRegistrar()
+    {
+        KisDlgInternalColorSelector::setScreenColorPickerFactory(KisScreenColorPicker::createScreenColorPicker);
+    }
+};
+
+static ColorPickerRegistrar s_colorPickerRegistrar;
+

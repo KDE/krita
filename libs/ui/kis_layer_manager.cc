@@ -526,8 +526,8 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
 
     bool r = doc->exportDocumentSync(QUrl::fromLocalFile(path), mimeType.toLatin1());
     if (!r) {
-        qDebug()<< "Path:"<<path;
-        qWarning() << doc->errorMessage();
+
+        qWarning() << "Converting layer to file layer. path:"<< path << "gave errors" << doc->errorMessage();
     } else {
         QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
         QString relativePath = QDir(basePath).relativeFilePath(path);

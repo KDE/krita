@@ -108,7 +108,6 @@ KisSketchView::KisSketchView(QQuickItem* parent)
     setAcceptHoverEvents(true);
 
     d->actionCollection = new KActionCollection(this, "krita");
-    qDebug() << ">>>>>>>>>>>>>" << qApp->activeWindow();
     d->viewManager = 0; //new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
     // QT5TODO

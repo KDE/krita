@@ -227,7 +227,6 @@ qreal KisZoomManager::zoom() const
     qreal zoomX;
     qreal zoomY;
     m_zoomHandler->zoom(&zoomX, &zoomY);
-    qDebug() << zoomX << zoomY;
     return zoomX;
 }
 

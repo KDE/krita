@@ -128,7 +128,6 @@ KisImportCatcher::~KisImportCatcher()
 void KisImportCatcher::adaptClipToImageColorSpace(KisPaintDeviceSP dev, KisImageSP image)
 {
     KisConfig cfg(true);
-    qDebug() << "dev" << dev->colorSpace() << "image" << image->colorSpace() << "cfg" << cfg.convertToImageColorspaceOnImport();
     if (cfg.convertToImageColorspaceOnImport() && *dev->colorSpace() != *image->colorSpace()) {
         /// XXX: do we need intent here?
         KUndo2Command* cmd = dev->convertTo(image->colorSpace());

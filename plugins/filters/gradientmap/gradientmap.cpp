@@ -96,7 +96,6 @@ void KritaGradientMapConfigWidget::setConfiguration(const KisPropertiesConfigura
     QDomDocument doc;
     if (config->hasProperty("gradientXML")) {
         doc.setContent(config->getString("gradientXML", ""));
-        qDebug()<<config->getString("gradientXML", "");
         KoStopGradient gradient = KoStopGradient::fromXML(doc.firstChildElement());
         if (gradient.stops().size()>0) {
             m_activeGradient->setStops(gradient.stops());

@@ -321,13 +321,10 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     KoColor bgColor(qc, cs);
 
     if (!document->newImage(name, width, height, cs, bgColor, true, 1, "", double(resolution / 72) )) {
-        qDebug() << "Could not create a new image";
         return 0;
     }
 
     Q_ASSERT(document->image());
-    qDebug() << document->image()->objectName();
-
     return new Document(document);
 }
 

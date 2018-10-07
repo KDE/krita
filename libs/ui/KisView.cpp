@@ -568,7 +568,7 @@ void KisView::dropEvent(QDropEvent *event)
                         tmp = new QTemporaryFile();
                         tmp->setAutoRemove(true);
                         if (!fetcher.fetchFile(url, tmp)) {
-                            qDebug() << "Fetching" << url << "failed";
+                            qWarning() << "Fetching" << url << "failed";
                             continue;
                         }
                         url = url.fromLocalFile(tmp->fileName());

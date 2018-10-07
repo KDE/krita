@@ -32,7 +32,6 @@
 KisNewsDelegate::KisNewsDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-    qDebug() << "Delegate created";
 }
 
 void KisNewsDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -240,6 +240,8 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
                             KisStrokeJobData::EXCLUSIVE);
 
     applicator.end();
+
+    view->resourceProvider()->slotPainting();
 }
 
 void KisClearActionFactory::run(KisViewManager *view)

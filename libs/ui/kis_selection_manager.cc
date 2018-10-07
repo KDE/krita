@@ -715,6 +715,9 @@ void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction act
         case SELECTION_INTERSECT:
             actionName = kundo2_i18n("Select Opaque (Intersect)");
             break;
+        case SELECTION_SYMMETRICDIFFERENCE:
+            actionName = kundo2_i18n("Select Opaque (Symmetric Difference)");
+            break;
         default:
             actionName = kundo2_i18n("Select Opaque");
             break;

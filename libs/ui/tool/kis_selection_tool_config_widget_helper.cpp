@@ -85,7 +85,7 @@ bool KisSelectionToolConfigWidgetHelper::antiAliasSelection() const
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(int action)
 {
-    if (action >= SELECTION_REPLACE && action <= SELECTION_INTERSECT) {
+    if (action >= SELECTION_REPLACE && action <= SELECTION_SYMMETRICDIFFERENCE) {
         m_selectionAction = (SelectionAction)action;
 
         KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
@@ -132,6 +132,12 @@ void KisSelectionToolConfigWidgetHelper::slotSubtractModeRequested()
 void KisSelectionToolConfigWidgetHelper::slotIntersectModeRequested()
 {
     m_optionsWidget->setAction(SELECTION_INTERSECT);
+    slotWidgetActionChanged(m_optionsWidget->action());
+}
+
+void KisSelectionToolConfigWidgetHelper::slotSymmetricDifferenceModeRequested()
+{
+    m_optionsWidget->setAction(SELECTION_SYMMETRICDIFFERENCE);
     slotWidgetActionChanged(m_optionsWidget->action());
 }
 

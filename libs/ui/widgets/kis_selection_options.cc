@@ -53,6 +53,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_action->addButton(m_page->subtract, SELECTION_SUBTRACT);
     m_action->addButton(m_page->replace, SELECTION_REPLACE);
     m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
+    m_action->addButton(m_page->symmetricdifference, SELECTION_SYMMETRICDIFFERENCE);
 
     m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
@@ -63,10 +64,12 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_page->subtract->setGroupPosition(KoGroupButton::GroupRight);
     m_page->replace->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->intersect->setGroupPosition(KoGroupButton::GroupCenter);
+    m_page->symmetricdifference->setGroupPosition(KoGroupButton::GroupRight);
     m_page->add->setIcon(KisIconUtils::loadIcon("selection_add"));
     m_page->subtract->setIcon(KisIconUtils::loadIcon("selection_subtract"));
     m_page->replace->setIcon(KisIconUtils::loadIcon("selection_replace"));
     m_page->intersect->setIcon(KisIconUtils::loadIcon("selection_intersect"));
+    m_page->symmetricdifference->setIcon(KisIconUtils::loadIcon("selection_symmetric_difference"));
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
@@ -137,6 +140,15 @@ void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequen
             i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
 
         m_action->button(SELECTION_INTERSECT)->setToolTip(toolTipText);
+
+        break;
+        
+    case SELECTION_SYMMETRICDIFFERENCE:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Symmetric Difference") :
+            i18nc("@info:tooltip", "Symmetric Difference (%1)", shortcutString);
+
+        m_action->button(SELECTION_SYMMETRICDIFFERENCE)->setToolTip(toolTipText);
 
         break;
     }

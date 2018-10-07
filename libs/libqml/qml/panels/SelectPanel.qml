@@ -145,6 +145,15 @@ Panel {
                 checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
                 onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
             }
+            Button {
+                id: selectSymmetricDifference;
+                anchors.left: selectSub.right;
+                image: Settings.theme.icon("select-symmetric-difference");
+                width: Constants.ToolbarButtonSize * 0.8;
+                height: width;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 4) ? true : false;
+                onClicked: if (toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 4;
+            }
         }
         Item {
             width: childrenRect.width;

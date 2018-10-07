@@ -59,6 +59,7 @@ public Q_SLOTS:
     void slotAddModeRequested();
     void slotSubtractModeRequested();
     void slotIntersectModeRequested();
+    void slotSymmetricDifferenceModeRequested();
 
 private:
     KisSelectionOptions* m_optionsWidget;

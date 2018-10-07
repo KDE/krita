@@ -162,6 +162,9 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionA
     case SELECTION_INTERSECT:
         intersectSelection(selection);
         break;
+    case SELECTION_SYMMETRICDIFFERENCE:
+        symmetricdifferenceSelection(selection);
+        break;
     default:
         break;
     }
@@ -262,6 +265,32 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 
     if (m_d->outlineCacheValid) {
         m_d->outlineCache &= selection->outlineCache();
+    }
+
+    m_d->invalidateThumbnailImage();
+}
+
+void KisPixelSelection::symmetricdifferenceSelection(KisPixelSelectionSP selection)
+{
+    QRect r = selection->selectedRect().united(selectedRect());
+    if (r.isEmpty()) return;
+
+    KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
+    KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
+    for (int i = 0; i < r.height(); ++i) {
+
+        do {
+            *dst->rawData() = abs(*dst->rawData() - *src->oldRawData());
+        }  while (src->nextPixel() && dst->nextPixel());
+
+        dst->nextRow();
+        src->nextRow();
+    }
+    
+    m_d->outlineCacheValid &= selection->outlineCacheValid();
+
+    if (m_d->outlineCacheValid) {
+       m_d->outlineCache = (m_d->outlineCache | selection->outlineCache()) - (m_d->outlineCache & selection->outlineCache());
     }
 
     m_d->invalidateThumbnailImage();

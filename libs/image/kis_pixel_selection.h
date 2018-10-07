@@ -158,6 +158,11 @@ private:
      */
     void intersectSelection(KisPixelSelectionSP selection);
 
+    /**
+     * Invert a selection or intersect with the inverse of a selection
+     */
+    void symmetricdifferenceSelection(KisPixelSelectionSP selection);
+
 private:
     // We don't want these methods to be used on selections:
     using KisPaintDevice::extent;

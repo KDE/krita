@@ -129,14 +129,14 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
 
         KoColor previousColor = canvas()->resourceManager()->foregroundColor();
 
-        KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend); /*!*/
+        KisToolUtils::pickColor(m_pickedColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend);
     }
 
     if (m_config->updateColor &&
         m_pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
 
         KoColor publicColor = m_pickedColor;
-        publicColor.setOpacity(OPACITY_OPAQUE_U8);
+        publicColor.setOpacity(OPACITY_OPAQUE_U8); // Alpha is unwanted for FG and BG colors.
 
         if (m_config->toForegroundColor) {
             canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ForegroundColor, publicColor);

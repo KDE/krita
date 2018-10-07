@@ -30,6 +30,7 @@
 #include <QWidget>
 #include <QGroupBox>
 #include <QRadioButton>
+#include "KisToolChangesTracker.h"
 
 #include "kis_canvas2.h"
 
@@ -42,7 +43,6 @@ class KisToolMove : public KisTool
 {
     Q_OBJECT
     Q_ENUMS(MoveToolMode);
-    Q_PROPERTY(bool moveInProgress READ moveInProgress NOTIFY moveInProgressChanged);
 public:
     KisToolMove(KoCanvasBase * canvas);
     ~KisToolMove() override;
@@ -104,7 +104,6 @@ public:
     void updateUIUnit(int newUnit);
 
     MoveToolMode moveToolMode() const;
-    bool moveInProgress() const;
 
     void setShowCoordinates(bool value);
 
@@ -115,10 +114,10 @@ public Q_SLOTS:
     void moveBySpinY(int newY);
 
     void slotNodeChanged(KisNodeList nodes);
+    void commitChanges();
 
 Q_SIGNALS:
     void moveToolModeChanged();
-    void moveInProgressChanged();
     void moveInNewPosition(QPoint);
 
 private:
@@ -128,8 +127,14 @@ private:
 
     bool startStrokeImpl(MoveToolMode mode, const QPoint *pos);
 
+    QPoint currentOffset() const;
+    void notifyGuiAfterMove(bool showFloatingMessage = true);
+    bool tryEndPreviousStroke(KisNodeList nodes);
+
+
 private Q_SLOTS:
     void endStroke();
+    void slotTrackerChangedConfig(KisToolChangesTrackerDataSP state);
 
 private:
 
@@ -137,11 +142,8 @@ private:
     QPoint m_dragStart; ///< Point where current cursor dragging began
     QPoint m_accumulatedOffset; ///< Total offset including multiple clicks, up/down/left/right keys, etc. added together
 
-    QPoint m_startPosition;
-
     KisStrokeId m_strokeId;
 
-    bool m_moveInProgress;
     KisNodeList m_currentlyProcessingNodes;
 
     int m_resolution;
@@ -150,9 +152,10 @@ private:
 
     KisCanvas2* m_canvas;
 
-    QPoint m_pos;
+    QPoint m_dragPos;
     QRect m_handlesRect;
-    bool m_dragInProgress = false;
+
+    KisToolChangesTracker m_changesTracker;
 };
 
 

@@ -262,8 +262,6 @@ KisLayer::KisLayer(const KisLayer& rhs)
         if (rhs.m_d->layerStyle) {
             m_d->layerStyle = rhs.m_d->layerStyle->clone();
 
-            KIS_SAFE_ASSERT_RECOVER_NOOP(rhs.m_d->layerStyleProjectionPlane);
-
             if (rhs.m_d->layerStyleProjectionPlane) {
                 m_d->layerStyleProjectionPlane = toQShared(
                     new KisLayerStyleProjectionPlane(*rhs.m_d->layerStyleProjectionPlane,

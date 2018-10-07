@@ -29,7 +29,18 @@
 #include <KisViewManager.h>
 #include "util.h"
 #include <KisView.h>
+#include <kis_config.h>
 #include "sdk/tests/kistest.h"
+
+void silenceReignsSupreme(QtMsgType /*type*/, const QMessageLogContext &/*context*/, const QString &/*msg*/)
+{
+
+}
+
+void KisDocumentTest::init()
+{
+    qInstallMessageHandler(silenceReignsSupreme);
+}
 
 void KisDocumentTest::testOpenImageTwiceInSameDoc()
 {

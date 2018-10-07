@@ -32,7 +32,6 @@
 #include <QRect>
 
 class KisTextureChooser;
-class KisTextureOptionWidget;
 class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;

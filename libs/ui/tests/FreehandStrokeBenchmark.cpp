@@ -34,7 +34,6 @@ public:
     FreehandStrokeBenchmarkTester(const QString &presetFilename)
         : StrokeTester("freehand_benchmark", QSize(5000, 5000), presetFilename)
     {
-        Q_UNUSED(m_strokeInfo);
         setBaseFuzziness(3);
     }
 
@@ -91,7 +90,6 @@ protected:
     }
 
 private:
-    KisFreehandStrokeInfo *m_strokeInfo;
     int m_cpuCoresLimit = -1;
 };
 

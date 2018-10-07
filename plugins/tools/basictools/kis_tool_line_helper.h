@@ -33,12 +33,12 @@ public:
     void setEnabled(bool value);
     void setUseSensors(bool value);
 
-    void repaintLine(KoCanvasResourceManager *resourceManager,
+    void repaintLine(KoCanvasResourceProvider *resourceManager,
                      KisImageWSP image,
                      KisNodeSP node,
                      KisStrokesFacade *strokesFacade);
 
-    void start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager);
+    void start(KoPointerEvent *event, KoCanvasResourceProvider *resourceManager);
     void addPoint(KoPointerEvent *event, const QPointF &overridePos = QPointF());
     void translatePoints(const QPointF &offset);
     void end();

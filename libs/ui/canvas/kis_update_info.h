@@ -142,4 +142,27 @@ public:
     KisImagePatch patch;
 };
 
+class KisMarkerUpdateInfo : public KisUpdateInfo
+{
+public:
+    enum Type {
+        StartBatch = 0,
+        EndBatch,
+        BlockLodUpdates,
+        UnblockLodUpdates,
+    };
+
+public:
+    KisMarkerUpdateInfo(Type type, const QRect &dirtyImageRect);
+
+    Type type() const;
+
+    QRect dirtyImageRect() const override;
+    int levelOfDetail() const override;
+
+private:
+    Type m_type;
+    QRect m_dirtyImageRect;
+};
+
 #endif /* KIS_UPDATE_INFO_H_ */

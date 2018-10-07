@@ -60,12 +60,12 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
     prev->setPageLayout(d->pageLayoutWidget->pageLayout());
     lay->addWidget(prev, 1);
 
-    connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
-            prev, SLOT(setPageLayout(const KoPageLayout&)));
-    connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
-            this, SLOT(setPageLayout(const KoPageLayout&)));
-    connect (d->pageLayoutWidget, SIGNAL(unitChanged(const KoUnit&)),
-            this, SIGNAL(unitChanged(const KoUnit&)));
+    connect (d->pageLayoutWidget, SIGNAL(layoutChanged(KoPageLayout)),
+            prev, SLOT(setPageLayout(KoPageLayout)));
+    connect (d->pageLayoutWidget, SIGNAL(layoutChanged(KoPageLayout)),
+            this, SLOT(setPageLayout(KoPageLayout)));
+    connect (d->pageLayoutWidget, SIGNAL(unitChanged(KoUnit)),
+            this, SIGNAL(unitChanged(KoUnit)));
 }
 
 KoPageLayoutDialog::~KoPageLayoutDialog()

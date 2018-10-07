@@ -489,7 +489,7 @@ public Q_SLOTS:
      * <li>Mitchell</li>
      * </ul>
      */
-    void scaleNode(int width, int height, QString strategy);
+    void scaleNode(const QPointF &origin, int width, int height, QString strategy);
 
     /**
      * @brief rotateNode rotate this layer by the given radians.

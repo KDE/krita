@@ -367,24 +367,24 @@ void KisGuidesManager::setView(QPointer<KisView> view)
         setGuidesConfigImpl(m_d->guidesConfig, false);
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationInProgress(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationInProgress(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationFinished(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->horizontalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationFinished(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationInProgress(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationInProgress(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationInProgress(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation, const QPoint&)),
-            this, SLOT(slotGuideCreationFinished(Qt::Orientation, const QPoint&)));
+            m_d->view->zoomManager()->verticalRuler(), SIGNAL(guideCreationFinished(Qt::Orientation,QPoint)),
+            this, SLOT(slotGuideCreationFinished(Qt::Orientation,QPoint)));
 
         m_d->viewConnections.addUniqueConnection(
-            m_d->view->document(), SIGNAL(sigGuidesConfigChanged(const KisGuidesConfig &)),
-            this, SLOT(slotDocumentRequestedConfig(const KisGuidesConfig &)));
+            m_d->view->document(), SIGNAL(sigGuidesConfigChanged(KisGuidesConfig)),
+            this, SLOT(slotDocumentRequestedConfig(KisGuidesConfig)));
     }
 }
 

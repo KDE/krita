@@ -32,7 +32,7 @@ void KoShapeConfigWidgetBase::setUnit(const KoUnit &)
 {
 }
 
-void KoShapeConfigWidgetBase::setResourceManager(KoCanvasResourceManager *rm)
+void KoShapeConfigWidgetBase::setResourceManager(KoCanvasResourceProvider *rm)
 {
     m_resourceManager = rm;
 }

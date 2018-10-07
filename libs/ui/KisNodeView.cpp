@@ -130,8 +130,8 @@ void KisNodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
-            connect(a, SIGNAL(toggled(bool, const QPersistentModelIndex&, int)),
-                    this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
+            connect(a, SIGNAL(toggled(bool,QPersistentModelIndex,int)),
+                    this, SLOT(slotActionToggled(bool,QPersistentModelIndex,int)));
             menu->addAction(a);
         }
     }

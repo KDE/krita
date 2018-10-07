@@ -58,6 +58,7 @@
 #include <KisMimeDatabase.h>
 #include <QMimeData>
 #include <QStackedWidget>
+#include <QProxyStyle>
 
 
 #include <kactioncollection.h>
@@ -71,6 +72,7 @@
 #include <kis_workspace_resource.h>
 #include <input/kis_input_manager.h>
 #include "kis_selection_manager.h"
+#include "kis_icon_utils.h"
 
 #ifdef HAVE_KIO
 #include <krecentdocument.h>
@@ -356,7 +358,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (d->toolOptionsDocker) {
         dockwidgetActions[d->toolOptionsDocker->toggleViewAction()->text()] = d->toolOptionsDocker->toggleViewAction();
     }
-    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*, QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*, QList<QPointer<QWidget> >)));
+    connect(KoToolManager::instance(), SIGNAL(toolOptionWidgetsChanged(KoCanvasController*,QList<QPointer<QWidget> >)), this, SLOT(newOptionWidgets(KoCanvasController*,QList<QPointer<QWidget> >)));
 
     Q_FOREACH (QString title, dockwidgetActions.keys()) {
         d->dockWidgetMenu->addAction(dockwidgetActions[title]);
@@ -381,6 +383,14 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
+
+
+    // Tab close button override
+    // Windows just has a black X, and Ubuntu has a dark x that is hard to read
+    // just switch this icon out for all OSs so it is easier to see
+    d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
+
+
 
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
@@ -868,7 +878,7 @@ bool KisMainWindow::openDocumentInternal(const QUrl &url, OpenFlags flags)
 
     d->firstTime = true;
     connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    connect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    connect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
     KisDocument::OpenFlags openFlags = KisDocument::None;
     if (flags & RecoveryFile) {
@@ -938,7 +948,7 @@ void KisMainWindow::slotLoadCompleted()
         addViewAndNotifyLoadingCompleted(newdoc);
 
         disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-        disconnect(newdoc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+        disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
         emit loadCompleted();
     }
@@ -954,7 +964,7 @@ void KisMainWindow::slotLoadCanceled(const QString & errMsg)
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
-    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotLoadCanceled(const QString &)));
+    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 }
 
 void KisMainWindow::slotSaveCanceled(const QString &errMsg)
@@ -971,7 +981,7 @@ void KisMainWindow::slotSaveCompleted()
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
     Q_ASSERT(doc);
     disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(doc, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
+    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 
     if (d->deferredClosingEvent) {
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);
@@ -1036,21 +1046,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         saveas = true;
     }
 
-    bool reset_url;
-
     if (document->url().isEmpty()) {
-        reset_url = true;
         saveas = true;
-    }
-    else {
-        reset_url = false;
     }
 
     connect(document, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    connect(document, SIGNAL(canceled(const QString &)), this, SLOT(slotSaveCanceled(const QString &)));
-
-    QUrl oldURL = document->url();
-    QString oldFile = document->localFilePath();
+    connect(document, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
 
     QByteArray nativeFormat = document->nativeFormatMimeType();
     QByteArray oldMimeFormat = document->mimeType();
@@ -1186,8 +1187,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                         setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
-                        document->setUrl(oldURL);
-                        document->setLocalFilePath(oldFile);
                     }
                 }
                 else { // Export
@@ -1217,17 +1216,8 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         if (!ret) {
             dbgUI << "Failed Save!";
-            document->setUrl(oldURL);
-            document->setLocalFilePath(oldFile);
         }
     }
-
-    if (ret && !isExporting) {
-        document->setRecovered(false);
-    }
-
-    if (!ret && reset_url)
-        document->resetURL(); //clean the suggested filename as the save dialog was rejected
 
     updateReloadFileAction(document);
     updateCaption();
@@ -1472,7 +1462,7 @@ void KisMainWindow::slotFileNew()
     // calls deleteLater
     connect(startupWidget, SIGNAL(documentSelected(KisDocument*)), KisPart::instance(), SLOT(startCustomDocument(KisDocument*)));
     // calls deleteLater
-    connect(startupWidget, SIGNAL(openTemplate(const QUrl&)), KisPart::instance(), SLOT(openTemplate(const QUrl&)));
+    connect(startupWidget, SIGNAL(openTemplate(QUrl)), KisPart::instance(), SLOT(openTemplate(QUrl)));
 
     startupWidget->exec();
 
@@ -1536,7 +1526,7 @@ void KisMainWindow::slotShowSessionManager() {
     KisPart::instance()->showSessionManager();
 }
 
-KoCanvasResourceManager *KisMainWindow::resourceManager() const
+KoCanvasResourceProvider *KisMainWindow::resourceManager() const
 {
     return d->viewManager->resourceProvider()->resourceManager();
 }
@@ -2097,6 +2087,26 @@ void KisMainWindow::subWindowActivated()
         }
     }
 
+    /**
+     * Qt has a weirdness, it has hardcoded shortcuts added to an action
+     * in the window menu. We need to reset the shortcuts for that menu
+     * to nothing, otherwise the shortcuts cannot be made configurable.
+     *
+     * See: https://bugs.kde.org/show_bug.cgi?id=352205
+     *      https://bugs.kde.org/show_bug.cgi?id=375524
+     *      https://bugs.kde.org/show_bug.cgi?id=398729
+     */
+    QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
+    if (subWindow) {
+        QMenu *menu = subWindow->systemMenu();
+        if (menu) {
+            Q_FOREACH (QAction *action, menu->actions()) {
+                action->setShortcut(QKeySequence());
+                action->deleteLater();
+            }
+        }
+    }
+
     updateCaption();
     d->actionManager()->updateGUI();
 }
@@ -2368,8 +2378,10 @@ void KisMainWindow::newWindow()
 
 void KisMainWindow::closeCurrentWindow()
 {
-    d->mdiArea->currentSubWindow()->close();
-    d->actionManager()->updateGUI();
+    if (d->mdiArea->currentSubWindow()) {
+        d->mdiArea->currentSubWindow()->close();
+        d->actionManager()->updateGUI();
+    }
 }
 
 void KisMainWindow::checkSanity()
@@ -2554,8 +2566,7 @@ void KisMainWindow::createActions()
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
 
-    d->close = actionManager->createAction("file_close");
-    connect(d->close, SIGNAL(triggered()), SLOT(closeCurrentWindow()));
+    d->close = actionManager->createStandardAction(KStandardAction::Close, this, SLOT(closeCurrentWindow()));
 
     d->showSessionManager = actionManager->createAction("file_sessions");
     connect(d->showSessionManager, SIGNAL(triggered(bool)), this, SLOT(slotShowSessionManager()));

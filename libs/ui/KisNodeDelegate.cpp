@@ -268,7 +268,12 @@ QRect KisNodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, co
 {
     Q_UNUSED(index);
 
-    const int steps = 0;
+    int steps = 0;
+    QModelIndex tmp = index.parent();
+    while (tmp.isValid()) {
+        steps++;
+        tmp = tmp.parent();
+    }
 
     KisNodeViewColorScheme scm;
     return QRect(scm.border() +

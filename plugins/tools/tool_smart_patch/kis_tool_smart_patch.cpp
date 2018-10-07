@@ -31,7 +31,7 @@
 
 #include "kundo2magicstring.h"
 #include "kundo2stack.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_transaction.h"
 
 #include "kis_processing_applicator.h"

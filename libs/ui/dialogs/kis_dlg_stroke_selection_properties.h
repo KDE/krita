@@ -98,7 +98,7 @@ public:
 private:
     WdgStrokeSelection * m_page;
     KisImageWSP m_image;
-    KoCanvasResourceManager *m_resourceManager;
+    KoCanvasResourceProvider *m_resourceManager;
     KisDisplayColorConverter *converter;
 
 private Q_SLOTS:

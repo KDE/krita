@@ -19,7 +19,7 @@
 #define _ORA_SAVE_CONTEXT_H_
 
 class KoStore;
-#include <metadata/kis_meta_data_entry.h>
+#include <kis_meta_data_entry.h>
 
 #include "kis_open_raster_save_context.h"
 

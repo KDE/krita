@@ -111,6 +111,8 @@ public:
     QColor gridColor;
     QColor cursorColor;
 
+    bool lodSwitchInProgress = false;
+
     int xToColWithWrapCompensation(int x, const QRect &imageRect) {
         int firstImageColumn = openGLImageTextures->xToCol(imageRect.left());
         int lastImageColumn = openGLImageTextures->xToCol(imageRect.right());
@@ -469,6 +471,11 @@ bool KisOpenGLCanvas2::isBusy() const
     return isBusyStatus;
 }
 
+void KisOpenGLCanvas2::setLodResetInProgress(bool value)
+{
+    d->lodSwitchInProgress = value;
+}
+
 void KisOpenGLCanvas2::drawCheckers()
 {
     if (!d->checkerShader) {
@@ -749,14 +756,14 @@ void KisOpenGLCanvas2::drawImage()
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::Texture1), 1);
             }
 
-            int currentLodPlane = tile->currentLodPlane();
+            glActiveTexture(GL_TEXTURE0);
+
+            const int currentLodPlane = tile->bindToActiveTexture(d->lodSwitchInProgress);
+
             if (d->displayShader->location(Uniform::FixedLodLevel) >= 0) {
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::FixedLodLevel),
                                                   (GLfloat) currentLodPlane);
             }
-
-            glActiveTexture(GL_TEXTURE0);
-            tile->bindToActiveTexture();
 
             if (currentLodPlane > 0) {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
@@ -907,7 +914,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     // See KisQPainterCanvas::updateCanvasProjection for more info
     bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
     if (isOpenGLUpdateInfo) {
-        d->openGLImageTextures->recalculateCache(info);
+        d->openGLImageTextures->recalculateCache(info, d->lodSwitchInProgress);
     }
     return QRect(); // FIXME: Implement dirty rect for OpenGL
 }

@@ -113,18 +113,6 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="file_export_pdf">
-      <icon>application-pdf</icon>
-      <text>&amp;Export as PDF...</text>
-      <whatsThis></whatsThis>
-      <toolTip>Export as PDF</toolTip>
-      <iconText>Export as PDF</iconText>
-      <activationFlags>1</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
-      <isCheckable>false</isCheckable>
-      <statusTip></statusTip>
-    </Action>
     <Action name="file_import_animation">
       <icon></icon>
       <text>Import animation frames...</text>
@@ -265,7 +253,7 @@
       <iconText>Close</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+W</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -605,7 +593,7 @@
       <iconText>Wrap Around Mode</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>W</shortcut>
+      <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
@@ -802,7 +790,7 @@
       <toolTip>Show Pixel Grid</toolTip>
       <iconText>Show Pixel Grid</iconText>
       <activationFlags>1000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationConditions>1000</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
@@ -1241,8 +1229,32 @@
       <whatsThis></whatsThis>
       <toolTip>Convert to Vector Selection</toolTip>
       <iconText>Convert to Vector Selection</iconText>
-      <activationFlags>10000000000</activationFlags>
+      <activationFlags>100000000000000000</activationFlags>
       <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="convert_to_raster_selection">
+      <icon></icon>
+      <text>&amp;Convert to Raster Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Convert to Raster Selection</toolTip>
+      <iconText>Convert to Raster Selection</iconText>
+      <activationFlags>10000000000000000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="edit_selection">
+      <icon></icon>
+      <text>Edit Selection</text>
+      <whatsThis></whatsThis>
+      <toolTip>Edit Selection</toolTip>
+      <iconText>Edit Selection</iconText>
+      <activationFlags>10000000000</activationFlags>
+      <activationConditions>100</activationConditions>
       <shortcut></shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>

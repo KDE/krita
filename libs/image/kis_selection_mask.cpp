@@ -66,11 +66,12 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image)
 {
     setName("selection");
     setActive(false);
+    setSupportsLodMoves(false);
 
     m_d->image = image;
 
     m_d->updatesCompressor =
-            new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
+            new KisThreadSafeSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
     this->moveToThread(image->thread());
@@ -205,7 +206,6 @@ void KisSelectionMask::setVisible(bool visible, bool isLoading)
     if (!isLoading && visible != oldVisible) {
         if (selection())
             selection()->setVisible(visible);
-        emit(visibilityChanged(visible));
     }
 }
 
@@ -229,8 +229,17 @@ void KisSelectionMask::setActive(bool active)
     const bool oldActive = this->active();
     setNodeProperty("active", active);
 
-    if (image && oldActive != active) {
-        image->nodeChanged(this);
+
+    /**
+     * WARNING: we have a direct link to the image here, but we
+     * must not use it for notification until we are a part of
+     * the nore graph! Notifications should be emitted iff we
+     * have graph listener link set up.
+     */
+    if (graphListener() &&
+        image && oldActive != active) {
+
+        baseNodeChangedCallback();
         image->undoAdapter()->emitSelectionChanged();
     }
 }

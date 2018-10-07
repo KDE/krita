@@ -269,7 +269,7 @@ void KisFilterManager::apply(KisFilterConfigurationSP filterConfig)
         applyRect |= image->bounds();
     }
 
-    KoCanvasResourceManager *resourceManager =
+    KoCanvasResourceProvider *resourceManager =
         d->view->resourceProvider()->resourceManager();
 
     KisResourcesSnapshotSP resources =

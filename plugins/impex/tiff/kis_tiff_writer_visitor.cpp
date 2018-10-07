@@ -160,7 +160,6 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 
     // Set the compression options
     TIFFSetField(image(), TIFFTAG_COMPRESSION, m_options->compressionType);
-    TIFFSetField(image(), TIFFTAG_FAXMODE, m_options->faxMode);
     TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
     TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
     TIFFSetField(image(), TIFFTAG_PIXARLOGQUALITY, m_options->pixarLogCompress);

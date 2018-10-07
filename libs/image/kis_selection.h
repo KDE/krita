@@ -73,6 +73,11 @@ public:
     virtual ~KisSelection();
 
     /**
+     * Create a new selection using the content of copySource as the mask.
+     */
+    KisSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds);
+
+    /**
      * The paint device of the pixel selection should report
      * about it's setDirty events to its parent. The creator
      * should set the parent manually if it wants to get the
@@ -198,6 +203,8 @@ public:
     /// replace it with. Undeprecate, therefore.
     quint8 selected(qint32 x, qint32 y) const;
 
+    KisNodeWSP parentNode() const;
+
 private:
     friend class KisSelectionTest;
     friend class KisMaskTest;
@@ -205,7 +212,7 @@ private:
     friend class KisUpdateSelectionJob;
     friend class KisSelectionUpdateCompressor;
     friend class KisDeselectActiveSelectionCommand;
-    KisNodeWSP parentNode() const;
+
 
     void copyFrom(const KisSelection &rhs);
 

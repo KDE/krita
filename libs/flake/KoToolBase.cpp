@@ -27,7 +27,7 @@
 #include "KoCanvasBase.h"
 #include "KoPointerEvent.h"
 #include "KoDocumentResourceManager.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
 #include "KoShapeControllerBase.h"

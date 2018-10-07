@@ -239,7 +239,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
     setMainWidget(page);
     
     setAttribute(Qt::WA_DeleteOnClose, false);
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotDeleteAll() ) );
+    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotDeleteAll()) );
 }
 
 KisAutoSaveRecoveryDialog::~KisAutoSaveRecoveryDialog()

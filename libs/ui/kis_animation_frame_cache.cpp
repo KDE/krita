@@ -298,7 +298,7 @@ bool KisAnimationFrameCache::uploadFrame(int time)
         // Previously we were trying to start cache regeneration in this point,
         // but it caused even bigger slowdowns when scrubbing
     } else {
-        m_d->textures->recalculateCache(info);
+        m_d->textures->recalculateCache(info, false);
     }
 
     return bool(info);

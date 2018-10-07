@@ -195,7 +195,7 @@ public:
     /// with a non-null value. To make it return shell() again, simply pass null to this function.
     void setQtMainWindow(QMainWindow* newMainWindow);
 
-    static void initializeResourceManager(KoCanvasResourceManager *resourceManager);
+    static void initializeResourceManager(KoCanvasResourceProvider *resourceManager);
 
 public Q_SLOTS:
 
@@ -212,6 +212,8 @@ public Q_SLOTS:
 
     void slotViewAdded(KisView *view);
     void slotViewRemoved(KisView *view);
+    
+    void slotActivateTransformTool();
 
 Q_SIGNALS:
 

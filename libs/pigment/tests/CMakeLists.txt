@@ -27,11 +27,11 @@ ecm_add_tests(
 ecm_add_tests(
     TestColorConversion.cpp
     TestKoColorSpaceMaths.cpp
+    TestKisSwatchGroup.cpp
+    # TestKoColorSet.cpp
 
     NAME_PREFIX "libs-pigment-"
     LINK_LIBRARIES kritapigment Qt5::Test)
-
-
 
 add_executable(CCSGraph CCSGraph.cpp)
 target_link_libraries(CCSGraph  kritapigment KF5::I18n)

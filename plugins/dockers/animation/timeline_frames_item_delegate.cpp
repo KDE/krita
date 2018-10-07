@@ -259,7 +259,7 @@ void TimelineFramesItemDelegate::drawFocus(QPainter *painter,
                                            const QStyleOptionViewItem &option,
                                            const QRect &rect) const
 {
-    // copied form Qt 4.8!
+    // copied from Qt 4.8!
 
     if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
         return;

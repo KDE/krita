@@ -41,7 +41,6 @@ private:
     KoFilterEffectStack *m_newFilterStack;
     KoFilterEffectStack *m_oldFilterStack;
     KoShape *m_shape;
-    bool m_isSet;
 };
 
 #endif // FILTERSTACKSETCOMMAND_H

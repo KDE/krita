@@ -1,4 +1,4 @@
-﻿/* This file is part of the Krita project
+/* This file is part of the Krita project
  *
  * Copyright (C) 2014 Boudewijn Rempt <boud@valdyas.org>
  *
@@ -265,6 +265,7 @@ public:
         , imageIdleWatcher(2000 /*ms*/)
         , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
         , globalAssistantsColor(rhs.globalAssistantsColor)
+        , paletteList(rhs.paletteList)
         , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
@@ -327,6 +328,8 @@ public:
     QColor globalAssistantsColor;
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
+
+    QList<KoColorSet*> paletteList;
 
     KisGridConfig gridConfig;
 
@@ -540,7 +543,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
 
     bool started =
         initiateSavingInBackground(actionName,
-                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus,QString)),
+                                   this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
                                    job, exportConfiguration);
 
     if (!started) {
@@ -623,16 +626,29 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
         }
     } else {
         if (!(job.flags & KritaUtils::SaveIsExporting)) {
+            const QString existingAutoSaveBaseName = localFilePath();
+            const bool wasRecovered = isRecovered();
+
             setUrl(QUrl::fromLocalFile(job.filePath));
             setLocalFilePath(job.filePath);
             setMimeType(job.mimeType);
             updateEditingTime(true);
 
             if (!d->modifiedWhileSaving) {
-                d->undoStack->setClean();
+                /**
+                 * If undo stack is alreado clean/empty, it doesn't emit any
+                 * signals, so we might forget update document modified state
+                 * (which was set, e.g. while recovering an autosave file)
+                 */
+
+                if (d->undoStack->isClean()) {
+                    setModified(false);
+                } else {
+                    d->undoStack->setClean();
+                }
             }
             setRecovered(false);
-            removeAutoSaveFiles();
+            removeAutoSaveFiles(existingAutoSaveBaseName, wasRecovered);
         }
 
         emit completed();
@@ -746,9 +762,9 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
     }
 
     connect(d->backgroundSaveDocument.data(),
-            SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus, const QString&)),
+            SIGNAL(sigBackgroundSavingFinished(KisImportExportFilter::ConversionStatus,QString)),
             this,
-            SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus, const QString&)));
+            SLOT(slotChildCompletedSavingInBackground(KisImportExportFilter::ConversionStatus,QString)));
 
 
     connect(this, SIGNAL(sigCompleteBackgroundSaving(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
@@ -811,7 +827,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
 
     if (d->image->isIdle() || hadClonedDocument) {
         started = initiateSavingInBackground(i18n("Autosaving..."),
-                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportFilter::ConversionStatus, const QString&)),
+                                             this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob,KisImportExportFilter::ConversionStatus,QString)),
                                              KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
                                              0,
                                              std::move(optionalClonedDocument));
@@ -1389,21 +1405,33 @@ QString KisDocument::warningMessage() const
 }
 
 
-void KisDocument::removeAutoSaveFiles()
+void KisDocument::removeAutoSaveFiles(const QString &autosaveBaseName, bool wasRecovered)
 {
     //qDebug() << "removeAutoSaveFiles";
     // Eliminate any auto-save file
-    QString asf = generateAutoSaveFileName(localFilePath());   // the one in the current dir
+    QString asf = generateAutoSaveFileName(autosaveBaseName);   // the one in the current dir
+
     //qDebug() << "\tfilename:" << asf << "exists:" << QFile::exists(asf);
     if (QFile::exists(asf)) {
         //qDebug() << "\tremoving autosavefile" << asf;
         QFile::remove(asf);
     }
     asf = generateAutoSaveFileName(QString());   // and the one in $HOME
+
     //qDebug() << "Autsavefile in $home" << asf;
     if (QFile::exists(asf)) {
         //qDebug() << "\tremoving autsavefile 2" << asf;
         QFile::remove(asf);
+    }
+
+    QRegularExpression autosavePattern("^\\..+-autosave.kra$");
+
+    if (wasRecovered &&
+        !autosaveBaseName.isEmpty() &&
+        autosavePattern.match(QFileInfo(autosaveBaseName).fileName()).hasMatch() &&
+        QFile::exists(autosaveBaseName)) {
+
+        QFile::remove(autosaveBaseName);
     }
 }
 
@@ -1472,6 +1500,16 @@ KisGridConfig KisDocument::gridConfig() const
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
     d->gridConfig = config;
+}
+
+QList<KoColorSet *> &KisDocument::paletteList()
+{
+    return d->paletteList;
+}
+
+void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList)
+{
+    d->paletteList = paletteList;
 }
 
 const KisGuidesConfig& KisDocument::guidesConfig() const
@@ -1719,7 +1757,7 @@ void KisDocument::setReferenceImagesLayer(KisSharedPtr<KisReferenceImagesLayer> 
     d->referenceImagesLayer = layer;
 
     if (d->referenceImagesLayer) {
-        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(const QRectF&)),
+        connect(d->referenceImagesLayer, SIGNAL(sigUpdateCanvas(QRectF)),
                 this, SIGNAL(sigReferenceImagesChanged()));
     }
 }
@@ -1749,6 +1787,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 {
     if (d->image) {
         // Disconnect existing sig/slot connections
+        d->image->setUndoStore(new KisDumbUndoStore());
         d->image->disconnect(this);
         d->shapeController->setImage(0);
         d->image = 0;
@@ -1757,6 +1796,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     if (!image) return;
 
     d->setImageAndInitIdleWatcher(image);
+    d->image->setUndoStore(new KisDocumentUndoStore(this));
     d->shapeController->setImage(image);
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);

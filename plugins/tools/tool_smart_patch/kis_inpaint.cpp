@@ -761,10 +761,10 @@ private:
 
 public:
     Inpaint(KisPaintDeviceSP dev, KisPaintDeviceSP devMask, int _radius, QRect maskRect)
+    : devCache(dev)
+    , initial(new MaskedImage(dev, devMask, maskRect))
+    , radius(_radius)
     {
-        initial = new MaskedImage(dev, devMask, maskRect);
-        radius = _radius;
-        devCache = dev;
     }
     MaskedImageSP patch(void);
     MaskedImageSP patch_simple(void);

@@ -126,7 +126,7 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom, true);
 
-    connect( this, SIGNAL( triggered( const QString& ) ), SLOT( triggered( const QString& ) ) );
+    connect( this, SIGNAL(triggered(QString)), SLOT(triggered(QString)) );
 }
 
 KoZoomAction::~KoZoomAction()
@@ -273,7 +273,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
     connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
     connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
-    connect(zoomWidget, SIGNAL(zoomLevelChanged(const QString&)), this, SLOT(triggered(const QString&)));
+    connect(zoomWidget, SIGNAL(zoomLevelChanged(QString)), this, SLOT(triggered(QString)));
     connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
     connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
     connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));

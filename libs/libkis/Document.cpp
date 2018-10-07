@@ -472,7 +472,7 @@ void Document::flatten()
 {
     if (!d->document) return;
     if (!d->document->image()) return;
-    d->document->image()->flatten();
+    d->document->image()->flatten(0);
 }
 
 void Document::resizeImage(int x, int y, int w, int h)
@@ -824,6 +824,12 @@ bool Document::modified() const
 {
     if (!d->document) return false;
     return d->document->isModified();
+}
+
+QRect Document::bounds() const
+{
+    if (!d->document) return QRect();
+    return d->document->image()->bounds();
 }
 
 QPointer<KisDocument> Document::document() const

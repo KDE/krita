@@ -73,9 +73,8 @@ void KoMarkerCollection::loadMarkersFromFile(const QString &svgFile)
     int errorLine = 0;
     int errorColumn;
 
-    KoXmlDocument doc;
-    bool ok = doc.setContent(&file, false, &errorMsg, &errorLine, &errorColumn);
-    if (!ok) {
+    KoXmlDocument doc = SvgParser::createDocumentFromSvg(&file, &errorMsg, &errorLine, &errorColumn);
+    if (doc.isNull()) {
         errKrita << "Parsing error in " << svgFile << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;

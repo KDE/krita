@@ -30,9 +30,9 @@ FilterInputChangeCommand::FilterInputChangeCommand(const InputChangeData &data, 
 
 FilterInputChangeCommand::FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape, KUndo2Command *parent)
     : KUndo2Command(parent)
+    , m_data(data)
     , m_shape(shape)
 {
-    m_data = data;
 }
 
 void FilterInputChangeCommand::redo()

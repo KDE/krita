@@ -36,10 +36,10 @@
 #include "kis_action.h"
 #include "kis_image.h"
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_entry.h>
-#include <metadata/kis_meta_data_value.h>
-#include <metadata/kis_meta_data_schema.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_schema.h>
 
 #include "kis_entry_editor.h"
 #include "kis_meta_data_editor.h"

@@ -88,7 +88,7 @@ void KisLiquifyPaintHelper::configurePaintOp(const KisLiquifyProperties &props,
     m_d->paintOp.reset(new KisLiquifyPaintop(props, worker));
 }
 
-void KisLiquifyPaintHelper::startPaint(KoPointerEvent *event, const KoCanvasResourceManager *manager)
+void KisLiquifyPaintHelper::startPaint(KoPointerEvent *event, const KoCanvasResourceProvider *manager)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->paintOp);
 

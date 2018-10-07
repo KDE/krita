@@ -99,12 +99,6 @@ install_pykrita_plugin(krita_script_starter)
 # endif()
 
 install( FILES
-    hello/hello.xmlgui
-DESTINATION ${DATA_INSTALL_DIR}/kritaplugins/)
-
-
-
-install( FILES
     hello/hello.action
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action

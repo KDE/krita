@@ -25,7 +25,7 @@
 #include <QTimer>
 #include <QCheckBox>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoToolBase.h>
 #include <resources/KoAbstractGradient.h>
 

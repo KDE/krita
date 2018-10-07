@@ -26,6 +26,7 @@
 #include "kis_stroke_strategy_undo_command_based.h"
 #include "kis_layer_utils.h"
 #include "kis_command_utils.h"
+#include "kis_image_signal_router.h"
 
 class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand
 {
@@ -207,6 +208,12 @@ void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                                            KisStrokeJobData::Sequentiality sequentiality,
                                            KisStrokeJobData::Exclusivity exclusivity)
 {
+    KUndo2Command *initCommand = visitor->createInitCommand();
+    if (initCommand) {
+        applyCommand(initCommand,
+                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+    }
+
     if(!m_flags.testFlag(RECURSIVE)) {
         applyCommand(new KisProcessingCommand(visitor, m_node),
                      sequentiality, exclusivity);
@@ -220,6 +227,12 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
                                                     KisStrokeJobData::Sequentiality sequentiality,
                                                     KisStrokeJobData::Exclusivity exclusivity)
 {
+    KUndo2Command *initCommand = visitor->createInitCommand();
+    if (initCommand) {
+        applyCommand(initCommand,
+                     KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+    }
+
     KisLayerUtils::FrameJobs jobs;
 
     // TODO: implement a nonrecursive case when !m_flags.testFlag(RECURSIVE)

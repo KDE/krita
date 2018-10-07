@@ -139,10 +139,10 @@ bool KisToolColorPicker::pickColor(const QPointF &pos)
         publicColor.setOpacity(OPACITY_OPAQUE_U8);
 
         if (m_config->toForegroundColor) {
-            canvas()->resourceManager()->setResource(KoCanvasResourceManager::ForegroundColor, publicColor);
+            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ForegroundColor, publicColor);
         }
         else {
-            canvas()->resourceManager()->setResource(KoCanvasResourceManager::BackgroundColor, publicColor);
+            canvas()->resourceManager()->setResource(KoCanvasResourceProvider::BackgroundColor, publicColor);
         }
     }
 
@@ -194,7 +194,7 @@ void KisToolColorPicker::endPrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     if (m_config->addPalette) {
-        KoColorSetEntry ent;
+        KisSwatch ent;
         ent.setColor(m_pickedColor);
         // We don't ask for a name, too intrusive here
 

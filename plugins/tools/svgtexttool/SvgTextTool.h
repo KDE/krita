@@ -57,7 +57,7 @@ public:
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QWidget *createOptionWidget();
+    virtual QWidget *createOptionWidget() override;
 
     KoSelection *koSelection() const;
     KoSvgTextShape *selectedShape() const;
@@ -65,7 +65,8 @@ protected:
 private Q_SLOTS:
 
     void showEditor();
-    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
+    void slotTextEditorClosed();
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated);
 
     /**
      * @brief generateDefs

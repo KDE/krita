@@ -200,15 +200,15 @@ LayerModel::LayerModel(QObject* parent)
     , d(new Private(this))
 {
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
-            this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
-            this, SLOT(source_rowsInserted(QModelIndex, int, int)));
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+            this, SLOT(source_rowsAboutToBeInserted(QModelIndex,int,int)));
+    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(source_rowsInserted(QModelIndex,int,int)));
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
-            this, SLOT(source_rowsAboutToBeRemoved(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
-            this, SLOT(source_rowsRemoved(QModelIndex, int, int)));
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+            this, SLOT(source_rowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)),
+            this, SLOT(source_rowsRemoved(QModelIndex,int,int)));
 
     connect(d->nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(source_dataChanged(QModelIndex,QModelIndex)));
@@ -268,7 +268,7 @@ void LayerModel::setView(QObject *newView)
         d->layers.clear();
         d->activeNode.clear();
         d->canvas = 0;
-        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0);
+        d->nodeModel->setDummiesFacade(0, 0, 0, 0, 0, 0, 0);
         d->selectionActionsAdapter.reset();
 
     }
@@ -298,7 +298,8 @@ void LayerModel::setView(QObject *newView)
                                        shapeController,
                                        d->nodeManager->nodeSelectionAdapter(),
                                        d->nodeManager->nodeInsertionAdapter(),
-                                       d->selectionActionsAdapter.data());
+                                       d->selectionActionsAdapter.data(),
+                                       d->nodeManager->nodeDisplayModeAdapter());
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));

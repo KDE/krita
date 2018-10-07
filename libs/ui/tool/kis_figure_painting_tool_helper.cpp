@@ -18,7 +18,7 @@
 
 #include "kis_figure_painting_tool_helper.h"
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "kis_resources_snapshot.h"
 #include <kis_distance_information.h>
@@ -30,7 +30,7 @@
 KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                                          KisImageWSP image,
                                                          KisNodeSP currentNode,
-                                                         KoCanvasResourceManager *resourceManager,
+                                                         KoCanvasResourceProvider *resourceManager,
                                                          KisPainter::StrokeStyle strokeStyle,
                                                          KisPainter::FillStyle fillStyle)
 {

@@ -63,15 +63,14 @@ public:
     /// reimplemented
     void keyPressEvent(QKeyEvent *event) override;
 
-    /// For behavior as selection tool and with initial shift-key
-    virtual bool listeningToModifiers();
-
     /**
     * Returns true if path has been started
     */
     bool pathStarted();
 
     bool tryMergeInPathShape(KoPathShape *pathShape);
+
+    void setEnableClosePathShortcut(bool value);
 
 public Q_SLOTS:
     /// reimplemented

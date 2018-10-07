@@ -302,7 +302,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
     if (!tile) {
         while (m_lazyLock.test_and_set(std::memory_order_acquire));
 
-        if (!(tile = m_map.get(idx))) {
+        while (!(tile = m_map.get(idx))) {
             {
                 QReadLocker locker(&m_defaultPixelDataLock);
                 tile = new TileType(col, row, m_defaultTileData, m_mementoManager);
@@ -322,8 +322,6 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
                 newTile = true;
                 m_numTiles.fetchAndAddRelaxed(1);
             }
-
-            tile = m_map.get(idx);
         }
 
         m_lazyLock.clear(std::memory_order_release);

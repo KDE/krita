@@ -1095,6 +1095,10 @@ void KisPainter::paintLine(const KisPaintInformation &pi1,
 void KisPainter::paintPolyline(const vQPointF &points,
                                int index, int numPoints)
 {
+    if (d->fillStyle != FillStyleNone) {
+        fillPolygon(points, d->fillStyle);
+    }
+
     if (index >= points.count())
         return;
 
@@ -2471,7 +2475,7 @@ KisPaintDeviceSP KisPainter::device()
 
 void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
-    Q_ASSERT(channelFlags.isEmpty() || quint32(channelFlags.size()) == d->colorSpace->channelCount());
+    // Q_ASSERT(channelFlags.isEmpty() || quint32(channelFlags.size()) == d->colorSpace->channelCount());
     // Now, if all bits in the channelflags are true, pass an empty channel flags bitarray
     // because otherwise the compositeops cannot optimize.
     d->paramInfo.channelFlags = channelFlags;

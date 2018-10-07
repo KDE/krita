@@ -41,6 +41,7 @@
   <name xml:lang="pl">Krita</name>
   <name xml:lang="pt">Krita</name>
   <name xml:lang="pt-BR">Krita</name>
+  <name xml:lang="ru">Krita</name>
   <name xml:lang="sk">Krita</name>
   <name xml:lang="sv">Krita</name>
   <name xml:lang="tr">Krita</name>
@@ -103,7 +104,7 @@
     <p xml:lang="pl">Krita jest pełnowymiarowym, cyfrowym studiem artystycznym</p>
     <p xml:lang="pt">O Krita é o estúdio de arte digital completo.</p>
     <p xml:lang="pt-BR">O Krita é o estúdio de arte digital completo.</p>
-    <p xml:lang="ru">Krita полнофункциональный инструмент для создания цифровой графики.</p>
+    <p xml:lang="ru">Krita — полнофункциональный инструмент для создания цифровой графики.</p>
     <p xml:lang="sk">Krita je plne vybavené digitálne umelecké štúdio.</p>
     <p xml:lang="sv">Krita är den fullfjädrade digitala konststudion.</p>
     <p xml:lang="tr">Krita, tam özellikli dijital sanat stüdyosudur.</p>
@@ -161,7 +162,7 @@
     <p xml:lang="pl">Krita jest świetnym wyborem przy tworzeniu koncepcyjnej sztuki, komiksów, tekstur do wyświetlania i kaszet. Krita obsługuje wiele przestrzeni barw takich jak RGB oraz CMYK dla kanałów 8 oraz 16 bitowych wyrażonych w l. całkowitych, a także  16 oraz 32 bitowych wyrażonych w l. zmiennoprzecinkowych.</p>
     <p xml:lang="pt">O Krita é uma óptima escolha para criar arte conceptual, banda desenhada, texturas para desenho e pinturas. O Krita suporta diversos espaços de cores como o RGB e o CMYK com canais de cores inteiros a 8 e 16 bits, assim como canais de vírgula flutuante a 16 e a 32 bits.</p>
     <p xml:lang="pt-BR">O Krita é uma ótima escolha para criação de arte conceitual, histórias em quadrinhos, texturas para desenhos e pinturas. O Krita tem suporte a diversos espaços de cores como RGB e CMYK com canais de cores inteiros de 8 e 16 bits, assim como canais de ponto flutuante de 16 e 32 bits.</p>
-    <p xml:lang="ru">Krita - отличный выбор для создания концепт-артов, комиксов, текстур для рендеринга и рисования. Она поддерживает множество цветовых пространств включая RGB и CMYK с 8 и 16 целыми битами на канал, а также 16 и 32 битами с плавающей запятой на канал.</p>
+    <p xml:lang="ru">Krita — отличный выбор для создания концепт-артов, комиксов, текстур для рендеринга и рисования. Она поддерживает множество цветовых пространств включая RGB и CMYK с 8 и 16 целыми битами на канал, а также 16 и 32 битами с плавающей запятой на канал.</p>
     <p xml:lang="sk">Krita je výborná voľba pre vytváranie konceptového umenia, textúr na renderovanie a matné kresby. Krita podporuje mnoho farebných priestorov ako RGB a CMYK na 8 a 16 bitových celočíselných kanáloch ako aj 16 a 32 bitových reálnych kanáloch.</p>
     <p xml:lang="sv">Krita är ett utmärkt val för att skapa concept art, serier, strukturer för återgivning och bakgrundsmålningar. Krita stöder många färgrymder som RGB och CMYK med 8- och 16-bitars heltal, samt 16- och 32-bitars flyttal.</p>
     <p xml:lang="tr">Krita, konsept sanat, çizgi roman, kaplama ve mat resimler için dokular oluşturmak için mükemmel bir seçimdir. Krita, 8 ve 16 bit tamsayı kanallarında RGB ve CMYK gibi birçok renk alanını ve 16 ve 32 bit kayan nokta kanallarını desteklemektedir.</p>

@@ -95,13 +95,15 @@
 #include "opengl/kis_opengl_canvas_debugger.h"
 
 #include "kis_algebra_2d.h"
+#include "kis_image_signal_router.h"
+
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 {
 
 public:
 
-    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceManager* resourceManager)
+    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceProvider* resourceManager)
         : coordinatesConverter(coordConverter)
         , view(view)
         , shapeManager(parent)
@@ -149,6 +151,7 @@ public:
     QRect regionOfInterest;
 
     QRect renderingLimit;
+    int isBatchUpdateActive = 0;
 
     bool effectiveLodAllowedInImage() {
         return lodAllowedInImage && !bootstrapLodBlocked;
@@ -168,8 +171,6 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
         if (shapeLayer) {
             shapeManager = shapeLayer->shapeManager();
 
-        } else {
-            selection = layer->selection();
         }
     } else if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
         selection = mask->selection();
@@ -186,7 +187,7 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisView *view, KoShapeControllerBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -240,9 +241,9 @@ void KisCanvas2::setup()
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(selectionContentChanged()),
-            globalShapeManager(), SIGNAL(selectionContentChanged()));
+            selectedShapesProxy(), SIGNAL(selectionContentChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
-            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+            selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(&m_d->canvasUpdateCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 
@@ -563,8 +564,12 @@ void KisCanvas2::initializeImage()
     m_d->toolProxy.initializeImage(image);
 
     connect(image, SIGNAL(sigImageUpdated(QRect)), SLOT(startUpdateCanvasProjection(QRect)), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigNotifyBatchUpdateStarted()), SLOT(slotBeginUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigNotifyBatchUpdateEnded()), SLOT(slotEndUpdatesBatch()), Qt::DirectConnection);
+    connect(image->signalRouter(), SIGNAL(sigRequestLodPlanesSyncBlocked(bool)), SLOT(slotSetLodUpdatesBlocked(bool)), Qt::DirectConnection);
+
     connect(image, SIGNAL(sigProofingConfigChanged()), SLOT(slotChangeProofingConfig()));
-    connect(image, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)), SLOT(startResizingImage()), Qt::DirectConnection);
+    connect(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(startResizingImage()), Qt::DirectConnection);
     connect(image->undoAdapter(), SIGNAL(selectionChanged()), SLOT(slotTrySwitchShapeManager()));
 
     connectCurrentCanvas();
@@ -755,28 +760,95 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 
 void KisCanvas2::updateCanvasProjection()
 {
+    auto tryIssueCanvasUpdates = [this](const QRect &vRect) {
+        if (!m_d->isBatchUpdateActive) {
+            // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
+            if (m_d->currentCanvasIsOpenGL) {
+                m_d->savedUpdateRect = QRect();
+
+                // we already had a compression in frameRenderStartCompressor, so force the update directly
+                slotDoCanvasUpdate();
+            } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
+                m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
+
+                // we already had a compression in frameRenderStartCompressor, so force the update directly
+                slotDoCanvasUpdate();
+            }
+        }
+    };
+
+    auto uploadData = [this, tryIssueCanvasUpdates](const QVector<KisUpdateInfoSP> &infoObjects) {
+        QVector<QRect> viewportRects = m_d->canvasWidget->updateCanvasProjection(infoObjects);
+        const QRect vRect = std::accumulate(viewportRects.constBegin(), viewportRects.constEnd(),
+                                            QRect(), std::bit_or<QRect>());
+
+        tryIssueCanvasUpdates(vRect);
+    };
+
+    bool shouldExplicitlyIssueUpdates = false;
+
     QVector<KisUpdateInfoSP> infoObjects;
     while (KisUpdateInfoSP info = m_d->projectionUpdatesCompressor.takeUpdateInfo()) {
-        infoObjects << info;
+        const KisMarkerUpdateInfo *batchInfo = dynamic_cast<const KisMarkerUpdateInfo*>(info.data());
+        if (batchInfo) {
+            if (!infoObjects.isEmpty()) {
+                uploadData(infoObjects);
+                infoObjects.clear();
+            }
+
+            if (batchInfo->type() == KisMarkerUpdateInfo::StartBatch) {
+                m_d->isBatchUpdateActive++;
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::EndBatch) {
+                m_d->isBatchUpdateActive--;
+                KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->isBatchUpdateActive >= 0);
+                if (m_d->isBatchUpdateActive == 0) {
+                    shouldExplicitlyIssueUpdates = true;
+                }
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::BlockLodUpdates) {
+                m_d->canvasWidget->setLodResetInProgress(true);
+            } else if (batchInfo->type() == KisMarkerUpdateInfo::UnblockLodUpdates) {
+                m_d->canvasWidget->setLodResetInProgress(false);
+                shouldExplicitlyIssueUpdates = true;
+            }
+        } else {
+            infoObjects << info;
+        }
     }
 
-    QVector<QRect> viewportRects = m_d->canvasWidget->updateCanvasProjection(infoObjects);
-
-    const QRect vRect = std::accumulate(viewportRects.constBegin(), viewportRects.constEnd(),
-                                        QRect(), std::bit_or<QRect>());
-
-    // TODO: Implement info->dirtyViewportRect() for KisOpenGLCanvas2 to avoid updating whole canvas
-    if (m_d->currentCanvasIsOpenGL) {
-        m_d->savedUpdateRect = QRect();
-
-        // we already had a compression in frameRenderStartCompressor, so force the update directly
-        slotDoCanvasUpdate();
-    } else if (/* !m_d->currentCanvasIsOpenGL && */ !vRect.isEmpty()) {
-        m_d->savedUpdateRect = m_d->coordinatesConverter->viewportToWidget(vRect).toAlignedRect();
-
-        // we already had a compression in frameRenderStartCompressor, so force the update directly
-        slotDoCanvasUpdate();
+    if (!infoObjects.isEmpty()) {
+        uploadData(infoObjects);
+    } else if (shouldExplicitlyIssueUpdates) {
+        tryIssueCanvasUpdates(m_d->coordinatesConverter->imageRectInImagePixels());
     }
+}
+
+void KisCanvas2::slotBeginUpdatesBatch()
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(KisMarkerUpdateInfo::StartBatch,
+                                      m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
+}
+
+void KisCanvas2::slotEndUpdatesBatch()
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(KisMarkerUpdateInfo::EndBatch,
+                                      m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
+}
+
+void KisCanvas2::slotSetLodUpdatesBlocked(bool value)
+{
+    KisUpdateInfoSP info =
+        new KisMarkerUpdateInfo(value ?
+                                KisMarkerUpdateInfo::BlockLodUpdates :
+                                KisMarkerUpdateInfo::UnblockLodUpdates,
+                                m_d->coordinatesConverter->imageRectInImagePixels());
+    m_d->projectionUpdatesCompressor.putUpdateInfo(info);
+    emit sigCanvasCacheUpdated();
 }
 
 void KisCanvas2::slotDoCanvasUpdate()

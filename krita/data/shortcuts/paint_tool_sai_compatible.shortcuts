@@ -426,5 +426,4 @@ windows_next=Ctrl+Tab
 windows_previous=Ctrl+Shift+Tab
 windows_tile=none
 workspaces=none
-wrap_around_mode=none
 zoom_to_100pct=Home

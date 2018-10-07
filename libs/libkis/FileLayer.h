@@ -69,6 +69,11 @@ public Q_SLOTS:
     void setProperties(QString fileName, QString scalingMethod = QString("None"));
 
     /**
+     * @brief makes the file layer to reload the connected image from disk
+     */
+    void resetCache();
+
+    /**
      * @brief path
      * @return A QString with the full path of the referenced image.
      */
@@ -93,7 +98,7 @@ private:
      * @param absolutePath the absolute location of the file referenced.
      * @return the appropriate relative path.
      */
-    QString getFileNameFromAbsolute(QString baseName, QString absolutePath);
+    QString getFileNameFromAbsolute(const QString &basePath, QString filePath);
     QString m_baseName;
 };
 

@@ -40,39 +40,42 @@
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
+#include <KoResourceServer.h>
+#include <kis_popup_button.h>
+#include <KisPaletteListWidget.h>
+#include <KisPaletteComboBox.h>
 
 #include <resources/KoColorSet.h>
 #include <KoColorDisplayRendererInterface.h>
 
 class KoColorPatch;
+class KisPaletteView;
 
 class Q_DECL_HIDDEN KoColorSetWidget::KoColorSetWidgetPrivate {
 public:
     KoColorSetWidget *thePublic;
     QPointer<KoColorSet> colorSet;
-    QTimer m_timer;
+
+    KisPaletteView *paletteView;
+    KisPaletteListWidget *paletteChooser;
+    KisPopupButton *paletteChooserButton;
+
     QVBoxLayout *mainLayout;
-    bool firstShowOfContainer;
-    QWidget *colorSetContainer;
-    QScrollArea *scrollArea;
     QVBoxLayout *colorSetLayout;
     QHBoxLayout *recentsLayout;
+    QHBoxLayout *bottomLayout;
+
     KoColorPatch *recentPatches[6];
     QToolButton *addRemoveButton;
-    QComboBox *colorNameCmb;
-    QStringList colornames;
+    KisPaletteComboBox *colorNameCmb;
     int numRecents;
 
-    void colorTriggered(KoColorPatch *patch);
+    const KoColorDisplayRendererInterface *displayRenderer;
+    KoResourceServer<KoColorSet> *rServer;
+
     void addRecent(const KoColor &);
     void activateRecent(int i);
-    void fillColors();
     void addRemoveColors();
-    void setColorFromString(QString s);
-
-    QList<KoColorPatch*> patchWidgetList;
-    const KoColorDisplayRendererInterface *displayRenderer;
-
 };
 
 #endif

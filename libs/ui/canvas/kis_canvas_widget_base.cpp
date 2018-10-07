@@ -164,6 +164,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 void KisCanvasWidgetBase::addDecoration(KisCanvasDecorationSP deco)
 {
     m_d->decorations.push_back(deco);
+    std::stable_sort(m_d->decorations.begin(), m_d->decorations.end(), KisCanvasDecoration::comparePriority);
 }
 
 void KisCanvasWidgetBase::removeDecoration(const QString &id)
@@ -189,6 +190,7 @@ KisCanvasDecorationSP KisCanvasWidgetBase::decoration(const QString& id) const
 void KisCanvasWidgetBase::setDecorations(const QList<KisCanvasDecorationSP > &decorations)
 {
     m_d->decorations=decorations;
+    std::stable_sort(m_d->decorations.begin(), m_d->decorations.end(), KisCanvasDecoration::comparePriority);
 }
 
 QList<KisCanvasDecorationSP > KisCanvasWidgetBase::decorations() const

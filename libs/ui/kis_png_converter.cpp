@@ -59,8 +59,8 @@
 #include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include <metadata/kis_meta_data_io_backend.h>
-#include <metadata/kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
+#include <kis_meta_data_store.h>
 #include <KoColorModelStandardIds.h>
 #include "dialogs/kis_dlg_png_import.h"
 #include "kis_clipboard.h"
@@ -910,8 +910,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, const QRe
         gc.end();
         device = tmp;
     }
-
-    if (options.forceSRGB) {
+    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
+    if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
         KUndo2Command *cmd = device->convertTo(cs);

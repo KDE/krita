@@ -120,6 +120,7 @@ set(kritaui_LIB_SRCS
     kis_node_juggler_compressed.cpp
     kis_node_selection_adapter.cpp
     kis_node_insertion_adapter.cpp
+    KisNodeDisplayModeAdapter.cpp
     kis_node_model.cpp
     kis_node_filter_proxy_model.cpp
     kis_model_index_converter_base.cpp
@@ -168,6 +169,8 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile_info_pool.cpp
     opengl/KisOpenGLUpdateInfoBuilder.cpp
     kis_fps_decoration.cpp
+    tool/KisToolChangesTracker.cpp
+    tool/KisToolChangesTrackerData.cpp
     tool/kis_selection_tool_helper.cpp
     tool/kis_selection_tool_config_widget_helper.cpp
     tool/kis_rectangle_constraint_widget.cpp
@@ -200,6 +203,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskedFreehandStrokePainter.cpp
     tool/strokes/KisMaskingBrushRenderer.cpp
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
+    tool/strokes/move_stroke_strategy.cpp
 
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
@@ -257,6 +261,11 @@ set(kritaui_LIB_SRCS
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
     
+    KisPaletteEditor.cpp
+    dialogs/KisDlgPaletteEditor.cpp
+
+    widgets/KisNewsWidget.cpp
+	widgets/KisGamutMaskToolbar.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -290,9 +299,9 @@ set(kritaui_LIB_SRCS
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactory.cpp
+    actions/KisTransformToolActivationCommand.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
-    kis_transaction_based_command.cpp
     kis_gui_context_command.cpp
     kis_gui_context_command_p.cpp
     input/kis_tablet_debugger.cpp
@@ -376,12 +385,12 @@ set(kritaui_LIB_SRCS
     KisReferenceImage.cpp
     flake/KisReferenceImagesLayer.cpp
     flake/KisReferenceImagesLayer.h
+
 )
 
 if(WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
@@ -413,14 +422,18 @@ endif()
         input/wintab/drawpile_tablettester/tablettest.cpp
     )
 
-if(UNIX)
+if (UNIX)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/kis_tablet_event.cpp
-        input/wintab/kis_tablet_support.cpp
         qtlockedfile/qtlockedfile_unix.cpp
         )
-    if(NOT APPLE)
+    if(NOT USE_QT_XCB)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/wintab/kis_tablet_support.cpp
+    )
+    endif()
+    if(NOT APPLE AND NOT USE_QT_XCB)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             input/wintab/qxcbconnection_xi2.cpp
@@ -486,6 +499,9 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+    forms/WdgDlgPaletteEditor.ui
+    forms/KisNewsPage.ui
+	forms/wdgGamutMaskToolbar.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
@@ -513,6 +529,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     wdgsplash.ui
     input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
+
 )
 
 

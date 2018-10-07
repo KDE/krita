@@ -46,9 +46,9 @@ DlgLayerSplit::DlgLayerSplit()
     m_page->intFuzziness->setRange(0, 200);
     m_page->intFuzziness->setSingleStep(1);
 
-    m_colorSetChooser = new KisColorsetChooser();
+    m_colorSetChooser = new KisPaletteListWidget();
     m_page->paletteChooser->setPopupWidget(m_colorSetChooser);
-    connect(m_colorSetChooser, SIGNAL(paletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
+    connect(m_colorSetChooser, SIGNAL(sigPaletteSelected(KoColorSet*)), this, SLOT(slotSetPalette(KoColorSet*)));
 
     KisConfig cfg(true);
     m_page->intFuzziness->setValue(cfg.readEntry<int>("layersplit/fuzziness", 20));

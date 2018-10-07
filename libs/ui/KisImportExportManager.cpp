@@ -35,6 +35,7 @@
 #include <QGroupBox>
 #include <QFuture>
 #include <QtConcurrent>
+#include <QFileInfo>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>
@@ -385,17 +386,15 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             result = doExport(location, filter, exportConfiguration, alsoAsKra);
         }
 
-        if (exportConfiguration) {
+        if (exportConfiguration && !batchMode() && showWarnings) {
             KisConfig(false).setExportConfiguration(typeName, exportConfiguration);
         }
     }
     return result;
 }
 
-void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration)
+void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration, KisImageSP image)
 {
-    // Fill with some meta information about the image
-    KisImageSP image = m_document->image();
     KisPaintDeviceSP dev = image->projection();
     const KoColorSpace* cs = dev->colorSpace();
     const bool isThereAlpha =
@@ -409,6 +408,12 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
             (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
              !cs->profile()->name().contains(QLatin1String("g10")));
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
+}
+
+
+void KisImportExportManager::fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration)
+{
+    return fillStaticExportConfigurationProperties(exportConfiguration, m_document->image());
 }
 
 bool KisImportExportManager::askUserAboutExportConfiguration(
@@ -607,28 +612,66 @@ KisImportExportFilter::ConversionStatus KisImportExportManager::doExport(const Q
     return status;
 }
 
+// Temporary workaround until QTBUG-57299 is fixed.
+#ifndef Q_OS_WIN
+#define USE_QSAVEFILE
+#endif
+
 KisImportExportFilter::ConversionStatus KisImportExportManager::doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration)
 {
+#ifdef USE_QSAVEFILE
     QSaveFile file(location);
     file.setDirectWriteFallback(true);
-
     if (filter->supportsIO() && !file.open(QFile::WriteOnly)) {
-        m_document->setErrorMessage(file.errorString());
+#else
+    QFileInfo fi(location);
+    QTemporaryFile file(fi.absolutePath() + ".XXXXXX.kra");
+    if (filter->supportsIO() && !file.open()) {
+#endif
+        QString error = file.errorString();
+        if (error.isEmpty()) {
+            error = i18n("Could not open %1 for writing.", location);
+        }
+        m_document->setErrorMessage(error);
+#ifdef USE_QSAVEFILE
         file.cancelWriting();
+#endif
         return KisImportExportFilter::CreationError;
     }
 
-    KisImportExportFilter::ConversionStatus status =
-            filter->convert(m_document, &file, exportConfiguration);
+    KisImportExportFilter::ConversionStatus status = filter->convert(m_document, &file, exportConfiguration);
 
     if (filter->supportsIO()) {
         if (status != KisImportExportFilter::OK) {
+#ifdef USE_QSAVEFILE
             file.cancelWriting();
+#endif
         } else {
+#ifdef USE_QSAVEFILE
             if (!file.commit()) {
-                m_document->setErrorMessage(file.errorString());
+                QString error = file.errorString();
+                if (error.isEmpty()) {
+                    error = i18n("Could not write to %1.", location);
+                }
+                if (m_document->errorMessage().isEmpty()) {
+                    m_document->setErrorMessage(error);
+                }
                 status = KisImportExportFilter::CreationError;
             }
+#else
+            file.flush();
+            file.close();
+            QFile target(location);
+            if (target.exists()) {
+                // There should already be a .kra~ backup
+                target.remove();
+            }
+            if (!file.copy(location)) {
+                file.setAutoRemove(false);
+                m_document->setErrorMessage(i18n("Could not copy %1 to its final location %2", file.fileName(), location));
+                return KisImportExportFilter::CreationError;
+            }
+#endif
         }
     }
     return status;

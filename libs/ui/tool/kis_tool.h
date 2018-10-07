@@ -24,7 +24,7 @@
 #include <KoColor.h>
 #include <KoToolBase.h>
 #include <KoID.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <kritaui_export.h>
 #include <kis_types.h>
 
@@ -191,7 +191,7 @@ public Q_SLOTS:
     virtual void updateSettingsViews();
 
 Q_SIGNALS:
-    void isActiveChanged();
+    void isActiveChanged(bool isActivated);
 
 protected:
     // conversion methods are also needed by the paint information builder

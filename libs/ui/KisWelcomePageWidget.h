@@ -59,19 +59,7 @@ private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
     void slotClearRecentFiles();
-
     void recentDocumentClicked(QModelIndex index);
-
-    /// go to URL links
-    void slotGoToManual();
-
-    void slotGettingStarted();
-    void slotSupportKrita();
-    void slotUserCommunity();
-    void slotKritaWebsite();
-    void slotSourceCode();
-    void slotKDESiteLink();
-
 };
 
 #endif // KISWELCOMEPAGEWIDGET_H

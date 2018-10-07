@@ -188,10 +188,10 @@ public:
           pointIsDragged(false),
           finishAfterThisPoint(false),
           hoveredPoint(0),
-          listeningToModifiers(false),
           angleSnapStrategy(0),
           angleSnappingDelta(15),
-          angleSnapStatus(false)
+          angleSnapStatus(false),
+          enableClosePathShortcut(true)
     {
     }
 
@@ -205,7 +205,6 @@ public:
     PathConnectionPoint existingStartPoint; ///< an existing path point we started a new path at
     PathConnectionPoint existingEndPoint;   ///< an existing path point we finished a new path at
     KoPathPoint *hoveredPoint; ///< an existing path end point the mouse is hovering on
-    bool listeningToModifiers; //  Fine tune when to begin processing modifiers at the beginning of a stroke.
     bool prevPointWasDragged = false;
     bool autoSmoothCurves = false;
 
@@ -214,6 +213,7 @@ public:
     AngleSnapStrategy *angleSnapStrategy;
     int angleSnappingDelta;
     bool angleSnapStatus;
+    bool enableClosePathShortcut;
 
     void repaintActivePoint() const {
         const bool isFirstPoint = (activePoint == firstPoint);
@@ -409,7 +409,6 @@ public:
         existingStartPoint = 0;
         existingEndPoint = 0;
         hoveredPoint = 0;
-        listeningToModifiers = false;
     }
 
     void angleDeltaChanged(int value) {

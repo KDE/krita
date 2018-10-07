@@ -39,8 +39,7 @@ public:
      */
     KisTIFFYCbCrReaderTarget8Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses,
                                  int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
-                                 KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
-                                 KisTIFFYCbCr::Position position);
+                                 KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub);
     ~KisTIFFYCbCrReaderTarget8Bit() override;
     uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override;
     void finalize() override;
@@ -50,7 +49,6 @@ private:
     quint32 m_bufferWidth, m_bufferHeight;
     uint16 m_hsub;
     uint16 m_vsub;
-    KisTIFFYCbCr::Position m_position;
     quint32 m_imageWidth, m_imageHeight;
 
 };
@@ -64,8 +62,7 @@ public:
      */
     KisTIFFYCbCrReaderTarget16Bit(KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses,
                                   int8 alphapos, uint8 sourceDepth, uint16 sampleformat, uint8 nbcolorssamples, uint8 extrasamplescount,
-                                  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub,
-                                  KisTIFFYCbCr::Position position);
+                                  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub);
     ~KisTIFFYCbCrReaderTarget16Bit() override;
     uint copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) override;
     void finalize() override;
@@ -75,7 +72,6 @@ private:
     quint32 m_bufferWidth, m_bufferHeight;
     uint16 m_hsub;
     uint16 m_vsub;
-    KisTIFFYCbCr::Position m_position;
     quint32 m_imageWidth, m_imageHeight;
 
 };

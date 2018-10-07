@@ -63,7 +63,7 @@ KUndo2Model::KUndo2Model(QObject *parent)
 {
     m_stack = 0;
     m_sel_model = new QItemSelectionModel(this, this);
-    connect(m_sel_model, SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
+    connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
     m_emty_label = i18n("<empty>");
 }
 

@@ -30,7 +30,7 @@ class KoPointerEvent;
 class KisToolFreehand;
 class KisCoordinatesConverter;
 class KisSpeedSmoother;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 {
@@ -40,7 +40,7 @@ public:
     KisPaintingInformationBuilder();
     ~KisPaintingInformationBuilder() override;
 
-    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, const KoCanvasResourceManager *manager);
+    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, const KoCanvasResourceProvider *manager);
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
                                        int timeElapsed);

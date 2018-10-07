@@ -32,6 +32,7 @@ KisGuidesDecoration::KisGuidesDecoration(QPointer<KisView> view)
     : KisCanvasDecoration(GUIDES_DECORATION_ID, view),
       m_d(new Private)
 {
+    setPriority(90);
 }
 
 KisGuidesDecoration::~KisGuidesDecoration()

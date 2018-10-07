@@ -211,7 +211,7 @@ void KisScratchPad::pointerMove(KoPointerEvent *event)
 
 void KisScratchPad::beginStroke(KoPointerEvent *event)
 {
-    KoCanvasResourceManager *resourceManager = m_resourceProvider->resourceManager();
+    KoCanvasResourceProvider *resourceManager = m_resourceProvider->resourceManager();
     m_helper->initPaint(event,
                         documentToWidget().map(event->point),
                         resourceManager,
@@ -356,8 +356,8 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 
     connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
             SLOT(setOnScreenResolution(qreal,qreal)));
-    connect(this, SIGNAL(colorSelected(const KoColor&)),
-            m_resourceProvider, SLOT(slotSetFGColor(const KoColor&)));
+    connect(this, SIGNAL(colorSelected(KoColor)),
+            m_resourceProvider, SLOT(slotSetFGColor(KoColor)));
 
     m_defaultColor = KoColor(defaultColor, KoColorSpaceRegistry::instance()->rgb8());
 

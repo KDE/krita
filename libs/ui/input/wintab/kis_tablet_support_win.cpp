@@ -23,9 +23,7 @@
 
 #include "kis_tablet_support_win_p.h"
 
-#include <input/kis_tablet_event.h>
 #include "kis_tablet_support_win.h"
-// #include "kis_tablet_support.h"
 
 #include <kis_debug.h>
 #include <QApplication>
@@ -801,10 +799,13 @@ bool QWindowsTabletSupport::translateTabletPacketEvent()
 
         const int z = currentDevice == QTabletEvent::FourDMouse ? int(packet.pkZ) : 0;
 
-        // This code is to delay the tablet data one cycle to sync with the mouse location.
-        QPointF globalPosF = m_oldGlobalPosF / dpr; // Convert from "native" to "device independent pixels."
-        m_oldGlobalPosF = tabletData.scaleCoordinates(packet.pkX, packet.pkY,
-                                                      tabletData.virtualDesktopArea);
+        // NOTE: we shouldn't postpone the tablet events like Qt does, because we
+        //       don't support mouse mode (which was the reason for introducing this
+        //       postponing). See bug 363284.
+        QPointF globalPosF =
+            tabletData.scaleCoordinates(packet.pkX, packet.pkY,
+                                        tabletData.virtualDesktopArea);
+        globalPosF /= dpr; // Convert from "native" to "device independent pixels."
 
         QPoint globalPos = globalPosF.toPoint();
 

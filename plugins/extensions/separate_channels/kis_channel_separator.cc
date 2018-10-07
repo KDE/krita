@@ -213,7 +213,7 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
         // Flatten the image if required
         switch (sourceOps) {
         case(ALL_LAYERS):
-            image->flatten();
+            image->flatten(0);
             break;
         default:
             break;

@@ -222,7 +222,7 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
 }
 
 KisView *KisPart::createView(KisDocument *document,
-                             KoCanvasResourceManager *resourceManager,
+                             KoCanvasResourceProvider *resourceManager,
                              KActionCollection *actionCollection,
                              QWidget *parent)
 {

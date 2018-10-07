@@ -71,7 +71,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
-
+    connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -85,26 +85,67 @@ int KisSelectionOptions::action()
 
 void KisSelectionOptions::setAction(int action) {
     QAbstractButton* button = m_action->button(action);
-    Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
 }
 
 void KisSelectionOptions::setMode(int mode) {
     QAbstractButton* button = m_mode->button(mode);
-    Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
     hideActionsForSelectionMode(mode);
+}
+
+void KisSelectionOptions::setAntiAliasSelection(bool value)
+{
+    m_page->chkAntiAliasing->setChecked(value);
+}
+
+void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)
+{
+    const QString shortcutString = shortcut.toString(QKeySequence::NativeText);
+    QString toolTipText;
+    switch ((SelectionAction)action) {
+    case SELECTION_DEFAULT:
+    case SELECTION_REPLACE:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Replace") :
+            i18nc("@info:tooltip", "Replace (%1)", shortcutString);
+
+        m_action->button(SELECTION_REPLACE)->setToolTip(toolTipText);
+        break;
+    case SELECTION_ADD:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Add") :
+            i18nc("@info:tooltip", "Add (%1)", shortcutString);
+
+        m_action->button(SELECTION_ADD)->setToolTip(toolTipText);
+        break;
+    case SELECTION_SUBTRACT:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Subtract") :
+            i18nc("@info:tooltip", "Subtract (%1)", shortcutString);
+
+        m_action->button(SELECTION_SUBTRACT)->setToolTip(toolTipText);
+
+        break;
+    case SELECTION_INTERSECT:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Intersect") :
+            i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
+
+        m_action->button(SELECTION_INTERSECT)->setToolTip(toolTipText);
+
+        break;
+    }
 }
 
 //hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
 void KisSelectionOptions::hideActionsForSelectionMode(int mode) {
-    bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
+    const bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
 
-    m_page->lblAction->setVisible(isPixelSelection);
-    m_page->add->setVisible(isPixelSelection);
-    m_page->subtract->setVisible(isPixelSelection);
-    m_page->replace->setVisible(isPixelSelection);
-    m_page->intersect->setVisible(isPixelSelection);
     m_page->chkAntiAliasing->setVisible(isPixelSelection);
 }
 

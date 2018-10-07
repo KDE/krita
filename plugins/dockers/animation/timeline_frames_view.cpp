@@ -192,7 +192,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
     connect(m_d->existingLayersMenu, SIGNAL(triggered(QAction*)), SLOT(slotAddExistingLayer(QAction*)));
 
-    connect(m_d->layersHeader, SIGNAL(sigRequestContextMenu(const QPoint&)), SLOT(slotLayerContextMenuRequested(const QPoint&)));
+    connect(m_d->layersHeader, SIGNAL(sigRequestContextMenu(QPoint)), SLOT(slotLayerContextMenuRequested(QPoint)));
 
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
@@ -403,13 +403,13 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     QTableView::setModel(model);
 
-    connect(m_d->model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
-            this, SLOT(slotHeaderDataChanged(Qt::Orientation, int, int)));
+    connect(m_d->model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+            this, SLOT(slotHeaderDataChanged(Qt::Orientation,int,int)));
 
     connect(m_d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
-    connect(m_d->model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(slotReselectCurrentIndex()));
 
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
@@ -418,7 +418,7 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
     connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
             this, SLOT(slotUpdateAudioActions()));
 
-    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+    connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));

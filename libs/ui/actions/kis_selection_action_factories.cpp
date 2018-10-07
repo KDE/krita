@@ -54,7 +54,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_selection_manager.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_selection_filters.h"
 #include "kis_shape_selection.h"
 #include "kis_shape_layer.h"
@@ -464,6 +464,40 @@ void KisSelectionToVectorActionFactory::run(KisViewManager *view)
     endAction(ap, KisOperationConfiguration(id()).toXML());
 }
 
+void KisSelectionToRasterActionFactory::run(KisViewManager *view)
+{
+    KisSelectionSP selection = view->selection();
+
+    if (!selection->hasShapeSelection()) {
+        view->showFloatingMessage(i18nc("floating message",
+                                        "Selection is already in a raster format "),
+                                  QIcon(), 2000, KisFloatingMessage::Low);
+        return;
+    }
+
+    KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Convert to Vector Selection"));
+
+    struct RasterizeSelection : public KisTransactionBasedCommand {
+        RasterizeSelection(KisSelectionSP sel)
+            : m_sel(sel) {}
+        KisSelectionSP m_sel;
+
+        KUndo2Command* paint() override {
+            // just create an empty transaction: it will rasterize the
+            // selection and emit the necessary signals
+
+            KisTransaction transaction(m_sel->pixelSelection());
+            return transaction.endAndTake();
+        }
+    };
+
+    ap->applyCommand(new RasterizeSelection(selection),
+                     KisStrokeJobData::SEQUENTIAL,
+                     KisStrokeJobData::EXCLUSIVE);
+
+    endAction(ap, KisOperationConfiguration(id()).toXML());
+}
+
 void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
 {
     const QList<KoShape*> originalShapes = view->canvasBase()->shapeManager()->selection()->selectedShapes();
@@ -505,7 +539,7 @@ void KisSelectionToShapeActionFactory::run(KisViewManager *view)
     KoShape *shape = KoPathShape::createShapeFromPainterPath(transform.map(selectionOutline));
     shape->setShapeId(KoPathShapeId);
 
-    KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+    KoColor fgColor = view->canvasBase()->resourceManager()->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     KoShapeStrokeSP border(new KoShapeStroke(1.0, fgColor.toQColor()));
     shape->setStroke(border);
 
@@ -535,8 +569,8 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
     QColor color = params.color.toQColor();
 
     KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0) {
-        KoCanvasResourceManager * rManager = view->resourceProvider()->resourceManager();
+    if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice()) {
+        KoCanvasResourceProvider * rManager = view->resourceProvider()->resourceManager();
         KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
         KisPainter::FillStyle fillStyle =  params.fillStyle();
 
@@ -558,7 +592,7 @@ void KisStrokeSelectionActionFactory::run(KisViewManager *view, StrokeSelectionO
             helper.paintPainterPathQPen(outline, pen, params.fillColor);
         }
     }
-    else  {
+    else if (currentNode->inherits("KisShapeLayer")) {
 
         QTransform transform = view->canvasBase()->coordinatesConverter()->imageToDocumentTransform();
 
@@ -592,9 +626,9 @@ void KisStrokeBrushSelectionActionFactory::run(KisViewManager *view, StrokeSelec
     }
 
     KisNodeSP currentNode = view->resourceProvider()->resourceManager()->resource(KisCanvasResourceProvider::CurrentKritaNode).value<KisNodeWSP>();
-    if (!currentNode->inherits("KisShapeLayer") && currentNode->childCount() == 0)
+    if (!currentNode->inherits("KisShapeLayer") && currentNode->paintDevice())
     {
-        KoCanvasResourceManager * rManager = view->resourceProvider()->resourceManager();
+        KoCanvasResourceProvider * rManager = view->resourceProvider()->resourceManager();
         QPainterPath outline = pixelSelection->outlineCache();
         KisPainter::StrokeStyle strokeStyle =  KisPainter::StrokeStyleBrush;
         KisPainter::FillStyle fillStyle =  KisPainter::FillStyleNone;

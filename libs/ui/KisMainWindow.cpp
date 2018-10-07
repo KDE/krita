@@ -714,6 +714,14 @@ void KisMainWindow::addRecentURL(const QUrl &url)
                     ok = false; // it's in the tmp resource
                 }
             }
+
+            const QStringList templateDirs = KoResourcePaths::findDirs("templates");
+            for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
+                if (path.contains(*it)) {
+                    ok = false; // it's in the templates directory.
+                    break;
+                }
+            }
 #ifdef HAVE_KIO
             if (ok) {
                 KRecentDocument::add(QUrl::fromLocalFile(path));

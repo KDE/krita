@@ -37,7 +37,6 @@
 #include <QStringList>
 #include <QImage>
 #include <QPainter>
-#include <QByteArray>
 #include <QXmlStreamReader>
 #include <QXmlStreamAttributes>
 #include <QtEndian> // qFromLittleEndian
@@ -49,7 +48,6 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorProfile.h>
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
 #include "KisSwatch.h"

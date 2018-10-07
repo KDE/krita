@@ -32,7 +32,7 @@
 #include <kritawidgetutils_export.h>
 
 #include <QMainWindow>
-#include <QtCore/QMetaClassInfo>
+#include <QMetaClassInfo>
 
 class QMenu;
 class KConfig;

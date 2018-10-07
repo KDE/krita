@@ -123,7 +123,6 @@
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
 #include "kis_group_layer.h"
-#include "kis_icon_utils.h"
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_image.h"
 #include <KisImportExportFilter.h>

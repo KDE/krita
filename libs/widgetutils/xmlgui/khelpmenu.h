@@ -24,8 +24,8 @@
 
 #include <kritawidgetutils_export.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 class QMenu;
 class QWidget;

@@ -22,7 +22,7 @@
 #include <QCoreApplication>
 #include <QFile>
 #include <QTextStream>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include <QStandardPaths>
 
 #include <QDir>

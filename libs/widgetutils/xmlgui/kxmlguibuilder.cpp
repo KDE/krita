@@ -29,9 +29,9 @@
 #include <kauthorized.h>
 #include <klocalizedstring.h>
 
-#include <QtXml/QDomElement>
-#include <QtCore/QObject>
-#include <QtCore/QMutableStringListIterator>
+#include <QDomElement>
+#include <QObject>
+#include <QMutableStringListIterator>
 #include <QAction>
 #include <QMenu>
 #include <QMenuBar>

@@ -41,7 +41,7 @@
 #include <QTouchEvent>
 #include <QWindow>
 #include <QPointer>
-#include <QtCore/QLoggingCategory>
+#include <QLoggingCategory>
 #include <xcb/xcb.h>
 
 #define XCB_USE_XINPUT2 1

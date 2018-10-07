@@ -38,7 +38,6 @@
 #include <KisDocument.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
-#include <KoDialog.h>
 #include <KisPaletteModel.h>
 #include <kis_color_button.h>
 

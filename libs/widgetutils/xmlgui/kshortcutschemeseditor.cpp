@@ -25,7 +25,7 @@
 #include <QFile>
 #include <QPushButton>
 #include <QTextStream>
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QInputDialog>

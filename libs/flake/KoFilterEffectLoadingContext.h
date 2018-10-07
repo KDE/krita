@@ -26,7 +26,7 @@ class QRectF;
 class QPointF;
 
 #include <QtGlobal>
-#include <QtCore/QString>
+#include <QString>
 
 /// This class provides a loading context for filter effects
 class KRITAFLAKE_EXPORT KoFilterEffectLoadingContext

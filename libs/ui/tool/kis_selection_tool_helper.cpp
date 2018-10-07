@@ -106,13 +106,21 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             KisSelectionTransaction transaction(pixelSelection);
 
             if (!hasSelection && m_action == SELECTION_SYMMETRICDIFFERENCE) {
+                m_action = SELECTION_REPLACE;
+            }
+
+            if (!hasSelection && m_action == SELECTION_SUBTRACT) {
                 pixelSelection->invert();
             }
 
             pixelSelection->applySelection(m_selection, m_action);
 
             QRect dirtyRect = m_view->image()->bounds();
-            if (hasSelection && m_action != SELECTION_REPLACE && m_action != SELECTION_SYMMETRICDIFFERENCE) {
+            if (hasSelection &&
+                m_action != SELECTION_REPLACE &&
+                m_action != SELECTION_INTERSECT &&
+                m_action != SELECTION_SYMMETRICDIFFERENCE) {
+
                 dirtyRect = m_selection->selectedRect();
             }
             m_view->selection()->updateProjection(dirtyRect);
@@ -282,7 +290,7 @@ bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionV
     bool result = false;
 
     if (KisAlgebra2D::maxDimension(selectionViewRect) < KisConfig(true).selectionViewSizeMinimum() &&
-        (action == SELECTION_SYMMETRICDIFFERENCE || action == SELECTION_REPLACE)) {
+        (action == SELECTION_INTERSECT || action == SELECTION_SYMMETRICDIFFERENCE || action == SELECTION_REPLACE)) {
 
         // Queueing this action to ensure we avoid a race condition when unlocking the node system
         QTimer::singleShot(0, m_canvas->viewManager()->selectionManager(), SLOT(deselect()));

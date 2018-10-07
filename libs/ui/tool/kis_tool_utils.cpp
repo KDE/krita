@@ -83,7 +83,6 @@ namespace KisToolUtils {
         bool validColorPicked = pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
 
         if (validColorPicked) {
-            pickedColor.setOpacity(OPACITY_OPAQUE_U8);
             out_color = pickedColor;
         }
 

@@ -33,6 +33,7 @@
 #include <QFormLayout>
 #include <QLineEdit>
 
+#include <squeezedcombobox.h>
 #include <klocalizedstring.h>
 #include <KoResourceServerProvider.h>
 #include <KoColorSpaceRegistry.h>
@@ -260,9 +261,10 @@ void PaletteDockerDock::slotSetColorSet(KoColorSet* colorSet)
     if (colorSet) {
         KisConfig cfg(true);
         cfg.setDefaultPalette(colorSet->name());
-        m_ui->bnColorSets->setText(colorSet->name());
+        m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
+        m_ui->lblPaletteName->setText(colorSet->name());
     } else {
-        m_ui->bnColorSets->setText("");
+        m_ui->lblPaletteName->setText("");
     }
 }
 

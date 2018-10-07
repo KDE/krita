@@ -502,10 +502,9 @@ void KUndo2Command::setExtraData(KUndo2CommandExtraData *data)
 
 KUndo2Action::KUndo2Action(const QString &textTemplate, const QString &defaultText, QObject *parent)
     : QAction(parent)
+    , m_textTemplate(textTemplate)
+    , m_defaultText(defaultText)
 {
-    m_textTemplate = textTemplate;
-    m_defaultText = defaultText;
-
 }
 
 void KUndo2Action::setPrefixedText(const QString &text)

@@ -25,11 +25,10 @@
 
 KoShapeLockCommand::KoShapeLockCommand(const QList<KoShape*> &shapes, const QList<bool> &oldLock, const QList<bool> &newLock, KUndo2Command *parent)
         : KUndo2Command(parent)
+        , m_shapes(shapes)
+        , m_oldLock(oldLock)
+        , m_newLock(newLock)
 {
-    m_shapes = shapes;
-    m_oldLock = oldLock;
-    m_newLock = newLock;
-
     Q_ASSERT(m_shapes.count() == m_oldLock.count());
     Q_ASSERT(m_shapes.count() == m_newLock.count());
 

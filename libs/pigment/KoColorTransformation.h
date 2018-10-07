@@ -60,7 +60,7 @@ public:
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const = 0;
 
     /**
-     * @return the list of parmeters
+     * @return the list of parameters
      */
     virtual QList<QString> parameters() const;
     /**

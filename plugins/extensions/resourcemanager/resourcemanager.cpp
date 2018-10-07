@@ -266,7 +266,7 @@ void ResourceManager::slotImportGradients()
 {
     QStringList resources = importResources(i18n("Import Gradients"), QStringList() << "image/svg+xml"
                                    << "application/x-gimp-gradient"
-                                   << "applicaition/x-karbon-gradient");
+                                   << "application/x-karbon-gradient");
     Q_FOREACH (const QString &res, resources) {
         d->gradientServer->importResourceFile(res);
     }

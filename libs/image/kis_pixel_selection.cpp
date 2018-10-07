@@ -400,7 +400,7 @@ QVector<QPolygon> KisPixelSelection::outline() const
     QRect selectionExtent = selectedExactRect();
 
     /**
-     * When the default pixel is not fully transarent, the
+     * When the default pixel is not fully transparent, the
      * exactBounds() return extent of the device instead. To make this
      * value sane we should limit the calculated area by the bounds of
      * the image.

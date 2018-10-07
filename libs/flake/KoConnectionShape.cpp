@@ -176,7 +176,7 @@ bool KoConnectionShapePrivate::intersects(const QPointF &p1, const QPointF &d1, 
     // use cross product to check if rays intersects at all
     qreal cp = crossProd(d1, d2);
     if (cp == 0.0) {
-        // rays are parallel or coincidient
+        // rays are parallel or coincident
         if (p1.x() == p2.x() && d1.x() == 0.0 && d1.y() != d2.y()) {
             // vertical, coincident
             isect = 0.5 * (p1 + p2);

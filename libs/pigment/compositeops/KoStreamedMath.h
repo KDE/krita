@@ -122,7 +122,7 @@ static inline Vc::float_v fetch_mask_8(const quint8 *data) {
 /**
  * Get an alpha values from Vc::float_v::size() pixels 32-bit each
  * (4 channels, 8 bit per channel).  The alpha value is considered
- * to be stored in the most significat byte of the pixel
+ * to be stored in the most significant byte of the pixel
  *
  * \p aligned controls whether the \p data is fetched using aligned
  *            instruction or not.

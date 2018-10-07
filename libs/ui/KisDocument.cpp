@@ -636,7 +636,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
             if (!d->modifiedWhileSaving) {
                 /**
-                 * If undo stack is alreado clean/empty, it doesn't emit any
+                 * If undo stack is already clean/empty, it doesn't emit any
                  * signals, so we might forget update document modified state
                  * (which was set, e.g. while recovering an autosave file)
                  */

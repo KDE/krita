@@ -2623,7 +2623,7 @@ void KisMainWindow::initializeGeometry()
         const int deskWidth = desk.width();
         if (deskWidth > 1024) {
             // a nice width, and slightly less than total available
-            // height to componensate for the window decs
+            // height to compensate for the window decs
             w = (deskWidth / 3) * 2;
             h = (desk.height() / 3) * 2;
         }

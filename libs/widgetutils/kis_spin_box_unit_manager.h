@@ -72,7 +72,7 @@ public:
  * This class doesn't allow to use relative units (units whose conversion factor is dependent of the context), even if it's private data is prepared to manage it.
  * The reason for this is that from the library of this class it is very hard to easily access the information needed. So all will be managed by subclasses in other libs.
  *
- * The class is a subclass of QAbstractListModel, so that available list of units is easily acessed by other Qt standard components, like QComboBoxes.
+ * The class is a subclass of QAbstractListModel, so that available list of units is easily accessed by other Qt standard components, like QComboBoxes.
  *
  */
 class KRITAWIDGETUTILS_EXPORT KisSpinBoxUnitManager : public  QAbstractListModel

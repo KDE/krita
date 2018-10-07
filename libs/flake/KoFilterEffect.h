@@ -156,7 +156,7 @@ protected:
     /**
      * Saves common filter attributes
      *
-     * Saves result, subregion and input attributes. The input attrinbute
+     * Saves result, subregion and input attributes. The input attribute
      * is only saved if required, maximal and actual input count equals 1.
      * All other filters have to write inputs on their own.
      */

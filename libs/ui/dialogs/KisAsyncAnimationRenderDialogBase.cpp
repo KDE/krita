@@ -121,7 +121,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         /**
          * Since this method can be called from the places where no
          * view manager is available, we need this manually crafted
-         * ugly construction to "try-lock-cance" the image.
+         * ugly construction to "try-lock-cancel" the image.
          */
 
         bool imageIsIdle = true;

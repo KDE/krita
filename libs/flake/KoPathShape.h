@@ -255,7 +255,7 @@ public:
     /**
      * @brief Returns the segment specified by a path point index
      *
-     * A semgent is defined by the point index of the first point in the segment.
+     * A segment is defined by the point index of the first point in the segment.
      * A segment contains the defined point and its following point. If the subpath is
      * closed and the and the pointIndex point to the last point in the subpath, the
      * following point is the first point in the subpath.
@@ -440,7 +440,7 @@ public:
      */
     virtual QString pathShapeId() const;
 
-    /// Returns a odf/svg string represenatation of the path data with the given matrix applied.
+    /// Returns a odf/svg string representation of the path data with the given matrix applied.
     QString toString(const QTransform &matrix = QTransform()) const;
 
     /// Returns the fill rule for the path object
@@ -499,7 +499,7 @@ protected:
      * @param sweepAngle the length of the angle
      * TODO add param to have angle of the ellipse
      * @param offset to the first point in the arc
-     * @param curvePoints a array which take the cuve points, pass a 'QPointF curvePoins[12]';
+     * @param curvePoints a array which take the curve points, pass a 'QPointF curvePoins[12]';
      *
      * @return number of points created by the curve
      */

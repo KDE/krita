@@ -288,7 +288,7 @@ qreal KarbonCalligraphyTool::calculateWidth(qreal pressure)
 
 qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed, const QPointF &newSpeed)
 {
-    // calculate the avarage of the speed (sum of the normalized values)
+    // calculate the average of the speed (sum of the normalized values)
     qreal oldLength = QLineF(QPointF(0, 0), oldSpeed).length();
     qreal newLength = QLineF(QPointF(0, 0), newSpeed).length();
     QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?

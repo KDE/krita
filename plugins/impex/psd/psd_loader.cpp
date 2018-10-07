@@ -238,7 +238,7 @@ KisImageBuilder_Result PSDLoader::decode(QIODevice *io)
                 QString compositeOp = psd_blendmode_to_composite_op(layerRecord->infoBlocks.sectionDividerBlendMode);
 
                 // Krita doesn't support pass-through blend
-                // mode. Instead it is just a property of a goupr
+                // mode. Instead it is just a property of a group
                 // layer, so flip it
                 if (compositeOp == COMPOSITE_PASS_THROUGH) {
                     compositeOp = COMPOSITE_OVER;
@@ -262,7 +262,7 @@ KisImageBuilder_Result PSDLoader::decode(QIODevice *io)
                 warnKrita << "WARNING: Provided PSD has unbalanced group "
                           << "layer markers. Some masks and/or layers can "
                           << "be lost while loading this file. Please "
-                          << "report a bug to Krita developes and attach "
+                          << "report a bug to Krita developers and attach "
                           << "this file to the bugreport\n"
                           << "    " << ppVar(layerRecord->layerName) << "\n"
                           << "    " << ppVar(layerRecord->infoBlocks.sectionDividerType) << "\n"

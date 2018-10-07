@@ -619,7 +619,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         /**
          * The alignment rule will be inverted while rendering the text in the text shape
-         * (accordign to the standard the alignment is defined not by "left" or "right",
+         * (according to the standard the alignment is defined not by "left" or "right",
          * but by "start" and "end", which inverts for rtl text)
          */
         Qt::Alignment blockAlignment = block.blockFormat().alignment();

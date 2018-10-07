@@ -76,7 +76,7 @@ public:
 
     /**
      * Set extra data that will be assigned to the command
-     * represecting this action. Using extra data has the following
+     * representing this action. Using extra data has the following
      * restrictions:
      *
      * 1) The \p data must be set *before* the stroke has been started.

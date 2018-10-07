@@ -126,7 +126,7 @@ public /* methods */:
     /**
      * @brief removeEntry
      * proper function to remove the colorsetentry at the given index.
-     * The consolidtes both removeentry and removegroup.
+     * The consolidates both removeentry and removegroup.
      * @param keepColors: This bool determines whether, when deleting a group,
      * the colors should be added to the default group. This is usually desirable,
      * so hence the default is true.

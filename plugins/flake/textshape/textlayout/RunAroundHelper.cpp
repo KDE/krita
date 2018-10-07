@@ -110,7 +110,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     if (isRightToLeft && line.naturalTextWidth() > m_textWidth) {
         // This can happen if spaces are added at the end of a line. Those spaces will not result in a
         // line-break. On left-to-right everything is fine and the spaces at the end are just not visible
-        // but on right-to-left we need to adust the position cause spaces at the end are displayed at
+        // but on right-to-left we need to adjust the position cause spaces at the end are displayed at
         // the beginning and we need to make sure that doesn't result in us cutting of text at the right side.
         qreal diff = line.naturalTextWidth() - m_textWidth;
         lineRectPart.setX(lineRectPart.x() - diff);

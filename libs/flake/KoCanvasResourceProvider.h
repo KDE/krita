@@ -45,7 +45,7 @@ class QSizeF;
  * for the most common ones.  All variables are always stored inside a QVariant
  * instance internally and you can always just use the resource() method to get
  * that directly.
- * The way to store arbitairy data objects that are stored as pointers you can use
+ * The way to store arbitrary data objects that are stored as pointers you can use
  * the following code snippets;
  * @code
  *  QVariant variant;

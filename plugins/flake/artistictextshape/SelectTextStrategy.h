@@ -32,11 +32,11 @@ public:
     SelectTextStrategy(ArtisticTextTool *textTool, int cursor);
     ~SelectTextStrategy() override;
 
-    // reimplemnted from KoInteractionStrategy
+    // reimplemented from KoInteractionStrategy
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
-    // reimplemnted from KoInteractionStrategy
+    // reimplemented from KoInteractionStrategy
     KUndo2Command *createCommand() override;
-    // reimplemnted from KoInteractionStrategy
+    // reimplemented from KoInteractionStrategy
     void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 private:

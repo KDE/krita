@@ -95,7 +95,7 @@ public:
     /// shows the preview converted to grayscale
     void setGrayscalePreview(bool grayscale);
 
-    /// sets the visibilty of tagging KlineEdits.
+    /// sets the visibility of tagging KlineEdits.
     void showTaggingBar(bool show);
 
     ///Set a proxy model with will be used to filter the resources

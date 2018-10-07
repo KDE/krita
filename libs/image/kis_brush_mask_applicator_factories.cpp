@@ -162,11 +162,11 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
                 //255 * n * (normeFade - 1) / (normeFade - n)
                 Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
 
-                // Mask in the inner circe of the mask
+                // Mask in the inner circle of the mask
                 Vc::float_m mask = vNormFade < vOne;
                 vFade.setZero(mask);
 
-                // Mask out the outer circe of the mask
+                // Mask out the outer circle of the mask
                 vFade(outsideMask) = vOne;
 
                 vFade.store(bufferPointer, Vc::Aligned);
@@ -240,15 +240,15 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             Vc::float_v fullFade = vAlphafactor * (  VcExtraMath::erf(valDist + vCenter) -  VcExtraMath::erf(valDist - vCenter));
 
             Vc::float_m mask;
-            // Mask in the inner circe of the mask
+            // Mask in the inner circle of the mask
             mask = fullFade < vZero;
             fullFade.setZero(mask);
 
-            // Mask the outter circle
+            // Mask the outer circle
             mask = fullFade > 254.974f;
             fullFade(mask) = vValMax;
 
-            // Mask (value - value), presicion errors.
+            // Mask (value - value), precision errors.
             Vc::float_v vFade = (vValMax - fullFade) / vValMax;
 
             // return original dist values before vFade transform
@@ -339,7 +339,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
                 alphaValueF * vCurvedData1);
 
             Vc::float_m mask;
-            // Mask in the inner circe of the mask
+            // Mask in the inner circle of the mask
             mask = fullFade < vZero;
             fullFade.setZero(mask);
 
@@ -452,7 +452,7 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
             vFade(fadeXMask) = fxrNorm;
             vFade(!fadeXMask && fadeYMask) = fyrNorm;
 
-            // Mask out the outer circe of the mask
+            // Mask out the outer circle of the mask
             vFade(outsideMask) = vOne;
             vFade.store(bufferPointer, Vc::Aligned);
         } else {
@@ -520,15 +520,15 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             Vc::float_m mask;
 
-            // Mask in the inner circe of the mask
+            // Mask in the inner circle of the mask
             mask = fullFade < vZero;
             fullFade.setZero(mask);
 
-            // Mask the outter circle
+            // Mask the outer circle
             mask = fullFade > 254.974f;
             fullFade(mask) = vValMax;
 
-            // Mask (value - value), presicion errors.
+            // Mask (value - value), precision errors.
             Vc::float_v vFade = fullFade / vValMax;
 
             // return original vValue values before vFade transform
@@ -627,15 +627,15 @@ FastRowProcessor::process<Vc::CurrentImplementation::current()>(float* buffer, i
 
             Vc::float_m mask;
 
-            // Mask in the inner circe of the mask
+            // Mask in the inner circle of the mask
             mask = fullFade < vZero;
             fullFade.setZero(mask);
 
-            // Mask the outter circle
+            // Mask the outer circle
             mask = fullFade > 254.974f;
             fullFade(mask) = vValMax;
 
-            // Mask (value - value), presicion errors.
+            // Mask (value - value), precision errors.
             Vc::float_v vFade = fullFade / vValMax;
 
             // return original vValue values before vFade transform

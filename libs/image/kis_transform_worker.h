@@ -95,7 +95,7 @@ public:
     /**
      * Returns a matrix of the transformation executed by the worker.
      * Resulting transformation has the following form (in Qt's matrix
-     * notation (all the matrices are trasposed)):
+     * notation (all the matrices are transposed)):
      *
      * transform = TS.inverted() * S * TS * SC * R * T
      *

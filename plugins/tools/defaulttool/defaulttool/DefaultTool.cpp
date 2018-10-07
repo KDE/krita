@@ -1184,7 +1184,7 @@ void DefaultTool::selectionTransform(int transformAction)
     const QTransform centerTrans = QTransform::fromTranslate(centerPoint.x(), centerPoint.y());
     const QTransform centerTransInv = QTransform::fromTranslate(-centerPoint.x(), -centerPoint.y());
 
-    // we also add selection to the list of trasformed shapes, so that its outline is updated correctly
+    // we also add selection to the list of transformed shapes, so that its outline is updated correctly
     QList<KoShape*> transformedShapes = editableShapes;
     transformedShapes << selection;
 

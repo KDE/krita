@@ -28,7 +28,7 @@
 #include "ui_KisWelcomePage.h"
 #include <QStandardItemModel>
 
-/// A widget for diplaying if no documents are open. This will display in the MDI area
+/// A widget for displaying if no documents are open. This will display in the MDI area
 class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcomePage
 {
     Q_OBJECT

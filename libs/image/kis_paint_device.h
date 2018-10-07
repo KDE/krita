@@ -317,7 +317,7 @@ public:
 public:
 
     /**
-     * Prepares the device for fastBitBlt opreration. It clears
+     * Prepares the device for fastBitBlt operation. It clears
      * the device, switches x,y shifts and colorspace if needed.
      * After this call fastBitBltPossible will return true.
      * May be used for initialization of temporary devices.

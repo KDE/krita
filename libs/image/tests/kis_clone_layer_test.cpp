@@ -316,7 +316,7 @@ void KisCloneLayerTest::testDuplicateGroup()
 
     /**
      * The newly created clone should now point to the *newly created*
-     * paint layer, not to the previos one.
+     * paint layer, not to the previous one.
      */
     QCOMPARE(KisNodeSP(newClone->copyFrom()), copyPaintLayer4);
 }

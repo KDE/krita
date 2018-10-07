@@ -232,7 +232,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
          this, SLOT(slotProposeCurrentColorToResourceManager()));
 
 
-    // confure GUI
+    // configure GUI
 
     d->ui = new Ui_KoFillConfigWidget();
     d->ui->setupUi(this);

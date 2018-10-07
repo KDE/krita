@@ -233,7 +233,7 @@ QString KoBasicF32HistogramProducer::positionToString(qreal pos) const
 
 qreal KoBasicF32HistogramProducer::maximalZoom() const
 {
-    // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
+    // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromise for the moment
     return 1.0 / 255.0;
 }
 
@@ -308,7 +308,7 @@ QString KoBasicF16HalfHistogramProducer::positionToString(qreal pos) const
 
 qreal KoBasicF16HalfHistogramProducer::maximalZoom() const
 {
-    // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromis for the moment
+    // XXX What _is_ the maximal zoom here? I don't think there is one with floats, so this seems a fine compromise for the moment
     return 1.0 / 255.0;
 }
 

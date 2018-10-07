@@ -374,8 +374,8 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
             intersection.manhattanLength() > maxSanePoint) {
 
             intersection = 0.5 * (pi1.pos() + pi2.pos());
-//            dbgKrita << "WARINING: there is no intersection point "
-//                     << "in the basic smoothing algoriths";
+//            dbgKrita << "WARNING: there is no intersection point "
+//                     << "in the basic smoothing algorithms";
         }
 
         controlTarget1 = intersection;

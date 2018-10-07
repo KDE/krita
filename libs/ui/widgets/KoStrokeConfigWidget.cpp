@@ -204,7 +204,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     : QWidget(parent)
     , d(new Private())
 {
-    // confure GUI
+    // configure GUI
     d->ui = new Ui_KoStrokeConfigWidget();
     d->ui->setupUi(this);
 

@@ -211,7 +211,7 @@ public:
         return (outXMask | outYMask);
     }
 
-    // Apply fader separatedly to avoid calculating vValue twice.
+    // Apply fader separately to avoid calculating vValue twice.
     void apply2DFader(Vc::float_v &vValue, Vc::float_m &excludeMask, Vc::float_v &xr, Vc::float_v &yr) const {
         const Vc::float_v vValMax(255.f);
 

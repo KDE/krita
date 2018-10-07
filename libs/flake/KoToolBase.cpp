@@ -403,7 +403,7 @@ bool KoToolBase::isInTextMode() const
 void KoToolBase::requestUndoDuringStroke()
 {
     /**
-     * Default implementation just cancells the stroke
+     * Default implementation just cancels the stroke
      */
     requestStrokeCancellation();
 }

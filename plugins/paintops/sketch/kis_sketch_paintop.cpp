@@ -61,7 +61,7 @@
 // to: i point - (offset * -random)  + random * 2
 // probability distance / thresholdDistnace
 
-// shaded: probabity : paint always - 0.0 density
+// shaded: probability : paint always - 0.0 density
 
 KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)

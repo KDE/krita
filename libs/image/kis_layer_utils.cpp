@@ -953,7 +953,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
-            // in two-layer mode we disable pass trhough only when the destination layer
+            // in two-layer mode we disable pass through only when the destination layer
             // is not a group layer
             applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);

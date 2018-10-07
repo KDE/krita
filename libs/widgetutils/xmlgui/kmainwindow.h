@@ -252,7 +252,7 @@ public:
      * of restoring and saving automatically. Make sure you call this
      * _after all_ your *bars have been created.
      *
-     * To make sure that KMainWindow propertly obtains the default
+     * To make sure that KMainWindow properly obtains the default
      * size of the window you should do the following:
      * - Remove hard coded resize() calls in the constructor or main, they
      *   should be removed in favor of letting the automatic resizing

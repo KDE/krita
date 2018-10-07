@@ -112,7 +112,7 @@ private:
     qreal m_kindAngle;
     // the center of the ellipse
     QPointF m_center;
-    // the radii of the ellips
+    // the radii of the ellipse
     QPointF m_radii;
     // the actual ellipse type
     EllipseType m_type;

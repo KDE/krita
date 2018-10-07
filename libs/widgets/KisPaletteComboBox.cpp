@@ -29,7 +29,7 @@
 #include "KisPaletteComboBox.h"
 
 KisPaletteComboBox::KisPaletteComboBox(QWidget *parent)
-    : QComboBox(parent)
+    : SqueezedComboBox(parent)
     , m_model(Q_NULLPTR)
 {
     setEditable(true);
@@ -93,7 +93,7 @@ void KisPaletteComboBox::slotPaletteChanged()
             if (!swatch.id().isEmpty()){
                 name = swatch.id() + " - " + swatch.name();
             }
-            addItem(QIcon(createColorSquare(swatch)), name);
+            addSqueezedItem(QIcon(createColorSquare(swatch)), name);
             posIdxMap[SwatchPosType(info.column, info.row)] = count() - 1;
             m_idxSwatchMap.push_back(swatch);
         }

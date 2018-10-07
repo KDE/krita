@@ -246,6 +246,8 @@ public Q_SLOTS:
 
     bool queryClose();
 
+    void slotScreenChanged();
+
 private Q_SLOTS:
     void slotImageNodeAdded(KisNodeSP node);
     void slotContinueAddNode(KisNodeSP newActiveNode);

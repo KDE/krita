@@ -2675,7 +2675,7 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
     const int newScreen = qApp->desktop()->screenNumber(e->pos());
 
     if (oldScreen != newScreen) {
-        KisConfigNotifier::instance()->notifyConfigChanged();
+        emit screenChanged();
     }
 }
 

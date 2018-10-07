@@ -60,6 +60,7 @@ public:
     ~KisCoordinatesConverter() override;
 
     void setCanvasWidgetSize(QSize size);
+    void setDevicePixelRatio(qreal value);
     void setImage(KisImageWSP image);
     void setDocumentOffset(const QPoint &offset);
 
@@ -147,6 +148,7 @@ public:
     QPointF widgetCenterPoint() const;
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
+    void imagePhysicalScale(qreal *scaleX, qreal *scaleY) const;
 
 private:
     friend class KisZoomAndPanTest;

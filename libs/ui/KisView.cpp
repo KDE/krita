@@ -251,6 +251,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceProvider *resourceManage
     d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
+    d->zoomManager.updateScreenResolution(this);
 }
 
 KisView::~KisView()
@@ -758,6 +759,11 @@ bool KisView::queryClose()
 
 }
 
+void KisView::slotScreenChanged()
+{
+    d->zoomManager.updateScreenResolution(this);
+}
+
 void KisView::resetImageSizeAndScroll(bool changeCentering,
                                       const QPointF &oldImageStillPoint,
                                       const QPointF &newImageStillPoint)
@@ -983,6 +989,7 @@ void KisView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
+    connect(d->viewManager->mainWindow(), SIGNAL(screenChanged()), SLOT(slotScreenChanged()));
     zoomManager()->updateImageBoundsSnapping();
 }
 

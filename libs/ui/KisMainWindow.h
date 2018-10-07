@@ -226,6 +226,9 @@ Q_SIGNALS:
 
     void guiLoadingFinished();
 
+    /// emitted when the window is migrated among different screens
+    void screenChanged();
+
 public Q_SLOTS:
 
     /**

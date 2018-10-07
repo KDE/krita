@@ -65,7 +65,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
 
 }
 
-void KisRemoteFileFetcher::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+void KisRemoteFileFetcher::downloadProgress(qint64 /*bytesReceived*/, qint64 /*bytesTotal*/)
 {
     //qDebug() << "bytesReceived" << bytesReceived << "bytesTotal" << bytesTotal;
 }

@@ -514,6 +514,8 @@ namespace KisLayerUtils {
             KisPainter gc(m_info->dstNode->paintDevice());
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
+                KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+                const bool inheritsAlpha = layer ? layer->alphaChannelDisabled() : false;
                 QRect rc = node->exactBounds() | m_info->image->bounds();
                 node->projectionPlane()->apply(&gc, rc);
             }
@@ -608,13 +610,22 @@ namespace KisLayerUtils {
     void RemoveNodeHelper::safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image) {
         const bool lastLayer = scanForLastLayer(image, nodes);
 
+        auto isNodeWeird = [] (KisNodeSP node) {
+            const bool normalCompositeMode = node->compositeOpId() == COMPOSITE_OVER;
+
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            const bool hasInheritAlpha = layer && layer->alphaChannelDisabled();
+            return !normalCompositeMode && !hasInheritAlpha;
+        };
+
         while (!nodes.isEmpty()) {
             KisNodeList::iterator it = nodes.begin();
 
             while (it != nodes.end()) {
                 if (!checkIsSourceForClone(*it, nodes)) {
                     KisNodeSP node = *it;
-                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, false, true));
+
+                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, !isNodeWeird(node), true));
                     it = nodes.erase(it);
                 } else {
                     ++it;

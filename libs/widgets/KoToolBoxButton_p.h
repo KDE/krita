@@ -32,7 +32,7 @@ public:
     void setHighlightColor();
 
 private Q_SLOTS:
-    void setDataFromToolAction();
+    void setDataFromToolAction(); // Generates tooltips.
 private:
     KoToolAction *m_toolAction;
 };

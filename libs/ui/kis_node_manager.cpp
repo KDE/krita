@@ -506,10 +506,10 @@ void KisNodeManager::slotTryRestartIsolatedMode()
     this->toggleIsolateMode(true);
 }
 
-void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
+KisNodeSP  KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDeviceSP copyFrom)
 {
     if (!m_d->view->blockUntilOperationsFinished(m_d->view->image())) {
-        return;
+        return 0;
     }
 
     KisNodeSP activeNode = this->activeNode();
@@ -517,36 +517,37 @@ void KisNodeManager::createNode(const QString & nodeType, bool quiet, KisPaintDe
         activeNode = m_d->view->image()->root();
     }
 
-    KIS_ASSERT_RECOVER_RETURN(activeNode);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(activeNode, 0);
 
     // XXX: make factories for this kind of stuff,
     //      with a registry
 
     if (nodeType == "KisPaintLayer") {
-        m_d->layerManager.addLayer(activeNode);
+        return m_d->layerManager.addPaintLayer(activeNode);
     } else if (nodeType == "KisGroupLayer") {
-        m_d->layerManager.addGroupLayer(activeNode);
+        return m_d->layerManager.addGroupLayer(activeNode);
     } else if (nodeType == "KisAdjustmentLayer") {
-        m_d->layerManager.addAdjustmentLayer(activeNode);
+        return m_d->layerManager.addAdjustmentLayer(activeNode);
     } else if (nodeType == "KisGeneratorLayer") {
-        m_d->layerManager.addGeneratorLayer(activeNode);
+        return m_d->layerManager.addGeneratorLayer(activeNode);
     } else if (nodeType == "KisShapeLayer") {
-        m_d->layerManager.addShapeLayer(activeNode);
+        return m_d->layerManager.addShapeLayer(activeNode);
     } else if (nodeType == "KisCloneLayer") {
-        m_d->layerManager.addCloneLayer(activeNode);
+        return m_d->layerManager.addCloneLayer(activeNode);
     } else if (nodeType == "KisTransparencyMask") {
-        m_d->maskManager.createTransparencyMask(activeNode, copyFrom, false);
+        return m_d->maskManager.createTransparencyMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFilterMask") {
-        m_d->maskManager.createFilterMask(activeNode, copyFrom, quiet, false);
+        return m_d->maskManager.createFilterMask(activeNode, copyFrom, quiet, false);
     } else if (nodeType == "KisColorizeMask") {
-        m_d->maskManager.createColorizeMask(activeNode);
+        return m_d->maskManager.createColorizeMask(activeNode);
     } else if (nodeType == "KisTransformMask") {
-        m_d->maskManager.createTransformMask(activeNode);
+        return m_d->maskManager.createTransformMask(activeNode);
     } else if (nodeType == "KisSelectionMask") {
-        m_d->maskManager.createSelectionMask(activeNode, copyFrom, false);
+        return m_d->maskManager.createSelectionMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFileLayer") {
-        m_d->layerManager.addFileLayer(activeNode);
+        return m_d->layerManager.addFileLayer(activeNode);
     }
+    return 0;
 }
 
 void KisNodeManager::createFromVisible()
@@ -568,7 +569,7 @@ KisLayerSP KisNodeManager::createPaintLayer()
         activeNode = m_d->view->image()->root();
     }
 
-    return m_d->layerManager.addLayer(activeNode);
+    return m_d->layerManager.addPaintLayer(activeNode);
 }
 
 void KisNodeManager::convertNode(const QString &nodeType)
@@ -590,11 +591,11 @@ void KisNodeManager::convertNode(const QString &nodeType)
         bool result = false;
 
         if (nodeType == "KisSelectionMask") {
-            result = m_d->maskManager.createSelectionMask(activeNode, copyFrom, true);
+            result = m_d->maskManager.createSelectionMask(activeNode, copyFrom, true).isNull();
         } else if (nodeType == "KisFilterMask") {
-            result = m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true);
+            result = m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true).isNull();
         } else if (nodeType == "KisTransparencyMask") {
-            result = m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true);
+            result = m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true).isNull();
         }
 
         m_d->commandsAdapter.endMacro();

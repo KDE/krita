@@ -38,6 +38,7 @@
 #include "kis_progress_widget.h"
 #include "kis_config.h"
 #include "KisPart.h"
+#include "kis_shape_layer.h"
 
 struct KisImportCatcher::Private
 {
@@ -102,13 +103,25 @@ void KisImportCatcher::slotLoadingFinished()
     importedImage->waitForDone();
 
     if (importedImage && importedImage->projection()->exactBounds().isValid()) {
-        if (m_d->layerType != "KisPaintLayer") {
-            m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection());
-        }
-        else {
+        if (m_d->layerType == "KisPaintLayer") {
             KisPaintDeviceSP dev = importedImage->projection();
             adaptClipToImageColorSpace(dev, m_d->view->image());
             m_d->importAsPaintLayer(dev);
+        }
+        else if (m_d->layerType == "KisShapeLayer") {
+            KisShapeLayerSP shapeLayer = dynamic_cast<KisShapeLayer*>(m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection()).data());
+            KisShapeLayerSP imported = dynamic_cast<KisShapeLayer*>(importedImage->rootLayer()->firstChild().data());
+
+            const QTransform thisInvertedTransform = shapeLayer->absoluteTransformation(0).inverted();
+
+            Q_FOREACH (KoShape *shape, imported->shapes()) {
+                KoShape *clonedShape = shape->cloneShape();
+                clonedShape->setTransformation(shape->absoluteTransformation(0) * thisInvertedTransform);
+                shapeLayer->addShape(clonedShape);
+            }
+        }
+        else {
+            m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection());
         }
     }
 

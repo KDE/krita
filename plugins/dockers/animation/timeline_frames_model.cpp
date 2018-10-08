@@ -671,15 +671,15 @@ bool TimelineFramesModel::dropMimeDataExtended(const QMimeData *data, Qt::DropAc
 
         KIS_SAFE_ASSERT_RECOVER(srcNode) { continue; }
 
-        const QModelIndex dstIndex = this->index(srcRow + offset.y(), srcColumn + offset.x());
-        if (!dstIndex.isValid()) continue;
+        const QModelIndex dstRowIndex = this->index(srcRow + offset.y(), 0);
+        if (!dstRowIndex.isValid()) continue;
 
-        KisNodeSP dstNode = nodeAt(dstIndex);
+        KisNodeSP dstNode = nodeAt(dstRowIndex);
         KIS_SAFE_ASSERT_RECOVER(dstNode) { continue; }
 
         Q_FOREACH (KisKeyframeChannel *channel, srcNode->keyframeChannels().values()) {
             KisAnimationUtils::FrameItem srcItem(srcNode, channel->id(), srcColumn);
-            KisAnimationUtils::FrameItem dstItem(dstNode, channel->id(), dstIndex.column());
+            KisAnimationUtils::FrameItem dstItem(dstNode, channel->id(), srcColumn + offset.x());
             frameMoves << std::make_pair(srcItem, dstItem);
         }
     }

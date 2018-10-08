@@ -170,7 +170,7 @@ public Q_SLOTS:
     void slotTryRestartIsolatedMode();
 
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
-    void createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
+    KisNodeSP createNode(const QString& nodeType, bool quiet = false, KisPaintDeviceSP copyFrom = 0);
     void convertNode(const QString &nodeType);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);

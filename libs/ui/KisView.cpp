@@ -303,7 +303,7 @@ void KisView::setShowFloatingMessage(bool show)
     d->showFloatingMessage = show;
 }
 
-void KisView::showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
+void KisView::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if (!d->viewManager) return;
 

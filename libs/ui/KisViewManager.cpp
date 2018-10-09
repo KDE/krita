@@ -1287,7 +1287,7 @@ void KisViewManager::guiUpdateTimeout()
 void KisViewManager::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if (!d->currentImageView) return;
-    d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
+    d->currentImageView->showFloatingMessage(message, icon, timeout, priority, alignment);
 
     emit floatingMessageRequested(message, icon.name());
 }

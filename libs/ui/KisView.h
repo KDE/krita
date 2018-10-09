@@ -211,7 +211,9 @@ public:
     bool isCurrent() const;
 
     void setShowFloatingMessage(bool show);
-    void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
+    void showFloatingMessage(const QString &message, const QIcon& icon, int timeout = 4500,
+                             KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
+                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
     bool canvasIsMirrored() const;
 

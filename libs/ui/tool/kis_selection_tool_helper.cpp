@@ -60,8 +60,8 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 }
 
 struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
-    LazyInitGlobalSelection(KisViewManager *view) : m_view(view) {}
-    KisViewManager *m_view;
+    LazyInitGlobalSelection(KisView *view) : m_view(view) {}
+    KisView *m_view;
 
     KUndo2Command* paint() override {
         return !m_view->selection() ?
@@ -71,7 +71,7 @@ struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
 
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
-    KisViewManager* view = m_canvas->viewManager();
+    KisView* view = m_canvas->imageView();
 
     if (selection->selectedExactRect().isEmpty()) {
         m_canvas->viewManager()->selectionManager()->deselect();
@@ -87,12 +87,12 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     applicator.applyCommand(new LazyInitGlobalSelection(view));
 
     struct ApplyToPixelSelection : public KisTransactionBasedCommand {
-        ApplyToPixelSelection(KisViewManager *view,
+        ApplyToPixelSelection(KisView *view,
                               KisPixelSelectionSP selection,
                               SelectionAction action) : m_view(view),
                                                         m_selection(selection),
                                                         m_action(action) {}
-        KisViewManager *m_view;
+        KisView *m_view;
         KisPixelSelectionSP m_selection;
         SelectionAction m_action;
 
@@ -152,7 +152,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape, SelectionAction a
 
 void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, SelectionAction action)
 {
-    KisViewManager* view = m_canvas->viewManager();
+    KisView *view = m_canvas->imageView();
 
     if (view->image()->wrapAroundModePermitted()) {
         view->showFloatingMessage(
@@ -171,8 +171,8 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
     applicator.applyCommand(new LazyInitGlobalSelection(view));
 
     struct ClearPixelSelection : public KisTransactionBasedCommand {
-        ClearPixelSelection(KisViewManager *view) : m_view(view) {}
-        KisViewManager *m_view;
+        ClearPixelSelection(KisView *view) : m_view(view) {}
+        KisView *m_view;
 
         KUndo2Command* paint() override {
 
@@ -190,12 +190,12 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
     }
 
     struct AddSelectionShape : public KisTransactionBasedCommand {
-        AddSelectionShape(KisViewManager *view, KoShape* shape, SelectionAction action)
+        AddSelectionShape(KisView *view, KoShape* shape, SelectionAction action)
             : m_view(view),
               m_shape(shape),
               m_action(action) {}
 
-        KisViewManager *m_view;
+        KisView *m_view;
         KoShape* m_shape;
         SelectionAction m_action;
 

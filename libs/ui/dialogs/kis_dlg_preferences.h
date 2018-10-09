@@ -133,7 +133,6 @@ public:
     WdgShortcutSettings  *m_page;
     QScopedPointer<KisActionsSnapshot> m_snapshot;
 
-
 public Q_SLOTS:
     void saveChanges();
     void cancelChanges();
@@ -328,6 +327,8 @@ protected:
 
     KisDlgPreferences(QWidget *parent = 0, const char *name = 0);
     ~KisDlgPreferences() override;
+
+    void showEvent(QShowEvent *event) override;
 
 protected:
 

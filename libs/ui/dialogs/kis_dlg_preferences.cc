@@ -1129,7 +1129,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     Q_UNUSED(name);
     setWindowTitle(i18n("Configure Krita"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
-    button(QDialogButtonBox::Ok)->setDefault(true);
 
     setFaceType(KPageDialog::Tree);
 
@@ -1259,6 +1258,16 @@ KisDlgPreferences::~KisDlgPreferences()
 {
     KisConfig cfg;
     cfg.writeEntry<QString>("KisDlgPreferences/CurrentPage", currentPage()->objectName());
+}
+
+void KisDlgPreferences::showEvent(QShowEvent *event){
+    KPageDialog::showEvent(event);
+    button(QDialogButtonBox::Cancel)->setAutoDefault(false);
+    button(QDialogButtonBox::Ok)->setAutoDefault(false);
+    button(QDialogButtonBox::RestoreDefaults)->setAutoDefault(false);
+    button(QDialogButtonBox::Cancel)->setDefault(false);
+    button(QDialogButtonBox::Ok)->setDefault(false);
+    button(QDialogButtonBox::RestoreDefaults)->setDefault(false);
 }
 
 void KisDlgPreferences::slotDefault()

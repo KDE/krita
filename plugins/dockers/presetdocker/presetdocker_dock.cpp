@@ -66,16 +66,17 @@ void PresetDockerDock::setCanvas(KoCanvasBase *canvas)
 
     connect(m_canvas->viewManager()->mainWindow(), SIGNAL(themeChanged()), m_presetChooser, SLOT(slotThemeChanged()));
 
+    canvasResourceChanged();
 }
 
 void PresetDockerDock::canvasResourceChanged(int /*key*/, const QVariant& /*v*/)
 {
     if (m_canvas && m_canvas->resourceManager()) {
-        sender()->blockSignals(true);
+        if (sender()) sender()->blockSignals(true);
         KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
         if(preset)
             m_presetChooser->canvasResourceChanged(preset);
-        sender()->blockSignals(false);
+        if (sender()) sender()->blockSignals(false);
         m_presetChooser->updateViewSettings();
     }
 }

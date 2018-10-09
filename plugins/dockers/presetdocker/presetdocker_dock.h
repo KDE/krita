@@ -33,9 +33,7 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override { m_canvas = 0; setEnabled(false);}
 public Q_SLOTS:
-    void canvasResourceChanged(int key, const QVariant& v);
-
-private Q_SLOTS:
+    void canvasResourceChanged(int key = 0, const QVariant& v = QVariant());
 private:
     QPointer<KisCanvas2> m_canvas;
     KisPaintOpPresetsChooserPopup* m_presetChooser;

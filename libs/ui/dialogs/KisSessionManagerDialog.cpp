@@ -72,6 +72,8 @@ void KisSessionManagerDialog::slotNewSession()
 
     server->addResource(session);
 
+    KisPart::instance()->setCurrentSession(session);
+
     updateSessionList();
 }
 

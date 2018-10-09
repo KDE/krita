@@ -42,6 +42,10 @@ public:
     KisFrameSet instancesWithin(KisKeyframeSP original, KisTimeSpan range) const;
 
 private:
+    friend class KisKeyframeChannel;
+    void setFirstKeyframe(KisKeyframeSP keyframe);
+    void setLastKeyframe(KisKeyframeSP keyframe);
+
     KisKeyframeSP m_firstSourceKeyframe, m_lastSourceKeyframe;
     QVector<QWeakPointer<KisRepeatFrame>> m_repeats;
 };

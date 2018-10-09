@@ -32,6 +32,7 @@
 class KisFrameSet;
 class KisTimeSpan;
 class KisAnimationCycle;
+class KisRepeatFrame;
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
@@ -177,6 +178,8 @@ private:
 
     void addCycle(QSharedPointer<KisAnimationCycle> cycle);
     void removeCycle(QSharedPointer<KisAnimationCycle> cycle);
+
+    KisKeyframeSP loadRepeatFrame(const QDomElement &keyframeNode, const QMap<int, QSharedPointer<KisAnimationCycle>> &cyclesByFirstKeyframe);
 
     friend class KisMoveFrameCommand;
     friend class KisReplaceKeyframeCommand;

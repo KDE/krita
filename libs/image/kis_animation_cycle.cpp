@@ -17,13 +17,24 @@
  */
 
 #include "kis_animation_cycle.h"
+#include <kis_pointer_utils.h>
 #include "kis_time_range.h"
 #include "kis_keyframe_channel.h"
 
 KisAnimationCycle::KisAnimationCycle(KisKeyframeSP firstKeyframe, KisKeyframeSP lastKeyframe)
         : m_firstSourceKeyframe(firstKeyframe)
-          , m_lastSourceKeyframe(lastKeyframe)
+        , m_lastSourceKeyframe(lastKeyframe)
 {}
+
+void KisAnimationCycle::setFirstKeyframe(KisKeyframeSP keyframe)
+{
+    m_firstSourceKeyframe = keyframe;
+}
+
+void KisAnimationCycle::setLastKeyframe(KisKeyframeSP keyframe)
+{
+    m_lastSourceKeyframe = keyframe;
+}
 
 KisKeyframeSP KisAnimationCycle::firstSourceKeyframe() const
 {
@@ -119,9 +130,11 @@ KisFrameSet KisAnimationCycle::instancesWithin(KisKeyframeSP original, KisTimeSp
 }
 
 
-KisKeyframeSP KisRepeatFrame::cloneFor(KisKeyframeChannel*) const
+KisKeyframeSP KisRepeatFrame::cloneFor(KisKeyframeChannel *channel) const
 {
-    return KisKeyframeSP(); // TODO
+    const int cycleBeginTime = m_cycle->firstSourceKeyframe()->time();
+    QSharedPointer<KisAnimationCycle> targetCycle = channel->cycleAt(cycleBeginTime);
+    return toQShared(new KisRepeatFrame(channel, time(), targetCycle));
 }
 
 bool KisRepeatFrame::isRepeat(KisKeyframeSP keyframe)

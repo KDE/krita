@@ -26,7 +26,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -399,7 +399,7 @@
             <item>
              <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
               <property name="text">
-               <string>In Tool&amp;bar</string>
+               <string>I&amp;n Toolbar</string>
               </property>
               <property name="checked">
                <bool>true</bool>

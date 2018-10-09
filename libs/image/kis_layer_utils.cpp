@@ -1246,6 +1246,14 @@ namespace KisLayerUtils {
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
         if (!invisibleNodes.isEmpty()) {
+            /* If the putAfter node is invisible,
+             * we should instead pick one of the nodes
+             * to be merged to avoid a null putAfter.
+             */
+            if (!putAfter->visible()){
+                putAfter = mergedNodes.first();
+            }
+
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),
@@ -1296,6 +1304,7 @@ namespace KisLayerUtils {
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);
             }
+
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, true));
         }
 

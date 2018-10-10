@@ -27,9 +27,9 @@
 
 #include "ktoggletoolbaraction.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QEvent>
-#include <QtCore/QPointer>
+#include <QByteArray>
+#include <QEvent>
+#include <QPointer>
 
 #include <klocalizedstring.h>
 

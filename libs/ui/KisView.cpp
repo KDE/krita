@@ -104,7 +104,7 @@ class Q_DECL_HIDDEN KisView::Private
 public:
     Private(KisView *_q,
             KisDocument *document,
-            KoCanvasResourceManager *resourceManager,
+            KoCanvasResourceProvider *resourceManager,
             KActionCollection *actionCollection)
         : actionCollection(actionCollection)
         , viewConverter()
@@ -206,7 +206,7 @@ public:
 
 };
 
-KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent)
+KisView::KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent)
     : QWidget(parent)
     , d(new Private(this, document, resourceManager, actionCollection))
 {
@@ -251,6 +251,7 @@ KisView::KisView(KisDocument *document, KoCanvasResourceManager *resourceManager
     d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
+    d->zoomManager.updateScreenResolution(this);
 }
 
 KisView::~KisView()
@@ -302,7 +303,7 @@ void KisView::setShowFloatingMessage(bool show)
     d->showFloatingMessage = show;
 }
 
-void KisView::showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
+void KisView::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if (!d->viewManager) return;
 
@@ -568,7 +569,7 @@ void KisView::dropEvent(QDropEvent *event)
                         tmp = new QTemporaryFile();
                         tmp->setAutoRemove(true);
                         if (!fetcher.fetchFile(url, tmp)) {
-                            qDebug() << "Fetching" << url << "failed";
+                            qWarning() << "Fetching" << url << "failed";
                             continue;
                         }
                         url = url.fromLocalFile(tmp->fileName());
@@ -756,6 +757,11 @@ bool KisView::queryClose()
 
     return true;
 
+}
+
+void KisView::slotScreenChanged()
+{
+    d->zoomManager.updateScreenResolution(this);
 }
 
 void KisView::resetImageSizeAndScroll(bool changeCentering,
@@ -983,6 +989,7 @@ void KisView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
+    connect(d->viewManager->mainWindow(), SIGNAL(screenChanged()), SLOT(slotScreenChanged()));
     zoomManager()->updateImageBoundsSnapping();
 }
 
@@ -1007,7 +1014,7 @@ void KisView::slotImageResolutionChanged()
     // update KoUnit value for the document
     if (resourceProvider()) {
         resourceProvider()->resourceManager()->
-                setResource(KoCanvasResourceManager::Unit, d->canvas.unit());
+                setResource(KoCanvasResourceProvider::Unit, d->canvas.unit());
     }
 }
 

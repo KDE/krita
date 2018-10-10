@@ -17,8 +17,8 @@
  */
 #include <KisSessionResource.h>
 #include <KisResourceServerProvider.h>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QMessageBox>
+#include <QInputDialog>
+#include <QMessageBox>
 #include <KisPart.h>
 #include "KisSessionManagerDialog.h"
 
@@ -71,6 +71,8 @@ void KisSessionManagerDialog::slotNewSession()
     session->storeCurrentWindows();
 
     server->addResource(session);
+
+    KisPart::instance()->setCurrentSession(session);
 
     updateSessionList();
 }

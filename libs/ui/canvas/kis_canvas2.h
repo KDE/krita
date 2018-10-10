@@ -77,7 +77,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc);
+    KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisView *view, KoShapeControllerBase *sc);
 
     ~KisCanvas2() override;
 
@@ -222,7 +222,7 @@ public: // KisCanvas2 methods
     QRect regionOfInterest() const;
 
     /**
-     * Set aftificial limit outside which the image will not be rendered
+     * Set artificial limit outside which the image will not be rendered
      * \p rc is measured in image pixels
      */
     void setRenderingLimit(const QRect &rc);

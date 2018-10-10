@@ -23,7 +23,7 @@
 #include <kritawidgetutils_export.h>
 #include <ksharedconfig.h>
 
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QExplicitlySharedDataPointer>
 
 #include <QPalette>
 

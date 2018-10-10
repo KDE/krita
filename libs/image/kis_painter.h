@@ -451,7 +451,7 @@ public:
      * If savedDist is less than zero, the brush is painted at pos1 before being
      * painted along the line using the spacing setting.
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
-     * because the currenlty set brush has a spacing greater than that distance.
+     * because the currently set brush has a spacing greater than that distance.
      */
     void paintLine(const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2,
@@ -462,7 +462,7 @@ public:
      * If savedDist is less than zero, the brush is painted at pos1 before being
      * painted along the curve using the spacing setting.
      * @return the drag distance, that is the remains of the distance between p1 and p2 not covered
-     * because the currenlty set brush has a spacing greater than that distance.
+     * because the currently set brush has a spacing greater than that distance.
      */
     void paintBezierCurve(const KisPaintInformation &pi1,
                           const QPointF &control1,

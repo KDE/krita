@@ -108,7 +108,7 @@ void KisParseSpinBoxesTest::testDoubleParseProblem()
 
         spinBox.setValue(0.0);
 
-        QVERIFY2(spinBox.isLastValid(), QString("SpinBox unsable to recover error free state after a value reset.")
+        QVERIFY2(spinBox.isLastValid(), QString("SpinBox unable to recover error free state after a value reset.")
                  .toStdString().c_str());
 
         spinBox.setValue(0);
@@ -260,7 +260,7 @@ void KisParseSpinBoxesTest::testIntParseProblem()
 
         spinBox.setValue(0);
 
-        QVERIFY2(spinBox.isLastValid(), QString("SpinBox unsable to recover error free state after a value reset.")
+        QVERIFY2(spinBox.isLastValid(), QString("SpinBox unable to recover error free state after a value reset.")
                  .toStdString().c_str());
 
         spinBox.setValue(0);

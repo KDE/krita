@@ -50,7 +50,7 @@ struct KisLodAvailabilityWidget::Private
     QPushButton *btnLod;
     QScopedPointer<QMenu> thresholdMenu;
     KisDoubleSliderSpinBox *thresholdSlider = 0;
-    KoCanvasResourceManager *resourceManager;
+    KoCanvasResourceProvider *resourceManager;
 
     KisPaintopLodLimitations limitations;
     bool thresholdSupported = true;
@@ -238,7 +238,7 @@ void KisLodAvailabilityWidget::slotUserChangedSize(qreal value)
     setLimitations(m_d->limitations);
 }
 
-void KisLodAvailabilityWidget::setCanvasResourceManager(KoCanvasResourceManager *resourceManager)
+void KisLodAvailabilityWidget::setCanvasResourceManager(KoCanvasResourceProvider *resourceManager)
 {
     m_d->resourceManager = resourceManager;
 }

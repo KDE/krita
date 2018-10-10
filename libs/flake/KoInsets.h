@@ -37,11 +37,12 @@ public:
      * @param bottom the inset at the bottom
      * @param right the inset at the right
      */
-    KoInsets(qreal top, qreal left, qreal bottom, qreal right) {
-        this->top = top;
-        this->left = left;
-        this->bottom = bottom;
-        this->right = right;
+    KoInsets(qreal top, qreal left, qreal bottom, qreal right)
+    : top(top)
+    , bottom(bottom)
+    , left(left)
+    , right(right)
+    {
     }
     /**
      * Constructor.

@@ -227,7 +227,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void resizeImage(const QRect& newRect);
 
@@ -243,7 +243,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void cropImage(const QRect& newRect);
 
@@ -258,7 +258,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void cropNode(KisNodeSP node, const QRect& newRect);
 
@@ -271,7 +271,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterStrategy *filterStrategy);
 
@@ -283,7 +283,7 @@ public:
      *
      * Please note that the actual operation starts asynchronously in
      * a background, so you cannot expect the image having new size
-     * right after ths call.
+     * right after this call.
      */
     void scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
 
@@ -587,7 +587,7 @@ public:
     vKisAnnotationSP_it endAnnotations();
 
     /**
-     * Called before the image is delted and sends the sigAboutToBeDeleted signal
+     * Called before the image is deleted and sends the sigAboutToBeDeleted signal
      */
     void notifyAboutToBeDeleted();
 
@@ -1054,7 +1054,7 @@ public Q_SLOTS:
 
     /**
      * Same as requestStrokeEnd() but is called by view manager when
-     * the current node is changed. Use to dintinguish
+     * the current node is changed. Use to distinguish
      * sigStrokeEndRequested() and
      * sigStrokeEndRequestedActiveNodeFiltered() which are used by
      * KisNodeJugglerCompressed

@@ -56,7 +56,7 @@ const QString ABR_WET_EDGES = "Wtdg";
 const QString ABR_NOISE = "Nose";
 const QString ABR_AIRBRUSH = "Rpt "; // repeat
 
-// TODO: if string comaprisons would be slow, convert it to enum
+// TODO: if string comparisons would be slow, convert it to enum
 enum enumObjectTypes {BRUSH_PRESET, BRUSH, SIZE_VARIANCE, ANGLE_DYNAMICS, ROUNDNESS_DYNAMICS, DUAL_BRUSH, COUNT_DYNAMICS, SCATTER_DYNAMICS, BRUSH_GROUP};
 const QString OBJECT_NAME_BRUSH_PRESET = "";
 const QString OBJECT_NAME_BRUSH = "Brsh";

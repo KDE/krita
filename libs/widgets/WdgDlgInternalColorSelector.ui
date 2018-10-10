@@ -141,7 +141,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="KisPopupButton" name="bnColorsetChooser">
+          <widget class="KisPopupButton" name="bnPaletteChooser">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -160,7 +160,7 @@
           </widget>
          </item>
          <item>
-          <widget class="SqueezedComboBox" name="cmbNameList">
+          <widget class="KisPaletteComboBox" name="cmbNameList">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -218,11 +218,6 @@
    <header location="global">kis_palette_view.h</header>
   </customwidget>
   <customwidget>
-   <class>SqueezedComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">squeezedcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisSpinboxColorSelector</class>
    <extends>QWidget</extends>
    <header>kis_spinbox_color_selector.h</header>
@@ -239,6 +234,11 @@
    <extends>QWidget</extends>
    <header>KoColorPatch.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPaletteComboBox</class>
+   <extends>QComboBox</extends>
+   <header>KisPaletteComboBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

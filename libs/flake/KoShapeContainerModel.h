@@ -155,8 +155,8 @@ public:
      * to inform the container of such a change.  The change has already happened at the
      * time this method is called.
      * The base implementation notifies the grand parent of the shape that there was a
-     * change in a shape. A reimplentation if this function should call this method when
-     * overwriding the function.
+     * change in a shape. A reimplementation if this function should call this method when
+     * overriding the function.
      *
      * @param shape the shape that has been changed
      * @param type this enum shows which change the shape has had.

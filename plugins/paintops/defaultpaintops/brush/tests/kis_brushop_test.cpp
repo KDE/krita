@@ -82,7 +82,7 @@ public:
 
         KisPainter gc(paint1->paintDevice());
 
-        QScopedPointer<KoCanvasResourceManager> manager(
+        QScopedPointer<KoCanvasResourceProvider> manager(
             utils::createResourceManager(image, 0, m_presetFileName));
 
         KisPaintOpPresetSP preset =

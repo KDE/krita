@@ -196,6 +196,11 @@ public Q_SLOTS:
      */
     void intersect(Selection *selection);
 
+        /**
+     * Intersect with the inverse of the given selection with this selection.
+     */
+    void symmetricdifference(Selection *selection);
+
     /**
      * @brief pixelData reads the given rectangle from the Selection's mask and returns it as a
      * byte array. The pixel data starts top-left, and is ordered row-first.

@@ -40,7 +40,7 @@
 #include "KoResourceSelector.h"
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShape.h>
 #include <KoShapeController.h>
@@ -232,7 +232,7 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
          this, SLOT(slotProposeCurrentColorToResourceManager()));
 
 
-    // confure GUI
+    // configure GUI
 
     d->ui = new Ui_KoFillConfigWidget();
     d->ui->setupUi(this);
@@ -366,10 +366,10 @@ void KoFillConfigWidget::slotUpdateFillTitle()
 
 void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &value)
 {
-    if ((key == KoCanvasResourceManager::ForegroundColor && d->fillVariant == KoFlake::Fill) ||
-        (key == KoCanvasResourceManager::BackgroundColor &&
+    if ((key == KoCanvasResourceProvider::ForegroundColor && d->fillVariant == KoFlake::Fill) ||
+        (key == KoCanvasResourceProvider::BackgroundColor &&
          d->fillVariant == KoFlake::StrokeFill && !d->noSelectionTrackingMode) ||
-        (key == KoCanvasResourceManager::ForegroundColor && d->noSelectionTrackingMode)) {
+        (key == KoCanvasResourceProvider::ForegroundColor && d->noSelectionTrackingMode)) {
 
         KoColor color = value.value<KoColor>();
 
@@ -383,7 +383,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
 
             d->colorAction->setCurrentColor(color);
             d->colorChangedCompressor.start();
-        } else if (checkedId == Gradient && key == KoCanvasResourceManager::ForegroundColor) {
+        } else if (checkedId == Gradient && key == KoCanvasResourceProvider::ForegroundColor) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
     } else if (key == KisCanvasResourceProvider::CurrentGradient) {
@@ -509,12 +509,12 @@ void KoFillConfigWidget::slotProposeCurrentColorToResourceManager()
 
     bool hasColor = false;
     KoColor color;
-    KoCanvasResourceManager::CanvasResource colorSlot = KoCanvasResourceManager::ForegroundColor;
+    KoCanvasResourceProvider::CanvasResource colorSlot = KoCanvasResourceProvider::ForegroundColor;
 
 
     if (checkedId == Solid) {
         if (d->fillVariant == KoFlake::StrokeFill) {
-            colorSlot = KoCanvasResourceManager::BackgroundColor;
+            colorSlot = KoCanvasResourceProvider::BackgroundColor;
         }
         color = d->colorAction->currentKoColor();
         hasColor = true;
@@ -702,12 +702,12 @@ void KoFillConfigWidget::loadCurrentFillFromResourceServer()
 {
     {
         KoColor color = d->canvas->resourceManager()->backgroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceManager::BackgroundColor, QVariant::fromValue(color));
+        slotCanvasResourceChanged(KoCanvasResourceProvider::BackgroundColor, QVariant::fromValue(color));
     }
 
     {
         KoColor color = d->canvas->resourceManager()->foregroundColor();
-        slotCanvasResourceChanged(KoCanvasResourceManager::ForegroundColor, QVariant::fromValue(color));
+        slotCanvasResourceChanged(KoCanvasResourceProvider::ForegroundColor, QVariant::fromValue(color));
     }
 
     Q_FOREACH (QAbstractButton *button, d->group->buttons()) {

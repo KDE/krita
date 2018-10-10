@@ -43,7 +43,7 @@ class KisSizeGroupPrivate;
  * widget can be in one, and only one, KisSizeGroup at time.
  *
  * NOTE: Added widgets in size groups must be laid out inside of a valid
- * layout. The current implementation sopports widgets laid out inside of
+ * layout. The current implementation supports widgets laid out inside of
  * QGridLayout, QFormLayout and QBoxLayout. If the parent widget layout is not
  * one of them, then the group size will not affect the widget size.
  */

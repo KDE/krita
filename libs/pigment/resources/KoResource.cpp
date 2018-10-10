@@ -55,9 +55,7 @@ KoResource::~KoResource()
 
 KoResource::KoResource(const KoResource &rhs)
     : d(new Private(*rhs.d))
-{
-    qDebug() << ">>>>>>>>>>>>>>>>>>" << filename() << name() << valid();
-}
+{ }
 
 bool KoResource::saveToDevice(QIODevice *dev) const
 {

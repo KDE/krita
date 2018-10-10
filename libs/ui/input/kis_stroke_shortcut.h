@@ -33,7 +33,7 @@ class QPointF;
  *
  * Idle <-> Ready <-> Running
  *
- * The possibility of trasition between Idle <-> Ready is defined
+ * The possibility of transition between Idle <-> Ready is defined
  * with a matchReady() method. The transition Ready <-> Running is
  * defined by matchBegin(). The Ready state is used for showing the
  * user the cursor of the upcoming action and the Running state shows

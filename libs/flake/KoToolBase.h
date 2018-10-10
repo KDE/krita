@@ -185,7 +185,7 @@ public:
      * able to support complex input method operations as support for surrounding
      * text and reconversions.
      * Default implementation returns simple defaults, for tools that want to provide
-     * a more responsive text entry experience for CJK languages it would be good to reimplemnt.
+     * a more responsive text entry experience for CJK languages it would be good to reimplement.
      * @param query specifies which property is queried.
      * @param converter the view converter for the current canvas.
      */

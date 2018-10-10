@@ -47,7 +47,7 @@ class KoSvgTextChunkShapeLayoutInterface;
  *
  * WARNING: beware the difference between "svg-text-chunk" and
  * KoSvgTextChunkShape! The chunk shape is **not** a "text chunk" in SVG's
- * definition. Accrding to SVG, "text chunk" is a set of characters anchored to
+ * definition. According to SVG, "text chunk" is a set of characters anchored to
  * a specific absolute position on canvas. And KoSvgTextChunkShape is just one
  * <tspan> or <text> element. Obviously, one <tspan> can contain multiple "text
  * chunks" and, vice versa, a "text chunk" can spread onto multiple <span>'s.
@@ -101,7 +101,7 @@ public:
      * or not. That is not a problem for normal shapes, but it cannot work for
      * text shapes. The text has different inheritance rules: if the parent
      * text chunk has a gradient fill, its inheriting descendants will
-     * **smoothly continue** this grandient. They will not start a new gradient
+     * **smoothly continue** this gradient. They will not start a new gradient
      * in their local coordinate system.
      *
      * Therefore, after loading, the loading code calls

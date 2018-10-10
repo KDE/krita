@@ -29,7 +29,7 @@ void blockWithFeedback(KisImageSP image)
 {
     if (!image) return;
 
-    // TODO1: find the window corrsponding to the awaited image!
+    // TODO1: find the window corresponding to the awaited image!
     // TODO2: move blocking code from KisViewManager here
     KisMainWindow *window = KisPart::instance()->currentMainwindow();
     if (!window) return;

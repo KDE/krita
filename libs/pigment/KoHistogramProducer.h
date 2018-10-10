@@ -51,7 +51,7 @@ class KRITAPIGMENT_EXPORT KoHistogramProducer
 {
 public:
     KoHistogramProducer() : m_skipTransparent(true), m_skipUnselected(true) {}
-    virtual ~KoHistogramProducer() { qDebug() << "removing KoHistogramProducer"; }
+    virtual ~KoHistogramProducer() {}
 
     // Methods to change the bins
 
@@ -132,7 +132,7 @@ public:
     KoHistogramProducerFactoryRegistry();
     ~KoHistogramProducerFactoryRegistry() override;
     static KoHistogramProducerFactoryRegistry* instance();
-    /// returns a list, sorted by preferrence: higher preferance comes first
+    /// returns a list, sorted by preference: higher preference comes first
     QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace, bool isStrict=false) const;
 
 private:

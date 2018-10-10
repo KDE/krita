@@ -22,8 +22,8 @@
 #define KIS_TABLET_SUPPORT_WIN_P_H
 
 
-#include <QtCore/QVector>
-#include <QtCore/QPointF>
+#include <QVector>
+#include <QPointF>
 #include <QMap>
 #include <QRect>
 

@@ -616,7 +616,6 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
                              shapeRect,
                              documentResources->shapeController()->pixelsPerInch());
 
-    shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(QColor(Qt::black))));
     shape->setPosition(shapeRect.topLeft());
 
     return shape;

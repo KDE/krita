@@ -65,6 +65,7 @@ protected:
 private Q_SLOTS:
 
     void showEditor();
+    void slotTextEditorClosed();
     void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated);
 
     /**

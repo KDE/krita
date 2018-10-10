@@ -427,7 +427,7 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
                 p.isGood = true;
                 return p;
             } else {
-                Q_ASSERT(!node2path.contains(endNode));   // That would be a total fuck up if there are two vertices between two nodes
+                //Q_ASSERT(!node2path.contains(endNode));   // That would be a total fuck up if there are two vertices between two nodes
                 node2path.insert(endNode, p);
                 possiblePaths.append(p);
             }

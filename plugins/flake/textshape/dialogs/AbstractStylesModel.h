@@ -31,7 +31,7 @@ class QImage;
 
 /** This class is used to provide widgets (like the @class StylesCombo) the styles available to the document being worked on.
  *
- * This is an abstract class supposed to be inherited only. DO NOT instentiate this class directly.
+ * This is an abstract class supposed to be inherited only. DO NOT instantiate this class directly.
  *
  * On top of the standard QAbstractItemModel methods to re-implement, there are 3 specific methods which need to be re-implemented in order to be used with the styles widgets:
  * - setStyleThumbnailer: a @class KoStyleThumbnailer is used to layout/draw a preview of the style

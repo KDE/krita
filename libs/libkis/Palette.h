@@ -20,6 +20,8 @@
 #define LIBKIS_PALETTE_H
 
 #include <QObject>
+#include <QList>
+
 #include "kritalibkis_export.h"
 #include "libkis.h"
 #include "Resource.h"
@@ -88,7 +90,7 @@ public:
      * @brief groupNames
      * @return the list of group names. This is list is in the order these groups are in the file.
      */
-    QStringList groupNames();
+    QStringList groupNames() const;
     /**
      * @brief addGroup
      * @param name of the new group
@@ -108,12 +110,6 @@ public:
      * @return the total amount of entries in the whole group
      */
     int colorsCountTotal();
-    /**
-     * @brief colorsCountGroup
-     * @param name of the group to check. Empty is the default group.
-     * @return the amount of colors within that group.
-     */
-    int colorsCountGroup(QString name);
 
     /**
      * @brief colorSetEntryByIndex
@@ -121,14 +117,14 @@ public:
      * @param index the global index
      * @return the colorset entry
      */
-    KoColorSetEntry colorSetEntryByIndex(int index);
+    KisSwatch colorSetEntryByIndex(int index);
     /**
      * @brief colorSetEntryFromGroup
      * @param index index in the group.
      * @param groupName the name of the group to get the color from.
      * @return the colorsetentry.
      */
-    KoColorSetEntry colorSetEntryFromGroup(int index, const QString &groupName);
+    KisSwatch colorSetEntryFromGroup(int index, const QString &groupName);
 
     /**
      * @brief colorForEntry
@@ -136,34 +132,20 @@ public:
      * @param entry the entry
      * @return the ManagedColorObject
      */
-    ManagedColor *colorForEntry(KoColorSetEntry entry);
+    ManagedColor *colorForEntry(KisSwatch entry);
     /**
      * @brief addEntry
      * add an entry to a group. Gets appended to the end.
      * @param entry the entry
      * @param groupName the name of the group to add to.
      */
-    void addEntry(KoColorSetEntry entry, QString groupName = QString());
+    void addEntry(KisSwatch entry, QString groupName = QString());
     /**
      * @brief removeEntry
      * remove the entry at @param index from the group @param groupName.
      */
     void removeEntry(int index, const QString &groupName);
-    /**
-     * @brief insertEntry
-     * like addentry, but allows you to pick the index to insertBefore.
-     * @param index
-     * @param entry
-     * @param groupName
-     */
-    void insertEntry(int index, KoColorSetEntry entry, QString groupName = QString());
-    /**
-     * @brief editEntry
-     * Changes the entry at @param index by replacing it with @param entry.
-     * @param groupName the group at which the index is.
-     * @return whether it was successful.
-     */
-    bool editEntry (int index, KoColorSetEntry entry, QString groupName = QString());
+
     /**
      * @brief changeGroupName
      * change the group name.

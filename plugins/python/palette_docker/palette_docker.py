@@ -123,7 +123,7 @@ class Palette_Docker(DockWidget):
             self.paletteView.setPalette(self.currentPalette)
             self.slot_fill_combobox()
 
-    @pyqtSlot('PaletteEntry')
+    @pyqtSlot('KisSwatch')
     def slot_swatchSelected(self, entry):
         if (self.canvas()) is not None:
             if (self.canvas().view()) is not None:
@@ -147,29 +147,29 @@ class Palette_Docker(DockWidget):
         palette = self.currentPalette
         self.colorComboBox.clear()
         self.colorList = list()
-        for i in range(palette.colorsCountTotal()):
-            entry = palette.colorSetEntryByIndex(i)
-            color = palette.colorForEntry(entry).colorForCanvas(self.canvas())
-            colorSquare = QPixmap(12, 12)
-            if entry.spotColor() is True:
-                img = colorSquare.toImage()
-                circlePainter = QPainter()
-                img.fill(self.colorComboBox.palette().color(QPalette.Base))
-                circlePainter.begin(img)
-                brush = QBrush(Qt.SolidPattern)
-                brush.setColor(color)
-                circlePainter.setBrush(brush)
-                circlePainter.pen().setWidth(0)
-                circlePainter.drawEllipse(0, 0, 11, 11)
-                circlePainter.end()
-                colorSquare = QPixmap.fromImage(img)
-            else:
-                colorSquare.fill(color)
-            name = entry.name()
-            if len(entry.id()) > 0:
-                name = entry.id() + " - " + entry.name()
-            self.colorList.append(name)
-            self.colorComboBox.addItem(QIcon(colorSquare), name)
+#        for info in palette.infoList():
+#            entry = info.swatch
+#            color = palette.colorForEntry(entry).colorForCanvas(self.canvas())
+#            colorSquare = QPixmap(12, 12)
+#            if entry.spotColor() is True:
+#                img = colorSquare.toImage()
+#                circlePainter = QPainter()
+#                img.fill(self.colorComboBox.palette().color(QPalette.Base))
+#                circlePainter.begin(img)
+#                brush = QBrush(Qt.SolidPattern)
+#                brush.setColor(color)
+#                circlePainter.setBrush(brush)
+#                circlePainter.pen().setWidth(0)
+#                circlePainter.drawEllipse(0, 0, 11, 11)
+#                circlePainter.end()
+#                colorSquare = QPixmap.fromImage(img)
+#            else:
+#                colorSquare.fill(color)
+#            name = entry.name()
+#            if len(entry.id()) > 0:
+#                name = entry.id() + " - " + entry.name()
+#            self.colorList.append(name)
+#            self.colorComboBox.addItem(QIcon(colorSquare), name)
         self.colorComboBox.setEditable(True)
         self.colorComboBox.setInsertPolicy(QComboBox.NoInsert)
         self.colorComboBox.completer().setCompletionMode(QCompleter.PopupCompletion)

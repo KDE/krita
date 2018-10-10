@@ -30,7 +30,12 @@
 
 struct KisCoordinatesConverter::Private {
     Private():
-        isXAxisMirrored(false), isYAxisMirrored(false), rotationAngle(0.0) { }
+        isXAxisMirrored(false),
+        isYAxisMirrored(false),
+        rotationAngle(0.0),
+        devicePixelRatio(1.0)
+    {
+    }
 
     KisImageWSP image;
 
@@ -38,6 +43,7 @@ struct KisCoordinatesConverter::Private {
     bool isYAxisMirrored;
     qreal rotationAngle;
     QSizeF canvasWidgetSize;
+    qreal devicePixelRatio;
     QPointF documentOffset;
 
     QTransform flakeToWidget;
@@ -148,6 +154,11 @@ void KisCoordinatesConverter::setCanvasWidgetSize(QSize size)
 {
     m_d->canvasWidgetSize = size;
     recalculateTransformations();
+}
+
+void KisCoordinatesConverter::setDevicePixelRatio(qreal value)
+{
+    m_d->devicePixelRatio = value;
 }
 
 void KisCoordinatesConverter::setImage(KisImageWSP image)
@@ -443,4 +454,11 @@ void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
     // Compute the scale factors
     *scaleX = zoomX / resX;
     *scaleY = zoomY / resY;
+}
+
+void KisCoordinatesConverter::imagePhysicalScale(qreal *scaleX, qreal *scaleY) const
+{
+    imageScale(scaleX, scaleY);
+    *scaleX *= m_d->devicePixelRatio;
+    *scaleY *= m_d->devicePixelRatio;
 }

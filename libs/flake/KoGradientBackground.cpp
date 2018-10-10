@@ -116,7 +116,7 @@ void KoGradientBackground::paint(QPainter &painter, const KoViewConverter &/*con
          *
          * Qt has different notation of QBrush::setTransform() in comparison
          * to what SVG defines. SVG defines gradientToUser matrix to be postmultiplied
-         * by QBrush::transform(), but Qt does exectly reverse!
+         * by QBrush::transform(), but Qt does exactly reverse!
          *
          * That most probably has beed caused by the fact that Qt uses transposed
          * matrices and someone just mistyped the stuff long ago :(

@@ -26,8 +26,8 @@
 
 /**
  * A class for storing a composite color transformation. All the
- * trasnformations added with appendTransform() are applied
- * sequentually to the process pixels.
+ * transformations added with appendTransform() are applied
+ * sequentially to the process pixels.
  *
  * \p mode defines how the buffers are used while processing.
  *

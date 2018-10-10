@@ -317,7 +317,7 @@ public:
 public:
 
     /**
-     * Prepares the device for fastBitBlt opreration. It clears
+     * Prepares the device for fastBitBlt operation. It clears
      * the device, switches x,y shifts and colorspace if needed.
      * After this call fastBitBltPossible will return true.
      * May be used for initialization of temporary devices.
@@ -721,7 +721,7 @@ public:
      * Create a keyframe channel for the content on this device.
      * @param id identifier for the channel
      * @param node the parent node for the channel
-     * @return keyframe channel
+     * @return keyframe channel or 0 if there is not one
      */
     KisRasterKeyframeChannel *createKeyframeChannel(const KoID &id);
 

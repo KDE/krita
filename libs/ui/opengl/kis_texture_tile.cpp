@@ -268,7 +268,7 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
      */
 
     /**
-     * WARN: The width of the stripes will be equal to the broder
+     * WARN: The width of the stripes will be equal to the broader
      *       width of the tiles.
      */
 

@@ -19,7 +19,7 @@
 #ifndef __KIS_NODE_VIEW_TEST_H
 #define __KIS_NODE_VIEW_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 #include "empty_nodes_test.h"
 
 class KisDocument;

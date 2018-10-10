@@ -23,7 +23,7 @@
 
 #include "khelpmenu.h"
 #include "config-xmlgui.h"
-#include <QtCore/QTimer>
+#include <QTimer>
 #include <QAction>
 #include <QApplication>
 #include <QDialogButtonBox>

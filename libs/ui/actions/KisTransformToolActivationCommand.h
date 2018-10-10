@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2018 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef __KIS_PALETTE_DELEGATE_H
-#define __KIS_PALETTE_DELEGATE_H
+#ifndef KISTRANSFORMTOOLACTIVATIONCOMMAND_H
+#define KISTRANSFORMTOOLACTIVATIONCOMMAND_H
 
-#include <QAbstractItemDelegate>
+#include <QObject>
+#include <kritaui_export.h>
+#include <kundo2command.h>
+#include "KisViewManager.h"
 
-#include "kritawidgets_export.h"
-
-
-class KRITAWIDGETS_EXPORT KisPaletteDelegate : public QAbstractItemDelegate
+class KRITAUI_EXPORT KisTransformToolActivationCommand :  public QObject, public KUndo2Command
 {
+     Q_OBJECT
 public:
-    KisPaletteDelegate(QObject * parent = 0);
-    ~KisPaletteDelegate() override;
+    KisTransformToolActivationCommand(KisViewManager* view, KUndo2Command * parent = 0);
+    ~KisTransformToolActivationCommand() override;
 
-    void setCrossedKeyword(const QString &value);
+    void redo() override;
+    void undo() override;
 
-    void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
-    QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 
+Q_SIGNALS:
+    void requestTransformTool();
+
+    
 private:
-    QString m_crossedKeyword;
+    bool m_firstRedo;
+    KisViewManager* m_view;
 };
 
-#endif /* __KIS_PALETTE_DELEGATE_H */
+#endif // KISTRANSFORMTOOLACTIVATIONCOMMAND_H

@@ -26,7 +26,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string extracomment="This is a type of normal map used in 3d rendering. Normal in this case reffers to the Normal in the law of Reflection by William Snellius">A Brush Engine for Drawing 3d Tangent Normal Maps</string>
+      <string extracomment="This is a type of normal map used in 3d rendering. Normal in this case refers to the Normal in the law of Reflection by William Snellius">A Brush Engine for Drawing 3d Tangent Normal Maps</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

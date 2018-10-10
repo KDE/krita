@@ -81,7 +81,7 @@ void KisOcioDisplayFilterTest::test()
 
     dbgKrita << ppVar(paintingCS) << ppVar(image->root()->firstChild()->colorSpace());
 
-    KoCanvasResourceManager *resourceManager =
+    KoCanvasResourceProvider *resourceManager =
             utils::createResourceManager(image,
                                          image->root(), "");
 

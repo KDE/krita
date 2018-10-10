@@ -37,7 +37,7 @@ public:
 };
 /**
  * Filter that add the name of the creation program and the date
- * of the last modificiation.
+ * of the last modification.
  */
 class ToolInfoFilter : public Filter
 {

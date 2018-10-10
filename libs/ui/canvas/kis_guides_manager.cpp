@@ -547,7 +547,7 @@ bool KisGuidesManager::Private::mouseReleaseHandler(const QPointF &docPos)
 
             /**
              * When we delete a guide, it might happen that we are
-             * delting the last guide. Therefore we should eat the
+             * deleting the last guide. Therefore we should eat the
              * corresponding event so that the event filter would stop
              * the filter processing.
              */

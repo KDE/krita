@@ -93,25 +93,25 @@ private Q_SLOTS:
 
     void convertLayerToFileLayer(KisNodeSP source);
 
-    KisLayerSP addLayer(KisNodeSP activeNode);
-    void addGroupLayer(KisNodeSP activeNode);
+    KisLayerSP addPaintLayer(KisNodeSP activeNode);
+    KisNodeSP addGroupLayer(KisNodeSP activeNode);
 
-    void addCloneLayer(KisNodeSP activeNode);
+    KisNodeSP addCloneLayer(KisNodeSP activeNode);
 
-    void addShapeLayer(KisNodeSP activeNode);
+    KisNodeSP addShapeLayer(KisNodeSP activeNode);
 
-    void addAdjustmentLayer(KisNodeSP activeNode);
+    KisNodeSP addAdjustmentLayer(KisNodeSP activeNode);
     KisAdjustmentLayerSP addAdjustmentLayer(KisNodeSP activeNode, const QString & name, KisFilterConfigurationSP  filter, KisSelectionSP selection);
 
-    void addGeneratorLayer(KisNodeSP activeNode);
+    KisNodeSP addGeneratorLayer(KisNodeSP activeNode);
 
-    void addFileLayer(KisNodeSP activeNode);
+    KisNodeSP addFileLayer(KisNodeSP activeNode);
 
     void layerStyle();
 
 private:
     void adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, KisNodeSP &parent, KisNodeSP &above);
-    void addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, bool updateImage = true);
+    void addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage = true);
 
 private:
 

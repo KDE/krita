@@ -46,7 +46,7 @@ void MoveSelectionStrokeTest::test()
 {
     const QRect imageRect(0,0,800,800);
     KisImageSP image = utils::createImage(0, imageRect.size());
-    QScopedPointer<KoCanvasResourceManager> manager(
+    QScopedPointer<KoCanvasResourceProvider> manager(
         utils::createResourceManager(image));
 
     image->setDesiredLevelOfDetail(2);

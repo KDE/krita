@@ -66,7 +66,7 @@ public:
 
     /**
      * @brief guidesVisible
-     * Returns guide visiiblity.
+     * Returns guide visibility.
      * @return whether the guides are visible.
      */
     bool guidesVisible() const;

@@ -136,12 +136,13 @@ public:
      */
     QSize sizeHint() const override;
 
+    static QString squeezeText(const QString& original, const QWidget *widget);
+
 private Q_SLOTS:
     void slotTimeOut();
 
 private:
     void resizeEvent(QResizeEvent *) override;
-    QString squeezeText(const QString& original);
 
     // Prevent these from being used.
     void setCurrentText(const QString& itemText);

@@ -28,7 +28,7 @@
  * layer object.
  *
  * Please note that recalculate() and apply() methods are not defined
- * for masks, because the KisLayer code still uses tranditional
+ * for masks, because the KisLayer code still uses traditional
  * methods of KisMask directly.
  */
 class KisMaskProjectionPlane : public KisAbstractProjectionPlane

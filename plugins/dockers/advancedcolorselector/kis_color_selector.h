@@ -90,10 +90,10 @@ private:
     Acs::ColorRole m_lastColorRole;
 
 
-    /// if Krita starts with a reference to this componenet that is attached to a canvas, it will call setCanvas()
+    /// if Krita starts with a reference to this component that is attached to a canvas, it will call setCanvas()
     /// that check will be what ultimately decides whether this component will look enabled or disabled
     /// This color selector is sometimes not attached to the canvas, so we shouldn't disable it in that situation
-    /// One instane of that is when you select the color wheel type from the settings.
+    /// One instance of that is when you select the color wheel type from the settings.
     bool m_hasAtLeastOneDocumentOpen = true;
 
 public:

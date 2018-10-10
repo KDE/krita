@@ -19,7 +19,7 @@
 #ifndef __KIS_STABILIZED_EVENTS_SAMPLER_TEST_H
 #define __KIS_STABILIZED_EVENTS_SAMPLER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisStabilizedEventsSamplerTest : public QObject
 {

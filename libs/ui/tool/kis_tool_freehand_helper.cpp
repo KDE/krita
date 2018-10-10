@@ -24,7 +24,7 @@
 #include <klocalizedstring.h>
 
 #include <KoPointerEvent.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "kis_algebra_2d.h"
 #include "kis_distance_information.h"
@@ -241,7 +241,7 @@ void KisToolFreehandHelper::cursorMoved(const QPointF &cursorPos)
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
                                       const QPointF &pixelCoords,
-                                      KoCanvasResourceManager *resourceManager,
+                                      KoCanvasResourceProvider *resourceManager,
                                       KisImageWSP image, KisNodeSP currentNode,
                                       KisStrokesFacade *strokesFacade,
                                       KisNodeSP overrideNode,
@@ -270,7 +270,7 @@ bool KisToolFreehandHelper::isRunning() const
 
 void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
                                           const KisPaintInformation &pi,
-                                          KoCanvasResourceManager *resourceManager,
+                                          KoCanvasResourceProvider *resourceManager,
                                           KisImageWSP image,
                                           KisNodeSP currentNode,
                                           KisStrokesFacade *strokesFacade,
@@ -374,8 +374,8 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
             intersection.manhattanLength() > maxSanePoint) {
 
             intersection = 0.5 * (pi1.pos() + pi2.pos());
-//            dbgKrita << "WARINING: there is no intersection point "
-//                     << "in the basic smoothing algoriths";
+//            dbgKrita << "WARNING: there is no intersection point "
+//                     << "in the basic smoothing algorithms";
         }
 
         controlTarget1 = intersection;

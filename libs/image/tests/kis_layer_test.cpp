@@ -272,8 +272,8 @@ void KisLayerTest::testMasksChangeRect()
     /**
      * KisNode::N_BELOW_FILTHY, KisNode::N_FILTHY_PROJECTION
      * should not be use by the caller, because the walker
-     * shoult not visit these node on a forward way.
-     * So the behavoiur here is undefined.
+     * should not visit these node on a forward way.
+     * So the behavior here is undefined.
      *
      * resultRect = paintLayer1->changeRect(testRect, KisNode::N_BELOW_FILTHY);
      * resultRect = paintLayer1->changeRect(testRect, KisNode::N_FILTHY_PROJECTION);

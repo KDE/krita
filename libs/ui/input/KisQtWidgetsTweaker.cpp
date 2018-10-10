@@ -304,7 +304,7 @@ bool KisQtWidgetsTweaker::eventFilter(QObject *receiver, QEvent *event)
             break;
         case ShortcutOverriderBase::DecisionOnShortcutOverride::overrideShortcut:
             event->accept();
-            //once shortcutoverride acepted, qt stop asking everyone
+            //once shortcutoverride accepted, qt stop asking everyone
             //about it and proceed to handling next event
             d->lastKeyPressProcessingComplete = true;
             retval = true;

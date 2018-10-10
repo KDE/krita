@@ -21,8 +21,8 @@
 
 #include <kritawidgetutils_export.h>
 
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
+#include <QMap>
+#include <QStringList>
 
 class QDomDocument;
 class QDomElement;

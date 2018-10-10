@@ -526,8 +526,8 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
 
     bool r = doc->exportDocumentSync(QUrl::fromLocalFile(path), mimeType.toLatin1());
     if (!r) {
-        qDebug()<< "Path:"<<path;
-        qWarning() << doc->errorMessage();
+
+        qWarning() << "Converting layer to file layer. path:"<< path << "gave errors" << doc->errorMessage();
     } else {
         QString basePath = QFileInfo(m_view->document()->url().toLocalFile()).absolutePath();
         QString relativePath = QDir(basePath).relativeFilePath(path);
@@ -567,12 +567,11 @@ void KisLayerManager::adjustLayerPosition(KisNodeSP node, KisNodeSP activeNode, 
     }
 }
 
-void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, bool updateImage)
+void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisNodeSP layer, bool updateImage)
 {
     KisNodeSP parent;
     KisNodeSP above;
     adjustLayerPosition(layer, activeNode, parent, above);
-
 
     KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(parent.data());
     const bool parentForceUpdate = group && !group->projectionIsValid();
@@ -581,7 +580,7 @@ void KisLayerManager::addLayerCommon(KisNodeSP activeNode, KisLayerSP layer, boo
     m_commandsAdapter->addNode(layer, parent, above, updateImage, updateImage);
 }
 
-KisLayerSP KisLayerManager::addLayer(KisNodeSP activeNode)
+KisLayerSP KisLayerManager::addPaintLayer(KisNodeSP activeNode)
 {
     KisLayerSP layer = KisLayerUtils::constructDefaultLayer(m_view->image());
     addLayerCommon(activeNode, layer, false);
@@ -589,32 +588,36 @@ KisLayerSP KisLayerManager::addLayer(KisNodeSP activeNode)
     return layer;
 }
 
-void KisLayerManager::addGroupLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addGroupLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
-    addLayerCommon(activeNode,
-                   new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8), false);
+    KisGroupLayerSP group = new KisGroupLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+    addLayerCommon(activeNode, group, false);
+    return group;
 }
 
-void KisLayerManager::addCloneLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addCloneLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
-    addLayerCommon(activeNode,
-                   new KisCloneLayer(activeLayer(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8));
+    KisNodeSP node = new KisCloneLayer(activeLayer(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
+    addLayerCommon(activeNode, node);
+    return node;
 }
 
-void KisLayerManager::addShapeLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addShapeLayer(KisNodeSP activeNode)
 {
-    if (!m_view) return;
-    if (!m_view->document()) return;
+    if (!m_view) return 0;
+    if (!m_view->document()) return 0;
 
     KisImageWSP image = m_view->image();
     KisShapeLayerSP layer = new KisShapeLayer(m_view->document()->shapeController(), image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8);
 
     addLayerCommon(activeNode, layer, false);
+
+    return layer;
 }
 
-void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
 
@@ -638,6 +641,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
         adjl->setName(dlg.layerName());
     }
 
+    return adjl;
 }
 
 KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, const QString & name,
@@ -650,7 +654,7 @@ KisAdjustmentLayerSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode, c
     return layer;
 }
 
-void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
 {
     KisImageWSP image = m_view->image();
 
@@ -662,10 +666,13 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
         KisFilterConfigurationSP  generator = dlg.configuration();
         QString name = dlg.layerName();
 
-        addLayerCommon(activeNode,
-            new KisGeneratorLayer(image, name, generator, selection));
-    }
+        KisNodeSP node = new KisGeneratorLayer(image, name, generator, selection);
 
+        addLayerCommon(activeNode, node );
+
+        return node;
+    }
+    return 0;
 }
 
 void KisLayerManager::flattenImage()
@@ -881,9 +888,8 @@ bool KisLayerManager::activeLayerHasSelection()
     return (activeLayer()->selection() != 0);
 }
 
-void KisLayerManager::addFileLayer(KisNodeSP activeNode)
+KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
 {
-
     QString basePath;
     QUrl url = m_view->document()->url();
     if (url.isLocalFile()) {
@@ -900,15 +906,15 @@ void KisLayerManager::addFileLayer(KisNodeSP activeNode)
 
         if(fileName.isEmpty()){
             QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
-            return;
+            return 0;
         }
 
         KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
-
-        addLayerCommon(activeNode,
-                       new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8));
+        KisNodeSP node = new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8);
+        addLayerCommon(activeNode, node);
+        return node;
     }
-
+    return 0;
 }
 
 void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg)

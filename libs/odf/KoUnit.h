@@ -245,10 +245,10 @@ public:
 
     /**
      * Get an approximate scale of a unit vector that was converted by
-     * the transfomation.
+     * the transformation.
      *
      * Please note that exact values are guaranteed only for
-     * combinations of Translate, Rotation and Unifor Scale
+     * combinations of Translate, Rotation and Uniform Scale
      * matrices. For combinations having shears and perspective the
      * value will be average for the point near CS origin.
      */

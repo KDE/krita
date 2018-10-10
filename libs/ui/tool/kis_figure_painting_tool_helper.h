@@ -24,7 +24,7 @@
 #include <brushengine/kis_paint_information.h>
 #include "strokes/freehand_stroke.h"
 
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 class KisStrokesFacade;
 
 class KRITAUI_EXPORT KisFigurePaintingToolHelper
@@ -33,7 +33,7 @@ public:
     KisFigurePaintingToolHelper(const KUndo2MagicString &name,
                                 KisImageWSP image,
                                 KisNodeSP currentNode,
-                                KoCanvasResourceManager *resourceManager,
+                                KoCanvasResourceProvider *resourceManager,
                                 KisPainter::StrokeStyle strokeStyle,
                                 KisPainter::FillStyle fillStyle);
     ~KisFigurePaintingToolHelper();

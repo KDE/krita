@@ -28,7 +28,7 @@
 #include "config-xmlgui.h"
 #include <kritawidgetutils_export.h>
 #include <kstandardaction.h>
-#include <QtCore/QObject>
+#include <QObject>
 
 class QAction;
 class KXMLGUIClient;

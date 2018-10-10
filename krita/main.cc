@@ -62,7 +62,10 @@
 #include <QLibrary>
 
 #elif defined HAVE_X11
+#include "config_use_qt_xcb.h"
+#ifndef USE_QT_XCB
 #include <kis_xi2_event_filter.h>
+#endif
 #endif
 
 #if defined HAVE_KCRASH
@@ -133,7 +136,7 @@ extern "C" int main(int argc, char **argv)
 #endif
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
-    QString key = "Krita3" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
+    QString key = "Krita4" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
@@ -221,13 +224,20 @@ extern "C" int main(int argc, char **argv)
     // selection dialog.
 
     dbgKrita << "Override language:" << language;
-
+    bool rightToLeft = false;
     if (!language.isEmpty()) {
         KLocalizedString::setLanguages(language.split(":"));
         // And override Qt's locale, too
         qputenv("LANG", language.split(":").first().toLocal8Bit());
         QLocale locale(language.split(":").first());
         QLocale::setDefault(locale);
+
+        const QStringList rtlLanguages = QStringList()
+                << "ar" << "dv" << "he" << "ha" << "ku" << "fa" << "ps" << "ur" << "yi";
+
+        if (rtlLanguages.contains(language.split(':').first())) {
+            rightToLeft = true;
+        }
     }
     else {
         dbgKrita << "Qt UI languages:" << QLocale::system().uiLanguages() << qgetenv("LANG");
@@ -276,6 +286,14 @@ extern "C" int main(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+    if (!language.isEmpty()) {
+        if (rightToLeft) {
+            app.setLayoutDirection(Qt::RightToLeft);
+        }
+        else {
+            app.setLayoutDirection(Qt::LeftToRight);
+        }
+    }
     KLocalizedString::setApplicationDomain("krita");
 
     dbgKrita << "Available translations" << KLocalizedString::availableApplicationTranslations();
@@ -286,10 +304,10 @@ extern "C" int main(int argc, char **argv)
     QDir appdir(KoResourcePaths::getApplicationRoot());
     QString path = qgetenv("PATH");
     qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
-                                    + appdir.absolutePath() + "/lib" + ";"
-                                    + appdir.absolutePath() + "/Frameworks" + ";"
-                                    + appdir.absolutePath() + ";"
-                                    + path));
+                                      + appdir.absolutePath() + "/lib" + ";"
+                                      + appdir.absolutePath() + "/Frameworks" + ";"
+                                      + appdir.absolutePath() + ";"
+                                      + path));
 
     dbgKrita << "PATH" << qgetenv("PATH");
 #endif
@@ -331,8 +349,11 @@ extern "C" int main(int argc, char **argv)
     }
 
 #if defined HAVE_X11
+#ifndef USE_QT_XCB
     app.installNativeEventFilter(KisXi2EventFilter::instance());
 #endif
+#endif
+
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
 
@@ -427,10 +448,10 @@ extern "C" int main(int argc, char **argv)
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
-                    &app, SLOT(remoteArguments(QByteArray,QObject*)));
+                     &app, SLOT(remoteArguments(QByteArray,QObject*)));
 
     QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
-                    &app, SLOT(fileOpenRequested(QString)));
+                     &app, SLOT(fileOpenRequested(QString)));
 
     int state = app.exec();
 

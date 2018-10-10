@@ -657,7 +657,8 @@ void KisOpenGLCanvas2::drawImage()
     }
 
     qreal scaleX, scaleY;
-    converter->imageScale(&scaleX, &scaleY);
+    converter->imagePhysicalScale(&scaleX, &scaleY);
+
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::ViewportScale), (GLfloat) scaleX);
     d->displayShader->setUniformValue(d->displayShader->location(Uniform::TexelSize), (GLfloat) d->openGLImageTextures->texelSize());
 

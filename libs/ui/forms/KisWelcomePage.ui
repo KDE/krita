@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>703</width>
-    <height>469</height>
+    <width>858</width>
+    <height>493</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_13">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QFrame" name="dropFrameBorder">
      <property name="frameShape">
@@ -73,29 +73,14 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QPushButton" name="manualLink">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+           <widget class="QLabel" name="manualLink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>User Manual</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -123,23 +108,14 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QPushButton" name="gettingStartedLink">
+           <widget class="QLabel" name="gettingStartedLink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>Getting Started</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -161,23 +137,14 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QPushButton" name="supportKritaLink">
+           <widget class="QLabel" name="supportKritaLink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>Support Krita</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -199,23 +166,14 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QPushButton" name="userCommunityLink">
+           <widget class="QLabel" name="userCommunityLink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>User Community</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -237,23 +195,14 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="QPushButton" name="kritaWebsiteLink">
+           <widget class="QLabel" name="kritaWebsiteLink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>Krita Website</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -281,23 +230,14 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QPushButton" name="sourceCodeLink">
+           <widget class="QLabel" name="sourceCodeLink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>Source Code</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -322,23 +262,36 @@
            <number>20</number>
           </property>
           <item>
-           <widget class="QPushButton" name="poweredByKDELink">
+           <widget class="QPushButton" name="kdeIcon">
+            <property name="minimumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="poweredByKDELink">
             <property name="font">
              <font>
               <underline>true</underline>
              </font>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
             <property name="text">
              <string>Powered by KDE</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>true</bool>
             </property>
            </widget>
           </item>

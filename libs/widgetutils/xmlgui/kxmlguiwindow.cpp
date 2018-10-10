@@ -42,7 +42,7 @@
 #ifdef HAVE_DBUS
 #include <QDBusConnection>
 #endif
-#include <QtXml/QDomDocument>
+#include <QDomDocument>
 #include <QLayout>
 #include <QDebug>
 #include <QMenuBar>

@@ -24,7 +24,7 @@
 #include <KoColor.h>
 #include <KoToolBase.h>
 #include <KoID.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <kritaui_export.h>
 #include <kis_types.h>
 

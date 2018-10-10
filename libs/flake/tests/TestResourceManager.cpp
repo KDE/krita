@@ -19,7 +19,7 @@
 
 #include "TestResourceManager.h"
 
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoResourceManager_p.h"
 #include "KoPathShape.h"
 #include "KoUnit.h"
@@ -33,22 +33,22 @@ void TestResourceManager::koShapeResource()
     KoPathShape * shape = new KoPathShape();
     int key = 9001;
 
-    KoCanvasResourceManager rp( 0 );
+    KoCanvasResourceProvider rp( 0 );
     rp.setResource( key, shape );
     QVERIFY( shape == rp.koShapeResource( key ) );
 }
 
 void TestResourceManager::testUnitChanged()
 {
-    KoCanvasResourceManager rm(0);
+    KoCanvasResourceProvider rm(0);
     QSignalSpy spy(&rm, SIGNAL(canvasResourceChanged(int,QVariant)));
 
     KoUnit a;
-    rm.setResource(KoCanvasResourceManager::Unit, a);
+    rm.setResource(KoCanvasResourceProvider::Unit, a);
     QCOMPARE(spy.count(), 1);
 
     KoUnit b(KoUnit::Millimeter);
-    rm.setResource(KoCanvasResourceManager::Unit, b);
+    rm.setResource(KoCanvasResourceProvider::Unit, b);
     QCOMPARE(spy.count(), 2);
 }
 
@@ -107,7 +107,7 @@ void TestResourceManager::testDerivedChanged()
     const int derivedKey = 3;
     const int otherDerivedKey = 4;
 
-    KoCanvasResourceManager m(0);
+    KoCanvasResourceProvider m(0);
     m.addDerivedResourceConverter(toQShared(new DerivedResource(derivedKey, key2)));
     m.addDerivedResourceConverter(toQShared(new DerivedResource(otherDerivedKey, key2)));
 
@@ -202,7 +202,7 @@ void TestResourceManager::testComplexResource()
     const int complex1 = 3;
     const int complex2 = 4;
 
-    KoCanvasResourceManager m(0);
+    KoCanvasResourceProvider m(0);
     m.addDerivedResourceConverter(toQShared(new ComplexConverter(complex1, key)));
     m.addDerivedResourceConverter(toQShared(new ComplexConverter(complex2, key)));
 

@@ -1964,8 +1964,10 @@ KisRasterKeyframeChannel *KisPaintDevice::createKeyframeChannel(const KoID &id)
 
 KisRasterKeyframeChannel* KisPaintDevice::keyframeChannel() const
 {
-    Q_ASSERT(m_d->contentChannel);
-    return m_d->contentChannel.data();
+    if (m_d->contentChannel) {
+        return m_d->contentChannel.data();
+    }
+    return 0;
 }
 
 const KoColorSpace* KisPaintDevice::colorSpace() const

@@ -34,6 +34,14 @@ namespace KisToolUtils {
     {
         KIS_ASSERT(dev);
 
+        // Bugfix hack forcing pure on first sample to avoid wrong
+        // format blendColor on newly initialized Krita.
+        static bool firstTime = true;
+        if (firstTime == true) {
+            pure = true;
+            firstTime = false;
+        }
+
         const KoColorSpace *cs = dev->colorSpace();
         KoColor pickedColor(Qt::transparent, cs);
 
@@ -83,7 +91,6 @@ namespace KisToolUtils {
         bool validColorPicked = pickedColor.opacityU8() != OPACITY_TRANSPARENT_U8;
 
         if (validColorPicked) {
-            pickedColor.setOpacity(OPACITY_OPAQUE_U8);
             out_color = pickedColor;
         }
 

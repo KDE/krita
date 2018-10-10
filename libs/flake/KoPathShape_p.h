@@ -56,7 +56,7 @@ public:
      * z symmetric
      *
      * The first point of a path is always of the type c.
-     * If the path is closed the type of the first point is saved in the last elemeent
+     * If the path is closed the type of the first point is saved in the last element
      * E.g. you have a closed path with 2 points in it. The first one (start/end of path)
      * is symmetric and the second one is smooth that will result in the nodeType="czs"
      * So if there is a closed sub path the nodeTypes contain one more entry then there

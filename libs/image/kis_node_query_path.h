@@ -44,7 +44,7 @@ public:
     ///
     /// For instance: "1/*" return all children of the first layer, "../3" return the third layer of the parent
     /// of the current layer
-    /// If the string starts with "/" then it's an aboslute path, otherwise it's a relative path.
+    /// If the string starts with "/" then it's an absolute path, otherwise it's a relative path.
     QString toString() const;
     /**
      * @param path

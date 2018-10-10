@@ -40,7 +40,6 @@
 #include <QGuiApplication>
 #include <QApplication>
 
-
 #include <X11/extensions/XI2proto.h>
 #include <xcb/xproto.h>
 

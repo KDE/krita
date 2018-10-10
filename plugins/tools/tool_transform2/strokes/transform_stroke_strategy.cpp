@@ -293,7 +293,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             clearSelection(device);
 
             /**
-             * Seleciton masks might have an overlay enabled, we should disable that
+             * Selection masks might have an overlay enabled, we should disable that
              */
             if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(csd->node.data())) {
                 KisSelectionSP selection = mask->selection();

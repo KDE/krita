@@ -382,10 +382,15 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     dbgFile << "There are" << nbchannels << " channels and" << extrasamplescount << " extra channels";
     if (sampleinfo) { // index images don't have any sampleinfo, and therefore sampleinfo == 0
         for (int i = 0; i < extrasamplescount; i ++) {
-            dbgFile << i << "" << extrasamplescount << ""  << (cs->colorChannelCount()) <<  nbchannels << "" << sampleinfo[i];
+            dbgFile << "sample" << i << "extra sample count" << extrasamplescount << "color channel count" << (cs->colorChannelCount()) << "Number of channels" <<  nbchannels << "sample info" << sampleinfo[i];
+            if (sampleinfo[i] == EXTRASAMPLE_UNSPECIFIED) {
+                qWarning() << "Extra sample type not defined for this file, assuming unassociated alpha.";
+                alphapos = i;
+            }
             if (sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA) {
                 // XXX: dangelo: the color values are already multiplied with
                 // the alpha value.  This needs to be reversed later (postprocessor?)
+                qWarning() << "Associated alpha in this file: krita does not handle plremultiplied alpha.";
                 alphapos = i;
             }
 

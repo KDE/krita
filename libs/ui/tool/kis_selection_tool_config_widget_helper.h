@@ -28,7 +28,7 @@
 class QKeyEvent;
 class KisCanvas2;
 class KisSelectionOptions;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
@@ -59,6 +59,7 @@ public Q_SLOTS:
     void slotAddModeRequested();
     void slotSubtractModeRequested();
     void slotIntersectModeRequested();
+    void slotSymmetricDifferenceModeRequested();
 
 private:
     KisSelectionOptions* m_optionsWidget;

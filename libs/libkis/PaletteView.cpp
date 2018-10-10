@@ -36,10 +36,10 @@ PaletteView::PaletteView(QWidget *parent)
     this->layout()->addWidget(d->widget);
 
     //forward signals.
-    connect(d->widget, SIGNAL(entrySelected(KoColorSetEntry)),
-                 this, SIGNAL(entrySelectedForeGround(KoColorSetEntry)));
-    connect(d->widget, SIGNAL(entrySelectedBackGround(KoColorSetEntry)),
-            this, SIGNAL(entrySelectedBackGround(KoColorSetEntry)));
+    connect(d->widget, SIGNAL(entrySelected(KisSwatch)),
+                 this, SIGNAL(entrySelectedForeGround(KisSwatch)));
+    connect(d->widget, SIGNAL(entrySelectedBackGround(KisSwatch)),
+            this, SIGNAL(entrySelectedBackGround(KisSwatch)));
 }
 
 PaletteView::~PaletteView()
@@ -49,7 +49,7 @@ PaletteView::~PaletteView()
 
 void PaletteView::setPalette(Palette *palette)
 {
-    d->model->setColorSet(palette->colorSet());
+    d->model->setPalette(palette->colorSet());
     d->widget->setPaletteModel(d->model);
 }
 
@@ -79,5 +79,5 @@ bool PaletteView::removeSelectedEntryWithDialog()
 
 void PaletteView::trySelectClosestColor(ManagedColor *color)
 {
-    d->widget->trySelectClosestColor(color->color());
+    d->widget->selectClosestColor(color->color());
 }

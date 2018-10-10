@@ -88,10 +88,10 @@ void KisSimplifiedActionPolicyStrategy::continuePrimaryAction(KoPointerEvent *ev
     /**
      * HACK ALERT!
      *
-     * Here we explicitly check for Shift key pressed! The chioce of
+     * Here we explicitly check for Shift key pressed! The choice of
      * the stroke type is usually done before the tablet press, but
      * for some actions like constrain proportions we should be able
-     * to activate it even after the strokehas been started. For now,
+     * to activate it even after the stroke has been started. For now,
      * KisShortcutMatcher does not support it, so just hardcode this
      * special case.
      *

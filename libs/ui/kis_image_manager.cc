@@ -127,11 +127,17 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
         urls.push_back(urlArg);
     }
 
-    if (urls.empty())
+    if (urls.empty()) {
         return 0;
+    }
 
-    for (QList<QUrl>::iterator it = urls.begin(); it != urls.end(); ++it) {
-        new KisImportCatcher(*it, m_view, layerType);
+    Q_FOREACH(const QUrl &url, urls) {
+        if (url.toLocalFile().endsWith("svg")) {
+            new KisImportCatcher(url, m_view, "KisShapeLayer");
+        }
+        else {
+            new KisImportCatcher(url, m_view, layerType);
+        }
     }
 
     m_view->canvas()->update();

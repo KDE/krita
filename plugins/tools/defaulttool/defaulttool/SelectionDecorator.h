@@ -29,7 +29,11 @@
 #include <QPointer>
 
 class KoSelection;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
+
+static const struct DecoratorIconPositions {
+    QPoint uiOffset = QPoint(0, 40);
+} decoratorIconPositions;
 
 /**
  * The SelectionDecorator is used to paint extra user-interface items on top of a selection.
@@ -43,7 +47,7 @@ public:
      * @param rotationHandles if true; the rotation handles will be drawn
      * @param shearHandles if true; the shearhandles will be drawn
      */
-    SelectionDecorator(KoCanvasResourceManager *resourceManager);
+    SelectionDecorator(KoCanvasResourceProvider *resourceManager);
     ~SelectionDecorator() {}
 
     /**
@@ -77,6 +81,14 @@ public:
      */
     void setShowStrokeFillGradientHandles(bool value);
 
+    /**
+     * Text vector objects GUI button for editing text
+     */
+    QPointF textEditorButtonPos();
+    void setIsOverTextEditorButton(bool value);
+    bool isOverTextEditorButton();
+
+
     void setForceShapeOutlines(bool value);
 
 private:
@@ -90,6 +102,9 @@ private:
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
     bool m_forceShapeOutlines;
+
+    QPointF m_textEditorButtonPosition;
+    bool m_isHoveringOverTextButton;
 };
 
 #endif

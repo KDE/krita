@@ -37,7 +37,7 @@ class QCloseEvent;
 class QMoveEvent;
 
 struct KoPageLayout;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 class KisDocument;
 class KisPrintJob;
@@ -164,7 +164,7 @@ public:
 
     QList<KoCanvasObserverBase*> canvasObservers() const override;
 
-    KoCanvasResourceManager *resourceManager() const;
+    KoCanvasResourceProvider *resourceManager() const;
 
     int viewCount() const;
 
@@ -225,6 +225,9 @@ Q_SIGNALS:
     void keyBindingsChanged();
 
     void guiLoadingFinished();
+
+    /// emitted when the window is migrated among different screens
+    void screenChanged();
 
 public Q_SLOTS:
 

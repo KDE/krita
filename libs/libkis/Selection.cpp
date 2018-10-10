@@ -293,6 +293,12 @@ void Selection::intersect(Selection *selection)
     d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_INTERSECT);
 }
 
+void Selection::symmetricdifference(Selection *selection)
+{
+    if (!d->selection) return;
+    d->selection->pixelSelection()->applySelection(selection->selection()->pixelSelection(), SELECTION_SYMMETRICDIFFERENCE);
+}
+
 
 QByteArray Selection::pixelData(int x, int y, int w, int h) const
 {

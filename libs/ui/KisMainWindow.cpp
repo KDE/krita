@@ -146,6 +146,7 @@
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
+#include <QScreen>
 
 #include <mutex>
 
@@ -276,6 +277,7 @@ public:
     KConfigGroup windowStateConfig;
 
     QUuid workspaceBorrowedBy;
+    KisSignalAutoConnectionsStore screenConnectionsStore;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -2684,6 +2686,15 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
 
     if (oldScreen != newScreen) {
         emit screenChanged();
+    }
+
+    if (d->screenConnectionsStore.isEmpty() || oldScreen != newScreen) {
+
+        d->screenConnectionsStore.clear();
+
+        QScreen *newScreenObject = qApp->screenAt(e->pos());
+        d->screenConnectionsStore.addConnection(newScreenObject, SIGNAL(physicalDotsPerInchChanged(qreal)),
+                                                this, SIGNAL(screenChanged()));
     }
 }
 

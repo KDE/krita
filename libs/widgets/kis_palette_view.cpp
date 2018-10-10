@@ -196,7 +196,9 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
-    selectClosestColor(color);
+    //TODO: We'll need a switch that implements forcing the paint
+    //color to always be one from the palette.
+    //selectClosestColor(color);
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
@@ -212,8 +214,7 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     connect(model, SIGNAL(sigPaletteChanged()),
             SLOT(slotAdditionalGuiUpdate()));
 
-    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
-            SLOT(slotCurrentSelectionChanged(QModelIndex)));
+    connect(m_d->model, SIGNAL(clicked(QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const

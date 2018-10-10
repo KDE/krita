@@ -76,7 +76,7 @@ protected:
     void drawLabels();
  
     QRgb colorByCoord(double x, double y);
-    void drawSmallElipse(QPointF xy, int r, int g, int b, int sz);
+    void drawSmallEllipse(QPointF xy, int r, int g, int b, int sz);
  
     void resizeEvent(QResizeEvent* event) override;
     void paintEvent(QPaintEvent*) override;

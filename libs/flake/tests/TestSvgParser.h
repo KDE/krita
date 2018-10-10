@@ -158,7 +158,7 @@ private Q_SLOTS:
 
     void testMarkersDifferent();
 
-    void testGradientRecoveringTrasnform();
+    void testGradientRecoveringTransform();
     void testMarkersOnClosedPath();
     void testMarkersAngularUnits();
 

@@ -325,7 +325,6 @@ bool KisApplicationArguments::doNewImage() const
 KisDocument *KisApplicationArguments::image() const
 {
     KisDocument *doc = KisPart::instance()->createDocument();
-    qDebug() << d->colorDepth << d->colorDepth;
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(d->colorModel, d->colorDepth, "");
     if (!cs) {
         qWarning() << "Could not create the colorspace for the new image. Check the colorspace and depth arguments.";

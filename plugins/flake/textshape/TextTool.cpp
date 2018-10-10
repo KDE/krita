@@ -46,7 +46,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
 #include <KoCanvasController.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoSelectedShapesProxy.h>
@@ -169,7 +169,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     createActions();
 
-    m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
+    m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceProvider::Unit);
 
     foreach (KoTextEditingPlugin *plugin, textEditingPluginContainer()->values()) {
         connect(plugin, SIGNAL(startMacro(QString)),
@@ -212,8 +212,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
-    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
-                             & KoCanvasResourceManager::NoAdvancedText);
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceProvider::ApplicationSpeciality)
+                             & KoCanvasResourceProvider::NoAdvancedText);
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
 
@@ -836,7 +836,7 @@ void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
                 QRectF rect(QPoint(), m_textShape->size());
                 rect = m_textShape->absoluteTransformation(0).mapRect(rect);
                 v.setValue(rect);
-                canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
+                canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ActiveRange, v);
             }
             return;
         }
@@ -1016,7 +1016,7 @@ void TextTool::updateSelectionHandler()
         }
     }
 
-    KoCanvasResourceManager *p = canvas()->resourceManager();
+    KoCanvasResourceProvider *p = canvas()->resourceManager();
     m_allowResourceManagerUpdates = false;
     if (m_textEditor && m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_textEditor.data()->position());
@@ -1942,8 +1942,8 @@ void TextTool::updateActions()
 
     m_allowActions = true;
 
-    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
-                             & KoCanvasResourceManager::NoAdvancedText);
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceProvider::ApplicationSpeciality)
+                             & KoCanvasResourceProvider::NoAdvancedText);
     if (useAdvancedText) {
         action("insert_table")->setEnabled(notInAnnotation);
 
@@ -1999,7 +1999,7 @@ void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes
         emit done();
         // This is how we inform the rulers of the active range
         // No shape means no active range
-        canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
+        canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ActiveRange, QVariant(QRectF()));
         return;
     }
 
@@ -2009,7 +2009,7 @@ void TextTool::activate(ToolActivation activation, const QSet<KoShape *> &shapes
     QRectF rect(QPoint(), m_textShape->size());
     rect = m_textShape->absoluteTransformation(0).mapRect(rect);
     v.setValue(rect);
-    canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
+    canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ActiveRange, v);
     if ((!m_oldTextEditor.isNull()) && m_oldTextEditor.data()->document() != static_cast<KoTextShapeData *>(m_textShape->userData())->document()) {
         m_oldTextEditor.data()->setPosition(m_oldTextEditor.data()->position());
         //we need to redraw like this so we update the old textshape wherever it may be
@@ -2038,7 +2038,7 @@ void TextTool::deactivate()
 
     // This is how we inform the rulers of the active range
     // No shape means no active range
-    canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, QVariant(QRectF()));
+    canvas()->resourceManager()->setResource(KoCanvasResourceProvider::ActiveRange, QVariant(QRectF()));
 
     m_oldTextEditor = m_textEditor;
     setShapeData(0);
@@ -2222,8 +2222,8 @@ QList<QPointer<QWidget> > TextTool::createOptionWidgets()
     spw->setWindowTitle(i18n("Paragraph"));
     widgets.append(spw);
 
-    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceManager::ApplicationSpeciality)
-                             & KoCanvasResourceManager::NoAdvancedText);
+    bool useAdvancedText = !(canvas()->resourceManager()->intResource(KoCanvasResourceProvider::ApplicationSpeciality)
+                             & KoCanvasResourceProvider::NoAdvancedText);
     if (useAdvancedText) {
         stw->setWindowTitle(i18n("Table"));
         widgets.append(stw);
@@ -2666,7 +2666,7 @@ void TextTool::startMacro(const QString &title)
     };
 
     /**
-     * FIXME: The messages genearted by the Text Tool might not be
+     * FIXME: The messages generated by the Text Tool might not be
      *        properly translated, since we don't control it in
      *        type-safe way.
      *
@@ -2746,7 +2746,7 @@ void TextTool::canvasResourceChanged(int key, const QVariant &var)
         int pos = m_textEditor.data()->position();
         m_textEditor.data()->setPosition(var.toInt());
         m_textEditor.data()->setPosition(pos, QTextCursor::KeepAnchor);
-    } else if (key == KoCanvasResourceManager::Unit) {
+    } else if (key == KoCanvasResourceProvider::Unit) {
         m_unit = var.value<KoUnit>();
     } else {
         return;
@@ -3008,7 +3008,7 @@ void TextTool::debugTextDocument()
                 } else if (fragment.length() > charStyleShort.length()) {
                     fragmentText += charStyleShort;
                 } else if (fragment.length() >= 2) {
-                    fragmentText += QChar(8230);    // elipses
+                    fragmentText += QChar(8230);    // ellipses
                 }
 
                 int rest =  fragmentStart - (lastPrintedChar - CHARSPERLINE) + fragment.length() - fragmentText.length();

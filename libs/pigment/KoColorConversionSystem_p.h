@@ -301,7 +301,7 @@ struct PathQualityChecker {
         , ignoreColorCorrectness(_ignoreColorCorrectness)
     {}
 
-    /// @return true if the path maximize all the criterions (except length)
+    /// @return true if the path maximize all the criteria (except length)
     inline bool isGoodPath(const KoColorConversionSystem::Path & path) const {
 
         return (path.respectColorCorrectness || ignoreColorCorrectness) &&

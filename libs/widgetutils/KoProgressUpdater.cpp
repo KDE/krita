@@ -57,7 +57,7 @@ public:
     int currentProgress = 0;
     bool isUndefinedState = false;
     bool updated;          // is true whenever the progress needs to be recomputed
-    QTimer updateGuiTimer; // fires regulary to update the progress bar widget
+    QTimer updateGuiTimer; // fires regularly to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
     bool canceled;
     int updateInterval = 250; // ms, 4 updates per second should be enough

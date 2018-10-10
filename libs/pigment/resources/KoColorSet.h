@@ -27,9 +27,11 @@
 
 #include <KoResource.h>
 #include "KoColor.h"
-#include "KoColorSetEntry.h"
+#include "KisSwatch.h"
+#include "KisSwatchGroup.h"
 
 /**
+ * Also called palette.
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
@@ -37,7 +39,30 @@ class KRITAPIGMENT_EXPORT KoColorSet : public QObject, public KoResource
 {
     Q_OBJECT
 public:
+    static const QString GLOBAL_GROUP_NAME;
+    static const QString KPL_VERSION_ATTR;
+    static const QString KPL_GROUP_ROW_COUNT_ATTR;
+    static const QString KPL_PALETTE_COLUMN_COUNT_ATTR;
+    static const QString KPL_PALETTE_NAME_ATTR;
+    static const QString KPL_PALETTE_COMMENT_ATTR;
+    static const QString KPL_PALETTE_FILENAME_ATTR;
+    static const QString KPL_PALETTE_READONLY_ATTR;
+    static const QString KPL_COLOR_MODEL_ID_ATTR;
+    static const QString KPL_COLOR_DEPTH_ID_ATTR;
+    static const QString KPL_GROUP_NAME_ATTR;
+    static const QString KPL_SWATCH_ROW_ATTR;
+    static const QString KPL_SWATCH_COL_ATTR;
+    static const QString KPL_SWATCH_NAME_ATTR;
+    static const QString KPL_SWATCH_SPOT_ATTR;
+    static const QString KPL_SWATCH_ID_ATTR;
+    static const QString KPL_SWATCH_BITDEPTH_ATTR;
+    static const QString KPL_PALETTE_PROFILE_TAG;
+    static const QString KPL_SWATCH_POS_TAG;
+    static const QString KPL_SWATCH_TAG;
+    static const QString KPL_GROUP_TAG;
+    static const QString KPL_PALETTE_TAG;
 
+public:
     enum PaletteType {
         UNKNOWN = 0,
         GPL,                // GIMP
@@ -57,50 +82,58 @@ public:
      * a Krita palette,
      * a Scribus palette or a SwatchBooker palette.
      */
-    explicit KoColorSet(const QString &filename);
+    explicit KoColorSet(const QString &filename = QString());
 
-    /// Create an empty color set
-    KoColorSet();
-
-    /// Explicit copy constructor (KoResource copy constructor is private)
+    // Explicit copy constructor (KoResource copy constructor is private)
     KoColorSet(const KoColorSet& rhs);
 
+public /* overridden methods */: // KoResource
     ~KoColorSet() override;
 
     bool load() override;
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
-
     QString defaultFileExtension() const override;
 
+
+public /* methods */:
     void setColumnCount(int columns);
-    int columnCount();
-    /**
-     * @brief comment
-     * @return the comment.
-     */
-    QString comment();
+    int columnCount() const;
 
     void setComment(QString comment);
+    QString comment();
 
-public:
+    int rowCount() const;
+    quint32 colorCount() const;
+
+    PaletteType paletteType() const;
+    void setPaletteType(PaletteType paletteType);
+
+    /**
+     * @brief isGlobal
+     * A global color set is a set stored in the config directory
+     * Such a color set would be opened every time Krita is launched.
+     *
+     * A non-global color set, on contrary, would be stored in a kra file,
+     * and would only be opened when that file is opened by Krita.
+     * @return
+     */
+    bool isGlobal() const;
+    void setIsGlobal(bool);
+
+    bool isEditable() const;
+    void setIsEditable(bool isEditable);
+
+    QByteArray toByteArray() const;
+    bool fromByteArray(QByteArray &data);
 
     /**
      * @brief add Add a color to the palette.
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
-    void add(const KoColorSetEntry &, QString groupName = QString());
-
-    /**
-     * @brief insertBefore insert color before index into group.
-     * @param index
-     * @param groupName name of the group that the color goes into.
-     * @return new index of index after the prepending.
-     */
-    quint32 insertBefore(const KoColorSetEntry &, qint32 index, const QString &groupName = QString());
-
-    void removeAt(quint32 index, QString groupName = QString());
+    void add(const KisSwatch &, const QString &groupName = GLOBAL_GROUP_NAME);
+    void setEntry(const KisSwatch &e, int x, int y, const QString &groupName = GLOBAL_GROUP_NAME);
 
     /**
      * @brief getColorGlobal
@@ -108,7 +141,8 @@ public:
      * @param globalIndex the global index over the whole palette.
      * @return the entry.
      */
-    KoColorSetEntry getColorGlobal(quint32 globalIndex);
+    KisSwatch getColorGlobal(quint32 x, quint32 y) const;
+
     /**
      * @brief getColorGroup
      * A function for getting the color from a specific group.
@@ -116,11 +150,7 @@ public:
      * @param index the index within the group.
      * @return the entry
      */
-    KoColorSetEntry getColorGroup(quint32 index, QString groupName = QString());
-
-    QString findGroupByGlobalIndex(quint32 globalIndex, quint32 *index);
-    QString findGroupByColorName(const QString &name, quint32 *index);
-    QString findGroupByID(const QString &id,quint32 *index);
+    KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName);
 
     /**
      * @brief getGroupNames
@@ -128,21 +158,17 @@ public:
      */
     QStringList getGroupNames();
 
-    bool changeGroupName(QString oldGroupName, QString newGroupName);
-
-    bool changeColorSetEntry(KoColorSetEntry entry, QString groupName, quint32 index);
-
     /**
-     * @brief nColorsGroup
-     * @param groupName string name of the group, when not specified, returns unsorted colors.
-     * @return the amount of colors in this group.
+     * @brief getGroup
+     * @param name
+     * @return the group with the name given; global group if no parameter is given
+     * null pointer if not found.
      */
-    quint32 nColorsGroup(QString groupName = QString());
-    /**
-     * @brief nColors
-     * @return total colors in palette.
-     */
-    quint32 nColors();
+    KisSwatchGroup *getGroup(const QString &name);
+    KisSwatchGroup *getGlobalGroup();
+
+    bool changeGroupName(const QString &oldGroupName, const QString &newGroupName);
+
 
     /**
      * @brief addGroup
@@ -159,7 +185,7 @@ public:
      * @param groupNameInsertBefore the groupname to insert before. Empty means it will be added to the end.
      * @return
      */
-    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
+    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = GLOBAL_GROUP_NAME);
     /**
      * @brief removeGroup
      * Remove a group from the KoColorSet
@@ -180,40 +206,11 @@ public:
      * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
      * @return returns the int of the closest match.
      */
-    quint32 getIndexClosestColor(KoColor color, bool useGivenColorSpace = true);
-
-    /**
-     * @brief closestColorName
-     * convenience function to get the name of the closest match.
-     * @param color
-     * @param useGivenColorSpace
-     * @return
-     */
-    QString closestColorName(KoColor color, bool useGivenColorSpace = true);
+    KisSwatchGroup::SwatchInfo getClosestColorInfo(KoColor compare, bool useGivenColorSpace = true);
 
 private:
-
-
-    bool init();
-
-    bool saveGpl(QIODevice *dev) const;
-    bool loadGpl();
-
-    bool loadAct();
-    bool loadRiff();
-    bool loadPsp();
-    bool loadAco();
-    bool loadXml();
-    bool loadSbz();
-
-    bool saveKpl(QIODevice *dev) const;
-    bool loadKpl();
-
-
-
-    struct Private;
+    class Private;
     const QScopedPointer<Private> d;
 
 };
 #endif // KOCOLORSET
-

@@ -18,7 +18,7 @@
 #include <kis_debug.h>
 
 #include <klocalizedstring.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerObserver.h>
 #include <KoResourceServerAdapter.h>

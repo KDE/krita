@@ -399,7 +399,7 @@
             <item>
              <widget class="QRadioButton" name="m_radioToolOptionsInToolbar">
               <property name="text">
-               <string>In Tool&amp;bar</string>
+               <string>I&amp;n Toolbar</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -420,6 +420,13 @@
           <widget class="QCheckBox" name="chkEnableTouch">
            <property name="text">
             <string>Enable Touch Painting</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkEnableTranformToolAfterPaste">
+           <property name="text">
+            <string>Activate transform tool after pasting</string>
            </property>
           </widget>
          </item>
@@ -837,6 +844,16 @@
    <signal>toggled(bool)</signal>
    <receiver>m_autosaveSpinBox</receiver>
    <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
  </connections>
 </ui>

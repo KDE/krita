@@ -18,7 +18,7 @@ set(kritaflake_SRCS
     KoResourceManager_p.cpp
     KoDerivedResourceConverter.cpp
     KoResourceUpdateMediator.cpp
-    KoCanvasResourceManager.cpp
+    KoCanvasResourceProvider.cpp
     KoDocumentResourceManager.cpp
     KoCanvasObserverBase.cpp
     KoCanvasSupervisor.cpp

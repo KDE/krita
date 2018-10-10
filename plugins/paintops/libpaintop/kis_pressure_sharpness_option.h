@@ -66,7 +66,7 @@ public:
     }
 
 private:
-    qint32 m_threshold;
+    qint32 m_threshold {40};
 };
 
 #endif

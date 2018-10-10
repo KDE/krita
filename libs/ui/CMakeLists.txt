@@ -260,6 +260,10 @@ set(kritaui_LIB_SRCS
     widgets/KoDualColorButton.cpp
     widgets/KoStrokeConfigWidget.cpp
     widgets/KoFillConfigWidget.cpp
+    
+    KisPaletteEditor.cpp
+    dialogs/KisDlgPaletteEditor.cpp
+
     widgets/KisNewsWidget.cpp
 	widgets/KisGamutMaskToolbar.cpp
 
@@ -295,6 +299,7 @@ set(kritaui_LIB_SRCS
     operations/kis_filter_selection_operation.cpp
     actions/kis_selection_action_factories.cpp
     actions/KisPasteActionFactory.cpp
+    actions/KisTransformToolActivationCommand.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -386,7 +391,6 @@ set(kritaui_LIB_SRCS
 if(WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/kis_tablet_event.cpp
         input/wintab/kis_tablet_support_win.cpp
         input/wintab/kis_screen_size_choice_dialog.cpp
         qtlockedfile/qtlockedfile_win.cpp
@@ -418,14 +422,18 @@ endif()
         input/wintab/drawpile_tablettester/tablettest.cpp
     )
 
-if(UNIX)
+if (UNIX)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        input/kis_tablet_event.cpp
-        input/wintab/kis_tablet_support.cpp
         qtlockedfile/qtlockedfile_unix.cpp
         )
-    if(NOT APPLE)
+    if(NOT USE_QT_XCB)
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        input/wintab/kis_tablet_support.cpp
+    )
+    endif()
+    if(NOT APPLE AND NOT USE_QT_XCB)
         set(kritaui_LIB_SRCS
             ${kritaui_LIB_SRCS}
             input/wintab/qxcbconnection_xi2.cpp
@@ -491,6 +499,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgsessionmanager.ui
     forms/wdgnewwindowlayout.ui
     forms/KisWelcomePage.ui
+    forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
 	forms/wdgGamutMaskToolbar.ui
 

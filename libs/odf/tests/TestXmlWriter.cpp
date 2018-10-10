@@ -129,7 +129,7 @@ void TestXmlWriter::testTextNode()
     writer->addTextNode("xt");
     writer->endElement();
     writer->endElement();
-    QCOMPARE(content(), QString("<a>\n  <b><c/>text</b>\n </a>"));
+    QCOMPARE(content(), QString("<a><b><c/>text</b>\n </a>"));
 }
 
 void TestXmlWriter::testTextSpan()

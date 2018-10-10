@@ -61,7 +61,7 @@ void KisToolLineHelper::setUseSensors(bool value)
     m_d->useSensors = value;
 }
 
-void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
+void KisToolLineHelper::repaintLine(KoCanvasResourceProvider *resourceManager,
                                     KisImageWSP image, KisNodeSP node,
                                     KisStrokesFacade *strokesFacade)
 {
@@ -89,7 +89,7 @@ void KisToolLineHelper::repaintLine(KoCanvasResourceManager *resourceManager,
     }
 }
 
-void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceManager *resourceManager)
+void KisToolLineHelper::start(KoPointerEvent *event, KoCanvasResourceProvider *resourceManager)
 {
     if (!m_d->enabled) return;
 

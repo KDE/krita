@@ -19,9 +19,9 @@
 #ifndef kxmlguifactory_p_h
 #define kxmlguifactory_p_h
 
-#include <QtCore/QStringList>
-#include <QtCore/QMap>
-#include <QtXml/QDomElement>
+#include <QStringList>
+#include <QMap>
+#include <QDomElement>
 #include <QStack>
 #include <QAction>
 

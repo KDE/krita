@@ -46,7 +46,7 @@ ChangeStylesCommand::ChangeStylesCommand(QTextDocument *qDoc
     // TODO optimization strategy;  store the formatid of the formats we checked into
     // a qset for 'hits' and 'ignores' and avoid the copying of the format
     // (fragment.charFormat() / block.blockFormat()) when the formatId is
-    // already checked previosly
+    // already checked previously
 
     KoStyleManager *sm = KoTextDocument(m_document).styleManager();
     QTextCursor cursor(m_document);

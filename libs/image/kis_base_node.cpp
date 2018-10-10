@@ -253,7 +253,6 @@ void KisBaseNode::setVisible(bool visible, bool loading)
     notifyParentVisibilityChanged(visible);
 
     if (!loading) {
-        emit visibilityChanged(visible);
         baseNodeChangedCallback();
         baseNodeInvalidateAllFramesCallback();
     }
@@ -270,7 +269,6 @@ void KisBaseNode::setUserLocked(bool locked)
     if (isLocked == locked) return;
 
     m_d->properties.setProperty(KisLayerPropertiesIcons::locked.id(), locked);
-    emit userLockingChanged(locked);
     baseNodeChangedCallback();
 }
 

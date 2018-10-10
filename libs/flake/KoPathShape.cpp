@@ -600,7 +600,7 @@ QRectF KoPathShape::boundingRect() const
 QSizeF KoPathShape::size() const
 {
     // don't call boundingRect here as it uses absoluteTransformation
-    // which itself uses size() -> leads to infinite reccursion
+    // which itself uses size() -> leads to infinite recursion
     return outlineRect().size();
 }
 

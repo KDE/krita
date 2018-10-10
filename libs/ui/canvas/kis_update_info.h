@@ -136,7 +136,7 @@ public:
     qint32 borderWidth;
 
     /**
-     * Used for temporary sorage of KisImage's data
+     * Used for temporary storage of KisImage's data
      * by KisProjectionCache
      */
     KisImagePatch patch;

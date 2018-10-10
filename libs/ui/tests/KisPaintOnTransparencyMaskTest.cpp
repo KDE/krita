@@ -38,7 +38,7 @@ protected:
     }
 
     using utils::StrokeTester::modifyResourceManager;
-    void modifyResourceManager(KoCanvasResourceManager *manager,
+    void modifyResourceManager(KoCanvasResourceProvider *manager,
                                KisImageWSP image) override {
 
         KoColor color(Qt::red, image->colorSpace());
@@ -46,7 +46,7 @@ protected:
 
         QVariant i;
         i.setValue(color);
-        manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
+        manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
     }
 
     KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,

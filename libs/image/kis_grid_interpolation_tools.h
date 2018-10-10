@@ -213,7 +213,7 @@ struct PaintDevicePolygonOp
                 // brain-blowing part:
                 //
                 // since the interpolator does the inverted
-                // transfomation we read data from "dstPoint"
+                // transformation we read data from "dstPoint"
                 // (which is non-transformed) and write it into
                 // "srcPoint" (which is transformed position)
 

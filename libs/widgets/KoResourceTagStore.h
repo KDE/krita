@@ -31,7 +31,7 @@ class QStringList;
 class QString;
 
 /**
- * KoResourceTagging allows to add and delete tags to resources and also search reources using tags
+ * KoResourceTagging allows to add and delete tags to resources and also search resources using tags
  */
 class KRITAWIDGETS_EXPORT KoResourceTagStore
 {

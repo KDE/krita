@@ -49,7 +49,7 @@ public:
  * many people the half-tone pattern also serves as a neutral pattern that is more pleasant
  * than plain flat look. The half tone in this case also becomes a stylistic technique.
  *
- * Based on that, there's a few ways a user could want to use this techique:
+ * Based on that, there's a few ways a user could want to use this technique:
  * 1. Per-component. Per patch, each component will have a halftone approximated.
  * 2. Intensity only. The relative luminosity of the patch is determined and will be used
  * for the approximation, resulting in a black/white pattern.

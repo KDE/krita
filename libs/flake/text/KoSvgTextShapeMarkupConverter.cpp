@@ -109,14 +109,14 @@ bool KoSvgTextShapeMarkupConverter::convertFromSvg(const QString &svgText, const
 
     d->clearErrors();
 
-    KoXmlDocument doc;
     QString errorMessage;
     int errorLine = 0;
     int errorColumn = 0;
 
     const QString fullText = QString("<svg>\n%1\n%2\n</svg>\n").arg(stylesText).arg(svgText);
 
-    if (!doc.setContent(fullText, &errorMessage, &errorLine, &errorColumn)) {
+    KoXmlDocument doc = SvgParser::createDocumentFromSvg(fullText, &errorMessage, &errorLine, &errorColumn);
+    if (doc.isNull()) {
         d->errors << QString("line %1, col %2: %3").arg(errorLine).arg(errorColumn).arg(errorMessage);
         return false;
     }
@@ -496,7 +496,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     QXmlStreamWriter svgWriter(&svgBuffer);
 
-    svgWriter.setAutoFormatting(true);
+    // disable auto-formatting to avoid axtra spaces appearing here and there
+    svgWriter.setAutoFormatting(false);
 
 
     qreal maxParagraphWidth = 0.0;
@@ -618,7 +619,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         /**
          * The alignment rule will be inverted while rendering the text in the text shape
-         * (accordign to the standard the alignment is defined not by "left" or "right",
+         * (according to the standard the alignment is defined not by "left" or "right",
          * but by "start" and "end", which inverts for rtl text)
          */
         Qt::Alignment blockAlignment = block.blockFormat().alignment();
@@ -826,7 +827,9 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                     newBlock = absoluteLineOffset > 0;
                 }
 
-                previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
+                if (elementAttributes.hasAttribute("x")) {
+                    previousBlockAbsoluteXOffset = blockAbsoluteXOffset;
+                }
             }
 
             //hack

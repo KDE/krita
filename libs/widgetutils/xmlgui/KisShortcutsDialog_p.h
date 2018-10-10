@@ -33,8 +33,8 @@
 #include <QKeySequence>
 #include <QMetaType>
 #include <QModelIndex>
-#include <QtCore/QList>
-#include <QtCore/QCollator>
+#include <QList>
+#include <QCollator>
 #include <QHBoxLayout>
 
 class QLabel;

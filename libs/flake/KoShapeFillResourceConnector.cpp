@@ -18,7 +18,7 @@
 
 #include "KoShapeFillResourceConnector.h"
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoSelectedShapesProxy.h>
 
 #include "kis_assert.h"
@@ -76,9 +76,9 @@ void KoShapeFillResourceConnector::slotCanvasResourceChanged(int key, const QVar
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
 
-    if (key == KoCanvasResourceManager::ForegroundColor) {
+    if (key == KoCanvasResourceProvider::ForegroundColor) {
         m_d->applyShapeColoring(KoFlake::Fill, value.value<KoColor>());
-    } else if (key == KoCanvasResourceManager::BackgroundColor) {
+    } else if (key == KoCanvasResourceProvider::BackgroundColor) {
         m_d->applyShapeColoring(KoFlake::StrokeFill, value.value<KoColor>());
     }
 }

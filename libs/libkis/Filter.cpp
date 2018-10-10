@@ -17,7 +17,7 @@
  */
 #include "Filter.h"
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <kis_canvas_resource_provider.h>
 #include <kis_filter.h>

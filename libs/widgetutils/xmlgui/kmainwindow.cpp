@@ -35,9 +35,9 @@
 #include "ktoolbar.h"
 
 #include <QApplication>
-#include <QtCore/QList>
-#include <QtCore/QObject>
-#include <QtCore/QTimer>
+#include <QList>
+#include <QObject>
+#include <QTimer>
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QDockWidget>

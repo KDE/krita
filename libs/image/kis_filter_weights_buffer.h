@@ -98,7 +98,7 @@ static bool checkForAsymmetricZeros = false;
  * this class is created before a pass of the transformation basing on
  * the desired scale factor and the filter strategy used for resampling.
  *
- * Here is an exmple of a calculation of the span for a pixel with
+ * Here is an example of a calculation of the span for a pixel with
  * scale equal to 1.0. The result of the blending will be written into
  * the dst(0) pixel, which is marked with '*' sign. Note that all the
  * coordinates here are related to the center of the pixel, not to its

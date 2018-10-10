@@ -103,7 +103,7 @@ class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceManager* resourceManager)
+    KisCanvas2Private(KoCanvasBase *parent, KisCoordinatesConverter* coordConverter, QPointer<KisView> view, KoCanvasResourceProvider* resourceManager)
         : coordinatesConverter(coordConverter)
         , view(view)
         , shapeManager(parent)
@@ -187,7 +187,7 @@ KoShapeManager* fetchShapeManagerFromNode(KisNodeSP node)
 }
 }
 
-KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceManager *resourceManager, KisView *view, KoShapeControllerBase *sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResourceProvider *resourceManager, KisView *view, KoShapeControllerBase *sc)
     : KoCanvasBase(sc, resourceManager)
     , m_d(new KisCanvas2Private(this, coordConverter, view, resourceManager))
 {
@@ -198,6 +198,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      */
     m_d->bootstrapLodBlocked = true;
     connect(view->mainWindow(), SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
+    connect(view->mainWindow(), SIGNAL(screenChanged()), SLOT(slotConfigChanged()));
 
     KisImageConfig config(false);
 
@@ -241,9 +242,9 @@ void KisCanvas2::setup()
     connect(kritaShapeController, SIGNAL(selectionChanged()),
             this, SLOT(slotSelectionChanged()));
     connect(kritaShapeController, SIGNAL(selectionContentChanged()),
-            globalShapeManager(), SIGNAL(selectionContentChanged()));
+            selectedShapesProxy(), SIGNAL(selectionContentChanged()));
     connect(kritaShapeController, SIGNAL(currentLayerChanged(const KoShapeLayer*)),
-            globalShapeManager()->selection(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
+            selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
     connect(&m_d->canvasUpdateCompressor, SIGNAL(timeout()), SLOT(slotDoCanvasUpdate()));
 
@@ -663,7 +664,6 @@ void KisCanvas2::setProofingOptions(bool softProof, bool gamutCheck)
 {
     m_d->proofingConfig = this->image()->proofingConfiguration();
     if (!m_d->proofingConfig) {
-        qDebug()<<"Canvas: No proofing config found, generating one.";
         KisImageConfig cfg(false);
         m_d->proofingConfig = cfg.defaultProofingconfiguration();
     }

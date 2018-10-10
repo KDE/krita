@@ -48,7 +48,7 @@ class KoCanvasControllerProxyObject;
  * Flake does not provide a canvas, the application will have to
  * implement a canvas themselves. You canvas can be QWidget-based
  * or something we haven't invented yet -- as long the class that holds the canvas
- * imlements KoCanvasController, tools, scrolling and zooming will work.
+ * implements KoCanvasController, tools, scrolling and zooming will work.
  *
  * A KoCanvasController implementation acts as a decorator around the canvas widget
  * and provides a way to scroll the canvas, allows the canvas to be centered

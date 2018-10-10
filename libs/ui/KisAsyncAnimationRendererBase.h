@@ -25,7 +25,7 @@
 #include "kritaui_export.h"
 
 /**
- * KisAsyncAnimationRendererBase is a special class represinting a
+ * KisAsyncAnimationRendererBase is a special class representing a
  * single worker thread inside KisAsyncAnimationRenderDialogBase. It connects
  * the specified image using correct Qt::DirectConnection connections and
  * reacts on them. On sigFrameReady() signal it calls frameCompletedCallback(),
@@ -131,7 +131,7 @@ protected:
      * startFrameRegeneration(). Should be used by the derived classes only.
      *
      * Please note that requestedImage() will become null as soon as the user
-     * cancels the processing. That happends in the GUI thread so
+     * cancels the processing. That happens in the GUI thread so
      * frameCompletedCallback() should be extremely careful when requesting the
      * value (check the shared pointer after fetching).
      */

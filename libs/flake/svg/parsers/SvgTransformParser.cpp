@@ -76,18 +76,19 @@ struct transform_unit
 {
     transform_unit() {}
 
-    transform_unit(const matrix &m) {
-        transform = QTransform(m.a, m.b, m.c, m.d, m.e, m.f);
+    transform_unit(const matrix &m)
+    : transform(QTransform(m.a, m.b, m.c, m.d, m.e, m.f))
+    {
     }
 
-    transform_unit(const translate &t) {
-        transform = QTransform::fromTranslate(t.tx, t.ty);
+    transform_unit(const translate &t)
+    : transform(QTransform::fromTranslate(t.tx, t.ty))
+    {
     }
 
-    transform_unit(const scale &sc) {
-        transform =
-            QTransform::fromScale(sc.sx,
-                                  sc.syPresent ? sc.sy : sc.sx);
+    transform_unit(const scale &sc)
+    : transform(QTransform::fromScale(sc.sx, sc.syPresent ? sc.sy : sc.sx))
+    {
     }
 
     transform_unit(const rotate &r) {

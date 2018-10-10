@@ -43,7 +43,7 @@
 #include <KoPathShape.h>
 #include <KoDrag.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoShapeRubberSelectStrategy.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeTransformCommand.h>
@@ -144,7 +144,7 @@ public:
         KoShapeRubberSelectStrategy::paint(painter, converter);
     }
 
-    void finishInteraction(Qt::KeyboardModifiers modifiers) override
+    void finishInteraction(Qt::KeyboardModifiers modifiers = 0) override
     {
         Q_UNUSED(modifiers);
         DefaultTool *defaultTool = dynamic_cast<DefaultTool*>(tool());
@@ -293,6 +293,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     , m_lastHandle(KoFlake::NoHandle)
     , m_hotPosition(KoFlake::TopLeft)
     , m_mouseWasInsideHandles(false)
+    , m_decorator(0)
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
 {
@@ -641,6 +642,13 @@ void DefaultTool::updateCursor()
             if (shearHandle) {
                 statusText = i18n("Click and drag to shear selection.");
             }
+
+            if (m_decorator->isOverTextEditorButton()) {
+                cursor = Qt::PointingHandCursor;
+            } else {
+                cursor = Qt::ArrowCursor;
+            }
+
         } else {
             statusText = i18n("Click and drag to resize selection.");
             m_angle = rotationOfHandle(m_lastHandle, false);
@@ -700,7 +708,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     KoSelection *selection = koSelection();
     if (selection) {
-        SelectionDecorator decorator(canvas()->resourceManager());
+        this->m_decorator = new SelectionDecorator(canvas()->resourceManager());
 
         {
             /**
@@ -711,14 +719,14 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
             KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(canvas());
             KisNodeSP node = kisCanvas->viewManager()->nodeManager()->activeNode();
             const bool isSelectionMask = node && node->inherits("KisSelectionMask");
-            decorator.setForceShapeOutlines(isSelectionMask);
+            m_decorator->setForceShapeOutlines(isSelectionMask);
         }
 
-        decorator.setSelection(selection);
-        decorator.setHandleRadius(handleRadius());
-        decorator.setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-        decorator.setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
-        decorator.paint(painter, converter);
+        m_decorator->setSelection(selection);
+        m_decorator->setHandleRadius(handleRadius());
+        m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
+        m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
+        m_decorator->paint(painter, converter);
     }
 
     KoInteractionTool::paint(painter, converter);
@@ -784,6 +792,8 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
         // there used to be guides... :'''(
     }
 
+    isSelectingTextEditorButton(event->point);
+
     updateCursor();
 }
 
@@ -810,6 +820,20 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     updateCursor();
+
+    // test to see if we are selecting button before we decide to check for a selection/de-selection
+    const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
+
+    // this helps tell the next tool that we ned to enter edit mode when it gets activated
+    canvas()->selectedShapesProxy()->setRequestingToBeEdited(selectingTextEditorButton);
+
+
+    if (selectingTextEditorButton) { // activate text tool
+        KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(koSelection()->selectedShapes()));
+    }
+
+    // This makes sure the decorations that are shown are refreshed. especally the "T" icon
+    canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
 void DefaultTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -1160,7 +1184,7 @@ void DefaultTool::selectionTransform(int transformAction)
     const QTransform centerTrans = QTransform::fromTranslate(centerPoint.x(), centerPoint.y());
     const QTransform centerTransInv = QTransform::fromTranslate(-centerPoint.x(), -centerPoint.y());
 
-    // we also add selection to the list of trasformed shapes, so that its outline is updated correctly
+    // we also add selection to the list of transformed shapes, so that its outline is updated correctly
     QList<KoShape*> transformedShapes = editableShapes;
     transformedShapes << selection;
 
@@ -1324,10 +1348,10 @@ void DefaultTool::selectionAlign(int _align)
 
     // single selected shape is automatically aligned to document rect
     if (editableShapes.count() == 1) {
-        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize)) {
+        if (!canvas()->resourceManager()->hasResource(KoCanvasResourceProvider::PageSize)) {
             return;
         }
-        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceManager::PageSize));
+        bb = QRectF(QPointF(0, 0), canvas()->resourceManager()->sizeResource(KoCanvasResourceProvider::PageSize));
     } else {
         bb = KoShape::absoluteOutlineRect(editableShapes);
     }
@@ -1510,6 +1534,15 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
         }
 
         if (!selectMultiple && !selectNextInStack) {
+
+            // move the selection if we hold and drag with the text editor button
+            // this also helps with how the click events flow to resolve this createStrategy
+            const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
+
+            if (selectingTextEditorButton) { // ignore the event if we are selecting the text editor button
+                return new SelectionInteractionStrategy(this, event->point, false);
+            }
+
             if (insideSelection) {
                 return new ShapeMoveStrategy(this, selection, event->point);
             }
@@ -1574,7 +1607,7 @@ void DefaultTool::updateActions()
     const bool alignmentEnabled =
        multipleSelected ||
        (!editableShapes.isEmpty() &&
-        canvas()->resourceManager()->hasResource(KoCanvasResourceManager::PageSize));
+        canvas()->resourceManager()->hasResource(KoCanvasResourceProvider::PageSize));
 
     action("object_align_horizontal_left")->setEnabled(alignmentEnabled);
     action("object_align_horizontal_center")->setEnabled(alignmentEnabled);
@@ -1703,4 +1736,44 @@ void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
     emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));
+}
+
+bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
+{
+
+    if (!canvas() || !m_decorator) {
+        return false;
+    }
+
+    // calculate position for textEditorBoxButton
+    KoSelection *selection = koSelection();
+    const KoViewConverter *converter = canvas()->viewConverter();
+
+    if (!selection || !selection->count() || !converter) {
+        return false;
+    }
+
+    QRectF outline = selection->boundingRect();
+
+    QPointF absoluteTransormPosition(
+        outline.x() + outline.width()*0.5,
+        outline.y() + outline.height());
+
+
+    QPointF textEditorAbsPosition =  converter->documentToView(absoluteTransormPosition);
+    textEditorAbsPosition += decoratorIconPositions.uiOffset;
+
+    // check to see if the text decorator is checked (only for text objects)
+    const QPointF viewPoint = converter->documentToView(mousePosition);
+    const QPointF handlePoint = textEditorAbsPosition;
+    const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
+
+    if (distanceSq < 18 * 18) { // 18 is "handle" area
+        m_decorator->setIsOverTextEditorButton(true);
+        return true;
+    }
+    else {
+        m_decorator->setIsOverTextEditorButton(false);
+        return false;
+    }
 }

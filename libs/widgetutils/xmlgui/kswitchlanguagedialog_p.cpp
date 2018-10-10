@@ -25,8 +25,8 @@
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QtCore/QEvent>
-#include <QtCore/QMap>
+#include <QEvent>
+#include <QMap>
 #include <QSettings>
 #include <QSharedPointer>
 #include <QStandardPaths>

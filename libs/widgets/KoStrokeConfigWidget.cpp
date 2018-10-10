@@ -57,7 +57,7 @@
 #include <KoPathShapeMarkerCommand.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoDocumentResourceManager.h>
 #include <KoToolManager.h>
 #include <KoSelection.h>
@@ -564,7 +564,7 @@ void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
-    case KoCanvasResourceManager::Unit:
+    case KoCanvasResourceProvider::Unit:
         setUnit(value.value<KoUnit>());
         break;
     }

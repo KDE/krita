@@ -40,8 +40,6 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
 {
     Q_ASSERT(!remote.isLocalFile());
 
-    qDebug() << "going to fetch" << remote;
-
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     m_request = new QNetworkRequest(remote);
     m_request->setRawHeader("User-Agent", QString("Krita-%1").arg(qApp->applicationVersion()).toUtf8());
@@ -67,9 +65,9 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
 
 }
 
-void KisRemoteFileFetcher::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+void KisRemoteFileFetcher::downloadProgress(qint64 /*bytesReceived*/, qint64 /*bytesTotal*/)
 {
-    qDebug() << "bytesReceived" << bytesReceived << "bytesTotal" << bytesTotal;
+    //qDebug() << "bytesReceived" << bytesReceived << "bytesTotal" << bytesTotal;
 }
 
 void KisRemoteFileFetcher::error(QNetworkReply::NetworkError error)

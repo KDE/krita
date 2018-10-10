@@ -79,14 +79,14 @@ public:
      * Load and parse
      *
      * This function loads and parses the content.xml, styles.xml and the settings.xml
-     * file in the store. The sytles are already parsed.
+     * file in the store. The styles are already parsed.
      *
      * After this function is called you can access the data via
      * styles()
      * contentDoc()
      * settingsDoc()
      *
-     * @param errorMessage The errorMessage is set in case an error is encounted.
+     * @param errorMessage The errorMessage is set in case an error is encountered.
      * @return true if loading and parsing was successful, false otherwise. In case of an error
      * the errorMessage is updated accordingly.
      */

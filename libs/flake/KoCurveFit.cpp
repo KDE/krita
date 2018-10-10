@@ -37,19 +37,22 @@ const qreal Zero = 10e-12;
 
 class FitVector {
 public:
-    FitVector(const QPointF &p) {
-        m_X = p.x();
-        m_Y = p.y();
+    FitVector(const QPointF &p)
+    : m_X(p.x())
+    , m_Y(p.y())
+	{
     }
 
-    FitVector() {
-        m_X = 0;
-        m_Y = 0;
+    FitVector()
+    : m_X(0)
+    , m_Y(0)
+	{
     }
 
-    FitVector(const QPointF &a, const QPointF &b) {
-        m_X = a.x() - b.x();
-        m_Y = a.y() - b.y();
+    FitVector(const QPointF &a, const QPointF &b)
+    : m_X(a.x() - b.x())
+    , m_Y(a.y() - b.y())
+	{
     }
 
     void normalize() {

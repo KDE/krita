@@ -19,7 +19,7 @@
 #ifndef _KISCOLORSPACESELECTORPLUGIN_H_
 #define _KISCOLORSPACESELECTORPLUGIN_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QtUiPlugin/QDesignerCustomWidgetInterface>
 
 class KisColorSpaceSelectorPlugin : public QObject, public QDesignerCustomWidgetInterface

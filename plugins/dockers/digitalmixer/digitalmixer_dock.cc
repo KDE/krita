@@ -27,7 +27,7 @@
 #include <KoColorSlider.h>
 #include <KoColorPopupAction.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCanvasBase.h>
 
 #include <kis_color_button.h>
@@ -160,7 +160,7 @@ void DigitalMixerDock::setCurrentColor(const KoColor& color)
 void DigitalMixerDock::canvasResourceChanged(int key, const QVariant& v)
 {
     m_tellCanvas = false;
-    if (key == KoCanvasResourceManager::ForegroundColor)
+    if (key == KoCanvasResourceProvider::ForegroundColor)
         setCurrentColor(v.value<KoColor>());
     m_tellCanvas = true;
 }

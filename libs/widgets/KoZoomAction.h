@@ -28,7 +28,7 @@
 /**
  * Class KoZoomAction implements an action to provide zoom values.
  * In a toolbar, KoZoomAction will show a dropdown list (combobox), also with
- * the possibility for the user to enter arbritrary zoom value
+ * the possibility for the user to enter arbitrary zoom value
  * (must be an integer). The values shown on the list are always
  * sorted.
  * In a statusbar it provides a scale (slider) plus an editable value plus

@@ -264,6 +264,7 @@ public:
         , imageIdleWatcher(2000 /*ms*/)
         , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
         , globalAssistantsColor(rhs.globalAssistantsColor)
+        , paletteList(rhs.paletteList)
         , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
@@ -326,6 +327,8 @@ public:
     QColor globalAssistantsColor;
 
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
+
+    QList<KoColorSet*> paletteList;
 
     KisGridConfig gridConfig;
 
@@ -632,7 +635,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
             if (!d->modifiedWhileSaving) {
                 /**
-                 * If undo stack is alreado clean/empty, it doesn't emit any
+                 * If undo stack is already clean/empty, it doesn't emit any
                  * signals, so we might forget update document modified state
                  * (which was set, e.g. while recovering an autosave file)
                  */
@@ -1496,6 +1499,16 @@ KisGridConfig KisDocument::gridConfig() const
 void KisDocument::setGridConfig(const KisGridConfig &config)
 {
     d->gridConfig = config;
+}
+
+QList<KoColorSet *> &KisDocument::paletteList()
+{
+    return d->paletteList;
+}
+
+void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList)
+{
+    d->paletteList = paletteList;
 }
 
 const KisGuidesConfig& KisDocument::guidesConfig() const

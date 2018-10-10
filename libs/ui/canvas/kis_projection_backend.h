@@ -50,7 +50,7 @@ public:
 
     /**
      * Updates the cache of the backend by reading from
-     * an accociated image. All data transfers with
+     * an associated image. All data transfers with
      * KisImage should happen here
      */
     virtual void updateCache(const QRect &dirtyImageRect) = 0;
@@ -78,7 +78,7 @@ public:
      * scale or even original scale (e.g. KisProjectionCache)
      *
      * If info.borderWidth is non-zero, info.requestedRect will
-     * be axpended by info.borderWidth pixels to all directions and
+     * be expended by info.borderWidth pixels to all directions and
      * image of this rect will actually be written to the patch's QImage.
      * That is done to eliminate border effects in smooth scaling.
      */

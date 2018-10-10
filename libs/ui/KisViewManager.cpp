@@ -236,7 +236,7 @@ public:
     bool showFloatingMessage;
     QPointer<KisView> currentImageView;
     KisCanvasResourceProvider canvasResourceProvider;
-    KoCanvasResourceManager canvasResourceManager;
+    KoCanvasResourceProvider canvasResourceManager;
     KisSignalCompressor guiUpdateCompressor;
     KActionCollection *actionCollection;
     KisMirrorManager mirrorManager;
@@ -340,7 +340,7 @@ KisViewManager::~KisViewManager()
     delete d;
 }
 
-void KisViewManager::initializeResourceManager(KoCanvasResourceManager *resourceManager)
+void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourceManager)
 {
     resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
@@ -1287,7 +1287,7 @@ void KisViewManager::guiUpdateTimeout()
 void KisViewManager::showFloatingMessage(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment)
 {
     if (!d->currentImageView) return;
-    d->currentImageView->showFloatingMessageImpl(message, icon, timeout, priority, alignment);
+    d->currentImageView->showFloatingMessage(message, icon, timeout, priority, alignment);
 
     emit floatingMessageRequested(message, icon.name());
 }
@@ -1389,4 +1389,18 @@ void KisViewManager::slotUpdatePixelGridAction()
 
     KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled() && cfg.useOpenGL());
+}
+
+void KisViewManager::slotActivateTransformTool()
+{
+    if(KoToolManager::instance()->activeToolId() == "KisToolTransform") {
+        KoToolBase* tool = KoToolManager::instance()->toolById(canvasBase(), "KisToolTransform");
+
+        QSet<KoShape*> dummy;
+        // Start a new stroke
+        tool->deactivate();
+        tool->activate(KoToolBase::DefaultActivation, dummy);
+    }
+
+    KoToolManager::instance()->switchToolRequested("KisToolTransform");
 }

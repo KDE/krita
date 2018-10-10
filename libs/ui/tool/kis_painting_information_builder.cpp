@@ -26,7 +26,7 @@
 #include "kis_cubic_curve.h"
 #include "kis_speed_smoother.h"
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include "kis_canvas_resource_provider.h"
 
 
@@ -63,7 +63,7 @@ void KisPaintingInformationBuilder::updateSettings()
 
 KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
                                                                int timeElapsed,
-                                                               const KoCanvasResourceManager *manager)
+                                                               const KoCanvasResourceProvider *manager)
 {
     if (manager) {
         m_pressureDisabled = manager->resource(KisCanvasResourceProvider::DisablePressure).toBool();

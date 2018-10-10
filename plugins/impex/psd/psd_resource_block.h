@@ -75,7 +75,7 @@ public:
     }
 
     KisAnnotation* clone() const Q_DECL_OVERRIDE {
-        // HACK ALERT: we are evil! use notmal copying instead!
+        // HACK ALERT: we are evil! use normal copying instead!
 
         PSDResourceBlock *copied = new PSDResourceBlock();
 

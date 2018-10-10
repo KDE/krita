@@ -159,7 +159,7 @@ void KisPSDLayerStyleCollectionResource::assignAllLayerStyles(KisNodeSP root)
         }
 
         if (!found) {
-            warnKrita << "WARNING: loading layer style for" << layer->name() << "failed! It requests unexistent style:" << uuid;
+            warnKrita << "WARNING: loading layer style for" << layer->name() << "failed! It requests inexistent style:" << uuid;
         }
     }
 

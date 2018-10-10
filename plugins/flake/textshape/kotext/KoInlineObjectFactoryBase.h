@@ -94,7 +94,7 @@ public:
 
 protected:
     /**
-     * Add a template with the properties of a speficic type of object this factory can generate
+     * Add a template with the properties of a specific type of object this factory can generate
      * using the createInlineObject() method.
      * @param params The new template this factory knows to produce
      */

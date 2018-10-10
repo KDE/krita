@@ -43,7 +43,7 @@ public:
      * Create a KisSaveGroupVisitor
      *
      * @param image: the image to save
-     * @param saveInvisible: also save invisibible layers
+     * @param saveInvisible: also save invisible layers
      * @param saveTopLevelOnly: if true, only save the toplevel layers, otherwise
      *        descend into groups and save the bottom-most groups (groups that do
      *        not contain another group.

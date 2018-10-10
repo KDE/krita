@@ -21,7 +21,7 @@
 
 #include <KoDialog.h>
 #include <KoColorSet.h>
-#include <KisColorsetChooser.h>
+#include <KisPaletteListWidget.h>
 #include <kis_types.h>
 
 #include "wdg_layersplit.h"
@@ -56,7 +56,7 @@ private Q_SLOTS:
 
 private:
     WdgLayerSplit *m_page {0};
-    KisColorsetChooser *m_colorSetChooser {0};
+    KisPaletteListWidget *m_colorSetChooser {0};
     KoColorSet *m_palette {0};
 };
 

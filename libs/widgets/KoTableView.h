@@ -48,7 +48,6 @@ public:
     */
     void resizeEvent(QResizeEvent *event) override;
 
-
     void setViewMode(ViewMode mode);
 
     void updateView();

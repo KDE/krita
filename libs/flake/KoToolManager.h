@@ -119,7 +119,7 @@ private:
      per view, because this is a class with scrollbars and a zoomlevel and so on)
    - for every pointing device (determined by the unique id of tablet,
      or 0 for mice -- you may have more than one mouse attached, but
-     Qt cannot distinquish between them, there is an associated tool.
+     Qt cannot distinguish between them, there is an associated tool.
    - depending on things like tablet leave/enter proximity, incoming
      mouse or tablet events and a little timer (that gets stopped when
      we know what is what), the active pointing device is determined,

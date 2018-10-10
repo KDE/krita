@@ -82,17 +82,16 @@ Q_SIGNALS:
      * fires when a swatch is selected with leftclick.
      * @param entry
      */
-    void entrySelectedForeGround(KoColorSetEntry entry);
+    void entrySelectedForeGround(KisSwatch entry);
     /**
      * @brief entrySelectedBackGround
      * fires when a swatch is selected with rightclick.
      * @param entry
      */
-    void entrySelectedBackGround(KoColorSetEntry entry);
+    void entrySelectedBackGround(KisSwatch entry);
 private:
     struct Private;
     const QScopedPointer<Private> d;
-
 };
 
 #endif // LIBKIS_PALETTE_VIEW_H

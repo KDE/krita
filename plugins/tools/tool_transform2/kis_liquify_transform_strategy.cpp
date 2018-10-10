@@ -34,7 +34,7 @@
 #include "kis_algebra_2d.h"
 #include "kis_liquify_paint_helper.h"
 #include "kis_liquify_transform_worker.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 
 
 struct KisLiquifyTransformStrategy::Private
@@ -43,7 +43,7 @@ struct KisLiquifyTransformStrategy::Private
             const KisCoordinatesConverter *_converter,
             ToolTransformArgs &_currentArgs,
             TransformTransactionProperties &_transaction,
-            const KoCanvasResourceManager *_manager)
+            const KoCanvasResourceProvider *_manager)
         : manager(_manager),
           q(_q),
           converter(_converter),
@@ -54,7 +54,7 @@ struct KisLiquifyTransformStrategy::Private
     {
     }
 
-    const KoCanvasResourceManager *manager;
+    const KoCanvasResourceProvider *manager;
 
     KisLiquifyTransformStrategy * const q;
 
@@ -92,7 +92,7 @@ struct KisLiquifyTransformStrategy::Private
 KisLiquifyTransformStrategy::KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
                                                          ToolTransformArgs &currentArgs,
                                                          TransformTransactionProperties &transaction,
-                                                         const KoCanvasResourceManager *manager)
+                                                         const KoCanvasResourceProvider *manager)
 
     : m_d(new Private(this, converter, currentArgs, transaction, manager))
 {

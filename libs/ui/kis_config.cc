@@ -1975,6 +1975,16 @@ void KisConfig::setAutoSmoothBezierCurves(bool value)
     m_cfg.writeEntry("autoSmoothBezierCurves", value);
 }
 
+bool KisConfig::activateTransformToolAfterPaste(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("activateTransformToolAfterPaste", false);
+}
+
+void KisConfig::setActivateTransformToolAfterPaste(bool value)
+{
+    m_cfg.writeEntry("activateTransformToolAfterPaste", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

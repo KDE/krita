@@ -55,7 +55,7 @@ extern "C" int main(int argc, char **argv)
                                       "The function to call (by default __main__ is called).", "function", "__main__");
     parser.addOption(functionOption);
 
-    parser.addPositionalArgument("[argument(s)]", "The argumetns for the script");
+    parser.addPositionalArgument("[argument(s)]", "The arguments for the script");
     parser.process(app);
 
     if (!parser.isSet(scriptOption)) {

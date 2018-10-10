@@ -158,10 +158,10 @@ KoColor KisDlgStrokeSelection::getSelectedColor() const
     QString currentSource = m_page->lineColorBox->currentText();
 
     if (currentSource == "Foreground color") {
-        color = m_resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+        color = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     }
     else  if (currentSource == "Background color") {
-              color = m_resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
+              color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
           }
           else  {
               color = m_page->m_options.color;
@@ -177,10 +177,10 @@ KoColor KisDlgStrokeSelection::getFillSelectedColor() const
     colorFillSource currentSource = static_cast<colorFillSource>(m_page->fillBox->currentIndex());
 
     if (currentSource == colorFillSource::FGColor) {
-        color = m_resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
+        color = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
     }
     else  if (currentSource == colorFillSource::BGColor) {
-              color = m_resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
+              color = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
           }
           else  if (currentSource == colorFillSource::PaintColor) {
                     color = converter->approximateFromRenderedQColor(m_page->colorSelector->color());
@@ -287,8 +287,8 @@ void KisDlgStrokeSelection::colorChanged(const QColor &newColor)
     if (m_page->fillBox->currentText() == "Paint color") {
         m_page->colorFillSelector->setColor(newColor);
     }
-    QColor BGColor = m_resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>().toQColor();
-    QColor FGColor = m_resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>().toQColor();
+    QColor BGColor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>().toQColor();
+    QColor FGColor = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>().toQColor();
     KoColor tempColor= converter->approximateFromRenderedQColor(newColor);
 
 
@@ -301,8 +301,8 @@ void KisDlgStrokeSelection::colorChanged(const QColor &newColor)
 void KisDlgStrokeSelection::colorFillChanged(const QColor &newColor)
 {
     QColor PaintColor = m_page->colorSelector->color();
-    QColor BGcolor = m_resourceManager->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>().toQColor();
-    QColor FGColor = m_resourceManager->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>().toQColor();
+    QColor BGcolor = m_resourceManager->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>().toQColor();
+    QColor FGColor = m_resourceManager->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>().toQColor();
     KoColor tempColor= converter->approximateFromRenderedQColor(newColor);
 
     if (!(newColor == FGColor) && !(newColor == BGcolor) && !(newColor == PaintColor)) {

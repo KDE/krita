@@ -23,9 +23,9 @@
 
 #include <kritawidgetutils_export.h>
 #include "config-xmlgui.h"
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QList>
+#include <QObject>
+#include <QString>
+#include <QList>
 
 #include <kstandardaction.h>
 #include "kactioncollection.h"

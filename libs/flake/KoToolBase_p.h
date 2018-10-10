@@ -22,7 +22,7 @@
 #define KOTOOLBASE_P_H
 
 #include "KoDocumentResourceManager.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoCanvasBase.h"
 #include "KoShapeController.h"
 #include <QHash>
@@ -60,7 +60,7 @@ public:
     void connectSignals()
     {
         if (canvas) { // in the case of KoToolManagers dummytool it can be zero :(
-            KoCanvasResourceManager * crp = canvas->resourceManager();
+            KoCanvasResourceProvider * crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)
                 q->connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)),

@@ -157,9 +157,6 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setMouseCoalescingEnabled(false);
 #endif
 
-    KisDlgInternalColorSelector::s_screenColorPickerFactory = KisScreenColorPicker::createScreenColorPicker;
-
-
     QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath());
 
     setApplicationDisplayName("Krita");

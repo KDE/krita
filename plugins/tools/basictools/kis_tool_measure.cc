@@ -96,8 +96,6 @@ void KisToolMeasureOptionsWidget::updateDistance()
 KisToolMeasure::KisToolMeasure(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::crossCursor())
 {
-    m_startPos = QPointF(0, 0);
-    m_endPos = QPointF(0, 0);
 }
 
 KisToolMeasure::~KisToolMeasure()

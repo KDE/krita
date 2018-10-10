@@ -64,6 +64,9 @@ private Q_SLOTS:
      * switch the text editor tab.
      */
     void switchTextEditorTab(bool convertData = true);
+
+    void slotCloseEditor();
+
     /**
      * in rich text, check the current format, and toggle the given buttons.
      */
@@ -127,6 +130,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 
     void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextPreferred);
+    void textEditorClosed();
 
 protected:
 
@@ -140,6 +144,7 @@ private:
                           const char *member);
     void createActions();
     void enableRichTextActions(bool enable);
+    void enableSvgTextActions(bool enable);
 
 
 
@@ -147,6 +152,8 @@ private:
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;
+    QList<QAction*> m_svgTextActions;
+
     KoSvgTextShape *m_shape {0};
 #ifndef Q_OS_WIN
     KoDialog *m_charSelectDialog {0};

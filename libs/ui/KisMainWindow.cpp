@@ -123,7 +123,6 @@
 #include "kis_custom_image_widget.h"
 #include <KisDocument.h>
 #include "kis_group_layer.h"
-#include "kis_icon_utils.h"
 #include "kis_image_from_clipboard_widget.h"
 #include "kis_image.h"
 #include <KisImportExportFilter.h>
@@ -1352,7 +1351,6 @@ void KisMainWindow::dropEvent(QDropEvent *event)
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
                 bool r = installBundle(url.toLocalFile());
-                qDebug() << "\t" << r;
             }
             else {
                 openDocument(url, None);
@@ -1526,7 +1524,7 @@ void KisMainWindow::slotShowSessionManager() {
     KisPart::instance()->showSessionManager();
 }
 
-KoCanvasResourceManager *KisMainWindow::resourceManager() const
+KoCanvasResourceProvider *KisMainWindow::resourceManager() const
 {
     return d->viewManager->resourceProvider()->resourceManager();
 }
@@ -2102,6 +2100,7 @@ void KisMainWindow::subWindowActivated()
         if (menu) {
             Q_FOREACH (QAction *action, menu->actions()) {
                 action->setShortcut(QKeySequence());
+                action->deleteLater();
             }
         }
     }
@@ -2623,7 +2622,7 @@ void KisMainWindow::initializeGeometry()
         const int deskWidth = desk.width();
         if (deskWidth > 1024) {
             // a nice width, and slightly less than total available
-            // height to componensate for the window decs
+            // height to compensate for the window decs
             w = (deskWidth / 3) * 2;
             h = (desk.height() / 3) * 2;
         }
@@ -2659,7 +2658,7 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
     const int newScreen = qApp->desktop()->screenNumber(e->pos());
 
     if (oldScreen != newScreen) {
-        KisConfigNotifier::instance()->notifyConfigChanged();
+        emit screenChanged();
     }
 }
 

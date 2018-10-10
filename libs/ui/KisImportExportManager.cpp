@@ -35,7 +35,6 @@
 #include <QGroupBox>
 #include <QFuture>
 #include <QtConcurrent>
-#include <QFileInfo>
 
 #include <klocalizedstring.h>
 #include <ksqueezedtextlabel.h>

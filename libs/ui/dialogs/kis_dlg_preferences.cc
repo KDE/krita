@@ -161,6 +161,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+    chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
 
     m_cmbKineticScrollingGesture->addItem(i18n("Disabled"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
@@ -260,6 +261,7 @@ void GeneralTab::setDefault()
     m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
+    chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
@@ -1344,6 +1346,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setKineticScrollingScrollbar(dialog->m_general->kineticScrollingScrollbar());
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
+        cfg.setActivateTransformToolAfterPaste(dialog->m_general->chkEnableTranformToolAfterPaste->isChecked());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());

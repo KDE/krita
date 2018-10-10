@@ -102,7 +102,7 @@ public:
      * specified menu.
      *
      * For instance, if a document section can be locked and visible,
-     * the menu will be expanded with locked and visilbe toggle
+     * the menu will be expanded with locked and visible toggle
      * actions.
      *
      * For instance

@@ -19,15 +19,53 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoColorSetEntry.h"
+#include "KisSwatch.h"
 
-KoColorSetEntry::KoColorSetEntry()
+
+KisSwatch::KisSwatch()
     : m_spotColor(false)
+    , m_valid(false)
 { }
 
-KoColorSetEntry::KoColorSetEntry(const KoColor &color, const QString &name)
+KisSwatch::KisSwatch(const KoColor &color, const QString &name)
     : m_color(color)
     , m_name(name)
     , m_spotColor(false)
+    , m_valid(true)
 { }
 
+void KisSwatch::setName(const QString &name)
+{
+    m_name = name;
+    m_valid = true;
+}
+
+void KisSwatch::setId(const QString &id)
+{
+    m_id = id;
+    m_valid = true;
+}
+
+void KisSwatch::setColor(const KoColor &color)
+{
+    m_color = color;
+    m_valid = true;
+}
+
+void KisSwatch::setSpotColor(bool spotColor)
+{
+    m_spotColor = spotColor;
+    m_valid = true;
+}
+
+KisSwatch &KisSwatch::operator =(const KisSwatch &source)
+{
+    if (&source == this)
+        return *this;
+    m_color = source.m_color;
+    m_id = source.m_id;
+    m_name = source.m_name;
+    m_spotColor = source.m_spotColor;
+    m_valid = source.m_valid;
+    return *this;
+}

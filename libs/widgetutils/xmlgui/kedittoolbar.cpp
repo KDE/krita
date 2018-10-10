@@ -28,8 +28,8 @@
 #include <QDialogButtonBox>
 #include <QDomDocument>
 #include <QLayout>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
+#include <QDir>
+#include <QFile>
 #include <QHeaderView>
 #include <QToolButton>
 #include <QLabel>

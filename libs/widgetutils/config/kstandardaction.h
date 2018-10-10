@@ -21,7 +21,7 @@
 
 #include <kritawidgetutils_export.h>
 #include <kstandardshortcut.h>
-#include <QtCore/QList>
+#include <QList>
 
 class QObject;
 class QStringList;

@@ -40,7 +40,7 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceRegistry.h"
 #include "KoColor.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 
 #include "kis_paint_device.h"
 #include "kis_painter.h"
@@ -282,8 +282,8 @@ void KisMyPaintShadeSelector::canvasResourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground) ||
-        (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResourceProvider::ForegroundColor && onForeground) ||
+        (key == KoCanvasResourceProvider::BackgroundColor && onBackground)) {
 
         setColor(v.value<KoColor>());
     }

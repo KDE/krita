@@ -102,7 +102,7 @@ public:
         setPriority(0);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIconName(koIconNameCStr("krita_tool_color_fill"));
-        //setShortcut( QKeySequence( Qt::Key_F ) );
+        setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);
     }
 

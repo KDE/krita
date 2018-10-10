@@ -2692,9 +2692,21 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
 
         d->screenConnectionsStore.clear();
 
-        QScreen *newScreenObject = qApp->screenAt(e->pos());
-        d->screenConnectionsStore.addConnection(newScreenObject, SIGNAL(physicalDotsPerInchChanged(qreal)),
-                                                this, SIGNAL(screenChanged()));
+        QScreen *newScreenObject = 0;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        newScreenObject = qApp->screenAt(e->pos());
+#else
+        // TODO: i'm not sure if this pointer already has a correct value
+        // by the moment we get the event. It might not work on older
+        // versions of Qt
+        newScreenObject = qApp->primaryScreen();
+#endif
+
+        if (newScreenObject) {
+            d->screenConnectionsStore.addConnection(newScreenObject, SIGNAL(physicalDotsPerInchChanged(qreal)),
+                                                    this, SIGNAL(screenChanged()));
+        }
     }
 }
 

@@ -514,8 +514,6 @@ namespace KisLayerUtils {
             KisPainter gc(m_info->dstNode->paintDevice());
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-                const bool inheritsAlpha = layer ? layer->alphaChannelDisabled() : false;
                 QRect rc = node->exactBounds() | m_info->image->bounds();
                 node->projectionPlane()->apply(&gc, rc);
             }

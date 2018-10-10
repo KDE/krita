@@ -44,11 +44,11 @@
 
 class KisColorPreviewPopup : public QWidget {
 public:
-    KisColorPreviewPopup(KisColorSelectorBase* parent) : QWidget(), m_parent(parent)
+    KisColorPreviewPopup(KisColorSelectorBase* parent)
+        : QWidget(parent), m_parent(parent)
     {
-        setWindowFlags(Qt::ToolTip);
+        setWindowFlags(Qt::ToolTip | Qt::NoDropShadowWindowHint);
         setQColor(QColor(0,0,0));
-        setMouseTracking(true);
         m_baseColor = QColor(0,0,0,0);
         m_previousColor = QColor(0,0,0,0);
         m_lastUsedColor = QColor(0,0,0,0);
@@ -108,6 +108,16 @@ protected:
         p.fillRect(0, 0, width(), width(), m_color);
         p.fillRect(50, width(), width(), height(), m_previousColor);
         p.fillRect(0, width(), 50, height(), m_lastUsedColor);
+    }
+
+    void enterEvent(QEvent *e) override {
+        QWidget::enterEvent(e);
+        m_parent->tryHideAllPopups();
+    }
+
+    void leaveEvent(QEvent *e) override {
+        QWidget::leaveEvent(e);
+        m_parent->tryHideAllPopups();
     }
 
 private:
@@ -233,12 +243,14 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         if(y+m_popup->height()>availRect.y()+availRect.height())
             y = availRect.y()+availRect.height()-m_popup->height();
 
-
         m_popup->move(x, y);
         m_popup->setHidingTime(200);
         showPopup(DontMove);
 
     } else if (m_isPopup && event->button() == Qt::MidButton) {
+        if (m_colorPreviewPopup) {
+            m_colorPreviewPopup->hide();
+        }
         hide();
     } else {
         showColorPreview();
@@ -253,15 +265,15 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
     if (e->button() == Qt::MidButton) {
         e->accept();
     } else if (m_isPopup && m_hideOnMouseClick==true && !m_hideTimer->isActive()) {
-        showColorPreview();
+        if (m_colorPreviewPopup) {
+            m_colorPreviewPopup->hide();
+        }
         hide();
     }
 }
 
 void KisColorSelectorBase::enterEvent(QEvent *e)
 {
-    Q_UNUSED(e);
-
     if (m_popup && m_popup->isVisible()) {
         m_popup->m_hideTimer->stop();
     }
@@ -306,24 +318,14 @@ void KisColorSelectorBase::enterEvent(QEvent *e)
         m_popup->setHidingTime(200);
         showPopup(DontMove);
     }
+
+    QWidget::enterEvent(e);
 }
 
 void KisColorSelectorBase::leaveEvent(QEvent *e)
 {
-    Q_UNUSED(e);
-
-    if (m_colorPreviewPopup->isVisible()) {
-        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
-        m_colorPreviewPopup->hide();
-    }
-
-    if (m_popup && m_popup->isVisible()) {
-        m_popup->m_hideTimer->start();
-    }
-
-    if (m_isPopup && !m_hideTimer->isActive()) {
-        m_hideTimer->start();
-    }
+    tryHideAllPopups();
+    QWidget::leaveEvent(e);
 }
 
 void KisColorSelectorBase::keyPressEvent(QKeyEvent *)
@@ -394,7 +396,20 @@ void KisColorSelectorBase::lazyCreatePopup()
     if (!m_popup) {
         m_popup = createPopup();
         Q_ASSERT(m_popup);
-        m_popup->setWindowFlags(Qt::FramelessWindowHint|Qt::SubWindow|Qt::X11BypassWindowManagerHint);
+        m_popup->setParent(this);
+
+        /**
+         * On Linux passing Qt::X11BypassWindowManagerHint makes
+         * the window never hide if one switches it with Alt+Tab
+         * or something like that. The window also don't get any
+         * mouse-enter/leave events. So we have to make it normal
+         * window (which is visible to the window manager and
+         * appears in the tasks bar). Therefore we don't use it
+         * anyomore.
+         */
+        m_popup->setWindowFlags(Qt::FramelessWindowHint |
+                                Qt::Window |
+                                Qt::NoDropShadowWindowHint);
         m_popup->m_parent = this;
         m_popup->m_isPopup=true;
     }
@@ -411,13 +426,17 @@ void KisColorSelectorBase::showPopup(Move move)
     QPoint cursorPos = QCursor::pos();
 
     if (move == MoveToMousePosition) {
-        m_popup->move(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2);
+        m_popup->move(this->mapFromGlobal(QPoint(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2)));
         QRect rc = m_popup->geometry();
         if (rc.x() < 0) rc.setX(0);
         if (rc.y() < 0) rc.setY(0);
         m_popup->setGeometry(rc);
-
     }
+
+    if (m_colorPreviewPopup) {
+        m_colorPreviewPopup->hide();
+    }
+
     m_popup->show();
     m_popup->m_colorPreviewPopup->show();
 }
@@ -527,7 +546,23 @@ KisDisplayColorConverter* KisColorSelectorBase::converter() const
 {
     return m_canvas ?
         m_canvas->displayColorConverter() :
-        KisDisplayColorConverter::dumbConverterInstance();
+                KisDisplayColorConverter::dumbConverterInstance();
+}
+
+void KisColorSelectorBase::tryHideAllPopups()
+{
+    if (m_colorPreviewPopup->isVisible()) {
+        m_colorUpdateSelf=false; //this is for allowing advanced selector to listen to outside colour-change events.
+        m_colorPreviewPopup->hide();
+    }
+
+    if (m_popup && m_popup->isVisible()) {
+        m_popup->m_hideTimer->start();
+    }
+
+    if (m_isPopup && !m_hideTimer->isActive()) {
+        m_hideTimer->start();
+    }
 }
 
 

@@ -217,6 +217,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     if (m_ffmpegPath.isEmpty()) {
         m_ffmpegPath = configuration->getString("ffmpeg_path");
         if (!QFileInfo(m_ffmpegPath).exists()) {
+            m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", m_ffmpegPath));
             return KisImageBuilder_RESULT_FAILURE;
         }
     }

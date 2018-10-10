@@ -73,6 +73,7 @@ KisImportExportFilter::ConversionStatus KisVideoExport::convert(KisDocument *doc
             else {
                 qWarning() << warningMessage;
             }
+            document->setErrorMessage(warningMessage);
             return KisImportExportFilter::UsageError;
         }
     }

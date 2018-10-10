@@ -38,10 +38,29 @@ class KRITAVIDEOEXPORT_EXPORT VideoSaver : public QObject {
 
     Q_OBJECT
 public:
+    /**
+     * @brief VideoSaver
+     * This is the object that takes an animation document and config and tells ffmpeg
+     * to render it. Log files are generated here too.
+     * @param doc the document to use for rendering.
+     * @param ffmpegPath the path to the ffmpeg executable.
+     * @param batchMode whether Krita is in batchmde and we can thus not show gui widgets.
+     */
     VideoSaver(KisDocument* doc, const QString &ffmpegPath, bool batchMode);
     ~VideoSaver() override;
 
+    /**
+     * @brief image
+     * @return get the image used by this exporter.
+     */
     KisImageSP image();
+    /**
+     * @brief encode the main encoding function.
+     * This in turn calls runFFMpeg, which is a private function inside this class.
+     * @param filename the filename to which to render the animation.
+     * @param configuration the configuration
+     * @return whether it is succesful or had another failure.
+     */
     KisImageBuilder_Result encode(const QString &filename, KisPropertiesConfigurationSP configuration);
 
     bool hasFFMpeg() const;

@@ -48,15 +48,16 @@ int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
-    bool allowPaletteModification; // if modification is allowed from this widget
+    bool allowPaletteModification {false}; // if modification is allowed from this widget
+    bool forceSelectClosestColor  {false}; // if selecting a color from the color selector should
+                             // select the closest color in this palette *AND* make
+                             // that the globally selected FG color.
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
     , m_d(new Private)
 {
-    m_d->allowPaletteModification = false;
-
     setItemDelegate(new KisPaletteDelegate(this));
 
     setShowGrid(true);
@@ -91,6 +92,8 @@ KisPaletteView::KisPaletteView(QWidget *parent)
         connect(scroller, SIGNAL(stateChanged(QScroller::State)),
                 this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
+    KConfigGroup group(KSharedConfig::openConfig(), "");
+    m_d->forceSelectClosestColor = group.readEntry("colorsettings/forcepalettecolors", false);
 }
 
 KisPaletteView::~KisPaletteView()
@@ -206,9 +209,15 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
+<<<<<<< HEAD
     //TODO: We'll need a switch that implements forcing the paint
     //color to always be one from the palette.
     //selectClosestColor(color);
+=======
+    if (m_d->forceSelectClosestColor) {
+        selectClosestColor(color);
+    }
+>>>>>>> Add a preference option to force selecting colors from the palette
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
@@ -219,12 +228,18 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     setModel(model);
     slotAdditionalGuiUpdate();
+<<<<<<< HEAD
     connect(model, SIGNAL(sigPaletteModified()),
             SLOT(slotAdditionalGuiUpdate()));
     connect(model, SIGNAL(sigPaletteChanged()),
             SLOT(slotAdditionalGuiUpdate()));
 
     connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
+=======
+    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
+    connect(m_d->model, SIGNAL(currentChanged(QModelIndex, QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
+>>>>>>> Add a preference option to force selecting colors from the palette
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const

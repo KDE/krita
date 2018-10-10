@@ -38,6 +38,7 @@
 #include "KisViewManager.h"
 #include <KisView.h>
 #include "kis_image.h"
+#include "kis_global.h"
 #include "kis_display_color_converter.h"
 
 
@@ -263,7 +264,9 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
 
     if (e->button() == Qt::MidButton) {
         e->accept();
-    } else if (m_isPopup && m_hideOnMouseClick==true && !m_hideTimer->isActive()) {
+    } else if (m_isPopup &&
+               (m_hideOnMouseClick && !m_popupOnMouseOver) &&
+               !m_hideTimer->isActive()) {
         if (m_colorPreviewPopup) {
             m_colorPreviewPopup->hide();
         }
@@ -290,30 +293,15 @@ void KisColorSelectorBase::enterEvent(QEvent *e)
 
         lazyCreatePopup();
 
-        QRect availRect = QApplication::desktop()->availableGeometry(this);
-        QRect forbiddenRect = QRect(parentWidget()->mapToGlobal(QPoint(0,0)),
-                                    QSize(parentWidget()->width(), parentWidget()->height()));
+        const QRect availRect = QApplication::desktop()->availableGeometry(this);
 
-        int x,y;
-        if(forbiddenRect.y()+forbiddenRect.height()/2 > availRect.height()/2) {
-            //popup above forbiddenRect
-            y = forbiddenRect.y()-m_popup->height();
-        }
-        else {
-            //popup below forbiddenRect
-            y = forbiddenRect.y()+forbiddenRect.height();
-        }
+        QPoint proposedTopLeft = rect().center() - m_popup->rect().center();
+        proposedTopLeft = mapToGlobal(proposedTopLeft);
 
-        if(forbiddenRect.x()+forbiddenRect.width()/2 < availRect.width()/2) {
-            //left edge of popup justified with left edge of popup
-            x = forbiddenRect.x();
-        }
-        else {
-            //the other way round
-            x = forbiddenRect.x()+forbiddenRect.width()-m_popup->width();
-        }
+        QRect popupRect = QRect(proposedTopLeft, m_popup->size());
+        popupRect = kisEnsureInRect(popupRect, availRect);
 
-        m_popup->move(x, y);
+        m_popup->setGeometry(popupRect);
         m_popup->setHidingTime(200);
         showPopup(DontMove);
     }

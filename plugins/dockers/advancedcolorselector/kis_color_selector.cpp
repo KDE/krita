@@ -295,7 +295,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
     e->setAccepted(false);
-    KisColorSelectorBase::mousePressEvent(e);
+    KisColorSelectorBase::mouseReleaseEvent(e);
 
     if(!e->isAccepted() &&
        !(m_lastRealColor == m_currentRealColor)) {

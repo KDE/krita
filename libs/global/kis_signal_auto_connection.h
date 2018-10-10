@@ -126,6 +126,10 @@ public:
         m_connections.clear();
     }
 
+    inline bool isEmpty() {
+        return m_connections.isEmpty();
+    }
+
 private:
     QVector<KisSignalAutoConnectionSP> m_connections;
 };

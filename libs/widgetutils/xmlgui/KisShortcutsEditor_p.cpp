@@ -35,6 +35,7 @@
 #include <ksharedconfig.h>
 #include <KConfigGroup>
 #include "kis_action_registry.h"
+#include <KisKineticScroller.h>
 
 //---------------------------------------------------------------------
 // KisShortcutsEditorPrivate
@@ -79,6 +80,12 @@ void KisShortcutsEditorPrivate::initGUI(KisShortcutsEditor::ActionTypes types,
     //we have our own editing mechanism
     ui.list->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui.list->setAlternatingRowColors(true);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(ui.list);
+    if (scroller){
+        QObject::connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                         q, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
     QObject::connect(delegate, SIGNAL(shortcutChanged(QVariant,QModelIndex)),
                      q, SLOT(capturedShortcut(QVariant,QModelIndex)));

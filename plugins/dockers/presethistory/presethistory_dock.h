@@ -20,6 +20,7 @@
 
 #include <QDockWidget>
 #include <QPointer>
+#include <KisKineticScroller.h>
 
 #include <KoCanvasObserverBase.h>
 
@@ -36,7 +37,8 @@ public:
     QString observerName() override { return "PresetHistoryDock"; }
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 private Q_SLOTS:
     void presetSelected(QListWidgetItem* item);
     void canvasResourceChanged(int key, const QVariant& v);

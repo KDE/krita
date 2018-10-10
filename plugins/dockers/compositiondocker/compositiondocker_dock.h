@@ -27,6 +27,7 @@
 #include <kis_canvas2.h>
 
 #include "ui_wdgcompositiondocker.h"
+#include <KisKineticScroller.h>
 
 class CompositionModel;
 class KisAction;
@@ -43,6 +44,9 @@ public:
     void updateModel();
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
+
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
     
 private Q_SLOTS:
     void activated (const QModelIndex& index);

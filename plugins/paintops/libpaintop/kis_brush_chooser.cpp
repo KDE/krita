@@ -36,7 +36,9 @@
 #include <kconfig.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
+#include <KisKineticScroller.h>
 
+#include <KoResourceItemView.h>
 #include <KoResourceItemChooser.h>
 
 #include <kis_icon.h>
@@ -118,7 +120,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     QObject::connect(brushSizeSpinBox, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemSize(qreal)));
 
-
     brushRotationSpinBox->setRange(0, 360, 0);
     brushRotationSpinBox->setValue(0);
     brushRotationSpinBox->setSuffix(QChar(Qt::Key_degree));
@@ -127,9 +128,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
     connect(brushSpacingSelectionWidget, SIGNAL(sigSpacingChanged()), SLOT(slotSpacingChanged()));
 
-
     QObject::connect(useColorAsMaskCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotSetItemUseColorAsMask(bool)));
-
 
     KisBrushResourceServer* rServer = KisBrushServer::instance()->brushServer();
     QSharedPointer<KisBrushResourceServerAdapter> adapter(new KisBrushResourceServerAdapter(rServer));
@@ -146,11 +145,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
     m_itemChooser->setMinimumWidth(100);
     m_itemChooser->setMinimumHeight(150);
     m_itemChooser->showButtons(false); // turn the import and delete buttons since we want control over them
-
-    KisConfig cfg(true);
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
@@ -172,7 +166,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(QWidget *parent, const char
 
     clipboardButton->setIcon(KisIconUtils::loadIcon("list-add"));
     clipboardButton->setToolTip(i18n("Creates a brush tip from the image in the clipboard."));
-
 
     connect(stampButton, SIGNAL(clicked()), this,  SLOT(slotOpenStampBrush()));
     connect(clipboardButton, SIGNAL(clicked()), SLOT(slotOpenClipboardBrush()));
@@ -352,7 +345,6 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
             brushTypeString = i18n("Animated Image");
         }
 
-
         QString brushDetailsText = QString("%1 (%2 x %3) %4")
                        .arg(brushTypeString)
                        .arg(m_brush->width())
@@ -370,14 +362,12 @@ void KisPredefinedBrushChooser::updateBrushTip(KoResource * resource, bool isCha
             m_brush->setUserEffectiveSize(brushSizeSpinBox->value());
         }
 
-
         brushSpacingSelectionWidget->setSpacing(m_brush->autoSpacingActive(),
                                 m_brush->autoSpacingActive() ?
                                 m_brush->autoSpacingCoeff() : m_brush->spacing());
 
         brushRotationSpinBox->setValue(m_brush->angle() * 180 / M_PI);
         brushSizeSpinBox->setValue(m_brush->width() * m_brush->scale());
-
 
         // useColorAsMask support is only in gimp brush so far
         KisGbrBrush *gimpBrush = dynamic_cast<KisGbrBrush*>(m_brush.data());

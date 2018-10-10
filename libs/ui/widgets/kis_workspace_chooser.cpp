@@ -27,10 +27,12 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include <KisKineticScroller.h>
 
 #include <klocalizedstring.h>
 
 #include <KoResourceItemChooser.h>
+#include <KoResourceItemView.h>
 #include <KoResourceServerAdapter.h>
 #include <resources/KoResource.h>
 
@@ -75,9 +77,7 @@ void KisWorkspaceDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
         painter->fillRect(option.rect, option.palette.base());
     }
 
-
     painter->drawText(option.rect.x() + 5, option.rect.y() + painter->fontMetrics().ascent() + 5, workspace->name());
-
 }
 
 KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent): QWidget(parent), m_view(view)
@@ -119,11 +119,6 @@ KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(QS
     widgets.itemChooser->setColumnCount(1);
     widgets.itemChooser->showTaggingBar(false);
     widgets.saveButton = new QPushButton(i18n("Save"));
-
-    KisConfig cfg(true);
-    widgets.itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                         cfg.kineticScrollingSensitivity(),
-                                         cfg.kineticScrollingScrollbar());
 
     widgets.nameEdit = new QLineEdit(this);
     widgets.nameEdit->setPlaceholderText(i18n("Insert name"));

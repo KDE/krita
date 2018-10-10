@@ -27,6 +27,7 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+#include <KisKineticScroller.h>
 
 #include "ui_WdgSvgCollection.h"
 
@@ -73,6 +74,9 @@ public:
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
+
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:
 

@@ -21,6 +21,7 @@
 #define KIS_DOCUMENT_SECTION_VIEW_H
 
 #include <QTreeView>
+#include <QScroller>
 #include "kritaui_export.h"
 
 class QStyleOptionViewItem;
@@ -149,6 +150,7 @@ protected:
 public Q_SLOTS:
     /// called with a theme change to refresh icon colors
     void slotUpdateIcons();
+    void slotScrollerStateChanged(QScroller::State state);
 
 protected Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;

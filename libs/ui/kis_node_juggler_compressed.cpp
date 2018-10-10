@@ -564,7 +564,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                 addCommand(new KisImageLayerAddCommand(m_image, newNode,
                                                        newParent,
                                                        currentAbove,
-                                                       false, false));
+                                                       true, true));
                 currentAbove = newNode;
             } else if (m_mode == MOVE) {
                 KisNodeSP newNode = node;

@@ -1359,6 +1359,9 @@ void KisMainWindow::dropEvent(QDropEvent *event)
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
                 bool r = installBundle(url.toLocalFile());
+                if (!r) {
+                    qWarning() << "Could not install bundle" << url.toLocalFile();
+                }
             }
             else {
                 openDocument(url, None);

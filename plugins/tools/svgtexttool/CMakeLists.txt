@@ -6,6 +6,7 @@ set (SvgTextTool_SRCS
     BasicXMLSyntaxHighlighter.cpp
     Plugin.cpp
     SvgTextChangeCommand.cpp
+    SvgRichTextCtrl.cpp
     SvgTextEditor.cpp
     SvgTextTool.cpp
     SvgTextToolFactory.cpp

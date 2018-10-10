@@ -96,14 +96,14 @@ void KisZoomManager::updateScreenResolution(QWidget *parentWidget)
 {
     if (qFuzzyCompare(parentWidget->physicalDpiX(), m_physicalDpiX) &&
         qFuzzyCompare(parentWidget->physicalDpiY(), m_physicalDpiY) &&
-        qFuzzyCompare(parentWidget->devicePixelRatio(), m_devicePixelRatio)) {
+        qFuzzyCompare(parentWidget->devicePixelRatioF(), m_devicePixelRatio)) {
 
         return;
     }
 
     m_physicalDpiX = parentWidget->physicalDpiX();
     m_physicalDpiY = parentWidget->physicalDpiY();
-    m_devicePixelRatio = parentWidget->devicePixelRatio();
+    m_devicePixelRatio = parentWidget->devicePixelRatioF();
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);

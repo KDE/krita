@@ -91,11 +91,13 @@ protected:
     void wheelEvent(QWheelEvent* event) override;
 
 private:
-    QSize calculatePreviewSize();
+    QSize recalculatePreviewSize();
     QPointF previewOrigin();
-    QTransform imageToPreviewTransform();
+    QTransform canvasToPreviewTransform();
+    QTransform previewToCanvasTransform();
     QPolygonF previewPolygon();
 
+    qreal m_previewScale;
     QPixmap m_oldPixmap;
     QPixmap m_pixmap;
     QPointer<KisCanvas2> m_canvas;

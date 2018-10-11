@@ -145,6 +145,9 @@ public:
 
     static QString minimumLabel(DynamicSensorType sensorType);
     static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    static int minimumValue(DynamicSensorType sensorType);
+    static int maximumValue(DynamicSensorType sensorType, int max = -1);
+    static QString valueSuffix(DynamicSensorType sensorType);
 
     static KisDynamicSensorSP createFromXML(const QString&, const QString &parentOptionName);
     static KisDynamicSensorSP createFromXML(const QDomElement&, const QString &parentOptionName);

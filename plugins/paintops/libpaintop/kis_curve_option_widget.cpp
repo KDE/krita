@@ -167,6 +167,20 @@ void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
     if (sensor) {
         m_curveOptionWidget->label_xmin->setText(KisDynamicSensor::minimumLabel(sensor->sensorType()));
         m_curveOptionWidget->label_xmax->setText(KisDynamicSensor::maximumLabel(sensor->sensorType(), sensor->length()));
+
+        int inMinValue = KisDynamicSensor::minimumValue(sensor->sensorType());
+        int inMaxValue = KisDynamicSensor::maximumValue(sensor->sensorType(), sensor->length());
+        QString inSuffix = KisDynamicSensor::valueSuffix(sensor->sensorType());
+
+        int outMinValue = m_curveOption->intMinValue();
+        int outMaxValue = m_curveOption->intMaxValue();
+        QString outSuffix = m_curveOption->valueSuffix();
+
+        m_curveOptionWidget->intIn->setSuffix(inSuffix);
+        m_curveOptionWidget->intOut->setSuffix(outSuffix);
+
+        m_curveOptionWidget->curveWidget->setupInOutControls(m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
+                                                         inMinValue,inMaxValue,outMinValue,outMaxValue);
     }
 }
 

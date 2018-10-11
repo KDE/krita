@@ -591,11 +591,11 @@ void KisNodeManager::convertNode(const QString &nodeType)
         bool result = false;
 
         if (nodeType == "KisSelectionMask") {
-            result = m_d->maskManager.createSelectionMask(activeNode, copyFrom, true).isNull();
+            result = !m_d->maskManager.createSelectionMask(activeNode, copyFrom, true).isNull();
         } else if (nodeType == "KisFilterMask") {
-            result = m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true).isNull();
+            result = !m_d->maskManager.createFilterMask(activeNode, copyFrom, false, true).isNull();
         } else if (nodeType == "KisTransparencyMask") {
-            result = m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true).isNull();
+            result = !m_d->maskManager.createTransparencyMask(activeNode, copyFrom, true).isNull();
         }
 
         m_d->commandsAdapter.endMacro();

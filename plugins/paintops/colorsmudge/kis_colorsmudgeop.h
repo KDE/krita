@@ -64,9 +64,10 @@ private:
 private:
     bool                      m_firstRun;
     KisImageWSP               m_image;
-    KisPrecisePaintDeviceWrapper m_preciseWrapper;
+    KisPrecisePaintDeviceWrapper m_precisePainterWrapper;
     KoColor                   m_paintColor;
     KisPaintDeviceSP          m_tempDev;
+    QScopedPointer<KisPrecisePaintDeviceWrapper> m_preciseImageDeviceWrapper;
     QScopedPointer<KisPainter> m_backgroundPainter;
     QScopedPointer<KisPainter> m_smudgePainter;
     QScopedPointer<KisPainter> m_colorRatePainter;

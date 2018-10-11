@@ -643,7 +643,7 @@ void DefaultTool::updateCursor()
                 statusText = i18n("Click and drag to shear selection.");
             }
 
-            if (m_decorator->isOverTextEditorButton()) {
+            if (m_decorator && m_decorator->isOverTextEditorButton()) {
                 cursor = Qt::PointingHandCursor;
             } else {
                 cursor = Qt::ArrowCursor;

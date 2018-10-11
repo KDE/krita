@@ -93,8 +93,8 @@ namespace KisLayerUtils
         ~SwitchFrameCommand() override;
 
     private:
-        void partA() override;
-        void partB() override;
+        void init() override;
+        void end() override;
 
     private:
         KisImageWSP m_image;
@@ -115,7 +115,7 @@ namespace KisLayerUtils
                              KisNodeSP activeAfter,
                              KisImageSP image,
                              bool finalize, KUndo2Command *parent = 0);
-    void partB() override;
+    void end() override;
 
     private:
         KisNodeList m_selectedBefore;
@@ -159,7 +159,7 @@ namespace KisLayerUtils
     {
     public:
         KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent = 0);
-        void partB() override;
+        void end() override;
         static void updateNodes(const KisNodeList &nodes);
     private:
         KisNodeList m_nodes;

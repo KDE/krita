@@ -38,11 +38,11 @@ public:
     {
     }
 
-    void partA() override {
+    void init() override {
         m_image->disableUIUpdates();
     }
 
-    void partB() override {
+    void end() override {
         m_image->enableUIUpdates();
     }
 
@@ -65,7 +65,7 @@ public:
     }
 
 private:
-    void partA() override {
+    void init() override {
         /**
          * We disable all non-centralized updates here. Everything
          * should be done by this command's explicit updates.
@@ -77,7 +77,7 @@ private:
         m_image->disableDirtyRequests();
     }
 
-    void partB() override {
+    void end() override {
         m_image->enableDirtyRequests();
 
         if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
@@ -130,8 +130,8 @@ public:
     {
     }
 
-    void partB() override {
-        if (getState() == State::FINALIZING) {
+    void end() override {
+        if (isFinalizing()) {
             doUpdate(m_emitSignals);
         } else {
             KisImageSignalVector reverseSignals;

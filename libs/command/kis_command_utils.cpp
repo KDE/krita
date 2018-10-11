@@ -142,24 +142,19 @@ namespace KisCommandUtils
         m_firstRedo = value;
     }
 
-    FlipFlopCommand::FlipFlopCommand(bool finalizing, KUndo2Command *parent)
+    FlipFlopCommand::FlipFlopCommand(bool finalize, KUndo2Command *parent)
         : KUndo2Command(parent),
+          m_finalize(finalize),
           m_firstRedo(true)
     {
-        m_currentState = finalizing ? State::FINALIZING : State::INITIALIZING;
     }
-
-    FlipFlopCommand::FlipFlopCommand(State initialState, KUndo2Command *parent)
-        : KUndo2Command(parent),
-          m_currentState(initialState)
-    {}
 
     void FlipFlopCommand::redo()
     {
-        if (m_currentState == FlipFlopCommand::State::INITIALIZING) {
-            partA();
+        if (!m_finalize) {
+            init();
         } else {
-            partB();
+            end();
         }
 
         m_firstRedo = false;
@@ -167,15 +162,15 @@ namespace KisCommandUtils
 
     void FlipFlopCommand::undo()
     {
-        if (m_currentState == FlipFlopCommand::State::FINALIZING) {
-            partA();
+        if (m_finalize) {
+            init();
         } else {
-            partB();
+            end();
         }
     }
 
-    void FlipFlopCommand::partA() {}
-    void FlipFlopCommand::partB() {}
+    void FlipFlopCommand::init() {}
+    void FlipFlopCommand::end() {}
 
     CompositeCommand::CompositeCommand(KUndo2Command *parent)
         : KUndo2Command(parent) {}

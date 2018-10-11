@@ -59,6 +59,7 @@
 #include "kis_command_utils.h"
 #include "kis_pointer_utils.h"
 
+
 #include <KoIcon.h>
 
 #include <QMenu>
@@ -390,8 +391,7 @@ void KoPathTool::convertToPath()
         const QList<KoShape*> oldSelectedShapes = implicitCastList<KoShape*>(textShapes);
 
 
-        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, canvas()->selectedShapesProxy(),
-                                        KisCommandUtils::FlipFlopCommand::State::INITIALIZING, cmd);
+        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
@@ -413,8 +413,7 @@ void KoPathTool::convertToPath()
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);
 
-        new KoKeepShapesSelectedCommand({}, newSelectedShapes, canvas()->selectedShapesProxy(),
-                                        KisCommandUtils::FlipFlopCommand::State::FINALIZING, cmd);
+        new KoKeepShapesSelectedCommand({}, newSelectedShapes, canvas()->selectedShapesProxy(), true, cmd);
 
         canvas()->addCommand(cmd);
     }

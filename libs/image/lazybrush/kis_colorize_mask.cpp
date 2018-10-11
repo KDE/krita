@@ -714,13 +714,13 @@ struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
           m_index(index), m_stroke(stroke),
           m_list(list), m_node(node) {}
 
-    void partA() override {
+    void init() override {
         m_list->insert(m_index, m_stroke);
         m_node->setNeedsUpdate(true);
         emit m_node->sigKeyStrokesListChanged();
     }
 
-    void partB() override {
+    void end() override {
         KIS_ASSERT_RECOVER_RETURN((*m_list)[m_index] == m_stroke);
         m_list->removeAt(m_index);
         m_node->setNeedsUpdate(true);

@@ -567,9 +567,9 @@ namespace KisLayerUtils {
     {
     }
 
-    void KeepNodesSelectedCommand::partB() {
+    void KeepNodesSelectedCommand::end() {
         KisImageSignalType type;
-        if (getState() == State::FINALIZING) {
+        if (isFinalizing()) {
             type = ComplexNodeReselectionSignal(m_activeAfter, m_selectedAfter);
         } else {
             type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
@@ -817,7 +817,7 @@ namespace KisLayerUtils {
 
     SwitchFrameCommand::~SwitchFrameCommand() {}
 
-    void SwitchFrameCommand::partA() {
+    void SwitchFrameCommand::init() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_newTime) {
@@ -829,7 +829,7 @@ namespace KisLayerUtils {
         interface->saveAndResetCurrentTime(m_newTime, &m_storage->value);
     }
 
-    void SwitchFrameCommand::partB() {
+    void SwitchFrameCommand::end() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_storage->value) {
@@ -1423,7 +1423,7 @@ namespace KisLayerUtils {
           m_nodes(nodes)
     {
     }
-    void KisSimpleUpdateCommand::partB()
+    void KisSimpleUpdateCommand::end()
     {
         updateNodes(m_nodes);
     }

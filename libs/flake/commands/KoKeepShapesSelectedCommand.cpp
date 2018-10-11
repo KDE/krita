@@ -36,14 +36,14 @@ KoKeepShapesSelectedCommand::KoKeepShapesSelectedCommand(const QList<KoShape*> &
 
 }
 
-void KoKeepShapesSelectedCommand::partB()
+void KoKeepShapesSelectedCommand::end()
 {
     KoSelection *selection = m_selectionProxy->selection();
 
     selection->deselectAll();
 
     const QList<KoShape*> newSelectedShapes =
-        getState() == FlipFlopCommand::State::FINALIZING ? m_selectedAfter : m_selectedBefore;
+        isFinalizing() ? m_selectedAfter : m_selectedBefore;
 
     Q_FOREACH (KoShape *shape, newSelectedShapes) {
         selection->select(shape);

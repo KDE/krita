@@ -205,7 +205,7 @@ public:
         }
     }
 
-    void emitFinalUpdates(KisCommandUtils::FlipFlopCommand::State state) {
+    void emitFinalUpdates(bool undo) {
         QMutexLocker l(&m_mutex);
 
         if (m_movedNodesUpdated.isEmpty()) return;
@@ -214,7 +214,7 @@ public:
         MovedNodesHash::const_iterator end = m_movedNodesUpdated.constEnd();
 
         for (; it != end; ++it) {
-            if (state == KisCommandUtils::FlipFlopCommand::State::FINALIZING) {
+            if (!undo) {
                 it.value()->doRedoUpdates();
             } else {
                 it.value()->doUndoUpdates();
@@ -238,10 +238,8 @@ public:
     {
     }
 
-    void partB() override {
-        State currentState = getState();
-
-        if (currentState == FINALIZING && isFirstRedo()) {
+    void end() override {
+        if (isFinalizing() && isFirstRedo()) {
             /**
              * When doing the first redo() some of the updates might
              * have already been executed by the juggler itself, so we
@@ -255,7 +253,7 @@ public:
              * that for us (juggler, which did it in the previous
              * case, might have already died).
              */
-            m_updateData->emitFinalUpdates(currentState);
+            m_updateData->emitFinalUpdates(isFinalizing());
         }
     }
 private:
@@ -277,10 +275,10 @@ public:
     {
     }
 
-    void partA() override {
+    void init() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
-        if (getState() == FINALIZING) {
+        if (isFinalizing()) {
             newActiveMasks = &m_activeAfter;
         } else {
             newActiveMasks = &m_activeBefore;
@@ -291,10 +289,10 @@ public:
         }
     }
 
-    void partB() override {
+    void end() override {
         QList<KisSelectionMaskSP> *newActiveMasks;
 
-        if (getState() == FINALIZING) {
+        if (isFinalizing()) {
             newActiveMasks = &m_activeAfter;
         } else {
             newActiveMasks = &m_activeBefore;
@@ -477,6 +475,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
         ADD
     };
 
+
     DuplicateLayers(BatchMoveUpdateDataSP updateData,
                     KisImageSP image,
                     const KisNodeList &nodes,
@@ -565,7 +564,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
                 addCommand(new KisImageLayerAddCommand(m_image, newNode,
                                                        newParent,
                                                        currentAbove,
-                                                       false, false));
+                                                       true, true));
                 currentAbove = newNode;
             } else if (m_mode == MOVE) {
                 KisNodeSP newNode = node;

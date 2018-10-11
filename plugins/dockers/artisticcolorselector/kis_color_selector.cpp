@@ -175,12 +175,7 @@ void KisColorSelector::setLumaCoefficients(qreal lR, qreal lG, qreal lB, qreal l
     m_lumaR = lR;
     m_lumaG = lG;
     m_lumaB = lB;
-
-    if (m_colorSpace == KisColor::HSY) {
-        m_lumaGamma = lGamma;
-    } else {
-        m_lumaGamma = 1.0;
-    }
+    m_lumaGamma = lGamma;
 
     m_selectedColor = KisColor(m_selectedColor, m_colorSpace, m_lumaR, m_lumaG, m_lumaB, m_lumaGamma);
 

@@ -365,7 +365,7 @@ QString KisDynamicSensor::valueSuffix(DynamicSensorType sensorType)
     case PRESSURE_IN:
         return i18n("%");
     case FADE:
-        return i18n("");
+        return QString();
     case DISTANCE:
         return i18n(" px");
     case TIME:

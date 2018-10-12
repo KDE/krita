@@ -74,9 +74,6 @@
 #include "kis_selection_manager.h"
 #include "kis_icon_utils.h"
 
-#ifdef HAVE_KIO
-#include <krecentdocument.h>
-#endif
 #include <krecentfilesaction.h>
 #include <KoResourcePaths.h>
 #include <ktoggleaction.h>
@@ -728,17 +725,7 @@ void KisMainWindow::addRecentURL(const QUrl &url)
                     break;
                 }
             }
-#ifdef HAVE_KIO
-            if (ok) {
-                KRecentDocument::add(QUrl::fromLocalFile(path));
-            }
-#endif
         }
-#ifdef HAVE_KIO
-        else {
-            KRecentDocument::add(url.adjusted(QUrl::StripTrailingSlash));
-        }
-#endif
         if (ok) {
             d->recentFiles->addUrl(url);
         }

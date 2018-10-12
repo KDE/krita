@@ -209,6 +209,7 @@ void KisApplication::addResourceTypes()
 {
     //    qDebug() << "addResourceTypes();";
     // All Krita's resource types
+    KoResourcePaths::addResourceType("markers", "data", "/styles/");
     KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
     KoResourcePaths::addResourceType("kis_images", "data", "/images/");
     KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");

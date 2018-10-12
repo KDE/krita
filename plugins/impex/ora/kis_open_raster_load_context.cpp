@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ora_load_context.h"
+#include "kis_open_raster_load_context.h"
 
 #include <QDomDocument>
 
@@ -23,20 +23,15 @@
 #include <KoStoreDevice.h>
 
 #include <kis_image.h>
-
 #include <kis_paint_device.h>
-
 #include "kis_png_converter.h"
 
-OraLoadContext::OraLoadContext(KoStore* _store) : m_store(_store)
+KisOpenRasterLoadContext::KisOpenRasterLoadContext(KoStore* _store)
+    : m_store(_store)
 {
 }
 
-OraLoadContext::~OraLoadContext()
-{
-}
-
-KisImageSP OraLoadContext::loadDeviceData(const QString & filename)
+KisImageSP KisOpenRasterLoadContext::loadDeviceData(const QString & filename)
 {
     if (m_store->open(filename)) {
         KoStoreDevice io(m_store);
@@ -55,7 +50,7 @@ KisImageSP OraLoadContext::loadDeviceData(const QString & filename)
     return 0;
 }
 
-QDomDocument OraLoadContext::loadStack()
+QDomDocument KisOpenRasterLoadContext::loadStack()
 {
     m_store->open("stack.xml");
     KoStoreDevice io(m_store);

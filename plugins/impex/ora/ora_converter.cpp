@@ -31,8 +31,8 @@
 #include <kis_open_raster_stack_save_visitor.h>
 #include <kis_paint_layer.h>
 #include "kis_png_converter.h"
-#include "ora_load_context.h"
-#include "ora_save_context.h"
+#include "kis_open_raster_load_context.h"
+#include "kis_open_raster_save_context.h"
 
 OraConverter::OraConverter(KisDocument *doc)
     : m_doc(doc)
@@ -52,7 +52,7 @@ KisImageBuilder_Result OraConverter::buildImage(QIODevice *io)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    OraLoadContext olc(store);
+    KisOpenRasterLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc->createUndoStore(), &olc);
     orslv.loadImage();
     m_image = orslv.image();
@@ -81,7 +81,7 @@ KisImageBuilder_Result OraConverter::buildFile(QIODevice *io, KisImageSP image, 
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    OraSaveContext osc(store);
+    KisOpenRasterSaveContext osc(store);
     KisOpenRasterStackSaveVisitor orssv(&osc, activeNodes);
 
     image->rootLayer()->accept(orssv);

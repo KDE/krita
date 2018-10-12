@@ -161,12 +161,6 @@ bool KisOpenRasterStackSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisOpenRasterStackSaveVisitor::saveLayer(KisLayer *layer)
 {
-    qDebug() << "layer";
-    if (layer->inherits("KisGroupLayer")) {
-        KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(layer);
-        QRect rc = layer->image()->bounds();
-        layer->projection()->convertToQImage(0, rc).save("group" + layer->name() + ".png");
-    }
     QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), layer->image()->bounds(), layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");

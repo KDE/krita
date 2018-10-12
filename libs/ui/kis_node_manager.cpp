@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QSignalMapper>
 #include <QApplication>
+#include <QMessageBox>
 
 #include <kactioncollection.h>
 
@@ -1069,7 +1070,13 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     dst->initialRefreshGraph();
 
-    doc->exportDocumentSync(url, mimefilter.toLatin1());
+    if (!doc->exportDocumentSync(url, mimefilter.toLatin1())) {
+        QMessageBox::warning(0,
+                             i18nc("@title:window", "Krita"),
+                             i18n("Could not save the layer. %1", doc->errorMessage().toUtf8().data()),
+                             QMessageBox::Ok);
+
+    }
 }
 
 void KisNodeManager::saveNodeAsImage()
@@ -1084,12 +1091,8 @@ void KisNodeManager::saveNodeAsImage()
     KisImageWSP image = m_d->view->image();
     QRect saveRect = image->bounds() | node->exactBounds();
 
-    KisPaintDeviceSP device = node->paintDevice();
-    if (!device) {
-        device = node->projection();
-    }
-
-    m_d->saveDeviceAsImage(device, node->name(),
+    m_d->saveDeviceAsImage(node->projection(),
+                           node->name(),
                            saveRect,
                            image->xRes(), image->yRes(),
                            node->opacity());

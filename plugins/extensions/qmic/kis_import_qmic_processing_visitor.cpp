@@ -79,7 +79,7 @@ void KisImportQmicProcessingVisitor::gmicImageToPaintDevice(gmic_image<float>& s
 void KisImportQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     int index = m_nodes->indexOf(node);
-    if (index >= 0) {
+    if (index >= 0 && index < m_images.size()) {
         gmic_image<float> *gimg = m_images[index];
         dbgPlugins << "Importing layer index" << index << "Size: "<< gimg->_width << "x" << gimg->_height << "colorchannels: " << gimg->_spectrum;
 

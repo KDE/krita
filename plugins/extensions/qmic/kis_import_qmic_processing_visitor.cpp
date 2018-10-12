@@ -84,8 +84,12 @@ void KisImportQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, Kis
         dbgPlugins << "Importing layer index" << index << "Size: "<< gimg->_width << "x" << gimg->_height << "colorchannels: " << gimg->_spectrum;
 
         KisPaintDeviceSP dst = node->paintDevice();
+
+        const KisLayer *layer = dynamic_cast<KisLayer*>(node);
+        const KisSelectionSP selection = layer ? layer->selection() : m_selection;
+        
         KisTransaction transaction(dst);
-        KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*gimg, dst, m_selection, m_dstRect);
+        KisImportQmicProcessingVisitor::gmicImageToPaintDevice(*gimg, dst, selection, m_dstRect);
         if (undoAdapter) {
             transaction.commit(undoAdapter);
             node->setDirty(m_dstRect);

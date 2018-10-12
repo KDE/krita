@@ -55,12 +55,12 @@ public:
     /// revert the actions done in redo
     void undo() override;
 
-    /// reimplemnted from KUndo2Command
+    /// reimplemented from KUndo2Command
     int id() const override
     {
         return 58450689;
     }
-    /// reimplemnted from KUndo2Command
+    /// reimplemented from KUndo2Command
     bool mergeWith(const KUndo2Command *other) override;
 
 private:

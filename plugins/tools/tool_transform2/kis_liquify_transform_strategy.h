@@ -38,7 +38,7 @@ class KisLiquifyTransformStrategy : public KisTransformStrategyBase
 public:
     KisLiquifyTransformStrategy(const KisCoordinatesConverter *converter,
                              ToolTransformArgs &currentArgs,
-                             TransformTransactionProperties &transaction, const KoCanvasResourceManager *manager);
+                             TransformTransactionProperties &transaction, const KoCanvasResourceProvider *manager);
     ~KisLiquifyTransformStrategy() override;
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive);

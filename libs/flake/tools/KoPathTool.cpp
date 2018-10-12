@@ -59,7 +59,6 @@
 #include "kis_command_utils.h"
 #include "kis_pointer_utils.h"
 
-
 #include <KoIcon.h>
 
 #include <QMenu>
@@ -391,7 +390,8 @@ void KoPathTool::convertToPath()
         const QList<KoShape*> oldSelectedShapes = implicitCastList<KoShape*>(textShapes);
 
 
-        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, canvas()->selectedShapesProxy(), false, cmd);
+        new KoKeepShapesSelectedCommand(oldSelectedShapes, {}, canvas()->selectedShapesProxy(),
+                                        KisCommandUtils::FlipFlopCommand::State::INITIALIZING, cmd);
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
@@ -413,7 +413,8 @@ void KoPathTool::convertToPath()
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);
 
-        new KoKeepShapesSelectedCommand({}, newSelectedShapes, canvas()->selectedShapesProxy(), true, cmd);
+        new KoKeepShapesSelectedCommand({}, newSelectedShapes, canvas()->selectedShapesProxy(),
+                                        KisCommandUtils::FlipFlopCommand::State::FINALIZING, cmd);
 
         canvas()->addCommand(cmd);
     }
@@ -810,7 +811,6 @@ void KoPathTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KoPathTool::keyPressEvent(QKeyEvent *event)
 {
-    Q_D(KoToolBase);
     if (m_currentStrategy) {
         switch (event->key()) {
         case Qt::Key_Control:
@@ -911,8 +911,6 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
 KoPathTool::PathSegment* KoPathTool::segmentAtPoint(const QPointF &point)
 {
-    Q_D(KoToolBase);
-
     // the max allowed distance from a segment
     const QRectF grabRoi = handleGrabRect(point);
     const qreal distanceThreshold = 0.5 * KisAlgebra2D::maxDimension(grabRoi);

@@ -32,6 +32,7 @@ class KoColorSpace;
 class KisCanvas2;
 class KisColorPreviewPopup;
 class KisDisplayColorConverter;
+class KoGamutMask;
 
 
 /// Base class for all color selectors, that should support color management and zooming.
@@ -50,6 +51,8 @@ public:
     const KoColorSpace* colorSpace() const;
 
     KisDisplayColorConverter* converter() const;
+
+    void tryHideAllPopups();
 
 public:
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);

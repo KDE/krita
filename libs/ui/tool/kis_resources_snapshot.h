@@ -26,7 +26,7 @@
 #include "kis_painter.h"
 #include "kis_default_bounds.h"
 
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 class KoCompositeOp;
 class KisPainter;
 class KisPostExecutionUndoAdapter;
@@ -41,7 +41,7 @@ class KoPattern;
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceManager *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
+    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds = 0);
     KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds = 0);
     ~KisResourcesSnapshot();
 

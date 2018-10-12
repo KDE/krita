@@ -140,7 +140,7 @@ QPointF KisVisualEllipticalSelectorShape::convertWidgetCoordinateToShapeCoordina
     qreal y = 1.0;
     qreal offset = 7.0;
     QPointF center = QRectF(QPointF(0.0, 0.0), this->size()).center();
-    qreal a = 0.5 * this->width()/2;
+    qreal a = (this->width()/2);
     qreal xRel = center.x()-coordinate.x();
     qreal yRel = center.y()-coordinate.y();
     qreal angle = atan2(xRel, yRel);

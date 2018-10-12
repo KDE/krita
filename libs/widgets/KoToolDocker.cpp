@@ -33,11 +33,13 @@
 #include <QGridLayout>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QScroller>
 #include <QLabel>
 #include <QSet>
 #include <QAction>
 #include <QStyleOptionFrame>
 #include <QToolButton>
+#include <KisKineticScroller.h>
 
 #include <WidgetsDebug.h>
 #include <kis_debug.h>
@@ -164,7 +166,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 {
     setFeatures(DockWidgetMovable|DockWidgetFloatable);
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
@@ -182,6 +184,11 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->scrollArea->setWidgetResizable(true);
     d->scrollArea->setFocusPolicy(Qt::NoFocus);
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(d->scrollArea);
+    if( scroller ) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+    }
+
     setWidget(d->scrollArea);
 }
 
@@ -198,6 +205,11 @@ bool KoToolDocker::hasOptionWidget()
 void KoToolDocker::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
     d->recreateLayout(optionWidgetList);
+}
+
+void KoToolDocker::slotScrollerStateChange(QScroller::State state)
+{
+    KisKineticScroller::updateCursor(d->scrollArea, state);
 }
 
 void KoToolDocker::resetWidgets()

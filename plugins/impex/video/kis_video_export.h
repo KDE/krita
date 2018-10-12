@@ -23,7 +23,12 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
-
+/**
+ * @brief The KisVideoExport class this controls the export
+ * plugin for video file export. This class deals with the plugin parts.
+ * Video saver deals with taking all the parts(document, ffmpeg, config)
+ * and getting ffmpeg to take the config and document to create a video file.
+ */
 class KisVideoExport : public KisImportExportFilter
 {
     Q_OBJECT

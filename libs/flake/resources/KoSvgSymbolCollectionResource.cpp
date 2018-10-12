@@ -141,13 +141,12 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev)
 {
     if (!dev->isOpen()) dev->open(QIODevice::ReadOnly);
 
-    KoXmlDocument doc;
     QString errorMsg;
     int errorLine = 0;
     int errorColumn;
 
-    bool ok = doc.setContent(dev->readAll(), false, &errorMsg, &errorLine, &errorColumn);
-    if (!ok) {
+    KoXmlDocument doc = SvgParser::createDocumentFromSvg(dev, &errorMsg, &errorLine, &errorColumn);
+    if (doc.isNull()) {
 
         errKrita << "Parsing error in " << filename() << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl

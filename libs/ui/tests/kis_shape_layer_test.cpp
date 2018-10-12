@@ -30,8 +30,8 @@
 #include <KisPart.h>
 #include <KisDocument.h>
 
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_merge_strategy_registry.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_merge_strategy_registry.h>
 
 #include "kis_filter_strategy.h"
 

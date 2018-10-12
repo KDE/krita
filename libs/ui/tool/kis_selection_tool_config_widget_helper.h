@@ -28,7 +28,7 @@
 class QKeyEvent;
 class KisCanvas2;
 class KisSelectionOptions;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
@@ -42,26 +42,33 @@ public:
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
+    bool antiAliasSelection() const;
     int action() const { return selectionAction(); }
-
-    bool processKeyPressEvent(QKeyEvent *event);
 
 Q_SIGNALS:
     void selectionActionChanged(int newAction);
-    void selectionModeChanged(int newMode);
 
 public Q_SLOTS:
+    void slotToolActivatedChanged(bool isActivated);
+
     void slotWidgetActionChanged(int action);
     void slotWidgetModeChanged(int mode);
+    void slotWidgetAntiAliasChanged(bool value);
 
-    void slotGlobalActionChanged(int action);
-    void slotGlobalModeChanged(int mode);
+    void slotReplaceModeRequested();
+    void slotAddModeRequested();
+    void slotSubtractModeRequested();
+    void slotIntersectModeRequested();
+    void slotSymmetricDifferenceModeRequested();
 
 private:
     KisSelectionOptions* m_optionsWidget;
-    KisCanvasResourceProvider *m_resourceProvider;
 
     QString m_windowTitle;
+
+    SelectionMode m_selectionMode;
+    SelectionAction m_selectionAction;
+    bool m_antiAliasSelection = true;
 };
 
 #endif /* __KIS_SELECTION_TOOL_CONFIG_WIDGET_HELPER_H */

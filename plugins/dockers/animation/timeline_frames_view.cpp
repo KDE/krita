@@ -29,12 +29,14 @@
 #include <QDropEvent>
 #include <QMenu>
 #include <QScrollBar>
+#include <QScroller>
 #include <QDrag>
 #include <QInputDialog>
 #include <QClipboard>
 #include <QMimeData>
 
 #include "KSharedConfig"
+#include "KisKineticScroller.h"
 
 #include "kis_zoom_button.h"
 #include "kis_icon_utils.h"
@@ -192,7 +194,7 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
     connect(m_d->existingLayersMenu, SIGNAL(aboutToShow()), SLOT(slotUpdateLayersMenu()));
     connect(m_d->existingLayersMenu, SIGNAL(triggered(QAction*)), SLOT(slotAddExistingLayer(QAction*)));
 
-    connect(m_d->layersHeader, SIGNAL(sigRequestContextMenu(const QPoint&)), SLOT(slotLayerContextMenuRequested(const QPoint&)));
+    connect(m_d->layersHeader, SIGNAL(sigRequestContextMenu(QPoint)), SLOT(slotLayerContextMenuRequested(QPoint)));
 
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
@@ -269,6 +271,14 @@ TimelineFramesView::TimelineFramesView(QWidget *parent)
 
     setFramesPerSecond(12);
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if( scroller ) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 
     connect(&m_d->selectionChangedCompressor, SIGNAL(timeout()),
             SLOT(slotSelectionChanged()));
@@ -394,13 +404,13 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
 
     QTableView::setModel(model);
 
-    connect(m_d->model, SIGNAL(headerDataChanged(Qt::Orientation, int, int)),
-            this, SLOT(slotHeaderDataChanged(Qt::Orientation, int, int)));
+    connect(m_d->model, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
+            this, SLOT(slotHeaderDataChanged(Qt::Orientation,int,int)));
 
     connect(m_d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
-    connect(m_d->model, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect(m_d->model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SLOT(slotReselectCurrentIndex()));
 
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
@@ -409,7 +419,7 @@ void TimelineFramesView::setModel(QAbstractItemModel *model)
     connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
             this, SLOT(slotUpdateAudioActions()));
 
-    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+    connect(selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
@@ -550,6 +560,10 @@ void TimelineFramesView::slotUpdateInfiniteFramesCount()
              m_d->horizontalRuler->width() - 1) / sectionWidth;
 
     m_d->model->setLastVisibleFrame(calculatedIndex);
+}
+
+void TimelineFramesView::slotScrollerStateChanged( QScroller::State state ) {
+    KisKineticScroller::updateCursor(this, state);
 }
 
 void TimelineFramesView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -896,6 +910,9 @@ void TimelineFramesView::dropEvent(QDropEvent *event)
     m_d->dragInProgress = false;
     m_d->model->setScrubState(false);
 
+    if (event->keyboardModifiers() & Qt::ControlModifier) {
+        event->setDropAction(Qt::CopyAction);
+    }
     QAbstractItemView::dropEvent(event);
     m_d->dragWasSuccessful = event->isAccepted();
 }

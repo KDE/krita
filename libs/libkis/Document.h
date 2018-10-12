@@ -66,7 +66,7 @@ public:
 
     /**
      * @brief guidesVisible
-     * Returns guide visiiblity.
+     * Returns guide visibility.
      * @return whether the guides are visible.
      */
     bool guidesVisible() const;
@@ -739,6 +739,12 @@ print(root.childNodes())
      * @brief modified returns true if the document has unsaved modifications.
      */
     bool modified() const;
+
+    /**
+     * @brief bounds return the bounds of the image
+     * @return the bounds
+     */
+    QRect bounds() const;
 
 private:
 

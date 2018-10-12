@@ -153,7 +153,7 @@ public:
         emit sigCompleteRegenerationInternal(frame);
     }
 
-    void frameCancelledCallback(int frame) {
+    void frameCancelledCallback(int frame) override {
         emit sigCancelRegenerationInternal(frame);
     }
 

@@ -63,6 +63,7 @@ public:
         patternServer = KoResourceServerProvider::instance()->patternServer();
         paletteServer = KoResourceServerProvider::instance()->paletteServer();
         workspaceServer = KisResourceServerProvider::instance()->workspaceServer();
+        gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
     }
 
     KisBrushResourceServer* brushServer;
@@ -71,7 +72,7 @@ public:
     KoResourceServer<KoPattern> *patternServer;
     KoResourceServer<KoColorSet>* paletteServer;
     KoResourceServer<KisWorkspaceResource>* workspaceServer;
-
+    KoResourceServer<KoGamutMask>* gamutMaskServer;
 };
 
 K_PLUGIN_FACTORY_WITH_JSON(ResourceManagerFactory, "kritaresourcemanager.json", registerPlugin<ResourceManager>();)
@@ -196,6 +197,12 @@ KisResourceBundle *ResourceManager::saveBundle(const DlgCreateBundle &dlgCreateB
         newBundle->addResource("kis_workspaces", res->filename(), d->workspaceServer->assignedTagsList(res), res->md5());
     }
 
+    res = dlgCreateBundle.selectedGamutMasks();
+    Q_FOREACH (const QString &r, res) {
+        KoResource *res = d->gamutMaskServer->resourceByFilename(r);
+        newBundle->addResource("ko_gamutmasks", res->filename(), d->gamutMaskServer->assignedTagsList(res), res->md5());
+    }
+
     newBundle->addMeta("fileName", bundlePath);
     newBundle->addMeta("created", QDate::currentDate().toString("dd/MM/yyyy"));
 
@@ -259,7 +266,7 @@ void ResourceManager::slotImportGradients()
 {
     QStringList resources = importResources(i18n("Import Gradients"), QStringList() << "image/svg+xml"
                                    << "application/x-gimp-gradient"
-                                   << "applicaition/x-karbon-gradient");
+                                   << "application/x-karbon-gradient");
     Q_FOREACH (const QString &res, resources) {
         d->gradientServer->importResourceFile(res);
     }

@@ -33,7 +33,6 @@
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
-#include <KisPart.h>
 
 #include <QTemporaryFile>
 #include <QFileInfo>

@@ -80,7 +80,7 @@ void KisActionsSnapshot::addAction(const QString &name, QAction *action)
 QMap<QString, KActionCollection *> KisActionsSnapshot::actionCollections()
 {
     /**
-     * A small heruistics to show warnings only when unknown shortcuts arppear
+     * A small heuristics to show warnings only when unknown shortcuts appear
      * in the non-registered list
      */
     if (m_d->nonRegisteredShortcuts.size() > 4 &&

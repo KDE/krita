@@ -325,7 +325,7 @@ bool SvmParser::parse(const QByteArray &data)
                 if (dxArrayLen > 0) {
                     quint32 maxDxArrayLen = totalSize - stream.device()->pos();
                     if (dxArrayLen > maxDxArrayLen) {
-                        debugVectorImage << "Defined dxArrayLen= " << dxArrayLen << "exceeds availalable size" << maxDxArrayLen;
+                        debugVectorImage << "Defined dxArrayLen= " << dxArrayLen << "exceeds available size" << maxDxArrayLen;
                         dxArrayLen = maxDxArrayLen;
                     }
 

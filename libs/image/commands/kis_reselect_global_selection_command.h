@@ -38,7 +38,7 @@ public:
     void redo() override;
     void undo() override;
 
-private:
+protected:
     KisImageWSP m_image;
     bool m_canReselect;
 };

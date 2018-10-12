@@ -25,7 +25,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoSelectedShapesProxy.h>
 #include <KoSelection.h>
 #include <KoUnit.h>
@@ -105,7 +105,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 
 
     // Connect and initialize anchor point resource
-    KoCanvasResourceManager *resourceManager = m_tool->canvas()->resourceManager();
+    KoCanvasResourceProvider *resourceManager = m_tool->canvas()->resourceManager();
     connect(resourceManager,
             SIGNAL(canvasResourceChanged(int,QVariant)),
             SLOT(resourceChanged(int,QVariant)));
@@ -455,7 +455,7 @@ void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
 
 void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)
 {
-    if (key == KoCanvasResourceManager::Unit) {
+    if (key == KoCanvasResourceProvider::Unit) {
         setUnit(res.value<KoUnit>());
     } else if (key == DefaultTool::HotPosition) {
         positionSelector->setValue(KoFlake::AnchorPosition(res.toInt()));

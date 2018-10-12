@@ -53,6 +53,7 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_action->addButton(m_page->subtract, SELECTION_SUBTRACT);
     m_action->addButton(m_page->replace, SELECTION_REPLACE);
     m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
+    m_action->addButton(m_page->symmetricdifference, SELECTION_SYMMETRICDIFFERENCE);
 
     m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
@@ -60,18 +61,20 @@ KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
     m_page->shape->setIcon(KisIconUtils::loadIcon("select_shape"));
 
     m_page->add->setGroupPosition(KoGroupButton::GroupCenter);
-    m_page->subtract->setGroupPosition(KoGroupButton::GroupRight);
+    m_page->subtract->setGroupPosition(KoGroupButton::GroupCenter);
     m_page->replace->setGroupPosition(KoGroupButton::GroupLeft);
     m_page->intersect->setGroupPosition(KoGroupButton::GroupCenter);
+    m_page->symmetricdifference->setGroupPosition(KoGroupButton::GroupRight);
     m_page->add->setIcon(KisIconUtils::loadIcon("selection_add"));
     m_page->subtract->setIcon(KisIconUtils::loadIcon("selection_subtract"));
     m_page->replace->setIcon(KisIconUtils::loadIcon("selection_replace"));
     m_page->intersect->setIcon(KisIconUtils::loadIcon("selection_intersect"));
+    m_page->symmetricdifference->setIcon(KisIconUtils::loadIcon("selection_symmetric_difference"));
 
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
     connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
     connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
-
+    connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
@@ -85,26 +88,76 @@ int KisSelectionOptions::action()
 
 void KisSelectionOptions::setAction(int action) {
     QAbstractButton* button = m_action->button(action);
-    Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
 }
 
 void KisSelectionOptions::setMode(int mode) {
     QAbstractButton* button = m_mode->button(mode);
-    Q_ASSERT(button);
-    if(button) button->setChecked(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
     hideActionsForSelectionMode(mode);
+}
+
+void KisSelectionOptions::setAntiAliasSelection(bool value)
+{
+    m_page->chkAntiAliasing->setChecked(value);
+}
+
+void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)
+{
+    const QString shortcutString = shortcut.toString(QKeySequence::NativeText);
+    QString toolTipText;
+    switch ((SelectionAction)action) {
+    case SELECTION_DEFAULT:
+    case SELECTION_REPLACE:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Replace") :
+            i18nc("@info:tooltip", "Replace (%1)", shortcutString);
+
+        m_action->button(SELECTION_REPLACE)->setToolTip(toolTipText);
+        break;
+    case SELECTION_ADD:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Add") :
+            i18nc("@info:tooltip", "Add (%1)", shortcutString);
+
+        m_action->button(SELECTION_ADD)->setToolTip(toolTipText);
+        break;
+    case SELECTION_SUBTRACT:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Subtract") :
+            i18nc("@info:tooltip", "Subtract (%1)", shortcutString);
+
+        m_action->button(SELECTION_SUBTRACT)->setToolTip(toolTipText);
+
+        break;
+    case SELECTION_INTERSECT:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Intersect") :
+            i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
+
+        m_action->button(SELECTION_INTERSECT)->setToolTip(toolTipText);
+
+        break;
+        
+    case SELECTION_SYMMETRICDIFFERENCE:
+        toolTipText = shortcutString.isEmpty() ?
+            i18nc("@info:tooltip", "Symmetric Difference") :
+            i18nc("@info:tooltip", "Symmetric Difference (%1)", shortcutString);
+
+        m_action->button(SELECTION_SYMMETRICDIFFERENCE)->setToolTip(toolTipText);
+
+        break;
+    }
 }
 
 //hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
 void KisSelectionOptions::hideActionsForSelectionMode(int mode) {
-    bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
+    const bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
 
-    m_page->lblAction->setVisible(isPixelSelection);
-    m_page->add->setVisible(isPixelSelection);
-    m_page->subtract->setVisible(isPixelSelection);
-    m_page->replace->setVisible(isPixelSelection);
-    m_page->intersect->setVisible(isPixelSelection);
     m_page->chkAntiAliasing->setVisible(isPixelSelection);
 }
 

@@ -41,3 +41,8 @@ void KisToolEllipseBase::paintRectangle(QPainter &gc, const QRectF &imageRect)
     path.addEllipse(viewRect);
     paintToolOutline(&gc, path);
 }
+
+bool KisToolEllipseBase::showRoundCornersGUI() const
+{
+    return false;
+}

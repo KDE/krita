@@ -34,7 +34,7 @@ class KRITALIBKRA_EXPORT KisKraSaver
 {
 public:
 
-    KisKraSaver(KisDocument* document);
+    KisKraSaver(KisDocument* document, const QString &filename);
 
     ~KisKraSaver();
 
@@ -43,6 +43,8 @@ public:
     bool saveKeyframes(KoStore *store, const QString &uri, bool external);
 
     bool saveBinaryData(KoStore* store, KisImageSP image, const QString & uri, bool external, bool includeMerge);
+
+    bool savePalettes(KoStore *store, KisImageSP image, const QString &uri);
 
     /// @return a list with everything that went wrong while saving
     QStringList errorMessages() const;
@@ -58,6 +60,7 @@ private:
     bool saveGuides(QDomDocument& doc, QDomElement& element);
     bool saveAudio(QDomDocument& doc, QDomElement& element);
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
+    void savePalettesToXML(QDomDocument& doc, QDomElement &element);
     struct Private;
     Private * const m_d;
 };

@@ -38,7 +38,7 @@ public:
     //virtual void endStroke();
     QPointF buttonPosition() const override;
     int numHandles() const override { return 2; }
-    bool isAssistantComplete() const;
+    bool isAssistantComplete() const override;
 
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;

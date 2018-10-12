@@ -28,7 +28,7 @@
 #include <KoTextEditor.h>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoChangeTracker.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextRangeManager.h>
@@ -257,7 +257,7 @@ void TextShape::saveOdf(KoShapeSavingContext &context) const
     const_cast<TextShape *>(this)->removeAdditionalAttribute("fo:min-height");
     writer.startElement("draw:frame");
     // if the TextShape is wrapped in a shrink to fit container we need to save the geometry of the container as
-    // the geomerty of the shape might have been changed.
+    // the geometry of the shape might have been changed.
     if (ShrinkToFitShapeContainer *stf = dynamic_cast<ShrinkToFitShapeContainer *>(this->parent())) {
         stf->saveOdfAttributes(context, OdfSize | OdfPosition | OdfTransformation);
         saveOdfAttributes(context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements);

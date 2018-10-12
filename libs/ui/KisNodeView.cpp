@@ -28,6 +28,7 @@
 #include <kconfiggroup.h>
 #include <kis_icon.h>
 #include <ksharedconfig.h>
+#include <KisKineticScroller.h>
 
 #include <QtDebug>
 #include <QContextMenuEvent>
@@ -40,6 +41,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QScrollBar>
+#include <QScroller>
 
 #include "kis_node_view_color_scheme.h"
 
@@ -99,8 +101,15 @@ KisNodeView::KisNodeView(QWidget *parent)
     setDragEnabled(true);
     setDragDropMode(QAbstractItemView::DragDrop);
     setAcceptDrops(true);
-
     setDropIndicatorShown(true);
+
+    {
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if (scroller) {
+            connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                    this, SLOT(slotScrollerStateChanged(QScroller::State)));
+        }
+    }
 }
 
 KisNodeView::~KisNodeView()
@@ -130,8 +139,8 @@ void KisNodeView::addPropertyActions(QMenu *menu, const QModelIndex &index)
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
-            connect(a, SIGNAL(toggled(bool, const QPersistentModelIndex&, int)),
-                    this, SLOT(slotActionToggled(bool, const QPersistentModelIndex&, int)));
+            connect(a, SIGNAL(toggled(bool,QPersistentModelIndex,int)),
+                    this, SLOT(slotActionToggled(bool,QPersistentModelIndex,int)));
             menu->addAction(a);
         }
     }
@@ -194,7 +203,6 @@ QItemSelectionModel::SelectionFlags KisNodeView::selectionCommand(const QModelIn
 
     return QAbstractItemView::selectionCommand(index, event);
 }
-
 QRect KisNodeView::visualRect(const QModelIndex &index) const
 {
     QRect rc = QTreeView::visualRect(index);
@@ -571,4 +579,8 @@ void KisNodeView::setDraggingFlag(bool flag)
 void KisNodeView::slotUpdateIcons()
 {
     d->delegate.slotUpdateIcon();
+}
+
+void KisNodeView::slotScrollerStateChanged(QScroller::State state){
+    KisKineticScroller::updateCursor(this, state);
 }

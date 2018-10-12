@@ -590,7 +590,7 @@ void KisImageConfig::setAnimationCacheRegionOfInterestMargin(qreal value)
 
 QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
 {
-    QColor def(255, 0, 0, 220);
+    QColor def(255, 0, 0, 128);
     return (defaultValue ? def : m_config.readEntry("selectionOverlayMaskColor", def));
 }
 

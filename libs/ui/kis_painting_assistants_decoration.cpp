@@ -76,6 +76,7 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
 {
     setAssistantVisible(true);
     setOutlineVisible(true);
+    setPriority(95);
     d->snapOnlyOneAssistant = true; //turn on by default.
 }
 

@@ -19,8 +19,8 @@
 
 #include "kbugreport.h"
 
-#include <QtCore/QProcess>
-#include <QtCore/QCoreApplication>
+#include <QProcess>
+#include <QCoreApplication>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QLayout>

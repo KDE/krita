@@ -148,6 +148,7 @@ void AnimaterionRenderer::slotRenderAnimation()
                 KisImportExportFilter::ConversionStatus res;
                 if (!fi.open(QIODevice::WriteOnly)) {
                     qWarning() << "Could not open" << fi.fileName() << "for writing!";
+                    doc->setErrorMessage(i18n("Could not open %1 for writing!", fi.fileName()));
                     res = KisImportExportFilter::CreationError;
                 }
                 else {

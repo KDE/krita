@@ -91,7 +91,7 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
     d->cursor = cursor;
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
-    connect(this, SIGNAL(isActiveChanged()), SLOT(resetCursorStyle()));
+    connect(this, SIGNAL(isActiveChanged(bool)), SLOT(resetCursorStyle()));
 
     KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
@@ -125,8 +125,8 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     if (!canvas()->resourceManager()) return;
 
 
-    d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::ForegroundColor).value<KoColor>();
-    d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceManager::BackgroundColor).value<KoColor>();
+    d->currentFgColor = canvas()->resourceManager()->resource(KoCanvasResourceProvider::ForegroundColor).value<KoColor>();
+    d->currentBgColor = canvas()->resourceManager()->resource(KoCanvasResourceProvider::BackgroundColor).value<KoColor>();
 
     if (canvas()->resourceManager()->hasResource(KisCanvasResourceProvider::CurrentPattern)) {
         d->currentPattern = canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPattern).value<KoPattern*>();
@@ -153,7 +153,7 @@ void KisTool::activate(ToolActivation activation, const QSet<KoShape*> &shapes)
     connect(action("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 
     d->m_isActive = true;
-    emit isActiveChanged();
+    emit isActiveChanged(true);
 }
 
 void KisTool::deactivate()
@@ -169,7 +169,7 @@ void KisTool::deactivate()
     }
 
     d->m_isActive = false;
-    emit isActiveChanged();
+    emit isActiveChanged(false);
 
     KoToolBase::deactivate();
 }
@@ -182,10 +182,10 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
     }
 
     switch (key) {
-    case(KoCanvasResourceManager::ForegroundColor):
+    case(KoCanvasResourceProvider::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
         break;
-    case(KoCanvasResourceManager::BackgroundColor):
+    case(KoCanvasResourceProvider::BackgroundColor):
         d->currentBgColor = v.value<KoColor>();
         break;
     case(KisCanvasResourceProvider::CurrentPattern):
@@ -295,6 +295,12 @@ QRectF KisTool::convertToPt(const QRectF &rect)
     r.setCoords(int(rect.left()) / image()->xRes(), int(rect.top()) / image()->yRes(),
                 int(rect.right()) / image()->xRes(), int( rect.bottom()) / image()->yRes());
     return r;
+}
+
+qreal KisTool::convertToPt(qreal value)
+{
+    const qreal avgResolution = 0.5 * (image()->xRes() + image()->yRes());
+    return value / avgResolution;
 }
 
 QPointF KisTool::pixelToView(const QPoint &pixelCoord) const
@@ -615,7 +621,7 @@ bool KisTool::isActive() const
 
 void KisTool::slotToggleFgBg()
 {
-    KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
+    KoCanvasResourceProvider* resourceManager = canvas()->resourceManager();
     KoColor newFg = resourceManager->backgroundColor();
     KoColor newBg = resourceManager->foregroundColor();
 
@@ -631,7 +637,7 @@ void KisTool::slotToggleFgBg()
 
 void KisTool::slotResetFgBg()
 {
-    KoCanvasResourceManager* resourceManager = canvas()->resourceManager();
+    KoCanvasResourceProvider* resourceManager = canvas()->resourceManager();
 
     // see a comment in slotToggleFgBg()
     resourceManager->setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));

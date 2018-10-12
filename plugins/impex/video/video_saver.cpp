@@ -153,7 +153,7 @@ private:
 
         QEventLoop loop;
         loop.connect(&watcher, SIGNAL(sigProcessingFinished()), SLOT(quit()));
-        loop.connect(&ffmpegProcess, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(quit()));
+        loop.connect(&ffmpegProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(quit()));
         loop.connect(&ffmpegProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(quit()));
         loop.connect(&watcher, SIGNAL(sigProgressChanged(int)), &progress, SLOT(setValue(int)));
 
@@ -217,6 +217,7 @@ KisImageBuilder_Result VideoSaver::encode(const QString &filename, KisProperties
     if (m_ffmpegPath.isEmpty()) {
         m_ffmpegPath = configuration->getString("ffmpeg_path");
         if (!QFileInfo(m_ffmpegPath).exists()) {
+            m_doc->setErrorMessage(i18n("ffmpeg could not be found at %1", m_ffmpegPath));
             return KisImageBuilder_RESULT_FAILURE;
         }
     }

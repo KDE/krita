@@ -175,7 +175,7 @@ void KoSection::saveOdf(KoShapeSavingContext &context) const
     if (!d->text_protected.isEmpty()) writer->addAttribute("text:text-protected", d->text_protected);
     if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
     if (!d->protection_key_digest_algorithm.isEmpty()) {
-        writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
+        writer->addAttribute("text:protection-key-digest-algorithm", d->protection_key_digest_algorithm);
     }
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
 

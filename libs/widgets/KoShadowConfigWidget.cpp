@@ -25,7 +25,7 @@
 #include <KoUnit.h>
 #include <KoColorPopupAction.h>
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoSelection.h>
 #include <KoShapeShadow.h>
 #include <KoShapeShadowCommand.h>
@@ -70,7 +70,7 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
 
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(applyChanges()));
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()));
-    connect(d->actionShadowColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(applyChanges()));
+    connect(d->actionShadowColor, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
     connect(d->widget.shadowAngle, SIGNAL(valueChanged(int)), this, SLOT(applyChanges()));
     connect(d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
     connect(d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
@@ -209,8 +209,8 @@ void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 
     setUnit(canvas->unit());
 
-    connect( d->canvas->resourceManager(), SIGNAL( canvasResourceChanged( int, const QVariant& ) ),
-             this, SLOT( resourceChanged( int, const QVariant& ) ) );
+    connect( d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+             this, SLOT(resourceChanged(int,QVariant)) );
 }
 
 void KoShadowConfigWidget::setUnitManagers(KisSpinBoxUnitManager* managerBlur, KisSpinBoxUnitManager *managerOffset)
@@ -235,7 +235,7 @@ void KoShadowConfigWidget::setUnit(const KoUnit &unit)
 
 void KoShadowConfigWidget::resourceChanged( int key, const QVariant & res )
 {
-    if( key == KoCanvasResourceManager::Unit ) {
+    if( key == KoCanvasResourceProvider::Unit ) {
         setUnit(res.value<KoUnit>());
     }
 }

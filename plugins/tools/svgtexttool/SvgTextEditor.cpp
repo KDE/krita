@@ -91,7 +91,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_charSelectDialog->setButtons(KoDialog::Close);
 #endif
     connect(m_textEditorWidget.buttons, SIGNAL(accepted()), this, SLOT(save()));
-    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(close()));
+    connect(m_textEditorWidget.buttons, SIGNAL(rejected()), this, SLOT(slotCloseEditor()));
     connect(m_textEditorWidget.buttons, SIGNAL(clicked(QAbstractButton*)), this, SLOT(dialogButtonClicked(QAbstractButton*)));
 
     KConfigGroup cg(KSharedConfig::openConfig(), "SvgTextTool");
@@ -170,8 +170,18 @@ void SvgTextEditor::setShape(KoSvgTextShape *shape)
             m_textEditorWidget.svgTextEdit->setPlainText(svg);
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
-            if (converter.convertSvgToDocument(svg, doc)) {
+
+            if (shape->isRichTextPreferred() &&
+                converter.convertSvgToDocument(svg, doc)) {
+
                 m_textEditorWidget.richTextEdit->setDocument(doc);
+                KisSignalsBlocker b(m_textEditorWidget.textTab);
+                m_textEditorWidget.textTab->setCurrentIndex(Richtext);
+                switchTextEditorTab(false);
+            } else {
+                KisSignalsBlocker b(m_textEditorWidget.textTab);
+                m_textEditorWidget.textTab->setCurrentIndex(SvgSource);
+                switchTextEditorTab(false);
             }
         }
         else {
@@ -194,17 +204,17 @@ void SvgTextEditor::save()
                     qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
-            emit textUpdated(m_shape, svg, styles);
+            emit textUpdated(m_shape, svg, styles, true);
         }
         else {
-            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
+            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(), false);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
 
 }
 
-void SvgTextEditor::switchTextEditorTab()
+void SvgTextEditor::switchTextEditorTab(bool convertData)
 {
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
@@ -216,12 +226,13 @@ void SvgTextEditor::switchTextEditorTab()
     if (m_textEditorWidget.textTab->currentIndex() == Richtext) {
         //first, make buttons checkable
         enableRichTextActions(true);
+        enableSvgTextActions(false);
 
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
 
-        if (m_shape) {
+        if (m_shape && convertData) {
             QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
             if (!converter.convertSvgToDocument(m_textEditorWidget.svgTextEdit->document()->toPlainText(), doc)) {
                 qWarning()<<"new converter svgToDoc doesn't work!";
@@ -233,10 +244,11 @@ void SvgTextEditor::switchTextEditorTab()
     else {
         //first, make buttons uncheckable
         enableRichTextActions(false);
+        enableSvgTextActions(true);
         disconnect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
 
         // Convert the rich text to svg and styles strings
-        if (m_shape) {
+        if (m_shape && convertData) {
             QString svg;
             QString styles;
 
@@ -255,6 +267,10 @@ void SvgTextEditor::checkFormat()
 {
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+
+    // checkboxes do not emit signals on manual switching, so we
+    // can avoid blocking them
+
     if (format.fontWeight() > QFont::Normal) {
         actionCollection()->action("svg_weight_bold")->setChecked(true);
     } else {
@@ -264,27 +280,42 @@ void SvgTextEditor::checkFormat()
     actionCollection()->action("svg_format_underline")->setChecked(format.fontUnderline());
     actionCollection()->action("svg_format_strike_through")->setChecked(format.fontStrikeOut());
 
-    FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
-    fontSizeAction->setFontSize(format.font().pointSize());
-
-    KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
-    qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"))->setCurrentColor(fg);
-
-    KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
-    qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"))->setCurrentColor(bg);
+    {
+        FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
+        KisSignalsBlocker b(fontSizeAction);
+        fontSizeAction->setFontSize(format.font().pointSize());
+    }
 
 
+    {
+        KoColor fg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
+        KoColorPopupAction *fgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_format_textcolor"));
+        KisSignalsBlocker b(fgColorPopup);
+        fgColorPopup->setCurrentColor(fg);
+    }
 
-    KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+    {
+        KoColor bg(format.foreground().color(), KoColorSpaceRegistry::instance()->rgb8());
+        KoColorPopupAction *bgColorPopup = qobject_cast<KoColorPopupAction*>(actionCollection()->action("svg_background_color"));
+        KisSignalsBlocker b(bgColorPopup);
+        bgColorPopup->setCurrentColor(bg);
+    }
 
-    KisSignalsBlocker b(fontComboBox); // this prevents setting the entire selection to one font
-    fontComboBox->setCurrentFont(format.font());
+    {
+        KisFontComboBoxes* fontComboBox = qobject_cast<KisFontComboBoxes*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_font"))->defaultWidget());
+        KisSignalsBlocker b(fontComboBox);
+        fontComboBox->setCurrentFont(format.font());
+    }
 
-    QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
-    if (blockFormat.lineHeightType()==QTextBlockFormat::SingleHeight) {
-        spnLineHeight->setValue(100.0);
-    } else if(blockFormat.lineHeightType()==QTextBlockFormat::ProportionalHeight) {
-        spnLineHeight->setValue(double(blockFormat.lineHeight()));
+    {
+        QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
+        KisSignalsBlocker b(spnLineHeight);
+
+        if (blockFormat.lineHeightType() == QTextBlockFormat::SingleHeight) {
+            spnLineHeight->setValue(100.0);
+        } else if(blockFormat.lineHeightType() == QTextBlockFormat::ProportionalHeight) {
+            spnLineHeight->setValue(double(blockFormat.lineHeight()));
+        }
     }
 }
 
@@ -931,7 +962,7 @@ void SvgTextEditor::createActions()
 
     // File: new, open, save, save as, close
     KStandardAction::save(this, SLOT(save()), actionCollection());
-    KStandardAction::close(this, SLOT(close()), actionCollection());
+    KStandardAction::close(this, SLOT(slotCloseEditor()), actionCollection());
 
     // Edit
     KStandardAction::undo(this, SLOT(undo()), actionCollection());
@@ -947,8 +978,9 @@ void SvgTextEditor::createActions()
     KStandardAction::replace(this, SLOT(replace()), actionCollection());
 
     // View
-    KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
-    KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
+    // WISH: we cannot zoom-in/out in rech-text mode
+    m_svgTextActions << KStandardAction::zoomOut(this, SLOT(zoomOut()), actionCollection());
+    m_svgTextActions << KStandardAction::zoomIn(this, SLOT(zoomIn()), actionCollection());
 #ifndef Q_OS_WIN
     // Insert:
     QAction * insertAction = createAction("svg_insert_special_character",
@@ -1059,4 +1091,17 @@ void SvgTextEditor::enableRichTextActions(bool enable)
     Q_FOREACH(QAction *action, m_richTextActions) {
         action->setEnabled(enable);
     }
+}
+
+void SvgTextEditor::enableSvgTextActions(bool enable)
+{
+    Q_FOREACH(QAction *action, m_svgTextActions) {
+        action->setEnabled(enable);
+    }
+}
+
+void SvgTextEditor::slotCloseEditor()
+{
+    close();
+    emit textEditorClosed();
 }

@@ -38,15 +38,15 @@ protected:
     }
 
     using utils::StrokeTester::modifyResourceManager;
-    void modifyResourceManager(KoCanvasResourceManager *manager,
-                               KisImageWSP image) {
+    void modifyResourceManager(KoCanvasResourceProvider *manager,
+                               KisImageWSP image) override {
 
         KoColor color(Qt::red, image->colorSpace());
         color.setOpacity(0.5);
 
         QVariant i;
         i.setValue(color);
-        manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
+        manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
     }
 
     KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,
@@ -101,7 +101,7 @@ protected:
         }
     }
 
-    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) {
+    void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode) override {
         ENTER_FUNCTION() << ppVar(image) << ppVar(activeNode);
 
         KisToolUtils::clearImage(image, activeNode, 0);

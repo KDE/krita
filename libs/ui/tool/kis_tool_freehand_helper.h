@@ -32,7 +32,7 @@
 
 
 class KoPointerEvent;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 class KisPaintingInformationBuilder;
 class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
@@ -63,7 +63,7 @@ public:
      */
     void initPaint(KoPointerEvent *event,
                    const QPointF &pixelCoords,
-                   KoCanvasResourceManager *resourceManager,
+                   KoCanvasResourceProvider *resourceManager,
                    KisImageWSP image,
                    KisNodeSP currentNode,
                    KisStrokesFacade *strokesFacade,
@@ -95,7 +95,7 @@ protected:
 
     void initPaintImpl(qreal startAngle,
                        const KisPaintInformation &pi,
-                       KoCanvasResourceManager *resourceManager,
+                       KoCanvasResourceProvider *resourceManager,
                        KisImageWSP image,
                        KisNodeSP node,
                        KisStrokesFacade *strokesFacade,

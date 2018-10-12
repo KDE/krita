@@ -24,6 +24,8 @@
 
 #include <QWidget>
 #include <QButtonGroup>
+#include <QMap>
+#include <QString>
 
 #include <kpagedialog.h>
 #include <kis_config.h>
@@ -84,9 +86,10 @@ public:
     bool showCanvasMessages();
     bool compressKra();
     bool toolOptionsInDocker();
+    bool kineticScrollingEnabled();
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();
-    bool kineticScrollingScrollbar();
+    bool kineticScrollingHiddenScrollbars();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
 
@@ -129,7 +132,6 @@ public:
     void setDefault();
     WdgShortcutSettings  *m_page;
     QScopedPointer<KisActionsSnapshot> m_snapshot;
-
 
 public Q_SLOTS:
     void saveChanges();
@@ -326,6 +328,8 @@ protected:
     KisDlgPreferences(QWidget *parent = 0, const char *name = 0);
     ~KisDlgPreferences() override;
 
+    void showEvent(QShowEvent *event) override;
+
 protected:
 
     GeneralTab *m_general;
@@ -337,6 +341,8 @@ protected:
     FullscreenSettingsTab *m_fullscreenSettings;
     KisInputConfigurationPage *m_inputConfiguration;
     KoConfigAuthorPage *m_authorPage;
+
+    QList<KPageWidgetItem*> m_pages;
 
 protected Q_SLOTS:
 

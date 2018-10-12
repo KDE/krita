@@ -21,6 +21,7 @@
 #define KIS_DOCUMENT_SECTION_VIEW_H
 
 #include <QTreeView>
+#include <QScroller>
 #include "kritaui_export.h"
 
 class QStyleOptionViewItem;
@@ -102,7 +103,7 @@ public:
      * specified menu.
      *
      * For instance, if a document section can be locked and visible,
-     * the menu will be expanded with locked and visilbe toggle
+     * the menu will be expanded with locked and visible toggle
      * actions.
      *
      * For instance
@@ -149,6 +150,7 @@ protected:
 public Q_SLOTS:
     /// called with a theme change to refresh icon colors
     void slotUpdateIcons();
+    void slotScrollerStateChanged(QScroller::State state);
 
 protected Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;

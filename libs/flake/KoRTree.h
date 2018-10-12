@@ -42,7 +42,7 @@
  * @brief The KoRTree class is a template class that provides a R-tree.
  *
  * This class implements a R-tree as described in
- * "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antomn Guttman
+ * "R-TREES. A DYNAMIC INDEX STRUCTURE FOR SPATIAL SEARCHING" by Antonin Guttman
  *
  * It only supports 2 dimensional bounding boxes which are represented by a QRectF.
  * For node splitting the Quadratic-Cost Algorithm is used as described by Guttman.
@@ -454,7 +454,7 @@ void KoRTree<T>::remove(const T&data)
     //debugFlake << "KoRTree remove";
     LeafNode * leaf = m_leafMap[data];
 
-    // Trying to remove unexistent leaf. Most probably, this leaf hasn't been added
+    // Trying to remove inexistent leaf. Most probably, this leaf hasn't been added
     // to the shape manager correctly
     KIS_SAFE_ASSERT_RECOVER_RETURN(leaf);
 

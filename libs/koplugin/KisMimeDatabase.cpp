@@ -222,6 +222,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "gpl" << "pal" << "act" << "aco" << "colors" << "xml" << "sbz";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "krita/x-colorset";
+        mimeType.description = i18nc("description of a file type", "Krita Color Palette");
+        mimeType.suffixes = QStringList() << "kpl";
+        s_mimeDatabase << mimeType;
+
         mimeType.mimeType = "application/x-opencolorio-configuration";
         mimeType.description = i18nc("description of a file type", "OpenColorIO Configuration");
         mimeType.suffixes = QStringList() << "ocio";

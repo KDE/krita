@@ -106,6 +106,7 @@ void KoPathPointTypeCommand::redo()
                 } else
                     point->setControlPoint2(cubic.first()->controlPoint2());
             }
+            point->setProperties(properties);
             break;
         }
         case Symmetric: {
@@ -126,33 +127,20 @@ void KoPathPointTypeCommand::redo()
             // the new distance of the control points is the average distance to the node point
             point->setControlPoint1(point->point() + 0.5 * averageLength * (directionC1 - directionC2));
             point->setControlPoint2(point->point() + 0.5 * averageLength * (directionC2 - directionC1));
+            point->setProperties(properties);
         }
         break;
         case Smooth: {
-            properties &= ~KoPathPoint::IsSymmetric;
-            properties |= KoPathPoint::IsSmooth;
-
-            // calculate vector from node point to first control point and normalize it
-            QPointF directionC1 = point->controlPoint1() - point->point();
-            qreal dirLengthC1 = sqrt(directionC1.x() * directionC1.x() + directionC1.y() * directionC1.y());
-            directionC1 /= dirLengthC1;
-            // calculate vector from node point to second control point and normalize it
-            QPointF directionC2 = point->controlPoint2() - point->point();
-            qreal dirLengthC2 = sqrt(directionC2.x() * directionC2.x() + directionC2.y() * directionC2.y());
-            directionC2 /= dirLengthC2;
-            // compute position of the control points so that they lie on a line going through the node point
-            // the new distance of the control points is the average distance to the node point
-            point->setControlPoint1(point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2));
-            point->setControlPoint2(point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1));
+            makeCubicPointSmooth(point);
         }
         break;
         case Corner:
         default:
             properties &= ~KoPathPoint::IsSymmetric;
             properties &= ~KoPathPoint::IsSmooth;
+            point->setProperties(properties);
             break;
         }
-        point->setProperties(properties);
     }
     repaint(true);
 }
@@ -184,6 +172,29 @@ void KoPathPointTypeCommand::undo()
     undoChanges(m_additionalPointData);
 
     repaint(true);
+}
+
+void KoPathPointTypeCommand::makeCubicPointSmooth(KoPathPoint *point)
+{
+    KoPathPoint::PointProperties properties = point->properties();
+
+    properties &= ~KoPathPoint::IsSymmetric;
+    properties |= KoPathPoint::IsSmooth;
+
+    // calculate vector from node point to first control point and normalize it
+    QPointF directionC1 = point->controlPoint1() - point->point();
+    qreal dirLengthC1 = sqrt(directionC1.x() * directionC1.x() + directionC1.y() * directionC1.y());
+    directionC1 /= dirLengthC1;
+    // calculate vector from node point to second control point and normalize it
+    QPointF directionC2 = point->controlPoint2() - point->point();
+    qreal dirLengthC2 = sqrt(directionC2.x() * directionC2.x() + directionC2.y() * directionC2.y());
+    directionC2 /= dirLengthC2;
+    // compute position of the control points so that they lie on a line going through the node point
+    // the new distance of the control points is the average distance to the node point
+    point->setControlPoint1(point->point() + 0.5 * dirLengthC1 * (directionC1 - directionC2));
+    point->setControlPoint2(point->point() + 0.5 * dirLengthC2 * (directionC2 - directionC1));
+
+    point->setProperties(properties);
 }
 
 void KoPathPointTypeCommand::undoChanges(const QList<PointData> &data)

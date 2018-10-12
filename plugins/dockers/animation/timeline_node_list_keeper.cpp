@@ -150,7 +150,7 @@ void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
                 &dummiesUpdateMapper, SLOT(map()));
         connect(channel, SIGNAL(sigKeyframeAboutToBeRemoved(KisKeyframeSP)),
                 &dummiesUpdateMapper, SLOT(map()));
-        connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)),
+        connect(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP,int)),
                 &dummiesUpdateMapper, SLOT(map()));
 
         dummiesUpdateMapper.setMapping(channel, (QObject*)dummy);

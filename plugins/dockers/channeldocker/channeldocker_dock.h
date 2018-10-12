@@ -22,6 +22,7 @@
 #include <QDockWidget>
 
 #include <KoCanvasObserverBase.h>
+#include <KisKineticScroller.h>
 
 #include <kis_canvas2.h>
 
@@ -42,6 +43,7 @@ public:
 
 public Q_SLOTS:
     void startUpdateCanvasProjection();
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:
     void updateChannelTable(void);

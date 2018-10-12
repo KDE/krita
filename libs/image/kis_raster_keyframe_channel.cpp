@@ -26,8 +26,9 @@
 #include "kundo2command.h"
 #include "kis_onion_skin_compositor.h"
 
-struct KisRasterKeyframe : public KisKeyframe
+class KisRasterKeyframe : public KisKeyframe
 {
+public:
     KisRasterKeyframe(KisRasterKeyframeChannel *channel, int time, int frameId)
         : KisKeyframe(channel, time)
         , frameId(frameId)

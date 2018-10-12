@@ -145,8 +145,10 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         initAndCache();
     }
 
-    // if this is first time the brush touches the canvas and we use soak the ink from canvas
-    if (firstStroke() && m_properties->useSoakInk) {
+    /*If this is first time the brush touches the canvas and
+    we are using soak ink while ink depletion is enabled...*/
+    if (m_properties->inkDepletionEnabled &&
+            firstStroke() && m_properties->useSoakInk) {
         if (layer) {
             colorifyBristles(layer, pi1.pos());
         }

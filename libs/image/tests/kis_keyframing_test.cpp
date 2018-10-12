@@ -280,7 +280,7 @@ void KisKeyframingTest::testChannelSignals()
     QSignalSpy spyPostRemove(channel, SIGNAL(sigKeyframeRemoved(KisKeyframeSP)));
 
     QSignalSpy spyPreMove(channel, SIGNAL(sigKeyframeAboutToBeMoved(KisKeyframeSP,int)));
-    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP, int)));
+    QSignalSpy spyPostMove(channel, SIGNAL(sigKeyframeMoved(KisKeyframeSP,int)));
 
     QVERIFY(spyPreAdd.isValid());
     QVERIFY(spyPostAdd.isValid());

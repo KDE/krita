@@ -104,13 +104,13 @@ QSize SqueezedComboBox::sizeHint() const
 void SqueezedComboBox::insertSqueezedItem(const QString& newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
-    QComboBox::insertItem(index, squeezeText(newItem), userData);
+    QComboBox::insertItem(index, squeezeText(newItem, this), userData);
 }
 
 void SqueezedComboBox::insertSqueezedItem(const QIcon &icon, const QString &newItem, int index, QVariant userData)
 {
     m_originalItems[index] = newItem;
-    QComboBox::insertItem(index, icon, squeezeText(newItem), userData);
+    QComboBox::insertItem(index, icon, squeezeText(newItem, this), userData);
 }
 
 void SqueezedComboBox::addSqueezedItem(const QString& newItem, QVariant userData)
@@ -140,15 +140,15 @@ void SqueezedComboBox::slotTimeOut()
 {
     for (QMap<int, QString>::iterator it = m_originalItems.begin() ; it != m_originalItems.end();
             ++it) {
-        setItemText(it.key(), squeezeText(it.value()));
+        setItemText(it.key(), squeezeText(it.value(), this));
     }
 }
 
-QString SqueezedComboBox::squeezeText(const QString& original)
+QString SqueezedComboBox::squeezeText(const QString& original, const QWidget *widget)
 {
     // not the complete widgetSize is usable. Need to compensate for that.
-    int widgetSize = width() - 30;
-    QFontMetrics fm(fontMetrics());
+    int widgetSize = widget->width() - 30;
+    QFontMetrics fm(widget->fontMetrics());
 
     // If we can fit the full text, return that.
     if (fm.width(original) < widgetSize)

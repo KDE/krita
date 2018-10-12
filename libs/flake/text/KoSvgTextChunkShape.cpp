@@ -122,15 +122,15 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
 {
     LayoutInterface(KoSvgTextChunkShape *_q) : q(_q) {}
 
-    KoSvgText::AutoValue textLength() const {
+    KoSvgText::AutoValue textLength() const override {
         return q->d_func()->textLength;
     }
 
-    KoSvgText::LengthAdjust lengthAdjust() const {
+    KoSvgText::LengthAdjust lengthAdjust() const override {
         return q->d_func()->lengthAdjust;
     }
 
-    int numChars() const {
+    int numChars() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->d_func()->text.isEmpty(), 0);
 
         int result = 0;
@@ -148,7 +148,7 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
-    int relativeCharPos(KoSvgTextChunkShape *child, int pos) const {
+    int relativeCharPos(KoSvgTextChunkShape *child, int pos) const override {
         QList<KoShape*> childShapes = q->shapes();
 
         int result = -1;
@@ -170,17 +170,17 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
-    bool isTextNode() const {
+    bool isTextNode() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->d_func()->text.isEmpty(), false);
         return !q->shapeCount();
     }
 
-    QString nodeText() const {
+    QString nodeText() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->d_func()->text.isEmpty(), 0);
         return !q->shapeCount() ? q->d_func()->text : QString();
     }
 
-    QVector<KoSvgText::CharTransformation> localCharTransformations() const {
+    QVector<KoSvgText::CharTransformation> localCharTransformations() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isTextNode(), QVector<KoSvgText::CharTransformation>());
 
         const QVector<KoSvgText::CharTransformation> t = q->d_func()->localTransformations;
@@ -201,7 +201,7 @@ struct KoSvgTextChunkShapePrivate::LayoutInterface : public KoSvgTextChunkShapeL
         return result;
     }
 
-    QVector<SubChunk> collectSubChunks() const {
+    QVector<SubChunk> collectSubChunks() const override {
         QVector<SubChunk> result;
 
         if (isTextNode()) {
@@ -502,6 +502,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 
         if (!context.strippedTextMode()) {
             context.shapeWriter().addAttribute("id", context.getID(this));
+            context.shapeWriter().addAttribute("krita:useRichText", d->isRichTextPreferred ? "true" : "false");
             SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
             SvgStyleWriter::saveSvgStyle(this, context);
         } else {
@@ -658,36 +659,87 @@ bool KoSvgTextChunkShape::loadSvg(const KoXmlElement &e, SvgLoadingContext &cont
 }
 
 namespace {
-bool hasNextSibling(const KoXmlNode &node)
-{
-    if (!node.nextSibling().isNull()) return true;
 
-    KoXmlNode parentNode = node.parentNode();
-
-    if (!parentNode.isNull() &&
-        parentNode.isElement() &&
-        parentNode.toElement().tagName() == "tspan") {
-
-        return hasNextSibling(parentNode);
-    }
-
-    return false;
+QString cleanUpString(QString text) {
+    text.replace(QRegExp("[\\r\\n]"), "");
+    text.replace(QRegExp(" {2,}"), " ");
+    return text;
 }
 
-bool hasPreviousSibling(const KoXmlNode &node)
+enum Result {
+    FoundNothing,
+    FoundText,
+    FoundSpace
+};
+
+Result hasPreviousSibling(KoXmlNode node)
 {
-    if (!node.previousSibling().isNull()) return true;
+    while (!node.isNull()) {
+        if (node.isElement()) {
+            KoXmlElement element = node.toElement();
+            if (element.tagName() == "text") break;
+        }
 
-    KoXmlNode parentNode = node.parentNode();
 
-    if (!parentNode.isNull() &&
-        parentNode.isElement() &&
-        parentNode.toElement().tagName() == "tspan") {
+        while (!node.previousSibling().isNull()) {
+            node = node.previousSibling();
 
-        return hasPreviousSibling(parentNode);
+            while (!node.lastChild().isNull()) {
+                node = node.lastChild();
+            }
+
+            if (node.isText()) {
+                KoXmlText textNode = node.toText();
+                const QString text = cleanUpString(textNode.data());
+
+                if (!text.isEmpty()) {
+
+                    // if we are the leading whitespace, we should report that
+                    // we are the last
+
+                    if (text == " ") {
+                        return hasPreviousSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
+                    }
+
+                    return text[text.size() - 1] != ' ' ? FoundText : FoundSpace;
+                }
+            }
+        }
+        node = node.parentNode();
     }
 
-    return false;
+    return FoundNothing;
+}
+
+Result hasNextSibling(KoXmlNode node)
+{
+    while (!node.isNull()) {
+        while (!node.nextSibling().isNull()) {
+            node = node.nextSibling();
+
+            while (!node.firstChild().isNull()) {
+                node = node.firstChild();
+            }
+
+            if (node.isText()) {
+                KoXmlText textNode = node.toText();
+                const QString text = cleanUpString(textNode.data());
+
+                // if we are the trailing whitespace, we should report that
+                // we are the last
+                if (text == " ") {
+                    return hasNextSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
+                }
+
+                if (!text.isEmpty()) {
+                    return text[0] != ' ' ? FoundText : FoundSpace;
+                }
+            }
+        }
+        node = node.parentNode();
+    }
+
+    return FoundNothing;
 }
 }
 
@@ -700,20 +752,20 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const KoXmlText &text, SvgLoadingConte
 
     d->loadContextBasedProperties(gc);
 
-    QString data = text.data();
+    QString data = cleanUpString(text.data());
 
-    data.replace(QRegExp("[\\r\\n]"), "");
-    data.replace(QRegExp("\\s{2,}"), " ");
+    const Result leftBorder = hasPreviousSibling(text);
+    const Result rightBorder = hasNextSibling(text);
 
-    if (data.startsWith(' ') && !hasPreviousSibling(text)) {
+    if (data.startsWith(' ') && leftBorder == FoundNothing) {
         data.remove(0, 1);
     }
 
-    if (data.endsWith(' ') && !hasNextSibling(text)) {
+    if (data.endsWith(' ') && rightBorder != FoundText) {
         data.remove(data.size() - 1, 1);
     }
 
-    if (data == " ") {
+    if (data == " " && (leftBorder == FoundNothing || rightBorder == FoundNothing)) {
         data = "";
     }
 
@@ -732,8 +784,6 @@ void KoSvgTextChunkShape::normalizeCharTransformations()
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()
 {
-    Q_D(KoSvgTextChunkShape);
-
     if (!isRootTextNode()) {
         KoShape *parentShape = parent();
         KIS_SAFE_ASSERT_RECOVER_RETURN(parentShape);
@@ -794,6 +844,20 @@ KoSvgTextChunkShapeLayoutInterface *KoSvgTextChunkShape::layoutInterface()
     return d->layoutInterface.data();
 }
 
+bool KoSvgTextChunkShape::isRichTextPreferred() const
+{
+    Q_D(const KoSvgTextChunkShape);
+    return isRootTextNode() && d->isRichTextPreferred;
+}
+
+void KoSvgTextChunkShape::setRichTextPreferred(bool value)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(isRootTextNode());
+
+    Q_D(KoSvgTextChunkShape);
+    d->isRichTextPreferred = value;
+}
+
 bool KoSvgTextChunkShape::isRootTextNode() const
 {
     return false;
@@ -818,7 +882,8 @@ KoSvgTextChunkShapePrivate::KoSvgTextChunkShapePrivate(const KoSvgTextChunkShape
       localTransformations(rhs.localTransformations),
       textLength(rhs.textLength),
       lengthAdjust(rhs.lengthAdjust),
-      text(rhs.text)
+      text(rhs.text),
+      isRichTextPreferred(rhs.isRichTextPreferred)
 {
     if (rhs.model) {
         SimpleShapeContainerModel *otherModel = dynamic_cast<SimpleShapeContainerModel*>(rhs.model);

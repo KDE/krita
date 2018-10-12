@@ -72,6 +72,7 @@
 #include <QWidgetAction>
 #include <QGridLayout>
 #include <kis_config.h>
+#include <KisKineticScroller.h>
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
@@ -130,6 +131,7 @@ KisUndoView::KisUndoView(QWidget *parent)
     , d(new KisUndoViewPrivate)
 {
     d->init(this);
+
 }
 
 /*!
@@ -158,6 +160,12 @@ KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent)
 {
     d->init(this);
     setGroup(group);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 #endif // QT_NO_UNDOGROUP

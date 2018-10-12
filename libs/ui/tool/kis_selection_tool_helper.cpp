@@ -36,7 +36,7 @@
 
 #include <kis_icon.h>
 #include "kis_processing_applicator.h"
-#include "kis_transaction_based_command.h"
+#include "commands_new/kis_transaction_based_command.h"
 #include "kis_gui_context_command.h"
 #include "kis_command_utils.h"
 #include "commands/kis_deselect_global_selection_command.h"
@@ -60,8 +60,8 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 }
 
 struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
-    LazyInitGlobalSelection(KisViewManager *view) : m_view(view) {}
-    KisViewManager *m_view;
+    LazyInitGlobalSelection(KisView *view) : m_view(view) {}
+    KisView *m_view;
 
     KUndo2Command* paint() override {
         return !m_view->selection() ?
@@ -71,7 +71,7 @@ struct LazyInitGlobalSelection : public KisTransactionBasedCommand {
 
 void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
-    KisViewManager* view = m_canvas->viewManager();
+    KisView* view = m_canvas->imageView();
 
     if (selection->selectedExactRect().isEmpty()) {
         m_canvas->viewManager()->selectionManager()->deselect();
@@ -87,12 +87,12 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     applicator.applyCommand(new LazyInitGlobalSelection(view));
 
     struct ApplyToPixelSelection : public KisTransactionBasedCommand {
-        ApplyToPixelSelection(KisViewManager *view,
+        ApplyToPixelSelection(KisView *view,
                               KisPixelSelectionSP selection,
                               SelectionAction action) : m_view(view),
                                                         m_selection(selection),
                                                         m_action(action) {}
-        KisViewManager *m_view;
+        KisView *m_view;
         KisPixelSelectionSP m_selection;
         SelectionAction m_action;
 
@@ -105,6 +105,10 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
             KisSelectionTransaction transaction(pixelSelection);
 
+            if (!hasSelection && m_action == SELECTION_SYMMETRICDIFFERENCE) {
+                m_action = SELECTION_REPLACE;
+            }
+
             if (!hasSelection && m_action == SELECTION_SUBTRACT) {
                 pixelSelection->invert();
             }
@@ -112,7 +116,11 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
             pixelSelection->applySelection(m_selection, m_action);
 
             QRect dirtyRect = m_view->image()->bounds();
-            if (hasSelection && m_action != SELECTION_REPLACE && m_action != SELECTION_INTERSECT) {
+            if (hasSelection &&
+                m_action != SELECTION_REPLACE &&
+                m_action != SELECTION_INTERSECT &&
+                m_action != SELECTION_SYMMETRICDIFFERENCE) {
+
                 dirtyRect = m_selection->selectedRect();
             }
             m_view->selection()->updateProjection(dirtyRect);
@@ -135,16 +143,16 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     applicator.end();
 }
 
-void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
+void KisSelectionToolHelper::addSelectionShape(KoShape* shape, SelectionAction action)
 {
     QList<KoShape*> shapes;
     shapes.append(shape);
-    addSelectionShapes(shapes);
+    addSelectionShapes(shapes, action);
 }
 
-void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
+void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, SelectionAction action)
 {
-    KisViewManager* view = m_canvas->viewManager();
+    KisView *view = m_canvas->imageView();
 
     if (view->image()->wrapAroundModePermitted()) {
         view->showFloatingMessage(
@@ -163,8 +171,8 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
     applicator.applyCommand(new LazyInitGlobalSelection(view));
 
     struct ClearPixelSelection : public KisTransactionBasedCommand {
-        ClearPixelSelection(KisViewManager *view) : m_view(view) {}
-        KisViewManager *m_view;
+        ClearPixelSelection(KisView *view) : m_view(view) {}
+        KisView *m_view;
 
         KUndo2Command* paint() override {
 
@@ -177,29 +185,92 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes)
         }
     };
 
-    applicator.applyCommand(new ClearPixelSelection(view));
+    if (action == SELECTION_REPLACE || action == SELECTION_DEFAULT) {
+        applicator.applyCommand(new ClearPixelSelection(view));
+    }
 
     struct AddSelectionShape : public KisTransactionBasedCommand {
-        AddSelectionShape(KisViewManager *view, KoShape* shape) : m_view(view),
-                                                            m_shape(shape) {}
-        KisViewManager *m_view;
+        AddSelectionShape(KisView *view, KoShape* shape, SelectionAction action)
+            : m_view(view),
+              m_shape(shape),
+              m_action(action) {}
+
+        KisView *m_view;
         KoShape* m_shape;
+        SelectionAction m_action;
 
         KUndo2Command* paint() override {
-            /**
-             * Mark a shape that it belongs to a shape selection
-             */
-            if(!m_shape->userData()) {
-                m_shape->setUserData(new KisShapeSelectionMarker);
+            KUndo2Command *resultCommand = 0;
+
+
+            KisSelectionSP selection = m_view->selection();
+            if (selection) {
+                KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
+
+                if (shapeSelection) {
+                    QList<KoShape*> existingShapes = shapeSelection->shapes();
+
+                    if (existingShapes.size() == 1) {
+                        KoShape *currentShape = existingShapes.first();
+                        QPainterPath path1 = currentShape->absoluteTransformation(0).map(currentShape->outline());
+                        QPainterPath path2 = m_shape->absoluteTransformation(0).map(m_shape->outline());
+
+                        QPainterPath path = path2;
+
+                        switch (m_action) {
+                        case SELECTION_DEFAULT:
+                        case SELECTION_REPLACE:
+                            path = path2;
+                            break;
+
+                        case SELECTION_INTERSECT:
+                            path = path1 & path2;
+                            break;
+
+                        case SELECTION_ADD:
+                            path = path1 | path2;
+                            break;
+
+                        case SELECTION_SUBTRACT:
+                            path = path1 - path2;
+                            break;
+                        case SELECTION_SYMMETRICDIFFERENCE:
+                            path = (path1 | path2) - (path1 & path2);
+                            break;
+                        }
+
+                        KoShape *newShape = KoPathShape::createShapeFromPainterPath(path);
+                        newShape->setUserData(new KisShapeSelectionMarker);
+
+                        KUndo2Command *parentCommand = new KUndo2Command();
+
+                        m_view->canvasBase()->shapeController()->removeShape(currentShape, parentCommand);
+                        m_view->canvasBase()->shapeController()->addShape(newShape, 0, parentCommand);
+
+                        resultCommand = parentCommand;
+                    }
+                }
             }
 
-            return m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
+
+            if (!resultCommand) {
+                /**
+                 * Mark a shape that it belongs to a shape selection
+                 */
+                if(!m_shape->userData()) {
+                    m_shape->setUserData(new KisShapeSelectionMarker);
+                }
+
+                resultCommand = m_view->canvasBase()->shapeController()->addShape(m_shape, 0);
+            }
+
+            return resultCommand;
         }
     };
 
     Q_FOREACH (KoShape* shape, shapes) {
         applicator.applyCommand(
-            new KisGuiContextCommand(new AddSelectionShape(view, shape), view));
+            new KisGuiContextCommand(new AddSelectionShape(view, shape, action), view));
     }
     applicator.end();
 }
@@ -219,7 +290,7 @@ bool KisSelectionToolHelper::tryDeselectCurrentSelection(const QRectF selectionV
     bool result = false;
 
     if (KisAlgebra2D::maxDimension(selectionViewRect) < KisConfig(true).selectionViewSizeMinimum() &&
-        (action == SELECTION_INTERSECT || action == SELECTION_REPLACE)) {
+        (action == SELECTION_INTERSECT || action == SELECTION_SYMMETRICDIFFERENCE || action == SELECTION_REPLACE)) {
 
         // Queueing this action to ensure we avoid a race condition when unlocking the node system
         QTimer::singleShot(0, m_canvas->viewManager()->selectionManager(), SLOT(deselect()));
@@ -236,7 +307,6 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     KisActionManager * actionMan = canvas->viewManager()->actionManager();
 
-
     m_contextMenu->addAction(actionMan->actionByName("deselect"));
     m_contextMenu->addAction(actionMan->actionByName("invert"));
     m_contextMenu->addAction(actionMan->actionByName("select_all"));
@@ -248,16 +318,27 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 
     m_contextMenu->addSeparator();
 
-    QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));
-    transformMenu->addAction(actionMan->actionByName("selectionscale"));
-    transformMenu->addAction(actionMan->actionByName("growselection"));
-    transformMenu->addAction(actionMan->actionByName("shrinkselection"));
-    transformMenu->addAction(actionMan->actionByName("borderselection"));
-    transformMenu->addAction(actionMan->actionByName("smoothselection"));
-    transformMenu->addAction(actionMan->actionByName("featherselection"));
-    transformMenu->addAction(actionMan->actionByName("stroke_selection"));
+    KisSelectionSP selection = canvas->viewManager()->selection();
+    if (selection && canvas->viewManager()->selectionEditable()) {
+        m_contextMenu->addAction(actionMan->actionByName("edit_selection"));
 
-    m_contextMenu->addSeparator();
+        if (!selection->hasShapeSelection()) {
+            m_contextMenu->addAction(actionMan->actionByName("convert_to_vector_selection"));
+        } else {
+            m_contextMenu->addAction(actionMan->actionByName("convert_to_raster_selection"));
+        }
+
+        QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));
+        transformMenu->addAction(actionMan->actionByName("selectionscale"));
+        transformMenu->addAction(actionMan->actionByName("growselection"));
+        transformMenu->addAction(actionMan->actionByName("shrinkselection"));
+        transformMenu->addAction(actionMan->actionByName("borderselection"));
+        transformMenu->addAction(actionMan->actionByName("smoothselection"));
+        transformMenu->addAction(actionMan->actionByName("featherselection"));
+        transformMenu->addAction(actionMan->actionByName("stroke_selection"));
+
+        m_contextMenu->addSeparator();
+    }
 
     m_contextMenu->addAction(actionMan->actionByName("resizeimagetoselection"));
 
@@ -267,4 +348,15 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
     m_contextMenu->addAction(actionMan->actionByName("show-global-selection-mask"));
 
     return m_contextMenu;
+}
+
+SelectionMode KisSelectionToolHelper::tryOverrideSelectionMode(KisSelectionSP activeSelection, SelectionMode currentMode, SelectionAction currentAction) const
+{
+    if (currentAction != SELECTION_DEFAULT && currentAction != SELECTION_REPLACE) {
+        if (activeSelection) {
+            currentMode = activeSelection->hasShapeSelection() ? SHAPE_PROTECTION : PIXEL_SELECTION;
+        }
+    }
+
+    return currentMode;
 }

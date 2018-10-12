@@ -60,6 +60,11 @@ public:
     virtual void readOptionSetting(KisPropertiesConfigurationSP setting);
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
+    //Please override for other values than 0-100 and %
+    virtual int intMinValue()const;
+    virtual int intMaxValue()const;
+    virtual QString valueSuffix()const;
+
     const QString& name() const;
     KisPaintOpOption::PaintopCategory category() const;
     qreal minValue() const;
@@ -112,7 +117,7 @@ public:
         qreal maxSizeLikeValue;
 
         /**
-         * @param normalizedBaseAngle canvas rotation alngle normalized to range [0; 1]
+         * @param normalizedBaseAngle canvas rotation angle normalized to range [0; 1]
          * @param absoluteAxesFlipped true if underlying image coordinate system is flipped (horiz. mirror != vert. mirror)
          */
 
@@ -167,8 +172,8 @@ public:
      * Uses the curves set on the sensors to compute a single
      * double value that can control the parameters of a brush.
      *
-     * This value is derives from the falues stored in
-     * ValuesComponents opject.
+     * This value is derives from the values stored in
+     * ValuesComponents object.
      */
     ValueComponents computeValueComponents(const KisPaintInformation& info) const;
 

@@ -53,7 +53,7 @@
         <file>pics/select_pixel.png</file>
         <file>pics/select_shape.png</file>
         <file>pics/selection_add.png</file>
-        <file>pics/selection_exclude.png</file>
+        <file>pics/selection_symmetric_difference.png</file>
         <file>pics/selection_intersect.png</file>
         <file>pics/selection_replace.png</file>
         <file>pics/selection_subtract.png</file>

@@ -50,11 +50,16 @@ class KoSvgTextShape;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
-    class DeferredUseStore;
+    struct DeferredUseStore;
 
 public:
     explicit SvgParser(KoDocumentResourceManager *documentResourceManager);
     virtual ~SvgParser();
+
+    static KoXmlDocument createDocumentFromSvg(QIODevice *device, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static KoXmlDocument createDocumentFromSvg(const QByteArray &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static KoXmlDocument createDocumentFromSvg(const QString &data, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+    static KoXmlDocument createDocumentFromSvg(QXmlInputSource *source, QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
 
     /// Parses a svg fragment, returning the list of top level child shapes
     QList<KoShape*> parseSvg(const KoXmlElement &e, QSizeF * fragmentSize = 0);

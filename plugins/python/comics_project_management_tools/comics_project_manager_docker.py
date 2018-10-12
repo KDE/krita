@@ -780,6 +780,16 @@ class comics_project_manager_docker(DockWidget):
     """
 
     def slot_export(self):
+        
+        #ensure there is a unique identifier
+        if "uuid" not in self.setupDictionary.keys():
+            uuid = str()
+            if "acbfID" in self.setupDictionary.keys():
+                uuid = str(self.setupDictionary["acbfID"])
+            else:
+                uuid = QUuid.createUuid().toString()
+            self.setupDictionary["uuid"] = uuid
+        
         exporter = comics_exporter.comicsExporter()
         exporter.set_config(self.setupDictionary, self.projecturl)
         exportSuccess = exporter.export()

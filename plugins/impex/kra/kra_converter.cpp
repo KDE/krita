@@ -107,7 +107,7 @@ QList<KisPaintingAssistantSP> KraConverter::assistants()
     return m_assistants;
 }
 
-KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
+KisImageBuilder_Result KraConverter::buildFile(QIODevice *io, const QString &filename)
 {
     m_store = KoStore::createStore(io, KoStore::Write, m_doc->nativeFormatMimeType(), KoStore::Zip);
 
@@ -118,7 +118,7 @@ KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
 
     bool result = false;
 
-    m_kraSaver = new KisKraSaver(m_doc);
+    m_kraSaver = new KisKraSaver(m_doc, filename);
 
     result = saveRootDocuments(m_store);
 
@@ -133,6 +133,10 @@ KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
     result = m_kraSaver->saveBinaryData(m_store, m_image, m_doc->url().toLocalFile(), true, m_doc->isAutosaving());
     if (!result) {
         qWarning() << "saving binary data failed";
+    }
+    result = m_kraSaver->savePalettes(m_store, m_image, m_doc->url().toLocalFile());
+    if (!result) {
+        qWarning() << "saving palettes data failed";
     }
 
     if (!m_store->finalize()) {
@@ -333,6 +337,7 @@ bool KraConverter::completeLoading(KoStore* store)
     m_image->blockUpdates();
 
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
+    m_kraLoader->loadPalettes(store, m_doc);
 
     m_image->unblockUpdates();
 

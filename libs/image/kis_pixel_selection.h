@@ -49,6 +49,11 @@ public:
      */
     KisPixelSelection(const KisPixelSelection& rhs, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot);
 
+    /**
+     * Create a new selection using the content of copySource as the mask.
+     */
+    KisPixelSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode = KritaUtils::CopySnapshot, KisSelectionWSP parentSelection = KisSelectionWSP());
+
     ~KisPixelSelection() override;
 
     KisSelectionComponent* clone(KisSelection*) override;
@@ -152,6 +157,11 @@ private:
      * Intersects a selection using min-T-norm for this.
      */
     void intersectSelection(KisPixelSelectionSP selection);
+
+    /**
+     * Invert a selection or intersect with the inverse of a selection
+     */
+    void symmetricdifferenceSelection(KisPixelSelectionSP selection);
 
 private:
     // We don't want these methods to be used on selections:

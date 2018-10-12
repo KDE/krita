@@ -39,7 +39,7 @@ public:
     /**
      * Create and return the context used for saving
      *
-     * If you need a special context for saving you can reimplent this function.
+     * If you need a special context for saving you can reimplement this function.
      * The default implementation return a KoShapeSavingContext.
      *
      * The returned context is valid as long as the KoDragOdfSaveHelper is existing

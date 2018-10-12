@@ -25,9 +25,9 @@
 #include <klocalizedstring.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
-#include <metadata/kis_meta_data_store.h>
-#include <metadata/kis_meta_data_filter_registry_model.h>
-#include <metadata/kis_exif_info_visitor.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_filter_registry_model.h>
+#include <kis_exif_info_visitor.h>
 
 class ExifCheck : public KisExportCheckBase
 {

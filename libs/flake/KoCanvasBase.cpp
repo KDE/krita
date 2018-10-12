@@ -23,7 +23,7 @@
 #include <QDebug>
 
 #include "KoCanvasBase.h"
-#include "KoCanvasResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
@@ -53,17 +53,17 @@ public:
         delete snapGuide;
     }
     QPointer<KoShapeController> shapeController;
-    QPointer<KoCanvasResourceManager> resourceManager;
+    QPointer<KoCanvasResourceProvider> resourceManager;
     bool isResourceManagerShared;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
 };
 
-KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeController, KoCanvasResourceManager *sharedResourceManager)
+KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeController, KoCanvasResourceProvider *sharedResourceManager)
         : d(new Private())
 {
     d->resourceManager = sharedResourceManager ?
-        sharedResourceManager : new KoCanvasResourceManager();
+        sharedResourceManager : new KoCanvasResourceProvider();
     d->isResourceManagerShared = sharedResourceManager;
 
     d->shapeController = new KoShapeController(this, shapeController);
@@ -99,7 +99,7 @@ void KoCanvasBase::disconnectCanvasObserver(QObject *object)
 }
 
 
-KoCanvasResourceManager *KoCanvasBase::resourceManager() const
+KoCanvasResourceProvider *KoCanvasBase::resourceManager() const
 {
     return d->resourceManager;
 }

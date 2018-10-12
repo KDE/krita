@@ -194,14 +194,14 @@ public Q_SLOTS:
 
     /**
      * Set whether the tabs is relative to the paragraph indent
-     * @param relative tabs are relative to pragraph indent if true, default is false.
+     * @param relative tabs are relative to paragraph indent if true, default is false.
      */
     void setRelativeTabs(bool relative);
 
     /**
      * Update the tabs
      * @param tabs a list of tabs that is shown on the ruler
-     * @param tabDistance the distncte between regular interval tabs
+     * @param tabDistance the distance between regular interval tabs
      */
     void updateTabs(const QList<Tab> &tabs, qreal tabDistance);
 

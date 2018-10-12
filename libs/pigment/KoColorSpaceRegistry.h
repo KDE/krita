@@ -219,7 +219,7 @@ public:
     QString colorSpaceId(const KoID& colorModelId, const KoID& colorDepthId) const;
 
     /**
-     * @return a the identifiant of the color model for the given color space id.
+     * @return the identifier of the color model for the given color space id.
      *
      * This function is a compatibility function used to get the color space from
      * all kra files.
@@ -227,7 +227,7 @@ public:
     KoID colorSpaceColorModelId(const QString & _colorSpaceId) const;
 
     /**
-     * @return a the identifiant of the color depth for the given color space id.
+     * @return the identifier of the color depth for the given color space id.
      *
      * This function is a compatibility function used to get the color space from
      * all kra files.
@@ -332,7 +332,7 @@ private:
     friend class KoColorSpacesBenchmark;
     friend class TestKoColorSpaceSanity;
     friend class TestColorConversionSystem;
-    friend class FriendOfColorSpaceRegistry;
+    friend struct FriendOfColorSpaceRegistry;
 
     /**
      * @return a list with an instance of all color space with their default profile.
@@ -343,8 +343,8 @@ private:
      * @return the color conversion system use by the registry and the color
      * spaces to create color conversion transformation.
      *
-     * WARNING: conversion system is guared by the registry locks, don't
-     *          use it anywhere other than unttests!
+     * WARNING: conversion system is guarded by the registry locks, don't
+     *          use it anywhere other than unittests!
      */
     const KoColorConversionSystem* colorConversionSystem() const;
 

@@ -63,7 +63,7 @@ KisHalftoneFilter::KisHalftoneFilter()
     setSupportsThreading(false);
 }
 
-//I am pretty terrible at trigionometry, hence all the comments.
+//I am pretty terrible at trigonometry, hence all the comments.
 void KisHalftoneFilter::processImpl(KisPaintDeviceSP device,
                                     const QRect &applyRect,
                                     const KisFilterConfigurationSP config,

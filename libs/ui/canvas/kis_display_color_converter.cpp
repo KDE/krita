@@ -28,7 +28,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorConversions.h>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include "kis_config_notifier.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_canvas2.h"
@@ -46,7 +46,7 @@ Q_GLOBAL_STATIC(KisDisplayColorConverter, s_instance)
 
 struct KisDisplayColorConverter::Private
 {
-    Private(KisDisplayColorConverter *_q, KoCanvasResourceManager *_resourceManager)
+    Private(KisDisplayColorConverter *_q, KoCanvasResourceProvider *_resourceManager)
         : q(_q),
           resourceManager(_resourceManager),
           nodeColorSpace(0),
@@ -63,7 +63,7 @@ struct KisDisplayColorConverter::Private
 
     KisDisplayColorConverter *const q;
 
-    KoCanvasResourceManager *resourceManager;
+    KoCanvasResourceProvider *resourceManager;
 
     const KoColorSpace *nodeColorSpace;
     const KoColorSpace *paintingColorSpace;
@@ -101,7 +101,7 @@ struct KisDisplayColorConverter::Private
 
     class DisplayRenderer : public KoColorDisplayRendererInterface {
     public:
-        DisplayRenderer(KisDisplayColorConverter *displayColorConverter, KoCanvasResourceManager *resourceManager)
+        DisplayRenderer(KisDisplayColorConverter *displayColorConverter, KoCanvasResourceProvider *resourceManager)
             : m_displayColorConverter(displayColorConverter),
               m_resourceManager(resourceManager)
         {
@@ -153,19 +153,19 @@ struct KisDisplayColorConverter::Private
 
     private:
         KisDisplayColorConverter *m_displayColorConverter;
-        QPointer<KoCanvasResourceManager> m_resourceManager;
+        QPointer<KoCanvasResourceProvider> m_resourceManager;
     };
 
     QScopedPointer<KoColorDisplayRendererInterface> displayRenderer;
 };
 
-KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceManager *resourceManager, QObject *parent)
+KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceProvider *resourceManager, QObject *parent)
     : QObject(parent),
       m_d(new Private(this, resourceManager))
 {
 
-    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            SLOT(slotCanvasResourceChanged(int, const QVariant&)));
+    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
+            SLOT(slotCanvasResourceChanged(int,QVariant)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
             SLOT(selectPaintingColorSpace()));
 
@@ -221,7 +221,7 @@ void KisDisplayColorConverter::Private::slotCanvasResourceChanged(int key, const
     if (key == KisCanvasResourceProvider::CurrentKritaNode) {
         KisNodeSP currentNode = v.value<KisNodeWSP>();
         setCurrentNode(currentNode);
-    } else if (useOcio() && key == KoCanvasResourceManager::ForegroundColor) {
+    } else if (useOcio() && key == KoCanvasResourceProvider::ForegroundColor) {
         updateIntermediateFgColor(v.value<KoColor>());
     }
 }

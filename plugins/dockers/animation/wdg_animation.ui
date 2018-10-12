@@ -164,7 +164,7 @@
         <item>
          <widget class="QToolButton" name="btnFirstFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -196,7 +196,7 @@
         <item>
          <widget class="QToolButton" name="btnPreviousKeyFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -228,7 +228,7 @@
         <item>
          <widget class="QToolButton" name="btnPreviousFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -260,7 +260,7 @@
         <item>
          <widget class="QToolButton" name="btnPlay">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -292,7 +292,7 @@
         <item>
          <widget class="QToolButton" name="btnNextFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -324,7 +324,7 @@
         <item>
          <widget class="QToolButton" name="btnNextKeyFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -356,7 +356,7 @@
         <item>
          <widget class="QToolButton" name="btnLastFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>

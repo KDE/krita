@@ -19,7 +19,7 @@
 #ifndef __KIS_BRUSH_HUD_PROPERTIES_CONFIG_TEST_H
 #define __KIS_BRUSH_HUD_PROPERTIES_CONFIG_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisBrushHudPropertiesConfigTest : public QObject
 {

@@ -69,7 +69,7 @@ public:
     /**
      * Draws an m_interestRect of the patch onto @gc
      * By the way it fits this rect into @dstRect
-     * @renderHints are directly tranmitted to QPainter
+     * @renderHints are directly transmitted to QPainter
      */
     void drawMe(QPainter &gc,
                 const QRectF &dstRect,

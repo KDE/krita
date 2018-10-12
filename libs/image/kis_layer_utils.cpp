@@ -53,6 +53,7 @@
 #include "commands/kis_node_compositeop_command.h"
 #include <KisDelayedUpdateNodeInterface.h>
 #include "krita_utils.h"
+#include "kis_image_signal_router.h"
 
 
 namespace KisLayerUtils {
@@ -564,9 +565,9 @@ namespace KisLayerUtils {
     {
     }
 
-    void KeepNodesSelectedCommand::end() {
+    void KeepNodesSelectedCommand::partB() {
         KisImageSignalType type;
-        if (isFinalizing()) {
+        if (getState() == State::FINALIZING) {
             type = ComplexNodeReselectionSignal(m_activeAfter, m_selectedAfter);
         } else {
             type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
@@ -607,13 +608,22 @@ namespace KisLayerUtils {
     void RemoveNodeHelper::safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image) {
         const bool lastLayer = scanForLastLayer(image, nodes);
 
+        auto isNodeWeird = [] (KisNodeSP node) {
+            const bool normalCompositeMode = node->compositeOpId() == COMPOSITE_OVER;
+
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            const bool hasInheritAlpha = layer && layer->alphaChannelDisabled();
+            return !normalCompositeMode && !hasInheritAlpha;
+        };
+
         while (!nodes.isEmpty()) {
             KisNodeList::iterator it = nodes.begin();
 
             while (it != nodes.end()) {
                 if (!checkIsSourceForClone(*it, nodes)) {
                     KisNodeSP node = *it;
-                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, false, true));
+
+                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, !isNodeWeird(node), true));
                     it = nodes.erase(it);
                 } else {
                     ++it;
@@ -777,7 +787,7 @@ namespace KisLayerUtils {
                     }
                 }
 
-                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [this](KisNodeSP node) {
+                KritaUtils::filterContainer<KisNodeList>(safeNodesToDelete, [](KisNodeSP node) {
                   return !node->userLocked();
                 });
                 safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
@@ -818,7 +828,7 @@ namespace KisLayerUtils {
 
     SwitchFrameCommand::~SwitchFrameCommand() {}
 
-    void SwitchFrameCommand::init() {
+    void SwitchFrameCommand::partA() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_newTime) {
@@ -830,7 +840,7 @@ namespace KisLayerUtils {
         interface->saveAndResetCurrentTime(m_newTime, &m_storage->value);
     }
 
-    void SwitchFrameCommand::end() {
+    void SwitchFrameCommand::partB() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_storage->value) {
@@ -952,7 +962,7 @@ namespace KisLayerUtils {
             applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
-            // in two-layer mode we disable pass trhough only when the destination layer
+            // in two-layer mode we disable pass through only when the destination layer
             // is not a group layer
             applicator.applyCommand(new DisablePassThroughForHeadsOnly(info, true));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
@@ -1234,6 +1244,14 @@ namespace KisLayerUtils {
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
         if (!invisibleNodes.isEmpty()) {
+            /* If the putAfter node is invisible,
+             * we should instead pick one of the nodes
+             * to be merged to avoid a null putAfter.
+             */
+            if (!putAfter->visible()){
+                putAfter = mergedNodes.first();
+            }
+
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),
@@ -1284,6 +1302,7 @@ namespace KisLayerUtils {
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);
             }
+
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, true));
         }
 
@@ -1406,12 +1425,17 @@ namespace KisLayerUtils {
         mergeMultipleLayersImpl(image, mergedNodes, layer, true, kundo2_i18n("Flatten Layer"));
     }
 
-    void flattenImage(KisImageSP image)
+    void flattenImage(KisImageSP image, KisNodeSP activeNode)
     {
+        if (!activeNode) {
+            activeNode = image->root()->lastChild();
+        }
+
+
         KisNodeList mergedNodes;
         mergedNodes << image->root();
 
-        mergeMultipleLayersImpl(image, mergedNodes, 0, true, kundo2_i18n("Flatten Image"));
+        mergeMultipleLayersImpl(image, mergedNodes, activeNode, true, kundo2_i18n("Flatten Image"));
     }
 
     KisSimpleUpdateCommand::KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent)
@@ -1419,7 +1443,7 @@ namespace KisLayerUtils {
           m_nodes(nodes)
     {
     }
-    void KisSimpleUpdateCommand::end()
+    void KisSimpleUpdateCommand::partB()
     {
         updateNodes(m_nodes);
     }

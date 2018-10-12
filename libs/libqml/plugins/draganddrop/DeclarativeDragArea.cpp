@@ -240,10 +240,10 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
             drag->setPixmap(QPixmap::fromImage(m_delegateImage));
 //             qDebug() << "++++++delegateImage";
         } else {
-//             qDebug() << "DDD NO Delegte image";
+//             qDebug() << "DDD NO Delegate image";
             if (m_delegate) {
                 // This is just highly unreliable, let's completely skip this
-                // until we have a non-digusting way of "attaching an item to
+                // until we have a non-disgusting way of "attaching an item to
                 // the cursor
 //                 QRectF rf;
 //                 qDebug() << "DDD +++ delegate" << m_delegate;

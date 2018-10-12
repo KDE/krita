@@ -56,3 +56,8 @@ KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
 KisProcessingVisitor::~KisProcessingVisitor()
 {
 }
+
+KUndo2Command *KisProcessingVisitor::createInitCommand()
+{
+    return 0;
+}

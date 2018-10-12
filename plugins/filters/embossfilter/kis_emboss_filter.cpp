@@ -77,7 +77,7 @@ KisFilterConfigurationSP KisEmbossFilter::factoryConfiguration() const
  * d                => Emboss value
  *
  * Theory           => This is an amazing effect. And the theory is very simple to
- *                     understand. You get the diference between the colors and
+ *                     understand. You get the difference between the colors and
  *                     increase it. After this, get the gray tone
  */
 void KisEmbossFilter::processImpl(KisPaintDeviceSP device,

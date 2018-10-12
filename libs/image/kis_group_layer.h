@@ -80,7 +80,7 @@ public:
     KisPaintDeviceSP paintDevice() const override;
 
     /**
-       Accect the specified visitor.
+       Accept the specified visitor.
        @return true if the operation succeeded, false if it failed.
     */
     bool accept(KisNodeVisitor &v) override;

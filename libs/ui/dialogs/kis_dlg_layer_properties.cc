@@ -273,14 +273,20 @@ void KisDlgLayerProperties::slotOpacityValueChangedExternally()
 
 void KisDlgLayerProperties::slotNameValueChangedInternally()
 {
-    d->page->editName->setText(d->nameProperty->value());
+    if (d->page->editName->text() != d->nameProperty->value()) {
+        d->page->editName->setText(d->nameProperty->value());
+    }
+
     d->page->editName->setEnabled(!d->nameProperty->isIgnored());
 }
 
 void KisDlgLayerProperties::slotNameValueChangedExternally()
 {
     if (d->nameProperty->isIgnored()) return;
-    d->nameProperty->setValue(d->page->editName->text());
+
+    if (d->page->editName->text() != d->nameProperty->value()) {
+        d->nameProperty->setValue(d->page->editName->text());
+    }
 }
 
 void KisDlgLayerProperties::slotPropertyValueChangedInternally()

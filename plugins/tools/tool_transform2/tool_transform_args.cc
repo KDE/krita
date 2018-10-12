@@ -31,33 +31,28 @@
 
 
 ToolTransformArgs::ToolTransformArgs()
-    : m_liquifyProperties(new KisLiquifyProperties())
+    : m_mode(FREE_TRANSFORM)
+    , m_defaultPoints(true)
+    , m_origPoints {QVector<QPointF>()}
+    , m_transfPoints {QVector<QPointF>()}
+    , m_warpType(KisWarpTransformWorker::RIGID_TRANSFORM)
+    , m_alpha(1.0)
+    , m_transformedCenter(QPointF(0, 0))
+    , m_originalCenter(QPointF(0, 0))
+    , m_rotationCenterOffset(QPointF(0, 0))
+    , m_aX(0)
+    , m_aY(0)
+    , m_aZ(0)
+    , m_scaleX(1.0)
+    , m_scaleY(1.0)
+    , m_shearX(0.0)
+    , m_shearY(0.0)
+    , m_liquifyProperties(new KisLiquifyProperties())
 {
-    m_mode = FREE_TRANSFORM;
-    m_transformedCenter = QPointF(0, 0);
-    m_originalCenter = QPointF(0, 0);
-    m_rotationCenterOffset = QPointF(0, 0);
-    m_cameraPos = QVector3D(0,0,1024);
-    m_aX = 0;
-    m_aY = 0;
-    m_aZ = 0;
-    m_scaleX = 1.0;
-    m_scaleY = 1.0;
-    m_shearX = 0.0;
-    m_shearY = 0.0;
-    m_origPoints = QVector<QPointF>();
-    m_transfPoints = QVector<QPointF>();
-    m_warpType = KisWarpTransformWorker::RIGID_TRANSFORM;
-    m_alpha = 1.0;
-    m_keepAspectRatio = false;
-    m_defaultPoints = true;
-
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KisToolTransform");
     QString savedFilterId = configGroup.readEntry("filterId", "Bicubic");
     setFilterId(savedFilterId);
     m_transformAroundRotationCenter = configGroup.readEntry("transformAroundRotationCenter", "0").toInt();
-
-    m_editTransformPoints = false;
 }
 
 void ToolTransformArgs::setFilterId(const QString &id) {
@@ -119,6 +114,11 @@ ToolTransformArgs::ToolTransformArgs(const ToolTransformArgs& args)
     : m_liquifyProperties(args.m_liquifyProperties)
 {
     init(args);
+}
+
+KisToolChangesTrackerData *ToolTransformArgs::clone() const
+{
+    return new ToolTransformArgs(*this);
 }
 
 ToolTransformArgs& ToolTransformArgs::operator=(const ToolTransformArgs& args)
@@ -228,29 +228,26 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      double alpha,
                                      bool defaultPoints,
                                      const QString &filterId)
-    : m_liquifyProperties(new KisLiquifyProperties())
+    : m_mode(mode)
+    , m_defaultPoints(defaultPoints)
+    , m_origPoints {QVector<QPointF>()}
+    , m_transfPoints {QVector<QPointF>()}
+    , m_warpType(warpType)
+    , m_alpha(alpha)
+    , m_transformedCenter(transformedCenter)
+    , m_originalCenter(originalCenter)
+    , m_rotationCenterOffset(rotationCenterOffset)
+    , m_transformAroundRotationCenter(transformAroundRotationCenter)
+    , m_aX(aX)
+    , m_aY(aY)
+    , m_aZ(aZ)
+    , m_scaleX(scaleX)
+    , m_scaleY(scaleY)
+    , m_shearX(shearX)
+    , m_shearY(shearY)
+    , m_liquifyProperties(new KisLiquifyProperties())
 {
-    m_mode = mode;
-    m_transformedCenter = transformedCenter;
-    m_originalCenter = originalCenter;
-    m_rotationCenterOffset = rotationCenterOffset;
-    m_transformAroundRotationCenter = transformAroundRotationCenter;
-    m_cameraPos = QVector3D(0,0,1024);
-    m_aX = aX;
-    m_aY = aY;
-    m_aZ = aZ;
-    m_scaleX = scaleX;
-    m_scaleY = scaleY;
-    m_shearX = shearX;
-    m_shearY = shearY;
-    m_origPoints = QVector<QPointF>();
-    m_transfPoints = QVector<QPointF>();
-    m_warpType = warpType;
-    m_alpha = alpha;
-    m_defaultPoints = defaultPoints;
-    m_keepAspectRatio = false;
     setFilterId(filterId);
-    m_editTransformPoints = false;
 }
 
 

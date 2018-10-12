@@ -75,18 +75,19 @@ void KisSessionResource::restore()
         if (!window) {
             qDebug() << "Warning: session file contains inconsistent data.";
         } else {
-            auto document = documents.value(url);
+            KisDocument *document = documents.value(url);
 
             if (!document) {
                 document = kisPart->createDocument();
-                kisPart->addDocument(document);
-                documents.insert(url, document);
 
                 bool ok = document->openUrl(url);
                 if (!ok) {
-                    // TODO: warn user that we failed to re-open a document
+                    delete document;
                     continue;
                 }
+
+                kisPart->addDocument(document);
+                documents.insert(url, document);
             }
 
             KisView *view = window->newView(document);

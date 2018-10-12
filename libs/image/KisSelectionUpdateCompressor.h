@@ -35,6 +35,7 @@ public:
 
 public Q_SLOTS:
     void requestUpdate(const QRect &updateRect);
+    void tryProcessStalledUpdate();
 
 private Q_SLOTS:
     void startUpdateJob();
@@ -44,6 +45,8 @@ private:
     KisThreadSafeSignalCompressor *m_updateSignalCompressor;
     QRect m_updateRect;
     bool m_fullUpdateRequested;
+
+    bool m_hasStalledUpdate;
 };
 
 #endif // KISSELECTIONUPDATECOMPRESSOR_H

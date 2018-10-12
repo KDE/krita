@@ -21,35 +21,34 @@
 #define __KIS_PALETTE_VIEW_H
 
 #include <QScopedPointer>
-
+#include <QTableView>
 #include <QColorDialog>
 #include <QPushButton>
 #include <QPixmap>
 #include <QIcon>
 
-#include <KoTableView.h>
 #include <KoColorSet.h>
 #include "kritawidgets_export.h"
 
+#include <KisKineticScroller.h>
+
 class KisPaletteModel;
 class QWheelEvent;
+class KoColorDisplayRendererInterface;
 
-
-class KRITAWIDGETS_EXPORT KisPaletteView : public KoTableView
+class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 {
     Q_OBJECT
+private:
+    static int MININUM_ROW_HEIGHT;
 public:
-    KisPaletteView(QWidget *parent = 0);
+    explicit KisPaletteView(QWidget *parent = Q_NULLPTR);
     ~KisPaletteView() override;
 
     void setPaletteModel(KisPaletteModel *model);
     KisPaletteModel* paletteModel() const;
 
-    /**
-     * @brief updateRows
-     * update the rows so they have the proper columnspanning.
-     */
-    void updateRows();
+public:
 
     /**
      * @brief setAllowModification
@@ -58,6 +57,8 @@ public:
      */
     void setAllowModification(bool allow);
 
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+
     /**
      * @brief setCrossedKeyword
      * this apparently allows you to set keywords that can cross out colors.
@@ -65,55 +66,57 @@ public:
      * @param value
      */
     void setCrossedKeyword(const QString &value);
+    void removeSelectedEntry();
+    /**
+     * @brief selectClosestColor
+     * select a color that's closest to parameter color
+     * @param color
+     */
+    void selectClosestColor(const KoColor &color);
 
-public Q_SLOTS:
-    void paletteModelChanged();
     /**
      * add an entry with a dialog window.
+     * @warning deprecated.
+     * kept for compatibility with @ref PaletteView in @ref libkis
      */
     bool addEntryWithDialog(KoColor color);
     /**
-     * @brief addGroupWithDialog
-     * summons a little dialog to name the new group.
-     */
-    bool addGroupWithDialog();
-    /**
      * remove entry with a dialog window.(Necessary for groups.
+     * @warning deprecated.
+     * kept for compatibility with @ref PaletteView in @ref libkis
      */
     bool removeEntryWithDialog(QModelIndex index);
+    /**
+     * add entry with a dialog window.
+     * @warning deprecated.
+     * kept for compatibility with @ref PaletteView in @ref libkis
+     */
+    bool addGroupWithDialog();
+
+Q_SIGNALS:
+    void sigIndexSelected(const QModelIndex &index);
+    void sigColorSelected(const KoColor &);
+
+public Q_SLOTS:
     /**
      *  This tries to select the closest color in the palette.
      *  This doesn't update the foreground color, just the visual selection.
      */
-    void trySelectClosestColor(KoColor color);
-Q_SIGNALS:
-    /**
-     * @brief entrySelected
-     * signals when an entry is selected.
-     * @param entry the selected entry.
-     */
-    void entrySelected(KoColorSetEntry entry);
-    void entrySelectedBackGround(KoColorSetEntry entry);
-    void indexEntrySelected(QModelIndex index);
-protected:
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
+    void slotFGColorChanged(const KoColor &);
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
+
+private Q_SLOTS:
+    void slotHorizontalHeaderResized(int, int, int newSize);
+    void slotAdditionalGuiUpdate();
+    void slotCurrentSelectionChanged(const QModelIndex &newCurrent);
+
+private:
+    void resizeRows(int newSize);
 
 private:
     struct Private;
     const QScopedPointer<Private> m_d;
-private Q_SLOTS:
-    /**
-     * @brief entrySelection
-     * the function that will emit entrySelected when the entry changes.
-     */
-    void entrySelection(bool foreground = true);
-    /**
-     * @brief modifyEntry
-     * function for changing the entry at the given index.
-     * if modification isn't allow(@see setAllowModification), this does nothing.
-     */
-    void modifyEntry(QModelIndex index);
 };
 
 #endif /* __KIS_PALETTE_VIEW_H */

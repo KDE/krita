@@ -111,6 +111,12 @@ public:
     static KisImportExportFilter *filterForMimeType(const QString &mimetype, Direction direction);
 
     /**
+     * Fill necessary information for the export filter into the properties, e.g. if the image has
+     * transparency or has sRGB profile.
+     */
+    static void fillStaticExportConfigurationProperties(KisPropertiesConfigurationSP exportConfiguration, KisImageSP image);
+
+    /**
      * Get if the filter manager is batch mode (true)
      * or in interactive mode (true)
      */

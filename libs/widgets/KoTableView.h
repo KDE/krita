@@ -20,8 +20,10 @@
 #define KOTABLEVIEW_H
 
 #include <QTableView>
+#include <QScroller>
 
 #include "kritawidgets_export.h"
+#include <KisKineticScroller.h>
 
 class QEvent;
 class QModelIndex;
@@ -48,10 +50,12 @@ public:
     */
     void resizeEvent(QResizeEvent *event) override;
 
-
     void setViewMode(ViewMode mode);
 
     void updateView();
+
+public Q_SLOTS:
+    void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 Q_SIGNALS:
 

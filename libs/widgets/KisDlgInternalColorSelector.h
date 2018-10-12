@@ -39,11 +39,14 @@ class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 
-public:
-
 
     static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
 
+public:
+
+    static void setScreenColorPickerFactory(std::function<KisScreenColorPickerBase *(QWidget *)> f) {
+        s_screenColorPickerFactory = f;
+    }
 
     struct Config
     {
@@ -171,13 +174,8 @@ private Q_SLOTS:
 
     void slotChangePalette(KoColorSet *set);
 
-    void slotSetColorFromColorList();
-
-    void slotSetColorFromColorSetEntry(KoColorSetEntry entry);
-
-
 protected:
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private:
     void focusInEvent(QFocusEvent *) override;

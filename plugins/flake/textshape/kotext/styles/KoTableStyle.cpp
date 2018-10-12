@@ -503,8 +503,6 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setBottomMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin-bottom")));
     if (styleStack.hasProperty(KoXmlNS::fo, "margin")) {
         setMargin(KoText::parseLength(styleStack.property(KoXmlNS::fo, "margin")));
-        hasMarginLeft = true;
-        hasMarginRight = true;
     }
 
     // keep table with next paragraph? 

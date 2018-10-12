@@ -24,7 +24,7 @@
 
 #include <klocalizedstring.h>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoCanvasBase.h>
 
 #include "kis_config.h"
@@ -34,6 +34,7 @@
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisResourceServerProvider.h"
+#include <KisKineticScroller.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_types.h>
 
@@ -52,6 +53,11 @@ PresetHistoryDock::PresetHistoryDock( )
     m_presetHistory->setSelectionMode(QAbstractItemView::SingleSelection);
     m_presetHistory->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     setWidget(m_presetHistory);
+
+    QScroller* scroller = KisKineticScroller::createPreconfiguredScroller(m_presetHistory);
+    if( scroller ) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
     connect(m_presetHistory, SIGNAL(itemClicked(QListWidgetItem*)), SLOT(presetSelected(QListWidgetItem*)));
 }

@@ -64,6 +64,8 @@ Q_SIGNALS:
     void sigSetTranslateX(int value);
     void sigSetTranslateY(int value);
 
+    void sigRequestCommitOffsetChanges();
+
 private:
     void updateUIUnit(int newUnit);
     void setMoveToolMode(KisToolMove::MoveToolMode newMode);

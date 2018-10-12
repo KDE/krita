@@ -18,6 +18,9 @@
 
 #include "KisPasteActionFactory.h"
 
+#include <QApplication>
+
+#include "kis_config.h"
 #include "kis_image.h"
 #include "KisViewManager.h"
 #include "kis_tool_proxy.h"
@@ -28,7 +31,10 @@
 #include "kis_shape_layer.h"
 #include "kis_import_catcher.h"
 #include "kis_clipboard.h"
+#include "kis_selection.h"
+#include "commands/kis_selection_commands.h"
 #include "commands/kis_image_layer_add_command.h"
+#include "KisTransformToolActivationCommand.h"
 #include "kis_processing_applicator.h"
 
 #include <KoSvgPaste.h>
@@ -237,6 +243,15 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         KUndo2Command *cmd = new KisImageLayerAddCommand(image, newLayer, parentNode, aboveNode);
         KisProcessingApplicator *ap = beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+        
+        if (KisConfig(true).activateTransformToolAfterPaste()) {
+            KUndo2Command *deselectCmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
+            ap->applyCommand(deselectCmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
+            
+            KUndo2Command *transformToolCmd = new KisTransformToolActivationCommand(view);
+            ap->applyCommand(transformToolCmd, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+        }
+        
         endAction(ap, KisOperationConfiguration(id()).toXML());
     } else {
         // XXX: "Add saving of XML data for Paste of shapes"

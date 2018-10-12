@@ -146,7 +146,7 @@ public Q_SLOTS:
      * be registered with krita and be compatible with the current color model and depth; the image data
      * is <i>not</i> converted.
      * @param colorProfile
-     * @return if assigining the colorprofiel worked
+     * @return if assigning the color profile worked
      */
     bool setColorProfile(const QString &colorProfile);
 
@@ -453,7 +453,7 @@ public Q_SLOTS:
     bool remove();
 
     /**
-     * @brief duplicate returns a full copy of the current node. The node is not inserted in the graphc
+     * @brief duplicate returns a full copy of the current node. The node is not inserted in the graphic
      * @return a valid Node object or 0 if the node couldn't be duplicated.
      */
     Node* duplicate();
@@ -489,7 +489,7 @@ public Q_SLOTS:
      * <li>Mitchell</li>
      * </ul>
      */
-    void scaleNode(int width, int height, QString strategy);
+    void scaleNode(const QPointF &origin, int width, int height, QString strategy);
 
     /**
      * @brief rotateNode rotate this layer by the given radians.

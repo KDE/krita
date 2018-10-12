@@ -137,7 +137,7 @@ struct NoProgressPolicy
  * this first pixel. After the jump is accomplished, you can easily request
  * the "jumped over" pixel data.
  *
- * The modified rules apply when the user wants accesses censequent pixels
+ * The modified rules apply when the user wants accesses consequent pixels
  * in one go. The user first asks the iterator for the number of available
  * consequent pixels, and then calls nextPixels(numConseqPixels). In this
  * case, iterator inserts a "virtual" pixel that one should jump over before

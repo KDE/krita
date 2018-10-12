@@ -57,6 +57,9 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
     action = createAction("layersize");
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
+    action = createAction("scaleAllLayers");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotScaleAllLayers()));
+
     action  = createAction("selectionscale");
     connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
 }
@@ -69,6 +72,8 @@ void ImageSize::slotImageSize()
 {
     KisImageSP image = viewManager()->image().toStrongRef();
     if (!image) return;
+
+    if(!viewManager()->blockUntilOperationsFinished(image)) return;
 
     DlgImageSize * dlgImageSize = new DlgImageSize(viewManager()->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgImageSize);
@@ -88,8 +93,9 @@ void ImageSize::slotImageSize()
 void ImageSize::slotCanvasSize()
 {
     KisImageWSP image = viewManager()->image();
-
     if (!image) return;
+
+    if(!viewManager()->blockUntilOperationsFinished(image)) return;
 
     DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(viewManager()->mainWindow(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgCanvasSize);
@@ -105,17 +111,25 @@ void ImageSize::slotCanvasSize()
     delete dlgCanvasSize;
 }
 
-void ImageSize::slotLayerSize()
+void ImageSize::scaleLayerImpl(KisNodeSP rootNode)
 {
     KisImageWSP image = viewManager()->image();
-
     if (!image) return;
 
-    KisPaintDeviceSP dev = viewManager()->activeLayer()->projection();
-    Q_ASSERT(dev);
-    QRect rc = dev->exactBounds();
+    if(!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgLayerSize * dlgLayerSize = new DlgLayerSize(viewManager()->mainWindow(), "LayerSize", rc.width(), rc.height(), image->yRes());
+    QRect bounds;
+    KisSelectionSP selection = viewManager()->selection();
+
+    if (selection) {
+        bounds = selection->selectedExactRect();
+    } else {
+        KisPaintDeviceSP dev = rootNode->projection();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(dev);
+        bounds = dev->exactBounds();
+    }
+
+    DlgLayerSize * dlgLayerSize = new DlgLayerSize(viewManager()->mainWindow(), "LayerSize", bounds.width(), bounds.height(), image->yRes());
     Q_CHECK_PTR(dlgLayerSize);
     dlgLayerSize->setCaption(i18n("Resize Layer"));
 
@@ -123,19 +137,36 @@ void ImageSize::slotLayerSize()
         qint32 w = dlgLayerSize->width();
         qint32 h = dlgLayerSize->height();
 
-        viewManager()->nodeManager()->scale((double)w / ((double)(rc.width())),
-                                     (double)h / ((double)(rc.height())),
-                                     dlgLayerSize->filterType());
+        viewManager()->image()->scaleNode(rootNode,
+                                          QRectF(bounds).center(),
+                                          qreal(w) / bounds.width(),
+                                          qreal(h) / bounds.height(),
+                                          dlgLayerSize->filterType(),
+                                          selection);
     }
     delete dlgLayerSize;
+}
+
+void ImageSize::slotLayerSize()
+{
+    scaleLayerImpl(viewManager()->activeNode());
+}
+
+void ImageSize::slotScaleAllLayers()
+{
+    KisImageWSP image = viewManager()->image();
+    if (!image) return;
+
+    scaleLayerImpl(image->root());
 }
 
 void ImageSize::slotSelectionScale()
 {
     KisImageSP image = viewManager()->image();
-    if (!image) {
-        return;
-    }
+    if (!image) return;
+
+    if(!viewManager()->blockUntilOperationsFinished(image)) return;
+
     KisLayerSP layer = viewManager()->activeLayer();
 
     KIS_ASSERT_RECOVER_RETURN(image && layer);
@@ -156,9 +187,10 @@ void ImageSize::slotSelectionScale()
         qint32 h = dlgSize->height();
 
         image->scaleNode(selectionMask,
+                         QRectF(rc).center(),
                          qreal(w) / rc.width(),
                          qreal(h) / rc.height(),
-                         dlgSize->filterType());
+                         dlgSize->filterType(), 0);
     }
     delete dlgSize;
 }

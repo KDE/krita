@@ -25,7 +25,7 @@ KisRunnableStrokeJobsInterface::~KisRunnableStrokeJobsInterface()
 
 }
 
-void KisRunnableStrokeJobsInterface::addRunnableJob(KisRunnableStrokeJobData *data)
+void KisRunnableStrokeJobsInterface::addRunnableJob(KisRunnableStrokeJobDataBase *data)
 {
     addRunnableJobs({data});
 }

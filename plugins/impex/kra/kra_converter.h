@@ -43,7 +43,7 @@ public:
     ~KraConverter() override;
 
     KisImageBuilder_Result buildImage(QIODevice *io);
-    KisImageBuilder_Result buildFile(QIODevice *io);
+    KisImageBuilder_Result buildFile(QIODevice *io, const QString &filename);
     /**
      * Retrieve the constructed image
      */

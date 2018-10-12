@@ -184,7 +184,7 @@ void parseColorIntoGroups(QVector<FillGroup> &groups,
             KisScanlineFill fill(stroke, pt, boundingRect);
             /**
              * The threshold is set explicitly. If you want to raise it,
-             * don't forget to add a destiction between 0 and >0 in
+             * don't forget to add a distinction between 0 and >0 in
              * the fill strategy. Otherwise the algorithm will not work.
              */
             fill.setThreshold(0);

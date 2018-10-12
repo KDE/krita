@@ -119,6 +119,14 @@ bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
               << "\"";
     svgStream << ">" << endl;
 
+    if (!m_documentTitle.isNull() && !m_documentTitle.isEmpty()) {
+        svgStream << "<title>" << m_documentTitle << "</title>" << endl;
+    }
+
+    if (!m_documentDescription.isNull() && !m_documentDescription.isEmpty()) {
+        svgStream << "<desc>" << m_documentDescription << "</desc>" << endl;
+    }
+
     {
         SvgSavingContext savingContext(outputDevice, m_writeInlineImages);
         saveShapes(m_toplevelShapes, savingContext);
@@ -300,3 +308,14 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
     // TODO: once we support saving single (flat) odf files
     // we can embed these here to have full support for generic shapes
 }
+
+void SvgWriter::setDocumentTitle(QString title)
+{
+    m_documentTitle = title;
+}
+
+void SvgWriter::setDocumentDescription(QString description)
+{
+    m_documentDescription = description;
+}
+

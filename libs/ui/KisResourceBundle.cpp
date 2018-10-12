@@ -154,7 +154,7 @@ bool KisResourceBundle::load()
                         m_metadata.insert("author", e.firstChild().toText().data());
                     }
                     else if (e.tagName() == "meta:creation-date") {
-                         m_metadata.insert("created", e.firstChild().toText().data());
+                        m_metadata.insert("created", e.firstChild().toText().data());
                     }
                     else if (e.tagName() == "meta:dc-date") {
                         m_metadata.insert("updated", e.firstChild().toText().data());
@@ -373,6 +373,21 @@ bool KisResourceBundle::save()
                 KisPaintOpPresetSP res = paintoppresetServer->resourceByMD5(ref.md5sum);
                 if (!res) res = paintoppresetServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
                 if (!saveResourceToStore(res.data(), store.data(), "paintoppresets")) {
+                    if (res) {
+                        warnKrita << "Could not save resource" << resType << res->name();
+                    }
+                    else {
+                        warnKrita << "could not find resource for" << QFileInfo(ref.resourcePath).fileName();
+                    }
+                }
+            }
+        }
+        else if (resType  == "ko_gamutmasks") {
+            KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+            Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+                KoResource *res = gamutMaskServer->resourceByMD5(ref.md5sum);
+                if (!res) res = gamutMaskServer->resourceByFilename(QFileInfo(ref.resourcePath).fileName());
+                if (!saveResourceToStore(res, store.data(), "gamutmasks")) {
                     if (res) {
                         warnKrita << "Could not save resource" << resType << res->name();
                     }
@@ -699,6 +714,51 @@ bool KisResourceBundle::install()
 
             }
         }
+        else if (resType  == "gamutmasks") {
+            KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+            Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files(resType)) {
+
+                if (resourceStore->isOpen()) resourceStore->close();
+
+                dbgResources << "\tInstalling" << ref.resourcePath;
+                KoGamutMask *res = gamutMaskServer->createResource(QString("bundle://%1:%2").arg(filename()).arg(ref.resourcePath));
+
+                if (!res) {
+                    warnKrita << "Could not create resource for" << ref.resourcePath;
+                    continue;
+                }
+                if (!resourceStore->open(ref.resourcePath)) {
+                    warnKrita << "Failed to open" << ref.resourcePath << "from bundle" << filename();
+                    continue;
+                }
+                if (!res->loadFromDevice(resourceStore->device())) {
+                    warnKrita << "Failed to load" << ref.resourcePath << "from bundle" << filename();
+                    continue;
+                }
+                dbgResources << "\t\tresource:" << res->name();
+
+                //find the resource on the server
+                KoGamutMask *res2 = gamutMaskServer->resourceByName(res->name());
+                if (!res2)  {//if it doesn't exist...
+                    gamutMaskServer->addResource(res, false);//add it!
+
+                    if (!m_gamutMasksMd5Installed.contains(res->md5())) {
+                        m_gamutMasksMd5Installed.append(res->md5());
+                    }
+                    if (ref.md5sum!=res->md5()) {
+                        md5Mismatch.append(res->name());
+                    }
+
+                    Q_FOREACH (const QString &tag, ref.tagList) {
+                        gamutMaskServer->addTag(res, tag);
+                    }
+                    //gamutMaskServer->addTag(res, name());
+                }
+                else {
+                    //warnKrita << "Didn't install" << res->name()<<"It already exists on the server";
+                }
+            }
+        }
     }
     m_installed = true;
     if(!md5Mismatch.isEmpty()){
@@ -776,6 +836,15 @@ bool KisResourceBundle::uninstall()
         }
     }
 
+    KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+    //Q_FOREACH (const KisResourceBundleManifest::ResourceReference &ref, m_manifest.files("gamutmasks")) {
+    Q_FOREACH (const QByteArray md5, m_gamutMasksMd5Installed) {
+        KoGamutMask *res = gamutMaskServer->resourceByMD5(md5);
+        if (res) {
+            gamutMaskServer->removeResourceFromServer(res);
+        }
+    }
+
     Q_FOREACH(const QString &tag, tags) {
         paintoppresetServer->tagCategoryRemoved(tag);
         workspaceServer->tagCategoryRemoved(tag);
@@ -783,6 +852,7 @@ bool KisResourceBundle::uninstall()
         brushServer->tagCategoryRemoved(tag);
         patternServer->tagCategoryRemoved(tag);
         gradientServer->tagCategoryRemoved(tag);
+        gamutMaskServer->tagCategoryRemoved(tag);
     }
 
 
@@ -800,7 +870,7 @@ const QString KisResourceBundle::getMeta(const QString &type, const QString &def
         return m_metadata[type];
     }
     else {
-       return defaultValue;
+        return defaultValue;
     }
 }
 
@@ -861,6 +931,11 @@ QList<KoResource*> KisResourceBundle::resources(const QString &resType) const
             KisPaintOpPresetResourceServer* paintoppresetServer = KisResourceServerProvider::instance()->paintOpPresetServer();
             KisPaintOpPresetSP res =  paintoppresetServer->resourceByMD5(ref.md5sum);
             if (res) ret << res.data();
+        }
+        else if (resType  == "gamutmasks") {
+            KoResourceServer<KoGamutMask>* gamutMaskServer = KoResourceServerProvider::instance()->gamutMaskServer();
+            KoResource *res =  gamutMaskServer->resourceByMD5(ref.md5sum);
+            if (res) ret << res;
         }
     }
     return ret;
@@ -966,48 +1041,54 @@ void KisResourceBundle::recreateBundle(QScopedPointer<KoStore> &oldStore)
     file.copy(filename() + ".old");
 
     QString newStoreName = filename() + ".tmp";
-    QScopedPointer<KoStore> store(KoStore::createStore(newStoreName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
-    KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
-    KisResourceBundleManifest newManifest;
+    {
+        QScopedPointer<KoStore> store(KoStore::createStore(newStoreName, KoStore::Write, "application/x-krita-resourcebundle", KoStore::Zip));
+        KoHashGenerator *generator = KoHashGeneratorProvider::instance()->getGenerator("MD5");
+        KisResourceBundleManifest newManifest;
 
-    addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
+        addMeta("updated", QDate::currentDate().toString("dd/MM/yyyy"));
 
-    Q_FOREACH (KisResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
-        // Wrong manifest entry found, skip it
-        if(!oldStore->open(ref.resourcePath))
-            continue;
+        Q_FOREACH (KisResourceBundleManifest::ResourceReference ref, m_manifest.files()) {
+            // Wrong manifest entry found, skip it
+            if(!oldStore->open(ref.resourcePath))
+                continue;
 
-        store->open(ref.resourcePath);
+            store->open(ref.resourcePath);
 
-        QByteArray data = oldStore->device()->readAll();
-        oldStore->close();
-        store->write(data);
-        store->close();
-        QByteArray result = generator->generateHash(data);
-        newManifest.addResource(ref.fileTypeName, ref.resourcePath, ref.tagList, result);
+            QByteArray data = oldStore->device()->readAll();
+            oldStore->close();
+            store->write(data);
+            store->close();
+            QByteArray result = generator->generateHash(data);
+            newManifest.addResource(ref.fileTypeName, ref.resourcePath, ref.tagList, result);
+        }
+
+        m_manifest = newManifest;
+
+        if (!m_thumbnail.isNull()) {
+            QByteArray byteArray;
+            QBuffer buffer(&byteArray);
+            m_thumbnail.save(&buffer, "PNG");
+            if (!store->open("preview.png")) warnKrita << "Could not open preview.png";
+            if (store->write(byteArray) != buffer.size()) warnKrita << "Could not write preview.png";
+            store->close();
+        }
+
+        saveManifest(store);
+        saveMetadata(store);
+
+        store->finalize();
     }
-
-    m_manifest = newManifest;
-
-    if (!m_thumbnail.isNull()) {
-        QByteArray byteArray;
-        QBuffer buffer(&byteArray);
-        m_thumbnail.save(&buffer, "PNG");
-        if (!store->open("preview.png")) warnKrita << "Could not open preview.png";
-        if (store->write(byteArray) != buffer.size()) warnKrita << "Could not write preview.png";
-        store->close();
-    }
-
-    saveManifest(store);
-    saveMetadata(store);
-
-    store->finalize();
-
     // Remove the current bundle and then move the tmp one to be the correct one
     file.setFileName(filename());
-    file.remove();
-    file.setFileName(newStoreName);
-    file.rename(filename());
+    if (!file.remove()) {
+        qWarning() << "Could not remove" << filename() << file.errorString();
+    }
+    QFile f(newStoreName);
+    Q_ASSERT(f.exists());
+    if (!f.copy(filename())) {
+        qWarning() << "Could not copy the tmp file to the store" << filename() << newStoreName << QFile(newStoreName).exists() << f.errorString();
+    }
 }
 
 

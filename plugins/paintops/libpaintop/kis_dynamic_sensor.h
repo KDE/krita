@@ -126,7 +126,7 @@ public:
     virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
 
     /**
-     * Creates a sensor from its identifiant.
+     * Creates a sensor from its identifier.
      */
     static KisDynamicSensorSP id2Sensor(const KoID& id, const QString &parentOptionName);
     static KisDynamicSensorSP id2Sensor(const QString& s, const QString &parentOptionName) {
@@ -145,6 +145,9 @@ public:
 
     static QString minimumLabel(DynamicSensorType sensorType);
     static QString maximumLabel(DynamicSensorType sensorType, int max = -1);
+    static int minimumValue(DynamicSensorType sensorType);
+    static int maximumValue(DynamicSensorType sensorType, int max = -1);
+    static QString valueSuffix(DynamicSensorType sensorType);
 
     static KisDynamicSensorSP createFromXML(const QString&, const QString &parentOptionName);
     static KisDynamicSensorSP createFromXML(const QDomElement&, const QString &parentOptionName);
@@ -156,7 +159,7 @@ public:
     static QList<DynamicSensorType> sensorsTypes();
 
     /**
-     * @return the identifiant of this sensor
+     * @return the identifier of this sensor
      */
     static QString id(DynamicSensorType sensorType);
 

@@ -34,6 +34,7 @@
 #include <QToolButton>
 #include <QThread>
 #include <QStandardPaths>
+#include <QGroupBox>
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QGroupBox>
@@ -153,14 +154,20 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker());
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+    chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
 
-    m_cmbKineticScrollingGesture->addItem(i18n("Disabled"));
+    m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled());
+
     m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Click Drag"));
+    m_cmbKineticScrollingGesture->addItem(i18n("On Middle-Click Drag"));
+    //m_cmbKineticScrollingGesture->addItem(i18n("On Right Click Drag"));
 
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
-    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
-    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
+    m_kineticScrollingSensitivitySlider->setRange(0, 100);
+    m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity());
+    m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars());
+
 
     //
     // Miscellaneous
@@ -236,16 +243,21 @@ void GeneralTab::setDefault()
 
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
+    m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
-    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity(true));
-    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar(true));
+    m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
+    m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
+    chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
     cursorColor.fromQColor(cfg.getCursorMainColor(true));
     cursorColorBtutton->setColor(cursorColor);
+
+
+
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -314,6 +326,11 @@ bool GeneralTab::toolOptionsInDocker()
     return m_radioToolOptionsInDocker->isChecked();
 }
 
+bool GeneralTab::kineticScrollingEnabled()
+{
+    return m_groupBoxKineticScrollingSettings->isChecked();
+}
+
 int GeneralTab::kineticScrollingGesture()
 {
     return m_cmbKineticScrollingGesture->currentIndex();
@@ -321,12 +338,12 @@ int GeneralTab::kineticScrollingGesture()
 
 int GeneralTab::kineticScrollingSensitivity()
 {
-    return m_kineticScrollingSensitivity->value();
+    return m_kineticScrollingSensitivitySlider->value();
 }
 
-bool GeneralTab::kineticScrollingScrollbar()
+bool GeneralTab::kineticScrollingHiddenScrollbars()
 {
-    return m_chkKineticScrollingScrollbar->isChecked();
+    return m_chkKineticScrollingHideScrollbars->isChecked();
 }
 
 bool GeneralTab::switchSelectionCtrlAlt()
@@ -1121,7 +1138,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     Q_UNUSED(name);
     setWindowTitle(i18n("Configure Krita"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
-    button(QDialogButtonBox::Ok)->setDefault(true);
 
     setFaceType(KPageDialog::Tree);
 
@@ -1131,6 +1147,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("general");
     page->setHeader(i18n("General"));
     page->setIcon(KisIconUtils::loadIcon("go-home"));
+    m_pages << page;
     addPage(page);
     m_general = new GeneralTab(vbox);
 
@@ -1140,6 +1157,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("shortcuts");
     page->setHeader(i18n("Shortcuts"));
     page->setIcon(KisIconUtils::loadIcon("document-export"));
+    m_pages << page;
     addPage(page);
     m_shortcutSettings = new ShortcutSettingsTab(vbox);
     connect(this, SIGNAL(accepted()), m_shortcutSettings, SLOT(saveChanges()));
@@ -1151,6 +1169,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setHeader(i18n("Canvas Input"));
     page->setObjectName("canvasinput");
     page->setIcon(KisIconUtils::loadIcon("configure"));
+    m_pages << page;
 
     // Display
     vbox = new KoVBox();
@@ -1158,6 +1177,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("display");
     page->setHeader(i18n("Display"));
     page->setIcon(KisIconUtils::loadIcon("preferences-desktop-display"));
+    m_pages << page;
     addPage(page);
     m_displaySettings = new DisplaySettingsTab(vbox);
 
@@ -1167,6 +1187,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("colormanagement");
     page->setHeader(i18n("Color"));
     page->setIcon(KisIconUtils::loadIcon("preferences-desktop-color"));
+    m_pages << page;
     addPage(page);
     m_colorSettings = new ColorSettingsTab(vbox);
 
@@ -1176,6 +1197,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("performance");
     page->setHeader(i18n("Performance"));
     page->setIcon(KisIconUtils::loadIcon("applications-system"));
+    m_pages << page;
     addPage(page);
     m_performanceSettings = new PerformanceTab(vbox);
 
@@ -1185,6 +1207,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("tablet");
     page->setHeader(i18n("Tablet"));
     page->setIcon(KisIconUtils::loadIcon("document-edit"));
+    m_pages << page;
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
 
@@ -1194,6 +1217,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("canvasonly");
     page->setHeader(i18n("Canvas-only"));
     page->setIcon(KisIconUtils::loadIcon("folder-pictures"));
+    m_pages << page;
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
 
@@ -1203,6 +1227,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setObjectName("author");
     page->setHeader(i18n("Author"));
     page->setIcon(KisIconUtils::loadIcon("im-user"));
+    m_pages << page;
 
 
     QPushButton *restoreDefaultsButton = button(QDialogButtonBox::RestoreDefaults);
@@ -1226,13 +1251,32 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         connect(this, SIGNAL(accepted()), preferenceSet, SLOT(savePreferences()), Qt::UniqueConnection);
     }
 
-
     connect(restoreDefaultsButton, SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
 
+    KisConfig cfg(true);
+    QString currentPageName = cfg.readEntry<QString>("KisDlgPreferences/CurrentPage");
+    Q_FOREACH(KPageWidgetItem *page, m_pages) {
+        if (page->objectName() == currentPageName) {
+            setCurrentPage(page);
+            break;
+        }
+    }
 }
 
 KisDlgPreferences::~KisDlgPreferences()
 {
+    KisConfig cfg(true);
+    cfg.writeEntry<QString>("KisDlgPreferences/CurrentPage", currentPage()->objectName());
+}
+
+void KisDlgPreferences::showEvent(QShowEvent *event){
+    KPageDialog::showEvent(event);
+    button(QDialogButtonBox::Cancel)->setAutoDefault(false);
+    button(QDialogButtonBox::Ok)->setAutoDefault(false);
+    button(QDialogButtonBox::RestoreDefaults)->setAutoDefault(false);
+    button(QDialogButtonBox::Cancel)->setDefault(false);
+    button(QDialogButtonBox::Ok)->setDefault(false);
+    button(QDialogButtonBox::RestoreDefaults)->setDefault(false);
 }
 
 void KisDlgPreferences::slotDefault()
@@ -1299,11 +1343,15 @@ bool KisDlgPreferences::editPreferences()
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
 
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
+
+        cfg.setKineticScrollingEnabled(dialog->m_general->kineticScrollingEnabled());
         cfg.setKineticScrollingGesture(dialog->m_general->kineticScrollingGesture());
         cfg.setKineticScrollingSensitivity(dialog->m_general->kineticScrollingSensitivity());
-        cfg.setKineticScrollingScrollbar(dialog->m_general->kineticScrollingScrollbar());
+        cfg.setKineticScrollingHideScrollbars(dialog->m_general->kineticScrollingHiddenScrollbars());
+
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
+        cfg.setActivateTransformToolAfterPaste(dialog->m_general->chkEnableTranformToolAfterPaste->isChecked());
         cfg.setConvertToImageColorspaceOnImport(dialog->m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(dialog->m_general->undoStackSize());
         cfg.setFavoritePresets(dialog->m_general->favoritePresets());

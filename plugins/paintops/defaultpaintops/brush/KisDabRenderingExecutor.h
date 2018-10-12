@@ -24,7 +24,7 @@
 #include <QScopedPointer>
 
 #include <QList>
-class KisRenderedDab;
+struct KisRenderedDab;
 
 #include "KisDabCacheUtils.h"
 

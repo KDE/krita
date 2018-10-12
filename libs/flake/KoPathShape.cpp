@@ -57,7 +57,6 @@
 static bool qIsNaNPoint(const QPointF &p) {
     return qIsNaN(p.x()) || qIsNaN(p.y());
 }
-static const qreal DefaultMarkerWidth = 3.0;
 
 KoPathShapePrivate::KoPathShapePrivate(KoPathShape *q)
     : KoTosContainerPrivate(q),
@@ -601,7 +600,7 @@ QRectF KoPathShape::boundingRect() const
 QSizeF KoPathShape::size() const
 {
     // don't call boundingRect here as it uses absoluteTransformation
-    // which itself uses size() -> leads to infinite reccursion
+    // which itself uses size() -> leads to infinite recursion
     return outlineRect().size();
 }
 
@@ -808,7 +807,6 @@ QPointF KoPathShape::normalize()
 
 void KoPathShapePrivate::map(const QTransform &matrix)
 {
-    Q_Q(KoPathShape);
     KoSubpathList::const_iterator pathIt(subpaths.constBegin());
     for (; pathIt != subpaths.constEnd(); ++pathIt) {
         KoSubpath::const_iterator it((*pathIt)->constBegin());
@@ -1386,7 +1384,6 @@ void KoPathShapePrivate::closeMergeSubpath(KoSubpath *subpath)
 
 KoSubpath *KoPathShapePrivate::subPath(int subpathIndex) const
 {
-    Q_Q(const KoPathShape);
     if (subpathIndex < 0 || subpathIndex >= subpaths.size())
         return 0;
 
@@ -1492,7 +1489,6 @@ char nodeType(const KoPathPoint * point)
 
 QString KoPathShapePrivate::nodeTypes() const
 {
-    Q_Q(const KoPathShape);
     QString types;
     KoSubpathList::const_iterator pathIt(subpaths.constBegin());
     for (; pathIt != subpaths.constEnd(); ++pathIt) {
@@ -1527,7 +1523,6 @@ void updateNodeType(KoPathPoint * point, const QChar & nodeType)
 
 void KoPathShapePrivate::loadNodeTypes(const KoXmlElement &element)
 {
-    Q_Q(KoPathShape);
     if (element.hasAttributeNS(KoXmlNS::calligra, "nodeTypes")) {
         QString nodeTypes = element.attributeNS(KoXmlNS::calligra, "nodeTypes");
         QString::const_iterator nIt(nodeTypes.constBegin());

@@ -399,6 +399,11 @@ public:
     QString toolbarSlider(int sliderNumber, bool defaultValue = false) const;
     void setToolbarSlider(int sliderNumber, const QString &slider);
 
+
+    int layerThumbnailSize(bool defaultValue = false) const;
+    void setLayerThumbnailSize(int size);
+
+
     bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);
 
@@ -504,14 +509,17 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
+    bool kineticScrollingEnabled(bool defaultValue = false) const;
+    void setKineticScrollingEnabled(bool enabled);
+
     int kineticScrollingGesture(bool defaultValue = false) const;
     void setKineticScrollingGesture(int kineticScroll);
 
     int kineticScrollingSensitivity(bool defaultValue = false) const;
     void setKineticScrollingSensitivity(int sensitivity);
 
-    bool kineticScrollingScrollbar(bool defaultValue = false) const;
-    void setKineticScrollingScrollbar(bool scrollbar);
+    bool kineticScrollingHiddenScrollbars(bool defaultValue = false) const;
+    void setKineticScrollingHideScrollbars(bool scrollbar);
 
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
@@ -560,6 +568,13 @@ public:
 
     QColor defaultAssistantsColor(bool defaultValue = false) const;
     void setDefaultAssistantsColor(const QColor &color) const;
+
+    bool autoSmoothBezierCurves(bool defaultValue = false) const;
+    void setAutoSmoothBezierCurves(bool value);
+    
+    bool activateTransformToolAfterPaste(bool defaultValue = false) const;
+    void setActivateTransformToolAfterPaste(bool value);
+    
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

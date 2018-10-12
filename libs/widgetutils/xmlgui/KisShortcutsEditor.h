@@ -30,6 +30,7 @@
 #include <kritawidgetutils_export.h>
 
 #include <QWidget>
+#include <KisKineticScroller.h>
 
 class KActionCollection;
 class KConfig;
@@ -237,6 +238,8 @@ public Q_SLOTS:
      * Expand or collapse the tree view when the search text changes
      */
     void searchUpdated(QString s);
+
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private:
     Q_PRIVATE_SLOT(d, void capturedShortcut(QVariant, const QModelIndex &))

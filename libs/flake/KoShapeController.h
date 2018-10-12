@@ -136,7 +136,7 @@ public:
     QRectF documentRectInPixels() const;
 
     /**
-     * Resolution of the rasterized representaiton of the document. Used to load SVG documents correctly.
+     * Resolution of the rasterized representation of the document. Used to load SVG documents correctly.
      */
     qreal pixelsPerInch() const;
 

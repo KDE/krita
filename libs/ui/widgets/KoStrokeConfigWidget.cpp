@@ -57,7 +57,7 @@
 #include <KoPathShapeMarkerCommand.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoDocumentResourceManager.h>
 #include <KoSelection.h>
 #include <KoShapeController.h>
@@ -204,7 +204,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     : QWidget(parent)
     , d(new Private())
 {
-    // confure GUI
+    // configure GUI
     d->ui = new Ui_KoStrokeConfigWidget();
     d->ui->setupUi(this);
 
@@ -220,8 +220,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
             this, SLOT(selectionChanged()));
 
         d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
-            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-            this, SLOT(canvasResourceChanged(int, const QVariant &)));
+            canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+            this, SLOT(canvasResourceChanged(int,QVariant)));
 
         d->canvas = canvas;
     }
@@ -778,7 +778,7 @@ void KoStrokeConfigWidget::selectionChanged()
 void KoStrokeConfigWidget::canvasResourceChanged(int key, const QVariant &value)
 {
     switch (key) {
-    case KoCanvasResourceManager::Unit:
+    case KoCanvasResourceProvider::Unit:
         // we request the whole selection to reload because the
         // unit of the stroke width depends on the selected shape
         selectionChanged();

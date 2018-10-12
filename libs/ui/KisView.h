@@ -46,7 +46,7 @@ class KisInputManager;
 class KoZoomController;
 class KoZoomController;
 struct KoPageLayout;
-class KoCanvasResourceManager;
+class KoCanvasResourceProvider;
 
 // KDE classes
 class QAction;
@@ -74,7 +74,7 @@ public:
     /**
      * Creates a new view for the document.
      */
-    KisView(KisDocument *document, KoCanvasResourceManager *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
+    KisView(KisDocument *document, KoCanvasResourceProvider *resourceManager, KActionCollection *actionCollection, QWidget *parent = 0);
     ~KisView() override;
 
     // Temporary while teasing apart view and mainwindow
@@ -211,7 +211,9 @@ public:
     bool isCurrent() const;
 
     void setShowFloatingMessage(bool show);
-    void showFloatingMessageImpl(const QString &message, const QIcon& icon, int timeout, KisFloatingMessage::Priority priority, int alignment);
+    void showFloatingMessage(const QString &message, const QIcon& icon, int timeout = 4500,
+                             KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
+                             int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
     bool canvasIsMirrored() const;
 
@@ -246,6 +248,8 @@ public Q_SLOTS:
     void slotGamutCheck(bool gamutCheck);
 
     bool queryClose();
+
+    void slotScreenChanged();
 
 private Q_SLOTS:
     void slotImageNodeAdded(KisNodeSP node);

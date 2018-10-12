@@ -181,7 +181,7 @@ void KisProcessingApplicatorTest::testNoUIUpdates()
     KisPaintLayerSP paintLayer1;
     KisPaintLayerSP paintLayer2;
     KisImageSP image = createImage(undoStore, paintLayer1, paintLayer2);
-    QSignalSpy uiSignalsCounter(image.data(), SIGNAL(sigImageUpdated(const QRect&)));
+    QSignalSpy uiSignalsCounter(image.data(), SIGNAL(sigImageUpdated(QRect)));
 
     QRect cropRect1(40,40,86,86);
 

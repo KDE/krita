@@ -27,7 +27,7 @@ class QPointF;
 class QPainterPath;
 class QBitArray;
 class QPainter;
-class KisRenderedDab;
+struct KisRenderedDab;
 
 #include <QVector>
 #include "kritaimage_export.h"

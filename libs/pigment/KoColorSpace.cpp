@@ -205,9 +205,9 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
         for (quint32 i=0; i<colorChannelCount(); i++) {
             qreal colorantY=1.0;
             if (colorModelId().id()!="CMYKA") {
-                for (int j=5; j>0; j--){
+                for (int j=4; j>=0; j--){
                     channelValuesF.fill(0.0);
-                    channelValuesF[i] = ((max/4)*(5-j));
+                    channelValuesF[i] = ((max/4)*(4-j));
 
                     if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
                         fromNormalisedChannelsValue(data, channelValuesF);
@@ -224,7 +224,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
                             d->colorants[i+2]= channelValuesF[1];
                         }
                     }
-                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(5-j)));
+                    d->TRCXYY << QPointF(channelValuesF[1]/colorantY, ((1.0/4)*(4-j)));
                 }
             } else {
                 for (int j=0; j<5; j++){

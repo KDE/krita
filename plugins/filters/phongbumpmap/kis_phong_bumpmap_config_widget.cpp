@@ -89,7 +89,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     for (quint8 ch = 0; ch < m_device->colorSpace()->colorChannelCount(); ch++)
         m_page->heightChannelComboBox->addItem(channels.at(ch)->name());
     
-    connect(m_page->useNormalMap, SIGNAL(toggled(bool)), this, SLOT(slotDisableHeightChannelCombobox(bool) ) );
+    connect(m_page->useNormalMap, SIGNAL(toggled(bool)), this, SLOT(slotDisableHeightChannelCombobox(bool)) );
 
 
 }

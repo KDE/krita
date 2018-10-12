@@ -41,8 +41,16 @@ __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *can
     setObjectName("tool_select_elliptical");
 }
 
-void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
+bool __KisToolSelectEllipticalLocal::hasUserInteractionRunning() const
 {
+    return false;
+}
+
+void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY)
+{
+    Q_UNUSED(roundCornersX);
+    Q_UNUSED(roundCornersY);
+
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
 
@@ -52,7 +60,12 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
         return;
     }
 
-    if (selectionMode() == PIXEL_SELECTION) {
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        selectionMode(),
+                                        selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
         KisPixelSelectionSP tmpSel = new KisPixelSelection();
 
         KisPainter painter(tmpSel);
@@ -72,7 +85,7 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);
 
-        helper.addSelectionShape(shape);
+        helper.addSelectionShape(shape, selectionAction());
     }
 }
 
@@ -80,21 +93,16 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect)
 KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
     KisToolSelectEllipticalTemplate(canvas, i18n("Elliptical Selection"))
 {
-    connect(&m_widgetHelper, &KisSelectionToolConfigWidgetHelper::selectionActionChanged,
-            this, &KisToolSelectElliptical::setSelectionAction);
 }
 
-
-void KisToolSelectElliptical::setSelectionAction(int action)
+void KisToolSelectElliptical::resetCursorStyle()
 {
-    changeSelectionAction(action);
+    if (selectionAction() == SELECTION_ADD) {
+        useCursor(KisCursor::load("tool_elliptical_selection_cursor_add.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SUBTRACT) {
+        useCursor(KisCursor::load("tool_elliptical_selection_cursor_sub.png", 6, 6));
+    } else {
+        KisToolSelectBase<__KisToolSelectEllipticalLocal>::resetCursorStyle();
+    }
 }
 
-QMenu* KisToolSelectElliptical::popupActionsMenu()
-{
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    Q_ASSERT(kisCanvas);
-
-
-    return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
-}

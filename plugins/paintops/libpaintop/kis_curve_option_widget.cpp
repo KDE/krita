@@ -58,8 +58,8 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QS
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(emitSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SLOT(updateLabelsOfCurrentSensor()));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateSensorCurveLabels(KisDynamicSensorSP )));
-    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP )), SLOT(updateCurve(KisDynamicSensorSP )));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateSensorCurveLabels(KisDynamicSensorSP)));
+    connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensorSP)), SLOT(updateCurve(KisDynamicSensorSP)));
     connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
 
 
@@ -167,6 +167,20 @@ void KisCurveOptionWidget::updateSensorCurveLabels(KisDynamicSensorSP sensor)
     if (sensor) {
         m_curveOptionWidget->label_xmin->setText(KisDynamicSensor::minimumLabel(sensor->sensorType()));
         m_curveOptionWidget->label_xmax->setText(KisDynamicSensor::maximumLabel(sensor->sensorType(), sensor->length()));
+
+        int inMinValue = KisDynamicSensor::minimumValue(sensor->sensorType());
+        int inMaxValue = KisDynamicSensor::maximumValue(sensor->sensorType(), sensor->length());
+        QString inSuffix = KisDynamicSensor::valueSuffix(sensor->sensorType());
+
+        int outMinValue = m_curveOption->intMinValue();
+        int outMaxValue = m_curveOption->intMaxValue();
+        QString outSuffix = m_curveOption->valueSuffix();
+
+        m_curveOptionWidget->intIn->setSuffix(inSuffix);
+        m_curveOptionWidget->intOut->setSuffix(outSuffix);
+
+        m_curveOptionWidget->curveWidget->setupInOutControls(m_curveOptionWidget->intIn,m_curveOptionWidget->intOut,
+                                                         inMinValue,inMaxValue,outMinValue,outMaxValue);
     }
 }
 

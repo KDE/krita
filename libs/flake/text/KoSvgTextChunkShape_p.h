@@ -25,8 +25,10 @@
 
 class SvgGraphicsContext;
 
-struct KoSvgTextChunkShapePrivate : public KoShapeContainerPrivate
+class KoSvgTextChunkShapePrivate : public KoShapeContainerPrivate
 {
+public:
+
     KoSvgTextChunkShapePrivate(KoSvgTextChunkShape *_q);
     KoSvgTextChunkShapePrivate(const KoSvgTextChunkShapePrivate &rhs, KoSvgTextChunkShape *q);
     ~KoSvgTextChunkShapePrivate();
@@ -51,6 +53,7 @@ struct KoSvgTextChunkShapePrivate : public KoShapeContainerPrivate
 
     void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);
     void loadContextBasedProperties(SvgGraphicsContext *gc);
+    bool isRichTextPreferred = true;
 
     Q_DECLARE_PUBLIC(KoSvgTextChunkShape)
 };

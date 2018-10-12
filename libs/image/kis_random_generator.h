@@ -30,7 +30,7 @@
  * pixel coordinate.
  * The rational is that filters that use random number (such as noises, or raindrops)
  * needs to always get the same random value at each run, or else the result will constantly
- * changes when used as an adjustement layer.
+ * changes when used as an adjustment layer.
  */
 class KRITAIMAGE_EXPORT KisRandomGenerator
 {

@@ -23,7 +23,7 @@
 
 #include <QApplication>
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 
 #include "kis_canvas_resource_provider.h"
 #include <util.h>
@@ -82,7 +82,7 @@ void KisDerivedResourcesTest::test()
     KisMainWindow* mainWindow = KisPart::instance()->createMainWindow();
     QPointer<KisView> view = new KisView(doc, mainWindow->resourceManager(), mainWindow->actionCollection(), mainWindow);
     KisViewManager *viewManager = new KisViewManager(mainWindow, mainWindow->actionCollection());
-    KoCanvasResourceManager *manager = viewManager->resourceProvider()->resourceManager();
+    KoCanvasResourceProvider *manager = viewManager->resourceProvider()->resourceManager();
 
     QApplication::processEvents();
 
@@ -103,7 +103,7 @@ void KisDerivedResourcesTest::test()
 
     QVERIFY(i.isValid());
 
-    QSignalSpy spy(manager, SIGNAL(canvasResourceChanged(int, const QVariant &)));
+    QSignalSpy spy(manager, SIGNAL(canvasResourceChanged(int,QVariant)));
 
     manager->setResource(KisCanvasResourceProvider::CurrentPaintOpPreset, i);
 

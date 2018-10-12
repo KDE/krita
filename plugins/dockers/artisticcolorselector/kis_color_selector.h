@@ -29,75 +29,97 @@
 #include "kis_acs_types.h"
 #include "kis_signal_compressor_with_param.h"
 
+#include <resources/KoGamutMask.h>
+#include <KisGamutMaskViewConverter.h>
+
 class QPainter;
-class QPainter;
+class KisDisplayColorConverter;
 
 class KisColorSelector: public QWidget
 {
     Q_OBJECT
-    
-    typedef KisRadian<float> Radian;
-    
+
+    typedef KisRadian<qreal> Radian;
+
     struct ColorRing
     {
-        ColorRing(): angle(0) { }
-        
-        Radian getPieceAngle() const { return RAD_360 / float(pieced.size()); }
-        Radian getShift     () const { return angle % getPieceAngle();        }
-        Radian getMovedAngel() const { return angle - tmpAngle;               }
-        
-        void setTemporaries(const KisColor& color) {
-            tmpAngle = angle;
-            tmpColor = color;
-        }
-        
-        KisColor              tmpColor;
-        Radian                tmpAngle;
-        Radian                angle;
-        float                 saturation;
-        float                 outerRadius;
-        float                 innerRadius;
+        ColorRing()
+            : saturation(0)
+            , outerRadius(0)
+            , innerRadius(0)
+        { }
+
+        qreal                 saturation;
+        qreal                 outerRadius;
+        qreal                 innerRadius;
         QVector<QPainterPath> pieced;
     };
-    
+
 public:
     KisColorSelector(QWidget* parent, KisColor::Type type=KisColor::HSL);
-    
+
     void setColorSpace(KisColor::Type type);
+    void setColorConverter(KisDisplayColorConverter* colorConverter);
     void setNumPieces(int num);
-    void setNumLightPieces(int num);
+    void setNumLightPieces(int num) __attribute__((optimize(0)));
     void setNumRings(int num);
-    void resetRings();
-    void resetSelectedRing();
-    void resetLight();
-    void setLight(float light=0.0f, bool relative=true);
+
+    void setLight(qreal light=0.0f);
+
+    void setLumaCoefficients(qreal lR, qreal lG, qreal lB, qreal lGamma);
+    inline qreal lumaR() const { return m_lumaR; }
+    inline qreal lumaG() const { return m_lumaG; }
+    inline qreal lumaB() const { return m_lumaB; }
+    inline qreal lumaGamma() const { return m_lumaGamma; }
+
     void setInverseSaturation(bool inverse);
     void selectColor(const KisColor& color);
-    void setFgColor(const KisColor& fgColor);
-    void setBgColor(const KisColor& bgColor);
-    
+    void setFgColor(const KoColor& fgColor);
+    void setBgColor(const KoColor& bgColor);
+
+    void setDefaultHueSteps(int num);
+    void setDefaultSaturationSteps(int num);
+    void setDefaultValueScaleSteps(int num);
+    void setShowBgColor(bool value);
+    void setShowValueScaleNumbers(bool value);
+    void setGamutMask(KoGamutMask* gamutMask);
+    bool gamutMaskOn();
+    void setGamutMaskOn(bool gamutMaskOn);
+    void setEnforceGamutMask(bool enforce);
+    KoGamutMask* gamutMask();
+
+    bool saturationIsInvertible();
+
     void saveSettings();
     void loadSettings();
-    
+
     KisColor::Type getColorSpace       () const { return m_colorSpace;        }
     qint32         getNumRings         () const { return m_colorRings.size(); }
     qint32         getNumPieces        () const { return m_numPieces;         }
     qint32         getNumLightPieces   () const { return m_numLightPieces;    }
-    qreal          getLight            () const { return m_light;             }
     bool           isSaturationInverted() const { return m_inverseSaturation; }
-    bool           islightRelative     () const { return m_relativeLight;     }
+
+    quint32        getDefaultHueSteps  () const { return m_defaultHueSteps;        }
+    quint32        getDefaultSaturationSteps () const { return m_defaultSaturationSteps;        }
+    quint32        getDefaultValueScaleSteps () const { return m_defaultValueScaleSteps;        }
+    bool           getShowBgColor () const { return m_showBgColor;        }
+    bool           getShowValueScaleNumbers () const { return m_showValueScaleNumbers;        }
+    bool           enforceGamutMask () const { return m_enforceGamutMask;        }
 
 Q_SIGNALS:
     void sigFgColorChanged(const KisColor& color);
     void sigBgColorChanged(const KisColor& color);
-    
+
 private:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+    void leaveEvent(QEvent* e) override;
 
+    bool colorIsClear(const KisColor &color);
+    bool colorIsClear(const QPointF &colorPoint);
     void requestUpdateColorAndPreview(const KisColor &color, Acs::ColorRole role);
 
     void recalculateAreas(quint8 numLightPieces);
@@ -106,19 +128,24 @@ private:
 
     void drawRing(QPainter& painter, ColorRing& wheel, const QRect& rect);
     void drawOutline(QPainter& painter, const QRect& rect);
+    void drawBlip(QPainter& painter, const QRect& rect);
     void drawLightStrip(QPainter& painter, const QRect& rect);
+    void drawGamutMaskShape(QPainter& painter, const QRect& rect);
 
-    qint8 getHueIndex(Radian hue, Radian shift=0.0f) const;
+    qint8 getHueIndex(Radian hue) const;
     qreal getHue(int hueIdx, Radian shift=0.0f) const;
     qint8 getLightIndex(const QPointF& pt) const;
     qint8 getLightIndex(qreal light) const;
-    qreal getLight(qreal light, qreal hue, bool relative) const;
     qreal getLight(const QPointF& pt) const;
     qint8 getSaturationIndex(const QPointF& pt) const;
     qint8 getSaturationIndex(qreal saturation) const;
     qreal getSaturation(int saturationIdx) const;
-    
-    QPointF mapCoord(const QPointF& pt, const QRectF& rect) const;
+
+    QPointF mapCoordToView(const QPointF& pt, const QRectF& viewRect) const;
+    QPointF mapCoordToUnit(const QPointF& pt, const QRectF& viewRect) const;
+    QPointF mapColorToUnit(const KisColor& color, bool invertSaturation = true) const;
+    Radian mapCoordToAngle(qreal x, qreal y) const;
+    QPointF mapHueToAngle(qreal hue) const;
 
 public:
     // This is a private interface for signal compressor, don't use it.
@@ -126,12 +153,11 @@ public:
     void slotUpdateColorAndPreview(QPair<KisColor, Acs::ColorRole> color);
 
 private:
+    KisDisplayColorConverter* m_colorConverter;
     KisColor::Type     m_colorSpace;
     quint8             m_numPieces;
     quint8             m_numLightPieces;
     bool               m_inverseSaturation;
-    bool               m_relativeLight;
-    float              m_light;
     qint8              m_selectedRing;
     qint8              m_selectedPiece;
     qint8              m_selectedLightPiece;
@@ -139,14 +165,35 @@ private:
     KisColor           m_fgColor;
     KisColor           m_bgColor;
     QImage             m_renderBuffer;
+    QImage             m_maskBuffer;
     QRect              m_renderArea;
     QRect              m_lightStripArea;
     bool               m_mouseMoved;
-    Acs::ColorRole     m_selectedColorRole;
     QPointF            m_clickPos;
     qint8              m_clickedRing;
     QVector<ColorRing> m_colorRings;
     Qt::MouseButtons   m_pressedButtons;
+
+    // docker settings
+    quint8 m_defaultHueSteps;
+    quint8 m_defaultSaturationSteps;
+    quint8 m_defaultValueScaleSteps;
+    bool m_showValueScaleNumbers;
+    bool m_showBgColor;
+
+    bool m_gamutMaskOn;
+    KoGamutMask* m_currentGamutMask;
+    bool m_enforceGamutMask;
+    QSize m_renderAreaSize;
+    bool m_maskPreviewActive;
+    KisGamutMaskViewConverter* m_viewConverter;
+
+    bool m_widgetUpdatesSelf;
+
+    qreal m_lumaR;
+    qreal m_lumaG;
+    qreal m_lumaB;
+    qreal m_lumaGamma;
 
     typedef KisSignalCompressorWithParam<QPair<KisColor, Acs::ColorRole>> ColorCompressorType;
     QScopedPointer<ColorCompressorType> m_updateColorCompressor;

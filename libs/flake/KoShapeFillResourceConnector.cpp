@@ -18,7 +18,7 @@
 
 #include "KoShapeFillResourceConnector.h"
 
-#include <KoCanvasResourceManager.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoSelectedShapesProxy.h>
 
 #include "kis_assert.h"
@@ -76,9 +76,9 @@ void KoShapeFillResourceConnector::slotCanvasResourceChanged(int key, const QVar
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
 
-    if (key == KoCanvasResourceManager::ForegroundColor) {
+    if (key == KoCanvasResourceProvider::ForegroundColor) {
         m_d->applyShapeColoring(KoFlake::Fill, value.value<KoColor>());
-    } else if (key == KoCanvasResourceManager::BackgroundColor) {
+    } else if (key == KoCanvasResourceProvider::BackgroundColor) {
         m_d->applyShapeColoring(KoFlake::StrokeFill, value.value<KoColor>());
     }
 }
@@ -86,8 +86,13 @@ void KoShapeFillResourceConnector::slotCanvasResourceChanged(int key, const QVar
 
 void KoShapeFillResourceConnector::Private::applyShapeColoring(KoFlake::FillVariant fillVariant, const KoColor &color)
 {
+    QList<KoShape *> selectedEditableShapes = canvas->selectedShapesProxy()->selection()->selectedEditableShapes();
 
-    KoShapeFillWrapper wrapper(canvas->selectedShapesProxy()->selection()->selectedEditableShapes(), fillVariant);
+    if (selectedEditableShapes.isEmpty()) {
+        return;
+    }
+
+    KoShapeFillWrapper wrapper(selectedEditableShapes, fillVariant);
     KUndo2Command *command = wrapper.setColor(color.toQColor()); // TODO: do the conversion in a better way!
 
     if (command) {

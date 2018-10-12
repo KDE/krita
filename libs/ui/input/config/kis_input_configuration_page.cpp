@@ -35,6 +35,7 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
     : QWidget(parent, f)
 {
     ui = new Ui::KisInputConfigurationPage;
+    this->setContentsMargins(0,0,0,0);
     ui->setupUi(this);
 
     ui->profileComboBox->setModel(new KisInputProfileModel(ui->profileComboBox));
@@ -50,7 +51,14 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
     Q_FOREACH(KisAbstractInputAction * action, actions) {
         KisInputConfigurationPageItem *item = new KisInputConfigurationPageItem(this);
         item->setAction(action);
+        ui->configurationItemsArea->setSpacing(0);
         ui->configurationItemsArea->addWidget(item);
+    }
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(ui->scrollArea);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
     }
 }
 

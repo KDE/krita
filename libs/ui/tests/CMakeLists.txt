@@ -1,6 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-#add_subdirectory(scratchpad)
 include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata 
                     ${CMAKE_SOURCE_DIR}/sdk/tests )
 
@@ -25,6 +24,9 @@ ecm_add_tests(
     KisFrameSerializerTest.cpp
     KisFrameCacheStoreTest.cpp
     kis_animation_exporter_test.cpp
+    kis_prescaled_projection_test.cpp
+    kis_asl_layer_style_serializer_test.cpp
+    kis_animation_importer_test.cpp
 
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-"
@@ -50,6 +52,7 @@ ecm_add_test( kis_model_index_converter_test.cpp ../../../sdk/tests/testutil.cpp
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
+
 ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
     TEST_NAME KisCategorizedListModelTest
     LINK_LIBRARIES kritaui Qt5::Test
@@ -73,26 +76,20 @@ ecm_add_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-
-##### Tests that currently fail and should be fixed #####
-
-include(KritaAddBrokenUnitTest)
-
-krita_add_broken_unit_test(
+ecm_add_test(
     kis_node_model_test.cpp modeltest.cpp
     TEST_NAME kis_node_model_test
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
+##### Tests that currently fail and should be fixed #####
+
+include(KritaAddBrokenUnitTest)
+
+
 krita_add_broken_unit_test(
     kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
     TEST_NAME kis_shape_controller_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
-krita_add_broken_unit_test(
-    kis_prescaled_projection_test.cpp
-    TEST_NAME kis_prescaled_projection_test
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
@@ -126,9 +123,10 @@ krita_add_broken_unit_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test(
+ecm_add_test(
     fill_processing_visitor_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
-    TEST_NAME FillProcessingVisitorTest
+    TEST_NAME 
+    FillProcessingVisitorTest
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
@@ -176,17 +174,6 @@ krita_add_broken_unit_test(
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "libs-ui-")
 
-krita_add_broken_unit_test(
-    kis_asl_layer_style_serializer_test.cpp
-    TEST_NAME KisAslLayerStyleSerializerTest
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
-
-krita_add_broken_unit_test(
-    kis_animation_importer_test.cpp
-    TEST_NAME kis_animation_importer_test
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "libs-ui-")
 
 krita_add_broken_unit_test(
     kis_animation_frame_cache_test.cpp

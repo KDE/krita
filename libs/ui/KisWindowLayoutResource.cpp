@@ -23,7 +23,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QApplication>
-#include <QtCore/QEventLoop>
+#include <QEventLoop>
 #include <QWindow>
 #include <QScreen>
 

@@ -38,8 +38,8 @@ void KoZoomController::Private::init(KoCanvasController *co,
     canvasController = co;
     fitMargin = co->margin();
     zoomHandler = zh;
-    connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            parent, SLOT(setZoom(KoZoomMode::Mode, qreal)));
+    connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            parent, SLOT(setZoom(KoZoomMode::Mode,qreal)));
     connect(action, SIGNAL(aspectModeChanged(bool)),
             parent, SIGNAL(aspectModeChanged(bool)));
     connect(action, SIGNAL(zoomedToSelection()),
@@ -49,9 +49,9 @@ void KoZoomController::Private::init(KoCanvasController *co,
 
     actionCollection->addAction("view_zoom", action);
 
-    connect(canvasController->proxyObject, SIGNAL( sizeChanged(const QSize & ) ), parent, SLOT( setAvailableSize() ) );
+    connect(canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), parent, SLOT(setAvailableSize()) );
 
-    connect(canvasController->proxyObject, SIGNAL( zoomRelative(const qreal, const QPointF& ) ), parent, SLOT( requestZoomRelative( const qreal, const QPointF& ) ) );
+    connect(canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), parent, SLOT(requestZoomRelative(qreal,QPointF)) );
 }
 
 KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, QObject *parent)

@@ -429,6 +429,16 @@ void TimelineRulerHeader::mousePressEvent(QMouseEvent *e)
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
             }
 
+            /* Fix for safe-assert involving kis_animation_curve_docker.
+             * There should probably be a more elagant way for dealing
+             * with reused timeline_ruler_header instances in other
+             * timeline views instead of simply animation_frame_view.
+             *
+             * This works for now though... */
+            if(!m_d->actionMan){
+                return;
+            }
+
             QMenu menu;
             KisActionManager::safePopulateMenu(&menu, "cut_columns_to_clipboard", m_d->actionMan);
             KisActionManager::safePopulateMenu(&menu, "copy_columns_to_clipboard", m_d->actionMan);

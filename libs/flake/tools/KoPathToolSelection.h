@@ -146,9 +146,9 @@ public:
     bool hasSelection() override;
 
 
-    void recommendPointSelectionChange(KoPathShape *shape, const QList<KoPathPointIndex> &newSelection);
+    void recommendPointSelectionChange(KoPathShape *shape, const QList<KoPathPointIndex> &newSelection) override;
     void notifyPathPointsChanged(KoPathShape *shape) override;
-    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape);
+    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
 
 Q_SIGNALS:
     void selectionChanged();

@@ -71,6 +71,17 @@ KisSelection::KisSelection(const KisSelection& rhs)
     copyFrom(rhs);
 }
 
+KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds)
+    : m_d(new Private(this))
+{
+    if (!defaultBounds) {
+        defaultBounds = new KisSelectionDefaultBounds(KisPaintDeviceSP());
+    }
+
+    m_d->defaultBounds = defaultBounds;
+    m_d->pixelSelection = new KisPixelSelection(source, copyMode);
+}
+
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
 {
     if (&rhs != this) {
@@ -110,6 +121,12 @@ void KisSelection::setParentNode(KisNodeWSP node)
 {
     m_d->parentNode = node;
     m_d->pixelSelection->setParentNode(node);
+
+    // the updates come through the parent image, so all the updates
+    // that happened in the meantime are considered "stalled"
+    if (node) {
+        m_d->updateCompressor->tryProcessStalledUpdate();
+    }
 }
 
 // for testing purposes only

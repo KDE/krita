@@ -21,7 +21,7 @@
 #include <QFrame>
 #include <kritaui_export.h>
 
-class QLabel;
+class KSqueezedTextLabel;
 class KoResourceItemChooser;
 class KoResource;
 
@@ -55,7 +55,7 @@ private Q_SLOTS:
 
 private:
 
-    QLabel *m_lbName;
+    KSqueezedTextLabel *m_lblName;
     KoResourceItemChooser *m_itemChooser;
 };
 

@@ -168,6 +168,10 @@ if (WIN32)
     endif (MINGW)
 endif ()
 
+option(USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt." OFF)
+configure_file(config_use_qt_xcb.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_xcb.h)
+add_feature_info("Use Qt's XCB and Tablet support on X11" USE_QT_XCB "Do not use Krita's forked XCB connection and tablet support on X11, but leave everything to Qt.")
+
 option(HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal." ON)
 configure_file(config-hide-safe-asserts.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hide-safe-asserts.h)
 add_feature_info("Hide Safe Asserts" HIDE_SAFE_ASSERTS "Don't show message box for \"safe\" asserts, just ignore them automatically and dump a message to the terminal.")
@@ -351,14 +355,6 @@ if (NOT WIN32 AND NOT APPLE)
         URL "http://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
-
-    find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
-    macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-    set_package_properties(KF5KIO PROPERTIES
-        DESCRIPTION "KDE's KIO Framework"
-        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html"
-        TYPE OPTIONAL
-        PURPOSE "Optionally used for recent document handling")
 
     find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)

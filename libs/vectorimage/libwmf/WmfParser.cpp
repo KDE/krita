@@ -1677,8 +1677,9 @@ bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
     stream.readRawData(pattern.data() + 14, size);
 
     // add BMP header
+    // First cast to void* to silence alignment warnings
     BMPFILEHEADER* bmpHeader;
-    bmpHeader = (BMPFILEHEADER*)(pattern.data());
+    bmpHeader = (BMPFILEHEADER*)(void *)(pattern.data());
     bmpHeader->bmType = 0x4D42;
     bmpHeader->bmSize = sizeBmp;
 

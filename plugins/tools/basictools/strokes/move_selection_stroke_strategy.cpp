@@ -135,7 +135,7 @@ void MoveSelectionStrokeStrategy::cancelStrokeCallback()
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
 }
 
-#include "move_stroke_strategy.h"
+#include "tool/strokes/move_stroke_strategy.h"
 
 void MoveSelectionStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {

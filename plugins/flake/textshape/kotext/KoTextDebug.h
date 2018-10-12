@@ -143,7 +143,7 @@ public:
      *
      * @note { The fragment content will be enclosed in '|' characters. }
      *
-     * @param fragment the fragment which's content should be dumped.
+     * @param fragment the fragment which content should be dumped.
      * @param out output stream to dump to.
      */
     static void dumpFragment(const QTextFragment &fragment, QTextStream &out);

@@ -59,28 +59,31 @@ int PaletteColorsModel::rowCount(const QModelIndex &parent) const
         return 0;
     if (!d->colorSet)
         return 0;
-    return d->colorSet->nColors();
+    return d->colorSet->colorCount();
 }
 
 QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
+    /*
     QColor color;
     if (index.isValid() && d->colorSet)
     {
         switch(role)
         {
         case ImageRole:
-            color = d->colorSet->getColorGlobal(index.row()).color().toQColor();
+            color = d->colorSet->getColorGlobal(index.row(), index.column()).color().toQColor();
             result = QString("image://color/%1,%2,%3,%4").arg(color.redF()).arg(color.greenF()).arg(color.blueF()).arg(color.alphaF());
             break;
         case TextRole:
-            result = d->colorSet->getColorGlobal(index.row()).name();
+            result = d->colorSet->getColorGlobal(index.row(), index.column()).name();
             break;
         default:
             break;
         }
     }
+    */
+
     return result;
 }
 
@@ -135,13 +138,14 @@ void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
     if ( !d->view )
         return;
 
-    if (index >= 0 && index < (int)d->colorSet->nColors())
-    {
+    if (index >= 0 && index < (int)d->colorSet->colorCount()) {
+        /*
         if (setBackgroundColor)
             d->view->resourceProvider()->setBGColor(d->colorSet->getColorGlobal(index).color());
         else
             d->view->resourceProvider()->setFGColor( d->colorSet->getColorGlobal(index).color());
         emit colorChanged(d->colorSet->getColorGlobal(index).color().toQColor(), setBackgroundColor);
+        */
     }
 }
 

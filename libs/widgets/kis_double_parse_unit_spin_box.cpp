@@ -70,7 +70,7 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     setUnit( KoUnit(KoUnit::Point) );
     setAlignment( Qt::AlignRight );
 
-    connect(this, SIGNAL(valueChanged( double )), this, SLOT(privateValueChanged()));
+    connect(this, SIGNAL(valueChanged(double)), this, SLOT(privateValueChanged()));
     connect(lineEdit(), SIGNAL(textChanged(QString)),
             this, SLOT(detectUnitChanges()) );
 

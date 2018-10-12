@@ -18,7 +18,7 @@
 
 #include "KoVBox.h"
 
-#include <QtCore/QEvent>
+#include <QEvent>
 #include <QApplication>
 #include <QVBoxLayout>
 

@@ -270,7 +270,7 @@ private:
         }
     }
     char* escapeForXML(const char* source, int length) const;
-    bool prepareForChild();
+    bool prepareForChild(bool indentInside = true);
     void prepareForTextNode();
     void init();
 

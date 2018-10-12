@@ -28,6 +28,7 @@
 #include <QScroller>
 #include <QStyleOption>
 #include <QToolButton>
+#include <KisKineticScroller.h>
 
 class KoToolBoxScrollArea : public QScrollArea
 {
@@ -56,17 +57,21 @@ public:
         m_scrollNext->setFocusPolicy(Qt::NoFocus);
         connect(m_scrollNext, &QToolButton::clicked, this, &KoToolBoxScrollArea::doScrollNext);
 
-        QScroller::grabGesture(viewport(), QScroller::LeftMouseButtonGesture);
-        QScroller *scroller = QScroller::scroller(viewport());
-        QScrollerProperties sp = scroller->scrollerProperties();
+        QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+        if (!scroller) {
+            QScroller::grabGesture(viewport(), QScroller::MiddleMouseButtonGesture);
+            QScroller *scroller = QScroller::scroller(viewport());
+            QScrollerProperties sp = scroller->scrollerProperties();
 
-        sp.setScrollMetric(QScrollerProperties::MaximumVelocity, 0.0);
-        sp.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 0.1);
-        sp.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0.1);
-        sp.setScrollMetric(QScrollerProperties::OvershootScrollDistanceFactor, 0.0);
-        sp.setScrollMetric(QScrollerProperties::OvershootScrollTime, 0.4);
+            sp.setScrollMetric(QScrollerProperties::MaximumVelocity, 0.0);
+            sp.setScrollMetric(QScrollerProperties::OvershootDragResistanceFactor, 0.1);
+            sp.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor, 0.1);
+            sp.setScrollMetric(QScrollerProperties::OvershootScrollDistanceFactor, 0.0);
+            sp.setScrollMetric(QScrollerProperties::OvershootScrollTime, 0.4);
 
-        scroller->setScrollerProperties(sp);
+            scroller->setScrollerProperties(sp);
+        }
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
     }
 
     void setOrientation(Qt::Orientation orientation)
@@ -93,6 +98,9 @@ public:
     {
         return m_toolBox->sizeHint();
     }
+
+public Q_SLOTS:
+    void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 protected:
     bool event(QEvent *event) override

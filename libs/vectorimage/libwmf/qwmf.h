@@ -60,8 +60,8 @@ public:
 
     /**
      * Paint metafile to given paint-device using absolute or relative coordinate.
-     * - absolute coord. Reset the world transfomation Matrix
-     * - relative coord. Use the existing world transfomation Matrix
+     * - absolute coord. Reset the world transformation Matrix
+     * - relative coord. Use the existing world transformation Matrix
      *
      * @return true on success.
      */

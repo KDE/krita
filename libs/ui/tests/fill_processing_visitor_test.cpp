@@ -53,7 +53,7 @@ public:
 
         KisNodeSP fillNode = findNode(image->root(), "paint1");
 
-        KoCanvasResourceManager *manager = utils::createResourceManager(image, fillNode);
+        KoCanvasResourceProvider *manager = utils::createResourceManager(image, fillNode);
 
         KoPattern *newPattern = new KoPattern(TestUtil::fetchDataFileLazy("HR_SketchPaper_01.pat"));
         newPattern->load();
@@ -85,7 +85,7 @@ public:
         applicator.end();
         image->waitForDone();
 
-        QVERIFY(checkOneLayer(image, fillNode, testname));
+        QVERIFY(checkOneLayer(image, fillNode, testname, 500));
 
         undoStore->undo();
         image->waitForDone();

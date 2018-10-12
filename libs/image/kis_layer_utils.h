@@ -65,7 +65,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
     KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
-    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image);
+    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image, KisNodeSP activeNode);
 
     KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);
@@ -93,8 +93,8 @@ namespace KisLayerUtils
         ~SwitchFrameCommand() override;
 
     private:
-        void init() override;
-        void end() override;
+        void partA() override;
+        void partB() override;
 
     private:
         KisImageWSP m_image;
@@ -115,7 +115,7 @@ namespace KisLayerUtils
                              KisNodeSP activeAfter,
                              KisImageSP image,
                              bool finalize, KUndo2Command *parent = 0);
-    void end() override;
+    void partB() override;
 
     private:
         KisNodeList m_selectedBefore;
@@ -167,7 +167,7 @@ namespace KisLayerUtils
     {
     public:
         KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent = 0);
-        void end() override;
+        void partB() override;
         static void updateNodes(const KisNodeList &nodes);
     private:
         KisNodeList m_nodes;

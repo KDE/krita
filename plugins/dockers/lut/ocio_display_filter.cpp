@@ -32,7 +32,7 @@
 #include <QOpenGLFunctions_3_2_Core>
 #include <QOpenGLFunctions_3_0>
 #include <QOpenGLFunctions_2_0>
-
+#include <QOpenGLExtraFunctions>
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
@@ -267,26 +267,30 @@ void OcioDisplayFilter::updateProcessor()
 
 bool OcioDisplayFilter::updateShader()
 {
-    bool result = false;
-
     if (KisOpenGL::hasOpenGL3()) {
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
-        result = updateShaderImpl(f);
+        if (f) {
+            return updateShaderImpl(f);
+        }
     }
+
     // XXX This option can be removed once we move to Qt 5.7+
-    else if (KisOpenGL::supportsLoD()) {
+    if (KisOpenGL::supportsLoD()) {
 #ifdef Q_OS_MAC
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
 #else
         QOpenGLFunctions_3_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
 #endif
-        result = updateShaderImpl(f);
-    } else {
-        QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
-        result = updateShaderImpl(f);
+        if (f) {
+            return updateShaderImpl(f);
+        }
+    }
+    QOpenGLExtraFunctions *f = QOpenGLContext::currentContext()->extraFunctions();
+    if (f) {
+        return updateShaderImpl(f);
     }
 
-    return result;
+    return false;
 }
 
 template <class F>

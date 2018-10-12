@@ -56,7 +56,6 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     flattenToggled(flatten->isChecked());
     qualityLevel->setValue(cfg->getInt("quality", 80));
     compressionLevelDeflate->setValue(cfg->getInt("deflate", 6));
-    kComboBoxFaxMode->setCurrentIndex(cfg->getInt("faxmode", 0));
     compressionLevelPixarLog->setValue(cfg->getInt("pixarlog", 6));
     chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
 
@@ -83,7 +82,6 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
     cfg->setProperty("flatten", flatten->isChecked());
     cfg->setProperty("quality", qualityLevel->value());
     cfg->setProperty("deflate", compressionLevelDeflate->value());
-    cfg->setProperty("faxmode", kComboBoxFaxMode->currentIndex());
     cfg->setProperty("pixarlog", compressionLevelPixarLog->value());
     cfg->setProperty("saveProfile", chkSaveProfile->isChecked());
 
@@ -99,10 +97,7 @@ void KisTIFFOptionsWidget::activated(int index)
     case 2:
         codecsOptionsStack->setCurrentIndex(2);
         break;
-    case 6:
-        codecsOptionsStack->setCurrentIndex(3);
-        break;
-    case 8:
+    case 4:
         codecsOptionsStack->setCurrentIndex(4);
         break;
     default:

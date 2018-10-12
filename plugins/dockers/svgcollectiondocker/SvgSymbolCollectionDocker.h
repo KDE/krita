@@ -27,6 +27,7 @@
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+#include <KisKineticScroller.h>
 
 #include "ui_WdgSvgCollection.h"
 
@@ -42,7 +43,7 @@ public:
     QMimeData *mimeData(const QModelIndexList &indexes) const override;
     QStringList mimeTypes() const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
-    Qt::DropActions supportedDragActions() const;
+    Qt::DropActions supportedDragActions() const override;
 public:
     void setSvgSymbolCollectionResource(KoSvgSymbolCollectionResource *resource);
 private:
@@ -73,6 +74,9 @@ public:
     /// reimplemented
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
+
+public Q_SLOTS:
+    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
 private Q_SLOTS:
 

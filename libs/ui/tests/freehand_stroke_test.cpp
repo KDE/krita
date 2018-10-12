@@ -29,6 +29,7 @@
 #include "kis_painter.h"
 #include <brushengine/kis_paint_information.h>
 
+#include "kistest.h"
 
 class FreehandStrokeTester : public utils::StrokeTester
 {
@@ -69,21 +70,21 @@ protected:
         }
     }
 
-    void modifyResourceManager(KoCanvasResourceManager *manager,
+    void modifyResourceManager(KoCanvasResourceProvider *manager,
                                KisImageWSP image) override
     {
         modifyResourceManager(manager, image, 0);
     }
 
 
-    void modifyResourceManager(KoCanvasResourceManager *manager,
+    void modifyResourceManager(KoCanvasResourceProvider *manager,
                                KisImageWSP image,
                                int iteration) override {
 
         if (m_paintColor && iteration > 0) {
             QVariant i;
             i.setValue(KoColor(*m_paintColor, image->colorSpace()));
-            manager->setResource(KoCanvasResourceManager::ForegroundColor, i);
+            manager->setResource(KoCanvasResourceProvider::ForegroundColor, i);
         }
     }
 
@@ -127,7 +128,6 @@ protected:
     }
 
 private:
-    KisFreehandStrokeInfo *m_strokeInfo;
     bool m_useLod;
     bool m_flipLineDirection;
     QScopedPointer<QColor> m_paintColor;
@@ -186,4 +186,4 @@ void FreehandStrokeTest::testPredefinedBrushStrokeLod()
     tester.testSimpleStroke();
 }
 
-QTEST_MAIN(FreehandStrokeTest)
+KISTEST_MAIN(FreehandStrokeTest)

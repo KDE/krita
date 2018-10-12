@@ -575,15 +575,6 @@ void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
     m_cfg.writeEntry("allowLCMSOptimization", allowLCMSOptimization);
 }
 
-bool KisConfig::forcePaletteColors(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("colorsettings/forcepalettecolors", false));
-}
-
-void KisConfig::setForcePaletteColors(bool forcePaletteColors)
-{
-    m_cfg.writeEntry("colorsettings/forcepalettecolors", forcePaletteColors);
-}
 
 bool KisConfig::showRulers(bool defaultValue) const
 {

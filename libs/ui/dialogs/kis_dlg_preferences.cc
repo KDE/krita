@@ -481,7 +481,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
-    m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors());
+
     KisImageConfig cfgImage(true);
 
     KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
@@ -608,7 +608,6 @@ void ColorSettingsTab::setDefault()
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
-    m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors(true));
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent(true));
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile(true));
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour(true));
@@ -1381,7 +1380,6 @@ bool KisDlgPreferences::editPreferences()
                                           (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
-        cfg.setForcePaletteColors(dialog->m_colorSettings->m_page->chkForcePaletteColor->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 

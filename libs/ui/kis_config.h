@@ -151,9 +151,6 @@ public:
     bool allowLCMSOptimization(bool defaultValue = false) const;
     void setAllowLCMSOptimization(bool allowLCMSOptimization);
 
-    bool forcePaletteColors(bool defaultValue = false) const;
-    void setForcePaletteColors(bool forcePaletteColors);
-
     void writeKoColor(const QString& name, const KoColor& color) const;
     KoColor readKoColor(const QString& name, const KoColor& color = KoColor()) const;
 

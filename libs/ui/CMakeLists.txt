@@ -548,10 +548,6 @@ if (HAVE_QT_MULTIMEDIA)
     target_link_libraries(kritaui Qt5::Multimedia)
 endif()
 
-if (HAVE_KIO)
-    target_link_libraries(kritaui KF5::KIOCore)
-endif() 
-
 if (NOT WIN32 AND NOT APPLE)
   target_link_libraries(kritaui ${X11_X11_LIB}
                                 ${X11_Xinput_LIB}

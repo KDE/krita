@@ -337,7 +337,7 @@ void QMic::slotStartApplicator(QStringList gmicImages)
 
     Q_FOREACH(const QString &image, gmicImages) {
         QStringList parts = image.split(',', QString::SkipEmptyParts);
-        Q_ASSERT(parts.size() == 4);
+        KIS_SAFE_ASSERT_RECOVER_BREAK(parts.size() == 5);
         QString key = parts[0];
         QString layerName = QByteArray::fromHex(parts[1].toLatin1());
         int spectrum = parts[2].toInt();

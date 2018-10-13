@@ -81,14 +81,6 @@ public:
      */
     void setShowStrokeFillGradientHandles(bool value);
 
-    /**
-     * Text vector objects GUI button for editing text
-     */
-    QPointF textEditorButtonPos();
-    void setIsOverTextEditorButton(bool value);
-    bool isOverTextEditorButton();
-
-
     void setForceShapeOutlines(bool value);
 
 private:
@@ -102,9 +94,6 @@ private:
     bool m_showFillGradientHandles;
     bool m_showStrokeFillGradientHandles;
     bool m_forceShapeOutlines;
-
-    QPointF m_textEditorButtonPosition;
-    bool m_isHoveringOverTextButton;
 };
 
 #endif

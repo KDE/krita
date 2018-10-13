@@ -643,11 +643,6 @@ void DefaultTool::updateCursor()
                 statusText = i18n("Click and drag to shear selection.");
             }
 
-            if (m_decorator && m_decorator->isOverTextEditorButton()) {
-                cursor = Qt::PointingHandCursor;
-            } else {
-                cursor = Qt::ArrowCursor;
-            }
 
         } else {
             statusText = i18n("Click and drag to resize selection.");
@@ -792,7 +787,6 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
         // there used to be guides... :'''(
     }
 
-    isSelectingTextEditorButton(event->point);
 
     updateCursor();
 }
@@ -820,17 +814,6 @@ void DefaultTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
     updateCursor();
-
-    // test to see if we are selecting button before we decide to check for a selection/de-selection
-    const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
-
-    // this helps tell the next tool that we ned to enter edit mode when it gets activated
-    canvas()->selectedShapesProxy()->setRequestingToBeEdited(selectingTextEditorButton);
-
-
-    if (selectingTextEditorButton) { // activate text tool
-        KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(koSelection()->selectedShapes()));
-    }
 
     // This makes sure the decorations that are shown are refreshed. especally the "T" icon
     canvas()->updateCanvas(QRectF(0,0,canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
@@ -1535,15 +1518,7 @@ KoInteractionStrategy *DefaultTool::createStrategy(KoPointerEvent *event)
 
         if (!selectMultiple && !selectNextInStack) {
 
-            // move the selection if we hold and drag with the text editor button
-            // this also helps with how the click events flow to resolve this createStrategy
-            const bool selectingTextEditorButton = isSelectingTextEditorButton(event->point);
-
-            if (selectingTextEditorButton) { // ignore the event if we are selecting the text editor button
-                return new SelectionInteractionStrategy(this, event->point, false);
-            }
-
-            if (insideSelection) {
+           if (insideSelection) {
                 return new ShapeMoveStrategy(this, selection, event->point);
             }
         }
@@ -1736,44 +1711,4 @@ void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
     emit activateTemporary(KoToolManager::instance()->preferredToolForSelection(shapes));
-}
-
-bool DefaultTool::isSelectingTextEditorButton(const QPointF &mousePosition)
-{
-
-    if (!canvas() || !m_decorator) {
-        return false;
-    }
-
-    // calculate position for textEditorBoxButton
-    KoSelection *selection = koSelection();
-    const KoViewConverter *converter = canvas()->viewConverter();
-
-    if (!selection || !selection->count() || !converter) {
-        return false;
-    }
-
-    QRectF outline = selection->boundingRect();
-
-    QPointF absoluteTransormPosition(
-        outline.x() + outline.width()*0.5,
-        outline.y() + outline.height());
-
-
-    QPointF textEditorAbsPosition =  converter->documentToView(absoluteTransormPosition);
-    textEditorAbsPosition += decoratorIconPositions.uiOffset;
-
-    // check to see if the text decorator is checked (only for text objects)
-    const QPointF viewPoint = converter->documentToView(mousePosition);
-    const QPointF handlePoint = textEditorAbsPosition;
-    const qreal distanceSq = kisSquareDistance(viewPoint, handlePoint);
-
-    if (distanceSq < 18 * 18) { // 18 is "handle" area
-        m_decorator->setIsOverTextEditorButton(true);
-        return true;
-    }
-    else {
-        m_decorator->setIsOverTextEditorButton(false);
-        return false;
-    }
 }

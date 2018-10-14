@@ -81,6 +81,7 @@
     <Action name="svg_font_size"/>
     <Action name="svg_font_color"/>
     <Action name="svg_format_textcolor"/>
+    <Action name="svg_pick_color"/>
   </ToolBar>
   
   <ToolBar name="formatting" newline="true" >

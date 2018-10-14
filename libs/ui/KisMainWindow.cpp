@@ -2115,11 +2115,12 @@ void KisMainWindow::windowFocused()
     /**
      * Notify selection manager so that it could update selection mask overlay
      */
-    viewManager()->selectionManager()->selectionChanged();
+    if (viewManager() && viewManager()->selectionManager()) {
+        viewManager()->selectionManager()->selectionChanged();
+    }
 
-
-    auto *kisPart = KisPart::instance();
-    auto *layoutManager = KisWindowLayoutManager::instance();
+    KisPart *kisPart = KisPart::instance();
+    KisWindowLayoutManager *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;
 
     QUuid primary = layoutManager->primaryWindowId();

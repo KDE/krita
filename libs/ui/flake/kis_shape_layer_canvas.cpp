@@ -126,6 +126,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
         : KisShapeLayerCanvasBase(parent, image)
         , m_projection(0)
         , m_parentLayer(parent)
+        , m_canvasUpdateCompressor(new KisSignalCompressor(500, KisSignalCompressor::FIRST_INACTIVE, this))
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , m_image(image)
 {
@@ -136,7 +137,9 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
     m_shapeManager->selection()->setActiveLayer(parent);
 
-    connect(this, SIGNAL(forwardRepaint()), SLOT(repaint()), Qt::QueuedConnection);
+    connect(this, SIGNAL(forwardRepaint()), m_canvasUpdateCompressor, SLOT(start()));
+    connect(m_canvasUpdateCompressor, SIGNAL(timeout()), this, SLOT(repaint()));
+
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
 
     connect(m_image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), SLOT(slotImageSizeChanged()));
@@ -216,7 +219,7 @@ void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
      *
      * Here we just avoid the most obvious conflict of threads:
      *
-     * 1) If the layer if modified by a non-gui (worker) thread, use a spontaneous jobs
+     * 1) If the layer is modified by a non-gui (worker) thread, use a spontaneous jobs
      *    to rerender the canvas. The job will be executed (almost) exclusively and it is
      *    the responsibility of the worker thread to add a barrier to wait until this job is
      *    completed, and not try to access the shapes concurrently.
@@ -264,43 +267,44 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
 
 void KisShapeLayerCanvas::repaint()
 {
-
-    QRect r;
+    QRect repaintRect;
 
     {
         QMutexLocker locker(&m_dirtyRegionMutex);
-        r = m_dirtyRegion.boundingRect();
+        repaintRect = m_dirtyRegion.boundingRect();
         m_dirtyRegion = QRegion();
     }
 
-    if (r.isEmpty()) return;
+    if (repaintRect.isEmpty()) {
+        return;
+    }
 
     // Crop the update rect by the image bounds. We keep the cache consistent
     // by tracking the size of the image in slotImageSizeChanged()
-    r = r.intersected(m_parentLayer->image()->bounds());
+    repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
 
-    QImage image(r.width(), r.height(), QImage::Format_ARGB32);
+    QImage image(repaintRect.width(), repaintRect.height(), QImage::Format_ARGB32);
     image.fill(0);
-    QPainter p(&image);
+    QPainter tempPainter(&image);
 
-    p.setRenderHint(QPainter::Antialiasing);
-    p.setRenderHint(QPainter::TextAntialiasing);
-    p.translate(-r.x(), -r.y());
-    p.setClipRect(r);
+    tempPainter.setRenderHint(QPainter::Antialiasing);
+    tempPainter.setRenderHint(QPainter::TextAntialiasing);
+    tempPainter.translate(-repaintRect.x(), -repaintRect.y());
+    tempPainter.setClipRect(repaintRect);
 #ifdef DEBUG_REPAINT
     QColor color = QColor(random() % 255, random() % 255, random() % 255);
-    p.fillRect(r, color);
+    tempPainter.fillRect(r, color);
 #endif
 
-    m_shapeManager->paint(p, *m_viewConverter, false);
-    p.end();
+    m_shapeManager->paint(tempPainter, *m_viewConverter, false);
+    tempPainter.end();
 
     KisPaintDeviceSP dev = new KisPaintDevice(m_projection->colorSpace());
     dev->convertFromQImage(image, 0);
 
-    KisPainter::copyAreaOptimized(r.topLeft(), dev, m_projection, QRect(QPoint(), r.size()));
+    KisPainter::copyAreaOptimized(repaintRect.topLeft(), dev, m_projection, QRect(QPoint(), repaintRect.size()));
 
-    m_parentLayer->setDirty(r);
+    m_parentLayer->setDirty(repaintRect);
 
     m_hasChangedWhileBeingInvisible |= !m_parentLayer->visible(true);
 }
@@ -339,4 +343,3 @@ void KisShapeLayerCanvas::rerenderAfterBeingInvisible()
     m_hasChangedWhileBeingInvisible = false;
     resetCache();
 }
-

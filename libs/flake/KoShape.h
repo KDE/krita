@@ -61,9 +61,7 @@ struct KoInsets;
 class KoShapeBackground;
 class KisHandlePainterHelper;
 
-
 /**
- *
  * Base class for all flake shapes. Shapes extend this class
  * to allow themselves to be manipulated. This class just represents
  * a graphical shape in the document and can be manipulated by some default

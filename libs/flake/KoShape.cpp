@@ -747,7 +747,6 @@ void KoShape::update() const
 
 void KoShape::updateAbsolute(const QRectF &rect) const
 {
-
     if (rect.isEmpty() && !rect.isNull()) {
         return;
     }
@@ -755,7 +754,7 @@ void KoShape::updateAbsolute(const QRectF &rect) const
     Q_D(const KoShape);
 
     if (!d->shapeManagers.empty() && isVisible()) {
-        Q_FOREACH (KoShapeManager * manager, d->shapeManagers) {
+        Q_FOREACH (KoShapeManager *manager, d->shapeManagers) {
             manager->update(rect);
         }
     }

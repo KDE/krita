@@ -2111,7 +2111,7 @@ void KisMainWindow::subWindowActivated()
     QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
     if (subWindow) {
         QMenu *menu = subWindow->systemMenu();
-        if (menu) {
+        if (menu && menu->actions().size() == 8) {
             Q_FOREACH (QAction *action, menu->actions()) {
                 action->setShortcut(QKeySequence());
 

@@ -454,6 +454,16 @@ qreal KisDistanceInformation::getNextPointPosition(const QPointF &start,
     return t;
 }
 
+qreal KisDistanceInformation::getSpacingInterval() const
+{
+    return m_d->spacingUpdateInterval;
+}
+
+qreal KisDistanceInformation::getTimingUpdateInterval() const
+{
+    return m_d->timingUpdateInterval;
+}
+
 qreal KisDistanceInformation::getNextPointPositionIsotropic(const QPointF &start,
                                                             const QPointF &end)
 {

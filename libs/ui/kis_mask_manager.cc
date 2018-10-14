@@ -199,6 +199,7 @@ KisNodeSP KisMaskManager::createSelectionMask(KisNodeSP activeNode, KisPaintDevi
     }
 
     KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
+
     createMaskCommon(mask, activeNode, copyFrom, kundo2_i18n("Add Selection Mask"), "KisSelectionMask", i18n("Selection"), false, convertActiveNode, false);
     mask->setActive(true);
     if (convertActiveNode) {

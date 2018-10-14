@@ -23,6 +23,11 @@
 #include <kis_properties_configuration.h>
 #include <KisDocument.h>
 
+#include <ksharedconfig.h>
+#include <KisViewManager.h>
+
+
+
 struct KisSessionResource::Private
 {
     struct View
@@ -39,7 +44,7 @@ struct KisSessionResource::Private
             return nullptr;
         }
     };
-
+    QString profileName;
     QVector<View> views;
 };
 
@@ -89,6 +94,12 @@ void KisSessionResource::restore()
                 kisPart->addDocument(document);
                 documents.insert(url, document);
             }
+            //update profile
+            QString profileName;
+            profileName = d->profileName;
+            window->viewManager()->changeAuthorProfile(profileName);
+            window->viewManager()->slotUpdateAuthorProfileActions();
+
 
             KisView *view = window->newView(document);
             view->restoreViewState(viewData.viewConfig);
@@ -140,7 +151,17 @@ void KisSessionResource::saveXml(QDomDocument &doc, QDomElement &root) const
         view.viewConfig.toXML(doc, elem);
 
         root.appendChild(elem);
+
+        // Save profile
+        KConfigGroup appAuthorGroup(KSharedConfig::openConfig(), "Author");
+        QString profileName = appAuthorGroup.readEntry("active-profile", "");
+
+        QDomElement session = doc.createElement("session");
+        session.setAttribute("profile", profileName);
+        root.appendChild(session);
+
     }
+
 }
 
 void KisSessionResource::loadXml(const QDomElement &root) const
@@ -159,4 +180,9 @@ void KisSessionResource::loadXml(const QDomElement &root) const
 
         d->views.append(view);
     }
+    //Load session
+    d->profileName.clear();
+    auto sessionElement = root.firstChildElement("session");
+    d->profileName = QString(sessionElement.attribute("profile"));
+
 }

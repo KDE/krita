@@ -228,6 +228,10 @@ public Q_SLOTS:
     void slotViewAdded(KisView *view);
     void slotViewRemoved(KisView *view);
 
+    // Change and update author
+    void changeAuthorProfile(const QString &profileName);
+    void slotUpdateAuthorProfileActions();
+
 Q_SIGNALS:
 
     void floatingMessageRequested(const QString &message, const QString &iconName);
@@ -250,8 +254,6 @@ private Q_SLOTS:
     void openResourcesDirectory();
     void initializeStatusBarVisibility();
     void guiUpdateTimeout();
-    void changeAuthorProfile(const QString &profileName);
-    void slotUpdateAuthorProfileActions();
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);

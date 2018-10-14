@@ -77,7 +77,7 @@ private Q_SLOTS:
 
 private:
     qreal currentResolutionPPI() const;
-    void setCurrentResilutionPPI(qreal value);
+    void setCurrentResolutionPPI(qreal value);
 
     void updatePrintSizeMaximum();
 

@@ -48,15 +48,13 @@ int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
-    bool allowPaletteModification; // if modification is allowed from this widget
+    bool allowPaletteModification {false}; // if modification is allowed from this widget
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
     , m_d(new Private)
 {
-    m_d->allowPaletteModification = false;
-
     setItemDelegate(new KisPaletteDelegate(this));
 
     setShowGrid(true);
@@ -206,9 +204,10 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
-    //TODO: We'll need a switch that implements forcing the paint
-    //color to always be one from the palette.
-    //selectClosestColor(color);
+    KConfigGroup group(KSharedConfig::openConfig(), "");
+    if (group.readEntry("colorsettings/forcepalettecolors", false)) {
+        selectClosestColor(color);
+    }
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
@@ -219,11 +218,9 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     setModel(model);
     slotAdditionalGuiUpdate();
-    connect(model, SIGNAL(sigPaletteModified()),
-            SLOT(slotAdditionalGuiUpdate()));
-    connect(model, SIGNAL(sigPaletteChanged()),
-            SLOT(slotAdditionalGuiUpdate()));
 
+    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
     connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 

@@ -44,6 +44,7 @@ Avencherus
 Azaleah Iniguez
 Azlan TG
 badjano
+Balaz Sel
 Bao
 Beau Gerbrands
 Beaupuy-Mouret
@@ -592,4 +593,4 @@ Zerginator
 ziyad kudus
 Zombubble
 Zookeeper02
-and 153 anonymous donors
+and 152 anonymous donors

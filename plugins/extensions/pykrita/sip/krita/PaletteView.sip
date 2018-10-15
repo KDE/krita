@@ -14,7 +14,7 @@ public Q_SLOTS:
     bool removeSelectedEntryWithDialog();
     void trySelectClosestColor(ManagedColor *color);
 Q_SIGNALS:
-    void entrySelectedForeGround(KisSwatch entry);
-    void entrySelectedBackGround(KisSwatch entry);
+    void entrySelectedForeGround(Swatch entry);
+    void entrySelectedBackGround(Swatch entry);
 private:
 };

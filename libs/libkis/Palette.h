@@ -26,6 +26,7 @@
 #include "libkis.h"
 #include "Resource.h"
 #include "KoColorSet.h"
+#include <Swatch.h>
 
 class ManagedColor;
 
@@ -117,29 +118,22 @@ public:
      * @param index the global index
      * @return the colorset entry
      */
-    KisSwatch colorSetEntryByIndex(int index);
+    Swatch *colorSetEntryByIndex(int index);
     /**
      * @brief colorSetEntryFromGroup
      * @param index index in the group.
      * @param groupName the name of the group to get the color from.
      * @return the colorsetentry.
      */
-    KisSwatch colorSetEntryFromGroup(int index, const QString &groupName);
+    Swatch *colorSetEntryFromGroup(int index, const QString &groupName);
 
-    /**
-     * @brief colorForEntry
-     * special function to retrieve a ManagedColor object from the colorsetentry.
-     * @param entry the entry
-     * @return the ManagedColorObject
-     */
-    ManagedColor *colorForEntry(KisSwatch entry);
     /**
      * @brief addEntry
      * add an entry to a group. Gets appended to the end.
      * @param entry the entry
      * @param groupName the name of the group to add to.
      */
-    void addEntry(KisSwatch entry, QString groupName = QString());
+    void addEntry(Swatch entry, QString groupName = QString());
     /**
      * @brief removeEntry
      * remove the entry at @param index from the group @param groupName.

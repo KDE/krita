@@ -39,7 +39,6 @@
 
 struct KisScreenColorPicker::Private
 {
-
     QPushButton *screenColorPickerButton = 0;
     QLabel *lblScreenColorInfo = 0;
 
@@ -54,7 +53,7 @@ struct KisScreenColorPicker::Private
 #endif
 };
 
-KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
+KisScreenColorPicker::KisScreenColorPicker(bool showInfoLabel, QWidget *parent) : KisScreenColorPickerBase(parent), m_d(new Private)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     this->setLayout(layout);
@@ -62,8 +61,12 @@ KisScreenColorPicker::KisScreenColorPicker(QWidget *parent) : KisScreenColorPick
 
     m_d->screenColorPickerButton->setMinimumHeight(25);
     this->layout()->addWidget(m_d->screenColorPickerButton);
-    m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
-    this->layout()->addWidget(m_d->lblScreenColorInfo);
+
+    if (showInfoLabel) {
+        m_d->lblScreenColorInfo = new QLabel(QLatin1String("\n"));
+        this->layout()->addWidget(m_d->lblScreenColorInfo);
+    }
+
     connect(m_d->screenColorPickerButton, SIGNAL(clicked()), SLOT(pickScreenColor()));
 
     updateIcons();
@@ -114,7 +117,6 @@ void KisScreenColorPicker::pickScreenColor()
      */
     setMouseTracking(true);
 
-    //emit to the rest of the dialog to disable.
     m_d->screenColorPickerButton->setDisabled(true);
 
     const QPoint globalPos = QCursor::pos();
@@ -161,11 +163,13 @@ KoColor KisScreenColorPicker::grabScreenColor(const QPoint &p)
 
 void KisScreenColorPicker::updateColorLabelText(const QPoint &globalPos)
 {
-    KoColor col = grabScreenColor(globalPos);
-    QString colname = KoColor::toQString(col);
-    QString location = QString::number(globalPos.x())+QString(", ")+QString::number(globalPos.y());
-    m_d->lblScreenColorInfo->setWordWrap(true);
-    m_d->lblScreenColorInfo->setText(location+QString(": ")+colname);
+    if (m_d->lblScreenColorInfo) {
+        KoColor col = grabScreenColor(globalPos);
+        QString colname = KoColor::toQString(col);
+        QString location = QString::number(globalPos.x())+QString(", ")+QString::number(globalPos.y());
+        m_d->lblScreenColorInfo->setWordWrap(true);
+        m_d->lblScreenColorInfo->setText(location+QString(": ")+colname);
+    }
 }
 
 bool KisScreenColorPicker::handleColorPickingMouseMove(QMouseEvent *e)
@@ -213,8 +217,11 @@ void KisScreenColorPicker::releaseColorPicking()
 #endif
     releaseKeyboard();
     setMouseTracking(false);
-    m_d->lblScreenColorInfo->setText(QLatin1String("\n"));
-    //emit enable signal
+
+    if (m_d->lblScreenColorInfo) {
+        m_d->lblScreenColorInfo->setText(QLatin1String("\n"));
+    }
+
     m_d->screenColorPickerButton->setDisabled(false);
 }
 
@@ -246,7 +253,6 @@ void KisScreenColorPicker::continueUpdateColorPicking(const QPoint &globalPos)
     // otherwise it is not possible to pre-select a custom cell for assignment.
     setCurrentColor(color);
     updateColorLabelText(globalPos);
-
 }
 
 // Event filter to be installed on the dialog while in color-picking mode.

@@ -49,7 +49,7 @@ Beau Gerbrands
 Beaupuy-Mouret
 Belzael
 Ben Reeves
-Benjamin \&quot
+Benjamin
 Benjamin E. Green
 Biliogadafr
 bkuri
@@ -143,7 +143,7 @@ Dude Fernandez
 Eduardo Bastos
 Eduardo Saporski
 Edward J Hickie
-Eivind \&quot
+Eivind
 Elias Steurer
 Elisa
 Elisabeth Niederhut
@@ -162,7 +162,7 @@ Fernando Michelotti
 Filou
 Flo Tasser
 forosha
-Francesca \&quot
+Francesca
 Francesco F.
 Francesco R
 Frank Quotschalla (Gutschy)
@@ -207,7 +207,7 @@ Isabelle Grandguillot
 IvanD
 Jache
 Jaime Gifte
-James \&quot
+James
 Jamie Silbernagel
 Jan Sundman
 Jangle bangle
@@ -333,7 +333,7 @@ MCO_MaTT
 MertA.
 Metalorion
 Michael
-Michael \&quot
+Michael
 Michael Lindström
 Michael Thaler
 Michel Wegener

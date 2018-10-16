@@ -26,6 +26,7 @@
 #include <QtSql>
 
 #include <TableModel.h>
+#include <KisResourceModel.h>
 
 
 DlgDbExplorer::DlgDbExplorer(QWidget *parent)
@@ -66,12 +67,8 @@ DlgDbExplorer::DlgDbExplorer(QWidget *parent)
     }
 
     {
-        TableModel *resourcesModel = new TableModel(this, QSqlDatabase::database());
-        TableDelegate *resourcesDelegate = new TableDelegate(m_page->tableStorages);
-        resourcesModel->setTable("resources");
-        resourcesModel->select();
+        KisResourceModel *resourcesModel = new KisResourceModel("paintoppresets");
         m_page->tableResources->setModel(resourcesModel);
-        m_page->tableResources->setItemDelegate(resourcesDelegate);
         m_page->tableResources->hideColumn(0);
         m_page->tableResources->setSelectionMode(QAbstractItemView::SingleSelection);;
     }

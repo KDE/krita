@@ -51,30 +51,54 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
 
 int KisResourceModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 1;
+    return m_columnCount;
 }
 
 QVariant KisResourceModel::data(const QModelIndex &index, int role) const
 {
+
     QVariant v;
     if (!index.isValid()) return v;
 
     if (index.row() > rowCount()) return v;
+    if (index.column() > m_columnCount) return v;
 
     bool pos = const_cast<KisResourceModel*>(this)->m_query.seek(index.row());
 
     if (pos) {
         switch(role) {
         case Qt::DisplayRole:
-            return m_query.value("name");
+        {
+            switch(index.column()) {
+            case 0:
+                return m_query.value("id");
+            case 1:
+                return m_query.value("storage_id");
+            case 2:
+                return m_query.value("name");
+            case 3:
+                return m_query.value("filename");
+            case 4:
+                return m_query.value("tooltip");
+            case 5:
+                ;
+            case 6:
+                return m_query.value("status");
+            default:
+                ;
+            };
+        }
         case Qt::DecorationRole:
         {
-            QByteArray ba = m_query.value("thumbnail").toByteArray();
-            QBuffer buf(&ba);
-            buf.open(QBuffer::ReadOnly);
-            QImage img;
-            img.load(&buf, "PNG");
-            return QVariant::fromValue<QImage>(img);
+            if (index.column() == 5) {
+                QByteArray ba = m_query.value("thumbnail").toByteArray();
+                QBuffer buf(&ba);
+                buf.open(QBuffer::ReadOnly);
+                QImage img;
+                img.load(&buf, "PNG");
+                return QVariant::fromValue<QImage>(img);
+            }
+            return QVariant();
         }
         case Qt::ToolTipRole:
             /* Falls through. */
@@ -104,6 +128,8 @@ int KisResourceModel::rowCount(const QModelIndex &) const
         q.first();
 
         const_cast<KisResourceModel*>(this)->m_cachedRowCount = q.value(0).toInt();
+        qDebug() << m_cachedRowCount;
     }
+
     return m_cachedRowCount;
 }

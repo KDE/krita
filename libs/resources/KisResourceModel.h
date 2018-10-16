@@ -33,6 +33,22 @@ class KRITARESOURCES_EXPORT  KisResourceModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+
+    /**
+     * @brief The Columns enum indexes the columns in the model. To get
+     * the thumbnail for a particular resource, create the index with
+     * QModelIndex(row, Thumbnail).
+     */
+    enum Columns {
+        Id = 0,
+        StorageId,
+        Name,
+        Filename,
+        Tooltip,
+        Thumbnail,
+        Status
+    };
+
     KisResourceModel(const QString &resourceType, QObject *parent = 0);
 
 // QAbstractItemModel API
@@ -46,6 +62,7 @@ public:
 private:
     QSqlQuery m_query;
     QString m_resourceType;
+    int m_columnCount {7};
     int m_cachedRowCount {-1};
 };
 

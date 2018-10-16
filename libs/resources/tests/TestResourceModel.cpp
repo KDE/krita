@@ -98,7 +98,7 @@ void TestResourceModel::testData()
     KisResourceModel resourceModel(resourceType);
 
     for (int i = 0; i < resourceModel.rowCount(); ++i)  {
-        QVariant v = resourceModel.data(resourceModel.index(i, 0), Qt::DisplayRole);
+        QVariant v = resourceModel.data(resourceModel.index(i, KisResourceModel::Name), Qt::DisplayRole);
         QCOMPARE(v.toString(), "test.kpp");
     }
 }

@@ -109,4 +109,4 @@ private:
     QString m_currentTag;
 };
 
-#endif // KORESOURCEMODEL_H
+#endif // KoLegacyResourceModel_H

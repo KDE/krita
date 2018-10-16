@@ -817,7 +817,9 @@
   <customwidget>
    <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
-   <header location="global">kis_file_name_requester.h</header>
+   <header>kis_file_name_requester.h</header>
+  </customwidget>
+  <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>

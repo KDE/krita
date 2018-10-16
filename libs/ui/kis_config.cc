@@ -575,6 +575,15 @@ void KisConfig::setAllowLCMSOptimization(bool allowLCMSOptimization)
     m_cfg.writeEntry("allowLCMSOptimization", allowLCMSOptimization);
 }
 
+bool KisConfig::forcePaletteColors(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("colorsettings/forcepalettecolors", false));
+}
+
+void KisConfig::setForcePaletteColors(bool forcePaletteColors)
+{
+    m_cfg.writeEntry("colorsettings/forcepalettecolors", forcePaletteColors);
+}
 
 bool KisConfig::showRulers(bool defaultValue) const
 {
@@ -1724,9 +1733,19 @@ void KisConfig::setToolOptionsInDocker(bool inDocker)
     m_cfg.writeEntry("ToolOptionsInDocker", inDocker);
 }
 
+bool KisConfig::kineticScrollingEnabled(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("KineticScrollingEnabled", true));
+}
+
+void KisConfig::setKineticScrollingEnabled(bool value)
+{
+    m_cfg.writeEntry("KineticScrollingEnabled", value);
+}
+
 int KisConfig::kineticScrollingGesture(bool defaultValue) const
 {
-    return (defaultValue ? 0 : m_cfg.readEntry("KineticScrollingGesture", 0));
+    return (defaultValue ? 2 : m_cfg.readEntry("KineticScrollingGesture", 2));
 }
 
 void KisConfig::setKineticScrollingGesture(int gesture)
@@ -1744,14 +1763,14 @@ void KisConfig::setKineticScrollingSensitivity(int sensitivity)
     m_cfg.writeEntry("KineticScrollingSensitivity", sensitivity);
 }
 
-bool KisConfig::kineticScrollingScrollbar(bool defaultValue) const
+bool KisConfig::kineticScrollingHiddenScrollbars(bool defaultValue) const
 {
-    return (defaultValue ? true : m_cfg.readEntry("KineticScrollingScrollbar", true));
+    return (defaultValue ? false : m_cfg.readEntry("KineticScrollingHideScrollbar", false));
 }
 
-void KisConfig::setKineticScrollingScrollbar(bool scrollbar)
+void KisConfig::setKineticScrollingHideScrollbars(bool scrollbar)
 {
-    m_cfg.writeEntry("KineticScrollingScrollbar", scrollbar);
+    m_cfg.writeEntry("KineticScrollingHideScrollbar", scrollbar);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const

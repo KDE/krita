@@ -36,8 +36,6 @@ struct ManagedColor::Private {
     KoColor color;
 };
 
-
-
 ManagedColor::ManagedColor(QObject *parent)
     : QObject(parent)
     , d(new Private())

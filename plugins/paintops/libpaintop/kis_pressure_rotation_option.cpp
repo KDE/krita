@@ -69,3 +69,18 @@ void KisPressureRotationOption::applyFanCornersInfo(KisPaintOp *op)
         op->setFanCornersInfo(sensor->fanCornersEnabled(), qreal(sensor->fanCornersStep()) * M_PI / 180.0);
     }
 }
+
+int KisPressureRotationOption::intMinValue() const
+{
+    return -180;
+}
+
+int KisPressureRotationOption::intMaxValue() const
+{
+    return 180;
+}
+
+QString KisPressureRotationOption::valueSuffix() const
+{
+    return i18n("°");
+}

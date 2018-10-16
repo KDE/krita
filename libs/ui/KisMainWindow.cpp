@@ -74,9 +74,6 @@
 #include "kis_selection_manager.h"
 #include "kis_icon_utils.h"
 
-#ifdef HAVE_KIO
-#include <krecentdocument.h>
-#endif
 #include <krecentfilesaction.h>
 #include <KoResourcePaths.h>
 #include <ktoggleaction.h>
@@ -146,6 +143,7 @@
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
+#include <QScreen>
 
 #include <mutex>
 
@@ -278,6 +276,7 @@ public:
     KConfigGroup windowStateConfig;
 
     QUuid workspaceBorrowedBy;
+    KisSignalAutoConnectionsStore screenConnectionsStore;
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();
@@ -718,17 +717,15 @@ void KisMainWindow::addRecentURL(const QUrl &url)
                     ok = false; // it's in the tmp resource
                 }
             }
-#ifdef HAVE_KIO
-            if (ok) {
-                KRecentDocument::add(QUrl::fromLocalFile(path));
+
+            const QStringList templateDirs = KoResourcePaths::findDirs("templates");
+            for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
+                if (path.contains(*it)) {
+                    ok = false; // it's in the templates directory.
+                    break;
+                }
             }
-#endif
         }
-#ifdef HAVE_KIO
-        else {
-            KRecentDocument::add(url.adjusted(QUrl::StripTrailingSlash));
-        }
-#endif
         if (ok) {
             d->recentFiles->addUrl(url);
         }
@@ -1351,6 +1348,9 @@ void KisMainWindow::dropEvent(QDropEvent *event)
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
             if (url.toLocalFile().endsWith(".bundle")) {
                 bool r = installBundle(url.toLocalFile());
+                if (!r) {
+                    qWarning() << "Could not install bundle" << url.toLocalFile();
+                }
             }
             else {
                 openDocument(url, None);
@@ -2097,11 +2097,12 @@ void KisMainWindow::subWindowActivated()
     QMdiSubWindow *subWindow = d->mdiArea->currentSubWindow();
     if (subWindow) {
         QMenu *menu = subWindow->systemMenu();
-        if (menu) {
+        if (menu && menu->actions().size() == 8) {
             Q_FOREACH (QAction *action, menu->actions()) {
                 action->setShortcut(QKeySequence());
-                action->deleteLater();
+
             }
+            menu->actions().last()->deleteLater();
         }
     }
 
@@ -2114,11 +2115,12 @@ void KisMainWindow::windowFocused()
     /**
      * Notify selection manager so that it could update selection mask overlay
      */
-    viewManager()->selectionManager()->selectionChanged();
+    if (viewManager() && viewManager()->selectionManager()) {
+        viewManager()->selectionManager()->selectionChanged();
+    }
 
-
-    auto *kisPart = KisPart::instance();
-    auto *layoutManager = KisWindowLayoutManager::instance();
+    KisPart *kisPart = KisPart::instance();
+    KisWindowLayoutManager *layoutManager = KisWindowLayoutManager::instance();
     if (!layoutManager->primaryWorkspaceFollowsFocus()) return;
 
     QUuid primary = layoutManager->primaryWindowId();
@@ -2659,6 +2661,27 @@ void KisMainWindow::moveEvent(QMoveEvent *e)
 
     if (oldScreen != newScreen) {
         emit screenChanged();
+    }
+
+    if (d->screenConnectionsStore.isEmpty() || oldScreen != newScreen) {
+
+        d->screenConnectionsStore.clear();
+
+        QScreen *newScreenObject = 0;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        newScreenObject = qApp->screenAt(e->pos());
+#else
+        // TODO: i'm not sure if this pointer already has a correct value
+        // by the moment we get the event. It might not work on older
+        // versions of Qt
+        newScreenObject = qApp->primaryScreen();
+#endif
+
+        if (newScreenObject) {
+            d->screenConnectionsStore.addConnection(newScreenObject, SIGNAL(physicalDotsPerInchChanged(qreal)),
+                                                    this, SIGNAL(screenChanged()));
+        }
     }
 }
 

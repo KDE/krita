@@ -22,7 +22,7 @@
 #include <kritaui_export.h>
 #include <QListView>
 #include <QListWidget>
-
+#include <QScroller>
 
 class KRITAUI_EXPORT KisCategorizedListView: public QListView
 {
@@ -49,6 +49,7 @@ protected Q_SLOTS:
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
+    void slotScrollerStateChange(QScroller::State state);
 
 private:
     void updateRows(int begin, int end);    

@@ -29,12 +29,14 @@
 
 #include "KisShortcutsEditor.h"
 #include <QTreeWidget>
+#include <QScroller>
 #include <ktreewidgetsearchline.h>
 
 #include "KisShortcutsDialog_p.h"
 
 // NEEDED FOR KisShortcutsEditorPrivate
 #include "ui_KisShortcutsDialog.h"
+
 
 
 
@@ -88,6 +90,8 @@ public:
 
     // TODO: Is this necessary w/o global actions?
     void setActionTypes(KisShortcutsEditor::ActionTypes actionTypes);
+
+public:
 
     // Members
     QList<KActionCollection *> actionCollections;

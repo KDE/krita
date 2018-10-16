@@ -31,7 +31,23 @@ public:
 
 private Q_SLOTS:
 
+    /**
+     * @brief slotRenderAnimation
+     *
+     * Triggered from the renderanimation action. This calls a dialog
+     * to set the animation settings and then takes that to call the appropriate exporter,
+     * this can be a frame exporter, or it is a KisVideoExport object as defined in
+     *  plugins/extensions/impex.
+     */
     void slotRenderAnimation();
+    /**
+     * @brief slotRenderSequenceAgain
+     *
+     * triggered from the renderanimationagain action. This does not call a dialog, but
+     * instead uses the settings to set the animation settings and then takes that to
+     * call the appropriate exporter, this can be a frame exporter, or it is a
+     * KisVideoExport object as defined in plugins/extensions/impex.
+     */
     void slotRenderSequenceAgain();
 
 };

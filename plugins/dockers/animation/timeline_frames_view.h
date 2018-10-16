@@ -22,6 +22,7 @@
 
 #include <QScopedPointer>
 #include <QTableView>
+#include <QScroller>
 #include "kis_action_manager.h"
 #include "kritaanimationdocker_export.h"
 
@@ -135,6 +136,9 @@ private Q_SLOTS:
     void slotAudioChannelRemove();
     void slotUpdateAudioActions();
     void slotAudioVolumeChanged(int value);
+
+    // DragScroll
+    void slotScrollerStateChanged(QScroller::State state);
 
 private:
     void setFramesPerSecond(int fps);

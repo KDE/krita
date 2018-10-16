@@ -232,4 +232,14 @@
       <isCheckable>false</isCheckable>
       <text>Settings...</text>
     </Action></Actions>
+    <Action name="svg_pick_color">
+      <iconText>Colorpicker</iconText>
+      <shortcut></shortcut>
+      <toolTip>Pick a color from the screen</toolTip>
+      <icon></icon>
+      <whatsThis/>
+      <statusTip/>
+      <isCheckable>false</isCheckable>
+      <text>Color Picker</text>
+    </Action></Actions>
 </ActionCollection>

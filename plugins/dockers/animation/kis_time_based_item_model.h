@@ -21,6 +21,7 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include <KisKineticScroller.h>
 
 #include "kritaanimationdocker_export.h"
 

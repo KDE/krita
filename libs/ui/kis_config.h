@@ -151,6 +151,9 @@ public:
     bool allowLCMSOptimization(bool defaultValue = false) const;
     void setAllowLCMSOptimization(bool allowLCMSOptimization);
 
+    bool forcePaletteColors(bool defaultValue = false) const;
+    void setForcePaletteColors(bool forcePaletteColors);
+
     void writeKoColor(const QString& name, const KoColor& color) const;
     KoColor readKoColor(const QString& name, const KoColor& color = KoColor()) const;
 
@@ -509,14 +512,17 @@ public:
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
+    bool kineticScrollingEnabled(bool defaultValue = false) const;
+    void setKineticScrollingEnabled(bool enabled);
+
     int kineticScrollingGesture(bool defaultValue = false) const;
     void setKineticScrollingGesture(int kineticScroll);
 
     int kineticScrollingSensitivity(bool defaultValue = false) const;
     void setKineticScrollingSensitivity(int sensitivity);
 
-    bool kineticScrollingScrollbar(bool defaultValue = false) const;
-    void setKineticScrollingScrollbar(bool scrollbar);
+    bool kineticScrollingHiddenScrollbars(bool defaultValue = false) const;
+    void setKineticScrollingHideScrollbars(bool scrollbar);
 
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;

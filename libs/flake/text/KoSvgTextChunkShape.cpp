@@ -701,7 +701,7 @@ Result hasPreviousSibling(KoXmlNode node)
                         return hasPreviousSibling(node) == FoundNothing ? FoundNothing : FoundSpace;
                     }
 
-                    return text[text.size() - 1] != " " ? FoundText : FoundSpace;
+                    return text[text.size() - 1] != ' ' ? FoundText : FoundSpace;
                 }
             }
         }
@@ -732,7 +732,7 @@ Result hasNextSibling(KoXmlNode node)
                 }
 
                 if (!text.isEmpty()) {
-                    return text[0] != " " ? FoundText : FoundSpace;
+                    return text[0] != ' ' ? FoundText : FoundSpace;
                 }
             }
         }

@@ -54,56 +54,52 @@ public:
 
         channels_type newAlpha = zeroValue<channels_type>();
 
-        if(dstAlpha == zeroValue<channels_type>() ||
-           opacity == unitValue<channels_type>()) {
+        if (opacity == unitValue<channels_type>()) {
+            if (!alphaLocked || srcAlpha != zeroValue<channels_type>()) {
+                // don't blend if the color of the destination is undefined (has zero opacity)
+                // copy the source channel instead
+                for(qint32 i=0; i<channels_nb; ++i)
+                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
+                        dst[i] = src[i];
+            }
 
-            newAlpha = lerp(dstAlpha, srcAlpha, opacity);
-
-            // don't blend if the color of the destination is undefined (has zero opacity)
-            // copy the source channel instead
-            for(qint32 i=0; i<channels_nb; ++i)
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
-                    dst[i] = src[i];
+            newAlpha = srcAlpha;
 
         } else if (opacity == zeroValue<channels_type>()) {
+
             newAlpha = dstAlpha;
 
-        } else {
-            /**
-             * In case the mask is not opaque, we should also pre-blend
-             * the source pixel alpha channel to the mask. Otherwise
-             * the blacks of the fully transparent source pixel will
-             * be mixed into destination event when the source alpha
-             * is negligible.
-             */
+        } else { // opacity 0...1
 
-            newAlpha = lerp(dstAlpha, srcAlpha, opacity);
+            if (!alphaLocked || srcAlpha != zeroValue<channels_type>()) {
 
-            if (newAlpha == zeroValue<channels_type>()) {
-                return newAlpha;
-            }
+                newAlpha = lerp(dstAlpha, srcAlpha, opacity);
 
-            // blend the color channels
-            for(qint32 i=0; i<channels_nb; ++i) {
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                if (newAlpha == zeroValue<channels_type>()) {
+                    return newAlpha;
+                }
 
-                    /**
-                     * We use the most fundamental OVER algorithm here,
-                     * which miltiplies, blends and then unmultiplies the
-                     * channels
-                     */
+                // blend the color channels
+                for(qint32 i=0; i<channels_nb; ++i) {
+                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
 
-                    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
+                        // We use the most fundamental OVER algorithm here,
+                        // which miltiplies, blends and then unmultiplies the
+                        // channels
 
-                    channels_type dstMult = mul(dst[i], dstAlpha);
-                    channels_type srcMult = mul(src[i], srcAlpha);
-                    channels_type blendedValue = lerp(dstMult, srcMult, opacity);
+                        typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
 
-                    composite_type normedValue = KoColorSpaceMaths<channels_type>::divide(blendedValue, newAlpha);
+                        channels_type dstMult = mul(dst[i], dstAlpha);
+                        channels_type srcMult = mul(src[i], srcAlpha);
+                        channels_type blendedValue = lerp(dstMult, srcMult, opacity);
 
-                    dst[i] = KoColorSpaceMaths<channels_type>::clampAfterScale(normedValue);
+                        composite_type normedValue = KoColorSpaceMaths<channels_type>::divide(blendedValue, newAlpha);
+
+                        dst[i] = KoColorSpaceMaths<channels_type>::clampAfterScale(normedValue);
+                    }
                 }
             }
+
         }
 
         return newAlpha;

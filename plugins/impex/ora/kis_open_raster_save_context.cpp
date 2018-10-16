@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ora_save_context.h"
+#include "kis_open_raster_save_context.h"
 
 #include <QDomDocument>
 
@@ -31,12 +31,13 @@
 
 #include "kis_png_converter.h"
 
-OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
+KisOpenRasterSaveContext::KisOpenRasterSaveContext(KoStore* store)
+    : m_id(0)
+    , m_store(store)
 {
-
 }
 
-QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, const QRect &imageRect, const qreal xRes, const qreal yRes)
+QString KisOpenRasterSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, const QRect &imageRect, const qreal xRes, const qreal yRes)
 {
     QString filename = QString("data/layer%1.png").arg(m_id++);
     if (KisPNGConverter::saveDeviceToStore(filename, imageRect, xRes, yRes, dev, m_store, metaData)) {
@@ -46,7 +47,7 @@ QString OraSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store*
 }
 
 
-void OraSaveContext::saveStack(const QDomDocument& doc)
+void KisOpenRasterSaveContext::saveStack(const QDomDocument& doc)
 {
     if (m_store->open("stack.xml")) {
         KoStoreDevice io(m_store);

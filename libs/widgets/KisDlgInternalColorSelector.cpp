@@ -150,7 +150,7 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_d->hexColorInput->setToolTip(i18n("This is a hexcode input, for webcolors. It can only get colors in the sRGB space."));
     }
 
-    // screen color picker is in kritaui, so a dependency inversion is used to get it
+    // KisScreenColorPicker is in the kritaui module, so dependency inversion is used to access it.
     m_ui->screenColorPickerWidget->setLayout(new QHBoxLayout(m_ui->screenColorPickerWidget));
     if (s_screenColorPickerFactory) {
         m_d->screenColorPicker = s_screenColorPickerFactory(m_ui->screenColorPickerWidget);

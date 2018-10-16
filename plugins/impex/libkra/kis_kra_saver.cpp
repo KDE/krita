@@ -74,13 +74,15 @@ public:
     QMap<const KisNode*, QString> nodeFileNames;
     QMap<const KisNode*, QString> keyframeFilenames;
     QString imageName;
+    QString filename;
     QStringList errorMessages;
 };
 
-KisKraSaver::KisKraSaver(KisDocument* document)
+KisKraSaver::KisKraSaver(KisDocument* document, const QString &filename)
         : m_d(new Private)
 {
     m_d->doc = document;
+    m_d->filename = filename;
 
     m_d->imageName = m_d->doc->documentInfo()->aboutInfo("title");
     if (m_d->imageName.isEmpty()) {
@@ -491,7 +493,7 @@ bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
         return false;
     }
 
-    const QDir documentDir = QFileInfo(m_d->doc->localFilePath()).absoluteDir();
+    const QDir documentDir = QFileInfo(m_d->filename).absoluteDir();
     KIS_ASSERT_RECOVER_RETURN_VALUE(documentDir.exists(), false);
 
     fileName = documentDir.relativeFilePath(fileName);

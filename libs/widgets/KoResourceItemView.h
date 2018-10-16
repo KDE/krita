@@ -23,6 +23,8 @@
 
 #include <KoTableView.h>
 #include <KoIconToolTip.h>
+#include <QScroller>
+#include <KisKineticScroller.h>
 
 class QEvent;
 class QModelIndex;
@@ -55,6 +57,7 @@ protected:
 
 private Q_SLOTS:
     void slotItemClicked(const QModelIndex &index);
+    void slotScrollerStateChange(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
 
 private:
     KoIconToolTip m_tip;

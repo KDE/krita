@@ -60,6 +60,11 @@ public:
     virtual void readOptionSetting(KisPropertiesConfigurationSP setting);
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
 
+    //Please override for other values than 0-100 and %
+    virtual int intMinValue()const;
+    virtual int intMaxValue()const;
+    virtual QString valueSuffix()const;
+
     const QString& name() const;
     KisPaintOpOption::PaintopCategory category() const;
     qreal minValue() const;

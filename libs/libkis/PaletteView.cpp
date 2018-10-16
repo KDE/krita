@@ -37,9 +37,9 @@ PaletteView::PaletteView(QWidget *parent)
 
     //forward signals.
     connect(d->widget, SIGNAL(entrySelected(KisSwatch)),
-                 this, SIGNAL(entrySelectedForeGround(KisSwatch)));
+                 this, SLOT(fgSelected(KisSwatch)));
     connect(d->widget, SIGNAL(entrySelectedBackGround(KisSwatch)),
-            this, SIGNAL(entrySelectedBackGround(KisSwatch)));
+            this, SLOT(bgSelected(KisSwatch)));
 }
 
 PaletteView::~PaletteView()
@@ -80,4 +80,14 @@ bool PaletteView::removeSelectedEntryWithDialog()
 void PaletteView::trySelectClosestColor(ManagedColor *color)
 {
     d->widget->selectClosestColor(color->color());
+}
+
+void PaletteView::fgSelected(KisSwatch swatch)
+{
+    emit entrySelectedForeGround(Swatch(swatch));
+}
+
+void PaletteView::bgSelected(KisSwatch swatch)
+{
+    emit entrySelectedBackGround(Swatch(swatch));
 }

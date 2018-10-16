@@ -63,6 +63,7 @@
 #include <KoColorPopupAction.h>
 #include <svg/SvgUtil.h>
 
+#include <KisScreenColorPicker.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_file_name_requester.h>
@@ -145,7 +146,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
 
     applySettings();
-
 }
 
 SvgTextEditor::~SvgTextEditor()
@@ -788,9 +788,7 @@ void SvgTextEditor::setSettings()
 
 void SvgTextEditor::slotToolbarToggled(bool)
 {
-
 }
-
 
 void SvgTextEditor::setFontColor(const KoColor &c)
 {
@@ -1072,6 +1070,16 @@ void SvgTextEditor::createActions()
     actionCollection()->addAction("svg_background_color", bgColor);
     actionRegistry->propertizeAction("svg_background_color", bgColor);
     m_richTextActions << bgColor;
+
+    QWidgetAction *colorPickerAction = new QWidgetAction(this);
+    colorPickerAction->setToolTip(i18n("Pick a Color"));
+    KisScreenColorPicker *colorPicker = new KisScreenColorPicker(false);
+    connect(colorPicker, SIGNAL(sigNewColorPicked(KoColor)), fgColor, SLOT(setCurrentColor(KoColor)));
+    connect(colorPicker, SIGNAL(sigNewColorPicked(KoColor)), SLOT(setFontColor(KoColor)));
+    colorPickerAction->setDefaultWidget(colorPicker);
+    actionCollection()->addAction("svg_pick_color", colorPickerAction);
+    m_richTextActions << colorPickerAction;
+    actionRegistry->propertizeAction("svg_pick_color", colorPickerAction);
 
     QWidgetAction *lineHeight = new QWidgetAction(this);
     lineHeight->setToolTip(i18n("Line height"));

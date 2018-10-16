@@ -47,17 +47,6 @@ const int thumbnailTileDim = 128;
 
 struct OverviewThumbnailStrokeStrategy::Private {
 
-    class InitData : public KisStrokeJobData
-    {
-    public:
-        InitData(KisPaintDeviceSP _device)
-            : KisStrokeJobData(SEQUENTIAL),
-              device(_device)
-        {}
-
-        KisPaintDeviceSP device;
-    };
-
     class ProcessData : public KisStrokeJobData
     {
     public:
@@ -118,38 +107,46 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
     }
 }
 
-QSize OverviewWidget::calculatePreviewSize()
+QSize OverviewWidget::recalculatePreviewSize()
 {
     QSize imageSize(m_canvas->image()->bounds().size());
-    imageSize.scale(size(), Qt::KeepAspectRatio);
-    return imageSize;
+
+    const qreal hScale = 1.0 * this->width() / imageSize.width();
+    const qreal vScale = 1.0 * this->height() / imageSize.height();
+
+    m_previewScale = qMin(hScale, vScale);
+
+    return imageSize * m_previewScale;
 }
 
 QPointF OverviewWidget::previewOrigin()
 {
-    return QPointF((width() - m_pixmap.width()) / 2.0f, (height() - m_pixmap.height()) / 2.0f);
+    const QSize previewSize = recalculatePreviewSize();
+    return QPointF((width() - previewSize.width()) / 2.0f, (height() - previewSize.height()) / 2.0f);
 }
 
 QPolygonF OverviewWidget::previewPolygon()
 {
     if (m_canvas) {
-        const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
-        QPolygonF canvasPoly = QPolygonF(QRectF(m_canvas->canvasWidget()->rect()));
-        QPolygonF imagePoly = converter->widgetToImage<QPolygonF>(canvasPoly);
-
-        QTransform imageToPreview = imageToPreviewTransform();
-
-        return imageToPreview.map(imagePoly);
+        const QRectF &canvasRect = QRectF(m_canvas->canvasWidget()->rect());
+        return canvasToPreviewTransform().map(canvasRect);
     }
     return QPolygonF();
 }
 
-QTransform OverviewWidget::imageToPreviewTransform()
+QTransform OverviewWidget::previewToCanvasTransform()
 {
-    QTransform imageToPreview;
-    imageToPreview.scale(calculatePreviewSize().width() / (float)m_canvas->image()->width(),
-                         calculatePreviewSize().height() / (float)m_canvas->image()->height());
-    return imageToPreview;
+    QTransform previewToImage =
+            QTransform::fromTranslate(-this->width() / 2.0, -this->height() / 2.0) *
+            QTransform::fromScale(1.0 / m_previewScale, 1.0 / m_previewScale) *
+            QTransform::fromTranslate(m_canvas->image()->width() / 2.0, m_canvas->image()->height() / 2.0);
+
+    return previewToImage * m_canvas->coordinatesConverter()->imageToWidgetTransform();
+}
+
+QTransform OverviewWidget::canvasToPreviewTransform()
+{
+    return previewToCanvasTransform().inverted();
 }
 
 void OverviewWidget::startUpdateCanvasProjection()
@@ -168,7 +165,7 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
     Q_UNUSED(event);
     if (m_canvas) {
         if (!m_oldPixmap.isNull()) {
-            QSize newSize = calculatePreviewSize();
+            QSize newSize = recalculatePreviewSize();
             m_pixmap = m_oldPixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
         m_imageIdleWatcher.startCountdown();
@@ -178,20 +175,13 @@ void OverviewWidget::resizeEvent(QResizeEvent *event)
 void OverviewWidget::mousePressEvent(QMouseEvent* event)
 {
     if (m_canvas) {
-        QPointF previewPos = event->pos() - previewOrigin();
+        QPointF previewPos = event->pos();
 
         if (!previewPolygon().containsPoint(previewPos, Qt::WindingFill)) {
-            // Move view to be centered on where the mouse clicked in the preview.
-            QTransform previewToImage = imageToPreviewTransform().inverted();
-            const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
-
-            QPointF newImagePos = previewToImage.map(previewPos);
-            QPointF newWidgetPos = converter->imageToWidget<QPointF>(newImagePos);
-
             const QRect& canvasRect = m_canvas->canvasWidget()->rect();
-            newWidgetPos -= QPointF(canvasRect.width() / 2.0f, canvasRect.height() / 2.0f);
-
-            m_canvas->canvasController()->pan(newWidgetPos.toPoint());
+            const QPointF newCanvasPos = previewToCanvasTransform().map(previewPos) -
+                    QPointF(canvasRect.width() / 2.0f, canvasRect.height() / 2.0f);
+            m_canvas->canvasController()->pan(newCanvasPos.toPoint());
         }
         m_lastPos = previewPos;
         m_dragging = true;
@@ -203,19 +193,11 @@ void OverviewWidget::mousePressEvent(QMouseEvent* event)
 void OverviewWidget::mouseMoveEvent(QMouseEvent* event)
 {
     if (m_dragging) {
-        QPointF previewPos = event->pos() - previewOrigin();
+        QPointF previewPos = event->pos();
+        const QPointF lastCanvasPos = previewToCanvasTransform().map(m_lastPos);
+        const QPointF newCanvasPos = previewToCanvasTransform().map(event->pos());
 
-        // position is mapped from preview image->image->canvas coordinates
-        QTransform previewToImage = imageToPreviewTransform().inverted();
-        const KisCoordinatesConverter* converter = m_canvas->coordinatesConverter();
-
-        QPointF lastImagePos = previewToImage.map(m_lastPos);
-        QPointF newImagePos = previewToImage.map(previewPos);
-
-        QPointF lastWidgetPos = converter->imageToWidget<QPointF>(lastImagePos);
-        QPointF newWidgetPos = converter->imageToWidget<QPointF>(newImagePos);
-
-        QPointF diff = newWidgetPos - lastWidgetPos;
+        QPointF diff = newCanvasPos - lastCanvasPos;
         m_canvas->canvasController()->pan(diff.toPoint());
         m_lastPos = previewPos;
     }
@@ -245,7 +227,7 @@ void OverviewWidget::generateThumbnail()
     if (isVisible()) {
         QMutexLocker locker(&mutex);
         if (m_canvas) {
-            QSize previewSize = calculatePreviewSize();
+            QSize previewSize = recalculatePreviewSize();
             if(previewSize.isValid()){
                 KisImageSP image = m_canvas->image();
 
@@ -288,11 +270,12 @@ void OverviewWidget::paintEvent(QPaintEvent* event)
 
     if (m_canvas) {
         QPainter p(this);
-        p.translate(previewOrigin());
 
-        p.drawPixmap(0, 0, m_pixmap.width(), m_pixmap.height(), m_pixmap);
+        const QSize previewSize = recalculatePreviewSize();
+        const QRectF previewRect = QRectF(previewOrigin(), previewSize);
+        p.drawPixmap(previewRect.toRect(), m_pixmap);
 
-        QRect r = rect().translated(-previewOrigin().toPoint());
+        QRect r = rect();
         QPolygonF outline;
         outline << r.topLeft() << r.topRight() << r.bottomRight() << r.bottomLeft();
 

@@ -51,6 +51,13 @@ public:
     ~KisPressureHSVOption() override;
 
     void apply(KoColorTransformation* hsvTransfo, const KisPaintInformation& info) const;
+
+    // KisCurveOption interface
+public:
+    int intMinValue() const override;
+    int intMaxValue() const override;
+    QString valueSuffix() const override;
+
 private:
     struct Private;
     Private* const d;

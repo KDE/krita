@@ -357,14 +357,6 @@ if (NOT WIN32 AND NOT APPLE)
         TYPE OPTIONAL
         PURPOSE "Optionally used to provide a dbus api on Linux")
 
-    find_package(KF5KIO ${MIN_FRAMEWORKS_VERSION})
-    macro_bool_to_01(KF5KIO_FOUND HAVE_KIO)
-    set_package_properties(KF5KIO PROPERTIES
-        DESCRIPTION "KDE's KIO Framework"
-        URL "http://api.kde.org/frameworks-api/frameworks5-apidocs/kio/html/index.html"
-        TYPE OPTIONAL
-        PURPOSE "Optionally used for recent document handling")
-
     find_package(KF5Crash ${MIN_FRAMEWORKS_VERSION})
     macro_bool_to_01(KF5Crash_FOUND HAVE_KCRASH)
     set_package_properties(KF5Crash PROPERTIES

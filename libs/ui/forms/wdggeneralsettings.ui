@@ -306,7 +306,7 @@
         </spacer>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_13">
+        <widget class="QLabel" name="lbl_window_general">
          <property name="text">
           <string>General:</string>
          </property>
@@ -431,9 +431,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBoxKineticScrollingSettings">
+          <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
            <property name="title">
             <string>Kinetic Scrolling (needs restart)</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
            <layout class="QVBoxLayout" name="verticalLayoutKineticScrollingSettings">
             <item>
@@ -444,44 +450,22 @@
               <item>
                <widget class="QLabel" name="labelKineticScrollingSensitivity">
                 <property name="text">
-                 <string>Sensitivity (0-100):</string>
+                 <string>Sensitivity:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="KisIntParseSpinBox" name="m_kineticScrollingSensitivity">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="minimum">
-                 <number>0</number>
-                </property>
-                <property name="maximum">
-                 <number>100</number>
-                </property>
-                <property name="singleStep">
-                 <number>1</number>
-                </property>
-                <property name="value">
-                 <number>75</number>
-                </property>
-               </widget>
+               <widget class="KisSliderSpinBox" name="m_kineticScrollingSensitivitySlider" native="true"/>
               </item>
              </layout>
             </item>
             <item>
-             <widget class="QCheckBox" name="m_chkKineticScrollingScrollbar">
+             <widget class="QCheckBox" name="m_chkKineticScrollingHideScrollbars">
               <property name="text">
-               <string>Show Scrollbar</string>
+               <string>Hide Scrollbars</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -577,7 +561,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_13">
+        <widget class="QLabel" name="lbl_autosave">
          <property name="text">
           <string>Autosave:</string>
          </property>
@@ -834,6 +818,9 @@
    <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
    <header location="global">kis_file_name_requester.h</header>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

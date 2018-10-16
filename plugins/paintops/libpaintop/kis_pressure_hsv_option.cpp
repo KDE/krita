@@ -145,3 +145,31 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
     transfo->setParameter(3, 0); //sets the type to HSV.
     transfo->setParameter(4, false); //sets the colorize to false.
 }
+
+
+int KisPressureHSVOption::intMinValue() const
+{
+    if (name() == "h") {
+        return -180;
+    } else {
+        return -100;
+    }
+}
+
+int KisPressureHSVOption::intMaxValue() const
+{
+    if (name() == "h") {
+        return 180;
+    } else {
+        return 100;
+    }
+}
+
+QString KisPressureHSVOption::valueSuffix() const
+{
+    if (name() == "h") {
+        return i18n("°");
+    } else {
+        return i18n("%");
+    }
+}

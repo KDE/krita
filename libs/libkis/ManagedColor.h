@@ -200,6 +200,8 @@ private:
 
     friend class View;
     friend class PaletteView;
+    friend class Swatch;
+
     KoColor color() const;
 
     struct Private;

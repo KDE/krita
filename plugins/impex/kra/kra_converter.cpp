@@ -107,7 +107,7 @@ QList<KisPaintingAssistantSP> KraConverter::assistants()
     return m_assistants;
 }
 
-KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
+KisImageBuilder_Result KraConverter::buildFile(QIODevice *io, const QString &filename)
 {
     m_store = KoStore::createStore(io, KoStore::Write, m_doc->nativeFormatMimeType(), KoStore::Zip);
 
@@ -118,7 +118,7 @@ KisImageBuilder_Result KraConverter::buildFile(QIODevice *io)
 
     bool result = false;
 
-    m_kraSaver = new KisKraSaver(m_doc);
+    m_kraSaver = new KisKraSaver(m_doc, filename);
 
     result = saveRootDocuments(m_store);
 

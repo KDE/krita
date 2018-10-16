@@ -38,6 +38,8 @@
 #include <KisPart.h>
 #include <KisViewManager.h>
 #include <kis_canvas2.h>
+#include <KisKineticScroller.h>
+
 #include <KisDocument.h>
 #include <kis_group_layer.h>
 #include <kis_painter.h>
@@ -64,7 +66,6 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     saveButton->setToolTip(i18n("New Composition"));
     exportButton->setToolTip(i18n("Export Composition"));
 
-
     setWidget(widget);
 
     connect( compositionView, SIGNAL(doubleClicked(QModelIndex)),
@@ -79,6 +80,10 @@ CompositionDockerDock::CompositionDockerDock( ) : QDockWidget(i18n("Compositions
     connect( exportButton, SIGNAL(clicked(bool)), this, SLOT(exportClicked()));
     saveNameEdit->setPlaceholderText(i18n("Insert Name"));
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(compositionView);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 
 }
 

@@ -30,7 +30,11 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
+
 #include <kis_icon_utils.h>
+
+#include <KisKineticScroller.h>
+
 #include <KoDialog.h>
 #include <KoColorDisplayRendererInterface.h>
 
@@ -44,15 +48,13 @@ int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
-    bool allowPaletteModification; // if modification is allowed from this widget
+    bool allowPaletteModification {false}; // if modification is allowed from this widget
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
     , m_d(new Private)
 {
-    m_d->allowPaletteModification = false;
-
     setItemDelegate(new KisPaletteDelegate(this));
 
     setShowGrid(true);
@@ -81,6 +83,12 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)),
             SLOT(slotHorizontalHeaderResized(int,int,int)));
     setAutoFillBackground(true);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 KisPaletteView::~KisPaletteView()
@@ -196,7 +204,10 @@ void KisPaletteView::selectClosestColor(const KoColor &color)
 
 void KisPaletteView::slotFGColorChanged(const KoColor &color)
 {
-    selectClosestColor(color);
+    KConfigGroup group(KSharedConfig::openConfig(), "");
+    if (group.readEntry("colorsettings/forcepalettecolors", false)) {
+        selectClosestColor(color);
+    }
 }
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
@@ -207,12 +218,10 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     m_d->model = model;
     setModel(model);
     slotAdditionalGuiUpdate();
-    connect(model, SIGNAL(sigPaletteModified()),
-            SLOT(slotAdditionalGuiUpdate()));
-    connect(model, SIGNAL(sigPaletteChanged()),
-            SLOT(slotAdditionalGuiUpdate()));
 
-    connect(m_d->model, SIGNAL(clicked(QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
+    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
+    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const

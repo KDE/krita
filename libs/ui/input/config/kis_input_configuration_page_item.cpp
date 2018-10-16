@@ -35,6 +35,7 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     : QWidget(parent, f)
 {
     ui = new Ui::KisInputConfigurationPageItem;
+    this->setContentsMargins(0,0,0,0);
     ui->setupUi(this);
 
     m_shortcutsModel = new KisActionShortcutsModel(this);

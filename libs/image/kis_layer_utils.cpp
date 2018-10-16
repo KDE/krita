@@ -514,8 +514,6 @@ namespace KisLayerUtils {
             KisPainter gc(m_info->dstNode->paintDevice());
 
             foreach (KisNodeSP node, m_info->allSrcNodes()) {
-                KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
-                const bool inheritsAlpha = layer ? layer->alphaChannelDisabled() : false;
                 QRect rc = node->exactBounds() | m_info->image->bounds();
                 node->projectionPlane()->apply(&gc, rc);
             }
@@ -567,9 +565,9 @@ namespace KisLayerUtils {
     {
     }
 
-    void KeepNodesSelectedCommand::end() {
+    void KeepNodesSelectedCommand::partB() {
         KisImageSignalType type;
-        if (isFinalizing()) {
+        if (getState() == State::FINALIZING) {
             type = ComplexNodeReselectionSignal(m_activeAfter, m_selectedAfter);
         } else {
             type = ComplexNodeReselectionSignal(m_activeBefore, m_selectedBefore);
@@ -830,7 +828,7 @@ namespace KisLayerUtils {
 
     SwitchFrameCommand::~SwitchFrameCommand() {}
 
-    void SwitchFrameCommand::init() {
+    void SwitchFrameCommand::partA() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_newTime) {
@@ -842,7 +840,7 @@ namespace KisLayerUtils {
         interface->saveAndResetCurrentTime(m_newTime, &m_storage->value);
     }
 
-    void SwitchFrameCommand::end() {
+    void SwitchFrameCommand::partB() {
         KisImageAnimationInterface *interface = m_image->animationInterface();
         const int currentTime = interface->currentTime();
         if (currentTime == m_storage->value) {
@@ -1246,6 +1244,14 @@ namespace KisLayerUtils {
         mergedNodes = filterInvisibleNodes(originalNodes, &invisibleNodes, &putAfter);
 
         if (!invisibleNodes.isEmpty()) {
+            /* If the putAfter node is invisible,
+             * we should instead pick one of the nodes
+             * to be merged to avoid a null putAfter.
+             */
+            if (!putAfter->visible()){
+                putAfter = mergedNodes.first();
+            }
+
             applicator.applyCommand(
                 new SimpleRemoveLayers(invisibleNodes,
                                        image),
@@ -1296,6 +1302,7 @@ namespace KisLayerUtils {
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);
             }
+
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, true));
         }
 
@@ -1436,7 +1443,7 @@ namespace KisLayerUtils {
           m_nodes(nodes)
     {
     }
-    void KisSimpleUpdateCommand::end()
+    void KisSimpleUpdateCommand::partB()
     {
         updateNodes(m_nodes);
     }

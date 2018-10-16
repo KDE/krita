@@ -96,6 +96,7 @@ void KoShapeStroke::Private::paintBorder(KoShape *shape, QPainter &painter, cons
         KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
         if (pathShape) {
             QPainterPath path = pathShape->pathStroke(pen);
+
             painter.fillPath(path, pen.brush());
 
             if (!pathShape->hasMarkers()) return;

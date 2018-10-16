@@ -44,6 +44,7 @@ const QString PALETTE_PATH = "/palettes/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";
+const QString CHANNEL_LOCK_FLAGS = "channellockflags";
 const QString CLONE_FROM = "clonefrom";
 const QString CLONE_FROM_UUID = "clonefromuuid";
 const QString CLONE_LAYER = "clonelayer";

@@ -3,7 +3,7 @@ class ManagedColor : QObject
 %TypeHeaderCode
 #include "ManagedColor.h"
 %End
-    ManagedColor(const Palette & __0);
+    ManagedColor(const ManagedColor & __0);
 public:
     ManagedColor(const QString &colorModel, const QString &colorDepth, const QString &colorProfile, QObject *parent = 0);
     bool operator==(const ManagedColor &other) const;

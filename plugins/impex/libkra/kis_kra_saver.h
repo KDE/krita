@@ -34,7 +34,7 @@ class KRITALIBKRA_EXPORT KisKraSaver
 {
 public:
 
-    KisKraSaver(KisDocument* document);
+    KisKraSaver(KisDocument* document, const QString &filename);
 
     ~KisKraSaver();
 

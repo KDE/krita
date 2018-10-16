@@ -205,6 +205,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisMaskingBrushCompositeOpFactory.cpp
     tool/strokes/move_stroke_strategy.cpp
 
+
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
@@ -265,7 +266,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisDlgPaletteEditor.cpp
 
     widgets/KisNewsWidget.cpp
-	widgets/KisGamutMaskToolbar.cpp
+    widgets/KisGamutMaskToolbar.cpp
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
 
@@ -501,7 +502,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/KisWelcomePage.ui
     forms/WdgDlgPaletteEditor.ui
     forms/KisNewsPage.ui
-	forms/wdgGamutMaskToolbar.ui
+    forms/wdgGamutMaskToolbar.ui
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
@@ -545,10 +546,6 @@ target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::Ite
 if (HAVE_QT_MULTIMEDIA)
     target_link_libraries(kritaui Qt5::Multimedia)
 endif()
-
-if (HAVE_KIO)
-    target_link_libraries(kritaui KF5::KIOCore)
-endif() 
 
 if (NOT WIN32 AND NOT APPLE)
   target_link_libraries(kritaui ${X11_X11_LIB}

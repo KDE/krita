@@ -252,12 +252,19 @@ public:
 
         KisSelectionSP selection = canvas->viewManager()->selection();
         if (selection &&
-            selection->outlineCacheValid() &&
-            selection->outlineCache().contains(pos)) {
+            selection->outlineCacheValid()) {
 
-            KisNodeSP parent = selection->parentNode();
-            if (parent && parent->isEditable()) {
-                return parent;
+            const int handleRadius = this->handleRadius();
+            QPainterPath samplePath;
+            samplePath.addEllipse(pos, handleRadius, handleRadius);
+
+            const QPainterPath selectionPath = selection->outlineCache();
+
+            if (selectionPath.intersects(samplePath) && !selectionPath.contains(samplePath)) {
+                KisNodeSP parent = selection->parentNode();
+                if (parent && parent->isEditable()) {
+                    return parent;
+                }
             }
         }
 

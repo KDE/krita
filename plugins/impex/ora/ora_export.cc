@@ -74,10 +74,7 @@ bool hasShapeLayerChild(KisNodeSP node)
 KisImportExportFilter::ConversionStatus OraExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     KisImageSP image = document->savingImage();
-
     Q_CHECK_PTR(image);
-
-    KisPaintDeviceSP pd = image->projection();
     OraConverter oraConverter(document);
 
     KisImageBuilder_Result res;

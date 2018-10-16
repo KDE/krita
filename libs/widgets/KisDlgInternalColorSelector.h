@@ -39,7 +39,6 @@ class KRITAWIDGETS_EXPORT KisDlgInternalColorSelector : public QDialog
 {
     Q_OBJECT
 
-
     static std::function<KisScreenColorPickerBase *(QWidget *)> s_screenColorPickerFactory;
 
 public:
@@ -119,6 +118,7 @@ Q_SIGNALS:
      */
 
     void signalForegroundColorChosen(KoColor color);
+
 public Q_SLOTS:
     /**
      * @brief slotColorUpdated
@@ -145,7 +145,6 @@ public Q_SLOTS:
     void reject() override;
 
 private Q_SLOTS:
-
     /**
      * @brief slotLockSelector
      * This slot will prevent the color from being updated.

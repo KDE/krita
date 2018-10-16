@@ -36,7 +36,6 @@ class KoCanvasBase;
 class KoPointerEvent;
 class KoShapePaintingContext;
 
-
 class QPainter;
 class QPointF;
 class QRectF;

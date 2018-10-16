@@ -49,7 +49,15 @@ void KisToolMultihandHelper::createPainters(QVector<KisFreehandStrokeInfo*> &str
                                             const KisDistanceInformation &startDist)
 {
     for (int i = 0; i < d->transformations.size(); i++) {
-        strokeInfos << new KisFreehandStrokeInfo(startDist);
+        const QTransform &transform = d->transformations[i];
+        KisDistanceInitInfo __startDistInfo(transform.map(startDist.lastPosition()),
+                                            startDist.lastDrawingAngle(),
+                                            startDist.getSpacingInterval(),
+                                            startDist.getTimingUpdateInterval(),
+                                            0);
+
+        KisDistanceInformation __startDist = __startDistInfo.makeDistInfo();
+        strokeInfos << new KisFreehandStrokeInfo(__startDist);
     }
 }
 

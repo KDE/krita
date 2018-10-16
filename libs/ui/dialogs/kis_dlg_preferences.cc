@@ -163,13 +163,18 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
 
-    m_cmbKineticScrollingGesture->addItem(i18n("Disabled"));
+    m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled());
+
     m_cmbKineticScrollingGesture->addItem(i18n("On Touch Drag"));
     m_cmbKineticScrollingGesture->addItem(i18n("On Click Drag"));
+    m_cmbKineticScrollingGesture->addItem(i18n("On Middle-Click Drag"));
+    //m_cmbKineticScrollingGesture->addItem(i18n("On Right Click Drag"));
 
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
-    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity());
-    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar());
+    m_kineticScrollingSensitivitySlider->setRange(0, 100);
+    m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity());
+    m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars());
+
 
     //
     // Miscellaneous
@@ -256,9 +261,10 @@ void GeneralTab::setDefault()
 
     m_chkHiDPI->setChecked(true);
     m_radioToolOptionsInDocker->setChecked(cfg.toolOptionsInDocker(true));
+    m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
-    m_kineticScrollingSensitivity->setValue(cfg.kineticScrollingSensitivity(true));
-    m_chkKineticScrollingScrollbar->setChecked(cfg.kineticScrollingScrollbar(true));
+    m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
+    m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
@@ -338,6 +344,11 @@ bool GeneralTab::toolOptionsInDocker()
     return m_radioToolOptionsInDocker->isChecked();
 }
 
+bool GeneralTab::kineticScrollingEnabled()
+{
+    return m_groupBoxKineticScrollingSettings->isChecked();
+}
+
 int GeneralTab::kineticScrollingGesture()
 {
     return m_cmbKineticScrollingGesture->currentIndex();
@@ -345,12 +356,12 @@ int GeneralTab::kineticScrollingGesture()
 
 int GeneralTab::kineticScrollingSensitivity()
 {
-    return m_kineticScrollingSensitivity->value();
+    return m_kineticScrollingSensitivitySlider->value();
 }
 
-bool GeneralTab::kineticScrollingScrollbar()
+bool GeneralTab::kineticScrollingHiddenScrollbars()
 {
-    return m_chkKineticScrollingScrollbar->isChecked();
+    return m_chkKineticScrollingHideScrollbars->isChecked();
 }
 
 bool GeneralTab::switchSelectionCtrlAlt()
@@ -488,7 +499,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
-
+    m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors());
     KisImageConfig cfgImage(true);
 
     KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
@@ -615,6 +626,7 @@ void ColorSettingsTab::setDefault()
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
+    m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors(true));
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent(true));
     m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile(true));
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour(true));
@@ -1145,7 +1157,6 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     Q_UNUSED(name);
     setWindowTitle(i18n("Configure Krita"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
-    button(QDialogButtonBox::Ok)->setDefault(true);
 
     setFaceType(KPageDialog::Tree);
 
@@ -1277,6 +1288,16 @@ KisDlgPreferences::~KisDlgPreferences()
     cfg.writeEntry<QString>("KisDlgPreferences/CurrentPage", currentPage()->objectName());
 }
 
+void KisDlgPreferences::showEvent(QShowEvent *event){
+    KPageDialog::showEvent(event);
+    button(QDialogButtonBox::Cancel)->setAutoDefault(false);
+    button(QDialogButtonBox::Ok)->setAutoDefault(false);
+    button(QDialogButtonBox::RestoreDefaults)->setAutoDefault(false);
+    button(QDialogButtonBox::Cancel)->setDefault(false);
+    button(QDialogButtonBox::Ok)->setDefault(false);
+    button(QDialogButtonBox::RestoreDefaults)->setDefault(false);
+}
+
 void KisDlgPreferences::slotDefault()
 {
     if (currentPage()->objectName() == "general") {
@@ -1341,9 +1362,12 @@ bool KisDlgPreferences::editPreferences()
         kritarc.setValue("EnableSingleApplication", dialog->m_general->m_chkSingleApplication->isChecked());
 
         cfg.setToolOptionsInDocker(dialog->m_general->toolOptionsInDocker());
+
+        cfg.setKineticScrollingEnabled(dialog->m_general->kineticScrollingEnabled());
         cfg.setKineticScrollingGesture(dialog->m_general->kineticScrollingGesture());
         cfg.setKineticScrollingSensitivity(dialog->m_general->kineticScrollingSensitivity());
-        cfg.setKineticScrollingScrollbar(dialog->m_general->kineticScrollingScrollbar());
+        cfg.setKineticScrollingHideScrollbars(dialog->m_general->kineticScrollingHiddenScrollbars());
+
         cfg.setSwitchSelectionCtrlAlt(dialog->m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!dialog->m_general->chkEnableTouch->isChecked());
         cfg.setActivateTransformToolAfterPaste(dialog->m_general->chkEnableTranformToolAfterPaste->isChecked());
@@ -1378,6 +1402,7 @@ bool KisDlgPreferences::editPreferences()
                                           (double)dialog->m_colorSettings->m_page->sldAdaptationState->value()/20);
         cfg.setUseBlackPointCompensation(dialog->m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(dialog->m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
+        cfg.setForcePaletteColors(dialog->m_colorSettings->m_page->chkForcePaletteColor->isChecked());
         cfg.setPasteBehaviour(dialog->m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(dialog->m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 

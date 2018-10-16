@@ -52,6 +52,8 @@ public:
 
     KisDisplayColorConverter* converter() const;
 
+    void tryHideAllPopups();
+
 public:
     void updateColor(const KoColor &color, Acs::ColorRole role, bool needsExplicitColorReset);
     void updateColorPreview(const KoColor &color);

@@ -30,6 +30,11 @@ KoTableView::KoTableView(QWidget *parent)
     verticalHeader()->setDefaultSectionSize(20);
     setContextMenuPolicy(Qt::DefaultContextMenu);
     setViewMode(FIXED_COLUMNS);
+
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+    }
 }
 
 void KoTableView::resizeEvent(QResizeEvent *event)

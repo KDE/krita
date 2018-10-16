@@ -65,11 +65,6 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     mainLayout->addWidget(m_lblName);
     mainLayout->addWidget(m_itemChooser, 10);
 
-    KisConfig cfg(true);
-    m_itemChooser->configureKineticScrolling(cfg.kineticScrollingGesture(),
-                                             cfg.kineticScrollingSensitivity(),
-                                             cfg.kineticScrollingScrollbar());
-
     setLayout(mainLayout);
 }
 

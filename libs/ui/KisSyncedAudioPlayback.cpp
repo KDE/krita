@@ -99,6 +99,11 @@ bool KisSyncedAudioPlayback::isPlaying() const
     return m_d->player.state() == QMediaPlayer::PlayingState;
 }
 
+qint64 KisSyncedAudioPlayback::position() const
+{
+    return m_d->player.position();
+}
+
 void KisSyncedAudioPlayback::setVolume(qreal value)
 {
     m_d->player.setVolume(qRound(100.0 * value));

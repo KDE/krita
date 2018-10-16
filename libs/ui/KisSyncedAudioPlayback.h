@@ -15,6 +15,7 @@ public:
     void syncWithVideo(qint64 position);
 
     bool isPlaying() const;
+    qint64 position() const;
 
     void setVolume(qreal value);
 

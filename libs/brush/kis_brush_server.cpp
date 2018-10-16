@@ -123,12 +123,6 @@ KisBrushServer::KisBrushServer()
 {
     m_brushServer = new BrushResourceServer();
     m_brushServer->loadResources(KoResourceServerProvider::blacklistFileNames(m_brushServer->fileNames(), m_brushServer->blackListedFiles()));
-
-    Q_FOREACH (KisBrushSP brush, m_brushServer->resources()) {
-        if (!dynamic_cast<KisAbrBrush*>(brush.data())) {
-            brush->setBrushTipImage(QImage());
-        }
-    }
 }
 
 KisBrushServer::~KisBrushServer()

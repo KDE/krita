@@ -61,13 +61,13 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
-            this, SLOT(fillCmbDepths(const KoID &)));
-    connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(const KoID &)),
+    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(KoID)),
+            this, SLOT(fillCmbDepths(KoID)));
+    connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(KoID)),
             this, SLOT(fillCmbProfiles()));
-    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(const KoID &)),
+    connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(KoID)),
             this, SLOT(fillCmbProfiles()));
-    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
+    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(QString)),
             this, SLOT(colorSpaceChanged()));
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()),
             this, SLOT(installProfile()));

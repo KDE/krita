@@ -66,7 +66,7 @@ KisPaletteView::KisPaletteView(QWidget *parent)
 
     /*
      * without this, a cycle might be created:
-     * the view streches to right border, and this make it need a scroll bar;
+     * the view stretches to right border, and this make it need a scroll bar;
      * after the bar is added, the view shrinks to the bar, and this makes it
      * no longer need the bar any more, and the bar is removed again
      */
@@ -221,7 +221,7 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 
     connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
     connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
-    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
+    connect(selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotCurrentSelectionChanged(QModelIndex)));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const

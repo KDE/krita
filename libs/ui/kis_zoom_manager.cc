@@ -119,7 +119,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    connect(image, SIGNAL(sigSizeChanged(const QPointF &, const QPointF &)), this, SLOT(setMinMaxZoom()));
+    connect(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(setMinMaxZoom()));
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
@@ -167,7 +167,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_horizontalRuler->setPopupActionList(unitActions);
     m_verticalRuler->setPopupActionList(unitActions);
 
-    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), SLOT(applyRulersUnit(const KoUnit&)));
+    connect(m_view->document(), SIGNAL(unitChanged(KoUnit)), SLOT(applyRulersUnit(KoUnit)));
     connect(rulerAction, SIGNAL(toggled(bool)), SLOT(setRulersPixelMultiple2(bool)));
 
     layout->addWidget(m_horizontalRuler, 0, 1);
@@ -180,8 +180,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)),
             this, SLOT(pageOffsetChanged()));
 
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            this, SLOT(slotZoomChanged(KoZoomMode::Mode, qreal)));
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            this, SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 
     connect(m_zoomController, SIGNAL(aspectModeChanged(bool)),
             this, SLOT(changeAspectMode(bool)));
@@ -230,8 +230,8 @@ void KisZoomManager::updateMouseTrackingConnections()
 
     if (value) {
         connect(m_canvasController->proxyObject,
-                SIGNAL(canvasMousePositionChanged(const QPoint &)),
-                SLOT(mousePositionChanged(const QPoint &)));
+                SIGNAL(canvasMousePositionChanged(QPoint)),
+                SLOT(mousePositionChanged(QPoint)));
 
     }
 }

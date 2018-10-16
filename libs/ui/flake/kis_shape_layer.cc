@@ -290,7 +290,7 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller, KisPaintDe
     connect(m_d->canvas->selectedShapesProxy(), SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             this, SIGNAL(currentLayerChanged(const KoShapeLayer*)));
 
-    connect(this, SIGNAL(sigMoveShapes(const QPointF&)), SLOT(slotMoveShapes(const QPointF&)));
+    connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const

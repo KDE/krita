@@ -141,7 +141,7 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     connect(m_warpStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_cageStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_liquifyStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
-    connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(const QPointF&)), SLOT(cursorOutlineUpdateRequested(const QPointF&)));
+    connect(m_liquifyStrategy.data(), SIGNAL(requestCursorOutlineUpdate(QPointF)), SLOT(cursorOutlineUpdateRequested(QPointF)));
     connect(m_liquifyStrategy.data(), SIGNAL(requestUpdateOptionWidget()), SLOT(updateOptionWidget()));
     connect(m_freeStrategy.data(), SIGNAL(requestCanvasUpdate()), SLOT(canvasUpdateRequested()));
     connect(m_freeStrategy.data(), SIGNAL(requestResetRotationCenterButtons()), SLOT(resetRotationCenterButtonsRequested()));

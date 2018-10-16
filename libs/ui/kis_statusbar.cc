@@ -88,8 +88,8 @@ void KisStatusBar::setup()
     m_statusBarStatusLabel->setObjectName("statsBarStatusLabel");
     m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusBarStatusLabel->setContentsMargins(5, 5, 5, 5);
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
-            m_statusBarStatusLabel, SLOT(setText(const QString &)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+            m_statusBarStatusLabel, SLOT(setText(QString)));
     addStatusBarItem(m_statusBarStatusLabel, 2);
     m_statusBarStatusLabel->setVisible(false);
 
@@ -155,7 +155,7 @@ void KisStatusBar::setView(QPointer<KisView> imageView)
                 this, SLOT(updateStatusBarProfileLabel()));
         connect(m_imageView, SIGNAL(sigProfileChanged(const KoColorProfile*)),
                 this, SLOT(updateStatusBarProfileLabel()));
-        connect(m_imageView, SIGNAL(sigSizeChanged(const QPointF&, const QPointF&)),
+        connect(m_imageView, SIGNAL(sigSizeChanged(QPointF,QPointF)),
                 this, SLOT(imageSizeChanged()));
         updateStatusBarProfileLabel();
         addStatusBarItem(m_imageView->zoomManager()->zoomActionWidget());

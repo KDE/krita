@@ -79,11 +79,11 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name)
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(update(KoResource*)));
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SIGNAL(resourceSelected(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(resourceSelected(KoResource*)));
 
     QWidget* buttonWidget = new QWidget(this);
     QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);

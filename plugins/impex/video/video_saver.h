@@ -59,7 +59,7 @@ public:
      * This in turn calls runFFMpeg, which is a private function inside this class.
      * @param filename the filename to which to render the animation.
      * @param configuration the configuration
-     * @return whether it is succesful or had another failure.
+     * @return whether it is successful or had another failure.
      */
     KisImageBuilder_Result encode(const QString &filename, KisPropertiesConfigurationSP configuration);
 

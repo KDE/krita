@@ -113,10 +113,10 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     connect(this, SIGNAL(triggered()), this, SLOT(emitColorChanged()));
 
-    connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)),
-            this, SLOT(colorWasSelected(const KoColor &, bool)));
-    connect(d->colorChooser, SIGNAL(colorChanged(const QColor &)),
-            this, SLOT(colorWasEdited( const QColor &)));
+    connect(d->colorSetWidget, SIGNAL(colorChanged(KoColor,bool)),
+            this, SLOT(colorWasSelected(KoColor,bool)));
+    connect(d->colorChooser, SIGNAL(colorChanged(QColor)),
+            this, SLOT(colorWasEdited(QColor)));
     connect(d->opacitySlider, SIGNAL(valueChanged(int)),
             this, SLOT(opacityWasChanged(int)));
 }

@@ -926,7 +926,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.loadAssistantButton, SIGNAL(clicked()), SLOT(loadAssistants()));
         connect(m_options.deleteAllAssistantsButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
 
-        connect(m_options.assistantsColor, SIGNAL(changed(const QColor&)), SLOT(slotGlobalAssistantsColorChanged(const QColor&)));
+        connect(m_options.assistantsColor, SIGNAL(changed(QColor)), SLOT(slotGlobalAssistantsColorChanged(QColor)));
         connect(m_options.assistantsGlobalOpacitySlider, SIGNAL(valueChanged(int)), SLOT(slotGlobalAssistantOpacityChanged()));
 
 

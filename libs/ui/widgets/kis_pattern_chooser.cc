@@ -53,11 +53,11 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setSynced(true);
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(update(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(update(KoResource*)));
 
-    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SIGNAL(resourceSelected(KoResource *)));
+    connect(m_itemChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(resourceSelected(KoResource*)));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);

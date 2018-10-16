@@ -89,8 +89,8 @@
 
         showFilterGallery(false);
 
-        connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
-        connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(const QModelIndex&)), SLOT(setFilterIndex(const QModelIndex &)));
+        connect(d->uiFilterSelector.filtersSelector, SIGNAL(clicked(QModelIndex)), SLOT(setFilterIndex(QModelIndex)));
+        connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(QModelIndex)), SLOT(setFilterIndex(QModelIndex)));
 
         connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),SLOT(slotBookmarkedFilterConfigurationSelected(int)));
         connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));

@@ -58,7 +58,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::addRecent(const KoColor &color)
         recentPatches[numRecents]->setFrameShape(QFrame::StyledPanel);
         recentPatches[numRecents]->setDisplayRenderer(displayRenderer);
         recentsLayout->insertWidget(numRecents + 1, recentPatches[numRecents]);
-        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch *)), thePublic, SLOT(slotPatchTriggered(KoColorPatch *)));
+        connect(recentPatches[numRecents], SIGNAL(triggered(KoColorPatch*)), thePublic, SLOT(slotPatchTriggered(KoColorPatch*)));
         numRecents++;
     }
     // shift colors to the right

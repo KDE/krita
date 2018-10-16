@@ -72,6 +72,7 @@
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
 #include <KoColorSet.h>
+#include <resources/KoGamutMask.h>
 
 #include "KisDocument.h"
 #include "kis_config.h"
@@ -139,6 +140,8 @@ public:
     QList<KisPaintingAssistantSP> assistants;
     QMap<KisNode*, QString> keyframeFilenames;
     QVector<QString> paletteFilenames;
+    QString gamutMaskFilename;
+    int gamutMaskRotation;
     QStringList errorMessages;
     QStringList warningMessages;
 };
@@ -337,6 +340,10 @@ KisImageSP KisKraLoader::loadXML(const KoXmlElement& element)
             if (e.tagName().toLower() == "animation") {
                 loadAnimationMetadata(e, image);
             }
+
+            if (e.tagName() == GAMUTMASK_ROOT) {
+                loadGamutMaskMetadata(e);
+            }
         }
 
         image->setProofingConfiguration(proofingConfig);
@@ -502,6 +509,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageSP image, const QStri
         m_d->document->documentInfo()->setAboutInfo("comment", m_d->imageComment);
 
     loadAssistants(store, uri, external);
+    loadGamutMask(store);
 }
 
 void KisKraLoader::loadPalettes(KoStore *store, KisDocument *doc)
@@ -1229,6 +1237,20 @@ void KisKraLoader::loadAudio(const KoXmlElement& elem, KisImageSP image)
     }
 }
 
+void KisKraLoader::loadGamutMaskMetadata(const KoXmlElement &elem)
+{
+    KoXmlNode child;
+
+    for (child = elem.firstChild(); !child.isNull(); child = child.nextSibling()) {
+        KoXmlElement e = child.toElement();
+        if (e.tagName() == GAMUTMASK_RESOURCE) {
+            m_d->gamutMaskFilename = e.attribute("filename");
+            m_d->gamutMaskRotation = e.attribute("rotation").toInt();
+        }
+        // todo: selector settings
+    }
+}
+
 KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisImageSP image)
 {
     KisSharedPtr<KisReferenceImagesLayer> layer =
@@ -1244,4 +1266,28 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const KoXmlElement &elem, KisIm
     }
 
     return layer;
+}
+
+void KisKraLoader::loadGamutMask(KoStore* store)
+{
+    if (m_d->gamutMaskFilename.isEmpty()) {
+        return;
+    }
+
+    QString gamutMaskPath = QString("%1%2%3")
+            .arg(m_d->imageName)
+            .arg(GAMUTMASK_PATH)
+            .arg(m_d->gamutMaskFilename);
+
+    KoGamutMask* mask = new KoGamutMask(m_d->gamutMaskFilename);
+
+    if (store->open(gamutMaskPath)) {
+        mask->loadFromByteArray(store->read(store->size()));
+        store->close();
+
+        mask->setRotation(m_d->gamutMaskRotation);
+        mask->setTitle(QString("%1 %2").arg(mask->title()).arg("[document]"));
+
+        m_d->document->setGamutMask(mask);
+    }
 }

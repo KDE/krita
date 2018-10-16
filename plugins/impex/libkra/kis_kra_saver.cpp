@@ -140,6 +140,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveGuides(doc, imageElement);
     saveAudio(doc, imageElement);
     savePalettesToXML(doc, imageElement);
+    saveGamutMaskMetadata(doc, imageElement);
 
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
@@ -178,6 +179,38 @@ bool KisKraSaver::savePalettes(KoStore *store, KisImageSP image, const QString &
     return res;
 }
 
+bool KisKraSaver::saveGamutMask(KoStore* store)
+{
+    // no mask in document -> automatic success
+    if (!m_d->doc->gamutMask()) {
+        return true;
+    }
+
+    QString gamutMaskPath = QString("%1%2%3")
+            .arg(m_d->imageName)
+            .arg(GAMUTMASK_PATH)
+            .arg(m_d->doc->gamutMask()->shortFilename());
+    if (!store->open(gamutMaskPath)) {
+        m_d->errorMessages << i18n("could not save gamut mask");
+        return false;
+    }
+
+    bool res = false;
+    QByteArray resourceData = m_d->doc->gamutMask()->toByteArray();
+    if (!resourceData.isEmpty()) {
+//        res = (store->write(resourceData) == -1) ? false : true;
+        store->write(resourceData);
+        res = true;
+    } else {
+        qWarning() << "Cannot convert gamut mask to byte array:" << m_d->doc->gamutMask()->title();
+        res = false;
+    }
+
+    store->close();
+
+    return res;
+}
+
 void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
@@ -189,6 +222,25 @@ void KisKraSaver::savePalettesToXML(QDomDocument &doc, QDomElement &element)
         }
     }
     element.appendChild(ePalette);
+}
+
+
+void KisKraSaver::saveGamutMaskMetadata(QDomDocument& doc, QDomElement& element)
+{
+    if (!m_d->doc->gamutMask()) {
+        return;
+    }
+
+    QDomElement gamutMaskRoot = doc.createElement(GAMUTMASK_ROOT);
+
+    QDomElement gamutMaskResource = doc.createElement(GAMUTMASK_RESOURCE);
+    gamutMaskResource.setAttribute("filename", m_d->doc->gamutMask()->shortFilename());
+    gamutMaskResource.setAttribute("rotation", m_d->doc->gamutMask()->rotation());
+    gamutMaskRoot.appendChild(gamutMaskResource);
+
+    // TODO: save color selector properties
+
+    element.appendChild(gamutMaskRoot);
 }
 
 bool KisKraSaver::saveKeyframes(KoStore *store, const QString &uri, bool external)

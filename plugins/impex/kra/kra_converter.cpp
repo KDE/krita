@@ -139,6 +139,11 @@ KisImageBuilder_Result KraConverter::buildFile(QIODevice *io, const QString &fil
         qWarning() << "saving palettes data failed";
     }
 
+    result = m_kraSaver->saveGamutMask(m_store);
+    if (!result) {
+        qWarning() << "saving gamut mask data failed";
+    }
+
     if (!m_store->finalize()) {
         return KisImageBuilder_RESULT_FAILURE;
     }

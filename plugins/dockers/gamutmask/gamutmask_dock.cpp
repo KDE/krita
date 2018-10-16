@@ -48,6 +48,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
+#include <kis_canvas2.h>
 
 #include <ctime>
 
@@ -71,9 +72,10 @@ GamutMaskDock::GamutMaskDock()
     , m_creatingNewMask(false)
     , m_templatePrevSaved(false)
     , m_selfSelectingMask(false)
+    , m_blockMaskStoring(false)
     , m_selectedMask(nullptr)
     , m_maskDocument(nullptr)
-    , m_view(nullptr)
+    , m_templateView(nullptr)
 {
     m_dockerUI    = new GamutMaskChooserUI();
 
@@ -193,8 +195,8 @@ bool GamutMaskDock::openMaskEditor()
     KisMainWindow* mainWindow = KisPart::instance()->currentMainwindow();
     KIS_ASSERT(mainWindow);
 
-    m_view = mainWindow->addViewAndNotifyLoadingCompleted(m_maskDocument);
-    KIS_ASSERT(m_view);
+    m_templateView = mainWindow->addViewAndNotifyLoadingCompleted(m_maskDocument);
+    KIS_ASSERT(m_templateView);
 
     for(KisView *view: KisPart::instance()->views()) {
         if (view->document() == m_maskDocument) {
@@ -203,7 +205,7 @@ bool GamutMaskDock::openMaskEditor()
         }
     }
 
-    connect(m_view->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
+    connect(m_templateView->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
     connect(m_maskDocument, SIGNAL(completed()), this, SLOT(slotDocumentSaved()));
 
     return true;
@@ -238,6 +240,12 @@ void GamutMaskDock::selectMask(KoGamutMask *mask, bool notifyItemChooser)
         m_selfSelectingMask = true;
         m_dockerUI->maskChooser->setCurrentResource(m_selectedMask);
         m_selfSelectingMask = false;
+    }
+
+    if (m_blockMaskStoring) {
+        if (m_canvas) {
+            m_canvas->imageView()->document()->setGamutMask(m_selectedMask);
+        }
     }
 
     emit sigGamutMaskSet(m_selectedMask);
@@ -401,13 +409,13 @@ void GamutMaskDock::closeMaskDocument()
             m_maskDocument->setModified(false);
 
             m_maskDocument->closeUrl();
-            m_view->closeView();
-            m_view->deleteLater();
+            m_templateView->closeView();
+            m_templateView->deleteLater();
 
             // set a flag that we are doing it ourselves, so the docker does not react to
             // removing signal from KisPart
             m_selfClosingTemplate = true;
-            KisPart::instance()->removeView(m_view);
+            KisPart::instance()->removeView(m_templateView);
             KisPart::instance()->removeDocument(m_maskDocument);
             m_selfClosingTemplate = false;
         }
@@ -417,7 +425,7 @@ void GamutMaskDock::closeMaskDocument()
     m_dockerUI->editControlsBox->setVisible(true);
     m_dockerUI->editControlsBox->setEnabled(true);
 
-    disconnect(m_view->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
+    disconnect(m_templateView->viewManager(), SIGNAL(viewChanged()), this, SLOT(slotViewChanged()));
     disconnect(m_maskDocument, SIGNAL(completed()), this, SLOT(slotDocumentSaved()));
 
     // the template file is meant as temporary, if the user saved it, delete now
@@ -426,7 +434,7 @@ void GamutMaskDock::closeMaskDocument()
     }
 
     m_maskDocument = nullptr;
-    m_view = nullptr;
+    m_templateView = nullptr;
     m_creatingNewMask = false;
     m_templatePrevSaved = false;
 }
@@ -517,12 +525,37 @@ void GamutMaskDock::slotGamutMaskSelected(KoGamutMask *mask)
 
 void GamutMaskDock::setCanvas(KoCanvasBase *canvas)
 {
+    if (!canvas) {
+        return;
+    }
+
     setEnabled(canvas != 0);
+
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    if (!m_canvas && !m_canvas->imageView()) {
+        return;
+    }
+
+    KoGamutMask* storedMask = m_canvas->imageView()->document()->gamutMask();
+
+    if (storedMask) {
+        KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
+
+        if (!rServer->resourceByName(storedMask->title())) {
+            rServer->addResource(storedMask, false);
+        }
+
+        m_blockMaskStoring = true;
+        selectMask(storedMask);
+        m_blockMaskStoring = false;
+    }
 }
 
 void GamutMaskDock::unsetCanvas()
 {
     setEnabled(false);
+    m_canvas = nullptr;
 }
 
 
@@ -612,11 +645,11 @@ void GamutMaskDock::slotDocumentRemoved(QString filename)
 
 void GamutMaskDock::slotViewChanged()
 {
-    if (!m_maskDocument || !m_view) {
+    if (!m_maskDocument || !m_templateView) {
         return;
     }
 
-    if (m_view->viewManager()->document() == m_maskDocument) {
+    if (m_templateView->viewManager()->document() == m_maskDocument) {
         m_dockerUI->maskPropertiesBox->setEnabled(true);
     } else {
         m_dockerUI->maskPropertiesBox->setEnabled(false);

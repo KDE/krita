@@ -368,6 +368,32 @@ bool KoGamutMask::saveToDevice(QIODevice *dev) const
     return store->finalize();
 }
 
+bool KoGamutMask::loadFromByteArray(QByteArray data)
+{
+    QBuffer buf(&data);
+    buf.open(QIODevice::ReadOnly);
+    return loadFromDevice(&buf);
+}
+
+QByteArray KoGamutMask::toByteArray()
+{
+    QBuffer saveBuffer;
+    saveBuffer.open(QIODevice::WriteOnly);
+
+    if (!saveToDevice(&saveBuffer)) {
+        warnFlake << "KoGamutMask::toByteArray(): saving gamut mask failed:" << name();
+        return QByteArray();
+    }
+
+    saveBuffer.close();
+
+    saveBuffer.open(QIODevice::ReadOnly);
+    QByteArray data = saveBuffer.readAll();
+    saveBuffer.close();
+
+    return data;
+}
+
 QString KoGamutMask::title()
 {
     return d->title;

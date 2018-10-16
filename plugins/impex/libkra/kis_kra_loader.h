@@ -111,6 +111,10 @@ private:
     void loadGrid(const KoXmlElement& elem);
     void loadGuides(const KoXmlElement& elem);
     void loadAudio(const KoXmlElement& elem, KisImageSP image);
+
+    void loadGamutMaskMetadata(const KoXmlElement& elem);
+    void loadGamutMask(KoStore* store);
+
 private:
 
     struct Private;

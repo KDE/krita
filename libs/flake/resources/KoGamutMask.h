@@ -68,6 +68,8 @@ public:
     bool loadFromDevice(QIODevice *dev) override;
     bool save() override;
     bool saveToDevice(QIODevice* dev) const override;
+    bool loadFromByteArray(QByteArray data);
+    QByteArray toByteArray();
 
     void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
     void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);

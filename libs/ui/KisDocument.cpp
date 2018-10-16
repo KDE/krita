@@ -234,6 +234,7 @@ public:
         , nserver(new KisNameServer(1))
         , imageIdleWatcher(2000 /*ms*/)
         , globalAssistantsColor(KisConfig(true).defaultAssistantsColor())
+        , gamutMask(nullptr)
         , savingLock(&savingMutex)
         , batchMode(false)
     {
@@ -266,6 +267,7 @@ public:
         , assistants(rhs.assistants) // WARNING: assistants should not store pointers to the document!
         , globalAssistantsColor(rhs.globalAssistantsColor)
         , paletteList(rhs.paletteList)
+        , gamutMask(rhs.gamutMask)
         , gridConfig(rhs.gridConfig)
         , savingLock(&savingMutex)
         , batchMode(rhs.batchMode)
@@ -330,6 +332,8 @@ public:
     KisSharedPtr<KisReferenceImagesLayer> referenceImagesLayer;
 
     QList<KoColorSet*> paletteList;
+
+    KoGamutMask* gamutMask;
 
     KisGridConfig gridConfig;
 
@@ -1510,6 +1514,16 @@ QList<KoColorSet *> &KisDocument::paletteList()
 void KisDocument::setPaletteList(const QList<KoColorSet *> &paletteList)
 {
     d->paletteList = paletteList;
+}
+
+KoGamutMask* KisDocument::gamutMask()
+{
+    return d->gamutMask;
+}
+
+void KisDocument::setGamutMask(KoGamutMask* gamutMask)
+{
+    d->gamutMask = gamutMask;
 }
 
 const KisGuidesConfig& KisDocument::guidesConfig() const

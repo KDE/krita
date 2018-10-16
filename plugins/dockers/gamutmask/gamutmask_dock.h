@@ -110,6 +110,7 @@ private:
     bool m_creatingNewMask;
     bool m_templatePrevSaved;
     bool m_selfSelectingMask;
+    bool m_blockMaskStoring;
 
     GamutMaskChooserUI* m_dockerUI;
     KoResourceItemChooser* m_maskChooser;
@@ -118,7 +119,8 @@ private:
     QRegExpValidator* m_maskTitleValidator;
 
     KisDocument* m_maskDocument;
-    KisView* m_view;
+    KisView* m_templateView;
+    KisCanvas2* m_canvas;
 };
 
 

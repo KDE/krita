@@ -65,6 +65,7 @@ class KisGridConfig;
 class KisGuidesConfig;
 class QDomDocument;
 class KisReferenceImagesLayer;
+class KoGamutMask;
 
 #define KIS_MIME_TYPE "application/x-krita"
 
@@ -351,6 +352,9 @@ public:
 
     QList<KoColorSet *> &paletteList();
     void setPaletteList(const QList<KoColorSet *> &paletteList);
+
+    KoGamutMask* gamutMask();
+    void setGamutMask(KoGamutMask* gamutMask);
 
     void clearUndoHistory();
 

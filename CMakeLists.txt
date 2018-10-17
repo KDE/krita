@@ -702,6 +702,11 @@ set_package_properties(Poppler PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
 
+##
+## Test for Atomics
+##
+include(CheckAtomic)
+
  ############################
 #############################
 ## Add Krita helper macros ##

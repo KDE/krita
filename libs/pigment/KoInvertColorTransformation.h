@@ -29,7 +29,10 @@
 
 #include "KoColorModelStandardIds.h"
 
-
+#include <KoConfig.h>
+#ifdef HAVE_OPENEXR
+#include <half.h>
+#endif
 class KoInvertColorTransformationT : public KoColorTransformation {
 
 public:
@@ -126,6 +129,7 @@ public:
     }
 };
 
+#ifdef HAVE_OPENEXR
 class KoF16InvertColorTransformer : public KoInvertColorTransformationT {
 public:
     KoF16InvertColorTransformer(const KoColorSpace* cs)
@@ -137,6 +141,7 @@ public:
         transformI<half>(src,dst,nPixels);
     }
 };
+#endif
 
 class KoF32InvertColorTransformer : public KoInvertColorTransformationT {
 public:

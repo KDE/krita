@@ -218,7 +218,8 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         QString filename = dialog.filename();
 
         d->model->importResourceFile(filename);
-    } else if (button == Button_Remove) {
+    }
+    else if (button == Button_Remove) {
         QModelIndex index = d->view->currentIndex();
         int row = index.row();
         int column = index.column();

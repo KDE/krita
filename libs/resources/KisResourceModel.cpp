@@ -21,12 +21,22 @@
 
 #include <QBuffer>
 #include <QImage>
+#include <QtSql>
+
+struct KisResourceModel::Private {
+    QSqlQuery query;
+    QString resourceType;
+    int columnCount {7};
+    int cachedRowCount {-1};
+};
+
 
 KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
     : QAbstractTableModel(parent)
-    , m_resourceType(resourceType)
+    , d(new Private)
 {
-    bool r = m_query.prepare("SELECT resources.id\n"
+    d->resourceType = resourceType;
+    bool r = d->query.prepare("SELECT resources.id\n"
                              ",      resources.storage_id\n"
                              ",      resources.name\n"
                              ",      resources.filename\n"
@@ -39,19 +49,24 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                              "AND    resource_types.name = :resource_type\n"
                              "AND    resources.status = 1");
     if (!r) {
-        qWarning() << "Could not prepare KisResourceModel query" << m_query.lastError();
+        qWarning() << "Could not prepare KisResourceModel query" << d->query.lastError();
     }
-    m_query.bindValue(":resource_type", resourceType);
-    r = m_query.exec();
+    d->query.bindValue(":resource_type", resourceType);
+    r = d->query.exec();
     if (!r) {
-        qWarning() << "Could not select" << resourceType << "resources" << m_query.lastError();
+        qWarning() << "Could not select" << resourceType << "resources" << d->query.lastError();
     }
-    Q_ASSERT(m_query.isSelect());
+    Q_ASSERT(d->query.isSelect());
+}
+
+KisResourceModel::~KisResourceModel()
+{
+    delete d;
 }
 
 int KisResourceModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return m_columnCount;
+    return d->columnCount;
 }
 
 QVariant KisResourceModel::data(const QModelIndex &index, int role) const
@@ -61,9 +76,9 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
     if (!index.isValid()) return v;
 
     if (index.row() > rowCount()) return v;
-    if (index.column() > m_columnCount) return v;
+    if (index.column() > d->columnCount) return v;
 
-    bool pos = const_cast<KisResourceModel*>(this)->m_query.seek(index.row());
+    bool pos = const_cast<KisResourceModel*>(this)->d->query.seek(index.row());
 
     if (pos) {
         switch(role) {
@@ -71,19 +86,19 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         {
             switch(index.column()) {
             case 0:
-                return m_query.value("id");
+                return d->query.value("id");
             case 1:
-                return m_query.value("storage_id");
+                return d->query.value("storage_id");
             case 2:
-                return m_query.value("name");
+                return d->query.value("name");
             case 3:
-                return m_query.value("filename");
+                return d->query.value("filename");
             case 4:
-                return m_query.value("tooltip");
+                return d->query.value("tooltip");
             case 5:
                 ;
             case 6:
-                return m_query.value("status");
+                return d->query.value("status");
             default:
                 ;
             };
@@ -91,7 +106,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         case Qt::DecorationRole:
         {
             if (index.column() == 5) {
-                QByteArray ba = m_query.value("thumbnail").toByteArray();
+                QByteArray ba = d->query.value("thumbnail").toByteArray();
                 QBuffer buf(&ba);
                 buf.open(QBuffer::ReadOnly);
                 QImage img;
@@ -105,7 +120,7 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
         case Qt::StatusTipRole:
             /* Falls through. */
         case Qt::WhatsThisRole:
-            return m_query.value("tooltip");
+            return d->query.value("tooltip");
         default:
             ;
         }
@@ -116,20 +131,19 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
 
 int KisResourceModel::rowCount(const QModelIndex &) const
 {
-    if (m_cachedRowCount < 0) {
+    if (d->cachedRowCount < 0) {
         QSqlQuery q;
         q.prepare("SELECT count(*)\n"
                   "FROM   resources\n"
                   ",      resource_types\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type");
-        q.bindValue(":resource_type", m_resourceType);
+        q.bindValue(":resource_type", d->resourceType);
         q.exec();
         q.first();
 
-        const_cast<KisResourceModel*>(this)->m_cachedRowCount = q.value(0).toInt();
-        qDebug() << m_cachedRowCount;
+        const_cast<KisResourceModel*>(this)->d->cachedRowCount = q.value(0).toInt();
     }
 
-    return m_cachedRowCount;
+    return d->cachedRowCount;
 }

@@ -122,6 +122,7 @@ target_link_libraries(kritawidgets
     kritaflake
     kritapigment
     kritawidgetutils
+    kritaresources
     Qt5::PrintSupport
     KF5::CoreAddons
     KF5::ConfigGui

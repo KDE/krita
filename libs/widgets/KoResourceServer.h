@@ -39,7 +39,7 @@
 #include "KoResourceServerObserver.h"
 #include "KoResourceTagStore.h"
 #include "KoResourcePaths.h"
-
+#include <KisResourceModel.h>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -61,7 +61,8 @@ public:
     * @param extensions the file extensions separate by ':', e.g. "*.kgr:*.svg:*.ggr"
     */
     KoResourceServerBase(const QString& type, const QString& extensions)
-        : m_type(type)
+        : m_resourceModel(type)
+        , m_type(type)
         , m_extensions(extensions)
     {
         qDebug() << "Creating KoResourceServerBase" << m_type << m_extensions;
@@ -94,6 +95,7 @@ public:
 
 protected:
 
+    KisResourceModel m_resourceModel;
     QStringList m_blackListFileNames;
 
     friend class KoResourceTagStore;
@@ -164,7 +166,7 @@ public:
     }
 
     int resourceCount() const override {
-        return m_resources.size();
+        return m_resourceModel.rowCount();
     }
 
     /**
@@ -174,62 +176,6 @@ public:
      * @param filenames list of filenames to be loaded
      */
     void loadResources(QStringList filenames) override {
-
-        QStringList uniqueFiles;
-
-        while (!filenames.empty()) {
-
-            QString front = filenames.first();
-            filenames.pop_front();
-
-            // In the save location, people can use sub-folders... And then they probably want
-            // to load both versions! See https://bugs.kde.org/show_bug.cgi?id=321361.
-            QString fname;
-            if (front.contains(saveLocation())) {
-                fname = front.split(saveLocation())[1];
-            }
-            else {
-                fname = QFileInfo(front).fileName();
-            }
-
-            // XXX: Don't load resources with the same filename. Actually, we should look inside
-            //      the resource to find out whether they are really the same, but for now this
-            //      will prevent the same brush etc. showing up twice.
-            if (!uniqueFiles.contains(fname)) {
-                m_loadLock.lock();
-                uniqueFiles.append(fname);
-                QList<PointerType> resources = createResources(front);
-                Q_FOREACH (PointerType resource, resources) {
-                    Q_CHECK_PTR(resource);
-                    if (resource->load() && resource->valid() && !resource->md5().isEmpty()) {
-                        addResourceToMd5Registry(resource);
-
-                        m_resourcesByFilename[resource->shortFilename()] = resource;
-
-                        if (resource->name().isEmpty()) {
-                            resource->setName(fname);
-                        }
-                        if (m_resourcesByName.contains(resource->name())) {
-                            resource->setName(resource->name() + "(" + resource->shortFilename() + ")");
-                        }
-                        m_resourcesByName[resource->name()] = resource;
-                        notifyResourceAdded(resource);
-                    }
-                    else {
-                        warnWidgets << "Loading resource " << front << "failed." << type();
-                        Policy::deleteResource(resource);
-                    }
-                }
-                m_loadLock.unlock();
-            }
-        }
-
-        m_resources = sortedResources();
-
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->syncTaggedResourceView();
-        }
-//        qDebug() << "done loading  resources for type " << type();
     }
 
     void loadTags() {

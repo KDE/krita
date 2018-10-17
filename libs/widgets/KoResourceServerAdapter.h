@@ -39,7 +39,9 @@ public:
 
     virtual void connectToResourceServer() = 0;
     virtual QList<KoResource*> resources() = 0;
+
     virtual QList<KoResource*> serverResources() = 0;
+
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
     virtual void removeResourceFile(const QString & filename) = 0;
@@ -144,7 +146,13 @@ public:
                 m_resourceServer->sortedResources() :
                 m_resourceServer->resources();
 
-            cacheServerResources(serverResources);
+            m_serverResources.clear();
+
+            Q_FOREACH (PointerType resource, serverResources) {
+                m_serverResources.append(Policy::toResourcePointer(resource));
+            }
+            serverResourceCacheInvalid(false);
+
         }
         if (m_enableFiltering) {
             if (m_resourceFilter.filtersHaveChanged() || cacheDirty) {
@@ -297,7 +305,6 @@ public:
     void tagCategoryRemoved(const QString& tag) override {
         m_resourceServer->tagCategoryRemoved(tag);
     }
-
     QList<KoResource*> serverResources() override {
         return m_serverResources;
     }
@@ -332,15 +339,6 @@ private:
         } else {
             m_oldChangeCounter = m_changeCounter;
         }
-    }
-
-    void cacheServerResources(const QList<PointerType> &serverResources) {
-        m_serverResources.clear();
-
-        Q_FOREACH (PointerType resource, serverResources) {
-            m_serverResources.append(Policy::toResourcePointer(resource));
-        }
-        serverResourceCacheInvalid(false);
     }
 
     ServerType* m_resourceServer;

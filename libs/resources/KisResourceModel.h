@@ -21,7 +21,6 @@
 #define KISRESOURCEMODEL_H
 
 #include <QAbstractTableModel>
-#include <QtSql>
 
 #include <kritaresources_export.h>
 
@@ -50,6 +49,7 @@ public:
     };
 
     KisResourceModel(const QString &resourceType, QObject *parent = 0);
+    ~KisResourceModel() override;
 
 // QAbstractItemModel API
 
@@ -60,10 +60,9 @@ public:
 // Resources API
 
 private:
-    QSqlQuery m_query;
-    QString m_resourceType;
-    int m_columnCount {7};
-    int m_cachedRowCount {-1};
+    struct Private;
+    Private* const d;
+
 };
 
 #endif // KISRESOURCEMODEL_H

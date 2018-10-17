@@ -75,7 +75,7 @@ KisPaletteListWidget::KisPaletteListWidget(QWidget *parent)
     m_ui->viewPalette->setLayout(new QHBoxLayout(m_ui->viewPalette));
     m_ui->viewPalette->layout()->addWidget(m_d->itemChooser.data());
 
-    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource *)), SLOT(slotPaletteResourceSelected(KoResource*)));
+    connect(m_d->itemChooser.data(), SIGNAL(resourceSelected(KoResource*)), SLOT(slotPaletteResourceSelected(KoResource*)));
 }
 
 KisPaletteListWidget::~KisPaletteListWidget()

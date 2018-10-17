@@ -51,8 +51,8 @@ KisAutogradient::KisAutogradient(KoSegmentGradient* gradient, QWidget *parent, c
     connect(gradientSlider, SIGNAL(sigChangedSegment(KoGradientSegment*)), SLOT(slotChangedSegment(KoGradientSegment*)));
     connect(comboBoxColorInterpolationType, SIGNAL(activated(int)), SLOT(slotChangedColorInterpolation(int)));
     connect(comboBoxInterpolationType, SIGNAL(activated(int)), SLOT(slotChangedInterpolation(int)));
-    connect(leftColorButton, SIGNAL(changed(const KoColor&)), SLOT(slotChangedLeftColor(const KoColor&)));
-    connect(rightColorButton, SIGNAL(changed(const KoColor&)), SLOT(slotChangedRightColor(const KoColor&)));
+    connect(leftColorButton, SIGNAL(changed(KoColor)), SLOT(slotChangedLeftColor(KoColor)));
+    connect(rightColorButton, SIGNAL(changed(KoColor)), SLOT(slotChangedRightColor(KoColor)));
 
     connect(intNumInputLeftOpacity, SIGNAL(valueChanged(int)), SLOT(slotChangedLeftOpacity(int)));
     connect(intNumInputRightOpacity, SIGNAL(valueChanged(int)), SLOT(slotChangedRightOpacity(int)));

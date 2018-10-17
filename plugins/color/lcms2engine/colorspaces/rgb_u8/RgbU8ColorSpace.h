@@ -36,8 +36,6 @@ public:
         return false;
     }
 
-    KoColorTransformation *createInvertTransformation() const override;
-
     KoID colorModelId() const override
     {
         return RGBAColorModelID;

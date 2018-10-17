@@ -224,7 +224,7 @@ void KisSelectionManager::setup(KisActionManager* actionManager)
 void KisSelectionManager::setView(QPointer<KisView>imageView)
 {
     if (m_imageView && m_imageView->canvasBase()) {
-        disconnect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
+        disconnect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(clipboardDataChanged()));
 
         KoSelection *selection = m_imageView->canvasBase()->globalShapeManager()->selection();
         selection->disconnect(this, SLOT(shapeSelectionChanged()));
@@ -249,7 +249,7 @@ void KisSelectionManager::setView(QPointer<KisView>imageView)
         m_selectionDecoration = decoration;
         connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
         connect(m_imageView->image()->undoAdapter(), SIGNAL(selectionChanged()), SLOT(selectionChanged()));
-        connect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(const QString&)), SLOT(clipboardDataChanged()));
+        connect(m_imageView->canvasBase()->toolProxy(), SIGNAL(toolChanged(QString)), SLOT(clipboardDataChanged()));
 
     }
 }

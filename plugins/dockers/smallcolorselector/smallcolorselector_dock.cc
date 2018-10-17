@@ -38,8 +38,8 @@ SmallColorSelectorDock::SmallColorSelectorDock()
     layout->addStretch(1);
     setWidget(page);
     m_smallColorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-    connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
-            this, SLOT(colorChangedProxy(const QColor&)));
+    connect(m_smallColorWidget, SIGNAL(colorChanged(QColor)),
+            this, SLOT(colorChangedProxy(QColor)));
 
     setWindowTitle(i18n("Small Color Selector"));
 }
@@ -54,8 +54,8 @@ void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     }
     m_canvas = canvas;
     if (m_canvas && m_canvas->resourceManager()) {
-        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int, const QVariant&)),
-                this, SLOT(canvasResourceChanged(int, const QVariant&)));
+        connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(canvasResourceChanged(int,QVariant)));
         m_smallColorWidget->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());
     }
 }

@@ -77,7 +77,7 @@ Q_SIGNALS:
 private:
     void connectCancelSignals();
     void disconnectCancelSignals();
-    void uploadFrame(int time);
+    void uploadFrame(int time, bool forceSyncAudio);
 
 private:
     struct Private;

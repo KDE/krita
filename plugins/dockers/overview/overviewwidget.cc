@@ -100,7 +100,7 @@ void OverviewWidget::setCanvas(KoCanvasBase * canvas)
         connect(&m_imageIdleWatcher, &KisIdleWatcher::startedIdleMode, this, &OverviewWidget::generateThumbnail);
 
         connect(m_canvas->image(), SIGNAL(sigImageUpdated(QRect)),SLOT(startUpdateCanvasProjection()));
-        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF, QPointF)),SLOT(startUpdateCanvasProjection()));
+        connect(m_canvas->image(), SIGNAL(sigSizeChanged(QPointF,QPointF)),SLOT(startUpdateCanvasProjection()));
 
         connect(m_canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(update()), Qt::UniqueConnection);
         generateThumbnail();

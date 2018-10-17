@@ -204,9 +204,9 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         feather->setSingleStep(1);
         gridLayout->addWidget(feather, 2, 1, 1, 1);
 
-        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int) ));
-        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)   ));
-        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)   ));
+        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
+        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
+        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
 
         QCheckBox* limitToCurrentLayer = new QCheckBox(i18n("Limit to current layer"), selectionWidget);
         l->insertWidget(4, limitToCurrentLayer);

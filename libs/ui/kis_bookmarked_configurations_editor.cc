@@ -36,8 +36,8 @@ KisBookmarkedConfigurationsEditor::KisBookmarkedConfigurationsEditor(QWidget* pa
     d->editorUi.listConfigurations->setModel(d->model);
     connect(d->editorUi.pushButtonClose, SIGNAL(pressed()), SLOT(accept()));
 
-    connect(d->editorUi.listConfigurations->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-            this, SLOT(currentConfigChanged(const QItemSelection&, const QItemSelection&)));
+    connect(d->editorUi.listConfigurations->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(currentConfigChanged(QItemSelection,QItemSelection)));
     currentConfigChanged(d->editorUi.listConfigurations->selectionModel()->selection(),
                          d->editorUi.listConfigurations->selectionModel()->selection());
 

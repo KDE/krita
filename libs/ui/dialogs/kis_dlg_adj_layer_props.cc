@@ -86,7 +86,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     m_layerName->setText(layerName);
     m_layerName->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
     hl->addWidget(m_layerName, 10);
-    connect(m_layerName, SIGNAL(textChanged(const QString &)), this, SLOT(slotNameChanged(const QString &)));
+    connect(m_layerName, SIGNAL(textChanged(QString)), this, SLOT(slotNameChanged(QString)));
 
     if (m_currentFilter) {
         m_currentConfigWidget = m_currentFilter->createConfigurationWidget(page, paintDevice);

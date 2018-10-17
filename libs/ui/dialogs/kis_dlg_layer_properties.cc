@@ -103,7 +103,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     d->nameProperty->connectIgnoreCheckBox(d->page->chkName);
     d->nameProperty->connectAutoEnableWidget(d->page->editName);
     d->nameProperty->connectValueChangedSignal(this, SLOT(slotNameValueChangedInternally()));
-    connect(d->page->editName, SIGNAL(textChanged(const QString &)), SLOT(slotNameValueChangedExternally()));
+    connect(d->page->editName, SIGNAL(textChanged(QString)), SLOT(slotNameValueChangedExternally()));
 
     d->page->intOpacity->setRange(0, 100);
     d->page->intOpacity->setSuffix("%");

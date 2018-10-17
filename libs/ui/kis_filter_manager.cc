@@ -103,7 +103,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
     d->reapplyAction->setEnabled(false);
     connect(d->reapplyAction, SIGNAL(triggered()), SLOT(reapplyLastFilter()));
 
-    connect(&d->actionsMapper, SIGNAL(mapped(const QString&)), SLOT(showFilterDialog(const QString&)));
+    connect(&d->actionsMapper, SIGNAL(mapped(QString)), SLOT(showFilterDialog(QString)));
 
     // Setup list of filters
     QStringList keys = KisFilterRegistry::instance()->keys();
@@ -112,7 +112,7 @@ void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionMan
         insertFilter(filterName);
     }
 
-    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(const QString &)));
+    connect(KisFilterRegistry::instance(), SIGNAL(filterAdded(QString)), SLOT(insertFilter(QString)));
 }
 
 void KisFilterManager::insertFilter(const QString & filterName)

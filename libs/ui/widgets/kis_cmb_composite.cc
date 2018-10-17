@@ -74,8 +74,8 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     setView(m_view);
     setItemDelegate(new KisCategorizedItemDelegate(this));
 
-    connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
-    connect(m_view, SIGNAL(sigEntryChecked(const QModelIndex&)), SLOT(slotEntryChecked(const QModelIndex&)));
+    connect(m_view, SIGNAL(sigCategoryToggled(QModelIndex,bool)), SLOT(slotCategoryToggled(QModelIndex,bool)));
+    connect(m_view, SIGNAL(sigEntryChecked(QModelIndex)), SLOT(slotEntryChecked(QModelIndex)));
 
     selectCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp());
 

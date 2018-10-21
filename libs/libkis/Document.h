@@ -746,6 +746,15 @@ print(root.childNodes())
      */
     QRect bounds() const;
 
+    /**
+     * @brief Import an image sequence of files from a directory. This will grab all
+     * images from the directory and import them with a potential offset (firstFrame)
+     * and step (images on 2s, 3s, etc)
+     * @returns whether the animation import was successful
+     */
+    bool importAnimation(const QList<QString> &files, int firstFrame, int step);
+
+
 private:
 
     friend class Krita;

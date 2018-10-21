@@ -65,6 +65,11 @@
 #include <Selection.h>
 #include <LibKisUtils.h>
 
+#include "kis_animation_importer.h"
+#include <kis_canvas2.h>
+#include <KoUpdater.h>
+#include <QMessageBox>
+
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
@@ -835,4 +840,19 @@ QRect Document::bounds() const
 QPointer<KisDocument> Document::document() const
 {
     return d->document;
+}
+
+bool Document::importAnimation(const QList<QString> &files, int firstFrame, int step)
+{
+    KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
+
+    KoUpdaterPtr updater = 0;
+    if (activeView && d->document->fileBatchMode()) {
+         updater = activeView->viewManager()->createUnthreadedUpdater(i18n("Import frames"));
+    }
+
+    KisAnimationImporter importer(d->document->image(), updater);
+    KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
+
+    return (status == KisImportExportFilter::OK);
 }

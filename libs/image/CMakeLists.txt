@@ -335,10 +335,8 @@ target_link_libraries(kritaimage
 
 target_link_libraries(kritaimage PUBLIC ${Boost_SYSTEM_LIBRARY})
 
-if(NOT APPLE)
-    if(NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
-	    target_link_libraries(kritaimage PUBLIC atomic)
-    endif()
+if(NOT HAVE_CXX_ATOMICS_WITHOUT_LIB)
+	target_link_libraries(kritaimage PUBLIC atomic)
 endif()
 
 if(OPENEXR_FOUND)

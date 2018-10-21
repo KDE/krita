@@ -93,7 +93,7 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "kis_raster_keyframe_channel.h"
-
+#include "KisImportExportManager.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_abstract_projection_plane.h"
 #include "commands_new/kis_set_layer_style_command.h"
@@ -485,13 +485,22 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     urlRequester->setFileName(m_view->document()->url().toLocalFile());
     if (m_view->document()->url().isLocalFile()) {
         QFileInfo location = QFileInfo(m_view->document()->url().toLocalFile()).baseName();
-        location.setFile(location.dir(), location.baseName()+"_"+ source->name()+".kra");
+        location.setFile(location.dir(), location.baseName() + "_" + source->name() + ".png");
         urlRequester->setFileName(location.absoluteFilePath());
-    } else {
+    }
+    else {
         const QFileInfo location = QFileInfo(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-        const QString proposedFileName = QDir(location.absoluteFilePath()).absoluteFilePath(source->name() + ".kra");
+        const QString proposedFileName = QDir(location.absoluteFilePath()).absoluteFilePath(source->name() + ".png");
         urlRequester->setFileName(proposedFileName);
     }
+
+    // We don't want .kra files as file layers, Krita cannot handle the load.
+    QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
+    int i = mimes.indexOf(KIS_MIME_TYPE);
+    if (i >= 0 && i < mimes.size()) {
+        mimes.removeAt(i);
+    }
+    urlRequester->setMimeTypeFilters(mimes);
 
     layout->addWidget(urlRequester);
     if (!dlg.exec()) return;

@@ -2269,12 +2269,9 @@ void KisMainWindow::updateWindowMenu()
         }
     }
 
-
-
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
-
         // keep the recent file list updated when going back to welcome screen
         reloadRecentFileList();
         d->welcomePage->populateRecentDocuments();

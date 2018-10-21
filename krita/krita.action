@@ -3026,7 +3026,7 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
-    <Action name="convert_layer_to_file_layer">
+    <Action name="convert_to_file_layer">
       <icon>fileLayer</icon>
       <text>to &amp;File Layer</text>
       <whatsThis></whatsThis>

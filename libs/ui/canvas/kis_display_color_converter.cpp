@@ -203,7 +203,7 @@ KoColorDisplayRendererInterface* KisDisplayColorConverter::displayRendererInterf
 
 bool KisDisplayColorConverter::Private::useOcio() const
 {
-    return displayFilter && paintingColorSpace->colorModelId() == RGBAColorModelID;
+    return displayFilter && paintingColorSpace && paintingColorSpace->colorModelId() == RGBAColorModelID;
 }
 
 void KisDisplayColorConverter::Private::updateIntermediateFgColor(const KoColor &srcColor)

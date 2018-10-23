@@ -394,7 +394,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->widgetStack->setCurrentIndex(0);
 
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
-    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
+    connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
+    connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
 
     createActions();
 
@@ -2268,12 +2269,9 @@ void KisMainWindow::updateWindowMenu()
         }
     }
 
-
-
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
-
         // keep the recent file list updated when going back to welcome screen
         reloadRecentFileList();
         d->welcomePage->populateRecentDocuments();

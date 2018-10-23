@@ -37,7 +37,7 @@ class KRITAUI_EXPORT KisWelcomePageWidget : public QWidget, public Ui::KisWelcom
     explicit KisWelcomePageWidget(QWidget *parent);
     ~KisWelcomePageWidget() override;
 
-    void setMainWindow(KisMainWindow* mainWindow);
+    void setMainWindow(KisMainWindow* m_mainWindow);
 
 public Q_SLOTS:
     /// if a document is placed over this area, a dotted line will appear as an indicator
@@ -52,8 +52,10 @@ public Q_SLOTS:
 
 
 private:
-    KisMainWindow* mainWindow;
-    QStandardItemModel *recentFilesModel;
+    KisMainWindow *m_mainWindow;
+    QStandardItemModel m_recentFilesModel;
+
+    QMap<QString, QIcon> m_thumbnailMap;
 
 private Q_SLOTS:
     void slotNewFileClicked();

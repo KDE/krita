@@ -363,7 +363,7 @@ void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManage
 
     CONVERT_NODE_ACTION("convert_to_animated", "animated");
 
-    CONVERT_NODE_ACTION_2("convert_layer_to_file_layer", "KisFileLayer", QStringList()<< "KisFileLayer" << "KisCloneLayer");
+    CONVERT_NODE_ACTION_2("convert_to_file_layer", "KisFileLayer", QStringList() << "KisGroupLayer" << "KisFileLayer" << "KisCloneLayer");
 
     connect(&m_d->nodeConversionSignalMapper, SIGNAL(mapped(QString)),
             this, SLOT(convertNode(QString)));
@@ -1381,6 +1381,8 @@ void KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
     KisNodeList nodes2;
     nodes2 = KisLayerUtils::sortMergableNodes(image->root(), selectedNodes());
     KisLayerUtils::filterMergableNodes(nodes2);
+
+    if (nodes2.size() == 0) return;
 
     if (KisLayerUtils::checkIsChildOf(active, nodes2)) {
         active = nodes2.first();

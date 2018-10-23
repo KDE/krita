@@ -179,8 +179,10 @@ public:
           return new KoU8InvertColorTransformer(cs);
       } else if (id == Integer16BitsColorDepthID) {
           return new KoU16InvertColorTransformer(cs);
+#ifdef HAVE_OPENEXR
       } else if (id == Float16BitsColorDepthID) {
           return new KoF16InvertColorTransformer(cs);
+#endif
       } else {
           if(modelId == LABAColorModelID || modelId == CMYKAColorModelID){
               return new KoF32GenInvertColorTransformer(cs);

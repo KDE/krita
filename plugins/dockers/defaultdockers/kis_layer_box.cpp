@@ -661,7 +661,7 @@ void KisLayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex 
                 addActionToMenu(convertToMenu, "convert_to_transparency_mask");
                 addActionToMenu(convertToMenu, "convert_to_filter_mask");
                 addActionToMenu(convertToMenu, "convert_to_selection_mask");
-                addActionToMenu(convertToMenu, "convert_layer_to_file_layer");
+                addActionToMenu(convertToMenu, "convert_to_file_layer");
 
                 QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
                 addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");

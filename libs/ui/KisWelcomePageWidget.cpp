@@ -37,14 +37,11 @@
 KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     : QWidget(parent)
 {
-   setupUi(this);
+    setupUi(this);
 
-   recentDocumentsListView->setDragEnabled(false);
-   recentDocumentsListView->viewport()->setAutoFillBackground(false);
-   recentDocumentsListView->setSpacing(2);
-
-
-
+    recentDocumentsListView->setDragEnabled(false);
+    recentDocumentsListView->viewport()->setAutoFillBackground(false);
+    recentDocumentsListView->setSpacing(2);
 
     // set up URLs that go to web browser
     manualLink->setText(QString("<a href=\"https://docs.krita.org/\">").append(i18n("User Manual")).append("</a>"));
@@ -85,12 +82,12 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     kdeIcon->setIcon(KisIconUtils::loadIcon(QStringLiteral("kde")).pixmap(20));
 
 
-   connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
+    connect(chkShowNews, SIGNAL(toggled(bool)), newsWidget, SLOT(toggleNews(bool)));
 
-   // configure the News area
-   KisConfig cfg(true);
-   bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
-   chkShowNews->setChecked(m_getNews);
+    // configure the News area
+    KisConfig cfg(true);
+    bool m_getNews = cfg.readEntry<bool>("FetchNews", false);
+    chkShowNews->setChecked(m_getNews);
 
 }
 
@@ -101,7 +98,7 @@ KisWelcomePageWidget::~KisWelcomePageWidget()
 void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
 {
     if (mainWin) {
-        mainWindow = mainWin;
+        m_mainWindow = mainWin;
 
         // set the shortcut links from actions (only if a shortcut exists)
         if ( mainWin->viewManager()->actionManager()->actionByName("file_new")->shortcut().toString() != "") {
@@ -111,12 +108,7 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         if (mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString()  != "") {
             openFileShortcut->setText(QString("(") + mainWin->viewManager()->actionManager()->actionByName("file_open")->shortcut().toString() + QString(")"));
         }
-
-
-        populateRecentDocuments();
         connect(recentDocumentsListView, SIGNAL(clicked(QModelIndex)), this, SLOT(recentDocumentClicked(QModelIndex)));
-
-
         // we need the view manager to actually call actions, so don't create the connections
         // until after the view manager is set
         connect(newFileLink, SIGNAL(clicked(bool)), this, SLOT(slotNewFileClicked()));
@@ -192,91 +184,86 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     newFileLink->setIconSize(QSize(30, 30));
     openFileLink->setIcon(KisIconUtils::loadIcon("document-open"));
     newFileLink->setIcon(KisIconUtils::loadIcon("document-new"));
-
-    // needed for updating icon color for files that don't have a preview
-    if (mainWindow) {
-        populateRecentDocuments();
-    }
 }
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
     // grab recent files data
-    recentFilesModel = new QStandardItemModel();
-    int recentDocumentsIterator = mainWindow->recentFilesUrls().length() > 5 ? 5 : mainWindow->recentFilesUrls().length(); // grab at most 5
+    int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
 
-    for (int i = 0; i < recentDocumentsIterator; i++ ) {
+    for (int i = 0; i < numRecentFiles; i++ ) {
 
-       QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
-       QString recentFileUrlPath = mainWindow->recentFilesUrls().at(i).toString();
-       QString fileName = recentFileUrlPath.split("/").last();
+        QStandardItem *recentItem = new QStandardItem(1,2); // 1 row, 1 column
+        recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
 
+        QString recentFileUrlPath = m_mainWindow->recentFilesUrls().at(i).toString();
+        QString fileName = recentFileUrlPath.split("/").last();
 
-       // get thumbnail -- almost all Krita-supported formats save a thumbnail
-       // this was mostly copied from the KisAutoSaveRecovery file
-       QScopedPointer<KoStore> store(KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read));
+        if (m_thumbnailMap.contains(recentFileUrlPath)) {
+            recentItem->setIcon(m_thumbnailMap[recentFileUrlPath]);
+        }
+        else {
+            if (recentFileUrlPath.endsWith("ora") || recentFileUrlPath.endsWith("kra")) {
+                QScopedPointer<KoStore> store(KoStore::createStore(QUrl(recentFileUrlPath), KoStore::Read));
+                if (store) {
+                    if (store->open(QString("Thumbnails/thumbnail.png"))
+                            || store->open(QString("preview.png"))) {
 
-       if (store) {
-           if (store->open(QString("Thumbnails/thumbnail.png"))
-              || store->open(QString("preview.png"))) {
+                        QByteArray bytes = store->read(store->size());
+                        store->close();
+                        QImage img;
+                        img.loadFromData(bytes);
+                        img.setDevicePixelRatio(devicePixelRatioF());
+                        recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
+                    }
+                }
+            }
+            else {
+                QImage img(QUrl(recentFileUrlPath).toLocalFile());
+                img.setDevicePixelRatio(devicePixelRatioF());
+                if (!img.isNull()) {
+                    recentItem->setIcon(QIcon(QPixmap::fromImage(img.scaledToWidth(48))));
+                }
+            }
+            m_thumbnailMap[recentFileUrlPath] = recentItem->icon();
+        }
 
-               QByteArray bytes = store->read(store->size());
-               store->close();
-               QImage img;
-               img.loadFromData(bytes);
-               recentItem->setIcon(QIcon(QPixmap::fromImage(img)));
-
-           }
-           else {
-               recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-           }
-
-       }
-       else {
-           recentItem->setIcon(KisIconUtils::loadIcon("document-export"));
-       }
-
-
-       // set the recent object with the data
-       recentItem->setText(fileName); // what to display for the item
-       recentItem->setToolTip(recentFileUrlPath);
-       recentFilesModel->appendRow(recentItem);
-
-
+        // set the recent object with the data
+        recentItem->setText(fileName); // what to display for the item
+        recentItem->setToolTip(recentFileUrlPath);
+        m_recentFilesModel.appendRow(recentItem);
     }
 
-
     // hide clear and Recent files title if there are none
-    bool hasRecentFiles = mainWindow->recentFilesUrls().length() > 0;
+    bool hasRecentFiles = m_mainWindow->recentFilesUrls().length() > 0;
     recentDocumentsLabel->setVisible(hasRecentFiles);
     clearRecentFilesLink->setVisible(hasRecentFiles);
 
-
-    recentDocumentsListView->setIconSize(QSize(40, 40));
-    recentDocumentsListView->setModel(recentFilesModel);
+    recentDocumentsListView->setIconSize(QSize(48, 48));
+    recentDocumentsListView->setModel(&m_recentFilesModel);
 }
 
 
 void KisWelcomePageWidget::recentDocumentClicked(QModelIndex index)
 {
     QString fileUrl = index.data(Qt::ToolTipRole).toString();
-    mainWindow->openDocument(QUrl(fileUrl), KisMainWindow::None );
+    m_mainWindow->openDocument(QUrl(fileUrl), KisMainWindow::None );
 }
 
 
 void KisWelcomePageWidget::slotNewFileClicked()
 {
-    mainWindow->slotFileNew();
+    m_mainWindow->slotFileNew();
 }
 
 void KisWelcomePageWidget::slotOpenFileClicked()
 {
-    mainWindow->slotFileOpen();
+    m_mainWindow->slotFileOpen();
 }
 
 void KisWelcomePageWidget::slotClearRecentFiles()
 {
-    mainWindow->clearRecentFiles();
-    mainWindow->reloadRecentFileList();
+    m_mainWindow->clearRecentFiles();
+    m_mainWindow->reloadRecentFileList();
     populateRecentDocuments();
 }

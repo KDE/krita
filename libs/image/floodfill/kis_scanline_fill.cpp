@@ -348,6 +348,7 @@ private:
 struct Q_DECL_HIDDEN KisScanlineFill::Private
 {
     KisPaintDeviceSP device;
+    KisRandomAccessorSP it;
     QPoint startPoint;
     QRect boundingRect;
     int threshold;
@@ -373,6 +374,7 @@ KisScanlineFill::KisScanlineFill(KisPaintDeviceSP device, const QPoint &startPoi
     : m_d(new Private)
 {
     m_d->device = device;
+    m_d->it = device->createRandomAccessorNG(startPoint.x(), startPoint.y());
     m_d->startPoint = startPoint;
     m_d->boundingRect = boundingRect;
 

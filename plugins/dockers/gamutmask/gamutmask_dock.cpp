@@ -158,7 +158,7 @@ bool GamutMaskDock::openMaskEditor()
     m_dockerUI->editControlsBox->setEnabled(false);
     m_dockerUI->editControlsBox->setVisible(false);
 
-    m_dockerUI->maskTitleEdit->setText(m_selectedMask->title());
+    m_dockerUI->maskTitleEdit->setText(m_selectedMask->name());
     m_dockerUI->maskDescriptionEdit->setPlainText(m_selectedMask->description());
 
     m_maskDocument = KisPart::instance()->createDocument();
@@ -277,7 +277,7 @@ bool GamutMaskDock::saveSelectedMaskResource()
             m_selectedMask->save();
             maskSaved = true;
         } else {
-            getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->title()),
+            getUserFeedback(i18n("Saving of gamut mask '%1' was aborted.", m_selectedMask->name()),
                             i18n("<p>The mask template is invalid.</p>"
                                  "<p>Please check that:"
                                  "<ul>"
@@ -320,7 +320,7 @@ int GamutMaskDock::saveOrCancel(QMessageBox::StandardButton defaultAction)
     int response = 0;
 
     if (m_maskDocument->isModified()) {
-        response = getUserFeedback(i18n("Gamut mask <b>'%1'</b> has been modified.", m_selectedMask->title()),
+        response = getUserFeedback(i18n("Gamut mask <b>'%1'</b> has been modified.", m_selectedMask->name()),
                                    i18n("Do you want to save it?"),
                                    QMessageBox::Cancel | QMessageBox::Close | QMessageBox::Save, defaultAction);
 
@@ -369,7 +369,7 @@ KoGamutMask *GamutMaskDock::createMaskResource(KoGamutMask* sourceMask, QString 
     QString maskTitle = maskFile.first;
     QFileInfo fileInfo = maskFile.second;
 
-    newMask->setTitle(maskTitle);
+    newMask->setName(maskTitle);
     newMask->setFilename(fileInfo.filePath());
 
     newMask->setValid(true);
@@ -474,7 +474,7 @@ void GamutMaskDock::slotGamutMaskSave()
 
     QString newTitle = m_dockerUI->maskTitleEdit->text();
 
-    if (m_selectedMask->title() != newTitle) {
+    if (m_selectedMask->name() != newTitle) {
         // title has changed, rename
         KoGamutMask* newMask = createMaskResource(m_selectedMask, newTitle);
 
@@ -599,7 +599,7 @@ void GamutMaskDock::slotGamutMaskDuplicate()
         return;
     }
 
-    KoGamutMask* newMask = createMaskResource(m_selectedMask, m_selectedMask->title());
+    KoGamutMask* newMask = createMaskResource(m_selectedMask, m_selectedMask->name());
     selectMask(newMask);
 
     bool editorOpened = openMaskEditor();
@@ -615,7 +615,7 @@ void GamutMaskDock::slotGamutMaskDelete()
     }
 
     int res = getUserFeedback(i18n("Are you sure you want to delete mask <b>'%1'</b>?"
-                                   , m_selectedMask->title()));
+                                   , m_selectedMask->name()));
 
     if (res == QMessageBox::Yes) {
         deleteMask();

@@ -1286,7 +1286,9 @@ void KisKraLoader::loadGamutMask(KoStore* store)
         store->close();
 
         mask->setRotation(m_d->gamutMaskRotation);
-        mask->setTitle(QString("%1 %2").arg(mask->title()).arg("[document]"));
+        mask->setName(m_d->imageName);
+        mask->setFilename(QString("%1.kgm").arg(m_d->imageName));
+        mask->setStoredInDocument(true);
 
         m_d->document->setGamutMask(mask);
     }

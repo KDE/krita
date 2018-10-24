@@ -51,7 +51,7 @@ private:
 
 
 /**
- * @brief The resource type for gamut masks used by the artistic color selector
+ * @brief The resource type for gamut masks used by color selectors
  */
 class KRITAFLAKE_EXPORT KoGamutMask : public QObject, public KoResource
 {
@@ -74,9 +74,6 @@ public:
     void paint(QPainter &painter, KoViewConverter& viewConverter, bool preview);
     void paintStroke(QPainter &painter, KoViewConverter& viewConverter, bool preview);
 
-    QString title();
-    void setTitle(QString title);
-
     QString description();
     void setDescription(QString description);
 
@@ -84,6 +81,9 @@ public:
     void setRotation(int rotation);
 
     QSizeF maskSize();
+
+    bool storedInDocument();
+    void setStoredInDocument(bool state);
 
     void setMaskShapes(QList<KoShape*> shapes);   
     void setPreviewMaskShapes(QList<KoShape*> shapes);
@@ -95,8 +95,13 @@ public:
 private:
     void setMaskShapesToVector(QList<KoShape*> shapes, QVector<KoGamutMaskShape*>& targetVector);
 
-    struct Private;
-    Private* const d;
+    QString m_description;
+    QVector<KoGamutMaskShape*> m_maskShapes;
+    QVector<KoGamutMaskShape*> m_previewShapes;
+    QSizeF m_maskSize;
+    int m_rotation;
+    bool m_storedInDocument;
+
 };
 
 #endif // KOGAMUTMASK_H

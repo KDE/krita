@@ -111,7 +111,7 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                        QPointF(paintRect.width() - rightMargin, paintRect.y() + descOffset + painter->fontMetrics().lineSpacing()));
         painter->drawText(titleRect, Qt::AlignLeft,
                           painter->fontMetrics().elidedText(
-                              mask->title(), Qt::ElideRight, titleRect.width()
+                              mask->name(), Qt::ElideRight, titleRect.width()
                               )
                           );
 

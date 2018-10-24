@@ -202,7 +202,7 @@ bool KisKraSaver::saveGamutMask(KoStore* store)
         store->write(resourceData);
         res = true;
     } else {
-        qWarning() << "Cannot convert gamut mask to byte array:" << m_d->doc->gamutMask()->title();
+        qWarning() << "Cannot convert gamut mask to byte array:" << m_d->doc->gamutMask()->name();
         res = false;
     }
 

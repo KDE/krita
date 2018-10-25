@@ -254,7 +254,7 @@ public:
         if (selection &&
             selection->outlineCacheValid()) {
 
-            const int handleRadius = this->handleRadius();
+            const qreal handleRadius = qreal(this->handleRadius()) / canvas->coordinatesConverter()->effectiveZoom();
             QPainterPath samplePath;
             samplePath.addEllipse(pos, handleRadius, handleRadius);
 

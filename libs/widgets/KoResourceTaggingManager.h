@@ -58,6 +58,7 @@ public:
     bool allowTagModification();
     KoTagFilterWidget* tagFilterWidget();
     KoTagChooserWidget* tagChooserWidget();
+    class QLineEdit* searchField();
 
 Q_SIGNALS:
     void updateView();

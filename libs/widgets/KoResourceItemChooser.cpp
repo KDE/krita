@@ -37,6 +37,7 @@
 #include <QSplitter>
 #include <QToolButton>
 #include <QWheelEvent>
+#include <QLineEdit>
 
 #include <klocalizedstring.h>
 
@@ -562,6 +563,13 @@ void KoResourceItemChooser::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     updateView();
+
+    /* Give the search field focus onShowEvent to allow for
+     * faster preset filtering... */
+    if( d->tagManager ) {
+        d->tagManager->searchField()->setFocus(Qt::FocusReason::OtherFocusReason);
+        d->tagManager->searchField()->selectAll();
+    }
 }
 
 void KoResourceItemChooser::updateView()

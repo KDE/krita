@@ -38,6 +38,7 @@ class KisBrushHud;
 class KisRoundHudButton;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
+class KisAcyclicSignalConnector;
 
 class KisPopupPalette : public QWidget
 {
@@ -140,6 +141,7 @@ private:
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
+    KisAcyclicSignalConnector *m_acyclicConnector = 0;
 
 Q_SIGNALS:
     void sigChangeActivePaintop(int);

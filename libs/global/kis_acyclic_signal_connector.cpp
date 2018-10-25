@@ -122,6 +122,18 @@ void KisAcyclicSignalConnector::connectBackwardResourcePair(QObject *sender, con
     connect(this, SIGNAL(backwardSignalResourcePair(int,QVariant)), receiver, method);
 }
 
+void KisAcyclicSignalConnector::connectForwardKoColor(QObject *sender, const char *signal, QObject *receiver, const char *method)
+{
+    connect(sender, signal, this, SLOT(forwardSlotKoColor(KoColor)));
+    connect(this, SIGNAL(forwardSignalKoColor(KoColor)), receiver, method);
+}
+
+void KisAcyclicSignalConnector::connectBackwardKoColor(QObject *sender, const char *signal, QObject *receiver, const char *method)
+{
+    connect(sender, signal, this, SLOT(backwardSlotKoColor(KoColor)));
+    connect(this, SIGNAL(backwardSignalKoColor(KoColor)), receiver, method);
+}
+
 void KisAcyclicSignalConnector::lock()
 {
     if (m_parentConnector) {
@@ -273,5 +285,23 @@ void KisAcyclicSignalConnector::backwardSlotResourcePair(int key, const QVariant
 
     lock();
     emit backwardSignalResourcePair(key, resource);
+    unlock();
+}
+
+void KisAcyclicSignalConnector::forwardSlotKoColor(const KoColor &value)
+{
+    if (m_signalsBlocked) return;
+
+    lock();
+    emit forwardSignalKoColor(value);
+    unlock();
+}
+
+void KisAcyclicSignalConnector::backwardSlotKoColor(const KoColor &value)
+{
+    if (m_signalsBlocked) return;
+
+    lock();
+    emit backwardSignalKoColor(value);
     unlock();
 }

@@ -294,7 +294,7 @@ public:
             const QPointF pos = this->convertToPixelCoord(event->point);
             KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
             if (selectionMask) {
-                this->useCursor(KisCursor::moveCursor());
+                this->useCursor(KisCursor::moveSelectionCursor());
             } else {
                 setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
                 this->resetCursorStyle();

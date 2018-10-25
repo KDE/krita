@@ -39,6 +39,8 @@
 #include "brushhud/kis_round_hud_button.h"
 #include "kis_signals_blocker.h"
 #include "kis_canvas_controller.h"
+#include "kis_acyclic_signal_connector.h"
+
 
 class PopupColorTriangle : public KoTriangleColorSelector
 {
@@ -93,6 +95,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_displayRenderer(displayRenderer)
     , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
     , m_actionCollection(viewManager->actionCollection())
+    , m_acyclicConnector(new KisAcyclicSignalConnector(this))
 {
     // some UI controls are defined and created based off these variables
 
@@ -127,11 +130,11 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), m_triangleColorSelector, SLOT(configurationChanged()));
 
-    connect(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
-            SLOT(slotExternalFgColorChanged(KoColor)));
-    connect(this, SIGNAL(sigChangefGColor(KoColor)),
-            m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+    m_acyclicConnector->connectForwardKoColor(m_resourceManager, SIGNAL(sigChangeFGColorSelector(KoColor)),
+                                              this, SLOT(slotExternalFgColorChanged(KoColor)));
 
+    m_acyclicConnector->connectBackwardKoColor(this, SIGNAL(sigChangefGColor(KoColor)),
+                                               m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
 
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));

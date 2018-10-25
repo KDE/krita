@@ -56,7 +56,7 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter &painter, const KoViewConverter &converter) override;
-    int flags() const override { return KisTool::FLAG_USES_CUSTOM_SIZE; }
+    int flags() const override { return KisTool::FLAG_USES_CUSTOM_SIZE | KisTool::FLAG_USES_CUSTOM_PRESET; }
 
 protected Q_SLOTS:
     void resetCursorStyle() override;

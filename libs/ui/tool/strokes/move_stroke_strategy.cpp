@@ -41,7 +41,7 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
                                              [this](KisNodeSP node) {
                                                  return
                                                      !KisLayerUtils::checkIsCloneOf(node, m_nodes) &&
-                                                     node->isEditable();
+                                                     node->isEditable(false);
                                              });
 
     Q_FOREACH(KisNodeSP subtree, m_nodes) {
@@ -49,7 +49,7 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes,
             subtree,
             [this](KisNodeSP node) {
                 if (KisLayerUtils::checkIsCloneOf(node, m_nodes) ||
-                    !node->isEditable()) {
+                    !node->isEditable(false)) {
 
                     m_blacklistedNodes.insert(node);
                 }

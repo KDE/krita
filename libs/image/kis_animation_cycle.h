@@ -64,6 +64,18 @@ public:
     /// Returns the earliest time the original frame appears in this repeat, or -1 if it never does.
     int firstInstanceOf(int originalTime) const;
 
+    /** Returns the time at which the previous frame within the repeat appears,
+     * or -1 if time is at the first repeated frame.
+     * NB: time should be at the start of a repeated frame
+     */
+    int previousVisibleFrame(int time) const;
+
+    /** Returns the time at which the next frame within the repeat appears,
+     * or -1 if time is at the last repeated frame.
+     * NB: time should be at the start of a repeated frame
+     */
+    int nextVisibleFrame(int time) const;
+
     static bool isRepeat(KisKeyframeSP keyframe);
 
 private:

@@ -189,3 +189,33 @@ int KisRepeatFrame::firstInstanceOf(int originalTime) const
 
     return first;
 }
+
+int KisRepeatFrame::previousVisibleFrame(int time) const
+{
+    if (time <= this->time()) return -1;
+
+    const int earlierOriginalTime = getOriginalTimeFor(time - 1);
+
+    int originalStart, originalEnd;
+    channel()->activeKeyframeRange(earlierOriginalTime, &originalStart, &originalEnd);
+    if (originalEnd == -1) return -1;
+
+    const int durationOfOriginalKeyframe = originalEnd + 1 - originalStart;
+    return time - durationOfOriginalKeyframe;
+}
+
+int KisRepeatFrame::nextVisibleFrame(int time) const
+{
+    const int originalTime = getOriginalTimeFor(time);
+    int originalStart, originalEnd;
+    channel()->activeKeyframeRange(originalTime, &originalStart, &originalEnd);
+    if (originalEnd == -1) return -1;
+
+    const int durationOfOriginalKeyframe = originalEnd + 1 - originalStart;
+    const int nextFrameTime = time + durationOfOriginalKeyframe;
+
+    const KisKeyframeSP next = channel()->nextKeyframe(*this);
+    if (next && next->time() <= nextFrameTime) return -1;
+
+    return nextFrameTime;
+}

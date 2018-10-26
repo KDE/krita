@@ -438,6 +438,11 @@ KisKeyframeSP KisKeyframeChannel::lastKeyframe() const
     return (m_d->keys.end()-1).value();
 }
 
+KisVisibleKeyframeIterator KisKeyframeChannel::visibleKeyframesFrom(int time) const
+{
+    return KisVisibleKeyframeIterator(visibleKeyframeAt(time));
+}
+
 KisTimeSpan KisKeyframeChannel::cycledRangeAt(int time) const
 {
     QSharedPointer<KisAnimationCycle> cycle = cycleAt(time);
@@ -871,4 +876,81 @@ void KisKeyframeChannel::setScalarValue(KisKeyframeSP keyframe, qreal value, KUn
     Q_UNUSED(keyframe);
     Q_UNUSED(value);
     Q_UNUSED(parentCommand);
+}
+
+KisVisibleKeyframeIterator::KisVisibleKeyframeIterator() = default;
+
+KisVisibleKeyframeIterator::KisVisibleKeyframeIterator(KisKeyframeSP keyframe)
+    : m_channel(keyframe->channel())
+    , m_keyframe(keyframe)
+    , m_time(keyframe->time())
+{}
+
+KisVisibleKeyframeIterator& KisVisibleKeyframeIterator::operator--()
+{
+    const KisRepeatFrame *repeat = dynamic_cast<KisRepeatFrame*>(m_keyframe.data());
+
+    if (repeat) {
+        const int time = repeat->previousVisibleFrame(m_time);
+        if (time >= 0) {
+            m_time = time;
+            return *this;
+        }
+    }
+
+    m_keyframe = m_channel->previousKeyframe(*m_keyframe);
+    if (!m_keyframe) return invalidate();
+
+    m_time = m_keyframe->time();
+    return *this;
+}
+
+KisVisibleKeyframeIterator& KisVisibleKeyframeIterator::operator++()
+{
+    const KisRepeatFrame *repeat = dynamic_cast<KisRepeatFrame*>(m_keyframe.data());
+
+    if (repeat) {
+        const int time = repeat->nextVisibleFrame(m_time);
+        if (time >= 0) {
+            m_time = time;
+            return *this;
+        }
+    }
+
+    m_keyframe = m_channel->nextKeyframe(*m_keyframe);
+    if (!m_keyframe) return invalidate();
+
+    m_time = m_keyframe->time();
+
+    return *this;
+};
+
+KisKeyframeSP KisVisibleKeyframeIterator::operator*() const
+{
+    const KisRepeatFrame *repeat = dynamic_cast<KisRepeatFrame*>(m_keyframe.data());
+
+    if (repeat) {
+        return repeat->getOriginalKeyframeFor(m_time);
+    }
+
+    return m_keyframe;
+}
+
+KisKeyframeSP KisVisibleKeyframeIterator::operator->() const
+{
+    return operator*();
+}
+
+bool KisVisibleKeyframeIterator::isValid() const
+{
+    return m_channel && m_time >= 0;
+}
+
+KisVisibleKeyframeIterator& KisVisibleKeyframeIterator::invalidate()
+{
+    m_channel = nullptr;
+    m_keyframe = KisKeyframeSP();
+    m_time = -1;
+
+    return *this;
 }

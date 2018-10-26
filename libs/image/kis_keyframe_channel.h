@@ -33,6 +33,7 @@ class KisFrameSet;
 class KisTimeSpan;
 class KisAnimationCycle;
 class KisRepeatFrame;
+class KisVisibleKeyframeIterator;
 
 class KRITAIMAGE_EXPORT KisKeyframeChannel : public QObject
 {
@@ -89,6 +90,8 @@ public:
     KisKeyframeSP nextKeyframe(const KisKeyframe &keyframe) const;
     KisKeyframeSP previousKeyframe(const KisKeyframe &keyframe) const;
     KisKeyframeSP lastKeyframe() const;
+
+    KisVisibleKeyframeIterator visibleKeyframesFrom(int time) const;
 
     /**
      * Finds the original range of the cycle defined or repeated at the given time.
@@ -191,6 +194,27 @@ private:
 
     struct Private;
     QScopedPointer<Private> m_d;
+};
+
+class KisVisibleKeyframeIterator
+{
+public:
+    KisVisibleKeyframeIterator();
+    explicit KisVisibleKeyframeIterator(KisKeyframeSP keyframe);
+
+    KisVisibleKeyframeIterator& operator--();
+    KisVisibleKeyframeIterator& operator++();
+
+    bool isValid() const;
+    KisKeyframeSP operator->() const;
+    KisKeyframeSP operator*() const;
+
+private:
+    KisVisibleKeyframeIterator &invalidate();
+
+    KisKeyframeChannel *m_channel{nullptr};
+    KisKeyframeSP m_keyframe;
+    int m_time{-1};
 };
 
 #endif // KIS_KEYFRAME_CHANNEL_H

@@ -60,7 +60,8 @@ struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<
 
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
-        :  KisTool(canvas, KisCursor::moveCursor())
+    : KisTool(canvas, KisCursor::moveCursor()),
+      m_updateCursorCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 {
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
@@ -107,6 +108,8 @@ KisToolMove::KisToolMove(KoCanvasBase * canvas)
     connect(&m_changesTracker,
             SIGNAL(sigConfigChanged(KisToolChangesTrackerDataSP)),
             SLOT(slotTrackerChangedConfig(KisToolChangesTrackerDataSP)));
+
+    connect(&m_updateCursorCompressor, SIGNAL(timeout()), this, SLOT(resetCursorStyle()));
 }
 
 KisToolMove::~KisToolMove()
@@ -118,22 +121,26 @@ void KisToolMove::resetCursorStyle()
 {
     KisTool::resetCursorStyle();
 
-    overrideCursorIfNotEditable();
-}
-
-bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
-{
-    KisNodeSP node;
-    KisNodeList nodes;
+    if (!isActive()) return;
     KisImageSP image = this->image();
-
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
     KisSelectionSP selection = resources->activeSelection();
+    KisNodeList nodes = fetchSelectedNodes(moveToolMode(), &m_lastCursorPos, selection);
 
-    if (mode != MoveSelectedLayer && pos) {
-        bool wholeGroup = !selection &&  mode == MoveGroup;
-        node = KisToolUtils::findNode(image->root(), *pos, wholeGroup);
+    if (nodes.isEmpty()) {
+        canvas()->setCursor(Qt::ForbiddenCursor);
+    }
+}
+
+KisNodeList KisToolMove::fetchSelectedNodes(MoveToolMode mode, const QPoint *pixelPoint, KisSelectionSP selection)
+{
+    KisNodeList nodes;
+
+    KisImageSP image = this->image();
+    if (mode != MoveSelectedLayer && pixelPoint) {
+        const bool wholeGroup = !selection &&  mode == MoveGroup;
+        KisNodeSP node = KisToolUtils::findNode(image->root(), *pixelPoint, wholeGroup);
         if (node) {
             nodes = {node};
         }
@@ -147,6 +154,20 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
                                                      return node->isEditable();
                                                  });
     }
+
+    return nodes;
+}
+
+bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
+{
+    KisNodeSP node;
+    KisImageSP image = this->image();
+
+    KisResourcesSnapshotSP resources =
+        new KisResourcesSnapshot(image, currentNode(), this->canvas()->resourceManager());
+    KisSelectionSP selection = resources->activeSelection();
+
+    KisNodeList nodes = fetchSelectedNodes(mode, pos, selection);
 
     if (nodes.size() == 1) {
         node = nodes.first();
@@ -388,6 +409,16 @@ void KisToolMove::endAlternateAction(KoPointerEvent *event, AlternateAction acti
 {
     Q_UNUSED(action)
     endAction(event);
+}
+
+void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
+{
+    m_lastCursorPos = convertToPixelCoord(event).toPoint();
+    KisTool::mouseMoveEvent(event);
+
+    if (moveToolMode() == MoveFirstLayer) {
+        m_updateCursorCompressor.start();
+    }
 }
 
 void KisToolMove::startAction(KoPointerEvent *event, MoveToolMode mode)

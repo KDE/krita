@@ -123,8 +123,6 @@ void KisToolMove::resetCursorStyle()
 
 bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 {
-    if (!currentNode()->isEditable()) return false;
-
     KisNodeSP node;
     KisNodeList nodes;
     KisImageSP image = this->image();

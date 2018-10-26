@@ -83,12 +83,11 @@ public:
     void setShowBgColor(bool value);
     void setShowValueScaleNumbers(bool value);
     void setGamutMask(KoGamutMask* gamutMask);
+    void setDirty();
     bool gamutMaskOn();
     void setGamutMaskOn(bool gamutMaskOn);
     void setEnforceGamutMask(bool enforce);
     KoGamutMask* gamutMask();
-
-    bool saturationIsInvertible();
 
     void saveSettings();
     void loadSettings();
@@ -131,6 +130,7 @@ private:
     void drawBlip(QPainter& painter, const QRect& rect);
     void drawLightStrip(QPainter& painter, const QRect& rect);
     void drawGamutMaskShape(QPainter& painter, const QRect& rect);
+    void drawColorPreview(QPainter& painter, const QRect& rect);
 
     qint8 getHueIndex(Radian hue) const;
     qreal getHue(int hueIdx, Radian shift=0.0f) const;
@@ -166,6 +166,9 @@ private:
     KisColor           m_bgColor;
     QImage             m_renderBuffer;
     QImage             m_maskBuffer;
+    QImage             m_lightStripBuffer;
+    QImage             m_colorPreviewBuffer;
+    QRect              m_widgetArea;
     QRect              m_renderArea;
     QRect              m_lightStripArea;
     bool               m_mouseMoved;
@@ -189,6 +192,10 @@ private:
     KisGamutMaskViewConverter* m_viewConverter;
 
     bool m_widgetUpdatesSelf;
+    bool m_isDirtyWheel;
+    bool m_isDirtyLightStrip;
+    bool m_isDirtyGamutMask;
+    bool m_isDirtyColorPreview;
 
     qreal m_lumaR;
     qreal m_lumaG;

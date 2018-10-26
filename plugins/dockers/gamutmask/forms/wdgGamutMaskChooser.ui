@@ -86,6 +86,16 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="bnMaskUnlink">
+        <property name="toolTip">
+         <string>Unlink gamut mask from active document</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="bnMaskDelete">
         <property name="toolTip">
          <string>Delete selected mask</string>

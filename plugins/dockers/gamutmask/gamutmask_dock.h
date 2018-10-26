@@ -77,6 +77,7 @@ private Q_SLOTS:
     void slotGamutMaskCreateNew();
     void slotGamutMaskDuplicate();
     void slotGamutMaskDelete();
+    void slotGamutMaskUnlinkFromDocument();
 
     void slotDocumentRemoved(QString filename);
     void slotViewChanged();
@@ -89,6 +90,9 @@ private:
     void selectMask(KoGamutMask* mask, bool notifyItemChooser = true);
     bool saveSelectedMaskResource();
     void deleteMask();
+    void unsetMask();
+    void removeStoredMasks();
+    void addStoredMask(KoGamutMask* mask);
     int getUserFeedback(QString text, QString informativeText = "",
                         QMessageBox::StandardButtons buttons = QMessageBox::Yes | QMessageBox::No,
                         QMessageBox::StandardButton defaultButton = QMessageBox::Yes,

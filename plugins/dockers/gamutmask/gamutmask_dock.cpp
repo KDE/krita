@@ -34,6 +34,7 @@
 #include <kis_group_layer.h>
 #include <KisView.h>
 #include <KoResourceItemChooser.h>
+#include <KoDocumentInfo.h>
 
 #include <QWidget>
 #include <QMenu>
@@ -77,12 +78,16 @@ GamutMaskDock::GamutMaskDock()
     , m_maskDocument(nullptr)
     , m_templateView(nullptr)
 {
+    setEnabled(false);
+
     m_dockerUI    = new GamutMaskChooserUI();
 
     m_dockerUI->bnMaskEditor->setIcon(KisIconUtils::loadIcon("dirty-preset"));
     m_dockerUI->bnMaskDelete->setIcon(KisIconUtils::loadIcon("deletelayer"));
     m_dockerUI->bnMaskNew->setIcon(KisIconUtils::loadIcon("list-add"));
     m_dockerUI->bnMaskDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
+    m_dockerUI->bnMaskUnlink->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    m_dockerUI->bnMaskUnlink->setEnabled(false);
 
     m_dockerUI->maskPropertiesBox->setVisible(false);
     m_dockerUI->bnSaveMask->setIcon(KisIconUtils::loadIcon("document-save"));
@@ -106,6 +111,7 @@ GamutMaskDock::GamutMaskDock()
     connect(m_dockerUI->bnMaskNew          , SIGNAL(clicked())               , SLOT(slotGamutMaskCreateNew()));
     connect(m_dockerUI->bnMaskDelete          , SIGNAL(clicked())               , SLOT(slotGamutMaskDelete()));
     connect(m_dockerUI->bnMaskDuplicate       , SIGNAL(clicked())               , SLOT(slotGamutMaskDuplicate()));
+    connect(m_dockerUI->bnMaskUnlink       , SIGNAL(clicked())               , SLOT(slotGamutMaskUnlinkFromDocument()));
 
     setWidget(m_dockerUI);
 }
@@ -234,18 +240,23 @@ void GamutMaskDock::selectMask(KoGamutMask *mask, bool notifyItemChooser)
         return;
     }
 
+    if (m_selectedMask == mask) {
+        return;
+    }
+
     m_selectedMask = mask;
+
+    if (!m_blockMaskStoring) {
+        if (m_canvas) {
+            m_canvas->imageView()->document()->setGamutMask(m_selectedMask);
+            m_dockerUI->bnMaskUnlink->setEnabled(true);
+        }
+    }
 
     if (notifyItemChooser) {
         m_selfSelectingMask = true;
         m_dockerUI->maskChooser->setCurrentResource(m_selectedMask);
         m_selfSelectingMask = false;
-    }
-
-    if (m_blockMaskStoring) {
-        if (m_canvas) {
-            m_canvas->imageView()->document()->setGamutMask(m_selectedMask);
-        }
     }
 
     emit sigGamutMaskSet(m_selectedMask);
@@ -297,6 +308,39 @@ void GamutMaskDock::deleteMask()
     KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
     rServer->removeResourceAndBlacklist(m_selectedMask);
     m_selectedMask = nullptr;
+}
+
+void GamutMaskDock::unsetMask()
+{
+    if (!m_selectedMask) {
+        return;
+    }
+
+    emit sigGamutMaskUnset();
+    m_selectedMask = nullptr;
+}
+
+void GamutMaskDock::removeStoredMasks()
+{
+    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
+
+    for (KoResource* resource: rServer->resources()) {
+        KoGamutMask* mask = static_cast<KoGamutMask*>(resource);
+        if (mask->storedInDocument()) {
+            rServer->removeResourceFromServer(mask);
+        }
+    }
+}
+
+void GamutMaskDock::addStoredMask(KoGamutMask* mask)
+{
+    if (mask) {
+        KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
+
+        if (!rServer->resourceByName(mask->name())) {
+            rServer->addResource(mask, false);
+        }
+    }
 }
 
 int GamutMaskDock::getUserFeedback(QString text, QString informativeText,
@@ -537,18 +581,21 @@ void GamutMaskDock::setCanvas(KoCanvasBase *canvas)
         return;
     }
 
-    KoGamutMask* storedMask = m_canvas->imageView()->document()->gamutMask();
+    // do not search for masks in gamut mask template while editing a mask
+    if (!m_maskDocument) {
+        KoGamutMask* activeDocumentMask = m_canvas->imageView()->document()->gamutMask();
+        addStoredMask(activeDocumentMask);
 
-    if (storedMask) {
-        KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
+        if (activeDocumentMask) {
+            m_blockMaskStoring = true;
+            selectMask(activeDocumentMask);
+            m_blockMaskStoring = false;
 
-        if (!rServer->resourceByName(storedMask->title())) {
-            rServer->addResource(storedMask, false);
+            m_dockerUI->bnMaskUnlink->setEnabled(true);
+        } else {
+            unsetMask();
+            m_dockerUI->bnMaskUnlink->setEnabled(false);
         }
-
-        m_blockMaskStoring = true;
-        selectMask(storedMask);
-        m_blockMaskStoring = false;
     }
 }
 
@@ -556,6 +603,11 @@ void GamutMaskDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = nullptr;
+
+    removeStoredMasks();
+
+    unsetMask();
+    m_dockerUI->bnMaskUnlink->setEnabled(false);
 }
 
 
@@ -569,8 +621,7 @@ void GamutMaskDock::removingResource(KoGamutMask *resource)
 {
     // if deleting previously set mask, notify selectors to unset their mask
     if (resource == m_resourceProvider->currentGamutMask()) {
-        emit sigGamutMaskUnset();
-        m_selectedMask = nullptr;
+        unsetMask();
     }
 }
 
@@ -622,6 +673,18 @@ void GamutMaskDock::slotGamutMaskDelete()
     }
 }
 
+void GamutMaskDock::slotGamutMaskUnlinkFromDocument()
+{
+    if (!m_canvas) {
+        return;
+    }
+
+    m_canvas->imageView()->document()->setGamutMask(nullptr);
+    m_dockerUI->bnMaskUnlink->setEnabled(false);
+
+//    removeStoredMasks();
+}
+
 void GamutMaskDock::slotDocumentRemoved(QString filename)
 {
     if (!m_maskDocument) {
@@ -645,7 +708,7 @@ void GamutMaskDock::slotDocumentRemoved(QString filename)
 
 void GamutMaskDock::slotViewChanged()
 {
-    if (!m_maskDocument || !m_templateView) {
+    if (!m_maskDocument && !m_templateView) {
         return;
     }
 

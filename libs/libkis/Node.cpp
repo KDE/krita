@@ -271,6 +271,18 @@ void Node::enableAnimation() const
     d->node->enableAnimation();
 }
 
+void Node::setShowInTimeline(bool showInTimeline) const
+{
+    if (!d->node) return;
+    d->node->setUseInTimeline(showInTimeline);
+}
+
+bool Node::showInTimeline() const
+{
+    if (!d->node) return false;
+    return d->node->useInTimeline();
+}
+
 bool Node::collapsed() const
 {
     if (!d->node) return false;

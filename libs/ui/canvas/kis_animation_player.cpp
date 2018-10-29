@@ -317,7 +317,7 @@ void KisAnimationPlayer::slotUpdateAudioChunkLength()
 
 void KisAnimationPlayer::slotUpdatePlaybackTimer()
 {
-    m_d->timer->stop();
+     m_d->timer->stop();
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     const KisTimeRange &playBackRange = animation->playbackRange();
@@ -416,6 +416,7 @@ void KisAnimationPlayer::play()
 
     emit sigPlaybackStarted();
 }
+
 
 void KisAnimationPlayer::Private::stopImpl(bool doUpdates)
 {

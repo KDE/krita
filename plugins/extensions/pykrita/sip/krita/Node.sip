@@ -23,6 +23,8 @@ public Q_SLOTS:
     QString colorDepth() const;
     bool animated() const;
     void enableAnimation() const;
+    void setShowInTimeline(bool showInTimeline) const;
+    bool showInTimeline() const;
     void setCollapsed(bool collapsed);
     bool collapsed() const;
     int colorLabel() const;

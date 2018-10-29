@@ -85,6 +85,19 @@ public Q_SLOTS:
     bool modified() const;
     QRect bounds() const;
     bool importAnimation(const QList<QString> &files, int firstFrame, int step);
+    int framesPerSecond();
+    void setFramesPerSecond(int fps);
+    void setFullClipRangeStartTime(int startTime);
+    int fullClipRangeStartTime();
+    void setFullClipRangeEndTime(int endTime);
+    int fullClipRangeEndTime();
+    int animationLength();
+    void setPlayBackRange(int start, int stop);
+    int playBackStartTime();
+    int playBackEndTime();
+    int currentTime();
+    void setCurrentTime(int time);
+
 private:
 
 };

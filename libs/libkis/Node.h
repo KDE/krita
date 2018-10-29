@@ -186,6 +186,18 @@ public Q_SLOTS:
     void enableAnimation() const;
 
     /**
+     * @brief Should the node be visible in the timeline. It defaults to false
+     * with new layer
+     */
+    void setShowInTimeline(bool showInTimeline) const;
+
+    /**
+     * @return is layer is shown in the timeline
+     */
+    bool showInTimeline() const;
+
+
+    /**
      * Sets the state of the node to the value of @param collapsed
      */
     void setCollapsed(bool collapsed);

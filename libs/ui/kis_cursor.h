@@ -67,6 +67,7 @@ public:
 
     // Existing custom KimageShop cursors. Use the 'load' function for all new cursors.
     static QCursor moveCursor();          // move tool cursor
+    static QCursor moveSelectionCursor(); // move selection action cursor
     static QCursor penCursor();           // pen tool cursor
     static QCursor brushCursor();         // brush tool cursor
     static QCursor airbrushCursor();      // airbrush tool cursor

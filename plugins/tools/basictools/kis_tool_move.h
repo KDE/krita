@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include "KisToolChangesTracker.h"
+#include "kis_signal_compressor.h"
 
 #include "kis_canvas2.h"
 
@@ -93,6 +94,8 @@ public:
     void continueAlternateAction(KoPointerEvent *event, AlternateAction action) override;
     void endAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
+    void mouseMoveEvent(KoPointerEvent *event) override;
+
     void startAction(KoPointerEvent *event, MoveToolMode mode);
     void continueAction(KoPointerEvent *event);
     void endAction(KoPointerEvent *event);
@@ -130,6 +133,7 @@ private:
     QPoint currentOffset() const;
     void notifyGuiAfterMove(bool showFloatingMessage = true);
     bool tryEndPreviousStroke(KisNodeList nodes);
+    KisNodeList fetchSelectedNodes(MoveToolMode mode, const QPoint *pixelPoint, KisSelectionSP selection);
 
 
 private Q_SLOTS:
@@ -156,6 +160,9 @@ private:
     QRect m_handlesRect;
 
     KisToolChangesTracker m_changesTracker;
+
+    QPoint m_lastCursorPos;
+    KisSignalCompressor m_updateCursorCompressor;
 };
 
 

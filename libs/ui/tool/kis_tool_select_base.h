@@ -254,7 +254,7 @@ public:
         if (selection &&
             selection->outlineCacheValid()) {
 
-            const int handleRadius = this->handleRadius();
+            const qreal handleRadius = qreal(this->handleRadius()) / canvas->coordinatesConverter()->effectiveZoom();
             QPainterPath samplePath;
             samplePath.addEllipse(pos, handleRadius, handleRadius);
 
@@ -294,7 +294,7 @@ public:
             const QPointF pos = this->convertToPixelCoord(event->point);
             KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
             if (selectionMask) {
-                this->useCursor(KisCursor::moveCursor());
+                this->useCursor(KisCursor::moveSelectionCursor());
             } else {
                 setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
                 this->resetCursorStyle();

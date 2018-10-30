@@ -743,6 +743,7 @@ bool KisNodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, cons
 QWidget *KisNodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex&) const
 {
     d->edit = new QLineEdit(parent);
+    d->edit->setFocusPolicy(Qt::StrongFocus);
     d->edit->installEventFilter(const_cast<KisNodeDelegate*>(this)); //hack?
     return d->edit;
 }
@@ -795,7 +796,7 @@ bool KisNodeDelegate::eventFilter(QObject *object, QEvent *event)
                 return true;
             case Qt::Key_Tab:
                 emit commitData(edit);
-                emit closeEditor(edit,EditNextItem);
+                emit closeEditor(edit, EditNextItem);
                 return true;
             case Qt::Key_Backtab:
                 emit commitData(edit);

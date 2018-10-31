@@ -120,15 +120,15 @@ void TestNumberStyle::testPercent()
 
 void TestNumberStyle::testScientific()
 {
-    QEXPECT_FAIL("", "min-exponent-digits not handled", Continue);
+    //QEXPECT_FAIL("", "min-exponent-digits not handled", Continue);
     QCOMPARE(escapeLocals(KoOdfNumberStyles::formatScientific(345678, "0.00E+000")), QString("3.456780E+05"));
 
     KoOdfNumberStyles::NumericStyleFormat f;
     f.type = KoOdfNumberStyles::Scientific;
     f.precision = 3;
-    QEXPECT_FAIL("", "min-exponent-digits not handled", Continue);
+    //QEXPECT_FAIL("", "min-exponent-digits not handled", Continue);
     QCOMPARE(escapeLocals(KoOdfNumberStyles::format("0.2", f)), QString("2.000E-01"));
-    QEXPECT_FAIL("", "min-exponent-digits not handled", Continue);
+    //QEXPECT_FAIL("", "min-exponent-digits not handled", Continue);
     QCOMPARE(escapeLocals(KoOdfNumberStyles::format("1.23", f)), QString("1.230E+00"));
     QCOMPARE(escapeLocals(KoOdfNumberStyles::format("test", f)), QString("test"));
 }

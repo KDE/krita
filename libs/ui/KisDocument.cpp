@@ -51,7 +51,6 @@
 #include <kis_debug.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <QTemporaryFile>
 #include <kbackup.h>
 
 #include <QTextBrowser>

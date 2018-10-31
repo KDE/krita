@@ -47,7 +47,6 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QTemporaryFile>
 #include <QDesktopWidget>
 #include <QDir>
 

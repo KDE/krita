@@ -51,7 +51,6 @@
 #include <QMoveEvent>
 #include <QUrl>
 #include <QMessageBox>
-#include <QTemporaryFile>
 #include <QStatusBar>
 #include <QMenu>
 #include <QMenuBar>

@@ -47,7 +47,6 @@
 #include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
 #include <KoToolManager.h>
-#include <QTemporaryFile>
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_paint_device.h>

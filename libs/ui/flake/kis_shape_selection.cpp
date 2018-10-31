@@ -25,8 +25,6 @@
 #include <kundo2command.h>
 #include <QMimeData>
 
-#include <QTemporaryFile>
-
 #include <KoShapeStroke.h>
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>

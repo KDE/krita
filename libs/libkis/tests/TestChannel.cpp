@@ -106,9 +106,7 @@ void TestChannel::testReadWritePixelData()
     QRect rc = greenChan->bounds();
     QVERIFY(rc == QRect(0, 0, 2, 2));
     QByteArray ba = greenChan->pixelData(rc);
-    for(int i = 0; i < 4; ++i) {
-        ba[i] = 128;
-    }
+    ba.fill('\x80', 4);
     greenChan->setPixelData(ba, rc);
     image->refreshGraph();
     QColor c;

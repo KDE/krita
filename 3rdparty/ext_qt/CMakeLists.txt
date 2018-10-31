@@ -33,8 +33,8 @@ if (WIN32)
   ExternalProject_Add(
       ext_qt
       DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-      URL https://download.qt.io/official_releases/qt/5.11/5.11.1/single/qt-everywhere-src-5.11.1.zip
-      URL_HASH SHA1=9b5464e2f42d7a673834950d0f440ca0d048f6a2
+      URL https://download.qt.io/official_releases/qt/5.11/5.11.2/single/qt-everywhere-src-5.11.2.zip
+      URL_HASH SHA1=d96004e6737133d2144e82d23c009872b5b45b5a
       PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-wintab.diff
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qtgui-private-headers.diff
             COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Don-t-request-the-MIME-image-every-time-Windows-asks.patch

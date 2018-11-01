@@ -142,8 +142,8 @@
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
+#include <KritaVersionWrapper.h>
 #include <kritaversion.h>
-#include <kritagitversion.h>
 #include <mutex>
 
 #ifdef Q_OS_WIN
@@ -381,13 +381,10 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
 
-
     // Tab close button override
     // Windows just has a black X, and Ubuntu has a dark x that is hard to read
     // just switch this icon out for all OSs so it is easier to see
     d->mdiArea->setStyleSheet("QTabBar::close-button { image: url(:/pics/broken-preset.png) }");
-
-
 
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
@@ -405,7 +402,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     subWindowActivated();
     updateWindowMenu();
-
 
     if (isHelpMenuEnabled() && !d->helpMenu) {
         // workaround for KHelpMenu (or rather KAboutData::applicationData()) internally
@@ -455,7 +451,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QAction *helpAction = actionCollection()->action("help_contents");
     helpAction->disconnect();
     connect(helpAction, SIGNAL(triggered()), this, SLOT(showManual()));
-
 
 #if 0
     //check for colliding shortcuts
@@ -809,21 +804,9 @@ void KisMainWindow::updateCaption()
 void KisMainWindow::updateCaption(const QString & caption, bool mod)
 {
     dbgUI << "KisMainWindow::updateCaption(" << caption << "," << mod << ")";
-    QString gitVersion = QStringLiteral(KRITA_GIT_SHA1_STRING);
-    QString versionString = QStringLiteral("%1.%2.%3 (%4)").arg(QString::number(KRITA_VERSION_MAJOR),
-                                                                QString::number(KRITA_VERSION_MINOR),
-                                                                QString::number(KRITA_VERSION_RELEASE),
-                                                                gitVersion);
-#ifdef KRITA_ALPHA
-    setCaption(QString("ALPHA %1: %2").arg(versionString).arg(caption), mod);
-    return;
-#endif
-#ifdef KRITA_BETA
-    setCaption(QString("BETA %1: %2").arg(versionString).arg(caption), mod);
-    return;
-#endif
-#ifdef KRITA_RC
-    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(versionString).arg(caption), mod);
+    QString versionString = KritaVersionWrapper::versionString(true);
+#if defined(KRITA_ALPHA) || defined (KRITA_BETA) || defined (KRITA_RC)
+    setCaption(QString("%1: %2").arg(versionString).arg(caption), mod);
     return;
 #endif
 

@@ -51,7 +51,6 @@
 #include <QMoveEvent>
 #include <QUrl>
 #include <QMessageBox>
-#include <QTemporaryFile>
 #include <QStatusBar>
 #include <QMenu>
 #include <QMenuBar>
@@ -59,7 +58,7 @@
 #include <QMimeData>
 #include <QStackedWidget>
 #include <QProxyStyle>
-
+#include <QScreen>
 
 #include <kactioncollection.h>
 #include <QAction>
@@ -143,8 +142,8 @@
 #include "KisWindowLayoutManager.h"
 #include <KisUndoActionsUpdateManager.h>
 #include "KisWelcomePageWidget.h"
-#include <QScreen>
-
+#include <kritaversion.h>
+#include <kritagitversion.h>
 #include <mutex>
 
 #ifdef Q_OS_WIN
@@ -786,52 +785,45 @@ void KisMainWindow::updateCaption()
             caption += " [" + i18n("Recovered") + "] ";
         }
 
-
-        // new documents aren't saved yet, so we don't need to say it is modified
-        // new files don't have a URL, so we are using that for the check
-        if (!doc->url().isEmpty()) {
-
-            if ( doc->isModified()) {
-                caption += " [" + i18n("Modified") + "] ";
-            }
-        }
-
         // show the file size for the document
-
-
         KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
-
 
         if (m_fileSizeStats.imageSize) {
             caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ")");
         }
-
 
         d->activeView->setWindowTitle(caption);
         d->activeView->setWindowModified(doc->isModified());
 
         updateCaption(caption, doc->isModified());
 
-        if (!doc->url().fileName().isEmpty())
+        if (!doc->url().fileName().isEmpty()) {
             d->saveAction->setToolTip(i18n("Save as %1", doc->url().fileName()));
-        else
+        }
+        else {
             d->saveAction->setToolTip(i18n("Save"));
+        }
     }
 }
 
 void KisMainWindow::updateCaption(const QString & caption, bool mod)
 {
     dbgUI << "KisMainWindow::updateCaption(" << caption << "," << mod << ")";
+    QString gitVersion = QStringLiteral(KRITA_GIT_SHA1_STRING);
+    QString versionString = QStringLiteral("%1.%2.%3 (%4)").arg(QString::number(KRITA_VERSION_MAJOR),
+                                                                QString::number(KRITA_VERSION_MINOR),
+                                                                QString::number(KRITA_VERSION_RELEASE),
+                                                                gitVersion);
 #ifdef KRITA_ALPHA
-    setCaption(QString("ALPHA %1: %2").arg(KRITA_ALPHA).arg(caption), mod);
+    setCaption(QString("ALPHA %1: %2").arg(versionString).arg(caption), mod);
     return;
 #endif
 #ifdef KRITA_BETA
-    setCaption(QString("BETA %1: %2").arg(KRITA_BETA).arg(caption), mod);
+    setCaption(QString("BETA %1: %2").arg(versionString).arg(caption), mod);
     return;
 #endif
 #ifdef KRITA_RC
-    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(KRITA_RC).arg(caption), mod);
+    setCaption(QString("RELEASE CANDIDATE %1: %2").arg(versionString).arg(caption), mod);
     return;
 #endif
 

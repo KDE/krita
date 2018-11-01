@@ -66,7 +66,8 @@ enum Format {
     IsoDLSize,
     UsFolioSize,
     UsLedgerSize,
-    UsTabloidSize
+    UsTabloidSize,
+    Invalid
 };
 
 /**

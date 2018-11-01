@@ -106,6 +106,9 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
 
 
         connect(animation, SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotGlobalTimeChanged()));
+        connect(animation, SIGNAL(sigFramerateChanged()), this, SLOT(slotFrameRateChanged()));
+
+
         connect(m_canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(slotGlobalTimeChanged()));
         connect(m_canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updatePlayPauseIcon()));
@@ -115,6 +118,7 @@ void AnimationDocker::setCanvas(KoCanvasBase * canvas)
                 SIGNAL(valueChanged(double)),
                 m_canvas->animationPlayer(),
                 SLOT(slotUpdatePlaybackSpeed(double)));
+
 
         connect(m_canvas->viewManager()->nodeManager(), SIGNAL(sigNodeActivated(KisNodeSP)),
                 this, SLOT(slotCurrentNodeChanged(KisNodeSP)));
@@ -218,6 +222,19 @@ void AnimationDocker::slotGlobalTimeChanged()
 
     QString realTimeString = realTime.toString("hh:mm:ss.zzz");
     m_animationWidget->intCurrentTime->setToolTip(realTimeString);
+}
+
+void AnimationDocker::slotFrameRateChanged()
+{
+    if (!m_canvas || !m_canvas->image()) return;
+
+    int fpsOnUI = m_animationWidget->intFramerate->value();
+    KisImageAnimationInterface *animation = m_canvas->image()->animationInterface();
+
+    if (animation->framerate() != fpsOnUI) {
+        m_animationWidget->intFramerate->setValue(animation->framerate());
+    }
+
 }
 
 void AnimationDocker::slotTimeSpinBoxChanged()

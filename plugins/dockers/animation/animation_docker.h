@@ -69,6 +69,11 @@ private Q_SLOTS:
     void slotGlobalTimeChanged();
     void slotTimeSpinBoxChanged();
 
+    /** Update the frame rate UI field in the case it gets
+     *  out of sync with the data model
+     */
+    void slotFrameRateChanged();
+
     void updatePlayPauseIcon();
     void updateLazyFrameIcon();
     void updateDropFramesIcon();

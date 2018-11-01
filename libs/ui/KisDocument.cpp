@@ -50,7 +50,6 @@
 #include <klocalizedstring.h>
 #include <kis_debug.h>
 #include <kconfiggroup.h>
-#include <QTemporaryFile>
 #include <kbackup.h>
 
 #include <QTextBrowser>

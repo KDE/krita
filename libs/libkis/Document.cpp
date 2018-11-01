@@ -52,6 +52,7 @@
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
 #include <kis_coordinates_converter.h>
+#include <kis_time_range.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -69,6 +70,8 @@
 #include <kis_canvas2.h>
 #include <KoUpdater.h>
 #include <QMessageBox>
+
+#include <kis_image_animation_interface.h>
 
 struct Document::Private {
     Private() {}
@@ -115,12 +118,14 @@ Node *Document::activeNode() const
     Q_FOREACH(QPointer<KisView> view, KisPart::instance()->views()) {
         if (view && view->document() == d->document) {
             activeNodes << view->currentNode();
+
         }
     }
     if (activeNodes.size() > 0) {
         QList<Node*> nodes = LibKisUtils::createNodeList(activeNodes, d->document->image());
         return nodes.first();
     }
+
     return 0;
 }
 
@@ -842,6 +847,8 @@ QPointer<KisDocument> Document::document() const
     return d->document;
 }
 
+/* Animation related function */
+
 bool Document::importAnimation(const QList<QString> &files, int firstFrame, int step)
 {
     KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
@@ -855,4 +862,104 @@ bool Document::importAnimation(const QList<QString> &files, int firstFrame, int 
     KisImportExportFilter::ConversionStatus status = importer.import(files, firstFrame, step);
 
     return (status == KisImportExportFilter::OK);
+}
+
+int Document::framesPerSecond()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->framerate();
+}
+
+void Document::setFramesPerSecond(int fps)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    d->document->image()->animationInterface()->setFramerate(fps);
+}
+
+void Document::setFullClipRangeStartTime(int startTime)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    d->document->image()->animationInterface()->setFullClipRangeStartTime(startTime);
+}
+
+
+int Document::fullClipRangeStartTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->fullClipRange().start();
+}
+
+
+void Document::setFullClipRangeEndTime(int endTime)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    d->document->image()->animationInterface()->setFullClipRangeEndTime(endTime);
+}
+
+
+int Document::fullClipRangeEndTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->fullClipRange().end();
+}
+
+int Document::animationLength()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->totalLength();
+}
+
+void Document::setPlayBackRange(int start, int stop)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    const KisTimeRange newTimeRange = KisTimeRange(start, (stop-start));
+    d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
+}
+
+int Document::playBackStartTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->playbackRange().start();
+}
+
+int Document::playBackEndTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->playbackRange().end();
+}
+
+int Document::currentTime()
+{
+    if (!d->document) return false;
+    if (!d->document->image()) return false;
+
+    return d->document->image()->animationInterface()->currentTime();
+}
+
+void Document::setCurrentTime(int time)
+{
+    if (!d->document) return;
+    if (!d->document->image()) return;
+
+    return d->document->image()->animationInterface()->requestTimeSwitchWithUndo(time);
 }

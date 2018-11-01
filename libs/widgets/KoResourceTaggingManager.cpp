@@ -385,6 +385,11 @@ KoTagChooserWidget* KoResourceTaggingManager::tagChooserWidget()
     return d->tagChooser;
 }
 
+QLineEdit* KoResourceTaggingManager::searchField()
+{
+    return d->tagFilter->searchField();
+}
+
 KoTagFilterWidget* KoResourceTaggingManager::tagFilterWidget()
 {
     return d->tagFilter;

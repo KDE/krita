@@ -746,6 +746,17 @@ print(root.childNodes())
      */
     QRect bounds() const;
 
+
+
+
+
+
+
+    /****
+     * Animation Related API
+    *****/
+
+
     /**
      * @brief Import an image sequence of files from a directory. This will grab all
      * images from the directory and import them with a potential offset (firstFrame)
@@ -753,6 +764,74 @@ print(root.childNodes())
      * @returns whether the animation import was successful
      */
     bool importAnimation(const QList<QString> &files, int firstFrame, int step);
+
+    /**
+     * @brief frames per second of document
+     * @return the fps of the document
+     */
+    int framesPerSecond();
+
+    /**
+     * @brief set frames per second of document
+     */
+    void setFramesPerSecond(int fps);
+
+    /**
+     * @brief set start time of animation
+     */
+    void setFullClipRangeStartTime(int startTime);
+
+    /**
+     * @brief get the full clip range start time
+     * @return full clip range start time
+     */
+    int fullClipRangeStartTime();
+
+
+    /**
+     * @brief set full clip range end time
+     */
+    void setFullClipRangeEndTime(int endTime);
+
+    /**
+     * @brief get the full clip range end time
+     * @return full clip range end time
+     */
+    int fullClipRangeEndTime();
+
+    /**
+     * @brief get total frame range for animation
+     * @return total frame range for animation
+     */
+    int animationLength();
+
+    /**
+     * @brief set temporary playback range of document
+     */
+    void setPlayBackRange(int start, int stop);
+
+    /**
+     * @brief get start time of current playback
+     * @return start time of current playback
+     */
+    int playBackStartTime();
+
+    /**
+     * @brief get end time of current playback
+     * @return end time of current playback
+     */
+    int playBackEndTime();
+
+    /**
+     * @brief get current frame selected of animation
+     * @return current frame selected of animation
+     */
+    int currentTime();
+
+    /**
+     * @brief set current time of document's animation
+     */
+    void setCurrentTime(int time);
 
 
 private:

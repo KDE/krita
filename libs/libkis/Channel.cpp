@@ -160,25 +160,25 @@ QByteArray Channel::pixelData(const QRect &rect) const
 
     if (d->node->colorSpace()->colorDepthId() == Integer8BitsColorDepthID) {
         while(srcIt.nextPixel()) {
-            stream << (quint8) *srcIt.rawDataConst();
+            stream << (quint8) *srcIt.rawDataConst() + (d->channel->pos() * d->channel->size());
         }
     }
     else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
         while(srcIt.nextPixel()) {
-            stream << (quint16) *srcIt.rawDataConst();
+            stream << (quint16) *srcIt.rawDataConst() + (d->channel->pos() * d->channel->size());
         }
     }
 #ifdef HAVE_OPENEXR
     else if (d->node->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
         while(srcIt.nextPixel()) {
-            half h = (half)*srcIt.rawDataConst();
+            half h = (half)*srcIt.rawDataConst() + (d->channel->pos() * d->channel->size());
             stream << (float)h;
         }
     }
 #endif
     else if (d->node->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         while(srcIt.nextPixel()) {
-            stream << (float) *srcIt.rawDataConst();
+            stream << (float) *srcIt.rawDataConst() + (d->channel->pos() * d->channel->size());
         }
 
     }
@@ -197,14 +197,14 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
         while (dstIt.nextPixel()) {
             quint8 v;
             stream >> v;
-            *dstIt.rawData() = v ;
+            *(dstIt.rawData() + (d->channel->pos() * d->channel->size())) = v ;
         }
     }
     else if (d->node->colorSpace()->colorDepthId() ==  Integer16BitsColorDepthID) {
         while (dstIt.nextPixel()) {
             quint16 v;
             stream >> v;
-            *dstIt.rawData() = v ;
+            *(dstIt.rawData() + (d->channel->pos() * d->channel->size())) = v ;
         }
     }
 #ifdef HAVE_OPENEXR
@@ -213,7 +213,7 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
             float f;
             stream >> f;
             half v = f;
-            *dstIt.rawData() = v ;
+            *(dstIt.rawData() + (d->channel->pos() * d->channel->size())) = v ;
         }
 
     }
@@ -222,7 +222,7 @@ void Channel::setPixelData(QByteArray value, const QRect &rect)
         while (dstIt.nextPixel()) {
             float v;
             stream >> v;
-            *dstIt.rawData() = v ;
+            *(dstIt.rawData() + (d->channel->pos() * d->channel->size())) = v ;
         }
     }
 }

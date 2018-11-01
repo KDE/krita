@@ -67,7 +67,6 @@ void TestChannel::testPixelDataF16()
 {
 #ifdef HAVE_OPENEXR
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA", "F16", "");
-    qDebug() << ">>>>>>>>>>>" << cs;
     KisImageSP image = new KisImage(0, 100, 100, cs, "test");
     KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
     KisFillPainter gc(layer->paintDevice());
@@ -92,6 +91,28 @@ void TestChannel::testPixelDataF32()
     Q_FOREACH(Channel *channel, channels) {
         QVERIFY(channel->channelSize() == 4);
     }
+}
+
+void TestChannel::testReadWritePixelData()
+{
+    KisImageSP image = new KisImage(0, 2, 2, KoColorSpaceRegistry::instance()->colorSpace("RGBA", "U8", ""), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    KisFillPainter gc(layer->paintDevice());
+    gc.fillRect(0, 0, 2, 2, KoColor(Qt::yellow, layer->colorSpace()));
+    Node node(image, layer);
+    QList<Channel*> channels = node.channels();
+    Channel *greenChan = channels[1];
+    QVERIFY(greenChan->name() == "Green");
+    QRect rc = greenChan->bounds();
+    QVERIFY(rc == QRect(0, 0, 2, 2));
+    QByteArray ba = greenChan->pixelData(rc);
+    ba.fill('\x80', 4);
+    greenChan->setPixelData(ba, rc);
+    image->refreshGraph();
+    QColor c;
+    layer->paintDevice()->pixel(0, 0, &c);
+    QVERIFY(c == QColor(255, 128, 0));
+
 }
 
 

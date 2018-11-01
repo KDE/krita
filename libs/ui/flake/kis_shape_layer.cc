@@ -34,8 +34,6 @@
 #include <commands_new/kis_node_move_command2.h>
 #include <QMimeData>
 
-#include <QTemporaryFile>
-
 #include <kis_icon.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>

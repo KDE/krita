@@ -29,6 +29,7 @@ private Q_SLOTS:
     void testPixelDataU16();
     void testPixelDataF16();
     void testPixelDataF32();
+    void testReadWritePixelData();
 };
 
 #endif

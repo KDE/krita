@@ -48,8 +48,8 @@ void KisPaletteDelegate::paintCrossedLine(const QStyleOptionViewItem &option, QP
     painter->restore();
 }
 
-void KisPaletteDelegate::paintNonCrossed(QPainter *painter, const QStyleOptionViewItem &option,
-                                         const QModelIndex &index, const bool isSelected) const
+void KisPaletteDelegate::paintNonCrossed(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/,
+                                         const QModelIndex &/*index*/, const bool /*isSelected*/) const
 {
 }
 

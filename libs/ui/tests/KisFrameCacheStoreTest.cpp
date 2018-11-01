@@ -58,7 +58,7 @@ bool compareTextureTileUpdateInfo(KisTextureTileUpdateInfoSP tile1, KisTextureTi
     KIS_COMPARE_RF(tile1->patchPixelsLength(), tile2->patchPixelsLength());
 
 
-    const int numRealPixelBytes = tile1->realPatchRect().width() * tile1->realPatchRect().height() * tile1->pixelSize();
+    const uint numRealPixelBytes = static_cast<uint>(tile1->realPatchRect().width() * tile1->realPatchRect().height() * tile1->pixelSize());
 
     if (memcmp(tile1->data(), tile2->data(), numRealPixelBytes) != 0) {
         qWarning() << "Tile pixels differ!";
@@ -68,7 +68,7 @@ bool compareTextureTileUpdateInfo(KisTextureTileUpdateInfoSP tile1, KisTextureTi
         quint8 *src = tile1->data();
         quint8 *dst = tile2->data();
 
-        for (int i = 0; i < numRealPixelBytes; i++) {
+        for (uint i = 0; i < numRealPixelBytes; i++) {
             if (*src != *dst) {
                 qDebug() << "    " << ppVar(i) << ppVar(*src) << ppVar(*dst);
             }

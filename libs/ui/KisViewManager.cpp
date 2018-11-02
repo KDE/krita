@@ -328,10 +328,8 @@ KisViewManager::~KisViewManager()
 {
     KisConfig cfg;
     if (resourceProvider() && resourceProvider()->currentPreset()) {
-        cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
         cfg.writeKoColor("LastForeGroundColor",resourceProvider()->fgColor());
         cfg.writeKoColor("LastBackGroundColor",resourceProvider()->bgColor());
-
     }
 
     cfg.writeEntry("baseLength", KoResourceItemChooserSync::instance()->baseLength());
@@ -377,6 +375,11 @@ void KisViewManager::slotViewRemoved(KisView *view)
 
     if (viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
+    }
+
+    KisConfig cfg(false);
+    if (resourceProvider() && resourceProvider()->currentPreset()) {
+        cfg.writeEntry("LastPreset", resourceProvider()->currentPreset()->name());
     }
 }
 

@@ -27,6 +27,7 @@ Note: on all operating systems the entire procedure is done in a terminal window
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
     * Windows: mingw-w64 7.3 (by mingw-builds): https://sourceforge.net/projects/mingw-w64/
+            Install mingw to something like c:\mingw; not to a folder with a space in its path.
             For threading, select posix, for exceptions seh.
                Make sure mingw's bin folder is in your path. It might be a good
                idea to create a batch file which sets the path and start cmd.

@@ -42,8 +42,6 @@ class KRITARESOURCES_EXPORT KisResourceStorage
 {
 public:
 
-    /// XXX: replace the default implementations with = 0 when all iterators have been implemented
-
     /// A resource item is simply an entry in the storage,
     struct ResourceItem {
 

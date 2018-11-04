@@ -37,6 +37,9 @@ const QString KisResourceCacheDb::dbLocationKey {"ResourceCacheDbDirectory"};
 const QString KisResourceCacheDb::resourceCacheDbFilename {"resourcecache.sqlite"};
 const QString KisResourceCacheDb::databaseVersion {"0.0.1"};
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
+QHash<int, KisResourceStorageSP> KisResourceCacheDb::s_cachedStorages{ QHash<int, KisResourceStorageSP>() };
+QHash<int, KoResourceSP> KisResourceCacheDb::s_cachedResources{ QHash<int, KoResourceSP>()};
+
 
 bool KisResourceCacheDb::s_valid {false};
 
@@ -633,9 +636,9 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
     {
         QSqlQuery q;
 
-        r = q.prepare("INSERT INTO storages "
-                      "(storage_type_id, location, timestamp, pre_installed, active)"
-                      "VALUES"
+        r = q.prepare("INSERT INTO storages\n "
+                      "(storage_type_id, location, timestamp, pre_installed, active)\n"
+                      "VALUES\n"
                       "(:storage_type_id, :location, :timestamp, :pre_installed, :active);");
 
         if (!r) {
@@ -652,7 +655,36 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
         r = q.exec();
 
         if (!r) qWarning() << "Could not execute query" << q.lastError();
+
     }
+
+    {
+        int id = -1;
+
+        QSqlQuery q;
+
+        r = q.prepare("SELECT id \n"
+                      "FROM   storages\n"
+                      "WHERE  storage_type_id = :stor"
+                      "age_type_id\n"
+                      "AND    location = :location");
+        q.bindValue(":storage_type_id", static_cast<int>(storage->type()));
+        q.bindValue(":location", storage->location());
+
+        r = q.exec();
+
+        if (!r) qWarning() << "Could not execute query" << q.lastError();
+
+        if (!q.first()) {
+            qWarning() << "Inconsistent database: could not find storage" << storage->location();
+            return false;
+        }
+
+        id = q.value(0).toInt();
+
+        s_cachedStorages[id] = storage;
+    }
+
     return r;
 }
 

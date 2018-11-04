@@ -30,8 +30,8 @@
 #include <KisResourceStorage.h>
 
 /**
- * The KisResourceLocator class is used to find resources of
- * a certain type.
+ * The KisResourceLocator class is used by the cache database to find
+ * resources in all known resource locations.
  */
 class KRITARESOURCES_EXPORT KisResourceLocator : public QObject
 {

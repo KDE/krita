@@ -152,6 +152,13 @@ QWidget* KisIntegerColorInput::createInput()
     m_intNumInput = new KisIntParseSpinBox(this);
     m_intNumInput->setMinimum(0);
     m_colorSlider->setMinimum(0);
+
+    if (m_usePercentage) {
+        m_intNumInput->setSuffix("%");
+    } else {
+        m_intNumInput->setSuffix("");
+    }
+
     switch (m_channelInfo->channelValueType()) {
     case KoChannelInfo::UINT8:
         if (m_usePercentage) {
@@ -183,6 +190,17 @@ QWidget* KisIntegerColorInput::createInput()
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(onColorSliderChanged(int)));
     connect(m_intNumInput, SIGNAL(valueChanged(int)), this, SLOT(onNumInputChanged(int)));
     return m_intNumInput;
+}
+
+void KisIntegerColorInput::setPercentageWise(bool val)
+{
+    m_usePercentage = val;
+
+    if (m_usePercentage) {
+        m_intNumInput->setSuffix("%");
+    } else {
+        m_intNumInput->setSuffix("");
+    }
 }
 
 void KisIntegerColorInput::onColorSliderChanged(int val)
@@ -387,6 +405,7 @@ void KisHexColorInput::update()
 QWidget* KisHexColorInput::createInput()
 {
     m_hexInput = new QLineEdit(this);
+    m_hexInput->setAlignment(Qt::AlignRight);
 
     int digits = 2*m_color->colorSpace()->colorChannelCount();
     QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);

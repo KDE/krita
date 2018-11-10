@@ -30,6 +30,8 @@ KisIntParseSpinBox::KisIntParseSpinBox(QWidget *parent) :
     QSpinBox(parent),
     boolLastValid(true)
 {
+    setAlignment(Qt::AlignRight);
+
     lastExprParsed = new QString("0");
 
     connect(this, SIGNAL(noMoreParsingError()),

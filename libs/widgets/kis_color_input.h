@@ -41,9 +41,10 @@ public:
     inline bool usePercentage() const {
         return m_usePercentage;
     }
-    inline void setPercentageWise(bool val) {
+    virtual inline void setPercentageWise(bool val) {
         m_usePercentage = val;
     }
+
 protected:
     void init();
     virtual QWidget* createInput() = 0;
@@ -64,6 +65,7 @@ public:
     KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
 protected:
     QWidget* createInput() override;
+    void setPercentageWise(bool val) override;
 public Q_SLOTS:
     void setValue(int);
     void update();

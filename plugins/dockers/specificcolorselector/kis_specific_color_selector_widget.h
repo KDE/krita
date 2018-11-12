@@ -23,6 +23,9 @@
 #include <KoColor.h>
 #include "kis_signal_auto_connection.h"
 
+#include "ui_wdgSpecificColorSelectorWidget.h"
+
+
 class KoColorSpace;
 class QVBoxLayout;
 class KisColorInput;
@@ -31,6 +34,7 @@ class QCheckBox;
 class KisSignalCompressor;
 class QSpacerItem;
 class KisDisplayColorConverter;
+class KisPopupButton;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
@@ -39,6 +43,10 @@ public:
     KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget() override;
     bool customColorSpaceUsed();
+
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+
 public Q_SLOTS:
     void setDisplayConverter(KisDisplayColorConverter *colorConverter);
 
@@ -56,15 +64,14 @@ Q_SIGNALS:
 private:
     QList<KisColorInput*> m_inputs;
     const KoColorSpace* m_colorSpace;
-    QVBoxLayout *m_layout;
     QSpacerItem *m_spacer;
     KoColor m_color;
     bool m_updateAllowed;
     KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
-    QCheckBox *m_chkShowColorSpaceSelector;
-    QCheckBox *m_chkUsePercentage;
+    Ui_wdgSpecificColorSelectorWidget* m_ui;
+
 
     KisDisplayColorConverter *m_displayConverter;
     KisSignalAutoConnectionsStore m_converterConnection;

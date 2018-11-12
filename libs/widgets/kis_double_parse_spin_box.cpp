@@ -32,6 +32,8 @@ KisDoubleParseSpinBox::KisDoubleParseSpinBox(QWidget *parent) :
     boolLastValid(true),
     lastExprParsed(QStringLiteral("0.0"))
 {
+    setAlignment(Qt::AlignRight);
+
     connect(this, SIGNAL(noMoreParsingError()),
                     this, SLOT(clearErrorStyle()));
 

@@ -188,6 +188,8 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 
 void KisWelcomePageWidget::populateRecentDocuments()
 {
+    m_recentFilesModel.clear(); // clear existing data before it gets re-populated
+
     // grab recent files data
     int numRecentFiles = m_mainWindow->recentFilesUrls().length() > 5 ? 5 : m_mainWindow->recentFilesUrls().length(); // grab at most 5
 
@@ -236,6 +238,7 @@ void KisWelcomePageWidget::populateRecentDocuments()
 
     // hide clear and Recent files title if there are none
     bool hasRecentFiles = m_mainWindow->recentFilesUrls().length() > 0;
+
     recentDocumentsLabel->setVisible(hasRecentFiles);
     clearRecentFilesLink->setVisible(hasRecentFiles);
 
@@ -264,6 +267,5 @@ void KisWelcomePageWidget::slotOpenFileClicked()
 void KisWelcomePageWidget::slotClearRecentFiles()
 {
     m_mainWindow->clearRecentFiles();
-    m_mainWindow->reloadRecentFileList();
     populateRecentDocuments();
 }

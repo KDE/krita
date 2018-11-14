@@ -129,6 +129,11 @@ QStringList KisResourceLocator::errorMessages() const
     return d->errorMessages;
 }
 
+QString KisResourceLocator::resourceLocation() const
+{
+    return d->resourceLocation;
+}
+
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
 {
 

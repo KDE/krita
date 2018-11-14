@@ -62,6 +62,8 @@ public:
 
     QStringList errorMessages() const;
 
+    QString resourceLocation() const;
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);

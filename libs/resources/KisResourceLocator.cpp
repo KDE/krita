@@ -131,6 +131,7 @@ QStringList KisResourceLocator::errorMessages() const
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
 {
+
     emit progressMessage(i18n("Krita is running for the first time. Intialization will take some time."));
     Q_UNUSED(initalizationStatus);
 

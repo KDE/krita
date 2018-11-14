@@ -746,24 +746,27 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
     }
 
     // Find the storage in the database
+    QSqlQuery q;
+    if (!q.prepare("SELECT id\n"
+                   ",      timestamp\n"
+                   ",      pre_installed\n"
+                   "FROM   storages\n"
+                   "WHERE  location = :location\n")) {
+        qWarning() << "Could not prepare storage timestamp statement" << q.lastError();
+    }
+
+    q.bindValue(":location", storage->location());
+    if (!q.exec()) {
+        qWarning() << "Could not execute storage timestamp statement" << q.boundValues() << q.lastError();
+    }
+
+    if (!q.first()) {
+        // This is a new storage, the user must have dropped it in the path before restarting Krita, so add it.
+        addStorage(storage, false);
+    }
 
     // Only check the time stamp for container storages, not the contents
     if (storage->type() != KisResourceStorage::StorageType::Folder) {
-        QSqlQuery q;
-        if (!q.prepare("SELECT timestamp\n"
-                       ",      pre_installed\n"
-                       "FROM   storages\n"
-                       "WHERE  location = :location\n")) {
-            qWarning() << "Could not prepare storage timestamp statement" << q.lastError();
-        }
-        q.bindValue(":location", storage->location());
-        if (!q.exec()) {
-            qWarning() << "Could not execute storage timestamp statement" << q.boundValues() << q.lastError();
-        }
-        if (!q.first()) {
-            // This is a new storage, the user must have dropped it in the path before restarting Krita, so add it.
-            addStorage(storage, false);
-        }
         if (!q.value(0).isValid()) {
             qWarning() << "Could not retrieve timestamp for storage" << storage->location();
         }
@@ -775,6 +778,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
                 qWarning() << "Could not add storage" << storage->location();
             }
         }
+
     }
     else {
 

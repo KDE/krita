@@ -37,6 +37,7 @@ public:
     ~ArrangeDockerWidget() override;
 
     void setActionCollection(KActionCollection *collection);
+    void switchState(bool enabled);
 
 private:
     Ui::ArrangeDockerWidget *ui;

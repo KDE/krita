@@ -31,6 +31,7 @@ ArrangeDockerDock::ArrangeDockerDock( )
     , m_canvas(0)
 {
     m_configWidget = new ArrangeDockerWidget(this);
+    m_configWidget->switchState(false);
     setWidget(m_configWidget);
     setEnabled(m_canvas);
 }
@@ -58,7 +59,7 @@ void ArrangeDockerDock::setCanvas(KoCanvasBase * canvas)
             m_canvas->toolProxy(),
             SIGNAL(toolChanged(QString)),
             this,
-            SLOT(slotToolChanged()));
+            SLOT(slotToolChanged(QString)));
 
         m_canvasConnections.addConnection(
             m_canvas->shapeManager(),
@@ -79,4 +80,11 @@ void ArrangeDockerDock::slotToolChanged()
 {
     KActionCollection *collection = m_canvas->viewManager()->actionCollection();
     m_configWidget->setActionCollection(collection);
+}
+
+void ArrangeDockerDock::slotToolChanged(QString toolId)
+{
+    bool enableWidget = (toolId == "InteractionTool") ? true : false;
+    m_configWidget->switchState(enableWidget);
+    slotToolChanged();
 }

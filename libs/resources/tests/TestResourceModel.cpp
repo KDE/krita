@@ -103,6 +103,15 @@ void TestResourceModel::testData()
     }
 }
 
+
+void TestResourceModel::testResource()
+{
+    KisResourceModel resourceModel(resourceType);
+    KoResourceSP resource = resourceModel.resourceForIndex(resourceModel.index(0, 0));
+    QVERIFY(resource);
+}
+
+
 void TestResourceModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();

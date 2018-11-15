@@ -29,6 +29,7 @@ private Q_SLOTS:
     void initTestCase();
     void testRowCount();
     void testData();
+    void testResource();
     void cleanupTestCase();
 private:
 

@@ -24,6 +24,8 @@
 
 #include <kritaresources_export.h>
 
+#include <KoResource.h>
+
 /**
  * @brief The KisResourceModel class provides access to the cache database
  * for a particular resource type.
@@ -51,13 +53,15 @@ public:
     KisResourceModel(const QString &resourceType, QObject *parent = 0);
     ~KisResourceModel() override;
 
-// QAbstractItemModel API
+    // QAbstractItemModel API
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
 
-// Resources API
+    // Resources API
+    KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const;
+
 
 private:
     struct Private;

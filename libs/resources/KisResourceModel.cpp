@@ -23,6 +23,8 @@
 #include <QImage>
 #include <QtSql>
 
+#include <KisResourceLocator.h>
+
 struct KisResourceModel::Private {
     QSqlQuery query;
     QString resourceType;
@@ -43,9 +45,12 @@ KisResourceModel::KisResourceModel(const QString &resourceType, QObject *parent)
                              ",      resources.tooltip\n"
                              ",      resources.thumbnail\n"
                              ",      resources.status\n"
+                             ",      storages.location\n"
                              "FROM   resources\n"
                              ",      resource_types\n"
+                             ",      storages\n"
                              "WHERE  resources.resource_type_id = resource_types.id\n"
+                             "AND    resources.storage_id = storages.id\n"
                              "AND    resource_types.name = :resource_type\n"
                              "AND    resources.status = 1");
     if (!r) {
@@ -99,6 +104,8 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
                 ;
             case 6:
                 return d->query.value("status");
+            case 7:
+                return d->query.value("location");
             default:
                 ;
             };
@@ -127,6 +134,26 @@ QVariant KisResourceModel::data(const QModelIndex &index, int role) const
     }
 
     return v;
+}
+
+KoResourceSP KisResourceModel::resourceForIndex(QModelIndex index) const
+{
+    KoResourceSP resource = 0;
+
+    if (!index.isValid()) return resource;
+
+    if (index.row() > rowCount()) return resource;
+    if (index.column() > d->columnCount) return resource;
+
+    bool pos = const_cast<KisResourceModel*>(this)->d->query.seek(index.row());
+    if (pos) {
+        QString storageLocation = d->query.value("location").toString();
+        QString resourceLocation = d->query.value("filename").toString();
+        qDebug() << storageLocation << resourceLocation;
+        resource = KisResourceLocator::instance()->resource(storageLocation, resourceLocation);
+    }
+    return resource;
+
 }
 
 int KisResourceModel::rowCount(const QModelIndex &) const

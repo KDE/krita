@@ -89,9 +89,10 @@ Note that the cmake command needs to point to your BUILDROOT like /dev/d, not c:
     cmake ..\krita\3rdparty -DEXTERNALS_DOWNLOAD_DIR=/dev/d -DINSTALL_ROOT=/dev/i  -G "MinGW Makefiles"
 
 - If you want to build Qt and some other dependencies with parallel jobs, add
-  `-DSUBMAKE_JOBS=<n>` to the cmake command where <n> is the number of jobs to
-  run (if your PC has 4 CPU cores, you might want to set it to 5).
-
+  `-DSUBMAKE_JOBS=<n>` to this cmake command where <n> is the number of jobs to
+  run (if your PC has 4 CPU cores, you might want to set it to 5). For other jobs,
+  you might need to manually add a -- -j N option, where N is the number of jobs.
+  
 - If you don't have Windows 10 SDK and don't want to build Qt with ANGLE, add
   `-DQT_ENABLE_DYNAMIC_OPENGL=OFF` to the CMake command line args.
 

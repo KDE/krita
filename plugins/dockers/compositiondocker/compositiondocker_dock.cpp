@@ -222,7 +222,7 @@ void CompositionDockerDock::exportClicked()
 
             KisDocument *d = KisPart::instance()->createDocument();
 
-            KisImageWSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
+            KisImageSP dst = new KisImage(d->createUndoStore(), r.width(), r.height(), image->colorSpace(), composition->name());
             dst->setResolution(image->xRes(), image->yRes());
             d->setCurrentImage(dst);
             KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", OPACITY_OPAQUE_U8);

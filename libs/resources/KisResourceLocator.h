@@ -62,13 +62,17 @@ public:
 
     QStringList errorMessages() const;
 
-    QString resourceLocation() const;
+    QString resourceLocationBase() const;
 
 Q_SIGNALS:
 
     void progressMessage(const QString&);
 
 private:
+
+    friend class KisResourceModel;
+
+    KoResourceSP resource(QString storageLocation, const QString &resourceLocationBase);
 
     friend class TestResourceLocator;
 

@@ -57,10 +57,6 @@ public:
 
 private:
 
-    static QHash<int, KisResourceStorageSP> s_cachedStorages;
-    static QHash<int, KoResourceSP> s_cachedResources; ///< We need to cache resources for the runtime of Krita,
-                                                       /// to make the tweaks to the paintop presets persistent.
-
     friend class KisResourceLocator;
     friend class TestResourceLocator;
     friend class TestResourceCacheDb;

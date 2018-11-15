@@ -131,6 +131,12 @@ void TestResourceLocator::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
+void TestResourceLocator::testResource()
+{
+    KoResourceSP res = m_locator->resource("", "paintoppresets/test.kpp");
+    QVERIFY(res);
+}
+
 
 QTEST_MAIN(TestResourceLocator)
 

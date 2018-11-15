@@ -45,7 +45,8 @@ const QString KisResourceLocator::resourceLocationKey {"ResourceDirectory"};
 class KisResourceLocator::Private {
 public:
     QString resourceLocation;
-    QList<KisResourceStorageSP> storages;
+    QMap<QString, KisResourceStorageSP> storages;
+    QHash<QPair<QString, QString>, KoResourceSP> resourceCache;
     QStringList errorMessages;
 };
 
@@ -129,9 +130,37 @@ QStringList KisResourceLocator::errorMessages() const
     return d->errorMessages;
 }
 
-QString KisResourceLocator::resourceLocation() const
+QString KisResourceLocator::resourceLocationBase() const
 {
     return d->resourceLocation;
+}
+
+KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceLocation)
+{
+    if (storageLocation.isEmpty()) {
+        storageLocation = resourceLocationBase();
+    }
+    else {
+        storageLocation = resourceLocationBase() + '/' + storageLocation;
+    }
+
+    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceLocation);
+
+    KoResourceSP resource;
+    if (d->resourceCache.contains(key)) {
+        resource = d->resourceCache[key];
+    }
+    else {
+        Q_ASSERT(d->storages.contains(storageLocation));
+        KisResourceStorageSP storage = d->storages[storageLocation];
+        Q_ASSERT(storage);
+
+        resource = storage->resource(resourceLocation);
+        if (resource) {
+            d->resourceCache[key] = resource;
+        }
+    }
+    return resource;
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitalizationStatus initalizationStatus, const QString &installationResourcesLocation)
@@ -220,20 +249,22 @@ void KisResourceLocator::findStorages()
     d->storages.clear();
 
     // Add the folder
-    d->storages.append(QSharedPointer<KisResourceStorage>::create(d->resourceLocation));
+    KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(d->resourceLocation);
+    d->storages[storage->location()] = storage;
 
     // And add bundles and adobe libraries
     QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
     QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
     while (iter.hasNext()) {
         iter.next();
-        d->storages.append(QSharedPointer<KisResourceStorage>::create(iter.filePath()));
+        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(iter.filePath());
+        d->storages[storage->location()] = storage;
     }
 }
 
 QList<KisResourceStorageSP> KisResourceLocator::storages() const
 {
-    return d->storages;
+    return d->storages.values();
 }
 
 bool KisResourceLocator::synchronizeDb()

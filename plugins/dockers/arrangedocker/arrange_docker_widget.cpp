@@ -88,4 +88,15 @@ void ArrangeDockerWidget::setActionCollection(KActionCollection *collection)
     setEnabled(enabled);
 }
 
+void ArrangeDockerWidget::switchState(bool enabled)
+{
+    if (enabled) {
+        ui->buttons->show();
+        ui->disabledLabel->hide();
+    } else {
+        ui->buttons->hide();
+        ui->disabledLabel->show();
+    }
+}
+
 

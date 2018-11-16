@@ -135,6 +135,9 @@ extern "C" int main(int argc, char **argv)
     qputenv("QT_QPA_PLATFORM", "xcb");
 #endif
 
+    // Workaround a bug in QNetworkManager
+    qputenv("QT_BEARER_POLL_TIMEOUT", QByteArray::number(-1));
+
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita4" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");
     key = key.replace(":", "_").replace("\\","_");

@@ -134,6 +134,8 @@ extern "C" int main(int argc, char **argv)
 #endif
 
     KisLoggingManager::initialize();
+    // Workaround a bug in QNetworkManager
+    qputenv("QT_BEARER_POLL_TIMEOUT", QByteArray::number(-1));
 
     // A per-user unique string, without /, because QLocalServer cannot use names with a / in it
     QString key = "Krita4" + QStandardPaths::writableLocation(QStandardPaths::HomeLocation).replace("/", "_");

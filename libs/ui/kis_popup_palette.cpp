@@ -227,6 +227,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     zoomCanvasSlider->setPageStep(1);
 
     connect(zoomCanvasSlider, SIGNAL(valueChanged(int)), this, SLOT(slotZoomSliderChanged(int)));
+    connect(zoomCanvasSlider, SIGNAL(sliderPressed()), this, SLOT(slotZoomSliderPressed()));
+    connect(zoomCanvasSlider, SIGNAL(sliderReleased()), this, SLOT(slotZoomSliderReleased()));
 
     slotUpdateIcons();
 
@@ -237,6 +239,9 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     setVisible(true);
     setVisible(false);
+
+    opacityChange = new QGraphicsOpacityEffect(this);
+    setGraphicsEffect(opacityChange);
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
@@ -305,6 +310,16 @@ void KisPopupPalette::slotEnableChangeFGColor()
 
 void KisPopupPalette::slotZoomSliderChanged(int zoom) {
     emit zoomLevelChanged(zoom);
+}
+
+void KisPopupPalette::slotZoomSliderPressed()
+{
+   m_isZoomingCanvas = true;
+}
+
+void KisPopupPalette::slotZoomSliderReleased()
+{
+    m_isZoomingCanvas = false;
 }
 
 void KisPopupPalette::adjustLayout(const QPoint &p)
@@ -590,6 +605,15 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.rotate(selectedColor() * -1 * rotationAngle);
         }
     }
+
+
+    // if we are actively rotating the canvas or zooming, make the panel slightly transparent to see the canvas better
+    if(m_isRotatingCanvasIndicator || m_isZoomingCanvas) {
+        opacityChange->setOpacity(0.4);
+    } else {
+        opacityChange->setOpacity(1.0);
+    }
+
 }
 
 QPainterPath KisPopupPalette::drawDonutPathFull(int x, int y, int inner_radius, int outer_radius)
@@ -683,6 +707,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
         KisCanvasController *canvasController =
             dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
         canvasController->rotateCanvas(angleDifference);
+
 
         emit sigUpdateCanvas();
     }
